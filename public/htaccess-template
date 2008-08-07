@@ -1,0 +1,15 @@
+
+# Configure on rewriting. Note that the rewrite base has to be adjusted to the base url of the application.
+# Replace <template> with correct path e.g. /workspace/Demetrios/public
+RewriteEngine on
+RewriteBase <template>
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule !\.(js|ico|gif|jpg|png|css)$ index.php
+
+# Security: Don't allow browsing of directories
+Options -Indexes
+
+# PHP settings
+php_flag magic_quotes_gpc off
+php_flag register_globals off
+php_flag short_open_tag on
