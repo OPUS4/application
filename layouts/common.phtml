@@ -1,0 +1,26 @@
+<?php
+/**
+ *
+ */
+
+/*
+ * Configure headMeta helper with content type, language and encoding.
+ */
+$this->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8')
+    ->appendHttpEquiv('Content-Language', 'de-DE');
+
+$this->headTitle('OPUS 4')
+    ->headTitle($this->title)
+    ->setSeparator(' | ');
+?>
+<?= $this->doctype('XHTML1_STRICT') ?>
+<html>
+<head>
+    <?= $this->headMeta() ?>
+    <?= $this->headTitle() ?>
+</head>
+
+<body>
+    <div id="content"><?= $this->layout()->content ?></div>
+</body>
+</html>
