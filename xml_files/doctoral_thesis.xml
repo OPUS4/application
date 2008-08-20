@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- 
+* This file contains the elements for the OPUS4 doucmenttype  "Doctoral thesis.
+* 
+* @category
+* @package
+* @author      Emily Erdbeer <emily@example.com>
+* @copyright   Copyright (c) 2008, OPUS 4 development team
+* @license     http://www.gnu.org/licenses/gpl.html
+* @version     $Id$
+-->
+
+
+
+<doctoral_thesis>
+
+       <form>
+            
+			<!-- general -->
+			<field name="document_type" mandatory="yes" />
+			<field name="licence_type" mandatory="yes" />
+			<field name="pod_allowed" mandatory="yes" />
+			<field name="language" mandatory="yes" />
+			
+			<!-- collections -->
+			<field name="collection_title" mandatory="no" />
+			<field name="collection_sequence_nr" mandatory="no" />
+			
+			<!-- dates -->
+			<field name="completed_year" mandatory="yes" /> <!-- either "completed_year" or "completed_date" must be mandatory -->
+			<field name="completed_date" mandatory="yes" />
+			<field name="published_year" mandatory="yes" /> <!-- either "published_year" or "published_date" must be mandatory -->
+			<field name="published_date" mandatory="yes" />
+			<field name="date_accepted" mandatory="yes" />
+
+			<!-- identifiers -->
+			<field name="identifier_isbn" mandatory="no" />
+			
+			<!-- institutes -->
+			<field name="institute_name" mandatory="yes" />
+			<field name="non_institute_affiliation" mandatory="no" />
+			
+			<!-- persons -->
+			<field name="person_advisor" mandatory="yes" />
+			<field name="person_author" mandatory="yes" />
+			<field name="person_author_email" mandatory="yes" />
+			<field name="person_other" mandatory="no" />
+			<field name="person_referee" mandatory="no" />
+			
+			<!-- titles  -->
+			<field name="title_abstract" mandatory="yes" />
+			<field name="title_main" mandatory="yes" />
+			<field name="title_parent" mandatory="no" />
+			
+			<!-- subjects -->
+			<field name="subject_swd" mandatory="yes" />
+			<field name="subject_ddc" mandatory="no" />
+			<field name="subject_uncontrolled" mandatory="yes" />
+			
+       </form>
+	                 
+</doctoral_thesis>
