@@ -49,9 +49,9 @@
 			<field name="person_referee" mandatory="no" />
 			
 			<!-- titles  -->
-			<field name="title_abstract" mandatory="yes" />
-			<field name="title_main" mandatory="yes" />
-			<field name="title_parent" mandatory="no" />
+			<field name="title_abstract" mandatory="yes" type="title_abstract"/>
+			<field name="title_main" mandatory="yes"     type="title_abstract_main"/>
+			<field name="title_parent" mandatory="no"    type="title_abstract_parent"/>
 			
 			<!-- subjects -->
 			<field name="subject_swd" mandatory="yes" />
