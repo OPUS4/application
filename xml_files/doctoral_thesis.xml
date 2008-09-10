@@ -35,76 +35,75 @@
 
 <documenttype name="doctoral_thesis"
 	xmlns="http://schemas.opus.org/documenttype"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:noNamespaceSchemaLocation="http://schemas.opus.org/documenttype documenttype.xsd ">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
 	<!-- general -->
-	<field name="licence" multiplicity="*" languageoption="no"
+	<field name="licence" multiplicity="*" languageoption="off"
 		mandatory="yes" />
-	<field name="language" multiplicity="*" languageoption="no"
+	<field name="language" multiplicity="*" languageoption="off"
 		mandatory="yes" />
 
 	<!-- collections -->
-	<field name="collection_title" multiplicity="1" languageoption="yes"
+	<field name="collection_title" multiplicity="1" languageoption="on"
 		mandatory="no" />
 	<field name="collection_sequence_nr" multiplicity="1"
-		languageoption="no" mandatory="no" />
+		languageoption="off" mandatory="no" />
 
 	<!-- dates -->
 	<!-- either "completed_year" or "completed_date" must be mandatory -->
 	<mandatory type="one-at-least">
 		<field name="completed_year" multiplicity="1"
-			languageoption="no" />
+			languageoption="off" />
 		<field name="completed_date" multiplicity="1"
-			languageoption="no" />
+			languageoption="off" />
 	</mandatory>
 
 	<!-- either "published_year" or "published_date" must be mandatory -->
 	<mandatory type="one-at-least">
 		<field name="published_year" multiplicity="1"
-			languageoption="no" />
+			languageoption="off" />
 		<field name="published_date" multiplicity="1"
-			languageoption="no" />
+			languageoption="off" />
 	</mandatory>
 
-	<field name="date_accepted" multiplicity="1" languageoption="no"
+	<field name="date_accepted" multiplicity="1" languageoption="off"
 		mandatory="yes" />
 
 
 	<!-- identifiers -->
-	<field name="identifier_isbn" multiplicity="1" languageoption="no"
+	<field name="identifier_isbn" multiplicity="1" languageoption="off"
 		mandatory="no" />
 
 	<!-- institutes -->
-	<field name="institute_name" multiplicity="1" languageoption="no"
+	<field name="institute_name" multiplicity="1" languageoption="off"
 		mandatory="yes" />
 	<field name="non_institute_affiliation" multiplicity="1"
-		languageoption="no" mandatory="no" />
+		languageoption="off" mandatory="no" />
 
 	<!-- persons -->
-	<field name="person_advisor" multiplicity="1" languageoption="no"
+	<field name="person_advisor" multiplicity="1" languageoption="off"
 		mandatory="yes" />
-	<field name="person_author" multiplicity="1" languageoption="no"
+	<field name="person_author" multiplicity="1" languageoption="off"
 		mandatory="yes" />
-	<field name="person_other" multiplicity="1" languageoption="no"
+	<field name="person_other" multiplicity="1" languageoption="off"
 		mandatory="no" />
-	<field name="person_referee" multiplicity="1" languageoption="no"
+	<field name="person_referee" multiplicity="1" languageoption="off"
 		mandatory="no" />
 
 	<!-- titles  -->
-	<field name="title_abstract" multiplicity="1" languageoption="no"
+	<field name="title_abstract" multiplicity="1" languageoption="off"
 		mandatory="yes" />
-	<field name="title_main" multiplicity="1" languageoption="no"
+	<field name="title_main" multiplicity="1" languageoption="off"
 		mandatory="yes" />
-	<field name="title_parent" multiplicity="1" languageoption="no"
+	<field name="title_parent" multiplicity="1" languageoption="off"
 		mandatory="no" />
 
 	<!-- subjects -->
-	<field name="subject_swd" multiplicity="1" languageoption="no"
+	<field name="subject_swd" multiplicity="1" languageoption="off"
 		mandatory="yes" />
-	<field name="subject_ddc" multiplicity="1" languageoption="no"
+	<field name="subject_ddc" multiplicity="1" languageoption="off"
 		mandatory="no" />
 	<field name="subject_uncontrolled" multiplicity="1"
-		languageoption="no" mandatory="yes" />
+		languageoption="off" mandatory="yes" />
 
 </documenttype>
