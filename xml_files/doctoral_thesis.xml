@@ -44,66 +44,47 @@
 		mandatory="yes" />
 
 	<!-- collections -->
-	<field name="collection_title" multiplicity="1" languageoption="on"
-		mandatory="no" />
-	<field name="collection_sequence_nr" multiplicity="1"
-		languageoption="off" mandatory="no" />
+	<field name="collection_title" />
+	<field name="collection_sequence_nr" languageoption="off" />
 
 	<!-- dates -->
 	<!-- either "completed_year" or "completed_date" must be mandatory -->
 	<mandatory type="one-at-least">
-		<field name="completed_year" multiplicity="1"
-			languageoption="off" />
-		<field name="completed_date" multiplicity="1"
-			languageoption="off" />
+		<field name="completed_year" languageoption="off" />
+		<field name="completed_date" languageoption="off" />
 	</mandatory>
 
 	<!-- either "published_year" or "published_date" must be mandatory -->
 	<mandatory type="one-at-least">
-		<field name="published_year" multiplicity="1"
-			languageoption="off" />
-		<field name="published_date" multiplicity="1"
-			languageoption="off" />
+		<field name="published_year" languageoption="off" />
+		<field name="published_date" languageoption="off" />
 	</mandatory>
 
-	<field name="date_accepted" multiplicity="1" languageoption="off"
-		mandatory="yes" />
+	<field name="date_accepted" languageoption="off" mandatory="yes" />
 
 
 	<!-- identifiers -->
-	<field name="identifier_isbn" multiplicity="1" languageoption="off"
-		mandatory="no" />
+	<field name="identifier_isbn" languageoption="off" />
 
 	<!-- institutes -->
-	<field name="institute_name" multiplicity="1" languageoption="off"
-		mandatory="yes" />
-	<field name="non_institute_affiliation" multiplicity="1"
-		languageoption="off" mandatory="no" />
+	<field name="institute_name" languageoption="off" mandatory="yes" />
+	<field name="non_institute_affiliation" languageoption="off" />
 
 	<!-- persons -->
-	<field name="person_advisor" multiplicity="1" languageoption="off"
-		mandatory="yes" />
-	<field name="person_author" multiplicity="1" languageoption="off"
-		mandatory="yes" />
-	<field name="person_other" multiplicity="1" languageoption="off"
-		mandatory="no" />
-	<field name="person_referee" multiplicity="1" languageoption="off"
-		mandatory="no" />
+	<field name="person_advisor" languageoption="off" mandatory="yes" />
+	<field name="person_author" languageoption="off" mandatory="yes" />
+	<field name="person_other" languageoption="off" />
+	<field name="person_referee" languageoption="off" />
 
 	<!-- titles  -->
-	<field name="title_abstract" multiplicity="*" languageoption="on"
-		mandatory="yes" />
-	<field name="title_main" multiplicity="*" languageoption="on"
-		mandatory="yes" />
-	<field name="title_parent" multiplicity="*" languageoption="on"
-		mandatory="no" />
+	<field name="title_abstract" multiplicity="*" mandatory="yes" />
+	<field name="title_main" multiplicity="*" mandatory="yes" />
+	<field name="title_parent" multiplicity="*" />
 
 	<!-- subjects -->
-	<field name="subject_swd" multiplicity="1" languageoption="off"
+	<field name="subject_swd" languageoption="off" mandatory="yes" />
+	<field name="subject_ddc" languageoption="off" />
+	<field name="subject_uncontrolled" languageoption="off"
 		mandatory="yes" />
-	<field name="subject_ddc" multiplicity="1" languageoption="off"
-		mandatory="no" />
-	<field name="subject_uncontrolled" multiplicity="1"
-		languageoption="off" mandatory="yes" />
 
 </documenttype>
