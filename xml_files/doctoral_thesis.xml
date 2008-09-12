@@ -91,11 +91,11 @@
 		mandatory="no" />
 
 	<!-- titles  -->
-	<field name="title_abstract" multiplicity="1" languageoption="off"
+	<field name="title_abstract" multiplicity="*" languageoption="on"
 		mandatory="yes" />
-	<field name="title_main" multiplicity="1" languageoption="off"
+	<field name="title_main" multiplicity="*" languageoption="on"
 		mandatory="yes" />
-	<field name="title_parent" multiplicity="1" languageoption="off"
+	<field name="title_parent" multiplicity="*" languageoption="on"
 		mandatory="no" />
 
 	<!-- subjects -->
