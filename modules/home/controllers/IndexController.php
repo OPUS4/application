@@ -25,19 +25,29 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Default
+ * @package     Module_Home
  * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
-<h1>Opus Application - <?= $this->title ?></h1>
-<ul>
-    <li><a href="<?= $this->url(array('module' => 'admin')) ?>">Admin</a></li>
-    <li><a href="<?= $this->url(array('module' => 'edit')) ?>">Edit</a></li>
-    <li><a href="<?= $this->url(array('module' => 'frontdoor')) ?>">Frontdoor</a></li>
-    <li><a href="<?= $this->url(array('module' => 'home')) ?>">Home</a></li>
-    <li><a href="<?= $this->url(array('module' => 'publish')) ?>">Publish</a></li>
-    <li><a href="<?= $this->url(array('module' => 'search')) ?>">Search</a></li>
-</ul>
+
+/**
+ * Main entry point for this module.
+ *
+ * @category    Application
+ * @package     Module_Home
+ */
+class Home_IndexController extends Zend_Controller_Action {
+
+	/**
+	 * Just to be there. No actions taken.
+	 *
+	 * @return void
+	 *
+	 */
+	public function indexAction() {
+		$this->view->title = 'Home';
+	}
+
+}
