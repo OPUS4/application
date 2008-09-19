@@ -38,7 +38,7 @@
 	<!-- General hints on the publication process. Documenttype and licence selection.   -->
 	<page name="publish">
 		<field name="document_type" />
-		<field name="licence" />
+		<field name="licences_id" />
 		<field name="language" />
 	</page>
 
@@ -55,7 +55,7 @@
 
 		<!-- institutions -->
 		<group name="institutions">
-			<field name="institute_name" />
+			<field name="institute" />
 			<field name="non_institute_affiliation" />
 		</group>
 

@@ -38,10 +38,8 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
 	<!-- general -->
-	<field name="licence" multiplicity="*" languageoption="off"
-		mandatory="yes" />
-	<field name="language" multiplicity="*" languageoption="off"
-		mandatory="yes" />
+	<field name="licences_id" mandatory="yes" />
+	<field name="language" mandatory="yes" />
 
 
 	<!-- dates -->
@@ -63,7 +61,7 @@
 	<field name="identifier_isbn" languageoption="off" />
 
 	<!-- institutes -->
-	<field name="institute_name" languageoption="off" mandatory="yes" />
+	<field name="institute" multiplicity="*" languageoption="off" mandatory="yes" />
 	<field name="non_institute_affiliation" languageoption="off" />
 
 	<!-- persons -->
