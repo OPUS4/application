@@ -43,9 +43,6 @@
 	<field name="language" multiplicity="*" languageoption="off"
 		mandatory="yes" />
 
-	<!-- collections -->
-	<field name="collection_title" />
-	<field name="collection_sequence_nr" languageoption="off" />
 
 	<!-- dates -->
 	<!-- either "completed_year" or "completed_date" must be mandatory -->
@@ -61,7 +58,6 @@
 	</mandatory>
 
 	<field name="date_accepted" languageoption="off" mandatory="yes" />
-
 
 	<!-- identifiers -->
 	<field name="identifier_isbn" languageoption="off" />
