@@ -33,6 +33,27 @@
 	* @version    $Id$
 -->
 
+<!-- 
+
+How to modify the complex type "field":
+===================================
+The complex type "field" may contain the attributes languageoption, mandatory, multiplicity
+and name. It needs at least the attribute "name". If there is no other entry, the attributes
+languageoption, mandatory and multiplicity use their default values.
+
+- Languageoption attributes accept only the values "on" or "off". The default value is "off".
+
+- Mandatory attributes accept only the values "yes" or "no". The default value is "no".
+
+- Multiplicity attributes accept only integers for quantities, or the asterisk "*" to represent
+unlimited quantity. The default value is "1".
+
+- The attrubute "name" has only lowercase characters and digits. It always starts with
+characters. Words can be separated by the underscore character "_". There is no default
+value for "name". It must be declared.
+
+-->
+
 <documenttype name="doctoral_thesis"
 	xmlns="http://schemas.opus.org/documenttype"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -45,40 +66,39 @@
 	<!-- dates -->
 	<!-- either "completed_year" or "completed_date" must be mandatory -->
 	<mandatory type="one-at-least">
-		<field name="completed_year" languageoption="off" />
-		<field name="completed_date" languageoption="off" />
+		<field name="completed_year" />
+		<field name="completed_date" />
 	</mandatory>
 
 	<!-- either "published_year" or "published_date" must be mandatory -->
 	<mandatory type="one-at-least">
-		<field name="published_year" languageoption="off" />
-		<field name="published_date" languageoption="off" />
+		<field name="published_year" />
+		<field name="published_date" />
 	</mandatory>
 
-	<field name="date_accepted" languageoption="off" mandatory="yes" />
+	<field name="date_accepted" mandatory="yes" />
 
 	<!-- identifiers -->
-	<field name="identifier_isbn" languageoption="off" />
+	<field name="identifier_isbn" />
 
 	<!-- institutes -->
-	<field name="institute" multiplicity="*" languageoption="off" mandatory="yes" />
-	<field name="non_institute_affiliation" languageoption="off" />
+	<field name="institute" mandatory="yes" multiplicity="*" />
+	<field name="non_institute_affiliation" />
 
 	<!-- persons -->
-	<field name="person_advisor" languageoption="off" mandatory="yes" />
-	<field name="person_author" languageoption="off" mandatory="yes" />
-	<field name="person_other" languageoption="off" />
-	<field name="person_referee" languageoption="off" />
+	<field name="person_advisor" mandatory="yes" />
+	<field name="person_author" mandatory="yes" multiplicity="3"/>
+	<field name="person_other" multiplicity="3" />
+	<field name="person_referee" />
 
 	<!-- titles  -->
-	<field name="title_abstract" multiplicity="*" mandatory="yes" />
-	<field name="title_main" multiplicity="*" mandatory="yes" />
-	<field name="title_parent" multiplicity="*" />
+	<field name="title_abstract" languageoption="on" mandatory="yes" multiplicity="2" />
+	<field name="title_main" languageoption="on" mandatory="yes" multiplicity="2" />
+	<field name="title_parent" languageoption="on" multiplicity="2" />
 
 	<!-- subjects -->
-	<field name="subject_swd" languageoption="off" mandatory="yes" />
-	<field name="subject_ddc" languageoption="off" />
-	<field name="subject_uncontrolled" languageoption="off"
-		mandatory="yes" />
+	<field name="subject_swd" mandatory="yes" />
+	<field name="subject_ddc" />
+	<field name="subject_uncontrolled" languageoption="on" />
 
 </documenttype>
