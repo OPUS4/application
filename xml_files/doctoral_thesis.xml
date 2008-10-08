@@ -48,7 +48,7 @@ languageoption, mandatory and multiplicity use their default values.
 - Multiplicity attributes accept only integers for quantities, or the asterisk "*" to represent
 unlimited quantity. The default value is "1".
 
-- The attrubute "name" has only lowercase characters and digits. It always starts with
+- The attribute "name" has only lowercase characters and digits. It always starts with
 characters. Words can be separated by the underscore character "_". There is no default
 value for "name". It must be declared.
 
