@@ -65,19 +65,18 @@ value for "name". It must be declared.
     <!-- collections  -->
     
 	<!-- dates -->
-	<!-- either "completed_year" or "completed_date" must be mandatory -->
-	<mandatory type="one-at-least">
-		<field name="completed_year" />
-		<field name="completed_date" />
-	</mandatory>
-
 	<!-- either "published_year" or "published_date" must be mandatory -->
 	<mandatory type="one-at-least">
 		<field name="published_year" />
 		<field name="published_date" />
 	</mandatory>
-	<field name="date_accepted" mandatory="yes" />
-
+	
+	<!-- editions -->
+	<field name="edition" />
+	
+	<!-- extent -->
+	<field name="page_number" />
+	
 	<!-- identifiers -->
 	<field name="identifier_isbn" multiplicity="2" />
 
@@ -86,11 +85,12 @@ value for "name". It must be declared.
 	<field name="non_institute_affiliation" />
 
 	<!-- persons -->
-	<field name="person_advisor" mandatory="yes" />
-	<field name="person_author" mandatory="yes" multiplicity="3" />
+	<mandatory type="one-at-least">
+	   <field name="person_editor" multiplicity="3" />
+	   <field name="person_author" multiplicity="3" />
+	</mandatory>
 	<field name="person_other" multiplicity="3" />
-	<field name="person_referee" />
-
+	
     <!-- publishers  -->
     <field name="publisher_name" />
     <field name="publisher_place" />  
