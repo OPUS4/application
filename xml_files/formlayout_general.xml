@@ -30,7 +30,7 @@
 	* @author     Eike Kleiner <eike.kleiner@bsz-bw.de>
 	* @copyright  Copyright (c) 2008, OPUS 4 development team
 	* @license    http://www.gnu.org/licenses/gpl.html General Public License
-	* @version    $Id: documenttype.xsd 696 2008-09-10 11:34:21Z claussnitzer $
+	* @version    $Id$
 -->
 
 <formlayout name="general" xmlns="http://schemas.opus.org/formlayout"
