@@ -40,12 +40,17 @@ $this->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8')
 $this->headTitle('OPUS 4')
     ->headTitle($this->title)
     ->setSeparator(' | ');
+
+$fc = Zend_Controller_Front::getInstance();
+$this->headLink()
+    ->appendStylesheet($fc->getRequest()->getBasePath() . '/css/opus.css');
 ?>
 <?= $this->doctype('XHTML1_STRICT') ?>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
     <?= $this->headMeta() ?>
     <?= $this->headTitle() ?>
+    <?= $this->headLink() ?>
 </head>
 
 <body>
