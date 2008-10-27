@@ -26,14 +26,36 @@
  *
  * @category    Application
  * @package     Module_Publish
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
  * @author      Henning Gerhardt (henning.gerhardt@slub-dresden.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
-<h1>Opus Application - <?= $this->title ?></h1>
-<a href="<?= $this->url(array('module' => 'default', 'controller' => 'index', 'action' => 'index')) ?>">Home</a>
 
-<?= $this->form ?>
+/**
+ * Shows available document types
+ *
+ * @category    Application
+ * @package     Module_Publish
+ */
+class Overview extends Zend_Form {
+
+    /**
+     * Enter description here...
+     *
+     * @return void
+     */
+    public function init() {
+        $listOptions = array('doctoral_thesis' => 'doctoral_thesis');
+        $select = new Zend_Form_Element_Select('selecttype');
+        $select->setLabel('selecttype')
+            ->setMultiOptions($listOptions)
+            ->addValidator('NotEmpty');
+
+        $submit = new Zend_Form_Element_Submit('submit');
+        $submit->setLabel('process');
+
+        $this->addElements(array($select, $submit));
+    }
+
+}

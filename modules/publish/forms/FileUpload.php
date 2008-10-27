@@ -26,14 +26,37 @@
  *
  * @category    Application
  * @package     Module_Publish
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
  * @author      Henning Gerhardt (henning.gerhardt@slub-dresden.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
-<h1>Opus Application - <?= $this->title ?></h1>
-<a href="<?= $this->url(array('module' => 'default', 'controller' => 'index', 'action' => 'index')) ?>">Home</a>
 
-<?= $this->form ?>
+/**
+ * Shows a upload form for one or more files
+ *
+ * @category    Application
+ * @package     Module_Publish
+ * */
+class FileUpload extends Zend_Form {
+
+    /**
+     * Enter description here...
+     *
+     * @return void
+     */
+    public function init() {
+        $fileupload = new Zend_Form_Element_File('fileupload');
+        $fileupload->setLabel('FileToUpload')
+            ->setDestination('../tmp/')
+            ->addValidator('Count', false, 1)     // ensure only 1 file
+            ->addValidator('Size', false, 102400) // limit to 100K
+            ->addValidator('Extension', false, 'pdf,txt'); // only PDF
+
+        $submit = new Zend_Form_Element_Submit('submit');
+        $submit->setLabel('process');
+
+        $this->addElements(array($fileupload, $submit));
+        $this->setAttrib('enctype', 'multipart/form-data');
+    }
+}
