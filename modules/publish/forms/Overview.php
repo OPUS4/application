@@ -46,7 +46,7 @@ class Overview extends Zend_Form {
      * @return void
      */
     public function init() {
-        $listOptions = array('doctoral_thesis' => 'doctoral_thesis');
+        $listOptions = array('doctoral_thesis' => 'doctoral_thesis', 'monograph' => 'monographie');
         $select = new Zend_Form_Element_Select('selecttype');
         $select->setLabel('selecttype')
             ->setMultiOptions($listOptions)
