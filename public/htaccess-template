@@ -29,7 +29,7 @@
 # @version     $Id$
 
 # Configure on rewriting. Note that the rewrite base has to be adjusted to the base url of the application.
-# Replace <template> with correct path e.g. /workspace/Demetrios/public
+# Replace <template> with correct path e.g. /MyProject/public/
 RewriteEngine on
 RewriteBase <template>
 RewriteCond %{REQUEST_FILENAME} -s [OR] 
