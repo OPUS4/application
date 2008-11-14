@@ -41,7 +41,7 @@
 class FileUpload extends Zend_Form {
 
     /**
-     * Enter description here...
+     * Build easy upload form
      *
      * @return void
      */
