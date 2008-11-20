@@ -27,6 +27,7 @@
  * @category    Application
  * @package     Module_Default
  * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
+ * @author      Felix Ostrowski (ostrowski@hbz-nrw.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -43,13 +44,13 @@
 class IndexController extends Zend_Controller_Action {
 
 	/**
-	 * Just to be there. No actions taken.
+	 * Redirect to module home by default.
 	 *
 	 * @return void
 	 *
 	 */
 	public function indexAction() {
-		$this->view->title = 'Index';
+		$this->_helper->getHelper('Redirector')->gotoSimple('index', 'index', 'home');
 	}
 
 }
