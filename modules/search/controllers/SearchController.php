@@ -59,7 +59,7 @@ class Search_SearchController extends Zend_Controller_Action
 		// Add elements to form:
 		$form->addElement($query)
 	     // use addElement() as a factory to create 'Login' button:
-    		 ->addElement('submit', 'search', array('label' => 'Suchen'));
+    		 ->addElement('submit', 'search', array('label' => $this->view->translate('search_searchaction')));
     	return $form;
     }
 
@@ -71,6 +71,7 @@ class Search_SearchController extends Zend_Controller_Action
 	 */
     public function indexAction()
     {
+    	$this->view->title = $this->view->translate('search_index_fulltextsearch');
     	$this->view->form = $this->getSearchForm();
     }
 
@@ -84,6 +85,7 @@ class Search_SearchController extends Zend_Controller_Action
     {
     	// Just Dummy Data - to show what we should get from the data schema
     	// TODO: real search operation
+    	$this->view->title = $this->view->translate('search_searchresult');
     	$this->view->hitlist = new HitListIterator(BrowsingFilter::getAllTitles());
     }
 }

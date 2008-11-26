@@ -44,6 +44,7 @@ class Search_IndexController extends Zend_Controller_Action
 	 */
     public function indexAction()
     {
+    	$this->view->title = $this->view->translate('search_modulename');
     }
 
 }

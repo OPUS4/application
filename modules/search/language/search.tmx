@@ -18,6 +18,14 @@
         <seg>Alle Titel aus dem Repository</seg>
       </tuv>
     </tu>
+     <tu tuid="search_index_collectionsbrowsing">
+      <tuv xml:lang="en">
+        <seg>Browsing categories</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Browsing nach Kategorien</seg>
+      </tuv>
+    </tu>
     <tu tuid="search_index_authorsbrowsing">
       <tuv xml:lang="en">
         <seg>Browse authors</seg>
@@ -48,6 +56,14 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Volltextsuche</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_searchresult">
+      <tuv xml:lang="en">
+        <seg>Search result</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Suchergebnis</seg>
       </tuv>
     </tu>
     <tu tuid="search_index_metadatasearch">
@@ -104,6 +120,14 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>gefunden in</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_searchaction">
+      <tuv xml:lang="en">
+        <seg>Search</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Suchen</seg>
       </tuv>
     </tu>
     <tu tuid="search_modulename">

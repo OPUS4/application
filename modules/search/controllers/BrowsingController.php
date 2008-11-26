@@ -44,6 +44,7 @@ class Search_BrowsingController extends Zend_Controller_Action
 	 */
     public function indexAction()
     {
+		$this->view->title = $this->view->translate('search_index_browsing');
 		// Generate a list of all CollectionRoles existing in the repository and pass it as an Iterator to the View
 		$browsingList = new BrowsingListFactory("collectionRoles");
 		$browsingListProduct = $browsingList->getBrowsingList();
@@ -70,18 +71,21 @@ class Search_BrowsingController extends Zend_Controller_Action
     	switch ($filter)
     	{
     		case 'author':
+    			$this->view->title = $this->view->translate('search_index_authorsbrowsing');
 	    		$authorId = (int) $this->_getParam("author");
     			$author = OpusPersonAdapter::getPerson($authorId);
 				$hitlist = BrowsingFilter::getAuthorTitles($author);
 				$this->view->author = $author->get();
 				break;
     		case 'doctype':
+    			$this->view->title = $this->view->translate('search_index_doctypebrowsing');
 	    		$authorId = (int) $this->_getParam("doctype");
     			$author = DocumentTypeAdapter::getDocType($authorId);
 				$hitlist = BrowsingFilter::getDocumentTypeTitles($author);
 				$this->view->doctype = $author->get();
 				break;
 			default:
+				$this->view->title = $this->view->translate('search_index_alltitlesbrowsing');
 				// Default Filter is: show all documents from the server
 				$hitlist = BrowsingFilter::getAllTitles();
     	}
@@ -116,16 +120,19 @@ class Search_BrowsingController extends Zend_Controller_Action
     	switch ($list)
     	{
     		case 'authors':
+    			$this->view->title = $this->view->translate('search_index_authorsbrowsing');
 				$browsingList = new BrowsingListFactory($list);
 				$browsingListProduct = $browsingList->getBrowsingList();
 				$this->view->browsinglist = new PersonsListIterator($browsingListProduct);
 				break;
 			case 'doctypes':
+				$this->view->title = $this->view->translate('search_index_doctypebrowsing');
 				$browsingList = new BrowsingListFactory($list);
 				$browsingListProduct = $browsingList->getBrowsingList();
 				$this->view->browsinglist = new DocumentTypeListIterator($browsingListProduct);
 				break;
 			case 'collection':
+				$this->view->title = $this->view->translate('search_index_collectionsbrowsing');
 				$node = $this->_getParam("node");
 				if (isset($node) === false) $node = 0;
 				$collection = $this->_getParam("collection");
@@ -136,6 +143,7 @@ class Search_BrowsingController extends Zend_Controller_Action
 				$this->view->documentlist = new CollectionNodeDocumentIterator($browsingListProduct);
 				break;
 			default:
+				$this->view->title = $this->view->translate('search_index_alltitlesbrowsing');
 				// Just to be there... List is not supported (Exception is thrown by BrowsingListFactory)
     	}
     }
