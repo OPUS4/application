@@ -33,7 +33,7 @@
  */
 
 
-class IndexController extends Zend_Controller_Action
+class Frontdoor_IndexController extends Zend_Controller_Action
 {
 
     public function indexAction()
@@ -60,10 +60,9 @@ class IndexController extends Zend_Controller_Action
             if ($value)
             {
             $mydummydata[$key] = $value;
-            $this->view->value .= $key;
-            $this->view->value .= $value;
             }
         }
+        $this->view->mydummydata = $mydummydata;
         $this->view->text_title = "Titel";
         $this->view->text_abstract = "Kurzfassung";
         $this->view->text_subject_url = "URL";
