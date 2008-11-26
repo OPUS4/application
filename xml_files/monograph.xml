@@ -59,50 +59,50 @@ value for "name". It must be declared.
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
 	<!-- general -->
-	<field name="licences_id" mandatory="yes" />
-	<field name="language" mandatory="yes" />
+	<field name="Licence" mandatory="yes" />
+	<field name="Language" mandatory="yes" />
 
     <!-- collections  -->
     
 	<!-- dates -->
 	<!-- either "published_year" or "published_date" must be mandatory -->
 	<mandatory type="one-at-least">
-		<field name="published_year" />
-		<field name="published_date" />
+		<field name="PublishedYear" />
+		<field name="PublishedDate" />
 	</mandatory>
 	
 	<!-- editions -->
-	<field name="edition" />
+	<field name="Edition" />
 	
 	<!-- extent -->
-	<field name="page_number" />
+	<field name="PageNumber" />
 	
 	<!-- identifiers -->
-	<field name="identifier_isbn" multiplicity="2" />
+	<field name="Isbn" multiplicity="2" />
 
 	<!-- institutes -->
-	<field name="institute" mandatory="yes" multiplicity="3" />
-	<field name="non_institute_affiliation" />
+	<field name="Institute" mandatory="yes" multiplicity="3" />
+	<field name="NonInstituteAffiliation" />
 
 	<!-- persons -->
 	<mandatory type="one-at-least">
-	   <field name="person_editor" multiplicity="3" />
-	   <field name="person_author" multiplicity="3" />
+	   <!--<field name="PersonEditor" multiplicity="3" />-->
+	   <field name="PersonAuthor" multiplicity="3" />
 	</mandatory>
-	<field name="person_other" multiplicity="3" />
+	<field name="PersonOther" multiplicity="3" />
 	
     <!-- publishers  -->
-    <field name="publisher_name" />
-    <field name="publisher_place" />  
+    <field name="PublisherName" />
+    <field name="PublisherPlace" />  
 
 	<!-- titles  -->
-	<field name="title_abstract" languageoption="on" mandatory="yes" multiplicity="2" />
-	<field name="title_main" languageoption="on" mandatory="yes" multiplicity="2" />
-	<field name="title_parent" languageoption="on" multiplicity="2" />
+	<field name="TitleAbstract" languageoption="on" mandatory="yes" multiplicity="2" />
+	<field name="TitleMain" languageoption="on" mandatory="yes" multiplicity="2" />
+	<field name="TitleParent" languageoption="on" multiplicity="2" />
 
 	<!-- subjects -->
-	<field name="subject_swd" mandatory="yes" multiplicity="4" />
-	<field name="subject_ddc" mandatory="yes" />
-	<field name="subject_uncontrolled" languageoption="on" multiplicity="4" />
+	<field name="SubjectSwd" mandatory="yes" multiplicity="4" />
+	<field name="SubjectDdc" mandatory="yes" />
+	<field name="SubjectUncontrolled" languageoption="on" multiplicity="4" />
 
 </documenttype>
