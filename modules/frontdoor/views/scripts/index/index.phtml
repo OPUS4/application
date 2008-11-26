@@ -32,96 +32,80 @@
  * @version     $Id: index.phtml 659 2008-09-01 11:03:28Z claussnitzer $
  */
 ?>
-<?
-require_once 'Zend/Controller/Action.php';
-?>
-<body>
-
 <h1>Opus Application - <?echo $this->pagetitle; ?></h1>
 <h2><?echo $this->header; ?>...</h2>
 
 ---------------------------------------------------------------------------------<br><br><br>
-<?if($this->my_title_abstract_main)
-  {
-?><b><?echo $this->my_title_abstract_main;?>
-</b><br><br><br>
-<?}?>
-
 <?
-if($this->my_identifiers_url)
-  {
-?><b><?echo $this->text_identifiers_url;?>: </b>
-<a href="<?echo $this->my_identifiers_url;?>"><?echo $this->my_identifiers_url;?>
-</a><br><br>
-<?}?>
+foreach ($mydummydata as $key => $value)
+{
+    if ($key === "title")
+    {
+        ?><b><?echo $this->value .= $value;?>
+        </b><br><br><br><?
+    }?>
 
-<?
-if($this->my_identifiers_urn)
-  {
-?><b><?echo $this->text_identifiers_urn;?>: </b>
-<a href="<?echo $this->my_identifiers_urn;?>"><?echo $this->my_identifiers_urn;?>
-</a><br><br>
-<?}?>
+    <?
+    if ($key === "url")
+    {
+       ?><b><?echo $this->text_url;?>: </b>
+        <a href="<?echo $this->value .= $value;?>"><?echo $this->value .= $value;?>
+        </a><br><br><?
+    }?>
 
-<?
-if($this->my_subject_swd)
-  {
-?><b><?echo $this->text_subject_swd;?>: </b>
-       <?echo $this->my_subject_swd;?>
-<br><br>
-<?}?>
+    <?
+    if ($key === "urn")
+    {
+       ?><b><?echo $this->text_urn;?>: </b>
+        <a href="<?echo $this->value .= $value;?>"><?echo $this->value .= $value;?>
+        </a><br><br><?
+    }?>
 
-<?
-if($this->my_subject_ddc)
- {
-?><b><?echo $this->text_subject_ddc;?>: </b>
-         <?echo $this->my_subject_ddc;?>
-<br><br>
-<?}?>
+    <?
+    if ($key === "ddc")
+    {
+       ?><b><?echo $this->text_ddc;?>: </b>
+       <?echo $this->value .= $value;?>
+       <br><br><?
+    }?>
 
-<?
-if($this->my_publisher_name)
-  {
-?><b><?echo $this->text_publisher_name;?>: </b>
-       <?echo $this->my_publisher_name;?>
-<br><br>
-<?}?>
+    <?
+    if ($key === "publisher_name")
+    {
+       ?><b><?echo $this->text_publisher_name;?>: </b>
+       <?echo $this->value .= $value;?>
+       <br><br><?
+    }?>
 
-<?
-if($this->my_publisher_place)
-  {
-?><b><?echo $this->text_publisher_place;?>: </b>
-       <?echo $this->my_publisher_place;?>
-<br><br>
-<?}?>
+    <?
+    if ($key === "publisher_place")
+    {
+       ?><b><?echo $this->text_publisher_place;?>: </b>
+       <?echo $this->value .= $value;?>
+       <br><br><?
+    }?>
 
-<?
-if($this->my_published_year)
-  {
-?><b><?echo $this->text_published_year;?>: </b>
-       <?echo $this->my_published_year;?>
-<br><br>
-<?}?>
+    <?
+    if ($key === "published_year")
+    {
+       ?><b><?echo $this->text_published_year;?>: </b>
+       <?echo $this->value .= $value;?>
+       <br><br><?
+    }?>
 
-<?
-if($this->my_title_abstract_abstract)
-  {
-?><b><?echo $this->text_title_abstract_abstract;?>: </b>
-       <?echo $this->my_title_abstract_abstract;?>
-<br><br>
-<?}?>
-
-<?
-if($this->my_title_abstract_abstract_eng)
-  {
-?><b><?echo $this->text_title_abstract_abstract_eng;?>: </b>
-       <?echo $this->my_title_abstract_abstract_eng;?>
-<br><br>
-<?}?>
-------------------------------------------------------------------------------------------<br><br>
-<? // echo $this->value; ?><br>
-<? //$this->ay; ?>
+    <?
+    if ($key === "abstract")
+    {
+       ?><b><?echo $this->text_abstract;?>: </b>
+       <?echo $this->value .= $value;?>
+       <br><br><?
+    }?>
+}
 
 
-</body>
+
+
+
+
+
 
