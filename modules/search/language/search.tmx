@@ -108,10 +108,10 @@
     </tu>
     <tu tuid="search_modulename">
       <tuv xml:lang="en">
-        <seg>Search repository content</seg>
+        <seg>Search and browse</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Suche in diesem Repository</seg>
+        <seg>Suchen und Browsen</seg>
       </tuv>
     </tu>
   </body>
