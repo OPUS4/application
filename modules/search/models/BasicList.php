@@ -1,6 +1,6 @@
 <?php
 /**
- * Controller for an overview on the browsing/search component
+ * Abstract definition of all lists for the Module_Search
  * 
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -26,7 +26,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Browsing
+ * @category    Search_Lists
  * @package     Module_Search
  * @author      Oliver Marahrens (o.marahrens@tu-harburg.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
@@ -34,17 +34,50 @@
  * @version     $Id$
  */
 
-class Search_IndexController extends Zend_Controller_Action
+/**
+ * class BasicList 
+ * all lists should extend this class and implement the methods
+ * @abstract
+ */
+abstract class BasicList
 {
-	/**
-	 * Just to be there. No actions taken.
-	 *
-	 * @return void
-	 *
-	 */
-    public function indexAction()
-    {
-    }
-
+  /**
+   * Adds an element to the list
+   * @abstract
+   * @return void
+   * @param Object element element that should be added to the list
+   * @access public
+   */
+	public abstract function add($element);
+  /**
+   * Removes an element from the list
+   * @abstract
+   * @return void
+   * @param Object|Integer element element (or index number of element) that should be removed from the list
+   * @access public
+   */
+	public abstract function delete($element);
+  /**
+   * Gets an element from the list by its index
+   * @abstract
+   * @return Object
+   * @param Integer offset index number of the element
+   * @access public
+   */
+	public abstract function get($offset);
+  /**
+   * Sorts the list
+   * @abstract
+   * @return void
+   * @param String sortCriteria criteria the list should be sorted with
+   * @access public
+   */
+	public abstract function sort($sortCriteria);
+  /**
+   * Counts the elements in the list
+   * @abstract
+   * @return Integer number of elements in this list
+   * @access public
+   */
+	public abstract function count();
 }
-?>

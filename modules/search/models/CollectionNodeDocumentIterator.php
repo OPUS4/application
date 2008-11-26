@@ -1,6 +1,6 @@
 <?php
 /**
- * Controller for an overview on the browsing/search component
+ * Iterator for the documents contained in a CollectionNode
  * 
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -34,17 +34,25 @@
  * @version     $Id$
  */
 
-class Search_IndexController extends Zend_Controller_Action
+/**
+ * class CollectionNodeDocumentIterator
+ */
+class CollectionNodeDocumentIterator extends ListIterator
 {
-	/**
-	 * Just to be there. No actions taken.
-	 *
-	 * @return void
-	 *
-	 */
-    public function indexAction()
-    {
-    }
+  /**
+   * Constructor
+   */
+  public function __construct($list) {
+    parent::__construct($list);
+  } // end of Constructor
 
-}
-?>
+  /**
+   * Returns the current element from the Documenttypelist
+   * 
+   * @return DocumentType currently selected Documenttype 
+   */
+  public function current() 
+  {
+  	return $this->list->get($this->_currentIndex);
+  }
+} // end of DocumentTypeListIterator

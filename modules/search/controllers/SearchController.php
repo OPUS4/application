@@ -1,6 +1,6 @@
 <?php
 /**
- * Controller for an overview on the browsing/search component
+ * Controller for search operations
  * 
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -26,7 +26,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Browsing
+ * @category    Browse
  * @package     Module_Search
  * @author      Oliver Marahrens (o.marahrens@tu-harburg.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
@@ -34,17 +34,57 @@
  * @version     $Id$
  */
 
-class Search_IndexController extends Zend_Controller_Action
+class Search_SearchController extends Zend_Controller_Action
 {
-	/**
-	 * Just to be there. No actions taken.
+
+    /**
+	 * Define Search form
+	 *
+	 * @return Zend_Form
+	 *
+	 */
+    private function getSearchForm()
+    {
+        $form = new Zend_Form();
+		$form->setAction($this->view->url(array("controller"=>"search", "action"=>"search")))
+     		->setMethod('post');
+
+		// Create and configure username element:
+		$query = $form->createElement('text', 'query');
+		$query->addValidator('alnum')
+        		->addValidator('regex', false, array('/^[a-z]+/'))
+         		->addValidator('stringLength', false, array(1, 100))
+         		->setRequired(true);
+
+		// Add elements to form:
+		$form->addElement($query)
+	     // use addElement() as a factory to create 'Login' button:
+    		 ->addElement('submit', 'search', array('label' => 'Suchen'));
+    	return $form;
+    }
+
+    /**
+	 * Show Search form
 	 *
 	 * @return void
 	 *
 	 */
     public function indexAction()
     {
+    	$this->view->form = $this->getSearchForm();
     }
 
+    /**
+	 * Do the search operation and set the hitlist to the view
+	 *
+	 * @return void
+	 *
+	 */
+    public function searchAction()
+    {
+    	// Just Dummy Data - to show what we should get from the data schema
+    	// TODO: real search operation
+    	$this->view->hitlist = new HitListIterator(BrowsingFilter::getAllTitles());
+    }
 }
 ?>

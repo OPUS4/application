@@ -1,6 +1,6 @@
 <?php
 /**
- * Controller for an overview on the browsing/search component
+ * Adapter to use the Documents from the framework in Module_Search
  * 
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -26,7 +26,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Browsing
+ * @category    Framework-Adapter
  * @package     Module_Search
  * @author      Oliver Marahrens (o.marahrens@tu-harburg.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
@@ -34,17 +34,47 @@
  * @version     $Id$
  */
 
-class Search_IndexController extends Zend_Controller_Action
+class OpusDocumentAdapter
 {
 	/**
-	 * Just to be there. No actions taken.
-	 *
-	 * @return void
-	 *
+	 * Attribute to store the Document as an Array
+	 * @access private
 	 */
-    public function indexAction()
-    {
-    }
+	private $documentData;
+	
+  /**
+   * Constructor
+   * 
+   * @param Integer|Array|OpusDocumentAdapter|Opus_Document_Document opusDocument data for the new OpusDocumentAdapter-Object 
+   */
+	public function __construct($opusDocument = null)
+	{
+  		if (is_int($opusDocument)) {
+  			$this->documentData = $this->mapDocument(new Opus_Document_Document($opusDocument));
+  		}
+  		else if (is_array($opusDocument)) {
+  			$this->documentData = $opusDocument;
+  		}
+  		elseif (get_class($opusDocument) === "OpusDocumentAdapter")
+  		{
+  			$this->documentData = $opusDocument->getDocument();
+  		}
+  		elseif (get_class($opusDocument) === "Opus_Document_Document")
+  		{
+  			$this->documentData = $this->mapDocumentType($opusDocument);
+  		}
+	}
+	
+  /**
+   * Returns the document data as an array
+   * 
+   * @return Array Array with document data usable in Module_Search 
+   */
+	public function getDocument()
+	{
+		return $this->documentData;
+	} 
 
 }
+
 ?>

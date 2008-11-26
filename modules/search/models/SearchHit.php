@@ -1,6 +1,6 @@
 <?php
 /**
- * Controller for an overview on the browsing/search component
+ * Structure of search hits in Module_Search
  * 
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -26,7 +26,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Browsing
+ * @category    Search
  * @package     Module_Search
  * @author      Oliver Marahrens (o.marahrens@tu-harburg.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
@@ -34,17 +34,64 @@
  * @version     $Id$
  */
 
-class Search_IndexController extends Zend_Controller_Action
+/**
+ * class SearchHit
+ */
+class SearchHit 
 {
-	/**
-	 * Just to be there. No actions taken.
-	 *
-	 * @return void
-	 *
-	 */
-    public function indexAction()
-    {
-    }
+
+  /**
+   * Document of the search hit matching the query
+   * @access private
+   */
+  private $document;
+
+  /**
+   * File of the search hit matching the query
+   * @access private
+   */
+  private $files;
+
+  /**
+   * Relevance of the search hit - get it from the search engine framework
+   * @access private
+   */
+  private $relevance;
+
+  /**
+   * Type of the Search hit - does the search term match the fulltext or metadata?
+   * @access private
+   */
+  private $type;
+
+  /**
+   * Constructor
+   * @access public
+   * @param Integer id ID of the document for this search hit - if not given or invalid, the Search hit wont have a document
+   */
+  public function __construct($id = null) {
+  	if ($id !== null) $this->getDocument($id);
+  	else $this->document = null;
+  } // end of Constructor
+
+  /**
+   * Get the document as a OpusDocumentAdapter by its ID
+   * @return OpusDocumentAdapter
+   * @param Integer id ID of the document
+   * @access private
+   */
+  private function getDocument($id) {
+    $this->document = new OpusDocumentAdapter($id);
+    return $this->document;
+  } // end of member function getDocument
+
+  /**
+   * Get the OpusDocumentAdapter from this search hit
+   * @return OpusDocumentAdapter
+   * @access public
+   */
+  public function getSearchHit() {
+    return $this->document;
+  } // end of member function getDocument
 
 }
-?>

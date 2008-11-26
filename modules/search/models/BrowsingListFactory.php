@@ -1,6 +1,6 @@
 <?php
 /**
- * Controller for an overview on the browsing/search component
+ * Central class to construct any browsing list
  * 
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -34,17 +34,62 @@
  * @version     $Id$
  */
 
-class Search_IndexController extends Zend_Controller_Action
+class BrowsingListFactory
 {
-	/**
-	 * Just to be there. No actions taken.
-	 *
-	 * @return void
-	 *
-	 */
-    public function indexAction()
-    {
-    }
-
+  /**
+   * Holds the browsing list produced in this factory
+   * @access private
+   */
+	private $browsinglist;
+	
+  /**
+   * Constructor
+   * @access public
+   * @param String browsingList Keyword of the browsingList that should be created in this factory
+   * Possible keywords are:
+   * authors	- list of all authors
+   * doctypes	- list of all document types
+   */
+	public function __construct($browsingList, $collection = null, $node = null)
+	{
+		$this->createBrowsingList($browsingList, $collection, $node);
+	}
+	
+  /**
+   * Create the browsing list by keyword
+   * @return void
+   * @param String browsingList Keyword of the browsingList that should be created in this factory
+   * @access private
+   */
+	private function createBrowsingList($browsingList, $collection, $node)
+	{
+		switch ($browsingList)
+		{
+			case 'authors':
+				$browseList = BrowsingList::getAuthorList();
+				break;
+			case 'doctypes':
+				$browseList = BrowsingList::getDocumentTypeList();
+				break;
+			case 'collectionRoles':
+				$browseList = BrowsingList::getCollectionRoleList();
+				break;
+			case 'collection':
+				$browseList = BrowsingList::getCollectionList($collection, $node);
+				break;				
+			default:
+				throw new BrowsingListFactoryException("This type of list is not supported (yet)!");
+		}
+		$this->browsingList = $browseList;
+	}
+	
+  /**
+   * Get the BrowsingList out of the factory
+   * @return BasicList BrowsingList, extended from BasicList
+   * @access public
+   */
+	public function getBrowsingList()
+	{
+		return $this->browsingList;
+	}
 }
-?>

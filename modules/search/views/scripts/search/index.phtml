@@ -1,6 +1,6 @@
 <?php
 /**
- * Controller for an overview on the browsing/search component
+ * Index View for SearchController, displays the search form
  * 
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -26,7 +26,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Browsing
+ * @category    Search
  * @package     Module_Search
  * @author      Oliver Marahrens (o.marahrens@tu-harburg.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
@@ -34,17 +34,6 @@
  * @version     $Id$
  */
 
-class Search_IndexController extends Zend_Controller_Action
-{
-	/**
-	 * Just to be there. No actions taken.
-	 *
-	 * @return void
-	 *
-	 */
-    public function indexAction()
-    {
-    }
-
-}
+echo "<h1>".$this->translate('search_index_fulltextsearch')."</h1>";
+print($this->form);
 ?>

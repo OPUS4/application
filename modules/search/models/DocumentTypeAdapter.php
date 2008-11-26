@@ -1,6 +1,6 @@
 <?php
 /**
- * Controller for an overview on the browsing/search component
+ * Adapter to use the DocumentTypes from the framework in Module_Search
  * 
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -26,7 +26,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Browsing
+ * @category    Framework-Adapter
  * @package     Module_Search
  * @author      Oliver Marahrens (o.marahrens@tu-harburg.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
@@ -34,17 +34,65 @@
  * @version     $Id$
  */
 
-class Search_IndexController extends Zend_Controller_Action
+class DocumentTypeAdapter
 {
 	/**
-	 * Just to be there. No actions taken.
-	 *
-	 * @return void
-	 *
+	 * Attribute to store the DocumentType as an Array
+	 * @access private
 	 */
-    public function indexAction()
-    {
-    }
+	private $documentType;
+	
+  /**
+   * Constructor
+   * 
+   * @param Integer|Array|DocumentTypeAdapter|Opus_Document_Type documentType data for the new DocumentTypeAdapter-Object 
+   */
+	public function __construct($documentType = null)
+	{
+  		if (is_int($documentType)) {
+  			$this->documentType = $this->mapDocumentType(new Opus_Document_Type($documentType));
+  		}
+  		else if (is_array($documentType)) {
+  			$this->documentType = $documentType;
+  		}
+  		elseif (get_class($documentType) === "DocumentTypeAdapter")
+  		{
+  			$this->documentType = $documentType->get();
+  		}
+  		elseif (get_class($documentType) === "Opus_Document_Type")
+  		{
+  			$this->documentType = $this->mapDocumentType($documentType);
+  		}
+	}
+	
+  /**
+   * Returns the documenttype data as an array
+   * 
+   * @return Array Array with documenttype data usable in Module_Search 
+   */
+	public function get()
+	{
+		return $this->documentType;
+	} 
+
+  /**
+   * Get a document type by its ID
+   * 
+   * @return DocumentTypeAdapter DocumentTypeAdapter of the Document type with the given ID, if this ID does not exists, null will be returned
+   * @param Integer id ID of the document type
+   */
+	public static function getDocType($id)
+	{
+		# Später die Werte anhand der ID aus der DB holen lassen
+		#$author = Opus_Person_Information::get($id);
+		# Jetzt noch statisch Person aus den Testdaten holen
+		$data = DummyData::getDummyDocumentTypes();
+		foreach ($data as $obj)
+		{
+			$d = $obj->get();
+			if ($d["id"] == $id) return $obj;
+		}
+		return null;
+	}
 
 }
-?>

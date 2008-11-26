@@ -1,6 +1,6 @@
 <?php
 /**
- * Controller for an overview on the browsing/search component
+ * View to browse title information on filtered title lists
  * 
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -33,18 +33,34 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
-class Search_IndexController extends Zend_Controller_Action
-{
-	/**
-	 * Just to be there. No actions taken.
-	 *
-	 * @return void
-	 *
-	 */
-    public function indexAction()
-    {
-    }
-
-}
-?>
+	switch ($this->filter)
+	{
+		case 'author':
+			echo "<h2>".$this->translate('search_titles_authors')." ".$this->author["firstName"]." ".$this->author["lastName"]."</h2>";
+			break;
+		case 'doctype':
+			echo "<h2>".$this->translate('search_titles_doctypes')." ".$this->doctype["name"]."</h2>";
+			break;
+		default:
+			echo "<h2>".$this->translate('search_titles_all')."</h2>";
+	}
+	echo "<ul>";
+	$n = 0;
+	while ($this->hitlist->valid() === true)
+	{
+		$hit = $this->hitlist->current();
+		$document = $hit->getSearchHit();
+		$data = $document->getDocument();
+		echo "<li>";
+		$aut = $data["author"]->get();
+		$doctype = $data["documentType"]->get();
+		echo "<a href=\"".$this->url($data["frontdoorUrl"])."\">";
+		echo $aut["lastName"].", ".$aut["firstName"].": ";
+		print($data["title"]);
+		echo "</a>";
+		echo "(".$doctype["name"].")";
+		echo "</li>";
+		$this->hitlist->next();
+	}
+	echo "</ul>";
+	?>

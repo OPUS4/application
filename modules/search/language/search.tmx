@@ -2,12 +2,116 @@
 <tmx version="2.0" xmlns="http://www.lisa.org/tmx20">
   <header adminlang="en" creationtool="locale4j" creationtoolversion="1.1" o-tmf="unknown" segtype="block" srclang="*all*"/>
   <body>
-    <tu tuid="search_modulename">
+    <tu tuid="search_index_browsing">
+      <tuv xml:lang="en">
+        <seg>Browsing</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Browsing</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_index_alltitlesbrowsing">
+      <tuv xml:lang="en">
+        <seg>All titles in this repository</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Alle Titel aus dem Repository</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_index_authorsbrowsing">
+      <tuv xml:lang="en">
+        <seg>Browse authors</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Browsing nach Autoren</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_index_doctypebrowsing">
+      <tuv xml:lang="en">
+        <seg>Browse document types</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Browsing nach Dokumenttypen</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_index_search">
       <tuv xml:lang="en">
         <seg>Search</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Suchen</seg>
+        <seg>Suche</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_index_fulltextsearch">
+      <tuv xml:lang="en">
+        <seg>Fulltext search</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Volltextsuche</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_index_metadatasearch">
+      <tuv xml:lang="en">
+        <seg>metadata search</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Metadatensuche</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_titles_authors">
+      <tuv xml:lang="en">
+        <seg>Documents by</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokumente von</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_titles_doctypes">
+      <tuv xml:lang="en">
+        <seg>Documents of type</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokumente vom Typ</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_titles_all">
+      <tuv xml:lang="en">
+        <seg>All documents in this repository</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Alle Dokumente auf diesem Server</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_titles_resultlist">
+      <tuv xml:lang="en">
+        <seg>Qery returned $this->hitlist->getList()->count() hits.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Die Suche ergab $this->hitlist->getList()->count() Treffer.</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_titles_relevance">
+      <tuv xml:lang="en">
+        <seg>Relevance</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Relevanz</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_titles_found">
+      <tuv xml:lang="en">
+        <seg>found in</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>gefunden in</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_modulename">
+      <tuv xml:lang="en">
+        <seg>Search repository content</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Suche in diesem Repository</seg>
       </tuv>
     </tu>
   </body>

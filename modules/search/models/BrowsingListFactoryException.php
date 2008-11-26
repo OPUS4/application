@@ -1,6 +1,6 @@
 <?php
 /**
- * Controller for an overview on the browsing/search component
+ * Exception class for BrowsingListFactory
  * 
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -26,7 +26,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Browsing
+ * @category    Browsing_Exception
  * @package     Module_Search
  * @author      Oliver Marahrens (o.marahrens@tu-harburg.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
@@ -34,17 +34,12 @@
  * @version     $Id$
  */
 
-class Search_IndexController extends Zend_Controller_Action
+/**
+ * class BrowsingListFactoryException
+ * Just to tell PHP that this is an exception class
+ * Nothing to be implemented
+ */
+class BrowsingListFactoryException extends Exception
 {
-	/**
-	 * Just to be there. No actions taken.
-	 *
-	 * @return void
-	 *
-	 */
-    public function indexAction()
-    {
-    }
-
+	
 }
-?>

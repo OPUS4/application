@@ -1,5 +1,7 @@
 <?php
 /**
+ * Index View for BrowsingController including links to several browsing lists and search functions 
+ * 
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,13 +26,15 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
+ * @category    Browsing
+ * @package     Module_Search
+ * @author      Oliver Marahrens (o.marahrens@tu-harburg.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: index.phtml 659 2008-09-01 11:03:28Z claussnitzer $
+ * @version     $Id: index.phtml 947 2008-11-20 15:55:20Z marahrens $
  */
 ?>
-<h1>Opus Application - <?= $this->title ?></h1>
-<a href="<?= $this->url(array('module' => 'default')) ?>">Home</a>
+	<a href="<?= $this->url(array("controller"=>"browsing", "action"=>"index")) ?>"><?= $this->translate('search_index_browsing') ?></a>
+	<h3><?= $this->translate('search_index_search') ?></h3>
+	<a href="<?= $this->url(array("controller"=>"search", "action"=>"index")) ?>"><?= $this->translate('search_index_fulltextsearch') ?></a><br/>
+	<a href="<?= $this->url(array("controller"=>"search", "action"=>"metadataSearch")) ?>"><?= $this->translate('search_index_metadatasearch') ?></a>

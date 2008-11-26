@@ -1,6 +1,6 @@
 <?php
 /**
- * Controller for an overview on the browsing/search component
+ * Iterator for PersonsLists
  * 
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -33,18 +33,25 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
-class Search_IndexController extends Zend_Controller_Action
+/**
+ * class PersonsListIterator
+ */
+class PersonsListIterator extends ListIterator
 {
-	/**
-	 * Just to be there. No actions taken.
-	 *
-	 * @return void
-	 *
-	 */
-    public function indexAction()
-    {
-    }
+  /**
+   * Constructor
+   */
+  public function __construct($list) {
+    parent::__construct($list);
+  } // end of Constructor
 
-}
-?>
+  /**
+   * Returns the current element from the personlist
+   * 
+   * @return Person currently selected person 
+   */
+  public function current() 
+  {
+  	return $this->list->get($this->_currentIndex);
+  }
+} // end of PersonsListIterator

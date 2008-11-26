@@ -1,6 +1,6 @@
 <?php
 /**
- * Controller for an overview on the browsing/search component
+ * Iterator for HitLists
  * 
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -33,18 +33,26 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
-class Search_IndexController extends Zend_Controller_Action
+/**
+ * class HitListIterator
+ */
+class HitListIterator extends ListIterator
 {
-	/**
-	 * Just to be there. No actions taken.
-	 *
-	 * @return void
-	 *
-	 */
-    public function indexAction()
-    {
-    }
+  // methods implemented for Iterator Interface
+  /**
+   * Konstruktor
+   */
+  public function __construct($list) {
+    parent::__construct($list);
+  } // end of Konstruktor
 
-}
-?>
+  /**
+   * Returns the current element from the hitlist
+   * 
+   * @return SearchHit currently selected Searchhit 
+   */
+  public function current() 
+  {
+  	return $this->list->get($this->_currentIndex);
+  }
+} // end of HitListIterator
