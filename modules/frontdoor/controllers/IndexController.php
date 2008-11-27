@@ -52,7 +52,7 @@ class Frontdoor_IndexController extends Zend_Controller_Action
                             Die Überlastabwehr-Algorithmen werden durch Anwendung von Regelungstechnik in Bezug auf Stabilität weiter untersucht.",
                             "url" => "http://doku.b.tu-harburg.de/volltexte/2005/90", "urn" => "urn:nbn:de:gbv:830-opus-907",
                             "document_type" => "Dissertation", "swd" => "IP, Rechnernetz, Überlastung",
-                            "publisher_name" => "Technische Universität Berlin", "ddc" => "620", "publisher_place" => "Berlin", "published_year" => "2006");
+                            "publisher_name" => "", "ddc" => "620", "publisher_place" => "Berlin", "published_year" => "2006");
 
 
         foreach ($dummydata as $key => $value)
@@ -64,14 +64,15 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         }
         $this->view->mydummydata = $mydummydata;
         $this->view->text_title = "Titel";
+        $this->view->text_author = "Autor(en)";
         $this->view->text_abstract = "Kurzfassung";
-        $this->view->text_subject_url = "URL";
+        $this->view->text_url = "URL";
         $this->view->text_publisher_name = "Institut";
-        $this->view->text_identifiers_urn = "URN";
+        $this->view->text_urn = "URN";
         $this->view->text_document_type = "Dokumenttyp";
         $this->view->text_swd = "SWD-Indexierung:";
         $this->view->text_publisher_place = "Erscheinungsort";
-        $this->view->text_publisher_year = "Jahr der Veröffentlichung";
+        $this->view->text_published_year = "Jahr der Veröffentlichung";
         $this->view->text_ddc = "DDC-Sachgruppe";
     }
 }

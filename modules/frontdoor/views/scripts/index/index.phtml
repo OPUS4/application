@@ -37,11 +37,11 @@
 
 ---------------------------------------------------------------------------------<br><br><br>
 <?
-foreach ($this->mydummydata as $key => $value)
+foreach ($this->$mydummydata as $key => $value)
 {
     if ($key === "title")
     {
-        ?><b><?echo $this->value .= $value;?>
+        ?><b><?echo $this->value = $value;?>
         </b><br><br><br><?
     }?>
 
@@ -49,7 +49,7 @@ foreach ($this->mydummydata as $key => $value)
     if ($key === "url")
     {
        ?><b><?echo $this->text_url;?>: </b>
-        <a href="<?echo $this->value .= $value;?>"><?echo $this->value .= $value;?>
+        <a href="<?echo $this->value = $value;?>"><?echo $this->value = $value;?>
         </a><br><br><?
     }?>
 
@@ -57,7 +57,7 @@ foreach ($this->mydummydata as $key => $value)
     if ($key === "urn")
     {
        ?><b><?echo $this->text_urn;?>: </b>
-        <a href="<?echo $this->value .= $value;?>"><?echo $this->value .= $value;?>
+        <a href="<?echo $this->value = $value;?>"><?echo $this->value = $value;?>
         </a><br><br><?
     }?>
 
@@ -65,7 +65,7 @@ foreach ($this->mydummydata as $key => $value)
     if ($key === "ddc")
     {
        ?><b><?echo $this->text_ddc;?>: </b>
-       <?echo $this->value .= $value;?>
+       <?echo $this->value = $value;?>
        <br><br><?
     }?>
 
@@ -73,7 +73,7 @@ foreach ($this->mydummydata as $key => $value)
     if ($key === "publisher_name")
     {
        ?><b><?echo $this->text_publisher_name;?>: </b>
-       <?echo $this->value .= $value;?>
+       <?echo $this->value = $value;?>
        <br><br><?
     }?>
 
@@ -81,7 +81,7 @@ foreach ($this->mydummydata as $key => $value)
     if ($key === "publisher_place")
     {
        ?><b><?echo $this->text_publisher_place;?>: </b>
-       <?echo $this->value .= $value;?>
+       <?echo $this->value = $value;?>
        <br><br><?
     }?>
 
@@ -89,7 +89,7 @@ foreach ($this->mydummydata as $key => $value)
     if ($key === "published_year")
     {
        ?><b><?echo $this->text_published_year;?>: </b>
-       <?echo $this->value .= $value;?>
+       <?echo $this->value = $value;?>
        <br><br><?
     }?>
 
@@ -97,7 +97,7 @@ foreach ($this->mydummydata as $key => $value)
     if ($key === "abstract")
     {
        ?><b><?echo $this->text_abstract;?>: </b>
-       <?echo $this->value .= $value;?>
+       <?echo $this->value = $value;?>
        <br><br><?
     }
 }?>
