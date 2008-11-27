@@ -46,14 +46,15 @@ class BrowsingFilter
 	public static function getAllTitles()
 	{
         # Erstmal nur Dummydaten, später echte unter Nutzung der Framework-Klassen
-        #$table = new Opus_Db_Documents();
-        #$docresult = $table->fetchAll();
+        //$table = new Opus_Db_Documents();
+        //$docresult = $table->fetchAll();
         
         $docresult = DummyData::getDummyDocuments();
         
         $hitlist = new HitList();
         foreach ($docresult as $row)
         {
+       		//$searchhit = new SearchHit($row->__get("documents_id"));
        		$searchhit = new SearchHit($row);
        		$hitlist->add($searchhit);
         }

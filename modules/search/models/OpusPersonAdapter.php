@@ -34,7 +34,7 @@
  * @version     $Id$
  */
 
-class OpusPersonAdapter
+class OpusPersonAdapter extends Opus_Model_Person
 {
 	/**
 	 * Attribute to store the Person as an Array
@@ -97,11 +97,11 @@ class OpusPersonAdapter
    * @return void
    * @param Integer id ID of the person
    */
-	public static function mapPerson($id)
+	private static function mapPerson($id)
 	{
-		$person = new Opus_Model_Person($id);
-		$firstName = $person->__call('getFirstName');
-		$lastName = $person->__call('getLastName');
+		parent::__construct($id);
+		$firstName = $this->getField('FirstName');
+		$lastName = $this->getField('LastName');
 		$this->personData = array("id"=>$id, "lastName"=>$lastName, "firstName"=>$firstName);
 	}
 }

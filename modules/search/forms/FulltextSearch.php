@@ -1,7 +1,5 @@
 <?php
 /**
- * View to browse title information on filtered title lists
- * 
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -26,52 +24,33 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Browsing
+ * @category    Search_Forms
  * @package     Module_Search
  * @author      Oliver Marahrens (o.marahrens@tu-harburg.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ * @version     $Id: $
  */
-	switch ($this->filter)
-	{
-		case 'author':
-			echo "<h2>".$this->translate('search_titles_authors')." ".$this->author["firstName"]." ".$this->author["lastName"]."</h2>";
-			break;
-		case 'doctype':
-			echo "<h2>".$this->translate('search_titles_doctypes')." ".$this->doctype["name"]."</h2>";
-			break;
-		default:
-			echo "<h2>".$this->translate('search_titles_all')."</h2>";
-	}
-	echo "<ul>";
-	$n = 0;
-	while ($this->hitlist->valid() === true)
-	{
-		$hit = $this->hitlist->current();
-		$document = $hit->getSearchHit();
-		$data = $document->getDocument();
-		$authoriterator = new PersonsListIterator($data["author"]);
-		//print_r($document); # just to debug
-		echo "<li>";
-		$doctype = $data["documentType"]->get();
-		while ($authoriterator->valid() === true)
-		{
-			$obj = $authoriterator->current();
-			$pers = $obj->get();
-			echo "<a href=".$this->url(array("controller"=>"browsing", "action"=>"browseTitles", "filter" => "author", "author"=>$pers["id"])).">";
-			echo $pers["lastName"].", ".$pers["firstName"];
-			echo "</a>";
-			if ($authoriterator->hasNext() === true) echo "; ";
-			else echo ":";
-			$authoriterator->next();
-		}
-		echo "<a href=\"".$this->url($data["frontdoorUrl"])."\">";
-		print($data["title"]);
-		echo "</a>";
-		echo "(".$doctype["name"].")";
-		echo "</li>";
-		$this->hitlist->next();
-	}
-	echo "</ul>";
-	?>
+
+class FulltextSearch extends Zend_Form
+{
+    /**
+     * Build easy search form
+     *
+     * @return void
+     */
+    public function init() {
+		// Create and configure query field element:
+		$query = new Zend_Form_Element_Text('query');
+		$query->addValidator('alnum')
+        		->addValidator('regex', false, array('/^[a-z]+/'))
+         		->addValidator('stringLength', false, array(1, 100))
+         		->setRequired(true);
+
+        $submit = new Zend_Form_Element_Submit('submit');
+        $submit->setLabel($this->view->translate('search_searchaction'));
+
+		// Add elements to form:
+		$this->addElements(array($query, $submit));
+    }
+}

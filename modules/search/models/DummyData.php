@@ -44,16 +44,18 @@ class DummyData
 	 */
 	public static function getDummyDocuments()
 	{
+		$authorsList = DummyData::getDummyPersons();
+		$autlist1 = new PersonsList();
+		$autlist1->add($authorsList[0]);
+		$autlist1->add($authorsList[1]);
+		$autlist2 = new PersonsList();
+		$autlist2->add($authorsList[0]);
+		$autlist3 = new PersonsList();
+		$autlist3->add($authorsList[1]);
 		$dummydata = 	array(
 							new OpusDocumentAdapter(
 								array(
-									"author" => new OpusPersonAdapter(
-										array(
-											"id" => "1", 
-											"lastName" => "Marahrens", 
-											"firstName" => "Oliver"
-										)
-									), 
+									"author" => $autlist1, 
 									"frontdoorUrl" => array(
 										"module"=>"frontdoor", 
 										"controller" => "index", 
@@ -80,13 +82,7 @@ class DummyData
 							),
 							new OpusDocumentAdapter(
 								array(
-									"author" => new OpusPersonAdapter(
-										array(
-											"id" => "1", 
-											"lastName" => "Marahrens", 
-											"firstName" => "Oliver"
-										)
-									), 
+									"author" => $autlist2, 
 									"frontdoorUrl" => array(
 										"module"=>"frontdoor", 
 										"controller" => "index", 
@@ -113,13 +109,7 @@ class DummyData
 							),
 							new OpusDocumentAdapter(
 								array(
-									"author" => new OpusPersonAdapter(
-										array(
-											"id" => "1", 
-											"lastName" => "Marahrens", 
-											"firstName" => "Oliver"
-										)
-									), 
+									"author" => $autlist3, 
 									"frontdoorUrl" => array(
 										"module"=>"frontdoor", 
 										"controller" => "index", 

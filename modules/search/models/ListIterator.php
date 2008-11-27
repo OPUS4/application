@@ -32,7 +32,7 @@
  * @author      Oliver Marahrens (o.marahrens@tu-harburg.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ * @version     $Id: ListIterator.php 1001 2008-11-25 16:03:19Z marahrens $
  */
 
 /**
@@ -114,6 +114,16 @@ class ListIterator implements Iterator
    */ 
   public function next() {
     $this->_currentIndex++;
+  }
+
+  /**
+   * checks if the list has a following element
+   * 
+   * @return boolean if true, there is another element, otherwise its false
+   */ 
+  public function hasNext() {
+    if ($this->_currentIndex < $this->list->count()-1) return true;
+    return false;
   }
   
   /**
