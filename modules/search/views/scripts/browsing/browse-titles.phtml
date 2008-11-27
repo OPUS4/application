@@ -63,13 +63,13 @@
 			echo $pers["lastName"].", ".$pers["firstName"];
 			echo "</a>";
 			if ($authoriterator->hasNext() === true) echo "; ";
-			else echo ":";
+			else echo ": ";
 			$authoriterator->next();
 		}
 		echo "<a href=\"".$this->url($data["frontdoorUrl"])."\">";
 		print($data["title"]);
 		echo "</a>";
-		echo "(".$doctype["name"].")";
+		echo " (".$doctype["name"].")";
 		echo "</li>";
 		$this->hitlist->next();
 	}
