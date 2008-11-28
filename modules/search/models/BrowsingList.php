@@ -47,13 +47,16 @@ class BrowsingList
 	public static function getAuthorList()
 	{
 		// Noch Dummydaten, später etwas in der Art
-		// $browsinglist = Opus_Person_Information::getAll();
-		$browsinglist = DummyData::getDummyPersons();
+        $table = new Opus_Db_Persons();
+        $browsinglist = $table->fetchAll();
+		#$browsinglist = Opus_Person_Information::getAll();
+		#$browsinglist = DummyData::getDummyPersons();
 		// map the unsorted list from Opus_Person_Information::getAll() into a PersonsList
 		$personsList = new PersonsList();
 		foreach ($browsinglist as $member)
 		{
-			$personsList->add($member);
+			$pers = new Opus_Search_Adapter_PersonAdapter((int) $member->__get("persons_id"));
+			$personsList->add($pers);
 		}
 		return $personsList;
 	}

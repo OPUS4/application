@@ -111,8 +111,6 @@ class Search_SearchController extends Zend_Controller_Action
 	 */
     public function searchAction()
     {
-    	// Just Dummy Data - to show what we should get from the data schema
-    	// TODO: real search operation
     	try 
     	{
     		$data = $this->_request->getPost();

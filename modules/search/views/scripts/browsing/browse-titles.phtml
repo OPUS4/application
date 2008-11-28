@@ -54,7 +54,7 @@
 		$authoriterator = new PersonsListIterator($data["author"]);
 		//print_r($document); # just to debug
 		echo "<li>";
-		$doctype = $data["documentType"]->get();
+		#$doctype = $data["documentType"]->get();
 		while ($authoriterator->valid() === true)
 		{
 			$obj = $authoriterator->current();
@@ -69,7 +69,7 @@
 		echo "<a href=\"".$this->url($data["frontdoorUrl"])."\">";
 		print($data["title"]);
 		echo "</a>";
-		echo " (".$doctype["name"].")";
+		#echo " (".$doctype["name"].")";
 		echo "</li>";
 		$this->hitlist->next();
 	}

@@ -41,21 +41,16 @@ class BrowsingFilter
 	 * 
 	 * @return HitList resultlist
 	 * @static
-	 * @todo get the title list from the database
 	 */
 	public static function getAllTitles()
 	{
-        # Erstmal nur Dummydaten, später echte unter Nutzung der Framework-Klassen
-        //$table = new Opus_Db_Documents();
-        //$docresult = $table->fetchAll();
-        
-        $docresult = DummyData::getDummyDocuments();
+        $table = new Opus_Db_Documents();
+        $docresult = $table->fetchAll();
         
         $hitlist = new HitList();
         foreach ($docresult as $row)
         {
-       		//$searchhit = new SearchHit($row->__get("documents_id"));
-       		$searchhit = new SearchHit($row);
+       		$searchhit = new SearchHit((int) $row->__get("documents_id"));
        		$hitlist->add($searchhit);
         }
         
@@ -93,18 +88,13 @@ class BrowsingFilter
 	 */
 	public static function getAuthorTitles($authorId)
 	{
-        # Erstmal nur Dummydaten, später echte unter Nutzung der Framework-Klassen
-        #$table = new Opus_Db_LinkDocumentsPersons();
-        #$select = $table->select();
-        #$select->where('persons_id = ?', $author["id"]);
-        #$docresult = $table->fetchAll($select);
-        
-        $docresult = DummyData::getDummyDocuments();
+        $person = new Opus_Search_Adapter_PersonAdapter((int) $authorId);
+        $docresult = $person->getDocumentsByRole("author");
         
         $hitlist = new HitList();
         foreach ($docresult as $row)
         {
-       		$searchhit = new SearchHit($row);
+       		$searchhit = new SearchHit((int) $row->getId());
        		$hitlist->add($searchhit);
         }
         
