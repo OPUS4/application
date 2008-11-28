@@ -113,8 +113,11 @@ class Search_SearchController extends Zend_Controller_Action
     {
     	// Just Dummy Data - to show what we should get from the data schema
     	// TODO: real search operation
+    	$data = $this->_request->getPost();
+    	$query = new Opus_Search_Query($data["query"]);
+    	$hitlist = $query->commit();
     	$this->view->title = $this->view->translate('search_searchresult');
-    	$this->view->hitlist = new HitListIterator(BrowsingFilter::getAllTitles());
+    	$this->view->hitlist = new HitListIterator($hitlist);
     }
 }
 ?>

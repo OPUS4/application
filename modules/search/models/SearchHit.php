@@ -81,7 +81,7 @@ class SearchHit
    * @access private
    */
   private function getDocument($id) {
-    $this->document = new OpusDocumentAdapter($id);
+    $this->document = new Opus_Search_Adapter_DocumentAdapter($id);
     return $this->document;
   } // end of member function getDocument
 
@@ -94,4 +94,31 @@ class SearchHit
     return $this->document;
   } // end of member function getDocument
 
+  /**
+   * Set the relevance from this search hit
+   * @return void
+   * @access public
+   */
+  public function setRelevance($relevance) {
+    $this->relevance = $relevance;
+  } // end of member function getDocument
+
+  /**
+   * Get the relevance from this search hit
+   * @return Float relevance
+   * @access public
+   */
+  public function getRelevance() {
+    return $this->relevance;
+  } // end of member function getDocument
+
+  /**
+   * set the document as a OpusDocumentAdapter
+   * @param OpusDocumentAdapter Document
+   * @return void
+   * @access public
+   */
+  public function setDocument($doc) {
+    $this->document = $doc;
+  } // end of member function setDocument
 }

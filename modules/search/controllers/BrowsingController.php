@@ -73,14 +73,14 @@ class Search_BrowsingController extends Zend_Controller_Action
     		case 'author':
     			$this->view->title = $this->view->translate('search_index_authorsbrowsing');
 	    		$authorId = (int) $this->_getParam("author");
-    			$author = OpusPersonAdapter::getPerson($authorId);
+    			$author = Opus_Search_Adapter_PersonAdapter::getPerson($authorId);
 				$hitlist = BrowsingFilter::getAuthorTitles($author);
 				$this->view->author = $author->get();
 				break;
     		case 'doctype':
     			$this->view->title = $this->view->translate('search_index_doctypebrowsing');
 	    		$authorId = (int) $this->_getParam("doctype");
-    			$author = DocumentTypeAdapter::getDocType($authorId);
+    			$author = Opus_Search_Adapter_DocumentTypeAdapter::getDocType($authorId);
 				$hitlist = BrowsingFilter::getDocumentTypeTitles($author);
 				$this->view->doctype = $author->get();
 				break;

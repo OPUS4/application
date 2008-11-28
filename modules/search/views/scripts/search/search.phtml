@@ -31,18 +31,29 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-	if ($this->hitlist) echo $this->translate('search_titles_resultlist')."<br/><ul>";
+	if ($this->hitlist) echo $this->translate('search_titles_resultlist').$this->hitlist->getList()->count()."<br/><ul>";
 	while ($this->hitlist->valid() === true)
 	{
 		$hit = $this->hitlist->current();
 		$doc = $hit->getSearchHit();
 		$document = $doc->getDocument();
-		$aut = $document["author"]->get();
+		//print_r($document);
+		$authoriterator = new PersonsListIterator($document["author"]);
 		echo "<li>";
-		print($aut["lastName"].", ".$aut["firstName"].": ");
+		while ($authoriterator->valid() === true)
+		{
+			$obj = $authoriterator->current();
+			$pers = $obj->get();
+			echo "<a href=".$this->url(array("controller"=>"browsing", "action"=>"browseTitles", "filter" => "author", "author"=>$pers["id"])).">";
+			echo $pers["lastName"].", ".$pers["firstName"];
+			echo "</a>";
+			if ($authoriterator->hasNext() === true) echo "; ";
+			else echo ": ";
+			$authoriterator->next();
+		}
 		print("<a href=\"".$this->url($document["frontdoorUrl"])."\">".$document["title"]."</a>");
 		echo "</li>";
-		echo "<div>".$this->translate('search_titles_relevance').": 1<br/>";
+		echo "<div>".$this->translate('search_titles_relevance').": ".$hit->getRelevance()."<br/>";
 		echo $document["abstract"]."<br/>";
 		print("<a href=\"".$this->url($document["frontdoorUrl"])."\">".$this->url($document["frontdoorUrl"])."</a><br/>");
 		echo $this->translate('search_titles_found').": <a href=\"".$this->url($document["fileUrl"])."\">".$this->url($document["fileUrl"])."</a></div>";

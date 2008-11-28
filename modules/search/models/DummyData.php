@@ -53,7 +53,7 @@ class DummyData
 		$autlist3 = new PersonsList();
 		$autlist3->add($authorsList[1]);
 		$dummydata = 	array(
-							new OpusDocumentAdapter(
+							new Opus_Search_Adapter_DocumentAdapter(
 								array(
 									"author" => $autlist1, 
 									"frontdoorUrl" => array(
@@ -71,7 +71,7 @@ class DummyData
 										"id"=>"82",
 										"filename"=>"projektbericht.pdf"
 									), 
-									"documentType" => new DocumentTypeAdapter(
+									"documentType" => new Opus_Search_Adapter_DocumentTypeAdapter(
 										array(
 											"id" => "1", 
 											"name" => "Dissertation", 
@@ -80,7 +80,7 @@ class DummyData
 									)
 								)
 							),
-							new OpusDocumentAdapter(
+							new Opus_Search_Adapter_DocumentAdapter(
 								array(
 									"author" => $autlist2, 
 									"frontdoorUrl" => array(
@@ -98,7 +98,7 @@ class DummyData
 										"id"=>"357",
 										"filename"=>"marahrens.pdf"
 									), 
-									"documentType" => new DocumentTypeAdapter(
+									"documentType" => new Opus_Search_Adapter_DocumentTypeAdapter(
 										array(
 											"id" => "2", 
 											"name" => "Monographie", 
@@ -107,7 +107,7 @@ class DummyData
 									)
 								)
 							),
-							new OpusDocumentAdapter(
+							new Opus_Search_Adapter_DocumentAdapter(
 								array(
 									"author" => $autlist3, 
 									"frontdoorUrl" => array(
@@ -125,7 +125,7 @@ class DummyData
 										"id"=>"358",
 										"filename"=>"zfbb_suma_marahrens_eigenarchivierung.pdf"
 									), 
-									"documentType" => new DocumentTypeAdapter(
+									"documentType" => new Opus_Search_Adapter_DocumentTypeAdapter(
 										array(
 											"id" => "2", 
 											"name" => "Monographie", 
@@ -147,14 +147,14 @@ class DummyData
 	public static function getDummyPersons()
 	{
 		$dummydata = array( 
-						new OpusPersonAdapter(
+						new Opus_Search_Adapter_PersonAdapter(
 							array(
 								"id" => "1", 
 								"lastName" => "Marahrens", 
 								"firstName" => "Oliver"
 							)
 						),
-						new OpusPersonAdapter(
+						new Opus_Search_Adapter_PersonAdapter(
 							array(
 								"id" => "2", 
 								"lastName" => "Dummy", 
@@ -174,14 +174,14 @@ class DummyData
 	public static function getDummyDocumentTypes()
 	{
 		$dummydata = array( 
-						new DocumentTypeAdapter( 
+						new Opus_Search_Adapter_DocumentTypeAdapter( 
 							array(
 								"id" => "1", 
 								"name" => "Dissertation", 
 								"type" => "Thesis"
 							)
 						),
-						new DocumentTypeAdapter(
+						new Opus_Search_Adapter_DocumentTypeAdapter(
 							array(
 								"id" => "2", 
 								"name" => "Monographie", 
