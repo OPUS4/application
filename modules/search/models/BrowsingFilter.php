@@ -61,6 +61,26 @@ class BrowsingFilter
         
         return ($hitlist);		
 	}
+
+	/**
+	 * Returns a list of all Dummy-entries
+	 * 
+	 * @return HitList resultlist
+	 * @static
+	 */
+	public static function getAllDummyTitles()
+	{
+        $docresult = DummyData::getDummyDocuments();
+        
+        $hitlist = new HitList();
+        foreach ($docresult as $row)
+        {
+       		$searchhit = new SearchHit($row);
+       		$hitlist->add($searchhit);
+        }
+        
+        return ($hitlist);		
+	}
 	
 	/**
 	 * Returns a list of all entries from a given author
