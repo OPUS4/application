@@ -33,7 +33,13 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
+	if ($this->list === "collection")
+	{
+		// Show name of the current CollectionNode
+		//print_r($this->collectionNode->getCollectionNode());
+		//print_r($this->collectionNode);
+		//echo $this->collectionNode->getName();
+	}
 	echo "<ul>";
 	while ($this->browsinglist->valid() === true)
 	{
@@ -58,7 +64,7 @@
 			// for Collections $this->browsinglist must be the ListIterator of all ChildNodes, not the current node itself... 
 			echo "<a href=".$this->url(array("controller"=>"browsing", "action"=>"browseList", "list" => "collection", "collection"=>$obj->getRoleId(), "node" => $obj->getNodeId())).">";
 			echo $obj->getName("ger");
-			echo "</a>";
+			echo "</a> (".$obj->count().")";
 		}
 		// print_r($pers); // to have a look at all persons information
 		echo "</li>";
@@ -67,22 +73,31 @@
 	echo "</ul>";		
 	if ($this->list === "collection")
 	{
+		if ($this->documentlist->getList()->count() > 0) echo "<h2>".$this->translate('search_category_documents')."</h2>";
 		// look at the documents in this hierarchy
 		while ($this->documentlist->valid() === true)
 		{
-			$obj = $this->documentlist->current();
+			$doc = $this->documentlist->current();
 			#print_r($obj);
-			$data = $obj->getDocument();
+			$data = $doc->getDocument();
+			$authoriterator = new PersonsListIterator($data["author"]);
 			#$data = $doc;
-			echo "<li>";
-			$aut = $data["author"]->get();
-			$doctype = $data["documentType"]->get();
+			while ($authoriterator->valid() === true)
+			{
+				$aut = $authoriterator->current();
+				$pers = $aut->get();
+				echo "<a href=".$this->url(array("controller"=>"browsing", "action"=>"browseTitles", "filter" => "author", "author"=>$pers["id"])).">";
+				echo $pers["lastName"].", ".$pers["firstName"];
+				echo "</a>";
+				if ($authoriterator->hasNext() === true) echo "; ";
+				else echo ": ";
+				$authoriterator->next();
+			}
+			#$doctype = $data["documentType"]->get();
 			echo "<a href=\"".$this->url($data["frontdoorUrl"])."\">";
-			echo $aut["lastName"].", ".$aut["firstName"].": ";
 			print($data["title"]);
-			echo "</a>";
-			echo "(".$doctype["name"].")";
-			echo "</li>";
+			echo "</a><br/>";
+			#echo "(".$doctype["name"].")";
 			$this->documentlist->next();
 		}
 		

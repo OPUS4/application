@@ -96,6 +96,7 @@ class CollectionNode extends BasicList
   				$this->collectionId = $c["collections_id"];
   			}
   		}
+  		$this->getDocuments();
   } // end of Constructor
 
   /**
@@ -231,16 +232,25 @@ class CollectionNode extends BasicList
    * @access public
    */
   public function getCollectionNode() {
-  		$nodeInfo = Opus_Collection_Information::getPathToRoot($this->roleId, $this->collectionId);
-  		$currentNode = $nodeInfo[count($nodeInfo)-1];
-  		# $this->name = $currentNode;
-  		$this->name = array("ger" => "Test", "eng" => "english Test"); # noch zu ersetzen durch echte Namensstruktur
-  		
-  		$documentdata = Opus_Collection_Information::getAllCollectionDocuments($this->roleId, $this->collectionId);
-		foreach ($documentdata as $member)
+  		if ($this->collectionId > 0) $nodeInfo = Opus_Collection_Information::getPathToRoot($this->roleId, $this->collectionId);
+  		else $nodeInfo = null;
+		return $nodeInfo;
+  }  
+
+  /**
+   * Gets the documents from this Node from the database
+   * @return void
+   * @access public
+   */
+  public function getDocuments($alsoSubnodes = false) {
+  		$docs = Opus_Collection_Information::getAllCollectionDocuments($this->roleId, $this->collectionId, $alsoSubnodes);
+		unset ($this->documents);
+		$this->documents = array();
+		foreach ($docs as $member)
 		{
-			$doc = new OpusDocumentAdapter($member);
+			$doc = new Opus_Search_Adapter_DocumentAdapter( (int) $member);
 			$this->add($doc);
 		}
-  }  
+  		return $this->documents;
+  }
 }

@@ -130,6 +130,14 @@
         <seg>Suchen</seg>
       </tuv>
     </tu>
+    <tu tuid="search_category_documents">
+      <tuv xml:lang="en">
+        <seg>Documents in this category</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokumente in dieser Kategorie</seg>
+      </tuv>
+    </tu>
     <tu tuid="search_modulename">
       <tuv xml:lang="en">
         <seg>Search and browse</seg>

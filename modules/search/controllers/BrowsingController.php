@@ -141,6 +141,7 @@ class Search_BrowsingController extends Zend_Controller_Action
 				$browsingListProduct = $browsingList->getBrowsingList();				
 				$this->view->browsinglist = new CollectionNodeListIterator($browsingListProduct->getSubNodes());
 				$this->view->documentlist = new CollectionNodeDocumentIterator($browsingListProduct);
+				$this->view->collectionNode = $browsingListProduct;
 				break;
 			default:
 				$this->view->title = $this->view->translate('search_index_alltitlesbrowsing');
