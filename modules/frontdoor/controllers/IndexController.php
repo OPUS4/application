@@ -36,24 +36,46 @@
 class Frontdoor_IndexController extends Zend_Controller_Action
 {
 
+       /**
+        * Getting an associative 1-dimensional array with all relevant document metadata
+        * Checking up for empty fields
+        * Building new array with all occupied fields
+        * $docId must be transferred with the URL
+        * Language controlling must be outsourced to a tmx-file
+        *
+        */
+
     public function indexAction()
     {
         $docId = 75;
         $this->view->pagetitle = 'Frontdoor';
-        $this->view->header = 'Show dataset with document_id=' . $docId;
+        $this->view->header = 'Das angeforderte Dokument ist zugänglich unter';
         $mydummydata = array();
 
-        $dummydata = array("docId" => "75", "author" => "Dipl.-Ing. Friedrich Wolff",
-                            "title" => "Überlastpreisgestaltung als skalierbare, effiziente und stabile Überlastabwehr für zukünftige IP-Netzwerke",
-                            "abstract" => "In dieser Dissertation werden durch die Anwendung der Überlastpreisgestaltung leistungsfähigere verteilte
-                            Überlastabwehr-Algorithmen für TCP/IP-Netzwerke entwickelt. Die Theorie der Überlast­preisgestaltung basiert auf
-                            Wirtschaftstheorien und Optimierungsverfahren und führt zu einer optimalen Allokation von Netzwerkressourcen.
-                            Dabei werden im Mittel niedrige Warteschlangenlängen und gleichzeitig ein hoher Ausnutzungsgrad erzielt.
-                            Die Überlastabwehr-Algorithmen werden durch Anwendung von Regelungstechnik in Bezug auf Stabilität weiter untersucht.",
-                            "url" => "http://doku.b.tu-harburg.de/volltexte/2005/90", "urn" => "urn:nbn:de:gbv:830-opus-907",
-                            "document_type" => "Dissertation", "swd" => "IP, Rechnernetz, Überlastung",
-                            "publisher_name" => "", "ddc" => "620", "publisher_place" => "Berlin", "published_year" => "2006");
-
+        $dummydata = array
+        (
+         'docId' => '75',
+         'urn' => 'urn:nbn:de:gbv:830-opus-907',
+         'url' => 'http://doku.b.tu-harburg.de/volltexte/2005/90',
+         'title' => 'Überlastpreisgestaltung als skalierbare, effiziente und stabile Überlastabwehr für zukünftige IP-Netzwerke',
+         'author' => 'Wolff, Friedrich',
+         'swd' => 'IP, Rechnernetz, Überlastung',
+         'document_type' => 'Dissertation',
+         'ddc' => '',
+         'language' => 'Deutsch',
+         'reviewed'=> 'peer',
+         'publisher_name' => 'Institut für Regelungstechnik',
+         'publisher_place' =>  'Hamburg',
+         'completed_year' => '2006',
+         'published_year' => '',
+         'published_date' => '06.04.2007',
+         'abstract' => 'In dieser Dissertation werden durch die Anwendung der Überlastpreisgestaltung leistungsfähigere
+         verteilte Überlastabwehr-Algorithmen für TCP/IP-Netzwerke entwickelt. Die Theorie der
+         Überlast­preisgestaltung basiert auf Wirtschaftstheorien und Optimierungsverfahren und führt
+         zu einer optimalen Allokation von Netzwerkressourcen. Dabei werden im Mittel niedrige
+         Warteschlangenlängen und gleichzeitig ein hoher Ausnutzungsgrad erzielt. Die Überlastabwehr-Algorithmen
+         werden durch Anwendung von Regelungstechnik in Bezug auf Stabilität weiter untersucht.'
+        );
 
         foreach ($dummydata as $key => $value)
         {
@@ -63,17 +85,23 @@ class Frontdoor_IndexController extends Zend_Controller_Action
             }
         }
         $this->view->mydummydata = $mydummydata;
-        $this->view->text_title = "Titel";
-        $this->view->text_author = "Autor(en)";
-        $this->view->text_abstract = "Kurzfassung";
-        $this->view->text_url = "URL";
-        $this->view->text_publisher_name = "Institut";
-        $this->view->text_urn = "URN";
-        $this->view->text_document_type = "Dokumenttyp";
-        $this->view->text_swd = "SWD-Indexierung:";
-        $this->view->text_publisher_place = "Erscheinungsort";
-        $this->view->text_published_year = "Jahr der Veröffentlichung";
-        $this->view->text_ddc = "DDC-Sachgruppe";
+        $this->view->text_title = 'Titel';
+        $this->view->text_document_type = 'Dokumentart';
+        $this->view->text_abstract = 'Kurzfassung';
+        $this->view->text_url = 'URL';
+        $this->view->text_publisher_name = 'Institut';
+        $this->view->text_urn = 'URN';
+        $this->view->text_document_type = 'Dokumenttyp';
+        $this->view->text_swd = 'SWD-Schlagwörter';
+        $this->view->text_publisher_place = 'Erscheinungsort';
+        $this->view->text_published_year = 'Jahr der Veröffentlichung';
+        $this->view->text_ddc = 'DDC-Sachgruppe';
+        $this->view->text_language = 'Sprache';
+        $this->view->text_completed_year = 'Erstellungsjahr';
+        $this->view->text_published_date = 'Publikationsdatum';
+        $this->view->text_reviewed = 'Begutachtung';
+        $this->view->text_peer = 'Peer-Review';
+        $this->view->text_ddc = 'DDC-Sachgruppe';
     }
 }
 

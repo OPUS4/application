@@ -30,39 +30,64 @@
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id: index.phtml 659 2008-09-01 11:03:28Z claussnitzer $
+ *
+ *
+ *
+ * This view checks for existing keys in the commited array
+ * If existing, keys and values are dumped
+ *
+ *
+ *
  */
-?>
-<h1>Opus Application - <?echo $this->pagetitle; ?></h1>
-<h2><?echo $this->header; ?>...</h2>
 
----------------------------------------------------------------------------------<br><br><br>
+?>
+<h1>Opus Application - <?echo $this->pagetitle; ?></h1><hr>
+<?echo $this->header; ?><br>
+
+
 <?
 foreach ($this->mydummydata as $key => $value)
 {
-    if ($key === "title")
-    {
-        ?><b><?echo $this->value = $value;?>
-        </b><br><br><br><?
-    }?>
 
-    <?
-    if ($key === "url")
+    if ($key === 'url')
     {
        ?><b><?echo $this->text_url;?>: </b>
         <a href="<?echo $this->value = $value;?>"><?echo $this->value = $value;?>
-        </a><br><br><?
+        </a><br><hr><br><br><?
     }?>
 
     <?
-    if ($key === "urn")
+    if ($key === 'urn')
     {
        ?><b><?echo $this->text_urn;?>: </b>
         <a href="<?echo $this->value = $value;?>"><?echo $this->value = $value;?>
-        </a><br><br><?
+        </a><br><?
     }?>
 
     <?
-    if ($key === "ddc")
+    if ($key === 'title')
+    {
+        ?><b><?echo $this->value = $value;?>
+        </b><br><br><?
+    }?>
+
+    <?
+    if ($key === 'author')
+    {
+        ?><b><?echo $this->value = $value;?>
+        </b><br><br><br><br><?
+    }?>
+
+    <?
+    if ($key === 'swd')
+    {
+       ?><b><?echo $this->text_swd;?>: </b>
+        <?echo $this->value = $value;?>
+        <br><br><?
+    }?>
+
+    <?
+    if ($key === 'ddc')
     {
        ?><b><?echo $this->text_ddc;?>: </b>
        <?echo $this->value = $value;?>
@@ -70,7 +95,7 @@ foreach ($this->mydummydata as $key => $value)
     }?>
 
     <?
-    if ($key === "publisher_name")
+    if ($key === 'publisher_name')
     {
        ?><b><?echo $this->text_publisher_name;?>: </b>
        <?echo $this->value = $value;?>
@@ -78,7 +103,7 @@ foreach ($this->mydummydata as $key => $value)
     }?>
 
     <?
-    if ($key === "publisher_place")
+    if ($key === 'publisher_place')
     {
        ?><b><?echo $this->text_publisher_place;?>: </b>
        <?echo $this->value = $value;?>
@@ -86,7 +111,34 @@ foreach ($this->mydummydata as $key => $value)
     }?>
 
     <?
-    if ($key === "published_year")
+    if ($key === 'completed_year')
+    {
+       ?><b><?echo $this->text_completed_year;?>: </b>
+       <?echo $this->value = $value;?>
+       <br><br><?
+    }?>
+
+    <?
+    if ($key === 'published_date')
+    {
+       ?><b><?echo $this->text_published_date;?>: </b>
+       <?echo $this->value = $value;?>
+       <br><br><?
+    }?>
+
+    <?
+    if ($key === 'reviewed')
+    {
+        if ($value === 'peer')
+        {
+          ?><b><?echo $this->text_reviewed;?>: </b>
+          <?echo $this->text_peer;?>
+          <br><br><?
+        }
+    }?>
+
+    <?
+    if ($key === 'published_year')
     {
        ?><b><?echo $this->text_published_year;?>: </b>
        <?echo $this->value = $value;?>
@@ -94,7 +146,23 @@ foreach ($this->mydummydata as $key => $value)
     }?>
 
     <?
-    if ($key === "abstract")
+    if ($key === 'language')
+    {
+       ?><b><?echo $this->text_language;?>: </b>
+       <?echo $this->value = $value;?>
+       <br><br><?
+    }?>
+
+    <?
+    if ($key === 'document_type')
+    {
+       ?><b><?echo $this->text_document_type;?>: </b>
+       <?echo $this->value = $value;?>
+       <br><br><?
+    }?>
+
+    <?
+    if ($key === 'abstract')
     {
        ?><b><?echo $this->text_abstract;?>: </b>
        <?echo $this->value = $value;?>
