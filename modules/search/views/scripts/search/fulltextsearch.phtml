@@ -1,7 +1,5 @@
 <?php
 /**
- * Index View for SearchController, displays the search form
- * 
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -33,7 +31,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+
+echo "<h1>".$this->translate('search_index_fulltextsearch')."</h1>";
+print($this->form);
 ?>
-	<h2><?= $this->translate('search_index_search') ?></h2>
-	<a href="<?= $this->url(array("controller"=>"search", "action"=>"fulltextsearch")) ?>"><?= $this->translate('search_index_fulltextsearch') ?></a><br/>
-	<a href="<?= $this->url(array("controller"=>"search", "action"=>"metadatasearch")) ?>"><?= $this->translate('search_index_metadatasearch') ?></a>

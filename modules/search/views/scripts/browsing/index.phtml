@@ -34,7 +34,7 @@
  * @version     $Id$
  */
 ?>
-	<h3><?= $this->translate('search_index_browsing') ?></h3>
+	<h2><?= $this->translate('search_index_browsing') ?></h2>
 	<a href="<?= $this->url(array("controller"=>"browsing", "action"=>"browseTitles")) ?>"><?= $this->translate('search_index_alltitlesbrowsing') ?></a><br/>
 	<a href="<?= $this->url(array("controller"=>"browsing", "action"=>"browseList", "list" => "authors")) ?>"><?= $this->translate('search_index_authorsbrowsing') ?></a><br/>
 	<a href="<?= $this->url(array("controller"=>"browsing", "action"=>"browseList", "list" => "doctypes")) ?>"><?= $this->translate('search_index_doctypebrowsing') ?></a><br/>
@@ -60,6 +60,3 @@
 	<a href="<?= $this->url(array("controller"=>"browsing", "action"=>"browseList", "list" => "bkl")) ?>">Browsing nach BKL-Klassifikation</a><br/>
 	**/
 	?>
-	<h3><?= $this->translate('search_index_search') ?></h3>
-	<a href="<?= $this->url(array("controller"=>"search", "action"=>"index")) ?>"><?= $this->translate('search_index_fulltextsearch') ?></a><br/>
-	<a href="<?= $this->url(array("controller"=>"search", "action"=>"metadataSearch")) ?>"><?= $this->translate('search_index_metadatasearch') ?></a>

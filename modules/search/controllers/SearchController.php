@@ -71,6 +71,23 @@ class Search_SearchController extends Zend_Controller_Action
 	 */
     public function indexAction()
     {
+    	$this->view->title = $this->view->translate('search_modulename');
+        /* get search form from Zend_Form-Object directly
+    	// Add form from Object
+    	//$this->view->form = $searchForm;
+    	// Add form by method call
+    	$this->view->form = $this->getSearchForm();
+    	*/
+    }
+
+     /**
+	 * Show Search form
+	 *
+	 * @return void
+	 *
+	 */
+    public function fulltextsearchAction()
+    {
     	$this->view->title = $this->view->translate('search_index_fulltextsearch');
         /* get search form from Zend_Form-Object directly
          * does not work properly (problems with strings that should be translated)

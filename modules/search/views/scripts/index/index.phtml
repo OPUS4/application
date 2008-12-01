@@ -34,7 +34,6 @@
  * @version     $Id: index.phtml 947 2008-11-20 15:55:20Z marahrens $
  */
 ?>
-	<a href="<?= $this->url(array("controller"=>"browsing", "action"=>"index")) ?>"><?= $this->translate('search_index_browsing') ?></a>
-	<h3><?= $this->translate('search_index_search') ?></h3>
-	<a href="<?= $this->url(array("controller"=>"search", "action"=>"index")) ?>"><?= $this->translate('search_index_fulltextsearch') ?></a><br/>
-	<a href="<?= $this->url(array("controller"=>"search", "action"=>"metadataSearch")) ?>"><?= $this->translate('search_index_metadatasearch') ?></a>
+	<h2><?= $this->translate('search_modulename') ?></h2>
+	<a href="<?= $this->url(array("controller"=>"browsing", "action"=>"index")) ?>"><?= $this->translate('search_index_browsing') ?></a><br/>
+	<a href="<?= $this->url(array("controller"=>"search", "action"=>"index")) ?>"><?= $this->translate('search_index_search') ?></a>
