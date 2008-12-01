@@ -94,7 +94,7 @@ class Publish_IndexController extends Zend_Controller_Action {
                 $form = new Overview();
                 // validate form data
                 if ($form->isValid($data) === true) {
-                    $filename = '../xml_files/' . $data['selecttype'] . '.xml';
+                    $filename = '../config/xmldoctypes/' . $data['selecttype'] . '.xml';
                     if (file_exists($filename) === false) {
                         // file does not exists, back to select form
                         $this->_redirector->gotoSimple('index');
