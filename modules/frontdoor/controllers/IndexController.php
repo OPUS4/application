@@ -61,7 +61,7 @@ class Frontdoor_IndexController extends Zend_Controller_Action
          'author' => 'Wolff, Friedrich',
          'swd' => 'IP, Rechnernetz, Überlastung',
          'document_type' => 'Dissertation',
-         'ddc' => '',
+         'ddc' => '004 (Datenverarbeitung; Informatik)',
          'language' => 'Deutsch',
          'reviewed'=> 'peer',
          'publisher_name' => 'Institut für Regelungstechnik',

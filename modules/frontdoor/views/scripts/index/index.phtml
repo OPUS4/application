@@ -34,16 +34,15 @@
  *
  *
  * This view checks for existing keys in the commited array
- * If existing, keys and values are dumped
+ * If existing, keys and values were dumped
  *
  *
  *
  */
 
 ?>
-<h1>Opus Application - <?echo $this->pagetitle; ?></h1><hr>
-<?echo $this->header; ?><br>
-
+<h1>Opus Application - <?echo $this->pagetitle; ?></h1><hr />
+<?echo $this->header; ?><br />
 
 <?
 foreach ($this->mydummydata as $key => $value)
@@ -52,78 +51,80 @@ foreach ($this->mydummydata as $key => $value)
     if ($key === 'url')
     {
        ?><b><?echo $this->text_url;?>: </b>
-         <a href="<?echo $this->value = $value;?>"><?echo $this->value = $value;?>
-         </a><br><hr><br><br><?
+         <a href="<?echo $this->value = $value;?>"><?echo $this->value = $value;?></a><hr /><br />
+       <?
     }?>
 
     <?
     if ($key === 'urn')
     {
        ?><b><?echo $this->text_urn;?>: </b>
-         <a href="<?echo $this->value = 'http://nbn-resolving.de/urn/resolver.pl?' . $value;?>"><?echo $this->value = $value;?>
-         </a><br><?
+         <a href="<?echo $this->value = 'http://nbn-resolving.de/urn/resolver.pl?' . $value;?>">
+         <?echo $this->value = $value;?></a><br />
+       <?
     }?>
 
     <?
     if ($key === 'title')
     {
-        ?><b><?echo $this->value = $value;?>
-          </b><br><br><?
+        ?><p><h2><?echo $this->value = $value;?>
+        </h2></p>
+        <?
     }?>
 
     <?
     if ($key === 'author')
     {
-        ?><b><?echo $this->value = $value;?>
-          </b><br><br><br><br><?
+        ?><p><h2><?echo $this->value = $value;?>
+          </h2></p><br /><?
     }?>
 
     <?
     if ($key === 'swd')
     {
-       ?><b><?echo $this->text_swd;?>: </b>
+       ?><p><b><?echo $this->text_swd;?>: </b>
        <?echo $this->value = $value;?>
-        <br><br><?
+        </p><?
     }?>
 
     <?
     if ($key === 'ddc')
     {
-       ?><b><?echo $this->text_ddc;?>: </b>
+       ?><p><b><?echo $this->text_ddc;?>: </b>
        <?echo $this->value = $value;?>
-       <br><br><?
+       </p><?
     }?>
 
     <?
     if ($key === 'publisher_name')
     {
-       ?><b><?echo $this->text_publisher_name;?>: </b>
+       ?><p><b><?echo $this->text_publisher_name;?>: </b>
        <?echo $this->value = $value;?>
-       <br><br><?
+       </p><?
     }?>
 
     <?
     if ($key === 'publisher_place')
     {
-       ?><b><?echo $this->text_publisher_place;?>: </b>
+       ?><p><b><?echo $this->text_publisher_place;?>: </b>
        <?echo $this->value = $value;?>
-       <br><br><?
+       </p><?
     }?>
 
     <?
     if ($key === 'completed_year')
     {
-       ?><b><?echo $this->text_completed_year;?>: </b>
+       ?><p><b><?echo $this->text_completed_year;?>: </b>
        <?echo $this->value = $value;?>
-       <br><br><?
+       </p><?
     }?>
 
     <?
     if ($key === 'published_date')
     {
-       ?><b><?echo $this->text_published_date;?>: </b>
+       ?><p><b><?echo $this->text_published_date;?>: </b>
        <?echo $this->value = $value;?>
-       <br><br><?
+       </p><?
     }?>
 
     <?
@@ -131,41 +132,41 @@ foreach ($this->mydummydata as $key => $value)
     {
         if ($value === 'peer')
         {
-          ?><b><?echo $this->text_reviewed;?>: </b>
+          ?><p><b><?echo $this->text_reviewed;?>: </b>
           <?echo $this->text_peer;?>
-          <br><br><?
+          </p><?
         }
     }?>
 
     <?
     if ($key === 'published_year')
     {
-       ?><b><?echo $this->text_published_year;?>: </b>
+       ?><p><b><?echo $this->text_published_year;?>: </b>
        <?echo $this->value = $value;?>
-       <br><br><?
+       </p><?
     }?>
 
     <?
     if ($key === 'language')
     {
-       ?><b><?echo $this->text_language;?>: </b>
+       ?><p><b><?echo $this->text_language;?>: </b>
        <?echo $this->value = $value;?>
-       <br><br><?
+       </p><?
     }?>
 
     <?
     if ($key === 'document_type')
     {
-       ?><b><?echo $this->text_document_type;?>: </b>
+       ?><p><b><?echo $this->text_document_type;?>: </b>
        <?echo $this->value = $value;?>
-       <br><br><?
+       </p><?
     }?>
 
     <?
     if ($key === 'abstract')
     {
-       ?><b><?echo $this->text_abstract;?>: </b>
+       ?><p><b><?echo $this->text_abstract;?>: </b>
        <?echo $this->value = $value;?>
-       <br><br><?
+       </p><?
     }
 }?>
