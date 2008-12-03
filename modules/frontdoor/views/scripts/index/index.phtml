@@ -52,37 +52,37 @@ foreach ($this->mydummydata as $key => $value)
     if ($key === 'url')
     {
        ?><b><?echo $this->text_url;?>: </b>
-        <a href="<?echo $this->value = $value;?>"><?echo $this->value = $value;?>
-        </a><br><hr><br><br><?
+         <a href="<?echo $this->value = $value;?>"><?echo $this->value = $value;?>
+         </a><br><hr><br><br><?
     }?>
 
     <?
     if ($key === 'urn')
     {
        ?><b><?echo $this->text_urn;?>: </b>
-        <a href="<?echo $this->value = $value;?>"><?echo $this->value = $value;?>
-        </a><br><?
+         <a href="<?echo $this->value = 'http://nbn-resolving.de/urn/resolver.pl?' . $value;?>"><?echo $this->value = $value;?>
+         </a><br><?
     }?>
 
     <?
     if ($key === 'title')
     {
         ?><b><?echo $this->value = $value;?>
-        </b><br><br><?
+          </b><br><br><?
     }?>
 
     <?
     if ($key === 'author')
     {
         ?><b><?echo $this->value = $value;?>
-        </b><br><br><br><br><?
+          </b><br><br><br><br><?
     }?>
 
     <?
     if ($key === 'swd')
     {
        ?><b><?echo $this->text_swd;?>: </b>
-        <?echo $this->value = $value;?>
+       <?echo $this->value = $value;?>
         <br><br><?
     }?>
 
