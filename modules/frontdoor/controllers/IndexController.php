@@ -52,8 +52,7 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         $this->view->header = 'Das angeforderte Dokument ist zugänglich unter';
         $mydummydata = array();
 
-        $dummydata = array
-        (
+        $dummydata = array(
          'docId' => '75',
          'urn' => 'urn:nbn:de:gbv:830-opus-907',
          'url' => 'http://doku.b.tu-harburg.de/volltexte/2005/90',
@@ -64,6 +63,7 @@ class Frontdoor_IndexController extends Zend_Controller_Action
          'ddc' => '004 (Datenverarbeitung; Informatik)',
          'language' => 'Deutsch',
          'reviewed'=> 'peer',
+         'publisher_university' => 'Technische Universität Hamburg-Harburg',
          'publisher_name' => 'Institut für Regelungstechnik',
          'publisher_place' =>  'Hamburg',
          'completed_year' => '2006',
@@ -77,10 +77,8 @@ class Frontdoor_IndexController extends Zend_Controller_Action
          werden durch Anwendung von Regelungstechnik in Bezug auf Stabilität weiter untersucht.'
         );
 
-        foreach ($dummydata as $key => $value)
-        {
-            if ($value)
-            {
+        foreach ($dummydata as $key => $value) {
+            if ($value != NULL) {
             $mydummydata[$key] = $value;
             }
         }
@@ -102,6 +100,7 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         $this->view->text_reviewed = 'Begutachtung';
         $this->view->text_peer = 'Peer-Review';
         $this->view->text_ddc = 'DDC-Sachgruppe';
+        $this->view->text_publisher_university = 'Universität';
     }
 }
 

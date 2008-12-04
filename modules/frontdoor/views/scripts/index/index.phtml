@@ -104,6 +104,14 @@ foreach ($this->mydummydata as $key => $value)
     }?>
 
     <?
+    if ($key === 'publisher_university')
+    {
+       ?><p><b><?echo $this->text_publisher_university;?>: </b>
+       <?echo $this->value = $value;?>
+       </p><?
+    }?>
+
+    <?
     if ($key === 'publisher_place')
     {
        ?><p><b><?echo $this->text_publisher_place;?>: </b>
