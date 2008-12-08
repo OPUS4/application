@@ -41,8 +41,8 @@
  */
 
 ?>
-<h1>Opus Application - <?echo $this->pagetitle; ?></h1><hr />
-<?echo $this->header; ?><br />
+<h1><?= $this-> translate('frontdoor_pagetitle') ?></h1><hr />
+<?= $this-> translate('frontdoor_entry') ?><br />
 
 <?
 foreach ($this->mydummydata as $key => $value)
@@ -82,7 +82,7 @@ foreach ($this->mydummydata as $key => $value)
     <?
     if ($key === 'swd')
     {
-       ?><p><b><?echo $this->text_swd;?>: </b>
+       ?><p><b><?= $this-> translate('frontdoor_swd') ?>: </b>
        <?echo $this->value = $value;?>
         </p><?
     }?>
@@ -90,7 +90,7 @@ foreach ($this->mydummydata as $key => $value)
     <?
     if ($key === 'ddc')
     {
-       ?><p><b><?echo $this->text_ddc;?>: </b>
+       ?><p><b><?= $this-> translate('frontdoor_ddc') ?>: </b>
        <?echo $this->value = $value;?>
        </p><?
     }?>
@@ -106,7 +106,7 @@ foreach ($this->mydummydata as $key => $value)
     <?
     if ($key === 'publisher_university')
     {
-       ?><p><b><?echo $this->text_publisher_university;?>: </b>
+       ?><p><b><?= $this-> translate('frontdoor_publisher_university') ?>: </b>
        <?echo $this->value = $value;?>
        </p><?
     }?>
@@ -140,7 +140,7 @@ foreach ($this->mydummydata as $key => $value)
     {
         if ($value === 'peer')
         {
-          ?><p><b><?echo $this->text_reviewed;?>: </b>
+          ?><p><b><?= $this-> translate('frontdoor_reviewed') ?>: </b>
           <?echo $this->text_peer;?>
           </p><?
         }
@@ -157,7 +157,7 @@ foreach ($this->mydummydata as $key => $value)
     <?
     if ($key === 'language')
     {
-       ?><p><b><?echo $this->text_language;?>: </b>
+       ?><p><b><?= $this-> translate('frontdoor_language') ?>: </b>
        <?echo $this->value = $value;?>
        </p><?
     }?>
@@ -165,7 +165,7 @@ foreach ($this->mydummydata as $key => $value)
     <?
     if ($key === 'document_type')
     {
-       ?><p><b><?echo $this->text_document_type;?>: </b>
+       ?><p><b><?= $this-> translate('frontdoor_document_type') ?>: </b>
        <?echo $this->value = $value;?>
        </p><?
     }?>

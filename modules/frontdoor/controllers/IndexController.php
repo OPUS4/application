@@ -48,8 +48,8 @@ class Frontdoor_IndexController extends Zend_Controller_Action
     public function indexAction()
     {
         $docId = 75;
-        $this->view->pagetitle = 'Frontdoor';
-        $this->view->header = 'Das angeforderte Dokument ist zugänglich unter';
+        $this->view->frontdoor_pagetitle = 'Opus Application - Frontdoor';
+        $this->view->frontdoor_entry = 'Das angeforderte Dokument ist zugänglich unter';
         $mydummydata = array();
 
         $dummydata = array(
