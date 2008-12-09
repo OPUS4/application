@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `collections_contents_1` (
   `name` varchar(255) character set utf8 NOT NULL,
   `number` varchar(3) character set utf8 NOT NULL,
   PRIMARY KEY  (`collections_id`,`collections_language`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Daten für Tabelle `collections_contents_1`
@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS `collections_replacement_1` (
   KEY `fk_link_collections_replacement_for_1` (`replacement_for_id`),
   KEY `fk_link_collections_replacement_by_1` (`replacement_by_id`),
   KEY `fk_link_collections_current_replacement_1` (`current_replacement_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 PACK_KEYS=0 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 PACK_KEYS=0 AUTO_INCREMENT=1 ;
 
 --
 -- Daten für Tabelle `collections_replacement_1`
@@ -141,7 +141,7 @@ CREATE TABLE IF NOT EXISTS `collections_roles` (
   `name` varchar(255) character set utf8 NOT NULL,
   `visible` tinyint(1) unsigned NOT NULL default '1',
   PRIMARY KEY  (`collections_roles_id`,`collections_language`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Daten für Tabelle `collections_roles`
@@ -165,7 +165,7 @@ CREATE TABLE IF NOT EXISTS `collections_structure_1` (
   `visible` tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (`collections_structure_id`),
   KEY `fk_collections_structure_collections_contents_1` (`collections_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 PACK_KEYS=0 AUTO_INCREMENT=704 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 PACK_KEYS=0 AUTO_INCREMENT=704 ;
 
 --
 -- Daten für Tabelle `collections_structure_1`
@@ -221,7 +221,7 @@ CREATE TABLE IF NOT EXISTS `link_documents_collections_1` (
   `collections_id` int(11) unsigned NOT NULL,
   `documents_id` int(11) unsigned NOT NULL,
   PRIMARY KEY  (`link_documents_collections_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 --
 -- Daten für Tabelle `link_documents_collections_1`
