@@ -27,12 +27,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Browsing
+ * @category    Application
  * @package     Module_Search
- * @author      Oliver Marahrens (o.marahrens@tu-harburg.de)
+ * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: ListIterator.php 1001 2008-11-25 16:03:19Z marahrens $
+ * @version     $Id$
  */
 
 /**

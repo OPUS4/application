@@ -1,7 +1,5 @@
 <?php
 /**
- * Index Controller for SocialBookmarking interfaces
- * 
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -26,14 +24,18 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    SocialBookmarking
+ * @category    Application
  * @package     Module_SocialBookmarking
- * @author      Oliver Marahrens (o.marahrens@tu-harburg.de)
+ * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id: $
  */
 
+/**
+ * Index Controller for SocialBookmarking interfaces
+ * 
+ */
 class SocialBookmarking_IndexController extends Zend_Controller_Action
 {
 	/**

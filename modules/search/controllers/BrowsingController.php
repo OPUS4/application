@@ -1,7 +1,5 @@
 <?php
 /**
- * Controller for any browsing operation
- * 
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -26,14 +24,18 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Browsing
+ * @category    Application
  * @package     Module_Search
- * @author      Oliver Marahrens (o.marahrens@tu-harburg.de)
+ * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
+/**
+ * Controller for any browsing operation
+ * 
+ */
 class Search_BrowsingController extends Zend_Controller_Action
 {
 	/**
