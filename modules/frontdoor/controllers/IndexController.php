@@ -25,7 +25,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Admin
+ * @package     Module_Frontdoor
  * @author      Wolfgang Filter (wolfgang.filter@ub.uni-stuttgart.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -48,7 +48,7 @@ class Frontdoor_IndexController extends Zend_Controller_Action
     public function indexAction()
     {
         $docId = 75;
-        $this->view->frontdoor_pagetitle = 'Opus Application - Frontdoor';
+        $this->view->frontdoor_pagetitle = 'OPUS Anwendung - Dokumentinformationen';
         $this->view->frontdoor_entry = 'Das angeforderte Dokument ist zugänglich unter';
         $mydummydata = array();
 
@@ -83,24 +83,6 @@ class Frontdoor_IndexController extends Zend_Controller_Action
             }
         }
         $this->view->mydummydata = $mydummydata;
-        $this->view->text_title = 'Titel';
-        $this->view->text_document_type = 'Dokumentart';
-        $this->view->text_abstract = 'Kurzfassung';
-        $this->view->text_url = 'URL';
-        $this->view->text_publisher_name = 'Institut';
-        $this->view->text_urn = 'URN';
-        $this->view->text_document_type = 'Dokumenttyp';
-        $this->view->text_swd = 'SWD-Schlagwörter';
-        $this->view->text_publisher_place = 'Erscheinungsort';
-        $this->view->text_published_year = 'Jahr der Veröffentlichung';
-        $this->view->text_ddc = 'DDC-Sachgruppe';
-        $this->view->text_language = 'Sprache';
-        $this->view->text_completed_year = 'Erstellungsjahr';
-        $this->view->text_published_date = 'Publikationsdatum';
-        $this->view->text_reviewed = 'Begutachtung';
-        $this->view->text_peer = 'Peer-Review';
-        $this->view->text_ddc = 'DDC-Sachgruppe';
-        $this->view->text_publisher_university = 'Universität';
     }
 }
 
