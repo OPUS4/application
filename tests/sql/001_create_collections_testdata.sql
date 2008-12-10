@@ -132,24 +132,26 @@ CREATE TABLE IF NOT EXISTS `collections_replacement_1` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur fÃ¼r Tabelle `collections_roles`
+-- Tabellenstruktur für Tabelle `collections_roles`
 --
 
 CREATE TABLE IF NOT EXISTS `collections_roles` (
   `collections_roles_id` int(11) unsigned NOT NULL,
-  `collections_language` varchar(3) character set utf8 NOT NULL,
-  `name` varchar(255) character set utf8 NOT NULL,
+  `collections_language` varchar(3) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `position` int(11) unsigned NOT NULL,
+  `link_docs_path_to_root` tinyint(1) unsigned NOT NULL default '0' COMMENT 'If not 0: Every document belonging to a collection C automatically belongs to every collection on the path from C to the root of the collection tree.',
   `visible` tinyint(1) unsigned NOT NULL default '1',
   PRIMARY KEY  (`collections_roles_id`,`collections_language`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Verwaltungstabelle fuer die einzelnen Collection-Baeume';
 
 --
--- Daten fÃ¼r Tabelle `collections_roles`
+-- Daten für Tabelle `collections_roles`
 --
 
-INSERT INTO `collections_roles` (`collections_roles_id`, `collections_language`, `name`, `visible`) VALUES
-(1, 'ger', 'Sachgruppen der Dewey Decimal Classification (DDC)', 1),
-(1, 'eng', 'Dewey Decimal Classification (DDC)', 1);
+INSERT INTO `collections_roles` (`collections_roles_id`, `collections_language`, `name`, `position`, `link_docs_path_to_root`, `visible`) VALUES
+(1, 'eng', 'Dewey Decimal Classification (DDC)', 1, 0, 1),
+(1, 'ger', 'Sachgruppen der Dewey Decimal Classification (DDC)', 1, 0, 1);
 
 -- --------------------------------------------------------
 
