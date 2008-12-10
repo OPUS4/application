@@ -41,8 +41,6 @@ The complex type "field" may contain the attributes languageoption, mandatory, m
 and name. It needs at least the attribute "name". If there is no other entry, the attributes
 languageoption, mandatory and multiplicity use their default values.
 
-- Languageoption attributes accept only the values "on" or "off". The default value is "off".
-
 - Mandatory attributes accept only the values "yes" or "no". The default value is "no".
 
 - Multiplicity attributes accept only integers for quantities, or the asterisk "*" to represent
@@ -96,13 +94,13 @@ value for "name". It must be declared.
     <field name="PublisherPlace" />  
 
 	<!-- titles  -->
-	<field name="TitleAbstract" languageoption="on" mandatory="yes" multiplicity="2" />
-	<field name="TitleMain" languageoption="on" mandatory="yes" multiplicity="2" />
-	<field name="TitleParent" languageoption="on" multiplicity="2" />
+	<field name="TitleAbstract" mandatory="yes" multiplicity="2" />
+	<field name="TitleMain" mandatory="yes" multiplicity="2" />
+	<field name="TitleParent" multiplicity="2" />
 
 	<!-- subjects -->
 	<field name="SubjectSwd" mandatory="yes" multiplicity="4" />
 	<field name="SubjectDdc" mandatory="yes" />
-	<field name="SubjectUncontrolled" languageoption="on" multiplicity="4" />
+	<field name="SubjectUncontrolled" multiplicity="4" />
 
 </documenttype>

@@ -41,8 +41,6 @@ The complex type "field" may contain the attributes languageoption, mandatory, m
 and name. It needs at least the attribute "name". If there is no other entry, the attributes
 languageoption, mandatory and multiplicity use their default values.
 
-- Languageoption attributes accept only the values "on" or "off". The default value is "off".
-
 - Mandatory attributes accept only the values "yes" or "no". The default value is "no".
 
 - Multiplicity attributes accept only integers for quantities, or the asterisk "*" to represent
