@@ -83,24 +83,29 @@ class Publish_IndexController extends Zend_Controller_Action {
 	/**
 	 * Create, recreate and validate a document form. If it is valid store it.
 	 *
-	 *  @return void
+	 * @return void
 	 */
 	public function createAction() {
 	    $this->view->title = 'Publish (create)';
 
 	    if ($this->_request->isPost() === true) {
             $data = $this->_request->getPost();
+            $form_builder = new Opus_Form_Builder();
             if (array_key_exists('selecttype', $data) === true) {
                 $form = new Overview();
                 // validate form data
                 if ($form->isValid($data) === true) {
-                    $filename = '../config/xmldoctypes/' . $data['selecttype'] . '.xml';
+                    $filename = '../config/xmldoctypes/' .
+                        $form->getValue('selecttype') .
+                        '.xml';
                     if (file_exists($filename) === false) {
                         // file does not exists, back to select form
                         $this->_redirector->gotoSimple('index');
                     }
                     $type = new Opus_Document_Type($filename);
-                    $createForm = Opus_Form_Builder::createForm($type);
+                    $document_builder = new Opus_Document_Builder($type);
+                    $document = $document_builder->create();
+                    $createForm = $form_builder->build($document);
                     $createForm->setAction($this->_baseUrl . '/index/create');
                     $this->view->form = $createForm;
                 } else {
@@ -108,16 +113,16 @@ class Publish_IndexController extends Zend_Controller_Action {
                     $this->view->form = $form;
                 }
             } else if (array_key_exists('submit', $data) === false) {
-                $form = Opus_Form_Builder::recreateForm($data);
-                $data['form'] = $form->form->getValue();
-                $form->populate($data);
+                $form = $form_builder->buildFromPost($data);
                 $form->setAction($this->_baseUrl . '/index/create');
                 $this->view->form = $form;
             } else {
-                $form = Opus_Form_Builder::recreateForm($data);
+                $form = $form_builder->buildFromPost($data);
                 if ($form->isValid($data) === true) {
-                    // TODO Store data
                     // go ahead to upload
+                    $model = $form_builder->getModelFromForm($form);
+                    $form_builder->setFromPost($model, $form->getValues());
+                    $id = $model->store();
                     $this->_redirector->gotoSimple('upload');
                 } else {
                     $this->view->form = $form;
