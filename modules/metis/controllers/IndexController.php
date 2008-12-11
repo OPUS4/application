@@ -26,7 +26,7 @@
  *
  * @category    Application
  * @package     Module_Edit
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
+ * @author      Wolfgang Filter (wolfgang.filter@ub.uni-stuttgart.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
