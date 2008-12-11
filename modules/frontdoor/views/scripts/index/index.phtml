@@ -33,8 +33,8 @@
  *
  *
  *
- * This view checks for existing keys in the commited array
- * If existing, keys and values were dumped
+ * This view checks for existing keys in the commited array.
+ * If key exists, key and value are dumped.
  *
  *
  *
@@ -65,7 +65,15 @@ foreach ($this->mydummydata as $key => $value)
     }?>
 
     <?
-    if ($key === 'title')
+    if ($key === 'title_ger')
+    {
+        ?><p><h2><?echo $this->value = $value;?>
+        </h2></p>
+        <?
+    }?>
+
+    <?
+    if ($key === 'title_eng')
     {
         ?><p><h2><?echo $this->value = $value;?>
         </h2></p>
@@ -91,6 +99,22 @@ foreach ($this->mydummydata as $key => $value)
     if ($key === 'ddc')
     {
        ?><p><b><?= $this-> translate('frontdoor_ddc') ?>: </b>
+       <?echo $this->value = $value;?>
+       </p><?
+    }?>
+
+    <?
+    if ($key === 'uncontrolled_de')
+    {
+       ?><p><b><?= $this-> translate('frontdoor_uncontrolled_de') ?>: </b>
+       <?echo $this->value = $value;?>
+       </p><?
+    }?>
+
+    <?
+    if ($key === 'uncontrolled_eng')
+    {
+       ?><p><b><?= $this-> translate('frontdoor_uncontrolled_eng') ?>: </b>
        <?echo $this->value = $value;?>
        </p><?
     }?>
@@ -163,14 +187,22 @@ foreach ($this->mydummydata as $key => $value)
     if ($key === 'document_type')
     {
        ?><p><b><?= $this-> translate('frontdoor_document_type') ?>: </b>
-       <?= $this-> translate ('frontdoor_' .$value) ?>
+       <?= $this-> translate('frontdoor_' .$value) ?>
        </p><?
     }?>
 
     <?
-    if ($key === 'abstract')
+    if ($key === 'abstract_eng')
     {
-       ?><p><b><?= $this-> translate('frontdoor_abstract') ?>: </b>
+       ?><p><b><?= $this-> translate('frontdoor_abstract_eng') ?>: </b>
+       <?echo $this->value = $value;?>
+       </p><?
+    }?>
+
+    <?
+    if ($key === 'abstract_ger')
+    {
+       ?><p><b><?= $this-> translate('frontdoor_abstract_ger') ?>: </b>
        <?echo $this->value = $value;?>
        </p><?
     }

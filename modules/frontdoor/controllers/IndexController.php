@@ -41,7 +41,6 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         * Checking up for empty fields
         * Building new array with all occupied fields
         * $docId must be transferred with the URL
-        * Language controlling must be outsourced to a tmx-file
         *
         */
 
@@ -53,14 +52,17 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         $mydummydata = array();
 
         $dummydata = array(
-         'docId' => '75',
+         'docId' => $docId,
          'urn' => 'urn:nbn:de:gbv:830-opus-907',
          'url' => 'http://doku.b.tu-harburg.de/volltexte/2005/90',
-         'title' => 'Überlastpreisgestaltung als skalierbare, effiziente und stabile Überlastabwehr für zukünftige IP-Netzwerke',
-         'author' => 'Wolff, Friedrich',
+         'title_ger' => 'Überlastpreisgestaltung als skalierbare, effiziente und stabile Überlastabwehr für zukünftige IP-Netzwerke',
+         'title_eng' => 'Congestion pricing as scalable, efficient and stable congestion control for future IP networks',
+         'author' => 'Zimmermann, Sebastian',
          'swd' => 'IP, Rechnernetz, Überlastung',
-         'document_type' => 'Dissertation',
          'ddc' => '004 (Datenverarbeitung; Informatik)',
+         'uncontrolled_de' => 'Netzwerktechnik , Steuerung , Regelung',
+         'uncontrolled_eng' => 'Networktechnology , Controlling',
+         'document_type' => 'Dissertation',
          'language' => 'Deutsch',
          'reviewed'=> 'peer',
          'publisher_university' => 'Technische Universität Hamburg-Harburg',
@@ -69,12 +71,17 @@ class Frontdoor_IndexController extends Zend_Controller_Action
          'completed_year' => '2006',
          'published_year' => '',
          'published_date' => '06.04.2007',
-         'abstract' => 'In dieser Dissertation werden durch die Anwendung der Überlastpreisgestaltung leistungsfähigere
+         'abstract_ger' => 'In dieser Dissertation werden durch die Anwendung der Überlastpreisgestaltung leistungsfähigere
          verteilte Überlastabwehr-Algorithmen für TCP/IP-Netzwerke entwickelt. Die Theorie der
          Überlast­preisgestaltung basiert auf Wirtschaftstheorien und Optimierungsverfahren und führt
          zu einer optimalen Allokation von Netzwerkressourcen. Dabei werden im Mittel niedrige
          Warteschlangenlängen und gleichzeitig ein hoher Ausnutzungsgrad erzielt. Die Überlastabwehr-Algorithmen
-         werden durch Anwendung von Regelungstechnik in Bezug auf Stabilität weiter untersucht.'
+         werden durch Anwendung von Regelungstechnik in Bezug auf Stabilität weiter untersucht.',
+         'abstract_eng' => 'This dissertation focuses on the design of more powerful distributed congestion control
+         algorithms for TCP/IP networks by utilizing the theory of Congestion Pricing as a mathematical framework.
+         Congestion Pricing, a strategy based on economics and optimization theory, leads to a social optimum for
+         the entire network while Maintaining low queue sizes and, at the same time, high utilization.
+         Using control theory, the stability of congestion control algorithms is further evaluated.'
         );
 
         foreach ($dummydata as $key => $value) {

@@ -44,7 +44,7 @@
     </tu>
     <tu tuid="frontdoor_swd">
       <tuv xml:lang="en">
-        <seg>SWD-keywords</seg>
+        <seg>Keywords from authority file SWD (German)</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>SWD-Schlagwörter</seg>
@@ -57,7 +57,8 @@
       <tuv xml:lang="de">
         <seg>Dokumenttyp</seg>
       </tuv>
-    </tu><tu tuid="frontdoor_Dissertation">
+    </tu>
+    <tu tuid="frontdoor_Dissertation">
       <tuv xml:lang="en">
         <seg>Doctoral thesis</seg>
       </tuv>
@@ -65,12 +66,36 @@
         <seg>Dissertation</seg>
       </tuv>
     </tu>
+    <tu tuid="frontdoor_Aufsatz">
+      <tuv xml:lang="en">
+        <seg>Article</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Aufsatz</seg>
+      </tuv>
+    </tu>
     <tu tuid="frontdoor_ddc">
       <tuv xml:lang="en">
-        <seg>DDC classification</seg>
+        <seg>Dewey Decimal Classification (DDC)</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>DDC-Sachgruppe</seg>
+      </tuv>
+    </tu>
+    <tu tuid="frontdoor_uncontrolled_de">
+      <tuv xml:lang="en">
+        <seg>Free Keywords (German)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Freie Schlagwörter (Deutsch)</seg>
+      </tuv>
+    </tu>
+    <tu tuid="frontdoor_uncontrolled_eng">
+      <tuv xml:lang="en">
+        <seg>Free Keywords (English)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Freie Schlagwörter (Englisch)</seg>
       </tuv>
     </tu>
     <tu tuid="frontdoor_language">
@@ -153,12 +178,20 @@
         <seg>Erscheinungsdatum</seg>
       </tuv>
     </tu>
-    <tu tuid="frontdoor_abstract">
+    <tu tuid="frontdoor_abstract_ger">
       <tuv xml:lang="en">
-        <seg>Abstract</seg>
+        <seg>Abstract (German)</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Kurzfassung</seg>
+      </tuv>
+    </tu>
+    <tu tuid="frontdoor_abstract_eng">
+      <tuv xml:lang="en">
+        <seg>Abstract (English)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Kurzfassung (Englisch)</seg>
       </tuv>
     </tu>
   </body>
