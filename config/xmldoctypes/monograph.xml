@@ -67,10 +67,10 @@ value for "name". It must be declared.
     
 	<!-- dates -->
 	<!-- either "published_year" or "published_date" must be mandatory -->
-	<mandatory type="one-at-least">
-		<field name="PublishedYear" />
-		<field name="PublishedDate" />
-	</mandatory>
+	<!-- <mandatory type="one-at-least"> -->
+		<!-- <field name="PublishedYear" /> -->
+		<!-- <field name="PublishedDate" /> -->
+	<!-- </mandatory> -->
 	
 	<!-- editions -->
 	<field name="Edition" />
