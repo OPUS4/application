@@ -80,18 +80,18 @@ value for "name". It must be declared.
 	<field name="Isbn" multiplicity="2" />
 
 	<!-- institutes -->
-	<field name="Institute" mandatory="yes" multiplicity="3" />
+	<!--  <field name="Institute" mandatory="yes" multiplicity="3" /> -->
 	<field name="NonInstituteAffiliation" />
 
 	<!-- persons -->
-	<field name="PersonAdvisor" mandatory="yes" />
-	<field name="PersonAuthor" mandatory="yes" multiplicity="3" />
-	<field name="PersonOther" multiplicity="3" />
-	<field name="PersonReferee" />
+	<!-- <field name="PersonAdvisor" mandatory="yes" /> -->
+	<!-- <field name="PersonAuthor" mandatory="yes" multiplicity="3" /> -->
+	<!-- <field name="PersonOther" multiplicity="3" /> -->
+	<!-- <field name="PersonReferee" /> -->
 
     <!-- publishers  -->
     <field name="PublisherName" />
-    <field name="PublisherPlace" />  
+    <field name="PublisherPlace" />
 
 	<!-- titles  -->
 	<field name="TitleAbstract" mandatory="yes" multiplicity="2" />
@@ -99,8 +99,8 @@ value for "name". It must be declared.
 	<field name="TitleParent" multiplicity="2" />
 
 	<!-- subjects -->
-	<field name="SubjectSwd" mandatory="yes" multiplicity="4" />
-	<field name="SubjectDdc" mandatory="yes" />
-	<field name="SubjectUncontrolled" multiplicity="4" />
+	<!-- <field name="SubjectSwd" mandatory="yes" multiplicity="4" /> -->
+	<!-- <field name="SubjectDdc" mandatory="yes" /> -->
+	<!-- <field name="SubjectUncontrolled" multiplicity="4" /> -->
 
 </documenttype>

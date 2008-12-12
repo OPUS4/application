@@ -79,6 +79,6 @@ value for "name". It must be declared.
 	<field name="Isbn" multiplicity="2" />
 
 	<!-- institutes -->
-	<field name="Institute" mandatory="yes" multiplicity="3" />
+	<!-- <field name="Institute" mandatory="yes" multiplicity="3" /> -->
 	<field name="NonInstituteAffiliation" />
 </documenttype>
