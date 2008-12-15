@@ -88,6 +88,14 @@ foreach ($this->mydummydata as $key => $value)
     }?>
 
     <?
+    if ($key === 'docId')
+    {
+        ?>(<?echo $this->value = 'docId';?>=
+        <?echo $this->value = $value;?>)
+          <br /><?
+    }?>
+
+    <?
     if ($key === 'swd')
     {
        ?><p><b><?= $this-> translate('frontdoor_swd') ?>: </b>
