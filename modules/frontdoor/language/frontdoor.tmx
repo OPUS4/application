@@ -66,6 +66,14 @@
         <seg>Dissertation</seg>
       </tuv>
     </tu>
+    <tu tuid="frontdoor_Monographie">
+      <tuv xml:lang="en">
+        <seg>Monograph</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Monographie</seg>
+      </tuv>
+    </tu>
     <tu tuid="frontdoor_Aufsatz">
       <tuv xml:lang="en">
         <seg>Article</seg>
@@ -124,10 +132,18 @@
     </tu>
     <tu tuid="frontdoor_peer">
       <tuv xml:lang="en">
-        <seg>Peer reviewed</seg>
+        <seg>Peer-reviewed</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Prüfung durch externe Gutachter</seg>
+      </tuv>
+    </tu>
+    <tu tuid="frontdoor_editorial">
+      <tuv xml:lang="en">
+        <seg>Editorial Review</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Redaktionelle Prüfung</seg>
       </tuv>
     </tu>
     <tu tuid="frontdoor_publisher_university">

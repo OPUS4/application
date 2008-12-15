@@ -37,10 +37,10 @@ class Frontdoor_IndexController extends Zend_Controller_Action
 {
 
        /**
-        * Getting an associative 1-dimensional array with all relevant document metadata
-        * Checking up for empty fields
-        * Building new array with all occupied fields
-        * $docId must be transferred with the URL
+        * Producing an associative 1-dimensional array with all relevant document metadata.
+        * Checking up for empty fields.
+        * Building up a new array with all allocated fields.
+        * $docId is transferred by URL (interface with module_search)
         *
         */
 

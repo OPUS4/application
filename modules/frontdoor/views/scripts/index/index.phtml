@@ -34,8 +34,8 @@
  *
  *
  * This view checks for existing keys in the commited array.
- * If key exists, key and value are dumped.
- *
+ * If key exists, key and corresponding value were dumped.
+ * All keys and some values from keys of type ENUM are going to be translated.
  *
  *
  */
@@ -51,7 +51,7 @@ foreach ($this->mydummydata as $key => $value)
     if ($key === 'url')
     {
        ?><b><?= $this-> translate('frontdoor_url') ?>: </b>
-         <a href="<?echo $this->value = $value;?>"><?echo $this->value = $value;?></a><hr /><br />
+         <a href="<?= $this->value = $value;?>"><?= $this->value = $value;?></a><hr /><br />
        <?
     }?>
 
@@ -59,15 +59,15 @@ foreach ($this->mydummydata as $key => $value)
     if ($key === 'urn')
     {
        ?><b><?= $this-> translate('frontdoor_urn') ?>: </b>
-         <a href="<?echo $this->value = 'http://nbn-resolving.de/urn/resolver.pl?' . $value;?>">
-         <?echo $this->value = $value;?></a><br />
+         <a href="<?= $this->value = 'http://nbn-resolving.de/urn/resolver.pl?' . $value;?>">
+         <?= $this->value = $value;?></a><br />
        <?
     }?>
 
     <?
     if ($key === 'title_ger')
     {
-        ?><p><h2><?echo $this->value = $value;?>
+        ?><p><h2><?= $this->value = $value;?>
         </h2></p>
         <?
     }?>
@@ -75,7 +75,7 @@ foreach ($this->mydummydata as $key => $value)
     <?
     if ($key === 'title_eng')
     {
-        ?><p><h2><?echo $this->value = $value;?>
+        ?><p><h2><?= $this->value = $value;?>
         </h2></p>
         <?
     }?>
@@ -83,15 +83,15 @@ foreach ($this->mydummydata as $key => $value)
     <?
     if ($key === 'author')
     {
-        ?><p><h2><?echo $this->value = $value;?>
+        ?><p><h2><?= $this->value = $value;?>
           </h2></p><br /><?
     }?>
 
     <?
     if ($key === 'docId')
     {
-        ?>(<?echo $this->value = 'docId';?>=
-        <?echo $this->value = $value;?>)
+        ?>(<?= $this->value = 'docId';?>=
+        <?= $this->value = $value;?>)
           <br /><?
     }?>
 
@@ -99,7 +99,7 @@ foreach ($this->mydummydata as $key => $value)
     if ($key === 'swd')
     {
        ?><p><b><?= $this-> translate('frontdoor_swd') ?>: </b>
-       <?echo $this->value = $value;?>
+       <?= $this->value = $value;?>
         </p><?
     }?>
 
@@ -107,7 +107,7 @@ foreach ($this->mydummydata as $key => $value)
     if ($key === 'ddc')
     {
        ?><p><b><?= $this-> translate('frontdoor_ddc') ?>: </b>
-       <?echo $this->value = $value;?>
+       <?= $this->value = $value;?>
        </p><?
     }?>
 
@@ -115,7 +115,7 @@ foreach ($this->mydummydata as $key => $value)
     if ($key === 'uncontrolled_de')
     {
        ?><p><b><?= $this-> translate('frontdoor_uncontrolled_de') ?>: </b>
-       <?echo $this->value = $value;?>
+       <?= $this->value = $value;?>
        </p><?
     }?>
 
@@ -123,7 +123,7 @@ foreach ($this->mydummydata as $key => $value)
     if ($key === 'uncontrolled_eng')
     {
        ?><p><b><?= $this-> translate('frontdoor_uncontrolled_eng') ?>: </b>
-       <?echo $this->value = $value;?>
+       <?= $this->value = $value;?>
        </p><?
     }?>
 
@@ -131,7 +131,7 @@ foreach ($this->mydummydata as $key => $value)
     if ($key === 'publisher_name')
     {
        ?><p><b><?= $this->  translate('frontdoor_publisher_name') ?>: </b>
-       <?echo $this->value = $value;?>
+       <?= $this->value = $value;?>
        </p><?
     }?>
 
@@ -139,7 +139,7 @@ foreach ($this->mydummydata as $key => $value)
     if ($key === 'publisher_university')
     {
        ?><p><b><?= $this-> translate('frontdoor_publisher_university') ?>: </b>
-       <?echo $this->value = $value;?>
+       <?= $this->value = $value;?>
        </p><?
     }?>
 
@@ -147,7 +147,7 @@ foreach ($this->mydummydata as $key => $value)
     if ($key === 'publisher_place')
     {
        ?><p><b><?= $this-> translate('frontdoor_publisher_place') ?>: </b>
-       <?echo $this->value = $value;?>
+       <?= $this->value = $value;?>
        </p><?
     }?>
 
@@ -155,7 +155,7 @@ foreach ($this->mydummydata as $key => $value)
     if ($key === 'completed_year')
     {
        ?><p><b><?= $this-> translate('frontdoor_completed_year') ?>: </b>
-       <?echo $this->value = $value;?>
+       <?= $this->value = $value;?>
        </p><?
     }?>
 
@@ -163,7 +163,7 @@ foreach ($this->mydummydata as $key => $value)
     if ($key === 'published_date')
     {
        ?><p><b><?= $this-> translate('frontdoor_published_date') ?>: </b>
-       <?echo $this->value = $value;?>
+       <?= $this->value = $value;?>
        </p><?
     }?>
 
@@ -179,7 +179,7 @@ foreach ($this->mydummydata as $key => $value)
     if ($key === 'published_year')
     {
        ?><p><b><?= $this-> translate('frontdoor_published_year') ?>: </b>
-       <?echo $this->value = $value;?>
+       <?= $this->value = $value;?>
        </p><?
     }?>
 
@@ -203,7 +203,7 @@ foreach ($this->mydummydata as $key => $value)
     if ($key === 'abstract_eng')
     {
        ?><p><b><?= $this-> translate('frontdoor_abstract_eng') ?>: </b>
-       <?echo $this->value = $value;?>
+       <?= $this->value = $value;?>
        </p><?
     }?>
 
@@ -211,7 +211,8 @@ foreach ($this->mydummydata as $key => $value)
     if ($key === 'abstract_ger')
     {
        ?><p><b><?= $this-> translate('frontdoor_abstract_ger') ?>: </b>
-       <?echo $this->value = $value;?>
+       <?= $this->value = $value;?>
        </p><?
     }
 }?>
+<p><a href="<?= $this->url(array('module' => 'home')) ?>">Home</a></p>
