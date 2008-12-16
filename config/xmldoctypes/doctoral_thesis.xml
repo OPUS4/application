@@ -70,10 +70,10 @@ value for "name". It must be declared.
 	</mandatory>
 
 	<!-- either "published_year" or "published_date" must be mandatory -->
-	<!-- <mandatory type="one-at-least"> -->
-		<!-- <field name="PublishedYear" />  -->
-		<!--<field name="PublishedDate" />  -->
-	<!-- </mandatory> -->
+	<mandatory type="one-at-least">
+		<field name="PublishedYear" />
+		<field name="PublishedDate" />
+	</mandatory>
 	<field name="DateAccepted" mandatory="yes" />
 
 	<!-- identifiers -->
@@ -85,7 +85,7 @@ value for "name". It must be declared.
 
 	<!-- persons -->
 	<!-- <field name="PersonAdvisor" mandatory="yes" /> -->
-	<!-- <field name="PersonAuthor" mandatory="yes" multiplicity="3" /> -->
+	<field name="PersonAuthor" mandatory="yes" multiplicity="3" />
 	<!-- <field name="PersonOther" multiplicity="3" /> -->
 	<!-- <field name="PersonReferee" /> -->
 
