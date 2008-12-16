@@ -52,7 +52,7 @@ value for "name". It must be declared.
 
 -->
 
-<documenttype name="doctoral_thesis"
+<documenttype name="monograph"
 	xmlns="http://schemas.opus.org/documenttype"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
