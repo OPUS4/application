@@ -53,7 +53,7 @@ class Frontdoor_IndexController extends Zend_Controller_Action
 
       function validate ($var)
       {
-        if ($var == NULL || $var<0)
+        if ($var<0)
         {
          throw new Exception('Invalid Document-ID');
         }
