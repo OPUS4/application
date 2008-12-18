@@ -40,19 +40,42 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         * Producing an associative 1-dimensional array with all relevant document metadata.
         * Checking up for empty fields.
         * Building up a new array with all allocated fields.
-        * $docId is transferred by URL (interface with module_search)
+        * $docId is transferred by URL (interface with module_search).
+        * Exception handling for invalid $docId.
         *
         */
 
     public function indexAction()
     {
-        $request = $this->getRequest();
-        $docId = $request->getParam('docId');
-        $this->view->frontdoor_pagetitle = 'OPUS Anwendung - Dokumentinformationen';
-        $this->view->frontdoor_entry = 'Das angeforderte Dokument ist zugänglich unter';
-        $mydummydata = array();
+      $request = $this->getRequest();
+      $docId = $request->getParam('docId');
+      $var = 0;
 
-        $dummydata = array(
+      function validate ($var)
+      {
+        if ($var == NULL || $var<0)
+        {
+         throw new Exception('Invalid Document-ID');
+        }
+        else
+        {
+         return $var;
+        }
+      }
+      try
+      {
+        validate($docId);
+      }
+      catch (Exception $error_text)
+      {
+        $this->view->error_text = $error_text;
+      }
+
+      $this->view->frontdoor_pagetitle = 'OPUS Anwendung - Dokumentinformationen';
+      $this->view->frontdoor_entry = 'Das angeforderte Dokument ist zugänglich unter';
+      $mydummydata = array();
+
+      $dummydata = array(
          'docId' => $docId,
          'urn' => 'urn:nbn:de:gbv:830-opus-907',
          'url' => 'http://doku.b.tu-harburg.de/volltexte/2005/90',
@@ -83,14 +106,16 @@ class Frontdoor_IndexController extends Zend_Controller_Action
          Congestion Pricing, a strategy based on economics and optimization theory, leads to a social optimum for
          the entire network while Maintaining low queue sizes and, at the same time, high utilization.
          Using control theory, the stability of congestion control algorithms is further evaluated.'
-        );
+      );
 
-        foreach ($dummydata as $key => $value) {
-            if ($value != NULL) {
-            $mydummydata[$key] = $value;
-            }
+      foreach ($dummydata as $key => $value)
+      {
+        if ($value != NULL)
+        {
+          $mydummydata[$key] = $value;
         }
-        $this->view->mydummydata = $mydummydata;
+      }
+      $this->view->mydummydata = $mydummydata;
     }
 }
 
