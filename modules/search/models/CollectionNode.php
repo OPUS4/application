@@ -55,7 +55,7 @@ class CollectionNode extends BasicList
   private $documents;
 
   /**
-   * Name of this node (in different languages)
+   * Name of this node
    * @access private
    */
   private $name;
@@ -79,22 +79,16 @@ class CollectionNode extends BasicList
    */
   public function __construct($coll = null, $collnode = null) {
   		$this->documents = array();
-  		$this->name = array();
+  		#$this->name = array();
   		$this->roleId = $coll;
   		$this->collectionId = $collnode;
   		if (is_array($coll)) {
-  			foreach ($coll as $c)
-  			{
-  				$this->name[$c["collections_language"]] = $c["name"];
-  				$this->roleId = (int) $c["collections_roles_id"];
-  			}
+			$this->name = $coll["name"];
+			$this->roleId = (int) $coll["collections_roles_id"];
   		}
   		if (is_array($collnode)) {
-  			foreach ($collnode as $c)
-  			{
-  				$this->name[$c["collections_language"]] = $c["name"];
-  				$this->collectionId = (int) $c["collections_id"];
-  			}
+			$this->name = $collnode[0]["name"];
+			$this->collectionId = (int) $collnode[0]["collections_id"];
   		}
   		$this->getDocuments();
   } // end of Constructor
@@ -168,23 +162,23 @@ class CollectionNode extends BasicList
    * @todo if language does not exist, return default language from element!
    */
   public function getName($language = null) {
-  	if ($language === null) 
-  	{
-        $translate = Zend_Registry::get('Zend_Translate');
-  		$lang = $translate->getLocale();
+  	#if ($language === null) 
+  	#{
+     #   $translate = Zend_Registry::get('Zend_Translate');
+  		#$lang = $translate->getLocale();
 		// get the correct language from the database...
-  		switch($lang)
-  		{
-	  		case "de_DE":
-  				$language = "ger";
-  				break;
-  			default:
-	  			$language = "eng";
-  				break;
-  		}
-  	}
-  	if (array_key_exists($language, $this->name)) return $this->name[$language];
-  	return null;
+  		#switch($lang)
+  		#{
+	  	#	case "de_DE":
+  		#		$language = "ger";
+  		#		break;
+  		#	default:
+	  	#		$language = "eng";
+  		#		break;
+  		#}
+  	#}
+  	#if (array_key_exists($language, $this->name)) return $this->name[$language];
+  	return $this->name;
   }  
 
   /**
