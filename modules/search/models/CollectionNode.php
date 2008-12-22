@@ -86,14 +86,14 @@ class CollectionNode extends BasicList
   			foreach ($coll as $c)
   			{
   				$this->name[$c["collections_language"]] = $c["name"];
-  				$this->roleId = $c["collections_roles_id"];
+  				$this->roleId = (int) $c["collections_roles_id"];
   			}
   		}
   		if (is_array($collnode)) {
   			foreach ($collnode as $c)
   			{
   				$this->name[$c["collections_language"]] = $c["name"];
-  				$this->collectionId = $c["collections_id"];
+  				$this->collectionId = (int) $c["collections_id"];
   			}
   		}
   		$this->getDocuments();
