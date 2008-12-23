@@ -52,7 +52,7 @@ class BrowsingList
 		#$browsinglist = Opus_Person_Information::getAll();
 		#$browsinglist = DummyData::getDummyPersons();
 		// map the unsorted list from Opus_Person_Information::getAll() into a PersonsList
-		$personsList = new PersonsList();
+		$personsList = new Opus_Search_List_PersonsList();
 		foreach ($browsinglist as $member)
 		{
 			$pers = new Opus_Search_Adapter_PersonAdapter((int) $member->__get("persons_id"));
@@ -75,7 +75,7 @@ class BrowsingList
 		// $browsinglist = Opus_Document_Type::getAllDocumentTypes()
 		$browsinglist = DummyData::getDummyDocumentTypes();
 		// map the unsorted list from Opus_Person_Information::getAll() into a PersonsList
-		$doctypeList = new DocumentTypeList();
+		$doctypeList = new Opus_Search_List_DocumentTypeList();
 		foreach ($browsinglist as $member)
 		{
 			$doctypeList->add($member);
@@ -98,10 +98,10 @@ class BrowsingList
 		#$browsinglist = DummyData::getDummyCollections();
 		// Real data from database 
 		$browsinglist = Opus_Collection_Information::getAllCollectionRoles();
-		$doctypeList = new CollectionNodeList();
+		$doctypeList = new Opus_Search_List_CollectionNodeList();
 		foreach ($browsinglist as $member)
 		{
-			$node = new CollectionNode($member);
+			$node = new Opus_Search_List_CollectionNode($member);
 			# Später: Nicht mehr $member uebergeben, sondern anhand der role_id die Collection aus der DB auslesen
 			#$node->getCollectionNode($member["role_id"], 0);
 			$doctypeList->add($node);
@@ -124,7 +124,7 @@ class BrowsingList
 		$browsinglist = Opus_Collection_Information::getSubCollections((int) $role, (int) $node);
 		#$browsinglist = DummyData::getDummyCollectionNode();
 		#print_r($browsinglist);
-		$collnode = new CollectionNode((int) $role, (int) $node);
+		$collnode = new Opus_Search_List_CollectionNode((int) $role, (int) $node);
 		# Später: Nicht mehr $member uebergeben, sondern anhand der role_id die Collection aus der DB auslesen
 		#$collnode->getCollectionNode($role, $node);
 		return $collnode;

@@ -47,7 +47,7 @@ class BrowsingFilter
         $table = new Opus_Db_Documents();
         $docresult = $table->fetchAll();
         
-        $hitlist = new HitList();
+        $hitlist = new Opus_Search_List_HitList();
         foreach ($docresult as $row)
         {
        		$searchhit = new SearchHit((int) $row->__get("documents_id"));
@@ -67,7 +67,7 @@ class BrowsingFilter
 	{
         $docresult = DummyData::getDummyDocuments();
         
-        $hitlist = new HitList();
+        $hitlist = new Opus_Search_List_HitList();
         foreach ($docresult as $row)
         {
        		$searchhit = new SearchHit($row);
@@ -91,7 +91,7 @@ class BrowsingFilter
         $person = new Opus_Search_Adapter_PersonAdapter((int) $authorId);
         $docresult = $person->getDocumentsByRole("author");
         
-        $hitlist = new HitList();
+        $hitlist = new Opus_Search_List_HitList();
         foreach ($docresult as $row)
         {
        		$searchhit = new SearchHit((int) $row->getId());
@@ -114,7 +114,7 @@ class BrowsingFilter
 	{
         $docresult = DummyData::getDummyDocuments();
         
-        $hitlist = new HitList();
+        $hitlist = new Opus_Search_List_HitList();
         foreach ($docresult as $row)
         {
        		$searchhit = new SearchHit($row);
@@ -137,7 +137,7 @@ class BrowsingFilter
 	{		
         $docresult = DummyData::getDummyDocuments();
         
-        $hitlist = new HitList();
+        $hitlist = new Opus_Search_List_HitList();
         foreach ($docresult as $row)
         {
        		$searchhit = new SearchHit($row);
@@ -160,7 +160,7 @@ class BrowsingFilter
 	{
         $docresult = DummyData::getDummyDocuments();
         
-        $hitlist = new HitList();
+        $hitlist = new Opus_Search_List_HitList();
         foreach ($docresult as $row)
         {
        		$searchhit = new SearchHit($row);
@@ -184,7 +184,7 @@ class BrowsingFilter
 	{
         $docresult = DummyData::getDummyDocuments();
         
-        $hitlist = new HitList();
+        $hitlist = new Opus_Search_List_HitList();
         foreach ($docresult as $row)
         {
        		$searchhit = new SearchHit($row);
@@ -207,7 +207,7 @@ class BrowsingFilter
 	{
         $docresult = DummyData::getDummyDocuments();
         
-        $hitlist = new HitList();
+        $hitlist = new Opus_Search_List_HitList();
         foreach ($docresult as $row)
         {
        		$searchhit = new SearchHit($row);
@@ -230,7 +230,7 @@ class BrowsingFilter
 	{
         $docresult = DummyData::getDummyDocuments();
         
-        $hitlist = new HitList();
+        $hitlist = new Opus_Search_List_HitList();
         foreach ($docresult as $row)
         {
        		$searchhit = new SearchHit($row);
