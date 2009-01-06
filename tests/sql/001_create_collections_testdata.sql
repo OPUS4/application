@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `collections_contents_1` (
   `name` varchar(255) character set utf8 NOT NULL,
   `number` varchar(3) character set utf8 NOT NULL,
   PRIMARY KEY  (`collections_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Daten für Tabelle `collections_contents_1`
@@ -184,7 +184,7 @@ CREATE TABLE IF NOT EXISTS `link_documents_collections_1` (
   `collections_id` int(11) unsigned NOT NULL,
   `documents_id` int(11) unsigned NOT NULL,
   PRIMARY KEY  (`link_documents_collections_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- Daten für Tabelle `link_documents_collections_1`
