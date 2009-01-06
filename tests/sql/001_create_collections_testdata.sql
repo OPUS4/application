@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `collections_replacement_1` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `collections_roles`
+-- Tabellenstruktur fÃ¼r Tabelle `collections_roles`
 --
 
 CREATE TABLE IF NOT EXISTS `collections_roles` (
@@ -108,7 +108,7 @@ CREATE TABLE IF NOT EXISTS `collections_roles` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Verwaltungstabelle fuer die einzelnen Collection-Baeume';
 
 --
--- Daten für Tabelle `collections_roles`
+-- Daten fÃ¼r Tabelle `collections_roles`
 --
 
 INSERT INTO `collections_roles` (`collections_roles_id`, `name`, `position`, `link_docs_path_to_root`, `visible`) VALUES
