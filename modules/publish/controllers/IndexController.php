@@ -66,29 +66,29 @@ class Publish_IndexController extends Zend_Controller_Action {
         $this->_baseUrl = $this->getRequest()->getBasePath() . '/' . $this->getRequest()->getModuleName();
     }
 
-	/**
-	 * Just to be there. No actions taken.
-	 *
-	 * @return void
-	 *
-	 */
-	public function indexAction() {
-		$this->view->title = 'Publish';
+    /**
+     * Just to be there. No actions taken.
+     *
+     * @return void
+     *
+     */
+    public function indexAction() {
+        $this->view->title = 'Publish';
 
-		$form = new Overview();
-		$form->setAction($this->_baseUrl . '/index/create');
-		$this->view->form = $form;
-	}
+        $form = new Overview();
+        $form->setAction($this->_baseUrl . '/index/create');
+        $this->view->form = $form;
+    }
 
-	/**
-	 * Create, recreate and validate a document form. If it is valid store it.
-	 *
-	 * @return void
-	 */
-	public function createAction() {
-	    $this->view->title = 'Publish (create)';
+    /**
+     * Create, recreate and validate a document form. If it is valid store it.
+     *
+     * @return void
+     */
+    public function createAction() {
+        $this->view->title = 'Publish (create)';
 
-	    if ($this->_request->isPost() === true) {
+        if ($this->_request->isPost() === true) {
             $data = $this->_request->getPost();
             $form_builder = new Opus_Form_Builder();
             if (array_key_exists('selecttype', $data) === true) {
@@ -123,44 +123,50 @@ class Publish_IndexController extends Zend_Controller_Action {
                     $model = $form_builder->getModelFromForm($form);
                     $form_builder->setFromPost($model, $form->getValues());
                     $id = $model->store();
-                    $this->_redirector->gotoSimple('upload');
+                    $this->view->title = 'Publish (upload)';
+                    $uploadForm = new FileUpload();
+                    $uploadForm->setAction($this->_baseUrl . '/index/upload');
+                    $uploadForm->setAttrib('enctype', 'multipart/form-data');
+                    $uploadForm->DocumentId->setValue($id);
+                    $this->view->form = $uploadForm;
                 } else {
                     $this->view->form = $form;
                 }
             }
-	    } else {
-	        // action used directly go back to main index
-	        $this->_redirector->gotoSimple('index');
-	    }
-	}
+        } else {
+            // action used directly go back to main index
+            $this->_redirector->gotoSimple('index');
+        }
+    }
 
-	/**
-	 * Create form and handling file uploading
-	 *
-	 * @return void
-	 */
-	public function uploadAction() {
-	    $this->view->title = 'Publish (upload)';
+    /**
+     * Create form and handling file uploading
+     *
+     * @return void
+     */
+    public function uploadAction() {
+        $this->view->title = 'Publish (upload)';
         $uploadForm = new FileUpload();
         $uploadForm->setAction($this->_baseUrl . '/index/upload');
         $uploadForm->setAttrib('enctype', 'multipart/form-data');
         // store uploaded data in application temp dir
         if ($this->_request->isPost() === true) {
-	        $data = $this->_request->getPost();
-	        if ($uploadForm->isValid($data) === true) {
-	            if ($uploadForm->file->receive() === true) {
-	                $this->view->message = 'File transfer successfull!';
-	                // TODO store / move data to correct place
-	            } else {
-                    $this->view->message = 'Error file transfer!';
-	            }
-	        } else {
-	            $this->view->message = 'not a valid form!';
-	            $uploadForm->populate($data);
-	            $this->view->form = $uploadForm;
-	        }
-	    } else {
+            $data = $this->_request->getPost();
+            $upload = new Zend_File_Transfer_Adapter_Http();
+            $files = $upload->getFileInfo();
+            $document = new Opus_Model_Document($data['DocumentId']);
+            foreach ($files as $file => $info) {
+                if (!$upload->isValid($file)) {
+                    print "Sorry but $file is not what we wanted";
+                    continue;
+                }
+                $file = $document->addFile();
+                $file->setDocumentsId($document->getId());
+                $file->setFromPost($info);
+            }
+            $document->store();
+        } else {
             $this->view->form = $uploadForm;
-	    }
-	}
+        }
+    }
 }

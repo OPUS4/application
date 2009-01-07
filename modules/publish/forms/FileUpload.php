@@ -46,6 +46,9 @@ class FileUpload extends Zend_Form {
      * @return void
      */
     public function init() {
+
+        $this->addElement('hash', 'UploadHash', array('salt' => 'unique'));
+
         $fileupload = new Zend_Form_Element_File('fileupload');
         $fileupload->setLabel('FileToUpload')
             ->setDestination('../tmp/')
@@ -56,7 +59,9 @@ class FileUpload extends Zend_Form {
         $submit = new Zend_Form_Element_Submit('submit');
         $submit->setLabel('process');
 
-        $this->addElements(array($fileupload, $submit));
-        $this->setAttrib('enctype', 'multipart/form-data');
+        $hidden = new Zend_Form_Element_Hidden('DocumentId');
+
+        $this->addElements(array($fileupload, $hidden, $submit));
+        $this->setAttrib('enctype', Zend_Form::ENCTYPE_MULTIPART);
     }
 }
