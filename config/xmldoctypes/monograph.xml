@@ -62,6 +62,7 @@ value for "name". It must be declared.
     <field name="TitleMain" multiplicity="*" />
     <field name="TitleAbstract" multiplicity="*" />
     <field name="PersonAuthor" multiplicity="*" />
+    <field name="File" multiplicity="*" />
 
     <!-- collections  -->
     

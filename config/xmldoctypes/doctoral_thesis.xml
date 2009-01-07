@@ -59,6 +59,7 @@ value for "name". It must be declared.
 	<!-- general -->
 	<field name="Licence" mandatory="yes" />
 	<field name="Language" mandatory="yes" />
+	<field name="File" multiplicity="*" />
 
     <!-- collections  -->
     
