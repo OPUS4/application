@@ -56,12 +56,23 @@ class FileUpload extends Zend_Form {
             ->addValidator('Size', false, 102400) // limit to 100K
             ->addValidator('Extension', false, 'pdf,txt'); // only PDF
 
+        $comment = new Zend_Form_Element_Text('comment');
+        $comment->setLabel('Comment');
+
+        $locale = new Zend_Locale();
+        $languages = $locale->getLanguageTranslationList();
+        asort($languages);
+        $languageList = new Zend_Form_Element_Select('language');
+        $languageList->setLabel('Language')
+            ->setMultiOptions($languages)
+            ->addValidator('NotEmpty');
+
         $submit = new Zend_Form_Element_Submit('submit');
-        $submit->setLabel('process');
+        $submit->setLabel('Process');
 
         $hidden = new Zend_Form_Element_Hidden('DocumentId');
 
-        $this->addElements(array($fileupload, $hidden, $submit));
+        $this->addElements(array($fileupload, $comment, $languageList, $hidden, $submit));
         $this->setAttrib('enctype', Zend_Form::ENCTYPE_MULTIPART);
     }
 }

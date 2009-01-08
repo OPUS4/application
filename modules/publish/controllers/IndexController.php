@@ -105,6 +105,7 @@ class Publish_IndexController extends Zend_Controller_Action {
                     $type = new Opus_Document_Type($filename);
                     $document_builder = new Opus_Document_Builder($type);
                     $document = $document_builder->create();
+                    $document->setDocumentType($form->getValue('selecttype'));
                     $createForm = $form_builder->build($document);
                     $createForm->setAction($this->_baseUrl . '/index/create');
                     $this->view->form = $createForm;
@@ -152,19 +153,26 @@ class Publish_IndexController extends Zend_Controller_Action {
         // store uploaded data in application temp dir
         if ($this->_request->isPost() === true) {
             $data = $this->_request->getPost();
-            $upload = new Zend_File_Transfer_Adapter_Http();
-            $files = $upload->getFileInfo();
-            $document = new Opus_Model_Document($data['DocumentId']);
-            foreach ($files as $file => $info) {
-                if (!$upload->isValid($file)) {
-                    print "Sorry but $file is not what we wanted";
-                    continue;
+            if ($uploadForm->isValid($data) === true) {
+                // This works only from Zend 1.7 on
+                // $upload = $uploadForm->getTransferAdapter();
+                $upload = new Zend_File_Transfer_Adapter_Http();
+                $files = $upload->getFileInfo();
+                $document = new Opus_Model_Document($data['DocumentId']);
+                foreach ($files as $file => $info) {
+                    if (!$upload->isValid($file)) {
+                        $this->_redirector->gotoSimple('upload');
+                    }
+                    $file = $document->addFile();
+                    $file->setDocumentsId($document->getId());
+                    $file->setFileLabel($uploadForm->getValue('comment'));
+                    $file->setFileLanguage($uploadForm->getValue('language'));
+                    $file->setFromPost($info);
                 }
-                $file = $document->addFile();
-                $file->setDocumentsId($document->getId());
-                $file->setFromPost($info);
+                $document->store();
+            } else {
+                $this->_redirector->gotoSimple('upload');
             }
-            $document->store();
         } else {
             $this->view->form = $uploadForm;
         }
