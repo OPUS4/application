@@ -26,7 +26,7 @@
         <seg>Das angeforderte Dokument ist zugänglich unter</seg>
       </tuv>
     </tu>
-    <tu tuid="frontdoor_error_text">
+    <tu tuid="error_text">
       <tuv xml:lang="en">
         <seg>OPUS-Exception: Unable to fetch metadata because of an invalid document-ID. Document-IDs have to be of type integer and greater or equal zero.</seg>
       </tuv>
