@@ -26,9 +26,9 @@
         <seg>Das angeforderte Dokument ist zugänglich unter</seg>
       </tuv>
     </tu>
-    <tu tuid="error_text">
+    <tu tuid="frontdoor_error_text">
       <tuv xml:lang="en">
-        <seg>OPUS-Error: Unable to get metadata because of an invalid document-ID...</seg>
+        <seg>OPUS-Exception: Unable to fetch metadata because of an invalid document-ID. Document-IDs have to be of type integer and greater or equal zero.</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>OPUS-Error: Die Metadaten können nicht angezeigt werden. Ursache: Ungültiger Dokumentschlüssel...</seg>
