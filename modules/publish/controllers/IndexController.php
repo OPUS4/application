@@ -127,7 +127,6 @@ class Publish_IndexController extends Zend_Controller_Action {
                     $this->view->title = 'Publish (upload)';
                     $uploadForm = new FileUpload();
                     $uploadForm->setAction($this->_baseUrl . '/index/upload');
-                    $uploadForm->setAttrib('enctype', 'multipart/form-data');
                     $uploadForm->DocumentId->setValue($id);
                     $this->view->form = $uploadForm;
                 } else {
@@ -158,6 +157,7 @@ class Publish_IndexController extends Zend_Controller_Action {
                 // $upload = $uploadForm->getTransferAdapter();
                 $upload = new Zend_File_Transfer_Adapter_Http();
                 $files = $upload->getFileInfo();
+                // TODO: Validate document id, error message on fail
                 $document = new Opus_Model_Document($data['DocumentId']);
                 foreach ($files as $file => $info) {
                     if (!$upload->isValid($file)) {

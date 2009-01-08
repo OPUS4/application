@@ -59,12 +59,9 @@ class FileUpload extends Zend_Form {
         $comment = new Zend_Form_Element_Text('comment');
         $comment->setLabel('Comment');
 
-        $locale = new Zend_Locale();
-        $languages = $locale->getLanguageTranslationList();
-        asort($languages);
         $languageList = new Zend_Form_Element_Select('language');
         $languageList->setLabel('Language')
-            ->setMultiOptions($languages)
+            ->setMultiOptions(Zend_Registry::get('Available_Languages'))
             ->addValidator('NotEmpty');
 
         $submit = new Zend_Form_Element_Submit('submit');
