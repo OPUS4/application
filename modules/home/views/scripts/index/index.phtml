@@ -25,7 +25,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Admin
+ * @package     Module_Home
  * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
  * @author      Felix Ostrowski (ostrowski@hbz-nrw.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
@@ -33,6 +33,7 @@
  * @version     $Id: index.phtml 659 2008-09-01 11:03:28Z claussnitzer $
  */
 ?>
-<h1><?= $this->translate('home_index_title') ?></h1>
-<p><?= $this->translate('home_index_welcome') ?></p>
-<p><?= $this->translate('home_index_instructions') ?></p>
+<? $this->title = $this->translate('home_index_pagetitle') ?>
+<h1><?= $this->translate('home_index_index_title') ?></h1>
+<p><?= $this->translate('home_index_index_welcome') ?></p>
+<p><?= $this->translate('home_index_index_instructions') ?></p>

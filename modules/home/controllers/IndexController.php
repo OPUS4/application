@@ -40,14 +40,17 @@
  */
 class Home_IndexController extends Zend_Controller_Action {
 
-	/**
-	 * Just to be there. No actions taken.
-	 *
-	 * @return void
-	 *
-	 */
-	public function indexAction() {
-		$this->view->title = 'Home';
-	}
+    /**
+     * The home module is the place for all custom static pages.  This function
+     * catches all action calls, thus making a new page available via
+     * http://.../home/index/page by simply placing it in
+     * modules/home/views/scripts/index/page.phtml
+     *
+     * @param  string $action     The name of the action that was called.
+     * @param  array  $parameters The parameters passed to the action.
+     * @return void
+     */
+    public function __call($action, $parameters) {
+    }
 
 }
