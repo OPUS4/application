@@ -67,9 +67,11 @@ class FileUpload extends Zend_Form {
         $submit = new Zend_Form_Element_Submit('submit');
         $submit->setLabel('Process');
 
-        $hidden = new Zend_Form_Element_Hidden('DocumentId');
+        $documentId = new Zend_Form_Element_Hidden('DocumentId');
+        $documentId->addValidator('NotEmpty')
+            ->addValidator('Int');
 
-        $this->addElements(array($fileupload, $comment, $languageList, $hidden, $submit));
+        $this->addElements(array($fileupload, $comment, $languageList, $documentId, $submit));
         $this->setAttrib('enctype', Zend_Form::ENCTYPE_MULTIPART);
     }
 }

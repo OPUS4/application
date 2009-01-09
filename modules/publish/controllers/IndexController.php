@@ -148,7 +148,6 @@ class Publish_IndexController extends Zend_Controller_Action {
         $this->view->title = 'Publish (upload)';
         $uploadForm = new FileUpload();
         $uploadForm->setAction($this->_baseUrl . '/index/upload');
-        $uploadForm->setAttrib('enctype', 'multipart/form-data');
         // store uploaded data in application temp dir
         if ($this->_request->isPost() === true) {
             $data = $this->_request->getPost();
@@ -158,10 +157,13 @@ class Publish_IndexController extends Zend_Controller_Action {
                 $upload = new Zend_File_Transfer_Adapter_Http();
                 $files = $upload->getFileInfo();
                 // TODO: Validate document id, error message on fail
-                $document = new Opus_Model_Document($data['DocumentId']);
+                $documentId = $uploadForm->getValue('DocumentId');
+                $document = new Opus_Model_Document($documentId);
+                $this->view->message = 'Upload succussful!';
                 foreach ($files as $file => $info) {
                     if (!$upload->isValid($file)) {
-                        $this->_redirector->gotoSimple('upload');
+                        $this->view->message = 'Upload failed: Not a valid file!';
+                        break;
                     }
                     $file = $document->addFile();
                     $file->setDocumentsId($document->getId());
@@ -170,11 +172,15 @@ class Publish_IndexController extends Zend_Controller_Action {
                     $file->setFromPost($info);
                 }
                 $document->store();
+                $this->view->form = $uploadForm;
             } else {
-                $this->_redirector->gotoSimple('upload');
+                // invalid form, populate with transmitted data
+                $uploadForm->populate($data);
+                $this->view->form = $uploadForm;
             }
         } else {
-            $this->view->form = $uploadForm;
+            // on non post request redirect to index action
+            $this->_redirector->gotoSimple('index');
         }
     }
 }
