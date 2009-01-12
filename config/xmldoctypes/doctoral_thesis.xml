@@ -85,10 +85,10 @@ value for "name". It must be declared.
 	<field name="NonInstituteAffiliation" />
 
 	<!-- persons -->
-	<!-- <field name="PersonAdvisor" mandatory="yes" /> -->
+	<field name="PersonAdvisor" mandatory="yes" />
 	<field name="PersonAuthor" mandatory="yes" multiplicity="3" />
-	<!-- <field name="PersonOther" multiplicity="3" /> -->
-	<!-- <field name="PersonReferee" /> -->
+	<field name="PersonOther" multiplicity="3" />
+	<field name="PersonReferee" />
 
     <!-- publishers  -->
     <!-- <field name="PublisherName" />  -->
