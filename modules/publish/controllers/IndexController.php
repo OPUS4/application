@@ -103,8 +103,7 @@ class Publish_IndexController extends Zend_Controller_Action {
                         $this->_redirector->gotoSimple('index');
                     }
                     $type = new Opus_Document_Type($filename);
-                    $document_builder = new Opus_Document_Builder($type);
-                    $document = $document_builder->create();
+                    $document = new Opus_Model_Document(null, $type);
                     $document->setDocumentType($form->getValue('selecttype'));
                     $createForm = $form_builder->build($document);
                     $createForm->setAction($this->_baseUrl . '/index/create');
@@ -172,6 +171,8 @@ class Publish_IndexController extends Zend_Controller_Action {
                     $file->setFromPost($info);
                 }
                 $document->store();
+                // reset input values fo re-displaying
+                $uploadForm->reset();
                 $this->view->form = $uploadForm;
             } else {
                 // invalid form, populate with transmitted data
