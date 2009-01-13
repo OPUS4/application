@@ -138,8 +138,7 @@ class Search_SearchController extends Zend_Controller_Action
     	}
     	catch (Zend_Exception $ze)
     	{
-    		echo "No index found! Using testdata!";
-    		$hitlist = BrowsingFilter::getAllDummyTitles();
+    		echo "Error while performing search operation: " . $ze->getMessage();
     	}
     	$this->view->title = $this->view->translate('search_searchresult');
     	$this->view->hitlist = new HitListIterator($hitlist);
