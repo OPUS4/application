@@ -51,18 +51,24 @@ class Frontdoor_IndexController extends Zend_Controller_Action
       $docId = $request->getParam('docId');
       $var = 0;
 
-      function validate ($var)
+      /**
+       * Exception handling:
+       * DocId has to be integer, greater or equal zero and not NULL.
+       */
+
+      function validate($var)
       {
       $intvar = (int) $var;
-        if ($var != $intvar || $var < 0)
+        if ($var != $intvar || $var < 0 || $var == NULL)
         {
-         throw new Exception();
+          throw new Exception();
         }
         else
         {
-         return $var;
+          return $var;
         }
       }
+
       try
       {
         validate($docId);
@@ -72,9 +78,14 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         $this->view->error_text = $error_text;
       }
 
+
       $this->view->frontdoor_pagetitle = 'OPUS Anwendung - Dokumentinformationen';
       $this->view->frontdoor_entry = 'Das angeforderte Dokument ist zugänglich unter';
       $mydummydata = array();
+
+      /*
+       * Metadata array
+       */
 
       $dummydata = array(
          'docId' => $docId,
@@ -108,6 +119,11 @@ class Frontdoor_IndexController extends Zend_Controller_Action
          the entire network while Maintaining low queue sizes and, at the same time, high utilization.
          Using control theory, the stability of congestion control algorithms is further evaluated.'
       );
+
+      /*
+       * Building new array with all allocated fields.
+       *  This array is committed to the view.
+       */
 
       foreach ($dummydata as $key => $value)
       {

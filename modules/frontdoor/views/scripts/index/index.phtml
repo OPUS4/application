@@ -45,21 +45,21 @@
 <? if ($this->error_text)
    {
      ?><?= $this-> translate('error_text') ?><br /><br />
-     <?
-   }
+ <?}
    else
    {?>
-     <?= $this-> translate('frontdoor_entry') ?><br />
+     <?= $this->translate ('frontdoor_entry') ?><br />
+
      <?
      foreach ($this->mydummydata as $key => $value)
      {
-
        if ($key === 'url')
        {
          ?><b><?= $this-> translate('frontdoor_url') ?>: </b>
          <a href="<?= $this->value = $value;?>"><?= $this->value = $value;?></a><hr /><br />
          <?
        }?>
+
        <?
        if ($key === 'urn')
        {
@@ -219,6 +219,6 @@
        <?= $this->value = $value;?>
        </p><?
       }
-   }
-}?>
+     }
+   }?>
 <p><a href="<?= $this->url(array('module' => 'home')) ?>">Home</a></p>
