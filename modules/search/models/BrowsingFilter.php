@@ -50,7 +50,7 @@ class BrowsingFilter
         $hitlist = new Opus_Search_List_HitList();
         foreach ($docresult as $row)
         {
-       		$searchhit = new SearchHit((int) $row->__get("documents_id"));
+       		$searchhit = new Opus_Search_SearchHit((int) $row->__get("documents_id"));
        		$hitlist->add($searchhit);
         }
         
@@ -70,7 +70,7 @@ class BrowsingFilter
         $hitlist = new Opus_Search_List_HitList();
         foreach ($docresult as $row)
         {
-       		$searchhit = new SearchHit($row);
+       		$searchhit = new Opus_Search_SearchHit($row);
        		$hitlist->add($searchhit);
         }
         
@@ -94,7 +94,7 @@ class BrowsingFilter
         $hitlist = new Opus_Search_List_HitList();
         foreach ($docresult as $row)
         {
-       		$searchhit = new SearchHit((int) $row->getId());
+       		$searchhit = new Opus_Search_SearchHit((int) $row->getId());
        		$hitlist->add($searchhit);
         }
         
@@ -117,7 +117,7 @@ class BrowsingFilter
         $hitlist = new Opus_Search_List_HitList();
         foreach ($docresult as $row)
         {
-       		$searchhit = new SearchHit($row);
+       		$searchhit = new Opus_Search_SearchHit($row);
        		$hitlist->add($searchhit);
         }
         
@@ -140,7 +140,7 @@ class BrowsingFilter
         $hitlist = new Opus_Search_List_HitList();
         foreach ($docresult as $row)
         {
-       		$searchhit = new SearchHit($row);
+       		$searchhit = new Opus_Search_SearchHit($row);
        		$hitlist->add($searchhit);
         }
         
@@ -163,7 +163,7 @@ class BrowsingFilter
         $hitlist = new Opus_Search_List_HitList();
         foreach ($docresult as $row)
         {
-       		$searchhit = new SearchHit($row);
+       		$searchhit = new Opus_Search_SearchHit($row);
        		$hitlist->add($searchhit);
         }
         
@@ -187,7 +187,7 @@ class BrowsingFilter
         $hitlist = new Opus_Search_List_HitList();
         foreach ($docresult as $row)
         {
-       		$searchhit = new SearchHit($row);
+       		$searchhit = new Opus_Search_SearchHit($row);
        		$hitlist->add($searchhit);
         }
         
@@ -210,7 +210,7 @@ class BrowsingFilter
         $hitlist = new Opus_Search_List_HitList();
         foreach ($docresult as $row)
         {
-       		$searchhit = new SearchHit($row);
+       		$searchhit = new Opus_Search_SearchHit($row);
        		$hitlist->add($searchhit);
         }
         
@@ -233,7 +233,7 @@ class BrowsingFilter
         $hitlist = new Opus_Search_List_HitList();
         foreach ($docresult as $row)
         {
-       		$searchhit = new SearchHit($row);
+       		$searchhit = new Opus_Search_SearchHit($row);
        		$hitlist->add($searchhit);
         }
         
