@@ -39,31 +39,6 @@
 class Search_SearchController extends Zend_Controller_Action
 {
 
-    /**
-	 * Define Search form
-	 *
-	 * @return Zend_Form
-	 *
-	 */
-    private function getSearchForm()
-    {
-        $form = new Zend_Form();
-		$form->setAction($this->view->url(array("controller"=>"search", "action"=>"search")))
-     		->setMethod('post');
-
-		// Create and configure username element:
-		$query = $form->createElement('text', 'query');
-		$query->addValidator('alnum')
-        		->addValidator('regex', false, array('/^[a-z]+/'))
-         		->addValidator('stringLength', false, array(1, 100))
-         		->setRequired(true);
-
-		// Add elements to form:
-		$form->addElement($query)
-	     // use addElement() as a factory to create 'Login' button:
-    		 ->addElement('submit', 'search', array('label' => $this->view->translate('search_searchaction')));
-    	return $form;
-    }
 
     /**
 	 * Show Search form
@@ -74,12 +49,6 @@ class Search_SearchController extends Zend_Controller_Action
     public function indexAction()
     {
     	$this->view->title = $this->view->translate('search_modulename');
-        /* get search form from Zend_Form-Object directly
-    	// Add form from Object
-    	//$this->view->form = $searchForm;
-    	// Add form by method call
-    	$this->view->form = $this->getSearchForm();
-    	*/
     }
 
      /**
@@ -91,35 +60,12 @@ class Search_SearchController extends Zend_Controller_Action
     public function fulltextsearchAction()
     {
     	$this->view->title = $this->view->translate('search_index_fulltextsearch');
-        /* get search form from Zend_Form-Object directly
-         * does not work properly (problems with strings that should be translated)
+
         $searchForm = new FulltextSearch();
         $searchForm->setAction($this->view->url(array("controller"=>"search", "action"=>"search")));
         $searchForm->setMethod('post');
-        /*
-        // form posted
-        /*
-        if ($this->_request->isPost() === true) {
-	        $data = $this->_request->getPost();
-	        if ($uploadForm->isValid($data) === true) {
-	            if ($uploadForm->file->receive() === true) {
-	                $this->view->message = 'File transfer successfull!';
-	                // TODO store / move data to correct place
-	            } else {
-                    $this->view->message = 'Error file transfer!';
-	            }
-	        } else {
-	            $this->view->message = 'not a valid form!';
-	            $uploadForm->populate($data);
-	            $this->view->form = $uploadForm;
-	        }
-	    } else {
-            $this->view->form = $uploadForm;
-	    }*/
-    	// Add form from Object
-    	//$this->view->form = $searchForm;
-    	// Add form by method call
-    	$this->view->form = $this->getSearchForm();
+
+    	$this->view->form = $searchForm;
     }
 
     /**

@@ -51,7 +51,7 @@ class FulltextSearch extends Zend_Form
          		->setRequired(true);
 
         $submit = new Zend_Form_Element_Submit('submit');
-        $submit->setLabel($this->view->translate('search_searchaction'));
+        $submit->setLabel('search_searchaction');
 
 		// Add elements to form:
 		$this->addElements(array($query, $submit));
