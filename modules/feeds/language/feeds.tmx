@@ -2,20 +2,20 @@
 <tmx version="2.0" xmlns="http://www.lisa.org/tmx20">
   <header adminlang="en" creationtool="locale4j" creationtoolversion="1.1" o-tmf="unknown" segtype="block" srclang="*all*"/>
   <body>
-      <tu tuid="rss_index_title">
+      <tu tuid="feeds_index_title">
       <tuv xml:lang="en">
-        <seg>RSS</seg>
+        <seg>Feeds</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>RSS</seg>
+        <seg>Feeds</seg>
       </tuv>
     </tu>
-    <tu tuid="rss_modulename">
+    <tu tuid="feeds_modulename">
       <tuv xml:lang="en">
-        <seg>rss</seg>
+        <seg>feeds</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>rss</seg>
+        <seg>feeds</seg>
       </tuv>
     </tu>
   </body>

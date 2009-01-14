@@ -25,7 +25,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_rss
+ * @package     Module_feeds
  * @author      Birgit Dressler (b.dressler@sulb.uni-saarland.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -36,9 +36,9 @@
  * Main entry point for this module.
  *
  * @category    Application
- * @package     Module_rss
+ * @package     Module_feeds
  */
-class Rss_IndexController extends Zend_Controller_Action {
+class Feeds_IndexController extends Zend_Controller_Action {
 
 	/**
 	 * Just to be there. No actions taken.
@@ -47,7 +47,7 @@ class Rss_IndexController extends Zend_Controller_Action {
 	 *
 	 */
 	public function indexAction() {
-		$this->view->title = 'rss';
+		$this->view->title = 'feeds';
 	}
 
 }
