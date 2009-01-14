@@ -31,7 +31,7 @@
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ * @version     $Id: BrowsingList.php 1411 2008-12-23 14:53:00Z marahrens $
  */
 
 class BrowsingList
@@ -55,7 +55,7 @@ class BrowsingList
 		$personsList = new Opus_Search_List_PersonsList();
 		foreach ($browsinglist as $member)
 		{
-			$pers = new Opus_Search_Adapter_PersonAdapter((int) $member->__get("persons_id"));
+			$pers = new Opus_Search_Adapter_PersonAdapter(array('id' => $member->__get('persons_id'), 'firstName' => $member->__get('first_name'), 'lastName' => $member->__get('last_name')));
 			$personsList->add($pers);
 		}
 		return $personsList;
