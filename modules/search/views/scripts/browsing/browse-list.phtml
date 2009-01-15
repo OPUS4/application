@@ -80,7 +80,7 @@
 			$doc = $this->documentlist->current();
 			#print_r($obj);
 			$data = $doc->getDocument();
-			$authoriterator = new PersonsListIterator($data["author"]);
+			$authoriterator = new Opus_Search_Iterator_PersonsListIterator($data["author"]);
 			#$data = $doc;
 			while ($authoriterator->valid() === true)
 			{

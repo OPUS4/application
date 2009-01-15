@@ -50,4 +50,22 @@ class Admin_IndexController extends Zend_Controller_Action {
 		$this->view->title = 'Admin';
 	}
 
+    /**
+	 * Builds the index of the search engine
+	 *
+	 * @return void
+	 */
+    public function buildindexAction()
+    {
+    	$this->view->title = $this->view->translate('admin_search_indexbuild');
+
+		$indexer = new Opus_Search_Index_Indexer();
+		$table = new Opus_Db_Documents();
+        $docresult = $table->fetchAll();
+        
+        foreach ($docresult as $row) {
+       		$indexer->addDocumentToEntryIndex(new Opus_Search_Adapter_DocumentAdapter( (int) $row->__get('documents_id')));
+       		$this->view->status = date('Y-m-d H:i:s') . ': Indexing Metadata for ' . $row->__get('documents_id') . '....<br/>\n';
+        }
+    }
 }

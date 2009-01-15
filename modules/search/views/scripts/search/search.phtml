@@ -40,7 +40,7 @@
 		$doc = $hit->getSearchHit();
 		$document = $doc->getDocument();
 		//print_r($document);
-		$authoriterator = new PersonsListIterator($document["author"]);
+		$authoriterator = new Opus_Search_Iterator_PersonsListIterator($document["author"]);
 		echo "<li>";
 		while ($authoriterator->valid() === true)
 		{

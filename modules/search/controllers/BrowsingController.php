@@ -50,7 +50,7 @@ class Search_BrowsingController extends Zend_Controller_Action
 		// Generate a list of all CollectionRoles existing in the repository and pass it as an Iterator to the View
 		$browsingList = new BrowsingListFactory("collectionRoles");
 		$browsingListProduct = $browsingList->getBrowsingList();
-		$this->view->browsinglist = new CollectionNodeListIterator($browsingListProduct);
+		$this->view->browsinglist = new Opus_Search_Iterator_CollectionNodeListIterator($browsingListProduct);
     }
 
 	/**
@@ -91,7 +91,7 @@ class Search_BrowsingController extends Zend_Controller_Action
 				// Default Filter is: show all documents from the server
 				$hitlist = BrowsingFilter::getAllTitles();
     	}
-		$this->view->hitlist = new HitListIterator($hitlist);
+		$this->view->hitlist = new Opus_Search_Iterator_HitListIterator($hitlist);
     }
 
 	/**
@@ -125,13 +125,13 @@ class Search_BrowsingController extends Zend_Controller_Action
     			$this->view->title = $this->view->translate('search_index_authorsbrowsing');
 				$browsingList = new BrowsingListFactory($list);
 				$browsingListProduct = $browsingList->getBrowsingList();
-				$this->view->browsinglist = new PersonsListIterator($browsingListProduct);
+				$this->view->browsinglist = new Opus_Search_Iterator_PersonsListIterator($browsingListProduct);
 				break;
 			case 'doctypes':
 				$this->view->title = $this->view->translate('search_index_doctypebrowsing');
 				$browsingList = new BrowsingListFactory($list);
 				$browsingListProduct = $browsingList->getBrowsingList();
-				$this->view->browsinglist = new DocumentTypeListIterator($browsingListProduct);
+				$this->view->browsinglist = new Opus_Search_Iterator_DocumentTypeListIterator($browsingListProduct);
 				break;
 			case 'collection':
 				$this->view->title = $this->view->translate('search_index_collectionsbrowsing');
@@ -141,8 +141,8 @@ class Search_BrowsingController extends Zend_Controller_Action
 				if (isset($collection) === false) $collection = 0;
 				$browsingList = new BrowsingListFactory($list, $collection, $node);
 				$browsingListProduct = $browsingList->getBrowsingList();				
-				$this->view->browsinglist = new CollectionNodeListIterator($browsingListProduct->getSubNodes());
-				$this->view->documentlist = new CollectionNodeDocumentIterator($browsingListProduct);
+				$this->view->browsinglist = new Opus_Search_Iterator_CollectionNodeListIterator($browsingListProduct->getSubNodes());
+				$this->view->documentlist = new Opus_Search_Iterator_CollectionNodeDocumentIterator($browsingListProduct);
 				$this->view->collectionNode = $browsingListProduct;
 				break;
 			default:

@@ -39,12 +39,10 @@
 class Search_SearchController extends Zend_Controller_Action
 {
 
-
     /**
-	 * Show Search form
+	 * Show menu for search actions
 	 *
 	 * @return void
-	 *
 	 */
     public function indexAction()
     {
@@ -55,7 +53,6 @@ class Search_SearchController extends Zend_Controller_Action
 	 * Show Search form
 	 *
 	 * @return void
-	 *
 	 */
     public function fulltextsearchAction()
     {
@@ -72,7 +69,6 @@ class Search_SearchController extends Zend_Controller_Action
 	 * Do the search operation and set the hitlist to the view
 	 *
 	 * @return void
-	 *
 	 */
     public function searchAction()
     {
@@ -87,7 +83,7 @@ class Search_SearchController extends Zend_Controller_Action
     		echo "Error while performing search operation: " . $ze->getMessage();
     	}
     	$this->view->title = $this->view->translate('search_searchresult');
-    	$this->view->hitlist = new HitListIterator($hitlist);
+    	$this->view->hitlist = new Opus_Search_Iterator_HitListIterator($hitlist);
     }
 }
 ?>

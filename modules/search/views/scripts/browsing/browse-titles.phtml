@@ -51,7 +51,7 @@
 		$hit = $this->hitlist->current();
 		$document = $hit->getSearchHit();
 		$data = $document->getDocument();
-		$authoriterator = new PersonsListIterator($data["author"]);
+		$authoriterator = new Opus_Search_Iterator_PersonsListIterator($data["author"]);
 		//print_r($document); # just to debug
 		echo "<li>";
 		#$doctype = $data["documentType"]->get();

@@ -1,7 +1,5 @@
 <?php
 /**
- * Iterator for DocumentTypeLists
- * 
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -27,32 +25,13 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Search
+ * @package     Module_Oai
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
-/**
- * class DocumentTypeListIterator
- */
-class DocumentTypeListIterator extends ListIterator
-{
-  /**
-   * Constructor
-   */
-  public function __construct($list) {
-    parent::__construct($list);
-  } // end of Constructor
-
-  /**
-   * Returns the current element from the Documenttypelist
-   * 
-   * @return DocumentType currently selected Documenttype 
-   */
-  public function current() 
-  {
-  	return $this->list->get($this->_currentIndex);
-  }
-} // end of DocumentTypeListIterator
+?>
+<h1>Opus Application - <?= $this->title ?></h1>
+<?= $this->status ?>
+<a href="<?= $this->url(array('module' => 'default')) ?>">Home</a>
