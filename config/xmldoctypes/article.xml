@@ -55,7 +55,7 @@ value for "name". It must be declared.
     xmlns="http://schemas.opus.org/documenttype"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <field name="Language" mandatory="yes" />
-    <field name="Licence"/>
+    <!-- <field name="Licence"/> -->
     <field name="ContributingCorporation"/>
     <field name="CreatingCorporation"/>
     <field name="DateAccepted"/>
@@ -82,7 +82,8 @@ value for "name". It must be declared.
     <field name="TitleMain" multiplicity="*"/>
     <field name="TitleParent"/>
     <field name="TitleAbstract" multiplicity="*"/>
-    <field name="Isbn"/>
+    <!-- BUG: ISBN does not work properly as non-multiplicity element -->
+    <!-- <field name="Isbn"/> -->
     <field name="Note"/>
     <field name="Patent"/>
     <field name="Enrichment"/>
