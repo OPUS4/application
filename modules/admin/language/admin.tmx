@@ -10,5 +10,13 @@
         <seg>Administration</seg>
       </tuv>
     </tu>
+    <tu tuid="admin_title_indexbuild">
+      <tuv xml:lang="en">
+        <seg>Build Lucene index</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Luceneindex aufbauen</seg>
+      </tuv>
+    </tu>
   </body>
 </tmx>

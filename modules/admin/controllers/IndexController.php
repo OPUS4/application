@@ -57,7 +57,7 @@ class Admin_IndexController extends Zend_Controller_Action {
 	 */
     public function buildindexAction()
     {
-    	$this->view->title = $this->view->translate('admin_search_indexbuild');
+    	$this->view->title = $this->view->translate('admin_title_indexbuild');
 
 		$indexer = new Opus_Search_Index_Indexer();
 		$table = new Opus_Db_Documents();
