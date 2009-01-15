@@ -57,7 +57,7 @@ value for "name". It must be declared.
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
 	<!-- general -->
-	<!-- <field name="Licence" mandatory="yes" /> -->
+	<field name="Licence" mandatory="yes" />
 	<field name="Language" mandatory="yes" />
     <field name="TitleMain" multiplicity="*" />
     <field name="TitleAbstract" multiplicity="*" />

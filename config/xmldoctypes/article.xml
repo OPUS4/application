@@ -55,7 +55,7 @@ value for "name". It must be declared.
     xmlns="http://schemas.opus.org/documenttype"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <field name="Language" mandatory="yes" />
-    <!-- <field name="Licence"/> -->
+    <field name="Licence"/>
     <field name="ContributingCorporation"/>
     <field name="CreatingCorporation"/>
     <field name="DateAccepted"/>
