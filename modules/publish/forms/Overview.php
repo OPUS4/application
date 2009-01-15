@@ -41,12 +41,16 @@
 class Overview extends Zend_Form {
 
     /**
-     * Enter description here...
+     * Build a simple select form for document types
      *
      * @return void
      */
     public function init() {
-        $listOptions = array('doctoral_thesis' => 'doctoral_thesis', 'monograph' => 'monographie');
+        $listOptions = array(
+            'doctoral_thesis' => 'doctoral_thesis',
+            'monograph' => 'monographie',
+            'article' => 'article',
+        );
         $select = new Zend_Form_Element_Select('selecttype');
         $select->setLabel('selecttype')
             ->setMultiOptions($listOptions)
