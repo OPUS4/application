@@ -63,9 +63,13 @@ class Admin_IndexController extends Zend_Controller_Action {
 		$table = new Opus_Db_Documents();
         $docresult = $table->fetchAll();
         
+        $docadapter = new Opus_Search_Adapter_DocumentAdapter();
+        $this->view->status = ""; 
+        
         foreach ($docresult as $row) {
-       		$indexer->addDocumentToEntryIndex(new Opus_Search_Adapter_DocumentAdapter( (int) $row->__get('documents_id')));
-       		$this->view->status = date('Y-m-d H:i:s') . ': Indexing Metadata for ' . $row->__get('documents_id') . '....<br/>\n';
+        	$docadapter->loadDocument( (int) $row->__get('documents_id'));
+       		$indexer->addDocumentToEntryIndex($docadapter);
+       		$this->view->status .= date('Y-m-d H:i:s') . ': Indexing Metadata for ' . $row->__get('documents_id') . '....<br/>\n';
         }
     }
 }
