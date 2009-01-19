@@ -46,32 +46,25 @@
 	}
 	echo "<ul>";
 	$n = 0;
-	while ($this->hitlist->valid() === true)
-	{
-		$hit = $this->hitlist->current();
+	foreach ($this->hitlist as $hit) {
 		$document = $hit->getSearchHit();
 		$data = $document->getDocument();
 		$authoriterator = new Opus_Search_Iterator_PersonsListIterator($data["author"]);
 		//print_r($document); # just to debug
 		echo "<li>";
 		#$doctype = $data["documentType"]->get();
-		while ($authoriterator->valid() === true)
-		{
-			$obj = $authoriterator->current();
+		foreach ($authoriterator as $obj) {
 			$pers = $obj->get();
 			echo "<a href=".$this->url(array("controller"=>"browsing", "action"=>"browseTitles", "filter" => "author", "author"=>$pers["id"])).">";
 			echo $pers["lastName"].", ".$pers["firstName"];
 			echo "</a>";
 			if ($authoriterator->hasNext() === true) echo "; ";
 			else echo ": ";
-			$authoriterator->next();
 		}
 		echo "<a href=\"".$this->url($data["frontdoorUrl"])."\">";
 		print($data["title"]);
 		echo "</a>";
 		#echo " (".$doctype["name"].")";
 		echo "</li>";
-		$this->hitlist->next();
 	}
 	echo "</ul>";
-	?>

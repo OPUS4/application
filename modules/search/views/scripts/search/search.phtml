@@ -34,24 +34,19 @@
  * @version     $Id$
  */
 	if ($this->hitlist) echo $this->translate('search_titles_resultlist').$this->hitlist->getList()->count()."<br/><ul>";
-	while ($this->hitlist->valid() === true)
-	{
-		$hit = $this->hitlist->current();
+	foreach ($this->hitlist as $hit) {
 		$doc = $hit->getSearchHit();
 		$document = $doc->getDocument();
 		//print_r($document);
 		$authoriterator = new Opus_Search_Iterator_PersonsListIterator($document["author"]);
 		echo "<li>";
-		while ($authoriterator->valid() === true)
-		{
-			$obj = $authoriterator->current();
+		foreach ($authoriterator as $obj) {
 			$pers = $obj->get();
 			echo "<a href=".$this->url(array("controller"=>"browsing", "action"=>"browseTitles", "filter" => "author", "author"=>$pers["id"])).">";
 			echo $pers["lastName"].", ".$pers["firstName"];
 			echo "</a>";
 			if ($authoriterator->hasNext() === true) echo "; ";
 			else echo ": ";
-			$authoriterator->next();
 		}
 		print("<a href=\"".$this->url($document["frontdoorUrl"])."\">".$document["title"]."</a>");
 		echo "</li>";
@@ -59,7 +54,5 @@
 		echo $document["abstract"]."<br/>";
 		print("<a href=\"".$this->url($document["frontdoorUrl"])."\">".$this->url($document["frontdoorUrl"])."</a><br/>");
 		echo $this->translate('search_titles_found').": <a href=\"".$this->url($document["fileUrl"])."\">".$this->url($document["fileUrl"])."</a></div>";
-		$this->hitlist->next();
 	}
 	echo "</ul>";
-	?>

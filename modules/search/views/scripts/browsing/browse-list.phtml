@@ -41,9 +41,7 @@
 		//echo $this->collectionNode->getName();
 	}
 	echo "<ul>";
-	while ($this->browsinglist->valid() === true)
-	{
-		$obj = $this->browsinglist->current();
+	foreach ($this->browsinglist as $obj)	{
 		echo "<li>";
 		if ($this->list === "authors")
 		{
@@ -68,38 +66,27 @@
 		}
 		// print_r($pers); // to have a look at all persons information
 		echo "</li>";
-		$this->browsinglist->next();
 	}
 	echo "</ul>";		
 	if ($this->list === "collection")
 	{
 		if ($this->documentlist->getList()->count() > 0) echo "<h2>".$this->translate('search_category_documents')."</h2>";
 		// look at the documents in this hierarchy
-		while ($this->documentlist->valid() === true)
-		{
-			$doc = $this->documentlist->current();
-			#print_r($obj);
+		foreach ($this->documentlist as $doc) {
 			$data = $doc->getDocument();
 			$authoriterator = new Opus_Search_Iterator_PersonsListIterator($data["author"]);
-			#$data = $doc;
-			while ($authoriterator->valid() === true)
+			foreach ($authoriterator as $aut)
 			{
-				$aut = $authoriterator->current();
 				$pers = $aut->get();
 				echo "<a href=".$this->url(array("controller"=>"browsing", "action"=>"browseTitles", "filter" => "author", "author"=>$pers["id"])).">";
 				echo $pers["lastName"].", ".$pers["firstName"];
 				echo "</a>";
 				if ($authoriterator->hasNext() === true) echo "; ";
 				else echo ": ";
-				$authoriterator->next();
 			}
-			#$doctype = $data["documentType"]->get();
 			echo "<a href=\"".$this->url($data["frontdoorUrl"])."\">";
 			print($data["title"]);
 			echo "</a><br/>";
-			#echo "(".$doctype["name"].")";
-			$this->documentlist->next();
 		}
 		
 	}
-	?>
