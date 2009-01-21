@@ -27,6 +27,7 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
+ * @author      Oliver Marahrens (o.marahrens@tu-harburg.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -64,12 +65,12 @@ class Admin_IndexController extends Zend_Controller_Action {
         $docresult = $table->fetchAll();
         
         $docadapter = new Opus_Search_Adapter_DocumentAdapter();
-        $this->view->status = ""; 
+        $this->view->indexed = ""; 
         
         foreach ($docresult as $row) {
         	$docadapter->loadDocument( (int) $row->__get('documents_id'));
        		$indexer->addDocumentToEntryIndex($docadapter);
-       		$this->view->status .= date('Y-m-d H:i:s') . ': Indexing Metadata for ' . $row->__get('documents_id') . '....<br/>\n';
+       		$this->view->indexed .= date('Y-m-d H:i:s') . ': Indexing Metadata for ' . $row->__get('documents_id') . '....<br/>\n';
         }
     }
 }
