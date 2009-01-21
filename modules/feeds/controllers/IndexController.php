@@ -47,7 +47,7 @@ class Feeds_IndexController extends Zend_Controller_Action {
 	 *
 	 */
 	public function indexAction() {
-		$this->view->title = 'feeds';
+		$this->view->title = 'fees';
 	}
 
 }
