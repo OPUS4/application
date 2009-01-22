@@ -58,6 +58,9 @@ class Admin_IndexController extends Zend_Controller_Action {
 	 */
     public function buildindexAction()
     {
+    	# Increase maximum execution time for indexer
+    	ini_set('max_execution_time', 600);
+    	
     	$this->view->title = $this->view->translate('admin_title_indexbuild');
 
 		$indexer = new Opus_Search_Index_Indexer();
