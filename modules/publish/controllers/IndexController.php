@@ -49,13 +49,6 @@ class Publish_IndexController extends Zend_Controller_Action {
     protected $_redirector = null;
 
     /**
-     * Holds base url
-     *
-     * @var string
-     */
-    protected $_baseUrl = null;
-
-    /**
      * Do some initialization on startup of every action
      *
      * @return void
@@ -63,7 +56,6 @@ class Publish_IndexController extends Zend_Controller_Action {
     public function init()
     {
         $this->_redirector = $this->_helper->getHelper('Redirector');
-        $this->_baseUrl = $this->getRequest()->getBasePath() . '/' . $this->getRequest()->getModuleName();
     }
 
     /**
@@ -76,7 +68,8 @@ class Publish_IndexController extends Zend_Controller_Action {
         $this->view->title = 'Publish';
 
         $form = new Overview();
-        $form->setAction($this->_baseUrl . '/index/create');
+        $action_url = $this->view->url(array("controller" => "index", "action" => "create"));
+        $form->setAction($action_url);
         $this->view->form = $form;
     }
 
@@ -106,7 +99,8 @@ class Publish_IndexController extends Zend_Controller_Action {
                     $document = new Opus_Model_Document(null, $type);
                     $document->setDocumentType($form->getValue('selecttype'));
                     $createForm = $form_builder->build($document);
-                    $createForm->setAction($this->_baseUrl . '/index/create');
+                    $action_url = $this->view->url(array("controller" => "index", "action" => "create"));
+                    $form->setAction($action_url);
                     $this->view->form = $createForm;
                 } else {
                     // submitted form data is not valid, back to select form
@@ -114,20 +108,27 @@ class Publish_IndexController extends Zend_Controller_Action {
                 }
             } else if (array_key_exists('submit', $data) === false) {
                 $form = $form_builder->buildFromPost($data);
-                $form->setAction($this->_baseUrl . '/index/create');
+                $action_url = $this->view->url(array("controller" => "index", "action" => "create"));
+                $form->setAction($action_url);
                 $this->view->form = $form;
             } else {
                 $form = $form_builder->buildFromPost($data);
                 if ($form->isValid($data) === true) {
-                    // go ahead to upload
+                    // retrieve values from form and save them into model
                     $model = $form_builder->getModelFromForm($form);
                     $form_builder->setFromPost($model, $form->getValues());
-                    $id = $model->store();
-                    $this->view->title = 'Publish (upload)';
-                    $uploadForm = new FileUpload();
-                    $uploadForm->setAction($this->_baseUrl . '/index/upload');
-                    $uploadForm->DocumentId->setValue($id);
-                    $this->view->form = $uploadForm;
+                    //echo '<pre>' . print_r($model->toArray(), true) . '</pre>';
+                    // TODO model 2 view transfer
+                    $this->view->document = $model;
+                    // go ahead to summary
+                    $this->view->title = 'Publish (summary)';
+                    $summaryForm = new Summary();
+                    $action_url = $this->view->url(array("controller" => "index", "action" => "summary"));
+                    $summaryForm->setAction($action_url);
+                    $model_ser = $form_builder->compressModel($model);
+                    $model_hidden = Opus_Form_Builder::HIDDEN_MODEL_ELEMENT_NAME;
+                    $summaryForm->$model_hidden->setValue($model_ser);
+                    $this->view->form = $summaryForm;
                 } else {
                     $this->view->form = $form;
                 }
@@ -138,6 +139,45 @@ class Publish_IndexController extends Zend_Controller_Action {
         }
     }
 
+    public function summaryAction() {
+        $this->view->title = 'Publish (summary)';
+        if ($this->_request->isPost() === true) {
+            $summaryForm = new Summary();
+            $postdata = $this->_request->getPost();
+            if ($summaryForm->isValid($postdata) === true) {
+
+                $form_builder = new Opus_Form_Builder();
+                $model_hidden = Opus_Form_Builder::HIDDEN_MODEL_ELEMENT_NAME;
+                $model = $form_builder->uncompressModel($postdata[$model_hidden]);
+                if (array_key_exists('submit', $postdata) === true) {
+                    $id = $model->store();
+                    $this->view->title = 'Publish (upload)';
+                    $uploadForm = new FileUpload();
+                    $action_url = $this->view->url(array("controller" => "index", "action" => "upload"));
+                    $uploadForm->setAction($action_url);
+                    $uploadForm->DocumentId->setValue($id);
+                    $this->view->form = $uploadForm;
+                } else if (array_key_exists('back', $postdata) === true) {
+                    $form = $form_builder->build($model);
+                    $action_url = $this->view->url(array("controller" => "index", "action" => "create"));
+                    $form->setAction($action_url);
+                    $this->view->title = 'Publish (create)';
+                    $this->view->form = $form;
+                } else {
+                    // invalid form return to index
+                    $this->_redirector->gotoSimple('index');
+                }
+            } else {
+                // invalid form return to index
+                $this->_redirector->gotoSimple('index');
+            }
+        } else {
+            // on non post request redirect to index action
+            $this->_redirector->gotoSimple('index');
+        }
+    }
+
+
     /**
      * Create form and handling file uploading
      *
@@ -146,7 +186,8 @@ class Publish_IndexController extends Zend_Controller_Action {
     public function uploadAction() {
         $this->view->title = 'Publish (upload)';
         $uploadForm = new FileUpload();
-        $uploadForm->setAction($this->_baseUrl . '/index/upload');
+        $action_url = $this->view->url(array("controller" => "index", "action" => "upload"));
+        $uploadForm->setAction($action_url);
         // store uploaded data in application temp dir
         if ($this->_request->isPost() === true) {
             $data = $this->_request->getPost();
@@ -184,4 +225,5 @@ class Publish_IndexController extends Zend_Controller_Action {
             $this->_redirector->gotoSimple('index');
         }
     }
+
 }

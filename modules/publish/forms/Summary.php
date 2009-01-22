@@ -1,3 +1,4 @@
+<?php
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,31 +25,27 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @author      Felix Ostrowski (ostrowski@hbz-nrw.de)
+ * @package     Module_Publish
+ * @author      Henning Gerhardt (henning.gerhardt@slub-dresden.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-/**
- * All styles concerned with colors, borders and images.
+/*
+ * Miniform
  */
+class Summary extends Zend_Form {
 
-#header {
-    border-bottom: 1px solid black;
+    public function init() {
+        $submit = new Zend_Form_Element_Submit('submit');
+        $submit->setLabel('save document and go to file transfer');
+
+        $back = new Zend_Form_Element_Submit('back');
+        $back->setLabel('back');
+
+        $hidden = new Zend_Form_Element_Hidden(Opus_Form_Builder::HIDDEN_MODEL_ELEMENT_NAME);
+
+        $this->addElements(array($hidden, $back, $submit));
+    }
 }
-
-#footer {
-    border-top: 1px solid black;
-    background: url(../img/opus-logo.gif) no-repeat;
-}
-
-#summary div{
- padding: 10px;
- }
-#summary .label {
-    font-weight: bold;
- }
-
-#summary .value {
-    font-style: italic;

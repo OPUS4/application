@@ -34,4 +34,10 @@
 ?>
 <h1>Opus Application - <?= $this->title ?></h1>
 
+<?php if (is_object($this->document) === true) : ?>
+    <div id="summary">
+    <?= $this->showModel($this->document); ?>
+    </div>
+<?php endif ?>
+
 <?= $this->form ?>
