@@ -41,6 +41,22 @@
 class Home_IndexController extends Zend_Controller_Action {
 
     /**
+     * Redirector - defined for code completion
+     *
+     * @var Zend_Controller_Action_Helper_Redirector
+     */
+    protected $_redirector = null;
+
+    /**
+     * Do some initialization on startup of every action.
+     *
+     * @return void
+     */
+    public function init() {
+        $this->_redirector = $this->_helper->getHelper('Redirector');
+    }
+
+    /**
      * The home module is the place for all custom static pages.  This function
      * catches all action calls, thus making a new page available via
      * http://.../home/index/page by simply placing it in
@@ -51,6 +67,27 @@ class Home_IndexController extends Zend_Controller_Action {
      * @return void
      */
     public function __call($action, $parameters) {
+    }
+
+    /**
+     * Switches the language for Zend_Translate and redirects back.
+     *
+     * @return void
+     */
+    public function languageAction() {
+        if ($this->_request->isPost() === true) {
+            $origin = $_SERVER['HTTP_REFERER'];
+            $language = $this->_request->getPost('language');
+            if (is_string('language') === false or Zend_Registry::get('Zend_Translate')->isAvailable($language) === false) {
+                $this->_redirector->gotoUrl($origin);
+            } else {
+                $sessiondata = new Zend_Session_Namespace();
+                $sessiondata->language = $language;
+                $this->_redirector->gotoUrl($origin);
+            }
+        } else {
+            $this->_redirector->gotoSimple('index');
+        }
     }
 
 }

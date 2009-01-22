@@ -50,6 +50,7 @@ body {
 }
 
 #header .navigation.primary {
+    clear: both;
     float: left;
 }
 
@@ -64,4 +65,12 @@ body {
     height: 40px;
     padding: 5px;
     background-color: #E6F0F0;
+}
+
+#header .navigation.home {
+    float: left;
+}
+
+#header #language_selector {
+    float: right;
 }
