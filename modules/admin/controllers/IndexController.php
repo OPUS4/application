@@ -70,7 +70,7 @@ class Admin_IndexController extends Zend_Controller_Action {
         foreach ($docresult as $row) {
         	$docadapter->loadDocument( (int) $row->__get('documents_id'));
        		$indexer->addDocumentToEntryIndex($docadapter);
-       		$this->view->indexed .= date('Y-m-d H:i:s') . ': Indexing Metadata for ' . $row->__get('documents_id') . '....<br/>\n';
+       		$this->view->indexed .= date('Y-m-d H:i:s') . ': Indexed Metadata for ' . $row->__get('documents_id') . '<br/>';
         }
     }
 }
