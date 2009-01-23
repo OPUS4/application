@@ -119,7 +119,7 @@ class Publish_IndexController extends Zend_Controller_Action {
                     $form_builder->setFromPost($model, $form->getValues());
                     //echo '<pre>' . print_r($model->toArray(), true) . '</pre>';
                     // TODO model 2 view transfer
-                    $this->view->document = $model;
+                    $this->view->document_data = $model->toArray();
                     // go ahead to summary
                     $this->view->title = 'Publish (summary)';
                     $summaryForm = new Summary();
