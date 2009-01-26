@@ -27,8 +27,7 @@
 	*
 	* @category   Application
 	* @author     Eike Kleiner <Eike.Kleiner@bsz-bw.de>
-	* @author     Ralf Claussnitzer <ralf.claussnitzer@slub-dresden.de>
-	* @copyright  Copyright (c) 2008 - 2009, OPUS 4 development team
+	* @copyright  Copyright (c) 2009, OPUS 4 development team
 	* @license    http://www.gnu.org/licenses/gpl.html General Public License
 	* @version    $Id$
 -->
@@ -52,38 +51,56 @@ value for "name". It must be declared.
 
 -->
 
-<documenttype name="monograph"
+<documenttype name="lecture"
 	xmlns="http://schemas.opus.org/documenttype"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
 	<!-- general -->
 	<field name="Licence" mandatory="yes" />
 	<field name="Language" mandatory="yes" />
-    <field name="TitleMain" multiplicity="*" />
-    <field name="TitleAbstract" multiplicity="*" />
-    <field name="PersonAuthor" multiplicity="*" />
-    <field name="File" multiplicity="*" />
+	<field name="File" multiplicity="*" />
 
     <!-- collections  -->
     
 	<!-- dates -->
+	<!-- either "completed_year" or "completed_date" must be mandatory -->
+	<mandatory type="one-at-least">
+		<field name="CompletedYear" />
+		<field name="CompletedDate" />
+	</mandatory>
+
 	<!-- either "published_year" or "published_date" must be mandatory -->
 	<mandatory type="one-at-least">
 		<field name="PublishedYear" />
 		<field name="PublishedDate" />
 	</mandatory>
-	
-	<!-- editions -->
-	<field name="Edition" />
-	
-	<!-- extent -->
-	<field name="PageNumber" />
-	
+	<field name="DateAccepted" mandatory="yes" />
+
 	<!-- identifiers -->
 	<field name="Isbn" multiplicity="2" />
-	<!-- <field name="Urn" /> -->
-	
+
 	<!-- institutes -->
-	<!-- <field name="Institute" mandatory="yes" multiplicity="3" /> -->
+	<!--  <field name="Institute" mandatory="yes" multiplicity="3" /> -->
 	<field name="NonInstituteAffiliation" />
+
+	<!-- persons -->
+	<field name="PersonAdvisor" mandatory="yes" />
+	<field name="PersonAuthor" mandatory="yes" multiplicity="3" />
+	<field name="PersonOther" multiplicity="3" />
+	<field name="PersonReferee" />
+
+    <!-- publishers  -->
+    <!-- <field name="PublisherName" />  -->
+    <!-- <field name="PublisherPlace" />  -->
+
+	<!-- titles  -->
+	<field name="TitleAbstract" mandatory="yes" multiplicity="2" />
+	<field name="TitleMain" mandatory="yes" multiplicity="2" />
+	<field name="TitleParent" multiplicity="2" />
+
+	<!-- subjects -->
+	<!-- <field name="SubjectSwd" mandatory="yes" multiplicity="4" /> -->
+	<!-- <field name="SubjectDdc" mandatory="yes" /> -->
+	<!-- <field name="SubjectUncontrolled" multiplicity="4" /> -->
+
 </documenttype>
