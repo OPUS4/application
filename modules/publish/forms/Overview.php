@@ -41,16 +41,38 @@
 class Overview extends Zend_Form {
 
     /**
+     * Looks in a specific directory for xml files.
+     *
+     * @return array
+     */
+    protected function _getXmlDocTypeFiles() {
+        // TODO Do not use a hardcoded path to xml files
+        $xml_path = '../config/xmldoctypes/';
+        $result = array();
+        if ($dirhandle = opendir($xml_path)) {
+            while (false !== ($file = readdir($dirhandle))) {
+                $path_parts = pathinfo($file);
+                $filename = $path_parts['filename'];
+                $basename = $path_parts['basename'];
+                $extension = $path_parts['extension'];
+                if (($basename === '.') or ($basename === '..') or ($extension !== 'xml')) {
+                    continue;
+                }
+                $result[$filename] = $filename;
+            }
+            closedir($dirhandle);
+            asort($result);
+        }
+        return $result;
+    }
+
+    /**
      * Build a simple select form for document types
      *
      * @return void
      */
     public function init() {
-        $listOptions = array(
-            'doctoral_thesis' => 'doctoral_thesis',
-            'monograph' => 'monographie',
-            'article' => 'article',
-        );
+        $listOptions = $this->_getXmlDocTypeFiles();
         $select = new Zend_Form_Element_Select('selecttype');
         $select->setLabel('selecttype')
             ->setMultiOptions($listOptions)
