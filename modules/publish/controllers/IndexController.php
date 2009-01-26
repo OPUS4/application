@@ -88,6 +88,7 @@ class Publish_IndexController extends Zend_Controller_Action {
                 $form = new Overview();
                 // validate form data
                 if ($form->isValid($data) === true) {
+                    // TODO Do not use a hardcoded path
                     $filename = '../config/xmldoctypes/' .
                         $form->getValue('selecttype') .
                         '.xml';
