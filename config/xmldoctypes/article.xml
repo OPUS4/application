@@ -45,8 +45,9 @@
     <!-- collections  -->
     
     <!-- corporate bodies  -->
-    <field name="CreatingCorporation" multiplicity="3" />
-    <field name="ContributingCorporation" multiplicity="3" />
+    <!-- NOTE: could not used as multi values -->
+    <field name="CreatingCorporation" />
+    <field name="ContributingCorporation" />
     
     <!-- dates -->
     <mandatory type="one-at-least">
