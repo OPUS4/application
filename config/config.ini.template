@@ -42,3 +42,5 @@ db.params.dbname =
 
 [test : production]
 db.params.profiler = true
+db.params.showqueries = true
+db.params.maxqueries = 500

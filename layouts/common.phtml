@@ -69,6 +69,9 @@ $this->headLink()
         <p><a href="mailto:opus-dev@bsz-bw.de">opus-dev@bsz-bw.de</a></p>
         <?php
             $dbprofiler = Zend_Registry::get('db_adapter')->getProfiler();
+            $config = Zend_Registry::get('Zend_Config');
+            $profiler_show_queries = (bool) $config->db->params->showqueries;
+            $profiler_max_queries = (int) $config->db->params->maxqueries;
             if ($dbprofiler->getEnabled() === true) :
         ?>
         <div class="debug dbprofiler">
@@ -78,6 +81,18 @@ $this->headLink()
             <b>Total query time (s): </b><?= $dbprofiler->getTotalElapsedSecs() ?><br />
             <b>Current memory consumption: </b><?= memory_get_usage(true) ?><br />
             <b>Peak memory consumption: </b><?= memory_get_peak_usage(true) ?><br />
+            <?php if ($profiler_show_queries === true) : ?>
+            <b>Queries:</b><br />
+            <ul>
+                <?php
+                    $profiler_query_profiles = $dbprofiler->getQueryProfiles();
+                    for ($i=1; ($i < $profiler_max_queries) and ($i < count($profiler_query_profiles)); $i++) :
+                ?>
+                <li><pre><?= $profiler_query_profiles[$i]->getQuery() ?></pre></li>
+            <?php endfor ?>
+            <?php if ($i < count($profiler_query_profiles)) { echo "<li>...</li>"; } ?>
+            </ul>
+            <?php endif ?>
         </div>
         <?php endif ?>
 
