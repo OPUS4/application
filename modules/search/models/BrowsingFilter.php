@@ -1,7 +1,7 @@
 <?php
 /**
  * Collection of static methods to get lists of titles for some filter criteria
- * 
+ *
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -38,72 +38,78 @@ class BrowsingFilter
 {
 	/**
 	 * Returns a list of all entries from the repository
-	 * 
+	 *
 	 * @return HitList resultlist
 	 * @static
 	 */
 	public static function getAllTitles()
 	{
-        $table = new Opus_Db_Documents();
-        $docresult = $table->fetchAll();
-        
+        $titles = Opus_Model_Document::getAllDocumentTitles();
+
         $hitlist = new Opus_Search_List_HitList();
-        foreach ($docresult as $row)
+
+        $i=10;
+        foreach ($titles as $title=>$docid)
         {
-       		$searchhit = new Opus_Search_SearchHit((int) $row->__get("documents_id"));
+       		$searchhit = new Opus_Search_SearchHit((int) $docid);
        		$hitlist->add($searchhit);
+
+       		// FIXME: Apply real pagination here.
+       		$i--;
+       		if ($i === 0) { break; }
+
         }
-        
-        return ($hitlist);		
+
+        return ($hitlist);
 	}
 
 	/**
 	 * Returns a list of all Dummy-entries
-	 * 
+	 *
 	 * @return HitList resultlist
 	 * @static
 	 */
 	public static function getAllDummyTitles()
 	{
         $docresult = DummyData::getDummyDocuments();
-        
+
         $hitlist = new Opus_Search_List_HitList();
         foreach ($docresult as $row)
         {
        		$searchhit = new Opus_Search_SearchHit($row);
        		$hitlist->add($searchhit);
         }
-        
-        return ($hitlist);		
+
+        return ($hitlist);
 	}
-	
+
 	/**
 	 * Returns a list of all entries from a given author
-	 * 
+	 *
 	 * @return HitList resultlist
 	 * @static
 	 * @param Integer authorId Id of the author from the Opus database
-	 * 
+	 *
 	 * @todo really get documents from the given Authors, not just dummydata
 	 */
 	public static function getAuthorTitles($authorId)
 	{
         $person = new Opus_Search_Adapter_PersonAdapter((int) $authorId);
         $docresult = $person->getDocumentsByRole("author");
-        
+
         $hitlist = new Opus_Search_List_HitList();
         foreach ($docresult as $row)
         {
        		$searchhit = new Opus_Search_SearchHit((int) $row->getId());
        		$hitlist->add($searchhit);
         }
-        
-        return ($hitlist);		
+
+        return ($hitlist);
 	}
 
 	/**
 	 * Returns a list of all entries from a given Documenttype
-	 * 
+	 *
 	 * @return HitList resultlist
 	 * @static
 	 * @param Integer|String doctype name or Id of the doctype that should be presented
@@ -113,130 +119,130 @@ class BrowsingFilter
 	public static function getDocumentTypeTitles($doctype)
 	{
         $docresult = DummyData::getDummyDocuments();
-        
+
         $hitlist = new Opus_Search_List_HitList();
         foreach ($docresult as $row)
         {
        		$searchhit = new Opus_Search_SearchHit($row);
        		$hitlist->add($searchhit);
         }
-        
-        return ($hitlist);		
+
+        return ($hitlist);
 	}
 
 	/**
 	 * Returns a list of all entries from a given DDC-Class
-	 * 
+	 *
 	 * @return HitList resultlist
 	 * @static
 	 * @param String ddcClass Class out of DDC classification which should be presented
-	 * 
+	 *
 	 * @todo really get documents from the given DDC-class, not just dummydata
 	 */
 	public static function getDdcTitles($ddcClass)
-	{		
+	{
         $docresult = DummyData::getDummyDocuments();
-        
+
         $hitlist = new Opus_Search_List_HitList();
         foreach ($docresult as $row)
         {
        		$searchhit = new Opus_Search_SearchHit($row);
        		$hitlist->add($searchhit);
         }
-        
-        return ($hitlist);		
+
+        return ($hitlist);
 	}
 
 	/**
 	 * Returns a list of all entries from a given faculty
-	 * 
+	 *
 	 * @return HitList resultlist
 	 * @static
 	 * @param Integer facultyId Id of the faculty or institute that should be presented
-	 * 
+	 *
 	 * @todo really get documents from the given faculty or institute, not just dummydata
 	 */
 	public static function getFacultyTitles($facultyId)
 	{
         $docresult = DummyData::getDummyDocuments();
-        
+
         $hitlist = new Opus_Search_List_HitList();
         foreach ($docresult as $row)
         {
        		$searchhit = new Opus_Search_SearchHit($row);
        		$hitlist->add($searchhit);
         }
-        
-        return ($hitlist);		
+
+        return ($hitlist);
 	}
 
 	/**
 	 * Returns a list of all entries from a given class out of a given classification
-	 * 
+	 *
 	 * @return HitList resultlist
 	 * @static
 	 * @param String classification Classification that should be used when trying to find the class entries
 	 * @param String class class of the entries that should be presented
-	 * 
-	 * @todo really get documents from the given class and classification, not just dummydata 
+	 *
+	 * @todo really get documents from the given class and classification, not just dummydata
 	 */
 	public static function getClassTitles($classification, $class)
 	{
         $docresult = DummyData::getDummyDocuments();
-        
+
         $hitlist = new Opus_Search_List_HitList();
         foreach ($docresult as $row)
         {
        		$searchhit = new Opus_Search_SearchHit($row);
        		$hitlist->add($searchhit);
         }
-        
-        return ($hitlist);		
+
+        return ($hitlist);
 	}
 
 	/**
 	 * Returns a list of all entries from a given collection
-	 * 
+	 *
 	 * @return HitList resultlist
 	 * @static
 	 * @param Integer collectionId Id of the collection that should be presented
-	 * 
+	 *
 	 * @todo really get documents from the given collection, not just dummydata
 	 */
 	public static function getCollectionTitles($collectionId)
 	{
         $docresult = DummyData::getDummyDocuments();
-        
+
         $hitlist = new Opus_Search_List_HitList();
         foreach ($docresult as $row)
         {
        		$searchhit = new Opus_Search_SearchHit($row);
        		$hitlist->add($searchhit);
         }
-        
-        return ($hitlist);		
+
+        return ($hitlist);
 	}
-	
+
 	/**
 	 * Returns a list of all entries from the repository, which are published in a given year
-	 * 
+	 *
 	 * @return HitList resultlist
 	 * @static
 	 * @param String year Year of the publications that should be listed
-	 * 
+	 *
 	 * @todo really get documents from the given year, not just dummydata
 	 */
 	public static function getYearTitles($year)
 	{
         $docresult = DummyData::getDummyDocuments();
-        
+
         $hitlist = new Opus_Search_List_HitList();
         foreach ($docresult as $row)
         {
        		$searchhit = new Opus_Search_SearchHit($row);
        		$hitlist->add($searchhit);
         }
-        
-        return ($hitlist);		
+
+        return ($hitlist);
 	}
 }
