@@ -41,5 +41,4 @@ db.params.password =
 db.params.dbname = 
 
 [test : production]
-db.params.dbname = 
-
+db.params.profiler = true

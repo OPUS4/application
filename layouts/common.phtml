@@ -67,6 +67,21 @@ $this->headLink()
     <div id="footer">
         <p><a href="https://opusdev.bsz-bw.de/trac/">Opus Development Platform</a></p>
         <p><a href="mailto:opus-dev@bsz-bw.de">opus-dev@bsz-bw.de</a></p>
+        <?php
+            $dbprofiler = Zend_Registry::get('db_adapter')->getProfiler();
+            if ($dbprofiler->getEnabled() === true) :
+        ?>
+        <div class="debug dbprofiler">
+            <hr/>
+            <h2>Profiling information</h2>
+            <b>Total number of queries: </b><?= $dbprofiler->getTotalNumQueries() ?><br />
+            <b>Total query time (s): </b><?= $dbprofiler->getTotalElapsedSecs() ?><br />
+            <b>Current memory consumption: </b><?= memory_get_usage(true) ?><br />
+            <b>Peak memory consumption: </b><?= memory_get_peak_usage(true) ?><br />
+        </div>
+        <?php endif ?>
+
     </div>
+
 </body>
 </html>
