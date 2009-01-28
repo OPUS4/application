@@ -62,6 +62,7 @@
 
     <!-- identifiers -->
     <field name="Isbn" multiplicity="2" />
+    <field name="Urn" />
 
     <!-- institutes -->
     <!--  <field name="Institute" mandatory="yes" multiplicity="3" /> -->
