@@ -43,10 +43,10 @@
 -->
 
 <xsl:stylesheet version="1.0"
+    xmlns="http://www.openarchives.org/OAI/2.0/"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
-    xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
 
     <xsl:include href="oai_dc.xslt"/>
     <xsl:output method="xml" indent="yes" />
@@ -56,6 +56,7 @@
     <xsl:param name="oai_from" />
     <xsl:param name="oai_until" />
     <xsl:param name="oai_metadataPrefix" />
+    <xsl:param name="oai_identifier" />
 
     <!--
     Suppress output for all elements that don't have an explicit template.
@@ -64,12 +65,17 @@
     <xsl:template match="*" mode="oai_dc" />
 
     <xsl:template match="/">
-        <OAI-PMH>
+        <OAI-PMH xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
+            http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
             <responseDate><xsl:value-of select="$dateTime" /></responseDate>
             <request>
                 <xsl:attribute name="verb"><xsl:value-of select="$oai_verb" /></xsl:attribute>
-                <xsl:attribute name="from"><xsl:value-of select="$oai_from" /></xsl:attribute>
-                <xsl:attribute name="until"><xsl:value-of select="$oai_until" /></xsl:attribute>
+                <xsl:if test="$oai_from != ''">
+                    <xsl:attribute name="from"><xsl:value-of select="$oai_from" /></xsl:attribute>
+                </xsl:if>
+                <xsl:if test="$oai_until != ''">
+                    <xsl:attribute name="until"><xsl:value-of select="$oai_until" /></xsl:attribute>
+                </xsl:if>
                 <xsl:attribute name="metadataPrefix"><xsl:value-of select="$oai_metadataPrefix" /></xsl:attribute>
             </request>
             <xsl:choose>
@@ -101,7 +107,11 @@
     <xsl:template match="Document">
         <record>
             <header>
-                <identifier><xsl:value-of select="Urn" /></identifier>
+                <!--
+                    This is the identifier for the metadata, not a digital object:
+                    http://www.openarchives.org/OAI/2.0/guidelines-oai-identifier.htm
+                -->
+                <identifier><xsl:value-of select="$oai_identifier" /></identifier>
                 <datestamp><xsl:value-of select="PublishedDate" /></datestamp>
             </header>
             <metadata>

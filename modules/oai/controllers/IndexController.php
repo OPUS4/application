@@ -122,11 +122,15 @@ class Oai_IndexController extends Zend_Controller_Action {
      * @return void
      */
     public function getrecordAction() {
-        // TODO: Identifier should reference Urn, not Id!
         $identifier = $this->getRequest()->getParam('identifier');
         $metadataPrefix = $this->getRequest()->getParam('metadataPrefix');
-        $document = new Opus_Model_Document($identifier);
         $this->_proc->setParameter('', 'oai_metadataPrefix', $metadataPrefix);
+        $this->_proc->setParameter('', 'oai_identifier', $identifier);
+
+        // Identifier references metadata Urn, not plain Id!
+        // Currently implemented as 'oai:foo.bar.de:{docId}'
+        $docId = substr(strrchr($identifier, ':'), 1);
+        $document = new Opus_Model_Document($docId);
         $this->_xml->loadXml('<Document>' . $document->toXml() . '</Document>');
         $this->_sendOaiResponse('GetRecord');
     }
