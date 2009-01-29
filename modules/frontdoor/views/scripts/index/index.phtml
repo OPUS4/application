@@ -42,8 +42,26 @@
 ?>
 <h1><?= $this-> translate('frontdoor_pagetitle') ?></h1><hr />
 
-<?php if (is_array($this->document_data) === true) : ?>
+<?//= print_r($this->result);  ?>
+<?//= print_r($this->document);  ?>
+
+
+
+<?php if (is_array($this->result) === true) : ?>
+
     <div id="summary">
-    <?= $this->showModel($this->document_data, true, true); ?>
+
+    <?//$this->mydocument_data = $mydocument_data; ?>
+    <?= $this->showModel($this->result, true, true); ?>
+
+
     </div>
+
 <?php endif ?>
+
+
+
+
+
+
+

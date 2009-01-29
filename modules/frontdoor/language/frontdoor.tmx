@@ -52,6 +52,14 @@
         <seg>URL</seg>
       </tuv>
     </tu>
+    <tu tuid="frontdoor_PersonName">
+      <tuv xml:lang="en">
+        <seg>Name</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Name</seg>
+      </tuv>
+    </tu>
     <tu tuid="frontdoor_swd">
       <tuv xml:lang="en">
         <seg>Keywords from authority file SWD (German)</seg>
@@ -124,7 +132,7 @@
         <seg>Sprache</seg>
       </tuv>
     </tu>
-    <tu tuid="frontdoor_Deutsch">
+    <tu tuid="frontdoor_ger">
       <tuv xml:lang="en">
         <seg>German</seg>
       </tuv>

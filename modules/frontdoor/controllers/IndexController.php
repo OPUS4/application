@@ -35,9 +35,71 @@
 
 class Frontdoor_IndexController extends Zend_Controller_Action
 {
-    public function indexAction() {
-        $docId = $this->getRequest()->getParam('docId');
-        $document = new Opus_Model_Document($docId);
-        $this->view->document_data = $document->toArray();
-    }
+
+    public function indexAction()
+    {
+
+      $request = $this->getRequest();
+      $docId = $request->getParam('docId');
+      $docId = $this->getRequest()->getParam('docId');
+      $document = new Opus_Model_Document($docId);
+      $this->document_data = $document->toArray();
+
+
+
+      function cmp_weight ($a, $b)
+      {
+
+          $weight = array('$TitleMain[0][$TitleAbstractValue]' => 3,
+                          //'TitleMain[1][1]' => 5,
+                          //'PersonAutor[0][LastName]' => 7,
+                          //'Language' => 9,
+                            'PublishedYear' => 11,
+                          //'TitleAbstract[0][TitleAbstractValue]' => 14,
+                          //'TitleAbstract[1][TitleAbstractValue]' => 16,
+                            'PageNumber' => 18,
+                            'Isbn' => 20
+                         );
+
+          if (array_key_exists($a, $weight) === true)
+          {
+             $a_weight = $weight[$a];
+          }
+          else
+          {
+              $a_weight = 0;
+          }
+
+          if (array_key_exists($b, $weight) === true)
+          {
+             $b_weight = $weight[$b];
+          }
+          else
+          {
+              $b_weight = 0;
+          }
+
+          if ($a_weight === $b_weight)
+          {
+              return 0;
+          }
+          return ($a_weight < $b_weight) ? -1 : 1;
+      }
+
+     function my_sort(array $a)
+     {
+         $cp = $a;
+         uksort($cp, 'cmp_weight');
+         return $cp;
+     }
+
+
+
+     //$this->array = $array = $document;
+     $result = my_sort($this->document_data);
+     $this->view->result = $result;
+     //$this->view = print_r($this->document_data);
+     //$this->view = print_r($result);
+
+  }
 }
