@@ -49,9 +49,10 @@ class FileUpload extends Zend_Form {
 
         $this->addElement('hash', 'UploadHash', array('salt' => 'unique'));
 
+        // FIXME: Make hard coded path configurable.
         $fileupload = new Zend_Form_Element_File('fileupload');
         $fileupload->setLabel('FileToUpload')
-            ->setDestination('../tmp/')
+            ->setDestination('../workspace/tmp/')
             ->addValidator('Count', false, 1)     // ensure only 1 file
             ->addValidator('Size', false, 102400) // limit to 100K
             ->addValidator('Extension', false, 'pdf,txt'); // only PDF
