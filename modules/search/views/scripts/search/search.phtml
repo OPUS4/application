@@ -1,7 +1,7 @@
 <?php
 /**
  * View for the search result list
- * 
+ *
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -33,9 +33,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-	if ($this->hitlist) echo $this->translate('search_titles_resultlist').$this->hitlist->getList()->count()."<br/><ul>";
+	if ($this->hitlist) printf($this->translate("search_titles_resultlist") . "%1\$s<br/><ul>", $this->hitlist->getList()->count());
 	foreach ($this->hitlist as $hit) {
-		$doc = $hit->getSearchHit();
+	    $doc = $hit->getSearchHit();
 		$document = $doc->getDocument();
 		//print_r($document);
 		$authoriterator = new Opus_Search_Iterator_PersonsListIterator($document["author"]);
