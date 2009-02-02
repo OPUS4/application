@@ -100,10 +100,10 @@
     </tu>
     <tu tuid="search_titles_resultlist">
       <tuv xml:lang="en">
-        <seg>Query returned %1\$s hits.</seg>
+        <seg>Query returned %1$s hits.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Die Suche ergab \%1\$s Treffer.</seg>
+        <seg>Die Suche ergab %1$s Treffer.</seg>
       </tuv>
     </tu>
     <tu tuid="search_titles_relevance">

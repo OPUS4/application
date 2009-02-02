@@ -33,7 +33,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-	if ($this->hitlist) printf($this->translate("search_titles_resultlist") . "%1\$s<br/><ul>", $this->hitlist->getList()->count());
+	if ($this->hitlist) printf($this->translate("search_titles_resultlist") . "<br/><ul>", $this->hitlist->getList()->count());
 	foreach ($this->hitlist as $hit) {
 	    $doc = $hit->getSearchHit();
 		$document = $doc->getDocument();
