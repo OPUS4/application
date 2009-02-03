@@ -50,16 +50,28 @@ class Frontdoor_IndexController extends Zend_Controller_Action
       function cmp_weight ($a, $b)
       {
 
-          $weight = array('$TitleMain[0][$TitleAbstractValue]' => 3,
-                          //'TitleMain[1][1]' => 5,
-                          //'PersonAutor[0][LastName]' => 7,
-                          //'Language' => 9,
-                            'PublishedYear' => 11,
-                          //'TitleAbstract[0][TitleAbstractValue]' => 14,
-                          //'TitleAbstract[1][TitleAbstractValue]' => 16,
-                            'PageNumber' => 18,
-                            'Isbn' => 20
-                         );
+          $weight = array(
+                          'Urn' => -40,
+                          //'Url' => -35,
+                          'TitleMain' => -30,
+                          'TitleParent' => -25,
+                          'PersonAutor' => -20,
+                          'CreatingCorporation' => -15,
+                          //'SubjectSwd' => -13,
+                          //'SubjectDdc' => -12,
+                          //'SubjectUncontrolled => -11;
+                          'ContributingCorporation' => -10,
+                          'CompletedYear' => -5,
+                          'CompletedDate' => -3,
+                          'DocumentType' => 0,
+                          'PageNumber' => 5,
+                          'Edition' => 10,
+                          'Issue'   => 15,
+                          'Language' => 20,
+                          'TitleAbstract' => 25,
+                          'Isbn' => 30,
+                          'Licence' => 35,
+                          );
 
           if (array_key_exists($a, $weight) === true)
           {
@@ -84,22 +96,57 @@ class Frontdoor_IndexController extends Zend_Controller_Action
               return 0;
           }
           return ($a_weight < $b_weight) ? -1 : 1;
+
       }
 
-     function my_sort(array $a)
-     {
-         $cp = $a;
-         uksort($cp, 'cmp_weight');
-         return $cp;
-     }
+      function cmp_title_weight ($a, $b)
+      {
+          $lang_a = $a['TitleAbstractLanguage'];
+          $lang_b = $b['TitleAbstractLanguage'];
 
+          $weight = array ('de' => -30, 'en' => 0);
 
+          $a_weight = $weight[$lang_a];
+          $b_weight = $weight[$lang_b];
+
+          if ($a_weight === $b_weight);
+          {
+              return 0;
+          }
+       }
+
+    function cmp_abstract_weight ($a, $b)
+      {
+          $lang_a = $a['TitleAbstractLanguage'];
+          $lang_b = $b['TitleAbstractLanguage'];
+
+          $weight = array ('de' => -30, 'en' => 0);
+
+          $a_weight = $weight[$lang_a];
+          $b_weight = $weight[$lang_b];
+
+          if ($a_weight === $b_weight);
+          {
+              return 0;
+          }
+       }
+
+       function my_sort(array $a)
+       {
+           $cp = $a;
+           uksort($cp, 'cmp_weight');
+           usort($cp['TitleMain'], 'cmp_title_weight');
+           usort($cp['TitleAbstract'], 'cmp_abstract_weight');
+           //uksort($cp, 'cmp_licence_weight');
+           return $cp;
+
+       }
 
      //$this->array = $array = $document;
      $result = my_sort($this->document_data);
      $this->view->result = $result;
      //$this->view = print_r($this->document_data);
-     //$this->view = print_r($result);
+     $this->view = print_r($result);
 
   }
 }
