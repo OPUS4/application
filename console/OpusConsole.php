@@ -52,6 +52,7 @@ class OpusConsole extends Opus_Application_Bootstrap {
     public static function init() {
         // For logging base path.
         self::$applicationRootDirectory = dirname(dirname(__FILE__));
+        self::$applicationWorkspaceDirectory = dirname(dirname(__FILE__)) . '/workspace';
         self::setupEnvironment();
         self::configure(self::CONFIG_TEST, dirname(__FILE__));
         self::setupDatabase();
