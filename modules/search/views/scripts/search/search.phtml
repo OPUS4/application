@@ -34,7 +34,6 @@
  * @version     $Id$
  */
 if (count($this->hitlist_paginator)) {
-    printf($this->translate("search_titles_resultlist") . "<br/>", $this->hitlist_count);
     echo $this->paginationControl($this->hitlist_paginator, NULL, 'searchList_ItemCount_pagination.phtml');
     foreach ($this->hitlist_paginator as $hit) {
         $doc = $hit->getSearchHit();

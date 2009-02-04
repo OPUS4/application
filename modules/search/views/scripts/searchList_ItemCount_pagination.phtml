@@ -1,4 +1,7 @@
 <?php
-printf($this->translate("search_results_from_to") . "<br/>", $this->firstItemNumber, ($this->firstItemNumber+$this->currentItemCount));
+if ($this->current === 1) {
+    printf($this->translate("search_titles_resultlist") . "<br/>", $this->totalItemCount);
+}
+printf($this->translate("search_results_from_to") . "<br/>", $this->firstItemNumber, ($this->firstItemNumber+$this->currentItemCount-1));
 ?>
 <ol start="<?=($this->firstItemNumber)?>">
