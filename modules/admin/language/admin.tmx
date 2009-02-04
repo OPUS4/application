@@ -18,5 +18,13 @@
         <seg>Luceneindex aufbauen</seg>
       </tuv>
     </tu>
+    <tu tuid="admin_title_collections">
+      <tuv xml:lang="en">
+        <seg>Administrate collections</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sammlungen verwalten</seg>
+      </tuv>
+    </tu>
   </body>
 </tmx>

@@ -27,18 +27,60 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: index.phtml 659 2008-09-01 11:03:28Z claussnitzer $
+ * @version     $Id$
  */
-?>
-<h1>Opus Application - <?= $this->title ?></h1>
-<ul>
-<li><a href="<?= $this->url(array('controller'=>'index', 'action'=>'buildindex')) ?>"><?=
-$this->translate('admin_title_indexbuild') ?></a></li>
-<li><a href="<?= $this->url(array('controller'=>'collections', 'action'=>'index')) ?>"><?=
-$this->translate('admin_title_collections') ?></a></li>
-</ul>
 
+/**
+ * Controller for administration of collections.
+ *
+ * @category    Application
+ * @package     Module_Admin
+ */
+class Admin_CollectionsController extends Zend_Controller_Action {
+
+    /**
+     * List all available collections trees.
+     *
+     * @return void
+     */
+    public function indexAction() {
+        $this->view->title = $this->view->translate('admin_title_collections');
+
+        $this->view->roles = array(
+            'Diese Sammlung' => array('id' => 12),
+            'Jene Sammlung' => array('id' => 45),
+            'Nochne Sammlung' => array('id' => 90));
+    }
+
+    /**
+     * Edit a collection role.
+     *
+     * @return void
+     */
+    public function roleeditAction() {
+        $this->view->title = $this->view->translate('admin_collections_role_edit');
+    }
+
+    /**
+     * Delete a collection role.
+     *
+     * @return void
+     */
+    public function roledeleteAction() {
+        $this->view->title = $this->view->translate('admin_collections_role_delete');
+    }
+
+    /**
+     * Create a new collection role.
+     *
+     * @return void
+     */
+    public function rolenewAction() {
+        $this->view->title = $this->view->translate('admin_collections_role_new');
+    }
+
+
+}
 
