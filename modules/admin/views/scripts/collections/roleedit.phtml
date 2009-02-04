@@ -33,3 +33,17 @@
  */
 ?>
 <h1>Opus Application - <?= $this->title ?></h1>
+
+<div class="list">
+    <ul class="collections">
+    <?php foreach ($this->collections as $colname => $collection) : ?>
+        <li class="listitem collection"><?= $colname ?>
+           <a href="<?= $this->url(array('controller' => 'collections', 'action' => 'collectionedit')) ?>"><?= $this->translate('admin_collections_edit')?></a>
+           <a href="<?= $this->url(array('controller' => 'collections', 'action' => 'collectiondelete')) ?>"><?= $this->translate('admin_collections_delete')?></a>
+        </li>
+    <?php endforeach; ?>
+    </ul>
+</div
+
+<a href="<?= $this->url(array('controller' => 'collections', 'action' => 'collectionnew')) ?>"><?= $this->translate('admin_collections_collection_new')?></a>
+

@@ -49,9 +49,9 @@ class Admin_CollectionsController extends Zend_Controller_Action {
         $this->view->title = $this->view->translate('admin_title_collections');
 
         $this->view->roles = array(
-            'Diese Sammlung' => array('id' => 12),
-            'Jene Sammlung' => array('id' => 45),
-            'Nochne Sammlung' => array('id' => 90));
+            'Diese Rolle' => array('id' => 12),
+            'Jene Rolle' => array('id' => 45),
+            'Nochne Rolle' => array('id' => 90));
     }
 
     /**
@@ -61,6 +61,12 @@ class Admin_CollectionsController extends Zend_Controller_Action {
      */
     public function roleeditAction() {
         $this->view->title = $this->view->translate('admin_collections_role_edit');
+
+        $this->view->collections = array(
+            'Sammlung alter Schlagerplatten' => array('id' => 2300),
+            'Sammlung neuer Beatplatten' => array('id' => 1200),
+            'Sammlung schöner Klassikplatten' => array('id' => 4250)
+            );
     }
 
     /**

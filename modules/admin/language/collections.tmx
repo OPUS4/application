@@ -42,5 +42,29 @@
         <seg>Entfernen einer Rolle</seg>
       </tuv>
     </tu>
+    <tu tuid="admin_collections_collection_new">
+      <tuv xml:lang="en">
+        <seg>Create a new Collection</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Eine neue Sammlung anlegen</seg>
+      </tuv>
+    </tu>
+    <tu tuid="admin_collections_collection_edit">
+      <tuv xml:lang="en">
+        <seg>Edit a Collections's properties</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Ändern der Eigenschaften der Sammlung</seg>
+      </tuv>
+    </tu>
+    <tu tuid="admin_collections_collection_delete">
+      <tuv xml:lang="en">
+        <seg>Delete a Collection</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Entfernen einer Sammlung</seg>
+      </tuv>
+    </tu>
   </body>
 </tmx>
