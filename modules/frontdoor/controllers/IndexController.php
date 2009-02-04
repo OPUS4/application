@@ -58,13 +58,16 @@ class Frontdoor_IndexController extends Zend_Controller_Action
     {
         $docId = $this->getRequest()->getParam('docId');
         $document = new Opus_Model_Document($docId);
-        $document_data_ex = array('Active', 'CommentInternal', 'DescText', 'TitleAbstractLanguage');
+        $document_data_ex = array('Active', 'CommentInternal', 'DescMarkup', 'LicenceLanguage',
+        'LinkLogo', 'LinkSign', 'MimeType', 'SortOrder', 'PodAllowed', 'ServerDatePublished', 'ServerDateModified',
+        'ServerDateUnlocked', 'ServerDateValid', 'Source', 'SwbId', 'PatentCountries', 'PatentDateGranted',
+        'PatentApplication', 'Enreichment');
         $document_data = $this->filterStopwords($document->toArray(), $document_data_ex);
 
-        //$this->array = $array = $document;
+
         $result = $this->my_sort($document_data);
         $this->view->result = $result;
-        //$this->view = print_r($this->document_data);
+        $this->view = print_r($document_data);
         //$this->view = print_r($result);
 
     }
