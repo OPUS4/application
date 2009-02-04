@@ -58,22 +58,26 @@ class Admin_IndexController extends Zend_Controller_Action {
 	 */
     public function buildindexAction()
     {
-    	# Increase maximum execution time for indexer
+        # Increase maximum execution time for indexer
     	ini_set('max_execution_time', 600);
-    	
+
     	$this->view->title = $this->view->translate('admin_title_indexbuild');
 
 		$indexer = new Opus_Search_Index_Indexer();
-		$table = new Opus_Db_Documents();
-        $docresult = $table->fetchAll();
-        
+
+        if ($this->_hasParam('testindex')) {
+        	$docresult = array('82');
+        } else {
+            Opus_Model_Document::getAll();
+        }
+
         $docadapter = new Opus_Search_Adapter_DocumentAdapter();
-        $this->view->indexed = ""; 
-        
+        $this->view->indexed = "";
+
         foreach ($docresult as $row) {
-        	$docadapter->loadDocument( (int) $row->__get('documents_id'));
+        	$docadapter->loadDocument( (int) $row);
        		$indexer->addDocumentToEntryIndex($docadapter);
-       		$this->view->indexed .= date('Y-m-d H:i:s') . ': Indexed Metadata for ' . $row->__get('documents_id') . '<br/>';
+       		$this->view->indexed .= date('Y-m-d H:i:s') . ': Indexed Metadata for ' . $row . '<br/>';
         }
     }
 }
