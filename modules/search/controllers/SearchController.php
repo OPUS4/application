@@ -34,56 +34,66 @@
 
 /**
  * Controller for search operations
- * 
+ *
  */
 class Search_SearchController extends Zend_Controller_Action
 {
 
     /**
-	 * Show menu for search actions
-	 *
-	 * @return void
-	 */
+     * Show menu for search actions
+     *
+     * @return void
+     */
     public function indexAction()
     {
-    	$this->view->title = $this->view->translate('search_modulename');
+        $this->view->title = $this->view->translate('search_modulename');
     }
 
-     /**
-	 * Show Search form
-	 *
-	 * @return void
-	 */
+    /**
+     * Show Search form
+     *
+     * @return void
+     */
     public function fulltextsearchAction()
     {
-    	$this->view->title = $this->view->translate('search_index_fulltextsearch');
+        $this->view->title = $this->view->translate('search_index_fulltextsearch');
 
         $searchForm = new FulltextSearch();
         $searchForm->setAction($this->view->url(array("controller"=>"search", "action"=>"search")));
         $searchForm->setMethod('post');
 
-    	$this->view->form = $searchForm;
+        $this->view->form = $searchForm;
     }
 
     /**
-	 * Do the search operation and set the hitlist to the view
-	 *
-	 * @return void
-	 */
+     * Do the search operation and set the hitlist to the view
+     *
+     * @return void
+     */
     public function searchAction()
     {
-    	try 
-    	{
-    		$data = $this->_request->getPost();
-    		$query = new Opus_Search_Query($data["query"]);
-    		$hitlist = $query->commit();
-    	}
-    	catch (Zend_Exception $ze)
-    	{
-    		echo "Error while performing search operation: " . $ze->getMessage();
-    	}
-    	$this->view->title = $this->view->translate('search_searchresult');
-    	$this->view->hitlist = new Opus_Search_Iterator_HitListIterator($hitlist);
+        $this->view->title = $this->view->translate('search_searchresult');
+        try
+        {
+            $resultlist = new Zend_Session_Namespace('resultlist');
+            if ($this->_request->getPost('query')) {
+                $data = $this->_request->getPost();
+                $query = new Opus_Search_Query($data["query"]);
+                $hitlist = $query->commit();
+                $resultlist->hitlist = $hitlist;
+            }
+            else {
+                $hitlist = $resultlist->hitlist;
+            }
+        }
+        catch (Zend_Exception $ze)
+        {
+            echo "Error while performing search operation: " . $ze->getMessage();
+        }
+        $hitlistIterator = new Opus_Search_Iterator_HitListIterator($hitlist);
+        $this->view->hitlist = $hitlistIterator;
+        $paginator = Zend_Paginator::factory($hitlistIterator);
+        $paginator->setCurrentPageNumber($this->_getParam('page'));
+        $this->view->hitlist_paginator = $paginator;
     }
 }
-?>
