@@ -1,5 +1,5 @@
-Frontdoor
-~~~~~~~~~
+Linkresolver
+~~~~~~~~~~~~
 
 ////////////////////////////////////////////////////////////////////////////////
 Zur Erstellung und Bearbeitung Deiner Dokumentation, siehe im 
