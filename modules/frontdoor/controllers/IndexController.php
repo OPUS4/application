@@ -36,30 +36,53 @@
 class Frontdoor_IndexController extends Zend_Controller_Action
 {
 
+    private function filterStopwords(array $fields, array &$stopwords) {
+        $result = array();
+
+        foreach ($fields as $key => $value) {
+            if ( in_array($key,$stopwords) === false ) {
+
+                if (is_array($value) === true) {
+                    $value = $this->filterStopwords($value, $stopwords);
+                }
+
+                $result[$key] = $value;
+            }
+
+        }
+
+        return $result;
+    }
+
     public function indexAction()
     {
+        $docId = $this->getRequest()->getParam('docId');
+        $document = new Opus_Model_Document($docId);
+        $document_data_ex = array('Active', 'CommentInternal', 'DescText', 'TitleAbstractLanguage');
+        $document_data = $this->filterStopwords($document->toArray(), $document_data_ex);
 
-      $request = $this->getRequest();
-      $docId = $request->getParam('docId');
-      $docId = $this->getRequest()->getParam('docId');
-      $document = new Opus_Model_Document($docId);
-      $this->document_data = $document->toArray();
+        //$this->array = $array = $document;
+        $result = $this->my_sort($document_data);
+        $this->view->result = $result;
+        //$this->view = print_r($this->document_data);
+        //$this->view = print_r($result);
+
+    }
 
 
+    private function cmp_weight ($a, $b)
+    {
 
-      function cmp_weight ($a, $b)
-      {
-
-          $weight = array(
+        $weight = array(
                           'Urn' => -40,
-                          //'Url' => -35,
+        //'Url' => -35,
                           'TitleMain' => -30,
                           'TitleParent' => -25,
                           'PersonAutor' => -20,
                           'CreatingCorporation' => -15,
-                          //'SubjectSwd' => -13,
-                          //'SubjectDdc' => -12,
-                          //'SubjectUncontrolled => -11;
+        //'SubjectSwd' => -13,
+        //'SubjectDdc' => -12,
+        //'SubjectUncontrolled => -11;
                           'ContributingCorporation' => -10,
                           'CompletedYear' => -5,
                           'CompletedDate' => -3,
@@ -71,82 +94,92 @@ class Frontdoor_IndexController extends Zend_Controller_Action
                           'TitleAbstract' => 25,
                           'Isbn' => 30,
                           'Licence' => 35,
-                          );
+        );
 
-          if (array_key_exists($a, $weight) === true)
-          {
-             $a_weight = $weight[$a];
-          }
-          else
-          {
-              $a_weight = 0;
-          }
+        if (array_key_exists($a, $weight) === true)
+        {
+            $a_weight = $weight[$a];
+        }
+        else
+        {
+            $a_weight = 0;
+        }
 
-          if (array_key_exists($b, $weight) === true)
-          {
-             $b_weight = $weight[$b];
-          }
-          else
-          {
-              $b_weight = 0;
-          }
+        if (array_key_exists($b, $weight) === true)
+        {
+            $b_weight = $weight[$b];
+        }
+        else
+        {
+            $b_weight = 0;
+        }
 
-          if ($a_weight === $b_weight)
-          {
-              return 0;
-          }
-          return ($a_weight < $b_weight) ? -1 : 1;
+        if ($a_weight === $b_weight)
+        {
+            return 0;
+        }
+        return ($a_weight < $b_weight) ? -1 : 1;
 
-      }
+    }
 
-      function cmp_title_weight ($a, $b)
-      {
-          $lang_a = $a['TitleAbstractLanguage'];
-          $lang_b = $b['TitleAbstractLanguage'];
+    private function cmp_title_weight ($a, $b)
+    {
+        if ((array_key_exists('TitleAbstractLanguage', $a) === false)
+            or (array_key_exists('TitleAbstractLanguage', $b) === false)) {
+            return 0;
+        }
 
-          $weight = array ('de' => -30, 'en' => 0);
 
-          $a_weight = $weight[$lang_a];
-          $b_weight = $weight[$lang_b];
+        $lang_a = $a['TitleAbstractLanguage'];
+        $lang_b = $b['TitleAbstractLanguage'];
 
-          if ($a_weight === $b_weight);
-          {
-              return 0;
-          }
-       }
+        $weight = array ('de' => -30, 'en' => 0);
 
-    function cmp_abstract_weight ($a, $b)
-      {
-          $lang_a = $a['TitleAbstractLanguage'];
-          $lang_b = $b['TitleAbstractLanguage'];
+        $a_weight = $weight[$lang_a];
+        $b_weight = $weight[$lang_b];
 
-          $weight = array ('de' => -30, 'en' => 0);
+        if ($a_weight === $b_weight);
+        {
+            return 0;
+        }
+    }
 
-          $a_weight = $weight[$lang_a];
-          $b_weight = $weight[$lang_b];
+    private function cmp_abstract_weight ($a, $b)
+    {
 
-          if ($a_weight === $b_weight);
-          {
-              return 0;
-          }
-       }
+        if ((array_key_exists('TitleAbstractLanguage', $a) === false)
+            or (array_key_exists('TitleAbstractLanguage', $b) === false)) {
+            return 0;
+        }
 
-       function my_sort(array $a)
-       {
-           $cp = $a;
-           uksort($cp, 'cmp_weight');
-           usort($cp['TitleMain'], 'cmp_title_weight');
-           usort($cp['TitleAbstract'], 'cmp_abstract_weight');
-           //uksort($cp, 'cmp_licence_weight');
-           return $cp;
 
-       }
+        $lang_a = $a['TitleAbstractLanguage'];
+        $lang_b = $b['TitleAbstractLanguage'];
 
-     //$this->array = $array = $document;
-     $result = my_sort($this->document_data);
-     $this->view->result = $result;
-     //$this->view = print_r($this->document_data);
-     $this->view = print_r($result);
+        $weight = array ('de' => -30, 'en' => 0);
 
-  }
+        $a_weight = $weight[$lang_a];
+        $b_weight = $weight[$lang_b];
+
+        if ($a_weight === $b_weight);
+        {
+            return 0;
+        }
+    }
+
+    private function my_sort(array $a)
+    {
+        $cp = $a;
+        uksort($cp, array($this, 'cmp_weight'));
+
+        if (array_key_exists('TitleMain', $cp) === true) {
+            usort($cp['TitleMain'], array($this, 'cmp_title_weight'));
+        }
+
+        if (array_key_exists('TitleAbstract', $cp) === true) {
+            usort($cp['TitleAbstract'], array($this, 'cmp_abstract_weight'));
+        }
+        return $cp;
+    }
+
 }
