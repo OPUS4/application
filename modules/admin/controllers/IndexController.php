@@ -65,11 +65,11 @@ class Admin_IndexController extends Zend_Controller_Action {
 
 		$indexer = new Opus_Search_Index_Indexer();
 
-        if ($this->_hasParam('testindex')) {
+        //if ($this->_hasParam('testindex')) {
         	$docresult = array('82');
-        } else {
-            Opus_Model_Document::getAll();
-        }
+        //} else {
+       //     Opus_Model_Document::getAll();
+        //}
 
         $docadapter = new Opus_Search_Adapter_DocumentAdapter();
         $this->view->indexed = "";
