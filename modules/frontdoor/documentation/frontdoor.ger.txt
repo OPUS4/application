@@ -1,3 +1,7 @@
-Die Frontdoor
-~~~~~~~~~~~~~
-Dies ist die Dokumentation der Frontdoor.
+Frontdoor
+~~~~~~~~~
+
+////////////////////////////////////////////////////////////////////////////////
+Zur Erstellung und Bearbeitung Deiner Dokumentation, siehe im 
+Subversion-Repository unter: /documentation/general/template.ger.txt
+////////////////////////////////////////////////////////////////////////////////
