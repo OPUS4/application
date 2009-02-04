@@ -80,4 +80,5 @@ class Admin_IndexController extends Zend_Controller_Action {
        		$this->view->indexed .= date('Y-m-d H:i:s') . ': Indexed Metadata for ' . $row . '<br/>';
         }
     }
+
 }
