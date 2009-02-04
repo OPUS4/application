@@ -68,13 +68,13 @@ class Admin_IndexController extends Zend_Controller_Action {
         $docresult = Opus_Model_Document::getAllIds();
 
         $this->view->indexed = "";
-        echo date('Y-m-d H:i:s') . 'Start<br/>';
+        $this->view->indexed .= date('Y-m-d H:i:s') . 'Start<br/>';
         foreach ($docresult as $row) {
             $docadapter = new Opus_Model_Document( (int) $row);
         	$indexer->addDocumentToEntryIndex($docadapter);
        		$this->view->indexed .= date('Y-m-d H:i:s') . ': Indexed Metadata for ' . $row . '<br/>';
         }
-       echo date('Y-m-d H:i:s') . 'Stop';
+        $this->view->indexed .= date('Y-m-d H:i:s') . 'Stop';
     }
 
 }
