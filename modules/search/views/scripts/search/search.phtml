@@ -38,21 +38,27 @@
 	    $doc = $hit->getSearchHit();
 		$document = $doc->getDocument();
 		//print_r($document);
-		$authoriterator = new Opus_Search_Iterator_PersonsListIterator($document["author"]);
+		#$authoriterator = new Opus_Search_Iterator_PersonsListIterator($document["author"]);
 		echo "<li>";
-		foreach ($authoriterator as $obj) {
-			$pers = $obj->get();
-			echo "<a href=".$this->url(array("controller"=>"browsing", "action"=>"browseTitles", "filter" => "author", "author"=>$pers["id"])).">";
-			echo $pers["lastName"].", ".$pers["firstName"];
-			echo "</a>";
-			if ($authoriterator->hasNext() === true) echo "; ";
-			else echo ": ";
-		}
-		print("<a href=\"".$this->url($document["frontdoorUrl"])."\">".$document["title"]."</a>");
+		echo $document['author'];
+		#foreach ($authoriterator as $obj) {
+		#	$pers = $obj->get();
+		#	echo "<a href=".$this->url(array("controller"=>"browsing", "action"=>"browseTitles", "filter" => "author", "author"=>$pers["id"])).">";
+		#	echo $pers["lastName"].", ".$pers["firstName"];
+		#	echo "</a>";
+		#	if ($authoriterator->hasNext() === true) echo "; ";
+		#	else echo ": ";
+		#}
+		#print("<a href=\"".$this->url($document["frontdoorUrl"])."\">".$document["title"]."</a>");
+		print("<a href=\"".$this->url(array('module' => 'frontdoor',
+            'controller' => 'index',
+            'action' => 'index',
+            'docId' => $document['id'])
+		)."\">".$document["title"]."</a>");
 		echo "</li>";
 		echo "<div>".$this->translate('search_titles_relevance').": ".$hit->getRelevance()."<br/>";
 		echo $document["abstract"]."<br/>";
-		print("<a href=\"".$this->url($document["frontdoorUrl"])."\">".$this->url($document["frontdoorUrl"])."</a><br/>");
-		echo $this->translate('search_titles_found').": <a href=\"".$this->url($document["fileUrl"])."\">".$this->url($document["fileUrl"])."</a></div>";
+		#print("<a href=\"".$this->url($document["frontdoorUrl"])."\">".$this->url($document["frontdoorUrl"])."</a><br/>");
+		#echo $this->translate('search_titles_found').": <a href=\"".$this->url($document["fileUrl"])."\">".$this->url($document["fileUrl"])."</a></div>";
 	}
 	echo "</ul>";
