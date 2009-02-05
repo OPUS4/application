@@ -38,6 +38,9 @@
         case 'author':
             echo "<h2>".$this->translate('search_titles_authors')." ".$this->author["firstName"]." ".$this->author["lastName"]."</h2>";
             break;
+        case 'editor':
+            echo "<h2>".$this->translate('search_titles_editors')." ".$this->editor["firstName"]." ".$this->editor["lastName"]."</h2>";
+            break;
         case 'doctype':
             echo "<h2>".$this->translate('search_titles_doctypes')." ".$this->doctype["name"]."</h2>";
             break;
@@ -57,7 +60,7 @@ if (count($this->hitlist_paginator)) {
         #echo $document['author'] . ': ';
         foreach ($authoriterator as $obj) {
            $pers = $obj->get();
-           echo "<a href=".$this->url(array("controller"=>"browsing", "action"=>"browseTitles", "filter" => "author", "author"=>$pers["id"])).">";
+           echo "<a href=".$this->url(array("controller"=>"browsing", "action"=>"browseTitles", "filter" => 'author', 'author' => $pers["id"])).">";
            echo $pers["lastName"].", ".$pers["firstName"];
            echo "</a>";
            if ($authoriterator->hasNext() === true) echo "; ";

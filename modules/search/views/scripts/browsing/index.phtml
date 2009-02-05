@@ -37,8 +37,11 @@
 	<h2><?= $this->translate('search_index_browsing') ?></h2>
 	<a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseTitles'), null, true) ?>"><?= $this->translate('search_index_alltitlesbrowsing') ?></a><br/>
 	<a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'authors'), null, true) ?>"><?= $this->translate('search_index_authorsbrowsing') ?></a><br/>
+	<a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'editors'), null, true) ?>"><?= $this->translate('search_index_editorsbrowsing') ?></a><br/>
 	<a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'doctypes'), null, true) ?>"><?= $this->translate('search_index_doctypebrowsing') ?></a><br/>
 	<?php
+	// Browsable roles of persons:
+    // 'advisor','contributor','referee','other','translator'
 	// get the list of hierarchical lists from the Collections-Classes
 	if (count($this->browsinglist) > 0) {
 	   foreach ($this->browsinglist as $obj)

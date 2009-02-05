@@ -44,7 +44,7 @@ class BrowsingList
 	 *
 	 * @todo get the author list from the database, not just dummydata
 	 */
-	public static function getAuthorList()
+	public static function getPersonsList()
 	{
 		// Noch Dummydaten, später etwas in der Art
         $table = new Opus_Db_Persons();

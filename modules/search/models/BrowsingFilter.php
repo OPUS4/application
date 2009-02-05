@@ -100,8 +100,6 @@ class BrowsingFilter
 	 * @return HitList resultlist
 	 * @static
 	 * @param Integer authorId Id of the author from the Opus database
-	 *
-	 * @todo really get documents from the given Authors, not just dummydata
 	 */
 	public static function getAuthorTitles($authorId)
 	{
@@ -120,6 +118,31 @@ class BrowsingFilter
 
 
 	}
+
+    /**
+     * Returns a list of all entries from a given author
+     *
+     * @return HitList resultlist
+     * @static
+     * @param Integer authorId Id of the author from the Opus database
+     */
+    public static function getEditorTitles($editorId)
+    {
+        $person = new Opus_Model_Person( (int) $editorId);
+        $docresult = $person->getDocumentsByRole('editor');
+
+        $hitlist = new Opus_Search_List_HitList();
+        $searchhits = array();
+        foreach ($docresult as $row)
+        {
+            array_push($searchhits, (int) $row->getId());
+        }
+
+        $paginator = Zend_Paginator::factory($searchhits);
+        return ($paginator);
+
+
+    }
 
 	/**
 	 * Returns a list of all entries from a given Documenttype

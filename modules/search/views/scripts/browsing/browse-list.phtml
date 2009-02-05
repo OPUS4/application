@@ -41,29 +41,58 @@
 	}
 	echo '<ul>';
 	foreach ($this->browsinglist as $obj)	{
-		echo '<li>';
 		if ($this->list === 'authors')
 		{
 			$pers = $obj->get();
-			echo '<a href=' .
-			 $this->url(
-			     array(
-			         'module'        => 'search',
-			         'controller'    => 'browsing',
-			         'action'        => 'browseTitles',
-			         'filter'        => 'author',
-			         'author'        => $pers['id']
-			     ),
-			     null,
-			     true
-			 ) .
-			'>';
-			echo $pers['lastName'] . ', ' . $pers['firstName'];
-			echo '</a>';
+			if (BrowsingFilter::getAuthorTitles($pers['id'])->count() > 0) {
+			    echo '<li>';
+			 echo '<a href=' .
+    			 $this->url(
+	       		     array(
+			             'module'        => 'search',
+			             'controller'    => 'browsing',
+			             'action'        => 'browseTitles',
+			             'filter'        => 'author',
+			             'author'        => $pers['id']
+    			     ),
+	       		     null,
+			          true
+			     ) .
+			     '>';
+			     echo $pers['lastName'] . ', ' . $pers['firstName'];
+			     echo '</a>';
+			     echo ' (' . BrowsingFilter::getAuthorTitles($pers['id'])->count() . ')';
+			     echo '</li>';
+			}
 		}
+        if ($this->list === 'editors')
+        {
+            $pers = $obj->get();
+            if (BrowsingFilter::getEditorTitles($pers['id'])->count() > 0) {
+                echo '<li>';
+             echo '<a href=' .
+                 $this->url(
+                     array(
+                         'module'        => 'search',
+                         'controller'    => 'browsing',
+                         'action'        => 'browseTitles',
+                         'filter'        => 'editor',
+                         'editor'        => $pers['id']
+                     ),
+                     null,
+                      true
+                 ) .
+                 '>';
+                 echo $pers['lastName'] . ', ' . $pers['firstName'];
+                 echo '</a>';
+                 echo ' (' . BrowsingFilter::getEditorTitles($pers['id'])->count() . ')';
+                 echo '</li>';
+            }
+        }
 		if ($this->list === 'doctypes')
 		{
 			$pers = $obj->get();
+			echo '<li>';
 			echo '<a href=' .
 			 $this->url(
 			     array(
@@ -79,11 +108,13 @@
 			'>';
 			echo $pers['name'];
 			echo '</a>';
+			     echo '</li>';
 		}
 		if ($this->list === 'collection')
 		{
 			// for Collections $this->browsinglist must be the ListIterator of all ChildNodes, not the current node itself...
-			echo '<a href=' .
+			echo '<li>';
+		    echo '<a href=' .
 			 $this->url(
 			     array(
 			         'module'        => 'search',
@@ -99,9 +130,9 @@
 			'>';
 			echo $obj->getName('ger');
 			echo '</a> (' . $obj->count() . ')';
+			     echo '</li>';
 		}
 		// print_r($pers); // to have a look at all persons information
-		echo '</li>';
 	}
 	echo '</ul>';
 	if ($this->list === 'collection')

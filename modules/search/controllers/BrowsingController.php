@@ -85,7 +85,14 @@ class Search_BrowsingController extends Zend_Controller_Action
 				$paginator = BrowsingFilter::getAuthorTitles($authorId);
 				$this->view->author = $author->get();
 				break;
-    		case 'doctype':
+            case 'editor':
+                $this->view->title = $this->view->translate('search_index_editorsbrowsing');
+                $editorId = (int) $this->_getParam("editor");
+                $editor = new Opus_Search_Adapter_PersonAdapter($editorId);
+                $paginator = BrowsingFilter::getEditorTitles($editorId);
+                $this->view->editor = $editor->get();
+                break;
+			case 'doctype':
     			$this->view->title = $this->view->translate('search_index_doctypebrowsing');
 	    		$authorId = (int) $this->_getParam("doctype");
     			$author = Opus_Search_Adapter_DocumentTypeAdapter::getDocType($authorId);
@@ -128,7 +135,7 @@ class Search_BrowsingController extends Zend_Controller_Action
     {
     	$list = $this->_getParam("list");
     	$this->view->list = $list;
-    	switch ($list)
+       	switch ($list)
     	{
     		case 'authors':
     			$this->view->title = $this->view->translate('search_index_authorsbrowsing');
@@ -136,6 +143,12 @@ class Search_BrowsingController extends Zend_Controller_Action
 				$browsingListProduct = $browsingList->getBrowsingList();
 				$this->view->browsinglist = new Opus_Search_Iterator_PersonsListIterator($browsingListProduct);
 				break;
+            case 'editors':
+                $this->view->title = $this->view->translate('search_index_editorsbrowsing');
+                $browsingList = new BrowsingListFactory($list);
+                $browsingListProduct = $browsingList->getBrowsingList();
+                $this->view->browsinglist = new Opus_Search_Iterator_PersonsListIterator($browsingListProduct);
+                break;
 			case 'doctypes':
 				$this->view->title = $this->view->translate('search_index_doctypebrowsing');
 				$browsingList = new BrowsingListFactory($list);

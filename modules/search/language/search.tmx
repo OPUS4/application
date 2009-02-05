@@ -34,6 +34,14 @@
         <seg>Browsing nach Autoren</seg>
       </tuv>
     </tu>
+    <tu tuid="search_index_editorsbrowsing">
+      <tuv xml:lang="en">
+        <seg>Browse editors</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Browsing nach Herausgebern</seg>
+      </tuv>
+    </tu>
     <tu tuid="search_index_doctypebrowsing">
       <tuv xml:lang="en">
         <seg>Browse document types</seg>
@@ -80,6 +88,14 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Dokumente von</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_titles_editors">
+      <tuv xml:lang="en">
+        <seg>Documents edited by</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokumente herausgegeben von</seg>
       </tuv>
     </tu>
     <tu tuid="search_titles_doctypes">

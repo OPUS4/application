@@ -1,7 +1,7 @@
 <?php
 /**
  * Central class to construct any browsing list
- * 
+ *
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -41,7 +41,7 @@ class BrowsingListFactory
    * @access private
    */
 	private $browsinglist;
-	
+
   /**
    * Constructor
    * @access public
@@ -54,7 +54,7 @@ class BrowsingListFactory
 	{
 		$this->createBrowsingList($browsingList, $collection, $node);
 	}
-	
+
   /**
    * Create the browsing list by keyword
    * @return void
@@ -66,7 +66,8 @@ class BrowsingListFactory
 		switch ($browsingList)
 		{
 			case 'authors':
-				$browseList = BrowsingList::getAuthorList();
+			case 'editors':
+				$browseList = BrowsingList::getPersonsList();
 				break;
 			case 'doctypes':
 				$browseList = BrowsingList::getDocumentTypeList();
@@ -76,13 +77,13 @@ class BrowsingListFactory
 				break;
 			case 'collection':
 				$browseList = BrowsingList::getCollectionList($collection, $node);
-				break;				
+				break;
 			default:
 				throw new BrowsingListFactoryException("This type of list is not supported (yet)!");
 		}
 		$this->browsingList = $browseList;
 	}
-	
+
   /**
    * Get the BrowsingList out of the factory
    * @return BasicList BrowsingList, extended from BasicList
