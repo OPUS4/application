@@ -210,6 +210,14 @@
         <seg>Jahr der Veröffentlichung</seg>
       </tuv>
     </tu>
+    <tu tuid="PublishedDate">
+      <tuv xml:lang="en">
+        <seg>Published Date</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datum der Veröffentlichung</seg>
+      </tuv>
+    </tu>
     <tu tuid="CompletedDate">
       <tuv xml:lang="en">
         <seg>Completed Date</seg>
@@ -488,12 +496,28 @@
         <seg>Autor</seg>
       </tuv>
     </tu>
-    <tu tuid="AcademicTitle">
+    <tu tuid="PersonReferee">
       <tuv xml:lang="en">
-        <seg>Acdemic Title</seg>
+        <seg>Referee</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Akademischer Grad</seg>
+        <seg>Gutachter</seg>
+      </tuv>
+    </tu>
+    <tu tuid="PersonAdvisor">
+      <tuv xml:lang="en">
+        <seg>Advisor</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Betreuer</seg>
+      </tuv>
+    </tu>
+    <tu tuid="PersonOther">
+      <tuv xml:lang="en">
+        <seg>Other Person</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Weitere Person</seg>
       </tuv>
     </tu>
     <tu tuid="DateOfBirth">
