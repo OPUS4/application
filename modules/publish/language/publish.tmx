@@ -10,5 +10,29 @@
         <seg>Veröffentlichen</seg>
       </tuv>
     </tu>
+    <tu tuid="selecttype">
+      <tuv xml:lang="en">
+        <seg>Choose your document type:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Wählen Sie Ihren Dokumententyp aus:</seg>
+      </tuv>
+    </tu>
+    <tu tuid="process">
+      <tuv xml:lang="en">
+        <seg>continue</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>weiter</seg>
+      </tuv>
+    </tu>
+    <tu tuid="transmit">
+      <tuv xml:lang="en">
+        <seg>transmit</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>übermitteln</seg>
+      </tuv>
+    </tu>
   </body>
 </tmx>
