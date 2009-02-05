@@ -371,18 +371,26 @@
     </tu>
     <tu tuid="Isbn">
       <tuv xml:lang="en">
-        <seg>ISBN-Identifier</seg>
+        <seg>ISBN</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>ISBN-Nummer</seg>
+        <seg>ISBN</seg>
       </tuv>
     </tu>
-    <tu tuid="IdentifierValue">
+    <tu tuid="Urn">
       <tuv xml:lang="en">
-        <seg>ISBN-Identifier</seg>
+        <seg>URN</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>ISBN-Nummer</seg>
+        <seg>URN</seg>
+      </tuv>
+    </tu>
+     <tu tuid="IdentifierValue">
+      <tuv xml:lang="en">
+        <seg>URN or ISBN</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>URN oder ISBN</seg>
       </tuv>
     </tu>
     <tu tuid="IdentifierLabel">
@@ -518,6 +526,14 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Weitere Person</seg>
+      </tuv>
+    </tu>
+    <tu tuid="AcademicTitle">
+      <tuv xml:lang="en">
+        <seg>Academic Title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Akademischer Grad</seg>
       </tuv>
     </tu>
     <tu tuid="DateOfBirth">
