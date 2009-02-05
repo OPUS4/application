@@ -37,38 +37,71 @@
 	{
 		// Show name of the current CollectionNode
 		//print_r($this->collectionNode->getCollectionNode());
-		//print_r($this->collectionNode);
-		//echo $this->collectionNode->getName();
+		//echo $this->collectionNode->getName('ger');
 	}
-	echo "<ul>";
+	echo '<ul>';
 	foreach ($this->browsinglist as $obj)	{
-		echo "<li>";
-		if ($this->list === "authors")
+		echo '<li>';
+		if ($this->list === 'authors')
 		{
 			$pers = $obj->get();
-			echo "<a href=".$this->url(array("controller"=>"browsing", "action"=>"browseTitles", "filter" => "author", "author"=>$pers["id"])).">";
-			echo $pers["lastName"].", ".$pers["firstName"];
-			echo "</a>";
+			echo '<a href=' .
+			 $this->url(
+			     array(
+			         'controller'    => 'browsing',
+			         'action'        => 'browseTitles',
+			         'filter'        => 'author',
+			         'author'        => $pers['id']
+			     ),
+			     null,
+			     true
+			 ) .
+			'>';
+			echo $pers['lastName'] . ', ' . $pers['firstName'];
+			echo '</a>';
 		}
-		if ($this->list === "doctypes")
+		if ($this->list === 'doctypes')
 		{
 			$pers = $obj->get();
-			echo "<a href=".$this->url(array("controller"=>"browsing", "action"=>"browseTitles", "filter" => "doctype", "doctype"=>$pers["id"])).">";
-			echo $pers["name"];
-			echo "</a>";
+			echo '<a href=' .
+			 $this->url(
+			     array(
+			         'controller'    => 'browsing',
+			         'action'        => 'browseTitles',
+			         'filter'        => 'doctype',
+			         'doctype'       => $pers['id']
+			     ),
+			     null,
+			     true
+			 ) .
+			'>';
+			echo $pers['name'];
+			echo '</a>';
 		}
-		if ($this->list === "collection")
+		if ($this->list === 'collection')
 		{
 			// for Collections $this->browsinglist must be the ListIterator of all ChildNodes, not the current node itself...
-			echo "<a href=".$this->url(array("controller"=>"browsing", "action"=>"browseList", "list" => "collection", "collection"=>$obj->getRoleId(), "node" => $obj->getNodeId())).">";
-			echo $obj->getName("ger");
-			echo "</a> (".$obj->count().")";
+			echo '<a href=' .
+			 $this->url(
+			     array(
+			         'controller'    => 'browsing',
+			         'action'        => 'browseList',
+			         'list'          => 'collection',
+			         'collection'    => $obj->getRoleId(),
+			         'node'          => $obj->getNodeId()
+			     ),
+			     null,
+			     true
+			 ) .
+			'>';
+			echo $obj->getName('ger');
+			echo '</a> (' . $obj->count() . ')';
 		}
 		// print_r($pers); // to have a look at all persons information
-		echo "</li>";
+		echo '</li>';
 	}
-	echo "</ul>";
-	if ($this->list === "collection")
+	echo '</ul>';
+	if ($this->list === 'collection')
 	{
         if (count($this->hitlist_paginator)) {
             echo $this->paginationControl($this->hitlist_paginator, NULL, 'searchList_ItemCount_pagination.phtml');
@@ -82,19 +115,37 @@
                 #echo $document['author'] . ': ';
                 foreach ($authoriterator as $obj) {
                     $pers = $obj->get();
-                    echo "<a href=".$this->url(array("controller"=>"browsing", "action"=>"browseTitles", "filter" => "author", "author"=>$pers["id"])).">";
+                    echo '<a href=' .
+                        $this->url(
+                            array(
+                                'controller'    => 'browsing',
+                                'action'        => 'browseTitles',
+                                'filter'        => 'author',
+                                'author'        => $pers['id']
+                            ),
+                            null,
+                            true
+                        ) .
+                    '>';
                     echo $pers["lastName"].", ".$pers["firstName"];
                     echo "</a>";
                     if ($authoriterator->hasNext() === true) echo "; ";
                     else echo ": ";
                 }
                 #print("<a href=\"".$this->url($document["frontdoorUrl"])."\">".$document["title"]."</a>");
-                print("<a href=\"".$this->url(array('module' => 'frontdoor',
-                    'controller' => 'index',
-                    'action' => 'index',
-                    'docId' => $document['id'])
-                )."\">".$document["title"]."</a>");
-                echo "</li>";
+                print('<a href=' .
+                    $this->url(
+                        array(
+                            'module'        => 'frontdoor',
+                            'controller'    => 'index',
+                            'action'        => 'index',
+                            'docId'         => $document['id']
+                        ),
+                        null,
+                        true
+                    ) . '>' . $document['title'] . '</a>'
+                );
+                echo '</li>';
                 #echo "<div>".$this->translate('search_titles_relevance').": ".$doc->getRelevance()."<br/>";
                 #echo $document["abstract"]."<br/>";
             }
