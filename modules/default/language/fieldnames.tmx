@@ -2,7 +2,7 @@
 <tmx version="2.0" xmlns="http://www.lisa.org/tmx20">
   <header adminlang="en" creationtool="locale4j" creationtoolversion="1.1" o-tmf="unknown" segtype="block" srclang="*all*"/>
   <body>
-    <tu tuid="fieldnames_Language">
+    <tu tuid="Language">
       <tuv xml:lang="en">
         <seg>Language</seg>
       </tuv>
@@ -10,7 +10,7 @@
         <seg>Sprache</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_Licence">
+    <tu tuid="Licence">
       <tuv xml:lang="en">
         <seg>Licence</seg>
       </tuv>
@@ -18,7 +18,7 @@
         <seg>Lizenz</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_Active">
+    <tu tuid="Active">
       <tuv xml:lang="en">
         <seg>Active</seg>
       </tuv>
@@ -26,7 +26,7 @@
         <seg>Aktiv</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_CommentInternal">
+    <tu tuid="CommentInternal">
       <tuv xml:lang="en">
         <seg>Internal Comment</seg>
       </tuv>
@@ -34,7 +34,7 @@
         <seg>Interne Bermerkung</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_DescMarkup">
+    <tu tuid="DescMarkup">
       <tuv xml:lang="en">
         <seg>Description Markup</seg>
       </tuv>
@@ -42,7 +42,7 @@
         <seg>Beschreibung Markup</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_DescText">
+    <tu tuid="DescText">
       <tuv xml:lang="en">
         <seg>Describing Text</seg>
       </tuv>
@@ -50,7 +50,7 @@
         <seg>Beschreibung</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_LicenceLanguage">
+    <tu tuid="LicenceLanguage">
       <tuv xml:lang="en">
         <seg>Licence Language</seg>
       </tuv>
@@ -58,7 +58,7 @@
         <seg>Sprache der Lizens</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_LinkLicence">
+    <tu tuid="LinkLicence">
       <tuv xml:lang="en">
         <seg>Link to Licence</seg>
       </tuv>
@@ -66,7 +66,7 @@
         <seg>Link zur Lizenz</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_LinkLogo">
+    <tu tuid="LinkLogo">
       <tuv xml:lang="en">
         <seg>Link Logo</seg>
       </tuv>
@@ -74,7 +74,7 @@
         <seg>Link Logo</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_LinkSign">
+    <tu tuid="LinkSign">
       <tuv xml:lang="en">
         <seg>Link Sign</seg>
       </tuv>
@@ -82,7 +82,7 @@
         <seg>Link Sign</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_MimeType">
+    <tu tuid="MimeType">
       <tuv xml:lang="en">
         <seg>Mime Type</seg>
       </tuv>
@@ -90,7 +90,7 @@
         <seg>Media Typ</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_NameLong">
+    <tu tuid="NameLong">
       <tuv xml:lang="en">
         <seg>Licence Name</seg>
       </tuv>
@@ -98,7 +98,7 @@
         <seg>Name der Lizenz</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_SortOrder">
+    <tu tuid="SortOrder">
       <tuv xml:lang="en">
         <seg>Sort Order</seg>
       </tuv>
@@ -106,7 +106,7 @@
         <seg>Sortierung</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_PodAllowed">
+    <tu tuid="PodAllowed">
       <tuv xml:lang="en">
         <seg>Print on Demand</seg>
       </tuv>
@@ -114,7 +114,7 @@
         <seg>Print on Demand</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_ContributingCorporation">
+    <tu tuid="ContributingCorporation">
       <tuv xml:lang="en">
         <seg>Contributing Corporation</seg>
       </tuv>
@@ -122,7 +122,7 @@
         <seg>Beteiligtes Institut</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_CreatingCorporation">
+    <tu tuid="CreatingCorporation">
       <tuv xml:lang="en">
         <seg>Institute</seg>
       </tuv>
@@ -130,7 +130,7 @@
         <seg>Intitut</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_DateAccepted">
+    <tu tuid="DateAccepted">
       <tuv xml:lang="en">
         <seg>Date of Publish</seg>
       </tuv>
@@ -138,7 +138,7 @@
         <seg>Publikationsdatum</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_DocumentType">
+    <tu tuid="DocumentType">
       <tuv xml:lang="en">
         <seg>Document Type</seg>
       </tuv>
@@ -146,7 +146,7 @@
         <seg>Dokumenttyp</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_Edition">
+    <tu tuid="Edition">
       <tuv xml:lang="en">
         <seg>Edition</seg>
       </tuv>
@@ -154,7 +154,7 @@
         <seg>Edition</seg>
       </tuv>
     </tu>
-      <tu tuid="fieldnames_Issue">
+      <tu tuid="Issue">
       <tuv xml:lang="en">
         <seg>Issue</seg>
       </tuv>
@@ -162,7 +162,7 @@
         <seg>Ausgabe</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_NonInstituteAffiliation">
+    <tu tuid="NonInstituteAffiliation">
       <tuv xml:lang="en">
         <seg>Non-Institute Affiliation</seg>
       </tuv>
@@ -170,7 +170,7 @@
         <seg>Nicht-instititutionelle Anbindung</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_PageFirst">
+    <tu tuid="PageFirst">
       <tuv xml:lang="en">
         <seg>First Page</seg>
       </tuv>
@@ -178,7 +178,7 @@
         <seg>Erste Seite</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_PageLast">
+    <tu tuid="PageLast">
       <tuv xml:lang="en">
         <seg>Last Page</seg>
       </tuv>
@@ -186,7 +186,7 @@
         <seg>Letzte Seite</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_PageNumber">
+    <tu tuid="PageNumber">
       <tuv xml:lang="en">
         <seg>Pagenumber</seg>
       </tuv>
@@ -194,7 +194,7 @@
         <seg>Seitenzahl</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_CompletedYear">
+    <tu tuid="CompletedYear">
       <tuv xml:lang="en">
         <seg>Completed Year</seg>
       </tuv>
@@ -202,7 +202,15 @@
         <seg>Jahr der Fertigstellung</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_CompletedDate">
+    <tu tuid="PublishedYear">
+      <tuv xml:lang="en">
+        <seg>Published Year</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Jahr der Veröffentlichung</seg>
+      </tuv>
+    </tu>
+    <tu tuid="CompletedDate">
       <tuv xml:lang="en">
         <seg>Completed Date</seg>
       </tuv>
@@ -210,7 +218,7 @@
         <seg>Datum der Fertigstellung</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_Reviewed">
+    <tu tuid="Reviewed">
       <tuv xml:lang="en">
         <seg>Reviewed</seg>
       </tuv>
@@ -218,7 +226,7 @@
         <seg>Art der Begutachtung</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_ServerDateModified">
+    <tu tuid="ServerDateModified">
       <tuv xml:lang="en">
         <seg>Date of Server Modify</seg>
       </tuv>
@@ -226,7 +234,7 @@
         <seg>Datum der Servermodifikation</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_ServerDatePublished">
+    <tu tuid="ServerDatePublished">
       <tuv xml:lang="en">
         <seg>Server Date Published</seg>
       </tuv>
@@ -234,7 +242,7 @@
         <seg>Datum der Ablage auf dem Server</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_ServerDateUnlocking">
+    <tu tuid="ServerDateUnlocking">
       <tuv xml:lang="en">
         <seg>Date of Server unlocking</seg>
       </tuv>
@@ -242,7 +250,7 @@
         <seg>Datum der Freigabe auf dem Server</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_ServerDateValid">
+    <tu tuid="ServerDateValid">
       <tuv xml:lang="en">
         <seg>Validation on Server</seg>
       </tuv>
@@ -250,7 +258,7 @@
         <seg>Datum der Validierung auf dem Server</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_Source">
+    <tu tuid="Source">
       <tuv xml:lang="en">
         <seg>Source</seg>
       </tuv>
@@ -258,7 +266,7 @@
         <seg>Quelle</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_SwbId">
+    <tu tuid="SwbId">
       <tuv xml:lang="en">
         <seg>ID SWB</seg>
       </tuv>
@@ -266,7 +274,7 @@
         <seg>ID SWB</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_VgWortPixelUrl">
+    <tu tuid="VgWortPixelUrl">
       <tuv xml:lang="en">
         <seg>URL for Pixel in VG Wort</seg>
       </tuv>
@@ -274,7 +282,7 @@
         <seg>URl für Zählpixel in VG Wort</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_Volume">
+    <tu tuid="Volume">
       <tuv xml:lang="en">
         <seg>Volume</seg>
       </tuv>
@@ -282,7 +290,7 @@
         <seg>Jahrgang</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_TitleMain">
+    <tu tuid="TitleMain">
       <tuv xml:lang="en">
         <seg>Main Title</seg>
       </tuv>
@@ -290,7 +298,7 @@
         <seg>Haupttitel</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_TitleAbstractLanguage">
+    <tu tuid="TitleAbstractLanguage">
       <tuv xml:lang="en">
         <seg>Language</seg>
       </tuv>
@@ -298,14 +306,14 @@
         <seg>Sprache</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_TitleMainTitleAbstractValue">
+    <tu tuid="TitleMainTitleAbstractValue">
       <tuv xml:lang="en">
         <seg>Main Title</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Haupttitel</seg>
       </tuv>
-    <tu tuid="fieldnames_TitleParent">
+    <tu tuid="TitleParent">
       <tuv xml:lang="en">
         <seg>Parent Title</seg>
       </tuv>
@@ -313,7 +321,7 @@
         <seg>Titel des übergordneten Werkes</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_TitleParentTitleAbstractValue">
+    <tu tuid="TitleParentTitleAbstractValue">
       <tuv xml:lang="en">
         <seg>Main Title</seg>
       </tuv>
@@ -321,7 +329,7 @@
         <seg>Haupttitel</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_TitleAbstract">
+    <tu tuid="TitleAbstract">
       <tuv xml:lang="en">
         <seg>Abstract</seg>
       </tuv>
@@ -329,7 +337,7 @@
         <seg>Kurzfassung</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_TitleAbstractTitleAbstractValue">
+    <tu tuid="TitleAbstractTitleAbstractValue">
       <tuv xml:lang="en">
         <seg>Abstract</seg>
       </tuv>
@@ -337,7 +345,7 @@
         <seg>Kurzfassung</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_TitleAbstractValue">
+    <tu tuid="TitleAbstractValue">
       <tuv xml:lang="en">
         <seg>Main Title/Abstract/Parent Title</seg>
       </tuv>
@@ -345,7 +353,7 @@
         <seg>Haupttitel/Kurzfassung/Titel des übergeordneten Werkes</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_TitleAbstractTitleAbstractValue">
+    <tu tuid="TitleAbstractTitleAbstractValue">
       <tuv xml:lang="en">
         <seg>Abstract</seg>
       </tuv>
@@ -353,7 +361,7 @@
         <seg>Kurzfassung</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_Isbn">
+    <tu tuid="Isbn">
       <tuv xml:lang="en">
         <seg>ISBN-Identifier</seg>
       </tuv>
@@ -361,7 +369,7 @@
         <seg>ISBN-Nummer</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_IdentifierValue">
+    <tu tuid="IdentifierValue">
       <tuv xml:lang="en">
         <seg>ISBN-Identifier</seg>
       </tuv>
@@ -369,7 +377,7 @@
         <seg>ISBN-Nummer</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_IdentifierLabel">
+    <tu tuid="IdentifierLabel">
       <tuv xml:lang="en">
         <seg>Identifier Label</seg>
       </tuv>
@@ -377,7 +385,7 @@
         <seg>Label</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_TitleAbstractTitleAbstractValue">
+    <tu tuid="TitleAbstractTitleAbstractValue">
       <tuv xml:lang="en">
         <seg>Abstract</seg>
       </tuv>
@@ -385,7 +393,7 @@
         <seg>Kurzfassung</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_Note">
+    <tu tuid="Note">
       <tuv xml:lang="en">
         <seg>Note</seg>
       </tuv>
@@ -393,7 +401,7 @@
         <seg>Bemerkung</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_Message">
+    <tu tuid="Message">
       <tuv xml:lang="en">
         <seg>Message</seg>
       </tuv>
@@ -401,7 +409,7 @@
         <seg>Text</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_scope">
+    <tu tuid="scope">
       <tuv xml:lang="en">
         <seg>Scope</seg>
       </tuv>
@@ -409,14 +417,14 @@
         <seg>Geltungsbereich</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_Patent">
+    <tu tuid="Patent">
       <tuv xml:lang="en">
         <seg>Patent Specifications</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Patentinformationen</seg>
       </tuv>
-    </tu><tu tuid="fieldnames_PatentCountries">
+    </tu><tu tuid="PatentCountries">
       <tuv xml:lang="en">
         <seg>Country of Patent Application</seg>
       </tuv>
@@ -424,7 +432,7 @@
         <seg>Land der Patentanmeldung</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_PatentDateGranted">
+    <tu tuid="PatentDateGranted">
       <tuv xml:lang="en">
         <seg>Date of Patent Granted</seg>
       </tuv>
@@ -432,7 +440,7 @@
         <seg>Datum der Patenterteilung</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_PatentNumber">
+    <tu tuid="PatentNumber">
       <tuv xml:lang="en">
         <seg>Patent Number</seg>
       </tuv>
@@ -440,7 +448,7 @@
         <seg>Patentnummer</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_PatentYearApplied">
+    <tu tuid="PatentYearApplied">
       <tuv xml:lang="en">
         <seg>Patent Year applied</seg>
       </tuv>
@@ -448,7 +456,7 @@
         <seg>Jahr der Anmeldung</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_PatentApplication">
+    <tu tuid="PatentApplication">
       <tuv xml:lang="en">
         <seg>PatentApplication</seg>
       </tuv>
@@ -456,7 +464,7 @@
         <seg>Patentanmeldung</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_Enrichment">
+    <tu tuid="Enrichment">
       <tuv xml:lang="en">
         <seg>Enrichment</seg>
       </tuv>
@@ -464,7 +472,7 @@
         <seg>Erweiterung</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_EnrichmentType">
+    <tu tuid="EnrichmentType">
       <tuv xml:lang="en">
         <seg>Enrichment Type</seg>
       </tuv>
@@ -472,7 +480,7 @@
         <seg>Typ der Erweiterung</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_PersonAuthor">
+    <tu tuid="PersonAuthor">
       <tuv xml:lang="en">
         <seg>Author</seg>
       </tuv>
@@ -480,7 +488,7 @@
         <seg>Autor</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_AcademicTitle">
+    <tu tuid="AcademicTitle">
       <tuv xml:lang="en">
         <seg>Acdemic Title</seg>
       </tuv>
@@ -488,7 +496,7 @@
         <seg>Akademischer Grad</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_DateOfBirth">
+    <tu tuid="DateOfBirth">
       <tuv xml:lang="en">
         <seg>Date of Birth</seg>
       </tuv>
@@ -496,7 +504,7 @@
         <seg>Geburtsdatum</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_PlaceOfBirth">
+    <tu tuid="PlaceOfBirth">
       <tuv xml:lang="en">
         <seg>Place of Birth</seg>
       </tuv>
@@ -504,7 +512,7 @@
         <seg>Geburtsort</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_Email">
+    <tu tuid="Email">
       <tuv xml:lang="en">
         <seg>E-Mail</seg>
       </tuv>
@@ -512,7 +520,7 @@
         <seg>E-Mail</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_PersonName">
+    <tu tuid="PersonName">
       <tuv xml:lang="en">
         <seg>Name</seg>
       </tuv>
@@ -520,7 +528,7 @@
         <seg>Name</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_FirstName">
+    <tu tuid="FirstName">
       <tuv xml:lang="en">
         <seg>First Name</seg>
       </tuv>
@@ -528,7 +536,7 @@
         <seg>Vorname</seg>
       </tuv>
     </tu>
-    <tu tuid="fieldnames_LastName">
+    <tu tuid="LastName">
       <tuv xml:lang="en">
         <seg>Last Name</seg>
       </tuv>
