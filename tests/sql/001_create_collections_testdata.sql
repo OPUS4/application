@@ -20,17 +20,17 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 --
 
 CREATE TABLE IF NOT EXISTS `collections_contents_1` (
-  `collections_id` int(11) unsigned NOT NULL,
+  `id` int(11) unsigned NOT NULL,
   `name` varchar(255) character set utf8 NOT NULL,
   `number` varchar(3) character set utf8 NOT NULL,
-  PRIMARY KEY  (`collections_id`)
+  PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Daten für Tabelle `collections_contents_1`
 --
 
-INSERT INTO `collections_contents_1` (`collections_id`, `name`, `number`) VALUES
+INSERT INTO `collections_contents_1` (`id`, `name`, `number`) VALUES
 (1, 'Informatik, Informationswissenschaft, allgemeine Werke', '000'),
 (2, 'Philosophie und Psychologie', '100'),
 (3, 'Religion', '200'),
@@ -75,12 +75,12 @@ INSERT INTO `collections_contents_1` (`collections_id`, `name`, `number`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `collections_replacement_1` (
-  `collections_replacement_id` int(10) unsigned NOT NULL auto_increment,
+  `id` int(10) unsigned NOT NULL auto_increment,
   `collections_id` int(10) unsigned NOT NULL,
   `replacement_for_id` int(10) unsigned default NULL,
   `replacement_by_id` int(10) unsigned default NULL,
   `current_replacement_id` int(10) unsigned default NULL,
-  PRIMARY KEY  (`collections_replacement_id`),
+  PRIMARY KEY  (`id`),
   KEY `fk_link_collections_1` (`collections_id`),
   KEY `fk_link_collections_replacement_for_1` (`replacement_for_id`),
   KEY `fk_link_collections_replacement_by_1` (`replacement_by_id`),
@@ -121,20 +121,20 @@ INSERT INTO `collections_roles` (`collections_roles_id`, `name`, `position`, `li
 --
 
 CREATE TABLE IF NOT EXISTS `collections_structure_1` (
-  `collections_structure_id` int(10) unsigned NOT NULL auto_increment,
+  `id` int(10) unsigned NOT NULL auto_increment,
   `collections_id` int(10) unsigned NOT NULL,
   `left` int(10) unsigned NOT NULL,
   `right` int(10) unsigned NOT NULL,
   `visible` tinyint(1) NOT NULL default '1',
-  PRIMARY KEY  (`collections_structure_id`),
-  KEY `fk_collections_structure_collections_contents_1` (`collections_id`)
+  PRIMARY KEY  (`id`),
+  KEY `fk_collections_structure_collections_contents_1` (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 PACK_KEYS=0 AUTO_INCREMENT=704 ;
 
 --
 -- Daten für Tabelle `collections_structure_1`
 --
 
-INSERT INTO `collections_structure_1` (`collections_structure_id`, `collections_id`, `left`, `right`, `visible`) VALUES
+INSERT INTO `collections_structure_1` (`id`, `collections_id`, `left`, `right`, `visible`) VALUES
 (1, 0, 1, 74, 0),
 (2, 1, 2, 35, 1),
 (3, 2, 36, 57, 1),
