@@ -48,11 +48,12 @@ class Admin_PersonController extends Zend_Controller_Action {
      * @return void
      */
     public function indexAction() {
-        $this->view->title = 'Person Controller';
+        $this->view->title = $this->view->translate('Person_Controller');
+
 
         $person_input = new Zend_Form_Element_Text('person');
         $person_input->setRequired(true)
-            ->setLabel('Person Id:');
+            ->setLabel('Person_Id');
 
         $submit = new Zend_Form_Element_Submit('submit');
         $submit->setLabel('transmit');
