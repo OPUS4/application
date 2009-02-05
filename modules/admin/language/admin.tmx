@@ -26,5 +26,13 @@
         <seg>Sammlungen verwalten</seg>
       </tuv>
     </tu>
+    <tu tuid="admin_title_person">
+      <tuv xml:lang="en">
+        <seg>Administrate person data</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Personendaten verwalten</seg>
+      </tuv>
+    </tu>
   </body>
 </tmx>
