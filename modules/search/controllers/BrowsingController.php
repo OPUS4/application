@@ -48,9 +48,10 @@ class Search_BrowsingController extends Zend_Controller_Action
     {
 		$this->view->title = $this->view->translate('search_index_browsing');
 		// Generate a list of all CollectionRoles existing in the repository and pass it as an Iterator to the View
-		#$browsingList = new BrowsingListFactory("collectionRoles");
-		#$browsingListProduct = $browsingList->getBrowsingList();
-		#$this->view->browsinglist = new Opus_Search_Iterator_CollectionNodeListIterator($browsingListProduct);
+		$browsingList = new BrowsingListFactory("collectionRoles");
+		$browsingListProduct = $browsingList->getBrowsingList();
+		#print_r($browsingListProduct);
+		$this->view->browsinglist = $browsingListProduct;
     }
 
 	/**

@@ -97,17 +97,17 @@ class BrowsingList
 		// Dummydata from DummyData
 		#$browsinglist = DummyData::getDummyCollections();
 		// Real data from database
-		$browsinglist = Opus_Collection_Information::getAllCollectionRoles();
-		print_r($browsinglist);
-		$doctypeList = new Opus_Search_List_CollectionNodeList();
-		foreach ($browsinglist as $member)
-		{
-			$node = new Opus_Search_List_CollectionNode($member);
+		$browsinglist = Opus_Model_Collection_Role::getAll();
+		#print_r($browsinglist);
+		#$doctypeList = new Opus_Search_List_CollectionNodeList();
+		#foreach ($browsinglist as $member)
+		#{
+			#$node = new Opus_Search_List_CollectionNode($member);
 			# Später: Nicht mehr $member uebergeben, sondern anhand der role_id die Collection aus der DB auslesen
 			#$node->getCollectionNode($member["role_id"], 0);
-			$doctypeList->add($node);
-		}
-		return $doctypeList;
+			#$doctypeList->add($node);
+		#}
+		return $browsinglist;
 
 	}
 
