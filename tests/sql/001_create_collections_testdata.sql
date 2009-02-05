@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `collections_roles` (
 -- Daten für Tabelle `collections_roles`
 --
 
-INSERT INTO `collections_roles` (`collections_roles_id`, `name`, `position`, `link_docs_path_to_root`, `visible`) VALUES
+INSERT INTO `collections_roles` (`id`, `name`, `position`, `link_docs_path_to_root`, `visible`) VALUES
 (1, 'Dewey Decimal Classification (DDC)', 1, 0, 1);
 
 -- --------------------------------------------------------
