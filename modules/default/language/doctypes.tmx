@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tmx version="2.0" xmlns="http://www.lisa.org/tmx20">
+  <header adminlang="en" creationtool="locale4j" creationtoolversion="1.1" o-tmf="unknown" segtype="block" srclang="*all*"/>
+  <body>
+    <tu tuid="default_modulename">
+      <tuv xml:lang="en">
+        <seg>Default</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Standard</seg>
+      </tuv>
+    </tu>
+  </body>
+</tmx>
