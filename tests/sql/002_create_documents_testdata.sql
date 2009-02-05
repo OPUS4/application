@@ -4445,7 +4445,7 @@ INSERT INTO `link_persons_documents` (`persons_id`, `documents_id`, `institutes_
 -- Daten für Tabelle `link_documents_collections_1`
 --
 
-INSERT INTO `link_documents_collections_1` (`link_documents_collections_id`, `collections_id`, `documents_id`) VALUES
+INSERT INTO `link_documents_collections_1` (`id`, `collections_id`, `documents_id`) VALUES
 (1, 1, 37),
 (2, 5, 38),
 (3, 15, 39),
