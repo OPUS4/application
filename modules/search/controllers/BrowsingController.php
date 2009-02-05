@@ -116,16 +116,9 @@ class Search_BrowsingController extends Zend_Controller_Action
 	 * Filter criteria has to be passed to the action by URL-parameter filter
 	 * Possible values for list are:
 	 * authors			- list of authors in the OPUS database
+	 * editors          - list of editors in the OPUS database
 	 * doctypes 		- list of document types in this repository
-	 * institutions		- list of faculties or institutes from the repository owner
-	 * schriftenreihe	- list of series stored in this repository
-	 * collections		- list of collections stored in this repository
-	 * ddc				- list of DDC classes
-	 * ccs				- list of CCS classes
-	 * jel				- list of JEL classes
-	 * msc				- list of MSC classes
-	 * pacs				- list of PACS classes
-	 * bkl				- list of BKL classes
+	 * collection		- list of collections stored in this repository
 	 *
 	 * If no (or an invalid) list is given, there will be an Exception which tells that this list is not supported
 	 *
