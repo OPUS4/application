@@ -2,13 +2,541 @@
 <tmx version="2.0" xmlns="http://www.lisa.org/tmx20">
   <header adminlang="en" creationtool="locale4j" creationtoolversion="1.1" o-tmf="unknown" segtype="block" srclang="*all*"/>
   <body>
-    <tu tuid="default_modulename">
+    <tu tuid="fieldnames_Language">
       <tuv xml:lang="en">
-        <seg>Default</seg>
+        <seg>Language</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Standard</seg>
+        <seg>Sprache</seg>
       </tuv>
     </tu>
+    <tu tuid="fieldnames_Licence">
+      <tuv xml:lang="en">
+        <seg>Licence</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Lizenz</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_Active">
+      <tuv xml:lang="en">
+        <seg>Active</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Aktiv</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_CommentInternal">
+      <tuv xml:lang="en">
+        <seg>Internal Comment</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Interne Bermerkung</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_DescMarkup">
+      <tuv xml:lang="en">
+        <seg>Description Markup</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Beschreibung Markup</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_DescText">
+      <tuv xml:lang="en">
+        <seg>Describing Text</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Beschreibung</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_LicenceLanguage">
+      <tuv xml:lang="en">
+        <seg>Licence Language</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sprache der Lizens</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_LinkLicence">
+      <tuv xml:lang="en">
+        <seg>Link to Licence</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Link zur Lizenz</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_LinkLogo">
+      <tuv xml:lang="en">
+        <seg>Link Logo</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Link Logo</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_LinkSign">
+      <tuv xml:lang="en">
+        <seg>Link Sign</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Link Sign</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_MimeType">
+      <tuv xml:lang="en">
+        <seg>Mime Type</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Media Typ</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_NameLong">
+      <tuv xml:lang="en">
+        <seg>Licence Name</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Name der Lizenz</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_SortOrder">
+      <tuv xml:lang="en">
+        <seg>Sort Order</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sortierung</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_PodAllowed">
+      <tuv xml:lang="en">
+        <seg>Print on Demand</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Print on Demand</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_ContributingCorporation">
+      <tuv xml:lang="en">
+        <seg>Contributing Corporation</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Beteiligtes Institut</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_CreatingCorporation">
+      <tuv xml:lang="en">
+        <seg>Institute</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Intitut</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_DateAccepted">
+      <tuv xml:lang="en">
+        <seg>Date of Publish</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Publikationsdatum</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_DocumentType">
+      <tuv xml:lang="en">
+        <seg>Document Type</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokumenttyp</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_Edition">
+      <tuv xml:lang="en">
+        <seg>Edition</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Edition</seg>
+      </tuv>
+    </tu>
+      <tu tuid="fieldnames_Issue">
+      <tuv xml:lang="en">
+        <seg>Issue</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Ausgabe</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_NonInstituteAffiliation">
+      <tuv xml:lang="en">
+        <seg>Non-Institute Affiliation</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nicht-instititutionelle Anbindung</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_PageFirst">
+      <tuv xml:lang="en">
+        <seg>First Page</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Erste Seite</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_PageLast">
+      <tuv xml:lang="en">
+        <seg>Last Page</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Letzte Seite</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_PageNumber">
+      <tuv xml:lang="en">
+        <seg>Pagenumber</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Seitenzahl</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_CompletedYear">
+      <tuv xml:lang="en">
+        <seg>Completed Year</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Jahr der Fertigstellung</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_CompletedDate">
+      <tuv xml:lang="en">
+        <seg>Completed Date</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datum der Fertigstellung</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_Reviewed">
+      <tuv xml:lang="en">
+        <seg>Reviewed</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Art der Begutachtung</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_ServerDateModified">
+      <tuv xml:lang="en">
+        <seg>Date of Server Modify</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datum der Servermodifikation</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_ServerDatePublished">
+      <tuv xml:lang="en">
+        <seg>Server Date Published</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datum der Ablage auf dem Server</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_ServerDateUnlocking">
+      <tuv xml:lang="en">
+        <seg>Date of Server unlocking</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datum der Freigabe auf dem Server</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_ServerDateValid">
+      <tuv xml:lang="en">
+        <seg>Validation on Server</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datum der Validierung auf dem Server</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_Source">
+      <tuv xml:lang="en">
+        <seg>Source</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Quelle</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_SwbId">
+      <tuv xml:lang="en">
+        <seg>ID SWB</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>ID SWB</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_VgWortPixelUrl">
+      <tuv xml:lang="en">
+        <seg>URL for Pixel in VG Wort</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>URl für Zählpixel in VG Wort</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_Volume">
+      <tuv xml:lang="en">
+        <seg>Volume</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Jahrgang</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_TitleMain">
+      <tuv xml:lang="en">
+        <seg>Main Title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Haupttitel</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_TitleAbstractLanguage">
+      <tuv xml:lang="en">
+        <seg>Language</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sprache</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_TitleMainTitleAbstractValue">
+      <tuv xml:lang="en">
+        <seg>Main Title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Haupttitel</seg>
+      </tuv>
+    <tu tuid="fieldnames_TitleParent">
+      <tuv xml:lang="en">
+        <seg>Parent Title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Titel des übergordneten Werkes</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_TitleParentTitleAbstractValue">
+      <tuv xml:lang="en">
+        <seg>Main Title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Haupttitel</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_TitleAbstract">
+      <tuv xml:lang="en">
+        <seg>Abstract</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Kurzfassung</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_TitleAbstractTitleAbstractValue">
+      <tuv xml:lang="en">
+        <seg>Abstract</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Kurzfassung</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_TitleAbstractValue">
+      <tuv xml:lang="en">
+        <seg>Main Title/Abstract/Parent Title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Haupttitel/Kurzfassung/Titel des übergeordneten Werkes</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_TitleAbstractTitleAbstractValue">
+      <tuv xml:lang="en">
+        <seg>Abstract</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Kurzfassung</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_Isbn">
+      <tuv xml:lang="en">
+        <seg>ISBN-Identifier</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>ISBN-Nummer</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_IdentifierValue">
+      <tuv xml:lang="en">
+        <seg>ISBN-Identifier</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>ISBN-Nummer</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_IdentifierLabel">
+      <tuv xml:lang="en">
+        <seg>Identifier Label</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Label</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_TitleAbstractTitleAbstractValue">
+      <tuv xml:lang="en">
+        <seg>Abstract</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Kurzfassung</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_Note">
+      <tuv xml:lang="en">
+        <seg>Note</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bemerkung</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_Message">
+      <tuv xml:lang="en">
+        <seg>Message</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Text</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_scope">
+      <tuv xml:lang="en">
+        <seg>Scope</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Geltungsbereich</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_Patent">
+      <tuv xml:lang="en">
+        <seg>Patent Specifications</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Patentinformationen</seg>
+      </tuv>
+    </tu><tu tuid="fieldnames_PatentCountries">
+      <tuv xml:lang="en">
+        <seg>Country of Patent Application</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Land der Patentanmeldung</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_PatentDateGranted">
+      <tuv xml:lang="en">
+        <seg>Date of Patent Granted</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datum der Patenterteilung</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_PatentNumber">
+      <tuv xml:lang="en">
+        <seg>Patent Number</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Patentnummer</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_PatentYearApplied">
+      <tuv xml:lang="en">
+        <seg>Patent Year applied</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Jahr der Anmeldung</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_PatentApplication">
+      <tuv xml:lang="en">
+        <seg>PatentApplication</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Patentanmeldung</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_Enrichment">
+      <tuv xml:lang="en">
+        <seg>Enrichment</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Erweiterung</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_EnrichmentType">
+      <tuv xml:lang="en">
+        <seg>Enrichment Type</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Typ der Erweiterung</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_PersonAuthor">
+      <tuv xml:lang="en">
+        <seg>Author</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Autor</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_AcademicTitle">
+      <tuv xml:lang="en">
+        <seg>Acdemic Title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Akademischer Grad</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_DateOfBirth">
+      <tuv xml:lang="en">
+        <seg>Date of Birth</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Geburtsdatum</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_PlaceOfBirth">
+      <tuv xml:lang="en">
+        <seg>Place of Birth</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Geburtsort</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_Email">
+      <tuv xml:lang="en">
+        <seg>E-Mail</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>E-Mail</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_PersonName">
+      <tuv xml:lang="en">
+        <seg>Name</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Name</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_FirstName">
+      <tuv xml:lang="en">
+        <seg>First Name</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Vorname</seg>
+      </tuv>
+    </tu>
+    <tu tuid="fieldnames_LastName">
+      <tuv xml:lang="en">
+        <seg>Last Name</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nachname</seg>
+      </tuv>
+    </tu>
+    
+    
   </body>
 </tmx>
