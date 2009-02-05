@@ -1,7 +1,7 @@
 <?php
 /**
  * collection of static mathods to get different browsing lists
- * 
+ *
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -31,17 +31,17 @@
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: BrowsingList.php 1411 2008-12-23 14:53:00Z marahrens $
+ * @version     $Id$
  */
 
 class BrowsingList
 {
 	/**
 	 * Get a list of all authors from the repository
-	 * 
+	 *
 	 * @return PersonsList list of authors, unsorted (call method sort() on it in order to sort it)
 	 * @static
-	 * 
+	 *
 	 * @todo get the author list from the database, not just dummydata
 	 */
 	public static function getAuthorList()
@@ -60,18 +60,18 @@ class BrowsingList
 		}
 		return $personsList;
 	}
-	
+
 	/**
 	 * Get a list of all documentTypes from the repository
-	 * 
+	 *
 	 * @return DocumentTypeList list of documenttypes, unsorted (call method sort() on it in order to sort it)
 	 * @static
-	 * 
+	 *
 	 * @todo get the documenttypes list from the database (or filesystem), not just dummydata
 	 */
 	public static function getDocumentTypeList()
 	{
-		// Noch Dummydaten, später etwas in der Art 
+		// Noch Dummydaten, später etwas in der Art
 		// $browsinglist = Opus_Document_Type::getAllDocumentTypes()
 		$browsinglist = DummyData::getDummyDocumentTypes();
 		// map the unsorted list from Opus_Person_Information::getAll() into a PersonsList
@@ -81,23 +81,24 @@ class BrowsingList
 			$doctypeList->add($member);
 		}
 		return $doctypeList;
-		
+
 	}
 
 	/**
 	 * Get a list of all CollectionRoles from the repository
-	 * 
+	 *
 	 * @return CollectionNodeList of all CollectionRole-Titles, unsorted (call method sort() on it in order to sort it)
 	 * @static
-	 * 
+	 *
 	 * @todo get the information from the real CollectionClass
 	 */
 	public static function getCollectionRoleList()
 	{
 		// Dummydata from DummyData
 		#$browsinglist = DummyData::getDummyCollections();
-		// Real data from database 
+		// Real data from database
 		$browsinglist = Opus_Collection_Information::getAllCollectionRoles();
+		print_r($browsinglist);
 		$doctypeList = new Opus_Search_List_CollectionNodeList();
 		foreach ($browsinglist as $member)
 		{
@@ -107,20 +108,20 @@ class BrowsingList
 			$doctypeList->add($node);
 		}
 		return $doctypeList;
-		
+
 	}
 
 	/**
 	 * Get a list of the addressed CollectionNode from the repository
-	 * 
+	 *
 	 * @return CollectionNode Including all content of this node
 	 * @static
-	 * 
+	 *
 	 * @todo get the information from the real CollectionClass
 	 */
 	public static function getCollectionList($role, $node)
 	{
-		// Noch Dummydaten, später etwas in der Art 
+		// Noch Dummydaten, später etwas in der Art
 		$browsinglist = Opus_Collection_Information::getSubCollections((int) $role, (int) $node);
 		#$browsinglist = DummyData::getDummyCollectionNode();
 		#print_r($browsinglist);
@@ -128,6 +129,6 @@ class BrowsingList
 		# Später: Nicht mehr $member uebergeben, sondern anhand der role_id die Collection aus der DB auslesen
 		#$collnode->getCollectionNode($role, $node);
 		return $collnode;
-		
+
 	}
 }

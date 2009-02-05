@@ -1,7 +1,7 @@
 <?php
 /**
- * Index View for BrowsingController including links to several browsing lists and search functions 
- * 
+ * Index View for BrowsingController including links to several browsing lists and search functions
+ *
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -35,18 +35,18 @@
  */
 ?>
 	<h2><?= $this->translate('search_index_browsing') ?></h2>
-	<a href="<?= $this->url(array("controller"=>"browsing", "action"=>"browseTitles")) ?>"><?= $this->translate('search_index_alltitlesbrowsing') ?></a><br/>
-	<a href="<?= $this->url(array("controller"=>"browsing", "action"=>"browseList", "list" => "authors")) ?>"><?= $this->translate('search_index_authorsbrowsing') ?></a><br/>
-	<a href="<?= $this->url(array("controller"=>"browsing", "action"=>"browseList", "list" => "doctypes")) ?>"><?= $this->translate('search_index_doctypebrowsing') ?></a><br/>
+	<a href="<?= $this->url(array('model' => 'search', 'controller' => 'browsing', 'action' => 'browseTitles'), null, true) ?>"><?= $this->translate('search_index_alltitlesbrowsing') ?></a><br/>
+	<a href="<?= $this->url(array('model' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'authors'), null, true) ?>"><?= $this->translate('search_index_authorsbrowsing') ?></a><br/>
+	<a href="<?= $this->url(array('model' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'doctypes'), null, true) ?>"><?= $this->translate('search_index_doctypebrowsing') ?></a><br/>
 	<?php
 	// get the list of hierarchical lists from the Collections-Classes
-	while ($this->browsinglist->valid() === true)
-	{
-		$obj = $this->browsinglist->current();
-		echo "<a href=".$this->url(array("controller"=>"browsing", "action"=>"browseList", "list" => "collection", "collection"=>$obj->getRoleId())).">";
-		echo $obj->getName();
-		echo "</a><br/>";
-		$this->browsinglist->next();
+	if (count($this->browsinglist) > 0) {
+	   foreach ($this->browsinglist as $obj)
+	   {
+		  echo '<a href=' . $this->url(array('model' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'collection', 'collection' => $obj->getRoleId()), null, true) . '>';
+		  echo $obj->getName();
+		  echo "</a><br/>";
+	   }
 	}
 	/* static list of hierarchical lists
 	 * <a href="<?= $this->url(array("controller"=>"browsing", "action"=>"browseList", "list" => "institutions")) ?>">Browsing nach Institutionen</a><br/>
@@ -59,4 +59,3 @@
 	<a href="<?= $this->url(array("controller"=>"browsing", "action"=>"browseList", "list" => "pacs")) ?>">Browsing nach PACS-Klassifikation</a><br/>
 	<a href="<?= $this->url(array("controller"=>"browsing", "action"=>"browseList", "list" => "bkl")) ?>">Browsing nach BKL-Klassifikation</a><br/>
 	**/
-	?>
