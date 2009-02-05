@@ -35,15 +35,15 @@
  */
 ?>
 	<h2><?= $this->translate('search_index_browsing') ?></h2>
-	<a href="<?= $this->url(array('model' => 'search', 'controller' => 'browsing', 'action' => 'browseTitles'), null, true) ?>"><?= $this->translate('search_index_alltitlesbrowsing') ?></a><br/>
-	<a href="<?= $this->url(array('model' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'authors'), null, true) ?>"><?= $this->translate('search_index_authorsbrowsing') ?></a><br/>
-	<a href="<?= $this->url(array('model' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'doctypes'), null, true) ?>"><?= $this->translate('search_index_doctypebrowsing') ?></a><br/>
+	<a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseTitles'), null, true) ?>"><?= $this->translate('search_index_alltitlesbrowsing') ?></a><br/>
+	<a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'authors'), null, true) ?>"><?= $this->translate('search_index_authorsbrowsing') ?></a><br/>
+	<a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'doctypes'), null, true) ?>"><?= $this->translate('search_index_doctypebrowsing') ?></a><br/>
 	<?php
 	// get the list of hierarchical lists from the Collections-Classes
 	if (count($this->browsinglist) > 0) {
 	   foreach ($this->browsinglist as $obj)
 	   {
-		  echo '<a href=' . $this->url(array('model' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'collection', 'collection' => $obj->getRoleId()), null, true) . '>';
+		  echo '<a href=' . $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'collection', 'collection' => $obj->getRoleId()), null, true) . '>';
 		  echo $obj->getName();
 		  echo "</a><br/>";
 	   }
