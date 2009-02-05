@@ -34,7 +34,7 @@
 
 /**
  * Controller for any browsing operation
- * 
+ *
  */
 class Search_BrowsingController extends Zend_Controller_Action
 {
@@ -60,8 +60,8 @@ class Search_BrowsingController extends Zend_Controller_Action
 	 * author 	- the ID of a person in the OPUS database
 	 * doctype 	- the ID of a doctype in OPUS
 	 * ... to be continued
-	 * 
-	 * If no (or an invalid) filter criteria is given, a complete list of all documents is passed to the view 
+	 *
+	 * If no (or an invalid) filter criteria is given, a complete list of all documents is passed to the view
 	 *
 	 * @return void
 	 *
@@ -70,13 +70,19 @@ class Search_BrowsingController extends Zend_Controller_Action
     {
     	$filter = $this->_getParam("filter");
     	$this->view->filter = $filter;
+    	$page = 1;
+    	$data = $this->_request->getParams();
+        if (array_key_exists('page', $data)) {
+            // set page if requested
+            $page = $data['page'];
+        }
     	switch ($filter)
     	{
     		case 'author':
     			$this->view->title = $this->view->translate('search_index_authorsbrowsing');
 	    		$authorId = (int) $this->_getParam("author");
     			$author = new Opus_Search_Adapter_PersonAdapter($authorId);
-				$hitlist = BrowsingFilter::getAuthorTitles($authorId);
+				$paginator = BrowsingFilter::getAuthorTitles($authorId);
 				$this->view->author = $author->get();
 				break;
     		case 'doctype':
@@ -89,9 +95,12 @@ class Search_BrowsingController extends Zend_Controller_Action
 			default:
 				$this->view->title = $this->view->translate('search_index_alltitlesbrowsing');
 				// Default Filter is: show all documents from the server
-				$hitlist = BrowsingFilter::getAllTitles();
+				$paginator = BrowsingFilter::getAllTitlesAsPaginator();
     	}
-		$this->view->hitlist = new Opus_Search_Iterator_HitListIterator($hitlist);
+        #$hitlistIterator = new Opus_Search_Iterator_HitListIterator($hitlist);
+        #$this->view->hitlist_count = $hitlist->count();
+        $paginator->setCurrentPageNumber($page);
+        $this->view->hitlist_paginator = $paginator;
     }
 
 	/**
@@ -109,8 +118,8 @@ class Search_BrowsingController extends Zend_Controller_Action
 	 * msc				- list of MSC classes
 	 * pacs				- list of PACS classes
 	 * bkl				- list of BKL classes
-	 * 
-	 * If no (or an invalid) list is given, there will be an Exception which tells that this list is not supported 
+	 *
+	 * If no (or an invalid) list is given, there will be an Exception which tells that this list is not supported
 	 *
 	 * @return void
 	 *
@@ -140,9 +149,9 @@ class Search_BrowsingController extends Zend_Controller_Action
 				$collection = $this->_getParam("collection");
 				if (isset($collection) === false) $collection = 0;
 				$browsingList = new BrowsingListFactory($list, $collection, $node);
-				$browsingListProduct = $browsingList->getBrowsingList();				
+				$browsingListProduct = $browsingList->getBrowsingList();
 				$this->view->browsinglist = new Opus_Search_Iterator_CollectionNodeListIterator($browsingListProduct->getSubNodes());
-				$this->view->documentlist = new Opus_Search_Iterator_CollectionNodeDocumentIterator($browsingListProduct);
+				$this->view->hitlist_paginator = Zend_Paginator::factory(Opus_Search_List_CollectionNode::getDocumentIds($collection, $node));
 				$this->view->collectionNode = $browsingListProduct;
 				break;
 			default:
@@ -151,4 +160,3 @@ class Search_BrowsingController extends Zend_Controller_Action
     	}
     }
 }
-?>

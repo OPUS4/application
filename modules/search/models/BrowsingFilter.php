@@ -44,24 +44,35 @@ class BrowsingFilter
 	 */
 	public static function getAllTitles()
 	{
-        $titles = Opus_Model_Document::getAllDocumentTitles();
+        $titles = Opus_Model_Document::getAllIds();
+
+        $paginator = Zend_Paginator::factory($titles);
 
         $hitlist = new Opus_Search_List_HitList();
 
-        $i=10;
         foreach ($titles as $title=>$docid)
         {
-       		$searchhit = new Opus_Search_SearchHit((int) $docid);
+       		$searchhit = new Opus_Search_SearchHit( (int) $docid);
        		$hitlist->add($searchhit);
-
-       		// FIXME: Apply real pagination here.
-       		$i--;
-       		if ($i === 0) { break; }
-
         }
 
         return ($hitlist);
 	}
+
+    /**
+     * Returns a paginator of all entries from the repository
+     *
+     * @return Zend_Paginator resultlist
+     * @static
+     */
+    public static function getAllTitlesAsPaginator()
+    {
+        $titles = Opus_Model_Document::getAllIds();
+
+        $paginator = Zend_Paginator::factory($titles);
+
+        return ($paginator);
+    }
 
 	/**
 	 * Returns a list of all Dummy-entries
@@ -94,17 +105,20 @@ class BrowsingFilter
 	 */
 	public static function getAuthorTitles($authorId)
 	{
-        $person = new Opus_Search_Adapter_PersonAdapter((int) $authorId);
-        $docresult = $person->getDocumentsByRole("author");
+        $person = new Opus_Model_Person( (int) $authorId);
+        $docresult = $person->getDocumentsByRole('author');
 
         $hitlist = new Opus_Search_List_HitList();
+        $searchhits = array();
         foreach ($docresult as $row)
         {
-       		$searchhit = new Opus_Search_SearchHit((int) $row->getId());
-       		$hitlist->add($searchhit);
+       		array_push($searchhits, (int) $row->getId());
         }
 
-        return ($hitlist);
+        $paginator = Zend_Paginator::factory($searchhits);
+        return ($paginator);
+
+
 	}
 
 	/**

@@ -1,7 +1,7 @@
 <?php
 /**
  * View to browse title information on filtered title lists
- * 
+ *
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -33,17 +33,52 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-	switch ($this->filter)
-	{
-		case 'author':
-			echo "<h2>".$this->translate('search_titles_authors')." ".$this->author["firstName"]." ".$this->author["lastName"]."</h2>";
-			break;
-		case 'doctype':
-			echo "<h2>".$this->translate('search_titles_doctypes')." ".$this->doctype["name"]."</h2>";
-			break;
-		default:
-			echo "<h2>".$this->translate('search_titles_all')."</h2>";
-	}
+    switch ($this->filter)
+    {
+        case 'author':
+            echo "<h2>".$this->translate('search_titles_authors')." ".$this->author["firstName"]." ".$this->author["lastName"]."</h2>";
+            break;
+        case 'doctype':
+            echo "<h2>".$this->translate('search_titles_doctypes')." ".$this->doctype["name"]."</h2>";
+            break;
+        default:
+            echo "<h2>".$this->translate('search_titles_all')."</h2>";
+    }
+if (count($this->hitlist_paginator)) {
+    echo $this->paginationControl($this->hitlist_paginator, NULL, 'searchList_ItemCount_pagination.phtml');
+    foreach ($this->hitlist_paginator as $id) {
+        $doc = new Opus_Search_SearchHit( (int) $id);
+        $hit = $doc->getSearchHit();
+        $document = $hit->getDocument();
+        //print_r($document);
+        $authoriterator = new Opus_Search_Iterator_PersonsListIterator($document["author"]);
+        echo "<li>";
+        #echo $document['author'] . ': ';
+        foreach ($authoriterator as $obj) {
+           $pers = $obj->get();
+           echo "<a href=".$this->url(array("controller"=>"browsing", "action"=>"browseTitles", "filter" => "author", "author"=>$pers["id"])).">";
+           echo $pers["lastName"].", ".$pers["firstName"];
+           echo "</a>";
+           if ($authoriterator->hasNext() === true) echo "; ";
+           else echo ": ";
+        }
+        #print("<a href=\"".$this->url($document["frontdoorUrl"])."\">".$document["title"]."</a>");
+        print("<a href=\"".$this->url(array('module' => 'frontdoor',
+            'controller' => 'index',
+            'action' => 'index',
+            'docId' => $document['id'])
+        )."\">".$document["title"]."</a>");
+        echo "</li>";
+        #echo "<div>".$this->translate('search_titles_relevance').": ".$doc->getRelevance()."<br/>";
+        #echo $document["abstract"]."<br/>";
+    }
+    echo '</ol>';
+    echo $this->paginationControl($this->hitlist_paginator, 'Sliding', 'searchList_pagination.phtml');
+}
+
+
+
+/*
 	echo "<ul>";
 	$n = 0;
 	foreach ($this->hitlist as $hit) {
@@ -68,3 +103,4 @@
 		echo "</li>";
 	}
 	echo "</ul>";
+*/
