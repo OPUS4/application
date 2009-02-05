@@ -133,7 +133,7 @@ class Search_BrowsingController extends Zend_Controller_Action
     		case 'authors':
     			$this->view->title = $this->view->translate('search_index_authorsbrowsing');
 				$browsingList = new BrowsingListFactory($list);
-				$browsingListProduct = $browsingList->getBrowsingList();#->sort('lastName');
+				$browsingListProduct = $browsingList->getBrowsingList();
 				$this->view->browsinglist = new Opus_Search_Iterator_PersonsListIterator($browsingListProduct);
 				break;
 			case 'doctypes':

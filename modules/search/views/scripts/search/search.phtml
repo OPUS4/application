@@ -35,6 +35,7 @@
  */
 if (count($this->hitlist_paginator)) {
     echo $this->paginationControl($this->hitlist_paginator, NULL, 'searchList_ItemCount_pagination.phtml');
+    echo $this->paginationControl($this->hitlist_paginator, 'Sliding', 'searchList_pagination.phtml');
     foreach ($this->hitlist_paginator as $hit) {
         $doc = $hit->getSearchHit();
         $document = $doc->getDocument();
