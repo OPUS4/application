@@ -98,7 +98,6 @@ class Publish_IndexController extends Zend_Controller_Action {
                     }
                     $type = new Opus_Document_Type($filename);
                     $document = new Opus_Model_Document(null, $type);
-                    $document->setDocumentType($form->getValue('selecttype'));
                     $createForm = $form_builder->build($document);
                     $action_url = $this->view->url(array("controller" => "index", "action" => "create"));
                     $form->setAction($action_url);
