@@ -94,7 +94,7 @@ class BrowsingList
 	 */
 	public static function getCollectionRoleList()
 	{
-		$browsinglist = Opus_Model_Collection_Role::getAll();
+		$browsinglist = Opus_Model_CollectionRole::getAll();
 		return $browsinglist;
 	}
 
