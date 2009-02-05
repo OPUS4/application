@@ -180,10 +180,10 @@ INSERT INTO `collections_structure_1` (`id`, `collections_id`, `left`, `right`, 
 --
 
 CREATE TABLE IF NOT EXISTS `link_documents_collections_1` (
-  `link_documents_collections_id` int(11) unsigned NOT NULL auto_increment,
+  `id` int(11) unsigned NOT NULL auto_increment,
   `collections_id` int(11) unsigned NOT NULL,
   `documents_id` int(11) unsigned NOT NULL,
-  PRIMARY KEY  (`link_documents_collections_id`)
+  PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
