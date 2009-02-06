@@ -41,10 +41,11 @@
 	}
 	echo '<ul>';
 	foreach ($this->browsinglist as $obj)	{
-		if ($this->list === 'authors')
+	    if ($this->list === 'authors')
 		{
-			$pers = $obj->get();
-			if (BrowsingFilter::getAuthorTitles($pers['id'])->count() > 0) {
+		    $pers = $obj->get();
+			$titleCount = BrowsingFilter::getAuthorTitles($pers['id'])->count();
+			if ($titleCount > 0) {
 			    echo '<li>';
 			 echo '<a href=' .
     			 $this->url(
@@ -61,14 +62,15 @@
 			     '>';
 			     echo $pers['lastName'] . ', ' . $pers['firstName'];
 			     echo '</a>';
-			     echo ' (' . BrowsingFilter::getAuthorTitles($pers['id'])->count() . ')';
+			     echo ' (' . $titleCount. ')';
 			     echo '</li>';
 			}
 		}
         if ($this->list === 'editors')
         {
             $pers = $obj->get();
-            if (BrowsingFilter::getEditorTitles($pers['id'])->count() > 0) {
+            $titleCount = BrowsingFilter::getEditorTitles($pers['id'])->count();
+            if ($titleCount > 0) {
                 echo '<li>';
              echo '<a href=' .
                  $this->url(
@@ -85,7 +87,7 @@
                  '>';
                  echo $pers['lastName'] . ', ' . $pers['firstName'];
                  echo '</a>';
-                 echo ' (' . BrowsingFilter::getEditorTitles($pers['id'])->count() . ')';
+                 echo ' (' . $titleCount . ')';
                  echo '</li>';
             }
         }
@@ -110,36 +112,47 @@
 			echo '</a>';
 			     echo '</li>';
 		}
-		if ($this->list === 'collection')
-		{
-			// for Collections $this->browsinglist must be the ListIterator of all ChildNodes, not the current node itself...
-			echo '<li>';
-		    echo '<a href=' .
-			 $this->url(
-			     array(
-			         'module'        => 'search',
-			         'controller'    => 'browsing',
-			         'action'        => 'browseList',
-			         'list'          => 'collection',
-			         'collection'    => $obj->getRoleId(),
-			         'node'          => $obj->getNodeId()
-			     ),
-			     null,
-			     true
-			 ) .
-			'>';
-			echo $obj->getName();
-			echo '</a> (' . $obj->count() . ')';
-			     echo '</li>';
-		}
 		// print_r($pers); // to have a look at all persons information
 	}
 	echo '</ul>';
 	if ($this->list === 'collection')
 	{
-        if (count($this->hitlist_paginator)) {
-            echo $this->paginationControl($this->hitlist_paginator, NULL, 'searchList_ItemCount_pagination.phtml');
-            foreach ($this->hitlist_paginator as $id) {
+           if (in_array('Collections', $this->browsinglist->describe())) $subcollections = $this->browsinglist->getCollections();
+           else $subcollections = $this->browsinglist->getSubCollection();
+	       foreach ($subcollections as $coll)    {
+                // for Collections $this->browsinglist must be the ListIterator of all ChildNodes, not the current node itself...
+              echo '<li>';
+              echo '<a href=' .
+                 $this->url(
+                     array(
+                         'module'        => 'search',
+                         'controller'    => 'browsing',
+                         'action'        => 'browseList',
+                         'list'          => 'collection',
+                         'collection'    => $this->collection,
+                         'node'          => $coll->getId()
+                     ),
+                     null,
+                     true
+                 ) .
+                 '>';
+                 echo $coll->getName();
+                 echo '</a> (' . count($coll->getEntries()) . ')';
+                 echo '</li>';
+            }
+            $documents = array();
+            try {
+                $documents = $this->browsinglist->getEntries();
+                $documents_paginator = Zend_Paginator::factory($this->browsinglist->getEntries());
+            }
+            catch (Exception $e) {
+                // presumably this is a collection role
+                // no action necessary
+            }
+	    if (count($documents) > 0) {
+            echo $this->paginationControl($documents_paginator, NULL, 'searchList_ItemCount_pagination.phtml');
+            foreach ($documents as $d) {
+                $id = $d->getId();
                 $doc = new Opus_Search_SearchHit( (int) $id);
                 $hit = $doc->getSearchHit();
                 $document = $hit->getDocument();
@@ -185,7 +198,7 @@
                 #echo $document["abstract"]."<br/>";
             }
             echo '</ol>';
-            echo $this->paginationControl($this->hitlist_paginator, 'Sliding', 'searchList_pagination.phtml');
+            echo $this->paginationControl($documents_paginator, 'Sliding', 'searchList_pagination.phtml');
         }
 	}
 

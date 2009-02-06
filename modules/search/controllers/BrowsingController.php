@@ -154,12 +154,12 @@ class Search_BrowsingController extends Zend_Controller_Action
 				$node = $this->_getParam("node");
 				if (isset($node) === false) $node = 0;
 				$collection = $this->_getParam("collection");
+				$this->view->collection = $this->_getParam("collection");
 				if (isset($collection) === false) $collection = 0;
-				#$browsingList = new BrowsingListFactory($list, $collection, $node);
-				#$browsingListProduct = $browsingList->getBrowsingList();
-				#$this->view->browsinglist = new Opus_Search_Iterator_CollectionNodeListIterator($browsingListProduct->getSubNodes());
+				$browsingList = new BrowsingListFactory($list, $collection, $node);
+				$browsingListProduct = $browsingList->getBrowsingList();
+				$this->view->browsinglist = $browsingListProduct;
 				#$this->view->hitlist_paginator = Zend_Paginator::factory(Opus_Search_List_CollectionNode::getDocumentIds($collection, $node));
-				#$this->view->collectionNode = $browsingListProduct;
 				break;
 			default:
 				$this->view->title = $this->view->translate('search_index_alltitlesbrowsing');
