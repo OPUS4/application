@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <tmx version="2.0" xmlns="http://www.lisa.org/tmx20">
-  <header adminlang="en" creationtool="locale4j" creationtoolversion="1.1" o-tmf="unknown" segtype="block" srclang="*all*"/>
+  <header adminlang="en" creationtool="locale4j" creationtoolversion="1.1" o-tmf="unknown" segtype="block" srclang="*all*" datatype="plaintext"/>
   <body>
     <tu tuid="Language">
       <tuv xml:lang="en">
@@ -36,58 +36,58 @@
     </tu>
     <tu tuid="DescMarkup">
       <tuv xml:lang="en">
-        <seg>Description Markup</seg>
+        <seg>Description in Markup</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Beschreibung Markup</seg>
+        <seg>Beschreibung als Markup</seg>
       </tuv>
     </tu>
     <tu tuid="DescText">
       <tuv xml:lang="en">
-        <seg>Describing Text</seg>
+        <seg>Description Text</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Beschreibung</seg>
+        <seg>Beschreibungstext</seg>
       </tuv>
     </tu>
     <tu tuid="LicenceLanguage">
       <tuv xml:lang="en">
-        <seg>Licence Language</seg>
+        <seg>Language</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Sprache der Lizens</seg>
+        <seg>Sprache</seg>
       </tuv>
     </tu>
     <tu tuid="LinkLicence">
       <tuv xml:lang="en">
-        <seg>Link to Licence</seg>
+        <seg>URI to Licence</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Link zur Lizenz</seg>
+        <seg>URI zur Lizenz</seg>
       </tuv>
     </tu>
     <tu tuid="LinkLogo">
       <tuv xml:lang="en">
-        <seg>Link Logo</seg>
+        <seg>URI to Logo</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Link Logo</seg>
+        <seg>URI zum Logo</seg>
       </tuv>
     </tu>
     <tu tuid="LinkSign">
       <tuv xml:lang="en">
-        <seg>Link Sign</seg>
+        <seg>Link to Sign</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Link Sign</seg>
+        <seg>Link zum Vertrag</seg>
       </tuv>
     </tu>
     <tu tuid="MimeType">
       <tuv xml:lang="en">
-        <seg>Mime Type</seg>
+        <seg>Internet Media Type</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Media Typ</seg>
+        <seg>Internet Media Type</seg>
       </tuv>
     </tu>
     <tu tuid="NameLong">
@@ -95,7 +95,7 @@
         <seg>Licence Name</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Name der Lizenz</seg>
+        <seg>Lizenzname</seg>
       </tuv>
     </tu>
     <tu tuid="SortOrder">
@@ -103,7 +103,7 @@
         <seg>Sort Order</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Sortierung</seg>
+        <seg>Sortierreihenfolge</seg>
       </tuv>
     </tu>
     <tu tuid="PodAllowed">
@@ -119,23 +119,23 @@
         <seg>Contributing Corporation</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Beteiligtes Institut</seg>
+        <seg>Beteiligte Körperschaft</seg>
       </tuv>
     </tu>
     <tu tuid="CreatingCorporation">
       <tuv xml:lang="en">
-        <seg>Institute</seg>
+        <seg>Creating Corporation</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Institut</seg>
+        <seg>Urhebende Körperschaft</seg>
       </tuv>
     </tu>
     <tu tuid="DateAccepted">
       <tuv xml:lang="en">
-        <seg>Date of Publish</seg>
+        <seg>Date of final exam</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Publikationsdatum</seg>
+        <seg>Datum der Abschlussprüfung</seg>
       </tuv>
     </tu>
     <tu tuid="DocumentType">
@@ -143,29 +143,29 @@
         <seg>Document Type</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Dokumenttyp</seg>
+        <seg>Dokumentart</seg>
       </tuv>
      </tu>
     <tu tuid="SubjectSwd">
       <tuv xml:lang="en">
-        <seg>SWD-keywords</seg>
+        <seg>SWD-Keyword</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>SWD-Schlagwörter</seg>
+        <seg>SWD-Schlagwort</seg>
       </tuv>
     </tu><tu tuid="SubjectDdc">
       <tuv xml:lang="en">
-        <seg>DDC Classification</seg>
+        <seg>DDC Term</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>DDC Klassifikation </seg>
+        <seg>DDC Sachgruppe</seg>
       </tuv>
     </tu><tu tuid="SubjectUncontrolled">
       <tuv xml:lang="en">
-        <seg>Uncontrolled Keywords</seg>
+        <seg>Tag</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Freie Schlagwörter</seg>
+        <seg>Freies Schlagwort / Tag</seg>
       </tuv>
     </tu>
      <tu tuid="Edition">
@@ -173,7 +173,7 @@
         <seg>Edition</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Edition</seg>
+        <seg>Auflage</seg>
       </tuv>
     </tu>
       <tu tuid="Issue">
@@ -181,7 +181,7 @@
         <seg>Issue</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Ausgabe</seg>
+        <seg>Ausgabe / Heft</seg>
       </tuv>
     </tu>
     <tu tuid="NonInstituteAffiliation">
@@ -189,7 +189,7 @@
         <seg>Non-Institute Affiliation</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Nicht-instititutionelle Anbindung</seg>
+        <seg>Nicht-instititutionelle Beziehung</seg>
       </tuv>
     </tu>
     <tu tuid="PageFirst">
@@ -218,7 +218,7 @@
     </tu>
     <tu tuid="CompletedYear">
       <tuv xml:lang="en">
-        <seg>Completed Year</seg>
+        <seg>Year of Completion</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Jahr der Fertigstellung</seg>
@@ -226,7 +226,7 @@
     </tu>
     <tu tuid="PublishedYear">
       <tuv xml:lang="en">
-        <seg>Published Year</seg>
+        <seg>Year of Publication</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Jahr der Veröffentlichung</seg>
@@ -234,7 +234,7 @@
     </tu>
     <tu tuid="PublishedDate">
       <tuv xml:lang="en">
-        <seg>Published Date</seg>
+        <seg>Date of Publication</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Datum der Veröffentlichung</seg>
@@ -242,7 +242,7 @@
     </tu>
     <tu tuid="CompletedDate">
       <tuv xml:lang="en">
-        <seg>Completed Date</seg>
+        <seg>Year of Completion</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Datum der Fertigstellung</seg>
@@ -250,26 +250,26 @@
     </tu>
     <tu tuid="Reviewed">
       <tuv xml:lang="en">
-        <seg>Reviewed</seg>
+        <seg>Style of Review</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Art der Begutachtung</seg>
+        <seg>Art des Review</seg>
       </tuv>
     </tu>
     <tu tuid="ServerDateModified">
       <tuv xml:lang="en">
-        <seg>Date of Server Modify</seg>
+        <seg>Date of Last Modification (Server)</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Datum der Servermodifikation</seg>
+        <seg>Datum der letzen Änderung (Server)</seg>
       </tuv>
     </tu>
     <tu tuid="ServerDatePublished">
       <tuv xml:lang="en">
-        <seg>Server Date Published</seg>
+        <seg>Date of the Publication (Server)</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Datum der Ablage auf dem Server</seg>
+        <seg>Datum der Publikation (Server)</seg>
       </tuv>
     </tu>
     <tu tuid="ServerDateUnlocking">
@@ -335,6 +335,7 @@
       <tuv xml:lang="de">
         <seg>Haupttitel</seg>
       </tuv>
+    </tu>
     <tu tuid="TitleParent">
       <tuv xml:lang="en">
         <seg>Parent Title</seg>
