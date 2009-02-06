@@ -55,7 +55,7 @@ class BrowsingList
 		$personsList = new Opus_Search_List_PersonsList();
 		foreach ($browsinglist as $member)
 		{
-			$pers = new Opus_Search_Adapter_PersonAdapter(array('id' => $member->__get('persons_id'), 'firstName' => $member->__get('first_name'), 'lastName' => $member->__get('last_name')));
+			$pers = new Opus_Search_Adapter_PersonAdapter(array('id' => $member->__get('id'), 'firstName' => $member->__get('first_name'), 'lastName' => $member->__get('last_name')));
 			$personsList->add($pers);
 		}
 		return $personsList;
