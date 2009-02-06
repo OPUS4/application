@@ -99,12 +99,12 @@ CREATE TABLE IF NOT EXISTS `collections_replacement_1` (
 --
 
 CREATE TABLE IF NOT EXISTS `collections_roles` (
-  `collections_roles_id` int(11) unsigned NOT NULL,
+  `id` int(11) unsigned NOT NULL,
   `name` varchar(255) NOT NULL,
   `position` int(11) unsigned NOT NULL,
   `link_docs_path_to_root` tinyint(1) unsigned NOT NULL default '0' COMMENT 'If not 0: Every document belonging to a collection C automatically belongs to every collection on the path from C to the root of the collection tree.',
   `visible` tinyint(1) unsigned NOT NULL default '1',
-  PRIMARY KEY  (`collections_roles_id`)
+  PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Verwaltungstabelle fuer die einzelnen Collection-Baeume';
 
 --
