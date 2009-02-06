@@ -108,12 +108,17 @@ class BrowsingList
 	 */
 	public static function getCollectionList($role, $node)
 	{
-		$browsinglist = Opus_Collection_Information::getSubCollections((int) $role, (int) $node);
+		if ($node === 0) {
+		    $browsinglist = new Opus_Model_CollectionRole((int) $role);
+		}
+		else {
+	       $browsinglist = new Opus_Model_Collection((int) $role, (int) $node);
+		}
 		#print_r($browsinglist);
-		$collnode = new Opus_Search_List_CollectionNode((int) $role, (int) $node);
+		#$collnode = new Opus_Search_List_CollectionNode((int) $role, (int) $node);
 		# Später: Nicht mehr $member uebergeben, sondern anhand der role_id die Collection aus der DB auslesen
 		#$collnode->getCollectionNode($role, $node);
-		return $collnode;
+		return $browsinglist;
 
 	}
 }
