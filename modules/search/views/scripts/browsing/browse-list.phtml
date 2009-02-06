@@ -201,28 +201,3 @@
             echo $this->paginationControl($documents_paginator, 'Sliding', 'searchList_pagination.phtml');
         }
 	}
-
-
-
-
-
-/*if ($this->documentlist->getList()->count() > 0) echo "<h2>".$this->translate('search_category_documents')."</h2>";
-		// look at the documents in this hierarchy
-		foreach ($this->documentlist as $doc) {
-			$data = $doc->getDocument();
-			$authoriterator = new Opus_Search_Iterator_PersonsListIterator($data["author"]);
-			foreach ($authoriterator as $aut)
-			{
-				$pers = $aut->get();
-				echo "<a href=".$this->url(array("controller"=>"browsing", "action"=>"browseTitles", "filter" => "author", "author"=>$pers["id"])).">";
-				echo $pers["lastName"].", ".$pers["firstName"];
-				echo "</a>";
-				if ($authoriterator->hasNext() === true) echo "; ";
-				else echo ": ";
-			}
-			echo "<a href=\"".$this->url($data["frontdoorUrl"])."\">";
-			print($data["title"]);
-			echo "</a><br/>";
-		}
-
-	}	*/
