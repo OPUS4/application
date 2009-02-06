@@ -41,17 +41,44 @@
 class Admin_CollectionsController extends Zend_Controller_Action {
 
     /**
+     * Redirector - defined for code completion
+     *
+     * @var Zend_Controller_Action_Helper_Redirector
+     */
+    protected $_redirector = null;
+
+    /**
+     * FlashMessenger
+     *
+     * @var Zend_Controller_Action_Helper_Messenger
+     */
+    protected $_flashMessenger = null;
+
+    /**
+     * Do some initialization on startup of every action
+     *
+     * @return void
+     */
+    public function init()
+    {
+        $this->_redirector = $this->_helper->getHelper('Redirector');
+        $this->_flashMessenger = $this->_helper->getHelper('FlashMessenger');
+    }
+
+    /**
      * List all available collections trees.
      *
      * @return void
      */
     public function indexAction() {
         $this->view->title = $this->view->translate('admin_title_collections');
+        $roles = Opus_Model_CollectionRole::getAll();
 
-        $this->view->roles = array(
-            'Diese Rolle' => array('id' => 12),
-            'Jene Rolle' => array('id' => 45),
-            'Nochne Rolle' => array('id' => 90));
+        $this->view->roles = array();
+
+        foreach ($roles as $role) {
+            $this->view->roles[$role->getName()] = array('id' => $role->getId());
+        }
     }
 
     /**
@@ -85,6 +112,44 @@ class Admin_CollectionsController extends Zend_Controller_Action {
      */
     public function rolenewAction() {
         $this->view->title = $this->view->translate('admin_collections_role_new');
+        $form_builder = new Opus_Form_Builder();
+        $role = new Opus_Model_CollectionRole();
+        $roleForm = $form_builder->build($role);
+        $action_url = $this->view->url(array("controller" => "collections", "action" => "rolecreate"));
+        $roleForm->setAction($action_url);
+        $this->view->form = $roleForm;
+    }
+
+    /**
+     * Add collection role.
+     *
+     * @return void
+     */
+    public function rolecreateAction() {
+        if ($this->_request->isPost() === true) {
+            $data = $this->_request->getPost();
+            $form_builder = new Opus_Form_Builder();
+            if (array_key_exists('submit', $data) === false) {
+                $form = $form_builder->buildFromPost($data);
+                $action_url = $this->view->url(array("controller" => "collections", "action" => "rolecreate"));
+                $form->setAction($action_url);
+                $this->view->form = $form;
+            } else {
+                $form = $form_builder->buildFromPost($data);
+                if ($form->isValid($data) === true) {
+                    // retrieve values from form and save them into model
+                    $role = $form_builder->getModelFromForm($form);
+                    $form_builder->setFromPost($role, $form->getValues());
+                    $role->store();
+                    $this->_helper->FlashMessenger('Role successfully created.');
+                    $this->_redirector->gotoSimple('index');
+                } else {
+                    $this->view->form = $form;
+                }
+            }
+        } else {
+            $this->_redirector->gotoSimple('index');
+        }
     }
 
 
