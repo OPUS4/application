@@ -65,8 +65,6 @@ class BrowsingListFactory
 	{
 		switch ($browsingList)
 		{
-			case 'authors':
-			case 'editors':
 			case 'persons':
 				$browseList = BrowsingList::getPersonsList();
 				break;
