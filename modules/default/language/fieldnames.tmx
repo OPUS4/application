@@ -127,7 +127,7 @@
         <seg>Institute</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Intitut</seg>
+        <seg>Institut</seg>
       </tuv>
     </tu>
     <tu tuid="DateAccepted">
@@ -145,8 +145,30 @@
       <tuv xml:lang="de">
         <seg>Dokumenttyp</seg>
       </tuv>
+     </tu>
+    <tu tuid="SubjectSwd">
+      <tuv xml:lang="en">
+        <seg>SWD-keywords</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>SWD-Schlagwörter</seg>
+      </tuv>
+    </tu><tu tuid="SubjectDdc">
+      <tuv xml:lang="en">
+        <seg>DDC Classification</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>DDC Klassifikation </seg>
+      </tuv>
+    </tu><tu tuid="SubjectUncontrolled">
+      <tuv xml:lang="en">
+        <seg>Uncontrolled Keywords</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Freie Schlagwörter</seg>
+      </tuv>
     </tu>
-    <tu tuid="Edition">
+     <tu tuid="Edition">
       <tuv xml:lang="en">
         <seg>Edition</seg>
       </tuv>
