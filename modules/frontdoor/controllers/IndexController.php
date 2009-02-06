@@ -36,10 +36,25 @@
 class Frontdoor_IndexController extends Zend_Controller_Action
 {
 
+    public function indexAction()
+    {
+        $docId = $this->getRequest()->getParam('docId');
+        $document = new Opus_Model_Document($docId);
+        $documentType = $document->getDocumentType();
+        $doc_data = $document->toArray();
+        $document_data = $this->filterStopwords($doc_data);
+        $document_data['DocumentType'] = $documentType;
+        $result = $this->my_sort($document_data);
+        $this->view->result = $result;
+        //print_r($doc_data);
+        //print_r($result);
+
+    }
+
     private $__stopwords = array('Active', 'CommentInternal', 'DescMarkup',
         'LinkLogo', 'LinkSign', 'MimeType', 'SortOrder', 'PodAllowed', 'ServerDatePublished', 'ServerDateModified',
         'ServerDateUnlocked', 'ServerDateValid', 'Source', 'SwbId', 'PatentCountries', 'PatentDateGranted',
-        'PatentApplication', 'Enrichment', );
+        'PatentApplication', 'Enrichment',);
 
     private function filterStopwords(array &$fields) {
         $result = array();
@@ -57,46 +72,36 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         return $result;
     }
 
-    public function indexAction()
-    {
-        $docId = $this->getRequest()->getParam('docId');
-        $document = new Opus_Model_Document($docId);
-        $documentType = $document->getDocumentType();
-        $doc_data = $document->toArray();
-        $document_data = $this->filterStopwords($doc_data);
-        $document_data['DocumentType'] = $documentType;
-        $result = $this->my_sort($document_data);
-        $this->view->result = $result;
-        //print_r($doc_data);
-        //print_r($result);
-
-    }
-
-
     private function cmp_weight ($a, $b)
     {
 
         $weight = array(
-                          'Urn' => -40,
-        //'Url' => -35,
-                          'TitleMain' => -30,
-                          'TitleParent' => -25,
-                          'PersonAutor' => -20,
-                          'CreatingCorporation' => -15,
-        //'SubjectSwd' => -13,
-        //'SubjectDdc' => -12,
-        //'SubjectUncontrolled => -11;
-                          'ContributingCorporation' => -10,
-                          'CompletedYear' => -5,
-                          'CompletedDate' => -3,
-                          'DocumentType' => 0,
-                          'PageNumber' => 5,
-                          'Edition' => 10,
-                          'Issue'   => 15,
-                          'Language' => 20,
-                          'TitleAbstract' => 25,
-                          'Isbn' => 30,
-                          'Licence' => 35,
+                          'Urn' => -100,
+                          'TitleMain' => -90,
+                          'TitleParent' => -80,
+                          'PersonAutor' => -70,
+                          'CreatingCorporation' => -60,
+                          'ContributingCorporation' => -50,
+                          'SubjectSwd' => -40,
+                          'SubjectDdc' => -30,
+                          'SubjectUncontrolled' => -20,
+                          'PersonOther' => -7,
+                          'Reviewed' => -0,
+                          'PersonReferee' => 5,
+                          'CompletedYear' => 10,
+                          'CompletedDate' => 12,
+                          'CompletedYear' => 15,
+                          'DateAccepted' => 20,
+                          'DocumentType' => 30,
+                          'PageNumber' => 40,
+                          'PageFirst' => 50,
+                          'PageLast' => 60,
+                          'Edition' => 70,
+                          'Issue'   => 80,
+                          'Language' => 90,
+                          'TitleAbstract' => 100,
+                          'Isbn' => 110,
+                          'Licence' => 120,
         );
 
         if (array_key_exists($a, $weight) === true)
