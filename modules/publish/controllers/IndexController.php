@@ -206,9 +206,9 @@ class Publish_IndexController extends Zend_Controller_Action {
                         break;
                     }
                     $file = $document->addFile();
-                    $file->setDocumentsId($document->getId());
-                    $file->setFileLabel($uploadForm->getValue('comment'));
-                    $file->setFileLanguage($uploadForm->getValue('language'));
+                    $file->setDocumentId($document->getId());
+                    $file->setLabel($uploadForm->getValue('comment'));
+                    $file->setLanguage($uploadForm->getValue('language'));
                     $file->setFromPost($info);
                 }
                 $document->store();
