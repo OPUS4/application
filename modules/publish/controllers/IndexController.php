@@ -212,6 +212,11 @@ class Publish_IndexController extends Zend_Controller_Action {
                     $file->setFromPost($info);
                 }
                 $document->store();
+
+                // After storing, add document to search engine index
+                $indexer = new Opus_Search_Index_Indexer();
+                $indexer->addDocumentToEntryIndex($document);
+
                 // reset input values fo re-displaying
                 $uploadForm->reset();
                 $this->view->form = $uploadForm;
