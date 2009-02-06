@@ -162,6 +162,14 @@
         <seg>Die Suche ergab %1$s Treffer.</seg>
       </tuv>
     </tu>
+    <tu tuid="search_titles_resultlist_one_entry">
+      <tuv xml:lang="en">
+        <seg>Query returned %1$s hit.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Die Suche ergab %1$s Treffer.</seg>
+      </tuv>
+    </tu>
     <tu tuid="search_titles_relevance">
       <tuv xml:lang="en">
         <seg>Relevance</seg>
@@ -208,6 +216,22 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Ergebnisse %1$s bis %2$s</seg>
+      </tuv>
+    </tu>
+    <tu tuid="browsing_titles_resultlist">
+      <tuv xml:lang="en">
+        <seg>This category has %1$s entries.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dieser Kategorie sind %1$s Dokumente zugeordnet.</seg>
+      </tuv>
+    </tu>
+    <tu tuid="browsing_titles_resultlist_one_entry">
+      <tuv xml:lang="en">
+        <seg>This category has %1$s entry.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dieser Kategorie ist %1$s Dokument zugeordnet.</seg>
       </tuv>
     </tu>
   </body>

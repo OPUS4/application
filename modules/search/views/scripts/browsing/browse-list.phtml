@@ -33,13 +33,18 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+    echo '<h2>' . $this->title . '</h2>';
     // Show list view of the selected list
+
+    if ($this->list === "collection")
+    {
+        // Show name of the current CollectionNode
+        echo '<p>' . $this->browsinglist->getName() . '</p>';
+    }
+
     echo '<ul>';
     if ($this->list === "collection")
 	{
-        // Show name of the current CollectionNode
-        //print_r($this->collectionNode->getCollectionNode());
-        //echo $this->collectionNode->getName('ger');
 	    if (in_array('Collections', $this->browsinglist->describe())) $subcollections = $this->browsinglist->getCollections();
            else $subcollections = $this->browsinglist->getSubCollection();
            foreach ($subcollections as $coll)    {
@@ -128,7 +133,7 @@
             // no action necessary
         }
 	    if (count($documents) > 0) {
-            echo $this->paginationControl($documents_paginator, NULL, 'searchList_ItemCount_pagination.phtml');
+            echo $this->paginationControl($documents_paginator, NULL, 'collectionEntries_ItemCount_pagination.phtml');
             foreach ($documents as $d) {
                 $id = $d->getId();
                 $doc = new Opus_Search_SearchHit( (int) $id);
