@@ -41,8 +41,6 @@ class BrowsingList
 	 *
 	 * @return PersonsList list of authors, unsorted (call method sort() on it in order to sort it)
 	 * @static
-	 *
-	 * @todo get the author list from the database, not just dummydata
 	 */
 	public static function getPersonsList()
 	{
@@ -66,22 +64,37 @@ class BrowsingList
 	 *
 	 * @return DocumentTypeList list of documenttypes, unsorted (call method sort() on it in order to sort it)
 	 * @static
-	 *
-	 * @todo get the documenttypes list from the database (or filesystem), not just dummydata
 	 */
 	public static function getDocumentTypeList()
 	{
-		// Noch Dummydaten, später etwas in der Art
+        // TODO Do not use a hardcoded path to xml files
+        $xml_path = '../config/xmldoctypes/';
+        $result = array();
+        if ($dirhandle = opendir($xml_path)) {
+            while (false !== ($file = readdir($dirhandle))) {
+                $path_parts = pathinfo($file);
+                $filename = $path_parts['filename'];
+                $basename = $path_parts['basename'];
+                $extension = $path_parts['extension'];
+                if (($basename === '.') or ($basename === '..') or ($extension !== 'xml')) {
+                    continue;
+                }
+                $result[$filename] = $filename;
+            }
+            closedir($dirhandle);
+            asort($result);
+        }
+        return $result;
+	    // Noch Dummydaten, später etwas in der Art
 		// $browsinglist = Opus_Document_Type::getAllDocumentTypes()
-		$browsinglist = DummyData::getDummyDocumentTypes();
+		#$browsinglist = DummyData::getDummyDocumentTypes();
 		// map the unsorted list from Opus_Person_Information::getAll() into a PersonsList
-		$doctypeList = new Opus_Search_List_DocumentTypeList();
-		foreach ($browsinglist as $member)
-		{
-			$doctypeList->add($member);
-		}
-		return $doctypeList;
-
+		#$doctypeList = new Opus_Search_List_DocumentTypeList();
+		#foreach ($browsinglist as $member)
+		#{
+		#	$doctypeList->add($member);
+		#}
+		#return $doctypeList;
 	}
 
 	/**

@@ -131,7 +131,16 @@ class Search_BrowsingController extends Zend_Controller_Action
     	$this->view->list = $list;
        	switch ($list)
     	{
-    		case 'authors':
+            case 'persons':
+                $role = $this->_getParam("role");
+                $this->view->role = $role;
+                $translatestring = 'search_index_' . $role . 'browsing';
+                $this->view->title = $this->view->translate($translatestring);
+                $browsingList = new BrowsingListFactory($list);
+                $browsingListProduct = $browsingList->getBrowsingList();
+                $this->view->browsinglist = new Opus_Search_Iterator_PersonsListIterator($browsingListProduct);
+                break;
+    	    case 'authors':
     			$this->view->title = $this->view->translate('search_index_authorsbrowsing');
 				$browsingList = new BrowsingListFactory($list);
 				$browsingListProduct = $browsingList->getBrowsingList();
@@ -147,7 +156,7 @@ class Search_BrowsingController extends Zend_Controller_Action
 				$this->view->title = $this->view->translate('search_index_doctypebrowsing');
 				$browsingList = new BrowsingListFactory($list);
 				$browsingListProduct = $browsingList->getBrowsingList();
-				$this->view->browsinglist = new Opus_Search_Iterator_DocumentTypeListIterator($browsingListProduct);
+				$this->view->browsinglist = $browsingListProduct;
 				break;
 			case 'collection':
 				$this->view->title = $this->view->translate('search_index_collectionsbrowsing');

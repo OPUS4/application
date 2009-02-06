@@ -26,7 +26,7 @@
         <seg>Browsing nach Kategorien</seg>
       </tuv>
     </tu>
-    <tu tuid="search_index_authorsbrowsing">
+    <tu tuid="search_index_authorbrowsing">
       <tuv xml:lang="en">
         <seg>Browse authors</seg>
       </tuv>
@@ -34,12 +34,52 @@
         <seg>Browsing nach Autoren</seg>
       </tuv>
     </tu>
-    <tu tuid="search_index_editorsbrowsing">
+    <tu tuid="search_index_editorbrowsing">
       <tuv xml:lang="en">
         <seg>Browse editors</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Browsing nach Herausgebern</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_index_advisorbrowsing">
+      <tuv xml:lang="en">
+        <seg>Browse advisors</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Browsing nach Berichtern</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_index_contributorbrowsing">
+      <tuv xml:lang="en">
+        <seg>Browse contributors</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Browsing nach beteiligten Personen</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_index_refereebrowsing">
+      <tuv xml:lang="en">
+        <seg>Browse referees</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Browsing nach Begutachtern</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_index_otherbrowsing">
+      <tuv xml:lang="en">
+        <seg>Browse other persons</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Browsing nach sonstigen beteiligten Personen</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_index_translatorbrowsing">
+      <tuv xml:lang="en">
+        <seg>Browse translators</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Browsing nach Übersetzern</seg>
       </tuv>
     </tu>
     <tu tuid="search_index_doctypebrowsing">

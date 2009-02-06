@@ -36,8 +36,13 @@
 ?>
 	<h2><?= $this->translate('search_index_browsing') ?></h2>
 	<a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseTitles'), null, true) ?>"><?= $this->translate('search_index_alltitlesbrowsing') ?></a><br/>
-	<a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'authors'), null, true) ?>"><?= $this->translate('search_index_authorsbrowsing') ?></a><br/>
-	<a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'editors'), null, true) ?>"><?= $this->translate('search_index_editorsbrowsing') ?></a><br/>
+	<?php
+	   $roles = array('author', 'editor', 'advisor','contributor','referee','other','translator');
+	   foreach ($roles as $role) {
+	       $translatelabel = 'search_index_' . $role . 'browsing';
+	       echo '<a href="' . $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'persons', 'role' => $role), null, true) . '">' . $this->translate($translatelabel) . '</a><br/>';
+	   }
+	?>
 	<a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'doctypes'), null, true) ?>"><?= $this->translate('search_index_doctypebrowsing') ?></a><br/>
 	<?php
 	// Browsable roles of persons:

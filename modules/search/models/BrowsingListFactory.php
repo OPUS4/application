@@ -67,6 +67,7 @@ class BrowsingListFactory
 		{
 			case 'authors':
 			case 'editors':
+			case 'persons':
 				$browseList = BrowsingList::getPersonsList();
 				break;
 			case 'doctypes':

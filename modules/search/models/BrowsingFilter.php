@@ -74,27 +74,32 @@ class BrowsingFilter
         return ($paginator);
     }
 
-	/**
-	 * Returns a list of all Dummy-entries
-	 *
-	 * @return HitList resultlist
-	 * @static
-	 */
-	public static function getAllDummyTitles()
-	{
-        $docresult = DummyData::getDummyDocuments();
+    /**
+     * Returns a list of all entries from a given author
+     *
+     * @return HitList resultlist
+     * @static
+     * @param Integer authorId Id of the author from the Opus database
+     */
+    public static function getPersonTitles($personId, $role)
+    {
+        $person = new Opus_Model_Person( (int) $personId);
+        $docresult = $person->getDocumentsByRole($role);
 
         $hitlist = new Opus_Search_List_HitList();
+        $searchhits = array();
         foreach ($docresult as $row)
         {
-       		$searchhit = new Opus_Search_SearchHit($row);
-       		$hitlist->add($searchhit);
+            array_push($searchhits, (int) $row->getId());
         }
 
-        return ($hitlist);
-	}
+        $paginator = Zend_Paginator::factory($searchhits);
+        return ($paginator);
 
-	/**
+
+    }
+
+    /**
 	 * Returns a list of all entries from a given author
 	 *
 	 * @return HitList resultlist
@@ -154,99 +159,6 @@ class BrowsingFilter
 	 * @todo really get documents from the given Documenttype, not just dummydata
 	 */
 	public static function getDocumentTypeTitles($doctype)
-	{
-        $docresult = DummyData::getDummyDocuments();
-
-        $hitlist = new Opus_Search_List_HitList();
-        foreach ($docresult as $row)
-        {
-       		$searchhit = new Opus_Search_SearchHit($row);
-       		$hitlist->add($searchhit);
-        }
-
-        return ($hitlist);
-	}
-
-	/**
-	 * Returns a list of all entries from a given DDC-Class
-	 *
-	 * @return HitList resultlist
-	 * @static
-	 * @param String ddcClass Class out of DDC classification which should be presented
-	 *
-	 * @todo really get documents from the given DDC-class, not just dummydata
-	 */
-	public static function getDdcTitles($ddcClass)
-	{
-        $docresult = DummyData::getDummyDocuments();
-
-        $hitlist = new Opus_Search_List_HitList();
-        foreach ($docresult as $row)
-        {
-       		$searchhit = new Opus_Search_SearchHit($row);
-       		$hitlist->add($searchhit);
-        }
-
-        return ($hitlist);
-	}
-
-	/**
-	 * Returns a list of all entries from a given faculty
-	 *
-	 * @return HitList resultlist
-	 * @static
-	 * @param Integer facultyId Id of the faculty or institute that should be presented
-	 *
-	 * @todo really get documents from the given faculty or institute, not just dummydata
-	 */
-	public static function getFacultyTitles($facultyId)
-	{
-        $docresult = DummyData::getDummyDocuments();
-
-        $hitlist = new Opus_Search_List_HitList();
-        foreach ($docresult as $row)
-        {
-       		$searchhit = new Opus_Search_SearchHit($row);
-       		$hitlist->add($searchhit);
-        }
-
-        return ($hitlist);
-	}
-
-	/**
-	 * Returns a list of all entries from a given class out of a given classification
-	 *
-	 * @return HitList resultlist
-	 * @static
-	 * @param String classification Classification that should be used when trying to find the class entries
-	 * @param String class class of the entries that should be presented
-	 *
-	 * @todo really get documents from the given class and classification, not just dummydata
-	 */
-	public static function getClassTitles($classification, $class)
-	{
-        $docresult = DummyData::getDummyDocuments();
-
-        $hitlist = new Opus_Search_List_HitList();
-        foreach ($docresult as $row)
-        {
-       		$searchhit = new Opus_Search_SearchHit($row);
-       		$hitlist->add($searchhit);
-        }
-
-        return ($hitlist);
-	}
-
-	/**
-	 * Returns a list of all entries from a given collection
-	 *
-	 * @return HitList resultlist
-	 * @static
-	 * @param Integer collectionId Id of the collection that should be presented
-	 *
-	 * @todo really get documents from the given collection, not just dummydata
-	 */
-	public static function getCollectionTitles($collectionId)
 	{
         $docresult = DummyData::getDummyDocuments();
 
