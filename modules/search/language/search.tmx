@@ -234,5 +234,13 @@
         <seg>Dieser Kategorie ist %1$s Dokument zugeordnet.</seg>
       </tuv>
     </tu>
+    <tu tuid="search_no_results">
+      <tuv xml:lang="en">
+        <seg>Sorry, no matches for your query!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Leider wurde nichts zu Ihrer Suchanfrage gefunden!</seg>
+      </tuv>
+    </tu>
   </body>
 </tmx>

@@ -33,6 +33,13 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+?>
+<h1><?= $this->translate('search_index_fulltextsearch') ?></h1>
+<?php
+echo $this->form;
+
+echo '<br/>';
+
 if (count($this->hitlist_paginator)) {
     echo $this->paginationControl($this->hitlist_paginator, NULL, 'searchList_ItemCount_pagination.phtml');
     echo $this->paginationControl($this->hitlist_paginator, 'Sliding', 'searchList_pagination.phtml');
@@ -63,4 +70,6 @@ if (count($this->hitlist_paginator)) {
     }
     echo '</ol>';
     echo $this->paginationControl($this->hitlist_paginator, 'Sliding', 'searchList_pagination.phtml');
+} else {
+    echo '<p>' . $this->translate('search_no_results') . '</p>';
 }
