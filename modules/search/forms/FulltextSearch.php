@@ -45,8 +45,7 @@ class FulltextSearch extends Zend_Form
     public function init() {
 		// Create and configure query field element:
 		$query = new Zend_Form_Element_Text('query');
-		$query->addValidator('regex', false, array('/^[a-zA-Z0-9\ ]+/'))
-         		->addValidator('stringLength', false, array(3, 100))
+		$query->addValidator('stringLength', false, array(3, 100))
          		->setRequired(true);
 
         $submit = new Zend_Form_Element_Submit('submit');
