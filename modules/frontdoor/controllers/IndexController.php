@@ -36,16 +36,19 @@
 class Frontdoor_IndexController extends Zend_Controller_Action
 {
 
-    private function filterStopwords(array $fields, array &$stopwords) {
+    private $__stopwords = array('Active', 'CommentInternal', 'DescMarkup',
+        'LinkLogo', 'LinkSign', 'MimeType', 'SortOrder', 'PodAllowed', 'ServerDatePublished', 'ServerDateModified',
+        'ServerDateUnlocked', 'ServerDateValid', 'Source', 'SwbId', 'PatentCountries', 'PatentDateGranted',
+        'PatentApplication', 'Enrichment', );
+
+    private function filterStopwords(array &$fields) {
         $result = array();
 
         foreach ($fields as $key => $value) {
-            if ( in_array($key,$stopwords) === false ) {
-
+            if ( in_array($key,$this->__stopwords, true) === false ) {
                 if (is_array($value) === true) {
-                    $value = $this->filterStopwords($value, $stopwords);
+                    $value = $this->filterStopwords($value);
                 }
-
                 $result[$key] = $value;
             }
 
@@ -59,19 +62,13 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         $docId = $this->getRequest()->getParam('docId');
         $document = new Opus_Model_Document($docId);
         $documentType = $document->getDocumentType();
-        $document_data_ex = array('Active', 'CommentInternal', 'DescMarkup', 'LicenceLanguage',
-        'LinkLogo', 'LinkSign', 'MimeType', 'SortOrder', 'PodAllowed', 'ServerDatePublished', 'ServerDateModified',
-        'ServerDateUnlocked', 'ServerDateValid', 'Source', 'SwbId', 'PatentCountries', 'PatentDateGranted',
-        'PatentApplication', 'Enrichment', 'TitleAbstractLanguage',);
-        $d2 = array('TitleAbstractLanguage');
         $doc_data = $document->toArray();
-        $document_data = $this->filterStopwords($doc_data, $document_data_ex);
-        $document_data['TitleMain'] = $this->filterStopwords($document_data['TitleMain'], $d2);
+        $document_data = $this->filterStopwords($doc_data);
         $document_data['DocumentType'] = $documentType;
         $result = $this->my_sort($document_data);
         $this->view->result = $result;
-        $this->view = print_r($doc_data);
-        //$this->view = print_r($result);
+        //print_r($doc_data);
+        //print_r($result);
 
     }
 
@@ -130,14 +127,14 @@ class Frontdoor_IndexController extends Zend_Controller_Action
 
     private function cmp_title_weight ($a, $b)
     {
-        if ((array_key_exists('TitleAbstractLanguage', $a) === false)
-            or (array_key_exists('TitleAbstractLanguage', $b) === false)) {
+        if ((array_key_exists('Language', $a) === false)
+            or (array_key_exists('Language', $b) === false)) {
             return 0;
         }
 
 
-        $lang_a = $a['TitleAbstractLanguage'];
-        $lang_b = $b['TitleAbstractLanguage'];
+        $lang_a = $a['Language'];
+        $lang_b = $b['Language'];
 
         $weight = array ('de' => -30, 'en' => 0);
 
@@ -153,14 +150,14 @@ class Frontdoor_IndexController extends Zend_Controller_Action
     private function cmp_abstract_weight ($a, $b)
     {
 
-        if ((array_key_exists('TitleAbstractLanguage', $a) === false)
-            or (array_key_exists('TitleAbstractLanguage', $b) === false)) {
+        if ((array_key_exists('Language', $a) === false)
+            or (array_key_exists('Language', $b) === false)) {
             return 0;
         }
 
 
-        $lang_a = $a['TitleAbstractLanguage'];
-        $lang_b = $b['TitleAbstractLanguage'];
+        $lang_a = $a['Language'];
+        $lang_b = $b['Language'];
 
         $weight = array ('de' => -30, 'en' => 0);
 
