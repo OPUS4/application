@@ -54,7 +54,7 @@ class FileUpload extends Zend_Form {
         $fileupload->setLabel('FileToUpload')
             ->setDestination('../workspace/tmp/')
             ->addValidator('Count', false, 1)     // ensure only 1 file
-            ->addValidator('Size', false, 102400) // limit to 100K
+            ->addValidator('Size', false, 1024000) // limit to 1000K
             ->addValidator('Extension', false, 'pdf,txt'); // only PDF
 
         $comment = new Zend_Form_Element_Text('comment');
