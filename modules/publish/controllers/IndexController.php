@@ -28,6 +28,7 @@
  * @package     Module_Publish
  * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
  * @author      Henning Gerhardt (henning.gerhardt@slub-dresden.de)
+ * @author      Pascal-Nicolas Becker <becker@zib.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -85,14 +86,15 @@ class Publish_IndexController extends Zend_Controller_Action {
             $data = $this->_request->getPost();
             $form_builder = new Opus_Form_Builder();
             if (array_key_exists('selecttype', $data) === true) {
+                // validate document type
                 $form = new Overview();
-                // validate form data
                 if ($form->isValid($data) === true) {
                     // TODO Do not use a hardcoded path
                     $filename = '../config/xmldoctypes/' .
                         $form->getValue('selecttype') .
                         '.xml';
                     if (file_exists($filename) === false) {
+                        // TODO: error message
                         // file does not exists, back to select form
                         $this->_redirector->gotoSimple('index');
                     }
@@ -114,13 +116,12 @@ class Publish_IndexController extends Zend_Controller_Action {
             } else {
                 $form = $form_builder->buildFromPost($data);
                 if ($form->isValid($data) === true) {
-                    // retrieve values from form and save them into model
+                    // retrieve old version from model
                     $model = $form_builder->getModelFromForm($form);
+                    // overwrite old data in the model with the new data from the form
                     $form_builder->setFromPost($model, $form->getValues());
-                    //echo '<pre>' . print_r($model->toArray(), true) . '</pre>';
-                    // TODO model 2 view transfer
-                    $this->view->document_data = $model->toArray();
                     // go ahead to summary
+                    $this->view->document_data = $model->toArray();
                     $this->view->title = 'Publish (summary)';
                     $summaryForm = new Summary();
                     $action_url = $this->view->url(array("controller" => "index", "action" => "summary"));
@@ -145,7 +146,6 @@ class Publish_IndexController extends Zend_Controller_Action {
             $summaryForm = new Summary();
             $postdata = $this->_request->getPost();
             if ($summaryForm->isValid($postdata) === true) {
-
                 $form_builder = new Opus_Form_Builder();
                 $model_hidden = Opus_Form_Builder::HIDDEN_MODEL_ELEMENT_NAME;
                 $model = $form_builder->uncompressModel($postdata[$model_hidden]);
@@ -155,6 +155,8 @@ class Publish_IndexController extends Zend_Controller_Action {
                     $uploadForm = new FileUpload();
                     $action_url = $this->view->url(array("controller" => "index", "action" => "upload"));
                     $uploadForm->setAction($action_url);
+                    // TODO: Security save id to session not to form
+                    // Actually it is possible to add Files to every document for everybody!
                     $uploadForm->DocumentId->setValue($id);
                     $this->view->form = $uploadForm;
                 } else if (array_key_exists('back', $postdata) === true) {
@@ -200,16 +202,23 @@ class Publish_IndexController extends Zend_Controller_Action {
                 $documentId = $uploadForm->getValue('DocumentId');
                 $document = new Opus_Model_Document($documentId);
                 $this->view->message = 'Upload succussful!';
-                foreach ($files as $file => $info) {
-                    if (!$upload->isValid($file)) {
-                        $this->view->message = 'Upload failed: Not a valid file!';
-                        break;
-                    }
-                    $file = $document->addFile();
-                    $file->setDocumentId($document->getId());
-                    $file->setLabel($uploadForm->getValue('comment'));
-                    $file->setLanguage($uploadForm->getValue('language'));
-                    $file->setFromPost($info);
+
+                // save each file
+                foreach ($files as $file) {
+                    /* TODO: Uncaught exception 'Zend_File_Transfer_Exception' with message '"fileupload" not found by file transfer adapter
+                     * if (!$upload->isValid($file)) {
+                     *    $this->view->message = 'Upload failed: Not a valid file!';
+                     *    break;
+                     * }
+                     */
+                    $docfile = $document->addFile();
+                    $docfile->setDocumentId($document->getId());
+                    $docfile->setLabel($uploadForm->getValue('comment'));
+                    $docfile->setLanguage($uploadForm->getValue('language'));
+                    $docfile->setPathName($file['name']);
+                    $docfile->setMimeType($file['type']);
+                    $docfile->setTempFile($file['tmp_name']);
+                    $docfile->setFromPost($file);
                 }
                 $document->store();
 
