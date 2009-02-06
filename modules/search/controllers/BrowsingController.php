@@ -95,10 +95,10 @@ class Search_BrowsingController extends Zend_Controller_Action
                 break;
 			case 'doctype':
     			$this->view->title = $this->view->translate('search_index_doctypebrowsing');
-	    		$authorId = (int) $this->_getParam("doctype");
-    			$author = Opus_Search_Adapter_DocumentTypeAdapter::getDocType($authorId);
-				$hitlist = BrowsingFilter::getDocumentTypeTitles($author);
-				$this->view->doctype = $author->get();
+	    		$doctype = $this->_getParam("doctype");
+				$hitlist = BrowsingFilter::getDocumentTypeTitles($doctype);
+				$paginator = Zend_Paginator::factory($hitlist);
+				$this->view->doctype = $doctype;
 				break;
 			default:
 				$this->view->title = $this->view->translate('search_index_alltitlesbrowsing');

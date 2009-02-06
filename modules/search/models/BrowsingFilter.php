@@ -156,20 +156,32 @@ class BrowsingFilter
 	 * @static
 	 * @param Integer|String doctype name or Id of the doctype that should be presented
 	 *
-	 * @todo really get documents from the given Documenttype, not just dummydata
+	 * @todo Put it to the model class
 	 */
 	public static function getDocumentTypeTitles($doctype)
 	{
-        $docresult = DummyData::getDummyDocuments();
+        $table = new Opus_Db_Documents();
+        $select = $table->select()
+            ->from($table)
+            ->where('type = ?', $doctype);
+        $rows = $table->fetchAll($select);
 
+        $result = array();
+        foreach ($rows as $row) {
+            $result[] = $row->id;
+        }
+        return $result;
+
+        /*
         $hitlist = new Opus_Search_List_HitList();
         foreach ($docresult as $row)
         {
-       		$searchhit = new Opus_Search_SearchHit($row);
+       		$searchhit = new Opus_Search_SearchHit($row->document_id);
        		$hitlist->add($searchhit);
         }
 
         return ($hitlist);
+        */
 	}
 
 	/**
