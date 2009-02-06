@@ -328,15 +328,7 @@
         <seg>Haupttitel</seg>
       </tuv>
     </tu>
-    <tu tuid="TitleAbstractLanguage">
-      <tuv xml:lang="en">
-        <seg>Language</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Sprache</seg>
-      </tuv>
-    </tu>
-    <tu tuid="TitleMainTitleAbstractValue">
+    <tu tuid="TitleMainValue">
       <tuv xml:lang="en">
         <seg>Main Title</seg>
       </tuv>
@@ -351,7 +343,7 @@
         <seg>Titel des übergordneten Werkes</seg>
       </tuv>
     </tu>
-    <tu tuid="TitleParentTitleAbstractValue">
+    <tu tuid="TitleParentValue">
       <tuv xml:lang="en">
         <seg>Main Title</seg>
       </tuv>
@@ -367,23 +359,15 @@
         <seg>Kurzfassung</seg>
       </tuv>
     </tu>
-    <tu tuid="TitleAbstractTitleAbstractValue">
+    <tu tuid="TitleAbstractLanguage">
       <tuv xml:lang="en">
-        <seg>Abstract</seg>
+        <seg>Language</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Kurzfassung</seg>
+        <seg>Sprache</seg>
       </tuv>
     </tu>
     <tu tuid="TitleAbstractValue">
-      <tuv xml:lang="en">
-        <seg>Main Title/Abstract/Parent Title</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Haupttitel/Kurzfassung/Titel des übergeordneten Werkes</seg>
-      </tuv>
-    </tu>
-    <tu tuid="TitleAbstractTitleAbstractValue">
       <tuv xml:lang="en">
         <seg>Abstract</seg>
       </tuv>
@@ -413,22 +397,6 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>URN oder ISBN</seg>
-      </tuv>
-    </tu>
-    <tu tuid="IdentifierLabel">
-      <tuv xml:lang="en">
-        <seg>Identifier Label</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Label</seg>
-      </tuv>
-    </tu>
-    <tu tuid="TitleAbstractTitleAbstractValue">
-      <tuv xml:lang="en">
-        <seg>Abstract</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Kurzfassung</seg>
       </tuv>
     </tu>
     <tu tuid="Note">
