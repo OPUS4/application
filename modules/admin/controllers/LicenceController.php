@@ -39,61 +39,13 @@
  * @category    Application
  * @package     Module_Licence
  */
-class Admin_LicenceController extends Zend_Controller_Action {
+class Admin_LicenceController extends Opus_Controller_CRUDAction {
 
     /**
-     * Redirector - defined for code completion
+     * The class of the model being administrated.
      *
-     * @var Zend_Controller_Action_Helper_Redirector
+     * @var Opus_Model_Abstract
      */
-    protected $_redirector = null;
-
-    /**
-     * Do some initialization on startup of every action
-     *
-     * @return void
-     */
-    public function init()
-    {
-        $this->_redirector = $this->_helper->getHelper('Redirector');
-    }
-
-    /**
-     * Display licence creation form.
-     *
-     * @return void
-     *
-     */
-    public function indexAction() {
-        $form_builder = new Opus_Form_Builder();
-        $licence = new Opus_Model_Licence();
-        $licenceForm = $form_builder->build($licence);
-        $action_url = $this->view->url(array("controller" => "licence", "action" => "create"));
-        $licenceForm->setAction($action_url);
-        $this->view->title = 'Licence';
-        $this->view->form = $licenceForm;
-    }
-
-    /**
-     * Add licence.
-     *
-     * @return void
-     */
-    public function createAction() {
-        if ($this->_request->isPost() === true) {
-            $data = $this->_request->getPost();
-            $form_builder = new Opus_Form_Builder();
-            $form = $form_builder->buildFromPost($data);
-            if ($form->isValid($data) === true) {
-                // retrieve values from form and save them into model
-                $licence = $form_builder->getModelFromForm($form);
-                $form_builder->setFromPost($licence, $form->getValues());
-                $licence->store();
-                $this->view->licence_data = $licence->toArray();
-            }
-        } else {
-            $this->_redirector->gotoSimple('index');
-        }
-    }
+    protected static $_modelclass = 'Opus_Model_Licence';
 
 }
