@@ -39,6 +39,7 @@ db.params.host =
 db.params.username = 
 db.params.password = 
 db.params.dbname = 
+theme = default
 
 [test : production]
 db.params.profiler = true
