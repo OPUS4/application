@@ -27,23 +27,26 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
+ * @author      Felix Ostrowski (ostrowski@hbz-nrw.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: index.phtml 659 2008-09-01 11:03:28Z claussnitzer $
+ * @version     $Id$
  */
-?>
-<h1>Opus Application - <?= $this->title ?></h1>
 
-<div class="list">
-    <ul class="collections">
-    <?php foreach ($this->collections as $colname => $collection) : ?>
-        <li class="listitem collection"><?= $colname ?>
-           <a href="<?= $this->url(array('controller' => 'collections', 'action' => 'collectionedit')) ?>"><?= $this->translate('admin_collections_edit')?></a>
-           <a href="<?= $this->url(array('controller' => 'collections', 'action' => 'collectiondelete')) ?>"><?= $this->translate('admin_collections_delete')?></a>
-        </li>
-    <?php endforeach; ?>
-    </ul>
-</div
+/**
+ * Controller for administration of collections.
+ *
+ * @category    Framework
+ * @package     Module_Admin
+ */
+class Admin_CollectionRoleController extends Opus_Controller_CRUDAction {
 
-<a href="<?= $this->url(array('controller' => 'collections', 'action' => 'collectionnew')) ?>"><?= $this->translate('admin_collections_collection_new')?></a>
+    /**
+     * The class of the model being administrated.
+     *
+     * @var Opus_Model_Abstract
+     */
+    protected static $_modelclass = 'Opus_Model_CollectionRole';
+
+}
 

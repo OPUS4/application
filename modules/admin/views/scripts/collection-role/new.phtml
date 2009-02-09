@@ -33,17 +33,4 @@
  */
 ?>
 <h1>Opus Application - <?= $this->title ?></h1>
-
-<div class="list">
-    <ul class="roles">
-    <?php foreach ($this->roles as $rolename => $role) : ?>
-    	<li class="listitem role"><?= $rolename ?>
-    	   <a href="<?= $this->url(array('controller' => 'collections', 'action' => 'roleedit')) ?>"><?= $this->translate('admin_collections_edit')?></a>
-    	   <a href="<?= $this->url(array('controller' => 'collections', 'action' => 'roledelete')) ?>"><?= $this->translate('admin_collections_delete')?></a>
-    	</li>
-    <?php endforeach; ?>
-    </ul>
-</div
-
-<a href="<?= $this->url(array('controller' => 'collections', 'action' => 'rolenew')) ?>"><?= $this->translate('admin_collections_role_new')?></a>
-
+<?= $this->form ?>
