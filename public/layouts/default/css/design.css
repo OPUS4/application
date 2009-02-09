@@ -43,12 +43,14 @@
     background: url(../img/opus-logo.gif) no-repeat;
 }
 
-#summary div{
+#summary div {
  padding: 10px;
- }
+}
+
 #summary .label {
     font-weight: bold;
- }
+}
 
 #summary .value {
     font-style: italic;
+}
