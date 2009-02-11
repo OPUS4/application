@@ -33,6 +33,27 @@
  * @version     $Id$
  */
 ?>
+<?php
+    /**
+     * Displays a collections as nested lists.
+     *
+     * @param  array  $collection
+     * @return string
+     */
+    function recurseCollection(array $collection) {
+        $result = '';
+        foreach ($collection as $subCollection) {
+            $result .= '<ul>';
+            if (empty($subCollection['SubCollection']) === true) {
+                $result .= '<li>' . $subCollection['Name'] . '</li>';
+            } else {
+                $result .= '<li>' . $subCollection['Name'] . '</li>';
+                $result .= recurseCollection($subCollection['SubCollection']);
+            }
+            $result .= '</ul>';
+        }
+        return $result;
+    }
+?>
 <h1>Opus Application - <?= $this->title ?></h1>
-<?= $this->showModel($this->entry); ?>
-
+<?= recurseCollection($this->entry); ?>
