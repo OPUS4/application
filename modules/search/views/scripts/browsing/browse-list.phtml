@@ -45,8 +45,12 @@
     echo '<ul>';
     if ($this->list === "collection")
 	{
-	    if (in_array('Collections', $this->browsinglist->describe())) $subcollections = $this->browsinglist->getCollections();
-           else $subcollections = $this->browsinglist->getSubCollection();
+		#print_r($this->browsinglist->describe());
+	    if (in_array('Collections', $this->browsinglist->describe())) {
+	    	$subcollections = $this->browsinglist->getCollections();
+	    } else {
+	    	$subcollections = $this->browsinglist->getSubCollection();
+	    }
            foreach ($subcollections as $coll)    {
                 // for Collections $this->browsinglist must be the ListIterator of all ChildNodes, not the current node itself...
               echo '<li>';
