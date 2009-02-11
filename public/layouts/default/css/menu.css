@@ -34,7 +34,14 @@
  * Styles for the navbars.
  */
 
+ul.navigation {
+    padding: 0;
+    margin: 0;
+}
+
 .navigation li {
+    padding: 0;
+    margin: 0;
     list-style: none;
     display: inline;
     margin-right: 5px;

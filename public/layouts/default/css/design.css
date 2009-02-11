@@ -54,3 +54,8 @@
 #summary .value {
     font-style: italic;
 }
+
+ul, li {
+    margin-left: 1em;
+    padding-left: 1em;
+}
