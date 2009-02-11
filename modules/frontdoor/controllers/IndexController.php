@@ -46,7 +46,7 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         $document_data['DocumentType'] = $documentType;
         $result = $this->my_sort($document_data);
         $this->view->result = $result;
-        //print_r($doc_data);
+        print_r($doc_data);
         //print_r($result);
 
     }
@@ -54,7 +54,7 @@ class Frontdoor_IndexController extends Zend_Controller_Action
     private $__stopwords = array('Active', 'CommentInternal', 'DescMarkup',
         'LinkLogo', 'LinkSign', 'MimeType', 'SortOrder', 'PodAllowed', 'ServerDatePublished', 'ServerDateModified',
         'ServerDateUnlocked', 'ServerDateValid', 'Source', 'SwbId', 'PatentCountries', 'PatentDateGranted',
-        'PatentApplication', 'Enrichment',);
+        'PatentApplication', 'Enrichment');
 
     private function filterStopwords(array &$fields) {
         $result = array();
@@ -79,28 +79,28 @@ class Frontdoor_IndexController extends Zend_Controller_Action
                           'Urn' => -100,
                           'TitleMain' => -90,
                           'TitleParent' => -80,
-                          'PersonAutor' => -70,
+                          'PersonAuthor' => -70,
+
                           'CreatingCorporation' => -60,
                           'ContributingCorporation' => -50,
                           'SubjectSwd' => -40,
                           'SubjectDdc' => -30,
                           'SubjectUncontrolled' => -20,
                           'PersonOther' => -7,
-                          'Reviewed' => -0,
+                          'Reviewed' => 0,
                           'PersonReferee' => 5,
                           'CompletedYear' => 10,
                           'CompletedDate' => 12,
-                          'CompletedYear' => 15,
                           'DateAccepted' => 20,
                           'DocumentType' => 30,
+                          'Language' => 35,
                           'PageNumber' => 40,
                           'PageFirst' => 50,
                           'PageLast' => 60,
                           'Edition' => 70,
                           'Issue'   => 80,
-                          'Language' => 90,
+                          'Isbn' => 90,
                           'TitleAbstract' => 100,
-                          'Isbn' => 110,
                           'Licence' => 120,
         );
 
