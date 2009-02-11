@@ -34,7 +34,7 @@
  */
 
 /**
- * Controller for administration of collections.
+ * Controller for administration of collection roles.
  *
  * @category    Framework
  * @package     Module_Admin
@@ -46,7 +46,17 @@ class Admin_CollectionRoleController extends Opus_Controller_CRUDAction {
      *
      * @var Opus_Model_Abstract
      */
-    protected static $_modelclass = 'Opus_Model_CollectionRole';
+    protected $_modelclass = 'Opus_Model_CollectionRole';
+
+    /**
+     * Overwrite standard show Action to pass additional parameter to view.
+     *
+     * @return void
+     */
+    public function showAction() {
+        $model = parent::showAction();
+        $this->view->role = $model->getId();
+    }
 
 }
 

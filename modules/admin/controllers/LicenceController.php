@@ -46,6 +46,6 @@ class Admin_LicenceController extends Opus_Controller_CRUDAction {
      *
      * @var Opus_Model_Abstract
      */
-    protected static $_modelclass = 'Opus_Model_Licence';
+    protected $_modelclass = 'Opus_Model_Licence';
 
 }

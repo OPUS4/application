@@ -40,15 +40,17 @@
      * @param  array  $collection
      * @return string
      */
-    function recurseCollection(array $collection) {
+    function recurseCollection(array $collection, $view) {
         $result = '';
         foreach ($collection as $subCollection) {
             $result .= '<ul>';
             if (empty($subCollection['SubCollection']) === true) {
-                $result .= '<li>' . $subCollection['Name'] . '</li>';
+                $result .= '<li>' . $subCollection['Name'] . ' <a href="/admin/collection/edit/id/' .
+                    $subCollection['Id'] . '/role/' . $view->role .'">Edit</a>' . '</li>';
             } else {
-                $result .= '<li>' . $subCollection['Name'] . '</li>';
-                $result .= recurseCollection($subCollection['SubCollection']);
+                $result .= '<li>' . $subCollection['Name'] . ' <a href="/admin/collection/edit/id/' .
+                    $subCollection['Id'] . '/role/' . $view->role .'">Edit</a>' . '</li>';
+                $result .= recurseCollection($subCollection['SubCollection'], $view);
             }
             $result .= '</ul>';
         }
@@ -56,4 +58,4 @@
     }
 ?>
 <h1>Opus Application - <?= $this->title ?></h1>
-<?= recurseCollection($this->entry); ?>
+<?= recurseCollection($this->entry, $this); ?>
