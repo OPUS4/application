@@ -65,8 +65,15 @@ $this->headLink()
         <?= $this->layout()->content ?>
     </div>
     <div id="footer">
-        <p><a href="https://opusdev.bsz-bw.de/trac/">Opus Development Platform</a></p>
-        <p><a href="mailto:opus-dev@bsz-bw.de">opus-dev@bsz-bw.de</a></p>
+        <span style="float:left">
+            <p><a href="https://opusdev.bsz-bw.de/trac/">Opus Development Platform</a></p>
+            <p><a href="mailto:opus-dev@bsz-bw.de">opus-dev@bsz-bw.de</a></p>
+        </span>
+        <span style="float:right">
+            <a href="http://validator.w3.org/check/referer">
+                <img src="/layouts/default/img/valid-xhtml10-blue.png" alt="Validate Page" />
+            </a>
+        </span>
         <?php
             $dbprofiler = Zend_Registry::get('db_adapter')->getProfiler();
             $config = Zend_Registry::get('Zend_Config');
@@ -74,7 +81,7 @@ $this->headLink()
             $profiler_max_queries = (int) $config->db->params->maxqueries;
             if ($dbprofiler->getEnabled() === true) :
         ?>
-        <div class="debug dbprofiler">
+        <div class="debug dbprofiler" style="clear:both">
             <hr/>
             <h2>Profiling information</h2>
             <b>Total number of queries: </b><?= $dbprofiler->getTotalNumQueries() ?><br />
