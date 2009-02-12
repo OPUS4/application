@@ -2,12 +2,44 @@
 <tmx version="2.0" xmlns="http://www.lisa.org/tmx20">
   <header adminlang="en" creationtool="locale4j" creationtoolversion="1.1" o-tmf="unknown" segtype="block" srclang="*all*"/>
   <body>
-    <tu tuid="default_modulename">
+    <tu tuid="monograph">
       <tuv xml:lang="en">
-        <seg>Default</seg>
+        <seg>Book (Monograph</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Standard</seg>
+        <seg>Buch (Monographie)</seg>
+      </tuv>
+    </tu>
+    <tu tuid="article">
+      <tuv xml:lang="en">
+        <seg>Article</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Aufsatz</seg>
+      </tuv>
+    </tu>
+    <tu tuid="doctoral thesis">
+      <tuv xml:lang="en">
+        <seg>Dissertation</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dissertation</seg>
+      </tuv>
+    </tu>
+    <tu tuid="journal">
+      <tuv xml:lang="en">
+        <seg>Journal</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Journal</seg>
+      </tuv>
+    </tu>
+    <tu tuid="lecture">
+      <tuv xml:lang="en">
+        <seg>Lecture</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Vorlesung</seg>
       </tuv>
     </tu>
   </body>
