@@ -242,7 +242,7 @@
     </tu>
     <tu tuid="CompletedDate">
       <tuv xml:lang="en">
-        <seg>Year of Completion</seg>
+        <seg>Date of Completion</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Datum der Fertigstellung</seg>
