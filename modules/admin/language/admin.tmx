@@ -34,5 +34,13 @@
         <seg>Personendaten verwalten</seg>
       </tuv>
     </tu>
+    <tu tuid="admin_title_licence">
+      <tuv xml:lang="en">
+        <seg>Administrate licence types</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Lizenzen verwalten</seg>
+      </tuv>
+    </tu>
   </body>
 </tmx>
