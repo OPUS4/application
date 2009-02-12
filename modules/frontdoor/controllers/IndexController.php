@@ -46,9 +46,6 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         $document_data['DocumentType'] = $documentType;
         $result = $this->my_sort($document_data);
         $this->view->result = $result;
-        print_r($doc_data);
-        //print_r($result);
-
     }
 
     private $__stopwords = array('Active', 'CommentInternal', 'DescMarkup',
