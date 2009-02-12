@@ -38,7 +38,7 @@
 <? foreach($this->entries as $id => $entry) : ?>
 <li>
     <?= $entry ?>
-    <form action="<?= $this->url(array('action' => 'delete')) ?>">
+    <form action="<?= $this->url(array('action' => 'delete')) ?>" class="crud" method="post">
         <a href="<?= $this->url(array('action' => 'show', 'id' => $id)) ?>">Show</a>
         <a href="<?= $this->url(array('action' => 'edit', 'id' => $id)) ?>">Edit</a>
         <input type="hidden" name="id" value="$id" />

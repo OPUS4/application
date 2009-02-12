@@ -65,6 +65,22 @@ class Admin_CollectionController extends Opus_Controller_CRUDAction {
     }
 
     /**
+     * Create a new collection instance
+     *
+     * @return void
+     */
+    public function newAction() {
+        $role = (int) $this->getRequest()->getParam('role');
+        $parent = (int) $this->getRequest()->getParam('parent');
+        $form_builder = new Opus_Form_Builder();
+        $model = new Opus_Model_Collection($role, null, $parent, 0);
+        $modelForm = $form_builder->build($model);
+        $action_url = $this->view->url(array("action" => "create"));
+        $modelForm->setAction($action_url);
+        $this->view->form = $modelForm;
+    }
+
+    /**
      * Redirect to index action of collection roles.
      *
      * @return void
@@ -73,5 +89,21 @@ class Admin_CollectionController extends Opus_Controller_CRUDAction {
         $this->_redirectTo('', 'index', 'collection-role');
     }
 
+    /**
+     * Deletes a collection instance
+     *
+     * @return void
+     */
+    public function deleteAction() {
+        if ($this->_request->isPost() === true) {
+            $role = (int) $this->getRequest()->getParam('role');
+            $id = (int) $this->getRequest()->getPost('id');
+            $model = new Opus_Model_Collection($role, $id);
+            $model->delete();
+            $this->_redirectTo('Model successfully deleted.', 'index');
+        } else {
+            $this->_redirectTo('', 'index');
+        }
+    }
 }
 

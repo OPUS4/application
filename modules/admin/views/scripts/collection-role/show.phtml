@@ -43,13 +43,17 @@
     function recurseCollection(array $collection, $view) {
         $result = '';
         foreach ($collection as $subCollection) {
-            $result .= '<ul>';
-            if (empty($subCollection['SubCollection']) === true) {
-                $result .= '<li>' . $subCollection['Name'] . ' <a href="/admin/collection/edit/id/' .
-                    $subCollection['Id'] . '/role/' . $view->role .'">Edit</a>' . '</li>';
-            } else {
-                $result .= '<li>' . $subCollection['Name'] . ' <a href="/admin/collection/edit/id/' .
-                    $subCollection['Id'] . '/role/' . $view->role .'">Edit</a>' . '</li>';
+            $result .=
+                '<ul>'.
+                '<li>' . $subCollection['Name'] .
+                '<form action="/admin/collection/delete/role/' . $view->role . '" class="crud" method="post">'.
+                ' <a href="/admin/collection/edit/id/' . $subCollection['Id'] . '/role/' . $view->role .'">Edit</a>'.
+                ' <a href="/admin/collection/new/parent/' . $subCollection['Id'] . '/role/' . $view->role .'">Add</a>'.
+                '<input type="hidden" name="id" value="' . $subCollection['Id'] . '" />'.
+                ' <button type="submit">Delete</button>'.
+                '</form>'.
+                '</li>';
+            if (empty($subCollection['SubCollection']) === false) {
                 $result .= recurseCollection($subCollection['SubCollection'], $view);
             }
             $result .= '</ul>';

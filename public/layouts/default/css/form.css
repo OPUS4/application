@@ -32,12 +32,12 @@
  */
 
 /* Zend_Form standard class for required elements */
-.required {
+form .required {
     font-weight: bold;
 }
 
 /* Zend_Form standard class for errros during validation */
-.errors {
+form .errors {
     padding: .8em;
     margin-bottom:1em;
     border:2px solid #ddd;
@@ -46,6 +46,11 @@
     border-color:#FBC2C4;
 }
 
-#language_selector dl, #language_selector dd, #language_selector dt {
+form#language_selector dl, form#language_selector dd, form#language_selector dt {
+    display: inline;
+}
+
+/* CRUD Action buttons */
+form.crud {
     display: inline;
 }
