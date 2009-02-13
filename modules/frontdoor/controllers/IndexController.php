@@ -43,7 +43,7 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         $documentType = $document->getDocumentType();
         $doc_data = $document->toArray();
         $document_data = $this->filterStopwords($doc_data);
-        $document_data['DocumentType'] = $documentType;
+        $document_data['DocumentType'] = $this->view->translate($documentType);
         $result = $this->my_sort($document_data);
         $this->view->result = $result;
     }
