@@ -65,15 +65,15 @@ $this->headLink()
         <?= $this->layout()->content ?>
     </div>
     <div id="footer">
-        <span style="float:left">
+        <div style="float:left">
             <p><a href="https://opusdev.bsz-bw.de/trac/">Opus Development Platform</a></p>
             <p><a href="mailto:opus-dev@bsz-bw.de">opus-dev@bsz-bw.de</a></p>
-        </span>
-        <span style="float:right">
+        </div>
+        <div style="float:right">
             <a href="http://validator.w3.org/check/referer">
                 <img src="/layouts/default/img/valid-xhtml10-blue.png" alt="Validate Page" />
             </a>
-        </span>
+        </div>
         <?php
             $dbprofiler = Zend_Registry::get('db_adapter')->getProfiler();
             $config = Zend_Registry::get('Zend_Config');
@@ -88,11 +88,10 @@ $this->headLink()
             <b>Total query time (s): </b><?= $dbprofiler->getTotalElapsedSecs() ?><br />
             <b>Current memory consumption: </b><?= memory_get_usage(true) ?><br />
             <b>Peak memory consumption: </b><?= memory_get_peak_usage(true) ?><br />
-            <?php if ($profiler_show_queries === true) : ?>
+            <?php if ($profiler_show_queries === true and $profiler_query_profiles = $dbprofiler->getQueryProfiles()) : ?>
             <b>Queries:</b><br />
             <ul>
                 <?php
-                    $profiler_query_profiles = $dbprofiler->getQueryProfiles();
                     for ($i=1; ($i < $profiler_max_queries) and ($i < count($profiler_query_profiles)); $i++) :
                 ?>
                 <li><pre><?= $profiler_query_profiles[$i]->getQuery() ?></pre></li>
