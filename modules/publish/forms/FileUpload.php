@@ -47,7 +47,7 @@ class FileUpload extends Zend_Form {
      */
     public function init() {
 
-        $this->addElement('hash', 'UploadHash', array('salt' => 'unique'));
+        //$this->addElement('hash', 'UploadHash', array('salt' => 'unique'));
 
         // FIXME: Make hard coded path configurable.
         $fileupload = new Zend_Form_Element_File('fileupload');
