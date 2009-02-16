@@ -4,7 +4,7 @@
   <body>
     <tu tuid="monograph">
       <tuv xml:lang="en">
-        <seg>Book (Monograph</seg>
+        <seg>Book (Monograph)</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Buch (Monographie)</seg>
@@ -18,7 +18,7 @@
         <seg>Aufsatz</seg>
       </tuv>
     </tu>
-    <tu tuid="doctoral thesis">
+    <tu tuid="doctoral_thesis">
       <tuv xml:lang="en">
         <seg>Dissertation</seg>
       </tuv>
@@ -28,7 +28,7 @@
     </tu>
     <tu tuid="journal">
       <tuv xml:lang="en">
-        <seg>Journal</seg>
+        <seg>Journal (Zeitschrift)</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Journal</seg>
@@ -42,5 +42,126 @@
         <seg>Vorlesung</seg>
       </tuv>
     </tu>
+    <tu tuid="bachelor_thesis">
+      <tuv xml:lang="en">
+        <seg>Bachelor Thesis</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bachelor Thesis</seg>
+      </tuv>
+    </tu>
+    <tu tuid="master_thesis">
+      <tuv xml:lang="en">
+        <seg>Master Thesis</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Diplomarbeit, Magisterarbeit</seg>
+      </tuv>
+    </tu>
+    <tu tuid="habilitation">
+      <tuv xml:lang="en">
+        <seg>Habitilation</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Vorlesung</seg>
+      </tuv>
+    </tu>
+    <tu tuid="paper">
+      <tuv xml:lang="en">
+        <seg>Paper</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Studienarbeit</seg>
+      </tuv>
+    </tu>
+    <tu tuid="inbook">
+      <tuv xml:lang="en">
+        <seg>InBook (Chapter / Part of a Monograph)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>InBuch (Kapitel / Teil einer Monographie)</seg>
+      </tuv>
+    </tu>
+    <tu tuid="proceedings">
+      <tuv xml:lang="en">
+        <seg>Proceedings </seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Proceedings (Komplette Ausgabe einer Konferenz etc.)</seg>
+      </tuv>
+    </tu>
+    <tu tuid="research_paper">
+      <tuv xml:lang="en">
+        <seg>ResearchPaper </seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>ResearchPaper</seg>
+      </tuv>
+    </tu>
+    <tu tuid="festschrift">
+      <tuv xml:lang="en">
+        <seg>Festschrift </seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Festschrift</seg>
+      </tuv>
+    </tu>
+    <tu tuid="course_material">
+      <tuv xml:lang="en">
+        <seg>Course material </seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Lehrmaterial</seg>
+      </tuv>
+    </tu>
+    <tu tuid="techreport">
+      <tuv xml:lang="en">
+        <seg>TechReport </seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Report (Bericht)</seg>
+      </tuv>
+    </tu>
+    <tu tuid="manual">
+      <tuv xml:lang="en">
+        <seg>Manual </seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Anleitung (Manual)</seg>
+      </tuv>
+    </tu>
+    <tu tuid="image">
+      <tuv xml:lang="en">
+        <seg>Image</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bild</seg>
+      </tuv>
+    </tu>
+    <tu tuid="video">
+      <tuv xml:lang="en">
+        <seg>Video</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Video</seg>
+      </tuv>
+    </tu>
+    <tu tuid="music">
+      <tuv xml:lang="en">
+        <seg>Music</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Musik</seg>
+      </tuv>
+    </tu>
+    <tu tuid="misc">
+      <tuv xml:lang="en">
+        <seg>Misc</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sonstiges</seg>
+      </tuv>
+    </tu>
+    
   </body>
 </tmx>
