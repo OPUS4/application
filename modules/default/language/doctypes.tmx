@@ -60,10 +60,10 @@
     </tu>
     <tu tuid="habilitation">
       <tuv xml:lang="en">
-        <seg>Habitilation</seg>
+        <seg>Habilitation</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Vorlesung</seg>
+        <seg>Habilitation</seg>
       </tuv>
     </tu>
     <tu tuid="paper">
