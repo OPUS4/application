@@ -33,31 +33,20 @@
  *
  *
  *
- * This view checks for existing keys in the commited array.
- * If key exists, key and corresponding value were dumped.
- * All keys and some values from keys of type ENUM are going to be translated.
+ * This view gets the filtered result-array from Frontdoor-Controller
+ * and displays it with a modified version of the view helper ShowModel.
  *
  *
  */
 ?>
 <h1><?= $this-> translate('frontdoor_pagetitle') ?></h1><hr />
-
-<?//= print_r($this->result);  ?>
-<?//= print_r($this->document);  ?>
-
+<?= $this-> translate('frontdoor_entry') ?>
 
 
 <?php if (is_array($this->result) === true) : ?>
-
     <div id="summary">
-
-    <?//= $this->document_type ?>
-    <?//$this->mydocument_data = $mydocument_data; ?>
-    <?= $this->showModel($this->result, true, true); ?>
-
-
+       <?= $this->showModel($this->result, true, true); ?>
     </div>
-
 <?php endif ?>
 
 

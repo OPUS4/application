@@ -30,9 +30,19 @@
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
+ *
+ *
+ *
+ *
+ *
+ * This controller gets an array with all document fields from ModelDocument.
+ * These fields pass through filters using functions concerning order and relevance.
+ *
+ *
+ *
+ *
+ *
  */
-
-
 class Frontdoor_IndexController extends Zend_Controller_Action
 {
 
@@ -48,10 +58,22 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         $this->view->result = $result;
     }
 
+     /**
+      *
+      * List with stopwords
+      *
+      */
+
     private $__stopwords = array('Active', 'CommentInternal', 'DescMarkup',
         'LinkLogo', 'LinkSign', 'MimeType', 'SortOrder', 'PodAllowed', 'ServerDatePublished', 'ServerDateModified',
         'ServerDateUnlocked', 'ServerDateValid', 'Source', 'SwbId', 'PatentCountries', 'PatentDateGranted',
         'PatentApplication', 'Enrichment');
+
+     /**
+      *
+      * Filter: Stopwords
+      *
+      */
 
     private function filterStopwords(array &$fields) {
         $result = array();
@@ -68,6 +90,12 @@ class Frontdoor_IndexController extends Zend_Controller_Action
 
         return $result;
     }
+
+    /**
+     *
+     * Filter: Weight (Order)
+     *
+     */
 
     private function cmp_weight ($a, $b)
     {
