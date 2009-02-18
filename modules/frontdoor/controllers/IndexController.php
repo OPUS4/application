@@ -50,7 +50,7 @@ class Frontdoor_IndexController extends Zend_Controller_Action
     {
         $docId = $this->getRequest()->getParam('docId');
         $document = new Opus_Model_Document($docId);
-        $documentType = $document->getDocumentType();
+        $documentType = $document->getType();
         $doc_data = $document->toArray();
         $document_data = $this->filterStopwords($doc_data);
         $document_data['DocumentType'] = $this->view->translate($documentType);
