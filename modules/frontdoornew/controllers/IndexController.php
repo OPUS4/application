@@ -43,7 +43,7 @@
  *
  *
  */
-class FrontdoorNew_IndexController extends Zend_Controller_Action
+class Frontdoornew_IndexController extends Zend_Controller_Action
 {
 
     public function indexAction()
@@ -52,10 +52,30 @@ class FrontdoorNew_IndexController extends Zend_Controller_Action
         $document = new Opus_Model_Document($docId);
         $documentType = $document->getType();
         $doc_data = $document->toArray();
+        //print_r($doc_data);
+
+        //Proof for occupied fields; Only these fields are to be displayed
+
+        $arit = new RecursiveArrayIterator($doc_data);
+        $ritit = new RecursiveIteratorIterator($arit);
+        foreach ($ritit as $key => $value)
+        {
+            if (empty($value) == true)
+            {
+
+            }
+            else
+            {
+            $mydoc_data[] = $value;
+            }
+        }
+        print_r($mydoc_data);
+
         $document_data = $this->filterStopwords($doc_data);
         $document_data['DocumentType'] = $this->view->translate($documentType);
         $result = $this->my_sort($document_data);
         $this->view->result = $result;
+        //print_r($result);
     }
 
      /**
@@ -67,7 +87,7 @@ class FrontdoorNew_IndexController extends Zend_Controller_Action
     private $__stopwords = array('Active', 'CommentInternal', 'DescMarkup',
         'LinkLogo', 'LinkSign', 'MimeType', 'SortOrder', 'PodAllowed', 'ServerDatePublished', 'ServerDateModified',
         'ServerDateUnlocked', 'ServerDateValid', 'Source', 'SwbId', 'PatentCountries', 'PatentDateGranted',
-        'PatentApplication', 'Enrichment');
+        'PatentApplication', 'Enrichment', 'Email', 'LastName', 'FirstName', 'PlaceOfBirth', 'DateOfBirth', 'AcademicTitle');
 
      /**
       *
@@ -108,6 +128,7 @@ class FrontdoorNew_IndexController extends Zend_Controller_Action
 
                           'CreatingCorporation' => -60,
                           'ContributingCorporation' => -50,
+                          'NonInstituteAffiliation' => -45,
                           'SubjectSwd' => -40,
                           'SubjectDdc' => -30,
                           'SubjectUncontrolled' => -20,
