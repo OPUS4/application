@@ -43,7 +43,7 @@
  *
  *
  */
-class FrontdoorNew_IndexController extends Zend_Controller_Action
+class Frontdoor_IndexController extends Zend_Controller_Action
 {
 
     public function indexAction()
