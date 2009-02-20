@@ -28,6 +28,7 @@
  * @category    Application
  * @package     Module_CollectionRole
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
+ * @author      Tobias Tappe <tobias.tappe@uni-bielefeld.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -40,24 +41,33 @@
      * @param  array  $collection
      * @return string
      */
-    function recurseCollection(array $collection, $view) {
-        $result = '';
+    function recurseCollection(array $collection, $view, $collection_id = 0) {
+        $result = '<ul>' . "\n" .
+                ' <li>' . "\n" .
+                ' &nbsp;&nbsp;&nbsp;<a href="' . $view->url(array('controller'=>'collection', 'action' => 'new', 'parent' => $collection_id, 'left_sibling' => 0, 'role' => $view->role)) . '">&lt;&lt;&lt; Add here</a>' . "\n" .
+        ' </li>' . "\n"
+        ;
         foreach ($collection as $subCollection) {
             $result .=
-                '<ul>'.
-                '<li>' . $subCollection['Name'] .
-                '<form action="/admin/collection/delete/role/' . $view->role . '" class="crud" method="post">'.
-                ' <a href="/admin/collection/edit/id/' . $subCollection['Id'] . '/role/' . $view->role .'">Edit</a>'.
-                ' <a href="/admin/collection/new/parent/' . $subCollection['Id'] . '/role/' . $view->role .'">Add</a>'.
-                '<input type="hidden" name="id" value="' . $subCollection['Id'] . '" />'.
-                ' <button type="submit">Delete</button>'.
-                '</form>'.
-                '</li>';
+                ' <li>' . 
+                $subCollection['Name'] . '<form action="/admin/collection/delete/role/' . $view->role . '" class="crud" method="post">'. "\n" .
+                '  <a href="' . $view->url(array('controller'=>'collection', 'action' => 'edit', 'id' => $subCollection['Id'], 'role' => $view->role)) . '">Edit</a>'. "\n" .
+                '   <input type="hidden" name="id" value="' . $subCollection['Id'] . '" />'. "\n" .
+                '   <button type="submit">Delete</button>'. "\n" .
+                '  </form>'. "\n" .
+                ' </li>'. "\n" //.
+                ;
             if (empty($subCollection['SubCollection']) === false) {
-                $result .= recurseCollection($subCollection['SubCollection'], $view);
+                $result .= ' <li>' . "\n" .
+                            recurseCollection($subCollection['SubCollection'], $view, $subCollection['Id']) .
+                           ' </li>' . "\n"
+                ;
             }
-            $result .= '</ul>';
+            $result .= ' <li>' . "\n" .
+                    '  &nbsp;&nbsp;&nbsp;<a href="' . $view->url(array('controller'=>'collection', 'action' => 'new', 'parent' => $collection_id, 'left_sibling' => $subCollection['Id'], 'role' => $view->role)) . '">&lt;&lt;&lt; Add here</a></li>' . "\n"
+                    ;
         }
+        $result .= '</ul>' . "\n";
         return $result;
     }
 ?>
