@@ -41,7 +41,7 @@
      * @param  array  $collection
      * @return string
      */
-    function recurseCollection(array $collection, $view, $collection_id = 0) {
+    function recurseCollection(array $collection, $view, $collection_id = 1) {
         $result = '<ul>' . "\n" .
                 ' <li>' . "\n" .
                 ' &nbsp;&nbsp;&nbsp;<a href="' . $view->url(array('controller'=>'collection', 'action' => 'new', 'parent' => $collection_id, 'left_sibling' => 0, 'role' => $view->role)) . '">&lt;&lt;&lt; Add here</a>' . "\n" .
@@ -62,6 +62,17 @@
                             recurseCollection($subCollection['SubCollection'], $view, $subCollection['Id']) .
                            ' </li>' . "\n"
                 ;
+            } else {
+                $result .= ' <li>' . "\n" .
+                            
+                            '<ul>' . "\n" .
+                            ' <li>' . "\n" .
+                            ' &nbsp;&nbsp;&nbsp;<a href="' . $view->url(array('controller'=>'collection', 'action' => 'new', 'parent' => $subCollection['Id'], 'left_sibling' => 0, 'role' => $view->role)) . '">&lt;&lt;&lt; Add here</a>' . "\n" .
+                            ' </li>' . "\n" .
+                           ' </li>' . "\n" .
+                           ' </ul>' . "\n"
+                           ;
+                
             }
             $result .= ' <li>' . "\n" .
                     '  &nbsp;&nbsp;&nbsp;<a href="' . $view->url(array('controller'=>'collection', 'action' => 'new', 'parent' => $collection_id, 'left_sibling' => $subCollection['Id'], 'role' => $view->role)) . '">&lt;&lt;&lt; Add here</a></li>' . "\n"
