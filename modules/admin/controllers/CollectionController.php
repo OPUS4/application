@@ -21,8 +21,8 @@
  * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details. You should have received a copy of the GNU General Public License 
- * along with OPUS; if not, write to the Free Software Foundation, Inc., 51 
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
@@ -58,7 +58,7 @@ class Admin_CollectionController extends Opus_Controller_CRUDAction {
         $collection_id = $this->getRequest()->getParam('id');
         $role_id = $this->getRequest()->getParam('role');
         $form_builder = new Opus_Form_Builder();
-        $model = new Opus_Model_Collection($role_id, $collection_id);
+        $model = new Opus_Collection($role_id, $collection_id);
         $modelForm = $form_builder->build($model);
         $action_url = $this->view->url(array("action" => "create"));
         $modelForm->setAction($action_url);
@@ -75,7 +75,7 @@ class Admin_CollectionController extends Opus_Controller_CRUDAction {
         $parent = (int) $this->getRequest()->getParam('parent');
         $left_sibling = (int) $this->getRequest()->getParam('left_sibling');
         $form_builder = new Opus_Form_Builder();
-        $model = new Opus_Model_Collection($role, null, $parent, $left_sibling);
+        $model = new Opus_Collection($role, null, $parent, $left_sibling);
         $modelForm = $form_builder->build($model);
         $action_url = $this->view->url(array("action" => "create"));
         $modelForm->setAction($action_url);
@@ -100,7 +100,7 @@ class Admin_CollectionController extends Opus_Controller_CRUDAction {
         if ($this->_request->isPost() === true) {
             $role = (int) $this->getRequest()->getParam('role');
             $id = (int) $this->getRequest()->getPost('id');
-            $model = new Opus_Model_Collection($role, $id);
+            $model = new Opus_Collection($role, $id);
             $model->delete();
             $this->_redirectTo('Model successfully deleted.', 'index');
         } else {

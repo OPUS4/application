@@ -107,7 +107,7 @@ class BrowsingList
 	 */
 	public static function getCollectionRoleList()
 	{
-		$browsinglist = Opus_Model_CollectionRole::getAll();
+		$browsinglist = Opus_CollectionRole::getAll();
 		return $browsinglist;
 	}
 
@@ -122,10 +122,10 @@ class BrowsingList
 	public static function getCollectionList($role, $node)
 	{
 		if ($node === 0) {
-		    $browsinglist = new Opus_Model_CollectionRole((int) $role);
+		    $browsinglist = new Opus_CollectionRole((int) $role);
 		}
 		else {
-	       $browsinglist = new Opus_Model_Collection((int) $role, (int) $node);
+	       $browsinglist = new Opus_Collection((int) $role, (int) $node);
 		}
 		#print_r($browsinglist);
 		#$collnode = new Opus_Search_List_CollectionNode((int) $role, (int) $node);

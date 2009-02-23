@@ -82,7 +82,7 @@ class Admin_PersonController extends Zend_Controller_Action {
             $postvalues = $this->_request->getPost();
             //var_dump($postvalues);
             $person_id = $postvalues['person'];
-            $person = new Opus_Model_Person($person_id);
+            $person = new Opus_Person($person_id);
             $form_builder = new Opus_Form_Builder();
             $form = $form_builder->build($person);
             $action_url = $this->view->url(array("controller" => "person", "action" => "save"));

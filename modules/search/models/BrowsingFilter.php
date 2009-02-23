@@ -83,7 +83,7 @@ class BrowsingFilter
      */
     public static function getPersonTitles($personId, $role)
     {
-        $person = new Opus_Model_Person( (int) $personId);
+        $person = new Opus_Person( (int) $personId);
         $docresult = $person->getDocumentsByRole($role);
 
         $hitlist = new Opus_Search_List_HitList();
@@ -108,7 +108,7 @@ class BrowsingFilter
 	 */
 	public static function getAuthorTitles($authorId)
 	{
-        $person = new Opus_Model_Person( (int) $authorId);
+        $person = new Opus_Person( (int) $authorId);
         $docresult = $person->getDocumentsByRole('author');
 
         $hitlist = new Opus_Search_List_HitList();
@@ -133,7 +133,7 @@ class BrowsingFilter
      */
     public static function getEditorTitles($editorId)
     {
-        $person = new Opus_Model_Person( (int) $editorId);
+        $person = new Opus_Person( (int) $editorId);
         $docresult = $person->getDocumentsByRole('editor');
 
         $hitlist = new Opus_Search_List_HitList();

@@ -46,7 +46,7 @@ class Admin_CollectionRoleController extends Opus_Controller_CRUDAction {
      *
      * @var Opus_Model_Abstract
      */
-    protected $_modelclass = 'Opus_Model_CollectionRole';
+    protected $_modelclass = 'Opus_CollectionRole';
 
     /**
      * Overwrite standard show Action to pass additional parameter to view.
