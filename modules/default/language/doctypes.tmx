@@ -28,10 +28,10 @@
     </tu>
     <tu tuid="journal">
       <tuv xml:lang="en">
-        <seg>Journal (Zeitschrift)</seg>
+        <seg>Journal</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Journal</seg>
+        <seg>Journal (Zeitschrift)</seg>
       </tuv>
     </tu>
     <tu tuid="lecture">
@@ -47,7 +47,7 @@
         <seg>Bachelor Thesis</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Bachelor Thesis</seg>
+        <seg>Bachelorarbeit</seg>
       </tuv>
     </tu>
     <tu tuid="master_thesis">
@@ -55,7 +55,7 @@
         <seg>Master Thesis</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Diplomarbeit, Magisterarbeit</seg>
+        <seg>Diplomarbeit, Magisterarbeit, Masterarbeit</seg>
       </tuv>
     </tu>
     <tu tuid="habilitation">
@@ -124,10 +124,10 @@
     </tu>
     <tu tuid="manual">
       <tuv xml:lang="en">
-        <seg>Manual </seg>
+        <seg>Manual</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Anleitung (Manual)</seg>
+        <seg>Anleitung / Handbuch</seg>
       </tuv>
     </tu>
     <tu tuid="image">
