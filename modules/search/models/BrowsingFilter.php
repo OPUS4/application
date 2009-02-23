@@ -44,7 +44,7 @@ class BrowsingFilter
 	 */
 	public static function getAllTitles()
 	{
-        $titles = Opus_Model_Document::getAllIds();
+        $titles = Opus_Document::getAllIds();
 
         $paginator = Zend_Paginator::factory($titles);
 
@@ -67,7 +67,7 @@ class BrowsingFilter
      */
     public static function getAllTitlesAsPaginator()
     {
-        $titles = Opus_Model_Document::getAllIds();
+        $titles = Opus_Document::getAllIds();
 
         $paginator = Zend_Paginator::factory($titles);
 

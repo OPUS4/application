@@ -130,7 +130,7 @@ class Oai_IndexController extends Zend_Controller_Action {
         // Identifier references metadata Urn, not plain Id!
         // Currently implemented as 'oai:foo.bar.de:{docId}'
         $docId = substr(strrchr($identifier, ':'), 1);
-        $document = new Opus_Model_Document($docId);
+        $document = new Opus_Document($docId);
         $this->_xml->loadXml('<Document>' . $document->toXml() . '</Document>');
         $this->_sendOaiResponse('GetRecord');
     }
@@ -168,7 +168,7 @@ class Oai_IndexController extends Zend_Controller_Action {
      * @return void
      */
     public function listrecordsAction() {
-        $documents = Opus_Model_Document::getAll();
+        $documents = Opus_Document::getAll();
         $xml = '<Documents>';
         foreach ($documents as $document) {
             $xml .= '<Document>' . $document->toXml() . '</Document>';

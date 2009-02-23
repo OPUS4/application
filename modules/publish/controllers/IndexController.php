@@ -99,7 +99,7 @@ class Publish_IndexController extends Zend_Controller_Action {
                         $this->_redirector->gotoSimple('index');
                     }
                     $type = new Opus_Document_Type($filename);
-                    $document = new Opus_Model_Document(null, $type);
+                    $document = new Opus_Document(null, $type);
                     $createForm = $form_builder->build($document);
                     $action_url = $this->view->url(array("controller" => "index", "action" => "create"));
                     $form->setAction($action_url);
@@ -200,7 +200,7 @@ class Publish_IndexController extends Zend_Controller_Action {
                 $files = $upload->getFileInfo();
                 // TODO: Validate document id, error message on fail
                 $documentId = $uploadForm->getValue('DocumentId');
-                $document = new Opus_Model_Document($documentId);
+                $document = new Opus_Document($documentId);
                 $this->view->message = 'Upload succussful!';
 
                 // save each file
