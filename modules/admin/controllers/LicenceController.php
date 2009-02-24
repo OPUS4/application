@@ -39,7 +39,7 @@
  * @category    Application
  * @package     Module_Licence
  */
-class Admin_LicenceController extends Opus_Controller_CRUDAction {
+class Admin_LicenceController extends Controller_CRUDAction {
 
     /**
      * The class of the model being administrated.

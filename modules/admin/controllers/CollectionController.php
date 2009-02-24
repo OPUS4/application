@@ -40,7 +40,7 @@
  * @category    Framework
  * @package     Module_Admin
  */
-class Admin_CollectionController extends Opus_Controller_CRUDAction {
+class Admin_CollectionController extends Controller_CRUDAction {
 
     /**
      * The class of the model being administrated.
