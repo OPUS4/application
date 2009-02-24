@@ -31,11 +31,33 @@
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ * @version     $Id: IndexController.php 1948 2009-02-17 15:17:01Z claussnitzer $
  */
 
-class Import_IndexController extends Zend_Controller_Action
+class Import_Opus3Controller extends Zend_Controller_Action
 {
+
+    /**
+     * Holds xml representation of document information to be processed.
+     *
+     * @var DomDocument  Defaults to null.
+     */
+    protected $_xml = null;
+
+    /**
+     * Holds the stylesheet for the transformation.
+     *
+     * @var DomDocument  Defaults to null.
+     */
+    protected $_xslt = null;
+
+    /**
+     * Holds the xslt processor.
+     *
+     * @var DomDocument  Defaults to null.
+     */
+    protected $_proc = null;
+
 	/**
 	 * Set forms to select an import action to the view
 	 *
@@ -46,4 +68,46 @@ class Import_IndexController extends Zend_Controller_Action
     {
     	$this->view->title = $this->view->translate('import_modulename');
     }
+
+    /**
+     * Do some initialization on startup of every action
+     *
+     * @return void
+     */
+    public function init()
+    {
+        // Module outputs plain Xml, so rendering and layout are disabled.
+        $this->_helper->viewRenderer->setNoRender(true);
+        $this->_helper->layout()->disableLayout();
+
+        // Initialize member variables.
+        $this->_xml = new DomDocument;
+        $this->_xslt = new DomDocument;
+        $this->_xslt->load($this->view->getScriptPath('opus3') . '/opus3.xslt');
+        $this->_proc = new XSLTProcessor;
+        $this->_proc->importStyleSheet($this->_xslt);
+    }
+
+	/**
+	 * Imports metadata from an Opus3-Repository from an XML-Dump
+	 *
+	 * @return void
+	 *
+	 */
+	public function importAction()
+	{
+		$upload = new Zend_File_Transfer_Adapter_Http();
+        $files = $upload->getFileInfo();
+		$this->_xml->load($files['xmldump']['tmp_name']);
+		// output transformed XML-Document containing all Documents in Opus 4-XML format
+		$documentsXML = new DOMDocument;
+		$documentsXML->loadXML($this->_proc->transformToXml($this->_xml));
+		$doclist = $documentsXML->getElementsByTagName('Opus_Document');
+		foreach ($doclist as $document) 
+		{
+			echo "Importing " . $documentsXML->saveXML($document) . '<br/>';
+			$doc = Opus_Document::fromXml($documentsXML->saveXML($document));
+			$doc->store();
+		}
+	}
 }
