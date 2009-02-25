@@ -110,4 +110,27 @@
             </xsl:attribute>
         </xsl:element>
     </xsl:template>
+
+    <xsl:template match="table_data[@name='opus']/row/field[@name='description']">
+        <xsl:element name="TitleAbstract">
+            <xsl:attribute name="Language">
+                <xsl:value-of select="../field[@name='description_lang']" />
+            </xsl:attribute>
+            <xsl:attribute name="Value">
+                <xsl:value-of select="." />
+            </xsl:attribute>
+        </xsl:element>
+    </xsl:template>
+
+    <xsl:template match="table_data[@name='opus']/row/field[@name='description2']">
+        <xsl:element name="TitleAbstract">
+            <xsl:attribute name="Language">
+                <xsl:value-of select="../field[@name='description2_lang']" />
+            </xsl:attribute>
+            <xsl:attribute name="Value">
+                <xsl:value-of select="." />
+            </xsl:attribute>
+        </xsl:element>
+    </xsl:template>
+
 </xsl:stylesheet>
