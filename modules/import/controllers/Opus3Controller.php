@@ -133,6 +133,7 @@ class Import_Opus3Controller extends Zend_Controller_Action
     	}
     	$this->_xslt->load($this->view->getScriptPath('opus3') . '/' . $xslt);
         $this->_proc = new XSLTProcessor;
+        $this->_proc->registerPhpFunctions();
         $this->_proc->importStyleSheet($this->_xslt);
     }
 }
