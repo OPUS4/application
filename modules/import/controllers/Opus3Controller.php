@@ -83,9 +83,6 @@ class Import_Opus3Controller extends Zend_Controller_Action
         // Initialize member variables.
         $this->_xml = new DomDocument;
         $this->_xslt = new DomDocument;
-        $this->_xslt->load($this->view->getScriptPath('opus3') . '/opus3.xslt');
-        $this->_proc = new XSLTProcessor;
-        $this->_proc->importStyleSheet($this->_xslt);
     }
 
 	/**
@@ -96,11 +93,14 @@ class Import_Opus3Controller extends Zend_Controller_Action
 	 */
 	public function importAction()
 	{
+		$stylesheet = $this->getRequest()->getPost('xmlformat');
+		$this->createXsltProcessor($stylesheet);
 		$upload = new Zend_File_Transfer_Adapter_Http();
         $files = $upload->getFileInfo();
 		$this->_xml->load($files['xmldump']['tmp_name']);
 		// output transformed XML-Document containing all Documents in Opus 4-XML format
 		$documentsXML = new DOMDocument;
+		//echo $this->_proc->transformToXml($this->_xml);
 		$documentsXML->loadXML($this->_proc->transformToXml($this->_xml));
 		$doclist = $documentsXML->getElementsByTagName('Opus_Document');
 		foreach ($doclist as $document) 
@@ -110,4 +110,29 @@ class Import_Opus3Controller extends Zend_Controller_Action
 			$doc->store();
 		}
 	}
+
+	/**
+	 * Sets the stylesheet to use for input file transformation
+	 *
+	 * @return void
+	 *
+	 */
+    private function createXsltProcessor($stylesheet) 
+    {
+    	switch ($stylesheet)
+    	{
+    		case 'mysqldump':
+    			$xslt = 'opus3.xslt';
+    			break;
+    		case 'phpmyadmin':
+                $xslt = 'opus3.phpmyadmin.xslt';
+                break;
+    		default:
+    			$xslt = 'opus3.xslt';
+    			break;    		    
+    	}
+    	$this->_xslt->load($this->view->getScriptPath('opus3') . '/' . $xslt);
+        $this->_proc = new XSLTProcessor;
+        $this->_proc->importStyleSheet($this->_xslt);
+    }
 }

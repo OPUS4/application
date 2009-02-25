@@ -1,6 +1,10 @@
 	<form action="<?= $this->url(array('module' => 'import', "controller"=>"opus3", "action"=>"import")) ?>" method="POST" enctype="multipart/form-data">
 	XML-Dump des Opus3-Repositories: 
 	<input type="file" name="xmldump" />
+	<br/>Format: 
+	<input type="radio" name="xmlformat" value="mysqldump" checked="true" />MySQLDump
+	<!--<input type="radio" name="xmlformat" value="phpmyadmin" />PhpMyAdmin-->
+	<br/>
 	<input type="submit" value="Importieren" />
 	</form>
 <!--

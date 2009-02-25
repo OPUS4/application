@@ -47,7 +47,7 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-    <xsl:output method="xml" indent="yes" />
+    <xsl:output method="xml" indent="no" />
 
     <!--
     Suppress output for all elements that don't have an explicit template.
@@ -55,7 +55,9 @@
     <xsl:template match="*" />
 
     <xsl:template match="/">
-        <xsl:apply-templates select="/mysqldump/database/table_data[@name='opus']/row" />
+        <xsl:element name="Documents">
+            <xsl:apply-templates select="/mysqldump/database/table_data[@name='opus']/row" />
+        </xsl:element>
     </xsl:template>
 
     <!--
@@ -71,6 +73,29 @@
             <xsl:attribute name="CreatingCorporation">
                 <xsl:value-of select="field[@name='creator_corporate']" />
             </xsl:attribute>
+            <xsl:attribute name="Type">
+                <xsl:choose>
+                    <xsl:when test="field[@name='type']='1'">manual</xsl:when>
+                    <xsl:when test="field[@name='type']='2'">article</xsl:when>
+                    <xsl:when test="field[@name='type']='4'">monograph</xsl:when>
+                    <xsl:when test="field[@name='type']='5'">book section</xsl:when>
+                    <xsl:when test="field[@name='type']='7'">master thesis</xsl:when>
+                    <xsl:when test="field[@name='type']='8'">doctoral thesis</xsl:when>
+                    <xsl:when test="field[@name='type']='9'">honour thesis</xsl:when>
+                    <xsl:when test="field[@name='type']='11'">journal</xsl:when>
+                    <xsl:when test="field[@name='type']='15'">conference</xsl:when>
+                    <xsl:when test="field[@name='type']='16'">conference item</xsl:when>
+                    <xsl:when test="field[@name='type']='17'">paper</xsl:when>
+                    <xsl:when test="field[@name='type']='19'">study paper</xsl:when>
+                    <xsl:when test="field[@name='type']='20'">report</xsl:when>
+                    <xsl:when test="field[@name='type']='22'">preprint</xsl:when>
+                    <xsl:when test="field[@name='type']='23'">other</xsl:when>
+                    <xsl:when test="field[@name='type']='24'">habil thesis</xsl:when>
+                    <xsl:when test="field[@name='type']='25'">bachelor thesis</xsl:when>
+                    <xsl:when test="field[@name='type']='26'">lecture</xsl:when>
+                    <xsl:otherwise>other</xsl:otherwise>
+                </xsl:choose>
+            </xsl:attribute>
             <xsl:apply-templates select="field" />
         </xsl:element>
     </xsl:template>
@@ -85,6 +110,4 @@
             </xsl:attribute>
         </xsl:element>
     </xsl:template>
-
-
 </xsl:stylesheet>
