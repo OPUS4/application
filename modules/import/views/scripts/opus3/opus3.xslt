@@ -29,9 +29,10 @@
  * @category    Application
  * @package     Module_Import
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
+ * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: oai-pmh.xslt 1948 2009-02-17 15:17:01Z claussnitzer $
+ * @version     $Id$
  */
 -->
 
@@ -42,113 +43,92 @@
  */
 -->
 
-<xsl:stylesheet version="1.0"
-    xmlns="http://www.openarchives.org/OAI/2.0/"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:fn="http://www.w3.org/2004/07/xpath-functions">
-
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
     <xsl:output method="xml" indent="yes" />
 
-    <!--
-    Suppress output for all elements that don't have an explicit template.
-    -->
-    <!--<xsl:template match="*" />
-    <xsl:template match="*" mode="oai_dc" />-->
-
     <xsl:template match="/">
-		<Documents>
-			<xsl:apply-templates select=".//opus" />
-		</Documents>
+        <xsl:element name="Documents">
+            <xsl:apply-templates select="node()/opus" />
+        </xsl:element>
     </xsl:template>
 
     <xsl:template match="opus">
-		<xsl:variable name="TypeID"><xsl:value-of select="type" /></xsl:variable>
-		<xsl:variable name="OriginalID"><xsl:value-of select="source_opus" /></xsl:variable>
-		<xsl:variable name="DocLanguage"><xsl:value-of select="language" /></xsl:variable>
-		<Opus_Document> 
-			<xsl:attribute name="Language"><xsl:value-of select="$DocLanguage" /></xsl:attribute>
-			<xsl:attribute name="CreatingCorporation"><xsl:value-of select="creator_corporate" /></xsl:attribute>
-			<!-- Dummy attribute, needs to be filled! -->
-			<xsl:attribute name="ContributingCorporation"></xsl:attribute>
-			<xsl:attribute name="PublishedYear"><xsl:value-of select="date_year" /></xsl:attribute>
-			<!-- Dummy attribute, needs to be filled (if possible)! -->
-			<xsl:attribute name="PublishedDate"></xsl:attribute>
-			<!-- Dummy attribute, needs to be filled (if possible)! -->
-			<xsl:attribute name="Edition"></xsl:attribute>
-			<!-- Dummy attribute, needs to be filled (if possible)! -->
-			<xsl:attribute name="PageNumber"></xsl:attribute>
-			<!-- Dummy attribute, needs to be filled (if possible)! -->
-			<xsl:attribute name="NonInstituteAffiliation"></xsl:attribute>
-			<xsl:attribute name="Type">
-				<xsl:choose>
-					<xsl:when test="$TypeID='1'">manual</xsl:when>
-					<xsl:when test="$TypeID='2'">article</xsl:when>
-					<xsl:when test="$TypeID='4'">monograph</xsl:when>
-					<xsl:when test="$TypeID='5'">book section</xsl:when>
-					<xsl:when test="$TypeID='7'">master thesis</xsl:when>
-					<xsl:when test="$TypeID='8'">doctoral thesis</xsl:when>
-					<xsl:when test="$TypeID='9'">honour thesis</xsl:when>
-					<xsl:when test="$TypeID='11'">journal</xsl:when>
-					<xsl:when test="$TypeID='15'">conference</xsl:when>
-					<xsl:when test="$TypeID='16'">conference item</xsl:when>
-					<xsl:when test="$TypeID='17'">paper</xsl:when>
-					<xsl:when test="$TypeID='19'">study paper</xsl:when>
-					<xsl:when test="$TypeID='20'">report</xsl:when>
-					<xsl:when test="$TypeID='22'">preprint</xsl:when>
-					<xsl:when test="$TypeID='23'">other</xsl:when>
-					<xsl:when test="$TypeID='24'">habil thesis</xsl:when>
-					<xsl:when test="$TypeID='25'">bachelor thesis</xsl:when>
-					<xsl:when test="$TypeID='26'">lecture</xsl:when>
-					<xsl:otherwise>other</xsl:otherwise>
-				</xsl:choose>
-			</xsl:attribute>
-			
-			<Urn>
-				<xsl:attribute name="Value"><xsl:value-of select="urn" /></xsl:attribute>
-			</Urn>
+        <xsl:variable name="OriginalID"><xsl:value-of select="source_opus" /></xsl:variable>
+        <xsl:element name="Opus_Document">
+            <xsl:attribute name="Language"><xsl:value-of select="language" /></xsl:attribute>
+            <xsl:attribute name="CreatingCorporation"><xsl:value-of select="creator_corporate" /></xsl:attribute>
+            <xsl:attribute name="ContributingCorporation"><xsl:value-of select="contributors_corporate" /></xsl:attribute>
+            <xsl:attribute name="PublishedYear"><xsl:value-of select="date_year" /></xsl:attribute>
+            <!-- Dummy attribute, needs to be filled (if possible)! -->
+            <xsl:attribute name="PublishedDate"></xsl:attribute>
+            <!-- Dummy attribute, needs to be filled (if possible)! -->
+            <xsl:attribute name="Edition"></xsl:attribute>
+            <!-- Dummy attribute, needs to be filled (if possible)! -->
+            <xsl:attribute name="PageNumber"></xsl:attribute>
+            <!-- Dummy attribute, needs to be filled (if possible)! -->
+            <xsl:attribute name="NonInstituteAffiliation"></xsl:attribute>
+            <xsl:attribute name="Type">
+                <xsl:choose>
+                    <xsl:when test="type='1'">manual</xsl:when>
+                    <xsl:when test="type='2'">article</xsl:when>
+                    <xsl:when test="type='4'">monograph</xsl:when>
+                    <xsl:when test="type='5'">book section</xsl:when>
+                    <xsl:when test="type='7'">master thesis</xsl:when>
+                    <xsl:when test="type='8'">doctoral thesis</xsl:when>
+                    <xsl:when test="type='9'">honour thesis</xsl:when>
+                    <xsl:when test="type='11'">journal</xsl:when>
+                    <xsl:when test="type='15'">conference</xsl:when>
+                    <xsl:when test="type='16'">conference item</xsl:when>
+                    <xsl:when test="type='17'">paper</xsl:when>
+                    <xsl:when test="type='19'">study paper</xsl:when>
+                    <xsl:when test="type='20'">report</xsl:when>
+                    <xsl:when test="type='22'">preprint</xsl:when>
+                    <xsl:when test="type='23'">other</xsl:when>
+                    <xsl:when test="type='24'">habil thesis</xsl:when>
+                    <xsl:when test="type='25'">bachelor thesis</xsl:when>
+                    <xsl:when test="type='26'">lecture</xsl:when>
+                    <xsl:otherwise>other</xsl:otherwise>
+                </xsl:choose>
+            </xsl:attribute>
 
-			<xsl:call-template name="getAuthor"><xsl:with-param name="ID"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
+            <xsl:element name="Urn">
+                <xsl:attribute name="Value"><xsl:value-of select="urn" /></xsl:attribute>
+            </xsl:element>
 
-			<TitleMain> 
-				<xsl:attribute name="Language"><xsl:value-of select="$DocLanguage" /></xsl:attribute>
-				<xsl:attribute name="Value"><xsl:value-of select="title" /></xsl:attribute>
-			</TitleMain>
+            <xsl:element name="PersonAuthor">
+                <xsl:attribute name="AcademicTitle"></xsl:attribute>
+                <xsl:attribute name="DateOfBirth"></xsl:attribute>
+                <xsl:attribute name="PlaceOfBirth"></xsl:attribute>
+                <xsl:attribute name="Email"></xsl:attribute>
+                <xsl:attribute name="FirstName">
+                    <xsl:value-of select="substring-after(../opus_autor[source_opus=$OriginalID]/creator_name,', ')" />
+                </xsl:attribute>
+                <xsl:attribute name="LastName">
+                    <xsl:value-of select="substring-before(../opus_autor[source_opus=$OriginalID]/creator_name,', ')" />
+                </xsl:attribute>
+            </xsl:element>
 
-			<TitleAbstract>
-				<xsl:attribute name="Language"><xsl:value-of select="description_lang" /></xsl:attribute>
-				<xsl:attribute name="Value"><xsl:value-of select="description" /></xsl:attribute>
-			</TitleAbstract>
-			<TitleAbstract>
-				<xsl:attribute name="Language"><xsl:value-of select="description2_lang" /></xsl:attribute>
-				<xsl:attribute name="Value"><xsl:value-of select="description2" /></xsl:attribute>
-			</TitleAbstract>
-		</Opus_Document>
+            <xsl:element name="TitleMain">
+                <xsl:attribute name="Language"><xsl:value-of select="language" /></xsl:attribute>
+                <xsl:attribute name="Value"><xsl:value-of select="title" /></xsl:attribute>
+            </xsl:element>
+
+            <xsl:element name="TitleAbstract">
+                <xsl:attribute name="Language"><xsl:value-of select="description_lang" /></xsl:attribute>
+                <xsl:attribute name="Value"><xsl:value-of select="description" /></xsl:attribute>
+            </xsl:element>
+
+            <xsl:element name="TitleAbstract">
+                <xsl:attribute name="Language"><xsl:value-of select="description2_lang" /></xsl:attribute>
+                <xsl:attribute name="Value"><xsl:value-of select="description2" /></xsl:attribute>
+            </xsl:element>
+        </xsl:element>
+
     </xsl:template>
 
-	<xsl:template name="getAuthor">
-		<xsl:param name="ID" required="yes" />
-		<xsl:for-each select="//opus_autor">
-			<xsl:if test="$ID=source_opus">
-				<PersonAuthor> 
-					<xsl:attribute name="AcademicTitle"></xsl:attribute>
-					<xsl:attribute name="DateOfBirth"></xsl:attribute>
-					<xsl:attribute name="PlaceOfBirth"></xsl:attribute>
-					<xsl:attribute name="Email"></xsl:attribute>
-					<xsl:attribute name="FirstName">
-						<xsl:value-of select="substring-after(creator_name,', ')" />
-					</xsl:attribute>
-					<xsl:attribute name="LastName">
-						<xsl:value-of select="substring-before(creator_name,',')" />
-					</xsl:attribute>
-				</PersonAuthor>
-			</xsl:if>
-		</xsl:for-each>
-	</xsl:template>
-
-<!-- Quelldatei
-	<opus>
+    <!-- Quelldatei
+    <opus>
         <subject_swd>Informationssystem  , Geschichte  , Ostwald, Wilhelm , Informations- und Dokumentationswissenschaft</subject_swd>
         <publisher_university>TUB</publisher_university>
         <contributors_name></contributors_name>
@@ -174,49 +154,48 @@
         <bem_intern></bem_intern>
         <bem_extern></bem_extern>
     </opus>
-...
+
     <opus_autor>
-        <source_opus>39</source_opus>
+        <source_opus>22</source_opus>
         <creator_name>Jungfer, Martin</creator_name>
         <reihenfolge>1</reihenfolge>
     </opus_autor>
-...    
+
     <opus_diss>
-        <source_opus>38</source_opus>
+        <source_opus>22</source_opus>
         <date_accepted>1024264800</date_accepted>
         <advisor>Krautschneider,  Wolfgang (Prof. Dr.)</advisor>
         <title_de></title_de>
         <publisher_faculty>4</publisher_faculty>
     </opus_diss>
-...
+
     <opus_hashes>
-        <source_opus>96</source_opus>
+        <source_opus>22</source_opus>
         <filename>/usr/local/wwwtubdok/htdocs/volltexte/2005/96/pdf/DISCUS_ABIT.pdf</filename>
         <hash>877c060747a086d7279f238dea46fa6b</hash>
     </opus_hashes>
-...
+
     <opus_inst>
-        <source_opus>37</source_opus>
+        <source_opus>22</source_opus>
         <inst_nr>69</inst_nr>
     </opus_inst>
-...
+
     <opus_msc>
-        <source_opus>158</source_opus>
+        <source_opus>22</source_opus>
         <class>65F20</class>
     </opus_msc>
-...
+
     <opus_pacs>
-        <source_opus>75</source_opus>
+        <source_opus>22</source_opus>
         <class>06.20.Dk</class>
     </opus_pacs>
-...
+
     <opus_schriftenreihe>
-        <source_opus>321</source_opus>
+        <source_opus>22</source_opus>
         <sr_id>1</sr_id>
         <sequence_nr>Mai 2006</sequence_nr>
     </opus_schriftenreihe>
-...
 
-Ende der Quelldatei
--->
+    Ende der Quelldatei
+    -->
 </xsl:stylesheet>
