@@ -39,8 +39,9 @@ set_include_path('.' . PATH_SEPARATOR
 // Handover control to bootstrap.php. The Parameter passes the root
 // path of the application (where all the modules live).
 
-require_once 'Opus/Application/Bootstrap.php';
-Opus_Application_Bootstrap::run(
+require_once 'Application/Bootstrap.php';
+$app = new Application_Bootstrap();
+$app->run(
     dirname(dirname(__FILE__)),
-    Opus_Application_Bootstrap::CONFIG_TEST,
+    Application_Bootstrap::CONFIG_TEST,
     dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'config');
