@@ -43,159 +43,48 @@
  */
 -->
 
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <xsl:output method="xml" indent="yes" />
 
-    <xsl:template match="/">
-        <xsl:element name="Documents">
-            <xsl:apply-templates select="node()/opus" />
-        </xsl:element>
-    </xsl:template>
-
-    <xsl:template match="opus">
-        <xsl:variable name="OriginalID"><xsl:value-of select="source_opus" /></xsl:variable>
-        <xsl:element name="Opus_Document">
-            <xsl:attribute name="Language"><xsl:value-of select="language" /></xsl:attribute>
-            <xsl:attribute name="CreatingCorporation"><xsl:value-of select="creator_corporate" /></xsl:attribute>
-            <xsl:attribute name="ContributingCorporation"><xsl:value-of select="contributors_corporate" /></xsl:attribute>
-            <xsl:attribute name="PublishedYear"><xsl:value-of select="date_year" /></xsl:attribute>
-            <!-- Dummy attribute, needs to be filled (if possible)! -->
-            <xsl:attribute name="PublishedDate"></xsl:attribute>
-            <!-- Dummy attribute, needs to be filled (if possible)! -->
-            <xsl:attribute name="Edition"></xsl:attribute>
-            <!-- Dummy attribute, needs to be filled (if possible)! -->
-            <xsl:attribute name="PageNumber"></xsl:attribute>
-            <!-- Dummy attribute, needs to be filled (if possible)! -->
-            <xsl:attribute name="NonInstituteAffiliation"></xsl:attribute>
-            <xsl:attribute name="Type">
-                <xsl:choose>
-                    <xsl:when test="type='1'">manual</xsl:when>
-                    <xsl:when test="type='2'">article</xsl:when>
-                    <xsl:when test="type='4'">monograph</xsl:when>
-                    <xsl:when test="type='5'">book section</xsl:when>
-                    <xsl:when test="type='7'">master thesis</xsl:when>
-                    <xsl:when test="type='8'">doctoral thesis</xsl:when>
-                    <xsl:when test="type='9'">honour thesis</xsl:when>
-                    <xsl:when test="type='11'">journal</xsl:when>
-                    <xsl:when test="type='15'">conference</xsl:when>
-                    <xsl:when test="type='16'">conference item</xsl:when>
-                    <xsl:when test="type='17'">paper</xsl:when>
-                    <xsl:when test="type='19'">study paper</xsl:when>
-                    <xsl:when test="type='20'">report</xsl:when>
-                    <xsl:when test="type='22'">preprint</xsl:when>
-                    <xsl:when test="type='23'">other</xsl:when>
-                    <xsl:when test="type='24'">habil thesis</xsl:when>
-                    <xsl:when test="type='25'">bachelor thesis</xsl:when>
-                    <xsl:when test="type='26'">lecture</xsl:when>
-                    <xsl:otherwise>other</xsl:otherwise>
-                </xsl:choose>
-            </xsl:attribute>
-
-            <xsl:element name="Urn">
-                <xsl:attribute name="Value"><xsl:value-of select="urn" /></xsl:attribute>
-            </xsl:element>
-
-            <xsl:element name="PersonAuthor">
-                <xsl:attribute name="AcademicTitle"></xsl:attribute>
-                <xsl:attribute name="DateOfBirth"></xsl:attribute>
-                <xsl:attribute name="PlaceOfBirth"></xsl:attribute>
-                <xsl:attribute name="Email"></xsl:attribute>
-                <xsl:attribute name="FirstName">
-                    <xsl:value-of select="substring-after(../opus_autor[source_opus=$OriginalID]/creator_name,', ')" />
-                </xsl:attribute>
-                <xsl:attribute name="LastName">
-                    <xsl:value-of select="substring-before(../opus_autor[source_opus=$OriginalID]/creator_name,', ')" />
-                </xsl:attribute>
-            </xsl:element>
-
-            <xsl:element name="TitleMain">
-                <xsl:attribute name="Language"><xsl:value-of select="language" /></xsl:attribute>
-                <xsl:attribute name="Value"><xsl:value-of select="title" /></xsl:attribute>
-            </xsl:element>
-
-            <xsl:element name="TitleAbstract">
-                <xsl:attribute name="Language"><xsl:value-of select="description_lang" /></xsl:attribute>
-                <xsl:attribute name="Value"><xsl:value-of select="description" /></xsl:attribute>
-            </xsl:element>
-
-            <xsl:element name="TitleAbstract">
-                <xsl:attribute name="Language"><xsl:value-of select="description2_lang" /></xsl:attribute>
-                <xsl:attribute name="Value"><xsl:value-of select="description2" /></xsl:attribute>
-            </xsl:element>
-        </xsl:element>
-
-    </xsl:template>
-
-    <!-- Quelldatei
-    <opus>
-        <subject_swd>Informationssystem  , Geschichte  , Ostwald, Wilhelm , Informations- und Dokumentationswissenschaft</subject_swd>
-        <publisher_university>TUB</publisher_university>
-        <contributors_name></contributors_name>
-        <contributors_corporate></contributors_corporate>
-        <date_creation>1020078886</date_creation>
-        <date_modified>1142593859</date_modified>
-        <source_opus>22</source_opus>
-        <source_title>http://www.chemheritage.org/HistoricalServices/ASIS_documents/ASIS98_Hapke.pdf</source_title>
-        <source_swb></source_swb>
-        <verification>t-hapke@gmx.de</verification>
-        <subject_uncontrolled_german></subject_uncontrolled_german>
-        <subject_uncontrolled_english>Wilhelm Ostwald , information science , history</subject_uncontrolled_english>
-        <title_en></title_en>
-        <description2></description2>
-        <subject_type>ccs</subject_type>
-        <date_valid>0</date_valid>
-        <description_lang>eng</description_lang>
-        <description2_lang>eng</description2_lang>
-        <sachgruppe_ddc>020</sachgruppe_ddc>
-        <bereich_id>1</bereich_id>
-        <lic>publ-ohne-pod</lic>
-        <isbn>0-8412-2772-1</isbn>
-        <bem_intern></bem_intern>
-        <bem_extern></bem_extern>
-    </opus>
-
-    <opus_autor>
-        <source_opus>22</source_opus>
-        <creator_name>Jungfer, Martin</creator_name>
-        <reihenfolge>1</reihenfolge>
-    </opus_autor>
-
-    <opus_diss>
-        <source_opus>22</source_opus>
-        <date_accepted>1024264800</date_accepted>
-        <advisor>Krautschneider,  Wolfgang (Prof. Dr.)</advisor>
-        <title_de></title_de>
-        <publisher_faculty>4</publisher_faculty>
-    </opus_diss>
-
-    <opus_hashes>
-        <source_opus>22</source_opus>
-        <filename>/usr/local/wwwtubdok/htdocs/volltexte/2005/96/pdf/DISCUS_ABIT.pdf</filename>
-        <hash>877c060747a086d7279f238dea46fa6b</hash>
-    </opus_hashes>
-
-    <opus_inst>
-        <source_opus>22</source_opus>
-        <inst_nr>69</inst_nr>
-    </opus_inst>
-
-    <opus_msc>
-        <source_opus>22</source_opus>
-        <class>65F20</class>
-    </opus_msc>
-
-    <opus_pacs>
-        <source_opus>22</source_opus>
-        <class>06.20.Dk</class>
-    </opus_pacs>
-
-    <opus_schriftenreihe>
-        <source_opus>22</source_opus>
-        <sr_id>1</sr_id>
-        <sequence_nr>Mai 2006</sequence_nr>
-    </opus_schriftenreihe>
-
-    Ende der Quelldatei
+    <!--
+    Suppress output for all elements that don't have an explicit template.
     -->
+    <xsl:template match="*" />
+
+    <xsl:template match="/">
+        <xsl:apply-templates select="/mysqldump/database/table_data[@name='opus']/row" />
+    </xsl:template>
+
+    <!--
+    Suppress fields with nil value
+    -->
+    <xsl:template match="table_data[@name='opus']/row/field[@xsi:nil='true']" />
+
+    <xsl:template match="table_data[@name='opus']/row">
+        <xsl:element name="Opus_Document">
+            <xsl:attribute name="Language">
+                <xsl:value-of select="field[@name='language']" />
+            </xsl:attribute>
+            <xsl:attribute name="CreatingCorporation">
+                <xsl:value-of select="field[@name='creator_corporate']" />
+            </xsl:attribute>
+            <xsl:apply-templates select="field" />
+        </xsl:element>
+    </xsl:template>
+
+    <xsl:template match="table_data[@name='opus']/row/field[@name='title']">
+        <xsl:element name="TitleMain">
+            <xsl:attribute name="Language">
+                <xsl:value-of select="../field[@name='language']" />
+            </xsl:attribute>
+            <xsl:attribute name="Value">
+                <xsl:value-of select="." />
+            </xsl:attribute>
+        </xsl:element>
+    </xsl:template>
+
+
 </xsl:stylesheet>
