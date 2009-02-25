@@ -53,7 +53,7 @@
     <xsl:output method="xml" indent="yes" />
 
 
-    <xsl:template match="Document" mode="oai_dc">
+    <xsl:template match="Opus_Document" mode="oai_dc">
         <oai_dc:dc
             xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/
             http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
@@ -93,53 +93,53 @@
     <xsl:template match="TitleMain" mode="oai_dc">
         <dc:title>
             <xsl:attribute name="xml:lang">
-                <xsl:value-of select="TitleAbstractLanguage" />
+                <xsl:value-of select="@Language" />
             </xsl:attribute>
-            <xsl:value-of select="TitleAbstractValue" />
+            <xsl:value-of select="@Value" />
         </dc:title>
     </xsl:template>
 
     <xsl:template match="PersonAuthor" mode="oai_dc">
         <dc:creator>
-            <xsl:value-of select="AcademicTitle" />
+            <xsl:value-of select="@AcademicTitle" />
             <xsl:text> </xsl:text>
-            <xsl:value-of select="FirstName" />
+            <xsl:value-of select="@FirstName" />
             <xsl:text> </xsl:text>
-            <xsl:value-of select="LastName" />
+            <xsl:value-of select="@LastName" />
         </dc:creator>
     </xsl:template>
 
     <xsl:template match="SubjectSwd" mode="oai_dc">
         <dc:subject>
             <xsl:attribute name="xml:lang">
-                <xsl:value-of select="SubjectLanguage" />
+                <xsl:value-of select="@Language" />
             </xsl:attribute>
-            <xsl:value-of select="SubjectValue" />
+            <xsl:value-of select="@Value" />
         </dc:subject>
     </xsl:template>
 
     <xsl:template match="TitleAbstract" mode="oai_dc">
         <dc:description>
             <xsl:attribute name="xml:lang">
-                <xsl:value-of select="TitleAbstractLanguage" />
+                <xsl:value-of select="@Language" />
             </xsl:attribute>
-            <xsl:value-of select="TitleAbstractValue" />
+            <xsl:value-of select="@Value" />
         </dc:description>
     </xsl:template>
 
-    <xsl:template match="ContributingCorporation" mode="oai_dc">
+    <xsl:template match="@ContributingCorporation" mode="oai_dc">
         <dc:contributor>
             <xsl:value-of select="." />
         </dc:contributor>
     </xsl:template>
 
-    <xsl:template match="PublishedDate" mode="oai_dc">
+    <xsl:template match="@PublishedDate" mode="oai_dc">
         <dc:date>
             <xsl:value-of select="." />
         </dc:date>
     </xsl:template>
 
-    <xsl:template match="File/MimeType" mode="oai_dc">
+    <xsl:template match="File/@MimeType" mode="oai_dc">
         <dc:format>
             <xsl:value-of select="." />
         </dc:format>
@@ -147,11 +147,11 @@
 
     <xsl:template match="Isbn|Urn" mode="oai_dc">
         <dc:identifier>
-            <xsl:value-of select="." />
+            <xsl:value-of select="@Value" />
         </dc:identifier>
     </xsl:template>
 
-    <xsl:template match="Language" mode="oai_dc">
+    <xsl:template match="@Language" mode="oai_dc">
         <dc:language>
             <xsl:value-of select="." />
         </dc:language>
@@ -159,7 +159,7 @@
 
     <xsl:template match="Licence" mode="oai_dc">
         <dc:rights>
-            <xsl:value-of select="NameLong" />
+            <xsl:value-of select="@NameLong" />
         </dc:rights>
     </xsl:template>
 

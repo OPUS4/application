@@ -83,7 +83,7 @@
                     <xsl:apply-templates select="Documents" mode="ListRecords" />
                 </xsl:when>
                 <xsl:when test="$oai_verb='GetRecord'">
-                    <xsl:apply-templates select="Document" mode="GetRecord" />
+                    <xsl:apply-templates select="Opus_Document" mode="GetRecord" />
                 </xsl:when>
                 <xsl:otherwise>
                     <error code="badVerb">The verb <xsl:value-of select="$oai_verb" /> provided in the request is illegal.</error>
@@ -94,17 +94,17 @@
 
     <xsl:template match="Documents" mode="ListRecords">
         <ListRecords>
-            <xsl:apply-templates select="Document" />
+            <xsl:apply-templates select="Opus_Document" />
         </ListRecords>
     </xsl:template>
 
-    <xsl:template match="Document" mode="GetRecord">
+    <xsl:template match="Opus_Document" mode="GetRecord">
         <GetRecord>
             <xsl:apply-templates select="." />
         </GetRecord>
     </xsl:template>
 
-    <xsl:template match="Document">
+    <xsl:template match="Opus_Document">
         <record>
             <header>
                 <!--

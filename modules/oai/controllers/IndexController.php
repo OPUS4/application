@@ -131,7 +131,7 @@ class Oai_IndexController extends Zend_Controller_Action {
         // Currently implemented as 'oai:foo.bar.de:{docId}'
         $docId = substr(strrchr($identifier, ':'), 1);
         $document = new Opus_Document($docId);
-        $this->_xml->loadXml('<Document>' . $document->toXml() . '</Document>');
+        $this->_xml = $document->toXml();
         $this->_sendOaiResponse('GetRecord');
     }
 
