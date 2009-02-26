@@ -10,5 +10,13 @@
         <seg>Import</seg>
       </tuv>
     </tu>
+    <tu tuid="imported_documents">
+      <tuv xml:lang="en">
+        <seg>%1$s documents imported.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Es wurden %1$s Documente importiert.</seg>
+      </tuv>
+    </tu>
   </body>
 </tmx>
