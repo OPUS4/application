@@ -40,30 +40,17 @@
  *
  * @category    Console
  */
-class OpusConsole extends Opus_Application_Bootstrap {
+class OpusConsole extends Opus_Bootstrap_Base {
 
 
     /**
-     * Perform basic bootstrapping. Setup environment variables, load
-     * configuration and initialize database connection.
+     * Add setting up database and logging facilities.
      *
      * @return void
+     * @see library/Opus/Bootstrap/Opus_Bootstrap_Base#_setupBackend()
      */
-    public static function init() {
-        // For logging base path.
-        self::$applicationRootDirectory = dirname(dirname(__FILE__));
-        self::$applicationWorkspaceDirectory = dirname(dirname(__FILE__)) . '/workspace';
-        self::setupEnvironment();
-        self::configure(self::CONFIG_TEST, dirname(__FILE__));
-        self::setupDatabase();
-        self::setupLogging();
-
-        $registry = Zend_Registry::getInstance();
-        $locale = new Zend_Locale();
-        $availableLanguages = $locale->getLanguageTranslationList();
-        asort($availableLanguages);
-        $registry->set('Available_Languages', $availableLanguages);
-        Opus_Document_Type::setXmlDoctypePath(dirname(dirname(__FILE__)) . '/config/xmldoctypes');
+    protected function _setupBackend() {
+        $this->_setupDatabase();
     }
 
     /**

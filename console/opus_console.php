@@ -41,13 +41,11 @@ set_include_path('.' . PATH_SEPARATOR
 
 // Zend_Loader is'nt available yet. We have to do a require_once
 // in order to find the bootstrap class.
-require_once 'Opus/Application/Bootstrap.php';
+require_once 'Opus/Bootstrap/Base.php';
 
 require_once 'OpusConsole.php';
 
-// Setup environment
-OpusConsole::init();
-
 // Start console
 $console = new OpusConsole;
+$console->run(dirname(__FILE__), Opus_Bootstrap_Base::CONFIG_TEST);
 $console->start();
