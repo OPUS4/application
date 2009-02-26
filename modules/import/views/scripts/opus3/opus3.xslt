@@ -155,31 +155,39 @@
             </xsl:attribute>-->
             
             
+            <!--CompletedYear und CompletedDate are not stored by Opus 3, so we leave it out -->
             <!--<xsl:attribute name="CompletedYear">
                 <xsl:value-of select="field[@name='date_year']" />
-            </xsl:attribute>-->
-            <!-- CompletedDate is not stored in OPUS3, so we take Jan 1st of the PublicationYear -->
-            <!--<xsl:attribute name="CompletedDate">
+            </xsl:attribute>
+            <xsl:attribute name="CompletedDate">
                 <xsl:value-of select="field[@name='date_year']" /><xsl:text>-01-01</xsl:text>
             </xsl:attribute>-->
             
             <!-- Take date_creation from OPUS3 as PublishedYear, PublishedDate and ServerDatePublished -->
             <!-- date_creation is stored as a unix timestamp -->
-            <!-- its transferred by date fuinction in PHP -->
+            <!-- its transferred by date function in PHP -->
             <xsl:variable name="date_creation"><xsl:value-of select="field[@name='date_creation']" /></xsl:variable>
             <xsl:variable name="date_modified"><xsl:value-of select="field[@name='date_modified']" /></xsl:variable>
+            <xsl:variable name="date_valid"><xsl:value-of select="field[@name='date_valid']" /></xsl:variable>
             <xsl:attribute name="PublishedYear">
-                <xsl:value-of select="php:function('date', 'Y', $date_creation)" />
+                <xsl:value-of select="field[@name='date_year']" />
             </xsl:attribute>
-            <xsl:attribute name="PublishedDate">
+            <!--PublishedDate is left out, because Opus3 only stores the year -->
+            <!--<xsl:attribute name="PublishedDate">
                 <xsl:value-of select="php:function('date', 'Y-m-d', $date_creation)" />
-            </xsl:attribute>
+            </xsl:attribute>-->
             <!--<xsl:attribute name="ServerDatePublished">
                 <xsl:value-of select="php:function('date', 'Y-m-d H:i:s', $date_creation)" />
             </xsl:attribute>
             <xsl:attribute name="ServerDateModified">
                 <xsl:value-of select="php:function('date', 'Y-m-d H:i:s', $date_modified)" />
-            </xsl:attribute>-->
+            </xsl:attribute>
+            <xsl:if test="$date_valid>0">
+                <xsl:attribute name="ServerDateValid">
+                    <xsl:value-of select="php:function('date', 'Y-m-d H:i:s', $date_valid)" />
+                </xsl:attribute>
+            </xsl:if>
+            -->
             
             <!-- Find persons associated with the document -->
             <xsl:call-template name="getAuthors"><xsl:with-param name="OriginalID"><xsl:value-of select="field[@name='source_opus']" /></xsl:with-param></xsl:call-template>
@@ -225,48 +233,58 @@
     </xsl:template>
 
     <xsl:template match="table_data[@name='opus']/row/field[@name='title_en']">
-        <xsl:element name="TitleMain">
-            <xsl:attribute name="Language">
-                <xsl:text>en</xsl:text>
-            </xsl:attribute>
-            <xsl:attribute name="Value">
-                <xsl:value-of select="." />
-            </xsl:attribute>
-        </xsl:element>
+        <xsl:if test="string-length(.)>0">
+            <xsl:element name="TitleMain">
+                <xsl:attribute name="Language">
+                    <xsl:text>eng</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="Value">
+                    <xsl:value-of select="." />
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="table_data[@name='opus']/row/field[@name='description']">
-        <xsl:element name="TitleAbstract">
-            <xsl:attribute name="Language">
-                <xsl:value-of select="../field[@name='description_lang']" />
-            </xsl:attribute>
-            <xsl:attribute name="Value">
-                <xsl:value-of select="." />
-            </xsl:attribute>
-        </xsl:element>
+        <xsl:if test="string-length(.)>0">
+            <xsl:element name="TitleAbstract">
+                <xsl:attribute name="Language">
+                    <xsl:value-of select="../field[@name='description_lang']" />
+                </xsl:attribute>
+                <xsl:attribute name="Value">
+                    <xsl:value-of select="." />
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="table_data[@name='opus']/row/field[@name='description2']">
-        <xsl:element name="TitleAbstract">
-            <xsl:attribute name="Language">
-                <xsl:value-of select="../field[@name='description2_lang']" />
-            </xsl:attribute>
-            <xsl:attribute name="Value">
-                <xsl:value-of select="." />
-            </xsl:attribute>
-        </xsl:element>
+        <xsl:if test="string-length(.)>0">
+            <xsl:element name="TitleAbstract">
+                <xsl:attribute name="Language">
+                    <xsl:value-of select="../field[@name='description2_lang']" />
+                </xsl:attribute>
+                <xsl:attribute name="Value">
+                    <xsl:value-of select="." />
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:if>
     </xsl:template>
     
     <xsl:template match="table_data[@name='opus']/row/field[@name='urn']">
-        <xsl:element name="Urn">
-            <xsl:attribute name="Value"><xsl:value-of select="." /></xsl:attribute>
-        </xsl:element>
+        <xsl:if test="string-length(.)>0">
+            <xsl:element name="Urn">
+                <xsl:attribute name="Value"><xsl:value-of select="." /></xsl:attribute>
+            </xsl:element>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="table_data[@name='opus']/row/field[@name='isbn']">
-        <xsl:element name="Isbn">
-            <xsl:attribute name="Value"><xsl:value-of select="." /></xsl:attribute>
-        </xsl:element>
+        <xsl:if test="string-length(.)>0">
+            <xsl:element name="Isbn">
+                <xsl:attribute name="Value"><xsl:value-of select="." /></xsl:attribute>
+            </xsl:element>
+        </xsl:if>
     </xsl:template>
     
     <!--<xsl:template match="table_data[@name='opus']/row/field[@name='url']">
@@ -319,6 +337,7 @@
         <xsl:param name="OriginalID" required="yes" />
         <xsl:for-each select="/mysqldump/database/table_data[@name='opus_diss']/row[field[@name='source_opus']=$OriginalID]">
             <xsl:call-template name="getAdvisor" />
+            <xsl:call-template name="getGermanTitle" />
         </xsl:for-each>
      </xsl:template>
 
@@ -337,5 +356,18 @@
                 <xsl:value-of select="substring-before(field[@name='advisor'],', ')" />
             </xsl:attribute>
         </xsl:element>
+    </xsl:template>
+    
+    <xsl:template name="getGermanTitle">
+        <xsl:if test="string-length(field[@name='title_de'])>0">
+            <xsl:element name="TitleMain">
+                <xsl:attribute name="Language">
+                    <xsl:text>ger</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="Value">
+                    <xsl:value-of select="field[@name='title_de']" />
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:if>
     </xsl:template>
 </xsl:stylesheet>

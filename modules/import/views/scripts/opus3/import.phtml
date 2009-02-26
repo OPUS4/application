@@ -43,7 +43,8 @@
 <?php
 	foreach ($this->importiere as $importentrymeldung)
 	{
-		print ('<li>' . $importentrymeldung->getTitleMain(0)->getValue() . '</li>');
+		#print ('<li>' . $importentrymeldung->getTitleMain(0)->getValue() . '</li>');
+		print ('<li>' . str_replace('<', '&lt;', $importentrymeldung) . '</li>');
 	}
 ?>
 </ol>

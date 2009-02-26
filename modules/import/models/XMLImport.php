@@ -93,7 +93,7 @@ class XMLImport
 			//echo $documentsXML->saveXML($document);
 			try {
 			    $doc = $this->importDocument($documentsXML->saveXML($document));
-			    $imported['success'][] = $doc;
+			    $imported['success'][] = $documentsXML->saveXML($document);
 			}
 			catch (Exception $e) {
 				$index = count($imported['failure']);
