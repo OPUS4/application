@@ -28,29 +28,38 @@
  * @category    Application
  * @package     Opus_Console
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
+ * @author      Ralf Claussnitzer <ralf.claussnitzer@slub-dresden.de>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
+// Configure include path.
+set_include_path('.' . PATH_SEPARATOR
+            . PATH_SEPARATOR . dirname(__FILE__)
+            . PATH_SEPARATOR . dirname(dirname(__FILE__)) . '/library'
+            . PATH_SEPARATOR . get_include_path());
+
+// Zend_Loader is'nt available yet. We have to do a require_once
+// in order to find the bootstrap class.
+require_once 'Opus/Bootstrap/Base.php';
+
 /**
- * This class provides a static initializiation method for setting up
- * the console environment including php include path, configuration and
- * database setup.
+ * Bootstraps and runs a console application.
  *
  * @category    Console
  */
 class OpusConsole extends Opus_Bootstrap_Base {
 
-
     /**
-     * Add setting up database and logging facilities.
+     * Add setting up database and document type path.
      *
      * @return void
      * @see library/Opus/Bootstrap/Opus_Bootstrap_Base#_setupBackend()
      */
     protected function _setupBackend() {
         $this->_setupDatabase();
+        $this->_setupDocumentType();
     }
 
     /**
@@ -58,7 +67,7 @@ class OpusConsole extends Opus_Bootstrap_Base {
      *
      * @return void
      */
-    public function start() {
+    protected function _run() {
         while (1) {
             $input = readline('opus> ');
             readline_add_history($input);
@@ -70,3 +79,9 @@ class OpusConsole extends Opus_Bootstrap_Base {
         }
     }
 }
+
+// Start console
+$console = new OpusConsole;
+$console->run(dirname(dirname(__FILE__)), Opus_Bootstrap_Base::CONFIG_TEST,
+    dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'config');
+
