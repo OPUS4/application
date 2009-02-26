@@ -1,7 +1,5 @@
 <?php
 /**
- * Index Controller for all actions dealing with encryption and signatures
- * 
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -34,19 +32,17 @@
  * @version     $Id$
  */
 
-class Pkm_IndexController extends Zend_Controller_Action
+/**
+ * GPG-Module of Opus
+ * based on PEAR/Crypt_GPG
+ */
+ 
+class OpusGPG extends Crypt_GPG 
 {
-	/**
-	 * Just to be there. No actions taken.
-	 *
-	 * @return void
-	 *
-	 */
-    public function indexAction()
-    {
-    	$this->view->title = $this->view->translate('pkm_modulename');
-    	// check if Crypt_GPG is installed
-    	$gpg = new OpusGPG();
-    }
-
+	
+	public function __construct() 
+	{
+		parent::__construct(array('homedir' => '/var/www', 'binary' => '/usr/local/gnupg/bin/gpg', 'debug' => true));
+		#echo "Crypt_GPG has been instatiated";
+	}
 }
