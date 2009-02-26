@@ -83,13 +83,23 @@ class XMLImport
 	public function import($data)
 	{
 		$imported = array();
+		$imported['success'] = array();
+		$imported['failure'] = array();
 		$documentsXML = new DOMDocument;
 		$documentsXML->loadXML($this->_proc->transformToXml($data));
 		$doclist = $documentsXML->getElementsByTagName('Opus_Document');
 		foreach ($doclist as $document) 
 		{
-			$doc = $this->importDocument($documentsXML->saveXML($document));
-			$imported[] = $doc; 
+			//echo $documentsXML->saveXML($document);
+			try {
+			    $doc = $this->importDocument($documentsXML->saveXML($document));
+			    $imported['success'][] = $doc;
+			}
+			catch (Exception $e) {
+				$index = count($imported['failure']);
+                $imported['failure'][$index]['message'] = $e->getMessage();
+                $imported['failure'][$index]['entry'] = $documentsXML->saveXML($document);
+			} 
 		}
 		#print_r($imported);
 		return $imported;
@@ -103,8 +113,8 @@ class XMLImport
 	 */
 	public function importDocument($data)
 	{
-		$doc = Opus_Document::fromXml($data);
-		$doc->store();
+        $doc = Opus_Document::fromXml($data);
+        $doc->store();
 		return $doc;
 	}
 }

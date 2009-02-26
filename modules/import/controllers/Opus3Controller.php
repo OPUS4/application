@@ -79,7 +79,9 @@ class Import_Opus3Controller extends Zend_Controller_Action
 		$import = new XMLImport($xslt, $stylesheetPath);
 		$result = $import->import($importData);
 		#print_r($result);
-		$this->view->numberOfEntries = count($result);
-		$this->view->importiere = $result;
+		$this->view->numberOfEntries = count($result['success']);
+		$this->view->numberOfFailures = count($result['failure']);
+		$this->view->importiere = $result['success'];
+		$this->view->importfehler = $result['failure'];
 	}
 }

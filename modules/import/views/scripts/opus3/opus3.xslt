@@ -184,7 +184,7 @@
             <!-- Find persons associated with the document -->
             <xsl:call-template name="getAuthors"><xsl:with-param name="OriginalID"><xsl:value-of select="field[@name='source_opus']" /></xsl:with-param></xsl:call-template>
             <!--<xsl:call-template name="getContributors"><xsl:with-param name="contributors"><xsl:value-of select="field[@name='contributors_name']" /></xsl:with-param></xsl:call-template>-->
-            <!--<xsl:call-template name="getAdvisor"><xsl:with-param name="OriginalID"><xsl:value-of select="field[@name='source_opus']" /></xsl:with-param></xsl:call-template>-->
+            <xsl:call-template name="getAdvisors"><xsl:with-param name="OriginalID"><xsl:value-of select="field[@name='source_opus']" /></xsl:with-param></xsl:call-template>
             
             <!--
             Missing fields from opus table:
@@ -263,11 +263,11 @@
         </xsl:element>
     </xsl:template>
 
-    <!--<xsl:template match="table_data[@name='opus']/row/field[@name='isbn']">
+    <xsl:template match="table_data[@name='opus']/row/field[@name='isbn']">
         <xsl:element name="Isbn">
             <xsl:attribute name="Value"><xsl:value-of select="." /></xsl:attribute>
         </xsl:element>
-    </xsl:template>-->
+    </xsl:template>
     
     <!--<xsl:template match="table_data[@name='opus']/row/field[@name='url']">
         <xsl:element name="Url">
@@ -277,16 +277,22 @@
     
     <xsl:template name="getAuthors">
         <xsl:param name="OriginalID" required="yes" />
+        <xsl:for-each select="/mysqldump/database/table_data[@name='opus_autor']/row[field[@name='source_opus']=$OriginalID]">
+            <xsl:call-template name="getAuthor" />
+        </xsl:for-each>
+    </xsl:template>
+
+    <xsl:template name="getAuthor">
         <xsl:element name="PersonAuthor">
             <xsl:attribute name="AcademicTitle"></xsl:attribute>
             <xsl:attribute name="DateOfBirth"></xsl:attribute>
             <xsl:attribute name="PlaceOfBirth"></xsl:attribute>
             <xsl:attribute name="Email"></xsl:attribute>
             <xsl:attribute name="FirstName">
-                <xsl:value-of select="substring-after(/mysqldump/database/table_data[@name='opus_autor']/row[field[@name='source_opus']=$OriginalID]/field[@name='creator_name'],', ')" />
+                <xsl:value-of select="substring-after(field[@name='creator_name'],', ')" />
             </xsl:attribute>
             <xsl:attribute name="LastName">
-                <xsl:value-of select="substring-before(/mysqldump/database/table_data[@name='opus_autor']/row[field[@name='source_opus']=$OriginalID]/field[@name='creator_name'],', ')" />
+                <xsl:value-of select="substring-before(field[@name='creator_name'],', ')" />
             </xsl:attribute>
         </xsl:element>
     </xsl:template>
@@ -309,21 +315,27 @@
         </xsl:element>
     </xsl:template>
 
-    <xsl:template name="getAdvisor">
+    <xsl:template name="getAdvisors">
         <xsl:param name="OriginalID" required="yes" />
+        <xsl:for-each select="/mysqldump/database/table_data[@name='opus_diss']/row[field[@name='source_opus']=$OriginalID]">
+            <xsl:call-template name="getAdvisor" />
+        </xsl:for-each>
+     </xsl:template>
+
+    <xsl:template name="getAdvisor">
         <xsl:element name="PersonAdvisor">
             <xsl:attribute name="AcademicTitle">
-                <xsl:value-of select="substring-after(substring-before(/mysqldump/database/table_data[@name='opus_diss']/row[field[@name='source_opus']=$OriginalID]/field[@name='advisor'],')'),'(')" />
+                <xsl:value-of select="substring-after(substring-before(field[@name='advisor'],')'),'(')" />
             </xsl:attribute>
             <xsl:attribute name="DateOfBirth"></xsl:attribute>
             <xsl:attribute name="PlaceOfBirth"></xsl:attribute>
             <xsl:attribute name="Email"></xsl:attribute>
             <xsl:attribute name="FirstName">
-                <xsl:value-of select="substring-after(substring-before(/mysqldump/database/table_data[@name='opus_diss']/row[field[@name='source_opus']=$OriginalID]/field[@name='advisor'],' ('),', ')" />
+                <xsl:value-of select="substring-after(substring-before(field[@name='advisor'],' ('),', ')" />
             </xsl:attribute>
             <xsl:attribute name="LastName">
-                <xsl:value-of select="substring-before(/mysqldump/database/table_data[@name='opus_diss']/row[field[@name='source_opus']=$OriginalID]/field[@name='advisor'],', ')" />
+                <xsl:value-of select="substring-before(field[@name='advisor'],', ')" />
             </xsl:attribute>
         </xsl:element>
-     </xsl:template>
+    </xsl:template>
 </xsl:stylesheet>

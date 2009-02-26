@@ -48,7 +48,13 @@
 ?>
 </ol>
 <?php
-	#foreach ($this->importfehler as $importentryfehler)
-	#{
-#		echo $importentryfehler;
-#	}
+    printf($this->translate("notimported_documents") . "<br/>", $this->numberOfFailures);
+?>
+<ol>
+<?php
+	foreach ($this->importfehler as $importentryfehler)
+	{
+		print ('<li>' . $importentryfehler['message'] . ':' . str_replace('<', '&lt;', $importentryfehler['entry']) . '</li>');
+	}
+?>
+</ol>

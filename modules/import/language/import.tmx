@@ -12,10 +12,18 @@
     </tu>
     <tu tuid="imported_documents">
       <tuv xml:lang="en">
-        <seg>%1$s documents imported.</seg>
+        <seg>%1$s documents successfully imported.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Es wurden %1$s Documente importiert.</seg>
+        <seg>Es wurden %1$s Documente erfolgreich importiert.</seg>
+      </tuv>
+    </tu>
+    <tu tuid="notimported_documents">
+      <tuv xml:lang="en">
+        <seg>%1$s documents not imported.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>%1$s Documente konnten nicht importiert werden.</seg>
       </tuv>
     </tu>
   </body>
