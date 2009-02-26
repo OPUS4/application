@@ -34,61 +34,123 @@
 	* @version    $Id: doctoral_thesis.xml 1948 2009-02-17 15:17:01Z claussnitzer $
 -->
 
-<documenttype name="doctoral_thesis"
+<documenttype name="habil_thesis"
 	xmlns="http://schemas.opus.org/documenttype"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    
+    <!-- administrative and technical data -->
+    <field name="Enrichment" />
+    <field name="Note" />
+        <!--  Auslagern in Security? -->
+        <field name="SwbId" />
+    <field name="ServerDateModified" />
+    <field name="ServerDatePublished" />
+    <field name="ServerDateUnlocking" />
+    <field name="ServerDateValid" />    
+        <!--  Existiert rein zu Abwärtskompatibilitäts- und Migrationszwecken -->
+	    <field name="Source" />	    
+	    <!--  Auslagern in Identifiers oder References? -->
+        <field name="SwbId" />
+        <!--  Ergebnisse von METIS noch unklar -->
+        <field name="VgWortPixelUrl" />
+        
+         
 
 	<!-- general -->
-	<field name="Licence" mandatory="yes" />
-	<field name="Language" mandatory="yes" />
-	<field name="File" multiplicity="*" />
-
+		<!--  Multiplicity noch nicht möglich -->
+		<field name="Licence" mandatory="yes" multiplicity="4" />
+		<!--  Multiplicity noch nicht möglich -->
+		<field name="Language" mandatory="yes" multiplicity="4" />
+	<field name="File" multiplicity="4" />
+	
+	
     <!-- collections  -->
+        <!-- Noch nicht möglich -->
+        <!-- <field name="Collection" /> -->
+    
     
     <!-- corporate bodies  -->
-    <!-- NOTE: could not used as multi values -->
     <field name="CreatingCorporation" />
     <field name="ContributingCorporation" />
     
-	<!-- dates -->
-	<mandatory type="one-at-least">
-		<field name="CompletedYear" />
-		<field name="CompletedDate" />
-	</mandatory>
-	<mandatory type="one-at-least">
-		<field name="PublishedYear" />
-		<field name="PublishedDate" />
-	</mandatory>
-	<field name="DateAccepted" mandatory="yes" />
-
-    <!-- extent -->
-    <field name="PageNumber" />
+    
+    <!-- dates: user input -->
+	<field name="CompletedYear" />
+	<field name="CompletedDate" />
+	<field name="DateAccepted" />
+	<field name="PublishedYear" />
+	<field name="PublishedDate" />
 	
+	
+    <!-- extent, pages, issue, volume, edtion -->
+    <field name="Edition" />
+    <field name="Issue" />
+    <field name="PageFirst" />
+    <field name="PageLast" />
+    <field name="PageNumber" />
+    <field name="Volume" />
+    	
+    	
 	<!-- identifiers -->
-	<field name="Isbn" multiplicity="2" />
-	<field name="Urn" />
+	<field name="Isbn" multiplicity="4" />
+	<field name="Urn" multiplicity="4" />
+
 
 	<!-- institutes -->
-	<!--  <field name="Institute" mandatory="yes" multiplicity="3" /> -->
-	<field name="NonInstituteAffiliation" />
+	   <!-- Noch nicht möglich -->
+	   <!-- <field name="Institute" /> -->
+	   <!-- Zweck? -->
+	   <field name="NonInstituteAffiliation" />
+
+
+    <!-- patent information -->
+    <field name="Patent" />
+
 
 	<!-- persons -->
-	<field name="PersonAdvisor" mandatory="yes" />
-	<field name="PersonAuthor" mandatory="yes" multiplicity="3" />
-	<field name="PersonOther" multiplicity="3" />
-	<field name="PersonReferee" />
+	<field name="PersonAdvisor" multiplicity="4" />
+	<field name="PersonAuthor" multiplicity="4" />
+	   <!-- Noch nicht möglich -->
+	   <!-- <field name="PersonContributor" multiplicity="4" /> -->
+	   <!-- Noch nicht möglich -->
+	   <!-- <field name="PersonEditor" multiplicity="4" /> -->
+	<field name="PersonOther" multiplicity="4" />
+	<field name="PersonReferee" multiplicity="4" />
+	   <!-- Noch nicht möglich -->
+	   <!-- <field name="PersonTranslator" /> -->
+	
+	
+	<!-- publication process, version control, reviewing, workflow  -->
+	   <!-- ??? -->
+       <!-- <field name="Publication" /> -->
+	   <!-- Ist im DB Schema als PublicationState bezeichnet -->
+	   <!-- <field name="PublicationStatus" /> -->
+	<field name="Reviewed" />
+	
 
     <!-- publishers  -->
-    <!-- <field name="PublisherName" />  -->
-    <!-- <field name="PublisherPlace" />  -->
-
+        <!-- Derzeit nicht im DB-Schema abgebildet -->
+        <!-- <field name="PublisherName" />  -->
+        <!-- Derzeit nicht im DB-Schema abgebildet -->
+        <!-- <field name="PublisherPlace" />  -->
+        <!-- Derzeit nicht im DB-Schema abgebildet & Zweck? -->
+        <!-- <field name="PublisherUniversity" />  -->
+        
+    
     <!-- subjects -->
-    <!-- <field name="SubjectSwd" multiplicity="4" /> -->
-    <!-- <field name="SubjectDdc" mandatory="yes" /> -->
-    <!-- <field name="SubjectUncontrolled" multiplicity="4" /> -->
+        <!-- Noch nicht möglich -->
+        <!-- <field name="SubjectSwd" multiplicity="4" /> -->
+        <!-- Nicht in document_subjects, sondern in Collection abgebildet-->
+        <!-- <field name="SubjectDdc" multiplicity="4" /> -->
+        <!-- Noch nicht möglich -->
+        <!-- <field name="SubjectPsyndex" multiplicity="4" /> -->
+        <!-- Noch nicht möglich -->
+        <!-- <field name="SubjectUncontrolled" multiplicity="4" /> -->
+    
     
 	<!-- titles  -->
-	<field name="TitleAbstract" mandatory="yes" multiplicity="4" />
+	<field name="TitleAbstract" multiplicity="4" />
 	<field name="TitleMain" mandatory="yes" multiplicity="4" />
+	<field name="TitleParent" mandatory="yes" multiplicity="4" />
 
 </documenttype>

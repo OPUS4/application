@@ -1,90 +1,156 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 
 <!-- 
-    * This file is part of OPUS. The software OPUS has been originally developed
-    * at the University of Stuttgart with funding from the German Research Net,
-    * the Federal Department of Higher Education and Research and the Ministry
-    * of Science, Research and the Arts of the State of Baden-Wuerttemberg.
-    *
-	* OPUS 4 is a complete rewrite of the original OPUS software and was developed
-	* by the Stuttgart University Library, the Library Service Center
-	* Baden-Wuerttemberg, the North Rhine-Westphalian Library Service Center,
-	* the Cooperative Library Network Berlin-Brandenburg, the Saarland University
-	* and State Library, the Saxon State Library - Dresden State and University
+	* This file is part of OPUS. The software OPUS has been originally developed
+	* at the University of Stuttgart with funding from the German Research Net,
+	* the Federal Department of Higher Education and Research and the Ministry
+	* of Science, Research and the Arts of the State of Baden-Wuerttemberg.
+	*
+    * OPUS 4 is a complete rewrite of the original OPUS software and was developed
+    * by the Stuttgart University Library, the Library Service Center
+    * Baden-Wuerttemberg, the North Rhine-Westphalian Library Service Center,
+    * the Cooperative Library Network Berlin-Brandenburg, the Saarland University
+    * and State Library, the Saxon State Library - Dresden State and University
     * Library, the Bielefeld University Library and the University Library of
     * Hamburg University of Technology with funding from the German Research
     * Foundation and the European Regional Development Fund.
-    *
-    * LICENCE
-    * OPUS is free software; you can redistribute it and/or modify it under the
-    * terms of the GNU General Public License as published by the Free Software
-    * Foundation; either version 2 of the Licence, or any later version.
-    * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
-    * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-    * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
-    * details. You should have received a copy of the GNU General Public License 
-    * along with OPUS; if not, write to the Free Software Foundation, Inc., 51 
-    * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
-    *
-    * @category   Application
-    * @author     Eike Kleiner <Eike.Kleiner@bsz-bw.de>
-    * @copyright  Copyright (c) 2009, OPUS 4 development team
-    * @license    http://www.gnu.org/licenses/gpl.html General Public License
-    * @version    $Id: article.xml 1948 2009-02-17 15:17:01Z claussnitzer $
+	*
+	* LICENCE
+	* OPUS is free software; you can redistribute it and/or modify it under the
+	* terms of the GNU General Public License as published by the Free Software
+	* Foundation; either version 2 of the Licence, or any later version.
+	* OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
+	* WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+	* FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+	* details. You should have received a copy of the GNU General Public License 
+	* along with OPUS; if not, write to the Free Software Foundation, Inc., 51 
+	* Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+	*
+	* @category   Application
+	* @author     Eike Kleiner <Eike.Kleiner@bsz-bw.de>
+	* @author     Ralf Claussnitzer <ralf.claussnitzer@slub-dresden.de>
+	* @copyright  Copyright (c) 2008 - 2009, OPUS 4 development team
+	* @license    http://www.gnu.org/licenses/gpl.html General Public License
+	* @version    $Id: doctoral_thesis.xml 1948 2009-02-17 15:17:01Z claussnitzer $
 -->
 
-<documenttype name="article"
-    xmlns="http://schemas.opus.org/documenttype"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<documenttype name="manual"
+	xmlns="http://schemas.opus.org/documenttype"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    
+    <!-- administrative and technical data -->
+    <field name="Enrichment" />
+    <field name="Note" />
+        <!--  Auslagern in Security? -->
+        <field name="SwbId" />
+    <field name="ServerDateModified" />
+    <field name="ServerDatePublished" />
+    <field name="ServerDateUnlocking" />
+    <field name="ServerDateValid" />    
+        <!--  Existiert rein zu Abwärtskompatibilitäts- und Migrationszwecken -->
+	    <field name="Source" />	    
+	    <!--  Auslagern in Identifiers oder References? -->
+        <field name="SwbId" />
+        <!--  Ergebnisse von METIS noch unklar -->
+        <field name="VgWortPixelUrl" />
+        
+         
 
-    <!-- general -->
-    <field name="Licence" mandatory="yes" />
-    <field name="Language" mandatory="yes" />
-    <field name="File" multiplicity="*" />
-
+	<!-- general -->
+		<!--  Multiplicity noch nicht möglich -->
+		<field name="Licence" mandatory="yes" multiplicity="4" />
+		<!--  Multiplicity noch nicht möglich -->
+		<field name="Language" mandatory="yes" multiplicity="4" />
+	<field name="File" multiplicity="4" />
+	
+	
     <!-- collections  -->
+        <!-- Noch nicht möglich -->
+        <!-- <field name="Collection" /> -->
+    
     
     <!-- corporate bodies  -->
-    <!-- NOTE: could not used as multi values -->
     <field name="CreatingCorporation" />
     <field name="ContributingCorporation" />
     
-    <!-- dates -->
-    <mandatory type="one-at-least">
-        <field name="CompletedYear" />
-        <field name="CompletedDate" />
-    </mandatory>
-    <mandatory type="one-at-least">
-        <field name="PublishedYear" />
-        <field name="PublishedDate" />
-    </mandatory>
-    <field name="DateAccepted" mandatory="yes" />
+    
+    <!-- dates: user input -->
+	<field name="CompletedYear" />
+	<field name="CompletedDate" />
+	<field name="DateAccepted" />
+	<field name="PublishedYear" />
+	<field name="PublishedDate" />
+	
+	
+    <!-- extent, pages, issue, volume, edtion -->
+    <field name="Edition" />
+    <field name="Issue" />
+    <field name="PageFirst" />
+    <field name="PageLast" />
+    <field name="PageNumber" />
+    <field name="Volume" />
+    	
+    	
+	<!-- identifiers -->
+	<field name="Isbn" multiplicity="4" />
+	<field name="Urn" multiplicity="4" />
 
-    <!-- identifiers -->
-    <field name="Isbn" multiplicity="2" />
-    <field name="Urn" />
 
-    <!-- institutes -->
-    <!--  <field name="Institute" mandatory="yes" multiplicity="3" /> -->
-    <field name="NonInstituteAffiliation" />
+	<!-- institutes -->
+	   <!-- Noch nicht möglich -->
+	   <!-- <field name="Institute" /> -->
+	   <!-- Zweck? -->
+	   <field name="NonInstituteAffiliation" />
 
-    <!-- persons -->
-    <field name="PersonAdvisor" mandatory="yes" />
-    <field name="PersonAuthor" mandatory="yes" multiplicity="3" />
-    <field name="PersonOther" multiplicity="3" />
-    <field name="PersonReferee" />
+
+    <!-- patent information -->
+    <field name="Patent" />
+
+
+	<!-- persons -->
+	<field name="PersonAdvisor" multiplicity="4" />
+	<field name="PersonAuthor" multiplicity="4" />
+	   <!-- Noch nicht möglich -->
+	   <!-- <field name="PersonContributor" multiplicity="4" /> -->
+	   <!-- Noch nicht möglich -->
+	   <!-- <field name="PersonEditor" multiplicity="4" /> -->
+	<field name="PersonOther" multiplicity="4" />
+	<field name="PersonReferee" multiplicity="4" />
+	   <!-- Noch nicht möglich -->
+	   <!-- <field name="PersonTranslator" /> -->
+	
+	
+	<!-- publication process, version control, reviewing, workflow  -->
+	   <!-- ??? -->
+       <!-- <field name="Publication" /> -->
+	   <!-- Ist im DB Schema als PublicationState bezeichnet -->
+	   <!-- <field name="PublicationStatus" /> -->
+	<field name="Reviewed" />
+	
 
     <!-- publishers  -->
-    <!-- <field name="PublisherName" />  -->
-    <!-- <field name="PublisherPlace" />  -->
-
-    <!-- subjects -->
-    <!-- <field name="SubjectSwd" mandatory="yes" multiplicity="4" /> -->
-    <!-- <field name="SubjectDdc" mandatory="yes" /> -->
-    <!-- <field name="SubjectUncontrolled" multiplicity="4" /> -->
+        <!-- Derzeit nicht im DB-Schema abgebildet -->
+        <!-- <field name="PublisherName" />  -->
+        <!-- Derzeit nicht im DB-Schema abgebildet -->
+        <!-- <field name="PublisherPlace" />  -->
+        <!-- Derzeit nicht im DB-Schema abgebildet & Zweck? -->
+        <!-- <field name="PublisherUniversity" />  -->
+        
     
-    <!-- titles  -->
-    <field name="TitleAbstract" mandatory="yes" multiplicity="2" />
-    <field name="TitleMain" mandatory="yes" multiplicity="2" />
+    <!-- subjects -->
+        <!-- Noch nicht möglich -->
+        <!-- <field name="SubjectSwd" multiplicity="4" /> -->
+        <!-- Nicht in document_subjects, sondern in Collection abgebildet-->
+        <!-- <field name="SubjectDdc" multiplicity="4" /> -->
+        <!-- Noch nicht möglich -->
+        <!-- <field name="SubjectPsyndex" multiplicity="4" /> -->
+        <!-- Noch nicht möglich -->
+        <!-- <field name="SubjectUncontrolled" multiplicity="4" /> -->
+    
+    
+	<!-- titles  -->
+	<field name="TitleAbstract" multiplicity="4" />
+	<field name="TitleMain" mandatory="yes" multiplicity="4" />
+	<field name="TitleParent" mandatory="yes" multiplicity="4" />
 
 </documenttype>
