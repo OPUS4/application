@@ -42,25 +42,14 @@ set_include_path('.' . PATH_SEPARATOR
 
 // Zend_Loader is'nt available yet. We have to do a require_once
 // in order to find the bootstrap class.
-require_once 'Opus/Bootstrap/Base.php';
+require_once 'Application/Bootstrap.php';
 
 /**
  * Bootstraps and runs a console application.
  *
  * @category    Console
  */
-class OpusConsole extends Opus_Bootstrap_Base {
-
-    /**
-     * Add setting up database and document type path.
-     *
-     * @return void
-     * @see library/Opus/Bootstrap/Opus_Bootstrap_Base#_setupBackend()
-     */
-    protected function _setupBackend() {
-        $this->_setupDatabase();
-        $this->_setupDocumentType();
-    }
+class OpusConsole extends Application_Bootstrap {
 
     /**
      * Starts an Opus console.
@@ -74,7 +63,7 @@ class OpusConsole extends Opus_Bootstrap_Base {
             try {
                 eval($input);
             } catch (Exception $e) {
-                echo 'Caught exception: ' . $e->getMessage() . "\n";
+                echo 'Caught exception: ' . $e->getMessage() . "\n" . $e->getTraceAsString() . "\n";
             }
         }
     }
