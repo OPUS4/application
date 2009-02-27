@@ -76,7 +76,7 @@
             <!-- dc:format -->
             <xsl:apply-templates select="File/MimeType" mode="oai_dc" />
             <!-- dc:identifier -->
-            <xsl:apply-templates select="Isbn|Urn" mode="oai_dc" />
+            <xsl:apply-templates select="IdentifierIsbn|IdentifierUrn" mode="oai_dc" />
             <!-- dc:source -->
             <!-- <xsl:apply-templates select="" /> -->
             <!-- dc:language -->
@@ -145,7 +145,7 @@
         </xsl:element>
     </xsl:template>
 
-    <xsl:template match="Isbn|Urn" mode="oai_dc">
+    <xsl:template match="IdentifierIsbn|IdentifierUrn" mode="oai_dc">
         <xsl:element name="dc:identifier">
             <xsl:value-of select="@Value" />
         </xsl:element>

@@ -375,14 +375,14 @@
     <!-- Identifiers -->
     <xsl:template match="table_data[@name='opus']/row/field[@name='urn']">
         <xsl:if test="string-length(.)>0">
-            <xsl:element name="Urn">
+            <xsl:element name="IdentifierUrn">
                 <xsl:attribute name="Value"><xsl:value-of select="." /></xsl:attribute>
             </xsl:element>
         </xsl:if>
     </xsl:template>
     <xsl:template match="table_data[@name='opus']/row/field[@name='isbn']">
         <xsl:if test="string-length(.)>0">
-            <xsl:element name="Isbn">
+            <xsl:element name="IdentifierIsbn">
                 <xsl:attribute name="Value"><xsl:value-of select="." /></xsl:attribute>
             </xsl:element>
         </xsl:if>

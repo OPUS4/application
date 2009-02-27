@@ -92,7 +92,7 @@
                 </xsl:choose>
             </xsl:attribute>
 
-            <xsl:element name="Urn">
+            <xsl:element name="IdentifierUrn">
                 <xsl:attribute name="Value"><xsl:value-of select="urn" /></xsl:attribute>
             </xsl:element>
 

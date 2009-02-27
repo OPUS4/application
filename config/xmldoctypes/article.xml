@@ -61,8 +61,8 @@
     <field name="DateAccepted" mandatory="yes" />
 
     <!-- identifiers -->
-    <field name="Isbn" multiplicity="2" />
-    <field name="Urn" />
+    <field name="IdentifierIsbn" multiplicity="2" />
+    <field name="IdentifierUrn" />
 
     <!-- institutes -->
     <!--  <field name="Institute" mandatory="yes" multiplicity="3" /> -->

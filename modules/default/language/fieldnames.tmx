@@ -376,7 +376,7 @@
         <seg>Kurzfassung</seg>
       </tuv>
     </tu>
-    <tu tuid="Isbn">
+    <tu tuid="IdentifierIsbn">
       <tuv xml:lang="en">
         <seg>ISBN</seg>
       </tuv>
@@ -392,7 +392,7 @@
         <seg>ISBN Nummer</seg>
       </tuv>
     </tu>
-    <tu tuid="Urn">
+    <tu tuid="IdentifierUrn">
       <tuv xml:lang="en">
         <seg>URN</seg>
       </tuv>

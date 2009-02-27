@@ -92,8 +92,8 @@
     	
     	
 	<!-- identifiers -->
-	<field name="Isbn" multiplicity="4" />
-	<field name="Urn" multiplicity="4" />
+	<field name="IdentifierIsbn" multiplicity="4" />
+	<field name="IdentifierUrn" multiplicity="4" />
 
 
 	<!-- institutes -->
