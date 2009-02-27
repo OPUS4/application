@@ -64,7 +64,7 @@
     <!--
     Suppress fields with nil value
     -->
-    <xsl:template match="table_data[@name='opus']/row/field[@xsi:nil='true']" />
+    <xsl:template match="table_data/row/field[@xsi:nil='true']" priority="1" />
 
     <xsl:template match="table_data[@name='opus']/row">
         <xsl:element name="Opus_Document">            
