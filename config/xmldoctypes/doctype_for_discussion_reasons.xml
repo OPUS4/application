@@ -92,9 +92,27 @@
     	
     	
 	<!-- identifiers -->
-	<field name="Isbn" multiplicity="4" />
-	<field name="Urn" multiplicity="4" />
+	<field name="IdentifierIsbn" multiplicity="4" />
+	<field name="IdentifierUrn" multiplicity="4" />
+	<field name="IdentifierDoi" multiplicity="4" />
+	<field name="IdentifierHandle" multiplicity="4" />
+	<field name="IdentifierUrl" multiplicity="4" />
+	<field name="IdentifierIssn" multiplicity="4" />
+	<field name="IdentifierStdDoi" multiplicity="4" />
+	<field name="IdentifierCrisLink" multiplicity="4" />
+	<field name="IdentifierSplashUrl" multiplicity="4" />
 
+
+	<!-- references -->
+	<field name="ReferenceIsbn" multiplicity="4" />
+	<field name="ReferenceUrn" multiplicity="4" />
+	<field name="ReferenceDoi" multiplicity="4" />
+	<field name="ReferenceHandle" multiplicity="4" />
+	<field name="ReferenceUrl" multiplicity="4" />
+	<field name="ReferenceIssn" multiplicity="4" />
+	<field name="ReferenceStdDoi" multiplicity="4" />
+	<field name="ReferenceCrisLink" multiplicity="4" />
+	<field name="ReferenceSplashUrl" multiplicity="4" />
 
 	<!-- institutes -->
 	   <!-- Noch nicht möglich -->
@@ -110,14 +128,11 @@
 	<!-- persons -->
 	<field name="PersonAdvisor" multiplicity="4" />
 	<field name="PersonAuthor" multiplicity="4" />
-	   <!-- Noch nicht möglich -->
-	   <!-- <field name="PersonContributor" multiplicity="4" /> -->
-	   <!-- Noch nicht möglich -->
-	   <!-- <field name="PersonEditor" multiplicity="4" /> -->
+	<field name="PersonContributor" multiplicity="4" />
+	<field name="PersonEditor" multiplicity="4" />
 	<field name="PersonOther" multiplicity="4" />
 	<field name="PersonReferee" multiplicity="4" />
-	   <!-- Noch nicht möglich -->
-	   <!-- <field name="PersonTranslator" /> -->
+	<field name="PersonTranslator" />
 	
 	
 	<!-- publication process, version control, reviewing, workflow  -->
@@ -138,14 +153,11 @@
         
     
     <!-- subjects -->
-        <!-- Noch nicht möglich -->
-        <!-- <field name="SubjectSwd" multiplicity="4" /> -->
+    <field name="SubjectSwd" multiplicity="4" />
         <!-- Nicht in document_subjects, sondern in Collection abgebildet-->
         <!-- <field name="SubjectDdc" multiplicity="4" /> -->
-        <!-- Noch nicht möglich -->
-        <!-- <field name="SubjectPsyndex" multiplicity="4" /> -->
-        <!-- Noch nicht möglich -->
-        <!-- <field name="SubjectUncontrolled" multiplicity="4" /> -->
+    <field name="SubjectPsyndex" multiplicity="4" />
+    <field name="SubjectUncontrolled" multiplicity="4" />
     
     
 	<!-- titles  -->
