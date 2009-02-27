@@ -34,5 +34,37 @@
 
 class Opus3FileImport 
 {
-	
+    /**
+     * Holds the path to the fulltexts in Opus3
+     *
+     * @var string  Defaults to null.
+     */
+    protected $_path = null;
+
+    /**
+     * Do some initialization on startup of every action
+     *
+     * @param string $fulltextPath Path to the Opus3-fulltexts
+     * @return void
+     */
+    public function __construct($fulltextPath)
+    {
+        // Initialize member variables.
+        $this->_path = $fulltextPath;
+    }
+    
+    /**
+     * Loads an old Opus ID
+     *
+     * @param string $opusId Id of the document in the old Opus-system
+     * @return void
+     */
+    public function loadFiles($opusId)
+    {
+        // Search the ID-directory in fulltext tree
+        // if you got it, build a Opus_File-Object
+        // look if there are other files
+        // return all files in an array
+    }
+    
 }

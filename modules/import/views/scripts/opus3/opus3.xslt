@@ -159,27 +159,17 @@
             </xsl:attribute>-->
             
             
-            <!--CompletedYear und CompletedDate are not stored by Opus 3, so we leave it out -->
-            <!--<xsl:attribute name="CompletedYear">
-                <xsl:value-of select="field[@name='date_year']" />
-            </xsl:attribute>
-            <xsl:attribute name="CompletedDate">
-                <xsl:value-of select="field[@name='date_year']" /><xsl:text>-01-01</xsl:text>
-            </xsl:attribute>-->
-            
-            <!-- Take date_creation from OPUS3 as PublishedYear, PublishedDate and ServerDatePublished -->
+            <!-- Take date_creation from OPUS3 as ServerDatePublished -->
             <!-- date_creation is stored as a unix timestamp -->
             <!-- its transferred by date function in PHP -->
             <xsl:variable name="date_creation"><xsl:value-of select="field[@name='date_creation']" /></xsl:variable>
             <xsl:variable name="date_modified"><xsl:value-of select="field[@name='date_modified']" /></xsl:variable>
             <xsl:variable name="date_valid"><xsl:value-of select="field[@name='date_valid']" /></xsl:variable>
-            <xsl:attribute name="PublishedYear">
+            <!--PublishedYear und PublishedDate are not stored by Opus 3, so we leave it out -->
+            <!--<xsl:attribute name="CompletedYear">
                 <xsl:value-of select="field[@name='date_year']" />
             </xsl:attribute>
-            <!--PublishedDate is left out, because Opus3 only stores the year -->
-            <!--<xsl:attribute name="PublishedDate">
-                <xsl:value-of select="php:function('date', 'Y-m-d', $date_creation)" />
-            </xsl:attribute>-->
+            <!--CompletedDate is left out, because Opus3 only stores the year -->
             <!--<xsl:attribute name="ServerDatePublished">
                 <xsl:value-of select="php:function('date', 'Y-m-d H:i:s', $date_creation)" />
             </xsl:attribute>
