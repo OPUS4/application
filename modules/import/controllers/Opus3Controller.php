@@ -84,4 +84,15 @@ class Import_Opus3Controller extends Zend_Controller_Action
 		$this->view->importiere = $result['success'];
 		$this->view->importfehler = $result['failure'];
 	}
+	
+	/**
+	 * Finds files from the Opus3-Repository and builds them in XML
+	 *
+	 * @return void
+	 *
+	 */
+	public function getFiles()
+	{
+		//<File PathName="" SortOrder="" Label="" FileType="" MimeType="" Language="" DocumentId=""/>
+	}
 }
