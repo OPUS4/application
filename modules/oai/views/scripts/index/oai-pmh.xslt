@@ -65,10 +65,15 @@
     <xsl:template match="*" mode="oai_dc" />
 
     <xsl:template match="/">
-        <OAI-PMH xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/
-            http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
-            <responseDate><xsl:value-of select="$dateTime" /></responseDate>
-            <request>
+        <xsl:element name="OAI-PMH">
+            <xsl:attribute name="xsi:schemaLocation">
+                <xsl:text>http://www.openarchives.org/OAI/2.0/
+                http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd</xsl:text>
+            </xsl:attribute>
+            <xsl:element name="responseDate">
+                <xsl:value-of select="$dateTime" />
+            </xsl:element>
+            <xsl:element name="request">
                 <xsl:attribute name="verb"><xsl:value-of select="$oai_verb" /></xsl:attribute>
                 <xsl:if test="$oai_from != ''">
                     <xsl:attribute name="from"><xsl:value-of select="$oai_from" /></xsl:attribute>
@@ -77,7 +82,7 @@
                     <xsl:attribute name="until"><xsl:value-of select="$oai_until" /></xsl:attribute>
                 </xsl:if>
                 <xsl:attribute name="metadataPrefix"><xsl:value-of select="$oai_metadataPrefix" /></xsl:attribute>
-            </request>
+            </xsl:element>
             <xsl:choose>
                 <xsl:when test="$oai_verb='ListRecords'">
                     <xsl:apply-templates select="Documents" mode="ListRecords" />
@@ -89,35 +94,39 @@
                     <error code="badVerb">The verb <xsl:value-of select="$oai_verb" /> provided in the request is illegal.</error>
                 </xsl:otherwise>
             </xsl:choose>
-        </OAI-PMH>
+        </xsl:element>
     </xsl:template>
 
     <xsl:template match="Documents" mode="ListRecords">
-        <ListRecords>
+        <xsl:element name="ListRecords">
             <xsl:apply-templates select="Opus_Document" />
-        </ListRecords>
+        </xsl:element>
     </xsl:template>
 
     <xsl:template match="Opus_Document" mode="GetRecord">
-        <GetRecord>
+        <xsl:element name="GetRecord">
             <xsl:apply-templates select="." />
-        </GetRecord>
+        </xsl:element>
     </xsl:template>
 
     <xsl:template match="Opus_Document">
-        <record>
-            <header>
+        <xsl:element name="record">
+            <xsl:element name="header">
                 <!--
                     This is the identifier for the metadata, not a digital object:
                     http://www.openarchives.org/OAI/2.0/guidelines-oai-identifier.htm
                 -->
-                <identifier><xsl:value-of select="$oai_identifier" /></identifier>
-                <datestamp><xsl:value-of select="PublishedDate" /></datestamp>
-            </header>
-            <metadata>
+                <xsl:element name="identifier">
+                    <xsl:value-of select="$oai_identifier" />
+                </xsl:element>
+                <xsl:element name="datestamp">
+                    <xsl:value-of select="@PublishedDate" />
+                </xsl:element>
+            </xsl:element>
+            <xsl:element name="metadata">
                 <xsl:apply-templates select="." mode="oai_dc" />
-            </metadata>
-        </record>
+            </xsl:element>
+        </xsl:element>
     </xsl:template>
 
 </xsl:stylesheet>
