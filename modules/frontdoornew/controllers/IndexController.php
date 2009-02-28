@@ -35,8 +35,9 @@
  *
  *
  *
- * This controller gets an array with all document fields from ModelDocument.
- * These fields pass through filters using functions concerning order and relevance.
+ * This controller gets an 3-dimensional array with all document fields from ModelDocument.
+ * The array has to be proofed for occupied values, then modified to one dimension and pass through
+ * filters using functions concerning order and relevance for displaying them in the Frontdoor View.
  *
  *
  *
@@ -54,22 +55,59 @@ class Frontdoornew_IndexController extends Zend_Controller_Action
         $doc_data = $document->toArray();
         //print_r($doc_data);
 
-        //Proof for occupied fields; Only these fields are to be displayed
+        //Recursive Iteration of occcupied values in $doc_data
 
         $arit = new RecursiveArrayIterator($doc_data);
         $ritit = new RecursiveIteratorIterator($arit);
         foreach ($ritit as $key => $value)
         {
-            if (empty($value) == true)
+            if (empty($value) == false)
             {
+               $mydoc_data_values[] = $value;
+            }
+        }
 
+        // Iteration for keys in $doc_data for max. 2 sub-arrays
+
+        foreach ($doc_data as $key => $value)
+        {
+           if (empty($value) == false)
+           {
+              if (is_array($value))
+              {
+                $array1 = $value;
+                foreach ($array1 as $key1 => $value1)
+                {
+                  if (is_array($value1))
+                  {
+                      $array2 = $value1;
+                      foreach ($array2 as $key2 => $value2)
+                      {
+                          if (is_array ($value2))
+                          {
+                              //$array3 = $value2; do nothing!
+                          }
+                          else
+                          {
+                              $mydoc_data_keys[] = $key. "_" .$key1. "_" .$key2;
+                          }
+                      }
+                  }
+                  else
+                  {
+                      $mydoc_data_keys[] = $key. "_" .$key1;
+                  }
+               }
             }
             else
             {
-            $mydoc_data[] = $value;
+                $mydoc_data_keys[] = $key;
             }
-        }
-        print_r($mydoc_data);
+          }
+       }
+
+        print_r ($mydoc_data_keys);
+        //$mydoc_data = array_combine ($mydoc_data_keys, $mydoc_data_values);
 
         $document_data = $this->filterStopwords($doc_data);
         $document_data['DocumentType'] = $this->view->translate($documentType);
@@ -83,6 +121,7 @@ class Frontdoornew_IndexController extends Zend_Controller_Action
       * List with stopwords
       *
       */
+
 
     private $__stopwords = array('Active', 'CommentInternal', 'DescMarkup',
         'LinkLogo', 'LinkSign', 'MimeType', 'SortOrder', 'PodAllowed', 'ServerDatePublished', 'ServerDateModified',
@@ -237,3 +276,5 @@ class Frontdoornew_IndexController extends Zend_Controller_Action
     }
 
 }
+
+
