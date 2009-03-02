@@ -78,36 +78,41 @@ class Frontdoornew_IndexController extends Zend_Controller_Action
                 $array1 = $value;
                 foreach ($array1 as $key1 => $value1)
                 {
-                  if (is_array($value1))
-                  {
-                      $array2 = $value1;
-                      foreach ($array2 as $key2 => $value2)
-                      {
-                          if (is_array ($value2))
-                          {
-                              //$array3 = $value2; do nothing!
-                          }
-                          else
-                          {
-                              $mydoc_data_keys[] = $key. "_" .$key1. "_" .$key2;
-                          }
-                      }
+                   if (is_array($value1))
+                   {
+                     $array2 = $value1;
+                     foreach ($array2 as $key2 => $value2)
+                     {
+                        if (is_array ($value2))
+                        {
+                        // do nothing!
+                        }
+                        else
+                        {
+                           if (empty($value2) == false)
+                           {
+                           $mydoc_data_keys[] = $key. "_" .$key1. "_" .$key2;
+                           }
+                        }
+                     }
                   }
                   else
                   {
+                      if (empty($value1) == false)
+                      {
                       $mydoc_data_keys[] = $key. "_" .$key1;
+                      }
                   }
                }
-            }
-            else
-            {
+             }
+             else
+             {
                 $mydoc_data_keys[] = $key;
-            }
+             }
           }
-       }
-
-        print_r ($mydoc_data_keys);
-        //$mydoc_data = array_combine ($mydoc_data_keys, $mydoc_data_values);
+        }
+        $mydoc_data = array_combine ($mydoc_data_keys, $mydoc_data_values);
+        print_r ($mydoc_data);
 
         $document_data = $this->filterStopwords($doc_data);
         $document_data['DocumentType'] = $this->view->translate($documentType);
