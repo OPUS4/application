@@ -54,8 +54,70 @@ class Admin_CollectionRoleController extends Controller_CRUDAction {
      * @return void
      */
     public function showAction() {
-        $model = parent::showAction();
-        $this->view->role = $model->getId();
+        $collectionRole = parent::showAction();
+        $selectElement = new Zend_Form_Element_Select('collection');
+        $selectElement = $this->__recurseCollection($collectionRole->toArray(), $selectElement);
+        $selectElement->setAttrib('size', count($selectElement->getMultiOptions()));
+        $addSubCollectionButton = new Zend_Form_Element_Submit('add_subcollection');
+        $addSubCollectionButton->setLabel('Add subcollection');
+        $deleteButton = new Zend_Form_Element_Submit('delete');
+        $deleteButton->setLabel('Delete');
+        $editButton = new Zend_Form_Element_Submit('edit');
+        $editButton->setLabel('Edit');
+        $form = new Zend_Form;
+        $form->setAction($this->view->url(array('action' => 'manage')));
+        $form->addElements(array($selectElement, $deleteButton, $editButton, $addSubCollectionButton));
+        $this->view->form = $form;
+    }
+
+    /**
+     * Manages a collection tree (create, edit, delete and move collections).
+     *
+     * @return void
+     */
+    public function manageAction() {
+        if ($this->_request->isPost() === true) {
+            $data = $this->_request->getParams();
+            $role_id = (int) $data['id'];
+            $collection_id = (int) $data['collection'];
+            $structure = new Opus_Collection_Structure($role_id);
+            if (is_null($this->_request->getPost('delete')) === false) {
+                // Delete collection
+                $collection = new Opus_Collection($role_id, $collection_id);
+                $collection->delete();
+                $this->_redirectTo('Collection deleted.', 'show', null, null, array('id' => $role_id));
+            } else if (is_null($this->_request->getPost('edit')) === false) {
+                // Edit Collection
+                $this->_redirectTo('', 'edit', 'collection', 'admin', array('id' => $collection_id, 'role' => $role_id));
+            } else if (is_null($this->_request->getPost('add_subcollection')) === false) {
+                // Create SubCollection
+                $this->_redirectTo('', 'new', 'collection', 'admin', array('parent' => $collection_id,
+                            'left_sibling' => 0, 'role' => $role_id));
+            } else {
+                $this->_redirectTo('', 'show', 'collection', 'admin', array('id' => $role_id));
+            }
+        } else {
+            $this->_redirectTo('', 'index');
+        }
+    }
+
+
+    /**
+     * Recursively adds collections as options to a select list.
+     *
+     * @param  array                    $collection The array representation of the collection to be displayed.
+     * @param  Zend_Form_Element_Select &$list      The select list.
+     * @param  mixed                    $level      (Optional) Depth of the current entry, defaults to 0.
+     * @return $list
+     */
+    private function __recurseCollection(array $collection, Zend_Form_Element_Select &$list, $level = 0) {
+        foreach ($collection as $subCollection) {
+            $list->addMultiOption($subCollection['Id'], str_repeat('-', $level) . $subCollection['Name']);
+            if (empty($subCollection['SubCollection']) === false) {
+                $this->__recurseCollection($subCollection['SubCollection'], $list, ($level + 1));
+            }
+        }
+        return $list;
     }
 
 }
