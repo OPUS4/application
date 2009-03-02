@@ -141,22 +141,27 @@
             <xsl:attribute name="Language">
                 <xsl:value-of select="field[@name='language']" />
             </xsl:attribute>
-            <xsl:attribute name="CreatingCorporation">
-                <xsl:value-of select="field[@name='creator_corporate']" />
-            </xsl:attribute>
-            <!--<xsl:attribute name="ContributingCorporation">
-                <xsl:value-of select="field[@name='contributors_corporate']" />
-            </xsl:attribute>-->
+            <xsl:if test="string-length(field[@name='creator_corporate'])>0">
+                <xsl:attribute name="CreatingCorporation">
+                    <xsl:value-of select="field[@name='creator_corporate']" />
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:if test="string-length(field[@name='contributors_corporate'])>0">
+                <xsl:attribute name="ContributingCorporation">
+                    <xsl:value-of select="field[@name='contributors_corporate']" />
+                </xsl:attribute>
+            </xsl:if>
             <!-- Source holds source_title? -->
-            <!--<xsl:attribute name="Source">
-                <xsl:value-of select="field[@name='source_title']" />
-            </xsl:attribute>
-            <xsl:attribute name="SwbId">
-                <xsl:value-of select="field[@name='source_swb']" />
-            </xsl:attribute>
-            <xsl:attribute name="RangeId">
-                <xsl:value-of select="field[@name='bereich_id']" />
-            </xsl:attribute>-->
+            <xsl:if test="string-length(field[@name='source_title'])>0">
+                <xsl:attribute name="Source">
+                    <xsl:value-of select="field[@name='source_title']" />
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:if test="string-length(field[@name='source_swb'])>0">
+                <xsl:attribute name="SwbId">
+                    <xsl:value-of select="field[@name='source_swb']" />
+                </xsl:attribute>
+            </xsl:if>
             
             
             <!-- Take date_creation from OPUS3 as ServerDatePublished -->
@@ -166,11 +171,11 @@
             <xsl:variable name="date_modified"><xsl:value-of select="field[@name='date_modified']" /></xsl:variable>
             <xsl:variable name="date_valid"><xsl:value-of select="field[@name='date_valid']" /></xsl:variable>
             <!--PublishedYear und PublishedDate are not stored by Opus 3, so we leave it out -->
-            <!--<xsl:attribute name="CompletedYear">
+            <xsl:attribute name="CompletedYear">
                 <xsl:value-of select="field[@name='date_year']" />
             </xsl:attribute>
             <!--CompletedDate is left out, because Opus3 only stores the year -->
-            <!--<xsl:attribute name="ServerDatePublished">
+            <xsl:attribute name="ServerDatePublished">
                 <xsl:value-of select="php:function('date', 'Y-m-d H:i:s', $date_creation)" />
             </xsl:attribute>
             <xsl:attribute name="ServerDateModified">
@@ -181,7 +186,6 @@
                     <xsl:value-of select="php:function('date', 'Y-m-d H:i:s', $date_valid)" />
                 </xsl:attribute>
             </xsl:if>
-            -->
             <xsl:variable name="dateaccepted"><xsl:value-of select="/mysqldump/database/table_data[@name='opus_diss']/row[field[@name='source_opus']=$OriginalID]/field[@name='date_accepted']" /></xsl:variable>
             <xsl:if test="string-length($dateaccepted)>0">
                 <xsl:attribute name="DateAccepted">
@@ -189,16 +193,21 @@
                 </xsl:attribute>
             </xsl:if>
             
-            <!--
-            <xsl:attribute name="PublisherUniversity">
-                <xsl:value-of select="field[@name='publisher_university']" />
-            </xsl:attribute>           
-            -->
-            
             <!-- Find persons associated with the document -->
             <xsl:call-template name="getAuthors"><xsl:with-param name="OriginalID"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
-            <!--<xsl:call-template name="getContributors"><xsl:with-param name="contributors"><xsl:value-of select="field[@name='contributors_name']" /></xsl:with-param></xsl:call-template>-->
+            <xsl:if test="string-length(field[@name='contributors_name'])>0">
+                <xsl:call-template name="getContributors"><xsl:with-param name="contributors"><xsl:value-of select="field[@name='contributors_name']" /></xsl:with-param></xsl:call-template>
+            </xsl:if>
             <xsl:call-template name="getAdvisors"><xsl:with-param name="OriginalID"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
+            
+            
+            <!-- Fields not used yet -->
+            <!--<xsl:attribute name="RangeId">
+                <xsl:value-of select="field[@name='bereich_id']" />
+            </xsl:attribute>
+            <xsl:attribute name="PublisherUniversity">
+                <xsl:value-of select="field[@name='publisher_university']" />
+            </xsl:attribute>-->           
             
             <!--
             Missing fields from opus table:
@@ -220,34 +229,36 @@
     </xsl:template>
 
     <!-- Notes -->
-    <!--
     <xsl:template match="table_data[@name='opus']/row/field[@name='bem_intern']">
-        <xsl:element name="Note">
-            <xsl:attribute name="Scope">
-                <xsl:text>private</xsl:text>
-            </xsl:attribute>
-            <xsl:attribute name="Message">
-                <xsl:value-of select="." />
-            </xsl:attribute>
-        </xsl:element>
+        <xsl:if test="string-length(.)>0">
+            <xsl:element name="Note">
+                <xsl:attribute name="Scope">
+                    <xsl:text>private</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="Message">
+                    <xsl:value-of select="." />
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:if>
     </xsl:template>
     <xsl:template match="table_data[@name='opus']/row/field[@name='bem_extern']">
-        <xsl:element name="Note">
-            <xsl:attribute name="Scope">
-                <xsl:text>public</xsl:text>
-            </xsl:attribute>
-            <xsl:attribute name="Message">
-                <xsl:value-of select="." />
-            </xsl:attribute>
-        </xsl:element>
+        <xsl:if test="string-length(.)>0">
+            <xsl:element name="Note">
+                <xsl:attribute name="Scope">
+                    <xsl:text>public</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="Message">
+                    <xsl:value-of select="." />
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:if>
     </xsl:template>
-    -->
 
     <!-- Subjects and Classifications -->
-    <!--
-    <xsl:template match="table_data[@name='opus']/row/field[@name='sachgruppe_ddc']">
-        - The value represents a key in the sachgruppe_ddc_de or _en-table -
-        <xsl:element name="SubjectDdc">
+<!--    <xsl:template match="table_data[@name='opus']/row/field[@name='sachgruppe_ddc']">
+-->
+        <!-- The value represents a key in the sachgruppe_ddc_de or _en-table -->
+<!--        <xsl:element name="SubjectDdc">
             <xsl:attribute name="Language">
                 <xsl:text>ger</xsl:text>
             </xsl:attribute>
@@ -264,43 +275,48 @@
             </xsl:attribute>
         </xsl:element>
     </xsl:template>
-    <xsl:template match="table_data[@name='opus']/row/field[@name='subject_swd']">
-        - Split values from field by <Space>,<Space> -
-        - each value gets its own element -
-        <xsl:element name="SubjectSwd">
-            <xsl:attribute name="Language">
-                <xsl:text>ger</xsl:text>
-            </xsl:attribute>
-            <xsl:attribute name="Value">
-                <xsl:value-of select="." />
-            </xsl:attribute>
-        </xsl:element>
+-->    <xsl:template match="table_data[@name='opus']/row/field[@name='subject_swd']">
+        <!-- Split values from field by <Space>,<Space> -->
+        <!-- each value gets its own element -->
+        <xsl:if test="string-length(.)>0">
+            <xsl:element name="SubjectSwd">
+                <xsl:attribute name="Language">
+                    <xsl:text>ger</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="Value">
+                    <xsl:value-of select="." />
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:if>
     </xsl:template>
     <xsl:template match="table_data[@name='opus']/row/field[@name='subject_uncontrolled_english']">
-        - WARNING: the uncontrolled subjects have no standardized format -
-        - take them as one value in one field ??? -
-        <xsl:element name="SubjectUncontrolled">
-            <xsl:attribute name="Language">
-                <xsl:text>eng</xsl:text>
-            </xsl:attribute>
-            <xsl:attribute name="Value">
-                <xsl:value-of select="." />
-            </xsl:attribute>
-        </xsl:element>
+        <!-- WARNING: the uncontrolled subjects have no standardized format -->
+        <!-- take them as one value in one field ??? -->
+        <xsl:if test="string-length(.)>0">
+            <xsl:element name="SubjectUncontrolled">
+                <xsl:attribute name="Language">
+                    <xsl:text>eng</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="Value">
+                    <xsl:value-of select="." />
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:if>
     </xsl:template>
     <xsl:template match="table_data[@name='opus']/row/field[@name='subject_uncontrolled_german']">
-        - WARNING: the uncontrolled subjects have no standardized format -
-        - take them as one value in one field ??? -
-        <xsl:element name="SubjectUncontrolled">
-            <xsl:attribute name="Language">
-                <xsl:text>ger</xsl:text>
-            </xsl:attribute>
-            <xsl:attribute name="Value">
-                <xsl:value-of select="." />
-            </xsl:attribute>
-        </xsl:element>
+        <!-- WARNING: the uncontrolled subjects have no standardized format -->
+        <!-- take them as one value in one field ??? -->
+        <xsl:if test="string-length(.)>0">
+            <xsl:element name="SubjectUncontrolled">
+                <xsl:attribute name="Language">
+                    <xsl:text>ger</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="Value">
+                    <xsl:value-of select="." />
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:if>
     </xsl:template>
-    -->
     
     <!-- Titles and abstracts -->
     <xsl:template match="table_data[@name='opus']/row/field[@name='title']">
@@ -377,14 +393,11 @@
             </xsl:element>
         </xsl:if>
     </xsl:template>
-    <!-- url-field is not used in Opus3, so dont import it -->
-    <!--
     <xsl:template match="table_data[@name='opus']/row/field[@name='url']">
-        <xsl:element name="Url">
+        <xsl:element name="IdentifierUrl">
             <xsl:attribute name="Value"><xsl:value-of select="." /></xsl:attribute>
         </xsl:element>
     </xsl:template>
-    -->
     
     <!-- Person templates, called in main template -->
     <xsl:template name="getAuthors">

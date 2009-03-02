@@ -40,7 +40,7 @@
     
     <!-- administrative and technical data -->
     <field name="Enrichment" />
-    <field name="Note" />
+    <field name="Note" mandatory="yes" multiplicity="4" />
         <!--  Auslagern in Security? -->
         <field name="SwbId" />
     <field name="ServerDateModified" />
@@ -108,16 +108,12 @@
 
 
 	<!-- persons -->
-	<field name="PersonAdvisor" multiplicity="4" />
 	<field name="PersonAuthor" multiplicity="4" />
-	   <!-- Noch nicht möglich -->
-	   <!-- <field name="PersonContributor" multiplicity="4" /> -->
-	   <!-- Noch nicht möglich -->
-	   <!-- <field name="PersonEditor" multiplicity="4" /> -->
+	<field name="PersonContributor" multiplicity="4" />
+	<field name="PersonEditor" multiplicity="4" />
 	<field name="PersonOther" multiplicity="4" />
 	<field name="PersonReferee" multiplicity="4" />
-	   <!-- Noch nicht möglich -->
-	   <!-- <field name="PersonTranslator" /> -->
+	<field name="PersonTranslator" />
 	
 	
 	<!-- publication process, version control, reviewing, workflow  -->
@@ -138,14 +134,11 @@
         
     
     <!-- subjects -->
-        <!-- Noch nicht möglich -->
-        <!-- <field name="SubjectSwd" multiplicity="4" /> -->
+    <field name="SubjectSwd" multiplicity="4" />
         <!-- Nicht in document_subjects, sondern in Collection abgebildet-->
         <!-- <field name="SubjectDdc" multiplicity="4" /> -->
-        <!-- Noch nicht möglich -->
-        <!-- <field name="SubjectPsyndex" multiplicity="4" /> -->
-        <!-- Noch nicht möglich -->
-        <!-- <field name="SubjectUncontrolled" multiplicity="4" /> -->
+    <field name="SubjectPsyndex" multiplicity="4" />
+    <field name="SubjectUncontrolled" multiplicity="4" />
     
     
 	<!-- titles  -->

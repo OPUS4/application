@@ -40,6 +40,12 @@
 	<field name="Licence" mandatory="yes" />
 	<field name="Language" mandatory="yes" />
 	<field name="File" multiplicity="*" />
+	<field name="Source" />
+	<field name="Note" mandatory="yes" multiplicity="4" />
+    <field name="ServerDateModified" />
+    <field name="ServerDatePublished" />
+    <field name="ServerDateUnlocking" />
+    <field name="ServerDateValid" />    
 
     <!-- collections  -->
     
@@ -63,12 +69,19 @@
        <field name="PersonAuthor" multiplicity="3" />
        <!-- <field name="PersonEditor" multiplicity="3" /> -->
     </mandatory>
-    <field name="PersonOther" multiplicity="3" />
+	<field name="PersonAdvisor" multiplicity="4" />
+	<field name="PersonContributor" multiplicity="4" />
+	<field name="PersonEditor" multiplicity="4" />
+	<field name="PersonOther" multiplicity="4" />
+	<field name="PersonReferee" multiplicity="4" />
+	<field name="PersonTranslator" />
 
     <!-- subjects -->
-    <!-- <field name="SubjectSwd" multiplicity="4" /> -->
-    <!-- <field name="SubjectDdc" mandatory="yes" /> -->
-    <!-- <field name="SubjectUncontrolled" multiplicity="4" /> -->
+    <field name="SubjectSwd" multiplicity="4" />
+        <!-- Nicht in document_subjects, sondern in Collection abgebildet-->
+        <!-- <field name="SubjectDdc" multiplicity="4" /> -->
+    <field name="SubjectPsyndex" multiplicity="4" />
+    <field name="SubjectUncontrolled" multiplicity="4" />
     
     <!-- titles  -->
     <field name="TitleAbstract" mandatory="yes" multiplicity="2" />
