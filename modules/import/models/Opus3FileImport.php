@@ -62,9 +62,57 @@ class Opus3FileImport
     public function loadFiles($opusId)
     {
         // Search the ID-directory in fulltext tree
+        echo $this->searchDir($this->_path, $opusId);
         // if you got it, build a Opus_File-Object
         // look if there are other files
         // return all files in an array
     }
     
+    private function getFiles($path) 
+    {
+        if (false === is_dir($path))
+            return false;
+
+        $dirs = array($path);
+        while (NULL !== ($dir = array_pop($dirs)))
+        {
+            if ($dh = opendir($dir))
+            {
+                while (false !== ($file = readdir($dh)))
+                {
+                    if( $file == '.' || $file == '..')
+                        continue;
+                    $path = $dir . '/' . $file;
+                    if (is_dir($path) && $path === $search)
+                        return $path;
+                }
+                closedir($dh);
+            }
+        }
+        return false;    	
+    }
+    
+    private function searchDir($from, $search)
+    {
+        if (false === is_dir($from))
+            return false;
+
+        $dirs = array($from);
+        while (NULL !== ($dir = array_pop($dirs)))
+        {
+            if ($dh = opendir($dir))
+            {
+                while (false !== ($file = readdir($dh)))
+                {
+                    if( $file == '.' || $file == '..')
+                        continue;
+                    $path = $dir . '/' . $file;
+                    if (is_dir($path) && $path === $search)
+                        return $path;
+                }
+                closedir($dh);
+            }
+        }
+        return false;
+    } 
 }

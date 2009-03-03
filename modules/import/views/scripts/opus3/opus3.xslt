@@ -200,6 +200,8 @@
             </xsl:if>
             <xsl:call-template name="getAdvisors"><xsl:with-param name="OriginalID"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
             
+            <!-- Classifications and Subjects -->
+            <!--<xsl:call-template name="getSubjects"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param><xsl:with-param name="subject"><xsl:value-of select="field[@name='subject_type']" /></xsl:with-param></xsl:call-template>-->            
             
             <!-- Fields not used yet -->
             <!--<xsl:attribute name="RangeId">
@@ -210,15 +212,21 @@
             </xsl:attribute>-->           
             
             <!--
+            Prepared, but commented out: 
+            Subjects from opus_ccs etc.
+            SubjectDdc
+            PublicationState
+            RangeId
+            PublisherUniversity
+            
             Missing fields from opus table:
-            subject_type (classification system the document is classified with) erstmal ausklammern
             lic (License information, not sure how this is handled currently) <field name="Licence" mandatory="yes" multiplicity="4" />
             
             Missing fields in other opus3 tables:
             opus_coll <field name="Collection" />
             opus_hashes - geht in File mit ein <field name="File" multiplicity="4" />
             opus_inst (+ institutes + faculties) <field name="Institute" />
-            opus_msc, opus_pacs, opus_ccs (, opus_bk) + Klassifikationstabellen (realisiert in Collections)
+            Klassifikationstabellen (realisiert in Collections)
             opus_schriftenreihe (+ schriftenreihe) <field name="TitleParent" mandatory="yes" multiplicity="4" />
             
             university_lang not to be migrated (part of configuration)
@@ -313,6 +321,22 @@
                 </xsl:attribute>
                 <xsl:attribute name="Value">
                     <xsl:value-of select="." />
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:if>
+    </xsl:template>
+    <xsl:template name="getSubjects">
+        <xsl:param name="subject" required="yes" />
+        <xsl:param name="source_id" required="yes" />
+        <xsl:variable name="subject_table">opus_<xsl:value-of select="$subject" /></xsl:variable>
+        <xsl:variable name="subject_object">Subject<xsl:value-of select="php:function('strtoupper', substring($subject, 1, 1))" /><xsl:value-of select="substring($subject, 2)" /></xsl:variable>
+        <xsl:if test="string-length(/mysqldump/database/table_data[@name=$subject_table]/row[field[@name='source_opus']=$source_id]/field[@name='class'])>0">
+            <xsl:element name="{$subject_object}">
+                <xsl:attribute name="Language">
+                    <xsl:text>ger</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="Value">
+                    <xsl:value-of select="/mysqldump/database/table_data[@name=$subject_table]/row[field[@name='source_opus']=$source_id]/field[@name='class']" />
                 </xsl:attribute>
             </xsl:element>
         </xsl:if>
