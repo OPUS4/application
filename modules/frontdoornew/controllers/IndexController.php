@@ -55,9 +55,18 @@ class Frontdoornew_IndexController extends Zend_Controller_Action
         $doc_data = $document->toArray();
         //print_r($doc_data);
 
-        //Recursive Iteration of occcupied values in $doc_data
+        // Filter for relevant $keys and order for Frontdoor view
 
-        $arit = new RecursiveArrayIterator($doc_data);
+        $document_data = $this->filterStopwords($doc_data);
+        $document_data['DocumentType'] = $this->view->translate($documentType);
+        $result = $this->my_sort($document_data);
+        //$this->view->result = $result;
+        //print_r($result);
+
+
+        //Recursive Iteration of occcupied values in $result
+
+        $arit = new RecursiveArrayIterator($result);
         $ritit = new RecursiveIteratorIterator($arit);
         foreach ($ritit as $key => $value)
         {
@@ -69,7 +78,7 @@ class Frontdoornew_IndexController extends Zend_Controller_Action
 
         // Iteration for keys in $doc_data for max. 2 sub-arrays
 
-        foreach ($doc_data as $key => $value)
+        foreach ($result as $key => $value)
         {
            if (empty($value) == false)
            {
@@ -114,11 +123,6 @@ class Frontdoornew_IndexController extends Zend_Controller_Action
         $mydoc_data = array_combine ($mydoc_data_keys, $mydoc_data_values);
         print_r ($mydoc_data);
 
-        $document_data = $this->filterStopwords($doc_data);
-        $document_data['DocumentType'] = $this->view->translate($documentType);
-        $result = $this->my_sort($document_data);
-        $this->view->result = $result;
-        //print_r($result);
     }
 
      /**
@@ -131,7 +135,7 @@ class Frontdoornew_IndexController extends Zend_Controller_Action
     private $__stopwords = array('Active', 'CommentInternal', 'DescMarkup',
         'LinkLogo', 'LinkSign', 'MimeType', 'SortOrder', 'PodAllowed', 'ServerDatePublished', 'ServerDateModified',
         'ServerDateUnlocked', 'ServerDateValid', 'Source', 'SwbId', 'PatentCountries', 'PatentDateGranted',
-        'PatentApplication', 'Enrichment', 'Email', 'LastName', 'FirstName', 'PlaceOfBirth', 'DateOfBirth', 'AcademicTitle');
+        'PatentApplication', 'Enrichment', 'Email', 'PlaceOfBirth', 'DateOfBirth', 'AcademicTitle');
 
      /**
       *
@@ -165,7 +169,7 @@ class Frontdoornew_IndexController extends Zend_Controller_Action
     {
 
         $weight = array(
-                          'Urn' => -100,
+                          'IdentifierUrn' => -100,
                           'TitleMain' => -90,
                           'TitleParent' => -80,
                           'PersonAuthor' => -70,
