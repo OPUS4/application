@@ -121,7 +121,25 @@ class Frontdoornew_IndexController extends Zend_Controller_Action
           }
         }
         $mydoc_data = array_combine ($mydoc_data_keys, $mydoc_data_values);
+        //print_r ($mydoc_data);
+
+        // Resolving SWD-Keywords
+
+        foreach ($mydoc_data as $key => $value)
+        {
+            for ($i = 0; $i < 20; $i++)
+            {
+                if ($key == 'SubjectSwd_'.$i.'_Value')
+                {
+                    $myswd[] = $value;
+                }
+            }
+        }
+        //print_r ($myswd);
+        $swd = implode (', ' , $myswd);
+        $mydoc_data['Swd'] = $swd;
         print_r ($mydoc_data);
+
 
     }
 
@@ -178,6 +196,7 @@ class Frontdoornew_IndexController extends Zend_Controller_Action
                           'ContributingCorporation' => -50,
                           'NonInstituteAffiliation' => -45,
                           'SubjectSwd' => -40,
+                          'Swd' => -37,
                           'SubjectDdc' => -30,
                           'SubjectUncontrolled' => -20,
                           'PersonOther' => -7,
