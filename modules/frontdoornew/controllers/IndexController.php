@@ -55,16 +55,16 @@ class Frontdoornew_IndexController extends Zend_Controller_Action
         $doc_data = $document->toArray();
         //print_r($doc_data);
 
-        // Filter for relevant $keys and order for Frontdoor view
+// Filter for relevant keys and order for Frontdoor view
 
         $document_data = $this->filterStopwords($doc_data);
         $document_data['DocumentType'] = $this->view->translate($documentType);
         $result = $this->my_sort($document_data);
         //$this->view->result = $result;
-        //print_r($result);
+        //Test: print_r($result);
 
 
-        //Recursive Iteration of occcupied values in $result
+//Recursive Iteration of occcupied values in $result
 
         $arit = new RecursiveArrayIterator($result);
         $ritit = new RecursiveIteratorIterator($arit);
@@ -76,7 +76,7 @@ class Frontdoornew_IndexController extends Zend_Controller_Action
             }
         }
 
-        // Iteration for keys in $doc_data for max. 2 sub-arrays
+// Iteration for keys in $doc_data for max. 2 sub-arrays
 
         foreach ($result as $key => $value)
         {
@@ -121,9 +121,10 @@ class Frontdoornew_IndexController extends Zend_Controller_Action
           }
         }
         $mydoc_data = array_combine ($mydoc_data_keys, $mydoc_data_values);
-        //print_r ($mydoc_data);
+        //Test: print_r ($mydoc_data);
 
-        // Resolving SWD-Keywords
+
+// Collecting SWD-Keywords and and combining them with language information
 
         foreach ($mydoc_data as $key => $value)
         {
@@ -131,16 +132,52 @@ class Frontdoornew_IndexController extends Zend_Controller_Action
             {
                 if ($key == 'SubjectSwd_'.$i.'_Value')
                 {
-                    $myswd[] = $value;
+                    $myswd_value[] = $value;
+                }
+                if ($key == 'SubjectSwd_'.$i.'_Language')
+                {
+                    $myswd_lan[] = $value;
                 }
             }
         }
-        //print_r ($myswd);
-        $swd = implode (', ' , $myswd);
-        $mydoc_data['Swd'] = $swd;
+        //Test: print_r ($myswd_value);
+        $mykey_eng = Array();
+        $mykey_ger = Array();
+        foreach ($myswd_lan as $key => $value)
+        {
+            if ($value == 'de')
+            {
+                $mykey_ger[] = $key;
+            }
+            if ($value == 'en')
+            {
+                $mykey_eng[] = $key;
+            }
+        }
+        //Test: print_r ($mykey_ger);
+        $myswd_ger = Array();
+        $myswd_eng = Array();
+        foreach ($myswd_value as $key => $value)
+        {
+            if ( in_array($key, $mykey_ger, true))
+            {
+               $myswd_ger[] = $value;
+            }
+            if ( in_array($key, $mykey_eng, true))
+            {
+               $myswd_eng[] = $value;
+            }
+        }
+        //Test: print_r ($swd_eng);
+        $swd_ger = implode (', ' , $myswd_ger);
+        $swd_eng = implode (', ' , $myswd_eng);
+        $mydoc_data['Swd_ger'] = $swd_ger;
+        if (is_array ($swd_eng) == true)
+        {
+        $mydoc_data['Swd_eng'] = $swd_eng;
+        }
+        //Test: print_r ($swd_ger);
         print_r ($mydoc_data);
-
-
     }
 
      /**
@@ -191,7 +228,6 @@ class Frontdoornew_IndexController extends Zend_Controller_Action
                           'TitleMain' => -90,
                           'TitleParent' => -80,
                           'PersonAuthor' => -70,
-
                           'CreatingCorporation' => -60,
                           'ContributingCorporation' => -50,
                           'NonInstituteAffiliation' => -45,
@@ -199,9 +235,11 @@ class Frontdoornew_IndexController extends Zend_Controller_Action
                           'Swd' => -37,
                           'SubjectDdc' => -30,
                           'SubjectUncontrolled' => -20,
-                          'PersonOther' => -7,
-                          'Reviewed' => 0,
-                          'PersonReferee' => 5,
+                          'Reviewed' => -15,
+                          'PersonReferee' => -10,
+                          'PersonContributor' => -8,
+                          'PersonEditor' => -5,
+                          'PersonOther' => -2,
                           'CompletedYear' => 10,
                           'CompletedDate' => 12,
                           'DateAccepted' => 20,
