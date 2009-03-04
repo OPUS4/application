@@ -10,6 +10,14 @@
         <seg>Administration</seg>
       </tuv>
     </tu>
+    <tu tuid="admin_title_configuration">
+      <tuv xml:lang="en">
+        <seg>Configure</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Konfiguration</seg>
+      </tuv>
+    </tu>
     <tu tuid="admin_title_indexbuild">
       <tuv xml:lang="en">
         <seg>Build Lucene index</seg>

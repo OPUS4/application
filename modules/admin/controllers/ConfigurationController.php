@@ -26,25 +26,25 @@
  *
  * @category    Application
  * @package     Module_Admin
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
+ * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
-<h1>Opus Application - <?= $this->title ?></h1>
-<ul>
-<li><a href="<?= $this->url(array('controller'=>'configuration', 'action'=>'index')) ?>"><?=
-$this->translate('admin_title_configuration') ?></a></li>
-<li><a href="<?= $this->url(array('controller'=>'index', 'action'=>'buildindex')) ?>"><?=
-$this->translate('admin_title_indexbuild') ?></a></li>
-<li><a href="<?= $this->url(array('controller'=>'licence', 'action'=>'index')) ?>"><?=
-$this->translate('admin_title_licence') ?></a></li>
-<li><a href="<?= $this->url(array('controller'=>'collection-role', 'action'=>'index')) ?>"><?=
-$this->translate('admin_title_collections') ?></a></li>
-<li><a href="<?= $this->url(array('controller'=>'person', 'action'=>'index')) ?>"><?=
-$this->translate('admin_title_person') ?></a></li>
-</ul>
 
+/**
+ * Controller to administrate Opus configurations.
+ *
+ * @category    Application
+ * @package     Module_Admin
+ */
+class Admin_ConfigurationController extends Controller_CRUDAction {
 
+    /**
+     * The class of the model being administrated.
+     *
+     * @var Opus_Model_Abstract
+     */
+    protected $_modelclass = 'Opus_Configuration';
+
+}
