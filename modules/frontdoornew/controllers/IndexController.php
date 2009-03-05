@@ -38,6 +38,7 @@
  * This controller gets an 3-dimensional array with all document fields from ModelDocument.
  * The array has to be proofed for occupied values, then modified to one dimension and pass through
  * filters using functions concerning order and relevance for displaying them in the Frontdoor View.
+ * Keywords are collected and combined with language information and converte to strings.
  *
  *
  *
@@ -169,16 +170,86 @@ class Frontdoornew_IndexController extends Zend_Controller_Action
             }
         }
         //Test: print_r ($swd_eng);
-        $swd_ger = implode (', ' , $myswd_ger);
-        $swd_eng = implode (', ' , $myswd_eng);
-        $mydoc_data['Swd_ger'] = $swd_ger;
-        if (is_array ($swd_eng) == true)
+        //Test: print_r ($swd_ger)
+        if (array_key_exists ('0', $myswd_eng) == true)
         {
-        $mydoc_data['Swd_eng'] = $swd_eng;
+           $swd_eng = implode (', ' , $myswd_eng);
+           $mydoc_data['Swd_eng'] = $swd_eng;
+        }
+        if (array_key_exists ('0', $myswd_ger) == true)
+        {
+          $swd_ger = implode (', ' , $myswd_ger);
+          $mydoc_data['Swd_ger'] = $swd_ger;
         }
         //Test: print_r ($swd_ger);
-        print_r ($mydoc_data);
+        //Test: print_r ($mydoc_data);
+
+
+ // Collecting uncontrolled Keywords and and combining them with language information
+
+        $myuncont_lan = array();
+        $myuncont_value = array();
+        foreach ($mydoc_data as $key => $value)
+        {
+            for ($i = 0; $i < 20; $i++)
+            {
+                if ($key == 'SubjectUncontrolled_'.$i.'_Value')
+                {
+                    $myuncont_value[] = $value;
+                }
+                if ($key == 'SubjectUncontrolled_'.$i.'_Language')
+                {
+                    $myuncont_lan[] = $value;
+                }
+            }
+        }
+        //Test: print_r ($myuncont_value);
+        //Test: print_r ($myuncont_lan);
+        $mykey_uncont_eng = Array();
+        $mykey_uncont_ger = Array();
+        foreach ($myuncont_lan as $key => $value)
+        {
+            if ($value == 'de')
+            {
+                $mykey_uncont_ger[] = $key;
+            }
+            if ($value == 'en')
+            {
+                $mykey_uncont_eng[] = $key;
+            }
+        }
+        //Test: print_r ($mykey_uncont_ger);
+        //Test: print_r ($mykey_uncont_eng);
+        $myuncont_ger = Array();
+        $myuncont_eng = Array();
+        foreach ($myuncont_value as $key => $value)
+        {
+            if ( in_array($key, $mykey_uncont_ger, true))
+            {
+               $myuncont_ger[] = $value;
+            }
+            if ( in_array($key, $mykey_uncont_eng, true))
+            {
+               $myuncont_eng[] = $value;
+            }
+        }
+        //Test: print_r ($myuncont_eng);
+        //Test: print_r ($myuncont_ger);
+        if (array_key_exists ('0', $myuncont_eng) == true)
+        {
+            $uncont_eng = implode (', ' , $myuncont_eng);
+            $mydoc_data['Uncontrolled_eng'] = $uncont_eng;
+        }
+        if (array_key_exists ('0', $myuncont_ger) == true)
+        {
+            $uncont_ger = implode (', ' , $myuncont_ger);
+            $mydoc_data['Uncontrolled_ger'] = $uncont_ger;
+        }
+        //Test: print_r ($uncont_ger);
+        //Test: print_r ($uncont_eng);
+        print_r ($mydoc_data); //Test
     }
+
 
      /**
       *
