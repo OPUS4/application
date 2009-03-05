@@ -47,7 +47,7 @@ class Admin_CollectionController extends Controller_CRUDAction {
      *
      * @var Opus_Model_Abstract
      */
-    protected $_modelclass = 'Opus_Model_Collection';
+    protected $_modelclass = 'Opus_Collection';
 
     /**
      * Edits a collection instance

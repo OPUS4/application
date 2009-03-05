@@ -101,6 +101,24 @@ class Admin_CollectionRoleController extends Controller_CRUDAction {
         }
     }
 
+    /**
+     * Extend standard behaviour to drop tables involved with this role.
+     *
+     * @return void
+     */
+    public function deleteAction() {
+        $dbadapter = Zend_Db_Table::getDefaultAdapter();
+        $id = $this->_request->getPost('id');
+        $collectionsContentsTable = $dbadapter->quoteIdentifier("collections_contents_$id");
+        $collectionsStructureTable = $dbadapter->quoteIdentifier("collections_structure_$id");
+        $collectionsReplacementTable = $dbadapter->quoteIdentifier("collections_replacement_$id");
+        $collectionsLinkTable = $dbadapter->quoteIdentifier("link_documents_collections_$id");
+        $dbadapter->query("DROP TABLE $collectionsStructureTable");
+        $dbadapter->query("DROP TABLE $collectionsReplacementTable");
+        $dbadapter->query("DROP TABLE $collectionsLinkTable");
+        $dbadapter->query("DROP TABLE $collectionsContentsTable");
+        parent::deleteAction();
+    }
 
     /**
      * Recursively adds collections as options to a select list.

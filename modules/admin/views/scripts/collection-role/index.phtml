@@ -41,7 +41,7 @@
     <form action="<?= $this->url(array('action' => 'delete')) ?>" class="crud" method="post">
         <a href="<?= $this->url(array('action' => 'show', 'id' => $id)) ?>">Show</a>
         <a href="<?= $this->url(array('action' => 'edit', 'id' => $id)) ?>">Edit</a>
-        <input type="hidden" name="id" value="$id" />
+        <input type="hidden" name="id" value="<?=$id?>" />
         <input type="submit" value="Delete" />
     </form>
 </li>
