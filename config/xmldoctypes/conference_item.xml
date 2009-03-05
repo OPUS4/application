@@ -52,7 +52,7 @@
 	    <!--  Auslagern in Identifiers oder References? -->
         <field name="SwbId" />
         <!--  Ergebnisse von METIS noch unklar -->
-        <field name="VgWortPixelUrl" />
+        <!-- <field name="VgWortPixelUrl" /> -->
         
          
 
