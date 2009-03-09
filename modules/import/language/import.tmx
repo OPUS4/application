@@ -10,6 +10,14 @@
         <seg>Import</seg>
       </tuv>
     </tu>
+    <tu tuid="import_importacion">
+      <tuv xml:lang="en">
+        <seg>Import</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Importieren</seg>
+      </tuv>
+    </tu>
     <tu tuid="imported_documents">
       <tuv xml:lang="en">
         <seg>%1$s documents successfully imported.</seg>

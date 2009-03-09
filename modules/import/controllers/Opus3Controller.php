@@ -31,7 +31,7 @@
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: IndexController.php 1948 2009-02-17 15:17:01Z claussnitzer $
+ * @version     $Id$
  */
 
 class Import_Opus3Controller extends Zend_Controller_Action
@@ -74,6 +74,8 @@ class Import_Opus3Controller extends Zend_Controller_Action
 		$upload = new Zend_File_Transfer_Adapter_Http();
         $files = $upload->getFileInfo();
 		$importData = new DOMDocument;
+		print_r($this->getRequest()->getPost());
+		print_r($files);
 		$importData->load($files['xmldump']['tmp_name']);
 
 		$import = new XMLImport($xslt, $stylesheetPath);

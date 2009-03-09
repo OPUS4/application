@@ -1,7 +1,5 @@
 <?php
 /**
- * Index controller for Import module
- * 
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -29,27 +27,34 @@
  * @category    Application
  * @package     Module_Import
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
-class Import_IndexController extends Zend_Controller_Action
+/**
+ * form to show the import
+ */
+class Opus3ImportForm extends Zend_Form
 {
-	/**
-	 * Set forms to select an import action to the view
-	 *
-	 * @return void
-	 *
-	 */
-     public function indexAction()
-    {
-    	$this->view->title = $this->view->translate('import_modulename');
-        
-        $importForm = new Opus3ImportForm();
-        $importForm->setAction($this->view->url(array("controller"=>"opus3", "action"=>"import")));
-        $importForm->setMethod('post');
+    /**
+     * Build easy search form
+     *
+     * @return void
+     */
+    public function init() {
+		$this->setAttrib('enctype', 'multipart/form-data');
+		// Create and configure query field element:
+		$dumpfile = new Zend_Form_Element_File('xmldump');
+		$dumpfile->setRequired(true);
+        $format = new Zend_Form_Element_Radio('xmlformat');
+        $format->addMultiOption('mysqldump', 'MySQLDump');
+        //$format->addMultiOption('phpmyadmin', 'PhpMyAdmin XML');
+        $format->setValue('mysqldump');
 
-        $this->view->form = $importForm;
+        $submit = new Zend_Form_Element_Submit('submit');
+        $submit->setLabel('import_importaction');
+
+		// Add elements to form:
+		$this->addElements(array($dumpfile, $format, $submit));
     }
-}
+}	
