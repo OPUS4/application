@@ -146,6 +146,14 @@
         <seg>Dokumentart</seg>
       </tuv>
      </tu>
+     <tu tuid="Type">
+      <tuv xml:lang="en">
+        <seg>Document Type</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokumentart</seg>
+      </tuv>
+     </tu>
     <tu tuid="SubjectSwd">
       <tuv xml:lang="en">
         <seg>SWD-Keyword</seg>
@@ -376,6 +384,22 @@
         <seg>Kurzfassung</seg>
       </tuv>
     </tu>
+    <tu tuid="AbstractGer">
+      <tuv xml:lang="en">
+        <seg>German Abstract</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Kurzfassung in Deutsch</seg>
+      </tuv>
+    </tu>
+    <tu tuid="AbstractEng">
+      <tuv xml:lang="en">
+        <seg>English Abstract</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Kurzfassung in Englisch</seg>
+      </tuv>
+    </tu>
     <tu tuid="IdentifierIsbn">
       <tuv xml:lang="en">
         <seg>ISBN</seg>
@@ -406,6 +430,37 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>URN oder ISBN</seg>
+      </tuv>
+    </tu>
+    <tu tuid="SwdGer">
+      <tuv xml:lang="en">
+        <seg>SWD-Keywords (ger)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>SWD-Schlagwörter (Deutsch)</seg>
+      </tuv>
+    </tu>
+    <tu tuid="SwdEng">
+      <tuv xml:lang="en">
+        <seg>SWD-Keywords (eng)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>SWD-Schlagwörter (Englisch)</seg>
+      </tuv>
+    </tu><tu tuid="UncontrolledGer">
+      <tuv xml:lang="en">
+        <seg>Uncontrolled Keywords (ger)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Freie Schlagwörter (Deutsch)</seg>
+      </tuv>
+    </tu>
+    <tu tuid="UncontrolledEng">
+      <tuv xml:lang="en">
+        <seg>Uncontrolled Keywords (eng)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Freie Schlagwörter (Englisch)</seg>
       </tuv>
     </tu>
     <tu tuid="Note">
