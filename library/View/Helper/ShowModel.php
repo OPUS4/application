@@ -126,6 +126,50 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
     }
 
     /**
+     * Helper method for displaying language field.
+     *
+     * @param string $field  Contains field name.
+     * @param string $value  Contains language information.
+     * @param string $prefix (Optional) Prefix for multiple language fields.
+     * @return string
+     */
+    private function __languageHelper($field, $value, $prefix = null) {
+        $result = '';
+        $language_list = Zend_Registry::get('Available_Languages');
+        $iterim_value = @$language_list[$value];
+        if (($this->__saef === false) or (empty($iterim_value) === false)) {
+            $data = $this->__skeleton($field, $iterim_value, $prefix);
+            $result = $this->view->partial('_model.phtml', $data);
+        }
+        return $result;
+    }
+
+    /**
+     * Helper method for displaying licence field.
+     *
+     * @param string $field  Contains field name.
+     * @param array  &$value Contains licence informations.
+     * @param string $prefix (Optional) Prefix for multiple licence fields.
+     * @return string
+     */
+    private function __licenceHelper($field, array &$value, $prefix = null) {
+        $result = '';
+        // we "know" that the licence name is in NameLong
+        $display_name = @$value['NameLong'];
+        $licence_link = @$value['LinkLicence'];
+        if (false === empty($licence_link)) {
+            $iterim_value = '<a href="' . $licence_link . '">' . $display_name . '</a>';
+        } else {
+            $iterim_value = $display_name;
+        }
+        if (($this->__saef === false) or (empty($iterim_value) === false)) {
+            $data = $this->__skeleton($field, $iterim_value, $prefix);
+            $result = $this->view->partial('_model.phtml', $data);
+        }
+        return $result;
+    }
+
+    /**
      * Helper method for person data
      *
      * @param string $field  Specific field
@@ -272,17 +316,15 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
      */
     protected function _displayLicence($field, $value) {
         $result = '';
-        // we "know" that the licence name is in NameLong
-        $display_name = @$value['NameLong'];
-        $licence_link = @$value['LinkLicence'];
-        if (false === empty($licence_link)) {
-            $iterim_value = '<a href="' . $licence_link . '">' . $display_name . '</a>';
+        if (false === @is_array($value[0])) {
+            $result = $this->__licenceHelper($field, $value);
         } else {
-            $iterim_value = $display_name;
-        }
-        if (($this->__saef === false) or (empty($iterim_value) === false)) {
-            $data = $this->__skeleton($field, $iterim_value);
-            $result = $this->view->partial('_model.phtml', $data);
+            foreach ($value as $number => $val) {
+                if (($this->__saef === false) or (empty($val) === false)) {
+                    $prefix = (++$number) . '. ';
+                    $result .= $this->__licenceHelper($field, $val, $prefix);
+                }
+            }
         }
         return $result;
     }
@@ -296,11 +338,15 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
      */
     protected function _displayLanguage($field, $value) {
         $result = '';
-        $language_list = Zend_Registry::get('Available_Languages');
-        $iterim_value = @$language_list[$value];
-        if (($this->__saef === false) or (empty($iterim_value) === false)) {
-            $data = $this->__skeleton($field, $iterim_value);
-            $result = $this->view->partial('_model.phtml', $data);
+        if (false === is_array($value)) {
+            $result = $this->__languageHelper($field, $value);
+        } else {
+            foreach ($value as $number => $val) {
+                if (($this->__saef === false) or (empty($val) === false)) {
+                    $prefix = (++$number) . '. ';
+                    $result .= $this->__languageHelper($field, $val, $prefix);
+                }
+            }
         }
         return $result;
     }
