@@ -62,7 +62,7 @@ class Frontdoornew_IndexController extends Zend_Controller_Action
         $document_data['DocumentType'] = $this->view->translate($documentType);
         $result = $this->my_sort($document_data);
         //$this->view->result = $result;
-        //Test: print_r($result);
+        //print_r($result);
 
 
 //Recursive Iteration of occcupied values in $result
@@ -77,7 +77,7 @@ class Frontdoornew_IndexController extends Zend_Controller_Action
             }
         }
 
-// Iteration for keys in $doc_data for max. 2 sub-arrays
+   // Iteration for keys in $doc_data for max. 2 sub-arrays
 
         foreach ($result as $key => $value)
         {
@@ -125,8 +125,9 @@ class Frontdoornew_IndexController extends Zend_Controller_Action
         //Test: print_r ($mydoc_data);
 
 
-// Collecting SWD-Keywords and and combining them with language information
-
+   // Collecting SWD-Keywords and and combining them with language information
+        $myswd_value = Array();
+        $myswd_lan = Array();
         foreach ($mydoc_data as $key => $value)
         {
             for ($i = 0; $i < 20; $i++)
@@ -144,33 +145,45 @@ class Frontdoornew_IndexController extends Zend_Controller_Action
         //Test: print_r ($myswd_value);
         $mykey_eng = Array();
         $mykey_ger = Array();
-        foreach ($myswd_lan as $key => $value)
+        if (array_key_exists ('0', $myswd_lan) == true)
         {
-            if ($value == 'de')
+            //$mykey_eng = Array();
+            //$mykey_ger = Array();
+            foreach ($myswd_lan as $key => $value)
             {
-                $mykey_ger[] = $key;
-            }
-            if ($value == 'en')
-            {
+               if ($value == 'de')
+               {
+                  $mykey_ger[] = $key;
+               }
+               if ($value == 'en')
+               {
                 $mykey_eng[] = $key;
+               }
             }
-        }
+         }
         //Test: print_r ($mykey_ger);
         $myswd_ger = Array();
         $myswd_eng = Array();
-        foreach ($myswd_value as $key => $value)
+        if (array_key_exists ('0', $myswd_value) == true)
         {
-            if ( in_array($key, $mykey_ger, true))
+            //$myswd_ger = Array();
+            //$myswd_eng = Array();
+            foreach ($myswd_value as $key => $value)
             {
-               $myswd_ger[] = $value;
-            }
-            if ( in_array($key, $mykey_eng, true))
-            {
-               $myswd_eng[] = $value;
+               if ( in_array($key, $mykey_ger, true))
+               {
+                 $myswd_ger[] = $value;
+               }
+               if ( in_array($key, $mykey_eng, true))
+               {
+                 $myswd_eng[] = $value;
+               }
             }
         }
         //Test: print_r ($swd_eng);
         //Test: print_r ($swd_ger)
+        $swd_eng = Array();
+        $swd_ger = Array();
         if (array_key_exists ('0', $myswd_eng) == true)
         {
            $swd_eng = implode (', ' , $myswd_eng);
@@ -247,7 +260,8 @@ class Frontdoornew_IndexController extends Zend_Controller_Action
         }
         //Test: print_r ($uncont_ger);
         //Test: print_r ($uncont_eng);
-        print_r ($mydoc_data); //Test
+        //print_r ($mydoc_data); //Test
+        $this->view->mydoc_data = $mydoc_data;
     }
 
 
@@ -311,6 +325,7 @@ class Frontdoornew_IndexController extends Zend_Controller_Action
                           'PersonContributor' => -8,
                           'PersonEditor' => -5,
                           'PersonOther' => -2,
+                          'PublishedYear' => 5,
                           'CompletedYear' => 10,
                           'CompletedDate' => 12,
                           'DateAccepted' => 20,

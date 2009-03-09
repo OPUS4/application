@@ -33,25 +33,115 @@
  *
  *
  *
- * This view gets the filtered result-array from Frontdoor-Controller
- * and displays it with a modified version of the view helper ShowModel.
+ * This view gets the filtered result-array from the Frontdoor-Controller
+ * and displays it.
  *
  *
  */
 ?>
 <h1><?= $this-> translate('frontdoor_pagetitle') ?></h1><hr />
-<?= $this-> translate('frontdoor_entry') ?>
 
 
-<?php if (is_array($this->result) === true) : ?>
+
+<? if (is_array($this->mydoc_data) === true)
+   {?>
     <div id="summary">
-       <?//= $this->showModel($this->result, true, true); ?>
-    </div>
-<?php endif ?>
+       <? foreach ($this->mydoc_data as $key => $value)
+          {
+              if ($key === 'IdentifierUrn_Value')
+              {?>
+                 <?= $this-> translate('frontdoor_entry'); ?><br />
+                 <b><?= $this-> translate ('IdentifierUrn');?>: </b>
+                 <a href="<?= $this->value = 'http://nbn-resolving.de/urn/resolver.pl?' .$value;?>">
+                 <?= $this->value = $value;?></a><br /><hr /><br />
+                 <?
+              }
+              for ($i = 0; $i < 10; $i++)
+              {
+                 if ($key === 'TitleMain_'.$i.'_Value')
+                 {?>
+                 <p><h2><?= $this->value = $value;?></h2></p><?
+                 }
+              }
+              for ($i = 0; $i < 10; $i++)
+              {
+                 if ($key === 'PersonAuthor_'.$i.'_Name')
+                 {?>
+                    <p><b><?= $this->value = $value;?></b></p><?
+                 }?><p></p><p></p><?
+              }
+              if ($key === 'Swd_ger')
+              {?>
+                 <p><b><?= $this-> translate('SwdGer')?>: </b>
+                 <?= $this->value = $value;?></p><?
+              }
+              if ($key === 'Swd_eng')
+              {?>
+                 <p><b><?= $this-> translate('SwdEng')?>: </b>
+                 <?= $this->value = $value;?></p><?
+              }
+              if ($key === 'Uncontrolled_ger')
+              {?>
+                 <p><b><?= $this-> translate('UncontrolledGer')?>: </b>
+                 <?= $this->value = $value;?></p><?
+              }
+              if ($key === 'Uncontrolled_eng')
+              {?>
+                 <p><b><?= $this-> translate('UncontrolledEng')?>: </b>
+                 <?= $this->value = $value;?></p><?
+              }
+              if ($key === 'Language')
+              {?>
+                 <p><b><?= $this-> translate('Language')?>: </b>
+                 <?= $this->value = $value;?></p><?
+              }
+              if ($key === 'Type')
+              {?>
+                 <p><b><?= $this-> translate('Type')?>: </b>
+                 <?= $this->value = $value;?></p><?
+              }
+              if ($key === 'PublishedYear')
+              {?>
+                 <p><b><?= $this-> translate('PublishedYear')?>: </b>
+                 <?= $this->value = $value;?></p><?
+              }
+              if ($key === 'CompletedYear')
+              {?>
+                 <p><b><?= $this-> translate('CompletedYear')?>: </b>
+                 <?= $this->value = $value;?></p><?
+              }
+              if ($key === 'IdentifierIsbn')
+              {?>
+                 <p><b><?= $this-> translate('IdentifierIsbn')?>: </b>
+                 <?= $this->value = $value;?></p><?
+              }
+              if ($key === 'CreatingCorporation')
+              {?>
+                 <p><b><?= $this-> translate('CreatingCorporation')?>: </b>
+                 <?= $this->value = $value;?></p><?
+              }
+              for ($i = 0; $i < 10; $i++)
+              {
+                 if ($key === 'TitleAbstract_'.$i.'_Value')
+                 {
+                    $val = prev($this->mydoc_data);
 
 
+                    if (($val === 'en') || ($val === 'eng'))
+                       {?>
+                         <p><b><?= $this-> translate('AbstractEng')?>: </b>
+                         <?= $this->value = $value;?><?
+                       }?><?
+                       if (($val === 'de') || ($val === 'ger'))
+                       {?>
+                          <p><b><?= $this-> translate('AbstractGer')?>: </b>
+                           <?= $this->value = $value;?><?
+                       }
 
-
-
+                 }
+              }
+          }?>
+    </div><?
+   }?>
 
 
