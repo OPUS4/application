@@ -292,6 +292,27 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
     }
 
     /**
+     * General method for displaying subjects.
+     *
+     * @param string $field  Contains field name.
+     * @param array  &$value Contains subject values.
+     * @return string
+     */
+    private function __subjectHelper($field, array &$value) {
+        $result = '';
+        $iterim_value = array();
+        foreach ($value as $val) {
+            $iterim_value[] = $val['Value'];
+        }
+        $iterim_value = implode(', ', $iterim_value);
+        if (($this->__saef === false) or (empty($iterim_value) === false)) {
+            $data = $this->__skeleton($field, $iterim_value);
+            $result = $this->view->partial('_model.phtml', $data);
+        }
+        return $result;
+    }
+
+    /**
      * General method for displaying a field
      *
      * @param string $name  Field to display
@@ -472,6 +493,39 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
             $result = $this->view->partial('_model.phtml', $data);
         }
         return $result;
+    }
+
+    /**
+     * Wrapper method for uncontrolled subjects.
+     *
+     * @param string $field  Contains field name.
+     * @param array  &$value Contains field values.
+     * @return string
+     */
+    protected function _displaySubjectUncontrolled($field, array &$value) {
+        return $this->__subjectHelper($field, $value);
+    }
+
+    /**
+     * Wrapper method for Psyndex subjects.
+     *
+     * @param string $field  Contains field name.
+     * @param array  &$value Contains field values.
+     * @return string
+     */
+    protected function _displaySubjectPsyndex($field, array &$value) {
+        return $this->__subjectHelper($field, $value);
+    }
+
+    /**
+     * Wrapper method for SWD subjects.
+     *
+     * @param string $field  Contains field name.
+     * @param array  &$value Contains field values.
+     * @return string
+     */
+    protected function _displaySubjectSwd($field, array &$value) {
+        return $this->__subjectHelper($field, $value);
     }
 
     /**
