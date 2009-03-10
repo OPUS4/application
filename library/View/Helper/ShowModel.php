@@ -148,11 +148,11 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
      * Helper method for displaying licence field.
      *
      * @param string $field  Contains field name.
-     * @param array  &$value Contains licence informations.
+     * @param string &$value Contains licence informations.
      * @param string $prefix (Optional) Prefix for multiple licence fields.
      * @return string
      */
-    private function __licenceHelper($field, array &$value, $prefix = null) {
+    private function __licenceHelper($field, &$value, $prefix = null) {
         $result = '';
         // we "know" that the licence name is in NameLong
         $display_name = @$value['NameLong'];
@@ -461,7 +461,7 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
      * @param array  &$value Value of urn field
      * @return string
      */
-    protected function _displayUrn($field, array &$value) {
+    protected function _displayIdentifierUrn($field, array &$value) {
         $result = '';
         $urn_value = $value['Value'];
         if (($this->__saef === false) or (empty($urn_value) === false)) {
