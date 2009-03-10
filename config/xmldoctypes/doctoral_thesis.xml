@@ -47,7 +47,8 @@
     <field name="ServerDateModified" />
     <field name="ServerDatePublished" />
     <field name="ServerDateUnlocking" />
-    <field name="ServerDateValid" />    
+    <field name="ServerDateValid" />   
+    <field name="IdentifierOpus3" /> 
 
     <!-- collections  -->
     

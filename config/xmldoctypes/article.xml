@@ -47,7 +47,8 @@
     <field name="ServerDateUnlocking" />
     <field name="ServerDateValid" />
     <field name="Source" />
-
+    <field name="IdentifierOpus3" />
+    
     <!-- collections  -->
     
     <!-- corporate bodies  -->

@@ -403,6 +403,11 @@
     </xsl:template>
     
     <!-- Identifiers -->
+    <xsl:template match="table_data[@name='opus']/row/field[@name='source_opus']">
+        <xsl:element name="IdentifierOpus3">
+            <xsl:attribute name="Value"><xsl:value-of select="." /></xsl:attribute>
+        </xsl:element>
+    </xsl:template>
     <xsl:template match="table_data[@name='opus']/row/field[@name='urn']">
         <xsl:if test="string-length(.)>0">
             <xsl:element name="IdentifierUrn">

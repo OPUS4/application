@@ -47,6 +47,7 @@
     <field name="ServerDatePublished" />
     <field name="ServerDateUnlocking" />
     <field name="ServerDateValid" />    
+    <field name="IdentifierOpus3" />
         <!--  Existiert rein zu Abwärtskompatibilitäts- und Migrationszwecken -->
 	    <field name="Source" />	    
 	    <!--  Auslagern in Identifiers oder References? -->

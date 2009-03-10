@@ -90,10 +90,15 @@ class XMLImport
 		$doclist = $documentsXML->getElementsByTagName('Opus_Document');
 		foreach ($doclist as $document) 
 		{
-			//echo $documentsXML->saveXML($document);
+			$tempdoc = new DOMDocument;
+            $tempdoc->loadXML($documentsXML->saveXML($document));
+            $oldid = $tempdoc->getElementsByTagName('IdentifierOpus3')->Item(0)->getAttribute('Value');
 			try {
 			    $doc = $this->importDocument($documentsXML->saveXML($document));
-			    $imported['success'][] = $documentsXML->saveXML($document);
+			    $index = count($imported['success']);
+			    $imported['success'][$index]['entry'] = $documentsXML->saveXML($document);
+			    $imported['success'][$index]['newid'] = $doc;
+			    $imported['success'][$index]['oldid'] = $oldid;
 			}
 			catch (Exception $e) {
 				$index = count($imported['failure']);

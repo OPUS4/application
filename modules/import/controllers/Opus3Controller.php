@@ -80,6 +80,9 @@ class Import_Opus3Controller extends Zend_Controller_Action
 
 		$import = new XMLImport($xslt, $stylesheetPath);
 		$result = $import->import($importData);
+		
+		// get the files for all successfully imported entries
+		
 		#print_r($result);
 		$this->view->numberOfEntries = count($result['success']);
 		$this->view->numberOfFailures = count($result['failure']);
@@ -95,6 +98,8 @@ class Import_Opus3Controller extends Zend_Controller_Action
 	 */
 	public function getFiles()
 	{
+		$fileImport = new Opus3FileImport('/www/tubdok_test/htdocs/volltexte');
+		$fileImport->loadFiles(82); 
 		//<File PathName="" SortOrder="" Label="" FileType="" MimeType="" Language="" DocumentId=""/>
 	}
 }

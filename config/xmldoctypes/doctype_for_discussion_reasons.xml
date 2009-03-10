@@ -48,6 +48,7 @@
     <field name="ServerDateUnlocking" />
     <field name="ServerDateValid" />    
         <!--  Existiert rein zu Abwärtskompatibilitäts- und Migrationszwecken -->
+        <field name="IdentifierOpus3" />
 	    <field name="Source" />	    
 	    <!--  Auslagern in Identifiers oder References? -->
         <field name="SwbId" />

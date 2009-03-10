@@ -44,7 +44,7 @@
 	foreach ($this->importiere as $importentrymeldung)
 	{
 		#print ('<li>' . $importentrymeldung->getTitleMain(0)->getValue() . '</li>');
-		print ('<li>' . str_replace('<', '&lt;', $importentrymeldung) . '</li>');
+		print ('<li>Import alte ID ' . $importentrymeldung['oldid'] . str_replace('<', '&lt;', $importentrymeldung['entry']) . '</li>');
 	}
 ?>
 </ol>
