@@ -50,16 +50,33 @@ class Search_SearchController extends Zend_Controller_Action
     }
 
     /**
-     * Show Search form
+     * Show fulltext search form
      *
      * @return void
      */
-    public function fulltextsearchAction()
+    public function fulltextsearchformAction()
     {
         $this->view->title = $this->view->translate('search_index_fulltextsearch');
 
         $searchForm = new FulltextSearch();
         $searchForm->setAction($this->view->url(array("controller"=>"search", "action"=>"search")));
+        $searchForm->setMethod('post');
+
+        $this->view->form = $searchForm;
+        $this->render('form');
+    }
+
+    /**
+     * Show metadata search form
+     *
+     * @return void
+     */
+    public function metadatasearchformAction()
+    {
+        $this->view->title = $this->view->translate('search_index_metadatasearch');
+
+        $searchForm = new MetadataSearch();
+        $searchForm->setAction($this->view->url(array("controller"=>"search", "action"=>"metadatasearch")));
         $searchForm->setMethod('post');
 
         $this->view->form = $searchForm;
@@ -83,6 +100,51 @@ class Search_SearchController extends Zend_Controller_Action
             if ($form->isValid($data) === true) {
                 // valid form
                 $this->view->form = $form->populate($data);
+                $query = new Opus_Search_Query($form->getValue('query'));
+                $hitlist = $query->commit();
+                $resultlist->hitlist = $hitlist;
+            } else {
+                // invalid form
+                $this->view->form = $form->populate($data);
+                return $this->render('form');
+            }
+        } else {
+            // nonpost request
+            $data = $this->_request->getParams();
+            if (array_key_exists('page', $data)) {
+                // paginator
+                $page = $data['page'];
+                $hitlist = $resultlist->hitlist;
+            } else {
+                return $this->_forward('fulltextsearch');
+            }
+        }
+
+        $hitlistIterator = new Opus_Search_Iterator_HitListIterator($hitlist);
+        $this->view->hitlist_count = $hitlist->count();
+        $paginator = Zend_Paginator::factory($hitlistIterator);
+        $paginator->setCurrentPageNumber($page);
+        $this->view->hitlist_paginator = $paginator;
+    }
+
+    /**
+     * Do the search operation and set the hitlist to the view
+     *
+     * @return void
+     */
+    public function metadatasearchAction()
+    {
+        $this->view->title = $this->view->translate('search_searchresult');
+        $page = 1;
+        $resultlist = new Zend_Session_Namespace('resultlist');
+        if ($this->_request->isPost() === true) {
+            // post request
+            $data = $this->_request->getPost();
+            $form = new MetadataSearch();
+            if ($form->isValid($data) === true) {
+                // valid form
+                $this->view->form = $form->populate($data);
+                // build the query
                 $query = new Opus_Search_Query($form->getValue('query'));
                 $hitlist = $query->commit();
                 $resultlist->hitlist = $hitlist;

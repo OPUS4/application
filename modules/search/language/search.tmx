@@ -242,5 +242,101 @@
         <seg>Leider wurde nichts zu Ihrer Suchanfrage gefunden!</seg>
       </tuv>
     </tu>
+    <tu tuid="searchfield_title">
+      <tuv xml:lang="en">
+        <seg>Title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Titel</seg>
+      </tuv>
+    </tu>
+    <tu tuid="searchfield_author">
+      <tuv xml:lang="en">
+        <seg>Author</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Autor</seg>
+      </tuv>
+    </tu>
+    <tu tuid="searchfield_persons">
+      <tuv xml:lang="en">
+        <seg>Persons</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>sonstige Personen</seg>
+      </tuv>
+    </tu>
+    <tu tuid="searchfield_fulltext">
+      <tuv xml:lang="en">
+        <seg>Fulltext</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Volltext</seg>
+      </tuv>
+    </tu>
+    <tu tuid="searchfield_abstract">
+      <tuv xml:lang="en">
+        <seg>Abstract</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Kurzzusammenfassung</seg>
+      </tuv>
+    </tu>
+    <tu tuid="searchfield_subject">
+      <tuv xml:lang="en">
+        <seg>Subjects</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Klassen und Schlagworte</seg>
+      </tuv>
+    </tu>
+    <tu tuid="searchfield_doctype">
+      <tuv xml:lang="en">
+        <seg>Document type</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokumenttyp</seg>
+      </tuv>
+    </tu>
+    <tu tuid="searchfield_year">
+      <tuv xml:lang="en">
+        <seg>Year of publication</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Publikationsjahr</seg>
+      </tuv>
+    </tu>
+    <tu tuid="searchfield_institute">
+      <tuv xml:lang="en">
+        <seg>Associated institute</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Assoziiertes Institut</seg>
+      </tuv>
+    </tu>
+    <tu tuid="boolean_and">
+      <tuv xml:lang="en">
+        <seg>and</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>und</seg>
+      </tuv>
+    </tu>
+    <tu tuid="boolean_or">
+      <tuv xml:lang="en">
+        <seg>or</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>oder</seg>
+      </tuv>
+    </tu>
+    <tu tuid="boolean_not">
+      <tuv xml:lang="en">
+        <seg>not</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>nicht</seg>
+      </tuv>
+    </tu>
   </body>
 </tmx>

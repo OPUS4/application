@@ -1,0 +1,105 @@
+<?php
+/**
+ * This file is part of OPUS. The software OPUS has been originally developed
+ * at the University of Stuttgart with funding from the German Research Net,
+ * the Federal Department of Higher Education and Research and the Ministry
+ * of Science, Research and the Arts of the State of Baden-Wuerttemberg.
+ *
+ * OPUS 4 is a complete rewrite of the original OPUS software and was developed
+ * by the Stuttgart University Library, the Library Service Center
+ * Baden-Wuerttemberg, the Cooperative Library Network Berlin-Brandenburg,
+ * the Saarland University and State Library, the Saxon State Library -
+ * Dresden State and University Library, the Bielefeld University Library and
+ * the University Library of Hamburg University of Technology with funding from
+ * the German Research Foundation and the European Regional Development Fund.
+ *
+ * LICENCE
+ * OPUS is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the Licence, or any later version.
+ * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @category    Application
+ * @package     Module_Search
+ * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
+ * @copyright   Copyright (c) 2009, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ * @version     $Id$
+ */
+
+/**
+ * form to show the search mask
+ */
+class MetadataSearch extends Zend_Form
+{
+	/**
+	 * number of fields that should be shown in the form
+	 */
+	protected $_queryFieldNumber = 5;
+	
+	/**
+     * Build extended search form
+     */
+    public function init() {
+		// Create and configure query field elements:
+		$query = array();
+		$field = array();
+		$boolean = array();
+		for ($n = 0; $n < $this->_queryFieldNumber; $n++)
+		{
+		    $query[$n] = new Zend_Form_Element_Text('query[' . $n . ']');
+		    $query[$n]->addValidator('stringLength', false, array(3, 100));
+		
+		    $field[$n] = new Zend_Form_Element_Select('field[' . $n . ']');
+		    $field[$n]->addMultiOptions($this->listSearchFields());
+		    
+		    if ($n < ($this->_queryFieldNumber-1))
+		    {
+		        $boolean[$n] = new Zend_Form_Element_Select('boolean[' . $n . ']');
+		        $boolean[$n]->addMultiOptions(array('and' => 'boolean_and', 'or' => 'boolean_or', 'not' => 'boolean_not'));
+		    }
+		}
+
+        $submit = new Zend_Form_Element_Submit('submit');
+        $submit->setLabel('search_searchaction');
+
+		// Add elements to form:
+		for ($n = 0; $n < $this->_queryFieldNumber; $n++)
+		{		
+		    $this->addElements(array($field[$n], $query[$n]));
+		    if ($n < ($this->_queryFieldNumber-1))
+		    {
+		        $this->addElement($boolean[$n]);
+		    }
+		}
+		$this->addElement($submit);
+    }
+    
+    /**
+     * Build list of possible search fields
+     */
+    private function listSearchFields()
+    {
+    	// aus Opus3:
+    	// Titel, Person, Freitext, Schlagwort, Körperschaft, Fakultät, Institut, Abstract
+    	// Dokumentart, Quelle, Jahr, verf. Klassifikationen
+    	// Opus4: Personen differenzieren, Quelle raus (?)
+    	$fields = array(
+            'title' => 'searchfield_title',
+            'author' => 'searchfield_author',
+            'persons' => 'searchfield_persons',
+            'fulltext' => 'searchfield_fulltext',
+            'abstract' => 'searchfield_abstract',
+            'subject' => 'searchfield_subject',
+            'doctype' => 'searchfield_doctype',
+            'year' => 'searchfield_year',
+            'institute' => 'searchfield_institute'
+            );
+    	return $fields;
+    }
+}
