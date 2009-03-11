@@ -82,7 +82,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
     protected function _setupFrontendCaching() {
         parent::_setupFrontendCaching();
         $this->_setupTranslationCache();
-        $this->_setupPageCache();
+        //$this->_setupPageCache();
     }
 
     /**
