@@ -31,7 +31,7 @@
 	* @author     Ralf Claussnitzer <ralf.claussnitzer@slub-dresden.de>
 	* @copyright  Copyright (c) 2008 - 2009, OPUS 4 development team
 	* @license    http://www.gnu.org/licenses/gpl.html General Public License
-	* @version    $Id: doctoral_thesis.xml 1948 2009-02-17 15:17:01Z claussnitzer $
+	* @version    $Id$
 -->
 
 <documenttype name="doctype_for_discussion_reasons"
