@@ -40,6 +40,16 @@ class Opus3FileImport
      * @var string  Defaults to null.
      */
     protected $_path = null;
+    
+    /**
+     * Holds the path to the fulltexts in Opus3 for this certain ID
+     *
+     * @var string  Defaults to null.
+     */
+    protected $_tmpPath = null;
+    
+    protected $_magicPath;
+    
 
     /**
      * Do some initialization on startup of every action
@@ -47,44 +57,59 @@ class Opus3FileImport
      * @param string $fulltextPath Path to the Opus3-fulltexts
      * @return void
      */
-    public function __construct($fulltextPath)
+    public function __construct($fulltextPath, $magicPath)
     {
         // Initialize member variables.
         $this->_path = $fulltextPath;
+        $this->_magicPath = $magicPath;
     }
     
     /**
      * Loads an old Opus ID
      *
-     * @param string $opusId Id of the document in the old Opus-system
+     * @param Opus_Document $object Opus-Document for that the files should be registered
      * @return void
      */
-    public function loadFiles($opusId)
+    public function loadFiles($object)
     {
+    	$opusId = $object->getIdentifierOpus3()->getValue();
+    	
         // Search the ID-directory in fulltext tree
-        $path = $this->searchDir($this->_path, $opusId);
-        echo "Found Files for $opusId in $path";
-        $files = $this->getFiles($path);
+        $this->searchDir($this->_path, $opusId);
+        #echo "Found Files for $opusId in $this->_tmpPath";
+        $files = $this->getFiles($this->_tmpPath);
         
-        print_r($files);
+        if (true === is_array($object->getLanguage()))
+        {
+    	    $lang = $object->getLanguage(0);
+        }
+        else
+        {
+    	    $lang = $object->getLanguage();
+        }
         
-        //$files = array();
-        
-        $filename = '';
-        $finfo = finfo_open(FILEINFO_MIME);
-        $mimeType = finfo_file($finfo, $filename);
-        
-        // if you got it, build a Opus_File-Object
-        $file = new Opus_File();
-        $file->setDocumentId($opusId);
-        $file->setLabel($filename);
-        $file->setPathName($filename);
-        $file->setMimeType($mimeType);
-        $file->setTempFile($filename);
-        $files[] = $file;
-        // look if there are other files
+        if (count($files) > 0) {
+            foreach ($files as $filename) {
+                $finfo = new finfo(FILEINFO_MIME, $this->_magicPath);
+                $mimeType = $finfo->file($filename);
+            
+                $filenameArray = split('\.', $filename);
+                $suffix = $filenameArray[(count($filenameArray)-1)];
+            
+                // if you got it, build a Opus_File-Object
+                $file = $object->addFile();
+                $file->setLabel(basename($filename));
+                $file->setFileType($suffix);
+                $file->setPathName(basename($filename));
+                $file->setMimeType($mimeType);
+                $file->setTempFile($filename);
+			    $file->setDocumentId($object->getId());
+			    $file->setLanguage($lang);
+            }
+        }
+
         // return all files in an array
-        return $files;
+        return $object;
     }
     
     private function getFiles($from) 
@@ -98,17 +123,17 @@ class Opus3FileImport
         {
             while( false !== ($file = readdir($dh)))
             {
-                // Skip '.' and '..'
-                if( $file == '.' || $file == '..')
+                // Skip '.' and '..' and '.svn' (that should not exist, but if it does...) and .asc files (they shouldnt be here also)
+                if( $file == '.' || $file == '..' || $file === '.svn' || ereg("\.asc$", $file) !== false)
                     continue;
                 $path = $from . '/' . $file;
-                if (is_file($file)) {
-                	echo "Datei gefunden: " . $path;
-                	$files[] = $path;
-                }
-                else if( is_dir($path) ) {
-                	echo "Entering $path";
-                    $files .= $this->getFiles($path);
+                if( is_dir($path) )
+                    $files += $this->getFiles($path);
+                else {
+                	// Ignore files in the main directory, OPUS3 stores in subdirectories only
+                	if ($from !== $this->_tmpPath) {
+                        $files[] = $path;
+                	}
                 }
             }
             closedir($dh);
@@ -130,8 +155,8 @@ class Opus3FileImport
                     continue;
                 $path = $from . '/' . $file;
                 if ($file === $search) {
-                	$returnpath = $path;
-                	break;
+                	$this->_tmpPath = $path;
+                	return true;
                 }
                 else if( is_dir($path) ) {
                     $this->searchDir($path, $search);
@@ -139,6 +164,6 @@ class Opus3FileImport
             }
             closedir($dh);
         }
-        return $returnpath;
+        return false;
     }
 }

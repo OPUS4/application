@@ -42,15 +42,17 @@ require_once 'Opus3Migration.php';
 
 // command line arguments
 if ($argc < 3 || in_array($argv[1], array('--help', '-help', '-h', '-?'))) {
+	
 ?>
 
 This is a command line PHP script with one option.
 
   Usage:
-  <?php echo $argv[0]; ?> <importfile> <opus 3 fulltext path> [<importformat>] 
+  <?php echo $argv[0]; ?> <importfile> <opus 3 fulltext path> [<magic path>] [<importformat>] 
 
   <importfile> is the path to the file to import
   <opus 3 fulltext path> is the complete path to the fulltexts in your OPUS3 repository
+  <magic path> (optional) should be supplied when the import doesnt work properly
   <importformat> (optional) is the format you wish to use (at the moment only mysqldump is supported)
 
 <?php
@@ -62,6 +64,7 @@ This is a command line PHP script with one option.
     $import = new Opus3Migration;
     $import->setImportfile($argv[1]);
     $import->setFulltextPath($argv[2]);
-    if ($argc === 4) $import->setFormat($argv[3]);
-    $import->start();
+    if ($argc === 4) $import->setMagicPath($argv[3]);
+    if ($argc === 5) $import->setFormat($argv[4]);
+    #$import->start();
 }

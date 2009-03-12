@@ -97,7 +97,7 @@ class XMLImport
 			    $doc = $this->importDocument($documentsXML->saveXML($document));
 			    $index = count($imported['success']);
 			    $imported['success'][$index]['entry'] = $documentsXML->saveXML($document);
-			    $imported['success'][$index]['newid'] = $doc;
+			    $imported['success'][$index]['document'] = $doc;
 			    $imported['success'][$index]['oldid'] = $oldid;
 			}
 			catch (Exception $e) {

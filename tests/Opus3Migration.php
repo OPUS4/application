@@ -51,6 +51,7 @@ class Opus3Migration extends Application_Bootstrap {
     protected $importfile;
     protected $path;
     protected $format = 'mysqldump';
+    protected $magicPath = '/usr/share/file/magic'; # on Ubuntu-Systems this is the magic path
 
     public function setImportfile($importfile) {
     	$this->importfile = $importfile;
@@ -58,6 +59,10 @@ class Opus3Migration extends Application_Bootstrap {
     
     public function setFulltextPath($path) {
     	$this->path = $path;
+    }
+
+    public function setMagicPath($path) {
+    	$this->magicPath = $path;
     }
     
     public function setFormat($format) {
@@ -70,6 +75,7 @@ class Opus3Migration extends Application_Bootstrap {
      * @return void
      */
     public function _run() {
+		$fileImporter = new Opus3FileImport($this->path, $this->magicPath);
 		$stylesheetPath = '../modules/import/views/scripts/opus3';
 		$stylesheet = $this->format;
     	// Set the stylesheet to use for XML-input transformation
@@ -97,46 +103,21 @@ class Opus3Migration extends Application_Bootstrap {
 		// get the files for all successfully imported entries
 		foreach ($result['success'] as $imported)
 		{
-			$fileList = $this->getFiles($imported['oldid']);
-			//print_r($fileList);
-			//$doc = new Opus_Document($imported['newid']);
-            //if (true === is_array($doc->getLanguage()))
-            //{
-        	    //$lang = $doc->getLanguage(0);
-            //}
-            //else
-            //{
-        	    //$lang = $doc->getLanguage();
-            //}
-			//foreach ($fileList as $file)
-			//{
-			    //$file->setLanguage($lang);
-			    //$doc->addFile($file);
-			//}
-			//$doc->store();
+			echo 'Imported document ' . $imported['document']->getId() . ' successfully! ';
+			$documentFiles = $fileImporter->loadFiles($imported['document']);
+			#print_r($documentFiles->toXml()->saveXml());
+			$documentFiles->store();
+			echo count($imported['document']->getField('File')->getValue()) . " file(s) have been imported successfully!\n";
 		}
 
     }
-
-	/**
-	 * Finds files from the Opus3-Repository and builds them in XML
-	 *
-	 * @return void
-	 *
-	 */
-	public function getFiles($opusid)
-	{
-		$fileImport = new Opus3FileImport($this->path);
-		$files = $fileImport->loadFiles($opusid); 
-		return $files;
-	}
-
 }
 
 // Start migration
 $import = new Opus3Migration;
 $import->setImportfile($argv[1]);
 $import->setFulltextPath($argv[2]);
-if ($argc === 4) $import->setFormat($argv[3]);
+if ($argc >= 4) $import->setMagicPath($argv[3]);
+if ($argc === 5) $import->setFormat($argv[4]);
 $import->run(dirname(dirname(__FILE__)), Opus_Bootstrap_Base::CONFIG_TEST,
     dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'config');

@@ -62,7 +62,7 @@
 		<field name="Licence" mandatory="yes" multiplicity="4" />
 		<!--  Multiplicity noch nicht möglich -->
 		<field name="Language" mandatory="yes" multiplicity="4" />
-	<field name="File" multiplicity="4" />
+	<field name="File" multiplicity="*" />
 	
 	
     <!-- collections  -->

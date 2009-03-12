@@ -175,19 +175,23 @@
                 <xsl:value-of select="field[@name='date_year']" />
             </xsl:attribute>
             <!--CompletedDate is left out, because Opus3 only stores the year -->
-            <xsl:attribute name="ServerDatePublished">
-                <xsl:value-of select="php:function('date', 'Y-m-d H:i:s', $date_creation)" />
-            </xsl:attribute>
-            <xsl:attribute name="ServerDateModified">
-                <xsl:value-of select="php:function('date', 'Y-m-d H:i:s', $date_modified)" />
-            </xsl:attribute>
+            <xsl:if test="$date_creation>0">
+                <xsl:attribute name="ServerDatePublished">
+                    <xsl:value-of select="php:function('date', 'Y-m-d H:i:s', $date_creation)" />
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:if test="$date_modified>0">
+                <xsl:attribute name="ServerDateModified">
+                    <xsl:value-of select="php:function('date', 'Y-m-d H:i:s', $date_modified)" />
+                </xsl:attribute>
+            </xsl:if>
             <xsl:if test="$date_valid>0">
                 <xsl:attribute name="ServerDateValid">
                     <xsl:value-of select="php:function('date', 'Y-m-d H:i:s', $date_valid)" />
                 </xsl:attribute>
             </xsl:if>
             <xsl:variable name="dateaccepted"><xsl:value-of select="/mysqldump/database/table_data[@name='opus_diss']/row[field[@name='source_opus']=$OriginalID]/field[@name='date_accepted']" /></xsl:variable>
-            <xsl:if test="string-length($dateaccepted)>0">
+            <xsl:if test="$dateaccepted>0">
                 <xsl:attribute name="DateAccepted">
                     <xsl:value-of select="php:function('date', 'Y-m-d', $dateaccepted)" />
                 </xsl:attribute>
