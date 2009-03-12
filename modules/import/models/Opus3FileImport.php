@@ -62,57 +62,83 @@ class Opus3FileImport
     public function loadFiles($opusId)
     {
         // Search the ID-directory in fulltext tree
-        echo $this->searchDir($this->_path, $opusId);
+        $path = $this->searchDir($this->_path, $opusId);
+        echo "Found Files for $opusId in $path";
+        $files = $this->getFiles($path);
+        
+        print_r($files);
+        
+        //$files = array();
+        
+        $filename = '';
+        $finfo = finfo_open(FILEINFO_MIME);
+        $mimeType = finfo_file($finfo, $filename);
+        
         // if you got it, build a Opus_File-Object
+        $file = new Opus_File();
+        $file->setDocumentId($opusId);
+        $file->setLabel($filename);
+        $file->setPathName($filename);
+        $file->setMimeType($mimeType);
+        $file->setTempFile($filename);
+        $files[] = $file;
         // look if there are other files
         // return all files in an array
+        return $files;
     }
     
-    private function getFiles($path) 
+    private function getFiles($from) 
     {
-        if (false === is_dir($path))
+        if(! is_dir($from))
             return false;
-
-        $dirs = array($path);
-        while (NULL !== ($dir = array_pop($dirs)))
+     
+        $files = array();
+     
+        if( $dh = opendir($from))
         {
-            if ($dh = opendir($dir))
+            while( false !== ($file = readdir($dh)))
             {
-                while (false !== ($file = readdir($dh)))
-                {
-                    if( $file == '.' || $file == '..')
-                        continue;
-                    $path = $dir . '/' . $file;
-                    if (is_dir($path) && $path === $search)
-                        return $path;
+                // Skip '.' and '..'
+                if( $file == '.' || $file == '..')
+                    continue;
+                $path = $from . '/' . $file;
+                if (is_file($file)) {
+                	echo "Datei gefunden: " . $path;
+                	$files[] = $path;
                 }
-                closedir($dh);
+                else if( is_dir($path) ) {
+                	echo "Entering $path";
+                    $files .= $this->getFiles($path);
+                }
             }
+            closedir($dh);
         }
-        return false;    	
+        return $files;
     }
     
     private function searchDir($from, $search)
     {
-        if (false === is_dir($from))
+        if(! is_dir($from))
             return false;
-
-        $dirs = array($from);
-        while (NULL !== ($dir = array_pop($dirs)))
+     
+        if( $dh = opendir($from))
         {
-            if ($dh = opendir($dir))
+            while( false !== ($file = readdir($dh)))
             {
-                while (false !== ($file = readdir($dh)))
-                {
-                    if( $file == '.' || $file == '..')
-                        continue;
-                    $path = $dir . '/' . $file;
-                    if (is_dir($path) && $path === $search)
-                        return $path;
+                // Skip '.' and '..'
+                if( $file == '.' || $file == '..')
+                    continue;
+                $path = $from . '/' . $file;
+                if ($file === $search) {
+                	$returnpath = $path;
+                	break;
                 }
-                closedir($dh);
+                else if( is_dir($path) ) {
+                    $this->searchDir($path, $search);
+                }
             }
+            closedir($dh);
         }
-        return false;
-    } 
+        return $returnpath;
+    }
 }

@@ -1,7 +1,5 @@
 <?php
 /**
- * Index controller for Import module
- * 
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -29,34 +27,51 @@
  * @category    Application
  * @package     Module_Import
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+// Configure include path.
+set_include_path('.' . PATH_SEPARATOR
+            . PATH_SEPARATOR . dirname(__FILE__)
+            . PATH_SEPARATOR . dirname(dirname(__FILE__)) . '/library'
+            . PATH_SEPARATOR . get_include_path());
 
-class Import_Opus3Controller extends Zend_Controller_Action
-{
-	/**
-	 * Set forms to select an import action to the view
-	 *
-	 * @return void
-	 *
-	 */
-     public function indexAction()
-    {
-    	$this->view->title = $this->view->translate('import_modulename');
+// Zend_Loader is'nt available yet. We have to do a require_once
+// in order to find the bootstrap class.
+require_once 'Application/Bootstrap.php';
+
+/**
+ * Bootstraps and runs an import from Opus3
+ *
+ * @category    Import
+ */
+class Opus3Migration extends Application_Bootstrap {
+
+    protected $importfile;
+    protected $path;
+    protected $format = 'mysqldump';
+
+    public function setImportfile($importfile) {
+    	$this->importfile = $importfile;
     }
-
-	/**
-	 * Imports metadata from an Opus3-Repository from an XML-Dump
-	 *
-	 * @return void
-	 *
-	 */
-	public function importAction()
-	{
-		$stylesheetPath = $this->view->getScriptPath('opus3');
-		$stylesheet = $this->getRequest()->getPost('xmlformat');
+    
+    public function setFulltextPath($path) {
+    	$this->path = $path;
+    }
+    
+    public function setFormat($format) {
+    	$this->format = $format;
+    }
+    
+    /**
+     * Starts an Opus console.
+     *
+     * @return void
+     */
+    public function _run() {
+		$stylesheetPath = '../modules/import/views/scripts/opus3';
+		$stylesheet = $this->format;
     	// Set the stylesheet to use for XML-input transformation
     	switch ($stylesheet)
     	{
@@ -71,12 +86,10 @@ class Import_Opus3Controller extends Zend_Controller_Action
     			break;    		    
     	}
 		
-		$upload = new Zend_File_Transfer_Adapter_Http();
-        $files = $upload->getFileInfo();
 		$importData = new DOMDocument;
 		//print_r($this->getRequest()->getPost());
 		//print_r($files);
-		$importData->load($files['xmldump']['tmp_name']);
+		$importData->load($this->importfile);
 
 		$import = new XMLImport($xslt, $stylesheetPath);
 		$result = $import->import($importData);
@@ -102,14 +115,9 @@ class Import_Opus3Controller extends Zend_Controller_Action
 			//}
 			//$doc->store();
 		}
-		
-		#print_r($result);
-		$this->view->numberOfEntries = count($result['success']);
-		$this->view->numberOfFailures = count($result['failure']);
-		$this->view->importiere = $result['success'];
-		$this->view->importfehler = $result['failure'];
-	}
-	
+
+    }
+
 	/**
 	 * Finds files from the Opus3-Repository and builds them in XML
 	 *
@@ -118,8 +126,17 @@ class Import_Opus3Controller extends Zend_Controller_Action
 	 */
 	public function getFiles($opusid)
 	{
-		$fileImport = new Opus3FileImport('/www/tubdok_test/htdocs/volltexte');
+		$fileImport = new Opus3FileImport($this->path);
 		$files = $fileImport->loadFiles($opusid); 
 		return $files;
 	}
+
 }
+
+// Start migration
+$import = new Opus3Migration;
+$import->setImportfile($argv[1]);
+$import->setFulltextPath($argv[2]);
+if ($argc === 4) $import->setFormat($argv[3]);
+$import->run(dirname(dirname(__FILE__)), Opus_Bootstrap_Base::CONFIG_TEST,
+    dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'config');
