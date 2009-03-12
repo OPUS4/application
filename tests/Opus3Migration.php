@@ -75,7 +75,6 @@ class Opus3Migration extends Application_Bootstrap {
      * @return void
      */
     public function _run() {
-		$fileImporter = new Opus3FileImport($this->path, $this->magicPath);
 		$stylesheetPath = '../modules/import/views/scripts/opus3';
 		$stylesheet = $this->format;
     	// Set the stylesheet to use for XML-input transformation
@@ -103,11 +102,13 @@ class Opus3Migration extends Application_Bootstrap {
 		// get the files for all successfully imported entries
 		foreach ($result['success'] as $imported)
 		{
-			echo 'Imported document ' . $imported['document']->getId() . ' successfully! ';
+			$fileImporter = new Opus3FileImport($this->path, $this->magicPath);
+			$opus3Id = $imported['document']->getIdentifierOpus3()->getValue();
+			echo 'Imported document ' . $opus3Id . ' as new ID ' . $imported['document']->getId() . ' successfully! ';
 			$documentFiles = $fileImporter->loadFiles($imported['document']);
 			#print_r($documentFiles->toXml()->saveXml());
 			$documentFiles->store();
-			echo count($imported['document']->getField('File')->getValue()) . " file(s) have been imported successfully!\n";
+			echo count($imported['document']->getField('File')->getValue()) . " file(s) have been imported successfully for this document!\n";
 		}
 
     }
