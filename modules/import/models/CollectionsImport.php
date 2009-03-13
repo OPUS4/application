@@ -78,10 +78,10 @@ class CollectionsImport
             	// store classification system
             }
             if (strtolower(substr($tablename, 0, 3)) === 'apa') {
-            	// Not prepared already
+            	// Should work, but untested
             	echo "Importing APA...";
              	$apaPrepare = $this->convertApa($tempdoc, $tablename);
-             	echo "not implemented yet!\n";
+             	echo "done!\n";
             	// store classification system
             }
 		}
@@ -500,8 +500,84 @@ class CollectionsImport
 	 * @param DOMDocument $data XML-Document to be imported
 	 * @return array List of documents that have been imported
 	 */
-	protected function convertApa($data)
+	protected function convertApa($data, $classificationName)
 	{
-		return false;
+		$classification = $this->transferOpusClassification($data);
+		
+		$classificationDomDocument = new DOMDocument;
+		$rootNode = $classificationDomDocument->createElement('CollectionRole');
+		$rootNode->setAttribute('name', $classificationName);
+	    $classificationDomDocument->appendChild($rootNode);
+
+		foreach ($classification as $key => $class) {
+            if (ereg("00$", $class['class'])) {
+			    // first level category
+			    $node = $classificationDomDocument->createElement('Collection');
+			    $node->setAttribute('name', $class['bez']);
+			    $node->setAttribute('class', $class['class']);
+			    $rootNode->appendChild($node);
+			    // Reduce the array to improve performance for the next iterations
+			    #array_splice($classification, $key, 1);
+            }
+		}
+		foreach ($classification as $key => $class) {
+            if (ereg("0$", $class['class']) && false === ereg("00$", $class['class'])) {
+            	$parent = false;
+            	// second level category
+            	foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
+            		if ($coll->getAttribute('class') === substr($class['class'], 0, 2).'00') {
+            			$parent = $coll;
+            		}
+            	}
+	            $node = $classificationDomDocument->createElement('Collection');
+			    $node->setAttribute('name', $class['bez']);
+			    $node->setAttribute('class', $class['class']);
+			    if ($parent !== false)
+			    {
+			        $parent->appendChild($node);
+			    }
+			    else
+			    {
+			    	// if there is no parent, put elements of the second level directly under the root node
+			    	$rootNode->appendChild($node);
+			    }
+			    // Reduce the array to improve performance for the next iterations
+			    #array_splice($classification, $key, 1);
+            }
+		}
+		foreach ($classification as $class) {
+            if (false === ereg("0$", $class['class'])) {
+            	$parent = false;
+            	// third level category
+            	foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
+            		if ($coll->getAttribute('class') === substr($class['class'], 0, 3).'0') {
+            			$parent = $coll;
+            		}
+            	}
+            	if ($parent === false) {
+            	    // no parent found, try one level higher
+            	    foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
+            		    if (substr($coll->getAttribute('class'), 0, 2) === substr($class['class'], 0, 2) && ereg("00$", $coll->getAttribute('class'))) {
+            			    $parent = $coll;
+            		    }
+            	    }
+            	}
+		        $node = $classificationDomDocument->createElement('Collection');
+		        $node->setAttribute('name', $class['bez']);
+		        $node->setAttribute('class', $class['class']);
+			    if ($parent !== false)
+			    {
+			        $parent->appendChild($node);
+			    }
+			    else
+			    {
+			    	// if there is no parent, put elements of the second level directly under the root node
+			    	$rootNode->appendChild($node);
+			    }
+            }
+		}
+		
+		#echo $classificationDomDocument->saveXml();
+		return $classificationDomDocument;
 	}
 }
