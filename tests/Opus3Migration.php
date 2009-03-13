@@ -95,6 +95,8 @@ class Opus3Migration extends Application_Bootstrap {
 		//print_r($this->getRequest()->getPost());
 		//print_r($files);
 		$importData->load($this->importfile);
+		
+		$importCollections = new CollectionsImport($importData);
 
 		$import = new XMLImport($xslt, $stylesheetPath);
 		$result = $import->import($importData);
@@ -110,7 +112,6 @@ class Opus3Migration extends Application_Bootstrap {
 			$documentFiles->store();
 			echo count($imported['document']->getField('File')->getValue()) . " file(s) have been imported successfully for this document!\n";
 		}
-
     }
 }
 
