@@ -35,8 +35,6 @@
  */
 
 /**
- *
- *
  * The controller produces an (3-dimensional) array with all fields from
  * ModelDocument. This array has to be proofed for occupied values, then reduced
  * to one dimension with recursive iteration and pass through a filter using a
@@ -44,32 +42,26 @@
  * with language information, converted to strings and added to the resulting array
  * $mydocdata.
  *
- *
- *
- *
- *
  */
 class Frontdoor_IndexController extends Zend_Controller_Action
 {
 
+    /**
+     *
+     * @return unknown_type
+     */
     public function indexAction()
     {
         $docId = $this->getRequest()->getParam('docId');
         $document = new Opus_Document($docId);
         $documentType = $document->getType();
         $doc_data = $document->toArray();
-   /**
-    *
-    * Filter for relevant keys. Getting Document Type
-    *
-    */
+
+        // Filter for relevant keys. Getting Document Type
         $document_data = $this->filterStopwords($doc_data);
         $document_data['Type'] = $this->view->translate($documentType);
-   /**
-    *
-    *Recursive Iteration of occcupied values in $document_data
-    *
-    */
+
+        // Recursive Iteration of occcupied values in $document_data
         $arit = new RecursiveArrayIterator($document_data);
         $ritit = new RecursiveIteratorIterator($arit);
         foreach ($ritit as $key => $value)
@@ -79,11 +71,8 @@ class Frontdoor_IndexController extends Zend_Controller_Action
                $mydoc_data_values[] = $value;
             }
         }
-   /**
-    *
-    *Iteration of keys (with occupied values) in $document_data for max. 2 sub-arrays
-    *
-    */
+
+        // Iteration of keys (with occupied values) in $document_data for max. 2 sub-arrays
         foreach ($document_data as $key => $value)
         {
            if (empty($value) == false)
@@ -122,17 +111,11 @@ class Frontdoor_IndexController extends Zend_Controller_Action
              }
           }
         }
-   /**
-    *
-    *Combining keys and values in one array
-    *
-    */
+
+        // Combining keys and values in one array
         $mydoc_data = array_combine ($mydoc_data_keys, $mydoc_data_values);
-   /**
-    *
-    *Collecting SWD-Keywords and and combining them with language information
-    *
-    */
+
+        // Collecting SWD-Keywords and and combining them with language information
         $myswd_value = Array();
         $myswd_lan = Array();
         foreach ($mydoc_data as $key => $value)
@@ -193,11 +176,8 @@ class Frontdoor_IndexController extends Zend_Controller_Action
           $swd_ger = implode (', ' , $myswd_ger);
           $mydoc_data['Swd_ger'] = $swd_ger;
         }
-   /**
-    *
-    *Collecting uncontrolled Keywords and and combining them with language information
-    *
-    */
+
+        // Collecting uncontrolled Keywords and and combining them with language information
         $myuncont_lan = array();
         $myuncont_value = array();
         foreach ($mydoc_data as $key => $value)
@@ -254,24 +234,22 @@ class Frontdoor_IndexController extends Zend_Controller_Action
     }
 
 
-/**
- *
- * List with stopwords for omitting irrelevant fields
- *
- */
-
-
+    /**
+     * List with stopwords for omitting irrelevant fields
+     *
+     * @var array
+     */
     private $__stopwords = array('Active', 'CommentInternal', 'DescMarkup',
         'LinkLogo', 'LinkSign', 'MimeType', 'SortOrder', 'PodAllowed', 'ServerDatePublished', 'ServerDateModified',
         'ServerDateUnlocked', 'ServerDateValid', 'Source', 'SwbId', 'PatentCountries', 'PatentDateGranted',
         'PatentApplication', 'Enrichment', 'Email', 'PlaceOfBirth', 'DateOfBirth', 'AcademicTitle');
 
-/**
- *
- * Filter-function: Comparing stopword-list with keys in array
- *
- */
-
+    /**
+     * Filter-function: Comparing stopword-list with keys in array
+     *
+     * @param $fields
+     * @return unknown_type
+     */
     private function filterStopwords(array &$fields) {
         $result = array();
 
