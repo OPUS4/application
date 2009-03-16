@@ -145,11 +145,22 @@ class Search_SearchController extends Zend_Controller_Action
                 // valid form
                 $this->view->form = $form->populate($data);
                 // build the query
-                $query = new Opus_Search_Query($form->getValue('query'));
+                #print_r($data);
+                $query = '';
+                for ($n = 0; strlen($data['query' . $n]) > 0; $n++)
+                {
+                	if ($n > 0) {
+                		$query .= ' ' . $data['boolean' . ($n-1)] . ' ';
+                	}
+                	$query .= $data['field' . $n] . ':' . $data['query' . $n];
+                }
+                #echo "Complete query: " . $query;
+                $query = new Opus_Search_Query($query);
                 $hitlist = $query->commit();
                 $resultlist->hitlist = $hitlist;
             } else {
                 // invalid form
+                print_r($data);
                 $this->view->form = $form->populate($data);
                 return $this->render('form');
             }
@@ -160,8 +171,20 @@ class Search_SearchController extends Zend_Controller_Action
                 // paginator
                 $page = $data['page'];
                 $hitlist = $resultlist->hitlist;
-            } else {
-                return $this->_forward('fulltextsearch');
+            }
+            // do a new query by URL-parameter
+            $query = '';
+            foreach ($data as $searchField => $searchValue) {
+                if (array_key_exists($searchField, MetadataSearch::retrieveSearchFields()))
+                {
+                	$query .= $searchField . ':' . $searchValue . ' ';
+                }
+            }
+            if ($query !== '') {
+                #echo "Complete query: " . $query;
+                $query = new Opus_Search_Query($query);
+                $hitlist = $query->commit();
+                $resultlist->hitlist = $hitlist;
             }
         }
 
@@ -170,5 +193,6 @@ class Search_SearchController extends Zend_Controller_Action
         $paginator = Zend_Paginator::factory($hitlistIterator);
         $paginator->setCurrentPageNumber($page);
         $this->view->hitlist_paginator = $paginator;
+        $this->render('search');
     }
 }

@@ -305,6 +305,7 @@ class CollectionsImport
 		$rootNode = $classificationDomDocument->createElement('CollectionRole');
 		$rootNode->setAttribute('name', $classificationName);
 	    $classificationDomDocument->appendChild($rootNode);
+	    #$count = 0;
 
 		foreach ($classification as $key => $class) {
             if (substr($class['class'], 3, 2) === "XX") {
@@ -315,9 +316,11 @@ class CollectionsImport
 			    $node->setAttribute('class', $class['class']);
 			    $rootNode->appendChild($node);
 			    // Reduce the array to improve performance for the next iterations
-			    #array_splice($classification, $key, 1);
+			    #array_splice($classification, ($key-$count), 1);
+			    #$count++;
             }
 		}
+		#$count = 0;
 		foreach ($classification as $key => $class) {
             if (substr($class['class'], 3, 2) === "xx") {
             	$parent = false;
@@ -341,9 +344,11 @@ class CollectionsImport
                     echo "Found second level category " . $class['class'] . " with no parent class.\n";
 			    	$rootNode->appendChild($node);
 			    }
-			    #array_splice($classification, $key, 1);
+			    #array_splice($classification, ($key-$count), 1);
+			    #$count++;
             }
 		}
+		#$count = 0;
 		foreach ($classification as $class) {
             if (substr($class['class'], 3, 2) !== "XX" && substr($class['class'], 3, 2) !== "xx") {
             	$parent = false;

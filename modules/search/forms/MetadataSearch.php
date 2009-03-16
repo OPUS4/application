@@ -85,6 +85,14 @@ class MetadataSearch extends Zend_Form
      */
     private function listSearchFields()
     {
+    	return $this->retrieveSearchFields();
+    }
+
+    /**
+     * Retrieve a list of possible search fields from outside
+     */
+    public static function retrieveSearchFields()
+    {
     	// aus Opus3:
     	// Titel, Person, Freitext, Schlagwort, Körperschaft, Fakultät, Institut, Abstract
     	// Dokumentart, Quelle, Jahr, verf. Klassifikationen
