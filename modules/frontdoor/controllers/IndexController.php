@@ -32,18 +32,24 @@
  * @version     $Id$
  *
  *
+ */
+
+/**
  *
  *
- *
- * This controller gets an array with all document fields from ModelDocument.
- * These fields pass through filters using functions concerning order and relevance.
+ * The controller produces an (3-dimensional) array with all fields from
+ * ModelDocument. This array has to be proofed for occupied values, then reduced
+ * to one dimension with recursive iteration and pass through a filter using a
+ * function concerning relevance (Stopwords). Keywords are collected and combined
+ * with language information, converted to strings and added to the resulting array
+ * $mydocdata.
  *
  *
  *
  *
  *
  */
-class Frontdoor_IndexController extends Zend_Controller_Action
+class Frontdoornew_IndexController extends Zend_Controller_Action
 {
 
     public function indexAction()
@@ -52,28 +58,219 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         $document = new Opus_Document($docId);
         $documentType = $document->getType();
         $doc_data = $document->toArray();
+   /**
+    *
+    * Filter for relevant keys. Getting Document Type
+    *
+    */
         $document_data = $this->filterStopwords($doc_data);
-        $document_data['DocumentType'] = $this->view->translate($documentType);
-        $result = $this->my_sort($document_data);
-        $this->view->result = $result;
+        $document_data['Type'] = $this->view->translate($documentType);
+   /**
+    *
+    *Recursive Iteration of occcupied values in $document_data
+    *
+    */
+        $arit = new RecursiveArrayIterator($document_data);
+        $ritit = new RecursiveIteratorIterator($arit);
+        foreach ($ritit as $key => $value)
+        {
+            if (empty($value) == false)
+            {
+               $mydoc_data_values[] = $value;
+            }
+        }
+   /**
+    *
+    *Iteration of keys (with occupied values) in $document_data for max. 2 sub-arrays
+    *
+    */
+        foreach ($document_data as $key => $value)
+        {
+           if (empty($value) == false)
+           {
+              if (is_array($value))
+              {
+                $array1 = $value;
+                foreach ($array1 as $key1 => $value1)
+                {
+                   if (is_array($value1))
+                   {
+                     $array2 = $value1;
+                     foreach ($array2 as $key2 => $value2)
+                     {
+                        if (is_array ($value2) === false)
+                        {
+                           if (empty($value2) == false)
+                           {
+                           $mydoc_data_keys[] = $key. "_" .$key1. "_" .$key2;
+                           }
+                        }
+                     }
+                  }
+                  else
+                  {
+                      if (empty($value1) == false)
+                      {
+                      $mydoc_data_keys[] = $key. "_" .$key1;
+                      }
+                  }
+               }
+             }
+             else
+             {
+                $mydoc_data_keys[] = $key;
+             }
+          }
+        }
+   /**
+    *
+    *Combining keys and values in one array
+    *
+    */
+        $mydoc_data = array_combine ($mydoc_data_keys, $mydoc_data_values);
+   /**
+    *
+    *Collecting SWD-Keywords and and combining them with language information
+    *
+    */
+        $myswd_value = Array();
+        $myswd_lan = Array();
+        foreach ($mydoc_data as $key => $value)
+        {
+            for ($i = 0; $i < 20; $i++)
+            {
+                if ($key == 'SubjectSwd_'.$i.'_Value')
+                {
+                    $myswd_value[] = $value;
+                }
+                if ($key == 'SubjectSwd_'.$i.'_Language')
+                {
+                    $myswd_lan[] = $value;
+                }
+            }
+        }
+        $mykey_eng = Array();
+        $mykey_ger = Array();
+        if (array_key_exists ('0', $myswd_lan) == true)
+        {
+            foreach ($myswd_lan as $key => $value)
+            {
+               if ($value == 'de')
+               {
+                  $mykey_ger[] = $key;
+               }
+               if ($value == 'en')
+               {
+                $mykey_eng[] = $key;
+               }
+            }
+         }
+        $myswd_ger = Array();
+        $myswd_eng = Array();
+        if (array_key_exists ('0', $myswd_value) == true)
+        {
+            foreach ($myswd_value as $key => $value)
+            {
+               if ( in_array($key, $mykey_ger, true))
+               {
+                 $myswd_ger[] = $value;
+               }
+               if ( in_array($key, $mykey_eng, true))
+               {
+                 $myswd_eng[] = $value;
+               }
+            }
+        }
+        $swd_eng = Array();
+        $swd_ger = Array();
+        if (array_key_exists ('0', $myswd_eng) == true)
+        {
+           $swd_eng = implode (', ' , $myswd_eng);
+           $mydoc_data['Swd_eng'] = $swd_eng;
+        }
+        if (array_key_exists ('0', $myswd_ger) == true)
+        {
+          $swd_ger = implode (', ' , $myswd_ger);
+          $mydoc_data['Swd_ger'] = $swd_ger;
+        }
+   /**
+    *
+    *Collecting uncontrolled Keywords and and combining them with language information
+    *
+    */
+        $myuncont_lan = array();
+        $myuncont_value = array();
+        foreach ($mydoc_data as $key => $value)
+        {
+            for ($i = 0; $i < 20; $i++)
+            {
+                if ($key == 'SubjectUncontrolled_'.$i.'_Value')
+                {
+                    $myuncont_value[] = $value;
+                }
+                if ($key == 'SubjectUncontrolled_'.$i.'_Language')
+                {
+                    $myuncont_lan[] = $value;
+                }
+            }
+        }
+        $mykey_uncont_eng = Array();
+        $mykey_uncont_ger = Array();
+        foreach ($myuncont_lan as $key => $value)
+        {
+            if ($value == 'de')
+            {
+                $mykey_uncont_ger[] = $key;
+            }
+            if ($value == 'en')
+            {
+                $mykey_uncont_eng[] = $key;
+            }
+        }
+        $myuncont_ger = Array();
+        $myuncont_eng = Array();
+        foreach ($myuncont_value as $key => $value)
+        {
+            if ( in_array($key, $mykey_uncont_ger, true))
+            {
+               $myuncont_ger[] = $value;
+            }
+            if ( in_array($key, $mykey_uncont_eng, true))
+            {
+               $myuncont_eng[] = $value;
+            }
+        }
+        if (array_key_exists ('0', $myuncont_eng) == true)
+        {
+            $uncont_eng = implode (', ' , $myuncont_eng);
+            $mydoc_data['Uncontrolled_eng'] = $uncont_eng;
+        }
+        if (array_key_exists ('0', $myuncont_ger) == true)
+        {
+            $uncont_ger = implode (', ' , $myuncont_ger);
+            $mydoc_data['Uncontrolled_ger'] = $uncont_ger;
+        }
+        $this->view->mydoc_data = $mydoc_data;
     }
 
-     /**
-      *
-      * List with stopwords
-      *
-      */
+
+/**
+ *
+ * List with stopwords for omitting irrelevant fields
+ *
+ */
+
 
     private $__stopwords = array('Active', 'CommentInternal', 'DescMarkup',
         'LinkLogo', 'LinkSign', 'MimeType', 'SortOrder', 'PodAllowed', 'ServerDatePublished', 'ServerDateModified',
         'ServerDateUnlocked', 'ServerDateValid', 'Source', 'SwbId', 'PatentCountries', 'PatentDateGranted',
-        'PatentApplication', 'Enrichment');
+        'PatentApplication', 'Enrichment', 'Email', 'PlaceOfBirth', 'DateOfBirth', 'AcademicTitle');
 
-     /**
-      *
-      * Filter: Stopwords
-      *
-      */
+/**
+ *
+ * Filter-function: Comparing stopword-list with keys in array
+ *
+ */
 
     private function filterStopwords(array &$fields) {
         $result = array();
@@ -87,132 +284,7 @@ class Frontdoor_IndexController extends Zend_Controller_Action
             }
 
         }
-
         return $result;
     }
-
-    /**
-     *
-     * Filter: Weight (Order)
-     *
-     */
-
-    private function cmp_weight ($a, $b)
-    {
-
-        $weight = array(
-                          'Urn' => -100,
-                          'TitleMain' => -90,
-                          'TitleParent' => -80,
-                          'PersonAuthor' => -70,
-
-                          'CreatingCorporation' => -60,
-                          'ContributingCorporation' => -50,
-                          'SubjectSwd' => -40,
-                          'SubjectDdc' => -30,
-                          'SubjectUncontrolled' => -20,
-                          'PersonOther' => -7,
-                          'Reviewed' => 0,
-                          'PersonReferee' => 5,
-                          'CompletedYear' => 10,
-                          'CompletedDate' => 12,
-                          'DateAccepted' => 20,
-                          'DocumentType' => 30,
-                          'Language' => 35,
-                          'PageNumber' => 40,
-                          'PageFirst' => 50,
-                          'PageLast' => 60,
-                          'Edition' => 70,
-                          'Issue'   => 80,
-                          'Isbn' => 90,
-                          'TitleAbstract' => 100,
-                          'Licence' => 120,
-        );
-
-        if (array_key_exists($a, $weight) === true)
-        {
-            $a_weight = $weight[$a];
-        }
-        else
-        {
-            $a_weight = 0;
-        }
-
-        if (array_key_exists($b, $weight) === true)
-        {
-            $b_weight = $weight[$b];
-        }
-        else
-        {
-            $b_weight = 0;
-        }
-
-        if ($a_weight === $b_weight)
-        {
-            return 0;
-        }
-        return ($a_weight < $b_weight) ? -1 : 1;
-
-    }
-
-    private function cmp_title_weight ($a, $b)
-    {
-        if ((array_key_exists('Language', $a) === false)
-            or (array_key_exists('Language', $b) === false)) {
-            return 0;
-        }
-
-
-        $lang_a = $a['Language'];
-        $lang_b = $b['Language'];
-
-        $weight = array ('de' => -30, 'en' => 0);
-
-        $a_weight = $weight[$lang_a];
-        $b_weight = $weight[$lang_b];
-
-        if ($a_weight === $b_weight);
-        {
-            return 0;
-        }
-    }
-
-    private function cmp_abstract_weight ($a, $b)
-    {
-
-        if ((array_key_exists('Language', $a) === false)
-            or (array_key_exists('Language', $b) === false)) {
-            return 0;
-        }
-
-
-        $lang_a = $a['Language'];
-        $lang_b = $b['Language'];
-
-        $weight = array ('de' => -30, 'en' => 0);
-
-        $a_weight = $weight[$lang_a];
-        $b_weight = $weight[$lang_b];
-
-        if ($a_weight === $b_weight);
-        {
-            return 0;
-        }
-    }
-
-    private function my_sort(array $a)
-    {
-        $cp = $a;
-        uksort($cp, array($this, 'cmp_weight'));
-
-        if (array_key_exists('TitleMain', $cp) === true) {
-            usort($cp['TitleMain'], array($this, 'cmp_title_weight'));
-        }
-
-        if (array_key_exists('TitleAbstract', $cp) === true) {
-            usort($cp['TitleAbstract'], array($this, 'cmp_abstract_weight'));
-        }
-        return $cp;
-    }
-
 }
+
