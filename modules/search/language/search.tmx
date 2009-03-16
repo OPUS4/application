@@ -338,5 +338,13 @@
         <seg>nicht</seg>
       </tuv>
     </tu>
+    <tu tuid="search_result">
+      <tuv xml:lang="en">
+        <seg>Search result</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Suchergebnis</seg>
+      </tuv>
+    </tu>
   </body>
 </tmx>
