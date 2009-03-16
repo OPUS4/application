@@ -141,6 +141,13 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $moduleprepare->appendClassPath('models')
         ->appendClassPath('forms');
         $this->_frontController->registerPlugin($moduleprepare);
+
+        /*
+         * Add a custorm front controller plugin of manipulating routing information
+         * for webapi REST requests.
+         */
+        $restRouterPlugin = new Controller_Plugin_RestManipulation();
+        $this->_frontController->registerPlugin($restRouterPlugin);
     }
 
     /**
