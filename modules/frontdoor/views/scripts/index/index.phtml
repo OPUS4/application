@@ -67,7 +67,8 @@
                     if (array_key_exists ('PersonAuthor_'.$i.'_Name', $this->mydoc_data) === true)
                     {
                         $value = $this->mydoc_data['PersonAuthor_'.$i.'_Name'];?>
-                        <p><b><?= $this->value = $value;?></b></p><?
+                        <p><a href="<?= $this->value = '/search/search/metadatasearch/author/' .$value;?>">
+                        <?= $this->value = $value;?></a></p><?
                     }
                  }?>
                  <br /><br />
