@@ -127,6 +127,7 @@ class CollectionsImport
 
 		foreach ($classification as $key => $class) {
             if (ereg("\.00$", $class['class'])) {
+            	echo ".";
 			    // first level category
 			    $node = $classificationDomDocument->createElement('Collection');
 			    $node->setAttribute('name', $class['bez']);
@@ -142,6 +143,7 @@ class CollectionsImport
             	// second level category
             	foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
             		if ($coll->getAttribute('class') === substr($class['class'], 0, 2).'.00') {
+            			echo ".";
             			$parent = $coll;
             		}
             	}
@@ -167,6 +169,7 @@ class CollectionsImport
             	// third level category
             	foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
             		if ($coll->getAttribute('class') === substr($class['class'], 0, 4).'0') {
+            			echo ".";
             			$parent = $coll;
             		}
             	}
@@ -174,6 +177,7 @@ class CollectionsImport
             	    // no parent found, try one level higher
             	    foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
             		    if ($coll->getAttribute('class') === substr($class['class'], 0, 2).'.00') {
+            			    echo ".";
             			    $parent = $coll;
             		    }
             	    }            		
@@ -215,6 +219,7 @@ class CollectionsImport
 		foreach ($classification as $key => $class) {
             if (strlen($class['class']) === 2) {
 			    // first level category
+			    echo ".";
 			    $node = $classificationDomDocument->createElement('Collection');
 			    $node->setAttribute('name', $class['bez']);
 			    $node->setAttribute('class', $class['class']);
@@ -229,6 +234,7 @@ class CollectionsImport
             	// second level category
             	foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
             		if ($coll->getAttribute('class') === substr($class['class'], 0, 2)) {
+            			echo ".";
             			$parent = $coll;
             		}
             	}
@@ -253,6 +259,7 @@ class CollectionsImport
             	// third level category
             	foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
             		if ($coll->getAttribute('class') === substr($class['class'], 0, 3)) {
+            			echo ".";
             			$parent = $coll;
             		}
             	}
@@ -260,6 +267,7 @@ class CollectionsImport
             	    // no parent found, try one level higher
             	    foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
             		    if ($coll->getAttribute('class') === substr($class['class'], 0, 2)) {
+            			    echo ".";
             			    $parent = $coll;
             		    }
             	    }            		
@@ -301,6 +309,7 @@ class CollectionsImport
 		foreach ($classification as $key => $class) {
             if (substr($class['class'], 3, 2) === "XX") {
 			    // first level category
+			    echo "Found main category " . $class['class'] . "\n";
 			    $node = $classificationDomDocument->createElement('Collection');
 			    $node->setAttribute('name', $class['bez']);
 			    $node->setAttribute('class', $class['class']);
@@ -316,6 +325,7 @@ class CollectionsImport
             	foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
             		if (substr($coll->getAttribute('class'), 0, 2) === substr($class['class'], 0, 2) && substr($coll->getAttribute('class'), 3, 2) === "XX") {
             			$parent = $coll;
+            			echo "Found second level category " . $class['class'] . " with parent class " . $coll->getAttribute('class') . "\n";
             		}
             	}
 	            $node = $classificationDomDocument->createElement('Collection');
@@ -328,6 +338,7 @@ class CollectionsImport
 			    else
 			    {
 			    	// if there is no parent, put elements of the second level directly under the root node
+                    echo "Found second level category " . $class['class'] . " with no parent class.\n";
 			    	$rootNode->appendChild($node);
 			    }
 			    #array_splice($classification, $key, 1);
@@ -339,6 +350,7 @@ class CollectionsImport
             	// third level category
             	foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
             		if (substr($coll->getAttribute('class'), 0, 3) === substr($class['class'], 0, 3) && substr($coll->getAttribute('class'), 3, 2) === "xx") {
+            			echo "Found third level category " . $class['class'] . " with parent class " . $coll->getAttribute('class') . "\n";
             			$parent = $coll;
             		}
             	}
@@ -346,6 +358,7 @@ class CollectionsImport
             	    // no parent found, try one level higher
             	    foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
             		    if (substr($coll->getAttribute('class'), 0, 2) === substr($class['class'], 0, 2) && substr($coll->getAttribute('class'), 3, 2) === "XX") {
+            			    echo "Found third level category " . $class['class'] . " with parent class " . $coll->getAttribute('class') . "\n";
             			    $parent = $coll;
             		    }
             	    }            		
@@ -360,6 +373,7 @@ class CollectionsImport
 			    else
 			    {
 			    	// if there is no parent, put elements of the second level directly under the root node
+			    	echo "Found third level category " . $class['class'] . " with no parent class.\n";
 			    	$rootNode->appendChild($node);
 			    }
             }
@@ -386,6 +400,7 @@ class CollectionsImport
 
 		foreach ($classification as $key => $class) {
             if (strlen($class['class']) === 3 && substr($class['class'], 1, 1) === '0') {
+			    echo ".";
 			    // first level category
 			    $node = $classificationDomDocument->createElement('Collection');
 			    $node->setAttribute('name', $class['bez']);
@@ -401,6 +416,7 @@ class CollectionsImport
             	// second level category
             	foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
             		if (substr($coll->getAttribute('class'), 0, 1) === substr($class['class'], 0, 1) && substr($coll->getAttribute('class'), 1, 1) === '0' && strlen($coll->getAttribute('class')) === 3) {
+            			echo ".";
             			$parent = $coll;
             		}
             	}
@@ -425,6 +441,7 @@ class CollectionsImport
             	// third level category
             	foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
             		if (strlen($coll->getAttribute('class')) === 3 && substr($class['class'], 0, 3) === $coll->getAttribute('class')) {
+            			echo ".";
             			$parent = $coll;
             		}
             	}
@@ -432,6 +449,7 @@ class CollectionsImport
             	    // no parent found, try one level higher
                     foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
             		    if (substr($coll->getAttribute('class'), 0, 1) === substr($class['class'], 0, 1) && substr($coll->getAttribute('class'), 1, 1) === '0' && strlen($coll->getAttribute('class')) === 3) {
+            			    echo ".";
             			    $parent = $coll;
             		    }
             	    }
@@ -456,6 +474,7 @@ class CollectionsImport
             	// fourth level category
             	foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
             		if (substr($coll->getAttribute('class'), 0, 7) === substr($class['class'], 0, 6).'-') {
+            			echo ".";
             			$parent = $coll;
             		}
             	}
@@ -463,6 +482,7 @@ class CollectionsImport
             	    // no parent found, try one level higher
             	    foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
             		    if (strlen($coll->getAttribute('class')) === 3 && substr($class['class'], 0, 3) === $coll->getAttribute('class')) {
+            			    echo ".";
             			    $parent = $coll;
             		    }
             	    }
@@ -471,6 +491,7 @@ class CollectionsImport
             	    // no parent found, try one level higher
                     foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
             		    if (substr($coll->getAttribute('class'), 0, 1) === substr($class['class'], 0, 1) && substr($coll->getAttribute('class'), 1, 1) === '0' && strlen($coll->getAttribute('class')) === 3) {
+            			    echo ".";
             			    $parent = $coll;
             		    }
             	    }
@@ -511,6 +532,7 @@ class CollectionsImport
 
 		foreach ($classification as $key => $class) {
             if (ereg("00$", $class['class'])) {
+			    echo ".";
 			    // first level category
 			    $node = $classificationDomDocument->createElement('Collection');
 			    $node->setAttribute('name', $class['bez']);
@@ -526,6 +548,7 @@ class CollectionsImport
             	// second level category
             	foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
             		if ($coll->getAttribute('class') === substr($class['class'], 0, 2).'00') {
+            			echo ".";
             			$parent = $coll;
             		}
             	}
@@ -551,6 +574,7 @@ class CollectionsImport
             	// third level category
             	foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
             		if ($coll->getAttribute('class') === substr($class['class'], 0, 3).'0') {
+            			echo ".";
             			$parent = $coll;
             		}
             	}
@@ -558,6 +582,7 @@ class CollectionsImport
             	    // no parent found, try one level higher
             	    foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
             		    if (substr($coll->getAttribute('class'), 0, 2) === substr($class['class'], 0, 2) && ereg("00$", $coll->getAttribute('class'))) {
+            			    echo ".";
             			    $parent = $coll;
             		    }
             	    }
