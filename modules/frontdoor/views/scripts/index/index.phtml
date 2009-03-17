@@ -71,7 +71,7 @@
                         <?= $this->value = $value;?></a></p><?
                     }
                  }?>
-                 <br /><br />
+                 <br /><br /><br />
                  <?if (array_key_exists('Type', $this->mydoc_data))
                    {
                        $value = $this->mydoc_data['Type'];?>
@@ -82,7 +82,7 @@
                    {
                       $value = $this->mydoc_data['Language'];?>
                       <p><b><?= $this-> translate('Language')?>: </b>
-                      <?= $this->value = $value;?></p><?
+                      <?= $this->translate($value);?></p><?
                    }
                    if (array_key_exists ('Swd_ger', $this->mydoc_data) === true)
                    {
