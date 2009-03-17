@@ -34,9 +34,7 @@
  */
 
 /**
- *
- * @author gerhardt
- *
+ * Controller for handling document specific requests.
  */
 class Webapi_DocumentController extends Controller_Rest {
 
