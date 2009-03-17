@@ -39,8 +39,10 @@
 class Webapi_DocumentController extends Controller_Rest {
 
     /**
-     * (non-PHPdoc)
-     * @see library/Controller/Controller_Rest#getAction()
+     * Handles get requests.
+     *
+     * @see    library/Controller/Controller_Rest#getAction()
+     * @return void
      */
     public function getAction() {
 

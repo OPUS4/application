@@ -38,6 +38,11 @@
  */
 class Webapi_IndexController extends Zend_Controller_Action {
 
+    /**
+     * Show usage informaton about webapi.
+     *
+     * @return void
+     */
     public function indexAction() {
         $this->view->title = 'WebAPI usage page';
     }
