@@ -1,0 +1,6 @@
+# wepapi
+[webapi]
+protocol=http
+host=localhost
+docroot=/
+modul=webapi

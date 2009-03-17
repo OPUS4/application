@@ -35,6 +35,7 @@
 
 require_once 'PHPUnit/Framework.php';
 
+require_once 'Zend/Config/Ini.php';
 require_once 'Zend/Rest/Client.php';
 
 /**
@@ -47,7 +48,14 @@ class Modules_Webapi_DocumentTests extends PHPUnit_Framework_TestCase {
      *
      * @var string
      */
-    private $__restUri = 'http://localhost/oap/webapi/document';
+    private $__restUri = '';
+
+    /**
+     * Holds url information like doc_root and module name.
+     *
+     * @var string
+     */
+    private $__restUrl = '';
 
     /**
      * Holds rest client.
@@ -62,6 +70,11 @@ class Modules_Webapi_DocumentTests extends PHPUnit_Framework_TestCase {
      * @return void
      */
     protected function setUp() {
+        $configfile = realpath(dirname(dirname(__FILE)) . '/config.ini');
+        $config = new Zend_Config_Ini($configfile, 'webapi');
+        $config = $config->toArray();
+        $this->__restUri = $config['protocol'] . '://' . $config['host'];
+        $this->__restUrl = $config['docroot'] . '/' . $config['modul'] . '/document';
         $restClient = new Zend_Rest_Client();
         $restClient->setUri($this->__restUri);
         $this->__restClient = $restClient;
@@ -73,9 +86,11 @@ class Modules_Webapi_DocumentTests extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testGetDocumentList() {
-        $restData = $this->__restClient->get();
+        $restData = $this->__restClient->restGet($this->__restUrl);
         $this->assertNotNull($restData);
-        // TODO more data asserts
+        // check for http status
+        $this->assertEquals(200, $restData->getStatus());
+        $this->assertNotNull($restData->getBody());
     }
 
     /**
@@ -84,12 +99,19 @@ class Modules_Webapi_DocumentTests extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testGetSpecificDocument() {
-        $restUri = $this->__restClient->getUri() . '/37';
-        $restClient = clone $this->__restClient;
-        $restClient->setUri($restUri);
-        $restData = $restClient->get();
-        $this->assertNotNull($restData);
-        // TODO more data asserts
+        $restData = $this->__restClient->restGet($this->__restUrl . '/37');
+        // check for http status
+        $this->assertEquals(200, $restData->getStatus());
+        $xml = new DOMDocument();
+        $xml->loadXML($restData->getBody());
+        // loading of xml works
+        $this->assertNotNull($xml);
+        $data = $xml->getElementsByTagName('Opus_Document');
+        // count of Opus_Documents should be one
+        $this->assertEquals(1, $data->length);
+        $this->assertNotNull($data->item(0));
+        // look if document has a type
+        $this->assertEquals('monograph', $data->item(0)->getAttribute('Type'));
     }
 
 }
