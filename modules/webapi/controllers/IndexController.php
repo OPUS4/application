@@ -26,42 +26,20 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category   Application
- * @package    Controller_Plugin
+ * @package    Module_Webapi
  * @author     Henning Gerhardt (henning.gerhardt@slub-dresden.de)
  * @copyright  Copyright (c) 2009, OPUS 4 development team
  * @license    http://www.gnu.org/licenses/gpl.html General Public License
  * @version    $Id$
  */
 
-/**
- * Routing plugin for REST action. Only available for module webapi.
+/*
+ * Show some information about webapi.
  */
-class Controller_Plugin_RestManipulation extends Zend_Controller_Plugin_Abstract {
+class Webapi_IndexController extends Zend_Controller_Action {
 
-    /**
-     * Override generic routeShutdown method for wepapi module.
-     *
-     * @params Zend_Controller_Request_Abstract $request Holds request object.
-     * @return void
-     */
-    public function routeShutdown(Zend_Controller_Request_Abstract $request) {
-        if (($request instanceOf Zend_Controller_Request_Http)
-            and ('webapi' === $request->getModuleName())
-            and ('index' !== $request->getControllerName())) {
-            $request_method = 'get';
-            // handle only 4 instead of all (missing: head, options) Rest actions
-            // if needed all than use getMethod()
-            if (true === $request->isPost()) {
-                $request_method = 'post';
-            } else if (true === $request->isPut()) {
-                $request_method = 'put';
-            } else if (true === $request->isDelete()) {
-                $request_method = 'delete';
-            }
-            $current_action = $request->getActionName();
-            $request->setActionName($request_method);
-            $request->setParam('action', $request_method);
-            $request->setParam('original_action', $current_action);
-        }
+    public function indexAction() {
+        $this->view->title = 'WebAPI usage page';
     }
+
 }
