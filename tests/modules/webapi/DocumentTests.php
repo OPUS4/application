@@ -87,10 +87,10 @@ class Modules_Webapi_DocumentTests extends PHPUnit_Framework_TestCase {
      */
     public function testGetDocumentList() {
         $restData = $this->__restClient->restGet($this->__restUrl);
-        $this->assertNotNull($restData);
+        $this->assertNotNull($restData, 'REST get return noting.');
         // check for http status
-        $this->assertEquals(200, $restData->getStatus());
-        $this->assertNotNull($restData->getBody());
+        $this->assertEquals(200, $restData->getStatus(), 'HTTP status should be 200 (OK).');
+        $this->assertNotNull($restData->getBody(), 'HTTP body contain no value.');
     }
 
     /**
@@ -101,17 +101,26 @@ class Modules_Webapi_DocumentTests extends PHPUnit_Framework_TestCase {
     public function testGetSpecificDocument() {
         $restData = $this->__restClient->restGet($this->__restUrl . '/37');
         // check for http status
-        $this->assertEquals(200, $restData->getStatus());
+        $this->assertEquals(200, $restData->getStatus(), 'HTTP status should be 200 (OK).');
         $xml = new DOMDocument();
         $xml->loadXML($restData->getBody());
         // loading of xml works
-        $this->assertNotNull($xml);
+        $this->assertNotNull($xml, 'DOMDocument should not be null.');
         $data = $xml->getElementsByTagName('Opus_Document');
         // count of Opus_Documents should be one
-        $this->assertEquals(1, $data->length);
+        $this->assertEquals(1, $data->length, 'DOMDocument should only contain one Opus_Document.');
         $this->assertNotNull($data->item(0));
         // look if document has a type
-        $this->assertEquals('monograph', $data->item(0)->getAttribute('Type'));
+        $this->assertEquals('monograph', $data->item(0)->getAttribute('Type'), 'Type of this Opus_Document should be monograph.');
+    }
+
+    public function testGetDocumentWithInvalidId() {
+        $restData = $this->__restClient->restGet($this->__restUrl . '/1');
+        $this->assertEquals(404, $restData->getStatus(), 'HTTP status should be 404 (File not found).');
+        $xml = new DOMDocument();
+        $xml->loadXML($restData->getBody());
+        $error = $xml->getElementsByTagName('error');
+        $this->assertTrue($error->item(0)->hasAttribute('message'), 'Error element contain no error message.');
     }
 
 }

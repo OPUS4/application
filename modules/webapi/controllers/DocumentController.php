@@ -47,8 +47,16 @@ class Webapi_DocumentController extends Controller_Rest {
     public function getAction() {
 
         if (true === is_numeric($this->requestData['original_action'])) {
-            $doc = new Opus_Document((int) $this->requestData['original_action']);
-            $xml = $doc->toXml();
+            try {
+                $doc = new Opus_Document((int) $this->requestData['original_action']);
+                $xml = $doc->toXml();
+            } catch (Opus_Model_Exception $e) {
+                $xml = new DOMDocument('1.0', 'utf-8');
+                $error = $xml->createElement('error');
+                $error->setAttribute('message', 'Invalid OpusId transmitted.');
+                $xml->appendChild($error);
+                $this->getResponse()->setHttpResponseCode(404);
+            }
         } else {
             $xml = new DOMDocument('1.0', 'utf-8');
             $resultlist = $xml->createElement('documentlist');
