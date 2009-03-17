@@ -10,12 +10,36 @@
         <seg>Sprache</seg>
       </tuv>
     </tu>
+    <tu tuid="en">
+      <tuv xml:lang="en">
+        <seg>English</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Englisch</seg>
+      </tuv>
+    </tu>
+    <tu tuid="de">
+      <tuv xml:lang="en">
+        <seg>German</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Deutsch</seg>
+      </tuv>
+    </tu>
     <tu tuid="Licence">
       <tuv xml:lang="en">
         <seg>Licence</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Lizenz</seg>
+      </tuv>
+    </tu>
+    <tu tuid="File">
+      <tuv xml:lang="en">
+        <seg>File(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datei(en)</seg>
       </tuv>
     </tu>
     <tu tuid="Active">
@@ -389,7 +413,7 @@
         <seg>German Abstract</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Kurzfassung in Deutsch</seg>
+        <seg>Deutsche Kurzfassung</seg>
       </tuv>
     </tu>
     <tu tuid="AbstractEng">
@@ -397,7 +421,7 @@
         <seg>English Abstract</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Kurzfassung in Englisch</seg>
+        <seg>Englische Kurzfassung</seg>
       </tuv>
     </tu>
     <tu tuid="IdentifierIsbn">
