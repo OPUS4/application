@@ -41,7 +41,7 @@ set_include_path('.' . PATH_SEPARATOR
 require_once 'SearchEngineIndexBuilder.php';
 
 // command line arguments
-if ($argc > 1 || in_array($argv[1], array('--help', '-help', '-h', '-?'))) {
+if ($argc > 1) {
 	
 ?>
 

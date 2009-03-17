@@ -65,6 +65,8 @@ class SearchEngineIndexBuilder extends Application_Bootstrap {
        		echo date('Y-m-d H:i:s') . ": Indexed Metadata for " . $row . "\n";
         }
         echo date('Y-m-d H:i:s') . ' Stop';
+        
+        $indexer->finalize();
     }
 }
 
