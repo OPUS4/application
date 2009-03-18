@@ -61,8 +61,10 @@ class SearchEngineIndexBuilder extends Application_Bootstrap {
         echo date('Y-m-d H:i:s') . " Start\n";
         foreach ($docresult as $row) {
             $docadapter = new Opus_Document( (int) $row);
-        	$indexer->addDocumentToEntryIndex($docadapter);
-       		echo date('Y-m-d H:i:s') . ": Indexed Metadata for " . $row . "\n";
+        	$returnvalue = $indexer->addDocumentToEntryIndex($docadapter);
+       		foreach ($returnvalue as $value) {
+       		    echo date('Y-m-d H:i:s') . ": " . $value . "\n";
+       		}
         }
         echo date('Y-m-d H:i:s') . ' Stop';
         

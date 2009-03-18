@@ -31,15 +31,16 @@
 ; Database adapter configuration using standard Zend_db option names.
 ; Have a look on Zend_Db::factory() method for information about adapter creation.
 
-; Database adapter configuration using standard Zend_db option names.
-; Have a look on Zend_Db::factory() method for information about adapter creation.
-
 [production]
 db.params.host = 
 db.params.username = 
 db.params.password = 
 db.params.dbname = 
 theme = default
+
+[searchengine]
+pdftotext.path = /usr/bin ; path to pdftotext - needed to index PDF fulltexts
+ps2ascii.path = /usr/bin ; path to ps2ascii - needed to index PS fulltexts
 
 [test : production]
 db.params.profiler = true

@@ -64,7 +64,7 @@ class Admin_IndexController extends Zend_Controller_Action {
     	$this->view->title = $this->view->translate('admin_title_indexbuild');
 
         $this->view->indexed = "Building index has been disabled from web interface. Please use command " .
-        		"line script instead! Use php tests/build_search_engine_index.php in main directory of OPUS.";
+        		"line script instead! Use php config/build_search_engine_index.php in main directory of OPUS.";
 
 		/*$indexer = new Opus_Search_Index_Indexer();
 
