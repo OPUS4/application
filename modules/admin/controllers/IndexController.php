@@ -63,7 +63,10 @@ class Admin_IndexController extends Zend_Controller_Action {
 
     	$this->view->title = $this->view->translate('admin_title_indexbuild');
 
-		$indexer = new Opus_Search_Index_Indexer();
+        $this->view->indexed = "Building index has been disabled from web interface. Please use command " .
+        		"line script instead! Use php tests/build_search_engine_index.php in main directory of OPUS.";
+
+		/*$indexer = new Opus_Search_Index_Indexer();
 
         $docresult = Opus_Document::getAllIds();
 
@@ -75,6 +78,7 @@ class Admin_IndexController extends Zend_Controller_Action {
        		$this->view->indexed .= date('Y-m-d H:i:s') . ': Indexed Metadata for ' . $row . '<br/>';
         }
         $this->view->indexed .= date('Y-m-d H:i:s') . 'Stop';
+        */
     }
 
 }
