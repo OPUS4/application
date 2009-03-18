@@ -45,4 +45,8 @@ class OpusGPG extends Crypt_GPG
 		parent::__construct(array('homedir' => '/var/www', 'binary' => '/usr/local/gnupg/bin/gpg', 'debug' => true));
 		#echo "Crypt_GPG has been instatiated";
 	}
+	
+	public function isInstalled() {
+		
+	}
 }

@@ -27,25 +27,35 @@
  * @category    Application
  * @package     Module_SocialBookmarking
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
 /**
- * Index Controller for SocialBookmarking interfaces
- * 
+ * form to show the login mask for Connotea
  */
-class SocialBookmarking_IndexController extends Zend_Controller_Action
+class ConnoteaLoginForm extends Zend_Form
 {
-	/**
-	 * Just to be there. No actions taken.
-	 *
-	 * @return void
-	 *
-	 */
-    public function indexAction()
-    {
-    	$this->view->title = $this->view->translate('socialBookmarking_modulename');    	
+    /**
+     * Build easy search form
+     *
+     * @return void
+     */
+    public function init() {
+		// Create and configure query field element:
+		$user = new Zend_Form_Element_Text('user');
+		$user->setRequired(true);
+		$user->setLabel('connotea_username');
+
+		$password = new Zend_Form_Element_Password('password');
+		$password->setRequired(true);
+		$password->setLabel('connotea_password');
+
+        $submit = new Zend_Form_Element_Submit('connotealogin');
+        $submit->setLabel('connotea_login');
+
+		// Add elements to form:
+		$this->addElements(array($user, $password, $submit));
     }
 }

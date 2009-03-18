@@ -10,5 +10,37 @@
         <seg>Schnittstellen zu SocialBookmarking-Systemen</seg>
       </tuv>
     </tu>
+    <tu tuid="connotea_username">
+      <tuv xml:lang="en">
+        <seg>Connotea-Username</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Connotea-Nutzername</seg>
+      </tuv>
+    </tu>
+    <tu tuid="connotea_password">
+      <tuv xml:lang="en">
+        <seg>Password</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Passwort</seg>
+      </tuv>
+    </tu>
+    <tu tuid="connotea_login">
+      <tuv xml:lang="en">
+        <seg>Login</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einloggen</seg>
+      </tuv>
+    </tu>
+    <tu tuid="connotea_register">
+      <tuv xml:lang="en">
+        <seg>Create a new account at Connotea</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zugang bei Connotea einrichten</seg>
+      </tuv>
+    </tu>
   </body>
 </tmx>
