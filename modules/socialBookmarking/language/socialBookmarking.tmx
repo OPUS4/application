@@ -42,5 +42,93 @@
         <seg>Zugang bei Connotea einrichten</seg>
       </tuv>
     </tu>
+    <tu tuid="connotea_loggedin">
+      <tuv xml:lang="en">
+        <seg>You are logged in as %1$s at Connotea!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sie sind als %1$s bei Connotea eingeloggt!</seg>
+      </tuv>
+    </tu>
+    <tu tuid="taglist_failure">
+      <tuv xml:lang="en">
+        <seg>Failure while reading the tag list for this bookmark.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Fehler beim Einlesen der Tags zu diesem Eintrag.</seg>
+      </tuv>
+    </tu>
+    <tu tuid="connotea_tags">
+      <tuv xml:lang="en">
+        <seg>This document has these tags on Connotea:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Diesem Dokument sind auf Connotea folgende Tags zugeordnet:</seg>
+      </tuv>
+    </tu>
+    <tu tuid="connotea_no_tags">
+      <tuv xml:lang="en">
+        <seg>This document has got no tags on Connotea yet.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Diesem Dokument sind noch keine Tags auf Connotea zugeordnet.</seg>
+      </tuv>
+    </tu>
+    <tu tuid="connotea_usertags">
+      <tuv xml:lang="en">
+        <seg>Your tags</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Eigene Tags</seg>
+      </tuv>
+    </tu>
+    <tu tuid="connotea_usertitle">
+      <tuv xml:lang="en">
+        <seg>Title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Titel</seg>
+      </tuv>
+    </tu>
+    <tu tuid="connotea_userdescription">
+      <tuv xml:lang="en">
+        <seg>Description</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Beschreibung</seg>
+      </tuv>
+    </tu>
+    <tu tuid="connotea_bookmark">
+      <tuv xml:lang="en">
+        <seg>Bookmark this title in Connotea</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Diesen Titel in Connotea bookmarken</seg>
+      </tuv>
+    </tu>
+    <tu tuid="failure_bmcheck">
+      <tuv xml:lang="en">
+        <seg>Failure while checking your Connotea list for this bookmark.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Fehler bei der Ermittlung, ob Sie diesen Bookmark in Ihrer Connotea-Liste haben.</seg>
+      </tuv>
+    </tu>
+    <tu tuid="delete_connotea_bookmark">
+      <tuv xml:lang="en">
+        <seg>Delete this title from your Connotea bookmarks</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Diesen Titel aus Ihrer Connotea-Liste löschen</seg>
+      </tuv>
+    </tu>
+    <tu tuid="connotea_no_parameter">
+      <tuv xml:lang="en">
+        <seg>No publication selected!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Keine Publikation ausgewählt!</seg>
+      </tuv>
+    </tu>
   </body>
 </tmx>

@@ -148,7 +148,7 @@ class Connotea
 		{
 			foreach ($index["RDF:VALUE"] as $key)
 			{
-				array_push($tags, utf8_decode($vals[$key]["value"]));
+				array_push($tags, $vals[$key]["value"]);
 			}
 		}
 		return ($tags);
@@ -199,7 +199,7 @@ class Connotea
 		{
 			foreach ($index["LINK"] as $key)
 			{
-				array_push($tags, utf8_decode($vals[$key]["value"]));
+				array_push($tags, $vals[$key]["value"]);
 			}
 		}
 		return ($tags);

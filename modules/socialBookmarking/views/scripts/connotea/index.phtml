@@ -35,7 +35,30 @@
  */
 ?>
 <h1>Connotea</h1>
-<?=$this->form ?>
+<?=$this->loginform ?>
+<?php
+    if (true === isset($this->connoteauser)) {
+        printf($this->translate("connotea_loggedin"), $this->connoteauser);
+    }
+?>
 <p>
 <?=$this->note ?>
 </p>
+<?php
+    if (isset($this->connotealink) === true)
+    {
+        if ($this->connotealink === -1) {
+            echo '<div>' . $this->translate('taglist_failure') . '</div>';
+        } else if (count($this->connotealink) > 0) {
+            echo '<div>' . $this->translate('connotea_tags');
+            echo '<ul>';
+            foreach($this->connotealink as $giventag) {
+                echo "<li>$giventag</li>";
+            }
+            echo '</ul></div>';
+        } else {
+            echo '<div>' . $this->translate('connotea_no_tags') . '</div>';
+        }
+    }
+?>
+<?=$this->bookmark ?>

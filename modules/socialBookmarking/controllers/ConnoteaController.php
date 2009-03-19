@@ -46,57 +46,51 @@ class SocialBookmarking_ConnoteaController extends Zend_Controller_Action
 	 */
     public function indexAction() 
     {
-        $searchForm = new ConnoteaLoginForm();
-        $searchForm->setAction($this->view->url(array('module' => "socialBookmarking", "controller"=>'connotea', "action"=>"login")));
-        $searchForm->setMethod('post');
-
         $connotea = new Zend_Session_Namespace('connotea');
         if (false === isset($connotea->user)) {
         	// show login mask
-            $this->view->form = $searchForm;
+            $loginForm = new ConnoteaLoginForm();
+            $loginForm->setAction($this->view->url(array('module' => "socialBookmarking", "controller"=>'connotea', "action"=>"login")));
+            $loginForm->setMethod('post');
+            $this->view->loginform = $loginForm;
             $this->view->note = '<a href="http://www.connotea.org/register" target="_blank">' . $this->view->translate('connotea_register') . "</a></div>\n";
         }
         else {
-        	$this->view->note = 'Eingeloggt als ' . $connotea->user . '! ';
-        	$this->view->note .= '<a href="' . $this->view->url(array('module' => "socialBookmarking", "controller"=>'connotea', "action"=>"logout")) . '">Logout</a>';
-        }
-        /*    $connoteaPost = new Connotea;
-            $connoteaPost->user = $_SESSION["connoteauser"];
-            $connoteaPost->password = $_SESSION["connoteapassword"];
-            print ("<div>$connotea_loggedin1 " . $connoteaPost->user . " $connotea_loggedin2 <a href=\"" . $_SERVER["PHP_SELF"] . "?source_opus=" . $source_opus . "&la=" . $la . "&connotealogout=true\">Logout</a></div>");
-            $return = $connoteaPost->listTags("$volltext_url/$jahr/$source_opus/");
-            if ($return == -1) {
-                echo "<div>$taglist_failure</div>";
-            } else if (count($return) > 0) {
-                echo "<div>$connotea_tags";
-                echo "<ul>";
-                foreach($return as $giventag) {
-                    echo "<li>$giventag</li>";
+            $connoteaPost = new Connotea;
+            $connoteaPost->user = $connotea->user;
+            $connoteaPost->password = $connotea->password;
+            $this->view->connoteauser = $connotea->user;
+            $this->view->note = '<a href="' . $this->view->url(array('module' => "socialBookmarking", "controller"=>'connotea', "action"=>"logout")) . '">Logout</a>';
+
+            $data = $this->_request->getParams();            
+
+            if (true === array_key_exists('docId', $data))
+            {
+                $connotea->uri = 'http://' . $_SERVER['HTTP_HOST'] . $this->view->url(array('module' => "frontdoor", "controller"=>'index', "action"=>"index", 'docId'=>$data['docId']));
+                $connotea->docId = $data['docId'];
+                $this->view->connotealink = $connoteaPost->listTags($connotea->uri);
+                $userHatBookmark = $connoteaPost->userHatBookmark($connotea->uri);
+
+                if ($userHatBookmark === -1) {
+                    $this->view->bookmark = $this->view->translate('failure_bmcheck');
+                } else if ($userHatBookmark === 1) {
+                    // Show Delete-form
+                    $bookmarkForm = new ConnoteaBookmarkDeleteForm();
+                    $bookmarkForm->setAction($this->view->url(array('module' => "socialBookmarking", "controller"=>'connotea', "action"=>"deletebookmark")));
+                    $bookmarkForm->setMethod('post');
+                    $this->view->bookmark = $bookmarkForm;
+                } else {
+                    $bookmarkForm = new ConnoteaBookmarkForm();
+                    $bookmarkForm->setAction($this->view->url(array('module' => "socialBookmarking", "controller"=>'connotea', "action"=>"postbookmark")));
+                    $bookmarkForm->setMethod('post');
+                    $this->view->bookmark = $bookmarkForm;
                 }
-                echo "</ul></div>";
-            } else {
-                echo "<div>$connotea_no_tags</div>";
             }
-            print ("<form action=\"" . $_SERVER["PHP_SELF"] . "?source_opus=" . $source_opus . "&la=" . $la . "\" method=\"post\">\n");
-            print ("<input type=\"hidden\" name=\"uri\" value=\"$volltext_url/$jahr/$source_opus/\"/><br/>\n");
-            // Pr�fen: hat User dieses Dokument schon gebookmarkt?
-            $userHatBookmark = $connoteaPost->userHatBookmark("$volltext_url/$jahr/$source_opus/");
-            if ($userHatBookmark == -1) {
-                echo $failure_bmcheck;
-            } else if ($userHatBookmark == 1) {
-                // Wenn ja: L�schen Button
-                print ("<input type=\"submit\" name=\"delete_connotea_bm\" value=\"$delete_connotea_bookmark\"/>\n");
-            } else {
-                // Sonst: Bookmarking-Formular
-                $system_tags = $opus->value("system_tags");
-                print ("<input type=\"hidden\" name=\"system_tags\" value=\"" . $system_tags . "\" /><br/>\n");
-                #print("<input type=\"hidden\" name=\"redirect\" value=\"http://".$_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]."\"/><br/>\n");
-                print ("Eigene Tags: <input type=\"text\" name=\"user_tags\" /><br/>\n");
-                print ("Titel: <input type=\"text\" name=\"usertitle\" value=\"" . $title . "\" /><br/>\n");
-                print ("Beschreibung: <textarea name=\"userdescription\"></textarea><br/>\n");
-                print ("<input type=\"submit\" name=\"connotea_bm\" value=\"$connotea_bookmark\"/>\n");
+            else 
+            {
+            	$this->view->bookmark = $this->view->translate('connotea_no_parameter');
             }
-            print ("</form>\n");*/
+        }
     }
     
     public function loginAction() {
@@ -109,6 +103,7 @@ class SocialBookmarking_ConnoteaController extends Zend_Controller_Action
             if (true === $connoteaPost->login()) {
             	$connotea = new Zend_Session_Namespace('connotea');
             	$connotea->user = $data['user'];
+            	$connotea->password = $data['password'];
             }
         }
         $this->_forward('index');
@@ -120,29 +115,41 @@ class SocialBookmarking_ConnoteaController extends Zend_Controller_Action
        $this->_forward('index');
     }
 
-    public function postBookmarkAction() {
-        if ($_POST["connotea_bm"] && $_SESSION["connoteauser"]) {
-            $params = array('uri' => $_POST["uri"], 'tags' => $_POST["system_tags"] . " " . $_POST["user_tags"], 'usertitle' => $_POST["usertitle"], 'description' => $_POST["userdescription"]);
-            $connoteaPost = new Connotea;
-            $connoteaPost->user = $_SESSION["connoteauser"];
-            $connoteaPost->password = $_SESSION["connoteapassword"];
-            $post_status = $connoteaPost->addBookmark($params);
-            if ($post_status) {
-                echo $add_success;
-            } else {
-                echo $add_failure;
-            }
-        }
-        if ($_POST["delete_connotea_bm"] && $_SESSION["connoteauser"]) {
-            $connoteaPost = new Connotea;
-            $connoteaPost->user = $_SESSION["connoteauser"];
-            $connoteaPost->password = $_SESSION["connoteapassword"];
-            $delete_status = $connoteaPost->deleteBookmark($_POST["uri"]);
-            if ($delete_status) {
-                echo $delete_success;
-            } else {
-                echo $delete_failure;
-            }
-        }
+    public function postbookmarkAction() {
+        $connotea = new Zend_Session_Namespace('connotea');
+        $connoteaPost = new Connotea;
+        $connoteaPost->user = $connotea->user;
+        $connoteaPost->password = $connotea->password;
+        
+        $config = new Zend_Config_Ini('../config/config.ini');
+		$system_tags = $config->socialBookmarking->connotea->systemTags;
+        
+        $data = $this->_request->getPost();
+        
+        $params = array('uri' => $connotea->uri, 'tags' => $system_tags . " " . $data['user_tags'], 'usertitle' => $data['usertitle'], 'description' => $data['userdescription']);
+        $post_status = $connoteaPost->addBookmark($params);
+        /*if ($post_status) {
+            echo $add_success;
+        } else {
+            echo $add_failure;
+        }*/
+        $this->_forward('index');
+    }
+
+    public function deletebookmarkAction() {
+        $connotea = new Zend_Session_Namespace('connotea');
+        $connoteaPost = new Connotea;
+        $connoteaPost->user = $connotea->user;
+        $connoteaPost->password = $connotea->password;
+
+        $data = $this->_request->getPost();
+        
+        $delete_status = $connoteaPost->deleteBookmark($connotea->uri);
+        /*if ($delete_status) {
+            echo $delete_success;
+        } else {
+            echo $delete_failure;
+        }*/
+        $this->_forward('index');
     }
 }

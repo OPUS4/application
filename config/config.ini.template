@@ -42,6 +42,9 @@ theme = default
 pdftotext.path = /usr/bin ; path to pdftotext - needed to index PDF fulltexts
 ps2ascii.path = /usr/bin ; path to ps2ascii - needed to index PS fulltexts
 
+[socialBookmarking]
+connotea.systemTags = OPUS Test ; Tags for any document that is bookmarked via this repository
+
 [test : production]
 db.params.profiler = true
 db.params.showqueries = true

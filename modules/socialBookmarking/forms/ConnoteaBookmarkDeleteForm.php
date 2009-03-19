@@ -1,7 +1,5 @@
 <?php
 /**
- * Indexview for all SocialBookmarking interfaces
- * 
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -29,11 +27,26 @@
  * @category    Application
  * @package     Module_SocialBookmarking
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
-<h1><?=$this->title ?></h1>
-<a href="/socialBookmarking/connotea/" title="Bookmark bei Connotea" onclick="window.open('/socialBookmarking/connotea','connotea','toolbar=no,width=700,height=400'); return false;"><img src="/images/connotea_icon.jpg" border="0" alt="Connotea Icon" /></a>
-<a href="/socialBookmarking/connotea/" title="Bookmark bei Connotea" onclick="window.open('/socialBookmarking/connotea/index/docId/82','connotea','toolbar=no,width=700,height=400'); return false;"><img src="/images/connotea_icon.jpg" border="0" alt="Connotea Icon" /></a>
+
+/**
+ * form to show the login mask for Connotea
+ */
+class ConnoteaBookmarkDeleteForm extends Zend_Form
+{
+    /**
+     * Build easy search form
+     *
+     * @return void
+     */
+    public function init() {
+        $submit = new Zend_Form_Element_Submit('delete_connotea_bm');
+        $submit->setLabel('delete_connotea_bookmark');
+
+		// Add elements to form:
+		$this->addElement($submit);
+    }
+}
