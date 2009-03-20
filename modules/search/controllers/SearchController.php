@@ -120,6 +120,9 @@ class Search_SearchController extends Zend_Controller_Action
             }
         }
 
+		if (array_key_exists('sort', $data)) {
+			$hitlist->sort($data['sort']);
+		}
         $hitlistIterator = new Opus_Search_Iterator_HitListIterator($hitlist);
         $this->view->hitlist_count = $hitlist->count();
         $paginator = Zend_Paginator::factory($hitlistIterator);
@@ -209,7 +212,9 @@ class Search_SearchController extends Zend_Controller_Action
                 $resultlist->hitlist = $hitlist;
             }
         }
-
+		if (array_key_exists('sort', $data)) {
+			$hitlist->sort($data['sort']);
+		}
         $hitlistIterator = new Opus_Search_Iterator_HitListIterator($hitlist);
         $this->view->hitlist_count = $hitlist->count();
         $paginator = Zend_Paginator::factory($hitlistIterator);

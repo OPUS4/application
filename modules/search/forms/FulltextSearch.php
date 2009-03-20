@@ -49,7 +49,7 @@ class FulltextSearch extends Zend_Form
 		$hitsPerPage->setLabel('search_hitsPerPage');
 
 		$sort = new Zend_Form_Element_Select('sort');
-		$sort->addMultiOptions(array('relevance' => 'search_sort_relevance', 'yat' => 'search_sort_yearandtitle', 'year' => 'search_sort_year', 'title' => 'search_sort_title'));
+		$sort->addMultiOptions(array('relevance' => 'search_sort_relevance', 'yat' => 'search_sort_yearandtitle', 'year' => 'search_sort_year', 'title' => 'search_sort_title', 'author' => 'search_sort_author', 'relevance_asc' => 'search_sort_relevance_asc', 'yat_desc' => 'search_sort_yearandtitle_desc', 'year_desc' => 'search_sort_year_desc', 'title_desc' => 'search_sort_title_desc', 'author_desc' => 'search_sort_author_desc'));
 		$sort->setLabel('search_sort');
 
 		$query = new Zend_Form_Element_Text('query');

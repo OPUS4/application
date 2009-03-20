@@ -418,5 +418,53 @@
         <seg>Titel</seg>
       </tuv>
     </tu>
+     <tu tuid="search_sort_author">
+      <tuv xml:lang="en">
+        <seg>Author</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Autor</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_sort_relevance_asc">
+      <tuv xml:lang="en">
+        <seg>Relevance (ascending)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Relevanz (aufsteigend)</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_sort_yearandtitle_desc">
+      <tuv xml:lang="en">
+        <seg>Year and title (descending)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Jahr und Titel (absteigend)</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_sort_year_desc">
+      <tuv xml:lang="en">
+        <seg>Year (descending)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Jahr (absteigend)</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_sort_title_desc">
+      <tuv xml:lang="en">
+        <seg>Title (Z-A)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Titel (Z-A)</seg>
+      </tuv>
+    </tu>
+     <tu tuid="search_sort_author_desc">
+      <tuv xml:lang="en">
+        <seg>Author (Z-A)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Autor (Z-A)</seg>
+      </tuv>
+    </tu>
   </body>
 </tmx>
