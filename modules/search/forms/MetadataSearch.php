@@ -47,6 +47,23 @@ class MetadataSearch extends Zend_Form
      */
     public function init() {
 		// Create and configure query field elements:
+		$truncation = new Zend_Form_Element_Select('searchtype');
+		$truncation->addMultiOptions(array('exact' => 'exact_search', 'truncated' => 'truncated_search'));
+		
+		$hitsPerPage = new Zend_Form_Element_Select('hitsPerPage');
+		$hitsPerPage->addMultiOptions(array('0' => 'all_hits', '10' => 10, '20' => 20, '25' => 25, '50' => 50));
+		$hitsPerPage->setLabel('search_hitsPerPage');
+
+		$sort = new Zend_Form_Element_Select('sort');
+		$sort->addMultiOptions(array('relevance' => 'search_sort_relevance', 'yat' => 'search_sort_yearandtitle', 'year' => 'search_sort_year', 'title' => 'search_sort_title'));
+		$sort->setLabel('search_sort');
+
+        $languageList = new Zend_Form_Element_Select('language');
+        $langs = Zend_Registry::get('Available_Languages');
+        $languageList->setLabel('Language')
+            ->setMultiOptions(array('0' => 'all_hits'));
+        $languageList->addMultiOptions($langs);
+
 		$query = array();
 		$field = array();
 		$boolean = array();
@@ -68,7 +85,8 @@ class MetadataSearch extends Zend_Form
         $submit = new Zend_Form_Element_Submit('submit');
         $submit->setLabel('search_searchaction');
 
-		// Add elements to form:
+        // Add elements to form:
+		$this->addElements(array($truncation, $hitsPerPage, $sort, $languageList));
 		for ($n = 0; $n < $this->_queryFieldNumber; $n++)
 		{		
 		    $this->addElements(array($field[$n], $query[$n]));

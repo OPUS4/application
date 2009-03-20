@@ -123,6 +123,15 @@ class Search_SearchController extends Zend_Controller_Action
         $hitlistIterator = new Opus_Search_Iterator_HitListIterator($hitlist);
         $this->view->hitlist_count = $hitlist->count();
         $paginator = Zend_Paginator::factory($hitlistIterator);
+        if (array_key_exists('hitsPerPage', $data)) {
+        	if ($data['hitsPerPage'] === '0') {
+        	    $hitsPerPage = '10000';
+        	}
+            else {
+            	$hitsPerPage = $data['hitsPerPage'];
+            }
+            $paginator->setItemCountPerPage($hitsPerPage);
+        }
         $paginator->setCurrentPageNumber($page);
         $this->view->hitlist_paginator = $paginator;
     }
@@ -152,7 +161,20 @@ class Search_SearchController extends Zend_Controller_Action
                 	if ($n > 0) {
                 		$query .= ' ' . $data['boolean' . ($n-1)] . ' ';
                 	}
-                	$query .= $data['field' . $n] . ':' . $data['query' . $n];
+                	$query .= $data['field' . $n] . ':';
+                	if ($data['searchtype'] === 'truncated')
+                	{
+                	    $query .= '*';
+                	}
+                	$query .= $data['query' . $n];
+                	if ($data['searchtype'] === 'truncated')
+                	{
+                	    $query .= '*';
+                	}
+                }
+                if ($data['language'] !== '0')
+                {
+                	$query .= ' and language:' . $data['language'];
                 }
                 #echo "Complete query: " . $query;
                 $query = new Opus_Search_Query($query);
@@ -192,6 +214,15 @@ class Search_SearchController extends Zend_Controller_Action
         $this->view->hitlist_count = $hitlist->count();
         $paginator = Zend_Paginator::factory($hitlistIterator);
         $paginator->setCurrentPageNumber($page);
+        if (array_key_exists('hitsPerPage', $data)) {
+        	if ($data['hitsPerPage'] === '0') {
+        	    $hitsPerPage = '10000';
+        	}
+            else {
+            	$hitsPerPage = $data['hitsPerPage'];
+            }
+            $paginator->setItemCountPerPage($hitsPerPage);
+        }
         $this->view->hitlist_paginator = $paginator;
         $this->render('search');
     }

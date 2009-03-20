@@ -223,6 +223,7 @@ class Publish_IndexController extends Zend_Controller_Action {
                 $document->store();
 
                 // After storing, add document to search engine index
+                // FIXME: this should be done after enabling the document, not right after upload!
                 $indexer = new Opus_Search_Index_Indexer();
                 $indexer->addDocumentToEntryIndex($document);
 

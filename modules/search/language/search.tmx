@@ -346,5 +346,77 @@
         <seg>Suchergebnis</seg>
       </tuv>
     </tu>
+    <tu tuid="exact_search">
+      <tuv xml:lang="en">
+        <seg>Exact query</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Exakte Suche</seg>
+      </tuv>
+    </tu>
+    <tu tuid="truncated_search">
+      <tuv xml:lang="en">
+        <seg>parts of the words</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Wortteile</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_hitsPerPage">
+      <tuv xml:lang="en">
+        <seg>Hits per page</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Treffer pro Seite</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_sort">
+      <tuv xml:lang="en">
+        <seg>Sorting</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sortierung</seg>
+      </tuv>
+    </tu>
+    <tu tuid="all_hits">
+      <tuv xml:lang="en">
+        <seg>All</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Alle</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_sort_relevance">
+      <tuv xml:lang="en">
+        <seg>Relevance</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Relevanz</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_sort_yearandtitle">
+      <tuv xml:lang="en">
+        <seg>Year and title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Jahr und Titel</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_sort_year">
+      <tuv xml:lang="en">
+        <seg>Year</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Jahr</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_sort_title">
+      <tuv xml:lang="en">
+        <seg>Title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Titel</seg>
+      </tuv>
+    </tu>
   </body>
 </tmx>

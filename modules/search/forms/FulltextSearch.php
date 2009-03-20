@@ -44,6 +44,14 @@ class FulltextSearch extends Zend_Form
      */
     public function init() {
 		// Create and configure query field element:
+		$hitsPerPage = new Zend_Form_Element_Select('hitsPerPage');
+		$hitsPerPage->addMultiOptions(array('0' => 'all_hits', '10' => 10, '20' => 20, '25' => 25, '50' => 50));
+		$hitsPerPage->setLabel('search_hitsPerPage');
+
+		$sort = new Zend_Form_Element_Select('sort');
+		$sort->addMultiOptions(array('relevance' => 'search_sort_relevance', 'yat' => 'search_sort_yearandtitle', 'year' => 'search_sort_year', 'title' => 'search_sort_title'));
+		$sort->setLabel('search_sort');
+
 		$query = new Zend_Form_Element_Text('query');
 		$query->addValidator('stringLength', false, array(3, 100))
          		->setRequired(true);
@@ -52,6 +60,6 @@ class FulltextSearch extends Zend_Form
         $submit->setLabel('search_searchaction');
 
 		// Add elements to form:
-		$this->addElements(array($query, $submit));
+		$this->addElements(array($hitsPerPage, $sort, $query, $submit));
     }
 }
