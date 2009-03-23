@@ -10,5 +10,45 @@
         <seg>Signatur- und Schlüsselverwaltung</seg>
       </tuv>
     </tu>
+    <tu tuid="pkm_list_keys">
+      <tuv xml:lang="en">
+        <seg>Key Management</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Schlüsselverwaltung</seg>
+      </tuv>
+    </tu>
+    <tu tuid="pkm_key_nosign">
+      <tuv xml:lang="en">
+        <seg>Warning: This key cannot sign data!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Achtung: Mit diesem Schlüssel können keine Daten signiert werden!</seg>
+      </tuv>
+    </tu>
+    <tu tuid="pkm_masterkey">
+      <tuv xml:lang="en">
+        <seg>Your internal key</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Interner Schlüssel</seg>
+      </tuv>
+    </tu>
+    <tu tuid="pkm_key_expired">
+      <tuv xml:lang="en">
+        <seg>This Key is expired!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dieser Schlüssel ist abgelaufen!</seg>
+      </tuv>
+    </tu>
+    <tu tuid="pkm_module_failure">
+      <tuv xml:lang="en">
+        <seg>GPG-Extension cannot get instantiated. You cannot use this module! Please check your installation of Crypt_GPG.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Die GPG-Erweiterung konnte nicht geladen werden! Daher kann dieses Modul nicht genutzt werden. Überprüfen Sie Ihre Installation von Crypt_GPG.</seg>
+      </tuv>
+    </tu>
   </body>
 </tmx>
