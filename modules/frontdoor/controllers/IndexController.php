@@ -56,6 +56,8 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         $document = new Opus_Document($docId);
         $documentType = $document->getType();
         $doc_data = $document->toArray();
+        $this->view->docId = $docId;
+        //print_r ($doc_data);
 
         // Filter for relevant keys. Getting Document Type
         $document_data = $this->filterStopwords($doc_data);
@@ -111,6 +113,7 @@ class Frontdoor_IndexController extends Zend_Controller_Action
              }
           }
         }
+
 
         // Combining keys and values in one array
         $mydoc_data = array_combine ($mydoc_data_keys, $mydoc_data_values);
