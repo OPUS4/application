@@ -42,6 +42,14 @@
         <seg>Datei(en)</seg>
       </tuv>
     </tu>
+    <tu tuid="POD">
+      <tuv xml:lang="en">
+        <seg>Order of printed copy</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Gedruckte Kopie bestellen</seg>
+      </tuv>
+    </tu>
     <tu tuid="Active">
       <tuv xml:lang="en">
         <seg>Active</seg>
