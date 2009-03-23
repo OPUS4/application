@@ -121,6 +121,7 @@
                       <p><b><?= $this-> translate('Language')?>: </b>
                       <?= $this->translate($value);?></p><?
                    }
+
                    if (array_key_exists ('Swd_ger', $this->mydoc_data) === true)
                    {
                       $value = $this->mydoc_data['Swd_ger'];?>
@@ -153,8 +154,8 @@
                   }
                   if (array_key_exists ('PublishedDate', $this->mydoc_data) === true)
                   {
-                     $value = $this->mydoc_data['CompletedYear'];?>
-                     <p><b><?= $this-> translate('CompletedYear')?>: </b>
+                     $value = $this->mydoc_data['PublishedDate'];?>
+                     <p><b><?= $this-> translate('PublishedDate')?>: </b>
                      <?= $this->value = $value;?></p><?
                   }
                   if (array_key_exists ('CompletedDate', $this->mydoc_data) === true)
@@ -169,11 +170,20 @@
                      <p><b><?= $this-> translate('CompletedYear')?>: </b>
                      <?= $this->value = $value;?></p><?
                   }
-                  if (array_key_exists ('IdentifierIsbn_Value', $this->mydoc_data) === true)
+                  if (array_key_exists ('DateAccepted', $this->mydoc_data) === true)
                   {
-                     $value = $this->mydoc_data['IdentifierIsbn'];?>
-                     <p><b><?= $this-> translate('IdentifierIsbn')?>: </b>
+                     $value = $this->mydoc_data['DateAccepted'];?>
+                     <p><b><?= $this-> translate('DateAccepted')?>: </b>
                      <?= $this->value = $value;?></p><?
+                  }
+                  for ($i=0; $i<10; $i++)
+                  {
+                     if (array_key_exists ('IdentifierIsbn_' .$i. '_Value', $this->mydoc_data) === true)
+                     {
+                       $value = $this->mydoc_data['IdentifierIsbn_' .$i. '_Value'];?>
+                       <p><b><?= $this-> translate('IdentifierIsbn')?>: </b>
+                       <?= $this->value = $value;?></p><?
+                      }
                   }
                   if (array_key_exists ('CreatingCorporation', $this->mydoc_data) === true)
                   {
@@ -185,6 +195,12 @@
                   {
                      $value = $this->mydoc_data['ContributingCorporation'];?>
                      <p><b><?= $this-> translate('ContributingCorporation')?>: </b>
+                     <?= $this->value = $value;?></p><?
+                  }
+                  if (array_key_exists ('NonInstituteAffiliation', $this->mydoc_data) === true)
+                  {
+                     $value = $this->mydoc_data['NonInstituteAffiliation'];?>
+                     <p><b><?= $this-> translate('NonInstituteAffiliation')?>: </b>
                      <?= $this->value = $value;?></p><?
                   }
                   for ($i = 0; $i < 10; $i++)
@@ -243,16 +259,15 @@
                               <?= $this->value = $value;?></p><?
                           }
                       }
+                  }
+                  if (array_key_exists ('Licence_NameLong', $this->mydoc_data) === true)
+                  {
+                     $value = $this->mydoc_data['Licence_NameLong'];?>
+                     <p><b><?= $this-> translate('Licence_NameLong')?>: </b>
+                     <?= $this->value = $value;?></p><?
                   }?>
                   <p><b><?= $this-> translate('POD')?>: </b>
                   <a href="<?= $this->value = '';?>">
                   <img src = "<?= $this->value = '/layouts/default/img/proprint_logo.png';?>" border = '0' title = 'Print-on-Demand'> Print-on-Demand</a></p>
-
-                  <?if (array_key_exists ('Licence', $this->mydoc_data) === true)
-                  {
-                     $value = $this->mydoc_data['Licence'];?>
-                     <p><b><?= $this-> translate('Licence')?>: </b>
-                     <?= $this->value = $value;?></p><?
-                  }?>
       </div>
   <?}
