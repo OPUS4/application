@@ -185,6 +185,12 @@
                        <?= $this->value = $value;?></p><?
                       }
                   }
+                  if (array_key_exists ('PageNumber', $this->mydoc_data) === true)
+                  {
+                     $value = $this->mydoc_data['PageNumber'];?>
+                     <p><b><?= $this-> translate('PageNumber')?>: </b>
+                     <?= $this->value = $value;?></p><?
+                  }
                   if (array_key_exists ('CreatingCorporation', $this->mydoc_data) === true)
                   {
                      $value = $this->mydoc_data['CreatingCorporation'];?>
