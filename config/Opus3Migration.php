@@ -92,16 +92,19 @@ class Opus3Migration extends Application_Bootstrap {
     	}
 		
 		$importData = new DOMDocument;
-		//print_r($this->getRequest()->getPost());
-		//print_r($files);
 		$importData->load($this->importfile);
 		
-		$importCollections = new CollectionsImport($importData);
-
+		// Import classification systems and classes 
+		//$importCollections = new CollectionsImport($importData);
+		
+		// Import Licences
+		$importLicences = new LicenceImport($importData);
+		
+		// Import documents
 		$import = new XMLImport($xslt, $stylesheetPath);
 		$result = $import->import($importData);
 		
-		// get the files for all successfully imported entries
+		// Import files
 		foreach ($result['success'] as $imported)
 		{
 			$fileImporter = new Opus3FileImport($this->path, $this->magicPath);
@@ -112,6 +115,9 @@ class Opus3Migration extends Application_Bootstrap {
 			$documentFiles->store();
 			echo count($imported['document']->getField('File')->getValue()) . " file(s) have been imported successfully for this document!\n";
 		}
+		
+		// cleaning: remove licence mapping file
+		unlink('../workspace/licenseMapping.txt');
     }
 }
 

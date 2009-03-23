@@ -90,11 +90,22 @@ class XMLImport
 		$doclist = $documentsXML->getElementsByTagName('Opus_Document');
 		foreach ($doclist as $document) 
 		{
-			$tempdoc = new DOMDocument;
-            $tempdoc->loadXML($documentsXML->saveXML($document));
-            $oldid = $tempdoc->getElementsByTagName('IdentifierOpus3')->Item(0)->getAttribute('Value');
+            $licence = null;
+            $lic = null;
+            $oldid = $document->getElementsByTagName('IdentifierOpus3')->Item(0)->getAttribute('Value');
+            $licence = $document->getElementsByTagName('OldLicence')->Item(0);
+            if ($licence !== null)
+            {
+                $licenceValue = $licence->getAttribute('Value');
+                $lic = new Opus_Licence($this->getLicence($licenceValue));
+                $document->removeChild($licence);
+            }
 			try {
-			    $doc = $this->importDocument($documentsXML->saveXML($document));
+			    $doc = Opus_Document::fromXml($documentsXML->saveXML($document));
+			    if ($lic !== null) {
+			    	$doc->addLicence($lic);
+			    }
+			    $doc->store();
 			    $index = count($imported['success']);
 			    $imported['success'][$index]['entry'] = $documentsXML->saveXML($document);
 			    $imported['success'][$index]['document'] = $doc;
@@ -106,20 +117,21 @@ class XMLImport
                 $imported['failure'][$index]['entry'] = $documentsXML->saveXML($document);
 			} 
 		}
-		#print_r($imported);
 		return $imported;
 	}
-
+	
 	/**
-	 * Imports metadata for one document from an XML-String
-	 *
-	 * @param string $data XML-String to be imported
-	 * @return Opus_Document imported document
+	 * Get the licence for a document and add it
+	 * 
+	 * @return Opus_Licence Licence to be added to the document
 	 */
-	public function importDocument($data)
-	{
-        $doc = Opus_Document::fromXml($data);
-        $doc->store();
-		return $doc;
-	}
+	 public function getLicence($shortName)
+	 {
+	 	$fp = file('../workspace/licenseMapping.txt');
+		foreach ($fp as $licence) {
+			$mappedLicence = split("\ ", $licence);
+			$lic[$mappedLicence[0]] = $mappedLicence[1];
+		}
+		return $lic[$shortName];
+	 }
 }

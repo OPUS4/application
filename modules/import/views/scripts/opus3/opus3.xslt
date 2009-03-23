@@ -139,7 +139,7 @@
             <!-- Language might be a multivalue field in Opus4; in Opus3 there can be only one language -->
             <!-- if the document type defines it as multivalue, there will be problems importing -->
             <xsl:attribute name="Language">
-                <xsl:value-of select="field[@name='language']" />
+                <xsl:call-template name="mapLanguage"><xsl:with-param name="lang"><xsl:value-of select="field[@name='language']" /></xsl:with-param></xsl:call-template>
             </xsl:attribute>
             <xsl:if test="string-length(field[@name='creator_corporate'])>0">
                 <xsl:attribute name="CreatingCorporation">
@@ -238,6 +238,39 @@
             
             <xsl:apply-templates select="field" />
         </xsl:element>
+    </xsl:template>
+
+    <xsl:template name="mapLanguage">
+        <xsl:param name="lang" required="yes" />
+        <xsl:if test="$lang='ger'">
+            <xsl:text>de</xsl:text>
+        </xsl:if>
+        <xsl:if test="$lang='eng'">
+            <xsl:text>en</xsl:text>
+        </xsl:if>
+        <xsl:if test="$lang='fre'">
+            <xsl:text>fr</xsl:text>
+        </xsl:if>
+        <xsl:if test="$lang='rus'">
+            <xsl:text>ru</xsl:text>
+        </xsl:if>
+        <xsl:if test="$lang='mul'">
+            <xsl:text></xsl:text>
+        </xsl:if>
+        <xsl:if test="$lang='mis'">
+            <xsl:text></xsl:text>
+        </xsl:if>
+    </xsl:template> 
+
+    <!-- temporary licence information -->
+    <xsl:template match="table_data[@name='opus']/row/field[@name='lic']">
+        <xsl:if test="string-length(.)>0">
+            <xsl:element name="OldLicence">
+                <xsl:attribute name="Value">
+                    <xsl:value-of select="." />
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:if>
     </xsl:template>
 
     <!-- Notes -->
