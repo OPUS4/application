@@ -57,66 +57,60 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         $documentType = $document->getType();
         $doc_data = $document->toArray();
         $this->view->docId = $docId;
-        //print_r ($doc_data);
 
         // Filter for relevant keys. Getting Document Type
         $document_data = $this->filterStopwords($doc_data);
         $document_data['Type'] = $this->view->translate($documentType);
 
-        // Recursive Iteration of occcupied values in $document_data
-        $arit = new RecursiveArrayIterator($document_data);
-        $ritit = new RecursiveIteratorIterator($arit);
-        foreach ($ritit as $key => $value)
+        // Recursive Iteration in 4 levels in $document_data
+        $arit = new RecursiveArrayIterator ($document_data);
+        foreach ($arit as $key => $value)
         {
-            if (empty($value) == false)
+            if ($arit->hasChildren())
             {
-               $mydoc_data_values[] = $value;
+                $el1 = $arit->getChildren();
+                foreach ($el1 as $key1 => $value1)
+                {
+                    if ($el1->hasChildren())
+                    {
+                        $el2 = $el1->getChildren();
+                        foreach ($el2 as $key2 => $value2)
+                        {
+                            if ($el2->hasChildren())
+                            {
+                                $el3 = $el2->getChildren();
+                                foreach ($el3 as $key3 => $value3)
+                                {
+                                    $mydoc_data_all[$key. '_' .$key1. '_' .$key2. '_' .$key3] = $value3;
+                                }
+                            }
+                            else
+                            {
+                                $mydoc_data_all[$key. '_' .$key1. '_' .$key2] = $value2;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        $mydoc_data_all[$key. '_' .$key1] = $value1;
+                    }
+                }
+            }
+            else
+            {
+                $mydoc_data_all[$key] = $value;
             }
         }
-
-        // Iteration of keys (with occupied values) in $document_data for max. 2 sub-arrays
-        foreach ($document_data as $key => $value)
+        // Proof for occupied values
+        foreach ($mydoc_data_all as $key => $value)
         {
-           if (empty($value) == false)
-           {
-              if (is_array($value))
-              {
-                $array1 = $value;
-                foreach ($array1 as $key1 => $value1)
-                {
-                   if (is_array($value1))
-                   {
-                     $array2 = $value1;
-                     foreach ($array2 as $key2 => $value2)
-                     {
-                        if (is_array ($value2) === false)
-                        {
-                           if (empty($value2) == false)
-                           {
-                           $mydoc_data_keys[] = $key. "_" .$key1. "_" .$key2;
-                           }
-                        }
-                     }
-                  }
-                  else
-                  {
-                      if (empty($value1) == false)
-                      {
-                      $mydoc_data_keys[] = $key. "_" .$key1;
-                      }
-                  }
-               }
-             }
-             else
-             {
-                $mydoc_data_keys[] = $key;
-             }
-          }
+            if (empty($value) === false  && ($value == '0000' || $value == '0000-00-00'  || $value == ', ') === false)
+            {
+                $mydoc_data[$key] = $value;
+            }
         }
+        print_r ($mydoc_data);
 
-
-        // Combining keys and values in one array
-        $mydoc_data = array_combine ($mydoc_data_keys, $mydoc_data_values);
 
         // Collecting SWD-Keywords and and combining them with language information
         $myswd_value = Array();
