@@ -98,6 +98,14 @@
         <seg>URI zur Lizenz</seg>
       </tuv>
     </tu>
+    <tu tuid="Licence_NameLong">
+      <tuv xml:lang="en">
+        <seg>Document licence</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Lizenz des Dokuments</seg>
+      </tuv>
+    </tu>
     <tu tuid="LinkLogo">
       <tuv xml:lang="en">
         <seg>URI to Logo</seg>
