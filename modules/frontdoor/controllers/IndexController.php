@@ -109,8 +109,6 @@ class Frontdoor_IndexController extends Zend_Controller_Action
                 $mydoc_data[$key] = $value;
             }
         }
-        print_r ($mydoc_data);
-
 
         // Collecting SWD-Keywords and and combining them with language information
         $myswd_value = Array();
