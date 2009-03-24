@@ -48,6 +48,21 @@ class Controller_Rest extends Zend_Controller_Action {
     protected $requestData = null;
 
     /**
+     * General message for not implemented REST requests.
+     *
+     * @return void
+     */
+    protected function _notImplemented() {
+        $xml = new DOMDocument('1.0', 'utf-8');
+        $xml->formatOutput = true;
+        $error = $xml->createElement('error');
+        $error->setAttribute('message', 'Required REST method not implemented.');
+        $xml->appendChild($error);
+        $this->getResponse()->setHttpResponseCode(501);
+        $this->getResponse()->setBody($xml->saveXML());
+    }
+
+    /**
      * Overide standard init method with default values for REST.
      *
      * @return void
@@ -64,27 +79,35 @@ class Controller_Rest extends Zend_Controller_Action {
      *
      * @return void
      */
-    public function getAction() {}
+    public function getAction() {
+        $this->_notImplemented();
+    }
 
     /**
      * Handling for post requests.
      *
      * @return void
      */
-    public function postAction() {}
+    public function postAction() {
+        $this->_notImplemented();
+    }
 
     /**
      * Handling for delete requests.
      *
      * @return void
      */
-    public function deleteAction() {}
+    public function deleteAction() {
+        $this->_notImplemented();
+    }
 
     /**
      * Handling for put requests.
      *
      * @return void
      */
-    public function putAction() {}
+    public function putAction() {
+        $this->_notImplemented();
+    }
 
 }
