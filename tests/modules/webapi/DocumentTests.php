@@ -114,6 +114,11 @@ class Modules_Webapi_DocumentTests extends PHPUnit_Framework_TestCase {
         $this->assertEquals('monograph', $data->item(0)->getAttribute('Type'), 'Type of this Opus_Document should be monograph.');
     }
 
+    /**
+     * Test if an invalid numeric id causes a 404 error.
+     *
+     * @return void
+     */
     public function testGetDocumentWithInvalidId() {
         $restData = $this->__restClient->restGet($this->__restUrl . '/1');
         $this->assertEquals(404, $restData->getStatus(), 'HTTP status should be 404 (File not found).');
@@ -121,6 +126,37 @@ class Modules_Webapi_DocumentTests extends PHPUnit_Framework_TestCase {
         $xml->loadXML($restData->getBody());
         $error = $xml->getElementsByTagName('error');
         $this->assertTrue($error->item(0)->hasAttribute('message'), 'Error element contain no error message.');
+    }
+
+    /**
+     * Test to delete a valid document.
+     *
+     * @return void
+     */
+    public function testDeleteDocument() {
+        $this->markTestSkipped('Skipped because of hard coding document id.');
+        $restData = $this->__restClient->restDelete($this->__restUrl . '/37');
+        $this->assertEquals(200, $restData->getStatus(), 'Expected a 200 HTTP response on deleting a document.');
+    }
+
+    /**
+     * Test deleting of a document with an invalid id.
+     *
+     * @return void
+     */
+    public function testDeleteDocumentWithInvalidNumericId() {
+        $restData = $this->__restClient->restDelete($this->__restUrl . '/1');
+        $this->assertEquals(400, $restData->getStatus(), 'Expected a 400 HTTP response.');
+    }
+
+    /**
+     * Test deleting of a document with an non numeric id.
+     *
+     * @return void
+     */
+    public function testDeleteDocumentWithInvalidNonNumericId() {
+        $restData = $this->__restClient->restDelete($this->__restUrl);
+        $this->assertEquals(404, $restData->getStatus(), 'Expected a 404 HTTP response.');
     }
 
 }

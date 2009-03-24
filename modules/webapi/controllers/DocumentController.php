@@ -74,4 +74,24 @@ class Webapi_DocumentController extends Controller_Rest {
         $this->getResponse()->setBody($xml->saveXML());
     }
 
+    /**
+     * Delete a specific document.
+     *
+     * @see    library/Controller/Controller_Rest#deleteAction()
+     * @return void
+     */
+    public function deleteAction() {
+        if (true === is_numeric($this->requestData['original_action'])) {
+            try {
+                $doc = new Opus_Document((int) $this->requestData['original_action']);
+                $doc->delete();
+                $this->getResponse()->setHttpResponseCode(200);
+            } catch (Exception $e) {
+                $this->getResponse()->setHttpResponseCode(400);
+            }
+        } else {
+            $this->getResponse()->setHttpResponseCode(404);
+        }
+    }
+
 }
