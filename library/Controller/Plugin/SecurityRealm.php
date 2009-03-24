@@ -52,8 +52,17 @@ class Controller_Plugin_SecurityRealm extends Zend_Controller_Plugin_Abstract {
         $realm = Opus_Security_Realm::getInstance();
         $acl = new Opus_Security_Acl;
 
+        // Detect role of currently logged on user (if any)
+        $identity = Zend_Auth::getInstance()->getIdentity();
+        if (true === empty($identity)) {
+            $identityRole = 'guest';
+        } else {
+            // Check if the logged in identity has a specific role assigned
+            $identityRole = 'admin';            
+        }
+
         // Set up standard guest role as defined in the database
-        $guest = $acl->getRole('Opus/Security/Role/2');
+        $guest = $acl->getRole($identityRole);
         
         // Set up master Resource object
         $masterResource = $acl->get('PUBLIC');
