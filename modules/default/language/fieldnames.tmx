@@ -598,12 +598,12 @@
         <seg>Autor</seg>
       </tuv>
     </tu>
-    <tu tuid="PersonReferee">
+    <tu tuid="PersonEditor">
       <tuv xml:lang="en">
-        <seg>Referee</seg>
+        <seg>Editor</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Gutachter</seg>
+        <seg>Herausgeber</seg>
       </tuv>
     </tu>
     <tu tuid="PersonAdvisor">
@@ -612,6 +612,22 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Betreuer</seg>
+      </tuv>
+    </tu>
+    <tu tuid="PersonReferee">
+      <tuv xml:lang="en">
+        <seg>Referee</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Gutachter</seg>
+      </tuv>
+    </tu>
+    <tu tuid="PersonTranslator">
+      <tuv xml:lang="en">
+        <seg>Translator</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Übersetzer</seg>
       </tuv>
     </tu>
     <tu tuid="PersonOther">
