@@ -74,13 +74,13 @@
                  <p><b><?= $this-> translate('File')?>:&nbsp; </b>
                  <?for ($i = 0; $i < 1; $i++)
                  {
-                    //if (array_key_exists ('File_'.$i, $this->mydoc_data) === true)
-                    //{
-                        //$value = $this->mydoc_data['File_' .$i];?>
-                        <a href="<?= $this->value = '/workspace/files/'.$this->docId.'/case_Contact.pdf';?>">
+                    if (array_key_exists ('File_'.$i. '_PathName', $this->mydoc_data) === true)
+                    {
+                        $value = $this->mydoc_data['File_' .$i. '_PathName'];?>
+                        <a href="<?= $this->value = '/files/'.$this->docId.'/'.$this->value = $value;?>">
                         <img src = "<?= $this->value = '/layouts/default/img/filetypelogo_pdf.png';?>" title = 'Download'> PDF, 20KB</a>
                         <?//= $this->value = $value;?></a>&nbsp; &nbsp; <?
-                   //}
+                    }
                  }?></p><br />
 
                  <p><a href="<?= $this->value = '';?>">
@@ -229,13 +229,21 @@
                   }
                   for ($i = 0; $i < 10; $i++)
                   {
-                    if (array_key_exists ('PersonTranslator_'.$i.'_Name', $this->mydoc_data) === true)
+                    if (array_key_exists ('PersonEditor_'.$i.'_Name', $this->mydoc_data) === true)
                     {
-                        $value = $this->mydoc_data['PersonTranslator_'.$i.'_Name'];?>
-                        <p><b><?= $this-> translate('PersonTranslator')?>: </b>
+                        $value = $this->mydoc_data['PersonEditor_'.$i.'_Name'];?>
+                        <p><b><?= $this-> translate('PersonEditor')?>: </b>
                         <?= $this->value = $value;?></p><?
                     }
                   }
+
+                    if (array_key_exists ('PersonTranslator_Name', $this->mydoc_data) === true)
+                    {
+                        $value = $this->mydoc_data['PersonTranslator_Name'];?>
+                        <p><b><?= $this-> translate('PersonTranslator')?>: </b>
+                        <?= $this->value = $value;?></p><?
+                    }
+
                   for ($i = 0; $i < 10; $i++)
                   {
                     if (array_key_exists ('PersonOther_'.$i.'_Name', $this->mydoc_data) === true)
