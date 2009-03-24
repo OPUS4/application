@@ -35,12 +35,12 @@
  */
 
 /**
- * The controller produces an (3-dimensional) array with all fields from
- * ModelDocument. This array has to be proofed for occupied values, then reduced
- * to one dimension with recursive iteration and pass through a filter using a
- * function concerning relevance (Stopwords). Keywords are collected and combined
- * with language information, converted to strings and added to the resulting array
- * $mydocdata.
+ *
+ * The controller gets an (4-dimensional) associative array with all fields from
+ * ModelDocument. This array is filtered with relevant stopwords for fields which are not relevant
+ * for the Frontdoor-View and then converted to one dimension with recursive iteration.
+ * Keywords are collected and combined with language information, converted to strings and
+ * added to the resulting array $mydocdata.
  *
  */
 class Frontdoor_IndexController extends Zend_Controller_Action
@@ -101,6 +101,7 @@ class Frontdoor_IndexController extends Zend_Controller_Action
                 $mydoc_data_all[$key] = $value;
             }
         }
+
         // Proof for occupied values
         foreach ($mydoc_data_all as $key => $value)
         {
