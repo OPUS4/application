@@ -611,7 +611,7 @@
         <seg>Advisor</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Betreuer</seg>
+        <seg>Berichter</seg>
       </tuv>
     </tu>
     <tu tuid="PersonReferee">
