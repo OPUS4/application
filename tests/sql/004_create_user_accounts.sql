@@ -3,8 +3,8 @@
 -- Create user accounts
 -- 
 INSERT INTO `accounts` (`id`, `login`, `password`) VALUES
-(1, 'user',  md5('useruser')),
-(2, 'admin', md5('adminadmin'));
+(1, 'user',  sha1('useruser')),
+(2, 'admin', sha1('adminadmin'));
 
 --
 -- Assign Roles to Accounts

@@ -58,7 +58,7 @@ class Controller_Plugin_SecurityRealm extends Zend_Controller_Plugin_Abstract {
             $identityRole = 'guest';
         } else {
             // Check if the logged in identity has a specific role assigned
-            $identityRole = 'admin';            
+            $identityRole = $realm->getIdentityRole($identity);            
         }
 
         // Set up standard guest role as defined in the database
