@@ -48,7 +48,7 @@ class Statistic_IndexController extends Zend_Controller_Action {
 	 */
 	public function indexAction() {
 		$this->view->title = 'statistic';
-		$counter = Statistic_LocalCounter::getInstance();
+		$counter = Opus_Statistic_LocalCounter::getInstance();
         $form = new Test();
         print_r($_POST);
         $form->populate($_POST);
