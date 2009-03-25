@@ -48,6 +48,29 @@ class Statistic_IndexController extends Zend_Controller_Action {
 	 */
 	public function indexAction() {
 		$this->view->title = 'statistic';
+		$counter = Statistic_LocalCounter::getInstance();
+        $form = new Test();
+        print_r($_POST);
+        $form->populate($_POST);
+        $this->view->form = $form;
+
+        $documentId = $form->getValue('document_id');
+        $fileId = $form->getValue('file_id');
+        $ip = $form->getValue('ip');
+        $userAgent = $form->getValue('user_agent');
+		$result = $counter->count($documentId, $fileId, $ip, $userAgent);
+		if ($result === FALSE) {
+		    $this->view->doubleClick = true;
+		} else {
+		    $this->view->doubleClick = false;
+		    $this->view->count = $result;
+		}
+
+		$this->view->userAgent = $_SERVER['HTTP_USER_AGENT'];
+		$this->view->redirectStatus = $_SERVER['REDIRECT_STATUS'];
+		//print_r($_SERVER);
+		//$registry = Zend_Registry::getInstance();
+		//print_r($registry);
 	}
 
 }

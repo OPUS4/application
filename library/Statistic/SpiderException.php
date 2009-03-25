@@ -7,11 +7,12 @@
  *
  * OPUS 4 is a complete rewrite of the original OPUS software and was developed
  * by the Stuttgart University Library, the Library Service Center
- * Baden-Wuerttemberg, the Cooperative Library Network Berlin-Brandenburg,
- * the Saarland University and State Library, the Saxon State Library -
- * Dresden State and University Library, the Bielefeld University Library and
- * the University Library of Hamburg University of Technology with funding from
- * the German Research Foundation and the European Regional Development Fund.
+ * Baden-Wuerttemberg, the North Rhine-Westphalian Library Service Center,
+ * the Cooperative Library Network Berlin-Brandenburg, the Saarland University
+ * and State Library, the Saxon State Library - Dresden State and University
+ * Library, the Bielefeld University Library and the University Library of
+ * Hamburg University of Technology with funding from the German Research
+ * Foundation and the European Regional Development Fund.
  *
  * LICENCE
  * OPUS is free software; you can redistribute it and/or modify it under the
@@ -25,17 +26,15 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_statistic
- * @author      Birgit Dressler (b.dressler@sulb.uni-saarland.de)
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @package     Statistic
+ * @author      Tobias Leidinger <tobias.leidinger@gmail.com>
+ * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
-<h1><?= $this->translate('statistic_index_title') ?></h1>
-<p><?php echo $this->form?></p>
-<p><?php $this->doubleClick?print('Doubleclick'):print('');?></p>
-<p>User Agent:<br> <?php print($this->userAgent);?></p>
-<p>Count:<br> <?php print($this->count);?></p>
 
-<p>Redirect Status:<br> <?php print($this->redirectStatus);?></p>
+
+
+class Statistic_SpiderException extends Exception  {
+
+}
