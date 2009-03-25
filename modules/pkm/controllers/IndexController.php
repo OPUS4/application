@@ -99,4 +99,26 @@ class Pkm_IndexController extends Zend_Controller_Action
     		$this->view->noFileSelected = true;
     	}
     }
+
+	/**
+	 * Shows a complete key
+	 *
+	 * @return void
+	 *
+	 */
+    public function showkeyAction()
+    {
+        $this->_helper->viewRenderer->setNoRender(true);
+        $this->_helper->layout()->disableLayout();
+
+    	$gpg = new OpusGPG();
+    	$data = $this->_request->getParams();
+
+    	if (true === array_key_exists('fingerprint', $data))
+    	{
+        	// Send plain text response.
+            $this->getResponse()->setHeader('Content-Type', 'text/plain; charset=UTF-8', true);
+            $this->getResponse()->setBody($gpg->exportPublicKey($data['fingerprint']));
+    	}    	
+    }
 }

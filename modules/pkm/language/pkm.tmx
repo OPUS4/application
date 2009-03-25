@@ -90,5 +90,13 @@
         <seg>Keine (oder eine ungültige) Publikation ausgewählt zur Signaturprüfung!</seg>
       </tuv>
     </tu>
+    <tu tuid="pkm_show_key">
+      <tuv xml:lang="en">
+        <seg>Show key used for signature</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Signierschlüssel anzeigen</seg>
+      </tuv>
+    </tu>
   </body>
 </tmx>

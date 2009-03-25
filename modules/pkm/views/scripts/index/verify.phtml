@@ -43,14 +43,16 @@
     else {
         foreach ($this->verifyResult as $file => $verification)
         {
-    	    echo $file;
+        ?>
+    	    <?= $file ?>
+    	    <?php
     	    if (count($verification) === 0)
     	    {
-    	    	?>
+    	    ?>
     	    	<div class="invalid">
     		    <?= $this->translate('pkm_no_signature') ?>
     		    </div>
-    		    <?php
+    		<?php
     	    }
     	    foreach($verification as $verifiedArray)
     	    {
@@ -58,17 +60,17 @@
     		    {
     		        if ($verified->isValid() === true)
     		        {
-    		        	?>
+    		        ?>
     		        	<div class="valid">
     		            <?php 
     		                printf($this->translate('pkm_sigcheck_valid'), $verified->getUserId()->getName()); 
     		            ?>
     		            </div>
-    		            <?php
+    		        <?php
     		        }
     		        else
     		        {
-    		        	?>
+    		        ?>
     		        	<div class="invalid">
     		        	<?php 
     		        	    printf($this->translate('pkm_sigcheck_invalid'), $verified->getUserId()->getName()); 
@@ -76,6 +78,10 @@
         		        </div>
         		    <?php
         		    }
+        		    // Show key used for signature
+        		    ?>
+        		    <a href="<?= $this->url(array('module' => 'pkm', 'controller' => 'index', 'action' => 'showkey', 'fingerprint' => $verified->getKeyFingerprint())) ?>"><?= $this->translate('pkm_show_key') ?></a>
+        		<?php
     	    	}
     	    }
     	}
