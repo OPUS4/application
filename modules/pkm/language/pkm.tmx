@@ -44,10 +44,50 @@
     </tu>
     <tu tuid="pkm_module_failure">
       <tuv xml:lang="en">
-        <seg>GPG-Extension cannot get instantiated. You cannot use this module! Please check your installation of Crypt_GPG.</seg>
+        <seg>GPG-Extension cannot get instantiated. You cannot use this module! Please check your parameters in config.ini.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Die GPG-Erweiterung konnte nicht geladen werden! Daher kann dieses Modul nicht genutzt werden. Überprüfen Sie Ihre Installation von Crypt_GPG.</seg>
+        <seg>Die GPG-Erweiterung konnte nicht geladen werden! Daher kann dieses Modul nicht genutzt werden. Überprüfen Sie Ihre Parameter in der config.ini.</seg>
+      </tuv>
+    </tu>
+    <tu tuid="pkm_sigcheck_valid">
+      <tuv xml:lang="en">
+        <seg>Valid signature from %1$s</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Gültige Signatur von %1$s</seg>
+      </tuv>
+    </tu>
+    <tu tuid="pkm_sigcheck_invalid">
+      <tuv xml:lang="en">
+        <seg>Invalid signature from %1$s</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Ungültige Signatur von %1$s</seg>
+      </tuv>
+    </tu>
+    <tu tuid="pkm_verify_signatures">
+      <tuv xml:lang="en">
+        <seg>Signature verification</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Signaturüberprüfung</seg>
+      </tuv>
+    </tu>
+    <tu tuid="pkm_no_signature">
+      <tuv xml:lang="en">
+        <seg>No signature for this file</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Keine Signatur für diese Datei vorhanden</seg>
+      </tuv>
+    </tu>
+    <tu tuid="pkm_no_publication_selected">
+      <tuv xml:lang="en">
+        <seg>No (or invalid) publication has been selected for verification!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Keine (oder eine ungültige) Publikation ausgewählt zur Signaturprüfung!</seg>
       </tuv>
     </tu>
   </body>

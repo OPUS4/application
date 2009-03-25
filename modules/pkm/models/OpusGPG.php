@@ -45,7 +45,7 @@ class OpusGPG extends Crypt_GPG
 		$config = new Zend_Config_Ini('../config/config.ini');
 
 		try {
-			parent::__construct(array('homedir' => $config->gpg->keyring->path, 'binary' => $config->gpg->path));
+			parent::__construct(array('homedir' => $config->gpg->keyring->path, 'binary' => $config->gpg->path, 'debug' => false));
 		}
 		catch (Exception $e) {
 			throw $e;
@@ -64,8 +64,46 @@ class OpusGPG extends Crypt_GPG
     		}
     	}
     	
+    	return false;
     }
 	
+    public function verifyPublication($id) 
+    {
+    	$doc = new Opus_Document($id);
+    	
+    	$filepath = '../workspace/files/' . $id . '/';
+
+    	$result = array();
+    	
+    	foreach ($doc->getFile() as $file) 
+    	{
+    		$hashes = $file->getHashValue();
+    		$result[$file->getPathName()] = array();
+    		if (true === is_array($hashes))
+    		{
+    		    foreach ($hashes as $hash)
+    		    {
+    			    if ($hash->getType() === 'gpg')
+    			    {
+    				    $result[$file->getPathName()][] = $this->verifyFile($filepath . $file->getPathName(), $hash->getValue());
+    			    }
+    		    }
+    		}
+    		else
+    		{
+    			if ($hashes->getType() === 'gpg')
+    			{
+    			    $result[$file->getPathName()][] = $this->verifyFile($filepath . $file->getPathName(), $hashes->getValue());
+    			}    			
+    		}
+    	}
+    	return $result;
+    }
+
+
+
+
+
 	/** 
 	 * verify prüft zu einer angegebenen Datei eine Signatur
      * Die Signatur muss entweder als .asc oder .sig-Datei im gleichen Verzeichnis wie die signierte Datei liegen
