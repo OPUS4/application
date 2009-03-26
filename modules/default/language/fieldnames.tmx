@@ -614,6 +614,14 @@
         <seg>Berichter</seg>
       </tuv>
     </tu>
+    <tu tuid="PersonContributor">
+      <tuv xml:lang="en">
+        <seg>Contributor</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Mitarbeiter</seg>
+      </tuv>
+    </tu>
     <tu tuid="PersonReferee">
       <tuv xml:lang="en">
         <seg>Referee</seg>
