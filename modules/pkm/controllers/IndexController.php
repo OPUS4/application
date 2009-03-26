@@ -136,17 +136,22 @@ class Pkm_IndexController extends Zend_Controller_Action
 	 */
     public function showkeyAction()
     {
-        $this->_helper->viewRenderer->setNoRender(true);
-        $this->_helper->layout()->disableLayout();
-
     	$gpg = new OpusGPG();
     	$data = $this->_request->getParams();
 
     	if (true === array_key_exists('fingerprint', $data))
     	{
-        	// Send plain text response.
-            $this->getResponse()->setHeader('Content-Type', 'text/plain; charset=UTF-8', true);
-            $this->getResponse()->setBody($gpg->exportPublicKey($data['fingerprint']));
+        	try {
+        	    $this->_helper->viewRenderer->setNoRender(true);
+                $this->_helper->layout()->disableLayout();
+
+            	// Send plain text response.
+                $this->getResponse()->setHeader('Content-Type', 'text/plain; charset=UTF-8', true);
+                $this->getResponse()->setBody($gpg->exportPublicKey($data['fingerprint']));
+        	}
+        	catch (Exception $e) {
+        		$this->getResponse()->setBody($e->getMessage());
+        	}
     	}    	
     }
 }
