@@ -98,5 +98,21 @@
         <seg>Signierschlüssel anzeigen</seg>
       </tuv>
     </tu>
+    <tu tuid="pkm_no_keys">
+      <tuv xml:lang="en">
+        <seg>No keys in your keyring</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Keine Schlüssel in Ihrem Schlüsselbund vorhanden</seg>
+      </tuv>
+    </tu>
+    <tu tuid="pkm_no_masterkey">
+      <tuv xml:lang="en">
+        <seg>No internal key found!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Kein interner Schlüssel vorhanden!</seg>
+      </tuv>
+    </tu>
   </body>
 </tmx>

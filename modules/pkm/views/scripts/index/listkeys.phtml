@@ -35,12 +35,12 @@
  */
 ?>
 <h1><?= $this->title ?></h1>
-<?= $this->translate('pkm_masterkey') ?><br/>
-<ol>
 <?php
     if ($this->masterkey !== false)
     {
    	?>
+        <?= $this->translate('pkm_masterkey') ?><br/>
+        <ol>
         <li><?= $this->masterkey->getPrimaryKey()->getId() ?> Fingerprint: <?= $this->masterkey->getPrimaryKey()->getFingerprint() ?><br/>
         <?php
 	    if ($this->masterkey->getPrimaryKey()->canSign() === false) 
@@ -63,28 +63,54 @@
 	    }
 	    ?>
 	    </li>
+	    </ol>
 	    <?php
     }
-?>
-</ol>
-<br/>
-<ul>
-<?php
-   	foreach ($this->keys as $key) 
+    else 
     {
-    	if ($key->getPrimaryKey()->getId() !== $this->masterkey->getPrimaryKey()->getId())
-    	{
-    	    echo '<li>' . $key->getPrimaryKey()->getId() . ' Fingerprint:' . $key->getPrimaryKey()->getFingerprint() . '<br/>';
-    	    if (0 < $key->getPrimaryKey()->getExpirationDate() && $key->getPrimaryKey()->getExpirationDate() < time()) 
-    	    {
-    		    echo $this->translate('pkm_key_expired') . "<br/>";
-    	    }
-    	    foreach ($key->getUserIds() as $user)
-    	    {
-    		    echo $user->getName() . ' ' . $user->getEmail() . '<br/>';
-    	    }
-    	    echo '</li>';
-    	}
+    	?>
+    	<?= $this->translate('pkm_no_masterkey') ?><br/>
+    	<?php
     }
 ?>
-</ul>
+<br/>
+<?php
+    if (count($this->keys) > 0) { 
+    ?>
+    <ul>
+    <?php
+        foreach ($this->keys as $key) 
+        {
+    	    if ($key->getPrimaryKey()->getId() !== $this->masterkey->getPrimaryKey()->getId())
+    	    {
+    	    ?>
+    	        <li><?= $key->getPrimaryKey()->getId() ?> Fingerprint: <?= $key->getPrimaryKey()->getFingerprint() ?><br/>
+    	        <?php
+    	        if (0 < $key->getPrimaryKey()->getExpirationDate() && $key->getPrimaryKey()->getExpirationDate() < time()) 
+    	        {
+    	        ?>
+    		        <?= $this->translate('pkm_key_expired') ?><br/>
+    		    <?php
+    	        }
+    	        foreach ($key->getUserIds() as $user)
+    	        {
+    	        ?>
+    		        <?= $user->getName() ?> <?= $user->getEmail() ?><br/>
+    		    <?php
+    	        }
+    	        ?>
+    	        </li>
+    	    <?php
+    	    }
+        }
+    ?>
+    </ul>
+    <?php
+    }
+    else
+    {
+        ?>
+        <?= $this->translate('pkm_no_keys') ?>
+        <?php
+    }
+?>
