@@ -114,6 +114,14 @@
         <seg>Kein interner Schlüssel vorhanden!</seg>
       </tuv>
     </tu>
+    <tu tuid="pkm_key_noprivate">
+      <tuv xml:lang="en">
+        <seg>Your internal key does not have a private key!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Der interne Schlüssel hat keinen Privatschlüssel!</seg>
+      </tuv>
+    </tu>
     <tu tuid="keyFileToUpload">
       <tuv xml:lang="en">
         <seg>Keyfile</seg>

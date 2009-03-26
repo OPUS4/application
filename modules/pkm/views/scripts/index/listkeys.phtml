@@ -51,6 +51,12 @@
 	        <?= $this->translate('pkm_key_nosign') ?><br/>
 	    <?php
 	    }
+	    if ($this->masterkey->getPrimaryKey()->hasPrivate() === false) 
+        {
+	    ?>
+	        <?= $this->translate('pkm_key_noprivate') ?><br/>
+	    <?php
+	    }
 	    if (0 < $this->masterkey->getPrimaryKey()->getExpirationDate() && $this->masterkey->getPrimaryKey()->getExpirationDate() < time()) 
         {
         ?>
