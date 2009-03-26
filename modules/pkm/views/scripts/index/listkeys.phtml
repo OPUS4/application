@@ -38,20 +38,33 @@
 <?= $this->translate('pkm_masterkey') ?><br/>
 <ol>
 <?php
-    echo '<li>' . $this->masterkey->getPrimaryKey()->getId() . ' Fingerprint:' . $this->masterkey->getPrimaryKey()->getFingerprint() . '<br/>';
-	if ($this->masterkey->getPrimaryKey()->canSign() === false) 
+    if ($this->masterkey !== false)
     {
-	    echo $this->translate('pkm_key_nosign') . "<br/>";
-	}
-	if (0 < $this->masterkey->getPrimaryKey()->getExpirationDate() && $this->masterkey->getPrimaryKey()->getExpirationDate() < time()) 
-    {
-	    echo $this->translate('pkm_key_expired') . "<br/>";
-	}
-	foreach ($this->masterkey->getUserIds() as $user)
-	{
-	    echo $user->getName() . ' ' . $user->getEmail() . '<br/>';
-	}
-	echo '</li>';
+   	?>
+        <li><?= $this->masterkey->getPrimaryKey()->getId() ?> Fingerprint: <?= $this->masterkey->getPrimaryKey()->getFingerprint() ?><br/>
+        <?php
+	    if ($this->masterkey->getPrimaryKey()->canSign() === false) 
+        {
+	    ?>
+	        <?= $this->translate('pkm_key_nosign') ?><br/>
+	    <?php
+	    }
+	    if (0 < $this->masterkey->getPrimaryKey()->getExpirationDate() && $this->masterkey->getPrimaryKey()->getExpirationDate() < time()) 
+        {
+        ?>
+	        <?= $this->translate('pkm_key_expired') ?><br/>
+	    <?php
+	    }
+	    foreach ($this->masterkey->getUserIds() as $user)
+	    {
+	    ?>
+	        <?= $user->getName() ?> <?= $user->getEmail() ?><br/>
+	    <?php
+	    }
+	    ?>
+	    </li>
+	    <?php
+    }
 ?>
 </ol>
 <br/>
