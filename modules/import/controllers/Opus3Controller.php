@@ -74,36 +74,13 @@ class Import_Opus3Controller extends Zend_Controller_Action
 		$upload = new Zend_File_Transfer_Adapter_Http();
         $files = $upload->getFileInfo();
 		$importData = new DOMDocument;
-		//print_r($this->getRequest()->getPost());
-		//print_r($files);
 		$importData->load($files['xmldump']['tmp_name']);
 
 		$import = new XMLImport($xslt, $stylesheetPath);
 		$result = $import->import($importData);
 		
-		// get the files for all successfully imported entries
-		foreach ($result['success'] as $imported)
-		{
-			$fileList = $this->getFiles($imported['oldid']);
-			//print_r($fileList);
-			//$doc = new Opus_Document($imported['newid']);
-            //if (true === is_array($doc->getLanguage()))
-            //{
-        	    //$lang = $doc->getLanguage(0);
-            //}
-            //else
-            //{
-        	    //$lang = $doc->getLanguage();
-            //}
-			//foreach ($fileList as $file)
-			//{
-			    //$file->setLanguage($lang);
-			    //$doc->addFile($file);
-			//}
-			//$doc->store();
-		}
+		// dont import the files from webinterface at the moment
 		
-		#print_r($result);
 		$this->view->numberOfEntries = count($result['success']);
 		$this->view->numberOfFailures = count($result['failure']);
 		$this->view->importiere = $result['success'];

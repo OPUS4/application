@@ -63,10 +63,38 @@ class Pkm_IndexController extends Zend_Controller_Action
     {
     	$this->view->title = $this->view->translate('pkm_list_keys');
     	
+        $uploadForm = new KeyUploadForm();
+        $action_url = $this->view->url(array("controller" => "index", "action" => "addkey"));
+        $uploadForm->setAction($action_url);
+        $this->view->form = $uploadForm;
+    	
     	$gpg = new OpusGPG();
     	
     	$this->view->masterkey = $gpg->getMasterKey();
     	$this->view->keys = $gpg->getKeys();
+    }
+
+	/**
+	 * Adds a key to the internal keyring
+	 *
+	 * @return void
+	 *
+	 */
+    public function addkeyAction()
+    {
+    	$gpg = new OpusGPG();
+    	
+        $upload = new Zend_File_Transfer_Adapter_Http();
+        $files = $upload->getFileInfo();
+
+        // save the file
+        foreach ($files as $file) {
+            $gpg->importKeyFile($file['tmp_name']);
+        }
+    	$this->view->masterkey = $gpg->getMasterKey();
+    	$this->view->keys = $gpg->getKeys();
+    	
+    	$this->render('listkeys');
     }
 
 	/**
