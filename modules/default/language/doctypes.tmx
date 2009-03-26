@@ -26,7 +26,7 @@
         <seg>Preprint (Vorab-Veröffentlichung)</seg>
       </tuv>
     </tu>
-    <tu tuid="doctoral_thesis">
+    <tu tuid="doctoral thesis">
       <tuv xml:lang="en">
         <seg>Dissertation</seg>
       </tuv>
@@ -50,7 +50,7 @@
         <seg>Vorlesung</seg>
       </tuv>
     </tu>
-    <tu tuid="bachelor_thesis">
+    <tu tuid="bachelor thesis">
       <tuv xml:lang="en">
         <seg>Bachelor Thesis</seg>
       </tuv>
@@ -58,7 +58,7 @@
         <seg>Bachelorarbeit</seg>
       </tuv>
     </tu>
-    <tu tuid="master_thesis">
+    <tu tuid="master thesis">
       <tuv xml:lang="en">
         <seg>Master Thesis</seg>
       </tuv>
@@ -66,7 +66,7 @@
         <seg>Diplomarbeit, Magisterarbeit, Masterarbeit</seg>
       </tuv>
     </tu>
-    <tu tuid="habil_thesis">
+    <tu tuid="habil thesis">
       <tuv xml:lang="en">
         <seg>Habil Thesis</seg>
       </tuv>
@@ -74,7 +74,7 @@
         <seg>Habilitation</seg>
       </tuv>
     </tu>
-    <tu tuid="honour_thesis">
+    <tu tuid="honour thesis">
       <tuv xml:lang="en">
         <seg>Honour's Thesis</seg>
       </tuv>
@@ -82,7 +82,7 @@
         <seg>Honour's Thesis</seg>
       </tuv>
     </tu>
-    <tu tuid="study_paper">
+    <tu tuid="study paper">
       <tuv xml:lang="en">
         <seg>StudyPaper</seg>
       </tuv>
@@ -98,7 +98,7 @@
         <seg>Veröffentlichung (allg.)</seg>
       </tuv>
     </tu>
-    <tu tuid="book_section">
+    <tu tuid="book section">
       <tuv xml:lang="en">
         <seg>Book Section (Chapter / Part of a Monograph)</seg>
       </tuv>
@@ -106,7 +106,7 @@
         <seg>Buchausschnitt (Kapitel / Teil einer Monographie)</seg>
       </tuv>
     </tu>
-    <tu tuid="conference_item">
+    <tu tuid="conference item">
       <tuv xml:lang="en">
         <seg>Conference Item</seg>
       </tuv>
@@ -130,7 +130,7 @@
         <seg>Forschungsbericht</seg>
       </tuv>
     </tu>
-    <tu tuid="doctype_for_discussion_reasons">
+    <tu tuid="doctype for discussion reasons">
       <tuv xml:lang="en">
         <seg>Doctype for discussion reasons</seg>
       </tuv>
@@ -146,7 +146,7 @@
         <seg>Festschrift</seg>
       </tuv>
     </tu>
-    <tu tuid="course_material">
+    <tu tuid="course material">
       <tuv xml:lang="en">
         <seg>Course material </seg>
       </tuv>
