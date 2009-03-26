@@ -81,7 +81,18 @@ class Frontdoor_IndexController extends Zend_Controller_Action
                                 $el3 = $el2->getChildren();
                                 foreach ($el3 as $key3 => $value3)
                                 {
-                                    $mydoc_data_all[$key. '_' .$key1. '_' .$key2. '_' .$key3] = $value3;
+                                    if ($el3->hasChildren())
+                                    {
+                                       $el4 = $el3->getChildren();
+                                       foreach ($el4 as $key4 => $value4)
+                                       {
+                                           $mydoc_data_all[$key. '_' .$key1. '_' .$key2. '_' .$key3. '_' .$key4] = $value4;
+                                       }
+                                    }
+                                    else
+                                    {
+                                        $mydoc_data_all[$key. '_' .$key1. '_' .$key2. '_' .$key3] = $value3;
+                                    }
                                 }
                             }
                             else
@@ -238,7 +249,7 @@ class Frontdoor_IndexController extends Zend_Controller_Action
     private $__stopwords = array('Active', 'CommentInternal', 'DescMarkup',
         'LinkLogo', 'LinkSign', 'MimeType', 'SortOrder', 'PodAllowed', 'ServerDatePublished', 'ServerDateModified',
         'ServerDateUnlocked', 'ServerDateValid', 'Source', 'SwbId', 'PatentCountries', 'PatentDateGranted',
-        'PatentApplication', 'Enrichment', 'Email', 'PlaceOfBirth', 'DateOfBirth', 'AcademicTitle');
+        'PatentApplication', 'Enrichment', 'Email', 'PlaceOfBirth', 'DateOfBirth');
 
     /**
      * Filter-function: Comparing stopword-list with keys in array
