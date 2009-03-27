@@ -619,7 +619,7 @@
         <seg>Contributor</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Mitarbeiter</seg>
+        <seg>Sonstige beteiligte Person</seg>
       </tuv>
     </tu>
     <tu tuid="PersonReferee">
@@ -640,7 +640,7 @@
     </tu>
     <tu tuid="PersonOther">
       <tuv xml:lang="en">
-        <seg>Other Person</seg>
+        <seg>Other Person(s)</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Weitere Person</seg>
