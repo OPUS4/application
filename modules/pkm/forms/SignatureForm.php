@@ -1,7 +1,5 @@
 <?php
 /**
- * Indexview for actions with public keys and signature verification
- * 
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -27,63 +25,33 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Pkm
+ * @package     Module_Search
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
-<h1><?= $this->title ?></h1>
-<?php
-    if ($this->noFileSelected === true)
-    {
-    	echo $this->translate('pkm_no_publication_selected');
+
+/**
+ * form to show the search mask
+ */
+class SignatureForm extends Zend_Form
+{
+    /**
+     * Build easy upload form
+     *
+     * @return void
+     */
+    public function init() {
+        // FIXME: Make hard coded path configurable.
+        $keyupload = new Zend_Form_Element_Password('password');
+        $keyupload->setLabel('keyPassword');
+        
+        $fileToSign = new Zend_Form_Element_Hidden('FileObject');
+
+        $submit = new Zend_Form_Element_Submit('submit');
+        $submit->setLabel('pkm_signFile');
+
+        $this->addElements(array($keyupload, $fileToSign, $submit));
     }
-    else {
-        foreach ($this->verifyResult as $file => $verification)
-        {
-        ?>
-    	    <?= $file ?>
-    	    <?php
-    	    if (count($verification) === 0)
-    	    {
-    	    ?>
-    	    	<div class="invalid">
-    		    <?= $this->translate('pkm_no_signature') ?>
-    		    </div>
-    		<?php
-    	    }
-    	    foreach($verification as $verifiedArray)
-    	    {
-    		    foreach($verifiedArray as $verified)
-    		    {
-    		        if ($verified->isValid() === true)
-    		        {
-    		        ?>
-    		        	<div class="valid">
-    		            <?php 
-    		                printf($this->translate('pkm_sigcheck_valid'), $verified->getUserId()->getName()); 
-    		            ?>
-    		            </div>
-    		        <?php
-    		        }
-    		        else
-    		        {
-    		        ?>
-    		        	<div class="invalid">
-    		        	<?php 
-    		        	    printf($this->translate('pkm_sigcheck_invalid'), $verified->getUserId()->getName()); 
-    		        	?>
-        		        </div>
-        		    <?php
-        		    }
-        		    // Show key used for signature
-        		    ?>
-        		    <a href="<?= $this->url(array('module' => 'pkm', 'controller' => 'index', 'action' => 'showkey', 'fingerprint' => $verified->getKeyFingerprint())) ?>"><?= $this->translate('pkm_show_signature_key') ?></a>
-        		<?php
-    	    	}
-    	    }
-    	}
-    }
-?>
+}

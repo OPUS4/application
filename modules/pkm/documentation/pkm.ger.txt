@@ -1,7 +1,56 @@
 Pkm
 ~~~
+_[blue]#Oliver Marahrens <o.marahrens@tu-harburg.de>#_
 
-////////////////////////////////////////////////////////////////////////////////
-Zur Erstellung und Bearbeitung Deiner Dokumentation, siehe im 
-Subversion-Repository unter: /documentation/general/template.ger.txt
-////////////////////////////////////////////////////////////////////////////////
+Modulbeschreibung
+^^^^^^^^^^^^^^^^^
+Im Modul PKM (Private/Public-Key-Management) können die Schlüssel verwaltet werden, die zur Signatur von Dokumenten verwendet werden.
+Derzeit unterstützt OPUS nur die Signaturvergabe über PGP/GPG-Schlüssel.
+
+Voraussetzungen
+^^^^^^^^^^^^^^^
+Um das Modul PKM nutzen zu können, muss auf dem Server Crypt_GPG sowie GnuPG installiert sein. GnuPG ist ein Produkt der Gnu Software Foundation und unter der GPL-Lizenz frei verfügbar. Es kann unter http://gnupg.org heruntergeladen werden. 
+Crypt_GPG ist ein PEAR-Modul für PHP, das GnuPG in PHP einbindet. Es lässt sich einfach über das Kommando
+.Installation von Crypt_GPG
+[bash]
+source~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+opusserver# pear install Crypt_GPG 
+source~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+installieren. 
+
+Konfigurationsoptionen
+^^^^^^^^^^^^^^^^^^^^^^
+Um PKM nutzen zu können, müssen folgende Parameter über die config.ini im Abschnitt gpg gesetzt werden:
+.PKM-Modul bzw. GPG in der config.ini
+[php]
+source~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+path = /usr/local/gnupg/bin/gpg <1> 
+keyring.path = /var/www <2> 
+source~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+<1> Hier den Pfad zum GPG-Programm eintragen (inklusive dem ausführbaren Programm), Beispiel: /usr/bin/gpg
+<2> Pfad, in dem der Schlüsselbund gespeichert wird, z.B. /var/www - Der Webserver muss schreibenden Zugriff auf das Verzeichnis haben
+
+Nutzung des Moduls
+^^^^^^^^^^^^^^^^^^
+Wird das PKM-Modul genutzt, werden mehrere Optionen innerhalb von OPUS freigeschaltet.
+Innerhalb der Administrationsoberfläche gibt es die Möglichkeit, die in OPUS genutzten Schlüssel zu verwalten und auf der Nutzeroberfläche der Frontdoor erscheint ein Link zum automatischen Überprüfen der Signaturen eines Dokumentes.
+Zudem wird die Signaturvergabe in den Freischaltungsvorgang für die Dokumente integriert.
+
+Key-Management
+++++++++++++++
+Im Key-Management können die in OPUS vorhandenen Schlüssel eingesehen und verwaltet werden. Über eine Upload-Maske können auch neue Schlüssel dem Schlüsselbund hinzugefügt werden.
+Es muss immer einen internen Schlüssel im Schlüsselbund geben, der als Signierschlüssel verwendet wird. Gibt es keinen, sind keinerlei Signaturoperationen möglich. 
+Sie können diesen Schlüssel entweder über GPG auf der Kommandozeile erstellen oder ein Schlüsselpaar mit einem öffentlichen und einem privaten Schlüssel über die Upload-Maske in den Schlüsselbund integrieren.
+Achtung: es kann immer nur einen einzigen internen Schlüssel geben! OPUS verwendet den ersten gefundenen privaten Schlüssel als internen Schlüssel. Sollte dies falsch sein, deaktivieren Sie ihn im Key-Management und der nächste verfügbare private Schlüssel wird fortan verwendet.
+Zudem muss der interne Schlüssel gültig sein (also sein Ablaufdatum noch nicht überschritten haben).
+
+Alle anderen Schlüssel im Schlüsselbund werden als öffentliche Schlüssel interpretiert. Sie dienen dazu, vorhandene Signaturen überprüfen zu können. Es können beliebig viele öffentliche Schlüssel im Schlüsselbund aufgenommen werden.
+Über das Key-Management können nicht mehr benötigte Schlüssel auch aus dem Schlüsselbund entfernt werden. Aber Vorsicht: wenn mit diesem Schlüssel signierte Dokumente auf dem Server liegen, so können diese fortan nicht mehr überprüft werden! Stellen Sie also sicher, dass keine Publikationen mehr mit diesem Schlüssel signiert sind, wenn Sie ihn entfernen.
+Daher entfernen Sie auch Ihre eigenen Schlüssel nicht aus dem Schlüsselbund, wenn sie auslaufen.
+
+Signaturen im Freischaltungsvorgang
++++++++++++++++++++++++++++++++++++
+
+Überprüfung von Signaturen
+++++++++++++++++++++++++++

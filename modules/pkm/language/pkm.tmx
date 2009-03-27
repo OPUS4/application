@@ -92,6 +92,38 @@
     </tu>
     <tu tuid="pkm_show_key">
       <tuv xml:lang="en">
+        <seg>Show key</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Schlüssel anzeigen</seg>
+      </tuv>
+    </tu>
+    <tu tuid="pkm_sign_key">
+      <tuv xml:lang="en">
+        <seg>Sign key with your internal key</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Schlüssel mit internem Schlüssel signieren</seg>
+      </tuv>
+    </tu>
+    <tu tuid="pkm_delete_key">
+      <tuv xml:lang="en">
+        <seg>Remove key from keyring</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Schlüssel aus dem Schlüsselbund entfernen</seg>
+      </tuv>
+    </tu>
+    <tu tuid="pkm_disable_masterkey">
+      <tuv xml:lang="en">
+        <seg>Disable this key as internal key</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Schlüssel als internen Schlüssel deaktivieren</seg>
+      </tuv>
+    </tu>
+    <tu tuid="pkm_show_signature_key">
+      <tuv xml:lang="en">
         <seg>Show key used for signature</seg>
       </tuv>
       <tuv xml:lang="de">
@@ -136,6 +168,22 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Abschicken</seg>
+      </tuv>
+    </tu>
+    <tu tuid="keyPassword">
+      <tuv xml:lang="en">
+        <seg>Passphrase for your internal key</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Passwort Ihres internen Schlüssels</seg>
+      </tuv>
+    </tu>
+    <tu tuid="pkm_signFile">
+      <tuv xml:lang="en">
+        <seg>Sign this file</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Diese Datei signieren</seg>
       </tuv>
     </tu>
   </body>

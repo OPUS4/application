@@ -36,6 +36,16 @@
 
 class Pkm_IndexController extends Zend_Controller_Action
 {
+    /**
+     * Do some initialization on startup of every action
+     *
+     * @return void
+     */
+    public function init()
+    {
+        $this->_redirector = $this->_helper->getHelper('Redirector');
+    }
+
 	/**
 	 * Just to be there. No actions taken.
 	 *
@@ -91,10 +101,8 @@ class Pkm_IndexController extends Zend_Controller_Action
         foreach ($files as $file) {
             $gpg->importKeyFile($file['tmp_name']);
         }
-    	$this->view->masterkey = $gpg->getMasterKey();
-    	$this->view->keys = $gpg->getKeys();
     	
-    	$this->render('listkeys');
+    	$this->_redirector->gotoSimple('listkeys');
     }
 
 	/**
@@ -153,5 +161,126 @@ class Pkm_IndexController extends Zend_Controller_Action
         		$this->getResponse()->setBody($e->getMessage());
         	}
     	}    	
+    }
+
+	/**
+	 * Signs a key with the internal key
+	 * not supported by Crypt_GPG 1.0.0
+	 * so not yet implemented
+	 *
+	 * @return void
+	 *
+	 */
+    public function signkeyAction()
+    {
+    }
+
+	/**
+	 * Removes a key from keyring
+	 *
+	 * @return void
+	 *
+	 */
+    public function deletekeyAction()
+    {
+    	$gpg = new OpusGPG();
+    	$data = $this->_request->getParams();
+
+    	if (true === array_key_exists('fingerprint', $data))
+    	{
+        	try {
+                $gpg->deleteKey($data['fingerprint']);
+        	}
+        	catch (Exception $e) {
+        		$this->view->actionresult = $e->getMessage();
+        	}
+    	}
+
+    	$this->_redirector->gotoSimple('listkeys');
+    }
+
+	/**
+	 * Disables an internal key
+	 *
+	 * @return void
+	 *
+	 */
+    public function disablekeyAction()
+    {
+    	$gpg = new OpusGPG();
+    	$data = $this->_request->getParams();
+
+    	if (true === array_key_exists('fingerprint', $data))
+    	{
+        	try {
+                $gpg->disableKey($data['fingerprint']);
+        	}
+        	catch (Exception $e) {
+        		$this->view->actionresult = $e->getMessage();
+        	}
+    	}
+
+    	$this->_redirector->gotoSimple('listkeys');
+    }
+
+	/**
+	 * Lists all files of a publication
+	 *
+	 * @return void
+	 *
+	 */
+    public function listfilesAction()
+    {
+    	$data = $this->_request->getParams();
+    	
+    	$this->view->noFileSelected = false;
+    	
+    	if (true === array_key_exists('docId', $data))
+    	{    	
+    	    try {
+    	        $doc = new Opus_Document($data['docId']);
+    	    }
+    	    catch (Exception $e) {
+    	    	$this->view->noFileSelected = true;
+    	    }
+    	
+    	        foreach ($doc->getFile() as $file) 
+    	        {
+    	        	$form = new SignatureForm();
+    	        	$form->FileObject->setValue(base64_encode(serialize($file)));
+    	        	$form->setAction($this->view->url(array("controller" => "index", "action" => "signfile")));
+    		        
+    		        $this->view->files .= $file->getPathName();
+    		        $this->view->files .= $form;
+    	        }
+    	}
+    	else
+    	{
+    		$this->view->noFileSelected = true;
+    	}
+    }
+
+	/**
+	 * Signs a file of a publication
+	 *
+	 * @return void
+	 *
+	 */
+    public function signfileAction()
+    {
+    	$gpg = new OpusGPG();
+    	$data = $this->_request->getPost();
+
+    	if (true === array_key_exists('FileObject', $data))
+    	{
+        	try {
+                $gpg->signPublicationFile(unserialize(base64_decode($data['FileObject'])), $data['password']);
+        	}
+        	catch (Exception $e) {
+        		$this->view->actionresult = $e->getMessage();
+        	}
+    	}
+
+    	//$this->_redirector->gotoSimple('verify');
     }
 }

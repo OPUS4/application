@@ -35,7 +35,8 @@
  */
 ?>
 <h1><?= $this->title ?></h1>
-<?= $this->form ?>
+<?= $this->form ?><br/>
+<?= $this->actionresult ?><br/>
 <?php
     if ($this->masterkey !== false)
     {
@@ -51,12 +52,14 @@
 	        <?= $this->translate('pkm_key_nosign') ?><br/>
 	    <?php
 	    }
+	    // This should not happen with autodetection
 	    if ($this->masterkey->getPrimaryKey()->hasPrivate() === false) 
         {
 	    ?>
 	        <?= $this->translate('pkm_key_noprivate') ?><br/>
 	    <?php
 	    }
+	    // This should not happen with autodetection
 	    if (0 < $this->masterkey->getPrimaryKey()->getExpirationDate() && $this->masterkey->getPrimaryKey()->getExpirationDate() < time()) 
         {
         ?>
@@ -70,6 +73,8 @@
 	    <?php
 	    }
 	    ?>
+        <a href="<?= $this->url(array('module' => 'pkm', 'controller' => 'index', 'action' => 'showkey', 'fingerprint' => $this->masterkey->getPrimaryKey()->getFingerprint())) ?>"><?= $this->translate('pkm_show_key') ?></a><br/>
+    	<a href="<?= $this->url(array('module' => 'pkm', 'controller' => 'index', 'action' => 'disablekey', 'fingerprint' => $this->masterkey->getPrimaryKey()->getFingerprint())) ?>"><?= $this->translate('pkm_disable_masterkey') ?></a><br/>
 	    </li>
 	    </ol>
 	    <?php
@@ -108,6 +113,9 @@
     		    <?php
     	        }
     	        ?>
+    	        <a href="<?= $this->url(array('module' => 'pkm', 'controller' => 'index', 'action' => 'showkey', 'fingerprint' => $key->getPrimaryKey()->getFingerprint())) ?>"><?= $this->translate('pkm_show_key') ?></a><br/>
+    	        <!--<a href="<?= $this->url(array('module' => 'pkm', 'controller' => 'index', 'action' => 'signkey', 'fingerprint' => $key->getPrimaryKey()->getFingerprint())) ?>"><?= $this->translate('pkm_sign_key') ?></a><br/>-->
+    	        <a href="<?= $this->url(array('module' => 'pkm', 'controller' => 'index', 'action' => 'deletekey', 'fingerprint' => $key->getPrimaryKey()->getFingerprint())) ?>"><?= $this->translate('pkm_delete_key') ?></a><br/>
     	        </li>
     	    <?php
     	    }
