@@ -49,6 +49,7 @@
 
 
     <xsl:include href="oai_dc.xslt"/>
+    <xsl:include href="epicur.xslt"/>
     <xsl:output method="xml" indent="yes" />
 
     <xsl:param name="dateTime" />
