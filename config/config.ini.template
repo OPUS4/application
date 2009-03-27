@@ -49,7 +49,6 @@ connotea.systemTags = OPUS Test ; Tags for any document that is bookmarked via t
 [gpg]
 path = /usr/bin/gpg ; path to gpg including gpg binary, e.g. /usr/bin/gpg
 keyring.path = /var/www ; path where the keyring is stored, e.g. /var/www - webserver must have writable access to this directory
-masterkey.id = 0 ; key ID of the key from the server maintainer, should be the last 8 digits of the fingerprint 
 
 [test : production]
 db.params.profiler = true

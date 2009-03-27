@@ -58,7 +58,10 @@ class OpusGPG extends Crypt_GPG
     	
     	foreach ($this->getKeys() as $key) 
     	{
-    		if (strtoupper($config->gpg->masterkey->id) === substr($key->getPrimaryKey()->getId(), -(strlen($config->gpg->masterkey->id))))
+    		// System key (masterkey) autodetection
+    		// check if there is a private key for this key in the keyring, 
+    		// take the first private key, that is not expired as system key
+    		if ($key->getPrimaryKey()->hasPrivate() === true && (0 === $key->getPrimaryKey()->getExpirationDate() || $key->getPrimaryKey()->getExpirationDate() > time()))
     		{
     			return $key;
     		}
