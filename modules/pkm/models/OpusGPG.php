@@ -40,6 +40,14 @@
 class OpusGPG extends Crypt_GPG 
 {
 	
+    /**
+     * Construct the Crypt_GPG-Object
+     * and set the paths necessary to do some operation
+     * The paths are taken from config file and do not need to be set by parameter
+     * 
+     * @throws Crypt_GPG_Exception When the parent object cant get built successfully 
+     * @return void
+     */
 	public function __construct() 
 	{
 		$config = new Zend_Config_Ini('../config/config.ini');
@@ -52,10 +60,14 @@ class OpusGPG extends Crypt_GPG
 		}
 	}
 
+    /**
+     * Get the internally used key (system key/masterkey)
+     * The key is autodetected (it has to have a private key and should not be expired)
+     * 
+     * @return Crypt_GPG_Key System key (false if there is no system key)
+     */
     public function getMasterkey() 
     {
-    	$config = new Zend_Config_Ini('../config/config.ini');
-    	
     	foreach ($this->getKeys() as $key) 
     	{
     		// System key (masterkey) autodetection
@@ -70,6 +82,12 @@ class OpusGPG extends Crypt_GPG
     	return false;
     }
 	
+    /**
+     * Verifies all signatures of any file of a given publication
+     *
+     * @param integer $id ID of the publication that should get verified 
+     * @return array Associative array with filenames as index and all Crypt_GPG_Signatures inside another array
+     */
     public function verifyPublication($id) 
     {
     	$doc = new Opus_Document($id);
