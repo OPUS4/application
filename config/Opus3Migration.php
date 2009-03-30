@@ -91,40 +91,71 @@ class Opus3Migration extends Application_Bootstrap {
     			break;    		    
     	}
 		
+        $importFilePath = $this->importfile;
+        while (false === file_exists($importFilePath)) {
+    		$importFilePath = readline('Please type the path to you OPUS3 database export file (a dumpfile of the database in XML format e.g. /usr/local/opus/complete_database.xml): '); 
+		}
+		$this->importfile = $importFilePath;
 		$importData = new DOMDocument;
 		$importData->load($this->importfile);
 		
 		// Import classification systems and classes 
-		//$importCollections = new CollectionsImport($importData);
+		$input = readline('Do you want to import all the classifications from OPUS3? Note: Only BK, APA, CCS, MSC and PACS are supported and detected automatically! (y/n) ');
+		if ($input === 'y' || $input === 'yes') {
+		    $importCollections = new CollectionsImport($importData);
+		}
 		
 		// Import Licences
-		$importLicences = new LicenceImport($importData);
+		$licenceinput = readline('Do you want to import the licences from OPUS3? (y/n) ');
+		if ($licenceinput === 'y' || $licenceinput === 'yes') {
+		    $importLicences = new LicenceImport($importData);
+		}
 		
 		// Import documents
-		$import = new XMLImport($xslt, $stylesheetPath);
-		$result = $import->import($importData);
+		$metadatainput = readline('Do you want to import the metadata of all documents from OPUS3? (y/n) ');
+		if ($metadatainput === 'y' || $metadatainput === 'yes') {
+		    $import = new XMLImport($xslt, $stylesheetPath);
+		    $result = $import->import($importData);
+		}
 		
 		// Import files
-		foreach ($result['success'] as $imported)
-		{
-			$fileImporter = new Opus3FileImport($this->path, $this->magicPath);
-			$opus3Id = $imported['document']->getIdentifierOpus3()->getValue();
-			echo 'Imported document ' . $opus3Id . ' as new ID ' . $imported['document']->getId() . ' successfully! ';
-			$documentFiles = $fileImporter->loadFiles($imported['document']);
-			#print_r($documentFiles->toXml()->saveXml());
-			$documentFiles->store();
-			echo count($imported['document']->getField('File')->getValue()) . " file(s) have been imported successfully for this document!\n";
+		$fileinput = readline('Do you want to import the files of all documents from OPUS3? Note: this script needs to have direct physical reading access to the files in your OPUS3 directory tree! Import via HTTP is not possible! (y/n) ');
+		if ($fileinput === 'y' || $fileinput === 'yes') {
+            $fulltextPath = $this->path;
+            while (false === file_exists($fulltextPath)) {
+    		    $fulltextPath = readline('Please type the path to you OPUS3 fulltext files (e.g. /usr/local/opus/htdocs/volltexte): '); 
+		    }
+		    $this->path = $fulltextPath;
+    		
+    		if ($metadatainput === 'y' || $metadatainput === 'yes') {
+    			$result['success'] = array();
+    			$docList = Opus_Document::getAllIds();
+    			foreach ($docList as $id) {
+    				$result['success'][]['document'] = new Opus_Document($id);
+    			}
+    		}
+	    	$fileImporter = new Opus3FileImport($this->path, $this->magicPath);
+    		foreach ($result['success'] as $imported)
+	    	{
+			    $opus3Id = $imported['document']->getIdentifierOpus3()->getValue();
+			    $documentFiles = $fileImporter->loadFiles($imported['document']);
+			    #print_r($documentFiles->toXml()->saveXml());
+			    $documentFiles->store();
+			    echo count($imported['document']->getField('File')->getValue()) . " file(s) have been imported successfully for document ID " . $imported['document']->getId() . "!\n";
+		    }
 		}
 		
 		// cleaning: remove licence mapping file
-		unlink('../workspace/licenseMapping.txt');
+		if ($licenceinput === 'y' || $licenceinput === 'yes') {
+		    unlink('../workspace/licenseMapping.txt');
+		}
     }
 }
 
 // Start migration
 $import = new Opus3Migration;
-$import->setImportfile($argv[1]);
-$import->setFulltextPath($argv[2]);
+if ($argc >= 2) $import->setImportfile($argv[1]);
+if ($argc >= 3) $import->setFulltextPath($argv[2]);
 if ($argc >= 4) $import->setMagicPath($argv[3]);
 if ($argc === 5) $import->setFormat($argv[4]);
 $import->run(dirname(dirname(__FILE__)), Opus_Bootstrap_Base::CONFIG_TEST,
