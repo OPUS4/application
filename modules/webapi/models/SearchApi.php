@@ -123,7 +123,8 @@ class SearchApi {
                 continue;
             }
 
-            $pos = $key[5]; // schema: query<number>
+            // schema: query <number>
+            $pos = $key[5];
             $fieldkey = 'field' . $pos;
             $bool = 'boolean' . ($pos - 1);
 
@@ -194,10 +195,9 @@ class SearchApi {
     /**
      * Constructor for initial stuff.
      *
-     * @param array $requestData Data array with necessary request informations.
-     * @return void
+     * @param array $requestData (Optional) Data array with necessary request informations.
      */
-    public function __construct($requestData = null) {
+    public function __construct(array $requestData = null) {
         if (false === empty($requestData)) {
             $this->__requestData = $requestData;
             $this->_cleanUp();
@@ -207,10 +207,10 @@ class SearchApi {
     /**
      * Initiate a search.
      *
-     * @param array $requestData Data array with necessary request informations.
+     * @param array $requestData (Optional) Data array with necessary request informations.
      * @return void
      */
-    public function search($requestData = null) {
+    public function search(array $requestData = null) {
         if (false === empty($requestData)) {
             $this->__requestData = $requestData;
             $this->_cleanup();
@@ -232,7 +232,7 @@ class SearchApi {
     /**
      * Returns the result of a search as an xml string.
      *
-     * @return array('code' => '...', 'xml' => '...') Returns a array with a status code and a xml string.
+     * @return array Returns a array with a status code and a xml string.
      */
     public function getXMLResult() {
         $statuscode = 200;
@@ -263,7 +263,7 @@ class SearchApi {
             $searchResult->appendChild($resultList);
             $view = Zend_Layout::getMvcInstance()->getView();
             $url = $view->url(array('controller' => 'document', 'module' => 'webapi'), 'default', true);
-            for ($n = 0; $n < $hitlist->count(); $n++) {
+            for ($n = 0; $n < $hitCount; $n++) {
                 $hit =  $hitlist->get($n)->getSearchHit()->getDocument();
                 $result = $xml->createElement('Result');
                 $result->setAttribute('number', $n);

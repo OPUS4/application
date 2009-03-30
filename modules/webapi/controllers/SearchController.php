@@ -39,8 +39,10 @@
 class Webapi_SearchController extends Controller_Rest {
 
     /**
-     * (non-PHPdoc)
+     * Perfrosm a get search request.
+     *
      * @see    library/Controller/Controller_Rest#getAction()
+     * @return void
      */
     public function getAction() {
         $requestData = $this->requestData;
