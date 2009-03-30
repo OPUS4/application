@@ -240,7 +240,6 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         $this->view->mydoc_data = $mydoc_data;
     }
 
-
     /**
      * List with stopwords for omitting irrelevant fields
      *
