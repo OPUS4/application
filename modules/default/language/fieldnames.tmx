@@ -424,22 +424,6 @@
         <seg>Kurzfassung</seg>
       </tuv>
     </tu>
-    <tu tuid="AbstractGer">
-      <tuv xml:lang="en">
-        <seg>German Abstract</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Deutsche Kurzfassung</seg>
-      </tuv>
-    </tu>
-    <tu tuid="AbstractEng">
-      <tuv xml:lang="en">
-        <seg>English Abstract</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Englische Kurzfassung</seg>
-      </tuv>
-    </tu>
     <tu tuid="IdentifierIsbn">
       <tuv xml:lang="en">
         <seg>ISBN</seg>
