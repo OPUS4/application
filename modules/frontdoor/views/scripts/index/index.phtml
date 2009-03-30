@@ -83,7 +83,7 @@
                     }
                  }?></p><br />
 
-                 <p><a href="<?= $this->value = '';?>">
+                     <p><a href="<?= $this->value = '/frontdoor/hash/index/index/docId/'.$this->docId;?>">
                      <img src = "<?= $this->value = '/layouts/default/img/unversehrt.jpg';?>" border = '0' title = 'Unversehrtheit'></a>
 
                     <a href="<?= $this->value = '';?>">
@@ -262,7 +262,7 @@
                         <?= $this->value = $value;?></p><?
                     }
                   }
-                  for ($i = 0; $i < 2; $i++)
+                  for ($i = 0; $i < 10; $i++)
                   {
                       if (array_key_exists ('TitleAbstract_'.$i.'_Value', $this->mydoc_data) === true)
                       {
@@ -270,17 +270,9 @@
                           {
                               $this->value = $value = $this->mydoc_data['TitleAbstract_'.$i.'_Value'];
                               $this->lang = $lang = $this->mydoc_data['TitleAbstract_'.$i.'_Language'];
-                          }
-                          if ($lang === 'en' || $lang === 'eng')
-                          {?>
-                              <p><b><?= $this-> translate('AbstractEng')?>: </b>
-                              <?= $this->value = $value;?></p><?
-                          }
-                          if ($lang === 'de' || $lang === 'ger')
-                          {?>
-                              <p><b><?= $this-> translate('AbstractGer')?>: </b>
-                              <?= $this->value = $value;?></p><?
-                          }
+                          }?>
+                           <p><b><?= $this-> translate('TitleAbstractValue') .' ('. $this->translate($lang). ')';?>: </b>
+                           <?= $this->value = $value;?></p><?
                       }
                   }
                   if (array_key_exists ('Licence_NameLong', $this->mydoc_data) === true)
