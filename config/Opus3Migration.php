@@ -35,6 +35,8 @@
 set_include_path('.' . PATH_SEPARATOR
             . PATH_SEPARATOR . dirname(__FILE__)
             . PATH_SEPARATOR . dirname(dirname(__FILE__)) . '/library'
+            . PATH_SEPARATOR . dirname(dirname(__FILE__)) . '/modules/import/models'
+            . PATH_SEPARATOR . dirname(dirname(__FILE__)) . '/modules/pkm/models'
             . PATH_SEPARATOR . get_include_path());
 
 // Zend_Loader is'nt available yet. We have to do a require_once
@@ -93,7 +95,7 @@ class Opus3Migration extends Application_Bootstrap {
 		
         $importFilePath = $this->importfile;
         while (false === file_exists($importFilePath)) {
-    		$importFilePath = readline('Please type the path to you OPUS3 database export file (a dumpfile of the database in XML format e.g. /usr/local/opus/complete_database.xml): '); 
+    		$importFilePath = readline('Please type the path to your OPUS3 database export file (a dumpfile of the database in XML format e.g. /usr/local/opus/complete_database.xml): '); 
 		}
 		$this->importfile = $importFilePath;
 		$importData = new DOMDocument;
@@ -117,34 +119,79 @@ class Opus3Migration extends Application_Bootstrap {
 		    $import = new XMLImport($xslt, $stylesheetPath);
 		    $result = $import->import($importData);
 		}
+		// if no metadata is imported use now the metadata already stored in database
+   		if ($metadatainput !== 'y' && $metadatainput !== 'yes') {
+    	    echo "Reading existing metadata from database, this could take some time";
+    	    $result['success'] = array();
+    		$docList = Opus_Document::getAllIds();
+    		foreach ($docList as $id) {
+    			$result['success'][]['document'] = new Opus_Document($id);
+    			echo ".";
+    		}
+    		echo "finished!\n";
+    	}
 		
 		// Import files
 		$fileinput = readline('Do you want to import the files of all documents from OPUS3? Note: this script needs to have direct physical reading access to the files in your OPUS3 directory tree! Import via HTTP is not possible! (y/n) ');
 		if ($fileinput === 'y' || $fileinput === 'yes') {
             $fulltextPath = $this->path;
             while (false === file_exists($fulltextPath)) {
-    		    $fulltextPath = readline('Please type the path to you OPUS3 fulltext files (e.g. /usr/local/opus/htdocs/volltexte): '); 
+    		    $fulltextPath = readline('Please type the path to your OPUS3 fulltext files (e.g. /usr/local/opus/htdocs/volltexte): '); 
 		    }
 		    $this->path = $fulltextPath;
     		
-    		if ($metadatainput === 'y' || $metadatainput === 'yes') {
-    			$result['success'] = array();
-    			$docList = Opus_Document::getAllIds();
-    			foreach ($docList as $id) {
-    				$result['success'][]['document'] = new Opus_Document($id);
-    			}
-    		}
+    		echo "Importing files";
 	    	$fileImporter = new Opus3FileImport($this->path, $this->magicPath);
     		foreach ($result['success'] as $imported)
 	    	{
+	    		echo ".";
 			    $opus3Id = $imported['document']->getIdentifierOpus3()->getValue();
 			    $documentFiles = $fileImporter->loadFiles($imported['document']);
 			    #print_r($documentFiles->toXml()->saveXml());
 			    $documentFiles->store();
 			    echo count($imported['document']->getField('File')->getValue()) . " file(s) have been imported successfully for document ID " . $imported['document']->getId() . "!\n";
 		    }
+		    echo "finished!\n";
 		}
 		
+		// Import signatures
+		// not yet implemented (class is only a copy of Opus3FileImport)
+		// TODO: implement it ;-)
+		#$siginput = readline('If you used signatures in OPUS 3.x, do you want the signatures to be imported? (y/n) ');
+		$siginput = '';
+		if ($siginput === 'y' || $siginput === 'yes') {
+            $signaturePath = '';
+            while (false === file_exists($signaturePath)) {
+    		    $signaturePath = readline('Please type the path to your OPUS3 signature files (e.g. /usr/local/opus/htdocs/signatures): '); 
+		    }
+    		
+	    	$sigImporter = new Opus3SignatureImport($signaturePath);
+    		foreach ($result['success'] as $imported)
+	    	{
+			    $opus3Id = $imported['document']->getIdentifierOpus3()->getValue();
+			    $documentSignatures = $sigImporter->loadFiles($imported['document']);
+			    #print_r($documentFiles->toXml()->saveXml());
+			    $documentSignatures->store();
+		    }
+		}
+
+		$newsiginput = readline('Do you want all files to get signed automatically? (You need to have an internal key already) (y/n) ');
+		if ($newsiginput === 'y' || $newsiginput === 'yes') {
+			$gpg = new OpusGPG();
+			$newsigpass = readline('Please type the password for your signature key: ');
+			echo "Signing publications ";
+    		foreach ($result['success'] as $imported)
+	    	{
+	    		$doc = $imported['document'];
+    	        foreach ($doc->getFile() as $file) 
+    	        {
+    	        	$gpg->signPublicationFile($file, $newsigpass);
+    	        	echo ".";
+    	        }
+		    }
+		    echo "finished!\n";
+		}
+
 		// cleaning: remove licence mapping file
 		if ($licenceinput === 'y' || $licenceinput === 'yes') {
 		    unlink('../workspace/licenseMapping.txt');

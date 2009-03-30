@@ -152,7 +152,7 @@ class OpusGPG extends Crypt_GPG
     		{
     		    foreach ($hashes as $hash)
     		    {
-    			    if ($hash->getType() === 'gpg')
+    			    if (substr($hash->getType(), 0, 3) === 'gpg')
     			    {
     				    $result[] = $this->verifyFile($filepath . $file->getPathName(), $hash->getValue());
     			    }
@@ -160,7 +160,7 @@ class OpusGPG extends Crypt_GPG
     		}
     		else
     		{
-    			if ($hashes->getType() === 'gpg')
+    			if (substr($hashes->getType(), 0, 3) === 'gpg')
     			{
     			    $result[] = $this->verifyFile($filepath . $file->getPathName(), $hashes->getValue());
     			}    			
@@ -184,6 +184,7 @@ class OpusGPG extends Crypt_GPG
     		}
     		
     		$this->addSignKey($this->getMasterkey(), $password);
+    		$key_id = $this->getMasterkey()->getPrimaryKey()->getId();
     		
     		// FIXME: hardcoded path
     		$filepath = '../workspace/files/' . $file->getDocumentId() . '/';    		
@@ -199,96 +200,13 @@ class OpusGPG extends Crypt_GPG
     		}
     		
     		$signature = new Opus_HashValues();
-    		$signature->setType('gpg');
+    		$signature->setType('gpg-' . $key_id);
     		$signature->setValue($this->signFile($filepath . $file->getPathName(), null, Crypt_GPG::SIGN_MODE_DETACHED));
     		
     		$docfile->addHashValue($signature);
     		
-    		print_r($docfile->toXml()->saveXml());
+    		#print_r($docfile->toXml()->saveXml());
     		
     		$doc->store();
     }
-
-    /* The following methods are old methods used in OPUS 3.x, they should get replaced */
-
- 	/**
-	 * Signiert eine Datei 
-	 * Bei übergebenem Parameter passwd wird gegen dieses Passwort gecheckt, 
-	 * ansonsten wird versucht, über eine externe  Passwortdatei zu verifizieren  
-	 */
-	function oldSignFile($passwd = 0)
-	{
-		$opus = new OPUS(dirname(__FILE__).'/opus.conf');
-		$db = $opus->value("db");
-		$bibkey_id = $opus->value("bibkey_id");
-		$sock = $opus->connect();
-		$opus->select_db($db);
-		$signature_pfad = $opus->value("signature_pfad");
-
-		$filenameArray = split("/", $this->signedfile);
-		$src_opus = $filenameArray[(count($filenameArray)-3)];
-		$extension = $filenameArray[(count($filenameArray)-2)];
-		$filename = $filenameArray[(count($filenameArray)-1)];
-
-        copy ($this->signedfile, $this->signedfile.".bibl");
-#echo $this->gpg." --batch --yes ".$this->gpg_home." -ba -u 0x$bibkey_id --passphrase-fd 0 < ".$this->gpg_pass." '".$this->signedfile.".bibl";
-		if ($this->gpg_pass) {
-			exec($this->gpg." --batch --yes ".$this->gpg_home." -ba -u 0x$bibkey_id --passphrase-fd 0 < ".$this->gpg_pass." '".$this->signedfile.".bibl'", $keyinfo, $keyinforeturn);
-		}
-		else
-		{
-			exec("echo ".escapeshellarg($passwd)." | ".$this->gpg." --batch --yes ".$this->gpg_home." -ba -u 0x$bibkey_id --passphrase-fd 0 '".$this->signedfile.".bibl'", $keyinfo, $keyinforeturn);
-		}
-		unlink($this->signedfile.".bibl");
-		
-        # Signaturdatei ins Signatur-Verzeichnis verschieben
-        if (!file_exists($signature_pfad."/".$src_opus))
-        {
-        	mkdir($signature_pfad."/".$src_opus);
-        }
-        if (!file_exists($signature_pfad."/".$src_opus."/".$extension))
-        {
-        	mkdir($signature_pfad."/".$src_opus."/".$extension);
-        }
-        copy ($this->signedfile.".bibl.asc", $signature_pfad."/".$src_opus."/".$extension."/".$filename.".bibl.asc");
-        unlink($this->signedfile.".bibl.asc");
-                
-		$this->registerSignature();
-	}
-
- 	/**
-	 * Registriert eine Signatur in der Signaturentabelle
-	 * @param String owner Von wem ist die Signatur - Bie Autoren hier bitte "author" angeben, bei Bibliotheken nichts
-	 * @param String sigfile Dateiname (NUR der Name mit Endung) der Signaturdatei
-	 * @param String keyid ID des Signierschlüssels (nicht kompletter Fingerprint!) - nur bei Autorensignatur angeben
-	 */
-	function registerSignature($owner = "bibl", $sigfile = false, $keyid = "")
-	{
-		$opus = new OPUS(dirname(__FILE__).'/opus.conf');
-		$db = $opus->value("db");
-		$sock = $opus->connect();
-		$opus->select_db($db);
-		$signature_pfad = $opus->value("signature_pfad");
-
-		$filenameArray = split("/", $this->signedfile);
-		$src_opus = $filenameArray[(count($filenameArray)-3)];
-		$extension = $filenameArray[(count($filenameArray)-2)];
-		$filename = $filenameArray[(count($filenameArray)-1)];
-
-		if ($sigfile !== false)
-		{
-			$this->sigfile = $signature_pfad."/".$src_opus."/".$extension."/".$sigfile;
-			$key_id = $keyid;
-		}
-		else 
-		{
-			$this->sigfile = $signature_pfad."/".$src_opus."/".$extension."/".$filename;
-			$sigfile = $filename.".bibl.asc";
-			$key_id = $opus->value("bibkey_id");
-		}
-
-        # In der Signaturtabelle vermerken
-        $register_sig = $opus->query("INSERT INTO opus_signatures (source_opus, filename, signature_file, signature_key, signature_type) " .
-        		"VALUES ('".$src_opus."', '".$extension."/".mysql_real_escape_string($filename)."', '".$extension."/".mysql_real_escape_string($sigfile)."', '".$key_id."', '".$owner."')");
-	}
 }

@@ -124,7 +124,7 @@ class Pkm_IndexController extends Zend_Controller_Action
     	if (true === array_key_exists('docId', $data))
     	{    	
     	    try {
-    	        $this->view->verifyResult = $gpg->verifyPublication($data['docId']);
+    	        $this->view->verifyResult = $gpg->verifyPublication( (int) $data['docId']);
     	    }
     	    catch (Exception $e) {
     	    	$this->view->noFileSelected = true;
