@@ -218,19 +218,13 @@
             <!--
             Prepared, but commented out: 
             Subjects from opus_ccs etc.
-            SubjectDdc
             PublicationState
             RangeId
             PublisherUniversity
             
-            Missing fields from opus table:
-            lic (License information, not sure how this is handled currently) <field name="Licence" mandatory="yes" multiplicity="4" />
-            
             Missing fields in other opus3 tables:
             opus_coll <field name="Collection" />
-            opus_hashes - geht in File mit ein <field name="File" multiplicity="4" />
             opus_inst (+ institutes + faculties) <field name="Institute" />
-            Klassifikationstabellen (realisiert in Collections)
             opus_schriftenreihe (+ schriftenreihe) <field name="TitleParent" mandatory="yes" multiplicity="4" />
             
             university_lang not to be migrated (part of configuration)
@@ -272,6 +266,16 @@
             </xsl:element>
         </xsl:if>
     </xsl:template>
+    <!-- temporary DDC information -->
+    <xsl:template match="table_data[@name='opus']/row/field[@name='sachgruppe_ddc']">
+        <xsl:if test="string-length(.)>0">
+            <xsl:element name="OldDdc">
+                <xsl:attribute name="Value">
+                    <xsl:value-of select="." />
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:if>
+    </xsl:template>
 
     <!-- Notes -->
     <xsl:template match="table_data[@name='opus']/row/field[@name='bem_intern']">
@@ -300,27 +304,7 @@
     </xsl:template>
 
     <!-- Subjects and Classifications -->
-<!--    <xsl:template match="table_data[@name='opus']/row/field[@name='sachgruppe_ddc']">
--->
-        <!-- The value represents a key in the sachgruppe_ddc_de or _en-table -->
-<!--        <xsl:element name="SubjectDdc">
-            <xsl:attribute name="Language">
-                <xsl:text>ger</xsl:text>
-            </xsl:attribute>
-            <xsl:attribute name="Value">
-                <xsl:value-of select="table_data[@name='sachgruppe_ddc_de']/row[field[@name='nr']=.]/field[@name='sachgruppe']" />
-            </xsl:attribute>
-        </xsl:element>
-        <xsl:element name="SubjectDdc">
-            <xsl:attribute name="Language">
-                <xsl:text>eng</xsl:text>
-            </xsl:attribute>
-            <xsl:attribute name="Value">
-                <xsl:value-of select="table_data[@name='sachgruppe_ddc_en']/row[field[@name='nr']=.]/field[@name='sachgruppe']" />
-            </xsl:attribute>
-        </xsl:element>
-    </xsl:template>
--->    <xsl:template match="table_data[@name='opus']/row/field[@name='subject_swd']">
+    <xsl:template match="table_data[@name='opus']/row/field[@name='subject_swd']">
         <!-- Split values from field by <Space>,<Space> -->
         <!-- each value gets its own element -->
         <xsl:if test="string-length(.)>0">

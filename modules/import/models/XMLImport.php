@@ -92,13 +92,26 @@ class XMLImport
 		{
             $licence = null;
             $lic = null;
+            $ddcNotation = null;
+            $coll = null;
             $oldid = $document->getElementsByTagName('IdentifierOpus3')->Item(0)->getAttribute('Value');
             $licence = $document->getElementsByTagName('OldLicence')->Item(0);
+            $ddcNotation = $document->getElementsByTagName('OldDdc')->Item(0);
             if ($licence !== null)
             {
                 $licenceValue = $licence->getAttribute('Value');
                 $lic = new Opus_Licence($this->getLicence($licenceValue));
                 $document->removeChild($licence);
+            }
+            if ($ddcNotation !== null)
+            {
+                $ddcValue = $ddcNotation->getAttribute('Value');
+                $this->coll_id = null;
+                $this->mapDdc($ddcValue);
+                if ($this->coll_id !== null) {
+                    $coll = new Opus_Collection(1, $this->coll_id);
+                }
+                $document->removeChild($ddcNotation);
             }
 			try {
 			    $doc = Opus_Document::fromXml($documentsXML->saveXML($document));
@@ -106,6 +119,10 @@ class XMLImport
 			    	$doc->addLicence($lic);
 			    }
 			    $doc->store();
+			    // Add this document to its DDC classification
+			    if ($coll !== null) {
+			        $coll->addEntry($doc);
+			    }
 			    $index = count($imported['success']);
 			    $imported['success'][$index]['entry'] = $documentsXML->saveXML($document);
 			    $imported['success'][$index]['document'] = $doc;
@@ -134,4 +151,26 @@ class XMLImport
 		}
 		return $lic[$shortName];
 	 }
+
+	/**
+	 * maps DDC-notation from Opus3 on Opus4 DDC-schema
+	 *
+	 * @param string $data DDC-notation
+	 * @return integer ID in Opus4
+	 */
+	protected function mapDdc($data, $coll = null)
+	{
+		if ($coll === null) $ddcCollectionRole = new Opus_CollectionRole(1);
+		else $ddcCollectionRole = $coll;
+		
+		foreach ($ddcCollectionRole->getSubCollection() as $ddcNotation) {
+			if ($ddcNotation->getNumber() === $data)
+			{
+				$this->coll_id = $ddcNotation->getId(); 
+			}
+			$this->mapDdc($data, $ddcNotation);
+		}
+        
+        return null;
+	}
 }
