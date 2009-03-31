@@ -82,6 +82,7 @@ class XMLImport
 	 */
 	public function import($data)
 	{
+		$this->createDdcMappingfile();
 		$imported = array();
 		$imported['success'] = array();
 		$imported['failure'] = array();
@@ -107,7 +108,7 @@ class XMLImport
             {
                 $ddcValue = $ddcNotation->getAttribute('Value');
                 $this->coll_id = null;
-                $this->mapDdc($ddcValue);
+                $this->coll_id = $this->mapDdc($ddcValue);
                 if ($this->coll_id !== null) {
                     $coll = new Opus_Collection(1, $this->coll_id);
                 }
@@ -156,21 +157,39 @@ class XMLImport
 	 * maps DDC-notation from Opus3 on Opus4 DDC-schema
 	 *
 	 * @param string $data DDC-notation
-	 * @return integer ID in Opus4
+	 * @return void
 	 */
-	protected function mapDdc($data, $coll = null)
+	protected function createDdcMappingfile($coll = null)
 	{
 		if ($coll === null) $ddcCollectionRole = new Opus_CollectionRole(1);
 		else $ddcCollectionRole = $coll;
 		
 		foreach ($ddcCollectionRole->getSubCollection() as $ddcNotation) {
-			if ($ddcNotation->getNumber() === $data)
-			{
-				$this->coll_id = $ddcNotation->getId(); 
-			}
-			$this->mapDdc($data, $ddcNotation);
+			$this->writeNotation($ddcNotation);
+			$this->createDdcMappingfile($ddcNotation);
 		}
-        
-        return null;
+		
+	}
+	
+	protected function writeNotation($ddcNotation) {
+	    $fp = fopen('../workspace/ddcMapping.txt', 'a');
+	    fputs($fp, $ddcNotation->getNumber() . ' ' . $ddcNotation->getId() . "\n");
+	    fclose($fp);
+	}
+
+	/**
+	 * maps DDC-notation from Opus3 on Opus4 DDC-schema
+	 *
+	 * @param string $data DDC-notation
+	 * @return integer ID in Opus4
+	 */
+	protected function mapDdc($data)
+	{
+	 	$fp = file('../workspace/ddcMapping.txt');
+		foreach ($fp as $licence) {
+			$mappedLicence = split("\ ", $licence);
+			$lic[$mappedLicence[0]] = $mappedLicence[1];
+		}
+		return $lic[$data];
 	}
 }
