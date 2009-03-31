@@ -397,11 +397,15 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
         return $result;
     }
 
-    protected function _displayNotice($field, $value) {
-        // amkes code sniffer happy
-        $my_field = $field;
-        $my_value = $value;
-        return;
+    /**
+     * Wrapper for note field.
+     *
+     * @param string $field
+     * @param array  &$value
+     * @return string
+     */
+    protected function _displayNote($field, array &$value) {
+        return $this->__complexDisplay($field, $value);
     }
 
     /**
@@ -626,6 +630,7 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
             if (true === empty($value)) {
                 continue;
             }
+
             $method_name = '_display' . $field;
             if (method_exists($this, $method_name) === true) {
                 $result .= $this->$method_name($field, $value);
