@@ -83,7 +83,7 @@
                     }
                  }?></p><br />
 
-                     <p><a href="<?= $this->value = '/frontdoor/hash/index/index/docId/'.$this->docId;?>">
+                     <p><a href="<?= $this->value = '/frontdoor/hash/index/docId/'.$this->docId;?>">
                      <img src = "<?= $this->value = '/layouts/default/img/unversehrt.jpg';?>" border = '0' title = 'Unversehrtheit'></a>
 
                     <a href="<?= $this->value = '';?>">
@@ -121,31 +121,23 @@
                       <p><b><?= $this-> translate('Language')?>: </b>
                       <?= $this->translate($value);?></p><?
                    }
+                   ?>
 
-                   if (array_key_exists ('Swd_ger', $this->mydoc_data) === true)
+                   <?$this->lang = $lang = 'de'?>
+                   <?$swd = array();?>
+                   <?for ($i = 0; $i < 10; $i++)
                    {
-                      $value = $this->mydoc_data['Swd_ger'];?>
-                      <p><b><?= $this-> translate('SwdGer')?>: </b>
-                      <?= $this->value = $value;?></p><?
-                   }
-                   if (array_key_exists ('Swd_eng', $this->mydoc_data) === true)
-                   {
-                      $value = $this->mydoc_data['Swd_eng'];?>
-                      <p><b><?= $this-> translate('SwdEng')?>: </b>
-                      <?= $this->value = $value;?></p><?
-                   }
-                   if (array_key_exists ('Uncontrolled_ger', $this->mydoc_data) === true)
-                   {
-                      $value = $this->mydoc_data['Uncontrolled_ger'];?>
-                      <p><b><?= $this-> translate('UncontrolledGer')?>: </b>
-                      <?= $this->value = $value;?></p><?
-                  }
-                  if (array_key_exists ('Uncontrolled_eng', $this->mydoc_data) === true)
-                  {
-                      $value = $this->mydoc_data['Uncontrolled_eng'];?>
-                     <p><b><?= $this-> translate('UncontrolledEng')?>: </b>
-                     <?= $this->value = $value;?></p><?
-                  }
+                      if (array_key_exists ('SubjectSwd_'.$i.'_Value', $this->mydoc_data) === true)
+                      {
+                         $this->value = $value = $this->mydoc_data['SubjectSwd_'.$i.'_Value'];
+                         $swd[] = $value;
+                      }
+                   }?>
+                   <?$swd_str = implode (', ' , $swd);?>
+                   <p><b><?= $this-> translate('SubjectSwdValue') .' ('. $this->translate($lang). ')';?>: </b>
+                   <?= $this->swd_str = $swd_str;?></p>
+
+                  <?
                   if (array_key_exists ('PublishedYear', $this->mydoc_data) === true)
                   {
                      $value = $this->mydoc_data['PublishedYear'];?>
