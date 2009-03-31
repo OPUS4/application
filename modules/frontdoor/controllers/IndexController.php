@@ -57,6 +57,7 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         $documentType = $document->getType();
         $doc_data = $document->toArray();
         $this->view->docId = $docId;
+        //print_r ($doc_data);
 
         // Filter for relevant keys. Getting Document Type
         $document_data = $this->filterStopwords($doc_data);
@@ -112,7 +113,7 @@ class Frontdoor_IndexController extends Zend_Controller_Action
                 $mydoc_data_all[$key] = $value;
             }
         }
-
+        //print_r ($mydoc_data_all);
         // Proof for occupied values
         foreach ($mydoc_data_all as $key => $value)
         {
@@ -121,130 +122,18 @@ class Frontdoor_IndexController extends Zend_Controller_Action
                 $mydoc_data[$key] = $value;
             }
         }
-
-        // Collecting SWD-Keywords and and combining them with language information
-        $myswd_value = Array();
-        $myswd_lan = Array();
-        foreach ($mydoc_data as $key => $value)
-        {
-            for ($i = 0; $i < 20; $i++)
-            {
-                if ($key == 'SubjectSwd_'.$i.'_Value')
-                {
-                    $myswd_value[] = $value;
-                }
-                if ($key == 'SubjectSwd_'.$i.'_Language')
-                {
-                    $myswd_lan[] = $value;
-                }
-            }
-        }
-        $mykey_eng = Array();
-        $mykey_ger = Array();
-        if (array_key_exists ('0', $myswd_lan) == true)
-        {
-            foreach ($myswd_lan as $key => $value)
-            {
-               if ($value == 'de')
-               {
-                  $mykey_ger[] = $key;
-               }
-               if ($value == 'en')
-               {
-                $mykey_eng[] = $key;
-               }
-            }
-         }
-        $myswd_ger = Array();
-        $myswd_eng = Array();
-        if (array_key_exists ('0', $myswd_value) == true)
-        {
-            foreach ($myswd_value as $key => $value)
-            {
-               if ( in_array($key, $mykey_ger, true))
-               {
-                 $myswd_ger[] = $value;
-               }
-               if ( in_array($key, $mykey_eng, true))
-               {
-                 $myswd_eng[] = $value;
-               }
-            }
-        }
-        $swd_eng = Array();
-        $swd_ger = Array();
-        if (array_key_exists ('0', $myswd_eng) == true)
-        {
-           $swd_eng = implode (', ' , $myswd_eng);
-           $mydoc_data['Swd_eng'] = $swd_eng;
-        }
-        if (array_key_exists ('0', $myswd_ger) == true)
-        {
-          $swd_ger = implode (', ' , $myswd_ger);
-          $mydoc_data['Swd_ger'] = $swd_ger;
-        }
-
-        // Collecting uncontrolled Keywords and and combining them with language information
-        $myuncont_lan = array();
-        $myuncont_value = array();
-        foreach ($mydoc_data as $key => $value)
-        {
-            for ($i = 0; $i < 20; $i++)
-            {
-                if ($key == 'SubjectUncontrolled_'.$i.'_Value')
-                {
-                    $myuncont_value[] = $value;
-                }
-                if ($key == 'SubjectUncontrolled_'.$i.'_Language')
-                {
-                    $myuncont_lan[] = $value;
-                }
-            }
-        }
-        $mykey_uncont_eng = Array();
-        $mykey_uncont_ger = Array();
-        foreach ($myuncont_lan as $key => $value)
-        {
-            if ($value == 'de')
-            {
-                $mykey_uncont_ger[] = $key;
-            }
-            if ($value == 'en')
-            {
-                $mykey_uncont_eng[] = $key;
-            }
-        }
-        $myuncont_ger = Array();
-        $myuncont_eng = Array();
-        foreach ($myuncont_value as $key => $value)
-        {
-            if ( in_array($key, $mykey_uncont_ger, true))
-            {
-               $myuncont_ger[] = $value;
-            }
-            if ( in_array($key, $mykey_uncont_eng, true))
-            {
-               $myuncont_eng[] = $value;
-            }
-        }
-        if (array_key_exists ('0', $myuncont_eng) == true)
-        {
-            $uncont_eng = implode (', ' , $myuncont_eng);
-            $mydoc_data['Uncontrolled_eng'] = $uncont_eng;
-        }
-        if (array_key_exists ('0', $myuncont_ger) == true)
-        {
-            $uncont_ger = implode (', ' , $myuncont_ger);
-            $mydoc_data['Uncontrolled_ger'] = $uncont_ger;
-        }
         $this->view->mydoc_data = $mydoc_data;
-    }
 
+        // Array of all languages (to be completed with all relevant Zend Languages)
+       $lang = array('de', 'en', 'fr', 'es', 'ru');
+       $this->view->lang = $lang;
+ }
     /**
      * List with stopwords for omitting irrelevant fields
      *
      * @var array
      */
+
     private $__stopwords = array('Active', 'CommentInternal', 'DescMarkup',
         'LinkLogo', 'LinkSign', 'MimeType', 'SortOrder', 'PodAllowed', 'ServerDatePublished', 'ServerDateModified',
         'ServerDateUnlocked', 'ServerDateValid', 'Source', 'SwbId', 'PatentCountries', 'PatentDateGranted',
@@ -256,6 +145,7 @@ class Frontdoor_IndexController extends Zend_Controller_Action
      * @param $fields
      * @return unknown_type
      */
+
     private function filterStopwords(array &$fields) {
         $result = array();
 
