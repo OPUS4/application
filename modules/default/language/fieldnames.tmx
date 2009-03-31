@@ -456,35 +456,28 @@
         <seg>URN oder ISBN</seg>
       </tuv>
     </tu>
-    <tu tuid="SwdGer">
+    <tu tuid="SubjectSwdValue">
       <tuv xml:lang="en">
-        <seg>SWD-Keywords (ger)</seg>
+        <seg>SWD Keywords</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>SWD-Schlagwörter (Deutsch)</seg>
+        <seg>SWD Schlagwörter</seg>
       </tuv>
     </tu>
-    <tu tuid="SwdEng">
+    <tu tuid="SubjectUncontrolledValue">
       <tuv xml:lang="en">
-        <seg>SWD-Keywords (eng)</seg>
+        <seg>Tags</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>SWD-Schlagwörter (Englisch)</seg>
-      </tuv>
-    </tu><tu tuid="UncontrolledGer">
-      <tuv xml:lang="en">
-        <seg>Uncontrolled Keywords (ger)</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Freie Schlagwörter (Deutsch)</seg>
+        <seg>Freie Schlagwörter</seg>
       </tuv>
     </tu>
-    <tu tuid="UncontrolledEng">
+    <tu tuid="SubjectPsyndexValue">
       <tuv xml:lang="en">
-        <seg>Uncontrolled Keywords (eng)</seg>
+        <seg>Psyndex Keywords</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Freie Schlagwörter (Englisch)</seg>
+        <seg>Psyndex-Schlagwörter</seg>
       </tuv>
     </tu>
     <tu tuid="Note">
