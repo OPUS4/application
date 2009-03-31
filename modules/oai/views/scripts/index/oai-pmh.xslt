@@ -50,6 +50,7 @@
 
     <xsl:include href="oai_dc.xslt"/>
     <xsl:include href="epicur.xslt"/>
+    <xsl:include href="xmetadiss.xslt"/>
     <xsl:output method="xml" indent="yes" />
 
     <xsl:param name="dateTime" />
@@ -124,8 +125,19 @@
                     <xsl:value-of select="@PublishedDate" />
                 </xsl:element>
             </xsl:element>
+            <!-- neu: mit Unterscheidung nach metadataPrefix -->
             <xsl:element name="metadata">
-                <xsl:apply-templates select="." mode="oai_dc" />
+            <xsl:choose>
+               <xsl:when test="$oai_metadataPrefix='xMetaDiss'">
+                  <xsl:apply-templates select="." mode="xmetadiss" />
+               </xsl:when>
+               <xsl:when test="$oai_metadataPrefix='epicur'">
+                  <xsl:apply-templates select="." mode="epicur" />
+               </xsl:when>
+               <xsl:otherwise>
+                  <xsl:apply-templates select="." mode="oai_dc" />
+               </xsl:otherwise>
+            </xsl:choose>
             </xsl:element>
         </xsl:element>
     </xsl:template>
