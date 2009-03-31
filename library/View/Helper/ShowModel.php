@@ -110,16 +110,12 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
         // silence decision about multi values or not
         if (@is_array($values[0]) === false) {
             // only one element to display
-            if (($this->__saef === false) or (empty($values) === false)) {
-                $result = $this->__complexHelper($field, $values);
-            }
+            $result = $this->__complexHelper($field, $values);
         } else {
             // more than one element to display
             foreach ($values as $number => $value) {
-                if (($this->__saef === false) or (empty($value) === false)) {
-                    $prefix = (++$number) . '. ';
-                    $result .= $this->__complexHelper($field, $value, $prefix);
-                }
+                $prefix = (++$number) . '. ';
+                $result .= $this->__complexHelper($field, $value, $prefix);
             }
         }
         return $result;
@@ -181,9 +177,9 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
         $result = '';
         $data = array();
         // merge academic title, lastname and firstname
-        $title = $value['AcademicTitle'];
-        $lastname = $value['LastName'];
-        $firstname = $value['FirstName'];
+        $title = @$value['AcademicTitle'];
+        $lastname = @$value['LastName'];
+        $firstname = @$value['FirstName'];
         $merged = $title . $lastname;
         if (empty($firstname) === false) {
             $merged .=  ', ' . $firstname;
@@ -223,16 +219,12 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
         // silence decision about multi values or not
         if (@is_array($values[0]) === false) {
             // only one element to display
-            if (($this->__saef === false) or (empty($values) === false)) {
-                $result = $this->__personHelper($field, $values);
-            }
+            $result = $this->__personHelper($field, $values);
         } else {
             // more than one element to display
             foreach ($values as $number => $value) {
-                if (($this->__saef === false) or (empty($value) === false)) {
-                    $prefix = (++$number) . '. ';
-                    $result .= $this->__personHelper($field, $value, $prefix);
-                }
+                $prefix = (++$number) . '. ';
+                $result .= $this->__personHelper($field, $value, $prefix);
             }
         }
         return $result;
@@ -313,6 +305,26 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
     }
 
     /**
+     * Helper method for displaying urn values.
+     *
+     * @param string $field  Field to display
+     * @param array  &$value Value of field
+     * @return string
+     */
+    private function __urnHelper($field, array &$value) {
+        $result = '';
+        $urn_value = @$value['Value'];
+        if (($this->__saef === false) or (empty($urn_value) === false)) {
+            // TODO resolving URI should configurable
+            $output_string = 'http://nbn-resolving.de/urn/resolver.pl?' . $urn_value;
+            $iterim_value = '<a href="' . $output_string . '">' . $output_string . '</a>';
+            $data = $this->__skeleton($field, $iterim_value);
+            $result = $this->view->partial('_model.phtml', $data);
+        }
+        return $result;
+    }
+
+    /**
      * General method for displaying a field
      *
      * @param string $name  Field to display
@@ -321,9 +333,18 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
      */
     protected function _displayGeneralElement($name, $value) {
         $result = '';
-        if (($this->__saef === false) or (empty($value) === false)) {
-            $data = $this->__skeleton($name, $value);
-            $result = $this->view->partial('_model.phtml', $data);
+        if (false === @is_array($value[0])) {
+            if (($this->__saef === false) or (empty($value) === false)) {
+                $data = $this->__skeleton($name, $value);
+                $result = $this->view->partial('_model.phtml', $data);
+            }
+        } else {
+            foreach ($value as $number => $val) {
+                if (($this->__saef === false) or (empty($val) === false)) {
+                    $data = $this->__skeleton($name, $val);
+                    $result .= $this->view->partial('_model.phtml', $data);
+                }
+            }
         }
         return $result;
     }
@@ -338,7 +359,9 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
     protected function _displayLicence($field, $value) {
         $result = '';
         if (false === @is_array($value[0])) {
-            $result = $this->__licenceHelper($field, $value);
+            if (($this->__saef === false) or (empty($value) === false)) {
+                $result = $this->__licenceHelper($field, $value);
+            }
         } else {
             foreach ($value as $number => $val) {
                 if (($this->__saef === false) or (empty($val) === false)) {
@@ -360,7 +383,9 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
     protected function _displayLanguage($field, $value) {
         $result = '';
         if (false === is_array($value)) {
-            $result = $this->__languageHelper($field, $value);
+            if (($this->__saef === false) or (empty($value) === false)) {
+                $result = $this->__languageHelper($field, $value);
+            }
         } else {
             foreach ($value as $number => $val) {
                 if (($this->__saef === false) or (empty($val) === false)) {
@@ -370,6 +395,13 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
             }
         }
         return $result;
+    }
+
+    protected function _displayNotice($field, $value) {
+        // amkes code sniffer happy
+        $my_field = $field;
+        $my_value = $value;
+        return;
     }
 
     /**
@@ -410,6 +442,28 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
     }
 
     /**
+     * Wrapper method for person contributor
+     *
+     * @param string $field Person field for displaying
+     * @param mixed  $value Value of person field
+     * @return string
+     */
+    protected function _displayPersonContributor($field, $value) {
+        return $this->__personDisplay($field, $value);
+    }
+
+    /**
+     * Wrapper method for person editor
+     *
+     * @param string $field Person field for displaying
+     * @param mixed  $value Value of person field
+     * @return string
+     */
+    protected function _displayPersonEditor($field, $value) {
+        return $this->__personDisplay($field, $value);
+    }
+
+    /**
      * Wrapper method for person referee
      *
      * @param string $field Person field for displaying
@@ -432,13 +486,24 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
     }
 
     /**
+     * Wrapper method for person translator
+     *
+     * @param string $field Person field for displaying
+     * @param mixed  $value Value of person field
+     * @return string
+     */
+    protected function _displayPersonTranslator($field, $value) {
+        return $this->__personDisplay($field, $value);
+    }
+
+    /**
      * Wrapper method for isbn
      *
      * @param string $field Isbn field for displaying
      * @param mixed  $value Value of isbn field
      * @return string
      */
-    protected function _displayIsbn($field, $value) {
+    protected function _displayIdentifierIsbn($field, $value) {
         return $this->__complexDisplay($field, $value);
     }
 
@@ -476,6 +541,20 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
     }
 
     /**
+     * Skipped importer field opus3.
+     *
+     * @param string $name  Field to display.
+     * @param string $value Value of field.
+     * @return void
+     */
+    protected function _displayIdentifierOpus3($field, $value) {
+        // make code sniffer happy
+        $my_field = $field;
+        $my_value = $value;
+        return;
+    }
+
+    /**
      * An urn field need a special handling for display.
      *
      * @param string $field  Urn field for displaying
@@ -484,13 +563,12 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
      */
     protected function _displayIdentifierUrn($field, array &$value) {
         $result = '';
-        $urn_value = $value['Value'];
-        if (($this->__saef === false) or (empty($urn_value) === false)) {
-            // TODO resolving URI should configurable
-            $output_string = 'http://nbn-resolving.de/urn/resolver.pl?' . $urn_value;
-            $iterim_value = '<a href="' . $output_string . '">' . $output_string . '</a>';
-            $data = $this->__skeleton($field, $iterim_value);
-            $result = $this->view->partial('_model.phtml', $data);
+        if (false === @is_array($value[0])) {
+            $result = $this->__urnHelper($field, $value);
+        } else {
+            foreach ($value as $number => $val) {
+                $result .= $this->__urnHelper($field, $val);
+            }
         }
         return $result;
     }
@@ -545,6 +623,9 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
         }
         $result = '';
         foreach ($modeldata as $field => $value) {
+            if (true === empty($value)) {
+                continue;
+            }
             $method_name = '_display' . $field;
             if (method_exists($this, $method_name) === true) {
                 $result .= $this->$method_name($field, $value);
@@ -554,5 +635,4 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
         }
         return $result;
     }
-
 }
