@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `collections_roles` (
   `id` int(11) unsigned NOT NULL auto_increment COMMENT 'Primary key.',
   `name` varchar(255) NOT NULL COMMENT 'Name, label or type of the collection role, i.e. a specific classification or conference.',
   `position` int(11) unsigned NOT NULL COMMENT 'Position of this collection tree (role) in the sorted list of collection roles for browsing and administration.',
-  `link_docs_path_to_root` tinyint(1) unsigned NOT NULL COMMENT 'If not 0: Every document belonging to a collection C automatically belongs to every collection on the path from C to the root of the collection tree.',
+  `link_docs_path_to_root` ENUM('none', 'count', 'display', 'both') default 'none' COMMENT 'Every document belonging to a collection C automatically belongs to every collection on the path from C to the root of the collection tree for document counting, document diplaying, none or both.',
   `visible` tinyint(1) unsigned NOT NULL COMMENT 'Is the collection visible? (1=yes, 0=no).',
   `display_browsing` varchar(512) default NULL,
   `display_doclist` varchar(512) default NULL,
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `collections_roles` (
 --
 
 INSERT INTO `collections_roles` (`id`, `name`, `position`, `link_docs_path_to_root`, `visible`, `display_browsing`, `display_doclist`, `display_col_front`, `display_frontdoor`) VALUES
-(1, 'Dewey Decimal Classification', 1, 1, 1, NULL, NULL, NULL, NULL);
+(1, 'Dewey Decimal Classification', 1, 'count', 1, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
