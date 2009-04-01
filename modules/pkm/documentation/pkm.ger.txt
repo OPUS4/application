@@ -12,21 +12,23 @@ Voraussetzungen
 Um das Modul PKM nutzen zu können, muss auf dem Server Crypt_GPG sowie GnuPG installiert sein. GnuPG ist ein Produkt der Gnu Software Foundation und unter der GPL-Lizenz frei verfügbar. Es kann unter http://gnupg.org heruntergeladen werden. 
 Crypt_GPG ist ein PEAR-Modul für PHP, das GnuPG in PHP einbindet. Es lässt sich einfach über das Kommando
 .Installation von Crypt_GPG
-[bash]
-source~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+[source, bash]
+--------------------------------------------------------------------------------
 opusserver# pear install Crypt_GPG 
-source~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------------------------------------------------------------
 installieren. 
 
 Konfigurationsoptionen
 ^^^^^^^^^^^^^^^^^^^^^^
 Um PKM nutzen zu können, müssen folgende Parameter über die config.ini im Abschnitt gpg gesetzt werden:
 .PKM-Modul bzw. GPG in der config.ini
-[php]
-source~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+[source, php]
+--------------------------------------------------------------------------------
 path = /usr/local/gnupg/bin/gpg <1> 
 keyring.path = /var/www <2> 
-source~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--------------------------------------------------------------------------------
 
 <1> Hier den Pfad zum GPG-Programm eintragen (inklusive dem ausführbaren Programm), Beispiel: /usr/bin/gpg
 <2> Pfad, in dem der Schlüsselbund gespeichert wird, z.B. /var/www - Der Webserver muss schreibenden Zugriff auf das Verzeichnis haben
