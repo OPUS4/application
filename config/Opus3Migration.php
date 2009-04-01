@@ -130,7 +130,7 @@ class Opus3Migration extends Application_Bootstrap {
     		}
     		echo "finished!\n";
     	}
-		
+
 		// Import files
 		$fileinput = readline('Do you want to import the files of all documents from OPUS3? Note: this script needs to have direct physical reading access to the files in your OPUS3 directory tree! Import via HTTP is not possible! (y/n) ');
 		if ($fileinput === 'y' || $fileinput === 'yes') {
@@ -195,6 +195,9 @@ class Opus3Migration extends Application_Bootstrap {
 		// cleaning: remove licence mapping file
 		if ($licenceinput === 'y' || $licenceinput === 'yes') {
 		    unlink('../workspace/licenseMapping.txt');
+		}
+		if ($metadatainput === 'y' || $metadatainput === 'yes') {
+		    unlink('../workspace/ddcMapping.txt');
 		}
     }
 }

@@ -130,7 +130,10 @@
         $documents = array();
         try {
             $documents = $this->browsinglist->getEntries();
-            $documents_paginator = Zend_Paginator::factory($this->browsinglist->getEntries());
+            $documents_paginator = Zend_Paginator::factory($documents);
+            if ($this->page > 0) {
+            	$documents_paginator->setCurrentPageNumber($this->page);
+            }
         }
         catch (Exception $e) {
             // presumably this is a collection role
@@ -138,7 +141,7 @@
         }
 	    if (count($documents) > 0) {
             echo $this->paginationControl($documents_paginator, NULL, 'collectionEntries_ItemCount_pagination.phtml');
-            foreach ($documents as $d) {
+            foreach ($documents_paginator as $d) {
                 $id = $d->getId();
                 $doc = new Opus_Search_SearchHit( (int) $id);
                 $hit = $doc->getSearchHit();
