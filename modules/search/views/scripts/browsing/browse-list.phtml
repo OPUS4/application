@@ -69,7 +69,7 @@
                  ) .
                  '>';
                  echo $coll->getName();
-                 echo '</a> (' . count($coll->getEntries()) . ')';
+                 echo '</a> (' . Opus_Collection_Information::countAllCollectionDocuments($this->collection, $coll->getId()) . ')';
                  echo '</li>';
             }
 	}
