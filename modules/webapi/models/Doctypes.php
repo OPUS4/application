@@ -46,13 +46,6 @@ class Doctypes {
     private $__xml_path = '';
 
     /**
-     * Separator for default values
-     *
-     * @var string
-     */
-    private $__value_separator = ';';
-
-    /**
      * Looks in a specific directory for xml files.
      *
      * @return array
@@ -128,15 +121,17 @@ class Doctypes {
         $result->setAttribute('multiplicity', $field->getMultiplicity());
         $result->setAttribute('htmlType', $htmltype);
         $defaults = $field->getDefault();
-        if (true === is_array($defaults)) {
-            if (false === is_object(current($defaults))) {
-                $defaults = implode($this->__value_separator, $defaults);
-            } else {
-                $defaults = '';
+
+        if (false === is_array($defaults)) {
+            $defaults = array($defaults);
+        }
+
+        foreach ($defaults as $default) {
+            if (false === is_object($default) and (false === empty($default))) {
+                $iterim = $xml->createElement('DefaultValue', $default);
+                $result->appendChild($iterim);
             }
         }
-        $result->setAttribute('default_values', $defaults);
-
         return $result;
     }
 
@@ -172,7 +167,6 @@ class Doctypes {
             $document = new Opus_Document(null, $type);
             $docxml = $xml->createElement('Document');
             $docxml->setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
-            $docxml->setAttribute('value_separator', $this->__value_separator);
             $xml->appendChild($docxml);
             $this->_convertModelForWebapi($document, $xml, $docxml);
         } else {
