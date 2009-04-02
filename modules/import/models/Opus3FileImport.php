@@ -124,7 +124,7 @@ class Opus3FileImport
             while( false !== ($file = readdir($dh)))
             {
                 // Skip '.' and '..' and '.svn' (that should not exist, but if it does...) and .asc files (they shouldnt be here also)
-                if( $file == '.' || $file == '..' || $file === '.svn' || ereg("\.asc$", $file) !== false)
+                if( $file == '.' || $file == '..' || $file === '.svn' || ereg("\.asc$", $file) !== false || ereg("\.sig$", $file) !== false)
                     continue;
                 $path = $from . '/' . $file;
                 if( is_dir($path) )

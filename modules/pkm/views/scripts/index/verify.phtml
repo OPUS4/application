@@ -38,7 +38,13 @@
 <?php
     if ($this->noFileSelected === true)
     {
-    	echo $this->translate('pkm_no_publication_selected');
+    	if ($this->error !== false)
+    	{
+    		echo $this->error;
+    	}
+    	else {
+    	    echo $this->translate('pkm_no_publication_selected');
+    	}
     }
     else {
         ?>
@@ -61,7 +67,13 @@
     	    {
     		    foreach($verifiedArray as $verified)
     		    {
-    		        if ($verified->isValid() === true)
+    		        if (false === is_object($verified))
+    		        {
+    		        	?>
+    		        	<?= $verified ?>
+    		        	<?php
+    		        }
+    		        else if ($verified->isValid() === true)
     		        {
     		        ?>
     		        	<li class="valid">
@@ -80,8 +92,13 @@
         		    <?php
         		    }
         		    // Show key used for signature
+        		    if (true === is_object($verified))
+        		    {
         		    ?>
         		    <a href="<?= $this->url(array('module' => 'pkm', 'controller' => 'index', 'action' => 'showkey', 'fingerprint' => $verified->getKeyFingerprint())) ?>"><?= $this->translate('pkm_show_signature_key') ?></a>
+        		    <?php
+        		    }
+        		    ?>
         		    </li>
         		<?php
     	    	}

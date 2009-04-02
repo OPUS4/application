@@ -114,26 +114,33 @@ class Pkm_IndexController extends Zend_Controller_Action
     public function verifyAction()
     {
     	$this->view->title = $this->view->translate('pkm_verify_signatures');
+
+    	$data = $this->_request->getParams();
     	
     	$gpg = new OpusGPG();
     	
-    	$data = $this->_request->getParams();
-    	
-    	$this->view->noFileSelected = false;
-    	
     	if (true === array_key_exists('docId', $data))
-    	{    	
-    	    try {
-    	        $this->view->verifyResult = $gpg->verifyPublication( (int) $data['docId']);
-    	    }
-    	    catch (Exception $e) {
-    	    	$this->view->noFileSelected = true;
-    	    }
-    	}
-    	else
     	{
-    		$this->view->noFileSelected = true;
-    	}
+        	try {
+        	    $doc = new Opus_Document($data['docId']);
+    	    }
+        	catch (Exception $e)
+        	{
+    	    	$this->view->noTitleSelected = true;
+    	    }
+    	
+    	    $this->view->verifyResult = array();
+    	
+    	    foreach ($doc->getFile() as $file) 
+    	    {
+    		    try {
+    		        $this->view->verifyResult[$file->getPathName()] = $gpg->verifyPublicationFile($file);
+    		    }
+    		    catch (Exception $e) {
+    		    	$this->view->verifyResult[$file->getPathName()] = array(array($e->getMessage()));
+    		    }
+    	    }
+        }
     }
 
 	/**

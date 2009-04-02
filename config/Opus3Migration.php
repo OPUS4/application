@@ -157,8 +157,8 @@ class Opus3Migration extends Application_Bootstrap {
 		// Import signatures
 		// not yet implemented (class is only a copy of Opus3FileImport)
 		// TODO: implement it ;-)
-		#$siginput = readline('If you used signatures in OPUS 3.x, do you want the signatures to be imported? (y/n) ');
-		$siginput = '';
+		$siginput = readline('If you used signatures in OPUS 3.x, do you want the signatures to be imported? (y/n) ');
+		#$siginput = '';
 		if ($siginput === 'y' || $siginput === 'yes') {
             $signaturePath = '';
             while (false === file_exists($signaturePath)) {
@@ -169,8 +169,7 @@ class Opus3Migration extends Application_Bootstrap {
     		foreach ($result['success'] as $imported)
 	    	{
 			    $opus3Id = $imported['document']->getIdentifierOpus3()->getValue();
-			    $documentSignatures = $sigImporter->loadFiles($imported['document']);
-			    #print_r($documentFiles->toXml()->saveXml());
+			    $documentSignatures = $sigImporter->loadSignatureFiles($imported['document'], $opus3Id);
 			    $documentSignatures->store();
 		    }
 		}

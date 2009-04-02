@@ -48,8 +48,6 @@ class Opus3SignatureImport
      */
     protected $_tmpPath = null;
     
-    protected $_magicPath;
-    
 
     /**
      * Do some initialization on startup of every action
@@ -61,7 +59,6 @@ class Opus3SignatureImport
     {
         // Initialize member variables.
         $this->_path = $fulltextPath;
-        $this->_magicPath = $magicPath;
     }
     
     /**
@@ -70,49 +67,35 @@ class Opus3SignatureImport
      * @param Opus_Document $object Opus-Document for that the files should be registered
      * @return void
      */
-    public function loadFiles($object)
+    public function loadSignatureFiles($object)
     {
+    	$this->_tmpPath = null;
     	$opusId = $object->getIdentifierOpus3()->getValue();
-    	
-        // Search the ID-directory in fulltext tree
+
+        // Search the ID-directory in signaturefiles tree
         $this->searchDir($this->_path, $opusId);
-        #echo "Found Files for $opusId in $this->_tmpPath";
-        $files = $this->getFiles($this->_tmpPath);
         
-        if (true === is_array($object->getLanguage()))
+        foreach($object->getFile() as $file)
         {
-    	    $lang = $object->getLanguage(0);
-        }
-        else
-        {
-    	    $lang = $object->getLanguage();
-        }
-        
-        if (count($files) > 0) {
-            foreach ($files as $filename) {
-                $finfo = new finfo(FILEINFO_MIME, $this->_magicPath);
-                $mimeType = $finfo->file($filename);
-            
-                $filenameArray = split('\.', $filename);
-                $suffix = $filenameArray[(count($filenameArray)-1)];
-            
-                // if you got it, build a Opus_File-Object
-                $file = $object->addFile();
-                $file->setLabel(basename($filename));
-                $file->setFileType($suffix);
-                $file->setPathName(basename($filename));
-                $file->setMimeType($mimeType);
-                $file->setTempFile($filename);
-			    $file->setDocumentId($object->getId());
-			    $file->setLanguage($lang);
+            $sigfiles = $this->getFiles($this->_tmpPath, $file->getPathName());
+            if (count($sigfiles) > 0) {
+                $key = 0;
+                foreach ($sigfiles as $signatureFile) {
+                	$signature = implode("", file($signatureFile));
+                	echo "Adding " . $signature . " to " . $file->getPathName() . "\n";
+                	$hash = $file->addHashValue();
+                	$hash->setType('gpg-' . $key);
+                	$hash->setValue($signature);
+                	$key++;
+                }
             }
         }
 
-        // return all files in an array
+        // return all signatures in an array
         return $object;
     }
     
-    private function getFiles($from) 
+    private function getFiles($from, $filename) 
     {
         if(! is_dir($from))
             return false;
@@ -124,15 +107,18 @@ class Opus3SignatureImport
             while( false !== ($file = readdir($dh)))
             {
                 // Skip '.' and '..' and '.svn' (that should not exist, but if it does...) and .asc files (they shouldnt be here also)
-                if( $file == '.' || $file == '..' || $file === '.svn' || ereg("\.asc$", $file) !== false)
+                if( $file == '.' || $file == '..' || $file === '.svn')
                     continue;
                 $path = $from . '/' . $file;
                 if( is_dir($path) )
-                    $files += $this->getFiles($path);
+                    $files += $this->getFiles($path, $filename);
                 else {
                 	// Ignore files in the main directory, OPUS3 stores in subdirectories only
                 	if ($from !== $this->_tmpPath) {
-                        $files[] = $path;
+                        if(strstr($path, $filename) !== false && (ereg("\.asc$", $path) !== false || ereg("\.sig$", $path) !== false))
+                        {
+                            $files[] = $path;
+                        }
                 	}
                 }
             }

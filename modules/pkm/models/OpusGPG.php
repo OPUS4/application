@@ -83,25 +83,6 @@ class OpusGPG extends Crypt_GPG
     }
 	
     /**
-     * Verifies all signatures of any file of a given publication
-     *
-     * @param integer $id ID of the publication that should get verified 
-     * @return array Associative array with filenames as index and all Crypt_GPG_Signatures inside another array
-     */
-    public function verifyPublication($id) 
-    {
-    	$doc = new Opus_Document($id);
-    	
-    	$result = array();
-    	
-    	foreach ($doc->getFile() as $file) 
-    	{
-    		$result[$file->getPathName()] = $this->verifyPublicationFile($file);
-    	}
-    	return $result;
-    }
-
-    /**
      * Removes a key from the keyring
      * If the system key is the one to be removed, only the private key is deleted
      *
@@ -154,7 +135,13 @@ class OpusGPG extends Crypt_GPG
     		    {
     			    if (substr($hash->getType(), 0, 3) === 'gpg')
     			    {
-    				    $result[] = $this->verifyFile($filepath . $file->getPathName(), $hash->getValue());
+    				    try
+    				    {
+    				        $result[] = $this->verifyFile($filepath . $file->getPathName(), $hash->getValue());
+    				    }
+    				    catch (Exception $e) {
+    				    	$result[] = array($e->getMessage());
+    				    }
     			    }
     		    }
     		}
@@ -162,7 +149,12 @@ class OpusGPG extends Crypt_GPG
     		{
     			if (substr($hashes->getType(), 0, 3) === 'gpg')
     			{
-    			    $result[] = $this->verifyFile($filepath . $file->getPathName(), $hashes->getValue());
+    			    try {
+    			        $result[] = $this->verifyFile($filepath . $file->getPathName(), $hashes->getValue());
+    			    }
+    			    catch (Exception $e) {
+    			    	$result[] = array($e->getMessage());
+    			    }
     			}    			
     		}
     		
