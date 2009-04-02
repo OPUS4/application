@@ -35,7 +35,7 @@
  *
  * This view gets a filtered one-dimensional associative array ($mydoc_data) from
  * the Frontdoor-Controller and displays it. The order of elements is fixed here.
- * Abstracts were combined with language information and displayed directly.
+ * Abstracts and keywords were combined with language information and displayed directly.
  *
  *
  */
@@ -92,7 +92,7 @@
                     <a href="<?= $this->value = '';?>">
                     <img src = "<?= $this->value = '/layouts/default/img/statistik.jpg';?>" border = '0' title = 'Statistik'></a>
 
-                    <a href="<?= $this->value = '';?>">
+                    <a href="<?= $this->value = '/socialBookmarking/connotea/index/docId';?>">
                     <img src = "<?= $this->value = '/layouts/default/img/connotea_icon.jpg';?>" border = '0' title = 'Bookmark bei Connotea'></a>
 
                     <a href="<?= $this->value = '';?>">
@@ -120,25 +120,50 @@
                       $value = $this->mydoc_data['Language'];?>
                       <p><b><?= $this-> translate('Language')?>: </b>
                       <?= $this->translate($value);?></p><?
-                   }
-                   ?>
+                   }?>
 
-                   <?$this->lang = $lang = 'de'?>
-                   <?$swd = array();?>
                    <?for ($i = 0; $i < 10; $i++)
                    {
                       if (array_key_exists ('SubjectSwd_'.$i.'_Value', $this->mydoc_data) === true)
                       {
-                         $this->value = $value = $this->mydoc_data['SubjectSwd_'.$i.'_Value'];
-                         $swd[] = $value;
+                         if (array_key_exists ('SubjectSwd_'.$i.'_Language', $this->mydoc_data) === true)
+                         {
+                            $this->value = $value = $this->mydoc_data['SubjectSwd_'.$i.'_Value'];
+                            $this->lang = $lang = $this->mydoc_data['SubjectSwd_'.$i.'_Language'];
+                         }?>
+                         <p><b><?= $this-> translate('SubjectSwdValue') .' ('. $this->translate($lang). ')';?>: </b>
+                         <?= $this->value = $value;?></p><?                      }
+                   }?>
+
+                   <?for ($i = 0; $i < 10; $i++)
+                   {
+                      if (array_key_exists ('SubjectUncontrolled_'.$i.'_Value', $this->mydoc_data) === true)
+                      {
+                          if (array_key_exists ('SubjectUncontrolled_'.$i.'_Language', $this->mydoc_data) === true)
+                          {
+                              $this->value = $value = $this->mydoc_data['SubjectUncontrolled_'.$i.'_Value'];
+                              $this->lang = $lang = $this->mydoc_data['SubjectUncontrolled_'.$i.'_Language'];
+                          }?>
+                           <p><b><?= $this-> translate('SubjectUncontrolledValue') .' ('. $this->translate($lang). ')';?>: </b>
+                           <?= $this->value = $value;?></p><?
                       }
                    }?>
-                   <?$swd_str = implode (', ' , $swd);?>
-                   <p><b><?= $this-> translate('SubjectSwdValue') .' ('. $this->translate($lang). ')';?>: </b>
-                   <?= $this->swd_str = $swd_str;?></p>
 
-                  <?
-                  if (array_key_exists ('PublishedYear', $this->mydoc_data) === true)
+                   <?for ($i = 0; $i < 10; $i++)
+                   {
+                      if (array_key_exists ('Psyindex_'.$i.'_Value', $this->mydoc_data) === true)
+                      {
+                          if (array_key_exists ('SubjectPsyndex_'.$i.'_Language', $this->mydoc_data) === true)
+                          {
+                              $this->value = $value = $this->mydoc_data['SubjectPsyndex_'.$i.'_Value'];
+                              $this->lang = $lang = $this->mydoc_data['SubjectPsyndex_'.$i.'_Language'];
+                          }?>
+                          <p><b><?= $this-> translate('SubjectPsyndexValue') .' ('. $this->translate($lang). ')';?>: </b>
+                          <?= $this->value = $value;?></p><?
+                      }
+                  }?>
+
+                  <?if (array_key_exists ('PublishedYear', $this->mydoc_data) === true)
                   {
                      $value = $this->mydoc_data['PublishedYear'];?>
                      <p><b><?= $this-> translate('PublishedYear')?>: </b>
@@ -289,3 +314,5 @@
                   <a href="<?= $this->value = '';?>">Print-on-Demand</a></p>
        </div>
   <?}
+
+
