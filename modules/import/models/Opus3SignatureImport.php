@@ -55,7 +55,7 @@ class Opus3SignatureImport
      * @param string $fulltextPath Path to the Opus3-fulltexts
      * @return void
      */
-    public function __construct($fulltextPath, $magicPath)
+    public function __construct($fulltextPath)
     {
         // Initialize member variables.
         $this->_path = $fulltextPath;
