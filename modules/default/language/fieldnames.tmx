@@ -466,7 +466,7 @@
     </tu>
     <tu tuid="SubjectUncontrolledValue">
       <tuv xml:lang="en">
-        <seg>Tags</seg>
+        <seg>Uncontrolled Keywords</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Freie Schlagwörter</seg>
