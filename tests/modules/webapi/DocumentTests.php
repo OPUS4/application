@@ -40,6 +40,8 @@ require_once 'Zend/Rest/Client.php';
 
 /**
  * Tests for document webapi.
+ *
+ * @group    WebapiDocumentTest
  */
 class Modules_Webapi_DocumentTests extends PHPUnit_Framework_TestCase {
 

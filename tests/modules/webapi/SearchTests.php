@@ -39,7 +39,9 @@ require_once 'Zend/Config/Ini.php';
 require_once 'Zend/Rest/Client.php';
 
 /**
- * Test websearch api
+ * Test websearch api.
+ *
+ * @group    WebapiSearchTest
  */
 class Modules_Webapi_SearchTests extends PHPUnit_Framework_TestCase {
 
