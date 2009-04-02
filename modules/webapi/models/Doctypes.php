@@ -30,7 +30,7 @@
  * @author     Henning Gerhardt (henning.gerhardt@slub-dresden.de)
  * @copyright  Copyright (c) 2009, OPUS 4 development team
  * @license    http://www.gnu.org/licenses/gpl.html General Public License
- * @version    $Id:$
+ * @version    $Id$
  */
 
 /**
@@ -59,7 +59,7 @@ class Doctypes {
      */
     protected function _getXmlDocTypeFiles() {
         $result = array();
-        if ($dirhandle = opendir($this->__xml_path)) {
+        if (false !== ($dirhandle = @opendir($this->__xml_path))) {
             while (false !== ($file = readdir($dirhandle))) {
                 $path_parts = pathinfo($file);
                 $filename = $path_parts['filename'];
@@ -79,9 +79,9 @@ class Doctypes {
     /**
      * Convert a Opus_Model to a xml structure.
      *
-     * @param Opus_Model_Abstract $model
-     * @param DOMDocument $xml
-     * @param DOMElement $container
+     * @param Opus_Model_Abstract $model     Document model.
+     * @param DOMDocument         $xml       XML dom object
+     * @param DOMElement          $container XML element dom object
      * @return void
      */
     protected function _convertModelForWebapi(Opus_Model_Abstract $model, DOMDocument $xml, DOMElement $container) {
@@ -91,7 +91,7 @@ class Doctypes {
             $modelClass = $field->getValueModelClass();
             $fieldxml = $this->_setFieldInfo($field, $xml);
             if (false === empty($modelClass)) {
-                $subfield = $this->_convertModelForWebapi(new $modelClass, $xml, $fieldxml);
+                $this->_convertModelForWebapi(new $modelClass, $xml, $fieldxml);
             }
             $container->appendChild($fieldxml);
         }
@@ -100,8 +100,8 @@ class Doctypes {
     /**
      * Set field specific informations.
      *
-     * @param Opus_Model_Field $field
-     * @param DOMDocumet $xml
+     * @param Opus_Model_Field $field Document model.
+     * @param DOMDocument      $xml   XML dom object
      * @return DOMElement
      */
     protected function _setFieldInfo(Opus_Model_Field $field, DOMDocument $xml) {
@@ -119,7 +119,12 @@ class Doctypes {
         }
 
         $result = $xml->createElement($field->getName());
-        $result->setAttribute('mandatory', $field->isMandatory() ? 'true' : 'false');
+        if (true === $field->isMandatory()) {
+            $mandatory = 'true';
+        } else {
+            $mandatory = 'false';
+        }
+        $result->setAttribute('mandatory', $mandatory);
         $result->setAttribute('multiplicity', $field->getMultiplicity());
         $result->setAttribute('htmlType', $htmltype);
         $defaults = $field->getDefault();
@@ -138,7 +143,7 @@ class Doctypes {
     /**
      * Constructor of class. Do some initalizing stuff.
      *
-     * @param $path (Optional) Path to document type xml files.
+     * @param string $path (Optional) Path to document type xml files.
      */
     public function __construct($path = null) {
         if (true === empty($path)) {
@@ -194,7 +199,7 @@ class Doctypes {
         $types = $this->_getXmlDocTypeFiles();
         $view = Zend_Layout::getMvcInstance()->getView();
         $url = $view->url(array('controller' => 'doctypes', 'module' => 'webapi'), 'default', true);
-        foreach($types as $type) {
+        foreach ($types as $type) {
             $entry = $xml->createElement('Type', $type);
             $entry->setAttribute('xlink:href', $url . '/' . $type);
             $typesList->appendChild($entry);

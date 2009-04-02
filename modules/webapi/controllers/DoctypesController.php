@@ -42,6 +42,7 @@ class Webapi_DoctypesController extends Controller_Rest {
      * Show a specific document type or a list of all available types.
      *
      * @see    library/Controller/Controller_Rest#getAction()
+     * @return void
      */
     public function getAction() {
         //
