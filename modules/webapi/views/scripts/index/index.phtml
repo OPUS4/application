@@ -75,3 +75,101 @@
 </ul>
 
 <p/>
+
+<h2>Searching:</h2>
+
+<h3>get usage:</h3>
+
+<p>
+Supported parameters:
+<ul>
+    <li>field&lt;number&gt;</li>
+    <li>query&lt;number&gt;</li>
+    <li>boolean&lt;number&gt;</li>
+    <li>language</li>
+    <li>searchtype</li>
+</ul>
+</p>
+
+<p>
+Valid values for parameter <strong>field&lt;number&gt;</strong>:
+<ul>
+    <li>author</li>
+    <li>title</li>
+    <li>... supported values for lucence searching ...</li>
+</ul>
+</p>
+
+<p />
+
+<p>
+Valid values for parameter <strong>query&lt;number&gt;</strong>:
+<ul>
+    <li>any utf-8 encoded input value</li>
+</ul>
+</p>
+
+<p />
+
+<p>
+Valid values for paraemter <strong>boolean&lt;number&gt;</strong>:
+<ul>
+    <li>AND</li>
+    <li>OR</li>
+    <li>NOT ( &lt;expression&gt; and not &lt;expression&gt;)</li>
+</ul>
+</p>
+
+<p/><p>&lt;number&gt; are numbers from 0 to infinity</p>
+
+
+<p />
+
+<p>
+Valid values for parameter <strong>language</strong>strong:
+<ul>
+    <li>Zend_Language values or what ever lucence searching used ;)</li>
+</ul>
+
+<p />
+
+<p>
+Valid values for parameter <strong>searchtype</strong>:
+<ul>
+    <li>empty</li>
+    <li>truncated - added to every search query a asteriks in front and end of term</li>
+</ul>
+</p>
+
+<p />
+<p>Examples:
+<ul>
+    <li><?php echo $this->url(array('controller' => 'search', 'module' => 'webapi'), null, true) ?>?field0=title&query0=gegen&searchtype=truncated</li>
+    <li><?php echo $this->url(array('controller' => 'search', 'module' => 'webapi'), null, true) ?>?field0=author&query0=oliver</li>
+</ul>
+</p>
+
+<p />
+
+<h3>post, put und delete usage:</h3>
+
+<h4 style="color: red;">Will never be supported.</h4>
+
+<p />
+
+<h2>Document types:</h2>
+
+<h3>get usage:</h3>
+
+<ul>
+    <li><a href="<?php echo $this->url(array('controller' => 'doctypes', 'module' => 'webapi'), null, true) ?>"><?php echo $this->url(array('controller' => 'doctypes', 'module' => 'webapi'), null, true) ?></a><br />Get a list of available document types</li>
+    <li><a href="<?php echo $this->url(array('controller' => 'doctypes', 'module' => 'webapi'), null, true) ?>/doctoral_thesis"><?php echo $this->url(array('controller' => 'doctypes', 'module' => 'webapi'), null, true) ?>/doctoral_thesis</a><br />Get a document type: doctoral thesis</li>
+</ul>
+
+<p />
+
+<h3>post, put und delete usage:</h3>
+
+<h4 style="color: red;">Not supported, yet. Needs write permission on system!</h4>
+
+<p />
