@@ -54,6 +54,10 @@ class Opus3Migration extends Application_Bootstrap {
     protected $path;
     protected $format = 'mysqldump';
     protected $magicPath = '/usr/share/file/magic'; # on Ubuntu-Systems this is the magic path
+    protected $stylesheet;
+    protected $xslt;
+    protected $docStack;
+    protected $signaturePath;
 
     public function setImportfile($importfile) {
     	$this->importfile = $importfile;
@@ -71,13 +75,8 @@ class Opus3Migration extends Application_Bootstrap {
     	$this->format = $format;
     }
     
-    /**
-     * Starts an Opus console.
-     *
-     * @return void
-     */
-    public function _run() {
-		$stylesheetPath = '../modules/import/views/scripts/opus3';
+    protected function setStylesheet() {
+    	$stylesheetPath = '../modules/import/views/scripts/opus3';
 		$stylesheet = $this->format;
     	// Set the stylesheet to use for XML-input transformation
     	switch ($stylesheet)
@@ -92,14 +91,96 @@ class Opus3Migration extends Application_Bootstrap {
     			$xslt = 'opus3.xslt';
     			break;    		    
     	}
-		
+    	$this->stylesheet = $stylesheetPath;
+    	$this->xslt = $xslt;
+    }
+    
+    protected function loadImportFile() {
+		$importData = new DOMDocument;
+		$importData->load($this->importfile);
+		return $importData;
+    }
+    
+    protected function autosign($pass) {
+       	$gpg = new OpusGPG();
+    	foreach ($this->docStack as $imported)
+	    {
+	    	$doc = $imported['document'];
+    	    foreach ($doc->getFile() as $file) 
+    	    {
+    	      	$gpg->signPublicationFile($file, $pass);
+    	       	echo ".";
+    	    }
+		}
+    }
+    
+    protected function readDocsFromDatabase() {
+    	    echo "Reading existing metadata from database, this could take some time";
+    	    $this->docStack = array();
+    		$docList = Opus_Document::getAllIds();
+    		foreach ($docList as $id) {
+    			$this->docStack[]['document'] = new Opus_Document($id);
+    			echo ".";
+    		}
+    		echo "finished!\n";
+    }
+
+    protected function importFiles() {
+    		echo "Importing files";
+	    	$fileImporter = new Opus3FileImport($this->path, $this->magicPath);
+    		foreach ($this->docStack as $imported)
+	    	{
+	    		echo ".";
+			    $opus3Id = $imported['document']->getIdentifierOpus3()->getValue();
+			    $documentFiles = $fileImporter->loadFiles($imported['document']);
+			    #print_r($documentFiles->toXml()->saveXml());
+			    $documentFiles->store();
+			    echo count($imported['document']->getField('File')->getValue()) . " file(s) have been imported successfully for document ID " . $imported['document']->getId() . "!\n";
+		    }
+		    echo "finished!\n";
+    }
+
+    protected function importSignatures() {
+    		echo "Importing signatures";
+	    	$sigImporter = new Opus3SignatureImport($this->signaturePath);
+    		foreach ($this->docStack as $imported)
+	    	{
+	    		echo ".";
+			    $opus3Id = $imported['document']->getIdentifierOpus3()->getValue();
+			    $documentSignatures = $sigImporter->loadSignatureFiles($imported['document'], $opus3Id);
+			    $documentSignatures->store();
+		    }
+		    echo "finished!";
+    }
+}
+
+class Opus3MigrationParameters extends Opus3Migration
+{
+    /**
+     * Migrates OPUS3 to OPUS4 using commandline parameters
+     *
+     * @return void
+     */
+    public function _run() {
+    	
+    }
+}
+
+class Opus3MigrationReadline extends Opus3Migration {
+    /**
+     * Migrates OPUS3 to OPUS4 using readline
+     *
+     * @return void
+     */
+    public function _run() {
+    	$this->setStylesheet();		
         $importFilePath = $this->importfile;
         while (false === file_exists($importFilePath)) {
     		$importFilePath = readline('Please type the path to your OPUS3 database export file (a dumpfile of the database in XML format e.g. /usr/local/opus/complete_database.xml): '); 
 		}
 		$this->importfile = $importFilePath;
-		$importData = new DOMDocument;
-		$importData->load($this->importfile);
+		
+		$importData = $this->loadImportFile();
 		
 		// Import classification systems and classes 
 		$input = readline('Do you want to import all the classifications from OPUS3? Note: Only BK, APA, CCS, MSC and PACS are supported and detected automatically! (y/n) ');
@@ -116,19 +197,13 @@ class Opus3Migration extends Application_Bootstrap {
 		// Import documents
 		$metadatainput = readline('Do you want to import the metadata of all documents from OPUS3? (y/n) ');
 		if ($metadatainput === 'y' || $metadatainput === 'yes') {
-		    $import = new XMLImport($xslt, $stylesheetPath);
+		    $import = new XMLImport($this->xslt, $this->stylesheet);
 		    $result = $import->import($importData);
+		    $this->docStack = $result['success'];
 		}
 		// if no metadata is imported use now the metadata already stored in database
    		if ($metadatainput !== 'y' && $metadatainput !== 'yes') {
-    	    echo "Reading existing metadata from database, this could take some time";
-    	    $result['success'] = array();
-    		$docList = Opus_Document::getAllIds();
-    		foreach ($docList as $id) {
-    			$result['success'][]['document'] = new Opus_Document($id);
-    			echo ".";
-    		}
-    		echo "finished!\n";
+   			$this->readDocsFromDatabase();
     	}
 
 		// Import files
@@ -139,55 +214,25 @@ class Opus3Migration extends Application_Bootstrap {
     		    $fulltextPath = readline('Please type the path to your OPUS3 fulltext files (e.g. /usr/local/opus/htdocs/volltexte): '); 
 		    }
 		    $this->path = $fulltextPath;
-    		
-    		echo "Importing files";
-	    	$fileImporter = new Opus3FileImport($this->path, $this->magicPath);
-    		foreach ($result['success'] as $imported)
-	    	{
-	    		echo ".";
-			    $opus3Id = $imported['document']->getIdentifierOpus3()->getValue();
-			    $documentFiles = $fileImporter->loadFiles($imported['document']);
-			    #print_r($documentFiles->toXml()->saveXml());
-			    $documentFiles->store();
-			    echo count($imported['document']->getField('File')->getValue()) . " file(s) have been imported successfully for document ID " . $imported['document']->getId() . "!\n";
-		    }
-		    echo "finished!\n";
+    	    $this->importFiles();	
 		}
 		
 		// Import signatures
-		// not yet implemented (class is only a copy of Opus3FileImport)
-		// TODO: implement it ;-)
-		$siginput = readline('If you used signatures in OPUS 3.x, do you want the signatures to be imported? (y/n) ');
-		#$siginput = '';
+		$siginput = readline('If you used signatures (GPG-Extension) in OPUS 3.x, do you want the signatures to be imported? (y/n) ');
 		if ($siginput === 'y' || $siginput === 'yes') {
             $signaturePath = '';
             while (false === file_exists($signaturePath)) {
     		    $signaturePath = readline('Please type the path to your OPUS3 signature files (e.g. /usr/local/opus/htdocs/signatures): '); 
 		    }
-    		
-	    	$sigImporter = new Opus3SignatureImport($signaturePath);
-    		foreach ($result['success'] as $imported)
-	    	{
-			    $opus3Id = $imported['document']->getIdentifierOpus3()->getValue();
-			    $documentSignatures = $sigImporter->loadSignatureFiles($imported['document'], $opus3Id);
-			    $documentSignatures->store();
-		    }
+		    $this->signaturePath = $signaturePath;
+		    $this->importSignatures();
 		}
 
 		$newsiginput = readline('Do you want all files to get signed automatically? (You need to have an internal key already) (y/n) ');
 		if ($newsiginput === 'y' || $newsiginput === 'yes') {
-			$gpg = new OpusGPG();
 			$newsigpass = readline('Please type the password for your signature key: ');
 			echo "Signing publications ";
-    		foreach ($result['success'] as $imported)
-	    	{
-	    		$doc = $imported['document'];
-    	        foreach ($doc->getFile() as $file) 
-    	        {
-    	        	$gpg->signPublicationFile($file, $newsigpass);
-    	        	echo ".";
-    	        }
-		    }
+			$this->autosign($newsigpass, $result['success']);
 		    echo "finished!\n";
 		}
 
@@ -198,11 +243,11 @@ class Opus3Migration extends Application_Bootstrap {
 		if ($metadatainput === 'y' || $metadatainput === 'yes') {
 		    unlink('../workspace/ddcMapping.txt');
 		}
-    }
+    }	
 }
 
 // Start migration
-$import = new Opus3Migration;
+$import = new Opus3MigrationReadline;
 if ($argc >= 2) $import->setImportfile($argv[1]);
 if ($argc >= 3) $import->setFulltextPath($argv[2]);
 if ($argc >= 4) $import->setMagicPath($argv[3]);
