@@ -57,7 +57,6 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         $documentType = $document->getType();
         $doc_data = $document->toArray();
         $this->view->docId = $docId;
-        //print_r ($doc_data);
 
         // Filter for relevant keys. Getting Document Type
         $document_data = $this->filterStopwords($doc_data);
@@ -113,7 +112,7 @@ class Frontdoor_IndexController extends Zend_Controller_Action
                 $mydoc_data_all[$key] = $value;
             }
         }
-        //print_r ($mydoc_data_all);
+
         // Proof for occupied values
         foreach ($mydoc_data_all as $key => $value)
         {
@@ -123,11 +122,7 @@ class Frontdoor_IndexController extends Zend_Controller_Action
             }
         }
         $this->view->mydoc_data = $mydoc_data;
-
-        // Array of all languages (to be completed with all relevant Zend Languages)
-       $lang = array('de', 'en', 'fr', 'es', 'ru');
-       $this->view->lang = $lang;
- }
+    }
     /**
      * List with stopwords for omitting irrelevant fields
      *
