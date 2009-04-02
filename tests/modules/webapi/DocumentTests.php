@@ -41,7 +41,7 @@ require_once 'Zend/Rest/Client.php';
 /**
  * Tests for document webapi.
  *
- * @group    WebapiDocumentTest
+ * @group WebapiDocumentTest
  */
 class Modules_Webapi_DocumentTests extends PHPUnit_Framework_TestCase {
 
@@ -113,7 +113,7 @@ class Modules_Webapi_DocumentTests extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $data->length, 'DOMDocument should only contain one Opus_Document.');
         $this->assertNotNull($data->item(0));
         // look if document has a type
-        $this->assertEquals('monograph', $data->item(0)->getAttribute('Type'), 'Type of this Opus_Document should be monograph.');
+        $this->assertEquals('report', $data->item(0)->getAttribute('Type'), 'Type of this Opus_Document should be monograph.');
     }
 
     /**
@@ -122,7 +122,7 @@ class Modules_Webapi_DocumentTests extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testGetDocumentWithInvalidId() {
-        $restData = $this->__restClient->restGet($this->__restUrl . '/1');
+        $restData = $this->__restClient->restGet($this->__restUrl . '/100000');
         $this->assertEquals(404, $restData->getStatus(), 'HTTP status should be 404 (File not found).');
         $xml = new DOMDocument();
         $xml->loadXML($restData->getBody());
