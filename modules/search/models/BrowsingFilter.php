@@ -160,6 +160,7 @@ class BrowsingFilter
 	 */
 	public static function getDocumentTypeTitles($doctype)
 	{
+        $doctype = str_replace("_", " ", $doctype);
         $table = new Opus_Db_Documents();
         $select = $table->select()
             ->from($table)
@@ -171,17 +172,6 @@ class BrowsingFilter
             $result[] = $row->id;
         }
         return $result;
-
-        /*
-        $hitlist = new Opus_Search_List_HitList();
-        foreach ($docresult as $row)
-        {
-       		$searchhit = new Opus_Search_SearchHit($row->document_id);
-       		$hitlist->add($searchhit);
-        }
-
-        return ($hitlist);
-        */
 	}
 
 	/**
@@ -195,15 +185,16 @@ class BrowsingFilter
 	 */
 	public static function getYearTitles($year)
 	{
-        $docresult = DummyData::getDummyDocuments();
+        $table = new Opus_Db_Documents();
+        $select = $table->select()
+            ->from($table)
+            ->where('completed_year = ?', $year);
+        $rows = $table->fetchAll($select);
 
-        $hitlist = new Opus_Search_List_HitList();
-        foreach ($docresult as $row)
-        {
-       		$searchhit = new Opus_Search_SearchHit($row);
-       		$hitlist->add($searchhit);
+        $result = array();
+        foreach ($rows as $row) {
+            $result[] = $row->id;
         }
-
-        return ($hitlist);
+        return $result;
 	}
 }
