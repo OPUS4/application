@@ -39,7 +39,7 @@
 class Webapi_SearchController extends Controller_Rest {
 
     /**
-     * Perfrosm a get search request.
+     * Perform a get search request.
      *
      * @see    library/Controller/Controller_Rest#getAction()
      * @return void
