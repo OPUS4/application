@@ -2171,7 +2171,19 @@ CREATE TABLE IF NOT EXISTS `link_documents_collections_1` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `collections_id` int(11) unsigned NOT NULL,
   `documents_id` int(11) unsigned NOT NULL,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY  (`id`),
+  INDEX fk_link_documents_collections_collections_contents_1 (`collections_id` ASC) ,
+  INDEX fk_link_documents_collections_documents_1 (`documents_id` ASC) ,
+  CONSTRAINT `fk_link_documents_collections_collections_contents_1`
+    FOREIGN KEY (`collections_id` )
+    REFERENCES `collections_contents_1` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_link_documents_collections_documents_1`
+    FOREIGN KEY (`documents_id` )
+    REFERENCES `documents` (`id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
