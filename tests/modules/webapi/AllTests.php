@@ -36,6 +36,7 @@
 require_once 'PHPUnit/Framework.php';
 
 require_once 'modules/webapi/DocumentTests.php';
+require_once 'modules/webapi/DoctypesTests.php';
 require_once 'modules/webapi/SearchTests.php';
 
 /**
@@ -51,6 +52,7 @@ class Modules_Webapi_AllTests {
     public static function suite() {
         $suite = new PHPUnit_Framework_Testsuite('Opus Application Module: Webapi');
         $suite->addTestSuite('Modules_Webapi_DocumentTests');
+        $suite->addTestSuite('Modules_Webapi_DoctypesTests');
         $suite->addTestSuite('Modules_Webapi_SearchTests');
         return $suite;
     }
