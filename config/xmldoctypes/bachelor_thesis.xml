@@ -47,7 +47,6 @@
     <field name="ServerDatePublished" />
     <field name="ServerDateUnlocking" />
     <field name="ServerDateValid" />
-    <field name="IdentifierOpus3" />    
         <!--  Existiert rein zu Abwärtskompatibilitäts- und Migrationszwecken -->
 	    <field name="Source" />	    
 	    <!--  Auslagern in Identifiers oder References? -->
@@ -124,6 +123,7 @@
 	   <!-- Ist im DB Schema als PublicationState bezeichnet -->
 	   <!-- <field name="PublicationStatus" /> -->
 	<field name="Reviewed" />
+	<field name="PublicationVersion" />
 	
 
     <!-- publishers  -->
@@ -131,8 +131,7 @@
         <!-- <field name="PublisherName" />  -->
         <!-- Derzeit nicht im DB-Schema abgebildet -->
         <!-- <field name="PublisherPlace" />  -->
-        <!-- Derzeit nicht im DB-Schema abgebildet & Zweck? -->
-        <!-- <field name="PublisherUniversity" />  -->
+        <field name="PublisherUniversity" />
         
     
     <!-- subjects -->

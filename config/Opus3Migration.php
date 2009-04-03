@@ -278,6 +278,12 @@ class Opus3MigrationParameters extends Opus3Migration
 		    $import = new XMLImport($this->xslt, $this->stylesheet);
 		    $result = $import->import($importData);
 		    $this->docStack = $result['success'];
+		    foreach ($result['success'] as $doc) {
+		    	echo "Successfully imported " . $doc['entry'] . "\n";
+		    }
+		    foreach ($result['failure'] as $doc) {
+		    	echo "ERROR: " . $doc['message'] . " for " . $doc['entry'] . "\n";
+		    }
 		}
 		// if no metadata is imported use now the metadata already stored in database
    		else {
@@ -344,6 +350,12 @@ class Opus3MigrationReadline extends Opus3Migration {
 		    $import = new XMLImport($this->xslt, $this->stylesheet);
 		    $result = $import->import($importData);
 		    $this->docStack = $result['success'];
+		    foreach ($result['success'] as $doc) {
+		    	echo "Successfully imported " . $doc['entry'] . "\n";
+		    }
+		    foreach ($result['failure'] as $doc) {
+		    	echo "ERROR: " . $doc['message'] . " for " . $doc['entry'] . "\n";
+		    }
 		}
 		// if no metadata is imported use now the metadata already stored in database
    		if ($metadatainput !== 'y' && $metadatainput !== 'yes') {

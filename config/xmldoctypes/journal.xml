@@ -48,7 +48,6 @@
     <field name="ServerDateUnlocking" />
     <field name="ServerDateValid" />    
     <field name="IdentifierOpus3" />
-
     <!-- collections  -->
     
     <!-- corporate bodies  -->
@@ -86,7 +85,8 @@
     <!-- publishers  -->
     <!-- <field name="PublisherName" />  -->
     <!-- <field name="PublisherPlace" />  -->
-
+    <field name="PublisherUniversity" />
+    
     <!-- subjects -->
     <field name="SubjectSwd" multiplicity="4" />
         <!-- Nicht in document_subjects, sondern in Collection abgebildet-->

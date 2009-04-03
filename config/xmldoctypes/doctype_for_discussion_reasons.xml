@@ -47,6 +47,8 @@
     <field name="ServerDatePublished" />
     <field name="ServerDateUnlocking" />
     <field name="ServerDateValid" />    
+    <!-- Was ist das fuer ein Datenbankfeld? Ist noch nirgendwo eingebunden... OM 03.04.09 -->
+    <!-- <field name="PublicationVersion" /> -->
         <!--  Existiert rein zu Abwärtskompatibilitäts- und Migrationszwecken -->
         <field name="IdentifierOpus3" />
 	    <field name="Source" />	    
@@ -145,12 +147,9 @@
 	
 
     <!-- publishers  -->
-        <!-- Derzeit nicht im DB-Schema abgebildet -->
-        <!-- <field name="PublisherName" />  -->
-        <!-- Derzeit nicht im DB-Schema abgebildet -->
-        <!-- <field name="PublisherPlace" />  -->
-        <!-- Derzeit nicht im DB-Schema abgebildet & Zweck? -->
-        <!-- <field name="PublisherUniversity" />  -->
+        <field name="PublisherName" />
+        <field name="PublisherPlace" />
+        <field name="PublisherUniversity" />
         
     
     <!-- subjects -->

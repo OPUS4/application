@@ -89,6 +89,7 @@
 	<field name="PersonTranslator" />
 
     <!-- publishers  -->
+    <field name="PublisherUniversity" />
     <!-- <field name="PublisherName" />  -->
     <!-- <field name="PublisherPlace" />  -->
 

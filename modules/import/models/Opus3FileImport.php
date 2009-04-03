@@ -73,7 +73,8 @@ class Opus3FileImport
     public function loadFiles($object)
     {
     	$opusId = $object->getIdentifierOpus3()->getValue();
-    	
+    	// Initialize path
+    	$this->_tmpPath = '';
         // Search the ID-directory in fulltext tree
         $this->searchDir($this->_path, $opusId);
         #echo "Found Files for $opusId in $this->_tmpPath";

@@ -196,6 +196,9 @@
                     <xsl:value-of select="php:function('date', 'Y-m-d', $dateaccepted)" />
                 </xsl:attribute>
             </xsl:if>
+            <xsl:attribute name="PublisherUniversity">
+                <xsl:value-of select="field[@name='publisher_university']" />
+            </xsl:attribute>           
             
             <!-- Find persons associated with the document -->
             <xsl:call-template name="getAuthors"><xsl:with-param name="OriginalID"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
@@ -210,10 +213,7 @@
             <!-- Fields not used yet -->
             <!--<xsl:attribute name="RangeId">
                 <xsl:value-of select="field[@name='bereich_id']" />
-            </xsl:attribute>
-            <xsl:attribute name="PublisherUniversity">
-                <xsl:value-of select="field[@name='publisher_university']" />
-            </xsl:attribute>-->           
+            </xsl:attribute>-->
             
             <!--
             Prepared, but commented out: 

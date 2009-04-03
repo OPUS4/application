@@ -119,6 +119,8 @@ class XMLImport
 			    if ($lic !== null) {
 			    	$doc->addLicence($lic);
 			    }
+			    // What about publicationVersion field?
+			    //$doc->setPublicationVersion('published');
 			    $doc->store();
 			    // Add this document to its DDC classification
 			    if ($coll !== null) {

@@ -131,8 +131,7 @@
         <!-- <field name="PublisherName" />  -->
         <!-- Derzeit nicht im DB-Schema abgebildet -->
         <!-- <field name="PublisherPlace" />  -->
-        <!-- Derzeit nicht im DB-Schema abgebildet & Zweck? -->
-        <!-- <field name="PublisherUniversity" />  -->
+        <field name="PublisherUniversity" />
         
     
     <!-- subjects -->

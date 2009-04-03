@@ -93,8 +93,9 @@
 	<field name="PersonTranslator" />
 	
 	<!-- publishers  -->
-    <!-- <field name="PublisherName" />  -->
-    <!-- <field name="PublisherPlace" />  -->
+    <field name="PublisherName" />
+    <field name="PublisherPlace" />
+    <field name="PublisherUniversity" />
 	
 	<!-- subjects -->
     <field name="SubjectSwd" multiplicity="4" />
