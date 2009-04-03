@@ -399,7 +399,7 @@ else {
 	$analyse = $import->analyseParameters($argv);
 	if ($analyse === false)
 	{
-		echo "There is at least one failure in the paramters - aborting";
+		echo "There is at least one failure in the paramters - aborting\n";
 		exit;
 	}
 }
