@@ -41,7 +41,7 @@
 class Statistic_IndexController extends Zend_Controller_Action {
 
 	/**
-	 * Just to be there. No actions taken.
+	 * Just for manual testing, not for final opus version
 	 *
 	 * @return void
 	 *
@@ -58,16 +58,20 @@ class Statistic_IndexController extends Zend_Controller_Action {
         $fileId = $form->getValue('file_id');
         $ip = $form->getValue('ip');
         $userAgent = $form->getValue('user_agent');
-		$result = $counter->count($documentId, $fileId, $ip, $userAgent);
+		$result = $counter->count($documentId, $fileId, 'files', $ip, $userAgent);
 		if ($result === FALSE) {
 		    $this->view->doubleClick = true;
 		} else {
 		    $this->view->doubleClick = false;
 		    $this->view->count = $result;
 		}
-
 		$this->view->userAgent = $_SERVER['HTTP_USER_AGENT'];
 		$this->view->redirectStatus = $_SERVER['REDIRECT_STATUS'];
+        $this->view->baseUrl = $counter->readYears('280');
+
+
+		//$this->view->pathToGraph = Zend_Registry::getInstance()->;
+
 		//print_r($_SERVER);
 		//$registry = Zend_Registry::getInstance();
 		//print_r($registry);

@@ -63,7 +63,7 @@ class Test extends Zend_Form {
 
         $this->addElement('text', 'ip', array(
             'decorators' => $this->elementDecorators,
-            'label'       => 'User Agent:',
+            'label'       => 'IP:',
         ));
         $this->addElement('text', 'user_agent', array(
             'decorators' => $this->elementDecorators,
