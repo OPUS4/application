@@ -53,28 +53,13 @@ class Opus3Migration extends Application_Bootstrap {
     protected $importfile;
     protected $path;
     protected $format = 'mysqldump';
-    protected $magicPath = '/usr/share/file/magic'; # on Ubuntu-Systems this is the magic path
+    protected $magicPath = '/usr/share/file/magic'; # on Ubuntu-Systems this should be the magic path
     protected $stylesheet;
     protected $xslt;
     protected $docStack;
     protected $signaturePath;
+    protected $signaturePassword;
 
-    public function setImportfile($importfile) {
-    	$this->importfile = $importfile;
-    }
-    
-    public function setFulltextPath($path) {
-    	$this->path = $path;
-    }
-
-    public function setMagicPath($path) {
-    	$this->magicPath = $path;
-    }
-    
-    public function setFormat($format) {
-    	$this->format = $format;
-    }
-    
     protected function setStylesheet() {
     	$stylesheetPath = '../modules/import/views/scripts/opus3';
 		$stylesheet = $this->format;
@@ -156,13 +141,172 @@ class Opus3Migration extends Application_Bootstrap {
 
 class Opus3MigrationParameters extends Opus3Migration
 {
+	/**
+	 * Holding a list of evaluated paramters, which specify what exectly the importer should do
+	 * 
+	 * @var array
+	 */
+	protected $whatToDo = array();
+	
+    /**
+     * Analyses the parameters given to the script
+     */
+    public function analyseParameters($argv) {
+    	$failure = false;
+
+    	// The last argument should be the importfile
+        if (count($argv) < 2) {
+        	$failure = true;
+    		echo "Not enough arguments - please specify at least the importfile.\n";
+		}
+
+    	if (count($argv) < 2 || true === in_array('--help', $argv) || true === in_array('-h', $argv)) {
+    		$failure = true;
+    		echo "Usage: " . $argv[0] . " [options] importfile\n";
+    		echo "Options:\n";
+    		echo "--without-classes Do not import the classification systems\n";
+    		echo "--without-licences Do not import the licences\n";
+    		echo "--without-metadata Do not import the metadata of the documents (if you do not import the metadata, the database will be read)\n";
+    		echo "--with-files=path-to-files Import the files using the given base path of Opus 3 fulltexts\n"; 
+    		echo "--with-signatures=path-to-files Import the signatures using the given base path of Opus 3 signatures\n";
+    		echo "--autosign=password-of-internal-key Sign all files automatically using the internal key and the passphrase given\n";
+    		echo "--with-magic=path-to-magic-file Use another path for magic file (to avoid problems importing the files). Default value is ' . $this->magicPath . '\n";
+    	}
+
+    	// The last argument should be the importfile
+    	$importFilePath = $argv[(count($argv)-1)];
+        if (false === file_exists($importFilePath) && $failure !== true) {
+        	$failure = true;
+    		echo "The importfile " . $importFilePath . " you specified does not exist!\n"; 
+		}
+		$this->importfile = $importFilePath;
+		
+        foreach ($argv as $arg) {
+        	// Import files?
+        	if ('--with-files' === substr($arg, 0, 12)) {
+        		$path = split('=', $arg);
+	            $this->whatToDo[] = "files";
+	            if ($path[1] === '') {
+        	        $failure = true;
+    		        echo "Please specify a fulltextpath by giving --with-files=fulltext-path!\n"; 
+	            	
+	            }
+                if (false === file_exists($path[1])) {
+        	        $failure = true;
+    		        echo "The fulltext path " . $path[1] . " you specified does not exist!\n"; 
+                }
+	            $this->path = $path[1];
+        	}
+        	
+        	// Import signatures?
+        	if ('--with-signatures' === substr($arg, 0, 17)) {
+        		$sigpath = split('=', $arg);
+	            $this->whatToDo[] = "signatures";
+	            if ($sigpath[1] === '') {
+        	        $failure = true;
+    		        echo "Please specify a signaturepath by giving --with-signatures=signature-path!\n"; 
+	            	
+	            }
+                if (false === file_exists($sigpath[1])) {
+        	        $failure = true;
+    		        echo "The signature path " . $sigpath[1] . " you specified does not exist!\n"; 
+                }
+	            $this->signaturePath = $sigpath[1];
+        	}
+
+        	// Automatically sign the files?
+        	if ('--autosign' === substr($arg, 0, 10)) {
+        		$signpass = split('=', $arg);
+	            $this->whatToDo[] = "autosign";
+	            if ($signpass[1] === '') {
+        	        $failure = true;
+    		        echo "Please specify your passphrase for the internal key by giving --autosign=passphrase!\n"; 
+	            	
+	            }
+	            $this->signaturePassword = $signpass[1];
+        	}
+
+        	// Path to magic file
+        	if ('--with-magic' === substr($arg, 0, 12)) {
+        		$magic = split('=', $arg);
+	            $this->magicPath = $magic[1];
+        	}
+        }
+
+        // Analyse the other parameters
+		// Import classification systems and classes? 
+		if (false === in_array("--without-classes", $argv)) {
+			$this->whatToDo[] = "classes";
+		}
+		
+		// Import Licences?
+		if (false === in_array("--without-licences", $argv)) {
+			$this->whatToDo[] = "licences";
+		}
+		
+		// Import documents metadata?
+		if (false === in_array("--without-metadata", $argv)) {
+			$this->whatToDo[] = "metadata";
+		}		
+        
+		if ($failure === false) return true;
+		return false;    	
+    }
+
     /**
      * Migrates OPUS3 to OPUS4 using commandline parameters
      *
      * @return void
      */
     public function _run() {
-    	
+    	$this->setStylesheet();		
+		
+		$importData = $this->loadImportFile();
+		
+		// Import classification systems and classes 
+		if (true === in_array('classes', $this->whatToDo)) {
+		    $importCollections = new CollectionsImport($importData);
+		}
+		
+		// Import Licences
+		if (true === in_array('licences', $this->whatToDo)) {
+		    $importLicences = new LicenceImport($importData);
+		}
+		
+		// Import documents metadata
+		if (true === in_array('metadata', $this->whatToDo)) {
+		    $import = new XMLImport($this->xslt, $this->stylesheet);
+		    $result = $import->import($importData);
+		    $this->docStack = $result['success'];
+		}
+		// if no metadata is imported use now the metadata already stored in database
+   		else {
+   			$this->readDocsFromDatabase();
+    	}
+
+		// Import files
+		if (true === in_array('files', $this->whatToDo)) {
+    	    $this->importFiles();	
+		}
+		
+		// Import signatures
+		if (true === in_array('signatures', $this->whatToDo)) {
+		    $this->importSignatures();
+		}
+
+		if (true === in_array('autosign', $this->whatToDo)) {
+			echo "Signing publications ";
+			$this->autosign($this->signaturePassword);
+		    echo "finished!\n";
+		}
+
+		// cleaning: remove licence mapping file
+		if (true === in_array('licences', $this->whatToDo)) {
+		    unlink('../workspace/licenseMapping.txt');
+		}
+		if (true === in_array('metadata', $this->whatToDo)) {
+		    unlink('../workspace/ddcMapping.txt');
+		}    	
     }
 }
 
@@ -232,7 +376,7 @@ class Opus3MigrationReadline extends Opus3Migration {
 		if ($newsiginput === 'y' || $newsiginput === 'yes') {
 			$newsigpass = readline('Please type the password for your signature key: ');
 			echo "Signing publications ";
-			$this->autosign($newsigpass, $result['success']);
+			$this->autosign($newsigpass);
 		    echo "finished!\n";
 		}
 
@@ -247,10 +391,17 @@ class Opus3MigrationReadline extends Opus3Migration {
 }
 
 // Start migration
-$import = new Opus3MigrationReadline;
-if ($argc >= 2) $import->setImportfile($argv[1]);
-if ($argc >= 3) $import->setFulltextPath($argv[2]);
-if ($argc >= 4) $import->setMagicPath($argv[3]);
-if ($argc === 5) $import->setFormat($argv[4]);
+if ($argc === 1) {
+    $import = new Opus3MigrationReadline;
+}
+else {
+	$import = new Opus3MigrationParameters;
+	$analyse = $import->analyseParameters($argv);
+	if ($analyse === false)
+	{
+		echo "There is at least one failure in the paramters - aborting";
+		exit;
+	}
+}
 $import->run(dirname(dirname(__FILE__)), Opus_Bootstrap_Base::CONFIG_TEST,
     dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'config');
