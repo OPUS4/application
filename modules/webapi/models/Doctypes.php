@@ -167,6 +167,7 @@ class Doctypes {
             $document = new Opus_Document(null, $type);
             $docxml = $xml->createElement('Document');
             $docxml->setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
+            $docxml->setAttribute('Type', $document->getType());
             $xml->appendChild($docxml);
             $this->_convertModelForWebapi($document, $xml, $docxml);
         } else {
