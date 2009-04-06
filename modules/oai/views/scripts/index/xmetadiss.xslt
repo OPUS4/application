@@ -46,6 +46,7 @@
 -->
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:fn="http://www.w3.org/2005/xpath-functions"
     xmlns:xMetaDiss="http://www.d-nb.de/standards/xMetaDiss/"
     xmlns:cc="http://www.d-nb.de/standards/cc/"
     xmlns:dc="http://purl.org/dc/elements/1.1/"
@@ -76,7 +77,6 @@
                 <xsl:apply-templates select="PersonAuthor" mode="xmetadiss" />
             </xsl:element>
             <!-- dc:subject -->
-            <!-- ddc-Sachgruppe fehlt noch im Modell -->
             <xsl:apply-templates select="SubjectDdc" mode="xmetadiss" />
             <xsl:apply-templates select="SubjectSwd" mode="xmetadiss" />
             <xsl:apply-templates select="SubjectUncontrolled" mode="xmetadiss" />
@@ -88,14 +88,14 @@
                   cc:Publisher
                </xsl:attribute>
                 <xsl:element name="cc:universityOrInstitution">
-                  <xsl:apply-templates select="PublisherName" mode="xmetadiss" />
-                  <xsl:apply-templates select="PublisherPlace" mode="xmetadiss" />
+                  <xsl:apply-templates select="@PublisherName" mode="xmetadiss" />
+                  <xsl:apply-templates select="@PublisherPlace" mode="xmetadiss" />
                 </xsl:element>             
-               <xsl:apply-templates select="PublisherAddress" mode="xmetadiss" />
+               <xsl:apply-templates select="@PublisherAddress" mode="xmetadiss" />
             </xsl:element>
             <!-- dc:contributor -->
             <xsl:apply-templates select="PersonAdvisor" mode="xmetadiss" />
-            <xsl:apply-templates select="CompletedDate" mode="xmetadiss" />
+            <xsl:apply-templates select="@DateAccepted" mode="xmetadiss" />
             <xsl:element name="dc:type">
                <xsl:attribute name="xsi:type">
                   ddb:PublType
@@ -103,11 +103,18 @@
                ElectronicThesisandDissertation
             </xsl:element>
             <xsl:apply-templates select="IdentifierUrn" mode="xmetadiss" />
-            <xsl:apply-templates select="Language" mode="xmetadiss" />
+            <xsl:apply-templates select="@Language" mode="xmetadiss" />
             <xsl:apply-templates select="Licence" mode="xmetadiss" />
             <xsl:element name="thesis:degree">
                <xsl:element name="thesis:level">
-                   thesis:doctoral
+                 <xsl:choose>
+                   <xsl:when test="@Type='doctoral thesis'">
+                       thesis:doctoral
+                   </xsl:when>
+                   <xsl:otherwise>
+                       thesis:habilitation 
+                   </xsl:otherwise>    
+                 </xsl:choose>  
                </xsl:element>
                <xsl:element name="thesis:grantor">
                   <xsl:attribute name="xsi:type">
@@ -115,6 +122,8 @@
                   </xsl:attribute>
                   <xsl:element name="cc:universityOrInstitution">
                   </xsl:element>
+   <!--  missing: cc:name,cc:place,cc:department, 
+         not yet in xml-output -->
                </xsl:element>    
             </xsl:element>
             <xsl:element name="ddb:contact">
@@ -122,6 +131,13 @@
                    F6000-0422
                 </xsl:attribute>
             </xsl:element>
+            <xsl:element name="ddb:fileNumber">
+               Anzahl Files
+       <!--  so klappt es nicht !!! 
+                <xsl:value-of select="fn:count(//File)"/>
+        -->        
+            </xsl:element>
+            <xsl:apply-templates select="File" mode="xmetadiss" />
             <xsl:apply-templates select="IdentifierUrl" mode="xmetadiss" />
             <xsl:element name="ddb:rights">
                <xsl:attribute name="ddb:kind">free</xsl:attribute>
@@ -137,6 +153,13 @@
             <xsl:attribute name="lang">
                 <xsl:value-of select="@Language" />
             </xsl:attribute>
+            <xsl:choose>
+              <xsl:when test="../@Language=@Language">
+                 <xsl:attribute name="ddb:type">translated</xsl:attribute>
+              </xsl:when>
+              <xsl:otherwise>
+              </xsl:otherwise>
+            </xsl:choose>
             <xsl:value-of select="@Value" />
         </xsl:element>
     </xsl:template>
@@ -250,7 +273,7 @@
        </xsl:element>
     </xsl:template>
 
-    <xsl:template match="@CompletedDate" mode="xmetadiss">
+    <xsl:template match="@DateAccepted" mode="xmetadiss">
         <xsl:element name="dcterms:dateAccepted">
           <xsl:attribute name="xsi:type">
              dcterms:W3CDTF
@@ -259,7 +282,6 @@
         </xsl:element>
     </xsl:template>
 
-    <!--xsl:template match="IdentifierIsbn|IdentifierUrn" mode="epicur"-->
     <xsl:template match="IdentifierUrn" mode="xmetadiss">
         <xsl:element name="identifier">
             <xsl:attribute name="xsi:type">urn:nbn</xsl:attribute>
@@ -281,6 +303,28 @@
             <xsl:value-of select="@NameLong" />
         </xsl:element>
     </xsl:template>
+  
+    <xsl:template match="File" mode="xmetadiss">
+        <xsl:element name="ddb:fileProperties">
+            <xsl:attribute name="ddb:fileName">
+               <xsl:value-of select="@PathName" />
+            </xsl:attribute>
+            <xsl:attribute name="ddb:fileID">
+               file<xsl:value-of select="@DocumentId"/>-<xsl:number value="position()-1"/>
+            </xsl:attribute> 
+
+       <!-- not yet in XML-Output -->            
+             <xsl:attribute name="ddb:fileSize">
+               <xsl:value-of select="@FileSize"/>
+            </xsl:attribute>   
+
+            <xsl:attribute name="ddb:fileDirectory">
+                  /
+            </xsl:attribute>
+               aus:Praesentationsformat   
+        </xsl:element>
+    </xsl:template>
+
 
     <xsl:template match="IdentifierUrl" mode="xmetadiss">
         <xsl:element name="ddb:identifier">
@@ -295,21 +339,16 @@
 
 <!-- folgende Felder sind unklar bzw. fehlen noch im Datenmodell bzw.
      in der xml-Darstellung
-DDC-Sachgruppe : hier bisher bezeichnet mit SubjectDdc
 SubjectSwd : freie Schlagwoerter tauchen in der XML-Darstellung
              doppelt auf, einmal als
              SubjectSwd Type=uncontrolled  und zweitens als
              SubjectUncontrolled
              Welches soll ich nehmen? Wird eines wegfallen?
              z.Zt. werden sie auch hier doppelt ausgegeben
-PublisherName  : hier z.Zt. PublisherName, gesucht als Attribut
-PublisherPlace : hier z.Zt. PublisherPlace, gesucht als Attribut
-PublisherAddress: hier z.Zt. PublisherAddress, gesucht als Attribut
-DateAccepted: hier z.Zt. CompletedDate (in Opus3 Tag der muendl. Pruefung)
-ddb:PublType: hier fix ElectronicThesisandDissertation gesetzt
+PublisherName, PublisherPlace, PublisherAddress: noch nicht gesehen,
+               da keine Testdaten
 thesis:grantor in Opus 3 Fakultaet, hier???
-ddb:file (fileNumber, fileName, fileID, fileSize, fileDirectory), 
-          (Information ueber zum Dokument gehoerende Dateien)
-          fehlt hier z.Zt. noch komplett
+fileSize    ist bei den Attributen zum Feld file nicht dabei
+            hier z.Zt. FileSize benannt 
 
 -->
