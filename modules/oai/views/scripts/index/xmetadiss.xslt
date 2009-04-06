@@ -128,6 +128,7 @@
             </xsl:element>
             <xsl:element name="ddb:contact">
                 <xsl:attribute name="ddb:contactID">
+               <!--  missing, not yet in xml-output, though set fix --> 
                    F6000-0422
                 </xsl:attribute>
             </xsl:element>
@@ -154,7 +155,7 @@
                 <xsl:value-of select="@Language" />
             </xsl:attribute>
             <xsl:choose>
-              <xsl:when test="../@Language=@Language">
+              <xsl:when test="../@Language!=@Language">
                  <xsl:attribute name="ddb:type">translated</xsl:attribute>
               </xsl:when>
               <xsl:otherwise>
@@ -347,7 +348,9 @@ SubjectSwd : freie Schlagwoerter tauchen in der XML-Darstellung
              z.Zt. werden sie auch hier doppelt ausgegeben
 PublisherName, PublisherPlace, PublisherAddress: noch nicht gesehen,
                da keine Testdaten
+contactID von thesis:grantor: z.Zt. fix gesetzt               
 thesis:grantor in Opus 3 Fakultaet, hier???
+contactID:  von thesis:grantor: z.Zt. fix gesetzt               
 fileSize    ist bei den Attributen zum Feld file nicht dabei
             hier z.Zt. FileSize benannt 
 
