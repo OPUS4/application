@@ -1,7 +1,5 @@
 <?php
 /**
- * Indexview for all SocialBookmarking interfaces
- * 
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -29,37 +27,42 @@
  * @category    Application
  * @package     Module_SocialBookmarking
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: index.phtml 2159 2009-03-12 13:36:06Z claussnitzer $
+ * @version     $Id$
  */
-?>
-<h1>Connotea</h1>
-<?=$this->loginform ?>
-<?php
-    if (true === isset($this->connoteauser)) {
-        printf($this->translate("connotea_loggedin"), $this->connoteauser);
-        echo '<a href="' . $this->url(array('module' => "socialBookmarking", "controller"=>'connotea', "action"=>"logout")) . '">' . $this->translate('logout') . '</a>';
+
+/**
+ * form to show the login mask for Bibsonomy
+ */
+class BibsonomyBookmarkForm extends Zend_Form
+{
+    /**
+     * Build easy search form
+     *
+     * @return void
+     */
+    public function init() {
+		// Create and configure query field element:
+		$connotea = new Zend_Session_Namespace('connotea');
+		$doc = new Opus_Document($connotea->docId);
+  		
+		$userTags = new Zend_Form_Element_Text('user_tags');
+		$userTags->setLabel('connotea_usertags');
+
+		$title = new Zend_Form_Element_Text('usertitle');
+		$title->setRequired(true);
+		$title->setValue($doc->getTitleMain(0)->getValue());
+		$title->setLabel('connotea_usertitle');
+
+		$description = new Zend_Form_Element_Textarea('userdescription');
+		$description->setValue($doc->getTitleAbstract(0)->getValue());
+		$description->setLabel('connotea_userdescription');
+
+        $submit = new Zend_Form_Element_Submit('connotea_bm');
+        $submit->setLabel('connotea_bookmark');
+
+		// Add elements to form:
+		$this->addElements(array($userTags, $title, $description, $submit));
     }
-?>
-<p>
-<?=$this->note ?>
-</p>
-<?php
-    if (isset($this->connotealink) === true)
-    {
-        if ($this->connotealink === -1) {
-            echo '<div>' . $this->translate('taglist_failure') . '</div>';
-        } else if (count($this->connotealink) > 0) {
-            echo '<div>' . $this->translate('connotea_tags');
-            echo '<ul>';
-            foreach($this->connotealink as $giventag) {
-                echo "<li>$giventag</li>";
-            }
-            echo '</ul></div>';
-        } else {
-            echo '<div>' . $this->translate('connotea_no_tags') . '</div>';
-        }
-    }
-?>
-<?=$this->bookmark ?>
+}

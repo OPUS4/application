@@ -1,7 +1,5 @@
 <?php
 /**
- * Indexview for all SocialBookmarking interfaces
- * 
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -29,37 +27,35 @@
  * @category    Application
  * @package     Module_SocialBookmarking
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: index.phtml 2159 2009-03-12 13:36:06Z claussnitzer $
+ * @version     $Id$
  */
-?>
-<h1>Connotea</h1>
-<?=$this->loginform ?>
-<?php
-    if (true === isset($this->connoteauser)) {
-        printf($this->translate("connotea_loggedin"), $this->connoteauser);
-        echo '<a href="' . $this->url(array('module' => "socialBookmarking", "controller"=>'connotea', "action"=>"logout")) . '">' . $this->translate('logout') . '</a>';
+
+/**
+ * form to show the login mask for Connotea
+ */
+class BibsonomyLoginForm extends Zend_Form
+{
+    /**
+     * Build easy search form
+     *
+     * @return void
+     */
+    public function init() {
+		// Create and configure query field element:
+		$user = new Zend_Form_Element_Text('user');
+		$user->setRequired(true);
+		$user->setLabel('connotea_username');
+
+		$password = new Zend_Form_Element_Password('password');
+		$password->setRequired(true);
+		$password->setLabel('connotea_password');
+
+        $submit = new Zend_Form_Element_Submit('connotealogin');
+        $submit->setLabel('connotea_login');
+
+		// Add elements to form:
+		$this->addElements(array($user, $password, $submit));
     }
-?>
-<p>
-<?=$this->note ?>
-</p>
-<?php
-    if (isset($this->connotealink) === true)
-    {
-        if ($this->connotealink === -1) {
-            echo '<div>' . $this->translate('taglist_failure') . '</div>';
-        } else if (count($this->connotealink) > 0) {
-            echo '<div>' . $this->translate('connotea_tags');
-            echo '<ul>';
-            foreach($this->connotealink as $giventag) {
-                echo "<li>$giventag</li>";
-            }
-            echo '</ul></div>';
-        } else {
-            echo '<div>' . $this->translate('connotea_no_tags') . '</div>';
-        }
-    }
-?>
-<?=$this->bookmark ?>
+}

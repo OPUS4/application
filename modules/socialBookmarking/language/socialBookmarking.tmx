@@ -10,6 +10,14 @@
         <seg>Schnittstellen zu SocialBookmarking-Systemen</seg>
       </tuv>
     </tu>
+    <tu tuid="logout">
+      <tuv xml:lang="en">
+        <seg>Logout</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Abmelden</seg>
+      </tuv>
+    </tu>
     <tu tuid="connotea_username">
       <tuv xml:lang="en">
         <seg>Connotea-Username</seg>
@@ -128,6 +136,110 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Keine Publikation ausgewählt!</seg>
+      </tuv>
+    </tu>
+    <tu tuid="delicious_register">
+      <tuv xml:lang="en">
+        <seg>Create a new account at Delicious</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zugang bei Delicious einrichten</seg>
+      </tuv>
+    </tu>
+    <tu tuid="delicious_loggedin">
+      <tuv xml:lang="en">
+        <seg>You are logged in as %1$s at Delicious!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sie sind als %1$s bei Delicious eingeloggt!</seg>
+      </tuv>
+    </tu>
+    <tu tuid="delete_delicious_bookmark">
+      <tuv xml:lang="en">
+        <seg>Delete this title from your Delicious bookmarks</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Diesen Titel aus Ihrer Delicious-Liste löschen</seg>
+      </tuv>
+    </tu>
+    <tu tuid="delicious_username">
+      <tuv xml:lang="en">
+        <seg>Delicious-Username</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Delicious-Nutzername</seg>
+      </tuv>
+    </tu>
+    <tu tuid="delicious_password">
+      <tuv xml:lang="en">
+        <seg>Password</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Passwort</seg>
+      </tuv>
+    </tu>
+    <tu tuid="delicious_login">
+      <tuv xml:lang="en">
+        <seg>Login</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einloggen</seg>
+      </tuv>
+    </tu>
+    <tu tuid="delicious_no_parameter">
+      <tuv xml:lang="en">
+        <seg>No publication selected!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Keine Publikation ausgewählt!</seg>
+      </tuv>
+    </tu>
+    <tu tuid="delicious_bookmark">
+      <tuv xml:lang="en">
+        <seg>Bookmark this title in Delicious</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Diesen Titel in Delicious bookmarken</seg>
+      </tuv>
+    </tu>
+    <tu tuid="delicious_usertags">
+      <tuv xml:lang="en">
+        <seg>Your tags</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Eigene Tags</seg>
+      </tuv>
+    </tu>
+    <tu tuid="delicious_usertitle">
+      <tuv xml:lang="en">
+        <seg>Title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Titel</seg>
+      </tuv>
+    </tu>
+    <tu tuid="delicious_userdescription">
+      <tuv xml:lang="en">
+        <seg>Description</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Beschreibung</seg>
+      </tuv>
+    </tu>
+    <tu tuid="delicious_tags">
+      <tuv xml:lang="en">
+        <seg>This document has these tags on Delicious:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Diesem Dokument sind auf Delicious folgende Tags zugeordnet:</seg>
+      </tuv>
+    </tu>
+    <tu tuid="delicious_no_tags">
+      <tuv xml:lang="en">
+        <seg>This document has got no tags on Delicious yet.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Diesem Dokument sind noch keine Tags auf Delicious zugeordnet.</seg>
       </tuv>
     </tu>
   </body>

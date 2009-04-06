@@ -34,31 +34,31 @@
  * @version     $Id: index.phtml 2159 2009-03-12 13:36:06Z claussnitzer $
  */
 ?>
-<h1>Connotea</h1>
+<h1>Delicious</h1>
 <?=$this->loginform ?>
 <?php
-    if (true === isset($this->connoteauser)) {
-        printf($this->translate("connotea_loggedin"), $this->connoteauser);
-        echo '<a href="' . $this->url(array('module' => "socialBookmarking", "controller"=>'connotea', "action"=>"logout")) . '">' . $this->translate('logout') . '</a>';
+    if (true === isset($this->delicioususer)) {
+        printf($this->translate("delicious_loggedin"), $this->delicioususer);
+        echo '<a href="' . $this->url(array('module' => "socialBookmarking", "controller"=>'delicious', "action"=>"logout")) . '">' . $this->translate('logout') . '</a>';
     }
 ?>
 <p>
 <?=$this->note ?>
 </p>
 <?php
-    if (isset($this->connotealink) === true)
+    if (isset($this->deliciouslink) === true)
     {
-        if ($this->connotealink === -1) {
+        if ($this->deliciouslink === -1) {
             echo '<div>' . $this->translate('taglist_failure') . '</div>';
-        } else if (count($this->connotealink) > 0) {
-            echo '<div>' . $this->translate('connotea_tags');
+        } else if (count($this->deliciouslink) > 0) {
+            echo '<div>' . $this->translate('delicious_tags');
             echo '<ul>';
-            foreach($this->connotealink as $giventag) {
+            foreach($this->deliciouslink as $giventag) {
                 echo "<li>$giventag</li>";
             }
             echo '</ul></div>';
         } else {
-            echo '<div>' . $this->translate('connotea_no_tags') . '</div>';
+            echo '<div>' . $this->translate('delicious_no_tags') . '</div>';
         }
     }
 ?>
