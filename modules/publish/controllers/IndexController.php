@@ -229,12 +229,12 @@ class Publish_IndexController extends Zend_Controller_Action {
 
                 // reset input values fo re-displaying
                 $uploadForm->reset();
+                // re-insert document id
+                $uploadForm->DocumentId->setValue($document->getId());
                 $this->view->form = $uploadForm;
             } else {
                 // invalid form, populate with transmitted data
                 $uploadForm->populate($data);
-                // re-insert document id
-                $uploadForm->DocumentId->setValue($document->getId());
                 $this->view->form = $uploadForm;
             }
         } else {
