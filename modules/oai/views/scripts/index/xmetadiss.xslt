@@ -133,10 +133,7 @@
                 </xsl:attribute>
             </xsl:element>
             <xsl:element name="ddb:fileNumber">
-               Anzahl Files
-       <!--  so klappt es nicht !!! 
-                <xsl:value-of select="fn:count(//File)"/>
-        -->        
+              <xsl:value-of select="count(//File)"/>
             </xsl:element>
             <xsl:apply-templates select="File" mode="xmetadiss" />
             <xsl:apply-templates select="IdentifierUrl" mode="xmetadiss" />
@@ -348,7 +345,6 @@ SubjectSwd : freie Schlagwoerter tauchen in der XML-Darstellung
              z.Zt. werden sie auch hier doppelt ausgegeben
 PublisherName, PublisherPlace, PublisherAddress: noch nicht gesehen,
                da keine Testdaten
-contactID von thesis:grantor: z.Zt. fix gesetzt               
 thesis:grantor in Opus 3 Fakultaet, hier???
 contactID:  von thesis:grantor: z.Zt. fix gesetzt               
 fileSize    ist bei den Attributen zum Feld file nicht dabei
