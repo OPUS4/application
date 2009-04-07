@@ -233,6 +233,8 @@ class Publish_IndexController extends Zend_Controller_Action {
             } else {
                 // invalid form, populate with transmitted data
                 $uploadForm->populate($data);
+                // re-insert document id
+                $uploadForm->DocumentId->setValue($document->getId());
                 $this->view->form = $uploadForm;
             }
         } else {
