@@ -40,8 +40,14 @@ class StatisticGraphThumb {
     protected $data = null;
     protected $width = 35;
     protected $height = 27;
+    protected $bgImg ;
 
-    public function __construct($data) {
+    public function __construct($data, $backgroundImage = null) {
+        if (is_null($backgroundImage) === FALSE) {
+            $this->bgImg = $backgroundImage;
+        } else {
+            $this->bgImg = '../public/layouts/default/img/statistics_bg.jpg';
+        }
         $this->data = $data;
     }
 
@@ -66,7 +72,9 @@ class StatisticGraphThumb {
         $bplot->SetFillColor('gray');
 
         //TODO relative path to layout directory!?
-        $graph->SetBackgroundImage('/home/developer/workspace/bsz_opus_application/public/layouts/default/img/statistics_bg.jpg', BGIMG_FILLPLOT, 'jpg');
+        if (file_exists($this->bgImg)) {
+            $graph->SetBackgroundImage($this->bgImg, BGIMG_FILLPLOT, 'jpg');
+        }
         $bplot->SetFillGradient("gray","darkgray",GRAD_HOR);
         $graph->yaxis->HideTicks(true,true);
         $graph->xaxis->HideLabels(true);
