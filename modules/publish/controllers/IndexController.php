@@ -69,7 +69,7 @@ class Publish_IndexController extends Zend_Controller_Action {
         $this->view->title = 'Publish';
 
         $form = new Overview();
-        $action_url = $this->view->url(array("controller" => "index", "action" => "create"));
+        $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create'));
         $form->setAction($action_url);
         $this->view->form = $form;
     }
@@ -101,7 +101,7 @@ class Publish_IndexController extends Zend_Controller_Action {
                     $type = new Opus_Document_Type($filename);
                     $document = new Opus_Document(null, $type);
                     $createForm = $form_builder->build($document);
-                    $action_url = $this->view->url(array("controller" => "index", "action" => "create"));
+                    $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create'));
                     $form->setAction($action_url);
                     $this->view->form = $createForm;
                 } else {
@@ -110,7 +110,7 @@ class Publish_IndexController extends Zend_Controller_Action {
                 }
             } else if (array_key_exists('submit', $data) === false) {
                 $form = $form_builder->buildFromPost($data);
-                $action_url = $this->view->url(array("controller" => "index", "action" => "create"));
+                $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create'));
                 $form->setAction($action_url);
                 $this->view->form = $form;
             } else {
@@ -124,7 +124,7 @@ class Publish_IndexController extends Zend_Controller_Action {
                     $this->view->document_data = $model->toArray();
                     $this->view->title = 'Publish (summary)';
                     $summaryForm = new Summary();
-                    $action_url = $this->view->url(array("controller" => "index", "action" => "summary"));
+                    $action_url = $this->view->url(array('controller' => 'index', 'action' => 'summary'));
                     $summaryForm->setAction($action_url);
                     $model_ser = $form_builder->compressModel($model);
                     $model_hidden = Opus_Form_Builder::HIDDEN_MODEL_ELEMENT_NAME;
@@ -153,7 +153,7 @@ class Publish_IndexController extends Zend_Controller_Action {
                     $id = $model->store();
                     $this->view->title = 'Publish (upload)';
                     $uploadForm = new FileUpload();
-                    $action_url = $this->view->url(array("controller" => "index", "action" => "upload"));
+                    $action_url = $this->view->url(array('controller' => 'index', 'action' => 'upload'));
                     $uploadForm->setAction($action_url);
                     // TODO: Security save id to session not to form
                     // Actually it is possible to add Files to every document for everybody!
@@ -161,7 +161,7 @@ class Publish_IndexController extends Zend_Controller_Action {
                     $this->view->form = $uploadForm;
                 } else if (array_key_exists('back', $postdata) === true) {
                     $form = $form_builder->build($model);
-                    $action_url = $this->view->url(array("controller" => "index", "action" => "create"));
+                    $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create'));
                     $form->setAction($action_url);
                     $this->view->title = 'Publish (create)';
                     $this->view->form = $form;
@@ -188,7 +188,7 @@ class Publish_IndexController extends Zend_Controller_Action {
     public function uploadAction() {
         $this->view->title = 'Publish (upload)';
         $uploadForm = new FileUpload();
-        $action_url = $this->view->url(array("controller" => "index", "action" => "upload"));
+        $action_url = $this->view->url(array('controller' => 'index', 'action' => 'upload'));
         $uploadForm->setAction($action_url);
         // store uploaded data in application temp dir
         if ($this->_request->isPost() === true) {
