@@ -43,11 +43,8 @@ class StatisticGraphThumb {
     protected $bgImg ;
 
     public function __construct($data, $backgroundImage = null) {
-        if (is_null($backgroundImage) === FALSE) {
-            $this->bgImg = $backgroundImage;
-        } else {
-            $this->bgImg = '../public/layouts/default/img/statistics_bg.jpg';
-        }
+        $this->bgImg = $backgroundImage;
+
         $this->data = $data;
     }
 
@@ -61,8 +58,8 @@ class StatisticGraphThumb {
         $graph = new Graph($this->width, $this->height, "auto");
         $graph->SetScale("textlin");
 
-        $graph->img->SetMargin(0,0,0,1);
-
+        $graph->img->SetMargin(0,0,0,0);
+        //$graph->SetFrame(true);
         // generate bars
         $bplot = new BarPlot($this->data);
         $graph->Add($bplot);
@@ -72,8 +69,8 @@ class StatisticGraphThumb {
         $bplot->SetFillColor('gray');
 
         //TODO relative path to layout directory!?
-        if (file_exists($this->bgImg)) {
-            $graph->SetBackgroundImage($this->bgImg, BGIMG_FILLPLOT, 'jpg');
+        if (false === empty($this->bgImg) || file_exists($this->bgImg)) {
+            $graph->SetBackgroundImage($this->bgImg, BGIMG_FILLFRAME);
         }
         $bplot->SetFillGradient("gray","darkgray",GRAD_HOR);
         $graph->yaxis->HideTicks(true,true);

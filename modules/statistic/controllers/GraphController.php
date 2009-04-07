@@ -137,14 +137,18 @@ class Statistic_GraphController extends Zend_Controller_Action {
      *
      */
     public function thumbAction() {
-    $this->_helper->viewRenderer->setNoRender();
+        $this->_helper->viewRenderer->setNoRender();
         $this->_helper->layout->disableLayout();
         $id = $this->getRequest()->getParam('id');
         if (isset($id) === FALSE) {
             //TODO: create own exception
             throw new Exception("Parameter id must be set.");
         }
-        $graph = new StatisticGraphThumb(array(90,150,30));
+        //send layout path to view so that icons can be shown in different layouts
+        //TODO maybe there is a more elegant way to do this!?
+        $layoutPath = $this->view->layout()->getLayoutPath();
+
+        $graph = new StatisticGraphThumb(array(90,150,30), $layoutPath . '/img/statistics_bg.jpg');
         $graph->drawGraph();
 
     }
