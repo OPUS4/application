@@ -89,8 +89,24 @@
                     <a href="<?= $this->value = '';?>">
                     <img src = "<?= $this->value = '/layouts/default/img/hand.jpg';?>" border = '0' title = 'Empfehlung'></a>
 
-                    <a href="<?= $this->value = '';?>">
-                    <img src = "<?= $this->value = '/layouts/default/img/statistik.jpg';?>" border = '0' title = 'Statistik'></a>
+                    <a href="<?= $this->value =
+                        $this->url(array(
+                            'module' => 'statistic',
+                            'controller' => 'index',
+                            'action' => 'index',
+                            'docId' => $this->docId,
+                        ), null, true);
+                    ;?>">
+                    <img src = "<?= $this->value =
+
+                    //'/layouts/default/img/statistik.jpg';
+                        $this->url(array(
+                            'module' => 'statistic',
+                            'controller' => 'graph',
+                            'action' => 'thumb',
+                            'id' => $this->docId,
+                        ));
+                    ?>" border = '0' title = 'Statistik'></a>
 
                     <a href="<?= $this->value = '/socialBookmarking/connotea/index/docId';?>">
                     <img src = "<?= $this->value = '/layouts/default/img/connotea_icon.jpg';?>" border = '0' title = 'Bookmark bei Connotea'></a>

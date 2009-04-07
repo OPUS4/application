@@ -121,7 +121,12 @@ class Frontdoor_IndexController extends Zend_Controller_Action
                 $mydoc_data[$key] = $value;
             }
         }
+
+        //increase counter if all conditions are fullfilled (no double click, no spider, etc.)
         $this->view->mydoc_data = $mydoc_data;
+        $statistic = Opus_Statistic_LocalCounter::getInstance();
+        $statistic->countFrontdoor($docId);
+
     }
     /**
      * List with stopwords for omitting irrelevant fields
