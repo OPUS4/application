@@ -122,6 +122,14 @@ class Frontdoor_IndexController extends Zend_Controller_Action
             }
         }
 
+        //send layout path to view so that icons can be shown in different layouts
+        //TODO maybe there is a more elegant way to do this!?
+        $theme =Zend_Registry::getInstance()->get('Zend_Config')->theme;
+        if (true === empty($theme)) {
+            $theme = 'default';
+        }
+        $this->view->layoutPath = $this->view->baseUrl() .'/layouts/'. $theme;
+
         //increase counter if all conditions are fullfilled (no double click, no spider, etc.)
         $this->view->mydoc_data = $mydoc_data;
         $statistic = Opus_Statistic_LocalCounter::getInstance();

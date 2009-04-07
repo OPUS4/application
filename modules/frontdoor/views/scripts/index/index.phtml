@@ -67,7 +67,16 @@
                     if (array_key_exists ('PersonAuthor_'.$i.'_Name', $this->mydoc_data) === true)
                     {
                         $value = $this->mydoc_data['PersonAuthor_'.$i.'_Name'];?>
-                        <p><b><a href="<?= $this->value = '/search/search/metadatasearch/author/' .$value;?>">
+                        <p><b><a href="<?= $this->value =
+                            $this->url(array(
+                                'module' => 'search',
+                                'controller' => 'search',
+                                'action' => 'metadatasearch',
+                                'author' => $value,
+                            ), null, true);
+
+                        //'/search/search/metadatasearch/author/' .$value;
+                        ?>">
                         <?= $this->value = $value;?></a></b></p><?
                     }
                  }?>
@@ -78,16 +87,23 @@
                         $value = $this->mydoc_data['File_' .$i. '_PathName'];?>
                         <p><b><?= $this-> translate('File')?>:&nbsp; </b>
                         <a href="<?= $this->value = '/files/'.$this->docId.'/'.$this->value = $value;?>">
-                        <img src = "<?= $this->value = '/layouts/default/img/filetypelogo_pdf.png';?>" title = 'Download'> PDF, 20KB</a>
+                        <img src = "<?= $this->value = $this->layoutPath . '/img/filetypelogo_pdf.png';?>" title = 'Download'> PDF, 20KB</a>
                          &nbsp; &nbsp; <?
                     }
                  }?></p><br />
 
-                     <p><a href="<?= $this->value = '/frontdoor/hash/index/docId/'.$this->docId;?>">
-                     <img src = "<?= $this->value = '/layouts/default/img/unversehrt.jpg';?>" border = '0' title = 'Unversehrtheit'></a>
+                     <p><a href="<?= $this->value =
+                        $this->url(array(
+                            'module' => 'frontdoor',
+                            'controller' => 'hash',
+                            'docId' => $this->docId,
+                        ), null, true);
+                     //'/frontdoor/hash/index/docId/'.$this->docId;
+                     ?>">
+                     <img src = "<?= $this->value = $this->layoutPath . '/img/unversehrt.jpg';?>" border = '0' title = 'Unversehrtheit'></a>
 
                     <a href="<?= $this->value = '';?>">
-                    <img src = "<?= $this->value = '/layouts/default/img/hand.jpg';?>" border = '0' title = 'Empfehlung'></a>
+                    <img src = "<?= $this->value = $this->layoutPath . '/img/hand.jpg';?>" border = '0' title = 'Empfehlung'></a>
 
                     <a href="<?= $this->value =
                         $this->url(array(
@@ -108,20 +124,34 @@
                         ));
                     ?>" border = '0' title = 'Statistik'></a>
 
-                    <a href="<?= $this->value = '/socialBookmarking/connotea/index/docId';?>">
-                    <img src = "<?= $this->value = '/layouts/default/img/connotea_icon.jpg';?>" border = '0' title = 'Bookmark bei Connotea'></a>
+                    <a href="<?= $this->value =
+                        $this->url(array(
+                            'module' => 'socialBookmarking',
+                            'controller' => 'connotea',
+                            'docId' => $this->docId,
+                        ), null, true);
+                    //'/socialBookmarking/connotea/index/docId'
+                    ?>">
+                    <img src = "<?= $this->value =  $this->layoutPath .'/img/connotea_icon.jpg';?>" border = '0' title = 'Bookmark bei Connotea'></a>
 
-                    <a href="<?= $this->value = '/socialBookmarking/delicious/index/docId';?>">
-                    <img src = "<?= $this->value = '/layouts/default/img/delicious.jpg';?>" border = '0' title = 'Bookmark bei del.icio.us'></a>
+                    <a href="<?= $this->value =
+                        $this->url(array(
+                            'module' => 'socialBookmarking',
+                            'controller' => 'delicious',
+                            'docId' => $this->docId,
+                        ), null, true);
+                    //'/socialBookmarking/delicious/index/docId';
+                    ?>">
+                    <img src = "<?= $this->value = $this->layoutPath . '/img/delicious.jpg';?>" border = '0' title = 'Bookmark bei del.icio.us'></a>
 
                     <a href="<?= $this->value = '';?>">
-                    <img src = "<?= $this->value = '/layouts/default/img/google_scholar.jpg';?>" border = '0' title = 'Dokument in Google Scholar suchen'></a>
+                    <img src = "<?= $this->value = $this->layoutPath . '/img/google_scholar.jpg';?>" border = '0' title = 'Dokument in Google Scholar suchen'></a>
 
                     <a href="<?= $this->value = '';?>">
-                    <img src = "<?= $this->value = '/layouts/default/img/bibtex.jpg';?>" border = '0' title = 'BibTex-Export'></a>
+                    <img src = "<?= $this->value = $this->layoutPath . '/img/bibtex.jpg';?>" border = '0' title = 'BibTex-Export'></a>
 
                     <a href="<?= $this->value = '';?>">
-                    <img src = "<?= $this->value = '/layouts/default/img/ris.jpg';?>" border = '0' title = 'RIS-Export'></a>
+                    <img src = "<?= $this->value = $this->layoutPath . '/img/ris.jpg';?>" border = '0' title = 'RIS-Export'></a>
                 </p>
 
                  <br /><br /><br />
