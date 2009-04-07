@@ -50,5 +50,13 @@
         <seg>Lizenzen verwalten</seg>
       </tuv>
     </tu>
+    <tu tuid="admin_title_documents">
+      <tuv xml:lang="en">
+        <seg>Administrate document metadata</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokumenten Metadata verwalten</seg>
+      </tuv>
+    </tu>
   </body>
 </tmx>

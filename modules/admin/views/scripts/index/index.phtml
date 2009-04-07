@@ -45,6 +45,8 @@ $this->translate('admin_title_licence') ?></a></li>
 $this->translate('admin_title_collections') ?></a></li>
 <li><a href="<?= $this->url(array('controller'=>'person', 'action'=>'index')) ?>"><?=
 $this->translate('admin_title_person') ?></a></li>
+<li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'index'), 'default', true) ?>">
+<?=$this->translate('admin_title_documents') ?></a></li>
 </ul>
 
 
