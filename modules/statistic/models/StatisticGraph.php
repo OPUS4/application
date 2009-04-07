@@ -41,7 +41,10 @@ class StatisticGraph {
     protected $dataFrontdoor = null;
     protected $xaxis = 'x axis';
     protected $yaxis = 'y axis';
+    protected $frontdoorLabel = 'frontdoor';
+    protected $filesLabel = 'files';
     protected $title;
+
     protected $width = 330;
     protected $height = 200;
 
@@ -68,6 +71,14 @@ class StatisticGraph {
         $this->height = $height;
     }
 
+    public function setLegendFrontdoorLabel($frontdoor) {
+        $this->frontdoorLabel = $frontdoor;
+    }
+
+    public function setLegendFilesLabel($files) {
+        $this->filesLabel = $files;
+    }
+
     public function drawGraph() {
         // generate graphic
         $graph = new Graph($this->width, $this->height, "auto");
@@ -81,9 +92,9 @@ class StatisticGraph {
         $graph->legend->Pos(0.05, 0.05, "right", "top");
         // generate bars
         $bplot = new BarPlot(array_values($this->dataPdf));
-        $bplot->SetLegend('Pdf');
+        $bplot->SetLegend($this->filesLabel);
         $bplot2 = new BarPlot(array_values($this->dataFrontdoor));
-        $bplot2->SetLegend('Frontdoor');
+        $bplot2->SetLegend($this->frontdoorLabel);
         $gbplot  = new GroupBarPlot (array($bplot ,$bplot2));
         $graph->Add($gbplot);
 

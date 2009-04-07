@@ -66,5 +66,21 @@
         <seg>Zurück zur Frontdoor</seg>
       </tuv>
     </tu>
+    <tu tuid="graph_legend_frontdoor">
+      <tuv xml:lang="en">
+        <seg>abstract page</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Frontdoor</seg>
+      </tuv>
+    </tu>
+    <tu tuid="graph_legend_files">
+      <tuv xml:lang="en">
+        <seg>full text</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Volltext</seg>
+      </tuv>
+    </tu>
   </body>
 </tmx>

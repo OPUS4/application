@@ -85,6 +85,9 @@ class Statistic_GraphController extends Zend_Controller_Action {
         $graph = new StatisticGraph($this->view->translate('graph_year_title'), $dataPdf, $dataFrontdoor);
         $graph->setXAxisTitle($this->view->translate('graph_year_xaxis'));
         $graph->setYAxisTitle($this->view->translate('graph_yaxis'));
+        $graph->setLegendFilesLabel($this->view->translate('graph_legend_files'));
+        $graph->setLegendFrontdoorLabel($this->view->translate('graph_legend_frontdoor'));
+
         $graph->drawGraph();
     }
 
@@ -120,6 +123,9 @@ class Statistic_GraphController extends Zend_Controller_Action {
         $graph = new StatisticGraph($this->view->translate('graph_month_title'), $dataPdf, $dataFrontdoor);
         $graph->setXAxisTitle($this->view->translate('graph_month_xaxis'));
         $graph->setYAxisTitle($this->view->translate('graph_yaxis'));
+        $graph->setLegendFilesLabel($this->view->translate('graph_legend_files'));
+        $graph->setLegendFrontdoorLabel($this->view->translate('graph_legend_frontdoor'));
+
         $graph->drawGraph();
     }
 
