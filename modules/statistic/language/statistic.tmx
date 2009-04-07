@@ -58,6 +58,13 @@
         <seg>angesehen</seg>
       </tuv>
     </tu>
-    
+    <tu tuid="back_to_frontdoor">
+      <tuv xml:lang="en">
+        <seg>back to abstract page</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zurück zur Frontdoor</seg>
+      </tuv>
+    </tu>
   </body>
 </tmx>

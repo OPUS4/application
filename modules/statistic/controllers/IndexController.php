@@ -46,7 +46,7 @@ class Statistic_IndexController extends Zend_Controller_Action {
 	 * @return void
 	 *
 	 */
-	public function indexAction() {
+	public function testAction() {
 		$this->view->title = 'statistic';
 		$counter = Opus_Statistic_LocalCounter::getInstance();
         $form = new Test();
@@ -76,5 +76,50 @@ class Statistic_IndexController extends Zend_Controller_Action {
 		//$registry = Zend_Registry::getInstance();
 		//print_r($registry);
 	}
+
+    public function indexAction() {
+        $docId = $this->getRequest()->getParam("docId");
+        if (isset($docId) === FALSE) {
+            throw new Exception("docId must be set");
+        }
+        $this->view->docId = $docId;
+
+        $document = new Opus_Document($docId);
+
+        $titles = $document->getTitleMain();
+        $authors = $document->getPersonAuthor();
+
+        $session = new Zend_Session_Namespace();
+
+        if (isset($session->language)) {
+            $language = $session->language;
+        } else {
+            $language = 'en';
+        }
+
+        foreach($titles as $title) {
+               //if ($title->getLanguage() == Zend_Registry::getInstance()->get('language'))
+               //$this->view->title = $title->getLanguage() . " ?= ". $language;
+            if ($title->getLanguage() == $language) {
+                $this->view->title = $title->getValue();
+                //$title->getValue(); // Der Titel
+            }
+               //echo $title->getLanguage(); // Die Sprache des Titels
+        }
+
+
+
+        $authorsArray = array();
+        foreach ($authors as $author) {
+               // Name in der Form Nachname, Vorname (um konsistent zu sein,
+               // sollte das Verwendet werden. So kann bei Bedarf
+               // anwendungsweit ganz einfach z.B. auf "Titel
+               // Vorname Nachname" umgestellt werden):
+               $authorsArray[] = $author->getName();
+        }
+        $this->view->authors = implode(', ', $authorsArray);
+        //$this->view->data = Zend_Registry::getInstance()->getArrayCopy();
+    }
+
 
 }
