@@ -36,23 +36,14 @@
 /**
  * Administrative work with document metadata.
  */
-class Admin_DocumentsController extends Zend_Controller_Action {
+class Admin_DocumentsController extends Controller_CRUDAction {
 
     /**
-     * Redirector - defined for code completion
+     * The class of the model being administrated.
      *
-     * @var Zend_Controller_Action_Helper_Redirector
+     * @var Opus_Model_Abstract
      */
-    protected $_redirector = null;
-
-    /**
-     * Do some initialization on startup of every action.
-     *
-     * @return void
-     */
-    public function init() {
-        $this->_redirector = $this->_helper->getHelper('Redirector');
-    }
+    protected $_modelclass = 'Opus_Document';
 
     /**
      * Display list of documents.
@@ -76,74 +67,4 @@ class Admin_DocumentsController extends Zend_Controller_Action {
         $this->view->documentList = $result;
     }
 
-    /**
-     * Show edit form.
-     *
-     * @return void.
-     */
-    public function editAction() {
-
-        $this->view->title = 'Document edit';
-
-        $docId = (int) $this->getRequest()->getParam('docId', 0);
-        if (true === empty($docId)) {
-            $this->_redirector->gotoSimple('index');
-        }
-        $form_builder = new Opus_Form_Builder();
-        $doc = new Opus_Document($docId);
-        $form = $form_builder->build($doc);
-        // submitting "hidden" docId !
-        // save action based on this behaviour
-        $action_url = $this->view->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'save'));
-        $form->setAction($action_url);
-        $this->view->form = $form;
-    }
-
-    /**
-     * Save submitted data.
-     *
-     * @return void
-     */
-    public function saveAction() {
-        $docId = (int) $this->getRequest()->getParam('docId', 0);
-
-        if ((true === empty($docId)) or (false === $this->getRequest()->isPost())) {
-            // docId not submitted, back to index
-            $this->_redirector->gotoSimple('index');
-        }
-
-        $postdata = $this->getRequest()->getPost();
-        $form_builder = new Opus_Form_Builder();
-        $form = $form_builder->buildFromPost($postdata);
-        if (true === $form->isValid($postdata)) {
-            // retrieve old version from model
-            $model = $form_builder->getModelFromForm($form);
-            // overwrite old data in the model with the new data from the form
-            $form_builder->setFromPost($model, $form->getValues());
-            $model->store();
-            // go back to index
-            $this->_redirector->gotoSimple('index');
-        } else {
-            // submitting "hidden" docId !
-            // save action based on this behaviour
-            $action_url = $this->view->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'save'));
-            $form->setAction($action_url);
-            $this->view->form = $form;
-            $this->render('edit');
-            return;
-        }
-    }
-
-    /**
-     * Delete a document.
-     *
-     * @return void
-     */
-    public function deleteAction() {
-        $docId = $this->getRequest()->getPost('docId', 0);
-        if (true === empty($docId) or (false === $this->getRequest()->isPost())) {
-            $this->_redirector->gotoSimple('index');
-        }
-        $this->view->title = 'Delete document ' . $docId;
-    }
 }
