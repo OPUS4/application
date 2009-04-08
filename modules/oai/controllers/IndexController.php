@@ -211,12 +211,11 @@ class Oai_IndexController extends Controller_Xml {
      * @return void
      */
     private function __validateMetadataPrefix($oaiMetadataPrefix) {
-        $availableMetadataPrefixes = array(
-                // TODO: dynamically read available prefixes.
-                'oai_dc',
-                'epicur',
-                'xmetadiss',
-            );
+        $availableMetadataPrefixes = array();
+        $prefixPath = $this->view->getScriptPath('index') . '/prefixes';
+        foreach (glob($prefixPath . '/*.xslt') as $prefixFile) {
+           $availableMetadataPrefixes[] = basename($prefixFile, '.xslt');
+        }
         if (false === in_array($oaiMetadataPrefix, $availableMetadataPrefixes)) {
             // MetadataPrefix not available.
             throw new Exception("The metadata format $oaiMetadataPrefix given by metadataPrefix is not supported by the item or this repository.",self::CANNOTDISSEMINATEFORMAT);

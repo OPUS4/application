@@ -48,9 +48,9 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
 
-    <xsl:include href="oai_dc.xslt"/>
-    <xsl:include href="epicur.xslt"/>
-    <xsl:include href="xmetadiss.xslt"/>
+    <xsl:include href="prefixes/oai_dc.xslt"/>
+    <xsl:include href="prefixes/epicur.xslt"/>
+    <xsl:include href="prefixes/xMetaDiss.xslt"/>
     <xsl:output method="xml" indent="yes" />
 
     <xsl:param name="dateTime" />
