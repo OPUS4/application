@@ -68,19 +68,19 @@
             <!-- dc:publisher -->
             <!-- <xsl:apply-templates select="" /> -->
             <!-- dc:contributor -->
-            <xsl:apply-templates select="ContributingCorporation" mode="oai_dc" />
+            <xsl:apply-templates select="@ContributingCorporation" mode="oai_dc" />
             <!-- dc:date -->
-            <xsl:apply-templates select="PublishedDate" mode="oai_dc" />
+            <xsl:apply-templates select="@PublishedDate" mode="oai_dc" />
             <!-- dc:type -->
             <!-- <xsl:apply-templates select="" /> -->
             <!-- dc:format -->
-            <xsl:apply-templates select="File/MimeType" mode="oai_dc" />
+            <xsl:apply-templates select="File/@MimeType" mode="oai_dc" />
             <!-- dc:identifier -->
             <xsl:apply-templates select="IdentifierIsbn|IdentifierUrn" mode="oai_dc" />
             <!-- dc:source -->
             <!-- <xsl:apply-templates select="" /> -->
             <!-- dc:language -->
-            <xsl:apply-templates select="Language" mode="oai_dc" />
+            <xsl:apply-templates select="@Language" mode="oai_dc" />
             <!-- dc:relation -->
             <!-- <xsl:apply-templates select="" /> -->
             <!-- dc:coverage -->
