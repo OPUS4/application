@@ -59,6 +59,9 @@
     <xsl:param name="oai_until" />
     <xsl:param name="oai_metadataPrefix" />
     <xsl:param name="oai_identifier" />
+    <xsl:param name="oai_error_code" />
+    <xsl:param name="oai_error_message" />
+    <xsl:param name="oai_base_url" />
 
     <!--
     Suppress output for all elements that don't have an explicit template.
@@ -76,25 +79,33 @@
                 <xsl:value-of select="$dateTime" />
             </xsl:element>
             <xsl:element name="request">
-                <xsl:attribute name="verb"><xsl:value-of select="$oai_verb" /></xsl:attribute>
+                <xsl:if test="$oai_verb != ''">
+                    <xsl:attribute name="verb"><xsl:value-of select="$oai_verb" /></xsl:attribute>
+                </xsl:if>
                 <xsl:if test="$oai_from != ''">
                     <xsl:attribute name="from"><xsl:value-of select="$oai_from" /></xsl:attribute>
                 </xsl:if>
                 <xsl:if test="$oai_until != ''">
                     <xsl:attribute name="until"><xsl:value-of select="$oai_until" /></xsl:attribute>
                 </xsl:if>
-                <xsl:attribute name="metadataPrefix"><xsl:value-of select="$oai_metadataPrefix" /></xsl:attribute>
+                <xsl:if test="$oai_metadataPrefix != ''">
+                    <xsl:attribute name="metadataPrefix"><xsl:value-of select="$oai_metadataPrefix" /></xsl:attribute>
+                </xsl:if>
+                <xsl:value-of select="$oai_base_url" />
             </xsl:element>
+            <xsl:if test="$oai_error_code!=''">
+                <xsl:element name="error">
+                    <xsl:attribute name="code"><xsl:value-of select="$oai_error_code" /></xsl:attribute>
+                    <xsl:value-of select="$oai_error_message" />
+                </xsl:element>
+            </xsl:if>
             <xsl:choose>
                 <xsl:when test="$oai_verb='ListRecords'">
                     <xsl:apply-templates select="Documents" mode="ListRecords" />
                 </xsl:when>
                 <xsl:when test="$oai_verb='GetRecord'">
-                    <xsl:apply-templates select="Opus_Document" mode="GetRecord" />
+                    <xsl:apply-templates select="Documents" mode="GetRecord" />
                 </xsl:when>
-                <xsl:otherwise>
-                    <error code="badVerb">The verb <xsl:value-of select="$oai_verb" /> provided in the request is illegal.</error>
-                </xsl:otherwise>
             </xsl:choose>
         </xsl:element>
     </xsl:template>
@@ -105,9 +116,9 @@
         </xsl:element>
     </xsl:template>
 
-    <xsl:template match="Opus_Document" mode="GetRecord">
+    <xsl:template match="Documents" mode="GetRecord">
         <xsl:element name="GetRecord">
-            <xsl:apply-templates select="." />
+            <xsl:apply-templates select="Opus_Document" />
         </xsl:element>
     </xsl:template>
 
@@ -134,9 +145,9 @@
                <xsl:when test="$oai_metadataPrefix='epicur'">
                   <xsl:apply-templates select="." mode="epicur" />
                </xsl:when>
-               <xsl:otherwise>
+               <xsl:when test="$oai_metadataPrefix='oai_dc'">
                   <xsl:apply-templates select="." mode="oai_dc" />
-               </xsl:otherwise>
+               </xsl:when>
             </xsl:choose>
             </xsl:element>
         </xsl:element>

@@ -55,8 +55,10 @@
 
     <xsl:template match="Opus_Document" mode="oai_dc">
         <xsl:element name="oai_dc:dc">
-            xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/
-            http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+            <xsl:attribute name="xsi:schemaLocation">
+                <xsl:text>http://www.openarchives.org/OAI/2.0/oai_dc/
+                http://www.openarchives.org/OAI/2.0/oai_dc.xsd</xsl:text>
+            </xsl:attribute>
             <!-- dc:title -->
             <xsl:apply-templates select="TitleMain" mode="oai_dc" />
             <!-- dc:creator -->

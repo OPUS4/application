@@ -39,47 +39,63 @@
  * @category    Application
  * @package     Module_Oai
  */
-class Oai_IndexController extends Zend_Controller_Action {
+class Oai_IndexController extends Controller_Xml {
+
+    const BADVERB = 0;
+    const BADARGUMENT = 1;
+    const CANNOTDISSEMINATEFORMAT = 2;
+    const BADRESUMPTIONTOKEN = 3;
 
     /**
-     * Holds xml representation of document information to be processed.
+     * Holds valid OAI parameters.
      *
-     * @var DomDocument  Defaults to null.
+     * @var array  Valid OAI parameters.
      */
-    protected $_xml = null;
+    protected static $_validArguments = array(
+                'verb',
+                'identifier',
+                'metadataPrefix',
+                'from',
+                'until',
+                'set',
+                'resumptionToken',
+            );
 
     /**
-     * Holds the stylesheet for the transformation.
+     * Holds valid OAI queries, i.e. parameter combinations.
      *
-     * @var DomDocument  Defaults to null.
+     * @var array  Valid OAI queries.
      */
-    protected $_xslt = null;
-
-    /**
-     * Holds the xslt processor.
-     *
-     * @var DomDocument  Defaults to null.
-     */
-    protected $_proc = null;
-
-    /**
-     * Do some initialization on startup of every action
-     *
-     * @return void
-     */
-    public function init()
-    {
-        // Module outputs plain Xml, so rendering and layout are disabled.
-        $this->_helper->viewRenderer->setNoRender(true);
-        $this->_helper->layout()->disableLayout();
-
-        // Initialize member variables.
-        $this->_xml = new DomDocument;
-        $this->_xslt = new DomDocument;
-        $this->_xslt->load($this->view->getScriptPath('index') . '/oai-pmh.xslt');
-        $this->_proc = new XSLTProcessor;
-        $this->_proc->importStyleSheet($this->_xslt);
-    }
+    protected static $_validQueries = array(
+                'GetRecord' => array(
+                    array('required' => array('identifier', 'metadataPrefix'),
+                          'optional' => array()),
+                    ),
+                'ListRecords' => array(
+                    array('required' => array('metadataPrefix'),
+                          'optional' => array('from', 'until', 'set')),
+                    array('required' => array('resumptionToken'),
+                          'optional' => array()),
+                    ),
+                'ListIdentifiers' => array(
+                    array('required' => array('metadataPrefix'),
+                          'optional' => array('from', 'until', 'set')),
+                    array('required' => array('resumptionToken'),
+                          'optional' => array()),
+                    ),
+                'ListSets' => array(
+                    array('required' => array(),
+                          'optional' => array()),
+                    ),
+                'ListMetadataFormats' => array(
+                    array('required' => array(),
+                          'optional' => array()),
+                    ),
+                'Identify' => array(
+                    array('required' => array(),
+                          'optional' => array()),
+                    ),
+            );
 
     /**
      * Entry point for all OAI-PMH requests.
@@ -87,32 +103,139 @@ class Oai_IndexController extends Zend_Controller_Action {
      * @return void
      */
     public function indexAction() {
-        $verb = $this->getRequest()->getParam('verb');
-        switch($verb) {
-            case 'Identify':
-                $this->_forward('badverb');
-                //$this->_forward('identify');
+        try {
+            $this->__handleRequest($this->getRequest()->getQuery());
+        } catch (Exception $e) {
+            switch ($e->getCode()) {
+                case self::BADVERB:
+                    $errorCode = 'badVerb';
+                    break;
+                case self::BADARGUMENT:
+                    $errorCode = 'badArgument';
+                    break;
+                case self::CANNOTDISSEMINATEFORMAT:
+                    $errorCode = 'cannotDisseminateFormat';
+                    break;
+                case self::BADRESUMPTIONTOKEN:
+                    $errorCode = 'badResumptionToken';
+                    break;
+                default:
+            }
+            $this->_proc->setParameter('', 'oai_error_code', $errorCode);
+            $this->_proc->setParameter('', 'oai_error_message', $e->getMessage());
+        }
+    }
+
+    /**
+     * Handles an OAI request.
+     *
+     * @param  array  $oaiRequest
+     * @throws Exception Thrown if the request could not be handled.
+     * @return void
+     */
+    private function __handleRequest(array $oaiRequest) {
+        // Setup stylesheet
+        $this->loadStyleSheet($this->view->getScriptPath('index') . '/oai-pmh.xslt');
+        // Set response time
+        $this->_proc->setParameter('', 'dateTime', date('c'));
+        // TODO: set proper base url
+        $this->_proc->setParameter('', 'oai_base_url', 'http://opus.foo.bar/oai');
+
+        try {
+            foreach ($oaiRequest as $parameter => $value) {
+                $this->_proc->setParameter('', 'oai_' . $parameter, $value);
+            }
+            $this->__validateRequest($oaiRequest);
+            $callname = '__handle' . $oaiRequest['verb'];
+            $this->$callname($oaiRequest);
+        } catch (Exception $e) {
+            throw $e;
+        }
+    }
+
+    /**
+     * Validates parameters of an OAI request.
+     *
+     * @param  array  $oaiRequest The request to validate.
+     * @throws Exception Thrown if the request is not valid.
+     * @return void
+     */
+    private function __validateRequest(array $oaiRequest) {
+        // Evaluate if a proper verb was supplied.
+        if (false === array_key_exists('verb', $oaiRequest) or
+            false === in_array($oaiRequest['verb'], array_keys(self::$_validQueries))) {
+            // Invalid or unspecified Verb
+            throw new Exception('The verb provided in the request is illegal.', self::BADVERB);
+        }
+
+        // Evaluate if any invalid parameters are provided
+        $invalidArguments = array_diff(array_keys($oaiRequest), self::$_validArguments);
+        if (false === empty($invalidArguments)) {
+            // Error occured
+            throw new Exception(implode(', ', $invalidArguments), self::BADARGUMENT);
+        }
+
+        // Evaluate if the query is valid, i.e. check for proper parameter combinations.
+        $oaiParameters = array_diff(array_keys($oaiRequest), array('verb'));
+        foreach (self::$_validQueries[$oaiRequest['verb']] as $validRequest) {
+            $missingRequiredParameters = array_diff($validRequest['required'], $oaiParameters);
+            $unknownParameters = array_diff($oaiParameters, array_merge($validRequest['required'],
+                        $validRequest['optional']));
+            if (false === empty($missingRequiredParameters)) {
+                // Missing required parameter
+                throw new Exception('Missing parameter(s) ' . implode(', ', $missingRequiredParameters), self::BADARGUMENT);
+            } else if (false === empty($unknownParameters)) {
+                // Superflous parameter
+                throw new Exception('badArgument', self::BADARGUMENT);
+            } else {
+                foreach ($oaiRequest as $parameter => $value) {
+                    $callname = '__validate' . ucfirst($parameter);
+                    if (true === method_exists($this, $callname)) {
+                        try {
+                            $this->$callname($value);
+                        } catch (Exception $e) {
+                            throw $e;
+                        }
+                    }
+                }
                 break;
-            case 'ListIdentifiers':
-                $this->_forward('badverb');
-                //$this->_forward('listidentifiers');
-                break;
-            case 'ListMetadataFormats':
-                $this->_forward('badverb');
-                //$this->_forward('listmetadataformats');
-                break;
-            case 'ListRecords':
-                $this->_forward('listrecords');
-                break;
-            case 'GetRecord':
-                $this->_forward('getrecord');
-                break;
-            case 'ListSets':
-                $this->_forward('badverb');
-                //$this->_forward('listsets');
-                break;
-            default:
-                $this->_forward('badverb');
+            }
+        }
+    }
+
+    /**
+     * Checks the availability of a metadataPrefix.
+     *
+     * @param  string  $oaiMetadataPrefix The metadataPrefix to check for.
+     * @throws Exception Thrown if the metadataPrefix is not available.
+     * @return void
+     */
+    private function __validateMetadataPrefix($oaiMetadataPrefix) {
+        $availableMetadataPrefixes = array(
+                // TODO: dynamically read available prefixes.
+                'oai_dc',
+                'epicur',
+                'xmetadiss',
+            );
+        if (false === in_array($oaiMetadataPrefix, $availableMetadataPrefixes)) {
+            // MetadataPrefix not available.
+            throw new Exception("The metadata format $oaiMetadataPrefix given by metadataPrefix is not supported by the item or this repository.",self::CANNOTDISSEMINATEFORMAT);
+        }
+    }
+
+    /**
+     * Validates resumption token.
+     *
+     * @param  string  $oaiResumptionToken The resumption token to validate.
+     * @throws Exception Thrown if the resumptionToken is not valid.
+     * @return void
+     */
+    private function __validateResumptionToken($oaiResumptionToken) {
+        // TODO: Implement resumption token handling.
+        if (true === empty($oaiResumptionToken)) {
+            // Resumption token not valid.
+            throw new Exception("The resumptionToken $oaiResumptionToken does not exist or has already expired.",
+                    self::BADRESUMPTIONTOKEN);
         }
     }
 
@@ -121,18 +244,14 @@ class Oai_IndexController extends Zend_Controller_Action {
      *
      * @return void
      */
-    public function getrecordAction() {
-        $identifier = $this->getRequest()->getParam('identifier');
-        $metadataPrefix = $this->getRequest()->getParam('metadataPrefix');
-        $this->_proc->setParameter('', 'oai_metadataPrefix', $metadataPrefix);
-        $this->_proc->setParameter('', 'oai_identifier', $identifier);
-
+    private function __handleGetRecord($oaiRequest) {
         // Identifier references metadata Urn, not plain Id!
         // Currently implemented as 'oai:foo.bar.de:{docId}'
-        $docId = substr(strrchr($identifier, ':'), 1);
+        $docId = substr(strrchr($oaiRequest['identifier'], ':'), 1);
         $document = new Opus_Document($docId);
-        $this->_xml = $document->toXml();
-        $this->_sendOaiResponse('GetRecord');
+        $this->_xml->appendChild($this->_xml->createElement('Documents'));
+        $node = $this->_xml->importNode($document->toXml()->documentElement, true);
+        $this->_xml->documentElement->appendChild($node);
     }
 
     /**
@@ -140,7 +259,7 @@ class Oai_IndexController extends Zend_Controller_Action {
      *
      * @return void
      */
-    public function identifyAction() {
+    private function __handleIdentify($oaiRequest) {
 
     }
 
@@ -149,7 +268,7 @@ class Oai_IndexController extends Zend_Controller_Action {
      *
      * @return void
      */
-    public function listidentifiersAction() {
+    private function __handleListIdentifiers($oaiRequest) {
 
     }
 
@@ -158,7 +277,7 @@ class Oai_IndexController extends Zend_Controller_Action {
      *
      * @return void
      */
-    public function listmetadataformatsAction() {
+    private function __handleListMetadataFormats($oaiRequest) {
 
     }
 
@@ -167,17 +286,13 @@ class Oai_IndexController extends Zend_Controller_Action {
      *
      * @return void
      */
-    public function listrecordsAction() {
+    private function __handleListRecords($oaiRequest) {
+        $this->_xml->appendChild($this->_xml->createElement('Documents'));
         $documents = Opus_Document::getAll();
-        $xml = '<Documents>';
         foreach ($documents as $document) {
-            $xml .= '<Document>' . $document->toXml() . '</Document>';
+            $node = $this->_xml->importNode($document->toXml()->documentElement, true);
+            $this->_xml->documentElement->appendChild($node);
         }
-        $xml .= '</Documents>';
-        $this->_xml->loadXml($xml);
-        $metadataPrefix = $this->getRequest()->getParam('metadataPrefix');
-        $this->_proc->setParameter('', 'oai_metadataPrefix', $metadataPrefix);
-        $this->_sendOaiResponse('ListRecords');
     }
 
     /**
@@ -185,34 +300,8 @@ class Oai_IndexController extends Zend_Controller_Action {
      *
      * @return void
      */
-    public function listsetsAction() {
+    private function __handleListSets($oaiRequest) {
 
-    }
-
-    /**
-     * Implements bad verb for OAI-PMH.
-     *
-     * @return void
-     */
-    public function badverbAction() {
-        $verb = $this->getRequest()->getParam('verb');
-        $this->_sendOaiResponse($verb);
-    }
-
-    /**
-     * Sends an OAI-PMH response.
-     *
-     * @return void
-     */
-    private function _sendOaiResponse($requestVerb) {
-
-        // Set XSLTProcessor parameters.
-        $this->_proc->setParameter('', 'dateTime', date('c'));
-        $this->_proc->setParameter('', 'oai_verb', $requestVerb);
-
-        // Send Xml response.
-        $this->getResponse()->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);
-        $this->getResponse()->setBody($this->_proc->transformToXML($this->_xml));
     }
 
 }
