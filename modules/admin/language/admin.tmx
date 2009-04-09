@@ -58,5 +58,13 @@
         <seg>Dokumenten Metadata verwalten</seg>
       </tuv>
     </tu>
+    <tu tuid="admin_title_languages">
+      <tuv xml:lang="en">
+        <seg>Administrate languages</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sprachen verwalten</seg>
+      </tuv>
+    </tu>
   </body>
 </tmx>
