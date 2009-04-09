@@ -40,15 +40,15 @@
  */
 class Statistic_IndexController extends Zend_Controller_Action {
 
-	/**
-	 * Just for manual testing, not for final opus version
-	 *
-	 * @return void
-	 *
-	 */
-	public function testAction() {
-		$this->view->title = 'statistic';
-		$counter = Opus_Statistic_LocalCounter::getInstance();
+    /**
+     * Just for manual testing, not for final opus version
+     *
+     * @return void
+     *
+     */
+    public function testAction() {
+        $this->view->title = 'statistic';
+        $counter = Opus_Statistic_LocalCounter::getInstance();
         $form = new Test();
         print_r($_POST);
         $form->populate($_POST);
@@ -58,24 +58,24 @@ class Statistic_IndexController extends Zend_Controller_Action {
         $fileId = $form->getValue('file_id');
         $ip = $form->getValue('ip');
         $userAgent = $form->getValue('user_agent');
-		$result = $counter->count($documentId, $fileId, 'files', $ip, $userAgent);
-		if ($result === FALSE) {
-		    $this->view->doubleClick = true;
-		} else {
-		    $this->view->doubleClick = false;
-		    $this->view->count = $result;
-		}
-		$this->view->userAgent = $_SERVER['HTTP_USER_AGENT'];
-		$this->view->redirectStatus = $_SERVER['REDIRECT_STATUS'];
+        $result = $counter->count($documentId, $fileId, 'files', $ip, $userAgent);
+        if ($result === FALSE) {
+            $this->view->doubleClick = true;
+        } else {
+            $this->view->doubleClick = false;
+            $this->view->count = $result;
+        }
+        $this->view->userAgent = $_SERVER['HTTP_USER_AGENT'];
+        $this->view->redirectStatus = $_SERVER['REDIRECT_STATUS'];
         $this->view->baseUrl = $counter->readYears('280');
 
 
-		//$this->view->pathToGraph = Zend_Registry::getInstance()->;
+        //$this->view->pathToGraph = Zend_Registry::getInstance()->;
 
-		//print_r($_SERVER);
-		//$registry = Zend_Registry::getInstance();
-		//print_r($registry);
-	}
+        //print_r($_SERVER);
+        //$registry = Zend_Registry::getInstance();
+        //print_r($registry);
+    }
 
     public function indexAction() {
         $docId = $this->getRequest()->getParam("docId");
@@ -98,27 +98,50 @@ class Statistic_IndexController extends Zend_Controller_Action {
         }
 
         foreach($titles as $title) {
-               //if ($title->getLanguage() == Zend_Registry::getInstance()->get('language'))
-               //$this->view->title = $title->getLanguage() . " ?= ". $language;
             if ($title->getLanguage() == $language) {
                 $this->view->title = $title->getValue();
-                //$title->getValue(); // Der Titel
             }
-               //echo $title->getLanguage(); // Die Sprache des Titels
         }
 
 
 
         $authorsArray = array();
         foreach ($authors as $author) {
-               // Name in der Form Nachname, Vorname (um konsistent zu sein,
-               // sollte das Verwendet werden. So kann bei Bedarf
-               // anwendungsweit ganz einfach z.B. auf "Titel
-               // Vorname Nachname" umgestellt werden):
-               $authorsArray[] = $author->getName();
+            $authorsArray[] = $author->getName();
         }
         $this->view->authors = implode(', ', $authorsArray);
-        //$this->view->data = Zend_Registry::getInstance()->getArrayCopy();
+
+        //get statistics from db for total count and for image tag (accessibility)
+        $statistic = Opus_Statistic_LocalCounter::getInstance();
+        $totalAbstractPage = $statistic->readTotal($docId, 'frontdoor');
+        $totalFiles = $statistic->readTotal($docId, 'files');
+
+
+        $yearAbstractPage = $statistic->readYears($docId, 'frontdoor');
+        $yearFiles = $statistic->readYears($docId, 'files');
+
+        $this->view->totalAbstractPage = $totalAbstractPage;
+        $this->view->totalFiles = $totalFiles;
+
+        $years = array_merge(array_keys($yearAbstractPage), array_keys($yearFiles));
+        if (count($years) == 0) {
+            $years = array(date('Y'));
+        }
+        foreach($years as $year) {
+            if (isset($yearFiles[$year]) === false) {
+                $yearFiles[$year] = 0;
+            }
+        if (isset($yearAbstractPage[$year]) === false) {
+                $yearAbstractPage[$year] = 0;
+            }
+        }
+        ksort($yearFiles);
+        ksort($yearAbstractPage);
+
+        foreach (array_keys($yearAbstractPage) as $year) {
+            $lines[] = $year.': ' . $yearAbstractPage[$year].', ' . $yearFiles[$year];
+        }
+        $this->view->altTextStat = implode('; ', $lines);
     }
 
 

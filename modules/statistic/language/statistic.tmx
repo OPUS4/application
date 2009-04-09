@@ -82,5 +82,13 @@
         <seg>Volltext</seg>
       </tuv>
     </tu>
+    <tu tuid="total_views">
+      <tuv xml:lang="en">
+        <seg>Total views</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Gesamtanzahl</seg>
+      </tuv>
+    </tu>
   </body>
 </tmx>
