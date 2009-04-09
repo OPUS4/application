@@ -77,12 +77,12 @@ class View_Helper_LanguageSelector {
         $form->setAction($this->_view->url(array('action' => 'language', 'controller' => 'index', 'module' => 'home')));
         $form->setAttrib('id', 'language_selector');
 
-        $availableLanguages = Zend_Registry::get('Available_Languages');
         $translations = Zend_Registry::get('Zend_Translate')->getList();
 
         $languages = array();
         foreach ($translations as $trans) {
-            $languages[$trans] = $availableLanguages[$trans];
+            $temp = Opus_Language::getByPart1($trans);
+            $languages[$trans] = $temp->getDisplayName();
         }
         $currentLocale = Zend_Registry::get('Zend_Translate')->getLocale();
 
