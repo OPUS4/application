@@ -78,6 +78,8 @@
 	   foreach ($this->browsinglist as $obj) {
             $pers = $obj->get();
             $titleCount = BrowsingFilter::getPersonTitles($pers['id'], $this->role)->count();
+            $role = $this->role;
+            if ($role !== 'authors') $role = 'persons';
             if ($titleCount > 0) {
                 echo '<li>';
              echo '<a href=' .
@@ -86,7 +88,7 @@
                          'module'        => 'search',
                          'controller'    => 'search',
                          'action'        => 'metadatasearch',
-                         $this->role     => $pers['lastName'] . ', ' . $pers['firstName']
+                         $role     => $pers['lastName'] . ', ' . $pers['firstName']
                      ),
                      null,
                       true
