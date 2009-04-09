@@ -344,12 +344,12 @@
         <seg>Quelle</seg>
       </tuv>
     </tu>
-    <tu tuid="SwbId">
+    <tu tuid="IdentifierOpac">
       <tuv xml:lang="en">
-        <seg>ID SWB</seg>
+        <seg>Opac ID</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>ID SWB</seg>
+        <seg>Opac ID</seg>
       </tuv>
     </tu>
     <tu tuid="VgWortPixelUrl">

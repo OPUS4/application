@@ -235,7 +235,7 @@ class Frontdoornew_IndexController extends Zend_Controller_Action
      */
     private $__stopwords = array('Active', 'CommentInternal', 'DescMarkup',
         'LinkLogo', 'LinkSign', 'MimeType', 'SortOrder', 'PodAllowed', 'ServerDatePublished', 'ServerDateModified',
-        'ServerDateUnlocked', 'ServerDateValid', 'Source', 'SwbId', 'PatentCountries', 'PatentDateGranted',
+        'ServerDateUnlocked', 'ServerDateValid', 'Source', 'IdentifierOpac', 'PatentCountries', 'PatentDateGranted',
         'PatentApplication', 'Enrichment', 'Email', 'PlaceOfBirth', 'DateOfBirth', 'AcademicTitle');
 
     /**

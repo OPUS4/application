@@ -42,7 +42,7 @@
     <field name="Enrichment" />
     <field name="Note" />
         <!--  Auslagern in Security? -->
-        <field name="SwbId" />
+        <field name="IdentifierOpac" />
     <field name="ServerDateModified" />
     <field name="ServerDatePublished" />
     <field name="ServerDateUnlocking" />
@@ -53,7 +53,7 @@
         <field name="IdentifierOpus3" />
 	    <field name="Source" />	    
 	    <!--  Auslagern in Identifiers oder References? -->
-        <field name="SwbId" />
+        <field name="IdentifierOpac" />
         <!--  Ergebnisse von METIS noch unklar -->
         <!-- <field name="VgWortPixelUrl" /> -->
         
