@@ -52,27 +52,49 @@ class CollectionsImport
             if (strtolower(substr($tablename, 0, 2)) === 'bk') {
             	// Works!
             	echo "Importing Bk...";
-            	$bkPrepare = $this->convertBk($tempdoc, $tablename);
+            	if (false === file_exists('/tmp/bk.xml'))
+            	{
+            	    $bkPrepare = $this->convertBk($tempdoc, $tablename);
+            	    $bk = fopen('/tmp/bk.xml', 'w');
+            	    fputs($bk, $bkPrepare->saveXml());
+            	    fclose($bk);
+            	}
+            	else {
+            		$bkRead = file('/tmp/bk.xml');
+            		$bkPrepare = implode("", $bkRead);
+            	}
+            	$importit = Opus_CollectionRole::fromXml($bkPrepare);
             	echo "done!\n";
             	// store classification system
             }
             if (strtolower(substr($tablename, 0, 3)) === 'ccs') {
             	// Works!
             	echo "Importing CCS...";
-            	$ccsPrepare = $this->convertCcs($tempdoc, $tablename);
+            	if (false === file_exists('/tmp/ccs.xml'))
+            	{
+            	    $ccsPrepare = $this->convertCcs($tempdoc, $tablename);
+            	    $bk = fopen('/tmp/ccs.xml', 'w');
+            	    fputs($bk, $bkPrepare->saveXml());
+            	    fclose($bk);
+            	}
+            	else {
+            		$bkRead = file('/tmp/ccs.xml');
+            		$ccsPrepare = implode("", $bkRead);
+            	}
+            	#$importit = Opus_CollectionRole::fromXml($ccsPrepare);
             	echo "done!\n";
             	// store classification system
             }
             if (strtolower(substr($tablename, 0, 3)) === 'msc') {
             	// Takes too much time...
             	echo "Importing MSC...";
-             	$mscPrepare = $this->convertMsc($tempdoc, $tablename);
+             	#$mscPrepare = $this->convertMsc($tempdoc, $tablename);
              	echo "done!\n";
             	// store classification system
             }
             if (strtolower(substr($tablename, 0, 4)) === 'pacs') {
             	// Works!
-            	echo "Importing PACS...";
+            	#echo "Importing PACS...";
              	$pacsPrepare = $this->convertPacs($tempdoc, $tablename);
              	echo "done!\n";
             	// store classification system
@@ -80,7 +102,7 @@ class CollectionsImport
             if (strtolower(substr($tablename, 0, 3)) === 'apa') {
             	// Should work, but untested
             	echo "Importing APA...";
-             	$apaPrepare = $this->convertApa($tempdoc, $tablename);
+             	#$apaPrepare = $this->convertApa($tempdoc, $tablename);
              	echo "done!\n";
             	// store classification system
             }
@@ -121,17 +143,17 @@ class CollectionsImport
 		$classification = $this->transferOpusClassification($data);
 		
 		$classificationDomDocument = new DOMDocument;
-		$rootNode = $classificationDomDocument->createElement('CollectionRole');
-		$rootNode->setAttribute('name', $classificationName);
+		$rootNode = $classificationDomDocument->createElement('Opus_CollectionRole');
+		$rootNode->setAttribute('Name', $classificationName);
 	    $classificationDomDocument->appendChild($rootNode);
 
 		foreach ($classification as $key => $class) {
             if (ereg("\.00$", $class['class'])) {
             	echo ".";
 			    // first level category
-			    $node = $classificationDomDocument->createElement('Collection');
-			    $node->setAttribute('name', $class['bez']);
-			    $node->setAttribute('class', $class['class']);
+			    $node = $classificationDomDocument->createElement('SubCollection');
+			    $node->setAttribute('Name', $class['bez']);
+			    $node->setAttribute('Number', $class['class']);
 			    $rootNode->appendChild($node);
 			    // Reduce the array to improve performance for the next iterations
 			    #array_splice($classification, $key, 1);
@@ -141,15 +163,15 @@ class CollectionsImport
             if (ereg("0$", $class['class']) && false === ereg("\.00$", $class['class'])) {
             	$parent = false;
             	// second level category
-            	foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
-            		if ($coll->getAttribute('class') === substr($class['class'], 0, 2).'.00') {
+            	foreach ($classificationDomDocument->getElementsByTagName('SubCollection') as $coll) {
+            		if ($coll->getAttribute('Number') === substr($class['class'], 0, 2).'.00') {
             			echo ".";
             			$parent = $coll;
             		}
             	}
-	            $node = $classificationDomDocument->createElement('Collection');
-			    $node->setAttribute('name', $class['bez']);
-			    $node->setAttribute('class', $class['class']);
+	            $node = $classificationDomDocument->createElement('SubCollection');
+			    $node->setAttribute('Name', $class['bez']);
+			    $node->setAttribute('Number', $class['class']);
 			    if ($parent !== false)
 			    {
 			        $parent->appendChild($node);
@@ -167,24 +189,24 @@ class CollectionsImport
             if (false === ereg("0$", $class['class'])) {
             	$parent = false;
             	// third level category
-            	foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
-            		if ($coll->getAttribute('class') === substr($class['class'], 0, 4).'0') {
+            	foreach ($classificationDomDocument->getElementsByTagName('SubCollection') as $coll) {
+            		if ($coll->getAttribute('Number') === substr($class['class'], 0, 4).'0') {
             			echo ".";
             			$parent = $coll;
             		}
             	}
             	if ($parent === false) {
             	    // no parent found, try one level higher
-            	    foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
-            		    if ($coll->getAttribute('class') === substr($class['class'], 0, 2).'.00') {
+            	    foreach ($classificationDomDocument->getElementsByTagName('SubCollection') as $coll) {
+            		    if ($coll->getAttribute('Number') === substr($class['class'], 0, 2).'.00') {
             			    echo ".";
             			    $parent = $coll;
             		    }
             	    }            		
             	}
-		        $node = $classificationDomDocument->createElement('Collection');
-		        $node->setAttribute('name', $class['bez']);
-		        $node->setAttribute('class', $class['class']);
+		        $node = $classificationDomDocument->createElement('SubCollection');
+		        $node->setAttribute('Name', $class['bez']);
+		        $node->setAttribute('Number', $class['class']);
 			    if ($parent !== false)
 			    {
 			        $parent->appendChild($node);

@@ -200,6 +200,11 @@
                 <xsl:value-of select="field[@name='publisher_university']" />
             </xsl:attribute>           
             
+            <!-- Fields not used yet -->
+            <!--<xsl:attribute name="RangeId">
+                <xsl:value-of select="field[@name='bereich_id']" />
+            </xsl:attribute>-->
+            
             <!-- Find persons associated with the document -->
             <xsl:call-template name="getAuthors"><xsl:with-param name="OriginalID"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
             <xsl:if test="string-length(field[@name='contributors_name'])>0">
@@ -209,25 +214,17 @@
             
             <!-- Classifications and Subjects -->
             <!--<xsl:call-template name="getSubjects"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param><xsl:with-param name="subject"><xsl:value-of select="field[@name='subject_type']" /></xsl:with-param></xsl:call-template>-->            
-            
-            <!-- Fields not used yet -->
-            <!--<xsl:attribute name="RangeId">
-                <xsl:value-of select="field[@name='bereich_id']" />
-            </xsl:attribute>-->
-            
+                      
             <!--
             Prepared, but commented out: 
             Subjects from opus_ccs etc.
             PublicationState
             RangeId
-            PublisherUniversity
             
             Missing fields in other opus3 tables:
             opus_coll <field name="Collection" />
             opus_inst (+ institutes + faculties) <field name="Institute" />
             opus_schriftenreihe (+ schriftenreihe) <field name="TitleParent" mandatory="yes" multiplicity="4" />
-            
-            university_lang not to be migrated (part of configuration)
 	        -->
             
             <xsl:apply-templates select="field" />

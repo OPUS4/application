@@ -159,6 +159,7 @@ class Search_SearchController extends Zend_Controller_Action
                 // build the query
                 #print_r($data);
                 $query = '';
+
                 for ($n = 0; strlen($data['query' . $n]) > 0; $n++)
                 {
                 	if ($n > 0) {

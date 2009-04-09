@@ -84,10 +84,9 @@
                  $this->url(
                      array(
                          'module'        => 'search',
-                         'controller'    => 'browsing',
-                         'action'        => 'browseTitles',
-                         'filter'        => $this->role,
-                         $this->role     => $pers['id']
+                         'controller'    => 'search',
+                         'action'        => 'metadatasearch',
+                         $this->role     => $pers['lastName'] . ', ' . $pers['firstName']
                      ),
                      null,
                       true
@@ -95,7 +94,7 @@
                  '>';
                  echo $pers['lastName'] . ', ' . $pers['firstName'];
                  echo '</a>';
-                 echo ' (' . $titleCount. ')';
+                 #echo ' (' . $titleCount. ')';
                  echo '</li>';
             }
         }

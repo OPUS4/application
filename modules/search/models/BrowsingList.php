@@ -44,17 +44,23 @@ class BrowsingList
 	 */
 	public static function getPersonsList()
 	{
-		// Noch Dummydaten, später etwas in der Art
-        $table = new Opus_Db_Persons();
-        $browsinglist = $table->fetchAll();
-		#$browsinglist = Opus_Person_Information::getAll();
-		#$browsinglist = DummyData::getDummyPersons();
-		// map the unsorted list from Opus_Person_Information::getAll() into a PersonsList
+        $browsinglist = Opus_Person::getAll();
 		$personsList = new Opus_Search_List_PersonsList();
+		$done = array();
 		foreach ($browsinglist as $member)
 		{
-			$pers = new Opus_Search_Adapter_PersonAdapter(array('id' => $member->__get('id'), 'firstName' => $member->__get('first_name'), 'lastName' => $member->__get('last_name')));
-			$personsList->add($pers);
+			if (false === array_key_exists($member->getLastName(), $done))
+			{
+			    $pers = new Opus_Search_Adapter_PersonAdapter(array('id' => $member->getId(), 'firstName' => $member->getFirstName(), 'lastName' => $member->getLastName()));
+			    $personsList->add($pers);
+			    $done[$member->getLastName()] = $member->getFirstName();
+			}
+			else if ($done[$member->getLastName()] !== $member->getFirstName())
+			{
+			    $pers = new Opus_Search_Adapter_PersonAdapter(array('id' => $member->getId(), 'firstName' => $member->getFirstName(), 'lastName' => $member->getLastName()));
+			    $personsList->add($pers);
+			    $done[$member->getLastName()] = $member->getFirstName();
+			}
 		}
 		return $personsList;
 	}
@@ -85,16 +91,6 @@ class BrowsingList
             asort($result);
         }
         return $result;
-	    // Noch Dummydaten, später etwas in der Art
-		// $browsinglist = Opus_Document_Type::getAllDocumentTypes()
-		#$browsinglist = DummyData::getDummyDocumentTypes();
-		// map the unsorted list from Opus_Person_Information::getAll() into a PersonsList
-		#$doctypeList = new Opus_Search_List_DocumentTypeList();
-		#foreach ($browsinglist as $member)
-		#{
-		#	$doctypeList->add($member);
-		#}
-		#return $doctypeList;
 	}
 
 	/**
@@ -127,11 +123,6 @@ class BrowsingList
 		else {
 	       $browsinglist = new Opus_Collection((int) $role, (int) $node);
 		}
-		#print_r($browsinglist);
-		#$collnode = new Opus_Search_List_CollectionNode((int) $role, (int) $node);
-		# Später: Nicht mehr $member uebergeben, sondern anhand der role_id die Collection aus der DB auslesen
-		#$collnode->getCollectionNode($role, $node);
 		return $browsinglist;
-
 	}
 }
