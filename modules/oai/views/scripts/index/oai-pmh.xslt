@@ -51,6 +51,7 @@
     <xsl:include href="prefixes/oai_dc.xslt"/>
     <xsl:include href="prefixes/epicur.xslt"/>
     <xsl:include href="prefixes/xMetaDiss.xslt"/>
+    <xsl:include href="prefixes/XMetaDissPlus.xslt"/>
     <xsl:output method="xml" indent="yes" />
 
     <xsl:param name="dateTime" />
@@ -139,6 +140,9 @@
             <!-- neu: mit Unterscheidung nach metadataPrefix -->
             <xsl:element name="metadata">
             <xsl:choose>
+               <xsl:when test="$oai_metadataPrefix='XMetaDissPlus'">
+                  <xsl:apply-templates select="." mode="xmetadissplus" />
+               </xsl:when>
                <xsl:when test="$oai_metadataPrefix='xMetaDiss'">
                   <xsl:apply-templates select="." mode="xmetadiss" />
                </xsl:when>
