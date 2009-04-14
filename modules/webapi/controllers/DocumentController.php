@@ -52,19 +52,19 @@ class Webapi_DocumentController extends Controller_Rest {
                 $xml = $doc->toXml();
             } catch (Opus_Model_Exception $e) {
                 $xml = new DOMDocument('1.0', 'utf-8');
-                $error = $xml->createElement('error');
+                $error = $xml->createElement('Error');
                 $error->setAttribute('message', 'Invalid OpusId transmitted.');
                 $xml->appendChild($error);
                 $this->getResponse()->setHttpResponseCode(404);
             }
         } else {
             $xml = new DOMDocument('1.0', 'utf-8');
-            $resultlist = $xml->createElement('documentlist');
+            $resultlist = $xml->createElement('DocumentList');
             $resultlist->setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
             $xml->appendChild($resultlist);
-            $url = $this->getRequest()->getBasePath() . $this->_helper->url('', 'document', 'webapi');
+            $url = $this->_protocol . $this->_hostname . $this->getRequest()->getBasePath() . $this->_helper->url('', 'document', 'webapi');
             foreach (Opus_Document::getAllIds() as $docId) {
-                $element = $xml->createElement('document');
+                $element = $xml->createElement('Document');
                 $element->setAttribute('xlink:href', $url . $docId);
                 $element->setAttribute('nr', $docId);
                 $resultlist->appendChild($element);

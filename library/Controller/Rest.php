@@ -40,6 +40,10 @@
  */
 class Controller_Rest extends Zend_Controller_Action {
 
+    protected $_hostname = '';
+
+    protected $_protocol = 'http://';
+
     /**
      * Holds request data for later processing
      *
@@ -72,6 +76,9 @@ class Controller_Rest extends Zend_Controller_Action {
         $this->_helper->layout()->disableLayout();
         $this->requestData = $this->getRequest()->getParams();
         $this->getResponse()->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);
+
+        $this->_hostname = $_SERVER['HTTP_HOST'];
+
     }
 
     /**

@@ -67,6 +67,13 @@ class SearchApi {
     private $__hitlist = null;
 
     /**
+     * Holds webapi host name.
+     *
+     * @var string
+     */
+    private $__hostname = '';
+
+    /**
      * Holds search language value
      *
      * @var string
@@ -79,6 +86,13 @@ class SearchApi {
      * @var string
      */
     private $__query = null;
+
+    /**
+     * Holds webapi protocol schema.
+     *
+     * @var string
+     */
+    private $__protocol = 'http://';
 
     /**
      * Holds requested search terms.
@@ -202,6 +216,10 @@ class SearchApi {
             $this->__requestData = $requestData;
             $this->_cleanUp();
         }
+
+        // TODO: find a better Zend way of life
+        $this->__hostname = $_SERVER['HTTP_HOST'];
+
     }
 
     /**

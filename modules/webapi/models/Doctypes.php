@@ -39,6 +39,20 @@
 class Doctypes {
 
     /**
+     * Holds webapi host name.
+     *
+     * @var string
+     */
+    private $__hostname = '';
+
+    /**
+     * Holds webapi protocol schema.
+     *
+     * @var string
+     */
+    private $__protocol = 'http://';
+
+    /**
      * Holds path to xml doctype files.
      *
      * @var string
@@ -147,6 +161,10 @@ class Doctypes {
         } else {
             $this->__xml_path = $path;
         }
+
+        // TODO: find a better Zend way of life
+        $this->__hostname = $_SERVER['HTTP_HOST'];
+
     }
 
     /**
@@ -193,7 +211,7 @@ class Doctypes {
 
         $types = $this->_getXmlDocTypeFiles();
         $view = Zend_Layout::getMvcInstance()->getView();
-        $url = $view->url(array('controller' => 'doctypes', 'module' => 'webapi'), 'default', true);
+        $url = $this->__protocol . $this->__hostname . $view->url(array('controller' => 'doctypes', 'module' => 'webapi'), 'default', true);
         foreach ($types as $type) {
             $entry = $xml->createElement('Type', $type);
             $entry->setAttribute('xlink:href', $url . '/' . $type);
