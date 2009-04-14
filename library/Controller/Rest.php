@@ -40,8 +40,18 @@
  */
 class Controller_Rest extends Zend_Controller_Action {
 
+    /**
+     * Holds webapi host name.
+     *
+     * @var string
+     */
     protected $_hostname = '';
 
+    /**
+     * Holds webapi protocol schema.
+     *
+     * @var string
+     */
     protected $_protocol = 'http://';
 
     /**
