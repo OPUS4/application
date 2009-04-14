@@ -36,7 +36,7 @@
 /**
  * Rest handling for document types.
  */
-class Webapi_DoctypesController extends Controller_Rest {
+class Webapi_DoctypeController extends Controller_Rest {
 
     /**
      * Show a specific document type or a list of all available types.
