@@ -126,7 +126,7 @@ class Modules_Webapi_DocumentTests extends PHPUnit_Framework_TestCase {
         $this->assertEquals(404, $restData->getStatus(), 'HTTP status should be 404 (File not found).');
         $xml = new DOMDocument();
         $xml->loadXML($restData->getBody());
-        $error = $xml->getElementsByTagName('error');
+        $error = $xml->getElementsByTagName('Error');
         $this->assertTrue($error->item(0)->hasAttribute('message'), 'Error element contain no error message.');
     }
 

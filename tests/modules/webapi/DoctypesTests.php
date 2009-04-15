@@ -76,7 +76,7 @@ class Modules_Webapi_DoctypesTests extends PHPUnit_Framework_TestCase {
         $config = new Zend_Config_Ini($configfile, 'webapi');
         $config = $config->toArray();
         $this->__restUri = $config['protocol'] . '://' . $config['host'];
-        $this->__restUrl = $config['docroot'] . '/' . $config['modul'] . '/doctypes';
+        $this->__restUrl = $config['docroot'] . '/' . $config['modul'] . '/doctype';
         $restClient = new Zend_Rest_Client();
         $restClient->setUri($this->__restUri);
         $this->__restClient = $restClient;
