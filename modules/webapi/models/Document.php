@@ -30,11 +30,11 @@
  * @author     Henning Gerhardt (henning.gerhardt@slub-dresden.de)
  * @copyright  Copyright (c) 2009, OPUS 4 development team
  * @license    http://www.gnu.org/licenses/gpl.html General Public License
- * @version    $Id:$
+ * @version    $Id$
  */
 
 /**
- * Methods fpr REST handling of resource document.
+ * Methods for REST handling of resource document.
  */
 class Document extends Response {
 
@@ -84,7 +84,7 @@ class Document extends Response {
     }
 
     /**
-     * TODO
+     * Deletes a document. Returns only a response code!
      *
      * @param mixed $docId Document id of deleting document.
      * @return void
