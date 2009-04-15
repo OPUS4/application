@@ -34,7 +34,7 @@
  */
 
 /**
- * TODO
+ * Methods for handling REST requests for resource licence.
  */
 class Licence extends Response {
 
