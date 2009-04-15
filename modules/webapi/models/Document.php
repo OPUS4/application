@@ -30,50 +30,73 @@
  * @author     Henning Gerhardt (henning.gerhardt@slub-dresden.de)
  * @copyright  Copyright (c) 2009, OPUS 4 development team
  * @license    http://www.gnu.org/licenses/gpl.html General Public License
- * @version    $Id$
+ * @version    $Id:$
  */
 
 /**
- * Controller for handling document specific requests.
+ * Methods fpr REST handling of resource document.
  */
-class Webapi_DocumentController extends Controller_Rest {
+class Document extends Response {
 
     /**
-     * Handles get requests.
+     * Returns a xml string for a specific document.
      *
-     * @see    library/Controller/Controller_Rest#getAction()
-     * @return void
+     * @param mixed $docId Requested document id.
+     * @return string
      */
-    public function getAction() {
+    public function getDocument($docId) {
 
-        $doc = new Document();
-        $original_action = $this->requestData['original_action'];
-        if ((false === empty($original_action))
-            and (true === is_numeric($original_action))) {
-            $result = $doc->getDocument($original_action);
-        } else {
-            $result = $doc->getAllDocuments();
+        $docId = (int) $docId;
+        try {
+            $doc = new Opus_Document($docId);
+            $xml = $doc->toXml();
+        } catch (Opus_Model_Exception $e) {
+            $xml = $this->_xml;
+            $error = $xml->createElement('Error');
+            $error->setAttribute('message', 'Invalid OpusId transmitted.');
+            $xml->appendChild($error);
+            $this->setResponseCode(404);
         }
-        $this->getResponse()->setBody($result);
-        $this->getResponse()->setHttpResponseCode($doc->getResponseCode());
+        return $xml->saveXML();
     }
 
     /**
-     * Delete a specific document.
+     * Retuns a xml list of available documents.
      *
-     * @see    library/Controller/Controller_Rest#deleteAction()
-     * @return void
+     * @return string
      */
-    public function deleteAction() {
-        $original_action = $this->requestData['original_action'];
-        if ((false === empty($original_action))
-            and (true === is_numeric($original_action))) {
-            $doc = new Document();
-            $doc->deleteDocument($original_action);
-            $this->getResponse()->setHttpResponseCode($doc->getResponseCode());
-        } else {
-            $this->getResponse()->setHttpResponseCode(404);
+    public function getAllDocuments() {
+
+        $xml = $this->_xml;
+        $resultlist = $xml->createElement('DocumentList');
+        $resultlist->setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
+        $xml->appendChild($resultlist);
+
+        $view = Zend_Layout::getMvcInstance()->getView();
+        $url = $this->_protocol . $this->_hostname . $view->url(array('controller' => 'document', 'module' => 'webapi'), 'default', true);
+        foreach (Opus_Document::getAllIds() as $docId) {
+            $element = $xml->createElement('Document');
+            $element->setAttribute('xlink:href', $url . $docId);
+            $element->setAttribute('nr', $docId);
+            $resultlist->appendChild($element);
         }
+        return $xml->saveXML();
     }
 
+    /**
+     * TODO
+     *
+     * @param mixed $docId Document id of deleting document.
+     * @return void
+     */
+    public function deleteDocument($docId) {
+
+        $docId = (int) $docId;
+        try {
+            $doc = new Opus_Document($docId);
+            $doc->delete();
+        } catch (Exception $e) {
+            $this->setResponseCode(404);
+        }
+    }
 }

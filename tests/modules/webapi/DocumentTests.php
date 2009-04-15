@@ -148,8 +148,8 @@ class Modules_Webapi_DocumentTests extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testDeleteDocumentWithInvalidNumericId() {
-        $restData = $this->__restClient->restDelete($this->__restUrl . '/1');
-        $this->assertEquals(400, $restData->getStatus(), 'Expected a 400 HTTP response.');
+        $restData = $this->__restClient->restDelete($this->__restUrl . '/0');
+        $this->assertEquals(404, $restData->getStatus(), 'Expected a 400 HTTP response.');
     }
 
     /**
@@ -158,7 +158,7 @@ class Modules_Webapi_DocumentTests extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testDeleteDocumentWithInvalidNonNumericId() {
-        $restData = $this->__restClient->restDelete($this->__restUrl);
+        $restData = $this->__restClient->restDelete($this->__restUrl . '/add');
         $this->assertEquals(404, $restData->getStatus(), 'Expected a 404 HTTP response.');
     }
 
