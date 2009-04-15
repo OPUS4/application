@@ -134,7 +134,6 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         $this->view->mydoc_data = $mydoc_data;
         $statistic = Opus_Statistic_LocalCounter::getInstance();
         $statistic->countFrontdoor($docId);
-
     }
     /**
      * List with stopwords for omitting irrelevant fields
