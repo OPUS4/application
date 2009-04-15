@@ -38,6 +38,7 @@ require_once 'PHPUnit/Framework.php';
 require_once 'modules/webapi/DocumentTests.php';
 require_once 'modules/webapi/DoctypesTests.php';
 require_once 'modules/webapi/LicenceTests.php';
+require_once 'modules/webapi/PersonTests.php';
 require_once 'modules/webapi/SearchTests.php';
 
 /**
@@ -55,6 +56,7 @@ class Modules_Webapi_AllTests {
         $suite->addTestSuite('Modules_Webapi_DocumentTests');
         $suite->addTestSuite('Modules_Webapi_DoctypesTests');
         $suite->addTestSuite('Modules_Webapi_LicenceTests');
+        $suite->addTestSuite('Modules_Webapi_PersonTests');
         $suite->addTestSuite('Modules_Webapi_SearchTests');
         return $suite;
     }
