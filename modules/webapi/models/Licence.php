@@ -26,37 +26,63 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category   Application
- * @package    Tests_Modules_Webapi
+ * @package    Module_Webapi
  * @author     Henning Gerhardt (henning.gerhardt@slub-dresden.de)
  * @copyright  Copyright (c) 2009, OPUS 4 development team
  * @license    http://www.gnu.org/licenses/gpl.html General Public License
  * @version    $Id$
  */
 
-require_once 'PHPUnit/Framework.php';
-
-require_once 'modules/webapi/DocumentTests.php';
-require_once 'modules/webapi/DoctypesTests.php';
-require_once 'modules/webapi/LicenceTests.php';
-require_once 'modules/webapi/SearchTests.php';
-
 /**
- * Collect all webapi tests.
+ * TODO
  */
-class Modules_Webapi_AllTests {
+class Licence extends Response {
 
     /**
-     * Set up a test suite with all webapi tests.
+     * Returns information for a licence as a xml string.
      *
-     * @return mixed
+     * @param mixed $licenceId Id of licence to display
+     * @return string
      */
-    public static function suite() {
-        $suite = new PHPUnit_Framework_Testsuite('Opus Application Module: Webapi');
-        $suite->addTestSuite('Modules_Webapi_DocumentTests');
-        $suite->addTestSuite('Modules_Webapi_DoctypesTests');
-        $suite->addTestSuite('Modules_Webapi_LicenceTests');
-        $suite->addTestSuite('Modules_Webapi_SearchTests');
-        return $suite;
+    public function getLicence($licenceId) {
+
+        $result = '';
+        $licenceId = (int) $licenceId;
+        try {
+            $licence = new Opus_Licence($licenceId);
+            $result = $licence->toXml()->saveXML();
+        } catch (Opus_Model_Exception $e) {
+            $error = $this->_xml->createElement('Error', 'Not a valid licence id.');
+            $this->_xml->appendChild($error);
+            $this->setResponseCode(404);
+            $result = $this->_xml->saveXML();
+        }
+        return $result;
+
     }
 
+    /**
+     * Returns a listing of available licences.
+     *
+     * @return string
+     */
+    public function getAllLicences() {
+        //
+        $xml = $this->_xml;
+
+        $licenceList = $xml->createElement('LicenceList');
+        $licenceList->setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
+        $xml->appendChild($licenceList);
+
+        $view = Zend_Layout::getMvcInstance()->getView();
+        $url = $this->_protocol . $this->_hostname . $view->url(array('controller' => 'licence', 'module' => 'webapi'), 'default', true);
+
+        $licences = Opus_Licence::getAll();
+        foreach ($licences as $licence) {
+            $entry = $xml->createElement('Licence');
+            $entry->setAttribute('xlink:href', $url . '/' . $licence->getId());
+            $licenceList->appendChild($entry);
+        }
+        return $xml->saveXML();
+    }
 }
