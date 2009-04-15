@@ -36,7 +36,7 @@
 /**
  * Model for Search API
  */
-class SearchApi {
+class SearchApi extends Response {
 
     /**
      * Holds search boolean operators.
@@ -67,13 +67,6 @@ class SearchApi {
     private $__hitlist = null;
 
     /**
-     * Holds webapi host name.
-     *
-     * @var string
-     */
-    private $__hostname = '';
-
-    /**
      * Holds search language value
      *
      * @var string
@@ -86,13 +79,6 @@ class SearchApi {
      * @var string
      */
     private $__query = null;
-
-    /**
-     * Holds webapi protocol schema.
-     *
-     * @var string
-     */
-    private $__protocol = 'http://';
 
     /**
      * Holds requested search terms.
@@ -217,9 +203,7 @@ class SearchApi {
             $this->_cleanUp();
         }
 
-        // TODO: find a better Zend way of life
-        $this->__hostname = $_SERVER['HTTP_HOST'];
-
+        parent::__construct();
     }
 
     /**
@@ -253,9 +237,7 @@ class SearchApi {
      * @return array Returns a array with a status code and a xml string.
      */
     public function getXMLResult() {
-        $statuscode = 200;
-        $xml = new DOMDocument('1.0', 'utf-8');
-        $xml->formatOutput = true;
+        $xml = $this->_xml;
 
         $searchResult = $xml->createElement('SearchResult');
         $searchResult->setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
@@ -264,7 +246,8 @@ class SearchApi {
         if (false === empty($this->__error_msg)) {
             $error = $xml->createElement('Error', $this->__error_msg);
             $searchResult->appendChild($error);
-            return array('code' => 400, 'xml' => $xml->saveXML());
+            $this->setResponseCode(400);
+            return $xml->saveXML();
         }
 
         $hitlist = $this->__hitlist;
@@ -280,7 +263,7 @@ class SearchApi {
             $resultList = $xml->createElement('ResultList');
             $searchResult->appendChild($resultList);
             $view = Zend_Layout::getMvcInstance()->getView();
-            $url = $view->url(array('controller' => 'document', 'module' => 'webapi'), 'default', true);
+            $url = $this->_protocol . $this->_hostname . $view->url(array('controller' => 'document', 'module' => 'webapi'), 'default', true);
             for ($n = 0; $n < $hitCount; $n++) {
                 $hit =  $hitlist->get($n)->getSearchHit()->getDocument();
                 $result = $xml->createElement('Result');
@@ -294,6 +277,6 @@ class SearchApi {
             }
         }
 
-        return array('code' => $statuscode, 'xml' => $xml->saveXML());
+        return $xml->saveXML();
     }
 }

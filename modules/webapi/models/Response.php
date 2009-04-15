@@ -34,23 +34,68 @@
  */
 
 /**
- * Controller for handling search specific requests.
+ * General class for responding webapi informations.
  */
-class Webapi_SearchController extends Controller_Rest {
+class Response {
 
     /**
-     * Perform a get search request.
+     * Holds webapi host name.
      *
-     * @see    library/Controller/Controller_Rest#getAction()
-     * @return void
+     * @var string
      */
-    public function getAction() {
-        $requestData = $this->requestData;
-        $search = new SearchApi($requestData);
+    protected $_hostname = '';
 
-        $search->search();
-        $this->getResponse()->setBody($search->getXMLResult());
-        $this->getResponse()->setHttpResponseCode($search->getResponseCode());
+    /**
+     * Holds webapi protocol schema.
+     *
+     * @var string
+     */
+    protected $_protocol = 'http://';
+
+    /**
+     * Holds response code information.
+     *
+     * @var int
+     */
+    protected $_responseCode = 200;
+
+    /**
+     * Holds a XML DOMDocument.
+     *
+     * @var DOMDocument
+     */
+    protected $_xml = '';
+
+    /**
+     * Contruction stuff.
+     */
+    public function __construct() {
+        // TODO: find a better Zend way of life
+        $this->_hostname = $_SERVER['HTTP_HOST'];
+
+        $this->_xml = new DOMDocument('1.0', 'utf-8');
+        $this->_xml->formatOutput = true;
     }
 
+    /**
+     * Returns setted response code.
+     * Default response code is set to 200.
+     *
+     * @return int
+     */
+    public function getResponseCode() {
+        return $this->_responseCode;
+    }
+
+    /**
+     * Set a new response code.
+     *
+     * @param int $codeNumer Response code number to set.
+     * @return void
+     */
+    public function setResponseCode($codeNumer) {
+        if ((true === is_int($codeNumer)) and ($codeNumer > 0)) {
+            $this->_responseCode = $codeNumer;
+        }
+    }
 }

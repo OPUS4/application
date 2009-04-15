@@ -47,13 +47,13 @@ class Webapi_DoctypeController extends Controller_Rest {
     public function getAction() {
         //
         $original_action = $this->requestData['original_action'];
+        $type = new Doctypes();
         if ((false === empty($original_action))
             and ('index' !== $original_action)) {
-            $type = new Doctypes();
             $this->getResponse()->setBody($type->getType($original_action));
         } else {
-            $list = new Doctypes();
-            $this->getResponse()->setBody($list->getAllTypes());
+            $this->getResponse()->setBody($type->getAllTypes());
         }
+        $this->getResponse()->setHttpResponseCode($type->getResponseCode());
     }
 }

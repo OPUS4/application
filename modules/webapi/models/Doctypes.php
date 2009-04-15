@@ -36,21 +36,7 @@
 /**
  * Loads a list of document types or present a specific type
  */
-class Doctypes {
-
-    /**
-     * Holds webapi host name.
-     *
-     * @var string
-     */
-    private $__hostname = '';
-
-    /**
-     * Holds webapi protocol schema.
-     *
-     * @var string
-     */
-    private $__protocol = 'http://';
+class Doctypes extends Response{
 
     /**
      * Holds path to xml doctype files.
@@ -162,9 +148,7 @@ class Doctypes {
             $this->__xml_path = $path;
         }
 
-        // TODO: find a better Zend way of life
-        $this->__hostname = $_SERVER['HTTP_HOST'];
-
+        parent::__construct();
     }
 
     /**
@@ -176,8 +160,7 @@ class Doctypes {
      */
     public function getType($typename) {
 
-        $xml = new DOMDocument('1.0', 'utf-8');
-        $xml->formatOutput = true;
+        $xml = $this->_xml;
 
         $filename = $this->__xml_path . $typename . '.xml';
         if (true === file_exists($filename)) {
@@ -191,6 +174,7 @@ class Doctypes {
         } else {
             $error_element = $xml->createElement('Error', 'Requested type is not available!');
             $xml->appendChild($error_element);
+            $this->setResponseCode(400);
         }
         return $xml->saveXML();;
     }
@@ -202,8 +186,7 @@ class Doctypes {
      */
     public function getAllTypes() {
         //
-        $xml = new DOMDocument('1.0', 'utf-8');
-        $xml->formatOutput = true;
+        $xml = $this->_xml;
 
         $typesList = $xml->createElement('TypesList');
         $typesList->setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
@@ -211,7 +194,7 @@ class Doctypes {
 
         $types = $this->_getXmlDocTypeFiles();
         $view = Zend_Layout::getMvcInstance()->getView();
-        $url = $this->__protocol . $this->__hostname . $view->url(array('controller' => 'doctypes', 'module' => 'webapi'), 'default', true);
+        $url = $this->_protocol . $this->_hostname . $view->url(array('controller' => 'doctype', 'module' => 'webapi'), 'default', true);
         foreach ($types as $type) {
             $entry = $xml->createElement('Type', $type);
             $entry->setAttribute('xlink:href', $url . '/' . $type);
