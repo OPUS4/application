@@ -232,4 +232,20 @@ class Search_SearchController extends Zend_Controller_Action
         $this->view->hitlist_paginator = $paginator;
         $this->render('search');
     }
+
+    /**
+     * Perform a get search request with an OpenSearch compliant result set.
+     *
+     * @return void
+     */
+    public function opensearchAction() {
+        $requestData = $this->_request->getParams();
+
+        $search = new OpenSearch($requestData['query']);
+
+        $result = $search->getRssResult();
+        $this->getResponse()->setHttpResponseCode($result['code']);
+        $this->getResponse()->setBody($result['xml']);
+    }
+
 }
