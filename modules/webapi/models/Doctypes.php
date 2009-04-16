@@ -164,16 +164,17 @@ class Doctypes extends Response{
 
         $filename = $this->__xml_path . $typename . '.xml';
         if (true === file_exists($filename)) {
+
             $type = new Opus_Document_Type($filename);
             $document = new Opus_Document(null, $type);
+
             $docxml = $xml->createElement('Document');
-            $docxml->setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
             $docxml->setAttribute('Type', $document->getType());
-            $xml->appendChild($docxml);
+            $this->_root->appendChild($docxml);
             $this->_convertModelForWebapi($document, $xml, $docxml);
         } else {
             $error_element = $xml->createElement('Error', 'Requested type is not available!');
-            $xml->appendChild($error_element);
+            $this->_root->appendChild($error_element);
             $this->setResponseCode(400);
         }
         return $xml->saveXML();;
@@ -189,8 +190,7 @@ class Doctypes extends Response{
         $xml = $this->_xml;
 
         $typesList = $xml->createElement('TypesList');
-        $typesList->setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
-        $xml->appendChild($typesList);
+        $this->_root->appendChild($typesList);
 
         $types = $this->_getXmlDocTypeFiles();
         $view = Zend_Layout::getMvcInstance()->getView();

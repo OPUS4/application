@@ -49,12 +49,20 @@ class Document extends Response {
         $docId = (int) $docId;
         try {
             $doc = new Opus_Document($docId);
-            $xml = $doc->toXml();
+            $xml2 = new Opus_Model_Xml();
+            $xml2->setModel($doc);
+            $xml2->excludeEmptyFields();
+            $resourceMap = array('Opus_Model_Dependent_Link_DocumentLicence' => 'licence');
+            $xml2->setResourceNameMap($resourceMap);
+            $view = Zend_Layout::getMvcInstance()->getView();
+            $baseUri = $this->_protocol . $this->_hostname . $view->url(array('module' => 'webapi'), 'default', true);
+            $xml2->setXlinkBaseUri($baseUri);
+            $xml = $xml2->getDomDocument();
         } catch (Opus_Model_Exception $e) {
             $xml = $this->_xml;
             $error = $xml->createElement('Error');
             $error->setAttribute('message', 'Invalid OpusId transmitted.');
-            $xml->appendChild($error);
+            $this->_root->appendChild($error);
             $this->setResponseCode(404);
         }
         return $xml->saveXML();
@@ -68,9 +76,9 @@ class Document extends Response {
     public function getAllDocuments() {
 
         $xml = $this->_xml;
+
         $resultlist = $xml->createElement('DocumentList');
-        $resultlist->setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
-        $xml->appendChild($resultlist);
+        $this->_root->appendChild($resultlist);
 
         $view = Zend_Layout::getMvcInstance()->getView();
         $url = $this->_protocol . $this->_hostname . $view->url(array('controller' => 'document', 'module' => 'webapi'), 'default', true);

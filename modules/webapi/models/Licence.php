@@ -50,15 +50,15 @@ class Licence extends Response {
         $licenceId = (int) $licenceId;
         try {
             $licence = new Opus_Licence($licenceId);
-            $result = $licence->toXml()->saveXML();
+            $result = $licence->toXml();
         } catch (Opus_Model_Exception $e) {
             $error = $this->_xml->createElement('Error');
             $error->setAttribute('message', 'Not a valid licence id.');
-            $this->_xml->appendChild($error);
+            $this->_root->appendChild($error);
             $this->setResponseCode(404);
-            $result = $this->_xml->saveXML();
+            $result = $this->_xml;
         }
-        return $result;
+        return $result->saveXML();
 
     }
 
@@ -68,12 +68,11 @@ class Licence extends Response {
      * @return string
      */
     public function getAllLicences() {
-        //
+
         $xml = $this->_xml;
 
         $licenceList = $xml->createElement('LicenceList');
-        $licenceList->setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
-        $xml->appendChild($licenceList);
+        $this->_root->appendChild($licenceList);
 
         $view = Zend_Layout::getMvcInstance()->getView();
         $url = $this->_protocol . $this->_hostname . $view->url(array('controller' => 'licence', 'module' => 'webapi'), 'default', true);

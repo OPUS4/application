@@ -240,11 +240,11 @@ class SearchApi extends Response {
         $xml = $this->_xml;
 
         $searchResult = $xml->createElement('SearchResult');
-        $searchResult->setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
-        $xml->appendChild($searchResult);
+        $this->_root->appendChild($searchResult);
 
         if (false === empty($this->__error_msg)) {
-            $error = $xml->createElement('Error', $this->__error_msg);
+            $error = $xml->createElement('Error');
+            $error->setAttribute('message', $this->__error_msg);
             $searchResult->appendChild($error);
             $this->setResponseCode(400);
             return $xml->saveXML();

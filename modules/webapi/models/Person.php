@@ -52,7 +52,7 @@ class Person extends Response {
             $xml = $person->toXml();
         } catch (Opus_Model_Exception $e) {
             $error = $xml->createElement('Error', 'Not a valid person id transmitted.');
-            $xml->appendChild($error);
+            $this->_root->appendChild($error);
             $this->setResponseCode(404);
         }
         return $xml->saveXML();

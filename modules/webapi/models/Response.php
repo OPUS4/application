@@ -60,6 +60,13 @@ class Response {
     protected $_responseCode = 200;
 
     /**
+     * Holds root entry point of xml structure.
+     *
+     * @var DOMElement
+     */
+    protected $_root = '';
+
+    /**
      * Holds a XML DOMDocument.
      *
      * @var DOMDocument
@@ -75,6 +82,9 @@ class Response {
 
         $this->_xml = new DOMDocument('1.0', 'utf-8');
         $this->_xml->formatOutput = true;
+        $this->_root = $this->_xml->createElement('Opus');
+        $this->_root->setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
+        $this->_xml->appendChild($this->_root);
     }
 
     /**
