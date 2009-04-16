@@ -26,41 +26,29 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category   Application
- * @package    Tests_Modules_Webapi
+ * @package    Module_Webapi
  * @author     Henning Gerhardt (henning.gerhardt@slub-dresden.de)
  * @copyright  Copyright (c) 2009, OPUS 4 development team
  * @license    http://www.gnu.org/licenses/gpl.html General Public License
  * @version    $Id$
  */
 
-require_once 'PHPUnit/Framework.php';
-
-require_once 'modules/webapi/DocumentTests.php';
-require_once 'modules/webapi/DoctypesTests.php';
-require_once 'modules/webapi/FileTests.php';
-require_once 'modules/webapi/LicenceTests.php';
-require_once 'modules/webapi/PersonTests.php';
-require_once 'modules/webapi/SearchTests.php';
-
 /**
- * Collect all webapi tests.
+ * Controller for handling REST requests of resource file.
  */
-class Modules_Webapi_AllTests {
+class Webapi_FileController extends Controller_Rest {
 
     /**
-     * Set up a test suite with all webapi tests.
+     * Get REST request. Returns metadata of a file.
      *
-     * @return mixed
+     * @see    library/Controller/Controller_Rest#getAction()
+     * @return void
      */
-    public static function suite() {
-        $suite = new PHPUnit_Framework_Testsuite('Opus Application Module: Webapi');
-        $suite->addTestSuite('Modules_Webapi_DocumentTests');
-        $suite->addTestSuite('Modules_Webapi_DoctypesTests');
-        $suite->addTestSuite('Modules_Webapi_FileTests');
-        $suite->addTestSuite('Modules_Webapi_LicenceTests');
-        $suite->addTestSuite('Modules_Webapi_PersonTests');
-        $suite->addTestSuite('Modules_Webapi_SearchTests');
-        return $suite;
-    }
+    public function getAction() {
 
+        $file = new File();
+        $result = $file->getFile($this->requestData['original_action']);
+        $this->getResponse()->setBody($result);
+        $this->getResponse()->setHttpResponseCode($file->getResponseCode());
+    }
 }

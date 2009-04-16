@@ -26,41 +26,39 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category   Application
- * @package    Tests_Modules_Webapi
+ * @package    Module_Webapi
  * @author     Henning Gerhardt (henning.gerhardt@slub-dresden.de)
  * @copyright  Copyright (c) 2009, OPUS 4 development team
  * @license    http://www.gnu.org/licenses/gpl.html General Public License
  * @version    $Id$
  */
 
-require_once 'PHPUnit/Framework.php';
-
-require_once 'modules/webapi/DocumentTests.php';
-require_once 'modules/webapi/DoctypesTests.php';
-require_once 'modules/webapi/FileTests.php';
-require_once 'modules/webapi/LicenceTests.php';
-require_once 'modules/webapi/PersonTests.php';
-require_once 'modules/webapi/SearchTests.php';
-
 /**
- * Collect all webapi tests.
+ * Methods for handling resource file.
  */
-class Modules_Webapi_AllTests {
+class File extends Response {
 
     /**
-     * Set up a test suite with all webapi tests.
+     * Returns informations about a specific file.
      *
-     * @return mixed
+     * @param mixed $fileId Requested file id.
+     * @return string
      */
-    public static function suite() {
-        $suite = new PHPUnit_Framework_Testsuite('Opus Application Module: Webapi');
-        $suite->addTestSuite('Modules_Webapi_DocumentTests');
-        $suite->addTestSuite('Modules_Webapi_DoctypesTests');
-        $suite->addTestSuite('Modules_Webapi_FileTests');
-        $suite->addTestSuite('Modules_Webapi_LicenceTests');
-        $suite->addTestSuite('Modules_Webapi_PersonTests');
-        $suite->addTestSuite('Modules_Webapi_SearchTests');
-        return $suite;
-    }
+    public function getFile($fileId) {
 
+        $fileId = (int) $fileId;
+
+        try {
+            $file = new Opus_File($fileId);
+            $xml = $file->toXml();
+            $deliver = $xml->createElement('Deliver');
+            $deliver->setAttribute('path', 'there/must/be/a/good/way/to/get/file/content/' . $file->getId());
+            $opusfile = $xml->getElementsByTagName('Opus_File')->item(0);
+            $opusfile->appendChild($deliver);
+        } catch (Opus_Model_Exception $e) {
+            $this->setError('Invalid file id submitted!', 404);
+            $xml = $this->_xml;
+        }
+        return $xml->saveXML();
+    }
 }
