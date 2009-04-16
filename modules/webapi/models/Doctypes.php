@@ -173,9 +173,7 @@ class Doctypes extends Response{
             $this->_root->appendChild($docxml);
             $this->_convertModelForWebapi($document, $xml, $docxml);
         } else {
-            $error_element = $xml->createElement('Error', 'Requested type is not available!');
-            $this->_root->appendChild($error_element);
-            $this->setResponseCode(400);
+            $this->setError('Requested type is not available!', 400);
         }
         return $xml->saveXML();;
     }

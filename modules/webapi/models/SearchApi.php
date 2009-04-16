@@ -243,10 +243,7 @@ class SearchApi extends Response {
         $this->_root->appendChild($searchResult);
 
         if (false === empty($this->__error_msg)) {
-            $error = $xml->createElement('Error');
-            $error->setAttribute('message', $this->__error_msg);
-            $searchResult->appendChild($error);
-            $this->setResponseCode(400);
+            $this->setError($this->__error_msg, 400);
             return $xml->saveXML();
         }
 

@@ -59,11 +59,8 @@ class Document extends Response {
             $xml2->setXlinkBaseUri($baseUri);
             $xml = $xml2->getDomDocument();
         } catch (Opus_Model_Exception $e) {
+            $this->setError('Invalid OpusId transmitted.', 404);
             $xml = $this->_xml;
-            $error = $xml->createElement('Error');
-            $error->setAttribute('message', 'Invalid OpusId transmitted.');
-            $this->_root->appendChild($error);
-            $this->setResponseCode(404);
         }
         return $xml->saveXML();
     }

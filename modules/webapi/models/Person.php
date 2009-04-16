@@ -51,9 +51,7 @@ class Person extends Response {
             $person = new Opus_Person($personId);
             $xml = $person->toXml();
         } catch (Opus_Model_Exception $e) {
-            $error = $xml->createElement('Error', 'Not a valid person id transmitted.');
-            $this->_root->appendChild($error);
-            $this->setResponseCode(404);
+            $this->setError('Not a valid person id transmitted.', 404);
         }
         return $xml->saveXML();
     }

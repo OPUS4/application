@@ -108,4 +108,21 @@ class Response {
             $this->_responseCode = $codeNumer;
         }
     }
+
+    /**
+     * Set a error message and a optional errorCode.
+     *
+     * @param string $errorMessage Text of error message.
+     * @param int    $errorCode    Response code for an error.
+     * @return void
+     */
+    public function setError($errorMessage, $errorCode) {
+        if (true === empty($errorMessage)) {
+            return;
+        }
+        $error = $this->_xml->createElement('Error');
+        $error->setAttribute('message', $errorMessage);
+        $this->_root->appendChild($error);
+        $this->setResponseCode($errorCode);
+    }
 }
