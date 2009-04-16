@@ -34,6 +34,22 @@
         <seg>Integrität dieses Dokuments</seg>
       </tuv>
     </tu>
+    <tu tuid="frontdoor_hash_existence">
+      <tuv xml:lang="en">
+        <seg>No hashvalues or signatures available for this document.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Für dieses Dokument liegen keine Hashwerte oder Signaturen vor.</seg>
+      </tuv>
+    </tu>
+    <tu tuid="frontdoor_filenumber">
+      <tuv xml:lang="en">
+        <seg>Number of files for this document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Anzahl der Dateien für dieses Dokument</seg>
+      </tuv>
+    </tu>
  
   </body>
 </tmx>
