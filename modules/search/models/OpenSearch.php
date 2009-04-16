@@ -25,7 +25,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Oai
+ * @package     Module_Search
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -71,21 +71,14 @@ class OpenSearch {
      * @return string Returns a OpenSearch-Result-XML-Document
      */
     public function getRssResult() {
-        $statuscode = 200;
-        $xml = new DOMDocument('1.0', 'utf-8');
-        $xml->formatOutput = true;
+    	
+    	$template = new RSSOutput();
+    	$result = $template->getTemplate($this->__hitlist, 'OpenSearch RSS Search Result');
+        $xml = $result['xmlobject'];
 
-        $searchResult = $xml->createElement('rss');
-        $searchResult->setAttribute('version', '2.0');
-        $searchResult->setAttribute('xmlns:opensearch', 'http://a9.com/-/spec/opensearch/1.1/');
-        $searchResult->setAttribute('xmlns:atom', 'http://www.w3.org/2005/Atom');
-        $xml->appendChild($searchResult);
-
-        if (false === empty($this->__error_msg)) {
-            $error = $xml->createElement('Error', $this->__error_msg);
-            $searchResult->appendChild($error);
-            return array('code' => 400, 'xml' => $xml->saveXML());
-        }
+        $searchResult = $xml->getElementsByTagName('rss');
+        $searchResult->item(0)->setAttribute('xmlns:opensearch', 'http://a9.com/-/spec/opensearch/1.1/');
+        $searchResult->item(0)->setAttribute('xmlns:atom', 'http://www.w3.org/2005/Atom');
 
         $hitlist = $this->__hitlist;
         $hitCount = $hitlist->count();
@@ -95,14 +88,12 @@ class OpenSearch {
         $hitlist_paginator->setCurrentPageNumber((($this->startOffset-1)/$this->itemsPerPage)+1);
         $hitlist_paginator->setItemCountPerPage($this->itemsPerPage);
 
-        $channel = $xml->createElement('channel');
-        $searchResult->appendChild($channel);
-
-        $title = $xml->createElement('title', 'OpenSearch RSS Search Result');
-        $channel->appendChild($title);
+        $channelItems = $xml->getElementsByTagName('channel');
+        $channel = $channelItems->item(0);
 
         $view = Zend_Layout::getMvcInstance()->getView();
 
+        // Add OpenSearch-specific Elements to RSS-Output
         $results = $xml->createElement('opensearch:totalResults', $hitCount);
         $channel->appendChild($results);
 
@@ -128,30 +119,7 @@ class OpenSearch {
         $search->setAttribute('startPage', ((($this->startOffset-1)/$this->itemsPerPage)+1));
         $channel->appendChild($search);
 
-        if (0 < $hitCount) {
-            foreach ($hitlist_paginator as $searchhit) {
-                $hit =  $searchhit->getSearchHit()->getDocument();
-                $result = $xml->createElement('item');
-                $channel->appendChild($result);
-                $url = $view->url(array('action' => 'index', 
-                                        'controller' => 'index', 
-                                        'module' => 'frontdoor',
-                                        'docId' => $hit['id']
-                                        ), 'default', true);
-                $linkElement = $xml->createElement('link', $_SERVER['HTTP_HOST'] . $url);
-                $result->appendChild($linkElement);
-                $titleElement = $xml->createElement('title', $hit['title']);
-                $result->appendChild($titleElement);
-                $authorElement = $xml->createElement('author', $hit['author']);
-                $result->appendChild($authorElement);
-                $abstractElement = $xml->createElement('description', $hit['abstract']);
-                $result->appendChild($abstractElement);
-                $yearElement = $xml->createElement('year', $hit['year']);
-                $result->appendChild($yearElement);
-            }
-        }
-
-        return array('code' => $statuscode, 'xml' => $xml->saveXML());
+        return array('code' => $result['code'], 'xml' => $xml->saveXML());
     }
 
     /**
