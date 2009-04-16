@@ -112,7 +112,7 @@ class Modules_Webapi_DoctypesTests extends PHPUnit_Framework_TestCase {
         $xml = new DOMDocument();
         $xml->loadXML($result->getBody());
         $error = $xml->getElementsByTagName('Error');
-        $this->assertEquals('Requested type is not available!', $error->item(0)->nodeValue, 'Wrong error message returned.');
+        $this->assertEquals('Requested type is not available!', $error->item(0)->getAttribute('message'), 'Wrong error message returned.');
     }
 
     /**
