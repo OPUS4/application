@@ -115,7 +115,7 @@ class Modules_Webapi_LicenceTests extends PHPUnit_Framework_TestCase {
      *
      * @return void
      */
-    public function testGetDocumentWithInvalidId() {
+    public function testGetLicenceWithInvalidId() {
         $restData = $this->__restClient->restGet($this->__restUrl . '/100000');
         $this->assertEquals(404, $restData->getStatus(), 'HTTP status should be 404 (File not found).');
         $xml = new DOMDocument();
