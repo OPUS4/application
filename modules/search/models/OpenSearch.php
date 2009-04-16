@@ -102,12 +102,6 @@ class OpenSearch {
         $channel->appendChild($title);
 
         $view = Zend_Layout::getMvcInstance()->getView();
-        $url = $view->url(array('action' => 'index', 'controller' => 'index', 'module' => 'frontdoor'), 'default', true);
-
-     /*<opensearch:startIndex>21</opensearch:startIndex>
-     <opensearch:itemsPerPage>10</opensearch:itemsPerPage>
-     <atom:link rel="search" type="application/opensearchdescription+xml" href="http://example.com/opensearchdescription.xml"/>
-     <opensearch:Query role="request" searchTerms="New York History" startPage="1" />*/
 
         $results = $xml->createElement('opensearch:totalResults', $hitCount);
         $channel->appendChild($results);
@@ -121,7 +115,11 @@ class OpenSearch {
         $openSearchDescriptionLink = $xml->createElement('atom:link');
         $openSearchDescriptionLink->setAttribute('rel', 'search');
         $openSearchDescriptionLink->setAttribute('type', 'application/opensearchdescription+xml');
-        $openSearchDescriptionLink->setAttribute('href', $_SERVER['HTTP_HOST'] . '/search/opensearch/description');
+        $descriptionurl = $view->url(array('action' => 'description', 
+                                        'controller' => 'opensearch', 
+                                        'module' => 'search'
+                                        ), 'default', true);
+        $openSearchDescriptionLink->setAttribute('href', $_SERVER['HTTP_HOST'] . $descriptionurl);
         $channel->appendChild($openSearchDescriptionLink);
 
         $search = $xml->createElement('opensearch:Query');
@@ -135,7 +133,12 @@ class OpenSearch {
                 $hit =  $searchhit->getSearchHit()->getDocument();
                 $result = $xml->createElement('item');
                 $channel->appendChild($result);
-                $linkElement = $xml->createElement('link', $url . '/docId/' . $hit['id']);
+                $url = $view->url(array('action' => 'index', 
+                                        'controller' => 'index', 
+                                        'module' => 'frontdoor',
+                                        'docId' => $hit['id']
+                                        ), 'default', true);
+                $linkElement = $xml->createElement('link', $_SERVER['HTTP_HOST'] . $url);
                 $result->appendChild($linkElement);
                 $titleElement = $xml->createElement('title', $hit['title']);
                 $result->appendChild($titleElement);
