@@ -43,7 +43,7 @@ class Webapi_PersonController extends Controller_Rest {
      * an error will be returned.
      * There will be never a list of all persons available.
      *
-     * @see   library/Controller/Controller_Rest#getAction()
+     * @see    library/Controller/Controller_Rest#getAction()
      * @return void
      */
     public function getAction() {

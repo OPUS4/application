@@ -55,7 +55,7 @@ class Response {
     /**
      * Holds response code information.
      *
-     * @var int
+     * @var integer
      */
     protected $_responseCode = 200;
 
@@ -91,7 +91,7 @@ class Response {
      * Returns setted response code.
      * Default response code is set to 200.
      *
-     * @return int
+     * @return integer
      */
     public function getResponseCode() {
         return $this->_responseCode;
@@ -100,7 +100,7 @@ class Response {
     /**
      * Set a new response code.
      *
-     * @param int $codeNumer Response code number to set.
+     * @param integer $codeNumer Response code number to set.
      * @return void
      */
     public function setResponseCode($codeNumer) {
@@ -112,8 +112,8 @@ class Response {
     /**
      * Set a error message and a optional errorCode.
      *
-     * @param string $errorMessage Text of error message.
-     * @param int    $errorCode    Response code for an error.
+     * @param string  $errorMessage Text of error message.
+     * @param integer $errorCode    Response code for an error.
      * @return void
      */
     public function setError($errorMessage, $errorCode) {
