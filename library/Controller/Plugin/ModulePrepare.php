@@ -135,13 +135,13 @@ class Controller_Plugin_ModulePrepare extends Zend_Controller_Plugin_Abstract {
 
 
 	/**
-	 * Hooks into dispatch loop startup to setup include path.
+	 * Hooks into preDispatch to setup include path for every request.
 	 *
 	 * @param Zend_Controller_Request_Abstract $request The request passed to the FrontController.
 	 * @return void
 	 *
 	 */
-	public function dispatchLoopStartup(Zend_Controller_Request_Abstract $request) {
+	public function preDispatch(Zend_Controller_Request_Abstract $request) {
 		$current_module = $request->getModuleName();
 		if ( array_key_exists($current_module, $this->_paths) === true ) {
 			$current_module_paths = $this->_paths[$current_module];
