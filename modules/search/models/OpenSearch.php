@@ -169,10 +169,10 @@ class OpenSearch {
         $atomurl = $view->url(array('module' => 'search',
                          'controller' => 'opensearch',
                          'action' => 'query',
-                         'q' => $this->__query,
+                         'q' => '{searchTerms}',
                          'format' => 'atom',
-                         'start' => $this->startOffset,
-                         'items' => $this->itemsPerPage
+                         'start' => '{startIndex}',
+                         'items' => '{count}'
                          ), null, true);
         $atomUrl->setAttribute('template', $_SERVER['HTTP_HOST'] . $atomurl);
         $searchResult->appendChild($atomUrl);
@@ -182,10 +182,10 @@ class OpenSearch {
         $rssurl = $view->url(array('module' => 'search',
                          'controller' => 'opensearch',
                          'action' => 'query',
-                         'q' => $this->__query,
+                         'q' => '{searchTerms}',
                          'format' => 'rss',
-                         'start' => $this->startOffset,
-                         'items' => $this->itemsPerPage
+                         'start' => '{startIndex}',
+                         'items' => '{count}'
                          ), null, true);
         $rssUrl->setAttribute('template', $_SERVER['HTTP_HOST'] . $rssurl);
         $searchResult->appendChild($rssUrl);
@@ -195,9 +195,9 @@ class OpenSearch {
         $htmlurl = $view->url(array('module' => 'search',
                          'controller' => 'search',
                          'action' => 'search',
-                         'query' => $this->__query,
-                         'start' => $this->startOffset,
-                         'items' => $this->itemsPerPage
+                         'query' => '{searchTerms}',
+                         'start' => '{startIndex}',
+                         'items' => '{count}'
                          ), null, true);
         $htmlUrl->setAttribute('template', $_SERVER['HTTP_HOST'] . $htmlurl);
         $searchResult->appendChild($htmlUrl);

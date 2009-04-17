@@ -64,6 +64,7 @@ class RSSOutput {
         if (0 < $hitCount) {
             foreach ($hitlist_paginator as $searchhit) {
                 $hit =  $searchhit->getSearchHit()->getDocument();
+                $doc = new Opus_Document($hit['id']);
                 $result = $xml->createElement('item');
                 $channel->appendChild($result);
                 $url = $view->url(array('action' => 'index', 
@@ -79,7 +80,7 @@ class RSSOutput {
                 $result->appendChild($authorElement);
                 $abstractElement = $xml->createElement('description', $hit['abstract']);
                 $result->appendChild($abstractElement);
-                $yearElement = $xml->createElement('year', $hit['year']);
+                $yearElement = $xml->createElement('pubDate', $doc->getServerDatePublished());
                 $result->appendChild($yearElement);
             }
         }
