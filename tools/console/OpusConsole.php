@@ -26,7 +26,6 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Opus_Console
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @author      Ralf Claussnitzer <ralf.claussnitzer@slub-dresden.de>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
@@ -47,7 +46,7 @@ require_once 'Application/Bootstrap.php';
 /**
  * Bootstraps and runs a console application.
  *
- * @category    Console
+ * @category    Application
  */
 class OpusConsole extends Application_Bootstrap {
 
