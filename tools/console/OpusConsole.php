@@ -37,7 +37,7 @@
 // Configure include path.
 set_include_path('.' . PATH_SEPARATOR
             . PATH_SEPARATOR . dirname(__FILE__)
-            . PATH_SEPARATOR . dirname(dirname(__FILE__)) . '/library'
+            . PATH_SEPARATOR . dirname(dirname(dirname(__FILE__))) . '/library'
             . PATH_SEPARATOR . get_include_path());
 
 // Zend_Loader is'nt available yet. We have to do a require_once
@@ -71,6 +71,11 @@ class OpusConsole extends Application_Bootstrap {
 
 // Start console
 $console = new OpusConsole;
-$console->run(dirname(dirname(__FILE__)), Opus_Bootstrap_Base::CONFIG_TEST,
-    dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'config');
+$console->run(
+    // application root directory
+    dirname(dirname(dirname(__FILE__))),
+    // config level
+    Opus_Bootstrap_Base::CONFIG_TEST,
+    // path to config file
+    dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'config');
 
