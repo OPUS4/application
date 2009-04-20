@@ -41,7 +41,7 @@ set_include_path('.' . PATH_SEPARATOR
 
 // Zend_Loader is'nt available yet. We have to do a require_once
 // in order to find the bootstrap class.
-require_once 'Application/Bootstrap.php';
+require_once 'Opus/Bootstrap/Base.php';
 
 /**
  * Bootstraps and runs the application.
@@ -95,8 +95,8 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
 }
 
 // start rewrite map
-$console = new OpusApacheRewritemap;
-$console->run(
+$rwmap = new OpusApacheRewritemap;
+$rwmap->run(
     // application root directory
     dirname(dirname(__FILE__)),
     // config level
