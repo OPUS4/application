@@ -21,8 +21,8 @@
  * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details. You should have received a copy of the GNU General Public License 
- * along with OPUS; if not, write to the Free Software Foundation, Inc., 51 
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
@@ -249,7 +249,7 @@ class Oai_IndexController extends Controller_Xml {
         $docId = substr(strrchr($oaiRequest['identifier'], ':'), 1);
         $document = new Opus_Document($docId);
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
-        $node = $this->_xml->importNode($document->toXml()->documentElement, true);
+        $node = $this->_xml->importNode($document->toXml()->getElementsByTagName('Opus_Document')->item(0), true);
         $this->_xml->documentElement->appendChild($node);
     }
 
@@ -289,7 +289,7 @@ class Oai_IndexController extends Controller_Xml {
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
         $documents = Opus_Document::getAll();
         foreach ($documents as $document) {
-            $node = $this->_xml->importNode($document->toXml()->documentElement, true);
+            $node = $this->_xml->importNode($document->toXml()->getElementsByTagName('Opus_Document')->item(0), true);
             $this->_xml->documentElement->appendChild($node);
         }
     }
