@@ -52,7 +52,10 @@ class Document extends Response {
             $xml2 = new Opus_Model_Xml();
             $xml2->setModel($doc);
             $xml2->excludeEmptyFields();
-            $resourceMap = array('Opus_Model_Dependent_Link_DocumentLicence' => 'licence');
+            $resourceMap = array(
+                'Opus_Licence' => 'licence',
+                'Opus_Person' => 'person',
+            );
             $xml2->setResourceNameMap($resourceMap);
             $view = Zend_Layout::getMvcInstance()->getView();
             $baseUri = $this->_protocol . $this->_hostname . $view->url(array('module' => 'webapi'), 'default', true);
