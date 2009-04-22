@@ -297,6 +297,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
     protected function _setupLanguageList() {
         $registry = Zend_Registry::getInstance();
         $availableLanguages = Opus_Language::getAllActive();
+        $languages = array();
         foreach ($availableLanguages as $availableLanguage) {
             $languages[$availableLanguage->getId()] = $availableLanguage->getDisplayName();
         }
