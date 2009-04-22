@@ -52,4 +52,43 @@ class Webapi_PersonController extends Controller_Rest {
         $this->getResponse()->setBody($result);
         $this->getResponse()->setHttpResponseCode($person->getResponseCode());
     }
+
+    /**
+     * Add a new person to database.
+     *
+     * @see library/Controller/Controller_Rest#putAction()
+     */
+    public function putAction() {
+        $rawBody = $this->getRequest()->getRawBody();
+        $person = new Person();
+        $result = $person->addNewPerson($rawBody);
+        $this->getResponse()->setBody($result);
+        $this->getResponse()->setHttpResponseCode($person->getResponseCode());
+    }
+
+    /**
+     * Update person data.
+     *
+     * @see library/Controller/Controller_Rest#postAction()
+     */
+    public function postAction() {
+        $personId = $this->requestData['original_action'];
+        $rawBody = $this->getRequest()->getRawBody();
+        $person = new Person();
+        $result = $person->update($personId, $rawBody);
+        $this->getResponse()->setBody($result);
+        $this->getResponse()->setHttpResponseCode($person->getResponseCode());
+    }
+
+    /**
+     * Delete a person.
+     *
+     * @see library/Controller/Controller_Rest#deleteAction()
+     */
+    public function deleteAction() {
+        $personId = $this->requestData['original_action'];
+        $person = new Person();
+        $result = $person->delete($personId);
+        $this->getResponse()->setHttpResponseCode($person->getResponseCode());
+    }
 }
