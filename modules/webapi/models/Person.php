@@ -55,4 +55,66 @@ class Person extends Response {
         }
         return $xml->saveXML();
     }
+
+    /**
+     * Adds a new person data set.
+     *
+     * @param string $xmlData XML person data
+     * @return string
+     */
+    public function addNewPerson($xmlData) {
+        $xml = $this->_xml;
+        try {
+            $person = Opus_Person::fromXml($xmlData);
+            $personId = $person->store();
+            $personXml = $xml->createElement('Opus_Person_Id', $personId);
+            $this->_root->appendChild($personXml);
+        } catch(Exception $e) {
+            $this->setError('Invalid person data transmitted.', 402);
+        }
+        return $xml->saveXML();
+    }
+
+    /**
+     * Updates person data.
+     *
+     * @param mixed $personId    Holds person id.
+     * @param string $updateData Holds a complete xml string of update data.
+     * @return string
+     */
+    public function update($personId, $updateData) {
+
+        $xml = $this->_xml;
+        $personId = (int) $personId;
+        try {
+            $person = new Opus_Person($personId);
+            $omx = new Opus_Model_Xml();
+            $omx->setModel($person);
+            $omx->updateFromXml($updateData);
+            $person->store();
+            $personXml = $xml->createElement('Opus_Person_Info', 'Update was sucessfull.');
+            $this->_root->appendChild($personXml);
+        } catch (Exception $e) {
+            $this->setError('Invalid data transmitted.', 402);
+        }
+
+        return $xml->saveXML();
+    }
+
+    /**
+     * Deletes a person from database.
+     *
+     * @param mixed $personId Id of person to delete.
+     * @return void
+     */
+    public function delete($personId) {
+
+        $personId = (int) $personId;
+        try {
+            $person = new Opus_Person($personId);
+            $person->delete();
+        } catch (Exception $e) {
+            $this->setResponseCode(404);
+        }
+    }
 }

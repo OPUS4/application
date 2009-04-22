@@ -109,4 +109,116 @@ class Modules_Webapi_PersonTests extends PHPUnit_Framework_TestCase {
         $error = $xml->getElementsByTagName('Error');
         $this->assertNotNull($error->item(0)->nodeValue, 'Error element should not be empty.');
     }
+
+    /**
+     * Test for adding a new person.
+     *
+     * @return void
+     */
+    public function testPutPersonData() {
+        $putData = '<?xml version="1.0" encoding="utf-8"?>
+                    <Opus xmlns:xlink="http://www.w3.org/1999/xlink"><Opus_Person DateOfBirth="2009-01-01" PlaceOfBirth="Dresden" FirstName="Test" LastName="Tester"/></Opus>';
+
+        $restData = $this->__restClient->restPut($this->__restUrl, $putData);
+
+        $this->assertEquals(200, $restData->getStatus(), 'HTTP status should be 200 (OK).');
+        $xml = new DOMDocument();
+        $xml->loadXML($restData->getRawBody());
+        $personTag = $xml->getElementsByTagName('Opus_Person_Id');
+        $this->assertEquals(1, $personTag->length);
+        $personId = $personTag->item(0)->nodeValue;
+        $this->assertNotNull($personId, 'It should be a person id transmitted.');
+
+    }
+
+    /**
+     * Test for adding a new person with invalid data.
+     *
+     * @return void
+     */
+    public function testPutInvalidPersonData() {
+
+        $putData = '<?xml version="1.0" encoding="utf-8"?>
+                    <Opus xmlns:xlink="http://www.w3.org/1999/xlink"><OpusPerson 1stName="Test" 8stName="Tester"/></Opus>';
+
+        $restData = $this->__restClient->restPut($this->__restUrl, $putData);
+
+        $this->assertEquals(402, $restData->getStatus(), 'HTTP status should be 404.');
+        $xml = new DOMDocument();
+        $xml->loadXML($restData->getRawBody());
+        $error = $xml->getElementsByTagName('Error');
+        $this->assertNotNull($error->item(0)->nodeValue, 'Error element should not be empty.');
+    }
+
+    /**
+     * Test for deleting a person.
+     *
+     * @return void
+     */
+    public function testDeletePerson() {
+        $this->markTestSkipped('Skipped because of hard coding person id.');
+        $restData = $this->__restClient->restDelete($this->__restUrl . '/37');
+        $this->assertEquals(200, $restData->getStatus(), 'Expected a 200 HTTP response on successful deleting a document.');
+    }
+
+    /**
+     * Test for deleting a person with an invalid numeric id.
+     *
+     * @return void
+     */
+    public function testDeletePersonWithInvalidId() {
+        $restData = $this->__restClient->restDelete($this->__restUrl . '/0');
+        $this->assertEquals(404, $restData->getStatus(), 'Expected a 400 HTTP response.');
+    }
+
+    /**
+     * Test for deleting a person with an non-numeric id.
+     *
+     * @return void
+     */
+    public function testDeletePersonWithInvalidNonNumericId() {
+        $restData = $this->__restClient->restDelete($this->__restUrl . '/add');
+        $this->assertEquals(404, $restData->getStatus(), 'Expected a 404 HTTP response.');
+    }
+
+    /**
+     * Test for updating existing person data.
+     *
+     * @return void
+     */
+    public function testPostPersonData() {
+        $this->markTestSkipped('Skipped because update method not included in model.');
+        $putData = '<?xml version="1.0" encoding="utf-8"?>
+                    <Opus xmlns:xlink="http://www.w3.org/1999/xlink"><Opus_Person DateOfBirth="2009-01-01" PlaceOfBirth="Dresden" FirstName="Test" LastName="Tester"/></Opus>';
+
+        $postData = '<?xml version="1.0" encoding="utf-8"?>
+                    <Opus xmlns:xlink="http://www.w3.org/1999/xlink"><Opus_Person PlaceOfBirth="Berlin" FirstName="Test" LastName="Tester"/></Opus>';
+
+        $restData = $this->__restClient->restPut($this->__restUrl, $putData);
+        $xml = new DOMDocument();
+        $xml->loadXML($restData->getRawBody());
+        $personTag = $xml->getElementsByTagName('Opus_Person_Id');
+        $this->assertEquals(1, $personTag->length);
+        $personId = $personTag->item(0)->nodeValue;
+
+        $restData2 = $this->__restClient->restPost($this->__restUrl . '/' . $personId, $postData);
+        $this->assertEquals(200, $restData->getStatus(), 'HTTP status should be 200 (OK).');
+        $xml2 = new DOMDocument();
+        $xml->loadXML($restData2->getRawBody());
+        $personTag = $xml->getElementsByTagName('Opus_Person_Info');
+        $this->assertEquals(1, $personTag->length, 'There should be an Opus_Person_Info tag.');
+        $updateMessage = $personId = $personTag->item(0)->nodeValue;
+        $this->assertNotNull($updateMessage, 'There should be an update message');
+
+    }
+
+    /**
+     * Test for updating person data with invalid id.
+     *
+     * @return void
+     */
+    public function testPostPersonWithInvalidId() {
+        $restData = $this->__restClient->restPost($this->__restUrl . '/0', '<emptyString />');
+        $this->assertEquals(402, $restData->getStatus(), 'Expected a 402 HTTP response.');
+    }
 }
