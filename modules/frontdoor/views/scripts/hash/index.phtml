@@ -3,17 +3,35 @@
 <h1><?= $this-> translate('frontdoor_pagetitle') ?></h1><hr />
 <h2><?= $this-> translate('frontdoor_hashtitle') ?></h2>
 <p><b><?= $this->title;?></b></p>
-<p><?= $this-> translate('frontdoor_filenumber')?>: <?= $this->filenumber?></p><br />
+<p><?= $this-> translate('frontdoor_filenumber')?>: <?= $this->fileNumber?></p><hr />
+
 <? if ($this->first_hash !== NULL)
-   {?>
-
-     <p><b>Typ: </b> <?= $this->hash0_type?></p>
-     <p><b>Wert: </b> <?= $this->hash0?></p><br />
-     <p><b>Typ: </b> <?= $this->hash1_type?></p>
-     <p><b>Wert: </b> <?= $this->hash1?></p><br />
-
-
- <?}
+   {
+      for ($i = 0; $i < $this->fileNumber; $i++)
+      {
+         if (array_key_exists ($i, $this->hashLabel) === true)
+         {
+            $value = $this->hashLabel[$i];?>
+            <p><b><?= $this->translate('File');?>: </b><?= $this->value = $value?></p>
+          <?$hashes = $this->document->getFile($i)->getHashValue();
+            $hashNumber = count($hashes);
+            for ($j = 0; $j < $hashNumber; $j++)
+            {
+               if (array_key_exists ('hashType_' .$i. '_' .$j, $this->hashValueType) === true)
+               {
+                  $value = $this->hashValueType['hashType_' .$i. '_' .$j];?>
+                  <p><b><?= $this->translate('HashType');?>: </b> <?= $this->value = $value?></p>
+             <?}
+               if (array_key_exists ('hashValue_' .$i. '_' .$j, $this->hashValueType) === true)
+               {
+                  $value = $this->hashValueType['hashValue_' .$i. '_' .$j];?>
+                  <p><b><?= $this->translate('HashValue');?>: </b> <?= $this->value = $value?></p>
+             <?}
+            }?>
+            <hr /><?
+            }
+       }
+   }
    else
    {?>
       <p><?$this-> translate('frontdoor_hash_existence');?></p><?
