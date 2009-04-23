@@ -46,6 +46,7 @@ $xml = new DOMDocument;
 $xml->load($args[2]);
 
 $proc = new XSLTProcessor;
+$proc->registerPhpFunctions();
 $proc->importStyleSheet($xslt);
 
 error_reporting(0);
