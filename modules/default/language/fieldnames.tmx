@@ -36,10 +36,26 @@
     </tu>
     <tu tuid="File">
       <tuv xml:lang="en">
-        <seg>File(s)</seg>
+        <seg>File</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Datei(en)</seg>
+        <seg>Datei</seg>
+      </tuv>
+    </tu>
+    <tu tuid="HashType">
+      <tuv xml:lang="en">
+        <seg>Hashtype</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Hashtyp</seg>
+      </tuv>
+    </tu>
+    <tu tuid="HashValue">
+      <tuv xml:lang="en">
+        <seg>Hashvalue</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Hashwert</seg>
       </tuv>
     </tu>
     <tu tuid="POD">
@@ -186,15 +202,7 @@
         <seg>Dokumentart</seg>
       </tuv>
      </tu>
-     <tu tuid="Type">
-      <tuv xml:lang="en">
-        <seg>Document Type</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Dokumentart</seg>
-      </tuv>
-     </tu>
-    <tu tuid="SubjectSwd">
+     <tu tuid="SubjectSwd">
       <tuv xml:lang="en">
         <seg>SWD-Keyword</seg>
       </tuv>
