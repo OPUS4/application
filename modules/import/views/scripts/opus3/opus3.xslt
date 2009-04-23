@@ -81,16 +81,16 @@
                         <xsl:text>monograph</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='5'">
-                        <xsl:text>book section</xsl:text>
+                        <xsl:text>book_section</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='7'">
-                        <xsl:text>master thesis</xsl:text>
+                        <xsl:text>master_thesis</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='8'">
-                        <xsl:text>doctoral thesis</xsl:text>
+                        <xsl:text>doctoral_thesis</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='9'">
-                        <xsl:text>honour thesis</xsl:text>
+                        <xsl:text>honour_thesis</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='11'">
                         <xsl:text>journal</xsl:text>
@@ -99,13 +99,13 @@
                         <xsl:text>conference</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='16'">
-                        <xsl:text>conference item</xsl:text>
+                        <xsl:text>conference_item</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='17'">
                         <xsl:text>paper</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='19'">
-                        <xsl:text>study paper</xsl:text>
+                        <xsl:text>study_paper</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='20'">
                         <xsl:text>report</xsl:text>
@@ -117,10 +117,10 @@
                         <xsl:text>other</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='24'">
-                        <xsl:text>habil thesis</xsl:text>
+                        <xsl:text>habil_thesis</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='25'">
-                        <xsl:text>bachelor thesis</xsl:text>
+                        <xsl:text>bachelor_thesis</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='26'">
                         <xsl:text>lecture</xsl:text>
