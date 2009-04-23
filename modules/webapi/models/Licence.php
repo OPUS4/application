@@ -52,7 +52,7 @@ class Licence extends Response {
             $licence = new Opus_Licence($licenceId);
             $result = $licence->toXml();
         } catch (Opus_Model_Exception $e) {
-            $this->setError('Not a valid licence id.', 404);
+            $this->setError('An error occurs during getting informations. Error reason: ' . $e->getMessage(), 404);
             $result = $this->_xml;
         }
         return $result->saveXML();

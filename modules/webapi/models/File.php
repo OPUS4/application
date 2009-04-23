@@ -56,7 +56,7 @@ class File extends Response {
             $opusfile = $xml->getElementsByTagName('Opus_File')->item(0);
             $opusfile->appendChild($deliver);
         } catch (Opus_Model_Exception $e) {
-            $this->setError('Invalid file id submitted!', 404);
+            $this->setError('An error occurs during getting informations. Error reason: ' . $e->getMessage(), 404);
             $xml = $this->_xml;
         }
         return $xml->saveXML();

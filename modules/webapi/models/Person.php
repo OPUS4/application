@@ -51,7 +51,7 @@ class Person extends Response {
             $person = new Opus_Person($personId);
             $xml = $person->toXml();
         } catch (Opus_Model_Exception $e) {
-            $this->setError('Not a valid person id transmitted.', 404);
+            $this->setError('An error occurs during getting informations. Error reason: ' . $e->getMessage(), 404);
         }
         return $xml->saveXML();
     }
@@ -70,7 +70,7 @@ class Person extends Response {
             $personXml = $xml->createElement('Opus_Person_Id', $personId);
             $this->_root->appendChild($personXml);
         } catch(Exception $e) {
-            $this->setError('Invalid person data transmitted.', 402);
+            $this->setError('An error occurs during adding a person. Error reason: ' . $e->getMessage(), 402);
         }
         return $xml->saveXML();
     }
@@ -95,7 +95,7 @@ class Person extends Response {
             $personXml = $xml->createElement('Opus_Person_Info', 'Update was sucessfull.');
             $this->_root->appendChild($personXml);
         } catch (Exception $e) {
-            $this->setError('Invalid data transmitted.', 402);
+            $this->setError('An error occurs during updating person informations. Error reason: ' . $e->getMessage(), 402);
         }
 
         return $xml->saveXML();

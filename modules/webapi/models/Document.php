@@ -54,7 +54,7 @@ class Document extends Response {
             $xml2->excludeEmptyFields();
             $resourceMap = array(
                 'Opus_Licence' => 'licence',
-                'Opus_Person' => 'person',
+
             );
             $xml2->setResourceNameMap($resourceMap);
             $view = Zend_Layout::getMvcInstance()->getView();
@@ -62,7 +62,7 @@ class Document extends Response {
             $xml2->setXlinkBaseUri($baseUri);
             $xml = $xml2->getDomDocument();
         } catch (Opus_Model_Exception $e) {
-            $this->setError('Invalid OpusId transmitted.', 404);
+            $this->setError('An error occurs during getting informations. Error reason: ' . $e->getMessage(), 404);
             $xml = $this->_xml;
         }
         return $xml->saveXML();
