@@ -147,7 +147,7 @@ class XMLImport
 	 */
 	 public function getLicence($shortName)
 	 {
-	 	$fp = file('../workspace/licenseMapping.txt');
+	 	$fp = file('../workspace/tmp/licenseMapping.txt');
 		foreach ($fp as $licence) {
 			$mappedLicence = split("\ ", $licence);
 			$lic[$mappedLicence[0]] = $mappedLicence[1];
@@ -174,7 +174,7 @@ class XMLImport
 	}
 	
 	protected function writeNotation($ddcNotation) {
-	    $fp = fopen('../workspace/ddcMapping.txt', 'a');
+	    $fp = fopen('../workspace/tmp/ddcMapping.txt', 'a');
 	    fputs($fp, $ddcNotation->getNumber() . ' ' . $ddcNotation->getId() . "\n");
 	    fclose($fp);
 	}
@@ -187,7 +187,7 @@ class XMLImport
 	 */
 	protected function mapDdc($data)
 	{
-	 	$fp = file('../workspace/ddcMapping.txt');
+	 	$fp = file('../workspace/tmp/ddcMapping.txt');
 		foreach ($fp as $licence) {
 			$mappedLicence = split("\ ", $licence);
 			$lic[$mappedLicence[0]] = $mappedLicence[1];

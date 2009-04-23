@@ -308,10 +308,10 @@ class Opus3MigrationParameters extends Opus3Migration
 
 		// cleaning: remove licence mapping file
 		if (true === in_array('licences', $this->whatToDo)) {
-		    unlink('../workspace/licenseMapping.txt');
+		    unlink('../workspace/tmp/licenseMapping.txt');
 		}
 		if (true === in_array('metadata', $this->whatToDo)) {
-		    unlink('../workspace/ddcMapping.txt');
+		    unlink('../workspace/tmp/ddcMapping.txt');
 		}    	
     }
 }
@@ -394,10 +394,10 @@ class Opus3MigrationReadline extends Opus3Migration {
 
 		// cleaning: remove licence mapping file
 		if ($licenceinput === 'y' || $licenceinput === 'yes') {
-		    unlink('../workspace/licenseMapping.txt');
+		    unlink('../workspace/tmp/licenseMapping.txt');
 		}
 		if ($metadatainput === 'y' || $metadatainput === 'yes') {
-		    unlink('../workspace/ddcMapping.txt');
+		    unlink('../workspace/tmp/ddcMapping.txt');
 		}
     }	
 }

@@ -53,15 +53,15 @@ class CollectionsImport
             	// Works!
             	echo "Importing Bk...";
             	// Importing via XML
-            	#if (false === file_exists('/tmp/bk.xml'))
+            	#if (false === file_exists('../workspace/tmp/bk.xml'))
             	#{
             	    #$bkPrepare = $this->convertBk($tempdoc, $tablename);
-            	    #$bk = fopen('/tmp/bk.xml', 'w');
+            	    #$bk = fopen('../workspace/tmp/bk.xml', 'w');
             	    #fputs($bk, $bkPrepare->saveXml());
             	    #fclose($bk);
             	#}
             	#else {
-            	#	$bkRead = file('/tmp/bk.xml');
+            	#	$bkRead = file('../workspace/tmp/bk.xml');
             	#	$bkPrepare = implode("", $bkRead);
             	#}
             	#$importit = Opus_CollectionRole::fromXml($bkPrepare);
@@ -72,15 +72,15 @@ class CollectionsImport
             if (strtolower(substr($tablename, 0, 3)) === 'ccs') {
             	// Works!
             	echo "Importing CCS...";
-            	#if (false === file_exists('/tmp/ccs.xml'))
+            	#if (false === file_exists('../workspace/tmp/ccs.xml'))
             	#{
             	#    $ccsPrepare = $this->convertCcs($tempdoc, $tablename);
-            	#    $bk = fopen('/tmp/ccs.xml', 'w');
+            	#    $bk = fopen('../workspace/tmp/ccs.xml', 'w');
             	#    fputs($bk, $bkPrepare->saveXml());
             	#    fclose($bk);
             	#}
             	#else {
-            	#	$bkRead = file('/tmp/ccs.xml');
+            	#	$bkRead = file('../workspace/tmp/ccs.xml');
             	#	$ccsPrepare = implode("", $bkRead);
             	#}
             	#$importit = Opus_CollectionRole::fromXml($ccsPrepare);
