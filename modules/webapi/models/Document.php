@@ -54,7 +54,7 @@ class Document extends Response {
             $xml2->excludeEmptyFields();
             $resourceMap = array(
                 'Opus_Licence' => 'licence',
-
+                'Opus_Person' => 'person',
             );
             $xml2->setResourceNameMap($resourceMap);
             $view = Zend_Layout::getMvcInstance()->getView();
