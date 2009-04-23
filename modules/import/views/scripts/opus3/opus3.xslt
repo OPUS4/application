@@ -307,7 +307,7 @@
         <xsl:if test="string-length(.)>0">
             <xsl:element name="SubjectSwd">
                 <xsl:attribute name="Language">
-                    <xsl:text>deu</xsl:text>
+                    <xsl:call-template name="mapLanguage"><xsl:with-param name="lang">ger</xsl:with-param></xsl:call-template>
                 </xsl:attribute>
                 <xsl:attribute name="Value">
                     <xsl:value-of select="." />
@@ -321,7 +321,7 @@
         <xsl:if test="string-length(.)>0">
             <xsl:element name="SubjectUncontrolled">
                 <xsl:attribute name="Language">
-                    <xsl:text>eng</xsl:text>
+                    <xsl:call-template name="mapLanguage"><xsl:with-param name="lang">eng</xsl:with-param></xsl:call-template>
                 </xsl:attribute>
                 <xsl:attribute name="Value">
                     <xsl:value-of select="." />
@@ -335,7 +335,7 @@
         <xsl:if test="string-length(.)>0">
             <xsl:element name="SubjectUncontrolled">
                 <xsl:attribute name="Language">
-                    <xsl:text>deu</xsl:text>
+                    <xsl:call-template name="mapLanguage"><xsl:with-param name="lang">ger</xsl:with-param></xsl:call-template>
                 </xsl:attribute>
                 <xsl:attribute name="Value">
                     <xsl:value-of select="." />
@@ -351,7 +351,7 @@
         <xsl:if test="string-length(/mysqldump/database/table_data[@name=$subject_table]/row[field[@name='source_opus']=$source_id]/field[@name='class'])>0">
             <xsl:element name="{$subject_object}">
                 <xsl:attribute name="Language">
-                    <xsl:text>deu</xsl:text>
+                    <xsl:call-template name="mapLanguage"><xsl:with-param name="lang">ger</xsl:with-param></xsl:call-template>
                 </xsl:attribute>
                 <xsl:attribute name="Value">
                     <xsl:value-of select="/mysqldump/database/table_data[@name=$subject_table]/row[field[@name='source_opus']=$source_id]/field[@name='class']" />
@@ -375,7 +375,7 @@
         <xsl:if test="string-length(.)>0">
             <xsl:element name="TitleMain">
                 <xsl:attribute name="Language">
-                    <xsl:text>eng</xsl:text>
+                    <xsl:call-template name="mapLanguage"><xsl:with-param name="lang">eng</xsl:with-param></xsl:call-template>
                 </xsl:attribute>
                 <xsl:attribute name="Value">
                     <xsl:value-of select="." />
@@ -411,7 +411,7 @@
         <xsl:if test="string-length(field[@name='title_de'])>0">
             <xsl:element name="TitleMain">
                 <xsl:attribute name="Language">
-                    <xsl:text>deu</xsl:text>
+                    <xsl:call-template name="mapLanguage"><xsl:with-param name="lang">ger</xsl:with-param></xsl:call-template>
                 </xsl:attribute>
                 <xsl:attribute name="Value">
                     <xsl:value-of select="field[@name='title_de']" />
