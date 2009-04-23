@@ -28,10 +28,10 @@
     </tu>
     <tu tuid="frontdoor_hashtitle">
       <tuv xml:lang="en">
-        <seg>Integrity of this document</seg>
+        <seg>Integrity of this document (hashvalues and hashtypes)</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Integrität dieses Dokuments</seg>
+        <seg>Integrität dieses Dokuments (Hashwerte und -typen)</seg>
       </tuv>
     </tu>
     <tu tuid="frontdoor_hash_existence">
