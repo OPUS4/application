@@ -79,7 +79,7 @@ class LicenceImport
            		if ($field->getAttribute('name') === 'active') $lic->setActive($field->nodeValue);
            		if ($field->getAttribute('name') === 'sort') $lic->setSortOrder($field->nodeValue);
            		if ($field->getAttribute('name') === 'pod_allowed') $lic->setPodAllowed($field->nodeValue);
-           		if ($field->getAttribute('name') === 'language') $lic->setLanguage($field->nodeValue);
+           		if ($field->getAttribute('name') === 'language') $lic->setLanguage($this->mapLanguage($field->nodeValue));
            		if ($field->getAttribute('name') === 'link') $lic->setLinkLicence($field->nodeValue);
            		if ($field->getAttribute('name') === 'link_tosign') $lic->setLinkSign($field->nodeValue);
            		if ($field->getAttribute('name') === 'desc_html') $lic->setDescMarkup($field->nodeValue);
@@ -92,6 +92,26 @@ class LicenceImport
 		return $licenses;
 	}
 
+    private function mapLanguage($lang) {
+    	switch ($lang) {
+            case 'ger':
+                return 'deu';
+                break;
+            case 'eng':
+                return 'eng';
+                break;
+            case 'fre':
+                return 'fra';
+                break;
+            case 'rus':
+                return 'rus';
+                break;
+            default:
+                return 'eng';
+                break;
+    	}
+    }
+    
 	/**
 	 * Converts Bk-classification to Opus4
 	 *

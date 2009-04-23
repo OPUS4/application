@@ -234,16 +234,16 @@
     <xsl:template name="mapLanguage">
         <xsl:param name="lang" required="yes" />
         <xsl:if test="$lang='ger'">
-            <xsl:text>de</xsl:text>
+            <xsl:text>deu</xsl:text>
         </xsl:if>
         <xsl:if test="$lang='eng'">
-            <xsl:text>en</xsl:text>
+            <xsl:text>eng</xsl:text>
         </xsl:if>
         <xsl:if test="$lang='fre'">
-            <xsl:text>fr</xsl:text>
+            <xsl:text>fra</xsl:text>
         </xsl:if>
         <xsl:if test="$lang='rus'">
-            <xsl:text>ru</xsl:text>
+            <xsl:text>rus</xsl:text>
         </xsl:if>
         <xsl:if test="$lang='mul'">
             <xsl:text></xsl:text>
@@ -307,7 +307,7 @@
         <xsl:if test="string-length(.)>0">
             <xsl:element name="SubjectSwd">
                 <xsl:attribute name="Language">
-                    <xsl:text>ger</xsl:text>
+                    <xsl:text>deu</xsl:text>
                 </xsl:attribute>
                 <xsl:attribute name="Value">
                     <xsl:value-of select="." />
@@ -335,7 +335,7 @@
         <xsl:if test="string-length(.)>0">
             <xsl:element name="SubjectUncontrolled">
                 <xsl:attribute name="Language">
-                    <xsl:text>ger</xsl:text>
+                    <xsl:text>deu</xsl:text>
                 </xsl:attribute>
                 <xsl:attribute name="Value">
                     <xsl:value-of select="." />
@@ -351,7 +351,7 @@
         <xsl:if test="string-length(/mysqldump/database/table_data[@name=$subject_table]/row[field[@name='source_opus']=$source_id]/field[@name='class'])>0">
             <xsl:element name="{$subject_object}">
                 <xsl:attribute name="Language">
-                    <xsl:text>ger</xsl:text>
+                    <xsl:text>deu</xsl:text>
                 </xsl:attribute>
                 <xsl:attribute name="Value">
                     <xsl:value-of select="/mysqldump/database/table_data[@name=$subject_table]/row[field[@name='source_opus']=$source_id]/field[@name='class']" />
@@ -364,7 +364,7 @@
     <xsl:template match="table_data[@name='opus']/row/field[@name='title']">
         <xsl:element name="TitleMain">
             <xsl:attribute name="Language">
-                <xsl:value-of select="../field[@name='language']" />
+                <xsl:call-template name="mapLanguage"><xsl:with-param name="lang"><xsl:value-of select="../field[@name='language']" /></xsl:with-param></xsl:call-template>
             </xsl:attribute>
             <xsl:attribute name="Value">
                 <xsl:value-of select="." />
@@ -387,7 +387,7 @@
         <xsl:if test="string-length(.)>0">
             <xsl:element name="TitleAbstract">
                 <xsl:attribute name="Language">
-                    <xsl:value-of select="../field[@name='description_lang']" />
+                    <xsl:call-template name="mapLanguage"><xsl:with-param name="lang"><xsl:value-of select="../field[@name='description_lang']" /></xsl:with-param></xsl:call-template>
                 </xsl:attribute>
                 <xsl:attribute name="Value">
                     <xsl:value-of select="." />
@@ -399,7 +399,7 @@
         <xsl:if test="string-length(.)>0">
             <xsl:element name="TitleAbstract">
                 <xsl:attribute name="Language">
-                    <xsl:value-of select="../field[@name='description2_lang']" />
+                    <xsl:call-template name="mapLanguage"><xsl:with-param name="lang"><xsl:value-of select="../field[@name='description2_lang']" /></xsl:with-param></xsl:call-template>
                 </xsl:attribute>
                 <xsl:attribute name="Value">
                     <xsl:value-of select="." />
@@ -411,7 +411,7 @@
         <xsl:if test="string-length(field[@name='title_de'])>0">
             <xsl:element name="TitleMain">
                 <xsl:attribute name="Language">
-                    <xsl:text>ger</xsl:text>
+                    <xsl:text>deu</xsl:text>
                 </xsl:attribute>
                 <xsl:attribute name="Value">
                     <xsl:value-of select="field[@name='title_de']" />

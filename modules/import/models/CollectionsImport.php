@@ -52,35 +52,37 @@ class CollectionsImport
             if (strtolower(substr($tablename, 0, 2)) === 'bk') {
             	// Works!
             	echo "Importing Bk...";
-            	if (false === file_exists('/tmp/bk.xml'))
-            	{
-            	    $bkPrepare = $this->convertBk($tempdoc, $tablename);
-            	    $bk = fopen('/tmp/bk.xml', 'w');
-            	    fputs($bk, $bkPrepare->saveXml());
-            	    fclose($bk);
-            	}
-            	else {
-            		$bkRead = file('/tmp/bk.xml');
-            		$bkPrepare = implode("", $bkRead);
-            	}
-            	$importit = Opus_CollectionRole::fromXml($bkPrepare);
+            	// Importing via XML
+            	#if (false === file_exists('/tmp/bk.xml'))
+            	#{
+            	    #$bkPrepare = $this->convertBk($tempdoc, $tablename);
+            	    #$bk = fopen('/tmp/bk.xml', 'w');
+            	    #fputs($bk, $bkPrepare->saveXml());
+            	    #fclose($bk);
+            	#}
+            	#else {
+            	#	$bkRead = file('/tmp/bk.xml');
+            	#	$bkPrepare = implode("", $bkRead);
+            	#}
+            	#$importit = Opus_CollectionRole::fromXml($bkPrepare);
+            	$this->importBk($tempdoc, $tablename);
             	echo "done!\n";
             	// store classification system
             }
             if (strtolower(substr($tablename, 0, 3)) === 'ccs') {
             	// Works!
             	echo "Importing CCS...";
-            	if (false === file_exists('/tmp/ccs.xml'))
-            	{
-            	    $ccsPrepare = $this->convertCcs($tempdoc, $tablename);
-            	    $bk = fopen('/tmp/ccs.xml', 'w');
-            	    fputs($bk, $bkPrepare->saveXml());
-            	    fclose($bk);
-            	}
-            	else {
-            		$bkRead = file('/tmp/ccs.xml');
-            		$ccsPrepare = implode("", $bkRead);
-            	}
+            	#if (false === file_exists('/tmp/ccs.xml'))
+            	#{
+            	#    $ccsPrepare = $this->convertCcs($tempdoc, $tablename);
+            	#    $bk = fopen('/tmp/ccs.xml', 'w');
+            	#    fputs($bk, $bkPrepare->saveXml());
+            	#    fclose($bk);
+            	#}
+            	#else {
+            	#	$bkRead = file('/tmp/ccs.xml');
+            	#	$ccsPrepare = implode("", $bkRead);
+            	#}
             	#$importit = Opus_CollectionRole::fromXml($ccsPrepare);
             	echo "done!\n";
             	// store classification system
@@ -133,6 +135,93 @@ class CollectionsImport
 	}
 
 	/**
+	 * Imports Bk-classification to Opus4 directly (without XML)
+	 *
+	 * @param DOMDocument $data XML-Document to be imported
+	 * @return array List of documents that have been imported
+	 */
+	protected function importBk($data, $classificationName)
+	{
+		$classification = $this->transferOpusClassification($data);
+		
+		$collRole = new Opus_CollectionRole();
+		$collRole->setName($classificationName);
+		$collRoleId = $collRole->store();
+
+		foreach ($classification as $class) {
+            if (ereg("\.00$", $class['class'])) {
+            	echo ".";
+			    // first level category
+			    $coll = new Opus_Collection($collRoleId);
+			    $coll->setName($class['bez']);
+			    #$coll->setNumber($class['class']);
+			    $subcoll[$class['class']] = $coll;
+			    $collRole->addSubCollection($coll);
+            }
+		}
+		$collRole->store();
+		foreach ($classification as $class) {
+            if (ereg("0$", $class['class']) && false === ereg("\.00$", $class['class'])) {
+            	$parent = false;
+            	// second level category
+       			echo ".";
+       			if (true === array_key_exists(substr($class['class'], 0, 2).'.00', $subcoll)) {
+       				$parent = $subcoll[substr($class['class'], 0, 2).'.00'];
+       			}
+            	if ($parent === false) {
+            		// if parent still is empty, lets put it on top
+            		$coll = new Opus_Collection($collRoleId);
+			        $coll->setName($class['bez']);
+			        #$coll->setNumber($class['class']);
+			        $subcoll[$class['class']] = $coll;
+			        $collRole->addSubCollection($coll);
+            	}
+            	else {
+			        $coll = new Opus_Collection($collRoleId, $parent->getId());
+			        $coll->setName($class['bez']);
+			        #$coll->setNumber($class['class']);
+			        $subcoll[$class['class']] = $coll;
+			        $parent->addSubCollection($coll);
+            	}
+            }
+		}
+		$collRole->store();
+		foreach ($classification as $class) {
+            if (false === ereg("0$", $class['class'])) {
+            	$parent = false;
+            	// third level category
+           		if (true === array_key_exists(substr($class['class'], 0, 4).'0', $subcoll)) {
+           			echo ".";
+           			$parent = $subcoll[substr($class['class'], 0, 4).'0'];
+           		}
+            	if ($parent === false) {
+            	    // no parent found, try one level higher
+            		if (true === array_key_exists(substr($class['class'], 0, 2).'.00', $subcoll)) {
+           			    echo ".";
+           			    $parent = $subcoll[substr($class['class'], 0, 2).'.00'];
+            	    }            		
+            	}
+            	if ($parent === false) {
+            		// if parent still is empty, lets put it on top
+            		$coll = new Opus_Collection($collRoleId);
+			        $coll->setName($class['bez']);
+			        #$coll->setNumber($class['class']);
+			        $subcoll[$class['class']] = $coll;
+			        $collRole->addSubCollection($coll);
+            	}
+            	else {
+			        $coll = new Opus_Collection($collRoleId, $parent->getId());
+			        $coll->setName($class['bez']);
+			        #$coll->setNumber($class['class']);
+			        $subcoll[$class['class']] = $coll;
+			        $parent->addSubCollection($coll);
+            	}
+            }
+		}
+		$collRole->store();
+	}
+
+	/**
 	 * Converts Bk-classification to Opus4
 	 *
 	 * @param DOMDocument $data XML-Document to be imported
@@ -151,7 +240,7 @@ class CollectionsImport
             if (ereg("\.00$", $class['class'])) {
             	echo ".";
 			    // first level category
-			    $node = $classificationDomDocument->createElement('SubCollection');
+			    $node = $classificationDomDocument->createElement('Collection');
 			    $node->setAttribute('Name', $class['bez']);
 			    $node->setAttribute('Number', $class['class']);
 			    $rootNode->appendChild($node);
@@ -163,13 +252,13 @@ class CollectionsImport
             if (ereg("0$", $class['class']) && false === ereg("\.00$", $class['class'])) {
             	$parent = false;
             	// second level category
-            	foreach ($classificationDomDocument->getElementsByTagName('SubCollection') as $coll) {
+            	foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
             		if ($coll->getAttribute('Number') === substr($class['class'], 0, 2).'.00') {
             			echo ".";
             			$parent = $coll;
             		}
             	}
-	            $node = $classificationDomDocument->createElement('SubCollection');
+	            $node = $classificationDomDocument->createElement('Collection');
 			    $node->setAttribute('Name', $class['bez']);
 			    $node->setAttribute('Number', $class['class']);
 			    if ($parent !== false)
@@ -189,7 +278,7 @@ class CollectionsImport
             if (false === ereg("0$", $class['class'])) {
             	$parent = false;
             	// third level category
-            	foreach ($classificationDomDocument->getElementsByTagName('SubCollection') as $coll) {
+            	foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
             		if ($coll->getAttribute('Number') === substr($class['class'], 0, 4).'0') {
             			echo ".";
             			$parent = $coll;
@@ -197,14 +286,14 @@ class CollectionsImport
             	}
             	if ($parent === false) {
             	    // no parent found, try one level higher
-            	    foreach ($classificationDomDocument->getElementsByTagName('SubCollection') as $coll) {
+            	    foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
             		    if ($coll->getAttribute('Number') === substr($class['class'], 0, 2).'.00') {
             			    echo ".";
             			    $parent = $coll;
             		    }
             	    }            		
             	}
-		        $node = $classificationDomDocument->createElement('SubCollection');
+		        $node = $classificationDomDocument->createElement('Collection');
 		        $node->setAttribute('Name', $class['bez']);
 		        $node->setAttribute('Number', $class['class']);
 			    if ($parent !== false)
