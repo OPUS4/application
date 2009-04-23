@@ -115,7 +115,7 @@ class XMLImport
                 $document->removeChild($ddcNotation);
             }
 			try {
-			    $doc = Opus_Document::fromXml($documentsXML->saveXML($document));
+			    $doc = Opus_Document::fromXml('<Opus>' . $documentsXML->saveXML($document) . '</Opus>');
 			    if ($lic !== null) {
 			    	$doc->addLicence($lic);
 			    }
