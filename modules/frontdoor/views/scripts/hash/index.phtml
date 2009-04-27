@@ -5,14 +5,15 @@
 <p><b><?= $this->title;?></b></p>
 <p><?= $this-> translate('frontdoor_filenumber')?>: <?= $this->fileNumber?></p><hr />
 
-<? if ($this->first_hash !== NULL)
-   {
+<?if ($this->first_hash !== NULL)
+  {
       for ($i = 0; $i < $this->fileNumber; $i++)
-      {
+
          if (array_key_exists ($i, $this->hashLabel) === true)
          {
-            $value = $this->hashLabel[$i];?>
-            <p><b><?= $this->translate('File');?>: </b><?= $this->value = $value?></p>
+            $value = $this->hashLabel[$i];
+            $this-> k = $k = $i+1?>
+            <p><b><?= $this-> k = $k. '. ' .$this->translate('File');?>: </b><?= $this->value = $value?></p>
           <?$hashes = $this->document->getFile($i)->getHashValue();
             $hashNumber = count($hashes);
             for ($j = 0; $j < $hashNumber; $j++)
@@ -22,23 +23,30 @@
                   $value = $this->hashValueType['hashType_' .$i. '_' .$j];?>
                   <p><b><?= $this->translate('HashType');?>: </b> <?= $this->value = $value?></p>
              <?}
+               else
+               {?>
+                  <p><b><?= $this->translate ('frontdoor_no_hashtype')?></b></p>
+             <?}
                if (array_key_exists ('hashValue_' .$i. '_' .$j, $this->hashValueType) === true)
                {
                   $value = $this->hashValueType['hashValue_' .$i. '_' .$j];?>
                   <p><b><?= $this->translate('HashValue');?>: </b> <?= $this->value = $value?></p>
              <?}
-            }?>
-            <hr /><?
-            }
-       }
-   }
+               else
+               {?>
+                  <p><b><?= $this->translate ('frontdoor_no_hashvalue')?></b></p>
+             <?}
+            }?> <hr /><?
+          }
+     }
+
    else
    {?>
-      <p><?$this-> translate('frontdoor_hash_existence');?></p><?
+      <p><?$this-> translate('frontdoor_no_hash_existence');?></p><?
    }?>
-
-
-
-
-
-
+   <p><a href="<?= $this->value =
+                        $this->url(array(
+                            'module' => 'frontdoor',
+                            'controller' => 'index',
+                            'docId' => $this->docId,
+                        ), null, true);?>"><?= $this->translate('frontdoor_back')?></a>
