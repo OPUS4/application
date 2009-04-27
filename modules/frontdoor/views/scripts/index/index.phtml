@@ -44,16 +44,18 @@
 <? if (is_array($this->mydoc_data) === true)
    {?>
       <div id="summary">
-       <?
-              if (array_key_exists ('IdentifierUrn_Value', $this->mydoc_data) === true)
+       <?  for ($i = 0; $i < 10; $i++)
+           {
+              if (array_key_exists ('IdentifierUrn_' .$i. '_Value', $this->mydoc_data) === true)
               {
-                 $value = $this->mydoc_data['IdentifierUrn_Value'];?>
+                 $value = $this->mydoc_data['IdentifierUrn_' .$i. '_Value'];?>
                  <?= $this-> translate('frontdoor_entry'); ?><br />
                  <b><?= $this-> translate ('IdentifierUrn');?>: </b>
                  <a href="<?= $this->value = 'http://nbn-resolving.de/urn/resolver.pl?' .$value;?>">
-                 <?= $this->value = $value;?></a><br /><hr /><br />
+                 <?= $this->value = $value;?></a><br /><br /><hr />
                  <?
-              }?>
+              }
+            }?>
               <? for ($i = 0; $i < 10; $i++)
                  {
                     if (array_key_exists ('TitleMain_'.$i.'_Value', $this->mydoc_data) === true)
@@ -74,8 +76,6 @@
                                 'action' => 'metadatasearch',
                                 'author' => $value,
                             ), null, true);
-
-                        //'/search/search/metadatasearch/author/' .$value;
                         ?>">
                         <?= $this->value = $value;?></a></b></p><?
                     }
@@ -98,7 +98,7 @@
                             'controller' => 'hash',
                             'docId' => $this->docId,
                         ), null, true);
-                     //'/frontdoor/hash/index/docId/'.$this->docId;
+
                      ?>">
                      <img src = "<?= $this->value = $this->layoutPath . '/img/unversehrt.jpg';?>" border = '0' title = 'Unversehrtheit'></a>
 
@@ -114,8 +114,6 @@
                         ), null, true);
                     ;?>">
                     <img src = "<?= $this->value =
-
-                    //'/layouts/default/img/statistik.jpg';
                         $this->url(array(
                             'module' => 'statistic',
                             'controller' => 'graph',
@@ -130,8 +128,7 @@
                             'controller' => 'connotea',
                             'docId' => $this->docId,
                         ), null, true);
-                    //'/socialBookmarking/connotea/index/docId'
-                    ?>">
+                      ?>">
                     <img src = "<?= $this->value =  $this->layoutPath .'/img/connotea_icon.jpg';?>" border = '0' title = 'Bookmark bei Connotea'></a>
 
                     <a href="<?= $this->value =
@@ -140,8 +137,7 @@
                             'controller' => 'delicious',
                             'docId' => $this->docId,
                         ), null, true);
-                    //'/socialBookmarking/delicious/index/docId';
-                    ?>">
+                      ?>">
                     <img src = "<?= $this->value = $this->layoutPath . '/img/delicious.jpg';?>" border = '0' title = 'Bookmark bei del.icio.us'></a>
 
                     <a href="<?= $this->value = '';?>">
