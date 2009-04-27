@@ -34,7 +34,23 @@
         <seg>Integrität dieses Dokuments (Hashwerte und -typen)</seg>
       </tuv>
     </tu>
-    <tu tuid="frontdoor_hash_existence">
+    <tu tuid="frontdoor_no_hash_types">
+      <tuv xml:lang="en">
+        <seg>No hashtypes available for this file</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Für diese Datei liegen keine Hashtypen oder Signaturen vor.</seg>
+      </tuv>
+    </tu>
+    <tu tuid="frontdoor_no_hash_values">
+      <tuv xml:lang="en">
+        <seg>No hashvalues for this file.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Für diese Datei liegen keine Hashwerte vor.</seg>
+      </tuv>
+    </tu>
+    <tu tuid="frontdoor_no_hash_existence">
       <tuv xml:lang="en">
         <seg>No hashvalues or signatures available for this document.</seg>
       </tuv>
@@ -48,6 +64,13 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Anzahl der Dateien für dieses Dokument</seg>
+      </tuv>
+    </tu><tu tuid="frontdoor_back">
+      <tuv xml:lang="en">
+        <seg>Back to frontdoor view</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zurück zur Frontdoor</seg>
       </tuv>
     </tu>
  
