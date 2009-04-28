@@ -96,18 +96,82 @@
             </xsl:element>
             <!-- dc:contributor -->
             <xsl:apply-templates select="PersonAdvisor" mode="xmetadissplus" />
-<!--    hier statt DateAccepted nur Jahreszahl -->
+
+<!--    hier statt DateAccepted Datum der Erstveroeffentlichung -->
             <xsl:apply-templates select="@DateAccepted" mode="xmetadissplus" />
+
             <xsl:element name="dc:type">
                <xsl:attribute name="xsi:type">
                   bszterms:PublType
                </xsl:attribute>
- <!--   noch aendern, variabel !! -->              
-                 Thesis.Doctoral
+                 <xsl:choose>
+                   <xsl:when test="@Type='manual'">
+                       Manual
+                   </xsl:when>
+                   <xsl:when test="@Type='article'">
+                       Article
+                   </xsl:when>
+                   <xsl:when test="@Type='monograph'">
+                       Book
+                   </xsl:when>
+                   <xsl:when test="@Type='book_section'">
+                       InBook
+                   </xsl:when>
+                   <xsl:when test="@Type='bachelor_thesis'">
+                       Thesis.Bachelor
+                   </xsl:when>
+                   <xsl:when test="@Type='master_thesis'">
+                       Thesis.Master
+                   </xsl:when>
+                   <xsl:when test="@Type='doctoral_thesis'">
+                       Thesis.Doctoral
+                   </xsl:when>
+                   <xsl:when test="@Type='habil_thesis'">
+                       Thesis.Habilitation
+                   </xsl:when>
+        <!--  ist das korrekt ? -->           
+                   <xsl:when test="@Type='honour_thesis'">
+                       Festschrift
+                   </xsl:when>
+                   <xsl:when test="@Type='journal'">
+                       Journal
+                   </xsl:when>
+                   <xsl:when test="@Type='conference'">
+                       Proceedings
+                   </xsl:when>
+                   <xsl:when test="@Type='conference_item'">
+                       InProceedings
+                   </xsl:when>
+                   <xsl:when test="@Type='study_paper'">
+                       Paper
+                   </xsl:when>
+                   <xsl:when test="@Type='paper'">
+                       ResearchPaper
+                   </xsl:when>
+                   <xsl:when test="@Type='report'">
+                       TechReport
+                   </xsl:when>
+                   <xsl:when test="@Type='preprint'">
+                       Preprint
+                   </xsl:when>
+                   <xsl:when test="@Type='other'">
+                       Misc
+                   </xsl:when>
+                   <xsl:when test="@Type='lecture'">
+                       Lecture
+                   </xsl:when>
+                   <xsl:otherwise>
+                     <xsl:value-of select="@Type" />
+                       unbekannter Typ 
+                   </xsl:otherwise>    
+                 </xsl:choose>  
             </xsl:element>
             <xsl:apply-templates select="IdentifierUrn" mode="xmetadissplus" />
             <xsl:apply-templates select="@Language" mode="xmetadissplus" />
             <xsl:apply-templates select="Licence" mode="xmetadissplus" />
+
+  <!--  evtl. thesis.degree nur ausgeben, wenn Inhalt, also
+        ueber ein apply-templates select = noch offen -->
             <xsl:element name="thesis:degree">
                <xsl:element name="thesis:level">
    <!--  noch aendern, kann hier auch andere Werte haben -->            
@@ -130,6 +194,7 @@
          not yet in xml-output -->
                </xsl:element>    
             </xsl:element>
+
             <xsl:element name="ddb:contact">
                 <xsl:attribute name="ddb:contactID">
                <!--  missing, not yet in xml-output, though set fix --> 
@@ -285,7 +350,7 @@
     </xsl:template>
 
     <xsl:template match="IdentifierUrn" mode="xmetadissplus">
-        <xsl:element name="identifier">
+        <xsl:element name="dc:identifier">
             <xsl:attribute name="xsi:type">urn:nbn</xsl:attribute>
             <xsl:value-of select="@Value" />
         </xsl:element>
@@ -337,6 +402,8 @@
 
 <!-- folgende Felder sind unklar bzw. fehlen noch im Datenmodell bzw.
      in der xml-Darstellung
+dcterms:issued Datum der Erstveroeffentlichung (z.Zt DateAccepted,
+               muss noch geaendert werden
 SubjectSwd : freie Schlagwoerter tauchen in der XML-Darstellung
              doppelt auf, einmal als
              SubjectSwd Type=uncontrolled  und zweitens als
@@ -345,7 +412,9 @@ SubjectSwd : freie Schlagwoerter tauchen in der XML-Darstellung
              z.Zt. werden sie auch hier doppelt ausgegeben
 PublisherName, PublisherPlace, PublisherAddress: noch nicht gesehen,
                da keine Testdaten
-thesis:grantor in Opus 3 Fakultaet, hier???
+thesis:degree: akademischer Grad
+thesis:grantor Institution, die akad. Grad vergeben hat
+               in Opus 3 Fakultaet, hier???
 contactID:  von thesis:grantor: z.Zt. fix gesetzt               
 fileSize    ist bei den Attributen zum Feld file nicht dabei
             hier z.Zt. FileSize benannt 
