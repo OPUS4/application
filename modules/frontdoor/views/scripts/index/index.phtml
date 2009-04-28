@@ -157,11 +157,14 @@
                        <p><b><?= $this-> translate('Type')?>: </b>
                        <?= $this->value = $value;?></p><?
                    }
-                   if (array_key_exists('Language', $this->mydoc_data) === true)
+                   for ($i = 0; $i < 10; $i++)
                    {
-                      $value = $this->mydoc_data['Language'];?>
-                      <p><b><?= $this-> translate('Language')?>: </b>
-                      <?= $this->translate($value);?></p><?
+                      if (array_key_exists('Language_' .$i, $this->mydoc_data) === true)
+                      {
+                         $this->value = $value = $this->mydoc_data['Language_' .$i];?>
+                         <p><b><?= $this-> translate('Language')?>: </b>
+                         <?= $this->translate($value);?></p><?
+                      }
                    }?>
 
                    <?for ($i = 0; $i < 10; $i++)
