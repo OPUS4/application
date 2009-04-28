@@ -105,10 +105,12 @@
             <xsl:apply-templates select="IdentifierUrn" mode="xmetadiss" />
             <xsl:apply-templates select="@Language" mode="xmetadiss" />
             <xsl:apply-templates select="Licence" mode="xmetadiss" />
+
+<!--  akademischer Grad, noch anpassen!! -->
             <xsl:element name="thesis:degree">
                <xsl:element name="thesis:level">
                  <xsl:choose>
-                   <xsl:when test="@Type='doctoral thesis'">
+                   <xsl:when test="@Type='doctoral_thesis'">
                        thesis:doctoral
                    </xsl:when>
                    <xsl:otherwise>
@@ -126,6 +128,7 @@
          not yet in xml-output -->
                </xsl:element>    
             </xsl:element>
+
             <xsl:element name="ddb:contact">
                 <xsl:attribute name="ddb:contactID">
                <!--  missing, not yet in xml-output, though set fix --> 
@@ -281,7 +284,7 @@
     </xsl:template>
 
     <xsl:template match="IdentifierUrn" mode="xmetadiss">
-        <xsl:element name="identifier">
+        <xsl:element name="dc:identifier">
             <xsl:attribute name="xsi:type">urn:nbn</xsl:attribute>
             <xsl:value-of select="@Value" />
         </xsl:element>
@@ -345,7 +348,9 @@ SubjectSwd : freie Schlagwoerter tauchen in der XML-Darstellung
              z.Zt. werden sie auch hier doppelt ausgegeben
 PublisherName, PublisherPlace, PublisherAddress: noch nicht gesehen,
                da keine Testdaten
-thesis:grantor in Opus 3 Fakultaet, hier???
+thesis:degree akademischer Grad
+thesis:grantor Institution, die akad.Grad vergeben hat 
+               in Opus 3 Fakultaet, hier???
 contactID:  von thesis:grantor: z.Zt. fix gesetzt               
 fileSize    ist bei den Attributen zum Feld file nicht dabei
             hier z.Zt. FileSize benannt 
