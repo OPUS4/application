@@ -49,6 +49,7 @@
 
 
     <xsl:include href="prefixes/oai_dc.xslt"/>
+    <xsl:include href="prefixes/oai_pp.xslt"/>
     <xsl:include href="prefixes/epicur.xslt"/>
     <xsl:include href="prefixes/xMetaDiss.xslt"/>
     <xsl:include href="prefixes/XMetaDissPlus.xslt"/>
@@ -151,6 +152,9 @@
                </xsl:when>
                <xsl:when test="$oai_metadataPrefix='oai_dc'">
                   <xsl:apply-templates select="." mode="oai_dc" />
+               </xsl:when>
+               <xsl:when test="$oai_metadataPrefix='oai_pp'">
+                  <xsl:apply-templates select="." mode="oai_pp" />
                </xsl:when>
             </xsl:choose>
             </xsl:element>
