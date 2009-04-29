@@ -10,6 +10,14 @@
         <seg>Admin: Veröffentlichungstatistik</seg>
       </tuv>
     </tu>
+    <tu tuid="Total_Number_Documents">
+      <tuv xml:lang="en">
+        <seg>Total number of documents</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Gesamtzahl Dokumente</seg>
+      </tuv>
+    </tu>
     <tu tuid="Month_Overview_Title">
       <tuv xml:lang="en">
         <seg>Month overview</seg>

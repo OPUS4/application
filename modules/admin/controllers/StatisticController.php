@@ -103,7 +103,19 @@ class Admin_StatisticController extends Zend_Controller_Action {
 
 
         // TODO: use tokens to reduce redundancy of inserting year twice
-        $select = $documents->getAdapter()->query("SELECT months.m as mon, count(d.id) as c FROM (SELECT id, MONTH(`server_date_published`) as m FROM `documents` WHERE YEAR(`server_date_published`) = ?) d, (SELECT DISTINCT MONTH(`server_date_published`) as m FROM `documents` WHERE YEAR(`server_date_published`) = ?) months WHERE months.m = d.m GROUP BY months.m", array($postData['selectedYear'], $postData['selectedYear']));
+        $select = $documents->getAdapter()->query("SELECT months.m as mon, count(d.id) as c
+            FROM
+                (SELECT id, MONTH(`server_date_published`) as m
+                    FROM `documents`
+                    WHERE YEAR(`server_date_published`) = ?)
+                d,
+                (SELECT DISTINCT MONTH(`server_date_published`) as m
+                    FROM `documents`
+                    WHERE YEAR(`server_date_published`) = ?)
+                months
+            WHERE months.m = d.m
+            GROUP BY months.m",
+        array($postData['selectedYear'], $postData['selectedYear']));
 
         $result = $select->fetchAll();
         foreach($result as $row) {
@@ -117,6 +129,7 @@ class Admin_StatisticController extends Zend_Controller_Action {
         }
         ksort($monthStat);
 
+        $this->view->totalNumber = array_sum($monthStat);
         $this->view->title = $this->view->translate('Statistic_Controller');
         $this->view->monthStat = $monthStat;
 
@@ -132,6 +145,7 @@ class Admin_StatisticController extends Zend_Controller_Action {
         foreach($result as $row) {
             $typeStat[$row['ty']] = $row['c'];
         }
+
         $this->view->typeStat = $typeStat;
 
 
