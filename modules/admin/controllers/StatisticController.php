@@ -51,16 +51,16 @@ class Admin_StatisticController extends Zend_Controller_Action {
 
         $documents = new Opus_Db_Documents();
         $select = $documents->select()->from('documents', array('year' => 'YEAR(server_date_published)'))
-            ->distinct()
-            ->order('year');
+        ->distinct()
+        ->order('year');
         $result = $documents->fetchAll($select);
         foreach($result as $row) {
             $years[$row->year] = $row->year;
         }
         /*$years = array_values($result->toArray());
-        print_r($result->toArray());
-        print("<br>");
-        print_r(array_values($result->toArray()));*/
+         print_r($result->toArray());
+         print("<br>");
+         print_r(array_values($result->toArray()));*/
         //print_r($years);
 
         //$selectYear = new Zend_Form_Element_Text('selectedYear');
@@ -71,7 +71,7 @@ class Admin_StatisticController extends Zend_Controller_Action {
         //$selectYear = new Zend_Form_Element_Select();
 
         $selectYear->setRequired(true)
-            ->setLabel($this->view->translate('Select_Year_Label'));
+        ->setLabel($this->view->translate('Select_Year_Label'));
 
         $submit = new Zend_Form_Element_Submit('submit');
         $submit->setLabel($this->view->translate('Submit_Button_Label'));
@@ -89,11 +89,31 @@ class Admin_StatisticController extends Zend_Controller_Action {
         $postData = $this->_request->getPost();
         // get month overview from database
 
-        for ($i = 1; $i<13; $i++) {
-            $select = $documents->select()->from('documents', array('c' => 'count(*)'))
-                ->where('YEAR(server_date_published) = ?', $postData['selectedYear'])
-                ->where('MONTH(server_date_published) = ?', $i);
-            $monthStat[$i] = $documents->fetchRow($select)->c;
+
+        /* iteration with 12 db select queries, replaced by join with subqueries
+         *
+         * for ($i = 1; $i<13; $i++) {
+         *
+         * $select = $documents->select()->from('documents', array('c' => 'count(*)'))
+         * ->where('YEAR(server_date_published) = ?', $postData['selectedYear'])
+         * ->where('MONTH(server_date_published) = ?', $i);
+         * $monthStat[$i] = $documents->fetchRow($select)->c;
+         * }
+         */
+
+
+        // TODO: use tokens to reduce redundancy of inserting year twice
+        $select = $documents->getAdapter()->query("SELECT months.m as mon, count(d.id) as c FROM (SELECT id, MONTH(`server_date_published`) as m FROM `documents` WHERE YEAR(`server_date_published`) = ?) d, (SELECT DISTINCT MONTH(`server_date_published`) as m FROM `documents` WHERE YEAR(`server_date_published`) = ?) months WHERE months.m = d.m GROUP BY months.m", array($postData['selectedYear'], $postData['selectedYear']));
+
+        $result = $select->fetchAll();
+        foreach($result as $row) {
+            $monthStat[$row['mon']] = $row['c'];
+        }
+
+        for($i = 1; $i<13; $i++) {
+            if (isset($monthStat[$i]) === FALSE) {
+                $monthStat[$i] = 0;
+            }
         }
 
         $this->view->title = $this->view->translate('Statistic_Controller');
