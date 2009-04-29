@@ -55,6 +55,7 @@ class Document extends Response {
             $resourceMap = array(
                 'Opus_Licence' => 'licence',
                 'Opus_Person' => 'person',
+                'Opus_File' => 'file',
             );
             $xml2->setResourceNameMap($resourceMap);
             $view = Zend_Layout::getMvcInstance()->getView();
