@@ -213,6 +213,7 @@
             <xsl:call-template name="getAdvisors"><xsl:with-param name="OriginalID"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
             
             <!-- Classifications and Subjects -->
+            <xsl:call-template name="getCcs"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
             <!--<xsl:call-template name="getSubjects"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param><xsl:with-param name="subject"><xsl:value-of select="field[@name='subject_type']" /></xsl:with-param></xsl:call-template>-->            
                       
             <!--
@@ -273,6 +274,18 @@
             </xsl:element>
         </xsl:if>
     </xsl:template>
+    <!-- temporary CCS information -->
+    <xsl:template name="getCcs">
+        <xsl:param name="source_id" required="yes" />
+        <xsl:for-each select="/mysqldump/database/table_data[@name='opus_ccs']/row[field[@name='source_opus']=$source_id]">
+            <xsl:element name="OldCcs">
+                <xsl:attribute name="Value">
+                    <xsl:value-of select="field[@name='class']" />
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:for-each>
+    </xsl:template>
+    
 
     <!-- Notes -->
     <xsl:template match="table_data[@name='opus']/row/field[@name='bem_intern']">

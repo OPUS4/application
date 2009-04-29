@@ -57,6 +57,13 @@ class XMLImport
     protected $_proc = null;
 
     /**
+     * Holds the collections predifined in OPUS
+     *
+     * @var array  Defaults to the predefined OPUS collections (ID => Name).
+     */    
+    protected $collections = array(1 => 'ddc', 2 => 'ccs');
+
+    /**
      * Do some initialization on startup of every action
      *
      * @param string $xslt Filename of the stylesheet to be used
@@ -82,7 +89,9 @@ class XMLImport
 	 */
 	public function import($data)
 	{
-		$this->createDdcMappingfile();
+		foreach ($this->collections as $id => $collection) {
+		    $this->createMappingfile(array($id, $collection));
+		}
 		$imported = array();
 		$imported['success'] = array();
 		$imported['failure'] = array();
@@ -94,10 +103,13 @@ class XMLImport
             $licence = null;
             $lic = null;
             $ddcNotation = null;
-            $coll = null;
+            $ddc = null;
+            $ccsNotation = null;
+            $ccs = null;
             $oldid = $document->getElementsByTagName('IdentifierOpus3')->Item(0)->getAttribute('Value');
             $licence = $document->getElementsByTagName('OldLicence')->Item(0);
             $ddcNotation = $document->getElementsByTagName('OldDdc')->Item(0);
+            $ccsNotations = $document->getElementsByTagName('OldCcs');
             if ($licence !== null)
             {
                 $licenceValue = $licence->getAttribute('Value');
@@ -107,12 +119,26 @@ class XMLImport
             if ($ddcNotation !== null)
             {
                 $ddcValue = $ddcNotation->getAttribute('Value');
-                $this->coll_id = null;
-                $this->coll_id = $this->mapDdc($ddcValue);
-                if ($this->coll_id !== null) {
-                    $coll = new Opus_Collection(1, $this->coll_id);
+                $this->ddc_id = null;
+                $this->ddc_id = $this->map('ddc', $ddcValue);
+                if ($this->ddc_id !== null) {
+                    $ddc = new Opus_Collection(1, $this->ddc_id);
                 }
                 $document->removeChild($ddcNotation);
+            }
+            if ($ccsNotations->length > 0)
+            {
+                $ccs = array();
+                for ($c = 0; $c < $ccsNotations->length; $c++) {
+                	$ccsNotation = $ccsNotations->Item($c);
+                    $ccsValue = $ccsNotation->getAttribute('Value');
+                    $ccs_id = null;
+                    $ccs_id = $this->map('ccs', $ccsValue);
+                    if ($ccs_id !== null) {
+                        $ccs[] = new Opus_Collection(2, $ccs_id);
+                    }
+                    $document->removeChild($ccsNotation);
+                }
             }
 			try {
 			    $doc = Opus_Document::fromXml('<Opus>' . $documentsXML->saveXML($document) . '</Opus>');
@@ -123,8 +149,13 @@ class XMLImport
 			    //$doc->setPublicationVersion('published');
 			    $doc->store();
 			    // Add this document to its DDC classification
-			    if ($coll !== null) {
-			        $coll->addEntry($doc);
+			    if ($ddc !== null) {
+			        $ddc->addEntry($doc);
+			    }
+			    if (count($ccs) > 0) {
+			        foreach($ccs as $ccsEntry) {
+			            $ccsEntry->addEntry($doc);
+			        }
 			    }
 			    $index = count($imported['success']);
 			    $imported['success'][$index]['entry'] = $documentsXML->saveXML($document);
@@ -156,40 +187,40 @@ class XMLImport
 	 }
 
 	/**
-	 * maps DDC-notation from Opus3 on Opus4 DDC-schema
+	 * creates a mapping file for a OPUS3 classification system to OPUS4
 	 *
-	 * @param string $data DDC-notation
+	 * @param array $classification  
 	 * @return void
 	 */
-	protected function createDdcMappingfile($coll = null)
+	protected function createMappingfile($classification, $coll = null)
 	{
-		if ($coll === null) $ddcCollectionRole = new Opus_CollectionRole(1);
+		if ($coll === null) $ddcCollectionRole = new Opus_CollectionRole($classification[0]);
 		else $ddcCollectionRole = $coll;
 		
 		foreach ($ddcCollectionRole->getSubCollection() as $ddcNotation) {
-			$this->writeNotation($ddcNotation);
-			$this->createDdcMappingfile($ddcNotation);
+			$this->writeNotation($ddcNotation, $classification[1]);
+			$this->createMappingfile($classification, $ddcNotation);
 		}
 		
 	}
 	
-	protected function writeNotation($ddcNotation) {
-	    $fp = fopen('../workspace/tmp/ddcMapping.txt', 'a');
-	    fputs($fp, $ddcNotation->getNumber() . ' ' . $ddcNotation->getId() . "\n");
+	protected function writeNotation($notation, $classification) {
+	    $fp = fopen('../workspace/tmp/'.$classification.'Mapping.txt', 'a');
+	    fputs($fp, $notation->getNumber() . "\t" . $notation->getId() . "\n");
 	    fclose($fp);
 	}
 
 	/**
-	 * maps DDC-notation from Opus3 on Opus4 DDC-schema
+	 * maps a notation from Opus3 on Opus4 schema
 	 *
-	 * @param string $data DDC-notation
+	 * @param string $data notation
 	 * @return integer ID in Opus4
 	 */
-	protected function mapDdc($data)
+	protected function map($classification, $data)
 	{
-	 	$fp = file('../workspace/tmp/ddcMapping.txt');
+	 	$fp = file('../workspace/tmp/'.$classification.'Mapping.txt');
 		foreach ($fp as $licence) {
-			$mappedLicence = split("\ ", $licence);
+			$mappedLicence = split("\t", $licence);
 			$lic[$mappedLicence[0]] = $mappedLicence[1];
 		}
 		return $lic[$data];
