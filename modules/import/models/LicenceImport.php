@@ -43,11 +43,13 @@ class LicenceImport
 	{
 		// Analyse the data to find out which classification systems there are
 		// and which converter methods should be used
+		#$data->createAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'xmlns:xsi');
 		$doclist = $data->getElementsByTagName('table_data');
 		foreach ($doclist as $document) 
 		{
 			$tempdoc = new DOMDocument;
-            $tempdoc->loadXML($data->saveXML($document));
+			$xmlInput = $data->saveXML($document);
+            $tempdoc->loadXML($xmlInput);
             $tablename = $tempdoc->getElementsByTagName('table_data')->Item(0)->getAttribute('name');
             if ($tablename === 'license_de') {
             	// Works!

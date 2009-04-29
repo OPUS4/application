@@ -69,9 +69,9 @@ class CollectionsImport
             	echo "done!\n";
             	// store classification system
             }
-            if (strtolower(substr($tablename, 0, 3)) === 'ccs') {
-            	// Works!
-            	echo "Importing CCS...";
+            #if (strtolower(substr($tablename, 0, 3)) === 'ccs') {
+            	// CCS is not necessary to import, its already there
+            	#echo "Importing CCS...";
             	#if (false === file_exists('../workspace/tmp/ccs.xml'))
             	#{
             	#    $ccsPrepare = $this->convertCcs($tempdoc, $tablename);
@@ -84,16 +84,16 @@ class CollectionsImport
             	#	$ccsPrepare = implode("", $bkRead);
             	#}
             	#$importit = Opus_CollectionRole::fromXml($ccsPrepare);
-            	echo "done!\n";
+            	#echo "done!\n";
             	// store classification system
-            }
-            if (strtolower(substr($tablename, 0, 3)) === 'msc') {
+            #}
+            #if (strtolower(substr($tablename, 0, 3)) === 'msc') {
             	// Takes too much time...
-            	echo "Importing MSC...";
+            	#echo "Importing MSC...";
              	#$mscPrepare = $this->convertMsc($tempdoc, $tablename);
-             	echo "done!\n";
+             	#echo "done!\n";
             	// store classification system
-            }
+            #}
             if (strtolower(substr($tablename, 0, 4)) === 'pacs') {
             	// Works!
             	#echo "Importing PACS...";
