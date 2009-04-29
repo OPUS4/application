@@ -56,6 +56,18 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         $document = new Opus_Document($docId);
         $documentType = $document->getType();
         $doc_data = $document->toArray();
+
+        // Proof existence of files, find out filenumber
+        if (is_array ($files = $document->getFile()) === true)
+        {
+           $fileNumber = count($files);
+           $this->view->fileNumber = $fileNumber;
+        }
+        else
+        {
+          $this->fileNumber = $fileNumber == 0;
+          $this->view->fileNumber = $fileNumber;
+        }
         $this->view->docId = $docId;
 
         // Filter for relevant keys. Getting Document Type
