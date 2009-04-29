@@ -59,9 +59,16 @@ class XMLImport
     /**
      * Holds the collections predifined in OPUS
      *
-     * @var array  Defaults to the predefined OPUS collections (ID => Name).
+     * @var array  Defaults to the OPUS collections (Name => ID).
      */    
-    protected $collections = array(1 => 'ddc', 2 => 'ccs');
+    protected $collections = array();
+
+    /**
+     * Holds the collections predifined in OPUS
+     *
+     * @var array  Defaults to the OPUS collections (Name => ID).
+     */    
+    protected $collectionShortNames = array('Dewey Decimal Classification' => 'ddc', 'Computing Classification System' => 'ccs');
 
     /**
      * Do some initialization on startup of every action
@@ -72,6 +79,11 @@ class XMLImport
      */
     public function __construct($xslt, $stylesheetPath)
     {
+        // Reading Collection IDs
+        $roles = Opus_Collection_Information::getAllCollectionRoles();
+        foreach ($roles as $role) {
+            $this->collections[$role['name']] = $role['id'];
+        }
         // Initialize member variables.
         $this->_xml = new DomDocument;
         $this->_xslt = new DomDocument;
@@ -89,8 +101,8 @@ class XMLImport
 	 */
 	public function import($data)
 	{
-		foreach ($this->collections as $id => $collection) {
-		    $this->createMappingfile(array($id, $collection));
+		foreach ($this->collections as $collection => $id) {
+		    $this->createMappingfile(array($id, $this->collectionShortNames[$collection]));
 		}
 		$imported = array();
 		$imported['success'] = array();
@@ -118,24 +130,26 @@ class XMLImport
             }
             if ($ddcNotation !== null)
             {
+                $ddcName = 'Dewey Decimal Classification';
                 $ddcValue = $ddcNotation->getAttribute('Value');
                 $this->ddc_id = null;
-                $this->ddc_id = $this->map('ddc', $ddcValue);
+                $this->ddc_id = $this->map($this->collectionShortNames[$ddcName], $ddcValue);
                 if ($this->ddc_id !== null) {
-                    $ddc = new Opus_Collection(1, $this->ddc_id);
+                    $ddc = new Opus_Collection($this->collections[$ddcName], $this->ddc_id);
                 }
                 $document->removeChild($ddcNotation);
             }
             if ($ccsNotations->length > 0)
             {
                 $ccs = array();
+                $ccsName = 'Computing Classification System';
                 for ($c = 0; $c < $ccsNotations->length; $c++) {
                 	$ccsNotation = $ccsNotations->Item($c);
                     $ccsValue = $ccsNotation->getAttribute('Value');
                     $ccs_id = null;
-                    $ccs_id = $this->map('ccs', $ccsValue);
+                    $ccs_id = $this->map($this->collectionShortNames[$ccsName], $ccsValue);
                     if ($ccs_id !== null) {
-                        $ccs[] = new Opus_Collection(2, $ccs_id);
+                        $ccs[] = new Opus_Collection($this->collections[$ccsName], $ccs_id);
                     }
                     $document->removeChild($ccsNotation);
                 }
