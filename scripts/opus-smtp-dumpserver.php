@@ -49,9 +49,9 @@ class FakeSMTP {
     /**
      * The tcp port to listen.
      *
-     * @var int  Defaults to 25.
+     * @var int  Defaults to 25000.
      */
-    protected $_port = 25;
+    protected $_port = 25000;
 
     /**
      * Holds the network socket of the server.
