@@ -115,6 +115,7 @@ class Admin_StatisticController extends Zend_Controller_Action {
                 $monthStat[$i] = 0;
             }
         }
+        ksort($monthStat);
 
         $this->view->title = $this->view->translate('Statistic_Controller');
         $this->view->monthStat = $monthStat;
