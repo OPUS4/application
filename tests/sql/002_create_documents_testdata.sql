@@ -6243,10 +6243,10 @@ INSERT INTO `link_persons_documents` (`person_id`, `document_id`, `institute_id`
 (828, 459, NULL, 'translator', 0, 0);
 
 --
--- Daten für Tabelle `link_documents_collections_1`
+-- Daten für Tabelle `link_documents_collections_2`
 --
 
-INSERT INTO `link_documents_collections_1` (`id`, `collections_id`, `documents_id`) VALUES
+INSERT INTO `link_documents_collections_2` (`id`, `collections_id`, `documents_id`) VALUES
 (1, 127, 1),
 (2, 127, 2),
 (3, 660, 3),

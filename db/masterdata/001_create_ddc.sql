@@ -44,15 +44,15 @@ CREATE TABLE IF NOT EXISTS `collections_roles` (
 --
 
 INSERT INTO `collections_roles` (`id`, `name`, `position`, `link_docs_path_to_root`, `visible`, `display_browsing`, `display_doclist`, `display_col_front`, `display_frontdoor`) VALUES
-(1, 'Dewey Decimal Classification', 1, 'count', 1, NULL, NULL, NULL, NULL);
+(2, 'Dewey Decimal Classification', 2, 'count', 1, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `collections_contents_1`
+-- Table structure for table `collections_contents_2`
 --
 
-CREATE TABLE IF NOT EXISTS `collections_contents_1` (
+CREATE TABLE IF NOT EXISTS `collections_contents_2` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `name` varchar(255) default NULL,
   `number` varchar(3) default NULL,
@@ -60,10 +60,10 @@ CREATE TABLE IF NOT EXISTS `collections_contents_1` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1026 ;
 
 --
--- Dumping data for table `collections_contents_1`
+-- Dumping data for table `collections_contents_2`
 --
 
-INSERT INTO `collections_contents_1` (`id`, `name`, `number`) VALUES
+INSERT INTO `collections_contents_2` (`id`, `name`, `number`) VALUES
 (1, NULL, NULL),
 (2, 'Informatik, Informationswissenschaft, allgemeine Werke', '000'),
 (3, 'Philosophie und Psychologie', '100'),
@@ -1093,48 +1093,48 @@ INSERT INTO `collections_contents_1` (`id`, `name`, `number`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `collections_replacement_1`
+-- Table structure for table `collections_replacement_2`
 --
 
-CREATE TABLE IF NOT EXISTS `collections_replacement_1` (
+CREATE TABLE IF NOT EXISTS `collections_replacement_2` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `collections_id` int(10) unsigned NOT NULL,
   `replacement_for_id` int(10) unsigned default NULL,
   `replacement_by_id` int(10) unsigned default NULL,
   `current_replacement_id` int(10) unsigned default NULL,
   PRIMARY KEY  (`id`),
-  KEY `fk_link_collections_1` (`collections_id`),
-  KEY `fk_link_collections_replacement_for_1` (`replacement_for_id`),
-  KEY `fk_link_collections_replacement_by_1` (`replacement_by_id`),
-  KEY `fk_link_collections_current_replacement_1` (`current_replacement_id`)
+  KEY `fk_link_collections_2` (`collections_id`),
+  KEY `fk_link_collections_replacement_for_2` (`replacement_for_id`),
+  KEY `fk_link_collections_replacement_by_2` (`replacement_by_id`),
+  KEY `fk_link_collections_current_replacement_2` (`current_replacement_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `collections_replacement_1`
+-- Dumping data for table `collections_replacement_2`
 --
 
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `collections_structure_1`
+-- Table structure for table `collections_structure_2`
 --
 
-CREATE TABLE IF NOT EXISTS `collections_structure_1` (
+CREATE TABLE IF NOT EXISTS `collections_structure_2` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `collections_id` int(10) unsigned NOT NULL,
   `left` int(10) unsigned NOT NULL,
   `right` int(10) unsigned NOT NULL,
   `visible` tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (`id`),
-  KEY `fk_collections_structure_collections_contents_1` (`collections_id`)
+  KEY `fk_collections_structure_collections_contents_2` (`collections_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1026 ;
 
 --
--- Dumping data for table `collections_structure_1`
+-- Dumping data for table `collections_structure_2`
 --
 
-INSERT INTO `collections_structure_1` (`id`, `collections_id`, `left`, `right`, `visible`) VALUES
+INSERT INTO `collections_structure_2` (`id`, `collections_id`, `left`, `right`, `visible`) VALUES
 (1, 1, 1, 2050, 0),
 (2, 2, 2, 189, 1),
 (3, 3, 190, 389, 1),
@@ -2164,22 +2164,22 @@ INSERT INTO `collections_structure_1` (`id`, `collections_id`, `left`, `right`, 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `link_documents_collections_1`
+-- Table structure for table `link_documents_collections_2`
 --
 
-CREATE TABLE IF NOT EXISTS `link_documents_collections_1` (
+CREATE TABLE IF NOT EXISTS `link_documents_collections_2` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `collections_id` int(11) unsigned NOT NULL,
   `documents_id` int(11) unsigned NOT NULL,
   PRIMARY KEY  (`id`),
-  INDEX fk_link_documents_collections_collections_contents_1 (`collections_id` ASC) ,
-  INDEX fk_link_documents_collections_documents_1 (`documents_id` ASC) ,
-  CONSTRAINT `fk_link_documents_collections_collections_contents_1`
+  INDEX fk_link_documents_collections_collections_contents_2 (`collections_id` ASC) ,
+  INDEX fk_link_documents_collections_documents_2 (`documents_id` ASC) ,
+  CONSTRAINT `fk_link_documents_collections_collections_contents_2`
     FOREIGN KEY (`collections_id` )
-    REFERENCES `collections_contents_1` (`id` )
+    REFERENCES `collections_contents_2` (`id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_link_documents_collections_documents_1`
+  CONSTRAINT `fk_link_documents_collections_documents_2`
     FOREIGN KEY (`documents_id` )
     REFERENCES `documents` (`id` )
     ON DELETE CASCADE
@@ -2187,7 +2187,7 @@ CREATE TABLE IF NOT EXISTS `link_documents_collections_1` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
--- Dumping data for table `link_documents_collections_1`
+-- Dumping data for table `link_documents_collections_2`
 --
 
 
@@ -2196,16 +2196,16 @@ CREATE TABLE IF NOT EXISTS `link_documents_collections_1` (
 --
 
 --
--- Constraints for table `collections_replacement_1`
+-- Constraints for table `collections_replacement_2`
 --
-ALTER TABLE `collections_replacement_1`
-  ADD CONSTRAINT `fk_link_collections_1` FOREIGN KEY (`collections_id`) REFERENCES `collections_contents_1` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_link_collections_replacement_for_1` FOREIGN KEY (`replacement_for_id`) REFERENCES `collections_contents_1` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_link_collections_replacement_by_1` FOREIGN KEY (`replacement_by_id`) REFERENCES `collections_contents_1` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_link_collections_current_replacement_1` FOREIGN KEY (`current_replacement_id`) REFERENCES `collections_contents_1` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `collections_replacement_2`
+  ADD CONSTRAINT `fk_link_collections_2` FOREIGN KEY (`collections_id`) REFERENCES `collections_contents_2` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_link_collections_replacement_for_2` FOREIGN KEY (`replacement_for_id`) REFERENCES `collections_contents_2` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_link_collections_replacement_by_2` FOREIGN KEY (`replacement_by_id`) REFERENCES `collections_contents_2` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_link_collections_current_replacement_2` FOREIGN KEY (`current_replacement_id`) REFERENCES `collections_contents_2` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Constraints for table `collections_structure_1`
+-- Constraints for table `collections_structure_2`
 --
-ALTER TABLE `collections_structure_1`
-  ADD CONSTRAINT `fk_collections_structure_collections_contents_1` FOREIGN KEY (`collections_id`) REFERENCES `collections_contents_1` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `collections_structure_2`
+  ADD CONSTRAINT `fk_collections_structure_collections_contents_2` FOREIGN KEY (`collections_id`) REFERENCES `collections_contents_2` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
