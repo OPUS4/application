@@ -66,5 +66,13 @@
         <seg>Sprachen verwalten</seg>
       </tuv>
     </tu>
+    <tu tuid="admin_title_statistic">
+      <tuv xml:lang="en">
+        <seg>Show number of publications</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Veröffentlichungsstatistik anzeigen</seg>
+      </tuv>
+    </tu>
   </body>
 </tmx>

@@ -58,7 +58,7 @@ class StatisticGraphThumb {
         $graph = new Graph($this->width, $this->height, "auto");
         $graph->SetScale("textlin");
 
-        $graph->img->SetMargin(0,0,0,0);
+        $graph->img->SetMargin(0,0,1,0);
         //$graph->SetFrame(true);
         // generate bars
         $bplot = new BarPlot($this->data);
@@ -68,8 +68,8 @@ class StatisticGraphThumb {
         // format bars
         $bplot->SetFillColor('gray');
 
-        //TODO relative path to layout directory!?
-        if (false === empty($this->bgImg) || file_exists($this->bgImg)) {
+        //show background image if file exists
+        if (false === empty($this->bgImg) && file_exists($this->bgImg)) {
             $graph->SetBackgroundImage($this->bgImg, BGIMG_FILLFRAME);
         }
         $bplot->SetFillGradient("gray","darkgray",GRAD_HOR);
