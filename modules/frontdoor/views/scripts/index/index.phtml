@@ -79,18 +79,50 @@
                         ?>">
                         <?= $this->value = $value;?></a></b></p><?
                     }
-                 }?>
-               <?for ($i = 0; $i < 10; $i++)
-                 {
-                    if (array_key_exists ('File_'.$i. '_PathName', $this->mydoc_data) === true)
+                 }
+
+
+                 if ($this->fileNumber !== 0)
+                 {?>
+                    <p><b><?= $this-> translate('File(s): ')?>&nbsp;&nbsp;</b><?
+
+                    for ($i = 0; $i < $this->fileNumber; $i++)
                     {
-                        $value = $this->mydoc_data['File_' .$i. '_PathName'];?>
-                        <p><b><?= $this-> translate('File')?>:&nbsp; </b>
-                        <a href="<?= $this->value = '/files/'.$this->docId.'/'.$this->value = $value;?>">
-                        <img src = "<?= $this->value = $this->layoutPath . '/img/filetypelogo_pdf.png';?>" title = 'Download'> PDF, 20KB</a>
-                         &nbsp; &nbsp; <?
+                       if (array_key_exists ('File_'.$i. '_PathName', $this->mydoc_data) === true)
+                       {
+                          $path_name = $this ->mydoc_data['File_' .$i. '_PathName'];
+                          //echo ($path_name);
+
+                          if (array_key_exists ('File_' .$i. '_FileType', $this->mydoc_data) === true)
+                          {
+                             $file_type = $this->mydoc_data['File_' .$i. '_FileType'];
+                             //echo ($file_type);
+                             if (array_key_exists ('File_'.$i. '_FileSize', $this->mydoc_data) === true)
+                             {
+                                $file_size = $this ->mydoc_data['File_' .$i. '_FileSize'];
+                                //echo ($file_size);?>
+                                <a href="<?= $this->value = '/files/'.$this->docId.'/'.$this->path_name = $path_name;?>">
+                                <img src = "<?= $this->value = $this->layoutPath . '/img/filetypelogo_' .$file_type. '.png';?>"
+                                title = 'Download <?= $this->value = '-' .$path_name?>'>
+                                (<?$this->file_type = $file_type. ', ' .$file_size?>)</a>&nbsp;&nbsp;<?
+                             }
+                             else
+                             {?>
+                                <a href="<?= $this->value = '/files/'.$this->docId.'/'.$this->path_name = $path_name;?>">
+                                <img src = "<?= $this->value = $this->layoutPath . '/img/filetypelogo_' .$file_type. '.png';?>"
+                                title = 'Download<?= $this->value = '-' .$path_name?>'>
+                                (<?= $this->file_type = $file_type?>)</a>&nbsp;&nbsp;<?
+                             }
+                         }
+                         else
+                         {?>
+                             <a href="<?= $this->value = '/files/'.$this->docId.'/'.$this->path_name = $path_name;?>">
+                             <img src = "<?= $this->value = $this->layoutPath . '/img/filetypelogo_' .$file_type. '.png';?>"
+                             title = 'Download<?= $this->value = '-' .$path_name?>'></a>&nbsp;&nbsp;<?
+                         }
+                      }
                     }
-                 }?></p><br />
+                 }?></p>
 
                      <p><a href="<?= $this->value =
                         $this->url(array(
@@ -150,7 +182,7 @@
                     <img src = "<?= $this->value = $this->layoutPath . '/img/ris.jpg';?>" border = '0' title = 'RIS-Export'></a>
                 </p>
 
-                 <br /><br /><br />
+                 <br />
                  <?if (array_key_exists('Type', $this->mydoc_data))
                    {
                        $value = $this->mydoc_data['Type'];?>
