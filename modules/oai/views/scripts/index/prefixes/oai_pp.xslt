@@ -106,7 +106,8 @@
 
     <xsl:template match="PersonAuthor" mode="oai_pp">
         <xsl:element name="PP:DC.Creator">
-           <xsl:value-of select="@Name" />
+           <xsl:value-of select="@LastName" />,
+           <xsl:value-of select="@FirstName" />
         </xsl:element>
     </xsl:template>
 
