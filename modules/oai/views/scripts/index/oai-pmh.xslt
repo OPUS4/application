@@ -53,6 +53,7 @@
     <xsl:include href="prefixes/epicur.xslt"/>
     <xsl:include href="prefixes/xMetaDiss.xslt"/>
     <xsl:include href="prefixes/XMetaDissPlus.xslt"/>
+    <xsl:include href="prefixes/copy_xml.xslt"/>
     <xsl:output method="xml" indent="yes" />
 
     <xsl:param name="dateTime" />
@@ -155,6 +156,9 @@
                </xsl:when>
                <xsl:when test="$oai_metadataPrefix='oai_pp'">
                   <xsl:apply-templates select="." mode="oai_pp" />
+               </xsl:when>
+               <xsl:when test="$oai_metadataPrefix='copy_xml'">
+                  <xsl:apply-templates select="." mode="copy_xml" />
                </xsl:when>
             </xsl:choose>
             </xsl:element>
