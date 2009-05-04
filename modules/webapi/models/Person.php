@@ -113,6 +113,7 @@ class Person extends Response {
         try {
             $person = new Opus_Person($personId);
             $person->delete();
+            $this->setResponseCode(204);
         } catch (Exception $e) {
             $this->setResponseCode(404);
         }

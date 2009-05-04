@@ -139,7 +139,7 @@ class Modules_Webapi_DocumentTests extends PHPUnit_Framework_TestCase {
     public function testDeleteDocument() {
         $this->markTestSkipped('Skipped because of hard coding document id.');
         $restData = $this->__restClient->restDelete($this->__restUrl . '/37');
-        $this->assertEquals(200, $restData->getStatus(), 'Expected a 200 HTTP response on deleting a document.');
+        $this->assertEquals(204, $restData->getStatus(), 'Expected a 204 HTTP response on deleting a document.');
     }
 
     /**

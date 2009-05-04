@@ -113,6 +113,7 @@ class Document extends Response {
         try {
             $doc = new Opus_Document($docId);
             $doc->delete();
+            $this->setResponseCode(204);
         } catch (Exception $e) {
             $this->setResponseCode(404);
         }

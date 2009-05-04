@@ -163,7 +163,7 @@ class Modules_Webapi_PersonTests extends PHPUnit_Framework_TestCase {
     public function testDeletePerson() {
         $this->markTestSkipped('Skipped because of hard coding person id.');
         $restData = $this->__restClient->restDelete($this->__restUrl . '/37');
-        $this->assertEquals(200, $restData->getStatus(), 'Expected a 200 HTTP response on successful deleting a document.');
+        $this->assertEquals(204, $restData->getStatus(), 'Expected a 204 HTTP response on successful deleting a document.');
     }
 
     /**
