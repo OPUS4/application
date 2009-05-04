@@ -77,10 +77,10 @@
     {
 	   foreach ($this->browsinglist as $obj) {
             $pers = $obj->get();
-            $titleCount = BrowsingFilter::getPersonTitles($pers['id'], $this->role)->count();
+            #$titleCount = BrowsingFilter::hasTitles($pers['id'], $this->role);
             $role = $this->role;
-            if ($role !== 'authors') $role = 'persons';
-            if ($titleCount > 0) {
+            if ($role !== 'author') $role = 'persons';
+            #if ($titleCount > 0) {
                 echo '<li>';
              echo '<a href=' .
                  $this->url(
@@ -98,7 +98,7 @@
                  echo '</a>';
                  #echo ' (' . $titleCount. ')';
                  echo '</li>';
-            }
+            #}
         }
 	}
     if ($this->list === 'doctypes')

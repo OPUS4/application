@@ -136,7 +136,7 @@ class Search_BrowsingController extends Zend_Controller_Action
                 $this->view->role = $role;
                 $translatestring = 'search_index_' . $role . 'browsing';
                 $this->view->title = $this->view->translate($translatestring);
-                $browsingList = new BrowsingListFactory($list);
+                $browsingList = new BrowsingListFactory($list, $role);
                 $browsingListProduct = $browsingList->getBrowsingList();
                 $this->view->browsinglist = new Opus_Search_Iterator_PersonsListIterator($browsingListProduct);
                 break;

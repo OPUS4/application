@@ -50,9 +50,9 @@ class BrowsingListFactory
    * authors	- list of all authors
    * doctypes	- list of all document types
    */
-	public function __construct($browsingList, $collection = null, $node = null)
+	public function __construct($browsingList, $role = null, $collection = null, $node = null)
 	{
-		$this->createBrowsingList($browsingList, $collection, $node);
+		$this->createBrowsingList($browsingList, $role, $collection, $node);
 	}
 
   /**
@@ -61,12 +61,12 @@ class BrowsingListFactory
    * @param String browsingList Keyword of the browsingList that should be created in this factory
    * @access private
    */
-	private function createBrowsingList($browsingList, $collection, $node)
+	private function createBrowsingList($browsingList, $role, $collection, $node)
 	{
 		switch ($browsingList)
 		{
 			case 'persons':
-				$browseList = BrowsingList::getPersonsList();
+				$browseList = BrowsingList::getPersonsRoleList($role);
 				break;
 			case 'doctypes':
 				$browseList = BrowsingList::getDocumentTypeList();

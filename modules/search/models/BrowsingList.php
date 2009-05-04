@@ -66,6 +66,42 @@ class BrowsingList
 	}
 
 	/**
+	 * Get a list of all authors from the repository
+	 *
+	 * @return PersonsList list of authors, unsorted (call method sort() on it in order to sort it)
+	 * @static
+	 */
+	public static function getPersonsRoleList($role)
+	{
+        $registry = Zend_Registry::getInstance();
+        $index = Zend_Search_Lucene::open($registry->get('Zend_LucenePersonsIndexPath'));
+
+        $browsinglist = $index->find('role:'.$role);
+
+        //$browsinglist = Opus_Person::getPersonsByRole($role);
+		$personsList = new Opus_Search_List_PersonsList();
+		$done = array();
+
+		foreach ($browsinglist as $person)
+		{
+			$member = new Opus_Person($person->dbid);
+			if (false === array_key_exists($member->getLastName(), $done))
+			{
+			    $pers = new Opus_Search_Adapter_PersonAdapter(array('id' => $member->getId(), 'firstName' => $member->getFirstName(), 'lastName' => $member->getLastName()));
+			    $personsList->add($pers);
+			    $done[$member->getLastName()] = $member->getFirstName();
+			}
+			else if ($done[$member->getLastName()] !== $member->getFirstName())
+			{
+			    $pers = new Opus_Search_Adapter_PersonAdapter(array('id' => $member->getId(), 'firstName' => $member->getFirstName(), 'lastName' => $member->getLastName()));
+			    $personsList->add($pers);
+			    $done[$member->getLastName()] = $member->getFirstName();
+			}
+		}
+		return $personsList;
+	}
+
+	/**
 	 * Get a list of all documentTypes from the repository
 	 *
 	 * @return DocumentTypeList list of documenttypes, unsorted (call method sort() on it in order to sort it)

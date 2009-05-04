@@ -100,6 +100,20 @@ class BrowsingFilter
     }
 
     /**
+     * Returns the number of documents connected with the given person
+     *
+     * @param Integer authorId Id of the author from the Opus database
+     * @return integer number of documents
+     */
+    public static function hasTitles($personId, $role)
+    {
+        $person = new Opus_Person( (int) $personId);
+        $docresult = $person->getDocumentsByRole($role);
+
+        return (count($docresult));
+    }
+
+    /**
 	 * Returns a list of all entries from a given author
 	 *
 	 * @return HitList resultlist
