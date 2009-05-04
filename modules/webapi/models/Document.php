@@ -65,6 +65,12 @@ class Document extends Response {
             // count access to a document
             $statistic = Opus_Statistic_LocalCounter::getInstance();
             $statistic->countFrontdoor($docId);
+            // add statistic information to xml structure
+            $statisticXml = $xml->createElement('Statistic');
+            $statisticXml->setAttribute('Frontdoor', $statistic->readTotal($docId, 'frontdoor'));
+            $statisticXml->setAttribute('Files', $statistic->readTotal($docId, 'files'));
+            $opusDocument = $xml->getElementsByTagName('Opus_Document')->item(0);
+            $opusDocument->appendChild($statisticXml);
         } catch (Opus_Model_Exception $e) {
             $this->setError('An error occurs during getting informations. Error reason: ' . $e->getMessage(), 404);
             $xml = $this->_xml;
