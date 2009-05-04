@@ -109,10 +109,16 @@ class XMLImport
             $ddc = null;
             $ccsNotation = null;
             $ccs = null;
+            $jelNotation = null;
+            $jel = null;
+            $pacsNotation = null;
+            $pacs = null;
             $oldid = $document->getElementsByTagName('IdentifierOpus3')->Item(0)->getAttribute('Value');
             $licence = $document->getElementsByTagName('OldLicence')->Item(0);
             $ddcNotation = $document->getElementsByTagName('OldDdc')->Item(0);
             $ccsNotations = $document->getElementsByTagName('OldCcs');
+            $jelNotations = $document->getElementsByTagName('OldJel');
+            $pacsNotations = $document->getElementsByTagName('OldPacs');
             if ($licence !== null)
             {
                 $licenceValue = $licence->getAttribute('Value');
@@ -143,6 +149,36 @@ class XMLImport
                         $ccs[] = new Opus_Collection($this->collections[$ccsName], $ccs_id);
                     }
                     $document->removeChild($ccsNotation);
+                }
+            }
+            if ($pacsNotations->length > 0)
+            {
+                $pacs = array();
+                $pacsName = 'Physics and Astronomy Classification Scheme';
+                for ($c = 0; $c < $pacsNotations->length; $c++) {
+                	$pacsNotation = $pacsNotations->Item($c);
+                    $pacsValue = $pacsNotation->getAttribute('Value');
+                    $pacs_id = null;
+                    $pacs_id = $this->map(MappingFile::getShortName($pacsName), $pacsValue);
+                    if ($pacs_id !== null && array_key_exists($pacsName, $this->collections) === true) {
+                        $pacs[] = new Opus_Collection($this->collections[$pacsName], $pacs_id);
+                    }
+                    $document->removeChild($pacsNotation);
+                }
+            }
+            if ($jelNotations->length > 0)
+            {
+                $jel = array();
+                $jelName = 'Journal of Economic Literature (JEL) Classification System';
+                for ($c = 0; $c < $jelNotations->length; $c++) {
+                	$jelNotation = $jelNotations->Item($c);
+                    $jelValue = $jelNotation->getAttribute('Value');
+                    $jel_id = null;
+                    $jel_id = $this->map(MappingFile::getShortName($jelName), $jelValue);
+                    if ($jel_id !== null && array_key_exists($jelName, $this->collections) === true) {
+                        $jel[] = new Opus_Collection($this->collections[$jelName], $jel_id);
+                    }
+                    $document->removeChild($jelNotation);
                 }
             }
 			try {

@@ -214,7 +214,8 @@
             
             <!-- Classifications and Subjects -->
             <xsl:call-template name="getCcs"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
-            <!--<xsl:call-template name="getSubjects"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param><xsl:with-param name="subject"><xsl:value-of select="field[@name='subject_type']" /></xsl:with-param></xsl:call-template>-->            
+            <xsl:call-template name="getPacs"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
+            <xsl:call-template name="getJel"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
                       
             <!--
             Prepared, but commented out: 
@@ -279,6 +280,28 @@
         <xsl:param name="source_id" required="yes" />
         <xsl:for-each select="/mysqldump/database/table_data[@name='opus_ccs']/row[field[@name='source_opus']=$source_id]">
             <xsl:element name="OldCcs">
+                <xsl:attribute name="Value">
+                    <xsl:value-of select="field[@name='class']" />
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:for-each>
+    </xsl:template>
+    <!-- temporary PACS information -->
+    <xsl:template name="getPacs">
+        <xsl:param name="source_id" required="yes" />
+        <xsl:for-each select="/mysqldump/database/table_data[@name='opus_pacs']/row[field[@name='source_opus']=$source_id]">
+            <xsl:element name="OldPacs">
+                <xsl:attribute name="Value">
+                    <xsl:value-of select="field[@name='class']" />
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:for-each>
+    </xsl:template>
+    <!-- temporary JEL information -->
+    <xsl:template name="getJel">
+        <xsl:param name="source_id" required="yes" />
+        <xsl:for-each select="/mysqldump/database/table_data[@name='opus_jel']/row[field[@name='source_opus']=$source_id]">
+            <xsl:element name="OldJel">
                 <xsl:attribute name="Value">
                     <xsl:value-of select="field[@name='class']" />
                 </xsl:attribute>
