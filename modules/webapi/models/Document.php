@@ -62,6 +62,9 @@ class Document extends Response {
             $baseUri = $this->_protocol . $this->_hostname . $view->url(array('module' => 'webapi'), 'default', true);
             $xml2->setXlinkBaseUri($baseUri);
             $xml = $xml2->getDomDocument();
+            // count access to a document
+            $statistic = Opus_Statistic_LocalCounter::getInstance();
+            $statistic->countFrontdoor($docId);
         } catch (Opus_Model_Exception $e) {
             $this->setError('An error occurs during getting informations. Error reason: ' . $e->getMessage(), 404);
             $xml = $this->_xml;
