@@ -192,7 +192,6 @@ class Modules_Webapi_PersonTests extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testPostPersonData() {
-        $this->markTestSkipped('Skipped because update method not included in model.');
         $putData = '<?xml version="1.0" encoding="utf-8"?>
                     <Opus xmlns:xlink="http://www.w3.org/1999/xlink"><Opus_Person PlaceOfBirth="Dresden" FirstName="Test" LastName="Tester"/></Opus>';
 
@@ -212,9 +211,8 @@ class Modules_Webapi_PersonTests extends PHPUnit_Framework_TestCase {
         $xml->loadXML($restData2->getRawBody());
         $personTag = $xml->getElementsByTagName('Opus_Person_Info');
         $this->assertEquals(1, $personTag->length, 'There should be an Opus_Person_Info tag.');
-        $updateMessage = $personId = $personTag->item(0)->nodeValue;
+        $updateMessage = $personTag->item(0)->nodeValue;
         $this->assertNotNull($updateMessage, 'There should be an update message');
-
     }
 
     /**
