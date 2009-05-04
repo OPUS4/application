@@ -64,13 +64,6 @@ class XMLImport
     protected $collections = array();
 
     /**
-     * Holds the collections predifined in OPUS
-     *
-     * @var array  Defaults to the OPUS collections (Name => ID).
-     */    
-    protected $collectionShortNames = array('Dewey Decimal Classification' => 'ddc', 'Computing Classification System' => 'ccs');
-
-    /**
      * Do some initialization on startup of every action
      *
      * @param string $xslt Filename of the stylesheet to be used
@@ -83,8 +76,7 @@ class XMLImport
         $roles = Opus_Collection_Information::getAllCollectionRoles();
         foreach ($roles as $role) {
             $this->collections[$role['name']] = $role['id'];
-            $this->createMappingfile(array($role['id'], $this->collectionShortNames[$role['name']]));
-            flush();
+            $mf = new MappingFile($role);
         }
         // Initialize member variables.
         $this->_xml = new DomDocument;
@@ -131,10 +123,10 @@ class XMLImport
             {
                 $ddcName = 'Dewey Decimal Classification';
                 $ddcValue = $ddcNotation->getAttribute('Value');
-                $this->ddc_id = null;
-                $this->ddc_id = $this->map($this->collectionShortNames[$ddcName], $ddcValue);
-                if ($this->ddc_id !== null && array_key_exists($ddcName, $this->collections) === true) {
-                    $ddc = new Opus_Collection($this->collections[$ddcName], $this->ddc_id);
+                $ddc_id = null;
+                $ddc_id = $this->map(MappingFile::getShortName($ddcName), $ddcValue);
+                if ($ddc_id !== null && array_key_exists($ddcName, $this->collections) === true) {
+                    $ddc = new Opus_Collection($this->collections[$ddcName], $ddc_id);
                 }
                 $document->removeChild($ddcNotation);
             }
@@ -146,7 +138,7 @@ class XMLImport
                 	$ccsNotation = $ccsNotations->Item($c);
                     $ccsValue = $ccsNotation->getAttribute('Value');
                     $ccs_id = null;
-                    $ccs_id = $this->map($this->collectionShortNames[$ccsName], $ccsValue);
+                    $ccs_id = $this->map(MappingFile::getShortName($ccsName), $ccsValue);
                     if ($ccs_id !== null && array_key_exists($ccsName, $this->collections) === true) {
                         $ccs[] = new Opus_Collection($this->collections[$ccsName], $ccs_id);
                     }
@@ -198,39 +190,6 @@ class XMLImport
 		}
 		return $lic[$shortName];
 	 }
-
-	/**
-	 * creates a mapping file for a OPUS3 classification system to OPUS4
-	 *
-	 * @param array $classification  
-	 * @return void
-	 */
-	protected function createMappingfile($classification, $coll = null)
-	{
-		if ($coll === null) $CollectionRole = new Opus_CollectionRole($classification[0]);
-		else $CollectionRole = $coll;
-		foreach ($CollectionRole->getSubCollection() as $Notation) {
-			echo "Mapping " . $Notation->getNumber() . " to " . $Notation->getId() . " in classification number ". $classification[0] ."\n";
-			$this->writeNotation($Notation, $classification[1]);
-			$this->createMappingfile($classification, $Notation);
-		}
-		echo "There is no SubCollection for ". $CollectionRole->getId() ."\n";
-	}
-	
-	/**
-	 * writes a line to the mapping file
-	 * 
-	 * @param Opus_Collection $notation Collection to get mapped
-	 * @param string $classification short name of the classification this collection belongs to
-	 * @return void 
-	 */	
-	protected function writeNotation($notation, $classification) {
-	    if ($notation->getNumber() !== '') {
-	        $fp = fopen('../workspace/tmp/'.$classification.'Mapping.txt', 'a');
-	        fputs($fp, $notation->getNumber() . "\t" . $notation->getId() . "\n");
-	        fclose($fp);
-	    }
-	}
 
 	/**
 	 * maps a notation from Opus3 on Opus4 schema
