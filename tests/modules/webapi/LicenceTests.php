@@ -38,6 +38,11 @@ require_once 'PHPUnit/Framework.php';
 require_once 'Zend/Config/Ini.php';
 require_once 'Zend/Rest/Client.php';
 
+/**
+ * Tests for resource licence.
+ *
+ * @group WebapiLicenceTest
+ */
 class Modules_Webapi_LicenceTests extends PHPUnit_Framework_TestCase {
 
     /**

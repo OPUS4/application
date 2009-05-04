@@ -38,6 +38,11 @@ require_once 'PHPUnit/Framework.php';
 require_once 'Zend/Config/Ini.php';
 require_once 'Zend/Rest/Client.php';
 
+/**
+ * Tests for resource file.
+ *
+ * @group WebapiFileTest
+ */
 class Modules_Webapi_FileTests extends PHPUnit_Framework_TestCase {
 
     /**

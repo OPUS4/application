@@ -38,6 +38,11 @@ require_once 'PHPUnit/Framework.php';
 require_once 'Zend/Config/Ini.php';
 require_once 'Zend/Rest/Client.php';
 
+/**
+ * Tests for resource person.
+ *
+ * @group WebapiPersonTest
+ */
 class Modules_Webapi_PersonTests extends PHPUnit_Framework_TestCase {
 
     /**
@@ -189,7 +194,7 @@ class Modules_Webapi_PersonTests extends PHPUnit_Framework_TestCase {
     public function testPostPersonData() {
         $this->markTestSkipped('Skipped because update method not included in model.');
         $putData = '<?xml version="1.0" encoding="utf-8"?>
-                    <Opus xmlns:xlink="http://www.w3.org/1999/xlink"><Opus_Person DateOfBirth="2009-01-01" PlaceOfBirth="Dresden" FirstName="Test" LastName="Tester"/></Opus>';
+                    <Opus xmlns:xlink="http://www.w3.org/1999/xlink"><Opus_Person PlaceOfBirth="Dresden" FirstName="Test" LastName="Tester"/></Opus>';
 
         $postData = '<?xml version="1.0" encoding="utf-8"?>
                     <Opus xmlns:xlink="http://www.w3.org/1999/xlink"><Opus_Person PlaceOfBirth="Berlin" FirstName="Test" LastName="Tester"/></Opus>';
