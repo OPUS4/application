@@ -165,7 +165,7 @@ class Search_BrowsingController extends Zend_Controller_Action
 				$collection = $this->_getParam("collection");
 				$this->view->collection = $this->_getParam("collection");
 				if (isset($collection) === false) $collection = 0;
-				$browsingList = new BrowsingListFactory($list, $collection, $node);
+				$browsingList = new BrowsingListFactory($list, null, $collection, $node);
 				$browsingListProduct = $browsingList->getBrowsingList();
 				$this->view->browsinglist = $browsingListProduct;
 				$this->view->page = $this->_getParam("page");
