@@ -42,6 +42,14 @@
         <seg>Datei</seg>
       </tuv>
     </tu>
+    <tu tuid="File(s)">
+      <tuv xml:lang="en">
+        <seg>File(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datei(en)</seg>
+      </tuv>
+    </tu>
     <tu tuid="HashType">
       <tuv xml:lang="en">
         <seg>Hashtype</seg>
