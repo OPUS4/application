@@ -63,7 +63,7 @@ class MappingFile
     public function __construct($role)
     {
     	// Initialize the file
-    	$fp = fopen('../workspace/tmp/'.self::$collectionShortNames[$role['name']].'Mapping.txt', 'w');
+    	$fp = fopen('../workspace/tmp/'.self::$collectionShortNames[$role['name']].'.map', 'w');
     	fclose($fp);
         $this->createMappingfile(array($role['id'], self::$collectionShortNames[$role['name']]));
     }
@@ -93,7 +93,7 @@ class MappingFile
 	 */	
 	protected function writeNotation($notation, $classification) {
 	    if ($notation->getNumber() !== '') {
-	        $fp = fopen('../workspace/tmp/'.$classification.'Mapping.txt', 'a');
+	        $fp = fopen('../workspace/tmp/'.$classification.'.map', 'a');
 	        fputs($fp, $notation->getNumber() . "\t" . $notation->getId() . "\n");
 	        fclose($fp);
 	    }

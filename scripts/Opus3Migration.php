@@ -137,6 +137,13 @@ class Opus3Migration extends Application_Bootstrap {
 		    }
 		    echo "finished!";
     }
+    
+    /**
+     * Removes all Mapping files needed for Import
+     */
+    protected function cleanup() {
+    	unlink('../workspace/tmp/*.map');
+    }
 }
 
 class Opus3MigrationParameters extends Opus3Migration
@@ -305,14 +312,8 @@ class Opus3MigrationParameters extends Opus3Migration
 			$this->autosign($this->signaturePassword);
 		    echo "finished!\n";
 		}
-
-		// cleaning: remove licence mapping file
-		if (true === in_array('licences', $this->whatToDo)) {
-		    unlink('../workspace/tmp/licenseMapping.txt');
-		}
-		if (true === in_array('metadata', $this->whatToDo)) {
-		    unlink('../workspace/tmp/ddcMapping.txt');
-		}    	
+		
+		$this->cleanup();
     }
 }
 
@@ -391,14 +392,8 @@ class Opus3MigrationReadline extends Opus3Migration {
 			$this->autosign($newsigpass);
 		    echo "finished!\n";
 		}
-
-		// cleaning: remove licence mapping file
-		if ($licenceinput === 'y' || $licenceinput === 'yes') {
-		    unlink('../workspace/tmp/licenseMapping.txt');
-		}
-		if ($metadatainput === 'y' || $metadatainput === 'yes') {
-		    unlink('../workspace/tmp/ddcMapping.txt');
-		}
+		
+		$this->cleanup();
     }	
 }
 

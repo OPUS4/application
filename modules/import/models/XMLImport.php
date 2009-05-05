@@ -219,7 +219,7 @@ class XMLImport
 	 */
 	 public function getLicence($shortName)
 	 {
-	 	$fp = file('../workspace/tmp/licenseMapping.txt');
+	 	$fp = file('../workspace/tmp/license.map');
 		foreach ($fp as $licence) {
 			$mappedLicence = split("\ ", $licence);
 			$lic[$mappedLicence[0]] = $mappedLicence[1];
@@ -235,7 +235,7 @@ class XMLImport
 	 */
 	protected function map($classification, $data)
 	{
-	 	$fp = file('../workspace/tmp/'.$classification.'Mapping.txt');
+	 	$fp = file('../workspace/tmp/'.$classification.'.map');
 		foreach ($fp as $licence) {
 			$mappedLicence = split("\t", $licence);
 			$lic[$mappedLicence[0]] = $mappedLicence[1];
