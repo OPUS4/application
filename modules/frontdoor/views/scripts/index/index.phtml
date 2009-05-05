@@ -39,12 +39,13 @@
  *
  *
  */
+
 ?>
 <h1><?= $this-> translate('frontdoor_pagetitle') ?></h1><hr />
 <? if (is_array($this->mydoc_data) === true)
    {?>
       <div id="summary">
-       <?  for ($i = 0; $i < 10; $i++)
+         <?for ($i = 0; $i < 10; $i++)
            {
               if (array_key_exists ('IdentifierUrn_' .$i. '_Value', $this->mydoc_data) === true)
               {
@@ -81,50 +82,75 @@
                     }
                  }
 
+                // getting logos depending on filetype
 
                  if ($this->fileNumber !== 0)
                  {?>
-                    <p><b><?= $this-> translate('File(s): ')?>&nbsp;&nbsp;</b><?
-
+                    <p><b><?= $this-> translate('File(s)')?>:</b><?
                     for ($i = 0; $i < $this->fileNumber; $i++)
                     {
                        if (array_key_exists ('File_'.$i. '_PathName', $this->mydoc_data) === true)
                        {
                           $path_name = $this ->mydoc_data['File_' .$i. '_PathName'];
-                          //echo ($path_name);
-
                           if (array_key_exists ('File_' .$i. '_FileType', $this->mydoc_data) === true)
                           {
                              $file_type = $this->mydoc_data['File_' .$i. '_FileType'];
-                             //echo ($file_type);
                              if (array_key_exists ('File_'.$i. '_FileSize', $this->mydoc_data) === true)
                              {
                                 $file_size = $this ->mydoc_data['File_' .$i. '_FileSize'];
-                                //echo ($file_size);?>
+                                if (file_exists ('./layouts/' .$this->theme. '/img/filetypelogo_' .$file_type. '.png'))
+                                {?>
+                                   <a href="<?= $this->value = '/files/'.$this->docId.'/'.$this->path_name = $path_name;?>">
+                                   <img src = "<?= $this->value = $this->layoutPath . '/img/filetypelogo_' .$file_type. '.png';?>"
+                                   title = 'Download' border = '0'<?= $this->value = '-' .$path_name?>'>
+                                   (<?$this->file_type = $file_type. ', ' .$file_size?>)</a>&nbsp;&nbsp;&nbsp;<?
+                                }
+                                else
+                                {?>
+                                   <a href="<?= $this->value = '/files/'.$this->docId.'/'.$this->path_name = $path_name;?>">
+                                   <img src = "<?= $this->value = $this->layoutPath . '/img/filetypelogo_default.png';?>"
+                                   title = 'Download' border = '0'<?= $this->value = '-' .$path_name?>'>
+                                   (<?$this->file_type = $file_type. ', ' .$file_size?>)</a>&nbsp;&nbsp;&nbsp;<?
+                                }
+                             }
+                             else
+                             {
+                                 if (file_exists ('./layouts/' .$this->theme. '/img/filetypelogo_' .$file_type. '.png'))
+                                 {?>
+                                    <a href="<?= $this->value = '/files/'.$this->docId.'/'.$this->path_name = $path_name;?>">
+                                    <img src = "<?= $this->value = $this->layoutPath . '/img/filetypelogo_' .$file_type. '.png';?>"
+                                    title = 'Download' border = '0'<?= $this->value = '-' .$path_name?>'>
+                                    (<?= $this->file_type = $file_type?>)</a>&nbsp;&nbsp;&nbsp;<?
+                                 }
+                                 else
+                                 {?>
+                                    <a href="<?= $this->value = '/files/'.$this->docId.'/'.$this->path_name = $path_name;?>">
+                                    <img src = "<?= $this->value = $this->layoutPath . '/img/filetypelogo_default.png';?>"
+                                    title = 'Download' border = '0'<?= $this->value = '-' .$path_name?>'>
+                                    (<?= $this->file_type = $file_type?>)</a>&nbsp;&nbsp;&nbsp;<?
+                                 }
+                              }
+                         }
+                         else
+                         {
+                             if (file_exists ('./layouts/' .$this->theme. '/img/filetypelogo_' .$file_type. '.png'))
+                             {?>
                                 <a href="<?= $this->value = '/files/'.$this->docId.'/'.$this->path_name = $path_name;?>">
                                 <img src = "<?= $this->value = $this->layoutPath . '/img/filetypelogo_' .$file_type. '.png';?>"
-                                title = 'Download <?= $this->value = '-' .$path_name?>'>
-                                (<?$this->file_type = $file_type. ', ' .$file_size?>)</a>&nbsp;&nbsp;<?
+                                title = 'Download' border = '0'<?= $this->value = '-' .$path_name?>'></a>&nbsp;&nbsp;&nbsp;<?
                              }
                              else
                              {?>
                                 <a href="<?= $this->value = '/files/'.$this->docId.'/'.$this->path_name = $path_name;?>">
-                                <img src = "<?= $this->value = $this->layoutPath . '/img/filetypelogo_' .$file_type. '.png';?>"
-                                title = 'Download<?= $this->value = '-' .$path_name?>'>
-                                (<?= $this->file_type = $file_type?>)</a>&nbsp;&nbsp;<?
+                                <img src = "<?= $this->value = $this->layoutPath . '/img/filetypelogo_default.png';?>"
+                                title = 'Download' border = '0'<?= $this->value = '-' .$path_name?></a>&nbsp;&nbsp;&nbsp;<?
                              }
-                         }
-                         else
-                         {?>
-                             <a href="<?= $this->value = '/files/'.$this->docId.'/'.$this->path_name = $path_name;?>">
-                             <img src = "<?= $this->value = $this->layoutPath . '/img/filetypelogo_' .$file_type. '.png';?>"
-                             title = 'Download<?= $this->value = '-' .$path_name?>'></a>&nbsp;&nbsp;<?
                          }
                       }
                     }
                  }?></p>
 
-                     <p><a href="<?= $this->value =
+                     <p><br><a href="<?= $this->value =
                         $this->url(array(
                             'module' => 'frontdoor',
                             'controller' => 'hash',
