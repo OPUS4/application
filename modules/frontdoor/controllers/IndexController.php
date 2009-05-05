@@ -140,6 +140,7 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         if (true === empty($theme)) {
             $theme = 'default';
         }
+        $this->view->theme = $theme;
         $this->view->layoutPath = $this->view->baseUrl() .'/layouts/'. $theme;
 
         //increase counter if all conditions are fullfilled (no double click, no spider, etc.)
