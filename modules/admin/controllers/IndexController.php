@@ -51,34 +51,4 @@ class Admin_IndexController extends Zend_Controller_Action {
 		$this->view->title = 'Admin';
 	}
 
-    /**
-	 * Builds the index of the search engine
-	 *
-	 * @return void
-	 */
-    public function buildindexAction()
-    {
-        # Increase maximum execution time for indexer
-    	ini_set('max_execution_time', 600);
-
-    	$this->view->title = $this->view->translate('admin_title_indexbuild');
-
-        $this->view->indexed = "Building index has been disabled from web interface. Please use command " .
-        		"line script instead! Use php config/build_search_engine_index.php in main directory of OPUS.";
-
-		/*$indexer = new Opus_Search_Index_Indexer();
-
-        $docresult = Opus_Document::getAllIds();
-
-        $this->view->indexed = "";
-        $this->view->indexed .= date('Y-m-d H:i:s') . 'Start<br/>';
-        foreach ($docresult as $row) {
-            $docadapter = new Opus_Document( (int) $row);
-        	$indexer->addDocumentToEntryIndex($docadapter);
-       		$this->view->indexed .= date('Y-m-d H:i:s') . ': Indexed Metadata for ' . $row . '<br/>';
-        }
-        $this->view->indexed .= date('Y-m-d H:i:s') . 'Stop';
-        */
-    }
-
 }

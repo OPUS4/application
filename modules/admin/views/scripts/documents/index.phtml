@@ -28,17 +28,25 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Henning Gerhardt (henning.gerhardt@slub-dresden.de)
+ * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 ?>
 
-<h1><?php echo $this->title ?></h1>
+<h1><?php echo $this->translate('admin_documents_modulename'); ?></h1>
 
 <?php
+foreach ($this->registers as $register) {
+	?>
+	<a href="<?=$register[0] ?>"><?php echo $this->translate($register[1]); ?></a> | 
+	<?php
+}
+
 $documentList = $this->documentList;
 if (false === empty($documentList)) { ?>
+<p>
 <ol>
     <?php foreach ($documentList as $entry) {
         $title = $entry['title'];
@@ -62,14 +70,15 @@ if (false === empty($documentList)) { ?>
         <li>
         <?php echo current($title) ?>
         <form action="<?php echo $url_delete ?>" method="post" class="crud">
-            <a href="<?php echo $url_edit ?>">Edit</a>
+            <a href="<?php echo $url_edit ?>"><?php echo $this->translate('docs_edit'); ?></a>
             <input type="hidden" name="id" value="<?php echo $entry['docId'] ?>" />
-            <input type="submit" value="Delete" />
+            <input type="submit" value="<?php echo $this->translate('docs_delete'); ?>" />
         </form>
         </li>
         <?php
     } ?>
 </ol>
+</p>
 <?php } else { ?>
-    <p>No documents in database!</p>
+    <p><?php echo $this->translate('docs_no_documents'); ?></p>
 <?php } ?>

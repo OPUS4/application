@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tmx version="2.0" xmlns="http://www.lisa.org/tmx20">
+  <header adminlang="en" creationtool="locale4j" creationtoolversion="1.1" o-tmf="unknown" segtype="block" srclang="*all*"/>
+  <body>
+    <tu tuid="admin_documents_modulename">
+      <tuv xml:lang="en">
+        <seg>Administration of documents</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Administration der Dokumente</seg>
+      </tuv>
+    </tu>
+    <tu tuid="docs_all">
+      <tuv xml:lang="en">
+        <seg>All documents</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Alle Dokumente</seg>
+      </tuv>
+    </tu>
+    <tu tuid="docs_published">
+      <tuv xml:lang="en">
+        <seg>Published documents</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Publizierte Dokumente</seg>
+      </tuv>
+    </tu>
+    <tu tuid="docs_unpublished">
+      <tuv xml:lang="en">
+        <seg>Unpublished documents</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nicht publizierte Dokumente</seg>
+      </tuv>
+    </tu>
+    <tu tuid="docs_deleted">
+      <tuv xml:lang="en">
+        <seg>Deleted documents</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Gelöschte Dokumente</seg>
+      </tuv>
+    </tu>
+    <tu tuid="docs_edit">
+      <tuv xml:lang="en">
+        <seg>Edit</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Ändern</seg>
+      </tuv>
+    </tu>
+    <tu tuid="docs_delete">
+      <tuv xml:lang="en">
+        <seg>Delete</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Löschen</seg>
+      </tuv>
+    </tu>
+    <tu tuid="docs_nodocs">
+      <tuv xml:lang="en">
+        <seg>No documents found!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Keine Dokumente vorhanden!</seg>
+      </tuv>
+    </tu>
+  </body>
+</tmx>

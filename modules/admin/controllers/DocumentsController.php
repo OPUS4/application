@@ -46,15 +46,40 @@ class Admin_DocumentsController extends Controller_CRUDAction {
     protected $_modelclass = 'Opus_Document';
 
     /**
-     * Display list of documents.
+     * Display documents (all or filtered by state)
      *
      * @return void
      */
     public function indexAction() {
-        //
-        $this->view->title = 'Documents';
+        $this->view->registers = array(
+            array(
+                $this->view->url(array('module' => 'admin', 'controller'=>'documents', 'action'=>'index'), null, true), 'docs_all'
+            ),
+            array(
+                $this->view->url(array('module' => 'admin', 'controller'=>'documents', 'action'=>'index', 'state' => 'published'), null, true), 'docs_published'
+            ),
+            array(
+                $this->view->url(array('module' => 'admin', 'controller'=>'documents', 'action'=>'index', 'state' => 'unpublished'), null, true), 'docs_unpublished'
+            ),
+            array(
+                $this->view->url(array('module' => 'admin', 'controller'=>'documents', 'action'=>'index', 'state' => 'deleted'), null, true), 'docs_deleted'
+            )
+            );
+        $data = $this->_request->getParams();
         // following could be handled inside a application model
-        $documentLists = Opus_Document::getAllIds();
+        if (true === array_key_exists('state', $data)) {
+        	$documentLists = Opus_Document::getAllByState($data['state']);
+            $result = array();
+            foreach ($documentLists as $doc) {
+                $iterim = array(
+                    'title' => array($doc->getTitleMain(0)->getValue(), $doc->getId()),
+                    'docId' => $doc->getId(),
+                    );
+                $result[] = $iterim;
+            }
+        }
+        else {
+            $documentLists = Opus_Document::getAllIds();
         $titlesList = Opus_Document::getAllDocumentTitles();
         $result = array();
         foreach ($documentLists as $docId) {
@@ -64,7 +89,8 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                 );
             $result[] = $iterim;
         }
-        $this->view->documentList = $result;
+        }
+        $this->view->documentList = $result;        
     }
 
 }
