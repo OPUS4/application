@@ -119,7 +119,13 @@ class Controller_CRUDAction extends Controller_Action {
                     $model = $form_builder->getModelFromForm($form);
                     $form_builder->setFromPost($model, $form->getValues());
                     $model->store();
-                    $this->_redirectTo('Model successfully created.', 'index');
+                    // The first 3 params are module, controller and action.
+                    // Additional parameters are passed through.
+                    $params = $this->getRequest()->getUserParams();
+                    $module = array_shift($params);
+                    $controller = array_shift($params);
+                    $action = array_shift($params);
+                    $this->_redirectTo('', 'show', $controller, $module, $params);
                 } else {
                     $this->view->form = $form;
                 }
