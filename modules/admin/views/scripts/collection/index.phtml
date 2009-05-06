@@ -37,10 +37,9 @@
 <ul>
 <? foreach($this->entries as $id => $entry) : ?>
 <li>
-    <?= $entry ?>
-    <form action="<?= $this->url(array('action' => 'delete')) ?>">
-        <a href="<?= $this->url(array('action' => 'show', 'id' => $id)) ?>">Show</a>
-        <a href="<?= $this->url(array('action' => 'edit', 'id' => $id)) ?>">Edit</a>
+    <form action="<?= $this->url(array('action' => 'delete', 'role' => $id))?>" method="post">
+        <a href="<?= $this->url(array('action' => 'show', 'role' => $id)) ?>"><?= $entry ?></a>
+        <a href="<?= $this->url(array('action' => 'edit', 'role' => $id)) ?>">Edit</a>
         <input type="hidden" name="id" value="$id" />
         <input type="submit" value="Delete" />
     </form>

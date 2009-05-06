@@ -40,14 +40,20 @@
  * @category    Framework
  * @package     Module_Admin
  */
-class Admin_CollectionController extends Controller_CRUDAction {
+class Admin_CollectionController extends Controller_Action {
 
     /**
-     * The class of the model being administrated.
+     * List all available collection role instances
      *
-     * @var Opus_Model_Abstract
+     * @return void
      */
-    protected $_modelclass = 'Opus_Collection';
+    public function indexAction() {
+        $entries = Opus_CollectionRole::getAll();
+        $this->view->entries = array();
+        foreach ($entries as $entry) {
+            $this->view->entries[$entry->getId()] = $entry->getDisplayName();
+        }
+    }
 
     /**
      * Edits a collection instance
@@ -55,14 +61,20 @@ class Admin_CollectionController extends Controller_CRUDAction {
      * @return void
      */
     public function editAction() {
-        $collection_id = $this->getRequest()->getParam('id');
-        $role_id = $this->getRequest()->getParam('role');
+        $role = $this->getRequest()->getParam('role');
+        $path = $this->getRequest()->getParam('path');
         $form_builder = new Opus_Form_Builder();
-        $model = new Opus_Collection($role_id, $collection_id);
-        $modelForm = $form_builder->build($model);
-        $action_url = $this->view->url(array("action" => "create"));
-        $modelForm->setAction($action_url);
-        $this->view->form = $modelForm;
+        $collection = new Opus_CollectionRole($role);
+        if (true === isset($path)) {
+            $trail = explode('-', $path);
+            foreach($trail as $step) {
+                $collection = $collection->getSubCollection($step);
+            }
+        }
+        $collectionForm = $form_builder->build($collection);
+        $action_url = $this->view->url(array('action' => 'create'));
+        $collectionForm->setAction($action_url);
+        $this->view->form = $collectionForm;
     }
 
     /**
@@ -71,38 +83,138 @@ class Admin_CollectionController extends Controller_CRUDAction {
      * @return void
      */
     public function newAction() {
-        $role = (int) $this->getRequest()->getParam('role');
-        $parent = (int) $this->getRequest()->getParam('parent');
-        $left_sibling = (int) $this->getRequest()->getParam('left_sibling');
+        $role = $this->getRequest()->getParam('role');
+        $path = $this->getRequest()->getParam('path');
         $form_builder = new Opus_Form_Builder();
-        $model = new Opus_Collection($role, null, $parent, $left_sibling);
-        $modelForm = $form_builder->build($model);
-        $action_url = $this->view->url(array("action" => "create"));
-        $modelForm->setAction($action_url);
-        $this->view->form = $modelForm;
+        if (true === isset($role)) {
+            $collection = new Opus_Collection($role);
+        } else {
+            $collection = new Opus_CollectionRole;
+        }
+        $collectionForm = $form_builder->build($collection);
+        $action_url = $this->view->url(array('action' => 'create'));
+        $collectionForm->setAction($action_url);
+        $this->view->form = $collectionForm;
     }
 
     /**
-     * Redirect to index action of collection roles.
-     *
-     * @return void
-     */
-    public function indexAction() {
-        $this->_redirectTo('', 'index', 'collection-role');
-    }
-
-    /**
-     * Deletes a collection instance
+     * Deletes a collection or collection role instance
      *
      * @return void
      */
     public function deleteAction() {
         if ($this->_request->isPost() === true) {
-            $role = (int) $this->getRequest()->getParam('role');
-            $id = (int) $this->getRequest()->getPost('id');
-            $model = new Opus_Collection($role, $id);
-            $model->delete();
-            $this->_redirectTo('Model successfully deleted.', 'index');
+            $role = $this->getRequest()->getUserParam('role');
+            $path = $this->getRequest()->getUserParam('path');
+            $collection = new Opus_CollectionRole($role);
+            if (true === isset($path)) {
+                $trail = explode('-', $path);
+                foreach($trail as $step) {
+                    $collection = $collection->getSubCollection($step);
+                }
+                $path = implode('-', array_slice($trail, 0, sizeof($trail) - 1));
+                $collection->delete();
+                $this->_redirectTo('Model successfully deleted.', 'show', null, null,
+                        array('role' => $role, 'path' => $path));
+            } else {
+                $collection->delete();
+                $this->_redirectTo('Model successfully deleted.', 'index');
+            }
+        } else {
+            $this->_redirectTo('', 'index');
+        }
+    }
+
+    /**
+     * Display subcollections of collections and collection roles.
+     *
+     * @return void
+     */
+    public function showAction() {
+        $roleId = $this->getRequest()->getParam('role');
+        $collection = new Opus_CollectionRole($roleId);
+        $roleName = $collection->getName();
+        $path = $this->getRequest()->getParam('path');
+        $subcollections = array();
+        $breadcrumb = array();
+        if (true === isset($path)) {
+            $trail = explode('-', $path);
+            foreach($trail as $step) {
+                if (false === isset($position)) {
+                    $position = $step;
+                } else {
+                    $position .= '-' . $step;
+                }
+                $collection = $collection->getSubCollection($step);
+                $breadcrumb[$position] = $collection->getName();
+            }
+            foreach($collection->getSubCollection() as $i => $subcollection) {
+                $subcollections[$path . '-' . $i] = $subcollection->getName();
+            }
+        } else {
+            foreach($collection->getSubCollection() as $i => $subcollection) {
+                $subcollections[$i] = $subcollection->getName();
+            }
+        }
+        $this->view->subcollections = $subcollections;
+        $this->view->role_id = $roleId;
+        $this->view->role_name = $roleName;
+        $this->view->path = $path;
+        $this->view->breadcrumb = $breadcrumb;
+    }
+
+    /**
+     * Save model instance
+     *
+     * @return void
+     */
+    public function createAction() {
+        if ($this->_request->isPost() === true) {
+            $data = $this->_request->getPost();
+            $form_builder = new Opus_Form_Builder();
+            if (array_key_exists('submit', $data) === false) {
+                $form = $form_builder->buildFromPost($data);
+                $action_url = $this->view->url(array('action' => 'create'));
+                $form->setAction($action_url);
+                $this->view->form = $form;
+            } else {
+                $form = $form_builder->buildFromPost($data);
+                $params = $this->getRequest()->getUserParams();
+                if ($form->isValid($data) === true) {
+                    // retrieve values from form and save them into model
+                    $model = $form_builder->getModelFromForm($form);
+                    $form_builder->setFromPost($model, $form->getValues());
+                    if (true === $model->isNewRecord()) {
+                        $role = $this->getRequest()->getParam('role');
+                        $path = $this->getRequest()->getParam('path');
+                        // Handling new collection in existing role.
+                        if (true === isset($role)) {
+                            $collection = new Opus_CollectionRole($role);
+                            // Handling a new collection in an existing collection.
+                            if (true === isset($path)) {
+                                $trail = explode('-', $path);
+                                foreach($trail as $step) {
+                                    $collection = $collection->getSubCollection($step);
+                                }
+                            }
+                            $collection->addSubCollection($model);
+                            $collection->store();
+                        } else {
+                            // Handling new role.
+                            $model->store();
+                            $params['role'] = $model->getId();
+                        }
+                    } else {
+                        $model->store();
+                    }
+                    $module = array_shift($params);
+                    $controller = array_shift($params);
+                    $action = array_shift($params);
+                    $this->_redirectTo('', 'show', $controller, $module, $params);
+                } else {
+                    $this->view->form = $form;
+                }
+            }
         } else {
             $this->_redirectTo('', 'index');
         }

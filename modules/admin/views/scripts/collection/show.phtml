@@ -26,7 +26,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Licence
+ * @package     Module_Admin
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -34,4 +34,26 @@
  */
 ?>
 <h1>Opus Application - <?= $this->title ?></h1>
-<?= $this->showModel($this->entry); ?>
+<p>
+<a href="<?=$this->url(array('module'=>'admin', 'controller'=>'collection', 'action'=>'index'), null,
+    true)?>">Collections</a>
+&gt;&nbsp;<a href="<?=$this->url(array('module'=>'admin', 'controller'=>'collection', 'action'=>'show',
+    'role'=>$this->role_id), null, true)?>"><?=$this->role_name?></a>
+<? foreach($this->breadcrumb as $path => $name) : ?>
+&gt;&nbsp;<a href="<?=$this->url(array('module'=>'admin', 'controller'=>'collection', 'action'=>'show',
+    'role'=>$this->role_id, 'path'=>$path), null, true)?>"><?=$name?></a>
+<? endforeach; ?>
+</p>
+<ul>
+    <? foreach($this->subcollections as $path => $name) : ?>
+    <li>
+        <form action="<?= $this->url(array('action' => 'delete', 'role'=>$this->role_id, 'path'=>$path)) ?>" method="post">
+            <a href="<?=$this->url(array('module'=>'admin', 'controller'=>'collection', 'action'=>'show',
+                'role'=>$this->role_id, 'path'=>$path), null, true)?>"><?=$name?></a>
+            <a href="<?= $this->url(array('action' => 'edit', 'role' => $this->role_id, 'path'=>$path)) ?>">Edit</a>
+            <input type="submit" value="Delete" />
+        </form>
+    </li>
+    <? endforeach; ?>
+</ul>
+<a href="<?= $this->url(array('action' => 'new')) ?>">New</a>
