@@ -142,7 +142,12 @@ class Opus3Migration extends Application_Bootstrap {
      * Removes all Mapping files needed for Import
      */
     protected function cleanup() {
-    	unlink('../workspace/tmp/*.map');
+    	$filereader = opendir('../workspace/tmp/');
+    	while (false !== ($file = readdir($filereader))) {
+    		if (substr($file, -4) === '.map') {
+    			unlink('../workspace/tmp/' . $file);
+    		}
+    	}
     }
 }
 
@@ -171,7 +176,7 @@ class Opus3MigrationParameters extends Opus3Migration
     		$failure = true;
     		echo "Usage: " . $argv[0] . " [options] importfile\n";
     		echo "Options:\n";
-    		echo "--without-classes Do not import the classification systems\n";
+    		#echo "--without-classes Do not import the classification systems\n";
     		echo "--without-licences Do not import the licences\n";
     		echo "--without-metadata Do not import the metadata of the documents (if you do not import the metadata, the database will be read)\n";
     		echo "--with-files=path-to-files Import the files using the given base path of Opus 3 fulltexts\n"; 
@@ -242,9 +247,10 @@ class Opus3MigrationParameters extends Opus3Migration
 
         // Analyse the other parameters
 		// Import classification systems and classes? 
-		if (false === in_array("--without-classes", $argv)) {
-			$this->whatToDo[] = "classes";
-		}
+		// Its not necessary to import classifications, they all should be predefined
+		#if (false === in_array("--without-classes", $argv)) {
+			#$this->whatToDo[] = "classes";
+		#}
 		
 		// Import Licences?
 		if (false === in_array("--without-licences", $argv)) {
@@ -333,11 +339,12 @@ class Opus3MigrationReadline extends Opus3Migration {
 		
 		$importData = $this->loadImportFile();
 		
-		// Import classification systems and classes 
-		$input = readline('Do you want to import all the classifications from OPUS3? Note: Only BK, APA, CCS, MSC and PACS are supported and detected automatically! (y/n) ');
-		if ($input === 'y' || $input === 'yes') {
-		    $importCollections = new CollectionsImport($importData);
-		}
+		// Import classification systems and classes
+		// Its not necessary to import classifications, they are predefined 
+		#$input = readline('Do you want to import all the classifications from OPUS3? Note: Only BK, APA, CCS, MSC and PACS are supported and detected automatically! (y/n) ');
+		#if ($input === 'y' || $input === 'yes') {
+		#    $importCollections = new CollectionsImport($importData);
+		#}
 		
 		// Import Licences
 		$licenceinput = readline('Do you want to import the licences from OPUS3? (y/n) ');

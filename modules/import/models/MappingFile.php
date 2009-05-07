@@ -40,7 +40,7 @@ class MappingFile
      *
      * @var array  Defaults to the OPUS collections (Name => ID).
      */    
-    protected static $collectionShortNames = array('Dewey Decimal Classification' => 'ddc', 'Computing Classification System' => 'ccs', 'Physics and Astronomy Classification Scheme' => 'pacs', 'Journal of Economic Literature (JEL) Classification System' => 'jel');
+    protected static $collectionShortNames = array('Dewey Decimal Classification' => 'ddc', 'Computing Classification System' => 'ccs', 'Physics and Astronomy Classification Scheme' => 'pacs', 'Journal of Economic Literature (JEL) Classification System' => 'jel', 'Mathematics Subject Classification' => 'msc');
 
     /**
      * Get the short name of the given collections
@@ -63,9 +63,13 @@ class MappingFile
     public function __construct($role)
     {
     	// Initialize the file
-    	$fp = fopen('../workspace/tmp/'.self::$collectionShortNames[$role['name']].'.map', 'w');
-    	fclose($fp);
-        $this->createMappingfile(array($role['id'], self::$collectionShortNames[$role['name']]));
+    	if (array_key_exists($role['name'], self::$collectionShortNames))
+    	{
+    	    $fp = fopen('../workspace/tmp/'.self::$collectionShortNames[$role['name']].'.map', 'w');
+    	    fclose($fp);
+            $this->createMappingfile(array($role['id'], self::$collectionShortNames[$role['name']]));
+    	}
+    	// if the name of the collection does not exist in the predefined collection roles, there is nothing to map
     }
 	
 	/**

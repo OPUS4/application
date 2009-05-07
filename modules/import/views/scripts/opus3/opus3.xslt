@@ -216,11 +216,12 @@
             <xsl:call-template name="getCcs"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
             <xsl:call-template name="getPacs"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
             <xsl:call-template name="getJel"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
+            <xsl:call-template name="getMsc"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
+            <xsl:call-template name="getApa"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
+            <xsl:call-template name="getBk"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
                       
             <!--
             Prepared, but commented out: 
-            Subjects from opus_ccs etc.
-            PublicationState
             RangeId
             
             Missing fields in other opus3 tables:
@@ -302,6 +303,39 @@
         <xsl:param name="source_id" required="yes" />
         <xsl:for-each select="/mysqldump/database/table_data[@name='opus_jel']/row[field[@name='source_opus']=$source_id]">
             <xsl:element name="OldJel">
+                <xsl:attribute name="Value">
+                    <xsl:value-of select="field[@name='class']" />
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:for-each>
+    </xsl:template>
+    <!-- temporary MSC information -->
+    <xsl:template name="getMsc">
+        <xsl:param name="source_id" required="yes" />
+        <xsl:for-each select="/mysqldump/database/table_data[@name='opus_msc']/row[field[@name='source_opus']=$source_id]">
+            <xsl:element name="OldMsc">
+                <xsl:attribute name="Value">
+                    <xsl:value-of select="field[@name='class']" />
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:for-each>
+    </xsl:template>
+    <!-- temporary APA information -->
+    <xsl:template name="getApa">
+        <xsl:param name="source_id" required="yes" />
+        <xsl:for-each select="/mysqldump/database/table_data[@name='opus_apa']/row[field[@name='source_opus']=$source_id]">
+            <xsl:element name="OldApa">
+                <xsl:attribute name="Value">
+                    <xsl:value-of select="field[@name='class']" />
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:for-each>
+    </xsl:template>
+    <!-- temporary Bk information -->
+    <xsl:template name="getBk">
+        <xsl:param name="source_id" required="yes" />
+        <xsl:for-each select="/mysqldump/database/table_data[@name='opus_bk']/row[field[@name='source_opus']=$source_id]">
+            <xsl:element name="OldBk">
                 <xsl:attribute name="Value">
                     <xsl:value-of select="field[@name='class']" />
                 </xsl:attribute>
