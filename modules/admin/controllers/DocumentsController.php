@@ -68,29 +68,11 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $data = $this->_request->getParams();
         // following could be handled inside a application model
         if (true === array_key_exists('state', $data)) {
-        	$documentLists = Opus_Document::getAllByState($data['state']);
-            $result = array();
-            foreach ($documentLists as $doc) {
-                $iterim = array(
-                    'title' => array($doc->getTitleMain(0)->getValue(), $doc->getId()),
-                    'docId' => $doc->getId(),
-                    );
-                $result[] = $iterim;
-            }
+            $result = Opus_Document::getAllDocumentTitlesByState($data['state']);
+        } else {
+            $result = Opus_Document::getAllDocumentTitles();
         }
-        else {
-            $documentLists = Opus_Document::getAllIds();
-        $titlesList = Opus_Document::getAllDocumentTitles();
-        $result = array();
-        foreach ($documentLists as $docId) {
-            $iterim = array(
-                'title' => array_keys($titlesList, $docId),
-                'docId' => $docId,
-                );
-            $result[] = $iterim;
-        }
-        }
-        $this->view->documentList = $result;        
+        $this->view->documentList = $result;
     }
 
 }

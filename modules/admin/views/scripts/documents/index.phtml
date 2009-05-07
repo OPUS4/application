@@ -48,16 +48,15 @@ $documentList = $this->documentList;
 if (false === empty($documentList)) { ?>
 <p>
 <ol>
-    <?php foreach ($documentList as $entry) {
-        $title = $entry['title'];
+    <?php foreach ($documentList as $docId => $title) {
         if (true === empty($title)) {
-            $title = array(0 => 'Opus document with id: ' . $entry['docId']);
+            $title = array(0 => 'Opus document with id: ' . $docId);
         }
         $url_edit = array(
             'module' => 'admin',
             'controller' => 'documents',
             'action' => 'edit',
-            'id' => $entry['docId']
+            'id' => $docId
         );
         $url_delete = array (
             'module' => 'admin',
@@ -71,7 +70,7 @@ if (false === empty($documentList)) { ?>
         <?php echo current($title) ?>
         <form action="<?php echo $url_delete ?>" method="post" class="crud">
             <a href="<?php echo $url_edit ?>"><?php echo $this->translate('docs_edit'); ?></a>
-            <input type="hidden" name="id" value="<?php echo $entry['docId'] ?>" />
+            <input type="hidden" name="id" value="<?php echo $docId ?>" />
             <input type="submit" value="<?php echo $this->translate('docs_delete'); ?>" />
         </form>
         </li>
