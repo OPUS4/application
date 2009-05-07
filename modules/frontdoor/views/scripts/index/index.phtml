@@ -45,7 +45,12 @@
 <? if (is_array($this->mydoc_data) === true)
    {?>
       <div id="summary">
-         <?for ($i = 0; $i < 10; $i++)
+       <?  if (array_key_exists ('TitleMain_0_Value', $this->mydoc_data) === true)
+           {
+              $title_main = $this->mydoc_data['TitleMain_0_Value'];
+           }
+
+           for ($i = 0; $i < 10; $i++)
            {
               if (array_key_exists ('IdentifierUrn_' .$i. '_Value', $this->mydoc_data) === true)
               {
@@ -100,14 +105,14 @@
                                 $file_size = $this ->mydoc_data['File_' .$i. '_FileSize'];
                                 if (file_exists ('./layouts/' .$this->theme. '/img/filetypelogo_' .$file_type. '.png'))
                                 {?>
-                                   <a href="<?= $this->value = '/files/'.$this->docId.'/'.$this->path_name = $path_name;?>">
+                                   <a href="<?= $this->value = '/workspace/files/'.$this->docId.'/'.$this->path_name = $path_name;?>">
                                    <img src = "<?= $this->value = $this->layoutPath . '/img/filetypelogo_' .$file_type. '.png';?>"
                                    title = 'Download' border = '0'<?= $this->value = '-' .$path_name?>'>
                                    (<?$this->file_type = $file_type. ', ' .$file_size?>)</a>&nbsp;&nbsp;&nbsp;<?
                                 }
                                 else
                                 {?>
-                                   <a href="<?= $this->value = '/files/'.$this->docId.'/'.$this->path_name = $path_name;?>">
+                                   <a href="<?= $this->value = '/workspace/files/'.$this->docId.'/'.$this->path_name = $path_name;?>">
                                    <img src = "<?= $this->value = $this->layoutPath . '/img/filetypelogo_default.png';?>"
                                    title = 'Download' border = '0'<?= $this->value = '-' .$path_name?>'>
                                    (<?$this->file_type = $file_type. ', ' .$file_size?>)</a>&nbsp;&nbsp;&nbsp;<?
@@ -117,14 +122,14 @@
                              {
                                  if (file_exists ('./layouts/' .$this->theme. '/img/filetypelogo_' .$file_type. '.png'))
                                  {?>
-                                    <a href="<?= $this->value = '/files/'.$this->docId.'/'.$this->path_name = $path_name;?>">
+                                    <a href="<?= $this->value = '/workspace/files/'.$this->docId.'/'.$this->path_name = $path_name;?>">
                                     <img src = "<?= $this->value = $this->layoutPath . '/img/filetypelogo_' .$file_type. '.png';?>"
                                     title = 'Download' border = '0'<?= $this->value = '-' .$path_name?>'>
                                     (<?= $this->file_type = $file_type?>)</a>&nbsp;&nbsp;&nbsp;<?
                                  }
                                  else
                                  {?>
-                                    <a href="<?= $this->value = '/files/'.$this->docId.'/'.$this->path_name = $path_name;?>">
+                                    <a href="<?= $this->value = '/workspace/files/'.$this->docId.'/'.$this->path_name = $path_name;?>">
                                     <img src = "<?= $this->value = $this->layoutPath . '/img/filetypelogo_default.png';?>"
                                     title = 'Download' border = '0'<?= $this->value = '-' .$path_name?>'>
                                     (<?= $this->file_type = $file_type?>)</a>&nbsp;&nbsp;&nbsp;<?
@@ -135,13 +140,13 @@
                          {
                              if (file_exists ('./layouts/' .$this->theme. '/img/filetypelogo_' .$file_type. '.png'))
                              {?>
-                                <a href="<?= $this->value = '/files/'.$this->docId.'/'.$this->path_name = $path_name;?>">
+                                <a href="<?= $this->value = '/workspace/files/'.$this->docId.'/'.$this->path_name = $path_name;?>">
                                 <img src = "<?= $this->value = $this->layoutPath . '/img/filetypelogo_' .$file_type. '.png';?>"
                                 title = 'Download' border = '0'<?= $this->value = '-' .$path_name?>'></a>&nbsp;&nbsp;&nbsp;<?
                              }
                              else
                              {?>
-                                <a href="<?= $this->value = '/files/'.$this->docId.'/'.$this->path_name = $path_name;?>">
+                                <a href="<?= $this->value = '/workspace/files/'.$this->docId.'/'.$this->path_name = $path_name;?>">
                                 <img src = "<?= $this->value = $this->layoutPath . '/img/filetypelogo_default.png';?>"
                                 title = 'Download' border = '0'<?= $this->value = '-' .$path_name?></a>&nbsp;&nbsp;&nbsp;<?
                              }
@@ -198,7 +203,7 @@
                       ?>">
                     <img src = "<?= $this->value = $this->layoutPath . '/img/delicious.jpg';?>" border = '0' title = 'Bookmark bei del.icio.us'></a>
 
-                    <a href="<?= $this->value = '';?>">
+                    <a href="<?= $this->value = 'http://scholar.google.de/scholar?hl=de&q=' .$title_main;?>">
                     <img src = "<?= $this->value = $this->layoutPath . '/img/google_scholar.jpg';?>" border = '0' title = 'Dokument in Google Scholar suchen'></a>
 
                     <a href="<?= $this->value = '';?>">
