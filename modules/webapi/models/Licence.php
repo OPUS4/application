@@ -77,6 +77,7 @@ class Licence extends Response {
         $licences = Opus_Licence::getAll();
         foreach ($licences as $licence) {
             $entry = $xml->createElement('Licence');
+            $entry->setAttribute('xlink:type', 'simple');
             $entry->setAttribute('xlink:href', $url . '/' . $licence->getId());
             $licenceList->appendChild($entry);
         }

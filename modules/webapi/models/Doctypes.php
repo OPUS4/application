@@ -195,6 +195,7 @@ class Doctypes extends Response{
         $url = $this->_protocol . $this->_hostname . $view->url(array('controller' => 'doctype', 'module' => 'webapi'), 'default', true);
         foreach ($types as $type) {
             $entry = $xml->createElement('Type', $type);
+            $entry->setAttribute('xlink:type', 'simple');
             $entry->setAttribute('xlink:href', $url . '/' . $type);
             $typesList->appendChild($entry);
         }

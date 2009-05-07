@@ -94,6 +94,7 @@ class Document extends Response {
         $url = $this->_protocol . $this->_hostname . $view->url(array('controller' => 'document', 'module' => 'webapi'), 'default', true);
         foreach (Opus_Document::getAllIds() as $docId) {
             $element = $xml->createElement('Document');
+            $element->setAttribute('xlink:type', 'simple');
             $element->setAttribute('xlink:href', $url . '/' . $docId);
             $element->setAttribute('nr', $docId);
             $resultlist->appendChild($element);
@@ -118,4 +119,5 @@ class Document extends Response {
             $this->setResponseCode(404);
         }
     }
+
 }
