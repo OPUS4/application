@@ -144,7 +144,7 @@ class XMLImport
                     $ddc = new Opus_Collection($this->collections[$ddcName], $ddc_id);
                 }
                     else {
-                    	echo "Mapping file for " . $this->collections[$ddcName]. " does not exist or class not found. Class $apa_id not imported for old ID $oldid\n";
+                    	echo "Mapping file for " . $this->collections[$ddcName]. " does not exist or class not found. Class $ddc_id not imported for old ID $oldid\n";
                     }
                 $document->removeChild($ddcNotation);
             }
@@ -161,7 +161,7 @@ class XMLImport
                         $ccs[] = new Opus_Collection($this->collections[$ccsName], $ccs_id);
                     }
                     else {
-                    	echo "Mapping file for " . $this->collections[$ccsName]. " does not exist or class not found. Class $apa_id not imported for old ID $oldid\n";
+                    	echo "Mapping file for " . $this->collections[$ccsName]. " does not exist or class not found. Class $ccs_id not imported for old ID $oldid\n";
                     }
                     $document->removeChild($ccsNotation);
                 }
@@ -179,7 +179,7 @@ class XMLImport
                         $pacs[] = new Opus_Collection($this->collections[$pacsName], $pacs_id);
                     }
                     else {
-                    	echo "Mapping file for " . $this->collections[$pacsName]. " does not exist or class not found. Class $apa_id not imported for old ID $oldid\n";
+                    	echo "Mapping file for " . $this->collections[$pacsName]. " does not exist or class not found. Class $pacs_id not imported for old ID $oldid\n";
                     }
                     $document->removeChild($pacsNotation);
                 }
@@ -197,7 +197,7 @@ class XMLImport
                         $jel[] = new Opus_Collection($this->collections[$jelName], $jel_id);
                     }
                     else {
-                    	echo "Mapping file for " . $this->collections[$jelName]. " does not exist or class not found. Class $apa_id not imported for old ID $oldid\n";
+                    	echo "Mapping file for " . $this->collections[$jelName]. " does not exist or class not found. Class $jel_id not imported for old ID $oldid\n";
                     }
                     $document->removeChild($jelNotation);
                 }
@@ -215,7 +215,7 @@ class XMLImport
                         $msc[] = new Opus_Collection($this->collections[$mscName], $msc_id);
                     }
                     else {
-                    	echo "Mapping file for " . $this->collections[$mscName]. " does not exist or class not found. Class $apa_id not imported for old ID $oldid\n";
+                    	echo "Mapping file for " . $this->collections[$mscName]. " does not exist or class not found. Class $msc_id not imported for old ID $oldid\n";
                     }
                     $document->removeChild($mscNotation);
                 }
@@ -223,7 +223,7 @@ class XMLImport
             if ($bkNotations->length > 0)
             {
                 $bk = array();
-                $bkName = '';
+                $bkName = 'Basisklassifikation';
                 for ($c = 0; $c < $bkNotations->length; $c++) {
                 	$bkNotation = $bkNotations->Item($c);
                     $bkValue = $bkNotation->getAttribute('Value');
@@ -233,7 +233,7 @@ class XMLImport
                         $bk[] = new Opus_Collection($this->collections[$bkName], $bk_id);
                     }
                     else {
-                    	echo "Mapping file for " . $this->collections[$bkName]. " does not exist or class not found. Class $apa_id not imported for old ID $oldid\n";
+                    	echo "Mapping file for " . $bkName . " does not exist or class not found. Class $bk_id not imported for old ID $oldid\n";
                     }
                     $document->removeChild($bkNotation);
                 }
@@ -241,7 +241,7 @@ class XMLImport
             if ($apaNotations->length > 0)
             {
                 $apa = array();
-                $apaName = '';
+                $apaName = 'Classification and Indexing System der American Psychological Association';
                 for ($c = 0; $c < $apaNotations->length; $c++) {
                 	$apaNotation = $apaNotations->Item($c);
                     $apaValue = $apaNotation->getAttribute('Value');
@@ -251,7 +251,7 @@ class XMLImport
                         $apa[] = new Opus_Collection($this->collections[$apaName], $apa_id);
                     }
                     else {
-                    	echo "Mapping file for " . $this->collections[$apaName]. " does not exist or class not found. Class $apa_id not imported for old ID $oldid\n";
+                    	echo "Mapping file for " . $apaName. " does not exist or class not found. Class $apa_id not imported for old ID $oldid\n";
                     }
                     $document->removeChild($apaNotation);
                 }
