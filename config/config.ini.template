@@ -50,6 +50,13 @@ connotea.systemTags = OPUS Test ; Tags for any document that is bookmarked via t
 path = /usr/bin/gpg ; path to gpg including gpg binary, e.g. /usr/bin/gpg
 keyring.path = /var/www ; path where the keyring is stored, e.g. /var/www - webserver must have writable access to this directory
 
+[mail]
+mail.opus.smtp = localhost
+; E-Mail-Adresse des Admins
+mail.opus.address = 
+; Name des Admins
+mail.opus.name =
+
 [test : production]
 db.params.profiler = true
 db.params.showqueries = true
