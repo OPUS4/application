@@ -177,6 +177,7 @@ class Opus3MigrationParameters extends Opus3Migration
     		echo "Usage: " . $argv[0] . " [options] importfile\n";
     		echo "Options:\n";
     		#echo "--without-classes Do not import the classification systems\n";
+    		echo "--without-institutes Do not import the faculties and institutes\n";
     		echo "--without-licences Do not import the licences\n";
     		echo "--without-metadata Do not import the metadata of the documents (if you do not import the metadata, the database will be read)\n";
     		echo "--with-files=path-to-files Import the files using the given base path of Opus 3 fulltexts\n"; 
@@ -252,6 +253,11 @@ class Opus3MigrationParameters extends Opus3Migration
 			#$this->whatToDo[] = "classes";
 		#}
 		
+		// Import faculties and instituites? 
+		if (false === in_array("--without-institutes", $argv)) {
+			$this->whatToDo[] = "institutes";
+		}
+
 		// Import Licences?
 		if (false === in_array("--without-licences", $argv)) {
 			$this->whatToDo[] = "licences";
@@ -281,6 +287,11 @@ class Opus3MigrationParameters extends Opus3Migration
 		    $importCollections = new CollectionsImport($importData);
 		}
 		
+		// Import faculties and institutes 
+		if (true === in_array('institutes', $this->whatToDo)) {
+		    $importInstitutes = new InstituteImport($importData);
+		}
+
 		// Import Licences
 		if (true === in_array('licences', $this->whatToDo)) {
 		    $importLicences = new LicenceImport($importData);
@@ -346,6 +357,12 @@ class Opus3MigrationReadline extends Opus3Migration {
 		#    $importCollections = new CollectionsImport($importData);
 		#}
 		
+		// Import faculties and institutes
+		$input = readline('Do you want to import all the faculties and institutes from OPUS3? (y/n) ');
+		if ($input === 'y' || $input === 'yes') {
+		    $importInstitutes = new InstituteImport($importData);
+		}
+
 		// Import Licences
 		$licenceinput = readline('Do you want to import the licences from OPUS3? (y/n) ');
 		if ($licenceinput === 'y' || $licenceinput === 'yes') {

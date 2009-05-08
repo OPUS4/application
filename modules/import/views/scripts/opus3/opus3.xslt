@@ -225,6 +225,11 @@
             RangeId
             
             Missing fields in other opus3 tables:
+	<table_data name="opus_inst">
+	<row>
+		<field name="source_opus">39</field>
+		<field name="inst_nr">62</field>
+	</row>
             opus_coll <field name="Collection" />
             opus_inst (+ institutes + faculties) <field name="Institute" />
             opus_schriftenreihe (+ schriftenreihe) <field name="TitleParent" mandatory="yes" multiplicity="4" />
