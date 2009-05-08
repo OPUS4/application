@@ -34,29 +34,18 @@
 class LicenceImport
 {
 	/**
-	 * Imports Collection data to Opus4
+	 * Imports licenses data to Opus4
 	 *
 	 * @param Strring $data XML-String with classifications to be imported
 	 * @return array List of documents that have been imported
 	 */
 	public function __construct($data)
 	{
-		// Analyse the data to find out which classification systems there are
-		// and which converter methods should be used
-		#$data->createAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'xmlns:xsi');
 		$doclist = $data->getElementsByTagName('table_data');
 		foreach ($doclist as $document) 
 		{
-			$tempdoc = new DOMDocument;
-			$xmlInput = $data->saveXML($document);
-            $tempdoc->loadXML($xmlInput);
-            $tablename = $tempdoc->getElementsByTagName('table_data')->Item(0)->getAttribute('name');
-            if ($tablename === 'license_de') {
-            	// Works!
-            	echo "Importing Licenses";
-            	$mappingTable = $this->readLicenses($tempdoc);
-            	echo "done!\n";
-            	// store classification system
+            if ($document->getAttribute('name') === 'license_de') {
+            	$mappingTable = $this->readLicenses($document);
             }
 		}
 	}
