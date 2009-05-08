@@ -76,4 +76,31 @@ class Webapi_DocumentController extends Controller_Rest {
         }
     }
 
+    /**
+     * Add a new document to database.
+     *
+     * @see library/Controller/Controller_Rest#putAction()
+     */
+    public function putAction() {
+        $rawBody = $this->getRequest()->getRawBody();
+        $doc = new Document();
+        $result = $doc->addNewDocument($rawBody);
+        $this->getResponse()->setBody($result);
+        $this->getResponse()->setHttpResponseCode($doc->getResponseCode());
+    }
+
+    /**
+     * Update document data.
+     *
+     * @see library/Controller/Controller_Rest#postAction()
+     */
+    public function postAction() {
+        $docId = $this->requestData['original_action'];
+        $rawBody = $this->getRequest()->getRawBody();
+        $doc = new Document();
+        $result = $doc->update($docId, $rawBody);
+        $this->getResponse()->setBody($result);
+        $this->getResponse()->setHttpResponseCode($doc->getResponseCode());
+    }
+
 }

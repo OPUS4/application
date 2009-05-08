@@ -120,4 +120,48 @@ class Document extends Response {
         }
     }
 
+   /**
+     * Add a new document to repository.
+     *
+     * @param string $xmlData
+     * @return string
+     */
+    public function addNewDocument($xmlData) {
+        $xml = $this->_xml;
+        try {
+            $document = Opus_Document::fromXml($xmlData);
+            $docId = $document->store();
+            $documentXml = $xml->createElement('Opus_Document_Id', $docId);
+            $this->_root->appendChild($documentXml);
+        } catch (Exception $e) {
+            $this->setError('An error occurs during adding a document. Error reason: ' . $e->getMessage(), 402);
+        }
+        return $xml->saveXML();
+    }
+
+    /**
+     * Update a document with new data.
+     *
+     * @param string $docId      Document id for updating.
+     * @param string $updateData XML data with updated values.
+     * @return string
+     */
+    public function update($docId, $updateData) {
+
+        $xml = $this->_xml;
+        $docId = (int) $docId;
+
+        try {
+            $document = new Opus_Document($docId);
+            $omx = new Opus_Model_Xml();
+            $omx->setModel($document);
+            $omx->updateFromXml($updateData);
+            $document->store();
+            $documentXml = $xml->createElement('Opus_Document_Info', 'Update was sucessfull.');
+            $this->_root->appendChild($documentXml);
+        } catch (Exception $e) {
+            $this->setError('An error occurs during updating document informations. Error reason: ' . $e->getMessage(), 402);
+        }
+        return $xml->saveXML();
+    }
 }
