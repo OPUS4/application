@@ -36,19 +36,19 @@
  * GPG-Module of Opus
  * based on PEAR/Crypt_GPG
  */
- 
-class OpusGPG extends Crypt_GPG 
+
+class OpusGPG extends Crypt_GPG
 {
-	
+
     /**
      * Construct the Crypt_GPG-Object
      * and set the paths necessary to do some operation
      * The paths are taken from config file and do not need to be set by parameter
-     * 
-     * @throws Crypt_GPG_Exception When the parent object cant get built successfully 
+     *
+     * @throws Crypt_GPG_Exception When the parent object cant get built successfully
      * @return void
      */
-	public function __construct() 
+	public function __construct()
 	{
 		$config = new Zend_Config_Ini('../config/config.ini');
 
@@ -63,33 +63,33 @@ class OpusGPG extends Crypt_GPG
     /**
      * Get the internally used key (system key/masterkey)
      * The key is autodetected (it has to have a private key and should not be expired)
-     * 
+     *
      * @return Crypt_GPG_Key System key (false if there is no system key)
      */
-    public function getMasterkey() 
+    public function getMasterkey()
     {
-    	foreach ($this->getKeys() as $key) 
+    	foreach ($this->getKeys() as $key)
     	{
     		// System key (masterkey) autodetection
-    		// check if there is a private key for this key in the keyring, 
+    		// check if there is a private key for this key in the keyring,
     		// take the first private key, that is not expired as system key
     		if ($key->getPrimaryKey()->hasPrivate() === true && (0 === $key->getPrimaryKey()->getExpirationDate() || $key->getPrimaryKey()->getExpirationDate() > time()))
     		{
     			return $key;
     		}
     	}
-    	
+
     	return false;
     }
-	
+
     /**
      * Removes a key from the keyring
      * If the system key is the one to be removed, only the private key is deleted
      *
-     * @param string $fingerprint Fingerprint-ID of the key that should be removed 
+     * @param string $fingerprint Fingerprint-ID of the key that should be removed
      * @return void
      */
-    public function disableKey($fingerprint) 
+    public function disableKey($fingerprint)
     {
         if ($this->getMasterkey() !== false)
         {
@@ -103,10 +103,10 @@ class OpusGPG extends Crypt_GPG
     /**
      * Removes a key from the keyring
      *
-     * @param string $fingerprint Fingerprint-ID of the key that should be removed 
+     * @param string $fingerprint Fingerprint-ID of the key that should be removed
      * @return void
      */
-    public function deleteKey($fingerprint) 
+    public function deleteKey($fingerprint)
     {
         try {
             $this->deletePublicKey($fingerprint);
@@ -120,13 +120,13 @@ class OpusGPG extends Crypt_GPG
     /**
      * Verifies all signatures of a given file
      *
-     * @param Opus_File $file File that should get verified 
+     * @param Opus_File $file File that should get verified
      * @return array Associative array with filenames as index and all Crypt_GPG_Signatures inside another array
      */
     public function verifyPublicationFile($file)
     {
     		// FIXME: hardcoded path
-    		$filepath = '../workspace/files/' . $file->getDocumentId() . '/';    		
+    		$filepath = '../workspace/files/' . $file->getDocumentId() . '/';
     		$hashes = $file->getHashValue();
     		$result = array();
     		if (true === is_array($hashes))
@@ -155,9 +155,9 @@ class OpusGPG extends Crypt_GPG
     			    catch (Exception $e) {
     			    	$result[] = array($e->getMessage());
     			    }
-    			}    			
+    			}
     		}
-    		
+
     		return $result;
     }
 
@@ -174,15 +174,15 @@ class OpusGPG extends Crypt_GPG
     		if ($this->getMasterkey() === false) {
     			throw new Exception('No internal key for this repository!');
     		}
-    		
+
     		$this->addSignKey($this->getMasterkey(), $password);
     		$key_id = $this->getMasterkey()->getPrimaryKey()->getId();
-    		
+
     		// FIXME: hardcoded path
-    		$filepath = '../workspace/files/' . $file->getDocumentId() . '/';    		
-    		
+    		$filepath = '../workspace/files/' . $file->getDocumentId() . '/';
+
     		$doc = new Opus_Document($file->getDocumentId());
-    		
+
     		foreach ($doc->getFile() as $f)
     		{
     			if ($f->getPathName() === $file->getPathName())
@@ -190,15 +190,15 @@ class OpusGPG extends Crypt_GPG
     				$docfile = $f;
     			}
     		}
-    		
+
     		$signature = new Opus_HashValues();
     		$signature->setType('gpg-' . $key_id);
     		$signature->setValue($this->signFile($filepath . $file->getPathName(), null, Crypt_GPG::SIGN_MODE_DETACHED));
-    		
+
     		$docfile->addHashValue($signature);
-    		
+
     		#print_r($docfile->toXml()->saveXml());
-    		
+
     		$doc->store();
     }
 }

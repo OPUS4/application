@@ -174,7 +174,7 @@ class BrowsingFilter
 	 */
 	public static function getDocumentTypeTitles($doctype)
 	{
-        $doctype = str_replace("_", " ", $doctype);
+        #$doctype = str_replace("_", " ", $doctype);
         $table = new Opus_Db_Documents();
         $select = $table->select()
             ->from($table)
