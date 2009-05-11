@@ -79,10 +79,11 @@ class View_Helper_LanguageSelector {
 
         $translations = Zend_Registry::get('Zend_Translate')->getList();
 
+        $locale = new Zend_Locale();
+
         $languages = array();
         foreach ($translations as $trans) {
-            $temp = Opus_Language::getByPart1($trans);
-            $languages[$trans] = $temp->getDisplayName();
+            $languages[$trans] = $locale->getLanguageTranslation($trans, $trans);
         }
         $currentLocale = Zend_Registry::get('Zend_Translate')->getLocale();
 
@@ -91,7 +92,7 @@ class View_Helper_LanguageSelector {
         $language->setValue($currentLocale);
         $language->setLabel($this->_view->translate('home_index_language_label'));
 
-        $submit = new Zend_Form_Element_Submit('submit');
+        $submit = new Zend_Form_Element_Submit('language_select');
         $submit->setLabel('Ok');
 
         $form->addElements(array($language, $submit));
