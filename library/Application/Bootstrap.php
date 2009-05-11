@@ -291,16 +291,26 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $registry->set('Zend_Translate', $translate);
     }
 
-    /** Setup language list.
+    /**
+     * Setup language list.
      *
      * @return void
      */
     protected function _setupLanguageList() {
         $registry = Zend_Registry::getInstance();
         $availableLanguages = Opus_Language::getAllActive();
+
+        $sessiondata = new Zend_Session_Namespace();
+        $locale = new Zend_Locale($sessiondata->language);
+
         $languages = array();
         foreach ($availableLanguages as $availableLanguage) {
-            $languages[$availableLanguage->getId()] = $availableLanguage->getDisplayName();
+            $trans = $availableLanguage->getPart1();
+            if (true === empty($trans)) {
+                $languages[$availableLanguage->getId()] = $availableLanguage->getDisplayName();
+            } else {
+                $languages[$availableLanguage->getId()] = $locale->getLanguageTranslation($trans);
+            }
         }
         $registry->set('Available_Languages', $languages);
     }
