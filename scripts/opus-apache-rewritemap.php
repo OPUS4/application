@@ -21,8 +21,8 @@
  * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details. You should have received a copy of the GNU General Public License 
- * along with OPUS; if not, write to the Free Software Foundation, Inc., 51 
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category   Application
@@ -54,7 +54,7 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
      * Sets URL to file directory.
      * TODO: make configurable
      *
-     * @var string  Defaults to '/workspace/files'. 
+     * @var string  Defaults to '/workspace/files'.
      */
     protected static $_absoluteFileDirURL = '/workspace/files';
 
@@ -63,43 +63,50 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
      *
      * @param string $request Input from apache, containing requested address and some information about the user.
      *
-     * return string 
+     * return void
      */
     public function rewriteRequest($request) {
         // TODO: make pathes configurable
-        return self::$_absoluteFileDirURL . '/' . $request;
+//      $logger = Zend_Registry::get('Zend_Log');
+//      $logger->info("got request: '" . $request . "'");
+        return self::$_absoluteFileDirURL . '/' . $request . "\n";
     }
-    
+
     /**
      * Empty method to not setup a backend.
      *
      * @return void
      */
     protected function _setupBackend() {
-    }    
-    
-    
+        $this->_setupLogging();
+    }
+
+
     /**
      * Starts an Opus console.
      *
      * @return void
      */
     protected function _run() {
-        // Loop to read requests given by apache.
-        while($line = trim(fgets(STDIN))) {
-            echo $this->rewriteRequest($line) . "\n";
-        }
-        // ATTENTION: CODE BELONG THIS LINE WILL NEVER BE REACHED!
     }
 
 }
 
-// start rewrite map
-$rwmap = new OpusApacheRewritemap;
-$rwmap->run(
-    // application root directory
-    dirname(dirname(__FILE__)),
-    // config level
-    Opus_Bootstrap_Base::CONFIG_TEST,
-    // path to config file
-    dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'config');
+// Loop to read requests given by apache.
+while($line = trim(fgets(STDIN))) {
+    // split input
+    list($path, $remoteAddress, $userAgent, $cookie) = preg_split('/\t/', $line, 4);
+    $_COOKIE=$cookie;
+
+    // Bootstrap Zend
+    $rwmap = new OpusApacheRewritemap;
+    $rwmap->run(
+        // application root directory
+        dirname(dirname(__FILE__)),
+        // config level
+        Opus_Bootstrap_Base::CONFIG_TEST,
+        // path to config file
+        dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'config');
+    $rwmap->rewriteRequest($path);
+}
+// ATTENTION: CODE BELONG THIS LINE WILL NEVER BE REACHED!
