@@ -63,7 +63,7 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
      *
      * @param string $request Input from apache, containing requested address and some information about the user.
      *
-     * return void
+     * return string
      */
     public function rewriteRequest($request) {
         // TODO: make pathes configurable
@@ -80,7 +80,6 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
     protected function _setupBackend() {
         $this->_setupLogging();
     }
-
 
     /**
      * Starts an Opus console.
@@ -107,6 +106,6 @@ while($line = trim(fgets(STDIN))) {
         Opus_Bootstrap_Base::CONFIG_TEST,
         // path to config file
         dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'config');
-    $rwmap->rewriteRequest($path);
+    echo $rwmap->rewriteRequest($path) . "\n";
 }
 // ATTENTION: CODE BELONG THIS LINE WILL NEVER BE REACHED!
