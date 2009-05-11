@@ -89,23 +89,53 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
     protected function _run() {
     }
 
+//    public function log($msg) {
+//        $logger = Zend_Registry::get('Zend_Log');
+//        $logger->info($msg);
+//    }
+//
+//    public function testSession($cookiestring) {
+//        $cookies = explode('; ', $cookiestring);
+//        $session_id = null;
+//        foreach ($cookies as $cookie) {
+//                if (preg_match('/'.ini_get('session.name').'=(.*)\/$/',
+//                    $cookie, $matches)) {
+//                        $session_id = $matches[1];
+//                }
+//        }
+//        if (is_null($session_id) === false) {
+//            $this->log("Session found: $session_id");
+//            Zend_Session::setId($session_id);
+//            Zend_Session::regenerateId();
+//            Zend_Session::start();
+//            $auth = Zend_Auth::getInstance();
+//            if ($auth->hasIdentity()) {
+//                // Identity exists; get it
+//                $this->log("An instance of Zend_Auth exists!");
+//            } else {
+//                $this->log("Noop");
+//            }
+//        } else {
+//            $this->log("No session information found.");
+//        }
+//    }
+
 }
 
-// Loop to read requests given by apache.
-while($line = trim(fgets(STDIN))) {
-    // split input
-    list($path, $remoteAddress, $userAgent, $cookie) = preg_split('/\t/', $line, 4);
-    $_COOKIE=$cookie;
+// Read request
+$line = trim($argv[1]);
+// split input
+list($path, $remoteAddress, $userAgent, $cookie) = preg_split('/\t/', $line, 4);
 
-    // Bootstrap Zend
-    $rwmap = new OpusApacheRewritemap;
-    $rwmap->run(
-        // application root directory
-        dirname(dirname(__FILE__)),
-        // config level
-        Opus_Bootstrap_Base::CONFIG_TEST,
-        // path to config file
-        dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'config');
-    echo $rwmap->rewriteRequest($path) . "\n";
-}
-// ATTENTION: CODE BELONG THIS LINE WILL NEVER BE REACHED!
+// Bootstrap Zend
+$rwmap = new OpusApacheRewritemap;
+$rwmap->run(
+    // application root directory
+    dirname(dirname(__FILE__)),
+    // config level
+    Opus_Bootstrap_Base::CONFIG_TEST,
+    // path to config file
+    dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'config');
+//$rwmap->log($cookie);
+//$rwmap->testSession($cookie);
+echo $rwmap->rewriteRequest($path) . "\n";
