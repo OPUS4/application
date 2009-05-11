@@ -103,18 +103,18 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
     protected function _setupTranslationCache() {
         $cache = null;
         $frontendOptions = array(
-        // Set cache lifetime to 5 minutes (in seconds)
+            // Set cache lifetime to 5 minutes (in seconds)
             'lifetime' => 600,
             'automatic_serialization' => true,
         );
 
         $backendOptions = array(
-        // Directory where to put the cache files. Must be writeable for application server
+            // Directory where to put the cache files. Must be writeable for application server
             'cache_dir' => $this->_applicationWorkspaceDirectory . '/cache/'
             );
 
-            $cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
-            Zend_Translate::setCache($cache);
+        $cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
+        Zend_Translate::setCache($cache);
     }
 
 
@@ -148,7 +148,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
          */
         $restRouterPlugin = new Controller_Plugin_RestManipulation();
         $this->_frontController->registerPlugin($restRouterPlugin);
-        
+
         // Add security realm initialization if security is enabled
         $conf = Zend_Registry::get('Zend_Config');
         $secu = $conf->security;
@@ -217,21 +217,21 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
     {
         $pagecache = null;
         $frontendOptions = array(
-        // Set cache lifetime to 5 minutes (in seconds)
+            // Set cache lifetime to 5 minutes (in seconds)
             'lifetime' => 600,
             'debug_header' => false,
-        // turning on could slow down caching
+            // turning on could slow down caching
             'automatic_serialization' => false,
             'default_options' => array(
-        // standard value false
+                // standard value false
                 'cache_with_get_variables' => true,
-        // standard value false
+                // standard value false
                 'cache_with_post_variables' => true,
-        // standard value false
+                // standard value false
                 'cache_with_session_variables' => true,
-        // standard value false
+                // standard value false
                 'cache_with_files_variables' => true,
-        // standard value false
+                // standard value false
                 'cache_with_cookie_variables' => true,
                 'make_id_with_get_variables' => true,
                 'make_id_with_post_variables' => true,
@@ -242,12 +242,12 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         );
 
         $backendOptions = array(
-        // Directory where to put the cache files. Must be writeable for application server
+            // Directory where to put the cache files. Must be writeable for application server
             'cache_dir' => $this->_applicationWorkspaceDirectory . '/cache/'
             );
 
-            $pagecache = Zend_Cache::factory('Page', 'File', $frontendOptions, $backendOptions);
-            Zend_Registry::set('Zend_Cache_Page', $pagecache);
+        $pagecache = Zend_Cache::factory('Page', 'File', $frontendOptions, $backendOptions);
+        Zend_Registry::set('Zend_Cache_Page', $pagecache);
     }
 
     /**
@@ -273,21 +273,22 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
             'scan' => Zend_Translate::LOCALE_FILENAME,
             'ignore' => '.'
             );
-            $translate = new Zend_Translate(
+        $translate = new Zend_Translate(
             Zend_Translate::AN_TMX,
             $this->_applicationRootDirectory . '/modules/',
             'auto',
             $options
             );
-            if (empty($sessiondata->language) === false) {
-                // Example for logging something
-                $logger = Zend_Registry::get('Zend_Log');
-                $logger->info('Switching to language "' . $sessiondata->language . '".');
-                $translate->setLocale($sessiondata->language);
-            }
 
-            $registry = Zend_Registry::getInstance();
-            $registry->set('Zend_Translate', $translate);
+        if (empty($sessiondata->language) === false) {
+            // Example for logging something
+            $logger = Zend_Registry::get('Zend_Log');
+            $logger->info('Switching to language "' . $sessiondata->language . '".');
+            $translate->setLocale($sessiondata->language);
+        }
+
+        $registry = Zend_Registry::getInstance();
+        $registry->set('Zend_Translate', $translate);
     }
 
     /** Setup language list.
