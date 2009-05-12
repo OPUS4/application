@@ -49,7 +49,8 @@ $this->translate('admin_title_person') ?></a></li>
 <?=$this->translate('admin_title_languages') ?></a></li>
 <li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'statistic', 'action' => 'index'), 'default', true) ?>">
 <?=$this->translate('admin_title_statistic') ?></a></li>
-
+<li><a href="<?= $this->url(array('module'=>'pkm', "controller"=>"index", "action"=>"listkeys")) ?>">
+<?= $this->translate('pkm_list_keys') ?></a></li>
 </ul>
 
 
