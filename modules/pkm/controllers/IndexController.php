@@ -1,7 +1,7 @@
 <?php
 /**
  * Index Controller for all actions dealing with encryption and signatures
- * 
+ *
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -56,7 +56,7 @@ class Pkm_IndexController extends Zend_Controller_Action
     {
     	$this->view->title = $this->view->translate('pkm_modulename');
     	try {
-    	    $gpg = new OpusGPG();
+    	    $gpg = new Opus_GPG();
     	}
     	catch (Exception $e) {
     		$this->view->excp = $this->view->translate('pkm_module_failure');
@@ -72,14 +72,14 @@ class Pkm_IndexController extends Zend_Controller_Action
     public function listkeysAction()
     {
     	$this->view->title = $this->view->translate('pkm_list_keys');
-    	
+
         $uploadForm = new KeyUploadForm();
         $action_url = $this->view->url(array("controller" => "index", "action" => "addkey"));
         $uploadForm->setAction($action_url);
         $this->view->form = $uploadForm;
-    	
-    	$gpg = new OpusGPG();
-    	
+
+    	$gpg = new Opus_GPG();
+
     	$this->view->masterkey = $gpg->getMasterKey();
     	$this->view->keys = $gpg->getKeys();
     }
@@ -92,8 +92,8 @@ class Pkm_IndexController extends Zend_Controller_Action
 	 */
     public function addkeyAction()
     {
-    	$gpg = new OpusGPG();
-    	
+    	$gpg = new Opus_GPG();
+
         $upload = new Zend_File_Transfer_Adapter_Http();
         $files = $upload->getFileInfo();
 
@@ -101,7 +101,7 @@ class Pkm_IndexController extends Zend_Controller_Action
         foreach ($files as $file) {
             $gpg->importKeyFile($file['tmp_name']);
         }
-    	
+
     	$this->_redirector->gotoSimple('listkeys');
     }
 
@@ -116,9 +116,9 @@ class Pkm_IndexController extends Zend_Controller_Action
     	$this->view->title = $this->view->translate('pkm_verify_signatures');
 
     	$data = $this->_request->getParams();
-    	
-    	$gpg = new OpusGPG();
-    	
+
+    	$gpg = new Opus_GPG();
+
     	if (true === array_key_exists('docId', $data))
     	{
         	try {
@@ -128,10 +128,10 @@ class Pkm_IndexController extends Zend_Controller_Action
         	{
     	    	$this->view->noTitleSelected = true;
     	    }
-    	
+
     	    $this->view->verifyResult = array();
-    	
-    	    foreach ($doc->getFile() as $file) 
+
+    	    foreach ($doc->getFile() as $file)
     	    {
     		    try {
     		        $this->view->verifyResult[$file->getPathName()] = $gpg->verifyPublicationFile($file);
@@ -151,7 +151,7 @@ class Pkm_IndexController extends Zend_Controller_Action
 	 */
     public function showkeyAction()
     {
-    	$gpg = new OpusGPG();
+    	$gpg = new Opus_GPG();
     	$data = $this->_request->getParams();
 
     	if (true === array_key_exists('fingerprint', $data))
@@ -167,7 +167,7 @@ class Pkm_IndexController extends Zend_Controller_Action
         	catch (Exception $e) {
         		$this->getResponse()->setBody($e->getMessage());
         	}
-    	}    	
+    	}
     }
 
 	/**
@@ -190,7 +190,7 @@ class Pkm_IndexController extends Zend_Controller_Action
 	 */
     public function deletekeyAction()
     {
-    	$gpg = new OpusGPG();
+    	$gpg = new Opus_GPG();
     	$data = $this->_request->getParams();
 
     	if (true === array_key_exists('fingerprint', $data))
@@ -214,7 +214,7 @@ class Pkm_IndexController extends Zend_Controller_Action
 	 */
     public function disablekeyAction()
     {
-    	$gpg = new OpusGPG();
+    	$gpg = new Opus_GPG();
     	$data = $this->_request->getParams();
 
     	if (true === array_key_exists('fingerprint', $data))
@@ -239,24 +239,24 @@ class Pkm_IndexController extends Zend_Controller_Action
     public function listfilesAction()
     {
     	$data = $this->_request->getParams();
-    	
+
     	$this->view->noFileSelected = false;
-    	
+
     	if (true === array_key_exists('docId', $data))
-    	{    	
+    	{
     	    try {
     	        $doc = new Opus_Document($data['docId']);
     	    }
     	    catch (Exception $e) {
     	    	$this->view->noFileSelected = true;
     	    }
-    	
-    	        foreach ($doc->getFile() as $file) 
+
+    	        foreach ($doc->getFile() as $file)
     	        {
     	        	$form = new SignatureForm();
     	        	$form->FileObject->setValue(base64_encode(serialize($file)));
     	        	$form->setAction($this->view->url(array("controller" => "index", "action" => "signfile")));
-    		        
+
     		        $this->view->files .= $file->getPathName();
     		        $this->view->files .= $form;
     	        }
@@ -275,7 +275,7 @@ class Pkm_IndexController extends Zend_Controller_Action
 	 */
     public function signfileAction()
     {
-    	$gpg = new OpusGPG();
+    	$gpg = new Opus_GPG();
     	$data = $this->_request->getPost();
 
     	if (true === array_key_exists('FileObject', $data))
