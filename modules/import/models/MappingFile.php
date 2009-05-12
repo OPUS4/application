@@ -39,12 +39,12 @@ class MappingFile
      * Holds the collections predifined in OPUS
      *
      * @var array  Defaults to the OPUS collections (Name => ID).
-     */    
+     */
     protected static $collectionShortNames = array('Dewey Decimal Classification' => 'ddc', 'Computing Classification System' => 'ccs', 'Physics and Astronomy Classification Scheme' => 'pacs', 'Journal of Economic Literature (JEL) Classification System' => 'jel', 'Mathematics Subject Classification' => 'msc');
 
     /**
      * Get the short name of the given collections
-     * 
+     *
      * @return string short name of the classification; if the classification is not supported, null will be returned
      */
     public static function getShortName($longname) {
@@ -67,15 +67,16 @@ class MappingFile
     	{
     	    $fp = fopen('../workspace/tmp/'.self::$collectionShortNames[$role['name']].'.map', 'w');
     	    fclose($fp);
+    	    echo "Creating mapping file for " . self::$collectionShortNames[$role['name']] . "\n";
             $this->createMappingfile(array($role['id'], self::$collectionShortNames[$role['name']]));
     	}
     	// if the name of the collection does not exist in the predefined collection roles, there is nothing to map
     }
-	
+
 	/**
 	 * creates a mapping file for a OPUS3 classification system to OPUS4
 	 *
-	 * @param array $classification  
+	 * @param array $classification
 	 * @return void
 	 */
 	protected function createMappingfile($classification, $coll = null)
@@ -83,18 +84,23 @@ class MappingFile
 		if ($coll === null) $CollectionRole = new Opus_CollectionRole($classification[0]);
 		else $CollectionRole = $coll;
 		foreach ($CollectionRole->getSubCollection() as $Notation) {
-			$this->writeNotation($Notation, $classification[1]);
+        if ($Notation->getNumber() !== '') {
+            $fp = fopen('../workspace/tmp/'.$classification[1].'.map', 'a');
+            fputs($fp, $Notation->getNumber() . "\t" . $Notation->getId() . "\n");
+            fclose($fp);
+        }
+		    #$this->writeNotation($Notation, $classification[1]);
 			$this->createMappingfile($classification, $Notation);
 		}
 	}
-	
+
 	/**
 	 * writes a line to the mapping file
-	 * 
+	 *
 	 * @param Opus_Collection $notation Collection to get mapped
 	 * @param string $classification short name of the classification this collection belongs to
-	 * @return void 
-	 */	
+	 * @return void
+	 */
 	protected function writeNotation($notation, $classification) {
 	    if ($notation->getNumber() !== '') {
 	        $fp = fopen('../workspace/tmp/'.$classification.'.map', 'a');

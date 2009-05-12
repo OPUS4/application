@@ -19,6 +19,8 @@ pear install Crypt_GPG
 --------------------------------------------------------------------------------
 installieren. 
 
+Damit das Modul ordnungsgemäß funktioniert, muss zudem ein Schlüsselbundverzeichnis angelegt werden, das für den Webserver beschreibbar ist. Das Verzeichnis muss dann in der config.ini eingetragen werden (s.u.). 
+
 Konfigurationsoptionen
 ^^^^^^^^^^^^^^^^^^^^^^
 Um PKM nutzen zu können, müssen folgende Parameter über die config.ini im Abschnitt gpg gesetzt werden:

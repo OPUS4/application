@@ -60,7 +60,7 @@ class XMLImport
      * Holds the collections predifined in OPUS
      *
      * @var array  Defaults to the OPUS collections (Name => ID).
-     */    
+     */
     protected $collections = array();
 
     /**
@@ -76,7 +76,8 @@ class XMLImport
         $roles = Opus_Collection_Information::getAllCollectionRoles();
         foreach ($roles as $role) {
             $this->collections[$role['name']] = $role['id'];
-            $mf = new MappingFile($role);
+            // Dont build mapping files, use method to get a id for a number
+            #$mf = new MappingFile($role);
         }
         // Initialize member variables.
         $this->_xml = new DomDocument;
@@ -101,7 +102,7 @@ class XMLImport
 		$documentsXML = new DOMDocument;
 		$documentsXML->loadXML($this->_proc->transformToXml($data));
 		$doclist = $documentsXML->getElementsByTagName('Opus_Document');
-		foreach ($doclist as $document) 
+		foreach ($doclist as $document)
 		{
             $licence = null;
             $lic = null;
@@ -139,29 +140,37 @@ class XMLImport
                 $ddcName = 'Dewey Decimal Classification';
                 $ddcValue = $ddcNotation->getAttribute('Value');
                 $ddc_id = null;
-                $ddc_id = $this->map(MappingFile::getShortName($ddcName), $ddcValue);
-                if ($ddc_id !== null && array_key_exists($ddcName, $this->collections) === true) {
-                    $ddc = new Opus_Collection($this->collections[$ddcName], $ddc_id);
-                }
+                if (array_key_exists($ddcName, $this->collections) === true) {
+                    //$ddc_id = $this->map(MappingFile::getShortName($ddcName), $ddcValue);
+                    $ddc_id = Opus_Collection_Information::getClassification($this->collections[$ddcName], $ddcValue);
+                    if ($ddc_id !== null) {
+                        $ddc = new Opus_Collection($this->collections[$ddcName], $ddc_id);
+                    }
                     else {
                     	echo "Mapping file for " . $this->collections[$ddcName]. " does not exist or class not found. Class $ddc_id not imported for old ID $oldid\n";
                     }
+                }
                 $document->removeChild($ddcNotation);
             }
             if ($ccsNotations->length > 0)
             {
                 $ccs = array();
                 $ccsName = 'Computing Classification System';
-                for ($c = 0; $c < $ccsNotations->length; $c++) {
-                	$ccsNotation = $ccsNotations->Item($c);
+                $length = $ccsNotations->length;
+                for ($c = 0; $c < $length; $c++) {
+                    // The item index is 0 any time, because the item is removed after processing
+                	$ccsNotation = $ccsNotations->Item(0);
                     $ccsValue = $ccsNotation->getAttribute('Value');
                     $ccs_id = null;
-                    $ccs_id = $this->map(MappingFile::getShortName($ccsName), $ccsValue);
-                    if ($ccs_id !== null && array_key_exists($ccsName, $this->collections) === true) {
-                        $ccs[] = new Opus_Collection($this->collections[$ccsName], $ccs_id);
-                    }
-                    else {
-                    	echo "Mapping file for " . $this->collections[$ccsName]. " does not exist or class not found. Class $ccs_id not imported for old ID $oldid\n";
+                    if (array_key_exists($ccsName, $this->collections) === true) {
+                        #$ccs_id = $this->map(MappingFile::getShortName($ccsName), $ccsValue);
+                        $ccs_id = Opus_Collection_Information::getClassification($this->collections[$ccsName], $ccsValue);
+                        if ($ccs_id !== null) {
+                            $ccs[] = new Opus_Collection($this->collections[$ccsName], $ccs_id);
+                        }
+                        else {
+                        	echo "Mapping file for " . $this->collections[$ccsName]. " does not exist or class not found. Class $ccs_id not imported for old ID $oldid\n";
+                        }
                     }
                     $document->removeChild($ccsNotation);
                 }
@@ -170,16 +179,21 @@ class XMLImport
             {
                 $pacs = array();
                 $pacsName = 'Physics and Astronomy Classification Scheme';
-                for ($c = 0; $c < $pacsNotations->length; $c++) {
-                	$pacsNotation = $pacsNotations->Item($c);
+                $length = $pacsNotations->length;
+                for ($c = 0; $c < $length; $c++) {
+                    // The item index is 0 any time, because the item is removed after processing
+                	$pacsNotation = $pacsNotations->Item(0);
                     $pacsValue = $pacsNotation->getAttribute('Value');
                     $pacs_id = null;
-                    $pacs_id = $this->map(MappingFile::getShortName($pacsName), $pacsValue);
-                    if ($pacs_id !== null && array_key_exists($pacsName, $this->collections) === true) {
-                        $pacs[] = new Opus_Collection($this->collections[$pacsName], $pacs_id);
-                    }
-                    else {
-                    	echo "Mapping file for " . $this->collections[$pacsName]. " does not exist or class not found. Class $pacs_id not imported for old ID $oldid\n";
+                    if (array_key_exists($pacsName, $this->collections) === true) {
+                        #$pacs_id = $this->map(MappingFile::getShortName($pacsName), $pacsValue);
+                        $pacs_id = Opus_Collection_Information::getClassification($this->collections[$pacsName], $pacsValue);
+                        if ($pacs_id !== null) {
+                            $pacs[] = new Opus_Collection($this->collections[$pacsName], $pacs_id);
+                        }
+                        else {
+                    	   echo "Mapping file for " . $this->collections[$pacsName]. " does not exist or class not found. Class $pacs_id not imported for old ID $oldid\n";
+                        }
                     }
                     $document->removeChild($pacsNotation);
                 }
@@ -188,16 +202,21 @@ class XMLImport
             {
                 $jel = array();
                 $jelName = 'Journal of Economic Literature (JEL) Classification System';
-                for ($c = 0; $c < $jelNotations->length; $c++) {
-                	$jelNotation = $jelNotations->Item($c);
+                $length = $jelNotations->length;
+                for ($c = 0; $c < $length; $c++) {
+                    // The item index is 0 any time, because the item is removed after processing
+                	$jelNotation = $jelNotations->Item(0);
                     $jelValue = $jelNotation->getAttribute('Value');
                     $jel_id = null;
-                    $jel_id = $this->map(MappingFile::getShortName($jelName), $jelValue);
-                    if ($jel_id !== null && array_key_exists($jelName, $this->collections) === true) {
-                        $jel[] = new Opus_Collection($this->collections[$jelName], $jel_id);
-                    }
-                    else {
-                    	echo "Mapping file for " . $this->collections[$jelName]. " does not exist or class not found. Class $jel_id not imported for old ID $oldid\n";
+                    if (array_key_exists($jelName, $this->collections) === true) {
+                        #$jel_id = $this->map(MappingFile::getShortName($jelName), $jelValue);
+                        $jel_id = Opus_Collection_Information::getClassification($this->collections[$jelName], $jelValue);
+                        if ($jel_id !== null) {
+                            $jel[] = new Opus_Collection($this->collections[$jelName], $jel_id);
+                        }
+                        else {
+                    	   echo "Mapping file for " . $this->collections[$jelName]. " does not exist or class not found. Class $jel_id not imported for old ID $oldid\n";
+                        }
                     }
                     $document->removeChild($jelNotation);
                 }
@@ -206,16 +225,21 @@ class XMLImport
             {
                 $msc = array();
                 $mscName = 'Mathematics Subject Classification';
-                for ($c = 0; $c < $mscNotations->length; $c++) {
-                	$mscNotation = $mscNotations->Item($c);
+                $length = $mscNotations->length;
+                for ($c = 0; $c < $length; $c++) {
+                    // The item index is 0 any time, because the item is removed after processing
+                	$mscNotation = $mscNotations->Item(0);
                     $mscValue = $mscNotation->getAttribute('Value');
                     $msc_id = null;
-                    $msc_id = $this->map(MappingFile::getShortName($mscName), $mscValue);
-                    if ($msc_id !== null && array_key_exists($mscName, $this->collections) === true) {
-                        $msc[] = new Opus_Collection($this->collections[$mscName], $msc_id);
-                    }
-                    else {
-                    	echo "Mapping file for " . $this->collections[$mscName]. " does not exist or class not found. Class $msc_id not imported for old ID $oldid\n";
+                    if (array_key_exists($mscName, $this->collections) === true) {
+                        #$msc_id = $this->map(MappingFile::getShortName($mscName), $mscValue);
+                        $msc_id = Opus_Collection_Information::getClassification($this->collections[$mscName], $mscValue);
+                        if ($msc_id !== null) {
+                            $msc[] = new Opus_Collection($this->collections[$mscName], $msc_id);
+                        }
+                        else {
+                    	   echo "Mapping file for " . $this->collections[$mscName]. " does not exist or class not found. Class $msc_id not imported for old ID $oldid\n";
+                        }
                     }
                     $document->removeChild($mscNotation);
                 }
@@ -224,16 +248,21 @@ class XMLImport
             {
                 $bk = array();
                 $bkName = 'Basisklassifikation';
-                for ($c = 0; $c < $bkNotations->length; $c++) {
-                	$bkNotation = $bkNotations->Item($c);
+                $length = $bkNotations->length;
+                for ($c = 0; $c < $length; $c++) {
+                    // The item index is 0 any time, because the item is removed after processing
+                    $bkNotation = $bkNotations->Item(0);
                     $bkValue = $bkNotation->getAttribute('Value');
                     $bk_id = null;
-                    $bk_id = $this->map(MappingFile::getShortName($bkName), $bkValue);
-                    if ($bk_id !== null && array_key_exists($bkName, $this->collections) === true) {
-                        $bk[] = new Opus_Collection($this->collections[$bkName], $bk_id);
-                    }
-                    else {
-                    	echo "Mapping file for " . $bkName . " does not exist or class not found. Class $bk_id not imported for old ID $oldid\n";
+                    if (array_key_exists($bkName, $this->collections) === true) {
+                        #$bk_id = $this->map(MappingFile::getShortName($bkName), $bkValue);
+                        $bk_id = Opus_Collection_Information::getClassification($this->collections[$bkName], $bkValue);
+                        if ($bk_id !== null) {
+                            $bk[] = new Opus_Collection($this->collections[$bkName], $bk_id);
+                        }
+                        else {
+                    	    echo "Mapping file for " . $bkName . " does not exist or class not found. Class $bk_id not imported for old ID $oldid\n";
+                        }
                     }
                     $document->removeChild($bkNotation);
                 }
@@ -242,16 +271,21 @@ class XMLImport
             {
                 $apa = array();
                 $apaName = 'Classification and Indexing System der American Psychological Association';
-                for ($c = 0; $c < $apaNotations->length; $c++) {
-                	$apaNotation = $apaNotations->Item($c);
+                $length = $apaNotations->length;
+                for ($c = 0; $c < $length; $c++) {
+            	    // The item index is 0 any time, because the item is removed after processing
+                    $apaNotation = $apaNotations->Item(0);
                     $apaValue = $apaNotation->getAttribute('Value');
                     $apa_id = null;
-                    $apa_id = $this->map(MappingFile::getShortName($apaName), $apaValue);
-                    if ($apa_id !== null && array_key_exists($apaName, $this->collections) === true) {
-                        $apa[] = new Opus_Collection($this->collections[$apaName], $apa_id);
-                    }
-                    else {
-                    	echo "Mapping file for " . $apaName. " does not exist or class not found. Class $apa_id not imported for old ID $oldid\n";
+                    if (array_key_exists($apaName, $this->collections) === true) {
+                        #$apa_id = $this->map(MappingFile::getShortName($apaName), $apaValue);
+                        $apa_id = Opus_Collection_Information::getClassification($this->collections[$apaName], $apaValue);
+                        if ($apa_id !== null) {
+                            $apa[] = new Opus_Collection($this->collections[$apaName], $apa_id);
+                        }
+                        else {
+                        	echo "Mapping file for " . $apaName. " does not exist or class not found. Class $apa_id not imported for old ID $oldid\n";
+                        }
                     }
                     $document->removeChild($apaNotation);
                 }
@@ -273,7 +307,32 @@ class XMLImport
 			            $ccsEntry->addEntry($doc);
 			        }
 			    }
-			    $index = count($imported['success']);
+                if (count($pacs) > 0) {
+                    foreach($pacs as $pacsEntry) {
+                        $pacsEntry->addEntry($doc);
+                    }
+                }
+			    if (count($msc) > 0) {
+                    foreach($msc as $mscEntry) {
+                        $mscEntry->addEntry($doc);
+                    }
+                }
+			    if (count($jel) > 0) {
+                    foreach($jel as $jelEntry) {
+                        $jelEntry->addEntry($doc);
+                    }
+                }
+			    if (count($apa) > 0) {
+                    foreach($apa as $apaEntry) {
+                        $apaEntry->addEntry($doc);
+                    }
+                }
+			    if (count($bk) > 0) {
+                    foreach($bk as $bkEntry) {
+                        $bkEntry->addEntry($doc);
+                    }
+                }
+                $index = count($imported['success']);
 			    $imported['success'][$index]['entry'] = $documentsXML->saveXML($document);
 			    $imported['success'][$index]['document'] = $doc;
 			    $imported['success'][$index]['oldid'] = $oldid;
@@ -282,14 +341,14 @@ class XMLImport
 				$index = count($imported['failure']);
                 $imported['failure'][$index]['message'] = $e->getMessage();
                 $imported['failure'][$index]['entry'] = $documentsXML->saveXML($document);
-			} 
+			}
 		}
 		return $imported;
 	}
-	
+
 	/**
 	 * Get the licence for a document and add it
-	 * 
+	 *
 	 * @return Opus_Licence Licence to be added to the document
 	 */
 	 public function getLicence($shortName)

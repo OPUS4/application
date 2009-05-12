@@ -41,21 +41,13 @@ class InstituteImport
 	 */
 	public function __construct($data)
 	{
-		// Analyse the data to find out which classification systems there are
-		// and which converter methods should be used
-		$doclist = $data->getElementsByTagName('table_data');
-		foreach ($doclist as $document) 
-		{
-			$tempdoc = new DOMDocument;
-            $tempdoc->loadXML($data->saveXML($document));
-            $tablename = $tempdoc->getElementsByTagName('table_data')->Item(0)->getAttribute('name');
-            if ($tablename === 'faculty_de') {
-            	// Does not work
-            	echo "Importing Faculties...";
-            	$fac_numbers = $this->importFaculties($tempdoc);
-            	echo "done!\n";
+        $doclist = $data->getElementsByTagName('table_data');
+        foreach ($doclist as $document)
+        {
+            if ($document->getAttribute('name') === 'faculty_de') {
+                $facNumbers = $this->importFaculties($document);
             }
-		}
+        }
 	}
 /*
 	<table_data name="faculty_de">
@@ -92,13 +84,13 @@ class InstituteImport
 	protected function transferOpusClassification($data)
 	{
 		$classification = array();
+
 		$doclist = $data->getElementsByTagName('row');
 		$index = 0;
-		foreach ($doclist as $document) 
+		foreach ($doclist as $document)
 		{
-			$tempdoc = new DOMDocument;
-            $tempdoc->loadXML($data->saveXML($document));
-            foreach ($tempdoc->getElementsByTagName('field') as $field) {
+            $classification[$index] = array();
+            foreach ($document->getElementsByTagName('field') as $field) {
            		$classification[$index][$field->getAttribute('name')] = $field->nodeValue;
             }
             $index++;
@@ -114,12 +106,12 @@ class InstituteImport
 	 */
 	protected function importFaculties($data)
 	{
-		$classification = $this->transferOpusClassification($data);
-		
+        $classification = $this->transferOpusClassification($data);
+
 		$subcoll = array();
-		
+
 		$collRole = new Opus_CollectionRole(1);
-		
+
 		foreach ($classification as $class) {
           	echo ".";
 		    // first level category
@@ -130,7 +122,7 @@ class InstituteImport
 			$collRole->addSubCollection($coll);
 		}
 		$collRole->store();
-		
+
 		return $subcoll;
 	}
 }
