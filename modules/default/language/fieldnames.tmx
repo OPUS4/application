@@ -55,7 +55,7 @@
         <seg>Hashtype</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Hashtyp</seg>
+        <seg>Prüfsummentyp</seg>
       </tuv>
     </tu>
     <tu tuid="HashValue">
@@ -63,7 +63,23 @@
         <seg>Hashvalue</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Hashwert</seg>
+        <seg>Prüfsumme</seg>
+      </tuv>
+    </tu>
+    <tu tuid="SignatureValue">
+      <tuv xml:lang="en">
+        <seg>Signature</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Signatur</seg>
+      </tuv>
+    </tu>
+    <tu tuid="SignatureType">
+      <tuv xml:lang="en">
+        <seg>Type of signature</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Signaturtyp</seg>
       </tuv>
     </tu>
     <tu tuid="POD">
