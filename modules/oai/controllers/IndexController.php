@@ -138,8 +138,12 @@ class Oai_IndexController extends Controller_Xml {
         $this->loadStyleSheet($this->view->getScriptPath('index') . '/oai-pmh.xslt');
         // Set response time
         $this->_proc->setParameter('', 'dateTime', date('c'));
-        // TODO: set proper base url
-        $this->_proc->setParameter('', 'oai_base_url', 'http://opus.foo.bar/oai');
+        $base = $this->getRequest()->getBaseUrl();
+        $host = $this->getRequest()->getHttpHost();
+        $scheme = $this->getRequest()->getScheme();
+        $module = $this->getRequest()->getModuleName();
+        $oai_base_url = $scheme . '://' . $host . $base . '/' . $module;
+        $this->_proc->setParameter('', 'oai_base_url', $oai_base_url);
 
         try {
             foreach ($oaiRequest as $parameter => $value) {
