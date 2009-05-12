@@ -34,7 +34,7 @@
 	* @version    $Id$
 -->
 
-<documenttype name="study_paper"
+<documenttype name="studienarbeit"
 	xmlns="http://schemas.opus.org/documenttype"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     

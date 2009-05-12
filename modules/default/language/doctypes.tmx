@@ -80,7 +80,7 @@
         <seg>Habilitation</seg>
       </tuv>
     </tu>
-    <tu tuid="study_paper">
+    <tu tuid="studienarbeit">
       <tuv xml:lang="en">
         <seg>Studienarbeit</seg>
       </tuv>
@@ -122,10 +122,10 @@
     </tu>
     <tu tuid="report">
       <tuv xml:lang="en">
-        <seg>Research Paper</seg>
+        <seg>Report</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Forschungsbericht</seg>
+        <seg>Report</seg>
       </tuv>
     </tu>
     <tu tuid="festschrift">
