@@ -102,24 +102,42 @@ class Admin_CollectionController extends Controller_Action {
      *
      * @return void
      */
-    public function deleteAction() {
+    public function manageAction() {
         if ($this->_request->isPost() === true) {
             $role = $this->getRequest()->getUserParam('role');
             $path = $this->getRequest()->getUserParam('path');
             $collection = new Opus_CollectionRole($role);
-            if (true === isset($path)) {
+
+            // Store whether we're handling a collection or a collection role.
+            $handlingCollection = (true === isset($path));
+            if (true === $handlingCollection) {
                 $trail = explode('-', $path);
                 foreach($trail as $step) {
                     $collection = $collection->getSubCollection($step);
                 }
                 $path = implode('-', array_slice($trail, 0, sizeof($trail) - 1));
-                $collection->delete();
-                $this->_redirectTo('Model successfully deleted.', 'show', null, null,
-                        array('role' => $role, 'path' => $path));
-            } else {
-                $collection->delete();
-                $this->_redirectTo('Model successfully deleted.', 'index');
             }
+
+            if (false === is_null($this->_request->getParam('delete'))) {
+                // Delete collection.
+                $collection->delete();
+            } else if (false === is_null($this->_request->getParam('move_up'))) {
+                // Move collection up by one position.
+                $collection->setPosition($collection->getPosition() - 1);
+                $collection->store();
+            } else if (false === is_null($this->_request->getParam('move_down'))) {
+                // Move collection up by one position.
+                $collection->setPosition($collection->getPosition() + 1);
+                $collection->store();
+            }
+
+            if (true === $handlingCollection) {
+                $this->_redirectTo('Collection successfully deleted.', 'show', null, null,
+                    array('role' => $role, 'path' => $path));
+            } else {
+                $this->_redirectTo('Role successfully deleted.', 'index');
+            }
+
         } else {
             $this->_redirectTo('', 'index');
         }

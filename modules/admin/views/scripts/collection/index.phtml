@@ -37,11 +37,12 @@
 <ul>
 <? foreach($this->entries as $id => $entry) : ?>
 <li>
-    <form action="<?= $this->url(array('action' => 'delete', 'role' => $id))?>" method="post">
+    <form action="<?= $this->url(array('action' => 'manage', 'role' => $id))?>" method="post">
         <a href="<?= $this->url(array('action' => 'show', 'role' => $id)) ?>"><?= $entry ?></a>
         <a href="<?= $this->url(array('action' => 'edit', 'role' => $id)) ?>">Edit</a>
-        <input type="hidden" name="id" value="$id" />
-        <input type="submit" value="Delete" />
+        <input type="submit" name="delete" value="Delete" />
+        <input type="submit" name="move_up" value="Up" />
+        <input type="submit" name="move_down" value="Down" />
     </form>
 </li>
 <? endforeach; ?>
