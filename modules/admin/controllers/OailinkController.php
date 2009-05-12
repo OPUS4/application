@@ -26,33 +26,31 @@
  *
  * @category    Application
  * @package     Module_Admin
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
+ * @author      Henning Gerhardt (henning.gerhardt@slub-dresden.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
-<h1>Opus Application - <?= $this->title ?></h1>
-<ul>
-<li><a href="<?= $this->url(array('controller'=>'configuration', 'action'=>'index')) ?>"><?=
-$this->translate('admin_title_configuration') ?></a></li>
-<li><a href="<?= $this->url(array('controller'=>'licence', 'action'=>'index')) ?>"><?=
-$this->translate('admin_title_licence') ?></a></li>
-<li><a href="<?= $this->url(array('controller'=>'collection', 'action'=>'index')) ?>"><?=
-$this->translate('admin_title_collections') ?></a></li>
-<li><a href="<?= $this->url(array('controller'=>'person', 'action'=>'index')) ?>"><?=
-$this->translate('admin_title_person') ?></a></li>
-<li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'index'), 'default', true) ?>">
-<?=$this->translate('admin_title_documents') ?></a></li>
-<li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'language', 'action' => 'index'), 'default', true) ?>">
-<?=$this->translate('admin_title_languages') ?></a></li>
-<li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'statistic', 'action' => 'index'), 'default', true) ?>">
-<?=$this->translate('admin_title_statistic') ?></a></li>
-<li><a href="<?= $this->url(array('module'=>'pkm', "controller"=>"index", "action"=>"listkeys")) ?>">
-<?= $this->translate('pkm_list_keys') ?></a></li>
-<li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'oailink', 'action' => 'index'), 'default', true) ?>">
-<?=$this->translate('admin_title_oailink') ?></a></li>
-</ul>
 
+/**
+ * Main entry point for this module.
+ *
+ * @category    Application
+ * @package     Module_Admin
+ */
+class Admin_OailinkController extends Zend_Controller_Action {
 
+    /**
+     * Shows link to oai module.
+     *
+     * @return void
+     */
+    public function indexAction() {
+
+        $this->view->title = $this->view->translate('admin_title_oailink');
+        $request = $this->getRequest();
+        $this->view->baseUrl = $request->getBaseUrl();
+        $this->view->baseHost = $request->getHttpHost();
+        $this->view->baseScheme = $request->getScheme();
+    }
+}

@@ -26,33 +26,25 @@
  *
  * @category    Application
  * @package     Module_Admin
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @author      Henning Gerhardt (henning.gerhardt@slub-dresden.de)
+ * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 ?>
-<h1>Opus Application - <?= $this->title ?></h1>
+<?php
+$baseLink = $this->baseScheme . '://' . $this->baseHost . $this->baseUrl . '/oai';
+?>
+
+<h1><?php echo $this->translate('admin_title_oailink');?></h1>
+
+<p><?php echo $this->translate('admin_oailink_general');?><br />
+<b><?php echo $baseLink ?></b>
+</p>
+
+<p><?php echo $this->translate('admin_oailink_examples'); ?></p>
 <ul>
-<li><a href="<?= $this->url(array('controller'=>'configuration', 'action'=>'index')) ?>"><?=
-$this->translate('admin_title_configuration') ?></a></li>
-<li><a href="<?= $this->url(array('controller'=>'licence', 'action'=>'index')) ?>"><?=
-$this->translate('admin_title_licence') ?></a></li>
-<li><a href="<?= $this->url(array('controller'=>'collection', 'action'=>'index')) ?>"><?=
-$this->translate('admin_title_collections') ?></a></li>
-<li><a href="<?= $this->url(array('controller'=>'person', 'action'=>'index')) ?>"><?=
-$this->translate('admin_title_person') ?></a></li>
-<li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'index'), 'default', true) ?>">
-<?=$this->translate('admin_title_documents') ?></a></li>
-<li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'language', 'action' => 'index'), 'default', true) ?>">
-<?=$this->translate('admin_title_languages') ?></a></li>
-<li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'statistic', 'action' => 'index'), 'default', true) ?>">
-<?=$this->translate('admin_title_statistic') ?></a></li>
-<li><a href="<?= $this->url(array('module'=>'pkm', "controller"=>"index", "action"=>"listkeys")) ?>">
-<?= $this->translate('pkm_list_keys') ?></a></li>
-<li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'oailink', 'action' => 'index'), 'default', true) ?>">
-<?=$this->translate('admin_title_oailink') ?></a></li>
+    <li><a href="<?php echo $baseLink . '?verb=Identify'?>"><?php echo $this->translate('admin_oailink_example_identify');?></a></li>
 </ul>
 
-
+<p />

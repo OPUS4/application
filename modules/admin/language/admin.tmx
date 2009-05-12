@@ -74,5 +74,13 @@
         <seg>Veröffentlichungsstatistik anzeigen</seg>
       </tuv>
     </tu>
+    <tu tuid="admin_title_oailink">
+      <tuv xml:lang="en">
+        <seg>Show OAI link</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Anzeige des OAI Links</seg>
+      </tuv>
+    </tu>
   </body>
 </tmx>
