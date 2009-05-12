@@ -42,8 +42,6 @@
     <field name="Language" mandatory="yes" />
     <field name="File" multiplicity="*" />
     <field name="Note" mandatory="yes" multiplicity="4" />
-    <field name="ServerDateModified" />
-    <field name="ServerDatePublished" />
     <field name="ServerDateUnlocking" />
     <field name="ServerDateValid" />
     <field name="Source" />

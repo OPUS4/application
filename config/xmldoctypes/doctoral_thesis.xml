@@ -44,8 +44,6 @@
 	<field name="File" multiplicity="*" />
 	<field name="Source" />
 	<field name="Note" mandatory="yes" multiplicity="4" />
-    <field name="ServerDateModified" />
-    <field name="ServerDatePublished" />
     <field name="ServerDateUnlocking" />
     <field name="ServerDateValid" />   
     <field name="IdentifierOpus3" /> 

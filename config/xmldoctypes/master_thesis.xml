@@ -43,8 +43,6 @@
     <field name="Note" mandatory="yes" multiplicity="4" />
         <!--  Auslagern in Security? -->
         <field name="IdentifierOpac" />
-    <field name="ServerDateModified" />
-    <field name="ServerDatePublished" />
     <field name="ServerDateUnlocking" />
     <field name="ServerDateValid" />  
     <field name="IdentifierOpus3" />  
