@@ -1,13 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<tmx version="2.0" xmlns="http://www.lisa.org/tmx20">
-  <header adminlang="en" creationtool="locale4j" creationtoolversion="1.1" o-tmf="unknown" segtype="block" srclang="*all*"/>
-  <body>
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+ 
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence"
+         adminlang="en-us" srclang="de-at" o-tmf="abc"
+         creationtool="XYZTool" >
+ </header>
+ 
+   <body>
     <tu tuid="monograph">
       <tuv xml:lang="en">
-        <seg>Book (Monograph)</seg>
+        <seg>Book</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Buch (Monographie)</seg>
+        <seg>Buch</seg>
       </tuv>
     </tu>
     <tu tuid="article">
@@ -15,7 +21,7 @@
         <seg>Article</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Aufsatz</seg>
+        <seg>Artikel</seg>
       </tuv>
     </tu>
     <tu tuid="preprint">
@@ -23,7 +29,7 @@
         <seg>Preprint</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Preprint (Vorab-Veröffentlichung)</seg>
+        <seg>Preprint</seg>
       </tuv>
     </tu>
     <tu tuid="doctoral_thesis">
@@ -39,7 +45,7 @@
         <seg>Journal</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Journal (Zeitschrift)</seg>
+        <seg>Zeitschrift</seg>
       </tuv>
     </tu>
     <tu tuid="lecture">
@@ -63,7 +69,7 @@
         <seg>Master Thesis</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Diplomarbeit, Magisterarbeit, Masterarbeit</seg>
+        <seg>Masterarbeit</seg>
       </tuv>
     </tu>
     <tu tuid="habil_thesis">
@@ -74,17 +80,9 @@
         <seg>Habilitation</seg>
       </tuv>
     </tu>
-    <tu tuid="honour_thesis">
-      <tuv xml:lang="en">
-        <seg>Honour's Thesis</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Honour's Thesis</seg>
-      </tuv>
-    </tu>
     <tu tuid="study_paper">
       <tuv xml:lang="en">
-        <seg>StudyPaper</seg>
+        <seg>Studienarbeit</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Studienarbeit</seg>
@@ -95,15 +93,15 @@
         <seg>Paper</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Veröffentlichung (allg.)</seg>
+        <seg>Paper</seg>
       </tuv>
     </tu>
     <tu tuid="book_section">
       <tuv xml:lang="en">
-        <seg>Book Section (Chapter / Part of a Monograph)</seg>
+        <seg>Book Section</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Buchausschnitt (Kapitel / Teil einer Monographie)</seg>
+        <seg>Buchausschnitt</seg>
       </tuv>
     </tu>
     <tu tuid="conference_item">
@@ -119,23 +117,15 @@
         <seg>Conference</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Konferenz, Tagung</seg>
+        <seg>Konferenz</seg>
       </tuv>
     </tu>
     <tu tuid="report">
       <tuv xml:lang="en">
-        <seg>ResearchPaper </seg>
+        <seg>Research Paper</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Forschungsbericht</seg>
-      </tuv>
-    </tu>
-    <tu tuid="doctype_for_discussion_reasons">
-      <tuv xml:lang="en">
-        <seg>Doctype for discussion reasons</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Diskussionspapier</seg>
       </tuv>
     </tu>
     <tu tuid="festschrift">
@@ -159,7 +149,7 @@
         <seg>Manual</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Anleitung / Handbuch</seg>
+        <seg>Handbuch</seg>
       </tuv>
     </tu>
     <tu tuid="image">
@@ -191,7 +181,7 @@
         <seg>Other</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Sonstiger Dokumenttyp</seg>
+        <seg>Sonstiges</seg>
       </tuv>
     </tu>
     
