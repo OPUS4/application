@@ -154,8 +154,7 @@ class Frontdoor_IndexController extends Zend_Controller_Action
      * @var array
      */
 
-    private $__stopwords = array('Active', 'CommentInternal', 'DescMarkup',
-        'LinkLogo', 'LinkSign', 'MimeType', 'SortOrder', 'PodAllowed', 'ServerDatePublished', 'ServerDateModified',
+    private $__stopwords = array('Active', 'CommentInternal', 'MimeType', 'SortOrder', 'ServerDatePublished', 'ServerDateModified',
         'ServerDateUnlocked', 'ServerDateValid', 'Source', 'IdentifierOpac', 'PatentCountries', 'PatentDateGranted',
         'PatentApplication', 'Enrichment', 'Email', 'PlaceOfBirth', 'DateOfBirth');
 
