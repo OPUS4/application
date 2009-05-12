@@ -285,6 +285,8 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
             $logger = Zend_Registry::get('Zend_Log');
             $logger->info('Switching to language "' . $sessiondata->language . '".');
             $translate->setLocale($sessiondata->language);
+        } else {
+            $sessiondata->language = $translate->getLocale();
         }
 
         $registry = Zend_Registry::getInstance();
@@ -298,12 +300,17 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      */
     protected function _setupLanguageList() {
         $registry = Zend_Registry::getInstance();
-        $availableLanguages = Opus_Language::getAllActive();
 
         $sessiondata = new Zend_Session_Namespace();
-        $locale = new Zend_Locale($sessiondata->language);
+        if (false === empty($sessiondata->language)) {
+            $locale = new Zend_Locale($sessiondata->language);
+        } else {
+            $locale = $registry->get('Zend_Translate')->getLocale();
+        }
 
         $languages = array();
+        $availableLanguages = Opus_Language::getAllActive();
+
         foreach ($availableLanguages as $availableLanguage) {
             $trans = $availableLanguage->getPart1();
             if (true === empty($trans)) {
