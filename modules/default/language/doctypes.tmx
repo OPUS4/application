@@ -72,7 +72,7 @@
         <seg>Masterarbeit</seg>
       </tuv>
     </tu>
-    <tu tuid="habil_thesis">
+    <tu tuid="habilitation">
       <tuv xml:lang="en">
         <seg>Habil Thesis</seg>
       </tuv>

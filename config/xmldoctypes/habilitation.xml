@@ -34,7 +34,7 @@
 	* @version    $Id$
 -->
 
-<documenttype name="habil_thesis"
+<documenttype name="habilitation"
 	xmlns="http://schemas.opus.org/documenttype"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     
