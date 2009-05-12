@@ -58,6 +58,7 @@ class InstituteImport
         $collRole->store();
 
         $doclist = $data->getElementsByTagName('table_data');
+
         foreach ($doclist as $document)
         {
             if ($document->getAttribute('name') === 'faculty_de') {
@@ -67,6 +68,7 @@ class InstituteImport
                 $instNumbers = $this->importInstitutes($document, $facNumbers, $collRole->getId());
             }
         }
+        echo "\n";
 	}
 
 	/**
@@ -128,15 +130,21 @@ class InstituteImport
     {
         $classification = $this->transferOpusClassification($data);
 
+        // Build a mapping file to associate old IDs with the new ones
+        $fp = fopen('../workspace/tmp/institute.map', 'w');
+
         foreach ($classification as $class) {
             echo ".";
             $parentColl = new Opus_Collection($roleId, $subColls[$class['fakultaet']]);
             // second level category
             $coll = new Opus_Collection($roleId);
             $coll->setName($class['name']);
-            $coll->store();
+            $id = $coll->store();
             $parentColl->addSubCollection($coll);
             $parentColl->store();
+            fputs($fp, $class['nr'] . ' ' . $id . "\n");
         }
+
+        fclose($fp);
     }
 }

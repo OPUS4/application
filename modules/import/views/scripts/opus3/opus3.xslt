@@ -219,6 +219,8 @@
             <xsl:call-template name="getMsc"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
             <xsl:call-template name="getApa"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
             <xsl:call-template name="getBk"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
+            
+            <xsl:call-template name="getInstitute"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
                       
             <!--
             Prepared, but commented out: 
@@ -231,7 +233,7 @@
 		<field name="inst_nr">62</field>
 	</row>
             opus_coll <field name="Collection" />
-            opus_inst (+ institutes + faculties) <field name="Institute" />
+            opus_inst <field name="Institute" />
             opus_schriftenreihe (+ schriftenreihe) <field name="TitleParent" mandatory="yes" multiplicity="4" />
 	        -->
             
@@ -270,6 +272,17 @@
                 </xsl:attribute>
             </xsl:element>
         </xsl:if>
+    </xsl:template>
+    <!-- temporary Institute information -->
+    <xsl:template name="getInstitute">
+        <xsl:param name="source_id" required="yes" />
+        <xsl:for-each select="/mysqldump/database/table_data[@name='opus_inst']/row[field[@name='source_opus']=$source_id]">
+            <xsl:element name="OldInstitute">
+                <xsl:attribute name="Value">
+                    <xsl:value-of select="field[@name='inst_nr']" />
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:for-each>
     </xsl:template>
     <!-- temporary DDC information -->
     <xsl:template match="table_data[@name='opus']/row/field[@name='sachgruppe_ddc']">

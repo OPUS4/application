@@ -106,22 +106,25 @@ class XMLImport
 		{
             $licence = null;
             $lic = null;
+            $institutes = null;
+            $inst = null;
             $ddcNotation = null;
             $ddc = null;
-            $ccsNotation = null;
+            $ccsNotations = null;
             $ccs = null;
-            $jelNotation = null;
+            $jelNotations = null;
             $jel = null;
-            $pacsNotation = null;
+            $pacsNotations = null;
             $pacs = null;
-            $mscNotation = null;
+            $mscNotations = null;
             $msc = null;
-            $apaNotation = null;
+            $apaNotations = null;
             $apa = null;
-            $bkNotation = null;
+            $bkNotations = null;
             $bk = null;
             $oldid = $document->getElementsByTagName('IdentifierOpus3')->Item(0)->getAttribute('Value');
             $licence = $document->getElementsByTagName('OldLicence')->Item(0);
+            $institutes = $document->getElementsByTagName('OldInstitute');
             $ddcNotation = $document->getElementsByTagName('OldDdc')->Item(0);
             $ccsNotations = $document->getElementsByTagName('OldCcs');
             $jelNotations = $document->getElementsByTagName('OldJel');
@@ -151,6 +154,26 @@ class XMLImport
                     }
                 }
                 $document->removeChild($ddcNotation);
+            }
+            if ($institutes->length > 0)
+            {
+                $institute = array();
+                $instituteName = 'Organisatorische Einheiten';
+                $length = $institutes->length;
+                for ($c = 0; $c < $length; $c++) {
+                    // The item index is 0 any time, because the item is removed after processing
+                    $instituteId = $institutes->Item(0);
+                    $instituteValue = $instituteId->getAttribute('Value');
+                    if (array_key_exists($instituteName, $this->collections) === true) {
+                        if ($instituteValue !== null) {
+                            $institute[] = new Opus_Collection($this->collections[$instituteName], $this->getInstitute($instituteValue));
+                        }
+                        else {
+                            echo "Mapping file for " . $this->collections[$instituteName]. " does not exist or class not found. Institute assignation $inst_id not imported for old ID $oldid\n";
+                        }
+                    }
+                    $document->removeChild($instituteId);
+                }
             }
             if ($ccsNotations->length > 0)
             {
@@ -361,7 +384,22 @@ class XMLImport
 		return $lic[$shortName];
 	 }
 
-	/**
+    /**
+     * Get the institute ID for a document
+     *
+     * @return Opus_Licence Licence to be added to the document
+     */
+     public function getInstitute($oldId)
+     {
+        $fp = file('../workspace/tmp/institute.map');
+        foreach ($fp as $licence) {
+            $mappedLicence = split("\ ", $licence);
+            $lic[$mappedLicence[0]] = $mappedLicence[1];
+        }
+        return $lic[$oldId];
+     }
+
+	 /**
 	 * maps a notation from Opus3 on Opus4 schema
 	 * depracated - dont use it any more since Mapping files are no longer supported
 	 *
