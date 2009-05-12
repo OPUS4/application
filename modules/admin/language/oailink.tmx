@@ -18,20 +18,12 @@
         <seg>OAI Anfrage Beispiele:</seg>
       </tuv>
     </tu>
-    <tu tuid="admin_oailink_examples_identify">
+    <tu tuid="admin_oailink_example_identify">
       <tuv xml:lang="en">
         <seg>OAI request with verb Identify</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>OAI Anfrage mit dem Verb Idenfity</seg>
-      </tuv>
-    </tu>
-    <tu tuid="admin_oailink">
-      <tuv xml:lang="en">
-        <seg>placeholder_en</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>placeholder_de</seg>
       </tuv>
     </tu>
   </body>
