@@ -28,44 +28,29 @@
     </tu>
     <tu tuid="frontdoor_hashtitle">
       <tuv xml:lang="en">
-        <seg>Integrity of this document (hashvalues and hashtypes)</seg>
+        <seg>Integrity of this document (hashvalues and signatures)</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Integrität dieses Dokuments (Hashwerte und -typen)</seg>
+        <seg>Integrität dieses Dokuments (Signaturen und Prüfsummen)</seg>
       </tuv>
     </tu>
-    <tu tuid="frontdoor_no_hash_types">
+    <tu tuid="frontdoor_no_hash">
       <tuv xml:lang="en">
-        <seg>No hashtypes available for this file</seg>
+        <seg>No hashes or signatures available for this file</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Für diese Datei liegen keine Hashtypen oder Signaturen vor.</seg>
-      </tuv>
-    </tu>
-    <tu tuid="frontdoor_no_hash_values">
-      <tuv xml:lang="en">
-        <seg>No hashvalues for this file.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Für diese Datei liegen keine Hashwerte vor.</seg>
-      </tuv>
-    </tu>
-    <tu tuid="frontdoor_no_hash_existence">
-      <tuv xml:lang="en">
-        <seg>No hashvalues or signatures available for this document.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Für dieses Dokument liegen keine Hashwerte oder Signaturen vor.</seg>
+        <seg>Für diese Datei liegen keine Prüfsummen oder Signaturen vor</seg>
       </tuv>
     </tu>
     <tu tuid="frontdoor_filenumber">
       <tuv xml:lang="en">
-        <seg>Number of files for this document</seg>
+        <seg>Number of files available for this document</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Anzahl der Dateien für dieses Dokument</seg>
+        <seg>Anzahl der vorliegenden Dateien für dieses Dokument</seg>
       </tuv>
-    </tu><tu tuid="frontdoor_back">
+    </tu>
+    <tu tuid="frontdoor_back">
       <tuv xml:lang="en">
         <seg>Back to frontdoor view</seg>
       </tuv>
