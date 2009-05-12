@@ -74,11 +74,12 @@ class BrowsingList
 	public static function getPersonsRoleList($role)
 	{
         $registry = Zend_Registry::getInstance();
-        $index = Zend_Search_Lucene::open($registry->get('Zend_LucenePersonsIndexPath'));
+        //$index = Zend_Search_Lucene::open($registry->get('Zend_LucenePersonsIndexPath'));
 
-        $browsinglist = $index->find('role:'.$role);
+        //$browsinglist = $index->find('role:'.$role);
 
         //$browsinglist = Opus_Person::getPersonsByRole($role);
+        $browsinglist = null;
 		$personsList = new Opus_Search_List_PersonsList();
 		$done = array();
 
