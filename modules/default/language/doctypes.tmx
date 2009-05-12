@@ -96,7 +96,7 @@
         <seg>Paper</seg>
       </tuv>
     </tu>
-    <tu tuid="book_section">
+    <tu tuid="monograph_section">
       <tuv xml:lang="en">
         <seg>Monograph (Section)</seg>
       </tuv>
