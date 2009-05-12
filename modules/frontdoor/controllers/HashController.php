@@ -19,7 +19,9 @@ class Frontdoor_HashController extends Zend_Controller_Action
        $this->view->document = $document;
 
        $title = $document->getTitleMain('0')->getValue();
+       $author = $document->getPersonAuthor('0')->getName();
        $this->view->title = $title;
+       $this->view->author = $author;
 
        if (is_array ($files = $document->getFile()) === true)
        {
@@ -51,7 +53,6 @@ class Frontdoor_HashController extends Zend_Controller_Action
                         $hashValueType['hashType_' .$i. '_' .$j] = $hashType;
 
                      }
-
                   }
               }
           }
@@ -59,5 +60,4 @@ class Frontdoor_HashController extends Zend_Controller_Action
        $this->view->hashValueType = $hashValueType;
        $this->view->hashLabel = $hashLabel;
     }
-
 }
