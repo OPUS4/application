@@ -13,9 +13,9 @@ Um das Modul PKM nutzen zu können, muss auf dem Server Crypt_GPG sowie GnuPG in
 Crypt_GPG ist ein PEAR-Modul für PHP, das GnuPG in PHP einbindet. Es lässt sich einfach über das Kommando
 .Installation von Crypt_GPG
 
-[source, bash]
+[source, php]
 --------------------------------------------------------------------------------
-opusserver# pear install Crypt_GPG 
+pear install Crypt_GPG 
 --------------------------------------------------------------------------------
 installieren. 
 
