@@ -363,10 +363,10 @@ class XMLImport
 
 	/**
 	 * maps a notation from Opus3 on Opus4 schema
+	 * depracated - dont use it any more since Mapping files are no longer supported
 	 *
 	 * @param string $data notation
 	 * @return integer ID in Opus4
-	 * @depracated - dont use it any more
 	 */
 	protected function map($classification, $data)
 	{

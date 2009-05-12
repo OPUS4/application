@@ -41,40 +41,34 @@ class InstituteImport
 	 */
 	public function __construct($data)
 	{
+        $roles = Opus_Collection_Information::getAllCollectionRoles();
+        foreach ($roles as $role) {
+            if ($role['name'] ===  'Organisatorische Einheiten') {
+                $cr = new Opus_CollectionRole($role['id']);
+                $cr->delete();
+            }
+        }
+
+        // Build the Institutes Collection
+	    $collRole = new Opus_CollectionRole();
+        $collRole->setName('Organisatorische Einheiten');
+        $collRole->setPosition(1);
+        $collRole->setVisible(1);
+        $collRole->setLinkDocsPathToRoot('count');
+        $collRole->store();
+
         $doclist = $data->getElementsByTagName('table_data');
         foreach ($doclist as $document)
         {
             if ($document->getAttribute('name') === 'faculty_de') {
-                $facNumbers = $this->importFaculties($document);
+                $facNumbers = $this->importFaculties($document, $collRole);
+            }
+            if ($document->getAttribute('name') === 'institute_de') {
+                $instNumbers = $this->importInstitutes($document, $facNumbers, $collRole->getId());
             }
         }
 	}
-/*
-	<table_data name="faculty_de">
-	<row>
-		<field name="nr">1</field>
-		<field name="fakultaet">Bauwesen</field>
-		<field name="sachgruppe_ddc">no</field>
-	</row>
-	<table_data name="faculty_en">
-	<row>
-		<field name="nr">1</field>
-		<field name="fakultaet">Civil Engineering</field>
-		<field name="sachgruppe_ddc">no</field>
-	</row>
-	<table_data name="institute_de">
-	<row>
-		<field name="nr">1</field>
-		<field name="name">Abwasserwirtschaft und Gewässerschutz B-2</field>
-		<field name="fakultaet">1</field>
-	</row>
-	<table_data name="institute_en">
-	<row>
-		<field name="nr">1</field>
-		<field name="name">Wastewater Management and Water Protection B-2</field>
-		<field name="fakultaet">1</field>
-	</row>
-*/
+
 	/**
 	 * transfers any OPUS3-conform classification System into an array
 	 *
@@ -99,30 +93,50 @@ class InstituteImport
 	}
 
 	/**
-	 * Imports Bk-classification to Opus4 directly (without XML)
+	 * Imports Faculties from Opus3 to Opus4 directly (without XML)
 	 *
 	 * @param DOMDocument $data XML-Document to be imported
 	 * @return array List of documents that have been imported
 	 */
-	protected function importFaculties($data)
+	protected function importFaculties($data, $collRole)
 	{
         $classification = $this->transferOpusClassification($data);
 
 		$subcoll = array();
 
-		$collRole = new Opus_CollectionRole(1);
-
 		foreach ($classification as $class) {
           	echo ".";
 		    // first level category
-		    $coll = new Opus_Collection(1);
+		    $coll = new Opus_Collection($collRole->getId());
 		    $coll->setName($class['fakultaet']);
 			// store the old ID with the new Collection
-			$subcoll[$class['nr']] = $coll;
+			$subcoll[$class['nr']] = $coll->store();
 			$collRole->addSubCollection($coll);
+			$collRole->store();
 		}
-		$collRole->store();
 
 		return $subcoll;
 	}
+
+	/**
+     * Imports Institutes from Opus3 to Opus4 directly (without XML)
+     *
+     * @param DOMDocument $data XML-Document to be imported
+     * @return array List of documents that have been imported
+     */
+    protected function importInstitutes($data, $subColls, $roleId)
+    {
+        $classification = $this->transferOpusClassification($data);
+
+        foreach ($classification as $class) {
+            echo ".";
+            $parentColl = new Opus_Collection($roleId, $subColls[$class['fakultaet']]);
+            // second level category
+            $coll = new Opus_Collection($roleId);
+            $coll->setName($class['name']);
+            $coll->store();
+            $parentColl->addSubCollection($coll);
+            $parentColl->store();
+        }
+    }
 }
