@@ -10,10 +10,10 @@
    <body>
     <tu tuid="monograph">
       <tuv xml:lang="en">
-        <seg>Book</seg>
+        <seg>Monograph</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Buch</seg>
+        <seg>Monographie</seg>
       </tuv>
     </tu>
     <tu tuid="article">
@@ -98,10 +98,10 @@
     </tu>
     <tu tuid="book_section">
       <tuv xml:lang="en">
-        <seg>Book Section</seg>
+        <seg>Monograph (Section)</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Buchausschnitt</seg>
+        <seg>Monographie (Ausschnitt)</seg>
       </tuv>
     </tu>
     <tu tuid="conference_item">
