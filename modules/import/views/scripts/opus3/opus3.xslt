@@ -81,7 +81,7 @@
                         <xsl:text>monograph</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='5'">
-                        <xsl:text>book_section</xsl:text>
+                        <xsl:text>monograph_section</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='7'">
                         <xsl:text>master_thesis</xsl:text>
@@ -90,7 +90,7 @@
                         <xsl:text>doctoral_thesis</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='9'">
-                        <xsl:text>honour_thesis</xsl:text>
+                        <xsl:text>festschrift</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='11'">
                         <xsl:text>journal</xsl:text>
@@ -105,7 +105,7 @@
                         <xsl:text>paper</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='19'">
-                        <xsl:text>study_paper</xsl:text>
+                        <xsl:text>studienarbeit</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='20'">
                         <xsl:text>report</xsl:text>
@@ -117,7 +117,7 @@
                         <xsl:text>other</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='24'">
-                        <xsl:text>habil_thesis</xsl:text>
+                        <xsl:text>habilitation</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='25'">
                         <xsl:text>bachelor_thesis</xsl:text>

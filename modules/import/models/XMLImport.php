@@ -366,6 +366,7 @@ class XMLImport
 	 *
 	 * @param string $data notation
 	 * @return integer ID in Opus4
+	 * @depracated - dont use it any more
 	 */
 	protected function map($classification, $data)
 	{
