@@ -114,7 +114,7 @@
                    <xsl:when test="@Type='monograph'">
                        Book
                    </xsl:when>
-                   <xsl:when test="@Type='book_section'">
+                   <xsl:when test="@Type='monograph_section'">
                        InBook
                    </xsl:when>
                    <xsl:when test="@Type='bachelor_thesis'">
@@ -126,11 +126,10 @@
                    <xsl:when test="@Type='doctoral_thesis'">
                        Thesis.Doctoral
                    </xsl:when>
-                   <xsl:when test="@Type='habil_thesis'">
+                   <xsl:when test="@Type='habilitation'">
                        Thesis.Habilitation
                    </xsl:when>
-        <!--  ist das korrekt ? -->           
-                   <xsl:when test="@Type='honour_thesis'">
+                   <xsl:when test="@Type='festschrift'">
                        Festschrift
                    </xsl:when>
                    <xsl:when test="@Type='journal'">
@@ -142,7 +141,7 @@
                    <xsl:when test="@Type='conference_item'">
                        InProceedings
                    </xsl:when>
-                   <xsl:when test="@Type='study_paper'">
+                   <xsl:when test="@Type='studienarbeit'">
                        Paper
                    </xsl:when>
                    <xsl:when test="@Type='paper'">
@@ -176,11 +175,20 @@
                <xsl:element name="thesis:level">
    <!--  noch aendern, kann hier auch andere Werte haben -->            
                  <xsl:choose>
-                   <xsl:when test="@Type='doctoral thesis'">
+                   <xsl:when test="@Type='doctoral_thesis'">
                        thesis:doctoral
                    </xsl:when>
+                   <xsl:when test="@Type='habilitation'">
+                       thesis:habilitation
+                   </xsl:when>
+                   <xsl:when test="@Type='bachelor_thesis'">
+                       bachelor
+                   </xsl:when>
+                   <xsl:when test="@Type='master_thesis'">
+                       master
+                   </xsl:when>
                    <xsl:otherwise>
-                       thesis:habilitation 
+                       other 
                    </xsl:otherwise>    
                  </xsl:choose>  
                </xsl:element>
@@ -414,7 +422,6 @@ SubjectSwd : freie Schlagwoerter tauchen in der XML-Darstellung
              z.Zt. werden sie auch hier doppelt ausgegeben
 PublisherName, PublisherPlace, PublisherAddress: noch nicht gesehen,
                da keine Testdaten
-thesis:degree: akademischer Grad
 thesis:grantor Institution, die akad. Grad vergeben hat
                in Opus 3 Fakultaet, hier???
 contactID:  von thesis:grantor: z.Zt. fix gesetzt               
