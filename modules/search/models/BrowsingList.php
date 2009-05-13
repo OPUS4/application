@@ -78,7 +78,7 @@ class BrowsingList
 
         //$browsinglist = $index->find('role:'.$role);
 
-        //$browsinglist = Opus_Person::getPersonsByRole($role);
+        //$browsinglist =Opus_Person::getPersonsByRole($role);
         $browsinglist = null;
 		$personsList = new Opus_Search_List_PersonsList();
 		$done = array();
