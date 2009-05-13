@@ -74,6 +74,7 @@ class Admin_CollectionController extends Controller_Action {
         $filter = new Opus_Model_Filter;
         $filter->setModel($collection);
         $filter->setBlacklist(array('SubCollection', 'ParentCollection', 'CollectionsContentSchema'));
+        $filter->setSortOrder(array('Name'));
         $collectionForm = $form_builder->build($filter);
         $action_url = $this->view->url(array('action' => 'create'));
         $collectionForm->setAction($action_url);
@@ -97,6 +98,7 @@ class Admin_CollectionController extends Controller_Action {
         $filter = new Opus_Model_Filter;
         $filter->setModel($collection);
         $filter->setBlacklist(array('SubCollection', 'ParentCollection'));
+        $filter->setSortOrder(array('Name'));
         $collectionForm = $form_builder->build($filter);
         $action_url = $this->view->url(array('action' => 'create'));
         $collectionForm->setAction($action_url);
@@ -157,7 +159,7 @@ class Admin_CollectionController extends Controller_Action {
     public function showAction() {
         $roleId = $this->getRequest()->getParam('role');
         $collection = new Opus_CollectionRole($roleId);
-        $roleName = $collection->getName();
+        $roleName = $collection->getDisplayName();
         $path = $this->getRequest()->getParam('path');
         $subcollections = array();
         $breadcrumb = array();
@@ -170,14 +172,14 @@ class Admin_CollectionController extends Controller_Action {
                     $position .= '-' . $step;
                 }
                 $collection = $collection->getSubCollection($step);
-                $breadcrumb[$position] = $collection->getName();
+                $breadcrumb[$position] = $collection->getDisplayName();
             }
             foreach($collection->getSubCollection() as $i => $subcollection) {
-                $subcollections[$path . '-' . $i] = $subcollection->getName();
+                $subcollections[$path . '-' . $i] = $subcollection->getDisplayName();
             }
         } else {
             foreach($collection->getSubCollection() as $i => $subcollection) {
-                $subcollections[$i] = $subcollection->getName();
+                $subcollections[$i] = $subcollection->getDisplayName();
             }
         }
         $this->view->subcollections = $subcollections;
