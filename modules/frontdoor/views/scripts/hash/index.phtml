@@ -20,36 +20,49 @@
 
          if (array_key_exists ($i, $this->hashLabel) === true)
          {
-            $value = $this->hashLabel[$i];?>
-
-            <p><b><?=$this->translate('File');?>: </b><?= $this->value = $value?></p><?
+            $file = $this->hashLabel[$i];
             $hashes = $this->document->getFile($i)->getHashValue();
             $hashNumber = count($hashes);
             for ($j = 0; $j < $hashNumber; $j++)
             {
                if (array_key_exists ('hashType_' .$i. '_' .$j, $this->hashValueType) === true)
                {
-                  $value = $this->hashValueType['hashType_' .$i. '_' .$j];
-                  $this->signtype = $signtype = substr($value, 0,3);
-                  if ($signtype == 'gpg')
-                  {
-                     $value = $this->signtype;?>
-                     <p><b><?= $this->translate('SignatureType');?>: </b> <?= $this->value = $value?></p><?
-                     $value = $this->hashValueType['hashValue_' .$i. '_' .$j];?>
+                  $hashtype = $this->hashValueType['hashType_' .$i. '_' .$j];
+                  $this->signtype = $signtype = substr($hashtype, 0,3);
 
-                     <p><b><?= $this->translate('SignatureValue');?>: </b><?= $this->value = $value?></p><?
-                  }
-                  if ($value == 'md5')
+                  if ($signtype == 'gpg')
                   {?>
-                    <p><b><?= $this->translate('HashType');?>: </b> <?= $this->value = $value?></p><?
-                    $value = $this->hashValueType['hashValue_' .$i. '_' .$j];?>
-                    <p><b><?= $this->translate ('HashValue');?>: </b><?= $this->value = $value?></p><?
+                     <p><b><?= $this->translate('SignatureValue');?> (<?= $this->file = $file?>)</b></p>
+                     <p><?= $this->signtype?>:</p><?
                   }
-                  if ($value == 'sha1')
-                  {?>
-                    <p><b><?= $his->translate('HashType');?>: </b> <?= $this->value = $value?></p><?
-                    $value = $this->hashValueType['hashValue_' .$i. '_' .$j];?>
-                    <p><b><?= $this->translate('HashValue');?>: <b> <?= $this->value = $value?></p><?
+                  if ($hashtype == 'md5')
+                  {
+                     $value = $this->hashValueType['hashValue_' .$i. '_' .$j];?>
+                     <p><b><?= $this->translate ('HashValue')?>&nbsp;(<?= $this->file = $file?>)</b></p>
+
+                     <p><?= $this->translate ('HashValue')?>&nbsp;
+                     <?= $this->hashtype = $hashtype?>&nbsp;
+                     <?= $this->translate('frontdoor_fixpoint')?>:&nbsp;
+                     <?= $this->value = $value?></p>
+                     <p><?= $this->translate ('HashValue')?>&nbsp;
+                     <?= $this->hashtype = $hashtype?>&nbsp;
+                     <?= $this->translate('frontdoor_current')?>:&nbsp;
+                     <?= $this->value = ''?></p><?
+
+                  }
+                  if ($hashtype == 'sha1')
+                  {
+                    $value = $this->hashValueType['hashvalue_' .$i. '_' .$j]?>
+                    <p><b><?= $this->translate('HashValue')?>&nbsp;(<?= $this->file = $file?></b></p>
+
+                    <p><?= $this->translate ('HashValue')?>&nbsp;
+                    <?= $this->hashtype = $hashtype?>&nbsp;
+                    <?= $this->translate('frontdoor_fixpoint')?>:&nbsp;
+                    <?= $this->value = $value?></p>
+                    <p><?= $this->translate ('HashValue')?>&nbsp;
+                    <?= $this->hashtype = $hashtype?>&nbsp;
+                    <?= $this->translate ('frontdoor_current')?>:&nbsp;
+                    <?= $this->value = ''?></p><?
                   }
                }
                else
