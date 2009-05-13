@@ -42,6 +42,22 @@
         <seg>Für diese Datei liegen keine Prüfsummen oder Signaturen vor</seg>
       </tuv>
     </tu>
+    <tu tuid="frontdoor_fixpoint">
+      <tuv xml:lang="en">
+        <seg>Fixpoint</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sollwert</seg>
+      </tuv>
+    </tu>
+    <tu tuid="frontdoor_current">
+      <tuv xml:lang="en">
+        <seg>Current value</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Istwert</seg>
+      </tuv>
+    </tu>
     <tu tuid="frontdoor_filenumber">
       <tuv xml:lang="en">
         <seg>Number of files available for this document</seg>
