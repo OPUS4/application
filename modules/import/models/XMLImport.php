@@ -218,6 +218,11 @@ class XMLImport
 			    if ($ddc !== null) {
 			        $ddc->addEntry($doc);
 			    }
+                if (count($institute) > 0) {
+                    foreach($institute as $instEntry) {
+                        $instEntry->addEntry($doc);
+                    }
+                }
 			    if (count($ccs) > 0) {
 			        foreach($ccs as $ccsEntry) {
 			            $ccsEntry->addEntry($doc);

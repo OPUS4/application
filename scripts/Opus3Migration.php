@@ -74,31 +74,31 @@ class Opus3Migration extends Application_Bootstrap {
                 break;
     		default:
     			$xslt = 'opus3.xslt';
-    			break;    		    
+    			break;
     	}
     	$this->stylesheet = $stylesheetPath;
     	$this->xslt = $xslt;
     }
-    
+
     protected function loadImportFile() {
 		$importData = new DOMDocument;
 		$importData->load($this->importfile);
 		return $importData;
     }
-    
+
     protected function autosign($pass) {
-       	$gpg = new OpusGPG();
+       	$gpg = new Opus_GPG();
     	foreach ($this->docStack as $imported)
 	    {
 	    	$doc = $imported['document'];
-    	    foreach ($doc->getFile() as $file) 
+    	    foreach ($doc->getFile() as $file)
     	    {
     	      	$gpg->signPublicationFile($file, $pass);
     	       	echo ".";
     	    }
 		}
     }
-    
+
     protected function readDocsFromDatabase() {
     	    echo "Reading existing metadata from database, this could take some time";
     	    $this->docStack = array();
@@ -137,7 +137,7 @@ class Opus3Migration extends Application_Bootstrap {
 		    }
 		    echo "finished!";
     }
-    
+
     /**
      * Removes all Mapping files needed for Import
      */
@@ -155,11 +155,11 @@ class Opus3MigrationParameters extends Opus3Migration
 {
 	/**
 	 * Holding a list of evaluated paramters, which specify what exectly the importer should do
-	 * 
+	 *
 	 * @var array
 	 */
 	protected $whatToDo = array();
-	
+
     /**
      * Analyses the parameters given to the script
      */
@@ -180,7 +180,7 @@ class Opus3MigrationParameters extends Opus3Migration
     		echo "--without-institutes Do not import the faculties and institutes\n";
     		echo "--without-licences Do not import the licences\n";
     		echo "--without-metadata Do not import the metadata of the documents (if you do not import the metadata, the database will be read)\n";
-    		echo "--with-files=path-to-files Import the files using the given base path of Opus 3 fulltexts\n"; 
+    		echo "--with-files=path-to-files Import the files using the given base path of Opus 3 fulltexts\n";
     		echo "--with-signatures=path-to-files Import the signatures using the given base path of Opus 3 signatures\n";
     		echo "--autosign=password-of-internal-key Sign all files automatically using the internal key and the passphrase given\n";
     		echo "--with-magic=path-to-magic-file Use another path for magic file (to avoid problems importing the files). Default value is ' . $this->magicPath . '\n";
@@ -190,10 +190,10 @@ class Opus3MigrationParameters extends Opus3Migration
     	$importFilePath = $argv[(count($argv)-1)];
         if (false === file_exists($importFilePath) && $failure !== true) {
         	$failure = true;
-    		echo "The importfile " . $importFilePath . " you specified does not exist!\n"; 
+    		echo "The importfile " . $importFilePath . " you specified does not exist!\n";
 		}
 		$this->importfile = $importFilePath;
-		
+
         foreach ($argv as $arg) {
         	// Import files?
         	if ('--with-files' === substr($arg, 0, 12)) {
@@ -201,28 +201,28 @@ class Opus3MigrationParameters extends Opus3Migration
 	            $this->whatToDo[] = "files";
 	            if ($path[1] === '') {
         	        $failure = true;
-    		        echo "Please specify a fulltextpath by giving --with-files=fulltext-path!\n"; 
-	            	
+    		        echo "Please specify a fulltextpath by giving --with-files=fulltext-path!\n";
+
 	            }
                 if (false === file_exists($path[1])) {
         	        $failure = true;
-    		        echo "The fulltext path " . $path[1] . " you specified does not exist!\n"; 
+    		        echo "The fulltext path " . $path[1] . " you specified does not exist!\n";
                 }
 	            $this->path = $path[1];
         	}
-        	
+
         	// Import signatures?
         	if ('--with-signatures' === substr($arg, 0, 17)) {
         		$sigpath = split('=', $arg);
 	            $this->whatToDo[] = "signatures";
 	            if ($sigpath[1] === '') {
         	        $failure = true;
-    		        echo "Please specify a signaturepath by giving --with-signatures=signature-path!\n"; 
-	            	
+    		        echo "Please specify a signaturepath by giving --with-signatures=signature-path!\n";
+
 	            }
                 if (false === file_exists($sigpath[1])) {
         	        $failure = true;
-    		        echo "The signature path " . $sigpath[1] . " you specified does not exist!\n"; 
+    		        echo "The signature path " . $sigpath[1] . " you specified does not exist!\n";
                 }
 	            $this->signaturePath = $sigpath[1];
         	}
@@ -233,8 +233,8 @@ class Opus3MigrationParameters extends Opus3Migration
 	            $this->whatToDo[] = "autosign";
 	            if ($signpass[1] === '') {
         	        $failure = true;
-    		        echo "Please specify your passphrase for the internal key by giving --autosign=passphrase!\n"; 
-	            	
+    		        echo "Please specify your passphrase for the internal key by giving --autosign=passphrase!\n";
+
 	            }
 	            $this->signaturePassword = $signpass[1];
         	}
@@ -247,13 +247,13 @@ class Opus3MigrationParameters extends Opus3Migration
         }
 
         // Analyse the other parameters
-		// Import classification systems and classes? 
+		// Import classification systems and classes?
 		// Its not necessary to import classifications, they all should be predefined
 		#if (false === in_array("--without-classes", $argv)) {
 			#$this->whatToDo[] = "classes";
 		#}
-		
-		// Import faculties and instituites? 
+
+		// Import faculties and instituites?
 		if (false === in_array("--without-institutes", $argv)) {
 			$this->whatToDo[] = "institutes";
 		}
@@ -262,14 +262,14 @@ class Opus3MigrationParameters extends Opus3Migration
 		if (false === in_array("--without-licences", $argv)) {
 			$this->whatToDo[] = "licences";
 		}
-		
+
 		// Import documents metadata?
 		if (false === in_array("--without-metadata", $argv)) {
 			$this->whatToDo[] = "metadata";
-		}		
-        
+		}
+
 		if ($failure === false) return true;
-		return false;    	
+		return false;
     }
 
     /**
@@ -278,16 +278,16 @@ class Opus3MigrationParameters extends Opus3Migration
      * @return void
      */
     public function _run() {
-    	$this->setStylesheet();		
-		
+    	$this->setStylesheet();
+
 		$importData = $this->loadImportFile();
-		
-		// Import classification systems and classes 
+
+		// Import classification systems and classes
 		if (true === in_array('classes', $this->whatToDo)) {
 		    $importCollections = new CollectionsImport($importData);
 		}
-		
-		// Import faculties and institutes 
+
+		// Import faculties and institutes
 		if (true === in_array('institutes', $this->whatToDo)) {
 		    $importInstitutes = new InstituteImport($importData);
 		}
@@ -296,7 +296,7 @@ class Opus3MigrationParameters extends Opus3Migration
 		if (true === in_array('licences', $this->whatToDo)) {
 		    $importLicences = new LicenceImport($importData);
 		}
-		
+
 		// Import documents metadata
 		if (true === in_array('metadata', $this->whatToDo)) {
 		    $import = new XMLImport($this->xslt, $this->stylesheet);
@@ -316,9 +316,9 @@ class Opus3MigrationParameters extends Opus3Migration
 
 		// Import files
 		if (true === in_array('files', $this->whatToDo)) {
-    	    $this->importFiles();	
+    	    $this->importFiles();
 		}
-		
+
 		// Import signatures
 		if (true === in_array('signatures', $this->whatToDo)) {
 		    $this->importSignatures();
@@ -329,7 +329,7 @@ class Opus3MigrationParameters extends Opus3Migration
 			$this->autosign($this->signaturePassword);
 		    echo "finished!\n";
 		}
-		
+
 		$this->cleanup();
     }
 }
@@ -341,22 +341,22 @@ class Opus3MigrationReadline extends Opus3Migration {
      * @return void
      */
     public function _run() {
-    	$this->setStylesheet();		
+    	$this->setStylesheet();
         $importFilePath = $this->importfile;
         while (false === file_exists($importFilePath)) {
-    		$importFilePath = readline('Please type the path to your OPUS3 database export file (a dumpfile of the database in XML format e.g. /usr/local/opus/complete_database.xml): '); 
+    		$importFilePath = readline('Please type the path to your OPUS3 database export file (a dumpfile of the database in XML format e.g. /usr/local/opus/complete_database.xml): ');
 		}
 		$this->importfile = $importFilePath;
-		
+
 		$importData = $this->loadImportFile();
-		
+
 		// Import classification systems and classes
-		// Its not necessary to import classifications, they are predefined 
+		// Its not necessary to import classifications, they are predefined
 		#$input = readline('Do you want to import all the classifications from OPUS3? Note: Only BK, APA, CCS, MSC and PACS are supported and detected automatically! (y/n) ');
 		#if ($input === 'y' || $input === 'yes') {
 		#    $importCollections = new CollectionsImport($importData);
 		#}
-		
+
 		// Import faculties and institutes
 		$input = readline('Do you want to import all the faculties and institutes from OPUS3? (y/n) ');
 		if ($input === 'y' || $input === 'yes') {
@@ -368,7 +368,7 @@ class Opus3MigrationReadline extends Opus3Migration {
 		if ($licenceinput === 'y' || $licenceinput === 'yes') {
 		    $importLicences = new LicenceImport($importData);
 		}
-		
+
 		// Import documents
 		$metadatainput = readline('Do you want to import the metadata of all documents from OPUS3? (y/n) ');
 		if ($metadatainput === 'y' || $metadatainput === 'yes') {
@@ -392,18 +392,18 @@ class Opus3MigrationReadline extends Opus3Migration {
 		if ($fileinput === 'y' || $fileinput === 'yes') {
             $fulltextPath = $this->path;
             while (false === file_exists($fulltextPath)) {
-    		    $fulltextPath = readline('Please type the path to your OPUS3 fulltext files (e.g. /usr/local/opus/htdocs/volltexte): '); 
+    		    $fulltextPath = readline('Please type the path to your OPUS3 fulltext files (e.g. /usr/local/opus/htdocs/volltexte): ');
 		    }
 		    $this->path = $fulltextPath;
-    	    $this->importFiles();	
+    	    $this->importFiles();
 		}
-		
+
 		// Import signatures
 		$siginput = readline('If you used signatures (GPG-Extension) in OPUS 3.x, do you want the signatures to be imported? (y/n) ');
 		if ($siginput === 'y' || $siginput === 'yes') {
             $signaturePath = '';
             while (false === file_exists($signaturePath)) {
-    		    $signaturePath = readline('Please type the path to your OPUS3 signature files (e.g. /usr/local/opus/htdocs/signatures): '); 
+    		    $signaturePath = readline('Please type the path to your OPUS3 signature files (e.g. /usr/local/opus/htdocs/signatures): ');
 		    }
 		    $this->signaturePath = $signaturePath;
 		    $this->importSignatures();
@@ -416,9 +416,9 @@ class Opus3MigrationReadline extends Opus3Migration {
 			$this->autosign($newsigpass);
 		    echo "finished!\n";
 		}
-		
+
 		$this->cleanup();
-    }	
+    }
 }
 
 // Start migration
