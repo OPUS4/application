@@ -71,7 +71,10 @@ class Admin_CollectionController extends Controller_Action {
                 $collection = $collection->getSubCollection($step);
             }
         }
-        $collectionForm = $form_builder->build($collection);
+        $filter = new Opus_Model_Filter;
+        $filter->setModel($collection);
+        $filter->setBlacklist(array('SubCollection', 'ParentCollection', 'CollectionsContentSchema'));
+        $collectionForm = $form_builder->build($filter);
         $action_url = $this->view->url(array('action' => 'create'));
         $collectionForm->setAction($action_url);
         $this->view->form = $collectionForm;
@@ -91,7 +94,10 @@ class Admin_CollectionController extends Controller_Action {
         } else {
             $collection = new Opus_CollectionRole;
         }
-        $collectionForm = $form_builder->build($collection);
+        $filter = new Opus_Model_Filter;
+        $filter->setModel($collection);
+        $filter->setBlacklist(array('SubCollection', 'ParentCollection'));
+        $collectionForm = $form_builder->build($filter);
         $action_url = $this->view->url(array('action' => 'create'));
         $collectionForm->setAction($action_url);
         $this->view->form = $collectionForm;
