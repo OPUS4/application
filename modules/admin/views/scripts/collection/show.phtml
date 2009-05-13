@@ -51,6 +51,8 @@
             <a href="<?=$this->url(array('module'=>'admin', 'controller'=>'collection', 'action'=>'show',
                 'role'=>$this->role_id, 'path'=>$path), null, true)?>"><?=$name?></a>
             <a href="<?= $this->url(array('action' => 'edit', 'role' => $this->role_id, 'path'=>$path)) ?>">Edit</a>
+            <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'new',
+                'role' => $this->role_id, 'below' => $path), null, true)?>">Add Below</a>
             <input type="submit" name="delete" value="Delete" />
         </form>
     </li>

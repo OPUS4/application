@@ -88,7 +88,6 @@ class Admin_CollectionController extends Controller_Action {
      */
     public function newAction() {
         $role = $this->getRequest()->getParam('role');
-        $path = $this->getRequest()->getParam('path');
         $form_builder = new Opus_Form_Builder();
         if (true === isset($role)) {
             $collection = new Opus_Collection($role);
@@ -213,17 +212,30 @@ class Admin_CollectionController extends Controller_Action {
                     if (true === $model->isNewRecord()) {
                         $role = $this->getRequest()->getParam('role');
                         $path = $this->getRequest()->getParam('path');
+                        $below = $this->getRequest()->getParam('below');
                         // Handling new collection in existing role.
                         if (true === isset($role)) {
                             $collection = new Opus_CollectionRole($role);
                             // Handling a new collection in an existing collection.
                             if (true === isset($path)) {
+                                // Insert as last subcollection
                                 $trail = explode('-', $path);
                                 foreach($trail as $step) {
                                     $collection = $collection->getSubCollection($step);
                                 }
+                                $collection->addSubCollection($model);
+                            } else if (true === isset($below)) {
+                                // Insert below specified position
+                                $trail = explode('-', $below);
+                                foreach($trail as $i => $step) {
+                                    if ($i < sizeof($trail) - 1) {
+                                        $collection = $collection->getSubCollection($step);
+                                    }
+                                }
+                                $collection->insertSubCollectionAt(end($trail) + 1, $model);
+                            } else {
+                                $collection->addSubCollection($model);
                             }
-                            $collection->addSubCollection($model);
                             $collection->store();
                         } else {
                             // Handling new role.
