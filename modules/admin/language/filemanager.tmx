@@ -18,5 +18,21 @@
         <seg>Zu diesem Dokument sind keine Dateien vorhanden!</seg>
       </tuv>
     </tu>
+    <tu tuid="admin_filemanager_uploadsuccess">
+      <tuv xml:lang="en">
+        <seg>Upload succussful!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datei erfolgreich hochgeladen!</seg>
+      </tuv>
+    </tu>
+    <tu tuid="admin_filemanager_uploadfailure">
+      <tuv xml:lang="en">
+        <seg>Upload NOT succussful - please check write permissions for file directory!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datei konnte nicht erfolgreich hochgeladen werden - bitte prüfen Sie die Schreibberchtigung im Dokumentverzeichnis.</seg>
+      </tuv>
+    </tu>
   </body>
 </tmx>

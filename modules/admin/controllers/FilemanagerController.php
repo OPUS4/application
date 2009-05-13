@@ -84,7 +84,7 @@ class Admin_FilemanagerController extends Zend_Controller_Action
             $action_url = $this->view->url(array('controller' => 'filemanager', 'action' => 'index'));
             $uploadForm->setAction($action_url);
             // store uploaded data in application temp dir
-            if (true === array_key_exists('submit', $data)) {
+            if (true === array_key_exists('uploadsubmit', $data)) {
                 if ($uploadForm->isValid($data) === true) {
                     // This works only from Zend 1.7 on
                     // $upload = $uploadForm->getTransferAdapter();
@@ -116,10 +116,10 @@ class Admin_FilemanagerController extends Zend_Controller_Action
                         $document->store();
                     }
                     catch (Exception $e) {
-                        $this->view->actionresult = 'Upload NOT succussful - please check write permissions for file directory!';
+                        $this->view->actionresult = $this->view->translate('admin_filemanager_uploadfailure');
                     }
                     if ($e === null) {
-                        $this->view->actionresult = 'Upload succussful!';
+                        $this->view->actionresult = $this->view->translate('admin_filemanager_uploadsuccess');
                     }
 
                     // reset input values fo re-displaying

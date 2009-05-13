@@ -64,7 +64,7 @@ class FileUpload extends Zend_Form {
             ->setMultiOptions(Zend_Registry::get('Available_Languages'))
             ->addValidator('NotEmpty');
 
-        $submit = new Zend_Form_Element_Submit('submit');
+        $submit = new Zend_Form_Element_Submit('uploadsubmit');
         $submit->setLabel('Process');
 
         $documentId = new Zend_Form_Element_Hidden('DocumentId');
