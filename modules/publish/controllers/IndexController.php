@@ -100,7 +100,22 @@ class Publish_IndexController extends Zend_Controller_Action {
                     }
                     $type = new Opus_Document_Type($filename);
                     $document = new Opus_Document(null, $type);
-                    $createForm = $form_builder->build($document);
+
+                    // add standard field filter
+                    $documentWithFilter = new Opus_Model_Filter;
+                    $documentWithFilter ->setModel($document)
+                        ->setBlacklist(array(
+                            'ServerState',
+                            'File'))
+                        ->setSortOrder(array(
+                            'TitleMain',
+                            'TitleAbstract',
+                            'Language',
+                            'PersonAuthor',
+                            'PersonContributor',
+                            'PersonOther'));
+
+                    $createForm = $form_builder->build($documentWithFilter);
                     $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create'));
                     $form->setAction($action_url);
                     $this->view->form = $createForm;
