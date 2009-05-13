@@ -111,10 +111,19 @@
                <xsl:element name="thesis:level">
                  <xsl:choose>
                    <xsl:when test="@Type='doctoral_thesis'">
-                       thesis:doctoral
+                       thesis.doctoral
+                   </xsl:when>
+                   <xsl:when test="@Type='habilitation'">
+                       thesis.habilitation
+                   </xsl:when>
+                   <xsl:when test="@Type='master_thesis'">
+                       master
+                   </xsl:when>
+                   <xsl:when test="@Type='bachelor_thesis'">
+                       bachelor
                    </xsl:when>
                    <xsl:otherwise>
-                       thesis:habilitation 
+                       other
                    </xsl:otherwise>    
                  </xsl:choose>  
                </xsl:element>
@@ -350,7 +359,6 @@ SubjectSwd : freie Schlagwoerter tauchen in der XML-Darstellung
              z.Zt. werden sie auch hier doppelt ausgegeben
 PublisherName, PublisherPlace, PublisherAddress: noch nicht gesehen,
                da keine Testdaten
-thesis:degree akademischer Grad
 thesis:grantor Institution, die akad.Grad vergeben hat 
                in Opus 3 Fakultaet, hier???
 contactID:  von thesis:grantor: z.Zt. fix gesetzt               
