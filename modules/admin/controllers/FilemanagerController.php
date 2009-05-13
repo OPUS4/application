@@ -54,8 +54,11 @@ class Admin_FilemanagerController extends Zend_Controller_Action
 	 */
     public function indexAction()
     {
-        $gpg = new Opus_GPG();
+        $this->view->title = $this->view->translate('admin_filemanager_index');
+
         $data = $this->_request->getPost();
+
+        $gpg = new Opus_GPG();
 
         if (true === array_key_exists('FileObject', $data))
         {
@@ -77,34 +80,92 @@ class Admin_FilemanagerController extends Zend_Controller_Action
 
     	if (true === array_key_exists('docId', $requestData))
     	{
+            $uploadForm = new FileUpload();
+            $action_url = $this->view->url(array('controller' => 'filemanager', 'action' => 'index'));
+            $uploadForm->setAction($action_url);
+            // store uploaded data in application temp dir
+            if (true === array_key_exists('submit', $data)) {
+                if ($uploadForm->isValid($data) === true) {
+                    // This works only from Zend 1.7 on
+                    // $upload = $uploadForm->getTransferAdapter();
+                    $upload = new Zend_File_Transfer_Adapter_Http();
+                    $files = $upload->getFileInfo();
+                    // TODO: Validate document id, error message on fail
+                    $documentId = $requestData['docId'];
+                    $document = new Opus_Document($documentId);
+
+                    // save each file
+                    foreach ($files as $file) {
+                        /* TODO: Uncaught exception 'Zend_File_Transfer_Exception' with message '"fileupload" not found by file transfer adapter
+                        * if (!$upload->isValid($file)) {
+                        *    $this->view->message = 'Upload failed: Not a valid file!';
+                        *    break;
+                        * }
+                        */
+                        $docfile = $document->addFile();
+                        $docfile->setDocumentId($document->getId());
+                        $docfile->setLabel($uploadForm->getValue('comment'));
+                        $docfile->setLanguage($uploadForm->getValue('language'));
+                        $docfile->setPathName($file['name']);
+                        $docfile->setMimeType($file['type']);
+                        $docfile->setTempFile($file['tmp_name']);
+                        $docfile->setFromPost($file);
+                    }
+                    $e = null;
+                    try {
+                        $document->store();
+                    }
+                    catch (Exception $e) {
+                        $this->view->actionresult = 'Upload NOT succussful - please check write permissions for file directory!';
+                    }
+                    if ($e === null) {
+                        $this->view->actionresult = 'Upload succussful!';
+                    }
+
+                    // reset input values fo re-displaying
+                    $uploadForm->reset();
+                    // re-insert document id
+                    $uploadForm->DocumentId->setValue($document->getId());
+                }
+                else {
+                    // invalid form, populate with transmitted data
+                    $uploadForm->populate($data);
+                    $this->view->form = $uploadForm;
+                }
+
+            }
+            $this->view->uploadform = $uploadForm;
     	    try {
     	        $doc = new Opus_Document($requestData['docId']);
-    	    }
-    	    catch (Exception $e) {
-    	    	$this->view->noFileSelected = true;
-    	    }
+    	        $this->view->files = array();
+                $this->view->verifyResult = array();
 
-            $this->view->files = array();
-            $this->view->verifyResult = array();
+                $index = 0;
 
-    	    foreach ($doc->getFile() as $file)
-    	    {
-    	            $index = 0;
-    	        	$form = new SignatureForm();
-    	        	$form->FileObject->setValue(base64_encode(serialize($file)));
-    	        	$form->setAction($this->view->url(array('module' => 'admin', 'controller' => 'filemanager', 'action' => 'index', 'docId' => $requestData['docId']), null, true));
+                foreach ($doc->getFile() as $file)
+                {
+                    $form = new SignatureForm();
+                    $form->FileObject->setValue(base64_encode(serialize($file)));
+                    $form->setAction($this->view->url(array('module' => 'admin', 'controller' => 'filemanager', 'action' => 'index', 'docId' => $requestData['docId']), null, true));
 
-    		        $this->view->files[$index] = $file->getPathName();
-    		        $this->view->files[$index] .= $form;
+                    $this->view->files[$index]['path'] = $file->getPathName();
+                    $this->view->files[$index]['form'] = $form;
 
-    		        try {
+                    try {
                         $this->view->verifyResult[$file->getPathName()] = $gpg->verifyPublicationFile($file);
                     }
                     catch (Exception $e) {
                         $this->view->verifyResult[$file->getPathName()] = array(array($e->getMessage()));
                     }
                     $index++;
-    	        }
+                }
+                if ($index === 0) {
+                    $this->view->actionresult = $this->view->translate('admin_filemanager_nofiles');
+                }
+    	    }
+    	    catch (Exception $e) {
+    	    	$this->view->noFileSelected = true;
+    	    }
     	}
     	else
     	{

@@ -10,5 +10,13 @@
         <seg>Dateimanager</seg>
       </tuv>
     </tu>
+    <tu tuid="admin_filemanager_nofiles">
+      <tuv xml:lang="en">
+        <seg>No files available for this document!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zu diesem Dokument sind keine Dateien vorhanden!</seg>
+      </tuv>
+    </tu>
   </body>
 </tmx>
