@@ -41,21 +41,24 @@ class InstituteImport
 	 */
 	public function __construct($data)
 	{
-        $roles = Opus_Collection_Information::getAllCollectionRoles();
-        foreach ($roles as $role) {
-            if ($role['name'] ===  'Organisatorische Einheiten') {
-                $cr = new Opus_CollectionRole($role['id']);
-                $cr->delete();
-            }
-        }
+        #$roles = Opus_Collection_Information::getAllCollectionRoles();
+        #foreach ($roles as $role) {
+        #    if ($role['name'] ===  'Organisatorische Einheiten') {
+        #        $cr = new Opus_CollectionRole($role['id']);
+        #        $cr->delete();
+        #    }
+        #}
+
+        // Use the institutes collection - always ID 1
+        $collRole = new Opus_CollectionRole(1);
 
         // Build the Institutes Collection
-	    $collRole = new Opus_CollectionRole();
-        $collRole->setName('Organisatorische Einheiten');
-        $collRole->setPosition(1);
-        $collRole->setVisible(1);
-        $collRole->setLinkDocsPathToRoot('count');
-        $collRole->store();
+        #$collRole = new Opus_CollectionRole();
+        #$collRole->setName('Organisatorische Einheiten');
+        #$collRole->setPosition(1);
+        #$collRole->setVisible(1);
+        #$collRole->setLinkDocsPathToRoot('count');
+        #$collRole->store();
 
         $doclist = $data->getElementsByTagName('table_data');
 
