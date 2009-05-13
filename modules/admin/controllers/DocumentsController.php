@@ -75,4 +75,19 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $this->view->documentList = $result;
     }
 
+    /**
+     * Edits a model instance
+     *
+     * @return void
+     */
+    public function editAction() {
+        $id = $this->getRequest()->getParam('id');
+        $form_builder = new Opus_Form_Builder();
+        $model = new $this->_modelclass($id);
+        $modelForm = $form_builder->build($model);
+        $action_url = $this->view->url(array("action" => "create"));
+        $modelForm->setAction($action_url);
+        $this->view->form = $modelForm;
+        $this->view->docId = $id;
+    }
 }
