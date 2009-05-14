@@ -77,16 +77,16 @@ class Admin_FilemanagerController extends Zend_Controller_Action
         if (true === array_key_exists('deletesubmit', $data))
         {
             $e = null;
-            #try {
+            try {
                 $file = new Opus_File($data['FileObject']);
                 $file->delete();
-            #}
-            #catch (Exception $e) {
-            #    $this->view->actionresult = $e->getMessage();
-            #}
-            #if ($e === null) {
-            #    $this->view->actionresult = $this->view->translate('admin_filemanager_deletesuccess');
-            #}
+            }
+            catch (Exception $e) {
+                $this->view->actionresult = $e->getMessage();
+            }
+            if ($e === null) {
+                $this->view->actionresult = $this->view->translate('admin_filemanager_deletesuccess');
+            }
         }
 
         $requestData = $this->_request->getParams();
