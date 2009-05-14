@@ -213,6 +213,7 @@ class Admin_CollectionController extends Controller_Action {
                         $role = $this->getRequest()->getParam('role');
                         $path = $this->getRequest()->getParam('path');
                         $below = $this->getRequest()->getParam('below');
+                        $above = $this->getRequest()->getParam('above');
                         // Handling new collection in existing role.
                         if (true === isset($role)) {
                             $collection = new Opus_CollectionRole($role);
@@ -233,6 +234,15 @@ class Admin_CollectionController extends Controller_Action {
                                     }
                                 }
                                 $collection->insertSubCollectionAt(end($trail) + 1, $model);
+                            } else if (true === isset($above)) {
+                                // Insert below specified position
+                                $trail = explode('-', $above);
+                                foreach($trail as $i => $step) {
+                                    if ($i < sizeof($trail) - 1) {
+                                        $collection = $collection->getSubCollection($step);
+                                    }
+                                }
+                                $collection->insertSubCollectionAt(end($trail), $model);
                             } else {
                                 $collection->addSubCollection($model);
                             }
