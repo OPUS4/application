@@ -122,6 +122,24 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
     }
 
     /**
+     * Helper method for converting Zend_Date data to a proper string.
+     *
+     * @param string $field Field to display.
+     * @param mixed  $value Value of this field.
+     * @return string
+     */
+    private function __dateHelper($field, $value) {
+        if ($value instanceOf Zend_Date) {
+            $locale = Zend_Registry::get('Zend_Translate')->getLocale();
+            $value->setLocale($locale);
+            $values = $value->toString(Zend_Locale_Format::getDateFormat($locale));
+        } else {
+            $values = $value;
+        }
+        return $this->__complexDisplay($field, $values);
+    }
+
+    /**
      * Helper method for displaying language field.
      *
      * @param string $field  Contains field name.
@@ -193,8 +211,14 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
             $other_fields = array('DateOfBirth', 'PlaceOfBirth', 'Email');
             foreach ($other_fields as $fieldname) {
                 if (array_key_exists($fieldname, $value) === true) {
-                    if (($this->__saef === false) or (empty($value[$fieldname]) === false)) {
-                        $data[] = $this->__skeleton($fieldname, $value[$fieldname]);
+                    $fieldValue = $value[$fieldname];
+                    if (($this->__saef === false) or (empty($fieldValue) === false)) {
+                        if ($fieldValue instanceOf Zend_Date) {
+                            $locale = Zend_Registry::get('Zend_Translate')->getLocale();
+                            $fieldValue->setLocale($locale);
+                            $fieldValue = $fieldValue->toString(Zend_Locale_Format::getDateFormat($locale));
+                        }
+                        $data[] = $this->__skeleton($fieldname, $fieldValue);
                     }
                 }
             }
@@ -608,6 +632,61 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
      */
     protected function _displaySubjectSwd($field, array &$value) {
         return $this->__subjectHelper($field, $value);
+    }
+
+    /**
+     * Wrapper method for displaying ServerDateModified.
+     *
+     * @param string $field Contains field name.
+     * @param array  $value Contains field values.
+     * @return string
+     */
+    protected function _displayServerDateModified($field, $value) {
+        return $this->__dateHelper($field, $value);
+    }
+
+    /**
+     * Wrapper method for displaying ServerDatePublished.
+     *
+     * @param string $field Contains field name.
+     * @param array  $value Contains field values.
+     * @return string
+     */
+    protected function _displayServerDatePublished($field, $value) {
+        return $this->__dateHelper($field, $value);
+    }
+
+    /**
+     * Wrapper method for displaying CompletedDate.
+     *
+     * @param string $field Contains field name.
+     * @param array  $value Contains field values.
+     * @return string
+     */
+    protected function _displayCompletedDate($field, $value) {
+        return $this->__dateHelper($field, $value);
+    }
+
+    /**
+     * Wrapper method for displaying PublishedDate.
+     *
+     * @param string $field Contains field name.
+     * @param array  $value Contains field values.
+     * @return string
+     */
+    protected function _displayPublishedDate($field, $value) {
+        return $this->__dateHelper($field, $value);
+    }
+
+    /**
+     * Wrapper method for displaying PublishedDate.
+     *
+     * @param string $field Contains field name.
+     * @param array  $value Contains field values.
+     * @return string
+     */
+    protected function _displayDateAccepted($field, $value) {
+        return $this->__dateHelper($field, $value);
     }
 
     /**
