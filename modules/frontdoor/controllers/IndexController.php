@@ -54,9 +54,7 @@ class Frontdoor_IndexController extends Zend_Controller_Action
     {
         $docId = $this->getRequest()->getParam('docId');
         $document = new Opus_Document($docId);
-        $documentType = $document->getType();
         $doc_data = $document->toArray();
-        //print_r ($doc_data);
 
         // Proof existence of files, find out filenumber
         if (is_array ($files = $document->getFile()) === true)
@@ -73,7 +71,7 @@ class Frontdoor_IndexController extends Zend_Controller_Action
 
         // Filter for relevant keys. Getting Document Type
         $document_data = $this->filterStopwords($doc_data);
-        $document_data['Type'] = $this->view->translate($documentType);
+        $document_data['Type'] = $this->view->translate($document_data['Type']);
 
         // Recursive Iteration in 4 levels in $document_data
         $arit = new RecursiveArrayIterator ($document_data);
