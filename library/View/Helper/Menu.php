@@ -68,9 +68,15 @@ class View_Helper_Menu
      */
     protected function _buildMenu()
     {
+        $menus['home']['index'] = array(
+            'module' => 'home',
+            'controller' => 'index',
+            'action' => 'index'
+            );
         $homedir = Zend_Controller_Front::getInstance()->getControllerDirectory('home');
         foreach (glob($homedir . '/../views/scripts/index/*') as $filename) {
             $filename = basename($filename, '.phtml');
+            if ($filename === 'index') continue;
             $menus['home'][$filename] = array(
                 'module' => 'home',
                 'controller' => 'index',
@@ -80,25 +86,14 @@ class View_Helper_Menu
         $menus['primary'] = array(
                 'Publish' => array(
                     'module' => 'publish',
-                    'controller' => 'index',
-                    'action' => 'index'
                     ),
                 'Search' => array(
                     'module' => 'search',
-                    'controller' => 'index',
-                    'action' => 'index'
                     ),
                 );
         $menus['secondary'] = array(
                 'Admin' => array(
                     'module' => 'admin',
-                    'controller' => 'index',
-                    'action' => 'index'
-                    ),
-                'Frontdoor' => array(
-                    'module' => 'frontdoor',
-                    'controller' => 'index',
-                    'action' => 'index'
                     ),
                 );
         if (is_array($menus[$this->_type])) return $menus[$this->_type];
@@ -124,32 +119,63 @@ class View_Helper_Menu
         if (is_array($menu)) {
             foreach ($menu as $label => $entry) {
                 // Beware! Hardcoding of expected translation string postfix.
-                if ($this->_view->translate(
-                        $entry['module'] . '_' . $entry['controller'] . '_' . $entry['action'] . '_actionname') !==
-                        $entry['module'] . '_' . $entry['controller'] . '_' . $entry['action'] . '_actionname') {
-                    $label = $this->_view->translate($entry['module'] . '_' . $entry['controller'] . '_' . $entry['action'] . "_actionname");
-                } elseif ($this->_view->translate(
-                        $entry['module'] . '_' . $entry['controller'] . '_controllername') !==
-                        $entry['module'] . '_' . $entry['controller'] . '_controllername') {
-                    $label = $this->_view->translate($entry['module'] . '_' . $entry['controller'] . "_controllername");
-                } else if ($this->_view->translate(
-                        $entry['module'] . '_modulename') !==
-                        $entry['module'] . '_modulename') {
-                    $label = $this->_view->translate($entry['module'] . "_modulename");
+                $transKey = '';
+                $transPrefix = '';
+                if (array_key_exists('module', $entry)) {
+                    $transKey = $entry['module'];
+                    $transPrefix = '_modulename';
                 }
-                $url = $this->_view->url(array(
-                        'module' => $entry['module'],
-                        'controller' => $entry['controller'],
-                        'action' => $entry['action'],
-                        ),
-                    null, true);
-                $link = '<a href="' . $url . '">' . $label . '</a>';
-                if ($entry['action'] === $activeAction
-                    and $entry['controller'] === $activeController
-                    and $entry['module'] === $activeModule) {
-                    $html .= '<li class="active">' . $label . '</li>';
-                } else {
-                    $html .= '<li>' . $link . '</li>';
+                if (array_key_exists('controller', $entry)) {
+                    $transKey .= '_' . $entry['controller'];
+                    $transPrefix = '_controllername';
+                }
+                if (array_key_exists('action', $entry)) {
+                    $transKey .= '_' . $entry['action'];
+                    $transPrefix = '_actionname';
+                }
+                $label = $this->_view->translate($transKey . $transPrefix);
+                if (array_key_exists('module', $entry)
+                    and array_key_exists('controller', $entry)
+                    and array_key_exists('action', $entry)) {
+                    $url = $this->_view->url(array(
+                                'module' => $entry['module'],
+                                'controller' => $entry['controller'],
+                                'action' => $entry['action'],
+                                ),
+                            null, true);
+                    $link = '<a href="' . $url . '">' . $label . '</a>';
+                    if ($entry['action'] === $activeAction
+                        and $entry['controller'] === $activeController
+                        and $entry['module'] === $activeModule) {
+                        $html .= '<li class="active">' . $label . '</li>';
+                    } else {
+                        $html .= '<li>' . $link . '</li>';
+                    }
+                } else if (array_key_exists('module', $entry)
+                    and array_key_exists('controller', $entry)) {
+                    $url = $this->_view->url(array(
+                                'module' => $entry['module'],
+                                'controller' => $entry['controller'],
+                                ),
+                            null, true);
+                    $link = '<a href="' . $url . '">' . $label . '</a>';
+                    if ($entry['controller'] === $activeController
+                        and $entry['module'] === $activeModule) {
+                        $html .= '<li class="active">' . $label . '</li>';
+                    } else {
+                        $html .= '<li>' . $link . '</li>';
+                    }
+                } else if (array_key_exists('module', $entry)) {
+                    $url = $this->_view->url(array(
+                                'module' => $entry['module'],
+                                ),
+                            null, true);
+                    $link = '<a href="' . $url . '">' . $label . '</a>';
+                    if ($entry['module'] === $activeModule) {
+                        $html .= '<li class="active">' . $label . '</li>';
+                    } else {
+                        $html .= '<li>' . $link . '</li>';
+                    }
                 }
             }
         }
