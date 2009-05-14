@@ -218,7 +218,7 @@
         <seg>Datum der Abschlussprüfung</seg>
       </tuv>
     </tu>
-    <tu tuid="DocumentType">
+    <tu tuid="Type">
       <tuv xml:lang="en">
         <seg>Document Type</seg>
       </tuv>
