@@ -56,6 +56,7 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         $document = new Opus_Document($docId);
         $documentType = $document->getType();
         $doc_data = $document->toArray();
+        //print_r ($doc_data);
 
         // Proof existence of files, find out filenumber
         if (is_array ($files = $document->getFile()) === true)
