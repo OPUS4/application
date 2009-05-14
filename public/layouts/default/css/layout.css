@@ -35,42 +35,47 @@
  */
 
 body {
-    width: 760px;
-    padding-left: 40px;
-    padding-top: 40px;
+    width: 100%;
 }
 
 #content {
     float: left;
     clear: both;
-}
-
-#header .navigation.secondary {
-    float: right;
-}
-
-#header .navigation.primary {
-    clear: both;
-    float: left;
+    margin-left: 10%;
+    margin-right: 10%;
 }
 
 #footer {
-    height: 40px;
-    padding: 5px;
-    padding-left: 140px;
+    height: 3em;
+    padding: 0.25em;
+    padding-left: 10%;
     clear: both;
 }
 
 #header {
-    height: 40px;
-    padding: 5px;
-    background-color: #E6F0F0;
+    padding-top: 6em;
+    margin-bottom: 1em;
+    padding-left: 10%;
 }
 
-#header .navigation.home {
+#header .navigation {
+    display: inline;
+}
+
+div.box {
+    margin-bottom: 1em;
+}
+
+div.box p, div.box h1 {
+    padding: 1em;
+}
+
+div.box.left {
     float: left;
+    width: 45%;
 }
 
-#header #language_selector {
+div.box.right {
     float: right;
+    width: 45%;
 }

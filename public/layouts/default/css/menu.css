@@ -37,12 +37,34 @@
 ul.navigation {
     padding: 0;
     margin: 0;
+    margin-right: 50px;
 }
 
-.navigation li {
-    padding: 0;
+ul.navigation li {
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
     margin: 0;
     list-style: none;
     display: inline;
     margin-right: 5px;
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+    -moz-border-radius-topright: 3px;
+    -moz-border-radius-topleft: 3px;
+}
+
+ul.navigation li {
+    background-color: #EFEFEF;
+}
+
+ul.navigation li.active {
+    background-color: white;
+    border-bottom: 1px solid white;
+}
+
+ul.navigation li a {
+    text-decoration: none;
+    color: black;
 }

@@ -75,19 +75,41 @@ class Home_IndexController extends Zend_Controller_Action {
      * @return void
      */
     public function languageAction() {
-        if ($this->_request->isPost() === true) {
-            $origin = $_SERVER['HTTP_REFERER'];
-            $language = $this->_request->getPost('language');
-            if (is_string('language') === false or Zend_Registry::get('Zend_Translate')->isAvailable($language) === false) {
-                $this->_redirector->gotoUrl($origin);
-            } else {
-                $sessiondata = new Zend_Session_Namespace();
-                $sessiondata->language = $language;
-                $this->_redirector->gotoUrl($origin);
-            }
+        $origin = $_SERVER['HTTP_REFERER'];
+        $language = $this->_request->getParam('language');
+        if (is_string('language') === false or Zend_Registry::get('Zend_Translate')->isAvailable($language) === false) {
+            $this->_redirector->gotoUrl($origin);
         } else {
-            $this->_redirector->gotoSimple('index');
+            $sessiondata = new Zend_Session_Namespace();
+            $sessiondata->language = $language;
+            $this->_redirector->gotoUrl($origin);
         }
     }
 
+    /**
+     * Show fulltext search form
+     *
+     * @return void
+     */
+    public function indexAction()
+    {
+        $searchForm = new Zend_Form;
+        $searchForm->setAttrib('class', 'crud');
+        $query = new Zend_Form_Element_Text('query');
+        $query->addValidator('stringLength', false, array(3, 100))
+            ->setRequired(true);
+
+        $submit = new Zend_Form_Element_Submit('submit');
+        $submit->setLabel('search_searchaction');
+
+        // Add elements to form:
+        $searchForm->addElements(array($query, $submit));
+
+        $searchForm->setAction($this->view->url(array(
+            'module' => 'search',
+            'controller' => 'search',
+            'action' => 'search')));
+        $searchForm->setMethod('post');
+        $this->view->searchForm = $searchForm;
+    }
 }

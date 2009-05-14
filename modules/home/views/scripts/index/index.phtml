@@ -34,6 +34,14 @@
  */
 ?>
 <? $this->title = $this->translate('home_index_index_pagetitle') ?>
-<h1><?= $this->translate('home_index_index_title') ?></h1>
-<p><?= $this->translate('home_index_index_welcome') ?></p>
-<p><?= $this->translate('home_index_index_instructions') ?></p>
+<div class="box left">
+    <h1><?=$this->translate('search_index_search')?></h1>
+    <?= $this->searchForm ?>
+</div>
+<div class="box right">
+    <h1><?= $this->translate('home_index_index_title') ?></h1>
+    <p><?= $this->translate('home_index_index_welcome') ?></p>
+</div>
+<div class="box left">
+    <p><?= $this->translate('home_index_index_instructions') ?></p>
+</div>

@@ -35,32 +35,43 @@
  */
 
 body {
-    font-family: arial, helvetica, sans-serif;
+    font: normal 100% Verdana, Arial, Arial, sans-serif;
     color: #333333;
 }
 
-#content p {
-    margin-bottom: 18px;
-}
-
 #content h1 {
-    font-size: 24px;
-    line-height: 36px;
-    margin-bottom: 18px;
+    font-size: 1.5em;
 }
 
 #content h2 {
-    font-size: 18px;
-    line-height: 18px;
-    margin-bottom: 18px;
+    font-size: 1.25em;
 }
 
 #content h3 {
-    font-size: 12px;
-    line-height: 18px;
+    font-size: 1.125em;
+}
+
+#content ol {
+    font-size: 0.875em;
+}
+
+#content .box h1 {
+    font-size: 1em;
 }
 
 #footer {
-    font-size: 12px;
-    line-height: 18px;
+    font-size: 0.75em;
 }
+
+#summary .label {
+    font-weight: bold;
+}
+
+#summary .value {
+    font-style: italic;
+}
+
+#header .navigation.languages {
+    font-size: 0.75em;
+}
+

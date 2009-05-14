@@ -57,10 +57,9 @@ $this->headLink()
 <body>
     <div id="header">
         <?= $this->menu('home') ?>
-        <?= $this->languageSelector() ?>
         <?= $this->menu('primary') ?>
         <?= $this->menu('secondary') ?>
-        <?= $this->loginBar() ?>
+        <?= $this->languageSelector() ?>
     </div>
     <div id="content">
         <?= $this->layout()->content ?>
