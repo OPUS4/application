@@ -16,24 +16,43 @@ class Frontdoor_HashController extends Zend_Controller_Action
        $docId = $request->getParam('docId');
        $this->view->docId = $docId;
        $document = new Opus_Document($docId);
+       $doc_data = $document->toArray();
        $this->view->document = $document;
-
+       $this->view->doc_data = $doc_data;
        $title = $document->getTitleMain('0')->getValue();
-       $author = $document->getPersonAuthor('0')->getName();
        $this->view->title = $title;
-       $this->view->author = $author;
+       $author_exists = $document->getPersonAuthor();
+       if (empty ($author_exists))
+       {
+           $this->author = $author = null;
+           $this->view->author = $author;
+       }
+       else
+       {
+           $author = $document->getPersonAuthor('0')->getName();
+           $this->view->author = $author;
+       }
 
        if (is_array ($files = $document->getFile()) === true)
        {
           $fileNumber = count($files);
           $this->view->fileNumber = $fileNumber;
-          $first_hash = $document->getFile('0')->getHashValue('0')->getValue();
+          $hash_exists = $document->getFile('0')->getHashValue();
+          if (empty ($hash_exists))
+          {
+             $this->first_hash = $first_hash = null;
+             $this->view->first_hash = $first_hash;
+          }
+          else
+          {
+            $first_hash = $document->getFile('0')->getHashValue('0')->getValue();
+            $this->view->first_hash = $first_hash;
+          }
           $this->view->first_hash = $first_hash;
           $hashValueType = array();
           $hashLabel = array();
 
-
-// Iteration over all files, hashtypes and -values
+          // Iteration over all files, hashtypes and -values
 
           if ($first_hash !== NULL)
           {
@@ -59,5 +78,25 @@ class Frontdoor_HashController extends Zend_Controller_Action
        }
        $this->view->hashValueType = $hashValueType;
        $this->view->hashLabel = $hashLabel;
+    }
+
+    public function verifyAction()
+    {
+       $docId = $this->getRequest()->getParam('docId');
+       $doc = new Opus_Document($docId);
+       $gpg = new Opus_GPG();
+
+       foreach ($doc->getFile() as $file)
+       {
+          try
+          {
+             $this->view->verifyResult[$file->getPathName()] = $gpg->verifyPublicationFile($file);
+          }
+          catch (Exception $e)
+          {
+             $this->view->verifyResult[$file->getPathName()] = array(array($e->getMessage()));
+          }
+       }
+       print_r($verifyResult);
     }
 }
