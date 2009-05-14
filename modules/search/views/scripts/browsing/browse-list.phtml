@@ -51,11 +51,13 @@
 	    } else {
 	    	$subcollections = $this->browsinglist->getSubCollection();
 	    }
-           foreach ($subcollections as $coll)    {
+        foreach ($subcollections as $coll)    {
+            // Hidden collections shouldn't be browsable
+            if(true === $coll->getVisibility()) {
                 // for Collections $this->browsinglist must be the ListIterator of all ChildNodes, not the current node itself...
-              echo '<li>';
-              echo '<a href=' .
-                 $this->url(
+                echo '<li>';
+                echo '<a href=' .
+                $this->url(
                      array(
                          'module'        => 'search',
                          'controller'    => 'browsing',
@@ -72,6 +74,7 @@
                  echo '</a> (' . Opus_Collection_Information::countAllCollectionDocuments($this->collection, $coll->getId()) . ')';
                  echo '</li>';
             }
+        }
 	}
     if ($this->list === 'persons')
     {

@@ -178,7 +178,8 @@ class Admin_CollectionController extends Controller_Action {
             }
         } else {
             foreach($collection->getSubCollection() as $i => $subcollection) {
-                $subcollections[$i] = $subcollection->getDisplayName();
+                $visibility = ($subcollection->getVisibility())?V:H;
+                $subcollections[$i] = $subcollection->getDisplayName() . $visibility;
             }
         }
         $this->view->subcollections = $subcollections;
