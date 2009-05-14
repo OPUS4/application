@@ -18,6 +18,14 @@
         <seg>Zu diesem Dokument sind keine Dateien vorhanden!</seg>
       </tuv>
     </tu>
+    <tu tuid="admin_filemanager_delete">
+      <tuv xml:lang="en">
+        <seg>Delete this file</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Diese Datei löschen</seg>
+      </tuv>
+    </tu>
     <tu tuid="admin_filemanager_uploadsuccess">
       <tuv xml:lang="en">
         <seg>Upload succussful!</seg>
@@ -48,6 +56,14 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Datei wurde erfolgreich entfernt.</seg>
+      </tuv>
+    </tu>
+    <tu tuid="admin_filemanager_checksum">
+      <tuv xml:lang="en">
+        <seg>Checksum</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Prüfsumme</seg>
       </tuv>
     </tu>
   </body>

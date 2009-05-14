@@ -48,7 +48,7 @@
             <?php
             // files includes a multidimensional array of files and signature forms
             foreach ($this->files as $file) {
-                echo '<li>' . $file['path'] . $file['form'];
+                echo '<li>' . $file['path'];
             ?>
                 <?php
                 // verifyResult includes a multidimensional array of verification results for this file
@@ -110,19 +110,29 @@
                     ?>
                         </li>
                 <?php
-                        }
+                        } // end of array with signature verification results
+                    } // end of array with signature objects
+                    } // end of check, if the file is the one in the signature array
+                } // end of array with signatures
+                // Show hash values for this file
+                $hashes = $file['object']->getHashValue();
+                foreach ($hashes as $hash) {
+                    // Dont show signatures
+                    if (substr($hash->getType(), 0, 3) !== 'gpg') {
+                        echo '<li>' . $this->translate('admin_filemanager_checksum') . ' ' . $hash->getType() . ': ' . $hash->getValue() . '</li>';
                     }
-            ?>
+                } // end of array with hash values
+                ?>
                 </ul>
-            <?php
-                    }
-                }
+                <?php
+                // Show form for building the signature
+                echo $file['form'];
         ?>
             </li>
         <?php
-        }
+        } // end of array with all files associated with this document
         ?>
         </ol>
         <?php
-    }
+    } // end of else clause when there are files associated with this document
 ?>

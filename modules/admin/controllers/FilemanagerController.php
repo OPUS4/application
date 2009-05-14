@@ -164,6 +164,7 @@ class Admin_FilemanagerController extends Zend_Controller_Action
                     $form->setAction($this->view->url(array('module' => 'admin', 'controller' => 'filemanager', 'action' => 'index', 'docId' => $requestData['docId']), null, true));
 
                     $this->view->files[$index]['path'] = $file->getPathName();
+                    $this->view->files[$index]['object'] = $file;
                     $this->view->files[$index]['form'] = $form;
 
                     try {

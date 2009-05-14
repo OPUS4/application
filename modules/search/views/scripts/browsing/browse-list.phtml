@@ -54,12 +54,6 @@
            foreach ($subcollections as $coll)    {
                 // for Collections $this->browsinglist must be the ListIterator of all ChildNodes, not the current node itself...
               echo '<li>';
-              try {
-                  echo $coll->getNumber() . ' ';
-              }
-              catch (Exception $e) {
-                  // do nothing as there is no number assigned
-              }
               echo '<a href=' .
                  $this->url(
                      array(
@@ -74,7 +68,7 @@
                      true
                  ) .
                  '>';
-                 echo $coll->getName();
+                 echo $coll->getDisplayName();
                  echo '</a> (' . Opus_Collection_Information::countAllCollectionDocuments($this->collection, $coll->getId()) . ')';
                  echo '</li>';
             }
