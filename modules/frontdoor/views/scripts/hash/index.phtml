@@ -3,21 +3,26 @@
 <h1><?= $this-> translate('frontdoor_pagetitle') ?></h1><hr />
 <h2><?= $this-> translate('frontdoor_hashtitle') ?></h2>
 
-<?$value = $this->author;?>
-<p><b><a href="<?= $this->value = $this->url(array(
+<?if ($this->author !== null)
+  {?>
+    <p><b><a href="<?= $this->value = $this->url(array(
                                 'module' => 'search',
                                 'controller' => 'search',
                                 'action' => 'metadatasearch',
-                                'author' => $value,
+                                'author' => $author,
                             ), null, true);
                         ?>">
-                        <?= $this->author?>:</a>&nbsp;<?= $this->title;?></b></p>
-<p><?= $this-> translate('frontdoor_filenumber')?>:&nbsp;<?= $this->fileNumber?></p><hr />
+    <?= $this->author?></a>:&nbsp;<?= $this->title;?></b></p><?
+  }
+  else
+  {?>
+    <p><b>&nbsp;<?= $this->title;?></b></p><?
+  }?>
+  <p><?= $this-> translate('frontdoor_filenumber')?>:&nbsp;<?= $this->fileNumber?></p><hr /><?
 
-<?if ($this->first_hash !== NULL)
+  if ($this->first_hash !== NULL)
   {
       for ($i = 0; $i < $this->fileNumber; $i++)
-
          if (array_key_exists ($i, $this->hashLabel) === true)
          {
             $file = $this->hashLabel[$i];
@@ -29,7 +34,6 @@
                {
                   $hashtype = $this->hashValueType['hashType_' .$i. '_' .$j];
                   $this->signtype = $signtype = substr($hashtype, 0,3);
-
                   if ($signtype == 'gpg')
                   {?>
                      <p><b><?= $this->translate('SignatureValue');?> (<?= $this->file = $file?>)</b></p>
@@ -39,7 +43,6 @@
                   {
                      $value = $this->hashValueType['hashValue_' .$i. '_' .$j];?>
                      <p><b><?= $this->translate ('HashValue')?>&nbsp;(<?= $this->file = $file?>)</b></p>
-
                      <p><?= $this->translate ('HashValue')?>&nbsp;
                      <?= $this->hashtype = $hashtype?>&nbsp;
                      <?= $this->translate('frontdoor_fixpoint')?>:&nbsp;
@@ -48,13 +51,11 @@
                      <?= $this->hashtype = $hashtype?>&nbsp;
                      <?= $this->translate('frontdoor_current')?>:&nbsp;
                      <?= $this->value = ''?></p><?
-
                   }
                   if ($hashtype == 'sha1')
                   {
                     $value = $this->hashValueType['hashvalue_' .$i. '_' .$j]?>
                     <p><b><?= $this->translate('HashValue')?>&nbsp;(<?= $this->file = $file?></b></p>
-
                     <p><?= $this->translate ('HashValue')?>&nbsp;
                     <?= $this->hashtype = $hashtype?>&nbsp;
                     <?= $this->translate('frontdoor_fixpoint')?>:&nbsp;
@@ -69,15 +70,13 @@
                {?>
                   <p><b><?= $this->translate ('frontdoor_no_hash')?></b></p>
              <?}
-
             }?> <hr /><?
           }
-     }
-
-   else
-   {?>
+       }
+  else
+  {?>
       <p><?$this-> translate('frontdoor_no_hash');?></p><?
-   }?>
+  }?>
    <p><a href="<?= $this->value =
                         $this->url(array(
                             'module' => 'frontdoor',
