@@ -28,7 +28,7 @@ INSERT INTO resources (id, parent_id, name) VALUES
 --
 -- Roles Privileges
 --
-INSERT INTO privileges (id, role_id, resource_id, privilege, granted) VALUES
+INSERT INTO rules (id, role_id, resource_id, privilege, granted) VALUES
 (1, 1, null, null,  1), -- grant anything to administrator role
 (2, 2, 2, 'create', 1), -- grant create and read to guest role for PUBLIC
 (3, 2, 2, 'read',   1);
