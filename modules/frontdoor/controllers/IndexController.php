@@ -61,13 +61,12 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         $collection_pathes = array();
         foreach ($collections as $coll_index=>$collection) {
             $coll_data = ($collection->toArray());
-            $collection_pathes[$coll_index] = $coll_data['Name'];
+            $collection_pathes[$coll_index] = $coll_data['DisplayFrontdoor'];
             $parent = $coll_data;
             while (true === array_key_exists('ParentCollection', $parent)) {
                 // TODO: There can be more than one parent
                 $parent = $parent['ParentCollection'][0];
-                $collection_pathes[$coll_index] = $parent['Name'] . ' > ' .$collection_pathes[$coll_index];
-
+                $collection_pathes[$coll_index] = $parent['DisplayFrontdoor'] . ' > ' .$collection_pathes[$coll_index];
             }
             $collection_pathes[$coll_index] = $coll_data['RoleName'] . ': ' . $collection_pathes[$coll_index];
         }
