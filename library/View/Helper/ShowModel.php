@@ -136,7 +136,14 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
         } else {
             $values = $value;
         }
-        return $this->__complexDisplay($field, $values);
+        $result = '';
+        if (($this->__saef === false) or (empty($values) === false)) {
+                $data[] = $this->__skeleton($field, $values);
+        }
+        if (($this->__saef === false) or (empty($data) === false)) {
+            $result = $this->view->partialLoop('_model.phtml', $data);
+        }
+        return $result;
     }
 
     /**
