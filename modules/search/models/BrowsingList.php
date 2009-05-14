@@ -78,14 +78,13 @@ class BrowsingList
 
         //$browsinglist = $index->find('role:'.$role);
 
-        //$browsinglist =Opus_Person::getPersonsByRole($role);
-        $browsinglist = null;
+        $browsinglist = Opus_Person::getAllIdsByRole($role);
 		$personsList = new Opus_Search_List_PersonsList();
 		$done = array();
 
 		foreach ($browsinglist as $person)
 		{
-			$member = new Opus_Person($person->dbid);
+			$member = new Opus_Person($person);
 			if (false === array_key_exists($member->getLastName(), $done))
 			{
 			    $pers = new Opus_Search_Adapter_PersonAdapter(array('id' => $member->getId(), 'firstName' => $member->getFirstName(), 'lastName' => $member->getLastName()));
