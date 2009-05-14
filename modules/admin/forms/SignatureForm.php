@@ -48,9 +48,12 @@ class SignatureForm extends Zend_Form
 
         $fileToSign = new Zend_Form_Element_Hidden('FileObject');
 
-        $submit = new Zend_Form_Element_Submit('submit');
+        $submit = new Zend_Form_Element_Submit('signsubmit');
         $submit->setLabel('pkm_signFile');
 
-        $this->addElements(array($keyupload, $fileToSign, $submit));
+        $deletesubmit = new Zend_Form_Element_Submit('deletesubmit');
+        $deletesubmit->setLabel('admin_filemanager_delete');
+
+        $this->addElements(array($keyupload, $fileToSign, $submit, $deletesubmit));
     }
 }

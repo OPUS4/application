@@ -60,18 +60,33 @@ class Admin_FilemanagerController extends Zend_Controller_Action
 
         $gpg = new Opus_GPG();
 
-        if (true === array_key_exists('FileObject', $data))
+        if (true === array_key_exists('signsubmit', $data))
         {
             $e = null;
             try {
-                $gpg->signPublicationFile(unserialize(base64_decode($data['FileObject'])), $data['password']);
+                $gpg->signPublicationFile(new Opus_File($data['FileObject']), $data['password']);
             }
             catch (Exception $e) {
                 $this->view->actionresult = $e->getMessage();
             }
             if ($e === null) {
-                $this->view->actionresult = 'Successfully signed file!';
+                $this->view->actionresult = $this->view->translate('admin_filemanager_signsuccess');
             }
+        }
+
+        if (true === array_key_exists('deletesubmit', $data))
+        {
+            $e = null;
+            #try {
+                $file = new Opus_File($data['FileObject']);
+                $file->delete();
+            #}
+            #catch (Exception $e) {
+            #    $this->view->actionresult = $e->getMessage();
+            #}
+            #if ($e === null) {
+            #    $this->view->actionresult = $this->view->translate('admin_filemanager_deletesuccess');
+            #}
         }
 
         $requestData = $this->_request->getParams();
@@ -145,7 +160,7 @@ class Admin_FilemanagerController extends Zend_Controller_Action
                 foreach ($doc->getFile() as $file)
                 {
                     $form = new SignatureForm();
-                    $form->FileObject->setValue(base64_encode(serialize($file)));
+                    $form->FileObject->setValue($file->getId());
                     $form->setAction($this->view->url(array('module' => 'admin', 'controller' => 'filemanager', 'action' => 'index', 'docId' => $requestData['docId']), null, true));
 
                     $this->view->files[$index]['path'] = $file->getPathName();

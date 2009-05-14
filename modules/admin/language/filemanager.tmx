@@ -34,5 +34,21 @@
         <seg>Datei konnte nicht erfolgreich hochgeladen werden - bitte prüfen Sie die Schreibberchtigung im Dokumentverzeichnis.</seg>
       </tuv>
     </tu>
+    <tu tuid="admin_filemanager_signsuccess">
+      <tuv xml:lang="en">
+        <seg>Successfully signed file!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datei wurde erfolgreich signiert.</seg>
+      </tuv>
+    </tu>
+    <tu tuid="admin_filemanager_deletesuccess">
+      <tuv xml:lang="en">
+        <seg>Successfully deleted file!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datei wurde erfolgreich entfernt.</seg>
+      </tuv>
+    </tu>
   </body>
 </tmx>
