@@ -56,6 +56,25 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         $document = new Opus_Document($docId);
         $doc_data = $document->toArray();
 
+        // Display collection pathes
+        $collections = $document->getCollections();
+        $collection_pathes = array();
+        foreach ($collections as $coll_index=>$collection) {
+            $coll_data = ($collection->toArray());
+            $collection_pathes[$coll_index] = $coll_data['Name'];
+            $parent = $coll_data;
+            while (true === array_key_exists('ParentCollection', $parent)) {
+                // TODO: There can be more than one parent
+                $parent = $parent['ParentCollection'][0];
+                $collection_pathes[$coll_index] = $parent['Name'] . ' > ' .$collection_pathes[$coll_index];
+
+            }
+        }
+
+        if (false === empty($collection_pathes)) {
+            $this->view->collectionPathes = $collection_pathes;
+        }
+
         // Proof existence of files, find out filenumber
         if (is_array ($files = $document->getFile()) === true)
         {

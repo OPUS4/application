@@ -62,6 +62,14 @@
                  <?
               }
             }?>
+
+            <?
+                foreach ($this->collectionPathes as $collPath) {
+                    echo $collPath . "<br />\n";
+                }
+            ?>
+
+
               <? for ($i = 0; $i < 10; $i++)
                  {
                     if (array_key_exists ('TitleMain_'.$i.'_Value', $this->mydoc_data) === true)
