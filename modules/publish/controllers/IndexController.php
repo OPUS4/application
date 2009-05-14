@@ -106,6 +106,8 @@ class Publish_IndexController extends Zend_Controller_Action {
                     $documentWithFilter ->setModel($document)
                         ->setBlacklist(array(
                             'ServerState',
+                            'ServerDateUnlocking',
+                            'ServerDateValid',
                             'File'))
                         ->setSortOrder(array(
                             'TitleMain',
