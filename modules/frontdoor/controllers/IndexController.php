@@ -69,6 +69,7 @@ class Frontdoor_IndexController extends Zend_Controller_Action
                 $collection_pathes[$coll_index] = $parent['Name'] . ' > ' .$collection_pathes[$coll_index];
 
             }
+            $collection_pathes[$coll_index] = $coll_data['RoleName'] . ': ' . $collection_pathes[$coll_index];
         }
 
         if (false === empty($collection_pathes)) {
