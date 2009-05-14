@@ -51,25 +51,115 @@ require_once 'Opus/Bootstrap/Base.php';
 class OpusApacheRewritemap extends Opus_Bootstrap_Base {
 
     /**
-     * Sets URL to file directory.
-     * TODO: make configurable
-     *
-     * @var string  Defaults to '/workspace/files'.
-     */
-    protected static $_absoluteFileDirURL = '/workspace/files';
-
-    /**
      * Static function to rewrite document requests.
      *
      * @param string $request Input from apache, containing requested address and some information about the user.
      *
      * return string
      */
-    public function rewriteRequest($request) {
-        // TODO: make pathes configurable
+    public function rewriteRequest($request, $ip = null, $cookie = null) {
 //      $logger = Zend_Registry::get('Zend_Log');
 //      $logger->info("got request: '" . $request . "'");
-        return self::$_absoluteFileDirURL . '/' . $request . "\n";
+
+        // parse and normalize request
+        // remove leading slashes
+        $request = preg_replace('/^\/(.*)$/', '$1', $request);
+        list($docId, $path) = preg_split('/\//', $request, 2);
+        // check input: docId should only be numbers, path should not leave to upper directory
+        if (preg_match('/^[\d]+$/', $docId) === 0 || preg_match('/\.\.\//', $path) === 1) {
+            return "error/send403.php\n";
+        }
+
+        // check for security
+        $conf = Zend_Registry::get('Zend_Config');
+        if (true === empty($conf->security)) {
+            // security switched off, deliver everything
+            return "$docId/$path\n";
+        }
+
+        // setup realm and acl
+        $realm = Opus_Security_Realm::getInstance();
+        $realm->setAcl(new Opus_Security_Acl());
+        $acl = $realm->getAcl();
+
+        // lookup the resourceId
+        $resourceId = null;
+        // get document
+        $doc = new Opus_Document($docId);
+        // load files
+        $files = $doc->getFile();
+        if (is_array($file) === false) {
+            $files = array($files);
+        }
+        // look for the right file and get its ResourceId
+        foreach ($files as $file) {
+            $pathnames = $file->getPathName();
+            if (is_array($pathnames) === false) {
+                if ($pathnames === $path) {
+                    $resourceId = $file->getResourceId();
+                    break;
+                }
+            }
+            // if one day a Opus_File can belong to more then one file in the filesystem:
+            foreach ($pathnames as $pathname) {
+                if ($pathname === $path) {
+                    $resourceId = $file->getResourceId();
+                }
+            }
+        }
+        if (is_null($resourcId) === true) {
+            // resource ID not found
+            return "error/send500.php\n";
+        }
+
+        // first we check if guest role is allowed to access the file
+        if ($acl->isAllowed('guest', $resourceId, 'read') === true) {
+            return "$docId/$path\n";
+        }
+
+        // now we check if we have a role, that's allowed to read the file
+        // check the ip address first
+        $roles = $realm->getIpAdressRole();
+        if (is_array($roles) === false) {
+            $roles = array($roles);
+        }
+        foreach ($roles as $role) {
+            if (is_null($role) === false) {
+                if ($acl->isAllowed($role, $resourceId, 'read') === true) {
+                    return "$docId/$path\n";
+                }
+            }
+        }
+
+        // check now the identity
+        $cookies = explode('; ', $cookiestring);
+        $session_id = null;
+        foreach ($cookies as $cookie) {
+                if (preg_match('/'.ini_get('session.name').'=(.*)\/$/',
+                        $cookie, $matches)) {
+                    $session_id = $matches[1];
+                }
+        }
+        if (is_null($session_id) === false) {
+            Zend_Session::setId($session_id);
+            Zend_Session::regenerateId();
+            Zend_Session::start();
+            $auth = Zend_Auth::getInstance();
+            if ($auth->hasIdentity()) {
+                $roles = $realm->getIdentityRole($auth->getIdentity());
+                if (is_array($roles) === false) {
+                    $roles = array($roles);
+                }
+                foreach ($roles as $role) {
+                    if (is_null($role) === false) {
+                        if ($acl->isAllowed($role, $resourceId, 'read') === true) {
+                            return "$docId/$path\n";
+                        }
+                    }
+                }
+            }
+        }
+        return  "error/send403.php\n";
     }
 
     /**
@@ -89,43 +179,16 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
     protected function _run() {
     }
 
-//    public function log($msg) {
-//        $logger = Zend_Registry::get('Zend_Log');
-//        $logger->info($msg);
-//    }
-//
-//    public function testSession($cookiestring) {
-//        $cookies = explode('; ', $cookiestring);
-//        $session_id = null;
-//        foreach ($cookies as $cookie) {
-//                if (preg_match('/'.ini_get('session.name').'=(.*)\/$/',
-//                    $cookie, $matches)) {
-//                        $session_id = $matches[1];
-//                }
-//        }
-//        if (is_null($session_id) === false) {
-//            $this->log("Session found: $session_id");
-//            Zend_Session::setId($session_id);
-//            Zend_Session::regenerateId();
-//            Zend_Session::start();
-//            $auth = Zend_Auth::getInstance();
-//            if ($auth->hasIdentity()) {
-//                // Identity exists; get it
-//                $this->log("An instance of Zend_Auth exists!");
-//            } else {
-//                $this->log("Noop");
-//            }
-//        } else {
-//            $this->log("No session information found.");
-//        }
-//    }
-
 }
 
 // Read request
 $line = trim($argv[1]);
+// we know that apache give's us a path and a remote ip,
+// but we can not be sure if a cookie exists.
+// instantiate cookie
+$cookie = null;
 // split input
-list($path, $remoteAddress, $userAgent, $cookie) = preg_split('/\t/', $line, 4);
+list($path, $remoteAddress, $cookie) = preg_split('/\t/', $line, 3);
 
 // Bootstrap Zend
 $rwmap = new OpusApacheRewritemap;
@@ -136,6 +199,4 @@ $rwmap->run(
     Opus_Bootstrap_Base::CONFIG_TEST,
     // path to config file
     dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'config');
-//$rwmap->log($cookie);
-//$rwmap->testSession($cookie);
-echo $rwmap->rewriteRequest($path) . "\n";
+echo $rwmap->rewriteRequest($path, $remoteAddress, $cookie) . "\n";
