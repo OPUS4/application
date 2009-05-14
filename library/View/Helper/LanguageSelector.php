@@ -73,29 +73,26 @@ class View_Helper_LanguageSelector {
      * @return string
      */
     public function __toString() {
-        $form = new Zend_Form;
-        $form->setAction($this->_view->url(array('action' => 'language', 'controller' => 'index', 'module' => 'home')));
-        $form->setAttrib('id', 'language_selector');
-
         $translations = Zend_Registry::get('Zend_Translate')->getList();
 
         $locale = new Zend_Locale();
 
-        $languages = array();
-        foreach ($translations as $trans) {
-            $languages[$trans] = $locale->getLanguageTranslation($trans, $trans);
-        }
+        $links = array();
         $currentLocale = Zend_Registry::get('Zend_Translate')->getLocale();
-
-        $language = new Zend_Form_Element_Select('language');
-        $language->setMultiOptions($languages);
-        $language->setValue($currentLocale);
-        $language->setLabel($this->_view->translate('home_index_language_label'));
-
-        $submit = new Zend_Form_Element_Submit('language_select');
-        $submit->setLabel('Ok');
-
-        $form->addElements(array($language, $submit));
-        return $form->render($this->_view);
+        foreach ($translations as $trans) {
+            if ($trans === $currentLocale) {
+                $links[] = $locale->getLanguageTranslation($trans, $trans);
+            } else {
+                $link = '<a href="';
+                $link .= $this->_view->url(array(
+                        'action' => 'language',
+                        'controller' => 'index',
+                      'module' => 'home',
+                        'language' => $trans));
+                $link .= '">' . $locale->getLanguageTranslation($trans, $trans) . '</a>';
+                $links[] = $link;
+            }
+        }
+        return '<span class="navigation languages">' . implode(' | ', $links) . '</span>';
     }
 }
