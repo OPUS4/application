@@ -42,12 +42,13 @@ class LicenceImport
 	public function __construct($data)
 	{
 		$doclist = $data->getElementsByTagName('table_data');
-		foreach ($doclist as $document) 
+		foreach ($doclist as $document)
 		{
             if ($document->getAttribute('name') === 'license_de') {
             	$mappingTable = $this->readLicenses($document);
             }
 		}
+		echo "\n";
 	}
 
 	/**
@@ -60,7 +61,7 @@ class LicenceImport
 	{
 		$classification = array();
 		$doclist = $data->getElementsByTagName('row');
-		foreach ($doclist as $document) 
+		foreach ($doclist as $document)
 		{
 			$lic = new Opus_Licence();
             foreach ($document->getElementsByTagName('field') as $field) {
@@ -102,7 +103,7 @@ class LicenceImport
                 break;
     	}
     }
-    
+
 	/**
 	 * Converts Bk-classification to Opus4
 	 *
@@ -112,12 +113,13 @@ class LicenceImport
 	protected function readLicenses($data)
 	{
 		$licenses = $this->transferOpus3Licence($data);
-		
+
 		// Store the licenses and create a mapping file for migration
 		$fp = fopen('../workspace/tmp/license.map', 'w');
 		foreach ($licenses as $key => $licence) {
+		    echo '.';
 			$id = $licence->store();
-			fputs($fp, $key . ' ' . $id . "\n"); 
+			fputs($fp, $key . ' ' . $id . "\n");
 		}
 		fclose($fp);
 	}

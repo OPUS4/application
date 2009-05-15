@@ -1724,6 +1724,44 @@ Universitätsbibliothek einer Technischen Universität.</field>
 		<field name="class">K.3.2</field>
 	</row>
 	</table_data>
+    <table_data name="opus_pacs">
+    <row>
+        <field name="source_opus">22</field>
+        <field name="class">01.30.Bb</field>
+    </row>
+    <row>
+        <field name="source_opus">37</field>
+        <field name="class">01.40.eg</field>
+    </row>
+    </table_data>
+    <table_data name="opus_jel">
+    <row>
+        <field name="source_opus">22</field>
+        <field name="class">A31</field>
+    </row>
+    <row>
+        <field name="source_opus">37</field>
+        <field name="class">A31</field>
+    </row>
+    <row>
+        <field name="source_opus">37</field>
+        <field name="class">B13</field>
+    </row>
+    </table_data>
+    <table_data name="opus_apa">
+    <row>
+        <field name="source_opus">22</field>
+        <field name="class">2224</field>
+    </row>
+    <row>
+        <field name="source_opus">37</field>
+        <field name="class">2400</field>
+    </row>
+    <row>
+        <field name="source_opus">37</field>
+        <field name="class">2420</field>
+    </row>
+    </table_data>
 	<table_data name="opus_coll">
 	<row>
 		<field name="coll_id">0</field>

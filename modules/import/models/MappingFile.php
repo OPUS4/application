@@ -40,7 +40,7 @@ class MappingFile
      *
      * @var array  Defaults to the OPUS collections (Name => ID).
      */
-    protected static $collectionShortNames = array('Dewey Decimal Classification' => 'ddc', 'Computing Classification System' => 'ccs', 'Physics and Astronomy Classification Scheme' => 'pacs', 'Journal of Economic Literature (JEL) Classification System' => 'jel', 'Mathematics Subject Classification' => 'msc');
+    protected static $collectionShortNames = array('Dewey Decimal Classification' => 'ddc', 'Computing Classification System' => 'ccs', 'Physics and Astronomy Classification Scheme' => 'pacs', 'Journal of Economic Literature (JEL) Classification System' => 'jel', 'Mathematics Subject Classification' => 'msc', 'Basisklassifikation (BK)' => 'bk', 'American Psychological Association (APA) Klassifikation' => 'apa');
 
     /**
      * Get the short name of the given collections

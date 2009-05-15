@@ -198,12 +198,12 @@ class XMLImport
             }
             if ($bkNotations->length > 0)
             {
-                $bkName = 'Basisklassifikation';
+                $bkName = 'Basisklassifikation (BK)';
                 $bk = $this->map($bkNotations, $bkName);
             }
             if ($apaNotations->length > 0)
             {
-                $apaName = 'Classification and Indexing System der American Psychological Association';
+                $apaName = 'American Psychological Association (APA) Klassifikation';
                 $apa = $this->map($apaNotations, $apaName);
             }
 			try {
