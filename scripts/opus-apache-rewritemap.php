@@ -50,6 +50,15 @@ require_once 'Opus/Bootstrap/Base.php';
  */
 class OpusApacheRewritemap extends Opus_Bootstrap_Base {
 
+
+    /**
+    * Sets URL to file directory.
+    * TODO: make configurable
+    *
+    * @var string  Defaults to '/workspace/files'.
+    */
+    protected static $_absoluteFileDirURL = '/files';
+
     /**
      * Static function to rewrite document requests.
      *
@@ -58,23 +67,34 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
      * return string
      */
     public function rewriteRequest($request, $ip = null, $cookie = null) {
-//      $logger = Zend_Registry::get('Zend_Log');
-//      $logger->info("got request: '" . $request . "'");
-
+        $logger = Zend_Registry::get('Zend_Log');
+//        $logger->info("got request '$request'");
         // parse and normalize request
         // remove leading slashes
         $request = preg_replace('/^\/(.*)$/', '$1', $request);
+        if (preg_match('/^[\d]+[\/]?$/', $request) === 1) {
+            // no file name submitted, trying index.html for compatibility reasons
+//            $logger->info("no filename submitted, trying /index.html");
+            if (preg_match('/\/$/', $request) === 0) {
+                $request .= "/";
+            }
+            $request .= 'index.html';
+        }
         list($docId, $path) = preg_split('/\//', $request, 2);
         // check input: docId should only be numbers, path should not leave to upper directory
-        if (preg_match('/^[\d]+$/', $docId) === 0 || preg_match('/\.\.\//', $path) === 1) {
-            return "error/send403.php\n"; // Forbidden, indipendent from authorization.
+        if (mb_strlen($docId) < 1 || mb_strlen($path) < 1 ||
+                preg_match('/^[\d]+$/', $docId) === 0 ||
+                preg_match('/\.\.\//', $path) === 1) {
+//            $logger->info("return " . self::_absoluteFileDirURL . "/error/send403.php'");
+            return self::_absoluteFileDirURL ."/error/send403.php\n"; // Forbidden, indipendent from authorization.
         }
 
         // check for security
         $conf = Zend_Registry::get('Zend_Config');
         if (true === empty($conf->security)) {
             // security switched off, deliver everything
-            return "$docId/$path\n";
+//            $logger->info("return " . self::_absoluteFileDirURL . "'files/$docId/$path'");
+            return self::_absoluteFileDirURL ."/$docId/$path\n";
         }
 
         // setup realm and acl
@@ -109,12 +129,12 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
         }
         if (is_null($resourcId) === true) {
             // resource ID not found
-            return "error/send404.php\n"; //not found
+            return self::_absoluteFileDirURL . "/error/send404.php\n"; //not found
         }
 
         // first we check if guest role is allowed to access the file
         if ($acl->isAllowed('guest', $resourceId, 'read') === true) {
-            return "$docId/$path\n";
+            return self::_absoluteFileDirURL . "/$docId/$path\n";
         }
 
         // now we check if we have a role, that's allowed to read the file
@@ -126,7 +146,7 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
         foreach ($roles as $role) {
             if (is_null($role) === false) {
                 if ($acl->isAllowed($role, $resourceId, 'read') === true) {
-                    return "$docId/$path\n";
+                    return self::_absoluteFileDirURL . "/$docId/$path\n";
                 }
             }
         }
@@ -153,13 +173,13 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
                 foreach ($roles as $role) {
                     if (is_null($role) === false) {
                         if ($acl->isAllowed($role, $resourceId, 'read') === true) {
-                            return "$docId/$path\n";
+                            return self::_absoluteFileDirURL ."/$docId/$path\n";
                         }
                     }
                 }
             }
         }
-        return  "error/send401.php\n"; // Unauthorized
+        return  self::_absoluteFileDirURL . "/error/send401.php\n"; // Unauthorized
     }
 
     /**
@@ -187,6 +207,11 @@ $line = trim($argv[1]);
 // but we can not be sure if a cookie exists.
 // instantiate cookie
 $cookie = null;
+if (preg_match('/\t.*\t/', $line) === 0) {
+    Zend_Registry::get('Zend_Log')->error('Internal fatal error! Input from Apache was not as predicted, unparsable by RewriteMap!');
+    Zend_Registry::get('Zend_Log')->info('Apache Input: \'' . $line . '\'');
+    return self::_absoluteFileDirURL ."/error/send500.php";
+}
 // split input
 list($path, $remoteAddress, $cookie) = preg_split('/\t/', $line, 3);
 
