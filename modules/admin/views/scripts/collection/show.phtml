@@ -38,12 +38,26 @@
 <a href="<?=$this->url(array('module'=>'admin', 'controller'=>'collection', 'action'=>'index'), null,
     true)?>">Collections</a>
 &gt;&nbsp;<a href="<?=$this->url(array('module'=>'admin', 'controller'=>'collection', 'action'=>'show',
-    'role'=>$this->role_id), null, true)?>"><?=$this->role_name?></a>
+    'role'=>$this->role_id, 'copy'=>$this->copy), null, true)?>"><?=$this->role_name?></a>
 <? foreach($this->breadcrumb as $path => $name) : ?>
 &gt;&nbsp;<a href="<?=$this->url(array('module'=>'admin', 'controller'=>'collection', 'action'=>'show',
-    'role'=>$this->role_id, 'path'=>$path), null, true)?>"><?=$name?></a>
+    'role'=>$this->role_id, 'path'=>$path, 'copy'=>$this->copy), null, true)?>"><?=$name?></a>
 <? endforeach; ?>
 </p>
+        <? if (isset($this->copy)) { ?>
+<p>
+            <? if (isset($this->breadcrumb)) {
+                $paths = array_keys($this->breadcrumb);
+                $path = array_pop($paths);?>
+        <a href="<?=$this->url(array('module'=>'admin', 'controller'=>'collection', 'action'=>'show',
+        'role'=>$this->role_id, 'path'=>$path), null, true)?>">Abort copying</a>
+            <? } else { ?>
+        <a href="<?=$this->url(array('module'=>'admin', 'controller'=>'collection', 'action'=>'show',
+        'role'=>$this->role_id), null, true)?>">Abort copying</a>
+            <? } ?>
+</p>
+        <? } ?>
+
 <ul>
     <? foreach($this->subcollections as $path => $name) : ?>
     <li class="<?=$this->visibility[$path]?>" <?=('hidden' === $this->visibility[$path])?'style="text-decoration:line-through"':''?>>
@@ -51,7 +65,7 @@
             <a href="<?=$this->url(array('module'=>'admin', 'controller'=>'collection', 'action'=>'show',
                 'role'=>$this->role_id, 'path'=>$path, 'copy'=>$this->copy), null, true)?>"><?=$name?></a>
 
-        <? if (isset($this->copy)) { ?>
+        <? if (true === isset($this->copy)) { ?>
 
             <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'create',
                 'role' => $this->role_id, 'below' => $path, 'copy'=>$this->copy), null, true)?>">Additional Position Below</a>
