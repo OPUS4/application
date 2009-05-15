@@ -55,42 +55,29 @@
                 'role' => $this->role_id, 'below' => $path), null, true)?>">Add Below</a>
             <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'new',
                 'role' => $this->role_id, 'above' => $path), null, true)?>">Add Above</a>
-
-
-
-
-
-     <?
+            <?
         if ('several' === $this->severalAppearances[$path]) {
             ?>
             <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'manage',
                 'role' => $this->role_id, 'path' => $path, 'deleteall' => 'Delete')) ?>">Delete everywhere</a>
             <?
         } else if ('visible' === $this->visibility[$path]) {
-     ?>
+            ?>
             <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'manage',
                 'role' => $this->role_id, 'path' => $path, 'deleteall' => 'Delete')) ?>">Delete</a>
             <?
         }
-     ?>
-
-     <?
         if ('several' === $this->severalAppearances[$path]) {
             ?>
             <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'manage',
                 'role' => $this->role_id, 'path' => $path, 'undeleteall' => 'UnDelete')) ?>">Undelete everywhere</a>
             <?
         } else if ('hidden' === $this->visibility[$path]) {
-     ?>
+            ?>
             <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'manage',
                 'role' => $this->role_id, 'path' => $path, 'undeleteall' => 'UnDelete')) ?>">Undelete</a>
             <?
         }
-     ?>
-
-
-
-     <?
         if ('several' === $this->severalAppearances[$path]) {
             ?>
             <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'manage',
@@ -98,10 +85,6 @@
             <?
         }
      ?>
-
-
-
-
         </form>
     </li>
     <? endforeach; ?>
