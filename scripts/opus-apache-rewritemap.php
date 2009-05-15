@@ -67,7 +67,7 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
         list($docId, $path) = preg_split('/\//', $request, 2);
         // check input: docId should only be numbers, path should not leave to upper directory
         if (preg_match('/^[\d]+$/', $docId) === 0 || preg_match('/\.\.\//', $path) === 1) {
-            return "error/send403.php\n";
+            return "error/send403.php\n"; // Forbidden, indipendent from authorization.
         }
 
         // check for security
@@ -109,7 +109,7 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
         }
         if (is_null($resourcId) === true) {
             // resource ID not found
-            return "error/send500.php\n";
+            return "error/send404.php\n"; //not found
         }
 
         // first we check if guest role is allowed to access the file
@@ -159,7 +159,7 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
                 }
             }
         }
-        return  "error/send403.php\n";
+        return  "error/send401.php\n"; // Unauthorized
     }
 
     /**
