@@ -91,7 +91,7 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
     public function rewriteRequest($request, $ip = null, $cookie = null) {
 //        $logger->info("got request '$request'");
         // parse and normalize request
-        // remove leading slashes
+        // remove leading slash
         $request = preg_replace('/^\/(.*)$/', '$1', $request);
         if (preg_match('/^[\d]+[\/]?$/', $request) === 1) {
             // no file name submitted, trying index.html for compatibility reasons
@@ -102,21 +102,20 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
             $request .= 'index.html';
         }
         list($docId, $path) = preg_split('/\//', $request, 2);
-        // check input: docId should only be numbers, path should not leave to upper directory
-        if (mb_strlen($docId) < 1 || mb_strlen($path) < 1 ||
-                preg_match('/^[\d]+$/', $docId) === 0 ||
-                preg_match('/\.\.\//', $path) === 1) {
+        // check input: docId should only be numbers, path should not contain ../
+        if ((mb_strlen($docId) < 1) ||
+                (mb_strlen($path) < 1) ||
+                (preg_match('/^[\d]+$/', $docId) === 0) ||
+                (preg_match('/\.\.\//', $path) === 1)) {
 //            $logger->info("return " . $this->_targetPrefix . "/error/send403.php'");
-            return $this->_targetPrefix ."/error/send403.php\n"; // Forbidden, indipendent from authorization.
+            return $this->_targetPrefix ."/error/send403.php"; // Forbidden, indipendent from authorization.
         }
 
         // check for security
         if ($this->_config->security === '0') {
             // security switched off, deliver everything
 //            $logger->info("return " . $this->_targetPrfix . "'files/$docId/$path'");
-            return $this->_targetPrefix ."/$docId/$path\n";
-        } else {
-            $this->_logger->info(print_r($this->_config, true));
+            return $this->_targetPrefix ."/$docId/$path";
         }
 
         // setup realm and acl
@@ -124,7 +123,7 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
         $realm->setAcl(new Opus_Security_Acl());
         $acl = $realm->getAcl();
 
-        // lookup the resourceId
+        // lookup the resourceId of file
         $resourceId = null;
         // get document
         $doc = new Opus_Document($docId);
@@ -151,12 +150,16 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
         }
         if (is_null($resourcId) === true) {
             // resource ID not found
-            return $this->_targetPrefix . "/error/send404.php\n"; //not found
+            return $this->_targetPrefix . "/error/send404.php"; //not found
         }
 
-        // first we check if guest role is allowed to access the file
-        if ($acl->isAllowed('guest', $resourceId, 'read') === true) {
-            return $this->_targetPrefix . "/$docId/$path\n";
+        try {
+            // first we check if guest role is allowed to access the file
+            if ($acl->isAllowed('guest', $resourceId, 'read') === true) {
+                return $this->_targetPrefix . "/$docId/$path";
+            }
+        } catch (Exception $e) {
+            return $this->_targetPrefix . "/error/send500.php";
         }
 
         // now we check if we have a role, that's allowed to read the file
@@ -167,17 +170,21 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
         }
         foreach ($roles as $role) {
             if (is_null($role) === false) {
-                if ($acl->isAllowed($role, $resourceId, 'read') === true) {
-                    return $this->_targetPrefix . "/$docId/$path\n";
+                try {
+                    if ($acl->isAllowed($role, $resourceId, 'read') === true) {
+                        return $this->_targetPrefix . "/$docId/$path";
+                    }
+                } catch (Exception $e) {
+                    return $this->_targetPrefix . "/error/send500.php";
                 }
             }
         }
 
-        // check now the identity
+        // now check the identity
         $cookies = explode('; ', $cookiestring);
         $session_id = null;
         foreach ($cookies as $cookie) {
-                if (preg_match('/'.ini_get('session.name').'=(.*)\/$/',
+                if (preg_match('/'.ini_get('session.name').'=(.*)[\/]?$/',
                         $cookie, $matches)) {
                     $session_id = $matches[1];
                 }
@@ -194,14 +201,18 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
                 }
                 foreach ($roles as $role) {
                     if (is_null($role) === false) {
-                        if ($acl->isAllowed($role, $resourceId, 'read') === true) {
-                            return $this->_targetPrefix ."/$docId/$path\n";
+                        try {
+                            if ($acl->isAllowed($role, $resourceId, 'read') === true) {
+                                return $this->_targetPrefix ."/$docId/$path";
+                            }
+                        } catch (Exception $e) {
+                            return $this->_targetPrefix . "/error/send500.php";
                         }
                     }
                 }
             }
         }
-        return  $this->_targetPrefix . "/error/send401.php\n"; // Unauthorized
+        return  $this->_targetPrefix . "/error/send401.php"; // Unauthorized
     }
 
     /**
