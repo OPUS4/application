@@ -53,11 +53,33 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
 
     /**
     * Sets URL to file directory.
-    * TODO: make configurable
     *
-    * @var string  Defaults to '/workspace/files'.
+    * @var string  Defaults to '/files'.
     */
-    protected static $_absoluteFileDirURL = '/files';
+    protected $_targetPrefix;
+
+    /**
+     * opus.config
+     *
+     * @var Zend_Config
+     */
+    protected $_config;
+
+    /**
+     * For logging output.
+     *
+     * @var Zend_Log
+     */
+    protected $_logger;
+
+
+    public function getTargetPrefix() {
+        return $this->_targetPrefix;
+    }
+
+    public function log($msg) {
+        return $this->_logger->info($msg);
+    }
 
     /**
      * Static function to rewrite document requests.
@@ -67,7 +89,6 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
      * return string
      */
     public function rewriteRequest($request, $ip = null, $cookie = null) {
-        $logger = Zend_Registry::get('Zend_Log');
 //        $logger->info("got request '$request'");
         // parse and normalize request
         // remove leading slashes
@@ -85,16 +106,17 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
         if (mb_strlen($docId) < 1 || mb_strlen($path) < 1 ||
                 preg_match('/^[\d]+$/', $docId) === 0 ||
                 preg_match('/\.\.\//', $path) === 1) {
-//            $logger->info("return " . self::_absoluteFileDirURL . "/error/send403.php'");
-            return self::_absoluteFileDirURL ."/error/send403.php\n"; // Forbidden, indipendent from authorization.
+//            $logger->info("return " . $this->_targetPrefix . "/error/send403.php'");
+            return $this->_targetPrefix ."/error/send403.php\n"; // Forbidden, indipendent from authorization.
         }
 
         // check for security
-        $conf = Zend_Registry::get('Zend_Config');
-        if (true === empty($conf->security)) {
+        if ($this->_config->security === '0') {
             // security switched off, deliver everything
-//            $logger->info("return " . self::_absoluteFileDirURL . "'files/$docId/$path'");
-            return self::_absoluteFileDirURL ."/$docId/$path\n";
+//            $logger->info("return " . $this->_targetPrfix . "'files/$docId/$path'");
+            return $this->_targetPrefix ."/$docId/$path\n";
+        } else {
+            $this->_logger->info(print_r($this->_config, true));
         }
 
         // setup realm and acl
@@ -129,12 +151,12 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
         }
         if (is_null($resourcId) === true) {
             // resource ID not found
-            return self::_absoluteFileDirURL . "/error/send404.php\n"; //not found
+            return $this->_targetPrefix . "/error/send404.php\n"; //not found
         }
 
         // first we check if guest role is allowed to access the file
         if ($acl->isAllowed('guest', $resourceId, 'read') === true) {
-            return self::_absoluteFileDirURL . "/$docId/$path\n";
+            return $this->_targetPrefix . "/$docId/$path\n";
         }
 
         // now we check if we have a role, that's allowed to read the file
@@ -146,7 +168,7 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
         foreach ($roles as $role) {
             if (is_null($role) === false) {
                 if ($acl->isAllowed($role, $resourceId, 'read') === true) {
-                    return self::_absoluteFileDirURL . "/$docId/$path\n";
+                    return $this->_targetPrefix . "/$docId/$path\n";
                 }
             }
         }
@@ -173,13 +195,13 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
                 foreach ($roles as $role) {
                     if (is_null($role) === false) {
                         if ($acl->isAllowed($role, $resourceId, 'read') === true) {
-                            return self::_absoluteFileDirURL ."/$docId/$path\n";
+                            return $this->_targetPrefix ."/$docId/$path\n";
                         }
                     }
                 }
             }
         }
-        return  self::_absoluteFileDirURL . "/error/send401.php\n"; // Unauthorized
+        return  $this->_targetPrefix . "/error/send401.php\n"; // Unauthorized
     }
 
     /**
@@ -189,6 +211,17 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
      */
     protected function _setupBackend() {
         $this->_setupLogging();
+        $this->_config = Zend_Registry::get('Zend_Config');
+        if (is_null($this->_config) === true) {
+            die('Can not load Config');
+        }
+        $this->_logger = Zend_Registry::get('Zend_Log');
+        if (empty($this->_config->deliver->target->prefix) === true) {
+            $this->_targetPrefix = '';
+            $this->_logger->info('Error: no target prefix.');
+        } else {
+            $this->_targetPrefix = $this->_config->deliver->target->prefix;
+        }
     }
 
     /**
@@ -203,20 +236,9 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
 
 // Read request
 $line = trim($argv[1]);
-// we know that apache give's us a path and a remote ip,
-// but we can not be sure if a cookie exists.
-// instantiate cookie
-$cookie = null;
-if (preg_match('/\t.*\t/', $line) === 0) {
-    Zend_Registry::get('Zend_Log')->error('Internal fatal error! Input from Apache was not as predicted, unparsable by RewriteMap!');
-    Zend_Registry::get('Zend_Log')->info('Apache Input: \'' . $line . '\'');
-    return self::_absoluteFileDirURL ."/error/send500.php";
-}
-// split input
-list($path, $remoteAddress, $cookie) = preg_split('/\t/', $line, 3);
 
 // Bootstrap Zend
-$rwmap = new OpusApacheRewritemap;
+$rwmap = new OpusApacheRewritemap();
 $rwmap->run(
     // application root directory
     dirname(dirname(__FILE__)),
@@ -224,4 +246,17 @@ $rwmap->run(
     Opus_Bootstrap_Base::CONFIG_TEST,
     // path to config file
     dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'config');
+
+// check input
+if (preg_match('/\t.*\t/', $line) === 0) {
+    $rwmap->log('Internal fatal error! Input from Apache was not as predicted, unparsable by RewriteMap!');
+    $rwmap->log('Apache Input: \'' . $line . '\'');
+    return $rwmap->getTargetPrefix() ."/error/send500.php";
+}
+
+// instantiate cookie
+$cookie = null;
+// split input
+list($path, $remoteAddress, $cookie) = preg_split('/\t/', $line, 3);
+
 echo $rwmap->rewriteRequest($path, $remoteAddress, $cookie) . "\n";
