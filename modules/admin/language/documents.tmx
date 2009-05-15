@@ -66,5 +66,21 @@
         <seg>Keine Dokumente vorhanden!</seg>
       </tuv>
     </tu>
+    <tu tuid="admin_documents_edit">
+      <tuv xml:lang="en">
+        <seg>Edit document metadata</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokument Metadaten ändern</seg>
+      </tuv>
+    </tu>
+    <tu tuid="admin_documents_publish">
+      <tuv xml:lang="en">
+        <seg>Publish document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokument freischalten</seg>
+      </tuv>
+    </tu>
   </body>
 </tmx>
