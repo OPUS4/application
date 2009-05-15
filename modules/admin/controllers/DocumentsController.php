@@ -64,6 +64,9 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             ),
             array(
                 $this->view->url(array('module' => 'admin', 'controller'=>'documents', 'action'=>'index', 'state' => 'deleted'), null, true), 'docs_deleted'
+            ),
+            array(
+                $this->view->url(array('module' => 'admin'), null, true), 'admin_index_title'
             )
             );
         $data = $this->_request->getParams();
