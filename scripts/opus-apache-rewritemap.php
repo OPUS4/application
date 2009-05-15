@@ -125,13 +125,8 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
 
         // lookup the resourceId of file
         $resourceId = null;
-        // get document
-        $doc = new Opus_Document($docId);
-        // load files
-        $files = $doc->getFile();
-        if (is_array($file) === false) {
-            $files = array($files);
-        }
+
+        $files = $this->__getFilesForDocumentId($docId);
         // look for the right file and get its ResourceId
         foreach ($files as $file) {
             $pathnames = $file->getPathName();
@@ -148,7 +143,8 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
                 }
             }
         }
-        if (is_null($resourcId) === true) {
+
+        if (is_null($resourceId) === true) {
             // resource ID not found
             return $this->_targetPrefix . "/error/send404.php"; //not found
         }
@@ -215,6 +211,24 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
         return  $this->_targetPrefix . "/error/send401.php"; // Unauthorized
     }
 
+
+    /**
+     * Get all Files for the given document identifier.
+     *
+     * @param integer $docId Document identfier
+     * @return array Array of Opus_File objects.
+     */
+    private function __getFilesForDocumentId($docId) {
+        $fileTable = Opus_Db_TableGateway::getInstance('Opus_Db_DocumentFiles');
+        $fileRows = $fileTable->fetchAll($fileTable->select()->where('document_id = ?', $docId));
+        $result = array();
+        foreach ($fileRows as $fileRow) {
+            $fileObj = new Opus_File($fileRow);
+            $result[] = $fileObj;
+        }
+        return $result;
+    }
+
     /**
      * Empty method to not setup a backend.
      *
@@ -222,6 +236,7 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
      */
     protected function _setupBackend() {
         $this->_setupLogging();
+
         $this->_config = Zend_Registry::get('Zend_Config');
         if (is_null($this->_config) === true) {
             die('Can not load Config');
@@ -233,7 +248,84 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
         } else {
             $this->_targetPrefix = $this->_config->deliver->target->prefix;
         }
+        $this->_setupDatabase();
+        $this->_setupTranslation();
+        $this->_setupLanguageList();
     }
+
+
+    /**
+     * Setup Zend_Translate with language resources of all existent modules.
+     *
+     * It is assumed that all modules are stored under modules/. The search
+     * pattern Zend_Translate gets configured with is to look for a
+     * folder and file structure similar to:
+     *
+     * language/
+     *         index.tmx
+     *         loginform.tmx
+     *         ...
+     *
+     * @return void
+     *
+     */
+    protected function _setupTranslation()
+    {
+        $sessiondata = new Zend_Session_Namespace();
+        $options = array(
+            'clear' => false,
+            'scan' => Zend_Translate::LOCALE_FILENAME,
+            'ignore' => '.'
+            );
+        $translate = new Zend_Translate(
+            Zend_Translate::AN_TMX,
+            $this->_applicationRootDirectory . '/modules/',
+            'auto',
+            $options
+            );
+
+        if (empty($sessiondata->language) === false) {
+            // Example for logging something
+            $logger = Zend_Registry::get('Zend_Log');
+            $logger->info('Switching to language "' . $sessiondata->language . '".');
+            $translate->setLocale($sessiondata->language);
+        } else {
+            $sessiondata->language = $translate->getLocale();
+        }
+
+        $registry = Zend_Registry::getInstance();
+        $registry->set('Zend_Translate', $translate);
+    }
+
+    /**
+     * Setup language list.
+     *
+     * @return void
+     */
+    protected function _setupLanguageList() {
+        $registry = Zend_Registry::getInstance();
+
+        $sessiondata = new Zend_Session_Namespace();
+        if (false === empty($sessiondata->language)) {
+            $locale = new Zend_Locale($sessiondata->language);
+        } else {
+            $locale = $registry->get('Zend_Translate')->getLocale();
+        }
+
+        $languages = array();
+        $availableLanguages = Opus_Language::getAllActive();
+
+        foreach ($availableLanguages as $availableLanguage) {
+            $trans = $availableLanguage->getPart1();
+            if (true === empty($trans)) {
+                $languages[$availableLanguage->getId()] = $availableLanguage->getDisplayName();
+            } else {
+                $languages[$availableLanguage->getId()] = $locale->getLanguageTranslation($trans);
+            }
+        }
+        $registry->set('Available_Languages', $languages);
+    }
+
 
     /**
      * Starts an Opus console.
@@ -269,5 +361,4 @@ if (preg_match('/\t.*\t/', $line) === 0) {
 $cookie = null;
 // split input
 list($path, $remoteAddress, $cookie) = preg_split('/\t/', $line, 3);
-
 echo $rwmap->rewriteRequest($path, $remoteAddress, $cookie) . "\n";
