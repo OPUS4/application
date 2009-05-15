@@ -55,7 +55,53 @@
                 'role' => $this->role_id, 'below' => $path), null, true)?>">Add Below</a>
             <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'new',
                 'role' => $this->role_id, 'above' => $path), null, true)?>">Add Above</a>
-            <input type="submit" name="delete" value="Delete" />
+
+
+
+
+
+     <?
+        if ('several' === $this->severalAppearances[$path]) {
+            ?>
+            <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'manage',
+                'role' => $this->role_id, 'path' => $path, 'deleteall' => 'Delete')) ?>">Delete everywhere</a>
+            <?
+        } else {
+     ?>
+            <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'manage',
+                'role' => $this->role_id, 'path' => $path, 'deleteall' => 'Delete')) ?>">Delete</a>
+            <?
+        }
+     ?>
+
+     <?
+        if ('several' === $this->severalAppearances[$path]) {
+            ?>
+            <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'manage',
+                'role' => $this->role_id, 'path' => $path, 'undeleteall' => 'UnDelete')) ?>">Undelete everywhere</a>
+            <?
+        } else {
+     ?>
+            <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'manage',
+                'role' => $this->role_id, 'path' => $path, 'undeleteall' => 'UnDelete')) ?>">Undelete</a>
+            <?
+        }
+     ?>
+
+
+
+     <?
+        if ('several' === $this->severalAppearances[$path]) {
+            ?>
+            <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'manage',
+                'role' => $this->role_id, 'path' => $path, 'delete' => 'Delete')) ?>">Delete here</a>
+            <?
+        }
+     ?>
+
+
+
+
         </form>
     </li>
     <? endforeach; ?>

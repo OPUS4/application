@@ -73,7 +73,7 @@ class Admin_CollectionController extends Controller_Action {
         }
         $filter = new Opus_Model_Filter;
         $filter->setModel($collection);
-        $filter->setBlacklist(array('SubCollection', 'ParentCollection', 'CollectionsContentSchema', 'Visibility'));
+        $filter->setBlacklist(array('SubCollection', 'ParentCollection', 'CollectionsContentSchema', 'Visibility', 'SeveralAppearances'));
         $filter->setSortOrder(array('Name'));
         $collectionForm = $form_builder->build($filter);
         $action_url = $this->view->url(array('action' => 'create'));
@@ -96,7 +96,7 @@ class Admin_CollectionController extends Controller_Action {
         }
         $filter = new Opus_Model_Filter;
         $filter->setModel($collection);
-        $filter->setBlacklist(array('SubCollection', 'ParentCollection'));
+        $filter->setBlacklist(array('SubCollection', 'ParentCollection', 'Visibility', 'SeveralAppearances'));
         $filter->setSortOrder(array('Name'));
         $collectionForm = $form_builder->build($filter);
         $action_url = $this->view->url(array('action' => 'create'));
@@ -110,7 +110,7 @@ class Admin_CollectionController extends Controller_Action {
      * @return void
      */
     public function manageAction() {
-        if ($this->_request->isPost() === true) {
+        //($this->_request->isPost() === true) {
             $role = $this->getRequest()->getUserParam('role');
             $path = $this->getRequest()->getUserParam('path');
             $collection = new Opus_CollectionRole($role);
@@ -118,16 +118,23 @@ class Admin_CollectionController extends Controller_Action {
             // Store whether we're handling a collection or a collection role.
             $handlingCollection = (true === isset($path));
             if (true === $handlingCollection) {
+                $parentCollId = 1;
                 $trail = explode('-', $path);
                 foreach($trail as $step) {
+                    $parentCollId = $collection->getId();
                     $collection = $collection->getSubCollection($step);
                 }
                 $path = implode('-', array_slice($trail, 0, sizeof($trail) - 1));
             }
-
-            if (false === is_null($this->_request->getParam('delete'))) {
+            if (false === is_null($this->_request->getParam('deleteall'))) {
                 // Delete collection.
                 $collection->delete();
+            } else if (false === is_null($this->_request->getParam('undeleteall'))) {
+                // Un-Delete collection.
+                $collection->undelete();
+            } else if (false === is_null($this->_request->getParam('delete'))) {
+                // Delete collection.
+                $collection->deletePosition($parentCollId);
             } else if (false === is_null($this->_request->getParam('move_up'))) {
                 // Move collection up by one position.
                 $collection->setPosition($collection->getPosition() - 1);
@@ -145,9 +152,9 @@ class Admin_CollectionController extends Controller_Action {
                 $this->_redirectTo('Role successfully deleted.', 'index');
             }
 
-        } else {
+/*        } else {
             $this->_redirectTo('', 'index');
-        }
+        }*/
     }
 
     /**
@@ -174,15 +181,18 @@ class Admin_CollectionController extends Controller_Action {
                 $breadcrumb[$position] = $collection->getDisplayName();
             }
             foreach($collection->getSubCollection() as $i => $subcollection) {
+                $severalAppearances[$path . '-' . $i] = (true === $subcollection->getSeveralAppearances())?'several':'unique';
                 $visibility[$path . '-' . $i] = (true === $subcollection->getVisibility())?'visible':'hidden';
                 $subcollections[$path . '-' . $i] = $subcollection->getDisplayName();
             }
         } else {
             foreach($collection->getSubCollection() as $i => $subcollection) {
+                $severalAppearances[$i] = (true === $subcollection->getSeveralAppearances())?'several':'unique';
                 $visibility[$i] = (true === $subcollection->getVisibility())?'visible':'hidden';
                 $subcollections[$i] = $subcollection->getDisplayName();
             }
         }
+        $this->view->severalAppearances = $severalAppearances;
         $this->view->visibility = $visibility;
         $this->view->subcollections = $subcollections;
         $this->view->role_id = $roleId;
