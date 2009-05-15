@@ -73,7 +73,7 @@ class Admin_CollectionController extends Controller_Action {
         }
         $filter = new Opus_Model_Filter;
         $filter->setModel($collection);
-        $filter->setBlacklist(array('SubCollection', 'ParentCollection', 'CollectionsContentSchema'));
+        $filter->setBlacklist(array('SubCollection', 'ParentCollection', 'CollectionsContentSchema', 'Visibility'));
         $filter->setSortOrder(array('Name'));
         $collectionForm = $form_builder->build($filter);
         $action_url = $this->view->url(array('action' => 'create'));
@@ -174,14 +174,16 @@ class Admin_CollectionController extends Controller_Action {
                 $breadcrumb[$position] = $collection->getDisplayName();
             }
             foreach($collection->getSubCollection() as $i => $subcollection) {
+                $visibility[$path . '-' . $i] = (true === $subcollection->getVisibility())?'visible':'hidden';
                 $subcollections[$path . '-' . $i] = $subcollection->getDisplayName();
             }
         } else {
             foreach($collection->getSubCollection() as $i => $subcollection) {
-                $visibility = ($subcollection->getVisibility())?V:H;
-                $subcollections[$i] = $subcollection->getDisplayName() . $visibility;
+                $visibility[$i] = (true === $subcollection->getVisibility())?'visible':'hidden';
+                $subcollections[$i] = $subcollection->getDisplayName();
             }
         }
+        $this->view->visibility = $visibility;
         $this->view->subcollections = $subcollections;
         $this->view->role_id = $roleId;
         $this->view->role_name = $roleName;

@@ -46,7 +46,7 @@
 </p>
 <ul>
     <? foreach($this->subcollections as $path => $name) : ?>
-    <li>
+    <li class="<?=$this->visibility[$path]?>" <?=('hidden' === $this->visibility[$path])?'style="text-decoration:line-through"':''?>>
         <form action="<?= $this->url(array('action' => 'manage', 'role'=>$this->role_id, 'path'=>$path)) ?>" method="post">
             <a href="<?=$this->url(array('module'=>'admin', 'controller'=>'collection', 'action'=>'show',
                 'role'=>$this->role_id, 'path'=>$path), null, true)?>"><?=$name?></a>
