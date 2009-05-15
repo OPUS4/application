@@ -38,3 +38,4 @@
 <?php echo $this->form; ?>
 
 <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'filemanager', 'action' => 'index', 'docId' => $this->docId), null, true); ?>"><?php echo $this->translate('admin_filemanager_index'); ?></a>
+<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'publish', 'docId' => $this->docId), null, true); ?>"><?php echo $this->translate('admin_documents_publish'); ?></a>

@@ -91,4 +91,41 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $this->view->form = $modelForm;
         $this->view->docId = $id;
     }
+
+    /**
+     * Deletes a document
+     *
+     * @return void
+     */
+    public function deleteAction() {
+        if ($this->_request->isPost() === true) {
+            $id = $this->getRequest()->getPost('id');
+            $model = new $this->_modelclass($id);
+            // Remove from index
+            $indexer = new Opus_Search_Index_Indexer();
+            $indexer->removeDocumentFromEntryIndex($model);
+            $model->delete();
+            $this->_redirectTo('Model successfully deleted.', 'index');
+        } else {
+            $this->_redirectTo('', 'index');
+        }
+    }
+
+    /**
+     * Publishes a document
+     *
+     * @return void
+     */
+    public function publishAction() {
+        $id = $this->getRequest()->getParam('docId');
+        $doc = new Opus_Document($id);
+        $doc->setServerState('published');
+        $doc->store();
+
+        // Add to index
+        $indexer = new Opus_Search_Index_Indexer();
+        $indexer->addDocumentToEntryIndex($doc);
+
+        $this->_redirectTo('', 'index');
+    }
 }

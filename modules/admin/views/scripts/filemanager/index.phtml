@@ -35,6 +35,7 @@
  */
 ?>
 <h1><?= $this->title ?></h1>
+<a href="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'edit', 'id' => $this->docId), null, true); ?>"><?= $this->translate('admin_documents_edit'); ?></a>
 <?= $this->uploadform ?>
 <?= $this->actionresult ?>
 <?php

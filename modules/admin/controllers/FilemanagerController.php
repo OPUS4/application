@@ -90,7 +90,7 @@ class Admin_FilemanagerController extends Zend_Controller_Action
         }
 
         $requestData = $this->_request->getParams();
-
+        $this->view->docId = $requestData['docId'];
     	$this->view->noFileSelected = false;
 
     	if (true === array_key_exists('docId', $requestData))

@@ -54,20 +54,34 @@ class SearchEngineIndexBuilder extends Application_Bootstrap {
      * @return void
      */
     public function _run() {
-		$indexer = new Opus_Search_Index_Indexer();
+		// removes index directory to start from scratch
+        $registry = Zend_Registry::getInstance();
+        $indexpath = $registry->get('Zend_LuceneIndexPath');
+        $fh = opendir($indexpath);
+        while (false !== $file = readdir($fh)) {
+            @unlink($indexpath . '/' . $file);
+        }
+        closedir($fh);
 
         $docresult = Opus_Document::getAllIds();
+        $indexer = new Opus_Search_Index_Indexer();
 
         echo date('Y-m-d H:i:s') . " Start\n";
         foreach ($docresult as $row) {
+            flush();
+            echo "Memorybedarf vor Indizierung von $row: " . memory_get_usage() . "\n";
             $docadapter = new Opus_Document( (int) $row);
-        	$returnvalue = $indexer->addDocumentToEntryIndex($docadapter);
+            $returnvalue = $indexer->addDocumentToEntryIndex($docadapter);
+        	unset($docadapter);
        		foreach ($returnvalue as $value) {
        		    echo date('Y-m-d H:i:s') . ": " . $value . "\n";
        		}
+       		unset($returnvalue);
+       		flush();
+       		echo "Memorybedarf nach Indizierung von $row: " . memory_get_usage() . "\n";
         }
         echo date('Y-m-d H:i:s') . ' Stop';
-        
+
         $indexer->finalize();
     }
 }
