@@ -149,14 +149,10 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $restRouterPlugin = new Controller_Plugin_RestManipulation();
         $this->_frontController->registerPlugin($restRouterPlugin);
 
-        // Add security realm initialization if security is enabled
+        // Add security realm initialization if security is not disabled
         $conf = Zend_Registry::get('Zend_Config');
         $secu = $conf->security;
-        if (true === empty($secu)) {
-            $secu = false;
-        } else {
-            $secu = (bool) $secu;
-        }
+        $secu = ($secu !== '0');
         if (true === $secu) {
             $realmSetupPlugin = new Controller_Plugin_SecurityRealm();
             $this->_frontController->registerPlugin($realmSetupPlugin);

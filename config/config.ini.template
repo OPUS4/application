@@ -37,7 +37,10 @@ db.params.username =
 db.params.password = 
 db.params.dbname = 
 theme = default
-security = false
+security = 0
+deliver.target.prefix = /files
+deliver.logrequest = false
+deliver.logoutput = false
 
 [searchengine]
 pdftotext.path = /usr/bin ; path to pdftotext - needed to index PDF fulltexts
