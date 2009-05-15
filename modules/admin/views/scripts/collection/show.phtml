@@ -49,7 +49,17 @@
     <li class="<?=$this->visibility[$path]?>" <?=('hidden' === $this->visibility[$path])?'style="text-decoration:line-through"':''?>>
         <form action="<?= $this->url(array('action' => 'manage', 'role'=>$this->role_id, 'path'=>$path)) ?>" method="post">
             <a href="<?=$this->url(array('module'=>'admin', 'controller'=>'collection', 'action'=>'show',
-                'role'=>$this->role_id, 'path'=>$path), null, true)?>"><?=$name?></a>
+                'role'=>$this->role_id, 'path'=>$path, 'copy'=>$this->copy), null, true)?>"><?=$name?></a>
+
+        <? if (isset($this->copy)) { ?>
+
+            <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'create',
+                'role' => $this->role_id, 'below' => $path, 'copy'=>$this->copy), null, true)?>">Additional Position Below</a>
+            <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'create',
+                'role' => $this->role_id, 'above' => $path, 'copy'=>$this->copy), null, true)?>">Additional Position Above</a>
+
+        <? } else { ?>
+
             <a href="<?= $this->url(array('action' => 'edit', 'role' => $this->role_id, 'path'=>$path)) ?>">Edit</a>
             <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'new',
                 'role' => $this->role_id, 'below' => $path), null, true)?>">Add Below</a>
@@ -85,6 +95,9 @@
             <?
         }
      ?>
+            <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'show',
+                'role' => $this->role_id, 'copy' => $path), null, true)?>">Copy</a>
+        <? } ?>
         </form>
     </li>
     <? endforeach; ?>

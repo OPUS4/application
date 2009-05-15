@@ -167,8 +167,11 @@ class Admin_CollectionController extends Controller_Action {
         $collection = new Opus_CollectionRole($roleId);
         $roleName = $collection->getDisplayName();
         $path = $this->getRequest()->getParam('path');
+        $copy = $this->getRequest()->getParam('copy');
         $subcollections = array();
         $breadcrumb = array();
+        $severalAppearances = array();
+        $visibility = array();
         if (true === isset($path)) {
             $trail = explode('-', $path);
             foreach($trail as $step) {
@@ -198,6 +201,7 @@ class Admin_CollectionController extends Controller_Action {
         $this->view->role_id = $roleId;
         $this->view->role_name = $roleName;
         $this->view->path = $path;
+        $this->view->copy = $copy;
         $this->view->breadcrumb = $breadcrumb;
     }
 
@@ -207,6 +211,7 @@ class Admin_CollectionController extends Controller_Action {
      * @return void
      */
     public function createAction() {
+        $copy = $this->getRequest()->getParam('copy');
         if ($this->_request->isPost() === true) {
             $data = $this->_request->getPost();
             $form_builder = new Opus_Form_Builder();
@@ -248,7 +253,7 @@ class Admin_CollectionController extends Controller_Action {
                                 }
                                 $collection->insertSubCollectionAt(end($trail) + 1, $model);
                             } else if (true === isset($above)) {
-                                // Insert below specified position
+                                // Insert above specified position
                                 $trail = explode('-', $above);
                                 foreach($trail as $i => $step) {
                                     if ($i < sizeof($trail) - 1) {
@@ -276,6 +281,53 @@ class Admin_CollectionController extends Controller_Action {
                     $this->view->form = $form;
                 }
             }
+        } else if (true === isset($copy)) {
+            // Copying a reference to a collection  to a new position
+            $role  = $this->getRequest()->getParam('role');
+            $below = $this->getRequest()->getParam('below');
+            $above = $this->getRequest()->getParam('above');
+
+            $sourceCollection = new Opus_CollectionRole($role);
+            // $copy is the path to the source collection
+            // fetch corresponding collection model
+            if (true === isset($copy)) {
+                $trail = explode('-', $copy);
+                foreach($trail as $i => $step) {
+                    if ($i < sizeof($trail)) {
+                        $sourceCollection = $sourceCollection->getSubCollection($step);
+                    }
+                }
+            }
+
+            $targetCollection = new Opus_CollectionRole($role);
+            // $below/$above is the path to the destination collection
+            if (true === isset($below)) {
+                // Insert below specified position
+                $trail = explode('-', $below);
+                foreach($trail as $i => $step) {
+                    if ($i < sizeof($trail) - 1) {
+                        $targetCollection = $targetCollection->getSubCollection($step);
+                    }
+                }
+                $targetCollection->insertSubCollectionAt(end($trail) + 1, $sourceCollection);
+            } else if (true === isset($above)) {
+                // Insert above specified position
+                $trail = explode('-', $above);
+                foreach($trail as $i => $step) {
+                    if ($i < sizeof($trail) - 1) {
+                        $targetCollection = $targetCollection->getSubCollection($step);
+                    }
+                }
+                $targetCollection->insertSubCollectionAt(end($trail), $sourceCollection);
+            }
+            $targetCollection->store();
+
+            // redirect to parent of created collection
+            array_pop($trail);
+            $path = implode('-', $trail);
+
+            $this->_redirectTo('Collection successfully copied.', 'show', null, null,
+                    array('role' => $role, 'path' => $path));
         } else {
             $this->_redirectTo('', 'index');
         }
