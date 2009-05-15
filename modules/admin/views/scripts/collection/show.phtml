@@ -66,7 +66,7 @@
             <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'manage',
                 'role' => $this->role_id, 'path' => $path, 'deleteall' => 'Delete')) ?>">Delete everywhere</a>
             <?
-        } else {
+        } else if ('visible' === $this->visibility[$path]) {
      ?>
             <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'manage',
                 'role' => $this->role_id, 'path' => $path, 'deleteall' => 'Delete')) ?>">Delete</a>
@@ -80,7 +80,7 @@
             <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'manage',
                 'role' => $this->role_id, 'path' => $path, 'undeleteall' => 'UnDelete')) ?>">Undelete everywhere</a>
             <?
-        } else {
+        } else if ('hidden' === $this->visibility[$path]) {
      ?>
             <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'manage',
                 'role' => $this->role_id, 'path' => $path, 'undeleteall' => 'UnDelete')) ?>">Undelete</a>
