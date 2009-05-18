@@ -50,204 +50,30 @@ require_once 'Opus/Bootstrap/Base.php';
  */
 class OpusApacheRewritemap extends Opus_Bootstrap_Base {
 
-
     /**
-    * Sets URL to file directory.
-    *
-    * @var string  Defaults to '/files'.
-    */
-    protected $_targetPrefix;
-
-    /**
-     * opus.config
+     * Holds command line arguments passed to the script.
      *
-     * @var Zend_Config
+     * @var array
      */
-    protected $_config;
+    private $_arguments = array();
 
     /**
-     * For logging output.
+     * Initialise with command line arguments.
      *
-     * @var Zend_Log
-     */
-    protected $_logger;
-
-
-    public function getTargetPrefix() {
-        return $this->_targetPrefix;
+     * @param array $arguments Command line arguments passed to the script.
+     */    
+    public function __construct(array $arguments) {
+        $this->_arguments = $arguments;
     }
-
-    public function log($msg) {
-        return $this->_logger->info($msg);
-    }
+    
 
     /**
-     * Static function to rewrite document requests.
-     *
-     * @param string $request Input from apache, containing requested address and some information about the user.
-     *
-     * return string
-     */
-    public function rewriteRequest($request, $ip = null, $cookie = null) {
-//        $logger->info("got request '$request'");
-        // parse and normalize request
-        // remove leading slash
-        $request = preg_replace('/^\/(.*)$/', '$1', $request);
-        if (preg_match('/^[\d]+[\/]?$/', $request) === 1) {
-            // no file name submitted, trying index.html for compatibility reasons
-//            $logger->info("no filename submitted, trying /index.html");
-            if (preg_match('/\/$/', $request) === 0) {
-                $request .= "/";
-            }
-            $request .= 'index.html';
-        }
-        list($docId, $path) = preg_split('/\//', $request, 2);
-        // check input: docId should only be numbers, path should not contain ../
-        if ((mb_strlen($docId) < 1) ||
-                (mb_strlen($path) < 1) ||
-                (preg_match('/^[\d]+$/', $docId) === 0) ||
-                (preg_match('/\.\.\//', $path) === 1)) {
-//            $logger->info("return " . $this->_targetPrefix . "/error/send403.php'");
-            return $this->_targetPrefix ."/error/send403.php"; // Forbidden, indipendent from authorization.
-        }
-
-        // check for security
-        if ($this->_config->security === '0') {
-            // security switched off, deliver everything
-//            $logger->info("return " . $this->_targetPrfix . "'files/$docId/$path'");
-            return $this->_targetPrefix ."/$docId/$path";
-        }
-
-        // setup realm and acl
-        $realm = Opus_Security_Realm::getInstance();
-        $realm->setAcl(new Opus_Security_Acl());
-        $acl = $realm->getAcl();
-
-        // lookup the resourceId of file
-        $resourceId = null;
-
-        $files = $this->__getFilesForDocumentId($docId);
-        // look for the right file and get its ResourceId
-        foreach ($files as $file) {
-            $pathnames = $file->getPathName();
-            if (is_array($pathnames) === false) {
-                if ($pathnames === $path) {
-                    $resourceId = $file->getResourceId();
-                    break;
-                }
-            }
-            // if one day a Opus_File can belong to more then one file in the filesystem:
-            foreach ($pathnames as $pathname) {
-                if ($pathname === $path) {
-                    $resourceId = $file->getResourceId();
-                }
-            }
-        }
-
-        if (is_null($resourceId) === true) {
-            // resource ID not found
-            return $this->_targetPrefix . "/error/send404.php"; //not found
-        }
-
-        try {
-            // first we check if guest role is allowed to access the file
-            if ($acl->isAllowed('guest', $resourceId, 'read') === true) {
-                return $this->_targetPrefix . "/$docId/$path";
-            }
-        } catch (Exception $e) {
-            return $this->_targetPrefix . "/error/send500.php";
-        }
-
-        // now we check if we have a role, that's allowed to read the file
-        // check the ip address first
-        $roles = $realm->getIpAdressRole();
-        if (is_array($roles) === false) {
-            $roles = array($roles);
-        }
-        foreach ($roles as $role) {
-            if (is_null($role) === false) {
-                try {
-                    if ($acl->isAllowed($role, $resourceId, 'read') === true) {
-                        return $this->_targetPrefix . "/$docId/$path";
-                    }
-                } catch (Exception $e) {
-                    return $this->_targetPrefix . "/error/send500.php";
-                }
-            }
-        }
-
-        // now check the identity
-        $cookies = explode('; ', $cookiestring);
-        $session_id = null;
-        foreach ($cookies as $cookie) {
-                if (preg_match('/'.ini_get('session.name').'=(.*)[\/]?$/',
-                        $cookie, $matches)) {
-                    $session_id = $matches[1];
-                }
-        }
-        if (is_null($session_id) === false) {
-            Zend_Session::setId($session_id);
-            Zend_Session::regenerateId();
-            Zend_Session::start();
-            $auth = Zend_Auth::getInstance();
-            if ($auth->hasIdentity()) {
-                $roles = $realm->getIdentityRole($auth->getIdentity());
-                if (is_array($roles) === false) {
-                    $roles = array($roles);
-                }
-                foreach ($roles as $role) {
-                    if (is_null($role) === false) {
-                        try {
-                            if ($acl->isAllowed($role, $resourceId, 'read') === true) {
-                                return $this->_targetPrefix ."/$docId/$path";
-                            }
-                        } catch (Exception $e) {
-                            return $this->_targetPrefix . "/error/send500.php";
-                        }
-                    }
-                }
-            }
-        }
-        return  $this->_targetPrefix . "/error/send401.php"; // Unauthorized
-    }
-
-
-    /**
-     * Get all Files for the given document identifier.
-     *
-     * @param integer $docId Document identfier
-     * @return array Array of Opus_File objects.
-     */
-    private function __getFilesForDocumentId($docId) {
-        $fileTable = Opus_Db_TableGateway::getInstance('Opus_Db_DocumentFiles');
-        $fileRows = $fileTable->fetchAll($fileTable->select()->where('document_id = ?', $docId));
-        $result = array();
-        foreach ($fileRows as $fileRow) {
-            $fileObj = new Opus_File($fileRow);
-            $result[] = $fileObj;
-        }
-        return $result;
-    }
-
-    /**
-     * Empty method to not setup a backend.
+     * Setup configuration, database and translation.
      *
      * @return void
      */
     protected function _setupBackend() {
         $this->_setupLogging();
-
-        $this->_config = Zend_Registry::get('Zend_Config');
-        if (is_null($this->_config) === true) {
-            die('Can not load Config');
-        }
-        $this->_logger = Zend_Registry::get('Zend_Log');
-        if (empty($this->_config->deliver->target->prefix) === true) {
-            $this->_targetPrefix = '';
-            $this->_logger->info('Error: no target prefix.');
-        } else {
-            $this->_targetPrefix = $this->_config->deliver->target->prefix;
-        }
         $this->_setupDatabase();
         $this->_setupTranslation();
         $this->_setupLanguageList();
@@ -255,6 +81,8 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
 
 
     /**
+     * FIXME This is frontend setup needed in backend to instanciate models.
+     *
      * Setup Zend_Translate with language resources of all existent modules.
      *
      * It is assumed that all modules are stored under modules/. The search
@@ -298,6 +126,8 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
     }
 
     /**
+     * FIXME This is frontend setup needed in backend to instanciate models.
+     *
      * Setup language list.
      *
      * @return void
@@ -333,15 +163,43 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
      * @return void
      */
     protected function _run() {
+        $log = Zend_Registry::get('Zend_Log');
+        $config = Zend_Registry::get('Zend_Config');
+
+        $targetPrefix = '/files';
+        if (empty($config->deliver->target->prefix) === true) {
+            $log->warn('No target prefix defined in configuration. Using "/files"!');
+        } else {
+            $targetPrefix = $config->deliver->target->prefix;
+        }
+
+        // check input
+        if (count($this->_arguments) < 2) {
+            $line = '';
+        } else {
+            $line = $this->_arguments[1];
+        }    
+
+        if (preg_match('/\t.*\t/', $line) === 0) {
+            $log->err('Internal fatal error! Input from Apache was not as predicted, unparsable by RewriteMap!');
+            $log->info('Apache Input: \'' . $line . '\'');
+            return $targetPrefix ."/error/send500.php";
+        }
+
+        // instantiate cookie
+        $cookie = null;
+        // split input
+        list($path, $remoteAddress, $cookie) = preg_split('/\t/', $line, 3);
+        
+        // issue rewriting
+        $rwmap = new Rewritemap_Apache($targetPrefix, $log);
+        echo $rwmap->rewriteRequest($path, $remoteAddress, $cookie) . "\n";
     }
 
 }
 
-// Read request
-$line = trim($argv[1]);
-
 // Bootstrap Zend
-$rwmap = new OpusApacheRewritemap();
+$rwmap = new OpusApacheRewritemap($argv);
 $rwmap->run(
     // application root directory
     dirname(dirname(__FILE__)),
@@ -350,15 +208,3 @@ $rwmap->run(
     // path to config file
     dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'config');
 
-// check input
-if (preg_match('/\t.*\t/', $line) === 0) {
-    $rwmap->log('Internal fatal error! Input from Apache was not as predicted, unparsable by RewriteMap!');
-    $rwmap->log('Apache Input: \'' . $line . '\'');
-    return $rwmap->getTargetPrefix() ."/error/send500.php";
-}
-
-// instantiate cookie
-$cookie = null;
-// split input
-list($path, $remoteAddress, $cookie) = preg_split('/\t/', $line, 3);
-echo $rwmap->rewriteRequest($path, $remoteAddress, $cookie) . "\n";
