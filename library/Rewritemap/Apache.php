@@ -55,18 +55,39 @@ class Rewritemap_Apache {
      *
      * @var Zend_Log
      */
-    protected $_logger;
+    protected $_logger = null;
+    
+    
+    /**
+     * Security realm to check permissions.
+     *
+     * @var Opus_Security_Realm
+     */
+    protected $_realm = null;
 
     /**
      * Initialize the rewritemap instance.
      *
-     * @param string   $targetPrefix (Optional) Path prefix of resources to deliver. Default is "/files".
-     * @param Zend_Log $logger       (Optional) Logger instance to issue log messages to.
+     * @param string              $targetPrefix (Optional) Path prefix of resources to deliver.
+     *                                          Default is "/files".
+     * @param Zend_Log            $logger       (Optional) Logger instance to issue log messages to.
+     * @param Opus_Security_Realm $logger       (Optional) Security realm instance to check permissions.
      * @return void
      */
-    public function __construct($targetPrefix = '/files', Zend_Log $logger = null) {
+    public function __construct($targetPrefix = '/files', Zend_Log $logger = null,
+        Opus_Security_Realm $realm = null) 
+    {
+        if (null === $logger) {
+            $logger = new Zend_Log(new Zend_Log_Writer_Mock);
+        }
+    
+        if (null === $realm) {
+            $realm = Opus_Security_Realm::getInstance();
+        }
+        
         $this->_targetPrefix = $targetPrefix;
         $this->_logger = $logger;
+        $this->_realm = $realm;
     }
 
 

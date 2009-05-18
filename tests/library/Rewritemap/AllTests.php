@@ -26,7 +26,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category   Application
- * @package    Tests
+ * @package    Tests_Modules_Webapi
  * @author     Henning Gerhardt (henning.gerhardt@slub-dresden.de)
  * @copyright  Copyright (c) 2009, OPUS 4 development team
  * @license    http://www.gnu.org/licenses/gpl.html General Public License
@@ -35,23 +35,22 @@
 
 require_once 'PHPUnit/Framework.php';
 
-require_once 'modules/AllTests.php';
-require_once 'library/AllTests.php';
+require_once 'ApacheTest.php';
 
 /**
- * General application test suite.
+ * Collect all webapi tests.
  */
-class AllTests {
+class Library_Rewritemap_AllTests {
 
     /**
-     * Set up all tests.
+     * Set up a test suite with all webapi tests.
      *
      * @return mixed
      */
     public static function suite() {
-        $suite = new PHPUnit_Framework_TestSuite('Opus Application');
-        $suite->addTest(Modules_AllTests::suite());
-        $suite->addTest(Library_AllTests::suite());
+        $suite = new PHPUnit_Framework_Testsuite('Opus Application Module: Webapi');
+        $suite->addTestSuite('Rewritemap_ApacheTests');
         return $suite;
     }
+
 }
