@@ -56,6 +56,15 @@ class OpusConsole extends Application_Bootstrap {
      * @return void
      */
     protected function _run() {
+    
+        $config = Zend_Registry::get('Zend_Config');
+        if ($config->security !== '0') {
+            // setup realm and acl
+            $realm = Opus_Security_Realm::getInstance();
+            $realm->setAcl(new Opus_Security_Acl());
+            $acl = $realm->getAcl();
+        }
+    
         while (1) {
             $input = readline('opus> ');
             readline_add_history($input);
