@@ -105,6 +105,8 @@ class Publish_IndexController extends Zend_Controller_Action {
                     $documentWithFilter = new Opus_Model_Filter;
                     $documentWithFilter ->setModel($document)
                         ->setBlacklist(array(
+                            'IdentifierOpus3',
+                            'Type',
                             'ServerState',
                             'ServerDateUnlocking',
                             'ServerDateValid',
