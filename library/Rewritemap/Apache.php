@@ -56,8 +56,8 @@ class Rewritemap_Apache {
      * @var Zend_Log
      */
     protected $_logger = null;
-    
-    
+
+
     /**
      * Security realm to check permissions.
      *
@@ -75,16 +75,16 @@ class Rewritemap_Apache {
      * @return void
      */
     public function __construct($targetPrefix = '/files', Zend_Log $logger = null,
-        Opus_Security_Realm $realm = null) 
+        Opus_Security_Realm $realm = null)
     {
         if (null === $logger) {
             $logger = new Zend_Log(new Zend_Log_Writer_Mock);
         }
-    
+
         if (null === $realm) {
             $realm = Opus_Security_Realm::getInstance();
         }
-        
+
         $this->_targetPrefix = $targetPrefix;
         $this->_logger = $logger;
         $this->_realm = $realm;
@@ -95,7 +95,7 @@ class Rewritemap_Apache {
     /**
      * Rewrite document requests.
      *
-     * @param string $request Input from apache, containing requested address and 
+     * @param string $request Input from apache, containing requested address and
      *                        some information about the user.
      * @param string $ip      (Optional) IP of the requesting host.
      * @param string $cookie  (Optional) Cookie content holding authentication information
@@ -131,7 +131,7 @@ class Rewritemap_Apache {
         $acl = $realm->getAcl();
         if (null === $acl) {
             // security switched off, deliver everything
-            $this->_logger->info("return " . $this->_targetPrfix . "'files/$docId/$path'");
+            $this->_logger->info("return " . $this->_targetPrefix . "'files/$docId/$path'");
             return $this->_targetPrefix ."/$docId/$path";
         }
 
