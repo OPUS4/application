@@ -314,12 +314,17 @@ class XMLImport
             $value = $item->getAttribute('Value');
             $id = null;
             if (array_key_exists($name, $this->collections) === true) {
-                $id = Opus_Collection_Information::getClassification($this->collections[$name], $value);
+                try {
+                    $id = Opus_Collection_Information::getClassification($this->collections[$name], $value);
+                }
+                catch (Exception $e) {
+                	// do nothing, but continue
+                }
                 if ($id !== null) {
                     $output[] = new Opus_Collection($this->collections[$name], $id);
                 }
                 else {
-                    echo "Number $id not found - not imported for old ID $oldid\n";
+                    echo "Number $value not found - not imported for old ID " . $this->document->getId() . "\n";
                 }
             }
             $this->document->removeChild($item);

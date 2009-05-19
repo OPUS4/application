@@ -2,6 +2,7 @@
 -- Dumping data for table `collections_contents_1`
 --
 
+DELETE FROM `collections_structure_1`;
 DELETE FROM `collections_contents_1`;
 
 LOCK TABLES `collections_contents_1` WRITE;
@@ -14,8 +15,6 @@ UNLOCK TABLES;
 --
 -- Dumping data for table `collections_structure_1`
 --
-
-DELETE FROM `collections_structure_1`;
 
 LOCK TABLES `collections_structure_1` WRITE;
 /*!40000 ALTER TABLE `collections_structure_1` DISABLE KEYS */;
