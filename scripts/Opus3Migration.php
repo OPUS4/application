@@ -376,7 +376,7 @@ class Opus3MigrationReadline extends Opus3Migration {
 		    $result = $import->import($importData);
 		    $this->docStack = $result['success'];
 		    foreach ($result['success'] as $doc) {
-		    	echo "Successfully imported " . $doc['entry'] . "\n";
+		    	echo "Successfully imported old ID " . $doc['oldid'] . "\n";
 		    }
 		    foreach ($result['failure'] as $doc) {
 		    	echo "ERROR: " . $doc['message'] . " for " . $doc['entry'] . "\n";
