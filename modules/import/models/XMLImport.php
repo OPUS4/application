@@ -324,7 +324,7 @@ class XMLImport
                     $output[] = new Opus_Collection($this->collections[$name], $id);
                 }
                 else {
-                    echo "Number $value not found - not imported for old ID " . $this->document->getId() . "\n";
+                    echo "Number $value in $name not found - not imported for old OPUS-ID " . $this->document->getElementsByTagName('IdentifierOpus3')->Item(0)->getAttribute('Value') . "\n";
                 }
             }
             $this->document->removeChild($item);
