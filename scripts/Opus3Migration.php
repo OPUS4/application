@@ -308,6 +308,8 @@ class Opus3MigrationParameters extends Opus3Migration
 		    foreach ($result['failure'] as $doc) {
 		    	echo "ERROR: " . $doc['message'] . " for " . $doc['entry'] . "\n";
 		    }
+		    echo "Imported " . count($result['success']) . " documents successfully.\n";
+		    echo count($result['failure']) . " documents have not been imported due to failures listed above.\n";
 		}
 		// if no metadata is imported use now the metadata already stored in database
    		else {
@@ -324,10 +326,13 @@ class Opus3MigrationParameters extends Opus3Migration
 		    $this->importSignatures();
 		}
 
-		if (true === in_array('autosign', $this->whatToDo)) {
+		if (true === in_array('autosign', $this->whatToDo) && true === in_array('files', $this->whatToDo)) {
 			echo "Signing publications ";
 			$this->autosign($this->signaturePassword);
 		    echo "finished!\n";
+		}
+		else if (true === in_array('autosign', $this->whatToDo) && false === in_array('files', $this->whatToDo)) {
+			echo "You have to specify --with-files=<path-to-opus3-files> if you want to sign the files automatically!\n";
 		}
 
 		$this->cleanup();
@@ -381,6 +386,8 @@ class Opus3MigrationReadline extends Opus3Migration {
 		    foreach ($result['failure'] as $doc) {
 		    	echo "ERROR: " . $doc['message'] . " for " . $doc['entry'] . "\n";
 		    }
+		    echo "Imported " . count($result['success']) . " documents successfully.\n";
+		    echo count($result['failure']) . " documents have not been imported due to failures listed above.\n";
 		}
 		// if no metadata is imported use now the metadata already stored in database
    		if ($metadatainput !== 'y' && $metadatainput !== 'yes') {
@@ -409,12 +416,15 @@ class Opus3MigrationReadline extends Opus3Migration {
 		    $this->importSignatures();
 		}
 
-		$newsiginput = readline('Do you want all files to get signed automatically? (You need to have an internal key already) (y/n) ');
-		if ($newsiginput === 'y' || $newsiginput === 'yes') {
-			$newsigpass = readline('Please type the password for your signature key: ');
-			echo "Signing publications ";
-			$this->autosign($newsigpass);
-		    echo "finished!\n";
+		// Signing publications is only possible if files have been imported
+		if ($fileinput === 'y' || $fileinput === 'yes') {
+		    $newsiginput = readline('Do you want all files to get signed automatically? (You need to have an internal key already) (y/n) ');
+		    if ($newsiginput === 'y' || $newsiginput === 'yes') {
+			    $newsigpass = readline('Please type the password for your signature key: ');
+			    echo "Signing publications ";
+			    $this->autosign($newsigpass);
+		        echo "finished!\n";
+		    }
 		}
 
 		$this->cleanup();
