@@ -34,7 +34,7 @@
  */
 
 /**
- * Test cases for class Opus_Form_Builder.
+ * Test cases for class Form_Builder.
  *
  * @category Applicaton
  * @package  Tests
@@ -44,14 +44,14 @@
 class LibraryTests_Form_BuilderTest extends PHPUnit_Framework_TestCase {
 
     /**
-     * Test fixture holding an instance of Opus_Form_BuilderTest_Model.
+     * Test fixture holding an instance of Form_BuilderTest_Model.
      *
      * @var Opus_Model_Abstract
      */
     protected $_model = null;
 
     /**
-     * Test fixture holding an instance of the Opus_Form_BuilderTest_DbModel table gateway.
+     * Test fixture holding an instance of the Form_BuilderTest_DbModel table gateway.
      *
      * @var Zend_Db_Table_Interface
      */
@@ -60,7 +60,7 @@ class LibraryTests_Form_BuilderTest extends PHPUnit_Framework_TestCase {
     /**
      * Instance of the class under test.
      *
-     * @var Opus_Form_Builder
+     * @var Form_Builder
      */
     protected $_builder = null;
 
@@ -78,7 +78,7 @@ class LibraryTests_Form_BuilderTest extends PHPUnit_Framework_TestCase {
         $dba->addField('dbmodel', array('name' => 'simple_field', 'type' => 'varchar', 'length' => 50));
 
         $this->_model = new LibraryTests_Form_BuilderTest_Model(null, new LibraryTests_Form_BuilderTest_DbModel);
-        $this->_builder = new Opus_Form_Builder();
+        $this->_builder = new Form_Builder();
 
         // Set up a mock language list.
         $list = array('de' => 'Test_Deutsch', 'en' => 'Test_Englisch');
@@ -113,7 +113,7 @@ class LibraryTests_Form_BuilderTest extends PHPUnit_Framework_TestCase {
     public function testModelIsSerializedCorrectly() {
         $form = $this->_builder->build($this->_model);
         $serializedModel = $this->_builder->compressModel($this->_model);
-        $serializedModelFromForm = $form->getElement(Opus_Form_Builder::HIDDEN_MODEL_ELEMENT_NAME)->getValue();
+        $serializedModelFromForm = $form->getElement(Form_Builder::HIDDEN_MODEL_ELEMENT_NAME)->getValue();
         $this->assertEquals($serializedModel, $serializedModelFromForm, 'Model serialization has failures.');
     }
 
@@ -199,7 +199,7 @@ class LibraryTests_Form_BuilderTest extends PHPUnit_Framework_TestCase {
         $this->_model->addMultiModel()->setField1('bar');
 
         $form = $this->_builder->build($this->_model);
-        $modelname = Opus_Form_Builder::HIDDEN_MODEL_ELEMENT_NAME;
+        $modelname = Form_Builder::HIDDEN_MODEL_ELEMENT_NAME;
 
         $post = array(
             'SimpleField' => $form->SimpleField->getValue(),
@@ -294,7 +294,7 @@ class LibraryTests_Form_BuilderTest extends PHPUnit_Framework_TestCase {
      */
     public function testSkippingOfPostData() {
         $form = $this->_builder->build($this->_model);
-        $modelname = Opus_Form_Builder::HIDDEN_MODEL_ELEMENT_NAME;
+        $modelname = Form_Builder::HIDDEN_MODEL_ELEMENT_NAME;
 
         $post = array(
             'AttackerCode' => 'Bad Value',
@@ -321,7 +321,7 @@ class LibraryTests_Form_BuilderTest extends PHPUnit_Framework_TestCase {
         $start_values = array('hana', 'dul', 'set');
         $this->_model->setMultiField($start_values);
         $form = $this->_builder->build($this->_model);
-        $modelname = Opus_Form_Builder::HIDDEN_MODEL_ELEMENT_NAME;
+        $modelname = Form_Builder::HIDDEN_MODEL_ELEMENT_NAME;
 
         $post = array(
             'SimpleField' => $form->SimpleField->getValue(),
@@ -377,7 +377,7 @@ class LibraryTests_Form_BuilderTest extends PHPUnit_Framework_TestCase {
         $start_values = array('hana', 'dul', 'set');
         $this->_model->setMultiField($start_values);
         $form = $this->_builder->build($this->_model);
-        $modelname = Opus_Form_Builder::HIDDEN_MODEL_ELEMENT_NAME;
+        $modelname = Form_Builder::HIDDEN_MODEL_ELEMENT_NAME;
 
         $post = array(
             'SimpleField' => $form->SimpleField->getValue(),
@@ -438,7 +438,7 @@ class LibraryTests_Form_BuilderTest extends PHPUnit_Framework_TestCase {
      */
     public function testGettingNullIfNoModelIsInForm() {
         $form = $this->_builder->build($this->_model);
-        $modelelementname = Opus_Form_Builder::HIDDEN_MODEL_ELEMENT_NAME;
+        $modelelementname = Form_Builder::HIDDEN_MODEL_ELEMENT_NAME;
         unset($form->$modelelementname);
         $form_model = $this->_builder->getModelFromForm($form);
         $this->assertNull($form_model, 'A form without a hidden model field should not contain model informations.');
@@ -453,7 +453,7 @@ class LibraryTests_Form_BuilderTest extends PHPUnit_Framework_TestCase {
         $expected = array('hana');
         $this->_model->setMultiField($expected);
         $form = $this->_builder->build($this->_model);
-        $modelname = Opus_Form_Builder::HIDDEN_MODEL_ELEMENT_NAME;
+        $modelname = Form_Builder::HIDDEN_MODEL_ELEMENT_NAME;
 
         $post = array(
             'SimpleField' => $form->SimpleField->getValue(),
@@ -498,7 +498,7 @@ class LibraryTests_Form_BuilderTest extends PHPUnit_Framework_TestCase {
         $expected = array('hana', 'dul');
         $this->_model->setMultiField($expected);
         $form = $this->_builder->build($this->_model);
-        $modelname = Opus_Form_Builder::HIDDEN_MODEL_ELEMENT_NAME;
+        $modelname = Form_Builder::HIDDEN_MODEL_ELEMENT_NAME;
 
         $post = array(
             'SimpleField' => $form->SimpleField->getValue(),

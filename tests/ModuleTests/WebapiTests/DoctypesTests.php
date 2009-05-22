@@ -70,9 +70,8 @@ class ModuleTests_WebapiTests_DoctypesTests extends PHPUnit_Framework_TestCase {
      * @return void
      */
     protected function setUp() {
-        $configfile = realpath(dirname(dirname(__FILE__)) . '/config.ini');
-        $config = new Zend_Config_Ini($configfile, 'webapi');
-        $config = $config->toArray();
+        $config = Zend_Registry::get('Zend_Config');
+        $config = $config->webapi->toArray();
         $this->__restUri = $config['protocol'] . '://' . $config['host'];
         $this->__restUrl = $config['docroot'] . '/' . $config['modul'] . '/doctype';
         $restClient = new Zend_Rest_Client();
