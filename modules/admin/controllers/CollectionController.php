@@ -63,7 +63,7 @@ class Admin_CollectionController extends Controller_Action {
     public function editAction() {
         $role = $this->getRequest()->getParam('role');
         $path = $this->getRequest()->getParam('path');
-        $form_builder = new Opus_Form_Builder();
+        $form_builder = new Form_Builder();
         $collection = new Opus_CollectionRole($role);
         if (true === isset($path)) {
             $trail = explode('-', $path);
@@ -88,7 +88,7 @@ class Admin_CollectionController extends Controller_Action {
      */
     public function newAction() {
         $role = $this->getRequest()->getParam('role');
-        $form_builder = new Opus_Form_Builder();
+        $form_builder = new Form_Builder();
         if (true === isset($role)) {
             $collection = new Opus_Collection($role);
         } else {
@@ -214,7 +214,7 @@ class Admin_CollectionController extends Controller_Action {
         $copy = $this->getRequest()->getParam('copy');
         if ($this->_request->isPost() === true) {
             $data = $this->_request->getPost();
-            $form_builder = new Opus_Form_Builder();
+            $form_builder = new Form_Builder();
             if (array_key_exists('submit', $data) === false) {
                 $form = $form_builder->buildFromPost($data);
                 $action_url = $this->view->url(array('action' => 'create'));

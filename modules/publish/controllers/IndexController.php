@@ -84,7 +84,7 @@ class Publish_IndexController extends Zend_Controller_Action {
 
         if ($this->_request->isPost() === true) {
             $data = $this->_request->getPost();
-            $form_builder = new Opus_Form_Builder();
+            $form_builder = new Form_Builder();
             if (array_key_exists('selecttype', $data) === true) {
                 // validate document type
                 $form = new Overview();
@@ -146,7 +146,7 @@ class Publish_IndexController extends Zend_Controller_Action {
                     $action_url = $this->view->url(array('controller' => 'index', 'action' => 'summary'));
                     $summaryForm->setAction($action_url);
                     $model_ser = $form_builder->compressModel($model);
-                    $model_hidden = Opus_Form_Builder::HIDDEN_MODEL_ELEMENT_NAME;
+                    $model_hidden = Form_Builder::HIDDEN_MODEL_ELEMENT_NAME;
                     $summaryForm->$model_hidden->setValue($model_ser);
                     $this->view->form = $summaryForm;
                 } else {
@@ -165,8 +165,8 @@ class Publish_IndexController extends Zend_Controller_Action {
             $summaryForm = new Summary();
             $postdata = $this->_request->getPost();
             if ($summaryForm->isValid($postdata) === true) {
-                $form_builder = new Opus_Form_Builder();
-                $model_hidden = Opus_Form_Builder::HIDDEN_MODEL_ELEMENT_NAME;
+                $form_builder = new Form_Builder();
+                $model_hidden = Form_Builder::HIDDEN_MODEL_ELEMENT_NAME;
                 $model = $form_builder->uncompressModel($postdata[$model_hidden]);
                 if (array_key_exists('submit', $postdata) === true) {
                     $id = $model->store();

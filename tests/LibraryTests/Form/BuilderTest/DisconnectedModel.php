@@ -25,27 +25,28 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Publish
- * @author      Henning Gerhardt (henning.gerhardt@slub-dresden.de)
+ * @package     Tests
+ * @author      Ralf Claußnitzer <ralf.claussnitzer@slub-dresden.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-/*
- * Miniform
+/**
+ * Domain model for Form_Builder test that is not connected to a database row. It
+ * serves as a reference model used with fields.
+ *
+ * @category    Application
+ * @package     Tests
  */
-class Summary extends Zend_Form {
+class LibraryTests_Form_BuilderTest_DisconnectedModel extends Opus_Model_Abstract {
 
-    public function init() {
-        $submit = new Zend_Form_Element_Submit('submit');
-        $submit->setLabel('save document and go to file transfer');
-
-        $back = new Zend_Form_Element_Submit('back');
-        $back->setLabel('back');
-
-        $hidden = new Zend_Form_Element_Hidden(Form_Builder::HIDDEN_MODEL_ELEMENT_NAME);
-
-        $this->addElements(array($hidden, $back, $submit));
+    /**
+     * Set up simple field instance "field1";
+     *
+     */
+    protected function _init() {
+        $this->addField(new Opus_Model_Field('Field1'));
     }
+
 }

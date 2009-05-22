@@ -26,21 +26,23 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category   Application
- * @package    Tests_Modules_Webapi
+ * @package    Tests
  * @author     Henning Gerhardt (henning.gerhardt@slub-dresden.de)
  * @copyright  Copyright (c) 2009, OPUS 4 development team
  * @license    http://www.gnu.org/licenses/gpl.html General Public License
  * @version    $Id$
  */
 
-require_once 'PHPUnit/Framework.php';
-
-require_once 'ApacheTest.php';
+// bootstrap application environment
+require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
  * Collect all webapi tests.
+ *
+ * @category   Application
+ * @package    Tests
  */
-class Library_Rewritemap_AllTests {
+class ModuleTests_WebapiTests_AllTests {
 
     /**
      * Set up a test suite with all webapi tests.
@@ -49,7 +51,12 @@ class Library_Rewritemap_AllTests {
      */
     public static function suite() {
         $suite = new PHPUnit_Framework_Testsuite('Opus Application Module: Webapi');
-        $suite->addTestSuite('Rewritemap_ApacheTests');
+        $suite->addTestSuite('ModuleTests_WebapiTests_DocumentTests');
+        $suite->addTestSuite('ModuleTests_WebapiTests_DoctypesTests');
+        $suite->addTestSuite('ModuleTests_WebapiTests_FileTests');
+        $suite->addTestSuite('ModuleTests_WebapiTests_LicenceTests');
+        $suite->addTestSuite('ModuleTests_WebapiTests_PersonTests');
+        $suite->addTestSuite('ModuleTests_WebapiTests_SearchTests');
         return $suite;
     }
 

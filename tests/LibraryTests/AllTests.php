@@ -26,21 +26,22 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category   Application
- * @package    Tests_Modules
- * @author     Henning Gerhardt (henning.gerhardt@slub-dresden.de)
+ * @package    Tests
+ * @author     Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
  * @copyright  Copyright (c) 2009, OPUS 4 development team
  * @license    http://www.gnu.org/licenses/gpl.html General Public License
  * @version    $Id$
  */
 
-require_once 'PHPUnit/Framework.php';
-
-require_once 'modules/webapi/AllTests.php';
+// bootstrap application environment
+require_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'TestHelper.php';
 
 /**
- * Collect all module tests.
+ * Collect all library tests.
+ * @category   Application
+ * @package    Tests
  */
-class Modules_AllTests {
+class LibraryTests_AllTests {
 
     /**
      * Set up all module tests.
@@ -48,8 +49,9 @@ class Modules_AllTests {
      * @return mixed
      */
     public static function suite() {
-        $suite = new PHPUnit_Framework_TestSuite('Opus Application Modules');
-        $suite->addTest(Modules_Webapi_AllTests::suite());
+        $suite = new PHPUnit_Framework_TestSuite('Opus Application Library');
+        $suite->addTest(LibraryTests_Rewritemap_AllTests::suite());
+        $suite->addTest(LibraryTests_Form_AllTests::suite());
         return $suite;
     }
 }

@@ -33,13 +33,14 @@
  * @version    $Id$
  */
 
-require_once 'PHPUnit/Framework.php';
-
-require_once 'modules/AllTests.php';
-require_once 'library/AllTests.php';
+// bootstrap application environment
+require_once 'TestHelper.php';
 
 /**
  * General application test suite.
+ *
+ * @category   Application
+ * @package    Tests
  */
 class AllTests {
 
@@ -50,8 +51,8 @@ class AllTests {
      */
     public static function suite() {
         $suite = new PHPUnit_Framework_TestSuite('Opus Application');
-        $suite->addTest(Modules_AllTests::suite());
-        $suite->addTest(Library_AllTests::suite());
+        $suite->addTest(ModuleTests_AllTests::suite());
+        $suite->addTest(LibraryTests_AllTests::suite());
         return $suite;
     }
 }

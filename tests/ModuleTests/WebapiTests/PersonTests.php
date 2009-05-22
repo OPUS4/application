@@ -26,24 +26,22 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category   Application
- * @package    Tests_Module_Webapi
+ * @package    Tests
  * @author     Henning Gerhardt (henning.gerhardt@slub-dresden.de)
  * @copyright  Copyright (c) 2009, OPUS 4 development team
  * @license    http://www.gnu.org/licenses/gpl.html General Public License
  * @version    $Id$
  */
 
-require_once 'PHPUnit/Framework.php';
-
-require_once 'Zend/Config/Ini.php';
-require_once 'Zend/Rest/Client.php';
-
 /**
  * Tests for resource person.
  *
+ * @category   Application
+ * @package    Tests
+ *
  * @group WebapiPersonTest
  */
-class Modules_Webapi_PersonTests extends PHPUnit_Framework_TestCase {
+class ModuleTests_WebapiTests_PersonTests extends PHPUnit_Framework_TestCase {
 
     /**
      * Holds uri location for tests. Should be configurable.
@@ -72,7 +70,7 @@ class Modules_Webapi_PersonTests extends PHPUnit_Framework_TestCase {
      * @return void
      */
     protected function setUp() {
-        $configfile = realpath(dirname(dirname(__FILE)) . '/config.ini');
+        $configfile = realpath(dirname(dirname(__FILE__)) . '/config.ini');
         $config = new Zend_Config_Ini($configfile, 'webapi');
         $config = $config->toArray();
         $this->__restUri = $config['protocol'] . '://' . $config['host'];

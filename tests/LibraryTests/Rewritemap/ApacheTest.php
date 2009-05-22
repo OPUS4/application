@@ -26,41 +26,48 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category   Application
- * @package    Tests_Modules_Webapi
- * @author     Henning Gerhardt (henning.gerhardt@slub-dresden.de)
+ * @package    Tests
+ * @author     Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
  * @copyright  Copyright (c) 2009, OPUS 4 development team
  * @license    http://www.gnu.org/licenses/gpl.html General Public License
  * @version    $Id$
  */
 
-require_once 'PHPUnit/Framework.php';
-
-require_once 'modules/webapi/DocumentTests.php';
-require_once 'modules/webapi/DoctypesTests.php';
-require_once 'modules/webapi/FileTests.php';
-require_once 'modules/webapi/LicenceTests.php';
-require_once 'modules/webapi/PersonTests.php';
-require_once 'modules/webapi/SearchTests.php';
-
 /**
- * Collect all webapi tests.
+ * Tests for Rewritemap_Apache.
+ *
+ * @category   Application
+ * @package    Tests
+ *
+ * @group RewritemapApacheTest
  */
-class Modules_Webapi_AllTests {
+class LibraryTests_Rewritemap_ApacheTest extends PHPUnit_Framework_TestCase {
 
     /**
-     * Set up a test suite with all webapi tests.
+     * Test if the 403 error file URL is delivered on empty request.
      *
-     * @return mixed
+     * @return void
      */
-    public static function suite() {
-        $suite = new PHPUnit_Framework_Testsuite('Opus Application Module: Webapi');
-        $suite->addTestSuite('Modules_Webapi_DocumentTests');
-        $suite->addTestSuite('Modules_Webapi_DoctypesTests');
-        $suite->addTestSuite('Modules_Webapi_FileTests');
-        $suite->addTestSuite('Modules_Webapi_LicenceTests');
-        $suite->addTestSuite('Modules_Webapi_PersonTests');
-        $suite->addTestSuite('Modules_Webapi_SearchTests');
-        return $suite;
+    public function testRewriteCallWithEmptyArgumentReturns403ErrorFile() {
+        $rwm = new Rewritemap_Apache;
+        $result =$rwm->rewriteRequest('');
+        
+        $this->assertEquals('/files/error/send403.php', $result, 'Wrong error status file URL.');
+    }
+ 
+    /**
+     * Test if a "got request" log message gets logged.
+     *
+     * @return void
+     */   
+    public function testGotRequestLogMessage() {
+        $logWriter = new Zend_Log_Writer_Mock();
+        $log = new Zend_Log($logWriter);
+        $rwm = new Rewritemap_Apache('/files', $log);
+        $rwm->rewriteRequest('');
+
+        $this->assertEquals('got request \'\'', $logWriter->events[0]['message'],
+            'Message log expected "got request" entry.');
     }
 
 }

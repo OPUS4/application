@@ -83,7 +83,7 @@ class Admin_PersonController extends Zend_Controller_Action {
             //var_dump($postvalues);
             $person_id = $postvalues['person'];
             $person = new Opus_Person($person_id);
-            $form_builder = new Opus_Form_Builder();
+            $form_builder = new Form_Builder();
             $form = $form_builder->build($person);
             $action_url = $this->view->url(array("controller" => "person", "action" => "save"));
             $form->setAction($action_url);
@@ -105,7 +105,7 @@ class Admin_PersonController extends Zend_Controller_Action {
         if (true === $this->_request->isPost()) {
             // post values
             $postvalues = $this->_request->getPost();
-            $form_builder = new Opus_Form_Builder;
+            $form_builder = new Form_Builder;
             $form = $form_builder->buildFromPost($postvalues);
             $model = $form_builder->getModelFromForm($form);
             // store changed values
