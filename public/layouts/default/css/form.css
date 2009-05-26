@@ -54,3 +54,9 @@ form#language_selector dl, form#language_selector dd, form#language_selector dt 
 form.crud {
     display: inline;
 }
+p.description { 
+color:blue; 
+padding: 0 0 10px 10px;
+font-size: 90%;
+}
+
