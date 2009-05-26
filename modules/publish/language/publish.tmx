@@ -34,5 +34,21 @@
         <seg>übermitteln</seg>
       </tuv>
     </tu>
+    <tu tuid="DateAcceptedDescr">
+      <tuv xml:lang="en">
+        <seg>Date of accepting</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datum, an dem das Dokument angenommen wurde</seg>
+      </tuv>
+    </tu>
+    <tu tuid="TitleMainDescr">
+      <tuv xml:lang="en">
+        <seg>Original Title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Originaltitel der Autoren-Arbeit</seg>
+      </tuv>
+    </tu>
   </body>
 </tmx>
