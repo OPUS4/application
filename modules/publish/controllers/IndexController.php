@@ -121,7 +121,7 @@ class Publish_IndexController extends Zend_Controller_Action {
 
                     $createForm = $form_builder->build($documentWithFilter);
                     $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create'));
-                    $form->setAction($action_url);
+                    $createForm->setAction($action_url);
                     $this->view->form = $createForm;
                 } else {
                     // submitted form data is not valid, back to select form
