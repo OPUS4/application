@@ -410,8 +410,10 @@ class Form_Builder {
         $subform->setLegend($fieldname);
         $i = 1;
         if (0 === $count) {
-            $modelClassName = $field->getValueModelClass();
-            $this->_makeSubForm($i, new $modelClassName, $subform);
+            if (true === $field->isMandatory()) {
+                $modelClassName = $field->getValueModelClass();
+                $this->_makeSubForm($i, new $modelClassName, $subform);
+            }
         } else {
             foreach ($field->getValue() as $fieldvalue) {
                 // fieldvalue contains a "working" model
@@ -890,7 +892,7 @@ class Form_Builder {
                 $index = (int) $fname[2];
                 // protect removing nonexisting fields or emptying structure
                 if ((array_key_exists($index, $value) === true)
-                and (count($value) > 1)) {
+                and (count($value) > 0)) {
                     unset($value[$index]);
                 }
                 break;
@@ -911,7 +913,7 @@ class Form_Builder {
      */
     private function __addRemoveButton(Opus_Model_Field $field, Zend_Form $container, $iterator) {
         $counts = count($field->getValue());
-        if ($counts > 1) {
+        if (($counts > 1) or (false === $field->isMandatory())) {
             $fieldname = $field->getName() . '_' . $iterator;
             $removeButton = new Zend_Form_Element_Submit('remove_' . $fieldname);
             $removeButton->setLabel('-');
