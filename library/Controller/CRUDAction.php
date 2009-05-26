@@ -90,7 +90,7 @@ class Controller_CRUDAction extends Controller_Action {
      * @return void
      */
     public function newAction() {
-        $form_builder = new Opus_Form_Builder();
+        $form_builder = new Form_Builder();
         $model = new $this->_modelclass;
         $modelForm = $form_builder->build($model);
         $action_url = $this->view->url(array("action" => "create"));
@@ -106,7 +106,7 @@ class Controller_CRUDAction extends Controller_Action {
     public function createAction() {
         if ($this->_request->isPost() === true) {
             $data = $this->_request->getPost();
-            $form_builder = new Opus_Form_Builder();
+            $form_builder = new Form_Builder();
             if (array_key_exists('submit', $data) === false) {
                 $form = $form_builder->buildFromPost($data);
                 $action_url = $this->view->url(array("action" => "create"));
@@ -142,7 +142,7 @@ class Controller_CRUDAction extends Controller_Action {
      */
     public function editAction() {
         $id = $this->getRequest()->getParam('id');
-        $form_builder = new Opus_Form_Builder();
+        $form_builder = new Form_Builder();
         $model = new $this->_modelclass($id);
         $modelForm = $form_builder->build($model);
         $action_url = $this->view->url(array("action" => "create"));
