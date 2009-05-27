@@ -93,8 +93,9 @@ class Opus3Migration extends Application_Bootstrap {
 	    	$doc = $imported['document'];
     	    foreach ($doc->getFile() as $file)
     	    {
+    	      	echo "Signing " . $file->getPathName();
     	      	$gpg->signPublicationFile($file, $pass);
-    	       	echo ".";
+    	       	echo "... done!\n";
     	    }
 		}
     }
@@ -115,7 +116,7 @@ class Opus3Migration extends Application_Bootstrap {
 	    	$fileImporter = new Opus3FileImport($this->path, $this->magicPath);
     		foreach ($this->docStack as $imported)
 	    	{
-	    		echo ".";
+	    		#echo ".";
 			    $opus3Id = $imported['document']->getIdentifierOpus3()->getValue();
 			    $documentFiles = $fileImporter->loadFiles($imported['document']);
 			    #print_r($documentFiles->toXml()->saveXml());

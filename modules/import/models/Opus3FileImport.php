@@ -89,7 +89,7 @@ class Opus3FileImport
     	    $lang = $object->getLanguage();
         }
         
-        if (count($files) > 0) {
+        if (true === isset($files[0])) {
             foreach ($files as $filename) {
                 $finfo = new finfo(FILEINFO_MIME, $this->_magicPath);
                 $mimeType = $finfo->file($filename);
