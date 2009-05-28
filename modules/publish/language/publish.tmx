@@ -10,6 +10,46 @@
         <seg>Veröffentlichen</seg>
       </tuv>
     </tu>
+    <tu tuid="publish_controller_index">
+      <tuv xml:lang="en">
+        <seg>Publish</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Veröffentlichen</seg>
+      </tuv>
+    </tu>
+    <tu tuid="publish_controller_create">
+      <tuv xml:lang="en">
+        <seg>Publish create</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Veröffentlichen - Beschreibungsdaten eingeben</seg>
+      </tuv>
+    </tu>
+    <tu tuid="publish_controller_summary">
+      <tuv xml:lang="en">
+        <seg>Publish summary</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Veröffentlichen - Vorschau</seg>
+      </tuv>
+    </tu>
+    <tu tuid="publish_controller_upload">
+      <tuv xml:lang="en">
+        <seg>Publish upload</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Veröffentlichen - Dateien hochladen</seg>
+      </tuv>
+    </tu>
+    <tu tuid="publish_controller_upload_successful">
+      <tuv xml:lang="en">
+        <seg>Publish upload successful</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Veröffentlichen - Dateien wurden erfolgreich hochgeladen.</seg>
+      </tuv>
+    </tu>
     <tu tuid="selecttype">
       <tuv xml:lang="en">
         <seg>Choose your document type:</seg>
@@ -34,6 +74,14 @@
         <seg>übermitteln</seg>
       </tuv>
     </tu>
+    <tu tuid="LanguageDescr">
+      <tuv xml:lang="en">
+        <seg>Please select the language</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte Sprache auswählen</seg>
+      </tuv>
+    </tu>
     <tu tuid="DateAcceptedDescr">
       <tuv xml:lang="en">
         <seg>Date of accepting</seg>
@@ -42,12 +90,12 @@
         <seg>Datum, an dem das Dokument angenommen wurde</seg>
       </tuv>
     </tu>
-    <tu tuid="TitleMainDescr">
+    <tu tuid="PublishedDateDescr">
       <tuv xml:lang="en">
-        <seg>Original Title</seg>
+        <seg>Date of Publication</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Originaltitel der Autoren-Arbeit</seg>
+        <seg>Datum der Veröffentlichung bitte eingeben</seg>
       </tuv>
     </tu>
   </body>
