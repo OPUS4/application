@@ -66,8 +66,7 @@ class Publish_IndexController extends Zend_Controller_Action {
      *
      */
     public function indexAction() {
-        $this->view->title = 'Publish';
-
+        $this->view->title = $this->view->translate('publish_controller_index');
         $form = new Overview();
         $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create'));
         $form->setAction($action_url);
@@ -80,7 +79,7 @@ class Publish_IndexController extends Zend_Controller_Action {
      * @return void
      */
     public function createAction() {
-        $this->view->title = 'Publish (create)';
+        $this->view->title = $this->view->translate('publish_controller_create');
 
         if ($this->_request->isPost() === true) {
             $data = $this->_request->getPost();
@@ -112,10 +111,10 @@ class Publish_IndexController extends Zend_Controller_Action {
                             'ServerDateValid',
                             'File'))
                         ->setSortOrder(array(
+                            'PersonAuthor',
                             'TitleMain',
                             'TitleAbstract',
                             'Language',
-                            'PersonAuthor',
                             'PersonContributor',
                             'PersonOther'));
 
@@ -141,7 +140,7 @@ class Publish_IndexController extends Zend_Controller_Action {
                     $form_builder->setFromPost($model, $form->getValues());
                     // go ahead to summary
                     $this->view->document_data = $model->toArray();
-                    $this->view->title = 'Publish (summary)';
+                    $this->view->title = $this->view->translate('publish_controller_summary');
                     $summaryForm = new Summary();
                     $action_url = $this->view->url(array('controller' => 'index', 'action' => 'summary'));
                     $summaryForm->setAction($action_url);
@@ -160,7 +159,7 @@ class Publish_IndexController extends Zend_Controller_Action {
     }
 
     public function summaryAction() {
-        $this->view->title = 'Publish (summary)';
+        $this->view->title = $this->view->translate('publish_controller_summary');
         if ($this->_request->isPost() === true) {
             $summaryForm = new Summary();
             $postdata = $this->_request->getPost();
@@ -170,7 +169,7 @@ class Publish_IndexController extends Zend_Controller_Action {
                 $model = $form_builder->uncompressModel($postdata[$model_hidden]);
                 if (array_key_exists('submit', $postdata) === true) {
                     $id = $model->store();
-                    $this->view->title = 'Publish (upload)';
+                    $this->view->title = $this->view->translate('publish_controller_upload');
                     $uploadForm = new FileUpload();
                     $action_url = $this->view->url(array('controller' => 'index', 'action' => 'upload'));
                     $uploadForm->setAction($action_url);
@@ -182,7 +181,7 @@ class Publish_IndexController extends Zend_Controller_Action {
                     $form = $form_builder->build($model);
                     $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create'));
                     $form->setAction($action_url);
-                    $this->view->title = 'Publish (create)';
+                      $this->view->title = $this->view->translate('publish_controller_create');
                     $this->view->form = $form;
                 } else {
                     // invalid form return to index
@@ -205,7 +204,7 @@ class Publish_IndexController extends Zend_Controller_Action {
      * @return void
      */
     public function uploadAction() {
-        $this->view->title = 'Publish (upload)';
+        $this->view->title = $this->view->translate('publish_controller_upload');
         $uploadForm = new FileUpload();
         $action_url = $this->view->url(array('controller' => 'index', 'action' => 'upload'));
         $uploadForm->setAction($action_url);
@@ -220,8 +219,11 @@ class Publish_IndexController extends Zend_Controller_Action {
                 // TODO: Validate document id, error message on fail
                 $documentId = $uploadForm->getValue('DocumentId');
                 $document = new Opus_Document($documentId);
-                $this->view->message = 'Upload succussful!';
-
+                // TODO: translate didn't work
+                /*
+                ** $this->view->message = $this->view->translate('publish_controller_upload_successful');
+                */
+                $this->view->message = 'upload was successful';
                 // save each file
                 foreach ($files as $file) {
                     /* TODO: Uncaught exception 'Zend_File_Transfer_Exception' with message '"fileupload" not found by file transfer adapter
