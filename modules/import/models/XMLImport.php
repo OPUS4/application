@@ -211,8 +211,8 @@ class XMLImport
 			    if ($lic !== null) {
 			    	$doc->addLicence($lic);
 			    }
-			    // What about publicationVersion field?
-			    //$doc->setPublicationVersion('published');
+			    // Set the publication status to published since only published documents shall be imported
+			    $doc->setServerState('published');
 			    $doc->store();
 			    // Add this document to its DDC classification
 			    if ($ddc !== null) {
