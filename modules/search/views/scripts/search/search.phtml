@@ -46,23 +46,12 @@ if (count($this->hitlist_paginator)) {
     foreach ($this->hitlist_paginator as $hit) {
         $doc = $hit->getSearchHit();
         $document = $doc->getDocument();
-        //print_r($document);
-        #$authoriterator = new Opus_Search_Iterator_PersonsListIterator($document["author"]);
         echo "<li>";
         echo $document['author'] . ': ';
-        #foreach ($authoriterator as $obj) {
-        #   $pers = $obj->get();
-        #   echo "<a href=".$this->url(array("controller"=>"browsing", "action"=>"browseTitles", "filter" => "author", "author"=>$pers["id"])).">";
-        #   echo $pers["lastName"].", ".$pers["firstName"];
-        #   echo "</a>";
-        #   if ($authoriterator->hasNext() === true) echo "; ";
-        #   else echo ": ";
-        #}
-        #print("<a href=\"".$this->url($document["frontdoorUrl"])."\">".$document["title"]."</a>");
         print("<a href=\"".$this->url(array('module' => 'frontdoor',
             'controller' => 'index',
             'action' => 'index',
-            'docId' => $document['id'])
+            'docId' => $document['id']), null, true
         )."\">".$document["title"]."</a>");
         echo "</li>";
         echo "<div>".$this->translate('search_titles_relevance').": ".$hit->getRelevance()."<br/>";
