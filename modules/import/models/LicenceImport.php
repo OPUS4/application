@@ -105,7 +105,7 @@ class LicenceImport
     }
 
 	/**
-	 * Converts Bk-classification to Opus4
+	 * reates a mapping file from old licence identifiers to the ones in Opus4
 	 *
 	 * @param DOMDocument $data XML-Document to be imported
 	 * @return array List of documents that have been imported
