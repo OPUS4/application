@@ -41,17 +41,11 @@ security = 0
 deliver.target.prefix = /files
 deliver.logrequest = false
 deliver.logoutput = false
-
-[searchengine]
-pdftotext.path = /usr/bin ; path to pdftotext - needed to index PDF fulltexts
-ps2ascii.path = /usr/bin ; path to ps2ascii - needed to index PS fulltexts
-
-[socialBookmarking]
-connotea.systemTags = OPUS Test ; Tags for any document that is bookmarked via this repository
-
-[gpg]
-path = /usr/bin/gpg ; path to gpg including gpg binary, e.g. /usr/bin/gpg
-keyring.path = /var/www ; path where the keyring is stored, e.g. /var/www - webserver must have writable access to this directory
+searchengine.pdftotext.path = /usr/bin ; path to pdftotext - needed to index PDF fulltexts
+searchengine.ps2ascii.path = /usr/bin ; path to ps2ascii - needed to index PS fulltexts
+socialBookmarking.connotea.systemTags = OPUS Test ; Tags for any document that is bookmarked via this repository
+gpg.path = /usr/bin/gpg ; path to gpg including gpg binary, e.g. /usr/bin/gpg
+gpg.keyring.path = /var/www ; path where the keyring is stored, e.g. /var/www - webserver must have writable access to this directory
 
 [mail]
 mail.opus.smtp = localhost
