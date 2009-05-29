@@ -40,7 +40,11 @@ INSERT INTO resources (id, parent_id, name) VALUES
 (26, 2,     'Opus/Reference'),
 (27, 2,     'Opus/Subject'),
 (28, 2,     'Opus/Title'),
-(29, 2,     'Opus/Abstract');
+(29, 2,     'Opus/Abstract'),
+(30, 2,     'Opus/Model/Dependent/Link/DocumentInstitute'),
+(31, 2,     'Opus/Model/Dependent/Link/DocumentLicence'),
+(32, 2,     'Opus/Model/Dependent/Link/DocumentPerson');
+
 --
 -- Roles Privileges
 --
