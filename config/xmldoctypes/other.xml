@@ -57,9 +57,9 @@
 
 	<!-- general -->
 		<!--  Multiplicity noch nicht möglich -->
-		<field name="Licence" mandatory="yes" multiplicity="4" />
+		<field name="Licence" mandatory="no" multiplicity="4" />
 		<!--  Multiplicity noch nicht möglich -->
-		<field name="Language" mandatory="yes" multiplicity="4" />
+		<field name="Language" mandatory="no" multiplicity="4" />
 	<field name="File" multiplicity="*" />
 	
 	
@@ -142,7 +142,7 @@
     
 	<!-- titles  -->
 	<field name="TitleAbstract" multiplicity="4" />
-	<field name="TitleMain" mandatory="yes" multiplicity="4" />
-	<field name="TitleParent" mandatory="yes" multiplicity="4" />
+	<field name="TitleMain" mandatory="no" multiplicity="4" />
+	<field name="TitleParent" mandatory="no" multiplicity="4" />
 
 </documenttype>
