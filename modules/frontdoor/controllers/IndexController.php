@@ -70,7 +70,6 @@ class Frontdoor_IndexController extends Zend_Controller_Action
             }
             $collection_pathes[$coll_index] = $coll_data['RoleName'] . ': ' . $collection_pathes[$coll_index];
         }
-
         if (false === empty($collection_pathes)) {
             $this->view->collectionPathes = $collection_pathes;
         }
@@ -83,9 +82,22 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         }
         else
         {
-          $this->fileNumber = $fileNumber == 0;
+          $this->fileNumber = $fileNumber = 0;
           $this->view->fileNumber = $fileNumber;
         }
+
+        // Proof existence of licences, find out licencenumber
+        if (is_array ($licences = $document->getLicence()) === true)
+        {
+           $licenceNumber = count($licences);
+           $this->view->licenceNumber = $licenceNumber;
+        }
+        else
+        {
+          $this->licenceNumber = $licenceNumber = 0;
+          $this->view->licenceNumber = $licenceNumber;
+        }
+
         $this->view->docId = $docId;
 
         // Filter for relevant keys. Getting Document Type

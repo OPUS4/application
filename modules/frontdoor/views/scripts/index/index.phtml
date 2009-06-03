@@ -161,7 +161,6 @@
                       }
                     }
                  }?></p>
-
                      <p><br><a href="<?= $this->value =
                         $this->url(array(
                             'module' => 'frontdoor',
@@ -407,25 +406,27 @@
                            <?= $this->value = $value;?></p><?
                       }
                   }
-                  if (array_key_exists ('Licence_NameLong', $this->mydoc_data) === true)
+                  if ($this->licenceNumber !== 0)
                   {
-                     $value = $this->mydoc_data['Licence_NameLong'];?>
-                     <p><b><?= $this-> translate('Licence_NameLong')?>: </b>
-                   <?if (substr($this->value = $value,0,16) === 'Creative Commons')
-                     {?>
-                       <img src = "<?= $this->value = '/layouts/default/img/somerights20.gif';?>" title = 'Creative Commons'>
-                       <a href="<?= $this->value = 'http://creativecommons.org/licenses/by-nc-nd/2.0/de/deed.de';?>">
-                       <?= $this->value = $value;?></a></p><?
+                     for ($i = 0; $i < $this->licenceNumber; $i++)
+                     {
+                        if (array_key_exists ('Licence_' .$i. '_DescMarkup', $this->mydoc_data) === true)
+                        {
+                           $value = $this->mydoc_data['Licence_' .$i. '_DescMarkup'];?>
+                           <p><b><?= $this-> translate('Licence_NameLong')?>: </b>
+                           <?= $this->value = $value;?></a></p><?
+                        }
+                        elseif (array_key_exists('Licence_' .$i. '_NameLong', $this->mydoc_data) == true)
+                        {
+                           $value = $this->mydoc_data['Licence_' .$i. '_NameLong'];?>
+                           <p><b><?= $this-> translate('Licence_NameLong')?>: </b>
+                           <?= $this->value = $value;?></a></p><?
+                        }
                      }
-                     else
-                     {?>
-                     <img src = "<?= $this->value = '/layouts/default/img/unilogo.gif';?>" title = 'University of Stuttgart'>
-                      <a href="<?= $this->value = '';?>">
-                       <?= $this->value = $value;?></a></p><?
-                     }
-                  }?>
+                 }?>
+
                   <p><b><?= $this-> translate('POD')?>: </b>
-                  <img src = "<?= $this->value = '/layouts/default/img/proprint_logo.png';?>" border = '0' title = 'Print-on-Demand'>
+                  <img src = "<?= $this->value = $this->layoutPath . '/img/proprint_logo.png';?>" border = '0' title = 'Print-on Demand'></a>
                   <a href="<?= $this->value = '';?>">Print-on-Demand</a></p>
        </div>
   <?}
