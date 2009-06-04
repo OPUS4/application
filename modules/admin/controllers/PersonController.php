@@ -56,13 +56,14 @@ class Admin_PersonController extends Zend_Controller_Action {
             ->setLabel('Person_Id');
 
         $submit = new Zend_Form_Element_Submit('submit');
-        $submit->setLabel('transmit');
+        $submit->setLabel('transmit_index');
 
         $form = new Zend_Form();
         //$action_url = $this->view->url(array("module" => "publish", "controller" => "index", "action" => "index"));
         $action_url = $this->view->url(array("controller" => "person", "action" => "edit"));
         $form->setAction($action_url);
         $form->addElements(array($person_input, $submit));
+
 
         $this->view->form = $form;
     }
@@ -74,7 +75,7 @@ class Admin_PersonController extends Zend_Controller_Action {
      */
     public function editAction() {
 
-        $this->view->title = 'Person Edit';
+        $this->view->title = $this->view->translate('Person_Controller');
 
         if (true === $this->_request->isPost()) {
             // post values
@@ -85,12 +86,13 @@ class Admin_PersonController extends Zend_Controller_Action {
             $person = new Opus_Person($person_id);
             $form_builder = new Form_Builder();
             $form = $form_builder->build($person);
+
             $action_url = $this->view->url(array("controller" => "person", "action" => "save"));
             $form->setAction($action_url);
             $this->view->form = $form;
         } else {
             // non post values
-            $this->view->birgit = 'Non post values';
+            $this->view->birgit = 'data_error';
         }
     }
 
@@ -100,7 +102,7 @@ class Admin_PersonController extends Zend_Controller_Action {
      * @return void
      */
     public function saveAction() {
-        $this->view->title = 'Person data saved.';
+        $this->view->title = $this->view->translate('Person_Controller');
 
         if (true === $this->_request->isPost()) {
             // post values
@@ -111,9 +113,15 @@ class Admin_PersonController extends Zend_Controller_Action {
             // store changed values
             $model->store();
             $form = $form_builder->build($model);
+            $submit = new Zend_Form_Element_Submit('submit');
+            $submit->setLabel('transmit_index');
+            $action_url = $this->view->url(array("controller" => "person", "action" => "index"));
+            $form->setAction($action_url);
             $this->view->form = $form;
+            $this->view->store = $this->view->translate('stored');
         } else {
             // non post values
+            $this->view->store = $this->view->translate('notstored');
         }
     }
 
