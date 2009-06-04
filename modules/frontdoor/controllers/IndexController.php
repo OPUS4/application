@@ -74,7 +74,27 @@ class Frontdoor_IndexController extends Zend_Controller_Action
             $this->view->collectionPathes = $collection_pathes;
         }
 
-        // Proof existence of files, find out filenumber
+        // Proof existence of URN, find out urnNumber
+        if (is_array ($urn = $document->getIdentifierUrn()) === true)
+        {
+           $urnNumber = count($urn);
+           $this->view->urnNumber = 0;
+           $this->view->urnNumber = $urnNumber;
+        }
+
+        // Proof existence of main titles, find out titleNumber
+        if (is_array ($titles = $document->getTitleMain()) === true)
+        {
+           $titleNumber = count($titles);
+           $this->view->titleNumber = $titleNumber;
+        }
+        else
+        {
+           $this->titleNumber = $titleNumber = 0;
+           $this->view->titleNumber = $titleNumber;
+        }
+
+        // Proof existence of files, find out fileNumber
         if (is_array ($files = $document->getFile()) === true)
         {
            $fileNumber = count($files);
@@ -82,11 +102,155 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         }
         else
         {
-          $this->fileNumber = $fileNumber = 0;
-          $this->view->fileNumber = $fileNumber;
+           $this->fileNumber = $fileNumber = 0;
+           $this->view->fileNumber = $fileNumber;
         }
 
-        // Proof existence of licences, find out licencenumber
+        // Proof existence of authors, find out authorNumber
+        if (is_array ($authors = $document->getPersonAuthor()) === true)
+        {
+           $authorNumber = count($authors);
+           $this->view->authorNumber = $authorNumber;
+        }
+        else
+        {
+           $this->authorNumber = $authorNumber = 0;
+           $this->view->authorNumber = $authorNumber;
+        }
+
+        // Proof existence of languages, find out languageNumber
+        if (is_array ($languages = $document->getLanguage()) === true)
+        {
+           $languageNumber = count($languages);
+           $this->view->languageNumber = $languageNumber;
+        }
+        else
+        {
+           $this->languageNumber = $languageNumber = 0;
+           $this->view->languageNumber = $languageNumber;
+        }
+
+        // Proof existence of swd-keyword-strings, find out swdNumber
+        if (is_array ($swd = $document->getSubjectSwd()) === true)
+        {
+           $swdNumber = count($swd);
+           $this->view->swdNumber = $swdNumber;
+        }
+        else
+        {
+           $this->swdNumber = $swdNumber = 0;
+           $this->view->swdNumber = $swdNumber;
+        }
+
+        // Proof existence of uncontrolled keyword-strings, find out uncontrolledNumber
+        if (is_array ($uncontrolled = $document->getSubjectUncontrolled()) === true)
+        {
+           $uncontrolledNumber = count($uncontrolled);
+           $this->view->uncontrolledNumber = $uncontrolledNumber;
+        }
+        else
+        {
+           $this->uncontrolledNumber = $uncontrolledNumber = 0;
+           $this->view->uncontrolledNumber = $uncontrolledNumber;
+        }
+
+        // Proof existence of psyndex-keyword-strings, find out psyndexNumber
+        if (is_array ($psyndex = $document->getSubjectPsyndex()) === true)
+        {
+           $psyndexNumber = count($psyndex);
+           $this->view->psyndexNumber = $psyndexNumber;
+        }
+        else
+        {
+           $this->psyndexNumber = $psyndexrNumber = 0;
+           $this->view->psyndexNumber = $psyndexNumber;
+        }
+
+        // Proof existence of isbn, find out isbnNumber (that means the number of isbn values)
+        if (is_array ($isbn = $document->getIdentifierIsbn()) === true)
+        {
+           $isbnNumber = count($isbn);
+           $this->view->isbnNumber = $isbnNumber;
+        }
+        else
+        {
+           $this->isbnNumber = $isbnNumber = 0;
+           $this->view->isbnNumber = $isbnNumber;
+        }
+
+        // Proof existence of contributors, find out contributorNumber
+        if (is_array ($contributors = $document->getPersonContributor()) === true)
+        {
+           $contributorNumber = count($contributors);
+           $this->view->contributorNumber = $contributorNumber;
+        }
+        else
+        {
+           $this->contributorNumber = $contributorNumber = 0;
+           $this->view->contributorNumber = $contributorNumber;
+        }
+
+        // Proof existence of other persons, find out otherPersonNumber
+        if (is_array ($otherPersons = $document->getPersonOther()) === true)
+        {
+           $otherPersonNumber = count($otherPersons);
+           $this->view->otherPersonNumber = $otherPersonNumber;
+        }
+        else
+        {
+           $this->otherPersonNumber = $otherPersonNumber = 0;
+           $this->view->otherPersonNumber = $otherPersonNumber;
+        }
+
+        // Proof existence of referees, find out refereeNumber
+        if (is_array ($referees = $document->getPersonReferee()) === true)
+        {
+           $refereeNumber = count($referees);
+           $this->view->refereeNumber = $refereeNumber;
+        }
+        else
+        {
+           $this->refereeNumber = $refereeNumber = 0;
+           $this->view->refereeNumber = $refereeNumber;
+        }
+
+        // Proof existence of editors, find out editorNumber
+        if (is_array ($editors = $document->getPersonEditor()) === true)
+        {
+           $editorNumber = count($editors);
+           $this->view->editorNumber = $editorNumber;
+        }
+        else
+        {
+           $this->editorNumber = $editorNumber = 0;
+           $this->view->editorNumber = $editorNumber;
+        }
+
+        // Proof existence of authors, find out authorNumber
+        if (is_array ($authors = $document->getPersonAuthor()) === true)
+        {
+           $authorNumber = count($authors);
+           $this->view->authorNumber = $authorNumber;
+        }
+        else
+        {
+           $this->authorNumber = $authorNumber = 0;
+           $this->view->authorNumber = $authorNumber;
+        }
+
+        // Proof existence of abstracts, find out abstractNumber
+        if (is_array ($abstracts = $document->getTitleAbstract()) === true)
+        {
+           $abstractNumber = count($abstracts);
+           $this->view->abstractNumber = $abstractNumber;
+        }
+        else
+        {
+           $this->abstractNumber = $abstractNumber = 0;
+           $this->view->abstractNumber = $abstractNumber;
+        }
+
+        // Proof existence of licences, find out licenceNumber
         if (is_array ($licences = $document->getLicence()) === true)
         {
            $licenceNumber = count($licences);
@@ -104,7 +268,7 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         $document_data = $this->filterStopwords($doc_data);
         $document_data['Type'] = $this->view->translate($document_data['Type']);
 
-        // Recursive Iteration in 4 levels in $document_data
+        // Recursive Iteration with 4 levels in $document_data leads to the one-dimensional array: $my_doc_data
         $arit = new RecursiveArrayIterator ($document_data);
         foreach ($arit as $key => $value)
         {
