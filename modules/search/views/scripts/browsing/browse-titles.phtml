@@ -75,7 +75,8 @@ if (count($this->hitlist_paginator)) {
         print("<a href=\"".$this->url(array('module' => 'frontdoor',
             'controller' => 'index',
             'action' => 'index',
-            'docId' => $document['id'])
+            'docId' => $document['id']),
+            null, true
         )."\">".$document["title"]."</a>");
         echo "</li>";
         #echo "<div>".$this->translate('search_titles_relevance').": ".$doc->getRelevance()."<br/>";
