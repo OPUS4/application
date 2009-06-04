@@ -851,6 +851,7 @@ class Form_Builder {
 
     /**
      * Add a + button to a form.
+     * New name for the +-button is 'additional_formfields'
      *
      * @param Opus_Model_Field $field     Holds necessary field informations.
      * @param Zend_Form        $container Form where to add.
@@ -862,8 +863,13 @@ class Form_Builder {
         if (('*' === $mult) or ($counts < $mult)) {
             $fieldname = $field->getName();
             $addButton = new Zend_Form_Element_Submit('add_' . $fieldname);
-            $addButton->setLabel('+');
-            $container->addElement($addButton);
+            /*
+             * the + button is now called AddditionalFormFields, it is translated in fieldnames.tmx
+             * if you want to have different translations for the differnet groups you need to give
+             * the fieldname as a label to make the button unique
+             */
+            $addButton->setLabel('AdditionalFormFields');
+                       $container->addElement($addButton);
         }
     }
 
@@ -916,7 +922,15 @@ class Form_Builder {
         if (($counts > 1) or (false === $field->isMandatory())) {
             $fieldname = $field->getName() . '_' . $iterator;
             $removeButton = new Zend_Form_Element_Submit('remove_' . $fieldname);
-            $removeButton->setLabel('-');
+             /*
+             * the - button is now called DeleteFormFields, it is translated in fieldnames.tmx
+             * if you want to have different translations for the differnet groups you need to give
+             * the fieldname as a label to make the button unique
+             */
+            /*
+             * $removeButton->setLabel('-');
+             */
+            $removeButton->setLabel('DeleteFormFields');
             $container->addElement($removeButton);
         }
     }
