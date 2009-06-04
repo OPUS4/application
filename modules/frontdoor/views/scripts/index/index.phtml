@@ -39,326 +39,339 @@
  *
  *
  */
-
 ?>
-<h1><?= $this-> translate('frontdoor_pagetitle') ?></h1><hr />
+<h1><?= $this-> translate('frontdoor_pagetitle') ?></h1><hr /><br />
 <? if (is_array($this->mydoc_data) === true)
-   {?>
-      <div id="summary">
-       <?  if (array_key_exists ('TitleMain_0_Value', $this->mydoc_data) === true)
-           {
-              $title_main = $this->mydoc_data['TitleMain_0_Value'];
-           }
+   {
+      if ($this->urnNumber != 0)
+      {
+         for ($i = 0; $i < $this->urnNumber; $i++)
+         {
+            if (array_key_exists ('IdentifierUrn_' .$i. '_Value', $this->mydoc_data) === true)
+            {
+               $value = $this->mydoc_data['IdentifierUrn_' .$i. '_Value'];?>
+               <?= $this-> translate('frontdoor_entry'); ?><br />
+               <b><?= $this-> translate ('IdentifierUrn');?>: </b>
+               <a href="<?= $this->value = 'http://nbn-resolving.de/urn/resolver.pl?' .$value;?>">
+               <?= $this->value = $value;?></a><br /><br /><hr /><?
+             }
+          }
+       }
 
-           for ($i = 0; $i < 10; $i++)
-           {
-              if (array_key_exists ('IdentifierUrn_' .$i. '_Value', $this->mydoc_data) === true)
-              {
-                 $value = $this->mydoc_data['IdentifierUrn_' .$i. '_Value'];?>
-                 <?= $this-> translate('frontdoor_entry'); ?><br />
-                 <b><?= $this-> translate ('IdentifierUrn');?>: </b>
-                 <a href="<?= $this->value = 'http://nbn-resolving.de/urn/resolver.pl?' .$value;?>">
-                 <?= $this->value = $value;?></a><br /><br /><hr />
-                 <?
+       //display collection path (i.e. DDC)
+       foreach ($this->collectionPathes as $collPath)
+       {
+          echo $collPath . "<br />\n";
+       }
+
+      //displaying titles and authors
+      if ($this->titleNumber !== 0)
+      {
+          for ($i = 0; $i < $this->titleNumber; $i++)
+          {
+             if (array_key_exists ('TitleMain_'.$i.'_Value', $this->mydoc_data) === true)
+             {
+                $value = $this->mydoc_data['TitleMain_'.$i.'_Value'];?>
+                <p><h2><?= $this->value = $value;?></h2></p><?
+             }
+          }
+      }
+
+      if ($this->authorNumber != 0)
+      {
+          for ($i = 0; $i < $this->authorNumber; $i++)
+          {
+             if (array_key_exists ('PersonAuthor_'.$i.'_Name', $this->mydoc_data) === true)
+             {
+                $value = $this->mydoc_data['PersonAuthor_'.$i.'_Name'];?>
+                <p><b><a href="<?= $this->value = $this->url(array(
+                   'module' => 'search',
+                   'controller' => 'search',
+                   'action' => 'metadatasearch',
+                   'author' => $value,
+                   ), null, true);?>">
+                   <?= $this->value = $value;?></a></b></p><?
               }
-            }?>
+          }
+       }
 
-            <?
-                foreach ($this->collectionPathes as $collPath) {
-                    echo $collPath . "<br />\n";
-                }
-            ?>
-
-
-              <? for ($i = 0; $i < 10; $i++)
-                 {
-                    if (array_key_exists ('TitleMain_'.$i.'_Value', $this->mydoc_data) === true)
-                    {
-                       $value = $this->mydoc_data['TitleMain_'.$i.'_Value'];?>
-                       <p><h2><?= $this->value = $value;?></h2></p><?
+       // getting logos depending on filetype of document
+       if ($this->fileNumber !== 0)
+       {?>
+          <p><b><?= $this-> translate('File(s)')?>:</b><?
+          for ($i = 0; $i < $this->fileNumber; $i++)
+          {
+             if (array_key_exists ('File_'.$i. '_PathName', $this->mydoc_data) === true)
+             {
+                $path_name = $this ->mydoc_data['File_' .$i. '_PathName'];
+                if (array_key_exists ('File_' .$i. '_FileType', $this->mydoc_data) === true)
+                {
+                   $file_type = $this->mydoc_data['File_' .$i. '_FileType'];
+                   if (array_key_exists ('File_'.$i. '_FileSize', $this->mydoc_data) === true)
+                   {
+                      $file_size = $this ->mydoc_data['File_' .$i. '_FileSize'];
+                      if (file_exists ('./layouts/' .$this->theme. '/img/filetypelogo_' .$file_type. '.png'))
+                      {?>
+                         <a href="<?= $this->value = '/documents/'.$this->docId.'/'.$this->path_name = $path_name;?>">
+                         <img src = "<?= $this->value = $this->layoutPath . '/img/filetypelogo_' .$file_type. '.png';?>"
+                         title = 'Download' border = '0'<?= $this->value = '-' .$path_name?>'>
+                         (<?$this->file_type = $file_type. ', ' .$file_size?>)</a>&nbsp;&nbsp;&nbsp;<?
+                       }
+                       else
+                       {?>
+                          <a href="<?= $this->value = '/documents/'.$this->docId.'/'.$this->path_name = $path_name;?>">
+                          <img src = "<?= $this->value = $this->layoutPath . '/img/filetypelogo_default.png';?>"
+                          title = 'Download' border = '0'<?= $this->value = '-' .$path_name?>'>
+                          (<?$this->file_type = $file_type. ', ' .$file_size?>)</a>&nbsp;&nbsp;&nbsp;<?
+                       }
                     }
-                 }?>
-               <?for ($i = 0; $i < 10; $i++)
-                 {
-                    if (array_key_exists ('PersonAuthor_'.$i.'_Name', $this->mydoc_data) === true)
+                    else
                     {
-                        $value = $this->mydoc_data['PersonAuthor_'.$i.'_Name'];?>
-                        <p><b><a href="<?= $this->value =
-                            $this->url(array(
-                                'module' => 'search',
-                                'controller' => 'search',
-                                'action' => 'metadatasearch',
-                                'author' => $value,
-                            ), null, true);?>">
-                        <?= $this->value = $value;?></a></b></p><?
+                       if (file_exists ('./layouts/' .$this->theme. '/img/filetypelogo_' .$file_type. '.png'))
+                       {?>
+                          <a href="<?= $this->value = '/documents/'.$this->docId.'/'.$this->path_name = $path_name;?>">
+                          <img src = "<?= $this->value = $this->layoutPath . '/img/filetypelogo_' .$file_type. '.png';?>"
+                          title = 'Download' border = '0'<?= $this->value = '-' .$path_name?>'>
+                          (<?= $this->file_type = $file_type?>)</a>&nbsp;&nbsp;&nbsp;<?
+                       }
+                       else
+                       {?>
+                          <a href="<?= $this->value = '/documents/'.$this->docId.'/'.$this->path_name = $path_name;?>">
+                          <img src = "<?= $this->value = $this->layoutPath . '/img/filetypelogo_default.png';?>"
+                          title = 'Download' border = '0'<?= $this->value = '-' .$path_name?>'>
+                          (<?= $this->file_type = $file_type?>)</a>&nbsp;&nbsp;&nbsp;<?
+                        }
+                     }
+                  }
+                  else
+                  {
+                     if (file_exists ('./layouts/' .$this->theme. '/img/filetypelogo_' .$file_type. '.png'))
+                     {?>
+                        <a href="<?= $this->value = '/documents/'.$this->docId.'/'.$this->path_name = $path_name;?>">
+                        <img src = "<?= $this->value = $this->layoutPath . '/img/filetypelogo_' .$file_type. '.png';?>"
+                        title = 'Download' border = '0'<?= $this->value = '-' .$path_name?>'></a>&nbsp;&nbsp;&nbsp;<?
+                     }
+                     else
+                     {?>
+                        <a href="<?= $this->value = '/documents/'.$this->docId.'/'.$this->path_name = $path_name;?>">
+                        <img src = "<?= $this->value = $this->layoutPath . '/img/filetypelogo_default.png';?>"
+                        title = 'Download' border = '0'<?= $this->value = '-' .$path_name?></a>&nbsp;&nbsp;&nbsp;<?
+                      }
+                   }
+                }
+             }
+          }
+          //offering intenal and external services
+          ?></p>
+          <p><br><a href="<?= $this->value =
+          $this->url(array(
+             'module' => 'frontdoor',
+             'controller' => 'hash',
+             'docId' => $this->docId,
+          ), null, true);?>">
+          <img src = "<?= $this->value = $this->layoutPath . '/img/unversehrt.jpg';?>" border = '0' title = 'Unversehrtheit'></a>
+          <a href="<?= $this->value = '';?>">
+
+          <img src = "<?= $this->value = $this->layoutPath . '/img/hand.jpg';?>" border = '0' title = 'Empfehlung'></a>
+          <a href="<?= $this->value =
+          $this->url(array(
+             'module' => 'statistic',
+             'controller' => 'index',
+             'action' => 'index',
+             'docId' => $this->docId,
+          ), null, true);?>">
+          <img src = "<?= $this->value =
+          $this->url(array(
+             'module' => 'statistic',
+             'controller' => 'graph',
+             'action' => 'thumb',
+             'id' => $this->docId,)); ?>" border = '0' title = 'Statistik'></a>
+
+          <a href="<?= $this->value =
+          $this->url(array(
+             'module' => 'socialBookmarking',
+             'controller' => 'connotea',
+             'docId' => $this->docId,
+          ), null, true);?>">
+          <img src = "<?= $this->value =
+          $this->layoutPath .'/img/connotea_icon.jpg';?>" border = '0' title = 'Bookmark bei Connotea'></a>
+
+          <a href="<?= $this->value =
+          $this->url(array(
+             'module' => 'socialBookmarking',
+             'controller' => 'delicious',
+             'docId' => $this->docId,
+          ), null, true);?>">
+          <img src = "<?= $this->value =
+          $this->layoutPath . '/img/delicious.jpg';?>" border = '0' title = 'Bookmark bei del.icio.us'></a>
+
+          <a href="<?= $this->value =
+          'http://scholar.google.de/scholar?hl=de&q=' .$title_main;?>">
+          <img src = "<?= $this->value =
+          $this->layoutPath . '/img/google_scholar.jpg';?>" border = '0' title = 'Dokument in Google Scholar suchen'></a>
+
+          <a href="<?= $this->value = '';?>">
+          <img src = "<?= $this->value =
+          $this->layoutPath . '/img/bibtex.jpg';?>" border = '0' title = 'BibTex-Export'></a>
+          <a href="<?= $this->value = '';?>">
+          <img src = "<?= $this->value = $this->layoutPath . '/img/ris.jpg';?>" border = '0' title = 'RIS-Export'></a>
+          </p><br />
+
+          <?//displaying other metadata
+          if (array_key_exists('Type', $this->mydoc_data))
+            {
+               $value = $this->mydoc_data['Type'];?>
+               <p><b><?= $this-> translate('Type')?>: </b>
+               <?= $this->value = $value;?></p><?
+            }
+
+            if ($this->languageNumber != 0)
+            {
+               for ($i = 0; $i < $this->languageNumber; $i++)
+               {
+                  if (array_key_exists('Language_' .$i, $this->mydoc_data) === true)
+                  {
+                     $this->value = $value = $this->mydoc_data['Language_' .$i];?>
+                     <p><b><?= $this-> translate('Language')?>: </b>
+                     <?= $this->translate($value);?></p><?
+                  }
+               }
+            }
+            if ($this->swdNumber != 0)
+            {
+                for ($i = 0; $i < $this->swdNumber; $i++)
+                {
+                   if (array_key_exists ('SubjectSwd_'.$i.'_Value', $this->mydoc_data) === true)
+                   {
+                      if (array_key_exists ('SubjectSwd_'.$i.'_Language', $this->mydoc_data) === true)
+                      {
+                         $this->value = $value = $this->mydoc_data['SubjectSwd_'.$i.'_Value'];
+                         $this->lang = $lang = $this->mydoc_data['SubjectSwd_'.$i.'_Language'];
+                      }?>
+                      <p><b><?= $this-> translate('SubjectSwdValue') .' ('. $this->translate($lang). ')';?>: </b>
+                      <?= $this->value = $value;?></p><?
                     }
                  }
+             }
 
-                // getting logos depending on filetype
-
-                 if ($this->fileNumber !== 0)
-                 {?>
-                    <p><b><?= $this-> translate('File(s)')?>:</b><?
-                    for ($i = 0; $i < $this->fileNumber; $i++)
-                    {
-                       if (array_key_exists ('File_'.$i. '_PathName', $this->mydoc_data) === true)
-                       {
-                          $path_name = $this ->mydoc_data['File_' .$i. '_PathName'];
-                          if (array_key_exists ('File_' .$i. '_FileType', $this->mydoc_data) === true)
-                          {
-                             $file_type = $this->mydoc_data['File_' .$i. '_FileType'];
-                             if (array_key_exists ('File_'.$i. '_FileSize', $this->mydoc_data) === true)
-                             {
-                                $file_size = $this ->mydoc_data['File_' .$i. '_FileSize'];
-                                if (file_exists ('./layouts/' .$this->theme. '/img/filetypelogo_' .$file_type. '.png'))
-                                {?>
-                                   <a href="<?= $this->value = '/documents/'.$this->docId.'/'.$this->path_name = $path_name;?>">
-                                   <img src = "<?= $this->value = $this->layoutPath . '/img/filetypelogo_' .$file_type. '.png';?>"
-                                   title = 'Download' border = '0'<?= $this->value = '-' .$path_name?>'>
-                                   (<?$this->file_type = $file_type. ', ' .$file_size?>)</a>&nbsp;&nbsp;&nbsp;<?
-                                }
-                                else
-                                {?>
-                                   <a href="<?= $this->value = '/documents/'.$this->docId.'/'.$this->path_name = $path_name;?>">
-                                   <img src = "<?= $this->value = $this->layoutPath . '/img/filetypelogo_default.png';?>"
-                                   title = 'Download' border = '0'<?= $this->value = '-' .$path_name?>'>
-                                   (<?$this->file_type = $file_type. ', ' .$file_size?>)</a>&nbsp;&nbsp;&nbsp;<?
-                                }
-                             }
-                             else
-                             {
-                                 if (file_exists ('./layouts/' .$this->theme. '/img/filetypelogo_' .$file_type. '.png'))
-                                 {?>
-                                    <a href="<?= $this->value = '/documents/'.$this->docId.'/'.$this->path_name = $path_name;?>">
-                                    <img src = "<?= $this->value = $this->layoutPath . '/img/filetypelogo_' .$file_type. '.png';?>"
-                                    title = 'Download' border = '0'<?= $this->value = '-' .$path_name?>'>
-                                    (<?= $this->file_type = $file_type?>)</a>&nbsp;&nbsp;&nbsp;<?
-                                 }
-                                 else
-                                 {?>
-                                    <a href="<?= $this->value = '/documents/'.$this->docId.'/'.$this->path_name = $path_name;?>">
-                                    <img src = "<?= $this->value = $this->layoutPath . '/img/filetypelogo_default.png';?>"
-                                    title = 'Download' border = '0'<?= $this->value = '-' .$path_name?>'>
-                                    (<?= $this->file_type = $file_type?>)</a>&nbsp;&nbsp;&nbsp;<?
-                                 }
-                              }
-                         }
-                         else
-                         {
-                             if (file_exists ('./layouts/' .$this->theme. '/img/filetypelogo_' .$file_type. '.png'))
-                             {?>
-                                <a href="<?= $this->value = '/documents/'.$this->docId.'/'.$this->path_name = $path_name;?>">
-                                <img src = "<?= $this->value = $this->layoutPath . '/img/filetypelogo_' .$file_type. '.png';?>"
-                                title = 'Download' border = '0'<?= $this->value = '-' .$path_name?>'></a>&nbsp;&nbsp;&nbsp;<?
-                             }
-                             else
-                             {?>
-                                <a href="<?= $this->value = '/documents/'.$this->docId.'/'.$this->path_name = $path_name;?>">
-                                <img src = "<?= $this->value = $this->layoutPath . '/img/filetypelogo_default.png';?>"
-                                title = 'Download' border = '0'<?= $this->value = '-' .$path_name?></a>&nbsp;&nbsp;&nbsp;<?
-                             }
-                         }
-                      }
+             if($this->uncontrolledNumber != 0)
+             {
+                for ($i = 0; $i < $this->uncontrolledNumber; $i++)
+                {
+                   if (array_key_exists ('SubjectUncontrolled_'.$i.'_Value', $this->mydoc_data) === true)
+                   {
+                      if (array_key_exists ('SubjectUncontrolled_'.$i.'_Language', $this->mydoc_data) === true)
+                      {
+                         $this->value = $value = $this->mydoc_data['SubjectUncontrolled_'.$i.'_Value'];
+                         $this->lang = $lang = $this->mydoc_data['SubjectUncontrolled_'.$i.'_Language'];
+                      }?>
+                      <p><b><?= $this-> translate('SubjectUncontrolledValue') .' ('. $this->translate($lang). ')';?>: </b>
+                      <?= $this->value = $value;?></p><?
                     }
-                 }?></p>
-                     <p><br><a href="<?= $this->value =
-                        $this->url(array(
-                            'module' => 'frontdoor',
-                            'controller' => 'hash',
-                            'docId' => $this->docId,
-                        ), null, true);
+                  }
+               }
 
-                     ?>">
-                     <img src = "<?= $this->value = $this->layoutPath . '/img/unversehrt.jpg';?>" border = '0' title = 'Unversehrtheit'></a>
-
-                    <a href="<?= $this->value = '';?>">
-                    <img src = "<?= $this->value = $this->layoutPath . '/img/hand.jpg';?>" border = '0' title = 'Empfehlung'></a>
-
-                    <a href="<?= $this->value =
-                        $this->url(array(
-                            'module' => 'statistic',
-                            'controller' => 'index',
-                            'action' => 'index',
-                            'docId' => $this->docId,
-                        ), null, true);
-                    ;?>">
-                    <img src = "<?= $this->value =
-                        $this->url(array(
-                            'module' => 'statistic',
-                            'controller' => 'graph',
-                            'action' => 'thumb',
-                            'id' => $this->docId,
-                        ));
-                    ?>" border = '0' title = 'Statistik'></a>
-
-                    <a href="<?= $this->value =
-                        $this->url(array(
-                            'module' => 'socialBookmarking',
-                            'controller' => 'connotea',
-                            'docId' => $this->docId,
-                        ), null, true);
-                      ?>">
-                    <img src = "<?= $this->value =  $this->layoutPath .'/img/connotea_icon.jpg';?>" border = '0' title = 'Bookmark bei Connotea'></a>
-
-                    <a href="<?= $this->value =
-                        $this->url(array(
-                            'module' => 'socialBookmarking',
-                            'controller' => 'delicious',
-                            'docId' => $this->docId,
-                        ), null, true);
-                      ?>">
-                    <img src = "<?= $this->value = $this->layoutPath . '/img/delicious.jpg';?>" border = '0' title = 'Bookmark bei del.icio.us'></a>
-
-                    <a href="<?= $this->value = 'http://scholar.google.de/scholar?hl=de&q=' .$title_main;?>">
-                    <img src = "<?= $this->value = $this->layoutPath . '/img/google_scholar.jpg';?>" border = '0' title = 'Dokument in Google Scholar suchen'></a>
-
-                    <a href="<?= $this->value = '';?>">
-                    <img src = "<?= $this->value = $this->layoutPath . '/img/bibtex.jpg';?>" border = '0' title = 'BibTex-Export'></a>
-
-                    <a href="<?= $this->value = '';?>">
-                    <img src = "<?= $this->value = $this->layoutPath . '/img/ris.jpg';?>" border = '0' title = 'RIS-Export'></a>
-                </p>
-
-                 <br />
-                 <?if (array_key_exists('Type', $this->mydoc_data))
-                   {
-                       $value = $this->mydoc_data['Type'];?>
-                       <p><b><?= $this-> translate('Type')?>: </b>
-                       <?= $this->value = $value;?></p><?
-                   }
-                   for ($i = 0; $i < 10; $i++)
-                   {
-                      if (array_key_exists('Language_' .$i, $this->mydoc_data) === true)
-                      {
-                         $this->value = $value = $this->mydoc_data['Language_' .$i];?>
-                         <p><b><?= $this-> translate('Language')?>: </b>
-                         <?= $this->translate($value);?></p><?
-                      }
-                   }?>
-
-                   <?for ($i = 0; $i < 10; $i++)
-                   {
-                      if (array_key_exists ('SubjectSwd_'.$i.'_Value', $this->mydoc_data) === true)
-                      {
-                         if (array_key_exists ('SubjectSwd_'.$i.'_Language', $this->mydoc_data) === true)
-                         {
-                            $this->value = $value = $this->mydoc_data['SubjectSwd_'.$i.'_Value'];
-                            $this->lang = $lang = $this->mydoc_data['SubjectSwd_'.$i.'_Language'];
-                         }?>
-                         <p><b><?= $this-> translate('SubjectSwdValue') .' ('. $this->translate($lang). ')';?>: </b>
-                         <?= $this->value = $value;?></p><?                      }
-                   }?>
-
-                   <?for ($i = 0; $i < 10; $i++)
-                   {
-                      if (array_key_exists ('SubjectUncontrolled_'.$i.'_Value', $this->mydoc_data) === true)
-                      {
-                          if (array_key_exists ('SubjectUncontrolled_'.$i.'_Language', $this->mydoc_data) === true)
-                          {
-                              $this->value = $value = $this->mydoc_data['SubjectUncontrolled_'.$i.'_Value'];
-                              $this->lang = $lang = $this->mydoc_data['SubjectUncontrolled_'.$i.'_Language'];
-                          }?>
-                           <p><b><?= $this-> translate('SubjectUncontrolledValue') .' ('. $this->translate($lang). ')';?>: </b>
-                           <?= $this->value = $value;?></p><?
-                      }
-                   }?>
-
-                   <?for ($i = 0; $i < 10; $i++)
-                   {
-                      if (array_key_exists ('Psyindex_'.$i.'_Value', $this->mydoc_data) === true)
-                      {
-                          if (array_key_exists ('SubjectPsyndex_'.$i.'_Language', $this->mydoc_data) === true)
-                          {
-                              $this->value = $value = $this->mydoc_data['SubjectPsyndex_'.$i.'_Value'];
-                              $this->lang = $lang = $this->mydoc_data['SubjectPsyndex_'.$i.'_Language'];
-                          }?>
+               if ($this->psyndexNumber != 0)
+               {
+                  for ($i = 0; $i < $this->psyndexNumber; $i++)
+                  {
+                     if (array_key_exists ('Psyindex_'.$i.'_Value', $this->mydoc_data) === true)
+                     {
+                        if (array_key_exists ('SubjectPsyndex_'.$i.'_Language', $this->mydoc_data) === true)
+                        {
+                           $this->value = $value = $this->mydoc_data['SubjectPsyndex_'.$i.'_Value'];
+                           $this->lang = $lang = $this->mydoc_data['SubjectPsyndex_'.$i.'_Language'];
+                        }?>
                           <p><b><?= $this-> translate('SubjectPsyndexValue') .' ('. $this->translate($lang). ')';?>: </b>
                           <?= $this->value = $value;?></p><?
-                      }
-                  }?>
+                     }
+                  }
+               }
+               if (array_key_exists ('PublishedYear', $this->mydoc_data) === true)
+               {
+                  $value = $this->mydoc_data['PublishedYear'];?>
+                  <p><b><?= $this-> translate('PublishedYear')?>: </b>
+                  <?= $this->value = $value;?></p><?
+               }
+               if (array_key_exists ('PublishedDate', $this->mydoc_data) === true)
+               {
+                  $value = $this->mydoc_data['PublishedDate'];?>
+                  <p><b><?= $this-> translate('PublishedDate')?>: </b>
+                  <?= $this->value = $value;?></p><?
+               }
+               if (array_key_exists ('CompletedDate', $this->mydoc_data) === true)
+               {
+                  $value = $this->mydoc_data['CompletedDate'];?>
+                  <p><b><?= $this-> translate('CompletedDate')?>: </b>
+                  <?= $this->value = $value;?></p><?
+               }
+               if (array_key_exists ('CompletedYear', $this->mydoc_data) === true)
+               {
+                  $value = $this->mydoc_data['CompletedYear'];?>
+                  <p><b><?= $this-> translate('CompletedYear')?>: </b>
+                  <?= $this->value = $value;?></p><?
+               }
+               if (array_key_exists ('DateAccepted', $this->mydoc_data) === true)
+               {
+                  $value = $this->mydoc_data['DateAccepted'];?>
+                  <p><b><?= $this-> translate('DateAccepted')?>: </b>
+                  <?= $this->value = $value;?></p><?
+               }
 
-                  <?if (array_key_exists ('PublishedYear', $this->mydoc_data) === true)
-                  {
-                     $value = $this->mydoc_data['PublishedYear'];?>
-                     <p><b><?= $this-> translate('PublishedYear')?>: </b>
-                     <?= $this->value = $value;?></p><?
-                  }
-                  if (array_key_exists ('PublishedDate', $this->mydoc_data) === true)
-                  {
-                     $value = $this->mydoc_data['PublishedDate'];?>
-                     <p><b><?= $this-> translate('PublishedDate')?>: </b>
-                     <?= $this->value = $value;?></p><?
-                  }
-                  if (array_key_exists ('CompletedDate', $this->mydoc_data) === true)
-                  {
-                     $value = $this->mydoc_data['CompletedDate'];?>
-                     <p><b><?= $this-> translate('CompletedDate')?>: </b>
-                     <?= $this->value = $value;?></p><?
-                  }
-                  if (array_key_exists ('CompletedYear', $this->mydoc_data) === true)
-                  {
-                     $value = $this->mydoc_data['CompletedYear'];?>
-                     <p><b><?= $this-> translate('CompletedYear')?>: </b>
-                     <?= $this->value = $value;?></p><?
-                  }
-                  if (array_key_exists ('DateAccepted', $this->mydoc_data) === true)
-                  {
-                     $value = $this->mydoc_data['DateAccepted'];?>
-                     <p><b><?= $this-> translate('DateAccepted')?>: </b>
-                     <?= $this->value = $value;?></p><?
-                  }
-                  for ($i=0; $i<10; $i++)
+               if ($this->isbnNumber != 0)
+               {
+                  for ($i=0; $i < $this->isbnNumber; $i++)
                   {
                      if (array_key_exists ('IdentifierIsbn_' .$i. '_Value', $this->mydoc_data) === true)
                      {
-                       $value = $this->mydoc_data['IdentifierIsbn_' .$i. '_Value'];?>
-                       <p><b><?= $this-> translate('IdentifierIsbn')?>: </b>
-                       <?= $this->value = $value;?></p><?
-                      }
+                        $value = $this->mydoc_data['IdentifierIsbn_' .$i. '_Value'];?>
+                        <p><b><?= $this-> translate('IdentifierIsbn')?>: </b>
+                        <?= $this->value = $value;?></p><?
+                     }
                   }
-                  if (array_key_exists ('PageNumber', $this->mydoc_data) === true)
+               }
+
+               if (array_key_exists ('PageNumber', $this->mydoc_data) === true)
+               {
+                  $value = $this->mydoc_data['PageNumber'];?>
+                  <p><b><?= $this-> translate('PageNumber')?>: </b>
+                  <?= $this->value = $value;?></p><?
+               }
+               if (array_key_exists ('CreatingCorporation', $this->mydoc_data) === true)
+               {
+                  $value = $this->mydoc_data['CreatingCorporation'];?>
+                  <p><b><?= $this-> translate('CreatingCorporation')?>: </b>
+                  <?= $this->value = $value;?></p><?
+               }
+               if (array_key_exists ('ContributingCorporation', $this->mydoc_data) === true)
+               {
+                  $value = $this->mydoc_data['ContributingCorporation'];?>
+                  <p><b><?= $this-> translate('ContributingCorporation')?>: </b>
+                  <?= $this->value = $value;?></p><?
+               }
+               if (array_key_exists ('NonInstituteAffiliation', $this->mydoc_data) === true)
+               {
+                  $value = $this->mydoc_data['NonInstituteAffiliation'];?>
+                  <p><b><?= $this-> translate('NonInstituteAffiliation')?>: </b>
+                  <?= $this->value = $value;?></p><?
+               }
+
+               if ($this->contributorNumber != 0)
+               {
+                  for ($i = 0; $i < $this->contributorNumber; $i++)
                   {
-                     $value = $this->mydoc_data['PageNumber'];?>
-                     <p><b><?= $this-> translate('PageNumber')?>: </b>
-                     <?= $this->value = $value;?></p><?
-                  }
-                  if (array_key_exists ('CreatingCorporation', $this->mydoc_data) === true)
-                  {
-                     $value = $this->mydoc_data['CreatingCorporation'];?>
-                     <p><b><?= $this-> translate('CreatingCorporation')?>: </b>
-                     <?= $this->value = $value;?></p><?
-                  }
-                  if (array_key_exists ('ContributingCorporation', $this->mydoc_data) === true)
-                  {
-                     $value = $this->mydoc_data['ContributingCorporation'];?>
-                     <p><b><?= $this-> translate('ContributingCorporation')?>: </b>
-                     <?= $this->value = $value;?></p><?
-                  }
-                  if (array_key_exists ('NonInstituteAffiliation', $this->mydoc_data) === true)
-                  {
-                     $value = $this->mydoc_data['NonInstituteAffiliation'];?>
-                     <p><b><?= $this-> translate('NonInstituteAffiliation')?>: </b>
-                     <?= $this->value = $value;?></p><?
-                  }
-                  for ($i = 0; $i < 10; $i++)
-                  {
-                    if (array_key_exists ('PersonContributor_'.$i.'_Name', $this->mydoc_data) === true)
-                    {
+                     if (array_key_exists ('PersonContributor_'.$i.'_Name', $this->mydoc_data) === true)
+                     {
                         $value = $this->mydoc_data['PersonContributor_'.$i.'_Name'];?>
                         <p><b><?= $this-> translate('PersonContributor')?>: </b>
                         <?= $this->value = $value;?></p><?
-                    }
+                     }
                   }
-                  for ($i = 0; $i < 10; $i++)
-                  {
-                    if (array_key_exists ('PersonAdvisor_'.$i.'_Name', $this->mydoc_data) === true)
-                    {
-                        $value = $this->mydoc_data['PersonAdvisor_'.$i.'_Name'];?>
-                        <p><b><?= $this-> translate('PersonAdvisor')?>: </b>
-                        <?= $this->value = $value;?></p><?
-                    }
-                  }
-                  for ($i = 0; $i < 10; $i++)
+               }
+
+               if ($this->refereeNumber != 0)
+               {
+                  for ($i = 0; $i < $this->refereeNumber; $i++)
                   {
                     if (array_key_exists ('PersonReferee_'.$i.'_Name', $this->mydoc_data) === true)
                     {
@@ -367,7 +380,11 @@
                         <?= $this->value = $value;?></p><?
                     }
                   }
-                  for ($i = 0; $i < 10; $i++)
+               }
+
+               if ($this->editorNumber != 0)
+               {
+                  for ($i = 0; $i < $this->editorNumber; $i++)
                   {
                     if (array_key_exists ('PersonEditor_'.$i.'_Name', $this->mydoc_data) === true)
                     {
@@ -376,59 +393,67 @@
                         <?= $this->value = $value;?></p><?
                     }
                   }
+               }
 
-                    if (array_key_exists ('PersonTranslator_Name', $this->mydoc_data) === true)
-                    {
-                        $value = $this->mydoc_data['PersonTranslator_Name'];?>
-                        <p><b><?= $this-> translate('PersonTranslator')?>: </b>
-                        <?= $this->value = $value;?></p><?
-                    }
+               if (array_key_exists ('PersonTranslator_Name', $this->mydoc_data) === true)
+               {
+                  $value = $this->mydoc_data['PersonTranslator_Name'];?>
+                  <p><b><?= $this-> translate('PersonTranslator')?>: </b>
+                  <?= $this->value = $value;?></p><?
+               }
 
-                  for ($i = 0; $i < 10; $i++)
+               if ($this->otherPersonNumber !=0)
+               {
+                  for ($i = 0; $i < $this->otherPersonNumber; $i++)
                   {
-                    if (array_key_exists ('PersonOther_'.$i.'_Name', $this->mydoc_data) === true)
-                    {
+                     if (array_key_exists ('PersonOther_'.$i.'_Name', $this->mydoc_data) === true)
+                     {
                         $value = $this->mydoc_data['PersonOther_'.$i.'_Name'];?>
                         <p><b><?= $this-> translate('PersonOther')?>: </b>
                         <?= $this->value = $value;?></p><?
-                    }
+                     }
                   }
-                  for ($i = 0; $i < 10; $i++)
+               }
+               if ($this->abstractNumber != 0)
+               {
+                  for ($i = 0; $i < $this->abstractNumber; $i++)
                   {
-                      if (array_key_exists ('TitleAbstract_'.$i.'_Value', $this->mydoc_data) === true)
-                      {
-                          if (array_key_exists ('TitleAbstract_'.$i.'_Language', $this->mydoc_data) === true)
-                          {
-                              $this->value = $value = $this->mydoc_data['TitleAbstract_'.$i.'_Value'];
-                              $this->lang = $lang = $this->mydoc_data['TitleAbstract_'.$i.'_Language'];
-                          }?>
-                           <p><b><?= $this-> translate('TitleAbstractValue') .' ('. $this->translate($lang). ')';?>: </b>
-                           <?= $this->value = $value;?></p><?
-                      }
-                  }
-                  if ($this->licenceNumber !== 0)
-                  {
-                     for ($i = 0; $i < $this->licenceNumber; $i++)
+                     if (array_key_exists ('TitleAbstract_'.$i.'_Value', $this->mydoc_data) === true)
                      {
-                        if (array_key_exists ('Licence_' .$i. '_DescMarkup', $this->mydoc_data) === true)
+                        if (array_key_exists ('TitleAbstract_'.$i.'_Language', $this->mydoc_data) === true)
                         {
-                           $value = $this->mydoc_data['Licence_' .$i. '_DescMarkup'];?>
-                           <p><b><?= $this-> translate('Licence_NameLong')?>: </b>
-                           <?= $this->value = $value;?></a></p><?
-                        }
-                        elseif (array_key_exists('Licence_' .$i. '_NameLong', $this->mydoc_data) == true)
-                        {
+                           $this->value = $value = $this->mydoc_data['TitleAbstract_'.$i.'_Value'];
+                           $this->lang = $lang = $this->mydoc_data['TitleAbstract_'.$i.'_Language'];
+                        }?>
+                        <p><b><?= $this-> translate('TitleAbstractValue') .' ('. $this->translate($lang). ')';?>: </b>
+                        <?= $this->value = $value;?></p><?
+                     }
+                  }
+               }
+
+               if ($this->licenceNumber !== 0)
+               {
+                  for ($i = 0; $i < $this->licenceNumber; $i++)
+                  {
+                     if (array_key_exists ('Licence_' .$i. '_DescMarkup', $this->mydoc_data) === true)
+                     {
+                        $value = $this->mydoc_data['Licence_' .$i. '_DescMarkup'];?>
+                        <p><b><?= $this-> translate('Licence_NameLong')?>: </b>
+                        <?= $this->value = $value;?></a></p><?
+                      }
+                      elseif (array_key_exists('Licence_' .$i. '_NameLong', $this->mydoc_data) == true)
+                      {
                            $value = $this->mydoc_data['Licence_' .$i. '_NameLong'];?>
                            <p><b><?= $this-> translate('Licence_NameLong')?>: </b>
                            <?= $this->value = $value;?></a></p><?
-                        }
-                     }
-                 }?>
+                      }
+                   }
+                }?>
 
-                  <p><b><?= $this-> translate('POD')?>: </b>
-                  <img src = "<?= $this->value = $this->layoutPath . '/img/proprint_logo.png';?>" border = '0' title = 'Print-on Demand'></a>
-                  <a href="<?= $this->value = '';?>">Print-on-Demand</a></p>
-       </div>
-  <?}
+                <p><b><?= $this-> translate('POD')?>: </b>
+                <img src = "<?= $this->value = $this->layoutPath . '/img/proprint_logo.png';?>" border = '0' title = 'Print-on Demand'></a>
+                <a href="<?= $this->value = '';?>">Print-on-Demand</a></p><?
+
+   }
 
 
