@@ -18,5 +18,45 @@
         <seg>Personen-Id:</seg>
       </tuv>
     </tu>
+    <tu tuid="data_error">
+      <tuv xml:lang="en">
+        <seg>person data are not correct.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Personendaten sind nicht korrekt.</seg>
+      </tuv>
+    </tu>
+    <tu tuid="stored">
+      <tuv xml:lang="en">
+        <seg>person data are updated.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Personendaten sind geändert.</seg>
+      </tuv>
+    </tu>
+    <tu tuid="notstored">
+      <tuv xml:lang="en">
+        <seg>Person data not updated!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Personendaten konnten nicht geändert werden.</seg>
+      </tuv>
+    </tu>
+    <tu tuid="transmit_index">
+      <tuv xml:lang="en">
+        <seg>show person data</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Personendaten anzeigen</seg>
+      </tuv>
+    </tu>
+    <tu tuid="transmit">
+      <tuv xml:lang="en">
+        <seg>store person data</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Daten abspeichern</seg>
+      </tuv>
+    </tu>
   </body>
 </tmx>
