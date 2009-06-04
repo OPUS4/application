@@ -604,7 +604,7 @@
         <seg>Author</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Autor</seg>
+        <seg>Verfasserangaben</seg>
       </tuv>
     </tu>
     <tu tuid="PersonEditor">
@@ -711,7 +711,30 @@
         <seg>Nachname</seg>
       </tuv>
     </tu>
-    
+    <tu tuid="Value">
+      <tuv xml:lang="en">
+        <seg>Value</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Text</seg>
+      </tuv>
+    </tu>
+    <tu tuid="AdditionalFormFields">
+      <tuv xml:lang="en">
+        <seg>additional fields</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Eingabefelder anfordern</seg>
+      </tuv>
+    </tu>
+    <tu tuid="DeleteFormFields">
+      <tuv xml:lang="en">
+        <seg>delete additional fields</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Eingabefelder entfernen</seg>
+      </tuv>
+    </tu>
     
   </body>
 </tmx>
