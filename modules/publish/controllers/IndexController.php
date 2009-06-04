@@ -111,8 +111,8 @@ class Publish_IndexController extends Zend_Controller_Action {
                             'ServerDateValid',
                             'File'))
                         ->setSortOrder(array(
-                            'PersonAuthor',
                             'TitleMain',
+                            'PersonAuthor',
                             'TitleAbstract',
                             'Language',
                             'PersonContributor',
@@ -181,7 +181,7 @@ class Publish_IndexController extends Zend_Controller_Action {
                     $form = $form_builder->build($model);
                     $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create'));
                     $form->setAction($action_url);
-                      $this->view->title = $this->view->translate('publish_controller_create');
+                    $this->view->title = $this->view->translate('publish_controller_create');
                     $this->view->form = $form;
                 } else {
                     // invalid form return to index
@@ -219,11 +219,9 @@ class Publish_IndexController extends Zend_Controller_Action {
                 // TODO: Validate document id, error message on fail
                 $documentId = $uploadForm->getValue('DocumentId');
                 $document = new Opus_Document($documentId);
-                // TODO: translate didn't work
-                /*
-                ** $this->view->message = $this->view->translate('publish_controller_upload_successful');
-                */
-                $this->view->message = 'upload was successful';
+
+                $this->view->message = $this->view->translate('publish_controller_upload_successful');
+
                 // save each file
                 foreach ($files as $file) {
                     /* TODO: Uncaught exception 'Zend_File_Transfer_Exception' with message '"fileupload" not found by file transfer adapter

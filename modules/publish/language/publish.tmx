@@ -47,7 +47,7 @@
         <seg>Publish upload successful</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Veröffentlichen - Dateien wurden erfolgreich hochgeladen.</seg>
+        <seg>Die Datei(en) wurde(n) erfolgreich hochgeladen.</seg>
       </tuv>
     </tu>
     <tu tuid="selecttype">
@@ -96,6 +96,14 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Datum der Veröffentlichung bitte eingeben</seg>
+      </tuv>
+    </tu>
+    <tu tuid="AdditionalFormFieldsDescr">
+      <tuv xml:lang="en">
+        <seg>additional fields</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte klicken Sie hier, wenn Sie eine weitere Person/einen weiteren Titel etc. eingeben möchten.</seg>
       </tuv>
     </tu>
   </body>
