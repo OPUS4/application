@@ -156,19 +156,18 @@
                 #echo $document['author'] . ': ';
                 foreach ($authoriterator as $obj) {
                     $pers = $obj->get();
-                    echo '<a href=' .
-                        $this->url(
-                            array(
-                                'module'        => 'search',
-                                'controller'    => 'browsing',
-                                'action'        => 'browseTitles',
-                                'filter'        => 'author',
-                                'author'        => $pers['id']
-                            ),
-                            null,
-                            true
-                        ) .
-                    '>';
+             echo '<a href=' .
+                 $this->url(
+                     array(
+                         'module'        => 'search',
+                         'controller'    => 'search',
+                         'action'        => 'metadatasearch',
+                         $role     => $pers['lastName'] . ', ' . $pers['firstName']
+                     ),
+                     null,
+                      true
+                 ) .
+                 '>';
                     echo $pers["lastName"].", ".$pers["firstName"];
                     echo "</a>";
                     if ($authoriterator->hasNext() === true) echo "; ";
