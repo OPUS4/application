@@ -1,25 +1,26 @@
 <?php
 ?>
 <h1><?= $this-> translate('frontdoor_pagetitle') ?></h1><hr />
-<h2><?= $this-> translate('frontdoor_hashtitle') ?></h2>
+<h2><?= $this-> translate('frontdoor_hashtitle') ?></h2><?
 
-<?if ($this->author !== null)
-  {?>
-    <p><b><a href="<?= $this->value = $this->url(array(
+if ($this->author !== null)
+{?>
+   <p><b><a href="<?= $this->value = $this->url(array(
                                 'module' => 'search',
                                 'controller' => 'search',
                                 'action' => 'metadatasearch',
-                                'author' => $author,
+                                'author' => $this->author,
                             ), null, true);
                         ?>">
-    <?= $this->author?></a>:&nbsp;<?= $this->title;?></b></p><?
-  }
-  else
-  {?>
-    <p><b>&nbsp;<?= $this->title;?></b></p><?
-  }?>
-  <p><?= $this-> translate('frontdoor_filenumber')?>:&nbsp;<?= $this->fileNumber?></p><hr /><?
-
+     <?= $this->author?></a>:&nbsp;<?= $this->title;?></b></p><?
+}
+else
+{?>
+   <p><b>&nbsp;<?= $this->title;?></b></p><?
+}?>
+<p><?= $this-> translate('frontdoor_filenumber')?>:&nbsp;<?= $this->fileNumber?></p><hr /><?
+if ($this->fileNumber !== 0)
+{
   if ($this->first_hash !== NULL)
   {
       for ($i = 0; $i < $this->fileNumber; $i++)
@@ -71,15 +72,20 @@
                   <p><b><?= $this->translate ('frontdoor_no_hash')?></b></p>
              <?}
             }?> <hr /><?
-          }
        }
+  }
   else
   {?>
-      <p><?$this-> translate('frontdoor_no_hash');?></p><?
-  }?>
-   <p><a href="<?= $this->value =
-                        $this->url(array(
-                            'module' => 'frontdoor',
-                            'controller' => 'index',
-                            'docId' => $this->docId,
-                        ), null, true);?>"><?= $this->translate('frontdoor_back')?></a>
+      <p><?= $this-> translate('frontdoor_no_hash');?></p><?
+  }
+}
+else
+{?>
+    <p><?= $this-> translate('frontdoor_no_file');?></p><?
+}?>
+<p><a href="<?= $this->value =
+   $this->url(array(
+   'module' => 'frontdoor',
+   'controller' => 'index',
+   'docId' => $this->docId,
+   ), null, true);?>"><?= $this->translate('frontdoor_back')?></a>

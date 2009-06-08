@@ -78,8 +78,12 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         if (is_array ($urn = $document->getIdentifierUrn()) === true)
         {
            $urnNumber = count($urn);
-           $this->view->urnNumber = 0;
            $this->view->urnNumber = $urnNumber;
+        }
+        else
+        {
+            $this->urnNumber = $urnNumber = 0;
+            $this->view->urnNnumber = $urnNumber;
         }
 
         // Proof existence of main titles, find out titleNumber

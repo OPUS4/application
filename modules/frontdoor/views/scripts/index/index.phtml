@@ -203,12 +203,15 @@
              'docId' => $this->docId,
           ), null, true);?>">
           <img src = "<?= $this->value =
-          $this->layoutPath . '/img/delicious.jpg';?>" border = '0' title = 'Bookmark bei del.icio.us'></a>
+          $this->layoutPath . '/img/delicious.jpg';?>" border = '0' title = 'Bookmark bei del.icio.us'></a><?
 
-          <a href="<?= $this->value =
-          'http://scholar.google.de/scholar?hl=de&q=' .$title_main;?>">
-          <img src = "<?= $this->value =
-          $this->layoutPath . '/img/google_scholar.jpg';?>" border = '0' title = 'Dokument in Google Scholar suchen'></a>
+          if (array_key_exists ('TitleMain_0_Value', $this->mydoc_data) === true)
+          {?>
+             <a href="<?= $this->value =
+             'http://scholar.google.de/scholar?hl=de&q=' .$this->mydoc_data['TitleMain_0_Value'];?>">
+             <img src = "<?= $this->value =
+             $this->layoutPath . '/img/google_scholar.jpg';?>" border = '0' title = 'Dokument in Google Scholar suchen'></a><?
+          }?>
 
           <a href="<?= $this->value = '';?>">
           <img src = "<?= $this->value =

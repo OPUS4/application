@@ -33,7 +33,9 @@ class Frontdoor_HashController extends Zend_Controller_Action
            $this->view->author = $author;
        }
 
-       if (is_array ($files = $document->getFile()) === true)
+       $files = $document->getFile();
+
+       if (empty ($files) === false)
        {
           $fileNumber = count($files);
           $this->view->fileNumber = $fileNumber;
@@ -75,9 +77,14 @@ class Frontdoor_HashController extends Zend_Controller_Action
                   }
               }
           }
+          $this->view->hashValueType = $hashValueType;
+          $this->view->hashLabel = $hashLabel;
        }
-       $this->view->hashValueType = $hashValueType;
-       $this->view->hashLabel = $hashLabel;
+       else
+       {
+           $this->fileNumber = $fileNumber = 0;
+           $this->view->fileNumber = $fileNumber;
+       }
     }
 
     public function verifyAction()
