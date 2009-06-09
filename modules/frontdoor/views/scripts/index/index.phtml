@@ -58,10 +58,12 @@
           }
        }
 
-       //display collection path (i.e. DDC)
-       foreach ($this->collectionPathes as $collPath)
-       {
-          echo $collPath . "<br />\n";
+       if (isset($this->collectionPathes) === true && is_array($this->collectionPathes) === true) {
+           //display collection path (i.e. DDC)
+           foreach ($this->collectionPathes as $collPath)
+           {
+              echo $collPath . "<br />\n";
+           }
        }
 
       //displaying titles and authors
