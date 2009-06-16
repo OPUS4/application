@@ -105,7 +105,7 @@ class SearchEngineIndexBuilder extends Application_Bootstrap {
         foreach ($docresult as $row) {
         	if ($start <= $row) {
         		if ($end >= $row || $end === null) {
-                    echo "Memory amount: " . memory_get_usage() . "\n";
+                    echo "Memory amount: " . round(memory_get_usage()/1024/1024, 2) . " (MB)\n";
                     $docadapter = new Opus_Document( (int) $row);
                     $returnvalue = $indexer->addDocumentToEntryIndex($docadapter);
         	        unset($docadapter);
