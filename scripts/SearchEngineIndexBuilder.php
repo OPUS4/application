@@ -54,6 +54,42 @@ class SearchEngineIndexBuilder extends Application_Bootstrap {
      * @return void
      */
     public function _run() {
+        
+        global $argv, $argc;
+        
+    	if (true === in_array('--help', $argv) || true === in_array('-h', $argv)) {
+    		echo "Usage: " . $argv[0] . " [starting with ID] [ending with ID] [number of maximum buffered docs]\n";
+    		echo "\n";
+    		echo "[starting with ID] If system aborted indexing at some ID, you can restart this command by supplying this parameter.\n";
+    		echo "It should be the ID where the program stopped before.\n";
+    		echo "Default start value is 0.\n";
+    		echo "\n";
+    		echo "[ending with ID] You can also supply a second ID where the indexer should stop indexing.\n";
+    		echo "If you omit this parameter or set it to null, the indexer will index all remaining documents.\n";
+    		echo "\n";
+    		echo "[number of maximum buffered docs] sets the number of documents that should get held in memory before writing them to index\n";
+    		echo "Low numbers will decrease performance and time amount for indexing, but also decreases the amount of desired memory.\n";
+    		echo "A high number can increase performance, but maybe the system will run out of memory and abort indexing.\n";
+    		echo "The best value to supply here is to calculate [php memory limit]/[size of biggest pdf document to index].\n";
+   		    echo "You should set the memory limit to a value larger than your biggest document!\n";
+   		    echo "Default value for maximum buffered docs is 3.\n";
+    		exit;
+    	}
+
+        $docresult = Opus_Document::getAllIds();
+        
+        // Evaluate parameters or set them to default values
+        $start = 0;
+        $maxBufferedDocs = 3;
+       	$end = null;
+        if ($argc >= 2) $start = $argv[1];
+        $docsToIndex = count($docresult)-$start;
+        if ($argc >= 3) {
+        	$end = $argv[2];
+        	$docsToIndex = $end-$start;
+        }
+        if ($argc >= 4) $maxBufferedDocs = $argv[3];
+
 		// removes index directory to start from scratch
         $registry = Zend_Registry::getInstance();
         $indexpath = $registry->get('Zend_LuceneIndexPath');
@@ -63,24 +99,24 @@ class SearchEngineIndexBuilder extends Application_Bootstrap {
         }
         closedir($fh);
 
-        $docresult = Opus_Document::getAllIds();
-        $indexer = new Opus_Search_Index_Indexer();
+        $indexer = new Opus_Search_Index_Indexer($maxBufferedDocs);
 
-        echo date('Y-m-d H:i:s') . " Start\n";
+        echo date('Y-m-d H:i:s') . " Starting indexing of " . $docsToIndex . " documents\n";
         foreach ($docresult as $row) {
-            flush();
-            echo "Memorybedarf vor Indizierung von $row: " . memory_get_usage() . "\n";
-            $docadapter = new Opus_Document( (int) $row);
-            $returnvalue = $indexer->addDocumentToEntryIndex($docadapter);
-        	unset($docadapter);
-       		foreach ($returnvalue as $value) {
-       		    echo date('Y-m-d H:i:s') . ": " . $value . "\n";
-       		}
-       		unset($returnvalue);
-       		flush();
-       		echo "Memorybedarf nach Indizierung von $row: " . memory_get_usage() . "\n";
+        	if ($start <= $row) {
+        		if ($end >= $row || $end === null) {
+                    echo "Memory amount: " . memory_get_usage() . "\n";
+                    $docadapter = new Opus_Document( (int) $row);
+                    $returnvalue = $indexer->addDocumentToEntryIndex($docadapter);
+        	        unset($docadapter);
+       		        foreach ($returnvalue as $value) {
+       		            echo date('Y-m-d H:i:s') . ": " . $value . "\n";
+       		        }
+       		        unset($returnvalue);
+        		}
+            }
         }
-        echo date('Y-m-d H:i:s') . ' Stop';
+        echo date('Y-m-d H:i:s') . " Finished indexing!\n";
 
         $indexer->finalize();
     }
