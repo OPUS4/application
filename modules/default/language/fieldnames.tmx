@@ -248,6 +248,14 @@
         <seg>Freies Schlagwort / Tag</seg>
       </tuv>
     </tu>
+    <tu tuid="SubjectPsyndex">
+      <tuv xml:lang="en">
+        <seg>Psyndex Keywords</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Psyndex-Schlagwörter</seg>
+      </tuv>
+    </tu>
      <tu tuid="Edition">
       <tuv xml:lang="en">
         <seg>Edition</seg>
@@ -528,7 +536,15 @@
         <seg>Text</seg>
       </tuv>
     </tu>
-    <tu tuid="scope">
+    <tu tuid="Creator">
+      <tuv xml:lang="en">
+        <seg>Creator</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Verfasser</seg>
+      </tuv>
+    </tu>
+    <tu tuid="Scope">
       <tuv xml:lang="en">
         <seg>Scope</seg>
       </tuv>
@@ -543,7 +559,7 @@
       <tuv xml:lang="de">
         <seg>Patentinformationen</seg>
       </tuv>
-    </tu><tu tuid="PatentCountries">
+    </tu><tu tuid="Countries">
       <tuv xml:lang="en">
         <seg>Country of Patent Application</seg>
       </tuv>
@@ -551,7 +567,7 @@
         <seg>Land der Patentanmeldung</seg>
       </tuv>
     </tu>
-    <tu tuid="PatentDateGranted">
+    <tu tuid="DateGranted">
       <tuv xml:lang="en">
         <seg>Date of Patent Granted</seg>
       </tuv>
@@ -559,7 +575,7 @@
         <seg>Datum der Patenterteilung</seg>
       </tuv>
     </tu>
-    <tu tuid="PatentNumber">
+    <tu tuid="Number">
       <tuv xml:lang="en">
         <seg>Patent Number</seg>
       </tuv>
@@ -567,7 +583,7 @@
         <seg>Patentnummer</seg>
       </tuv>
     </tu>
-    <tu tuid="PatentYearApplied">
+    <tu tuid="YearApplied">
       <tuv xml:lang="en">
         <seg>Patent Year applied</seg>
       </tuv>
@@ -575,7 +591,7 @@
         <seg>Jahr der Anmeldung</seg>
       </tuv>
     </tu>
-    <tu tuid="PatentApplication">
+    <tu tuid="Application">
       <tuv xml:lang="en">
         <seg>PatentApplication</seg>
       </tuv>
@@ -719,6 +735,20 @@
         <seg>Text</seg>
       </tuv>
     </tu>
+    <tu tuid="PublicationVersion">
+      <tuv xml:lang="en">
+        <seg>Version of Publication</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Publikationsversion</seg>
+      </tuv>
+    <tu tuid="PublisherUniversity">
+      <tuv xml:lang="en">
+        <seg>Publisher University</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Universität (Veröffentlicher)</seg>
+      </tuv>
     <tu tuid="AdditionalFormFields">
       <tuv xml:lang="en">
         <seg>additional fields</seg>
