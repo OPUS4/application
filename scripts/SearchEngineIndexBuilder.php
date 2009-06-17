@@ -90,15 +90,17 @@ class SearchEngineIndexBuilder extends Application_Bootstrap {
         }
         if ($argc >= 4) $maxBufferedDocs = $argv[3];
 
-		// removes index directory to start from scratch
-        $registry = Zend_Registry::getInstance();
-        $indexpath = $registry->get('Zend_LuceneIndexPath');
-        $fh = opendir($indexpath);
-        while (false !== $file = readdir($fh)) {
-            @unlink($indexpath . '/' . $file);
+		// removes index directory to start from scratch, if no limit is given
+        if ($start === 0 && $end === null) {
+            $registry = Zend_Registry::getInstance();
+            $indexpath = $registry->get('Zend_LuceneIndexPath');
+            $fh = opendir($indexpath);
+            while (false !== $file = readdir($fh)) {
+                @unlink($indexpath . '/' . $file);
+            }
+            closedir($fh);
         }
-        closedir($fh);
-
+        
         $indexer = new Opus_Search_Index_Indexer($maxBufferedDocs);
 
         echo date('Y-m-d H:i:s') . " Starting indexing of " . $docsToIndex . " documents\n";
