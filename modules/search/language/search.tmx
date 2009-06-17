@@ -314,6 +314,22 @@
         <seg>Assoziiertes Institut</seg>
       </tuv>
     </tu>
+    <tu tuid="searchfield_isbn">
+      <tuv xml:lang="en">
+        <seg>ISBN</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>ISBN</seg>
+      </tuv>
+    </tu>
+    <tu tuid="searchfield_urn">
+      <tuv xml:lang="en">
+        <seg>URN</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>URN</seg>
+      </tuv>
+    </tu>
     <tu tuid="boolean_and">
       <tuv xml:lang="en">
         <seg>and</seg>

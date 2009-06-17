@@ -124,7 +124,9 @@ class MetadataSearch extends Zend_Form
             'subject' => 'searchfield_subject',
             'doctype' => 'searchfield_doctype',
             'year' => 'searchfield_year',
-            'institute' => 'searchfield_institute'
+            'institute' => 'searchfield_institute',
+            'urn' => 'searchfield_urn',
+            'isbn' => 'searchfield_isbn'
             );
     	return $fields;
     }
