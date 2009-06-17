@@ -50,6 +50,22 @@
         <seg>Datei(en)</seg>
       </tuv>
     </tu>
+    <tu tuid="FileType">
+      <tuv xml:lang="en">
+        <seg>File Type</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dateiart</seg>
+      </tuv>
+    </tu>
+    <tu tuid="PathName">
+      <tuv xml:lang="en">
+        <seg>Pathname</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Pfadname</seg>
+      </tuv>
+    </tu>
     <tu tuid="HashType">
       <tuv xml:lang="en">
         <seg>Hashtype</seg>
@@ -167,7 +183,7 @@
         <seg>Internet Media Type</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Internet Media Type</seg>
+        <seg>Internet Media Typ</seg>
       </tuv>
     </tu>
     <tu tuid="NameLong">
@@ -178,12 +194,28 @@
         <seg>Lizenzname</seg>
       </tuv>
     </tu>
+    <tu tuid="Role">
+      <tuv xml:lang="en">
+        <seg>Role</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Funktion</seg>
+      </tuv>
+    </tu>
     <tu tuid="SortOrder">
       <tuv xml:lang="en">
         <seg>Sort Order</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Sortierreihenfolge</seg>
+      </tuv>
+    </tu>
+    <tu tuid="AllowEmailContact">
+      <tuv xml:lang="en">
+        <seg>e-mail contact allowed</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>e-mail-Kontakt erlaubt</seg>
       </tuv>
     </tu>
     <tu tuid="PodAllowed">
