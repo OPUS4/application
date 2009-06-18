@@ -134,7 +134,7 @@ class Frontdoor_IndexController extends Zend_Controller_Action
            $this->view->languageNumber = $languageNumber;
         }
 
-        // Proof existence of swd-keyword-strings, find out swdNumber
+        //Proof existence of swd-keyword-strings, find out swdNumber
         if (is_array ($swd = $document->getSubjectSwd()) === true)
         {
            $swdNumber = count($swd);
