@@ -65,7 +65,7 @@ class SearchEngineIndexBuilder extends Application_Bootstrap {
     		echo "Default start value is 0.\n";
     		echo "\n";
     		echo "[ending with ID] You can also supply a second ID where the indexer should stop indexing.\n";
-    		echo "If you omit this parameter or set it to null, the indexer will index all remaining documents.\n";
+    		echo "If you omit this parameter or set it to 0, the indexer will index all remaining documents.\n";
     		echo "\n";
     		echo "[number of maximum buffered docs] sets the number of documents that should get held in memory before writing them to index\n";
     		echo "Low numbers will decrease performance and time amount for indexing, but also decreases the amount of desired memory.\n";
@@ -81,12 +81,16 @@ class SearchEngineIndexBuilder extends Application_Bootstrap {
         // Evaluate parameters or set them to default values
         $start = 0;
         $maxBufferedDocs = 3;
-       	$end = null;
         if ($argc >= 2) $start = $argv[1];
         $docsToIndex = count($docresult)-$start;
         if ($argc >= 3) {
-        	$end = $argv[2];
-        	$docsToIndex = $end-$start;
+        	if ($argv[2] === 0) {
+        		$end = null;
+        	}
+        	else {
+        		$end = $argv[2];
+        	    $docsToIndex = $end-$start;
+        	}
         }
         if ($argc >= 4) $maxBufferedDocs = $argv[3];
 
