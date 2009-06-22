@@ -163,11 +163,22 @@ class Admin_CollectionController extends Controller_Action {
      * @return void
      */
     public function showAction() {
-        $roleId = $this->getRequest()->getParam('role');
+        $roleId = (int) $this->getRequest()->getParam('role');
         $collection = new Opus_CollectionRole($roleId);
         $roleName = $collection->getDisplayName();
         $path = $this->getRequest()->getParam('path');
         $copy = $this->getRequest()->getParam('copy');
+        if (true === isset($copy)) {
+            $cpCollection = $collection;
+            $trail = explode('-', $copy);
+            foreach($trail as $step) {
+                $cpCollection = $cpCollection->getSubCollection($step);
+            }
+            $copyId = $cpCollection->getId();
+            unset($position);
+        } else {
+            $copyId = 0;
+        }
         $subcollections = array();
         $breadcrumb = array();
         $severalAppearances = array();
@@ -186,13 +197,30 @@ class Admin_CollectionController extends Controller_Action {
             foreach($collection->getSubCollection() as $i => $subcollection) {
                 $severalAppearances[$path . '-' . $i] = (true === $subcollection->getSeveralAppearances())?'several':'unique';
                 $visibility[$path . '-' . $i] = (true === $subcollection->getVisibility())?'visible':'hidden';
+                // Alle Parents der aktuellen Subcollection
+                $parentIds = Opus_Collection_Information::getAllParents($roleId, (int) $subcollection->getId());
+                //$parents = $subcollection->getParentCollection();
+
+                $copypaste[$path . '-' . $i] = ((int) $copyId === (int) $subcollection->getId())?'forbidden':'allowed';
+                //$copypaste[$path . '-' . $i] = (true === in_array($copyId, $parentIds))?'forbidden':'allowed';
+                $prn = implode(',', $parentIds);
                 $subcollections[$path . '-' . $i] = $subcollection->getDisplayName();
             }
         } else {
             foreach($collection->getSubCollection() as $i => $subcollection) {
                 $severalAppearances[$i] = (true === $subcollection->getSeveralAppearances())?'several':'unique';
                 $visibility[$i] = (true === $subcollection->getVisibility())?'visible':'hidden';
+                // Alle Parents der aktuellen Subcollection
+                $parentIds = Opus_Collection_Information::getAllParents($roleId, (int) $subcollection->getId());//print_r($parentIds);
+                //$parents = $subcollection->getParentCollection();
+                $copypaste[$i] = ((int) $copyId === (int) $subcollection->getId())?'forbidden':'allowed';
+
+                //$copypaste[$i] = (true === in_array($copyId, $parentIds))?'forbidden':'allowed';
+
+                $prn = implode(',', $parentIds);
+
                 $subcollections[$i] = $subcollection->getDisplayName();
+
             }
         }
         $this->view->severalAppearances = $severalAppearances;
@@ -203,6 +231,7 @@ class Admin_CollectionController extends Controller_Action {
         $this->view->path = $path;
         $this->view->copy = $copy;
         $this->view->breadcrumb = $breadcrumb;
+        $this->view->copypaste = $copypaste;
     }
 
     /**

@@ -62,8 +62,13 @@
     <? foreach($this->subcollections as $path => $name) : ?>
     <li class="<?=$this->visibility[$path]?>" <?=('hidden' === $this->visibility[$path])?'style="text-decoration:line-through"':''?>>
         <form action="<?= $this->url(array('action' => 'manage', 'role'=>$this->role_id, 'path'=>$path)) ?>" method="post">
+        <? if ((true === isset($this->copy)) AND (('allowed' === $this->copypaste[$path])) OR (false === isset($this->copy))) { ?>
             <a href="<?=$this->url(array('module'=>'admin', 'controller'=>'collection', 'action'=>'show',
                 'role'=>$this->role_id, 'path'=>$path, 'copy'=>$this->copy), null, true)?>"><?=$name?></a>
+        <? } else {       ?>
+            <?=$name?>
+        <? }  ?>
+
 
         <? if (true === isset($this->copy)) { ?>
 
@@ -111,7 +116,9 @@
      ?>
             <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'show',
                 'role' => $this->role_id, 'copy' => $path), null, true)?>">Copy</a>
-        <? } ?>
+        <? }
+        ?>
+
         </form>
     </li>
     <? endforeach; ?>
