@@ -276,6 +276,24 @@
                <?= $this->translate($value);?></p><?
             }
 
+            if (array_key_exists ('TitleParent_0_Value', $this->mydoc_data) === true)
+            {
+               for ($i = 0; $i < $this->titleparentNumber; $i++)
+               {
+                  if (array_key_exists ('TitleParent_'.$i.'_Value', $this->mydoc_data) === true)
+                  {
+                     $value = $this->mydoc_data['TitleParent_'.$i.'_Value'];?>
+                     <p><b><?= $this-> translate('TitleParent')?>: </b>
+                     <?= $this->value = $value;?></p><?
+                  }
+               }
+            }
+            elseif (array_key_exists ('TitleParent_Value', $this->mydoc_data) === true)
+            {
+               $value = $this->mydoc_data['TitleParent_Value'];?>
+               <p><h2><?= $this->value = $value;?></h2></p><?
+            }
+
             if (array_key_exists ('SubjectSwd_0_Value', $this->mydoc_data) === true)
             {
                 for ($i = 0; $i < $this->swdNumber; $i++)
@@ -321,16 +339,16 @@
               }
               elseif (array_key_exists ('SubjectUncontrolled_Value', $this->mydoc_data) === true)
               {
-                 if (array_key_exists ('SubjectUncontrolled_'.$i.'_Language', $this->mydoc_data) === true)
+                 if (array_key_exists ('SubjectUncontrolled_Language', $this->mydoc_data) === true)
                  {
                     $this->value = $value = $this->mydoc_data['SubjectUncontrolled_Value'];
                     $this->lang = $lang = $this->mydoc_data['SubjectUncontrolled_Language'];
-                  }?>
+                 }?>
                   <p><b><?= $this-> translate('SubjectUncontrolledValue') .' ('. $this->translate($lang). ')';?>: </b>
                   <?= $this->value = $value;?></p><?
                }
 
-               if ($this->psyndexNumber != 0)
+               if (array_key_exists ('SubectPsyndex_0_Value', $this->mydoc_data) === true)
                {
                   for ($i = 0; $i < $this->psyndexNumber; $i++)
                   {
@@ -346,6 +364,17 @@
                      }
                   }
                }
+               elseif (array_key_exists ('SubjectPsyndex_Value', $this->mydoc_data) === true)
+               {
+                  if(array_key_exists ('SubjectPsyndex_Language', $this->mydoc_data) == true)
+                  {
+                     $this->value = $value = $this->mydoc_data['SubjectPsyndex_'.$i.'_Value'];
+                     $this->lang = $lang = $this->mydoc_data['SubjectPsyndex_'.$i.'_Language'];
+                  }?>
+                  <p><b><?= $this-> translate('SubjectPsyndexValue') .' ('. $this->translate($lang). ')';?>: </b>
+                  <?= $this->value = $value;?></p><?
+               }
+
                if (array_key_exists ('PublishedYear', $this->mydoc_data) === true)
                {
                   $value = $this->mydoc_data['PublishedYear'];?>
@@ -377,7 +406,7 @@
                   <?= $this->value = $value;?></p><?
                }
 
-               if ($this->isbnNumber != 0)
+               if (array_key_exists ('IdentifierIsbn_0_Value', $this->mydoc_data) === true)
                {
                   for ($i=0; $i < $this->isbnNumber; $i++)
                   {
@@ -388,6 +417,12 @@
                         <?= $this->value = $value;?></p><?
                      }
                   }
+               }
+               elseif (array_key_exists ('IdentifierIsbn_Value', $this->mydoc_data) === true)
+               {
+                 $this->value = $value = $this->mydoc_data['IdentifierIsbn_Value'];?>
+                 <p><b><?= $this-> translate('IdentifierIsbn')?>: </b>
+                 <?= $this->value = $value;?></p><?
                }
 
                if (array_key_exists ('PageNumber', $this->mydoc_data) === true)
@@ -415,7 +450,7 @@
                   <?= $this->value = $value;?></p><?
                }
 
-               if ($this->contributorNumber != 0)
+               if (array_key_exists ('PersonContributor_0_Name', $this->mydoc_data) === true)
                {
                   for ($i = 0; $i < $this->contributorNumber; $i++)
                   {
@@ -427,21 +462,33 @@
                      }
                   }
                }
+               elseif (array_key_exists ('PersonContributorName', $this->mydoc_data) === true)
+               {
+                  $value = $this->mydoc_data['PersonContributorName'];?>
+                  <p><b><?= $this-> translate('PersonContributor')?>: </b>
+                  <?= $this->value = $value;?></p><?
+               }
 
-               if ($this->refereeNumber != 0)
+               if (array_key_exists ('PersonReferee_0_Name', $this->mydoc_data) === true)
                {
                   for ($i = 0; $i < $this->refereeNumber; $i++)
                   {
                     if (array_key_exists ('PersonReferee_'.$i.'_Name', $this->mydoc_data) === true)
                     {
-                        $value = $this->mydoc_data['PersonReferee_'.$i.'_Name'];?>
-                        <p><b><?= $this-> translate('PersonReferee')?>: </b>
-                        <?= $this->value = $value;?></p><?
+                       $value = $this->mydoc_data['PersonReferee_'.$i.'_Name'];?>
+                       <p><b><?= $this-> translate('PersonReferee')?>: </b>
+                       <?= $this->value = $value;?></p><?
                     }
                   }
                }
+               elseif (array_key_exists ('PersonReferee_Name', $this->mydoc_data) === true)
+               {
+                  $value = $this->mydoc_data['PersonRefereeName'];?>
+                  <p><b><?= $this-> translate('PersonReferee')?>: </b>
+                  <?= $this->value = $value;?></p><?
+               }
 
-               if ($this->editorNumber != 0)
+               if (array_key_exists ('PersonEditor_0_Name', $this->mydoc_data) === true)
                {
                   for ($i = 0; $i < $this->editorNumber; $i++)
                   {
@@ -453,27 +500,71 @@
                     }
                   }
                }
+               elseif (array_key_exists ('PersonEditor_Name', $this->mydoc_data) === true)
+               {
+                  $value = $this->mydoc_data['PersonEditor_Name'];?>
+                  <p><b><?= $this-> translate('PersonEditor')?>: </b>
+                  <?= $this->value = $value;?></p><?
+               }
 
-               if (array_key_exists ('PersonTranslator_Name', $this->mydoc_data) === true)
+               if (array_key_exists ('PersonTranslator_0_Name', $this->mydoc_data) === true)
+               {
+                  for ($i = 0; $i < $this->translatorNumber; $i++)
+                  {
+                    if (array_key_exists ('PersonTranslator_'.$i.'_Name', $this->mydoc_data) === true)
+                    {
+                        $value = $this->mydoc_data['PersonTranslator_'.$i.'_Name'];?>
+                        <p><b><?= $this-> translate('PersonTranslator')?>: </b>
+                        <?= $this->value = $value;?></p><?
+                    }
+                  }
+               }
+               elseif (array_key_exists ('PersonTranslator_Name', $this->mydoc_data) === true)
                {
                   $value = $this->mydoc_data['PersonTranslator_Name'];?>
                   <p><b><?= $this-> translate('PersonTranslator')?>: </b>
                   <?= $this->value = $value;?></p><?
                }
 
-               if ($this->otherPersonNumber !=0)
+               if (array_key_exists ('PersonAdvisor_0_Name', $this->mydoc_data) === true)
+               {
+                  for ($i = 0; $i < $this->advisorNumber; $i++)
+                  {
+                    if (array_key_exists ('PersonAdvisor_'.$i.'_Name', $this->mydoc_data) === true)
+                    {
+                        $value = $this->mydoc_data['PersonAdvisor_'.$i.'_Name'];?>
+                        <p><b><?= $this-> translate('PersonAdvisor')?>: </b>
+                        <?= $this->value = $value;?></p><?
+                    }
+                  }
+               }
+               elseif (array_key_exists ('PersonAdvisor_Name', $this->mydoc_data) === true)
+               {
+                  $value = $this->mydoc_data['PersonAdvisor_Name'];?>
+                  <p><b><?= $this-> translate('PersonAdvisor')?>: </b>
+                  <?= $this->value = $value;?></p><?
+               }
+
+               if (array_key_exists ('PersonOther_0_Name', $this->mydoc_data) === true)
                {
                   for ($i = 0; $i < $this->otherPersonNumber; $i++)
                   {
-                     if (array_key_exists ('PersonOther_'.$i.'_Name', $this->mydoc_data) === true)
-                     {
+                    if (array_key_exists ('PersonOther_'.$i.'_Name', $this->mydoc_data) === true)
+                    {
                         $value = $this->mydoc_data['PersonOther_'.$i.'_Name'];?>
                         <p><b><?= $this-> translate('PersonOther')?>: </b>
                         <?= $this->value = $value;?></p><?
-                     }
+                    }
                   }
                }
-               if ($this->abstractNumber != 0)
+               elseif (array_key_exists ('PersonOther_Name', $this->mydoc_data) === true)
+               {
+                  $value = $this->mydoc_data['PersonOther_Name'];?>
+                  <p><b><?= $this-> translate('PersonOther')?>: </b>
+                  <?= $this->value = $value;?></p><?
+               }
+
+               if (array_key_exists ('TitleAbstract_0_Value', $this->mydoc_data) === true)
                {
                   for ($i = 0; $i < $this->abstractNumber; $i++)
                   {
@@ -489,6 +580,16 @@
                      }
                   }
                }
+               elseif (array_key_exists ('TitleAbstract_Value', $this->mydoc_data) === true)
+               {
+                  if (array_key_exists ('TitleAbstract_Language', $this->mydoc_data) === true)
+                  {
+                     $this->value = $value = $this->mydoc_data['TitleAbstract_Value'];
+                     $this->lang = $lang = $this->mydoc_data['TitleAbstract_Language'];
+                  }?>
+                  <p><b><?= $this-> translate('TitleAbstractValue') .' ('. $this->translate($lang). ')';?>: </b>
+                  <?= $this->value = $value;?></p><?
+              }
 
                if (array_key_exists ('Licence_0_NameLong', $this->mydoc_data) === true)
                {
