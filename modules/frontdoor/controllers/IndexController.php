@@ -75,8 +75,9 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         }
 
         // Proof existence of URN, find out urnNumber
-        if (is_array ($urn = $document->getIdentifierUrn()) === true)
+        if (array_key_exists ('IdentifierUrn', $doc_data) === true)
         {
+           $urn = $document->getIdentifierUrn();
            $urnNumber = count($urn);
            $this->view->urnNumber = $urnNumber;
         }
@@ -87,8 +88,9 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         }
 
         // Proof existence of main titles, find out titleNumber
-        if (is_array ($titles = $document->getTitleMain()) === true)
+        if (array_key_exists ('TitleMain', $doc_data) === true)
         {
+           $titles = $document->getTitleMain();
            $titleNumber = count($titles);
            $this->view->titleNumber = $titleNumber;
         }
@@ -99,8 +101,9 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         }
 
         // Proof existence of files, find out fileNumber
-        if (is_array ($files = $document->getFile()) === true)
+        if (array_key_exists ('File', $doc_data) === true)
         {
+           $files = $document->getFile();
            $fileNumber = count($files);
            $this->view->fileNumber = $fileNumber;
         }
@@ -111,8 +114,9 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         }
 
         // Proof existence of authors, find out authorNumber
-        if (is_array ($authors = $document->getPersonAuthor()) === true)
+        if (array_key_exists ('PersonAuthor', $doc_data) === true)
         {
+           $authors = $document->getPersonAuthor();
            $authorNumber = count($authors);
            $this->view->authorNumber = $authorNumber;
         }
@@ -123,8 +127,9 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         }
 
         // Proof existence of languages, find out languageNumber
-        if (is_array ($languages = $document->getLanguage()) === true)
+        if (array_key_exists ('Language', $doc_data) === true)
         {
+           $languages = $document->getLanguage();
            $languageNumber = count($languages);
            $this->view->languageNumber = $languageNumber;
         }
@@ -134,9 +139,23 @@ class Frontdoor_IndexController extends Zend_Controller_Action
            $this->view->languageNumber = $languageNumber;
         }
 
-        //Proof existence of swd-keyword-strings, find out swdNumber
-        if (is_array ($swd = $document->getSubjectSwd()) === true)
+        // Proof existence of parent titles, find out titleparentNumber
+        if (array_key_exists ('TitleParent', $doc_data) === true)
         {
+          $titleparents = $document->getTitleParent();
+          $titleparentNumber = count($titleparents);
+          $this->view->titleparentNumber = $titleparentNumber;
+        }
+        else
+        {
+           $this->titleparentNumber = $titleParentNumber = 0;
+           $this->view->titleparentNumber = $titleParentNumber;
+        }
+
+        //Proof existence of swd-keyword-strings, find out swdNumber
+        if (array_key_exists ('SubjectSwd', $doc_data) === true)
+        {
+           $swd = $document->getSubjectSwd();
            $swdNumber = count($swd);
            $this->view->swdNumber = $swdNumber;
         }
@@ -147,8 +166,9 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         }
 
         // Proof existence of uncontrolled keyword-strings, find out uncontrolledNumber
-        if (is_array ($uncontrolled = $document->getSubjectUncontrolled()) === true)
+        if (array_key_exists ('SubjectUncontrolled', $doc_data) === true)
         {
+           $uncontrolled = $document->getSubjectUncontrolled();
            $uncontrolledNumber = count($uncontrolled);
            $this->view->uncontrolledNumber = $uncontrolledNumber;
         }
@@ -159,20 +179,22 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         }
 
         // Proof existence of psyndex-keyword-strings, find out psyndexNumber
-        if (is_array ($psyndex = $document->getSubjectPsyndex()) === true)
+        if (array_key_exists('SubjectPsyndex', $doc_data) === true)
         {
+           $psyndex = $document->getSubjectPsyndex();
            $psyndexNumber = count($psyndex);
            $this->view->psyndexNumber = $psyndexNumber;
         }
         else
         {
-           $this->psyndexNumber = $psyndexrNumber = 0;
+           $this->psyndexNumber = $psyndexNumber = 0;
            $this->view->psyndexNumber = $psyndexNumber;
         }
 
         // Proof existence of isbn, find out isbnNumber (that means the number of isbn values)
-        if (is_array ($isbn = $document->getIdentifierIsbn()) === true)
+        if (array_key_exists ('IdentifierIsbn', $doc_data) === true)
         {
+           $isbn = $document->getIdentifierIsbn();
            $isbnNumber = count($isbn);
            $this->view->isbnNumber = $isbnNumber;
         }
@@ -183,8 +205,9 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         }
 
         // Proof existence of contributors, find out contributorNumber
-        if (is_array ($contributors = $document->getPersonContributor()) === true)
+        if (array_key_exists ('PersonContributor', $doc_data) === true)
         {
+           $contributors = $document->getPersonContributor();
            $contributorNumber = count($contributors);
            $this->view->contributorNumber = $contributorNumber;
         }
@@ -194,9 +217,36 @@ class Frontdoor_IndexController extends Zend_Controller_Action
            $this->view->contributorNumber = $contributorNumber;
         }
 
-        // Proof existence of other persons, find out otherPersonNumber
-        if (is_array ($otherPersons = $document->getPersonOther()) === true)
+        // Proof existence of translators, find out translatorNumber
+        if (array_key_exists ('PersonTranslator', $doc_data) === true)
         {
+           $translators = $document->getPersonTranslator();
+           $translatorNumber = count($translators);
+           $this->view->translatorNumber = $translatorNumber;
+        }
+        else
+        {
+           $this->translatorNumber = $translatorNumber = 0;
+           $this->view->translatorNumber = $translatorNumber;
+        }
+
+        // Proof existence of advisors, find out advisorNumber
+        if (array_key_exists ('PersonAdvisor', $doc_data) === true)
+        {
+           $advisors = $document->getPersonAdvisor();
+           $advisorNumber = count($advisors);
+           $this->view->advisorNumber = $advisorNumber;
+        }
+        else
+        {
+           $this->advisorNumber = $advisorNumber = 0;
+           $this->view->advisorNumber = $advisorNumber;
+        }
+
+        // Proof existence of other persons, find out otherPersonNumber
+        if (array_key_exists ('PersonOther', $doc_data) === true)
+        {
+           $otherPersons = $document->getPersonOther();
            $otherPersonNumber = count($otherPersons);
            $this->view->otherPersonNumber = $otherPersonNumber;
         }
@@ -207,8 +257,9 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         }
 
         // Proof existence of referees, find out refereeNumber
-        if (is_array ($referees = $document->getPersonReferee()) === true)
+        if (array_key_exists ('PersonReferee', $doc_data) === true)
         {
+           $referees = $document->getPersonReferee();
            $refereeNumber = count($referees);
            $this->view->refereeNumber = $refereeNumber;
         }
@@ -219,8 +270,9 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         }
 
         // Proof existence of editors, find out editorNumber
-        if (is_array ($editors = $document->getPersonEditor()) === true)
+        if (array_key_exists ('PersonEditor', $doc_data) === true)
         {
+           $editors = $document->getPersonEditor();
            $editorNumber = count($editors);
            $this->view->editorNumber = $editorNumber;
         }
@@ -231,8 +283,9 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         }
 
         // Proof existence of authors, find out authorNumber
-        if (is_array ($authors = $document->getPersonAuthor()) === true)
+        if (array_key_exists ('PersonAuthor', $doc_data) === true)
         {
+           $authors = $document->getPersonAuthor();
            $authorNumber = count($authors);
            $this->view->authorNumber = $authorNumber;
         }
@@ -243,8 +296,9 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         }
 
         // Proof existence of abstracts, find out abstractNumber
-        if (is_array ($abstracts = $document->getTitleAbstract()) === true)
+        if (array_key_exists ('TitleAbstract', $doc_data) === true)
         {
+           $abstracts = $document->getTitleAbstract();
            $abstractNumber = count($abstracts);
            $this->view->abstractNumber = $abstractNumber;
         }
@@ -255,8 +309,9 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         }
 
         // Proof existence of licences, find out licenceNumber
-        if (is_array ($licences = $document->getLicence()) === true)
+        if (array_key_exists ('Licence', $doc_data) === true)
         {
+           $licences = $document->getLicence();
            $licenceNumber = count($licences);
            $this->view->licenceNumber = $licenceNumber;
         }
