@@ -381,29 +381,15 @@
                   <p><b><?= $this-> translate('PublishedYear')?>: </b>
                   <?= $this->value = $value;?></p><?
                }
-               if (array_key_exists ('PublishedDate', $this->mydoc_data) === true)
+               if (array_key_exists ('PublishedDate_year', $this->mydoc_data) &&
+               (array_key_exists ('PublishedDate_month', $this->mydoc_data)) &&
+               (array_key_exists ('PublishedDate_day', $this->mydoc_data)))
                {
-                  $value = $this->mydoc_data['PublishedDate'];?>
+                  $year = $this->mydoc_data['PublishedDate_year'];
+                  $month = $this->mydoc_data['PublishedDate_month'];
+                  $day = $this->mydoc_data['PublishedDate_day'];?>
                   <p><b><?= $this-> translate('PublishedDate')?>: </b>
-                  <?= $this->value = $value;?></p><?
-               }
-               if (array_key_exists ('CompletedDate', $this->mydoc_data) === true)
-               {
-                  $value = $this->mydoc_data['CompletedDate'];?>
-                  <p><b><?= $this-> translate('CompletedDate')?>: </b>
-                  <?= $this->value = $value;?></p><?
-               }
-               if (array_key_exists ('CompletedYear', $this->mydoc_data) === true)
-               {
-                  $value = $this->mydoc_data['CompletedYear'];?>
-                  <p><b><?= $this-> translate('CompletedYear')?>: </b>
-                  <?= $this->value = $value;?></p><?
-               }
-               if (array_key_exists ('DateAccepted', $this->mydoc_data) === true)
-               {
-                  $value = $this->mydoc_data['DateAccepted'];?>
-                  <p><b><?= $this-> translate('DateAccepted')?>: </b>
-                  <?= $this->value = $value;?></p><?
+                  <?= $this->year = $year. '-' .$month. '-' .$day?></p><?
                }
 
                if (array_key_exists ('IdentifierIsbn_0_Value', $this->mydoc_data) === true)
