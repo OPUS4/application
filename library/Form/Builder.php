@@ -69,6 +69,10 @@ class Form_Builder {
             $form = new Zend_Form();
         }
 
+        if ($model instanceof Opus_Model_Dependent_Link_Abstract) {
+            $model = $model->getModel();
+        }
+
         foreach ($model->describe() as $fieldname) {
             $field = $model->getField($fieldname);
             $this->_prepareElement($field, $form);
