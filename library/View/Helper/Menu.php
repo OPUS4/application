@@ -147,7 +147,7 @@ class View_Helper_Menu
                     if ($entry['action'] === $activeAction
                         and $entry['controller'] === $activeController
                         and $entry['module'] === $activeModule) {
-                        $html .= '<li class="active">' . $label . '</li>';
+                        $html .= '<li class="active">' . $link . '</li>';
                     } else {
                         $html .= '<li>' . $link . '</li>';
                     }
@@ -161,7 +161,7 @@ class View_Helper_Menu
                     $link = '<a href="' . $url . '">' . $label . '</a>';
                     if ($entry['controller'] === $activeController
                         and $entry['module'] === $activeModule) {
-                        $html .= '<li class="active">' . $label . '</li>';
+                        $html .= '<li class="active">' . $link . '</li>';
                     } else {
                         $html .= '<li>' . $link . '</li>';
                     }
@@ -172,7 +172,7 @@ class View_Helper_Menu
                             null, true);
                     $link = '<a href="' . $url . '">' . $label . '</a>';
                     if ($entry['module'] === $activeModule) {
-                        $html .= '<li class="active">' . $label . '</li>';
+                        $html .= '<li class="active">' . $link . '</li>';
                     } else {
                         $html .= '<li>' . $link . '</li>';
                     }
