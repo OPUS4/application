@@ -168,6 +168,7 @@ class Admin_CollectionController extends Controller_Action {
         $roleName = $collection->getDisplayName();
         $path = $this->getRequest()->getParam('path');
         $copy = $this->getRequest()->getParam('copy');
+        $assign = $this->getRequest()->getParam('assign');
         if (true === isset($copy)) {
             $cpCollection = $collection;
             $trail = explode('-', $copy);
@@ -230,6 +231,7 @@ class Admin_CollectionController extends Controller_Action {
         $this->view->role_name = $roleName;
         $this->view->path = $path;
         $this->view->copy = $copy;
+        $this->view->assign = $assign;
         $this->view->breadcrumb = $breadcrumb;
         $this->view->copypaste = $copypaste;
     }
@@ -241,6 +243,7 @@ class Admin_CollectionController extends Controller_Action {
      */
     public function createAction() {
         $copy = $this->getRequest()->getParam('copy');
+        $assign = $this->getRequest()->getParam('assign');
         if ($this->_request->isPost() === true) {
             $data = $this->_request->getPost();
             $form_builder = new Form_Builder();
@@ -357,6 +360,23 @@ class Admin_CollectionController extends Controller_Action {
 
             $this->_redirectTo('Collection successfully copied.', 'show', null, null,
                     array('role' => $role, 'path' => $path));
+        } else if (true === isset($assign)) {
+            // Assign a document to a collection
+            $role  = $this->getRequest()->getParam('role');
+            $path = $this->getRequest()->getParam('path');
+            $collection = new Opus_CollectionRole($role);
+            $document = new Opus_Document($assign);
+            if (true === isset($path)) {
+                $trail = explode('-', $path);
+                foreach($trail as $i => $step) {
+                    if ($i < sizeof($trail)) {
+                        $collection = $collection->getSubCollection($step);
+                    }
+                }
+            }
+            $collection->addEntry($document);
+            $this->_redirectTo('Document successfully assigned to collection "' . $collection->getDisplayName() . '".'
+                    , 'edit', 'documents', 'admin', array('id' => $document->getId()));
         } else {
             $this->_redirectTo('', 'index');
         }

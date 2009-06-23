@@ -82,5 +82,13 @@
         <seg>Dokument freischalten</seg>
       </tuv>
     </tu>
+    <tu tuid="admin_documents_assign">
+      <tuv xml:lang="en">
+        <seg>Assign document to collection</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokument einer Sammlung zuweisen</seg>
+      </tuv>
+    </tu>
   </body>
 </tmx>
