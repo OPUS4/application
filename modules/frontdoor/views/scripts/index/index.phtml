@@ -44,18 +44,19 @@
 <? if (is_array($this->mydoc_data) === true)
    {
       if (array_key_exists ('IdentifierUrn_0_Value', $this->mydoc_data) === true)
-      {
+      {?>
+         <?= $this-> translate('frontdoor_entry'); ?><br /><?
          for ($i = 0; $i < $this->urnNumber; $i++)
          {
             if (array_key_exists ('IdentifierUrn_' .$i. '_Value', $this->mydoc_data) === true)
             {
                $value = $this->mydoc_data['IdentifierUrn_' .$i. '_Value'];?>
-               <?= $this-> translate('frontdoor_entry'); ?><br />
+
                <b><?= $this-> translate ('IdentifierUrn');?>: </b>
                <a href="<?= $this->value = 'http://nbn-resolving.de/urn/resolver.pl?' .$value;?>">
-               <?= $this->value = $value;?></a><br /><br /><hr /><?
+               <?= $this->value = $value;?></a><br /><?
              }
-          }
+          }?><br /><hr /><?
        }
        elseif (array_key_exists ('IdentifierUrn_Value', $this->mydoc_data) === true)
        {
@@ -247,10 +248,22 @@
           $this->layoutPath . '/img/bibtex.jpg';?>" border = '0' title = 'BibTex-Export'></a>
           <a href="<?= $this->value = '';?>">
           <img src = "<?= $this->value = $this->layoutPath . '/img/ris.jpg';?>" border = '0' title = 'RIS-Export'></a>
-          </p><br />
+          </p><br /><?
 
-          <?//displaying other metadata
-          if (array_key_exists('Type', $this->mydoc_data))
+            //displaying other metadata
+            if (array_key_exists('Type_0', $this->mydoc_data) === true)
+            {
+               for ($i = 0; $i < $this->typenumber; $i++)
+               {
+                  if (array_key_exists('Type_' .$i, $this->mydoc_data) === true)
+                  {
+                     $value = $this->mydoc_data['Type_' .$i];?>
+                     <p><b><?= $this-> translate('Type')?>: </b>
+                     <?= $this->value = $value;?></p><?
+                  }
+               }
+            }
+            elseif (array_key_exists ('Type', $this->mydoc_data) === true)
             {
                $value = $this->mydoc_data['Type'];?>
                <p><b><?= $this-> translate('Type')?>: </b>
@@ -381,6 +394,7 @@
                   <p><b><?= $this-> translate('PublishedYear')?>: </b>
                   <?= $this->value = $value;?></p><?
                }
+
                if (array_key_exists ('PublishedDate_year', $this->mydoc_data) &&
                (array_key_exists ('PublishedDate_month', $this->mydoc_data)) &&
                (array_key_exists ('PublishedDate_day', $this->mydoc_data)))
@@ -417,19 +431,58 @@
                   <p><b><?= $this-> translate('PageNumber')?>: </b>
                   <?= $this->value = $value;?></p><?
                }
-               if (array_key_exists ('CreatingCorporation', $this->mydoc_data) === true)
+
+               if (array_key_exists ('CreatingCorporation_0', $this->mydoc_data) === true)
+               {
+                  for ($i = 0; $i < $this->creatingCorporationNumber; $i++)
+                  {
+                     if (array_key_exists ('CreatingCorporation_'.$i, $this->mydoc_data)  === true)
+                     {
+                        $value = $this->mydoc_data['CreatingCorporation_' .$i];?>
+                        <p><b><?= $this-> translate('CreatingCorporation')?>: </b>
+                        <?= $this->value = $value;?></p><?
+                     }
+                  }
+               }
+               elseif (array_key_exists ('CreatingCorporation', $this->mydoc_data) === true)
                {
                   $value = $this->mydoc_data['CreatingCorporation'];?>
                   <p><b><?= $this-> translate('CreatingCorporation')?>: </b>
                   <?= $this->value = $value;?></p><?
                }
-               if (array_key_exists ('ContributingCorporation', $this->mydoc_data) === true)
+
+               if (array_key_exists ('ContributingCorporation_0', $this->mydoc_data) === true)
+               {
+                  for ($i = 0; $i < $this->contributingCorporationNumber; $i++)
+                  {
+                     if (array_key_exists ('ContributingCorporation_'.$i, $this->mydoc_data)  === true)
+                     {
+                        $value = $this->mydoc_data['ContributingCorporation_' .$i];?>
+                        <p><b><?= $this-> translate('ContributingCorporation')?>: </b>
+                        <?= $this->value = $value;?></p><?
+                     }
+                  }
+               }
+               elseif (array_key_exists ('ContributingCorporation', $this->mydoc_data) === true)
                {
                   $value = $this->mydoc_data['ContributingCorporation'];?>
                   <p><b><?= $this-> translate('ContributingCorporation')?>: </b>
                   <?= $this->value = $value;?></p><?
                }
-               if (array_key_exists ('NonInstituteAffiliation', $this->mydoc_data) === true)
+
+               if (array_key_exists ('NonInstituteAffiliation_0', $this->mydoc_data) === true)
+               {
+                  for ($i = 0; $i < $this->nonInstituteAffiliationNumber; $i++)
+                  {
+                     if (array_key_exists ('NonInstituteAffiliation_'.$i, $this->mydoc_data)  === true)
+                     {
+                        $value = $this->mydoc_data['NonInstituteAffiliation_' .$i];?>
+                        <p><b><?= $this-> translate('NonInstituteAffiliation')?>: </b>
+                        <?= $this->value = $value;?></p><?
+                     }
+                  }
+               }
+               elseif (array_key_exists ('NonInstituteAffiliation', $this->mydoc_data) === true)
                {
                   $value = $this->mydoc_data['NonInstituteAffiliation'];?>
                   <p><b><?= $this-> translate('NonInstituteAffiliation')?>: </b>
