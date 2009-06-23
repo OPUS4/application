@@ -126,6 +126,19 @@ class Frontdoor_IndexController extends Zend_Controller_Action
            $this->view->authorNumber = $authorNumber;
         }
 
+        // Proof existence of document types, find out typeNumber
+        if (array_key_exists ('Type', $doc_data) === true)
+        {
+           $types = $document->getType();
+           $typeNumber = count($types);
+           $this->view->typeNumber = $typeNumber;
+        }
+        else
+        {
+           $this->typeNumber = $typeNumber = 0;
+           $this->view->typeNumber = $typeNumber;
+        }
+
         // Proof existence of languages, find out languageNumber
         if (array_key_exists ('Language', $doc_data) === true)
         {
@@ -293,6 +306,45 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         {
            $this->authorNumber = $authorNumber = 0;
            $this->view->authorNumber = $authorNumber;
+        }
+
+        // Proof existence of creating corporations, find out creatingCorporationNumber
+        if (array_key_exists ('CreatingCorporation', $doc_data) === true)
+        {
+           $creatingCorporations = $document->getCreatingCorporation();
+           $creatingCorporationNumber = count($creatingCorporations);
+           $this->view->creatingCorporationNumber = $creatingCorporationNumber;
+        }
+        else
+        {
+           $this->creatingCorporationNumber = $creatingCorporationNumber = 0;
+           $this->view->creatingCorporationNumber = $creatingCorporationNumber;
+        }
+
+        // Proof existence of contributing corporations, find out contributingCorporationNumber
+        if (array_key_exists ('ContributingCorporation', $doc_data) === true)
+        {
+           $contributingCorporations = $document->getContributingCorporation();
+           $contributingCorporationNumber = count($contributingCorporations);
+           $this->view->contributingCorporationNumber = $contributingCorporationNumber;
+        }
+        else
+        {
+           $this->contributingCorporationNumber = $contributingCorporationNumber = 0;
+           $this->view->contributingCorporationNumber = $contributingCorporationNumber;
+        }
+
+        // Proof existence of non-institute affiliations, find out nonInstituteAffiliationNumber
+        if (array_key_exists ('NonInstitutAffiliation', $doc_data) === true)
+        {
+           $nonInstituteAffiliations = $document->getNonInstituteAffiliation();
+           $nonInstituteAffiliationNumber = count($nonInstituteAffiliations);
+           $this->view->nonInstituteAffiliationNumber = $nonInstituteAffiliationNumber;
+        }
+        else
+        {
+           $this->nonInstituteAffiliationNumber = $nonInstituteAffiliationNumber = 0;
+           $this->view->nonInstituteAffiliationNumber = $nonInstituteAffiliationNumber;
         }
 
         // Proof existence of abstracts, find out abstractNumber
