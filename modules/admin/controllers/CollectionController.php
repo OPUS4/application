@@ -43,6 +43,16 @@
 class Admin_CollectionController extends Controller_Action {
 
     /**
+     * Setup theme path
+     *
+     * @return void
+     */
+    public function init() {
+        parent::init();
+        Opus_Collection::setThemesPath('./layouts');
+    }
+
+    /**
      * List all available collection role instances
      *
      * @return void
@@ -224,6 +234,7 @@ class Admin_CollectionController extends Controller_Action {
 
             }
         }
+        $this->_helper->layout->setLayout('../' . $collection->getTheme() . '/common');
         $this->view->severalAppearances = $severalAppearances;
         $this->view->visibility = $visibility;
         $this->view->subcollections = $subcollections;
