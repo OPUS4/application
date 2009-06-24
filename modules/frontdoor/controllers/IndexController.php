@@ -335,7 +335,7 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         }
 
         // Proof existence of non-institute affiliations, find out nonInstituteAffiliationNumber
-        if (array_key_exists ('NonInstitutAffiliation', $doc_data) === true)
+        if (array_key_exists ('NonInstituteAffiliation', $doc_data) === true)
         {
            $nonInstituteAffiliations = $document->getNonInstituteAffiliation();
            $nonInstituteAffiliationNumber = count($nonInstituteAffiliations);
@@ -345,6 +345,84 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         {
            $this->nonInstituteAffiliationNumber = $nonInstituteAffiliationNumber = 0;
            $this->view->nonInstituteAffiliationNumber = $nonInstituteAffiliationNumber;
+        }
+        // Proof existence of editons, find out editionNumber
+        if (array_key_exists ('Edition', $doc_data) === true)
+        {
+           $editions = $document->getEdition();
+           $editionNumber = count($editions);
+           $this->view->editionNumber = $editionNumber;
+        }
+        else
+        {
+           $this->editionNumber = $editionNumber = 0;
+           $this->view->editionNumber = $editionNumber;
+        }
+
+        // Proof existence of issues, find out issueNumber
+        if (array_key_exists ('Issue', $doc_data) === true)
+        {
+           $issues = $document->getIssue();
+           $issueNumber = count($issues);
+           $this->view->issueNumber = $issueNumber;
+        }
+        else
+        {
+           $this->issueNumber = $issueNumber = 0;
+           $this->view->issueNumber = $issueNumber;
+        }
+
+        //Proof existence of page number, find out pageNumberNumber
+        if (array_key_exists ('PageNumber', $doc_data) === true)
+        {
+           $pageNumbers = $document->getPageNumber();
+           $pageNumberNumber = count($pageNumbers);
+           $this->view->pageNumberNumber = $pageNumberNumber;
+        }
+        else
+        {
+           $this->PageNumberNumber = $pageNumberNumber = 0;
+           $this->view->pageNumberNumber = $pageNumberNumber;
+        }
+
+
+        //Proof existence of first pages, find out firstPageNumber
+        if (array_key_exists ('FirstPage', $doc_data) === true)
+        {
+           $firstPages = $document->getFirstPage();
+           $firstPageNumber = count($firstPages);
+           $this->view->firstPageNumber = $firstPageNumber;
+        }
+        else
+        {
+           $this->firstPageNumber = $firstPageNumber = 0;
+           $this->view->firstPageNumber = $firstPageNumber;
+        }
+
+        //Proof existence of LastPages, find out LastPageNumber
+        if (array_key_exists ('LastPage', $doc_data) === true)
+        {
+           $lastPages = $document->getLastPage();
+           $lastPageNumber = count($lastPages);
+           $this->view->issueNumber = $lastPageNumber;
+        }
+        else
+        {
+           $this->lastPageNumber = $lastPageNumber = 0;
+           $this->view->lastPageNumber = $lastPageNumber;
+        }
+
+        //Proof existence of published Dates, find out publishedDateNumber
+        if (array_key_exists ('PublishedDate', $doc_data) === true)
+        {
+           $publishedDates = $document->getPublishedDate();
+           $publishedDateNumber = count($publishedDates);
+           $this->view->PublishedDateNumber = $publishedDateNumber;
+        }
+        else
+        {
+           $this->publishedDateNumber = $publishedDateNumber = 0;
+           $this->view->publishedDateNumber = $publishedDateNumber;
         }
 
         // Proof existence of abstracts, find out abstractNumber

@@ -395,7 +395,20 @@
                   <?= $this->value = $value;?></p><?
                }
 
-               if (array_key_exists ('PublishedDate_year', $this->mydoc_data) &&
+               if (array_key_exists ('PublishedDate_year_0', $this->mydoc_data) &&
+               (array_key_exists ('PublishedDate_month_0', $this->mydoc_data)) &&
+               (array_key_exists ('PublishedDate_day_0', $this->mydoc_data)))
+               {
+                  for ($i = 0; $i<$this->publishedDateNumber; $i++)
+                  {
+                    $year = $this->mydoc_data['PublishedDate_year_'. $i];
+                    $month = $this->mydoc_data['PublishedDate_month_'. $i];
+                    $day = $this->mydoc_data['PublishedDate_day_'. $i];?>
+                    <p><b><?= $this-> translate('PublishedDate'). '(File'. $i. ')'?>: </b>
+                    <?= $this->year = $year. '-' .$month. '-' .$day?></p><?
+                  }
+               }
+               elseif (array_key_exists ('PublishedDate_year', $this->mydoc_data) &&
                (array_key_exists ('PublishedDate_month', $this->mydoc_data)) &&
                (array_key_exists ('PublishedDate_day', $this->mydoc_data)))
                {
@@ -420,15 +433,89 @@
                }
                elseif (array_key_exists ('IdentifierIsbn_Value', $this->mydoc_data) === true)
                {
-                 $this->value = $value = $this->mydoc_data['IdentifierIsbn_Value'];?>
-                 <p><b><?= $this-> translate('IdentifierIsbn')?>: </b>
-                 <?= $this->value = $value;?></p><?
+                  $this->value = $value = $this->mydoc_data['IdentifierIsbn_Value'];?>
+                  <p><b><?= $this-> translate('IdentifierIsbn')?>: </b>
+                  <?= $this->value = $value;?></p><?
                }
 
-               if (array_key_exists ('PageNumber', $this->mydoc_data) === true)
+               if (array_key_exists ('PageNumber_0', $this->mydoc_data) === true)
+               {
+                  for ($i = 0; $i < $this->pageNumberNumber; $i++)
+                  {
+                     $j = $i + 1;
+                     if (array_key_exists ('PageNumber_'.$i, $this->mydoc_data) === true)
+                     {
+                        $value = $this->mydoc_data['PageNumber_' .$i];?>
+                        <p><b><?= $this->j = $j .'.'. $this->translate ('PageNumber');?>: </b>
+                        <?= $this->value = $value;?></p><?
+                     }
+                  }
+               }
+               elseif (array_key_exists ('PageNumber', $this->mydoc_data) === true)
                {
                   $value = $this->mydoc_data['PageNumber'];?>
-                  <p><b><?= $this-> translate('PageNumber')?>: </b>
+                  <p><b><?= $this->translate ('PageNumber');?>: </b>
+                  <?= $this->value = $value;?></p><?
+               }
+
+               if (array_key_exists ('PageFirst_0', $this->mydoc_data) &&
+               (array_key_exists ('PageLast_0', $this->mydoc_data)))
+               {
+                  for ($i = 0; $i < $this->firstPageNumber; $i++)
+                  {
+                     if (array_key_exists ('FirstPage_'.$i, $this->mydoc_data) === true)
+                     {
+                       $firstpage = $this->mydoc_data['FirstPage_' .$i];
+                       $lastPage = $this->mydoc_data['LastPage_' .$i];?>
+                       <p><b><?= $this->translate('Pages from-to'). '(File ('.$i. ')):';?></b></p>
+                       <?= $this->firstpage = $firstpage. '-' .$lastpage;?></p><?
+                     }
+                  }
+               }
+               elseif (array_key_exists ('PageFirst', $this->mydoc_data) &&
+               (array_key_exists ('PageLast', $this->mydoc_data)))
+               {
+                  $firstpage = $this->mydoc_data['PageFirst'];
+                  $lastPage = $this->mydoc_data['PageLast'];?>
+                  <p><b><?= $this->translate('Pages from-to');?>:</b>
+                  <?= $this->firstpage = $firstpage. '-' .$lastPage;?></p><?
+               }
+
+               if (array_key_exists ('Edition_0', $this->mydoc_data) === true)
+               {
+                  for ($i = 0; $i < $this->editionNumber; $i++)
+                  {
+                     if (array_key_exists ('Edition_'.$i, $this->mydoc_data)  === true)
+                     {
+                        $value = $this->mydoc_data['Edition_' .$i];?>
+                        <p><b><?= $this-> translate('Edition')?>: </b>
+                        <?= $this->value = $value;?></p><?
+                     }
+                  }
+               }
+               elseif (array_key_exists ('Edition', $this->mydoc_data) === true)
+               {
+                  $value = $this->mydoc_data['Edition'];?>
+                  <p><b><?= $this-> translate('Edition')?>: </b>
+                  <?= $this->value = $value;?></p><?
+               }
+
+               if (array_key_exists ('Issue_0', $this->mydoc_data) === true)
+               {
+                  for ($i = 0; $i < $this->issueNumber; $i++)
+                  {
+                     if (array_key_exists ('Issue_'.$i, $this->mydoc_data)  === true)
+                     {
+                        $value = $this->mydoc_data['Issue_' .$i];?>
+                        <p><b><?= $this-> translate('Issue')?>: </b>
+                        <?= $this->value = $value;?></p><?
+                     }
+                  }
+               }
+               elseif (array_key_exists ('Issue', $this->mydoc_data) === true)
+               {
+                  $value = $this->mydoc_data['Issue'];?>
+                  <p><b><?= $this-> translate('Issue')?>: </b>
                   <?= $this->value = $value;?></p><?
                }
 
