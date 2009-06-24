@@ -59,7 +59,7 @@ class RSSOutput {
         $title = $xml->createElement('title', $givenTitle);
         $channel->appendChild($title);
 
-        $view = Zend_Layout::getMvcInstance()->getView();
+        #$view = Zend_Layout::getMvcInstance()->getView();
 
         if (0 < $hitCount) {
             foreach ($hitlist_paginator as $searchhit) {
@@ -80,7 +80,9 @@ class RSSOutput {
                 $result->appendChild($authorElement);
                 $abstractElement = $xml->createElement('description', $hit['abstract']);
                 $result->appendChild($abstractElement);
-                $yearElement = $xml->createElement('pubDate', $doc->getServerDatePublished());
+                $docArray = $doc->toArray();
+                $pubDate = $docArray['ServerDatePublished']['day'] . '.' . $docArray['ServerDatePublished']['month'] . '.' . $docArray['ServerDatePublished']['year'];  
+                $yearElement = $xml->createElement('pubDate', $pubDate);
                 $result->appendChild($yearElement);
             }
         }
