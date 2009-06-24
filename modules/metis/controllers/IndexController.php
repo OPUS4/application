@@ -25,8 +25,8 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Edit
- * @author      Wolfgang Filter (wolfgang.filter@ub.uni-stuttgart.de)
+ * @package     Module_Metis
+ * @author      Simone Finkbeiner (simone.finkbeiner@ub.uni-stuttgart.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -38,7 +38,8 @@
  * @category    Application
  * @package     Module_Metis
  */
-class Edit_IndexController extends Zend_Controller_Action {
+//class Edit_IndexController extends Zend_Controller_Action {
+class Metis_IndexController extends Zend_Controller_Action {
 
 	/**
 	 * Just to be there. No actions taken.
@@ -48,6 +49,26 @@ class Edit_IndexController extends Zend_Controller_Action {
 	 */
 	public function indexAction() {
 		$this->view->title = 'Metis';
+		// create Client
+		$wsdl = "https://213.61.127.251/TOM/services/1.0/pixelService.wsdl?";
+		$options = array('trace' => '1');
+		$client = new SoapClient ($wsdl,$options);
+		// request the available functions of the webservice
+		$avail = $client->__getFunctions();
+		$this->view->avail = $avail;
+        // request the datatypes
+		$types = $client->__getTypes();
+        $this->view->types = $types;
+		// calling PixelOrder
+		try {
+        // so funktioniert es nicht, waere korrekt, wenn Datentyp String verlangt waere !
+        //  $response = $client->orderPixel('1');
+            $param = array('count' => '1');
+            $response = $client->orderPixel($param);
+            print_r($response);
+		}
+		catch (SoapFault $sf) {
+		    print_r($sf);
+		}
 	}
-
 }
