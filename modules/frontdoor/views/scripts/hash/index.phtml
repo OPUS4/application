@@ -28,6 +28,7 @@ if ($this->fileNumber !== 0)
          {
             $file = $this->hashLabel[$i];
             $hashes = $this->document->getFile($i)->getHashValue();
+            $f = $this->document->getFile($i);
             $hashNumber = count($hashes);
             for ($j = 0; $j < $hashNumber; $j++)
             {
@@ -40,7 +41,7 @@ if ($this->fileNumber !== 0)
                      <p><b><?= $this->translate('SignatureValue');?> (<?= $this->file = $file?>)</b></p>
                      <p><?= $this->signtype?>:</p><?
                   }
-                  if ($hashtype == 'md5')
+                  else
                   {
                      $value = $this->hashValueType['hashValue_' .$i. '_' .$j];?>
                      <p><b><?= $this->translate ('HashValue')?>&nbsp;(<?= $this->file = $file?>)</b></p>
@@ -51,37 +52,29 @@ if ($this->fileNumber !== 0)
                      <p><?= $this->translate ('HashValue')?>&nbsp;
                      <?= $this->hashtype = $hashtype?>&nbsp;
                      <?= $this->translate('frontdoor_current')?>:&nbsp;
-                     <?= $this->value = ''?></p><?
-                  }
-                  if ($hashtype == 'sha1')
-                  {
-                    $value = $this->hashValueType['hashvalue_' .$i. '_' .$j]?>
-                    <p><b><?= $this->translate('HashValue')?>&nbsp;(<?= $this->file = $file?></b></p>
-                    <p><?= $this->translate ('HashValue')?>&nbsp;
-                    <?= $this->hashtype = $hashtype?>&nbsp;
-                    <?= $this->translate('frontdoor_fixpoint')?>:&nbsp;
-                    <?= $this->value = $value?></p>
-                    <p><?= $this->translate ('HashValue')?>&nbsp;
-                    <?= $this->hashtype = $hashtype?>&nbsp;
-                    <?= $this->translate ('frontdoor_current')?>:&nbsp;
-                    <?= $this->value = ''?></p><?
+                     <?php if ($f->canVerify() === true) { ?>
+                         <?= $f->getRealHash($hashtype)?></p><?
+                     }
+                     else { ?>
+                     	<?= $this->translate('frontdoor_file_too_big')?>
+                     <?php }
                   }
                }
                else
                {?>
-                  <p><b><?= $this->translate ('frontdoor_no_hash')?></b></p>
+                  <p><b><?= $this->translate('frontdoor_no_hash')?></b></p>
              <?}
             }?> <hr /><?
        }
   }
   else
   {?>
-      <p><?= $this-> translate('frontdoor_no_hash');?></p><?
+      <p><?= $this->translate('frontdoor_no_hash');?></p><?
   }
 }
 else
 {?>
-    <p><?= $this-> translate('frontdoor_no_file');?></p><?
+    <p><?= $this->translate('frontdoor_no_file');?></p><?
 }?>
 <p><a href="<?= $this->value =
    $this->url(array(
