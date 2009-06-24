@@ -80,6 +80,7 @@ class SearchEngineIndexBuilder extends Application_Bootstrap {
         
         // Evaluate parameters or set them to default values
         $start = 0;
+        $end = null;
         $maxBufferedDocs = 3;
         if ($argc >= 2) $start = $argv[1];
         $docsToIndex = count($docresult)-$start;
