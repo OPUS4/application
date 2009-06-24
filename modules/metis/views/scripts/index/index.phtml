@@ -26,11 +26,22 @@
  *
  * @category    Application
  * @package     Module_Metis
- * @author      Wolfgang Filter (wolfgang.filter@ub.uni-stuttgart.de)
+ * @author      Simone Finkbeiner (simone.finkbeiner@ub.uni-stuttgart.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 ?>
 <h1>Opus Application - <?= $this->title ?></h1>
+<?php
+echo '<h3>Methoden des Webservice</h3><br/>';
+foreach($this->avail as $func) {
+    echo '<p>' . $func . '</p>';
+    echo '<br/>';
+    }
 
+echo '<h3>Datentypen des Webservice</h3><br/>';
+foreach($this->types as $type) {
+    echo '<p>' . $type . '</p>';
+    }
+echo '<br/>';
