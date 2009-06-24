@@ -576,6 +576,26 @@
                   <?= $this->value = $value;?></p><?
                }
 
+               if (array_key_exists ('PublisherUniversity_0', $this->mydoc_data) === true)
+               {
+                  for ($i = 0; $i < $this->publisherUniversityNumber; $i++)
+                  {
+                     $j = $i + 1;
+                     if (array_key_exists ('PublisherUniversity_'.$i, $this->mydoc_data)  === true)
+                     {
+                        $value = $this->mydoc_data['PublisherUniversity_' .$i];?>
+                        <p><b><?= $this->j = $j.'.'. $this-> translate('PublisherUniversity')?>: </b>
+                        <?= $this->value = $value;?></p><?
+                     }
+                  }
+               }
+               elseif (array_key_exists ('PublisherUniversity', $this->mydoc_data) === true)
+               {
+                  $value = $this->mydoc_data['PublisherUniversity'];?>
+                  <p><b><?= $this-> translate('PublisherUniversity')?>: </b>
+                  <?= $this->value = $value;?></p><?
+               }
+
                if (array_key_exists ('PersonContributor_0_Name', $this->mydoc_data) === true)
                {
                   for ($i = 0; $i < $this->contributorNumber; $i++)

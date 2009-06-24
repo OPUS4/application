@@ -155,9 +155,9 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         // Proof existence of parent titles, find out titleparentNumber
         if (array_key_exists ('TitleParent', $doc_data) === true)
         {
-          $titleparents = $document->getTitleParent();
-          $titleparentNumber = count($titleparents);
-          $this->view->titleparentNumber = $titleparentNumber;
+           $titleparents = $document->getTitleParent();
+           $titleparentNumber = count($titleparents);
+           $this->view->titleparentNumber = $titleparentNumber;
         }
         else
         {
@@ -346,7 +346,21 @@ class Frontdoor_IndexController extends Zend_Controller_Action
            $this->nonInstituteAffiliationNumber = $nonInstituteAffiliationNumber = 0;
            $this->view->nonInstituteAffiliationNumber = $nonInstituteAffiliationNumber;
         }
-        // Proof existence of editons, find out editionNumber
+
+        // Proof existence of publishing universities, find out publisherUniversityNumber
+        if (array_key_exists ('PublisherUniversity', $doc_data) === true)
+        {
+           $publisherUniversities = $document->getPublisherUniversity();
+           $publisherUniversityNumber = count($publisherUniversities);
+           $this->view->publisherUniversityNumber = $publisherUniversityNumber;
+        }
+        else
+        {
+           $this->publisherUniversityNumber = $publisherUniversityNumber = 0;
+           $this->view->publisherUniversityNumberr = $publisherUniversityNumber;
+        }
+
+        // Proof existence of editions, find out editionNumber
         if (array_key_exists ('Edition', $doc_data) === true)
         {
            $editions = $document->getEdition();
@@ -372,7 +386,7 @@ class Frontdoor_IndexController extends Zend_Controller_Action
            $this->view->issueNumber = $issueNumber;
         }
 
-        //Proof existence of page number, find out pageNumberNumber
+        //Proof existence of pagenumber, find out pageNumberNumber
         if (array_key_exists ('PageNumber', $doc_data) === true)
         {
            $pageNumbers = $document->getPageNumber();
