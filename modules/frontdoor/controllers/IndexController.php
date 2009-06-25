@@ -413,17 +413,30 @@ class Frontdoor_IndexController extends Zend_Controller_Action
            $this->view->firstPageNumber = $firstPageNumber;
         }
 
-        //Proof existence of LastPages, find out LastPageNumber
+        //Proof existence of last pages, find out lastPageNumber
         if (array_key_exists ('LastPage', $doc_data) === true)
         {
            $lastPages = $document->getLastPage();
            $lastPageNumber = count($lastPages);
-           $this->view->issueNumber = $lastPageNumber;
+           $this->view->lastPageNumber = $lastPageNumber;
         }
         else
         {
            $this->lastPageNumber = $lastPageNumber = 0;
            $this->view->lastPageNumber = $lastPageNumber;
+        }
+
+        //Proof existence of published years, find out publishedYearNumber
+        if (array_key_exists ('PublishedYear', $doc_data) === true)
+        {
+           $publishedYears = $document->getPublishedYear();
+           $publishedYearNumber = count($publishedYears);
+           $this->view->publishedYearNumber = $publishedYearNumber;
+        }
+        else
+        {
+           $this->publishedYearNumber = $publishedYearNumber = 0;
+           $this->view->publishedYearNumber = $publishedYearNumber;
         }
 
         //Proof existence of published Dates, find out publishedDateNumber
