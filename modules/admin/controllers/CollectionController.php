@@ -89,6 +89,7 @@ class Admin_CollectionController extends Controller_Action {
         $action_url = $this->view->url(array('action' => 'create'));
         $collectionForm->setAction($action_url);
         $this->view->form = $collectionForm;
+        $this->_helper->layout->setLayout('../' . $collection->getTheme() . '/common');
     }
 
     /**
@@ -112,6 +113,7 @@ class Admin_CollectionController extends Controller_Action {
         $action_url = $this->view->url(array('action' => 'create'));
         $collectionForm->setAction($action_url);
         $this->view->form = $collectionForm;
+        $this->_helper->layout->setLayout('../' . $collection->getTheme() . '/common');
     }
 
     /**
