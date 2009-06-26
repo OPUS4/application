@@ -88,8 +88,11 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $id = $this->getRequest()->getParam('id');
         $this->view->title = $this->view->translate('admin_documents_edit');
         $form_builder = new Form_Builder();
-        $model = new $this->_modelclass($id);
-        $modelForm = $form_builder->build($model);
+        $document = new $this->_modelclass($id);
+        $filter = new Opus_Model_Filter;
+        $filter->setModel($document);
+        $filter->setBlacklist(array('File'));
+        $modelForm = $form_builder->build($filter);
         $action_url = $this->view->url(array("action" => "create"));
         $modelForm->setAction($action_url);
         $this->view->form = $modelForm;
