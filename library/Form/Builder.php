@@ -518,7 +518,7 @@ class Form_Builder {
         $fieldname = $field->getName();
         $element = new Zend_Form_Element_Textarea($fieldname);
         $element->setLabel($fieldname);
-        $element->setAttrib('class', $name);
+        $element->setAttrib('class', $fieldname);
         $element->setValue($field->getValue());
         // TODO values should be configurable
         $element->setAttribs(array('rows' => 10, 'cols' => 60));
