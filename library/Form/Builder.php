@@ -271,6 +271,7 @@ class Form_Builder {
         $fieldname = $field->getName();
         $element = new Zend_Form_Element_Checkbox($fieldname);
         $element->setLabel($fieldname);
+        $element->setAttrib('class', $fieldname);
         $element->setValue($field->getValue());
         $container->addElement($element);
         $this->_setFieldAttributes($field, $container);
@@ -288,6 +289,7 @@ class Form_Builder {
         $count = count($field->getValue());
         $subform = new Zend_Form_SubForm();
         $subform->setLegend($fieldname);
+        $subform->setAttrib('class', $fieldname);
         $i = 1;
         $values = $field->getValue();
         do {
@@ -319,6 +321,7 @@ class Form_Builder {
         $count = count($field->getValue());
         $subform = new Zend_Form_SubForm();
         $subform->setLegend($fieldname);
+        $subform->setAttrib('class', $fieldname);
         $i = 1;
         $values = $field->getValue();
         do {
@@ -350,6 +353,7 @@ class Form_Builder {
         $count = count($field->getValue());
         $subform = new Zend_Form_SubForm();
         $subform->setLegend($fieldname);
+        $subform->setAttrib('class', $fieldname);
         $i = 1;
         $values = $field->getValue();
         do {
@@ -381,6 +385,7 @@ class Form_Builder {
         $count = count($field->getValue());
         $subform = new Zend_Form_SubForm();
         $subform->setLegend($fieldname);
+        $subform->setAttrib('class', $fieldname);
         $i = 1;
         $values = $field->getValue();
         do {
@@ -412,6 +417,7 @@ class Form_Builder {
         $count = count($field->getValue());
         $subform = new Zend_Form_SubForm();
         $subform->setLegend($fieldname);
+        $subform->setAttrib('class', $fieldname);
         $i = 1;
         if (0 === $count) {
             if (true === $field->isMandatory()) {
@@ -441,6 +447,7 @@ class Form_Builder {
         $fieldname = $field->getName();
         $element = new Zend_Form_Element_Select($fieldname);
         $element->setLabel($fieldname);
+        $element->setAttrib('class', $fieldname);
         $defaults = $field->getDefault();
         $value = $field->getValue();
         if ($value instanceOf Opus_Model_Dependent_Link_Abstract) {
@@ -496,6 +503,7 @@ class Form_Builder {
     protected function _makeSubForm($name, Opus_Model_Abstract $model, Zend_Form $container) {
         $subform = $this->build($model, true);
         $subform->setLegend($name);
+        $subform->setAttrib('class', $name);
         $container->addSubForm($subform, $name);
     }
 
@@ -510,6 +518,7 @@ class Form_Builder {
         $fieldname = $field->getName();
         $element = new Zend_Form_Element_Textarea($fieldname);
         $element->setLabel($fieldname);
+        $element->setAttrib('class', $name);
         $element->setValue($field->getValue());
         // TODO values should be configurable
         $element->setAttribs(array('rows' => 10, 'cols' => 60));
@@ -528,6 +537,7 @@ class Form_Builder {
         $fieldname = $field->getName();
         $element = new Zend_Form_Element_Text($fieldname);
         $element->setLabel($fieldname);
+        $element->setAttrib('class', $fieldname);
         $fieldvalue = $field->getValue();
         if ((is_array($fieldvalue) === true) or (is_object($fieldvalue) === true)) {
             // FIXME: Workaround for date fields
