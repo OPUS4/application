@@ -336,6 +336,14 @@
         <seg>Seitenzahl</seg>
       </tuv>
     </tu>
+    <tu tuid="Pages_from_to">
+      <tuv xml:lang="en">
+        <seg>Pages (from-to)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Seiten (von-bis)</seg>
+      </tuv>
+    </tu>
     <tu tuid="CompletedYear">
       <tuv xml:lang="en">
         <seg>Year of Completion</seg>
