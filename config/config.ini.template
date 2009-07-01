@@ -43,6 +43,9 @@ deliver.logrequest = false
 deliver.logoutput = false
 searchengine.pdftotext.path = /usr/bin ; path to pdftotext - needed to index PDF fulltexts
 searchengine.ps2ascii.path = /usr/bin ; path to ps2ascii - needed to index PS fulltexts
+searchengine.ocr.enable = 0 ; enable/disable OCR-recognition - WARNING: this can massively slow down your indexing process! 0=enabled, 1=disabled
+searchengine.ocr.pdfimages.path = /usr/bin ; path to pdfimages binary, needed to ocr pdfs.
+searchengine.ocr.ocropus.path = /usr/bin ; if OCR is enabled, insert the path to ocropus here - other OCR-programs are not supported.
 searchengine.index.maxFileSize = 0 ; maximum filesize to index (in Byte), 0 means there is no limit
 socialBookmarking.connotea.systemTags = OPUS Test ; Tags for any document that is bookmarked via this repository
 gpg.path = /usr/bin/gpg ; path to gpg including gpg binary, e.g. /usr/bin/gpg

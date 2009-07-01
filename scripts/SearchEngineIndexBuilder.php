@@ -93,6 +93,7 @@ class SearchEngineIndexBuilder extends Application_Bootstrap {
         	    $docsToIndex = $end-$start;
         	}
         }
+        if ($start === $end) $docsToIndex = 1;
         if ($argc >= 4) $maxBufferedDocs = $argv[3];
 
 		// removes index directory to start from scratch, if no limit is given
