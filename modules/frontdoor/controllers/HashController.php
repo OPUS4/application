@@ -5,7 +5,7 @@ class Frontdoor_HashController extends Zend_Controller_Action
      *
      *getting hashvalues from Opus_Document to display them
      *case of multiple files and multiple hashtypes exists
-     *commits array 'hashLabel' with all filelabels
+     *commits array 'fileNames' with all filenames
      *commits array 'hashValueType' with all hashvalues and hashtypes
      *
      */
@@ -63,8 +63,8 @@ class Frontdoor_HashController extends Zend_Controller_Action
                  if (is_array ($hashes = $document->getFile($i)->getHashValue()) === true)
                  {
                      $hashNumber = count($hashes);
-                     $label = $document->getFile($i)->getLabel();
-                     $hashLabel[] = $label;
+                     $names = $document->getFile($i)->getPathName();
+                     $fileNames[] = $names;
 
                      for ($j = 0; $j < $hashNumber; $j++)
                      {
@@ -78,7 +78,7 @@ class Frontdoor_HashController extends Zend_Controller_Action
               }
           }
           $this->view->hashValueType = $hashValueType;
-          $this->view->hashLabel = $hashLabel;
+          $this->view->fileNames = $fileNames;
        }
        else
        {
