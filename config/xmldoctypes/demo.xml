@@ -38,16 +38,18 @@
     xmlns="http://schemas.opus.org/documenttype"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-    <!-- persons -->
-    <field name="PersonAuthor" multiplicity="3" mandatory="yes" />
+    <page>
+        <field name="TitleMain" multiplicity="*" />
+        <field name="PersonAuthor" multiplicity="3" mandatory="yes" />
+        <field name="TitleAbstract" multiplicity="*" />
+    </page>
 
-    <!-- titles  -->
-    <field name="TitleAbstract" />
-    <field name="TitleMain" />
-
-    <field name="Licence" />
-    <field name="Language" />
-    <field name="PublishedDate" />
-    <field name="File" multiplicity="*" />
+    <page>
+        <field name="PublishedDate" />
+        <field name="Licence" />
+        <field name="Language" />
+        <field name="File" multiplicity="*" />
+        <field name="SubjectSwd" multiplicity="2" />
+    </page>
 
     </documenttype>

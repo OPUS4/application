@@ -98,28 +98,25 @@ class Publish_IndexController extends Zend_Controller_Action {
                         $this->_redirector->gotoSimple('index');
                     }
                     $type = new Opus_Document_Type($filename);
+                    $pages = $type->getPages();
                     $document = new Opus_Document(null, $type);
 
                     // add standard field filter
                     $documentWithFilter = new Opus_Model_Filter;
-                    $documentWithFilter ->setModel($document)
-                        ->setBlacklist(array(
-                            'IdentifierOpus3',
-                            'Type',
-                            'ServerState',
-                            'ServerDateUnlocking',
-                            'ServerDateValid',
-                            'File'))
-                        ->setSortOrder(array(
-                            'TitleMain',
-                            'PersonAuthor',
-                            'TitleAbstract',
-                            'Language',
-                            'PersonContributor',
-                            'PersonOther'));
+
+                    if (true === array_key_exists(0, $pages)) {
+                        $documentWithFilter->setModel($document)
+                            ->setWhitelist(array_diff($pages[0], $type->getPublishFormBlackList()))
+                            ->setSortOrder($type->getPublishFormSortOrder());
+                        $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create', 'page' => 1));
+                    } else {
+                        $documentWithFilter->setModel($document)
+                            ->setBlacklist($type->getPublishFormBlackList())
+                            ->setSortOrder($type->getPublishFormSortOrder());
+                        $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create'));
+                    }
 
                     $createForm = $form_builder->build($documentWithFilter);
-                    $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create'));
                     $createForm->setAction($action_url);
                     $this->view->form = $createForm;
                 } else {
@@ -138,16 +135,35 @@ class Publish_IndexController extends Zend_Controller_Action {
                     $model = $form_builder->getModelFromForm($form);
                     // overwrite old data in the model with the new data from the form
                     $form_builder->setFromPost($model, $form->getValues());
-                    // go ahead to summary
-                    $this->view->document_data = $model->toArray();
-                    $this->view->title = $this->view->translate('publish_controller_summary');
-                    $summaryForm = new Summary();
-                    $action_url = $this->view->url(array('controller' => 'index', 'action' => 'summary'));
-                    $summaryForm->setAction($action_url);
-                    $model_ser = $form_builder->compressModel($model);
-                    $model_hidden = Form_Builder::HIDDEN_MODEL_ELEMENT_NAME;
-                    $summaryForm->$model_hidden->setValue($model_ser);
-                    $this->view->form = $summaryForm;
+
+                    // Get the document from the filter, use type to get paging configuration.
+                    $document = $model->getModel();
+                    $type = new Opus_Document_Type($document->getType());
+                    $pages = $type->getPages();
+                    $requested_page = $this->_request->getParam('page');
+
+                    if (array_key_exists($requested_page, $pages)) {
+                        // Handle remaining multi-page form steps.
+                        $documentWithFilter = new Opus_Model_Filter;
+                        $documentWithFilter->setModel($document)
+                            ->setWhitelist(array_diff($pages[$requested_page], $type->getPublishFormBlackList()))
+                            ->setSortOrder($type->getPublishFormSortOrder());
+                        $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create', 'page' => $requested_page + 1));
+                        $createForm = $form_builder->build($documentWithFilter);
+                        $createForm->setAction($action_url);
+                        $this->view->form = $createForm;
+                    } else {
+                        // go ahead to summary
+                        $this->view->document_data = $document->toArray();
+                        $this->view->title = $this->view->translate('publish_controller_summary');
+                        $summaryForm = new Summary();
+                        $action_url = $this->view->url(array('controller' => 'index', 'action' => 'summary'));
+                        $summaryForm->setAction($action_url);
+                        $model_ser = $form_builder->compressModel($document);
+                        $model_hidden = Form_Builder::HIDDEN_MODEL_ELEMENT_NAME;
+                        $summaryForm->$model_hidden->setValue($model_ser);
+                        $this->view->form = $summaryForm;
+                    }
                 } else {
                     $this->view->form = $form;
                 }
