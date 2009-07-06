@@ -69,10 +69,6 @@ class Form_Builder {
             $form = new Zend_Form();
         }
 
-        if ($model instanceof Opus_Model_Dependent_Link_Abstract) {
-            $model = $model->getModel();
-        }
-
         foreach ($model->describe() as $fieldname) {
             $field = $model->getField($fieldname);
             $this->_prepareElement($field, $form);
@@ -422,7 +418,15 @@ class Form_Builder {
         if (0 === $count) {
             if (true === $field->isMandatory()) {
                 $modelClassName = $field->getValueModelClass();
-                $this->_makeSubForm($i, new $modelClassName, $subform);
+                $linkModelClassName = $field->getLinkModelClass();
+                if (false === is_null($linkModelClassName)) {
+                    $model = new $modelClassName;
+                    $link = new $linkModelClassName;
+                    $link->setModel($model);
+                    $this->_makeSubForm($i, $link, $subform);
+                } else {
+                    $this->_makeSubForm($i, new $modelClassName, $subform);
+                }
             }
         } else {
             foreach ($field->getValue() as $fieldvalue) {
@@ -485,7 +489,15 @@ class Form_Builder {
         $count = count($field->getValue());
         if (0 === $count) {
             $modelClassName = $field->getValueModelClass();
-            $this->_makeSubForm($fieldname, new $modelClassName, $container);
+            $linkModelClassName = $field->getLinkModelClass();
+            if (false === is_null($linkModelClassName)) {
+                $model = new $modelClassName;
+                $link = new $linkModelClassName;
+                $link->setModel($model);
+                $this->_makeSubForm($i, $link, $subform);
+            } else {
+                $this->_makeSubForm($fieldname, new $modelClassName, $container);
+            }
         } else {
             // field->getValue() holds model
             $this->_makeSubForm($fieldname, $field->getValue(), $container);
