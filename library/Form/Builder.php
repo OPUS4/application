@@ -494,7 +494,7 @@ class Form_Builder {
                 $model = new $modelClassName;
                 $link = new $linkModelClassName;
                 $link->setModel($model);
-                $this->_makeSubForm($i, $link, $subform);
+                $this->_makeSubForm($fieldname, $link, $container);
             } else {
                 $this->_makeSubForm($fieldname, new $modelClassName, $container);
             }
