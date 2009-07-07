@@ -946,63 +946,102 @@
                   <p><b><?= $this-> translate('TitleAbstractValue') .' ('. $this->translate($lang). ')';?>: </b>
                   <?= $this->value = $value;?></p><?
               }
-
-               if (array_key_exists ('Licence_0_NameLong', $this->mydoc_data) &&
-                  ($this->licenceNumber > 1))
-               {
-                  for ($i = 0; $i < $this->licenceNumber; $i++)
+               //Licences - 3 cases
+              //case 1: licence item is multiple and allocated with more than one element
+              if (array_key_exists ('Licence_0_NameLong', $this->mydoc_data) &&
+                 ($this->licenceNumber > 1))
+              {
+                 for ($i = 0; $i < $this->licenceNumber; $i++)
+                 {
+                    $j = $i +1;
+                    // case 'Creative Commons' licences
+                    if ($value = substr($licence = $this->mydoc_data['Licence_'. $i. '_NameLong'], 0, 8) === 'Creative')
+                    {
+                       if (array_key_exists ('Licence_' .$i. '_NameLong', $this->mydoc_data) === true)
+                       {
+                          $value = $this->mydoc_data['Licence_'. $i. '_NameLong'];?>
+                          <p><b><?= $this-> translate('Licence'). '('. $j. ')';?>: </b><?
+                          $linklicence = $this ->mydoc_data['Licence_'. $i. '_LinkLicence'];?>
+                          <a href = "<?= $this->linklicence = $linklicence;?>"
+                          <img src = "<?= $this->layoutPath. '/img/somerights20.gif'?>"title = 'Creative Commons' border = '0'>
+                          <a href = "<?= $this->linklicence = $linklicence;?>"<?= $this->linklicence = $linklicence?>>
+                          <?= $this->value = $value?></p></a><?
+                       }
+                    }
+                    //other Licences (not 'Creative Commons')
+                    else
+                    {
+                       if (array_key_exists ('Licence_' .$i. '_NameLong', $this->mydoc_data) === true)
+                       {
+                          $value = $this->mydoc_data['Licence_'. $i. '_NameLong'];?>
+                          <p><b><?= $this-> translate('Licence'). '('. $j. ')';?>: </b><?
+                          $linklicence = $this ->mydoc_data['Licence_'. $i. '_LinkLicence'];?>
+                          <a href = "<?= $this->value = $this->baseUrl(). $linklicence;?>"
+                          <img src = "<?= $this->layoutPath. '/img/unilogo.gif'?>"title = 'Unilogo' border = '0'>
+                          <a href = "<?= $this->value = $this->baseUrl(). $linklicence;?>"<?= $this->linklicence = $linklicence?>>
+                          <?= $this->value = $value?></p></a><?
+                       }
+                    }
+                 }
+              }
+              //case2: licence is multiple but allocated with only one element ($licenceNumber = 1);
+              //(if you don't regard this case, the corresponding output would be 'Licence(1):' instead of 'Licence:')
+              elseif (array_key_exists ('Licence_0_NameLong', $this->mydoc_data) &&
+                     ($this->licenceNumber = 1))
+              {
+                 //case 'Creative Commons' licence
+                 if ($value = substr($licence = $this->mydoc_data['Licence_0_NameLong'], 0, 8) === 'Creative')
+                 {
+                     $value = $this->mydoc_data['Licence_0_NameLong'];?>
+                     <p><b><?= $this-> translate('Licence');?>: </b><?
+                     $linklicence = $this ->mydoc_data['Licence_0_LinkLicence'];?>
+                     <a href = "<?= $this->linklicence = $linklicence;?>"
+                     <img src = "<?= $this->layoutPath. '/img/somerights20.gif'?>"title = 'Creative Commons' border = '0'>
+                     <a href = "<?= $this->linklicence = $linklicence;?>"<?= $this->linklicence = $linklicence?>>
+                     <?= $this->value = $value?></p></a><?
+                 }
+                 // case not 'Creative Commons'
+                 else
+                 {
+                     $value = $this->mydoc_data['Licence_0_NameLong'];?>
+                     <p><b><?= $this-> translate('Licence');?>: </b><?
+                     $linklicence = $this ->mydoc_data['Licence_0_LinkLicence'];?>
+                     <a href = "<?= $this->value = $this->baseUrl(). $linklicence;?>"
+                     <img src = "<?= $this->layoutPath. '/img/unilogo.gif'?>"title = 'Unilogo' border = '0'>
+                     <a href = "<?= $this->value = $this->baseUrl(). $linklicence;?>"<?= $this->linklicence = $linklicence?>>
+                     <?= $this->value = $value?></p></a><?
+                 }
+              }
+              //case3: licence is unique (only one element is possible)
+              elseif (array_key_exists ('Licence_NameLong', $this->mydoc_data) === true)
+              {
+                  // case 'Creative Commons' licence
+                  if ($value = substr($licence = $this->mydoc_data['Licence_NameLong'], 0, 8) === 'Creative')
                   {
-                     $j = $i +1;
-                     if (array_key_exists ('Licence_' .$i. '_DescMarkup', $this->mydoc_data) === true)
-                     {
-                        $value = $this->mydoc_data['Licence_' .$i. '_DescMarkup'];?>
-                        <p><b><?= $this-> translate('Licence_NameLong'). ' ('. $j. ')'?>: </b>
-                        <?= $this->value = $value;?></a></p><?
-                      }
-                      elseif (array_key_exists('Licence_' .$i. '_NameLong', $this->mydoc_data) === true)
-                      {
-                           $value = $this->mydoc_data['Licence_' .$i. '_NameLong'];?>
-                           <p><b><?= $this-> translate('Licence_NameLong'). '('. $j. ')'?>: </b>
-                           <?= $this->value = $value;?></a></p><?
-                      }
-                   }
-               }
-               elseif (array_key_exists ('Licence_0_NameLong', $this->mydoc_data) &&
-                      ($this->licenceNumber = 1))
-               {
-                   if (array_key_exists ('Licence_0_DescMarkup', $this->mydoc_data) === true)
-                   {
-                      $value = $this->mydoc_data['Licence_0_DescMarkup'];?>
-                      <p><b><?= $this-> translate('Licence_NameLong')?>: </b>
-                      <?= $this->value = $value;?></a></p><?
-                   }
-                   else
-                   {
-                    $value = $this->mydoc_data['Licence_0_NameLong'];?>
-                    <p><b><?= $this-> translate('Licence_NameLong')?>: </b>
-                    <?= $this->value = $value;?></a></p><?
-                   }
-               }
-               elseif (array_key_exists ('Licence_NameLong', $this->mydoc_data))
-               {
-                   if (array_key_exists ('Licence_DescMarkup', $this->mydoc_data) === true)
-                   {
-                      $value = $this->mydoc_data['Licence_DescMarkup'];?>
-                      <p><b><?= $this-> translate('Licence_NameLong')?>: </b>
-                      <?= $this->value = $value;?></a></p><?
-                   }
-                   else
-                   {
-                      $value = $this->mydoc_data['Licence_NameLong'];?>
-                      <p><b><?= $this-> translate('Licence_NameLong')?>: </b>
-                      <?= $this->value = $value;?></a></p><?
-                   }
-               }?>
+                     $value = $this->mydoc_data['Licence_NameLong'];?>
+                     <p><b><?= $this-> translate('Licence');?>: </b><?
+                     $linklicence = $this ->mydoc_data['Licence_LinkLicence'];?>
+                     <a href = "<?= $this->linklicence = $linklicence;?>"
+                     <img src = "<?= $this->layoutPath. '/img/somerights20.gif'?>"title = 'Creative Commons' border = '0'>
+                     <a href = "<?= $this->linklicence = $linklicence;?>"<?= $this->linklicence = $linklicence?>>
+                     <?= $this->value = $value?></p></a><?
+                  }
+                 // case not 'Creative Commons'
+                  else
+                  {
+                     $value = $this->mydoc_data['Licence_NameLong'];?>
+                     <p><b><?= $this-> translate('Licence');?>: </b><?
+                     $linklicence = $this ->mydoc_data['Licence_LinkLicence'];?>
+                     <a href = "<?= $this->value = $this->baseUrl(). $linklicence;?>"
+                     <img src = "<?= $this->layoutPath. '/img/unilogo.gif'?>"title = 'Unilogo' border = '0'>
+                     <a href = "<?= $this->value = $this->baseUrl(). $linklicence;?>"<?= $this->linklicence = $linklicence?>>
+                     <?= $this->value = $value?></p></a><?
+                  }
+              }?>
 
                 <p><b><?= $this-> translate('POD')?>: </b>
                 <img src = "<?= $this->value = $this->layoutPath . '/img/proprint_logo.png';?>" border = '0' title = 'Print-on Demand'></a>
                 <a href="<?= $this->value = '';?>">Print-on-Demand</a></p><?
-
    }
 
 
