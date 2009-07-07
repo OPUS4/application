@@ -27,5 +27,8 @@
 </h2>
 <table>
 <tr><th><?= $this->translate('Institute_Title');?></th><th><?= $this->translate('Count_Title');?></th></tr>
+<?php foreach ($this->instStat as $instName => $count):?>
+<?= "<tr><td>".$instName."</td><td>$count</td></tr>"?>
+<?php endforeach;?>
 </table>
 <?php echo $this->form?>

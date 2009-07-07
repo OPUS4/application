@@ -27,6 +27,7 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Tobias Leidinger (tobias.leidinger@gmail.com
+ * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -130,7 +131,7 @@ class Admin_StatisticController extends Zend_Controller_Action {
         ksort($monthStat);
 
         $this->view->totalNumber = array_sum($monthStat);
-        $this->view->title = $this->view->translate('Statistic_Controller');
+        $this->view->title = $this->view->translate('Statistic_Controller') . ' (' . $postData['selectedYear'] . ')';
         $this->view->monthStat = $monthStat;
 
 
@@ -149,7 +150,21 @@ class Admin_StatisticController extends Zend_Controller_Action {
         $this->view->typeStat = $typeStat;
 
 
-        // TODO: add institution statistics
+        // institution statistics
+        $institutes = new Opus_OrganisationalUnits;
+        $instStat = array();
+        $db = Zend_Registry::get('db_adapter');
+        foreach ($institutes->getSubCollection() as $institut) {
+            $query = "SELECT COUNT(d.id) AS entries FROM link_documents_collections_1 AS l JOIN documents AS d ON d.id =
+                l.documents_id WHERE l.collections_id IN (SELECT collections_id FROM collections_structure_1 WHERE
+                `left` >= (SELECT `left` FROM collections_structure_1 WHERE collections_id = ?) AND `right` <=
+                (SELECT `right` FROM collections_structure_1 WHERE collections_id = ?)AND
+                YEAR(d.server_date_published) = ?)";
+            $res = $db->query($query, array($institut->getId(), $institut->getId(), $postData['selectedYear']))->fetchAll();
+            $instStat[$institut->getDisplayName()] = $res[0]['entries'];
+        }
+        $this->view->instStat = $instStat;
+
     }
 
 }
