@@ -29,6 +29,7 @@
  * @category    Application
  * @package     Module_Oai
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
+ * @author      Simone Finkbeiner <simone.finkbeiner@ub.uni-stuttgart.de>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -48,12 +49,15 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
 
+    <!-- add include here for each new metadata format    -->
+
     <xsl:include href="prefixes/oai_dc.xslt"/>
     <xsl:include href="prefixes/oai_pp.xslt"/>
     <xsl:include href="prefixes/epicur.xslt"/>
     <xsl:include href="prefixes/xMetaDiss.xslt"/>
     <xsl:include href="prefixes/XMetaDissPlus.xslt"/>
     <xsl:include href="prefixes/copy_xml.xslt"/>
+
     <xsl:output method="xml" indent="yes" />
 
     <xsl:param name="dateTime" />
@@ -72,6 +76,7 @@
     <xsl:template match="*" />
     <xsl:template match="*" mode="oai_dc" />
 
+    <!--create the head of oai response  -->
     <xsl:template match="/">
         <xsl:element name="OAI-PMH">
             <xsl:attribute name="xsi:schemaLocation">
@@ -102,16 +107,53 @@
                     <xsl:value-of select="$oai_error_message" />
                 </xsl:element>
             </xsl:if>
-            <xsl:choose>
-                <xsl:when test="$oai_verb='ListRecords'">
-                    <xsl:apply-templates select="Documents" mode="ListRecords" />
-                </xsl:when>
+            
+    <!--create the rest of oai response depending on oai_verb -->
+                <xsl:choose>
                 <xsl:when test="$oai_verb='GetRecord'">
                     <xsl:apply-templates select="Documents" mode="GetRecord" />
+                </xsl:when>
+                <xsl:when test="$oai_verb='ListMetadataFormats'">
+                    <xsl:apply-templates select="Documents" mode="ListMetadataFormats" />
+                </xsl:when>
+                <xsl:when test="$oai_verb='ListRecords'">
+                    <xsl:apply-templates select="Documents" mode="ListRecords" />
                 </xsl:when>
             </xsl:choose>
         </xsl:element>
     </xsl:template>
+
+    <!-- template for ListMetadataFormats  -->
+    <xsl:template match="Documents" mode="ListMetadataFormats">
+        <xsl:element name="ListMetadataFormats">
+          <xsl:element name="metadataFormat">
+            <xsl:element name="metadataPrefix">oai_dc</xsl:element>
+            <xsl:element name="schema">http://www.openarchives.org/OAI/2.0/oai_dc.xsd</xsl:element>
+            <xsl:element name="metadataNamespace">http://www.openarchives.org/OAI/2.0/oai_dc/</xsl:element>
+          </xsl:element>
+          <xsl:element name="metadataFormat">
+            <xsl:element name="metadataPrefix">epicur</xsl:element>
+            <xsl:element name="schema">http://www.persistent-identifier.de/xepicur/version1.0/xepicur.xsd</xsl:element>
+            <xsl:element name="metadataNamespace">urn:nbn:de:1111-2004033116</xsl:element>
+          </xsl:element>
+          <xsl:element name="metadataFormat">
+            <xsl:element name="metadataPrefix">oai_pp</xsl:element>
+            <xsl:element name="schema">http://www.proprint-service.de/xml/schemes/v1/PROPRINT_METADATA_SET.xsd</xsl:element>
+            <xsl:element name="metadataNamespace">http://www.proprint-service.de/xml/schemes/v1/</xsl:element>
+          </xsl:element>
+          <xsl:element name="metadataFormat">
+            <xsl:element name="metadataPrefix">xMetaDiss</xsl:element>
+            <xsl:element name="schema">http://www.d-nb.de/standards/xmetadiss/xmetadiss.xsd</xsl:element>
+            <xsl:element name="metadataNamespace">http://www.d-nb.de/standards/xMetaDiss/</xsl:element>
+          </xsl:element>
+          <xsl:element name="metadataFormat">
+            <xsl:element name="metadataPrefix">XMetaDissPlus</xsl:element>
+            <xsl:element name="schema">http://www.bsz-bw.de/xmetadissplus/1.3/xmetadissplus.xsd</xsl:element>
+            <xsl:element name="metadataNamespace">http://www.bsz-bw.de/xmetadissplus/1.3</xsl:element>
+          </xsl:element>
+        </xsl:element>
+    </xsl:template>
+
 
     <xsl:template match="Documents" mode="ListRecords">
         <xsl:element name="ListRecords">
@@ -124,6 +166,7 @@
             <xsl:apply-templates select="Opus_Document" />
         </xsl:element>
     </xsl:template>
+
 
     <xsl:template match="Opus_Document">
         <xsl:element name="record">
@@ -138,8 +181,10 @@
                 <xsl:element name="datestamp">
                     <xsl:value-of select="@PublishedDate" />
                 </xsl:element>
+        <!--  here the set-information has to be added -->
             </xsl:element>
-            <!-- neu: mit Unterscheidung nach metadataPrefix -->
+            
+            <!-- choose the corresponding template depending on metadataPrefix -->
             <xsl:element name="metadata">
             <xsl:choose>
                <xsl:when test="$oai_metadataPrefix='XMetaDissPlus'">
