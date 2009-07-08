@@ -106,18 +106,22 @@ class Publish_IndexController extends Zend_Controller_Action {
 
                     if (true === array_key_exists(0, $pages)) {
                         $documentWithFilter->setModel($document)
-                            ->setWhitelist(array_diff($pages[0], $type->getPublishFormBlackList()))
+                            ->setWhitelist(array_diff($pages[0]['fields'], $type->getPublishFormBlackList()))
                             ->setSortOrder($type->getPublishFormSortOrder());
+                        $caption = $pages[0]['caption'];
                         $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create', 'page' => 1));
                     } else {
                         $documentWithFilter->setModel($document)
                             ->setBlacklist($type->getPublishFormBlackList())
                             ->setSortOrder($type->getPublishFormSortOrder());
+                        $caption = 'publish_index_create_' . $type->getName();
                         $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create'));
                     }
 
                     $createForm = $form_builder->build($documentWithFilter);
                     $createForm->setAction($action_url);
+                    $createForm->setDescription($this->view->translate($caption));
+                    $createForm->setDecorators(array('FormElements', array('Description', array('placement' => 'prepend','tag' => 'h2')), 'Form'));
                     $this->view->form = $createForm;
                 } else {
                     // submitted form data is not valid, back to select form
@@ -146,11 +150,13 @@ class Publish_IndexController extends Zend_Controller_Action {
                         // Handle remaining multi-page form steps.
                         $documentWithFilter = new Opus_Model_Filter;
                         $documentWithFilter->setModel($document)
-                            ->setWhitelist(array_diff($pages[$requested_page], $type->getPublishFormBlackList()))
+                            ->setWhitelist(array_diff($pages[$requested_page]['fields'], $type->getPublishFormBlackList()))
                             ->setSortOrder($type->getPublishFormSortOrder());
                         $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create', 'page' => $requested_page + 1));
                         $createForm = $form_builder->build($documentWithFilter);
                         $createForm->setAction($action_url);
+                        $createForm->setDescription($this->view->translate($pages[$requested_page]['caption']));
+                        $createForm->setDecorators(array('FormElements', array('Description', array('placement' => 'prepend','tag' => 'h2')), 'Form'));
                         $this->view->form = $createForm;
                     } else {
                         // go ahead to summary

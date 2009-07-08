@@ -38,13 +38,13 @@
     xmlns="http://schemas.opus.org/documenttype"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-    <page>
-        <field name="TitleMain" multiplicity="*" />
+    <page caption="page1_title">
+        <field name="TitleMain" mandatory="yes" />
         <field name="PersonAuthor" multiplicity="3" mandatory="yes" />
         <field name="TitleAbstract" multiplicity="*" />
     </page>
 
-    <page>
+    <page caption="page2_title">
         <field name="PublishedDate" />
         <field name="Licence" />
         <field name="Language" />
