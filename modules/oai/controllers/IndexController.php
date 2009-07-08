@@ -28,6 +28,7 @@
  * @category    Application
  * @package     Module_Oai
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
+ * @author      Simone Finkbeiner <simone.finkbeiner@ub.uni-stuttgart.de>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -281,6 +282,7 @@ class Oai_IndexController extends Controller_Xml {
      * @return void
      */
     private function __handleListMetadataFormats($oaiRequest) {
+        $this->_xml->appendChild($this->_xml->createElement('Documents'));
 
     }
 
