@@ -1,7 +1,11 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<tmx version="2.0" xmlns="http://www.lisa.org/tmx20">
-  <header adminlang="en" creationtool="locale4j" creationtoolversion="1.1" o-tmf="unknown" segtype="block" srclang="*all*" datatype="plaintext"/>
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+ 
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool" />
+  
   <body>
+  
     <tu tuid="Language">
       <tuv xml:lang="en">
         <seg>Language</seg>
@@ -10,6 +14,7 @@
         <seg>Sprache</seg>
       </tuv>
     </tu>
+    
     <tu tuid="en">
       <tuv xml:lang="en">
         <seg>English</seg>
@@ -18,6 +23,7 @@
         <seg>Englisch</seg>
       </tuv>
     </tu>
+    
     <tu tuid="de">
       <tuv xml:lang="en">
         <seg>German</seg>
@@ -26,6 +32,7 @@
         <seg>Deutsch</seg>
       </tuv>
     </tu>
+    
     <tu tuid="Licence">
       <tuv xml:lang="en">
         <seg>Licence</seg>
@@ -34,6 +41,7 @@
         <seg>Lizenz</seg>
       </tuv>
     </tu>
+    
     <tu tuid="File">
       <tuv xml:lang="en">
         <seg>File</seg>
@@ -42,6 +50,7 @@
         <seg>Datei</seg>
       </tuv>
     </tu>
+    
     <tu tuid="File(s)">
       <tuv xml:lang="en">
         <seg>File(s)</seg>
@@ -50,6 +59,7 @@
         <seg>Datei(en)</seg>
       </tuv>
     </tu>
+    
     <tu tuid="FileType">
       <tuv xml:lang="en">
         <seg>File Type</seg>
@@ -58,6 +68,7 @@
         <seg>Dateiart</seg>
       </tuv>
     </tu>
+    
     <tu tuid="PathName">
       <tuv xml:lang="en">
         <seg>Pathname</seg>
@@ -66,6 +77,7 @@
         <seg>Pfadname</seg>
       </tuv>
     </tu>
+    
     <tu tuid="HashType">
       <tuv xml:lang="en">
         <seg>Hashtype</seg>
@@ -74,6 +86,7 @@
         <seg>Prüfsummentyp</seg>
       </tuv>
     </tu>
+    
     <tu tuid="HashValue">
       <tuv xml:lang="en">
         <seg>Hashvalue</seg>
@@ -82,6 +95,7 @@
         <seg>Prüfsumme</seg>
       </tuv>
     </tu>
+    
     <tu tuid="SignatureValue">
       <tuv xml:lang="en">
         <seg>Signature</seg>
@@ -90,6 +104,7 @@
         <seg>Signatur</seg>
       </tuv>
     </tu>
+    
     <tu tuid="SignatureType">
       <tuv xml:lang="en">
         <seg>Type of signature</seg>
@@ -98,6 +113,7 @@
         <seg>Signaturtyp</seg>
       </tuv>
     </tu>
+    
     <tu tuid="POD">
       <tuv xml:lang="en">
         <seg>Order of printed copy</seg>
@@ -106,6 +122,7 @@
         <seg>Gedruckte Kopie bestellen</seg>
       </tuv>
     </tu>
+    
     <tu tuid="Active">
       <tuv xml:lang="en">
         <seg>Active</seg>
@@ -114,6 +131,7 @@
         <seg>Aktiv</seg>
       </tuv>
     </tu>
+    
     <tu tuid="CommentInternal">
       <tuv xml:lang="en">
         <seg>Internal Comment</seg>
@@ -122,6 +140,7 @@
         <seg>Interne Bermerkung</seg>
       </tuv>
     </tu>
+    
     <tu tuid="DescMarkup">
       <tuv xml:lang="en">
         <seg>Description in Markup</seg>
@@ -130,6 +149,7 @@
         <seg>Beschreibung als Markup</seg>
       </tuv>
     </tu>
+    
     <tu tuid="DescText">
       <tuv xml:lang="en">
         <seg>Description Text</seg>
@@ -138,6 +158,7 @@
         <seg>Beschreibungstext</seg>
       </tuv>
     </tu>
+    
     <tu tuid="LicenceLanguage">
       <tuv xml:lang="en">
         <seg>Language</seg>
@@ -146,6 +167,7 @@
         <seg>Sprache</seg>
       </tuv>
     </tu>
+    
     <tu tuid="LinkLicence">
       <tuv xml:lang="en">
         <seg>URI to Licence</seg>
@@ -154,6 +176,7 @@
         <seg>URI zur Lizenz</seg>
       </tuv>
     </tu>
+    
     <tu tuid="Licence_NameLong">
       <tuv xml:lang="en">
         <seg>Document licence</seg>
@@ -162,6 +185,7 @@
         <seg>Lizenz des Dokuments</seg>
       </tuv>
     </tu>
+    
     <tu tuid="LinkLogo">
       <tuv xml:lang="en">
         <seg>URI to Logo</seg>
@@ -170,6 +194,7 @@
         <seg>URI zum Logo</seg>
       </tuv>
     </tu>
+    
     <tu tuid="LinkSign">
       <tuv xml:lang="en">
         <seg>Link to Sign</seg>
@@ -178,6 +203,7 @@
         <seg>Link zum Vertrag</seg>
       </tuv>
     </tu>
+    
     <tu tuid="MimeType">
       <tuv xml:lang="en">
         <seg>Internet Media Type</seg>
@@ -186,6 +212,7 @@
         <seg>Internet Media Typ</seg>
       </tuv>
     </tu>
+    
     <tu tuid="NameLong">
       <tuv xml:lang="en">
         <seg>Licence Name</seg>
@@ -194,6 +221,7 @@
         <seg>Lizenzname</seg>
       </tuv>
     </tu>
+    
     <tu tuid="Role">
       <tuv xml:lang="en">
         <seg>Role</seg>
@@ -202,6 +230,7 @@
         <seg>Funktion</seg>
       </tuv>
     </tu>
+    
     <tu tuid="SortOrder">
       <tuv xml:lang="en">
         <seg>Sort Order</seg>
@@ -210,6 +239,7 @@
         <seg>Sortierreihenfolge</seg>
       </tuv>
     </tu>
+    
     <tu tuid="AllowEmailContact">
       <tuv xml:lang="en">
         <seg>e-mail contact allowed</seg>
@@ -218,6 +248,7 @@
         <seg>e-mail-Kontakt erlaubt</seg>
       </tuv>
     </tu>
+    
     <tu tuid="PodAllowed">
       <tuv xml:lang="en">
         <seg>Print on Demand</seg>
@@ -226,6 +257,7 @@
         <seg>Print on Demand</seg>
       </tuv>
     </tu>
+    
     <tu tuid="ContributingCorporation">
       <tuv xml:lang="en">
         <seg>Contributing Corporation</seg>
@@ -234,6 +266,7 @@
         <seg>Beteiligte Körperschaft</seg>
       </tuv>
     </tu>
+    
     <tu tuid="CreatingCorporation">
       <tuv xml:lang="en">
         <seg>Creating Corporation</seg>
@@ -242,6 +275,7 @@
         <seg>Urhebende Körperschaft</seg>
       </tuv>
     </tu>
+    
     <tu tuid="DateAccepted">
       <tuv xml:lang="en">
         <seg>Date of final exam</seg>
@@ -250,6 +284,7 @@
         <seg>Datum der Abschlussprüfung</seg>
       </tuv>
     </tu>
+    
     <tu tuid="Type">
       <tuv xml:lang="en">
         <seg>Document Type</seg>
@@ -258,6 +293,7 @@
         <seg>Dokumentart</seg>
       </tuv>
      </tu>
+     
      <tu tuid="SubjectSwd">
       <tuv xml:lang="en">
         <seg>SWD-Keyword</seg>
@@ -265,14 +301,18 @@
       <tuv xml:lang="de">
         <seg>SWD-Schlagwort</seg>
       </tuv>
-    </tu><tu tuid="SubjectDdc">
+    </tu>
+    
+    <tu tuid="SubjectDdc">
       <tuv xml:lang="en">
         <seg>DDC Term</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>DDC Sachgruppe</seg>
       </tuv>
-    </tu><tu tuid="SubjectUncontrolled">
+    </tu>
+    
+    <tu tuid="SubjectUncontrolled">
       <tuv xml:lang="en">
         <seg>Tag</seg>
       </tuv>
@@ -280,6 +320,7 @@
         <seg>Freies Schlagwort / Tag</seg>
       </tuv>
     </tu>
+    
     <tu tuid="SubjectPsyndex">
       <tuv xml:lang="en">
         <seg>Psyndex Keywords</seg>
@@ -288,6 +329,7 @@
         <seg>Psyndex-Schlagwörter</seg>
       </tuv>
     </tu>
+    
      <tu tuid="Edition">
       <tuv xml:lang="en">
         <seg>Edition</seg>
@@ -295,6 +337,7 @@
       <tuv xml:lang="de">
         <seg>Auflage</seg>
       </tuv>
+      
     </tu>
       <tu tuid="Issue">
       <tuv xml:lang="en">
@@ -304,6 +347,7 @@
         <seg>Ausgabe / Heft</seg>
       </tuv>
     </tu>
+    
     <tu tuid="NonInstituteAffiliation">
       <tuv xml:lang="en">
         <seg>Non-Institute Affiliation</seg>
@@ -312,6 +356,7 @@
         <seg>Nicht-instititutionelle Beziehung</seg>
       </tuv>
     </tu>
+    
     <tu tuid="PageFirst">
       <tuv xml:lang="en">
         <seg>First Page</seg>
@@ -320,6 +365,7 @@
         <seg>Erste Seite</seg>
       </tuv>
     </tu>
+    
     <tu tuid="PageLast">
       <tuv xml:lang="en">
         <seg>Last Page</seg>
@@ -328,6 +374,7 @@
         <seg>Letzte Seite</seg>
       </tuv>
     </tu>
+    
     <tu tuid="PageNumber">
       <tuv xml:lang="en">
         <seg>Pagenumber</seg>
@@ -336,6 +383,7 @@
         <seg>Seitenzahl</seg>
       </tuv>
     </tu>
+    
     <tu tuid="Pages_from_to">
       <tuv xml:lang="en">
         <seg>Pages (from-to)</seg>
@@ -344,6 +392,7 @@
         <seg>Seiten (von-bis)</seg>
       </tuv>
     </tu>
+    
     <tu tuid="CompletedYear">
       <tuv xml:lang="en">
         <seg>Year of Completion</seg>
@@ -352,6 +401,7 @@
         <seg>Jahr der Fertigstellung</seg>
       </tuv>
     </tu>
+    
     <tu tuid="PublishedYear">
       <tuv xml:lang="en">
         <seg>Year of Publication</seg>
@@ -360,6 +410,7 @@
         <seg>Jahr der Veröffentlichung</seg>
       </tuv>
     </tu>
+    
     <tu tuid="PublishedDate">
       <tuv xml:lang="en">
         <seg>Date of Publication</seg>
@@ -368,6 +419,7 @@
         <seg>Datum der Veröffentlichung</seg>
       </tuv>
     </tu>
+    
     <tu tuid="CompletedDate">
       <tuv xml:lang="en">
         <seg>Date of Completion</seg>
@@ -376,6 +428,7 @@
         <seg>Datum der Fertigstellung</seg>
       </tuv>
     </tu>
+    
     <tu tuid="Reviewed">
       <tuv xml:lang="en">
         <seg>Style of Review</seg>
@@ -384,6 +437,7 @@
         <seg>Art des Review</seg>
       </tuv>
     </tu>
+    
     <tu tuid="ServerDateModified">
       <tuv xml:lang="en">
         <seg>Date of Last Modification (Server)</seg>
@@ -392,6 +446,7 @@
         <seg>Datum der letzen Änderung (Server)</seg>
       </tuv>
     </tu>
+    
     <tu tuid="ServerDatePublished">
       <tuv xml:lang="en">
         <seg>Date of the Publication (Server)</seg>
@@ -400,22 +455,25 @@
         <seg>Datum der Publikation (Server)</seg>
       </tuv>
     </tu>
+    
     <tu tuid="ServerDateUnlocking">
       <tuv xml:lang="en">
-        <seg>Date of Server unlocking</seg>
+        <seg>Release at</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Datum der Freigabe auf dem Server</seg>
+        <seg>Freigabe am</seg>
       </tuv>
     </tu>
+    
     <tu tuid="ServerDateValid">
       <tuv xml:lang="en">
-        <seg>Validation on Server</seg>
+        <seg>Valid until</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Datum der Validierung auf dem Server</seg>
+        <seg>Gültig bis</seg>
       </tuv>
     </tu>
+    
     <tu tuid="Source">
       <tuv xml:lang="en">
         <seg>Source</seg>
@@ -424,6 +482,7 @@
         <seg>Quelle</seg>
       </tuv>
     </tu>
+    
     <tu tuid="IdentifierOpac">
       <tuv xml:lang="en">
         <seg>Opac ID</seg>
@@ -432,6 +491,7 @@
         <seg>Opac ID</seg>
       </tuv>
     </tu>
+    
     <tu tuid="VgWortPixelUrl">
       <tuv xml:lang="en">
         <seg>URL for Pixel in VG Wort</seg>
@@ -440,6 +500,7 @@
         <seg>URl für Zählpixel in VG Wort</seg>
       </tuv>
     </tu>
+    
     <tu tuid="Volume">
       <tuv xml:lang="en">
         <seg>Volume</seg>
@@ -448,6 +509,7 @@
         <seg>Jahrgang</seg>
       </tuv>
     </tu>
+    
     <tu tuid="TitleMain">
       <tuv xml:lang="en">
         <seg>Main Title</seg>
@@ -456,6 +518,7 @@
         <seg>Haupttitel</seg>
       </tuv>
     </tu>
+    
     <tu tuid="TitleMainValue">
       <tuv xml:lang="en">
         <seg>Main Title</seg>
@@ -464,6 +527,7 @@
         <seg>Haupttitel</seg>
       </tuv>
     </tu>
+    
     <tu tuid="TitleParent">
       <tuv xml:lang="en">
         <seg>Parent Title</seg>
@@ -472,6 +536,7 @@
         <seg>Titel des übergordneten Werkes</seg>
       </tuv>
     </tu>
+    
     <tu tuid="TitleParentValue">
       <tuv xml:lang="en">
         <seg>Main Title</seg>
@@ -480,14 +545,16 @@
         <seg>Haupttitel</seg>
       </tuv>
     </tu>
+    
     <tu tuid="TitleAbstract">
       <tuv xml:lang="en">
         <seg>Abstract</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Kurzfassung</seg>
+        <seg>Abstract / Kurzfassung</seg>
       </tuv>
     </tu>
+    
     <tu tuid="TitleAbstractLanguage">
       <tuv xml:lang="en">
         <seg>Language</seg>
@@ -496,14 +563,16 @@
         <seg>Sprache</seg>
       </tuv>
     </tu>
+    
     <tu tuid="TitleAbstractValue">
       <tuv xml:lang="en">
         <seg>Abstract</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Kurzfassung</seg>
+        <seg>Abstract / Kurzfassung</seg>
       </tuv>
     </tu>
+    
     <tu tuid="IdentifierIsbn">
       <tuv xml:lang="en">
         <seg>ISBN</seg>
@@ -512,6 +581,7 @@
         <seg>ISBN</seg>
       </tuv>
     </tu>
+    
     <tu tuid="IdentifierValue">
       <tuv xml:lang="en">
         <seg>ISBN</seg>
@@ -520,6 +590,7 @@
         <seg>ISBN Nummer</seg>
       </tuv>
     </tu>
+    
     <tu tuid="IdentifierUrn">
       <tuv xml:lang="en">
         <seg>URN</seg>
@@ -528,6 +599,7 @@
         <seg>URN</seg>
       </tuv>
     </tu>
+    
      <tu tuid="IdentifierValue">
       <tuv xml:lang="en">
         <seg>URN or ISBN</seg>
@@ -536,6 +608,7 @@
         <seg>URN oder ISBN</seg>
       </tuv>
     </tu>
+    
     <tu tuid="SubjectSwdValue">
       <tuv xml:lang="en">
         <seg>SWD Keywords</seg>
@@ -544,6 +617,7 @@
         <seg>SWD Schlagwörter</seg>
       </tuv>
     </tu>
+    
     <tu tuid="SubjectUncontrolledValue">
       <tuv xml:lang="en">
         <seg>Uncontrolled Keywords</seg>
@@ -552,6 +626,7 @@
         <seg>Freie Schlagwörter</seg>
       </tuv>
     </tu>
+    
     <tu tuid="SubjectPsyndexValue">
       <tuv xml:lang="en">
         <seg>Psyndex Keywords</seg>
@@ -560,6 +635,7 @@
         <seg>Psyndex-Schlagwörter</seg>
       </tuv>
     </tu>
+    
     <tu tuid="Note">
       <tuv xml:lang="en">
         <seg>Note</seg>
@@ -568,6 +644,7 @@
         <seg>Bemerkung</seg>
       </tuv>
     </tu>
+    
     <tu tuid="Message">
       <tuv xml:lang="en">
         <seg>Message</seg>
@@ -576,6 +653,7 @@
         <seg>Text</seg>
       </tuv>
     </tu>
+    
     <tu tuid="Creator">
       <tuv xml:lang="en">
         <seg>Creator</seg>
@@ -584,6 +662,7 @@
         <seg>Verfasser</seg>
       </tuv>
     </tu>
+    
     <tu tuid="Scope">
       <tuv xml:lang="en">
         <seg>Scope</seg>
@@ -592,6 +671,7 @@
         <seg>Geltungsbereich</seg>
       </tuv>
     </tu>
+    
     <tu tuid="Patent">
       <tuv xml:lang="en">
         <seg>Patent Specifications</seg>
@@ -599,7 +679,9 @@
       <tuv xml:lang="de">
         <seg>Patentinformationen</seg>
       </tuv>
-    </tu><tu tuid="Countries">
+    </tu>
+    
+    <tu tuid="Countries">
       <tuv xml:lang="en">
         <seg>Country of Patent Application</seg>
       </tuv>
@@ -607,6 +689,7 @@
         <seg>Land der Patentanmeldung</seg>
       </tuv>
     </tu>
+    
     <tu tuid="DateGranted">
       <tuv xml:lang="en">
         <seg>Date of Patent Granted</seg>
@@ -615,6 +698,7 @@
         <seg>Datum der Patenterteilung</seg>
       </tuv>
     </tu>
+    
     <tu tuid="Number">
       <tuv xml:lang="en">
         <seg>Patent Number</seg>
@@ -623,6 +707,7 @@
         <seg>Patentnummer</seg>
       </tuv>
     </tu>
+    
     <tu tuid="YearApplied">
       <tuv xml:lang="en">
         <seg>Patent Year applied</seg>
@@ -631,6 +716,7 @@
         <seg>Jahr der Anmeldung</seg>
       </tuv>
     </tu>
+    
     <tu tuid="Application">
       <tuv xml:lang="en">
         <seg>PatentApplication</seg>
@@ -639,6 +725,7 @@
         <seg>Patentanmeldung</seg>
       </tuv>
     </tu>
+    
     <tu tuid="Enrichment">
       <tuv xml:lang="en">
         <seg>Enrichment</seg>
@@ -647,6 +734,7 @@
         <seg>Erweiterung</seg>
       </tuv>
     </tu>
+    
     <tu tuid="EnrichmentType">
       <tuv xml:lang="en">
         <seg>Enrichment Type</seg>
@@ -655,6 +743,7 @@
         <seg>Typ der Erweiterung</seg>
       </tuv>
     </tu>
+    
     <tu tuid="PersonAuthor">
       <tuv xml:lang="en">
         <seg>Author</seg>
@@ -663,6 +752,7 @@
         <seg>Verfasserangaben</seg>
       </tuv>
     </tu>
+    
     <tu tuid="PersonEditor">
       <tuv xml:lang="en">
         <seg>Editor</seg>
@@ -671,6 +761,7 @@
         <seg>Herausgeber</seg>
       </tuv>
     </tu>
+    
     <tu tuid="PersonAdvisor">
       <tuv xml:lang="en">
         <seg>Advisor</seg>
@@ -679,6 +770,7 @@
         <seg>Berichter</seg>
       </tuv>
     </tu>
+    
     <tu tuid="PersonContributor">
       <tuv xml:lang="en">
         <seg>Contributor</seg>
@@ -687,6 +779,7 @@
         <seg>Sonstige beteiligte Person</seg>
       </tuv>
     </tu>
+    
     <tu tuid="PersonReferee">
       <tuv xml:lang="en">
         <seg>Referee</seg>
@@ -695,6 +788,7 @@
         <seg>Gutachter</seg>
       </tuv>
     </tu>
+    
     <tu tuid="PersonTranslator">
       <tuv xml:lang="en">
         <seg>Translator</seg>
@@ -703,6 +797,7 @@
         <seg>Übersetzer</seg>
       </tuv>
     </tu>
+    
     <tu tuid="PersonOther">
       <tuv xml:lang="en">
         <seg>Other Person(s)</seg>
@@ -711,6 +806,7 @@
         <seg>Weitere Person</seg>
       </tuv>
     </tu>
+    
     <tu tuid="AcademicTitle">
       <tuv xml:lang="en">
         <seg>Academic Title</seg>
@@ -719,6 +815,7 @@
         <seg>Akademischer Grad</seg>
       </tuv>
     </tu>
+    
     <tu tuid="DateOfBirth">
       <tuv xml:lang="en">
         <seg>Date of Birth</seg>
@@ -727,6 +824,7 @@
         <seg>Geburtsdatum</seg>
       </tuv>
     </tu>
+    
     <tu tuid="PlaceOfBirth">
       <tuv xml:lang="en">
         <seg>Place of Birth</seg>
@@ -735,6 +833,7 @@
         <seg>Geburtsort</seg>
       </tuv>
     </tu>
+    
     <tu tuid="Email">
       <tuv xml:lang="en">
         <seg>E-Mail</seg>
@@ -743,6 +842,7 @@
         <seg>E-Mail</seg>
       </tuv>
     </tu>
+    
     <tu tuid="PersonName">
       <tuv xml:lang="en">
         <seg>Name</seg>
@@ -751,6 +851,7 @@
         <seg>Name</seg>
       </tuv>
     </tu>
+    
     <tu tuid="FirstName">
       <tuv xml:lang="en">
         <seg>First Name</seg>
@@ -759,6 +860,7 @@
         <seg>Vorname</seg>
       </tuv>
     </tu>
+    
     <tu tuid="LastName">
       <tuv xml:lang="en">
         <seg>Last Name</seg>
@@ -767,6 +869,7 @@
         <seg>Nachname</seg>
       </tuv>
     </tu>
+    
     <tu tuid="Value">
       <tuv xml:lang="en">
         <seg>Value</seg>
@@ -775,6 +878,7 @@
         <seg>Text</seg>
       </tuv>
     </tu>
+    
     <tu tuid="PublicationVersion">
       <tuv xml:lang="en">
         <seg>Version of Publication</seg>
@@ -782,6 +886,8 @@
       <tuv xml:lang="de">
         <seg>Publikationsversion</seg>
       </tuv>
+    </tu>
+    
     <tu tuid="PublisherUniversity">
       <tuv xml:lang="en">
         <seg>Publisher University</seg>
@@ -789,6 +895,26 @@
       <tuv xml:lang="de">
         <seg>Universität (Veröffentlicher)</seg>
       </tuv>
+    </tu>
+    
+    <tu tuid="PublisherPlace">
+      <tuv xml:lang="en">
+        <seg>Place of publication</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Verlagsort</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="PublisherName">
+      <tuv xml:lang="en">
+        <seg>Publisher</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Verlag</seg>
+      </tuv>
+    </tu>
+    
     <tu tuid="AdditionalFormFields">
       <tuv xml:lang="en">
         <seg>additional fields</seg>
@@ -797,6 +923,7 @@
         <seg>Eingabefelder anfordern</seg>
       </tuv>
     </tu>
+    
     <tu tuid="DeleteFormFields">
       <tuv xml:lang="en">
         <seg>delete additional fields</seg>
@@ -807,4 +934,5 @@
     </tu>
     
   </body>
+  
 </tmx>
