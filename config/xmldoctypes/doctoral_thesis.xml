@@ -37,69 +37,75 @@
 <documenttype name="doctoral_thesis"
 	xmlns="http://schemas.opus.org/documenttype"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-
-	<!-- general -->
-	<field name="Licence" mandatory="yes" />
-	<field name="Language" mandatory="yes" />
-	<field name="File" multiplicity="*" />
-	<field name="Source" />
-	<field name="Note" mandatory="yes" multiplicity="4" />
-    <field name="ServerDateUnlocking" />
-    <field name="ServerDateValid" />   
-    <field name="IdentifierOpus3" /> 
-
-    <!-- collections  -->
-    
-    <!-- corporate bodies  -->
-    <!-- NOTE: could not used as multi values -->
-    <field name="CreatingCorporation" />
-    <field name="ContributingCorporation" />
-    
-	<!-- dates -->
-	<mandatory type="one-at-least">
-		<field name="CompletedYear" />
-		<field name="CompletedDate" />
-	</mandatory>
-	<mandatory type="one-at-least">
-		<field name="PublishedYear" />
-		<field name="PublishedDate" />
-	</mandatory>
-	<field name="DateAccepted" mandatory="yes" />
-
-    <!-- extent -->
-    <field name="PageNumber" />
 	
-	<!-- identifiers -->
-	<field name="IdentifierIsbn" multiplicity="2" />
-	<field name="IdentifierUrn" />
+	<page caption="caption_01_doctoral_thesis">
 
-	<!-- institutes -->
-	<!--  <field name="Institute" mandatory="yes" multiplicity="3" /> -->
-	<field name="NonInstituteAffiliation" />
+		<field name="Licence" mandatory="yes" frontdoorweight="1" adminformweight="1" publishformweight="101" multiplicity="1" />
+		<field name="Language" mandatory="yes" frontdoorweight="1" adminformweight="1" publishformweight="102" multiplicity="1"/>
+		<field name="File" mandatory="no" frontdoorweight="0" adminformweight="0" publishformweight="0" multiplicity="*" />
+		
+		<field name="ServerDateUnlocking" mandatory="no" frontdoorweight="0" adminformweight="0" publishformweight="201" multiplicity="1" />
+	    <field name="ServerDateValid" mandatory="no" frontdoorweight="0" adminformweight="0" publishformweight="202" multiplicity="1" />   
+	    	    
+	    <!-- for downward compatibility to opus 3 data. Do not show this fields -->	    
+	    <field name="IdentifierOpus3" mandatory="no" frontdoorweight="0" adminformweight="1" publishformweight="0" multiplicity="1" />
+	    <field name="Source" mandatory="no" frontdoorweight="0" adminformweight="1" publishformweight="0" multiplicity="1" />
+	     
+	</page>
+	
+	<page caption="caption_02_doctoral_thesis">
+	
+        <field name="TitleMain" mandatory="yes" frontdoorweight="1" adminformweight="1" publishformweight="101" multiplicity="4" />
+        <field name="TitleAbstract" mandatory="yes" frontdoorweight="1" adminformweight="1" publishformweight="102" multiplicity="4" />
+	   
+		<field name="PersonAuthor" mandatory="yes" frontdoorweight="1" adminformweight="1" publishformweight="201" multiplicity="3" />
+		<field name="PersonAdvisor" mandatory="yes" frontdoorweight="1" adminformweight="1" publishformweight="202" multiplicity="2" />
+		<field name="PersonReferee" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="203" multiplicity="1" />
+		<field name="PersonEditor" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="204" multiplicity="3" />
+		<field name="PersonTranslator" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="205" multiplicity="3" />
+		<field name="PersonContributor" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="206" multiplicity="3" />
 
-	<!-- persons -->
-	<field name="PersonAdvisor" multiplicity="4" />
-	<field name="PersonAuthor" multiplicity="4" />
-	<field name="PersonContributor" multiplicity="4" />
-	<field name="PersonEditor" multiplicity="4" />
-	<field name="PersonOther" multiplicity="4" />
-	<field name="PersonReferee" multiplicity="4" />
-	<field name="PersonTranslator" />
+        <field name="CreatingCorporation" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="207" multiplicity="3" />
+        <field name="ContributingCorporation" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="208" multiplicity="3"/>
 
-    <!-- publishers  -->
-    <field name="PublisherUniversity" />
-    <!-- <field name="PublisherName" />  -->
-    <!-- <field name="PublisherPlace" />  -->
+	    <field name="PublisherUniversity" mandatory="yes" frontdoorweight="1" adminformweight="1" publishformweight="301" multiplicity="3" />
 
-    <!-- subjects -->
-    <field name="SubjectSwd" multiplicity="4" />
-        <!-- Nicht in document_subjects, sondern in Collection abgebildet-->
-        <!-- <field name="SubjectDdc" multiplicity="4" /> -->
-    <field name="SubjectPsyndex" multiplicity="4" />
-    <field name="SubjectUncontrolled" multiplicity="4" />
+	    
+        <field name="DateAccepted" mandatory="yes" frontdoorweight="1" adminformweight="1" publishformweight="401" multiplicity="1" />
+        <mandatory type="one-at-least">
+            <field name="CompletedYear" frontdoorweight="1" adminformweight="1" publishformweight="402" multiplicity="1" />
+            <field name="CompletedDate" frontdoorweight="1" adminformweight="1" publishformweight="403" multiplicity="1" />
+        </mandatory>
+        <mandatory type="one-at-least">
+            <field name="PublishedYear" frontdoorweight="1" adminformweight="1" publishformweight="404" multiplicity="1" />
+            <field name="PublishedDate" frontdoorweight="1" adminformweight="1" publishformweight="405" multiplicity="1" />
+        </mandatory>
+
+	    <field name="SubjectSwd" multiplicity="4" />
+	        <!-- Nicht in document_subjects, sondern in Collection abgebildet-->
+	        <!-- <field name="SubjectDdc" multiplicity="4" /> -->
+	    <field name="SubjectPsyndex" multiplicity="4" />
+	    <field name="SubjectUncontrolled" multiplicity="4" />
+	    
+        <field name="PageNumber" />
+              
+        <!--  <field name="Institute" mandatory="yes" multiplicity="3" /> -->
+        <field name="NonInstituteAffiliation" />
+		
+		
+		
+    </page>
     
-	<!-- titles  -->
-	<field name="TitleAbstract" mandatory="yes" multiplicity="4" />
-	<field name="TitleMain" mandatory="yes" multiplicity="4" />
+        <page caption="caption_03_doctoral_thesis">
+        
+        <field name="PublisherName" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="101" multiplicity="1" />
+        <field name="PublisherPlace" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="102" multiplicity="1"/>
+        
+        <field name="IdentifierIsbn" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="201" multiplicity="2" />
+        <field name="IdentifierUrn" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="202" multiplicity="1" />
+        
+        <field name="Note" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="301" multiplicity="1" />
+        
+    </page>
 
 </documenttype>

@@ -1,0 +1,40 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+
+<tmx version="1.4">
+ 
+    <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool" >
+    </header>
+ 
+    <body>
+    
+        <tu tuid="caption_01_doctoral_thesis">
+          <tuv xml:lang="en">
+            <seg>1. General Information (Doctoral Thesis)</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>1. Allgemeine Angaben (Dissertation)</seg>
+          </tuv>
+        </tu>
+        
+        <tu tuid="caption_02_doctoral_thesis">
+          <tuv xml:lang="en">
+            <seg>2. XXX</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>2. XXX</seg>
+          </tuv>
+        </tu>
+            
+        <tu tuid="caption_03_doctoral_thesis">
+          <tuv xml:lang="en">
+            <seg>3. Publisher Statements and References</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>3. Verlagsangaben und Verweise</seg>
+          </tuv>
+        </tu>
+    
+    </body>
+
+</tmx>
