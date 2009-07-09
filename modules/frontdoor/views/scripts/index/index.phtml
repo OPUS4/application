@@ -201,7 +201,7 @@
        }
     }
 
-          //offering intenal and external services
+          //offering internal and external services
           ?></p>
           <p><br><a href="<?= $this->value =
           $this->url(array(
@@ -210,9 +210,16 @@
              'docId' => $this->docId,
           ), null, true);?>">
           <img src = "<?= $this->value = $this->layoutPath . '/img/unversehrt.jpg';?>" border = '0' title = 'Unversehrtheit'></a>
-          <a href="<?= $this->value = '';?>">
 
+          <a href="<?= $this->value =
+          $this->url(array(
+          'module' => 'frontdoor',
+          'controller' => 'mail',
+          'action' => 'index',
+          'docId' => $this->docId,
+          ), null, true);?>">
           <img src = "<?= $this->value = $this->layoutPath . '/img/hand.jpg';?>" border = '0' title = 'Empfehlung'></a>
+
           <a href="<?= $this->value =
           $this->url(array(
              'module' => 'statistic',
@@ -256,6 +263,7 @@
           <a href="<?= $this->value = '';?>">
           <img src = "<?= $this->value =
           $this->layoutPath . '/img/bibtex.jpg';?>" border = '0' title = 'BibTex-Export'></a>
+
           <a href="<?= $this->value = '';?>">
           <img src = "<?= $this->value = $this->layoutPath . '/img/ris.jpg';?>" border = '0' title = 'RIS-Export'></a>
           </p><br /><?
@@ -1041,7 +1049,7 @@
 
                 <p><b><?= $this-> translate('POD')?>: </b>
                 <img src = "<?= $this->value = $this->layoutPath . '/img/proprint_logo.png';?>" border = '0' title = 'Print-on Demand'></a>
-                <a href="<?= $this->value = '';?>">Print-on-Demand</a></p><?
+                <a href="<?= $this->value = '';?>">Print-on-Demand</a></p><br /><?
    }
 
 
