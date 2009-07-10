@@ -61,6 +61,10 @@
     <xsl:output method="xml" indent="yes" />
 
     <xsl:param name="dateTime" />
+    <xsl:param name="emailAddress" />
+    <xsl:param name="repName" />
+    <xsl:param name="repIdentifier" />
+    <xsl:param name="sampleIdentifier" />
     <xsl:param name="oai_verb" />
     <xsl:param name="oai_from" />
     <xsl:param name="oai_until" />
@@ -113,6 +117,9 @@
                 <xsl:when test="$oai_verb='GetRecord'">
                     <xsl:apply-templates select="Documents" mode="GetRecord" />
                 </xsl:when>
+                <xsl:when test="$oai_verb='Identify'">
+                    <xsl:apply-templates select="Documents" mode="Identify" />
+                </xsl:when>
                 <xsl:when test="$oai_verb='ListMetadataFormats'">
                     <xsl:apply-templates select="Documents" mode="ListMetadataFormats" />
                 </xsl:when>
@@ -122,6 +129,43 @@
             </xsl:choose>
         </xsl:element>
     </xsl:template>
+
+
+    <!-- template for Identiy  -->
+    <xsl:template match="Documents" mode="Identify">
+        <xsl:element name="Identify">
+           <xsl:element name="repositoryName">
+              <xsl:value-of select="$repName"/>
+           </xsl:element>
+           <xsl:element name="baseURL">
+             <xsl:value-of select="$oai_base_url"/>
+           </xsl:element>
+           <xsl:element name="protocolVersion">2.0</xsl:element>
+           <xsl:element name="adminEmail">
+             <xsl:value-of select="$emailAddress"/>
+           </xsl:element>
+           <xsl:element name="earliestDatestamp">!!! 1999-01-01T00:00:00Z oder als Variable !!!</xsl:element>
+           <xsl:element name="deletedRecord">no</xsl:element>
+           <xsl:element name="granularity">YYYY-MM-DDThh:mm:ssZ</xsl:element>
+           <xsl:element name="description">
+               <xsl:element name="oai-identifier">
+                  <xsl:attribute name="xsi:schemaLocation">
+                     http://www.openarchives.org/OAI/2.0/oai-identifier
+                     http://www.openarchives.org/OAI/2.0/oai-identifier.xsd
+                  </xsl:attribute>
+                  <xsl:element name="scheme">oai</xsl:element>
+                  <xsl:element name="repositoryIdentifier">
+                     <xsl:value-of select="$repIdentifier"/>
+                  </xsl:element>
+                  <xsl:element name="delimiter">:</xsl:element>
+                  <xsl:element name="sampleIdentifier">
+                     <xsl:value-of select="$sampleIdentifier"/>
+                  </xsl:element>
+               </xsl:element>
+           </xsl:element>
+        </xsl:element>
+    </xsl:template>
+
 
     <!-- template for ListMetadataFormats  -->
     <xsl:template match="Documents" mode="ListMetadataFormats">
