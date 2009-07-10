@@ -59,6 +59,10 @@ mail.opus.address =
 ; Name des Admins
 mail.opus.name =
 
+oai.repository.name =
+oai.repository.identifier =
+oai.sample.identifier =
+
 [test : production]
 db.params.profiler = true
 db.params.showqueries = true
