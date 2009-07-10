@@ -264,7 +264,17 @@ class Oai_IndexController extends Controller_Xml {
      * @return void
      */
     private function __handleIdentify($oaiRequest) {
-
+        $registry = Zend_Registry::getInstance();
+        $config = $registry->get('Zend_Config');
+        $email = $config->mail->opus->address;
+        $repName = $config->oai->repository->name;
+        $repIdentifier = $config->oai->repository->identifier;
+        $sampleIdentifier = $config->oai->sample->identifier;
+        $this->_proc->setParameter('', 'emailAddress', 'mailto:'.$email);
+        $this->_proc->setParameter('', 'repName', $repName);
+        $this->_proc->setParameter('', 'repIdentifier', $repIdentifier);
+        $this->_proc->setParameter('', 'sampleIdentifier', $sampleIdentifier);
+        $this->_xml->appendChild($this->_xml->createElement('Documents'));
     }
 
     /**
