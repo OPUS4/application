@@ -114,6 +114,7 @@ class InstituteImport
 		    // first level category
 		    $coll = new Opus_Collection($collRole->getId());
 		    $coll->setName($class['fakultaet']);
+		    $coll->setTheme('default');
 			// store the old ID with the new Collection
 			$subcoll[$class['nr']] = $coll->store();
 			$collRole->addSubCollection($coll);
@@ -142,6 +143,8 @@ class InstituteImport
             // second level category
             $coll = new Opus_Collection($roleId);
             $coll->setName($class['name']);
+            $coll->setTheme('default');
+            $parentColl->setTheme('default');
             $id = $coll->store();
             $parentColl->addSubCollection($coll);
             $parentColl->store();
