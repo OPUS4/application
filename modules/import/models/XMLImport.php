@@ -262,6 +262,7 @@ class XMLImport
 				$index = count($imported['failure']);
                 $imported['failure'][$index]['message'] = $e->getMessage();
                 $imported['failure'][$index]['entry'] = $documentsXML->saveXML($this->document);
+                $imported['failure'][$index]['oldid'] = $oldid;
 			}
 		}
 		return $imported;
@@ -311,7 +312,13 @@ class XMLImport
         for ($c = 0; $c < $length; $c++) {
             // The item index is 0 any time, because the item is removed after processing
             $item = $inputCollection->Item(0);
-            $value = $item->getAttribute('Value');
+            $v = $item->getAttribute('Value');
+            if (true === is_array($v)) {
+            	$value = $v[0];
+            }
+            else {
+            	$value = $v;
+            }
             $id = null;
             if (array_key_exists($name, $this->collections) === true) {
                 try {
