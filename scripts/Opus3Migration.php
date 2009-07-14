@@ -306,11 +306,15 @@ class Opus3MigrationParameters extends Opus3Migration
 		    foreach ($result['success'] as $doc) {
 		    	echo "Successfully imported old ID " . $doc['oldid'] . "\n";
 		    }
+		    $logfile = '../workspace/tmp/importerrors.xml';
+		    $f = fopen($logfile, 'w');
 		    foreach ($result['failure'] as $doc) {
 		    	echo "ERROR: " . $doc['message'] . " for old ID " . $doc['oldid'] . "\n";
+		    	fputs($f, $doc['entry'] . "\n");
 		    }
+		    fclose($f);
 		    echo "Imported " . count($result['success']) . " documents successfully.\n";
-		    echo count($result['failure']) . " documents have not been imported due to failures listed above.\n";
+		    echo count($result['failure']) . " documents have not been imported due to failures listed above. See $logfile for details about failed entries.\n";
 		}
 		// if no metadata is imported use now the metadata already stored in database
    		else {
