@@ -1,7 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<tmx version="2.0" xmlns="http://www.lisa.org/tmx20">
-  <header adminlang="en" creationtool="locale4j" creationtoolversion="1.1" o-tmf="unknown" segtype="block" srclang="*all*"/>
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+ 
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+ 
   <body>
+  
     <tu tuid="admin_documents_index">
       <tuv xml:lang="en">
         <seg>Administration of documents</seg>
@@ -10,6 +15,7 @@
         <seg>Administration der Dokumente</seg>
       </tuv>
     </tu>
+    
     <tu tuid="docs_all">
       <tuv xml:lang="en">
         <seg>All documents</seg>
@@ -18,6 +24,7 @@
         <seg>Alle Dokumente</seg>
       </tuv>
     </tu>
+    
     <tu tuid="docs_published">
       <tuv xml:lang="en">
         <seg>Published documents</seg>
@@ -26,6 +33,7 @@
         <seg>Publizierte Dokumente</seg>
       </tuv>
     </tu>
+    
     <tu tuid="docs_unpublished">
       <tuv xml:lang="en">
         <seg>Unpublished documents</seg>
@@ -34,6 +42,7 @@
         <seg>Nicht publizierte Dokumente</seg>
       </tuv>
     </tu>
+    
     <tu tuid="docs_deleted">
       <tuv xml:lang="en">
         <seg>Deleted documents</seg>
@@ -42,6 +51,7 @@
         <seg>Gelöschte Dokumente</seg>
       </tuv>
     </tu>
+    
     <tu tuid="docs_edit">
       <tuv xml:lang="en">
         <seg>Edit</seg>
@@ -50,6 +60,7 @@
         <seg>Ändern</seg>
       </tuv>
     </tu>
+    
     <tu tuid="docs_delete">
       <tuv xml:lang="en">
         <seg>Delete</seg>
@@ -58,6 +69,7 @@
         <seg>Löschen</seg>
       </tuv>
     </tu>
+    
     <tu tuid="docs_nodocs">
       <tuv xml:lang="en">
         <seg>No documents found!</seg>
@@ -66,6 +78,7 @@
         <seg>Keine Dokumente vorhanden!</seg>
       </tuv>
     </tu>
+    
     <tu tuid="admin_documents_edit">
       <tuv xml:lang="en">
         <seg>Edit document metadata</seg>
@@ -74,6 +87,7 @@
         <seg>Dokument Metadaten ändern</seg>
       </tuv>
     </tu>
+    
     <tu tuid="admin_documents_publish">
       <tuv xml:lang="en">
         <seg>Publish document</seg>
@@ -82,6 +96,7 @@
         <seg>Dokument freischalten</seg>
       </tuv>
     </tu>
+    
     <tu tuid="admin_documents_collectionassign">
       <tuv xml:lang="en">
         <seg>Assign document to collection</seg>
@@ -90,6 +105,7 @@
         <seg>Dokument einer Sammlung zuweisen</seg>
       </tuv>
     </tu>
+    
     <tu tuid="admin_documents_organisationalunitassign">
       <tuv xml:lang="en">
         <seg>Assign document to organisational unit</seg>
@@ -98,5 +114,7 @@
         <seg>Dokument einer organisatorischen Einheit zuweisen</seg>
       </tuv>
     </tu>
+    
   </body>
+  
 </tmx>

@@ -1,7 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<tmx version="2.0" xmlns="http://www.lisa.org/tmx20">
-  <header adminlang="en" creationtool="locale4j" creationtoolversion="1.1" o-tmf="unknown" segtype="block" srclang="*all*"/>
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+ 
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+ 
   <body>
+  
     <tu tuid="admin_filemanager_index">
       <tuv xml:lang="en">
         <seg>Filemanager</seg>
@@ -10,6 +15,7 @@
         <seg>Dateimanager</seg>
       </tuv>
     </tu>
+    
     <tu tuid="admin_filemanager_nofiles">
       <tuv xml:lang="en">
         <seg>No files available for this document!</seg>
@@ -26,6 +32,7 @@
         <seg>Diese Datei löschen</seg>
       </tuv>
     </tu>
+    
     <tu tuid="admin_filemanager_uploadsuccess">
       <tuv xml:lang="en">
         <seg>Upload succussful!</seg>
@@ -34,6 +41,7 @@
         <seg>Datei erfolgreich hochgeladen!</seg>
       </tuv>
     </tu>
+    
     <tu tuid="admin_filemanager_uploadfailure">
       <tuv xml:lang="en">
         <seg>Upload NOT succussful - please check write permissions for file directory!</seg>
@@ -42,6 +50,7 @@
         <seg>Datei konnte nicht erfolgreich hochgeladen werden - bitte prüfen Sie die Schreibberchtigung im Dokumentverzeichnis.</seg>
       </tuv>
     </tu>
+    
     <tu tuid="admin_filemanager_signsuccess">
       <tuv xml:lang="en">
         <seg>Successfully signed file!</seg>
@@ -50,6 +59,7 @@
         <seg>Datei wurde erfolgreich signiert.</seg>
       </tuv>
     </tu>
+    
     <tu tuid="admin_filemanager_deletesuccess">
       <tuv xml:lang="en">
         <seg>Successfully deleted file!</seg>
@@ -58,6 +68,7 @@
         <seg>Datei wurde erfolgreich entfernt.</seg>
       </tuv>
     </tu>
+    
     <tu tuid="admin_filemanager_checksum">
       <tuv xml:lang="en">
         <seg>Checksum</seg>
@@ -66,5 +77,7 @@
         <seg>Prüfsumme</seg>
       </tuv>
     </tu>
+    
   </body>
+  
 </tmx>

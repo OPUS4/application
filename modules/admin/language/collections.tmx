@@ -1,7 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<tmx version="2.0" xmlns="http://www.lisa.org/tmx20">
-  <header adminlang="en" creationtool="locale4j" creationtoolversion="1.1" o-tmf="unknown" segtype="block" srclang="*all*"/>
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+ 
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+ 
   <body>
+  
     <tu tuid="admin_collections_edit">
       <tuv xml:lang="en">
         <seg>Edit</seg>
@@ -10,6 +15,7 @@
         <seg>Ändern</seg>
       </tuv>
     </tu>
+    
     <tu tuid="admin_collections_delete">
       <tuv xml:lang="en">
         <seg>Remove</seg>
@@ -18,6 +24,7 @@
         <seg>Entfernen</seg>
       </tuv>
     </tu>
+    
     <tu tuid="admin_collections_role_new">
       <tuv xml:lang="en">
         <seg>Create a new Role</seg>
@@ -26,6 +33,7 @@
         <seg>Eine neue Rolle anlegen</seg>
       </tuv>
     </tu>
+    
     <tu tuid="admin_collections_role_edit">
       <tuv xml:lang="en">
         <seg>Edit a Role's properties</seg>
@@ -34,6 +42,7 @@
         <seg>Ändern der Rolleneigenschaften</seg>
       </tuv>
     </tu>
+    
     <tu tuid="admin_collections_role_delete">
       <tuv xml:lang="en">
         <seg>Delete a Role</seg>
@@ -42,6 +51,7 @@
         <seg>Entfernen einer Rolle</seg>
       </tuv>
     </tu>
+    
     <tu tuid="admin_collections_collection_new">
       <tuv xml:lang="en">
         <seg>Create a new Collection</seg>
@@ -50,6 +60,7 @@
         <seg>Eine neue Sammlung anlegen</seg>
       </tuv>
     </tu>
+    
     <tu tuid="admin_collections_collection_edit">
       <tuv xml:lang="en">
         <seg>Edit a Collections's properties</seg>
@@ -58,6 +69,7 @@
         <seg>Ändern der Eigenschaften der Sammlung</seg>
       </tuv>
     </tu>
+    
     <tu tuid="admin_collections_collection_delete">
       <tuv xml:lang="en">
         <seg>Delete a Collection</seg>
@@ -66,5 +78,7 @@
         <seg>Entfernen einer Sammlung</seg>
       </tuv>
     </tu>
+    
   </body>
+  
 </tmx>
