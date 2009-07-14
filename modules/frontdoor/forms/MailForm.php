@@ -61,7 +61,7 @@ class MailForm extends Zend_Form
         $sender_mail->setRequired(true);
         $sender_mail->setLabel('frontdoor_sendermail');
 
-        $message = new Zend_Form_Element_Text('message');
+        $message = new Zend_Form_Element_Textarea('message');
         $message->setRequired(false);
         $message->setLabel('frontdoor_messagetext');
 
