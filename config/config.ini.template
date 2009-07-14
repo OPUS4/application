@@ -52,7 +52,6 @@ gpg.path = /usr/bin/gpg ; path to gpg including gpg binary, e.g. /usr/bin/gpg
 gpg.keyring.path = /var/www ; path where the keyring is stored, e.g. /var/www - webserver must have writable access to this directory
 checksum.maxVerificationSize = 1M ; maximum filesize until that verification operations are done, 0 turns off verification operations completely, no value unlimits filesize
 
-[mail]
 mail.opus.smtp = localhost
 ; E-Mail-Adresse des Admins
 mail.opus.address = 
