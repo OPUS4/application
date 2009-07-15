@@ -48,6 +48,8 @@ searchengine.ocr.pdfimages.path = /usr/bin ; path to pdfimages binary, needed to
 searchengine.ocr.ocropus.path = /usr/bin ; if OCR is enabled, insert the path to ocropus here - other OCR-programs are not supported.
 searchengine.index.maxFileSize = 0 ; maximum filesize to index (in Byte), 0 means there is no limit
 socialBookmarking.connotea.systemTags = OPUS Test ; Tags for any document that is bookmarked via this repository
+socialBookmarking.bibsonomy.sysuser = ; Library User for Bibsonomy
+socialBookmarking.bibsonomy.syspassword = ; API-Password for library user at Bibsonomy Attention: the API-Password is not the one you created for the user at Bibsonomy - you can find it in the account settings on Bibsonomy
 gpg.path = /usr/bin/gpg ; path to gpg including gpg binary, e.g. /usr/bin/gpg
 gpg.keyring.path = /var/www ; path where the keyring is stored, e.g. /var/www - webserver must have writable access to this directory
 checksum.maxVerificationSize = 1M ; maximum filesize until that verification operations are done, 0 turns off verification operations completely, no value unlimits filesize
@@ -58,9 +60,22 @@ mail.opus.address =
 ; Name des Admins
 mail.opus.name =
 
+<<<<<<< .mine
+[socialBookmarking]
+connotea.systemTags = OPUS Test ; Tags for any document that is bookmarked via this repository
+connotea.user = ; Library User for Connotea
+connotea.password = ; Password for the library user at Connotea
+bibsonomy.sysuser = ; Library User for Bibsonomy
+bibsonomy.syspassword = ; API-Password for library user at Bibsonomy Attention: the API-Password is not the one you created for the user at Bibsonomy - you can find it in the account settings on Bibsonomy
+
+[gpg]
+path = /usr/bin/gpg ; path to gpg including gpg binary, e.g. /usr/bin/gpg
+keyring.path = /var/www ; path where the keyring is stored, e.g. /var/www - webserver must have writable access to this directory
+=======
 oai.repository.name =
 oai.repository.identifier =
 oai.sample.identifier =
+>>>>>>> .r3415
 
 [test : production]
 db.params.profiler = true

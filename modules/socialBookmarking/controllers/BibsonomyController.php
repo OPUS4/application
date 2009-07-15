@@ -36,31 +36,37 @@
  * Controller for Bookmarking in Bibsonomy
  * 
  */
-class SocialBookmarking_BobsonomyController extends Zend_Controller_Action
+class SocialBookmarking_BibsonomyController extends Zend_Controller_Action
 {
 	/**
-	 * Show the login form for Connotea, if the user isnt logged in already
+	 * Show the login form for Bibsonomy, if the user isnt logged in already
 	 *
 	 * @return void
 	 *
 	 */
     public function indexAction() 
     {
-        $connotea = new Zend_Session_Namespace('connotea');
+        $connotea = new Zend_Session_Namespace('bibsonomy');
+        // Auto Login with library account
+        $config = new Zend_Config_Ini('../config/config.ini');
+        $connotea->sysuser = $config->socialBookmarking->bibsonomy->sysuser;
+        $connotea->syspassword = $config->socialBookmarking->bibsonomy->syspassword;
         if (false === isset($connotea->user)) {
         	// show login mask
-            $loginForm = new ConnoteaLoginForm();
-            $loginForm->setAction($this->view->url(array('module' => "socialBookmarking", "controller"=>'connotea', "action"=>"login")));
+            $loginForm = new BibsonomyLoginForm();
+            $loginForm->setAction($this->view->url(array('module' => "socialBookmarking", "controller"=>'bibsonomy', "action"=>"login")));
             $loginForm->setMethod('post');
             $this->view->loginform = $loginForm;
-            $this->view->note = '<a href="http://www.connotea.org/register" target="_blank">' . $this->view->translate('connotea_register') . "</a></div>\n";
+            $this->view->note = '<a href="http://www.bibsonomy.org/register" target="_blank">' . $this->view->translate('bibsonomy_register') . "</a></div>\n";
         }
         else {
-            $connoteaPost = new Connotea;
+            $connoteaPost = new Bibsonomy;
             $connoteaPost->user = $connotea->user;
             $connoteaPost->password = $connotea->password;
+            $connoteaPost->sysuser = $connotea->sysuser;
+            $connoteaPost->syspassword = $connotea->syspassword;
             $this->view->connoteauser = $connotea->user;
-            $this->view->note = '<a href="' . $this->view->url(array('module' => "socialBookmarking", "controller"=>'connotea', "action"=>"logout")) . '">Logout</a>';
+            $this->view->note = '<a href="' . $this->view->url(array('module' => "socialBookmarking", "controller"=>'bibsonomy', "action"=>"logout")) . '">Logout</a>';
 
             $data = $this->_request->getParams();            
 
@@ -75,20 +81,20 @@ class SocialBookmarking_BobsonomyController extends Zend_Controller_Action
                     $this->view->bookmark = $this->view->translate('failure_bmcheck');
                 } else if ($userHatBookmark === 1) {
                     // Show Delete-form
-                    $bookmarkForm = new ConnoteaBookmarkDeleteForm();
-                    $bookmarkForm->setAction($this->view->url(array('module' => "socialBookmarking", "controller"=>'connotea', "action"=>"deletebookmark")));
+                    $bookmarkForm = new BibsonomyBookmarkDeleteForm();
+                    $bookmarkForm->setAction($this->view->url(array('module' => "socialBookmarking", "controller"=>'bibsonomy', "action"=>"deletebookmark")));
                     $bookmarkForm->setMethod('post');
                     $this->view->bookmark = $bookmarkForm;
                 } else {
-                    $bookmarkForm = new ConnoteaBookmarkForm();
-                    $bookmarkForm->setAction($this->view->url(array('module' => "socialBookmarking", "controller"=>'connotea', "action"=>"postbookmark")));
+                    $bookmarkForm = new BibsonomyBookmarkForm();
+                    $bookmarkForm->setAction($this->view->url(array('module' => "socialBookmarking", "controller"=>'bibsonomy', "action"=>"postbookmark")));
                     $bookmarkForm->setMethod('post');
                     $this->view->bookmark = $bookmarkForm;
                 }
             }
             else 
             {
-            	$this->view->bookmark = $this->view->translate('connotea_no_parameter');
+            	$this->view->bookmark = $this->view->translate('bibsonomy_no_parameter');
             }
         }
     }
@@ -97,11 +103,11 @@ class SocialBookmarking_BobsonomyController extends Zend_Controller_Action
        if ($this->_request->isPost() === true) {
             // post request
             $data = $this->_request->getPost();
-            $connoteaPost = new Connotea;
+            $connoteaPost = new Bibsonomy;
             $connoteaPost->user = $data['user'];
             $connoteaPost->password = $data['password'];
             if (true === $connoteaPost->login()) {
-            	$connotea = new Zend_Session_Namespace('connotea');
+            	$connotea = new Zend_Session_Namespace('bibsonomy');
             	$connotea->user = $data['user'];
             	$connotea->password = $data['password'];
             }
@@ -110,14 +116,14 @@ class SocialBookmarking_BobsonomyController extends Zend_Controller_Action
     }
 
     public function logoutAction() {
-       $connotea = new Zend_Session_Namespace('connotea');
+       $connotea = new Zend_Session_Namespace('bibsonomy');
        unset($connotea->user);
        $this->_forward('index');
     }
 
     public function postbookmarkAction() {
-        $connotea = new Zend_Session_Namespace('connotea');
-        $connoteaPost = new Connotea;
+        $connotea = new Zend_Session_Namespace('bibsonomy');
+        $connoteaPost = new Bibsonomy;
         $connoteaPost->user = $connotea->user;
         $connoteaPost->password = $connotea->password;
         
@@ -137,8 +143,8 @@ class SocialBookmarking_BobsonomyController extends Zend_Controller_Action
     }
 
     public function deletebookmarkAction() {
-        $connotea = new Zend_Session_Namespace('connotea');
-        $connoteaPost = new Connotea;
+        $connotea = new Zend_Session_Namespace('bibsonomy');
+        $connoteaPost = new Bibsonomy;
         $connoteaPost->user = $connotea->user;
         $connoteaPost->password = $connotea->password;
 

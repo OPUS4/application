@@ -46,14 +46,14 @@ class BibsonomyLoginForm extends Zend_Form
 		// Create and configure query field element:
 		$user = new Zend_Form_Element_Text('user');
 		$user->setRequired(true);
-		$user->setLabel('connotea_username');
+		$user->setLabel('bibsonomy_username');
 
 		$password = new Zend_Form_Element_Password('password');
 		$password->setRequired(true);
-		$password->setLabel('connotea_password');
+		$password->setLabel('bibsonomy_password');
 
         $submit = new Zend_Form_Element_Submit('connotealogin');
-        $submit->setLabel('connotea_login');
+        $submit->setLabel('bibsonomy_login');
 
 		// Add elements to form:
 		$this->addElements(array($user, $password, $submit));

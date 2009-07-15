@@ -38,8 +38,7 @@
 <?=$this->loginform ?>
 <?php
     if (true === isset($this->connoteauser)) {
-        printf($this->translate("connotea_loggedin"), $this->connoteauser);
-        echo '<a href="' . $this->url(array('module' => "socialBookmarking", "controller"=>'connotea', "action"=>"logout")) . '">' . $this->translate('logout') . '</a>';
+        printf($this->translate("bibsonomy_loggedin"), $this->connoteauser);
     }
 ?>
 <p>
@@ -51,14 +50,14 @@
         if ($this->connotealink === -1) {
             echo '<div>' . $this->translate('taglist_failure') . '</div>';
         } else if (count($this->connotealink) > 0) {
-            echo '<div>' . $this->translate('connotea_tags');
+            echo '<div>' . $this->translate('bibsonomy_tags');
             echo '<ul>';
             foreach($this->connotealink as $giventag) {
                 echo "<li>$giventag</li>";
             }
             echo '</ul></div>';
         } else {
-            echo '<div>' . $this->translate('connotea_no_tags') . '</div>';
+            echo '<div>' . $this->translate('bibsonomy_no_tags') . '</div>';
         }
     }
 ?>

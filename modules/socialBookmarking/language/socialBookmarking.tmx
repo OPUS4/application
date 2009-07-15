@@ -276,7 +276,106 @@
         <seg>Diesem Dokument sind noch keine Tags auf Delicious zugeordnet.</seg>
       </tuv>
     </tu>
+<<<<<<< .mine
+    <tu tuid="bibsonomy_register">
+      <tuv xml:lang="en">
+        <seg>Create a new account at Bibsonomy</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zugang bei Bibsonomy einrichten</seg>
+      </tuv>
+    </tu>
+    <tu tuid="delete_bibsonomy_bookmark">
+      <tuv xml:lang="en">
+        <seg>Delete this title from your Bibsonomy bookmarks</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Diesen Titel aus Ihrer Bibsonomy-Liste löschen</seg>
+      </tuv>
+    </tu>
+    <tu tuid="bibsonomy_username">
+      <tuv xml:lang="en">
+        <seg>Bibsonomy-Username</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bibsonomy-Nutzername</seg>
+      </tuv>
+    </tu>
+    <tu tuid="bibsonomy_password">
+      <tuv xml:lang="en">
+        <seg>API-Key (not your password! You can find the key in your account settings on Bibsonomy)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>API-Key (nicht Ihr Passwort! Der API-Key zu Ihrem Usernamen findet sich in den Einstellungen auf Bibsonomy)</seg>
+      </tuv>
+    </tu>
+    <tu tuid="bibsonomy_login">
+      <tuv xml:lang="en">
+        <seg>Login</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einloggen</seg>
+      </tuv>
+    </tu>
+    <tu tuid="bibsonomy_loggedin">
+      <tuv xml:lang="en">
+        <seg>You are logged in as %1$s at Bibsonomy!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sie sind als %1$s bei Bibsonomy eingeloggt!</seg>
+      </tuv>
+    </tu>
+    <tu tuid="bibsonomy_usertags">
+      <tuv xml:lang="en">
+        <seg>Your tags</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Eigene Tags</seg>
+      </tuv>
+    </tu>
+    <tu tuid="bibsonomy_usertitle">
+      <tuv xml:lang="en">
+        <seg>Title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Titel</seg>
+      </tuv>
+    </tu>
+    <tu tuid="bibsonomy_userdescription">
+      <tuv xml:lang="en">
+        <seg>Description</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Beschreibung</seg>
+      </tuv>
+    </tu>
+    <tu tuid="bibsonomy_bookmark">
+      <tuv xml:lang="en">
+        <seg>Bookmark this title in Bibsonomy</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Diesen Titel in Bibsonomy bookmarken</seg>
+      </tuv>
+    </tu>
+    <tu tuid="bibsonomy_tags">
+      <tuv xml:lang="en">
+        <seg>This document has these tags on Bibsonomy:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Diesem Dokument sind auf Bibsonnomy folgende Tags zugeordnet:</seg>
+      </tuv>
+    </tu>
+    <tu tuid="bibsonomy_no_tags">
+      <tuv xml:lang="en">
+        <seg>This document has got no tags on Bibsonomy yet.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Diesem Dokument sind noch keine Tags auf Bibsonomy zugeordnet.</seg>
+      </tuv>
+    </tu>
+=======
     
+>>>>>>> .r3415
   </body>
   
 </tmx>

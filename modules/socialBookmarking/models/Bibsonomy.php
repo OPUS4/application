@@ -33,11 +33,11 @@
  */
 
 // Connection variables
-define ('x401_host', 'www.connotea.org');
+define ('x401_host', 'www.bibsonomy.org');
 define ('x401_port', 80);
 // Debugging Connotea interface: 0 = no logging, 1 = Logging in LOGFILE
-define ('DEBUG', 0);
-define ('LOGFILE', '/tmp/connotea_debug.log');
+define ('DEBUG', 1);
+define ('LOGFILE', '/tmp/bibsonomy_debug.log');
 
 class Bibsonomy
 {		
@@ -52,6 +52,16 @@ class Bibsonomy
 	var $password;
 	
 	/**
+	 * @var String Opus-Username for Bibsonomy 
+	 */
+	var $sysuser;
+	
+	/**
+	 * @var String Opus User Bibsonomy-Password
+	 */
+	var $syspassword;
+
+	/**
 	 * @var Integer Timeout (constant)
 	 */
 	var $timeout = 20;
@@ -64,31 +74,62 @@ class Bibsonomy
 	}
 
 	/**
-	 * @param string $file          Script to call at Connotea
-	 * @param array  $data_to_send  All values that should gat posted to Connotea 
+	 * @param string $file          Script to call at Bibsonomy
+	 * @param array  $data_to_send  All values that should get posted to Bibsonomy
+	 * Should include the following elements
+	 * description
+	 * tags (space seperated list)
+	 * uri
+	 * usertitle 
 	 */
 	function postit($file, $data_to_send) 
 	{
 		if (DEBUG) $this->logit("Methode postit($file, $data_to_send) aufgerufen");
-		// prepare parameters
-		foreach ($data_to_send as $key => $dat)
-		{
-			$data_to_send[$key] = "$key=".rawurlencode(utf8_encode(stripslashes($dat)));
-		}
-		$postData = implode("&", $data_to_send);
+		$postData = new DOMDocument;
+		$rootNode = $postData->createElement('bibsonomy');
+		$postData->appendChild($rootNode);
 		
-		if (DEBUG) $this->logit("data_to_post vorbereitet (postData ist $postData)");
+		$posting = $postData->createElement('post');
+		$posting->setAttribute('description', $data_to_send['description']);
+	    $rootNode->appendChild($posting);
+
+		$user = $postData->createElement('user');
+		$user->setAttribute('name', $this->user);
+	    $posting->appendChild($user);
+		
+		$tags = split("\ ", $data_to_send['tags']);
+		$i = 0;
+		foreach ($tags as $tag) {
+		    if ($tag !== "")
+		    {
+		        $t[$i] = $postData->createElement('tag');
+		        $t[$i]->setAttribute('name', $tag);
+	            $posting->appendChild($t[$i]);
+	            $i++;
+		    }
+		}
+
+		$group = $postData->createElement('group');
+		$group->setAttribute('name', 'public');
+	    $posting->appendChild($group);
+
+		$bookmark = $postData->createElement('bookmark');
+		$bookmark->setAttribute('url', $data_to_send['uri']);
+		$bookmark->setAttribute('title', html_entity_decode($data_to_send['usertitle']));
+	    $posting->appendChild($bookmark);
+
+		if (DEBUG) $this->logit("data_to_post vorbereitet (postData ist ".$postData->saveXml().")");
 		
 		// HTTP-Header vorbereiten
 		$out  = "POST $file HTTP/1.1\r\n";
 		$out .= "Host: ".x401_host."\r\n";
-		$out .= "Content-type: application/x-www-form-urlencoded\r\n";
-		$out .= "Content-length: ". strlen($postData) ."\r\n";
+		$out .= "Content-type: text/plain\r\n";
+		$out .= "Content-length: ". strlen($postData->saveXml()) ."\r\n";
 		$out .= "User-Agent: ".$_SERVER["HTTP_USER_AGENT"]."\r\n";
 		$out .= "Authorization: Basic ".base64_encode($this->user.":".$this->password)."\r\n";
 		$out .= "Connection: Close\r\n";
 		$out .= "\r\n";
-		$out .= $postData;
+		$out .= $postData->saveXml();
 		if (!$conex = @fsockopen(x401_host, x401_port, $errno, $errstr, 10)) return 0;
 		if (DEBUG) $this->logit("conex geoeffnet");
 		fwrite($conex, $out);
@@ -110,7 +151,7 @@ class Bibsonomy
 	{
 		if (DEBUG) $this->logit("Methode gettags($url) aufgerufen");
 		// HTTP-Header vorbereiten
-		$out  = "GET /data/tags/uri/$url HTTP/1.1\r\n";
+		$out  = "GET /api/users/".$this->user."/posts?resourcetype=bookmark HTTP/1.1\r\n";
 		$out .= "Host: ".x401_host."\r\n";
 		$out .= "User-Agent: ".$_SERVER["HTTP_USER_AGENT"]."\r\n";
 		$out .= "Authorization: Basic ".base64_encode($this->user.":".$this->password)."\r\n";
@@ -129,26 +170,24 @@ class Bibsonomy
 		$xmlStart = strpos($data, "<?xml");
 		$xmlCode = substr($data, $xmlStart);
 
-		#echo $xmlCode;
-
-		$p = xml_parser_create();
-		xml_parse_into_struct($p, $xmlCode, $vals, $index);
-		xml_parser_free($p);
-		#echo "Index array\n";
-		#print_r($index);
-		#echo "\nVals array\n";
-		#print_r($vals);
-		
+		print ($xmlCode);
+		$documentsXML = new DOMDocument;
+		$documentsXML->loadXML($xmlCode);
+		$postList = $documentsXML->getElementsByTagName('post');
 		$tags = array();
-		if (!$index)
+		foreach ($postList as $post) 
 		{
-			return (-1);
-		}
-		if (array_key_exists("RDF:VALUE", $index))
-		{
-			foreach ($index["RDF:VALUE"] as $key)
+			$postXml = new DOMDocument; 
+			$postXml->loadXml($documentsXML->saveXML($post));
+			$postData = $postXml->getElementsByTagName('bookmark');
+			if ($postData->item(0)->getAttribute('url') === $url)
 			{
-				array_push($tags, $vals[$key]["value"]);
+		        $tagList = $postXml->getElementsByTagName('tag');
+		        foreach ($tagList as $tag) 
+		        {
+			        $tagValue = $tag->getAttribute('name');
+			        $tags[] = $tagValue;
+		        }
 			}
 		}
 		return ($tags);
@@ -161,7 +200,7 @@ class Bibsonomy
 	{
 		if (DEBUG) $this->logit("Methode getbookmarks() aufgerufen");
 		// HTTP-Header vorbereiten
-		$out  = "GET /data/user/".$this->user." HTTP/1.1\r\n";
+		$out  = "GET /api/users/".$this->user."/posts?resourcetype=bookmark HTTP/1.1\r\n";
 		$out .= "Host: ".x401_host."\r\n";
 		$out .= "Authorization: Basic ".base64_encode($this->user.":".$this->password)."\r\n";
 		$out .= "User-Agent: ".$_SERVER["HTTP_USER_AGENT"]."\r\n";
@@ -180,27 +219,14 @@ class Bibsonomy
 		$xmlStart = strpos($data, "<?xml");
 		$xmlCode = substr($data, $xmlStart);
 
-		#echo $xmlCode;
-
-		$p = xml_parser_create();
-		xml_parse_into_struct($p, $xmlCode, $vals, $index);
-		xml_parser_free($p);
-		#echo "Index array\n";
-		#print_r($index);
-		#echo "\nVals array\n";
-		#print_r($vals);
-		
+		$documentsXML = new DOMDocument;
+		$documentsXML->loadXML($xmlCode);
+		$postList = $documentsXML->getElementsByTagName('post');
 		$tags = array();
-		if (!$index)
+		foreach ($postList as $post) 
 		{
-			return (-1);
-		}
-		if (array_key_exists("LINK", $index))
-		{
-			foreach ($index["LINK"] as $key)
-			{
-				array_push($tags, $vals[$key]["value"]);
-			}
+			$postData = $post->getElementsByTagName('bookmark');
+			$tags[] = $postData->item(0)->getAttribute('url');
 		}
 		return ($tags);
 	}
@@ -236,8 +262,10 @@ class Bibsonomy
 	}
 
 	/**
-	 * @param String return XML-R�ckgabe von Connotea
-	 * @abstract Liefert zur�ck, ob das Posting erfolgreich war oder nicht
+	 * Checks the result of the API request
+	 * 
+	 * @param string $return XML-Output by Bibsonomy
+	 * @return boolean true if there has been no error
 	 */
 	function isSuccess($return)
 	{
@@ -246,27 +274,20 @@ class Bibsonomy
 		$xmlStart = strpos($return, "<?xml");
 		$xmlCode = substr($return, $xmlStart);
 
-		#echo $xmlCode;
+		$documentsXML = new DOMDocument;
+		$documentsXML->loadXML($xmlCode);
+		$postList = $documentsXML->getElementsByTagName('bibsonomy');
+		$root = $postList->item(0);
 
-		$p = xml_parser_create();
-		xml_parse_into_struct($p, $xmlCode, $vals, $index);
-		xml_parser_free($p);
-		#echo "Index array\n";
-		#print_r($index);
-		#echo "\nVals array\n";
-		#print_r($vals);
 		// In den Indizes muss irgendwo der Key ISSUCCESS auftauchen, value ist der Index im vals-Array
-		if (array_key_exists("ISSUCCESS", $index))
+		if ($root->getAttribute('stat') === 'fail')
 		{
-			$successkey = $index["ISSUCCESS"][0];
+			return false;
 		} 
 		else
 		{
-			return 0;
+			return true;
 		}
-		// Nun den Wert �berpr�fen (er muss 1 sein)
-		if ($vals[$successkey]["value"] == 1) return 1;
-		else return 0;
 	}
 
 	/**
@@ -299,19 +320,7 @@ class Bibsonomy
 	function addBookmark($params)
 	{
 		if (DEBUG) $this->logit("Methode addBookmark($params) aufgerufen");
-		$return = $this->postit("/data/add", $params);
-		$i = 0;
-		while (!$this->isSuccess($return))
-		{
-			// Automatischer Retry, bis Eintrag erfolgreich
-			sleep(1);
-			$return = $this->postit("/data/add", $params);
-			$i++;
-			if ($i == $this->timeout)
-			{
-				return 0;
-			}
-		}
+		$return = $this->postit("/api/users/" . $this->user . "/posts", $params);
 		return 1;
 	}
 
@@ -321,33 +330,72 @@ class Bibsonomy
 	function deleteBookmark($url)
 	{
 		if (DEBUG) $this->logit("Methode deleteBookmark($url) aufgerufen");
-		$params = array('uri' => $url);
-		$return = $this->postit("/data/remove", $params);
-		$i = 0;
-		while (!$this->isSuccess($return))
-		{
-			// Automatischer Retry, bis Eintrag erfolgreich
-			sleep(1);
-			$return = $this->postit("/data/remove", $params);
-			$i++;
-			if ($i == $this->timeout)
-			{
-				return 0;
-			}
+		$out  = 'DELETE /api/users/' . $this->user . '/posts/' . $this->getUrlHash($url) ." HTTP/1.1\r\n";
+		$out .= "Host: ".x401_host."\r\n";
+		$out .= "Authorization: Basic ".base64_encode($this->user.":".$this->password)."\r\n";
+		$out .= "User-Agent: ".$_SERVER["HTTP_USER_AGENT"]."\r\n";
+		$out .= "Connection: Close\r\n";
+		$out .= "\r\n";
+		if (!$conex = @fsockopen(x401_host, x401_port, $errno, $errstr, 10)) return 0;
+		fwrite($conex, $out);
+		$data = '';
+		while (!feof($conex)) {
+			$data .= fgets($conex, 512);
 		}
+		fclose($conex);
 		return 1;
 	}
 
 	/**
-	 * Login to Connotea
+	 * @param String URL des zu entfernenden Eintrags
+	 */
+	function getUrlHash($url)
+	{
+		if (DEBUG) $this->logit("Methode getUrlHash($url) aufgerufen");
+		// HTTP-Header vorbereiten
+		$out  = "GET /api/users/".$this->user."/posts?resourcetype=bookmark HTTP/1.1\r\n";
+		$out .= "Host: ".x401_host."\r\n";
+		$out .= "Authorization: Basic ".base64_encode($this->user.":".$this->password)."\r\n";
+		$out .= "User-Agent: ".$_SERVER["HTTP_USER_AGENT"]."\r\n";
+		$out .= "Connection: Close\r\n";
+		$out .= "\r\n";
+		if (!$conex = @fsockopen(x401_host, x401_port, $errno, $errstr, 10)) return 0;
+		fwrite($conex, $out);
+		$data = '';
+		while (!feof($conex)) {
+			$data .= fgets($conex, 512);
+		}
+		fclose($conex);
+		#echo $data;
+		
+		// Der Header der R�ckgabe muss rausgecuttet werden, sonst ist das XML-Dokument nicht wohlgeformt
+		$xmlStart = strpos($data, "<?xml");
+		$xmlCode = substr($data, $xmlStart);
+
+		$documentsXML = new DOMDocument;
+		$documentsXML->loadXML($xmlCode);
+		$postList = $documentsXML->getElementsByTagName('post');
+		foreach ($postList as $post) 
+		{
+			$postData = $post->getElementsByTagName('bookmark');
+			if ($postData->item(0)->getAttribute('url') === $url)
+			{
+			    return $postData->item(0)->getAttribute('intrahash');
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Login to Bibsonomy
 	 * 
-	 * @return boolean true if the User is authenticated successfully, otherwise flase
+	 * @return boolean true if there is no authentication failure
 	 */
 	function login() 
 	{
 		if (DEBUG) $this->logit("Methode login() aufgerufen");
 		// Prepare HTTP-Header
-		$out  = "GET /data/noop HTTP/1.1\r\n";
+		$out  = "GET /api/users/" . $this->user . " HTTP/1.1\r\n";
 		$out .= "Host: ".x401_host."\r\n";
 		$out .= "User-Agent: ".$_SERVER["HTTP_USER_AGENT"]."\r\n";
 		$out .= "Authorization: Basic ".base64_encode($this->user.":".$this->password)."\r\n";
@@ -360,10 +408,6 @@ class Bibsonomy
 			$data .= fgets($conex, 512);
 		}
 		fclose($conex);
-		if ($this->isSuccess($data))
-		{
-			return true;
-		}
-		return false;
+		return $this->isSuccess($data);
 	}
 }

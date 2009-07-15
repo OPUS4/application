@@ -44,23 +44,23 @@ class BibsonomyBookmarkForm extends Zend_Form
      */
     public function init() {
 		// Create and configure query field element:
-		$connotea = new Zend_Session_Namespace('connotea');
+		$connotea = new Zend_Session_Namespace('bibsonomy');
 		$doc = new Opus_Document($connotea->docId);
   		
 		$userTags = new Zend_Form_Element_Text('user_tags');
-		$userTags->setLabel('connotea_usertags');
+		$userTags->setLabel('bibsonomy_usertags');
 
 		$title = new Zend_Form_Element_Text('usertitle');
 		$title->setRequired(true);
 		$title->setValue($doc->getTitleMain(0)->getValue());
-		$title->setLabel('connotea_usertitle');
+		$title->setLabel('bibsonomy_usertitle');
 
 		$description = new Zend_Form_Element_Textarea('userdescription');
 		$description->setValue($doc->getTitleAbstract(0)->getValue());
-		$description->setLabel('connotea_userdescription');
+		$description->setLabel('bibsonomy_userdescription');
 
-        $submit = new Zend_Form_Element_Submit('connotea_bm');
-        $submit->setLabel('connotea_bookmark');
+        $submit = new Zend_Form_Element_Submit('bibsonomy_bm');
+        $submit->setLabel('bibsonomy_bookmark');
 
 		// Add elements to form:
 		$this->addElements(array($userTags, $title, $description, $submit));

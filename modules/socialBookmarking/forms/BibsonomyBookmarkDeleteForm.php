@@ -43,8 +43,8 @@ class BibsonomyBookmarkDeleteForm extends Zend_Form
      * @return void
      */
     public function init() {
-        $submit = new Zend_Form_Element_Submit('delete_connotea_bm');
-        $submit->setLabel('delete_connotea_bookmark');
+        $submit = new Zend_Form_Element_Submit('delete_bibsonomy_bm');
+        $submit->setLabel('delete_bibsonomy_bookmark');
 
 		// Add elements to form:
 		$this->addElement($submit);
