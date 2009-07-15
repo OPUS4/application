@@ -1,6 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<tmx version="2.0" xmlns="http://www.lisa.org/tmx20">
-  <header adminlang="en" creationtool="locale4j" creationtoolversion="1.1" o-tmf="unknown" segtype="block" srclang="*all*"/>
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+ 
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+ 
   <body>
       <tu tuid="feeds_index_title">
       <tuv xml:lang="en">
@@ -10,6 +14,7 @@
         <seg>Feeds</seg>
       </tuv>
     </tu>
+    
     <tu tuid="feeds_modulename">
       <tuv xml:lang="en">
         <seg>feeds</seg>
@@ -18,5 +23,7 @@
         <seg>feeds</seg>
       </tuv>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
     </tu>
+    
   </body>
+  
 </tmx>
