@@ -1,7 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<tmx version="2.0" xmlns="http://www.lisa.org/tmx20">
-  <header adminlang="en" creationtool="locale4j" creationtoolversion="1.1" o-tmf="unknown" segtype="block" srclang="*all*"/>
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+ 
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+  
   <body>
+  
     <tu tuid="publish_modulename">
       <tuv xml:lang="en">
         <seg>Publish</seg>
@@ -10,6 +15,7 @@
         <seg>Veröffentlichen</seg>
       </tuv>
     </tu>
+    
     <tu tuid="publish_controller_index">
       <tuv xml:lang="en">
         <seg>Publish</seg>
@@ -18,6 +24,7 @@
         <seg>Veröffentlichen</seg>
       </tuv>
     </tu>
+    
     <tu tuid="publish_controller_create">
       <tuv xml:lang="en">
         <seg>Publish create</seg>
@@ -26,6 +33,7 @@
         <seg>Veröffentlichen - Beschreibungsdaten eingeben</seg>
       </tuv>
     </tu>
+    
     <tu tuid="publish_controller_summary">
       <tuv xml:lang="en">
         <seg>Publish summary</seg>
@@ -42,6 +50,7 @@
         <seg>Veröffentlichen - Dateien hochladen</seg>
       </tuv>
     </tu>
+    
     <tu tuid="publish_controller_upload_successful">
       <tuv xml:lang="en">
         <seg>Publish upload successful</seg>
@@ -50,6 +59,7 @@
         <seg>Die Datei(en) wurde(n) erfolgreich hochgeladen.</seg>
       </tuv>
     </tu>
+    
     <tu tuid="selecttype">
       <tuv xml:lang="en">
         <seg>Choose your document type:</seg>
@@ -58,6 +68,7 @@
         <seg>Wählen Sie Ihren Dokumententyp aus:</seg>
       </tuv>
     </tu>
+    
     <tu tuid="process">
       <tuv xml:lang="en">
         <seg>continue</seg>
@@ -66,6 +77,7 @@
         <seg>weiter</seg>
       </tuv>
     </tu>
+    
     <tu tuid="transmit">
       <tuv xml:lang="en">
         <seg>transmit</seg>
@@ -82,6 +94,7 @@
         <seg>Bitte Sprache auswählen</seg>
       </tuv>
     </tu>
+    
     <tu tuid="DateAcceptedDescr">
       <tuv xml:lang="en">
         <seg>Date of accepting</seg>
@@ -90,6 +103,7 @@
         <seg>Datum, an dem das Dokument angenommen wurde</seg>
       </tuv>
     </tu>
+    
     <tu tuid="PublishedDateDescr">
       <tuv xml:lang="en">
         <seg>Date of Publication</seg>
@@ -98,6 +112,7 @@
         <seg>Datum der Veröffentlichung bitte eingeben</seg>
       </tuv>
     </tu>
+    
     <tu tuid="AdditionalFormFieldsDescr">
       <tuv xml:lang="en">
         <seg>additional fields</seg>
@@ -106,5 +121,7 @@
         <seg>Bitte klicken Sie hier, wenn Sie eine weitere Person/einen weiteren Titel etc. eingeben möchten.</seg>
       </tuv>
     </tu>
+    
   </body>
+  
 </tmx>

@@ -1,7 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<tmx version="2.0" xmlns="http://www.lisa.org/tmx20">
-  <header adminlang="en" creationtool="locale4j" creationtoolversion="1.1" o-tmf="unknown" segtype="block" srclang="*all*"/>
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+ 
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+  
   <body>
+  
     <tu tuid="search_index_browsing">
       <tuv xml:lang="en">
         <seg>Browsing</seg>
@@ -10,6 +15,7 @@
         <seg>Browsing</seg>
       </tuv>
     </tu>
+    
     <tu tuid="search_index_alltitlesbrowsing">
       <tuv xml:lang="en">
         <seg>All titles in this repository</seg>
@@ -18,6 +24,7 @@
         <seg>Alle Titel aus dem Repository</seg>
       </tuv>
     </tu>
+    
      <tu tuid="search_index_collectionsbrowsing">
       <tuv xml:lang="en">
         <seg>Browsing categories</seg>
@@ -26,6 +33,7 @@
         <seg>Browsing nach Kategorien</seg>
       </tuv>
     </tu>
+    
     <tu tuid="search_index_authorbrowsing">
       <tuv xml:lang="en">
         <seg>Browse authors</seg>
@@ -42,6 +50,7 @@
         <seg>Browsing nach Herausgebern</seg>
       </tuv>
     </tu>
+    
     <tu tuid="search_index_advisorbrowsing">
       <tuv xml:lang="en">
         <seg>Browse advisors</seg>
@@ -50,6 +59,7 @@
         <seg>Browsing nach Berichtern</seg>
       </tuv>
     </tu>
+    
     <tu tuid="search_index_contributorbrowsing">
       <tuv xml:lang="en">
         <seg>Browse contributors</seg>
@@ -66,6 +76,7 @@
         <seg>Browsing nach Begutachtern</seg>
       </tuv>
     </tu>
+    
     <tu tuid="search_index_otherbrowsing">
       <tuv xml:lang="en">
         <seg>Browse other persons</seg>
@@ -74,6 +85,7 @@
         <seg>Browsing nach sonstigen beteiligten Personen</seg>
       </tuv>
     </tu>
+    
     <tu tuid="search_index_translatorbrowsing">
       <tuv xml:lang="en">
         <seg>Browse translators</seg>
@@ -82,6 +94,7 @@
         <seg>Browsing nach Übersetzern</seg>
       </tuv>
     </tu>
+    
     <tu tuid="search_index_doctypebrowsing">
       <tuv xml:lang="en">
         <seg>Browse document types</seg>
@@ -90,6 +103,7 @@
         <seg>Browsing nach Dokumenttypen</seg>
       </tuv>
     </tu>
+    
     <tu tuid="search_index_search">
       <tuv xml:lang="en">
         <seg>Search</seg>
@@ -106,6 +120,7 @@
         <seg>Volltextsuche</seg>
       </tuv>
     </tu>
+    
     <tu tuid="search_searchresult">
       <tuv xml:lang="en">
         <seg>Search result</seg>
@@ -114,6 +129,7 @@
         <seg>Suchergebnis</seg>
       </tuv>
     </tu>
+    
     <tu tuid="search_index_metadatasearch">
       <tuv xml:lang="en">
         <seg>metadata search</seg>
@@ -122,6 +138,7 @@
         <seg>Metadatensuche</seg>
       </tuv>
     </tu>
+    
     <tu tuid="search_titles_authors">
       <tuv xml:lang="en">
         <seg>Documents by</seg>
@@ -138,6 +155,7 @@
         <seg>Dokumente herausgegeben von</seg>
       </tuv>
     </tu>
+    
     <tu tuid="search_titles_doctypes">
       <tuv xml:lang="en">
         <seg>Documents of type</seg>
@@ -154,6 +172,7 @@
         <seg>Alle Dokumente auf diesem Server</seg>
       </tuv>
     </tu>
+    
     <tu tuid="search_titles_resultlist">
       <tuv xml:lang="en">
         <seg>Query returned %1$s hits.</seg>
@@ -162,6 +181,7 @@
         <seg>Die Suche ergab %1$s Treffer.</seg>
       </tuv>
     </tu>
+    
     <tu tuid="search_titles_resultlist_one_entry">
       <tuv xml:lang="en">
         <seg>Query returned %1$s hit.</seg>
@@ -170,6 +190,7 @@
         <seg>Die Suche ergab %1$s Treffer.</seg>
       </tuv>
     </tu>
+    
     <tu tuid="search_titles_relevance">
       <tuv xml:lang="en">
         <seg>Relevance</seg>
@@ -178,6 +199,7 @@
         <seg>Relevanz</seg>
       </tuv>
     </tu>
+    
     <tu tuid="search_titles_found">
       <tuv xml:lang="en">
         <seg>found in</seg>
@@ -186,6 +208,7 @@
         <seg>gefunden in</seg>
       </tuv>
     </tu>
+    
     <tu tuid="search_searchaction">
       <tuv xml:lang="en">
         <seg>Search</seg>
@@ -202,6 +225,7 @@
         <seg>Dokumente in dieser Kategorie</seg>
       </tuv>
     </tu>
+    
     <tu tuid="search_modulename">
       <tuv xml:lang="en">
         <seg>Search and browse</seg>
@@ -210,6 +234,7 @@
         <seg>Suchen und Browsen</seg>
       </tuv>
     </tu>
+    
     <tu tuid="search_results_from_to">
       <tuv xml:lang="en">
         <seg>Showing results %1$s to %2$s</seg>
@@ -218,6 +243,7 @@
         <seg>Ergebnisse %1$s bis %2$s</seg>
       </tuv>
     </tu>
+    
     <tu tuid="browsing_titles_resultlist">
       <tuv xml:lang="en">
         <seg>This category has %1$s entries.</seg>
@@ -226,6 +252,7 @@
         <seg>Dieser Kategorie sind %1$s Dokumente zugeordnet.</seg>
       </tuv>
     </tu>
+    
     <tu tuid="browsing_titles_resultlist_one_entry">
       <tuv xml:lang="en">
         <seg>This category has %1$s entry.</seg>
@@ -234,6 +261,7 @@
         <seg>Dieser Kategorie ist %1$s Dokument zugeordnet.</seg>
       </tuv>
     </tu>
+    
     <tu tuid="search_no_results">
       <tuv xml:lang="en">
         <seg>Sorry, no matches for your query!</seg>
@@ -242,6 +270,7 @@
         <seg>Leider wurde nichts zu Ihrer Suchanfrage gefunden!</seg>
       </tuv>
     </tu>
+    
     <tu tuid="searchfield_title">
       <tuv xml:lang="en">
         <seg>Title</seg>
@@ -250,6 +279,7 @@
         <seg>Titel</seg>
       </tuv>
     </tu>
+    
     <tu tuid="searchfield_author">
       <tuv xml:lang="en">
         <seg>Author</seg>
@@ -258,6 +288,7 @@
         <seg>Autor</seg>
       </tuv>
     </tu>
+    
     <tu tuid="searchfield_persons">
       <tuv xml:lang="en">
         <seg>Persons</seg>
@@ -274,6 +305,7 @@
         <seg>Volltext</seg>
       </tuv>
     </tu>
+    
     <tu tuid="searchfield_abstract">
       <tuv xml:lang="en">
         <seg>Abstract</seg>
@@ -282,6 +314,7 @@
         <seg>Kurzzusammenfassung</seg>
       </tuv>
     </tu>
+    
     <tu tuid="searchfield_subject">
       <tuv xml:lang="en">
         <seg>Subjects</seg>
@@ -290,6 +323,7 @@
         <seg>Klassen und Schlagworte</seg>
       </tuv>
     </tu>
+    
     <tu tuid="searchfield_doctype">
       <tuv xml:lang="en">
         <seg>Document type</seg>
@@ -298,6 +332,7 @@
         <seg>Dokumenttyp</seg>
       </tuv>
     </tu>
+    
     <tu tuid="searchfield_year">
       <tuv xml:lang="en">
         <seg>Year of publication</seg>
@@ -314,6 +349,7 @@
         <seg>Assoziiertes Institut</seg>
       </tuv>
     </tu>
+    
     <tu tuid="searchfield_isbn">
       <tuv xml:lang="en">
         <seg>ISBN</seg>
@@ -322,6 +358,7 @@
         <seg>ISBN</seg>
       </tuv>
     </tu>
+    
     <tu tuid="searchfield_urn">
       <tuv xml:lang="en">
         <seg>URN</seg>
@@ -330,6 +367,7 @@
         <seg>URN</seg>
       </tuv>
     </tu>
+    
     <tu tuid="boolean_and">
       <tuv xml:lang="en">
         <seg>and</seg>
@@ -338,6 +376,7 @@
         <seg>und</seg>
       </tuv>
     </tu>
+    
     <tu tuid="boolean_or">
       <tuv xml:lang="en">
         <seg>or</seg>
@@ -354,6 +393,7 @@
         <seg>nicht</seg>
       </tuv>
     </tu>
+    
     <tu tuid="search_result">
       <tuv xml:lang="en">
         <seg>Search result</seg>
@@ -362,6 +402,7 @@
         <seg>Suchergebnis</seg>
       </tuv>
     </tu>
+    
     <tu tuid="exact_search">
       <tuv xml:lang="en">
         <seg>Exact query</seg>
@@ -370,6 +411,7 @@
         <seg>Exakte Suche</seg>
       </tuv>
     </tu>
+    
     <tu tuid="truncated_search">
       <tuv xml:lang="en">
         <seg>parts of the words</seg>
@@ -378,6 +420,7 @@
         <seg>Wortteile</seg>
       </tuv>
     </tu>
+    
     <tu tuid="search_hitsPerPage">
       <tuv xml:lang="en">
         <seg>Hits per page</seg>
@@ -386,6 +429,7 @@
         <seg>Treffer pro Seite</seg>
       </tuv>
     </tu>
+    
     <tu tuid="search_sort">
       <tuv xml:lang="en">
         <seg>Sorting</seg>
@@ -394,6 +438,7 @@
         <seg>Sortierung</seg>
       </tuv>
     </tu>
+    
     <tu tuid="all_hits">
       <tuv xml:lang="en">
         <seg>All</seg>
@@ -402,6 +447,7 @@
         <seg>Alle</seg>
       </tuv>
     </tu>
+    
     <tu tuid="search_sort_relevance">
       <tuv xml:lang="en">
         <seg>Relevance</seg>
@@ -410,6 +456,7 @@
         <seg>Relevanz</seg>
       </tuv>
     </tu>
+    
     <tu tuid="search_sort_yearandtitle">
       <tuv xml:lang="en">
         <seg>Year and title</seg>
@@ -418,6 +465,7 @@
         <seg>Jahr und Titel</seg>
       </tuv>
     </tu>
+    
     <tu tuid="search_sort_year">
       <tuv xml:lang="en">
         <seg>Year</seg>
@@ -426,6 +474,7 @@
         <seg>Jahr</seg>
       </tuv>
     </tu>
+    
     <tu tuid="search_sort_title">
       <tuv xml:lang="en">
         <seg>Title</seg>
@@ -434,6 +483,7 @@
         <seg>Titel</seg>
       </tuv>
     </tu>
+    
      <tu tuid="search_sort_author">
       <tuv xml:lang="en">
         <seg>Author</seg>
@@ -442,6 +492,7 @@
         <seg>Autor</seg>
       </tuv>
     </tu>
+    
     <tu tuid="search_sort_relevance_asc">
       <tuv xml:lang="en">
         <seg>Relevance (ascending)</seg>
@@ -450,6 +501,7 @@
         <seg>Relevanz (aufsteigend)</seg>
       </tuv>
     </tu>
+    
     <tu tuid="search_sort_yearandtitle_desc">
       <tuv xml:lang="en">
         <seg>Year and title (descending)</seg>
@@ -458,6 +510,7 @@
         <seg>Jahr und Titel (absteigend)</seg>
       </tuv>
     </tu>
+    
     <tu tuid="search_sort_year_desc">
       <tuv xml:lang="en">
         <seg>Year (descending)</seg>
@@ -466,6 +519,7 @@
         <seg>Jahr (absteigend)</seg>
       </tuv>
     </tu>
+    
     <tu tuid="search_sort_title_desc">
       <tuv xml:lang="en">
         <seg>Title (Z-A)</seg>
@@ -474,6 +528,7 @@
         <seg>Titel (Z-A)</seg>
       </tuv>
     </tu>
+    
      <tu tuid="search_sort_author_desc">
       <tuv xml:lang="en">
         <seg>Author (Z-A)</seg>
@@ -482,5 +537,7 @@
         <seg>Autor (Z-A)</seg>
       </tuv>
     </tu>
+    
   </body>
+  
 </tmx>

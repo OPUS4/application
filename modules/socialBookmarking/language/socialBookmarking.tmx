@@ -1,7 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<tmx version="2.0" xmlns="http://www.lisa.org/tmx20">
-  <header adminlang="en" creationtool="locale4j" creationtoolversion="1.1" o-tmf="unknown" segtype="block" srclang="*all*"/>
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+ 
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+  
   <body>
+  
     <tu tuid="socialBookmarking_modulename">
       <tuv xml:lang="en">
         <seg>Social Bookmarking interfaces</seg>
@@ -10,6 +15,7 @@
         <seg>Schnittstellen zu SocialBookmarking-Systemen</seg>
       </tuv>
     </tu>
+    
     <tu tuid="logout">
       <tuv xml:lang="en">
         <seg>Logout</seg>
@@ -18,6 +24,7 @@
         <seg>Abmelden</seg>
       </tuv>
     </tu>
+    
     <tu tuid="connotea_username">
       <tuv xml:lang="en">
         <seg>Connotea-Username</seg>
@@ -26,6 +33,7 @@
         <seg>Connotea-Nutzername</seg>
       </tuv>
     </tu>
+    
     <tu tuid="connotea_password">
       <tuv xml:lang="en">
         <seg>Password</seg>
@@ -34,6 +42,7 @@
         <seg>Passwort</seg>
       </tuv>
     </tu>
+    
     <tu tuid="connotea_login">
       <tuv xml:lang="en">
         <seg>Login</seg>
@@ -42,6 +51,7 @@
         <seg>Einloggen</seg>
       </tuv>
     </tu>
+    
     <tu tuid="connotea_register">
       <tuv xml:lang="en">
         <seg>Create a new account at Connotea</seg>
@@ -50,6 +60,7 @@
         <seg>Zugang bei Connotea einrichten</seg>
       </tuv>
     </tu>
+    
     <tu tuid="connotea_loggedin">
       <tuv xml:lang="en">
         <seg>You are logged in as %1$s at Connotea!</seg>
@@ -58,6 +69,7 @@
         <seg>Sie sind als %1$s bei Connotea eingeloggt!</seg>
       </tuv>
     </tu>
+    
     <tu tuid="taglist_failure">
       <tuv xml:lang="en">
         <seg>Failure while reading the tag list for this bookmark.</seg>
@@ -66,6 +78,7 @@
         <seg>Fehler beim Einlesen der Tags zu diesem Eintrag.</seg>
       </tuv>
     </tu>
+    
     <tu tuid="connotea_tags">
       <tuv xml:lang="en">
         <seg>This document has these tags on Connotea:</seg>
@@ -74,6 +87,7 @@
         <seg>Diesem Dokument sind auf Connotea folgende Tags zugeordnet:</seg>
       </tuv>
     </tu>
+    
     <tu tuid="connotea_no_tags">
       <tuv xml:lang="en">
         <seg>This document has got no tags on Connotea yet.</seg>
@@ -82,6 +96,7 @@
         <seg>Diesem Dokument sind noch keine Tags auf Connotea zugeordnet.</seg>
       </tuv>
     </tu>
+    
     <tu tuid="connotea_usertags">
       <tuv xml:lang="en">
         <seg>Your tags</seg>
@@ -90,6 +105,7 @@
         <seg>Eigene Tags</seg>
       </tuv>
     </tu>
+    
     <tu tuid="connotea_usertitle">
       <tuv xml:lang="en">
         <seg>Title</seg>
@@ -98,6 +114,7 @@
         <seg>Titel</seg>
       </tuv>
     </tu>
+    
     <tu tuid="connotea_userdescription">
       <tuv xml:lang="en">
         <seg>Description</seg>
@@ -106,6 +123,7 @@
         <seg>Beschreibung</seg>
       </tuv>
     </tu>
+    
     <tu tuid="connotea_bookmark">
       <tuv xml:lang="en">
         <seg>Bookmark this title in Connotea</seg>
@@ -114,6 +132,7 @@
         <seg>Diesen Titel in Connotea bookmarken</seg>
       </tuv>
     </tu>
+    
     <tu tuid="failure_bmcheck">
       <tuv xml:lang="en">
         <seg>Failure while checking your Connotea list for this bookmark.</seg>
@@ -122,6 +141,7 @@
         <seg>Fehler bei der Ermittlung, ob Sie diesen Bookmark in Ihrer Connotea-Liste haben.</seg>
       </tuv>
     </tu>
+    
     <tu tuid="delete_connotea_bookmark">
       <tuv xml:lang="en">
         <seg>Delete this title from your Connotea bookmarks</seg>
@@ -130,6 +150,7 @@
         <seg>Diesen Titel aus Ihrer Connotea-Liste löschen</seg>
       </tuv>
     </tu>
+    
     <tu tuid="connotea_no_parameter">
       <tuv xml:lang="en">
         <seg>No publication selected!</seg>
@@ -138,6 +159,7 @@
         <seg>Keine Publikation ausgewählt!</seg>
       </tuv>
     </tu>
+    
     <tu tuid="delicious_register">
       <tuv xml:lang="en">
         <seg>Create a new account at Delicious</seg>
@@ -146,6 +168,7 @@
         <seg>Zugang bei Delicious einrichten</seg>
       </tuv>
     </tu>
+    
     <tu tuid="delicious_loggedin">
       <tuv xml:lang="en">
         <seg>You are logged in as %1$s at Delicious!</seg>
@@ -154,6 +177,7 @@
         <seg>Sie sind als %1$s bei Delicious eingeloggt!</seg>
       </tuv>
     </tu>
+    
     <tu tuid="delete_delicious_bookmark">
       <tuv xml:lang="en">
         <seg>Delete this title from your Delicious bookmarks</seg>
@@ -162,6 +186,7 @@
         <seg>Diesen Titel aus Ihrer Delicious-Liste löschen</seg>
       </tuv>
     </tu>
+    
     <tu tuid="delicious_username">
       <tuv xml:lang="en">
         <seg>Delicious-Username</seg>
@@ -170,6 +195,7 @@
         <seg>Delicious-Nutzername</seg>
       </tuv>
     </tu>
+    
     <tu tuid="delicious_password">
       <tuv xml:lang="en">
         <seg>Password</seg>
@@ -178,6 +204,7 @@
         <seg>Passwort</seg>
       </tuv>
     </tu>
+    
     <tu tuid="delicious_login">
       <tuv xml:lang="en">
         <seg>Login</seg>
@@ -186,6 +213,7 @@
         <seg>Einloggen</seg>
       </tuv>
     </tu>
+    
     <tu tuid="delicious_no_parameter">
       <tuv xml:lang="en">
         <seg>No publication selected!</seg>
@@ -194,6 +222,7 @@
         <seg>Keine Publikation ausgewählt!</seg>
       </tuv>
     </tu>
+    
     <tu tuid="delicious_bookmark">
       <tuv xml:lang="en">
         <seg>Bookmark this title in Delicious</seg>
@@ -202,6 +231,7 @@
         <seg>Diesen Titel in Delicious bookmarken</seg>
       </tuv>
     </tu>
+    
     <tu tuid="delicious_usertags">
       <tuv xml:lang="en">
         <seg>Your tags</seg>
@@ -210,6 +240,7 @@
         <seg>Eigene Tags</seg>
       </tuv>
     </tu>
+    
     <tu tuid="delicious_usertitle">
       <tuv xml:lang="en">
         <seg>Title</seg>
@@ -218,6 +249,7 @@
         <seg>Titel</seg>
       </tuv>
     </tu>
+    
     <tu tuid="delicious_userdescription">
       <tuv xml:lang="en">
         <seg>Description</seg>
@@ -226,6 +258,7 @@
         <seg>Beschreibung</seg>
       </tuv>
     </tu>
+    
     <tu tuid="delicious_tags">
       <tuv xml:lang="en">
         <seg>This document has these tags on Delicious:</seg>
@@ -234,6 +267,7 @@
         <seg>Diesem Dokument sind auf Delicious folgende Tags zugeordnet:</seg>
       </tuv>
     </tu>
+    
     <tu tuid="delicious_no_tags">
       <tuv xml:lang="en">
         <seg>This document has got no tags on Delicious yet.</seg>
@@ -242,5 +276,7 @@
         <seg>Diesem Dokument sind noch keine Tags auf Delicious zugeordnet.</seg>
       </tuv>
     </tu>
+    
   </body>
+  
 </tmx>
