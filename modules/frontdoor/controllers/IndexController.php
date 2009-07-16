@@ -566,7 +566,7 @@ class Frontdoor_IndexController extends Zend_Controller_Action
 
     private $__stopwords = array('Active', 'CommentInternal', 'MimeType', 'SortOrder', 'ServerDatePublished', 'ServerDateModified',
         'ServerDateUnlocked', 'ServerDateValid', 'Source', 'IdentifierOpac', 'PatentCountries', 'PatentDateGranted',
-        'PatentApplication', 'Enrichment', 'Email', 'PlaceOfBirth', 'DateOfBirth');
+        'PatentApplication', 'Enrichment', 'PlaceOfBirth', 'DateOfBirth');
 
     /**
      * Filter-function: Comparing stopword-list with keys in array

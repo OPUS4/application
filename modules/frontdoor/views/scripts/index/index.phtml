@@ -86,7 +86,7 @@
            }
        }
 
-      //displaying titles and authors
+      //displaying TitleMain (case multiple)
       if (array_key_exists ('TitleMain_0_Value', $this->mydoc_data) === true)
       {
           for ($i = 0; $i < $this->titleNumber; $i++)
@@ -98,44 +98,88 @@
              }
           }
       }
-      //case TitleMain is not multiple
+      // TitleMain ( case not multiple)
       elseif (array_key_exists ('TitleMain_Value', $this->mydoc_data) === true)
       {
           $value = $this->mydoc_data['TitleMain_Value'];?>
           <p><h2><?= $this->value = $value;?></h2></p><?
       }
 
+      //PersonAuthor (case multiple)
       if (array_key_exists ('PersonAuthor_0_Name', $this->mydoc_data) === true)
       {
           for ($i = 0; $i < $this->authorNumber; $i++)
           {
              if (array_key_exists ('PersonAuthor_'.$i.'_Name', $this->mydoc_data) === true)
              {
-                $value = $this->mydoc_data['PersonAuthor_'.$i.'_Name'];?>
-                <p><b><a href="<?= $this->value = $this->url(array(
+                if (array_key_exists ('PersonAuthor_'. $i. '_Email', $this->mydoc_data) &&
+                $mail_allowed = $this->mydoc_data['PersonAuthor_'. $i. '_AllowEmailContact'] == 1)
+                {
+                   $value = $this->mydoc_data['PersonAuthor_'.$i.'_Name'];?>
+                   <p><b><a href="<?= $this->value = $this->url(array(
                    'module' => 'search',
                    'controller' => 'search',
                    'action' => 'metadatasearch',
                    'author' => $value,
                    ), null, true);?>">
-                   <?= $this->value = $value;?></a></b></p><?
-              }
+                   <?= $this->value = $value;?></a></b>&nbsp;
+                   <a href="<?= $this->value = $this->url(array(
+                   'module' => 'frontdoor',
+                   'controller' => 'mailtoauthor',
+                   'docId' => $this->docId,
+                    ), null, true);?>">
+                    <img src = "<?= $this->value =
+                    $this->layoutPath .'/img/email_logo.gif';?>" border = '0' width = '23' height = '23' title = 'Kontakt'></a></p><br /><?
+                }
+                else
+                {
+                   $value = $this->mydoc_data['PersonAuthor_'.$i.'_Name'];?>
+                   <p><b><a href="<?= $this->value = $this->url(array(
+                   'controller' => 'search',
+                   'action' => 'metadatasearch',
+                   'author' => $value,
+                   ), null, true);?>">
+                   <?= $this->value = $value?></a></b></p><br /><?
+                }
+            }
+         }
+      }
+      //PersonAuthor (Case not multiple)
+      elseif (array_key_exists ('PersonAuthor_Name', $this->mydoc_data) === true)
+      {
+         if (array_key_exists ('PersonAuthor_Email', $this->mydoc_data) &&
+         $mail_allowed = $this->mydoc_data['PersonAuthor_AllowEmailContact'] == 1)
+         {
+            $value = $this->mydoc_data['PersonAuthor_Name'];?>
+            <p><b><a href="<?= $this->value = $this->url(array(
+            'module' => 'search',
+            'controller' => 'search',
+            'action' => 'metadatasearch',
+            'author' => $value,
+            ), null, true);?>">
+            <?= $this->value = $value;?></a></b>&nbsp;
+            <a href="<?= $this->value = $this->url(array(
+             'module' => 'frontdoor',
+             'controller' => 'mailtoauthor',
+             'docId' => $this->docId,
+             ), null, true);?>">
+             <img src = "<?= $this->value =
+             $this->layoutPath .'/img/email_logo.gif';?>" border = '0' width = '23' height = '23' title = 'Contact to the author'></a></p><br /><?
+         }
+         else
+         {
+            $value = $this->mydoc_data['PersonAuthor_Name'];?>
+            <p><b><a href="<?= $this->value = $this->url(array(
+            'module' => 'search',
+            'controller' => 'search',
+            'action' => 'metadatasearch',
+            'author' => $value,
+            ), null, true);?>">
+            <?= $this->value = $value;?></a></b></p><?
           }
-       }
-       //case PersonAuthor is not multiple
-       elseif (array_key_exists ('PersonAuthor_Name', $this->mydoc_data) == true)
-       {
-          $value = $this->mydoc_data['PersonAuthor_Name'];?>
-          <p><b><a href="<?= $this->value = $this->url(array(
-             'module' => 'search',
-             'controller' => 'search',
-             'action' => 'metadatasearch',
-             'author' => $value,
-              ), null, true);?>">
-          <?= $this->value = $value;?></a></b></p><?
-       }
+      }
 
-       // getting logos depending on filetype of document
+       // getting filetype-logos depending on filetype
        if ($this->fileNumber !== 0)
        {?>
           <p><b><?= $this-> translate('File(s)')?>:</b><?
@@ -265,8 +309,7 @@
           $this->layoutPath . '/img/bibtex.jpg';?>" border = '0' title = 'BibTex-Export'></a>
 
           <a href="<?= $this->value = '';?>">
-          <img src = "<?= $this->value = $this->layoutPath . '/img/ris.jpg';?>" border = '0' title = 'RIS-Export'></a>
-          </p><br /><?
+          <img src = "<?= $this->value = $this->layoutPath . '/img/ris.jpg';?>" border = '0' title = 'RIS-Export'></a><?
 
             //displaying other metadata
             if (array_key_exists('Type_0', $this->mydoc_data) &&
