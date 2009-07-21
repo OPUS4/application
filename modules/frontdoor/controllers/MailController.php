@@ -50,7 +50,6 @@ class Frontdoor_MailController extends Zend_Controller_Action
        $docId = $request->getParam('docId');
        $this->view->docId = $docId;
        $document = new Opus_Document($docId);
-       $doc_data = $document->toArray();
 
        // Proof if 'PersonAuthor' is a multiple item or not and if 'Name' is an empty item or not
        if (empty ($doc_data['PersonAuthor']) === false)
@@ -110,12 +109,12 @@ class Frontdoor_MailController extends Zend_Controller_Action
 
        // show mail form
        $mailForm = new MailForm();
-       $mailForm->setAction($this->view->url(array('module' => "frontdoor", "controller"=>'mail', "action"=>"recommendate")));
+       $mailForm->setAction($this->view->url(array('module' => "frontdoor", "controller"=>'mail', "action"=>'sendmail')));
        $mailForm->setMethod('post');
        $this->view->mailForm = $mailForm;
     }
 
-    public function recommendateAction()
+    public function sendmailAction()
     {
      //action for recommendate document via mail posting (to be done)
     }
