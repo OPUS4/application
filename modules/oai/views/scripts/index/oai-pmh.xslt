@@ -65,6 +65,7 @@
     <xsl:param name="repName" />
     <xsl:param name="repIdentifier" />
     <xsl:param name="sampleIdentifier" />
+    <xsl:param name="docId" />
     <xsl:param name="oai_verb" />
     <xsl:param name="oai_from" />
     <xsl:param name="oai_until" />
@@ -222,8 +223,12 @@
                 <xsl:element name="identifier">
                     <xsl:value-of select="$oai_identifier" />
                 </xsl:element>
+                <!-- has to be changed !!!!  -->
+                <xsl:element name="identifier">
+                    !!! not correct: oai:<xsl:value-of select="$repIdentifier" />:<xsl:value-of select="$docId" />
+                </xsl:element>
                 <xsl:element name="datestamp">
-                    <xsl:value-of select="@PublishedDate" />
+                    <xsl:value-of select="@ServerDateModified" />
                 </xsl:element>
         <!--  here the set-information has to be added -->
             </xsl:element>
