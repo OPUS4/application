@@ -50,6 +50,7 @@ class Frontdoor_MailController extends Zend_Controller_Action
        $docId = $request->getParam('docId');
        $this->view->docId = $docId;
        $document = new Opus_Document($docId);
+       $doc_data = $document->toArray();
 
        // Proof if 'PersonAuthor' is a multiple item or not and if 'Name' is an empty item or not
        if (empty ($doc_data['PersonAuthor']) === false)
