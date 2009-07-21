@@ -198,9 +198,23 @@ class Oai_IndexController extends Controller_Xml {
                     if (true === method_exists($this, $callname)) {
                         try {
                             $this->$callname($value);
+                            if ($parameter == 'from') {
+                                $fromdate = $value;
+                            }
+                            if ($parameter == 'until') {
+                                $untildate = $value;
+                            }
                         } catch (Exception $e) {
                             throw $e;
                         }
+                    }
+                }
+                // Proof combination of from and until
+                if (!empty($fromdate) && !empty($untildate)) {
+                    try {
+                        $this->__validateFromUntil($fromdate,$untildate);
+                    }  catch (Exception $e) {
+                         throw $e;
                     }
                 }
                 break;
@@ -227,6 +241,49 @@ class Oai_IndexController extends Controller_Xml {
         }
     }
 
+
+    /**
+     * Checks the availability of given parameter from.
+     *
+     * @param  string  $oaiFrom The date to check for.
+     * @throws Exception Thrown if the date isn't a correct date.
+     * @return void
+     */
+    private function __validateFrom($oaiFrom) {
+        $validator = new Zend_Validate_Date();
+        if (false === $validator->isValid($oaiFrom)) {
+            throw new Exception("The date $oaiFrom is not a correct date, use YYYY-MM-TT.",self::BADARGUMENT);
+        }
+    }
+
+    /**
+     * Checks the availability of given parameter until.
+     *
+     * @param  string  $oaiUntil The date to check for.
+     * @throws Exception Thrown if the date isn't a correct date.
+     * @return void
+     */
+    private function __validateUntil($oaiUntil) {
+        $validator = new Zend_Validate_Date();
+        if (false === $validator->isValid($oaiUntil)) {
+            throw new Exception("The date $oaiUntil is not a correct date, use YYYY-MM-TT.",self::BADARGUMENT);
+        }
+    }
+
+    /**
+     * Checks wheather from <= until.
+     *
+     * @param  string  $oaiFrom,$oaiUntil The dates to check for.
+     * @throws Exception Thrown if $oaiFrom > $oaiUntil.
+     * @return void
+     */
+    private function __validateFromUntil($from,$until) {
+        $datefrom = new DateTime($from);
+        $dateuntil = new DateTime($until);
+        if ($datefrom > $dateuntil) {
+            throw new Exception("The date $from is greater than the date $until.",self::BADARGUMENT);
+        }
+    }
     /**
      * Validates resumption token.
      *
@@ -264,12 +321,14 @@ class Oai_IndexController extends Controller_Xml {
      * @return void
      */
     private function __handleIdentify($oaiRequest) {
+        // get values from config.ini
         $registry = Zend_Registry::getInstance();
         $config = $registry->get('Zend_Config');
         $email = $config->mail->opus->address;
         $repName = $config->oai->repository->name;
         $repIdentifier = $config->oai->repository->identifier;
         $sampleIdentifier = $config->oai->sample->identifier;
+        // set parameters for oai-pmh.xslt
         $this->_proc->setParameter('', 'emailAddress', 'mailto:'.$email);
         $this->_proc->setParameter('', 'repName', $repName);
         $this->_proc->setParameter('', 'repIdentifier', $repIdentifier);
@@ -302,11 +361,37 @@ class Oai_IndexController extends Controller_Xml {
      * @return void
      */
     private function __handleListRecords($oaiRequest) {
+        $registry = Zend_Registry::getInstance();
+        $config = $registry->get('Zend_Config');
+        $repIdentifier = $config->oai->repository->identifier;
+        $this->_proc->setParameter('', 'repIdentifier', $repIdentifier);
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
-        $documents = Opus_Document::getAll();
-        foreach ($documents as $document) {
-            $node = $this->_xml->importNode($document->toXml()->getElementsByTagName('Opus_Document')->item(0), true);
-            $this->_xml->documentElement->appendChild($node);
+//  Code von Felix: klappt nicht: Speicher-Probleme
+//        $documents = Opus_Document::getAll();
+        $docIds = Opus_Document::getAllIds();
+        $id_max = 0;
+//  Code von Felix  foreach ($documents as $document) {
+        foreach ($docIds as $docId) {
+            $document = new Opus_Document($docId);
+            $in_output = 1;
+//          for xMetaDiss only give Habilitation or doctoral-thesis
+            if ($oaiRequest['metadataPrefix'] == 'xMetaDiss') {
+                $in_output = $this->filterDocType($document);
+            }
+//          only published documents
+            if ($in_output == 1) {
+                $in_output = $this->filterDocPublished($document);
+            }
+//            if ($in_output == 1) $in_output = $this->filterDocDate($document);
+//            if ($in_output == 1) $in_output = $this->filterDocSet($document);
+            $id_max++;
+//          only give 100 documents at once (missing resumption token)
+            if ($in_output == 1 & $id_max <= 100) {
+                // so geht es nicht, dann nimmt er nur die letzte DokId
+                $this->_proc->setParameter('', 'docId', $docId);
+                $node = $this->_xml->importNode($document->toXml()->getElementsByTagName('Opus_Document')->item(0), true);
+                $this->_xml->documentElement->appendChild($node);
+            }
         }
     }
 
@@ -316,6 +401,61 @@ class Oai_IndexController extends Controller_Xml {
      * @return void
      */
     private function __handleListSets($oaiRequest) {
+
+    }
+
+    /**
+     * Handles, if a Document is between dates from and until.
+     *
+     * @param  Opus_Document  $document the document to be proofed
+     * @return int $result, 1 oder 0, decides, wheather document is in output or not
+     */
+    private function filterDocDate($document) {
+         $server_date_mod = $document->getServerDateModified();
+
+    }
+
+
+    /**
+     * Handles, if a Document has state published.
+     *
+     * @param  Opus_Document  $document the document to be proofed
+     * @return int $result, 1 oder 0, decides, wheather document is in output or not
+     */
+    private function filterDocPublished($document) {
+       $result = 0;
+       $server_state = $document->getServerState();
+       if ($server_state == 'published') {
+           $result = 1;
+       }
+       return $result;
+
+    }
+
+    /**
+     * Handles, if a Document belongs to a given set.
+     *
+     * @param  Opus_Document  $document the document to be proofed
+     * @return int $result, 1 oder 0, decides, wheather document is in output or not
+     */
+    private function filterDocSet($document) {
+
+    }
+
+    /**
+     * Handles, if a Document belongs to type habilitation or doctoral_thesis.
+     *
+     * @param  Opus_Document  $document the document to be proofed
+     * @return int $result, 1 oder 0, decides, wheather document is in output or not
+     */
+    private function filterDocType($document) {
+       $result = 0;
+       $type = $document->getType();
+       if ($type == 'habilitation' || $type == 'doctoral_thesis') {
+           $result = 1;
+       }
+       return $result;
+
 
     }
 
