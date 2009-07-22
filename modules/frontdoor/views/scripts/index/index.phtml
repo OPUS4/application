@@ -125,7 +125,7 @@
                    <?= $this->value = $value;?></a></b>&nbsp;
                    <a href="<?= $this->value = $this->url(array(
                    'module' => 'frontdoor',
-                   'controller' => 'mailtoauthor',
+                   'controller' => 'contactmail',
                    'docId' => $this->docId,
                     ), null, true);?>">
                     <img src = "<?= $this->value =
@@ -407,10 +407,16 @@
                       if (array_key_exists ('SubjectSwd_'.$i.'_Language', $this->mydoc_data) === true)
                       {
                          $this->value = $value = $this->mydoc_data['SubjectSwd_'.$i.'_Value'];
-                         $this->lang = $lang = $this->mydoc_data['SubjectSwd_'.$i.'_Language'];
-                      }?>
-                      <p><b><?= $this->translate('SubjectSwdValue') .' ('. $this->translate($lang). ')';?>: </b>
-                      <?= $this->value = $value;?></p><?
+                         $this->lang = $lang = $this->mydoc_data['SubjectSwd_'.$i.'_Language'];?>
+                         <p><b><?= $this->translate('SubjectSwdValue') .' ('. $this->translate($lang). ')';?>: </b>
+                         <?= $this->value = $value;?></p><?
+                      }
+                      else
+                      {
+                         $this->value = $value = $this->mydoc_data['SubjectSwd_'.$i.'_Value'];?>
+                         <p><b><?= $this->translate('SubjectSwdValue');?>: </b>
+                         <?= $this->value = $value;?></p><?
+                      }
                    }
                 }
              }
@@ -419,10 +425,16 @@
                 if (array_key_exists ('SubjectSwd_Language', $this->mydoc_data) === true)
                 {
                    $this->value = $value = $this->mydoc_data['SubjectSwd_Value'];
-                   $this->lang = $lang = $this->mydoc_data['SubjectSwd_Language'];
-                }?>
-                <p><b><?= $this-> translate('SubjectSwdValue') .' ('. $this->translate($lang). ')';?>: </b>
-                <?= $this->value = $value;?></p><?
+                   $this->lang = $lang = $this->mydoc_data['SubjectSwd_Language'];?>
+                   <p><b><?= $this-> translate('SubjectSwdValue') .' ('. $this->translate($lang). ')';?>: </b>
+                   <?= $this->value = $value;?></p><?
+                }
+                else
+                {
+                   $this->value = $value = $this->mydoc_data['SubjectSwd_Value'];?>
+                   <p><b><?= $this-> translate('SubjectSwdValue');?>: </b>
+                   <?= $this->value = $value;?></p><?
+                }
              }
 
              if (array_key_exists ('SubjectUncontrolled_0_Value', $this->mydoc_data) === true)
@@ -434,10 +446,16 @@
                       if (array_key_exists ('SubjectUncontrolled_'.$i.'_Language', $this->mydoc_data) === true)
                       {
                          $this->value = $value = $this->mydoc_data['SubjectUncontrolled_'.$i.'_Value'];
-                         $this->lang = $lang = $this->mydoc_data['SubjectUncontrolled_'.$i.'_Language'];
-                      }?>
-                      <p><b><?= $this-> translate('SubjectUncontrolledValue') .' ('. $this->translate($lang). ')';?>: </b>
-                      <?= $this->value = $value;?></p><?
+                         $this->lang = $lang = $this->mydoc_data['SubjectUncontrolled_'.$i.'_Language'];?>
+                         <p><b><?= $this-> translate('SubjectUncontrolledValue') .' ('. $this->translate($lang). ')';?>: </b>
+                         <?= $this->value = $value;?></p><?
+                      }
+                      else
+                      {
+                         $this->value = $value = $this->mydoc_data['SubjectUncontrolled_Value'];?>
+                         <p><b><?= $this-> translate('SubjectUncontrolledValue');?>: </b>
+                         <?= $this->value = $value;?></p><?
+                      }
                    }
                  }
               }
@@ -446,10 +464,16 @@
                  if (array_key_exists ('SubjectUncontrolled_Language', $this->mydoc_data) === true)
                  {
                     $this->value = $value = $this->mydoc_data['SubjectUncontrolled_Value'];
-                    $this->lang = $lang = $this->mydoc_data['SubjectUncontrolled_Language'];
-                 }?>
-                  <p><b><?= $this-> translate('SubjectUncontrolledValue') .' ('. $this->translate($lang). ')';?>: </b>
-                  <?= $this->value = $value;?></p><?
+                    $this->lang = $lang = $this->mydoc_data['SubjectUncontrolled_Language'];?>
+                    <p><b><?= $this-> translate('SubjectUncontrolledValue') .' ('. $this->translate($lang). ')';?>: </b>
+                    <?= $this->value = $value;?></p><?
+                 }
+                 else
+                 {
+                    $this->value = $value = $this->mydoc_data['SubjectUncontrolled_Value'];?>
+                    <p><b><?= $this-> translate('SubjectUncontrolledValue');?>: </b>
+                    <?= $this->value = $value;?></p><?
+                 }
                }
 
                if (array_key_exists ('SubjectPsyndex_0_Value', $this->mydoc_data) === true)
@@ -461,10 +485,16 @@
                         if (array_key_exists ('SubjectPsyndex_'.$i.'_Language', $this->mydoc_data) === true)
                         {
                            $this->value = $value = $this->mydoc_data['SubjectPsyndex_'.$i.'_Value'];
-                           $this->lang = $lang = $this->mydoc_data['SubjectPsyndex_'.$i.'_Language'];
-                        }?>
-                          <p><b><?= $this-> translate('SubjectPsyndexValue') .' ('. $this->translate($lang). ')';?>: </b>
-                          <?= $this->value = $value;?></p><?
+                           $this->lang = $lang = $this->mydoc_data['SubjectPsyndex_'.$i.'_Language'];?>
+                           <p><b><?= $this-> translate('SubjectPsyndexValue') .' ('. $this->translate($lang). ')';?>: </b>
+                           <?= $this->value = $value;?></p><?
+                        }
+                        else
+                        {
+                           $this->value = $value = $this->mydoc_data['SubjectPsyndex_'.$i.'_Value'];?>
+                           <p><b><?= $this-> translate('SubjectPsyndexValue');?>: </b>
+                           <?= $this->value = $value;?></p><?
+                        }
                      }
                   }
                }
@@ -472,11 +502,17 @@
                {
                   if(array_key_exists ('SubjectPsyndex_Language', $this->mydoc_data) == true)
                   {
-                     $this->value = $value = $this->mydoc_data['SubjectPsyndex_'.$i.'_Value'];
-                     $this->lang = $lang = $this->mydoc_data['SubjectPsyndex_'.$i.'_Language'];
-                  }?>
-                  <p><b><?= $this-> translate('SubjectPsyndexValue') .' ('. $this->translate($lang). ')';?>: </b>
-                  <?= $this->value = $value;?></p><?
+                     $this->value = $value = $this->mydoc_data['SubjectPsyndex_Value'];
+                     $this->lang = $lang = $this->mydoc_data['SubjectPsyndex_Language'];?>
+                     <p><b><?= $this-> translate('SubjectPsyndexValue') .' ('. $this->translate($lang). ')';?>: </b>
+                     <?= $this->value = $value;?></p><?
+                  }
+                  else
+                  {
+                     $this->value = $value = $this->mydoc_data['SubjectPsyndex_Value'];?>
+                     <p><b><?= $this-> translate('SubjectPsyndexValue');?>: </b>
+                     <?= $this->value = $value;?></p><?
+                  }
                }
 
                if (array_key_exists ('PublishedYear_0', $this->mydoc_data) &&
@@ -980,10 +1016,16 @@
                         if (array_key_exists ('TitleAbstract_'.$i.'_Language', $this->mydoc_data) === true)
                         {
                            $this->value = $value = $this->mydoc_data['TitleAbstract_'.$i.'_Value'];
-                           $this->lang = $lang = $this->mydoc_data['TitleAbstract_'.$i.'_Language'];
-                        }?>
-                        <p><b><?= $this-> translate('TitleAbstractValue') .' ('. $this->translate($lang). ')';?>: </b>
-                        <?= $this->value = $value;?></p><?
+                           $this->lang = $lang = $this->mydoc_data['TitleAbstract_'.$i.'_Language'];?>
+                           <p><b><?= $this-> translate('TitleAbstractValue') .' ('. $this->translate($lang). ')';?>: </b>
+                           <?= $this->value = $value;?></p><?
+                        }
+                        else
+                        {
+                           $this->value = $value = $this->mydoc_data['TitleAbstract_'.$i.'_Value'];?>
+                           <p><b><?= $this-> translate('TitleAbstractValue');?>: </b>
+                           <?= $this->value = $value;?></p><?
+                        }
                      }
                   }
                }
@@ -992,11 +1034,18 @@
                   if (array_key_exists ('TitleAbstract_Language', $this->mydoc_data) === true)
                   {
                      $this->value = $value = $this->mydoc_data['TitleAbstract_Value'];
-                     $this->lang = $lang = $this->mydoc_data['TitleAbstract_Language'];
-                  }?>
-                  <p><b><?= $this-> translate('TitleAbstractValue') .' ('. $this->translate($lang). ')';?>: </b>
-                  <?= $this->value = $value;?></p><?
+                     $this->lang = $lang = $this->mydoc_data['TitleAbstract_Language'];?>
+                     <p><b><?= $this-> translate('TitleAbstractValue') .' ('. $this->translate($lang). ')';?>: </b>
+                     <?= $this->value = $value;?></p><?
+                  }
+                  else
+                  {
+                     $this->value = $value = $this->mydoc_data['TitleAbstract_Value'];?>
+                     <p><b><?= $this-> translate('TitleAbstractValue');?>: </b>
+                     <?= $this->value = $value;?></p><?
+                  }
               }
+
                //Licences - 3 cases
               //case 1: licence item is multiple and allocated with more than one element
               if (array_key_exists ('Licence_0_NameLong', $this->mydoc_data) &&
