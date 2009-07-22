@@ -105,21 +105,30 @@
       </tuv>
     </tu>
     
-    <tu tuid="frontdoor_recommendationtitle">
-      <tuv xml:lang="en">
-        <seg>Document Recommendation</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Dokument empfehlen</seg>
-      </tuv>
-    </tu>
-    
     <tu tuid="frontdoor_recommendationtext">
       <tuv xml:lang="en">
         <seg>Please fill out this form to mail the URL of this document and a short message. Please note: Your Name and your e-mail adress are helpful to jugde the reliability of this mail. All fat-marked fields are mandatory.</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Um die Adresse (URL) dieses Dokuments und eine kurze Mitteilung zu versenden, füllen Sie bitte die untenstehenden Felder aus. Bitte beachten Sie: Die Angabe Ihres Namens und Ihrer E-mail-Adresse helfen dem Empfänger die Seriösität dieser mail einzuschätzen. Bitte beachten Sie: Die Felder mit fett dargestellter Bezeichnung müssen ausgefüllt werden.</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="frontdoor_contacttitle">
+      <tuv xml:lang="en">
+        <seg>Contact</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Kontakt</seg>
+      </tuv>
+    </tu>
+    
+     <tu tuid="frontdoor_contacttext">
+      <tuv xml:lang="en">
+        <seg>Please fill out this form to contact the author of this document and leave a short message. His agreement is on hand. All fat-marked fields are mandatory.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Hier können Sie den Autor per E-mail kontaktieren. Das Einverständnis des Autors liegt vor. Bitte tragen Sie Ihren Namen, E-mail Adresse und eine Mitteilung ein. Alle fett markierten Felder sind Pflichtfelder.</seg>
       </tuv>
     </tu>
     
@@ -131,7 +140,7 @@
         <seg>Name des Empfängers</seg>
       </tuv>
     </tu>
-    
+          
     <tu tuid="frontdoor_recipientmail">
       <tuv xml:lang="en">
         <seg>Mail adress of recipient</seg>
@@ -168,12 +177,21 @@
       </tuv>
     </tu>
     
-    <tu tuid="frontdoor_sendrecommendation">
+    <tu tuid="frontdoor_sendmail">
       <tuv xml:lang="en">
-        <seg>Send recommendation</seg>
+        <seg>Send mail</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Empfehlung senden</seg>
+        <seg>Mail versenden</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="frontdoor_sendmailtitle">
+      <tuv xml:lang="en">
+        <seg>Send e-mail</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>E-mail versenden</seg>
       </tuv>
     </tu>
   
