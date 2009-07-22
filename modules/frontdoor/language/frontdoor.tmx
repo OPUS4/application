@@ -105,6 +105,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="frontdoor_recommendationtitle">
+      <tuv xml:lang="en">
+        <seg>Recommendation of the document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokumentempfehlung</seg>
+      </tuv>
+    </tu>
+        
     <tu tuid="frontdoor_recommendationtext">
       <tuv xml:lang="en">
         <seg>Please fill out this form to mail the URL of this document and a short message. Please note: Your Name and your e-mail adress are helpful to jugde the reliability of this mail. All fat-marked fields are mandatory.</seg>
@@ -114,6 +123,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="frontdoor_sendrecommendation">
+      <tuv xml:lang="en">
+        <seg>Send recommendation</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Empfehlung absenden</seg>
+      </tuv>
+    </tu>
+   
     <tu tuid="frontdoor_contacttitle">
       <tuv xml:lang="en">
         <seg>Contact</seg>
@@ -134,7 +152,7 @@
     
     <tu tuid="frontdoor_recipientname">
       <tuv xml:lang="en">
-        <seg>Name of Recipient</seg>
+        <seg>Name of recipient</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Name des Empfängers</seg>

@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -27,13 +26,50 @@
  *
  * @category    Application
  * @package     Module_Frontdoor
- * @author      Wolfgang Filter <wolfgang.filter@ub.un-stuttgart.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @author      Wolfgang Filter <wolfgang.filter@ub.uni-stuttgart.de>
+ * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id:
- *
- *  This view indicates if a mail is posted successfully or not
  */
-?>
-<h1><?= $this->translate ('frontdoor_sendmailtitle')?></h1><br />
-<p>mail function out of order...<p /><br />
+
+/**
+ * class to built the mail mask for contacting authors via e-mail
+ */
+class ContactmailForm extends Zend_Form
+{
+    /**
+     * Build easy mail form
+     *
+     * @return void
+     */
+
+    public function init()
+    {
+      // Create and configure query field elements:
+        $recipient = new Zend_Form_Element_Text('recipient');
+        $recipient->setRequired(false);
+        $recipient->setLabel('frontdoor_recipientname');
+
+        $recipient_mail = new Zend_Form_Element_Text('recipient_mail');
+        $recipient_mail->setRequired(false);
+        $recipient_mail->setLabel('frontdoor_recipientmail');
+
+        $sender = new Zend_Form_Element_Text('sender');
+        $sender->setRequired(true);
+        $sender->setLabel('frontdoor_sendername');
+
+        $sender_mail = new Zend_Form_Element_Text('sender_mail');
+        $sender_mail->setRequired(true);
+        $sender_mail->setLabel('frontdoor_sendermail');
+
+        $message = new Zend_Form_Element_Textarea('message');
+        $message->setRequired(true);
+        $message->setLabel('frontdoor_messagetext');
+
+        $submit = new Zend_Form_Element_Submit('frontdoor_sendmail');
+        $submit->setLabel('frontdoor_sendmail');
+
+        // Add elements to form:
+        $this->addElements(array($recipient, $recipient_mail, $sender, $sender_mail, $message, $submit));
+    }
+}

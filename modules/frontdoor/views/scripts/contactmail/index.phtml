@@ -32,8 +32,15 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id:
  *
- *  This view indicates if a mail is posted successfully or not
+ *  This view displays a mailform for contacting authors starting from frontdoor-view
  */
 ?>
-<h1><?= $this->translate ('frontdoor_sendmailtitle')?></h1><br />
-<p>mail function out of order...<p /><br />
+<h1><?= $this->translate ('frontdoor_contacttitle')?></h1><br />
+<p><?= $this->translate ('frontdoor_contacttext')?></p><br /><br>
+<?= $this->contactmailForm?><br />
+<br /><p><a href="<?= $this->value =
+   $this->url(array(
+   'module' => 'frontdoor',
+   'controller' => 'index',
+   'docId' => $this->docId,
+   ), null, true);?>"><?= $this->translate('frontdoor_back')?></a></p><br />
