@@ -75,6 +75,8 @@ keyring.path = /var/www ; path where the keyring is stored, e.g. /var/www - webs
 oai.repository.name =
 oai.repository.identifier =
 oai.sample.identifier =
+oai.max.listrecords = 100
+oai.max.listidentifiers = 200
 >>>>>>> .r3415
 
 [test : production]
