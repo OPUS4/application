@@ -121,6 +121,9 @@
                 <xsl:when test="$oai_verb='Identify'">
                     <xsl:apply-templates select="Documents" mode="Identify" />
                 </xsl:when>
+                <xsl:when test="$oai_verb='ListIdentifiers'">
+                    <xsl:apply-templates select="Documents" mode="ListIdentifiers" />
+                </xsl:when>
                 <xsl:when test="$oai_verb='ListMetadataFormats'">
                     <xsl:apply-templates select="Documents" mode="ListMetadataFormats" />
                 </xsl:when>
@@ -145,7 +148,9 @@
            <xsl:element name="adminEmail">
              <xsl:value-of select="$emailAddress"/>
            </xsl:element>
-           <xsl:element name="earliestDatestamp">!!! 1999-01-01T00:00:00Z oder als Variable !!!</xsl:element>
+           <xsl:element name="earliestDatestamp">
+             <xsl:value-of select="$earliestDate"/>
+           </xsl:element>
            <xsl:element name="deletedRecord">no</xsl:element>
            <xsl:element name="granularity">YYYY-MM-DDThh:mm:ssZ</xsl:element>
            <xsl:element name="description">
@@ -199,6 +204,11 @@
         </xsl:element>
     </xsl:template>
 
+    <xsl:template match="Documents" mode="ListIdentifiers">
+        <xsl:element name="ListIdentifiers">
+            <xsl:apply-templates select="Opus_Document" />
+        </xsl:element>
+    </xsl:template>
 
     <xsl:template match="Documents" mode="ListRecords">
         <xsl:element name="ListRecords">
@@ -220,42 +230,55 @@
                     This is the identifier for the metadata, not a digital object:
                     http://www.openarchives.org/OAI/2.0/guidelines-oai-identifier.htm
                 -->
+            <xsl:choose>
+              <xsl:when test="$oai_verb='GetRecord'">
                 <xsl:element name="identifier">
                     <xsl:value-of select="$oai_identifier" />
                 </xsl:element>
+              </xsl:when>  
+              <xsl:otherwise>  
                 <!-- has to be changed !!!!  -->
                 <xsl:element name="identifier">
-                    !!! not correct: oai:<xsl:value-of select="$repIdentifier" />:<xsl:value-of select="$docId" />
+                    oai:<xsl:value-of select="$repIdentifier" />:<xsl:value-of select="$docId" /> !!! Identifier fehlt noch in XML
                 </xsl:element>
+               </xsl:otherwise> 
+            </xsl:choose>
                 <xsl:element name="datestamp">
-                    <xsl:value-of select="@ServerDateModified" />
+                    <xsl:value-of select="@ServerDatePublished" />
                 </xsl:element>
         <!--  here the set-information has to be added -->
             </xsl:element>
             
             <!-- choose the corresponding template depending on metadataPrefix -->
-            <xsl:element name="metadata">
+            <!-- not, when verb=ListIdentifiers -->
             <xsl:choose>
-               <xsl:when test="$oai_metadataPrefix='XMetaDissPlus'">
-                  <xsl:apply-templates select="." mode="xmetadissplus" />
-               </xsl:when>
-               <xsl:when test="$oai_metadataPrefix='xMetaDiss'">
-                  <xsl:apply-templates select="." mode="xmetadiss" />
-               </xsl:when>
-               <xsl:when test="$oai_metadataPrefix='epicur'">
-                  <xsl:apply-templates select="." mode="epicur" />
-               </xsl:when>
-               <xsl:when test="$oai_metadataPrefix='oai_dc'">
-                  <xsl:apply-templates select="." mode="oai_dc" />
-               </xsl:when>
-               <xsl:when test="$oai_metadataPrefix='oai_pp'">
-                  <xsl:apply-templates select="." mode="oai_pp" />
-               </xsl:when>
-               <xsl:when test="$oai_metadataPrefix='copy_xml'">
-                  <xsl:apply-templates select="." mode="copy_xml" />
-               </xsl:when>
+              <xsl:when test="$oai_verb!='ListIdentifiers'">
+
+                 <xsl:element name="metadata">
+                 <xsl:choose>
+                    <xsl:when test="$oai_metadataPrefix='XMetaDissPlus'">
+                       <xsl:apply-templates select="." mode="xmetadissplus" />
+                    </xsl:when>
+                    <xsl:when test="$oai_metadataPrefix='xMetaDiss'">
+                       <xsl:apply-templates select="." mode="xmetadiss" />
+                    </xsl:when>
+                    <xsl:when test="$oai_metadataPrefix='epicur'">
+                       <xsl:apply-templates select="." mode="epicur" />
+                    </xsl:when>
+                    <xsl:when test="$oai_metadataPrefix='oai_dc'">
+                       <xsl:apply-templates select="." mode="oai_dc" />
+                    </xsl:when>
+                    <xsl:when test="$oai_metadataPrefix='oai_pp'">
+                       <xsl:apply-templates select="." mode="oai_pp" />
+                    </xsl:when>
+                    <xsl:when test="$oai_metadataPrefix='copy_xml'">
+                       <xsl:apply-templates select="." mode="copy_xml" />
+                    </xsl:when>
+                 </xsl:choose>
+                 </xsl:element>
+            
+            </xsl:when>
             </xsl:choose>
-            </xsl:element>
         </xsl:element>
     </xsl:template>
 
