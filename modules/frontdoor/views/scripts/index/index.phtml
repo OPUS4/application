@@ -113,7 +113,7 @@
              if (array_key_exists ('PersonAuthor_'.$i.'_Name', $this->mydoc_data) === true)
              {
                 if (array_key_exists ('PersonAuthor_'. $i. '_Email', $this->mydoc_data) &&
-                $mail_allowed = $this->mydoc_data['PersonAuthor_'. $i. '_AllowEmailContact'] == 1)
+                array_key_exists ('PersonAuthor_'. $i. '_AllowEmailContact', $this->mydoc_data) === true)
                 {
                    $value = $this->mydoc_data['PersonAuthor_'.$i.'_Name'];?>
                    <p><b><a href="<?= $this->value = $this->url(array(
@@ -148,7 +148,7 @@
       elseif (array_key_exists ('PersonAuthor_Name', $this->mydoc_data) === true)
       {
          if (array_key_exists ('PersonAuthor_Email', $this->mydoc_data) &&
-         $mail_allowed = $this->mydoc_data['PersonAuthor_AllowEmailContact'] == 1)
+         array_key_exists ('PersonAuthor_Allow_EmailContact') === true)
          {
             $value = $this->mydoc_data['PersonAuthor_Name'];?>
             <p><b><a href="<?= $this->value = $this->url(array(

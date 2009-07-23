@@ -538,9 +538,9 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         // Proof for occupied values
         foreach ($mydoc_data_all as $key => $value)
         {
-            if (empty($value) === false  && ($value == '0000' || $value == '0000-00-00'  || $value == ', ') === false)
+            if (false === empty($value) && ($value === '0000' || $value === '0000-00-00' || $value === ', ') === false)
             {
-                $mydoc_data[$key] = $value;
+               $mydoc_data[$key] = $value;
             }
         }
 
