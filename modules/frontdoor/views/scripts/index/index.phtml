@@ -36,6 +36,8 @@
  * This view gets a filtered one-dimensional associative array ($mydoc_data) from
  * the Frontdoor-Controller and displays it. The order of elements is fixed here.
  * Abstracts and keywords were combined with language information and displayed directly.
+ * Every metadate is checked for multiplicity.
+ *
  *
  *
  */
@@ -82,7 +84,7 @@
            //display collection path (i.e. DDC)
            foreach ($this->collectionPathes as $collPath)
            {
-              echo $collPath . "<br />\n";
+              echo $collPath . "<br /><br />\n";
            }
        }
 
@@ -129,7 +131,7 @@
                    'docId' => $this->docId,
                     ), null, true);?>">
                     <img src = "<?= $this->value =
-                    $this->layoutPath .'/img/email_logo.gif';?>" border = '0' width = '23' height = '23' title = 'Kontakt'></a></p><br /><?
+                    $this->layoutPath .'/img/email_logo.gif';?>" border = '0' width = '23' height = '23' title = '<?= $this->translate('frontdoor_contacttitle')?>'</a></p><br /><?
                 }
                 else
                 {
@@ -160,11 +162,11 @@
             <?= $this->value = $value;?></a></b>&nbsp;
             <a href="<?= $this->value = $this->url(array(
              'module' => 'frontdoor',
-             'controller' => 'mailtoauthor',
+             'controller' => 'contactmail',
              'docId' => $this->docId,
              ), null, true);?>">
              <img src = "<?= $this->value =
-             $this->layoutPath .'/img/email_logo.gif';?>" border = '0' width = '23' height = '23' title = 'Contact to the author'></a></p><br /><?
+             $this->layoutPath .'/img/email_logo.gif';?>" border = '0' width = '23' height = '23' title = '<?= $this->translate('frontdoor_contacttitle')?>'</a></p><br /><?
          }
          else
          {
@@ -247,13 +249,13 @@
 
           //offering internal and external services
           ?></p>
-          <p><br><a href="<?= $this->value =
+          <p><br /><a href="<?= $this->value =
           $this->url(array(
              'module' => 'frontdoor',
              'controller' => 'hash',
              'docId' => $this->docId,
           ), null, true);?>">
-          <img src = "<?= $this->value = $this->layoutPath . '/img/unversehrt.jpg';?>" border = '0' title = 'Unversehrtheit'></a>
+          <img src = "<?= $this->value = $this->layoutPath . '/img/unversehrt.jpg';?>" border = '0' title = '<?= $this->translate('frontdoor_integrity')?>'</a>
 
           <a href="<?= $this->value =
           $this->url(array(
@@ -262,7 +264,7 @@
           'action' => 'index',
           'docId' => $this->docId,
           ), null, true);?>">
-          <img src = "<?= $this->value = $this->layoutPath . '/img/hand.jpg';?>" border = '0' title = 'Empfehlung'></a>
+          <img src = "<?= $this->value = $this->layoutPath . '/img/hand.jpg';?>" border = '0' title = '<?= $this->translate('frontdoor_recommendationtitle')?>'</a>
 
           <a href="<?= $this->value =
           $this->url(array(
@@ -276,7 +278,7 @@
              'module' => 'statistic',
              'controller' => 'graph',
              'action' => 'thumb',
-             'id' => $this->docId,)); ?>" border = '0' title = 'Statistik'></a>
+             'id' => $this->docId,)); ?>" border = '0' title = '<?= $this->translate('frontdoor_statistics')?>'</a>
 
           <a href="<?= $this->value =
           $this->url(array(
@@ -285,7 +287,7 @@
              'docId' => $this->docId,
           ), null, true);?>">
           <img src = "<?= $this->value =
-          $this->layoutPath .'/img/connotea_icon.jpg';?>" border = '0' title = 'Bookmark bei Connotea'></a>
+          $this->layoutPath .'/img/connotea_icon.jpg';?>" border = '0' title = '<?= $this->translate('frontdoor_bookmarkconnotea')?>'</a>
 
           <a href="<?= $this->value =
           $this->url(array(
@@ -294,22 +296,22 @@
              'docId' => $this->docId,
           ), null, true);?>">
           <img src = "<?= $this->value =
-          $this->layoutPath . '/img/delicious.jpg';?>" border = '0' title = 'Bookmark bei del.icio.us'></a><?
+          $this->layoutPath . '/img/delicious.jpg';?>" border = '0' title = '<?= $this->translate('frontdoor_bookmarkdelicious')?>'</a><?
 
           if (array_key_exists ('TitleMain_0_Value', $this->mydoc_data) === true)
           {?>
              <a href="<?= $this->value =
              'http://scholar.google.de/scholar?hl=de&q=' .$this->mydoc_data['TitleMain_0_Value'];?>">
              <img src = "<?= $this->value =
-             $this->layoutPath . '/img/google_scholar.jpg';?>" border = '0' title = 'Dokument in Google Scholar suchen'></a><?
+             $this->layoutPath . '/img/google_scholar.jpg';?>" border = '0' title = '<?= $this->translate('frontdoor_searchgoogle')?>'</a><?
           }?>
 
           <a href="<?= $this->value = '';?>">
           <img src = "<?= $this->value =
-          $this->layoutPath . '/img/bibtex.jpg';?>" border = '0' title = 'BibTex-Export'></a>
+          $this->layoutPath . '/img/bibtex.jpg';?>" border = '0' title = '<?= $this->translate('frontdoor_exportbibtex')?>'</a>
 
           <a href="<?= $this->value = '';?>">
-          <img src = "<?= $this->value = $this->layoutPath . '/img/ris.jpg';?>" border = '0' title = 'RIS-Export'></a><?
+          <img src = "<?= $this->value = $this->layoutPath . '/img/ris.jpg';?>" border = '0' title = '<?= $this->translate('frontdoor_exportris')?>'></a></p><br /><?
 
             //displaying other metadata
             if (array_key_exists('Type_0', $this->mydoc_data) &&

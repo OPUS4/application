@@ -107,7 +107,7 @@
     
     <tu tuid="frontdoor_recommendationtitle">
       <tuv xml:lang="en">
-        <seg>Recommendation of the document</seg>
+        <seg>Recommendation</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Dokumentempfehlung</seg>
@@ -212,7 +212,70 @@
         <seg>E-mail versenden</seg>
       </tuv>
     </tu>
+    
+    <tu tuid="frontdoor_integrity">
+      <tuv xml:lang="en">
+        <seg>Integrity</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Integrität</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="frontdoor_statistics">
+      <tuv xml:lang="en">
+        <seg>Statistics</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Statistik</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="frontdoor_bookmarkconnotea">
+      <tuv xml:lang="en">
+        <seg>Connotea bookmark</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Lesezeichen bei Connotea</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="frontdoor_bookmarkdelicious">
+      <tuv xml:lang="en">
+        <seg>Delicious bookmark</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Lesezeichen bei Delicious</seg>
+      </tuv>
+    </tu>
   
+    <tu tuid="frontdoor_searchgoogle">
+      <tuv xml:lang="en">
+        <seg>Search Google Scholar</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Suche bei Google Scholar</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="frontdoor_exportbibtex">
+      <tuv xml:lang="en">
+        <seg>Export Bibtex</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Export nach Bibtex</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="frontdoor_exportris">
+      <tuv xml:lang="en">
+        <seg>Export RIS</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Export nach RIS</seg>
+      </tuv>
+    </tu>
+    
   </body>
   
 </tmx>
