@@ -46,6 +46,7 @@ class Oai_IndexController extends Controller_Xml {
     const BADARGUMENT = 1;
     const CANNOTDISSEMINATEFORMAT = 2;
     const BADRESUMPTIONTOKEN = 3;
+    const NORECORDSMATCH = 4;
 
     /**
      * Holds valid OAI parameters.
@@ -114,7 +115,10 @@ class Oai_IndexController extends Controller_Xml {
                 case self::BADARGUMENT:
                     $errorCode = 'badArgument';
                     break;
-                case self::CANNOTDISSEMINATEFORMAT:
+                case self::NORECORDSMATCH:
+                    $errorCode = 'noRecordsMatch';
+                    break;
+                    case self::CANNOTDISSEMINATEFORMAT:
                     $errorCode = 'cannotDisseminateFormat';
                     break;
                 case self::BADRESUMPTIONTOKEN:
@@ -328,11 +332,13 @@ class Oai_IndexController extends Controller_Xml {
         $repName = $config->oai->repository->name;
         $repIdentifier = $config->oai->repository->identifier;
         $sampleIdentifier = $config->oai->sample->identifier;
+        $earliestDate = Opus_Document::getEarliestPublicationDate();
         // set parameters for oai-pmh.xslt
         $this->_proc->setParameter('', 'emailAddress', 'mailto:'.$email);
         $this->_proc->setParameter('', 'repName', $repName);
         $this->_proc->setParameter('', 'repIdentifier', $repIdentifier);
         $this->_proc->setParameter('', 'sampleIdentifier', $sampleIdentifier);
+        $this->_proc->setParameter('', 'earliestDate', $earliestDate);
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
     }
 
@@ -342,6 +348,12 @@ class Oai_IndexController extends Controller_Xml {
      * @return void
      */
     private function __handleListIdentifiers($oaiRequest) {
+        $registry = Zend_Registry::getInstance();
+        $config = $registry->get('Zend_Config');
+        $repIdentifier = $config->oai->repository->identifier;
+        $max_records = $config->oai->max->listrecords;
+        $this->_proc->setParameter('', 'repIdentifier', $repIdentifier);
+        $this->_xml->appendChild($this->_xml->createElement('Documents'));
 
     }
 
@@ -361,38 +373,51 @@ class Oai_IndexController extends Controller_Xml {
      * @return void
      */
     private function __handleListRecords($oaiRequest) {
+        // get values from config.ini
         $registry = Zend_Registry::getInstance();
         $config = $registry->get('Zend_Config');
         $repIdentifier = $config->oai->repository->identifier;
+        $max_records = $config->oai->max->listrecords;
         $this->_proc->setParameter('', 'repIdentifier', $repIdentifier);
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
-//  Code von Felix: klappt nicht: Speicher-Probleme
-//        $documents = Opus_Document::getAll();
-        $docIds = Opus_Document::getAllIds();
+        // get document-Ids depending given daterange
+        $from = NULL;
+        $until = NULL;
+        if (true === array_key_exists('from',$oaiRequest)) {
+            $from = $oaiRequest['from'];
+        }
+        if (true === array_key_exists('until',$oaiRequest)) {
+            $until = $oaiRequest['until'];
+        }
+        $docIds = Opus_Document::getIdsForDateRange($from,$until);
+        if (count($docIds) == 0) {
+            throw new Exception("The combination of the given values results in an empty list.", self::NORECORDSMATCH);
+        }
+        // handling all documents
         $id_max = 0;
-//  Code von Felix  foreach ($documents as $document) {
         foreach ($docIds as $docId) {
             $document = new Opus_Document($docId);
             $in_output = 1;
-//          for xMetaDiss only give Habilitation or doctoral-thesis
+            // for xMetaDiss only give Habilitation or doctoral-thesis
             if ($oaiRequest['metadataPrefix'] == 'xMetaDiss') {
                 $in_output = $this->filterDocType($document);
             }
-//          only published documents
+            // only published documents
             if ($in_output == 1) {
                 $in_output = $this->filterDocPublished($document);
             }
-//            if ($in_output == 1) $in_output = $this->filterDocDate($document);
-//            if ($in_output == 1) $in_output = $this->filterDocSet($document);
-            $id_max++;
-//          only give 100 documents at once (missing resumption token)
-            if ($in_output == 1 & $id_max <= 100) {
-                // so geht es nicht, dann nimmt er nur die letzte DokId
-                $this->_proc->setParameter('', 'docId', $docId);
+            // TODO if ($in_output == 1) $in_output = $this->filterDocSet($document);
+            if ($in_output == 1) {$id_max++;}
+            // missing resumption token
+            if ($in_output == 1 & $id_max <= $max_records) {
                 $node = $this->_xml->importNode($document->toXml()->getElementsByTagName('Opus_Document')->item(0), true);
                 $this->_xml->documentElement->appendChild($node);
             }
         }
+        // no records returned
+        if ($id_max == 0) {
+            throw new Exception("The combination of the given values results in an empty list.", self::NORECORDSMATCH);
+           }
     }
 
     /**
@@ -403,18 +428,6 @@ class Oai_IndexController extends Controller_Xml {
     private function __handleListSets($oaiRequest) {
 
     }
-
-    /**
-     * Handles, if a Document is between dates from and until.
-     *
-     * @param  Opus_Document  $document the document to be proofed
-     * @return int $result, 1 oder 0, decides, wheather document is in output or not
-     */
-    private function filterDocDate($document) {
-         $server_date_mod = $document->getServerDateModified();
-
-    }
-
 
     /**
      * Handles, if a Document has state published.
