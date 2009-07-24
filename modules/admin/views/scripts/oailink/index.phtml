@@ -44,7 +44,10 @@ $baseLink = $this->baseScheme . '://' . $this->baseHost . $this->baseUrl . '/oai
 
 <p><?php echo $this->translate('admin_oailink_examples'); ?></p>
 <ul>
+    <li><a href="<?php echo $baseLink . '?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai:' . $this->repIdentifier . ':35'?>"><?php echo $this->translate('admin_oailink_example_getrecord');?></a></li>
     <li><a href="<?php echo $baseLink . '?verb=Identify'?>"><?php echo $this->translate('admin_oailink_example_identify');?></a></li>
+    <li><a href="<?php echo $baseLink . '?verb=ListMetadataFormats'?>"><?php echo $this->translate('admin_oailink_example_listmetadataformats');?></a></li>
+    <li><a href="<?php echo $baseLink . '?verb=ListRecords&metadataPrefix=oai_dc&from=2006-01-01'?>"><?php echo $this->translate('admin_oailink_example_listrecords');?></a></li>
 </ul>
 
 <p />
