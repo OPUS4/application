@@ -244,7 +244,14 @@
                </xsl:otherwise> 
             </xsl:choose>
                 <xsl:element name="datestamp">
-                    <xsl:value-of select="@ServerDatePublished" />
+                  <xsl:choose>
+                    <xsl:when test="@ServerDateModified ">
+                      <xsl:value-of select="@ServerDateModified" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                      <xsl:value-of select="@ServerDatePublished" />
+                    </xsl:otherwise>
+                  </xsl:choose>
                 </xsl:element>
         <!--  here the set-information has to be added -->
             </xsl:element>
