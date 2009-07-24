@@ -52,5 +52,9 @@ class Admin_OailinkController extends Zend_Controller_Action {
         $this->view->baseUrl = $request->getBaseUrl();
         $this->view->baseHost = $request->getHttpHost();
         $this->view->baseScheme = $request->getScheme();
+        $registry = Zend_Registry::getInstance();
+        $config = $registry->get('Zend_Config');
+        $repIdentifier = $config->oai->repository->identifier;
+        $this->view->repIdentifier = $repIdentifier;
     }
 }
