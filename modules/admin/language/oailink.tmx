@@ -25,12 +25,39 @@
       </tuv>
     </tu>
     
+    <tu tuid="admin_oailink_example_getrecord">
+      <tuv xml:lang="en">
+        <seg>OAI request with verb GetRecord</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>OAI Anfrage mit dem Verb GetRecord</seg>
+      </tuv>
+    </tu>
+    
     <tu tuid="admin_oailink_example_identify">
       <tuv xml:lang="en">
         <seg>OAI request with verb Identify</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>OAI Anfrage mit dem Verb Idenfity</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_oailink_example_listmetadataformats">
+      <tuv xml:lang="en">
+        <seg>OAI request with verb ListMetadataFormats</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>OAI Anfrage mit dem Verb ListMetaDataFormats</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_oailink_example_listrecords">
+      <tuv xml:lang="en">
+        <seg>OAI request with verb ListRecords</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>OAI Anfrage mit dem Verb ListRecords</seg>
       </tuv>
     </tu>
     
