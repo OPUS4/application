@@ -34,6 +34,35 @@
             <seg>3. Verlagsangaben und Verweise</seg>
           </tuv>
         </tu>
+        
+        
+        
+        <tu tuid="caption_01_festschrift">
+          <tuv xml:lang="en">
+            <seg>1. General Information (Festschrift)</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>1. Allgemeine Angaben (Festschrift)</seg>
+          </tuv>
+        </tu>
+        
+        <tu tuid="caption_02_festschrift">
+          <tuv xml:lang="en">
+            <seg>2. Descriptive Data</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>2. Beschreibende Informationen</seg>
+          </tuv>
+        </tu>
+            
+        <tu tuid="caption_03_festschrift">
+          <tuv xml:lang="en">
+            <seg>3. Publisher Statements and References</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>3. Verlagsangaben und Verweise</seg>
+          </tuv>
+        </tu>
     
     </body>
 
