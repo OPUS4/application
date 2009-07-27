@@ -354,6 +354,46 @@ class Oai_IndexController extends Controller_Xml {
         $max_records = $config->oai->max->listrecords;
         $this->_proc->setParameter('', 'repIdentifier', $repIdentifier);
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
+        // get document-Ids depending given daterange
+        $from = NULL;
+        $until = NULL;
+        if (true === array_key_exists('from',$oaiRequest)) {
+            $from = $oaiRequest['from'];
+        }
+        if (true === array_key_exists('until',$oaiRequest)) {
+            $until = $oaiRequest['until'];
+        }
+        $docIds = Opus_Document::getIdsForDateRange($from,$until);
+        if (count($docIds) == 0) {
+            throw new Exception("The combination of the given values results in an empty list.", self::NORECORDSMATCH);
+        }
+        // handling all documents
+        $id_max = 0;
+        foreach ($docIds as $docId) {
+            $document = new Opus_Document($docId);
+            $in_output = 1;
+            // for xMetaDiss only give Habilitation or doctoral-thesis
+            if ($oaiRequest['metadataPrefix'] == 'xMetaDiss') {
+                $in_output = $this->filterDocType($document);
+            }
+            // only published documents
+            if ($in_output == 1) {
+                $in_output = $this->filterDocPublished($document);
+            }
+            // TODO if ($in_output == 1) $in_output = $this->filterDocSet($document);
+            if ($in_output == 1) {$id_max++;}
+            // missing resumption token
+//            if ($in_output == 1 & $id_max <= $max_records) {
+            if ($in_output == 1 & $id_max <= 20) {
+                  $this->_xml->appendChild($this->_xml->createElement('Opus_Document'));
+//                $node = $this->_xml->importNode($document->toXml()->getElementsByTagName('Opus_Document')->item(0), true);
+//                $this->_xml->documentElement->appendChild($node);
+            }
+        }
+        // no records returned
+        if ($id_max == 0) {
+            throw new Exception("The combination of the given values results in an empty list.", self::NORECORDSMATCH);
+           }
 
     }
 
