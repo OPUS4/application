@@ -60,6 +60,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="frontdoor_no_document">
+      <tuv xml:lang="en">
+        <seg>No document available!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Kein Dokument vorhanden!</seg>
+      </tuv>
+    </tu>
+    
     <tu tuid="frontdoor_fixpoint">
       <tuv xml:lang="en">
         <seg>Fixpoint</seg>
