@@ -348,25 +348,15 @@ class Oai_IndexController extends Controller_Xml {
      * @return void
      */
     private function __handleListIdentifiers($oaiRequest) {
+        // get values from config.ini
         $registry = Zend_Registry::getInstance();
         $config = $registry->get('Zend_Config');
         $repIdentifier = $config->oai->repository->identifier;
-        $max_records = $config->oai->max->listrecords;
+        $max_identifier = $config->oai->max->listidentifiers;
         $this->_proc->setParameter('', 'repIdentifier', $repIdentifier);
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
         // get document-Ids depending given daterange
-        $from = NULL;
-        $until = NULL;
-        if (true === array_key_exists('from',$oaiRequest)) {
-            $from = $oaiRequest['from'];
-        }
-        if (true === array_key_exists('until',$oaiRequest)) {
-            $until = $oaiRequest['until'];
-        }
-        $docIds = Opus_Document::getIdsForDateRange($from,$until);
-        if (count($docIds) == 0) {
-            throw new Exception("The combination of the given values results in an empty list.", self::NORECORDSMATCH);
-        }
+        $docIds = $this->filterDocDate($oaiRequest);
         // handling all documents
         $id_max = 0;
         foreach ($docIds as $docId) {
@@ -383,11 +373,20 @@ class Oai_IndexController extends Controller_Xml {
             // TODO if ($in_output == 1) $in_output = $this->filterDocSet($document);
             if ($in_output == 1) {$id_max++;}
             // missing resumption token
-//            if ($in_output == 1 & $id_max <= $max_records) {
-            if ($in_output == 1 & $id_max <= 20) {
-                  $this->_xml->appendChild($this->_xml->createElement('Opus_Document'));
-//                $node = $this->_xml->importNode($document->toXml()->getElementsByTagName('Opus_Document')->item(0), true);
-//                $this->_xml->documentElement->appendChild($node);
+            // create xml-document, only information for header is necessary
+            if ($in_output == 1 & $id_max <= $max_identifier) {
+                  $date_mod = $document->getServerDateModified();
+                  $date_pub = $document->getServerDatePublished();
+                  $opus_doc = $this->_xml->createElement('Opus_Document');
+                  $date_mod_attr = $this->_xml->createAttribute("ServerDateModified");
+                  $date_mod_value = $this->_xml->createTextNode($date_mod);
+                  $date_mod_attr->appendChild($date_mod_value);
+                  $date_pub_attr = $this->_xml->createAttribute("ServerDatePublished");
+                  $date_pub_value = $this->_xml->createTextNode($date_pub);
+                  $date_pub_attr->appendChild($date_pub_value);
+                  $opus_doc->appendChild($date_mod_attr);
+                  $opus_doc->appendChild($date_pub_attr);
+                  $this->_xml->documentElement->appendChild($opus_doc);
             }
         }
         // no records returned
@@ -421,18 +420,7 @@ class Oai_IndexController extends Controller_Xml {
         $this->_proc->setParameter('', 'repIdentifier', $repIdentifier);
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
         // get document-Ids depending given daterange
-        $from = NULL;
-        $until = NULL;
-        if (true === array_key_exists('from',$oaiRequest)) {
-            $from = $oaiRequest['from'];
-        }
-        if (true === array_key_exists('until',$oaiRequest)) {
-            $until = $oaiRequest['until'];
-        }
-        $docIds = Opus_Document::getIdsForDateRange($from,$until);
-        if (count($docIds) == 0) {
-            throw new Exception("The combination of the given values results in an empty list.", self::NORECORDSMATCH);
-        }
+        $docIds = $this->filterDocDate($oaiRequest);
         // handling all documents
         $id_max = 0;
         foreach ($docIds as $docId) {
@@ -468,6 +456,31 @@ class Oai_IndexController extends Controller_Xml {
     private function __handleListSets($oaiRequest) {
 
     }
+
+    /**
+     * Give Document-Ids, which are daterange.
+     *
+     * @param  array  $oaiRequest
+     * @return array $docIds, which are in daterange
+     */
+    private function filterDocDate($oaiRequest) {
+        $docIds = array();
+        $from = NULL;
+        $until = NULL;
+        if (true === array_key_exists('from',$oaiRequest)) {
+            $from = $oaiRequest['from'];
+        }
+        if (true === array_key_exists('until',$oaiRequest)) {
+            $until = $oaiRequest['until'];
+        }
+        $docIds = Opus_Document::getIdsForDateRange($from,$until);
+        if (count($docIds) == 0) {
+            throw new Exception("The combination of the given values results in an empty list.", self::NORECORDSMATCH);
+        }
+       return $docIds;
+
+    }
+
 
     /**
      * Handles, if a Document has state published.
