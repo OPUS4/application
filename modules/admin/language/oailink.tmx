@@ -52,6 +52,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="admin_oailink_example_listidentifiers">
+      <tuv xml:lang="en">
+        <seg>OAI request with verb ListIdentifiers</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>OAI Anfrage mit dem Verb ListIdentifiers</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_oailink_example_listrecords">
       <tuv xml:lang="en">
         <seg>OAI request with verb ListRecords</seg>
