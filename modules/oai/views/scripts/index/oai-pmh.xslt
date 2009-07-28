@@ -206,7 +206,7 @@
 
     <xsl:template match="Documents" mode="ListIdentifiers">
         <xsl:element name="ListIdentifiers">
-            <xsl:apply-templates select="Opus_Document" />
+              <xsl:apply-templates select="Opus_Document" /> 
         </xsl:element>
     </xsl:template>
 
@@ -253,14 +253,16 @@
                     </xsl:otherwise>
                   </xsl:choose>
                 </xsl:element>
+                <xsl:element name="setSpec">
         <!--  here the set-information has to be added -->
+                </xsl:element>
             </xsl:element>
+            
             
             <!-- choose the corresponding template depending on metadataPrefix -->
             <!-- not, when verb=ListIdentifiers -->
             <xsl:choose>
-              <xsl:when test="$oai_verb!='ListIdentifiers'">
-
+                 <xsl:when test="$oai_verb!='ListIdentifiers'">  
                  <xsl:element name="metadata">
                  <xsl:choose>
                     <xsl:when test="$oai_metadataPrefix='XMetaDissPlus'">
@@ -285,7 +287,7 @@
                  </xsl:element>
             
             </xsl:when>
-            </xsl:choose>
+            </xsl:choose>            
         </xsl:element>
     </xsl:template>
 
