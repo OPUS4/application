@@ -314,6 +314,13 @@ class Oai_IndexController extends Controller_Xml {
         // Currently implemented as 'oai:foo.bar.de:{docId}'
         $docId = substr(strrchr($oaiRequest['identifier'], ':'), 1);
         $document = new Opus_Document($docId);
+        // for xMetaDiss it must be habilitation or doctoral-thesis
+        if ($oaiRequest['metadataPrefix'] == 'xMetaDiss') {
+            $is_hab_doc = $this->filterDocType($document);
+            if ($is_hab_doc == 0) {
+               throw new Exception("The combination of the given values results in an empty list (xMetaDiss only for habilitation and doctoral_thesis).", self::NORECORDSMATCH);
+            }
+        }
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
         $node = $this->_xml->importNode($document->toXml()->getElementsByTagName('Opus_Document')->item(0), true);
         $this->_xml->documentElement->appendChild($node);
