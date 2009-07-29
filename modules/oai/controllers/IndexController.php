@@ -378,13 +378,15 @@ class Oai_IndexController extends Controller_Xml {
                   $date_mod = $document->getServerDateModified();
                   $date_pub = $document->getServerDatePublished();
                   $opus_doc = $this->_xml->createElement('Opus_Document');
-                  $date_mod_attr = $this->_xml->createAttribute("ServerDateModified");
-                  $date_mod_value = $this->_xml->createTextNode($date_mod);
-                  $date_mod_attr->appendChild($date_mod_value);
+                  if (!empty($date_mod)) {
+                      $date_mod_attr = $this->_xml->createAttribute("ServerDateModified");
+                      $date_mod_value = $this->_xml->createTextNode($date_mod);
+                      $date_mod_attr->appendChild($date_mod_value);
+                      $opus_doc->appendChild($date_mod_attr);
+                  }
                   $date_pub_attr = $this->_xml->createAttribute("ServerDatePublished");
                   $date_pub_value = $this->_xml->createTextNode($date_pub);
                   $date_pub_attr->appendChild($date_pub_value);
-                  $opus_doc->appendChild($date_mod_attr);
                   $opus_doc->appendChild($date_pub_attr);
                   $this->_xml->documentElement->appendChild($opus_doc);
             }
@@ -458,7 +460,7 @@ class Oai_IndexController extends Controller_Xml {
     }
 
     /**
-     * Give Document-Ids, which are daterange.
+     * Give Document-Ids, which are in daterange.
      *
      * @param  array  $oaiRequest
      * @return array $docIds, which are in daterange
