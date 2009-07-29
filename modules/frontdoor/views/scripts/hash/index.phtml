@@ -57,10 +57,6 @@ else
    <p><b>&nbsp;<?= $this->title;?></b></p><br /><?
 }?>
 <p><?= $this-> translate('frontdoor_filenumber')?>:&nbsp;<?= $this->fileNumber?></p><br /><hr /><?
-if ($this->doc = false )
-{
-    $this->filenumber == 0;
-}
 
 if ($this->fileNumber !== 0)
 {
@@ -121,17 +117,9 @@ if ($this->fileNumber !== 0)
   }
 }
 else
-{
-    if ($this->doc == false)
-    {?>
-        <p><?= $this->translate('frontdoor_no_document');?></p><br /><?
-    }
-    else
-    {?>
-        <p><?= $this->translate('frontdoor_no_file');?></p><br /><?
-    }
+{?>
+   <p><?= $this->translate('frontdoor_no_file');?></p><br /><?
 }?>
-<p><br /><br /><?= $this->docpath?></p><br />
 
 <br /><p><a href="<?= $this->value =
    $this->url(array(

@@ -124,35 +124,25 @@ class Frontdoor_HashController extends Zend_Controller_Action
       }
 
       //searching for files, getting filenumbers and hashes if document is available
-      $this->docpath = $docpath = '<a href = "/documents/'. $docId. '/">Test</a>';
-      $this->view->docpath = $docpath;
-      //echo ($docpath);
-      if (file_exists($docpath))
+
+      if (array_key_exists('File', $doc_data) === true)
       {
-         if (array_key_exists('File', $doc_data) === true)
+         $files = $document->getFile();
+         $fileNumber = count($files);
+         $this->view->fileNumber = $fileNumber;
+         if (array_key_exists('0', $files) === true)
          {
-            $files = $document->getFile();
-            $fileNumber = count($files);
-            $this->view->fileNumber = $fileNumber;
-            if (array_key_exists('0', $files) === true)
+            $hash_exists = $document->getFile('0')->getHashValue();
+            if (array_key_exists('0', $hash_exists))
             {
-               $hash_exists = $document->getFile('0')->getHashValue();
-               if (array_key_exists('0', $hash_exists))
-               {
-                  $first_hash = $document->getFile('0')->getHashValue('0')->getValue();
-                  $this->view->first_hash = $first_hash;
-               }
-               else
-               {
-                  $this->first_hash = $first_hash = null;
-                  $this->view_first_hash = $first_hash;
-               }
-           }
-           else
-           {
-              $this->first_hash = $first_hash = null;
-              $this->view_first_hash = $first_hash;
-           }
+               $first_hash = $document->getFile('0')->getHashValue('0')->getValue();
+               $this->view->first_hash = $first_hash;
+            }
+            else
+            {
+               $this->first_hash = $first_hash = null;
+               $this->view_first_hash = $first_hash;
+            }
          }
          else
          {
@@ -162,11 +152,10 @@ class Frontdoor_HashController extends Zend_Controller_Action
       }
       else
       {
-          $this->doc = $doc = false;
-          $this->view->doc = $doc;
           $this->first_hash = $first_hash = null;
-          $this->view->first_hash =$first_hash;
+          $this->view_first_hash = $first_hash;
       }
+
 
        // Iteration over all files, hashtypes and -values; filling up the arrays $fileNames() and $hashValueType()
        if ($first_hash !== NULL)
