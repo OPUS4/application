@@ -124,8 +124,10 @@ class Frontdoor_HashController extends Zend_Controller_Action
       }
 
       //searching for files, getting filenumbers and hashes if document is available
-      $docpath = '/documents/'. $docId. '/';
-      if (file_exists ($docpath) === true)
+      $this->docpath = $docpath = '<a href = "/documents/'. $docId. '/">Test</a>';
+      $this->view->docpath = $docpath;
+      //echo ($docpath);
+      if (file_exists($docpath))
       {
          if (array_key_exists('File', $doc_data) === true)
          {
