@@ -254,10 +254,11 @@ class Oai_IndexController extends Controller_Xml {
      * @return void
      */
     private function __validateFrom($oaiFrom) {
-        $validator = new Zend_Validate_Date();
-        if (false === $validator->isValid($oaiFrom)) {
-            throw new Exception("The date $oaiFrom is not a correct date, use YYYY-MM-TT.",self::BADARGUMENT);
-        }
+        try {
+          $from = new Zend_Date($oaiFrom);
+        } catch(exception $e) {
+             throw new Exception('The date from is not a correct date',self::BADARGUMENT);
+          }
     }
 
     /**
@@ -268,10 +269,15 @@ class Oai_IndexController extends Controller_Xml {
      * @return void
      */
     private function __validateUntil($oaiUntil) {
-        $validator = new Zend_Validate_Date();
-        if (false === $validator->isValid($oaiUntil)) {
-            throw new Exception("The date $oaiUntil is not a correct date, use YYYY-MM-TT.",self::BADARGUMENT);
-        }
+        try {
+          $until = new Zend_Date($oaiUntil);
+        } catch(exception $e) {
+             throw new Exception('The date until is not a correct date.',self::BADARGUMENT);
+          }
+//        $validator = new Zend_Validate_Date();
+//        if (false === $validator->isValid($oaiUntil)) {
+//            throw new Exception("The date $oaiUntil is not a correct date, use YYYY-MM-TT.",self::BADARGUMENT);
+//        }
     }
 
     /**
@@ -369,7 +375,7 @@ class Oai_IndexController extends Controller_Xml {
         foreach ($docIds as $docId) {
             $document = new Opus_Document($docId);
             $in_output = 1;
-            // for xMetaDiss only give Habilitation or doctoral-thesis
+            // for xMetaDiss only give habilitation and doctoral-thesis
             if ($oaiRequest['metadataPrefix'] == 'xMetaDiss') {
                 $in_output = $this->filterDocType($document);
             }
@@ -432,6 +438,8 @@ class Oai_IndexController extends Controller_Xml {
         $docIds = $this->filterDocDate($oaiRequest);
         // handling all documents
         $id_max = 0;
+        $restIds = array();
+        $ri = 0;
         foreach ($docIds as $docId) {
             $document = new Opus_Document($docId);
             $in_output = 1;
@@ -446,15 +454,43 @@ class Oai_IndexController extends Controller_Xml {
             // TODO if ($in_output == 1) $in_output = $this->filterDocSet($document);
             if ($in_output == 1) {$id_max++;}
             // missing resumption token
-            if ($in_output == 1 & $id_max <= $max_records) {
-                $node = $this->_xml->importNode($document->toXml()->getElementsByTagName('Opus_Document')->item(0), true);
-                $this->_xml->documentElement->appendChild($node);
+//            if ($in_output == 1 & $id_max <= $max_records) {
+//                $node = $this->_xml->importNode($document->toXml()->getElementsByTagName('Opus_Document')->item(0), true);
+//                $this->_xml->documentElement->appendChild($node);
+//            }
+            if ($in_output == 1) {
+                if ($id_max <= $max_records) {
+                   $node = $this->_xml->importNode($document->toXml()->getElementsByTagName('Opus_Document')->item(0), true);
+                   $this->_xml->documentElement->appendChild($node);
+                }
+                else {
+                    $restIds[$ri] = $docId;
+                    $ri++;
+                }
             }
         }
         // no records returned
         if ($id_max == 0) {
             throw new Exception("The combination of the given values results in an empty list.", self::NORECORDSMATCH);
            }
+        // store the further Ids in a resumption-file
+        if (count($restIds) > 0) {
+            $gesamtIds = $max_records + count($restIds);
+            $this->_proc->setParameter('', 'gesamtIds', $gesamtIds);
+            $file = "../resumption/rs_20090729.txt";
+/*            if ($fp = fopen($file,'x')) {
+                foreach ($restIds as $restId) {
+                    if (fwrite($fp,$restId)) {
+                       } else {
+                           throw new Exception("file konnte nicht beschrieben werden.", self::NORECORDSMATCH);
+                         }
+                    }
+                fclose($fp);
+            } else {
+            throw new Exception("file konnte nicht geoeffnet werden.", self::NORECORDSMATCH);
+            }
+*/
+        }
     }
 
     /**
