@@ -58,8 +58,8 @@ searchengine.index.maxFileSize = 0 ; maximum filesize to index (in Byte), 0 mean
 
 ;SOCIAL BOOKMARKING SETTINGS
 socialBookmarking.connotea.systemTags = OPUS Test ; Tags for any document that is bookmarked via this repository
-; Oli fragen: Wegen Merge-Konflikt unklar, wie der Parameter korrekt lauten muss: connotea.user = ; Library User for Connotea
-; Oli fragen: Wegen Merge-Konflikt unklar, wie der Parameter korrekt lauten muss: connotea.password = ; Password for the library user at Connotea
+socialBookmarking.connotea.user = ; Library User for Connotea
+socialBookmarking.connotea.password = ; Password for the library user at Connotea
 socialBookmarking.bibsonomy.sysuser = ; Library User for Bibsonomy
 socialBookmarking.bibsonomy.syspassword = ; API-Password for library user at Bibsonomy Attention: the API-Password is not the one you created for the user at Bibsonomy - you can find it in the account settings on Bibsonomy
 
