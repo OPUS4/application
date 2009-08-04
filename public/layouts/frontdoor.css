@@ -1,0 +1,11 @@
+span.md {
+    display: block;
+}
+
+span.md.name {
+    font-weight: bold;
+}
+
+span.md.value {
+    margin-left: 3em;
+}
