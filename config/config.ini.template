@@ -43,6 +43,9 @@ db.params.dbname =
 theme = default
 security = 0
 
+;WOKSPACE-PATH SETTINGS
+path.workspace.temp = 
+
 ;DELIVER SETTINGS
 deliver.target.prefix = /files
 deliver.logrequest = false
