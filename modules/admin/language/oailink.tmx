@@ -69,6 +69,15 @@
         <seg>OAI Anfrage mit dem Verb ListRecords</seg>
       </tuv>
     </tu>
+
+    <tu tuid="admin_oailink_example_listsets">
+      <tuv xml:lang="en">
+        <seg>OAI request with verb ListSets</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>OAI Anfrage mit dem Verb ListSets</seg>
+      </tuv>
+    </tu>
     
   </body>
   
