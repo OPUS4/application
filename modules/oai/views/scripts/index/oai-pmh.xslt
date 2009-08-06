@@ -66,10 +66,15 @@
     <xsl:param name="repIdentifier" />
     <xsl:param name="sampleIdentifier" />
     <xsl:param name="docId" />
+    <xsl:param name="dateDelete" />
+    <xsl:param name="gesamtIds" />
+    <xsl:param name="res" />
+    <xsl:param name="cursor" />
     <xsl:param name="oai_verb" />
     <xsl:param name="oai_from" />
     <xsl:param name="oai_until" />
     <xsl:param name="oai_metadataPrefix" />
+    <xsl:param name="oai_resumptionToken" />
     <xsl:param name="oai_identifier" />
     <xsl:param name="oai_error_code" />
     <xsl:param name="oai_error_message" />
@@ -104,6 +109,9 @@
                 <xsl:if test="$oai_metadataPrefix != ''">
                     <xsl:attribute name="metadataPrefix"><xsl:value-of select="$oai_metadataPrefix" /></xsl:attribute>
                 </xsl:if>
+                <xsl:if test="$oai_resumptionToken != ''">
+                    <xsl:attribute name="resumptionToken"><xsl:value-of select="$oai_resumptionToken" /></xsl:attribute>
+                </xsl:if>
                 <xsl:value-of select="$oai_base_url" />
             </xsl:element>
             <xsl:if test="$oai_error_code!=''">
@@ -129,6 +137,9 @@
                 </xsl:when>
                 <xsl:when test="$oai_verb='ListRecords'">
                     <xsl:apply-templates select="Documents" mode="ListRecords" />
+                </xsl:when>
+                <xsl:when test="$oai_verb='ListSets'">
+                    <xsl:apply-templates select="Documents" mode="ListSets" />
                 </xsl:when>
             </xsl:choose>
         </xsl:element>
@@ -210,9 +221,23 @@
         </xsl:element>
     </xsl:template>
 
+    <xsl:template match="Documents" mode="ListSets">
+        <xsl:element name="ListSets">
+            <xsl:apply-templates select="Opus_Sets" />
+        </xsl:element>
+    </xsl:template>
+
     <xsl:template match="Documents" mode="ListRecords">
         <xsl:element name="ListRecords">
             <xsl:apply-templates select="Opus_Document" />
+            <xsl:if test="$gesamtIds > 0">
+                <xsl:element name = "resumptionToken">
+                  <xsl:attribute name="expirationDate"><xsl:value-of select="$dateDelete"/></xsl:attribute>
+                  <xsl:attribute name="completeListSize"><xsl:value-of select="$gesamtIds"/>
+                  </xsl:attribute><xsl:attribute name="cursor"><xsl:value-of select="$cursor"/>
+                  </xsl:attribute><xsl:value-of select="$res"/>
+                </xsl:element>
+            </xsl:if>
         </xsl:element>
     </xsl:template>
 
@@ -221,6 +246,14 @@
             <xsl:apply-templates select="Opus_Document" />
         </xsl:element>
     </xsl:template>
+
+    <xsl:template match="Opus_Sets">
+        <xsl:element name="set">
+           <xsl:element name="setSpec">pub-type:<xsl:value-of select="@Type"/></xsl:element>
+           <xsl:element name="setName"><xsl:value-of select="@TypeName"/></xsl:element>
+        </xsl:element>
+    </xsl:template>    
+
 
 
     <xsl:template match="Opus_Document">
