@@ -72,12 +72,6 @@ class Oai_IndexController extends Controller_Xml {
                     array('required' => array('identifier', 'metadataPrefix'),
                           'optional' => array()),
                     ),
-//                'ListRecords' => array(
-//                    array('required' => array('metadataPrefix'),
-//                          'optional' => array('from', 'until', 'set')),
-//                    array('required' => array('resumptionToken'),
-//                          'optional' => array()),
-//                    ),
                 'ListRecords' => array(
                     array('required' => array('metadataPrefix'),
                           'optional' => array('from', 'until', 'set','resumptionToken')),
@@ -277,10 +271,6 @@ class Oai_IndexController extends Controller_Xml {
         } catch(exception $e) {
              throw new Exception('The date until is not a correct date.',self::BADARGUMENT);
           }
-//        $validator = new Zend_Validate_Date();
-//        if (false === $validator->isValid($oaiUntil)) {
-//            throw new Exception("The date $oaiUntil is not a correct date, use YYYY-MM-TT.",self::BADARGUMENT);
-//        }
     }
 
     /**
@@ -305,11 +295,11 @@ class Oai_IndexController extends Controller_Xml {
      * @return void
      */
     private function __validateResumptionToken($oaiResumptionToken) {
-        // TODO: Implement resumption token handling.
-        $fn = '/home/developer/workspace/bsz_opus_application1/workspace/tmp/resumption/rs_'.$oaiResumptionToken.'.txt';
+        $registry = Zend_Registry::getInstance();
+        $config = $registry->get('Zend_Config');
+        $tempPath = $config->path->workspace->temp;
+        $fn = $tempPath.'/resumption/rs_'.$oaiResumptionToken.'.txt';
         if (!file_exists($fn)) {
-//        if (true === empty($oaiResumptionToken)) {
-            // Resumption token not valid.
             throw new Exception("The resumptionToken $oaiResumptionToken does not exist or has already expired.",self::BADRESUMPTIONTOKEN);
         }
     }
