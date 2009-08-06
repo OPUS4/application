@@ -47,7 +47,6 @@ class Oai_IndexController extends Controller_Xml {
     const CANNOTDISSEMINATEFORMAT = 2;
     const BADRESUMPTIONTOKEN = 3;
     const NORECORDSMATCH = 4;
-
     /**
      * Holds valid OAI parameters.
      *
@@ -73,13 +72,17 @@ class Oai_IndexController extends Controller_Xml {
                     array('required' => array('identifier', 'metadataPrefix'),
                           'optional' => array()),
                     ),
+//                'ListRecords' => array(
+//                    array('required' => array('metadataPrefix'),
+//                          'optional' => array('from', 'until', 'set')),
+//                    array('required' => array('resumptionToken'),
+//                          'optional' => array()),
+//                    ),
                 'ListRecords' => array(
                     array('required' => array('metadataPrefix'),
-                          'optional' => array('from', 'until', 'set')),
-                    array('required' => array('resumptionToken'),
-                          'optional' => array()),
+                          'optional' => array('from', 'until', 'set','resumptionToken')),
                     ),
-                'ListIdentifiers' => array(
+                    'ListIdentifiers' => array(
                     array('required' => array('metadataPrefix'),
                           'optional' => array('from', 'until', 'set')),
                     array('required' => array('resumptionToken'),
@@ -303,10 +306,11 @@ class Oai_IndexController extends Controller_Xml {
      */
     private function __validateResumptionToken($oaiResumptionToken) {
         // TODO: Implement resumption token handling.
-        if (true === empty($oaiResumptionToken)) {
+        $fn = '/home/developer/workspace/bsz_opus_application1/workspace/tmp/resumption/rs_'.$oaiResumptionToken.'.txt';
+        if (!file_exists($fn)) {
+//        if (true === empty($oaiResumptionToken)) {
             // Resumption token not valid.
-            throw new Exception("The resumptionToken $oaiResumptionToken does not exist or has already expired.",
-                    self::BADRESUMPTIONTOKEN);
+            throw new Exception("The resumptionToken $oaiResumptionToken does not exist or has already expired.",self::BADRESUMPTIONTOKEN);
         }
     }
 
@@ -432,55 +436,100 @@ class Oai_IndexController extends Controller_Xml {
         $config = $registry->get('Zend_Config');
         $repIdentifier = $config->oai->repository->identifier;
         $max_records = $config->oai->max->listrecords;
+        $tempPath = $config->path->workspace->temp;
         $this->_proc->setParameter('', 'repIdentifier', $repIdentifier);
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
-        // get document-Ids depending given daterange
-        $docIds = $this->filterDocDate($oaiRequest);
-        // handling all documents
         $id_max = 0;
+        $cursor = 0;
+        $gesamtIds = 0;
+        $res = '';
+        $resParam = '';
+        $startNeu = $max_records + 1;
         $restIds = array();
         $ri = 0;
-        foreach ($docIds as $docId) {
-            $document = new Opus_Document($docId);
-            $in_output = 1;
-            // for xMetaDiss only give Habilitation or doctoral-thesis
-            if ($oaiRequest['metadataPrefix'] == 'xMetaDiss') {
-                $in_output = $this->filterDocType($document);
-            }
-            // only published documents
-            if ($in_output == 1) {
-                $in_output = $this->filterDocPublished($document);
-            }
-            // TODO if ($in_output == 1) $in_output = $this->filterDocSet($document);
-            if ($in_output == 1) {$id_max++;}
-            // missing resumption token
-//            if ($in_output == 1 & $id_max <= $max_records) {
-//                $node = $this->_xml->importNode($document->toXml()->getElementsByTagName('Opus_Document')->item(0), true);
-//                $this->_xml->documentElement->appendChild($node);
-//            }
-            if ($in_output == 1) {
-                if ($id_max <= $max_records) {
-                   $node = $this->_xml->importNode($document->toXml()->getElementsByTagName('Opus_Document')->item(0), true);
-                   $this->_xml->documentElement->appendChild($node);
+        // parameter resumptionToken is given
+        if (!empty($oaiRequest['resumptionToken'])) {
+            // read the resumption file
+            $resParam = $oaiRequest['resumptionToken'];
+            $fn = $tempPath.'/resumption/rs_'.$resParam.'.txt';
+            $daten = file_get_contents($fn);
+            if ($daten != false) {
+                $daten = explode(' ',$daten);
+                // first entry is startposition, second entry is total number
+                $cursor = $daten[0] - 1;
+                $startNeu = $daten[0] + $max_records;
+                $gesamtIds = $daten[1];
+                $reldocIds = array();
+                $j = 0;
+                for ($i=2; $i <= count($daten)-2; $i++) {
+                    $reldocIds[$j] = $daten[$i];
+                    $j++;
                 }
-                else {
-                    $restIds[$ri] = $docId;
-                    $ri++;
+                // handling all Ids of the resumption file
+                foreach ($reldocIds as $docId) {
+                  $id_max++;
+                  if ($id_max <= $max_records) {
+                      $document = new Opus_Document($docId);
+                      $node = $this->_xml->importNode($document->toXml()->getElementsByTagName('Opus_Document')->item(0), true);
+                      $this->_xml->documentElement->appendChild($node);
+                  }
+                  else {
+                      $restIds[$ri] = $docId;
+                      $ri++;
+                  }
                 }
+            } else {
+                 throw new Exception("file konnte nicht ausgelesen werden.", self::NORECORDSMATCH);
             }
+        // TODO cronjob for removing files and not here, because token has to be repeatable
+        unlink($fn);
+
+        // no resumptionToken is given
+        } else {
+            // get document-Ids depending given daterange
+            $docIds = $this->filterDocDate($oaiRequest);
+            // handling all documents
+            foreach ($docIds as $docId) {
+               $document = new Opus_Document($docId);
+               $in_output = 1;
+               // for xMetaDiss only give Habilitation or doctoral-thesis
+               if ($oaiRequest['metadataPrefix'] == 'xMetaDiss') {
+                   $in_output = $this->filterDocType($document);
+               }
+               // only published documents
+               if ($in_output == 1) {
+                   $in_output = $this->filterDocPublished($document);
+               }
+               // TODO if ($in_output == 1) $in_output = $this->filterDocSet($document);
+               if ($in_output == 1) {$id_max++;}
+               // missing resumption token
+               if ($in_output == 1) {
+                   if ($id_max <= $max_records) {
+                      $node = $this->_xml->importNode($document->toXml()->getElementsByTagName('Opus_Document')->item(0), true);
+                      $this->_xml->documentElement->appendChild($node);
+                   }
+                   else {
+                       $restIds[$ri] = $docId;
+                       $ri++;
+                   }
+               }
+          }
         }
         // no records returned
         if ($id_max == 0) {
             throw new Exception("The combination of the given values results in an empty list.", self::NORECORDSMATCH);
            }
+
         // store the further Ids in a resumption-file
         if (count($restIds) > 0) {
-            $gesamtIds = $max_records + count($restIds);
-            $this->_proc->setParameter('', 'gesamtIds', $gesamtIds);
-            $file = "../resumption/rs_20090729.txt";
-/*            if ($fp = fopen($file,'x')) {
+            if ($gesamtIds == 0) $gesamtIds = $max_records + count($restIds);
+            $fc = 0;
+            $fn = $tempPath.'/resumption/rs_'.(string) time();
+            while (file_exists($file=sprintf('%s%02d.txt',$fn,$fc++)));
+            if ($fp = fopen($file,'w+')) {
+                fwrite($fp,$startNeu.' '.$gesamtIds.' ');
                 foreach ($restIds as $restId) {
-                    if (fwrite($fp,$restId)) {
+                    if (fwrite($fp,$restId.' ')) {
                        } else {
                            throw new Exception("file konnte nicht beschrieben werden.", self::NORECORDSMATCH);
                          }
@@ -489,9 +538,22 @@ class Oai_IndexController extends Controller_Xml {
             } else {
             throw new Exception("file konnte nicht geoeffnet werden.", self::NORECORDSMATCH);
             }
-*/
+            $start_res = strpos($file,'rs_');
+            $res = substr($file,$start_res+3,12);
+        }
+
+        // set parameters for the resumptionToken-node
+        if (!empty($resParam) || count($restIds) > 0) {
+            $heute = new Zend_Date();
+            $heute->add(1,Zend_Date::DAY);
+            $morgen = $heute->get('yyyy-MM-ddThh-mm-ss');
+            $this->_proc->setParameter('', 'dateDelete', $morgen);
+            $this->_proc->setParameter('', 'res', $res);
+            $this->_proc->setParameter('', 'cursor', $cursor);
+            $this->_proc->setParameter('', 'gesamtIds', $gesamtIds);
         }
     }
+
 
     /**
      * Implements response for OAI-PMH verb 'ListSets'.
@@ -499,6 +561,25 @@ class Oai_IndexController extends Controller_Xml {
      * @return void
      */
     private function __handleListSets($oaiRequest) {
+        $registry = Zend_Registry::getInstance();
+        $config = $registry->get('Zend_Config');
+        $repIdentifier = $config->oai->repository->identifier;
+        $this->_proc->setParameter('', 'repIdentifier', $repIdentifier);
+        $this->_xml->appendChild($this->_xml->createElement('Documents'));
+        $types = Opus_Document_Type::getAvailableTypeNames();
+        foreach ($types as $type) {
+            $opus_doc = $this->_xml->createElement('Opus_Sets');
+            $type_attr = $this->_xml->createAttribute("Type");
+            $type_value = $this->_xml->createTextNode($type);
+            $type_attr->appendChild($type_value);
+            $opus_doc->appendChild($type_attr);
+            $name_attr = $this->_xml->createAttribute("TypeName");
+            $name_value = $this->_xml->createTextNode($type);
+            $name_attr->appendChild($name_value);
+            $opus_doc->appendChild($name_attr);
+            $this->_xml->documentElement->appendChild($opus_doc);
+
+        }
 
     }
 
