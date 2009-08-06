@@ -152,6 +152,7 @@
                 $document = $hit->getDocument();
                 // print_r($document);
                 $authoriterator = new Opus_Search_Iterator_PersonsListIterator($document["author"]);
+                $role = 'author';
                 echo "<li>";
                 #echo $document['author'] . ': ';
                 foreach ($authoriterator as $obj) {
