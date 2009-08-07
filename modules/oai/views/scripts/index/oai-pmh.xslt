@@ -67,7 +67,7 @@
     <xsl:param name="sampleIdentifier" />
     <xsl:param name="docId" />
     <xsl:param name="dateDelete" />
-    <xsl:param name="gesamtIds" />
+    <xsl:param name="totalIds" />
     <xsl:param name="res" />
     <xsl:param name="cursor" />
     <xsl:param name="oai_verb" />
@@ -217,7 +217,15 @@
 
     <xsl:template match="Documents" mode="ListIdentifiers">
         <xsl:element name="ListIdentifiers">
-              <xsl:apply-templates select="Opus_Document" /> 
+            <xsl:apply-templates select="Opus_Document" /> 
+            <xsl:if test="$totalIds > 0">
+                <xsl:element name = "resumptionToken">
+                  <xsl:attribute name="expirationDate"><xsl:value-of select="$dateDelete"/></xsl:attribute>
+                  <xsl:attribute name="completeListSize"><xsl:value-of select="$totalIds"/>
+                  </xsl:attribute><xsl:attribute name="cursor"><xsl:value-of select="$cursor"/>
+                  </xsl:attribute><xsl:value-of select="$res"/>
+                </xsl:element>
+            </xsl:if>
         </xsl:element>
     </xsl:template>
 
@@ -230,10 +238,10 @@
     <xsl:template match="Documents" mode="ListRecords">
         <xsl:element name="ListRecords">
             <xsl:apply-templates select="Opus_Document" />
-            <xsl:if test="$gesamtIds > 0">
+            <xsl:if test="$totalIds > 0">
                 <xsl:element name = "resumptionToken">
                   <xsl:attribute name="expirationDate"><xsl:value-of select="$dateDelete"/></xsl:attribute>
-                  <xsl:attribute name="completeListSize"><xsl:value-of select="$gesamtIds"/>
+                  <xsl:attribute name="completeListSize"><xsl:value-of select="$totalIds"/>
                   </xsl:attribute><xsl:attribute name="cursor"><xsl:value-of select="$cursor"/>
                   </xsl:attribute><xsl:value-of select="$res"/>
                 </xsl:element>
