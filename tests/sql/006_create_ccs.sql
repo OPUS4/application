@@ -6,7 +6,7 @@
 CREATE TABLE IF NOT EXISTS `collections_contents_3` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `name` varchar(255) default NULL,
-  `number` varchar(5) default NULL,
+  `number` varchar(6) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1457;
 
