@@ -321,6 +321,8 @@ class Oai_IndexController extends Controller_Xml {
                throw new Exception("The combination of the given values results in an empty list (xMetaDiss only for habilitation and doctoral_thesis).", self::NORECORDSMATCH);
             }
         }
+        $type = $document->getType();
+        $this->_proc->setParameter('', 'setPubType', $type);
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
         $node = $this->_xml->importNode($document->toXml()->getElementsByTagName('Opus_Document')->item(0), true);
         $this->_xml->documentElement->appendChild($node);
@@ -427,8 +429,8 @@ class Oai_IndexController extends Controller_Xml {
                     $in_output = $this->filterDocPublished($document);
                 }
                 // TODO if ($in_output == 1) $in_output = $this->filterDocSet($document);
-                if ($in_output == 1) {$id_max++;}
                 if ($in_output == 1) {
+                    $id_max++;
                     // create xml-document
                     if ($id_max <= $max_identifier) {
                       $this->xmlCreationIdentifiers($document);
@@ -516,8 +518,7 @@ class Oai_IndexController extends Controller_Xml {
                   $id_max++;
                   if ($id_max <= $max_records) {
                       $document = new Opus_Document($docId);
-                      $node = $this->_xml->importNode($document->toXml()->getElementsByTagName('Opus_Document')->item(0), true);
-                      $this->_xml->documentElement->appendChild($node);
+                      $this->xmlCreationRecords($document);
                   }
                   else {
                       $restIds[$ri] = $docId;
@@ -547,11 +548,10 @@ class Oai_IndexController extends Controller_Xml {
                    $in_output = $this->filterDocPublished($document);
                }
                // TODO if ($in_output == 1) $in_output = $this->filterDocSet($document);
-               if ($in_output == 1) {$id_max++;}
                if ($in_output == 1) {
+                   $id_max++;
                    if ($id_max <= $max_records) {
-                      $node = $this->_xml->importNode($document->toXml()->getElementsByTagName('Opus_Document')->item(0), true);
-                      $this->_xml->documentElement->appendChild($node);
+                      $this->xmlCreationRecords($document);
                    }
                    else {
                        $restIds[$ri] = $docId;
@@ -724,6 +724,8 @@ class Oai_IndexController extends Controller_Xml {
      * @param  Opus_Document $document
      */
     private function xmlCreationIdentifiers($document) {
+       $type = $document->getType();
+       $this->_proc->setParameter('', 'setPubType', $type);
        $date_mod = $document->getServerDateModified();
        $date_pub = $document->getServerDatePublished();
        $opus_doc = $this->_xml->createElement('Opus_Document');
@@ -737,7 +739,26 @@ class Oai_IndexController extends Controller_Xml {
        $date_pub_value = $this->_xml->createTextNode($date_pub);
        $date_pub_attr->appendChild($date_pub_value);
        $opus_doc->appendChild($date_pub_attr);
+       $set_pub_attr = $this->_xml->createAttribute("SetPubType");
+       $set_pub_value = $this->_xml->createTextNode($type);
+       $set_pub_attr->appendChild($set_pub_value);
+       $opus_doc->appendChild($set_pub_attr);
        $this->_xml->documentElement->appendChild($opus_doc);
+    }
+
+    /**
+     * Create xml for ListRecords
+     *
+     * @param  Opus_Document $document
+     */
+    private function xmlCreationRecords($document) {
+       $node = $this->_xml->importNode($document->toXml()->getElementsByTagName('Opus_Document')->item(0), true);
+       $type = $document->getType();
+       $set_pub_attr = $this->_xml->createAttribute("SetPubType");
+       $set_pub_value = $this->_xml->createTextNode($type);
+       $set_pub_attr->appendChild($set_pub_value);
+       $node->appendChild($set_pub_attr);
+       $this->_xml->documentElement->appendChild($node);
     }
 
 }
