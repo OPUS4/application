@@ -305,14 +305,17 @@ class Opus3MigrationParameters extends Opus3Migration
 		    $this->docStack = $result['success'];
 		    foreach ($result['success'] as $doc) {
 		    	echo "Successfully imported old ID " . $doc['oldid'] . "\n";
+		    	$import->log("Successfully imported old ID " . $doc['oldid'] . "\n");
 		    }
 		    $logfile = '../workspace/tmp/importerrors.xml';
 		    $f = fopen($logfile, 'w');
 		    foreach ($result['failure'] as $doc) {
 		    	echo "ERROR: " . $doc['message'] . " for old ID " . $doc['oldid'] . "\n";
+		    	$import->log("ERROR: " . $doc['message'] . " for old ID " . $doc['oldid'] . "\n");
 		    	fputs($f, $doc['entry'] . "\n");
 		    }
 		    fclose($f);
+		    $import->finalize();
 		    echo "Imported " . count($result['success']) . " documents successfully.\n";
 		    echo count($result['failure']) . " documents have not been imported due to failures listed above. See $logfile for details about failed entries.\n";
 		}
@@ -387,14 +390,17 @@ class Opus3MigrationReadline extends Opus3Migration {
 		    $this->docStack = $result['success'];
 		    foreach ($result['success'] as $doc) {
 		    	echo "Successfully imported old ID " . $doc['oldid'] . "\n";
+		    	$import->log("Successfully imported old ID " . $doc['oldid'] . "\n");
 		    }
 		    $logfile = '../workspace/tmp/importerrors.xml';
 		    $f = fopen($logfile, 'w');
 		    foreach ($result['failure'] as $doc) {
 		    	echo "ERROR: " . $doc['message'] . " for old ID " . $doc['oldid'] . "\n";
+		    	$import->log("ERROR: " . $doc['message'] . " for old ID " . $doc['oldid'] . "\n");
 		    	fputs($f, $doc['entry'] . "\n");
 		    }
 		    fclose($f);
+		    $import->finalize();
 		    echo "Imported " . count($result['success']) . " documents successfully.\n";
 		    echo count($result['failure']) . " documents have not been imported due to failures listed above. See $logfile for details about failed entries.\n";
 		}

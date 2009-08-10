@@ -62,6 +62,14 @@ class XMLImport
      * @var array  Defaults to the OPUS collections (Name => ID).
      */
     protected $collections = array();
+    
+    /**
+     * Holds the logfile for Importer
+     *
+     * @var string  Path to logfile
+     */
+    protected $logfile = '../workspace/log/import.log';
+    protected $_logfile;
 
     /**
      * Do some initialization on startup of every action
@@ -86,6 +94,16 @@ class XMLImport
         $this->_proc = new XSLTProcessor;
         $this->_proc->registerPhpFunctions();
         $this->_proc->importStyleSheet($this->_xslt);
+        $this->_logfile = fopen($this->logfile, 'w');
+    }
+    
+    public function log($string) {
+    	fputs($this->_logfile, $string);
+    }
+    
+    public function finalize()
+    {
+    	fclose($this->_logfile);
     }
 
 	/**
@@ -331,7 +349,8 @@ class XMLImport
                     $output[] = new Opus_Collection($this->collections[$name], $id);
                 }
                 else {
-                    echo "Number $value in $name not found - not imported for old OPUS-ID " . $this->document->getElementsByTagName('IdentifierOpus3')->Item(0)->getAttribute('Value') . "\n";
+		    		echo "Number $value in $name not found - not imported for old OPUS-ID " . $this->document->getElementsByTagName('IdentifierOpus3')->Item(0)->getAttribute('Value') . "\n";
+                    fputs($this->_logfile, "Number $value in $name not found - not imported for old OPUS-ID " . $this->document->getElementsByTagName('IdentifierOpus3')->Item(0)->getAttribute('Value') . "\n");
                 }
             }
             $this->document->removeChild($item);

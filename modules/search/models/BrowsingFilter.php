@@ -44,13 +44,15 @@ class BrowsingFilter
 	 */
 	public static function getAllTitles()
 	{
-        $titles = Opus_Document::getAllIds();
-
-        $paginator = Zend_Paginator::factory($titles);
+        #$titles = Opus_Document::getAllIds();
+        
+        $result = Opus_Document::getAllDocumentTitlesByState('published');
+        
+        $paginator = Zend_Paginator::factory($result);
 
         $hitlist = new Opus_Search_List_HitList();
 
-        foreach ($titles as $title=>$docid)
+        foreach ($result as $docid => $title)
         {
        		$searchhit = new Opus_Search_SearchHit( (int) $docid);
        		$hitlist->add($searchhit);
@@ -67,6 +69,7 @@ class BrowsingFilter
      */
     public static function getAllTitlesAsPaginator()
     {
+        #$titles = Opus_Document::getAllDocumentTitlesByState('published');
         $titles = Opus_Document::getAllIds();
 
         $paginator = Zend_Paginator::factory($titles);
