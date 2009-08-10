@@ -83,9 +83,11 @@ class Opus3SignatureImport
                 foreach ($sigfiles as $signatureFile) {
                 	$signature = implode("", file($signatureFile));
                 	echo "Adding " . $signature . " to " . $file->getPathName() . "\n";
-                	$hash = $file->addHashValue();
-                	$hash->setType('gpg-' . $key);
-                	$hash->setValue($signature);
+            		$hash = new Opus_HashValues();
+    	        	$hash->setType('gpg-' . $key);
+    		        $hash->setValue($signature);
+
+    		        $file->addHashValue($hash);
                 	$key++;
                 }
             }
