@@ -62,6 +62,7 @@
 
     <xsl:param name="dateTime" />
     <xsl:param name="emailAddress" />
+    <xsl:param name="setPubType" />
     <xsl:param name="repName" />
     <xsl:param name="repIdentifier" />
     <xsl:param name="sampleIdentifier" />
@@ -263,7 +264,6 @@
     </xsl:template>    
 
 
-
     <xsl:template match="Opus_Document">
         <xsl:element name="record">
             <xsl:element name="header">
@@ -294,9 +294,15 @@
                     </xsl:otherwise>
                   </xsl:choose>
                 </xsl:element>
-                <xsl:element name="setSpec">
-        <!--  here the set-information has to be added -->
+            <xsl:choose>
+              <xsl:when test="$oai_verb='GetRecord'">
+                 <xsl:element name="setSpec">pub-type:<xsl:value-of select="$setPubType" />
                 </xsl:element>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:element name="setSpec">pub-type:<xsl:value-of select="@SetPubType"/></xsl:element>
+              </xsl:otherwise>
+            </xsl:choose>   
             </xsl:element>
             
             
