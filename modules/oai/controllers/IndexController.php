@@ -433,10 +433,12 @@ class Oai_IndexController extends Controller_Xml {
         } else {
             $setReady = 0;
             $docReady = 0;
+            $setGiven = 0;
         // set is given
             if (true === array_key_exists('set',$oaiRequest)) {
                 $setParam = $oaiRequest['set'];
                 $setarray = explode(':',$setParam);
+                $setGiven = 1;
                 // if only set is given, read DocIds of the set (performance reasons)
                 if (false === array_key_exists('from',$oaiRequest) &&
                     false === array_key_exists('until',$oaiRequest)) {
@@ -463,7 +465,7 @@ class Oai_IndexController extends Controller_Xml {
                     $in_output = $this->filterDocPublished($document);
                 }
                 // proof set
-                if ($in_output == 1 && $setReady == 0) $in_output = $this->filterDocSet($document,$setarray);
+                if ($in_output == 1 && $setReady == 0 && $setGiven == 1) $in_output = $this->filterDocSet($document,$setarray);
                 if ($in_output == 1) {
                     $id_max++;
                     // create xml-document
@@ -570,6 +572,7 @@ class Oai_IndexController extends Controller_Xml {
         } else {
             $setReady = 0;
             $docReady = 0;
+            $setGiven = 0;
             // set is given
             if (true === array_key_exists('set',$oaiRequest)) {
                 $setParam = $oaiRequest['set'];
@@ -581,6 +584,7 @@ class Oai_IndexController extends Controller_Xml {
                     $docIds = $this->readDocidsOfSet($setarray);
                     $docReady = 1;
                     $setReady = 1;
+                    $setGiven = 1;
                 }
             }
             if ($docReady == 0) {
@@ -600,7 +604,7 @@ class Oai_IndexController extends Controller_Xml {
                    $in_output = $this->filterDocPublished($document);
                }
                // proof set
-               if ($in_output == 1 && $setReady == 0) $in_output = $this->filterDocSet($document,$setarray);
+               if ($in_output == 1 && $setReady == 0 && $setGiven == 1) $in_output = $this->filterDocSet($document,$setarray);
                if ($in_output == 1) {
                    $id_max++;
                    if ($id_max <= $max_records) {
