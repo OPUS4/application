@@ -258,6 +258,23 @@ class Oai_IndexController extends Controller_Xml {
           }
     }
 
+
+    /**
+     * Checks the availability of given parameter set.
+     *
+     * @param  string  $oaiSet The set to check for.
+     * @throws Exception Thrown if the set is'nt correct.
+     * @return void
+     */
+    private function __validateSet($oaiSet) {
+        $setInfo = explode(':',$oaiSet);
+        if ($setInfo[0] != 'pub-type') {
+             throw new Exception('The given set is not correct',self::BADARGUMENT);
+        }
+    }
+
+
+
     /**
      * Checks the availability of given parameter until.
      *
@@ -414,8 +431,25 @@ class Oai_IndexController extends Controller_Xml {
 
         // no resumptionToken is given
         } else {
-            // get document-Ids depending given daterange
-            $docIds = $this->filterDocDate($oaiRequest);
+            $setReady = 0;
+            $docReady = 0;
+        // set is given
+            if (true === array_key_exists('set',$oaiRequest)) {
+                $setParam = $oaiRequest['set'];
+                $setarray = explode(':',$setParam);
+                // if only set is given, read DocIds of the set (performance reasons)
+                if (false === array_key_exists('from',$oaiRequest) &&
+                    false === array_key_exists('until',$oaiRequest)) {
+                    // get document-Ids depending on a set
+                    $docIds = $this->readDocidsOfSet($setarray);
+                    $docReady = 1;
+                    $setReady = 1;
+                }
+            }
+            if ($docReady == 0) {
+                // get document-Ids depending given daterange
+                $docIds = $this->filterDocDate($oaiRequest);
+            }
             // handling all documents
             foreach ($docIds as $docId) {
                 $document = new Opus_Document($docId);
@@ -428,7 +462,8 @@ class Oai_IndexController extends Controller_Xml {
                 if ($in_output == 1) {
                     $in_output = $this->filterDocPublished($document);
                 }
-                // TODO if ($in_output == 1) $in_output = $this->filterDocSet($document);
+                // proof set
+                if ($in_output == 1 && $setReady == 0) $in_output = $this->filterDocSet($document,$setarray);
                 if ($in_output == 1) {
                     $id_max++;
                     // create xml-document
@@ -533,8 +568,25 @@ class Oai_IndexController extends Controller_Xml {
 
         // no resumptionToken is given
         } else {
-            // get document-Ids depending given daterange
-            $docIds = $this->filterDocDate($oaiRequest);
+            $setReady = 0;
+            $docReady = 0;
+            // set is given
+            if (true === array_key_exists('set',$oaiRequest)) {
+                $setParam = $oaiRequest['set'];
+                $setarray = explode(':',$setParam);
+                // if only set is given, read DocIds of the set (performance reasons)
+                if (false === array_key_exists('from',$oaiRequest) &&
+                    false === array_key_exists('until',$oaiRequest)) {
+                    // get document-Ids depending on a set
+                    $docIds = $this->readDocidsOfSet($setarray);
+                    $docReady = 1;
+                    $setReady = 1;
+                }
+            }
+            if ($docReady == 0) {
+                // get document-Ids depending given daterange
+                $docIds = $this->filterDocDate($oaiRequest);
+            }
             // handling all documents
             foreach ($docIds as $docId) {
                $document = new Opus_Document($docId);
@@ -547,7 +599,8 @@ class Oai_IndexController extends Controller_Xml {
                if ($in_output == 1) {
                    $in_output = $this->filterDocPublished($document);
                }
-               // TODO if ($in_output == 1) $in_output = $this->filterDocSet($document);
+               // proof set
+               if ($in_output == 1 && $setReady == 0) $in_output = $this->filterDocSet($document,$setarray);
                if ($in_output == 1) {
                    $id_max++;
                    if ($id_max <= $max_records) {
@@ -645,13 +698,21 @@ class Oai_IndexController extends Controller_Xml {
     }
 
     /**
-     * Handles, if a Document belongs to a given set.
+     * Handles, if a Document belongs to a given set (first only for sets pub-type)
      *
      * @param  Opus_Document  $document the document to be proofed
+     * @param  array          $setInfo, for example [0]=pub-type, [1]=doctoral_thesis
      * @return int $result, 1 oder 0, decides, wheather document is in output or not
      */
-    private function filterDocSet($document) {
-
+    private function filterDocSet($document,$setInfo) {
+       $result = 0;
+       if ($setInfo[0] == 'pub-type') {
+          $type = $document->getType();
+          if ($type == $setInfo[1]) {
+              $result = 1;
+          }
+       }
+       return $result;
     }
 
     /**
@@ -668,6 +729,26 @@ class Oai_IndexController extends Controller_Xml {
        }
        return $result;
     }
+
+
+    /**
+     * Give Document-Ids, which belong to a set (first only for sets pub-type).
+     *
+     * @param  array $setInfo, for example [0]=pub-type,[1]=paper
+     * @return array $docIds, which are in daterange
+     */
+    private function readDocidsOfSet($setInfo) {
+        $docIds = array();
+        if ($setInfo[0]=='pub-type') {
+           $docIds = Opus_Document::getIdsForDocType($setInfo[1]);
+        }
+        if (count($docIds) == 0) {
+            throw new Exception("The combination of the given values results in an empty list.", self::NORECORDSMATCH);
+        }
+       return $docIds;
+
+    }
+
 
 
     /**
