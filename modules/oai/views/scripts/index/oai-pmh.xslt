@@ -110,6 +110,9 @@
                 <xsl:if test="$oai_metadataPrefix != ''">
                     <xsl:attribute name="metadataPrefix"><xsl:value-of select="$oai_metadataPrefix" /></xsl:attribute>
                 </xsl:if>
+                <xsl:if test="$oai_identifier != ''">
+                    <xsl:attribute name="identifier"><xsl:value-of select="$oai_identifier" /></xsl:attribute>
+                </xsl:if>
                 <xsl:if test="$oai_resumptionToken != ''">
                     <xsl:attribute name="resumptionToken"><xsl:value-of select="$oai_resumptionToken" /></xsl:attribute>
                 </xsl:if>
