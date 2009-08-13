@@ -38,12 +38,46 @@
 <h1><?php echo $this->translate('admin_documents_index'); ?></h1>
 
 <?php
+        $url_call_id = array(
+            'module' => 'admin',
+            'controller' => 'documents',
+            'action' => 'edit'
+        );
+        $url_call_id = $this->url($url_call_id, 'default', true);
+?>
+<p>
+<form action="<?php echo $url_call_id ?>" method="post" class="crud">
+     <input type="text" name="id" />
+     <input type="submit" value="<?php echo $this->translate('docs_call_id'); ?>" />
+</form>
+</p><br/><br/>
+<?php
 foreach ($this->registers as $register) {
 	?>
 	<a href="<?=$register[0] ?>"><?php echo $this->translate($register[1]); ?></a> |
 	<?php
 }
 
+// Sorting the titles
+        $url_sort_by_id = array(
+            'module' => 'admin',
+            'controller' => 'documents',
+            'action' => 'index',
+            'sort_order' => 'id'
+        );
+        $url_sort_by_title = array(
+            'module' => 'admin',
+            'controller' => 'documents',
+            'action' => 'index',
+            'sort_order' => 'title'
+        );
+        $url_sort_by_id = $this->url($url_sort_by_id, 'default', false);
+        $url_sort_by_title = $this->url($url_sort_by_title, 'default', false);
+?>
+<br/>
+<?php echo $this->translate('docs_sortorder'); ?> <a href="<?php echo $url_sort_by_id ?>"><?php echo $this->translate('docs_by_id'); ?></a> <a href="<?php echo $url_sort_by_title ?>"><?php echo $this->translate('docs_by_title'); ?></a>
+<br/>
+<?php
 $documentList = $this->documentList;
 if (false === empty($documentList)) { ?>
 <p>
@@ -52,6 +86,12 @@ if (false === empty($documentList)) { ?>
         if (true === empty($title)) {
             $title = array(0 => 'Opus document with id: ' . $docId);
         }
+        $url_frontdoor = array(
+            'module' => 'frontdoor',
+            'controller' => 'index',
+            'action' => 'index',
+            'docId' => $docId
+        );
         $url_edit = array(
             'module' => 'admin',
             'controller' => 'documents',
@@ -65,9 +105,10 @@ if (false === empty($documentList)) { ?>
         );
         $url_edit = $this->url($url_edit, 'default', true);
         $url_delete = $this->url($url_delete, 'default', true);
+        $url_frontdoor = $this->url($url_frontdoor, 'default', true);
     ?>
         <li>
-        <?php echo current($title) ?>
+        <?php echo '<a href="' . $url_frontdoor . '" target="_blank">' . current($title) . '</a> (ID ' . $docId . ')' ?>
         <form action="<?php echo $url_delete ?>" method="post" class="crud">
             <a href="<?php echo $url_edit ?>"><?php echo $this->translate('docs_edit'); ?></a>
             <input type="hidden" name="id" value="<?php echo $docId ?>" />

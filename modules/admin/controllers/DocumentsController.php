@@ -76,6 +76,14 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         } else {
             $result = Opus_Document::getAllDocumentTitles();
         }
+        if (true === array_key_exists('sort_order', $data)) {
+        	if ($data['sort_order'] === 'id') {
+        		ksort($result);
+        	}
+        	else if ($data['sort_order'] === 'title') {
+        		asort($result);
+        	}
+        }
         $this->view->documentList = $result;
     }
 

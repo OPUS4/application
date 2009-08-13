@@ -79,6 +79,42 @@
       </tuv>
     </tu>
     
+    <tu tuid="docs_call_id">
+      <tuv xml:lang="en">
+        <seg>Edit</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Aufrufen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="docs_sortorder">
+      <tuv xml:lang="en">
+        <seg>Sort document list by:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sortiere Dokumentliste nach:</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="docs_by_id">
+      <tuv xml:lang="en">
+        <seg>ID</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>ID</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="docs_by_title">
+      <tuv xml:lang="en">
+        <seg>title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Titel</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_documents_edit">
       <tuv xml:lang="en">
         <seg>Edit document metadata</seg>
