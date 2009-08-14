@@ -112,7 +112,7 @@ class Opus3Migration extends Application_Bootstrap {
     }
 
     protected function importFiles() {
-    		echo "Importing files";
+    		echo "Importing files\n";
 	    	$fileImporter = new Opus3FileImport($this->path, $this->magicPath);
     		foreach ($this->docStack as $imported)
 	    	{
@@ -127,14 +127,12 @@ class Opus3Migration extends Application_Bootstrap {
     }
 
     protected function importSignatures() {
-    		echo "Importing signatures";
+    		echo "Importing signatures\n";
 	    	$sigImporter = new Opus3SignatureImport($this->signaturePath);
     		foreach ($this->docStack as $imported)
 	    	{
 	    		echo ".";
-			    $opus3Id = $imported['document']->getIdentifierOpus3()->getValue();
-			    $documentSignatures = $sigImporter->loadSignatureFiles($imported['document'], $opus3Id);
-			    $documentSignatures->store();
+			    $sigImporter->loadSignatureFiles($imported['document']->getId());
 		    }
 		    echo "finished!";
     }

@@ -67,8 +67,9 @@ class Opus3SignatureImport
      * @param Opus_Document $object Opus-Document for that the files should be registered
      * @return void
      */
-    public function loadSignatureFiles($object)
+    public function loadSignatureFiles($id)
     {
+    	$object = new Opus_Document($id);
     	$this->_tmpPath = null;
     	$opusId = $object->getIdentifierOpus3()->getValue();
 
@@ -92,9 +93,8 @@ class Opus3SignatureImport
                 }
             }
         }
-
-        // return all signatures in an array
-        return $object;
+        // Store signature(s) directly
+        $object->store();
     }
     
     private function getFiles($from, $filename) 
