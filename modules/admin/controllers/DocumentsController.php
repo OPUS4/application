@@ -76,15 +76,44 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         } else {
             $result = Opus_Document::getAllDocumentTitles();
         }
+        // get additional information about document type and authors
+        $authorsList = array();
+        $documentTypeList = array();
+        $docList = array();
+        foreach ($result as $id => $doc) {
+        	$authors = array();
+        	$d = new Opus_Document($id);
+        	$aut = $d->getPersonAuthor();
+        	foreach ($aut as $a) {
+        		$authors[] = $a->getLastName() . ', ' . $a->getFirstName();
+        	}
+            if (true === empty($doc)) {
+                $doc = array(0 => 'Opus document with id: ' . $id);
+            }
+            if (true === array_key_exists('sort_order', $data)) {
+            	if ($data['sort_order'] === 'author') {
+            		$docList[$id] = array(join("; ", $authors) . ': ' . $doc[0] . ' (' . $this->view->translate($d->getType()) . ')');
+        	    }
+        	    else if ($data['sort_order'] === 'title') {
+        		    $docList[$id] = array($doc[0] . ' (' . join("; ", $authors) . ', ' . $this->view->translate($d->getType()) . ')');
+        	    }
+        	    else if ($data['sort_order'] === 'docType') {
+        		    $docList[$id] = array($this->view->translate($d->getType()) . ': ' . join("; ", $authors) . ': ' . $doc[0]);
+        	    }
+            }
+            else {
+        	    $docList[$id] = array(join("; ", $authors) . ': ' . $doc[0] . ' (' . $this->view->translate($d->getType()) . ')');
+            }
+        }
         if (true === array_key_exists('sort_order', $data)) {
         	if ($data['sort_order'] === 'id') {
-        		ksort($result);
+        		ksort($docList);
         	}
-        	else if ($data['sort_order'] === 'title') {
-        		asort($result);
+        	else {
+        		asort($docList);
         	}
         }
-        $this->view->documentList = $result;
+        $this->view->documentList = $docList;
     }
 
     /**

@@ -115,6 +115,24 @@
       </tuv>
     </tu>
 
+    <tu tuid="docs_by_author">
+      <tuv xml:lang="en">
+        <seg>author</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Autor</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="docs_by_doctype">
+      <tuv xml:lang="en">
+        <seg>document type</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokumenttyp</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_documents_edit">
       <tuv xml:lang="en">
         <seg>Edit document metadata</seg>

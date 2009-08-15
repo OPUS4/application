@@ -71,11 +71,25 @@ foreach ($this->registers as $register) {
             'action' => 'index',
             'sort_order' => 'title'
         );
+        $url_sort_by_doctype = array(
+            'module' => 'admin',
+            'controller' => 'documents',
+            'action' => 'index',
+            'sort_order' => 'docType'
+        );
+        $url_sort_by_author = array(
+            'module' => 'admin',
+            'controller' => 'documents',
+            'action' => 'index',
+            'sort_order' => 'author'
+        );
         $url_sort_by_id = $this->url($url_sort_by_id, 'default', false);
         $url_sort_by_title = $this->url($url_sort_by_title, 'default', false);
+        $url_sort_by_doctype = $this->url($url_sort_by_doctype, 'default', false);
+        $url_sort_by_author = $this->url($url_sort_by_author, 'default', false);
 ?>
 <br/>
-<?php echo $this->translate('docs_sortorder'); ?> <a href="<?php echo $url_sort_by_id ?>"><?php echo $this->translate('docs_by_id'); ?></a> <a href="<?php echo $url_sort_by_title ?>"><?php echo $this->translate('docs_by_title'); ?></a>
+<?php echo $this->translate('docs_sortorder'); ?> <a href="<?php echo $url_sort_by_id ?>"><?php echo $this->translate('docs_by_id'); ?></a> <a href="<?php echo $url_sort_by_title ?>"><?php echo $this->translate('docs_by_title'); ?></a> <a href="<?php echo $url_sort_by_author ?>"><?php echo $this->translate('docs_by_author'); ?></a> <a href="<?php echo $url_sort_by_doctype ?>"><?php echo $this->translate('docs_by_doctype'); ?></a>
 <br/>
 <?php
 $documentList = $this->documentList;
