@@ -82,27 +82,57 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $docList = array();
         foreach ($result as $id => $doc) {
         	$authors = array();
+        	unset($authors);
         	$d = new Opus_Document($id);
         	$aut = $d->getPersonAuthor();
         	foreach ($aut as $a) {
-        		$authors[] = $a->getLastName() . ', ' . $a->getFirstName();
+        		$name = '';
+        		$lastName = '';
+        		$name = $a->getName();
+        		$lastName = $a->getLastName();
+        		if (false === empty($name)) {
+        		    $author = $a->getName();
+        		}
+        		else if (false === empty($lastName)) {
+        			$autor = $a->getLastName();
+        		}
+        		else {
+        			$author = " ";
+        		}
+        		$authors[] = $author;
         	}
             if (true === empty($doc)) {
                 $doc = array(0 => 'Opus document with id: ' . $id);
             }
+            $authorsstring = '';
             if (true === array_key_exists('sort_order', $data)) {
             	if ($data['sort_order'] === 'author') {
-            		$docList[$id] = array(join("; ", $authors) . ': ' . $doc[0] . ' (' . $this->view->translate($d->getType()) . ')');
+            		if (false === empty($authors)) {
+            			$authorsstring = join("; ", $authors) . ': ';
+            		}
+            		else {
+            			$authorsstring = "No author: ";
+            		}
+            		$docList[$id] = array($authorsstring . $doc[0] . ' (' . $this->view->translate($d->getType()) . ')');
         	    }
         	    else if ($data['sort_order'] === 'title') {
-        		    $docList[$id] = array($doc[0] . ' (' . join("; ", $authors) . ', ' . $this->view->translate($d->getType()) . ')');
+             		if (false === empty($authors)) {
+            			$authorsstring = join("; ", $authors) . ', ';
+            		}
+        		    $docList[$id] = array($doc[0] . ' (' . $authorsstring . $this->view->translate($d->getType()) . ')');
         	    }
         	    else if ($data['sort_order'] === 'docType') {
-        		    $docList[$id] = array($this->view->translate($d->getType()) . ': ' . join("; ", $authors) . ': ' . $doc[0]);
+             		if (false === empty($authors)) {
+            			$authorsstring = join("; ", $authors) . ': ';
+            		}
+        		    $docList[$id] = array($this->view->translate($d->getType()) . ': ' . $authorsstring . $doc[0]);
         	    }
             }
             else {
-        	    $docList[$id] = array(join("; ", $authors) . ': ' . $doc[0] . ' (' . $this->view->translate($d->getType()) . ')');
+           		if (false === empty($authors)) {
+           			$authorsstring = join("; ", $authors) . ': ';
+          		}
+        	    $docList[$id] = array($authorsstring . $doc[0] . ' (' . $this->view->translate($d->getType()) . ')');
             }
         }
         if (true === array_key_exists('sort_order', $data)) {
