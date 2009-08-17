@@ -69,10 +69,17 @@ class BrowsingFilter
      */
     public static function getAllTitlesAsPaginator()
     {
-        #$titles = Opus_Document::getAllDocumentTitlesByState('published');
-        $titles = Opus_Document::getAllIds();
+        $titles = Opus_Document::getAllDocumentTitlesByState('published');
+        #$titles = Opus_Document::getAllIds();
 
-        $paginator = Zend_Paginator::factory($titles);
+        // Map the list of IDs and titles to a simple list of IDs without title
+        // (as returned by Opus_Document::getAllIds() to stay compatible)
+        $docList = array();
+        foreach ($titles as $id => $doc) {
+        	    $docList[] = $id;
+        }
+
+        $paginator = Zend_Paginator::factory($docList);
 
         return ($paginator);
     }
