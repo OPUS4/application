@@ -76,72 +76,72 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         } else {
             $result = Opus_Document::getAllDocumentTitles();
         }
-        // get additional information about document type and authors
-        $authorsList = array();
-        $documentTypeList = array();
+        // Sort the result if necessary
+        // docList contains a list of IDs of the documents, that should be returned after sorting
         $docList = array();
-        foreach ($result as $id => $doc) {
-        	$authors = array();
-        	unset($authors);
-        	$d = new Opus_Document($id);
-        	$aut = $d->getPersonAuthor();
-        	foreach ($aut as $a) {
-        		$name = '';
-        		$lastName = '';
-        		$name = $a->getName();
-        		$lastName = $a->getLastName();
-        		if (false === empty($name)) {
-        		    $author = $a->getName();
-        		}
-        		else if (false === empty($lastName)) {
-        			$autor = $a->getLastName();
-        		}
-        		else {
-        			$author = " ";
-        		}
-        		$authors[] = $author;
-        	}
-            if (true === empty($doc)) {
-                $doc = array(0 => 'Opus document with id: ' . $id);
-            }
-            $authorsstring = '';
-            if (true === array_key_exists('sort_order', $data)) {
-            	if ($data['sort_order'] === 'author') {
-            		if (false === empty($authors)) {
-            			$authorsstring = join("; ", $authors) . ': ';
-            		}
-            		else {
-            			$authorsstring = "No author: ";
-            		}
-            		$docList[$id] = array($authorsstring . $doc[0] . ' (' . $this->view->translate($d->getType()) . ')');
-        	    }
-        	    else if ($data['sort_order'] === 'title') {
-             		if (false === empty($authors)) {
-            			$authorsstring = join("; ", $authors) . ', ';
-            		}
-        		    $docList[$id] = array($doc[0] . ' (' . $authorsstring . $this->view->translate($d->getType()) . ')');
-        	    }
-        	    else if ($data['sort_order'] === 'docType') {
-             		if (false === empty($authors)) {
-            			$authorsstring = join("; ", $authors) . ': ';
-            		}
-        		    $docList[$id] = array($this->view->translate($d->getType()) . ': ' . $authorsstring . $doc[0]);
-        	    }
-            }
-            else {
-           		if (false === empty($authors)) {
-           			$authorsstring = join("; ", $authors) . ': ';
-          		}
-        	    $docList[$id] = array($authorsstring . $doc[0] . ' (' . $this->view->translate($d->getType()) . ')');
-            }
-        }
         if (true === array_key_exists('sort_order', $data)) {
-        	if ($data['sort_order'] === 'id') {
-        		ksort($docList);
+        	switch ($data['sort_order']) {
+        		case 'title':
+                    asort($result);
+                    foreach ($result as $id => $doc) {
+        	            $docList[] = $id;
+                    }
+                    break;
+        		case 'docType':
+        		    $tmpdocList = array();
+                    foreach ($result as $id => $doc) {
+                        $d = new Opus_Document($id);
+                        $docType = $this->view->translate($d->getType());
+                        $tmpdocList[$id] = $docType;
+                    }
+                    asort($tmpdocList);
+                    foreach ($tmpdocList as $id => $doc) {
+        	            $docList[] = $id;
+                    }
+                    break;
+        		case 'author':
+        		    $tmpdocList = array();
+                    foreach ($result as $id => $doc) {
+       	                $d = new Opus_Document($id);
+       	                $aut = $d->getPersonAuthor();
+       	                if (is_array($aut) === true && isset($aut[0]) === true) {
+       	                	$a = $aut[0];
+       		                $name = '';
+       		                $lastName = '';
+       		                $name = $a->getName();
+       		                $lastName = $a->getLastName();
+       		                if (false === empty($name)) {
+       		                    $author = $a->getName();
+       		                }
+       		                else if (false === empty($lastName)) {
+       			                $author = $a->getLastName();
+       		                }
+       		                else {
+       			                $author = " ";
+       		                }
+       	                }
+       	                else {
+       	                	$author = ' ';
+       	                }
+                        $tmpdocList[$id] = $author;
+                    }
+                    asort($tmpdocList);
+                    foreach ($tmpdocList as $id => $doc) {
+        	            $docList[] = $id;
+                    }
+                    break;
+        		default:
+                    foreach ($result as $id => $doc) {
+        	            $docList[] = $id;
+                    }
+        			sort($docList);
         	}
-        	else {
-        		asort($docList);
-        	}
+        }
+        else {
+        	foreach ($result as $id => $doc) {
+        	    $docList[] = $id;
+            }
+        	sort($docList);
         }
         $paginator = Zend_Paginator::factory($docList);
         if (array_key_exists('hitsPerPage', $data)) {
@@ -160,8 +160,8 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             $page = 1;
         }
         $paginator->setCurrentPageNumber($page);
-        #$this->view->documentList = $paginator;
-        $this->view->documentList = $docList;
+        $this->view->documentList = $paginator;
+        #$this->view->documentList = $docList;
     }
 
     /**

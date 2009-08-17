@@ -98,15 +98,42 @@ if (count($documentList) > 0) {
 	?>
 <p>
 <?php
-#    echo $this->paginationControl($documentList, NULL, 'itemCount_pagination.phtml');
-#    echo $this->paginationControl($documentList, 'Sliding', 'results_pagination.phtml');
+    echo $this->paginationControl($documentList, NULL, 'itemCount_pagination.phtml');
+    echo $this->paginationControl($documentList, 'Sliding', 'results_pagination.phtml');
 ?>
 <ol>
     <?php 
-    foreach ($documentList as $docId => $title) {
-        if (true === empty($title)) {
-            $title = array(0 => 'Opus document with id: ' . $docId);
+    foreach ($documentList as $docId) {
+       	$authors = array();
+       	unset($authors);
+       	$d = new Opus_Document($docId);
+       	$aut = $d->getPersonAuthor();
+       	foreach ($aut as $a) {
+       		$name = '';
+       		$lastName = '';
+       		$name = $a->getName();
+       		$lastName = $a->getLastName();
+       		if (false === empty($name)) {
+       		    $author = $a->getName();
+       		}
+       		else if (false === empty($lastName)) {
+       			$autor = $a->getLastName();
+       		}
+       		else {
+       			$author = " ";
+       		}
+       		$authors[] = $author;
+       	}
+        $docObject = $d->getTitleMain();
+        $doc = array($docObject[0]->getValue());
+        if (true === empty($doc)) {
+            $doc = array(0 => 'Opus document with id: ' . $id);
         }
+        $authorsstring = '';
+   		if (false === empty($authors)) {
+   			$authorsstring = join("; ", $authors) . ': ';
+   		}
+   	    $title = array($authorsstring . $doc[0] . ' (' . $this->translate($d->getType()) . ')');
         $url_frontdoor = array(
             'module' => 'frontdoor',
             'controller' => 'index',
@@ -141,7 +168,7 @@ if (count($documentList) > 0) {
 </ol>
 </p>
 <?php 
-#echo $this->paginationControl($documentList, 'Sliding', 'results_pagination.phtml');
+echo $this->paginationControl($documentList, 'Sliding', 'results_pagination.phtml');
 } else { ?>
     <p><?php echo $this->translate('docs_nodocs'); ?></p>
 <?php } ?>
