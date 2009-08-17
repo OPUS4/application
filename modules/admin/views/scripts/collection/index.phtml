@@ -40,7 +40,7 @@
     <form action="<?= $this->url(array('action' => 'manage', 'role' => $id))?>" method="post">
         <a href="<?= $this->url(array('action' => 'show', 'role' => $id)) ?>"><?= $entry ?></a>
         <a href="<?= $this->url(array('action' => 'edit', 'role' => $id)) ?>">Edit</a>
-        <input type="submit" name="delete" value="Delete" />
+        <input type="submit" name="deleteall" value="Delete" />
         <input type="submit" name="move_up" value="Up" />
         <input type="submit" name="move_down" value="Down" />
     </form>
