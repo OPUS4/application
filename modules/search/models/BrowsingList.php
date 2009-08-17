@@ -98,6 +98,7 @@ class BrowsingList
 			    $done[$member->getLastName()] = $member->getFirstName();
 			}
 		}
+		$personsList->sort();
 		return $personsList;
 	}
 
