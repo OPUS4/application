@@ -182,21 +182,22 @@ class BrowsingFilter
 	 *
 	 * @todo Put it to the model class
 	 */
-	public static function getDocumentTypeTitles($doctype)
-	{
-        #$doctype = str_replace("_", " ", $doctype);
-        $table = new Opus_Db_Documents();
-        $select = $table->select()
-            ->from($table)
-            ->where('type = ?', $doctype);
-        $rows = $table->fetchAll($select);
-
-        $result = array();
-        foreach ($rows as $row) {
-            $result[] = $row->id;
-        }
-        return $result;
-	}
+#	public static function getDocumentTypeTitles($doctype)
+#	{
+#       #$doctype = str_replace("_", " ", $doctype);
+#        $table = new Opus_Db_Documents();
+#        $select = $table->select()
+#            ->from($table)
+#            ->where('type = ?', $doctype,
+#                    'server_state = ?', 'published');
+#        $rows = $table->fetchAll($select);
+#
+#        $result = array();
+#        foreach ($rows as $row) {
+#            $result[] = $row->id;
+#        }
+#        return $result;
+#	}
 
 	/**
 	 * Returns a list of all entries from the repository, which are published in a given year
@@ -207,18 +208,18 @@ class BrowsingFilter
 	 *
 	 * @todo really get documents from the given year, not just dummydata
 	 */
-	public static function getYearTitles($year)
-	{
-        $table = new Opus_Db_Documents();
-        $select = $table->select()
-            ->from($table)
-            ->where('completed_year = ?', $year);
-        $rows = $table->fetchAll($select);
-
-        $result = array();
-        foreach ($rows as $row) {
-            $result[] = $row->id;
-        }
-        return $result;
-	}
+#	public static function getYearTitles($year)
+#	{
+#        $table = new Opus_Db_Documents();
+#        $select = $table->select()
+#            ->from($table)
+#            ->where('completed_year = ?', $year);
+#        $rows = $table->fetchAll($select);
+#
+#        $result = array();
+#        foreach ($rows as $row) {
+#            $result[] = $row->id;
+#        }
+#        return $result;
+#	}
 }
