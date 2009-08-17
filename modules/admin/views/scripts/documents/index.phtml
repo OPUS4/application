@@ -93,10 +93,17 @@ foreach ($this->registers as $register) {
 <br/>
 <?php
 $documentList = $this->documentList;
-if (false === empty($documentList)) { ?>
+if (count($documentList) > 0) {
+#if (false === empty($documentList)) { 
+	?>
 <p>
+<?php
+#    echo $this->paginationControl($documentList, NULL, 'itemCount_pagination.phtml');
+#    echo $this->paginationControl($documentList, 'Sliding', 'results_pagination.phtml');
+?>
 <ol>
-    <?php foreach ($documentList as $docId => $title) {
+    <?php 
+    foreach ($documentList as $docId => $title) {
         if (true === empty($title)) {
             $title = array(0 => 'Opus document with id: ' . $docId);
         }
@@ -133,6 +140,8 @@ if (false === empty($documentList)) { ?>
     } ?>
 </ol>
 </p>
-<?php } else { ?>
+<?php 
+#echo $this->paginationControl($documentList, 'Sliding', 'results_pagination.phtml');
+} else { ?>
     <p><?php echo $this->translate('docs_nodocs'); ?></p>
 <?php } ?>
