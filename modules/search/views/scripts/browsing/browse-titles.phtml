@@ -50,6 +50,25 @@
             break;
         default:
             echo "<h2>".$this->translate('search_titles_all')."</h2>";
+// Sorting the titles
+        $url_sort_by_id = array(
+            'module' => 'search',
+            'controller' => 'browsing',
+            'action' => 'browseTitles',
+            'sort_order' => 'id'
+        );
+        $url_sort_by_title = array(
+            'module' => 'search',
+            'controller' => 'browsing',
+            'action' => 'browseTitles',
+            'sort_order' => 'title'
+        );
+        $url_sort_by_id = $this->url($url_sort_by_id, 'default', false);
+        $url_sort_by_title = $this->url($url_sort_by_title, 'default', false);
+?>
+<br/>
+<?php echo $this->translate('docs_sortorder'); ?> <a href="<?php echo $url_sort_by_id ?>"><?php echo $this->translate('docs_by_id'); ?></a> <a href="<?php echo $url_sort_by_title ?>"><?php echo $this->translate('docs_by_title'); ?></a>
+<?php
     }
 
 if (count($this->hitlist_paginator)) {

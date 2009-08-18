@@ -77,34 +77,35 @@ class Search_BrowsingController extends Zend_Controller_Action
             // set page if requested
             $page = $data['page'];
         }
-    	switch ($filter)
-    	{
-    		case 'author':
-    		case 'contributor':
-    		case 'editor':
-    		case 'advisor':
-    		case 'referee':
-    		case 'other':
-    		case 'translator':
-    		    $translatestring = 'search_index_' . $filter . 'browsing';
-    			$this->view->title = $this->view->translate($translatestring);
-	    		$personId = (int) $this->_getParam($filter);
-    			$person = new Opus_Search_Adapter_PersonAdapter($personId);
-				$paginator = BrowsingFilter::getPersonTitles($personId, $filter);
-				$this->view->author = $person->get();
-				break;
-			case 'doctype':
-    			$this->view->title = $this->view->translate('search_index_doctypebrowsing');
-	    		$doctype = $this->_getParam("doctype");
-				$hitlist = BrowsingFilter::getDocumentTypeTitles($doctype);
-				$paginator = Zend_Paginator::factory($hitlist);
-				$this->view->doctype = $doctype;
-				break;
-			default:
-				$this->view->title = $this->view->translate('search_index_alltitlesbrowsing');
-				// Default Filter is: show all documents from the server
-				$paginator = BrowsingFilter::getAllTitlesAsPaginator();
-    	}
+    	$this->view->title = $this->view->translate('search_index_alltitlesbrowsing');
+	    // Default Filter is: show all documents from the server
+        $result = Opus_Document::getAllDocumentTitlesByState('published');
+
+        // Sort the result if necessary
+        // docList contains a list of IDs of the documents, that should be returned after sorting
+        $docList = array();
+        if (true === array_key_exists('sort_order', $data)) {
+      	    switch ($data['sort_order']) {
+       		    case 'title':
+                    asort($result);
+                    foreach ($result as $id => $doc) {
+    	                $docList[] = $id;
+                    }
+                    break;
+      		    default:
+                    foreach ($result as $id => $doc) {
+    	                $docList[] = $id;
+                    }
+    			    sort($docList);
+    	    }
+        }
+        else {
+    	    foreach ($result as $id => $doc) {
+    	        $docList[] = $id;
+            }
+    	    sort($docList);
+        }
+        $paginator = Zend_Paginator::factory($docList);
         #$hitlistIterator = new Opus_Search_Iterator_HitListIterator($hitlist);
         #$this->view->hitlist_count = $hitlist->count();
         $paginator->setCurrentPageNumber($page);
