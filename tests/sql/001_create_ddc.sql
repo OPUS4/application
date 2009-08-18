@@ -28,7 +28,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 CREATE TABLE IF NOT EXISTS `collections_contents_2` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `name` varchar(255) default NULL,
-  `number` varchar(3) default NULL,
+  `number` varchar(5) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1026 ;
 
@@ -1061,7 +1061,9 @@ INSERT INTO `collections_contents_2` (`id`, `name`, `number`) VALUES
 (1022, 'Geschichte anderer Teile des Pazifischen Ozeans; Polynesiens', '996'),
 (1023, 'Geschichte der atlantischen Inseln', '997'),
 (1024, 'Geschichte der arktischen Inseln und der Antarktis', '998'),
-(1025, 'Geschichte der außerirdischen Welten', '999');
+(1025, 'Geschichte der außerirdischen Welten', '999'),
+(1026, 'Comics, Cartoons, Karikaturen', '741.5'),
+(1027, 'Landeskunde Deutschlands', '914.3');
 
 -- --------------------------------------------------------
 
@@ -1457,6 +1459,7 @@ CREATE TABLE IF NOT EXISTS `collections_structure_2` (
 --
 -- Dumping data for table `collections_structure_2`
 --
+
 
 INSERT INTO `collections_structure_2` (`id`, `collections_id`, `left`, `right`, `visible`) VALUES
 (1, 1, 1, 2050, 0),
@@ -2484,6 +2487,16 @@ INSERT INTO `collections_structure_2` (`id`, `collections_id`, `left`, `right`, 
 (1023, 1023, 2042, 2043, 1),
 (1024, 1024, 2044, 2045, 1),
 (1025, 1025, 2046, 2047, 1);
+
+
+UPDATE `collections_structure_2` SET `left` = `left` + 2 WHERE `left` > 1865;
+UPDATE `collections_structure_2` SET `right` = `right` + 2 WHERE `right` > 1865;
+INSERT INTO `collections_structure_2` (`collections_id`, `left`, `right`, `visible`) VALUES
+(1027, 1866, 1867, 1);
+UPDATE `collections_structure_2` SET `left` = `left` + 2 WHERE `left` > 1493;
+UPDATE `collections_structure_2` SET `right` = `right` + 2 WHERE `right` > 1493;
+INSERT INTO `collections_structure_2` (`collections_id`, `left`, `right`, `visible`) VALUES
+(1026, 1494, 1495, 1);
 
 -- --------------------------------------------------------
 
