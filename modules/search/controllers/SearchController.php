@@ -196,7 +196,7 @@ class Search_SearchController extends Zend_Controller_Action
             }
         } else {
             // nonpost request
-            $form = new FulltextSearch();
+            $form = new MetadataSearch();
             $this->view->form = $form->populate($resultlist->postedData);
             $data = $this->_request->getParams();
             if (array_key_exists('page', $data)) {
