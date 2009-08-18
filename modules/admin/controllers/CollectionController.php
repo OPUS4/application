@@ -120,51 +120,46 @@ class Admin_CollectionController extends Controller_Action {
      * @return void
      */
     public function manageAction() {
-        //($this->_request->isPost() === true) {
-            $role = $this->getRequest()->getUserParam('role');
-            $path = $this->getRequest()->getUserParam('path');
-            $collection = new Opus_CollectionRole($role);
+        $role = $this->getRequest()->getUserParam('role');
+        $path = $this->getRequest()->getUserParam('path');
+        $collection = new Opus_CollectionRole($role);
 
-            // Store whether we're handling a collection or a collection role.
-            $handlingCollection = (true === isset($path));
-            if (true === $handlingCollection) {
-                $parentCollId = 1;
-                $trail = explode('-', $path);
-                foreach($trail as $step) {
-                    $parentCollId = $collection->getId();
-                    $collection = $collection->getSubCollection($step);
-                }
-                $path = implode('-', array_slice($trail, 0, sizeof($trail) - 1));
+        // Store whether we're handling a collection or a collection role.
+        $handlingCollection = (true === isset($path));
+        if (true === $handlingCollection) {
+            $parentCollId = 1;
+            $trail = explode('-', $path);
+            foreach($trail as $step) {
+                $parentCollId = $collection->getId();
+                $collection = $collection->getSubCollection($step);
             }
-            if (false === is_null($this->_request->getParam('deleteall'))) {
-                // Delete collection.
-                $collection->delete();
-            } else if (false === is_null($this->_request->getParam('undeleteall'))) {
-                // Un-Delete collection.
-                $collection->undelete();
-            } else if (false === is_null($this->_request->getParam('delete'))) {
-                // Delete collection.
-                $collection->deletePosition($parentCollId);
-            } else if (false === is_null($this->_request->getParam('move_up'))) {
-                // Move collection up by one position.
-                $collection->setPosition($collection->getPosition() - 1);
-                $collection->store();
-            } else if (false === is_null($this->_request->getParam('move_down'))) {
-                // Move collection up by one position.
-                $collection->setPosition($collection->getPosition() + 1);
-                $collection->store();
-            }
+            $path = implode('-', array_slice($trail, 0, sizeof($trail) - 1));
+        }
+        if (false === is_null($this->_request->getParam('deleteall'))) {
+            // Delete collection.
+            $collection->delete();
+        } else if (false === is_null($this->_request->getParam('undeleteall'))) {
+            // Un-Delete collection.
+            $collection->undelete();
+        } else if (false === is_null($this->_request->getParam('delete'))) {
+            // Delete collection.
+            $collection->deletePosition($parentCollId);
+        } else if (false === is_null($this->_request->getParam('move_up'))) {
+            // Move collection up by one position.
+            $collection->setPosition($collection->getPosition() - 1);
+            $collection->store();
+        } else if (false === is_null($this->_request->getParam('move_down'))) {
+            // Move collection up by one position.
+            $collection->setPosition($collection->getPosition() + 1);
+            $collection->store();
+        }
 
-            if (true === $handlingCollection) {
-                $this->_redirectTo('Collection successfully deleted.', 'show', null, null,
+        if (true === $handlingCollection) {
+            $this->_redirectTo('Collection successfully deleted.', 'show', null, null,
                     array('role' => $role, 'path' => $path));
-            } else {
-                $this->_redirectTo('Role successfully deleted.', 'index');
-            }
-
-/*        } else {
-            $this->_redirectTo('', 'index');
-        }*/
+        } else {
+            $this->_redirectTo('Role successfully deleted.', 'index');
+        }
     }
 
     /**
@@ -210,10 +205,9 @@ class Admin_CollectionController extends Controller_Action {
                 $visibility[$path . '-' . $i] = (true === $subcollection->getVisibility())?'visible':'hidden';
                 // Alle Parents der aktuellen Subcollection
                 $parentIds = Opus_Collection_Information::getAllParents($roleId, (int) $subcollection->getId());
-                //$parents = $subcollection->getParentCollection();
 
                 $copypaste[$path . '-' . $i] = ((int) $copyId === (int) $subcollection->getId())?'forbidden':'allowed';
-                //$copypaste[$path . '-' . $i] = (true === in_array($copyId, $parentIds))?'forbidden':'allowed';
+                $this->view->copypaste = $copypaste;
                 $prn = implode(',', $parentIds);
                 $subcollections[$path . '-' . $i] = $subcollection->getDisplayName();
             }
@@ -223,10 +217,8 @@ class Admin_CollectionController extends Controller_Action {
                 $visibility[$i] = (true === $subcollection->getVisibility())?'visible':'hidden';
                 // Alle Parents der aktuellen Subcollection
                 $parentIds = Opus_Collection_Information::getAllParents($roleId, (int) $subcollection->getId());//print_r($parentIds);
-                //$parents = $subcollection->getParentCollection();
                 $copypaste[$i] = ((int) $copyId === (int) $subcollection->getId())?'forbidden':'allowed';
-
-                //$copypaste[$i] = (true === in_array($copyId, $parentIds))?'forbidden':'allowed';
+                $this->view->copypaste = $copypaste;
 
                 $prn = implode(',', $parentIds);
 
@@ -244,7 +236,6 @@ class Admin_CollectionController extends Controller_Action {
         $this->view->copy = $copy;
         $this->view->assign = $assign;
         $this->view->breadcrumb = $breadcrumb;
-        $this->view->copypaste = $copypaste;
     }
 
     /**
