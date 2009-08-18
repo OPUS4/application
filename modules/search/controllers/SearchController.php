@@ -103,6 +103,7 @@ class Search_SearchController extends Zend_Controller_Action
                 $query = new Opus_Search_Query($form->getValue('query'));
                 $hitlist = $query->commit();
                 $resultlist->hitlist = $hitlist;
+                $resultlist->postedData = $data;
             } else {
                 // invalid form
                 $this->view->form = $form->populate($data);
@@ -110,6 +111,8 @@ class Search_SearchController extends Zend_Controller_Action
             }
         } else {
             // nonpost request
+            $form = new FulltextSearch();
+            $this->view->form = $form->populate($resultlist->postedData);
             $data = $this->_request->getParams();
             if (array_key_exists('page', $data)) {
                 // paginator
