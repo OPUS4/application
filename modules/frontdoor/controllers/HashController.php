@@ -158,6 +158,9 @@ class Frontdoor_HashController extends Zend_Controller_Action
 
 
        // Iteration over all files, hashtypes and -values; filling up the arrays $fileNames() and $hashValueType()
+       $gpg = new Opus_GPG();
+       $this->view->verifyResult = array();
+       $this->view->signature = array();
        if ($first_hash !== NULL)
        {
            for ($i = 0; $i < $fileNumber; $i++)
@@ -167,10 +170,21 @@ class Frontdoor_HashController extends Zend_Controller_Action
                      $hashNumber = count($hashes);
                      $names = $document->getFile($i)->getPathName();
                      $fileNames[] = $names;
+                     $this->view->signature[$i] = array();
                      for ($j = 0; $j < $hashNumber; $j++)
                      {
                          $hashValue = $document->getFile($i)->getHashValue($j)->getValue();
                          $hashType = $document->getFile($i)->getHashValue($j)->getType();
+                         if (substr($hashType, 0, 3) === 'gpg') {
+                             try
+                             {
+                                 $this->view->verifyResult[$document->getFile($i)->getPathName()] = $gpg->verifyPublicationFile($document->getFile($i));
+                             }
+                             catch (Exception $e)
+                             {
+                                 $this->view->verifyResult[$document->getFile($i)->getPathName()] = array(array($e->getMessage()));
+                             }
+                         }
                          $hashValueType['hashValue_' .$i. '_' .$j] = $hashValue;
                          $hashValueType['hashType_' .$i. '_' .$j] = $hashType;
                      }
@@ -184,24 +198,5 @@ class Frontdoor_HashController extends Zend_Controller_Action
             $this->fileNumber = $fileNumber = 0;
             $this->view->fileNumber = $fileNumber;
         }
-    }
-
-    public function verifyAction()
-    {
-       $docId = $this->getRequest()->getParam('docId');
-       $doc = new Opus_Document($docId);
-       $gpg = new Opus_GPG();
-
-       foreach ($doc->getFile() as $file)
-       {
-          try
-          {
-             $this->view->verifyResult[$file->getPathName()] = $gpg->verifyPublicationFile($file);
-          }
-          catch (Exception $e)
-          {
-             $this->view->verifyResult[$file->getPathName()] = array(array($e->getMessage()));
-          }
-       }
     }
 }

@@ -70,6 +70,7 @@ if ($this->fileNumber !== 0)
             $hashes = $this->document->getFile($i)->getHashValue();
             $f = $this->document->getFile($i);
             $hashNumber = count($hashes);
+            $show_gpg = false;
             for ($j = 0; $j < $hashNumber; $j++)
             {
                if (array_key_exists ('hashType_' .$i. '_' .$j, $this->hashValueType) === true)
@@ -77,9 +78,58 @@ if ($this->fileNumber !== 0)
                   $hashtype = $this->hashValueType['hashType_' .$i. '_' .$j];
                   $this->signtype = $signtype = substr($hashtype, 0,3);
                   if ($signtype == 'gpg')
-                  {?>
+                  {
+                  	if ($show_gpg === false) {
+                  	// Show GPG-Signatures only once
+                  	$show_gpg = true;
+                  	?>
                      <p><b><?= $this->translate('SignatureValue');?> (<?= $this->file = $file?>)</b></p>
-                     <p><?= $this->signtype?>:<?//Hier ausgeben, ob Signaturprüfung erfolgreich war?></p><?
+                     <p><?= $this->signtype?>:
+                     <?php
+                     // Controller stores signature verification results in $this->verifyResult[$file]
+                     $verification = $this->verifyResult[$file];
+    	             if (count($verification) === 0)
+    	             {
+    	             ?>
+    		             <?= $this->translate('pkm_no_signature') ?>
+    		         <?php
+    	             }
+    	             foreach($verification as $verifiedArray)
+    	             {
+    		             #print_r($verifiedArray);
+    		             foreach($verifiedArray as $verified)
+    		             {
+    		                 if (false === is_object($verified))
+    		                 {
+    		        	     ?>
+           		        	     <?= $verified ?><br/>
+    		        	     <?php
+    		                 }
+    		                 else if ($verified->isValid() === true)
+    		                 {
+  		                         printf($this->translate('pkm_sigcheck_valid'), $verified->getUserId()->getName());
+  		                         echo "<br/>"; 
+    		                 }
+    		                 else
+    		                 {
+   		        	             printf($this->translate('pkm_sigcheck_invalid'), $verified->getUserId()->getName());
+   		        	             echo "<br/>"; 
+        		             }
+        		             // Show key used for signature
+        		             if (true === is_object($verified))
+        		             {
+        		             ?>
+        		                 <a href="<?= $this->url(array('module' => 'pkm', 'controller' => 'index', 'action' => 'showsignature', 'signature' => $signature)) ?>"><?= $this->translate('pkm_show_signature') ?></a><br/>
+        		                 <a href="<?= $this->url(array('module' => 'pkm', 'controller' => 'index', 'action' => 'showkey', 'fingerprint' => $verified->getKeyFingerprint())) ?>"><?= $this->translate('pkm_show_signature_key') ?></a><br/>
+        		             <?php
+        		             }
+        		             ?>
+        		        <?php
+    	    	        }
+    	            }
+    	            ?>
+                   </p><?
+                  	}
                   }
                   else
                   {
