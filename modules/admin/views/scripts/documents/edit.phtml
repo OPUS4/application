@@ -40,6 +40,17 @@
 <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'filemanager', 'action' => 'index', 'docId' => $this->docId), null, true); ?>"><?php echo $this->translate('admin_filemanager_index'); ?></a><br/>
 <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'index', 'assign' => $this->docId), null, true); ?>"><?php echo $this->translate('admin_documents_collectionassign'); ?></a><br/>
 <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'show', 'role' => 1, 'assign' => $this->docId), null, true); ?>"><?php echo $this->translate('admin_documents_organisationalunitassign'); ?></a><br/>
-<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'publish', 'docId' => $this->docId), null, true); ?>"><?php echo $this->translate('admin_documents_publish'); ?></a><br/>
+<?php
+if ($this->actions === 'publish') {
+?>
+    <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'publish', 'docId' => $this->docId), null, true); ?>"><?php echo $this->translate('admin_documents_publish'); ?></a><br/>
+<?php
+}
+else if ($this->actions === 'unpublish') {
+?>
+<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'unpublish', 'docId' => $this->docId), null, true); ?>"><?php echo $this->translate('admin_documents_unpublish'); ?></a><br/>
+<?php
+}
+?>
 <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'documents'), null, true); ?>"><?php echo $this->translate('admin_documents_index'); ?></a><br/>
 <a href="<?php echo $this->url(array('module' => 'admin'), null, true); ?>"><?php echo $this->translate('admin_index_title'); ?></a><br/>

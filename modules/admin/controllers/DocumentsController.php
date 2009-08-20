@@ -176,7 +176,13 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $document = new $this->_modelclass($id);
         $filter = new Opus_Model_Filter;
         $filter->setModel($document);
-        $filter->setBlacklist(array('File'));
+        $filter->setBlacklist(array('File', 'ServerState', 'ServerDatePublished', 'ServerDateModified', 'ServerDateUnlocking'));
+        if ($document->getServerState() === 'unpublished') {
+            $this->view->actions = 'publish';
+        }
+        else if ($document->getServerState() === 'published') {
+        	$this->view->actions = 'unpublish';
+        }
         $modelForm = $form_builder->build($filter);
         $action_url = $this->view->url(array("action" => "create"));
         $modelForm->setAction($action_url);
@@ -204,6 +210,49 @@ class Admin_DocumentsController extends Controller_CRUDAction {
     }
 
     /**
+     * Save model instance
+     *
+     * @return void
+     */
+    public function createAction() {
+        if ($this->_request->isPost() === true) {
+            $data = $this->_request->getPost();
+            $form_builder = new Form_Builder();
+            if (array_key_exists('submit', $data) === false) {
+                $form = $form_builder->buildFromPost($data);
+                $action_url = $this->view->url(array("action" => "create"));
+                $form->setAction($action_url);
+                $this->view->form = $form;
+            } else {
+                $form = $form_builder->buildFromPost($data);
+                if ($form->isValid($data) === true) {
+                    // retrieve values from form and save them into model
+                    $model = $form_builder->getModelFromForm($form);
+                    $form_builder->setFromPost($model, $form->getValues());
+                    $model->store();
+            
+                    // Reindex
+                    $indexer = new Opus_Search_Index_Indexer();
+                    $indexer->removeDocumentFromEntryIndex($model);
+                    $indexer->addDocumentToEntryIndex($model);
+                    
+                    // The first 3 params are module, controller and action.
+                    // Additional parameters are passed through.
+                    $params = $this->getRequest()->getUserParams();
+                    $module = array_shift($params);
+                    $controller = array_shift($params);
+                    $action = array_shift($params);
+                    $this->_redirectTo('', 'index', $controller, $module, $params);
+                } else {
+                    $this->view->form = $form;
+                }
+            }
+        } else {
+            $this->_redirectTo('', 'index');
+        }
+    }
+
+    /**
      * Publishes a document
      *
      * @return void
@@ -217,6 +266,24 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         // Add to index
         $indexer = new Opus_Search_Index_Indexer();
         $indexer->addDocumentToEntryIndex($doc);
+
+        $this->_redirectTo('', 'index');
+    }
+
+    /**
+     * Unpublishes a document
+     *
+     * @return void
+     */
+    public function unpublishAction() {
+        $id = $this->getRequest()->getParam('docId');
+        $doc = new Opus_Document($id);
+        $doc->setServerState('unpublished');
+        $doc->store();
+
+        // Add to index
+        $indexer = new Opus_Search_Index_Indexer();
+        $indexer->removeDocumentFromEntryIndex($doc);
 
         $this->_redirectTo('', 'index');
     }

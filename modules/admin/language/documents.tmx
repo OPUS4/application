@@ -151,6 +151,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="admin_documents_unpublish">
+      <tuv xml:lang="en">
+        <seg>Unpublish document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokument zurückziehen</seg>
+      </tuv>
+    </tu>
+    
     <tu tuid="admin_documents_collectionassign">
       <tuv xml:lang="en">
         <seg>Assign document to collection</seg>
