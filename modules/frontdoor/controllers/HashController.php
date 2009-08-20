@@ -160,7 +160,6 @@ class Frontdoor_HashController extends Zend_Controller_Action
        // Iteration over all files, hashtypes and -values; filling up the arrays $fileNames() and $hashValueType()
        $gpg = new Opus_GPG();
        $this->view->verifyResult = array();
-       $this->view->signature = array();
        if ($first_hash !== NULL)
        {
            for ($i = 0; $i < $fileNumber; $i++)
@@ -170,11 +169,12 @@ class Frontdoor_HashController extends Zend_Controller_Action
                      $hashNumber = count($hashes);
                      $names = $document->getFile($i)->getPathName();
                      $fileNames[] = $names;
-                     $this->view->signature[$i] = array();
                      for ($j = 0; $j < $hashNumber; $j++)
                      {
                          $hashValue = $document->getFile($i)->getHashValue($j)->getValue();
                          $hashType = $document->getFile($i)->getHashValue($j)->getType();
+                         $hashValueType['hashValue_' .$i. '_' .$j] = $hashValue;
+                         $hashValueType['hashType_' .$i. '_' .$j] = $hashType;
                          if (substr($hashType, 0, 3) === 'gpg') {
                              try
                              {
@@ -182,11 +182,9 @@ class Frontdoor_HashController extends Zend_Controller_Action
                              }
                              catch (Exception $e)
                              {
-                                 $this->view->verifyResult[$document->getFile($i)->getPathName()] = array(array($e->getMessage()));
+                                 $this->view->verifyResult[$document->getFile($i)->getPathName()] = array('result' => array($e->getMessage()), 'signature' => $hashValue);
                              }
                          }
-                         $hashValueType['hashValue_' .$i. '_' .$j] = $hashValue;
-                         $hashValueType['hashType_' .$i. '_' .$j] = $hashType;
                      }
                   }
              }

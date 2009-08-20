@@ -114,6 +114,24 @@
       </tuv>
     </tu>
     
+    <tu tuid="pkm_show_signature">
+      <tuv xml:lang="en">
+        <seg>Show signature</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Signatur anzeigen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="pkm_sig_not_found">
+      <tuv xml:lang="en">
+        <seg>Signature not found!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Signatur nicht gefunden!</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="pkm_sign_key">
       <tuv xml:lang="en">
         <seg>Sign key with your internal key</seg>

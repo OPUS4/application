@@ -171,6 +171,40 @@ class Pkm_IndexController extends Zend_Controller_Action
     }
 
 	/**
+	 * Shows a complete signature
+	 *
+	 * @return void
+	 *
+	 */
+    public function showsignatureAction()
+    {
+    	$gpg = new Opus_GPG();
+    	$data = $this->_request->getParams();
+
+        $signaturelist = new Zend_Session_Namespace('signaturelist');
+
+    	if (true === array_key_exists('signature', $data))
+    	{
+        	try {
+        	    $this->_helper->viewRenderer->setNoRender(true);
+                $this->_helper->layout()->disableLayout();
+
+            	// Send plain text response.
+                $this->getResponse()->setHeader('Content-Type', 'text/plain; charset=UTF-8', true);
+                if (true === array_key_exists($data['signature'], $signaturelist->signatures)) {
+                    $this->getResponse()->setBody($signaturelist->signatures[$data['signature']]);
+                }
+                else {
+                	$this->getResponse()->setBody($this->view->translate('pkm_sig_not_found'));
+                }
+        	}
+        	catch (Exception $e) {
+        		$this->getResponse()->setBody($e->getMessage());
+        	}
+    	}
+    }
+
+	/**
 	 * Signs a key with the internal key
 	 * not supported by Crypt_GPG 1.0.0
 	 * so not yet implemented

@@ -37,6 +37,8 @@
  * and 'hashValueType()' from the controller.
  *
  */
+$signaturelist = new Zend_Session_Namespace('signaturelist');
+$signaturelist->signatures = array();
 ?>
 <h1><?= $this-> translate('frontdoor_pagetitle') ?></h1><hr /><br />
 <h2><?= $this-> translate('frontdoor_hashtitle') ?></h2><?
@@ -94,37 +96,46 @@ if ($this->fileNumber !== 0)
     		             <?= $this->translate('pkm_no_signature') ?>
     		         <?php
     	             }
+    	             $sigindex = 0;
     	             foreach($verification as $verifiedArray)
     	             {
     		             #print_r($verifiedArray);
-    		             foreach($verifiedArray as $verified)
+    		             foreach($verifiedArray as $index => $verificationResult)
     		             {
-    		                 if (false === is_object($verified))
-    		                 {
-    		        	     ?>
-           		        	     <?= $verified ?><br/>
-    		        	     <?php
+    		                 if ($index === 'result') {
+    		                 	foreach ($verificationResult as $verified) {
+    		                        if (false === is_object($verified))
+    		                        {
+    		        	            ?>
+           		        	            <?= $verified ?><br/>
+    		        	            <?php
+    		                        }
+    		                        else if ($verified->isValid() === true)
+    		                        {
+  		                                printf($this->translate('pkm_sigcheck_valid'), $verified->getUserId()->getName());
+  		                                echo "<br/>"; 
+    		                        }
+    		                        else
+    		                        {
+   		        	                    printf($this->translate('pkm_sigcheck_invalid'), $verified->getUserId()->getName());
+   		        	                    echo "<br/>"; 
+        		                    }
+                		            // Show key used for signature
+        		                    if (true === is_object($verified))
+        		                    {
+        		                    ?>
+        		                        <a href="<?= $this->url(array('module' => 'pkm', 'controller' => 'index', 'action' => 'showkey', 'fingerprint' => $verified->getKeyFingerprint()), null, true) ?>"><?= $this->translate('pkm_show_signature_key') ?></a><br/>
+        		                    <?php
+        		                    }
+    		                 	}
     		                 }
-    		                 else if ($verified->isValid() === true)
-    		                 {
-  		                         printf($this->translate('pkm_sigcheck_valid'), $verified->getUserId()->getName());
-  		                         echo "<br/>"; 
+    		                 else {
+    		                 	$signaturelist->signatures[$sigindex] = $verificationResult;
+    		                 	?>
+    		                 	<a href="<?= $this->url(array('module' => 'pkm', 'controller' => 'index', 'action' => 'showsignature', 'signature' => $sigindex), null, true) ?>"><?= $this->translate('pkm_show_signature') ?></a><br/>
+    		                 	<?php
+    		                 	$sigindex++;
     		                 }
-    		                 else
-    		                 {
-   		        	             printf($this->translate('pkm_sigcheck_invalid'), $verified->getUserId()->getName());
-   		        	             echo "<br/>"; 
-        		             }
-        		             // Show key used for signature
-        		             if (true === is_object($verified))
-        		             {
-        		             ?>
-        		                 <a href="<?= $this->url(array('module' => 'pkm', 'controller' => 'index', 'action' => 'showsignature', 'signature' => $signature)) ?>"><?= $this->translate('pkm_show_signature') ?></a><br/>
-        		                 <a href="<?= $this->url(array('module' => 'pkm', 'controller' => 'index', 'action' => 'showkey', 'fingerprint' => $verified->getKeyFingerprint())) ?>"><?= $this->translate('pkm_show_signature_key') ?></a><br/>
-        		             <?php
-        		             }
-        		             ?>
-        		        <?php
     	    	        }
     	            }
     	            ?>
