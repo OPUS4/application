@@ -1438,7 +1438,7 @@ CREATE TABLE IF NOT EXISTS `collections_roles` (
 --
 
 INSERT INTO `collections_roles` (`id`, `name`, `position`, `link_docs_path_to_root`, `visible`, `display_browsing`, `display_doclist`, `display_col_front`, `display_frontdoor`) VALUES
-(2, 'Dewey Decimal Classification', 2, 'count', 1, NULL, NULL, NULL, NULL) ;
+(2, 'Dewey Decimal Classification', 2, 'count', 1, 'Number Name', NULL, NULL, NULL) ;
 
 -- --------------------------------------------------------
 

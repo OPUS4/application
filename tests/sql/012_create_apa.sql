@@ -5,7 +5,7 @@
 
 LOCK TABLES `collections_roles` WRITE;
 /*!40000 ALTER TABLE `collections_roles` DISABLE KEYS */;
-INSERT INTO `collections_roles` VALUES (8,'American Psychological Association (APA) Klassifikation',8,'count',1,NULL,NULL,NULL,NULL);
+INSERT INTO `collections_roles` VALUES (8,'American Psychological Association (APA) Klassifikation',8,'count',1,'Number Name',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `collections_roles` ENABLE KEYS */;
 UNLOCK TABLES;
 
