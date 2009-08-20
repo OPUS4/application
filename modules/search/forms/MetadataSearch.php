@@ -64,16 +64,22 @@ class MetadataSearch extends Zend_Form
             ->setMultiOptions(array('0' => 'all_hits'));
         $languageList->addMultiOptions($langs);
 
+        $doctypeList = new Zend_Form_Element_Select('doctype');
+        $doctypes = BrowsingList::getDocumentTypeList();
+        $doctypeList->setLabel('searchfield_doctype')
+            ->setMultiOptions(array('0' => 'all_hits'));
+        $doctypeList->addMultiOptions($doctypes);
+
 		$query = array();
 		$field = array();
 		$boolean = array();
 		for ($n = 0; $n < $this->_queryFieldNumber; $n++)
 		{
-		    $query[$n] = new Zend_Form_Element_Text('query[' . $n . ']');
-		    $query[$n]->addValidator('stringLength', false, array(3, 100));
-		
 		    $field[$n] = new Zend_Form_Element_Select('field[' . $n . ']');
 		    $field[$n]->addMultiOptions($this->listSearchFields());
+
+		    $query[$n] = new Zend_Form_Element_Text('query[' . $n . ']');
+		    $query[$n]->addValidator('stringLength', false, array(3, 100));
 		    
 		    if ($n < ($this->_queryFieldNumber-1))
 		    {
@@ -86,7 +92,7 @@ class MetadataSearch extends Zend_Form
         $submit->setLabel('search_searchaction');
 
         // Add elements to form:
-		$this->addElements(array($truncation, $hitsPerPage, $sort, $languageList));
+		$this->addElements(array($truncation, $hitsPerPage, $sort, $languageList, $doctypeList));
 		for ($n = 0; $n < $this->_queryFieldNumber; $n++)
 		{		
 		    $this->addElements(array($field[$n], $query[$n]));
@@ -122,7 +128,6 @@ class MetadataSearch extends Zend_Form
             'fulltext' => 'searchfield_fulltext',
             'abstract' => 'searchfield_abstract',
             'subject' => 'searchfield_subject',
-            'doctype' => 'searchfield_doctype',
             'year' => 'searchfield_year',
             'institute' => 'searchfield_institute',
             'urn' => 'searchfield_urn',
