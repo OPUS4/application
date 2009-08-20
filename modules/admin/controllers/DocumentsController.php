@@ -232,9 +232,10 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                     $model->store();
             
                     // Reindex
+                    $doc = new Opus_Document($this->getRequest()->getParam('id'));
                     $indexer = new Opus_Search_Index_Indexer();
-                    $indexer->removeDocumentFromEntryIndex($model);
-                    $indexer->addDocumentToEntryIndex($model);
+                    $indexer->removeDocumentFromEntryIndex($doc);
+                    $indexer->addDocumentToEntryIndex($doc);
                     
                     // The first 3 params are module, controller and action.
                     // Additional parameters are passed through.
@@ -242,13 +243,13 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                     $module = array_shift($params);
                     $controller = array_shift($params);
                     $action = array_shift($params);
-                    $this->_redirectTo('', 'index', $controller, $module, $params);
+                    $this->_redirectTo('', 'edit', $controller, $module, $params);
                 } else {
                     $this->view->form = $form;
                 }
             }
         } else {
-            $this->_redirectTo('', 'index');
+            $this->_redirectTo('', 'edit');
         }
     }
 
