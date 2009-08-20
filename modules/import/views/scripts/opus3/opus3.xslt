@@ -132,7 +132,7 @@
             </xsl:attribute>
             
             <!-- All publications in the OPUS table are published, so we can set this statically -->
-            <!--<xsl:attribute name="PublicationState">
+            <!--<xsl:attribute name="ServerState">
                 <xsl:text>published</xsl:text>
             </xsl:attribute>-->
             
@@ -222,21 +222,6 @@
             
             <xsl:call-template name="getInstitute"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
                       
-            <!--
-            Prepared, but commented out: 
-            RangeId
-            
-            Missing fields in other opus3 tables:
-	<table_data name="opus_inst">
-	<row>
-		<field name="source_opus">39</field>
-		<field name="inst_nr">62</field>
-	</row>
-            opus_coll <field name="Collection" />
-            opus_inst <field name="Institute" />
-            opus_schriftenreihe (+ schriftenreihe) <field name="TitleParent" mandatory="yes" multiplicity="4" />
-	        -->
-            
             <xsl:apply-templates select="field" />
         </xsl:element>
     </xsl:template>
