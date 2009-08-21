@@ -41,40 +41,34 @@ class CollectionsImport
 	 */
 	public function __construct($data)
 	{
-		// Analyse the data to find out which classification systems there are
-		// and which converter methods should be used
+		// Add a CollectionRole for Collections
+        $collRole = new Opus_CollectionRole();
+        $collRole->setName('Collections');
+        $collRole->setVisible(1);
+        $collRole->setLinkDocsPathToRoot('count');
+        $collRole->store();
+		// Add a CollectionRole for Series (Schriftenreihen)
+        $seriesRole = new Opus_CollectionRole();
+        $seriesRole->setName('Schriftenreihen');
+        $seriesRole->setVisible(1);
+        $seriesRole->setLinkDocsPathToRoot('count');
+        $roleId = $seriesRole->store();
+		
 		$doclist = $data->getElementsByTagName('table_data');
 		foreach ($doclist as $document) 
 		{
-			$tempdoc = new DOMDocument;
-            $tempdoc->loadXML($data->saveXML($document));
-            $tablename = $tempdoc->getElementsByTagName('table_data')->Item(0)->getAttribute('name');
-            if (strtolower(substr($tablename, 0, 2)) === 'bk') {
-            	// Works!
-            	echo "Importing Bk...";
-            	// Importing via XML
-            	#if (false === file_exists('../workspace/tmp/bk.xml'))
-            	#{
-            	    #$bkPrepare = $this->convertBk($tempdoc, $tablename);
-            	    #$bk = fopen('../workspace/tmp/bk.xml', 'w');
-            	    #fputs($bk, $bkPrepare->saveXml());
-            	    #fclose($bk);
-            	#}
-            	#else {
-            	#	$bkRead = file('../workspace/tmp/bk.xml');
-            	#	$bkPrepare = implode("", $bkRead);
-            	#}
-            	#$importit = Opus_CollectionRole::fromXml($bkPrepare);
-            	$this->importBk($tempdoc, $tablename);
-            	echo "done!\n";
-            	// store classification system
-            }
-            if (strtolower(substr($tablename, 0, 3)) === 'apa') {
-            	// Should work, but untested
-            	echo "Importing APA...";
-             	#$apaPrepare = $this->convertApa($tempdoc, $tablename);
-             	echo "done!\n";
-            	// store classification system
+            #if ($document->getAttribute('name') === 'collections') {
+            #    $facNumbers = $this->importCollections($document, $collRole);
+	/*<row>
+		<field name="coll_id">1</field>
+		<field name="root_id">1</field>
+		<field name="coll_name">TUHH Spektrum Specials</field>
+		<field name="lft">1</field>
+		<field name="rgt">2</field>
+	</row>*/
+            #}
+            if ($document->getAttribute('name') === 'schriftenreihen') {
+                $instNumbers = $this->importSeries($document, $seriesRole);
             }
 		}
 	}
@@ -88,13 +82,13 @@ class CollectionsImport
 	protected function transferOpusClassification($data)
 	{
 		$classification = array();
+
 		$doclist = $data->getElementsByTagName('row');
 		$index = 0;
-		foreach ($doclist as $document) 
+		foreach ($doclist as $document)
 		{
-			$tempdoc = new DOMDocument;
-            $tempdoc->loadXML($data->saveXML($document));
-            foreach ($tempdoc->getElementsByTagName('field') as $field) {
+            $classification[$index] = array();
+            foreach ($document->getElementsByTagName('field') as $field) {
            		$classification[$index][$field->getAttribute('name')] = $field->nodeValue;
             }
             $index++;
@@ -103,271 +97,31 @@ class CollectionsImport
 	}
 
 	/**
-	 * Imports Bk-classification to Opus4 directly (without XML)
+	 * Imports Faculties from Opus3 to Opus4 directly (without XML)
 	 *
 	 * @param DOMDocument $data XML-Document to be imported
 	 * @return array List of documents that have been imported
 	 */
-	protected function importBk($data, $classificationName)
+	protected function importSeries($data, $collRole)
 	{
-		$classification = $this->transferOpusClassification($data);
-		
-		$collRole = new Opus_CollectionRole();
-		$collRole->setName($classificationName);
-		$collRoleId = $collRole->store();
+        $classification = $this->transferOpusClassification($data);
+
+		$subcoll = array();
+
+        // Build a mapping file to associate old IDs with the new ones
+        $fp = fopen('../workspace/tmp/series.map', 'w');
 
 		foreach ($classification as $class) {
-            if (ereg("\.00$", $class['class'])) {
-            	echo ".";
-			    // first level category
-			    $coll = new Opus_Collection($collRoleId);
-			    $coll->setName($class['bez']);
-			    #$coll->setNumber($class['class']);
-			    $subcoll[$class['class']] = $coll;
-			    $collRole->addSubCollection($coll);
-            }
+          	echo ".";
+		    // first level category
+		    $coll = new Opus_Collection($collRole->getId());
+		    $coll->setName($class['name']);
+		    $coll->setTheme('default');
+			fputs($fp, $class['sr_id'] . ' ' . $coll->store() . "\n");
+			$collRole->addSubCollection($coll);
+			$collRole->store();
 		}
-		$collRole->store();
-		foreach ($classification as $class) {
-            if (ereg("0$", $class['class']) && false === ereg("\.00$", $class['class'])) {
-            	$parent = false;
-            	// second level category
-       			echo ".";
-       			if (true === array_key_exists(substr($class['class'], 0, 2).'.00', $subcoll)) {
-       				$parent = $subcoll[substr($class['class'], 0, 2).'.00'];
-       			}
-            	if ($parent === false) {
-            		// if parent still is empty, lets put it on top
-            		$coll = new Opus_Collection($collRoleId);
-			        $coll->setName($class['bez']);
-			        #$coll->setNumber($class['class']);
-			        $subcoll[$class['class']] = $coll;
-			        $collRole->addSubCollection($coll);
-            	}
-            	else {
-			        $coll = new Opus_Collection($collRoleId, $parent->getId());
-			        $coll->setName($class['bez']);
-			        #$coll->setNumber($class['class']);
-			        $subcoll[$class['class']] = $coll;
-			        $parent->addSubCollection($coll);
-            	}
-            }
-		}
-		$collRole->store();
-		foreach ($classification as $class) {
-            if (false === ereg("0$", $class['class'])) {
-            	$parent = false;
-            	// third level category
-           		if (true === array_key_exists(substr($class['class'], 0, 4).'0', $subcoll)) {
-           			echo ".";
-           			$parent = $subcoll[substr($class['class'], 0, 4).'0'];
-           		}
-            	if ($parent === false) {
-            	    // no parent found, try one level higher
-            		if (true === array_key_exists(substr($class['class'], 0, 2).'.00', $subcoll)) {
-           			    echo ".";
-           			    $parent = $subcoll[substr($class['class'], 0, 2).'.00'];
-            	    }            		
-            	}
-            	if ($parent === false) {
-            		// if parent still is empty, lets put it on top
-            		$coll = new Opus_Collection($collRoleId);
-			        $coll->setName($class['bez']);
-			        #$coll->setNumber($class['class']);
-			        $subcoll[$class['class']] = $coll;
-			        $collRole->addSubCollection($coll);
-            	}
-            	else {
-			        $coll = new Opus_Collection($collRoleId, $parent->getId());
-			        $coll->setName($class['bez']);
-			        #$coll->setNumber($class['class']);
-			        $subcoll[$class['class']] = $coll;
-			        $parent->addSubCollection($coll);
-            	}
-            }
-		}
-		$collRole->store();
-	}
-
-	/**
-	 * Converts Bk-classification to Opus4
-	 *
-	 * @param DOMDocument $data XML-Document to be imported
-	 * @return array List of documents that have been imported
-	 */
-	protected function convertBk($data, $classificationName)
-	{
-		$classification = $this->transferOpusClassification($data);
-		
-		$classificationDomDocument = new DOMDocument;
-		$rootNode = $classificationDomDocument->createElement('Opus_CollectionRole');
-		$rootNode->setAttribute('Name', $classificationName);
-	    $classificationDomDocument->appendChild($rootNode);
-
-		foreach ($classification as $key => $class) {
-            if (ereg("\.00$", $class['class'])) {
-            	echo ".";
-			    // first level category
-			    $node = $classificationDomDocument->createElement('Collection');
-			    $node->setAttribute('Name', $class['bez']);
-			    $node->setAttribute('Number', $class['class']);
-			    $rootNode->appendChild($node);
-			    // Reduce the array to improve performance for the next iterations
-			    #array_splice($classification, $key, 1);
-            }
-		}
-		foreach ($classification as $key => $class) {
-            if (ereg("0$", $class['class']) && false === ereg("\.00$", $class['class'])) {
-            	$parent = false;
-            	// second level category
-            	foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
-            		if ($coll->getAttribute('Number') === substr($class['class'], 0, 2).'.00') {
-            			echo ".";
-            			$parent = $coll;
-            		}
-            	}
-	            $node = $classificationDomDocument->createElement('Collection');
-			    $node->setAttribute('Name', $class['bez']);
-			    $node->setAttribute('Number', $class['class']);
-			    if ($parent !== false)
-			    {
-			        $parent->appendChild($node);
-			    }
-			    else
-			    {
-			    	// if there is no parent, put elements of the second level directly under the root node
-			    	$rootNode->appendChild($node);
-			    }
-			    // Reduce the array to improve performance for the next iterations
-			    #array_splice($classification, $key, 1);
-            }
-		}
-		foreach ($classification as $class) {
-            if (false === ereg("0$", $class['class'])) {
-            	$parent = false;
-            	// third level category
-            	foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
-            		if ($coll->getAttribute('Number') === substr($class['class'], 0, 4).'0') {
-            			echo ".";
-            			$parent = $coll;
-            		}
-            	}
-            	if ($parent === false) {
-            	    // no parent found, try one level higher
-            	    foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
-            		    if ($coll->getAttribute('Number') === substr($class['class'], 0, 2).'.00') {
-            			    echo ".";
-            			    $parent = $coll;
-            		    }
-            	    }            		
-            	}
-		        $node = $classificationDomDocument->createElement('Collection');
-		        $node->setAttribute('Name', $class['bez']);
-		        $node->setAttribute('Number', $class['class']);
-			    if ($parent !== false)
-			    {
-			        $parent->appendChild($node);
-			    }
-			    else
-			    {
-			    	// if there is no parent, put elements of the second level directly under the root node
-			    	$rootNode->appendChild($node);
-			    }
-            }
-		}
-		
-		#echo $classificationDomDocument->saveXml();
-		return $classificationDomDocument;
-	}
-
-	/**
-	 * Converts Apa classification to Opus4
-	 *
-	 * @param DOMDocument $data XML-Document to be imported
-	 * @return array List of documents that have been imported
-	 */
-	protected function convertApa($data, $classificationName)
-	{
-		$classification = $this->transferOpusClassification($data);
-		
-		$classificationDomDocument = new DOMDocument;
-		$rootNode = $classificationDomDocument->createElement('CollectionRole');
-		$rootNode->setAttribute('name', $classificationName);
-	    $classificationDomDocument->appendChild($rootNode);
-
-		foreach ($classification as $key => $class) {
-            if (ereg("00$", $class['class'])) {
-			    echo ".";
-			    // first level category
-			    $node = $classificationDomDocument->createElement('Collection');
-			    $node->setAttribute('name', $class['bez']);
-			    $node->setAttribute('class', $class['class']);
-			    $rootNode->appendChild($node);
-			    // Reduce the array to improve performance for the next iterations
-			    #array_splice($classification, $key, 1);
-            }
-		}
-		foreach ($classification as $key => $class) {
-            if (ereg("0$", $class['class']) && false === ereg("00$", $class['class'])) {
-            	$parent = false;
-            	// second level category
-            	foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
-            		if ($coll->getAttribute('class') === substr($class['class'], 0, 2).'00') {
-            			echo ".";
-            			$parent = $coll;
-            		}
-            	}
-	            $node = $classificationDomDocument->createElement('Collection');
-			    $node->setAttribute('name', $class['bez']);
-			    $node->setAttribute('class', $class['class']);
-			    if ($parent !== false)
-			    {
-			        $parent->appendChild($node);
-			    }
-			    else
-			    {
-			    	// if there is no parent, put elements of the second level directly under the root node
-			    	$rootNode->appendChild($node);
-			    }
-			    // Reduce the array to improve performance for the next iterations
-			    #array_splice($classification, $key, 1);
-            }
-		}
-		foreach ($classification as $class) {
-            if (false === ereg("0$", $class['class'])) {
-            	$parent = false;
-            	// third level category
-            	foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
-            		if ($coll->getAttribute('class') === substr($class['class'], 0, 3).'0') {
-            			echo ".";
-            			$parent = $coll;
-            		}
-            	}
-            	if ($parent === false) {
-            	    // no parent found, try one level higher
-            	    foreach ($classificationDomDocument->getElementsByTagName('Collection') as $coll) {
-            		    if (substr($coll->getAttribute('class'), 0, 2) === substr($class['class'], 0, 2) && ereg("00$", $coll->getAttribute('class'))) {
-            			    echo ".";
-            			    $parent = $coll;
-            		    }
-            	    }
-            	}
-		        $node = $classificationDomDocument->createElement('Collection');
-		        $node->setAttribute('name', $class['bez']);
-		        $node->setAttribute('class', $class['class']);
-			    if ($parent !== false)
-			    {
-			        $parent->appendChild($node);
-			    }
-			    else
-			    {
-			    	// if there is no parent, put elements of the second level directly under the root node
-			    	$rootNode->appendChild($node);
-			    }
-            }
-		}
-		
-		#echo $classificationDomDocument->saveXml();
-		return $classificationDomDocument;
+         echo "\n";
+		 fclose($fp);
 	}
 }

@@ -212,6 +212,9 @@
             </xsl:if>
             <xsl:call-template name="getAdvisors"><xsl:with-param name="OriginalID"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
             
+            <!-- Series -->
+            <xsl:call-template name="getSeries"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
+            
             <!-- Classifications and Subjects -->
             <xsl:call-template name="getCcs"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
             <xsl:call-template name="getPacs"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
@@ -257,6 +260,20 @@
                 </xsl:attribute>
             </xsl:element>
         </xsl:if>
+    </xsl:template>
+    <!-- temporary series information -->
+    <xsl:template name="getSeries">
+        <xsl:param name="source_id" required="yes" />
+        <xsl:for-each select="/mysqldump/database/table_data[@name='opus_schriftenreihe']/row[field[@name='source_opus']=$source_id]">
+            <xsl:element name="OldSeries">
+                <xsl:attribute name="Value">
+                    <xsl:value-of select="field[@name='sr_id']" />
+                </xsl:attribute>
+                <xsl:attribute name="Issue">
+                    <xsl:value-of select="field[@name='sequence_nr']" />
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:for-each>
     </xsl:template>
     <!-- temporary Institute information -->
     <xsl:template name="getInstitute">

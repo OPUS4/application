@@ -175,7 +175,7 @@ class Opus3MigrationParameters extends Opus3Migration
     		$failure = true;
     		echo "Usage: " . $argv[0] . " [options] importfile\n";
     		echo "Options:\n";
-    		#echo "--without-classes Do not import the classification systems\n";
+    		echo "--with-collections Import collections and series\n";
     		echo "--without-institutes Do not import the faculties and institutes\n";
     		echo "--without-licences Do not import the licences\n";
     		echo "--without-metadata Do not import the metadata of the documents (if you do not import the metadata, the database will be read)\n";
@@ -246,11 +246,10 @@ class Opus3MigrationParameters extends Opus3Migration
         }
 
         // Analyse the other parameters
-		// Import classification systems and classes?
-		// Its not necessary to import classifications, they all should be predefined
-		#if (false === in_array("--without-classes", $argv)) {
-			#$this->whatToDo[] = "classes";
-		#}
+		// Import collections and series?
+		if (false === in_array("--with-collections", $argv)) {
+			$this->whatToDo[] = "collections";
+		}
 
 		// Import faculties and instituites?
 		if (false === in_array("--without-institutes", $argv)) {
@@ -282,7 +281,7 @@ class Opus3MigrationParameters extends Opus3Migration
 		$importData = $this->loadImportFile();
 
 		// Import classification systems and classes
-		if (true === in_array('classes', $this->whatToDo)) {
+		if (true === in_array('collections', $this->whatToDo)) {
 		    $importCollections = new CollectionsImport($importData);
 		}
 
@@ -361,12 +360,11 @@ class Opus3MigrationReadline extends Opus3Migration {
 
 		$importData = $this->loadImportFile();
 
-		// Import classification systems and classes
-		// Its not necessary to import classifications, they are predefined
-		#$input = readline('Do you want to import all the classifications from OPUS3? Note: Only BK, APA, CCS, MSC and PACS are supported and detected automatically! (y/n) ');
-		#if ($input === 'y' || $input === 'yes') {
-		#    $importCollections = new CollectionsImport($importData);
-		#}
+		// Import collections and series
+		$collectionsinput = readline('Do you want to import all the collections from OPUS3? (y/n) ');
+		if ($collectionsinput === 'y' || $collectionsinput === 'yes') {
+		    $importCollections = new CollectionsImport($importData);
+		}
 
 		// Import faculties and institutes
 		$input = readline('Do you want to import all the faculties and institutes from OPUS3? (y/n) ');

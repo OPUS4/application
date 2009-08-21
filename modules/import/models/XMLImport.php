@@ -141,8 +141,12 @@ class XMLImport
             $apa = null;
             $bkNotations = null;
             $bk = null;
+            $oldSeries = null;
+            $seriesCollection = null;
+            $issue = null;
             $oldid = $document->getElementsByTagName('IdentifierOpus3')->Item(0)->getAttribute('Value');
             $licence = $document->getElementsByTagName('OldLicence')->Item(0);
+            $oldSeries = $document->getElementsByTagName('OldSeries')->Item(0);
             $institutes = $document->getElementsByTagName('OldInstitute');
             $ddcNotation = $document->getElementsByTagName('OldDdc')->Item(0);
             $ccsNotations = $document->getElementsByTagName('OldCcs');
@@ -173,6 +177,22 @@ class XMLImport
                     }
                 }
                 $this->document->removeChild($ddcNotation);
+            }
+            if ($oldSeries !== null)
+            {
+                $seriesName = 'Schriftenreihen';
+                $oldSeriesId = $oldSeries->getAttribute('Value');
+                $issue = $oldSeries->getAttribute('Issue');
+                $newSeriesId = $this->getSeries($oldSeriesId);
+                if (array_key_exists($seriesName, $this->collections) === true) {
+                	if ($newSeriesId !== null) {
+                        $seriesCollection = new Opus_Collection($this->collections[$seriesName], $newSeriesId);
+                    }
+                    else {
+                	    echo "Mapping file for " . $this->collections[$seriesName] . " does not exist or class not found. Series $series not imported for old ID $oldid\n";
+                    }
+                }
+                $this->document->removeChild($oldSeries);
             }
             if ($institutes->length > 0)
             {
@@ -235,6 +255,11 @@ class XMLImport
 			    // Add this document to its DDC classification
 			    if ($ddc !== null) {
 			        $ddc->addEntry($doc);
+			    }
+			    if ($seriesCollection !== null) {
+			        $seriesCollection->addEntry($doc);
+			        // TODO: Add Issue of the document to metadata
+			        //$doc->setIssue($issue);
 			    }
                 if (count($institute) > 0) {
                     foreach($institute as $instEntry) {
@@ -299,6 +324,21 @@ class XMLImport
 			$lic[$mappedLicence[0]] = $mappedLicence[1];
 		}
 		return $lic[$shortName];
+	 }
+
+	/**
+	 * Get the new series ID for a document
+	 *
+	 * @return int New series ID the document should be added to
+	 */
+	 public function getSeries($oldId)
+	 {
+	 	$fp = file('../workspace/tmp/series.map');
+		foreach ($fp as $licence) {
+			$mappedLicence = split("\ ", $licence);
+		    $lic[$mappedLicence[0]] = $mappedLicence[1];
+		}
+		return $lic[$oldId];
 	 }
 
     /**
