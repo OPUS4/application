@@ -110,23 +110,8 @@ class BrowsingList
 	 */
 	public static function getDocumentTypeList()
 	{
-        // TODO Do not use a hardcoded path to xml files
-        $xml_path = '../config/xmldoctypes/';
-        $result = array();
-        if ($dirhandle = opendir($xml_path)) {
-            while (false !== ($file = readdir($dirhandle))) {
-                $path_parts = pathinfo($file);
-                $filename = $path_parts['filename'];
-                $basename = $path_parts['basename'];
-                $extension = $path_parts['extension'];
-                if (($basename === '.') or ($basename === '..') or ($extension !== 'xml')) {
-                    continue;
-                }
-                $result[$filename] = $filename;
-            }
-            closedir($dirhandle);
-            asort($result);
-        }
+        $result = Opus_Document_Type::getAvailableTypeNames();
+        asort($result);
         return $result;
 	}
 
