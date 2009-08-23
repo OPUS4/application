@@ -111,8 +111,9 @@ class Publish_IndexController extends Zend_Controller_Action {
                         $caption = $pages[0]['caption'];
                         $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create', 'page' => 1));
                     } else {
+                        $alwayshidden = array('Type', 'ServerState', 'ServerDateModified', 'ServerDatePublished');
                         $documentWithFilter->setModel($document)
-                            ->setBlacklist($type->getPublishFormBlackList())
+                            ->setBlacklist(array_merge($type->getPublishFormBlackList(), $alwayshidden))
                             ->setSortOrder($type->getPublishFormSortOrder());
                         $caption = 'publish_index_create_' . $type->getName();
                         $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create'));
