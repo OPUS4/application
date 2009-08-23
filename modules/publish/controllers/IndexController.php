@@ -88,16 +88,14 @@ class Publish_IndexController extends Zend_Controller_Action {
                 // validate document type
                 $form = new Overview();
                 if ($form->isValid($data) === true) {
-                    // TODO Do not use a hardcoded path
-                    $filename = '../config/xmldoctypes/' .
-                        $form->getValue('selecttype') .
-                        '.xml';
-                    if (file_exists($filename) === false) {
+                    $possibleDoctypes = Opus_Document_Type::getAvailableTypeNames();
+                    $selectedDoctype = $form->getValue('selecttype');
+                    if (in_array($selectedDoctype, $possibleDoctypes) === false) {
                         // TODO: error message
-                        // file does not exists, back to select form
+                        // document type does not exists, back to select form
                         $this->_redirector->gotoSimple('index');
                     }
-                    $type = new Opus_Document_Type($filename);
+                    $type = new Opus_Document_Type($selectedDoctype);
                     $pages = $type->getPages();
                     $document = new Opus_Document(null, $type);
 
