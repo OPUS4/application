@@ -72,6 +72,7 @@ class Admin_CollectionController extends Controller_Action {
      */
     public function editAction() {
         $role = $this->getRequest()->getParam('role');
+        $this->view->role = $role;
         $path = $this->getRequest()->getParam('path');
         $form_builder = new Form_Builder();
         $collection = new Opus_CollectionRole($role);

@@ -27,10 +27,10 @@
 
     <tu tuid="admin_collections_display_note">
       <tuv xml:lang="en">
-        <seg>In all the Display-fields you can choose, what is to display from this Collection in the listed context. You can choose 'Name' and 'Number' in any order you like.</seg>
+        <seg>In all the Display-fields you can choose, what is to display from this Collection in the listed context. You can choose 'Name' and 'Number' in any order you like. Important note: Please seperate the values by comma!</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>In den Display-Feldern können Sie einstellen, welche Metadaten der Sammlung in welchem Zusammenhang angezeigt werden sollen. Hier können in beliebiger Reihenfolge die Werte 'Name' und 'Number' eingegeben werden.</seg>
+        <seg>In den Display-Feldern können Sie einstellen, welche Metadaten der Sammlung in welchem Zusammenhang angezeigt werden sollen. Hier können in beliebiger Reihenfolge die Werte 'Name' und 'Number' eingegeben werden. Wichtig: Die Werte müssen mit Komma voneinander getrennt werden!</seg>
       </tuv>
     </tu>
     

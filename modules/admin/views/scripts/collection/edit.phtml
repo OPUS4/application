@@ -33,5 +33,9 @@
  */
 ?>
 <h1>Opus Application - <?= $this->title ?></h1>
-<p><?= $this->translate('admin_collections_display_note') ?></p>
+<p><?php
+if ($this->role === 1) {
+    echo $this->translate('admin_collections_display_note'); 
+}
+?></p>
 <?= $this->form ?>
