@@ -54,7 +54,7 @@
          
     </page>
     
-    <page caption="caption_02_doctoral_thesis">
+    <page caption="caption_02_festschrift">
     
         <field name="TitleMain" mandatory="yes" frontdoorweight="1" adminformweight="1" publishformweight="101" multiplicity="4" />
         <field name="TitleAbstract" mandatory="yes" frontdoorweight="1" adminformweight="1" publishformweight="102" multiplicity="4" />
@@ -86,7 +86,7 @@
         
     </page>
     
-        <page caption="caption_03_doctoral_thesis">
+        <page caption="caption_03_festschrift">
         
         <field name="PublisherName" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="101" multiplicity="1" />
         <field name="PublisherPlace" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="102" multiplicity="1"/>
