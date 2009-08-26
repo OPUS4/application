@@ -174,16 +174,18 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $this->view->title = $this->view->translate('admin_documents_edit');
         $form_builder = new Form_Builder();
         $document = new $this->_modelclass($id);
-        $filter = new Opus_Model_Filter;
-        $filter->setModel($document);
-        $filter->setBlacklist(array('File', 'ServerState', 'ServerDatePublished', 'ServerDateModified', 'ServerDateUnlocking'));
         if ($document->getServerState() === 'unpublished') {
             $this->view->actions = 'publish';
         }
         else if ($document->getServerState() === 'published') {
         	$this->view->actions = 'unpublish';
         }
-        $modelForm = $form_builder->build($filter);
+        $type = new Opus_Document_Type($document->getType());
+        $documentWithFilter = new Opus_Model_Filter;
+        $documentWithFilter->setModel($document)
+            ->setBlacklist(array_merge(array('IdentifierOpus3', 'Source'), $type->getAdminFormBlackList()))
+            ->setSortOrder($type->getAdminFormSortOrder());
+        $modelForm = $form_builder->build($documentWithFilter);
         $action_url = $this->view->url(array("action" => "create"));
         $modelForm->setAction($action_url);
         $this->view->form = $modelForm;
