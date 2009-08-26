@@ -57,8 +57,8 @@ class CollectionsImport
 		$doclist = $data->getElementsByTagName('table_data');
 		foreach ($doclist as $document) 
 		{
-            #if ($document->getAttribute('name') === 'collections') {
-            #    $facNumbers = $this->importCollections($document, $collRole);
+            if ($document->getAttribute('name') === 'collections') {
+                $facNumbers = $this->importCollections($document, $collRole);
 	/*<row>
 		<field name="coll_id">1</field>
 		<field name="root_id">1</field>
@@ -66,7 +66,7 @@ class CollectionsImport
 		<field name="lft">1</field>
 		<field name="rgt">2</field>
 	</row>*/
-            #}
+            }
             if ($document->getAttribute('name') === 'schriftenreihen') {
                 $instNumbers = $this->importSeries($document, $seriesRole);
             }
@@ -97,7 +97,69 @@ class CollectionsImport
 	}
 
 	/**
-	 * Imports Faculties from Opus3 to Opus4 directly (without XML)
+	 * Imports Collections from Opus3 to Opus4 directly (without XML)
+	 *
+	 * @param DOMDocument $data XML-Document to be imported
+	 * @return array List of documents that have been imported
+	 */
+	protected function importCollections($data, $collRole)
+	{
+        $collections = $this->transferOpusClassification($data);
+        
+        // sort collections array by left-value
+        foreach ($collections as $key => $row) {
+            $colls[$key]    = $row['lft'];
+        }
+
+        sort($colls);
+        
+		$subcoll = array();
+
+        // Build a mapping file to associate old IDs with the new ones
+        $fp = fopen('../workspace/tmp/collections.map', 'w');
+
+		foreach ($colls as $key => $c) {
+		    $class = $collections[$key];
+		    // check if this is first level Collection
+		    // its first level, if coll_id = root_id
+		    if ($class['coll_id'] === $class['root_id']) {
+		        echo ".";
+		        $coll = new Opus_Collection($collRole->getId());
+    		    $coll->setName($class['coll_name']);
+	    	    $coll->setTheme('default');
+	    	    $newCollId = $coll->store();
+		    	fputs($fp, $class['coll_id'] . ' ' . $newCollId . "\n");
+		    	$subcoll[$class['coll_id']] = $newCollId;
+			    $collRole->addSubCollection($coll);
+			    $collRole->store();
+		    }
+		}
+		#reset($colls);
+		#foreach ($colls as $key => $c) {
+		#    $class = $collections[$key];
+		    // check if this is first level Collection
+		    // its first level, if coll_id = root_id
+		#    if ($class['coll_id'] !== $class['root_id']) {
+		    	// first level elements are already inside, so lets proceed with next level
+		#        echo ".";
+		#        $parentCollId = $subcoll[$class['coll_id']];
+		#        $coll = new Opus_Collection($collRole->getId(), $parentCollId);
+    #		    $coll->setName($class['name']);
+	 #   	    $coll->setTheme('default');
+	  #  	    $newCollId = $coll->store();
+		#    	fputs($fp, $class['coll_id'] . ' ' . $newCollId . "\n");
+		#    	$subcoll[$class['coll_id']] = $newCollId;
+		#	    $parentColl->addSubCollection($coll);
+		#	    $parentColl->store();
+		 #   }
+		#}
+		
+         echo "\n";
+		 fclose($fp);
+	}
+
+	/**
+	 * Imports Series from Opus3 to Opus4 directly (without XML)
 	 *
 	 * @param DOMDocument $data XML-Document to be imported
 	 * @return array List of documents that have been imported
@@ -105,8 +167,6 @@ class CollectionsImport
 	protected function importSeries($data, $collRole)
 	{
         $classification = $this->transferOpusClassification($data);
-
-		$subcoll = array();
 
         // Build a mapping file to associate old IDs with the new ones
         $fp = fopen('../workspace/tmp/series.map', 'w');
