@@ -168,7 +168,13 @@ class XMLImport
                 $ddc_id = null;
                 if (array_key_exists($ddcName, $this->collections) === true) {
                     //$ddc_id = $this->map(MappingFile::getShortName($ddcName), $ddcValue);
-                    $ddc_id = Opus_Collection_Information::getClassification($this->collections[$ddcName], $ddcValue);
+                    $ddcVal = Opus_Collection_Information::getClassification($this->collections[$ddcName], $ddcValue);
+                    if (true === is_array($ddcVal)) {
+                    	$ddc_id = $ddcVal[0];
+                    }
+                    else {
+            	        $ddc_id = $ddcVal;
+                    }
                     if ($ddc_id !== null) {
                         $ddc = new Opus_Collection($this->collections[$ddcName], $ddc_id);
                     }
@@ -202,16 +208,24 @@ class XMLImport
                 for ($c = 0; $c < $length; $c++) {
                     // The item index is 0 any time, because the item is removed after processing
                     $instituteId = $institutes->Item(0);
-                    $instituteValue = $instituteId->getAttribute('Value');
+                    $oldInstituteValue = $instituteId->getAttribute('Value');
+                    $instituteReturnValue = null;
+                    $instituteReturnValue = $this->getInstitute($instituteId->getAttribute('Value'));
+                    if (true === is_array($instituteReturnValue)) {
+                    	$instituteValue = $instituteReturnValue[0];
+                    }
+                    else {
+            	        $instituteValue = $instituteReturnValue;
+                    }
                     if (array_key_exists($instituteName, $this->collections) === true) {
-                        if ($instituteValue !== null) {
-                            $institute[] = new Opus_Collection($this->collections[$instituteName], $this->getInstitute($instituteValue));
+                        if (false === empty($instituteValue) && $instituteValue !== null) {
+                            $institute[] = new Opus_Collection($this->collections[$instituteName], $instituteValue);
                         }
                         else {
-                            echo "Mapping file for " . $this->collections[$instituteName]. " does not exist or class not found. Institute assignation $inst_id not imported for old ID $oldid\n";
+                            echo "Mapping file for " . $this->collections[$instituteName]. " does not exist or class not found. Institute assignation $oldInstituteValue not imported for old ID $oldid\n";
                         }
                     }
-                    $this->document->removeChild($instituteId);
+                  	$this->document->removeChild($instituteId);
                 }
             }
             if ($ccsNotations->length > 0)
@@ -358,7 +372,6 @@ class XMLImport
 
 	 /**
 	 * maps a notation from Opus3 on Opus4 schema
-	 * depracated - dont use it any more since Mapping files are no longer supported
 	 *
 	 * @param string $data notation
 	 * @return integer ID in Opus4
@@ -370,17 +383,17 @@ class XMLImport
         for ($c = 0; $c < $length; $c++) {
             // The item index is 0 any time, because the item is removed after processing
             $item = $inputCollection->Item(0);
-            $v = $item->getAttribute('Value');
-            if (true === is_array($v)) {
-            	$value = $v[0];
-            }
-            else {
-            	$value = $v;
-            }
+            $value = $item->getAttribute('Value');
             $id = null;
             if (array_key_exists($name, $this->collections) === true) {
                 try {
-                    $id = Opus_Collection_Information::getClassification($this->collections[$name], $value);
+                    $returnedId = Opus_Collection_Information::getClassification($this->collections[$name], $value);
+                    if (true === is_array($returnedId)) {
+                    	$id = $returnedId[0];
+                    }
+                    else {
+            	        $id = $returnedId;
+                    }
                 }
                 catch (Exception $e) {
                 	// do nothing, but continue
