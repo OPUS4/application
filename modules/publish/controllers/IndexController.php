@@ -187,9 +187,9 @@ class Publish_IndexController extends Zend_Controller_Action {
             if ($summaryForm->isValid($postdata) === true) {
                 $form_builder = new Form_Builder();
                 $model_hidden = Form_Builder::HIDDEN_MODEL_ELEMENT_NAME;
-                $model = $form_builder->uncompressModel($postdata[$model_hidden]);
+                $document = $form_builder->uncompressModel($postdata[$model_hidden]);
                 if (array_key_exists('submit', $postdata) === true) {
-                    $id = $model->store();
+                    $id = $document->store();
                     $this->view->title = $this->view->translate('publish_controller_upload');
                     $uploadForm = new FileUpload();
                     $action_url = $this->view->url(array('controller' => 'index', 'action' => 'upload'));
@@ -199,7 +199,14 @@ class Publish_IndexController extends Zend_Controller_Action {
                     $uploadForm->DocumentId->setValue($id);
                     $this->view->form = $uploadForm;
                 } else if (array_key_exists('back', $postdata) === true) {
-                    $form = $form_builder->build($model);
+                    $documentWithFilter = new Opus_Model_Filter;
+                    $type = new Opus_Document_Type($document->getType());
+                    $alwayshidden = array('Type', 'ServerState', 'ServerDateModified', 'ServerDatePublished', 'File',
+                            'IdentifierOpus3', 'Source');
+                    $documentWithFilter->setModel($document)
+                        ->setBlacklist(array_merge($type->getPublishFormBlackList(), $alwayshidden))
+                        ->setSortOrder($type->getPublishFormSortOrder());
+                    $form = $form_builder->build($documentWithFilter);
                     $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create'));
                     $form->setAction($action_url);
                     $this->view->title = $this->view->translate('publish_controller_create');
