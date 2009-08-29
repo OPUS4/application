@@ -183,7 +183,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $type = new Opus_Document_Type($document->getType());
         $documentWithFilter = new Opus_Model_Filter;
         $documentWithFilter->setModel($document)
-            ->setBlacklist(array_merge(array('IdentifierOpus3', 'Source'), $type->getAdminFormBlackList()))
+            ->setBlacklist(array_merge(array('IdentifierOpus3', 'Source', 'File', 'ServerState', 'ServerDatePublished', 'ServerDateModified', 'ServerDateUnlocking'), $type->getAdminFormBlackList()))
             ->setSortOrder($type->getAdminFormSortOrder());
         $modelForm = $form_builder->build($documentWithFilter);
         $action_url = $this->view->url(array("action" => "create"));

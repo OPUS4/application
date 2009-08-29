@@ -109,7 +109,7 @@ class Publish_IndexController extends Zend_Controller_Action {
                         $caption = $pages[0]['caption'];
                         $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create', 'page' => 1));
                     } else {
-                        $alwayshidden = array('Type', 'ServerState', 'ServerDateModified', 'ServerDatePublished');
+                        $alwayshidden = array('IdentifierOpus3', 'Type', 'ServerState', 'ServerDateModified', 'ServerDatePublished');
                         $documentWithFilter->setModel($document)
                             ->setBlacklist(array_merge($type->getPublishFormBlackList(), $alwayshidden))
                             ->setSortOrder($type->getPublishFormSortOrder());

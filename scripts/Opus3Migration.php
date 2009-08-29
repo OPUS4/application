@@ -56,7 +56,7 @@ class Opus3Migration extends Application_Bootstrap {
     protected $magicPath = '/usr/share/file/magic'; # on Ubuntu-Systems this should be the magic path
     protected $stylesheet;
     protected $xslt;
-    protected $docStack;
+    protected $docStack = array();
     protected $signaturePath;
     protected $signaturePassword;
 
@@ -102,7 +102,6 @@ class Opus3Migration extends Application_Bootstrap {
 
     protected function readDocsFromDatabase() {
     	    echo "Reading existing metadata from database, this could take some time";
-    	    $this->docStack = array();
     		$docList = Opus_Document::getAllIds();
     		foreach ($docList as $id) {
     			$this->docStack[]['document'] = new Opus_Document($id);
@@ -298,23 +297,30 @@ class Opus3MigrationParameters extends Opus3Migration
 		// Import documents metadata
 		if (true === in_array('metadata', $this->whatToDo)) {
 		    $import = new XMLImport($this->xslt, $this->stylesheet);
-		    $result = $import->import($importData);
-		    $this->docStack = $result['success'];
-		    foreach ($result['success'] as $doc) {
-		    	echo "Successfully imported old ID " . $doc['oldid'] . "\n";
-		    	$import->log("Successfully imported old ID " . $doc['oldid'] . "\n");
-		    }
+		    $toImport = $import->initImportFile($importData);
 		    $logfile = '../workspace/tmp/importerrors.xml';
 		    $f = fopen($logfile, 'w');
-		    foreach ($result['failure'] as $doc) {
-		    	echo "ERROR: " . $doc['message'] . " for old ID " . $doc['oldid'] . "\n";
-		    	$import->log("ERROR: " . $doc['message'] . " for old ID " . $doc['oldid'] . "\n");
-		    	fputs($f, $doc['entry'] . "\n");
+		    $successCount = 0;
+		    $failureCount = 0;
+		    foreach ($toImport as $document) {
+		        $result = $import->import($document);
+		        if ($result['result'] === 'success') {
+		            #$this->docStack[]['document'] = $result['document'];
+                    echo "Successfully imported old ID " . $result['oldid'] . "\n";
+                    $import->log("Successfully imported old ID " . $result['oldid'] . "\n");
+                    $successCount++;
+		        }
+		        else if ($result['result'] === 'failure') {
+		    	    echo "ERROR: " . $result['message'] . " for old ID " . $result['oldid'] . "\n";
+		    	    $import->log("ERROR: " . $result['message'] . " for old ID " . $result['oldid'] . "\n");
+		    	    fputs($f, $result['entry'] . "\n");
+		    	    $failureCount++;
+		        }
 		    }
 		    fclose($f);
 		    $import->finalize();
-		    echo "Imported " . count($result['success']) . " documents successfully.\n";
-		    echo count($result['failure']) . " documents have not been imported due to failures listed above. See $logfile for details about failed entries.\n";
+		    echo "Imported " . $successCount . " documents successfully.\n";
+		    echo $failureCount . " documents have not been imported due to failures listed above. See $logfile for details about failed entries.\n";
 		}
 		// if no metadata is imported use now the metadata already stored in database
    		else {
@@ -365,40 +371,52 @@ class Opus3MigrationReadline extends Opus3Migration {
 		if ($collectionsinput === 'y' || $collectionsinput === 'yes') {
 		    $importCollections = new CollectionsImport($importData);
 		}
+		unset($importCollections);
 
 		// Import faculties and institutes
 		$input = readline('Do you want to import all the faculties and institutes from OPUS3? (y/n) ');
 		if ($input === 'y' || $input === 'yes') {
 		    $importInstitutes = new InstituteImport($importData);
 		}
+		unset($importInstitutes);
 
 		// Import Licences
 		$licenceinput = readline('Do you want to import the licences from OPUS3? (y/n) ');
 		if ($licenceinput === 'y' || $licenceinput === 'yes') {
 		    $importLicences = new LicenceImport($importData);
 		}
+		unset($importLicences);
 
 		// Import documents
 		$metadatainput = readline('Do you want to import the metadata of all documents from OPUS3? (y/n) ');
 		if ($metadatainput === 'y' || $metadatainput === 'yes') {
 		    $import = new XMLImport($this->xslt, $this->stylesheet);
-		    $result = $import->import($importData);
-		    $this->docStack = $result['success'];
-		    foreach ($result['success'] as $doc) {
-		    	echo "Successfully imported old ID " . $doc['oldid'] . "\n";
-		    	$import->log("Successfully imported old ID " . $doc['oldid'] . "\n");
-		    }
+		    $toImport = $import->initImportFile($importData);
 		    $logfile = '../workspace/tmp/importerrors.xml';
 		    $f = fopen($logfile, 'w');
-		    foreach ($result['failure'] as $doc) {
-		    	echo "ERROR: " . $doc['message'] . " for old ID " . $doc['oldid'] . "\n";
-		    	$import->log("ERROR: " . $doc['message'] . " for old ID " . $doc['oldid'] . "\n");
-		    	fputs($f, $doc['entry'] . "\n");
+		    $successCount = 0;
+		    $failureCount = 0;
+		    foreach ($toImport as $document) {
+		        echo "Memory amount: " . round(memory_get_usage()/1024/1024, 2) . " (MB)\n";
+		        $result = $import->import($document);
+		        if ($result['result'] === 'success') {
+		            $this->docStack[]['document'] = $result['document'];
+                    echo "Successfully imported old ID " . $result['oldid'] . "\n";
+                    $import->log("Successfully imported old ID " . $result['oldid'] . "\n");
+                    $successCount++;
+		        }
+		        else if ($result['result'] === 'failure') {
+		    	    echo "ERROR: " . $result['message'] . " for old ID " . $result['oldid'] . "\n";
+		    	    $import->log("ERROR: " . $result['message'] . " for old ID " . $result['oldid'] . "\n");
+		    	    fputs($f, $result['entry'] . "\n");
+		    	    $failureCount++;
+		        }
+		        flush();
 		    }
 		    fclose($f);
 		    $import->finalize();
-		    echo "Imported " . count($result['success']) . " documents successfully.\n";
-		    echo count($result['failure']) . " documents have not been imported due to failures listed above. See $logfile for details about failed entries.\n";
+		    echo "Imported " . $successCount . " documents successfully.\n";
+		    echo $failureCount . " documents have not been imported due to failures listed above. See $logfile for details about failed entries.\n";
 		}
 		// if no metadata is imported use now the metadata already stored in database
    		if ($metadatainput !== 'y' && $metadatainput !== 'yes') {
