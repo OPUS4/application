@@ -59,6 +59,8 @@ class Opus3Migration extends Application_Bootstrap {
     protected $docStack = array();
     protected $signaturePath;
     protected $signaturePassword;
+    protected $startAtId = null;
+    protected $stopAtId = null;
 
     protected function setStylesheet() {
     	$stylesheetPath = '../modules/import/views/scripts/opus3';
@@ -172,9 +174,9 @@ class Opus3MigrationParameters extends Opus3Migration
 
     	if (count($argv) < 2 || true === in_array('--help', $argv) || true === in_array('-h', $argv)) {
     		$failure = true;
-    		echo "Usage: " . $argv[0] . " [options] importfile\n";
+    		echo "Usage: " . $argv[0] . " [options] importfile [start-at-id] [stop-at-id]\n";
     		echo "Options:\n";
-    		echo "--with-collections Import collections and series\n";
+    		echo "--without-collections Do not import collections and series\n";
     		echo "--without-institutes Do not import the faculties and institutes\n";
     		echo "--without-licences Do not import the licences\n";
     		echo "--without-metadata Do not import the metadata of the documents (if you do not import the metadata, the database will be read)\n";
@@ -185,7 +187,16 @@ class Opus3MigrationParameters extends Opus3Migration
     	}
 
     	// The last argument should be the importfile
-    	$importFilePath = $argv[(count($argv)-1)];
+    	for ($n = count($argv)-1; $n > 0; $n--) {
+    		// The first non-integer argument is the filename
+    		if (false === is_numeric($argv[$n])) {
+    			$importFilePath = $argv[$n];
+    	        if (array_key_exists($n+1, $argv)) $this->startAtId = $argv[$n+1];
+    	        if (array_key_exists($n+2, $argv)) $this->stopAtId = $argv[$n+2];
+    	        break;
+    		}
+    	}
+    	
         if (false === file_exists($importFilePath) && $failure !== true) {
         	$failure = true;
     		echo "The importfile " . $importFilePath . " you specified does not exist!\n";
@@ -246,7 +257,7 @@ class Opus3MigrationParameters extends Opus3Migration
 
         // Analyse the other parameters
 		// Import collections and series?
-		if (false === in_array("--with-collections", $argv)) {
+		if (false === in_array("--without-collections", $argv)) {
 			$this->whatToDo[] = "collections";
 		}
 
@@ -302,30 +313,40 @@ class Opus3MigrationParameters extends Opus3Migration
 		    $f = fopen($logfile, 'w');
 		    $successCount = 0;
 		    $failureCount = 0;
+		    $counter = 0;
 		    foreach ($toImport as $document) {
-		        $result = $import->import($document);
-		        if ($result['result'] === 'success') {
-		            #$this->docStack[]['document'] = $result['document'];
-                    echo "Successfully imported old ID " . $result['oldid'] . "\n";
-                    $import->log("Successfully imported old ID " . $result['oldid'] . "\n");
-                    $successCount++;
+		        if ($this->startAtId === null || ($this->startAtId !== null && $counter >= $this->startAtId)) {
+		            $result = $import->import($document);
+		            if ($result['result'] === 'success') {
+		                #$this->docStack[]['document'] = $result['document'];
+                        echo "Successfully imported old ID " . $result['oldid'] . "\n";
+                        $import->log("Successfully imported old ID " . $result['oldid'] . "\n");
+                        $successCount++;
+		            }
+		            else if ($result['result'] === 'failure') {
+		    	        echo "ERROR: " . $result['message'] . " for old ID " . $result['oldid'] . "\n";
+		    	        $import->log("ERROR: " . $result['message'] . " for old ID " . $result['oldid'] . "\n");
+		    	        fputs($f, $result['entry'] . "\n");
+		    	        $failureCount++;
+		            }
 		        }
-		        else if ($result['result'] === 'failure') {
-		    	    echo "ERROR: " . $result['message'] . " for old ID " . $result['oldid'] . "\n";
-		    	    $import->log("ERROR: " . $result['message'] . " for old ID " . $result['oldid'] . "\n");
-		    	    fputs($f, $result['entry'] . "\n");
-		    	    $failureCount++;
+		        if ($this->stopAtId !== null && $counter >= $this->stopAtId) {
+		        	break;
 		        }
+		        $counter++;
 		    }
 		    fclose($f);
 		    $import->finalize();
 		    echo "Imported " . $successCount . " documents successfully.\n";
 		    echo $failureCount . " documents have not been imported due to failures listed above. See $logfile for details about failed entries.\n";
+		    if ($this->stopAtId !== null && $counter >= $this->stopAtId) {
+		    	die('Aborted execution, please proceed import at position ' . $counter+1);
+		    }
 		}
 		// if no metadata is imported use now the metadata already stored in database
-   		else {
+   		#else {
    			$this->readDocsFromDatabase();
-    	}
+    	#}
 
 		// Import files
 		if (true === in_array('files', $this->whatToDo)) {
