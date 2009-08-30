@@ -576,27 +576,30 @@
         <!-- WARNING: no unique format for persons in Opus3! -->
         <!-- there may occur problems -->
         <xsl:param name="contributor" required="yes" />
+        <xsl:variable name="contributors" value="str:split($contributor, ', ')" />
+        <xsl:for-each select="token">
         <xsl:element name="PersonContributor">
             <xsl:attribute name="AcademicTitle"></xsl:attribute>
             <xsl:attribute name="DateOfBirth"></xsl:attribute>
             <xsl:attribute name="PlaceOfBirth"></xsl:attribute>
             <xsl:attribute name="Email"></xsl:attribute>
             <xsl:choose>
-                <xsl:when test="string-length(substring-before($contributor,','))=0">
+                <xsl:when test="string-length(substring-before(.,','))=0">
                     <xsl:attribute name="LastName">
-                        <xsl:value-of select="$contributor" />
+                        <xsl:value-of select="." />
                     </xsl:attribute>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:attribute name="FirstName">
-                        <xsl:value-of select="substring-after($contributor,',')" />
+                        <xsl:value-of select="substring-after(.,',')" />
                     </xsl:attribute>
                     <xsl:attribute name="LastName">
-                        <xsl:value-of select="substring-before($contributor,',')" />
+                        <xsl:value-of select="substring-before(.,',')" />
                     </xsl:attribute>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:element>
+        </xsl:for-each>
     </xsl:template>
     <xsl:template name="getAdvisors">
         <xsl:param name="OriginalID" required="yes" />
@@ -614,14 +617,14 @@
             <xsl:attribute name="PlaceOfBirth"></xsl:attribute>
             <xsl:attribute name="Email"></xsl:attribute>
             <xsl:choose>
-                <xsl:when test="string-length(substring-before(field[@name='advisor'],', '))>0">
+                <xsl:when test="string-length(substring-before(field[@name='advisor'],', '))=0">
                     <xsl:attribute name="LastName">
                         <xsl:value-of select="field[@name='advisor']" />
                     </xsl:attribute>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:attribute name="FirstName">
-                        <xsl:value-of select="substring-after(field[@name='advisor'],', ')" />
+                        <xsl:value-of select="substring-after(substring-before(field[@name='advisor'],'('),', ')" />
                     </xsl:attribute>
                     <xsl:attribute name="LastName">
                         <xsl:value-of select="substring-before(field[@name='advisor'],', ')" />
