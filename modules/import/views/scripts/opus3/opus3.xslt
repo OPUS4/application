@@ -46,7 +46,11 @@
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:php="http://php.net/xsl">
+    xmlns:php="http://php.net/xsl"
+    xmlns:str="http://exslt.org/strings"
+    extension-element-prefixes="str">
+
+    <xsl:import href="exslt/str/str.xsl" />
 
     <xsl:output method="xml" indent="no" />
 
@@ -576,30 +580,39 @@
         <!-- WARNING: no unique format for persons in Opus3! -->
         <!-- there may occur problems -->
         <xsl:param name="contributor" required="yes" />
-        <xsl:variable name="contributors" value="str:split($contributor, ', ')" />
-        <xsl:for-each select="token">
+        <!--<xsl:call-template name="str:split">
+            <xsl:with-param name="string"><xsl:value-of select="$contributor" /></xsl:with-param>
+            <xsl:with-param name="pattern"><xsl:text>;</xsl:text></xsl:with-param>
+        </xsl:call-template>-->
+        <xsl:for-each select="str:split($contributor,';')">
+            <xsl:call-template name="getContributor">
+                <xsl:with-param name="contributor" select="." />
+            </xsl:call-template>
+        </xsl:for-each>
+    </xsl:template>
+    <xsl:template name="getContributor">
+        <xsl:param name="contributor" required="yes" />
         <xsl:element name="PersonContributor">
             <xsl:attribute name="AcademicTitle"></xsl:attribute>
             <xsl:attribute name="DateOfBirth"></xsl:attribute>
             <xsl:attribute name="PlaceOfBirth"></xsl:attribute>
             <xsl:attribute name="Email"></xsl:attribute>
             <xsl:choose>
-                <xsl:when test="string-length(substring-before(.,','))=0">
+                <xsl:when test="string-length(substring-before($contributor,','))=0">
                     <xsl:attribute name="LastName">
                         <xsl:value-of select="." />
                     </xsl:attribute>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:attribute name="FirstName">
-                        <xsl:value-of select="substring-after(.,',')" />
+                        <xsl:value-of select="substring-after($contributor,',')" />
                     </xsl:attribute>
                     <xsl:attribute name="LastName">
-                        <xsl:value-of select="substring-before(.,',')" />
+                        <xsl:value-of select="substring-before($contributor,',')" />
                     </xsl:attribute>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:element>
-        </xsl:for-each>
     </xsl:template>
     <xsl:template name="getAdvisors">
         <xsl:param name="OriginalID" required="yes" />
