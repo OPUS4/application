@@ -55,6 +55,7 @@ deliver.logoutput = false
 searchengine.pdftotext.path = /usr/bin ; path to pdftotext - needed to index PDF fulltexts
 searchengine.ps2ascii.path = /usr/bin ; path to ps2ascii - needed to index PS fulltexts
 searchengine.ocr.enable = 0 ; enable/disable OCR-recognition - WARNING: this can massively slow down your indexing process! 1=enabled, 0=disabled
+searchengine.ocr.timeout = 60 ; timeout for OCR (in s), text is recognized until time limit is reached
 searchengine.ocr.pdfimages.path = /usr/bin ; path to pdfimages binary, needed to ocr pdfs.
 searchengine.ocr.ocropus.path = /usr/bin ; if OCR is enabled, insert the path to ocropus here - other OCR-programs are not supported.
 searchengine.index.maxFileSize = 0 ; maximum filesize to index (in Byte), 0 means there is no limit
