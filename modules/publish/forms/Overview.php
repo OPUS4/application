@@ -78,10 +78,15 @@ class Overview extends Zend_Form {
             ->setMultiOptions($listOptions)
             ->addValidator('NotEmpty');
 
+        $gpgkeyavailable = new Zend_Form_Element_Radio('gpgkey');
+        $gpgkeyavailable->setLabel('gpgkeyavailable')
+            ->setMultiOptions(array('0' => 'answer_no', '1' => 'answer_yes'))
+            ->setValue('0');
+
         $submit = new Zend_Form_Element_Submit('submit');
         $submit->setLabel('process');
 
-        $this->addElements(array($select, $submit));
+        $this->addElements(array($select, $gpgkeyavailable, $submit));
     }
 
 }

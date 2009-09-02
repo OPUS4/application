@@ -68,7 +68,33 @@
         <seg>Wählen Sie Ihren Dokumententyp aus:</seg>
       </tuv>
     </tu>
+
+    <tu tuid="gpgkeyavailable">
+      <tuv xml:lang="en">
+        <seg>Do you have a GPG-Key and did you sign your publication files with it?</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Haben Sie einen GPG-Schlüssel und haben Sie Ihre Dateien damit signiert?</seg>
+      </tuv>
+    </tu>
     
+    <tu tuid="answer_no">
+      <tuv xml:lang="en">
+        <seg>No</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nein</seg>
+      </tuv>
+    </tu>
+    <tu tuid="answer_yes">
+      <tuv xml:lang="en">
+        <seg>Yes</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Ja</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="process">
       <tuv xml:lang="en">
         <seg>continue</seg>
