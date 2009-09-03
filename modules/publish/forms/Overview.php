@@ -72,6 +72,12 @@ class Overview extends Zend_Form {
      * @return void
      */
     public function init() {
+        $config = Zend_Registry::get('Zend_Config');
+        $gpg_visible_to_user = '0';
+        if (isset($config->gpg->enable->user) === true) {
+            $gpg_visible_to_user = $config->gpg->enable->user;
+        }
+
         $listOptions = $this->_getXmlDocTypeFiles();
         $select = new Zend_Form_Element_Select('selecttype');
         $select->setLabel('selecttype')
@@ -86,7 +92,11 @@ class Overview extends Zend_Form {
         $submit = new Zend_Form_Element_Submit('submit');
         $submit->setLabel('process');
 
-        $this->addElements(array($select, $gpgkeyavailable, $submit));
+        if ($gpg_visible_to_user === '1') {
+            $this->addElements(array($select, $gpgkeyavailable, $submit));
+        } else {
+        	$this->addElements(array($select, $submit));
+        }
     }
 
 }

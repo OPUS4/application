@@ -74,6 +74,20 @@ class Publish_IndexController extends Zend_Controller_Action {
     }
 
     /**
+     * Show form for key upload and do the key upload
+     *
+     * @return void
+     *
+     */
+    public function keyuploadAction() {
+        $this->view->title = $this->view->translate('publish_controller_keyupload');
+        $form = new KeyUpload();
+        $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create'));
+        $form->setAction($action_url);
+        $this->view->form = $form;
+    }
+
+    /**
      * Create, recreate and validate a document form. If it is valid store it.
      *
      * @return void
@@ -84,16 +98,45 @@ class Publish_IndexController extends Zend_Controller_Action {
         if ($this->_request->isPost() === true) {
             $data = $this->_request->getPost();
             $form_builder = new Form_Builder();
-            if (array_key_exists('selecttype', $data) === true) {
+            $documentInSession = new Zend_Session_Namespace('document');
+            if (array_key_exists('selecttype', $data) === true || array_key_exists('gpg_key_upload', $data) === true) {
                 // validate document type
                 $form = new Overview();
-                if ($form->isValid($data) === true) {
+                $alternateForm = new KeyUpload();
+                if ($form->isValid($data) === true || $alternateForm->isValid($data) === true) {
                     $possibleDoctypes = Opus_Document_Type::getAvailableTypeNames();
                     $selectedDoctype = $form->getValue('selecttype');
+                    if ($selectedDoctype !== $documentInSession->doctype && isset($selectedDoctype) === true) {
+                        $documentInSession->doctype = $selectedDoctype;
+                    }
+                    else {
+                        $selectedDoctype = $documentInSession->doctype;
+                    }
                     if (in_array($selectedDoctype, $possibleDoctypes) === false) {
                         // TODO: error message
                         // document type does not exists, back to select form
                         $this->_redirector->gotoSimple('index');
+                    }
+                    
+                    if ($alternateForm->isValid($data) === true) {
+            	        $gpg = new Opus_GPG();
+
+                        $upload = new Zend_File_Transfer_Adapter_Http();
+                        $files = $upload->getFileInfo();
+
+                        // save the file
+                        foreach ($files as $file) {
+                            $gpg->importKeyFile($file['tmp_name']);
+                        }
+                    }
+                    #else if ($form->isValid($data) === false) {
+                    #	$this->_redirector->gotoSimple('index');
+                    #}
+                    // If author selected that he has a GPG-Key, redirect to Uploadform
+                    $gpgkey = $form->getValue('gpgkey');
+                    if ($gpgkey === '1') {
+                    	$documentInSession->keyupload = true;
+                    	$this->_redirector->gotoSimple('keyupload');
                     }
                     $type = new Opus_Document_Type($selectedDoctype);
                     $pages = $type->getPages();
@@ -250,22 +293,31 @@ class Publish_IndexController extends Zend_Controller_Action {
 
                 $this->view->message = $this->view->translate('publish_controller_upload_successful');
 
-                // save each file
-                foreach ($files as $file) {
-                    /* TODO: Uncaught exception 'Zend_File_Transfer_Exception' with message '"fileupload" not found by file transfer adapter
-                     * if (!$upload->isValid($file)) {
-                     *    $this->view->message = 'Upload failed: Not a valid file!';
-                     *    break;
-                     * }
-                     */
-                    $docfile = $document->addFile();
-                    $docfile->setDocumentId($document->getId());
-                    $docfile->setLabel($uploadForm->getValue('comment'));
-                    $docfile->setLanguage($uploadForm->getValue('language'));
-                    $docfile->setPathName($file['name']);
-                    $docfile->setMimeType($file['type']);
-                    $docfile->setTempFile($file['tmp_name']);
-                    $docfile->setFromPost($file);
+                // one form has only one file
+                $file = $files['fileupload'];
+                $hash = null;
+                if (array_key_exists('sigupload', $files) === true) {
+                	$sigfile = $files['sigupload'];
+                }
+                /* TODO: Uncaught exception 'Zend_File_Transfer_Exception' with message '"fileupload" not found by file transfer adapter
+                 * if (!$upload->isValid($file)) {
+                 *    $this->view->message = 'Upload failed: Not a valid file!';
+                 *    break;
+                 * }
+                 */
+                $docfile = $document->addFile();
+                $docfile->setDocumentId($document->getId());
+                $docfile->setLabel($uploadForm->getValue('comment'));
+                $docfile->setLanguage($uploadForm->getValue('language'));
+                $docfile->setPathName($file['name']);
+                $docfile->setMimeType($file['type']);
+                $docfile->setTempFile($file['tmp_name']);
+                $docfile->setFromPost($file);
+                if (array_key_exists('sigupload', $files) === true) {
+                	$signature = implode("", file($sigfile['tmp_name']));
+            		$hash = $docfile->addHashValue();
+    	        	$hash->setType('gpg-0');
+    		        $hash->setValue($signature);                	
                 }
                 $document->store();
 

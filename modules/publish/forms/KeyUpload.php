@@ -25,67 +25,38 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Publish
- * @author      Henning Gerhardt (henning.gerhardt@slub-dresden.de)
+ * @package     Module_Search
+ * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ * @version     $Id: KeyUploadForm.php 2281 2009-03-26 13:53:34Z marahrens $
  */
 
 /**
- * Shows a upload form for one or more files
- *
- * @category    Application
- * @package     Module_Publish
- * */
-class FileUpload extends Zend_Form {
-
+ * form to show the search mask
+ */
+class KeyUpload extends Zend_Form
+{
     /**
      * Build easy upload form
      *
      * @return void
      */
     public function init() {
-        $documentInSession = new Zend_Session_Namespace('document');
-        
-        //$this->addElement('hash', 'UploadHash', array('salt' => 'unique'));
-
         // FIXME: Make hard coded path configurable.
-        $fileupload = new Zend_Form_Element_File('fileupload');
-        $fileupload->setLabel('FileToUpload')
+        $keyupload = new Zend_Form_Element_File('keyupload');
+        $keyupload->setLabel('keyFileToUpload')
             ->setDestination('../workspace/tmp/')
             ->addValidator('Count', false, 1)     // ensure only 1 file
-            ->addValidator('Size', false, 1024000) // limit to 1000K
-            ->addValidator('Extension', false, 'pdf,txt'); // only PDF
+            ->addValidator('Size', false, 102400); // limit to 100K
 
-        $signatureupload = new Zend_Form_Element_File('sigupload');
-        $signatureupload->setLabel('SigToUpload')
-            ->setDestination('../workspace/tmp/')
-            ->addValidator('Count', false, 1)     // ensure only 1 file
-            ->addValidator('Size', false, 102400) // limit to 100K
-            ->addValidator('Extension', false, 'asc'); // only ASC
-
-        $comment = new Zend_Form_Element_Text('comment');
-        $comment->setLabel('Comment');
-
-        $languageList = new Zend_Form_Element_Select('language');
-        $languageList->setLabel('Language')
-            ->setMultiOptions(Zend_Registry::get('Available_Languages'))
-            ->addValidator('NotEmpty');
+        $key_upload_token = new Zend_Form_Element_Hidden('gpg_key_upload');
+        $key_upload_token->setValue('true');
 
         $submit = new Zend_Form_Element_Submit('submit');
-        $submit->setLabel('Process');
+        $submit->setLabel('pkm_process');
 
-        $documentId = new Zend_Form_Element_Hidden('DocumentId');
-        $documentId->addValidator('NotEmpty')
-            ->addValidator('Int');
-
-        if ($documentInSession->keyupload === true) {
-            $this->addElements(array($fileupload, $signatureupload, $comment, $languageList, $documentId, $submit));
-        }
-        else {
-        	$this->addElements(array($fileupload, $comment, $languageList, $documentId, $submit));
-        }
+        $this->addElements(array($keyupload, $key_upload_token, $submit));
         $this->setAttrib('enctype', Zend_Form::ENCTYPE_MULTIPART);
     }
 }
