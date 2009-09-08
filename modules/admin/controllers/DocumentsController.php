@@ -201,9 +201,6 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         if ($this->_request->isPost() === true) {
             $id = $this->getRequest()->getPost('id');
             $model = new $this->_modelclass($id);
-            // Remove from index
-            $indexer = new Opus_Search_Index_Indexer();
-            $indexer->removeDocumentFromEntryIndex($model);
             $model->delete();
             $this->_redirectTo('Model successfully deleted.', 'index');
         } else {
