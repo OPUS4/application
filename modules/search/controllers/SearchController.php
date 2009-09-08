@@ -112,10 +112,12 @@ class Search_SearchController extends Zend_Controller_Action
         } else {
             // nonpost request
             $form = new FulltextSearch();
+            $data = $this->_request->getParams();
             if (isset($resultlist->postedData) === true) {
             	$this->view->form = $form->populate($resultlist->postedData);
+            	$data['hitsPerPage'] = $resultlist->postedData['hitsPerPage'];
+            	$data['sort'] = $resultlist->postedData['sort'];
             }
-            $data = $this->_request->getParams();
             if (array_key_exists('page', $data)) {
                 // paginator
                 $page = $data['page'];
@@ -199,10 +201,12 @@ class Search_SearchController extends Zend_Controller_Action
         } else {
             // nonpost request
             $form = new MetadataSearch();
+            $data = $this->_request->getParams();
             if (isset($resultlist->postedData) === true) {
                 $this->view->form = $form->populate($resultlist->postedData);
+                $data['hitsPerPage'] = $resultlist->postedData['hitsPerPage'];
+                $data['sort'] = $resultlist->postedData['sort'];
             }
-            $data = $this->_request->getParams();
             if (array_key_exists('page', $data)) {
                 // paginator
                 $page = $data['page'];
