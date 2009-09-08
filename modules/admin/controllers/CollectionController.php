@@ -158,8 +158,10 @@ class Admin_CollectionController extends Controller_Action {
         if (true === $handlingCollection) {
             $this->_redirectTo('Collection successfully deleted.', 'show', null, null,
                     array('role' => $role, 'path' => $path));
-        } else {
+        } elseif (false === is_null($this->_request->getParam('deleteall'))) {
             $this->_redirectTo('Role successfully deleted.', 'index');
+        } else {
+            $this->_redirectTo('', 'index');
         }
     }
 
@@ -186,8 +188,8 @@ class Admin_CollectionController extends Controller_Action {
         } else {
             $copyId = 0;
         }
-        $subcollections = array();
-        $breadcrumb = array();
+        $subcollections     = array();
+        $breadcrumb         = array();
         $severalAppearances = array();
         $visibility = array();
         if (true === isset($path)) {
