@@ -29,6 +29,7 @@
 	* @category   Application
 	* @author     Eike Kleiner <Eike.Kleiner@bsz-bw.de>
 	* @author     Ralf Claussnitzer <ralf.claussnitzer@slub-dresden.de>
+	* @author     Oliver Marahrens <o.marahrens@tu-harburg.de>
 	* @copyright  Copyright (c) 2008 - 2009, OPUS 4 development team
 	* @license    http://www.gnu.org/licenses/gpl.html General Public License
 	* @version    $Id$
@@ -38,111 +39,71 @@
 	xmlns="http://schemas.opus.org/documenttype"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     
-    <!-- administrative and technical data -->
-    <field name="Enrichment" />
-    <field name="Note" mandatory="yes" multiplicity="4" />
-        <!--  Auslagern in Security? -->
-        <field name="IdentifierOpac" />
-    <field name="ServerDateUnlocking" />
-    <field name="ServerDateValid" />
-    <field name="IdentifierOpus3" />
-        <!--  Existiert rein zu Abwärtskompatibilitäts- und Migrationszwecken -->
-	    <field name="Source" />	    
-	    <!--  Auslagern in Identifiers oder References? -->
-        <field name="IdentifierOpac" />
-        <!--  Ergebnisse von METIS noch unklar -->
-        <!-- <field name="VgWortPixelUrl" /> -->
+	<page caption="caption_01_conferenceitem">
+		<field name="Licence" mandatory="yes" frontdoorweight="1" adminformweight="1" publishformweight="101" multiplicity="1" />
+		<field name="Language" mandatory="yes" frontdoorweight="1" adminformweight="1" publishformweight="102" multiplicity="1"/>
+		<field name="File" mandatory="no" frontdoorweight="0" adminformweight="0" publishformweight="0" multiplicity="*" />
+		
+		<field name="ServerDateUnlocking" mandatory="no" frontdoorweight="0" adminformweight="0" publishformweight="201" multiplicity="1" />
+	    <field name="ServerDateValid" mandatory="no" frontdoorweight="0" adminformweight="0" publishformweight="202" multiplicity="1" />   
+	    	    
+	    <!-- for downward compatibility to opus 3 data. Do not show this fields -->	    
+	    <field name="IdentifierOpus3" mandatory="no" frontdoorweight="0" adminformweight="1" publishformweight="0" multiplicity="1" />
+	</page>
+
+	<page caption="caption_02_conferenceitem">
+        <field name="TitleMain" mandatory="yes" frontdoorweight="1" adminformweight="1" publishformweight="101" multiplicity="4" />
+        <field name="TitleAbstract" mandatory="yes" frontdoorweight="1" adminformweight="1" publishformweight="102" multiplicity="4" />
+		<field name="TitleParent" mandatory="yes" frontdoorweight="1" adminformweight="1" publishformweight="103" multiplicity="1" />
+    </page>
+	   
+	<page caption="caption_03_conferenceitem">
+		<field name="PersonAuthor" mandatory="yes" frontdoorweight="1" adminformweight="1" publishformweight="201" multiplicity="*" />
+		<field name="PersonReferee" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="203" multiplicity="*" />
+		<field name="PersonEditor" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="204" multiplicity="*" />
+		<field name="PersonTranslator" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="205" multiplicity="*" />
+		<field name="PersonContributor" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="206" multiplicity="*" />
+
+        <field name="CreatingCorporation" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="207" multiplicity="*" />
+        <field name="ContributingCorporation" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="208" multiplicity="*"/>
+
+	    <field name="PublisherUniversity" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="301" multiplicity="*" />
+
+		<!-- TODO implement it -->
+		<!--<field name="Institute" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="302" multiplicity="*" />-->
+
+        <field name="NonInstituteAffiliation" mandatory="no" frontdoorweight="0" adminformweight="1" publishformweight="303" multiplicity="*" />
+    </page>
+
+	<page caption="caption_04_conferenceitem">	    
+        <field name="PageNumber"  frontdoorweight="1" adminformweight="1" publishformweight="102" multiplicity="1" />
+        <mandatory type="one-at-least">
+            <field name="CompletedYear" frontdoorweight="1" adminformweight="1" publishformweight="402" multiplicity="1" />
+            <field name="CompletedDate" frontdoorweight="1" adminformweight="1" publishformweight="403" multiplicity="1" />
+        </mandatory>
+        <mandatory type="one-at-least">
+            <field name="PublishedYear" frontdoorweight="1" adminformweight="1" publishformweight="404" multiplicity="1" />
+            <field name="PublishedDate" frontdoorweight="1" adminformweight="1" publishformweight="405" multiplicity="1" />
+        </mandatory>
+    </page>
+
+	<page caption="caption_05_conferenceitem">
+	    <field name="SubjectSwd" frontdoorweight="1" adminformweight="1" publishformweight="401" multiplicity="5" />
+	    <!-- <field name="SubjectPsyndex" frontdoorweight="1" adminformweight="1" publishformweight="402" multiplicity="*" /> -->
+	    <field name="SubjectUncontrolled" frontdoorweight="1" adminformweight="1" publishformweight="403" multiplicity="*" />
+	    <!-- TODO implement it - derzeit Fehlermeldung Specified column "collection" is not in the row -->
+	    <!--<field name="Collection" frontdoorweight="1" adminformweight="1" publishformweight="404" multiplicity="*" />-->
+    </page>
+	    
+    
+    <page caption="caption_06_conferenceitem">
+
+		<!-- TODO implement it -->
+		<!--<field name="Conference" mandatory="yes" frontdoorweight="1" adminformweight="1" publishformweight="201" multiplicity="1" />-->
+		
+        <field name="IdentifierUrn" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="202" multiplicity="1" />
         
-         
-
-	<!-- general -->
-		<!--  Multiplicity noch nicht möglich -->
-		<field name="Licence" mandatory="yes" multiplicity="4" />
-		<!--  Multiplicity noch nicht möglich -->
-		<field name="Language" mandatory="yes" multiplicity="4" />
-	<field name="File" multiplicity="*" />
-	
-	
-    <!-- collections  -->
-        <!-- Noch nicht möglich -->
-        <!-- <field name="Collection" /> -->
-    
-    
-    <!-- corporate bodies  -->
-    <field name="CreatingCorporation" />
-    <field name="ContributingCorporation" />
-    
-    
-    <!-- dates: user input -->
-	<field name="CompletedYear" />
-	<field name="CompletedDate" />
-	<field name="DateAccepted" />
-	<field name="PublishedYear" />
-	<field name="PublishedDate" />
-	
-	
-    <!-- extent, pages, issue, volume, edtion -->
-    <field name="Edition" />
-    <field name="Issue" />
-    <field name="PageFirst" />
-    <field name="PageLast" />
-    <field name="PageNumber" />
-    <field name="Volume" />
-    	
-    	
-	<!-- identifiers -->
-	<field name="IdentifierIsbn" multiplicity="4" />
-	<field name="IdentifierUrn" multiplicity="4" />
-
-
-	<!-- institutes -->
-	   <!-- Noch nicht möglich -->
-	   <!-- <field name="Institute" /> -->
-	   <!-- Zweck? -->
-	   <field name="NonInstituteAffiliation" />
-
-
-    <!-- patent information -->
-    <field name="Patent" />
-
-
-	<!-- persons -->
-	<field name="PersonAdvisor" multiplicity="4" />
-	<field name="PersonAuthor" multiplicity="4" />
-	<field name="PersonContributor" multiplicity="4" />
-	<field name="PersonEditor" multiplicity="4" />
-	<field name="PersonOther" multiplicity="4" />
-	<field name="PersonReferee" multiplicity="4" />
-	<field name="PersonTranslator" />
-	
-	
-	<!-- publication process, version control, reviewing, workflow  -->
-	   <!-- ??? -->
-       <!-- <field name="Publication" /> -->
-	   <!-- Ist im DB Schema als PublicationState bezeichnet -->
-	   <!-- <field name="PublicationStatus" /> -->
-	<field name="Reviewed" />
-	
-
-    <!-- publishers  -->
-        <!-- Derzeit nicht im DB-Schema abgebildet -->
-        <!-- <field name="PublisherName" />  -->
-        <!-- Derzeit nicht im DB-Schema abgebildet -->
-        <!-- <field name="PublisherPlace" />  -->
-        <field name="PublisherUniversity" />
-        
-    
-    <!-- subjects -->
-    <field name="SubjectSwd" multiplicity="4" />
-        <!-- Nicht in document_subjects, sondern in Collection abgebildet-->
-        <!-- <field name="SubjectDdc" multiplicity="4" /> -->
-    <field name="SubjectPsyndex" multiplicity="4" />
-    <field name="SubjectUncontrolled" multiplicity="4" />
-    
-    
-	<!-- titles  -->
-	<field name="TitleAbstract" multiplicity="4" />
-	<field name="TitleMain" mandatory="yes" multiplicity="4" />
-	<field name="TitleParent" mandatory="yes" multiplicity="4" />
+        <field name="Note" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="301" multiplicity="1" />
+    </page>
 
 </documenttype>
