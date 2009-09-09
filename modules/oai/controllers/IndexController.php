@@ -146,6 +146,10 @@ class Oai_IndexController extends Controller_Xml {
         $module = $this->getRequest()->getModuleName();
         $oai_base_url = $scheme . '://' . $host . $base . '/' . $module;
         $this->_proc->setParameter('', 'oai_base_url', $oai_base_url);
+        $registry = Zend_Registry::getInstance();
+        $config = $registry->get('Zend_Config');
+        $contactId = $config->oai->contactid;
+        $this->_proc->setParameter('', 'contactId', $contactId);
 
         try {
             foreach ($oaiRequest as $parameter => $value) {
@@ -577,6 +581,7 @@ class Oai_IndexController extends Controller_Xml {
             if (true === array_key_exists('set',$oaiRequest)) {
                 $setParam = $oaiRequest['set'];
                 $setarray = explode(':',$setParam);
+                $setGiven = 1;
                 // if only set is given, read DocIds of the set (performance reasons)
                 if (false === array_key_exists('from',$oaiRequest) &&
                     false === array_key_exists('until',$oaiRequest)) {
@@ -584,7 +589,6 @@ class Oai_IndexController extends Controller_Xml {
                     $docIds = $this->readDocidsOfSet($setarray);
                     $docReady = 1;
                     $setReady = 1;
-                    $setGiven = 1;
                 }
             }
             if ($docReady == 0) {
