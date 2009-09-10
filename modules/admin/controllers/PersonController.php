@@ -40,89 +40,13 @@
  * @package     Module_Admin
  */
 
-class Admin_PersonController extends Zend_Controller_Action {
+class Admin_PersonController extends Controller_CRUDAction {
 
     /**
-     * TODO
+     * The class of the model being administrated.
      *
-     * @return void
+     * @var Opus_Model_Abstract
      */
-    public function indexAction() {
-        $this->view->title = $this->view->translate('Person_Controller');
-
-
-        $person_input = new Zend_Form_Element_Text('person');
-        $person_input->setRequired(true)
-            ->setLabel('Person_Id');
-
-        $submit = new Zend_Form_Element_Submit('submit');
-        $submit->setLabel('transmit_index');
-
-        $form = new Zend_Form();
-        //$action_url = $this->view->url(array("module" => "publish", "controller" => "index", "action" => "index"));
-        $action_url = $this->view->url(array("controller" => "person", "action" => "edit"));
-        $form->setAction($action_url);
-        $form->addElements(array($person_input, $submit));
-
-
-        $this->view->form = $form;
-    }
-
-    /**
-     * TODO
-     *
-     * @return void
-     */
-    public function editAction() {
-
-        $this->view->title = $this->view->translate('Person_Controller');
-
-        if (true === $this->_request->isPost()) {
-            // post values
-            $this->view->birgit = 'Post values';
-            $postvalues = $this->_request->getPost();
-            //var_dump($postvalues);
-            $person_id = $postvalues['person'];
-            $person = new Opus_Person($person_id);
-            $form_builder = new Form_Builder();
-            $form = $form_builder->build($person);
-
-            $action_url = $this->view->url(array("controller" => "person", "action" => "save"));
-            $form->setAction($action_url);
-            $this->view->form = $form;
-        } else {
-            // non post values
-            $this->view->birgit = 'data_error';
-        }
-    }
-
-    /**
-     * TODO
-     *
-     * @return void
-     */
-    public function saveAction() {
-        $this->view->title = $this->view->translate('Person_Controller');
-
-        if (true === $this->_request->isPost()) {
-            // post values
-            $postvalues = $this->_request->getPost();
-            $form_builder = new Form_Builder;
-            $form = $form_builder->buildFromPost($postvalues);
-            $model = $form_builder->getModelFromForm($form);
-            // store changed values
-            $model->store();
-            $form = $form_builder->build($model);
-            $submit = new Zend_Form_Element_Submit('submit');
-            $submit->setLabel('transmit_index');
-            $action_url = $this->view->url(array("controller" => "person", "action" => "index"));
-            $form->setAction($action_url);
-            $this->view->form = $form;
-            $this->view->store = $this->view->translate('stored');
-        } else {
-            // non post values
-            $this->view->store = $this->view->translate('notstored');
-        }
-    }
+    protected $_modelclass = 'Opus_Person';
 
 }
