@@ -63,6 +63,8 @@ class FrontdoorXSLT_IndexController extends Controller_Action {
         $proc->registerPHPFunctions('FrontdoorXSLT_IndexController::translate');
         $proc->importStyleSheet($xslt);
 
+        // Set Base-Url
+        $this->view->baseUrl = $this->getRequest()->getBaseUrl();
         // Set Doctype
         $this->view->doctype('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"  "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">');
 
