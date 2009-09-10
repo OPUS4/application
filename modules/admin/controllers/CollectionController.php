@@ -84,7 +84,7 @@ class Admin_CollectionController extends Controller_Action {
         }
         $filter = new Opus_Model_Filter;
         $filter->setModel($collection);
-        $filter->setBlacklist(array('SubCollection', 'ParentCollection', 'CollectionsContentSchema', 'Visibility', 'SeveralAppearances'));
+        $filter->setBlacklist(array('Position', 'SubCollection', 'ParentCollection', 'CollectionsContentSchema', 'Visibility', 'SeveralAppearances'));
         $filter->setSortOrder(array('Name'));
         $collectionForm = $form_builder->build($filter);
         $action_url = $this->view->url(array('action' => 'create'));
@@ -171,6 +171,16 @@ class Admin_CollectionController extends Controller_Action {
      * @return void
      */
     public function showAction() {
+
+        $theme =Zend_Registry::getInstance()->get('Zend_Config')->theme;
+        if (true === empty($theme)) {
+            $theme = 'default';
+        }
+        $this->view->theme = $theme;
+        $this->view->layoutPath = $this->view->baseUrl() .'/layouts/'. $theme;
+
+
+
         $roleId = (int) $this->getRequest()->getParam('role');
         $collection = new Opus_CollectionRole($roleId);
         $roleName = $collection->getDisplayName();
@@ -192,6 +202,7 @@ class Admin_CollectionController extends Controller_Action {
         $breadcrumb         = array();
         $severalAppearances = array();
         $visibility = array();
+        $nameLength = 0;
         if (true === isset($path)) {
             $trail = explode('-', $path);
             foreach($trail as $step) {
@@ -213,6 +224,7 @@ class Admin_CollectionController extends Controller_Action {
                 $this->view->copypaste = $copypaste;
                 $prn = implode(',', $parentIds);
                 $subcollections[$path . '-' . $i] = $subcollection->getDisplayName();
+                $nameLength = max($nameLength, strlen($subcollection->getDisplayName()));
             }
         } else {
             foreach($collection->getSubCollection() as $i => $subcollection) {
@@ -226,7 +238,7 @@ class Admin_CollectionController extends Controller_Action {
                 $prn = implode(',', $parentIds);
 
                 $subcollections[$i] = $subcollection->getDisplayName();
-
+                $nameLength = max($nameLength, strlen($subcollection->getDisplayName()));
             }
         }
         $this->_helper->layout->setLayout('../' . $collection->getTheme() . '/common');

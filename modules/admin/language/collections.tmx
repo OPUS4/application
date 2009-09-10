@@ -27,7 +27,7 @@
 
     <tu tuid="admin_collections_display_note">
       <tuv xml:lang="en">
-        <seg>In all the Display-fields you can choose, what is to display from this Collection in the listed context. You can choose 'Name' and 'Number' in any order you like. Important note: Please seperate the values by comma!</seg>
+        <seg>In each display field you can choose, which collection attributes to display in the listed context. You can choose 'Name' and 'Number' in any order you like. Important note: values have to be separated by commas!</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>In den Display-Feldern können Sie einstellen, welche Metadaten der Sammlung in welchem Zusammenhang angezeigt werden sollen. Hier können in beliebiger Reihenfolge die Werte 'Name' und 'Number' eingegeben werden. Wichtig: Die Werte müssen mit Komma voneinander getrennt werden!</seg>
@@ -88,6 +88,136 @@
       </tuv>
     </tu>
     
+    
+    
+    <tu tuid="admin_collections_collection_copy_abort">
+      <tuv xml:lang="en">
+        <seg>Abort copying</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Kopieren abbrechen</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_collections_collection_copy">
+      <tuv xml:lang="en">
+        <seg>Copy</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Kopieren</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_collections_collection_assign_abort">
+      <tuv xml:lang="en">
+        <seg>Abort collection assignment</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Collection Zuweisung abbrechen</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_collections_collection_paste_below">
+      <tuv xml:lang="en">
+        <seg>Paste below</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Hierunter einfügen</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_collections_collection_paste_above">
+      <tuv xml:lang="en">
+        <seg>Paste above</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Hierüber einfügen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_collections_collection_assign_here">
+      <tuv xml:lang="en">
+        <seg>Assign here</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Hiermit verknüpfen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_collections_collection_add_below">
+      <tuv xml:lang="en">
+        <seg>Add new collection below</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Neue Sammlung hierunter einfügen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_collections_collection_add_above">
+      <tuv xml:lang="en">
+        <seg>Add new collection above</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Neue Sammlung hierüber einfügen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="">
+      <tuv xml:lang="en">
+        <seg></seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg></seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="">
+      <tuv xml:lang="en">
+        <seg></seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg></seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="">
+      <tuv xml:lang="en">
+        <seg></seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg></seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="">
+      <tuv xml:lang="en">
+        <seg></seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg></seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="">
+      <tuv xml:lang="en">
+        <seg></seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg></seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="">
+      <tuv xml:lang="en">
+        <seg></seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg></seg>
+      </tuv>
+    </tu>
+
+
+
   </body>
   
 </tmx>
