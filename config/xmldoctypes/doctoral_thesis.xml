@@ -29,6 +29,7 @@
 	* @category   Application
 	* @author     Eike Kleiner <Eike.Kleiner@bsz-bw.de>
 	* @author     Ralf Claussnitzer <ralf.claussnitzer@slub-dresden.de>
+	* @author     Oliver Marahrens <o.marahrens@tu-harburg.de>
 	* @copyright  Copyright (c) 2008 - 2009, OPUS 4 development team
 	* @license    http://www.gnu.org/licenses/gpl.html General Public License
 	* @version    $Id$
@@ -49,15 +50,15 @@
 	    	    
 	    <!-- for downward compatibility to opus 3 data. Do not show this fields -->	    
 	    <field name="IdentifierOpus3" mandatory="no" frontdoorweight="0" adminformweight="1" publishformweight="0" multiplicity="1" />
-	    <field name="Source" mandatory="no" frontdoorweight="0" adminformweight="1" publishformweight="0" multiplicity="1" />
-	     
 	</page>
 	
 	<page caption="caption_02_doctoral_thesis">
 	
         <field name="TitleMain" mandatory="yes" frontdoorweight="1" adminformweight="1" publishformweight="101" multiplicity="4" />
         <field name="TitleAbstract" mandatory="yes" frontdoorweight="1" adminformweight="1" publishformweight="102" multiplicity="4" />
-	   
+	</page>
+	
+	<page caption="caption_03_doctoral_thesis">
 		<field name="PersonAuthor" mandatory="yes" frontdoorweight="1" adminformweight="1" publishformweight="201" multiplicity="3" />
 		<field name="PersonAdvisor" mandatory="yes" frontdoorweight="1" adminformweight="1" publishformweight="202" multiplicity="2" />
 		<field name="PersonReferee" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="203" multiplicity="1" />
@@ -68,9 +69,16 @@
         <field name="CreatingCorporation" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="207" multiplicity="3" />
         <field name="ContributingCorporation" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="208" multiplicity="3"/>
 
+        <field name="PublisherName" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="101" multiplicity="1" />
+        <field name="PublisherPlace" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="102" multiplicity="1"/>
+ 
+        <!--  <field name="Institute" mandatory="yes" multiplicity="3" /> -->
+        <field name="NonInstituteAffiliation" />		
+    </page>
+    
+    <page caption="caption_04_doctoral_thesis">
 	    <field name="PublisherUniversity" mandatory="yes" frontdoorweight="1" adminformweight="1" publishformweight="301" multiplicity="3" />
-
-	    
+        <field name="PageNumber" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="102" multiplicity="1" />	    
         <field name="DateAccepted" mandatory="yes" frontdoorweight="1" adminformweight="1" publishformweight="401" multiplicity="1" />
         <mandatory type="one-at-least">
             <field name="CompletedYear" frontdoorweight="1" adminformweight="1" publishformweight="402" multiplicity="1" />
@@ -80,29 +88,20 @@
             <field name="PublishedYear" frontdoorweight="1" adminformweight="1" publishformweight="404" multiplicity="1" />
             <field name="PublishedDate" frontdoorweight="1" adminformweight="1" publishformweight="405" multiplicity="1" />
         </mandatory>
-
-	    <field name="SubjectSwd" multiplicity="4" />
-	        <!-- Nicht in document_subjects, sondern in Collection abgebildet-->
-	        <!-- <field name="SubjectDdc" multiplicity="4" /> -->
-	    <field name="SubjectPsyndex" multiplicity="4" />
-	    <field name="SubjectUncontrolled" multiplicity="4" />
-	    
-        <field name="PageNumber" />
-              
-        <!--  <field name="Institute" mandatory="yes" multiplicity="3" /> -->
-        <field name="NonInstituteAffiliation" />
-		
-		
-		
+    </page>
+	
+	<page caption="caption_05_doctoral_thesis">
+	    <field name="SubjectSwd" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="401" multiplicity="5" />
+	    <field name="SubjectPsyndex" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="402" multiplicity="*" />
+	    <field name="SubjectUncontrolled" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="403" multiplicity="*" />
+	    <!-- TODO implement it - derzeit Fehlermeldung Specified column "collection" is not in the row -->
+	    <!--<field name="Collection" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="404" multiplicity="*" />-->
     </page>
     
-        <page caption="caption_03_doctoral_thesis">
-        
-        <field name="PublisherName" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="101" multiplicity="1" />
-        <field name="PublisherPlace" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="102" multiplicity="1"/>
-        
+    <page caption="caption_06_doctoral_thesis">        
         <field name="IdentifierIsbn" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="201" multiplicity="2" />
         <field name="IdentifierUrn" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="202" multiplicity="1" />
+        <field name="IdentifierOpac" mandatory="no" frontdoorweight="0" adminformweight="1" publishformweight="0" multiplicity="1" />
         
         <field name="Note" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="301" multiplicity="1" />
         

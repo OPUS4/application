@@ -78,7 +78,9 @@
         <!--<field name="Journal" mandatory="yes" frontdoorweight="1" adminformweight="1" publishformweight="102" multiplicity="1" />-->
         <!--<field name="Volume" mandatory="yes" frontdoorweight="1" adminformweight="1" publishformweight="103" multiplicity="1" />-->
         <!--<field name="Issue" mandatory="yes" frontdoorweight="1" adminformweight="1" publishformweight="104" multiplicity="1" />-->
-        <field name="PageNumber"  frontdoorweight="1" adminformweight="1" publishformweight="105" multiplicity="1" />
+        <field name="PageNumber" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="105" multiplicity="1" />
+        <field name="PageFirst" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="106" multiplicity="1" />
+        <field name="PageLast" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="107" multiplicity="1" />
         <mandatory type="one-at-least">
             <field name="CompletedYear" frontdoorweight="1" adminformweight="1" publishformweight="402" multiplicity="1" />
             <field name="CompletedDate" frontdoorweight="1" adminformweight="1" publishformweight="403" multiplicity="1" />
@@ -90,17 +92,18 @@
     </page>
 
 	<page caption="caption_05_article">
-	    <field name="SubjectSwd" frontdoorweight="1" adminformweight="1" publishformweight="402" multiplicity="5" />
-	    <!-- <field name="SubjectPsyndex" frontdoorweight="1" adminformweight="1" publishformweight="402" multiplicity="*" /> -->
-	    <field name="SubjectUncontrolled" frontdoorweight="1" adminformweight="1" publishformweight="402" multiplicity="*" />
+	    <field name="SubjectSwd" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="401" multiplicity="5" />
+	    <field name="SubjectPsyndex" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="402" multiplicity="*" />
+	    <field name="SubjectUncontrolled" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="403" multiplicity="*" />
 	    <!-- TODO implement it - derzeit Fehlermeldung Specified column "collection" is not in the row -->
-	    <!--<field name="Collection" frontdoorweight="1" adminformweight="1" publishformweight="404" multiplicity="*" />-->
+	    <!--<field name="Collection" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="404" multiplicity="*" />-->
     </page>
 	    
     
     <page caption="caption_06_article">
 
         <field name="IdentifierUrn" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="202" multiplicity="1" />
+        <field name="IdentifierOpac" mandatory="no" frontdoorweight="0" adminformweight="1" publishformweight="0" multiplicity="1" />
         
         <field name="Note" mandatory="no" frontdoorweight="1" adminformweight="1" publishformweight="301" multiplicity="1" />
     </page>
