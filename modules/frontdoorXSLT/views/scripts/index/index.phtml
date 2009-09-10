@@ -41,6 +41,6 @@
  */
 
 ?>
-<? $this->headLink()->appendStylesheet('/layouts/frontdoor.css') ?>
+<? $this->headLink()->appendStylesheet($this->baseUrl.'/layouts/frontdoor.css') ?>
 <h1><?= $this->translate('frontdoor_pagetitle') ?></h1>
 <?= $this->frontdoor ?>
