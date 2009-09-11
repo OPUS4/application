@@ -289,11 +289,33 @@
             </xsl:choose>
                 <xsl:element name="datestamp">
                   <xsl:choose>
-                    <xsl:when test="@ServerDateModified ">
-                      <xsl:value-of select="@ServerDateModified" />
+                    <xsl:when test="ServerDateModified">
+                      <xsl:value-of select="ServerDateModified/@Year" />
+                      <xsl:text>-</xsl:text>
+                      <xsl:value-of select="ServerDateModified/@Month" />
+                      <xsl:text>-</xsl:text>
+                      <xsl:value-of select="ServerDateModified/@Day" />
+                      <xsl:text>T</xsl:text>
+                      <xsl:value-of select="ServerDateModified/@Hour" />
+                      <xsl:text>:</xsl:text>
+                      <xsl:value-of select="ServerDateModified/@Minute" />
+                      <xsl:text>:</xsl:text>
+                      <xsl:value-of select="ServerDateModified/@Second" />
+                      <xsl:text>Z</xsl:text>
                     </xsl:when>
                     <xsl:otherwise>
-                      <xsl:value-of select="@ServerDatePublished" />
+                      <xsl:value-of select="ServerDatePublished/@Year" />
+                      <xsl:text>-</xsl:text>
+                      <xsl:value-of select="ServerDatePublished/@Month" />
+                      <xsl:text>-</xsl:text>
+                      <xsl:value-of select="ServerDatePublished/@Day" />
+                      <xsl:text>T</xsl:text>
+                      <xsl:value-of select="ServerDatePublished/@Hour" />
+                      <xsl:text>:</xsl:text>
+                      <xsl:value-of select="ServerDatePublished/@Minute" />
+                      <xsl:text>:</xsl:text>
+                      <xsl:value-of select="ServerDatePublished/@Second" />
+                      <xsl:text>Z</xsl:text>
                     </xsl:otherwise>
                   </xsl:choose>
                 </xsl:element>
