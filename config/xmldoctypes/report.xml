@@ -42,7 +42,7 @@
 	<page caption="caption_01_report">
 		<field name="Licence" mandatory="yes" frontdoorweight="1" adminformweight="1" publishformweight="101" multiplicity="1" />
 		<field name="Language" mandatory="yes" frontdoorweight="1" adminformweight="1" publishformweight="102" multiplicity="1"/>
-		<field name="File" mandatory="no" frontdoorweight="0" adminformweight="0" publishformweight="0" multiplicity="*" />
+		<field name="File" mandatory="no" frontdoorweight="1" adminformweight="0" publishformweight="0" multiplicity="*" />
 		
 		<field name="ServerDateUnlocking" mandatory="no" frontdoorweight="0" adminformweight="0" publishformweight="201" multiplicity="1" />
 	    <field name="ServerDateValid" mandatory="no" frontdoorweight="0" adminformweight="0" publishformweight="202" multiplicity="1" />   
