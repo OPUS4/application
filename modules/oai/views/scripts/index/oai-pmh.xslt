@@ -290,32 +290,10 @@
                 <xsl:element name="datestamp">
                   <xsl:choose>
                     <xsl:when test="ServerDateModified">
-                      <xsl:value-of select="ServerDateModified/@Year" />
-                      <xsl:text>-</xsl:text>
-                      <xsl:value-of select="ServerDateModified/@Month" />
-                      <xsl:text>-</xsl:text>
-                      <xsl:value-of select="ServerDateModified/@Day" />
-                      <xsl:text>T</xsl:text>
-                      <xsl:value-of select="ServerDateModified/@Hour" />
-                      <xsl:text>:</xsl:text>
-                      <xsl:value-of select="ServerDateModified/@Minute" />
-                      <xsl:text>:</xsl:text>
-                      <xsl:value-of select="ServerDateModified/@Second" />
-                      <xsl:text>Z</xsl:text>
+                      <xsl:value-of select="concat(ServerDateModified/@Year,'-',format-number(ServerDateModified/@Month,'00'),'-',format-number(ServerDateModified/@Day,'00'),'T',format-number(ServerDateModified/@Hour,'00'),':',format-number(ServerDateModified/@Minute,'00'),':',format-number(ServerDateModified/@Second,'00'),'Z')" />
                     </xsl:when>
                     <xsl:otherwise>
-                      <xsl:value-of select="ServerDatePublished/@Year" />
-                      <xsl:text>-</xsl:text>
-                      <xsl:value-of select="ServerDatePublished/@Month" />
-                      <xsl:text>-</xsl:text>
-                      <xsl:value-of select="ServerDatePublished/@Day" />
-                      <xsl:text>T</xsl:text>
-                      <xsl:value-of select="ServerDatePublished/@Hour" />
-                      <xsl:text>:</xsl:text>
-                      <xsl:value-of select="ServerDatePublished/@Minute" />
-                      <xsl:text>:</xsl:text>
-                      <xsl:value-of select="ServerDatePublished/@Second" />
-                      <xsl:text>Z</xsl:text>
+                      <xsl:value-of select="concat(ServerDatePublished/@Year,'-',format-number(ServerDatePublished/@Month,'00'),'-',format-number(ServerDatePublished/@Day,'00'),'T',format-number(ServerDatePublished/@Hour,'00'),':',format-number(ServerDatePublished/@Minute,'00'),':',format-number(ServerDatePublished/@Second,'00'),'Z')" />
                     </xsl:otherwise>
                   </xsl:choose>
                 </xsl:element>
