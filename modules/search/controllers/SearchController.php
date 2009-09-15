@@ -203,7 +203,9 @@ class Search_SearchController extends Zend_Controller_Action
             $form = new MetadataSearch();
             $data = $this->_request->getParams();
             if (isset($resultlist->postedData) === true) {
-                $this->view->form = $form->populate($resultlist->postedData);
+                if (array_key_exists('noform', $data) === false) {
+                	$this->view->form = $form->populate($resultlist->postedData);
+                }
                 $data['hitsPerPage'] = $resultlist->postedData['hitsPerPage'];
                 $data['sort'] = $resultlist->postedData['sort'];
             }
@@ -215,7 +217,7 @@ class Search_SearchController extends Zend_Controller_Action
             // do a new query by URL-parameter
             $query = '';
             foreach ($data as $searchField => $searchValue) {
-                if (array_key_exists($searchField, MetadataSearch::retrieveSearchFields()))
+                if (array_key_exists($searchField, MetadataSearch::retrieveInternalSearchFields()))
                 {
                 	$query .= $searchField . ':' . $searchValue . ' ';
                 }

@@ -135,4 +135,29 @@ class MetadataSearch extends Zend_Form
             );
     	return $fields;
     }
+
+    /**
+     * Retrieve a list of possible search fields
+     */
+    public static function retrieveInternalSearchFields()
+    {
+    	// aus Opus3:
+    	// Titel, Person, Freitext, Schlagwort, Körperschaft, Fakultät, Institut, Abstract
+    	// Dokumentart, Quelle, Jahr, verf. Klassifikationen
+    	// Opus4: Personen differenzieren, Quelle raus (?)
+    	$fields = array(
+            'title' => 'searchfield_title',
+            'author' => 'searchfield_author',
+            'persons' => 'searchfield_persons',
+            'fulltext' => 'searchfield_fulltext',
+            'abstract' => 'searchfield_abstract',
+            'subject' => 'searchfield_subject',
+            'year' => 'searchfield_year',
+            'institute' => 'searchfield_institute',
+            'urn' => 'searchfield_urn',
+            'isbn' => 'searchfield_isbn',
+            'doctype' => 'searchfield_doctype'
+            );
+    	return $fields;
+    }
 }
