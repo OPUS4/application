@@ -61,6 +61,7 @@
 
     <xsl:output method="xml" indent="yes" />
 
+    <xsl:param name="contactId" />
 
     <xsl:template match="Opus_Document" mode="xmetadissplus">
         <xsl:element name="xMetaDiss">
@@ -92,70 +93,71 @@
             </xsl:element>
             <!-- dc:contributor -->
             <xsl:apply-templates select="PersonAdvisor" mode="xmetadissplus" />
+            <xsl:apply-templates select="PersonReferee" mode="xmetadissplus" />
 
 <!--    hier statt DateAccepted Datum der Erstveroeffentlichung -->
-            <xsl:apply-templates select="@DateAccepted" mode="xmetadissplus" />
+            <xsl:apply-templates select="DateAccepted" mode="xmetadissplus" />
 
             <xsl:element name="dc:type">
                <xsl:attribute name="xsi:type">bszterms:PublType</xsl:attribute>
                  <xsl:choose>
                    <xsl:when test="@Type='manual'">
-                       Manual
+                       <xsl:text>Manual</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='article'">
-                       Article
+                       <xsl:text>Article</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='monograph'">
-                       Book
+                       <xsl:text>Book</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='monograph_section'">
-                       InBook
+                       <xsl:text>InBook</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='bachelor_thesis'">
-                       Thesis.Bachelor
+                       <xsl:text>Thesis.Bachelor</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='master_thesis'">
-                       Thesis.Master
+                       <xsl:text>Thesis.Master</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='doctoral_thesis'">
-                       Thesis.Doctoral
+                       <xsl:text>Thesis.Doctoral</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='habilitation'">
-                       Thesis.Habilitation
+                       <xsl:text>Thesis.Habilitation</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='festschrift'">
-                       Festschrift
+                       <xsl:text>Festschrift</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='journal'">
-                       Journal
+                       <xsl:text>Journal</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='conference'">
-                       Proceedings
+                       <xsl:text>Proceedings</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='conference_item'">
-                       InProceedings
+                       <xsl:text>InProceedings</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='studienarbeit'">
-                       Paper
+                       <xsl:text>Paper</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='paper'">
-                       ResearchPaper
+                       <xsl:text>ResearchPaper</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='report'">
-                       TechReport
+                       <xsl:text>TechReport</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='preprint'">
-                       Preprint
+                       <xsl:text>Preprint</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='other'">
-                       Misc
+                       <xsl:text>Misc</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='lecture'">
-                       Lecture
+                       <xsl:text>Lecture</xsl:text>
                    </xsl:when>
                    <xsl:otherwise>
                      <xsl:value-of select="@Type" />
-                       unbekannter Typ 
+                       <xsl:text>unbekannter Typ</xsl:text> 
                    </xsl:otherwise>    
                  </xsl:choose>  
             </xsl:element>
@@ -166,41 +168,34 @@
             <xsl:apply-templates select="@Language" mode="xmetadissplus" />
             <xsl:apply-templates select="Licence" mode="xmetadissplus" />
 
-  <!--  evtl. thesis.degree nur ausgeben, wenn Inhalt, also
-        ueber ein apply-templates select = noch offen -->
-            <xsl:element name="thesis:degree">
-               <xsl:element name="thesis:level">
-   <!--  noch aendern, kann hier auch andere Werte haben -->            
-                 <xsl:choose>
-                   <xsl:when test="@Type='doctoral_thesis'">
-                       thesis:doctoral
-                   </xsl:when>
-                   <xsl:when test="@Type='habilitation'">
-                       thesis:habilitation
-                   </xsl:when>
-                   <xsl:when test="@Type='bachelor_thesis'">
-                       bachelor
-                   </xsl:when>
-                   <xsl:when test="@Type='master_thesis'">
-                       master
-                   </xsl:when>
-                   <xsl:otherwise>
-                       other 
-                   </xsl:otherwise>    
-                 </xsl:choose>  
-               </xsl:element>
-               <xsl:element name="thesis:grantor">
-                  <xsl:attribute name="xsi:type">cc:Corporate</xsl:attribute>
-                  <xsl:element name="cc:universityOrInstitution">
-                  </xsl:element>
+           <!--  thesis.degree only, if type doctoral or habilitation -->
+            <xsl:if test="@Type='doctoral_thesis' or @Type='habilitation'">
+                <xsl:element name="thesis:degree">
+                   <xsl:element name="thesis:level">
+                     <xsl:choose>
+                       <xsl:when test="@Type='doctoral_thesis'">
+                           <xsl:text>thesis:doctoral</xsl:text>
+                       </xsl:when>
+                       <xsl:when test="@Type='habilitation'">
+                           <xsl:text>thesis:habilitation</xsl:text>
+                       </xsl:when>
+                       <xsl:otherwise>
+                           <xsl:text>other</xsl:text> 
+                       </xsl:otherwise>    
+                     </xsl:choose>  
+                   </xsl:element>
+                   <xsl:element name="thesis:grantor">
+                      <xsl:attribute name="xsi:type">cc:Corporate</xsl:attribute>
+                      <xsl:element name="cc:universityOrInstitution">
+                      </xsl:element>
    <!--  missing: cc:name,cc:place,cc:department, 
          not yet in xml-output -->
-               </xsl:element>    
-            </xsl:element>
+                   </xsl:element>    
+                </xsl:element>
+            </xsl:if>
 
             <xsl:element name="ddb:contact">
-               <!--  missing, not yet in xml-output, though set fix --> 
-                <xsl:attribute name="ddb:contactID">F6000-0422</xsl:attribute>
+                <xsl:attribute name="ddb:contactID"><xsl:value-of select="$contactId" /></xsl:attribute>
             </xsl:element>
             <xsl:element name="ddb:fileNumber">
               <xsl:value-of select="count(//File)"/>
@@ -215,7 +210,7 @@
 
     <xsl:template match="TitleMain" mode="xmetadissplus">
         <xsl:element name="dc:title">
-            <xsl:attribute name="xsi:type">ddb:titleISO639-2</xsl:attribute>
+            <xsl:attribute name="xsi:type">ddb:titleISO639-3</xsl:attribute>
             <xsl:attribute name="lang">
                 <xsl:value-of select="@Language" />
             </xsl:attribute>
@@ -272,7 +267,7 @@
 
     <xsl:template match="TitleAbstract" mode="xmetadissplus">
         <xsl:element name="dcterms:abstract">
-            <xsl:attribute name="xsi:type">ddb:contentISO639-2</xsl:attribute>
+            <xsl:attribute name="xsi:type">ddb:contentISO639-3</xsl:attribute>
             <xsl:attribute name="lang">
                 <xsl:value-of select="@Language" />
             </xsl:attribute>
@@ -302,11 +297,12 @@
 
     <xsl:template match="PersonAdvisor" mode="xmetadissplus">
        <xsl:element name="contributor">
-         <xsl:attribute name="xsi:type">pc:Contributor</xsl:attribute>
-         <xsl:attribute name="thesis:role">advisor</xsl:attribute>
+         <xsl:attribute name="xsi:type"><xsl:text>pc:Contributor</xsl:text></xsl:attribute>
+         <xsl:attribute name="thesis:role"><xsl:text>advisor</xsl:text></xsl:attribute>
+         <xsl:attribute name="countryCode"><xsl:text>DE</xsl:text></xsl:attribute>
            <xsl:element name="pc:person">
              <xsl:element name="pc:name">
-                <xsl:attribute name="type">nameUsedByThePerson</xsl:attribute>
+                <xsl:attribute name="type"><xsl:text>nameUsedByThePerson</xsl:text></xsl:attribute>
                 <xsl:element name="pc:foreName">
                   <xsl:value-of select="@FirstName" />
                 </xsl:element>
@@ -321,10 +317,34 @@
        </xsl:element>
     </xsl:template>
 
-    <xsl:template match="@DateAccepted" mode="xmetadissplus">
+    <xsl:template match="PersonReferee" mode="xmetadiss">
+       <xsl:element name="dc:contributor">
+         <xsl:attribute name="xsi:type"><xsl:text>pc:Contributor</xsl:text></xsl:attribute>
+         <xsl:attribute name="thesis:role"><xsl:text>referee</xsl:text></xsl:attribute>
+         <xsl:attribute name="countryCode"><xsl:text>DE</xsl:text></xsl:attribute>
+           <xsl:element name="pc:person">
+             <xsl:element name="pc:name">
+                <xsl:attribute name="type"><xsl:text>nameUsedByThePerson</xsl:text></xsl:attribute>
+                <xsl:element name="pc:foreName">
+                  <xsl:value-of select="@FirstName" />
+                </xsl:element>
+                <xsl:element name="pc:surName">
+                  <xsl:value-of select="@LastName" />
+                </xsl:element>
+             </xsl:element>
+             <xsl:element name="academicTitle">
+                <xsl:value-of select="@AcademicTitle" />
+             </xsl:element>
+           </xsl:element>
+       </xsl:element>
+    </xsl:template>
+
+
+
+    <xsl:template match="DateAccepted" mode="xmetadissplus">
         <xsl:element name="dcterms:dateAccepted">
           <xsl:attribute name="xsi:type">dcterms:W3CDTF</xsl:attribute>
-            <xsl:value-of select="." />
+            <xsl:value-of select="concat(@Year,'-',format-number(@Month,'00'),'-',format-number(@Day,'00'))" />
         </xsl:element>
     </xsl:template>
 
@@ -337,7 +357,7 @@
 
     <xsl:template match="@Language" mode="xmetadissplus">
         <xsl:element name="dc:language">
-           <xsl:attribute name="xsi:type">dcterms:ISO639-2</xsl:attribute>    
+           <xsl:attribute name="xsi:type">dcterms:ISO639-3</xsl:attribute>    
            <xsl:value-of select="." />
         </xsl:element>
     </xsl:template>
@@ -360,7 +380,8 @@
              <xsl:attribute name="ddb:fileSize">
                <xsl:value-of select="@FileSize"/>
             </xsl:attribute>   
-               aus:Praesentationsformat   
+            <xsl:attribute name="ddb:fileDirectory">/</xsl:attribute>
+            <xsl:text>aus:Praesentationsformat</xsl:text>
         </xsl:element>
     </xsl:template>
 
@@ -390,7 +411,6 @@ PublisherName, PublisherPlace, PublisherAddress: noch nicht gesehen,
                da keine Testdaten
 thesis:grantor Institution, die akad. Grad vergeben hat
                in Opus 3 Fakultaet, hier???
-contactID:  von thesis:grantor: z.Zt. fix gesetzt               
 fileSize    ist bei den Attributen zum Feld file nicht dabei
             hier z.Zt. FileSize benannt 
 
