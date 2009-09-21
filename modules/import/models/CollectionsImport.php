@@ -135,17 +135,20 @@ class CollectionsImport
 		    }
 		}
 		reset($colls);
-		/*foreach ($colls as $key => $c) {
+		foreach ($colls as $key => $c) {
 		    $class = $collections[$key];
 		    // check if this is first level Collection
 		    // its first level, if coll_id = root_id
 		    if ($class['coll_id'] !== $class['root_id']) {
 		    	// first level elements are already inside, so lets proceed with next level
 		        echo ".";
+		        // Warning: every Collection is now imported as a direct subcollection of the first level
+		        // This is not necessarily true
+		        // TODO: import real hierarchy
 		        $parentCollId = $subcoll[$class['root_id']];
-		        $parentColl = new Opus_Collection($parentCollId);
-		        $coll = new Opus_Collection($collRole->getId(), $parentCollId);
-    		    $coll->setName($class['name']);
+		        $parentColl = new Opus_Collection($collRole->getId(), $parentCollId);
+		        $coll = new Opus_Collection($collRole->getId());
+    		    $coll->setName($class['coll_name']);
 	    	    $coll->setTheme('default');
 	    	    $newCollId = $coll->store();
 			   	fputs($fp, $class['coll_id'] . ' ' . $newCollId . "\n");
@@ -153,10 +156,9 @@ class CollectionsImport
 			    $parentColl->addSubCollection($coll);
 			    $parentColl->store();
 		    }
-		}*/
-		
-         echo "\n";
-		 fclose($fp);
+		}		
+        echo "\n";
+		fclose($fp);
 	}
 
 	/**
