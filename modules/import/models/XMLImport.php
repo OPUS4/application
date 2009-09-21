@@ -214,9 +214,15 @@ class XMLImport
             $oldSeriesId = $oldSeries->getAttribute('Value');
             $issue = $oldSeries->getAttribute('Issue');
             $newSeriesId = $this->getSeries($oldSeriesId);
+            // Build Subcollection
             if (array_key_exists($seriesName, $this->collections) === true) {
             	if ($newSeriesId !== null) {
-                    $seriesCollection = new Opus_Collection($this->collections[$seriesName], $newSeriesId);
+                    $seriesParentCollection = new Opus_Collection($this->collections[$seriesName], $newSeriesId);
+                    $seriesCollection = new Opus_Collection($this->collections[$seriesName]);
+		            $seriesCollection->setName('Band ' . $issue);
+		            $seriesCollection->setTheme('default');
+                    $seriesParentCollection->addSubCollection($seriesCollection);
+                    $seriesParentCollection->store();
                 }
                 else {
             	    echo "Mapping file for " . $this->collections[$seriesName] . " does not exist or class not found. Series $series not imported for old ID $oldid\n";
@@ -297,8 +303,6 @@ class XMLImport
 		    }
 		    if ($seriesCollection !== null) {
 		        $seriesCollection->addEntry($doc);
-		        // TODO: Add Issue of the document to metadata
-		        //$doc->setIssue($issue);
 		    }
             if (count($institute) > 0) {
                 foreach($institute as $instEntry) {

@@ -134,25 +134,26 @@ class CollectionsImport
 			    $collRole->store();
 		    }
 		}
-		#reset($colls);
-		#foreach ($colls as $key => $c) {
-		#    $class = $collections[$key];
+		reset($colls);
+		/*foreach ($colls as $key => $c) {
+		    $class = $collections[$key];
 		    // check if this is first level Collection
 		    // its first level, if coll_id = root_id
-		#    if ($class['coll_id'] !== $class['root_id']) {
+		    if ($class['coll_id'] !== $class['root_id']) {
 		    	// first level elements are already inside, so lets proceed with next level
-		#        echo ".";
-		#        $parentCollId = $subcoll[$class['coll_id']];
-		#        $coll = new Opus_Collection($collRole->getId(), $parentCollId);
-    #		    $coll->setName($class['name']);
-	 #   	    $coll->setTheme('default');
-	  #  	    $newCollId = $coll->store();
-		#    	fputs($fp, $class['coll_id'] . ' ' . $newCollId . "\n");
-		#    	$subcoll[$class['coll_id']] = $newCollId;
-		#	    $parentColl->addSubCollection($coll);
-		#	    $parentColl->store();
-		 #   }
-		#}
+		        echo ".";
+		        $parentCollId = $subcoll[$class['root_id']];
+		        $parentColl = new Opus_Collection($parentCollId);
+		        $coll = new Opus_Collection($collRole->getId(), $parentCollId);
+    		    $coll->setName($class['name']);
+	    	    $coll->setTheme('default');
+	    	    $newCollId = $coll->store();
+			   	fputs($fp, $class['coll_id'] . ' ' . $newCollId . "\n");
+		    	$subcoll[$class['coll_id']] = $newCollId;
+			    $parentColl->addSubCollection($coll);
+			    $parentColl->store();
+		    }
+		}*/
 		
          echo "\n";
 		 fclose($fp);
