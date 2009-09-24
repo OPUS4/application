@@ -2505,7 +2505,6 @@ AND c.number > 499
 
 AND s.left = s.right-1
 AND c.number <> 839
-AND c.number <> 914
 AND c.number <> 943
 
 AND c.number <> 790
@@ -2517,9 +2516,29 @@ AND c.number <> 796
 AND c.number <> 741.5
 AND c.number <> 914.3
 
+AND c.number <> 000
+AND c.number <> 350
+AND c.number <> 430
+AND c.number <> 740
+AND c.number <> 830
+AND c.number <> 910
+AND c.number <> 940
+
 OR s.collections_id = c.id
 AND c.number = 680;
 
+UPDATE opus400.collections_structure_2 s , opus400.collections_contents_2 c 
+SET s.visible = 1 
+WHERE s.collections_id = c.id
+AND s.left = s.right-1
+AND (c.number = 000
+OR c.number = 350
+OR c.number = 430
+OR c.number = 740
+OR c.number = 830
+OR c.number = 910
+OR c.number = 940)
+;
 
 -- --------------------------------------------------------
 
