@@ -50,13 +50,16 @@ class FrontdoorXSLT_IndexController extends Controller_Action {
         $type = new Opus_Document_Type($document->getType());
         $filter = new Opus_Model_Filter;
         $filter->setModel($document);
-        $filter->setSortOrder($type->getFrontdoorSortOrder());
-        $filter->setBlacklist($type->getFrontdoorBlackList());
         $xml = $filter->toXml();
 
         // Set up XSLT-Stylesheet
         $xslt = new DomDocument;
-        $xslt->load($this->view->getScriptPath('index') . '/index.xslt');
+        if (true === file_exists($this->view->getScriptPath('index') . '/' . $type->getName() . '.xslt')) {
+            $template = $type->getName() . '.xslt';
+        } else {
+            $template = 'index.xslt';
+        }
+        $xslt->load($this->view->getScriptPath('index') . '/' . $template);
 
         // Set up XSLT-Processor
         $proc = new XSLTProcessor;
