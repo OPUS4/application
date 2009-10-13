@@ -41,63 +41,63 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     
 	<page caption="caption_01_bachelorthesis">
-		<field name="Licence" mandatory="yes" frontdoorweight="3" adminformweight="1" publishformweight="101" multiplicity="1" />
-		<field name="Language" mandatory="yes" frontdoorweight="121" adminformweight="1" publishformweight="102" multiplicity="1"/>
-		<field name="File" mandatory="no" frontdoorweight="51" adminformweight="0" publishformweight="0" multiplicity="*" />
+		<field name="Licence" mandatory="yes" adminformweight="1" publishformweight="101" multiplicity="1" />
+		<field name="Language" mandatory="yes" adminformweight="1" publishformweight="102" multiplicity="1"/>
+		<field name="File" mandatory="no" adminformweight="0" publishformweight="0" multiplicity="*" />
 		
-		<field name="ServerDateUnlocking" mandatory="no" frontdoorweight="0" adminformweight="0" publishformweight="201" multiplicity="1" />
-	    <field name="ServerDateValid" mandatory="no" frontdoorweight="0" adminformweight="0" publishformweight="202" multiplicity="1" />   
+		<field name="ServerDateUnlocking" mandatory="no" adminformweight="0" publishformweight="201" multiplicity="1" />
+	    <field name="ServerDateValid" mandatory="no" adminformweight="0" publishformweight="202" multiplicity="1" />   
 	    	    
 	    <!-- for downward compatibility to opus 3 data. Do not show this fields -->	    
-	    <field name="IdentifierOpus3" mandatory="no" frontdoorweight="0" adminformweight="1" publishformweight="0" multiplicity="1" />
+	    <field name="IdentifierOpus3" mandatory="no" adminformweight="1" publishformweight="0" multiplicity="1" />
 	</page>
 
 	<page caption="caption_02_bachelorthesis">
-        <field name="TitleMain" mandatory="yes" frontdoorweight="21" adminformweight="1" publishformweight="101" multiplicity="4" />
-        <field name="TitleAbstract" mandatory="yes" frontdoorweight="141" adminformweight="1" publishformweight="102" multiplicity="4" />
+        <field name="TitleMain" mandatory="yes" adminformweight="1" publishformweight="101" multiplicity="4" />
+        <field name="TitleAbstract" mandatory="yes" adminformweight="1" publishformweight="102" multiplicity="4" />
     </page>
 	   
 	<page caption="caption_03_bachelorthesis">
-		<field name="PersonAuthor" mandatory="yes" frontdoorweight="31" adminformweight="1" publishformweight="201" multiplicity="*" />
-		<field name="PersonAdvisor" mandatory="no" frontdoorweight="111" adminformweight="1" publishformweight="202" multiplicity="2" />
-		<field name="PersonContributor" mandatory="no" frontdoorweight="32" adminformweight="1" publishformweight="206" multiplicity="*" />
+		<field name="PersonAuthor" mandatory="yes" adminformweight="1" publishformweight="201" multiplicity="*" />
+		<field name="PersonAdvisor" mandatory="no" adminformweight="1" publishformweight="202" multiplicity="2" />
+		<field name="PersonContributor" mandatory="no" adminformweight="1" publishformweight="206" multiplicity="*" />
 
-        <field name="ContributingCorporation" mandatory="no" frontdoorweight="96" adminformweight="1" publishformweight="208" multiplicity="*"/>
+        <field name="ContributingCorporation" mandatory="no" adminformweight="1" publishformweight="208" multiplicity="*"/>
 
-	    <field name="PublisherUniversity" mandatory="yes" frontdoorweight="91" adminformweight="1" publishformweight="301" multiplicity="*" />
+	    <field name="PublisherUniversity" mandatory="yes" adminformweight="1" publishformweight="301" multiplicity="*" />
 
 		<!-- TODO implement it -->
-		<!--<field name="Institute" mandatory="yes" frontdoorweight="32" adminformweight="1" publishformweight="302" multiplicity="*" />-->
+		<!--<field name="Institute" mandatory="yes" adminformweight="1" publishformweight="302" multiplicity="*" />-->
 
-        <field name="NonInstituteAffiliation" mandatory="no" frontdoorweight="0" adminformweight="1" publishformweight="303" multiplicity="*" />
+        <field name="NonInstituteAffiliation" mandatory="no" adminformweight="1" publishformweight="303" multiplicity="*" />
     </page>
 
 	<page caption="caption_04_bachelorthesis">	    
-        <field name="PageNumber" mandatory="no" frontdoorweight="81" adminformweight="1" publishformweight="102" multiplicity="1" />
+        <field name="PageNumber" mandatory="no" adminformweight="1" publishformweight="102" multiplicity="1" />
         <mandatory type="one-at-least">
-            <field name="CompletedYear" frontdoorweight="131" adminformweight="1" publishformweight="402" multiplicity="1" />
-            <field name="CompletedDate" frontdoorweight="132" adminformweight="1" publishformweight="403" multiplicity="1" />
+            <field name="CompletedYear" adminformweight="1" publishformweight="402" multiplicity="1" />
+            <field name="CompletedDate" adminformweight="1" publishformweight="403" multiplicity="1" />
         </mandatory>
         <mandatory type="one-at-least">
-            <field name="PublishedYear" frontdoorweight="133" adminformweight="1" publishformweight="404" multiplicity="1" />
-            <field name="PublishedDate" frontdoorweight="134" adminformweight="1" publishformweight="405" multiplicity="1" />
+            <field name="PublishedYear" adminformweight="1" publishformweight="404" multiplicity="1" />
+            <field name="PublishedDate" adminformweight="1" publishformweight="405" multiplicity="1" />
         </mandatory>
     </page>
 
 	<page caption="caption_05_bachelorthesis">
-	    <field name="SubjectSwd" mandatory="no" frontdoorweight="61" adminformweight="1" publishformweight="401" multiplicity="5" />
-	    <field name="SubjectPsyndex" mandatory="no" frontdoorweight="62" adminformweight="1" publishformweight="402" multiplicity="*" />
-	    <field name="SubjectUncontrolled" mandatory="no" frontdoorweight="63" adminformweight="1" publishformweight="403" multiplicity="*" />
+	    <field name="SubjectSwd" mandatory="no" adminformweight="1" publishformweight="401" multiplicity="5" />
+	    <field name="SubjectPsyndex" mandatory="no" adminformweight="1" publishformweight="402" multiplicity="*" />
+	    <field name="SubjectUncontrolled" mandatory="no" adminformweight="1" publishformweight="403" multiplicity="*" />
 	    <!-- TODO implement it - derzeit Fehlermeldung Specified column "collection" is not in the row -->
-	    <!--<field name="Collection" mandatory="no" frontdoorweight="71" adminformweight="1" publishformweight="404" multiplicity="*" />-->
+	    <!--<field name="Collection" mandatory="no" adminformweight="1" publishformweight="404" multiplicity="*" />-->
     </page>
 	    
     
     <page caption="caption_06_bachelorthesis">
-        <field name="IdentifierUrn" mandatory="no" frontdoorweight="11" adminformweight="1" publishformweight="202" multiplicity="1" />
-        <field name="IdentifierOpac" mandatory="no" frontdoorweight="0" adminformweight="1" publishformweight="0" multiplicity="1" />
+        <field name="IdentifierUrn" mandatory="no" adminformweight="1" publishformweight="202" multiplicity="1" />
+        <field name="IdentifierOpac" mandatory="no" adminformweight="1" publishformweight="0" multiplicity="1" />
         
-        <field name="Note" mandatory="no" frontdoorweight="151" adminformweight="1" publishformweight="301" multiplicity="1" />
+        <field name="Note" mandatory="no" adminformweight="1" publishformweight="301" multiplicity="1" />
     </page>
 
 </documenttype>

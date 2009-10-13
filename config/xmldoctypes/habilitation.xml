@@ -42,74 +42,74 @@
     
 	<page caption="caption_01_habilitation">
 
-		<field name="Licence" mandatory="yes" frontdoorweight="3" adminformweight="1" publishformweight="101" multiplicity="1" />
-		<field name="Language" mandatory="yes" frontdoorweight="121" adminformweight="1" publishformweight="102" multiplicity="1"/>
-		<field name="File" mandatory="no" frontdoorweight="51" adminformweight="0" publishformweight="0" multiplicity="*" />
+		<field name="Licence" mandatory="yes" adminformweight="1" publishformweight="101" multiplicity="1" />
+		<field name="Language" mandatory="yes" adminformweight="1" publishformweight="102" multiplicity="1"/>
+		<field name="File" mandatory="no" adminformweight="0" publishformweight="0" multiplicity="*" />
 		
-		<field name="ServerDateUnlocking" mandatory="no" frontdoorweight="0" adminformweight="0" publishformweight="201" multiplicity="1" />
-	    <field name="ServerDateValid" mandatory="no" frontdoorweight="0" adminformweight="0" publishformweight="202" multiplicity="1" />   
+		<field name="ServerDateUnlocking" mandatory="no" adminformweight="0" publishformweight="201" multiplicity="1" />
+	    <field name="ServerDateValid" mandatory="no" adminformweight="0" publishformweight="202" multiplicity="1" />   
 	    	    
 	    <!-- for downward compatibility to opus 3 data. Do not show this fields -->	    
-	    <field name="IdentifierOpus3" mandatory="no" frontdoorweight="0" adminformweight="1" publishformweight="0" multiplicity="1" />
+	    <field name="IdentifierOpus3" mandatory="no" adminformweight="1" publishformweight="0" multiplicity="1" />
 	</page>
 	
 	<page caption="caption_02_habilitation">
 	
-        <field name="TitleMain" mandatory="yes" frontdoorweight="21" adminformweight="1" publishformweight="101" multiplicity="4" />
-        <field name="TitleAbstract" mandatory="yes" frontdoorweight="141" adminformweight="1" publishformweight="102" multiplicity="4" />
+        <field name="TitleMain" mandatory="yes" adminformweight="1" publishformweight="101" multiplicity="4" />
+        <field name="TitleAbstract" mandatory="yes" adminformweight="1" publishformweight="102" multiplicity="4" />
 	</page>
 	
 	<page caption="caption_03_habilitation">
-		<field name="PersonAuthor" mandatory="yes" frontdoorweight="31" adminformweight="1" publishformweight="201" multiplicity="3" />
-		<field name="PersonAdvisor" mandatory="yes" frontdoorweight="111" adminformweight="1" publishformweight="202" multiplicity="2" />
-		<field name="PersonReferee" mandatory="no" frontdoorweight="112" adminformweight="1" publishformweight="203" multiplicity="1" />
-		<field name="PersonEditor" mandatory="no" frontdoorweight="32" adminformweight="1" publishformweight="204" multiplicity="3" />
-		<field name="PersonTranslator" mandatory="no" frontdoorweight="33" adminformweight="1" publishformweight="205" multiplicity="3" />
-		<field name="PersonContributor" mandatory="no" frontdoorweight="34" adminformweight="1" publishformweight="206" multiplicity="3" />
+		<field name="PersonAuthor" mandatory="yes" adminformweight="1" publishformweight="201" multiplicity="3" />
+		<field name="PersonAdvisor" mandatory="yes" adminformweight="1" publishformweight="202" multiplicity="2" />
+		<field name="PersonReferee" mandatory="no" adminformweight="1" publishformweight="203" multiplicity="1" />
+		<field name="PersonEditor" mandatory="no" adminformweight="1" publishformweight="204" multiplicity="3" />
+		<field name="PersonTranslator" mandatory="no" adminformweight="1" publishformweight="205" multiplicity="3" />
+		<field name="PersonContributor" mandatory="no" adminformweight="1" publishformweight="206" multiplicity="3" />
 
-        <field name="CreatingCorporation" mandatory="no" frontdoorweight="96" adminformweight="1" publishformweight="207" multiplicity="3" />
-        <field name="ContributingCorporation" mandatory="no" frontdoorweight="97" adminformweight="1" publishformweight="208" multiplicity="3"/>
+        <field name="CreatingCorporation" mandatory="no" adminformweight="1" publishformweight="207" multiplicity="3" />
+        <field name="ContributingCorporation" mandatory="no" adminformweight="1" publishformweight="208" multiplicity="3"/>
  		
-        <field name="PublisherName" mandatory="no" frontdoorweight="42" adminformweight="1" publishformweight="101" multiplicity="1" />
-        <field name="PublisherPlace" mandatory="no" frontdoorweight="43" adminformweight="1" publishformweight="102" multiplicity="1"/>
+        <field name="PublisherName" mandatory="no" adminformweight="1" publishformweight="101" multiplicity="1" />
+        <field name="PublisherPlace" mandatory="no" adminformweight="1" publishformweight="102" multiplicity="1"/>
         
  		<!--  <field name="Institute" mandatory="yes" multiplicity="3" /> -->
         <field name="NonInstituteAffiliation" />
  	</page>
 	
 	<page caption="caption_04_habilitation">
-	    <field name="PublisherUniversity" mandatory="yes" frontdoorweight="91" adminformweight="1" publishformweight="301" multiplicity="3" />
+	    <field name="PublisherUniversity" mandatory="yes" adminformweight="1" publishformweight="301" multiplicity="3" />
 
-        <field name="PageNumber" mandatory="no" frontdoorweight="82" adminformweight="1" publishformweight="102" multiplicity="1" />
+        <field name="PageNumber" mandatory="no" adminformweight="1" publishformweight="102" multiplicity="1" />
 
-        <field name="DateAccepted" mandatory="yes" frontdoorweight="131" adminformweight="1" publishformweight="401" multiplicity="1" />
+        <field name="DateAccepted" mandatory="yes" adminformweight="1" publishformweight="401" multiplicity="1" />
 
         <mandatory type="one-at-least">
-            <field name="CompletedYear" frontdoorweight="132" adminformweight="1" publishformweight="402" multiplicity="1" />
-            <field name="CompletedDate" frontdoorweight="133" adminformweight="1" publishformweight="403" multiplicity="1" />
+            <field name="CompletedYear" adminformweight="1" publishformweight="402" multiplicity="1" />
+            <field name="CompletedDate" adminformweight="1" publishformweight="403" multiplicity="1" />
         </mandatory>
         <mandatory type="one-at-least">
-            <field name="PublishedYear" frontdoorweight="134" adminformweight="1" publishformweight="404" multiplicity="1" />
-            <field name="PublishedDate" frontdoorweight="135" adminformweight="1" publishformweight="405" multiplicity="1" />
+            <field name="PublishedYear" adminformweight="1" publishformweight="404" multiplicity="1" />
+            <field name="PublishedDate" adminformweight="1" publishformweight="405" multiplicity="1" />
         </mandatory>
 
 	</page>
 	
 	<page caption="caption_05_habilitation">
-	    <field name="SubjectSwd" mandatory="no" frontdoorweight="61" adminformweight="1" publishformweight="401" multiplicity="5" />
-	    <field name="SubjectPsyndex" mandatory="no" frontdoorweight="62" adminformweight="1" publishformweight="402" multiplicity="*" />
-	    <field name="SubjectUncontrolled" mandatory="no" frontdoorweight="63" adminformweight="1" publishformweight="403" multiplicity="*" />
+	    <field name="SubjectSwd" mandatory="no" adminformweight="1" publishformweight="401" multiplicity="5" />
+	    <field name="SubjectPsyndex" mandatory="no" adminformweight="1" publishformweight="402" multiplicity="*" />
+	    <field name="SubjectUncontrolled" mandatory="no" adminformweight="1" publishformweight="403" multiplicity="*" />
 	    <!-- TODO implement it - derzeit Fehlermeldung Specified column "collection" is not in the row -->
-	    <!--<field name="Collection" mandatory="no" frontdoorweight="71" adminformweight="1" publishformweight="404" multiplicity="*" />-->
+	    <!--<field name="Collection" mandatory="no" adminformweight="1" publishformweight="404" multiplicity="*" />-->
     </page>
     
         <page caption="caption_06_habilitation">
         
-        <field name="IdentifierIsbn" mandatory="no" frontdoorweight="83" adminformweight="1" publishformweight="201" multiplicity="2" />
-        <field name="IdentifierUrn" mandatory="no" frontdoorweight="11" adminformweight="1" publishformweight="202" multiplicity="1" />
-        <field name="IdentifierOpac" mandatory="no" frontdoorweight="0" adminformweight="1" publishformweight="0" multiplicity="1" />
+        <field name="IdentifierIsbn" mandatory="no" adminformweight="1" publishformweight="201" multiplicity="2" />
+        <field name="IdentifierUrn" mandatory="no" adminformweight="1" publishformweight="202" multiplicity="1" />
+        <field name="IdentifierOpac" mandatory="no" adminformweight="1" publishformweight="0" multiplicity="1" />
         
-        <field name="Note" mandatory="no" frontdoorweight="151" adminformweight="1" publishformweight="301" multiplicity="1" />
+        <field name="Note" mandatory="no" adminformweight="1" publishformweight="301" multiplicity="1" />
         
     </page>
 
