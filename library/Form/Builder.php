@@ -891,7 +891,7 @@ class Form_Builder {
             $addButton = new Zend_Form_Element_Submit('add_' . $fieldname);
             // Set custom translation string according to field name.
             $addButton->setLabel('add_' . $fieldname);
-                       $container->addElement($addButton);
+            $container->addElement($addButton);
         }
     }
 
@@ -945,7 +945,7 @@ class Form_Builder {
             $fieldname = $field->getName() . '_' . $iterator;
             $removeButton = new Zend_Form_Element_Submit('remove_' . $fieldname);
             // Set custom translation string according to field name.
-            $removeButton->setLabel('remove_' . $fieldname);
+            $removeButton->setLabel('remove_' . $field->getName());
             $container->addElement($removeButton);
         }
     }
