@@ -267,6 +267,15 @@
         <seg>Beteiligte Körperschaft</seg>
       </tuv>
     </tu>
+
+    <tu tuid="add_ContributingCorporation">
+      <tuv xml:lang="en">
+        <seg>add Contributing Corporation</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Beteiligte Körperschaft hinzufügen</seg>
+      </tuv>
+    </tu>
     
     <tu tuid="CreatingCorporation">
       <tuv xml:lang="en">
@@ -274,6 +283,15 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Urhebende Körperschaft</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="add_CreatingCorporation">
+      <tuv xml:lang="en">
+        <seg>add Creating Corporation</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Urhebende Körperschaft hinzufügen</seg>
       </tuv>
     </tu>
     
@@ -303,6 +321,15 @@
         <seg>SWD-Schlagwort</seg>
       </tuv>
     </tu>
+
+    <tu tuid="add_SubjectSwd">
+      <tuv xml:lang="en">
+        <seg>add SWD-Keyword</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>SWD-Schlagwort hinzufügen</seg>
+      </tuv>
+    </tu>
     
     <tu tuid="SubjectDdc">
       <tuv xml:lang="en">
@@ -310,6 +337,15 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>DDC Sachgruppe</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="add_SubjectDdc">
+      <tuv xml:lang="en">
+        <seg>add DDC Term</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>DDC Sachgruppe hinzufügen</seg>
       </tuv>
     </tu>
     
@@ -321,6 +357,15 @@
         <seg>Freies Schlagwort / Tag</seg>
       </tuv>
     </tu>
+
+    <tu tuid="add_SubjectUncontrolled">
+      <tuv xml:lang="en">
+        <seg>add Tag</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Freies Schlagwort hinzufügen</seg>
+      </tuv>
+    </tu>
     
     <tu tuid="SubjectPsyndex">
       <tuv xml:lang="en">
@@ -328,6 +373,15 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Psyndex-Schlagwörter</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="add_SubjectPsyndex">
+      <tuv xml:lang="en">
+        <seg>add Psyndex Keywords</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Psyndex-Schlagwort hinzufügen</seg>
       </tuv>
     </tu>
     
@@ -355,6 +409,15 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Nicht-instititutionelle Beziehung</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="add_NonInstituteAffiliation">
+      <tuv xml:lang="en">
+        <seg>add Non-Institute Affiliation</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nicht-instititutionelle Beziehung hinzufügen</seg>
       </tuv>
     </tu>
     
@@ -436,6 +499,15 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Art des Review</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="ServerState">
+      <tuv xml:lang="en">
+        <seg>State of publication process</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Status des Publikationsprozesses</seg>
       </tuv>
     </tu>
     
@@ -528,7 +600,16 @@
         <seg>Haupttitel</seg>
       </tuv>
     </tu>
-    
+
+    <tu tuid="add_TitleMain">
+      <tuv xml:lang="en">
+        <seg>add Main Title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Haupttitel hinzufügen</seg>
+      </tuv>
+    </tu>
+        
     <tu tuid="TitleParent">
       <tuv xml:lang="en">
         <seg>Parent Title</seg>
@@ -555,7 +636,16 @@
         <seg>Abstract / Kurzfassung</seg>
       </tuv>
     </tu>
-    
+
+    <tu tuid="add_TitleAbstract">
+      <tuv xml:lang="en">
+        <seg>add Abstract</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Kurzfassung hinzufügen</seg>
+      </tuv>
+    </tu>
+        
     <tu tuid="TitleAbstractLanguage">
       <tuv xml:lang="en">
         <seg>Language</seg>
@@ -753,7 +843,16 @@
         <seg>Verfasserangaben</seg>
       </tuv>
     </tu>
-    
+
+    <tu tuid="add_PersonAuthor">
+      <tuv xml:lang="en">
+        <seg>add Author</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Autor hinzufügen</seg>
+      </tuv>
+    </tu>
+        
     <tu tuid="PersonEditor">
       <tuv xml:lang="en">
         <seg>Editor</seg>
@@ -762,13 +861,31 @@
         <seg>Herausgeber</seg>
       </tuv>
     </tu>
-    
+
+    <tu tuid="add_PersonEditor">
+      <tuv xml:lang="en">
+        <seg>add Editor</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Herausgeber hinzufügen</seg>
+      </tuv>
+    </tu>
+            
     <tu tuid="PersonAdvisor">
       <tuv xml:lang="en">
         <seg>Advisor</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Berichter</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="add_PersonAdvisor">
+      <tuv xml:lang="en">
+        <seg>add Advisor</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Berichter hinzufügen</seg>
       </tuv>
     </tu>
     
@@ -781,12 +898,30 @@
       </tuv>
     </tu>
     
+    <tu tuid="add_PersonContributor">
+      <tuv xml:lang="en">
+        <seg>add Contributor</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>beteiligte Person hinzufügen</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="PersonReferee">
       <tuv xml:lang="en">
         <seg>Referee</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Gutachter</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="add_PersonReferee">
+      <tuv xml:lang="en">
+        <seg>add Referee</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Gutachter hinzufügen</seg>
       </tuv>
     </tu>
     
@@ -799,12 +934,30 @@
       </tuv>
     </tu>
     
+    <tu tuid="add_PersonTranslator">
+      <tuv xml:lang="en">
+        <seg>add Translator</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Übersetzer hinzufügen</seg>
+      </tuv>
+    </tu>
+    
     <tu tuid="PersonOther">
       <tuv xml:lang="en">
         <seg>Other Person(s)</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Weitere Person</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="add_PersonOther">
+      <tuv xml:lang="en">
+        <seg>add Other Person</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>weitere Person hinzufügen</seg>
       </tuv>
     </tu>
     
@@ -915,16 +1068,7 @@
         <seg>Verlag</seg>
       </tuv>
     </tu>
-    
-    <tu tuid="AdditionalFormFields">
-      <tuv xml:lang="en">
-        <seg>additional fields</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Eingabefelder anfordern</seg>
-      </tuv>
-    </tu>
-    
+        
     <tu tuid="DeleteFormFields">
       <tuv xml:lang="en">
         <seg>delete additional fields</seg>
