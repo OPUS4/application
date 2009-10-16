@@ -277,6 +277,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="remove_ContributingCorporation">
+      <tuv xml:lang="en">
+        <seg>remove Contributing Corporation</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Beteiligte Körperschaft entfernen</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="CreatingCorporation">
       <tuv xml:lang="en">
         <seg>Creating Corporation</seg>
@@ -292,6 +301,15 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Urhebende Körperschaft hinzufügen</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="remove_CreatingCorporation">
+      <tuv xml:lang="en">
+        <seg>remove Creating Corporation</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Urhebende Körperschaft entfernen</seg>
       </tuv>
     </tu>
     
@@ -331,6 +349,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="remove_SubjectSwd">
+      <tuv xml:lang="en">
+        <seg>remove SWD-Keyword</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>SWD-Schlagwort entfernen</seg>
+      </tuv>
+    </tu>
+    
     <tu tuid="SubjectDdc">
       <tuv xml:lang="en">
         <seg>DDC Term</seg>
@@ -346,6 +373,15 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>DDC Sachgruppe hinzufügen</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="remove_SubjectDdc">
+      <tuv xml:lang="en">
+        <seg>remove DDC Term</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>DDC Sachgruppe entfernen</seg>
       </tuv>
     </tu>
     
@@ -367,21 +403,39 @@
       </tuv>
     </tu>
     
-    <tu tuid="SubjectPsyndex">
+    <tu tuid="remove_SubjectUncontrolled">
       <tuv xml:lang="en">
-        <seg>Psyndex Keywords</seg>
+        <seg>remove Tag</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Psyndex-Schlagwörter</seg>
+        <seg>Freies Schlagwort entfernen</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="SubjectPsyndex">
+      <tuv xml:lang="en">
+        <seg>Psyndex Keyword</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Psyndex-Schlagwort</seg>
       </tuv>
     </tu>
 
     <tu tuid="add_SubjectPsyndex">
       <tuv xml:lang="en">
-        <seg>add Psyndex Keywords</seg>
+        <seg>add Psyndex Keyword</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Psyndex-Schlagwort hinzufügen</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="remove_SubjectPsyndex">
+      <tuv xml:lang="en">
+        <seg>remove Psyndex Keyword</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Psyndex-Schlagwort entfernen</seg>
       </tuv>
     </tu>
     
@@ -418,6 +472,15 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Nicht-instititutionelle Beziehung hinzufügen</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="remove_NonInstituteAffiliation">
+      <tuv xml:lang="en">
+        <seg>remove Non-Institute Affiliation</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nicht-instititutionelle Beziehung entfernen</seg>
       </tuv>
     </tu>
     
@@ -610,6 +673,15 @@
       </tuv>
     </tu>
         
+    <tu tuid="remove_TitleMain">
+      <tuv xml:lang="en">
+        <seg>remove Main Title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Haupttitel entfernen</seg>
+      </tuv>
+    </tu>
+        
     <tu tuid="TitleParent">
       <tuv xml:lang="en">
         <seg>Parent Title</seg>
@@ -643,6 +715,15 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Kurzfassung hinzufügen</seg>
+      </tuv>
+    </tu>
+        
+    <tu tuid="remove_TitleAbstract">
+      <tuv xml:lang="en">
+        <seg>remove Abstract</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Kurzfassung entfernen</seg>
       </tuv>
     </tu>
         
@@ -853,6 +934,15 @@
       </tuv>
     </tu>
         
+    <tu tuid="remove_PersonAuthor">
+      <tuv xml:lang="en">
+        <seg>remove Author</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Autor entfernen</seg>
+      </tuv>
+    </tu>
+        
     <tu tuid="PersonEditor">
       <tuv xml:lang="en">
         <seg>Editor</seg>
@@ -868,6 +958,15 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Herausgeber hinzufügen</seg>
+      </tuv>
+    </tu>
+            
+    <tu tuid="remove_PersonEditor">
+      <tuv xml:lang="en">
+        <seg>remove Editor</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Herausgeber entfernen</seg>
       </tuv>
     </tu>
             
@@ -889,6 +988,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="remove_PersonAdvisor">
+      <tuv xml:lang="en">
+        <seg>remove Advisor</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Berichter entfernen</seg>
+      </tuv>
+    </tu>
+    
     <tu tuid="PersonContributor">
       <tuv xml:lang="en">
         <seg>Contributor</seg>
@@ -904,6 +1012,15 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>beteiligte Person hinzufügen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="remove_PersonContributor">
+      <tuv xml:lang="en">
+        <seg>remove Contributor</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>beteiligte Person entfernen</seg>
       </tuv>
     </tu>
 
@@ -925,6 +1042,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="remove_PersonReferee">
+      <tuv xml:lang="en">
+        <seg>remove Referee</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Gutachter entfernen</seg>
+      </tuv>
+    </tu>
+    
     <tu tuid="PersonTranslator">
       <tuv xml:lang="en">
         <seg>Translator</seg>
@@ -943,6 +1069,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="remove_PersonTranslator">
+      <tuv xml:lang="en">
+        <seg>remove Translator</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Übersetzer entfernen</seg>
+      </tuv>
+    </tu>
+    
     <tu tuid="PersonOther">
       <tuv xml:lang="en">
         <seg>Other Person(s)</seg>
@@ -958,6 +1093,15 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>weitere Person hinzufügen</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="remove_PersonOther">
+      <tuv xml:lang="en">
+        <seg>remove Other Person</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>weitere Person entfernen</seg>
       </tuv>
     </tu>
     
@@ -1068,16 +1212,7 @@
         <seg>Verlag</seg>
       </tuv>
     </tu>
-        
-    <tu tuid="DeleteFormFields">
-      <tuv xml:lang="en">
-        <seg>delete additional fields</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Eingabefelder entfernen</seg>
-      </tuv>
-    </tu>
-    
+            
   </body>
   
 </tmx>
