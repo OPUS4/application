@@ -163,7 +163,7 @@
             </xsl:if>
             <xsl:if test="string-length(field[@name='source_swb'])>0">
                 <xsl:attribute name="IdentifierOpac">
-                    <xsl:value-of select="field[@name='source_swb']" />
+                    <xsl:attribute name="Value"><xsl:value-of select="field[@name='source_swb']" /></xsl:attribute>
                 </xsl:attribute>
             </xsl:if>
             

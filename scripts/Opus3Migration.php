@@ -329,6 +329,8 @@ class Opus3MigrationParameters extends Opus3Migration
 		    	        fputs($f, $result['entry'] . "\n");
 		    	        $failureCount++;
 		            }
+		            unset($result);
+		            unset($document);
 		        }
 		        if ($this->stopAtId !== null && $counter >= $this->stopAtId) {
 		        	break;
@@ -432,6 +434,8 @@ class Opus3MigrationReadline extends Opus3Migration {
 		    	    fputs($f, $result['entry'] . "\n");
 		    	    $failureCount++;
 		        }
+		        unset($result);
+		        unset($document);
 		        flush();
 		    }
 		    fclose($f);
