@@ -28,7 +28,8 @@
  *
  * @category    Application
  * @package     Module_FrontdoorXSLT
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
+ * @author      Felix Ostrowski <ostrowski@hbz-nrw.de> 
+ * @author      Simone Finkbeiner <simone.finkbeiner@ub.uni-stuttgart.de> 
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -49,21 +50,211 @@
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     exclude-result-prefixes="php">
 
-    <xsl:output method="html" omit-xml-declaration="yes" />
+    <xsl:output method="html" omit-xml-declaration="yes" />  
+ 
 
-    <xsl:template match="/">
-        <div about="{/Opus/Opus_Model_Filter/TitleMain/@Value}">
-            <xsl:apply-templates select="/Opus/Opus_Model_Filter/@*|/Opus/Opus_Model_Filter/node()" />
-        </div>
+    <xsl:template match="/"> 
+       <div about="{/Opus/Opus_Model_Filter/TitleMain/@Value}"> 
+          <xsl:apply-templates select="Opus/Opus_Model_Filter" />   
+       </div>
     </xsl:template>
 
     <!-- Suppress spilling values with no corresponding templates -->
-    <xsl:template match="@*|node()" />
+      <xsl:template match="@*|node()" /> 
+
+<!-- here you can change the order of the fields, just change the order of the apply-templates-rows
+     if there is a choose-block for the field, you have to move the whole choose-block
+     if you wish new fields, you have to add a new line xsl:apply-templates...
+     and a special template for each new field below, too -->
+    <xsl:template match="Opus_Model_Filter">
+       <xsl:apply-templates select="PersonAuthor" />
+       <xsl:apply-templates select="TitleMain" />
+       <xsl:apply-templates select="TitleParent" />
+       <xsl:apply-templates select="PersonEditor" />
+       <xsl:apply-templates select="PersonTranslator" />
+       <xsl:apply-templates select="PersonContributor" />
+       <xsl:apply-templates select="PersonOther" />
+       <xsl:apply-templates select="File" />
+       <xsl:apply-templates select="IdentifierUrn|IdentifierDoi|IdentifierHandle|IdentifierUrl" />
+       <xsl:apply-templates select="@PublisherName" />
+       <xsl:apply-templates select="@PublisherPlace" />
+       <xsl:apply-templates select="PersonReferee" />
+       <xsl:apply-templates select="PersonAdvisor" />
+       <xsl:apply-templates select="@Type" />
+       <xsl:apply-templates select="IdentifierIsbn" />
+       <xsl:apply-templates select="IdentifierIssn" />
+       <xsl:apply-templates select="@Language" />
+       <xsl:choose>
+         <xsl:when test="normalize-space(@CompletedYear)">
+           <xsl:apply-templates select="@CompletedYear" />
+         </xsl:when>
+         <xsl:otherwise>
+           <xsl:apply-templates select="ComletedDate" />
+         </xsl:otherwise>
+       </xsl:choose>
+       <xsl:choose>
+         <xsl:when test="normalize-space(PublishedDate)">
+           <xsl:apply-templates select="PublishedDate" />
+         </xsl:when>
+         <xsl:otherwise>
+           <xsl:apply-templates select="@PublishedYear" />
+         </xsl:otherwise>
+       </xsl:choose>
+       <xsl:apply-templates select="DateAccepted" />
+       <xsl:apply-templates select="@CreatingCorporation" />
+       <xsl:apply-templates select="@ContributingCorporation" />
+       <xsl:apply-templates select="TitleAbstract" />
+       <xsl:apply-templates select="SubjectSwd" />
+       <xsl:apply-templates select="SubjectUncontrolled" />
+       <xsl:apply-templates select="SubjectPsyndex" />
+       <xsl:apply-templates select="@Source" />
+       <xsl:apply-templates select="@Volume" />
+       <xsl:apply-templates select="@Issue" />
+       <xsl:apply-templates select="@Edition" />
+       <xsl:apply-templates select="@PageNumber" />
+       <xsl:apply-templates select="@PageFirst" />
+       <xsl:apply-templates select="@PageLast" />
+       <xsl:apply-templates select="@Reviewed" />
+       <xsl:apply-templates select="Note" />
+       <xsl:apply-templates select="@PublicationVersion" />
+       <xsl:apply-templates select="Licence" />
+    </xsl:template>
+
 
     <!-- Templates for "internal fields". -->
-    <xsl:template match="@DateAccepted">
+    <xsl:template match="@CompletedYear">
         <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value"><xsl:value-of select="." /></span>
+        <span class="md value">
+            <xsl:call-template name="translateString">
+                <xsl:with-param name="string" select="." />
+            </xsl:call-template>
+        </span>
+    </xsl:template>
+
+    <xsl:template match="@ContributingCorporation">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value">
+            <xsl:call-template name="translateString">
+                <xsl:with-param name="string" select="." />
+            </xsl:call-template>
+        </span>
+    </xsl:template>
+
+    <xsl:template match="@CreatingCorporation">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value">
+            <xsl:call-template name="translateString">
+                <xsl:with-param name="string" select="." />
+            </xsl:call-template>
+        </span>
+    </xsl:template>
+
+    <xsl:template match="@Edition">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value">
+            <xsl:call-template name="translateString">
+                <xsl:with-param name="string" select="." />
+            </xsl:call-template>
+        </span>
+    </xsl:template>
+
+    <xsl:template match="@Issue">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value">
+            <xsl:call-template name="translateString">
+                <xsl:with-param name="string" select="." />
+            </xsl:call-template>
+        </span>
+    </xsl:template>
+
+    <xsl:template match="@Language">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value">
+            <xsl:call-template name="translateString">
+                <xsl:with-param name="string" select="." />
+            </xsl:call-template>
+        </span>
+    </xsl:template>
+
+    <xsl:template match="@PageFirst">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value">
+            <xsl:call-template name="translateString">
+                <xsl:with-param name="string" select="." />
+            </xsl:call-template>
+        </span>
+    </xsl:template>
+
+    <xsl:template match="@PageLast">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value">
+            <xsl:call-template name="translateString">
+                <xsl:with-param name="string" select="." />
+            </xsl:call-template>
+        </span>
+    </xsl:template>
+
+    <xsl:template match="@PageNumber">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value">
+            <xsl:call-template name="translateString">
+                <xsl:with-param name="string" select="." />
+            </xsl:call-template>
+        </span>
+    </xsl:template>
+
+    <xsl:template match="@PublicationVersion">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value">
+            <xsl:call-template name="translateString">
+                <xsl:with-param name="string" select="." />
+            </xsl:call-template>
+        </span>
+    </xsl:template>
+
+    <xsl:template match="@PublishedYear">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value">
+            <xsl:call-template name="translateString">
+                <xsl:with-param name="string" select="." />
+            </xsl:call-template>
+        </span>
+    </xsl:template>
+
+    <xsl:template match="@PublisherName">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value">
+            <xsl:call-template name="translateString">
+                <xsl:with-param name="string" select="." />
+            </xsl:call-template>
+        </span>
+    </xsl:template>
+
+    <xsl:template match="@PublisherPlace">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value">
+            <xsl:call-template name="translateString">
+                <xsl:with-param name="string" select="." />
+            </xsl:call-template>
+        </span>
+    </xsl:template>
+
+    <xsl:template match="@Reviewed">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value">
+            <xsl:call-template name="translateString">
+                <xsl:with-param name="string" select="." />
+            </xsl:call-template>
+        </span>
+    </xsl:template>
+
+    <xsl:template match="@Source">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value">
+            <xsl:call-template name="translateString">
+                <xsl:with-param name="string" select="." />
+            </xsl:call-template>
+        </span>
     </xsl:template>
 
     <xsl:template match="@Type">
@@ -75,7 +266,139 @@
         </span>
     </xsl:template>
 
+    <xsl:template match="@Volume">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value">
+            <xsl:call-template name="translateString">
+                <xsl:with-param name="string" select="." />
+            </xsl:call-template>
+        </span>
+    </xsl:template>
+
+
     <!-- Templates for "external fields". -->
+    <xsl:template match="CompletedDate">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value"><xsl:value-of select="concat(format-number(@Day,'00'),'.',format-number(@Month,'00'),'.',@Year)" /></span>
+    </xsl:template>
+
+    <xsl:template match="DateAccepted">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value"><xsl:value-of select="concat(format-number(@Day,'00'),'.',format-number(@Month,'00'),'.',@Year)" /></span>
+    </xsl:template>
+
+    <xsl:template match="File">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value">
+             <xsl:element name="a">
+                <!-- TODO: Use Zend Url-Helper to build href attribute -->
+                  <xsl:attribute name="href">
+                    <xsl:text>/documents/</xsl:text>
+                    <xsl:value-of select="@DocumentId" />
+                    <xsl:text>/</xsl:text>
+                    <xsl:value-of select="@PathName" />
+                </xsl:attribute>
+                <xsl:value-of select="@PathName" />
+             </xsl:element>
+            <xsl:text> (</xsl:text><xsl:value-of select="@Label" /><xsl:text>)</xsl:text>
+        </span>
+    </xsl:template>
+         
+    <xsl:template match="IdentifierUrn|IdentifierDoi|IdentifierHandle|IdentifierUrl">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value"><xsl:value-of select="@Value" /></span>
+    </xsl:template>
+
+    <xsl:template match="IdentifierIsbn">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value"><xsl:value-of select="@Value" /></span>
+    </xsl:template>
+ 
+    <xsl:template match="IdentifierIssn">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value"><xsl:value-of select="@Value" /></span>
+    </xsl:template>
+
+    <xsl:template match="Licence">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value" property="dc:rights"><xsl:value-of select="@NameLong" /></span>
+    </xsl:template>
+      
+
+    <xsl:template match="Collection"/>
+    <xsl:template match="Enrichment"/>
+
+    <xsl:template match="Note">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value"><xsl:value-of select="@Message" /></span>
+    </xsl:template>
+
+ 
+    <xsl:template match="Institute"/>
+    <xsl:template match="Patent"/>
+
+
+ 
+    <xsl:template match="PersonAdvisor">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value" property="dc:creator"><xsl:value-of select="@Name" /></span>
+    </xsl:template>
+ 
+    <xsl:template match="PersonAuthor">
+      <xsl:if test="position()=1">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+      </xsl:if>
+        <span class="md value" property="dc:creator"><xsl:value-of select="@Name" /></span>
+    </xsl:template>  
+          
+    <xsl:template match="PersonOther">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value" property="dc:creator"><xsl:value-of select="@Name" /></span>
+    </xsl:template>
+ 
+    <xsl:template match="PersonReferee">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value" property="dc:creator"><xsl:value-of select="@Name" /></span>
+    </xsl:template>
+
+    <xsl:template match="PersonContributor">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value" property="dc:creator"><xsl:value-of select="@Name" /></span>
+    </xsl:template>
+ 
+    <xsl:template match="PersonEditor">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value" property="dc:creator"><xsl:value-of select="@Name" /></span>
+    </xsl:template>
+ 
+    <xsl:template match="PersonTranslator">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value" property="dc:creator"><xsl:value-of select="@Name" /></span>
+    </xsl:template>
+ 
+
+    <xsl:template match="PublishedDate">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value"><xsl:value-of select="concat(format-number(@Day,'00'),'.',format-number(@Month,'00'),'.',@Year)" /></span>
+    </xsl:template>
+
+    <xsl:template match="PublisherUniversity"/>
+
+    <xsl:template match="SubjectPsyndex">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value" property="dc:subject" xml:lang="{@Language}"><xsl:value-of select="@Value" /></span>
+    </xsl:template>
+
+    <xsl:template match="SubjectSwd">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value" property="dc:subject" xml:lang="{@Language}"><xsl:value-of select="@Value" /></span>
+    </xsl:template>
+
+    <xsl:template match="SubjectUncontrolled">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value" property="dc:subject" xml:lang="{@Language}"><xsl:value-of select="@Value" /></span>
+    </xsl:template>
+
     <xsl:template match="TitleMain">
         <span class="md name"><xsl:call-template name="translateFieldname" /></span>
         <span class="md value" property="dc:title" xml:lang="{@Language}"><xsl:value-of select="@Value" /></span>
@@ -85,90 +408,16 @@
         <span class="md name"><xsl:call-template name="translateFieldname" /></span>
         <span class="md value" property="dc:description" xml:lang="{@Language}"><xsl:value-of select="@Value" /></span>
     </xsl:template>
-
-    <xsl:template match="PersonAuthor">
+    
+    <xsl:template match="TitleParent">
         <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value" property="dc:creator"><xsl:value-of select="@Name" /></span>
+        <span class="md value" property="dc:title" xml:lang="{@Language}"><xsl:value-of select="@Value" /></span>
     </xsl:template>
 
-    <xsl:template match="Licence">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value" property="dc:rights"><xsl:value-of select="@NameLong" /></span>
-    </xsl:template>
 
-    <xsl:template match="SubjectUncontrolled">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value" property="dc:subject" xml:lang="{@Language}"><xsl:value-of select="@Value" /></span>
-    </xsl:template>
-
-    <xsl:template match="IdentifierUrn|IdentifierDoi|IdentifierIsbn|IdentifierHandle|IdentifierUrl|IdentifierIssn">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value"><xsl:value-of select="@Value" /></span>
-    </xsl:template>
-
-    <xsl:template match="File">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value">
-            <xsl:element name="a">
-                <!-- TODO: Use Zend Url-Helper to build href attribute -->
-                <xsl:attribute name="href">
-                    <xsl:text>/documents/</xsl:text>
-                    <xsl:value-of select="@DocumentId" />
-                    <xsl:text>/</xsl:text>
-                    <xsl:value-of select="@PathName" />
-                </xsl:attribute>
-                <xsl:value-of select="@PathName" />
-            </xsl:element>
-            <xsl:text> (</xsl:text><xsl:value-of select="@Label" /><xsl:text>)</xsl:text>
-        </span>
-    </xsl:template>
-
-    <xsl:template match="Collection"/>
-    <xsl:template match="CompletedDate"/>
-    <xsl:template match="ContributingCorporation"/>
-    <xsl:template match="CreatingCorporation"/>
-    <xsl:template match="Edition"/>
-    <xsl:template match="Enrichment"/>
-    <xsl:template match="Institute"/>
-    <xsl:template match="Issue"/>
-    <xsl:template match="Language"/>
-    <xsl:template match="NonInstituteAffiliation"/>
-    <xsl:template match="Note"/>
-    <xsl:template match="PageFirst"/>
-    <xsl:template match="PageLast"/>
-    <xsl:template match="PageNumber"/>
-    <xsl:template match="Patent"/>
-    <xsl:template match="PersonAdvisor"/>
-    <xsl:template match="PersonOther"/>
-    <xsl:template match="PersonReferee"/>
-    <xsl:template match="PersonContributor"/>
-    <xsl:template match="PersonEditor"/>
-    <xsl:template match="PersonTranslator"/>
-    <xsl:template match="PublicationVersion"/>
-    <xsl:template match="PublishedDate"/>
-    <xsl:template match="PublishedYear"/>
-    <xsl:template match="PublisherName"/>
-    <xsl:template match="PublisherPlace"/>
-    <xsl:template match="PublisherUniversity"/>
-    <xsl:template match="Reviewed"/>
-    <xsl:template match="ServerDateUnlocking"/>
-    <xsl:template match="ServerDateValid"/>
-    <xsl:template match="Source"/>
-    <xsl:template match="SubjectDdc"/>
-    <xsl:template match="SubjectPsyndex"/>
-    <xsl:template match="SubjectSwd"/>
-    <xsl:template match="TitleParent"/>
-    <xsl:template match="Volume"/>
-    <xsl:template match="IdentifierIsbn"/>
-    <xsl:template match="IdentifierDoi"/>
-    <xsl:template match="IdentifierHandle"/>
-    <xsl:template match="IdentifierUrl"/>
-    <xsl:template match="IdentifierIssn"/>
     <xsl:template match="IdentifierStdDoi"/>
     <xsl:template match="IdentifierCrisLink"/>
     <xsl:template match="IdentifierSplashUrl"/>
-    <xsl:template match="IdentifierOpus3"/>
-    <xsl:template match="IdentifierOpac"/>
     <xsl:template match="ReferenceIsbn"/>
     <xsl:template match="ReferenceUrn"/>
     <xsl:template match="ReferenceDoi"/>
