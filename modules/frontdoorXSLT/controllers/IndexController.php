@@ -67,9 +67,22 @@ class FrontdoorXSLT_IndexController extends Controller_Action {
         $proc->importStyleSheet($xslt);
 
         // Set Base-Url
-        $this->view->baseUrl = $this->getRequest()->getBaseUrl();
+        $baseUrl = $this->getRequest()->getBaseUrl();
+        $this->view->baseUrl = $baseUrl;
         // Set Doctype
         $this->view->doctype('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"  "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">');
+
+        // Set path for layout
+        $registry = Zend_Registry::getInstance();
+        $config = $registry->get('Zend_Config');
+        $theme = 'default';
+        if (true === isset($config->theme)) {
+            $theme = $config->theme;
+        }
+        $layoutPath = $baseUrl .'/layouts/'. $theme;
+
+        $proc->setParameter('', 'baseUrl', $baseUrl);
+        $proc->setParameter('', 'layoutPath', $layoutPath);
 
         // Transform to HTML
         $this->view->frontdoor = $proc->transformToXML($xml);
