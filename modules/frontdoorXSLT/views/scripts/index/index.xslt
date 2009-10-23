@@ -78,7 +78,8 @@
        <xsl:apply-templates select="PersonOther" />
        <xsl:apply-templates select="File" />
        <xsl:call-template name="services"/>
-       <xsl:apply-templates select="IdentifierUrn|IdentifierDoi|IdentifierHandle|IdentifierUrl" />
+       <xsl:apply-templates select="IdentifierUrn" />
+       <xsl:apply-templates select="IdentifierDoi|IdentifierHandle|IdentifierUrl" />
        <xsl:apply-templates select="@PublisherName" />
        <xsl:apply-templates select="@PublisherPlace" />
        <xsl:apply-templates select="PersonReferee" />
@@ -307,9 +308,23 @@
         </span>
     </xsl:template>
          
-    <xsl:template match="IdentifierUrn|IdentifierDoi|IdentifierHandle|IdentifierUrl">
+    <xsl:template match="IdentifierDoi|IdentifierHandle|IdentifierUrl">
         <span class="md name"><xsl:call-template name="translateFieldname" /></span>
         <span class="md value"><xsl:value-of select="@Value" /></span>
+    </xsl:template>
+
+    <xsl:template match="IdentifierUrn">
+        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md value">
+            <xsl:element name="a">
+                <!-- TODO: Use Zend Url-Helper to build href attribute -->
+                  <xsl:attribute name="href">
+                     <xsl:text>http://nbn-resolving.de/urn/resolver.pl?</xsl:text>
+                     <xsl:value-of select="@Value" />
+                </xsl:attribute>
+                <xsl:value-of select="@Value" />
+             </xsl:element>
+        </span>
     </xsl:template>
 
     <xsl:template match="IdentifierIsbn">
