@@ -52,6 +52,8 @@
 
     <xsl:output method="html" omit-xml-declaration="yes" />  
  
+    <xsl:param name="baseUrl" />
+    <xsl:param name="layoutPath" />
 
     <xsl:template match="/"> 
        <div about="{/Opus/Opus_Model_Filter/TitleMain/@Value}"> 
@@ -75,6 +77,7 @@
        <xsl:apply-templates select="PersonContributor" />
        <xsl:apply-templates select="PersonOther" />
        <xsl:apply-templates select="File" />
+       <xsl:call-template name="services"/>
        <xsl:apply-templates select="IdentifierUrn|IdentifierDoi|IdentifierHandle|IdentifierUrl" />
        <xsl:apply-templates select="@PublisherName" />
        <xsl:apply-templates select="@PublisherPlace" />
@@ -345,10 +348,20 @@
     </xsl:template>
  
     <xsl:template match="PersonAuthor">
-      <xsl:if test="position()=1">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+      <xsl:element name="br" />
+      <xsl:element name="a">
+           <!-- TODO: Use Zend Url-Helper to build href attribute -->
+           <xsl:attribute name="href">
+               <xsl:value-of select="$baseUrl"/>
+               <xsl:text>/search/search/metadatasearch/author/</xsl:text>
+               <xsl:value-of select="@Name" />
+           </xsl:attribute>
+           <xsl:value-of select="@Name" />
+      </xsl:element>
+      <xsl:if test="position()=last()">
+         <xsl:element name="br" />
+         <xsl:element name="br" />
       </xsl:if>
-        <span class="md value" property="dc:creator"><xsl:value-of select="@Name" /></span>
     </xsl:template>  
           
     <xsl:template match="PersonOther">
@@ -427,6 +440,163 @@
     <xsl:template match="ReferenceStdDoi"/>
     <xsl:template match="ReferenceCrisLink"/>
     <xsl:template match="ReferenceSplashUrl"/>
+
+
+    <!--  Named template for services-buttons -->
+    <xsl:template name="services">
+      <xsl:element name="br"/>
+        <!-- integrity -->
+        <xsl:element name="a">
+           <!-- TODO: Use Zend Url-Helper to build href attribute -->
+             <xsl:attribute name="href">
+               <xsl:value-of select="$baseUrl"/>
+               <xsl:text>/frontdoor/hash/index/docId/</xsl:text>
+               <xsl:value-of select="@Id" />
+             </xsl:attribute>
+           <xsl:element name="img">   
+             <xsl:attribute name="src">
+               <xsl:value-of select="$layoutPath"/>
+                <xsl:text>/img/unversehrt.jpg</xsl:text>
+             </xsl:attribute>
+             <xsl:attribute name="border">
+               <xsl:text>0</xsl:text>
+             </xsl:attribute>
+             <xsl:attribute name="title">
+                <xsl:call-template name="translateString">
+                   <xsl:with-param name="string">frontdoor_integrity</xsl:with-param>
+                </xsl:call-template>
+             </xsl:attribute>
+          </xsl:element>
+        </xsl:element>
+
+        <!-- recommendation -->
+        <xsl:element name="a">
+           <!-- TODO: Use Zend Url-Helper to build href attribute -->
+             <xsl:attribute name="href">
+               <xsl:value-of select="$baseUrl"/>
+               <xsl:text>/frontdoor/mail/index/docId/</xsl:text>
+               <xsl:value-of select="@Id" />
+             </xsl:attribute>
+           <xsl:element name="img">   
+             <xsl:attribute name="src">
+               <xsl:value-of select="$layoutPath"/>
+                <xsl:text>/img/hand.jpg</xsl:text>
+             </xsl:attribute>
+             <xsl:attribute name="border">
+               <xsl:text>0</xsl:text>
+             </xsl:attribute>
+             <xsl:attribute name="title">
+                <xsl:call-template name="translateString">
+                   <xsl:with-param name="string">frontdoor_recommendationtitle</xsl:with-param>
+                </xsl:call-template>
+             </xsl:attribute>
+          </xsl:element>
+        </xsl:element>
+
+        <!-- statistic -->
+        <xsl:element name="a">
+           <!-- TODO: Use Zend Url-Helper to build href attribute -->
+             <xsl:attribute name="href">
+               <xsl:value-of select="$baseUrl"/>
+               <xsl:text>/statistic/index/index/docId/</xsl:text>
+               <xsl:value-of select="@Id" />
+             </xsl:attribute>
+<!--               <xsl:element name="img">   
+             <xsl:attribute name="src">
+               <xsl:value-of select="$baseUrl"/>
+                <xsl:text>/statistic/graph/thumb/docId</xsl:text>
+             </xsl:attribute>
+             <xsl:attribute name="border">
+               <xsl:text>0</xsl:text>
+             </xsl:attribute>
+             <xsl:attribute name="title">
+                <xsl:call-template name="translateString">
+                   <xsl:with-param name="string">frontdoor_statistics</xsl:with-param>
+                </xsl:call-template>
+             </xsl:attribute>
+          </xsl:element>
+-->         
+            <xsl:call-template name="translateString">
+               <xsl:with-param name="string">frontdoor_statistics</xsl:with-param>
+            </xsl:call-template>
+          
+        </xsl:element>
+
+        <!-- connotea -->
+        <xsl:element name="a">
+           <!-- TODO: Use Zend Url-Helper to build href attribute -->
+             <xsl:attribute name="href">
+               <xsl:value-of select="$baseUrl"/>
+               <xsl:text>/socialBookmarking/connotea/index/docId/</xsl:text>
+               <xsl:value-of select="@Id" />
+             </xsl:attribute>
+           <xsl:element name="img">   
+             <xsl:attribute name="src">
+               <xsl:value-of select="$layoutPath"/>
+                <xsl:text>/img/connotea_icon.jpg</xsl:text>
+             </xsl:attribute>
+             <xsl:attribute name="border">
+               <xsl:text>0</xsl:text>
+             </xsl:attribute>
+             <xsl:attribute name="title">
+                <xsl:call-template name="translateString">
+                   <xsl:with-param name="string">frontdoor_bookmarkconnotea</xsl:with-param>
+                </xsl:call-template>
+             </xsl:attribute>
+          </xsl:element>
+        </xsl:element>
+
+        <!-- delicious -->
+        <xsl:element name="a">
+           <!-- TODO: Use Zend Url-Helper to build href attribute -->
+             <xsl:attribute name="href">
+               <xsl:value-of select="$baseUrl"/>
+               <xsl:text>/socialBookmarking/delicious/index/docId/</xsl:text>
+               <xsl:value-of select="@Id" />
+             </xsl:attribute>
+           <xsl:element name="img">   
+             <xsl:attribute name="src">
+               <xsl:value-of select="$layoutPath"/>
+                <xsl:text>/img/delicious.jpg</xsl:text>
+             </xsl:attribute>
+             <xsl:attribute name="border">
+               <xsl:text>0</xsl:text>
+             </xsl:attribute>
+             <xsl:attribute name="title">
+                <xsl:call-template name="translateString">
+                   <xsl:with-param name="string">frontdoor_bookmarkdelicious</xsl:with-param>
+                </xsl:call-template>
+             </xsl:attribute>
+          </xsl:element>
+        </xsl:element>
+
+        <!-- google-scholar -->
+        <xsl:if test="normalize-space(TitleMain/@Value)">
+          <xsl:element name="a">
+           <!-- TODO: Use Zend Url-Helper to build href attribute -->
+            <xsl:attribute name="href">
+               <xsl:text disable-output-escaping="yes">http://scholar.google.de/scholar?hl=de&amp;q=</xsl:text>
+               <xsl:value-of select="TitleMain/@Value"/>
+            </xsl:attribute>
+            <xsl:element name="img">   
+               <xsl:attribute name="src">
+                 <xsl:value-of select="$layoutPath"/>
+                  <xsl:text>/img/google_scholar.jpg</xsl:text>
+               </xsl:attribute>
+               <xsl:attribute name="border">
+                 <xsl:text>0</xsl:text>
+               </xsl:attribute>
+               <xsl:attribute name="title">
+                  <xsl:call-template name="translateString">
+                     <xsl:with-param name="string">frontdoor_searchgoogle</xsl:with-param>
+                  </xsl:call-template>
+               </xsl:attribute>
+            </xsl:element>
+          </xsl:element>
+        </xsl:if>
+
+    </xsl:template>
+
 
     <!-- Named template to translate a field's name. Needs no parameter. -->
     <xsl:template name="translateFieldname">
