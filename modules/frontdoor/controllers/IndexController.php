@@ -57,7 +57,7 @@ class Frontdoor_IndexController extends Zend_Controller_Action
         $doc_data = $document->toArray();
 
         // Display collection pathes
-        $collections = $document->getCollections();
+        $collections = $document->getCollection();
         $collection_pathes = array();
         foreach ($collections as $coll_index=>$collection) {
             $coll_data = ($collection->toArray());

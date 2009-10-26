@@ -47,7 +47,7 @@
 	{
 		#print_r($this->browsinglist->describe());
 	    if (in_array('Collections', $this->browsinglist->describe())) {
-	    	$subcollections = $this->browsinglist->getCollections();
+	        $subcollections = $this->browsinglist->getCollection();
 	    } else {
 	    	$subcollections = $this->browsinglist->getSubCollection();
 	    }
