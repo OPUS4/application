@@ -487,7 +487,7 @@ class Form_Builder {
     protected function _makeSingleModel(Opus_Model_Field $field, Zend_Form $container) {
         $fieldname = $field->getName();
         $count = count($field->getValue());
-        if (0 === $count) {
+        if (0 === $count and true === $field->isMandatory()) {
             $modelClassName = $field->getValueModelClass();
             $linkModelClassName = $field->getLinkModelClass();
             if (false === is_null($linkModelClassName)) {
@@ -498,9 +498,19 @@ class Form_Builder {
             } else {
                 $this->_makeSubForm($fieldname, new $modelClassName, $container);
             }
+        } else if (0 === $count and false === $field->isMandatory()) {
+            $subform = new Zend_Form_SubForm();
+            $subform->setLegend($fieldname);
+            $subform->setAttrib('class', $fieldname);
+            $this->__addAddButton($field, $subform);
+            $container->addSubForm($subform, $fieldname);
         } else {
             // field->getValue() holds model
-            $this->_makeSubForm($fieldname, $field->getValue(), $container);
+            $subform = $this->build($field->getValue(), true);
+            $subform->setLegend($fieldname);
+            $subform->setAttrib('class', $fieldname);
+            $this->__addRemoveButton($field, $subform, '1');
+            $container->addSubForm($subform, $fieldname);
         }
     }
 
