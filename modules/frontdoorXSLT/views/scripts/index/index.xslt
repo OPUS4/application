@@ -292,19 +292,37 @@
     </xsl:template>
 
     <xsl:template match="File">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md name">
+        <xsl:call-template name="translateString">
+            <xsl:with-param name="string">File(s)</xsl:with-param>
+        </xsl:call-template>
+        </span>
         <span class="md value">
-             <xsl:element name="a">
-                <!-- TODO: Use Zend Url-Helper to build href attribute -->
-                  <xsl:attribute name="href">
-                    <xsl:text>/documents/</xsl:text>
-                    <xsl:value-of select="@DocumentId" />
-                    <xsl:text>/</xsl:text>
-                    <xsl:value-of select="@PathName" />
-                </xsl:attribute>
+           <xsl:element name="a">
+              <!-- TODO: Use Zend Url-Helper to build href attribute -->
+              <xsl:attribute name="href">
+                <xsl:text>/documents/</xsl:text>
+                <xsl:value-of select="@DocumentId" />
+                <xsl:text>/</xsl:text>
                 <xsl:value-of select="@PathName" />
-             </xsl:element>
-            <xsl:text> (</xsl:text><xsl:value-of select="@Label" /><xsl:text>)</xsl:text>
+              </xsl:attribute>
+              <xsl:element name="img">   
+                <xsl:attribute name="src">
+                  <xsl:value-of select="$layoutPath"/>
+                   <xsl:text>/img/filetypelogo_</xsl:text>
+                   <xsl:value-of select="@FileType"/>
+                   <xsl:text>.png</xsl:text>  
+                </xsl:attribute>
+                <xsl:attribute name="border">
+                  <xsl:text>0</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="title">
+                   <xsl:text>Download</xsl:text>
+                </xsl:attribute>
+              </xsl:element>
+              <xsl:value-of select="@PathName" />
+           </xsl:element>
+      <xsl:text> (</xsl:text><xsl:value-of select="@Label" /><xsl:text>)</xsl:text> 
         </span>
     </xsl:template>
          
@@ -339,7 +357,53 @@
 
     <xsl:template match="Licence">
         <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value" property="dc:rights"><xsl:value-of select="@NameLong" /></span>
+        <span class="md value" property="dc:rights">
+          <xsl:choose>
+             <xsl:when test="starts-with(@NameLong,'Creative')">
+               <xsl:element name="img">
+                   <xsl:attribute name="src">
+                      <xsl:value-of select="$layoutPath"/>
+                      <xsl:text>/img/somerights20.gif</xsl:text>
+                   </xsl:attribute>
+                   <xsl:attribute name="title">
+                      <xsl:text>Creative Commons</xsl:text>
+                   </xsl:attribute>
+                   <xsl:attribute name="border">
+                     <xsl:text>0</xsl:text>
+                   </xsl:attribute>
+               </xsl:element>
+               <xsl:element name="a">
+                   <!-- TODO: Use Zend Url-Helper to build href attribute -->
+                   <xsl:attribute name="href">
+                       <xsl:value-of select="@LinkLicence" />
+                  </xsl:attribute>
+                  <xsl:value-of select="@NameLong" />
+               </xsl:element>
+             </xsl:when>
+             <xsl:otherwise>
+               <xsl:element name="img">
+                   <xsl:attribute name="src">
+                      <xsl:value-of select="$layoutPath"/>
+                      <xsl:text>/img/unilogo.gif</xsl:text>
+                   </xsl:attribute>
+                   <xsl:attribute name="title">
+                      <xsl:text>Unilogo</xsl:text>
+                   </xsl:attribute>
+                   <xsl:attribute name="border">
+                     <xsl:text>0</xsl:text>
+                   </xsl:attribute>
+               </xsl:element>
+               <xsl:element name="a">
+                   <!-- TODO: Use Zend Url-Helper to build href attribute -->
+                   <xsl:attribute name="href">
+                       <xsl:value-of select="$baseUrl" />
+                       <xsl:value-of select="@LinkLicence" />
+                  </xsl:attribute>
+                  <xsl:value-of select="@NameLong" />
+               </xsl:element>
+              </xsl:otherwise>
+          </xsl:choose> 
+        </span>
     </xsl:template>
       
 
@@ -590,8 +654,8 @@
           <xsl:element name="a">
            <!-- TODO: Use Zend Url-Helper to build href attribute -->
             <xsl:attribute name="href">
-               <xsl:text disable-output-escaping="yes">http://scholar.google.de/scholar?hl=de&amp;q=</xsl:text>
-               <xsl:value-of select="TitleMain/@Value"/>
+               <xsl:text disable-output-escaping="yes">http://scholar.google.de/scholar?hl=de&amp;q="</xsl:text>
+               <xsl:value-of select="TitleMain/@Value"/><xsl:text>"</xsl:text>
             </xsl:attribute>
             <xsl:element name="img">   
                <xsl:attribute name="src">
