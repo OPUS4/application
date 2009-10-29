@@ -131,13 +131,19 @@ if (count($documentList) > 0) {
        	}
         try {
             $docObject = $d->getTitleMain();
-            $doc = array($docObject[0]->getValue());
+            $doc = '';
+            if (is_array($docObject) === true && empty($docObject) === false) {
+            	$doc = array($docObject[0]->getValue());
+            }
+            else if (is_array($docObject) === false) {
+            	$doc = array($docObject->getValue());
+            }
             if (true === empty($doc)) {
-                $doc = array(0 => 'Opus document with id: ' . $id);
+                $doc = array(0 => 'Opus document with id: ' . $docId);
             }	
         }
         catch (Exception $e) {
-        	$doc = array(0 => 'Opus document with id: ' . $id);
+        	$doc = array(0 => 'Opus document with id: ' . $docId);
         }
         $authorsstring = '';
    		if (false === empty($authors)) {
