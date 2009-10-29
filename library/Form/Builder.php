@@ -70,8 +70,11 @@ class Form_Builder {
         }
 
         foreach ($model->describe() as $fieldname) {
-            $field = $model->getField($fieldname);
-            $this->_prepareElement($field, $form);
+            // disable Collections in form builder
+            if ($fieldname !== 'Collection') {
+                $field = $model->getField($fieldname);
+                $this->_prepareElement($field, $form);
+            }
         }
 
         if ($createSubForm === false) {
