@@ -199,7 +199,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
     }
 
     /**
-     * Deletes a document
+     * Deletes a document (sets state to deleted)
      *
      * @return void
      */
@@ -208,6 +208,22 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             $id = $this->getRequest()->getPost('id');
             $model = new $this->_modelclass($id);
             $model->delete();
+            $this->_redirectTo('Model successfully deleted.', 'index');
+        } else {
+            $this->_redirectTo('', 'index');
+        }
+    }
+
+    /**
+     * Deletes a document permanently (removes it from database and disk)
+     *
+     * @return void
+     */
+    public function permanentdeleteAction() {
+        if ($this->_request->isPost() === true) {
+            $id = $this->getRequest()->getPost('id');
+            $model = new $this->_modelclass($id);
+            $model->deletePermanent();
             $this->_redirectTo('Model successfully deleted.', 'index');
         } else {
             $this->_redirectTo('', 'index');
