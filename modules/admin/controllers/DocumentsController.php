@@ -103,24 +103,29 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         		    $tmpdocList = array();
                     foreach ($result as $id => $doc) {
        	                $d = new Opus_Document($id);
-       	                $aut = $d->getPersonAuthor();
-       	                if (is_array($aut) === true && isset($aut[0]) === true) {
-       	                	$a = $aut[0];
-       		                $name = '';
-       		                $lastName = '';
-       		                $name = $a->getName();
-       		                $lastName = $a->getLastName();
-       		                if (false === empty($name)) {
-       		                    $author = $a->getName();
-       		                }
-       		                else if (false === empty($lastName)) {
-       			                $author = $a->getLastName();
-       		                }
-       		                else {
-       			                $author = " ";
-       		                }
+                        try {
+       	                    $aut = $d->getPersonAuthor();
+       	                    if (is_array($aut) === true && isset($aut[0]) === true) {
+       	                	    $a = $aut[0];
+       		                    $name = '';
+       		                    $lastName = '';
+       		                    $name = $a->getName();
+       		                    $lastName = $a->getLastName();
+       		                    if (false === empty($name)) {
+       		                        $author = $a->getName();
+       		                    }
+       		                    else if (false === empty($lastName)) {
+           			                $author = $a->getLastName();
+           		                }
+       	    	                else {
+       		    	                $author = " ";
+       		                    }
+       	                    }
+       	                    else {
+           	                	$author = ' ';
+           	                }
        	                }
-       	                else {
+       	                catch (Exception $e) {
        	                	$author = ' ';
        	                }
                         $tmpdocList[$id] = $author;
