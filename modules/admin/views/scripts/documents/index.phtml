@@ -145,6 +145,12 @@ if (count($documentList) > 0) {
         catch (Exception $e) {
         	$doc = array(0 => 'Opus document with id: ' . $docId);
         }
+        try {
+            $docState = $d->getServerState();
+        }
+        catch (Exception $e) {
+        	// do nothing, document has no state!
+        }
         $authorsstring = '';
    		if (false === empty($authors)) {
    			$authorsstring = join("; ", $authors) . ': ';
@@ -168,13 +174,27 @@ if (count($documentList) > 0) {
             'controller' => 'documents',
             'action' => 'delete',
         );
+        $url_permadelete = array (
+            'module' => 'admin',
+            'controller' => 'documents',
+            'action' => 'permanentdelete',
+        );
         $url_edit = $this->url($url_edit, 'default', true);
         $url_delete = $this->url($url_delete, 'default', true);
+        $url_permanentdelete = $this->url($url_permadelete, 'default', true);
         $url_frontdoor = $this->url($url_frontdoor, 'default', true);
     ?>
         <li>
         <?php echo '<a href="' . $url_frontdoor . '" target="_blank">' . current($title) . '</a> (ID ' . $docId . ')' ?>
+        <?php if ($docState === 'deleted') { ?>
+        <form action="<?php echo $url_permanentdelete ?>" method="post" class="crud">
+        <?php
+        } else {
+        ?>
         <form action="<?php echo $url_delete ?>" method="post" class="crud">
+        <?php
+        }
+        ?>
             <a href="<?php echo $url_edit ?>"><?php echo $this->translate('docs_edit'); ?></a>
             <input type="hidden" name="id" value="<?php echo $docId ?>" />
             <input type="submit" value="<?php echo $this->translate('docs_delete'); ?>" />
