@@ -197,7 +197,15 @@ if (count($documentList) > 0) {
         ?>
             <a href="<?php echo $url_edit ?>"><?php echo $this->translate('docs_edit'); ?></a>
             <input type="hidden" name="id" value="<?php echo $docId ?>" />
+            <?php if ($docState === 'deleted') { ?>
+            <input type="submit" value="<?php echo $this->translate('docs_permadelete'); ?>" />
+            <?php
+            } else {
+            ?>
             <input type="submit" value="<?php echo $this->translate('docs_delete'); ?>" />
+            <?php
+            }
+            ?>
         </form>
         </li>
         <?php

@@ -206,9 +206,31 @@ class Admin_DocumentsController extends Controller_CRUDAction {
     public function deleteAction() {
         if ($this->_request->isPost() === true) {
             $id = $this->getRequest()->getPost('id');
-            $model = new $this->_modelclass($id);
-            $model->delete();
-            $this->_redirectTo('Model successfully deleted.', 'index');
+            $sureyes = $this->getRequest()->getPost('sureyes');
+            $sureno = $this->getRequest()->getPost('sureno');
+            if (isset($sureyes) === true or isset($sureno) === true) {
+            	// Safety question answered, deleting
+            	if (isset($sureyes) === true) {
+                    $model = new $this->_modelclass($id);
+                    $model->delete();
+                    $this->_redirectTo('Model successfully deleted.', 'index');
+            	}
+            	else {
+            		$this->_redirectTo('', 'index');
+            	}
+            }
+            else {
+                // show safety question
+                $this->view->title = $this->view->translate('admin_doc_delete');
+                $this->view->text = $this->view->translate('admin_doc_delete_sure');
+                $yesnoForm = new YesNoForm(); 
+                $idElement = new Zend_Form_Element_Hidden('id');
+                $idElement->setValue($id);
+                $yesnoForm->addElement($idElement);
+                $yesnoForm->setAction($this->view->url(array("controller"=>"documents", "action"=>"delete")));
+                $yesnoForm->setMethod('post');
+                $this->view->form = $yesnoForm;
+            }
         } else {
             $this->_redirectTo('', 'index');
         }
@@ -222,9 +244,31 @@ class Admin_DocumentsController extends Controller_CRUDAction {
     public function permanentdeleteAction() {
         if ($this->_request->isPost() === true) {
             $id = $this->getRequest()->getPost('id');
-            $model = new $this->_modelclass($id);
-            $model->deletePermanent();
-            $this->_redirectTo('Model successfully deleted.', 'index');
+            $sureyes = $this->getRequest()->getPost('sureyes');
+            $sureno = $this->getRequest()->getPost('sureno');
+            if (isset($sureyes) === true or isset($sureno) === true) {
+            	// Safety question answered, deleting
+            	if (isset($sureyes) === true) {
+                    $model = new $this->_modelclass($id);
+                    $model->deletePermanent();
+                    $this->_redirectTo('Model successfully deleted.', 'index');
+            	}
+            	else {
+            		$this->_redirectTo('', 'index');
+            	}
+            }
+            else {
+                // show safety question
+                $this->view->title = $this->view->translate('admin_doc_delete_permanent');
+                $this->view->text = $this->view->translate('admin_doc_delete_permanent_sure');
+                $yesnoForm = new YesNoForm(); 
+                $idElement = new Zend_Form_Element_Hidden('id');
+                $idElement->setValue($id);
+                $yesnoForm->addElement($idElement);
+                $yesnoForm->setAction($this->view->url(array("controller"=>"documents", "action"=>"permanentdelete")));
+                $yesnoForm->setMethod('post');
+                $this->view->form = $yesnoForm;
+            }
         } else {
             $this->_redirectTo('', 'index');
         }

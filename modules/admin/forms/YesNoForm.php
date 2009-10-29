@@ -7,12 +7,11 @@
  *
  * OPUS 4 is a complete rewrite of the original OPUS software and was developed
  * by the Stuttgart University Library, the Library Service Center
- * Baden-Wuerttemberg, the North Rhine-Westphalian Library Service Center,
- * the Cooperative Library Network Berlin-Brandenburg, the Saarland University
- * and State Library, the Saxon State Library - Dresden State and University
- * Library, the Bielefeld University Library and the University Library of
- * Hamburg University of Technology with funding from the German Research
- * Foundation and the European Regional Development Fund.
+ * Baden-Wuerttemberg, the Cooperative Library Network Berlin-Brandenburg,
+ * the Saarland University and State Library, the Saxon State Library -
+ * Dresden State and University Library, the Bielefeld University Library and
+ * the University Library of Hamburg University of Technology with funding from
+ * the German Research Foundation and the European Regional Development Fund.
  *
  * LICENCE
  * OPUS is free software; you can redistribute it and/or modify it under the
@@ -32,7 +31,23 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
-<h1><?php echo $this->title?></h1>
-<?= $this->text ?>
-<?= $this->form ?>
+
+class YesNoForm extends Zend_Form
+{
+    /**
+     * Build easy form
+     *
+     * @return void
+     */
+    public function init() {
+        $sureyes = new Zend_Form_Element_Submit('sureyes');
+        $sureyes->setLabel('yes');
+
+        $sureno = new Zend_Form_Element_Submit('sureno');
+        $sureno->setLabel('no');
+
+        #$id = new Zend_Form_Element_Hidden('id');
+        
+        $this->addElements(array($sureyes, $sureno));
+    }
+}

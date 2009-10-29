@@ -70,6 +70,51 @@
       </tuv>
     </tu>
     
+    <tu tuid="admin_doc_delete">
+      <tuv xml:lang="en">
+        <seg>Delete document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokument löschen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admion_doc_delete_sure">
+      <tuv xml:lang="en">
+        <seg>Are you sure you want to delete this document?</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sind Sie sicher, dass dieses Dokument gelöscht werden soll?</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="docs_permadelete">
+      <tuv xml:lang="en">
+        <seg>Delete permanently</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Ganz entfernen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_doc_delete_permanent">
+      <tuv xml:lang="en">
+        <seg>Delete document permanently</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokument komplett löschen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admion_doc_delete_permanent_sure">
+      <tuv xml:lang="en">
+        <seg>Are you sure you want to delete this document permanently? All contents will be removed from disk without the possibility to undelete!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sind Sie sicher, dass dieses Dokument komplett gelöscht werden soll? Alle Daten zum Dokument werden vollständig entfernt und es gibt keine Möglichkeit, dies rückgängig zu machen!</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="docs_nodocs">
       <tuv xml:lang="en">
         <seg>No documents found!</seg>
