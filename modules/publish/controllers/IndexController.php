@@ -232,7 +232,11 @@ class Publish_IndexController extends Zend_Controller_Action {
                 $model_hidden = Form_Builder::HIDDEN_MODEL_ELEMENT_NAME;
                 $document = $form_builder->uncompressModel($postdata[$model_hidden]);
                 if (array_key_exists('submit', $postdata) === true) {
-                    $id = $document->store();
+                    // type is stored in serialized model as a string only
+                    // to validate document it must be a Document_Type
+                    $type = new Opus_Document_Type($document->getType());
+                    $document->setType($type);
+                   	$id = $document->store();
                     $this->view->title = $this->view->translate('publish_controller_upload');
                     $uploadForm = new FileUpload();
                     $action_url = $this->view->url(array('controller' => 'index', 'action' => 'upload'));
