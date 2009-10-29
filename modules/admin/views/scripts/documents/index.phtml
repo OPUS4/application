@@ -107,33 +107,44 @@ if (count($documentList) > 0) {
        	$authors = array();
        	unset($authors);
        	$d = new Opus_Document($docId);
-       	$aut = $d->getPersonAuthor();
-       	foreach ($aut as $a) {
-       		$name = '';
-       		$lastName = '';
-       		$name = $a->getName();
-       		$lastName = $a->getLastName();
-       		if (false === empty($name)) {
-       		    $author = $a->getName();
-       		}
-       		else if (false === empty($lastName)) {
-       			$autor = $a->getLastName();
-       		}
-       		else {
-       			$author = " ";
-       		}
-       		$authors[] = $author;
+       	try {
+       	    $aut = $d->getPersonAuthor();
+       	    foreach ($aut as $a) {
+       		    $name = '';
+       		    $lastName = '';
+       		    $name = $a->getName();
+       		    $lastName = $a->getLastName();
+       		    if (false === empty($name)) {
+       		        $author = $a->getName();
+       		    }
+       		    else if (false === empty($lastName)) {
+       			    $autor = $a->getLastName();
+       		    }
+       		    else {
+       			    $author = " ";
+       		    }
+       		    $authors[] = $author;
+       	    }
        	}
-        $docObject = $d->getTitleMain();
-        $doc = array($docObject[0]->getValue());
-        if (true === empty($doc)) {
-            $doc = array(0 => 'Opus document with id: ' . $id);
+       	catch (Exception $e) {
+       		$authors[] = " ";
+       	}
+        try {
+            $docObject = $d->getTitleMain();
+            $doc = array($docObject[0]->getValue());
+            if (true === empty($doc)) {
+                $doc = array(0 => 'Opus document with id: ' . $id);
+            }	
+        }
+        catch (Exception $e) {
+        	$doc = array(0 => 'Opus document with id: ' . $id);
         }
         $authorsstring = '';
    		if (false === empty($authors)) {
    			$authorsstring = join("; ", $authors) . ': ';
    		}
    	    $title = array($authorsstring . $doc[0] . ' (' . $this->translate($d->getType()) . ')');
+
         $url_frontdoor = array(
             'module' => 'frontdoor',
             'controller' => 'index',

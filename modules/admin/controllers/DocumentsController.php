@@ -143,6 +143,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             }
         	sort($docList);
         }
+
         $paginator = Zend_Paginator::factory($docList);
         if (array_key_exists('hitsPerPage', $data)) {
         	if ($data['hitsPerPage'] === '0') {
