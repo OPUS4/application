@@ -2,10 +2,34 @@ span.md {
     display: block;
 }
 
-span.md.name {
+span.md.nam1 {
     font-weight: bold;
 }
 
 span.md.value {
     margin-left: 3em;
 }
+table {
+	margin: 1px;
+	border-collapse: separate;
+	width: 100%;
+	border-bottom: 1px solid #e4f0fc;
+	background: #ffffff;
+}	 
+th.name {
+    border-left: 1px solid #e4f0fc;
+    border-bottom: none;
+    font-size:0.9em;
+    color: #FFA500;
+    padding: 2px 2px 2px 2px;
+    vertical-align: top;
+    text-align: left;
+    width: 150px;
+}
+td {
+    border: 1px solid #e4f0fc;
+    border-bottom: none;
+    font-size:0.9em;
+    padding: 2px 2px 2px 2px;
+    vertical-align: top;
+} 
