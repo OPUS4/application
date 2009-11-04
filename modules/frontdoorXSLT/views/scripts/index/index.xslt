@@ -78,6 +78,11 @@
        <xsl:apply-templates select="PersonOther" />
        <xsl:apply-templates select="File" />
        <xsl:call-template name="services"/>
+       <table cellspacing="0">
+         <colgroup class="angaben">
+            <col class="name"/> 
+         </colgroup>            
+  <!--       <tbody>   -->
        <xsl:apply-templates select="IdentifierUrn" />
        <xsl:apply-templates select="IdentifierDoi|IdentifierHandle|IdentifierUrl" />
        <xsl:apply-templates select="@PublisherName" />
@@ -121,182 +126,234 @@
        <xsl:apply-templates select="@Reviewed" />
        <xsl:apply-templates select="Note" />
        <xsl:apply-templates select="@PublicationVersion" />
+       <xsl:apply-templates select="Collection" />
        <xsl:apply-templates select="Licence" />
+ <!--        </tbody>  -->
+         </table>
     </xsl:template>
 
 
     <!-- Templates for "internal fields". -->
     <xsl:template match="@CompletedYear">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value">
+      <tr> 
+        <th class="name"><xsl:call-template name="translateFieldname" /><xsl:text>:</xsl:text></th>
+        <td>
             <xsl:call-template name="translateString">
                 <xsl:with-param name="string" select="." />
             </xsl:call-template>
-        </span>
+         </td>
+       </tr>    
     </xsl:template>
 
     <xsl:template match="@ContributingCorporation">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value">
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname" /><xsl:text>:</xsl:text></th>
+        <td>
             <xsl:call-template name="translateString">
                 <xsl:with-param name="string" select="." />
             </xsl:call-template>
-        </span>
+         </td>
+       </tr>    
     </xsl:template>
 
     <xsl:template match="@CreatingCorporation">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value">
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname" /><xsl:text>:</xsl:text></th>
+        <td>
             <xsl:call-template name="translateString">
                 <xsl:with-param name="string" select="." />
             </xsl:call-template>
-        </span>
+         </td>
+       </tr>    
     </xsl:template>
 
     <xsl:template match="@Edition">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value">
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname" /><xsl:text>:</xsl:text></th>
+        <td>
             <xsl:call-template name="translateString">
                 <xsl:with-param name="string" select="." />
             </xsl:call-template>
-        </span>
+         </td>
+       </tr>    
     </xsl:template>
 
     <xsl:template match="@Issue">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value">
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname" /><xsl:text>:</xsl:text></th>
+        <td>
             <xsl:call-template name="translateString">
                 <xsl:with-param name="string" select="." />
             </xsl:call-template>
-        </span>
+         </td>
+       </tr>    
     </xsl:template>
 
     <xsl:template match="@Language">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value">
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname" /><xsl:text>:</xsl:text></th>
+        <td>
             <xsl:call-template name="translateString">
                 <xsl:with-param name="string" select="." />
             </xsl:call-template>
-        </span>
+         </td>
+       </tr>    
     </xsl:template>
 
     <xsl:template match="@PageFirst">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value">
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname" /><xsl:text>:</xsl:text></th>
+        <td>
             <xsl:call-template name="translateString">
                 <xsl:with-param name="string" select="." />
             </xsl:call-template>
-        </span>
+         </td>
+       </tr>    
     </xsl:template>
 
     <xsl:template match="@PageLast">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value">
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname" /><xsl:text>:</xsl:text></th>
+        <td>
             <xsl:call-template name="translateString">
                 <xsl:with-param name="string" select="." />
             </xsl:call-template>
-        </span>
+         </td>
+       </tr>    
     </xsl:template>
 
     <xsl:template match="@PageNumber">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value">
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname" /><xsl:text>:</xsl:text></th>
+        <td>
             <xsl:call-template name="translateString">
                 <xsl:with-param name="string" select="." />
             </xsl:call-template>
-        </span>
+         </td>
+       </tr>    
     </xsl:template>
 
     <xsl:template match="@PublicationVersion">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value">
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname" /><xsl:text>:</xsl:text></th>
+        <td>
             <xsl:call-template name="translateString">
                 <xsl:with-param name="string" select="." />
             </xsl:call-template>
-        </span>
+         </td>
+       </tr>    
     </xsl:template>
 
     <xsl:template match="@PublishedYear">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value">
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname" /><xsl:text>:</xsl:text></th>
+        <td>
             <xsl:call-template name="translateString">
                 <xsl:with-param name="string" select="." />
             </xsl:call-template>
-        </span>
+         </td>
+       </tr>    
     </xsl:template>
 
     <xsl:template match="@PublisherName">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value">
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname" /><xsl:text>:</xsl:text></th>
+        <td>
             <xsl:call-template name="translateString">
                 <xsl:with-param name="string" select="." />
             </xsl:call-template>
-        </span>
+         </td>
+       </tr>    
     </xsl:template>
 
     <xsl:template match="@PublisherPlace">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value">
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname" /><xsl:text>:</xsl:text></th>
+        <td>
             <xsl:call-template name="translateString">
                 <xsl:with-param name="string" select="." />
             </xsl:call-template>
-        </span>
+         </td>
+       </tr>    
     </xsl:template>
 
     <xsl:template match="@Reviewed">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value">
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname" /><xsl:text>:</xsl:text></th>
+        <td>
             <xsl:call-template name="translateString">
                 <xsl:with-param name="string" select="." />
             </xsl:call-template>
-        </span>
+         </td>
+       </tr>    
     </xsl:template>
 
     <xsl:template match="@Source">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value">
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname" /><xsl:text>:</xsl:text></th>
+        <td>
             <xsl:call-template name="translateString">
                 <xsl:with-param name="string" select="." />
             </xsl:call-template>
-        </span>
+         </td>
+       </tr>    
     </xsl:template>
 
     <xsl:template match="@Type">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value">
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname" /><xsl:text>:</xsl:text></th>
+        <td>
             <xsl:call-template name="translateString">
                 <xsl:with-param name="string" select="." />
             </xsl:call-template>
-        </span>
+         </td>
+       </tr>    
     </xsl:template>
 
     <xsl:template match="@Volume">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value">
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname" /><xsl:text>:</xsl:text></th>
+        <td>
             <xsl:call-template name="translateString">
                 <xsl:with-param name="string" select="." />
             </xsl:call-template>
-        </span>
+         </td>
+       </tr>    
     </xsl:template>
 
 
     <!-- Templates for "external fields". -->
+    <xsl:template match="Collection">
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
+        <td><xsl:value-of select="@Name" /></td>
+      </tr>    
+    </xsl:template>
+
     <xsl:template match="CompletedDate">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value"><xsl:value-of select="concat(format-number(@Day,'00'),'.',format-number(@Month,'00'),'.',@Year)" /></span>
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
+        <td><xsl:value-of select="concat(format-number(@Day,'00'),'.',format-number(@Month,'00'),'.',@Year)" /></td>
+      </tr>    
     </xsl:template>
 
     <xsl:template match="DateAccepted">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value"><xsl:value-of select="concat(format-number(@Day,'00'),'.',format-number(@Month,'00'),'.',@Year)" /></span>
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
+        <td><xsl:value-of select="concat(format-number(@Day,'00'),'.',format-number(@Month,'00'),'.',@Year)" /></td>
+      </tr>    
     </xsl:template>
 
     <xsl:template match="File">
-        <span class="md name">
+      <xsl:if test="position()=1">
+<!--        <span class="md nam1">  -->
+        <h3> 
         <xsl:call-template name="translateString">
             <xsl:with-param name="string">File(s)</xsl:with-param>
         </xsl:call-template>
-        </span>
+        </h3>
+<!--         </span>  -->
+        </xsl:if>
         <span class="md value">
            <xsl:element name="a">
               <!-- TODO: Use Zend Url-Helper to build href attribute -->
@@ -323,17 +380,20 @@
               <xsl:value-of select="@PathName" />
            </xsl:element>
       <xsl:text> (</xsl:text><xsl:value-of select="@Label" /><xsl:text>)</xsl:text> 
-        </span>
+       </span> 
     </xsl:template>
          
     <xsl:template match="IdentifierDoi|IdentifierHandle|IdentifierUrl">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value"><xsl:value-of select="@Value" /></span>
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
+        <td><xsl:value-of select="@Value" /></td>
+      </tr>    
     </xsl:template>
 
     <xsl:template match="IdentifierUrn">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value">
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
+        <td>
             <xsl:element name="a">
                 <!-- TODO: Use Zend Url-Helper to build href attribute -->
                   <xsl:attribute name="href">
@@ -342,22 +402,29 @@
                 </xsl:attribute>
                 <xsl:value-of select="@Value" />
              </xsl:element>
-        </span>
-    </xsl:template>
+         </td>
+      </tr>    
+     </xsl:template>
 
     <xsl:template match="IdentifierIsbn">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value"><xsl:value-of select="@Value" /></span>
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
+        <td><xsl:value-of select="@Value" /></td>
+      </tr>    
     </xsl:template>
  
     <xsl:template match="IdentifierIssn">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value"><xsl:value-of select="@Value" /></span>
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
+        <td><xsl:call-template name="translateFieldname" /></td>
+        <td><xsl:value-of select="@Value" /></td>
+      </tr>    
     </xsl:template>
 
     <xsl:template match="Licence">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value" property="dc:rights">
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
+        <td>
           <xsl:choose>
              <xsl:when test="starts-with(@NameLong,'Creative')">
                <xsl:element name="img">
@@ -403,27 +470,30 @@
                </xsl:element>
               </xsl:otherwise>
           </xsl:choose> 
-        </span>
+        </td>
+      </tr>    
     </xsl:template>
       
 
-    <xsl:template match="Collection"/>
     <xsl:template match="Enrichment"/>
 
     <xsl:template match="Note">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value"><xsl:value-of select="@Message" /></span>
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
+        <td><xsl:value-of select="@Message" /></td>
+      </tr>    
     </xsl:template>
 
  
     <xsl:template match="Institute"/>
     <xsl:template match="Patent"/>
 
-
  
     <xsl:template match="PersonAdvisor">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value" property="dc:creator"><xsl:value-of select="@Name" /></span>
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
+        <td><xsl:value-of select="@Name" /></td>
+      </tr>    
     </xsl:template>
  
     <xsl:template match="PersonAuthor">
@@ -444,65 +514,78 @@
     </xsl:template>  
           
     <xsl:template match="PersonOther">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md nam1"><xsl:call-template name="translateFieldname" /></span>
         <span class="md value" property="dc:creator"><xsl:value-of select="@Name" /></span>
     </xsl:template>
  
     <xsl:template match="PersonReferee">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value" property="dc:creator"><xsl:value-of select="@Name" /></span>
+      <tr>
+        <th class="nam1"><xsl:call-template name="translateFieldname"/>:</th>
+        <td><xsl:value-of select="@Name" /></td>
+      </tr>    
     </xsl:template>
 
     <xsl:template match="PersonContributor">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md nam1"><xsl:call-template name="translateFieldname" /></span>
         <span class="md value" property="dc:creator"><xsl:value-of select="@Name" /></span>
     </xsl:template>
  
     <xsl:template match="PersonEditor">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md nam1"><xsl:call-template name="translateFieldname" /></span>
         <span class="md value" property="dc:creator"><xsl:value-of select="@Name" /></span>
     </xsl:template>
  
     <xsl:template match="PersonTranslator">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md nam1"><xsl:call-template name="translateFieldname" /></span>
         <span class="md value" property="dc:creator"><xsl:value-of select="@Name" /></span>
     </xsl:template>
  
 
     <xsl:template match="PublishedDate">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value"><xsl:value-of select="concat(format-number(@Day,'00'),'.',format-number(@Month,'00'),'.',@Year)" /></span>
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
+        <td><xsl:value-of select="concat(format-number(@Day,'00'),'.',format-number(@Month,'00'),'.',@Year)" /></td>
+      </tr>    
     </xsl:template>
 
     <xsl:template match="PublisherUniversity"/>
 
     <xsl:template match="SubjectPsyndex">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value" property="dc:subject" xml:lang="{@Language}"><xsl:value-of select="@Value" /></span>
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
+        <td><xsl:value-of select="@Value" /></td>
+      </tr>    
     </xsl:template>
 
     <xsl:template match="SubjectSwd">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value" property="dc:subject" xml:lang="{@Language}"><xsl:value-of select="@Value" /></span>
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
+        <td><xsl:value-of select="@Value" /></td>
+      </tr>    
     </xsl:template>
 
     <xsl:template match="SubjectUncontrolled">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value" property="dc:subject" xml:lang="{@Language}"><xsl:value-of select="@Value" /></span>
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
+        <td><xsl:value-of select="@Value" /></td>
+      </tr>    
     </xsl:template>
 
     <xsl:template match="TitleMain">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+ <!--        <span class="md nam1"><xsl:call-template name="translateFieldname" /></span> -->
+        <h3><xsl:call-template name="translateFieldname" /></h3>
         <span class="md value" property="dc:title" xml:lang="{@Language}"><xsl:value-of select="@Value" /></span>
     </xsl:template>
 
     <xsl:template match="TitleAbstract">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value" property="dc:description" xml:lang="{@Language}"><xsl:value-of select="@Value" /></span>
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
+        <td><xsl:value-of select="@Value" /></td>
+      </tr>    
     </xsl:template>
     
     <xsl:template match="TitleParent">
-        <span class="md name"><xsl:call-template name="translateFieldname" /></span>
+        <span class="md nam1"><xsl:call-template name="translateFieldname" /></span>
         <span class="md value" property="dc:title" xml:lang="{@Language}"><xsl:value-of select="@Value" /></span>
     </xsl:template>
 
@@ -523,6 +606,7 @@
 
     <!--  Named template for services-buttons -->
     <xsl:template name="services">
+      <xsl:element name="br"/>
       <xsl:element name="br"/>
         <!-- integrity -->
         <xsl:element name="a">
@@ -674,6 +758,8 @@
           </xsl:element>
         </xsl:if>
 
+      <xsl:element name="br"/>
+      <xsl:element name="br"/>
     </xsl:template>
 
 
