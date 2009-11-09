@@ -2,6 +2,7 @@
 <tmx version="2.0" xmlns="http://www.lisa.org/tmx20">
   <header adminlang="en" creationtool="locale4j" creationtoolversion="1.1" o-tmf="unknown" segtype="block" srclang="*all*"/>
   <body>
+
     <tu tuid="frontdoor_modulename">
       <tuv xml:lang="en">
         <seg>Frontdoor</seg>
@@ -10,6 +11,7 @@
         <seg>Frontdoor</seg>
       </tuv>
     </tu>
+
     <tu tuid="frontdoor_pagetitle">
       <tuv xml:lang="en">
         <seg>OPUS Application - Frontdoor</seg>
@@ -18,6 +20,7 @@
         <seg>OPUS Anwendung - Dokumentinformationen</seg>
       </tuv>
     </tu>
+
     <tu tuid="frontdoor_entry">
       <tuv xml:lang="en">
         <seg>Use this URN/URL for citation:</seg>
@@ -26,6 +29,7 @@
         <seg>Bitte nutzen Sie diese URN/URL, um auf das Dokument zu verweisen:</seg>
       </tuv>
     </tu>
+
     <tu tuid="frontdoor_hashtitle">
       <tuv xml:lang="en">
         <seg>Integrity of this document (hashvalues and signatures)</seg>
@@ -34,6 +38,7 @@
         <seg>Integrität dieses Dokuments (Signaturen und Prüfsummen)</seg>
       </tuv>
     </tu>
+
     <tu tuid="frontdoor_no_hash">
       <tuv xml:lang="en">
         <seg>No hashes or signatures available for this file</seg>
@@ -42,6 +47,7 @@
         <seg>Für diese Datei liegen keine Prüfsummen oder Signaturen vor</seg>
       </tuv>
     </tu>
+
     <tu tuid="frontdoor_fixpoint">
       <tuv xml:lang="en">
         <seg>Fixpoint</seg>
@@ -50,6 +56,7 @@
         <seg>Sollwert</seg>
       </tuv>
     </tu>
+
     <tu tuid="frontdoor_current">
       <tuv xml:lang="en">
         <seg>Current value</seg>
@@ -58,6 +65,7 @@
         <seg>Istwert</seg>
       </tuv>
     </tu>
+
     <tu tuid="frontdoor_filenumber">
       <tuv xml:lang="en">
         <seg>Number of files available for this document</seg>
@@ -66,12 +74,40 @@
         <seg>Anzahl der vorliegenden Dateien für dieses Dokument</seg>
       </tuv>
     </tu>
+
     <tu tuid="frontdoor_back">
       <tuv xml:lang="en">
         <seg>Back to frontdoor view</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Zurück zur Frontdoor</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="col">
+      <tuv xml:lang="en">
+        <seg>Collection</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sammlung</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="col_ccs">
+      <tuv xml:lang="en">
+        <seg>CCS-Classification</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>CCS-Klassifikation</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="col_ddc">
+      <tuv xml:lang="en">
+        <seg>Dewey Decimal Classification</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>DDC-Sachgruppe</seg>
       </tuv>
     </tu>
  
