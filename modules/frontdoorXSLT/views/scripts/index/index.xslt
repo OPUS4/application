@@ -76,7 +76,13 @@
        <xsl:apply-templates select="PersonTranslator" />
        <xsl:apply-templates select="PersonContributor" />
        <xsl:apply-templates select="PersonOther" />
-       <xsl:apply-templates select="File" />
+        <xsl:if test="normalize-space(File/@PathName)"> 
+       <table class="fulltext">
+         <tr class="fulltext">
+           <xsl:apply-templates select="File" />
+         </tr>
+       </table>
+      </xsl:if> 
        <xsl:call-template name="services"/>
        <table cellspacing="0">
          <colgroup class="angaben">
@@ -102,7 +108,7 @@
          </xsl:otherwise>
        </xsl:choose>
        <xsl:choose>
-         <xsl:when test="normalize-space(PublishedDate)">
+         <xsl:when test="normalize-space(PublishedDate/@Year)">
            <xsl:apply-templates select="PublishedDate" />
          </xsl:when>
          <xsl:otherwise>
@@ -126,7 +132,13 @@
        <xsl:apply-templates select="@Reviewed" />
        <xsl:apply-templates select="Note" />
        <xsl:apply-templates select="@PublicationVersion" />
-       <xsl:apply-templates select="Collection" />
+       <xsl:if test="Collection/@RoleName='Computing Classification System'">
+          <xsl:apply-templates select="Collection" mode="ccs" />
+       </xsl:if>   
+       <xsl:if test="Collection/@RoleName='Dewey Decimal Classification'">
+          <xsl:apply-templates select="Collection" mode="ddc" />
+       </xsl:if>   
+       <xsl:apply-templates select="Collection" mode="other"/> 
        <xsl:apply-templates select="Licence" />
  <!--        </tbody>  -->
          </table>
@@ -323,11 +335,39 @@
 
 
     <!-- Templates for "external fields". -->
-    <xsl:template match="Collection">
+    <xsl:template match="Collection" mode="ccs">
       <tr>
-        <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
+          <th class="name">
+          <xsl:call-template name="translateString">
+              <xsl:with-param name="string">col_ccs</xsl:with-param>
+          </xsl:call-template>
+          <xsl:text>:</xsl:text></th>
         <td><xsl:value-of select="@Name" /></td>
       </tr>    
+    </xsl:template>
+
+    <xsl:template match="Collection" mode="ddc">
+      <tr>
+          <th class="name">
+          <xsl:call-template name="translateString">
+              <xsl:with-param name="string">col_ddc</xsl:with-param>
+          </xsl:call-template>
+          <xsl:text>:</xsl:text></th>
+        <td><xsl:value-of select="@Name" /></td>
+      </tr>    
+    </xsl:template>
+
+    <xsl:template match="Collection" mode="other">
+      <xsl:if test="@RoleName!='Computing Classificatin Classification' and @RoleName!='Dewey Decimal Classification'">
+        <tr>
+          <th class="name">
+            <xsl:call-template name="translateString">
+              <xsl:with-param name="string">col</xsl:with-param>
+            </xsl:call-template>
+            <xsl:text>:</xsl:text></th>
+          <td><xsl:value-of select="@Name" /></td>
+        </tr>
+      </xsl:if>    
     </xsl:template>
 
     <xsl:template match="CompletedDate">
@@ -345,16 +385,24 @@
     </xsl:template>
 
     <xsl:template match="File">
-      <xsl:if test="position()=1">
-<!--        <span class="md nam1">  -->
-        <h3> 
-        <xsl:call-template name="translateString">
-            <xsl:with-param name="string">File(s)</xsl:with-param>
-        </xsl:call-template>
-        </h3>
-<!--         </span>  -->
-        </xsl:if>
-        <span class="md value">
+      <xsl:choose>
+        <xsl:when test="position()=1">
+          <td class="fulltext_label">
+          <xsl:attribute name="width"><xsl:text>60px</xsl:text></xsl:attribute>
+          <h3><nobr> 
+          <xsl:call-template name="translateString">
+              <xsl:with-param name="string">File(s)</xsl:with-param>
+          </xsl:call-template>
+          </nobr></h3>
+          </td>
+        </xsl:when>
+        <xsl:otherwise>
+          <td class="fulltext_label"></td>
+        </xsl:otherwise>
+        </xsl:choose>
+<!--         <span class="md value"> -->
+          <td class="fulltext">
+          <nobr>
            <xsl:element name="a">
               <!-- TODO: Use Zend Url-Helper to build href attribute -->
               <xsl:attribute name="href">
@@ -370,17 +418,17 @@
                    <xsl:value-of select="@FileType"/>
                    <xsl:text>.png</xsl:text>  
                 </xsl:attribute>
-                <xsl:attribute name="border">
-                  <xsl:text>0</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="title">
-                   <xsl:text>Download</xsl:text>
-                </xsl:attribute>
+                <xsl:attribute name="width"><xsl:text>50</xsl:text></xsl:attribute>
+                <xsl:attribute name="height"><xsl:text>53</xsl:text></xsl:attribute>
+                <xsl:attribute name="border"><xsl:text>0</xsl:text></xsl:attribute>
+                <xsl:attribute name="title"><xsl:text>Download</xsl:text></xsl:attribute>
               </xsl:element>
               <xsl:value-of select="@PathName" />
            </xsl:element>
-      <xsl:text> (</xsl:text><xsl:value-of select="@Label" /><xsl:text>)</xsl:text> 
-       </span> 
+      <xsl:text> (</xsl:text><xsl:value-of select="@Label" /><xsl:text>)</xsl:text>
+      </nobr>
+      </td>
+<!--     </span> -->
     </xsl:template>
          
     <xsl:template match="IdentifierDoi|IdentifierHandle|IdentifierUrl">
@@ -572,9 +620,12 @@
     </xsl:template>
 
     <xsl:template match="TitleMain">
- <!--        <span class="md nam1"><xsl:call-template name="translateFieldname" /></span> -->
-        <h3><xsl:call-template name="translateFieldname" /></h3>
-        <span class="md value" property="dc:title" xml:lang="{@Language}"><xsl:value-of select="@Value" /></span>
+<!--     <h3><xsl:call-template name="translateFieldname" /></h3> -->
+<!--    <span class="md value" property="dc:title" xml:lang="{@Language}"><xsl:value-of select="@Value" /></span> -->
+        <h3><xsl:value-of select="@Value" />
+        <xsl:text> (</xsl:text>
+        <xsl:call-template name="translateFieldname" />
+        <xsl:text>)</xsl:text></h3>
     </xsl:template>
 
     <xsl:template match="TitleAbstract">
@@ -664,10 +715,13 @@
                <xsl:text>/statistic/index/index/docId/</xsl:text>
                <xsl:value-of select="@Id" />
              </xsl:attribute>
-<!--               <xsl:element name="img">   
+               <xsl:element name="img">   
              <xsl:attribute name="src">
                <xsl:value-of select="$baseUrl"/>
-                <xsl:text>/statistic/graph/thumb/docId</xsl:text>
+                <xsl:text>/statistic/graph/thumb/docId/</xsl:text>
+                <xsl:value-of select="@Id" />
+                <xsl:text>/id/</xsl:text>
+                <xsl:value-of select="@Id" />
              </xsl:attribute>
              <xsl:attribute name="border">
                <xsl:text>0</xsl:text>
@@ -678,11 +732,11 @@
                 </xsl:call-template>
              </xsl:attribute>
           </xsl:element>
--->         
-            <xsl:call-template name="translateString">
+         
+<!--              <xsl:call-template name="translateString">
                <xsl:with-param name="string">frontdoor_statistics</xsl:with-param>
             </xsl:call-template>
-          
+     -->     
         </xsl:element>
 
         <!-- connotea -->
