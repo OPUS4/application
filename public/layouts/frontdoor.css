@@ -9,18 +9,35 @@ span.md.nam1 {
 span.md.value {
     margin-left: 3em;
 }
+h3 {
+	color: #ff810e;     /* warm yellow */
+}	
 table {
-	margin: 1px;
+	margin: 1px; 
 	border-collapse: separate;
 	width: 100%;
 	border-bottom: 1px solid #e4f0fc;
 	background: #ffffff;
-}	 
+}
+table.fulltext {
+	border: 0px;
+	margin-left: 0px;
+}
+th {
+	border: 1px solid #e4f0fc;
+	font-size: 0.9em;  
+	color: #FFA500;  /*#FFA500 orange opus33, #006699 hellblau*/
+	font-weight: normal;
+	padding: 2px 2px 2px 2px;
+	width: 10%;
+	vertical-align: top;
+	width: 30px;
+}
 th.name {
     border-left: 1px solid #e4f0fc;
     border-bottom: none;
     font-size:0.9em;
-    color: #FFA500;
+    color: #006699; /* hellblau, blue wie Links, #FFA500 orange */
     padding: 2px 2px 2px 2px;
     vertical-align: top;
     text-align: left;
@@ -32,4 +49,16 @@ td {
     font-size:0.9em;
     padding: 2px 2px 2px 2px;
     vertical-align: top;
-} 
+}
+td.fulltext {
+	font-size: 0.9em;
+	border: 0px;
+	vertical-align: top; 
+	text-align: left;
+}
+td.fulltext_label {
+	font-size: 1em;
+	border: 0px;
+	text-align: left;
+	padding-top: 40px;
+}		 
