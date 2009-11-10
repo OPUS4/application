@@ -71,11 +71,6 @@
     <xsl:template match="Opus_Model_Filter">
        <xsl:apply-templates select="PersonAuthor" />
        <xsl:apply-templates select="TitleMain" />
-       <xsl:apply-templates select="TitleParent" />
-       <xsl:apply-templates select="PersonEditor" />
-       <xsl:apply-templates select="PersonTranslator" />
-       <xsl:apply-templates select="PersonContributor" />
-       <xsl:apply-templates select="PersonOther" />
         <xsl:if test="normalize-space(File/@PathName)"> 
        <table class="fulltext">
          <tr class="fulltext">
@@ -88,11 +83,15 @@
          <colgroup class="angaben">
             <col class="name"/> 
          </colgroup>            
-  <!--       <tbody>   -->
        <xsl:apply-templates select="IdentifierUrn" />
        <xsl:apply-templates select="IdentifierDoi|IdentifierHandle|IdentifierUrl" />
+       <xsl:apply-templates select="TitleParent" />
        <xsl:apply-templates select="@PublisherName" />
        <xsl:apply-templates select="@PublisherPlace" />
+       <xsl:apply-templates select="PersonEditor" />
+       <xsl:apply-templates select="PersonTranslator" />
+       <xsl:apply-templates select="PersonContributor" />
+       <xsl:apply-templates select="PersonOther" />
        <xsl:apply-templates select="PersonReferee" />
        <xsl:apply-templates select="PersonAdvisor" />
        <xsl:apply-templates select="@Type" />
@@ -140,7 +139,6 @@
        </xsl:if>   
        <xsl:apply-templates select="Collection" mode="other"/> 
        <xsl:apply-templates select="Licence" />
- <!--        </tbody>  -->
          </table>
     </xsl:template>
 
@@ -400,7 +398,6 @@
           <td class="fulltext_label"></td>
         </xsl:otherwise>
         </xsl:choose>
-<!--         <span class="md value"> -->
           <td class="fulltext">
           <nobr>
            <xsl:element name="a">
@@ -428,7 +425,6 @@
       <xsl:text> (</xsl:text><xsl:value-of select="@Label" /><xsl:text>)</xsl:text>
       </nobr>
       </td>
-<!--     </span> -->
     </xsl:template>
          
     <xsl:template match="IdentifierDoi|IdentifierHandle|IdentifierUrl">
@@ -562,33 +558,40 @@
     </xsl:template>  
           
     <xsl:template match="PersonOther">
-        <span class="md nam1"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value" property="dc:creator"><xsl:value-of select="@Name" /></span>
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
+        <td><xsl:value-of select="@Name" /></td>
+      </tr>    
     </xsl:template>
  
     <xsl:template match="PersonReferee">
       <tr>
-        <th class="nam1"><xsl:call-template name="translateFieldname"/>:</th>
+        <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
         <td><xsl:value-of select="@Name" /></td>
       </tr>    
     </xsl:template>
 
     <xsl:template match="PersonContributor">
-        <span class="md nam1"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value" property="dc:creator"><xsl:value-of select="@Name" /></span>
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
+        <td><xsl:value-of select="@Name" /></td>
+      </tr>    
     </xsl:template>
  
     <xsl:template match="PersonEditor">
-        <span class="md nam1"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value" property="dc:creator"><xsl:value-of select="@Name" /></span>
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
+        <td><xsl:value-of select="@Name" /></td>
+      </tr>    
     </xsl:template>
  
     <xsl:template match="PersonTranslator">
-        <span class="md nam1"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value" property="dc:creator"><xsl:value-of select="@Name" /></span>
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
+        <td><xsl:value-of select="@Name" /></td>
+      </tr>    
     </xsl:template>
  
-
     <xsl:template match="PublishedDate">
       <tr>
         <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
@@ -620,8 +623,6 @@
     </xsl:template>
 
     <xsl:template match="TitleMain">
-<!--     <h3><xsl:call-template name="translateFieldname" /></h3> -->
-<!--    <span class="md value" property="dc:title" xml:lang="{@Language}"><xsl:value-of select="@Value" /></span> -->
         <h3><xsl:value-of select="@Value" />
         <xsl:text> (</xsl:text>
         <xsl:call-template name="translateFieldname" />
@@ -636,10 +637,11 @@
     </xsl:template>
     
     <xsl:template match="TitleParent">
-        <span class="md nam1"><xsl:call-template name="translateFieldname" /></span>
-        <span class="md value" property="dc:title" xml:lang="{@Language}"><xsl:value-of select="@Value" /></span>
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
+        <td><xsl:value-of select="@Value" /></td>
+      </tr>    
     </xsl:template>
-
 
     <xsl:template match="IdentifierStdDoi"/>
     <xsl:template match="IdentifierCrisLink"/>
@@ -682,7 +684,8 @@
              </xsl:attribute>
           </xsl:element>
         </xsl:element>
-
+        <xsl:text> </xsl:text>
+ 
         <!-- recommendation -->
         <xsl:element name="a">
            <!-- TODO: Use Zend Url-Helper to build href attribute -->
@@ -706,6 +709,7 @@
              </xsl:attribute>
           </xsl:element>
         </xsl:element>
+        <xsl:text> </xsl:text>
 
         <!-- statistic -->
         <xsl:element name="a">
@@ -738,6 +742,7 @@
             </xsl:call-template>
      -->     
         </xsl:element>
+        <xsl:text> </xsl:text>
 
         <!-- connotea -->
         <xsl:element name="a">
@@ -762,6 +767,7 @@
              </xsl:attribute>
           </xsl:element>
         </xsl:element>
+        <xsl:text> </xsl:text>
 
         <!-- delicious -->
         <xsl:element name="a">
@@ -786,6 +792,7 @@
              </xsl:attribute>
           </xsl:element>
         </xsl:element>
+        <xsl:text> </xsl:text>
 
         <!-- google-scholar -->
         <xsl:if test="normalize-space(TitleMain/@Value)">
@@ -810,7 +817,54 @@
                </xsl:attribute>
             </xsl:element>
           </xsl:element>
+         <xsl:text> </xsl:text>
         </xsl:if>
+
+        <!-- Bib-Export -->
+        <xsl:element name="a">
+           <!-- TODO: Use Zend Url-Helper to build href attribute -->
+             <xsl:attribute name="href">
+               <xsl:text> </xsl:text>
+             </xsl:attribute>
+           <xsl:element name="img">   
+             <xsl:attribute name="src">
+               <xsl:value-of select="$layoutPath"/>
+                <xsl:text>/img/bibtex.jpg</xsl:text>
+             </xsl:attribute>
+             <xsl:attribute name="border">
+               <xsl:text>0</xsl:text>
+             </xsl:attribute>
+             <xsl:attribute name="title">
+                <xsl:call-template name="translateString">
+                   <xsl:with-param name="string">frontdoor_exportbibtex</xsl:with-param>
+                </xsl:call-template>
+             </xsl:attribute>
+          </xsl:element>
+        </xsl:element>
+        <xsl:text> </xsl:text>
+
+        <!-- Ris-Export -->
+        <xsl:element name="a">
+           <!-- TODO: Use Zend Url-Helper to build href attribute -->
+             <xsl:attribute name="href">
+               <xsl:text> </xsl:text>
+             </xsl:attribute>
+           <xsl:element name="img">   
+             <xsl:attribute name="src">
+               <xsl:value-of select="$layoutPath"/>
+                <xsl:text>/img/ris.jpg</xsl:text>
+             </xsl:attribute>
+             <xsl:attribute name="border">
+               <xsl:text>0</xsl:text>
+             </xsl:attribute>
+             <xsl:attribute name="title">
+                <xsl:call-template name="translateString">
+                   <xsl:with-param name="string">frontdoor_exportris</xsl:with-param>
+                </xsl:call-template>
+             </xsl:attribute>
+          </xsl:element>
+        </xsl:element>
+
 
       <xsl:element name="br"/>
       <xsl:element name="br"/>
