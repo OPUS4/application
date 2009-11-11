@@ -100,8 +100,8 @@ if (count($documentList) > 0) {
 <?php
     echo $this->paginationControl($documentList, NULL, 'itemCount_pagination.phtml');
     echo $this->paginationControl($documentList, 'Sliding', 'results_pagination.phtml');
+    echo $this->paginationControl($documentList, NULL, 'start_itemlist.phtml');
 ?>
-<ol>
     <?php 
     foreach ($documentList as $docId) {
        	$authors = array();
