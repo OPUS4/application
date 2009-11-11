@@ -541,7 +541,9 @@
     </xsl:template>
  
     <xsl:template match="PersonAuthor">
+         <xsl:if test="position()=1">
       <xsl:element name="br" />
+        </xsl:if>
       <xsl:element name="a">
            <!-- TODO: Use Zend Url-Helper to build href attribute -->
            <xsl:attribute name="href">
@@ -551,10 +553,16 @@
            </xsl:attribute>
            <xsl:value-of select="@Name" />
       </xsl:element>
-      <xsl:if test="position()=last()">
-         <xsl:element name="br" />
-         <xsl:element name="br" />
-      </xsl:if>
+      <xsl:choose>
+         <xsl:when test="position()=last()">
+            <xsl:text>:</xsl:text>
+            <xsl:element name="br"/>
+            <xsl:element name="br"/>
+         </xsl:when>
+         <xsl:otherwise>
+            <xsl:text>; </xsl:text>
+         </xsl:otherwise>
+      </xsl:choose>
     </xsl:template>  
           
     <xsl:template match="PersonOther">
