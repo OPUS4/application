@@ -186,6 +186,9 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         else if ($document->getServerState() === 'published') {
         	$this->view->actions = 'unpublish';
         }
+        if ($document->getServerState() === 'deleted') {
+            $this->view->actions = 'undelete';
+        }
         $type = new Opus_Document_Type($document->getType());
         $documentWithFilter = new Opus_Model_Filter;
         $documentWithFilter->setModel($document)
@@ -204,8 +207,10 @@ class Admin_DocumentsController extends Controller_CRUDAction {
      * @return void
      */
     public function deleteAction() {
-        if ($this->_request->isPost() === true) {
-            $id = $this->getRequest()->getPost('id');
+        if ($this->_request->isPost() === true || $this->getRequest()->getParam('docId') !== null) {
+        	$id = null;
+        	$id = $this->getRequest()->getParam('docId');
+            if ($id === null) $id = $this->getRequest()->getPost('id');
             $sureyes = $this->getRequest()->getPost('sureyes');
             $sureno = $this->getRequest()->getPost('sureno');
             if (isset($sureyes) === true or isset($sureno) === true) {
@@ -242,8 +247,10 @@ class Admin_DocumentsController extends Controller_CRUDAction {
      * @return void
      */
     public function permanentdeleteAction() {
-        if ($this->_request->isPost() === true) {
-            $id = $this->getRequest()->getPost('id');
+        if ($this->_request->isPost() === true || $this->getRequest()->getParam('docId') !== null) {
+        	$id = null;
+        	$id = $this->getRequest()->getParam('docId');
+            if ($id === null) $id = $this->getRequest()->getPost('id');
             $sureyes = $this->getRequest()->getPost('sureyes');
             $sureno = $this->getRequest()->getPost('sureno');
             if (isset($sureyes) === true or isset($sureno) === true) {
@@ -280,8 +287,10 @@ class Admin_DocumentsController extends Controller_CRUDAction {
      * @return void
      */
     public function createAction() {
-        if ($this->_request->isPost() === true) {
-            $data = $this->_request->getPost();
+        if ($this->_request->isPost() === true || $this->getRequest()->getParam('docId') !== null) {
+        	$id = null;
+        	$id = $this->getRequest()->getParam('docId');
+            if ($id === null) $id = $this->getRequest()->getPost('id');
             $form_builder = new Form_Builder();
             if (array_key_exists('submit', $data) === false) {
                 $form = $form_builder->buildFromPost($data);

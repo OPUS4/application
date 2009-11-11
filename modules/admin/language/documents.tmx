@@ -70,6 +70,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="admin_doc_undelete">
+      <tuv xml:lang="en">
+        <seg>Undelete (publish again)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Wiederherstellung (erneut publizieren)</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_doc_delete">
       <tuv xml:lang="en">
         <seg>Delete document</seg>
@@ -79,7 +88,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="admion_doc_delete_sure">
+    <tu tuid="admin_doc_delete_sure">
       <tuv xml:lang="en">
         <seg>Are you sure you want to delete this document?</seg>
       </tuv>
