@@ -1,0 +1,177 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+ 
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+  
+  <body>
+  
+    <tu tuid="search_index_browsing">
+      <tuv xml:lang="en">
+        <seg>Browsing</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Browsing</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="search_index_alltitles_browsing">
+      <tuv xml:lang="en">
+        <seg>All titles in this repository</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Alle Titel aus dem Repository</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="search_index_author_browsing">
+      <tuv xml:lang="en">
+        <seg>Browse authors</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Browsing nach Autoren</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_index_editor_browsing">
+      <tuv xml:lang="en">
+        <seg>Browse editors</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Browsing nach Herausgebern</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="search_index_advisor_browsing">
+      <tuv xml:lang="en">
+        <seg>Browse advisors</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Browsing nach Berichtern</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="search_index_contributor_browsing">
+      <tuv xml:lang="en">
+        <seg>Browse contributors</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Browsing nach beteiligten Personen</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_index_referee_browsing">
+      <tuv xml:lang="en">
+        <seg>Browse referees</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Browsing nach Begutachtern</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="search_index_other_browsing">
+      <tuv xml:lang="en">
+        <seg>Browse other persons</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Browsing nach sonstigen beteiligten Personen</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="search_index_translator_browsing">
+      <tuv xml:lang="en">
+        <seg>Browse translators</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Browsing nach Übersetzern</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="search_index_doctype_browsing">
+      <tuv xml:lang="en">
+        <seg>Browse document types</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Browsing nach Dokumenttypen</seg>
+      </tuv>
+    </tu>
+
+
+
+
+
+
+
+    <tu tuid="search_index_custom_browsing_institutions">
+      <tuv xml:lang="de">
+        <seg>Browsing nach Institutionen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="search_index_custom_browsing_schriftenreihe">
+      <tuv xml:lang="de">
+        <seg>Browsing nach Schriftenreihen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="search_index_custom_browsing_collections">
+      <tuv xml:lang="de">
+        <seg>Browsing nach Collections</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="search_index_custom_browsing_ddc">
+      <tuv xml:lang="de">
+        <seg>Browsing nach DDC-Sachgruppen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="search_index_custom_browsing_ccs">
+      <tuv xml:lang="de">
+        <seg>Browsing nach CCS-Klassifikation</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="search_index_custom_browsing_jel">
+      <tuv xml:lang="de">
+        <seg>Browsing nach JEL-Klassifikation</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="search_index_custom_browsing_msc">
+      <tuv xml:lang="en">
+        <seg>Browse MSC-Classification</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Browsing nach MSC-Klassifikation</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="search_index_custom_browsing_pacs">
+      <tuv xml:lang="de">
+        <seg>Browsing nach PACS-Klassifikation</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="search_index_custom_browsing_bkl">
+      <tuv xml:lang="de">
+        <seg>Browsing nach BKL-Klassifikation</seg>
+      </tuv>
+    </tu>
+
+
+
+
+
+
+    <tu tuid="search_index_custom_browsing_mytestcollection">
+      <tuv xml:lang="en">
+        <seg>My Test Collection</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Meine Test-Sammlung</seg>
+      </tuv>
+    </tu>
+
+  </body>
+  
+</tmx>

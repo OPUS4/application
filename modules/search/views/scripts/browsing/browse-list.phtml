@@ -36,11 +36,14 @@
     echo '<h2>' . $this->title . '</h2>';
     // Show list view of the selected list
 
-    if ($this->list === "collection")
-    {
-        // Show name of the current CollectionNode
-        echo '<p>' . $this->browsinglist->getName() . '</p>';
-    }
+/*    Obsolete: Collection name will be set/translated in controller.
+ * 
+ *    if ($this->list === "collection")
+ *    {
+ *        // Show name of the current CollectionNode
+ *        echo '<p>' . $this->browsinglist->getName() . '</p>';
+ *    }
+ */
 
     echo '<ul>';
     if ($this->list === "collection")

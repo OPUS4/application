@@ -77,7 +77,7 @@ class Search_BrowsingController extends Zend_Controller_Action
             // set page if requested
             $page = $data['page'];
         }
-    	$this->view->title = $this->view->translate('search_index_alltitlesbrowsing');
+    	$this->view->title = $this->view->translate('search_index_alltitles_browsing');
 	    // Default Filter is: show all documents from the server
         $result = Opus_Document::getAllDocumentTitlesByState('published');
 
@@ -135,32 +135,31 @@ class Search_BrowsingController extends Zend_Controller_Action
             case 'persons':
                 $role = $this->_getParam("role");
                 $this->view->role = $role;
-                $translatestring = 'search_index_' . $role . 'browsing';
+                $translatestring = 'search_index_' . $role . '_browsing';
                 $this->view->title = $this->view->translate($translatestring);
                 $browsingList = new BrowsingListFactory($list, $role);
                 $browsingListProduct = $browsingList->getBrowsingList();
                 $this->view->browsinglist = new Opus_Search_Iterator_PersonsListIterator($browsingListProduct);
                 break;
     	    case 'authors':
-    			$this->view->title = $this->view->translate('search_index_authorsbrowsing');
+    			$this->view->title = $this->view->translate('search_index_authors_browsing');
 				$browsingList = new BrowsingListFactory($list);
 				$browsingListProduct = $browsingList->getBrowsingList();
 				$this->view->browsinglist = new Opus_Search_Iterator_PersonsListIterator($browsingListProduct);
 				break;
             case 'editors':
-                $this->view->title = $this->view->translate('search_index_editorsbrowsing');
+                $this->view->title = $this->view->translate('search_index_editors_browsing');
                 $browsingList = new BrowsingListFactory($list);
                 $browsingListProduct = $browsingList->getBrowsingList();
                 $this->view->browsinglist = new Opus_Search_Iterator_PersonsListIterator($browsingListProduct);
                 break;
 			case 'doctypes':
-				$this->view->title = $this->view->translate('search_index_doctypebrowsing');
+				$this->view->title = $this->view->translate('search_index_doctype_browsing');
 				$browsingList = new BrowsingListFactory($list);
 				$browsingListProduct = $browsingList->getBrowsingList();
 				$this->view->browsinglist = $browsingListProduct;
 				break;
 			case 'collection':
-				$this->view->title = $this->view->translate('search_index_collectionsbrowsing');
 				$node = $this->_getParam("node");
 				if (isset($node) === false) $node = 0;
 				$collection = $this->_getParam("collection");
@@ -168,12 +167,14 @@ class Search_BrowsingController extends Zend_Controller_Action
 				if (isset($collection) === false) $collection = 0;
 				$browsingList = new BrowsingListFactory($list, null, $collection, $node);
 				$browsingListProduct = $browsingList->getBrowsingList();
+
+				$this->view->title = $this->view->translate('search_index_custom_browsing_' . $browsingListProduct->getName());
 				$this->view->browsinglist = $browsingListProduct;
 				$this->view->page = $this->_getParam("page");
 				#$this->view->hitlist_paginator = Zend_Paginator::factory(Opus_Search_List_CollectionNode::getDocumentIds($collection, $node));
 				break;
 			default:
-				$this->view->title = $this->view->translate('search_index_alltitlesbrowsing');
+				$this->view->title = $this->view->translate('search_index_alltitles_browsing');
 				// Just to be there... List is not supported (Exception is thrown by BrowsingListFactory)
     	}
     }

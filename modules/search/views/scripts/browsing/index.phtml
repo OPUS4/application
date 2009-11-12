@@ -35,16 +35,20 @@
  */
 ?>
 	<h2><?= $this->translate('search_index_browsing') ?></h2>
-	<a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseTitles'), null, true) ?>"><?= $this->translate('search_index_alltitlesbrowsing') ?></a><br/>
+	<a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseTitles'), null, true) ?>"><?= $this->translate('search_index_alltitles_browsing') ?></a><br/>
 	<?php
-	   $roles = array('author', 'editor', 'advisor','contributor','referee','other','translator');
+           // TODO: Get roles-list from database
+	   $roles = array('author', 'editor', 'advisor', 'contributor', 'referee', 'other', 'translator');
 	   foreach ($roles as $role) {
-	       $translatelabel = 'search_index_' . $role . 'browsing';
-	       echo '<a href="' . $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'persons', 'role' => $role), null, true) . '">' . $this->translate($translatelabel) . '</a><br/>';
+	       $translatelabel = 'search_index_' . $role . '_browsing';
+	       echo '<a href="' . $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'persons', 'role' => $role), null, true) . '">';
+	       echo $this->translate($translatelabel);
+	       echo '</a><br/>';
 	   }
 	?>
-	<a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'doctypes'), null, true) ?>"><?= $this->translate('search_index_doctypebrowsing') ?></a><br/>
+	<a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'doctypes'), null, true) ?>"><?= $this->translate('search_index_doctype_browsing') ?></a><br/>
 	<?php
+
 	// Browsable roles of persons:
     // 'advisor','contributor','referee','other','translator'
 	// get the list of hierarchical lists from the Collections-Classes
@@ -52,8 +56,9 @@
 	if (count($this->browsinglist) > 0) {
 	   foreach ($this->browsinglist as $obj)
 	   {
+	          $translatelabel = 'search_index_custom_browsing_' . $obj->getName();
 		  echo '<a href=' . $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'collection', 'collection' => $obj->getId()), null, true) . '>';
-		  echo $obj->getName();
+		  echo $this->translate($translatelabel);
 		  echo "</a><br/>";
 	   }
 	}
