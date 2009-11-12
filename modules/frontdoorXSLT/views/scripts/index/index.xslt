@@ -699,7 +699,7 @@
            <!-- TODO: Use Zend Url-Helper to build href attribute -->
              <xsl:attribute name="href">
                <xsl:value-of select="$baseUrl"/>
-               <xsl:text>/frontdoor/mail/index/docId/</xsl:text>
+               <xsl:text>/frontdoorXSLT/mail/index/docId/</xsl:text>
                <xsl:value-of select="@Id" />
              </xsl:attribute>
            <xsl:element name="img">   
