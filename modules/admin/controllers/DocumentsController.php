@@ -77,7 +77,14 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         	    	if (true === array_key_exists('state', $data)) {
                         $result = Opus_Document::getAllDocumentAuthorsByState($data['state']);
                     } else {
-                        $result = Opus_Document::getAllDocumentTitles();
+                        $result = Opus_Document::getAllDocumentAuthors();
+                    }
+        		    break;
+         		case 'docType':
+        	    	if (true === array_key_exists('state', $data)) {
+                        $result = Opus_Document::getAllDocumentsByDoctypeByState($data['state']);
+                    } else {
+                        $result = Opus_Document::getAllDocumentsByDoctype();
                     }
         		    break;
         		default:
@@ -110,8 +117,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         		case 'docType':
         		    $tmpdocList = array();
                     foreach ($result as $id => $doc) {
-                        $d = new Opus_Document($id);
-                        $docType = $this->view->translate($d->getType());
+                        $docType = $this->view->translate($doc);
                         $tmpdocList[$id] = $docType;
                     }
                     asort($tmpdocList);
