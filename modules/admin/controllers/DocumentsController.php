@@ -71,11 +71,31 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             );
         $data = $this->_request->getParams();
         // following could be handled inside a application model
-        if (true === array_key_exists('state', $data)) {
-            $result = Opus_Document::getAllDocumentTitlesByState($data['state']);
-        } else {
-            $result = Opus_Document::getAllDocumentTitles();
+        if (true === array_key_exists('sort_order', $data)) {
+        	switch ($data['sort_order']) {
+        		case 'author':
+        	    	if (true === array_key_exists('state', $data)) {
+                        $result = Opus_Document::getAllDocumentAuthorsByState($data['state']);
+                    } else {
+                        $result = Opus_Document::getAllDocumentTitles();
+                    }
+        		    break;
+        		default:
+        		    if (true === array_key_exists('state', $data)) {
+                        $result = Opus_Document::getAllDocumentTitlesByState($data['state']);
+                    } else {
+                        $result = Opus_Document::getAllDocumentTitles();
+                    }
+        	}
         }
+        else {
+        	if (true === array_key_exists('state', $data)) {
+                $result = Opus_Document::getAllDocumentTitlesByState($data['state']);
+            } else {
+                $result = Opus_Document::getAllDocumentTitles();
+            }
+        }
+
         // Sort the result if necessary
         // docList contains a list of IDs of the documents, that should be returned after sorting
         $docList = array();
@@ -100,7 +120,12 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                     }
                     break;
         		case 'author':
-        		    $tmpdocList = array();
+        		    // Do nothing, the list has been sorted already!
+                    foreach ($result as $id => $doc) {
+        	            $docList[] = $id;
+                    }        		    
+        		    break;
+        		/*    $tmpdocList = array();
                     foreach ($result as $id => $doc) {
        	                $d = new Opus_Document($id);
                         try {
@@ -134,7 +159,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                     foreach ($tmpdocList as $id => $doc) {
         	            $docList[] = $id;
                     }
-                    break;
+                    break;*/
         		default:
                     foreach ($result as $id => $doc) {
         	            $docList[] = $id;
@@ -287,10 +312,8 @@ class Admin_DocumentsController extends Controller_CRUDAction {
      * @return void
      */
     public function createAction() {
-        if ($this->_request->isPost() === true || $this->getRequest()->getParam('docId') !== null) {
-        	$id = null;
-        	$id = $this->getRequest()->getParam('docId');
-            if ($id === null) $id = $this->getRequest()->getPost('id');
+        if ($this->_request->isPost() === true) {
+        	$data = $this->_request->getPost();
             $form_builder = new Form_Builder();
             if (array_key_exists('submit', $data) === false) {
                 $form = $form_builder->buildFromPost($data);
