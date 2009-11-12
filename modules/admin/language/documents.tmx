@@ -25,6 +25,24 @@
       </tuv>
     </tu>
     
+    <tu tuid="sort_ascending">
+      <tuv xml:lang="en">
+        <seg>Ascending</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Aufsteigend</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="sort_descending">
+      <tuv xml:lang="en">
+        <seg>Descending</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Absteigend</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="docs_published">
       <tuv xml:lang="en">
         <seg>Published documents</seg>

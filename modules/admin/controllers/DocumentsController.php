@@ -131,41 +131,6 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         	            $docList[] = $id;
                     }        		    
         		    break;
-        		/*    $tmpdocList = array();
-                    foreach ($result as $id => $doc) {
-       	                $d = new Opus_Document($id);
-                        try {
-       	                    $aut = $d->getPersonAuthor();
-       	                    if (is_array($aut) === true && isset($aut[0]) === true) {
-       	                	    $a = $aut[0];
-       		                    $name = '';
-       		                    $lastName = '';
-       		                    $name = $a->getName();
-       		                    $lastName = $a->getLastName();
-       		                    if (false === empty($name)) {
-       		                        $author = $a->getName();
-       		                    }
-       		                    else if (false === empty($lastName)) {
-           			                $author = $a->getLastName();
-           		                }
-       	    	                else {
-       		    	                $author = " ";
-       		                    }
-       	                    }
-       	                    else {
-           	                	$author = ' ';
-           	                }
-       	                }
-       	                catch (Exception $e) {
-       	                	$author = ' ';
-       	                }
-                        $tmpdocList[$id] = $author;
-                    }
-                    asort($tmpdocList);
-                    foreach ($tmpdocList as $id => $doc) {
-        	            $docList[] = $id;
-                    }
-                    break;*/
         		default:
                     foreach ($result as $id => $doc) {
         	            $docList[] = $id;
@@ -179,7 +144,15 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             }
         	sort($docList);
         }
-
+        
+        if (true === array_key_exists('sorting', $data)) {
+        	// By default everything is ascending
+        	// if sorting is set to desc, reverse the array
+        	if ($data['sorting'] === 'desc') {
+        		$docList = array_reverse($docList, true);
+        	}
+        }
+        
         $paginator = Zend_Paginator::factory($docList);
         if (array_key_exists('hitsPerPage', $data)) {
         	if ($data['hitsPerPage'] === '0') {

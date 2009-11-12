@@ -83,13 +83,22 @@ foreach ($this->registers as $register) {
             'action' => 'index',
             'sort_order' => 'author'
         );
+        $url_sort_asc = array(
+            'sorting' => 'asc'
+        );
+        $url_sort_desc = array(
+            'sorting' => 'desc'
+        );
         $url_sort_by_id = $this->url($url_sort_by_id, 'default', false);
         $url_sort_by_title = $this->url($url_sort_by_title, 'default', false);
         $url_sort_by_doctype = $this->url($url_sort_by_doctype, 'default', false);
         $url_sort_by_author = $this->url($url_sort_by_author, 'default', false);
+        $url_sort_asc = $this->url($url_sort_asc, 'default', false);
+        $url_sort_desc = $this->url($url_sort_desc, 'default', false);
 ?>
 <br/>
 <?php echo $this->translate('docs_sortorder'); ?> <a href="<?php echo $url_sort_by_id ?>"><?php echo $this->translate('docs_by_id'); ?></a> <a href="<?php echo $url_sort_by_title ?>"><?php echo $this->translate('docs_by_title'); ?></a> <a href="<?php echo $url_sort_by_author ?>"><?php echo $this->translate('docs_by_author'); ?></a> <a href="<?php echo $url_sort_by_doctype ?>"><?php echo $this->translate('docs_by_doctype'); ?></a>
+<a href="<?php echo $url_sort_asc ?>"><?php echo $this->translate('sort_ascending'); ?></a> <a href="<?php echo $url_sort_desc ?>"><?php echo $this->translate('sort_descending'); ?></a>
 <br/>
 <?php
 $documentList = $this->documentList;
