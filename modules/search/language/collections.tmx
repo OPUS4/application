@@ -163,7 +163,7 @@
 
 
 
-    <tu tuid="search_index_custom_browsing_mytestcollection">
+    <tu tuid="search_index_custom_browsing_mycollection">
       <tuv xml:lang="en">
         <seg>My Test Collection</seg>
       </tuv>

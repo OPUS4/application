@@ -56,9 +56,17 @@
 	if (count($this->browsinglist) > 0) {
 	   foreach ($this->browsinglist as $obj)
 	   {
-	          $translatelabel = 'search_index_custom_browsing_' . $obj->getName();
+		  // No translation is given, if translate(name)===name.  Check it.
+                  $translatelabel = 'search_index_custom_browsing_' . $obj->getName();
+                  if ($translatelabel === $this->translate($translatelabel)) {
+		     $printname = $obj->getName();
+		  }
+		  else {
+		     $printname = $this->translate($translatelabel);
+		  }
+
 		  echo '<a href=' . $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'collection', 'collection' => $obj->getId()), null, true) . '>';
-		  echo $this->translate($translatelabel);
+		  echo $printname;
 		  echo "</a><br/>";
 	   }
 	}

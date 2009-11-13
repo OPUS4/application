@@ -168,10 +168,18 @@ class Search_BrowsingController extends Zend_Controller_Action
 				$browsingList = new BrowsingListFactory($list, null, $collection, $node);
 				$browsingListProduct = $browsingList->getBrowsingList();
 
-				$this->view->title = $this->view->translate('search_index_custom_browsing_' . $browsingListProduct->getName());
+				$this->view->title = $browsingListProduct->getName();
 				$this->view->browsinglist = $browsingListProduct;
 				$this->view->page = $this->_getParam("page");
 				#$this->view->hitlist_paginator = Zend_Paginator::factory(Opus_Search_List_CollectionNode::getDocumentIds($collection, $node));
+
+            // If node === 0, then this collection actually is a CollectionRole
+            // and we want to translate the title (if specified).
+            $translatelabel = 'search_index_custom_browsing_' . $this->view->title;
+            if ($node === 0 && !($translatelabel === $this->view->translate($translatelabel)) ) {
+                $this->view->title = $this->view->translate($translatelabel);
+            }
+
 				break;
 			default:
 				$this->view->title = $this->view->translate('search_index_alltitles_browsing');
