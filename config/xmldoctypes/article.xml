@@ -74,7 +74,7 @@
 
 	<page caption="caption_04_article">	    
 	    <!-- Question: Source holds in OPUS3 the name, volume, issue, pages etc. from the printed article. Should that be replaced? -->
-	    <field name="Source" mandatory="yes" adminformweight="1" publishformweight="101" multiplicity="1" />
+	    <field name="Source" mandatory="no" adminformweight="1" publishformweight="0" multiplicity="1" />
         <!-- TODO implement it -->
         <!--<field name="Journal" mandatory="yes" adminformweight="1" publishformweight="102" multiplicity="1" />-->
         <!--<field name="Volume" mandatory="yes" adminformweight="1" publishformweight="103" multiplicity="1" />-->
