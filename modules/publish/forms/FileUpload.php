@@ -51,12 +51,19 @@ class FileUpload extends Zend_Form {
         //$this->addElement('hash', 'UploadHash', array('salt' => 'unique'));
 
         // FIXME: Make hard coded path configurable.
-        $fileupload = new Zend_Form_Element_File('fileupload');
-        $fileupload->setLabel('FileToUpload')
-            ->setDestination('../workspace/tmp/')
-            ->addValidator('Count', false, 1)     // ensure only 1 file
-            ->addValidator('Size', false, 1024000) // limit to 1000K
-            ->addValidator('Extension', false, 'pdf,txt'); // only PDF
+        // FIXME: Make allowed filetypes configurable.
+        // more than one file does not work this way
+        //$fileCount = 5;
+        //$fileupload = array();
+        //for ($n = 0; $n < $fileCount; $n++) {
+            $fileupload = new Zend_Form_Element_File('fileupload');
+            $fileupload->setLabel('FileToUpload')
+                ->setDestination('../workspace/tmp/')
+                ->addValidator('Count', false, 1)     // ensure only 1 file
+                ->addValidator('Size', false, 1024000) // limit to 1000K
+                ->addValidator('Extension', false, 'pdf,txt,html,htm'); // allowed filetypes by extension
+            //array_push($fileupload, $uploadelement);
+        //}
 
         $signatureupload = new Zend_Form_Element_File('sigupload');
         $signatureupload->setLabel('SigToUpload')

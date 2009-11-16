@@ -34,6 +34,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="upload_another_publication">
+      <tuv xml:lang="en">
+        <seg>Create another publication</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Ein weiteres Dokument veröffentlichen</seg>
+      </tuv>
+    </tu>
+    
     <tu tuid="publish_controller_summary">
       <tuv xml:lang="en">
         <seg>Publish summary</seg>

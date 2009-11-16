@@ -224,6 +224,8 @@ class Publish_IndexController extends Zend_Controller_Action {
 
     public function summaryAction() {
         $this->view->title = $this->view->translate('publish_controller_summary');
+        $backUrl = $this->view->url(array('module' => 'publish', 'controller' => 'index', 'action' => 'create'), null, false);
+        $this->view->backlink = "<a href='$backUrl'>" . $this->view->translate('upload_another_publication') . "</a>";
         if ($this->_request->isPost() === true) {
             $summaryForm = new Summary();
             $postdata = $this->_request->getPost();
@@ -280,6 +282,8 @@ class Publish_IndexController extends Zend_Controller_Action {
      */
     public function uploadAction() {
         $this->view->title = $this->view->translate('publish_controller_upload');
+        $backUrl = $this->view->url(array('module' => 'publish', 'controller' => 'index', 'action' => 'create'), null, false);
+        $this->view->backlink = "<a href='$backUrl'>" . $this->view->translate('upload_another_publication') . "</a>";
         $uploadForm = new FileUpload();
         $action_url = $this->view->url(array('controller' => 'index', 'action' => 'upload'));
         $uploadForm->setAction($action_url);
@@ -289,41 +293,48 @@ class Publish_IndexController extends Zend_Controller_Action {
             if ($uploadForm->isValid($data) === true) {
                 // This works only from Zend 1.7 on
                 // $upload = $uploadForm->getTransferAdapter();
-                $upload = new Zend_File_Transfer_Adapter_Http();
-                $files = $upload->getFileInfo();
-                // TODO: Validate document id, error message on fail
-                $documentId = $uploadForm->getValue('DocumentId');
-                $document = new Opus_Document($documentId);
+                try {
+                    $upload = new Zend_File_Transfer_Adapter_Http();
+                    $files = $upload->getFileInfo();
+                    // TODO: Validate document id, error message on fail
+                    $documentId = $uploadForm->getValue('DocumentId');
+                    $document = new Opus_Document($documentId);
 
-                $this->view->message = $this->view->translate('publish_controller_upload_successful');
+                    $this->view->message = $this->view->translate('publish_controller_upload_successful');
 
-                // one form has only one file
-                $file = $files['fileupload'];
-                $hash = null;
-                if (array_key_exists('sigupload', $files) === true) {
-                	$sigfile = $files['sigupload'];
+                    // one form has only one file
+                    $file = $files['fileupload'];
+                    $hash = null;
+                    if (array_key_exists('sigupload', $files) === true) {
+                	    $sigfile = $files['sigupload'];
+                    }
+                
+                    /*
+                     * if (!$upload->isValid($file)) {
+                     *   $this->view->message = 'Upload failed: Not a valid file or no file submitted!';
+                     *   break;
+                     * }
+                     */
+
+                    $docfile = $document->addFile();
+                    $docfile->setDocumentId($document->getId());
+                    $docfile->setLabel($uploadForm->getValue('comment'));
+                    $docfile->setLanguage($uploadForm->getValue('language'));
+                    $docfile->setPathName($file['name']);
+                    $docfile->setMimeType($file['type']);
+                    $docfile->setTempFile($file['tmp_name']);
+                    $docfile->setFromPost($file);
+                    if (array_key_exists('sigupload', $files) === true) {
+                	    $signature = implode("", file($sigfile['tmp_name']));
+            		    $hash = $docfile->addHashValue();
+    	        	    $hash->setType('gpg-0');
+    		            $hash->setValue($signature);                	
+                    }
+                    $document->store();
                 }
-                /* TODO: Uncaught exception 'Zend_File_Transfer_Exception' with message '"fileupload" not found by file transfer adapter
-                 * if (!$upload->isValid($file)) {
-                 *    $this->view->message = 'Upload failed: Not a valid file!';
-                 *    break;
-                 * }
-                 */
-                $docfile = $document->addFile();
-                $docfile->setDocumentId($document->getId());
-                $docfile->setLabel($uploadForm->getValue('comment'));
-                $docfile->setLanguage($uploadForm->getValue('language'));
-                $docfile->setPathName($file['name']);
-                $docfile->setMimeType($file['type']);
-                $docfile->setTempFile($file['tmp_name']);
-                $docfile->setFromPost($file);
-                if (array_key_exists('sigupload', $files) === true) {
-                	$signature = implode("", file($sigfile['tmp_name']));
-            		$hash = $docfile->addHashValue();
-    	        	$hash->setType('gpg-0');
-    		        $hash->setValue($signature);                	
+                catch (Zend_File_Transfer_Exception $zfte) {
+                	$this->view->message = $zfte->getMessage();
                 }
-                $document->store();
 
                 // reset input values fo re-displaying
                 $uploadForm->reset();
