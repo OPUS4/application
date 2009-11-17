@@ -3,8 +3,6 @@
 # This script is needed to make php forget session information between to requests.
 # Also it makes the rewrite map more robust in case of php errors.
 
-set -x
-
 # please configure the next to lines
 PHP='/usr/bin/php5'
 MAP='/home/matheon/development/scripts/opus-apache-rewritemap.php'
