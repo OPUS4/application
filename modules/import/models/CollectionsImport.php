@@ -58,7 +58,8 @@ class CollectionsImport
 		foreach ($doclist as $document) 
 		{
             if ($document->getAttribute('name') === 'collections') {
-                $facNumbers = $this->importCollections($document, $collRole);
+                #$facNumbers = $this->importCollections($document, $collRole);
+                $facNumbers = $this->importCollectionsDirectly($document, $collRole);
 	/*<row>
 		<field name="coll_id">1</field>
 		<field name="root_id">1</field>
@@ -96,6 +97,49 @@ class CollectionsImport
 		return $classification;
 	}
 
+	/**
+	 * Imports Collections from Opus3 to Opus4 directly (from DB-table to DB-tables)
+	 *
+	 * @param DOMDocument $data XML-Document to be imported
+	 * @return array List of documents that have been imported
+	 */
+	protected function importCollectionsDirectly($data, $collRole)
+	{
+        $collections = $this->transferOpusClassification($data);
+        $contentTable = new Opus_Db_CollectionsContents($collRole->getId());
+        $structTable = new Opus_Db_CollectionsStructure($collRole->getId());
+
+        // 1 is used as a predefined key and should not be used again!
+        // so lets increment all old IDs by 1
+        foreach ($collections as $row) {
+            $contentData = array(
+                'id'      => ($row['coll_id']+1),
+                'name'    => $row['coll_name']
+            );
+
+            $contentTable->insert($contentData);
+                        
+            $structureData = array(
+                'collections_id' => ($row['coll_id']+1),
+                'left'           => ($row['lft']+1),
+                'right'          => ($row['rgt']+1)
+            );
+            
+            $structTable->insert($structureData);
+
+            if ($row['coll_id'] === "1") {
+            	// set right-value for ID 1
+            	$newRight = array(
+                    'right'      => ($row['rgt']+2)
+                );
+
+                $where = $structTable->getAdapter()->quoteInto('id = ?', 1);
+
+                $structTable->update($newRight, $where);
+            }
+        }
+	}
+	
 	/**
 	 * Imports Collections from Opus3 to Opus4 directly (without XML)
 	 *
