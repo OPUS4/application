@@ -74,7 +74,7 @@ class View_Helper_Menu
             'action' => 'index'
             );
         $homedir = Zend_Controller_Front::getInstance()->getControllerDirectory('home');
-        foreach (glob($homedir . '/../views/scripts/index/*') as $filename) {
+        foreach (glob($homedir . '/../views/scripts/index/*.phtml') as $filename) {
             $filename = basename($filename, '.phtml');
             if ($filename === 'index') continue;
             $menus['home'][$filename] = array(
