@@ -48,6 +48,20 @@ class CitationExport_IndexController extends Zend_Controller_Action {
      */
     public function indexAction() {
         $this->view->title = 'Citation Export (Export bibliographischer Daten)';
+        $requestData = $this->_request->getParams();
+        $outputFormat = null;
+        if (true === isset($requestData['output'])) $outputFormat = $requestData['output'];
+        switch($outputFormat) {
+        	case 'bibtex':
+        	    $this->view->output = "BibTeX noch nicht implementiert";
+        	    break;
+        	case 'ris':
+        	    $this->view->output = "RIS noch nicht implementiert";
+        	    break;
+        	default:
+        	    $this->view->output = $this->view->translate('invalid_format');
+        	    break;
+        }
     }
 
 }

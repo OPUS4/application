@@ -15,6 +15,14 @@
       </tuv>
     </tu>
     
+    <tu tuid="invalid_format">
+      <tuv xml:lang="en">
+        <seg>Bibliographic data cannot be shown: Unknown output format</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bibliographische Daten können nicht angezeigt werden: Unbekanntes Ausgabeformat</seg>
+      </tuv>
+    </tu>
   </body>
   
 </tmx>
