@@ -51,27 +51,17 @@ foreach ($this->author as $authors) {
 
 <p><?= $this-> translate('frontdoor_filenumber')?>:&nbsp;<?= $this->fileNumber?></p><br /><hr /><?
 
-if ($this->fileNumber !== 0)
-{
-  if ($this->first_hash !== NULL)
-  {
-      for ($i = 0; $i < $this->fileNumber; $i++)
-      {
-         if (array_key_exists ($i, $this->fileNames) === true)
-         {
+if ($this->fileNumber !== 0) {
+  if ($this->first_hash !== NULL) {
+      for ($i = 0; $i < $this->fileNumber; $i++) {
             $file = $this->fileNames[$i];
-            $hashes = $this->document->getFile($i)->getHashValue();
-            $f = $this->document->getFile($i);
-            $hashNumber = count($hashes);
+            $hashNumber = $this->hashNumber[$i];
             $show_gpg = false;
-            for ($j = 0; $j < $hashNumber; $j++)
-            {
-               if (array_key_exists ('hashType_' .$i. '_' .$j, $this->hashValueType) === true)
-               {
-                  $hashtype = $this->hashValueType['hashType_' .$i. '_' .$j];
+            for ($j = 0; $j < $hashNumber; $j++) {
+                $hashtype = $this->hashType[$i][$j];
+                if (true === isset($hashtype)) {
                   $this->signtype = $signtype = substr($hashtype, 0,3);
-                  if ($signtype == 'gpg')
-                  {
+                  if ($signtype == 'gpg') {
                     if ($show_gpg === false) {
                     // Show GPG-Signatures only once
                     $show_gpg = true;
@@ -81,42 +71,33 @@ if ($this->fileNumber !== 0)
                      <?php
                      // Controller stores signature verification results in $this->verifyResult[$file]
                      $verification = $this->verifyResult[$file];
-                     if (count($verification) === 0)
-                     {
+                     if (count($verification) === 0) {
                      ?>
                          <?= $this->translate('pkm_no_signature') ?>
                      <?php
                      }
                      $sigindex = 0;
-                     foreach($verification as $verifiedArray)
-                     {
+                     foreach($verification as $verifiedArray) {
                          #print_r($verifiedArray);
-                         foreach($verifiedArray as $index => $verificationResult)
-                         {
+                         foreach($verifiedArray as $index => $verificationResult) {
                              if ($index === 'result') {
                                 foreach ($verificationResult as $verified) {
-                                    if (false === is_object($verified))
-                                    {
-                                    ?>
-                                        <?= $verified ?><br/>
-                                    <?php
-                                    }
-                                    else if ($verified->isValid() === true)
-                                    {
+                                    if (false === is_object($verified)) {
+                                        ?><?= $verified ?><br/>
+                                    <?}
+                                    else if ($verified->isValid() === true) {
                                         printf($this->translate('pkm_sigcheck_valid'), $verified->getUserId()->getName());
                                         echo "<br/>";
                                     }
-                                    else
-                                    {
+                                    else {
                                         printf($this->translate('pkm_sigcheck_invalid'), $verified->getUserId()->getName());
                                         echo "<br/>";
                                     }
                                     // Show key used for signature
-                                    if (true === is_object($verified))
-                                    {
+                                    if (true === is_object($verified)) {
                                     ?>
-                                        <a href="<?= $this->url(array('module' => 'pkm', 'controller' => 'index', 'action' => 'showkey', 'fingerprint' => $verified->getKeyFingerprint()), null, true) ?>"><?= $this->translate('pkm_show_signature_key') ?></a><br/>
-                                    <?php
+                                       <a href="<?= $this->url(array('module' => 'pkm', 'controller' => 'index', 'action' => 'showkey', 'fingerprint' => $verified->getKeyFingerprint()), null, true) ?>"><?= $this->translate('pkm_show_signature_key') ?></a><br/>
+                                    <?
                                     }
                                 }
                              }
@@ -133,9 +114,8 @@ if ($this->fileNumber !== 0)
                    </p><?
                     }
                   }
-                  else
-                  {
-                     $value = $this->hashValueType['hashValue_' .$i. '_' .$j];?>
+                  else {
+                     $value = $this->hashType[$i][$j];?>
                      <p><b><?= $this->translate ('HashValue')?>&nbsp;(<?= $this->file = $file?>):</b></p>
                      <p><b>
                      <?= $this->hashtype = $hashtype?>&nbsp;</b>
@@ -145,32 +125,26 @@ if ($this->fileNumber !== 0)
                      <?= $this->hashtype = $hashtype?>&nbsp;</b>
                      <?= $this->translate('frontdoor_current')?>:&nbsp;
 
-                     <?if ($f->canVerify() === true)
-                       {?>
-                         <?= $f->getRealHash($hashtype)?></p><?
+                     <?if ($this->hashIst[$i][$j] != 0) {
+                         ?><?= $this->hashIst[$i][$j]?></p><?
                        }
-                       else
-                       {?>
-                        <?= $this->translate('frontdoor_file_too_big')?></p>
+                       else {
+                        ?><?= $this->translate('frontdoor_file_too_big')?></p>
                      <?}
                    }
                }
-               else
-               {?>
-                  <p><b><?= $this->translate('frontdoor_no_hash')?></b></p>
+               else {
+                  ?><p><b><?= $this->translate('frontdoor_no_hash')?></b></p>
              <?}
             }?> <hr /><?
-        }
      }
   }
-  else
-  {?>
-      <p><?= $this->translate('frontdoor_no_hash');?></p><?
+  else {
+      ?><p><?= $this->translate('frontdoor_no_hash');?></p><?
   }
 }
-else
-{?>
-   <p><?= $this->translate('frontdoor_no_file');?></p><br /><?
+else {
+   ?><p><?= $this->translate('frontdoor_no_file');?></p><br /><?
 }?>
 
 <br /><p><a href="<?= $this->value =
