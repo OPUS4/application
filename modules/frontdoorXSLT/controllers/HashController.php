@@ -88,88 +88,57 @@ class FrontdoorXSLT_HashController extends Zend_Controller_Action
        $fileNumber = 0;
        $first_hash = null;
        $files = $document->getFile();
-       if (true === is_array($files)) {
+       if (true === is_array($files) && count($files) > 0) {
            $fileNumber = count($files);
            $this->view->fileNumber = $fileNumber;
            $hash_exists = $document->getFile('0')->getHashValue();
-           if (is_array($hash_exists)) {
+           if (true === is_array($hash_exists)) {
                $first_hash = $document->getFile('0')->getHashValue('0')->getValue();
                $this->view->first_hash = $first_hash;
             }
- //           else {
- //              $this->first_hash = $first_hash = null;
- //              $this->view_first_hash = $first_hash;
- //           }
        }
- //     else {
- //           $this->first_hash = $first_hash = null;
- //           $this->view_first_hash = $first_hash;
- //      }
- /*        if (array_key_exists('0', $files) === true)
-         {
-            $hash_exists = $document->getFile('0')->getHashValue();
-            if (array_key_exists('0', $hash_exists))
-            {
-               $first_hash = $document->getFile('0')->getHashValue('0')->getValue();
-               $this->view->first_hash = $first_hash;
-            }
-            else
-            {
-               $this->first_hash = $first_hash = null;
-               $this->view_first_hash = $first_hash;
-            }
-         }
-         else
-         {
-            $this->first_hash = $first_hash = null;
-            $this->view_first_hash = $first_hash;
-         }
-      }
-      else
-      {
-          $this->first_hash = $first_hash = null;
-          $this->view_first_hash = $first_hash;
-      }
-*/
-
-       // Iteration over all files, hashtypes and -values; filling up the arrays $fileNames() and $hashValueType()
+       // Iteration over all files, hashtypes and -values
        $gpg = new Opus_GPG();
        $this->view->verifyResult = array();
-       if ($first_hash !== NULL)
-       {
-           for ($i = 0; $i < $fileNumber; $i++)
-           {
-                 if (is_array ($hashes = $document->getFile($i)->getHashValue()) === true)
-                 {
-                     $hashNumber = count($hashes);
-                     $names = $document->getFile($i)->getPathName();
-                     $fileNames[] = $names;
-                     for ($j = 0; $j < $hashNumber; $j++)
-                     {
-                         $hashValue = $document->getFile($i)->getHashValue($j)->getValue();
-                         $hashType = $document->getFile($i)->getHashValue($j)->getType();
-                         $hashValueType['hashValue_' .$i. '_' .$j] = $hashValue;
-                         $hashValueType['hashType_' .$i. '_' .$j] = $hashType;
-                         if (substr($hashType, 0, 3) === 'gpg') {
+       $fileNames = array();
+       $hashType = array();
+       $hashSoll = array();
+       $hashIst = array();
+       $hashNumber = array();
+       if ($first_hash !== NULL) {
+           for ($i = 0; $i < $fileNumber; $i++) {
+               $fileNames[$i] = $document->getFile($i)->getPathName();
+               if (true === is_array ($hashes = $document->getFile($i)->getHashValue())) {
+                     $countHash = count($hashes);
+                     for ($j = 0; $j < $countHash; $j++) {
+                         $hashNumber[$i] = $countHash;
+                         $hashSoll[$i][$j] = $document->getFile($i)->getHashValue($j)->getValue();
+                         $hashType[$i][$j] = $document->getFile($i)->getHashValue($j)->getType();
+                         if (substr($hashType[$i][$j], 0, 3) === 'gpg') {
                              try
                              {
-                                 $this->view->verifyResult[$document->getFile($i)->getPathName()] = $gpg->verifyPublicationFile($document->getFile($i));
+                                 $this->view->verifyResult[$fileNames[$i]] = $gpg->verifyPublicationFile($document->getFile($i));
                              }
                              catch (Exception $e)
                              {
-                                 $this->view->verifyResult[$document->getFile($i)->getPathName()] = array('result' => array($e->getMessage()), 'signature' => $hashValue);
+                                 $this->view->verifyResult[$fileNames[$i]] = array('result' => array($e->getMessage()), 'signature' => $hashSoll[$i][$j]);
                              }
                          }
+                       else {
+                           $hashIst[$i][$j] = 0;
+                           if (true === $document->getFile($i)->canVerify()) {
+                               $hashIst[$i][$j] = $document->getFile($i)->getRealHash($hashType[$i][$j]);
+                           }
+                       }
                      }
                   }
              }
-             $this->view->hashValueType = $hashValueType;
-             $this->view->fileNames = $fileNames;
-        }
-        else
-        {
-            $this->fileNumber = $fileNumber = 0;
-            $this->view->fileNumber = $fileNumber;
-        }
+       }
+       $this->view->hashType = $hashType;
+       $this->view->hashSoll = $hashSoll;
+       $this->view->hashIst = $hashIst;
+       $this->view->hashNumber = $hashNumber;
+       $this->view->fileNames = $fileNames;
+       $this->view->fileNumber = $fileNumber;
     }
 }
