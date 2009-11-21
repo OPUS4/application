@@ -160,6 +160,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="docs_call_id_label">
+      <tuv xml:lang="en">
+        <seg>Edit document with ID: </seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokument mit ID direkt aufrufen: </seg>
+      </tuv>
+    </tu>
+
     <tu tuid="docs_sortorder">
       <tuv xml:lang="en">
         <seg>Sort document list by:</seg>
