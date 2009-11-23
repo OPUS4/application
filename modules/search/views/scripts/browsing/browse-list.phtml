@@ -29,6 +29,7 @@
  * @category    Application
  * @package     Module_Search
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
+ * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -40,6 +41,17 @@
     if ($this->list === "collection")
 	{
 		#print_r($this->browsinglist->describe());
+       
+      # Check if LinkDocsPathToRoot is set to "count" or "both" for this
+      # CollectionRole.  Only in these two cases, the document count is
+      # calculated over all SubCollections and we can use it to skip
+      # empty collections!  Disable with "$hideEmptyCollections = false;"
+
+      $thisCollectionRole = new Opus_CollectionRole($this->collection);
+      $browseListCountStyle = $thisCollectionRole->getLinkDocsPathToRoot();
+      $trustDocumentCount = (($browseListCountStyle === 'count') || ($browseListCountStyle === 'both'));
+      $hideEmptyCollections = true;
+
 	    if (in_array('Collections', $this->browsinglist->describe())) {
 	        $subcollections = $this->browsinglist->getCollection();
 	    } else {
@@ -48,6 +60,13 @@
         foreach ($subcollections as $coll)    {
             // Hidden collections shouldn't be browsable
             if(true === $coll->getVisibility()) {
+
+                $documentCount = Opus_Collection_Information::countAllCollectionDocuments($this->collection, $coll->getId());
+
+                if ($hideEmptyCollections && $trustDocumentCount && $documentCount == 0) {
+                    echo '<li>' . $coll->getDisplayName() . '</li>';
+                }
+                else {
                 // for Collections $this->browsinglist must be the ListIterator of all ChildNodes, not the current node itself...
                 echo '<li>';
                 echo '<a href="' .
@@ -65,8 +84,9 @@
                  ) .
                  '">';
                  echo $coll->getDisplayName();
-                 echo '</a> (' . Opus_Collection_Information::countAllCollectionDocuments($this->collection, $coll->getId()) . ')';
-                 echo '</li>';
+                    echo '</a> (' . $documentCount . ')';
+                    echo '</li>';
+                }
             }
         }
 	}
