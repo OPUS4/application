@@ -71,40 +71,31 @@ class Search_BrowsingController extends Zend_Controller_Action
     {
     	$filter = $this->_getParam("filter");
     	$this->view->filter = $filter;
-    	$page = 1;
     	$data = $this->_request->getParams();
+
+        $page = 1;
         if (array_key_exists('page', $data)) {
             // set page if requested
             $page = $data['page'];
         }
-    	$this->view->title = $this->view->translate('search_index_alltitles_browsing');
-	    // Default Filter is: show all documents from the server
-        $result = Opus_Document::getAllDocumentTitlesByState('published');
+        $this->view->title = $this->view->translate('search_index_alltitles_browsing');
 
-        // Sort the result if necessary
-        // docList contains a list of IDs of the documents, that should be returned after sorting
-        $docList = array();
-        if (true === array_key_exists('sort_order', $data)) {
-      	    switch ($data['sort_order']) {
-       		    case 'title':
-                    asort($result);
-                    foreach ($result as $id => $doc) {
-    	                $docList[] = $id;
-                    }
-                    break;
-      		    default:
-                    foreach ($result as $id => $doc) {
-    	                $docList[] = $id;
-                    }
-    			    sort($docList);
-    	    }
+	     // Default Filter is: show all documents from the server
+        $sort_order   = 'id';
+        if (true === array_key_exists('sort_order', $data) && false === is_null($data['sort_order'])) {
+           $sort_order = $data['sort_order'];
         }
-        else {
-    	    foreach ($result as $id => $doc) {
-    	        $docList[] = $id;
-            }
-    	    sort($docList);
+
+        // Default Ordering...
+        $sort_reverse = false;
+        if (true === array_key_exists('sort_reverse', $data) && false === is_null($data['sort_reverse'])) {
+           $sort_reverse = '1' === $data['sort_reverse'] ? true : false;
         }
+
+        // docList contains a (sorted) list of IDs of the documents, that should be returned
+        // the list has been sorted by the database already.
+        $docList = Opus_Document::getAllDocumentIdsByStateSorted('published', array($sort_order => $sort_reverse));
+
         $paginator = Zend_Paginator::factory($docList);
         #$hitlistIterator = new Opus_Search_Iterator_HitListIterator($hitlist);
         #$this->view->hitlist_count = $hitlist->count();

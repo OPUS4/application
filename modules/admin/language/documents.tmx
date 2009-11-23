@@ -196,6 +196,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="docs_by_date">
+      <tuv xml:lang="en">
+        <seg>date</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datum</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="docs_by_author">
       <tuv xml:lang="en">
         <seg>author</seg>

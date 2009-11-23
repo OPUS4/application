@@ -55,19 +55,32 @@
             'module' => 'search',
             'controller' => 'browsing',
             'action' => 'browseTitles',
-            'sort_order' => 'id'
+            'sort_order' => 'id',
+            'sort_reverse' => '1'
         );
         $url_sort_by_title = array(
             'module' => 'search',
             'controller' => 'browsing',
             'action' => 'browseTitles',
-            'sort_order' => 'title'
+            'sort_order' => 'title',
+            'sort_reverse' => '0'
+        );
+        $url_sort_by_date = array(
+            'module' => 'search',
+            'controller' => 'browsing',
+            'action' => 'browseTitles',
+            'sort_order' => 'date',
+            'sort_reverse' => '1'
         );
         $url_sort_by_id = $this->url($url_sort_by_id, 'default', false);
         $url_sort_by_title = $this->url($url_sort_by_title, 'default', false);
+        $url_sort_by_date = $this->url($url_sort_by_date, 'default', false);
 ?>
 <br/>
-<?php echo $this->translate('docs_sortorder'); ?> <a href="<?php echo $url_sort_by_id ?>"><?php echo $this->translate('docs_by_id'); ?></a> <a href="<?php echo $url_sort_by_title ?>"><?php echo $this->translate('docs_by_title'); ?></a>
+<?php echo $this->translate('docs_sortorder'); ?>
+ <a href="<?php echo $url_sort_by_id ?>"><?php echo $this->translate('docs_by_id'); ?></a>
+ <a href="<?php echo $url_sort_by_title ?>"><?php echo $this->translate('docs_by_title'); ?></a>
+ <a href="<?php echo $url_sort_by_date ?>"><?php echo $this->translate('docs_by_date'); ?></a>
 <?php
     }
 
