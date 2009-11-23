@@ -87,17 +87,29 @@
 if (count($this->hitlist_paginator)) {
     echo $this->paginationControl($this->hitlist_paginator, NULL, 'searchList_ItemCount_pagination.phtml');
     echo $this->paginationControl($this->hitlist_paginator, 'Sliding', 'searchList_pagination.phtml');
+
+    // FIXME: <ol start="..."> is not valid XHTML 1.0 Strict!
+    $pagerInfo = $this->hitlist_paginator->getPages();
+    echo '<ol class="search" start="' . $pagerInfo->firstItemNumber . '">';
+    echo "\n";
+            
+    $searchListItemCount = 0;
     foreach ($this->hitlist_paginator as $id) {
+        $searchListItemCount++;
+        $searchListOdd = ($searchListItemCount%2 === 1);
+
         $doc = new Opus_Search_SearchHit( (int) $id);
         $hit = $doc->getSearchHit();
         $document = $hit->getDocument();
+ 
         //print_r($document);
+        echo $searchListOdd ? '<li class="odd">' : '<li class="even">';
         $authoriterator = new Opus_Search_Iterator_PersonsListIterator($document["author"]);
-        echo "<li>";
+        
         #echo $document['author'] . ': ';
         foreach ($authoriterator as $obj) {
            $pers = $obj->get();
-             echo '<a href=' .
+             echo '<span class="author"><a href="' .
                  $this->url(
                      array(
                          'module'        => 'search',
@@ -108,25 +120,29 @@ if (count($this->hitlist_paginator)) {
                      null,
                       true
                  ) .
-                 '>';
+                 '">';
 
            echo $pers["lastName"].", ".$pers["firstName"];
-           echo "</a>";
+           echo "</a></span>";
            if ($authoriterator->hasNext() === true) echo "; ";
            else echo ": ";
         }
         #print("<a href=\"".$this->url($document["frontdoorUrl"])."\">".$document["title"]."</a>");
-        print("<a href=\"".$this->url(array('module' => 'frontdoor',
+        print('<span class="title"><a href="' . $this->url(array('module' => 'frontdoor',
             'controller' => 'index',
             'action' => 'index',
             'docId' => $document['id']),
             null, true
-        )."\">".$document["title"]."</a>");
+        ) . '">' . $document["title"] . "</a></span>");
         echo "</li>";
+
         #echo "<div>".$this->translate('search_titles_relevance').": ".$doc->getRelevance()."<br/>";
         #echo $document["abstract"]."<br/>";
+        echo "\n";
     }
-    echo '</ol>';
+
+    echo "</ol>\n";
+
     echo $this->paginationControl($this->hitlist_paginator, 'Sliding', 'searchList_pagination.phtml');
 }
 
