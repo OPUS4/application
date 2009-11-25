@@ -41,15 +41,12 @@ class FrontdoorXSLT_HashController extends Zend_Controller_Action
     /**
      *
      *getting hashvalues from Opus_Document to display them
-     *case of multiple files and multiple hashtypes are considered
-     *commits array 'fileNames' with all filenames to view
-     *commits array 'hashValueType' with all hashvalues and hashtypes to view
      *
      */
 
     public function indexAction()
     {
-       //starting document model
+       // get document
        $request = $this->getRequest();
        $docId = $request->getParam('docId');
        $this->view->docId = $docId;
@@ -57,14 +54,15 @@ class FrontdoorXSLT_HashController extends Zend_Controller_Action
        // get authors
        $author_names = array();
        $authors = $document->getPersonAuthor();
+       // more than one author
        if (true === is_array($authors)) {
            $ni = 0;
            foreach ($authors as $author) {
                $author_names[$ni] = $author->getName();
                $ni = $ni + 1;
            }
-       }
-       else {
+       // only one author
+       } else {
            $author_names[0] = $document->getPersonAuthor()->getName();
        }
        $this->view->author = $author_names;
@@ -73,29 +71,21 @@ class FrontdoorXSLT_HashController extends Zend_Controller_Action
        $title = $document->getTitleMain();
        if (true === is_array($title)) {
            $title_value = $title[0]->getValue();
-       }
-       else {
+       } else {
            $title_value = $title->getValue();
        }
        $this->view->title = $title_value;
+
        // get type
        $type = $document->getType();
        $this->view->type = $type;
 
-       $this->view->document = $document;
-
-      //searching for files, getting filenumbers and hashes if document is available
+      //searching for files, getting filenumbers and hashes
        $fileNumber = 0;
-       $first_hash = null;
        $files = $document->getFile();
        if (true === is_array($files) && count($files) > 0) {
            $fileNumber = count($files);
            $this->view->fileNumber = $fileNumber;
-           $hash_exists = $document->getFile('0')->getHashValue();
-           if (true === is_array($hash_exists)) {
-               $first_hash = $document->getFile('0')->getHashValue('0')->getValue();
-               $this->view->first_hash = $first_hash;
-            }
        }
        // Iteration over all files, hashtypes and -values
        $gpg = new Opus_GPG();
@@ -105,34 +95,28 @@ class FrontdoorXSLT_HashController extends Zend_Controller_Action
        $hashSoll = array();
        $hashIst = array();
        $hashNumber = array();
-       if ($first_hash !== NULL) {
-           for ($i = 0; $i < $fileNumber; $i++) {
-               $fileNames[$i] = $document->getFile($i)->getPathName();
-               if (true === is_array ($hashes = $document->getFile($i)->getHashValue())) {
-                     $countHash = count($hashes);
-                     for ($j = 0; $j < $countHash; $j++) {
-                         $hashNumber[$i] = $countHash;
-                         $hashSoll[$i][$j] = $document->getFile($i)->getHashValue($j)->getValue();
-                         $hashType[$i][$j] = $document->getFile($i)->getHashValue($j)->getType();
-                         if (substr($hashType[$i][$j], 0, 3) === 'gpg') {
-                             try
-                             {
-                                 $this->view->verifyResult[$fileNames[$i]] = $gpg->verifyPublicationFile($document->getFile($i));
-                             }
-                             catch (Exception $e)
-                             {
-                                 $this->view->verifyResult[$fileNames[$i]] = array('result' => array($e->getMessage()), 'signature' => $hashSoll[$i][$j]);
-                             }
+       for ($fi = 0; $fi < $fileNumber; $fi++) {
+           $fileNames[$fi] = $document->getFile($fi)->getPathName();
+           if (true === is_array ($hashes = $document->getFile($fi)->getHashValue())) {
+                 $countHash = count($hashes);
+                 for ($hi = 0; $hi < $countHash; $hi++) {
+                     $hashNumber[$fi] = $countHash;
+                     $hashSoll[$fi][$hi] = $document->getFile($fi)->getHashValue($hi)->getValue();
+                     $hashType[$fi][$hi] = $document->getFile($fi)->getHashValue($hi)->getType();
+                     if (substr($hashType[$fi][$hi], 0, 3) === 'gpg') {
+                         try {
+                             $this->view->verifyResult[$fileNames[$fi]] = $gpg->verifyPublicationFile($document->getFile($fi));
+                         } catch (Exception $e) {
+                             $this->view->verifyResult[$fileNames[$fi]] = array('result' => array($e->getMessage()), 'signature' => $hashSoll[$fi][$hi]);
                          }
-                       else {
-                           $hashIst[$i][$j] = 0;
-                           if (true === $document->getFile($i)->canVerify()) {
-                               $hashIst[$i][$j] = $document->getFile($i)->getRealHash($hashType[$i][$j]);
-                           }
-                       }
+                     } else {
+                        $hashIst[$fi][$hi] = 0;
+                        if (true === $document->getFile($fi)->canVerify()) {
+                            $hashIst[$fi][$hi] = $document->getFile($fi)->getRealHash($hashType[$fi][$hi]);
+                        }
                      }
-                  }
-             }
+                 }
+           }
        }
        $this->view->hashType = $hashType;
        $this->view->hashSoll = $hashSoll;
