@@ -164,8 +164,10 @@ class Search_BrowsingController extends Zend_Controller_Action
 				$this->view->page = $this->_getParam("page");
 				#$this->view->hitlist_paginator = Zend_Paginator::factory(Opus_Search_List_CollectionNode::getDocumentIds($collection, $node));
 
-            // Get the theme assigned to this collection iff usertheme is set in the request
-            $usertheme = $this->_getParam("usertheme");
+            // Get the theme assigned to this collection iff usertheme is
+            // set in the request.  To enable the collection theme, add
+            // /usetheme/1/ to the browsing URL.
+            $usetheme = $this->_getParam("usetheme");
             if (isset ($usetheme) === true && 1 === (int)$usetheme) {
                 $this->_helper->layout->setLayout('../' . $browsingListProduct->getTheme() . '/common');
             }
