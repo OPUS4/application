@@ -166,7 +166,7 @@ class Search_BrowsingController extends Zend_Controller_Action
 
             // Get the theme assigned to this collection iff usertheme is set in the request
             $usertheme = $this->_getParam("usertheme");
-            if (isset ($usertheme) === true && 1 === (int)$usertheme) {
+            if (isset ($usetheme) === true && 1 === (int)$usetheme) {
                 $this->_helper->layout->setLayout('../' . $browsingListProduct->getTheme() . '/common');
             }
 
