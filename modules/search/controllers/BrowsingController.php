@@ -164,8 +164,11 @@ class Search_BrowsingController extends Zend_Controller_Action
 				$this->view->page = $this->_getParam("page");
 				#$this->view->hitlist_paginator = Zend_Paginator::factory(Opus_Search_List_CollectionNode::getDocumentIds($collection, $node));
 
-                                // Get the theme assigned to this collection.
-				$this->_helper->layout->setLayout('../' . $browsingListProduct->getTheme() . '/common');
+            // Get the theme assigned to this collection iff usertheme is set in the request
+            $usertheme = $this->_getParam("usertheme");
+            if (isset ($usertheme) === true && 1 === (int)$usertheme) {
+                $this->_helper->layout->setLayout('../' . $browsingListProduct->getTheme() . '/common');
+            }
 
             // If node === 0, then this collection actually is a CollectionRole
             // and we want to translate the title (if specified).
