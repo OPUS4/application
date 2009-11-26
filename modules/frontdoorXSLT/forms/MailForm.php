@@ -27,6 +27,7 @@
  * @category    Application
  * @package     Module_Frontdoor
  * @author      Wolfgang Filter <wolfgang.filter@ub.uni-stuttgart.de>
+ * @author      Simone Finkbeiner <simone.finkbeiner@ub.uni-stuttgart.de>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -50,7 +51,7 @@ class MailForm extends Zend_Form
         $recipient->setLabel('frontdoor_recipientname');
 
         $recipient_mail = new Zend_Form_Element_Text('recipient_mail');
-        $recipient_mail->setRequired(false);
+        $recipient_mail->setRequired(true);
         $recipient_mail->setLabel('frontdoor_recipientmail');
 
         $sender = new Zend_Form_Element_Text('sender');
@@ -58,7 +59,7 @@ class MailForm extends Zend_Form
         $sender->setLabel('frontdoor_sendername');
 
         $sender_mail = new Zend_Form_Element_Text('sender_mail');
-        $sender_mail->setRequired(true);
+        $sender_mail->setRequired(false);
         $sender_mail->setLabel('frontdoor_sendermail');
 
         $message = new Zend_Form_Element_Textarea('message');
