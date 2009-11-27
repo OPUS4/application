@@ -65,7 +65,7 @@
 		     $printname = $this->translate($translatelabel);
 		  }
 
-		  echo '<a href=' . $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'collection', 'collection' => $obj->getId()), null, true) . '>';
+		  echo '<a href="' . $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'collection', 'collection' => $obj->getId()), null, true) . '">';
 		  echo $printname;
 		  echo "</a><br/>";
 	   }

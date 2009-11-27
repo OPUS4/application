@@ -51,7 +51,11 @@ if (count($this->hitlist_paginator)) {
     $pagerInfo = $this->hitlist_paginator->getPages();
     echo '<ol class="search" start="' . $pagerInfo->firstItemNumber . '">';
 
+    $searchListItemCount = 0;
     foreach ($this->hitlist_paginator as $hit) {
+        $searchListItemCount++;
+        $searchListOdd = ($searchListItemCount%2 === 1);
+
         $doc = $hit->getSearchHit();
         $document = $doc->getDocument();
         try {
@@ -64,11 +68,12 @@ if (count($this->hitlist_paginator)) {
         	// do nothing at all, but break
         	break;
         }
-        echo "<li>";
+
+        echo $searchListOdd ? '<li class="odd">' : '<li class="even">';
         #echo $document['author'] . ': ';
         foreach ($authoriterator as $obj) {
            $pers = $obj->get();
-             echo '<a href=' .
+             echo '<span class="author"><a href="' .
                  $this->url(
                      array(
                          'module'        => 'search',
@@ -79,18 +84,18 @@ if (count($this->hitlist_paginator)) {
                      null,
                       true
                  ) .
-                 '>';
+                 '">';
 
            echo $pers["lastName"].", ".$pers["firstName"];
-           echo "</a>";
+           echo "</a></span>";
            if ($authoriterator->hasNext() === true) echo "; ";
            else echo ": ";
         }
-        print("<a href=\"".$this->url(array('module' => 'frontdoor',
+        print('<span class="title"><a href="' . $this->url(array('module' => 'frontdoor',
             'controller' => 'index',
             'action' => 'index',
             'docId' => $document['id']), null, true
-        )."\">".$document["title"]."</a>");
+        ).'">'.$document["title"]."</a></span>");
         echo "</li>";
         echo "<div>".$this->translate('search_titles_relevance').": ".$hit->getRelevance()."<br/>";
         echo $document["abstract"]."<br/>";
