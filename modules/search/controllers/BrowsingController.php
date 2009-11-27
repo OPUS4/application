@@ -159,7 +159,7 @@ class Search_BrowsingController extends Zend_Controller_Action
 				$browsingList = new BrowsingListFactory($list, null, $collection, $node);
 				$browsingListProduct = $browsingList->getBrowsingList();
 
-				$this->view->title = $browsingListProduct->getName();
+            $this->view->title = $browsingListProduct->getDisplayName('browsing');
 				$this->view->browsinglist = $browsingListProduct;
 				$this->view->page = $this->_getParam("page");
 				#$this->view->hitlist_paginator = Zend_Paginator::factory(Opus_Search_List_CollectionNode::getDocumentIds($collection, $node));
