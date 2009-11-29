@@ -105,10 +105,10 @@ class SearchEngineIndexBuilder extends Application_Bootstrap {
                 @unlink($indexpath . '/' . $file);
             }
             closedir($fh);
-            $indexer = new Opus_Search_Index_Indexer(true, $maxBufferedDocs);
+            $indexer = new Opus_Search_Index_SolrIndexer(true, $maxBufferedDocs);
         }
         else {
-        	$indexer = new Opus_Search_Index_Indexer(false, $maxBufferedDocs);
+        	$indexer = new Opus_Search_Index_SolrIndexer(false, $maxBufferedDocs);
         }
 
         echo date('Y-m-d H:i:s') . " Starting indexing of " . $docsToIndex . " documents\n";

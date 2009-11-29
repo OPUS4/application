@@ -300,7 +300,11 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                 $form->setAction($action_url);
                 $this->view->form = $form;
             } else {
+                try{
+                // change licence
+                print_r($data);
                 $form = $form_builder->buildFromPost($data);
+                //print_r($form);
                 if ($form->isValid($data) === true) {
                     // retrieve values from form and save them into model
                     $model = $form_builder->getModelFromForm($form);
@@ -322,6 +326,10 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                     $this->_redirectTo('', 'edit', $controller, $module, $params);
                 } else {
                     $this->view->form = $form;
+                }
+                }
+                catch (Exception $e) {
+                	echo $e->getMessage();
                 }
             }
         } else {

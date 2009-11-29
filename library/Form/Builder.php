@@ -72,7 +72,7 @@ class Form_Builder {
         foreach ($model->describe() as $fieldname) {
             // disable Collections in form builder
             if ($fieldname !== 'Collection') {
-                $field = $model->getField($fieldname);
+               	$field = $model->getField($fieldname);
                 $this->_prepareElement($field, $form);
             }
         }
@@ -100,9 +100,11 @@ class Form_Builder {
         $modelelementname = self::HIDDEN_MODEL_ELEMENT_NAME;
         $model = $this->uncompressModel($post[$modelelementname]);
 
+        // Write new data to model
         $this->_addRemove($post);
         $this->setFromPost($model, $post);
 
+        // Build form
         $form = $this->build($model);
         $form->$modelelementname->setValue($this->compressModel($model));
 
