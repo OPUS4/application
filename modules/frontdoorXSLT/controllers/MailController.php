@@ -86,6 +86,26 @@ class FrontdoorXSLT_MailController extends Zend_Controller_Action
 
     public function sendmailAction()
     {
-     //action for sending the recommendation-mail (to be done)
+     $form = new MailForm();
+     if (true === $this->getRequest()->isPost()) {
+         $data = $this->getRequest()->getPost();
+         if (true === $form->isValid($data)) {
+             $from = $form->getValue('sender_mail');
+             $fromName = $form->getValue('sender');
+             $subject = '';
+             $bodyText = $form->getValue('message');
+             $recipient = array('address' => $form->getValue('recipient_mail'),'name' => $form->getValue('recipient'));
+             $mailSendMail = new Opus_Mail_SendMail();
+             try {
+                $mailSendMail->sendMail($from,$fromName,$subject,$bodyText,$recipient);
+                $this->view->form = $form;
+             } catch (Exception $e) {
+                 $this->view->form = $e->getMessage();
+             }
+         } else {
+              $this->view->form = $form;
+         }
+     }
+//     $this->view->form = $form;
     }
 }
