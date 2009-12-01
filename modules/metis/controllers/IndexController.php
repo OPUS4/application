@@ -50,22 +50,23 @@ class Metis_IndexController extends Zend_Controller_Action {
 	public function indexAction() {
 		$this->view->title = 'Metis';
 		// create Client
-		$wsdl = "https://213.61.127.251/TOM/services/1.0/pixelService.wsdl?";
-		$options = array('trace' => '1');
+		$wsdl = "https://213.61.127.251/services/1.0/pixelService.wsdl";
+        $options = array('trace' => '1',
+                         'login' => 'usernamexx',
+                         'password' => 'passwortxx');
+
 		$client = new SoapClient ($wsdl,$options);
 		// request the available functions of the webservice
 		$avail = $client->__getFunctions();
 		$this->view->avail = $avail;
         // request the datatypes
 		$types = $client->__getTypes();
-        $this->view->types = $types;
+		$this->view->types = $types;
 		// calling PixelOrder
-		try {
-        // so funktioniert es nicht, waere korrekt, wenn Datentyp String verlangt waere !
-        //  $response = $client->orderPixel('1');
-            $param = array('count' => '1');
-            $response = $client->orderPixel($param);
-            print_r($response);
+        try {
+           $param = array('count' => '3');
+           $response = $client->orderPixel($param);
+           print_r($response);
 		}
 		catch (SoapFault $sf) {
 		    print_r($sf);
