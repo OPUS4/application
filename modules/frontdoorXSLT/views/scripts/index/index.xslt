@@ -131,7 +131,13 @@
        <xsl:apply-templates select="@Reviewed" />
        <xsl:apply-templates select="Note" />
        <xsl:apply-templates select="@PublicationVersion" />
-       <xsl:apply-templates select="Collection" /> 
+       <xsl:if test="Collection/@RoleName='Computing Classification System'">
+          <xsl:apply-templates select="Collection" mode="ccs" />
+       </xsl:if>   
+       <xsl:if test="Collection/@RoleName='Dewey Decimal Classification'">
+          <xsl:apply-templates select="Collection" mode="ddc" />
+       </xsl:if>   
+       <xsl:apply-templates select="Collection" mode="other"/> 
        <xsl:apply-templates select="Licence" />
          </table>
     </xsl:template>
@@ -327,33 +333,39 @@
 
 
     <!-- Templates for "external fields". -->
-    <xsl:template match="Collection">
-       <tr>
-         <th class="name">
-           <xsl:choose>
-           <xsl:when test="@RoleName='Mathematics Subject Classification'">
-              <xsl:text>MSC</xsl:text>
-           </xsl:when>
-           <xsl:when test="@RoleName='Computing Classificatin Classification'">
-              <xsl:call-template name="translateString">
-                <xsl:with-param name="string">col_ccs</xsl:with-param>
-              </xsl:call-template>
-           </xsl:when>
-           <xsl:when test="@RoleName='Dewey Decimal Classification'">
-              <xsl:call-template name="translateString">
-                <xsl:with-param name="string">col_ddc</xsl:with-param>
-              </xsl:call-template>
-           </xsl:when>
-           <xsl:otherwise>
-              <xsl:call-template name="translateString">
-                <xsl:with-param name="string">col</xsl:with-param>
-              </xsl:call-template>
-           </xsl:otherwise>
-           </xsl:choose>
-           <xsl:text>:</xsl:text>
-         </th>
-         <td><xsl:value-of select="@Name" /></td>
-       </tr>
+    <xsl:template match="Collection" mode="ccs">
+      <tr>
+          <th class="name">
+          <xsl:call-template name="translateString">
+              <xsl:with-param name="string">col_ccs</xsl:with-param>
+          </xsl:call-template>
+          <xsl:text>:</xsl:text></th>
+        <td><xsl:value-of select="@Name" /></td>
+      </tr>    
+    </xsl:template>
+
+    <xsl:template match="Collection" mode="ddc">
+      <tr>
+          <th class="name">
+          <xsl:call-template name="translateString">
+              <xsl:with-param name="string">col_ddc</xsl:with-param>
+          </xsl:call-template>
+          <xsl:text>:</xsl:text></th>
+        <td><xsl:value-of select="@Name" /></td>
+      </tr>    
+    </xsl:template>
+
+    <xsl:template match="Collection" mode="other">
+      <xsl:if test="@RoleName!='Computing Classificatin Classification' and @RoleName!='Dewey Decimal Classification'">
+        <tr>
+          <th class="name">
+            <xsl:call-template name="translateString">
+              <xsl:with-param name="string">col</xsl:with-param>
+            </xsl:call-template>
+            <xsl:text>:</xsl:text></th>
+          <td><xsl:value-of select="@Name" /></td>
+        </tr>
+      </xsl:if>    
     </xsl:template>
 
     <xsl:template match="CompletedDate">
