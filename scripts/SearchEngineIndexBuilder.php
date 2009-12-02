@@ -54,9 +54,9 @@ class SearchEngineIndexBuilder extends Application_Bootstrap {
      * @return void
      */
     public function _run() {
-        
+
         global $argv, $argc;
-        
+
     	if (true === in_array('--help', $argv) || true === in_array('-h', $argv)) {
     		echo "Usage: " . $argv[0] . " [starting with ID] [ending with ID] [number of maximum buffered docs]\n";
     		echo "\n";
@@ -75,9 +75,15 @@ class SearchEngineIndexBuilder extends Application_Bootstrap {
    		    echo "Default value for maximum buffered docs is 3.\n";
     		exit;
     	}
+    	if (true === in_array('--solr', $argv)) {
+    	    $indexbuilder = 'Opus_Search_Index_SolrIndexer';
+    	}
+    	else {
+    	    $indexbuilder = 'Opus_Search_Index_Indexer';
+    	}
 
         $docresult = Opus_Document::getAllIds();
-        
+
         // Evaluate parameters or set them to default values
         $start = 0;
         $end = null;
@@ -105,10 +111,10 @@ class SearchEngineIndexBuilder extends Application_Bootstrap {
                 @unlink($indexpath . '/' . $file);
             }
             closedir($fh);
-            $indexer = new Opus_Search_Index_SolrIndexer(true, $maxBufferedDocs);
+            $indexer = new $indexbuilder(true, $maxBufferedDocs);
         }
         else {
-        	$indexer = new Opus_Search_Index_SolrIndexer(false, $maxBufferedDocs);
+        	$indexer = new $indexbuilder(false, $maxBufferedDocs);
         }
 
         echo date('Y-m-d H:i:s') . " Starting indexing of " . $docsToIndex . " documents\n";
