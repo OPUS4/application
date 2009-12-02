@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `collections_replacement_3` (
 
 LOCK TABLES `collections_roles` WRITE;
 /*!40000 ALTER TABLE `collections_roles` DISABLE KEYS */;
-INSERT INTO `collections_roles` VALUES (3,'Computing Classification System',3,'count',1,'Number, Name',NULL,NULL,NULL);
+INSERT INTO `collections_roles` VALUES (3,'Computing Classification System','ccs',3,'count',1,'Number, Name',NULL,NULL,NULL,'number');
 /*!40000 ALTER TABLE `collections_roles` ENABLE KEYS */;
 UNLOCK TABLES;
 

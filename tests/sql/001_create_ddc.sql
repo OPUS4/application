@@ -1415,30 +1415,33 @@ INSERT INTO `collections_replacement_2` (`id`, `collections_id`, `replacement_fo
 
 -- --------------------------------------------------------
 
---
--- Table structure for table `collections_roles`
---
-
-CREATE TABLE IF NOT EXISTS `collections_roles` (
-  `id` int(11) unsigned NOT NULL auto_increment COMMENT 'Primary key.',
-  `name` varchar(255) NOT NULL COMMENT 'Name, label or type of the collection role, i.e. a specific classification or conference.',
-  `position` int(11) unsigned NOT NULL COMMENT 'Position of this collection tree (role) in the sorted list of collection roles for browsing and administration.',
-  `link_docs_path_to_root` enum('none','count','display','both') default 'none' COMMENT 'Every document belonging to a collection C automatically belongs to every collection on the path from C to the root of the collection tree for document counting, document diplaying, none or both.',
-  `visible` tinyint(1) unsigned NOT NULL COMMENT 'Is the collection visible? (1=yes, 0=no).',
-  `display_browsing` varchar(512) default NULL,
-  `display_doclist` varchar(512) default NULL,
-  `display_col_front` varchar(512) default NULL,
-  `display_frontdoor` varchar(512) default NULL,
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `UNIQUE_NAME` (`name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Administration table for the indivdual collection trees.' AUTO_INCREMENT=9 ;
+-- -----------------------------------------------------
+-- Table `collections_roles`
+-- -----------------------------------------------------
+CREATE  TABLE IF NOT EXISTS `collections_roles` (
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Primary key.' ,
+  `name` VARCHAR(255) NOT NULL COMMENT 'Name, label or type of the collection role, i.e. a specific classification or conference.' ,
+  `oai_name` VARCHAR(255) NOT NULL COMMENT 'Shortname identifying role in oai context.' ,
+  `position` INT(11) UNSIGNED NOT NULL COMMENT 'Position of this collection tree (role) in the sorted list of collection roles for browsing and administration.' ,
+  `link_docs_path_to_root` ENUM('none', 'count', 'display', 'both') default 'none' COMMENT 'Every document belonging to a collection C automatically belongs to every collection on the path from C to the root of the collection tree for document counting, document diplaying, none or both.',
+  `visible` TINYINT(1) UNSIGNED NOT NULL COMMENT 'Is the collection visible? (1=yes, 0=no).' ,
+  `display_browsing` VARCHAR(512) NULL COMMENT 'Comma separated list of collection_contents_x-fields to display in browsing context.' ,
+  `display_doclist` VARCHAR(512) NULL COMMENT 'Comma separated list of collection_contents_x-fields to display in document list context.' ,
+  `display_col_front` VARCHAR(512) NULL COMMENT 'Comma separated list of collection_contents_x-fields to display in collection frontdoor context.' ,
+  `display_frontdoor` VARCHAR(512) NULL COMMENT 'Comma separated list of collection_contents_x-fields to display in frontdoor context.' ,
+  `display_oai` VARCHAR(512) NULL COMMENT 'collection_contents_x-field to display in oai context.' ,
+  PRIMARY KEY (`id`) ,
+  UNIQUE INDEX `UNIQUE_NAME` (`name` ASC) ,
+  UNIQUE INDEX `UNIQUE_OAI_NAME` (`oai_name` ASC) )
+ENGINE = InnoDB
+COMMENT = 'Administration table for the indivdual collection trees.';
 
 --
 -- Dumping data for table `collections_roles`
 --
 
-INSERT INTO `collections_roles` (`id`, `name`, `position`, `link_docs_path_to_root`, `visible`, `display_browsing`, `display_doclist`, `display_col_front`, `display_frontdoor`) VALUES
-(2, 'Dewey Decimal Classification', 2, 'count', 1, 'Number, Name', NULL, NULL, NULL) ;
+INSERT INTO `collections_roles` (`id`, `name`, `oai_name`, `position`, `link_docs_path_to_root`, `visible`, `display_browsing`, `display_doclist`, `display_col_front`, `display_frontdoor`, `display_oai`) VALUES
+(2, 'Dewey Decimal Classification', 'ddc', 2, 'count', 1, 'Number, Name', NULL, NULL, NULL, 'number') ;
 
 -- --------------------------------------------------------
 
