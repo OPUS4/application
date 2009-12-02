@@ -36,7 +36,7 @@
  * Controller for document recommendation starting from Frontdoor
  *
  */
-class FrontdoorXSLT_MailController extends Zend_Controller_Action
+class Frontdoor_MailController extends Zend_Controller_Action
 {
     /**
      *
@@ -79,7 +79,7 @@ class FrontdoorXSLT_MailController extends Zend_Controller_Action
 
        // show mail form
        $mailForm = new MailForm();
-       $mailForm->setAction($this->view->url(array('module' => "frontdoorXSLT", "controller"=>'mail', "action"=>'sendmail')));
+       $mailForm->setAction($this->view->url(array('module' => "frontdoor", "controller"=>'mail', "action"=>'sendmail')));
        $mailForm->setMethod('post');
        $this->view->mailForm = $mailForm;
     }

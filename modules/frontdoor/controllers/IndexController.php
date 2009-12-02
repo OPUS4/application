@@ -25,7 +25,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_FrontdoorXSLT
+ * @package     Module_Frontdoor
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -33,7 +33,7 @@
  *
  */
 
-class FrontdoorXSLT_IndexController extends Controller_Action {
+class Frontdoor_IndexController extends Controller_Action {
 
     /**
      * Display the metadata of a document.
@@ -63,7 +63,7 @@ class FrontdoorXSLT_IndexController extends Controller_Action {
 
         // Set up XSLT-Processor
         $proc = new XSLTProcessor;
-        $proc->registerPHPFunctions('FrontdoorXSLT_IndexController::translate');
+        $proc->registerPHPFunctions('Frontdoor_IndexController::translate');
         $proc->importStyleSheet($xslt);
 
         // Set Base-Url

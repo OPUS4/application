@@ -27,7 +27,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_FrontdoorXSLT
+ * @package     Module_Frontdoor
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de> 
  * @author      Simone Finkbeiner <simone.finkbeiner@ub.uni-stuttgart.de> 
  * @copyright   Copyright (c) 2009, OPUS 4 development team
@@ -39,7 +39,7 @@
 <!--
 /**
  * @category    Application
- * @package     Module_FrontdoorXSLT
+ * @package     Module_Frontdoor
  */
 -->
 
@@ -686,7 +686,7 @@
            <!-- TODO: Use Zend Url-Helper to build href attribute -->
              <xsl:attribute name="href">
                <xsl:value-of select="$baseUrl"/>
-               <xsl:text>/frontdoorXSLT/hash/index/docId/</xsl:text>
+               <xsl:text>/frontdoor/hash/index/docId/</xsl:text>
                <xsl:value-of select="@Id" />
              </xsl:attribute>
            <xsl:element name="img">   
@@ -711,7 +711,7 @@
            <!-- TODO: Use Zend Url-Helper to build href attribute -->
              <xsl:attribute name="href">
                <xsl:value-of select="$baseUrl"/>
-               <xsl:text>/frontdoorXSLT/mail/index/docId/</xsl:text>
+               <xsl:text>/frontdoor/mail/index/docId/</xsl:text>
                <xsl:value-of select="@Id" />
              </xsl:attribute>
            <xsl:element name="img">   
@@ -897,7 +897,7 @@
 
     <!-- Named template to translate a field's name. Needs no parameter. -->
     <xsl:template name="translateFieldname">
-        <xsl:value-of select="php:functionString('FrontdoorXSLT_IndexController::translate', name())" />
+        <xsl:value-of select="php:functionString('Frontdoor_IndexController::translate', name())" />
         <xsl:if test="normalize-space(@Language)">
             <!-- TODO: Enable translation of language abbreviations when they are available.
             <xsl:call-template name="translateString">
@@ -911,7 +911,7 @@
     <!-- Named template to translate an arbitrary string. Needs the translation key as a parameter. -->
     <xsl:template name="translateString">
         <xsl:param name="string" />
-        <xsl:value-of select="php:functionString('FrontdoorXSLT_IndexController::translate', $string)" />
+        <xsl:value-of select="php:functionString('Frontdoor_IndexController::translate', $string)" />
     </xsl:template>
 
 </xsl:stylesheet>
