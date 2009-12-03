@@ -70,6 +70,24 @@
       </tuv>
     </tu>
     
+    <tu tuid="admin_title_organizational_units_show">
+      <tuv xml:lang="en">
+        <seg>Administrate organizational units</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Organisatorische Einheiten (Institute, Fakultäten, ...) verwalten</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_title_organizational_units_edit">
+      <tuv xml:lang="en">
+        <seg>Administrate organization tree</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Organisationsbaum verwalten</seg>
+      </tuv>
+    </tu>
+    
     <tu tuid="admin_title_documents">
       <tuv xml:lang="en">
         <seg>Administrate document metadata</seg>
