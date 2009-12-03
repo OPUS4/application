@@ -56,22 +56,20 @@ if (count($this->hitlist_paginator)) {
         $searchListItemCount++;
         $searchListOdd = ($searchListItemCount%2 === 1);
 
+        // retrieve hit from hit list
         $doc = $hit->getSearchHit();
         $document = $doc->getDocument();
-        try {
-        $doc2 = new Opus_Search_SearchHit((int) $document['id']);
-        $hit2 = $doc2->getSearchHit();
-        $document2 = $hit2->getDocument();
-        $authoriterator = new Opus_Search_Iterator_PersonsListIterator($document2["author"]);
-        }
-        catch (Exception $e) {
+        #try {
+        #    $authoriterator = new Opus_Search_Iterator_PersonsListIterator($document["author"]);
+        #}
+        #catch (Exception $e) {
         	// do nothing at all, but break
-        	break;
-        }
+        #	break;
+        #}
 
         echo $searchListOdd ? '<li class="odd">' : '<li class="even">';
-        #echo $document['author'] . ': ';
-        foreach ($authoriterator as $obj) {
+        echo '<span class="author">' . $document['author'] . ': </span>';
+        /*foreach ($authoriterator as $obj) {
            $pers = $obj->get();
              echo '<span class="author"><a href="' .
                  $this->url(
@@ -90,7 +88,7 @@ if (count($this->hitlist_paginator)) {
            echo "</a></span>";
            if ($authoriterator->hasNext() === true) echo "; ";
            else echo ": ";
-        }
+        }*/
         print('<span class="title"><a href="' . $this->url(array('module' => 'frontdoor',
             'controller' => 'index',
             'action' => 'index',

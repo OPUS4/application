@@ -129,7 +129,7 @@ class BrowsingList
 		// remove invisible (deleted) CollectionRoles
 		// and ignore the ones which are not visible
 		for ($counter = 0; isset($browsinglist[$counter]) === true; $counter++) {
-		    if ($browsinglist[$counter]->getVisible() === '0') {
+		    if ($browsinglist[$counter]->getVisible() === '0' or $browsinglist[$counter]->getVisibleBrowsingStart() === '0') {
 		        array_splice($browsinglist, ($counter-1), 1);
 		    }
 		}
