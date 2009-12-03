@@ -59,13 +59,6 @@ if (count($this->hitlist_paginator)) {
         // retrieve hit from hit list
         $doc = $hit->getSearchHit();
         $document = $doc->getDocument();
-        #try {
-        #    $authoriterator = new Opus_Search_Iterator_PersonsListIterator($document["author"]);
-        #}
-        #catch (Exception $e) {
-        	// do nothing at all, but break
-        #	break;
-        #}
         $authoriterator = explode('; ', $document['author']);
 
         echo $searchListOdd ? '<li class="odd">' : '<li class="even">';
