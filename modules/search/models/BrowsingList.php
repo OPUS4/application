@@ -126,6 +126,13 @@ class BrowsingList
 	public static function getCollectionRoleList()
 	{
 		$browsinglist = Opus_CollectionRole::getAll();
+		// remove invisible (deleted) CollectionRoles
+		// and ignore the ones which are not visible
+		for ($counter = 0; isset($browsinglist[$counter]) === true; $counter++) {
+		    if ($browsinglist[$counter]->getVisible() === '0') {
+		        array_splice($browsinglist, ($counter-1), 1);
+		    }
+		}
 		return $browsinglist;
 	}
 
