@@ -44,10 +44,12 @@ if (isset($this->failure) === true) {
 	echo $this->failure;
 }
 if (count($this->hitlist_paginator)) {
+
     echo $this->paginationControl($this->hitlist_paginator, NULL, 'searchList_ItemCount_pagination.phtml');
     echo $this->paginationControl($this->hitlist_paginator, 'Sliding', 'searchList_pagination.phtml');
 
     // FIXME: <ol start="..."> is not valid XHTML 1.0 Strict!
+    // but it will return in (X)HTML 5, so wontfix
     $pagerInfo = $this->hitlist_paginator->getPages();
     echo '<ol class="search" start="' . $pagerInfo->firstItemNumber . '">';
 
