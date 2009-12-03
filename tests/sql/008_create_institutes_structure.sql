@@ -5,7 +5,7 @@
 
 LOCK TABLES `collections_roles` WRITE;
 /*!40000 ALTER TABLE `collections_roles` DISABLE KEYS */;
-INSERT INTO `collections_roles` VALUES (1,'Organisatorische Einheiten','org',1,'none',1,NULL,NULL,NULL,NULL,NULL);
+INSERT INTO `collections_roles` VALUES (1,'Organisatorische Einheiten','org',1,'none',1, 1, 'Name', 1, 'Name', 1, 'Name');
 /*!40000 ALTER TABLE `collections_roles` ENABLE KEYS */;
 UNLOCK TABLES;
 

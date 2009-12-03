@@ -4,7 +4,7 @@
 
 LOCK TABLES `collections_roles` WRITE;
 /*!40000 ALTER TABLE `collections_roles` DISABLE KEYS */;
-INSERT INTO `collections_roles` VALUES (5,'Journal of Economic Literature (JEL) Classification System','jel',5,'count',1,'Number, Name',NULL,NULL,NULL,'number');
+INSERT INTO `collections_roles` VALUES (5,'Journal of Economic Literature (JEL) Classification System','jel',5,'count',1, 1, 'Number, Name', 1, 'Number, Name', 1, 'number') ;
 /*!40000 ALTER TABLE `collections_roles` ENABLE KEYS */;
 UNLOCK TABLES;
 
