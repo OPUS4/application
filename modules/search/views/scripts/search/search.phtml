@@ -66,29 +66,30 @@ if (count($this->hitlist_paginator)) {
         	// do nothing at all, but break
         #	break;
         #}
+        $authoriterator = explode('; ', $document['author']);
 
         echo $searchListOdd ? '<li class="odd">' : '<li class="even">';
-        echo '<span class="author">' . $document['author'] . ': </span>';
-        /*foreach ($authoriterator as $obj) {
-           $pers = $obj->get();
+        $counter = 1;
+        foreach ($authoriterator as $obj) {
              echo '<span class="author"><a href="' .
                  $this->url(
                      array(
                          'module'        => 'search',
                          'controller'    => 'search',
                          'action'        => 'metadatasearch',
-                         'author'        => $pers['lastName'] . ', ' . $pers['firstName']
+                         'author'        => $obj
                      ),
                      null,
                       true
                  ) .
                  '">';
 
-           echo $pers["lastName"].", ".$pers["firstName"];
+           echo $obj;
            echo "</a></span>";
-           if ($authoriterator->hasNext() === true) echo "; ";
-           else echo ": ";
-        }*/
+           if ($counter === count($authoriterator)) echo ": ";
+           else echo "; ";
+           $counter++;
+        }
         print('<span class="title"><a href="' . $this->url(array('module' => 'frontdoor',
             'controller' => 'index',
             'action' => 'index',
