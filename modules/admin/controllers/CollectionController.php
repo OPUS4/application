@@ -104,6 +104,11 @@ class Admin_CollectionController extends Controller_Action {
             $collection = new Opus_Collection($role);
         } else {
             $collection = new Opus_CollectionRole;
+            $allRoles = $collection->getAll();
+            $countRoles = count($allRoles);
+            $pos_field = $collection->getField('Position');
+            $pos_field->setDefault(array_combine(range(1,$countRoles+1),range(1,$countRoles+1)))->setSelection(true);
+
         }
         $filter = new Opus_Model_Filter;
         $filter->setModel($collection);
