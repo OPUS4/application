@@ -26,6 +26,7 @@
  *
  * @category    Application
  * @package     Controller
+ * @author		Pascal-Nicolas Becker <becker@zib.de>
  * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -50,27 +51,15 @@ class Controller_Plugin_SecurityRealm extends Zend_Controller_Plugin_Abstract {
     public function routeStartup(Zend_Controller_Request_Abstract $request) {
         // Create a Realm instance
         $realm = Opus_Security_Realm::getInstance();
-        $acl = new Opus_Security_Acl;
 
-        // Detect role of currently logged on user (if any)
+		// Overwrite default user if current user is logged on.
         $identity = Zend_Auth::getInstance()->getIdentity();
-        if (true === empty($identity)) {
-            $identityRole = 'guest';
-        } else {
-            // Check if the logged in identity has a specific role assigned
-            $identityRole = $realm->getIdentityRole($identity);            
-        }
-
-        // Set up standard guest role as defined in the database
-        $guest = $acl->getRole($identityRole);
-        
-        // Set up master Resource object
-        $masterResource = $acl->get('PUBLIC');
-        $realm->setResourceMaster($masterResource);
-        
-        // Start permission checks with assigning the Acl 
-        $realm->setRole($guest);
-        $realm->setAcl($acl);
+		if (false === empty($identiy) {
+			$realm->setUser($identity);
+		}
+		
+		// Set ip
+		$realm->setIp($_SERVER['REMOTE_ADDR']);
     }   
     
 }
