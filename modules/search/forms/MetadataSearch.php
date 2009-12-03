@@ -41,7 +41,7 @@ class MetadataSearch extends Zend_Form
 	 * number of fields that should be shown in the form
 	 */
 	protected $_queryFieldNumber = 5;
-	
+
 	/**
      * Build extended search form
      */
@@ -49,9 +49,10 @@ class MetadataSearch extends Zend_Form
 		// Create and configure query field elements:
 		$truncation = new Zend_Form_Element_Select('searchtype');
 		$truncation->addMultiOptions(array('exact' => 'exact_search', 'truncated' => 'truncated_search'));
-		
+
 		$hitsPerPage = new Zend_Form_Element_Select('hitsPerPage');
 		$hitsPerPage->addMultiOptions(array('0' => 'all_hits', '10' => 10, '20' => 20, '25' => 25, '50' => 50));
+		$hitsPerPage->setValue('10');
 		$hitsPerPage->setLabel('search_hitsPerPage');
 
 		$sort = new Zend_Form_Element_Select('sort');
@@ -80,7 +81,7 @@ class MetadataSearch extends Zend_Form
 
 		    $query[$n] = new Zend_Form_Element_Text('query[' . $n . ']');
 		    $query[$n]->addValidator('stringLength', false, array(3, 100));
-		    
+
 		    if ($n < ($this->_queryFieldNumber-1))
 		    {
 		        $boolean[$n] = new Zend_Form_Element_Select('boolean[' . $n . ']');
@@ -94,7 +95,7 @@ class MetadataSearch extends Zend_Form
         // Add elements to form:
 		$this->addElements(array($truncation, $hitsPerPage, $sort, $languageList, $doctypeList));
 		for ($n = 0; $n < $this->_queryFieldNumber; $n++)
-		{		
+		{
 		    $this->addElements(array($field[$n], $query[$n]));
 		    if ($n < ($this->_queryFieldNumber-1))
 		    {
@@ -103,7 +104,7 @@ class MetadataSearch extends Zend_Form
 		}
 		$this->addElement($submit);
     }
-    
+
     /**
      * Build list of possible search fields
      */

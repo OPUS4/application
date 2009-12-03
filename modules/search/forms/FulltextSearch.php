@@ -46,6 +46,7 @@ class FulltextSearch extends Zend_Form
 		// Create and configure query field element:
 		$hitsPerPage = new Zend_Form_Element_Select('hitsPerPage');
 		$hitsPerPage->addMultiOptions(array('0' => 'all_hits', '10' => 10, '20' => 20, '25' => 25, '50' => 50));
+		$hitsPerPage->setValue('10');
 		$hitsPerPage->setLabel('search_hitsPerPage');
 
 		$sort = new Zend_Form_Element_Select('sort');
