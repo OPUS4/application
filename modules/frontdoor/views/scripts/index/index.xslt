@@ -85,6 +85,7 @@
          </colgroup>            
        <xsl:apply-templates select="IdentifierUrn" />
        <xsl:apply-templates select="IdentifierDoi|IdentifierHandle|IdentifierUrl" />
+       <xsl:apply-templates select="IdentifierIsbn|IdentifierIssn" />
        <xsl:apply-templates select="TitleParent" />
        <xsl:apply-templates select="@PublisherName" />
        <xsl:apply-templates select="@PublisherPlace" />
@@ -95,8 +96,6 @@
        <xsl:apply-templates select="PersonReferee" />
        <xsl:apply-templates select="PersonAdvisor" />
        <xsl:apply-templates select="@Type" />
-       <xsl:apply-templates select="IdentifierIsbn" />
-       <xsl:apply-templates select="IdentifierIssn" />
        <xsl:apply-templates select="@Language" />
        <xsl:choose>
          <xsl:when test="normalize-space(@CompletedYear)">
@@ -136,6 +135,9 @@
        </xsl:if>   
        <xsl:if test="Collection/@RoleName='Dewey Decimal Classification'">
           <xsl:apply-templates select="Collection" mode="ddc" />
+       </xsl:if>   
+       <xsl:if test="Collection/@RoleName='Mathematics Subject Classification'">
+          <xsl:apply-templates select="Collection" mode="msc" />
        </xsl:if>   
        <xsl:apply-templates select="Collection" mode="other"/> 
        <xsl:apply-templates select="Licence" />
@@ -355,8 +357,19 @@
       </tr>    
     </xsl:template>
 
+    <xsl:template match="Collection" mode="msc">
+      <tr>
+          <th class="name">
+          <xsl:call-template name="translateString">
+              <xsl:with-param name="string">col_msc</xsl:with-param>
+          </xsl:call-template>
+          <xsl:text>:</xsl:text></th>
+        <td><xsl:value-of select="@Name" /></td>
+      </tr>    
+    </xsl:template>
+
     <xsl:template match="Collection" mode="other">
-      <xsl:if test="@RoleName!='Computing Classificatin Classification' and @RoleName!='Dewey Decimal Classification'">
+      <xsl:if test="@RoleName!='Computing Classification System' and @RoleName!='Dewey Decimal Classification' and @RoleName!='Mathematics Subject Classification'">
         <tr>
           <th class="name">
             <xsl:call-template name="translateString">
@@ -462,21 +475,13 @@
       </tr>    
      </xsl:template>
 
-    <xsl:template match="IdentifierIsbn">
+    <xsl:template match="IdentifierIsbn|IdentifierIssn">
       <tr>
         <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
         <td><xsl:value-of select="@Value" /></td>
       </tr>    
     </xsl:template>
  
-    <xsl:template match="IdentifierIssn">
-      <tr>
-        <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
-        <td><xsl:call-template name="translateFieldname" /></td>
-        <td><xsl:value-of select="@Value" /></td>
-      </tr>    
-    </xsl:template>
-
     <xsl:template match="Licence">
       <tr>
         <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
