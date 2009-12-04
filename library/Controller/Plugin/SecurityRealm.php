@@ -56,6 +56,8 @@ class Controller_Plugin_SecurityRealm extends Zend_Controller_Plugin_Abstract {
         $identity = Zend_Auth::getInstance()->getIdentity();
 		if (false === empty($identiy)) {
 			$realm->setUser($identity);
+		} else {
+			$realm->setUser(null);
 		}
 		
 		// Set ip
