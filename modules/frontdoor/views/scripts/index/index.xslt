@@ -766,11 +766,6 @@
                 </xsl:call-template>
              </xsl:attribute>
           </xsl:element>
-         
-<!--              <xsl:call-template name="translateString">
-               <xsl:with-param name="string">frontdoor_statistics</xsl:with-param>
-            </xsl:call-template>
-     -->     
         </xsl:element>
         <xsl:text> </xsl:text>
 
@@ -909,12 +904,13 @@
     <xsl:template name="translateFieldname">
         <xsl:value-of select="php:functionString('Frontdoor_IndexController::translate', name())" />
         <xsl:if test="normalize-space(@Language)">
-            <!-- TODO: Enable translation of language abbreviations when they are available.
+            <!-- translation of language abbreviations  -->
+            <xsl:text> (</xsl:text>
             <xsl:call-template name="translateString">
                 <xsl:with-param name="string" select="@Language" />
             </xsl:call-template>
-            -->
-            <xsl:text> (</xsl:text><xsl:value-of select="@Language" /><xsl:text>)</xsl:text>
+            <xsl:text>)</xsl:text>
+            
         </xsl:if>
     </xsl:template>
 
