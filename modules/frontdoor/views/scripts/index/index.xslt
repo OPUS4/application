@@ -84,8 +84,17 @@
             <col class="name"/> 
          </colgroup>            
        <xsl:apply-templates select="IdentifierUrn" />
-       <xsl:apply-templates select="IdentifierDoi|IdentifierHandle|IdentifierUrl" />
-       <xsl:apply-templates select="IdentifierIsbn|IdentifierIssn" />
+       <xsl:apply-templates select="IdentifierUrl" />
+       <xsl:apply-templates select="IdentifierHandle" />
+       <xsl:apply-templates select="IdentifierDoi" />
+       <xsl:apply-templates select="IdentifierIsbn" />
+       <xsl:apply-templates select="IdentifierIssn" />
+       <xsl:apply-templates select="ReferenceUrn" />
+       <xsl:apply-templates select="ReferenceUrl" />
+       <xsl:apply-templates select="ReferenceDoi" />
+       <xsl:apply-templates select="ReferenceHandle" />
+       <xsl:apply-templates select="ReferenceIsbn" />
+       <xsl:apply-templates select="ReferenceIssn" />
        <xsl:apply-templates select="TitleParent" />
        <xsl:apply-templates select="@PublisherName" />
        <xsl:apply-templates select="@PublisherPlace" />
@@ -447,7 +456,7 @@
       </tr>    
     </xsl:template>
 
-    <xsl:template match="IdentifierDoi">
+    <xsl:template match="IdentifierDoi|ReferenceDoi">
       <tr>
         <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
         <td>
@@ -459,7 +468,7 @@
       </tr>
     </xsl:template>
 
-    <xsl:template match="IdentifierUrn">
+    <xsl:template match="IdentifierUrn|ReferenceUrn">
       <tr>
         <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
         <td>
@@ -475,7 +484,7 @@
       </tr>    
      </xsl:template>
 
-    <xsl:template match="IdentifierIsbn|IdentifierIssn">
+    <xsl:template match="IdentifierIsbn|IdentifierIssn|ReferenceIsbn|ReferenceIssn">
       <tr>
         <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
         <td><xsl:value-of select="@Value" /></td>
@@ -535,20 +544,15 @@
       </tr>    
     </xsl:template>
       
-
-    <xsl:template match="Enrichment"/>
-
     <xsl:template match="Note">
       <tr>
         <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
         <td><xsl:value-of select="@Message" /></td>
       </tr>    
     </xsl:template>
-
  
     <xsl:template match="Institute"/>
     <xsl:template match="Patent"/>
-
  
     <xsl:template match="PersonAdvisor">
       <tr>
@@ -626,6 +630,13 @@
 
     <xsl:template match="PublisherUniversity"/>
 
+    <xsl:template match="ReferenceHandle|ReferenceUrl">
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
+        <td><xsl:value-of select="@Value" /></td>
+      </tr>    
+    </xsl:template>
+
     <xsl:template match="SubjectPsyndex">
       <tr>
         <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
@@ -671,12 +682,6 @@
     <xsl:template match="IdentifierStdDoi"/>
     <xsl:template match="IdentifierCrisLink"/>
     <xsl:template match="IdentifierSplashUrl"/>
-    <xsl:template match="ReferenceIsbn"/>
-    <xsl:template match="ReferenceUrn"/>
-    <xsl:template match="ReferenceDoi"/>
-    <xsl:template match="ReferenceHandle"/>
-    <xsl:template match="ReferenceUrl"/>
-    <xsl:template match="ReferenceIssn"/>
     <xsl:template match="ReferenceStdDoi"/>
     <xsl:template match="ReferenceCrisLink"/>
     <xsl:template match="ReferenceSplashUrl"/>
