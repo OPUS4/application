@@ -36,10 +36,10 @@
     
     <tu tuid="admin_collections_role_new">
       <tuv xml:lang="en">
-        <seg>Create a new Role</seg>
+        <seg>Create a new collection tree</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Eine neue Rolle anlegen</seg>
+        <seg>Einen neuen Sammlungs-Baum anlegen</seg>
       </tuv>
     </tu>
     

@@ -61,8 +61,14 @@ class Admin_CollectionController extends Controller_Action {
         $entries = Opus_CollectionRole::getAll();
         $this->view->entries = array();
         foreach ($entries as $entry) {
-            $this->view->entries[$entry->getId()] = $entry->getDisplayName();
+            $this->view->entries[] = array('id'=>$entry->getId(), 'name'=>$entry->getDisplayName());
         }
+        $theme =Zend_Registry::getInstance()->get('Zend_Config')->theme;
+        if (true === empty($theme)) {
+            $theme = 'default';
+        }
+        $this->view->theme = $theme;
+        $this->view->layoutPath = $this->view->baseUrl() .'/layouts/'. $theme;
     }
 
     /**

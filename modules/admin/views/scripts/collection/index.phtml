@@ -35,16 +35,36 @@
 ?>
 <h1>Opus Application - <?= $this->title ?></h1>
 <ul>
-<? foreach($this->entries as $id => $entry) : ?>
+<? foreach($this->entries as $i=>$entry) : ?>
 <li>
-    <form action="<?= $this->url(array('action' => 'manage', 'role' => $id))?>" method="post">
-        <a href="<?= $this->url(array('action' => 'show', 'role' => $id)) ?>"><?= $entry ?></a>
-        <a href="<?= $this->url(array('action' => 'edit', 'role' => $id)) ?>">Edit</a>
-        <input type="submit" name="deleteall" value="Delete" />
-        <input type="submit" name="move_up" value="Up" />
-        <input type="submit" name="move_down" value="Down" />
+    <form action="<?= $this->url(array('action' => 'manage', 'role' => $entry['id']))?>" method="post">
+        <a href="<?= $this->url(array('action' => 'show', 'role' => $entry['id'])) ?>"><?= $entry['name'] ?></a>
+        <a href="<?= $this->url(array('action' => 'edit', 'role' => $entry['id'])) ?>">
+<img src = "<?= $this->layoutPath . '/img/edit_collection.png';?>"
+align='middle' border = '0' title = '<?=$this->translate('admin_collections_role_edit')?>'>
+</a>
+
+<a href="<?= $this->url(array('action' => 'manage', 'role' => $entry['id'], 'deleteall' => 'Delete'))?>">
+<img src = "<?= $this->layoutPath . '/img/delete_collection.png';?>"
+align='middle' border = '0' title = '<?=$this->translate('admin_collections_role_delete')?>'>
+</a>
+<? if ($i > 0) {?>
+&nbsp;
+<a href="<?= $this->url(array('action' => 'manage', 'role' => $entry['id'], 'move_up' => 'Up'))?>">
+<img src = "<?= $this->layoutPath . '/img/move_up_collection.jpg';?>"
+align='middle' border = '0' title = '<?=$this->translate('admin_collections_role_move_up')?>'>
+</a>
+<? }?>
+<? if ($i < (count($this->entries) - 1)) {?>
+&nbsp;
+<a href="<?= $this->url(array('action' => 'manage', 'role' => $entry['id'], 'move_down' => 'Down'))?>">
+<img src = "<?= $this->layoutPath . '/img/move_down_collection.jpg';?>"
+align='middle' border = '0' title = '<?=$this->translate('admin_collections_role_move_down')?>'>
+</a>
+<? }?>
     </form>
 </li>
 <? endforeach; ?>
 </ul>
-<a href="<?= $this->url(array('action' => 'new')) ?>">New</a>
+<a href="<?= $this->url(array('action' => 'new')) ?>"><img src = "<?= $this->layoutPath . '/img/tree-64x64.gif';?>"
+align='middle' border = '0' title = '<?=$this->translate('admin_collections_role_new') ?>'></a>
