@@ -299,6 +299,15 @@
         <seg>DDC-Sachgruppe</seg>
       </tuv>
     </tu>
+
+    <tu tuid="col_msc">
+      <tuv xml:lang="en">
+        <seg>MSC-Classification</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>MSC-Klassifikation</seg>
+      </tuv>
+    </tu>
  
   </body>
 </tmx>
