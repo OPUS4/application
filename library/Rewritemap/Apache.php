@@ -102,7 +102,7 @@ class Rewritemap_Apache {
      *                        if submitted.
      * return string
      */
-    public function rewriteRequest($request, $ip = null, $cookie = null) {
+    public function rewriteRequest($request, $ip = null, $cookies = null) {
         $this->_logger->info("got request '$request'");
         // parse and normalize request
         // remove leading slash
@@ -126,100 +126,54 @@ class Rewritemap_Apache {
         }
 
         // check for security
-        // immediately return when no Acl is present
-        $realm = Opus_Security_Realm::getInstance();
-        $acl = $realm->getAcl();
-        if (null === $acl) {
-            // security switched off, deliver everything
-            $this->_logger->info("return " . $this->_targetPrefix . "'files/$docId/$path'");
-            return $this->_targetPrefix ."/$docId/$path";
-        }
+		# if (config === '0') {  //FIXME
+        #     // security switched off, deliver everything
+        #     $this->_logger->info("return " . $this->_targetPrefix . "'files/$docId/$path'");
+        #     return $this->_targetPrefix ."/$docId/$path";
+        # }
+		
+		$this->__setupIdentity($ip, $cookies);
 
-        // lookup the resourceId of file
-        $resourceId = null;
-
+        // lookup the target file
+		$target = null;
+		//get all files
         $files = $this->__getFilesForDocumentId($docId);
-        // look for the right file and get its ResourceId
+        // look for the right file
         foreach ($files as $file) {
             $pathnames = $file->getPathName();
             if (is_array($pathnames) === false) {
                 if ($pathnames === $path) {
-                    $resourceId = $file->getResourceId();
+                    $target = $file;
                     break;
                 }
-            }
-            // if one day a Opus_File can belong to more then one file in the filesystem:
-            foreach ($pathnames as $pathname) {
-                if ($pathname === $path) {
-                    $resourceId = $file->getResourceId();
-                }
+            } else {
+	            // if one day a Opus_File can belong to more then one file in the filesystem:
+		        foreach ($pathnames as $pathname) {
+			        if ($pathname === $path) {
+				        $target = $file;
+					}
+				}
             }
         }
 
-        if (is_null($resourceId) === true) {
-            // resource ID not found
+        if (is_null($target) === true) {
+            // file not found
             return $this->_targetPrefix . "/error/send404.php"; //not found
         }
 
-        try {
-            // first we check if guest role is allowed to access the file
-            if ($acl->isAllowed('guest', $resourceId, 'read') === true) {
+		// check if we have access
+		try {
+			if (true === $this->_realm->readFile($target)) {
                 return $this->_targetPrefix . "/$docId/$path";
-            }
+			} else {
+				// 403 Forbidden
+				return $this->_targetPrefix . "/error/send403.php";
+			}
         } catch (Exception $e) {
+			// 500 Internal Server Error
             return $this->_targetPrefix . "/error/send500.php";
         }
 
-        // now we check if we have a role, that's allowed to read the file
-        // check the ip address first
-        $roles = $realm->getIpAdressRole();
-        if (is_array($roles) === false) {
-            $roles = array($roles);
-        }
-        foreach ($roles as $role) {
-            if (is_null($role) === false) {
-                try {
-                    if ($acl->isAllowed($role, $resourceId, 'read') === true) {
-                        return $this->_targetPrefix . "/$docId/$path";
-                    }
-                } catch (Exception $e) {
-                    return $this->_targetPrefix . "/error/send500.php";
-                }
-            }
-        }
-
-        // now check the identity
-        $cookies = explode('; ', $cookiestring);
-        $session_id = null;
-        foreach ($cookies as $cookie) {
-                if (preg_match('/'.ini_get('session.name').'=(.*)[\/]?$/',
-                        $cookie, $matches)) {
-                    $session_id = $matches[1];
-                }
-        }
-        if (is_null($session_id) === false) {
-            Zend_Session::setId($session_id);
-            Zend_Session::regenerateId();
-            Zend_Session::start();
-            $auth = Zend_Auth::getInstance();
-            if ($auth->hasIdentity()) {
-                $roles = $realm->getIdentityRole($auth->getIdentity());
-                if (is_array($roles) === false) {
-                    $roles = array($roles);
-                }
-                foreach ($roles as $role) {
-                    if (is_null($role) === false) {
-                        try {
-                            if ($acl->isAllowed($role, $resourceId, 'read') === true) {
-                                return $this->_targetPrefix ."/$docId/$path";
-                            }
-                        } catch (Exception $e) {
-                            return $this->_targetPrefix . "/error/send500.php";
-                        }
-                    }
-                }
-            }
-        }
         return  $this->_targetPrefix . "/error/send401.php"; // Unauthorized
     }
 
@@ -240,5 +194,39 @@ class Rewritemap_Apache {
         }
         return $result;
     }
+
+	private function __setupIdentity($ip, $cookiestring) {
+		// set/reset IP
+		try {
+			$this->_realm->setIp($ip);
+		} catch (Opus_Security_Exception $e) {
+			$this->_realm->setIp(null);
+		}
+
+		// set/reset User
+        // check the identity
+		if (false === is_null($cookiestring)) {
+	        $cookies = explode('; ', $cookiestring);
+		    $session_id = null;
+			foreach ($cookies as $cookie) {
+				    if (preg_match('/'.ini_get('session.name').'=(.*)[\/]?$/',
+					        $cookie, $matches)) {
+						$session_id = $matches[1];
+					}
+	        }
+		    if (is_null($session_id) === false) {
+			    Zend_Session::setId($session_id);
+				Zend_Session::start();
+				$identity = Zend_Auth::getInstance()->getIdentity();
+				if (false === empty($identiy)) {
+					$this->_realm->setUser($identity);
+				} else {
+					$this->_realm->setUser(null);
+				}
+			} else {
+				$this->_realm->setUser(null);
+			}
+		}
+	}
 }
 
