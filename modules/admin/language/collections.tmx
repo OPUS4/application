@@ -52,7 +52,7 @@
     
     <tu tuid="admin_collections_role_edit">
       <tuv xml:lang="en">
-        <seg>Edit this collection tree's properties</seg>
+        <seg>Edit this collection tree`s properties</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Ändern der Eigenschaften dieses Sammlungsbaumes</seg>
@@ -79,7 +79,7 @@
     
     <tu tuid="admin_collections_collection_edit">
       <tuv xml:lang="en">
-        <seg>Edit a Collections's properties</seg>
+        <seg>Edit a Collection`s properties</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Ändern der Eigenschaften der Sammlung</seg>
@@ -94,8 +94,6 @@
         <seg>Entfernen einer Sammlung</seg>
       </tuv>
     </tu>
-    
-    
     
     <tu tuid="admin_collections_collection_copy_abort">
       <tuv xml:lang="en">

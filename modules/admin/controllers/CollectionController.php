@@ -90,7 +90,16 @@ class Admin_CollectionController extends Controller_Action {
         }
         $filter = new Opus_Model_Filter;
         $filter->setModel($collection);
-        $filter->setBlacklist(array('Position', 'SubCollection', 'ParentCollection', 'CollectionsContentSchema', 'Visibility', 'SeveralAppearances'));
+        $filter->setBlacklist(array('Position',
+                                    'SubCollection',
+                                    'ParentCollection',
+                                    'CollectionsContentSchema',
+                                    'Visibility',
+                                    'SeveralAppearances',
+                                    'RoleName',
+                                    'RoleId',
+                                )
+                            );
         $filter->setSortOrder(array('Name'));
         $collectionForm = $form_builder->build($filter);
         $action_url = $this->view->url(array('action' => 'create'));

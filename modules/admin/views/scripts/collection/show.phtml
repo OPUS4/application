@@ -33,7 +33,7 @@
  * @version     $Id$
  */
 ?>
-<h1>Opus Application - <?= $this->title ?></h1>
+<h1>Opus Application - <?=$this->translate('admin_title_collections') ?></h1>
 
 <p>
 <a href="<?=$this->url(array('module'=>'admin', 'controller'=>'collection', 'action'=>'index', 'assign'=>$this->assign), null,
@@ -68,7 +68,7 @@
 <table>
     <? foreach($this->subcollections as $path => $name) : ?>
     <tr class="<?=$this->visibility[$path]?>" <?=('hidden' === $this->visibility[$path])?'style="text-decoration:line-through"':''?>>
-        <td>
+        <td width="400">
         <? if ((true === isset($this->copy)) AND (('allowed' === $this->copypaste[$path])) OR (false === isset($this->copy))) { ?>
             <a href="<?=$this->url(array('module'=>'admin', 'controller'=>'collection', 'action'=>'show',
                 'role'=>$this->role_id, 'path'=>$path, 'copy'=>$this->copy, 'assign'=>$this->assign), null, true)?>"><?=$name?></a>
@@ -137,4 +137,3 @@
     </tr>
     <? endforeach; ?>
 </table>
- <a href="<?= $this->url(array('action' => 'new')) ?>">New</a>
