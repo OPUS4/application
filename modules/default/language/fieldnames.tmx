@@ -891,10 +891,10 @@
     
     <tu tuid="Number">
       <tuv xml:lang="en">
-        <seg>Patent Number</seg>
+        <seg>Number</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Patentnummer</seg>
+        <seg>Nummer</seg>
       </tuv>
     </tu>
     
