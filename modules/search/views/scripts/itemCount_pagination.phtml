@@ -1,0 +1,14 @@
+<p>
+<?php
+#if ($this->current === 1) {
+    if ($this->totalItemCount > 1) {
+        printf($this->translate("search_titles_resultlist") . "<br/>", $this->totalItemCount);
+    } else {
+        printf($this->translate("search_titles_resultlist_one_entry") . "<br/>", $this->totalItemCount);
+    }
+#}
+if ($this->pageCount > 1) {
+    printf($this->translate("search_results_from_to") . "<br/>", $this->firstItemNumber, ($this->firstItemNumber+$this->currentItemCount-1));
+}
+?>
+</p>

@@ -33,7 +33,142 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-    switch ($this->filter)
+?>
+<h1><?php echo $this->translate('search_titles_all'); ?></h1>
+
+<?php
+// Sorting the titles
+        $url_sort_by_id = array(
+            'module' => 'search',
+            'controller' => 'browsing',
+            'action' => 'browseTitles',
+            'sort_order' => 'id'
+        );
+        $url_sort_by_title = array(
+            'module' => 'search',
+            'controller' => 'browsing',
+            'action' => 'browseTitles',
+            'sort_order' => 'title'
+        );
+        $url_sort_by_author = array(
+            'module' => 'search',
+            'controller' => 'browsing',
+            'action' => 'browseTitles',
+            'sort_order' => 'author'
+        );
+        $url_sort_by_date = array(
+            'module' => 'search',
+            'controller' => 'browsing',
+            'action' => 'browseTitles',
+            'sort_order' => 'date'
+        );
+        $url_sort_asc = array(
+            'sorting' => 'asc'
+        );
+        $url_sort_desc = array(
+            'sorting' => 'desc'
+        );
+        $url_sort_by_id = $this->url($url_sort_by_id, 'default', false);
+        $url_sort_by_title = $this->url($url_sort_by_title, 'default', false);
+        $url_sort_by_author = $this->url($url_sort_by_author, 'default', false);
+        $url_sort_by_date = $this->url($url_sort_by_date, 'default', false);
+        $url_sort_asc = $this->url($url_sort_asc, 'default', false);
+        $url_sort_desc = $this->url($url_sort_desc, 'default', false);
+?>
+<br/>
+<?php echo $this->translate('docs_sortorder'); ?> <a href="<?php echo $url_sort_by_id ?>"><?php echo $this->translate('docs_by_id'); ?></a> <a href="<?php echo $url_sort_by_title ?>"><?php echo $this->translate('docs_by_title'); ?></a> <a href="<?php echo $url_sort_by_author ?>"><?php echo $this->translate('docs_by_author'); ?></a> <a href="<?php echo $url_sort_by_date ?>"><?php echo $this->translate('docs_by_date'); ?></a>
+<a href="<?php echo $url_sort_asc ?>"><?php echo $this->translate('sort_ascending'); ?></a> <a href="<?php echo $url_sort_desc ?>"><?php echo $this->translate('sort_descending'); ?></a>
+<br/>
+<?php
+$documentList = $this->documentList;
+if (count($documentList) > 0) {
+#if (false === empty($documentList)) {
+    ?>
+<p>
+<?php
+    echo $this->paginationControl($documentList, NULL, 'itemCount_pagination.phtml');
+    echo $this->paginationControl($documentList, 'Sliding', 'results_pagination.phtml');
+    echo $this->paginationControl($documentList, NULL, 'start_itemlist.phtml');
+?>
+    <?php
+    foreach ($documentList as $docId) {
+        $authors = array();
+        unset($authors);
+        $d = new Opus_Document($docId);
+        try {
+            $aut = $d->getPersonAuthor();
+            foreach ($aut as $a) {
+                $name = '';
+                $lastName = '';
+                $name = $a->getName();
+                $lastName = $a->getLastName();
+                if (false === empty($name)) {
+                    $author = $a->getName();
+                }
+                else if (false === empty($lastName)) {
+                    $autor = $a->getLastName();
+                }
+                else {
+                    $author = " ";
+                }
+                $authors[] = $author;
+            }
+        }
+        catch (Exception $e) {
+            $authors[] = " ";
+        }
+        try {
+            $docObject = $d->getTitleMain();
+            $doc = '';
+            if (is_array($docObject) === true && empty($docObject) === false) {
+                $doc = array($docObject[0]->getValue());
+            }
+            else if (is_array($docObject) === false) {
+                $doc = array($docObject->getValue());
+            }
+            if (true === empty($doc)) {
+                $doc = array(0 => 'Opus document with id: ' . $docId);
+            }
+        }
+        catch (Exception $e) {
+            $doc = array(0 => 'Opus document with id: ' . $docId);
+        }
+        try {
+            $docState = $d->getServerState();
+        }
+        catch (Exception $e) {
+            // do nothing, document has no state!
+        }
+        $authorsstring = '';
+        if (false === empty($authors)) {
+            $authorsstring = join("; ", $authors) . ': ';
+        }
+        $title = array($authorsstring . $doc[0] . ' (' . $this->translate($d->getType()) . ')');
+
+        $url_frontdoor = array(
+            'module' => 'frontdoor',
+            'controller' => 'index',
+            'action' => 'index',
+            'docId' => $docId
+        );
+        $url_frontdoor = $this->url($url_frontdoor, 'default', true);
+    ?>
+        <li>
+        <?php echo '<a href="' . $url_frontdoor . '" target="_blank">' . current($title) . '</a>' ?>
+        </li>
+        <?php
+    } ?>
+</ol>
+</p>
+<?php
+echo $this->paginationControl($documentList, 'Sliding', 'results_pagination.phtml');
+} else { ?>
+    <p><?php echo $this->translate('docs_nodocs'); ?></p>
+<?php } ?>
+
+<?php
+/*
+switch ($this->filter)
     {
         case 'author':
         case 'contributor':
@@ -145,7 +280,7 @@ if (count($this->hitlist_paginator)) {
 
     echo $this->paginationControl($this->hitlist_paginator, 'Sliding', 'searchList_pagination.phtml');
 }
-
+*/
 
 
 /*
