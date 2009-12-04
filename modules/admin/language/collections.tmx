@@ -27,10 +27,17 @@
 
     <tu tuid="admin_collections_display_note">
       <tuv xml:lang="en">
-        <seg>In each display field you can choose, which collection attributes to display in the listed context. You can choose 'Name' and 'Number' in any order you like. Important note: values have to be separated by commas!</seg>
+        <seg>In each display field you can choose, which collection attributes
+         to display in the listed context. You can choose 'Name' and 'Number' 
+         in any order you like. Important note: values have to be separated 
+         by commas!</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>In den Display-Feldern können Sie einstellen, welche Metadaten der Sammlung in welchem Zusammenhang angezeigt werden sollen. Hier können in beliebiger Reihenfolge die Werte 'Name' und 'Number' eingegeben werden. Wichtig: Die Werte müssen mit Komma voneinander getrennt werden!</seg>
+        <seg>In den Display-Feldern können Sie einstellen, welche Metadaten 
+        der Sammlung in welchem Zusammenhang angezeigt werden sollen. 
+        Hier können in beliebiger Reihenfolge die Werte 'Name' und 'Number' 
+        eingegeben werden. Wichtig: Die Werte müssen mit Komma voneinander 
+        getrennt werden!</seg>
       </tuv>
     </tu>
     
@@ -45,19 +52,19 @@
     
     <tu tuid="admin_collections_role_edit">
       <tuv xml:lang="en">
-        <seg>Edit a Role's properties</seg>
+        <seg>Edit this collection tree's properties</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Ändern der Rolleneigenschaften</seg>
+        <seg>Ändern der Eigenschaften dieses Sammlungsbaumes</seg>
       </tuv>
     </tu>
     
     <tu tuid="admin_collections_role_delete">
       <tuv xml:lang="en">
-        <seg>Delete a Role</seg>
+        <seg>Delete this collection tree</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Entfernen einer Rolle</seg>
+        <seg>Entfernen dieses Sammlungsbaumes</seg>
       </tuv>
     </tu>
     
@@ -162,21 +169,21 @@
       </tuv>
     </tu>
 
-    <tu tuid="">
+    <tu tuid="admin_collections_role_move_up">
       <tuv xml:lang="en">
-        <seg></seg>
+        <seg>Move up this collection tree</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg></seg>
+        <seg>Diesen Sammlungsbaum in Sortierreihenfolge nach oben bewegen</seg>
       </tuv>
     </tu>
 
-    <tu tuid="">
+    <tu tuid="admin_collections_role_move_down">
       <tuv xml:lang="en">
-        <seg></seg>
+        <seg>Move down this collection tree</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg></seg>
+        <seg>Diesen Sammlungsbaum in Sortierreihenfolge nach unten bewegen</seg>
       </tuv>
     </tu>
 
