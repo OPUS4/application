@@ -148,7 +148,10 @@ class Oai_IndexController extends Controller_Xml {
         $this->_proc->setParameter('', 'oai_base_url', $oai_base_url);
         $registry = Zend_Registry::getInstance();
         $config = $registry->get('Zend_Config');
-        $contactId = $config->oai->contactid;
+        $contactId = '';
+        if (true === isset($config->oai->contactid)) {
+           $contactId = $config->oai->contactid;
+        }
         $this->_proc->setParameter('', 'contactId', $contactId);
 
         try {
@@ -358,10 +361,22 @@ class Oai_IndexController extends Controller_Xml {
         // get values from config.ini
         $registry = Zend_Registry::getInstance();
         $config = $registry->get('Zend_Config');
-        $email = $config->mail->opus->address;
-        $repName = $config->oai->repository->name;
-        $repIdentifier = $config->oai->repository->identifier;
-        $sampleIdentifier = $config->oai->sample->identifier;
+        $email = '';
+        if (true === isset($config->mail->opus->address)) {
+             $email = $config->mail->opus->address;
+        }
+        $repName = '';
+        if (true === isset($config->oai->repository->name)) {
+             $repName = $config->oai->repository->name;
+        }
+        $repIdentifier = '';
+        if (true === isset($config->oai->repository->identifier)) {
+             $repIdentifier = $config->oai->repository->identifier;
+        }
+        $sampleIdentifier = '';
+        if (true === isset($config->oai->sample->identifier)) {
+             $sampleIdentifier = $config->oai->sample->identifier;
+        }
         $earliestDate = Opus_Document::getEarliestPublicationDate();
         // set parameters for oai-pmh.xslt
         $this->_proc->setParameter('', 'emailAddress', 'mailto:'.$email);
