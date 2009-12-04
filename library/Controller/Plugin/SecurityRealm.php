@@ -54,7 +54,7 @@ class Controller_Plugin_SecurityRealm extends Zend_Controller_Plugin_Abstract {
 
 		// Overwrite default user if current user is logged on.
         $identity = Zend_Auth::getInstance()->getIdentity();
-		if (false === empty($identiy) {
+		if (false === empty($identiy)) {
 			$realm->setUser($identity);
 		}
 		
