@@ -92,7 +92,7 @@ if (count($this->hitlist_paginator)) {
     $pagerInfo = $this->hitlist_paginator->getPages();
     echo '<ol class="search" start="' . $pagerInfo->firstItemNumber . '">';
     echo "\n";
-            
+
     $searchListItemCount = 0;
     foreach ($this->hitlist_paginator as $id) {
         $searchListItemCount++;
@@ -101,33 +101,32 @@ if (count($this->hitlist_paginator)) {
         $doc = new Opus_Search_SearchHit( (int) $id);
         $hit = $doc->getSearchHit();
         $document = $hit->getDocument();
- 
+
         //print_r($document);
+        $authoriterator = explode('; ', $document['author']);
+
         echo $searchListOdd ? '<li class="odd">' : '<li class="even">';
-        $authoriterator = new Opus_Search_Iterator_PersonsListIterator($document["author"]);
-        
-        #echo $document['author'] . ': ';
+        $counter = 1;
         foreach ($authoriterator as $obj) {
-           $pers = $obj->get();
              echo '<span class="author"><a href="' .
                  $this->url(
                      array(
                          'module'        => 'search',
                          'controller'    => 'search',
                          'action'        => 'metadatasearch',
-                         'author'        => $pers['lastName'] . ', ' . $pers['firstName']
+                         'author'        => $obj
                      ),
                      null,
                       true
                  ) .
                  '">';
 
-           echo $pers["lastName"].", ".$pers["firstName"];
+           echo $obj;
            echo "</a></span>";
-           if ($authoriterator->hasNext() === true) echo "; ";
-           else echo ": ";
+           if ($counter === count($authoriterator)) echo ": ";
+           else echo "; ";
+           $counter++;
         }
-        #print("<a href=\"".$this->url($document["frontdoorUrl"])."\">".$document["title"]."</a>");
         print('<span class="title"><a href="' . $this->url(array('module' => 'frontdoor',
             'controller' => 'index',
             'action' => 'index',
