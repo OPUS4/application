@@ -75,8 +75,8 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
     protected function _setupBackend() {
         $this->_setupLogging();
         $this->_setupDatabase();
-        $this->_setupTranslation();
-        $this->_setupLanguageList();
+        # $this->_setupTranslation();
+        # $this->_setupLanguageList();
     }
 
 
@@ -172,6 +172,7 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
         } else {
             $targetPrefix = $config->deliver->target->prefix;
         }
+        $rwmap = new Rewritemap_Apache($targetPrefix, $log);
 
         // check input
         if (count($this->_arguments) < 2) {
@@ -192,7 +193,6 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
         list($path, $remoteAddress, $cookie) = preg_split('/\t/', $line, 3);
         
         // issue rewriting
-        $rwmap = new Rewritemap_Apache($targetPrefix, $log);
         echo $rwmap->rewriteRequest($path, $remoteAddress, $cookie) . "\n";
     }
 
