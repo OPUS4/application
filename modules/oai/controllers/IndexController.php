@@ -690,18 +690,36 @@ class Oai_IndexController extends Controller_Xml {
         }
         $this->_proc->setParameter('', 'repIdentifier', $repIdentifier);
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
+        // list sets pub-type
         $types = Opus_Document_Type::getAvailableTypeNames();
         foreach ($types as $type) {
             $opus_doc = $this->_xml->createElement('Opus_Sets');
-            $type_attr = $this->_xml->createAttribute("Type");
-            $type_value = $this->_xml->createTextNode($type);
+            $type_attr = $this->_xml->createAttribute("Spec");
+            $type_value = $this->_xml->createTextNode('pub-type:' . $type);
             $type_attr->appendChild($type_value);
             $opus_doc->appendChild($type_attr);
-            $name_attr = $this->_xml->createAttribute("TypeName");
+            $name_attr = $this->_xml->createAttribute("Name");
             $name_value = $this->_xml->createTextNode($type);
             $name_attr->appendChild($name_value);
             $opus_doc->appendChild($name_attr);
             $this->_xml->documentElement->appendChild($opus_doc);
+        }
+        // list sets for all collections for oai
+        $roles = Opus_CollectionRole::getAll();
+        foreach ($roles as $role) {
+            $oaisets = $role->getOaiSetNames();
+            foreach ($oaisets as $oaiset) {
+               $opus_doc = $this->_xml->createElement('Opus_Sets');
+               $type_attr = $this->_xml->createAttribute("Spec");
+               $type_value = $this->_xml->createTextNode($oaiset);
+               $type_attr->appendChild($type_value);
+               $opus_doc->appendChild($type_attr);
+               $name_attr = $this->_xml->createAttribute("Name");
+               $name_value = $this->_xml->createTextNode($oaiset);
+               $name_attr->appendChild($name_value);
+               $opus_doc->appendChild($name_attr);
+               $this->_xml->documentElement->appendChild($opus_doc);
+            }
         }
     }
 

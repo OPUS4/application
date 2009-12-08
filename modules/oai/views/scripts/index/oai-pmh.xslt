@@ -261,8 +261,10 @@
 
     <xsl:template match="Opus_Sets">
         <xsl:element name="set">
-           <xsl:element name="setSpec">pub-type:<xsl:value-of select="@Type"/></xsl:element>
-           <xsl:element name="setName"><xsl:value-of select="@TypeName"/></xsl:element>
+<!--            <xsl:element name="setSpec">pub-type:<xsl:value-of select="@Type"/></xsl:element>
+-->
+           <xsl:element name="setSpec"><xsl:value-of select="@Spec"/></xsl:element>
+           <xsl:element name="setName"><xsl:value-of select="@Name"/></xsl:element>
         </xsl:element>
     </xsl:template>    
 
