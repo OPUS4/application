@@ -501,7 +501,7 @@ class Oai_IndexController extends Controller_Xml {
                     $id_max++;
                     // create xml-document
                     if ($id_max <= $max_identifier) {
-                      $this->xmlCreationIdentifiers($document);
+                      $this->xmlCreationIdentifiers($document,$docId);
                    }
                    // store the further Ids
                    else {
@@ -852,12 +852,16 @@ class Oai_IndexController extends Controller_Xml {
      *
      * @param  Opus_Document $document
      */
-    private function xmlCreationIdentifiers($document) {
+    private function xmlCreationIdentifiers($document,$docId) {
        $type = $document->getType();
        $this->_proc->setParameter('', 'setPubType', $type);
        $date_mod = $document->getServerDateModified();
        $date_pub = $document->getServerDatePublished();
        $opus_doc = $this->_xml->createElement('Opus_Document');
+       $doc_id_attr = $this->_xml->createAttribute("Id");
+       $doc_id_value = $this->_xml->createTextNode($docId);
+       $doc_id_attr->appendChild($doc_id_value);
+       $opus_doc->appendChild($doc_id_attr);
        if (!empty($date_mod)) {
             $date_mod_attr = $this->_xml->createAttribute("ServerDateModified");
             $date_mod_value = $this->_xml->createTextNode($date_mod);

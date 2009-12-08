@@ -281,9 +281,8 @@
                 </xsl:element>
               </xsl:when>  
               <xsl:otherwise>  
-                <!-- has to be changed !!!!  -->
                 <xsl:element name="identifier">
-                    oai:<xsl:value-of select="$repIdentifier" />:<xsl:value-of select="$docId" /> !!! Identifier fehlt noch in XML
+                    oai:<xsl:value-of select="$repIdentifier" />:<xsl:value-of select="@Id" />
                 </xsl:element>
                </xsl:otherwise> 
             </xsl:choose>
