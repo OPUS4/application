@@ -290,10 +290,24 @@
                 <xsl:element name="datestamp">
                   <xsl:choose>
                     <xsl:when test="ServerDateModified">
-                      <xsl:value-of select="concat(ServerDateModified/@Year,'-',format-number(ServerDateModified/@Month,'00'),'-',format-number(ServerDateModified/@Day,'00'),'T',format-number(ServerDateModified/@Hour,'00'),':',format-number(ServerDateModified/@Minute,'00'),':',format-number(ServerDateModified/@Second,'00'),'Z')" />
+                      <xsl:choose>
+                        <xsl:when test="$oai_verb='ListIdentifiers'">
+                          <xsl:value-of select="@ServerDateModified" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                          <xsl:value-of select="concat(ServerDateModified/@Year,'-',format-number(ServerDateModified/@Month,'00'),'-',format-number(ServerDateModified/@Day,'00'),'T',format-number(ServerDateModified/@Hour,'00'),':',format-number(ServerDateModified/@Minute,'00'),':',format-number(ServerDateModified/@Second,'00'),'Z')" />
+                        </xsl:otherwise>
+                      </xsl:choose>
                     </xsl:when>
                     <xsl:otherwise>
-                      <xsl:value-of select="concat(ServerDatePublished/@Year,'-',format-number(ServerDatePublished/@Month,'00'),'-',format-number(ServerDatePublished/@Day,'00'),'T',format-number(ServerDatePublished/@Hour,'00'),':',format-number(ServerDatePublished/@Minute,'00'),':',format-number(ServerDatePublished/@Second,'00'),'Z')" />
+                      <xsl:choose>
+                        <xsl:when test="$oai_verb='ListIdentifiers'">
+                          <xsl:value-of select="@ServerDatePublished" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                         <xsl:value-of select="concat(ServerDatePublished/@Year,'-',format-number(ServerDatePublished/@Month,'00'),'-',format-number(ServerDatePublished/@Day,'00'),'T',format-number(ServerDatePublished/@Hour,'00'),':',format-number(ServerDatePublished/@Minute,'00'),':',format-number(ServerDatePublished/@Second,'00'),'Z')" />
+                        </xsl:otherwise>
+                      </xsl:choose>
                     </xsl:otherwise>
                   </xsl:choose>
                 </xsl:element>
