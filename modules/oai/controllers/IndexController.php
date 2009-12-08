@@ -79,8 +79,6 @@ class Oai_IndexController extends Controller_Xml {
                 'ListIdentifiers' => array(
                     array('required' => array('metadataPrefix'),
                           'optional' => array('from', 'until', 'set','resumptionToken')),
-//                    array('required' => array('resumptionToken'),
-//                          'optional' => array()),
                     ),
                 'ListSets' => array(
                     array('required' => array(),
@@ -321,7 +319,11 @@ class Oai_IndexController extends Controller_Xml {
     private function __validateResumptionToken($oaiResumptionToken) {
         $registry = Zend_Registry::getInstance();
         $config = $registry->get('Zend_Config');
-        $tempPath = $config->path->workspace->temp;
+        if (true === isset($config->path->workspace->temp)) {
+            $tempPath = $config->path->workspace->temp;
+        } else {
+            throw new Exception("no path to resumption files set in config-file",self::BADRESUMPTIONTOKEN);
+        }
         $fn = $tempPath.'/resumption/rs_'.$oaiResumptionToken.'.txt';
         if (!file_exists($fn)) {
             throw new Exception("The resumptionToken $oaiResumptionToken does not exist or has already expired.",self::BADRESUMPTIONTOKEN);
@@ -396,9 +398,19 @@ class Oai_IndexController extends Controller_Xml {
         // get values from config.ini
         $registry = Zend_Registry::getInstance();
         $config = $registry->get('Zend_Config');
-        $repIdentifier = $config->oai->repository->identifier;
-        $max_identifier = $config->oai->max->listidentifiers;
-        $tempPath = $config->path->workspace->temp;
+        $repIdentifier = '';
+        if (true === isset($config->oai->repository->identifier)) {
+             $repIdentifier = $config->oai->repository->identifier;
+        }
+        $max_identifier = 50;
+        if (true === isset($config->oai->max->listidentifiers)) {
+            $max_identifier = $config->oai->max->listidentifiers;
+        }
+        if (true === isset($config->path->workspace->temp)) {
+            $tempPath = $config->path->workspace->temp;
+        } else {
+            throw new Exception("no path to resumption files set in config-file",self::BADRESUMPTIONTOKEN);
+        }
         $this->_proc->setParameter('', 'repIdentifier', $repIdentifier);
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
         // do some initialisation
@@ -537,9 +549,19 @@ class Oai_IndexController extends Controller_Xml {
         // get values from config.ini
         $registry = Zend_Registry::getInstance();
         $config = $registry->get('Zend_Config');
-        $repIdentifier = $config->oai->repository->identifier;
-        $max_records = $config->oai->max->listrecords;
-        $tempPath = $config->path->workspace->temp;
+        $repIdentifier = '';
+        if (true === isset($config->oai->repository->identifier)) {
+             $repIdentifier = $config->oai->repository->identifier;
+        }
+        $max_records = 50;
+        if (true === isset($config->oai->max->listrecords)) {
+            $max_records = $config->oai->max->listrecords;
+        }
+        if (true === isset($config->path->workspace->temp)) {
+            $tempPath = $config->path->workspace->temp;
+        } else {
+            throw new Exception("no path to resumption files set in config-file",self::BADRESUMPTIONTOKEN);
+        }
         $this->_proc->setParameter('', 'repIdentifier', $repIdentifier);
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
         // do some initialisation
@@ -662,7 +684,10 @@ class Oai_IndexController extends Controller_Xml {
     private function __handleListSets($oaiRequest) {
         $registry = Zend_Registry::getInstance();
         $config = $registry->get('Zend_Config');
-        $repIdentifier = $config->oai->repository->identifier;
+        $repIdentifier = '';
+        if (true === isset($config->oai->repository->identifier)) {
+             $repIdentifier = $config->oai->repository->identifier;
+        }
         $this->_proc->setParameter('', 'repIdentifier', $repIdentifier);
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
         $types = Opus_Document_Type::getAvailableTypeNames();
