@@ -62,7 +62,6 @@
 
     <xsl:param name="dateTime" />
     <xsl:param name="emailAddress" />
-    <xsl:param name="setPubType" />
     <xsl:param name="repName" />
     <xsl:param name="repIdentifier" />
     <xsl:param name="sampleIdentifier" />
@@ -261,8 +260,6 @@
 
     <xsl:template match="Opus_Sets">
         <xsl:element name="set">
-<!--            <xsl:element name="setSpec">pub-type:<xsl:value-of select="@Type"/></xsl:element>
--->
            <xsl:element name="setSpec"><xsl:value-of select="@Spec"/></xsl:element>
            <xsl:element name="setName"><xsl:value-of select="@Name"/></xsl:element>
         </xsl:element>
@@ -298,18 +295,8 @@
                     </xsl:otherwise>   
                   </xsl:choose>
                 </xsl:element>
-            <xsl:choose>
-              <xsl:when test="$oai_verb='GetRecord'">
-                 <xsl:element name="setSpec">pub-type:<xsl:value-of select="$setPubType" />
-                </xsl:element>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:element name="setSpec">pub-type:<xsl:value-of select="@SetPubType"/></xsl:element>
-              </xsl:otherwise>
-            </xsl:choose>   
+            <xsl:apply-templates select="Spec" />
             </xsl:element>
-            
-            
             <!-- choose the corresponding template depending on metadataPrefix -->
             <!-- not, when verb=ListIdentifiers -->
             <xsl:choose>
@@ -341,5 +328,10 @@
             </xsl:choose>            
         </xsl:element>
     </xsl:template>
+    
+    <xsl:template match="Spec">
+       <xsl:element name="setSpec"><xsl:value-of select="@Value"/></xsl:element>
+    </xsl:template>         
+    
 
 </xsl:stylesheet>

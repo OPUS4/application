@@ -347,11 +347,11 @@ class Oai_IndexController extends Controller_Xml {
                throw new Exception("The combination of the given values results in an empty list (xMetaDiss only for habilitation and doctoral_thesis).", self::NORECORDSMATCH);
             }
         }
-        $type = $document->getType();
-        $this->_proc->setParameter('', 'setPubType', $type);
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
         $node = $this->_xml->importNode($document->toXml()->getElementsByTagName('Opus_Document')->item(0), true);
         $this->_xml->documentElement->appendChild($node);
+        // create xml for set information
+        $this->setInfoXml($document,$node);
     }
 
     /**
@@ -526,7 +526,6 @@ class Oai_IndexController extends Controller_Xml {
         if (!empty($resParam) || count($restIds) > 0) {
             $this->setParamResumption($res,$cursor,$totalIds);
         }
-
     }
 
 
@@ -537,7 +536,6 @@ class Oai_IndexController extends Controller_Xml {
      */
     private function __handleListMetadataFormats($oaiRequest) {
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
-
     }
 
     /**
@@ -744,7 +742,6 @@ class Oai_IndexController extends Controller_Xml {
             throw new Exception("The combination of the given values results in an empty list.", self::NORECORDSMATCH);
         }
        return $docIds;
-
     }
 
 
@@ -812,9 +809,39 @@ class Oai_IndexController extends Controller_Xml {
             throw new Exception("The combination of the given values results in an empty list.", self::NORECORDSMATCH);
         }
        return $docIds;
-
     }
 
+
+
+    /**
+     * Create xml for set-information for each record
+     *
+     * @param  Opus_Document $document
+     * @param  xml-node      $node, xml-node where will be appended
+     */
+    private function setInfoXml($document,$node) {
+       // get affiliation to set pub-type
+       $type = $document->getType();
+       $spec = $this->_xml->createElement("Spec");
+       $set_pub_attr = $this->_xml->createAttribute("Value");
+       $set_pub_value = $this->_xml->createTextNode('pub-type:' . $type);
+       $set_pub_attr->appendChild($set_pub_value);
+       $spec->appendChild($set_pub_attr);
+       $node->appendChild($spec);
+       $this->_xml->documentElement->appendChild($node);
+       // get other set-affiliations
+       $collections = $document->getCollection();
+       foreach($collections as $collection) {
+            $set = $collection->getOaiSetName();
+            $spec = $this->_xml->createElement("Spec");
+            $set_pub_attr = $this->_xml->createAttribute("Value");
+            $set_pub_value = $this->_xml->createTextNode($set);
+            $set_pub_attr->appendChild($set_pub_value);
+            $spec->appendChild($set_pub_attr);
+            $node->appendChild($spec);
+            $this->_xml->documentElement->appendChild($node);
+       }
+    }
 
 
     /**
@@ -871,8 +898,6 @@ class Oai_IndexController extends Controller_Xml {
      * @param  Opus_Document $document
      */
     private function xmlCreationIdentifiers($document,$docId) {
-       $type = $document->getType();
-       $this->_proc->setParameter('', 'setPubType', $type);
        $date_mod = $document->getServerDateModified();
        $date_pub = $document->getServerDatePublished();
        $opus_doc = $this->_xml->createElement('Opus_Document');
@@ -890,11 +915,8 @@ class Oai_IndexController extends Controller_Xml {
        $date_pub_value = $this->_xml->createTextNode($date_pub);
        $date_pub_attr->appendChild($date_pub_value);
        $opus_doc->appendChild($date_pub_attr);
-       $set_pub_attr = $this->_xml->createAttribute("SetPubType");
-       $set_pub_value = $this->_xml->createTextNode($type);
-       $set_pub_attr->appendChild($set_pub_value);
-       $opus_doc->appendChild($set_pub_attr);
-       $this->_xml->documentElement->appendChild($opus_doc);
+       // create xml for set information
+       $this->setInfoXml($document,$opus_doc);
     }
 
     /**
@@ -904,12 +926,7 @@ class Oai_IndexController extends Controller_Xml {
      */
     private function xmlCreationRecords($document) {
        $node = $this->_xml->importNode($document->toXml()->getElementsByTagName('Opus_Document')->item(0), true);
-       $type = $document->getType();
-       $set_pub_attr = $this->_xml->createAttribute("SetPubType");
-       $set_pub_value = $this->_xml->createTextNode($type);
-       $set_pub_attr->appendChild($set_pub_value);
-       $node->appendChild($set_pub_attr);
-       $this->_xml->documentElement->appendChild($node);
+       // create xml for set information
+       $this->setInfoXml($document,$node);
     }
-
 }
