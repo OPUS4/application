@@ -44,8 +44,6 @@ class Summary extends Zend_Form {
         $back = new Zend_Form_Element_Submit('back');
         $back->setLabel('back');
 
-        $hidden = new Zend_Form_Element_Hidden(Form_Builder::HIDDEN_MODEL_ELEMENT_NAME);
-
-        $this->addElements(array($hidden, $back, $submit));
+        $this->addElements(array($back, $submit));
     }
 }

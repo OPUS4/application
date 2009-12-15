@@ -29,6 +29,7 @@
  * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
  * @author      Henning Gerhardt (henning.gerhardt@slub-dresden.de)
  * @author      Pascal-Nicolas Becker <becker@zib.de>
+ * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -88,6 +89,42 @@ class Publish_IndexController extends Zend_Controller_Action {
     }
 
     /**
+     * Returns a filtered representation of the document.
+     *
+     * @param  Opus_Document  $document The document to be filtered.
+     * @return Opus_Model_Filter The filtered document.
+     */
+    private function __createFilter(Opus_Document $document, $page = null) {
+        $filter = new Opus_Model_Filter();
+        $filter->setModel($document);
+        $type = new Opus_Document_Type($document->getType());
+        $pages = $type->getPages();
+        $alwayshidden = array('IdentifierOpus3', 'Type', 'ServerState', 'ServerDateModified', 'ServerDatePublished', 'File');
+        $blacklist = array_merge($alwayshidden, $type->getPublishFormBlackList());
+        if (false === is_null($page) and true === array_key_exists($page, $pages)) {
+            $filter->setWhitelist(array_diff($pages[$page]['fields'], $blacklist));
+        } else {
+            $filter->setBlacklist($blacklist);
+        }
+        $filter->setSortOrder($type->getPublishFormSortOrder());
+        return $filter;
+    }
+
+    /**
+     * Returns whether a given page is defined for a document.
+     *
+     * @param  Opus_Document  $document The document to check.
+     * @param  mixed          $page     The page to check for.
+     * @return boolean  Whether the page is defined.
+     */
+    private function __pageExists(Opus_Document $document, $page) {
+        $type = new Opus_Document_Type($document->getType());
+        $type = new Opus_Document_Type($document->getType());
+        $pages = $type->getPages();
+        return array_key_exists($page, $pages);
+    }
+
+    /**
      * Create, recreate and validate a document form. If it is valid store it.
      *
      * @return void
@@ -96,6 +133,7 @@ class Publish_IndexController extends Zend_Controller_Action {
         $this->view->title = $this->view->translate('publish_controller_create');
 
         if ($this->_request->isPost() === true) {
+            $requested_page = $this->_request->getParam('page');
             $data = $this->_request->getPost();
             $form_builder = new Form_Builder();
             $documentInSession = new Zend_Session_Namespace('document');
@@ -117,9 +155,9 @@ class Publish_IndexController extends Zend_Controller_Action {
                         // document type does not exists, back to select form
                         $this->_redirector->gotoSimple('index');
                     }
-                    
+
                     if ($alternateForm->isValid($data) === true) {
-            	        $gpg = new Opus_GPG();
+                        $gpg = new Opus_GPG();
 
                         $upload = new Zend_File_Transfer_Adapter_Http();
                         $files = $upload->getFileInfo();
@@ -129,38 +167,21 @@ class Publish_IndexController extends Zend_Controller_Action {
                             $gpg->importKeyFile($file['tmp_name']);
                         }
                     }
-                    #else if ($form->isValid($data) === false) {
-                    #	$this->_redirector->gotoSimple('index');
-                    #}
                     // If author selected that he has a GPG-Key, redirect to Uploadform
                     $gpgkey = $form->getValue('gpgkey');
                     if ($gpgkey === '1') {
-                    	$documentInSession->keyupload = true;
-                    	$this->_redirector->gotoSimple('keyupload');
-                    }
-                    $type = new Opus_Document_Type($selectedDoctype);
-                    $pages = $type->getPages();
-                    $document = new Opus_Document(null, $type);
-
-                    // add standard field filter
-                    $documentWithFilter = new Opus_Model_Filter;
-
-                    if (true === array_key_exists(0, $pages)) {
-                        $documentWithFilter->setModel($document)
-                            ->setWhitelist(array_diff($pages[0]['fields'], $type->getPublishFormBlackList()))
-                            ->setSortOrder($type->getPublishFormSortOrder());
-                        $caption = $pages[0]['caption'];
-                        $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create', 'page' => 1));
-                    } else {
-                        $alwayshidden = array('IdentifierOpus3', 'Type', 'ServerState', 'ServerDateModified', 'ServerDatePublished');
-                        $documentWithFilter->setModel($document)
-                            ->setBlacklist(array_merge($type->getPublishFormBlackList(), $alwayshidden))
-                            ->setSortOrder($type->getPublishFormSortOrder());
-                        $caption = 'publish_index_create_' . $type->getName();
-                        $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create'));
+                        $documentInSession->keyupload = true;
+                        $this->_redirector->gotoSimple('keyupload');
                     }
 
-                    $createForm = $form_builder->build($documentWithFilter);
+                    // Store document in session
+                    $document = new Opus_Document(null, $selectedDoctype);
+                    $documentInSession->document = $document;
+
+                    $caption = 'publish_index_create_' . $selectedDoctype;
+                    $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create', 'page' => 1));
+
+                    $createForm = $form_builder->build($this->__createFilter($document, 0));
                     $createForm->setAction($action_url);
                     $createForm->setDescription($this->view->translate($caption));
                     $createForm->setDecorators(array('FormElements', array('Description', array('placement' => 'prepend','tag' => 'h2')), 'Form'));
@@ -169,49 +190,34 @@ class Publish_IndexController extends Zend_Controller_Action {
                     // submitted form data is not valid, back to select form
                     $this->view->form = $form;
                 }
-            } else if (array_key_exists('submit', $data) === false) {
-                $form = $form_builder->buildFromPost($data);
-                $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create'));
+            } else if (false === array_key_exists('submit', $data)) {
+                $form_builder->buildModelFromPostData($documentInSession->document, $data['Opus_Model_Filter']);
+                $form = $form_builder->build($this->__createFilter($documentInSession->document, $requested_page - 1));
+                $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create', 'page' => $requested_page));
+                $form->setAction($action_url);
+                $this->view->form = $form;
+            } else if (false === is_null($requested_page) and true === $this->__pageExists($documentInSession->document, $requested_page)) {
+                $form_builder->buildModelFromPostData($documentInSession->document, $data['Opus_Model_Filter']);
+                $form = $form_builder->build($this->__createFilter($documentInSession->document, $requested_page - 1));
+                if (true === $form->isValid($data)) {
+                    $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create', 'page' => $requested_page + 1));
+                    $form = $form_builder->build($this->__createFilter($documentInSession->document, $requested_page));
+                } else {
+                    $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create', 'page' => $requested_page));
+                }
                 $form->setAction($action_url);
                 $this->view->form = $form;
             } else {
-                $form = $form_builder->buildFromPost($data);
+                $form_builder->buildModelFromPostData($documentInSession->document, $data['Opus_Model_Filter']);
+                $form = $form_builder->build($this->__createFilter($documentInSession->document, $requested_page - 1));
                 if ($form->isValid($data) === true) {
-                    // retrieve old version from model
-                    $model = $form_builder->getModelFromForm($form);
-                    // overwrite old data in the model with the new data from the form
-                    $form_builder->setFromPost($model, $form->getValues());
-
-                    // Get the document from the filter, use type to get paging configuration.
-                    $document = $model->getModel();
-                    $type = new Opus_Document_Type($document->getType());
-                    $pages = $type->getPages();
-                    $requested_page = $this->_request->getParam('page');
-
-                    if (array_key_exists($requested_page, $pages)) {
-                        // Handle remaining multi-page form steps.
-                        $documentWithFilter = new Opus_Model_Filter;
-                        $documentWithFilter->setModel($document)
-                            ->setWhitelist(array_diff($pages[$requested_page]['fields'], $type->getPublishFormBlackList()))
-                            ->setSortOrder($type->getPublishFormSortOrder());
-                        $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create', 'page' => $requested_page + 1));
-                        $createForm = $form_builder->build($documentWithFilter);
-                        $createForm->setAction($action_url);
-                        $createForm->setDescription($this->view->translate($pages[$requested_page]['caption']));
-                        $createForm->setDecorators(array('FormElements', array('Description', array('placement' => 'prepend','tag' => 'h2')), 'Form'));
-                        $this->view->form = $createForm;
-                    } else {
-                        // go ahead to summary
-                        $this->view->document_data = $document->toArray();
-                        $this->view->title = $this->view->translate('publish_controller_summary');
-                        $summaryForm = new Summary();
-                        $action_url = $this->view->url(array('controller' => 'index', 'action' => 'summary'));
-                        $summaryForm->setAction($action_url);
-                        $model_ser = $form_builder->compressModel($document);
-                        $model_hidden = Form_Builder::HIDDEN_MODEL_ELEMENT_NAME;
-                        $summaryForm->$model_hidden->setValue($model_ser);
-                        $this->view->form = $summaryForm;
-                    }
+                    // go ahead to summary
+                    $this->view->document_data = $documentInSession->document->toArray();
+                    $this->view->title = $this->view->translate('publish_controller_summary');
+                    $summaryForm = new Summary();
+                    $action_url = $this->view->url(array('controller' => 'index', 'action' => 'summary'));
+                    $summaryForm->setAction($action_url);
+                    $this->view->form = $summaryForm;
                 } else {
                     $this->view->form = $form;
                 }
@@ -223,6 +229,7 @@ class Publish_IndexController extends Zend_Controller_Action {
     }
 
     public function summaryAction() {
+        $documentInSession = new Zend_Session_Namespace('document');
         $this->view->title = $this->view->translate('publish_controller_summary');
         $backUrl = $this->view->url(array('module' => 'publish', 'controller' => 'index', 'action' => 'create'), null, false);
         $this->view->backlink = "<a href='$backUrl'>" . $this->view->translate('upload_another_publication') . "</a>";
@@ -231,14 +238,13 @@ class Publish_IndexController extends Zend_Controller_Action {
             $postdata = $this->_request->getPost();
             if ($summaryForm->isValid($postdata) === true) {
                 $form_builder = new Form_Builder();
-                $model_hidden = Form_Builder::HIDDEN_MODEL_ELEMENT_NAME;
-                $document = $form_builder->uncompressModel($postdata[$model_hidden]);
+                $document = $documentInSession->document;
                 if (array_key_exists('submit', $postdata) === true) {
                     // type is stored in serialized model as a string only
                     // to validate document it must be a Document_Type
                     $type = new Opus_Document_Type($document->getType());
                     $document->setType($type);
-                   	$id = $document->store();
+                    $id = $document->store();
                     $this->view->title = $this->view->translate('publish_controller_upload');
                     $uploadForm = new FileUpload();
                     $action_url = $this->view->url(array('controller' => 'index', 'action' => 'upload'));
@@ -248,14 +254,7 @@ class Publish_IndexController extends Zend_Controller_Action {
                     $uploadForm->DocumentId->setValue($id);
                     $this->view->form = $uploadForm;
                 } else if (array_key_exists('back', $postdata) === true) {
-                    $documentWithFilter = new Opus_Model_Filter;
-                    $type = new Opus_Document_Type($document->getType());
-                    $alwayshidden = array('Type', 'ServerState', 'ServerDateModified', 'ServerDatePublished', 'File',
-                            'IdentifierOpus3', 'Source');
-                    $documentWithFilter->setModel($document)
-                        ->setBlacklist(array_merge($type->getPublishFormBlackList(), $alwayshidden))
-                        ->setSortOrder($type->getPublishFormSortOrder());
-                    $form = $form_builder->build($documentWithFilter);
+                    $form = $form_builder->build($this->__createFilter($document));
                     $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create'));
                     $form->setAction($action_url);
                     $this->view->title = $this->view->translate('publish_controller_create');
@@ -306,9 +305,9 @@ class Publish_IndexController extends Zend_Controller_Action {
                     $file = $files['fileupload'];
                     $hash = null;
                     if (array_key_exists('sigupload', $files) === true) {
-                	    $sigfile = $files['sigupload'];
+                        $sigfile = $files['sigupload'];
                     }
-                
+
                     /*
                      * if (!$upload->isValid($file)) {
                      *   $this->view->message = 'Upload failed: Not a valid file or no file submitted!';
@@ -325,15 +324,15 @@ class Publish_IndexController extends Zend_Controller_Action {
                     $docfile->setTempFile($file['tmp_name']);
                     $docfile->setFromPost($file);
                     if (array_key_exists('sigupload', $files) === true) {
-                	    $signature = implode("", file($sigfile['tmp_name']));
-            		    $hash = $docfile->addHashValue();
-    	        	    $hash->setType('gpg-0');
-    		            $hash->setValue($signature);                	
+                        $signature = implode("", file($sigfile['tmp_name']));
+                        $hash = $docfile->addHashValue();
+                        $hash->setType('gpg-0');
+                        $hash->setValue($signature);
                     }
                     $document->store();
                 }
                 catch (Zend_File_Transfer_Exception $zfte) {
-                	$this->view->message = $zfte->getMessage();
+                    $this->view->message = $zfte->getMessage();
                 }
 
                 // reset input values fo re-displaying

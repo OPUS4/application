@@ -92,6 +92,8 @@ class Controller_CRUDAction extends Controller_Action {
     public function newAction() {
         $form_builder = new Form_Builder();
         $model = new $this->_modelclass;
+        $session = new Zend_Session_Namespace('crud');
+        $session->{$this->_modelclass} = $model;
         $modelForm = $form_builder->build($model);
         $action_url = $this->view->url(array("action" => "create"));
         $modelForm->setAction($action_url);
@@ -104,20 +106,23 @@ class Controller_CRUDAction extends Controller_Action {
      * @return void
      */
     public function createAction() {
+        // TODO: Use session to store model.
         if ($this->_request->isPost() === true) {
             $data = $this->_request->getPost();
             $form_builder = new Form_Builder();
+            $id = $this->getRequest()->getParam('id');
+            $session = new Zend_Session_Namespace('crud');
+            $model = $session->{$this->_modelclass};
             if (array_key_exists('submit', $data) === false) {
-                $form = $form_builder->buildFromPost($data);
+                $form_builder->buildModelFromPostData($model, $data[$this->_modelclass]);
+                $form = $form_builder->build($model);
                 $action_url = $this->view->url(array("action" => "create"));
                 $form->setAction($action_url);
                 $this->view->form = $form;
             } else {
-                $form = $form_builder->buildFromPost($data);
+                $form_builder->buildModelFromPostData($model, $data[$this->_modelclass]);
+                $form = $form_builder->build($model);
                 if ($form->isValid($data) === true) {
-                    // retrieve values from form and save them into model
-                    $model = $form_builder->getModelFromForm($form);
-                    $form_builder->setFromPost($model, $form->getValues());
                     $model->store();
                     // The first 3 params are module, controller and action.
                     // Additional parameters are passed through.
@@ -144,6 +149,8 @@ class Controller_CRUDAction extends Controller_Action {
         $id = $this->getRequest()->getParam('id');
         $form_builder = new Form_Builder();
         $model = new $this->_modelclass($id);
+        $session = new Zend_Session_Namespace('crud');
+        $session->{$this->_modelclass} = $model;
         $modelForm = $form_builder->build($model);
         $action_url = $this->view->url(array("action" => "create"));
         $modelForm->setAction($action_url);
