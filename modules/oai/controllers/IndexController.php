@@ -612,39 +612,13 @@ class Oai_IndexController extends Controller_Xml {
             $setReady = 0;
             $docReady = 0;
             $setGiven = 0;
-            // set is given
-            if (true === array_key_exists('set',$oaiRequest)) {
-                $setParam = $oaiRequest['set'];
-                $setarray = explode(':',$setParam);
-                $setGiven = 1;
-                // if only set is given, read DocIds of the set (performance reasons)
-                if (false === array_key_exists('from',$oaiRequest) &&
-                    false === array_key_exists('until',$oaiRequest)) {
-                    // get document-Ids depending on a set
-                    $docIds = $this->readDocidsOfSet($setarray);
-                    $docReady = 1;
-                    $setReady = 1;
-                }
-            }
-            if ($docReady == 0) {
-                // get document-Ids depending given daterange
-                $docIds = $this->filterDocDate($oaiRequest);
-            }
-            // handling all documents
+            // get relevant docIds
+            $docIds = $this->getDocumentIdsByOaiRequest($oaiRequest);
+            // TODO proof collection-sets !!!!!!!!!!!!
             foreach ($docIds as $docId) {
-               $document = new Opus_Document($docId);
                $in_output = 1;
-               // for xMetaDiss only give Habilitation or doctoral-thesis
-               if ($oaiRequest['metadataPrefix'] == 'xMetaDiss') {
-                   $in_output = $this->filterDocType($document);
-               }
-               // only published documents
                if ($in_output == 1) {
-                   $in_output = $this->filterDocPublished($document);
-               }
-               // proof set
-               if ($in_output == 1 && $setReady == 0 && $setGiven == 1) $in_output = $this->filterDocSet($document,$setarray);
-               if ($in_output == 1) {
+                   $document = new Opus_Document($docId);
                    $id_max++;
                    if ($id_max <= $max_records) {
                       $this->xmlCreationRecords($document);
@@ -791,6 +765,53 @@ class Oai_IndexController extends Controller_Xml {
            $result = 1;
        }
        return $result;
+    }
+
+
+    /**
+     * Retrieve all document ids for a valid oai request exempted from "collection"-sets.
+     *
+     * @param  array $oaiRequest
+     * @return array $docIds
+     */
+    private function getDocumentIdsByOaiRequest($oaiRequest) {
+        $docIds = array();
+        $restriction = array();
+        $restriction['ServerState'] = array('published');
+        $setInfo = null;
+        if (true === array_key_exists('set', $oaiRequest)) {
+            $setarray = explode(':', $oaiRequest['set']);
+            if ($setarray[0] == 'pub-type') {
+                $setInfo = $setarray[1];
+            }
+        }
+        $restriction['Type'] = array();
+        if ('xMetaDiss' === $oaiRequest['metadataPrefix']) {
+            $restriction['Type'] = array('doctoral_thesis','habilitation');
+            // by xMetaDiss as metadataPrefix no other pub-type-sets are allowed
+            if (false === empty($setInfo)) {
+                if (false === in_array($setInfo,$restriction['Type'])) {
+                    throw new Exception("The combination of given values results in an empty list.", self::NORECORDSMATCH);
+                }
+                $restriction['Type'] = array($setInfo);
+            }
+        } else {
+            if (false === empty($setInfo)) {
+                $restriction['Type'][] = $setInfo;
+            }
+        }
+        if (true === array_key_exists('from',$oaiRequest)) {
+            $fromDate = $oaiRequest['from'];
+            $restriction['Date']['from'] = $fromDate;
+            $restriction['Date']['dateFormat'] = 'yyyy-MM-dd';
+        }
+        if (true === array_key_exists('until',$oaiRequest)) {
+            $untilDate = $oaiRequest['until'];
+            $restriction['Date']['until'] = $untilDate;
+            $restriction['Date']['dateFormat'] = 'yyyy-MM-dd';
+        }
+        $docIds = Opus_Document::getIdsOfOaiRequest($restriction);
+        return $docIds;
     }
 
 
