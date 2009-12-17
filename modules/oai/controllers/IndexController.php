@@ -616,17 +616,13 @@ class Oai_IndexController extends Controller_Xml {
             $docIds = $this->getDocumentIdsByOaiRequest($oaiRequest);
             // TODO proof collection-sets !!!!!!!!!!!!
             foreach ($docIds as $docId) {
-               $in_output = 1;
-               if ($in_output == 1) {
+               $id_max++;
+               if ($id_max <= $max_records) {
                    $document = new Opus_Document($docId);
-                   $id_max++;
-                   if ($id_max <= $max_records) {
-                      $this->xmlCreationRecords($document);
-                   }
-                   else {
-                       $restIds[$ri] = $docId;
-                       $ri++;
-                   }
+                   $this->xmlCreationRecords($document);
+               } else {
+                    $restIds[$ri] = $docId;
+                    $ri++;
                }
           }
         }
