@@ -785,7 +785,6 @@ class Oai_IndexController extends Controller_Xml {
                 $setInfo = $setarray[1];
             }
         }
-        $restriction['Type'] = array();
         if ('xMetaDiss' === $oaiRequest['metadataPrefix']) {
             $restriction['Type'] = array('doctoral_thesis','habilitation');
             // by xMetaDiss as metadataPrefix no other pub-type-sets are allowed
