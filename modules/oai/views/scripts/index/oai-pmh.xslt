@@ -75,6 +75,7 @@
     <xsl:param name="oai_until" />
     <xsl:param name="oai_metadataPrefix" />
     <xsl:param name="oai_resumptionToken" />
+    <xsl:param name="oai_set" />
     <xsl:param name="oai_identifier" />
     <xsl:param name="oai_error_code" />
     <xsl:param name="oai_error_message" />
@@ -108,6 +109,9 @@
                 </xsl:if>
                 <xsl:if test="$oai_metadataPrefix != ''">
                     <xsl:attribute name="metadataPrefix"><xsl:value-of select="$oai_metadataPrefix" /></xsl:attribute>
+                </xsl:if>
+                <xsl:if test="$oai_set != ''">
+                    <xsl:attribute name="set"><xsl:value-of select="$oai_set" /></xsl:attribute>
                 </xsl:if>
                 <xsl:if test="$oai_identifier != ''">
                     <xsl:attribute name="identifier"><xsl:value-of select="$oai_identifier" /></xsl:attribute>
