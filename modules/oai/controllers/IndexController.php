@@ -461,46 +461,43 @@ class Oai_IndexController extends Controller_Xml {
 
         // no resumptionToken is given
         } else {
-            $setReady = 0;
-            $docReady = 0;
-            $setGiven = 0;
-        // set is given
+            $setDocIds = array();
+            $docIds = array();
+            // get docIds for parameter-restrictions
+            $restDocIds = $this->getDocumentIdsByOaiRequest($oaiRequest);
+            // get docIds for set (except pub-type, already handled in getDocumentIdsByOaiRequest)
             if (true === array_key_exists('set',$oaiRequest)) {
                 $setParam = $oaiRequest['set'];
                 $setarray = explode(':',$setParam);
-                $setGiven = 1;
-                // if only set is given, read DocIds of the set (performance reasons)
-                if (false === array_key_exists('from',$oaiRequest) &&
-                    false === array_key_exists('until',$oaiRequest)) {
-                    // get document-Ids depending on a set
-                    $docIds = $this->readDocidsOfSet($setarray);
-                    $docReady = 1;
-                    $setReady = 1;
+                if ($setarray[0] != "pub-type") {
+                    $setDocIds = Opus_CollectionRole::getDocumentIdsInSet($setParam);
+                    if (true === is_null($setDocIds)) {
+                       throw new Exception("The combination of the given values results in an empty list.", self::NORECORDSMATCH);
+                    }
                 }
             }
-            if ($docReady == 0) {
-                // get document-Ids depending given daterange
-                $docIds = $this->filterDocDate($oaiRequest);
+            // get relevant docIds out of the two arrays
+            $di = 0;
+            if (true === empty($setDocIds)) {
+                $docIds = $restDocIds;
+            } else {
+                foreach ($restDocIds as $restDocId) {
+                    foreach ($setDocIds as $setDocId) {
+                        if ($restDocId == $setDocId) {
+                          $docIds[$di] = $restDocId;
+                          unset($setDocIds[$setDocId]);
+                          $di = $di + 1;
+                        }
+                    }
+                }
             }
             // handling all documents
             foreach ($docIds as $docId) {
-                $document = new Opus_Document($docId);
-                $in_output = 1;
-                // for xMetaDiss only give habilitation and doctoral-thesis
-                if ($oaiRequest['metadataPrefix'] == 'xMetaDiss') {
-                    $in_output = $this->filterDocType($document);
-                }
-                // only published documents
-                if ($in_output == 1) {
-                    $in_output = $this->filterDocPublished($document);
-                }
-                // proof set
-                if ($in_output == 1 && $setReady == 0 && $setGiven == 1) $in_output = $this->filterDocSet($document,$setarray);
-                if ($in_output == 1) {
                     $id_max++;
                     // create xml-document
                     if ($id_max <= $max_identifier) {
-                      $this->xmlCreationIdentifiers($document,$docId);
+                        $document = new Opus_Document($docId);
+                        $this->xmlCreationIdentifiers($document,$docId);
                    }
                    // store the further Ids
                    else {
@@ -508,7 +505,6 @@ class Oai_IndexController extends Controller_Xml {
                       $ri++;
                    }
                 }
-          }
         }
         // no records returned
         if ($id_max == 0) {
