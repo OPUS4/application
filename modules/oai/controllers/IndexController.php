@@ -461,36 +461,9 @@ class Oai_IndexController extends Controller_Xml {
 
         // no resumptionToken is given
         } else {
-            $setDocIds = array();
             $docIds = array();
             // get docIds for parameter-restrictions
-            $restDocIds = $this->getDocumentIdsByOaiRequest($oaiRequest);
-            // get docIds for set (except pub-type, already handled in getDocumentIdsByOaiRequest)
-            if (true === array_key_exists('set',$oaiRequest)) {
-                $setParam = $oaiRequest['set'];
-                $setarray = explode(':',$setParam);
-                if ($setarray[0] != "pub-type") {
-                    $setDocIds = Opus_CollectionRole::getDocumentIdsInSet($setParam);
-                    if (true === is_null($setDocIds)) {
-                       throw new Exception("The combination of the given values results in an empty list.", self::NORECORDSMATCH);
-                    }
-                }
-            }
-            // get relevant docIds out of the two arrays
-            $di = 0;
-            if (true === empty($setDocIds)) {
-                $docIds = $restDocIds;
-            } else {
-                foreach ($restDocIds as $restDocId) {
-                    foreach ($setDocIds as $setDocId) {
-                        if ($restDocId == $setDocId) {
-                          $docIds[$di] = $restDocId;
-                          unset($setDocIds[$setDocId]);
-                          $di = $di + 1;
-                        }
-                    }
-                }
-            }
+            $docIds = $this->getDocumentIdsByOaiRequest($oaiRequest);
             // handling all documents
             foreach ($docIds as $docId) {
                     $id_max++;
@@ -604,36 +577,9 @@ class Oai_IndexController extends Controller_Xml {
 
         // no resumptionToken is given
         } else {
-            $setDocIds = array();
             $docIds = array();
             // get docIds for parameter-restrictions
-            $restDocIds = $this->getDocumentIdsByOaiRequest($oaiRequest);
-            // get docIds for set (except pub-type, already handled in getDocumentIdsByOaiRequest)
-            if (true === array_key_exists('set',$oaiRequest)) {
-                $setParam = $oaiRequest['set'];
-                $setarray = explode(':',$setParam);
-                if ($setarray[0] != "pub-type") {
-                    $setDocIds = Opus_CollectionRole::getDocumentIdsInSet($setParam);
-                    if (true === is_null($setDocIds)) {
-                       throw new Exception("The combination of the given values results in an empty list.", self::NORECORDSMATCH);
-                    }
-                }
-            }
-            // get relevant docIds out of the two arrays
-            $di = 0;
-            if (true === empty($setDocIds)) {
-                $docIds = $restDocIds;
-            } else {
-                foreach ($restDocIds as $restDocId) {
-                    foreach ($setDocIds as $setDocId) {
-                        if ($restDocId == $setDocId) {
-                          $docIds[$di] = $restDocId;
-                          unset($setDocIds[$setDocId]);
-                          $di = $di + 1;
-                        }
-                    }
-                }
-            }
+            $docIds = $this->getDocumentIdsByOaiRequest($oaiRequest);
             // handling all relevant docIds
             foreach ($docIds as $docId) {
                $id_max++;
@@ -791,7 +737,7 @@ class Oai_IndexController extends Controller_Xml {
      * @return array $docIds
      */
     private function getDocumentIdsByOaiRequest($oaiRequest) {
-        $docIds = array();
+        $restDocIds = array();
         $restriction = array();
         $restriction['ServerState'] = array('published');
         $setInfo = null;
@@ -825,7 +771,37 @@ class Oai_IndexController extends Controller_Xml {
             $restriction['Date']['until'] = $untilDate;
             $restriction['Date']['dateFormat'] = 'yyyy-MM-dd';
         }
-        $docIds = Opus_Document::getIdsOfOaiRequest($restriction);
+
+        $restDocIds = Opus_Document::getIdsOfOaiRequest($restriction);
+
+        // get docIds for set (except pub-type, already handled in getDocumentIdsByOaiRequest)
+        $setDocIds = array();
+        if (true === array_key_exists('set',$oaiRequest)) {
+            $setParam = $oaiRequest['set'];
+            $setarray = explode(':',$setParam);
+            if ($setarray[0] != "pub-type") {
+                $setDocIds = Opus_CollectionRole::getDocumentIdsInSet($setParam);
+                if (true === is_null($setDocIds)) {
+                   throw new Exception("The combination of the given values results in an empty list.", self::NORECORDSMATCH);
+                }
+            }
+        }
+        // get relevant docIds out of the two arrays
+        $di = 0;
+        if (true === empty($setDocIds)) {
+            $docIds = $restDocIds;
+        } else {
+            foreach ($restDocIds as $restDocId) {
+                foreach ($setDocIds as $setDocId) {
+                   if ($restDocId == $setDocId) {
+                      $docIds[$di] = $restDocId;
+                      unset($setDocIds[$setDocId]);
+                      $di = $di + 1;
+                    }
+                }
+            }
+        }
+
         return $docIds;
     }
 
