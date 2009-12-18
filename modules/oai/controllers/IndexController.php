@@ -272,8 +272,7 @@ class Oai_IndexController extends Controller_Xml {
      * @return void
      */
     private function __validateSet($oaiSet) {
-        $setInfo = explode(':',$oaiSet);
-        if ($setInfo[0] != 'pub-type') {
+        if (false === strpos($oaiSet,':')) {
              throw new Exception('The given set is not correct',self::BADARGUMENT);
         }
     }
@@ -609,12 +608,37 @@ class Oai_IndexController extends Controller_Xml {
 
         // no resumptionToken is given
         } else {
-            $setReady = 0;
-            $docReady = 0;
-            $setGiven = 0;
-            // get relevant docIds
-            $docIds = $this->getDocumentIdsByOaiRequest($oaiRequest);
-            // TODO proof collection-sets !!!!!!!!!!!!
+            $setDocIds = array();
+            $docIds = array();
+            // get docIds for parameter-restrictions
+            $restDocIds = $this->getDocumentIdsByOaiRequest($oaiRequest);
+            // get docIds for set (except pub-type, already handled in getDocumentIdsByOaiRequest)
+            if (true === array_key_exists('set',$oaiRequest)) {
+                $setParam = $oaiRequest['set'];
+                $setarray = explode(':',$setParam);
+                if ($setarray[0] != "pub-type") {
+                    $setDocIds = Opus_CollectionRole::getDocumentIdsInSet($setParam);
+                    if (true === is_null($setDocIds)) {
+                       throw new Exception("The combination of the given values results in an empty list.", self::NORECORDSMATCH);
+                    }
+                }
+            }
+            // get relevant docIds out of the two arrays
+            $di = 0;
+            if (true === empty($setDocIds)) {
+                $docIds = $restDocIds;
+            } else {
+                foreach ($restDocIds as $restDocId) {
+                    foreach ($setDocIds as $setDocId) {
+                        if ($restDocId == $setDocId) {
+                          $docIds[$di] = $restDocId;
+                          unset($setDocIds[$setDocId]);
+                          $di = $di + 1;
+                        }
+                    }
+                }
+            }
+            // handling all relevant docIds
             foreach ($docIds as $docId) {
                $id_max++;
                if ($id_max <= $max_records) {
