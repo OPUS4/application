@@ -47,6 +47,28 @@ class Admin_DocumentsController extends Controller_CRUDAction {
     protected $_modelclass = 'Opus_Document';
 
     /**
+     * Returns a filtered representation of the document.
+     *
+     * @param  Opus_Document  $document The document to be filtered.
+     * @return Opus_Model_Filter The filtered document.
+     */
+    private function __createFilter(Opus_Document $document, $page = null) {
+        $filter = new Opus_Model_Filter();
+        $filter->setModel($document);
+        $type = new Opus_Document_Type($document->getType());
+        $pages = $type->getPages();
+        $alwayshidden = array('Collection', 'IdentifierOpus3', 'Source', 'File', 'ServerState', 'ServerDatePublished', 'ServerDateModified', 'ServerDateUnlocking');
+        $blacklist = array_merge($alwayshidden, $type->getAdminFormBlackList());
+        if (false === is_null($page) and true === array_key_exists($page, $pages)) {
+            $filter->setWhitelist(array_diff($pages[$page]['fields'], $blacklist));
+        } else {
+            $filter->setBlacklist($blacklist);
+        }
+        $filter->setSortOrder($type->getAdminFormSortOrder());
+        return $filter;
+    }
+
+    /**
      * Display documents (all or filtered by state)
      *
      * @return void
@@ -196,7 +218,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $type = new Opus_Document_Type($document->getType());
         $documentWithFilter = new Opus_Model_Filter;
         $documentWithFilter->setModel($document)
-            ->setBlacklist(array_merge(array('IdentifierOpus3', 'Source', 'File', 'ServerState', 'ServerDatePublished', 'ServerDateModified', 'ServerDateUnlocking'), $type->getAdminFormBlackList()))
+            ->setBlacklist(array_merge(array('Collection', 'IdentifierOpus3', 'Source', 'File', 'ServerState', 'ServerDatePublished', 'ServerDateModified', 'ServerDateUnlocking'), $type->getAdminFormBlackList()))
             ->setSortOrder($type->getAdminFormSortOrder());
         $modelForm = $form_builder->build($documentWithFilter);
         $action_url = $this->view->url(array("action" => "create"));
@@ -294,39 +316,36 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         if ($this->_request->isPost() === true) {
         	$data = $this->_request->getPost();
             $form_builder = new Form_Builder();
+            $id = $this->getRequest()->getParam('id');
+            $document = new Opus_Document($id);
+            $form_builder->buildModelFromPostData($document, $data['Opus_Model_Filter']);
+            $form = $form_builder->build($this->__createFilter($document));
             if (array_key_exists('submit', $data) === false) {
-                $form = $form_builder->buildFromPost($data);
                 $action_url = $this->view->url(array("action" => "create"));
                 $form->setAction($action_url);
                 $this->view->form = $form;
             } else {
                 try{
-                // change licence
-                print_r($data);
-                $form = $form_builder->buildFromPost($data);
-                //print_r($form);
-                if ($form->isValid($data) === true) {
-                    // retrieve values from form and save them into model
-                    $model = $form_builder->getModelFromForm($form);
-                    $form_builder->setFromPost($model, $form->getValues());
-                    $model->store();
+                    if ($form->isValid($data) === true) {
+                        // retrieve values from form and save them into model
+                        print_r($document->toArray());
+                        $document->store();
             
-                    // Reindex
-                    $doc = new Opus_Document($this->getRequest()->getParam('id'));
-                    $indexer = new Opus_Search_Index_Indexer();
-                    $indexer->removeDocumentFromEntryIndex($doc);
-                    $indexer->addDocumentToEntryIndex($doc);
+                        // Reindex
+                        $indexer = new Opus_Search_Index_Indexer();
+                        $indexer->removeDocumentFromEntryIndex($document);
+                        $indexer->addDocumentToEntryIndex($document);
                     
-                    // The first 3 params are module, controller and action.
-                    // Additional parameters are passed through.
-                    $params = $this->getRequest()->getUserParams();
-                    $module = array_shift($params);
-                    $controller = array_shift($params);
-                    $action = array_shift($params);
-                    $this->_redirectTo('', 'edit', $controller, $module, $params);
-                } else {
-                    $this->view->form = $form;
-                }
+                        // The first 3 params are module, controller and action.
+                        // Additional parameters are passed through.
+                        $params = $this->getRequest()->getUserParams();
+                        $module = array_shift($params);
+                        $controller = array_shift($params);
+                        $action = array_shift($params);
+                        $this->_redirectTo('', 'edit', $controller, $module, $params);
+                    } else {
+                        $this->view->form = $form;
+                    }
                 }
                 catch (Exception $e) {
                 	echo $e->getMessage();

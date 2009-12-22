@@ -59,7 +59,8 @@ class RSSOutput {
         $title = $xml->createElement('title', $givenTitle);
         $channel->appendChild($title);
 
-        #$view = Zend_Layout::getMvcInstance()->getView();
+        // instantiate a View to get the URL method 
+        $view = Zend_Layout::getMvcInstance()->getView();
 
         if (0 < $hitCount) {
             foreach ($hitlist_paginator as $searchhit) {

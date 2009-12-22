@@ -48,10 +48,12 @@ class Search_OpensearchController extends Controller_Xml
 
         $search = new OpenSearch($requestData['q']);
         
+        if (true === isset($requestData['format'])) $format = $requestData['format'];
+        else $format = 'rss';
         if (true === isset($requestData['start'])) $search->startOffset = $requestData['start'];
         if (true === isset($requestData['items'])) $search->itemsPerPage = $requestData['items'];
         
-        switch ($requestData['format']) {
+        switch ($format) {
         	case 'atom':
         	    $result = $search->getAtomResult();
         	    break;
