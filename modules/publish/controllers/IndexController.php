@@ -197,7 +197,11 @@ class Publish_IndexController extends Zend_Controller_Action {
                 $form->setAction($action_url);
                 $this->view->form = $form;
             } else if (false === is_null($requested_page) and true === $this->__pageExists($documentInSession->document, $requested_page)) {
-                $form_builder->buildModelFromPostData($documentInSession->document, $data['Opus_Model_Filter']);
+                // if Opus_Model_filter does not exist, an empty form has been submitted
+                // its not necessary to store new data to the model
+                if (true === array_key_exists('Opus_Model_Filter', $data)) {
+                    $form_builder->buildModelFromPostData($documentInSession->document, $data['Opus_Model_Filter']);
+                }
                 $form = $form_builder->build($this->__createFilter($documentInSession->document, $requested_page - 1));
                 if (true === $form->isValid($data)) {
                     $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create', 'page' => $requested_page + 1));
@@ -206,9 +210,13 @@ class Publish_IndexController extends Zend_Controller_Action {
                     $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create', 'page' => $requested_page));
                 }
                 $form->setAction($action_url);
-                $this->view->form = $form;
+                $this->view->form = $form;                
             } else {
-                $form_builder->buildModelFromPostData($documentInSession->document, $data['Opus_Model_Filter']);
+                // if Opus_Model_filter does not exist, an empty form has been submitted
+                // its not necessary to store new data to the model
+                if (true === array_key_exists('Opus_Model_Filter', $data)) {
+                    $form_builder->buildModelFromPostData($documentInSession->document, $data['Opus_Model_Filter']);
+                }
                 $form = $form_builder->build($this->__createFilter($documentInSession->document, $requested_page - 1));
                 if ($form->isValid($data) === true) {
                     // go ahead to summary
