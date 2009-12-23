@@ -25,9 +25,9 @@ class Form_Builder {
     }
 
     /**
-     * TODO: short description.
+     * Updates or builds a model based on form data
      * 
-     * @return TODO
+     * @return void
      */
     public function buildModelFromPostData($model, $data) {
         $this->__populateModel($model, $data);
@@ -47,6 +47,16 @@ class Form_Builder {
             $field = $model->getField($fieldName);
             // FIXME: Under what condition does this happen?
             if (null === $field) continue;
+            
+            // Licences should be handled seperately as they come by ID only
+            if ($fieldName === 'Licence') {
+                foreach ($values as $key => $value) {
+                	unset($values[$key]);
+                	$lic = new Opus_Licence($value);
+                	$model->setLicence($lic);
+                }
+            	continue;
+            }
 
             // The 'remove' key triggers deletion of a field value.
             // FIXME: Apparently the assignment of Zend_Form_Elements to an individual
@@ -106,7 +116,7 @@ class Form_Builder {
         // Construct subform to hold elements.
         $subForm = new Zend_Form_SubForm();
         $subForm->setLegend(get_class($model));
-
+        
         // Iterate over fields and build a subform for each field.
         foreach ($model->describe() as $i => $fieldName) {
             $field = $model->getField($fieldName);

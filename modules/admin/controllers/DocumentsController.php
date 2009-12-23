@@ -319,6 +319,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             $id = $this->getRequest()->getParam('id');
             $document = new Opus_Document($id);
             $form_builder->buildModelFromPostData($document, $data['Opus_Model_Filter']);
+            print_r($document->toArray());
             $form = $form_builder->build($this->__createFilter($document));
             if (array_key_exists('submit', $data) === false) {
                 $action_url = $this->view->url(array("action" => "create"));
@@ -327,8 +328,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             } else {
                 try{
                     if ($form->isValid($data) === true) {
-                        // retrieve values from form and save them into model
-                        print_r($document->toArray());
+                        // store document
                         $document->store();
             
                         // Reindex
