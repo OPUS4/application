@@ -47,16 +47,6 @@ class Form_Builder {
             $field = $model->getField($fieldName);
             // FIXME: Under what condition does this happen?
             if (null === $field) continue;
-            
-            // Licences should be handled seperately as they come by ID only
-            if ($fieldName === 'Licence') {
-                foreach ($values as $key => $value) {
-                	unset($values[$key]);
-                	$lic = new Opus_Licence($value);
-                	$model->setLicence($lic);
-                }
-            	continue;
-            }
 
             // The 'remove' key triggers deletion of a field value.
             // FIXME: Apparently the assignment of Zend_Form_Elements to an individual
@@ -90,7 +80,11 @@ class Form_Builder {
                 foreach ($values as $key => $value) {
                     if (true === $field->isSelection()) {
                         // A selection is a shortcut to an existing model.
-                        $fieldValues[] = new $clazz($value);
+                        if ('add' === $key) {
+                            $fieldValues[] = new $clazz();
+                        } else {
+                            $fieldValues[] = new $clazz($value);
+                        }
                     } else if ('add' !== $key) {
                         // The 'add' key is reserved for adding a new (blank) subform.
                         $fieldValue = new $clazz;
@@ -210,7 +204,7 @@ class Form_Builder {
                 if (1 < count($fieldValues) or false === $field->isMandatory()) {
                     $element = new Zend_Form_Element_Submit('remove_' . strVal($i + 1));
                     $element->setBelongsTo('Actions');
-                    $element->setLabel('Remove ' . $fieldName);
+                    $element->setLabel('remove_' . $fieldName);
                     $fieldForm->addElement($element);
                 }
             }
@@ -220,7 +214,7 @@ class Form_Builder {
         if (count($fieldValues) < $field->getMultiplicity() or '*' === $field->getMultiplicity()) {
             $element = new Zend_Form_Element_Submit('add');
             $element->setBelongsTo('Actions');
-            $element->setLabel('Add ' . $fieldName);
+            $element->setLabel('add_' . $fieldName);
             $element->setAttrib('name', 'Action');
             $fieldForm->addElement($element);
         }
