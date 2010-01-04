@@ -319,7 +319,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             $id = $this->getRequest()->getParam('id');
             $document = new Opus_Document($id);
             $form_builder->buildModelFromPostData($document, $data['Opus_Model_Filter']);
-            print_r($document->toArray());
+            print_r($data['Opus_Model_Filter']);
             $form = $form_builder->build($this->__createFilter($document));
             if (array_key_exists('submit', $data) === false) {
                 $action_url = $this->view->url(array("action" => "create"));
@@ -328,6 +328,10 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             } else {
                 try{
                     if ($form->isValid($data) === true) {
+                        // extra handling for Licences
+                        // FIXME: Only the first licence is stored
+                        $lic = $data['Opus_Model_Filter']['Licence'][0];
+                        $document->setLicence($lic);
                         // store document
                         $document->store();
             
