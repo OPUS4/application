@@ -577,7 +577,6 @@ class Oai_IndexController extends Controller_Xml {
 
         // no resumptionToken is given
         } else {
-            $docIds = array();
             // get docIds for parameter-restrictions
             $docIds = $this->getDocumentIdsByOaiRequest($oaiRequest);
             // handling all relevant docIds
@@ -739,6 +738,7 @@ class Oai_IndexController extends Controller_Xml {
     private function getDocumentIdsByOaiRequest($oaiRequest) {
         $restDocIds = array();
         $restriction = array();
+        $docIds = array();
         $restriction['ServerState'] = array('published');
         $setInfo = null;
         if (true === array_key_exists('set', $oaiRequest)) {
