@@ -626,16 +626,23 @@ class Oai_IndexController extends Controller_Xml {
         // list sets pub-type
         $types = Opus_Document_Type::getAvailableTypeNames();
         foreach ($types as $type) {
-            $opus_doc = $this->_xml->createElement('Opus_Sets');
-            $type_attr = $this->_xml->createAttribute("Spec");
-            $type_value = $this->_xml->createTextNode('pub-type:' . $type);
-            $type_attr->appendChild($type_value);
-            $opus_doc->appendChild($type_attr);
-            $name_attr = $this->_xml->createAttribute("Name");
-            $name_value = $this->_xml->createTextNode($type);
-            $name_attr->appendChild($name_value);
-            $opus_doc->appendChild($name_attr);
-            $this->_xml->documentElement->appendChild($opus_doc);
+        // proof wheather there is a document for this type
+            $docIds = array();
+            $countIds = 0;
+            $docIds = Opus_Document::getIdsForDocType($type);
+            $countIds = count($docIds);
+            if ($countIds > 0) {
+               $opus_doc = $this->_xml->createElement('Opus_Sets');
+               $type_attr = $this->_xml->createAttribute("Spec");
+               $type_value = $this->_xml->createTextNode('pub-type:' . $type);
+               $type_attr->appendChild($type_value);
+               $opus_doc->appendChild($type_attr);
+               $name_attr = $this->_xml->createAttribute("Name");
+               $name_value = $this->_xml->createTextNode($type);
+               $name_attr->appendChild($name_value);
+               $opus_doc->appendChild($name_attr);
+               $this->_xml->documentElement->appendChild($opus_doc);
+            }
         }
         // list sets for all collections for oai
         $roles = Opus_CollectionRole::getAll();
@@ -810,16 +817,16 @@ class Oai_IndexController extends Controller_Xml {
      * Give Document-Ids, which belong to a set (first only for sets pub-type).
      *
      * @param  array $setInfo, for example [0]=pub-type,[1]=paper
-     * @return array $docIds, which are in daterange
+     * @return array $docIds, which belongs to the special set pub-type
      */
     private function readDocidsOfSet($setInfo) {
         $docIds = array();
         if ($setInfo[0]=='pub-type') {
            $docIds = Opus_Document::getIdsForDocType($setInfo[1]);
         }
-        if (count($docIds) == 0) {
-            throw new Exception("The combination of the given values results in an empty list.", self::NORECORDSMATCH);
-        }
+//        if (count($docIds) == 0) {
+//            throw new Exception("The combination of the given values results in an empty list.", self::NORECORDSMATCH);
+//        }
        return $docIds;
     }
 
