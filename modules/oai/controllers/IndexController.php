@@ -663,62 +663,6 @@ class Oai_IndexController extends Controller_Xml {
         }
     }
 
-    /**
-     * Give Document-Ids, which are in daterange.
-     *
-     * @param  array  $oaiRequest
-     * @return array $docIds, which are in daterange
-     */
-    private function filterDocDate($oaiRequest) {
-        $docIds = array();
-        $from = NULL;
-        $until = NULL;
-        if (true === array_key_exists('from',$oaiRequest)) {
-            $from = $oaiRequest['from'];
-        }
-        if (true === array_key_exists('until',$oaiRequest)) {
-            $until = $oaiRequest['until'];
-        }
-        $docIds = Opus_Document::getIdsForDateRange($from,$until);
-        if (count($docIds) == 0) {
-            throw new Exception("The combination of the given values results in an empty list.", self::NORECORDSMATCH);
-        }
-       return $docIds;
-    }
-
-
-    /**
-     * Handles, if a Document has state published.
-     *
-     * @param  Opus_Document  $document the document to be proofed
-     * @return int $result, 1 oder 0, decides, wheather document is in output or not
-     */
-    private function filterDocPublished($document) {
-       $result = 0;
-       $server_state = $document->getServerState();
-       if ($server_state == 'published') {
-           $result = 1;
-       }
-       return $result;
-    }
-
-    /**
-     * Handles, if a Document belongs to a given set (first only for sets pub-type)
-     *
-     * @param  Opus_Document  $document the document to be proofed
-     * @param  array          $setInfo, for example [0]=pub-type, [1]=doctoral_thesis
-     * @return int $result, 1 oder 0, decides, wheather document is in output or not
-     */
-    private function filterDocSet($document,$setInfo) {
-       $result = 0;
-       if ($setInfo[0] == 'pub-type') {
-          $type = $document->getType();
-          if ($type == $setInfo[1]) {
-              $result = 1;
-          }
-       }
-       return $result;
-    }
 
     /**
      * Handles, if a Document belongs to type habilitation or doctoral_thesis.
@@ -810,24 +754,6 @@ class Oai_IndexController extends Controller_Xml {
         }
 
         return $docIds;
-    }
-
-
-    /**
-     * Give Document-Ids, which belong to a set (first only for sets pub-type).
-     *
-     * @param  array $setInfo, for example [0]=pub-type,[1]=paper
-     * @return array $docIds, which belongs to the special set pub-type
-     */
-    private function readDocidsOfSet($setInfo) {
-        $docIds = array();
-        if ($setInfo[0]=='pub-type') {
-           $docIds = Opus_Document::getIdsForDocType($setInfo[1]);
-        }
-//        if (count($docIds) == 0) {
-//            throw new Exception("The combination of the given values results in an empty list.", self::NORECORDSMATCH);
-//        }
-       return $docIds;
     }
 
 
