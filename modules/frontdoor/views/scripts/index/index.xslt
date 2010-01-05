@@ -71,13 +71,13 @@
     <xsl:template match="Opus_Model_Filter">
        <xsl:apply-templates select="PersonAuthor" />
        <xsl:apply-templates select="TitleMain" />
-        <xsl:if test="normalize-space(File/@PathName)"> 
-       <table class="fulltext">
-         <tr class="fulltext">
-           <xsl:apply-templates select="File" />
-         </tr>
-       </table>
-      </xsl:if> 
+       <xsl:if test="normalize-space(File/@PathName)"> 
+         <table class="fulltext">
+          <tr class="fulltext">
+            <xsl:apply-templates select="File" />
+          </tr>
+         </table>
+       </xsl:if> 
        <xsl:call-template name="services"/>
        <table cellspacing="0">
          <colgroup class="angaben">
@@ -139,6 +139,9 @@
        <xsl:apply-templates select="@Reviewed" />
        <xsl:apply-templates select="Note" />
        <xsl:apply-templates select="@PublicationVersion" />
+       <xsl:if test="Collection/@RoleName='Organisatorische Einheiten'">
+          <xsl:apply-templates select="Collection" mode="org" />
+       </xsl:if>   
        <xsl:if test="Collection/@RoleName='Computing Classification System'">
           <xsl:apply-templates select="Collection" mode="ccs" />
        </xsl:if>   
@@ -148,12 +151,15 @@
        <xsl:if test="Collection/@RoleName='Mathematics Subject Classification'">
           <xsl:apply-templates select="Collection" mode="msc" />
        </xsl:if>   
+       <xsl:if test="Collection/@RoleName='Physics and Astronomy Classification Scheme'">
+          <xsl:apply-templates select="Collection" mode="pacs" />
+       </xsl:if>   
        <xsl:apply-templates select="Collection" mode="other"/> 
        <xsl:apply-templates select="Licence" />
-         </table>
+       </table>
     </xsl:template>
 
-
+    <!-- here begins the special templates for the fields -->
     <!-- Templates for "internal fields". -->
     <xsl:template match="@CompletedYear">
       <tr> 
@@ -345,40 +351,72 @@
 
     <!-- Templates for "external fields". -->
     <xsl:template match="Collection" mode="ccs">
-      <tr>
+      <xsl:if test="@RoleName='Computing Classification System'">
+        <tr>
           <th class="name">
           <xsl:call-template name="translateString">
               <xsl:with-param name="string">col_ccs</xsl:with-param>
           </xsl:call-template>
           <xsl:text>:</xsl:text></th>
-        <td><xsl:value-of select="@Name" /></td>
-      </tr>    
+          <td><xsl:value-of select="@Name" /></td>
+        </tr>
+      </xsl:if>
     </xsl:template>
 
     <xsl:template match="Collection" mode="ddc">
-      <tr>
-          <th class="name">
-          <xsl:call-template name="translateString">
-              <xsl:with-param name="string">col_ddc</xsl:with-param>
-          </xsl:call-template>
-          <xsl:text>:</xsl:text></th>
-        <td><xsl:value-of select="@Name" /></td>
-      </tr>    
+       <xsl:if test="@RoleName='Dewey Decimal Classification'">
+         <tr>
+           <th class="name">
+           <xsl:call-template name="translateString">
+               <xsl:with-param name="string">col_ddc</xsl:with-param>
+           </xsl:call-template>
+           <xsl:text>:</xsl:text></th>
+           <td><xsl:value-of select="@Name" /></td>
+         </tr>
+       </xsl:if>    
     </xsl:template>
 
     <xsl:template match="Collection" mode="msc">
-      <tr>
-          <th class="name">
-          <xsl:call-template name="translateString">
-              <xsl:with-param name="string">col_msc</xsl:with-param>
-          </xsl:call-template>
-          <xsl:text>:</xsl:text></th>
-        <td><xsl:value-of select="@Name" /></td>
-      </tr>    
+       <xsl:if test="@RoleName='Mathematics Subject Classification'">
+          <tr>
+            <th class="name">
+            <xsl:call-template name="translateString">
+                <xsl:with-param name="string">col_msc</xsl:with-param>
+            </xsl:call-template>
+            <xsl:text>:</xsl:text></th>
+            <td><xsl:value-of select="@Name" /></td>
+          </tr>
+       </xsl:if>        
+    </xsl:template>
+
+    <xsl:template match="Collection" mode="org">
+       <xsl:if test="@RoleName='Organisatorische Einheiten'">
+          <tr>
+            <th class="name">
+            <xsl:call-template name="translateString">
+                <xsl:with-param name="string">col_org</xsl:with-param>
+            </xsl:call-template>
+            <xsl:text>:</xsl:text></th>
+            <td><xsl:value-of select="@Name" /></td>
+          </tr>
+       </xsl:if>        
+    </xsl:template>
+
+    <xsl:template match="Collection" mode="pacs">
+       <xsl:if test="@RoleName='Physics and Astronomy Classification Scheme'">
+          <tr>
+            <th class="name">
+            <xsl:call-template name="translateString">
+                <xsl:with-param name="string">col_pacs</xsl:with-param>
+            </xsl:call-template>
+            <xsl:text>:</xsl:text></th>
+            <td><xsl:value-of select="@Name" /></td>
+          </tr>
+       </xsl:if>        
     </xsl:template>
 
     <xsl:template match="Collection" mode="other">
-      <xsl:if test="@RoleName!='Computing Classification System' and @RoleName!='Dewey Decimal Classification' and @RoleName!='Mathematics Subject Classification'">
+      <xsl:if test="@RoleName!='Computing Classification System' and @RoleName!='Dewey Decimal Classification' and @RoleName!='Mathematics Subject Classification' and @RoleName!='Physics and Astronomy Classification Scheme' and @RoleName!='Organisatorische Einheiten'">
         <tr>
           <th class="name">
             <xsl:call-template name="translateString">
