@@ -309,5 +309,23 @@
       </tuv>
     </tu>
  
+    <tu tuid="col_org">
+      <tuv xml:lang="en">
+        <seg>Organizational Unit</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Organisatorische Einheit</seg>
+      </tuv>
+    </tu>
+ 
+    <tu tuid="col_pacs">
+      <tuv xml:lang="en">
+        <seg>PACS-Classification</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>PACS-Klassifikation</seg>
+      </tuv>
+    </tu>
+ 
   </body>
 </tmx>
