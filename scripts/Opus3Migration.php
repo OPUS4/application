@@ -90,9 +90,10 @@ class Opus3Migration extends Application_Bootstrap {
 
     protected function autosign($pass) {
        	$gpg = new Opus_GPG();
-    	foreach ($this->docStack as $imported)
-	    {
-	    	$doc = $imported['document'];
+   		$docList = Opus_Document::getAllIds();
+   		foreach ($docList as $id)
+    	{
+    		$doc = new Opus_Document($id);
     	    foreach ($doc->getFile() as $file)
     	    {
     	      	echo "Signing " . $file->getPathName();
@@ -115,14 +116,16 @@ class Opus3Migration extends Application_Bootstrap {
     protected function importFiles() {
     		echo "Importing files\n";
 	    	$fileImporter = new Opus3FileImport($this->path, $this->magicPath);
-    		foreach ($this->docStack as $imported)
+    		$docList = Opus_Document::getAllIds();
+    		foreach ($docList as $id)
 	    	{
-	    		#echo ".";
-			    $opus3Id = $imported['document']->getIdentifierOpus3()->getValue();
-			    $documentFiles = $fileImporter->loadFiles($imported['document']);
-			    #print_r($documentFiles->toXml()->saveXml());
+	    		$doc = new Opus_Document($id);
+			    $opus3Id = $doc->getIdentifierOpus3()->getValue();
+			    $documentFiles = $fileImporter->loadFiles($doc);
 			    $documentFiles->store();
-			    echo count($imported['document']->getField('File')->getValue()) . " file(s) have been imported successfully for document ID " . $imported['document']->getId() . "!\n";
+			    echo count($doc->getField('File')->getValue()) . " file(s) have been imported successfully for document ID " . $doc->getId() . "!\n";
+			    unset($doc);
+			    unset($documentFiles);
 		    }
 		    echo "finished!\n";
     }
@@ -130,10 +133,13 @@ class Opus3Migration extends Application_Bootstrap {
     protected function importSignatures() {
     		echo "Importing signatures\n";
 	    	$sigImporter = new Opus3SignatureImport($this->signaturePath);
-    		foreach ($this->docStack as $imported)
+    		$docList = Opus_Document::getAllIds();
+    		foreach ($docList as $id)
 	    	{
+	    		$doc = new Opus_Document($id);
 	    		echo ".";
-			    $sigImporter->loadSignatureFiles($imported['document']->getId());
+			    $sigImporter->loadSignatureFiles($doc->getId());
+			    unset($doc);
 		    }
 		    echo "finished!";
     }
@@ -347,7 +353,7 @@ class Opus3MigrationParameters extends Opus3Migration
 		}
 		// if no metadata is imported use now the metadata already stored in database
    		#else {
-   			$this->readDocsFromDatabase();
+   		#	$this->readDocsFromDatabase();
     	#}
 
 		// Import files
@@ -423,7 +429,7 @@ class Opus3MigrationReadline extends Opus3Migration {
 		        echo "Memory amount: " . round(memory_get_usage()/1024/1024, 2) . " (MB)\n";
 		        $result = $import->import($document);
 		        if ($result['result'] === 'success') {
-		            $this->docStack[]['document'] = $result['document'];
+		            #$this->docStack[]['document'] = $result['document'];
                     echo "Successfully imported old ID " . $result['oldid'] . "\n";
                     $import->log("Successfully imported old ID " . $result['oldid'] . "\n");
                     $successCount++;
@@ -444,9 +450,9 @@ class Opus3MigrationReadline extends Opus3Migration {
 		    echo $failureCount . " documents have not been imported due to failures listed above. See $logfile for details about failed entries.\n";
 		}
 		// if no metadata is imported use now the metadata already stored in database
-   		if ($metadatainput !== 'y' && $metadatainput !== 'yes') {
-   			$this->readDocsFromDatabase();
-    	}
+   		#if ($metadatainput !== 'y' && $metadatainput !== 'yes') {
+   		#	$this->readDocsFromDatabase();
+    	#}
 
 		// Import files
 		$fileinput = readline('Do you want to import the files of all documents from OPUS3? Note: this script needs to have direct physical reading access to the files in your OPUS3 directory tree! Import via HTTP is not possible! (y/n) ');
