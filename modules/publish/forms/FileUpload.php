@@ -50,24 +50,36 @@ class FileUpload extends Zend_Form {
         
         //$this->addElement('hash', 'UploadHash', array('salt' => 'unique'));
 
-        // FIXME: Make hard coded path configurable.
-        // FIXME: Make allowed filetypes configurable.
+        $config = Zend_Registry::get('Zend_Config');
+
+        // get path to store files
+        $tempPath = $config->path->workspace->temp;
+        if (true === empty($tempPath)) {
+            $tempPath = '../workspace/tmp/';
+        }
+
+        // get allowed filetypes
+        @$filetypes = $config->publish->filetypes->allowed;
+        if (true === empty($filetypes)) {
+            $filetypes = 'pdf,txt,html,htm';
+        }
+
         // more than one file does not work this way
         //$fileCount = 5;
         //$fileupload = array();
         //for ($n = 0; $n < $fileCount; $n++) {
             $fileupload = new Zend_Form_Element_File('fileupload');
             $fileupload->setLabel('FileToUpload')
-                ->setDestination('../workspace/tmp/')
+                ->setDestination($tempPath)
                 ->addValidator('Count', false, 1)     // ensure only 1 file
                 ->addValidator('Size', false, 1024000) // limit to 1000K
-                ->addValidator('Extension', false, 'pdf,txt,html,htm'); // allowed filetypes by extension
+                ->addValidator('Extension', false, $filetypes); // allowed filetypes by extension
             //array_push($fileupload, $uploadelement);
         //}
 
         $signatureupload = new Zend_Form_Element_File('sigupload');
         $signatureupload->setLabel('SigToUpload')
-            ->setDestination('../workspace/tmp/')
+            ->setDestination($tempPath)
             ->addValidator('Count', false, 1)     // ensure only 1 file
             ->addValidator('Size', false, 102400) // limit to 100K
             ->addValidator('Extension', false, 'asc'); // only ASC

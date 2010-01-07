@@ -51,6 +51,9 @@ deliver.target.prefix = /files
 deliver.logrequest = false
 deliver.logoutput = false
 
+;PUBLICATION SETTINGS
+publish.filetypes.allowed = pdf,txt,html,htm ; filetypes that are accepted in publication form
+
 ;SEARCH ENGINE SETTINGS
 searchengine.pdftotext.path = /usr/bin ; path to pdftotext - needed to index PDF fulltexts
 searchengine.ps2ascii.path = /usr/bin ; path to ps2ascii - needed to index PS fulltexts
