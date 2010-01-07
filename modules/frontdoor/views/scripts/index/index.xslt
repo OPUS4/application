@@ -140,19 +140,19 @@
        <xsl:apply-templates select="Note" />
        <xsl:apply-templates select="@PublicationVersion" />
        <xsl:if test="Collection/@RoleName='Organisatorische Einheiten'">
-          <xsl:apply-templates select="Collection" mode="org" />
+          <xsl:apply-templates select="Collection[@RoleName='Organisatorische Einheiten']" />
        </xsl:if>   
        <xsl:if test="Collection/@RoleName='Computing Classification System'">
-          <xsl:apply-templates select="Collection" mode="ccs" />
+          <xsl:apply-templates select="Collection[@RoleName='Computing Classification System']" />
        </xsl:if>   
        <xsl:if test="Collection/@RoleName='Dewey Decimal Classification'">
-          <xsl:apply-templates select="Collection" mode="ddc" />
+          <xsl:apply-templates select="Collection[@RoleName='Dewey Decimal Classification']" />
        </xsl:if>   
        <xsl:if test="Collection/@RoleName='Mathematics Subject Classification'">
-          <xsl:apply-templates select="Collection" mode="msc" />
+          <xsl:apply-templates select="Collection[@RoleName='Mathematics Subject Classification']" />
        </xsl:if>   
        <xsl:if test="Collection/@RoleName='Physics and Astronomy Classification Scheme'">
-          <xsl:apply-templates select="Collection" mode="pacs" />
+          <xsl:apply-templates select="Collection[@RoleName='Physics and Astronomy Classification Scheme']" />
        </xsl:if>   
        <xsl:apply-templates select="Collection" mode="other"/> 
        <xsl:apply-templates select="Licence" />
@@ -350,81 +350,191 @@
 
 
     <!-- Templates for "external fields". -->
-    <xsl:template match="Collection" mode="ccs">
-      <xsl:if test="@RoleName='Computing Classification System'">
-        <tr>
-          <th class="name">
-          <xsl:call-template name="translateString">
-              <xsl:with-param name="string">col_ccs</xsl:with-param>
-          </xsl:call-template>
-          <xsl:text>:</xsl:text></th>
-          <td><xsl:value-of select="@Name" /></td>
-        </tr>
-      </xsl:if>
+    <xsl:template match="Collection[@RoleName='Computing Classification System']">
+      <xsl:choose>
+        <xsl:when test="position()=1">
+          <tr>
+            <th class="name">
+            <xsl:call-template name="translateString">
+                <xsl:with-param name="string">col_ccs</xsl:with-param>
+            </xsl:call-template>
+            <xsl:text>:</xsl:text></th>
+            <td>
+               <xsl:if test="@Number != ''">
+                 <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
+               </xsl:if>
+               <xsl:value-of select="@Name" />
+            </td>
+          </tr>
+        </xsl:when>   
+        <xsl:otherwise>
+            <tr>
+            <td></td>
+               <td> 
+               <xsl:if test="@Number != ''">
+                 <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
+               </xsl:if>
+               <xsl:value-of select="@Name" />
+              </td>
+            </tr>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="Collection" mode="ddc">
-       <xsl:if test="@RoleName='Dewey Decimal Classification'">
+    <xsl:template match="Collection[@RoleName='Dewey Decimal Classification']">
+      <xsl:choose>
+        <xsl:when test="position()=1">
          <tr>
            <th class="name">
            <xsl:call-template name="translateString">
                <xsl:with-param name="string">col_ddc</xsl:with-param>
            </xsl:call-template>
            <xsl:text>:</xsl:text></th>
-           <td><xsl:value-of select="@Name" /></td>
+           <td>
+             <xsl:if test="@Number != ''">
+                <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
+             </xsl:if>
+             <xsl:value-of select="@Name" />
+           </td>
          </tr>
-       </xsl:if>    
+        </xsl:when>   
+        <xsl:otherwise>
+            <tr>
+            <td></td>
+               <td> 
+               <xsl:if test="@Number != ''">
+                 <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
+               </xsl:if>
+               <xsl:value-of select="@Name" />
+              </td>
+            </tr>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="Collection" mode="msc">
-       <xsl:if test="@RoleName='Mathematics Subject Classification'">
+    <xsl:template match="Collection[@RoleName='Mathematics Subject Classification']">
+      <xsl:choose>
+        <xsl:when test="position()=1">
           <tr>
             <th class="name">
             <xsl:call-template name="translateString">
                 <xsl:with-param name="string">col_msc</xsl:with-param>
             </xsl:call-template>
             <xsl:text>:</xsl:text></th>
-            <td><xsl:value-of select="@Name" /></td>
+            <td>
+              <xsl:if test="@Number != ''">
+                 <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
+              </xsl:if>
+              <xsl:value-of select="@Name" />
+            </td>
           </tr>
-       </xsl:if>        
+        </xsl:when>   
+        <xsl:otherwise>
+            <tr>
+            <td></td>
+               <td> 
+               <xsl:if test="@Number != ''">
+                 <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
+               </xsl:if>
+               <xsl:value-of select="@Name" />
+              </td>
+            </tr>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="Collection" mode="org">
-       <xsl:if test="@RoleName='Organisatorische Einheiten'">
+    <xsl:template match="Collection[@RoleName='Organisatorische Einheiten']">
+      <xsl:choose>
+        <xsl:when test="position()=1">
           <tr>
             <th class="name">
             <xsl:call-template name="translateString">
                 <xsl:with-param name="string">col_org</xsl:with-param>
             </xsl:call-template>
             <xsl:text>:</xsl:text></th>
-            <td><xsl:value-of select="@Name" /></td>
+            <td>
+              <xsl:if test="@Number != ''">
+                 <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
+              </xsl:if>
+              <xsl:value-of select="@Name" />
+            </td>
           </tr>
-       </xsl:if>        
+        </xsl:when>   
+        <xsl:otherwise>
+            <tr>
+            <td></td>
+               <td> 
+               <xsl:if test="@Number != ''">
+                 <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
+               </xsl:if>
+               <xsl:value-of select="@Name" />
+              </td>
+            </tr>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="Collection" mode="pacs">
-       <xsl:if test="@RoleName='Physics and Astronomy Classification Scheme'">
+    <xsl:template match="Collection[@RoleName='Physics and Astronomy Classification Scheme']">
+      <xsl:choose>
+        <xsl:when test="position()=1">
           <tr>
             <th class="name">
             <xsl:call-template name="translateString">
                 <xsl:with-param name="string">col_pacs</xsl:with-param>
             </xsl:call-template>
             <xsl:text>:</xsl:text></th>
-            <td><xsl:value-of select="@Name" /></td>
+            <td>
+              <xsl:if test="@Number != ''">
+                 <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
+              </xsl:if>
+              <xsl:value-of select="@Name" />
+            </td>
           </tr>
-       </xsl:if>        
+        </xsl:when>   
+        <xsl:otherwise>
+            <tr>
+            <td></td>
+               <td> 
+               <xsl:if test="@Number != ''">
+                 <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
+               </xsl:if>
+               <xsl:value-of select="@Name" />
+              </td>
+            </tr>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:template>
 
     <xsl:template match="Collection" mode="other">
       <xsl:if test="@RoleName!='Computing Classification System' and @RoleName!='Dewey Decimal Classification' and @RoleName!='Mathematics Subject Classification' and @RoleName!='Physics and Astronomy Classification Scheme' and @RoleName!='Organisatorische Einheiten'">
+      <xsl:choose>
+        <xsl:when test="position()=1">
         <tr>
           <th class="name">
             <xsl:call-template name="translateString">
               <xsl:with-param name="string">col</xsl:with-param>
             </xsl:call-template>
             <xsl:text>:</xsl:text></th>
-          <td><xsl:value-of select="@Name" /></td>
+          <td>
+            <xsl:if test="@Number != ''">
+               <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
+            </xsl:if>
+            <xsl:value-of select="@Name" />
+          </td>
         </tr>
+        </xsl:when>   
+        <xsl:otherwise>
+            <tr>
+            <td></td>
+               <td> 
+               <xsl:if test="@Number != ''">
+                 <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
+               </xsl:if>
+               <xsl:value-of select="@Name" />
+              </td>
+            </tr>
+        </xsl:otherwise>
+      </xsl:choose>
       </xsl:if>    
     </xsl:template>
 
