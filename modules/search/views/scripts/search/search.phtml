@@ -47,7 +47,7 @@ if (count($this->hitlist_paginator)) {
 
     echo $this->paginationControl($this->hitlist_paginator, NULL, 'searchList_ItemCount_pagination.phtml');
     echo $this->paginationControl($this->hitlist_paginator, 'Sliding', 'searchList_pagination.phtml');
-
+    
     // FIXME: <ol start="..."> is not valid XHTML 1.0 Strict!
     // but it will return in (X)HTML 5, so wontfix
     $pagerInfo = $this->hitlist_paginator->getPages();
@@ -91,8 +91,8 @@ if (count($this->hitlist_paginator)) {
             'docId' => $document['id']), null, true
         ).'">'.$document["title"]."</a></span>");
         echo "</li>";
-        echo "<div>".$this->translate('search_titles_relevance').": ".$hit->getRelevance()."<br/>";
-        echo $document["abstract"]."<br/>";
+        echo "<div class=\"queryhit\">".$this->translate('search_titles_relevance').": ".$hit->getRelevance()."<br/>";
+        echo $document["abstract"]."</div>";
     }
     echo '</ol>';
     echo $this->paginationControl($this->hitlist_paginator, 'Sliding', 'searchList_pagination.phtml');

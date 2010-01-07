@@ -59,3 +59,15 @@ div.box {
 div.box h1 {
     background-color: #EFEFEF;
 }
+
+.queryhit {
+    margin-left: 1em;
+    padding-left: 1em;
+    margin-bottom: 1em;
+    padding-bottom: 1em;   
+}
+
+.paginationControl {
+    margin-bottom: 1em;
+    padding-bottom: 1em;
+}
