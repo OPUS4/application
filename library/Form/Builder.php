@@ -87,13 +87,19 @@ class Form_Builder {
                         }
                     } else if ('add' !== $key) {
                         // The 'add' key is reserved for adding a new (blank) subform.
-                        $fieldValue = new $clazz;
+                        if (false === array_key_exists('Id', $value) or '' === $value['Id']) {
+                            $id = null;
+                        } else {
+                            $id = $value['Id'];
+                            unset($value['Id']);
+                        }
+                        $fieldValue = new $clazz($id);
                         $this->__populateModel($fieldValue, $value);
                         $fieldValues[] = $fieldValue;
                     } else {
+                        // Create a new model for the value
                         $fieldValues[] = new $clazz;
                     }
-                    // Create a new model for the value
                 }
                 $model->$accessor($fieldValues);
             }
@@ -110,7 +116,16 @@ class Form_Builder {
         // Construct subform to hold elements.
         $subForm = new Zend_Form_SubForm();
         $subForm->setLegend(get_class($model));
-        
+
+        // Add Id when necessary
+        if ($model instanceof Opus_Model_AbstractDb) {
+            $idElement = new Zend_Form_Element_Hidden('Id');
+            $id = $model->getId();
+            if (true === is_array($id)) $id = implode(',', $id);
+            $idElement->setValue($id);
+            $subForm->addElement($idElement);
+        }
+
         // Iterate over fields and build a subform for each field.
         foreach ($model->describe() as $i => $fieldName) {
             $field = $model->getField($fieldName);
