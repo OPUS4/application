@@ -186,7 +186,11 @@ class Search_SearchController extends Zend_Controller_Action
                 }
                 if ($data['language'] !== '0')
                 {
-                	$query .= ' and language:' . $data['language'];
+                	$query .= ' AND language:' . $data['language'];
+                }
+                if ($data['doctype'] !== '0')
+                {
+                	$query .= ' AND doctype:' . $data['doctype'];
                 }
                 try {
                     #echo "Complete query: " . $query;

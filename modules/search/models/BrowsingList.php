@@ -112,7 +112,11 @@ class BrowsingList
 	{
         $result = Opus_Document_Type::getAvailableTypeNames();
         asort($result);
-        return $result;
+        $return = array();
+        foreach ($result as $list) {
+        	$return[$list] = $list;
+        }
+        return $return;
 	}
 
 	/**
