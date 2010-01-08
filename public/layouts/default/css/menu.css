@@ -68,3 +68,12 @@ ul.navigation li a {
     text-decoration: none;
     color: black;
 }
+
+.fieldsearch {
+    float: left;
+}
+
+.queryterm {
+    float: left;
+    padding-left: 1em;
+}

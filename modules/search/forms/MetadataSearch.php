@@ -46,6 +46,42 @@ class MetadataSearch extends Zend_Form
      * Build extended search form
      */
     public function init() {
+		// decorate form
+		$this->clearDecorators();
+		$decorators = array(
+		    array('ViewHelper'),
+		    array('Errors'),
+		    array('Label', array(
+		        'requiredSuffix' => ' *',
+		        'class' => 'leftalign'
+		    )),
+		    array('HtmlTag', array('tag' => 'p')),
+		);
+		$fieldDecorators = array(
+		    array('ViewHelper'),
+		    array('Errors'),
+		    array('Label', array(
+		        'requiredSuffix' => ' *',
+		        'class' => 'leftalign'
+		    )),
+		    array('HtmlTag', array(
+                'tag' => 'div',
+                'class' => 'fieldsearch'
+		    )),
+		);
+		$searchtermDecorators = array(
+		    array('ViewHelper'),
+		    array('Errors'),
+		    array('Label', array(
+		        'requiredSuffix' => ' *',
+		        'class' => 'leftalign'
+		    )),
+		    array('HtmlTag', array(
+                'tag' => 'div',
+                'class' => 'queryterm'
+		    )),
+		);
+		
 		// Create and configure query field elements:
 		$truncation = new Zend_Form_Element_Select('searchtype');
 		$truncation->addMultiOptions(array('exact' => 'exact_search', 'truncated' => 'truncated_search'));
@@ -54,22 +90,26 @@ class MetadataSearch extends Zend_Form
 		$hitsPerPage->addMultiOptions(array('0' => 'all_hits', '10' => 10, '20' => 20, '25' => 25, '50' => 50));
 		$hitsPerPage->setValue('10');
 		$hitsPerPage->setLabel('search_hitsPerPage');
+		$hitsPerPage->setDecorators($decorators);
 
 		$sort = new Zend_Form_Element_Select('sort');
 		$sort->addMultiOptions(array('relevance' => 'search_sort_relevance', 'yat' => 'search_sort_yearandtitle', 'year' => 'search_sort_year', 'title' => 'search_sort_title', 'author' => 'search_sort_author', 'relevance_asc' => 'search_sort_relevance_asc', 'yat_desc' => 'search_sort_yearandtitle_desc', 'year_desc' => 'search_sort_year_desc', 'title_desc' => 'search_sort_title_desc', 'author_desc' => 'search_sort_author_desc'));
 		$sort->setLabel('search_sort');
+		$sort->setDecorators($decorators);
 
         $languageList = new Zend_Form_Element_Select('language');
         $langs = Zend_Registry::get('Available_Languages');
         $languageList->setLabel('Language')
             ->setMultiOptions(array('0' => 'all_hits'));
         $languageList->addMultiOptions($langs);
+        $languageList->setDecorators($decorators);
 
         $doctypeList = new Zend_Form_Element_Select('doctype');
         $doctypes = BrowsingList::getDocumentTypeList();
         $doctypeList->setLabel('searchfield_doctype')
             ->setMultiOptions(array('0' => 'all_hits'));
         $doctypeList->addMultiOptions($doctypes);
+        $doctypeList->setDecorators($decorators);
 
 		$query = array();
 		$field = array();
@@ -78,9 +118,11 @@ class MetadataSearch extends Zend_Form
 		{
 		    $field[$n] = new Zend_Form_Element_Select('field[' . $n . ']');
 		    $field[$n]->addMultiOptions($this->listSearchFields());
+		    $field[$n]->setDecorators($fieldDecorators);
 
 		    $query[$n] = new Zend_Form_Element_Text('query[' . $n . ']');
 		    $query[$n]->addValidator('stringLength', false, array(3, 100));
+		    $query[$n]->setDecorators($searchtermDecorators);
 
 		    if ($n < ($this->_queryFieldNumber-1))
 		    {
