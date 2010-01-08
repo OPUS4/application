@@ -732,7 +732,7 @@ class Oai_IndexController extends Controller_Xml {
             $setarray = explode(':',$setParam);
             if ($setarray[0] != "pub-type") {
                 $setDocIds = Opus_CollectionRole::getDocumentIdsInSet($setParam);
-                if (true === is_null($setDocIds)) {
+                if (true === is_null($setDocIds) or true === empty($setDocIds)) {
                    throw new Exception("The combination of the given values results in an empty list.", self::NORECORDSMATCH);
                 }
             }
