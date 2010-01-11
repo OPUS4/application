@@ -90,6 +90,13 @@ class Search_SearchController extends Zend_Controller_Action
      */
     public function searchAction()
     {
+   		$config = Zend_Registry::get('Zend_Config');
+
+		$searchEngine = $config->searchengine->engine;
+		if (empty($searchEngine) === true) {
+			$searchEngine = 'Lucene';
+		}
+
         $this->view->title = $this->view->translate('search_searchresult');
         $page = 1;
         $resultlist = new Zend_Session_Namespace('resultlist');
@@ -100,7 +107,7 @@ class Search_SearchController extends Zend_Controller_Action
             if ($form->isValid($data) === true) {
                 // valid form
                 $this->view->form = $form->populate($data);
-                $query = new Opus_Search_Query($form->getValue('query'));
+                $query = new Opus_Search_Query($form->getValue('query'), 'ignore', $searchEngine);
                 $hitlist = $query->commit();
                 $resultlist->hitlist = $hitlist;
                 $resultlist->postedData = $data;
@@ -153,6 +160,13 @@ class Search_SearchController extends Zend_Controller_Action
      */
     public function metadatasearchAction()
     {
+   		$config = Zend_Registry::get('Zend_Config');
+
+		$searchEngine = $config->searchengine->engine;
+		if (empty($searchEngine) === true) {
+			$searchEngine = 'Lucene';
+		}
+
         $this->view->title = $this->view->translate('search_searchresult');
         $page = 1;
         $resultlist = new Zend_Session_Namespace('resultlist');
@@ -194,7 +208,7 @@ class Search_SearchController extends Zend_Controller_Action
                 }
                 try {
                     #echo "Complete query: " . $query;
-                    $query = new Opus_Search_Query($query);
+                    $query = new Opus_Search_Query($query, 'ignore', $searchEngine);
                     $hitlist = $query->commit();
                     $resultlist->hitlist = $hitlist;
                     $resultlist->postedData = $data;
@@ -235,7 +249,7 @@ class Search_SearchController extends Zend_Controller_Action
             if ($query !== '') {
                 try {
                     #echo "Complete query: " . $query;
-                    $query = new Opus_Search_Query($query);
+                    $query = new Opus_Search_Query($query, 'ignore', $searchEngine);
                     $hitlist = $query->commit();
                     $resultlist->hitlist = $hitlist;
                 }

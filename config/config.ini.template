@@ -55,6 +55,7 @@ deliver.logoutput = false
 publish.filetypes.allowed = pdf,txt,html,htm ; filetypes that are accepted in publication form
 
 ;SEARCH ENGINE SETTINGS
+searchengine.engine = Lucene ; searchengine to be used: Lucene or Solr
 searchengine.pdftotext.path = /usr/bin ; path to pdftotext - needed to index PDF fulltexts
 searchengine.ps2ascii.path = /usr/bin ; path to ps2ascii - needed to index PS fulltexts
 searchengine.ocr.enable = 0 ; enable/disable OCR-recognition - WARNING: this can massively slow down your indexing process! 1=enabled, 0=disabled
