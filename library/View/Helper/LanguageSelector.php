@@ -81,7 +81,7 @@ class View_Helper_LanguageSelector {
         $currentLocale = Zend_Registry::get('Zend_Translate')->getLocale();
         foreach ($translations as $trans) {
             if ($trans === $currentLocale) {
-                $links[] = $locale->getLanguageTranslation($trans, $trans);
+                $links[] = $locale->getTranslation($trans, 'language', $trans);
             } else {
                 $link = '<a href="';
                 $link .= $this->_view->url(array(
@@ -89,7 +89,7 @@ class View_Helper_LanguageSelector {
                         'controller' => 'index',
                       'module' => 'home',
                         'language' => $trans));
-                $link .= '">' . $locale->getLanguageTranslation($trans, $trans) . '</a>';
+                $link .= '">' . $locale->getTranslation($trans, 'language', $trans) . '</a>';
                 $links[] = $link;
             }
         }

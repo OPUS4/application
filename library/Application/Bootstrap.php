@@ -267,7 +267,8 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $options = array(
             'clear' => false,
             'scan' => Zend_Translate::LOCALE_FILENAME,
-            'ignore' => '.'
+            'ignore' => '.',
+            'disableNotices' => true
             );
         $translate = new Zend_Translate(
             Zend_Translate::AN_TMX,
@@ -312,7 +313,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
             if (true === empty($trans)) {
                 $languages[$availableLanguage->getId()] = $availableLanguage->getDisplayName();
             } else {
-                $languages[$availableLanguage->getId()] = $locale->getLanguageTranslation($trans);
+                $languages[$availableLanguage->getId()] = $locale->getTranslation($trans, 'language', $trans);
             }
         }
         $registry->set('Available_Languages', $languages);

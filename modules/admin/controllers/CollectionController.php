@@ -261,7 +261,9 @@ class Admin_CollectionController extends Controller_Action {
                 $nameLength = max($nameLength, strlen($subcollection->getDisplayName()));
             }
         }
-        $this->_helper->layout->setLayout('../' . $collection->getTheme() . '/common');
+        // Freakin' Zend appears to consider layout as file name, not direcory
+        // name...
+        //$this->_helper->layout->setLayout($collection->getTheme());
         $this->view->severalAppearances = $severalAppearances;
         $this->view->visibility = $visibility;
         $this->view->subcollections = $subcollections;
