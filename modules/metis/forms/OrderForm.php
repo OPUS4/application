@@ -31,7 +31,31 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
-<h1>Opus Application - <?= $this->translate('metis_title') ?></h1>
-<?=$this->form?>
 
+/**
+ *
+ * @category    Application
+ * @package     Module_Metis
+ */
+class OrderForm extends Zend_Form
+{
+    /**
+     * Build form for pixel-order
+     *
+     * @return void
+     */
+    public function init() {
+       $user = new Zend_Form_Element_Text('user');
+       $user->setRequired(true);
+       $user->setLabel('metis_user');
+       $passwd = new Zend_Form_Element_Password('passwd');
+       $passwd->setRequired(true);
+       $passwd->setLabel('metis_password');
+       $number = new Zend_Form_Element_Text('number');
+       $number->setRequired(true);
+       $number->setLabel('metis_number');
+       $submit = new Zend_Form_Element_Submit('getpixel');
+       $submit->setLabel('metis_getpixel');
+       $this->addElements(array($user, $passwd, $number, $submit));
+    }
+}

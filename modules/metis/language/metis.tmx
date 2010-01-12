@@ -16,6 +16,51 @@
       </tuv>
     </tu>
     
+    <tu tuid="metis_title">
+      <tuv xml:lang="en">
+        <seg>Pixel Order</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Anfordern von Zählpixeln</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="metis_getpixel">
+      <tuv xml:lang="en">
+        <seg>Order pixel</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zählpixel anfordern</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="metis_number">
+      <tuv xml:lang="en">
+        <seg>Number of pixels</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Anzahl Pixel</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="metis_password">
+      <tuv xml:lang="en">
+        <seg>Password</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Passwort</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="metis_user">
+      <tuv xml:lang="en">
+        <seg>User</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Benutzer</seg>
+      </tuv>
+    </tu>
+    
   </body>
   
 </tmx>

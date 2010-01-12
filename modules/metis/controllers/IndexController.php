@@ -48,28 +48,56 @@ class Metis_IndexController extends Zend_Controller_Action {
 	 *
 	 */
 	public function indexAction() {
-		$this->view->title = 'Metis';
-		// create Client
-		$wsdl = "https://213.61.127.251/services/1.0/pixelService.wsdl";
-        $options = array('trace' => '1',
-                         'login' => 'usernamexx',
-                         'password' => 'passwortxx');
+	   $metisForm = new OrderForm();
+       $metisForm->setAction($this->view->url(array('module' => "metis", "controller"=>'index', "action"=>'getpixel')));
+       $metisForm->setMethod('post');
+       $this->view->form = $metisForm;
 
-		$client = new SoapClient ($wsdl,$options);
-		// request the available functions of the webservice
-		$avail = $client->__getFunctions();
-		$this->view->avail = $avail;
-        // request the datatypes
-		$types = $client->__getTypes();
-		$this->view->types = $types;
-		// calling PixelOrder
-        try {
-           $param = array('count' => '3');
-           $response = $client->orderPixel($param);
-           print_r($response);
-		}
-		catch (SoapFault $sf) {
-		    print_r($sf);
-		}
 	}
+
+    public function getpixelAction() {
+	    $this->view->title = 'Metis';
+        if (true === $this->getRequest()->isPost()) {
+           $data = $this->getRequest()->getPost();
+           $form = new OrderForm();
+           if (true === $form->isValid($data)) {
+               $this->view->ok = '1';
+               $user = $form->getValue('user');
+               $password = $form->getValue('passwd');
+               $number = $form->getValue('number');
+
+        // create Client
+               $wsdl = "https://213.61.127.251/services/1.0/pixelService.wsdl";
+               $options = array('trace' => '1',
+                                'login' => $user,
+                                'password' => $password);
+
+               $client = new SoapClient ($wsdl,$options);
+               // request the available functions of the webservice
+               $avail = $client->__getFunctions();
+               $this->view->avail = $avail;
+               // request the datatypes
+               $types = $client->__getTypes();
+               $this->view->types = $types;
+               // calling PixelOrder
+               try {
+//                   $param = array('count' => '3');
+                   $param = array('count' => $number);
+                   $response = $client->orderPixel($param);
+                   print_r($response);
+               }
+               catch (SoapFault $sf) {
+                   print_r($sf);
+               }
+
+            } else {
+                $this->view->form = $form;
+//                $this->view->form = $form->populate($data);
+            }
+     }
+                $this->view->form = $form->populate($data);
+//     $this->view->form = $form;
+
+
+   }
 }
