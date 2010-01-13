@@ -339,6 +339,11 @@ class Oai_IndexController extends Controller_Xml {
         // Currently implemented as 'oai:foo.bar.de:{docId}'
         $docId = substr(strrchr($oaiRequest['identifier'], ':'), 1);
         $document = new Opus_Document($docId);
+        // document has to be published
+        $serverState = $document->getServerState();
+        if ($serverState != 'published') {
+               throw new Exception("The combination of the given values results in an empty list (document is not published).", self::NORECORDSMATCH);
+        }
         // for xMetaDiss it must be habilitation or doctoral-thesis
         if ($oaiRequest['metadataPrefix'] == 'xMetaDiss') {
             $is_hab_doc = $this->filterDocType($document);
