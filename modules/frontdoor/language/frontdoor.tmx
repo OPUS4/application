@@ -147,6 +147,24 @@
       </tuv>
     </tu>
     
+    <tu tuid="frontdoor_mail_ok">
+      <tuv xml:lang="en">
+        <seg>E-mail was send.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>E-mail wurde versand.</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="frontdoor_mail_notok">
+      <tuv xml:lang="en">
+        <seg>E-mail could not be send.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>E-mail konnte nicht versendet werden.</seg>
+      </tuv>
+    </tu>
+    
     <tu tuid="frontdoor_recipientname">
       <tuv xml:lang="en">
         <seg>Name of recipient</seg>
@@ -198,6 +216,15 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Mail versenden</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="frontdoor_sendmailsubject">
+      <tuv xml:lang="en">
+        <seg>Recommend document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokumentempfehlung</seg>
       </tuv>
     </tu>
     

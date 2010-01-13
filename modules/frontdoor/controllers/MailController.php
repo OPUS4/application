@@ -76,7 +76,6 @@ class Frontdoor_MailController extends Zend_Controller_Action
        // get type
        $type = $document->getType();
        $this->view->type = $type;
-
        // show mail form
        $mailForm = new MailForm();
        $mailForm->setAction($this->view->url(array('module' => "frontdoor", "controller"=>'mail', "action"=>'sendmail')));
@@ -92,20 +91,22 @@ class Frontdoor_MailController extends Zend_Controller_Action
          if (true === $form->isValid($data)) {
              $from = $form->getValue('sender_mail');
              $fromName = $form->getValue('sender');
-             $subject = '';
+             $subject = $this->view->translate('frontdoor_sendmailsubject');
              $bodyText = $form->getValue('message');
              $recipient = array('address' => $form->getValue('recipient_mail'),'name' => $form->getValue('recipient'));
              $mailSendMail = new Opus_Mail_SendMail();
              try {
                 $mailSendMail->sendMail($from,$fromName,$subject,$bodyText,$recipient);
                 $this->view->form = $form;
+                $this->view->text = $this->view->translate('frontdoor_email_ok');
              } catch (Exception $e) {
                  $this->view->form = $e->getMessage();
+                 $this->view->text = $this->view->translate('frontdoor_email_notok');
              }
          } else {
               $this->view->form = $form;
          }
      }
-//     $this->view->form = $form;
+    $this->view->form = $form;
     }
 }

@@ -37,5 +37,8 @@
  */
 ?>
 <h1><?= $this->translate ('frontdoor_sendmailtitle')?></h1><br />
-<?=$this->form?>
+<? echo $this->form;
+if ($this->text != "") {
+   echo $this->text;
+}?>
 
