@@ -75,10 +75,20 @@ class SearchEngineIndexBuilder extends Application_Bootstrap {
    		    echo "Default value for maximum buffered docs is 3.\n";
     		exit;
     	}
-    	if (true === in_array('--solr', $argv)) {
+   		
+   		$config = Zend_Registry::get('Zend_Config');
+
+		$searchEngine = $config->searchengine->engine;
+		if (empty($searchEngine) === true) {
+			$searchEngine = 'Lucene';
+		}
+
+    	if ($searchEngine === 'Solr' || true === in_array('--solr', $argv)) {
+    	    echo "Building Solr Index...\n";
     	    $indexbuilder = 'Opus_Search_Index_SolrIndexer';
     	}
     	else {
+    		echo "Building Lucene Index...\n";
     	    $indexbuilder = 'Opus_Search_Index_Indexer';
     	}
 
