@@ -90,16 +90,16 @@ class SearchEngineIndexBuilder extends Application_Bootstrap {
             if ( ! $solr->ping() ) {
         		echo "Solr server is not responding, building Lucene Index instead...\n
         			  Please change settings in config file to use Lucene.\n";
-        		$indexbuilder = 'Opus_Search_Index_Indexer';
+        		$indexbuilder = 'Opus_Search_Index_Lucene_Indexer';
             }
             else {
     	        echo "Building Solr Index...\n";
-    	        $indexbuilder = 'Opus_Search_Index_SolrIndexer';
+    	        $indexbuilder = 'Opus_Search_Index_Solr_Indexer';
             }
     	}
     	else {
     		echo "Building Lucene Index...\n";
-    	    $indexbuilder = 'Opus_Search_Index_Indexer';
+    	    $indexbuilder = 'Opus_Search_Index_Lucene_Indexer';
     	}
 
         $docresult = Opus_Document::getAllIds();
