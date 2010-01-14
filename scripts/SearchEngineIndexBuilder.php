@@ -84,8 +84,18 @@ class SearchEngineIndexBuilder extends Application_Bootstrap {
 		}
 
     	if ($searchEngine === 'Solr' || true === in_array('--solr', $argv)) {
-    	    echo "Building Solr Index...\n";
-    	    $indexbuilder = 'Opus_Search_Index_SolrIndexer';
+    	    // check Solr server
+    	    $solr = new Apache_Solr_Service( 'localhost', '8983', '/solr' );
+  
+            if ( ! $solr->ping() ) {
+        		echo "Solr server is not responding, building Lucene Index instead...\n
+        			  Please change settings in config file to use Lucene.\n";
+        		$indexbuilder = 'Opus_Search_Index_Indexer';
+            }
+            else {
+    	        echo "Building Solr Index...\n";
+    	        $indexbuilder = 'Opus_Search_Index_SolrIndexer';
+            }
     	}
     	else {
     		echo "Building Lucene Index...\n";
