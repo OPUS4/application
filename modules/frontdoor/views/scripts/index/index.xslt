@@ -967,6 +967,31 @@
         </xsl:element>
         <xsl:text> </xsl:text>
 
+        <!-- bibsonomy -->
+        <xsl:element name="a">
+           <!-- TODO: Use Zend Url-Helper to build href attribute -->
+             <xsl:attribute name="href">
+               <xsl:value-of select="$baseUrl"/>
+               <xsl:text>/socialBookmarking/bibsonomy/index/docId/</xsl:text>
+               <xsl:value-of select="@Id" />
+             </xsl:attribute>
+           <xsl:element name="img">   
+             <xsl:attribute name="src">
+               <xsl:value-of select="$layoutPath"/>
+                <xsl:text>/img/bibsonomy.jpg</xsl:text>
+             </xsl:attribute>
+             <xsl:attribute name="border">
+               <xsl:text>0</xsl:text>
+             </xsl:attribute>
+             <xsl:attribute name="title">
+                <xsl:call-template name="translateString">
+                   <xsl:with-param name="string">frontdoor_bookmarkbibsonomy</xsl:with-param>
+                </xsl:call-template>
+             </xsl:attribute>
+          </xsl:element>
+        </xsl:element>
+        <xsl:text> </xsl:text>
+
         <!-- google-scholar -->
         <xsl:if test="normalize-space(TitleMain/@Value)">
           <xsl:element name="a">
