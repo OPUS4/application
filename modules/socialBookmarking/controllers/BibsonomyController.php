@@ -49,8 +49,10 @@ class SocialBookmarking_BibsonomyController extends Zend_Controller_Action
         $connotea = new Zend_Session_Namespace('bibsonomy');
         // Auto Login with library account
         $config = new Zend_Config_Ini('../config/config.ini');
-        $connotea->sysuser = $config->socialBookmarking->bibsonomy->sysuser;
-        $connotea->syspassword = $config->socialBookmarking->bibsonomy->syspassword;
+        if (empty($config->socialBookmarking->bibsonomy->sysuser) === false) {
+            $connotea->sysuser = $config->socialBookmarking->bibsonomy->sysuser;
+            $connotea->syspassword = $config->socialBookmarking->bibsonomy->syspassword;
+        }
         if (false === isset($connotea->user)) {
         	// show login mask
             $loginForm = new BibsonomyLoginForm();
@@ -63,8 +65,10 @@ class SocialBookmarking_BibsonomyController extends Zend_Controller_Action
             $connoteaPost = new Bibsonomy;
             $connoteaPost->user = $connotea->user;
             $connoteaPost->password = $connotea->password;
-            $connoteaPost->sysuser = $connotea->sysuser;
-            $connoteaPost->syspassword = $connotea->syspassword;
+            if (empty($config->socialBookmarking->bibsonomy->sysuser) === false) {
+                $connoteaPost->sysuser = $connotea->sysuser;
+                $connoteaPost->syspassword = $connotea->syspassword;
+            }
             $this->view->connoteauser = $connotea->user;
             $this->view->note = '<a href="' . $this->view->url(array('module' => "socialBookmarking", "controller"=>'bibsonomy', "action"=>"logout")) . '">Logout</a>';
 
@@ -128,7 +132,12 @@ class SocialBookmarking_BibsonomyController extends Zend_Controller_Action
         $connoteaPost->password = $connotea->password;
         
         $config = new Zend_Config_Ini('../config/config.ini');
-		$system_tags = $config->socialBookmarking->connotea->systemTags;
+        if (empty($config->socialBookmarking->connotea->systemTags) === false) {
+		    $system_tags = $config->socialBookmarking->connotea->systemTags;
+        }
+        else {
+        	$system_tags = '';
+        }
         
         $data = $this->_request->getPost();
         
