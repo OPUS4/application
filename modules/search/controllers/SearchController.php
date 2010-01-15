@@ -90,6 +90,7 @@ class Search_SearchController extends Zend_Controller_Action
      */
     public function searchAction()
     {
+   		$failure = false;
    		$config = Zend_Registry::get('Zend_Config');
 
 		$searchEngine = $config->searchengine->engine;
@@ -107,10 +108,15 @@ class Search_SearchController extends Zend_Controller_Action
             if ($form->isValid($data) === true) {
                 // valid form
                 $this->view->form = $form->populate($data);
-                $query = new Opus_Search_Query($form->getValue('query'), 'ignore', $searchEngine);
-                $hitlist = $query->commit();
-                $resultlist->hitlist = $hitlist;
-                $resultlist->postedData = $data;
+                try {
+                    $query = new Opus_Search_Query($form->getValue('query'), 'ignore', $searchEngine);
+                    $hitlist = $query->commit();
+                    $resultlist->hitlist = $hitlist;
+                    $resultlist->postedData = $data;
+                }
+                catch (Exception $e) {
+                	$failure = $e->getMessage();
+                }
             } else {
                 // invalid form
                 $this->view->form = $form->populate($data);
@@ -133,24 +139,30 @@ class Search_SearchController extends Zend_Controller_Action
                 return $this->_forward('fulltextsearch');
             }
         }
-
-		if (array_key_exists('sort', $data)) {
-			$hitlist->sort($data['sort']);
-		}
-        $hitlistIterator = new Opus_Search_Iterator_HitListIterator($hitlist);
-        $this->view->hitlist_count = $hitlist->count();
-        $paginator = Zend_Paginator::factory($hitlistIterator);
-        if (array_key_exists('hitsPerPage', $data)) {
-        	if ($data['hitsPerPage'] === '0') {
-        	    $hitsPerPage = '10000';
-        	}
-            else {
-            	$hitsPerPage = $data['hitsPerPage'];
+        if ($failure === false) {
+		    if (array_key_exists('sort', $data)) {
+			    $hitlist->sort($data['sort']);
+		    }
+            $hitlistIterator = new Opus_Search_Iterator_HitListIterator($hitlist);
+            $this->view->hitlist_count = $hitlist->count();
+            $paginator = Zend_Paginator::factory($hitlistIterator);
+            if (array_key_exists('hitsPerPage', $data)) {
+        	    if ($data['hitsPerPage'] === '0') {
+        	        $hitsPerPage = '10000';
+        	    }
+                else {
+            	    $hitsPerPage = $data['hitsPerPage'];
+                }
+                $paginator->setItemCountPerPage($hitsPerPage);
             }
-            $paginator->setItemCountPerPage($hitsPerPage);
+            $paginator->setCurrentPageNumber($page);
+            $this->view->hitlist_paginator = $paginator;
         }
-        $paginator->setCurrentPageNumber($page);
-        $this->view->hitlist_paginator = $paginator;
+        else {
+        	$this->view->failure = $failure;
+            $this->render('search');
+        }
+        
     }
 
     /**
