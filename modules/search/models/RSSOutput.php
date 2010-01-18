@@ -82,7 +82,7 @@ class RSSOutput {
                 $abstractElement = $xml->createElement('description', $hit['abstract']);
                 $result->appendChild($abstractElement);
                 $docArray = $doc->toArray();
-                $pubDate = $docArray['ServerDatePublished']['day'] . '.' . $docArray['ServerDatePublished']['month'] . '.' . $docArray['ServerDatePublished']['year'];  
+                $pubDate = $docArray['ServerDatePublished'];  
                 $yearElement = $xml->createElement('pubDate', $pubDate);
                 $result->appendChild($yearElement);
             }
