@@ -91,6 +91,10 @@ class Form_Builder {
                             $id = null;
                         } else {
                             $id = $value['Id'];
+                            if (!(false === strpos($id, ','))) {
+                                $id = explode(',', $id);
+                                $clazz = $field->getLinkModelClass();
+                            }
                             unset($value['Id']);
                         }
                         $fieldValue = new $clazz($id);
