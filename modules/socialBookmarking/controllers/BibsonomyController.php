@@ -59,7 +59,7 @@ class SocialBookmarking_BibsonomyController extends Zend_Controller_Action
             $loginForm->setAction($this->view->url(array('module' => "socialBookmarking", "controller"=>'bibsonomy', "action"=>"login")));
             $loginForm->setMethod('post');
             $this->view->loginform = $loginForm;
-            $this->view->note = '<a href="http://www.bibsonomy.org/register" target="_blank">' . $this->view->translate('bibsonomy_register') . "</a></div>\n";
+            $this->view->note = '<a href="http://www.bibsonomy.org/register" target="_blank">' . $this->view->translate('bibsonomy_register') . "</a>\n";
         }
         else {
             $connoteaPost = new Bibsonomy;

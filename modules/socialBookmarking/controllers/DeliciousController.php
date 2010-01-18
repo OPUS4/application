@@ -53,7 +53,7 @@ class SocialBookmarking_DeliciousController extends Zend_Controller_Action
             $loginForm->setAction($this->view->url(array('module' => "socialBookmarking", "controller"=>'delicious', "action"=>"login")));
             $loginForm->setMethod('post');
             $this->view->loginform = $loginForm;
-            $this->view->note = '<a href="https://secure.delicious.com/register" target="_blank">' . $this->view->translate('delicious_register') . "</a></div>\n";
+            $this->view->note = '<a href="https://secure.delicious.com/register" target="_blank">' . $this->view->translate('delicious_register') . "</a>\n";
         }
         else {
             $connoteaPost = new Delicious;

@@ -53,7 +53,7 @@ class SocialBookmarking_ConnoteaController extends Zend_Controller_Action
             $loginForm->setAction($this->view->url(array('module' => "socialBookmarking", "controller"=>'connotea', "action"=>"login")));
             $loginForm->setMethod('post');
             $this->view->loginform = $loginForm;
-            $this->view->note = '<a href="http://www.connotea.org/register" target="_blank">' . $this->view->translate('connotea_register') . "</a></div>\n";
+            $this->view->note = '<a href="http://www.connotea.org/register" target="_blank">' . $this->view->translate('connotea_register') . "</a>\n";
         }
         else {
             $connoteaPost = new Connotea;
