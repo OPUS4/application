@@ -88,19 +88,9 @@ class Admin_CollectionController extends Controller_Action {
                 $collection = $collection->getSubCollection($step);
             }
         }
-        $filter = new Opus_Model_Filter;
-        $filter->setModel($collection);
-        $filter->setBlacklist(array('Position',
-                                    'SubCollection',
-                                    'ParentCollection',
-                                    'CollectionsContentSchema',
-                                    'Visibility',
-                                    'SeveralAppearances',
-                                    'RoleName',
-                                    'RoleId',
-                                )
-                            );
-        $filter->setSortOrder(array('Name'));
+        $session = new Zend_Session_Namespace('collection');
+        $session->collection = $collection;
+        $filter = $this->__createFilter($collection);
         $collectionForm = $form_builder->build($filter);
         $action_url = $this->view->url(array('action' => 'create'));
         $collectionForm->setAction($action_url);
@@ -125,10 +115,9 @@ class Admin_CollectionController extends Controller_Action {
             $pos_field->setDefault(array_combine(range(1,$countRoles+1),range(1,$countRoles+1)))->setSelection(true);
 
         }
-        $filter = new Opus_Model_Filter;
-        $filter->setModel($collection);
-        $filter->setBlacklist(array('SubCollection', 'ParentCollection', 'Visibility', 'SeveralAppearances'));
-        $filter->setSortOrder(array('Name'));
+        $session = new Zend_Session_Namespace('collection');
+        $session->collection = $collection;
+        $filter = $this->__createFilter($collection);
         $collectionForm = $form_builder->build($filter);
         $action_url = $this->view->url(array('action' => 'create'));
         $collectionForm->setAction($action_url);
@@ -286,18 +275,18 @@ class Admin_CollectionController extends Controller_Action {
         if ($this->_request->isPost() === true) {
             $data = $this->_request->getPost();
             $form_builder = new Form_Builder();
+            $session = new Zend_Session_Namespace('collection');
+            $form_builder->buildModelFromPostData($session->collection, $data['Opus_Model_Filter']);
+            $form = $form_builder->build($this->__createFilter($session->collection));
             if (array_key_exists('submit', $data) === false) {
-                $form = $form_builder->buildFromPost($data);
                 $action_url = $this->view->url(array('action' => 'create'));
                 $form->setAction($action_url);
                 $this->view->form = $form;
             } else {
-                $form = $form_builder->buildFromPost($data);
                 $params = $this->getRequest()->getUserParams();
                 if ($form->isValid($data) === true) {
                     // retrieve values from form and save them into model
-                    $model = $form_builder->getModelFromForm($form);
-                    $form_builder->setFromPost($model, $form->getValues());
+                    $model = $session->collection;
                     if (true === $model->isNewRecord()) {
                         $role = $this->getRequest()->getParam('role');
                         $path = $this->getRequest()->getParam('path');
@@ -419,6 +408,20 @@ class Admin_CollectionController extends Controller_Action {
         } else {
             $this->_redirectTo('', 'index');
         }
+    }
+
+    /**
+     * Returns a filtered representation of the collection.
+     *
+     * @param  Opus_Model_Abstract  $collection The collection to be filtered.
+     * @return Opus_Model_Filter The filtered collection.
+     */
+    private function __createFilter(Opus_Model_Abstract $collection) {
+        $filter = new Opus_Model_Filter();
+        $filter->setModel($collection);
+        $filter->setBlacklist(array('SubCollection', 'ParentCollection', 'Visibility', 'SeveralAppearances', 'RoleId', 'RoleName'));
+        $filter->setSortOrder(array('Name'));
+        return $filter;
     }
 }
 
