@@ -255,6 +255,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="frontdoor_bookmarkbibsonomy">
+      <tuv xml:lang="en">
+        <seg>BibSonomy bookmark</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Lesezeichen bei BibSonomy</seg>
+      </tuv>
+    </tu>
+    
     <tu tuid="frontdoor_bookmarkconnotea">
       <tuv xml:lang="en">
         <seg>Connotea bookmark</seg>
