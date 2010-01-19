@@ -330,8 +330,14 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                         // store document
                         $document->store();
             
+                		$config = Zend_Registry::get('Zend_Config');
+
+		                $searchEngine = $config->searchengine->engine;
+		                if (empty($searchEngine) === true) {
+			                $searchEngine = 'Lucene';
+		                }
                         // Reindex
-                        $indexer = new Opus_Search_Index_Indexer();
+                        $indexer = new Opus_Search_Index_.$searchEngine._Indexer();
                         $indexer->removeDocumentFromEntryIndex($document);
                         $indexer->addDocumentToEntryIndex($document);
                     
@@ -366,8 +372,14 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $doc->setServerState('published');
         $doc->store();
 
+   		$config = Zend_Registry::get('Zend_Config');
+
+        $searchEngine = $config->searchengine->engine;
+        if (empty($searchEngine) === true) {
+            $searchEngine = 'Lucene';
+	    }
         // Add to index
-        $indexer = new Opus_Search_Index_Indexer();
+        $indexer = new Opus_Search_Index_.$searchEngine._Indexer();
         $indexer->addDocumentToEntryIndex($doc);
 
         $this->_redirectTo('', 'index');
@@ -384,8 +396,14 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $doc->setServerState('unpublished');
         $doc->store();
 
+   		$config = Zend_Registry::get('Zend_Config');
+
+        $searchEngine = $config->searchengine->engine;
+        if (empty($searchEngine) === true) {
+            $searchEngine = 'Lucene';
+	    }
         // Add to index
-        $indexer = new Opus_Search_Index_Indexer();
+        $indexer = new Opus_Search_Index_.$searchEngine._Indexer();
         $indexer->removeDocumentFromEntryIndex($doc);
 
         $this->_redirectTo('', 'index');
