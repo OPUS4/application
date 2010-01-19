@@ -7441,23 +7441,11 @@ INSERT INTO `file_hashvalues` (`file_id`, `type`, `value`) VALUES
 (548, 'sha512', '992bbd3bc0f48d7a4b2b1abd95c300fc8f1112766aec5fa1197fa99dd349ac5621edf16eaf31eea27ca00cb0683cea344fd72343a2dfb87def24da73b6dd1ffd'),
 (549, 'sha512', 'cd0e65f070412b8a91330796f237de7f0436319eaf9668b1615b4d2ef964176c493fe41416e503d419d8fd7709c0de25b4ae4ff6fccc19081e3a42b58bab5c55');
 
--- phpMyAdmin SQL Dump
--- version 2.11.4-rc1
--- http://www.phpmyadmin.net
---
--- Host: localhost
--- Erstellungszeit: 13. Januar 2010 um 12:36
--- Server Version: 5.0.45
--- PHP-Version: 5.2.11
+-- Collection Roles
 
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-
---
--- Datenbank: `opus400`
---
-
--- --------------------------------------------------------
-
+INSERT INTO `collections_roles` (`id`, `name`, `oai_name`, `position`, `link_docs_path_to_root`, `visible`, `visible_browsing_start`, `display_browsing`, `visible_frontdoor`, `display_frontdoor`, `visible_oai`, `display_oai`) VALUES
+(9, 'Collections', 'coll', 9, 'none', 1, 1, 'Name', 1, 'Name', 1, 'Name'),
+(10, 'Schriftenreihen', 'series', 10, 'none', 1, 1, 'Name', 1, 'Name', 1, 'Name');
 --
 -- Tabellenstruktur für Tabelle `collections_contents_9`
 --
