@@ -61,6 +61,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="metis_fault">
+      <tuv xml:lang="en">
+        <seg>An error occurred</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Es ist ein Fehler aufgetreten</seg>
+      </tuv>
+    </tu>
+    
   </body>
   
 </tmx>

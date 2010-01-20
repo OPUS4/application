@@ -38,12 +38,11 @@
  * @category    Application
  * @package     Module_Metis
  */
-//class Edit_IndexController extends Zend_Controller_Action {
 class Metis_IndexController extends Zend_Controller_Action {
 
 	/**
-	 * Just to be there. No actions taken.
-	 *
+     * build the form for pixel-order
+     *
 	 * @return void
 	 *
 	 */
@@ -52,7 +51,6 @@ class Metis_IndexController extends Zend_Controller_Action {
        $metisForm->setAction($this->view->url(array('module' => "metis", "controller"=>'index', "action"=>'getpixel')));
        $metisForm->setMethod('post');
        $this->view->form = $metisForm;
-
 	}
 
     public function getpixelAction() {
@@ -66,38 +64,52 @@ class Metis_IndexController extends Zend_Controller_Action {
                $password = $form->getValue('passwd');
                $number = $form->getValue('number');
 
-        // create Client
+               // create Client
                $wsdl = "https://213.61.127.251/services/1.0/pixelService.wsdl";
                $options = array('trace' => '1',
                                 'login' => $user,
                                 'password' => $password);
-
                $client = new SoapClient ($wsdl,$options);
-               // request the available functions of the webservice
-               $avail = $client->__getFunctions();
-               $this->view->avail = $avail;
-               // request the datatypes
-               $types = $client->__getTypes();
-               $this->view->types = $types;
                // calling PixelOrder
                try {
-//                   $param = array('count' => '3');
                    $param = array('count' => $number);
                    $response = $client->orderPixel($param);
-                   print_r($response);
+                   print_r($response);  // nur zu Testzwecken
+                   $publicIds = array();
+                   $privateIds = array();
+                   $pixels = $response->pixels->pixel;
+                   if (true === is_array($pixels)) {
+                       for ($pi = 0; $pi < count($pixels); $pi++) {
+                           $publicIds [$pi] = $pixels[$pi]->publicIdentificationId;
+                           $privateIds[$pi] = $pixels[$pi]->privateIdentificationId;
+                       }
+                   } else {
+                       $publicIds [0] = $response->pixels->pixel->publicIdentificationId;
+                       $privateIds[0] = $response->pixels->pixel->privateIdentificationId;
+                   }
+                   //TODO save pixels in SQL-table
+                   $this->view->domain = $response->domain;
+                   $this->view->datetime = $response->orderDateTime;
+                   $this->view->publicIds = $publicIds;
+                   $this->view->privateIds = $privateIds;
                }
                catch (SoapFault $sf) {
-                   print_r($sf);
+                   $this->view->form = $form;
+                   $this->view->ok = '0';
+                   if (isset($sf->detail->orderPixelFault->errormsg)) {
+                       $this->view->fault = $sf->detail->orderPixelFault->errormsg;
+                   } else {
+                        $this->view->fault = $sf->faultstring;
+                   }
                }
 
-            } else {
+           } else {      // form not valid
                 $this->view->form = $form;
-//                $this->view->form = $form->populate($data);
-            }
-     }
-                $this->view->form = $form->populate($data);
-//     $this->view->form = $form;
-
+           }
+        } else {         // not post
+           $form = new OrderForm();
+           $this->view->form = $form;
+        }
 
    }
 }

@@ -36,18 +36,18 @@
 <?
 if ($this->ok != '1') {
   echo $this->form;
+  if ($this->fault != '') {
+    echo '<br>' . $this->translate('metis_fault') . ': ' . $this->fault;
   }
+}
 
 if ($this->ok == '1') {
-echo '<h3>Methoden des Webservice</h3><br/>';
-foreach($this->avail as $func) {
-    echo '<p>' . $func . '</p>';
-    echo '<br/>';
-    }
-
-echo '<h3>Datentypen des Webservice</h3><br/>';
-foreach($this->types as $type) {
-    echo '<p>' . $type . '</p>';
-    }
-echo '<br/>';
+   echo $this->domain . '<br/>';
+   echo $this->datetime . '<br/>';
+   foreach ($this->publicIds as $publicId) {
+      echo $publicId . '<br/>';
+   }
+   foreach ($this->privateIds as $privateId) {
+      echo $privateId . '<br/>';
+   }
 }
