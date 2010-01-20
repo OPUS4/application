@@ -276,7 +276,16 @@
         <seg>Diesem Dokument sind noch keine Tags auf Delicious zugeordnet.</seg>
       </tuv>
     </tu>
-<<<<<<< .mine
+
+    <tu tuid="delicious_loginfailed">
+      <tuv xml:lang="en">
+        <seg>Failure logging in. Please try again. If you lost your password please contact delicious.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Fehler bei der Anmeldung. Bitte versuchen Sie es erneut. Wenn Sie Ihr Passwort vergessen haben, kontaktieren Sie bitte delicious.</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="bibsonomy_register">
       <tuv xml:lang="en">
         <seg>Create a new account at Bibsonomy</seg>

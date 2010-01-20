@@ -47,15 +47,8 @@ class SocialBookmarking_DeliciousController extends Zend_Controller_Action
     public function indexAction() 
     {
         $connotea = new Zend_Session_Namespace('delicious');
-        if (false === isset($connotea->user)) {
-        	// show login mask
-            $loginForm = new DeliciousLoginForm();
-            $loginForm->setAction($this->view->url(array('module' => "socialBookmarking", "controller"=>'delicious', "action"=>"login")));
-            $loginForm->setMethod('post');
-            $this->view->loginform = $loginForm;
-            $this->view->note = '<a href="https://secure.delicious.com/register" target="_blank">' . $this->view->translate('delicious_register') . "</a>\n";
-        }
-        else {
+        try {
+        if (true === $connotea->authorized) {
             $connoteaPost = new Delicious;
             $connoteaPost->user = $connotea->user;
             $connoteaPost->password = $connotea->password;
@@ -63,7 +56,7 @@ class SocialBookmarking_DeliciousController extends Zend_Controller_Action
             #$this->view->note = '<a href="' . $this->view->url(array('module' => "socialBookmarking", "controller"=>'delicious', "action"=>"logout")) . '">Logout</a>';
 
             $data = $this->_request->getParams();            
-
+   
             if (true === array_key_exists('docId', $data))
             {
                 $connotea->uri = 'http://' . $_SERVER['HTTP_HOST'] . $this->view->url(array('module' => "frontdoor", "controller"=>'index', "action"=>"index", 'docId'=>$data['docId']));
@@ -86,8 +79,32 @@ class SocialBookmarking_DeliciousController extends Zend_Controller_Action
             }
             else 
             {
-            	$this->view->bookmark = $this->view->translate('delicious_no_parameter');
+          	    $this->view->bookmark = $this->view->translate('delicious_no_parameter');
             }
+        }
+        else {
+        	// show login mask
+        	$this->view->delicioususer = null;
+            $loginForm = new DeliciousLoginForm();
+            $loginForm->setAction($this->view->url(array('module' => "socialBookmarking", "controller"=>'delicious', "action"=>"login")));
+            $loginForm->setMethod('post');
+            $this->view->loginform = $loginForm;
+            $this->view->note = '<a href="https://secure.delicious.com/register" target="_blank">' . $this->view->translate('delicious_register') . "</a>\n";
+            if ($connotea->loginfail === true) {
+            	$this->view->note .= $this->view->translate('delicious_loginfailed');
+            	$connotea->loginfail = false;
+            }
+        }
+        }
+        catch (Exception $e) {
+        	// show login mask
+        	$this->view->delicioususer = null;
+            $loginForm = new DeliciousLoginForm();
+            $loginForm->setAction($this->view->url(array('module' => "socialBookmarking", "controller"=>'delicious', "action"=>"login")));
+            $loginForm->setMethod('post');
+            $this->view->loginform = $loginForm;
+            $this->view->note = '<a href="https://secure.delicious.com/register" target="_blank">' . $this->view->translate('delicious_register') . "</a><br/>\n";
+           	$this->view->note .= 'Error ' . $e->getCode() . ': ' . $e->getMessage();
         }
     }
     
@@ -95,9 +112,26 @@ class SocialBookmarking_DeliciousController extends Zend_Controller_Action
        if ($this->_request->isPost() === true) {
             // post request
             $data = $this->_request->getPost();
+           	// check login
            	$connotea = new Zend_Session_Namespace('delicious');
+           	$connotea->authorized = false;
+           	try { 
+                $connoteaPost = new Delicious;
+                $connoteaPost->user = $data['user'];
+                $connoteaPost->password = $data['password'];
+           	    $connoteaPost->gettags('http://' . $_SERVER['HTTP_HOST'] . $this->view->url(array('module' => "frontdoor", "controller"=>'index', "action"=>"index", 'docId'=>"1")));
+           	}
+           	catch (Exception $e) {
+            	#if ($e->getCode() === 0) {
+                	$connotea->user = null;
+                	$connotea->password = null;
+                	$connotea->authorized = false;
+                	$this->_forward('index');
+            	#}           		
+           	}
            	$connotea->user = $data['user'];
            	$connotea->password = $data['password'];
+           	$connotea->authorized = true;
         }
         $this->_forward('index');
     }
@@ -105,6 +139,7 @@ class SocialBookmarking_DeliciousController extends Zend_Controller_Action
     public function logoutAction() {
        $connotea = new Zend_Session_Namespace('delicious');
        unset($connotea->user);
+       $connotea->authorized = false;
        $this->_forward('index');
     }
 
