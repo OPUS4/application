@@ -337,7 +337,8 @@ class Admin_DocumentsController extends Controller_CRUDAction {
 			                $searchEngine = 'Lucene';
 		                }
                         // Reindex
-                        $indexer = new Opus_Search_Index_.$searchEngine._Indexer();
+                        $engineclass = 'Opus_Search_Index_'.$searchEngine.'_Indexer';
+                        $indexer = new $engineclass();
                         $indexer->removeDocumentFromEntryIndex($document);
                         $indexer->addDocumentToEntryIndex($document);
                     
@@ -379,7 +380,8 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             $searchEngine = 'Lucene';
 	    }
         // Add to index
-        $indexer = new Opus_Search_Index_.$searchEngine._Indexer();
+        $engineclass = 'Opus_Search_Index_'.$searchEngine.'_Indexer';
+        $indexer = new $engineclass();
         $indexer->addDocumentToEntryIndex($doc);
 
         $this->_redirectTo('', 'index');
@@ -403,7 +405,8 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             $searchEngine = 'Lucene';
 	    }
         // Add to index
-        $indexer = new Opus_Search_Index_.$searchEngine._Indexer();
+        $engineclass = 'Opus_Search_Index_'.$searchEngine.'_Indexer';
+        $indexer = new $engineclass();
         $indexer->removeDocumentFromEntryIndex($doc);
 
         $this->_redirectTo('', 'index');
