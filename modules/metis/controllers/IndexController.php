@@ -53,7 +53,13 @@ class Metis_IndexController extends Zend_Controller_Action {
        $this->view->form = $metisForm;
 	}
 
-    public function getpixelAction() {
+    /**
+     * get pixels from the VG Wort-Webservice
+     *
+     * @return void
+     *
+     */
+	public function getpixelAction() {
 	    $this->view->title = 'Metis';
         if (true === $this->getRequest()->isPost()) {
            $data = $this->getRequest()->getPost();
@@ -96,7 +102,7 @@ class Metis_IndexController extends Zend_Controller_Action {
                catch (SoapFault $sf) {
                    $this->view->form = $form;
                    $this->view->ok = '0';
-                   if (isset($sf->detail->orderPixelFault->errormsg)) {
+                   if (true === isset($sf->detail->orderPixelFault->errormsg)) {
                        $this->view->fault = $sf->detail->orderPixelFault->errormsg;
                    } else {
                         $this->view->fault = $sf->faultstring;
