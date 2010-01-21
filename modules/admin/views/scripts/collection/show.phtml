@@ -32,6 +32,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+$path = '';
 ?>
 <h1>Opus Application - <?=$this->translate('admin_title_collections') ?></h1>
 
@@ -52,7 +53,7 @@
                 $path = array_pop($paths);?>
         <a href="<?=$this->url(array('module'=>'admin', 'controller'=>'collection', 'action'=>'show',
         'role'=>$this->role_id, 'path'=>$path), null, true)?>"><img src = "<?= $this->layoutPath . '/img/abort_copy_collection.png';?>" align='middle' border = '0' title = '<?=$this->translate('admin_collections_collection_copy_abort')?>'></a>
-            <? } else { ?>
+            <? } else {?>
         <a href="<?=$this->url(array('module'=>'admin', 'controller'=>'collection', 'action'=>'show',
         'role'=>$this->role_id), null, true)?>"><?=$this->translate('admin_collections_collection_copy_abort')?></a>
             <? } ?>
