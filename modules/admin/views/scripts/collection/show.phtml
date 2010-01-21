@@ -136,4 +136,16 @@
 </td>
     </tr>
     <? endforeach; ?>
+
+    <? if (0 === count($this->subcollections)) : ?>
+    <tr class="visible" >
+        <td width="400">
+    <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'new',
+                'role' => $this->role_id), null, true)?>">
+                <img src = "<?= $this->layoutPath . '/img/add_collection_below.png';?>" align='middle' border = '0'
+                    title = '<?=$this->translate('admin_collections_collection_add_below')?>'></a>
+</td>
+    </tr>
+    <? endif; ?>
+
 </table>
