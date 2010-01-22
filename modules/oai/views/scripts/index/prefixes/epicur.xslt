@@ -55,8 +55,7 @@
     <xsl:template match="Opus_Document" mode="epicur">
         <xsl:element name="epicur">
             <xsl:attribute name="xsi:schemaLocation">
-            urn:nbn:de:1111-2004033116
-            http://www.persistent-identifier.de/xepicur/version1.0/xepicur.xsd
+              <xsl:text>urn:nbn:de:1111-2004033116 http://www.persistent-identifier.de/xepicur/version1.0/xepicur.xsd</xsl:text>
             </xsl:attribute>
             <xsl:element name="administrative_data">
                 <xsl:element name="delivery">
@@ -65,16 +64,14 @@
             </xsl:element>
             <xsl:element name="record">
                <!-- IdentifierUrn -->
-               <!-- xsl:apply-templates select="IdentifierIsbn|IdentifierUrn" mode="epicur" -->
                <xsl:apply-templates select="IdentifierUrn" mode="epicur" />
                <xsl:element name="resource">
                     <!-- IdentifierUrl -->
                     <xsl:apply-templates select="IdentifierUrl" mode="epicur" />
                     <xsl:element name="format">
-                        <xsl:attribute name="scheme"> 
-                        imt
+                        <xsl:attribute name="scheme"><xsl:text>imt</xsl:text>
                         </xsl:attribute>
-                        text/html
+                        <xsl:text>text/html</xsl:text>
                     </xsl:element>
                </xsl:element>
             </xsl:element>
@@ -85,7 +82,7 @@
     <!--xsl:template match="IdentifierIsbn|IdentifierUrn" mode="epicur"-->
     <xsl:template match="IdentifierUrn" mode="epicur">
         <xsl:element name="identifier">
-            <xsl:attribute name="scheme">urn:nbn:de</xsl:attribute>
+            <xsl:attribute name="scheme"><xsl:text>urn:nbn:de</xsl:text></xsl:attribute>
             <xsl:value-of select="@Value" />
         </xsl:element>
     </xsl:template>
@@ -93,9 +90,9 @@
 
     <xsl:template match="IdentifierUrl" mode="epicur">
         <xsl:element name="identifier">
-            <xsl:attribute name="scheme">url</xsl:attribute>
-            <xsl:attribute name="type">frontpage</xsl:attribute>
-            <xsl:attribute name="role">primary</xsl:attribute>
+            <xsl:attribute name="scheme"><xsl:text>url</xsl:text></xsl:attribute>
+            <xsl:attribute name="type"><xsl:text>frontpage</xsl:text></xsl:attribute>
+            <xsl:attribute name="role"><xsl:text>primary</xsl:text></xsl:attribute>
             <xsl:value-of select="@Value" />
         </xsl:element>
     </xsl:template>

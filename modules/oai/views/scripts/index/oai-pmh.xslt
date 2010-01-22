@@ -91,8 +91,7 @@
     <xsl:template match="/">
         <xsl:element name="OAI-PMH">
             <xsl:attribute name="xsi:schemaLocation">
-                <xsl:text>http://www.openarchives.org/OAI/2.0/
-                http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd</xsl:text>
+                <xsl:text>http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd</xsl:text>
             </xsl:attribute>
             <xsl:element name="responseDate">
                 <xsl:value-of select="$dateTime" />
@@ -162,26 +161,24 @@
            <xsl:element name="baseURL">
              <xsl:value-of select="$oai_base_url"/>
            </xsl:element>
-           <xsl:element name="protocolVersion">2.0</xsl:element>
+           <xsl:element name="protocolVersion"><xsl:text>2.0</xsl:text></xsl:element>
            <xsl:element name="adminEmail">
              <xsl:value-of select="$emailAddress"/>
            </xsl:element>
            <xsl:element name="earliestDatestamp">
              <xsl:value-of select="$earliestDate"/>
            </xsl:element>
-           <xsl:element name="deletedRecord">no</xsl:element>
-           <xsl:element name="granularity">YYYY-MM-DDThh:mm:ssZ</xsl:element>
+           <xsl:element name="deletedRecord"><xsl:text>no</xsl:text></xsl:element>
+           <xsl:element name="granularity"><xsl:text>YYYY-MM-DDThh:mm:ssZ</xsl:text></xsl:element>
            <xsl:element name="description">
                <xsl:element name="oai-identifier">
-                  <xsl:attribute name="xsi:schemaLocation">
-                     http://www.openarchives.org/OAI/2.0/oai-identifier
-                     http://www.openarchives.org/OAI/2.0/oai-identifier.xsd
+                  <xsl:attribute name="xsi:schemaLocation"><xsl:text>http://www.openarchives.org/OAI/2.0/oai-identifier http://www.openarchives.org/OAI/2.0/oai-identifier.xsd</xsl:text>
                   </xsl:attribute>
-                  <xsl:element name="scheme">oai</xsl:element>
+                  <xsl:element name="scheme"><xsl:text>oai</xsl:text></xsl:element>
                   <xsl:element name="repositoryIdentifier">
                      <xsl:value-of select="$repIdentifier"/>
                   </xsl:element>
-                  <xsl:element name="delimiter">:</xsl:element>
+                  <xsl:element name="delimiter"><xsl:text>:</xsl:text></xsl:element>
                   <xsl:element name="sampleIdentifier">
                      <xsl:value-of select="$sampleIdentifier"/>
                   </xsl:element>
@@ -195,29 +192,24 @@
     <xsl:template match="Documents" mode="ListMetadataFormats">
         <xsl:element name="ListMetadataFormats">
           <xsl:element name="metadataFormat">
-            <xsl:element name="metadataPrefix">oai_dc</xsl:element>
-            <xsl:element name="schema">http://www.openarchives.org/OAI/2.0/oai_dc.xsd</xsl:element>
-            <xsl:element name="metadataNamespace">http://www.openarchives.org/OAI/2.0/oai_dc/</xsl:element>
+            <xsl:element name="metadataPrefix"><xsl:text>oai_dc</xsl:text></xsl:element>
+            <xsl:element name="schema"><xsl:text>http://www.openarchives.org/OAI/2.0/oai_dc.xsd</xsl:text></xsl:element>
+            <xsl:element name="metadataNamespace"><xsl:text>http://www.openarchives.org/OAI/2.0/oai_dc/</xsl:text></xsl:element>
           </xsl:element>
           <xsl:element name="metadataFormat">
-            <xsl:element name="metadataPrefix">epicur</xsl:element>
-            <xsl:element name="schema">http://www.persistent-identifier.de/xepicur/version1.0/xepicur.xsd</xsl:element>
-            <xsl:element name="metadataNamespace">urn:nbn:de:1111-2004033116</xsl:element>
+            <xsl:element name="metadataPrefix"><xsl:text>epicur</xsl:text></xsl:element>
+            <xsl:element name="schema"><xsl:text>http://www.persistent-identifier.de/xepicur/version1.0/xepicur.xsd</xsl:text></xsl:element>
+            <xsl:element name="metadataNamespace"><xsl:text>urn:nbn:de:1111-2004033116</xsl:text></xsl:element>
           </xsl:element>
           <xsl:element name="metadataFormat">
-            <xsl:element name="metadataPrefix">oai_pp</xsl:element>
-            <xsl:element name="schema">http://www.proprint-service.de/xml/schemes/v1/PROPRINT_METADATA_SET.xsd</xsl:element>
-            <xsl:element name="metadataNamespace">http://www.proprint-service.de/xml/schemes/v1/</xsl:element>
+            <xsl:element name="metadataPrefix"><xsl:text>xMetaDiss</xsl:text></xsl:element>
+            <xsl:element name="schema"><xsl:text>http://www.d-nb.de/standards/xmetadiss/xmetadiss.xsd</xsl:text></xsl:element>
+            <xsl:element name="metadataNamespace"><xsl:text>http://www.d-nb.de/standards/xMetaDiss/</xsl:text></xsl:element>
           </xsl:element>
           <xsl:element name="metadataFormat">
-            <xsl:element name="metadataPrefix">xMetaDiss</xsl:element>
-            <xsl:element name="schema">http://www.d-nb.de/standards/xmetadiss/xmetadiss.xsd</xsl:element>
-            <xsl:element name="metadataNamespace">http://www.d-nb.de/standards/xMetaDiss/</xsl:element>
-          </xsl:element>
-          <xsl:element name="metadataFormat">
-            <xsl:element name="metadataPrefix">XMetaDissPlus</xsl:element>
-            <xsl:element name="schema">http://www.bsz-bw.de/xmetadissplus/1.3/xmetadissplus.xsd</xsl:element>
-            <xsl:element name="metadataNamespace">http://www.bsz-bw.de/xmetadissplus/1.3</xsl:element>
+            <xsl:element name="metadataPrefix"><xsl:text>XMetaDissPlus</xsl:text></xsl:element>
+            <xsl:element name="schema"><xsl:text>http://www.bsz-bw.de/xmetadissplus/1.3/xmetadissplus.xsd</xsl:text></xsl:element>
+            <xsl:element name="metadataNamespace"><xsl:text>http://www.bsz-bw.de/xmetadissplus/1.3</xsl:text></xsl:element>
           </xsl:element>
         </xsl:element>
     </xsl:template>
@@ -271,7 +263,20 @@
 
 
     <xsl:template match="Opus_Document">
-        <xsl:element name="record">
+      <xsl:choose>
+         <xsl:when test="$oai_verb='ListIdentifiers'">
+           <xsl:call-template name="Opus_Document_Data"/>
+         </xsl:when>
+         <xsl:otherwise>
+           <xsl:element name="record">
+             <xsl:call-template name="Opus_Document_Data"/>
+           </xsl:element>
+         </xsl:otherwise>
+      </xsl:choose>
+    </xsl:template>       
+
+
+    <xsl:template name="Opus_Document_Data">
             <xsl:element name="header">
                 <!--
                     This is the identifier for the metadata, not a digital object:
@@ -330,7 +335,6 @@
             
             </xsl:when>
             </xsl:choose>            
-        </xsl:element>
     </xsl:template>
     
     <xsl:template match="Spec">
