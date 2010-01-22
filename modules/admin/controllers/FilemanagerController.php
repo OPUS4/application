@@ -151,31 +151,61 @@ class Admin_FilemanagerController extends Zend_Controller_Action
             }
             $this->view->uploadform = $uploadForm;
     	    try {
-    	        $doc = new Opus_Document($requestData['docId']);
+    	        $document = new Opus_Document($requestData['docId']);
     	        $this->view->files = array();
-                $this->view->verifyResult = array();
 
-                $index = 0;
-
-                foreach ($doc->getFile() as $file)
-                {
-                    $form = new SignatureForm();
-                    $form->FileObject->setValue($file->getId());
-                    $form->setAction($this->view->url(array('module' => 'admin', 'controller' => 'filemanager', 'action' => 'index', 'docId' => $requestData['docId']), null, true));
-
-                    $this->view->files[$index]['path'] = $file->getPathName();
-                    $this->view->files[$index]['object'] = $file;
-                    $this->view->files[$index]['form'] = $form;
-
-                    try {
-                        $this->view->verifyResult[$file->getPathName()] = $gpg->verifyPublicationFile($file);
-                    }
-                    catch (Exception $e) {
-                        $this->view->verifyResult[$file->getPathName()] = array(array($e->getMessage()));
-                    }
-                    $index++;
+                //searching for files, getting filenumbers and hashes
+                $fileNumber = 0;
+                $files = $document->getFile();
+                if (true === is_array($files) && count($files) > 0) {
+                    $fileNumber = count($files);
+                    $this->view->fileNumber = $fileNumber;
                 }
-                if ($index === 0) {
+                // Iteration over all files, hashtypes and -values
+                $gpg = new Opus_GPG();
+                $this->view->verifyResult = array();
+                $fileNames = array();
+                $hashType = array();
+                $hashSoll = array();
+                $hashIst = array();
+                $hashNumber = array();
+                $fileForms = array();
+                for ($fi = 0; $fi < $fileNumber; $fi++) {
+                    $form = new SignatureForm();
+                    $form->FileObject->setValue($document->getFile($fi)->getId());
+                    $form->setAction($this->view->url(array('module' => 'admin', 'controller' => 'filemanager', 'action' => 'index', 'docId' => $requestData['docId']), null, true));
+                    
+                    $fileForms[$fi] = $form;
+                    $fileNames[$fi] = $document->getFile($fi)->getPathName();
+                    if (true === is_array ($hashes = $document->getFile($fi)->getHashValue())) {
+                        $countHash = count($hashes);
+                        for ($hi = 0; $hi < $countHash; $hi++) {
+                            $hashNumber[$fi] = $countHash;
+                            $hashSoll[$fi][$hi] = $document->getFile($fi)->getHashValue($hi)->getValue();
+                            $hashType[$fi][$hi] = $document->getFile($fi)->getHashValue($hi)->getType();
+                            if (substr($hashType[$fi][$hi], 0, 3) === 'gpg') {
+                                try {
+                                    $this->view->verifyResult[$fileNames[$fi]] = $gpg->verifyPublicationFile($document->getFile($fi));
+                                } catch (Exception $e) {
+                                    $this->view->verifyResult[$fileNames[$fi]] = array('result' => array($e->getMessage()), 'signature' => $hashSoll[$fi][$hi]);
+                                }
+                            } else {
+                                $hashIst[$fi][$hi] = 0;
+                                if (true === $document->getFile($fi)->canVerify()) {
+                                    $hashIst[$fi][$hi] = $document->getFile($fi)->getRealHash($hashType[$fi][$hi]);
+                                }
+                            }
+                        }
+                    }
+                }
+                $this->view->hashType = $hashType;
+                $this->view->hashSoll = $hashSoll;
+                $this->view->hashIst = $hashIst;
+                $this->view->hashNumber = $hashNumber;
+                $this->view->fileNames = $fileNames;
+                $this->view->fileNumber = $fileNumber;
+                $this->view->fileForm = $fileForms;
+                if ($fileNumber === 0) {
                     $this->view->actionresult = $this->view->translate('admin_filemanager_nofiles');
                 }
     	    }
