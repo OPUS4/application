@@ -170,13 +170,17 @@ class Admin_FilemanagerController extends Zend_Controller_Action
                 $hashIst = array();
                 $hashNumber = array();
                 $fileForms = array();
+                $verified = array();
                 for ($fi = 0; $fi < $fileNumber; $fi++) {
                     $form = new SignatureForm();
                     $form->FileObject->setValue($document->getFile($fi)->getId());
                     $form->setAction($this->view->url(array('module' => 'admin', 'controller' => 'filemanager', 'action' => 'index', 'docId' => $requestData['docId']), null, true));
                     
-                    $fileForms[$fi] = $form;
                     $fileNames[$fi] = $document->getFile($fi)->getPathName();
+                    if (file_exists($fileNames[$fi]) === false) {
+                    	$fileNumber--;
+                    	continue;
+                    }
                     if (true === is_array ($hashes = $document->getFile($fi)->getHashValue())) {
                         $countHash = count($hashes);
                         for ($hi = 0; $hi < $countHash; $hi++) {
@@ -186,6 +190,18 @@ class Admin_FilemanagerController extends Zend_Controller_Action
                             if (substr($hashType[$fi][$hi], 0, 3) === 'gpg') {
                                 try {
                                     $this->view->verifyResult[$fileNames[$fi]] = $gpg->verifyPublicationFile($document->getFile($fi));
+                                    foreach($this->view->verifyResult[$fileNames[$fi]] as $verifiedArray) {
+                                        foreach($verifiedArray as $index => $verificationResult) {
+                                            if ($index === 'result') {
+                                                foreach ($verificationResult as $result) {
+                                                    // Show key used for signature
+                                                    if (true === is_object($result) && get_class($result) === 'Crypt_GPG_Signature') {
+                                                        $verified[] = $result->getKeyFingerprint();
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
                                 } catch (Exception $e) {
                                     $this->view->verifyResult[$fileNames[$fi]] = array('result' => array($e->getMessage()), 'signature' => $hashSoll[$fi][$hi]);
                                 }
@@ -196,6 +212,16 @@ class Admin_FilemanagerController extends Zend_Controller_Action
                                 }
                             }
                         }
+                        if (in_array($gpg->getMasterkey()->getPrimaryKey()->getFingerprint(), $verified) === false) {
+                            $fileForms[$fi] = $form;
+                        }
+                        else {
+                        	$fileForms[$fi] = '';
+                        }
+                        $deleteForm = new DeleteForm();
+                        $deleteForm->FileObject->setValue($document->getFile($fi)->getId());
+                        $deleteForm->setAction($this->view->url(array('module' => 'admin', 'controller' => 'filemanager', 'action' => 'index', 'docId' => $requestData['docId']), null, true));
+                        $fileForms[$fi] .= $deleteForm;
                     }
                 }
                 $this->view->hashType = $hashType;

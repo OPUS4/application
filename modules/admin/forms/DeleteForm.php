@@ -29,13 +29,13 @@
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ * @version     $Id: SignatureForm.php 2760 2009-05-14 07:13:38Z marahrens $
  */
 
 /**
  * form to show the search mask
  */
-class SignatureForm extends Zend_Form
+class DeleteForm extends Zend_Form
 {
     /**
      * Build easy upload form
@@ -43,14 +43,11 @@ class SignatureForm extends Zend_Form
      * @return void
      */
     public function init() {
-        $keyupload = new Zend_Form_Element_Password('password');
-        $keyupload->setLabel('keyPassword');
-
         $fileToSign = new Zend_Form_Element_Hidden('FileObject');
 
-        $submit = new Zend_Form_Element_Submit('signsubmit');
-        $submit->setLabel('pkm_signFile');
+        $deletesubmit = new Zend_Form_Element_Submit('deletesubmit');
+        $deletesubmit->setLabel('admin_filemanager_delete');
 
-        $this->addElements(array($keyupload, $fileToSign, $submit));
+        $this->addElements(array($fileToSign, $deletesubmit));
     }
 }

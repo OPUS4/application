@@ -127,7 +127,10 @@ for ($fi = 0; $fi < $this->fileNumber; $fi++) {
             <?
          }
       }
-      echo $this->fileForm[$fi];
+      if (isset($this->fileForm[$fi]) === true) {
+          echo $this->fileForm[$fi];
+      }
+      echo "<hr/>";
 }
 }
 ?>
