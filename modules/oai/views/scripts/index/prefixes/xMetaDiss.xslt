@@ -92,7 +92,7 @@
             <!-- dc:contributor -->
             <xsl:apply-templates select="PersonAdvisor" mode="xmetadiss" />
             <xsl:apply-templates select="PersonReferee" mode="xmetadiss" />
-            <xsl:apply-templates select="DateAccepted" mode="xmetadiss" />
+            <xsl:apply-templates select="@DateAccepted" mode="xmetadiss" />
             <xsl:element name="dc:type">
                <xsl:attribute name="xsi:type"><xsl:text>ddb:PublType</xsl:text></xsl:attribute>
                <xsl:text>ElectronicThesisandDissertation</xsl:text>
@@ -274,10 +274,10 @@
     </xsl:template>
 
 
-    <xsl:template match="DateAccepted" mode="xmetadiss">
+    <xsl:template match="@DateAccepted" mode="xmetadiss">
         <xsl:element name="dcterms:dateAccepted">
           <xsl:attribute name="xsi:type"><xsl:text>dcterms:W3CDTF</xsl:text></xsl:attribute>
-            <xsl:value-of select="concat(@Year,'-',format-number(@Month,'00'),'-',format-number(@Day,'00'))" />
+            <xsl:value-of select="." />
         </xsl:element>
     </xsl:template>
 
