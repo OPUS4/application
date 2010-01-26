@@ -117,7 +117,11 @@ class Admin_DocumentsController extends Controller_CRUDAction {
 
         // docList contains a (sorted) list of IDs of the documents, that should be returned
         // the list has been sorted by the database already.
-        $docList = Opus_Document::getAllDocumentIdsByStateSorted('published', array($sort_order => $sort_reverse));
+        if (true === array_key_exists('state', $data)) {
+            $docList = Opus_Document::getAllDocumentIdsByStateSorted($data['state'], array($sort_order => $sort_reverse));
+        } else {
+            $docList = Opus_Document::getAllDocumentIdsSorted(array($sort_order => $sort_reverse));
+        }
 
         $paginator = Zend_Paginator::factory($docList);
         if (array_key_exists('hitsPerPage', $data)) {

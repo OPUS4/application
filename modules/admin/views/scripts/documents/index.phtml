@@ -248,7 +248,7 @@ if (count($this->hitlist_paginator)) {
         }
         ?>
             <a href="<?php echo $url_edit ?>"><?php echo $this->translate('docs_edit'); ?></a>
-            <input type="hidden" name="id" value="<?php echo $docId ?>" />
+            <input type="hidden" name="id" value="<?php echo $id ?>" />
             <?php if ($docState === 'deleted') { ?>
             <input type="submit" value="<?php echo $this->translate('docs_permadelete'); ?>" />
             <?php
