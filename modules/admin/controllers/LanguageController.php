@@ -48,21 +48,4 @@ class Admin_LanguageController extends Controller_CRUDAction {
      */
     protected $_modelclass = 'Opus_Language';
 
-    /**
-     * List all available languages
-     *
-     * @return void
-     */
-    public function indexAction() {
-        $name = $this->getRequest()->getParam('name');
-        if (isset($name) === false) {
-            $this->_redirectTo('', 'index', null, null, array('name' => 'A'));
-        }
-        $entries = Opus_Language::getAllByName($name);
-        $this->view->entries = array();
-        foreach ($entries as $entry) {
-            $this->view->entries[$entry->getId()] = $entry->getDisplayName();
-        }
-    }
-
 }
