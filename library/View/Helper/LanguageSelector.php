@@ -73,6 +73,8 @@ class View_Helper_LanguageSelector {
      * @return string
      */
     public function __toString() {
+        if ($this->_view->languageSelectorDisabled === true) return '';
+
         $translations = Zend_Registry::get('Zend_Translate')->getList();
 
         $locale = new Zend_Locale();

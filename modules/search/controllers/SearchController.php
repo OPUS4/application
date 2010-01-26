@@ -90,7 +90,8 @@ class Search_SearchController extends Zend_Controller_Action
      */
     public function searchAction()
     {
-   		$failure = false;
+   		$this->view->languageSelectorDisabled = true;
+        $failure = false;
    		$config = Zend_Registry::get('Zend_Config');
 
 		$searchEngine = $config->searchengine->engine;
@@ -162,7 +163,7 @@ class Search_SearchController extends Zend_Controller_Action
         	$this->view->failure = $failure;
             $this->render('search');
         }
-        
+
     }
 
     /**
@@ -172,6 +173,7 @@ class Search_SearchController extends Zend_Controller_Action
      */
     public function metadatasearchAction()
     {
+        $this->view->languageSelectorDisabled = true;
    		$config = Zend_Registry::get('Zend_Config');
 
 		$searchEngine = $config->searchengine->engine;
