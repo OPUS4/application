@@ -92,8 +92,54 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             )
             );
         $data = $this->_request->getParams();
+        $filter = $this->_getParam("filter");
+        $this->view->filter = $filter;
+        $data = $this->_request->getParams();
+
+        $page = 1;
+        if (array_key_exists('page', $data)) {
+            // set page if requested
+            $page = $data['page'];
+        }
+        $this->view->title = $this->view->translate('search_index_alltitles_browsing');
+
+         // Default Filter is: show all documents from the server
+        $sort_order   = 'id';
+        if (true === array_key_exists('sort_order', $data) && false === is_null($data['sort_order'])) {
+           $sort_order = $data['sort_order'];
+        }
+
+        // Default Ordering...
+        $sort_reverse = false;
+        if (true === array_key_exists('sort_reverse', $data) && false === is_null($data['sort_reverse'])) {
+           $sort_reverse = '1' === $data['sort_reverse'] ? true : false;
+        }
+
+        // docList contains a (sorted) list of IDs of the documents, that should be returned
+        // the list has been sorted by the database already.
+        $docList = Opus_Document::getAllDocumentIdsByStateSorted('published', array($sort_order => $sort_reverse));
+
+        $paginator = Zend_Paginator::factory($docList);
+        if (array_key_exists('hitsPerPage', $data)) {
+            if ($data['hitsPerPage'] === '0') {
+                $hitsPerPage = '10000';
+            }
+            else {
+                $hitsPerPage = $data['hitsPerPage'];
+            }
+            $paginator->setItemCountPerPage($hitsPerPage);
+        }
+        $paginator->setCurrentPageNumber($page);
+        $this->view->hitlist_paginator = $paginator;
+
+
+
+
+
+
+
         // following could be handled inside a application model
-        if (true === array_key_exists('sort_order', $data)) {
+        /*if (true === array_key_exists('sort_order', $data)) {
         	switch ($data['sort_order']) {
         		case 'author':
         	    	if (true === array_key_exists('state', $data)) {
@@ -151,7 +197,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         		    // Do nothing, the list has been sorted already!
                     foreach ($result as $id => $doc) {
         	            $docList[] = $id;
-                    }        		    
+                    }
         		    break;
         		default:
                     foreach ($result as $id => $doc) {
@@ -166,7 +212,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             }
         	sort($docList);
         }
-        
+
         if (true === array_key_exists('sorting', $data)) {
         	// By default everything is ascending
         	// if sorting is set to desc, reverse the array
@@ -174,7 +220,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         		$docList = array_reverse($docList, true);
         	}
         }
-        
+
         $paginator = Zend_Paginator::factory($docList);
         if (array_key_exists('hitsPerPage', $data)) {
         	if ($data['hitsPerPage'] === '0') {
@@ -193,7 +239,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         }
         $paginator->setCurrentPageNumber($page);
         $this->view->documentList = $paginator;
-        #$this->view->documentList = $docList;
+        #$this->view->documentList = $docList;*/
     }
 
     /**
@@ -254,7 +300,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                 // show safety question
                 $this->view->title = $this->view->translate('admin_doc_delete');
                 $this->view->text = $this->view->translate('admin_doc_delete_sure');
-                $yesnoForm = new YesNoForm(); 
+                $yesnoForm = new YesNoForm();
                 $idElement = new Zend_Form_Element_Hidden('id');
                 $idElement->setValue($id);
                 $yesnoForm->addElement($idElement);
@@ -294,7 +340,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                 // show safety question
                 $this->view->title = $this->view->translate('admin_doc_delete_permanent');
                 $this->view->text = $this->view->translate('admin_doc_delete_permanent_sure');
-                $yesnoForm = new YesNoForm(); 
+                $yesnoForm = new YesNoForm();
                 $idElement = new Zend_Form_Element_Hidden('id');
                 $idElement->setValue($id);
                 $yesnoForm->addElement($idElement);
@@ -329,7 +375,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                     if ($form->isValid($data) === true) {
                         // store document
                         $document->store();
-            
+
                 		$config = Zend_Registry::get('Zend_Config');
 
 		                $searchEngine = $config->searchengine->engine;
@@ -341,7 +387,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                         $indexer = new $engineclass();
                         $indexer->removeDocumentFromEntryIndex($document);
                         $indexer->addDocumentToEntryIndex($document);
-                    
+
                         // The first 3 params are module, controller and action.
                         // Additional parameters are passed through.
                         $params = $this->getRequest()->getUserParams();
