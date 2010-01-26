@@ -252,6 +252,8 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $this->view->title = $this->view->translate('admin_documents_edit');
         $form_builder = new Form_Builder();
         $document = new $this->_modelclass($id);
+        $documentInSession = new Zend_Session_Namespace('document');
+        $documentInSession->document = $document;
         if ($document->getServerState() === 'unpublished') {
             $this->view->actions = 'publish';
         }
@@ -363,7 +365,8 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         	$data = $this->_request->getPost();
             $form_builder = new Form_Builder();
             $id = $this->getRequest()->getParam('id');
-            $document = new Opus_Document($id);
+            $documentInSession = new Zend_Session_Namespace('document');
+            $document = $documentInSession->document;
             $form_builder->buildModelFromPostData($document, $data['Opus_Model_Filter']);
             $form = $form_builder->build($this->__createFilter($document));
             if (array_key_exists('submit', $data) === false) {
