@@ -37,14 +37,16 @@
 	<h2><?= $this->translate('search_index_browsing') ?></h2>
 	<a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseTitles'), null, true) ?>"><?= $this->translate('search_index_alltitles_browsing') ?></a><br/>
 	<?php
-           // TODO: Get roles-list from database
-	   $roles = array('author', 'editor', 'advisor', 'contributor', 'referee', 'other', 'translator');
+       // TODO: Get roles-list from database
+	   /* Removed
+	    * until we get a mechanism to control person doublettes
+	    * $roles = array('author', 'editor', 'advisor', 'contributor', 'referee', 'other', 'translator');
 	   foreach ($roles as $role) {
 	       $translatelabel = 'search_index_' . $role . '_browsing';
 	       echo '<a href="' . $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'persons', 'role' => $role), null, true) . '">';
 	       echo $this->translate($translatelabel);
 	       echo '</a><br/>';
-	   }
+	   }*/
 	?>
 	<a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'doctypes'), null, true) ?>"><?= $this->translate('search_index_doctype_browsing') ?></a><br/>
     <a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'collection', 'collection' => '1'), null, true) ?>"><?= $this->translate('search_index_custom_browsing_institutions') ?></a><br/>
