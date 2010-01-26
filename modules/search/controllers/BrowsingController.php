@@ -190,12 +190,15 @@ $data = $this->_request->getParams();
         $sort_order   = 'id';
         if (true === array_key_exists('sort_order', $data) && false === is_null($data['sort_order'])) {
            $sort_order = $data['sort_order'];
+           $this->view->sort_order = $sort_order;
         }
 
         // Default Ordering...
         $sort_reverse = false;
+        $this->view->sort_reverse = '0';
         if (true === array_key_exists('sort_reverse', $data) && false === is_null($data['sort_reverse'])) {
            $sort_reverse = '1' === $data['sort_reverse'] ? true : false;
+           $this->view->sort_reverse = $sort_reverse;
         }
 
         // docList contains a (sorted) list of IDs of the documents, that should be returned
