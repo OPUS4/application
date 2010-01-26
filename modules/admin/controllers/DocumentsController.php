@@ -86,9 +86,6 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             ),
             array(
                 $this->view->url(array('module' => 'admin', 'controller'=>'documents', 'action'=>'index', 'state' => 'deleted'), null, true), 'docs_deleted'
-            ),
-            array(
-                $this->view->url(array('module' => 'admin'), null, true), 'admin_index_title'
             )
             );
         $data = $this->_request->getParams();
@@ -107,18 +104,22 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $sort_order   = 'id';
         if (true === array_key_exists('sort_order', $data) && false === is_null($data['sort_order'])) {
            $sort_order = $data['sort_order'];
+           $this->view->sort_order = $sort_order;
         }
 
         // Default Ordering...
         $sort_reverse = false;
+        $this->view->sort_reverse = '0';
         if (true === array_key_exists('sort_reverse', $data) && false === is_null($data['sort_reverse'])) {
            $sort_reverse = '1' === $data['sort_reverse'] ? true : false;
+           $this->view->sort_reverse = $sort_reverse;
         }
 
         // docList contains a (sorted) list of IDs of the documents, that should be returned
         // the list has been sorted by the database already.
         if (true === array_key_exists('state', $data)) {
             $docList = Opus_Document::getAllDocumentIdsByStateSorted($data['state'], array($sort_order => $sort_reverse));
+            $this->view->state = $data['state'];
         } else {
             $docList = Opus_Document::getAllDocumentIdsSorted(array($sort_order => $sort_reverse));
         }

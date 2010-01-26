@@ -51,54 +51,53 @@
      <input type="text" name="id" size="5" />
      <input type="submit" value="<?php echo $this->translate('docs_call_id'); ?>" />
 </form>
-</p><br/><br/>
+</p>
+<br/><br/>
+<p>
+<ul class="navigation">
 <?php
 foreach ($this->registers as $register) {
 	?>
-	<a href="<?=$register[0] ?>"><?php echo $this->translate($register[1]); ?></a> |
+	<li
+    <?php
+        $urlArray = explode('/', $register[0]);
+        $state = $urlArray[count($urlArray)-1];
+        if ($this->state === $state) {
+            echo 'class="active"';
+        }
+        if (empty($this->state) === true && $state === 'documents') {
+            echo 'class="active"';
+        }
+    ?>
+	><a href="<?=$register[0] ?>"><?php echo $this->translate($register[1]); ?></a></li>
 	<?php
 }
-
-switch ($this->filter)
-    {
-        case 'author':
-        case 'contributor':
-        case 'editor':
-        case 'advisor':
-        case 'referee':
-        case 'other':
-        case 'translator':
-            $translatestring = 'search_titles_' . $this->filter;
-            echo "<h2>".$this->translate($translatestring)." ".$this->author["firstName"]." ".$this->author["lastName"]."</h2>";
-            break;
-        case 'doctype':
-            echo "<h2>".$this->translate('search_titles_doctypes')." ".$this->doctype."</h2>";
-            break;
-        default:
-            echo "<h2>".$this->translate('search_titles_all')."</h2>";
+?></ul>
+</p>
+<?php
 // Sorting the titles
         $url_sort_by_id = array(
-            'module' => 'search',
-            'controller' => 'browsing',
-            'action' => 'browseTitles',
+            'module' => 'admin',
+            'controller' => 'documents',
+            'action' => 'index',
             'sort_order' => 'id'
         );
         $url_sort_by_title = array(
-            'module' => 'search',
-            'controller' => 'browsing',
-            'action' => 'browseTitles',
+            'module' => 'admin',
+            'controller' => 'documents',
+            'action' => 'index',
             'sort_order' => 'title'
         );
         $url_sort_by_author = array(
-            'module' => 'search',
-            'controller' => 'browsing',
-            'action' => 'browseTitles',
+            'module' => 'admin',
+            'controller' => 'documents',
+            'action' => 'index',
             'sort_order' => 'p.last_name'
         );
         $url_sort_by_date = array(
-            'module' => 'search',
-            'controller' => 'browsing',
-            'action' => 'browseTitles',
+            'module' => 'admin',
+            'controller' => 'documents',
+            'action' => 'index',
             'sort_order' => 'date'
         );
         $url_sort_asc = array(
@@ -115,8 +114,51 @@ switch ($this->filter)
         $url_sort_desc = $this->url($url_sort_desc, 'default', false);
 ?>
 <br/>
-<?php echo $this->translate('docs_sortorder'); ?> <a href="<?php echo $url_sort_by_id ?>"><?php echo $this->translate('docs_by_id'); ?></a> <a href="<?php echo $url_sort_by_title ?>"><?php echo $this->translate('docs_by_title'); ?></a> <a href="<?php echo $url_sort_by_author ?>"><?php echo $this->translate('docs_by_author'); ?></a> <a href="<?php echo $url_sort_by_date ?>"><?php echo $this->translate('docs_by_date'); ?></a>
-<a href="<?php echo $url_sort_asc ?>"><?php echo $this->translate('sort_ascending'); ?></a> <a href="<?php echo $url_sort_desc ?>"><?php echo $this->translate('sort_descending'); ?></a>
+<ul class="navigation">
+    <?php echo $this->translate('docs_sortorder'); ?>
+    <li
+    <?php
+        if ($this->sort_order === 'id' || empty($this->sort_order) === true) {
+            echo 'class="active"';
+        }
+    ?>
+    ><a href="<?php echo $url_sort_by_id ?>"><?php echo $this->translate('docs_by_id'); ?></a></li>
+    <li
+    <?php
+        if ($this->sort_order === 'title') {
+            echo 'class="active"';
+        }
+    ?>
+    ><a href="<?php echo $url_sort_by_title ?>"><?php echo $this->translate('docs_by_title'); ?></a></li>
+    <li
+    <?php
+        if ($this->sort_order === 'p.last_name') {
+            echo 'class="active"';
+        }
+    ?>
+    ><a href="<?php echo $url_sort_by_author ?>"><?php echo $this->translate('docs_by_author'); ?></a></li>
+    <li
+    <?php
+        if ($this->sort_order === 'date') {
+            echo 'class="active"';
+        }
+    ?>
+    ><a href="<?php echo $url_sort_by_date ?>"><?php echo $this->translate('docs_by_date'); ?></a></li>
+    <li
+    <?php
+        if ($this->sort_reverse === '0' || $this->sort_reverse === false || empty($this->sort_reverse) === true) {
+            echo 'class="active"';
+        }
+    ?>
+    style="margin-left:30px;"><a href="<?php echo $url_sort_asc ?>"><?php echo $this->translate('sort_ascending'); ?></a></li>
+    <li
+    <?php
+        if ($this->sort_reverse === '1' || $this->sort_reverse === true) {
+            echo 'class="active"';
+        }
+    ?>
+    ><a href="<?php echo $url_sort_desc ?>"><?php echo $this->translate('sort_descending'); ?></a></li>
+</ul>
 <?php
 /*        $url_sort_by_id = array(
             'module' => 'search',
@@ -148,7 +190,6 @@ echo $this->translate('docs_sortorder'); ?>
  <a href="<?php echo $url_sort_by_title ?>"><?php echo $this->translate('docs_by_title'); ?></a>
  <a href="<?php echo $url_sort_by_date ?>"><?php echo $this->translate('docs_by_date'); ?></a>
 <?php */
-    }
 
 if (count($this->hitlist_paginator)) {
     echo $this->paginationControl($this->hitlist_paginator, NULL, 'itemCount_pagination.phtml');
@@ -158,7 +199,7 @@ if (count($this->hitlist_paginator)) {
     // FIXME: <ol start="..."> is not valid XHTML 1.0 Strict!
     // but it will return in (X)HTML 5 - so wontfix
     $pagerInfo = $this->hitlist_paginator->getPages();
-    echo '<ol class="search" start="' . $pagerInfo->firstItemNumber . '">';
+    echo '<ol class="search " start="' . $pagerInfo->firstItemNumber . '">';
     echo "\n";
 
     $searchListItemCount = 0;
