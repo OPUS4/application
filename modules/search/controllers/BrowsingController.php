@@ -70,8 +70,8 @@ class Search_BrowsingController extends Zend_Controller_Action
     public function browsetitlesAction()
     {
         $this->view->title = $this->view->translate('search_index_alltitles_browsing');
-
-        $data = $this->_request->getParams();
+/*
+$data = $this->_request->getParams();
         // following could be handled inside a application model
         if (true === array_key_exists('sort_order', $data)) {
             switch ($data['sort_order']) {
@@ -174,8 +174,7 @@ class Search_BrowsingController extends Zend_Controller_Action
         }
         $paginator->setCurrentPageNumber($page);
         $this->view->documentList = $paginator;
-
-        /* schoene, aber wenig performante Lösung
+*/
     	$filter = $this->_getParam("filter");
     	$this->view->filter = $filter;
     	$data = $this->_request->getParams();
@@ -204,11 +203,18 @@ class Search_BrowsingController extends Zend_Controller_Action
         $docList = Opus_Document::getAllDocumentIdsByStateSorted('published', array($sort_order => $sort_reverse));
 
         $paginator = Zend_Paginator::factory($docList);
-        #$hitlistIterator = new Opus_Search_Iterator_HitListIterator($hitlist);
-        #$this->view->hitlist_count = $hitlist->count();
+        if (array_key_exists('hitsPerPage', $data)) {
+            if ($data['hitsPerPage'] === '0') {
+                $hitsPerPage = '10000';
+            }
+            else {
+                $hitsPerPage = $data['hitsPerPage'];
+            }
+            $paginator->setItemCountPerPage($hitsPerPage);
+        }
         $paginator->setCurrentPageNumber($page);
         $this->view->hitlist_paginator = $paginator;
-        */
+        /**/
     }
 
 	/**
