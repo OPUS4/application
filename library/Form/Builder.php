@@ -137,6 +137,7 @@ class Form_Builder {
             $subForm->addSubForm($fieldForm, $fieldName);
         }
 
+        $subForm->removeDecorator('Fieldset');
         return $subForm;
 
     }
@@ -154,16 +155,23 @@ class Form_Builder {
         $mandatory = $field->isMandatory();
         $validator = $field->getValidator();
         $valueModelClass = $field->getValueModelClass();
+        $linkModelClass = $field->getLinkModelClass();
         $fieldValues = $field->getValue();
 
         // If getter returns no value, initialize new values if field is
         // mandatory, since null-values will be ignored.
         if (true === empty($fieldValues) and (true === $field->isMandatory())) {
-            if (false === is_null($valueModelClass)) {
+            if (false === is_null($linkModelClass)) {
+                $fieldValues = new $linkModelClass;
+                $target = new $valueModelClass;
+                $fieldValues->setModel($target);
+            } else if (false === is_null($valueModelClass)) {
                 $fieldValues = new $valueModelClass;
             } else {
                 $fieldValues = '';
             }
+        } else if (true === empty($fieldValues) and (true === is_null($field->getValueModelClass()))) {
+            $fieldValues = '';
         }
 
         // Construct value array if neccessary
@@ -212,15 +220,13 @@ class Form_Builder {
                         $widget = new Zend_Form_Element_Text(strVal($i + 1));
                     }
                     $widget->setValue($fieldValue);
-                    $widget->setAttrib('class', $fieldName);
+                    $widget->setLabel($fieldName);
                     $widget->setRequired($mandatory);
-                    if (false === is_null($validator)) {
-                        $widget->addValidator($validator);
-                    }
                     $fieldForm->addElement($widget);
+                    $fieldForm->removeDecorator('Fieldset');
                 }
                 // Create button to remove value when appropriate.
-                if (1 < count($fieldValues) or false === $field->isMandatory()) {
+                if (1 < count($fieldValues) or (false === $field->isMandatory() and false === is_null($valueModelClass))) {
                     $element = new Zend_Form_Element_Submit('remove_' . strVal($i + 1));
                     $element->setBelongsTo('Actions');
                     $element->setLabel('remove_' . $fieldName);
