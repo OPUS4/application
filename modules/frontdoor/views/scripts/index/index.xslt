@@ -705,7 +705,7 @@
     <xsl:template match="PersonAdvisor">
       <tr>
         <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
-        <td><xsl:value-of select="@Name" /></td>
+        <td><xsl:value-of select="concat(@LastName, ', ', @FirstName)" /></td>
       </tr>    
     </xsl:template>
  
@@ -718,9 +718,9 @@
            <xsl:attribute name="href">
                <xsl:value-of select="$baseUrl"/>
                <xsl:text>/search/search/metadatasearch/author/</xsl:text>
-               <xsl:value-of select="@Name" />
+               <xsl:value-of select="concat(@LastName, ', ', @FirstName)" />
            </xsl:attribute>
-           <xsl:value-of select="@Name" />
+           <xsl:value-of select="concat(@LastName, ', ', @FirstName)" />
       </xsl:element>
       <xsl:choose>
          <xsl:when test="position()=last()">
@@ -737,35 +737,35 @@
     <xsl:template match="PersonOther">
       <tr>
         <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
-        <td><xsl:value-of select="@Name" /></td>
+        <td><xsl:value-of select="concat(@LastName, ', ', @FirstName)" /></td>
       </tr>    
     </xsl:template>
  
     <xsl:template match="PersonReferee">
       <tr>
         <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
-        <td><xsl:value-of select="@Name" /></td>
+        <td><xsl:value-of select="concat(@LastName, ', ', @FirstName)" /></td>
       </tr>    
     </xsl:template>
 
     <xsl:template match="PersonContributor">
       <tr>
         <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
-        <td><xsl:value-of select="@Name" /></td>
+        <td><xsl:value-of select="concat(@LastName, ', ', @FirstName)" /></td>
       </tr>    
     </xsl:template>
  
     <xsl:template match="PersonEditor">
       <tr>
         <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
-        <td><xsl:value-of select="@Name" /></td>
+        <td><xsl:value-of select="concat(@LastName, ', ', @FirstName)" /></td>
       </tr>    
     </xsl:template>
  
     <xsl:template match="PersonTranslator">
       <tr>
         <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
-        <td><xsl:value-of select="@Name" /></td>
+        <td><xsl:value-of select="concat(@LastName, ', ', @FirstName)" /></td>
       </tr>    
     </xsl:template>
  
