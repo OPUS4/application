@@ -156,7 +156,25 @@
         <seg>Bitte klicken Sie hier, wenn Sie eine weitere Person/einen weiteren Titel etc. eingeben möchten.</seg>
       </tuv>
     </tu>
-    
+
+    <tu tuid="workflow_bibliography">
+      <tuv xml:lang="en">
+        <seg>Bibliography</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bibliografie</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="workflow_repository">
+      <tuv xml:lang="en">
+        <seg>Repository</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Repository</seg>
+      </tuv>
+    </tu>
+
   </body>
   
 </tmx>

@@ -66,12 +66,24 @@ class Publish_IndexController extends Zend_Controller_Action {
      * @return void
      *
      */
-    public function indexAction() {
+    public function depositAction() {
         $this->view->title = $this->view->translate('publish_controller_index');
-        $form = new Overview();
+        $workflow = $this->_request->getParam('target');
+        $form = new Overview($workflow);
         $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create'));
         $form->setAction($action_url);
         $this->view->form = $form;
+    }
+
+    /**
+     * Just to be there. No actions taken.
+     *
+     * @return void
+     *
+     */
+    public function indexAction() {
+        $this->view->title = $this->view->translate('publish_controller_index');
+        $this->view->workflows = array('repository', 'bibliography');
     }
 
     /**
@@ -134,15 +146,16 @@ class Publish_IndexController extends Zend_Controller_Action {
 
         if ($this->_request->isPost() === true) {
             $requested_page = $this->_request->getParam('page');
+            $workflow = $this->_request->getParam('target');
             $data = $this->_request->getPost();
             $form_builder = new Form_Builder();
             $documentInSession = new Zend_Session_Namespace('document');
             if (array_key_exists('selecttype', $data) === true || array_key_exists('gpg_key_upload', $data) === true) {
                 // validate document type
-                $form = new Overview();
+                $form = new Overview($workflow);
                 $alternateForm = new KeyUpload();
                 if ($form->isValid($data) === true || $alternateForm->isValid($data) === true) {
-                    $possibleDoctypes = Opus_Document_Type::getAvailableTypeNames();
+                    $possibleDoctypes = Opus_Document_Type::getAvailableTypeNames($workflow);
                     $selectedDoctype = $form->getValue('selecttype');
                     if ($selectedDoctype !== $documentInSession->doctype && isset($selectedDoctype) === true) {
                         $documentInSession->doctype = $selectedDoctype;
@@ -175,7 +188,7 @@ class Publish_IndexController extends Zend_Controller_Action {
                     }
 
                     // Store document in session
-                    $document = new Opus_Document(null, $selectedDoctype);
+                    $document = new Opus_Document(null, $selectedDoctype, $workflow);
                     $documentInSession->document = $document;
 
                     $caption = 'publish_index_create_' . $selectedDoctype;

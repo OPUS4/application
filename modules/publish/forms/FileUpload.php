@@ -47,7 +47,7 @@ class FileUpload extends Zend_Form {
      */
     public function init() {
         $documentInSession = new Zend_Session_Namespace('document');
-        
+
         //$this->addElement('hash', 'UploadHash', array('salt' => 'unique'));
 
         $config = Zend_Registry::get('Zend_Config');
@@ -103,7 +103,7 @@ class FileUpload extends Zend_Form {
             $this->addElements(array($fileupload, $signatureupload, $comment, $languageList, $documentId, $submit));
         }
         else {
-        	$this->addElements(array($fileupload, $comment, $languageList, $documentId, $submit));
+            $this->addElements(array($fileupload, $comment, $languageList, $documentId, $submit));
         }
         $this->setAttrib('enctype', Zend_Form::ENCTYPE_MULTIPART);
     }

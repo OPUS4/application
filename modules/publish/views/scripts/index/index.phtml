@@ -34,5 +34,8 @@
  */
 ?>
 <h1>Opus Application - <?= $this->title ?></h1>
-
-<?= $this->form ?>
+<ul>
+    <?foreach ($this->workflows as $workflow):?>
+    <li><a href="<?=$this->url(array('action' => 'deposit', 'target' => $workflow))?>"><?=$this->translate("workflow_$workflow")?></a></li>
+    <?endforeach?>
+</ul>
