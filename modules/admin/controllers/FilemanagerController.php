@@ -79,7 +79,8 @@ class Admin_FilemanagerController extends Zend_Controller_Action
             $e = null;
             try {
                 $file = new Opus_File($data['FileObject']);
-                $file->delete();
+                // Really delete this file
+                $file->doDelete($file->delete());
             }
             catch (Exception $e) {
                 $this->view->actionresult = $e->getMessage();
@@ -129,6 +130,17 @@ class Admin_FilemanagerController extends Zend_Controller_Action
                     $e = null;
                     try {
                         $document->store();
+                        $config = Zend_Registry::get('Zend_Config');
+
+                        $searchEngine = $config->searchengine->engine;
+                        if (empty($searchEngine) === true) {
+                            $searchEngine = 'Lucene';
+                        }
+                        // Reindex
+                        $engineclass = 'Opus_Search_Index_'.$searchEngine.'_Indexer';
+                        $indexer = new $engineclass();
+                        $indexer->removeDocumentFromEntryIndex($document);
+                        $indexer->addDocumentToEntryIndex($document);
                     }
                     catch (Exception $e) {
                         $this->view->actionresult = $this->view->translate('admin_filemanager_uploadfailure');
