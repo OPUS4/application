@@ -807,10 +807,7 @@
     </xsl:template>
 
     <xsl:template match="TitleMain">
-        <h3><xsl:value-of select="@Value" />
-        <xsl:text> (</xsl:text>
-        <xsl:call-template name="translateFieldname" />
-        <xsl:text>)</xsl:text></h3>
+        <h3><xsl:value-of select="@Value" /></h3>
     </xsl:template>
 
     <xsl:template match="TitleAbstract">
