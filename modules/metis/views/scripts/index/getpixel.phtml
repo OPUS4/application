@@ -32,22 +32,7 @@
  * @version     $Id: index.phtml 3242 2009-06-24 06:50:37Z finkbeiner $
  */
 ?>
-<h1>Opus Application - <?= $this->title ?></h1>
+<h1>Opus Application - <?= $this->translate('metis_title') ?></h1>
 <?
-if ($this->ok != '1') {
-  echo $this->form;
-  if ($this->fault != '') {
-    echo '<br>' . $this->translate('metis_fault') . ': ' . $this->fault;
-  }
-}
+echo $this->form;
 
-if ($this->ok == '1') {
-   echo $this->domain . '<br/>';
-   echo $this->datetime . '<br/>';
-   foreach ($this->publicIds as $publicId) {
-      echo $publicId . '<br/>';
-   }
-   foreach ($this->privateIds as $privateId) {
-      echo $privateId . '<br/>';
-   }
-}

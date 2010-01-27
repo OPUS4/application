@@ -38,7 +38,7 @@
  * @category    Application
  * @package     Module_Metis
  */
-class Metis_IndexController extends Zend_Controller_Action {
+class Metis_IndexController extends Controller_Action {
 
 	/**
      * build the form for pixel-order
@@ -60,12 +60,10 @@ class Metis_IndexController extends Zend_Controller_Action {
      *
      */
 	public function getpixelAction() {
-	    $this->view->title = 'Metis';
         if (true === $this->getRequest()->isPost()) {
            $data = $this->getRequest()->getPost();
            $form = new OrderForm();
            if (true === $form->isValid($data)) {
-               $this->view->ok = '1';
                $user = $form->getValue('user');
                $password = $form->getValue('passwd');
                $number = $form->getValue('number');
@@ -80,32 +78,33 @@ class Metis_IndexController extends Zend_Controller_Action {
                try {
                    $param = array('count' => $number);
                    $response = $client->orderPixel($param);
-                   print_r($response);  // nur zu Testzwecken
                    $publicIds = array();
                    $privateIds = array();
                    $pixels = $response->pixels->pixel;
                    if (true === is_array($pixels)) {
                        for ($pi = 0; $pi < count($pixels); $pi++) {
-                           $publicIds [$pi] = $pixels[$pi]->publicIdentificationId;
-                           $privateIds[$pi] = $pixels[$pi]->privateIdentificationId;
+                           // save pixels in SQL table
+                           $pixel = new Opus_MetisPixel();
+                           $pixel->setPublicId($pixels[$pi]->publicIdentificationId);
+                           $pixel->setPrivateId($pixels[$pi]->privateIdentificationId);
+                           $pixel->store();
+                           $msg = $number . ' ' . $this->view->translate('metis_stored_more');
                        }
                    } else {
-                       $publicIds [0] = $response->pixels->pixel->publicIdentificationId;
-                       $privateIds[0] = $response->pixels->pixel->privateIdentificationId;
+                       $pixel = new Opus_MetisPixel();
+                       $pixel->setPublicId($response->pixels->pixel->publicIdentificationId);
+                       $pixel->setPrivateId($response->pixels->pixel->privateIdentificationId);
+                       $pixel->store();
+                       $msg = $number . ' ' . $this->view->translate('metis_stored_one');
                    }
-                   //TODO save pixels in SQL-table
-                   $this->view->domain = $response->domain;
-                   $this->view->datetime = $response->orderDateTime;
-                   $this->view->publicIds = $publicIds;
-                   $this->view->privateIds = $privateIds;
+                   $this->_redirectTo($msg,'index');
+
                }
                catch (SoapFault $sf) {
-                   $this->view->form = $form;
-                   $this->view->ok = '0';
                    if (true === isset($sf->detail->orderPixelFault->errormsg)) {
-                       $this->view->fault = $sf->detail->orderPixelFault->errormsg;
+                       $this->_redirectTo($sf->detail->orderPixelFault->errormsg,'index');
                    } else {
-                        $this->view->fault = $sf->faultstring;
+                       $this->_redirectTo($sf->faultstring,'index');
                    }
                }
 
@@ -113,8 +112,7 @@ class Metis_IndexController extends Zend_Controller_Action {
                 $this->view->form = $form;
            }
         } else {         // not post
-           $form = new OrderForm();
-           $this->view->form = $form;
+           $this->_redirectTo('','index');
         }
 
    }

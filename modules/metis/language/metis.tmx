@@ -70,6 +70,24 @@
       </tuv>
     </tu>
     
+    <tu tuid="metis_stored_one">
+      <tuv xml:lang="en">
+        <seg>pixel is stored</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Pixel wurde gespeichert</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="metis_stored_more">
+      <tuv xml:lang="en">
+        <seg>pixels are stored</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Pixel wurden gespeichert</seg>
+      </tuv>
+    </tu>
+    
   </body>
   
 </tmx>
