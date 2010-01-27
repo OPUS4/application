@@ -43,7 +43,9 @@
     {
     	echo $this->translate('pkm_no_publication_selected');
     }
-    else {
+    else if (empty($this->noFileSelected) === false) {
+        echo $this->noFileSelected;
+    } else {
         ?>
         <ol>
         <?

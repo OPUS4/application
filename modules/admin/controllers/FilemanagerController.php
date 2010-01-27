@@ -150,9 +150,8 @@ class Admin_FilemanagerController extends Zend_Controller_Action
 
             }
             $this->view->uploadform = $uploadForm;
-    	    try {
-    	        $document = new Opus_Document($requestData['docId']);
-    	        $this->view->files = array();
+                $document = new Opus_Document($requestData['docId']);
+                $this->view->files = array();
 
                 //searching for files, getting filenumbers and hashes
                 $fileNumber = 0;
@@ -163,6 +162,12 @@ class Admin_FilemanagerController extends Zend_Controller_Action
                 }
                 // Iteration over all files, hashtypes and -values
                 $gpg = new Opus_GPG();
+                try {
+                    $masterkey = $gpg->getMasterkey()->getPrimaryKey()->getFingerprint();
+                }
+                catch (Exception $e) {
+                    $masterkey = false;
+                }
                 $this->view->verifyResult = array();
                 $fileNames = array();
                 $hashType = array();
@@ -172,15 +177,16 @@ class Admin_FilemanagerController extends Zend_Controller_Action
                 $fileForms = array();
                 $verified = array();
                 for ($fi = 0; $fi < $fileNumber; $fi++) {
+            try {
                     $form = new SignatureForm();
                     $form->FileObject->setValue($document->getFile($fi)->getId());
                     $form->setAction($this->view->url(array('module' => 'admin', 'controller' => 'filemanager', 'action' => 'index', 'docId' => $requestData['docId']), null, true));
-                    
+
                     $fileNames[$fi] = $document->getFile($fi)->getPathName();
-                    if (file_exists($fileNames[$fi]) === false) {
-                    	$fileNumber--;
-                    	continue;
-                    }
+                    #if (file_exists($fileNames[$fi]) === false) {
+                    #	$fileNumber--;
+                    #	continue;
+                    #}
                     if (true === is_array ($hashes = $document->getFile($fi)->getHashValue())) {
                         $countHash = count($hashes);
                         for ($hi = 0; $hi < $countHash; $hi++) {
@@ -212,7 +218,7 @@ class Admin_FilemanagerController extends Zend_Controller_Action
                                 }
                             }
                         }
-                        if (in_array($gpg->getMasterkey()->getPrimaryKey()->getFingerprint(), $verified) === false) {
+                        if ($masterkey !== false && in_array($masterkey, $verified) === false) {
                             $fileForms[$fi] = $form;
                         }
                         else {
@@ -224,6 +230,9 @@ class Admin_FilemanagerController extends Zend_Controller_Action
                         $fileForms[$fi] .= $deleteForm;
                     }
                 }
+            catch (Exception $e) {
+                $this->view->noFileSelected = $e->getMessage();
+            }
                 $this->view->hashType = $hashType;
                 $this->view->hashSoll = $hashSoll;
                 $this->view->hashIst = $hashIst;
@@ -234,9 +243,6 @@ class Admin_FilemanagerController extends Zend_Controller_Action
                 if ($fileNumber === 0) {
                     $this->view->actionresult = $this->view->translate('admin_filemanager_nofiles');
                 }
-    	    }
-    	    catch (Exception $e) {
-    	    	$this->view->noFileSelected = true;
     	    }
     	}
     	else
