@@ -14,11 +14,13 @@ class Form_Builder {
     public function build(Opus_Model_Abstract $model) {
         // Construct base form
         $form = new Zend_Form;
+        $form->removeDecorator('DtDdWrapper');
         // Construct subform for model
         $subForm = $this->__buildModelForm($model);
         $form->addSubForm($subForm, get_class($model));
         // Add submit button to form
         $element = new Zend_Form_Element_Submit('submit');
+        $element->removeDecorator('DtDdWrapper');
         $element->setLabel('transmit');
         $form->addElement($element);
         return $form;
@@ -119,11 +121,13 @@ class Form_Builder {
     private function __buildModelForm(Opus_Model_Abstract $model) {
         // Construct subform to hold elements.
         $subForm = new Zend_Form_SubForm();
+        $subForm->removeDecorator('DtDdWrapper');
         $subForm->setLegend(get_class($model));
 
         // Add Id when necessary
         if ($model instanceof Opus_Model_AbstractDb) {
             $idElement = new Zend_Form_Element_Hidden('Id');
+            $idElement->removeDecorator('DtDdWrapper');
             $id = $model->getId();
             if (true === is_array($id)) $id = implode(',', $id);
             $idElement->setValue($id);
@@ -181,6 +185,7 @@ class Form_Builder {
 
         // Iterate over values, placing them on the appropriate subform.
         $fieldForm = new Zend_Form_SubForm;
+        $fieldForm->removeDecorator('DtDdWrapper');
         $fieldForm->setLegend($fieldName);
         if (false === empty($fieldValues)) {
             foreach ($fieldValues as $i => $fieldValue) {
@@ -194,6 +199,7 @@ class Form_Builder {
                         // If value is a selection of models, build selection widget
                         $options = $field->getDefault();
                         $widget = new Zend_Form_Element_Select(strVal($i + 1));
+                        $widget->removeDecorator('DtDdWrapper');
                         foreach ($options as $option) {
                             $widget->addMultiOption($option->getId(), $option->getDisplayName());
                         }
@@ -210,14 +216,18 @@ class Form_Builder {
                     // If value is simple, build corresponding widget
                     if ($field->isTextarea()) {
                         $widget = new Zend_Form_Element_Textarea(strVal($i + 1));
+                        $widget->removeDecorator('DtDdWrapper');
                     } else if ($field->isCheckbox()) {
                         $widget = new Zend_Form_Element_Checkbox(strVal($i + 1));
+                        $widget->removeDecorator('DtDdWrapper');
                     } else if ($field->isSelection()) {
                         $options = $field->getDefault();
                         $widget = new Zend_Form_Element_Select(strVal($i + 1));
+                        $widget->removeDecorator('DtDdWrapper');
                         $widget->setMultiOptions($options);
                     } else {
                         $widget = new Zend_Form_Element_Text(strVal($i + 1));
+                        $widget->removeDecorator('DtDdWrapper');
                     }
                     $widget->setValue($fieldValue);
                     $widget->setLabel($fieldName);
@@ -228,6 +238,7 @@ class Form_Builder {
                 // Create button to remove value when appropriate.
                 if (1 < count($fieldValues) or (false === $field->isMandatory() and false === is_null($valueModelClass))) {
                     $element = new Zend_Form_Element_Submit('remove_' . strVal($i + 1));
+                    $element->removeDecorator('DtDdWrapper');
                     $element->setBelongsTo('Actions');
                     $element->setLabel('remove_' . $fieldName);
                     $fieldForm->addElement($element);
@@ -238,6 +249,7 @@ class Form_Builder {
         // Create button to add value when appropriate.
         if (count($fieldValues) < $field->getMultiplicity() or '*' === $field->getMultiplicity()) {
             $element = new Zend_Form_Element_Submit('add');
+            $element->removeDecorator('DtDdWrapper');
             $element->setBelongsTo('Actions');
             $element->setLabel('add_' . $fieldName);
             $element->setAttrib('name', 'Action');
