@@ -83,7 +83,8 @@ class Publish_IndexController extends Zend_Controller_Action {
      */
     public function indexAction() {
         $this->view->title = $this->view->translate('publish_controller_index');
-        $this->view->workflows = array('repository', 'bibliography');
+        $workflows = Opus_Document_Type::getAvailableWorkflows();
+        $this->view->workflows = $workflows;
     }
 
     /**
