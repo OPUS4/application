@@ -79,3 +79,9 @@ div.box.right {
     float: right;
     width: 45%;
 }
+
+.searchterm1, .searchterm1 a { background-color: #FFFF00; padding: 2px 0px; font-weight: bold;}
+.searchterm2, .searchterm2 a { background-color: #F7B34F; padding: 2px 0px; font-weight: bold;}
+.searchterm3, .searchterm3 a { background-color: #A0F74F; padding: 2px 0px; font-weight: bold;}
+.searchterm4, .searchterm4 a { background-color: #4FCFF7; padding: 2px 0px; font-weight: bold;}
+.searchterm5, .searchterm5 a { background-color: #F7C7F1; padding: 2px 0px; font-weight: bold;}
