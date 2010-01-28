@@ -195,7 +195,6 @@ class Admin_CollectionController extends Controller_Action {
         $roleName = $collection->getDisplayName();
         $path = $this->getRequest()->getParam('path');
         $copy = $this->getRequest()->getParam('copy');
-        $assign = $this->getRequest()->getParam('assign');
         if (true === isset($copy)) {
             $cpCollection = $collection;
             $trail = explode('-', $copy);
@@ -260,7 +259,6 @@ class Admin_CollectionController extends Controller_Action {
         $this->view->role_name = $roleName;
         $this->view->path = $path;
         $this->view->copy = $copy;
-        $this->view->assign = $assign;
         $this->view->breadcrumb = $breadcrumb;
     }
 
@@ -271,7 +269,6 @@ class Admin_CollectionController extends Controller_Action {
      */
     public function createAction() {
         $copy = $this->getRequest()->getParam('copy');
-        $assign = $this->getRequest()->getParam('assign');
         if ($this->_request->isPost() === true) {
             $data = $this->_request->getPost();
             $form_builder = new Form_Builder();
@@ -388,12 +385,24 @@ class Admin_CollectionController extends Controller_Action {
 
             $this->_redirectTo('Collection successfully copied.', 'show', null, null,
                     array('role' => $role, 'path' => $path));
-        } else if (true === isset($assign)) {
-            // Assign a document to a collection
-            $role  = $this->getRequest()->getParam('role');
-            $path = $this->getRequest()->getParam('path');
+        } else {
+            $this->_redirectTo('', 'index');
+        }
+    }
+
+    /**
+     * Assign a document to a collection
+     *
+     * @return void
+     */
+    public function assignAction() {
+        $documentId = $this->getRequest()->getParam('document');
+        $role = $this->getRequest()->getParam('role');
+        $path = $this->getRequest()->getParam('path');
+        $document = new Opus_Document($documentId);
+        if ($this->_request->isPost() === true) {
             $collection = new Opus_CollectionRole($role);
-            $document = new Opus_Document($assign);
+            $roleName = $collection->getDisplayName();
             if (true === isset($path)) {
                 $trail = explode('-', $path);
                 foreach($trail as $i => $step) {
@@ -405,8 +414,47 @@ class Admin_CollectionController extends Controller_Action {
             $collection->addEntry($document);
             $this->_redirectTo('Document successfully assigned to collection "' . $collection->getDisplayName() . '".'
                     , 'edit', 'documents', 'admin', array('id' => $document->getId()));
+        } else if (false === isset($role)) {
+            $collections = array();
+            foreach (Opus_CollectionRole::getAll() as $collection) {
+                $collections[$collection->getId()] = $collection->getDisplayName();
+            }
+            $this->view->subcollections = $collections;
+            $this->view->breadcrumb = array();
+            $this->view->assign = $documentId;
+            $this->view->role_id = null;
         } else {
-            $this->_redirectTo('', 'index');
+            $collection = new Opus_CollectionRole($role);
+            $roleName = $collection->getDisplayName();
+            $subcollections = array();
+            $breadcrumb = array();
+            if (true === isset($path)) {
+                $trail = explode('-', $path);
+                foreach($trail as $step) {
+                    if (false === isset($position)) {
+                        $position = $step;
+                    } else {
+                        $position .= '-' . $step;
+                    }
+                    $collection = $collection->getSubCollection($step);
+                    $breadcrumb[$position] = $collection->getDisplayName();
+                }
+            }
+            if ($collection instanceof Opus_CollectionRole) {
+                foreach($collection->getSubCollection() as $i => $subcollection) {
+                    $subcollections[$i] = $subcollection->getDisplayName();
+                }
+            } else {
+                foreach($collection->getSubCollection() as $i => $subcollection) {
+                    $subcollections[$path . '-' . $i] = $subcollection->getDisplayName();
+                }
+            }
+            $this->view->subcollections = $subcollections;
+            $this->view->role_id = $role;
+            $this->view->role_name = $roleName;
+            $this->view->path = $path;
+            $this->view->assign = $documentId;
+            $this->view->breadcrumb = $breadcrumb;
         }
     }
 

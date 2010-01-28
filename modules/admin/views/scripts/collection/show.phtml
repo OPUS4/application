@@ -37,13 +37,13 @@ $path = '';
 <h1>Opus Application - <?=$this->translate('admin_title_collections') ?></h1>
 
 <p>
-<a href="<?=$this->url(array('module'=>'admin', 'controller'=>'collection', 'action'=>'index', 'assign'=>$this->assign), null,
+<a href="<?=$this->url(array('module'=>'admin', 'controller'=>'collection', 'action'=>'index'), null,
     true)?>">Collections</a>
 &gt;&nbsp;<a href="<?=$this->url(array('module'=>'admin', 'controller'=>'collection', 'action'=>'show',
-    'role'=>$this->role_id, 'copy'=>$this->copy, 'assign'=>$this->assign), null, true)?>"><?=$this->role_name?></a>
+    'role'=>$this->role_id, 'copy'=>$this->copy), null, true)?>"><?=$this->role_name?></a>
 <? foreach($this->breadcrumb as $path => $name) : ?>
 &gt;&nbsp;<a href="<?=$this->url(array('module'=>'admin', 'controller'=>'collection', 'action'=>'show',
-    'role'=>$this->role_id, 'path'=>$path, 'copy'=>$this->copy, 'assign'=>$this->assign), null, true)?>"><?=$name?></a>
+    'role'=>$this->role_id, 'path'=>$path, 'copy'=>$this->copy), null, true)?>"><?=$name?></a>
 <? endforeach; ?>
 </p>
         <? if (isset($this->copy)) { ?>
@@ -60,11 +60,6 @@ $path = '';
 </p>
         <? } ?>
 
-        <? if (isset($this->assign)) { ?>
-            <a href="<?=$this->url(array('module'=>'admin', 'controller'=>'documents', 'action'=>'edit',
-                'id'=>$this->assign), null, true)?>"><?=$this->translate('admin_collections_collection_assign_abort')?></a>
-        <? } ?>
-
 <!-- ul -->
 <table>
     <? foreach($this->subcollections as $path => $name) : ?>
@@ -72,7 +67,7 @@ $path = '';
         <td width="400">
         <? if ((true === isset($this->copy)) AND (('allowed' === $this->copypaste[$path])) OR (false === isset($this->copy))) { ?>
             <a href="<?=$this->url(array('module'=>'admin', 'controller'=>'collection', 'action'=>'show',
-                'role'=>$this->role_id, 'path'=>$path, 'copy'=>$this->copy, 'assign'=>$this->assign), null, true)?>"><?=$name?></a>
+                'role'=>$this->role_id, 'path'=>$path, 'copy'=>$this->copy), null, true)?>"><?=$name?></a>
         <? } else {       ?>
             <?=$name?>
         <? }  ?>
@@ -85,11 +80,6 @@ $path = '';
             &nbsp;&nbsp;&nbsp; <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'create',
                 'role' => $this->role_id, 'above' => $path, 'copy'=>$this->copy), null, true)?>"><img src = "<?= $this->layoutPath . '/img/add_collection_above.png';?>" align='middle' border = '0' title = '<?=$this->translate('admin_collections_collection_paste_above')?>'></a>
         <? }  ?>
-
-        <? } else if (true === isset($this->assign)) { ?>
-
-            &nbsp;&nbsp;&nbsp; <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'create',
-                'role' => $this->role_id, 'path' => $path, 'assign'=>$this->assign), null, true)?>"><?=$this->translate('admin_collections_collection_assign_here')?></a>
 
         <? } else { ?>
 
