@@ -221,7 +221,7 @@ class Rewritemap_Apache {
 				Zend_Session::start();
 				$identity = Zend_Auth::getInstance()->getIdentity();
 				// found an username?
-				if (false === empty($identiy)) {
+				if (false === empty($identity)) {
 				    // set session and return.
 					$this->_realm->setUser($identity);
 					return;
