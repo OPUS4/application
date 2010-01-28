@@ -66,8 +66,8 @@ class LicenceImport
 			$lic = new Opus_Licence();
             foreach ($document->getElementsByTagName('field') as $field) {
            		if ($field->getAttribute('name') === 'shortname') $shortname = $field->nodeValue;
-           		if ($field->getAttribute('name') === 'longname') $lic->setNameLong($field->nodeValue);
-           		if ($field->getAttribute('name') === 'desc_text') $lic->setDescText($field->nodeValue);
+           		if ($field->getAttribute('name') === 'longname') $lic->setNameLong(html_entity_decode($field->nodeValue));
+           		if ($field->getAttribute('name') === 'desc_text') $lic->setDescText(html_entity_decode($field->nodeValue));
            		if ($field->getAttribute('name') === 'active') $lic->setActive($field->nodeValue);
            		if ($field->getAttribute('name') === 'sort') $lic->setSortOrder($field->nodeValue);
            		if ($field->getAttribute('name') === 'pod_allowed') $lic->setPodAllowed($field->nodeValue);
