@@ -104,8 +104,7 @@ class Rewritemap_Apache {
      */
     public function rewriteRequest($request, $ip = null, $cookies = null) {
         $this->_logger->info("got request '$request'");
-        // parse and normalize request
-        // remove leading slash
+        // parse and normalize request, remove leading slash
         $request = preg_replace('/^\/(.*)$/', '$1', $request);
         if (preg_match('/^[\d]+[\/]?$/', $request) === 1) {
             // no file name submitted, trying index.html for compatibility reasons
@@ -121,17 +120,20 @@ class Rewritemap_Apache {
                 (mb_strlen($path) < 1) ||
                 (preg_match('/^[\d]+$/', $docId) === 0) ||
                 (preg_match('/\.\.\//', $path) === 1)) {
-            $this->_logger->info("return " . $this->_targetPrefix . "/error/send403.php'");
+            $this->_logger->err("Got path: $path and docId: $docId, will send "
+                                 . $this->_targetPrefix . "/error/send403.php'");
             return $this->_targetPrefix ."/error/send403.php"; // Forbidden, indipendent from authorization.
         }
 
         // check for security
-		# if (config === '0') {  //FIXME
-        #     // security switched off, deliver everything
-        #     $this->_logger->info("return " . $this->_targetPrefix . "'files/$docId/$path'");
-        #     return $this->_targetPrefix ."/$docId/$path";
-        # }
-		
+        $conf = Zend_Registry::get('Zend_Config');
+        $secu = $conf->security;
+		if ($secu === '0') {
+            // security switched off, deliver everything
+            $this->_logger->info("return " . $this->_targetPrefix . "'files/$docId/$path'");
+            return $this->_targetPrefix ."/$docId/$path";
+        }
+        // set ip/username in realm
 		$this->__setupIdentity($ip, $cookies);
 
         // lookup the target file
@@ -147,7 +149,8 @@ class Rewritemap_Apache {
                     break;
                 }
             } else {
-	            // if one day a Opus_File can belong to more then one file in the filesystem:
+                // in theory we can get an error here, if one file contains
+                // more then on object out of the filesystem.
 		        foreach ($pathnames as $pathname) {
 			        if ($pathname === $path) {
 				        $target = $file;
@@ -163,14 +166,12 @@ class Rewritemap_Apache {
 
 		// check if we have access
 		try {
-			if (true === $this->_realm->readFile($target)) {
+			if (true === $this->_realm->check('readFile', null, $target->getId())) {
                 return $this->_targetPrefix . "/$docId/$path";
-			} else {
-				// 403 Forbidden
-				return $this->_targetPrefix . "/error/send403.php";
 			}
         } catch (Exception $e) {
 			// 500 Internal Server Error
+			$this->_logger->err('Caught exception ' . $e->getMessage());
             return $this->_targetPrefix . "/error/send500.php";
         }
 
@@ -200,11 +201,11 @@ class Rewritemap_Apache {
 		try {
 			$this->_realm->setIp($ip);
 		} catch (Opus_Security_Exception $e) {
+		    $this->_logger->err("RewriteMap got an invalid IP address: '$ip'!\n");
 			$this->_realm->setIp(null);
 		}
 
-		// set/reset User
-        // check the identity
+		// look for a session to set user/identity in realm.
 		if (false === is_null($cookiestring)) {
 	        $cookies = explode('; ', $cookiestring);
 		    $session_id = null;
@@ -214,19 +215,22 @@ class Rewritemap_Apache {
 						$session_id = $matches[1];
 					}
 	        }
+	        // found a open session?
 		    if (is_null($session_id) === false) {
 			    Zend_Session::setId($session_id);
 				Zend_Session::start();
 				$identity = Zend_Auth::getInstance()->getIdentity();
+				// found an username?
 				if (false === empty($identiy)) {
+				    // set session and return.
 					$this->_realm->setUser($identity);
-				} else {
-					$this->_realm->setUser(null);
+					return;
 				}
-			} else {
-				$this->_realm->setUser(null);
 			}
 		}
+		// if we reach this code, we have not found any user.
+		// reset the user.
+	    $this->_realm->setUser(null);
 	}
 }
 
