@@ -73,6 +73,7 @@
     <xsl:template match="table_data[@name='opus']/row">
         <xsl:element name="Opus_Document">            
             <xsl:variable name="OriginalID"><xsl:value-of select="field[@name='source_opus']" /></xsl:variable>
+            <xsl:attribute name="Workflow">repository</xsl:attribute>
             <xsl:attribute name="Type">
                 <xsl:choose>
                     <xsl:when test="field[@name='type']='1'">

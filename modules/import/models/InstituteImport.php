@@ -52,6 +52,13 @@ class InstituteImport
         // Use the institutes collection - always ID 1
         $collRole = new Opus_CollectionRole(1);
 
+        $xml = new DomDocument;
+        $xslt = new DomDocument;
+        $xslt->load('../modules/import/views/scripts/opus3/institute_structure.xslt');
+        $proc = new XSLTProcessor;
+        $proc->registerPhpFunctions();
+        $proc->importStyleSheet($xslt);
+        $xml->loadXML($proc->transformToXml($data));
         // Build the Institutes Collection
         #$collRole = new Opus_CollectionRole();
         #$collRole->setName('Organisatorische Einheiten');
@@ -60,12 +67,15 @@ class InstituteImport
         #$collRole->setLinkDocsPathToRoot('count');
         #$collRole->store();
 
-        $doclist = $data->getElementsByTagName('table_data');
+        $doclist = $xml->getElementsByTagName('table_data');
 
         foreach ($doclist as $document)
         {
+            if ($document->getAttribute('name') === 'university_de') {
+                $uniNumbers = $this->importUniversities($document, $collRole);
+            }
             if ($document->getAttribute('name') === 'faculty_de') {
-                $facNumbers = $this->importFaculties($document, $collRole);
+                $facNumbers = $this->importFaculties($document, $uniNumbers[0], $collRole->getId());
             }
             if ($document->getAttribute('name') === 'institute_de') {
                 $instNumbers = $this->importInstitutes($document, $facNumbers, $collRole->getId());
@@ -97,13 +107,43 @@ class InstituteImport
 		return $classification;
 	}
 
+    /**
+     * Imports Universities from Opus3 to Opus4 directly (without XML)
+     *
+     * @param DOMDocument $data XML-Document to be imported
+     * @return array List of documents that have been imported
+     */
+    protected function importUniversities($data, $collRole)
+    {
+        $classification = $this->transferOpusClassification($data);
+
+        $subcoll = array();
+
+        foreach ($classification as $class) {
+            echo ".";
+            // first level category
+            $coll = new Opus_Collection($collRole->getId());
+            $coll->setName($class['universitaet_anzeige']);
+            $coll->setAddress($class['instadresse']);
+            $coll->setCity($class['univort']);
+            $coll->setDnbContactId($class['ddb_idn']);
+            $coll->setTheme('default');
+            // store the old ID with the new Collection
+            $subcoll[] = $coll->store();
+            $collRole->addSubCollection($coll);
+            $collRole->store();
+        }
+
+        return $subcoll;
+    }
+
 	/**
 	 * Imports Faculties from Opus3 to Opus4 directly (without XML)
 	 *
 	 * @param DOMDocument $data XML-Document to be imported
 	 * @return array List of documents that have been imported
 	 */
-	protected function importFaculties($data, $collRole)
+	protected function importFaculties($data, $subColls, $roleId)
 	{
         $classification = $this->transferOpusClassification($data);
 
@@ -111,14 +151,16 @@ class InstituteImport
 
 		foreach ($classification as $class) {
           	echo ".";
-		    // first level category
-		    $coll = new Opus_Collection($collRole->getId());
-		    $coll->setName($class['fakultaet']);
-		    $coll->setTheme('default');
-			// store the old ID with the new Collection
-			$subcoll[$class['nr']] = $coll->store();
-			$collRole->addSubCollection($coll);
-			$collRole->store();
+            $parentColl = new Opus_Collection($roleId, $subColls);
+            // second level category
+            $coll = new Opus_Collection($roleId);
+            $coll->setName($class['fakultaet']);
+            $coll->setIsGrantor('1');
+            $coll->setTheme('default');
+            $parentColl->setTheme('default');
+            $subcoll[$class["nr"]] = $coll->store();
+            $parentColl->addSubCollection($coll);
+            $parentColl->store();
 		}
 
 		return $subcoll;

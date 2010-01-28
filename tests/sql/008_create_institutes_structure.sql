@@ -16,6 +16,11 @@ UNLOCK TABLES;
 CREATE TABLE `collections_contents_1` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `name` varchar(255) default NULL,
+  `address` varchar(255) default NULL,
+  `city` varchar(255) default NULL,
+  `phone` varchar(30) default NULL,
+  `dnb_contact_id` varchar(20) default NULL,
+  `is_grantor` tinyint default 0,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=228 DEFAULT CHARSET=utf8;
 
@@ -25,7 +30,7 @@ CREATE TABLE `collections_contents_1` (
 
 LOCK TABLES `collections_contents_1` WRITE;
 /*!40000 ALTER TABLE `collections_contents_1` DISABLE KEYS */;
-INSERT INTO `collections_contents_1` VALUES (1,NULL);
+INSERT INTO `collections_contents_1` VALUES (1,NULL, NULL, NULL, NULL, NULL, 0);
 /*!40000 ALTER TABLE `collections_contents_1` ENABLE KEYS */;
 UNLOCK TABLES;
 
