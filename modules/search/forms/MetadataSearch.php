@@ -40,12 +40,16 @@ class MetadataSearch extends Zend_Form
 	/**
 	 * number of fields that should be shown in the form
 	 */
-	protected $_queryFieldNumber = 5;
+	private $_queryFieldNumber = 1;
+
+	public function init() {
+	    $this->setupForm();
+	}
 
 	/**
      * Build extended search form
      */
-    public function init() {
+    protected function setupForm() {
 		// decorate form
 		$this->clearDecorators();
 		$decorators = array(
@@ -81,7 +85,7 @@ class MetadataSearch extends Zend_Form
                 'class' => 'queryterm'
 		    )),
 		);
-		
+
 		// Create and configure query field elements:
 		$truncation = new Zend_Form_Element_Select('searchtype');
 		$truncation->addMultiOptions(array('exact' => 'exact_search', 'truncated' => 'truncated_search'));
@@ -130,6 +134,9 @@ class MetadataSearch extends Zend_Form
 		        $boolean[$n]->addMultiOptions(array('and' => 'boolean_and', 'or' => 'boolean_or', 'not' => 'boolean_not'));
 		    }
 		}
+        $addElement = new Zend_Form_Element_Submit('add');
+        $addElement->setLabel('add_searchfield');
+        $addElement->setAttrib('name', 'Action');
 
         $submit = new Zend_Form_Element_Submit('submit');
         $submit->setLabel('search_searchaction');
@@ -144,7 +151,13 @@ class MetadataSearch extends Zend_Form
 		        $this->addElement($boolean[$n]);
 		    }
 		}
+		$this->addElement($addElement);
 		$this->addElement($submit);
+    }
+
+    public function addSearchfield() {
+        $this->_queryFieldNumber++;
+        $this->setupForm();
     }
 
     /**

@@ -39,6 +39,8 @@
 class Search_SearchController extends Zend_Controller_Action
 {
 
+    protected $_queryFieldNumber = 1;
+
     /**
      * Show menu for search actions
      *
@@ -174,6 +176,118 @@ class Search_SearchController extends Zend_Controller_Action
     }
 
     /**
+     * Build metadata search form
+     */
+    public function buildMetadataForm() {
+        $metadataForm = new MetadataSearch();
+        $form = new Zend_Form();
+        // decorate form
+        $form->clearDecorators();
+        $decorators = array(
+            array('ViewHelper'),
+            array('Errors'),
+            array('Label', array(
+                'requiredSuffix' => ' *',
+                'class' => 'leftalign'
+            )),
+            array('HtmlTag', array('tag' => 'p')),
+        );
+        $fieldDecorators = array(
+            array('ViewHelper'),
+            array('Errors'),
+            array('Label', array(
+                'requiredSuffix' => ' *',
+                'class' => 'leftalign'
+            )),
+            array('HtmlTag', array(
+                'tag' => 'div',
+                'class' => 'fieldsearch'
+            )),
+        );
+        $searchtermDecorators = array(
+            array('ViewHelper'),
+            array('Errors'),
+            array('Label', array(
+                'requiredSuffix' => ' *',
+                'class' => 'leftalign'
+            )),
+            array('HtmlTag', array(
+                'tag' => 'div',
+                'class' => 'queryterm'
+            )),
+        );
+
+        // Create and configure query field elements:
+        $truncation = new Zend_Form_Element_Select('searchtype');
+        $truncation->addMultiOptions(array('exact' => 'exact_search', 'truncated' => 'truncated_search'));
+
+        $hitsPerPage = new Zend_Form_Element_Select('hitsPerPage');
+        $hitsPerPage->addMultiOptions(array('0' => 'all_hits', '10' => 10, '20' => 20, '25' => 25, '50' => 50));
+        $hitsPerPage->setValue('10');
+        $hitsPerPage->setLabel('search_hitsPerPage');
+        $hitsPerPage->setDecorators($decorators);
+
+        $sort = new Zend_Form_Element_Select('sort');
+        $sort->addMultiOptions(array('relevance' => 'search_sort_relevance', 'yat' => 'search_sort_yearandtitle', 'year' => 'search_sort_year', 'title' => 'search_sort_title', 'author' => 'search_sort_author', 'relevance_asc' => 'search_sort_relevance_asc', 'yat_desc' => 'search_sort_yearandtitle_desc', 'year_desc' => 'search_sort_year_desc', 'title_desc' => 'search_sort_title_desc', 'author_desc' => 'search_sort_author_desc'));
+        $sort->setLabel('search_sort');
+        $sort->setDecorators($decorators);
+
+        $languageList = new Zend_Form_Element_Select('language');
+        $langs = Zend_Registry::get('Available_Languages');
+        $languageList->setLabel('Language')
+            ->setMultiOptions(array('0' => 'all_hits'));
+        $languageList->addMultiOptions($langs);
+        $languageList->setDecorators($decorators);
+
+        $doctypeList = new Zend_Form_Element_Select('doctype');
+        $doctypes = BrowsingList::getDocumentTypeList();
+        $doctypeList->setLabel('searchfield_doctype')
+            ->setMultiOptions(array('0' => 'all_hits'));
+        $doctypeList->addMultiOptions($doctypes);
+        $doctypeList->setDecorators($decorators);
+
+        $query = array();
+        $field = array();
+        $boolean = array();
+        for ($n = 0; $n < $this->_queryFieldNumber; $n++)
+        {
+            $field[$n] = new Zend_Form_Element_Select('field[' . $n . ']');
+            $field[$n]->addMultiOptions($metadataForm->retrieveSearchFields());
+            $field[$n]->setDecorators($fieldDecorators);
+
+            $query[$n] = new Zend_Form_Element_Text('query[' . $n . ']');
+            $query[$n]->addValidator('stringLength', false, array(3, 100));
+            $query[$n]->setDecorators($searchtermDecorators);
+
+            if ($n < ($this->_queryFieldNumber-1))
+            {
+                $boolean[$n] = new Zend_Form_Element_Select('boolean[' . $n . ']');
+                $boolean[$n]->addMultiOptions(array('and' => 'boolean_and', 'or' => 'boolean_or', 'not' => 'boolean_not'));
+            }
+        }
+        $addElement = new Zend_Form_Element_Submit('add');
+        $addElement->setLabel('add_searchfield');
+        $addElement->setAttrib('name', 'Action');
+
+        $submit = new Zend_Form_Element_Submit('submit');
+        $submit->setLabel('search_searchaction');
+
+        // Add elements to form:
+        $form->addElements(array($truncation, $hitsPerPage, $sort, $languageList, $doctypeList));
+        for ($n = 0; $n < $this->_queryFieldNumber; $n++)
+        {
+            $form->addElements(array($field[$n], $query[$n]));
+            if ($n < ($this->_queryFieldNumber-1))
+            {
+                $form->addElement($boolean[$n]);
+            }
+        }
+        $form->addElement($addElement);
+        $form->addElement($submit);
+        return $form;
+    }
+
+    /**
      * Do the search operation and set the hitlist to the view
      *
      * @return void
@@ -195,7 +309,15 @@ class Search_SearchController extends Zend_Controller_Action
         if ($this->_request->isPost() === true) {
             // post request
             $data = $this->_request->getPost();
-            $form = new MetadataSearch();
+            print_r($data);
+            if (array_key_exists('add', $data) === true) {
+                $this->_queryFieldNumber++;
+                echo $this->_queryFieldNumber;
+                $form = $this->buildMetadataForm();
+                $this->view->form = $form->populate($data);
+                return $this->render('form');
+            }
+            $form = $this->buildMetadataForm();
             if ($form->isValid($data) === true) {
                 // valid form
                 $this->view->form = $form->populate($data);
@@ -245,7 +367,7 @@ class Search_SearchController extends Zend_Controller_Action
             }
         } else {
             // nonpost request
-            $form = new MetadataSearch();
+            $form = $this->buildMetadataForm();
             $data = $this->_request->getParams();
             if (isset($resultlist->postedData) === true) {
                 if (array_key_exists('noform', $data) === false) {
