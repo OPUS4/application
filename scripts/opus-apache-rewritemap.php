@@ -61,11 +61,11 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
      * Initialise with command line arguments.
      *
      * @param array $arguments Command line arguments passed to the script.
-     */    
+     */
     public function __construct(array $arguments) {
         $this->_arguments = $arguments;
     }
-    
+
 
     /**
      * Setup configuration, database and translation.
@@ -166,24 +166,23 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
         $log = Zend_Registry::get('Zend_Log');
         $config = Zend_Registry::get('Zend_Config');
 
-        $targetPrefix = '/files';
+        // set targetprefix
         if (empty($config->deliver->target->prefix) === true) {
             $log->warn('No target prefix defined in configuration. Using "/files"!');
+            $targetPrefix = '/files';
         } else {
             $targetPrefix = $config->deliver->target->prefix;
         }
-        $rwmap = new Rewritemap_Apache($targetPrefix, $log);
 
         // check input
         if (count($this->_arguments) < 2) {
             $line = '';
         } else {
             $line = $this->_arguments[1];
-        }    
-
+        }
         if (preg_match('/\t.*\t/', $line) === 0) {
             $log->err('Internal fatal error! Input from Apache was not as predicted, unparsable by RewriteMap!');
-            $log->info('Apache Input: \'' . $line . '\'');
+            $log->err('Apache Input: \'' . $line . '\'');
             return $targetPrefix ."/error/send500.php";
         }
 
@@ -191,8 +190,11 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
         $cookie = null;
         // split input
         list($path, $remoteAddress, $cookie) = preg_split('/\t/', $line, 3);
-        
+        // remove leading 'COOKIE=', set to prevent eating of second tab by the shell
+        preg_replace('/^COOKIES=/', '', $cookie, 1);
+
         // issue rewriting
+        $rwmap = new Rewritemap_Apache($targetPrefix, $log);
         echo $rwmap->rewriteRequest($path, $remoteAddress, $cookie) . "\n";
     }
 
@@ -200,6 +202,7 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
 
 // Bootstrap Zend
 $rwmap = new OpusApacheRewritemap($argv);
+//echo dirname(dirname(__FILE__));
 $rwmap->run(
     // application root directory
     dirname(dirname(__FILE__)),
