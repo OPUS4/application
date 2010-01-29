@@ -652,6 +652,7 @@ class Oai_IndexController extends Controller_Xml {
         // list sets for all collections for oai
         $roles = Opus_CollectionRole::getAll();
         foreach ($roles as $role) {
+          if ($role->getVisibleOai() == '1') {
             $oaisets = $role->getOaiSetNames();
             foreach ($oaisets as $oaiset) {
                $opus_doc = $this->_xml->createElement('Opus_Sets');
@@ -665,6 +666,7 @@ class Oai_IndexController extends Controller_Xml {
                $opus_doc->appendChild($name_attr);
                $this->_xml->documentElement->appendChild($opus_doc);
             }
+          }
         }
     }
 
