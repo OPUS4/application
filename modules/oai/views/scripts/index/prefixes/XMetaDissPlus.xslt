@@ -66,7 +66,17 @@
     <xsl:template match="Opus_Document" mode="xmetadissplus">
         <xsl:element name="xMetaDiss">
             <xsl:attribute name="xsi:schemaLocation">
-            <xsl:text>http://www.bsz-bw.de/xmetadissplus/1.3 http://www.bsz-bw.de/xmetadissplus/1.3/xmetadissplus.xsd</xsl:text>
+            <xsl:text>http://www.bsz-bw.de/xmetadissplus/1.3 http://www.bsz-bw.de/xmetadissplus/1.3/xmetadissplus.xsd
+            xmlns="http://www.bsz-bw.de/xmetadissplus/1.3"
+            xmlns:xmetadiss="http://www.d-nb.de/standards/xMetaDiss/"  
+            xmlns:cc="http://www.d-nb.de/standards/cc/"
+            xmlns:dc="http://purl.org/dc/elements/1.1/"
+            xmlns:dcterms="http://purl.org/dc/terms/"
+            xmlns:bszterms="http://www.bsz-bw.de/xmetadissplus/1.3/terms/"
+            xmlns:pc="http://www.d-nb.de/standards/pc/"
+            xmlns:urn="http://www.d-nb.de/standards/urn/"
+            xmlns:ddb="http://www.d-nb.de/standards/ddb/"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"</xsl:text>
             </xsl:attribute>
             <!-- dc:title -->
             <xsl:apply-templates select="TitleMain" mode="xmetadissplus" />

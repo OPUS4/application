@@ -46,7 +46,6 @@
 -->
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:fn="http://www.w3.org/2005/xpath-functions"
     xmlns:xMetaDiss="http://www.d-nb.de/standards/xMetaDiss/"
     xmlns:cc="http://www.d-nb.de/standards/cc/"
     xmlns:dc="http://purl.org/dc/elements/1.1/"
@@ -65,7 +64,15 @@
     <xsl:template match="Opus_Document" mode="xmetadiss">
         <xsl:element name="xMetaDiss:xMetaDiss">
             <xsl:attribute name="xsi:schemaLocation">
-            <xsl:text>http://www.d-nb.de/standards/xMetaDiss/ http://www.d-nb.de/standards/xmetadiss/xmetadiss.xsd</xsl:text>
+            <xsl:text>http://www.d-nb.de/standards/xMetaDiss/ http://www.d-nb.de/standards/xmetadiss/xmetadiss.xsd
+            xmlns="http://www.d-nb.de/standards/subject/"   
+            xmlns:cc="http://www.d-nb.de/standards/cc/"
+            xmlns:dc="http://purl.org/dc/elements/1.1/"
+            xmlns:dcterms="http://purl.org/dc/terms/"
+            xmlns:pc="http://www.d-nb.de/standards/pc/"
+            xmlns:urn="http://www.d-nb.de/standards/urn/"
+            xmlns:ddb="http://www.d-nb.de/standards/ddb/"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"</xsl:text>
             </xsl:attribute>
             <!-- dc:title -->
             <xsl:apply-templates select="TitleMain" mode="xmetadiss" />
