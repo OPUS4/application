@@ -154,6 +154,9 @@
        <xsl:if test="Collection/@RoleName='Physics and Astronomy Classification Scheme'">
           <xsl:apply-templates select="Collection[@RoleName='Physics and Astronomy Classification Scheme']" />
        </xsl:if>   
+       <xsl:if test="Collection/@RoleName='Schriftenreihen'">
+          <xsl:apply-templates select="Collection[@RoleName='Schriftenreihen']" />
+       </xsl:if>   
        <xsl:apply-templates select="Collection" mode="other"/> 
        <xsl:apply-templates select="Licence" />
        </table>
@@ -505,8 +508,39 @@
       </xsl:choose>
     </xsl:template>
 
+    <xsl:template match="Collection[@RoleName='Schriftenreihen']">
+      <xsl:choose>
+        <xsl:when test="position()=1">
+          <tr>
+            <th class="name">
+            <xsl:call-template name="translateString">
+                <xsl:with-param name="string">col_ser</xsl:with-param>
+            </xsl:call-template>
+            <xsl:text>:</xsl:text></th>
+            <td>
+              <xsl:if test="@Number != ''">
+                 <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
+              </xsl:if>
+              <xsl:value-of select="@Name" />
+            </td>
+          </tr>
+        </xsl:when>   
+        <xsl:otherwise>
+            <tr>
+            <td></td>
+               <td> 
+               <xsl:if test="@Number != ''">
+                 <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
+               </xsl:if>
+               <xsl:value-of select="@Name" />
+              </td>
+            </tr>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:template>
+
     <xsl:template match="Collection" mode="other">
-      <xsl:if test="@RoleName!='Computing Classification System' and @RoleName!='Dewey Decimal Classification' and @RoleName!='Mathematics Subject Classification' and @RoleName!='Physics and Astronomy Classification Scheme' and @RoleName!='Organisatorische Einheiten'">
+      <xsl:if test="@RoleName!='Computing Classification System' and @RoleName!='Dewey Decimal Classification' and @RoleName!='Mathematics Subject Classification' and @RoleName!='Physics and Astronomy Classification Scheme' and @RoleName!='Schriftenreihen' and @RoleName!='Organisatorische Einheiten'">
       <xsl:choose>
         <xsl:when test="position()=1">
         <tr>

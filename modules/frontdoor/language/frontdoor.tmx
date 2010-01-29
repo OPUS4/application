@@ -221,7 +221,7 @@
     
     <tu tuid="frontdoor_sendmailsubject">
       <tuv xml:lang="en">
-        <seg>Recommend document</seg>
+        <seg>Document Recommendation</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Dokumentempfehlung</seg>
@@ -360,6 +360,15 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>PACS-Klassifikation</seg>
+      </tuv>
+    </tu>
+ 
+    <tu tuid="col_ser">
+      <tuv xml:lang="en">
+        <seg>Series</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Schriftenreihen</seg>
       </tuv>
     </tu>
  
