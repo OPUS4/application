@@ -806,7 +806,8 @@ class Oai_IndexController extends Controller_Xml {
     private function setParamResumption($res,$cursor,$totalIds) {
        $today = new Zend_Date();
        $today->add(1,Zend_Date::DAY);
-       $tomorrow = $today->get('yyyy-MM-ddThh-mm-ssZ');
+       $tomorrow = $today->get('yyyy-MM-ddThh:mm:ss');
+       $tomorrow = $tomorrow . 'Z';
        $this->_proc->setParameter('', 'dateDelete', $tomorrow);
        $this->_proc->setParameter('', 'res', $res);
        $this->_proc->setParameter('', 'cursor', $cursor);
