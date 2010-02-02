@@ -94,10 +94,10 @@ if (count($this->hitlist_paginator)) {
         echo "<div class=\"queryhit\">";
         if ($this->noform !== true) {
         	echo $this->translate('search_titles_relevance').": ".$hit->getRelevance()."<br/>";
-        	echo strip_tags($document["abstract"]);
+        	echo $document["abstract"];
         }
         else {
-            echo $document["abstract"];
+            echo strip_tags($document["abstract"]);
         }
         echo "</div>";
     }
