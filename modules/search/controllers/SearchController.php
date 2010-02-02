@@ -369,6 +369,9 @@ class Search_SearchController extends Zend_Controller_Action
             // nonpost request
             $form = $this->buildMetadataForm();
             $data = $this->_request->getParams();
+            if (array_key_exists('noform', $data) === true) {
+              	$this->view->noform = true;
+            }
             if (isset($resultlist->postedData) === true) {
                 if (array_key_exists('noform', $data) === false) {
                 	$this->view->form = $form->populate($resultlist->postedData);

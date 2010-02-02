@@ -91,8 +91,15 @@ if (count($this->hitlist_paginator)) {
             'docId' => $document['id']), null, true
         ).'">'.$document["title"]."</a></span>");
         echo "</li>";
-        echo "<div class=\"queryhit\">".$this->translate('search_titles_relevance').": ".$hit->getRelevance()."<br/>";
-        echo $document["abstract"]."</div>";
+        echo "<div class=\"queryhit\">";
+        if ($this->noform !== true) {
+        	echo $this->translate('search_titles_relevance').": ".$hit->getRelevance()."<br/>";
+        	echo strip_tags($document["abstract"]);
+        }
+        else {
+            echo $document["abstract"];
+        }
+        echo "</div>";
     }
     echo '</ol>';
     echo $this->paginationControl($this->hitlist_paginator, 'Sliding', 'searchList_pagination.phtml');
