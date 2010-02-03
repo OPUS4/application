@@ -2,10 +2,14 @@
 <div class="paginationControl">
 <!-- Previous page link -->
 <?php if (isset($this->previous)): ?>
+  <a href="<?= $this->url(array('page' => $this->first)); ?>">
+    &lt;&lt; First
+  </a> | 
   <a href="<?= $this->url(array('page' => $this->previous)); ?>">
     &lt; Previous
   </a> |
 <?php else: ?>
+  <span class="disabled">&lt;&lt; First</span> |
   <span class="disabled">&lt; Previous</span> |
 <?php endif; ?>
 
@@ -24,9 +28,17 @@
 <?php if (isset($this->next)): ?>
   <a href="<?= $this->url(array('page' => $this->next)); ?>">
     Next &gt;
+  </a> | 
+<?php else: ?>
+  <span class="disabled">Next &gt;</span> | 
+<?php endif; ?>
+<!-- Last page link -->
+<?php if (isset($this->next)): ?>
+  <a href="<?php echo $this->url(array('page' => $this->last)); ?>">
+    Last &gt;&gt;
   </a>
 <?php else: ?>
-  <span class="disabled">Next &gt;</span>
+  <span class="disabled">Last &gt;&gt;</span>
 <?php endif; ?>
 </div>
 <?php endif; ?>
