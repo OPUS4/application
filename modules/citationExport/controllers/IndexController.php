@@ -62,6 +62,7 @@ class CitationExport_IndexController extends Zend_Controller_Action {
         $requestData = $this->_request->getParams();
         $outputFormat = null;
         if (true === isset($requestData['output'])) $outputFormat = $requestData['output'];
+        if ($outputFormat === 'bibtex' && file_exists($this->view->getScriptPath('index') . '/' . $outputFormat . "_" . $document->getType() . '.xslt')) $outputFormat .= "_" . $document->getType();
         if (true === file_exists($this->view->getScriptPath('index') . '/' . $outputFormat . '.xslt')) {
             $template = $outputFormat . '.xslt';
         } else {
@@ -69,6 +70,45 @@ class CitationExport_IndexController extends Zend_Controller_Action {
             $this->view->output = $this->view->translate('invalid_format');
             return;
         }
+        /*
+         * different bibtex types - they need seperate stylesheets...
+book = monograph
+    A book with an explicit publisher.
+    Required fields: author/editor, title, publisher, year
+    Optional fields: volume, series, address, edition, month, note, key
+incollection = monograph_section
+    A part of a book having its own title.
+    Required fields: author, title, booktitle, year
+    Optional fields: editor, pages, organization, publisher, address, month, note, key
+inproceedings = conference_item
+    An article in a conference proceedings.
+    Required fields: author, title, booktitle, year
+    Optional fields: editor, series, pages, organization, publisher, address, month, note, key
+manual = manual
+    Technical documentation.
+    Required fields: title
+    Optional fields: author, organization, address, edition, month, year, note, key
+mastersthesis = master_thesis
+    A Master's thesis.
+    Required fields: author, title, school, year
+    Optional fields: address, month, note, key
+misc = other
+    For use when nothing else fits.
+    Required fields: none
+    Optional fields: author, title, howpublished, month, year, note, key
+phdthesis = doctoral_thesis
+    A Ph.D. thesis.
+    Required fields: author, title, school, year
+    Optional fields: address, month, note, key
+proceedings = conference
+    The proceedings of a conference.
+    Required fields: title, year
+    Optional fields: editor, publisher, organization, address, month, note, key
+techreport = report
+    A report published by a school or other institution, usually numbered within a series.
+    Required fields: author, title, institution, year
+    Optional fields: type, number, address, month, note, key
+    */
         $xslt->load($this->view->getScriptPath('index') . '/' . $template);
 
         // Set up XSLT-Processor

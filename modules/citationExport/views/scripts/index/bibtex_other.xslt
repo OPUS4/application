@@ -140,7 +140,7 @@
     </xsl:template>
 
     <xsl:template match="@Type">
-      @misc{OPUS-Bibtex,
+      @<xsl:value-of select="." />{OPUS-Bibtex,
     </xsl:template>
 
     <xsl:template match="@Volume">
