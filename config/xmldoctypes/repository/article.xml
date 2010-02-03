@@ -55,7 +55,7 @@
 	<page caption="caption_02_article">
         <field name="TitleMain" mandatory="yes" adminformweight="1" publishformweight="101" multiplicity="4" />
         <field name="TitleAbstract" mandatory="yes" adminformweight="1" publishformweight="102" multiplicity="4" />
-        <field name="TitleParent" mandatory="yes" adminformweight="1" publishformweight="103" multiplicity="1" />
+        <!--- <field name="TitleParent" mandatory="yes" adminformweight="1" publishformweight="103" multiplicity="1" /> -->
     </page>
 	   
 	<page caption="caption_03_article">
