@@ -47,21 +47,47 @@ class CitationExport_IndexController extends Zend_Controller_Action {
      *
      */
     public function indexAction() {
-        $this->view->title = 'Citation Export (Export bibliographischer Daten)';
+        // Load document
+        $docId = $this->getRequest()->getParam('docId');
+        $document = new Opus_Document($docId);
+
+        // Set up filter and get XML-Representation of filtered document.
+        $type = new Opus_Document_Type($document->getType());
+        $filter = new Opus_Model_Filter;
+        $filter->setModel($document);
+        $xml = $filter->toXml();
+
+        // Set up XSLT-Stylesheet
+        $xslt = new DomDocument;
         $requestData = $this->_request->getParams();
         $outputFormat = null;
         if (true === isset($requestData['output'])) $outputFormat = $requestData['output'];
-        switch($outputFormat) {
-        	case 'bibtex':
-        	    $this->view->output = "BibTeX noch nicht implementiert";
-        	    break;
-        	case 'ris':
-        	    $this->view->output = "RIS noch nicht implementiert";
-        	    break;
-        	default:
-        	    $this->view->output = $this->view->translate('invalid_format');
-        	    break;
+        if (true === file_exists($this->view->getScriptPath('index') . '/' . $outputFormat . '.xslt')) {
+            $template = $outputFormat . '.xslt';
+        } else {
+            $this->view->title = 'Citation Export (Export bibliographischer Daten)';
+            $this->view->output = $this->view->translate('invalid_format');
+            return;
         }
+        $xslt->load($this->view->getScriptPath('index') . '/' . $template);
+
+        // Set up XSLT-Processor
+        $proc = new XSLTProcessor;
+        $proc->registerPHPFunctions();
+        $proc->importStyleSheet($xslt);
+
+        // Transform to HTML
+        	    $this->_helper->viewRenderer->setNoRender(true);
+                $this->_helper->layout()->disableLayout();
+
+            	// Send plain text response.
+                $this->getResponse()->setHeader('Content-Type', 'text/plain; charset=UTF-8', true);
+                $this->getResponse()->setBody($proc->transformToXML($xml));
+        #echo $xml->saveXml();
+        #echo $proc->transformToXML($xml);
+        #$this->getResponse()->setHttpResponseCode(200);
+        #$this->getResponse()->setBody($document->toXml()->saveXml());
+        #$this->getResponse()->setBody($proc->transformToXML($xml));
     }
 
 }
