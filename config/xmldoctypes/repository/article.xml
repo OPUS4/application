@@ -30,6 +30,7 @@
     * @author     Eike Kleiner <Eike.Kleiner@bsz-bw.de>
     * @author     Oliver Marahrens <o.marahrens@tu-harburg.de>
     * @author     Simone Finkbeiner <simone.finkbeiner@ub.uni-stuttgart.de>
+    * @author     Ulrich Herb <u.herb@sulb.uni-saarland.de>
     * @copyright  Copyright (c) 2009, OPUS 4 development team
     * @license    http://www.gnu.org/licenses/gpl.html General Public License
     * @version    $Id$
@@ -66,10 +67,7 @@
 
         <field name="CreatingCorporation" mandatory="no" adminformweight="1" publishformweight="207" multiplicity="*" />
         <field name="ContributingCorporation" mandatory="no" adminformweight="1" publishformweight="208" multiplicity="*"/>
-
-	    <field name="PublisherUniversity" mandatory="yes" adminformweight="1" publishformweight="301" multiplicity="*" />
-
-        <field name="NonInstituteAffiliation" mandatory="no" adminformweight="1" publishformweight="302" multiplicity="*" />
+        
     </page>
 
 	<page caption="caption_04_article">	    
@@ -84,17 +82,16 @@
         <field name="PageLast" mandatory="no" adminformweight="1" publishformweight="107" multiplicity="1" />
         <mandatory type="one-at-least">
             <field name="CompletedYear" adminformweight="1" publishformweight="402" multiplicity="1" />
-            <field name="CompletedDate" adminformweight="1" publishformweight="403" multiplicity="1" />
+            <!--<field name="CompletedDate" adminformweight="1" publishformweight="403" multiplicity="1"/> -->
         </mandatory>
         <mandatory type="one-at-least">
             <field name="PublishedYear" adminformweight="1" publishformweight="404" multiplicity="1" />
-            <field name="PublishedDate" adminformweight="1" publishformweight="405" multiplicity="1" />
+            <!-- <field name="PublishedDate" adminformweight="1" publishformweight="405" multiplicity="1" /> -->
         </mandatory>
     </page>
 
 	<page caption="caption_05_article">
 	    <field name="SubjectSwd" mandatory="no" adminformweight="1" publishformweight="401" multiplicity="5" />
-	    <field name="SubjectPsyndex" mandatory="no" adminformweight="1" publishformweight="402" multiplicity="*" />
 	    <field name="SubjectUncontrolled" mandatory="no" adminformweight="1" publishformweight="403" multiplicity="*" />
     </page>
 	    
