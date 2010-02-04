@@ -33,6 +33,10 @@
  * @version     $Id$
  */
 ?>
-<h1>Opus Application - <?= $this->title ?></h1>
-
+<h1><?= $this->title ?></h1>
+<p>
+<code>
 <?= $this->output ?>
+</code>
+</p>
+<a href="<?= $this->downloadUrl ?>"><?= $this->translate('download_bibliographic_data') ?></a>

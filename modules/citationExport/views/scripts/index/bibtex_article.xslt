@@ -67,31 +67,53 @@
        author   =  "<xsl:apply-templates select="PersonAuthor" />",
        title    =  '<xsl:apply-templates select="TitleMain" />',
        journal  =  "<xsl:apply-templates select="TitleParent" />",
-       <xsl:variable name="year">null</xsl:variable>
+       <xsl:variable name="year">
        <xsl:choose>
          <xsl:when test="normalize-space(@CompletedYear)">
-           <xsl:variable name="year"><xsl:apply-templates select="@CompletedYear" /></xsl:variable>
+             <xsl:value-of select="@CompletedYear" />
          </xsl:when>
          <xsl:otherwise>
-           <xsl:variable name="year"><xsl:apply-templates select="ComletedDate" /></xsl:variable>
+           <xsl:value-of select="ComletedDate/@Year" />
          </xsl:otherwise>
        </xsl:choose>
-       <xsl:if test="$year='null'">
-       <xsl:choose>
-         <xsl:when test="normalize-space(PublishedDate/@Year)">
-           <xsl:variable name="year"><xsl:apply-templates select="PublishedDate" /></xsl:variable>
-         </xsl:when>
-         <xsl:otherwise>
-           <xsl:variable name="year"><xsl:apply-templates select="@PublishedYear" /></xsl:variable>
-         </xsl:otherwise>
-       </xsl:choose>
+       </xsl:variable>
+       <xsl:if test="not($year)">
+           <xsl:variable name="year">
+           <xsl:choose>
+             <xsl:when test="normalize-space(PublishedDate/@Year)">
+               <xsl:value-of select="PublishedDate/@Year" />
+             </xsl:when>
+             <xsl:otherwise>
+               <xsl:value-of select="@PublishedYear" />
+             </xsl:otherwise>
+           </xsl:choose>
+           </xsl:variable>
        </xsl:if>
-       year    =  <xsl:value-of select="$year" />,
-       url     =  <xsl:apply-templates select="IdentifierUrl" />,
-       volume  =  <xsl:apply-templates select="@Volume" />,
-       number  =  <xsl:apply-templates select="@Issue" />,
-       pages   =  "<xsl:value-of select="@PageFirst" />, <xsl:value-of select="@PageLast" />",
-       note    =  "<xsl:apply-templates select="Note" />"
+       year = <xsl:value-of select="$year" />
+       <xsl:if test="string-length(IdentifierUrl)>0">
+           ,
+           url     =  <xsl:apply-templates select="IdentifierUrl" />
+       </xsl:if>
+       <xsl:if test="string-length(@PageFirst)>0">
+           ,
+           pages   =  "<xsl:value-of select="@PageFirst" />, <xsl:value-of select="@PageLast" />"
+       </xsl:if>
+       <xsl:if test="string-length(@Volume)>0">
+           ,
+           volume  =  <xsl:apply-templates select="@Volume" />
+       </xsl:if>   
+       <xsl:if test="string-length(@Issue)>0">
+           ,
+           number =  "<xsl:value-of select="@Issue" />"
+       </xsl:if>
+       <xsl:if test="string-length(@ContributingCorporation)>0">
+           ,
+           organization =  "<xsl:value-of select="@ContributingCorporation" />"
+       </xsl:if>
+       <xsl:if test="string-length(Note)>0">
+           ,
+           note    =  "<xsl:apply-templates select="Note" />"
+       </xsl:if>
        }
     </xsl:template>
 

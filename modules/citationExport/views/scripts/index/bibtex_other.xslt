@@ -63,117 +63,118 @@
      if you wish new fields, you have to add a new line xsl:apply-templates...
      and a special template for each new field below, too -->
     <xsl:template match="Opus_Model_Filter">
-       <xsl:apply-templates select="@Type" />
-       <xsl:apply-templates select="PersonAuthor" />
-       <xsl:apply-templates select="TitleMain" />
-       <xsl:apply-templates select="IdentifierUrl" />
-       <xsl:apply-templates select="TitleParent" />
-       <xsl:apply-templates select="@PublisherName" />
-       <xsl:apply-templates select="@PublisherPlace" />
-       <xsl:apply-templates select="PersonEditor" />
+       @misc{OPUS-Bibtex<xsl:value-of select="@Id" />
+       <xsl:if test="string-length(PersonAuthor)>0">
+           ,
+           author   =  "<xsl:apply-templates select="PersonAuthor" />"
+       </xsl:if>
+       <xsl:if test="string-length(TitleMain)>0">
+           ,
+           title    =  '<xsl:apply-templates select="TitleMain" />'
+       </xsl:if>
+       <xsl:variable name="year">
        <xsl:choose>
          <xsl:when test="normalize-space(@CompletedYear)">
-           <xsl:apply-templates select="@CompletedYear" />
+             <xsl:value-of select="@CompletedYear" />
          </xsl:when>
          <xsl:otherwise>
-           <xsl:apply-templates select="ComletedDate" />
+           <xsl:value-of select="ComletedDate/@Year" />
          </xsl:otherwise>
        </xsl:choose>
-       <xsl:choose>
-         <xsl:when test="normalize-space(PublishedDate/@Year)">
-           <xsl:apply-templates select="PublishedDate" />
-         </xsl:when>
-         <xsl:otherwise>
-           <xsl:apply-templates select="@PublishedYear" />
-         </xsl:otherwise>
-       </xsl:choose>
-       <xsl:apply-templates select="@CreatingCorporation" />
-       <xsl:apply-templates select="@Volume" />
-       <xsl:apply-templates select="@Issue" />
-       <xsl:apply-templates select="@PageNumber" />
-       <xsl:apply-templates select="@PageFirst" />
-       <xsl:apply-templates select="@PageLast" />
-       <xsl:apply-templates select="Note" />
+       </xsl:variable>
+       <xsl:if test="not($year)">
+           <xsl:variable name="year">
+           <xsl:choose>
+             <xsl:when test="normalize-space(PublishedDate/@Year)">
+               <xsl:value-of select="PublishedDate/@Year" />
+             </xsl:when>
+             <xsl:otherwise>
+               <xsl:value-of select="@PublishedYear" />
+             </xsl:otherwise>
+           </xsl:choose>
+           </xsl:variable>
+       </xsl:if>
+       <xsl:if test="$year">
+           ,
+           year = <xsl:value-of select="$year" />
+       </xsl:if>
+       <xsl:if test="string-length(IdentifierUrl)>0">
+           ,
+           url     =  <xsl:apply-templates select="IdentifierUrl" />
+       </xsl:if>
+       <xsl:if test="string-length(Note)>0">
+           ,
+           note    =  "<xsl:apply-templates select="Note" />"
+       </xsl:if>
+       ,
+       howpublished=  'online'
        }
     </xsl:template>
 
     <!-- here begins the special templates for the fields -->
     <!-- Templates for "internal fields". -->
     <xsl:template match="@CompletedYear">
-      year=<xsl:value-of select="." />,
+      <xsl:value-of select="." />
     </xsl:template>
 
     <xsl:template match="@ContributingCorporation">
-      institution='<xsl:value-of select="." />',
+      <xsl:value-of select="." />
     </xsl:template>
 
     <xsl:template match="@CreatingCorporation">
-      organization='<xsl:value-of select="." />',
+      <xsl:value-of select="." />
     </xsl:template>
 
     <xsl:template match="@Edition">
-     edition='<xsl:value-of select="." />',
+     <xsl:value-of select="." />
     </xsl:template>
 
     <xsl:template match="@Issue">
-      number=<xsl:value-of select="." />,
-    </xsl:template>
-
-    <xsl:template match="@PageFirst">
-      pages='<xsl:value-of select="." />, <xsl:value-of select="../@PageLast" />',
+      <xsl:value-of select="." />
     </xsl:template>
 
     <xsl:template match="@PageNumber">
-      pages=<xsl:value-of select="." />,  
+      <xsl:value-of select="." />  
     </xsl:template>
 
     <xsl:template match="@PublishedYear">
-      year=<xsl:value-of select="." />,
+      <xsl:value-of select="." />
     </xsl:template>
 
     <xsl:template match="@PublisherName">
-      publisher='<xsl:value-of select="." />',
+      <xsl:value-of select="." />
     </xsl:template>
 
     <xsl:template match="@PublisherPlace">
-      address='<xsl:value-of select="." />',
-    </xsl:template>
-
-    <xsl:template match="@Type">
-      @<xsl:value-of select="." />{OPUS-Bibtex,
+      <xsl:value-of select="." />
     </xsl:template>
 
     <xsl:template match="@Volume">
-      volume=<xsl:value-of select="." />,
+      <xsl:value-of select="." />
     </xsl:template>
 
 
     <!-- Templates for "external fields". -->
     <xsl:template match="CompletedDate">
-      year=<xsl:value-of select="@Year" />,
+      <xsl:value-of select="@Year" />
     </xsl:template>
 
     <xsl:template match="IdentifierUrl">
-      url="<xsl:value-of select="@Value" />",
+      <xsl:value-of select="@Value" />
     </xsl:template>
 
     <xsl:template match="Note">
-      note=<xsl:value-of select="@Message" />,
+      <xsl:value-of select="@Message" />
     </xsl:template>
  
     <xsl:template match="Institute"/>
     <xsl:template match="Patent"/>
  
     <xsl:template match="PersonAuthor">
-      <xsl:choose>
-         <xsl:when test="position()=1">
-            <xsl:text>author="</xsl:text>
-         </xsl:when>
-      </xsl:choose>
       <xsl:value-of select="concat(@LastName, ', ', @FirstName)" />
       <xsl:choose>
          <xsl:when test="position()=last()">
-            <xsl:text>",</xsl:text>
+            <xsl:text></xsl:text>
          </xsl:when>
          <xsl:otherwise>
             <xsl:text> and </xsl:text>
@@ -182,17 +183,32 @@
     </xsl:template>  
           
     <xsl:template match="PersonEditor">
-      editor='<xsl:value-of select="concat(@LastName, ', ', @FirstName)" />',
+      <xsl:value-of select="concat(@LastName, ', ', @FirstName)" />
+      <xsl:choose>
+         <xsl:when test="position()=last()">
+            <xsl:text></xsl:text>
+         </xsl:when>
+         <xsl:otherwise>
+            <xsl:text> and </xsl:text>
+         </xsl:otherwise>
+      </xsl:choose>
     </xsl:template>
  
     <xsl:template match="PublisherUniversity"/>
 
     <xsl:template match="TitleMain">
-        title='<xsl:value-of select="@Value" />',
+        <xsl:value-of select="@Value" />
     </xsl:template>
 
     <xsl:template match="TitleParent">
-      journal='<xsl:value-of select="@Value" />',
+      <xsl:value-of select="@Value" />
+    </xsl:template>
+
+    <xsl:template match="Collection[@RoleName='Schriftenreihen']">
+        <xsl:if test="@Number != ''">
+            <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
+        </xsl:if>
+        <xsl:value-of select="@Name" />
     </xsl:template>
 
     <!-- Named template to translate an arbitrary string. Needs the translation key as a parameter. -->

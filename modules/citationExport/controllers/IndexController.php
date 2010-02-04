@@ -41,13 +41,62 @@
 class CitationExport_IndexController extends Zend_Controller_Action {
 
     /**
-     * Just to be there. No actions taken.
+     * Output data to index view
      *
      * @return void
      *
      */
     public function indexAction() {
-        // Load document
+        $docId = $this->getRequest()->getParam('docId');
+        $outputFormat = $this->getRequest()->getParam('output');
+        
+        $output = $this->getPlainOutput($docId, $outputFormat);
+
+        // Send output to view
+        $this->view->title = $this->view->translate('citationExport_modulename');
+        if ($output === false) $this->view->output = $this->view->translate('invalid_format');
+        else $this->view->output = $output;
+        $this->view->downloadUrl = $this->view->url(array('module' => 'citationExport', 'controller' => 'index', 'action' => 'download', 'docId' => $docId, 'output' => $outputFormat), false, null);
+    }
+
+    /**
+     * Output data as downloadable file
+     *
+     * @return void
+     *
+     */
+    public function downloadAction() {
+        $docId = $this->getRequest()->getParam('docId');
+        $outputFormat = $this->getRequest()->getParam('output');
+        
+        switch ($outputFormat) {
+        	case 'bibtex':
+        	    $extension = 'bib';
+        	    break;
+        	case 'ris':
+        	    $extension = 'ris';
+        	    break;
+        	default:
+        	    $extension = 'txt';
+        }
+        
+        $output = $this->getPlainOutput($docId, $outputFormat);
+
+        // Transform to HTML
+        $this->_helper->viewRenderer->setNoRender(true);
+        $this->_helper->layout()->disableLayout();
+
+        // Send plain text response.
+        $this->getResponse()->setHeader('Content-Type', 'text/plain; charset=UTF-8', true);
+        $this->getResponse()->setHeader('Content-Disposition', 'attachment; filename=' . $outputFormat . '-' . $docId . '.' . $extension, true);
+        $this->getResponse()->setBody($output);
+    }
+
+    /**
+     * 
+     */
+     public function getPlainOutput($docId, $outputFormat = null) {
+     	// Load document
         $docId = $this->getRequest()->getParam('docId');
         $document = new Opus_Document($docId);
 
@@ -59,56 +108,12 @@ class CitationExport_IndexController extends Zend_Controller_Action {
 
         // Set up XSLT-Stylesheet
         $xslt = new DomDocument;
-        $requestData = $this->_request->getParams();
-        $outputFormat = null;
-        if (true === isset($requestData['output'])) $outputFormat = $requestData['output'];
         if ($outputFormat === 'bibtex' && file_exists($this->view->getScriptPath('index') . '/' . $outputFormat . "_" . $document->getType() . '.xslt')) $outputFormat .= "_" . $document->getType();
         if (true === file_exists($this->view->getScriptPath('index') . '/' . $outputFormat . '.xslt')) {
             $template = $outputFormat . '.xslt';
         } else {
-            $this->view->title = 'Citation Export (Export bibliographischer Daten)';
-            $this->view->output = $this->view->translate('invalid_format');
-            return;
+            return false;
         }
-        /*
-         * different bibtex types - they need seperate stylesheets...
-book = monograph
-    A book with an explicit publisher.
-    Required fields: author/editor, title, publisher, year
-    Optional fields: volume, series, address, edition, month, note, key
-incollection = monograph_section
-    A part of a book having its own title.
-    Required fields: author, title, booktitle, year
-    Optional fields: editor, pages, organization, publisher, address, month, note, key
-inproceedings = conference_item
-    An article in a conference proceedings.
-    Required fields: author, title, booktitle, year
-    Optional fields: editor, series, pages, organization, publisher, address, month, note, key
-manual = manual
-    Technical documentation.
-    Required fields: title
-    Optional fields: author, organization, address, edition, month, year, note, key
-mastersthesis = master_thesis
-    A Master's thesis.
-    Required fields: author, title, school, year
-    Optional fields: address, month, note, key
-misc = other
-    For use when nothing else fits.
-    Required fields: none
-    Optional fields: author, title, howpublished, month, year, note, key
-phdthesis = doctoral_thesis
-    A Ph.D. thesis.
-    Required fields: author, title, school, year
-    Optional fields: address, month, note, key
-proceedings = conference
-    The proceedings of a conference.
-    Required fields: title, year
-    Optional fields: editor, publisher, organization, address, month, note, key
-techreport = report
-    A report published by a school or other institution, usually numbered within a series.
-    Required fields: author, title, institution, year
-    Optional fields: type, number, address, month, note, key
-    */
         $xslt->load($this->view->getScriptPath('index') . '/' . $template);
 
         // Set up XSLT-Processor
@@ -116,18 +121,7 @@ techreport = report
         $proc->registerPHPFunctions();
         $proc->importStyleSheet($xslt);
 
-        // Transform to HTML
-        	    $this->_helper->viewRenderer->setNoRender(true);
-                $this->_helper->layout()->disableLayout();
-
-            	// Send plain text response.
-                $this->getResponse()->setHeader('Content-Type', 'text/plain; charset=UTF-8', true);
-                $this->getResponse()->setBody($proc->transformToXML($xml));
-        #echo $xml->saveXml();
-        #echo $proc->transformToXML($xml);
-        #$this->getResponse()->setHttpResponseCode(200);
-        #$this->getResponse()->setBody($document->toXml()->saveXml());
-        #$this->getResponse()->setBody($proc->transformToXML($xml));
-    }
+        return $proc->transformToXML($xml);     	
+     }
 
 }

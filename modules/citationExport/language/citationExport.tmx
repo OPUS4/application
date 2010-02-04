@@ -23,6 +23,16 @@
         <seg>Bibliographische Daten können nicht angezeigt werden: Unbekanntes Ausgabeformat</seg>
       </tuv>
     </tu>
+
+    <tu tuid="download_bibliographic_data">
+      <tuv xml:lang="en">
+        <seg>Download bibliographic data</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bibliographische Daten speichern</seg>
+      </tuv>
+    </tu>
+
   </body>
   
 </tmx>
