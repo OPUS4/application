@@ -88,11 +88,11 @@
            </xsl:variable>
        </xsl:if>
        year = <xsl:value-of select="$year" />
-       <xsl:if test="string-length(IdentifierUrl)>0">
+       <xsl:if test="string-length(IdentifierUrl/@Value)>0">
            ,
            url     =  <xsl:apply-templates select="IdentifierUrl" />
        </xsl:if>
-       <xsl:if test="string-length(PersonEditor)>0">
+       <xsl:if test="string-length(PersonEditor/@LastName)>0">
            ,
            editor   =  "<xsl:apply-templates select="PersonEditor" />"
        </xsl:if>
@@ -108,7 +108,7 @@
            ,
            organization =  "<xsl:value-of select="@ContributingCorporation" />"
        </xsl:if>
-       <xsl:if test="string-length(Note)>0">
+       <xsl:if test="string-length(Note/@Message)>0">
            ,
            note    =  "<xsl:apply-templates select="Note" />"
        </xsl:if>

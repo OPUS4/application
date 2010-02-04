@@ -64,8 +64,14 @@
      and a special template for each new field below, too -->
     <xsl:template match="Opus_Model_Filter">
        @book{OPUS-Bibtex<xsl:value-of select="@Id" />,
-       author   =  "<xsl:apply-templates select="PersonAuthor" />",
-       editor   =  "<xsl:apply-templates select="PersonEditor" />",
+       <xsl:choose>
+         <xsl:when test="PersonAuthor/@LastName">
+           author   =  "<xsl:apply-templates select="PersonAuthor" />",
+         </xsl:when>
+         <xsl:otherwise>
+           editor   =  "<xsl:apply-templates select="PersonEditor" />",
+         </xsl:otherwise>
+       </xsl:choose>
        title    =  '<xsl:apply-templates select="TitleMain" />',
        publisher=  "<xsl:apply-templates select="@PublisherName" />",
        <xsl:variable name="year">
@@ -91,7 +97,7 @@
            </xsl:variable>
        </xsl:if>
        year = <xsl:value-of select="$year" />
-       <xsl:if test="string-length(IdentifierUrl)>0">
+       <xsl:if test="string-length(IdentifierUrl/@Value)>0">
            ,
            url     =  <xsl:apply-templates select="IdentifierUrl" />
        </xsl:if>
@@ -111,7 +117,7 @@
            ,
            edition =  "<xsl:value-of select="@Edition" />"
        </xsl:if>
-       <xsl:if test="string-length(Note)>0">
+       <xsl:if test="string-length(Note/@Message)>0">
            ,
            note    =  "<xsl:apply-templates select="Note" />"
        </xsl:if>

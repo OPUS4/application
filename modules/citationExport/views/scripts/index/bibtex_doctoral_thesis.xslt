@@ -66,7 +66,7 @@
        @phdthesis{OPUS-Bibtex<xsl:value-of select="@Id" />,
        author   =  "<xsl:apply-templates select="PersonAuthor" />",
        title    =  '<xsl:apply-templates select="TitleMain" />',
-       school  =  <xsl:apply-templates select="@PublisherName" />,
+       school  =  "<xsl:value-of select="@PublisherUniversity" />",
        <xsl:variable name="year">
        <xsl:choose>
          <xsl:when test="normalize-space(@CompletedYear)">
@@ -90,7 +90,7 @@
            </xsl:variable>
        </xsl:if>
        year = <xsl:value-of select="$year" />
-       <xsl:if test="string-length(IdentifierUrl)>0">
+       <xsl:if test="string-length(IdentifierUrl/@Value)>0">
            ,
            url     =  <xsl:apply-templates select="IdentifierUrl" />
        </xsl:if>
@@ -98,7 +98,7 @@
            ,
            address =  "<xsl:value-of select="@PublisherPlace" />"
        </xsl:if>
-       <xsl:if test="string-length(Note)>0">
+       <xsl:if test="string-length(Note/@Message)>0">
            ,
            note    =  "<xsl:apply-templates select="Note" />"
        </xsl:if>

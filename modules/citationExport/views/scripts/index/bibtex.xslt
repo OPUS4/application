@@ -64,11 +64,11 @@
      and a special template for each new field below, too -->
     <xsl:template match="Opus_Model_Filter">
        @misc{OPUS-Bibtex<xsl:value-of select="@Id" />
-       <xsl:if test="string-length(PersonAuthor)>0">
+       <xsl:if test="string-length(PersonAuthor/@LastName)>0">
            ,
            author   =  "<xsl:apply-templates select="PersonAuthor" />"
        </xsl:if>
-       <xsl:if test="string-length(TitleMain)>0">
+       <xsl:if test="string-length(TitleMain/@Value)>0">
            ,
            title    =  '<xsl:apply-templates select="TitleMain" />'
        </xsl:if>
@@ -98,11 +98,11 @@
            ,
            year = <xsl:value-of select="$year" />
        </xsl:if>
-       <xsl:if test="string-length(IdentifierUrl)>0">
+       <xsl:if test="string-length(IdentifierUrl/@Value)>0">
            ,
            url     =  <xsl:apply-templates select="IdentifierUrl" />
        </xsl:if>
-       <xsl:if test="string-length(Note)>0">
+       <xsl:if test="string-length(Note/@Message)>0">
            ,
            note    =  "<xsl:apply-templates select="Note" />"
        </xsl:if>
@@ -207,6 +207,13 @@
     <xsl:template match="Collection[@RoleName='Schriftenreihen']">
         <xsl:if test="@Number != ''">
             <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
+        </xsl:if>
+        <xsl:value-of select="@Name" />
+    </xsl:template>
+
+     <xsl:template match="Collection[@RoleName='Organisatorische Einheiten']">
+        <xsl:if test="@Number != ''">
+           <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
         </xsl:if>
         <xsl:value-of select="@Name" />
     </xsl:template>
