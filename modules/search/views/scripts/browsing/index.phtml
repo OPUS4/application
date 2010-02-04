@@ -35,6 +35,7 @@
  */
 ?>
 	<h2><?= $this->translate('search_index_browsing') ?></h2>
+	<a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'latest'), null, true) ?>"><?= $this->translate('latest_docs_browsing') ?></a><br/>
 	<a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseTitles'), null, true) ?>"><?= $this->translate('search_index_alltitles_browsing') ?></a><br/>
 	<?php
        // TODO: Get roles-list from database

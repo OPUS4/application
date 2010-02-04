@@ -276,7 +276,7 @@ $data = $this->_request->getParams();
 				$browsingList = new BrowsingListFactory($list, null, $collection, $node);
 				$browsingListProduct = $browsingList->getBrowsingList();
 
-            $this->view->title = $browsingListProduct->getDisplayName('browsing');
+                $this->view->title = $browsingListProduct->getDisplayName('browsing');
 				$this->view->browsinglist = $browsingListProduct;
 				$this->view->page = $this->_getParam("page");
 				#$this->view->hitlist_paginator = Zend_Paginator::factory(Opus_Search_List_CollectionNode::getDocumentIds($collection, $node));
@@ -301,5 +301,32 @@ $data = $this->_request->getParams();
 				$this->view->title = $this->view->translate('search_index_alltitles_browsing');
 				// Just to be there... List is not supported (Exception is thrown by BrowsingListFactory)
     	}
+    }
+    
+    /**
+     * get the latest publications
+     */
+    public function latestAction() {
+    	$hitlist = BrowsingList::getLatestDocuments();
+            $data = $this->_request->getParams();
+    	    $hitlistIterator = new Opus_Search_Iterator_HitListIterator($hitlist);
+            $this->view->hitlist_count = $hitlist->count();
+            $paginator = Zend_Paginator::factory($hitlistIterator);
+            if (array_key_exists('hitsPerPage', $data)) {
+        	    if ($data['hitsPerPage'] === '0') {
+        	        $hitsPerPage = '10000';
+        	    }
+                else {
+            	    $hitsPerPage = $data['hitsPerPage'];
+                }
+                $paginator->setItemCountPerPage($hitsPerPage);
+            }
+            $page = 1;
+            if (array_key_exists('page', $data)) {
+                // paginator
+                $page = $data['page'];
+            }
+            $paginator->setCurrentPageNumber($page);
+            $this->view->hitlist_paginator = $paginator;
     }
 }

@@ -1,0 +1,100 @@
+<?php
+/**
+ * View for the search result list
+ *
+ * This file is part of OPUS. The software OPUS has been originally developed
+ * at the University of Stuttgart with funding from the German Research Net,
+ * the Federal Department of Higher Education and Research and the Ministry
+ * of Science, Research and the Arts of the State of Baden-Wuerttemberg.
+ *
+ * OPUS 4 is a complete rewrite of the original OPUS software and was developed
+ * by the Stuttgart University Library, the Library Service Center
+ * Baden-Wuerttemberg, the Cooperative Library Network Berlin-Brandenburg,
+ * the Saarland University and State Library, the Saxon State Library -
+ * Dresden State and University Library, the Bielefeld University Library and
+ * the University Library of Hamburg University of Technology with funding from
+ * the German Research Foundation and the European Regional Development Fund.
+ *
+ * LICENCE
+ * OPUS is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the Licence, or any later version.
+ * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @category    Application
+ * @package     Module_Search
+ * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ * @version     $Id: search.phtml 4113 2010-02-02 16:07:12Z marahrens $
+ */
+?>
+<h1><?= $this->translate('search_result') ?></h1>
+<?php
+if (count($this->hitlist_paginator)) {
+
+    echo $this->paginationControl($this->hitlist_paginator, NULL, 'searchList_ItemCount_pagination.phtml');
+    echo $this->paginationControl($this->hitlist_paginator, 'Sliding', 'searchList_pagination.phtml');
+
+    // FIXME: <ol start="..."> is not valid XHTML 1.0 Strict!
+    // but it will return in (X)HTML 5, so wontfix
+    $pagerInfo = $this->hitlist_paginator->getPages();
+    echo '<ol class="search" start="' . $pagerInfo->firstItemNumber . '">';
+
+    $searchListItemCount = 0;
+    foreach ($this->hitlist_paginator as $hit) {
+        $searchListItemCount++;
+        $searchListOdd = ($searchListItemCount%2 === 1);
+
+        // retrieve hit from hit list
+        $doc = $hit->getSearchHit();
+        $document = $doc->getDocument();
+        $authoriterator = explode('; ', $document['author']);
+
+        echo $searchListOdd ? '<li class="odd">' : '<li class="even">';
+        $counter = 1;
+        foreach ($authoriterator as $obj) {
+             echo '<span class="author"><a href="' .
+                 $this->url(
+                     array(
+                         'module'        => 'search',
+                         'controller'    => 'search',
+                         'action'        => 'metadatasearch',
+                         'author'        => $obj
+                     ),
+                     null,
+                      true
+                 ) .
+                 '">';
+
+           echo $obj;
+           echo "</a></span>";
+           if ($counter === count($authoriterator)) echo ": ";
+           else echo "; ";
+           $counter++;
+        }
+        print('<span class="title"><a href="' . $this->url(array('module' => 'frontdoor',
+            'controller' => 'index',
+            'action' => 'index',
+            'docId' => $document['id']), null, true
+        ).'">'.$document["title"]."</a></span>");
+        echo "</li>";
+        echo "<div class=\"queryhit\">";
+        if ($this->noform !== true) {
+        	echo $document["abstract"];
+        }
+        else {
+            echo strip_tags($document["abstract"]);
+        }
+        echo "</div>";
+    }
+    echo '</ol>';
+    echo $this->paginationControl($this->hitlist_paginator, 'Sliding', 'searchList_pagination.phtml');
+} else {
+    echo '<p>' . $this->translate('search_no_results') . '</p>';
+}

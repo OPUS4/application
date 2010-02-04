@@ -37,6 +37,24 @@
 class BrowsingList
 {
 	/**
+	 * Get a list of the 10 latest documents in repository
+	 *
+	 * @return Hitlist list of the 10 latest entries
+	 * @static
+	 */
+	public static function getLatestDocuments()
+	{
+        $hits = Opus_Document::getLatestIds();
+        // We need an OPUS-compliant result list to return
+        $hitlist = new Opus_Search_List_HitList();
+        foreach ($hits as $queryHit) {
+            $opusHit = new Opus_Search_SearchHit((int) $queryHit);
+           	$hitlist->add($opusHit);
+        }
+        return $hitlist;
+	}
+
+	/**
 	 * Get a list of all authors from the repository
 	 *
 	 * @return PersonsList list of authors, unsorted (call method sort() on it in order to sort it)
