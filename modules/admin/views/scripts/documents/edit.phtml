@@ -38,7 +38,24 @@
 <?php echo $this->form; ?>
 
 <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'filemanager', 'action' => 'index', 'docId' => $this->docId), null, true); ?>"><?php echo $this->translate('admin_filemanager_index'); ?></a><br/>
-<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'assign', 'document' => $this->docId), null, true); ?>"><?php echo $this->translate('admin_documents_collectionassign'); ?></a><br/>
+<?if (0 < count($this->assignedCollections)):?>
+    <?=$this->translate('admin_documents_collectionsassigned')?>
+<?else:?>
+    <?echo $this->translate('admin_documents_nocollectionsassigned')?>
+<?endif;?>
+    <ul>
+    <?foreach ($this->assignedCollections as $collection):?>
+        <li>
+            <?=$collection['roleName']?>: <?=$collection['collectionName']?>
+            <form method="post" action="<?=$this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'unlinkcollection', 'role' => $collection['roleId'], 'collection' => $collection['collectionId']))?>">
+                <input type="submit" value="<?=$this->translate('admin_documents_unlinkcollection')?>" />
+            </form>
+        </li>
+    <?endforeach;?>
+        <li>
+            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'assign', 'document' => $this->docId), null, true); ?>"><?php echo $this->translate('admin_documents_collectionassign'); ?></a><br/>
+        </li>
+    </ul>
 <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'assign', 'role' => 1, 'document' => $this->docId), null, true); ?>"><?php echo $this->translate('admin_documents_organisationalunitassign'); ?></a><br/>
 <?php
 if ($this->actions === 'publish') {

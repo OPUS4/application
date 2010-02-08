@@ -263,7 +263,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             $this->view->actions = 'publish';
         }
         else if ($document->getServerState() === 'published') {
-        	$this->view->actions = 'unpublish';
+            $this->view->actions = 'unpublish';
         }
         if ($document->getServerState() === 'deleted') {
             $this->view->actions = 'undelete';
@@ -278,6 +278,11 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $modelForm->setAction($action_url);
         $this->view->form = $modelForm;
         $this->view->docId = $id;
+        $assignedCollections = array();
+        foreach ($document->getCollection() as $assignedCollection) {
+            $assignedCollections[] = array('collectionName' => $assignedCollection->getDisplayName(), 'collectionId' => $assignedCollection->getId(), 'roleName' => $assignedCollection->getRoleName(), 'roleId' => $assignedCollection->getRoleId());
+        }
+        $this->view->assignedCollections = $assignedCollections;
     }
 
     /**
@@ -464,5 +469,27 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $indexer->removeDocumentFromEntryIndex($doc);
 
         $this->_redirectTo('', 'index');
+    }
+
+    /**
+     * Removes a document from a collection.
+     *
+     * @return void
+     */
+    public function unlinkcollectionAction() {
+        if (true === $this->_request->isPost()) {
+            $document_id = $this->getRequest()->getParam('id');
+            $role_id = $this->getRequest()->getParam('role');
+            $collection_id = $this->getRequest()->getParam('collection');
+            $collection = new Opus_Collection($role_id, $collection_id);
+            $collection->deleteEntry(new Opus_Document($document_id));
+            $params = $this->getRequest()->getUserParams();
+            $module = array_shift($params);
+            $controller = array_shift($params);
+            $action = array_shift($params);
+            $this->_redirectTo('', 'edit', $controller, $module, $params);
+        } else {
+            $this->_redirectTo('', 'index');
+        }
     }
 }
