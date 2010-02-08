@@ -33,12 +33,6 @@
  */
 ?>
 <h1>Opus Application - <?= $this->title ?></h1>
-<? $alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; ?>
-<p>
-<?for($i=0;$i<strlen($alphabet);$i++) : ?>
-    <a href="<?= $this->url(array('name' => $alphabet{$i}))?>"><?=$alphabet{$i}?></a>
-<? endfor; ?>
-</p>
 <ul>
 <? foreach($this->entries as $id => $entry) : ?>
 <li>
@@ -52,9 +46,4 @@
 </li>
 <? endforeach; ?>
 </ul>
-<p>
-<?for($i=0;$i<strlen($alphabet);$i++) : ?>
-    <a href="<?= $this->url(array('name' => $alphabet{$i}))?>"><?=$alphabet{$i}?></a>
-<? endfor; ?>
-</p>
 <a href="<?= $this->url(array('action' => 'new')) ?>">New</a>
