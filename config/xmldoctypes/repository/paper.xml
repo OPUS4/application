@@ -31,6 +31,7 @@
 	* @author     Ralf Claussnitzer <ralf.claussnitzer@slub-dresden.de>
 	* @author     Oliver Marahrens <o.marahrens@tu-harburg.de>
     * @author     Simone Finkbeiner <simone.finkbeiner@ub.uni-stuttgart.de>
+    * @author     Ulrich Herb <u.herb@sulb.uni-saarland.de>
 	* @copyright  Copyright (c) 2008 - 2009, OPUS 4 development team
 	* @license    http://www.gnu.org/licenses/gpl.html General Public License
 	* @version    $Id$
@@ -46,7 +47,7 @@
 		<field name="File" mandatory="no" adminformweight="0" publishformweight="0" multiplicity="*" />
 		
 		<field name="ServerDateUnlocking" mandatory="no" adminformweight="0" publishformweight="201" multiplicity="1" />
-	    <field name="ServerDateValid" mandatory="no" adminformweight="0" publishformweight="202" multiplicity="1" />   
+	    <!-- <field name="ServerDateValid" mandatory="no" adminformweight="0" publishformweight="202" multiplicity="1" /> -->   
 	    	    
 	    <!-- for downward compatibility to opus 3 data. Do not show this fields -->	    
 	    <field name="IdentifierOpus3" mandatory="no" adminformweight="1" publishformweight="0" multiplicity="1" />
@@ -54,12 +55,12 @@
 
 	<page caption="caption_02_paper">
         <field name="TitleMain" mandatory="yes" adminformweight="1" publishformweight="101" multiplicity="4" />
-        <field name="TitleAbstract" mandatory="no" adminformweight="1" publishformweight="102" multiplicity="4" />
+        <field name="TitleAbstract" mandatory="yes" adminformweight="1" publishformweight="102" multiplicity="4" />
     </page>
 	   
 	<page caption="caption_03_paper">
 		<field name="PersonAuthor" mandatory="yes" adminformweight="1" publishformweight="201" multiplicity="*" />
-		<field name="PersonReferee" mandatory="no" adminformweight="1" publishformweight="203" multiplicity="*" />
+		<!-- <field name="PersonReferee" mandatory="no" adminformweight="1" publishformweight="203" multiplicity="*" /> -->
 		<field name="PersonEditor" mandatory="no" adminformweight="1" publishformweight="204" multiplicity="*" />
 		<field name="PersonTranslator" mandatory="no" adminformweight="1" publishformweight="205" multiplicity="*" />
 		<field name="PersonContributor" mandatory="no" adminformweight="1" publishformweight="206" multiplicity="*" />
@@ -67,32 +68,29 @@
         <field name="CreatingCorporation" mandatory="no" adminformweight="1" publishformweight="207" multiplicity="*" />
         <field name="ContributingCorporation" mandatory="no" adminformweight="1" publishformweight="208" multiplicity="*"/>
 
-        <field name="PublisherName" mandatory="no" adminformweight="1" publishformweight="101" multiplicity="1" />
-        <field name="PublisherPlace" mandatory="no" adminformweight="1" publishformweight="102" multiplicity="1"/>
-	    <field name="PublisherUniversity" mandatory="no" adminformweight="1" publishformweight="301" multiplicity="*" />
+        <field name="PublisherName" mandatory="no" adminformweight="1" publishformweight="209" multiplicity="1" />
+        <field name="PublisherPlace" mandatory="no" adminformweight="1" publishformweight="210" multiplicity="1"/>
+	    
 
 		<!-- TODO implement it -->
 		<!--<field name="Institute" mandatory="no" adminformweight="1" publishformweight="302" multiplicity="*" />-->
-
-        <field name="NonInstituteAffiliation" mandatory="no" adminformweight="1" publishformweight="303" multiplicity="*" />
+      
     </page>
 
 	<page caption="caption_04_paper">	    
         <field name="PageNumber" mandatory="no" adminformweight="1" publishformweight="102" multiplicity="1" />
-        <mandatory type="one-at-least">
-            <field name="CompletedYear" adminformweight="1" publishformweight="402" multiplicity="1" />
-            <field name="CompletedDate" adminformweight="1" publishformweight="403" multiplicity="1" />
-        </mandatory>
+        <!-- <mandatory type="one-at-least"> -->
+            <!--  <field name="CompletedYear" adminformweight="1" publishformweight="402" multiplicity="1" /> -->
+            <!-- <field name="CompletedDate" adminformweight="1" publishformweight="403" multiplicity="1" /> -->
+        <!--  </mandatory> -->
         <mandatory type="one-at-least">
             <field name="PublishedYear" adminformweight="1" publishformweight="404" multiplicity="1" />
-            <field name="PublishedDate" adminformweight="1" publishformweight="405" multiplicity="1" />
-        </mandatory>
-    </page>
+            <!-- <field name="PublishedDate" adminformweight="1" publishformweight="405" multiplicity="1" /> -->
+        </mandatory>    </page>
 
 	<page caption="caption_05_paper">
-	    <field name="SubjectSwd" mandatory="no" adminformweight="1" publishformweight="401" multiplicity="5" />
-	    <field name="SubjectPsyndex" mandatory="no" adminformweight="1" publishformweight="402" multiplicity="*" />
-	    <field name="SubjectUncontrolled" mandatory="no" adminformweight="1" publishformweight="403" multiplicity="*" />
+	    <field name="SubjectSwd" mandatory="yes" adminformweight="1" publishformweight="401" multiplicity="5" />
+	    <field name="SubjectUncontrolled" mandatory="no" adminformweight="1" publishformweight="403" multiplicity="5" />
 	    <!-- TODO implement it - derzeit Fehlermeldung Specified column "collection" is not in the row -->
 	    <!--<field name="Collection" mandatory="no" adminformweight="1" publishformweight="404" multiplicity="*" />-->
     </page>
