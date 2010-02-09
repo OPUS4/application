@@ -430,6 +430,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $id = $this->getRequest()->getParam('docId');
         $doc = new Opus_Document($id);
         $doc->setServerState('published');
+        $doc->setServerDateUnlocking(date('Y-m-d'));
         $doc->store();
 
    		$config = Zend_Registry::get('Zend_Config');
