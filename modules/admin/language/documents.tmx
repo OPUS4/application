@@ -25,6 +25,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="document_published">
+      <tuv xml:lang="en">
+        <seg>Document published successfully!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das Dokument wurde freigeschaltet!</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="publish_unlocking_date_not_reached">
       <tuv xml:lang="en">
         <seg>This document has an unlocking date, which has not been reached. It will be published automatically.</seg>

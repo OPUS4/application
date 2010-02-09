@@ -447,7 +447,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $indexer = new $engineclass();
         $indexer->addDocumentToEntryIndex($doc);
 
-        $this->_redirectTo('', 'index');
+        $this->_redirectTo('document_published', 'index');
     }
 
     /**

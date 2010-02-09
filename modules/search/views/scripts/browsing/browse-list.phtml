@@ -63,7 +63,7 @@
 
                 $documentCount = Opus_Collection_Information::countAllCollectionDocuments($this->collection, $coll->getId());
 
-                if ($hideEmptyCollections && $trustDocumentCount && $documentCount == 0) {
+                if ($hideEmptyCollections && count($coll->getEntries()) === 0 && $documentCount == 0) {
                     echo '<li>' . $coll->getDisplayName() . '</li>';
                 }
                 else {
@@ -87,8 +87,14 @@
                     if ($browseListCountStyle === 'count') {
                         echo '</a> (' . count($coll->getEntries()) . ') (' . $this->translate('browsing_total_number') . ' ' . $documentCount . ')';
                     }
-                    else {
+                    else if ($browseListCountStyle === 'none') {
+                    	echo '</a>';
+                    }
+                    else if ($browseListCountStyle === 'both') {
                     	echo '</a> (' . $documentCount . ')';
+                    }
+                    else {
+                    	echo '</a> (' . count($coll->getEntries()) . ')';
                     }
                     echo '</li>';
                 }
