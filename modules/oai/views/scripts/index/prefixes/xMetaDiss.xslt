@@ -62,18 +62,8 @@
     <xsl:param name="contactId" />
 
     <xsl:template match="Opus_Document" mode="xmetadiss">
-        <xsl:element name="xMetaDiss:xMetaDiss">
-            <xsl:attribute name="xsi:schemaLocation">
-            <xsl:text>http://www.d-nb.de/standards/xMetaDiss/ http://www.d-nb.de/standards/xmetadiss/xmetadiss.xsd
-            xmlns="http://www.d-nb.de/standards/subject/"   
-            xmlns:cc="http://www.d-nb.de/standards/cc/"
-            xmlns:dc="http://purl.org/dc/elements/1.1/"
-            xmlns:dcterms="http://purl.org/dc/terms/"
-            xmlns:pc="http://www.d-nb.de/standards/pc/"
-            xmlns:urn="http://www.d-nb.de/standards/urn/"
-            xmlns:ddb="http://www.d-nb.de/standards/ddb/"
-            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"</xsl:text>
-            </xsl:attribute>
+        <xMetaDiss:xMetaDiss
+            xsi:schemaLocation="http://www.d-nb.de/standards/xMetaDiss/ http://www.d-nb.de/standards/xmetadiss/xmetadiss.xsd">
             <!-- dc:title -->
             <xsl:apply-templates select="TitleMain" mode="xmetadiss" />
             <!-- dc:creator -->
@@ -109,8 +99,17 @@
                <xsl:attribute name="xsi:type"><xsl:text>dcterms:IMT</xsl:text>
                </xsl:attribute><xsl:text>application/pdf</xsl:text>
             </xsl:element>
-            <xsl:apply-templates select="@Language" mode="xmetadiss" />
-            <xsl:apply-templates select="Licence" mode="xmetadiss" />
+            <xsl:element name="dc:language">
+              <xsl:attribute name="xsi:type"><xsl:text>dcterms:ISO639-2</xsl:text></xsl:attribute>    
+                 <xsl:choose>
+                   <xsl:when test="@Language='deu'">
+                      <xsl:text>ger</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>     
+                       <xsl:value-of select="@Language" />
+                    </xsl:otherwise>
+                 </xsl:choose>
+            </xsl:element>
 
             <xsl:element name="thesis:degree">
                <xsl:element name="thesis:level">
@@ -146,18 +145,25 @@
             <xsl:element name="ddb:rights">
                <xsl:attribute name="ddb:kind"><xsl:text>free</xsl:text></xsl:attribute>
             </xsl:element>
-        </xsl:element>
+         </xMetaDiss:xMetaDiss>
     </xsl:template>
 
     <xsl:template match="TitleMain" mode="xmetadiss">
         <xsl:element name="dc:title">
-            <xsl:attribute name="xsi:type"><xsl:text>ddb:titleISO639-3</xsl:text></xsl:attribute>
+             <xsl:attribute name="xsi:type"><xsl:text>ddb:titleISO639-2</xsl:text></xsl:attribute>
             <xsl:attribute name="lang">
-                <xsl:value-of select="@Language" />
+               <xsl:choose>
+                  <xsl:when test="@Language='deu'">
+                    <xsl:text>ger</xsl:text>
+                  </xsl:when>
+                  <xsl:otherwise>     
+                     <xsl:value-of select="@Language" />
+                  </xsl:otherwise>
+               </xsl:choose>
             </xsl:attribute>
             <xsl:choose>
               <xsl:when test="../@Language!=@Language">
-                 <xsl:attribute name="ddb:type"><xsl:text>translated</xsl:text></xsl:attribute>
+                   <xsl:attribute name="ddb:type"><xsl:text>translated</xsl:text></xsl:attribute>
               </xsl:when>
               <xsl:otherwise>
               </xsl:otherwise>
@@ -208,9 +214,16 @@
 
     <xsl:template match="TitleAbstract" mode="xmetadiss">
         <xsl:element name="dcterms:abstract">
-            <xsl:attribute name="xsi:type"><xsl:text>ddb:contentISO639-3</xsl:text></xsl:attribute>
+            <xsl:attribute name="xsi:type"><xsl:text>ddb:contentISO639-2</xsl:text></xsl:attribute>
             <xsl:attribute name="lang">
-                <xsl:value-of select="@Language" />
+               <xsl:choose>
+                  <xsl:when test="@Language='deu'">
+                    <xsl:text>ger</xsl:text>
+                  </xsl:when>
+                  <xsl:otherwise>     
+                     <xsl:value-of select="@Language" />
+                  </xsl:otherwise>
+               </xsl:choose>
             </xsl:attribute>
             <xsl:attribute name="ddb:type"><xsl:text>noScheme</xsl:text></xsl:attribute>
             <xsl:value-of select="@Value" />
@@ -292,13 +305,6 @@
         <xsl:element name="dc:identifier">
             <xsl:attribute name="xsi:type"><xsl:text>urn:nbn</xsl:text></xsl:attribute>
             <xsl:value-of select="@Value" />
-        </xsl:element>
-    </xsl:template>
-
-    <xsl:template match="@Language" mode="xmetadiss">
-        <xsl:element name="dc:language">
-           <xsl:attribute name="xsi:type"><xsl:text>dcterms:ISO639-3</xsl:text></xsl:attribute>    
-           <xsl:value-of select="." />
         </xsl:element>
     </xsl:template>
 
