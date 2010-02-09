@@ -27,6 +27,7 @@
  * @category    Application
  * @package     Application
  * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
+ * @author      Simone Finkbeiner (simone.finkbeiner@ub.uni-stuttgart.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -157,6 +158,13 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
             $realmSetupPlugin = new Controller_Plugin_SecurityRealm();
             $this->_frontController->registerPlugin($realmSetupPlugin);
         }
+
+        /*
+         * Add a front controller plugin for oai-requests because of
+         * DNB-validation
+         */
+        $oaiPlugin = new Controller_Plugin_DnbXmlPostprocess();
+        $this->_frontController->registerPlugin($oaiPlugin);
     }
 
     /**
