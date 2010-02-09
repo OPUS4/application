@@ -81,7 +81,11 @@ class Admin_CollectionController extends Controller_Action {
         $this->view->role = $role;
         $path = $this->getRequest()->getParam('path');
         $form_builder = new Form_Builder();
-        $collection = new Opus_CollectionRole($role);
+        if (1 == $role) {
+            $collection = new Opus_OrganisationalUnits($role);
+        } else {
+            $collection = new Opus_CollectionRole($role);
+        }
         if (true === isset($path)) {
             $trail = explode('-', $path);
             foreach($trail as $step) {
@@ -105,11 +109,12 @@ class Admin_CollectionController extends Controller_Action {
     public function newAction() {
         $role = $this->getRequest()->getParam('role');
         $form_builder = new Form_Builder();
-        if (true === isset($role)) {
+        if (true === isset($role) and 1 == $role) {
+            $collection = new Opus_OrganisationalUnit(1);
+        } else if (true === isset($role)) {
             $collection = new Opus_Collection($role);
         } else {
-            $collection = new Opus_CollectionRole;
-            $allRoles = $collection->getAll();
+            $allRoles = Opus_CollectionRole::getAll();
             $countRoles = count($allRoles);
             $pos_field = $collection->getField('Position');
             $pos_field->setDefault(array_combine(range(1,$countRoles+1),range(1,$countRoles+1)))->setSelection(true);
