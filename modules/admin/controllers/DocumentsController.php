@@ -429,6 +429,9 @@ class Admin_DocumentsController extends Controller_CRUDAction {
     public function publishAction() {
         $id = $this->getRequest()->getParam('docId');
         $doc = new Opus_Document($id);
+        if ($doc->getServerDateUnlocking() > date('Y-m-d')) {
+        	$this->_redirectTo('publish_unlocking_date_not_reached', 'index');
+        }
         $doc->setServerState('published');
         $doc->setServerDateUnlocking(date('Y-m-d'));
         $doc->store();

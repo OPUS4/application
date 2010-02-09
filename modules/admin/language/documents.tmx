@@ -25,6 +25,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="publish_unlocking_date_not_reached">
+      <tuv xml:lang="en">
+        <seg>This document has an unlocking date, which has not been reached. It will be published automatically.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dieses Dokument hat ein festgelegtes Freischaltdatum, das noch nicht erreicht wurde. Es wird automatisch am festgelegten Tag freigeschaltet.</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="sort_ascending">
       <tuv xml:lang="en">
         <seg>Ascending</seg>
