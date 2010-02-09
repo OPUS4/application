@@ -97,6 +97,14 @@
 
 
 
+    <tu tuid="browsing_total_number">
+      <tuv xml:lang="en">
+        <seg>totally</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>insgesamt</seg>
+      </tuv>
+    </tu>
 
 
 

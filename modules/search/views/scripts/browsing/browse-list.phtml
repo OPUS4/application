@@ -83,8 +83,13 @@
                      true
                  ) .
                  '">';
-                 echo $coll->getDisplayName();
-                    echo '</a> (' . $documentCount . ')';
+                    echo $coll->getDisplayName();
+                    if ($browseListCountStyle === 'count') {
+                        echo '</a> (' . count($coll->getEntries()) . ') (' . $this->translate('browsing_total_number') . ' ' . $documentCount . ')';
+                    }
+                    else {
+                    	echo '</a> (' . $documentCount . ')';
+                    }
                     echo '</li>';
                 }
             }
