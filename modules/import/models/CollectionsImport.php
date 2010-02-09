@@ -170,7 +170,7 @@ class CollectionsImport
 		    // its first level, if coll_id = root_id
 		    if ($class['coll_id'] === $class['root_id']) {
 		        echo ".";
-		        $coll = new Opus_Collection($collRole->getId());
+		        $coll = new Opus_Collection(null, $collRole->getId());
     		    $coll->setName($class['coll_name']);
 	    	    $coll->setTheme('default');
 	    	    $newCollId = $coll->store();
@@ -192,8 +192,8 @@ class CollectionsImport
 		        // This is not necessarily true
 		        // TODO: import real hierarchy
 		        $parentCollId = $subcoll[$class['root_id']];
-		        $parentColl = new Opus_Collection($collRole->getId(), $parentCollId);
-		        $coll = new Opus_Collection($collRole->getId());
+		        $parentColl = new Opus_Collection($parentCollId, $collRole->getId());
+		        $coll = new Opus_Collection(null, $collRole->getId());
     		    $coll->setName($class['coll_name']);
 	    	    $coll->setTheme('default');
 	    	    $newCollId = $coll->store();
@@ -223,7 +223,7 @@ class CollectionsImport
 		foreach ($classification as $class) {
           	echo ".";
 		    // first level category
-		    $coll = new Opus_Collection($collRole->getId());
+		    $coll = new Opus_Collection(null, $collRole->getId());
 		    $coll->setName($class['name']);
 		    $coll->setTheme('default');
 			fputs($fp, $class['sr_id'] . ' ' . $coll->store() . "\n");

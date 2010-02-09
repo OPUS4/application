@@ -172,7 +172,7 @@ class BrowsingList
 		    $browsinglist = new Opus_CollectionRole((int) $role);
 		}
 		else {
-	       $browsinglist = new Opus_Collection((int) $role, (int) $node);
+	       $browsinglist = new Opus_Collection((int) $node, (int) $role);
 		}
 		return $browsinglist;
 	}

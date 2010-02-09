@@ -82,7 +82,7 @@ class Admin_CollectionController extends Controller_Action {
         $path = $this->getRequest()->getParam('path');
         $form_builder = new Form_Builder();
         if (1 == $role) {
-            $collection = new Opus_OrganisationalUnits($role);
+            $collection = new Opus_OrganisationalUnits;
         } else {
             $collection = new Opus_CollectionRole($role);
         }
@@ -110,9 +110,9 @@ class Admin_CollectionController extends Controller_Action {
         $role = $this->getRequest()->getParam('role');
         $form_builder = new Form_Builder();
         if (true === isset($role) and 1 == $role) {
-            $collection = new Opus_OrganisationalUnit(1);
+            $collection = new Opus_OrganisationalUnit;
         } else if (true === isset($role)) {
-            $collection = new Opus_Collection($role);
+            $collection = new Opus_Collection(null, $role);
         } else {
             $allRoles = Opus_CollectionRole::getAll();
             $countRoles = count($allRoles);

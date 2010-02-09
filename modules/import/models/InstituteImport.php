@@ -122,7 +122,7 @@ class InstituteImport
         foreach ($classification as $class) {
             echo ".";
             // first level category
-            $coll = new Opus_Collection($collRole->getId());
+            $coll = new Opus_Collection(null, $collRole->getId());
             $coll->setName($class['universitaet_anzeige']);
             $coll->setAddress($class['instadresse']);
             $coll->setCity($class['univort']);
@@ -151,9 +151,9 @@ class InstituteImport
 
 		foreach ($classification as $class) {
           	echo ".";
-            $parentColl = new Opus_Collection($roleId, $subColls);
+            $parentColl = new Opus_Collection($subColls, $roleId);
             // second level category
-            $coll = new Opus_Collection($roleId);
+            $coll = new Opus_Collection(null, $roleId);
             $coll->setName($class['fakultaet']);
             $coll->setIsGrantor('1');
             $coll->setTheme('default');
@@ -181,9 +181,9 @@ class InstituteImport
 
         foreach ($classification as $class) {
             echo ".";
-            $parentColl = new Opus_Collection($roleId, $subColls[$class['fakultaet']]);
+            $parentColl = new Opus_Collection($subColls[$class['fakultaet']], $roleId);
             // second level category
-            $coll = new Opus_Collection($roleId);
+            $coll = new Opus_Collection(null, $roleId);
             $coll->setName($class['name']);
             $coll->setTheme('default');
             $parentColl->setTheme('default');

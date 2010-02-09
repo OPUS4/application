@@ -200,7 +200,7 @@ class XMLImport
                     $ddc_id = $ddcVal;
                 }
                 if ($ddc_id !== null) {
-                    $ddc = new Opus_Collection($this->collections[$ddcName], $ddc_id);
+                    $ddc = new Opus_Collection($ddc_id, $this->collections[$ddcName]);
                 }
                 else {
                 	echo "Mapping file for " . $this->collections[$ddcName]. " does not exist or class not found. Class $ddc_id not imported for old ID $oldid\n";
@@ -217,8 +217,8 @@ class XMLImport
             // Build Subcollection
             if (array_key_exists($seriesName, $this->collections) === true) {
             	if ($newSeriesId !== null) {
-                    $seriesParentCollection = new Opus_Collection($this->collections[$seriesName], $newSeriesId);
-                    $seriesCollection = new Opus_Collection($this->collections[$seriesName]);
+                    $seriesParentCollection = new Opus_Collection($newSeriesId, $this->collections[$seriesName]);
+                    $seriesCollection = new Opus_Collection(null, $this->collections[$seriesName]);
 		            $seriesCollection->setName('Band ' . $issue);
 		            $seriesCollection->setTheme('default');
                     $seriesParentCollection->addSubCollection($seriesCollection);
@@ -249,7 +249,7 @@ class XMLImport
                 }
                 if (array_key_exists($instituteName, $this->collections) === true) {
                     if (false === empty($instituteValue) && $instituteValue !== null) {
-                        $institute[] = new Opus_Collection($this->collections[$instituteName], $instituteValue);
+                        $institute[] = new Opus_Collection($instituteValue, $this->collections[$instituteName]);
                     }
                     else {
                         echo "Mapping file for " . $this->collections[$instituteName]. " does not exist or class not found. Institute assignation $oldInstituteValue not imported for old ID $oldid\n";
@@ -427,7 +427,7 @@ class XMLImport
                 	// do nothing, but continue
                 }
                 if ($id !== null) {
-                    $output[] = new Opus_Collection($this->collections[$name], $id);
+                    $output[] = new Opus_Collection($id, $this->collections[$name]);
                 }
                 else {
 		    		echo "Number $value in $name not found - not imported for old OPUS-ID " . $this->document->getElementsByTagName('IdentifierOpus3')->Item(0)->getAttribute('Value') . "\n";
