@@ -253,6 +253,9 @@ if (count($this->hitlist_paginator)) {
 
         $counter = 1;
         foreach ($authoriterator as $obj) {
+           if (empty($obj) === true || $obj === ' ' || $obj === '') {
+           	continue;
+           }
              echo '<span class="author"><a href="' .
                  $this->url(
                      array(
