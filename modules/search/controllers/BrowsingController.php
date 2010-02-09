@@ -309,6 +309,16 @@ $data = $this->_request->getParams();
     public function latestAction() {
     	$hitlist = BrowsingList::getLatestDocuments();
             $data = $this->_request->getParams();
+            if ($data['output'] === "rss") {
+                $template = new RSSOutput();
+    	        $result = $template->getTemplate($hitlist, 'RSS Feed Latest Documents');
+                $xml = $result['xmlobject'];
+                $this->_helper->viewRenderer->setNoRender(true);
+                $this->_helper->layout()->disableLayout();
+                $this->getResponse()->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);
+                $this->getResponse()->setBody($xml->saveXml());
+            }
+            
     	    $hitlistIterator = new Opus_Search_Iterator_HitListIterator($hitlist);
             $this->view->hitlist_count = $hitlist->count();
             $paginator = Zend_Paginator::factory($hitlistIterator);
