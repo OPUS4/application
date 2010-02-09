@@ -69,8 +69,8 @@
         <field name="CreatingCorporation" mandatory="no" adminformweight="1" publishformweight="207" multiplicity="*" />
         <field name="ContributingCorporation" mandatory="no" adminformweight="1" publishformweight="208" multiplicity="*"/>
 
-        <!-- <field name="PublisherName" mandatory="no" adminformweight="1" publishformweight="101" multiplicity="1" /> -->
-        <!-- <field name="PublisherPlace" mandatory="no" adminformweight="1" publishformweight="102" multiplicity="1"/> -->
+        <!-- <field name="PublisherName" mandatory="no" adminformweight="1" publishformweight="209" multiplicity="1" /> -->
+        <!-- <field name="PublisherPlace" mandatory="no" adminformweight="1" publishformweight="210" multiplicity="1"/> -->
 	    
 		<!-- TODO implement it -->
 		<!--<field name="Institute" mandatory="no" adminformweight="1" publishformweight="302" multiplicity="*" />-->

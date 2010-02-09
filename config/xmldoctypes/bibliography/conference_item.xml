@@ -44,7 +44,7 @@
 	<page caption="caption_01_conferenceitem">
 		<!-- <field name="Licence" mandatory="yes" adminformweight="1" publishformweight="101" multiplicity="1" />  -->
 		<field name="Language" mandatory="yes" adminformweight="1" publishformweight="102" multiplicity="1"/>
-		<field name="File" mandatory="no" adminformweight="0" publishformweight="0" multiplicity="*" />
+		<!-- <field name="File" mandatory="no" adminformweight="0" publishformweight="0" multiplicity="*" /> -->
 		
 		<!-- <field name="ServerDateUnlocking" mandatory="no" adminformweight="0" publishformweight="201" multiplicity="1" /> -->
 	    <!-- <field name="ServerDateValid" mandatory="no" adminformweight="0" publishformweight="202" multiplicity="1" /> -->   

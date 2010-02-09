@@ -70,8 +70,8 @@
         <!-- <field name="CreatingCorporation" mandatory="no" adminformweight="1" publishformweight="210" multiplicity="*" /> -->
         <!-- <field name="ContributingCorporation" mandatory="no" adminformweight="1" publishformweight="211" multiplicity="*"/> -->
 
-        <field name="PublisherPlace" mandatory="no" adminformweight="1" publishformweight="102" multiplicity="1"/>
-        <field name="PublisherUniversity" mandatory="no" adminformweight="1" publishformweight="301" multiplicity="*" />
+        <field name="PublisherPlace" mandatory="no" adminformweight="1" publishformweight="212" multiplicity="1"/>
+        <field name="PublisherUniversity" mandatory="no" adminformweight="1" publishformweight="213" multiplicity="*" />
 
         <!-- TODO implement it -->
         <!--<field name="Institute" mandatory="no" adminformweight="1" publishformweight="302" multiplicity="*" />-->
