@@ -84,7 +84,7 @@ class Form_Builder {
                         // A selection is a shortcut to an existing model.
                         if ('add' === $key) {
                             $fieldValues[] = new $clazz();
-                        } else {
+                        } else if ('' !== $value) {
                             $fieldValues[] = new $clazz($value);
                         }
                     } else if ('add' !== $key) {
@@ -199,12 +199,15 @@ class Form_Builder {
                         // If value is a selection of models, build selection widget
                         $options = $field->getDefault();
                         $widget = new Zend_Form_Element_Select(strVal($i + 1));
+                        $widget->setRequired($mandatory);
                         $widget->removeDecorator('DtDdWrapper');
+                        $message = Zend_Registry::get('Zend_Translate')->_('choose_option') . ' ' . Zend_Registry::get('Zend_Translate')->_($fieldName);
+                        $widget->addMultiOption('', $message);
                         foreach ($options as $option) {
                             $widget->addMultiOption($option->getId(), $option->getDisplayName());
                         }
-                        $fieldForm->addElement($widget);
                         $widget->setValue($fieldValue->getId());
+                        $fieldForm->addElement($widget);
                     } else {
                         // If value is not a selection of models, embed subform
                         // FIXME: hardcoded check to deal with infinite
@@ -224,7 +227,11 @@ class Form_Builder {
                         $options = $field->getDefault();
                         $widget = new Zend_Form_Element_Select(strVal($i + 1));
                         $widget->removeDecorator('DtDdWrapper');
-                        $widget->setMultiOptions($options);
+                        $message = Zend_Registry::get('Zend_Translate')->_('choose_option') . ' ' . Zend_Registry::get('Zend_Translate')->_($fieldName);
+                        $widget->addMultiOption('', $message);
+                        foreach ($field->getDefault() as $key => $option) {
+                            $widget->addMultiOption($key, $option);
+                        }
                     } else {
                         $widget = new Zend_Form_Element_Text(strVal($i + 1));
                         $widget->removeDecorator('DtDdWrapper');

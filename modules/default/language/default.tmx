@@ -16,6 +16,14 @@
       </tuv>
     </tu>
     
+    <tu tuid="choose_option">
+      <tuv xml:lang="en">
+        <seg>Please choose: </seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen: </seg>
+      </tuv>
+    </tu>
   </body>
   
 </tmx>
