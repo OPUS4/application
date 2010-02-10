@@ -63,7 +63,7 @@
 
                 $documentCount = Opus_Collection_Information::countAllCollectionDocuments($this->collection, $coll->getId());
 
-                if ($hideEmptyCollections && count($coll->getEntries()) === 0 && $documentCount == 0) {
+                if ($hideEmptyCollections && $browseListCountStyle !== 'none' && count($coll->getEntries()) === 0 && $documentCount == 0) {
                     echo '<li>' . $coll->getDisplayName() . '</li>';
                 }
                 else {
