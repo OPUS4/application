@@ -291,7 +291,7 @@ if (count($this->hitlist_paginator)) {
         <?php
         }
         ?>
-            <a href="<?php echo $url_edit ?>"><?php echo $this->translate('docs_edit'); ?></a>
+            <input type='button' onClick="javascript:location.href='<?php echo $url_edit ?>'" value='<?php echo $this->translate('docs_edit'); ?>' class="crud">
             <input type="hidden" name="id" value="<?php echo $id ?>" />
             <?php if ($docState === 'deleted') { ?>
             <input type="submit" value="<?php echo $this->translate('docs_permadelete'); ?>" />
