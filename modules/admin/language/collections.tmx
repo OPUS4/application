@@ -8,82 +8,47 @@
   <body>
   
     <tu tuid="admin_collections_edit">
-      <tuv xml:lang="en">
-        <seg>Edit</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Ändern</seg>
-      </tuv>
+      <tuv xml:lang="en"><seg>Edit</seg></tuv>
+      <tuv xml:lang="de"><seg>Ändern</seg></tuv>
     </tu>
     
     <tu tuid="admin_collections_delete">
-      <tuv xml:lang="en">
-        <seg>Remove</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Entfernen</seg>
-      </tuv>
+      <tuv xml:lang="en"><seg>Remove</seg></tuv>
+      <tuv xml:lang="de"><seg>Entfernen</seg></tuv>
     </tu>
 
     <tu tuid="admin_collections_display_note">
       <tuv xml:lang="en">
-        <seg>In each display field you can choose, which collection attributes
-         to display in the listed context. You can choose 'Name' and 'Number' 
-         in any order you like. Important note: values have to be separated 
-         by commas!</seg>
+        <seg>On this page you can create a new collection tree</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>In den Display-Feldern können Sie einstellen, welche Metadaten 
-        der Sammlung in welchem Zusammenhang angezeigt werden sollen. 
-        Hier können in beliebiger Reihenfolge die Werte 'Name' und 'Number' 
-        eingegeben werden. Wichtig: Die Werte müssen mit Komma voneinander 
-        getrennt werden!</seg>
+        <seg>Auf dieser Seite können Sie einen neuen Sammlungsbaum anlegen.</seg>
       </tuv>
     </tu>
     
     <tu tuid="admin_collections_role_new">
-      <tuv xml:lang="en">
-        <seg>Create a new collection tree</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Einen neuen Sammlungs-Baum anlegen</seg>
-      </tuv>
+      <tuv xml:lang="en"><seg>Create a new collection tree</seg></tuv>
+      <tuv xml:lang="de"><seg>Einen neuen Sammlungs-Baum anlegen</seg></tuv>
     </tu>
     
     <tu tuid="admin_collections_role_edit">
-      <tuv xml:lang="en">
-        <seg>Edit this collection tree`s properties</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Ändern der Eigenschaften dieses Sammlungsbaumes</seg>
-      </tuv>
+      <tuv xml:lang="en"><seg>Edit this collection tree`s properties</seg></tuv>
+      <tuv xml:lang="de"><seg>Ändern der Eigenschaften dieses Sammlungsbaumes</seg></tuv>
     </tu>
     
     <tu tuid="admin_collections_role_delete">
-      <tuv xml:lang="en">
-        <seg>Delete this collection tree</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Entfernen dieses Sammlungsbaumes</seg>
-      </tuv>
+      <tuv xml:lang="en"><seg>Delete this collection tree</seg></tuv>
+      <tuv xml:lang="de"><seg>Entfernen dieses Sammlungsbaumes</seg></tuv>
     </tu>
     
     <tu tuid="admin_collections_collection_new">
-      <tuv xml:lang="en">
-        <seg>Create a new Collection</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Eine neue Sammlung anlegen</seg>
-      </tuv>
+      <tuv xml:lang="en"><seg>Create a new Collection</seg></tuv>
+      <tuv xml:lang="de"><seg>Eine neue Sammlung anlegen</seg></tuv>
     </tu>
     
     <tu tuid="admin_collections_collection_edit">
-      <tuv xml:lang="en">
-        <seg>Edit a Collection`s properties</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Ändern der Eigenschaften der Sammlung</seg>
-      </tuv>
+      <tuv xml:lang="en"><seg>Edit a Collection`s properties</seg></tuv>
+      <tuv xml:lang="de"><seg>Ändern der Eigenschaften der Sammlung</seg></tuv>
     </tu>
     
     <tu tuid="admin_collections_collection_delete">
@@ -185,39 +150,172 @@
       </tuv>
     </tu>
 
-    <tu tuid="">
+    <tu tuid="Name">
       <tuv xml:lang="en">
-        <seg></seg>
+        <seg>Name</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg></seg>
+        <seg>Name</seg>
       </tuv>
     </tu>
 
-    <tu tuid="">
+    <tu tuid="OaiName">
       <tuv xml:lang="en">
-        <seg></seg>
+        <seg>Name of collection root in oai set entry</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg></seg>
+        <seg>Bezeichnung der Sammlungs-Wurzel im OAI-Set-Eintrag</seg>
       </tuv>
     </tu>
 
-    <tu tuid="">
+    <tu tuid="Position">
       <tuv xml:lang="en">
-        <seg></seg>
+        <seg>Sort order</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg></seg>
+        <seg>Sortierreihenfolge</seg>
       </tuv>
     </tu>
 
-    <tu tuid="">
+    <tu tuid="none">
       <tuv xml:lang="en">
-        <seg></seg>
+        <seg>Never</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg></seg>
+        <seg>Nie</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="LinkDocsPathToRoot">
+      <tuv xml:lang="en">
+        <seg>Are collection members inherent members of superior collections</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zählen Doukumente in einer Sammlung inhärent zu übergeordneten Sammlungen gehörig?</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="count">
+      <tuv xml:lang="en">
+        <seg>Only in document count context</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nur im Dokument-Zähl-Kontext</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="display">
+      <tuv xml:lang="en">
+        <seg>Only in document display context</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nur im Dokument-Anzeige-Kontext</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="both">
+      <tuv xml:lang="en">
+        <seg>Everytime</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Immer</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="Visible">
+      <tuv xml:lang="en">
+        <seg>Collection tree is in use</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sammlungsbaum wird verwendet</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="VisibleBrowsingStart">
+      <tuv xml:lang="en">
+        <seg>Collection tree is shown on browsing start page</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sammlungsbaum wird auf Browsing-Startseite angezeigt</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="CollectionsContentSchema">
+      <tuv xml:lang="en">
+        <seg>Metadata fields of collections</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Metadaten-Felder der Sammlungen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="remove_CollectionsContentSchema">
+      <tuv xml:lang="en">
+        <seg>Remove this field</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dieses Feld entfernen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="add_CollectionsContentSchema">
+      <tuv xml:lang="en">
+        <seg>Add field</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Feld hinzufügen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="DisplayBrowsing">
+      <tuv xml:lang="en"><seg>Shown metadata fields in browsing context. 
+      These must be comma separated collection field designators 
+      (See "Metadata fields of collections"). Additionally to there defined
+      field designators every collection has an implicit designator "Name" you
+      can use here. Example: "Number, Name"
+      </seg></tuv>
+      <tuv xml:lang="de"><seg>Anzuzeigende Metadaten-Felder im Browsing-Kontext. 
+      Dies müssen durch Kommata getrennte gültige Sammlungs-Feldbezeichner sein.
+      (Siehe "Metadaten-Felder der Sammlungen"). Neben den dort definierten 
+      Feldbezeichnern hat jede Sammlung einen impliziten Bezeichner "Name", 
+      der hier auch verwendet werden kann.
+      Beispiel: "Number, Name"
+      </seg></tuv>
+    </tu>
+
+    <tu tuid="VisibleFrontdoor">
+      <tuv xml:lang="en">
+        <seg>Show collection membership on frontdoor</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sammlungszugehörigkeit auf Frontdoor anzeigen?</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="DisplayFrontdoor">
+      <tuv xml:lang="en">
+        <seg>Shown metadata fields in frontdoor context. (See "Shown metadata fields in browsing context")</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Anzuzeigende Metadaten-Felder im Frontdoor-Kontext. (Siehe "Anzuzeigende Metadaten-Felder im Browsing-Kontext")</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="VisibleOai">
+      <tuv xml:lang="en">
+        <seg>Use collection as OAI set</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sammlung als OAI-Set ausgeben</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="DisplayOai">
+      <tuv xml:lang="en">
+        <seg>Shown metadata fields in OAI set context. (See "Shown metadata fields in browsing context")</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Auszugebende Metadaten-Felder im OAI-Set-Kontext. (Siehe "Anzuzeigende Metadaten-Felder im Browsing-Kontext")</seg>
       </tuv>
     </tu>
 
