@@ -433,7 +433,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         	$this->_redirectTo('publish_unlocking_date_not_reached', 'index');
         }
         $doc->setServerState('published');
-        $doc->setServerDateUnlocking(date('Y-m-d'));
+        $doc->setServerDatePublished(date('Y-m-d'));
         $doc->store();
 
    		$config = Zend_Registry::get('Zend_Config');
