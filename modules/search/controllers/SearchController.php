@@ -39,8 +39,6 @@
 class Search_SearchController extends Zend_Controller_Action
 {
 
-    protected $_queryFieldNumber = 1;
-
     /**
      * Show menu for search actions
      *
@@ -78,7 +76,7 @@ class Search_SearchController extends Zend_Controller_Action
     {
         $this->view->title = $this->view->translate('search_index_metadatasearch');
 
-        $searchForm = new MetadataSearch();
+        $searchForm = $this->buildMetadataForm();
         $searchForm->setAction($this->view->url(array("controller"=>"search", "action"=>"metadatasearch")));
         $searchForm->setMethod('post');
 
@@ -176,13 +174,65 @@ class Search_SearchController extends Zend_Controller_Action
     }
 
     /**
+     * Retrieve a list of possible search fields from outside
+     */
+    public static function retrieveSearchFields()
+    {
+    	// aus Opus3:
+    	// Titel, Person, Freitext, Schlagwort, Körperschaft, Fakultät, Institut, Abstract
+    	// Dokumentart, Quelle, Jahr, verf. Klassifikationen
+    	// Opus4: Personen differenzieren, Quelle raus (?)
+    	$fields = array(
+            'title' => 'searchfield_title',
+            'author' => 'searchfield_author',
+            'persons' => 'searchfield_persons',
+            'fulltext' => 'searchfield_fulltext',
+            'abstract' => 'searchfield_abstract',
+            'subject' => 'searchfield_subject',
+            'year' => 'searchfield_year',
+            'institute' => 'searchfield_institute',
+            'urn' => 'searchfield_urn',
+            'isbn' => 'searchfield_isbn'
+            );
+    	return $fields;
+    }
+
+    /**
+     * Retrieve a list of possible search fields
+     */
+    public static function retrieveInternalSearchFields()
+    {
+    	// aus Opus3:
+    	// Titel, Person, Freitext, Schlagwort, Körperschaft, Fakultät, Institut, Abstract
+    	// Dokumentart, Quelle, Jahr, verf. Klassifikationen
+    	// Opus4: Personen differenzieren, Quelle raus (?)
+    	$fields = array(
+            'title' => 'searchfield_title',
+            'author' => 'searchfield_author',
+            'persons' => 'searchfield_persons',
+            'fulltext' => 'searchfield_fulltext',
+            'abstract' => 'searchfield_abstract',
+            'subject' => 'searchfield_subject',
+            'year' => 'searchfield_year',
+            'institute' => 'searchfield_institute',
+            'urn' => 'searchfield_urn',
+            'isbn' => 'searchfield_isbn',
+            'doctype' => 'searchfield_doctype'
+            );
+    	return $fields;
+    }
+
+    /**
      * Build metadata search form
      */
     public function buildMetadataForm() {
-        $metadataForm = new MetadataSearch();
+    	$searchfields = new Zend_Session_Namespace('fields');
+    	if (isset($searchfields->fields) === false) {
+    		$searchfields->fields = 1;
+    	}
         $form = new Zend_Form();
         // decorate form
-        $form->clearDecorators();
+        #$form->clearDecorators();
         $decorators = array(
             array('ViewHelper'),
             array('Errors'),
@@ -249,17 +299,17 @@ class Search_SearchController extends Zend_Controller_Action
         $query = array();
         $field = array();
         $boolean = array();
-        for ($n = 0; $n < $this->_queryFieldNumber; $n++)
+        for ($n = 0; $n < $searchfields->fields; $n++)
         {
             $field[$n] = new Zend_Form_Element_Select('field[' . $n . ']');
-            $field[$n]->addMultiOptions($metadataForm->retrieveSearchFields());
+            $field[$n]->addMultiOptions($this->retrieveSearchFields());
             $field[$n]->setDecorators($fieldDecorators);
 
             $query[$n] = new Zend_Form_Element_Text('query[' . $n . ']');
             $query[$n]->addValidator('stringLength', false, array(3, 100));
             $query[$n]->setDecorators($searchtermDecorators);
 
-            if ($n < ($this->_queryFieldNumber-1))
+            if ($n < ($searchfields->fields-1))
             {
                 $boolean[$n] = new Zend_Form_Element_Select('boolean[' . $n . ']');
                 $boolean[$n]->addMultiOptions(array('and' => 'boolean_and', 'or' => 'boolean_or', 'not' => 'boolean_not'));
@@ -269,20 +319,27 @@ class Search_SearchController extends Zend_Controller_Action
         $addElement->setLabel('add_searchfield');
         $addElement->setAttrib('name', 'Action');
 
+        $removeElement = new Zend_Form_Element_Submit('remove');
+        $removeElement->setLabel('remove_searchfield');
+        $removeElement->setAttrib('name', 'Action');
+
         $submit = new Zend_Form_Element_Submit('submit');
         $submit->setLabel('search_searchaction');
 
         // Add elements to form:
         $form->addElements(array($truncation, $hitsPerPage, $sort, $languageList, $doctypeList));
-        for ($n = 0; $n < $this->_queryFieldNumber; $n++)
+        for ($n = 0; $n < $searchfields->fields; $n++)
         {
             $form->addElements(array($field[$n], $query[$n]));
-            if ($n < ($this->_queryFieldNumber-1))
+            if ($n < ($searchfields->fields-1))
             {
                 $form->addElement($boolean[$n]);
             }
         }
         $form->addElement($addElement);
+        if ($searchfields->fields > 1) {
+        	$form->addElement($removeElement);
+        }
         $form->addElement($submit);
         return $form;
     }
@@ -305,17 +362,24 @@ class Search_SearchController extends Zend_Controller_Action
         $this->view->title = $this->view->translate('search_searchresult');
         $page = 1;
         $resultlist = new Zend_Session_Namespace('resultlist');
+        $searchfields = new Zend_Session_Namespace('fields');
         $failure = false;
         if ($this->_request->isPost() === true) {
             // post request
             $data = $this->_request->getPost();
-            print_r($data);
             if (array_key_exists('add', $data) === true) {
-                $this->_queryFieldNumber++;
-                echo $this->_queryFieldNumber;
+                $searchfields->fields++;
                 $form = $this->buildMetadataForm();
                 $this->view->form = $form->populate($data);
-                return $this->render('form');
+                $this->render('form');
+                return;
+            }
+            if (array_key_exists('remove', $data) === true) {
+                $searchfields->fields--;
+                $form = $this->buildMetadataForm();
+                $this->view->form = $form->populate($data);
+                $this->render('form');
+                return;
             }
             $form = $this->buildMetadataForm();
             if ($form->isValid($data) === true) {
@@ -325,16 +389,12 @@ class Search_SearchController extends Zend_Controller_Action
                 #print_r($data);
                 $query = '';
 
-                for ($n = 0; strlen($data['query' . $n]) > 0; $n++)
+                for ($n = 0; $n < $searchfields->fields; $n++)
                 {
                 	if ($n > 0) {
                 		$query .= ' ' . $data['boolean' . ($n-1)] . ' ';
                 	}
                 	$query .= $data['field' . $n] . ':';
-                	if ($data['searchtype'] === 'truncated')
-                	{
-                	    $query .= '*';
-                	}
                 	$query .= $data['query' . $n];
                 	if ($data['searchtype'] === 'truncated')
                 	{

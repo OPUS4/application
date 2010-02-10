@@ -24,6 +24,23 @@
       </tuv>
     </tu>
     
+    <tu tuid="add_searchfield">
+      <tuv xml:lang="en">
+        <seg>Add one search field</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Suchfeld hinzufügen</seg>
+      </tuv>
+    </tu>
+    <tu tuid="remove_searchfield">
+      <tuv xml:lang="en">
+        <seg>Remove last search field</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Letztes Suchfeld entfernen</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="search_searchresult">
       <tuv xml:lang="en">
         <seg>Search result</seg>
