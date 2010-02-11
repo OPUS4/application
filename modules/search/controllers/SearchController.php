@@ -174,55 +174,6 @@ class Search_SearchController extends Zend_Controller_Action
     }
 
     /**
-     * Retrieve a list of possible search fields from outside
-     */
-    public static function retrieveSearchFields()
-    {
-    	// aus Opus3:
-    	// Titel, Person, Freitext, Schlagwort, Körperschaft, Fakultät, Institut, Abstract
-    	// Dokumentart, Quelle, Jahr, verf. Klassifikationen
-    	// Opus4: Personen differenzieren, Quelle raus (?)
-    	$fields = array(
-            'title' => 'searchfield_title',
-            'author' => 'searchfield_author',
-            'persons' => 'searchfield_persons',
-            'fulltext' => 'searchfield_fulltext',
-            'abstract' => 'searchfield_abstract',
-            'subject' => 'searchfield_subject',
-            'year' => 'searchfield_year',
-            'institute' => 'searchfield_institute',
-            'urn' => 'searchfield_urn',
-            'isbn' => 'searchfield_isbn'
-            );
-    	return $fields;
-    }
-
-    /**
-     * Retrieve a list of possible search fields
-     */
-    public static function retrieveInternalSearchFields()
-    {
-    	// aus Opus3:
-    	// Titel, Person, Freitext, Schlagwort, Körperschaft, Fakultät, Institut, Abstract
-    	// Dokumentart, Quelle, Jahr, verf. Klassifikationen
-    	// Opus4: Personen differenzieren, Quelle raus (?)
-    	$fields = array(
-            'title' => 'searchfield_title',
-            'author' => 'searchfield_author',
-            'persons' => 'searchfield_persons',
-            'fulltext' => 'searchfield_fulltext',
-            'abstract' => 'searchfield_abstract',
-            'subject' => 'searchfield_subject',
-            'year' => 'searchfield_year',
-            'institute' => 'searchfield_institute',
-            'urn' => 'searchfield_urn',
-            'isbn' => 'searchfield_isbn',
-            'doctype' => 'searchfield_doctype'
-            );
-    	return $fields;
-    }
-
-    /**
      * Build metadata search form
      */
     public function buildMetadataForm() {
@@ -447,7 +398,7 @@ class Search_SearchController extends Zend_Controller_Action
             // do a new query by URL-parameter
             $query = '';
             foreach ($data as $searchField => $searchValue) {
-                if (array_key_exists($searchField, MetadataSearch::retrieveInternalSearchFields()))
+                if (array_key_exists($searchField, $this->retrieveSearchFields()))
                 {
                 	$query .= $searchField . ':' . $searchValue . ' ';
                 }
@@ -505,4 +456,31 @@ class Search_SearchController extends Zend_Controller_Action
         $this->getResponse()->setBody($result['xml']);
     }
 
+    /**
+     * Retrieve a list of possible search fields from outside
+     * 
+     * @return Array array with fieldnames as keys and labels as values
+     */
+    public static function retrieveSearchFields()
+    {
+    	// aus Opus3:
+    	// Titel, Person, Freitext, Schlagwort, Körperschaft, Fakultät, Institut, Abstract
+    	// Dokumentart, Quelle, Jahr, verf. Klassifikationen
+    	// Opus4: Personen differenzieren, Quelle raus (?)
+    	$fields = array(
+            'title' => 'searchfield_title',
+            'author' => 'searchfield_author',
+            'persons' => 'searchfield_persons',
+            'fulltext' => 'searchfield_fulltext',
+            'abstract' => 'searchfield_abstract',
+            'subject' => 'searchfield_subject',
+            'year' => 'searchfield_year',
+            'institute' => 'searchfield_institute',
+            'urn' => 'searchfield_urn',
+            'isbn' => 'searchfield_isbn',
+            'series' => 'searchfield_series',
+            'collection' => 'searchfield_coll'
+            );
+    	return $fields;
+    }
 }
