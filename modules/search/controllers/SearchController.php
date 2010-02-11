@@ -76,11 +76,7 @@ class Search_SearchController extends Zend_Controller_Action
     {
         $this->view->title = $this->view->translate('search_index_metadatasearch');
 
-        $searchForm = $this->buildMetadataForm();
-        $searchForm->setAction($this->view->url(array("controller"=>"search", "action"=>"metadatasearch")));
-        $searchForm->setMethod('post');
-
-        $this->view->form = $searchForm;
+        $this->view->form = $this->buildMetadataForm();
         $this->render('form');
     }
 
@@ -266,13 +262,15 @@ class Search_SearchController extends Zend_Controller_Action
                 $boolean[$n]->addMultiOptions(array('and' => 'boolean_and', 'or' => 'boolean_or', 'not' => 'boolean_not'));
             }
         }
-        $addElement = new Zend_Form_Element_Submit('add');
+        $addElement = new Zend_Form_Element_Button('add');
         $addElement->setLabel('add_searchfield');
         $addElement->setAttrib('name', 'Action');
+        $addElement->setAttrib('onClick', 'javascript:location.href=\'' . $this->view->url(array('module' => 'search', 'controller' => 'search', 'action' => 'metadatasearch', 'add' => 'true'), null, true) . '\'');
 
-        $removeElement = new Zend_Form_Element_Submit('remove');
+        $removeElement = new Zend_Form_Element_Button('remove');
         $removeElement->setLabel('remove_searchfield');
         $removeElement->setAttrib('name', 'Action');
+        $removeElement->setAttrib('onClick', 'javascript:location.href=\'' . $this->view->url(array('module' => 'search', 'controller' => 'search', 'action' => 'metadatasearch', 'remove' => 'true'), null, true) . '\'');
 
         $submit = new Zend_Form_Element_Submit('submit');
         $submit->setLabel('search_searchaction');
@@ -292,6 +290,8 @@ class Search_SearchController extends Zend_Controller_Action
         	$form->addElement($removeElement);
         }
         $form->addElement($submit);
+        $form->setAction($this->view->url(array('module' => 'search', 'controller' => 'search', 'action' => 'metadatasearch'), null, true));
+        $form->setMethod('post');
         return $form;
     }
 
@@ -315,23 +315,25 @@ class Search_SearchController extends Zend_Controller_Action
         $resultlist = new Zend_Session_Namespace('resultlist');
         $searchfields = new Zend_Session_Namespace('fields');
         $failure = false;
+        $data = $this->_request->getPost();
+        $requestData = $this->_request->getParams();
+        if (array_key_exists('add', $requestData) === true) {
+            $searchfields->fields++;
+            $form = $this->buildMetadataForm();
+            $this->view->form = $form->populate($data);
+            $this->render('form');
+            return;
+        }
+        if (array_key_exists('remove', $requestData) === true) {
+            $searchfields->fields--;
+            $form = $this->buildMetadataForm();
+            $this->view->form = $form->populate($data);
+            $this->render('form');
+            return;
+        }
         if ($this->_request->isPost() === true) {
             // post request
             $data = $this->_request->getPost();
-            if (array_key_exists('add', $data) === true) {
-                $searchfields->fields++;
-                $form = $this->buildMetadataForm();
-                $this->view->form = $form->populate($data);
-                $this->render('form');
-                return;
-            }
-            if (array_key_exists('remove', $data) === true) {
-                $searchfields->fields--;
-                $form = $this->buildMetadataForm();
-                $this->view->form = $form->populate($data);
-                $this->render('form');
-                return;
-            }
             $form = $this->buildMetadataForm();
             if ($form->isValid($data) === true) {
                 // valid form

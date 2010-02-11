@@ -253,7 +253,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="searchfield_collection">
+    <tu tuid="searchfield_coll">
       <tuv xml:lang="en">
         <seg>Collections</seg>
       </tuv>
