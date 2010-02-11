@@ -149,6 +149,20 @@
         '">';
         echo $this->translate($obj);
         echo '</a>';
+         echo ' <a href="' .
+         $this->url(
+             array(
+                 'module'        => 'search',
+                 'controller'    => 'opensearch',
+                 'action'        => 'query',
+                 'q'             => 'doctype:' . $obj
+             ),
+             null,
+             true
+         ) .
+        '">';
+        echo '<img src="/layouts/default/img/rss.gif" width="36" height="14" border="0" align="bottom" alt="RSS-Feed Icon" title="RSS-Feed abonnieren" />';
+        echo '</a>';
         echo '</li>';
         }
     }
