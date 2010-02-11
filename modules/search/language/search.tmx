@@ -244,6 +244,24 @@
       </tuv>
     </tu>
     
+    <tu tuid="searchfield_series">
+      <tuv xml:lang="en">
+        <seg>Series</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Schriftenreihen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="searchfield_collection">
+      <tuv xml:lang="en">
+        <seg>Collections</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sammlungen</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="searchfield_doctype">
       <tuv xml:lang="en">
         <seg>Document type</seg>
