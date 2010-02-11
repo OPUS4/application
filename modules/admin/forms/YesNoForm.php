@@ -41,10 +41,10 @@ class YesNoForm extends Zend_Form
      */
     public function init() {
         $sureyes = new Zend_Form_Element_Submit('sureyes');
-        $sureyes->setLabel('yes');
+        $sureyes->setLabel('answer_yes');
 
         $sureno = new Zend_Form_Element_Submit('sureno');
-        $sureno->setLabel('no');
+        $sureno->setLabel('answer_no');
 
         #$id = new Zend_Form_Element_Hidden('id');
         
