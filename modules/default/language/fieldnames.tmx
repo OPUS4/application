@@ -666,10 +666,28 @@
     
     <tu tuid="IdentifierOpac">
       <tuv xml:lang="en">
-        <seg>Opac ID</seg>
+        <seg>Opac Id</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Opac ID</seg>
+        <seg>Opac Id</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="add_IdentifierOpac">
+      <tuv xml:lang="en">
+        <seg>add Opac Id</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Opac Id hinzufügen</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="remove_IdentifierOpac">
+      <tuv xml:lang="en">
+        <seg>remove Opac Id</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Opac Id entfernen</seg>
       </tuv>
     </tu>
     
@@ -735,7 +753,25 @@
         <seg>Titel des übergordneten Werkes</seg>
       </tuv>
     </tu>
-    
+
+    <tu tuid="add_TitleParent">
+      <tuv xml:lang="en">
+        <seg>add Parent Title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Titel des übergeordneten Werkes hinzufügen</seg>
+      </tuv>
+    </tu>
+        
+    <tu tuid="remove_TitleParent">
+      <tuv xml:lang="en">
+        <seg>remove Parent Title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Titel des übergeordneten Werkes entfernen</seg>
+      </tuv>
+    </tu>
+        
     <tu tuid="TitleParentValue">
       <tuv xml:lang="en">
         <seg>Main Title</seg>
@@ -789,7 +825,34 @@
         <seg>Abstract / Kurzfassung</seg>
       </tuv>
     </tu>
-    
+
+    <tu tuid="TitleAdditional">
+      <tuv xml:lang="en">
+        <seg>Title Additional</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zusatztitel</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="add_TitleAdditional">
+      <tuv xml:lang="en">
+        <seg>add Title Additional</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zusatztitel hinzufügen</seg>
+      </tuv>
+    </tu>
+        
+    <tu tuid="remove_TitleAdditional">
+      <tuv xml:lang="en">
+        <seg>remove Titel Additional</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zusatztitel entfernen</seg>
+      </tuv>
+    </tu>
+            
     <tu tuid="IdentifierIsbn">
       <tuv xml:lang="en">
         <seg>ISBN</seg>
@@ -798,7 +861,79 @@
         <seg>ISBN</seg>
       </tuv>
     </tu>
-    
+
+    <tu tuid="add_IdentifierIsbn">
+      <tuv xml:lang="en">
+        <seg>add ISBN</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>ISBN hinzufügen</seg>
+      </tuv>
+    </tu>
+        
+    <tu tuid="remove_IdentifierIsbn">
+      <tuv xml:lang="en">
+        <seg>remove ISBN</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>ISBN entfernen</seg>
+      </tuv>
+    </tu>
+            
+    <tu tuid="IdentifierIssn">
+      <tuv xml:lang="en">
+        <seg>ISSN</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>ISSN</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="add_IdentifierIssn">
+      <tuv xml:lang="en">
+        <seg>add ISSN</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>ISSN hinzufügen</seg>
+      </tuv>
+    </tu>
+        
+    <tu tuid="remove_IdentifierIssn">
+      <tuv xml:lang="en">
+        <seg>remove ISSN</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>ISSN entfernen</seg>
+      </tuv>
+    </tu>
+            
+    <tu tuid="IdentifierUuid">
+      <tuv xml:lang="en">
+        <seg>Uuid</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Uuid</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="add_IdentifierUuid">
+      <tuv xml:lang="en">
+        <seg>add Uuid</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Uuid hinzufügen</seg>
+      </tuv>
+    </tu>
+        
+    <tu tuid="remove_IdentifierUuid">
+      <tuv xml:lang="en">
+        <seg>remove Uuid</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Uuid entfernen</seg>
+      </tuv>
+    </tu>
+            
     <tu tuid="IdentifierValue">
       <tuv xml:lang="en">
         <seg>ISBN</seg>
@@ -816,7 +951,25 @@
         <seg>URN</seg>
       </tuv>
     </tu>
-    
+
+    <tu tuid="add_IdentifierUrn">
+      <tuv xml:lang="en">
+        <seg>add URN</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>URN hinzufügen</seg>
+      </tuv>
+    </tu>
+        
+    <tu tuid="remove_IdentifierUrn">
+      <tuv xml:lang="en">
+        <seg>remove URN</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>URN entfernen</seg>
+      </tuv>
+    </tu>
+                
      <tu tuid="IdentifierValue">
       <tuv xml:lang="en">
         <seg>URN or ISBN</seg>
@@ -861,7 +1014,25 @@
         <seg>Bemerkung</seg>
       </tuv>
     </tu>
-    
+
+    <tu tuid="add_Note">
+      <tuv xml:lang="en">
+        <seg>add Note</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bemerkung hinzufügen</seg>
+      </tuv>
+    </tu>
+        
+    <tu tuid="remove_Note">
+      <tuv xml:lang="en">
+        <seg>remove Note</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bemerkung entfernen</seg>
+      </tuv>
+    </tu>
+                    
     <tu tuid="Message">
       <tuv xml:lang="en">
         <seg>Message</seg>
