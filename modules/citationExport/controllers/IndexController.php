@@ -55,8 +55,10 @@ class CitationExport_IndexController extends Zend_Controller_Action {
         // Send output to view
         $this->view->title = $this->view->translate('citationExport_modulename');
         if ($output === false) $this->view->output = $this->view->translate('invalid_format');
-        else $this->view->output = $output;
-        $this->view->downloadUrl = $this->view->url(array('module' => 'citationExport', 'controller' => 'index', 'action' => 'download', 'docId' => $docId, 'output' => $outputFormat), false, null);
+        else {
+        	$this->view->output = $output;
+            $this->view->downloadUrl = $this->view->url(array('module' => 'citationExport', 'controller' => 'index', 'action' => 'download', 'docId' => $docId, 'output' => $outputFormat), false, null);
+        }
     }
 
     /**
@@ -93,9 +95,14 @@ class CitationExport_IndexController extends Zend_Controller_Action {
     }
 
     /**
+     * transform XML output to desired output format
      * 
+     * @param int $docId Document ID that should be transformed
+     * @param string $outputFormat Output format the document should be transformed into
+     * 
+     * @return string document in the given output format as plain text, if the output format is not found, this method will return boolean false
      */
-     public function getPlainOutput($docId, $outputFormat = null) {
+     public function getPlainOutput($docId, $outputFormat) {
      	// Load document
         $docId = $this->getRequest()->getParam('docId');
         $document = new Opus_Document($docId);
@@ -105,7 +112,7 @@ class CitationExport_IndexController extends Zend_Controller_Action {
         $filter = new Opus_Model_Filter;
         $filter->setModel($document);
         $xml = $filter->toXml();
-
+echo $xml->saveXml();
         // Set up XSLT-Stylesheet
         $xslt = new DomDocument;
         if ($outputFormat === 'bibtex' && file_exists($this->view->getScriptPath('index') . '/' . $outputFormat . "_" . $document->getType() . '.xslt')) $outputFormat .= "_" . $document->getType();
@@ -117,11 +124,17 @@ class CitationExport_IndexController extends Zend_Controller_Action {
         $xslt->load($this->view->getScriptPath('index') . '/' . $template);
 
         // Set up XSLT-Processor
+        try {
         $proc = new XSLTProcessor;
         $proc->registerPHPFunctions();
         $proc->importStyleSheet($xslt);
-
-        return $proc->transformToXML($xml);     	
+        
+        	$transform = $proc->transformToXML($xml);
+        }
+        catch (Exception $e) {
+        	$transform = $e->getMessage();
+        }
+        return    $transform;  	
      }
 
 }

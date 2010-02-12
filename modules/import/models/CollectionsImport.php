@@ -42,19 +42,9 @@ class CollectionsImport
 	public function __construct($data)
 	{
 		// Add a CollectionRole for Collections
-        $collRole = new Opus_CollectionRole();
-        $collRole->setName('Collections');
-        $collRole->setOaiName('colls');
-        $collRole->setVisible(1);
-        $collRole->setLinkDocsPathToRoot('count');
-        $collRole->store();
+        $collRole = new Opus_CollectionRole(9);
 		// Add a CollectionRole for Series (Schriftenreihen)
-        $seriesRole = new Opus_CollectionRole();
-        $seriesRole->setName('Schriftenreihen');
-        $seriesRole->setOaiName('series');
-        $seriesRole->setVisible(1);
-        $seriesRole->setLinkDocsPathToRoot('count');
-        $roleId = $seriesRole->store();
+        $seriesRole = new Opus_CollectionRole(10);
 		
 		$doclist = $data->getElementsByTagName('table_data');
 		foreach ($doclist as $document) 
