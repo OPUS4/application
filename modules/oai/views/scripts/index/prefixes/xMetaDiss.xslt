@@ -45,6 +45,7 @@
  */
 -->
 <xsl:stylesheet version="1.0"
+    xmlns="http://www.d-nb.de/standards/subject/"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xMetaDiss="http://www.d-nb.de/standards/xMetaDiss/"
     xmlns:cc="http://www.d-nb.de/standards/cc/"
@@ -53,7 +54,7 @@
     xmlns:dcterms="http://purl.org/dc/terms/"
     xmlns:pc="http://www.d-nb.de/standards/pc/"
     xmlns:urn="http://www.d-nb.de/standards/urn/"
-    xmlns:thesis="http://www.ndltd.org/standards/metadata/etdms/1.0"
+    xmlns:thesis="http://www.ndltd.org/standards/metadata/etdms/1.0/"
     xmlns:ddb="http://www.d-nb.de/standards/ddb/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 

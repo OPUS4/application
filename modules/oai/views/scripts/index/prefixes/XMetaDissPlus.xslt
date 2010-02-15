@@ -46,7 +46,7 @@
 -->
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:fn="http://www.w3.org/2005/xpath-functions"
+    xmlns="http://www.bsz-bw.de/xmetadissplus/1.3"
     xmlns:xMetaDiss="http://www.d-nb.de/standards/xMetaDiss/"
     xmlns:cc="http://www.d-nb.de/standards/cc/"
     xmlns:dc="http://purl.org/dc/elements/1.1/"
@@ -55,7 +55,7 @@
     xmlns:bszterms="http://www.bsz-bw.de/xmetadissplus/1.3/terms/"
     xmlns:pc="http://www.d-nb.de/standards/pc/"
     xmlns:urn="http://www.d-nb.de/standards/urn/"
-    xmlns:thesis="http://www.ndltd.org/standards/metadata/etdms/1.0"
+    xmlns:thesis="http://www.ndltd.org/standards/metadata/etdms/1.0/"
     xmlns:ddb="http://www.d-nb.de/standards/ddb/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
@@ -64,20 +64,8 @@
     <xsl:param name="contactId" />
 
     <xsl:template match="Opus_Document" mode="xmetadissplus">
-        <xsl:element name="xMetaDiss">
-            <xsl:attribute name="xsi:schemaLocation">
-            <xsl:text>http://www.bsz-bw.de/xmetadissplus/1.3 http://www.bsz-bw.de/xmetadissplus/1.3/xmetadissplus.xsd
-            xmlns="http://www.bsz-bw.de/xmetadissplus/1.3"
-            xmlns:xmetadiss="http://www.d-nb.de/standards/xMetaDiss/"  
-            xmlns:cc="http://www.d-nb.de/standards/cc/"
-            xmlns:dc="http://purl.org/dc/elements/1.1/"
-            xmlns:dcterms="http://purl.org/dc/terms/"
-            xmlns:bszterms="http://www.bsz-bw.de/xmetadissplus/1.3/terms/"
-            xmlns:pc="http://www.d-nb.de/standards/pc/"
-            xmlns:urn="http://www.d-nb.de/standards/urn/"
-            xmlns:ddb="http://www.d-nb.de/standards/ddb/"
-            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"</xsl:text>
-            </xsl:attribute>
+        <xMetaDiss
+            xsi:schemaLocation="http://www.bsz-bw.de/xmetadissplus/1.3 http://www.bsz-bw.de/xmetadissplus/1.3/xmetadissplus.xsd">
             <!-- dc:title -->
             <xsl:apply-templates select="TitleMain" mode="xmetadissplus" />
             <!-- dc:creator -->
@@ -175,7 +163,17 @@
                <xsl:attribute name="xsi:type"><xsl:text>dcterms:IMT</xsl:text></xsl:attribute>
                <xsl:text>application/pdf</xsl:text>
             </xsl:element>
-            <xsl:apply-templates select="@Language" mode="xmetadissplus" />
+            <xsl:element name="dc:language">
+              <xsl:attribute name="xsi:type"><xsl:text>dcterms:ISO639-2</xsl:text></xsl:attribute>    
+                 <xsl:choose>
+                   <xsl:when test="@Language='deu'">
+                      <xsl:text>ger</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>     
+                       <xsl:value-of select="@Language" />
+                    </xsl:otherwise>
+                 </xsl:choose>
+            </xsl:element>
             <xsl:apply-templates select="Licence" mode="xmetadissplus" />
 
            <!--  thesis.degree only, if type doctoral or habilitation -->
@@ -215,14 +213,21 @@
             <xsl:element name="ddb:rights">
                <xsl:attribute name="ddb:kind"><xsl:text>free</xsl:text></xsl:attribute>
             </xsl:element>
-        </xsl:element>
+         </xMetaDiss>
     </xsl:template>
 
     <xsl:template match="TitleMain" mode="xmetadissplus">
         <xsl:element name="dc:title">
-            <xsl:attribute name="xsi:type"><xsl:text>ddb:titleISO639-3</xsl:text></xsl:attribute>
+            <xsl:attribute name="xsi:type"><xsl:text>ddb:titleISO639-2</xsl:text></xsl:attribute>
             <xsl:attribute name="lang">
-                <xsl:value-of select="@Language" />
+               <xsl:choose>
+                  <xsl:when test="@Language='deu'">
+                    <xsl:text>ger</xsl:text>
+                  </xsl:when>
+                  <xsl:otherwise>     
+                     <xsl:value-of select="@Language" />
+                  </xsl:otherwise>
+               </xsl:choose>
             </xsl:attribute>
             <xsl:choose>
               <xsl:when test="../@Language!=@Language">
@@ -277,9 +282,16 @@
 
     <xsl:template match="TitleAbstract" mode="xmetadissplus">
         <xsl:element name="dcterms:abstract">
-            <xsl:attribute name="xsi:type"><xsl:text>ddb:contentISO639-3</xsl:text></xsl:attribute>
+            <xsl:attribute name="xsi:type"><xsl:text>ddb:contentISO639-2</xsl:text></xsl:attribute>
             <xsl:attribute name="lang">
-                <xsl:value-of select="@Language" />
+               <xsl:choose>
+                  <xsl:when test="@Language='deu'">
+                    <xsl:text>ger</xsl:text>
+                  </xsl:when>
+                  <xsl:otherwise>     
+                     <xsl:value-of select="@Language" />
+                  </xsl:otherwise>
+               </xsl:choose>
             </xsl:attribute>
             <xsl:attribute name="ddb:type"><xsl:text>noScheme</xsl:text></xsl:attribute>
             <xsl:value-of select="@Value" />
@@ -306,7 +318,7 @@
     </xsl:template>
 
     <xsl:template match="PersonAdvisor" mode="xmetadissplus">
-       <xsl:element name="contributor">
+       <xsl:element name="dc:contributor">
          <xsl:attribute name="xsi:type"><xsl:text>pc:Contributor</xsl:text></xsl:attribute>
          <xsl:attribute name="thesis:role"><xsl:text>advisor</xsl:text></xsl:attribute>
          <xsl:attribute name="countryCode"><xsl:text>DE</xsl:text></xsl:attribute>
@@ -320,9 +332,11 @@
                   <xsl:value-of select="@LastName" />
                 </xsl:element>
              </xsl:element>
-             <xsl:element name="academicTitle">
-                <xsl:value-of select="@AcademicTitle" />
-             </xsl:element>
+             <xsl:if test="normalize-space(@AcademicTitle)">
+                <xsl:element name="academicTitle">
+                  <xsl:value-of select="@AcademicTitle" />
+                </xsl:element>
+             </xsl:if>
            </xsl:element>
        </xsl:element>
     </xsl:template>
@@ -342,13 +356,14 @@
                   <xsl:value-of select="@LastName" />
                 </xsl:element>
              </xsl:element>
-             <xsl:element name="academicTitle">
-                <xsl:value-of select="@AcademicTitle" />
-             </xsl:element>
+             <xsl:if test="normalize-space(@AcademicTitle)">
+                <xsl:element name="academicTitle">
+                  <xsl:value-of select="@AcademicTitle" />
+                </xsl:element>
+             </xsl:if>
            </xsl:element>
        </xsl:element>
     </xsl:template>
-
 
 
     <xsl:template match="@DateAccepted" mode="xmetadissplus">
@@ -362,13 +377,6 @@
         <xsl:element name="dc:identifier">
             <xsl:attribute name="xsi:type"><xsl:text>urn:nbn</xsl:text></xsl:attribute>
             <xsl:value-of select="@Value" />
-        </xsl:element>
-    </xsl:template>
-
-    <xsl:template match="@Language" mode="xmetadissplus">
-        <xsl:element name="dc:language">
-           <xsl:attribute name="xsi:type"><xsl:text>dcterms:ISO639-3</xsl:text></xsl:attribute>    
-           <xsl:value-of select="." />
         </xsl:element>
     </xsl:template>
 
