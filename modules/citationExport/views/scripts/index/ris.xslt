@@ -120,7 +120,7 @@
            </xsl:otherwise>
        </xsl:choose>
        <xsl:text>
-       ID  - OPUS</xsl:text><xsl:value-of select="@Id" />
+ID  - OPUS</xsl:text><xsl:value-of select="@Id" />
        <xsl:if test="string-length(PersonAuthor/@LastName)>0">
            <xsl:apply-templates select="PersonAuthor" />
        </xsl:if>
@@ -162,50 +162,50 @@
            </xsl:variable>
        </xsl:if>
        <xsl:if test="$year">
-           <xsl:text>Y1  - </xsl:text><xsl:value-of select="$year" /> <xsl:text>///
-           </xsl:text>
+<xsl:text>Y1  - </xsl:text><xsl:value-of select="$year" /> <xsl:text>///
+</xsl:text>
        </xsl:if>
        <xsl:if test="string-length(IdentifierUrl/@Value)>0">
-           <xsl:text>UR  - </xsl:text><xsl:apply-templates select="IdentifierUrl" /><xsl:text>
-           </xsl:text>
+<xsl:text>UR  - </xsl:text><xsl:apply-templates select="IdentifierUrl" /><xsl:text>
+</xsl:text>
        </xsl:if>
        <xsl:if test="string-length(IdentifierIsbn/@Value)>0">
-           <xsl:text>SN  - </xsl:text><xsl:apply-templates select="IdentifierIsbn" /><xsl:text>
-           </xsl:text>
+<xsl:text>SN  - </xsl:text><xsl:apply-templates select="IdentifierIsbn" /><xsl:text>
+</xsl:text>
        </xsl:if>
        <xsl:if test="string-length(IdentifierIssn/@Value)>0">
-           <xsl:text>SN  - </xsl:text><xsl:apply-templates select="IdentifierIssn" /><xsl:text>
-           </xsl:text>
+<xsl:text>SN  - </xsl:text><xsl:apply-templates select="IdentifierIssn" /><xsl:text>
+</xsl:text>
        </xsl:if>
        <xsl:if test="string-length(Note/@Message)>0">
-           <xsl:text>N1  - </xsl:text><xsl:apply-templates select="Note" /><xsl:text>
-           </xsl:text>
+<xsl:text>N1  - </xsl:text><xsl:apply-templates select="Note" /><xsl:text>
+</xsl:text>
        </xsl:if>
        <xsl:if test="string-length(@Volume)>0">
-           <xsl:text>VL  - </xsl:text><xsl:value-of select="@Volume" /><xsl:text>
-           </xsl:text>
+<xsl:text>VL  - </xsl:text><xsl:value-of select="@Volume" /><xsl:text>
+</xsl:text>
        </xsl:if>
        <xsl:if test="string-length(@Issue)>0">
-           <xsl:text>IS  - </xsl:text><xsl:value-of select="@Issue" /><xsl:text>
-           </xsl:text>
+<xsl:text>IS  - </xsl:text><xsl:value-of select="@Issue" /><xsl:text>
+</xsl:text>
        </xsl:if>
        <xsl:if test="string-length(@PageFirst)>0">
-           <xsl:text>SP  - </xsl:text><xsl:value-of select="@PageFirst" /><xsl:text>
-           </xsl:text>
+<xsl:text>SP  - </xsl:text><xsl:value-of select="@PageFirst" /><xsl:text>
+</xsl:text>
        </xsl:if>
        <xsl:if test="string-length(@PageLast)>0">
-           <xsl:text>EP  - </xsl:text><xsl:value-of select="@PageLast" /><xsl:text>
-           </xsl:text>
+<xsl:text>EP  - </xsl:text><xsl:value-of select="@PageLast" /><xsl:text>
+</xsl:text>
        </xsl:if>
        <xsl:if test="string-length(@PublisherName)>0">
-           <xsl:text>PB  - </xsl:text><xsl:value-of select="@PublisherName" /><xsl:text>
-           </xsl:text>
+<xsl:text>PB  - </xsl:text><xsl:value-of select="@PublisherName" /><xsl:text>
+</xsl:text>
        </xsl:if>   
        <xsl:if test="string-length(@PublisherPlace)>0">
-           <xsl:text>CY  - </xsl:text><xsl:value-of select="@PublisherPlace" /><xsl:text>
-           </xsl:text>
+<xsl:text>CY  - </xsl:text><xsl:value-of select="@PublisherPlace" /><xsl:text>
+</xsl:text>
        </xsl:if>
-       <xsl:text>ER  - </xsl:text>
+<xsl:text>ER  - </xsl:text>
     </xsl:template>
 
     <!-- here begins the special templates for the fields -->
@@ -235,47 +235,47 @@
     </xsl:template>
  
     <xsl:template match="SubjectUncontrolled">
-      <xsl:text>KW  - </xsl:text><xsl:value-of select="@Value" /><xsl:text>
-      </xsl:text>
+<xsl:text>KW  - </xsl:text><xsl:value-of select="@Value" /><xsl:text>
+</xsl:text>
     </xsl:template>  
 
     <xsl:template match="SubjectSwd">
-      <xsl:text>KW  - </xsl:text><xsl:value-of select="@Value" /><xsl:text>
-      </xsl:text>
+<xsl:text>KW  - </xsl:text><xsl:value-of select="@Value" /><xsl:text>
+</xsl:text>
     </xsl:template>  
  
     <xsl:template match="PersonAuthor">
-      <xsl:text>A1  - </xsl:text><xsl:value-of select="concat(@LastName, ', ', @FirstName)" /><xsl:text>
-      </xsl:text>
+<xsl:text>A1  - </xsl:text><xsl:value-of select="concat(@LastName, ', ', @FirstName)" /><xsl:text>
+</xsl:text>
     </xsl:template>  
           
     <xsl:template match="PersonEditor">
-      <xsl:text>A2  - </xsl:text><xsl:value-of select="concat(@LastName, ', ', @FirstName)" /><xsl:text>
-      </xsl:text>
+<xsl:text>A2  - </xsl:text><xsl:value-of select="concat(@LastName, ', ', @FirstName)" /><xsl:text>
+</xsl:text>
     </xsl:template>
  
     <xsl:template match="PublisherUniversity"/>
 
     <xsl:template match="TitleMain">
-      <xsl:text>T1  - </xsl:text><xsl:value-of select="@Value" /><xsl:text>
-      </xsl:text>
+<xsl:text>T1  - </xsl:text><xsl:value-of select="@Value" /><xsl:text>
+</xsl:text>
     </xsl:template>
 
     <xsl:template match="TitleAbstract">
-      <xsl:text>N2  - </xsl:text><xsl:value-of select="@Value" /><xsl:text>
-      </xsl:text>
+<xsl:text>N2  - </xsl:text><xsl:value-of select="@Value" /><xsl:text>
+</xsl:text>
     </xsl:template>
 
     <xsl:template match="TitleParent">
-      <xsl:value-of select="@Value" />
+<xsl:value-of select="@Value" />
     </xsl:template>
 
     <xsl:template match="Collection[@RoleName='Schriftenreihen']">
-        <xsl:text>T3  - </xsl:text>
+<xsl:text>T3  - </xsl:text>
         <xsl:if test="@Number != ''">
-            <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
+<xsl:value-of select="@Number" /><xsl:text> </xsl:text>
         </xsl:if>
-        <xsl:value-of select="@Name" />
+<xsl:value-of select="@Name" />
     </xsl:template>
 
 </xsl:stylesheet>

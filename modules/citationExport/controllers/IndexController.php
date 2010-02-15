@@ -112,7 +112,7 @@ class CitationExport_IndexController extends Zend_Controller_Action {
         $filter = new Opus_Model_Filter;
         $filter->setModel($document);
         $xml = $filter->toXml();
-echo $xml->saveXml();
+
         // Set up XSLT-Stylesheet
         $xslt = new DomDocument;
         if ($outputFormat === 'bibtex' && file_exists($this->view->getScriptPath('index') . '/' . $outputFormat . "_" . $document->getType() . '.xslt')) $outputFormat .= "_" . $document->getType();
