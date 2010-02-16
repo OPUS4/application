@@ -73,7 +73,7 @@
             <!-- dc:date -->
             <xsl:apply-templates select="@PublishedDate" mode="oai_dc" />
             <!-- dc:type -->
-            <!-- <xsl:apply-templates select="" /> -->
+            <xsl:apply-templates select="@Type" mode="oai_dc" /> 
             <!-- dc:format -->
             <xsl:apply-templates select="File/@MimeType" mode="oai_dc" />
             <!-- dc:identifier -->
@@ -125,6 +125,12 @@
                 <xsl:value-of select="@Language" />
             </xsl:attribute>
             <xsl:value-of select="@Value" />
+        </xsl:element>
+    </xsl:template>
+
+    <xsl:template match="@Type" mode="oai_dc">
+        <xsl:element name="dc:type">
+            <xsl:value-of select="." />
         </xsl:element>
     </xsl:template>
 
