@@ -113,9 +113,28 @@ class Opus3Migration extends Application_Bootstrap {
     		echo "finished!\n";
     }
 
-    protected function importFiles() {
+    protected function importFiles($ipstart, $ipend) {
     		echo "Importing files\n";
-	    	$fileImporter = new Opus3FileImport($this->path, $this->magicPath);
+    		$iprange = null;
+    		// create IP-range for these documents
+    		if (empty($ipstart) !== true) {
+    			if (empty($ipend) === true) {
+    				$ipend = $ipstart;
+    			}
+    		    $iprange = new Opus_Iprange();
+    		    $ip1 = explode(".", $ipstart);
+    		    $ip2 = explode(".", $ipend);
+    		    $iprange->setIp1byte1($ip1[0]);
+    		    $iprange->setIp1byte2($ip1[1]);
+    		    $iprange->setIp1byte3($ip1[2]);
+    		    $iprange->setIp1byte4($ip1[3]);
+    		    $iprange->setIp2byte1($ip2[0]);
+    		    $iprange->setIp2byte2($ip2[1]);
+    		    $iprange->setIp2byte3($ip2[2]);
+    		    $iprange->setIp2byte4($ip2[3]);
+    		    $ipid = $iprange->store();
+    		}
+	    	$fileImporter = new Opus3FileImport($this->path, $this->magicPath, $iprange);
     		$docList = Opus_Document::getAllIds();
     		foreach ($docList as $id)
 	    	{
@@ -457,12 +476,20 @@ class Opus3MigrationReadline extends Opus3Migration {
 		// Import files
 		$fileinput = readline('Do you want to import the files of all documents from OPUS3? Note: this script needs to have direct physical reading access to the files in your OPUS3 directory tree! Import via HTTP is not possible! (y/n) ');
 		if ($fileinput === 'y' || $fileinput === 'yes') {
-            $fulltextPath = $this->path;
-            while (false === file_exists($fulltextPath)) {
-    		    $fulltextPath = readline('Please type the path to your OPUS3 fulltext files (e.g. /usr/local/opus/htdocs/volltexte): ');
-		    }
-		    $this->path = $fulltextPath;
-    	    $this->importFiles();
+            do {
+                $fulltextPath = $this->path;
+                while (false === file_exists($fulltextPath)) {
+    		        $fulltextPath = readline('Please type the path to your OPUS3 fulltext files (e.g. /usr/local/opus/htdocs/volltexte): ');
+		        }
+   		        echo "Please specify the access rights for this fulltext path (Opus3 ranges)!\n";
+   		        $ipStart = readline('The IP-range starts at (e.g. 192.168.1.1): ');
+   		        $ipEnd = readline('The IP-range ends at (e.g. 192.168.1.10): ');
+		        $this->path = $fulltextPath;
+    	        $this->importFiles($ipStart, $ipEnd);
+    	        $anotherPath = readline('Do you want to enter another fulltext path for files from another Opus3-area? (y/n) ');
+    	        $this->path = '';
+            }
+            while ($anotherPath === 'y');
 		}
 
 		// Import signatures
