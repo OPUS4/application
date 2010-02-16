@@ -478,7 +478,7 @@
 
      <tu tuid="latest_docs_browsing">
       <tuv xml:lang="en">
-        <seg>10 latest docuemnts</seg>
+        <seg>10 latest documents</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Die 10 letzten Dokumente</seg>
