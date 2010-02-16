@@ -175,8 +175,11 @@
             <xsl:variable name="date_creation"><xsl:value-of select="field[@name='date_creation']" /></xsl:variable>
             <xsl:variable name="date_modified"><xsl:value-of select="field[@name='date_modified']" /></xsl:variable>
             <xsl:variable name="date_valid"><xsl:value-of select="field[@name='date_valid']" /></xsl:variable>
-            <!--PublishedYear und PublishedDate are not stored by Opus 3, so we leave it out -->
             <xsl:attribute name="CompletedYear">
+                <xsl:value-of select="field[@name='date_year']" />
+            </xsl:attribute>
+            <!--PublishedYear is not stored by Opus 3, but necessary for some doctypes in OPUS4, so import date_year into both fields -->
+            <xsl:attribute name="PublishedYear">
                 <xsl:value-of select="field[@name='date_year']" />
             </xsl:attribute>
             <!--CompletedDate is left out, because Opus3 only stores the year -->
