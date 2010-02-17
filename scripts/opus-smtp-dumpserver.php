@@ -137,6 +137,10 @@ class FakeSMTP {
                 $this->_sendSMTPResponse($socket, $response);
                 $cont = false;
                 break;
+	    case 'RSET':
+		$response = '250 Ok';
+		$this->_sendSMTPResponse($socket, $response);
+		break;
             default:
                 $response = '500 Command not recognized: Syntax error.';
                 $this->_sendSMTPResponse($socket, $response);
