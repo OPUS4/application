@@ -101,7 +101,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $this->view->title = $this->view->translate('search_index_alltitles_browsing');
 
          // Default Filter is: show all documents from the server
-        $sort_order   = 'id';
+        $sort_order   = 'd.id';
         if (true === array_key_exists('sort_order', $data) && false === is_null($data['sort_order'])) {
            $sort_order = $data['sort_order'];
            $this->view->sort_order = $sort_order;
