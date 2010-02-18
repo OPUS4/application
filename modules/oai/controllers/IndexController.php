@@ -342,7 +342,7 @@ class Oai_IndexController extends Controller_Xml {
         // document has to be published
         $serverState = $document->getServerState();
         if ($serverState != 'published' && $serverState != 'deleted') {
-               throw new Exception("The combination of the given values results in an empty list (document is not published).", self::NORECORDSMATCH);
+               throw new Exception("The combination of the given values results in an empty list (document not published or deleted).", self::NORECORDSMATCH);
         }
         // for xMetaDiss it must be habilitation or doctoral-thesis
         if ($oaiRequest['metadataPrefix'] == 'xMetaDiss') {
