@@ -271,7 +271,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $type = new Opus_Document_Type($document->getType());
         $documentWithFilter = new Opus_Model_Filter;
         $documentWithFilter->setModel($document)
-            ->setBlacklist(array_merge(array('Collection', 'IdentifierOpus3', 'Source', 'File', 'ServerState', 'ServerDatePublished', 'ServerDateModified', 'ServerDateUnlocking'), $type->getAdminFormBlackList()))
+            ->setBlacklist(array_merge(array('Collection', 'IdentifierOpus3', 'Source', 'File', 'ServerState', 'ServerDatePublished', 'ServerDateModified', 'ServerDateUnlocking', 'Type', 'Workflow'), $type->getAdminFormBlackList()))
             ->setSortOrder($type->getAdminFormSortOrder());
         $modelForm = $form_builder->build($documentWithFilter);
         $action_url = $this->view->url(array("action" => "create"));
@@ -429,7 +429,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
     public function publishAction() {
         $id = $this->getRequest()->getParam('docId');
         $doc = new Opus_Document($id);
-        if ($doc->getServerDateUnlocking() > date('Y-m-d')) {
+        if (false === is_null($doc->getField('ServerDateUnlocking')) and $doc->getServerDateUnlocking() > date('Y-m-d')) {
         	$this->_redirectTo('publish_unlocking_date_not_reached', 'index');
         }
         $doc->setServerState('published');
