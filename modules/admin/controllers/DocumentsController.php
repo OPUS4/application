@@ -108,7 +108,10 @@ class Admin_DocumentsController extends Controller_CRUDAction {
            $sort_reverse = '0';
         }
         $this->view->sort_reverse = $sort_reverse;
-
+        
+        if (true === array_key_exists('state', $data)) {
+        	$this->view->state = $data['state'];
+        }
         // following could be handled inside a application model
         if (true === array_key_exists('sort_order', $data)) {
         	$this->view->sort_order = $data['sort_order'];
@@ -127,18 +130,24 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                         $result = Opus_Document::getAllDocumentsByDoctype($sort_reverse);
                     }
         		    break;
-        		default:
+        		case 'title':
         		    if (true === array_key_exists('state', $data)) {
                         $result = Opus_Document::getAllDocumentTitlesByState($data['state'], $sort_reverse);
                     } else {
                         $result = Opus_Document::getAllDocumentTitles($sort_reverse);
+                    }
+                    break;
+        		default:
+                	if (true === array_key_exists('state', $data)) {
+                        $result = Opus_Document::getAllIdsByState($data['state'], $sort_reverse);
+                    } else {
+                        $result = Opus_Document::getAllIds($sort_reverse);
                     }
         	}
         }
         else {
         	if (true === array_key_exists('state', $data)) {
                 $result = Opus_Document::getAllIdsByState($data['state'], $sort_reverse);
-                $this->view->state = $data['state'];
             } else {
                 $result = Opus_Document::getAllIds($sort_reverse);
             }
