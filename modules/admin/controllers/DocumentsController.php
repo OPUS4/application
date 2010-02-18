@@ -100,133 +100,51 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         }
         $this->view->title = $this->view->translate('search_index_alltitles_browsing');
 
-         // Default Filter is: show all documents from the server
-        $sort_order   = 'd.id';
-        if (true === array_key_exists('sort_order', $data) && false === is_null($data['sort_order'])) {
-           $sort_order = $data['sort_order'];
-           $this->view->sort_order = $sort_order;
-        }
-
         // Default Ordering...
-        $sort_reverse = false;
-        $this->view->sort_reverse = '0';
-        if (true === array_key_exists('sort_reverse', $data) && false === is_null($data['sort_reverse'])) {
-           $sort_reverse = '1' === $data['sort_reverse'] ? true : false;
-           $this->view->sort_reverse = $sort_reverse;
+        if (true === array_key_exists('sort_reverse', $data)) {
+           $sort_reverse = $data['sort_reverse'];
         }
-
-        // docList contains a (sorted) list of IDs of the documents, that should be returned
-        // the list has been sorted by the database already.
-        if (true === array_key_exists('state', $data)) {
-            $docList = Opus_Document::getAllDocumentIdsByStateSorted($data['state'], array($sort_order => $sort_reverse));
-            $this->view->state = $data['state'];
-        } else {
-            $docList = Opus_Document::getAllDocumentIdsSorted(array($sort_order => $sort_reverse));
+        else {
+           $sort_reverse = '0';
         }
-
-        $paginator = Zend_Paginator::factory($docList);
-        if (array_key_exists('hitsPerPage', $data)) {
-            if ($data['hitsPerPage'] === '0') {
-                $hitsPerPage = '10000';
-            }
-            else {
-                $hitsPerPage = $data['hitsPerPage'];
-            }
-            $paginator->setItemCountPerPage($hitsPerPage);
-        }
-        $paginator->setCurrentPageNumber($page);
-        $this->view->hitlist_paginator = $paginator;
-
-
-
-
-
-
+        $this->view->sort_reverse = $sort_reverse;
 
         // following could be handled inside a application model
-        /*if (true === array_key_exists('sort_order', $data)) {
+        if (true === array_key_exists('sort_order', $data)) {
+        	$this->view->sort_order = $data['sort_order'];
         	switch ($data['sort_order']) {
         		case 'author':
         	    	if (true === array_key_exists('state', $data)) {
-                        $result = Opus_Document::getAllDocumentAuthorsByState($data['state']);
+                        $result = Opus_Document::getAllDocumentAuthorsByState($data['state'], $sort_reverse);
                     } else {
-                        $result = Opus_Document::getAllDocumentAuthors();
+                        $result = Opus_Document::getAllDocumentAuthors($sort_reverse);
                     }
         		    break;
          		case 'docType':
         	    	if (true === array_key_exists('state', $data)) {
-                        $result = Opus_Document::getAllDocumentsByDoctypeByState($data['state']);
+                        $result = Opus_Document::getAllDocumentsByDoctypeByState($data['state'], $sort_reverse);
                     } else {
-                        $result = Opus_Document::getAllDocumentsByDoctype();
+                        $result = Opus_Document::getAllDocumentsByDoctype($sort_reverse);
                     }
         		    break;
         		default:
         		    if (true === array_key_exists('state', $data)) {
-                        $result = Opus_Document::getAllDocumentTitlesByState($data['state']);
+                        $result = Opus_Document::getAllDocumentTitlesByState($data['state'], $sort_reverse);
                     } else {
-                        $result = Opus_Document::getAllDocumentTitles();
+                        $result = Opus_Document::getAllDocumentTitles($sort_reverse);
                     }
         	}
         }
         else {
         	if (true === array_key_exists('state', $data)) {
-                $result = Opus_Document::getAllDocumentTitlesByState($data['state']);
+                $result = Opus_Document::getAllIdsByState($data['state'], $sort_reverse);
+                $this->view->state = $data['state'];
             } else {
-                $result = Opus_Document::getAllDocumentTitles();
+                $result = Opus_Document::getAllIds($sort_reverse);
             }
         }
 
-        // Sort the result if necessary
-        // docList contains a list of IDs of the documents, that should be returned after sorting
-        $docList = array();
-        if (true === array_key_exists('sort_order', $data)) {
-        	switch ($data['sort_order']) {
-        		case 'title':
-                    asort($result);
-                    foreach ($result as $id => $doc) {
-        	            $docList[] = $id;
-                    }
-                    break;
-        		case 'docType':
-        		    $tmpdocList = array();
-                    foreach ($result as $id => $doc) {
-                        $docType = $this->view->translate($doc);
-                        $tmpdocList[$id] = $docType;
-                    }
-                    asort($tmpdocList);
-                    foreach ($tmpdocList as $id => $doc) {
-        	            $docList[] = $id;
-                    }
-                    break;
-        		case 'author':
-        		    // Do nothing, the list has been sorted already!
-                    foreach ($result as $id => $doc) {
-        	            $docList[] = $id;
-                    }
-        		    break;
-        		default:
-                    foreach ($result as $id => $doc) {
-        	            $docList[] = $id;
-                    }
-        			sort($docList);
-        	}
-        }
-        else {
-        	foreach ($result as $id => $doc) {
-        	    $docList[] = $id;
-            }
-        	sort($docList);
-        }
-
-        if (true === array_key_exists('sorting', $data)) {
-        	// By default everything is ascending
-        	// if sorting is set to desc, reverse the array
-        	if ($data['sorting'] === 'desc') {
-        		$docList = array_reverse($docList, true);
-        	}
-        }
-
-        $paginator = Zend_Paginator::factory($docList);
+        $paginator = Zend_Paginator::factory($result);
         if (array_key_exists('hitsPerPage', $data)) {
         	if ($data['hitsPerPage'] === '0') {
         	    $hitsPerPage = '10000';
@@ -243,8 +161,8 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             $page = 1;
         }
         $paginator->setCurrentPageNumber($page);
-        $this->view->documentList = $paginator;
-        #$this->view->documentList = $docList;*/
+        $this->view->hitlist_paginator = $paginator;
+        #$this->view->documentList = $docList;
     }
 
     /**

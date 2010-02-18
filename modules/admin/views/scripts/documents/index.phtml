@@ -234,10 +234,6 @@ if (count($this->hitlist_paginator)) {
         $searchListItemCount++;
         $searchListOdd = ($searchListItemCount%2 === 1);
 
-        $doc = new Opus_Search_SearchHit( (int) $id);
-        $hit = $doc->getSearchHit();
-        $document = $hit->getDocument();
-
         $d = new Opus_Document( (int) $id);
         try {
             $docState = $d->getServerState();
@@ -247,40 +243,35 @@ if (count($this->hitlist_paginator)) {
         }
 
         //print_r($document);
-        $authoriterator = explode('; ', $document['author']);
-
         echo $searchListOdd ? '<li class="odd">' : '<li class="even">';
 
-        $counter = 1;
-        foreach ($authoriterator as $obj) {
-           if (empty($obj) === true || $obj === ' ' || $obj === '') {
-           	continue;
-           }
+        $c = count($d->getPersonAuthor());
+        for ($counter = 0; $counter < $c; $counter++) {
+        	$name = $d->getPersonAuthor($counter)->getName();
              echo '<span class="author"><a href="' .
                  $this->url(
                      array(
                          'module'        => 'search',
                          'controller'    => 'search',
                          'action'        => 'metadatasearch',
-                         'author'        => $obj
+                         'author'        => $name
                      ),
                      null,
                       true
                  ) .
                  '">';
 
-           echo $obj;
+           echo $name;
            echo "</a></span>";
-           if ($counter === count($authoriterator)) echo ": ";
+           if ($counter === $c-1) echo ": ";
            else echo "; ";
-           $counter++;
         }
         print('<span class="title"><a href="' . $this->url(array('module' => 'frontdoor',
             'controller' => 'index',
             'action' => 'index',
-            'docId' => $document['id']),
+            'docId' => $d->getId()),
             null, true
-        ) . '">' . $document["title"] . "</a></span>");
+        ) . '">' .  $d->getTitleMain(0)->getValue() . "</a></span>");
 
         if ($docState === 'deleted') { ?>
         <form action="<?php echo $url_permanentdelete ?>" method="post" class="crud">
@@ -292,7 +283,7 @@ if (count($this->hitlist_paginator)) {
         }
         ?>
             <input type='button' onClick="javascript:location.href='<?php echo $url_edit ?>'" value='<?php echo $this->translate('docs_edit'); ?>' class="crud">
-            <input type="hidden" name="id" value="<?php echo $id ?>" />
+            <input type="hidden" name="id" value="<?php echo $d->getId() ?>" />
             <?php if ($docState === 'deleted') { ?>
             <input type="submit" value="<?php echo $this->translate('docs_permadelete'); ?>" />
             <?php
@@ -308,7 +299,7 @@ if (count($this->hitlist_paginator)) {
         #echo "<div>".$this->translate('search_titles_relevance').": ".$doc->getRelevance()."<br/>";
         #echo $document["abstract"]."<br/>";
         echo "\n";
-    }
+        }
 
     echo "</ol>\n";
 
