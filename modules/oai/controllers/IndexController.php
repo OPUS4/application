@@ -341,7 +341,7 @@ class Oai_IndexController extends Controller_Xml {
         $document = new Opus_Document($docId);
         // document has to be published
         $serverState = $document->getServerState();
-        if ($serverState != 'published') {
+        if ($serverState != 'published' && $serverState != 'deleted') {
                throw new Exception("The combination of the given values results in an empty list (document is not published).", self::NORECORDSMATCH);
         }
         // for xMetaDiss it must be habilitation or doctoral-thesis
@@ -697,7 +697,7 @@ class Oai_IndexController extends Controller_Xml {
         $restDocIds = array();
         $restriction = array();
         $docIds = array();
-        $restriction['ServerState'] = array('published');
+        $restriction['ServerState'] = array('published','deleted');
         $setInfo = null;
         if (true === array_key_exists('set', $oaiRequest)) {
             $setarray = explode(':', $oaiRequest['set']);
@@ -853,11 +853,13 @@ class Oai_IndexController extends Controller_Xml {
     private function xmlCreationIdentifiers($document,$docId) {
        $date_mod = $document->getServerDateModified();
        $date_pub = $document->getServerDatePublished();
+       $server_state = $document->getServerState();
        $opus_doc = $this->_xml->createElement('Opus_Document');
        $doc_id_attr = $this->_xml->createAttribute("Id");
        $doc_id_value = $this->_xml->createTextNode($docId);
        $doc_id_attr->appendChild($doc_id_value);
        $opus_doc->appendChild($doc_id_attr);
+       // add attributes ServerDateModified / ServerDatePublished
        if (!empty($date_mod)) {
             $date_mod_attr = $this->_xml->createAttribute("ServerDateModified");
             $date_mod_value = $this->_xml->createTextNode($date_mod);
@@ -868,6 +870,13 @@ class Oai_IndexController extends Controller_Xml {
        $date_pub_value = $this->_xml->createTextNode($date_pub);
        $date_pub_attr->appendChild($date_pub_value);
        $opus_doc->appendChild($date_pub_attr);
+
+       // add attribute ServerState (necessary for deleted records)
+       $server_state_attr = $this->_xml->createAttribute("ServerState");
+       $server_state_value = $this->_xml->createTextNode($server_state);
+       $server_state_attr->appendChild($server_state_value);
+       $opus_doc->appendChild($server_state_attr);
+
        // create xml for set information
        $this->setInfoXml($document,$opus_doc);
     }

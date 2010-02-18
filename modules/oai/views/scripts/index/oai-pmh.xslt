@@ -167,7 +167,7 @@
            <xsl:element name="earliestDatestamp">
              <xsl:value-of select="$earliestDate"/>
            </xsl:element>
-           <xsl:element name="deletedRecord"><xsl:text>no</xsl:text></xsl:element>
+           <xsl:element name="deletedRecord"><xsl:text>persistent</xsl:text></xsl:element>
            <xsl:element name="granularity"><xsl:text>YYYY-MM-DDThh:mm:ssZ</xsl:text></xsl:element>
            <xsl:element name="description">
                <xsl:element name="oai-identifier">
@@ -276,7 +276,12 @@
 
 
     <xsl:template name="Opus_Document_Data">
-            <xsl:element name="header">
+        <xsl:element name="header">
+            <xsl:if test="@ServerState='deleted'">
+                 <xsl:attribute name="status">
+                    <xsl:text>deleted</xsl:text>
+                 </xsl:attribute>
+            </xsl:if>
                 <!--
                     This is the identifier for the metadata, not a digital object:
                     http://www.openarchives.org/OAI/2.0/guidelines-oai-identifier.htm
@@ -308,7 +313,7 @@
             <!-- choose the corresponding template depending on metadataPrefix -->
             <!-- not, when verb=ListIdentifiers -->
             <xsl:choose>
-                 <xsl:when test="$oai_verb!='ListIdentifiers'">  
+                 <xsl:when test="$oai_verb!='ListIdentifiers' and @ServerState!='deleted'">  
                  <xsl:element name="metadata">
                  <xsl:choose>
                     <xsl:when test="$oai_metadataPrefix='XMetaDissPlus'">
