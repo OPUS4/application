@@ -70,99 +70,129 @@ class Search_BrowsingController extends Zend_Controller_Action
     public function browsetitlesAction()
     {
         $this->view->title = $this->view->translate('search_index_alltitles_browsing');
-/*
-$data = $this->_request->getParams();
+        $url_sort_by_id = array(
+            'module' => 'search',
+            'controller' => 'browsing',
+            'action' => 'browseTitles',
+            'sort_order' => 'id'
+        );
+        $url_sort_by_title = array(
+            'module' => 'search',
+            'controller' => 'browsing',
+            'action' => 'browseTitles',
+            'sort_order' => 'title'
+        );
+        $url_sort_by_author = array(
+            'module' => 'search',
+            'controller' => 'browsing',
+            'action' => 'browseTitles',
+            'sort_order' => 'author'
+        );
+        $url_sort_by_date = array(
+            'module' => 'search',
+            'controller' => 'browsing',
+            'action' => 'browseTitles',
+            'sort_order' => 'publicationDate'
+        );
+        $url_sort_by_doctype = array(
+            'module' => 'search',
+            'controller' => 'browsing',
+            'action' => 'browseTitles',
+            'sort_order' => 'docType'
+        );
+        $url_sort_asc = array(
+            'sort_reverse' => '0'
+        );
+        $url_sort_desc = array(
+            'sort_reverse' => '1'
+        );
+        $this->view->url_sort_by_id = $this->view->url($url_sort_by_id, 'default', false);
+        $this->view->url_sort_by_title = $this->view->url($url_sort_by_title, 'default', false);
+        $this->view->url_sort_by_author = $this->view->url($url_sort_by_author, 'default', false);
+        $this->view->url_sort_by_date = $this->view->url($url_sort_by_date, 'default', false);
+        $this->view->url_sort_by_doctype = $this->view->url($url_sort_by_doctype, 'default', false);
+        $this->view->url_sort_asc = $this->view->url($url_sort_asc, 'default', false);
+        $this->view->url_sort_desc = $this->view->url($url_sort_desc, 'default', false);
+
+        $data = $this->_request->getParams();
+        $filter = $this->_getParam("filter");
+        $this->view->filter = $filter;
+        $data = $this->_request->getParams();
+
+        $page = 1;
+        if (array_key_exists('page', $data)) {
+            // set page if requested
+            $page = $data['page'];
+        }
+        $this->view->title = $this->view->translate('search_index_alltitles_browsing');
+
+        // Default Ordering...
+        if (true === array_key_exists('sort_reverse', $data)) {
+           $sort_reverse = $data['sort_reverse'];
+        }
+        else {
+           $sort_reverse = '0';
+        }
+        $this->view->sort_reverse = $sort_reverse;
+        
+        if (true === array_key_exists('state', $data)) {
+        	$this->view->state = $data['state'];
+        }
         // following could be handled inside a application model
         if (true === array_key_exists('sort_order', $data)) {
-            switch ($data['sort_order']) {
-                case 'author':
-                    $result = Opus_Document::getAllDocumentAuthorsByState('published');
-                    break;
-                case 'docType':
-                    $result = Opus_Document::getAllDocumentsByDoctypeByState('published');
-                    break;
-                case 'date':
-                    // Default Ordering...
-                    $sort_reverse = '1';
-                    if (true === array_key_exists('sorting', $data)) {
-                        // By default everything is ascending
-                        // if sorting is set to desc, reverse the array
-                        if ($data['sorting'] === 'desc') {
-                            $sort_reverse = '0';
-                        }
+        	$this->view->sort_order = $data['sort_order'];
+        	switch ($data['sort_order']) {
+        		case 'author':
+        	    	if (true === array_key_exists('state', $data)) {
+                        $result = Opus_Document::getAllDocumentsByAuthorsByState($data['state'], $sort_reverse);
+                    } else {
+                        $result = Opus_Document::getAllDocumentsByAuthors($sort_reverse);
                     }
-
-                    // docList contains a (sorted) list of IDs of the documents, that should be returned
-                    // the list has been sorted by the database already.
-                    $docList = Opus_Document::getAllDocumentIdsByStateSorted('published', array('date' => $sort_reverse));
+        		    break;
+        		case 'publicationDate':
+        	    	if (true === array_key_exists('state', $data)) {
+                        $result = Opus_Document::getAllDocumentsByPubDateByState($data['state'], $sort_reverse);
+                    } else {
+                        $result = Opus_Document::getAllDocumentsByPubDate($sort_reverse);
+                    }
+        		    break;
+         		case 'docType':
+        	    	if (true === array_key_exists('state', $data)) {
+                        $result = Opus_Document::getAllDocumentsByDoctypeByState($data['state'], $sort_reverse);
+                    } else {
+                        $result = Opus_Document::getAllDocumentsByDoctype($sort_reverse);
+                    }
+        		    break;
+        		case 'title':
+        		    if (true === array_key_exists('state', $data)) {
+                        $result = Opus_Document::getAllDocumentsByTitlesByState($data['state'], $sort_reverse);
+                    } else {
+                        $result = Opus_Document::getAllDocumentsByTitles($sort_reverse);
+                    }
                     break;
-                default:
-                    $result = Opus_Document::getAllDocumentTitlesByState('published');
-            }
+        		default:
+                	if (true === array_key_exists('state', $data)) {
+                        $result = Opus_Document::getAllIdsByState($data['state'], $sort_reverse);
+                    } else {
+                        $result = Opus_Document::getAllIds($sort_reverse);
+                    }
+        	}
         }
         else {
-            $result = Opus_Document::getAllDocumentTitlesByState('published');
-        }
-
-        // Sort the result if necessary
-        // docList contains a list of IDs of the documents, that should be returned after sorting
-        if (isset($docList) === false) {
-        $docList = array();
-        if (true === array_key_exists('sort_order', $data)) {
-            switch ($data['sort_order']) {
-                case 'title':
-                    asort($result);
-                    foreach ($result as $id => $doc) {
-                        $docList[] = $id;
-                    }
-                    break;
-                case 'docType':
-                    $tmpdocList = array();
-                    foreach ($result as $id => $doc) {
-                        $docType = $this->view->translate($doc);
-                        $tmpdocList[$id] = $docType;
-                    }
-                    asort($tmpdocList);
-                    foreach ($tmpdocList as $id => $doc) {
-                        $docList[] = $id;
-                    }
-                    break;
-                case 'author':
-                    // Do nothing, the list has been sorted already!
-                    foreach ($result as $id => $doc) {
-                        $docList[] = $id;
-                    }
-                    break;
-                default:
-                    foreach ($result as $id => $doc) {
-                        $docList[] = $id;
-                    }
-                    sort($docList);
+        	if (true === array_key_exists('state', $data)) {
+                $result = Opus_Document::getAllIdsByState($data['state'], $sort_reverse);
+            } else {
+                $result = Opus_Document::getAllIds($sort_reverse);
             }
         }
-        else {
-            foreach ($result as $id => $doc) {
-                $docList[] = $id;
-            }
-            sort($docList);
-        }
 
-        if (true === array_key_exists('sorting', $data)) {
-            // By default everything is ascending
-            // if sorting is set to desc, reverse the array
-            if ($data['sorting'] === 'desc') {
-                $docList = array_reverse($docList, true);
-            }
-        }
-        }
-
-        $paginator = Zend_Paginator::factory($docList);
+        $paginator = Zend_Paginator::factory($result);
         if (array_key_exists('hitsPerPage', $data)) {
-            if ($data['hitsPerPage'] === '0') {
-                $hitsPerPage = '10000';
-            }
+        	if ($data['hitsPerPage'] === '0') {
+        	    $hitsPerPage = '10000';
+        	}
             else {
-                $hitsPerPage = $data['hitsPerPage'];
+            	$hitsPerPage = $data['hitsPerPage'];
             }
             $paginator->setItemCountPerPage($hitsPerPage);
         }
@@ -173,51 +203,58 @@ $data = $this->_request->getParams();
             $page = 1;
         }
         $paginator->setCurrentPageNumber($page);
-        $this->view->documentList = $paginator;
-*/
-    	$filter = $this->_getParam("filter");
-    	$this->view->filter = $filter;
-    	$data = $this->_request->getParams();
+        $this->view->paginator = $paginator;
+        
+        // iterate the paginator and get the attributes we want to show in the view
+        $runningIndex = 0;
+        $this->view->docId = array();
+        $this->view->title = array();
+        $this->view->author = array();
+        $this->view->url_frontdoor = array();
+        $this->view->url_author = array();
+        foreach ($paginator as $id) {
+            $url_frontdoor = array(
+                'module' => 'frontdoor',
+                'controller' => 'index',
+                'action' => 'index',
+                'docId' => $id
+            );
+            $this->view->url_frontdoor[$runningIndex] = $this->view->url($url_frontdoor, 'default', true);
 
-        $page = 1;
-        if (array_key_exists('page', $data)) {
-            // set page if requested
-            $page = $data['page'];
-        }
-        $this->view->title = $this->view->translate('search_index_alltitles_browsing');
-
-	     // Default Filter is: show all documents from the server
-        $sort_order   = 'id';
-        if (true === array_key_exists('sort_order', $data) && false === is_null($data['sort_order'])) {
-           $sort_order = $data['sort_order'];
-           $this->view->sort_order = $sort_order;
-        }
-
-        // Default Ordering...
-        $sort_reverse = false;
-        $this->view->sort_reverse = '0';
-        if (true === array_key_exists('sort_reverse', $data) && false === is_null($data['sort_reverse'])) {
-           $sort_reverse = '1' === $data['sort_reverse'] ? true : false;
-           $this->view->sort_reverse = $sort_reverse;
-        }
-
-        // docList contains a (sorted) list of IDs of the documents, that should be returned
-        // the list has been sorted by the database already.
-        $docList = Opus_Document::getAllDocumentIdsByStateSorted('published', array($sort_order => $sort_reverse));
-
-        $paginator = Zend_Paginator::factory($docList);
-        if (array_key_exists('hitsPerPage', $data)) {
-            if ($data['hitsPerPage'] === '0') {
-                $hitsPerPage = '10000';
+            $d = new Opus_Document( (int) $id);
+            $this->view->docId[$runningIndex] = $id;
+            try {
+                $this->view->docState = $d->getServerState();
             }
-            else {
-                $hitsPerPage = $data['hitsPerPage'];
+            catch (Exception $e) {
+                $this->view->docState = 'undefined';
             }
-            $paginator->setItemCountPerPage($hitsPerPage);
+
+            $c = count($d->getPersonAuthor());
+            $this->view->author[$runningIndex] = array();
+            $this->view->url_author[$runningIndex] = array();
+            for ($counter = 0; $counter < $c; $counter++) {
+        	    $name = $d->getPersonAuthor($counter)->getName();
+                $this->view->url_author[$runningIndex][$counter] = $this->view->url(
+                    array(
+                        'module'        => 'search',
+                        'controller'    => 'search',
+                        'action'        => 'metadatasearch',
+                        'author'        => $name
+                    ),
+                    null,
+                    true
+                );
+                $this->view->author[$runningIndex][$counter] = $name;
+            }
+            try {
+                $this->view->title[$runningIndex] = $d->getTitleMain(0)->getValue();
+            }
+            catch (Exception $e) {
+            	$this->view->title[$runningIndex] = $this->view->translate('document_no_title') . $id;
+            }
+            $runningIndex++;
         }
-        $paginator->setCurrentPageNumber($page);
-        $this->view->hitlist_paginator = $paginator;
-        /**/
     }
 
 	/**
