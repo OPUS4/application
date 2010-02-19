@@ -42,6 +42,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="document_no_title">
+      <tuv xml:lang="en">
+        <seg>No title specified for document ID </seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Kein Titel angegeben für Dokument ID </seg>
+      </tuv>
+    </tu>
+
     <tu tuid="document_published">
       <tuv xml:lang="en">
         <seg>Document published successfully!</seg>

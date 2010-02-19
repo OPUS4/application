@@ -297,7 +297,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                 $this->view->title[$runningIndex] = $d->getTitleMain(0)->getValue();
             }
             catch (Exception $e) {
-            	$this->view->title[$runningIndex] = 'No title specified for document ID ' . $id;
+            	$this->view->title[$runningIndex] = $this->view->translate('document_no_title') . $id;
             }
             $runningIndex++;
         }
