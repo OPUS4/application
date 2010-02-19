@@ -88,6 +88,56 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                 $this->view->url(array('module' => 'admin', 'controller'=>'documents', 'action'=>'index', 'state' => 'deleted'), null, true), 'docs_deleted'
             )
             );
+        $url_call_id = array(
+            'module' => 'admin',
+            'controller' => 'documents',
+            'action' => 'edit'
+        );
+        $this->view->url_call_id = $this->view->url($url_call_id, 'default', true);
+        $url_sort_by_id = array(
+            'module' => 'admin',
+            'controller' => 'documents',
+            'action' => 'index',
+            'sort_order' => 'id'
+        );
+        $url_sort_by_title = array(
+            'module' => 'admin',
+            'controller' => 'documents',
+            'action' => 'index',
+            'sort_order' => 'title'
+        );
+        $url_sort_by_author = array(
+            'module' => 'admin',
+            'controller' => 'documents',
+            'action' => 'index',
+            'sort_order' => 'author'
+        );
+        $url_sort_by_date = array(
+            'module' => 'admin',
+            'controller' => 'documents',
+            'action' => 'index',
+            'sort_order' => 'publicationDate'
+        );
+        $url_sort_by_doctype = array(
+            'module' => 'admin',
+            'controller' => 'documents',
+            'action' => 'index',
+            'sort_order' => 'docType'
+        );
+        $url_sort_asc = array(
+            'sort_reverse' => '0'
+        );
+        $url_sort_desc = array(
+            'sort_reverse' => '1'
+        );
+        $this->view->url_sort_by_id = $this->view->url($url_sort_by_id, 'default', false);
+        $this->view->url_sort_by_title = $this->view->url($url_sort_by_title, 'default', false);
+        $this->view->url_sort_by_author = $this->view->url($url_sort_by_author, 'default', false);
+        $this->view->url_sort_by_date = $this->view->url($url_sort_by_date, 'default', false);
+        $this->view->url_sort_by_doctype = $this->view->url($url_sort_by_doctype, 'default', false);
+        $this->view->url_sort_asc = $this->view->url($url_sort_asc, 'default', false);
+        $this->view->url_sort_desc = $this->view->url($url_sort_desc, 'default', false);
+
         $data = $this->_request->getParams();
         $filter = $this->_getParam("filter");
         $this->view->filter = $filter;
@@ -118,9 +168,16 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         	switch ($data['sort_order']) {
         		case 'author':
         	    	if (true === array_key_exists('state', $data)) {
-                        $result = Opus_Document::getAllDocumentAuthorsByState($data['state'], $sort_reverse);
+                        $result = Opus_Document::getAllDocumentsByAuthorsByState($data['state'], $sort_reverse);
                     } else {
-                        $result = Opus_Document::getAllDocumentAuthors($sort_reverse);
+                        $result = Opus_Document::getAllDocumentsByAuthors($sort_reverse);
+                    }
+        		    break;
+        		case 'publicationDate':
+        	    	if (true === array_key_exists('state', $data)) {
+                        $result = Opus_Document::getAllDocumentsByPubDateByState($data['state'], $sort_reverse);
+                    } else {
+                        $result = Opus_Document::getAllDocumentsByPubDate($sort_reverse);
                     }
         		    break;
          		case 'docType':
@@ -132,9 +189,9 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         		    break;
         		case 'title':
         		    if (true === array_key_exists('state', $data)) {
-                        $result = Opus_Document::getAllDocumentTitlesByState($data['state'], $sort_reverse);
+                        $result = Opus_Document::getAllDocumentsByTitlesByState($data['state'], $sort_reverse);
                     } else {
-                        $result = Opus_Document::getAllDocumentTitles($sort_reverse);
+                        $result = Opus_Document::getAllDocumentsByTitles($sort_reverse);
                     }
                     break;
         		default:

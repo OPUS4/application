@@ -35,21 +35,12 @@
  */
 ?>
 
-<h1><?php echo $this->translate('admin_documents_index'); ?></h1>
-
-<?php
-        $url_call_id = array(
-            'module' => 'admin',
-            'controller' => 'documents',
-            'action' => 'edit'
-        );
-        $url_call_id = $this->url($url_call_id, 'default', true);
-?>
+<h1><?= $this->translate('admin_documents_index') ?></h1>
 <p>
-<form action="<?php echo $url_call_id ?>" method="post" class="crud">
-     <?php echo $this->translate('docs_call_id_label'); ?>
+<form action="<?= $this->url_call_id ?>" method="post" class="crud">
+     <?= $this->translate('docs_call_id_label') ?>
      <input type="text" name="id" size="5" />
-     <input type="submit" value="<?php echo $this->translate('docs_call_id'); ?>" />
+     <input type="submit" value="<?= $this->translate('docs_call_id') ?>" />
 </form>
 </p>
 <br/><br/>
@@ -69,128 +60,65 @@ foreach ($this->registers as $register) {
             echo 'class="active"';
         }
     ?>
-	><a href="<?=$register[0] ?>"><?php echo $this->translate($register[1]); ?></a></li>
+	><a href="<?=$register[0] ?>"><?= $this->translate($register[1]) ?></a></li>
 	<?php
 }
 ?></ul>
 </p>
-<?php
-// Sorting the titles
-        $url_sort_by_id = array(
-            'module' => 'admin',
-            'controller' => 'documents',
-            'action' => 'index',
-            'sort_order' => 'id'
-        );
-        $url_sort_by_title = array(
-            'module' => 'admin',
-            'controller' => 'documents',
-            'action' => 'index',
-            'sort_order' => 'title'
-        );
-        $url_sort_by_author = array(
-            'module' => 'admin',
-            'controller' => 'documents',
-            'action' => 'index',
-            'sort_order' => 'p.last_name'
-        );
-        $url_sort_by_date = array(
-            'module' => 'admin',
-            'controller' => 'documents',
-            'action' => 'index',
-            'sort_order' => 'server_date_published'
-        );
-        $url_sort_asc = array(
-            'sort_reverse' => '0'
-        );
-        $url_sort_desc = array(
-            'sort_reverse' => '1'
-        );
-        $url_sort_by_id = $this->url($url_sort_by_id, 'default', false);
-        $url_sort_by_title = $this->url($url_sort_by_title, 'default', false);
-        $url_sort_by_author = $this->url($url_sort_by_author, 'default', false);
-        $url_sort_by_date = $this->url($url_sort_by_date, 'default', false);
-        $url_sort_asc = $this->url($url_sort_asc, 'default', false);
-        $url_sort_desc = $this->url($url_sort_desc, 'default', false);
-?>
 <br/>
 <ul class="navigation">
-    <?php echo $this->translate('docs_sortorder'); ?>
+    <?= $this->translate('docs_sortorder') ?>
     <li
     <?php
         if ($this->sort_order === 'id' || empty($this->sort_order) === true) {
             echo 'class="active"';
         }
     ?>
-    ><a href="<?php echo $url_sort_by_id ?>"><?php echo $this->translate('docs_by_id'); ?></a></li>
+    ><a href="<?= $this->url_sort_by_id ?>"><?= $this->translate('docs_by_id') ?></a></li>
     <li
     <?php
         if ($this->sort_order === 'title') {
             echo 'class="active"';
         }
     ?>
-    ><a href="<?php echo $url_sort_by_title ?>"><?php echo $this->translate('docs_by_title'); ?></a></li>
+    ><a href="<?= $this->url_sort_by_title ?>"><?= $this->translate('docs_by_title') ?></a></li>
     <li
     <?php
-        if ($this->sort_order === 'p.last_name') {
+        if ($this->sort_order === 'author') {
             echo 'class="active"';
         }
     ?>
-    ><a href="<?php echo $url_sort_by_author ?>"><?php echo $this->translate('docs_by_author'); ?></a></li>
+    ><a href="<?= $this->url_sort_by_author ?>"><?= $this->translate('docs_by_author') ?></a></li>
     <li
     <?php
-        if ($this->sort_order === 'date') {
+        if ($this->sort_order === 'publicationDate') {
             echo 'class="active"';
         }
     ?>
-    ><a href="<?php echo $url_sort_by_date ?>"><?php echo $this->translate('docs_by_date'); ?></a></li>
+    ><a href="<?= $this->url_sort_by_date ?>"><?= $this->translate('docs_by_date') ?></a></li>
+    <li
+    <?php
+        if ($this->sort_order === 'docType') {
+            echo 'class="active"';
+        }
+    ?>
+    ><a href="<?= $this->url_sort_by_doctype ?>"><?= $this->translate('docs_by_doctype') ?></a></li>
     <li
     <?php
         if ($this->sort_reverse === '0' || $this->sort_reverse === false || empty($this->sort_reverse) === true) {
             echo 'class="active"';
         }
     ?>
-    style="margin-left:30px;"><a href="<?php echo $url_sort_asc ?>"><?php echo $this->translate('sort_ascending'); ?></a></li>
+    style="margin-left:30px;"><a href="<?= $this->url_sort_asc ?>"><?= $this->translate('sort_ascending') ?></a></li>
     <li
     <?php
         if ($this->sort_reverse === '1' || $this->sort_reverse === true) {
             echo 'class="active"';
         }
     ?>
-    ><a href="<?php echo $url_sort_desc ?>"><?php echo $this->translate('sort_descending'); ?></a></li>
+    ><a href="<?= $this->url_sort_desc ?>"><?= $this->translate('sort_descending') ?></a></li>
 </ul>
 <?php
-/*        $url_sort_by_id = array(
-            'module' => 'search',
-            'controller' => 'browsing',
-            'action' => 'browseTitles',
-            'sort_order' => 'id',
-            'sort_reverse' => '1'
-        );
-        $url_sort_by_title = array(
-            'module' => 'search',
-            'controller' => 'browsing',
-            'action' => 'browseTitles',
-            'sort_order' => 'title',
-            'sort_reverse' => '0'
-        );
-        $url_sort_by_date = array(
-            'module' => 'search',
-            'controller' => 'browsing',
-            'action' => 'browseTitles',
-            'sort_order' => 'date',
-            'sort_reverse' => '1'
-        );
-        $url_sort_by_id = $this->url($url_sort_by_id, 'default', false);
-        $url_sort_by_title = $this->url($url_sort_by_title, 'default', false);
-        $url_sort_by_date = $this->url($url_sort_by_date, 'default', false);
-echo '<br/>';
-echo $this->translate('docs_sortorder'); ?>
- <a href="<?php echo $url_sort_by_id ?>"><?php echo $this->translate('docs_by_id'); ?></a>
- <a href="<?php echo $url_sort_by_title ?>"><?php echo $this->translate('docs_by_title'); ?></a>
- <a href="<?php echo $url_sort_by_date ?>"><?php echo $this->translate('docs_by_date'); ?></a>
-<?php */
-
 if (count($this->hitlist_paginator)) {
     echo $this->paginationControl($this->hitlist_paginator, NULL, 'itemCount_pagination.phtml');
     echo $this->paginationControl($this->hitlist_paginator, 'Sliding', 'results_pagination.phtml');
@@ -296,203 +224,11 @@ if (count($this->hitlist_paginator)) {
         </form>
         </li>
         <?php
-        #echo "<div>".$this->translate('search_titles_relevance').": ".$doc->getRelevance()."<br/>";
-        #echo $document["abstract"]."<br/>";
         echo "\n";
         }
+?>
+    </ol>
 
-    echo "</ol>\n";
-
-    echo $this->paginationControl($this->hitlist_paginator, 'Sliding', 'results_pagination.phtml');
+    <?= $this->paginationControl($this->hitlist_paginator, 'Sliding', 'results_pagination.phtml') ?>
+<?php
 }
-
-
-
-
-
-
-
-
-
-
-
-
-// OLD stuff
-
-
-
-
-
-
-
-
-
-
-// Sorting the titles
-/*        $url_sort_by_id = array(
-            'module' => 'admin',
-            'controller' => 'documents',
-            'action' => 'index',
-            'sort_order' => 'id'
-        );
-        $url_sort_by_title = array(
-            'module' => 'admin',
-            'controller' => 'documents',
-            'action' => 'index',
-            'sort_order' => 'title'
-        );
-        $url_sort_by_doctype = array(
-            'module' => 'admin',
-            'controller' => 'documents',
-            'action' => 'index',
-            'sort_order' => 'docType'
-        );
-        $url_sort_by_author = array(
-            'module' => 'admin',
-            'controller' => 'documents',
-            'action' => 'index',
-            'sort_order' => 'author'
-        );
-        $url_sort_asc = array(
-            'sorting' => 'asc'
-        );
-        $url_sort_desc = array(
-            'sorting' => 'desc'
-        );
-        $url_sort_by_id = $this->url($url_sort_by_id, 'default', false);
-        $url_sort_by_title = $this->url($url_sort_by_title, 'default', false);
-        $url_sort_by_doctype = $this->url($url_sort_by_doctype, 'default', false);
-        $url_sort_by_author = $this->url($url_sort_by_author, 'default', false);
-        $url_sort_asc = $this->url($url_sort_asc, 'default', false);
-        $url_sort_desc = $this->url($url_sort_desc, 'default', false);
-?>
-<br/>
-<?php echo $this->translate('docs_sortorder'); ?> <a href="<?php echo $url_sort_by_id ?>"><?php echo $this->translate('docs_by_id'); ?></a> <a href="<?php echo $url_sort_by_title ?>"><?php echo $this->translate('docs_by_title'); ?></a> <a href="<?php echo $url_sort_by_author ?>"><?php echo $this->translate('docs_by_author'); ?></a> <a href="<?php echo $url_sort_by_doctype ?>"><?php echo $this->translate('docs_by_doctype'); ?></a>
-<a href="<?php echo $url_sort_asc ?>"><?php echo $this->translate('sort_ascending'); ?></a> <a href="<?php echo $url_sort_desc ?>"><?php echo $this->translate('sort_descending'); ?></a>
-<br/>
-<?php
-$documentList = $this->documentList;
-if (count($documentList) > 0) {
-#if (false === empty($documentList)) {
-	?>
-<p>
-<?php
-    echo $this->paginationControl($documentList, NULL, 'itemCount_pagination.phtml');
-    echo $this->paginationControl($documentList, 'Sliding', 'results_pagination.phtml');
-    echo $this->paginationControl($documentList, NULL, 'start_itemlist.phtml');
-?>
-    <?php
-    foreach ($documentList as $docId) {
-       	$authors = array();
-       	unset($authors);
-       	$d = new Opus_Document($docId);
-       	try {
-       	    $aut = $d->getPersonAuthor();
-       	    foreach ($aut as $a) {
-       		    $name = '';
-       		    $lastName = '';
-       		    $name = $a->getName();
-       		    $lastName = $a->getLastName();
-       		    if (false === empty($name)) {
-       		        $author = $a->getName();
-       		    }
-       		    else if (false === empty($lastName)) {
-       			    $autor = $a->getLastName();
-       		    }
-       		    else {
-       			    $author = " ";
-       		    }
-       		    $authors[] = $author;
-       	    }
-       	}
-       	catch (Exception $e) {
-       		$authors[] = " ";
-       	}
-        try {
-            $docObject = $d->getTitleMain();
-            $doc = '';
-            if (is_array($docObject) === true && empty($docObject) === false) {
-            	$doc = array($docObject[0]->getValue());
-            }
-            else if (is_array($docObject) === false) {
-            	$doc = array($docObject->getValue());
-            }
-            if (true === empty($doc)) {
-                $doc = array(0 => 'Opus document with id: ' . $docId);
-            }
-        }
-        catch (Exception $e) {
-        	$doc = array(0 => 'Opus document with id: ' . $docId);
-        }
-        try {
-            $docState = $d->getServerState();
-        }
-        catch (Exception $e) {
-        	// do nothing, document has no state!
-        }
-        $authorsstring = '';
-   		if (false === empty($authors)) {
-   			$authorsstring = join("; ", $authors) . ': ';
-   		}
-   	    $title = array($authorsstring . $doc[0] . ' (' . $this->translate($d->getType()) . ')');
-
-        $url_frontdoor = array(
-            'module' => 'frontdoor',
-            'controller' => 'index',
-            'action' => 'index',
-            'docId' => $docId
-        );
-        $url_edit = array(
-            'module' => 'admin',
-            'controller' => 'documents',
-            'action' => 'edit',
-            'id' => $docId
-        );
-        $url_delete = array (
-            'module' => 'admin',
-            'controller' => 'documents',
-            'action' => 'delete',
-        );
-        $url_permadelete = array (
-            'module' => 'admin',
-            'controller' => 'documents',
-            'action' => 'permanentdelete',
-        );
-        $url_edit = $this->url($url_edit, 'default', true);
-        $url_delete = $this->url($url_delete, 'default', true);
-        $url_permanentdelete = $this->url($url_permadelete, 'default', true);
-        $url_frontdoor = $this->url($url_frontdoor, 'default', true);
-    ?>
-        <li>
-        <?php echo '<a href="' . $url_frontdoor . '" target="_blank">' . current($title) . '</a> (ID ' . $docId . ')' ?>
-        <?php if ($docState === 'deleted') { ?>
-        <form action="<?php echo $url_permanentdelete ?>" method="post" class="crud">
-        <?php
-        } else {
-        ?>
-        <form action="<?php echo $url_delete ?>" method="post" class="crud">
-        <?php
-        }
-        ?>
-            <a href="<?php echo $url_edit ?>"><?php echo $this->translate('docs_edit'); ?></a>
-            <input type="hidden" name="id" value="<?php echo $docId ?>" />
-            <?php if ($docState === 'deleted') { ?>
-            <input type="submit" value="<?php echo $this->translate('docs_permadelete'); ?>" />
-            <?php
-            } else {
-            ?>
-            <input type="submit" value="<?php echo $this->translate('docs_delete'); ?>" />
-            <?php
-            }
-            ?>
-        </form>
-        </li>
-        <?php
-    } ?>
-</ol>
-</p>
-<?php
-echo $this->paginationControl($documentList, 'Sliding', 'results_pagination.phtml');
-} else { ?>
-    <p><?php echo $this->translate('docs_nodocs'); ?></p>
-<?php } */ ?>
