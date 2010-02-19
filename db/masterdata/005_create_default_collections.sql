@@ -92,6 +92,7 @@ CREATE TABLE `link_documents_collections_1` (
   `id` int(11) unsigned NOT NULL auto_increment,
   `collections_id` int(11) unsigned NOT NULL,
   `documents_id` int(11) unsigned NOT NULL,
+  `role` enum('unknown', 'publisher', 'grantor') default 'unknown' NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `fk_link_documents_collections_collections_contents_1` (`collections_id`),
   KEY `fk_link_documents_collections_documents_1` (`documents_id`),
