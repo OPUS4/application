@@ -35,7 +35,7 @@
  */
 ?>
 	<h2><?= $this->translate('search_index_browsing') ?></h2>
-	<a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'latest'), null, true) ?>"><?= $this->translate('latest_docs_browsing') ?></a> <a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'latest', 'output' => 'rss'), null, true) ?>" class="rss"><img src="/layouts/default/img/rss.gif" width="36" height="14" border="0" align="bottom" alt="RSS-Feed Icon" title="RSS-Feed abonnieren" /></a>
+    <a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'latest'), null, true) ?>"><?= $this->translate('latest_docs_browsing') ?></a> <a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'latest', 'output' => 'rss'), null, true) ?>" class="rss"><img src="<?= $this->baseUrl;?>/layouts/default/img/rss.gif" width="36" height="14" border="0" align="bottom" alt="RSS-Feed Icon" title="RSS-Feed abonnieren" /></a>
 	<br/>
 	<a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseTitles'), null, true) ?>"><?= $this->translate('search_index_alltitles_browsing') ?></a><br/>
 	<?php
