@@ -119,116 +119,59 @@ foreach ($this->registers as $register) {
     ><a href="<?= $this->url_sort_desc ?>"><?= $this->translate('sort_descending') ?></a></li>
 </ul>
 <?php
-if (count($this->hitlist_paginator)) {
-    echo $this->paginationControl($this->hitlist_paginator, NULL, 'itemCount_pagination.phtml');
-    echo $this->paginationControl($this->hitlist_paginator, 'Sliding', 'results_pagination.phtml');
-    echo $this->paginationControl($this->hitlist_paginator, NULL, 'start_itemlist.phtml');
+if (count($this->docId)) {
+    echo $this->paginationControl($this->paginator, NULL, 'itemCount_pagination.phtml');
+    echo $this->paginationControl($this->paginator, 'Sliding', 'results_pagination.phtml');
+    echo $this->paginationControl($this->paginator, NULL, 'start_itemlist.phtml');
 
     // FIXME: <ol start="..."> is not valid XHTML 1.0 Strict!
     // but it will return in (X)HTML 5 - so wontfix
-    $pagerInfo = $this->hitlist_paginator->getPages();
-    echo '<ol class="search " start="' . $pagerInfo->firstItemNumber . '">';
-    echo "\n";
-
-    $searchListItemCount = 0;
-    foreach ($this->hitlist_paginator as $id) {
-        $url_frontdoor = array(
-            'module' => 'frontdoor',
-            'controller' => 'index',
-            'action' => 'index',
-            'docId' => $id
-        );
-        $url_edit = array(
-            'module' => 'admin',
-            'controller' => 'documents',
-            'action' => 'edit',
-            'id' => $id
-        );
-        $url_delete = array (
-            'module' => 'admin',
-            'controller' => 'documents',
-            'action' => 'delete',
-        );
-        $url_permadelete = array (
-            'module' => 'admin',
-            'controller' => 'documents',
-            'action' => 'permanentdelete',
-        );
-        $url_edit = $this->url($url_edit, 'default', true);
-        $url_delete = $this->url($url_delete, 'default', true);
-        $url_permanentdelete = $this->url($url_permadelete, 'default', true);
-        $url_frontdoor = $this->url($url_frontdoor, 'default', true);
-
+    $pagerInfo = $this->paginator->getPages();
+    ?>
+    <ol class="search " start="<?= $pagerInfo->firstItemNumber ?>">
+    <?php
+    $searchListItemCount = 0;    
+    for ($runningIndex = 0; $runningIndex < count($this->docId); $runningIndex++) {
         $searchListItemCount++;
         $searchListOdd = ($searchListItemCount%2 === 1);
-
-        $d = new Opus_Document( (int) $id);
-        try {
-            $docState = $d->getServerState();
-        }
-        catch (Exception $e) {
-            // do nothing, document has no state!
-        }
-
-        //print_r($document);
         echo $searchListOdd ? '<li class="odd">' : '<li class="even">';
-
-        $c = count($d->getPersonAuthor());
-        for ($counter = 0; $counter < $c; $counter++) {
-        	$name = $d->getPersonAuthor($counter)->getName();
-             echo '<span class="author"><a href="' .
-                 $this->url(
-                     array(
-                         'module'        => 'search',
-                         'controller'    => 'search',
-                         'action'        => 'metadatasearch',
-                         'author'        => $name
-                     ),
-                     null,
-                      true
-                 ) .
-                 '">';
-
-           echo $name;
-           echo "</a></span>";
-           if ($counter === $c-1) echo ": ";
-           else echo "; ";
+        $authorcount = count($this->author[$runningIndex]);
+        for ($counter = 0; $counter < $authorcount; $counter++) {
+        ?>
+            <span class="author"><a href="<?=$this->url_author[$runningIndex][$counter]?>"><?=$this->author[$runningIndex][$counter]?></a></span>
+        <?php
+                if ($counter === $authorcount-1) echo ": ";
+                else echo "; ";
         }
-        print('<span class="title"><a href="' . $this->url(array('module' => 'frontdoor',
-            'controller' => 'index',
-            'action' => 'index',
-            'docId' => $d->getId()),
-            null, true
-        ) . '">' .  $d->getTitleMain(0)->getValue() . "</a></span>");
-
-        if ($docState === 'deleted') { ?>
-        <form action="<?php echo $url_permanentdelete ?>" method="post" class="crud">
+        ?>
+        <span class="title"><a href="<?=$this->url_frontdoor[$runningIndex]?>"><?=$this->title[$runningIndex]?></a></span>
+        <?php
+        if ($this->docState === 'deleted') { ?>
+        <form action="<?= $this->url_permanentdelete[$runningIndex] ?>" method="post" class="crud">
         <?php
         } else {
         ?>
-        <form action="<?php echo $url_delete ?>" method="post" class="crud">
+        <form action="<?= $this->url_delete[$runningIndex] ?>" method="post" class="crud">
         <?php
         }
         ?>
-            <input type='button' onClick="javascript:location.href='<?php echo $url_edit ?>'" value='<?php echo $this->translate('docs_edit'); ?>' class="crud">
-            <input type="hidden" name="id" value="<?php echo $d->getId() ?>" />
-            <?php if ($docState === 'deleted') { ?>
-            <input type="submit" value="<?php echo $this->translate('docs_permadelete'); ?>" />
-            <?php
-            } else {
-            ?>
-            <input type="submit" value="<?php echo $this->translate('docs_delete'); ?>" />
-            <?php
-            }
-            ?>
+        <input type='button' onClick="javascript:location.href='<?= $this->url_edit[$runningIndex] ?>'" value='<?= $this->translate('docs_edit') ?>' class="crud">
+        <input type="hidden" name="id" value="<?= $this->docId[$runningIndex] ?>" />
+        <?php if ($this->docState === 'deleted') { ?>
+        <input type="submit" value="<?= $this->translate('docs_permadelete') ?>" />
+        <?php
+        } else {
+        ?>
+        <input type="submit" value="<?= $this->translate('docs_delete') ?>" />
+        <?php
+        }
+        ?>
         </form>
         </li>
-        <?php
-        echo "\n";
-        }
+<?php
+    }
 ?>
     </ol>
-
-    <?= $this->paginationControl($this->hitlist_paginator, 'Sliding', 'results_pagination.phtml') ?>
+    <?= $this->paginationControl($this->paginator, 'Sliding', 'results_pagination.phtml') ?>
 <?php
 }

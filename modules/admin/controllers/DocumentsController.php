@@ -227,8 +227,80 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             $page = 1;
         }
         $paginator->setCurrentPageNumber($page);
-        $this->view->hitlist_paginator = $paginator;
-        #$this->view->documentList = $docList;
+        $this->view->paginator = $paginator;
+        
+        // iterate the paginator and get the attributes we want to show in the view
+        $runningIndex = 0;
+        $this->view->docId = array();
+        $this->view->title = array();
+        $this->view->author = array();
+        $this->view->url_frontdoor = array();
+        $this->view->url_permanentdelete = array();
+        $this->view->url_delete = array();
+        $this->view->url_edit = array();
+        $this->view->url_author = array();
+        foreach ($paginator as $id) {
+            $url_frontdoor = array(
+                'module' => 'frontdoor',
+                'controller' => 'index',
+                'action' => 'index',
+                'docId' => $id
+            );
+            $url_edit = array(
+                'module' => 'admin',
+                'controller' => 'documents',
+                'action' => 'edit',
+                'id' => $id
+            );
+            $url_delete = array (
+                'module' => 'admin',
+                'controller' => 'documents',
+                'action' => 'delete',
+            );
+            $url_permadelete = array (
+                'module' => 'admin',
+                'controller' => 'documents',
+                'action' => 'permanentdelete',
+            );
+            $this->view->url_edit[$runningIndex] = $this->view->url($url_edit, 'default', true);
+            $this->view->url_delete[$runningIndex] = $this->view->url($url_delete, 'default', true);
+            $this->view->url_permanentdelete[$runningIndex] = $this->view->url($url_permadelete, 'default', true);
+            $this->view->url_frontdoor[$runningIndex] = $this->view->url($url_frontdoor, 'default', true);
+
+            $d = new Opus_Document( (int) $id);
+            $this->view->docId[$runningIndex] = $id;
+            try {
+                $this->view->docState = $d->getServerState();
+            }
+            catch (Exception $e) {
+                $this->view->docState = 'undefined';
+            }
+
+            $c = count($d->getPersonAuthor());
+            $this->view->author[$runningIndex] = array();
+            $this->view->url_author[$runningIndex] = array();
+            for ($counter = 0; $counter < $c; $counter++) {
+        	    $name = $d->getPersonAuthor($counter)->getName();
+                $this->view->url_author[$runningIndex][$counter] = $this->view->url(
+                    array(
+                        'module'        => 'search',
+                        'controller'    => 'search',
+                        'action'        => 'metadatasearch',
+                        'author'        => $name
+                    ),
+                    null,
+                    true
+                );
+                $this->view->author[$runningIndex][$counter] = $name;
+            }
+            try {
+                $this->view->title[$runningIndex] = $d->getTitleMain(0)->getValue();
+            }
+            catch (Exception $e) {
+            	$this->view->title[$runningIndex] = 'No title specified for document ID ' . $id;
+            }
+            $runningIndex++;
+        }
     }
 
     /**
