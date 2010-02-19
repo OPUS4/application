@@ -345,8 +345,8 @@ class Search_BrowsingController extends Zend_Controller_Action
      */
     public function latestAction() {
     	$hitlist = BrowsingList::getLatestDocuments();
-            $data = $this->_request->getParams();
-            if ($data['output'] === "rss") {
+        $data = $this->_request->getParams();
+        if (array_key_exists('output', $data) === true && $data['output'] === "rss") {
                 $template = new RSSOutput();
     	        $result = $template->getTemplate($hitlist, 'RSS Feed Latest Documents');
                 $xml = $result['xmlobject'];
@@ -354,11 +354,9 @@ class Search_BrowsingController extends Zend_Controller_Action
                 $this->_helper->layout()->disableLayout();
                 $this->getResponse()->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);
                 $this->getResponse()->setBody($xml->saveXml());
-            }
-            
-    	    $hitlistIterator = new Opus_Search_Iterator_HitListIterator($hitlist);
-            $this->view->hitlist_count = $hitlist->count();
-            $paginator = Zend_Paginator::factory($hitlistIterator);
+        }
+     	if (count($hitlist) > 0) {
+            $paginator = Zend_Paginator::factory($hitlist);
             if (array_key_exists('hitsPerPage', $data)) {
         	    if ($data['hitsPerPage'] === '0') {
         	        $hitsPerPage = '10000';
@@ -368,12 +366,72 @@ class Search_BrowsingController extends Zend_Controller_Action
                 }
                 $paginator->setItemCountPerPage($hitsPerPage);
             }
-            $page = 1;
             if (array_key_exists('page', $data)) {
                 // paginator
                 $page = $data['page'];
+            } else {
+                $page = 1;
             }
             $paginator->setCurrentPageNumber($page);
-            $this->view->hitlist_paginator = $paginator;
+            $this->view->paginator = $paginator;
+        
+            // iterate the paginator and get the attributes we want to show in the view
+            $runningIndex = 0;
+            $this->view->docId = array();
+            $this->view->title = array();
+            $this->view->abstractValue = array();
+            $this->view->author = array();
+            $this->view->url_frontdoor = array();
+            $this->view->url_author = array();
+            foreach ($paginator as $id) {
+                $url_frontdoor = array(
+                    'module' => 'frontdoor',
+                    'controller' => 'index',
+                    'action' => 'index',
+                    'docId' => $id
+                );
+                $this->view->url_frontdoor[$runningIndex] = $this->view->url($url_frontdoor, 'default', true);
+
+                $d = new Opus_Document( (int) $id);
+                $this->view->docId[$runningIndex] = $id;
+                try {
+                    $this->view->docState = $d->getServerState();
+                }
+                catch (Exception $e) {
+                    $this->view->docState = 'undefined';
+                }
+
+                $c = count($d->getPersonAuthor());
+                $this->view->author[$runningIndex] = array();
+                $this->view->url_author[$runningIndex] = array();
+                for ($counter = 0; $counter < $c; $counter++) {
+        	        $name = $d->getPersonAuthor($counter)->getName();
+                    $this->view->url_author[$runningIndex][$counter] = $this->view->url(
+                        array(
+                            'module'        => 'search',
+                            'controller'    => 'search',
+                            'action'        => 'metadatasearch',
+                            'author'        => $name
+                        ),
+                        null,
+                        true
+                    );
+                    $this->view->author[$runningIndex][$counter] = $name;
+                }
+                try {
+                    $this->view->title[$runningIndex] = $d->getTitleMain(0)->getValue();
+                }
+                catch (Exception $e) {
+            	    $this->view->title[$runningIndex] = $this->view->translate('document_no_title') . $id;
+                }
+                try {
+                    $this->view->abstractValue[$runningIndex] = $d->getTitleAbstract(0)->getValue();
+                }
+                catch (Exception $e) {
+                	// do nothing, there is just no abstract
+                }
+                $runningIndex++;
+            }
+        }
     }
 }

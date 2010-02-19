@@ -43,6 +43,49 @@ echo '<br/>';
 if (isset($this->failure) === true) {
 	echo $this->failure;
 }
+
+/*if (count($this->docId)) {
+    echo $this->paginationControl($this->paginator, NULL, 'searchList_ItemCount_pagination.phtml');
+    echo $this->paginationControl($this->paginator, 'Sliding', 'searchList_pagination.phtml');
+
+    // FIXME: <ol start="..."> is not valid XHTML 1.0 Strict!
+    // but it will return in (X)HTML 5 - so wontfix
+    $pagerInfo = $this->paginator->getPages();
+    ?>
+    <ol class="search " start="<?= $pagerInfo->firstItemNumber ?>">
+    <?php
+    $searchListItemCount = 0;    
+    for ($runningIndex = 0; $runningIndex < count($this->docId); $runningIndex++) {
+        $searchListItemCount++;
+        $searchListOdd = ($searchListItemCount%2 === 1);
+        echo $searchListOdd ? '<li class="odd">' : '<li class="even">';
+        $authorcount = count($this->author[$runningIndex]);
+        for ($counter = 0; $counter < $authorcount; $counter++) {
+        ?>
+            <span class="author"><a href="<?=$this->url_author[$runningIndex][$counter]?>"><?=$this->author[$runningIndex][$counter]?></a></span>
+        <?php
+                if ($counter === $authorcount-1) echo ": ";
+                else echo "; ";
+        }
+        ?>
+        <span class="title"><a href="<?=$this->url_frontdoor[$runningIndex]?>"><?=$this->title[$runningIndex]?></a></span>
+        </li>
+        <div class="queryhit">
+        <?=$this->abstractValue[$runningIndex]?>
+        </div>
+<?php
+    }
+?>
+    </ol>
+    <?= $this->paginationControl($this->paginator, 'Sliding', 'searchList_pagination.phtml') ?>
+<?php
+} else {
+    echo '<p>' . $this->translate('search_no_results') . '</p>';
+}
+*/
+
+
+
 if (count($this->hitlist_paginator)) {
 
     echo $this->paginationControl($this->hitlist_paginator, NULL, 'searchList_ItemCount_pagination.phtml');

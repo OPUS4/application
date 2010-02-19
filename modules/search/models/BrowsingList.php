@@ -46,12 +46,13 @@ class BrowsingList
 	{
         $hits = Opus_Document::getLatestIds();
         // We need an OPUS-compliant result list to return
-        $hitlist = new Opus_Search_List_HitList();
+        /*$hitlist = new Opus_Search_List_HitList();
         foreach ($hits as $queryHit) {
-            $opusHit = new Opus_Search_SearchHit((int) $queryHit);
+            //$opusHit = new Opus_Search_SearchHit((int) $queryHit);
+            $opusHit = new Opus_Document((int) $queryHit);
            	$hitlist->add($opusHit);
-        }
-        return $hitlist;
+        }*/
+        return $hits;
 	}
 
 	/**

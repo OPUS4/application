@@ -40,10 +40,9 @@ class RSSOutput {
 	 */
 	public function getTemplate($hitlist, $givenTitle = null, $rssVersion = '2.0') {
 
-        $hitCount = $hitlist->count();
+        $hitCount = count($hitlist);
         // Put the hitlist into a Pagionator
-        $hitlistIterator = new Opus_Search_Iterator_HitListIterator($hitlist);
-        $hitlist_paginator = Zend_Paginator::factory($hitlistIterator);
+        $hitlist_paginator = Zend_Paginator::factory($hitlist);
 
         $statuscode = 200;
         $xml = new DOMDocument('1.0', 'utf-8');
@@ -62,28 +61,37 @@ class RSSOutput {
         // instantiate a View to get the URL method 
         $view = Zend_Layout::getMvcInstance()->getView();
 
-        if (0 < $hitCount) {
+        if (0 < $hitCount && is_int($hitCount) === true) {
             foreach ($hitlist_paginator as $searchhit) {
-                $hit =  $searchhit->getSearchHit()->getDocument();
-                $doc = new Opus_Document($hit['id']);
+                $doc = new Opus_Document( (int) $searchhit);
                 $result = $xml->createElement('item');
                 $channel->appendChild($result);
-                $url = $view->url(array('action' => 'index', 
-                                        'controller' => 'index', 
-                                        'module' => 'frontdoor',
-                                        'docId' => $hit['id']
-                                        ), 'default', true);
+                $url = $view->url(
+                    array(
+                        'action' => 'index', 
+                        'controller' => 'index', 
+                        'module' => 'frontdoor',
+                        'docId' => $searchhit
+                    ), 
+                    'default', 
+                    true
+                );
                 $linkElement = $xml->createElement('link', $_SERVER['HTTP_HOST'] . $url);
                 $result->appendChild($linkElement);
-                $titleElement = $xml->createElement('title', $hit['title']);
+                $titleElement = $xml->createElement('title', $doc->getTitleMain(0)->getValue());
                 $result->appendChild($titleElement);
-                $authorElement = $xml->createElement('author', $hit['author']);
+                $c = count($doc->getPersonAuthor());
+                $authorString = '';
+                for ($counter = 0; $counter < $c; $counter++) {
+            	    $name = $doc->getPersonAuthor($counter)->getName();
+                    $authorString .= $name;
+                    if ($counter < $c-1) $authorString .= '; ';
+                }
+                $authorElement = $xml->createElement('author', $authorString);
                 $result->appendChild($authorElement);
-                $abstractElement = $xml->createElement('description', str_replace("&hellip;", " ... ", $hit['abstract']));
+                $abstractElement = $xml->createElement('description', str_replace("&hellip;", " ... ", $doc->getTitleAbstract(0)->getValue()));
                 $result->appendChild($abstractElement);
-                $docArray = $doc->toArray();
-                $pubDate = $docArray['ServerDatePublished'];  
-                $yearElement = $xml->createElement('pubDate', $pubDate);
+                $yearElement = $xml->createElement('pubDate', $doc->getServerDatePublished());
                 $result->appendChild($yearElement);
             }
         }
