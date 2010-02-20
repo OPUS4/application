@@ -27,6 +27,7 @@
  * @category    Application
  * @package     View
  * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
+ * @author      Pascal-Nicolas Becker <becker@zib.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -122,12 +123,39 @@ class View_Helper_LoginBar {
     public function __toString() {
         $identity = Zend_Auth::getInstance()->getIdentity();
         if (empty($identity) === true) {
-            $url = $this->_view->url($this->_login_url);
+            $url = $this->_view->url(array_merge($this->_login_url, $this->prepareReturnParameters()));
             return '<a href="' . $url . '">Login</a>';
         } else {
-            $url = $this->_view->url($this->_logout_url);
+            $url = $this->_view->url(array_merge($this->_logout_url, $this->prepareReturnParameters()));
             return '<a href="' . $url . '">Logout</a>';
         }
+    }
+
+    /**
+     * Look for current module, controller, action and parameters. Forwards them to auth controller.
+     *
+     * returns mixed Associative array containing parameters for auth controller.
+     */
+    protected function prepareReturnParameters() {
+        $params = array();
+        foreach (Zend_Controller_Front::getInstance()->getRequest()->getParams() as $key => $value) {
+            switch ($key) {
+            case 'module' :
+                $params['rmodule'] = $value;
+                break;
+            case 'controller' :
+                $params['rcontroller'] = $value;
+                break;
+            case 'action' :
+                $params['raction'] = $value;
+                break;
+            default :
+                $params[$key] = $value;
+                break;
+            }
+        }
+
+        return $params;
     }
 
 }
