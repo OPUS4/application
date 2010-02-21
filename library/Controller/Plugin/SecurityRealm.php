@@ -49,12 +49,13 @@ class Controller_Plugin_SecurityRealm extends Zend_Controller_Plugin_Abstract {
      * @return void
      */
     public function routeStartup(Zend_Controller_Request_Abstract $request) {
+        //$logger = Zend_Registry::get('Zend_Log');
         // Create a Realm instance
         $realm = Opus_Security_Realm::getInstance();
 
 		// Overwrite default user if current user is logged on.
         $identity = Zend_Auth::getInstance()->getIdentity();
-		if (false === empty($identiy)) {
+		if (false === empty($identity)) {
 			$realm->setUser($identity);
 		} else {
 			$realm->setUser(null);
