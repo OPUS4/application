@@ -41,24 +41,7 @@
  * @category    Application
  * @package     Module_Publish
  */
-class Publish_IndexController extends Zend_Controller_Action {
-
-    /**
-     * Redirector - defined for code completion
-     *
-     * @var Zend_Controller_Action_Helper_Redirector
-     */
-    protected $_redirector = null;
-
-    /**
-     * Do some initialization on startup of every action
-     *
-     * @return void
-     */
-    public function init()
-    {
-        $this->_redirector = $this->_helper->getHelper('Redirector');
-    }
+class Publish_IndexController extends Controller_Action {
 
     /**
      * Just to be there. No actions taken.
@@ -167,7 +150,7 @@ class Publish_IndexController extends Zend_Controller_Action {
                     if (in_array($selectedDoctype, $possibleDoctypes) === false) {
                         // TODO: error message
                         // document type does not exists, back to select form
-                        $this->_redirector->gotoSimple('index');
+                        $this->_redirectTo('index');
                     }
 
                     if ($alternateForm->isValid($data) === true) {
@@ -185,7 +168,7 @@ class Publish_IndexController extends Zend_Controller_Action {
                     $gpgkey = $form->getValue('gpgkey');
                     if ($gpgkey === '1') {
                         $documentInSession->keyupload = true;
-                        $this->_redirector->gotoSimple('keyupload');
+                        $this->_redirectTo('keyupload');
                     }
 
                     // Store document in session
@@ -224,7 +207,7 @@ class Publish_IndexController extends Zend_Controller_Action {
                     $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create', 'page' => $requested_page));
                 }
                 $form->setAction($action_url);
-                $this->view->form = $form;                
+                $this->view->form = $form;
             } else {
                 // if Opus_Model_filter does not exist, an empty form has been submitted
                 // its not necessary to store new data to the model
@@ -246,7 +229,7 @@ class Publish_IndexController extends Zend_Controller_Action {
             }
         } else {
             // action used directly go back to main index
-            $this->_redirector->gotoSimple('index');
+            $this->_redirectTo('index');
         }
     }
 
@@ -283,15 +266,15 @@ class Publish_IndexController extends Zend_Controller_Action {
                     $this->view->form = $form;
                 } else {
                     // invalid form return to index
-                    $this->_redirector->gotoSimple('index');
+                    $this->_redirectTo('index');
                 }
             } else {
                 // invalid form return to index
-                $this->_redirector->gotoSimple('index');
+                $this->_redirectTo('index');
             }
         } else {
             // on non post request redirect to index action
-            $this->_redirector->gotoSimple('index');
+            $this->_redirectTo('index');
         }
     }
 
@@ -308,6 +291,7 @@ class Publish_IndexController extends Zend_Controller_Action {
         $uploadForm = new FileUpload();
         $action_url = $this->view->url(array('controller' => 'index', 'action' => 'upload'));
         $uploadForm->setAction($action_url);
+        $documentInSession = new Zend_Session_Namespace('document');
         // store uploaded data in application temp dir
         if ($this->_request->isPost() === true) {
             $data = $this->_request->getPost();
@@ -317,9 +301,7 @@ class Publish_IndexController extends Zend_Controller_Action {
                 try {
                     $upload = new Zend_File_Transfer_Adapter_Http();
                     $files = $upload->getFileInfo();
-                    // TODO: Validate document id, error message on fail
-                    $documentId = $uploadForm->getValue('DocumentId');
-                    $document = new Opus_Document($documentId);
+                    $document = $documentInSession->document;
 
                     $this->view->message = $this->view->translate('publish_controller_upload_successful');
 
@@ -369,8 +351,80 @@ class Publish_IndexController extends Zend_Controller_Action {
             }
         } else {
             // on non post request redirect to index action
-            $this->_redirector->gotoSimple('index');
+            if (false === is_null($documentInSession->document)) {
+                $this->view->form = $uploadForm;
+            } else {
+                $this->_redirectTo('index');
+            }
         }
     }
 
+    /**
+     * Assign a document to a collection
+     *
+     * @return void
+     */
+    public function assignAction() {
+        $documentInSession = new Zend_Session_Namespace('document');
+        $document = $documentInSession->document;
+        $documentId = $document->getId();
+        $role = $this->getRequest()->getParam('role');
+        $path = $this->getRequest()->getParam('path');
+        if ($this->_request->isPost() === true) {
+            $collection = new Opus_CollectionRole($role);
+            $roleName = $collection->getDisplayName();
+            if (true === isset($path)) {
+                $trail = explode('-', $path);
+                foreach($trail as $i => $step) {
+                    if ($i < sizeof($trail)) {
+                        $collection = $collection->getSubCollection($step);
+                    }
+                }
+            }
+            $collection->addEntry($document);
+            $this->_redirectTo('Document successfully assigned to collection "' . $collection->getDisplayName() . '".'
+                    , 'upload', 'index', 'publish');
+        } else if (false === isset($role)) {
+            $collections = array();
+            foreach (Opus_CollectionRole::getAll() as $collection) {
+                $collections[$collection->getId()] = $collection->getDisplayName();
+            }
+            $this->view->subcollections = $collections;
+            $this->view->breadcrumb = array();
+            $this->view->assign = $documentId;
+            $this->view->role_id = null;
+        } else {
+            $collection = new Opus_CollectionRole($role);
+            $roleName = $collection->getDisplayName();
+            $subcollections = array();
+            $breadcrumb = array();
+            if (true === isset($path)) {
+                $trail = explode('-', $path);
+                foreach($trail as $step) {
+                    if (false === isset($position)) {
+                        $position = $step;
+                    } else {
+                        $position .= '-' . $step;
+                    }
+                    $collection = $collection->getSubCollection($step);
+                    $breadcrumb[$position] = $collection->getDisplayName();
+                }
+            }
+            if ($collection instanceof Opus_CollectionRole) {
+                foreach($collection->getSubCollection() as $i => $subcollection) {
+                    $subcollections[$i] = $subcollection->getDisplayName();
+                }
+            } else {
+                foreach($collection->getSubCollection() as $i => $subcollection) {
+                    $subcollections[$path . '-' . $i] = $subcollection->getDisplayName();
+                }
+            }
+            $this->view->subcollections = $subcollections;
+            $this->view->role_id = $role;
+            $this->view->role_name = $roleName;
+            $this->view->path = $path;
+            $this->view->assign = $documentId;
+            $this->view->breadcrumb = $breadcrumb;
+        }
+    }
 }
