@@ -319,9 +319,9 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         foreach ($availableLanguages as $availableLanguage) {
             $trans = $availableLanguage->getPart1();
             if (true === empty($trans)) {
-                $languages[$availableLanguage->getId()] = $availableLanguage->getDisplayName();
+                $languages[$availableLanguage->getPart2T()] = $availableLanguage->getDisplayName();
             } else {
-                $languages[$availableLanguage->getId()] = $locale->getTranslation($trans, 'language', $trans);
+                $languages[$availableLanguage->getPart2T()] = $locale->getTranslation($trans, 'language', $trans);
             }
         }
         $registry->set('Available_Languages', $languages);
