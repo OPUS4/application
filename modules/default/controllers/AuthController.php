@@ -39,7 +39,7 @@
  * @category    Application
  * @package     Module_Default
  */
-class AuthController extends Zend_Controller_Action {
+class AuthController extends Controller_Action {
 
     /**
      * Default URL to goto after successful login. Maybe overwritten by findRemoteParameters().
