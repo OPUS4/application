@@ -110,8 +110,9 @@ class Search_SearchController extends Zend_Controller_Action
                 // valid form
                 $this->view->form = $form->populate($data);
                 try {
-                    $query = new Opus_Search_Query($form->getValue('query'), 'ignore', $searchEngine);
-                    $hitlist = $query->commit();
+                    $queryObject = new Opus_Search_Query($form->getValue('query'), 'ignore', $searchEngine);
+                    $hitlist = $queryObject->commit();
+                    $resultlist->query = $queryObject->parsedQuery;
                     $resultlist->hitlist = $hitlist;
                     $resultlist->postedData = $data;
                 }
@@ -144,7 +145,106 @@ class Search_SearchController extends Zend_Controller_Action
             }
         }
         if ($failure === false) {
-		    if (array_key_exists('sort', $data)) {
+		    #if (array_key_exists('sort', $data)) {
+			#    $hitlist->sort($data['sort']);
+		    #}
+            $hitlistIterator = new Opus_Search_Iterator_HitListIterator($hitlist);
+            $this->view->hitlist_count = count($hitlist);
+            if (is_null($hitlist) === false) {
+                $paginator = Zend_Paginator::factory($hitlistIterator);
+                if (array_key_exists('hitsPerPage', $data)) {
+        	        if ($data['hitsPerPage'] === '0') {
+        	            $hitsPerPage = '10000';
+        	        }
+                    else {
+            	        $hitsPerPage = $data['hitsPerPage'];
+                    }
+                    $paginator->setItemCountPerPage($hitsPerPage);
+                }
+                if (array_key_exists('page', $data)) {
+                    // paginator
+                    $page = $data['page'];
+                } else {
+                    $page = 1;
+                }
+                $paginator->setCurrentPageNumber($page);
+                $this->view->paginator = $paginator;
+        
+                // iterate the paginator and get the attributes we want to show in the view
+                $runningIndex = 0;
+                $this->view->docId = array();
+                $this->view->title = array();
+                $this->view->abstractValue = array();
+                $this->view->author = array();
+                $this->view->url_frontdoor = array();
+                $this->view->url_author = array();
+                foreach ($paginator as $hit) {
+                	$h = $hit->getSearchHit();
+                	$doc = $h->getDocument();
+                	$id = $doc['id'];
+                    $url_frontdoor = array(
+                        'module' => 'frontdoor',
+                        'controller' => 'index',
+                        'action' => 'index',
+                        'docId' => $id
+                    );
+                    $this->view->url_frontdoor[$runningIndex] = $this->view->url($url_frontdoor, 'default', true);
+
+                    $d = new Opus_Document( (int) $id);
+                    $this->view->docId[$runningIndex] = $id;
+                    try {
+                        $this->view->docState = $d->getServerState();
+                    }
+                    catch (Exception $e) {
+                        $this->view->docState = 'undefined';
+                    }
+
+                    try{
+                        $c = count($d->getPersonAuthor());
+                    }
+                    catch (Exception $e) {
+                    	$c = 0;
+                    }
+                    $this->view->author[$runningIndex] = array();
+                    $this->view->url_author[$runningIndex] = array();
+                    for ($counter = 0; $counter < $c; $counter++) {
+        	            $name = $d->getPersonAuthor($counter)->getName();
+                        $this->view->url_author[$runningIndex][$counter] = $this->view->url(
+                            array(
+                                'module'        => 'search',
+                                'controller'    => 'search',
+                                'action'        => 'metadatasearch',
+                                'author'        => $name
+                            ),
+                            null,
+                            true
+                        );
+                        $this->view->author[$runningIndex][$counter] = $name;
+                    }
+                    try {
+                        $this->view->title[$runningIndex] = $d->getTitleMain(0)->getValue();
+                    }
+                    catch (Exception $e) {
+            	        $this->view->title[$runningIndex] = $this->view->translate('document_no_title') . $id;
+                    }
+                    try {
+                    	if (array_key_exists('noform', $data) === false) {
+                    		$this->view->abstractValue[$runningIndex] = Opus_Search_Adapter_Lucene_SearchHitAdapter::highlight($resultlist->query, $d->getTitleAbstract(0)->getValue());
+                    	}
+                    	else {
+                    		$this->view->abstractValue[$runningIndex] = $d->getTitleAbstract(0)->getValue();
+                    	}
+                    }
+                    catch (Exception $e) {
+                    	// dont do anything, the worst is that there is no abstract to display
+                    }
+                    $runningIndex++;
+                }
+            }
+            $this->render('search');
+
+
+/*		    if (array_key_exists('sort', $data)) {
 			    $hitlist->sort($data['sort']);
 		    }
             $hitlistIterator = new Opus_Search_Iterator_HitListIterator($hitlist);
@@ -161,6 +261,7 @@ class Search_SearchController extends Zend_Controller_Action
             }
             $paginator->setCurrentPageNumber($page);
             $this->view->hitlist_paginator = $paginator;
+            */
         }
         else {
         	$this->view->failure = $failure;
@@ -422,10 +523,10 @@ class Search_SearchController extends Zend_Controller_Action
 		    #if (array_key_exists('sort', $data)) {
 			#    $hitlist->sort($data['sort']);
 		    #}
-            #$hitlistIterator = new Opus_Search_Iterator_HitListIterator($hitlist);
+            $hitlistIterator = new Opus_Search_Iterator_HitListIterator($hitlist);
             $this->view->hitlist_count = count($hitlist);
             if (is_null($hitlist) === false) {
-                $paginator = Zend_Paginator::factory($hitlist);
+                $paginator = Zend_Paginator::factory($hitlistIterator);
                 if (array_key_exists('hitsPerPage', $data)) {
         	        if ($data['hitsPerPage'] === '0') {
         	            $hitsPerPage = '10000';
@@ -452,7 +553,10 @@ class Search_SearchController extends Zend_Controller_Action
                 $this->view->author = array();
                 $this->view->url_frontdoor = array();
                 $this->view->url_author = array();
-                foreach ($paginator as $id) {
+                foreach ($paginator as $hit) {
+                	$h = $hit->getSearchHit();
+                	$doc = $h->getDocument();
+                	$id = $doc['id'];
                     $url_frontdoor = array(
                         'module' => 'frontdoor',
                         'controller' => 'index',
