@@ -231,7 +231,12 @@ class Search_BrowsingController extends Zend_Controller_Action
                 $this->view->docState = 'undefined';
             }
 
-            $c = count($d->getPersonAuthor());
+            try {
+                $c = count($d->getPersonAuthor());
+            }
+            catch (Exception $e) {
+            	$c = 0;
+            }
             $this->view->author[$runningIndex] = array();
             $this->view->url_author[$runningIndex] = array();
             for ($counter = 0; $counter < $c; $counter++) {
@@ -318,21 +323,97 @@ class Search_BrowsingController extends Zend_Controller_Action
 				$this->view->browsinglist = $browsingListProduct;
 				$this->view->page = $this->_getParam("page");
 				#$this->view->hitlist_paginator = Zend_Paginator::factory(Opus_Search_List_CollectionNode::getDocumentIds($collection, $node));
+				
+				// check for documents in this collection
+                $documents = array();
+                try {
+                    $documents = $browsingListProduct->getEntries();
+                    $documents_paginator = Zend_Paginator::factory($documents);
+                    if ($this->view->page > 0) {
+            	        $documents_paginator->setCurrentPageNumber($this->view->page);
+                    }
+                    $this->view->documents_paginator = $documents_paginator;
+                }
+                catch (Exception $e) {
+                    // presumably this is a collection role
+                    // no action necessary
+                }
+                $numberOfDocuments = count($documents);
+                $this->view->numberOfDocuments = $numberOfDocuments;
+	            if ($numberOfDocuments > 0) {
+                    $searchListItemCount = 0;
+                    // iterate the paginator and get the attributes we want to show in the view
+                    $runningIndex = 0;
+                    $this->view->docId = array();
+                    $this->view->title = array();
+                    $this->view->author = array();
+                    $this->view->url_frontdoor = array();
+                    $this->view->url_author = array();
+                    foreach ($documents_paginator as $d) {
+                    	$id = $d->getId();
+                        $url_frontdoor = array(
+                            'module' => 'frontdoor',
+                            'controller' => 'index',
+                            'action' => 'index',
+                            'docId' => $id
+                        );
+                        $this->view->url_frontdoor[$runningIndex] = $this->view->url($url_frontdoor, 'default', true);
 
-            // Get the theme assigned to this collection iff usertheme is
-            // set in the request.  To enable the collection theme, add
-            // /usetheme/1/ to the browsing URL.
-            $usetheme = $this->_getParam("usetheme");
-            if (isset ($usetheme) === true && 1 === (int)$usetheme) {
-                $this->_helper->layout->setLayout('../' . $browsingListProduct->getTheme() . '/common');
-            }
+                        $this->view->docId[$runningIndex] = $id;
+                        try {
+                            $this->view->docState = $d->getServerState();
+                        }
+                        catch (Exception $e) {
+                            $this->view->docState = 'undefined';
+                        }
 
-            // If node === 0, then this collection actually is a CollectionRole
-            // and we want to translate the title (if specified).
-            $translatelabel = 'search_index_custom_browsing_' . $this->view->title;
-            if ($node === 0 && !($translatelabel === $this->view->translate($translatelabel)) ) {
-                $this->view->title = $this->view->translate($translatelabel);
-            }
+                        try{
+                        $c = count($d->getPersonAuthor());
+                        $this->view->author[$runningIndex] = array();
+                        $this->view->url_author[$runningIndex] = array();
+                        for ($counter = 0; $counter < $c; $counter++) {
+        	                $name = $d->getPersonAuthor($counter)->getName();
+                            $this->view->url_author[$runningIndex][$counter] = $this->view->url(
+                                array(
+                                    'module'        => 'search',
+                                    'controller'    => 'search',
+                                    'action'        => 'metadatasearch',
+                                    'author'        => $name
+                                ),
+                                null,
+                                true
+                            );
+                            $this->view->author[$runningIndex][$counter] = $name;
+                        }
+                        }
+                        catch (Exception $e) {
+                        	//no author
+                        	$this->view->author[$runningIndex] = null;
+                        }
+                        try {
+                            $this->view->title[$runningIndex] = $d->getTitleMain(0)->getValue();
+                        }
+                        catch (Exception $e) {
+            	            $this->view->title[$runningIndex] = $this->view->translate('document_no_title') . $id;
+                        }
+                        $runningIndex++;
+                    }
+	            }
+
+                // Get the theme assigned to this collection iff usertheme is
+                // set in the request.  To enable the collection theme, add
+                // /usetheme/1/ to the browsing URL.
+                $usetheme = $this->_getParam("usetheme");
+                if (isset ($usetheme) === true && 1 === (int)$usetheme) {
+                    $this->_helper->layout->setLayout('../' . $browsingListProduct->getTheme() . '/common');
+                }
+
+                // If node === 0, then this collection actually is a CollectionRole
+                // and we want to translate the title (if specified).
+                $translatelabel = 'search_index_custom_browsing_' . $this->view->title;
+                if ($node === 0 && !($translatelabel === $this->view->translate($translatelabel)) ) {
+                    $this->view->title = $this->view->translate($translatelabel);
+                }
 
 				break;
 			default:
@@ -356,10 +437,29 @@ class Search_BrowsingController extends Zend_Controller_Action
                     $array = array('id' => $queryHit);
                     $opusdoc = new Opus_Search_Adapter_DocumentAdapter($array);
                     $opusHit->setDocument($opusdoc);
-                    //$opusHit = new Opus_Document((int) $queryHit);
            	        $hitlistList->add($opusHit);
                 }
-    	        $result = $template->getTemplate($hitlistList, 'RSS Feed Latest Documents');
+                $hitlistIterator = new Opus_Search_Iterator_HitListIterator($hitlistList);
+                // Put the hitlist into a Pagionator
+                $hitlist_paginator = Zend_Paginator::factory($hitlistIterator);
+                if (array_key_exists('hitsPerPage', $data)) {
+        	        if ($data['hitsPerPage'] === '0') {
+        	            $hitsPerPage = '10000';
+        	        }
+                    else {
+            	        $hitsPerPage = $data['hitsPerPage'];
+                    }
+                    $hitlist_paginator->setItemCountPerPage($hitsPerPage);
+                }
+                if (array_key_exists('page', $data)) {
+                    // paginator
+                    $page = $data['page'];
+                } else {
+                    $page = 1;
+                }
+                $hitlist_paginator->setCurrentPageNumber($page);
+                
+    	        $result = $template->getTemplate($hitlist_paginator, 'RSS Feed Latest Documents');
                 $xml = $result['xmlobject'];
                 $this->_helper->viewRenderer->setNoRender(true);
                 $this->_helper->layout()->disableLayout();
@@ -412,6 +512,7 @@ class Search_BrowsingController extends Zend_Controller_Action
                     $this->view->docState = 'undefined';
                 }
 
+                try {
                 $c = count($d->getPersonAuthor());
                 $this->view->author[$runningIndex] = array();
                 $this->view->url_author[$runningIndex] = array();
@@ -428,6 +529,11 @@ class Search_BrowsingController extends Zend_Controller_Action
                         true
                     );
                     $this->view->author[$runningIndex][$counter] = $name;
+                }
+                }
+                catch (Exception $e) {
+                  	//no author
+                    $this->view->author[$runningIndex] = null;
                 }
                 try {
                     $this->view->title[$runningIndex] = $d->getTitleMain(0)->getValue();

@@ -172,81 +172,42 @@
     // Show documents in this Collection hierarchy
     if ($this->list === 'collection')
 	{
-        $documents = array();
-        try {
-            $documents = $this->browsinglist->getEntries();
-            $documents_paginator = Zend_Paginator::factory($documents);
-            if ($this->page > 0) {
-            	$documents_paginator->setCurrentPageNumber($this->page);
-            }
-        }
-        catch (Exception $e) {
-            // presumably this is a collection role
-            // no action necessary
-        }
-	    if (count($documents) > 0) {
-            echo $this->paginationControl($documents_paginator, NULL, 'collectionEntries_ItemCount_pagination.phtml');
-            echo $this->paginationControl($documents_paginator, 'Sliding', 'searchList_pagination.phtml');
-
-            // FIXME: <ol start="..."> is not valid XHTML 1.0 Strict!
-            $pagerInfo = $documents_paginator->getPages();
+        if ($this->numberOfDocuments > 0) {
+            echo $this->paginationControl($this->documents_paginator, NULL, 'collectionEntries_ItemCount_pagination.phtml');
+            echo $this->paginationControl($this->documents_paginator, 'Sliding', 'searchList_pagination.phtml');
+            
+            $pagerInfo = $this->documents_paginator->getPages();
             echo '<ol class="search" start="' . $pagerInfo->firstItemNumber . '">';
-            echo "\n";
-
-            $searchListItemCount = 0;
-            foreach ($documents_paginator as $d) {
+            $searchListItemCount = 0;    
+            for ($runningIndex = 0; $runningIndex < count($this->docId); $runningIndex++) {
                 $searchListItemCount++;
                 $searchListOdd = ($searchListItemCount%2 === 1);
-
-                $id = $d->getId();
-                $doc = new Opus_Search_SearchHit( (int) $id);
-                $hit = $doc->getSearchHit();
-                $document = $hit->getDocument();
-                // print_r($document);
                 echo $searchListOdd ? '<li class="odd">' : '<li class="even">';
-
-                $authoriterator = new Opus_Search_Iterator_PersonsListIterator($document["author"]);
-                $role = 'author';
-                #echo $document['author'] . ': ';
-                foreach ($authoriterator as $obj) {
-                    $pers = $obj->get();
-             echo '<span class="author"><a href="' .
-                 $this->url(
-                     array(
-                         'module'        => 'search',
-                         'controller'    => 'search',
-                         'action'        => 'metadatasearch',
-                         'noform'        => 'true',
-                         $role     => $pers['lastName'] . ', ' . $pers['firstName']
-                     ),
-                     null,
-                      true
-                 ) .
-                 '">';
-                    echo $pers["lastName"].", ".$pers["firstName"];
-                    echo "</a></span>";
-                    if ($authoriterator->hasNext() === true) echo "; ";
-                    else echo ": ";
+                $authorcount = count($this->author[$runningIndex]);
+                for ($counter = 0; $counter < $authorcount; $counter++) {
+                ?>
+                    <span class="author"><a href="<?=$this->url_author[$runningIndex][$counter]?>"><?=$this->author[$runningIndex][$counter]?></a></span>
+                <?php
+                    if ($counter === $authorcount-1) echo ": ";
+                    else echo "; ";
                 }
-                #print("<a href=\"".$this->url($document["frontdoorUrl"])."\">".$document["title"]."</a>");
-                print('<span class="title"><a href="' .
-                    $this->url(
-                        array(
-                            'module'        => 'frontdoor',
-                            'controller'    => 'index',
-                            'action'        => 'index',
-                            'docId'         => $document['id']
-                        ),
-                        null,
-                        true
-                    ) . '">' . $document['title'] . '</a></span>'
-                );
-                echo '</li>';
-                #echo "<div>".$this->translate('search_titles_relevance').": ".$doc->getRelevance()."<br/>";
-                #echo $document["abstract"]."<br/>";
-                echo "\n";
+                ?>
+                <span class="title"><a href="<?=$this->url_frontdoor[$runningIndex]?>"><?=$this->title[$runningIndex]?></a></span>
+                </li>
+                <div class="queryhit">
+                <?php
+                if (false === empty($this->relevance[$runningIndex])) {
+                ?>
+                    <?=$this->translate('search_titles_relevance')?>: <?=$this->relevance[$runningIndex]?><br/>
+                <?php } ?>
+                <?=$this->abstractValue[$runningIndex]?>
+                </div>
+            <?php
             }
-            echo "</ol>\n";
-            echo $this->paginationControl($documents_paginator, 'Sliding', 'searchList_pagination.phtml');
-        }
+            ?>
+            </ol>
+            <?= $this->paginationControl($this->documents_paginator, 'Sliding', 'searchList_pagination.phtml') ?>
+        <?php 
+        } 
 	}
+	?>

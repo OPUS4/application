@@ -40,11 +40,7 @@ class RSSOutput {
 	 */
 	public function getTemplate($hitlist, $givenTitle = null, $rssVersion = '2.0') {
 
-        $hitlistIterator = new Opus_Search_Iterator_HitListIterator($hitlist);
-        $hitCount = count($hitlist);
-        // Put the hitlist into a Pagionator
-        $hitlist_paginator = Zend_Paginator::factory($hitlistIterator);
-
+        $hitCount = $hitlist->getTotalItemCount();
         $statuscode = 200;
         $xml = new DOMDocument('1.0', 'utf-8');
         $xml->formatOutput = true;
@@ -63,7 +59,7 @@ class RSSOutput {
         $view = Zend_Layout::getMvcInstance()->getView();
 
         if (0 < $hitCount && is_int($hitCount) === true) {
-            foreach ($hitlist_paginator as $searchhit) {
+            foreach ($hitlist as $searchhit) {
             	$h = $searchhit->getSearchHit();
                 $doc = $h->getDocument();
                 $id = $doc['id'];

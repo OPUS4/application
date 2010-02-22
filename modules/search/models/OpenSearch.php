@@ -73,20 +73,19 @@ class OpenSearch {
     public function getRssResult() {
     	
     	$template = new RSSOutput();
-    	$result = $template->getTemplate($this->__hitlist, 'OpenSearch RSS Search Result');
+        // Put the hitlist into a Pagionator
+        $hitlistIterator = new Opus_Search_Iterator_HitListIterator($this->__hitlist);
+        $hitlist_paginator = Zend_Paginator::factory($hitlistIterator);
+        $hitlist_paginator->setCurrentPageNumber((($this->startOffset-1)/$this->itemsPerPage)+1);
+        $hitlist_paginator->setItemCountPerPage($this->itemsPerPage);
+    	$result = $template->getTemplate($hitlist_paginator, 'OpenSearch RSS Search Result');
         $xml = $result['xmlobject'];
 
         $searchResult = $xml->getElementsByTagName('rss');
         $searchResult->item(0)->setAttribute('xmlns:opensearch', 'http://a9.com/-/spec/opensearch/1.1/');
         $searchResult->item(0)->setAttribute('xmlns:atom', 'http://www.w3.org/2005/Atom');
 
-        $hitlist = $this->__hitlist;
-        $hitCount = count($hitlist);
-        // Put the hitlist into a Pagionator
-        $hitlistIterator = new Opus_Search_Iterator_HitListIterator($hitlist);
-        $hitlist_paginator = Zend_Paginator::factory($hitlistIterator);
-        $hitlist_paginator->setCurrentPageNumber((($this->startOffset-1)/$this->itemsPerPage)+1);
-        $hitlist_paginator->setItemCountPerPage($this->itemsPerPage);
+        $hitCount = $hitlist_paginator->getTotalItemCount();
 
         $channelItems = $xml->getElementsByTagName('channel');
         $channel = $channelItems->item(0);
