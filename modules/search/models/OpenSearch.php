@@ -83,8 +83,8 @@ class OpenSearch {
         $hitlist = $this->__hitlist;
         $hitCount = count($hitlist);
         // Put the hitlist into a Pagionator
-        //$hitlistIterator = new Opus_Search_Iterator_HitListIterator($hitlist);
-        $hitlist_paginator = Zend_Paginator::factory($hitlist);
+        $hitlistIterator = new Opus_Search_Iterator_HitListIterator($hitlist);
+        $hitlist_paginator = Zend_Paginator::factory($hitlistIterator);
         $hitlist_paginator->setCurrentPageNumber((($this->startOffset-1)/$this->itemsPerPage)+1);
         $hitlist_paginator->setItemCountPerPage($this->itemsPerPage);
 

@@ -40,9 +40,10 @@ class RSSOutput {
 	 */
 	public function getTemplate($hitlist, $givenTitle = null, $rssVersion = '2.0') {
 
+        $hitlistIterator = new Opus_Search_Iterator_HitListIterator($hitlist);
         $hitCount = count($hitlist);
         // Put the hitlist into a Pagionator
-        $hitlist_paginator = Zend_Paginator::factory($hitlist);
+        $hitlist_paginator = Zend_Paginator::factory($hitlistIterator);
 
         $statuscode = 200;
         $xml = new DOMDocument('1.0', 'utf-8');
@@ -63,7 +64,11 @@ class RSSOutput {
 
         if (0 < $hitCount && is_int($hitCount) === true) {
             foreach ($hitlist_paginator as $searchhit) {
-                $doc = new Opus_Document( (int) $searchhit);
+            	$h = $searchhit->getSearchHit();
+                $doc = $h->getDocument();
+                $id = $doc['id'];
+            	
+                $doc = new Opus_Document( (int) $id);
                 $result = $xml->createElement('item');
                 $channel->appendChild($result);
                 $url = $view->url(
@@ -71,7 +76,7 @@ class RSSOutput {
                         'action' => 'index', 
                         'controller' => 'index', 
                         'module' => 'frontdoor',
-                        'docId' => $searchhit
+                        'docId' => $id
                     ), 
                     'default', 
                     true

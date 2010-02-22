@@ -349,7 +349,17 @@ class Search_BrowsingController extends Zend_Controller_Action
         $data = $this->_request->getParams();
         if (array_key_exists('output', $data) === true && $data['output'] === "rss") {
                 $template = new RSSOutput();
-    	        $result = $template->getTemplate($hitlist, 'RSS Feed Latest Documents');
+    	        // We need an OPUS-compliant result list to return
+                $hitlistList = new Opus_Search_List_HitList();
+                foreach ($hitlist as $queryHit) {
+                    $opusHit = new Opus_Search_SearchHit();
+                    $array = array('id' => $queryHit);
+                    $opusdoc = new Opus_Search_Adapter_DocumentAdapter($array);
+                    $opusHit->setDocument($opusdoc);
+                    //$opusHit = new Opus_Document((int) $queryHit);
+           	        $hitlistList->add($opusHit);
+                }
+    	        $result = $template->getTemplate($hitlistList, 'RSS Feed Latest Documents');
                 $xml = $result['xmlobject'];
                 $this->_helper->viewRenderer->setNoRender(true);
                 $this->_helper->layout()->disableLayout();
