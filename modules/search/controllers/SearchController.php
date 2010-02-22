@@ -175,6 +175,7 @@ class Search_SearchController extends Zend_Controller_Action
                 $this->view->docId = array();
                 $this->view->title = array();
                 $this->view->abstractValue = array();
+                $this->view->relevance = array();
                 $this->view->author = array();
                 $this->view->url_frontdoor = array();
                 $this->view->url_author = array();
@@ -229,6 +230,7 @@ class Search_SearchController extends Zend_Controller_Action
                     }
                     try {
                     	if (array_key_exists('noform', $data) === false) {
+                    		$this->view->relevance[$runningIndex] = $hit->getRelevance();
                     		$this->view->abstractValue[$runningIndex] = Opus_Search_Adapter_Lucene_SearchHitAdapter::highlight($resultlist->query, $d->getTitleAbstract(0)->getValue());
                     	}
                     	else {
@@ -550,6 +552,7 @@ class Search_SearchController extends Zend_Controller_Action
                 $this->view->docId = array();
                 $this->view->title = array();
                 $this->view->abstractValue = array();
+                $this->view->relevance = array();
                 $this->view->author = array();
                 $this->view->url_frontdoor = array();
                 $this->view->url_author = array();
@@ -604,6 +607,7 @@ class Search_SearchController extends Zend_Controller_Action
                     }
                     try {
                     	if (array_key_exists('noform', $data) === false) {
+                    		$this->view->relevance[$runningIndex] = $hit->getRelevance();
                     		$this->view->abstractValue[$runningIndex] = Opus_Search_Adapter_Lucene_SearchHitAdapter::highlight($queryObject->parsedQuery, $d->getTitleAbstract(0)->getValue());
                     	}
                     	else {

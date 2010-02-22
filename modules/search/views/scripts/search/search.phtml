@@ -71,6 +71,11 @@ if (count($this->docId)) {
         <span class="title"><a href="<?=$this->url_frontdoor[$runningIndex]?>"><?=$this->title[$runningIndex]?></a></span>
         </li>
         <div class="queryhit">
+        <?php
+            if (false === empty($this->relevance[$runningIndex])) {
+        ?>
+            <?=$this->translate('search_titles_relevance')?>: <?=$this->relevance[$runningIndex]?><br/>
+        <?php } ?>
         <?=$this->abstractValue[$runningIndex]?>
         </div>
 <?php
