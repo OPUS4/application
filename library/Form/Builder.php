@@ -15,6 +15,7 @@ class Form_Builder {
         // Construct base form
         $form = new Zend_Form;
         $form->removeDecorator('DtDdWrapper');
+        $form->removeDecorator('HtmlTag');
         // Construct subform for model
         $subForm = $this->__buildModelForm($model);
         $form->addSubForm($subForm, get_class($model));
@@ -28,7 +29,7 @@ class Form_Builder {
 
     /**
      * Updates or builds a model based on form data
-     * 
+     *
      * @return void
      */
     public function buildModelFromPostData($model, $data) {
@@ -122,11 +123,15 @@ class Form_Builder {
         // Construct subform to hold elements.
         $subForm = new Zend_Form_SubForm();
         $subForm->removeDecorator('DtDdWrapper');
+        $subForm->getDecorator('HtmlTag')->setOption('tag','div');
+        $subForm->getDecorator('HtmlTag')->setOption('class',get_class($model));
         $subForm->setLegend(get_class($model));
 
         // Add Id when necessary
         if ($model instanceof Opus_Model_AbstractDb) {
             $idElement = new Zend_Form_Element_Hidden('Id');
+            $idElement->removeDecorator('HtmlTag');
+            $idElement->removeDecorator('Label');
             $idElement->removeDecorator('DtDdWrapper');
             $id = $model->getId();
             if (true === is_array($id)) $id = implode(',', $id);
@@ -185,6 +190,7 @@ class Form_Builder {
 
         // Iterate over values, placing them on the appropriate subform.
         $fieldForm = new Zend_Form_SubForm;
+        $fieldForm->getDecorator('HtmlTag')->setoption('tag','div');
         $fieldForm->removeDecorator('DtDdWrapper');
         $fieldForm->setLegend($fieldName);
         if (false === empty($fieldValues)) {
@@ -207,6 +213,8 @@ class Form_Builder {
                             $widget->addMultiOption($option->getId(), $option->getDisplayName());
                         }
                         $widget->setValue($fieldValue->getId());
+                        $widget->getDecorator('Label')->setTag(null);
+                        $widget->removeDecorator('HtmlTag');
                         $fieldForm->addElement($widget);
                     } else {
                         // If value is not a selection of models, embed subform
@@ -219,14 +227,11 @@ class Form_Builder {
                     // If value is simple, build corresponding widget
                     if ($field->isTextarea()) {
                         $widget = new Zend_Form_Element_Textarea(strVal($i + 1));
-                        $widget->removeDecorator('DtDdWrapper');
                     } else if ($field->isCheckbox()) {
                         $widget = new Zend_Form_Element_Checkbox(strVal($i + 1));
-                        $widget->removeDecorator('DtDdWrapper');
                     } else if ($field->isSelection()) {
                         $options = $field->getDefault();
                         $widget = new Zend_Form_Element_Select(strVal($i + 1));
-                        $widget->removeDecorator('DtDdWrapper');
                         $message = Zend_Registry::get('Zend_Translate')->_('choose_option') . ' ' . Zend_Registry::get('Zend_Translate')->_($fieldName);
                         $widget->addMultiOption('', $message);
                         foreach ($field->getDefault() as $key => $option) {
@@ -234,8 +239,12 @@ class Form_Builder {
                         }
                     } else {
                         $widget = new Zend_Form_Element_Text(strVal($i + 1));
-                        $widget->removeDecorator('DtDdWrapper');
                     }
+                    $widget->getDecorator('Label')->setTag(null);
+                    $widget->getDecorator('Label')->setOption('tag','div');
+                    $widget->getDecorator('Label')->setRequiredSuffix(' *');
+                    $widget->getDecorator('HtmlTag')->setOption('tag','div');
+                    $widget->getDecorator('HtmlTag')->setOption('class', $fieldName);
                     $widget->setValue($fieldValue);
                     $widget->setLabel($fieldName);
                     $widget->setRequired($mandatory);
