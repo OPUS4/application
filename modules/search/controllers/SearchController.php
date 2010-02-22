@@ -145,9 +145,9 @@ class Search_SearchController extends Zend_Controller_Action
             }
         }
         if ($failure === false) {
-		    #if (array_key_exists('sort', $data)) {
-			#    $hitlist->sort($data['sort']);
-		    #}
+		    if (array_key_exists('sort', $data)) {
+			    $hitlist->sort($data['sort']);
+		    }
             $hitlistIterator = new Opus_Search_Iterator_HitListIterator($hitlist);
             $this->view->hitlist_count = count($hitlist);
             if (is_null($hitlist) === false) {
@@ -522,9 +522,9 @@ class Search_SearchController extends Zend_Controller_Action
             }
         }
         if ($failure === false) {
-		    #if (array_key_exists('sort', $data)) {
-			#    $hitlist->sort($data['sort']);
-		    #}
+		    if (array_key_exists('sort', $data)) {
+			    $hitlist->sort($data['sort']);
+		    }
             $hitlistIterator = new Opus_Search_Iterator_HitListIterator($hitlist);
             $this->view->hitlist_count = count($hitlist);
             if (is_null($hitlist) === false) {
