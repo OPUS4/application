@@ -94,6 +94,7 @@
     <page caption="caption_06_bachelorthesis">
         <field name="IdentifierUrn" mandatory="no" adminformweight="1" publishformweight="202" multiplicity="1" />
         <field name="IdentifierOpac" mandatory="no" adminformweight="1" publishformweight="0" multiplicity="1" />
+        <field name="IdentifierIsbn" mandatory="no" adminformweight="1" publishformweight="0" multiplicity="1" />
         
         <field name="Note" mandatory="no" adminformweight="1" publishformweight="301" multiplicity="1" />
     </page>

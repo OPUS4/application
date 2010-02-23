@@ -118,8 +118,12 @@ class Opus3Migration extends Application_Bootstrap {
     		$iprange = null;
     		// create IP-range for these documents
     		if (empty($ipstart) !== true) {
+    			$rolename = $ipstart;
     			if (empty($ipend) === true) {
     				$ipend = $ipstart;
+    			}
+    			else {
+    				$rolename .= '-' . $ipend;
     			}
     		    $iprange = new Opus_Iprange();
     		    $ip1 = explode(".", $ipstart);
@@ -134,7 +138,15 @@ class Opus3Migration extends Application_Bootstrap {
     		    $iprange->setIp2byte4($ip2[3]);
     		    $ipid = $iprange->store();
     		}
-	    	$fileImporter = new Opus3FileImport($this->path, $this->magicPath, $iprange);
+    		else {
+    			$rolename = 'all';
+    		}
+    		
+    		$accessRole = new Opus_Role('IP-' . $rolename);
+    		if (empty($iprange) === false) {
+    		    //$iprange->addRole($accessRole);
+    		}
+	    	$fileImporter = new Opus3FileImport($this->path, $this->magicPath, $accessRole);
     		$docList = Opus_Document::getAllIds();
     		foreach ($docList as $id)
 	    	{
@@ -142,7 +154,7 @@ class Opus3Migration extends Application_Bootstrap {
 			    $opus3Id = $doc->getIdentifierOpus3()->getValue();
 			    $documentFiles = $fileImporter->loadFiles($doc);
 			    $documentFiles->store();
-			    echo count($doc->getField('File')->getValue()) . " file(s) have been imported successfully for document ID " . $doc->getId() . "!\n";
+			    echo count($documentFiles) . " file(s) have been imported successfully for document ID " . $doc->getId() . "!\n";
 			    unset($doc);
 			    unset($documentFiles);
 		    }

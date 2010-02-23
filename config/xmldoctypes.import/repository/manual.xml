@@ -59,7 +59,7 @@
     </page>
 	   
 	<page caption="caption_03_manual">
-		<field name="PersonAuthor" mandatory="yes" adminformweight="1" publishformweight="201" multiplicity="*" />
+		<field name="PersonAuthor" mandatory="no" adminformweight="1" publishformweight="201" multiplicity="*" />
 		<!-- <field name="PersonReferee" mandatory="no" adminformweight="1" publishformweight="203" multiplicity="*" /> -->
 		<!-- <field name="PersonEditor" mandatory="no" adminformweight="1" publishformweight="204" multiplicity="*" /> -->
 		<field name="PersonTranslator" mandatory="no" adminformweight="1" publishformweight="205" multiplicity="*" />

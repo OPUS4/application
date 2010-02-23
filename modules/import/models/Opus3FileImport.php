@@ -49,7 +49,7 @@ class Opus3FileImport
     protected $_tmpPath = null;
     
     protected $_magicPath;
-    protected $_iprange;
+    protected $_accessRole;
     
 
     /**
@@ -58,12 +58,12 @@ class Opus3FileImport
      * @param string $fulltextPath Path to the Opus3-fulltexts
      * @return void
      */
-    public function __construct($fulltextPath, $magicPath, $iprange)
+    public function __construct($fulltextPath, $magicPath, $accessRole)
     {
         // Initialize member variables.
         $this->_path = $fulltextPath;
         $this->_magicPath = $magicPath;
-        $this->_iprange = $iprange;
+        $this->_accessRole = $accessRole;
     }
     
     /**
@@ -108,9 +108,8 @@ class Opus3FileImport
                 $file->setTempFile($filename);
 			    $file->setDocumentId($object->getId());
 			    $file->setLanguage($lang);
-			    // TODO: set the IP-range
-			    if ($this->_iprange !== null) {
-    			    //$file->setAccessIpRange($this->_iprange);
+			    if ($this->_accessRole !== null) {
+    			    $file->setAccessPermissions($this->_accessRole);
 			    }
             }
         }

@@ -58,8 +58,9 @@
     </page>
 	   
 	<page caption="caption_03_journal">
+        <field name="PersonAuthor" mandatory="no" adminformweight="1" publishformweight="203" multiplicity="*" />
         <field name="PersonEditor" mandatory="no" adminformweight="1" publishformweight="204" multiplicity="*" />
-		<!-- <field name="PersonContributor" mandatory="no" adminformweight="1" publishformweight="206" multiplicity="*" /> -->
+		<field name="PersonContributor" mandatory="no" adminformweight="1" publishformweight="206" multiplicity="*" />
         <field name="CreatingCorporation" mandatory="no" adminformweight="1" publishformweight="208" multiplicity="*"/>
         <!--  <field name="ContributingCorporation" mandatory="no" adminformweight="1" publishformweight="208" multiplicity="*"/> -->
 	            

@@ -59,7 +59,7 @@
     </page>
 	   
 	<page caption="caption_03_studypaper">
-		<field name="PersonAuthor" mandatory="yes" adminformweight="1" publishformweight="201" multiplicity="*" />
+		<field name="PersonAuthor" mandatory="no" adminformweight="1" publishformweight="201" multiplicity="*" />
 		<field name="PersonAdvisor" mandatory="no" adminformweight="1" publishformweight="202" multiplicity="2" />
 		<!-- <field name="PersonReferee" mandatory="no" adminformweight="1" publishformweight="203" multiplicity="*" /> -->
 		<!-- <field name="PersonEditor" mandatory="no" adminformweight="1" publishformweight="204" multiplicity="*" /> -->
@@ -98,7 +98,7 @@
 	    
     
     <page caption="caption_06_studypaper">
-	
+	    <field name="IdentifierIsbn" mandatory="no" adminformweight="1" publishformweight="0" multiplicity="1" />
         <field name="IdentifierUrn" mandatory="no" adminformweight="1" publishformweight="202" multiplicity="1" />
         <field name="IdentifierOpac" mandatory="no" adminformweight="1" publishformweight="0" multiplicity="1" />
         <field name="Note" mandatory="no" adminformweight="1" publishformweight="301" multiplicity="1" />

@@ -59,7 +59,7 @@
     </page>
 	   
 	<page caption="caption_03_masterthesis">
-		<field name="PersonAuthor" mandatory="yes" adminformweight="1" publishformweight="201" multiplicity="*" />
+		<field name="PersonAuthor" mandatory="no" adminformweight="1" publishformweight="201" multiplicity="*" />
 		<field name="PersonAdvisor" mandatory="no" adminformweight="1" publishformweight="202" multiplicity="2" />
 		<field name="PersonContributor" mandatory="no" adminformweight="1" publishformweight="206" multiplicity="*" />
 
