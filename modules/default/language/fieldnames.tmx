@@ -573,7 +573,44 @@
         <seg>Jahr der Fertigstellung</seg>
       </tuv>
     </tu>
+
+    <tu tuid="Grantor">
+      <tuv xml:lang="en">
+        <seg>Grantor</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Institution für akademischen Grad</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="Publisher">
+      <tuv xml:lang="en">
+        <seg>Publisher</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Veröffentlicher</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="add_Publisher">
+      <tuv xml:lang="en">
+        <seg>add Publisher</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Veröffentlicher hinzufügen</seg>
+      </tuv>
+    </tu>
     
+    <tu tuid="remove_Publisher">
+      <tuv xml:lang="en">
+        <seg>remove Publisher</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Veröffentlicher entfernen</seg>
+      </tuv>
+    </tu>
+
+        
     <tu tuid="PublishedYear">
       <tuv xml:lang="en">
         <seg>Year of Publication</seg>
