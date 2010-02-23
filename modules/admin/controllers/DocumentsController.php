@@ -276,7 +276,12 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                 $this->view->docState = 'undefined';
             }
 
-            $c = count($d->getPersonAuthor());
+            try {
+                $c = count($d->getPersonAuthor());
+            }
+            catch (Exception $e) {
+            	$c = 0;
+            }
             $this->view->author[$runningIndex] = array();
             $this->view->url_author[$runningIndex] = array();
             for ($counter = 0; $counter < $c; $counter++) {
