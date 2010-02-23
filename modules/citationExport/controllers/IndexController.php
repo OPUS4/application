@@ -108,7 +108,7 @@ class CitationExport_IndexController extends Zend_Controller_Action {
         $document = new Opus_Document($docId);
 
         // Set up filter and get XML-Representation of filtered document.
-        $type = new Opus_Document_Type($document->getType());
+        $type = new Opus_Document_Type($document->getType(), $document->getWorkflow());
         $filter = new Opus_Model_Filter;
         $filter->setModel($document);
         $xml = $filter->toXml();

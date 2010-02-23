@@ -93,7 +93,7 @@ class Publish_IndexController extends Controller_Action {
     private function __createFilter(Opus_Document $document, $page = null) {
         $filter = new Opus_Model_Filter();
         $filter->setModel($document);
-        $type = new Opus_Document_Type($document->getType());
+        $type = new Opus_Document_Type($document->getType(), $document->getWorkflow());
         $pages = $type->getPages();
         $alwayshidden = array('IdentifierOpus3', 'Type', 'ServerState', 'ServerDateModified', 'ServerDatePublished', 'File');
         $blacklist = array_merge($alwayshidden, $type->getPublishFormBlackList());
@@ -114,8 +114,7 @@ class Publish_IndexController extends Controller_Action {
      * @return boolean  Whether the page is defined.
      */
     private function __pageExists(Opus_Document $document, $page) {
-        $type = new Opus_Document_Type($document->getType());
-        $type = new Opus_Document_Type($document->getType());
+        $type = new Opus_Document_Type($document->getType(), $document->getWorkflow());
         $pages = $type->getPages();
         return array_key_exists($page, $pages);
     }
@@ -247,7 +246,7 @@ class Publish_IndexController extends Controller_Action {
                 if (array_key_exists('submit', $postdata) === true) {
                     // type is stored in serialized model as a string only
                     // to validate document it must be a Document_Type
-                    $type = new Opus_Document_Type($document->getType());
+                    $type = new Opus_Document_Type($document->getType(), $document->getWorkflow());
                     $document->setType($type);
                     $id = $document->store();
                     $this->view->title = $this->view->translate('publish_controller_upload');

@@ -55,7 +55,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
     private function __createFilter(Opus_Document $document, $page = null) {
         $filter = new Opus_Model_Filter();
         $filter->setModel($document);
-        $type = new Opus_Document_Type($document->getType());
+        $type = new Opus_Document_Type($document->getType(), $document->getWorkflow());
         $pages = $type->getPages();
         $alwayshidden = array('Collection', 'IdentifierOpus3', 'Source', 'File', 'ServerState', 'ServerDatePublished', 'ServerDateModified', 'ServerDateUnlocking');
         $blacklist = array_merge($alwayshidden, $type->getAdminFormBlackList());
@@ -329,7 +329,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         if ($document->getServerState() === 'deleted') {
             $this->view->actions = 'undelete';
         }
-        $type = new Opus_Document_Type($document->getType());
+        $type = new Opus_Document_Type($document->getType(), $document->getWorkflow());
         $documentWithFilter = new Opus_Model_Filter;
         $documentWithFilter->setModel($document)
             ->setBlacklist(array_merge(array('Collection', 'IdentifierOpus3', 'Source', 'File', 'ServerState', 'ServerDatePublished', 'ServerDateModified', 'ServerDateUnlocking', 'Type', 'Workflow'), $type->getAdminFormBlackList()))
