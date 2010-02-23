@@ -138,7 +138,7 @@ class View_Helper_LoginBar {
      */
     protected function prepareReturnParameters() {
         $params = array();
-        foreach (Zend_Controller_Front::getInstance()->getRequest()->getParams() as $key => $value) {
+        foreach (Zend_Controller_Front::getInstance()->getRequest()->getUserParams() as $key => $value) {
             switch ($key) {
             case 'module' :
                 $params['rmodule'] = $value;
