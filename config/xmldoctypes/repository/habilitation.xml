@@ -91,6 +91,8 @@
         <mandatory type="one-at-least">
             <field name="PublishedYear" adminformweight="1" publishformweight="404" multiplicity="1" />
             <!-- <field name="PublishedDate" adminformweight="1" publishformweight="405" multiplicity="1" /> -->
+        <field name="Publisher" mandatory="yes" adminformweight="1" publishformweight="404" multiplicity="2" />
+        <field name="Grantor" mandatory="yes" adminformweight="1" publishformweight="404" multiplicity="1" />
         </mandatory>
 
 	</page>
