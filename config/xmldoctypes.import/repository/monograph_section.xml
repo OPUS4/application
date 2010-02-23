@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- 
+	* This file is part of OPUS. The software OPUS has been originally developed
+	* at the University of Stuttgart with funding from the German Research Net,
+	* the Federal Department of Higher Education and Research and the Ministry
+	* of Science, Research and the Arts of the State of Baden-Wuerttemberg.
+	*
+    * OPUS 4 is a complete rewrite of the original OPUS software and was developed
+    * by the Stuttgart University Library, the Library Service Center
+    * Baden-Wuerttemberg, the North Rhine-Westphalian Library Service Center,
+    * the Cooperative Library Network Berlin-Brandenburg, the Saarland University
+    * and State Library, the Saxon State Library - Dresden State and University
+    * Library, the Bielefeld University Library and the University Library of
+    * Hamburg University of Technology with funding from the German Research
+    * Foundation and the European Regional Development Fund.
+	*
+	* LICENCE
+	* OPUS is free software; you can redistribute it and/or modify it under the
+	* terms of the GNU General Public License as published by the Free Software
+	* Foundation; either version 2 of the Licence, or any later version.
+	* OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
+	* WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+	* FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+	* details. You should have received a copy of the GNU General Public License 
+	* along with OPUS; if not, write to the Free Software Foundation, Inc., 51 
+	* Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+	*
+	* @category   Application
+	* @author     Eike Kleiner <Eike.Kleiner@bsz-bw.de>
+	* @author     Ralf Claussnitzer <ralf.claussnitzer@slub-dresden.de>
+	* @author     Oliver Marahrens <o.marahrens@tu-harburg.de>
+    * @author     Simone Finkbeiner <simone.finkbeiner@ub.uni-stuttgart.de>
+    * @author     Ulrich Herb <u.herb@sulb.uni-saarland.de>
+	* @copyright  Copyright (c) 2008 - 2009, OPUS 4 development team
+	* @license    http://www.gnu.org/licenses/gpl.html General Public License
+	* @version    $Id: monograph_section.xml 4129 2010-02-09 11:26:55Z uherb $
+-->
+
+<documenttype name="monograph_section"
+	xmlns="http://schemas.opus.org/documenttype"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    
+	<page caption="caption_01_monographsection">
+		<field name="Licence" mandatory="yes" adminformweight="1" publishformweight="101" multiplicity="1" />
+		<field name="Language" mandatory="yes" adminformweight="1" publishformweight="102" multiplicity="1"/>
+		<field name="File" mandatory="no" adminformweight="0" publishformweight="0" multiplicity="*" />
+		
+		<field name="ServerDateUnlocking" mandatory="no" adminformweight="0" publishformweight="201" multiplicity="1" />
+	    <!-- <field name="ServerDateValid" mandatory="no" adminformweight="0" publishformweight="202" multiplicity="1" /> -->   
+	    	    
+	    <!-- for downward compatibility to opus 3 data. Do not show this fields -->	    
+	    <field name="IdentifierOpus3" mandatory="no" adminformweight="1" publishformweight="0" multiplicity="1" />
+	</page>
+
+	<page caption="caption_02_monographsection">
+        <field name="TitleMain" mandatory="yes" adminformweight="1" publishformweight="101" multiplicity="4" />
+        <field name="TitleAbstract" mandatory="yes" adminformweight="1" publishformweight="102" multiplicity="4" />
+        <field name="TitleParent" mandatory="no" adminformweight="1" publishformweight="103" multiplicity="1" />
+    </page>
+	   
+	<page caption="caption_03_monographsection">
+		<field name="PersonAuthor" mandatory="yes" adminformweight="1" publishformweight="201" multiplicity="*" />
+		<!-- <field name="PersonReferee" mandatory="no" adminformweight="1" publishformweight="203" multiplicity="*" /> -->
+		<!-- <field name="PersonEditor" mandatory="no" adminformweight="1" publishformweight="204" multiplicity="*" /> -->
+		<field name="PersonTranslator" mandatory="no" adminformweight="1" publishformweight="205" multiplicity="*" />
+		<field name="PersonContributor" mandatory="no" adminformweight="1" publishformweight="206" multiplicity="*" />
+
+        <field name="CreatingCorporation" mandatory="no" adminformweight="1" publishformweight="207" multiplicity="*" />
+        <field name="ContributingCorporation" mandatory="no" adminformweight="1" publishformweight="208" multiplicity="*"/>
+
+        <field name="PublisherName" mandatory="no" adminformweight="1" publishformweight="209" multiplicity="1" />
+        <field name="PublisherPlace" mandatory="no" adminformweight="1" publishformweight="210" multiplicity="1"/>
+	    
+		<!-- TODO implement it -->
+		<!--<field name="Institute" mandatory="no" adminformweight="1" publishformweight="302" multiplicity="*" />-->
+        
+    </page>
+
+	<page caption="caption_04_monographsection">	    
+        <!-- <field name="PageNumber" mandatory="no" adminformweight="1" publishformweight="102" multiplicity="1" /> -->
+        <field name="PageFirst" mandatory="no" adminformweight="1" publishformweight="105" multiplicity="1" />
+        <field name="PageLast" mandatory="no" adminformweight="1" publishformweight="106" multiplicity="1" />
+        <!-- <mandatory type="one-at-least"> -->
+            <!--  <field name="CompletedYear" adminformweight="1" publishformweight="402" multiplicity="1" /> -->
+            <!-- <field name="CompletedDate" adminformweight="1" publishformweight="403" multiplicity="1" /> -->
+        <!--  </mandatory> -->
+        <mandatory type="one-at-least">
+            <field name="PublishedYear" adminformweight="1" publishformweight="404" multiplicity="1" />
+            <!-- <field name="PublishedDate" adminformweight="1" publishformweight="405" multiplicity="1" /> -->
+        </mandatory>
+    </page>
+
+	<page caption="caption_05_monographsection">
+	    <field name="SubjectSwd" mandatory="yes" adminformweight="1" publishformweight="401" multiplicity="*" />
+	    <field name="SubjectUncontrolled" mandatory="no" adminformweight="1" publishformweight="403" multiplicity="*" />
+	    <!-- TODO implement it - derzeit Fehlermeldung Specified column "collection" is not in the row -->
+	    <!--<field name="Collection" mandatory="no" adminformweight="1" publishformweight="404" multiplicity="*" />-->
+    </page>
+	    
+    
+    <page caption="caption_06_monographsection">
+	
+		<!-- TODO implement it -->
+		<!--<field name="Monograph" mandatory="no" adminformweight="1" publishformweight="201" multiplicity="1" />-->
+        <field name="IdentifierUrn" mandatory="no" adminformweight="1" publishformweight="202" multiplicity="1" />
+        <field name="IdentifierOpac" mandatory="no" adminformweight="1" publishformweight="0" multiplicity="1" />
+        <field name="Note" mandatory="no" adminformweight="1" publishformweight="301" multiplicity="1" />
+    </page>
+
+</documenttype>
