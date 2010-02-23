@@ -114,6 +114,7 @@ class Admin_CollectionController extends Controller_Action {
         } else if (true === isset($role)) {
             $collection = new Opus_Collection(null, $role);
         } else {
+            $collection = new Opus_CollectionRole();
             $allRoles = Opus_CollectionRole::getAll();
             $countRoles = count($allRoles);
             $pos_field = $collection->getField('Position');
