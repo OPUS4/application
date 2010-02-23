@@ -199,7 +199,7 @@ class AuthController extends Controller_Action {
      * returns mixed Associative array containing parameters that should be added to urls referencing this controller.
      */
     protected function findReturnParameters() {
-        $params = $this->getRequest()->getParams();
+        $params = $this->getRequest()->getUserParams();
         $rparams = array();
         foreach($params as $key=>$value) {
             switch ($key) {
