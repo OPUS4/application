@@ -158,7 +158,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
            $sort_reverse = '0';
         }
         $this->view->sort_reverse = $sort_reverse;
-        
+
         if (true === array_key_exists('state', $data)) {
         	$this->view->state = $data['state'];
         }
@@ -228,7 +228,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         }
         $paginator->setCurrentPageNumber($page);
         $this->view->paginator = $paginator;
-        
+
         // iterate the paginator and get the attributes we want to show in the view
         $runningIndex = 0;
         $this->view->docId = array();
@@ -489,7 +489,8 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         	$this->_redirectTo('publish_unlocking_date_not_reached', 'index');
         }
         $doc->setServerState('published');
-        $doc->setServerDatePublished(date('Y-m-d'));
+//        $doc->setServerDatePublished(date('Y-m-d'));
+        $doc->setServerDatePublished(date('c'));
         $doc->store();
 
    		$config = Zend_Registry::get('Zend_Config');
