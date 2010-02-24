@@ -78,6 +78,7 @@
           </tr>
          </table>
        </xsl:if> 
+       <xsl:call-template name="MailToAuthor"/>
        <xsl:call-template name="services"/>
        <table cellspacing="0">
          <colgroup class="angaben">
@@ -864,6 +865,22 @@
     <xsl:template match="ReferenceStdDoi"/>
     <xsl:template match="ReferenceCrisLink"/>
     <xsl:template match="ReferenceSplashUrl"/>
+    
+
+    <xsl:template name="MailToAuthor">
+      <xsl:element name="br"/>
+      <xsl:element name="a">
+           	<!-- TODO: Use Zend Url-Helper to build href attribute -->
+	        <xsl:attribute name="href">
+                    <xsl:value-of select="$baseUrl"/>
+                    <xsl:text>/frontdoor/mail/toauthor/docId/</xsl:text>
+		    <xsl:value-of select="@Id" />
+                </xsl:attribute>
+                <xsl:call-template name="translateString">
+                    <xsl:with-param name="string">frontdoor_mailtoauthor</xsl:with-param>
+                </xsl:call-template>
+            </xsl:element>
+    </xsl:template>
 
 
     <!--  Named template for services-buttons -->
