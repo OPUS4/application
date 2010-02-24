@@ -41,7 +41,7 @@ class Frontdoor_IndexController extends Controller_Action {
      * @return void
      */
     public function indexAction() {
-        // $logger = Zend_Registry::get('Zend_Log');        
+        // $logger = Zend_Registry::get('Zend_Log');
         // Load document
         $docId = $this->getRequest()->getParam('docId');
         $document = new Opus_Document($docId);
@@ -58,9 +58,9 @@ class Frontdoor_IndexController extends Controller_Action {
                 }
                 $this->_redirectTo(
                     $message,
-                    'index', 
-                    'auth', 
-                    'default', 
+                    'index',
+                    'auth',
+                    'default',
                     array(
                         'rmodule' => 'frontdoor',
                         'rcontroller' => 'index',
@@ -112,6 +112,10 @@ class Frontdoor_IndexController extends Controller_Action {
 
         // Transform to HTML
         $this->view->frontdoor = $proc->transformToXML($xml);
+
+        // increment counter for document access statistics
+        $statistics = Opus_Statistic_LocalCounter::getInstance();
+        $statistics->countFrontdoor($docId);
     }
 
     /**

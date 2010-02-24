@@ -25,49 +25,48 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_statistic
- * @author      Birgit Dressler (b.dressler@sulb.uni-saarland.de)
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @package     Module_Frontdoor
+ * @author      Tobias Leidinger <tobias.leidinger@googlemail.com>
+ * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
-<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
-<META HTTP-EQUIV="Expires" CONTENT="-1">
-<h1><?= $this->translate('statistic_index_title') ?></h1>
-<h2><?= $this->authors?></h2>
-<h3><?= $this->title?></h3>
-<p><?= $this->translate('total_views')?>
- <?= $this->translate('graph_legend_frontdoor')?>:
-<?= $this->totalAbstractPage?>,
-<?= $this->translate('graph_legend_files')?>:
-<?= $this->totalFiles?> </p>
-<p><img src="<?= $this->url(array(
-        'module' => 'statistic',
-        'controller' => 'graph',
-        'action' => 'year',
-        'id' => $this->docId,
-        )); ?>"
-alt="<?=$this->translate('graph_year_title'). ' ('.$this->translate('graph_legend_frontdoor').', '.$this->translate('graph_legend_files').')'.': ' . $this->altTextStat?>"
-/>
-</p>
 
-<p><img src="<?= $this->url(array(
-        'module' => 'statistic',
-        'controller' => 'graph',
-        'action' => 'month',
-        'id' => $this->docId,
-        )); ?>"
-alt ="<?=$this->translate('graph_month_title')?>"
-/>
-</p>
-<p><a href="<?= $this->url(array(
-        'module' =>'frontdoor',
-        'controller' => 'index',
-        'action' => 'index',
-        'docId' => $this->docId,
-    )); ?>"
-    >
-    <?= $this->translate('back_to_frontdoor'); ?>
-   </a>
-</p>
+/**
+ * class to built the mail mask for mail contact to author
+ */
+class ToauthorForm extends Zend_Form
+{
+    /**
+     * hold author information (name, mail)
+     * @var array('name' => ..., 'mail' => ...)
+     */
+    protected $authors;
+
+    /**
+     * Build mail form
+     *
+     * @return void
+     */
+    public function init()
+    {
+        $sender = new Zend_Form_Element_Text('sender');
+        $sender->setRequired(false);
+        $sender->setLabel('frontdoor_sendername');
+
+        $sender_mail = new Zend_Form_Element_Text('sender_mail');
+        $sender_mail->setRequired(false);
+        $sender_mail->setLabel('frontdoor_sendermail');
+        $sender_mail->addValidator('EmailAddress');
+
+        $message = new Zend_Form_Element_Textarea('message');
+        $message->setRequired(false);
+        $message->setLabel('frontdoor_messagetext');
+
+        $submit = new Zend_Form_Element_Submit('frontdoor_send_mailtoauthor');
+        $submit->setLabel('frontdoor_sendmailtoauthor');
+
+        // Add elements to form:
+        $this->addElements(array($sender, $sender_mail, $message, $submit));
+    }
+}

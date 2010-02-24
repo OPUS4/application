@@ -120,6 +120,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="frontdoor_toauthortext">
+      <tuv xml:lang="en">
+        <seg>Please indicate your contact information and select, which author you want to contact.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte geben Sie Ihre Kontaktdaten an, und wählen Sie aus, welchen der Autoren sie kontaktieren wollen.</seg>
+      </tuv>
+    </tu>
+    
     <tu tuid="frontdoor_sendrecommendation">
       <tuv xml:lang="en">
         <seg>Send recommendation</seg>
@@ -234,6 +243,15 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>E-mail versenden</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="frontdoor_toauthortitle">
+      <tuv xml:lang="en">
+        <seg>Send mail to Author</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Mail an Autor</seg>
       </tuv>
     </tu>
     
@@ -389,6 +407,17 @@
         <seg>Schriftenreihen</seg>
       </tuv>
     </tu>
+ 
+     <tu tuid="frontdoor_mailtoauthor">
+      <tuv xml:lang="en">
+        <seg>Send a mail to submitter of this document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Mail an den Autor des Dokuments schreiben</seg>
+      </tuv>
+    </tu>
+ 
+ 
  
   </body>
 </tmx>

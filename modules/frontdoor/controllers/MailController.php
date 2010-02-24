@@ -93,7 +93,7 @@ class Frontdoor_MailController extends Zend_Controller_Action
              $fromName = $form->getValue('sender');
              $subject = $this->view->translate('frontdoor_sendmailsubject');
              $bodyText = $form->getValue('message');
-             $recipient = array('address' => $form->getValue('recipient_mail'),'name' => $form->getValue('recipient'));
+             $recipient = array(1 => array('address' => $form->getValue('recipient_mail'),'name' => $form->getValue('recipient')));
              $mailSendMail = new Opus_Mail_SendMail();
              try {
                 $mailSendMail->sendMail($from,$fromName,$subject,$bodyText,$recipient);
@@ -109,5 +109,79 @@ class Frontdoor_MailController extends Zend_Controller_Action
          }
      }
     $this->view->form = $form;
+    }
+
+    public function toauthorAction()
+    {
+       $request = $this->getRequest();
+       $docId = $request->getParam('docId');
+       $this->view->docId = $docId;
+       $document = new Opus_Document($docId);
+       // get author
+       $authors = array();
+       $author = $document->getPersonAuthor();
+       if (true === is_array($author)) {
+           $ni = 0;
+           foreach ($author as $au) {
+               $authors[$ni] = array('name' => $au->getName(), 'mail' => $au->getEmail());
+               $ni = $ni + 1;
+           }
+       }
+       else {
+           $authors[0] = array('name' => $document->getPersonAuthor()->getName(), 'mail' => $document->getPersonAuthor()->getEmail());
+       }
+       $this->view->author = $authors;
+
+       // get title
+       $title = $document->getTitleMain();
+       if (true === is_array($title)) {
+           $title_value = $title[0]->getValue();
+       }
+       else {
+           $title_value = $title->getValue();
+       }
+       $this->view->title = $title_value;
+       // get type
+       $type = $document->getType();
+       $this->view->type = $type;
+       // show mail form
+
+
+       //$this->view->mailForm = $form;
+
+
+
+
+        $form = new ToauthorForm();
+        $form->setAction($this->view->url(array('module' => "frontdoor", "controller"=>'mail', "action"=>'toauthor')));
+        $form->setMethod('post');
+        if (true === $this->getRequest()->isPost()) {
+         $data = $this->getRequest()->getPost();
+
+         if (true === $form->isValid($data)) {
+             $from = $form->getValue('sender_mail');
+             $fromName = $form->getValue('sender');
+             $subject = $this->view->translate('frontdoor_sendmailsubject');
+             $bodyText = $form->getValue('message');
+             $recipient = array(1 => array('address' => 'author@mail.com' ,'name' => 'author_name'));
+             $mailSendMail = new Opus_Mail_SendMail();
+             try {
+                $mailSendMail->sendMail($from,$fromName,$subject,$bodyText,$recipient);
+                $this->view->ok = true;
+
+                $this->view->success = 'frontdoor_mail_ok';
+                $this->render('feedback');
+             } catch (Exception $e) {
+                 $this->view->ok = false;
+                 $this->view->form = $e->getMessage();
+                 $this->view->success = 'frontdoor_mail_notok';
+                 $this->render('feedback');
+             }
+         } else {
+              $this->view->form = $form;
+         }
+     }
+    $this->view->form = $form;
+
     }
 }
