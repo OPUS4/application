@@ -175,6 +175,14 @@
       </tuv>
     </tu>
 
+    <tu tuid="choose_valid_doctype">
+      <tuv xml:lang="en">
+        <seg>Please choose a document type.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie einen Dokumenttyp.</seg>
+      </tuv>
+    </tu>
   </body>
   
 </tmx>

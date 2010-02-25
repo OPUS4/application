@@ -149,7 +149,8 @@ class Publish_IndexController extends Controller_Action {
                     if (in_array($selectedDoctype, $possibleDoctypes) === false) {
                         // TODO: error message
                         // document type does not exists, back to select form
-                        $this->_redirectTo('index');
+                        $this->_redirectTo($this->view->translate('choose_valid_doctype'),
+                            'deposit', 'index', 'publish', array('target' => $workflow));
                     }
 
                     if ($alternateForm->isValid($data) === true) {
