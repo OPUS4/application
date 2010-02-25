@@ -32,8 +32,6 @@
 # Replace <template> with correct path e.g. /MyProject/public/
 RewriteEngine on
 RewriteBase <template>
-Rewritecond %{REQUEST_URI} !^/documents
-Rewritecond %{REQUEST_URI} !^/files
 RewriteCond %{REQUEST_FILENAME} -s [OR] 
 RewriteCond %{REQUEST_FILENAME} -l [OR] 
 RewriteCond %{REQUEST_FILENAME} -d 
