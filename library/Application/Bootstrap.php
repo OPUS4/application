@@ -143,6 +143,10 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         ->appendClassPath('forms');
         $this->_frontController->registerPlugin($moduleprepare);
 
+		// Checks the current requeste module's directory for an initFile and runs it before controller is loaded.
+		$moduleInit = new Controller_Plugin_ModuleInit();
+		$this->_frontController->registerPlugin($moduleInit);
+
         /*
          * Add a custorm front controller plugin of manipulating routing information
          * for webapi REST requests.
