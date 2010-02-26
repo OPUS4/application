@@ -248,6 +248,9 @@ class Form_Builder {
                     $widget->setValue($fieldValue);
                     $widget->setLabel($fieldName);
                     $widget->setRequired($mandatory);
+                    if (false === is_null($validator)) {
+                        $widget->addValidator($validator);
+                    }
                     $fieldForm->addElement($widget);
                     $fieldForm->removeDecorator('Fieldset');
                 }
