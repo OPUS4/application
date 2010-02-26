@@ -44,7 +44,7 @@
 class Publish_IndexController extends Controller_Action {
 
     /**
-     * Just to be there. No actions taken.
+     * Renders a list of available document types in selected workflow.
      *
      * @return void
      *
@@ -59,7 +59,7 @@ class Publish_IndexController extends Controller_Action {
     }
 
     /**
-     * Just to be there. No actions taken.
+     * Renders a list of available workflows.
      *
      * @return void
      *
@@ -180,7 +180,6 @@ class Publish_IndexController extends Controller_Action {
 
                     $createForm = $form_builder->build($this->__createFilter($document, 0));
                     $createForm->setAction($action_url);
-                    $createForm->setDescription($this->view->translate($caption));
                     $createForm->setDecorators(array('FormElements', array('Description', array('placement' => 'prepend','tag' => 'h2')), 'Form'));
                     $this->view->form = $createForm;
                 } else {

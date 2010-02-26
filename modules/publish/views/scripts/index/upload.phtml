@@ -38,4 +38,11 @@
 
 <?= $this->form ?>
 
-<?= $this->backlink ?>
+<ul>
+    <li>
+        <a href="<?=$this->url(array('module'=>'publish', 'controller'=>'index', 'action'=>'assign'), null, true)?>"><?=$this->translate('admin_documents_collectionassign')?></a>
+    </li>
+    <li>
+        <?= $this->backlink ?>
+    </li>
+</ul>
