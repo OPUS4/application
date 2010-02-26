@@ -80,14 +80,7 @@
             <!-- dc:abstract -->
             <xsl:apply-templates select="TitleAbstract" mode="xmetadissplus" />
             <!-- dc:publisher -->
-            <xsl:element name="dc:publisher">
-               <xsl:attribute name="xsi:type"><xsl:text>cc:Publisher</xsl:text></xsl:attribute>
-                <xsl:element name="cc:universityOrInstitution">
-                  <xsl:apply-templates select="@PublisherName" mode="xmetadissplus" />
-                  <xsl:apply-templates select="@PublisherPlace" mode="xmetadissplus" />
-                </xsl:element>             
-               <xsl:apply-templates select="@PublisherAddress" mode="xmetadissplus" />
-            </xsl:element>
+            <xsl:apply-templates select="Publisher" mode="xmetadissplus" />
             <!-- dc:contributor -->
             <xsl:apply-templates select="PersonAdvisor" mode="xmetadissplus" />
             <xsl:apply-templates select="PersonReferee" mode="xmetadissplus" />
@@ -192,13 +185,24 @@
                        </xsl:otherwise>    
                      </xsl:choose>  
                    </xsl:element>
-                   <xsl:element name="thesis:grantor">
-                      <xsl:attribute name="xsi:type"><xsl:text>cc:Corporate</xsl:text></xsl:attribute>
-                      <xsl:element name="cc:universityOrInstitution">
-                      </xsl:element>
-   <!--  missing: cc:name,cc:place,cc:department, 
-         not yet in xml-output -->
-                   </xsl:element>    
+
+                <xsl:element name="thesis:grantor">
+                   <xsl:attribute name="xsi:type"><xsl:text>cc:Corporate</xsl:text></xsl:attribute>
+                   <xsl:element name="cc:universityOrInstitution">
+                       <xsl:element name="cc:name">
+                          <xsl:value-of select="Publisher/@Name" />
+                       </xsl:element>   
+                       <xsl:element name="cc:place">
+                          <xsl:value-of select="Publisher/@City" />
+                       </xsl:element>
+                       <xsl:element name="cc:department">
+                          <xsl:element name="cc:name">
+                             <xsl:value-of select="Grantor/@Name" />
+                          </xsl:element>
+                       </xsl:element>
+                   </xsl:element>
+                </xsl:element>    
+
                 </xsl:element>
             </xsl:if>
 
@@ -298,24 +302,6 @@
         </xsl:element>
     </xsl:template>
 
-    <xsl:template match="@PublisherName" mode="xmetadissplus">
-        <xsl:element name="cc:name">
-            <xsl:value-of select="." />
-        </xsl:element>
-    </xsl:template>
-
-    <xsl:template match="@PublisherPlace" mode="xmetadissplus">
-        <xsl:element name="cc:place">
-            <xsl:value-of select="." />
-        </xsl:element>
-    </xsl:template>
-
-    <xsl:template match="@PublisherAddress" mode="xmetadissplus">
-        <xsl:element name="cc:address">
-          <xsl:attribute name="cc:Scheme"><xsl:text>DIN5008</xsl:text></xsl:attribute>
-            <xsl:value-of select="." />
-        </xsl:element>
-    </xsl:template>
 
     <xsl:template match="PersonAdvisor" mode="xmetadissplus">
        <xsl:element name="dc:contributor">
@@ -365,6 +351,23 @@
        </xsl:element>
     </xsl:template>
 
+    <xsl:template match="Publisher" mode="xmetadissplus">
+        <xsl:element name="dc:publisher">
+           <xsl:attribute name="xsi:type"><xsl:text>cc:Publisher</xsl:text></xsl:attribute>
+               <xsl:element name="cc:universityOrInstitution">
+                 <xsl:element name="cc:name">
+                     <xsl:value-of select="@Name" />
+                 </xsl:element>
+                 <xsl:element name="cc:place">
+                    <xsl:value-of select="@City" />
+                 </xsl:element>
+               </xsl:element>
+                 <xsl:element name="cc:address">
+                    <xsl:attribute name="cc:Scheme"><xsl:text>DIN5008</xsl:text></xsl:attribute>
+                    <xsl:value-of select="@Address" />
+                 </xsl:element>
+        </xsl:element>
+    </xsl:template>          
 
     <xsl:template match="@DateAccepted" mode="xmetadissplus">
         <xsl:element name="dcterms:dateAccepted">
@@ -426,10 +429,6 @@ SubjectSwd : freie Schlagwoerter tauchen in der XML-Darstellung
              SubjectUncontrolled
              Welches soll ich nehmen? Wird eines wegfallen?
              z.Zt. werden sie auch hier doppelt ausgegeben
-PublisherName, PublisherPlace, PublisherAddress: noch nicht gesehen,
-               da keine Testdaten
-thesis:grantor Institution, die akad. Grad vergeben hat
-               in Opus 3 Fakultaet, hier???
 fileSize    ist bei den Attributen zum Feld file nicht dabei
             hier z.Zt. FileSize benannt 
 
