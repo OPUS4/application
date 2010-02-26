@@ -97,8 +97,13 @@ class Opus3Migration extends Application_Bootstrap {
     	    foreach ($doc->getFile() as $file)
     	    {
     	      	echo "Signing " . $file->getPathName();
-    	      	$gpg->signPublicationFile($file, $pass);
-    	       	echo "... done!\n";
+    	      	try {
+    	      	    $gpg->signPublicationFile($file, $pass);
+    	      	    echo "... done!\n";
+    	      	}
+    	       	catch (Exception $e) {
+    	       		echo $e->getMessage();
+    	       	}
     	    }
 		}
     }
@@ -128,23 +133,21 @@ class Opus3Migration extends Application_Bootstrap {
     		    $iprange = new Opus_Iprange();
     		    $ip1 = explode(".", $ipstart);
     		    $ip2 = explode(".", $ipend);
-    		    $iprange->setIp1byte1($ip1[0]);
-    		    $iprange->setIp1byte2($ip1[1]);
-    		    $iprange->setIp1byte3($ip1[2]);
-    		    $iprange->setIp1byte4($ip1[3]);
-    		    $iprange->setIp2byte1($ip2[0]);
-    		    $iprange->setIp2byte2($ip2[1]);
-    		    $iprange->setIp2byte3($ip2[2]);
-    		    $iprange->setIp2byte4($ip2[3]);
+    		    $iprange->setIp1byte1($ip1[0])->setIp1byte2($ip1[1])->setIp1byte3($ip1[2])->setIp1byte4($ip1[3]);
+    		    $iprange->setIp2byte1($ip2[0])->setIp2byte2($ip2[1])->setIp2byte3($ip2[2])->setIp2byte4($ip2[3]);
+    		    $iprange->setName('IP-' . $rolename);
     		    $ipid = $iprange->store();
     		}
     		else {
     			$rolename = 'all';
     		}
     		
-    		$accessRole = new Opus_Role('IP-' . $rolename);
+    		$accessRole = new Opus_Role();
+    		$accessRole->setName('IP-' . $rolename);
+    		$accessRole->store();
     		if (empty($iprange) === false) {
-    		    //$iprange->addRole($accessRole);
+    		    $iprange->addRole($accessRole);
+    		    $iprange->store();
     		}
 	    	$fileImporter = new Opus3FileImport($this->path, $this->magicPath, $accessRole);
     		$docList = Opus_Document::getAllIds();
@@ -153,8 +156,10 @@ class Opus3Migration extends Application_Bootstrap {
 	    		$doc = new Opus_Document($id);
 			    $opus3Id = $doc->getIdentifierOpus3()->getValue();
 			    $documentFiles = $fileImporter->loadFiles($doc);
-			    $documentFiles->store();
-			    echo count($documentFiles) . " file(s) have been imported successfully for document ID " . $doc->getId() . "!\n";
+			    if ($documentFiles !== false) {
+			        $documentFiles->store();
+			        echo count($doc->getFile()) . " file(s) have been imported successfully for document ID " . $doc->getId() . "!\n";
+			    }
 			    unset($doc);
 			    unset($documentFiles);
 		    }

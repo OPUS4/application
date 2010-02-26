@@ -185,6 +185,9 @@ class XMLImport
             $lic = new Opus_Licence($this->getLicence($licenceValue));
             $this->document->removeChild($licence);
         }
+        else {
+            $lic = new Opus_Licence('1');
+        }
         if ($ddcNotation !== null)
         {
             $ddcName = 'Dewey Decimal Classification';

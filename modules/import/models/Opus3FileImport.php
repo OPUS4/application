@@ -82,6 +82,10 @@ class Opus3FileImport
         #echo "Found Files for $opusId in $this->_tmpPath";
         $files = $this->getFiles($this->_tmpPath);
         
+        if (count($files) === 0) {
+        	return false;
+        }
+        
         if (true === is_array($object->getLanguage()))
         {
     	    $lang = $object->getLanguage(0);
@@ -109,7 +113,7 @@ class Opus3FileImport
 			    $file->setDocumentId($object->getId());
 			    $file->setLanguage($lang);
 			    if ($this->_accessRole !== null) {
-    			    $file->setAccessPermissions($this->_accessRole);
+    			    $file->addAccessPermission($this->_accessRole);
 			    }
             }
         }
