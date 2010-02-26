@@ -72,26 +72,27 @@
         <field name="CreatingCorporation" mandatory="no" adminformweight="309" publishformweight="207" multiplicity="3" />
         <field name="ContributingCorporation" mandatory="no" adminformweight="310" publishformweight="208" multiplicity="3"/>
         
-        <field name="PublisherName" mandatory="no" adminformweight="401" publishformweight="209" multiplicity="1" />
-        <field name="PublisherPlace" mandatory="no" adminformweight="402" publishformweight="210" multiplicity="1"/>
- 
+        
         <!--  <field name="Institute" mandatory="yes" multiplicity="3" /> -->
         		
     </page>
     
     <page caption="caption_04_doctoral_thesis">
-	    <field name="PageNumber" mandatory="no" adminformweight="403" publishformweight="102" multiplicity="1" />	    
-        <field name="DateAccepted" mandatory="yes" adminformweight="404" publishformweight="401" multiplicity="1" />
+	    <field name="PublisherName" mandatory="no" adminformweight="401" publishformweight="401" multiplicity="1" />
+        <field name="PublisherPlace" mandatory="no" adminformweight="402" publishformweight="402" multiplicity="1"/>
+ 
+	    <field name="PageNumber" mandatory="no" adminformweight="403" publishformweight="403" multiplicity="1" />	    
+        <field name="DateAccepted" mandatory="yes" adminformweight="404" publishformweight="404" multiplicity="1" />
         <mandatory type="one-at-least">
-            <field name="CompletedYear" adminformweight="405" publishformweight="402" multiplicity="1" />
-            <field name="CompletedDate" adminformweight="406" publishformweight="403" multiplicity="1" />
+            <field name="CompletedYear" adminformweight="405" publishformweight="405" multiplicity="1" />
+            <field name="CompletedDate" adminformweight="406" publishformweight="406" multiplicity="1" />
         </mandatory>
         <mandatory type="one-at-least">
-            <field name="PublishedYear" adminformweight="407" publishformweight="404" multiplicity="1" />
-            <!-- <field name="PublishedDate" adminformweight="408" publishformweight="405" multiplicity="1" /> -->
+            <field name="PublishedYear" adminformweight="407" publishformweight="407" multiplicity="1" />
+            <!-- <field name="PublishedDate" adminformweight="408" publishformweight="408" multiplicity="1" /> -->
         </mandatory>
-        <field name="Publisher" mandatory="yes" adminformweight="409" publishformweight="404" multiplicity="1" />
-        <field name="Grantor" mandatory="yes" adminformweight="410" publishformweight="405" multiplicity="1" />
+        <field name="Publisher" mandatory="yes" adminformweight="409" publishformweight="409" multiplicity="1" />
+        <field name="Grantor" mandatory="yes" adminformweight="410" publishformweight="410" multiplicity="1" />
     </page>
 	
 	<page caption="caption_05_doctoral_thesis">
