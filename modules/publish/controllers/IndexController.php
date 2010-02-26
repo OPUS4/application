@@ -129,6 +129,10 @@ class Publish_IndexController extends Controller_Action {
 
         if ($this->_request->isPost() === true) {
             $requested_page = $this->_request->getParam('page');
+            $backlink = $this->_request->getParam('back');
+            if (false === is_null($backlink)) {
+                $requested_page--;
+            }
             $workflow = $this->_request->getParam('target');
             $data = $this->_request->getPost();
             $form_builder = new Form_Builder();
@@ -187,10 +191,16 @@ class Publish_IndexController extends Controller_Action {
                     $this->view->form = $form;
                 }
             } else if (false === array_key_exists('submit', $data)) {
-                $form_builder->buildModelFromPostData($documentInSession->document, $data['Opus_Model_Filter']);
+                if (true === array_key_exists('Opus_Model_Filter', $data)) {
+                    $form_builder->buildModelFromPostData($documentInSession->document, $data['Opus_Model_Filter']);
+                }
                 $form = $form_builder->build($this->__createFilter($documentInSession->document, $requested_page - 1));
                 $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create', 'page' => $requested_page));
                 $form->setAction($action_url);
+                if (0 < $requested_page - 1) {
+                    $backButton = new Zend_Form_Element_Submit('back');
+                    $form->addElement($backButton);
+                }
                 $this->view->form = $form;
             } else if (false === is_null($requested_page) and true === $this->__pageExists($documentInSession->document, $requested_page)) {
                 // if Opus_Model_filter does not exist, an empty form has been submitted
@@ -200,12 +210,18 @@ class Publish_IndexController extends Controller_Action {
                 }
                 $form = $form_builder->build($this->__createFilter($documentInSession->document, $requested_page - 1));
                 if (true === $form->isValid($data)) {
-                    $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create', 'page' => $requested_page + 1));
+                    $deliver_page = $requested_page + 1;
+                    $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create', 'page' => $deliver_page));
                     $form = $form_builder->build($this->__createFilter($documentInSession->document, $requested_page));
                 } else {
-                    $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create', 'page' => $requested_page));
+                    $deliver_page = $requested_page;
+                    $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create', 'page' => $deliver_page));
                 }
                 $form->setAction($action_url);
+                if ($deliver_page > 1) {
+                    $backButton = new Zend_Form_Element_Submit('back');
+                    $form->addElement($backButton);
+                }
                 $this->view->form = $form;
             } else {
                 // if Opus_Model_filter does not exist, an empty form has been submitted
@@ -222,6 +238,12 @@ class Publish_IndexController extends Controller_Action {
                     $action_url = $this->view->url(array('controller' => 'index', 'action' => 'summary'));
                     $summaryForm->setAction($action_url);
                     $this->view->form = $summaryForm;
+                    $backLinkForm = new Zend_Form;
+                    $backLinkUrl = $this->view->url(array('controller' => 'index', 'action' => 'create', 'page' => $requested_page + 1));
+                    $backLinkForm->setAction($backLinkUrl);
+                    $backButton = new Zend_Form_Element_Submit('back');
+                    $backLinkForm->addElement($backButton);
+                    $this->view->backLinkForm = $backLinkForm;
                 } else {
                     $this->view->form = $form;
                 }
@@ -257,12 +279,6 @@ class Publish_IndexController extends Controller_Action {
                     // Actually it is possible to add Files to every document for everybody!
                     $uploadForm->DocumentId->setValue($id);
                     $this->view->form = $uploadForm;
-                } else if (array_key_exists('back', $postdata) === true) {
-                    $form = $form_builder->build($this->__createFilter($document));
-                    $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create'));
-                    $form->setAction($action_url);
-                    $this->view->title = $this->view->translate('publish_controller_create');
-                    $this->view->form = $form;
                 } else {
                     // invalid form return to index
                     $this->_redirectTo('index');

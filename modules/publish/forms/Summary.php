@@ -41,9 +41,6 @@ class Summary extends Zend_Form {
         $submit = new Zend_Form_Element_Submit('submit');
         $submit->setLabel('save document and go to file transfer');
 
-        $back = new Zend_Form_Element_Submit('back');
-        $back->setLabel('back');
-
-        $this->addElements(array($back, $submit));
+        $this->addElement($submit);
     }
 }
