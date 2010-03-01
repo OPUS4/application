@@ -121,6 +121,8 @@ class Opus3Migration extends Application_Bootstrap {
     protected function importFiles($ipstart, $ipend) {
     		echo "Importing files\n";
     		$iprange = null;
+    		$rolename = null;
+    		$accessRole = null;
     		// create IP-range for these documents
     		if (empty($ipstart) !== true) {
     			$rolename = $ipstart;
@@ -138,17 +140,32 @@ class Opus3Migration extends Application_Bootstrap {
     		    $iprange->setName('IP-' . $rolename);
     		    $ipid = $iprange->store();
     		}
-    		else {
-    			$rolename = 'all';
-    		}
     		
-    		$accessRole = new Opus_Role();
-    		$accessRole->setName('IP-' . $rolename);
-    		$accessRole->store();
     		if (empty($iprange) === false) {
+        		$accessRole = new Opus_Role();
+        		$accessRole->setName('IP-' . $rolename);
+    	    	$accessRole->store();
     		    $iprange->addRole($accessRole);
     		    $iprange->store();
     		}
+    		else {
+        		$guestId = 0;
+        		// open document to the great bad internet
+        		// by assigning it to guest role
+        		$roles = Opus_Role::getAll();
+        		foreach ($roles as $role) {
+        			if ($role->getDisplayName() === 'guest') {
+        				$guestId = $role->getId();
+        			}
+        		}
+    	    	if ($guestId > 0) {
+    	    	    $accessRole = new Opus_Role($guestId);
+    	    	}
+        		if ($accessRole === null) {
+        			echo "Warning: no guest user has been found in database! Documents without IP-range will be imported without access permissions, so only the admin can view them!";
+    	    	}
+    		}
+    		
 	    	$fileImporter = new Opus3FileImport($this->path, $this->magicPath, $accessRole);
     		$docList = Opus_Document::getAllIds();
     		foreach ($docList as $id)
