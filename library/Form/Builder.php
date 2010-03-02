@@ -275,7 +275,6 @@ class Form_Builder {
                     }
                     $widget->getDecorator('Label')->setTag(null);
                     $widget->getDecorator('Label')->setOption('tag','div');
-                    $widget->getDecorator('Label')->setRequiredSuffix(' *');
                     $widget->getDecorator('HtmlTag')->setOption('tag','div');
                     $widget->getDecorator('HtmlTag')->setOption('class', $fieldName);
                     $widget->setValue($fieldValue);
