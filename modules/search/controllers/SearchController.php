@@ -447,11 +447,13 @@ class Search_SearchController extends Zend_Controller_Action
 
                 for ($n = 0; $n < $searchfields->fields; $n++)
                 {
-                	if ($n > 0) {
+                	if ($n > 0 && false === empty($data['query' . $n])) {
                 		$query .= ' ' . $data['boolean' . ($n-1)] . ' ';
                 	}
-                	$query .= $data['field' . $n] . ':';
-                	$query .= $data['query' . $n];
+                	if (false === empty($data['query' . $n])) {
+                		$query .= $data['field' . $n] . ':';
+                	    $query .= $data['query' . $n];
+                	}
                 	if ($data['searchtype'] === 'truncated')
                 	{
                 	    $query .= '*';
@@ -459,11 +461,17 @@ class Search_SearchController extends Zend_Controller_Action
                 }
                 if ($data['language'] !== '0')
                 {
-                	$query .= ' AND language:' . $data['language'];
+                	if ($query !== '') {
+                		$query .= ' AND ';
+                	}
+                	$query .= 'language:' . $data['language'];
                 }
                 if ($data['doctype'] !== '0')
                 {
-                	$query .= ' AND doctype:' . $data['doctype'];
+                	if ($query !== '') {
+                		$query .= ' AND ';
+                	}
+                	$query .= 'doctype:' . $data['doctype'];
                 }
                 try {
                     #echo "Complete query: " . $query;
