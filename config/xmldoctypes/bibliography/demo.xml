@@ -39,6 +39,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <page caption="page1_title">
+        <field name="PersonSubmitter" mandatory="yes" adminformweight="101" publishformweight="101" multiplicity="1" />
         <field name="TitleMain" mandatory="yes" />
         <field name="PersonAuthor" multiplicity="3" mandatory="yes" />
         <field name="TitleAbstract" multiplicity="*" />

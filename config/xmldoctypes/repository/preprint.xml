@@ -42,6 +42,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     
 	<page caption="caption_01_preprint">
+		<field name="PersonSubmitter" mandatory="yes" adminformweight="101" publishformweight="101" multiplicity="1" />
 		<field name="Licence" mandatory="yes" adminformweight="102" publishformweight="101" multiplicity="1" />
 		<field name="Language" mandatory="yes" adminformweight="103" publishformweight="102" multiplicity="1"/>
 		<field name="File" mandatory="no" adminformweight="0" publishformweight="0" multiplicity="*" />

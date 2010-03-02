@@ -130,6 +130,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="PersonSubmitter">
+      <tuv xml:lang="en">
+        <seg>Submitters contact data</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Kontaktdaten des Einstellers</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="DateAcceptedDescr">
       <tuv xml:lang="en">
         <seg>Date of accepting</seg>
