@@ -146,7 +146,7 @@ if (count($this->docId)) {
         ?>
         <span class="title"><a href="<?=$this->url_frontdoor[$runningIndex]?>"><?=$this->title[$runningIndex]?></a></span>
         <?php
-        if ($this->docState === 'deleted') { ?>
+        if ($this->docState[$runningIndex] === 'deleted') { ?>
         <form action="<?= $this->url_permanentdelete[$runningIndex] ?>" method="post" class="crud">
         <?php
         } else {
@@ -157,7 +157,7 @@ if (count($this->docId)) {
         ?>
         <input type='button' onClick="javascript:location.href='<?= $this->url_edit[$runningIndex] ?>'" value='<?= $this->translate('docs_edit') ?>' class="crud">
         <input type="hidden" name="id" value="<?= $this->docId[$runningIndex] ?>" />
-        <?php if ($this->docState === 'deleted') { ?>
+        <?php if ($this->docState[$runningIndex] === 'deleted') { ?>
         <input type="submit" value="<?= $this->translate('docs_permadelete') ?>" />
         <?php
         } else {

@@ -177,7 +177,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="admion_doc_delete_permanent_sure">
+    <tu tuid="admin_doc_delete_permanent_sure">
       <tuv xml:lang="en">
         <seg>Are you sure you want to delete this document permanently? All contents will be removed from disk without the possibility to undelete!</seg>
       </tuv>

@@ -239,6 +239,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $this->view->url_delete = array();
         $this->view->url_edit = array();
         $this->view->url_author = array();
+        $this->view->docState = array();
         foreach ($paginator as $id) {
             $url_frontdoor = array(
                 'module' => 'frontdoor',
@@ -270,10 +271,10 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             $d = new Opus_Document( (int) $id);
             $this->view->docId[$runningIndex] = $id;
             try {
-                $this->view->docState = $d->getServerState();
+                $this->view->docState[$runningIndex] = $d->getServerState();
             }
             catch (Exception $e) {
-                $this->view->docState = 'undefined';
+                $this->view->docState[$runningIndex] = 'undefined';
             }
 
             try {
