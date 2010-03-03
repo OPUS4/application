@@ -49,7 +49,7 @@ if (isset($docId) === true) {
     // check, if we are allowed to read the document metadata
     if (true !== Opus_Security_Realm::getInstance()->check('readMetadata', $doc->getServerState())) {
         // we are not allowed to read the metadata
-        $logger->info("Unallowed to read document metadata from doc $docId!");
+        // $logger->info("Unallowed to read document metadata from doc $docId!");
         
         $identity = Zend_Auth::getInstance()->getIdentity();
         if (empty($identity) === true) {
