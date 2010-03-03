@@ -111,11 +111,11 @@ class Form_Builder {
             } else {
                 // Set object property.
                 $accessor = 'set' . $fieldName;
-                $clazz = $field->getValueModelClass();
                 $fieldValues = array();
                 foreach ($values as $key => $value) {
                     if (true === $field->isSelection()) {
                         // A selection is a shortcut to an existing model.
+                        $clazz = $field->getValueModelClass();
                         if ('add' === $key) {
                             $fieldValues[] = new $clazz();
                         } else if ('' !== $value) {
@@ -123,6 +123,7 @@ class Form_Builder {
                         }
                     } else if ('add' !== $key) {
                         // The 'add' key is reserved for adding a new (blank) subform.
+                        $clazz = $field->getValueModelClass();
                         if (false === array_key_exists('Id', $value) or '' === $value['Id']) {
                             $id = null;
                         } else {
@@ -134,11 +135,25 @@ class Form_Builder {
                             unset($value['Id']);
                         }
                         $fieldValue = new $clazz($id);
+                        if (false === is_null($field->getLinkModelClass()) and is_null($id)) {
+                            $linkModelClass = $field->getLinkModelClass();
+                            $link = new $linkModelClass();
+                            $link->setModel($fieldValue);
+                            $fieldValue = $link;
+                        }
                         $this->__populateModel($fieldValue, $value);
                         $fieldValues[] = $fieldValue;
                     } else {
                         // Create a new model for the value
-                        $fieldValues[] = new $clazz;
+                        $clazz = $field->getValueModelClass();
+                        $fieldValue = new $clazz;
+                        if (false === is_null($field->getLinkModelClass())) {
+                            $linkModelClass = $field->getLinkModelClass();
+                            $link = new $linkModelClass();
+                            $link->setModel($fieldValue);
+                            $fieldValue = $link;
+                        }
+                        $fieldValues[] = $fieldValue;
                     }
                 }
                 $model->$accessor($fieldValues);
