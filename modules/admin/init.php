@@ -39,13 +39,13 @@
  * @category    Application
  * @package     Module_Admin
  */
-$logger = Zend_Registry::get('Zend_Log');
-$logger->info("starting autorisitation check for module admin!");
+// $logger = Zend_Registry::get('Zend_Log');
+// $logger->info("starting autorisitation check for module admin!");
 
 // check, if we are allowed to administrate
 if (true !== Opus_Security_Realm::getInstance()->check('administrate')) {
 	// we are not allowed to administrate.
-	$logger->info("Unallowed access to module admin!");
+	// $logger->info("Unallowed access to module admin!");
 	
 	$identity = Zend_Auth::getInstance()->getIdentity();
 	if (empty($identity) === true) {
