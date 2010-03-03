@@ -46,32 +46,6 @@ class Frontdoor_IndexController extends Controller_Action {
         $docId = $this->getRequest()->getParam('docId');
         $document = new Opus_Document($docId);
 
-        if (Zend_Registry::get('Zend_Config')->security !== '0') {
-            // $logger->info("Check security");
-            if (true !== Opus_Security_Realm::getInstance()->check('readMetadata', $document->getServerState())) {
-                // $logger->info("Security false.");
-                $identity = Zend_Auth::getInstance()->getIdentity();
-                if (empty($identity) === true) {
-                    $message = $this->translate('frontdoor_no_identity_error');
-                } else {
-                    $message = $this->translate('frontdoor_wrong_identity_error');
-                }
-                $this->_redirectTo(
-                    $message,
-                    'index',
-                    'auth',
-                    'default',
-                    array(
-                        'rmodule' => 'frontdoor',
-                        'rcontroller' => 'index',
-                        'raction' => 'index',
-                        'docId' => $docId,
-                    )
-                );
-            }
-            // $logger->info("Security true.");
-        }
-
         // Set up filter and get XML-Representation of filtered document.
         $type = new Opus_Document_Type($document->getType(), $document->getWorkflow());
         $filter = new Opus_Model_Filter;
