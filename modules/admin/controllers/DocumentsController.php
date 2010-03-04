@@ -496,7 +496,9 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         }
         $doc->setServerState('published');
 //        $doc->setServerDatePublished(date('Y-m-d'));
-        $doc->setServerDatePublished(date('c'));
+//        $doc->setServerDatePublished(date('c'));
+        $date = new Zend_Date();
+        $doc->setServerDatePublished($date->get('yyyy-MM-ddThh:mm:ss') . 'Z');
         $doc->store();
 
    		$config = Zend_Registry::get('Zend_Config');
