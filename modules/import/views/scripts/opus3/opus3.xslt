@@ -201,7 +201,7 @@
                 <xsl:attribute name="ServerDateValid">
                     <!--Hours, minutes, seconds not needed in new format -->
                     <!--<xsl:value-of select="php:function('date', 'Y-m-d H:i:s', $date_valid)" />-->
-                    <xsl:value-of select="php:function('date', 'c', $date_valid)" />
+                    <xsl:value-of select="php:function('date', 'd.m.Y', $date_valid)" />
                 </xsl:attribute>
             </xsl:if>
             <xsl:variable name="dateaccepted"><xsl:value-of select="/mysqldump/database/table_data[@name='opus_diss']/row[field[@name='source_opus']=$OriginalID]/field[@name='date_accepted']" /></xsl:variable>
