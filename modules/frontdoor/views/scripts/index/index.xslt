@@ -107,6 +107,7 @@
        <xsl:apply-templates select="PersonAdvisor" />
        <xsl:apply-templates select="@Type" />
        <xsl:apply-templates select="@Language" />
+
        <xsl:choose>
          <xsl:when test="normalize-space(@CompletedYear)">
            <xsl:apply-templates select="@CompletedYear" />
@@ -115,6 +116,7 @@
            <xsl:apply-templates select="ComletedDate" />
          </xsl:otherwise>
        </xsl:choose>
+
        <xsl:choose>
          <xsl:when test="normalize-space(PublishedDate/@Year)">
            <xsl:apply-templates select="PublishedDate" />
@@ -123,9 +125,16 @@
            <xsl:apply-templates select="@PublishedYear" />
          </xsl:otherwise>
        </xsl:choose>
+
        <xsl:apply-templates select="DateAccepted" />
-       <xsl:apply-templates select="@CreatingCorporation" />
-       <xsl:apply-templates select="@ContributingCorporation" />
+
+       <xsl:if test="@CreatingCorporation != ''">
+           <xsl:apply-templates select="@CreatingCorporation" />
+       </xsl:if>    
+       <xsl:if test="@ContributingCorporation != ''">
+           <xsl:apply-templates select="@ContributingCorporation" />
+       </xsl:if>    
+
        <xsl:apply-templates select="TitleAbstract" />
        <xsl:apply-templates select="SubjectSwd" />
        <xsl:apply-templates select="SubjectUncontrolled" />
@@ -140,6 +149,7 @@
        <xsl:apply-templates select="@Reviewed" />
        <xsl:apply-templates select="Note" />
        <xsl:apply-templates select="@PublicationVersion" />
+
        <xsl:if test="Collection/@RoleName='Organisatorische Einheiten'">
           <xsl:apply-templates select="Collection[@RoleName='Organisatorische Einheiten']" />
        </xsl:if>   
@@ -158,10 +168,13 @@
        <xsl:if test="Collection/@RoleName='Schriftenreihen'">
           <xsl:apply-templates select="Collection[@RoleName='Schriftenreihen']" />
        </xsl:if>   
+
        <xsl:apply-templates select="Collection" mode="other"/> 
+
        <xsl:apply-templates select="Licence" />
        </table>
     </xsl:template>
+
 
     <!-- here begins the special templates for the fields -->
     <!-- Templates for "internal fields". -->
