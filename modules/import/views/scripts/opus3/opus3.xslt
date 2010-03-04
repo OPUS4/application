@@ -187,21 +187,21 @@
                 <xsl:attribute name="ServerDatePublished">
                     <!--Hours, minutes, seconds not needed in new format -->
                     <!--<xsl:value-of select="php:function('date', 'Y-m-d H:i:s', $date_creation)" />-->
-                    <xsl:value-of select="php:function('date', 'd.m.Y', $date_creation)" />
+                    <xsl:value-of select="php:function('date', 'c', $date_creation)" />
                 </xsl:attribute>
             </xsl:if>
             <xsl:if test="$date_modified>0">
                 <xsl:attribute name="ServerDateModified">
                     <!--Hours, minutes, seconds not needed in new format -->
                     <!--<xsl:value-of select="php:function('date', 'Y-m-d H:i:s', $date_modified)" />-->
-                    <xsl:value-of select="php:function('date', 'd.m.Y', $date_modified)" />
+                    <xsl:value-of select="php:function('date', 'c', $date_modified)" />
                 </xsl:attribute>
             </xsl:if>
             <xsl:if test="$date_valid>0">
                 <xsl:attribute name="ServerDateValid">
                     <!--Hours, minutes, seconds not needed in new format -->
                     <!--<xsl:value-of select="php:function('date', 'Y-m-d H:i:s', $date_valid)" />-->
-                    <xsl:value-of select="php:function('date', 'd.m.Y', $date_valid)" />
+                    <xsl:value-of select="php:function('date', 'c', $date_valid)" />
                 </xsl:attribute>
             </xsl:if>
             <xsl:variable name="dateaccepted"><xsl:value-of select="/mysqldump/database/table_data[@name='opus_diss']/row[field[@name='source_opus']=$OriginalID]/field[@name='date_accepted']" /></xsl:variable>
