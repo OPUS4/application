@@ -188,11 +188,6 @@
                <xsl:value-of select="@LastName" />
              </xsl:element>
           </xsl:element>
-          <xsl:if test="@Email!=''">
-             <xsl:element name="pc:email">
-               <xsl:value-of select="@Email" />
-             </xsl:element>
-           </xsl:if>
         </xsl:element>
     </xsl:template>
 
