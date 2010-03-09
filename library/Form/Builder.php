@@ -21,8 +21,8 @@
  * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details. You should have received a copy of the GNU General Public License 
- * along with OPUS; if not, write to the Free Software Foundation, Inc., 51 
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
@@ -171,8 +171,6 @@ class Form_Builder {
         // Construct subform to hold elements.
         $subForm = new Zend_Form_SubForm();
         $subForm->removeDecorator('DtDdWrapper');
-        $subForm->getDecorator('HtmlTag')->setOption('tag','div');
-        $subForm->getDecorator('HtmlTag')->setOption('class',get_class($model));
         $subForm->setLegend(get_class($model));
 
         // Add Id when necessary
@@ -181,6 +179,7 @@ class Form_Builder {
             $idElement->removeDecorator('HtmlTag');
             $idElement->removeDecorator('Label');
             $idElement->removeDecorator('DtDdWrapper');
+            $idElement->setAttrib('class', 'identifier');
             $id = $model->getId();
             if (true === is_array($id)) $id = implode(',', $id);
             $idElement->setValue($id);
@@ -238,7 +237,7 @@ class Form_Builder {
 
         // Iterate over values, placing them on the appropriate subform.
         $fieldForm = new Zend_Form_SubForm;
-        $fieldForm->getDecorator('HtmlTag')->setoption('tag','div');
+        $fieldForm->removeDecorator('HtmlTag');
         $fieldForm->removeDecorator('DtDdWrapper');
         $fieldForm->setLegend($fieldName);
         if (false === empty($fieldValues)) {
@@ -254,7 +253,6 @@ class Form_Builder {
                         $options = $field->getDefault();
                         $widget = new Zend_Form_Element_Select(strVal($i + 1));
                         $widget->setRequired($mandatory);
-                        $widget->removeDecorator('DtDdWrapper');
                         $message = Zend_Registry::get('Zend_Translate')->_('choose_option') . ' ' . Zend_Registry::get('Zend_Translate')->_($fieldName);
                         $widget->addMultiOption('', $message);
                         foreach ($options as $option) {
@@ -263,6 +261,7 @@ class Form_Builder {
                         $widget->setValue($fieldValue->getId());
                         $widget->getDecorator('Label')->setTag(null);
                         $widget->removeDecorator('HtmlTag');
+                        $widget->setAttrib('class', $fieldName);
                         $fieldForm->addElement($widget);
                     } else {
                         // If value is not a selection of models, embed subform
@@ -270,6 +269,7 @@ class Form_Builder {
                         // recursion in collection fields
                         if ($fieldValue instanceof Opus_Collection) continue;
                         $fieldForm->addSubForm($this->__buildModelForm($fieldValue), $i + 1);
+                        $this->__addFormDescription($fieldForm, $fieldName);
                     }
                 } else if (true === is_null($valueModelClass)) {
                     // If value is simple, build corresponding widget
@@ -288,16 +288,18 @@ class Form_Builder {
                     } else {
                         $widget = new Zend_Form_Element_Text(strVal($i + 1));
                     }
-                    $widget->getDecorator('Label')->setTag(null);
                     $widget->getDecorator('Label')->setOption('tag','div');
-                    $widget->getDecorator('HtmlTag')->setOption('tag','div');
-                    $widget->getDecorator('HtmlTag')->setOption('class', $fieldName);
+
+                    $widget->removeDecorator('HtmlTag');
                     $widget->setValue($fieldValue);
                     $widget->setLabel($fieldName);
                     $widget->setRequired($mandatory);
+
+                    $this->__addElementDescription($widget);
                     if (false === is_null($validator)) {
                         $widget->addValidator($validator);
                     }
+                    $widget->setAttrib('class', $fieldName);
                     $fieldForm->addElement($widget);
                     $fieldForm->removeDecorator('Fieldset');
                 }
@@ -307,6 +309,7 @@ class Form_Builder {
                     $element->removeDecorator('DtDdWrapper');
                     $element->setBelongsTo('Actions');
                     $element->setLabel('remove_' . $fieldName);
+                    $element->setAttrib('class', 'button remove');
                     $fieldForm->addElement($element);
                 }
             }
@@ -319,10 +322,26 @@ class Form_Builder {
             $element->setBelongsTo('Actions');
             $element->setLabel('add_' . $fieldName);
             $element->setAttrib('name', 'Action');
+            $this->__addElementDescription($element);
+            $element->setAttrib('class', 'description');
+            $element->setAttrib('class', 'button add');
             $fieldForm->addElement($element);
         }
 
         return $fieldForm;
     }
 
+    private function __addElementDescription(Zend_form_Element $element) {
+        if(Zend_Registry::get('Zend_Translate')->isTranslated('hint_' . $element->getName())) {
+            $element->setDescription('hint_' . $element->getName());
+            $element->addDecorator('Description');
+        }
+    }
+
+    private function __addFormDescription(Zend_Form_SubForm $subForm, $fieldName) {
+        if (Zend_Registry::get('Zend_Translate')->isTranslated('hint_' . $fieldName)) {
+            $subForm->setDescription('hint_' . $fieldName);
+            $subForm->addDecorator('Description');
+        }
+    }
 }
