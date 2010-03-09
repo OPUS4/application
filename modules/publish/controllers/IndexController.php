@@ -273,12 +273,14 @@ class Publish_IndexController extends Controller_Action {
                     $id = $document->store();
                     $this->view->title = $this->view->translate('publish_controller_upload');
                     $uploadForm = new FileUpload();
-                    $action_url = $this->view->url(array('controller' => 'index', 'action' => 'upload'));
-                    $uploadForm->setAction($action_url);
-                    // TODO: Security save id to session not to form
-                    // Actually it is possible to add Files to every document for everybody!
-                    $uploadForm->DocumentId->setValue($id);
-                    $this->view->form = $uploadForm;
+                    if (false === is_null($document->getField('File'))) {
+                        $action_url = $this->view->url(array('controller' => 'index', 'action' => 'upload'));
+                        $uploadForm->setAction($action_url);
+                        // TODO: Security save id to session not to form
+                        // Actually it is possible to add Files to every document for everybody!
+                        $uploadForm->DocumentId->setValue($id);
+                        $this->view->form = $uploadForm;
+                    }
                 } else {
                     // invalid form return to index
                     $this->_redirectTo('index');
@@ -367,7 +369,9 @@ class Publish_IndexController extends Controller_Action {
         } else {
             // on non post request redirect to index action
             if (false === is_null($documentInSession->document)) {
-                $this->view->form = $uploadForm;
+                if (false === is_null($documentInSession->document->getField('File'))) {
+                    $this->view->form = $uploadForm;
+                }
             } else {
                 $this->_redirectTo('index');
             }
