@@ -189,7 +189,7 @@ class Form_Builder {
         // Iterate over fields and build a subform for each field.
         foreach ($model->describe() as $i => $fieldName) {
             $field = $model->getField($fieldName);
-            $fieldForm = $this->__buildFieldForm($field);
+            $fieldForm = $this->__buildFieldForm($field, get_class($model));
             $subForm->addSubForm($fieldForm, $fieldName);
         }
 
@@ -204,7 +204,7 @@ class Form_Builder {
      * @param  Opus_Model_Field  $field The field to render a subform for.
      * @return Zend_Form_SubForm The subform for the field.
      */
-    private function __buildFieldForm(Opus_Model_Field $field) {
+    private function __buildFieldForm(Opus_Model_Field $field, $modelName = '') {
 
         // Get field properties.
         $fieldName = $field->getName();
@@ -269,7 +269,7 @@ class Form_Builder {
                         // recursion in collection fields
                         if ($fieldValue instanceof Opus_Collection) continue;
                         $fieldForm->addSubForm($this->__buildModelForm($fieldValue), $i + 1);
-                        $this->__addFormDescription($fieldForm, $fieldName);
+                        $this->__addDescription($modelName, $fieldName, $fieldForm);
                     }
                 } else if (true === is_null($valueModelClass)) {
                     // If value is simple, build corresponding widget
@@ -295,7 +295,7 @@ class Form_Builder {
                     $widget->setLabel($fieldName);
                     $widget->setRequired($mandatory);
 
-                    $this->__addElementDescription($widget);
+                    $this->__addDescription($modelName, $fieldName, $widget);
                     if (false === is_null($validator)) {
                         $widget->addValidator($validator);
                     }
@@ -310,6 +310,7 @@ class Form_Builder {
                     $element->setBelongsTo('Actions');
                     $element->setLabel('remove_' . $fieldName);
                     $element->setAttrib('class', 'button remove');
+                    $this->__addDescription($modelName, $fieldName, $element);
                     $fieldForm->addElement($element);
                 }
             }
@@ -322,26 +323,23 @@ class Form_Builder {
             $element->setBelongsTo('Actions');
             $element->setLabel('add_' . $fieldName);
             $element->setAttrib('name', 'Action');
-            $this->__addElementDescription($element);
+            $this->__addDescription($modelName, $fieldName, $element);
             $element->setAttrib('class', 'description');
             $element->setAttrib('class', 'button add');
             $fieldForm->addElement($element);
         }
 
+        $fieldForm->setAttrib('class', $valueModelClass);
         return $fieldForm;
     }
 
-    private function __addElementDescription(Zend_form_Element $element) {
-        if(Zend_Registry::get('Zend_Translate')->isTranslated('hint_' . $element->getName())) {
-            $element->setDescription('hint_' . $element->getName());
+    private function __addDescription($modelName, $fieldName, $element) {
+        $translationKey = 'hint_' . $modelName . '_' . $fieldName;
+        $translate = Zend_Registry::get('Zend_Translate');
+        if ($translate->isTranslated($translationKey)) {
+            $element->setDescription($translate->translate($translationKey));
             $element->addDecorator('Description');
         }
     }
 
-    private function __addFormDescription(Zend_Form_SubForm $subForm, $fieldName) {
-        if (Zend_Registry::get('Zend_Translate')->isTranslated('hint_' . $fieldName)) {
-            $subForm->setDescription('hint_' . $fieldName);
-            $subForm->addDecorator('Description');
-        }
-    }
 }
