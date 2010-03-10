@@ -79,6 +79,8 @@ class Frontdoor_MailController extends Zend_Controller_Action
        $this->view->type = $type;
        // show mail form
        $mailForm = new MailForm();
+       $mailForm->title->setValue($title_value);
+       $mailForm->doc_id->setValue($docId);
        $mailForm->setAction($this->view->url(array('module' => "frontdoor", "controller"=>'mail', "action"=>'sendmail')));
        $mailForm->setMethod('post');
        $this->view->mailForm = $mailForm;
@@ -90,20 +92,39 @@ class Frontdoor_MailController extends Zend_Controller_Action
      if (true === $this->getRequest()->isPost()) {
          $data = $this->getRequest()->getPost();
          if (true === $form->isValid($data)) {
+             $from = '';
              $from = $form->getValue('sender_mail');
+             if ('' == $from) {
+                $registry = Zend_Registry::getInstance();
+                $config = $registry->get('Zend_Config');
+                if (true === isset($config->mail->opus->address)) {
+                    $from = $config->mail->opus->address ;
+                    }
+             }
              $fromName = $form->getValue('sender');
+             $title = $form->getValue('title');
+             $docId = $form->getValue('doc_id');
+             $recipientMail = $form->getValue('recipient_mail');
              $subject = $this->view->translate('frontdoor_sendmailsubject');
-             $bodyText = $form->getValue('message');
-             $recipient = array(1 => array('address' => $form->getValue('recipient_mail'),'name' => $form->getValue('recipient')));
+             $bodyText = 'Hallo,' . '\n' . $this->view->translate('frontdoor_sendmailbody1') . ':\n';
+             $bodyText .= $title;
+             $bodyText .= '\n' . $this->view->translate('frontdoor_sendmailbody2') . ': ';
+             $bodyText .= '\n' . $this->view->translate('frontdoor_sendmailmsg') . ': ' . $form->getValue('message');
+             $bodyText .= '\n' . $this->view->translate('frontdoor_sendersname') .': ' . $fromName;
+             $bodyText .= '\n' . $this->view->translate('frontdoor_sendersmail') .': ' . $from;
+             $recipient = array(1 => array('address' => $recipientMail,'name' => $form->getValue('recipient')));
              $mailSendMail = new Opus_Mail_SendMail();
              try {
                 $mailSendMail->sendMail($from,$fromName,$subject,$bodyText,$recipient);
                 $this->view->ok = '1';
-                $this->view->form = $form;
-                $this->view->text = $this->view->translate('frontdoor_email_ok');
+                $this->view->docId = $docId;
+                $this->view->title = $title;
+                $this->view->recipientMail = $recipientMail;
+                $this->view->message = $form->getValue('message');
+                $this->render('recfeedback');
              } catch (Exception $e) {
                  $this->view->form = $e->getMessage();
-                 $this->view->text = $this->view->translate('frontdoor_email_notok');
+                 $this->view->text = $this->view->translate('frontdoor_mail_notok');
              }
          } else {
               $this->view->form = $form;

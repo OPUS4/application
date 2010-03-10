@@ -66,10 +66,20 @@ class MailForm extends Zend_Form
         $message->setRequired(false);
         $message->setLabel('frontdoor_messagetext');
 
+        $title = new Zend_Form_Element_Hidden('title');
+        $htmlTag = $title->getDecorator('htmlTag');
+        $htmlTag->setOption('tag','div');
+        $title->removeDecorator('label');
+
+        $doc_id = new Zend_Form_Element_Hidden('doc_id');
+        $htmlTag = $doc_id->getDecorator('htmlTag');
+        $htmlTag->setOption('tag','div');
+        $doc_id->removeDecorator('label');
+
         $submit = new Zend_Form_Element_Submit('frontdoor_send_recommendation');
         $submit->setLabel('frontdoor_sendrecommendation');
 
         // Add elements to form:
-        $this->addElements(array($recipient, $recipient_mail, $sender, $sender_mail, $message, $submit));
+        $this->addElements(array($recipient, $recipient_mail, $sender, $sender_mail, $message, $title, $doc_id, $submit));
     }
 }

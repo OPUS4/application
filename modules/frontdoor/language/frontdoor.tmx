@@ -219,12 +219,66 @@
       </tuv>
     </tu>
     
+    <tu tuid="frontdoor_message">
+      <tuv xml:lang="en">
+        <seg>Your message</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Ihre Mitteilung</seg>
+      </tuv>
+    </tu>
+    
     <tu tuid="frontdoor_sendmail">
       <tuv xml:lang="en">
         <seg>Send mail</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Mail versenden</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="frontdoor_sendmailbody1">
+      <tuv xml:lang="en">
+        <seg>a visitor to the repository Opus recommends this document to you</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>ein Besucher des Volltextservers Opus empfiehlt Ihnen dieses Dokument</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="frontdoor_sendmailbody2">
+      <tuv xml:lang="en">
+        <seg>The URL of the document is</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Die URL des Dokuments lautet</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="frontdoor_sendmailmsg">
+      <tuv xml:lang="en">
+        <seg>Senders message</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Mitteilung des Absenders</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="frontdoor_sendersmail">
+      <tuv xml:lang="en">
+        <seg>Senders E-mail address</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>E-mail-Adresse des Absenders</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="frontdoor_sendersname">
+      <tuv xml:lang="en">
+        <seg>Senders name</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Name des Absenders</seg>
       </tuv>
     </tu>
     
@@ -239,10 +293,19 @@
     
     <tu tuid="frontdoor_sendmailtitle">
       <tuv xml:lang="en">
-        <seg>Send e-mail</seg>
+        <seg>Send recommendation</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>E-mail versenden</seg>
+        <seg>Empfehlung versenden</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="frontdoor_sendmailtext">
+      <tuv xml:lang="en">
+        <seg>You have recommended this document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sie haben dieses Dokument empfohlen</seg>
       </tuv>
     </tu>
     
