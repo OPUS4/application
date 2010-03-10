@@ -50,6 +50,38 @@ class ToauthorForm extends Zend_Form
      */
     public function init()
     {
+        $first = true;
+        $numberOfAuthors = 0;
+        if (!is_null($this->authors)) {
+            foreach($this->authors as $author) {
+                $mail = $author['mail'];
+                $allow = $author['allowMail'];
+                if ($allow && !empty($mail)) {
+                    $numberOfAuthors++;
+                    $options = array('checked' => true);
+                    if (sizeof($this->authors) == 1) {
+                        $options['disabled'] = true;
+                    }
+                } else {
+                    $options = array('disabled' => true);
+                }
+                $authCheck = new Zend_Form_Element_Checkbox($author['mail'], $options);
+                if ($first) {
+                    $firstAuthorCheckbox = $authCheck;
+                    $first = false;
+                }
+                $label = $author['name'];
+                if (!$allow) {
+                    $translate = Zend_Registry::get('Zend_Translate');
+                    $label .= ' (' . $translate->_('frontdoor_mailform_notallowed') .')';
+                }
+                $authCheck->setLabel($label);
+                $this->addElement($authCheck);
+            }
+            if ($numberOfAuthors == 1) {
+                $firstAuthorCheckbox->setOptions(array('disabled' => true));
+            }
+        }
         $sender = new Zend_Form_Element_Text('sender');
         $sender->setRequired(false);
         $sender->setLabel('frontdoor_sendername');
@@ -68,5 +100,10 @@ class ToauthorForm extends Zend_Form
 
         // Add elements to form:
         $this->addElements(array($sender, $sender_mail, $message, $submit));
+    }
+
+    public function setAuthors($authors) {
+        $this->authors = $authors;
+        return $this;
     }
 }

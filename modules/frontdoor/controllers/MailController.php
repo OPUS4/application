@@ -52,6 +52,7 @@ class Frontdoor_MailController extends Zend_Controller_Action
        // get author
        $author_names = array();
        $authors = $document->getPersonAuthor();
+       print_r($authors);
        if (true === is_array($authors)) {
            $ni = 0;
            foreach ($authors as $author) {
@@ -117,21 +118,18 @@ class Frontdoor_MailController extends Zend_Controller_Action
        $docId = $request->getParam('docId');
        $this->view->docId = $docId;
        $document = new Opus_Document($docId);
-       // get author
-       $authors = array();
        $author = $document->getPersonAuthor();
        if (true === is_array($author)) {
-           $ni = 0;
            foreach ($author as $au) {
-               $authors[$ni] = array('name' => $au->getName(), 'mail' => $au->getEmail());
-               $ni = $ni + 1;
+
+                 $authors[] = array('name' => $au->getName(), 'mail' => $au->getEmail(), 'allowMail' => $au->getAllowEmailContact());
+
            }
        }
        else {
-           $authors[0] = array('name' => $document->getPersonAuthor()->getName(), 'mail' => $document->getPersonAuthor()->getEmail());
+           $authors[] = array('name' => $author->getName(), 'mail' => $author->getEmail());
        }
        $this->view->author = $authors;
-
        // get title
        $title = $document->getTitleMain();
        if (true === is_array($title)) {
@@ -152,7 +150,7 @@ class Frontdoor_MailController extends Zend_Controller_Action
 
 
 
-        $form = new ToauthorForm();
+        $form = new ToauthorForm(array('authors' => $authors));
         $form->setAction($this->view->url(array('module' => "frontdoor", "controller"=>'mail', "action"=>'toauthor')));
         $form->setMethod('post');
         if (true === $this->getRequest()->isPost()) {

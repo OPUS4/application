@@ -410,13 +410,22 @@
  
      <tu tuid="frontdoor_mailtoauthor">
       <tuv xml:lang="en">
-        <seg>Send a mail to submitter of this document</seg>
+        <seg>Send a mail to the author of this document</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Mail an den Autor des Dokuments schreiben</seg>
+        <seg>Mail an den Autor des Dokuments verfassen</seg>
       </tuv>
     </tu>
  
+    <tu tuid="frontdoor_mailform_notallowed">
+      <tuv xml:lang="en">
+        <seg>E-Mail contact not allowed</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Mailkontakt nicht erlaubt</seg>
+      </tuv>
+    </tu>
+    
  
  
   </body>

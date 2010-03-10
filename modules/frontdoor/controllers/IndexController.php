@@ -63,7 +63,7 @@ class Frontdoor_IndexController extends Controller_Action {
 
         // Set up XSLT-Processor
         $proc = new XSLTProcessor;
-        $proc->registerPHPFunctions('Frontdoor_IndexController::translate');
+        $proc->registerPHPFunctions('Frontdoor_IndexController::translate', 'Frontdoor_IndexController::isMailPossible');
         $proc->importStyleSheet($xslt);
 
         // Set Base-Url
@@ -102,6 +102,17 @@ class Frontdoor_IndexController extends Controller_Action {
         $registry = Zend_Registry::getInstance();
         $translate = $registry->get('Zend_Translate');
         return $translate->_($key);
+    }
+
+    static public function isMailPossible($docId) {
+        $document = new Opus_Document($docId);
+        $authors = $document->getPersonAuthor();
+        $result = false;
+        foreach ($authors as $author) {
+            $mail = $author->getEmail();
+            $result = $result || ($author->getAllowEmailContact() && !empty($mail));
+        }
+        return $result;
     }
 
 }
