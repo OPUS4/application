@@ -72,7 +72,7 @@ form input, form select, form textarea {
 
 form input[type='text'],
 form textarea {
-    width: 650px; 
+    width: 90%; 
     }
 		
 /* submit-button with gray border and black font */
