@@ -28,16 +28,17 @@ opus3# scp -r <opus3-Installationsverzeichnis>/htdocs/signatures <opus4-host>:/t
 opus4# cd <opus4-installationsverzeichnis>/scripts
 opus4# sh ./migration.sh
 Das Script ist interaktiv und fragt Pfade etc. ab.
-opus4# more ../workspace/log/importerrors.log
-opus4# cat ../workspace/log/importerrors.log >> ../workspace/log/importederrors.log
-Sollte migration.sh mit einem Speicherüberlauf enden, bitte mit dem nächsten Schritt fortfahren
-opus4# mysql -u<user> -p<Passwort> opus400
-mysql> SELECT COUNT(*) FROM documents;
-(Ergebnis ablesen)
-mysql> exit
-opus4# php Opus3Migration.php <importdatei> <abgelesenes Ergebnis>
-opus4# more ../workspace/log/importederrors.log
-Wenn in importederrors.log Fehler aufgeführt sind, sollten diese korrigiert werden, bevor fortgefahren wird
+workspace/log/import.log prüfen und darin nach dem String ERROR suchen
+Die nicht importierten Einträge sind als Opus_Model unter workspace/tmp/importerrors zu finden 
+Sollte migration.sh mit einem Speicherüberlauf enden, muss der Import wiederholt (oder besser: ergänzt) werden.
+Zur Ergänzung muss die XML-Dumpdatei manuell editiert werden. Im XML-Element <table_data name="opus">
+müssen sämtliche bereits importierten Einträge entfernt werden. Anschliessend abspeichern und erneut
+den Import starten, diesmal mit folgendem Kommando:
+opus4# php Opus3Migration.php
+Auch bei Fehlern muss eine Dumpdatei bereitgestellt werden, die die Einträge aus der opus-Tabelle enthält.
+Bei erneuten Importdurchläufen müssen die Collections, Institute und Lizenzen nicht erneut importiert werden.
+
+Ist der Datenbestand vollständig importiert, kann der Suchindex aufgebaut werden.
 opus4# php SearchEngineIndexBuilder.php
 Sollte SearchEngineIndexBuilder.php mit einem Speicherüberlauf enden, kann die Indizierung ab der letzten
 ID fortgesetzt werden:

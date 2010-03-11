@@ -480,7 +480,14 @@
     <xsl:template match="table_data[@name='opus']/row/field[@name='title']">
         <xsl:element name="TitleMain">
             <xsl:attribute name="Language">
-                <xsl:call-template name="mapLanguage"><xsl:with-param name="lang"><xsl:value-of select="../field[@name='language']" /></xsl:with-param></xsl:call-template>
+                <xsl:choose>
+                    <xsl:when test="string-length(../field[@name='language'])=0">
+                       <xsl:call-template name="mapLanguage"><xsl:with-param name="lang">ger</xsl:with-param></xsl:call-template> 
+                    </xsl:when>
+                    <xsl:otherwise>
+                       <xsl:call-template name="mapLanguage"><xsl:with-param name="lang"><xsl:value-of select="../field[@name='language']" /></xsl:with-param></xsl:call-template>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:attribute>
             <xsl:attribute name="Value">
                 <xsl:value-of select="." />

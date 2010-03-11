@@ -428,7 +428,7 @@ class Opus3MigrationParameters extends Opus3Migration
 			echo "You have to specify --with-files=<path-to-opus3-files> if you want to sign the files automatically!\n";
 		}
 
-		$this->cleanup();
+		//$this->cleanup();
     }
 }
 
@@ -548,7 +548,7 @@ class Opus3MigrationReadline extends Opus3Migration {
 		    }
 		}
 
-		$this->cleanup();
+		//$this->cleanup();
     }
 }
 
