@@ -1,5 +1,7 @@
 #!/bin/sh
 
+cd ../tests
+
 mv ../config/xmldoctypes ../config/xmldoctypes.opus
 mv ../config/xmldoctypes.import ../config/xmldoctypes
 
