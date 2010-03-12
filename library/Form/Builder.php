@@ -192,7 +192,7 @@ class Form_Builder {
             $fieldForm = $this->__buildFieldForm($field, get_class($model));
             $subForm->addSubForm($fieldForm, $fieldName);
         }
-
+        $this->__addDescription(get_class($model) . '_form', $subForm);
         $subForm->removeDecorator('Fieldset');
         return $subForm;
 
@@ -246,6 +246,7 @@ class Form_Builder {
                     // Hardcoded class name for file inputs!
                     $fileInput = new Zend_Form_Element_File($fieldName);
                     $fileInput->setLabel($fieldName);
+                    $this->__addDescription($modelName . '_' . $fieldName, $fileInput);
                     $fieldForm->addElement($fileInput);
                 } else if ($fieldValue instanceof Opus_Model_Abstract) {
                     if ($field->isSelection()) {
@@ -262,6 +263,7 @@ class Form_Builder {
                         $widget->getDecorator('Label')->setTag(null);
                         $widget->removeDecorator('HtmlTag');
                         $widget->setAttrib('class', $fieldName);
+                        $this->__addDescription($modelName . '_' . $fieldName, $widget);
                         $fieldForm->addElement($widget);
                     } else {
                         // If value is not a selection of models, embed subform
@@ -269,7 +271,7 @@ class Form_Builder {
                         // recursion in collection fields
                         if ($fieldValue instanceof Opus_Collection) continue;
                         $fieldForm->addSubForm($this->__buildModelForm($fieldValue), $i + 1);
-                        $this->__addDescription($modelName, $fieldName, $fieldForm);
+                        $this->__addDescription($modelName . '_' . $fieldName, $fieldForm);
                     }
                 } else if (true === is_null($valueModelClass)) {
                     // If value is simple, build corresponding widget
@@ -295,7 +297,7 @@ class Form_Builder {
                     $widget->setLabel($fieldName);
                     $widget->setRequired($mandatory);
 
-                    $this->__addDescription($modelName, $fieldName, $widget);
+                    $this->__addDescription($modelName . '_' . $fieldName, $widget);
                     if (false === is_null($validator)) {
                         $widget->addValidator($validator);
                     }
@@ -310,7 +312,7 @@ class Form_Builder {
                     $element->setBelongsTo('Actions');
                     $element->setLabel('remove_' . $fieldName);
                     $element->setAttrib('class', 'button remove');
-                    $this->__addDescription($modelName, $fieldName, $element);
+                    $this->__addDescription($modelName . '_' . $fieldName, $element);
                     $fieldForm->addElement($element);
                 }
             }
@@ -323,7 +325,7 @@ class Form_Builder {
             $element->setBelongsTo('Actions');
             $element->setLabel('add_' . $fieldName);
             $element->setAttrib('name', 'Action');
-            $this->__addDescription($modelName, $fieldName, $element);
+            $this->__addDescription($modelName . '_' . $fieldName . '_add', $element);
             $element->setAttrib('class', 'description');
             $element->setAttrib('class', 'button add');
             $fieldForm->addElement($element);
@@ -333,8 +335,8 @@ class Form_Builder {
         return $fieldForm;
     }
 
-    private function __addDescription($modelName, $fieldName, $element) {
-        $translationKey = 'hint_' . $modelName . '_' . $fieldName;
+    private function __addDescription($key, $element) {
+        $translationKey = 'hint_' . $key;
         $translate = Zend_Registry::get('Zend_Translate');
         if ($translate->isTranslated($translationKey)) {
             $element->setDescription($translate->translate($translationKey));
