@@ -479,6 +479,15 @@
         <seg>Mail an den Autor des Dokuments verfassen</seg>
       </tuv>
     </tu>
+    
+    <tu tuid="frontdoor_send_mailtoauthor">
+      <tuv xml:lang="en">
+        <seg>Send mail.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Mail abschicken.</seg>
+      </tuv>
+    </tu>
  
     <tu tuid="frontdoor_mailform_notallowed">
       <tuv xml:lang="en">

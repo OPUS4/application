@@ -45,50 +45,50 @@ class Frontdoor_MailController extends Zend_Controller_Action
      */
     public function indexAction()
     {
-       $request = $this->getRequest();
-       $docId = $request->getParam('docId');
-       $this->view->docId = $docId;
-       $document = new Opus_Document($docId);
-       // get author
-       $author_names = array();
-       $authors = $document->getPersonAuthor();
-       print_r($authors);
-       if (true === is_array($authors)) {
-           $ni = 0;
-           foreach ($authors as $author) {
-               $author_names[$ni] = $author->getName();
-               $ni = $ni + 1;
-           }
-       }
-       else {
-           $author_names[0] = $document->getPersonAuthor()->getName();
-       }
-       $this->view->author = $author_names;
+        $request = $this->getRequest();
+        $docId = $request->getParam('docId');
+        $this->view->docId = $docId;
+        $document = new Opus_Document($docId);
+        // get author
+        $author_names = array();
+        $authors = $document->getPersonAuthor();
+        print_r($authors);
+        if (true === is_array($authors)) {
+            $ni = 0;
+            foreach ($authors as $author) {
+                $author_names[$ni] = $author->getName();
+                $ni = $ni + 1;
+            }
+        }
+        else {
+            $author_names[0] = $document->getPersonAuthor()->getName();
+        }
+        $this->view->author = $author_names;
 
-       // get title
-       $title = $document->getTitleMain();
-       if (true === is_array($title)) {
-           $title_value = $title[0]->getValue();
-       }
-       else {
-           $title_value = $title->getValue();
-       }
-       $this->view->title = $title_value;
-       // get type
-       $type = $document->getType();
-       $this->view->type = $type;
-       // show mail form
-       $mailForm = new MailForm();
-       $mailForm->title->setValue($title_value);
-       $mailForm->doc_id->setValue($docId);
-       $mailForm->setAction($this->view->url(array('module' => "frontdoor", "controller"=>'mail', "action"=>'sendmail')));
-       $mailForm->setMethod('post');
-       $this->view->mailForm = $mailForm;
+        // get title
+        $title = $document->getTitleMain();
+        if (true === is_array($title)) {
+            $title_value = $title[0]->getValue();
+        }
+        else {
+            $title_value = $title->getValue();
+        }
+        $this->view->title = $title_value;
+        // get type
+        $type = $document->getType();
+        $this->view->type = $type;
+        // show mail form
+        $mailForm = new MailForm();
+        $mailForm->title->setValue($title_value);
+       	$mailForm->doc_id->setValue($docId);
+        $mailForm->setAction($this->view->url(array('module' => "frontdoor", "controller"=>'mail', "action"=>'sendmail')));
+        $mailForm->setMethod('post');
+        $this->view->mailForm = $mailForm;
     }
 
     public function sendmailAction()
     {
-     $form = new MailForm();
+         $form = new MailForm();
      if (true === $this->getRequest()->isPost()) {
          $data = $this->getRequest()->getPost();
          if (true === $form->isValid($data)) {
@@ -135,72 +135,83 @@ class Frontdoor_MailController extends Zend_Controller_Action
 
     public function toauthorAction()
     {
-       $request = $this->getRequest();
-       $docId = $request->getParam('docId');
-       $this->view->docId = $docId;
-       $document = new Opus_Document($docId);
-       $author = $document->getPersonAuthor();
-       if (true === is_array($author)) {
-           foreach ($author as $au) {
+        $request = $this->getRequest();
+        $docId = $request->getParam('docId');
+        $this->view->docId = $docId;
+        $document = new Opus_Document($docId);
+        $authorFromDb = $document->getPersonAuthor();
+        if (true === is_array($authorFromDb)) {
+            foreach ($authorFromDb as $au) {
+                $authorId = $au->getId();
+                $authors[] = array('id' => $authorId[0], 'name' => $au->getName(), 'mail' => $au->getEmail(), 'allowMail' => $au->getAllowEmailContact());
 
-                 $authors[] = array('name' => $au->getName(), 'mail' => $au->getEmail(), 'allowMail' => $au->getAllowEmailContact());
+            }
+        }
+        else {
+            throw new Exception('Error determine the author of this document');
+            //$authors[] = array('name' => $authorFromDb->getName(), 'mail' => $authorFromDb->getEmail());
+        }
+        $this->view->author = $authors;
+        // get title
+        $title = $document->getTitleMain();
+        if (true === is_array($title)) {
+            $title_value = $title[0]->getValue();
+        }
+        else {
+            $title_value = $title->getValue();
+        }
+        $this->view->title = $title_value;
+        // get type
+        $type = $document->getType();
+        $this->view->type = $type;
 
-           }
-       }
-       else {
-           $authors[] = array('name' => $author->getName(), 'mail' => $author->getEmail());
-       }
-       $this->view->author = $authors;
-       // get title
-       $title = $document->getTitleMain();
-       if (true === is_array($title)) {
-           $title_value = $title[0]->getValue();
-       }
-       else {
-           $title_value = $title->getValue();
-       }
-       $this->view->title = $title_value;
-       // get type
-       $type = $document->getType();
-       $this->view->type = $type;
-       // show mail form
-
-
-       //$this->view->mailForm = $form;
-
-
-
-
+        // show mail form
         $form = new ToauthorForm(array('authors' => $authors));
         $form->setAction($this->view->url(array('module' => "frontdoor", "controller"=>'mail', "action"=>'toauthor')));
         $form->setMethod('post');
+
+        // try to get formular data
         if (true === $this->getRequest()->isPost()) {
-         $data = $this->getRequest()->getPost();
+            $data = $this->getRequest()->getPost();
 
-         if (true === $form->isValid($data)) {
-             $from = $form->getValue('sender_mail');
-             $fromName = $form->getValue('sender');
-             $subject = $this->view->translate('frontdoor_sendmailsubject');
-             $bodyText = $form->getValue('message');
-             $recipient = array(1 => array('address' => 'author@mail.com' ,'name' => 'author_name'));
-             $mailSendMail = new Opus_Mail_SendMail();
-             try {
-                $mailSendMail->sendMail($from,$fromName,$subject,$bodyText,$recipient);
-                $this->view->ok = true;
+            if (true === $form->isValid($data)) {
+                $from = $form->getValue('sender_mail');
+                $fromName = $form->getValue('sender');
+                $subject = $this->view->translate('frontdoor_sendmailsubject');
+                $bodyText = $form->getValue('message');
 
-                $this->view->success = 'frontdoor_mail_ok';
-                $this->render('feedback');
-             } catch (Exception $e) {
-                 $this->view->ok = false;
-                 $this->view->form = $e->getMessage();
-                 $this->view->success = 'frontdoor_mail_notok';
-                 $this->render('feedback');
-             }
-         } else {
-              $this->view->form = $form;
-         }
-     }
-    $this->view->form = $form;
+                $checkBoxResult = $form->getValue('authors');
+
+                $recipient = array();
+                foreach ($authorFromDb as $author) {
+                    $authorId = $author->getId();
+                    $authorId = $authorId[0];
+                    if (array_key_exists($authorId, $checkBoxResult) && $checkBoxResult[$authorId] == 1) {
+                        $recipient[] = array('address' => $author->getEmail() ,'name' => $author->getName());
+                    }
+                }
+
+
+                //try to send a mail with the given information
+
+                $mailSendMail = new Opus_Mail_SendMail();
+                try {
+                    $mailSendMail->sendMail($from,$fromName,$subject,$bodyText,$recipient, true);
+                    $this->view->ok = true;
+
+                    $this->view->success = 'frontdoor_mail_ok';
+                    $this->render('feedback');
+                } catch (Exception $e) {
+                    $this->view->ok = false;
+                    $this->view->form = $e->getMessage();
+                    $this->view->success = 'frontdoor_mail_notok';
+                    $this->render('feedback');
+                }
+            } else {
+                $this->view->form = $form;
+            }
+        }
+        $this->view->form = $form;
 
     }
 }
