@@ -67,11 +67,11 @@ $this->headLink()
         <div id="content">
             <?= $this->layout()->content ?>
         </div>
-        <?php //if (Zend_Registry::get('Zend_Translate')->isTranslated(Zend_Controller_Front::getInstance()->getRequest()->getPathInfo())) { ?>
+        <?php if (Zend_Registry::get('Zend_Translate')->isTranslated(Zend_Controller_Front::getInstance()->getRequest()->getPathInfo())) { ?>
         <div class="right">
             <?= Zend_Registry::get('Zend_Translate')->_(Zend_Controller_Front::getInstance()->getRequest()->getPathInfo())?>
         </div>
-        <?php //} ?>
+        <?php } ?>
         <div id="foot">
             Letzte &Auml;nderung: 08.03.10    (Mail to <a href="mailto:ub@uni-beispiel.de">OPUS 4</a>) |
             BSZ-BW Konstanz
