@@ -56,6 +56,7 @@ $this->headLink()
 </head>
 <body>
     <div id="container">
+        <img src="<?= $basePath?>/layouts/opus34/img/OPUSlogo_200.gif" border ="0" width="200" />
         <div id="navigation1">
              <?= $this->menu('home') ?>
              <?= $this->languageSelector() ?>
@@ -66,9 +67,11 @@ $this->headLink()
         <div id="content">
             <?= $this->layout()->content ?>
         </div>
-        <div id="right">
+        <?php //if (Zend_Registry::get('Zend_Translate')->isTranslated(Zend_Controller_Front::getInstance()->getRequest()->getPathInfo())) { ?>
+        <div class="right">
             <?= Zend_Registry::get('Zend_Translate')->_(Zend_Controller_Front::getInstance()->getRequest()->getPathInfo())?>
         </div>
+        <?php //} ?>
         <div id="foot">
             Letzte &Auml;nderung: 08.03.10    (Mail to <a href="mailto:ub@uni-beispiel.de">OPUS 4</a>) |
             BSZ-BW Konstanz
@@ -107,7 +110,6 @@ $this->headLink()
         <?php endif ?>
        */
         ?>
-
 
 </body>
 </html>
