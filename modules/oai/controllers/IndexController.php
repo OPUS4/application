@@ -650,21 +650,27 @@ class Oai_IndexController extends Controller_Xml {
             }
         }
         // list sets for all collections for oai
-        $roles = Opus_CollectionRole::getAll();
+        $roles = Opus_CollectionRole::getAll(true);
         foreach ($roles as $role) {
           if ($role->getVisibleOai() == '1') {
             $oaisets = $role->getOaiSetNames();
             foreach ($oaisets as $oaiset) {
-               $opus_doc = $this->_xml->createElement('Opus_Sets');
-               $type_attr = $this->_xml->createAttribute("Spec");
-               $type_value = $this->_xml->createTextNode($oaiset);
-               $type_attr->appendChild($type_value);
-               $opus_doc->appendChild($type_attr);
-               $name_attr = $this->_xml->createAttribute("Name");
-               $name_value = $this->_xml->createTextNode($oaiset);
-               $name_attr->appendChild($name_value);
-               $opus_doc->appendChild($name_attr);
-               $this->_xml->documentElement->appendChild($opus_doc);
+               // proof wheather there is a document for this set
+               $setDocIds = array();
+               $setDocIds = Opus_CollectionRole::getDocumentIdsInSet($oaiset);
+                if (true === is_null($setDocIds) or true === empty($setDocIds)) {
+                } else {
+                   $opus_doc = $this->_xml->createElement('Opus_Sets');
+                   $type_attr = $this->_xml->createAttribute("Spec");
+                   $type_value = $this->_xml->createTextNode($oaiset);
+                   $type_attr->appendChild($type_value);
+                   $opus_doc->appendChild($type_attr);
+                   $name_attr = $this->_xml->createAttribute("Name");
+                   $name_value = $this->_xml->createTextNode($oaiset);
+                   $name_attr->appendChild($name_value);
+                   $opus_doc->appendChild($name_attr);
+                   $this->_xml->documentElement->appendChild($opus_doc);
+                   }
             }
           }
         }
@@ -787,6 +793,10 @@ class Oai_IndexController extends Controller_Xml {
             $set = $collection->getOaiSetName();
             $spec = $this->_xml->createElement("Spec");
             $set_pub_attr = $this->_xml->createAttribute("Value");
+            $pos_dp = strpos($set,":");
+//            $setinfo = utf8_encode($set);
+//            $setinfo = substr($set,0,$pos_dp+1) . rawurlencode(substr($set,$pos_dp+1));
+//            $set_pub_value = $this->_xml->createTextNode($setinfo);
             $set_pub_value = $this->_xml->createTextNode($set);
             $set_pub_attr->appendChild($set_pub_value);
             $spec->appendChild($set_pub_attr);
