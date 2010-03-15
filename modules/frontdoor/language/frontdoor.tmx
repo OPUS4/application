@@ -113,10 +113,10 @@
         
     <tu tuid="frontdoor_recommendationtext">
       <tuv xml:lang="en">
-        <seg>Please fill out this form to mail the URL of this document and a short message. Please note: Your name and your e-mail address are helpful to jugde the reliability of this e-mail. All fat-marked fields are mandatory.</seg>
+        <seg>Please fill out this form to mail the URL of this document and a short message. Please note: Your name and your e-mail address are helpful to jugde the reliability of this e-mail. All marked fields are mandatory.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Um die Adresse (URL) dieses Dokuments und eine kurze Mitteilung zu versenden, füllen Sie bitte die untenstehenden Felder aus. Bitte beachten Sie: Die Angabe Ihres Namens und Ihrer E-mail-Adresse helfen dem Empfänger die Seriösität dieser E-mail einzuschätzen. Bitte beachten Sie: Die Felder mit fett dargestellter Bezeichnung müssen ausgefüllt werden.</seg>
+        <seg>Um die Adresse (URL) dieses Dokuments und eine kurze Mitteilung zu versenden, füllen Sie bitte die untenstehenden Felder aus. Bitte beachten Sie: Die Angabe Ihres Namens und Ihrer E-mail-Adresse helfen dem Empfänger die Seriösität dieser E-mail einzuschätzen. Bitte beachten Sie: Die markierten Felder müssen ausgefüllt werden.</seg>
       </tuv>
     </tu>
     

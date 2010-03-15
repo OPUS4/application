@@ -38,7 +38,7 @@
 <h1><?= $this->translate ('frontdoor_sendmailtitle')?></h1><br/>
 <?
 echo $this->translate ('frontdoor_sendmailtext') . ': <br>';
-echo '<br><b>'. $this->title . '</b></br>';
+echo '<br><b>'. $this->title . '</b> (' . $this->translate($this->docType) . ').</br>';
 echo '<br><br><b>'. $this->translate('frontdoor_recipientmail') . ': </b></br></br>';
 echo $this->recipientMail;
 if ($this->message != '') {

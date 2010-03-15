@@ -52,7 +52,6 @@ class Frontdoor_MailController extends Zend_Controller_Action
         // get author
         $author_names = array();
         $authors = $document->getPersonAuthor();
-        print_r($authors);
         if (true === is_array($authors)) {
             $ni = 0;
             foreach ($authors as $author) {
@@ -81,7 +80,8 @@ class Frontdoor_MailController extends Zend_Controller_Action
         $mailForm = new MailForm();
         $mailForm->title->setValue($title_value);
        	$mailForm->doc_id->setValue($docId);
-        $mailForm->setAction($this->view->url(array('module' => "frontdoor", "controller"=>'mail', "action"=>'sendmail')));
+        $mailForm->doc_type->setValue($this->view->translate($type));
+       	$mailForm->setAction($this->view->url(array('module' => "frontdoor", "controller"=>'mail', "action"=>'sendmail')));
         $mailForm->setMethod('post');
         $this->view->mailForm = $mailForm;
     }
@@ -104,10 +104,11 @@ class Frontdoor_MailController extends Zend_Controller_Action
              $fromName = $form->getValue('sender');
              $title = $form->getValue('title');
              $docId = $form->getValue('doc_id');
+             $docType = $form->getValue('doc_type');
              $recipientMail = $form->getValue('recipient_mail');
              $subject = $this->view->translate('frontdoor_sendmailsubject');
              $bodyText = 'Hallo,' . '\n' . $this->view->translate('frontdoor_sendmailbody1') . ':\n';
-             $bodyText .= $title;
+             $bodyText .= $title .' (' . $docType . ')';
              $bodyText .= '\n' . $this->view->translate('frontdoor_sendmailbody2') . ': ';
              $bodyText .= '\n' . $this->view->translate('frontdoor_sendmailmsg') . ': ' . $form->getValue('message');
              $bodyText .= '\n' . $this->view->translate('frontdoor_sendersname') .': ' . $fromName;
@@ -119,6 +120,7 @@ class Frontdoor_MailController extends Zend_Controller_Action
                 $this->view->ok = '1';
                 $this->view->docId = $docId;
                 $this->view->title = $title;
+                $this->view->docType = $docType;
                 $this->view->recipientMail = $recipientMail;
                 $this->view->message = $form->getValue('message');
                 $this->render('recfeedback');
