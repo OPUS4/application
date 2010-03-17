@@ -49,15 +49,20 @@ if (isset($docId) === true) {
     // check, if we are allowed to read the document metadata
     if (true !== Opus_Security_Realm::getInstance()->check('readMetadata', $doc->getServerState())) {
         // we are not allowed to read the metadata
-        // $logger->info("Unallowed to read document metadata from doc $docId!");
-        
         $identity = Zend_Auth::getInstance()->getIdentity();
-        if (empty($identity) === true) {
-            // $message = $this->translate('admin_no_identity_error');
-            $message = "You must be logged in to see the document metadata.";
+        $translate = Zend_Registry::get('Zend_Translate');
+        if (is_null($translate) === false) {
+            if (empty($identity) === true) {
+                $message = $translate->getAdapter()->translate('frontdoor_no_identity_error');
+            } else {
+                $message = $translate->getAdapter()->translate('frontdoor_wrong_identity_error');
+            }
         } else {
-            // $message = $this->translate('admin_wrong_identity_error');
-            $message = "You need another identity to see the document metadata.";
+            if (empty($identity) === true) {
+                $message = "You must be logged in to see the document metadata.";
+            } else {
+                $message = "You need another identity to see the document metadata.";
+            }
         }
         
         // get all parameters to return after login.
