@@ -52,9 +52,13 @@ if (isset($docId) === true) {
         //$logger->info("Unallowed to read document metadata from doc $docId!");
         
         $identity = Zend_Auth::getInstance()->getIdentity();
-        if (empty($identity) === true) {
-            // $message = $this->translate('admin_no_identity_error');
-            $message = "You must be logged in to see the document metadata.";
+        $translate = Zend_Registry::get('Zend_Translate');
+        if (is_null($translate) === false) {
+            if (empty($identity) === true) {
+                $message = $translate->getAdapter()->translate('frontdoor_no_identity_error');
+            } else {
+                $message = $translate->getAdapter()->translate('frontdoor_wrong_identity_error');
+            }
         } else {
             // $message = $this->translate('admin_wrong_identity_error');
             $message = "You need another identity to see the document metadata.";
