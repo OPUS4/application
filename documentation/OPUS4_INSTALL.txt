@@ -38,7 +38,7 @@ Pear-Modul Crypt_GPG:
 
 root@opus4# pear install Crypt_GPG
 
-Benötigt werden außerdem die PHP5-Pakete ‚php5-gd‘ und ‚php5-xsl‘ und die Mysql-Treiber ‚php5-mysql‘:
+Benötigt werden außerdem die PHP5-Pakete "php5-gd" und "php5-xsl" und die Mysql-Treiber "php5-mysql":
 
 root@opus4# apt-get install php5-xsl
 root@opus4# apt-get install php5-gd 
@@ -71,7 +71,7 @@ root@opus4# su - opus
 opus@opus4: cd Zend
 opus@opus4: wget http://framework.zend.com/releases/ZendFramework-1.9.7/ZendFramework-1.9.7.tar.gz
 opus@opus4: tar zxvf ZendFramework-1.9.7.tar.gz
-opus@opus4: ln –s ./ZendFramework-1.9.7 ./ZendFramework
+opus@opus4: ln -s ./ZendFramework-1.9.7 ./ZendFramework
 
 In etc/php5/apache/php.ini und /etc/php5/cli/php.ini include_path setzen:
 
@@ -81,12 +81,12 @@ include_path = ".:/usr/share/php:/opt/Zend/ZendFramework/library"
 6.	Sonstige benötigte Software
 ------------------------------------------
 
-•	pstotext
-•	xpdf-utils
+->	pstotext
+->	xpdf-utils
 
 Für Mailfunktionen:
-•	exim4
-•	mailx
+->	exim4
+->	mailx
 
 
 
@@ -118,7 +118,7 @@ opus@opus4: svn up
 da hier vom Webserver-User geschrieben wird:
 
 root@opus4# cd $OPUS_HOME/workspace
-root@opus4# chown –R www-data:www-data tmp cache log files lucene_index tmp
+root@opus4# chown -R www-data:www-data tmp cache log files lucene_index tmp
 
 
 4.	Mysql-DB erstellen
@@ -143,7 +143,7 @@ opus@opus4: ./createdb.sh
 wird die Datenbank neu erzeugt und gefüllt.
 
 Einen Mysql-User 'opus4' mit dem Passwort 'xxxx' für die Opus-Anwendung erstellt man folgendermaßen:
-opus@opus4: mysql –u root -p
+opus@opus4: mysql -u root -p
 mysql> grant all on opus400.* to opus4@localhost identified by 'xxxx';
 
 
@@ -176,7 +176,7 @@ Die Apache-Konfiguration (am besten in einem Virtual Host unter /etc/apache2/sit
 
 .......
 DocumentRoot $OPUS_HOME/application/public
-<Directory $OPUS_HOME/application/public/>
+<Directory "$OPUS_HOME/application/public/">
                 RewriteEngine on
                 RewriteBase /
                 RewriteCond %{REQUEST_FILENAME} -s [OR]
@@ -205,11 +205,11 @@ DocumentRoot $OPUS_HOME/application/public
             		Allow from all
          		</Proxy>
     	</IfModule>
-    	RewriteRule ^/documents/(.*)$ http://127.0.0.1/${opusdeliver:$1\  %{REMOTE_ADDR}\ %{HTTP_COOKIE}} [P]
+    	RewriteRule ^/documents/(.*)$ http://127.0.0.1/${opusdeliver:$1\	%{REMOTE_ADDR}\ %{HTTP_COOKIE}} [P]
     	</IfModule>
 
 Alias /files '$OPUS_HOME/application/workspace/files'
-<Directory ‘$OPUS_HOME/application/workspace/files/">
+<Directory "$OPUS_HOME/application/workspace/files/">
     	Options -Indexes
    	 AllowOverride None
     	Order deny,allow
@@ -218,7 +218,7 @@ Alias /files '$OPUS_HOME/application/workspace/files'
 </Directory>
 .......
 
-Achtung: In der RewriteRule muss ei nTabulatur-Zeichen zwischen $1\   und %{REMOTE_ADDR} stehen, ansonsten wirft der Apache eine Fehlermeldung aus!
+Achtung: In der RewriteRule muss ein Tabulatur-Zeichen zwischen $1\   und %{REMOTE_ADDR} stehen, ansonsten wirft der Apache eine Fehlermeldung aus!
 
 
 7.	 Lucene-Index erzeugen
@@ -233,7 +233,7 @@ max_input_time = 300 ; Maximum amount of time each script may spend parsing requ
 memory_limit = 128M      ; Maximum amount of memory a script may consume (32MB)
 
 Der Index kann dann wie folgt erzeugt werden: 
-root@opus4: su –www-data
+root@opus4: su - www-data
 www-data@opus4: cd $OPUS_HOME/application/scripts
 www-data@opus4: php SearchEngineIndexBuilder.php
 
