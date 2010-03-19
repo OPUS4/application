@@ -836,6 +836,9 @@ class Oai_IndexController extends Controller_Xml {
      */
     private function writeResumptionFile($start,$totalIds,$tempPath,$restIds) {
             $fc = 0;
+            if (false === is_dir($tempPath. '/resumption')) {
+                mkdir($tempPath. '/resumption',0777);
+            }
             $fn = $tempPath.'/resumption/rs_'.(string) time();
             while (file_exists($file=sprintf('%s%02d.txt',$fn,$fc++)));
             if ($fp = fopen($file,'w+')) {
