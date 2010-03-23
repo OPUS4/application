@@ -378,10 +378,7 @@
             </xsl:call-template>
             <xsl:text>:</xsl:text></th>
             <td>
-               <xsl:if test="@Number != ''">
-                 <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
-               </xsl:if>
-               <xsl:value-of select="@Name" />
+               <xsl:call-template name="checkdisplay"/>
             </td>
           </tr>
         </xsl:when>   
@@ -389,10 +386,7 @@
             <tr>
             <td></td>
                <td> 
-               <xsl:if test="@Number != ''">
-                 <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
-               </xsl:if>
-               <xsl:value-of select="@Name" />
+                 <xsl:call-template name="checkdisplay"/>
               </td>
             </tr>
         </xsl:otherwise>
@@ -402,17 +396,14 @@
     <xsl:template match="Collection[@RoleName='Dewey Decimal Classification']">
       <xsl:choose>
         <xsl:when test="position()=1">
-         <tr>
-           <th class="name">
-           <xsl:call-template name="translateString">
-               <xsl:with-param name="string">col_ddc</xsl:with-param>
-           </xsl:call-template>
-           <xsl:text>:</xsl:text></th>
-           <td>
-             <xsl:if test="@Number != ''">
-                <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
-             </xsl:if>
-             <xsl:value-of select="@Name" />
+          <tr>
+            <th class="name">
+            <xsl:call-template name="translateString">
+                <xsl:with-param name="string">col_ddc</xsl:with-param>
+            </xsl:call-template>
+            <xsl:text>:</xsl:text></th>
+            <td>
+               <xsl:call-template name="checkdisplay"/>
            </td>
          </tr>
         </xsl:when>   
@@ -420,10 +411,7 @@
             <tr>
             <td></td>
                <td> 
-               <xsl:if test="@Number != ''">
-                 <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
-               </xsl:if>
-               <xsl:value-of select="@Name" />
+                 <xsl:call-template name="checkdisplay"/>
               </td>
             </tr>
         </xsl:otherwise>
@@ -440,10 +428,7 @@
             </xsl:call-template>
             <xsl:text>:</xsl:text></th>
             <td>
-              <xsl:if test="@Number != ''">
-                 <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
-              </xsl:if>
-              <xsl:value-of select="@Name" />
+               <xsl:call-template name="checkdisplay"/>
             </td>
           </tr>
         </xsl:when>   
@@ -451,10 +436,7 @@
             <tr>
             <td></td>
                <td> 
-               <xsl:if test="@Number != ''">
-                 <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
-               </xsl:if>
-               <xsl:value-of select="@Name" />
+                 <xsl:call-template name="checkdisplay"/>
               </td>
             </tr>
         </xsl:otherwise>
@@ -471,10 +453,7 @@
             </xsl:call-template>
             <xsl:text>:</xsl:text></th>
             <td>
-              <xsl:if test="@Number != ''">
-                 <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
-              </xsl:if>
-              <xsl:value-of select="@Name" />
+               <xsl:call-template name="checkdisplay"/>
             </td>
           </tr>
         </xsl:when>   
@@ -482,10 +461,7 @@
             <tr>
             <td></td>
                <td> 
-               <xsl:if test="@Number != ''">
-                 <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
-               </xsl:if>
-               <xsl:value-of select="@Name" />
+                 <xsl:call-template name="checkdisplay"/>
               </td>
             </tr>
         </xsl:otherwise>
@@ -502,10 +478,7 @@
             </xsl:call-template>
             <xsl:text>:</xsl:text></th>
             <td>
-              <xsl:if test="@Number != ''">
-                 <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
-              </xsl:if>
-              <xsl:value-of select="@Name" />
+               <xsl:call-template name="checkdisplay"/>
             </td>
           </tr>
         </xsl:when>   
@@ -513,10 +486,7 @@
             <tr>
             <td></td>
                <td> 
-               <xsl:if test="@Number != ''">
-                 <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
-               </xsl:if>
-               <xsl:value-of select="@Name" />
+                 <xsl:call-template name="checkdisplay"/>
               </td>
             </tr>
         </xsl:otherwise>
@@ -533,10 +503,7 @@
             </xsl:call-template>
             <xsl:text>:</xsl:text></th>
             <td>
-              <xsl:if test="@Number != ''">
-                 <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
-              </xsl:if>
-              <xsl:value-of select="@Name" />
+               <xsl:call-template name="checkdisplay"/>
             </td>
           </tr>
         </xsl:when>   
@@ -544,10 +511,7 @@
             <tr>
             <td></td>
                <td> 
-               <xsl:if test="@Number != ''">
-                 <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
-               </xsl:if>
-               <xsl:value-of select="@Name" />
+                 <xsl:call-template name="checkdisplay"/>
               </td>
             </tr>
         </xsl:otherwise>
@@ -565,10 +529,7 @@
             </xsl:call-template>
             <xsl:text>:</xsl:text></th>
           <td>
-            <xsl:if test="@Number != ''">
-               <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
-            </xsl:if>
-            <xsl:value-of select="@Name" />
+               <xsl:call-template name="checkdisplay"/>
           </td>
         </tr>
         </xsl:when>   
@@ -576,10 +537,7 @@
             <tr>
             <td></td>
                <td> 
-               <xsl:if test="@Number != ''">
-                 <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
-               </xsl:if>
-               <xsl:value-of select="@Name" />
+                 <xsl:call-template name="checkdisplay"/>
               </td>
             </tr>
         </xsl:otherwise>
@@ -881,6 +839,16 @@
     <xsl:template match="ReferenceSplashUrl"/>
     
 
+    <!-- Named template to proof, what to show for collections, depending on display_frontdoor -->
+    <xsl:template name="checkdisplay">
+       <xsl:if test="contains(@DisplayFrontdoor,'Number') and @Number != ''">
+           <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
+       </xsl:if>
+       <xsl:if test="contains(@DisplayFrontdoor,'Name') and @Name != ''">
+           <xsl:value-of select="@Name" />
+       </xsl:if>
+    </xsl:template>
+
     <xsl:template name="MailToAuthor">
       <xsl:if test ="php:functionString('Frontdoor_IndexController::isMailPossible', @Id)">
           <xsl:element name="br"/>
@@ -1157,5 +1125,7 @@
         <xsl:param name="string" />
         <xsl:value-of select="php:functionString('Frontdoor_IndexController::translate', $string)" />
     </xsl:template>
+
+
 
 </xsl:stylesheet>
