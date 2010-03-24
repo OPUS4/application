@@ -320,7 +320,13 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
             if (true === empty($trans)) {
                 $languages[$availableLanguage->getPart2T()] = $availableLanguage->getDisplayName();
             } else {
-                $languages[$availableLanguage->getPart2T()] = $locale->getTranslation($trans, 'language', $trans);
+                try {
+                    $languages[$availableLanguage->getPart2T()] = $locale->getTranslation($trans, 'language', $trans);
+                } catch (Zend_Locale_Exception $zle) {
+                    $logger = Zend_Registry::get('Zend_Log');
+                    $logger->warn('Caught Zend_Locale_Exception while loading ' . $trans . ': ' . $zle->getMessage());
+                    $logger->warn('Ignoring language with ID ' . $availableLanguage->getId());
+                }
             }
         }
         $registry->set('Available_Languages', $languages);
