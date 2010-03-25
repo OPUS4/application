@@ -27,23 +27,24 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
+ * @author      Simone Finkbeiner <simone.finkbeiner@ub.uni-stuttgart.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 ?>
-<h1>Opus Application - <?= $this->title ?></h1>
+<h1>Opus Application - <?= $this->translate($this->title) ?></h1>
 <ul>
 <? foreach($this->entries as $id => $entry) : ?>
 <li>
     <?= $entry ?>
     <form action="<?= $this->url(array('action' => 'delete')) ?>" class="crud" method="post">
-        <a href="<?= $this->url(array('action' => 'show', 'id' => $id)) ?>">Show</a>
-        <a href="<?= $this->url(array('action' => 'edit', 'id' => $id)) ?>">Edit</a>
+        <input type='button' onClick="javascript:location.href='<?= $this->url(array('action' => 'show', 'id' => $id)) ?>'" value="<?= $this->translate('ButtonShow')?>" class="crud">
+        <input type='button' onClick="javascript:location.href='<?= $this->url(array('action' => 'edit', 'id' => $id)) ?>'" value='<?= $this->translate('ButtonEdit')?>' class="crud">
         <input type="hidden" name="id" value="<?=$id?>" />
-        <input type="submit" value="Delete" />
+        <input type="submit" value='<?= $this->translate('ButtonDelete') ?>' />
     </form>
 </li>
 <? endforeach; ?>
 </ul>
-<a href="<?= $this->url(array('action' => 'new')) ?>">New</a>
+<input type='button' onClick="javascript:location.href='<?= $this->url(array('action' => 'new')) ?>'" value='<?= $this->translate('ButtonNew') ?>' class="crud">

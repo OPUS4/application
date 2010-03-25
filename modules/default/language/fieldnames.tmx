@@ -651,7 +651,6 @@
         <seg>Veröffentlicher entfernen</seg>
       </tuv>
     </tu>
-
         
     <tu tuid="PublishedYear">
       <tuv xml:lang="en">
@@ -931,7 +930,6 @@
         <seg>Abstract / Kurzfassung</seg>
       </tuv>
     </tu>
-
 
     <tu tuid="hint_Opus_Model_Filter_TitleAbstract_add">
       <tuv xml:lang="en">
@@ -1562,6 +1560,123 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Verlag</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_language_edit">
+      <tuv xml:lang="en">
+        <seg>Edit Language</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sprache ändern</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_language_new">
+      <tuv xml:lang="en">
+        <seg>New Language</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Neue Sprache</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_language_index">
+      <tuv xml:lang="en">
+        <seg>Admin Languages</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sprachen verwalten</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_licence_edit">
+      <tuv xml:lang="en">
+        <seg>Edit Licence</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Lizenz ändern</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_licence_new">
+      <tuv xml:lang="en">
+        <seg>New Licence</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Neue Lizenz</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_licence_index">
+      <tuv xml:lang="en">
+        <seg>Admin Licences</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Lizenzen verwalten</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_person_edit">
+      <tuv xml:lang="en">
+        <seg>Edit Person</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Personendaten ändern</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_person_new">
+      <tuv xml:lang="en">
+        <seg>New Person</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Neue Person</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_person_index">
+      <tuv xml:lang="en">
+        <seg>Admin Persons</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Personen verwalten</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="ButtonDelete">
+      <tuv xml:lang="en">
+        <seg>Delete</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Löschen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="ButtonEdit">
+      <tuv xml:lang="en">
+        <seg>Edit</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Ändern</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="ButtonNew">
+      <tuv xml:lang="en">
+        <seg>New</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Neu</seg>
+      </tuv>
+    </tu>
+                        
+    <tu tuid="ButtonShow">
+      <tuv xml:lang="en">
+        <seg>Show</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Anzeigen</seg>
       </tuv>
     </tu>
             

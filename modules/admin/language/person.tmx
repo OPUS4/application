@@ -24,7 +24,7 @@
         <seg>Personen-Id:</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="data_error">
       <tuv xml:lang="en">
         <seg>person data are not correct.</seg>
