@@ -1590,6 +1590,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_language_show">
+      <tuv xml:lang="en">
+        <seg>Show Language</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Language anzeigen</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_licence_edit">
       <tuv xml:lang="en">
         <seg>Edit Licence</seg>
@@ -1605,6 +1614,15 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Neue Lizenz</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_licence_show">
+      <tuv xml:lang="en">
+        <seg>Show Licence</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Lizenz anzeigen</seg>
       </tuv>
     </tu>
 
@@ -1641,6 +1659,15 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Personen verwalten</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_person_show">
+      <tuv xml:lang="en">
+        <seg>Show Person</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Person anzeigen</seg>
       </tuv>
     </tu>
 
