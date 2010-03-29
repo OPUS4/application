@@ -305,10 +305,10 @@
     
     <tu tuid="AllowEmailContact">
       <tuv xml:lang="en">
-        <seg>e-mail contact allowed</seg>
+        <seg>E-Mail contact allowed</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>e-mail-Kontakt erlaubt</seg>
+        <seg>E-Mail-Kontakt erlaubt</seg>
       </tuv>
     </tu>
     
