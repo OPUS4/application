@@ -99,7 +99,7 @@ class Overview extends Zend_Form {
         $select = new Zend_Form_Element_Select('selecttype');
         $select->setLabel('selecttype')
             ->setMultiOptions(array_merge(array('' => 'choose_valid_doctype'), $listOptions))
-            ->addValidator('NotEmpty');
+            ->setRequired(true);
 
         $gpgkeyavailable = new Zend_Form_Element_Radio('gpgkey');
         $gpgkeyavailable->setLabel('gpgkeyavailable')

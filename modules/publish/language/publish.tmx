@@ -71,10 +71,10 @@
     
     <tu tuid="selecttype">
       <tuv xml:lang="en">
-        <seg>Choose your document type:</seg>
+        <seg>Document type</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Wählen Sie Ihren Dokumententyp aus:</seg>
+        <seg>Dokumenttyp</seg>
       </tuv>
     </tu>
 
