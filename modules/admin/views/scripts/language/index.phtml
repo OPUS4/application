@@ -37,7 +37,7 @@
 <ul>
 <? foreach($this->entries as $id => $entry) : ?>
 <li>
-    <?= $entry ?>
+    <?= $this->translate($entry) ?>
     <form action="<?= $this->url(array('action' => 'delete')) ?>" class="crud" method="post">
         <input type='button' onClick="javascript:location.href='<?= $this->url(array('action' => 'show', 'id' => $id)) ?>'" value="<?= $this->translate('ButtonShow')?>" class="crud">
         <input type='button' onClick="javascript:location.href='<?= $this->url(array('action' => 'edit', 'id' => $id)) ?>'" value='<?= $this->translate('ButtonEdit')?>' class="crud">
