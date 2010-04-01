@@ -321,7 +321,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
                 $languages[$availableLanguage->getPart2T()] = $availableLanguage->getDisplayName();
             } else {
                 try {
-                    $languages[$availableLanguage->getPart2T()] = $locale->getTranslation($trans, 'language', $trans);
+                    $languages[$availableLanguage->getPart2T()] = $locale->getTranslation($trans, 'language', $locale);
                 } catch (Zend_Locale_Exception $zle) {
                     $logger = Zend_Registry::get('Zend_Log');
                     $logger->warn('Caught Zend_Locale_Exception while loading ' . $trans . ': ' . $zle->getMessage());
