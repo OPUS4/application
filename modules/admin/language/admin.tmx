@@ -7,15 +7,6 @@
  
   <body>
   
-    <tu tuid="admin_modulename">
-      <tuv xml:lang="en">
-        <seg>Administration</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Administration</seg>
-      </tuv>
-    </tu>
-    
     <tu tuid="admin_index_title">
       <tuv xml:lang="en">
         <seg>Administration menu</seg>
