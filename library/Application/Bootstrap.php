@@ -275,28 +275,49 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * @return void
      *
      */
-    protected function _setupTranslation($module = null)
+    protected function _setupTranslation($mod = null)
     {
         $sessiondata = new Zend_Session_Namespace();
-        $languageFilesPath = $this->_applicationRootDirectory . '/modules/';
-        if ($module !== null) {
-       	    $languageFilesPath = $this->_applicationRootDirectory . '/modules/' . $module . '/language/';
-        }
+        
         $options = array(
             'clear' => false,
             'scan' => Zend_Translate::LOCALE_FILENAME,
             'ignore' => '.',
             'disableNotices' => true
             );
-        $translate = new Zend_Translate(
-            Zend_Translate::AN_TMX,
-            $languageFilesPath,
-            'auto',
-            $options
-            );
-            
-        // Add global translation resource
-        $translate->addTranslation($this->_applicationRootDirectory . '/modules/home/language/', 'auto', $options);
+        if ($mod !== null) {
+
+            $translate = new Zend_Translate(
+                Zend_Translate::AN_TMX,
+                $this->_applicationRootDirectory . '/modules/home/language/home.tmx',
+                'auto',
+                $options
+                );
+                
+            $modules = array('home', $mod);
+            foreach ($modules as $module) {
+            	$languageFilesPath = $this->_applicationRootDirectory . '/modules/' . $module . '/language/';
+                // Add translation resources from global and current module, but only load tmx files
+                if ($handle = opendir($languageFilesPath)) {
+                    while (false !== ($file = readdir($handle))) {
+                    	$filenameArray = explode(".", $file);
+            	        $extension = $filenameArray[count($filenameArray)-1];
+            	        if ($extension === 'tmx') {
+                            $translate->addTranslation($this->_applicationRootDirectory . '/modules/' . $module . '/language/' . $file, 'auto', $options);
+            	        }
+            	    }
+                }
+            }
+        }
+        else {
+            // Load all translation resource
+            $translate = new Zend_Translate(
+                Zend_Translate::AN_TMX,
+                $this->_applicationRootDirectory . '/modules/',
+                'auto',
+                $options
+                );        	
+        }
 
         if (empty($sessiondata->language) === false) {
             // Example for logging something
