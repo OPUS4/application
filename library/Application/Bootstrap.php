@@ -280,7 +280,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $sessiondata = new Zend_Session_Namespace();
         $languageFilesPath = $this->_applicationRootDirectory . '/modules/';
         if ($module !== null) {
-        	$languageFilesPath = $this->_applicationRootDirectory . '/modules/' . $module . '/language/';
+       	    $languageFilesPath = $this->_applicationRootDirectory . '/modules/' . $module . '/language/';
         }
         $options = array(
             'clear' => false,
@@ -294,6 +294,9 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
             'auto',
             $options
             );
+            
+        // Add global translation resource
+        $translate->addTranslation($this->_applicationRootDirectory . '/modules/home/language/', 'auto', $options);
 
         if (empty($sessiondata->language) === false) {
             // Example for logging something
