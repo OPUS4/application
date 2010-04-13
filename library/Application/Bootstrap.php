@@ -68,8 +68,14 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * @return void
      */
     protected function _setupFrontend() {
+    	$module = '/home';
+    	$moduleArray = explode('/', $_SERVER['REQUEST_URI']);
+    	// 0 ist leer, 1 ist das Modul, 2 der Controller, 3 die Action
+    	if (count($moduleArray) >= 2) {
+    	    $module = $moduleArray[1];
+    	}
         parent::_setupFrontend();
-        $this->_setupTranslation();
+        $this->_setupTranslation($module);
         $this->_setupLanguageList();
         $this->_setupFrontController();
         $this->_setupView();
@@ -268,9 +274,13 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * @return void
      *
      */
-    protected function _setupTranslation()
+    protected function _setupTranslation($module = null)
     {
         $sessiondata = new Zend_Session_Namespace();
+        $languageFilesPath = $this->_applicationRootDirectory . '/modules/';
+        if ($module !== null) {
+        	$languageFilesPath = $this->_applicationRootDirectory . '/modules/' . $module . '/language/';
+        }
         $options = array(
             'clear' => false,
             'scan' => Zend_Translate::LOCALE_FILENAME,
@@ -279,7 +289,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
             );
         $translate = new Zend_Translate(
             Zend_Translate::AN_TMX,
-            $this->_applicationRootDirectory . '/modules/',
+            $languageFilesPath,
             'auto',
             $options
             );
