@@ -7,14 +7,6 @@
   
   <body>
   
-    <tu tuid="search_index_search">
-      <tuv xml:lang="en">
-        <seg>Search</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Suche</seg>
-      </tuv>
-    </tu>
     <tu tuid="search_index_fulltextsearch">
       <tuv xml:lang="en">
         <seg>Fulltext search</seg>
@@ -137,14 +129,6 @@
       </tuv>
     </tu>
     
-    <tu tuid="search_searchaction">
-      <tuv xml:lang="en">
-        <seg>Search</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Suchen</seg>
-      </tuv>
-    </tu>
     <tu tuid="search_category_documents">
       <tuv xml:lang="en">
         <seg>Documents in this category</seg>

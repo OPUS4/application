@@ -7,6 +7,15 @@
  
   <body>
   
+    <tu tuid="publish_modulename">
+      <tuv xml:lang="en">
+        <seg>Publish</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Veröffentlichen</seg>
+      </tuv>
+    </tu>
+    
     <tu tuid="home_modulename">
       <tuv xml:lang="en">
         <seg>Home</seg>
@@ -204,6 +213,24 @@
       </tuv>
     </tu>
     
+    <tu tuid="search_index_search">
+      <tuv xml:lang="en">
+        <seg>Search</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Suche</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="search_searchaction">
+      <tuv xml:lang="en">
+        <seg>Search</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Suchen</seg>
+      </tuv>
+    </tu>
+
   </body>
   
 </tmx>
