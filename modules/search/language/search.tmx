@@ -138,15 +138,6 @@
       </tuv>
     </tu>
     
-    <tu tuid="search_modulename">
-      <tuv xml:lang="en">
-        <seg>Search and browse</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Suchen und Browsen</seg>
-      </tuv>
-    </tu>
-    
     <tu tuid="search_results_from_to">
       <tuv xml:lang="en">
         <seg>Showing results %1$s to %2$s</seg>

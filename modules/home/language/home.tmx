@@ -25,6 +25,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="search_modulename">
+      <tuv xml:lang="en">
+        <seg>Search and browse</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Suchen und Browsen</seg>
+      </tuv>
+    </tu>
+    
     <tu tuid="home_index_index_actionname">
       <tuv xml:lang="en">
         <seg>Home</seg>
