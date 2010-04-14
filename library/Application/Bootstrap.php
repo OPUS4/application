@@ -76,7 +76,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
     	}
     	if (empty($module) === true) $module = "home";
         parent::_setupFrontend();
-        $this->_setupTranslation();
+        $this->_setupTranslation($module);
         $this->_setupLanguageList();
         $this->_setupFrontController();
         $this->_setupView();
@@ -289,21 +289,23 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
 
             $translate = new Zend_Translate(
                 Zend_Translate::AN_TMX,
-                $this->_applicationRootDirectory . '/modules/home/language/home.tmx',
+                $this->_applicationRootDirectory . '/modules/default/language/default.tmx',
                 'auto',
                 $options
                 );
                 
-            $modules = array('home', $mod);
+            $modules = array('default', $mod);
             foreach ($modules as $module) {
             	$languageFilesPath = $this->_applicationRootDirectory . '/modules/' . $module . '/language/';
                 // Add translation resources from global and current module, but only load tmx files
-                if ($handle = opendir($languageFilesPath)) {
-                    while (false !== ($file = readdir($handle))) {
-                    	$filenameArray = explode(".", $file);
-            	        $extension = $filenameArray[count($filenameArray)-1];
-            	        if ($extension === 'tmx') {
-                            $translate->addTranslation($this->_applicationRootDirectory . '/modules/' . $module . '/language/' . $file, 'auto', $options);
+                if (file_exists($this->_applicationRootDirectory . '/modules/' . $module . '/language/') === true) {
+                    if ($handle = opendir($languageFilesPath)) {
+                        while (false !== ($file = readdir($handle))) {
+                    	    $filenameArray = explode(".", $file);
+            	            $extension = $filenameArray[count($filenameArray)-1];
+            	            if ($extension === 'tmx') {
+                                $translate->addTranslation($this->_applicationRootDirectory . '/modules/' . $module . '/language/' . $file, 'auto', $options);
+            	            }
             	        }
             	    }
                 }

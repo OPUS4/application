@@ -7,6 +7,69 @@
  
   <body>
   
+    <tu tuid="publish_modulename">
+      <tuv xml:lang="en">
+        <seg>Publish</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Veröffentlichen</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="home_modulename">
+      <tuv xml:lang="en">
+        <seg>Home</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einstieg</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="search_modulename">
+      <tuv xml:lang="en">
+        <seg>Search and browse</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Suchen und Browsen</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_modulename">
+      <tuv xml:lang="en">
+        <seg>Administration</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Administration</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="home_index_index_actionname">
+      <tuv xml:lang="en">
+        <seg>Home</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einstieg</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="home_index_about_actionname">
+      <tuv xml:lang="en">
+        <seg>About</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Über</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="home_index_contact_actionname">
+      <tuv xml:lang="en">
+        <seg>Contact</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Kontakt</seg>
+      </tuv>
+    </tu>
+    
     <tu tuid="default_modulename">
       <tuv xml:lang="en">
         <seg>Default</seg>
