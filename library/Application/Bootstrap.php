@@ -76,7 +76,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
     	}
     	if (empty($module) === true) $module = "home";
         parent::_setupFrontend();
-        $this->_setupTranslation($module);
+        $this->_setupTranslation();
         $this->_setupLanguageList();
         $this->_setupFrontController();
         $this->_setupView();
