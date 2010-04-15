@@ -285,40 +285,23 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
             'ignore' => '.',
             'disableNotices' => true
             );
-        if ($mod !== null) {
+        $translate = new Zend_Translate(
+            Zend_Translate::AN_TMX,
+            $this->_applicationRootDirectory . '/modules/default/language/default.tmx',
+            'auto',
+            $options
+            );
 
-            $translate = new Zend_Translate(
-                Zend_Translate::AN_TMX,
-                $this->_applicationRootDirectory . '/modules/default/language/default.tmx',
-                'auto',
-                $options
-                );
-                
-            $modules = array('default', $mod);
-            foreach ($modules as $module) {
-            	$languageFilesPath = $this->_applicationRootDirectory . '/modules/' . $module . '/language/';
-                // Add translation resources from global and current module, but only load tmx files
-                if (file_exists($this->_applicationRootDirectory . '/modules/' . $module . '/language/') === true) {
-                    if ($handle = opendir($languageFilesPath)) {
-                        while (false !== ($file = readdir($handle))) {
-                    	    $filenameArray = explode(".", $file);
-            	            $extension = $filenameArray[count($filenameArray)-1];
-            	            if ($extension === 'tmx') {
-                                $translate->addTranslation($this->_applicationRootDirectory . '/modules/' . $module . '/language/' . $file, 'auto', $options);
-            	            }
-            	        }
-            	    }
+        if (file_exists($this->_applicationRootDirectory . '/modules/default/language/') === true) {
+            if ($handle = opendir($this->_applicationRootDirectory . '/modules/default/language/')) {
+                while (false !== ($file = readdir($handle))) {
+                    // ignore directories
+                    if (is_dir($file) === true) continue;
+                    // ignore files with leading dot and files without extension tmx
+                    if (preg_match('/^[^.].*\.tmx$/', $file) === 0) continue;
+                    $translate->addTranslation($this->_applicationRootDirectory . '/modules/default/language/' . $file, 'auto', $options);
                 }
             }
-        }
-        else {
-            // Load all translation resource
-            $translate = new Zend_Translate(
-                Zend_Translate::AN_TMX,
-                $this->_applicationRootDirectory . '/modules/',
-                'auto',
-                $options
-                );        	
         }
 
         if (empty($sessiondata->language) === false) {

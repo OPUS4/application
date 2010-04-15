@@ -162,7 +162,29 @@ class Controller_Plugin_ModulePrepare extends Zend_Controller_Plugin_Abstract {
 				}
 				set_include_path(implode(PATH_SEPARATOR, $include_paths));
 			}
-			//Add view helper paths.
+            // Add translation
+            if ($current_module !== 'default') {
+                $lang_path = "$this->_path_to_modules/$current_module/language";
+                if (file_exists($lang_path) === true) {
+                    if ($handle = opendir($lang_path)) {
+                        while (false !== ($file = readdir($handle))) {
+                            // ignore directories
+                            if (is_dir($file) === true) continue;
+                            // ignore files with leading dot and files without extension tmx
+                            if (preg_match('/^[^.].*\.tmx$/', $file) === 0) continue;
+                            $translate = Zend_Registry::get('Zend_Translate');
+                            $options = array(
+                                        'clear' => false,
+                                        'scan' => Zend_Translate::LOCALE_FILENAME,
+                                        'ignore' => '.',
+                                        'disableNotices' => true
+                                        );
+                            $translate->addTranslation($lang_path . '/' . $file, 'auto', $options);
+                        }
+                    }
+                }
+            }
+			// Add view helper paths.
 			if ( array_key_exists('viewhelper', $path) === true ) {
 				$view = Zend_Layout::getMvcInstance()->getView();
 				$viewhelper_paths = $path['viewhelper'];
