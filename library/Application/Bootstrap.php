@@ -68,15 +68,8 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * @return void
      */
     protected function _setupFrontend() {
-    	$module = null;
-    	$moduleArray = explode('/', $_SERVER['REQUEST_URI']);
-    	// 0 ist leer, 1 ist das Modul, 2 der Controller, 3 die Action
-    	if (count($moduleArray) >= 2) {
-    	    $module = $moduleArray[1];
-    	}
-    	if (empty($module) === true) $module = "home";
         parent::_setupFrontend();
-        $this->_setupTranslation($module);
+        $this->_setupTranslation();
         $this->_setupLanguageList();
         $this->_setupFrontController();
         $this->_setupView();
@@ -275,7 +268,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * @return void
      *
      */
-    protected function _setupTranslation($mod = null)
+    protected function _setupTranslation()
     {
         $sessiondata = new Zend_Session_Namespace();
         
