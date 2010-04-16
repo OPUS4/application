@@ -38,11 +38,17 @@ Pear-Modul Crypt_GPG:
 
 root@opus4# pear install Crypt_GPG
 
-Benötigt werden außerdem die PHP5-Pakete "php5-gd" und "php5-xsl" und die Mysql-Treiber "php5-mysql":
+BenÃ¶tigt werden auÃŸerdem die PHP5-Pakete "php5-gd" und "php5-xsl" und die Mysql-Treiber "php5-mysql":
 
 root@opus4# apt-get install php5-xsl
 root@opus4# apt-get install php5-gd 
 root@opus4# apt-get install php5-mysql
+
+Und das Pecl-Modul fileinfo (sofern PHP < 5.3 verwendet wird):
+root@opus4# apt-get install  libmagic-dev
+root@opus4# pecl install fileinfo
+
+Das Modul fileinfo muss noch in der php.ini freigeschaltet werden:
 
 
 4.	Subversion-Client
@@ -78,13 +84,13 @@ In etc/php5/apache/php.ini und /etc/php5/cli/php.ini include_path setzen:
 include_path = ".:/usr/share/php:/opt/Zend/ZendFramework/library" 
 
 
-6.	Sonstige benötigte Software
+6.	Sonstige benÃ¶tigte Software
 ------------------------------------------
 
 ->	pstotext
 ->	xpdf-utils
 
-Für Mailfunktionen:
+FÃ¼r Mailfunktionen:
 ->	exim4
 ->	mailx
 
@@ -107,7 +113,7 @@ opus@opus4: cd $OPUS_HOME
 opus@opus4: svn export https://opusdev.bsz-bw.de/svn/application/trunk ./application
 opus@opus4: svn export https://opusdev.bsz-bw.de/svn/framework/trunk ./framework
 
-Will man die Software aus dem SVN-Repository laufend aktualisieren, sollte ein 'svn checkout' ausgeführt werden.
+Will man die Software aus dem SVN-Repository laufend aktualisieren, sollte ein 'svn checkout' ausgefÃ¼hrt werden.
 Die Aktualisierung erfolgt dann mit dem Befehl
 opus@opus4: svn up
 
@@ -135,14 +141,14 @@ user = rootuser
 password= rootpw
 dbname=opus400
 
-wobei 'rootuser' ein User sein soll, der Datenbanken anlegen und löschen kann (i.d.Regel root).
+wobei 'rootuser' ein User sein soll, der Datenbanken anlegen und lÃ¶schen kann (i.d.Regel root).
 
 
 Mit 
 opus@opus4: ./createdb.sh
-wird die Datenbank neu erzeugt und gefüllt.
+wird die Datenbank neu erzeugt und gefÃ¼llt.
 
-Einen Mysql-User 'opus4' mit dem Passwort 'xxxx' für die Opus-Anwendung erstellt man folgendermaßen:
+Einen Mysql-User 'opus4' mit dem Passwort 'xxxx' fÃ¼r die Opus-Anwendung erstellt man folgendermaÃŸen:
 opus@opus4: mysql -u root -p
 mysql> grant all on opus400.* to opus4@localhost identified by 'xxxx';
 
@@ -224,7 +230,7 @@ Achtung: In der RewriteRule muss ein Tabulatur-Zeichen zwischen $1\   und %{REMO
 7.	 Lucene-Index erzeugen
 ------------------------------------------
 
-Um den Lucene-Index komplett erzeugen zu können müssen in der php.ini 
+Um den Lucene-Index komplett erzeugen zu kÃ¶nnen mÃ¼ssen in der php.ini 
 ( /etc/php5/apache2/php.ini und /etc/php5/cli/php.ini ) 
 folgende Werte angepasst werden: 
 
