@@ -69,24 +69,6 @@
       </tuv>
     </tu>
 
-    <tu tuid="sort_ascending">
-      <tuv xml:lang="en">
-        <seg>Ascending</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Aufsteigend</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="sort_descending">
-      <tuv xml:lang="en">
-        <seg>Descending</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Absteigend</seg>
-      </tuv>
-    </tu>
-
     <tu tuid="docs_published">
       <tuv xml:lang="en">
         <seg>Published documents</seg>
@@ -219,51 +201,6 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Sortiere Dokumentliste nach:</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="docs_by_id">
-      <tuv xml:lang="en">
-        <seg>ID</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>ID</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="docs_by_title">
-      <tuv xml:lang="en">
-        <seg>title</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Titel</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="docs_by_date">
-      <tuv xml:lang="en">
-        <seg>date</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Datum</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="docs_by_author">
-      <tuv xml:lang="en">
-        <seg>author</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Autor</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="docs_by_doctype">
-      <tuv xml:lang="en">
-        <seg>document type</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Dokumenttyp</seg>
       </tuv>
     </tu>
 

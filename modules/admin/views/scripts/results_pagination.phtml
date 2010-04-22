@@ -3,14 +3,14 @@
 <!-- Previous page link -->
 <?php if (isset($this->previous)): ?>
   <a href="<?= $this->url(array('page' => $this->first)); ?>">
-    &lt;&lt; First
+    &lt;&lt; <?= $this->translate("pagination_first"); ?>
   </a> | 
   <a href="<?= $this->url(array('page' => $this->previous)); ?>">
-    &lt; Previous
+    &lt; <?= $this->translate("pagination_previous"); ?>
   </a> |
 <?php else: ?>
-  <span class="disabled">&lt;&lt; First</span> |
-  <span class="disabled">&lt; Previous</span> |
+  <span class="disabled">&lt;&lt; <?= $this->translate("pagination_first"); ?></span> |
+  <span class="disabled">&lt; <?= $this->translate("pagination_previous"); ?></span> |
 <?php endif; ?>
 
 <!-- Numbered page links -->
@@ -27,18 +27,18 @@
 <!-- Next page link -->
 <?php if (isset($this->next)): ?>
   <a href="<?= $this->url(array('page' => $this->next)); ?>">
-    Next &gt;
+    <?= $this->translate("pagination_next"); ?> &gt;
   </a> | 
 <?php else: ?>
-  <span class="disabled">Next &gt;</span> | 
+  <span class="disabled"><?= $this->translate("pagination_next"); ?> &gt;</span> | 
 <?php endif; ?>
 <!-- Last page link -->
 <?php if (isset($this->next)): ?>
   <a href="<?php echo $this->url(array('page' => $this->last)); ?>">
-    Last &gt;&gt;
+    <?= $this->translate("pagination_last"); ?> &gt;&gt;
   </a>
 <?php else: ?>
-  <span class="disabled">Last &gt;&gt;</span>
+  <span class="disabled"><?= $this->translate("pagination_last"); ?> &gt;&gt;</span>
 <?php endif; ?>
 </div>
 <?php endif; ?>

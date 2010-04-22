@@ -88,6 +88,123 @@
       </tuv>
     </tu>
     
+    <tu tuid="search_index_search">
+      <tuv xml:lang="en">
+        <seg>Search</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Suche</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="search_searchaction">
+      <tuv xml:lang="en">
+        <seg>Search</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Suchen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="sort_ascending">
+      <tuv xml:lang="en">
+        <seg>Ascending</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Aufsteigend</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="sort_descending">
+      <tuv xml:lang="en">
+        <seg>Descending</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Absteigend</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="docs_by_id">
+      <tuv xml:lang="en">
+        <seg>ID</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>ID</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="pagination_previous">
+      <tuv xml:lang="en">
+        <seg>Previous</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zurück</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="pagination_next">
+      <tuv xml:lang="en">
+        <seg>Next</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Weiter</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="pagination_first">
+      <tuv xml:lang="en">
+        <seg>First</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Anfang</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="pagination_last">
+      <tuv xml:lang="en">
+        <seg>Last</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Ende</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="docs_by_title">
+      <tuv xml:lang="en">
+        <seg>title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Titel</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="docs_by_date">
+      <tuv xml:lang="en">
+        <seg>date</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datum</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="docs_by_author">
+      <tuv xml:lang="en">
+        <seg>author</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Autor</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="docs_by_doctype">
+      <tuv xml:lang="en">
+        <seg>document type</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokumenttyp</seg>
+      </tuv>
+    </tu>
+
      <tu tuid="/publish/index/create/target/repository/page/1">
       <tuv xml:lang="en">
         <seg>Das ist ein Hilfetext <b>zur</b> Publish-Funktion</seg>
