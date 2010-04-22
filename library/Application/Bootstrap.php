@@ -271,7 +271,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
     protected function _setupTranslation()
     {
         $sessiondata = new Zend_Session_Namespace();
-        
+
         $options = array(
             'clear' => false,
             'scan' => Zend_Translate::LOCALE_FILENAME,
@@ -331,7 +331,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         foreach ($availableLanguages as $availableLanguage) {
             $trans = $availableLanguage->getPart1();
             if (true === empty($trans)) {
-                $languages[$availableLanguage->getPart2T()] = $availableLanguage->getDisplayName();
+                $languages[$availableLanguage->getPart2T()] = $availableLanguage->getPart2T();
             } else {
                 try {
                     $languages[$availableLanguage->getPart2T()] = $locale->getTranslation($trans, 'language', $locale);

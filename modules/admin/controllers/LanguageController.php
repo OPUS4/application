@@ -21,8 +21,8 @@
  * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details. You should have received a copy of the GNU General Public License 
- * along with OPUS; if not, write to the Free Software Foundation, Inc., 51 
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
@@ -47,5 +47,17 @@ class Admin_LanguageController extends Controller_CRUDAction {
      * @var Opus_Model_Abstract
      */
     protected $_modelclass = 'Opus_Language';
+    /**
+     * List all available collection role instances
+     *
+     * @return void
+     */
+    public function indexAction() {
+        $entries = Opus_Language::getAll();
+        $this->view->entries = array();
+        foreach ($entries as $entry) {
+            $this->view->entries[$entry->getId()] = $entry->getPart2T();
+        }
+    }
 
 }
