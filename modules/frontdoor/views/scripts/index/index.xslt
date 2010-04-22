@@ -847,6 +847,8 @@
        <xsl:if test="contains(@DisplayFrontdoor,'Name') and @Name != ''">
            <xsl:value-of select="@Name" />
        </xsl:if>
+       <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
+       <xsl:value-of select="@Name" />
     </xsl:template>
 
     <xsl:template name="MailToAuthor">
