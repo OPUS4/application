@@ -34,15 +34,6 @@
       </tuv>
     </tu>
     
-    <tu tuid="ara">
-      <tuv xml:lang="en">
-        <seg>Arabian</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Arabisch</seg>
-      </tuv>
-    </tu>
-    
     <tu tuid="deu">
       <tuv xml:lang="en">
         <seg>German</seg>
