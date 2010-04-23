@@ -171,7 +171,11 @@
            <xsl:element name="granularity"><xsl:text>YYYY-MM-DDThh:mm:ssZ</xsl:text></xsl:element>
            <xsl:element name="description">
                <xsl:element name="oai-identifier">
-                  <xsl:attribute name="xsi:schemaLocation"><xsl:text>http://www.openarchives.org/OAI/2.0/oai-identifier http://www.openarchives.org/OAI/2.0/oai-identifier.xsd</xsl:text>
+                  <xsl:attribute name="xmlns"> 
+                    <xsl:text>http://www.openarchives.org/OAI/2.0/oai-identifier</xsl:text>
+                  </xsl:attribute>
+                  <xsl:attribute name="xsi:schemaLocation">
+                    <xsl:text>http://www.openarchives.org/OAI/2.0/oai-identifier http://www.openarchives.org/OAI/2.0/oai-identifier.xsd</xsl:text>
                   </xsl:attribute>
                   <xsl:element name="scheme"><xsl:text>oai</xsl:text></xsl:element>
                   <xsl:element name="repositoryIdentifier">
