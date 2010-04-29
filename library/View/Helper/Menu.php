@@ -68,17 +68,24 @@ class View_Helper_Menu
      */
     protected function _buildMenu()
     {
+   		$config = Zend_Registry::get('Zend_Config');
+
+		$module = $config->startmodule;
+		if (empty($module) === true) {
+			$module = 'home';
+		}
+
         $menus['home']['index'] = array(
-            'module' => 'home',
+            'module' => $module,
             'controller' => 'index',
             'action' => 'index'
             );
-        $homedir = Zend_Controller_Front::getInstance()->getControllerDirectory('home');
+        $homedir = Zend_Controller_Front::getInstance()->getControllerDirectory($module);
         foreach (glob($homedir . '/../views/scripts/index/*.phtml') as $filename) {
             $filename = basename($filename, '.phtml');
             if ($filename === 'index') continue;
             $menus['home'][$filename] = array(
-                'module' => 'home',
+                'module' => $module,
                 'controller' => 'index',
                 'action' => $filename
                 );
