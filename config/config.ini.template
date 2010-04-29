@@ -41,6 +41,7 @@ db.params.dbname =
 
 ;GENERAL SETTINGS
 theme = default
+startmodule = home
 security = 0
 
 ;WOKSPACE-PATH SETTINGS

@@ -44,13 +44,21 @@
 class IndexController extends Zend_Controller_Action {
 
 	/**
-	 * Redirect to module home by default.
+	 * Redirect to default module.
+	 * Default module is configurable in config.ini
 	 *
 	 * @return void
 	 *
 	 */
 	public function indexAction() {
-		$this->_helper->getHelper('Redirector')->gotoSimple('index', 'index', 'home');
+   		$config = Zend_Registry::get('Zend_Config');
+
+		$module = $config->startmodule;
+		if (empty($module) === true) {
+			$module = 'home';
+		}
+		
+		$this->_helper->getHelper('Redirector')->gotoSimple('index', 'index', $module);
 	}
 
 }
