@@ -140,6 +140,7 @@
         <seg>Der interne Schlüssel hat keinen Privatschlüssel!</seg>
       </tuv>
     </tu>
+
     <tu tuid="keyFileToUpload">
       <tuv xml:lang="en">
         <seg>Keyfile</seg>
@@ -157,6 +158,16 @@
         <seg>Abschicken</seg>
       </tuv>
     </tu>
+
+    <tu tuid="pkm_admin_disabled">
+      <tuv xml:lang="en">
+        <seg>The GPG-Module has been disabled! To enable it, set gpg.enable.admin in config.ini to value 1.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das GPG-Modul ist nicht aktiviert! Zum Aktivieren setzen Sie in der config.ini die Option gpg.enable.admin auf den Wert 1.</seg>
+      </tuv>
+    </tu>
+
     
   </body>
   

@@ -71,17 +71,38 @@ class Pkm_IndexController extends Zend_Controller_Action
 	 */
     public function listkeysAction()
     {
+        // Check if GPG for admin is enabled
+        $config = Zend_Registry::get('Zend_Config');
+
+        $use_gpg = $config->gpg->enable->admin;
+        if (empty($use_gpg) === true) {
+            $use_gpg = 0;
+        }
+
     	$this->view->title = $this->view->translate('pkm_list_keys');
 
-        $uploadForm = new KeyUploadForm();
-        $action_url = $this->view->url(array("controller" => "index", "action" => "addkey"));
-        $uploadForm->setAction($action_url);
-        $this->view->form = $uploadForm;
+        if ($use_gpg === 1) {
+            $uploadForm = new KeyUploadForm();
+            $action_url = $this->view->url(array("controller" => "index", "action" => "addkey"));
+            $uploadForm->setAction($action_url);
+            $this->view->form = $uploadForm;
 
-    	$gpg = new Opus_GPG();
+    	    $gpg = new Opus_GPG();
 
-    	$this->view->masterkey = $gpg->getMasterKey();
-    	$this->view->keys = $gpg->getKeys();
+    	    try {
+    	        $this->view->masterkey = $gpg->getMasterKey();
+    	        $this->view->keys = $gpg->getKeys();
+    	    }
+    	    catch (Crypt_GPG_Exception $e) {
+    		    $this->view->masterkey = false;
+    		    $this->view->keys = array();
+    	    }
+    	}
+    	else {
+  		    $this->view->masterkey = false;
+   		    $this->view->keys = array();
+    		$this->view->actionresult = $this->view->translate('pkm_admin_disabled');
+    	}
     }
 
 	/**
