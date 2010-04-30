@@ -263,8 +263,33 @@
       </tuv>
     </tu>
     
+    <tu tuid="FileToUpload">
+      <tuv xml:lang="en">
+        <seg>File to upload</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einzubringende Datei</seg>
+      </tuv>
+    </tu>
       
+    <tu tuid="Comment">
+      <tuv xml:lang="en">
+        <seg>Comment</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Kommentar</seg>
+      </tuv>
+    </tu>
     
+    <tu tuid="Process">
+      <tuv xml:lang="en">
+        <seg>Process</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einbringen</seg>
+      </tuv>
+    </tu>
+
   </body>
   
   
