@@ -290,6 +290,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="pkm_list_keys">
+      <tuv xml:lang="en">
+        <seg>Key Management</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Schlüsselverwaltung</seg>
+      </tuv>
+    </tu>
+    
   </body>
   
   

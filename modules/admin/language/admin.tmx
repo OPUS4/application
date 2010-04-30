@@ -97,15 +97,6 @@
       </tuv>
     </tu>
     
-    <tu tuid="pkm_list_keys">
-      <tuv xml:lang="en">
-        <seg>Key Management</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Schlüsselverwaltung</seg>
-      </tuv>
-    </tu>
-    
     <tu tuid="admin_title_statistic">
       <tuv xml:lang="en">
         <seg>Show number of publications</seg>

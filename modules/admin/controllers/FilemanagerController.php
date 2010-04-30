@@ -175,7 +175,12 @@ class Admin_FilemanagerController extends Zend_Controller_Action
                 // Iteration over all files, hashtypes and -values
                 $gpg = new Opus_GPG();
                 try {
-                    $masterkey = $gpg->getMasterkey()->getPrimaryKey()->getFingerprint();
+                    if ($gpg->getMasterkey() === false) {
+                    	$masterkey = false;
+                    }
+                    else {
+                        $masterkey = $gpg->getMasterkey()->getPrimaryKey()->getFingerprint();
+                    }
                 }
                 catch (Exception $e) {
                     $masterkey = false;
