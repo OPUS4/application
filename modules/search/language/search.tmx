@@ -93,15 +93,6 @@
       </tuv>
     </tu>
     
-    <tu tuid="search_titles_resultlist">
-      <tuv xml:lang="en">
-        <seg>Query returned %1$s hits.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Die Suche ergab %1$s Treffer.</seg>
-      </tuv>
-    </tu>
-    
     <tu tuid="search_titles_resultlist_one_entry">
       <tuv xml:lang="en">
         <seg>Query returned %1$s hit.</seg>
@@ -135,15 +126,6 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Dokumente in dieser Kategorie</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="search_results_from_to">
-      <tuv xml:lang="en">
-        <seg>Showing results %1$s to %2$s</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Ergebnisse %1$s bis %2$s</seg>
       </tuv>
     </tu>
     
