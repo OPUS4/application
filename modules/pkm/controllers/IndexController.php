@@ -81,7 +81,7 @@ class Pkm_IndexController extends Zend_Controller_Action
 
     	$this->view->title = $this->view->translate('pkm_list_keys');
 
-        if ($use_gpg === 1) {
+        if ($use_gpg === '1') {
             $uploadForm = new KeyUploadForm();
             $action_url = $this->view->url(array("controller" => "index", "action" => "addkey"));
             $uploadForm->setAction($action_url);
