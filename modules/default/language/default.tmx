@@ -236,6 +236,33 @@
       </tuv>
     </tu>
     
+    <tu tuid="frontdoor_fixpoint">
+      <tuv xml:lang="en">
+        <seg>Fixpoint</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sollwert</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="frontdoor_current">
+      <tuv xml:lang="en">
+        <seg>Current value</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Istwert</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="frontdoor_file_too_big">
+      <tuv xml:lang="en">
+        <seg>Checksum cannot be verified - file too large</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Prüfsumme konnte nicht geprüft werden - Datei ist zu groß</seg>
+      </tuv>
+    </tu>
+    
       
     
   </body>
