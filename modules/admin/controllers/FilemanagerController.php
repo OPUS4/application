@@ -162,39 +162,49 @@ class Admin_FilemanagerController extends Zend_Controller_Action
 
             }
             $this->view->uploadform = $uploadForm;
-                $document = new Opus_Document($requestData['docId']);
-                $this->view->files = array();
+            $document = new Opus_Document($requestData['docId']);
+            $this->view->files = array();
 
-                //searching for files, getting filenumbers and hashes
-                $fileNumber = 0;
-                $files = $document->getFile();
-                if (true === is_array($files) && count($files) > 0) {
-                    $fileNumber = count($files);
-                    $this->view->fileNumber = $fileNumber;
-                }
-                // Iteration over all files, hashtypes and -values
+            //searching for files, getting filenumbers and hashes
+            $fileNumber = 0;
+            $files = $document->getFile();
+            if (true === is_array($files) && count($files) > 0) {
+                $fileNumber = count($files);
+                $this->view->fileNumber = $fileNumber;
+            }
+            // Iteration over all files, hashtypes and -values
+            // Check if GPG for admin is enabled
+            $config = Zend_Registry::get('Zend_Config');
+
+            $use_gpg = $config->gpg->enable->admin;
+            if (empty($use_gpg) === true) {
+                $use_gpg = 0;
+		    }
+                
+            // Initialize masterkey
+            $masterkey = false;
+                
+            if ($use_gpg === '1') {                
                 $gpg = new Opus_GPG();
-                try {
-                    if ($gpg->getMasterkey() === false) {
-                    	$masterkey = false;
-                    }
-                    else {
+                if ($gpg->getMasterkey() !== false) {
+                    try {
                         $masterkey = $gpg->getMasterkey()->getPrimaryKey()->getFingerprint();
                     }
+                    catch (Exception $e) {
+                        // do nothing, masterkey is already set to false
+                    }
                 }
-                catch (Exception $e) {
-                    $masterkey = false;
-                }
-                $this->view->verifyResult = array();
-                $fileNames = array();
-                $hashType = array();
-                $hashSoll = array();
-                $hashIst = array();
-                $hashNumber = array();
-                $fileForms = array();
-                $verified = array();
-                for ($fi = 0; $fi < $fileNumber; $fi++) {
-            try {
+            }
+            $this->view->verifyResult = array();
+            $fileNames = array();
+            $hashType = array();
+            $hashSoll = array();
+            $hashIst = array();
+            $hashNumber = array();
+            $fileForms = array();
+            $verified = array();
+            for ($fi = 0; $fi < $fileNumber; $fi++) {
+                try {
                     $form = new SignatureForm();
                     $form->FileObject->setValue($document->getFile($fi)->getId());
                     $form->setAction($this->view->url(array('module' => 'admin', 'controller' => 'filemanager', 'action' => 'index', 'docId' => $requestData['docId']), null, true));
@@ -211,6 +221,13 @@ class Admin_FilemanagerController extends Zend_Controller_Action
                             $hashSoll[$fi][$hi] = $document->getFile($fi)->getHashValue($hi)->getValue();
                             $hashType[$fi][$hi] = $document->getFile($fi)->getHashValue($hi)->getType();
                             if (substr($hashType[$fi][$hi], 0, 3) === 'gpg') {
+                                // Check if GPG is used
+                                // GPG is not used 
+                                // * by default
+                                // * if admin has disabled it in config
+                                // * if no masterkey has been found
+                                // TODO * if GPG is not configured correctly
+                                if ($use_gpg === '1') {
                                 try {
                                     $this->view->verifyResult[$fileNames[$fi]] = $gpg->verifyPublicationFile($document->getFile($fi));
                                     foreach($this->view->verifyResult[$fileNames[$fi]] as $verifiedArray) {
@@ -227,6 +244,7 @@ class Admin_FilemanagerController extends Zend_Controller_Action
                                     }
                                 } catch (Exception $e) {
                                     $this->view->verifyResult[$fileNames[$fi]] = array('result' => array($e->getMessage()), 'signature' => $hashSoll[$fi][$hi]);
+                                }
                                 }
                             } else {
                                 $hashIst[$fi][$hi] = 0;
@@ -247,9 +265,9 @@ class Admin_FilemanagerController extends Zend_Controller_Action
                         $fileForms[$fi] .= $deleteForm;
                     }
                 }
-            catch (Exception $e) {
-                $this->view->noFileSelected = $e->getMessage();
-            }
+                catch (Exception $e) {
+                    $this->view->noFileSelected = $e->getMessage();
+                }
                 $this->view->hashType = $hashType;
                 $this->view->hashSoll = $hashSoll;
                 $this->view->hashIst = $hashIst;
