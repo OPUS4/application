@@ -35,4 +35,26 @@
 ?>
 <? $this->title = $this->translate('home_index_about_pagetitle') ?>
 <h1><?= $this->translate('home_index_about_title') ?></h1>
-<p><?= $this->translate('home_index_about_text') ?></p>
+<p class="col3head"><?= $this->translate('home_index_about_general') ?></p> 
+<ul class="navigation"> 
+<li><a href="<?= $this->url(array('module' => 'home', 'controller'=>'index', 'action'=>'about', 'content' => 'about_content_whatsthis'), null, true) ?>"><?= $this->translate('home_index_about_whatsthis') ?></a></li> 
+<li><a href="<?= $this->url(array('module' => 'home', 'controller'=>'index', 'action'=>'about', 'content' => 'about_content_policies'), null, true) ?>"><?= $this->translate('home_index_about_policies') ?></a></li> 
+<li><a href="<?= $this->url(array('module' => 'home', 'controller'=>'index', 'action'=>'about', 'content' => 'about_content_documentation'), null, true) ?>"><?= $this->translate('home_index_about_documentation') ?></a></li> 
+<li><a href="<?= $this->url(array('module' => 'home', 'controller'=>'index', 'action'=>'about', 'content' => 'about_content_disclaimer'), null, true) ?>"><?= $this->translate('home_index_about_disclaimer') ?></a></li> 
+<li><a href="<?= $this->url(array('module' => 'home', 'controller'=>'index', 'action'=>'about', 'content' => 'about_content_impress'), null, true) ?>"><?= $this->translate('home_index_about_impress') ?></a></li> 
+<li><a href="<?= $this->url(array('module' => 'home', 'controller'=>'index', 'action'=>'about', 'content' => 'about_content_termsofuse'), null, true) ?>"><?= $this->translate('home_index_about_termsofuse') ?></a></li> 
+</ul>
+<?php
+if ($this->content) {
+?>
+<div><?php
+if (file_exists($this->getScriptPath('') . $this->translate($this->content)) === true) {
+    readfile($this->getScriptPath('') . $this->translate($this->content));
+}
+else {
+    echo $this->translate($this->content);
+}
+?></div>
+<?php
+}
+?>

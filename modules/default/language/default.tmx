@@ -52,6 +52,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="home_index_help_actionname">
+      <tuv xml:lang="en">
+        <seg>Help</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Hilfe</seg>
+      </tuv>
+    </tu>
+    
     <tu tuid="home_index_about_actionname">
       <tuv xml:lang="en">
         <seg>About</seg>

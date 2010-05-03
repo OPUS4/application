@@ -1,0 +1,615 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+ 
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+ 
+  <body>
+  
+    <tu tuid="publish_modulename">
+      <tuv xml:lang="en">
+        <seg>Publish</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Veröffentlichen</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="home_modulename">
+      <tuv xml:lang="en">
+        <seg>Home</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einstieg</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="search_modulename">
+      <tuv xml:lang="en">
+        <seg>Search and browse</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Suchen und Browsen</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_modulename">
+      <tuv xml:lang="en">
+        <seg>Administration</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Administration</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="tubdok_index_help_pagetitle">
+        <tuv xml:lang="en">
+            <seg>Help</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Hilfe</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="home_index_help_title">
+        <tuv xml:lang="en">
+            <seg>Help about OPUS</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Hilfe zu OPUS</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="dinitext">
+        <tuv xml:lang="en">
+            <seg>This is an electronic document repository certified by DINI (Deutsche Initiative für Netzwerkinformation, German Initiative for network information)</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Dieser Dokumentenserver ist bei der Deutschen Initiative für Netzwerkinformation (DINI) als standardkonformer Dokumentenserver zertifiziert.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="oaitext">
+      <tuv xml:lang="en">
+          <seg>This repository server is registered as data provider at the Open Archives Initiative (OAI) and supports the OAI 2.0-interface</seg>
+      </tuv>
+      <tuv xml:lang="de">
+          <seg>Dieser Dokumentenserver ist registrierter Dataprovider bei der Open Archives Initiative (OAI) und unterstützt die OAI 2.0-Schnittstelle.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="dinititle">
+        <tuv xml:lang="en">
+            <seg>This is an electronic document repository certified by DINI</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Dies ist ein von der DINI zertifizier Dokumentenserver</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="dinialt">
+        <tuv xml:lang="en">
+            <seg>DINI-Certificate-Icon</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>DINI-Zertifikatslogo</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="oaititle">
+        <tuv xml:lang="en">
+            <seg>This repository is registered as data provider at the Open Archives Initiative (OAI)</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Dieser Dokumentenserver ist bei der Open Archives Initiative (OAI) registrierter Dataprovider</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="oaialt">
+        <tuv xml:lang="en">
+            <seg>OAI-Icon</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>OAI-Logo</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="admin_modulename">
+      <tuv xml:lang="en">
+          <seg>Administration</seg>
+        </tuv>
+      <tuv xml:lang="de">
+          <seg>Administration</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="home_index_index_actionname">
+      <tuv xml:lang="en">
+        <seg>Home</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einstieg</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="home_index_about_actionname">
+      <tuv xml:lang="en">
+        <seg>About</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Über</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="home_index_contact_actionname">
+      <tuv xml:lang="en">
+        <seg>Contact</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Kontakt</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="home_index_index_instructions">
+      <tuv xml:lang="en">
+        <seg>If you want to search for documents of the university, please
+        choose the menu "Search" where you will find several search options.If
+        you want to publish a document, please select the menu "Publish"; here
+        you can submit your document to the publication server in just a few
+        steps.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Wenn Sie nach Texten der Hochschule suchen wollen, wählen Sie bitte
+        das Menü "Suchen"; dort stehen Ihnen verschiedene Recherchemöglichkeiten
+        zur Verfügung. Wollen Sie ein Dokument publizieren, wählen Sie bitte das
+        Menü "Veröffentlichen"; mit wenigen Schritten können Sie dort Ihr
+        Dokument an den Hochschulschriftenserver übertragen.</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="home_index_index_title">
+      <tuv xml:lang="en">
+        <seg>Publication Server</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Hochschulschriftenserver</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="home_index_index_pagetitle">
+      <tuv xml:lang="en">
+        <seg>Home</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einstieg</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="home_index_index_welcome">
+      <tuv xml:lang="en">
+        <seg>The library offers to publish electronically generated and
+        qualified documents on its online publication system. This service is
+        for university members only and free of charge. After publication, the
+        texts are available worldwide on the Internet and will be archived
+        permanently by the library. The documents are indexed and made
+        accessible in library catalogues and Web search engines.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Die Bibliothek bietet allen Angehörigen der Hochschule – Lehrenden
+        und Studierenden – die Möglichkeit, elektronisch erzeugte, qualifizierte
+        Dokumente über ihr Online-Publikations-System kostenlos zu
+        veröffentlichen.  Die Texte stehen nach ihrer Veröffentlichung weltweit
+        im Internet zur Verfügung und werden von der Bibliothek dauerhaft
+        archiviert. Die Dokumente sind über Bibliothekskataloge und über die
+        Suchmaschinen des WWW erschlossen und zugänglich.</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="home_index_about_pagetitle">
+      <tuv xml:lang="en">
+        <seg>About</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Über</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="home_index_about_title">
+      <tuv xml:lang="en">
+        <seg>OPUS</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>OPUS</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="about_content_whatsthis">
+        <tuv xml:lang="en">
+            <seg>
+            Welcome on this electronic document repository. This server is maintained by the university library. You can find electronic fulltexts here.
+            If you have created a doctoral thesis or state doctorate or anything else interesting for the scientific community at this university and want to publish your work online, you can do that by clicking on "Publish".
+            </seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>
+            Willkommen auf diesem Dokumentenserver. Dieser Server wird betrieben von der Bibliothek. Hier sind elektronische Volltexte zu finden.
+            Wenn Sie selbst eine Dissertation bzw. Habilitation oder ein anderes wissenschaftliches Dokument an der TUHH verfasst haben und diese online verfügbar machen möchten, dann können Sie das über "Veröffentlichen" tun.
+            </seg>
+        </tuv>
+    </tu>
+    
+    <tu tuid="about_content_policies">
+        <tuv xml:lang="en">
+            <seg>about_content_policies.en.txt</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>about_content_policies.de.txt</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="about_content_documentation">
+        <tuv xml:lang="en">
+            <seg>about_content_documentation.en.txt</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>about_content_documentation.de.txt</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="about_content_disclaimer">
+        <tuv xml:lang="en">
+            <seg>about_content_disclaimer.en.txt</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>about_content_disclaimer.de.txt</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="about_content_impress">
+        <tuv xml:lang="en">
+            <seg>about_content_impress.en.txt</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>about_content_impress.de.txt</seg>
+        </tuv>
+    </tu>
+    
+    <tu tuid="about_content_termsofuse">
+        <tuv xml:lang="en">
+            <seg>The documents on this server should be copied, printed out and referenced for your own or scientific purposes. The author has the copyright for his works. It is not permitted to use the complete documents or parts of them for commercial purpose without having the authorization of the author and the server mainatiner.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Die auf diesem Server liegenden Dokumente dürfen zu wissenschaftlichen Zwecken und zum Eigengebrauch kopiert, ausgedruckt und zitiert werden. Die Urheberrechte liegen bei den Autoren. Jede kommerzielle Nutzung der Dokumente, auch von Teilen und Auszügen, ist ohne vorherige Zustimmung und Absprache mit den Serverbetreibern ausdrücklich verboten.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="home_index_about_general">
+        <tuv xml:lang="en">
+            <seg>General Info</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Allgemeines</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="home_index_about_whatsthis">
+        <tuv xml:lang="en">
+            <seg>Whats this?</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Was ist das hier?</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="home_index_about_policies">
+        <tuv xml:lang="en">
+            <seg>Policies</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Leitlinien</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="home_index_about_documentation">
+        <tuv xml:lang="en">
+            <seg>Documentation</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Dokumentation</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="home_index_about_disclaimer">
+        <tuv xml:lang="en">
+            <seg>Disclaimer</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Haftungsausschluss</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="home_index_about_impress">
+        <tuv xml:lang="en">
+            <seg>Impress</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Impressum</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="home_index_about_termsofuse">
+        <tuv xml:lang="en">
+            <seg>Terms of Use</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Nutzungsbedingungen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="help_index_general">
+        <tuv xml:lang="en">
+            <seg>Using this publication server</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Benutzung des Dokumentenservers</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="help_index_costs">
+        <tuv xml:lang="en">
+            <seg>Is the publication free of charge?</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Kostet die Veröffentlichung Geld?</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="help_index_searchtipps">
+        <tuv xml:lang="en">
+            <seg>Tipps concerning your search</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tipps für die Suche</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="help_content_costs">
+        <tuv xml:lang="en">
+            <seg>Yes! Basically all publications are free of charge at the moment.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Nein! Grundsätzlich ist die Veröffentlichung von Dokumenten derzeit kostenfrei.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="help_content_searchtipps">
+        <tuv xml:lang="en">
+            <seg>help_content_searchtipps.en.txt</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>help_content_searchtipps.de.txt</seg>
+        </tuv>
+    </tu>
+
+<!--
+<p class="col3head">help_index_authorhelp => Hilfe für Autoren</p>
+<li><a href="#2.1">Besonderheiten bei der Veröffentlichung von Dissertationen</a></li>
+<li><a href="#2.2">An wen kann ich mich bei Fragen wenden?</a></li>
+<li><a href="#2.3">Sind meine Publikationen frei zugänglich?</a></li>
+<li><a href="#2.4">Was brauche ich, um eine Veröffentlichung zu machen?</a></li>
+<li><a href="#2.5">Welche rechtlichen Aspekte muss ich beachten?</a></li>
+<li><a href="#2.6">Was ist das Präsentationsformat?</a></li>
+<li><a href="#2.7">Welche Anforderungen werden an mein(e) Dokument(e) gestellt?</a></li>
+<li><a href="#2.8">Was muss ich beim Schreiben der Texte beachten?</a></li>
+<li><a href="#2.9">Wie geht der Veröffentlichungsvorgang vor sich?</a></li>
+<li><a href="#2.10">Gibt es Besonderheiten bei der Publikation einer Dissertation?</a></li>
+<li><a href="#2.11">Besonderheiten bei der Publikation eines Preprints</a></li>
+<li><a href="#2.12">Was passiert, nachdem ich mein(e) Dokumente hochgeladen habe?</a></li>
+
+<p class="col3head"><?= $this->translate('help_index_authorhelp') ?></p>
+<ul class="navigation">
+<li><a href="<?= $this->url(array('module' => 'tubdok', 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_diss', 'position' =>.
+'#content'), null, true) ?>"><?= $this->translate('help_index_diss') ?>
+Besonderheiten bei der Veröffentlichung von Dissertationen</li>
+<li><a href="<?= $this->url(array('module' => 'tubdok', 'controller'=>'index', 'action'=>'contact'), null, true) ?>">
+<?= $this->translate('help_index_contact') ?>An wen kann ich mich bei Fragen wenden?</li>
+<li><a href="<?= $this->url(array('module' => 'tubdok', 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_free', 'position' =>.
+'#content'), null, true) ?>"><?= $this->translate('help_index_free') ?>Sind meine Publikationen frei zugänglich?</li>
+<li><a href="<?= $this->url(array('module' => 'tubdok', 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_publneeds', 'position' =>.
+'#content'), null, true) ?>"><?= $this->translate('help_index_publneeds') ?>Was brauche ich, um eine Veröffentlichung zu machen?</li>
+<li><a href="<?= $this->url(array('module' => 'tubdok', 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_right', 'position' =>.
+'#content'), null, true) ?>"><?= $this->translate('help_index_right') ?>Welche rechtlichen Aspekte muss ich beachten?</li>
+<li><a href="<?= $this->url(array('module' => 'tubdok', 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_format', 'position' =>.
+'#content'), null, true) ?>"><?= $this->translate('help_index_format') ?>Was ist das Präsentationsformat?</li>
+<li><a href="<?= $this->url(array('module' => 'tubdok', 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_requirements', 'position' =>.
+'#content'), null, true) ?>"><?= $this->translate('help_index_requirements') ?>Welche Anforderungen werden an mein(e) Dokument(e) gestellt?</li>
+<li><a href="<?= $this->url(array('module' => 'tubdok', 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_write', 'position' =>.
+'#content'), null, true) ?>"><?= $this->translate('help_index_write') ?>Was muss ich beim Schreiben der Texte beachten?</li>
+<li><a href="<?= $this->url(array('module' => 'tubdok', 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_publicationprocess', 'position' =
+'#content'), null, true) ?>"><?= $this->translate('help_index_publicationprocess') ?>Wie geht der Veröffentlichungsvorgang vor sich?</li>
+<li><a href="<?= $this->url(array('module' => 'tubdok', 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_preprint', 'position' =>.
+'#content'), null, true) ?>"><?= $this->translate('help_index_preprint') ?>Besonderheiten bei der Publikation eines Preprints</li>
+<li><a href="<?= $this->url(array('module' => 'tubdok', 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_workflowlibrary', 'position' =>.
+'#content'), null, true) ?>"><?= $this->translate('help_index_workflowlibrary') ?>Was passiert, nachdem ich mein(e) Dokumente hochgeladen habe?</li>
+</ul>
+
+
+
+<p class="col3head">Formularfelder</p>
+<li><a href="#3.1">Was sind Metadaten?</a></li>
+<li><a href="#3.2">Allgemeine Hilfe zu den Formularen</a></li>
+<li><a href="#3.3">Formularelement Verfügbarkeit</a></li>
+<li><a href="#3.4">Formularelement Titel (Title)</a></li>
+<li><a href="#3.5">Formularelement Verfasser (Creator)</a></li>
+<li><a href="#3.6">Formularelement Urheber (Creator)</a></li>
+<li><a href="#3.7">Formularelement Sonstige Beteiligte (Other Contributors)</a></li>
+<li><a href="#3.8">Formularelement Schlagwörter (Subject)</a></li>
+<li><a href="#3.9">Formularelement Freie Schlagwörter</a></li>
+<li><a href="#3.10">Formularelement Klassifikation (Subject)</a></li>
+<li><a href="#3.11">Formularelement Inhaltliche Beschreibung (Description)</a></li>
+<li><a href="#3.12">Formularelement Schriftenreihe</a></li>
+<li><a href="#3.13">Formularelement Hochschule bzw. Fakultät (Publisher)</a></li>
+<li><a href="#3.14">Formularelement Hauptberichter (Advisor)</a></li>
+<li><a href="#3.15">Formularelement Datum (Date)</a></li>
+<li><a href="#3.16">Formularelement Dokumentart (Resource Type)</a></li>
+<li><a href="#3.17">Formularelement Format (Format)</a></li>
+<li><a href="#3.18">Formularelement ISBN</a></li>
+<li><a href="#3.19">Formularelement Sprache (Language)</a></li>
+<li><a href="#3.20">Formularelement Quelle (Source)</a></li>
+<li><a href="#3.21">Formularelement Name der Dokumentdatei (Resource Identifier)</a></li>
+<li><a href="#3.22">Formularelement Identifizierung</a></li>
+<li><a href="#3.23">Formularelement Anzahl der Dateien, die übermittelt werden sollen</a></li>
+<li><a href="#3.24">Formularelement G&uuml;ltigkeitsdauer</a></li>
+
+<p class="col3head">Rechtliches</p>
+<li><a href="#4.1">Was ist, wenn ich meine Publikation bei einem Verlag ver&ouml;ffentlichen lasse oder dies plane?</a></li>
+<li><a href="#4.2">Wie gehen Verlage mit einer frei verfügbaren Online-Version der Arbeit um?</a></li>
+<li><a href="#4.3">Wie sieht es mit Lizenzen für mein Werk aus?</a></li>
+
+<p class="col3head">MD5-Prüfsummen</p>
+<li><a href="#5.1">Wie berechnet man die Prüfsumme?</a></li>
+<li><a href="#5.2">Was ist eine MD5-Prüfsumme?</a></li>
+
+<p class="col3head">PGP/GPG</p>
+<li><a href="#6.1">Was ist PGP/GPG?</a></li>
+<li><a href="#6.2">Warum brauche ich einen PGP/GPG-Schlüssel für die Veröffentlichung?</a></li>
+<li><a href="#6.3">Formularelement Schlüsselupload</a></li>
+<li><a href="#6.4">Wie stelle ich Ihnen meinen Schl&uuml;ssel zur Verf&uuml;gung?</a></li>
+<li><a href="#6.5">Was machen Sie mit meinem Schlüssel?</a></li>
+<li><a href="#6.6">Wie signiere ich meine Dokumente digital?</a></li>
+<li><a href="#6.7">Signaturerstellung mit PGP für Windows</a></li>
+<li><a href="#6.8">Signaturerstellung mit GPG für Windows (über WinPT)</a></li>
+<li><a href="#6.9">Erstellung einer digitalen Signatur mit GPG über Kommandozeile</a></li>
+
+-->
+
+    <tu tuid="home_index_contact_pagetitle">
+      <tuv xml:lang="en">
+        <seg>Contact</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Kontakt</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="home_index_contact_title">
+      <tuv xml:lang="en">
+        <seg>Contact us!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nehmen Sie Kontakt mit uns auf!</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="home_index_language_label">
+      <tuv xml:lang="en">
+        <seg>Language</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sprache</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="search_index_search">
+      <tuv xml:lang="en">
+        <seg>Search</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Suche</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="search_searchaction">
+      <tuv xml:lang="en">
+        <seg>Search</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Suchen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="tubdok_contact_einleitung">
+      <tuv xml:lang="en">
+        <seg>If you have questions, which cannot be answered with this help system or if you do not understand something, please do not hesitate to get in contact with us!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Wenn Sie Fragen haben, die sich mit diesem Hilfesystem nicht beantworten lassen oder Ihnen etwas unklar ist, dann zögern Sie nicht, uns direkt zu kontaktieren!</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="tubdok_contact_beratung_title">
+      <tuv xml:lang="en">
+        <seg>expert advice</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Beratung</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="tubdok_contact_technics_title">
+        <tuv xml:lang="en">
+            <seg>Technics</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Technik</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="tubdok_contact_oai_title">
+        <tuv xml:lang="en">
+            <seg>Open Archives Initiative</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Open Archives Initiative</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="tubdok_contact_hapke">
+        <tuv xml:lang="en">
+            <seg>Thomas Hapke, 428 78 - 33 65</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Thomas Hapke, 428 78 - 33 65</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="tubdok_contact_weier">
+        <tuv xml:lang="en">
+            <seg>Heiko Weier, 428 78 - 34 49</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Heiko Weier, 428 78 - 34 49</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="tubdok_contact_marahrens">
+        <tuv xml:lang="en">
+            <seg>Oliver Marahrens, 428 78 - 32 91</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Oliver Marahrens, 428 78 - 32 91</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="tubdok_contact_brunke">
+        <tuv xml:lang="en">
+            <seg>Angela Brunke, 428 78 - 33 12</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Angela Brunke, 428 78 - 33 12</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="tubdok_contact_lass">
+        <tuv xml:lang="en">
+            <seg>Karin Lass, 428 78 - 36 22</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Karin Lass, 428 78 - 36 22</seg>
+        </tuv>
+    </tu>
+
+  </body>
+
+</tmx>

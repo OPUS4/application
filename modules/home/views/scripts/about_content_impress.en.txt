@@ -1,0 +1,5 @@
+<h2>Impress according to §6 Teledienstegesetz (Germany)</h2>
+This repository of electronic documents is a digital service University Library of the Hamburg University of Technics.<br/>Technische Universit&auml;t Hamburg-Harburg<br/>Bibliothek<br/>Denickestr. 22<br/>21073 Hamburg<br/>Phone: +49 (0)40 428 78 28 45<br/>Fax: +49 (0)40 428 78 22 48<br/>eMail: <a href=\"mailto:bibliothek@tu-harburg.de\">bibliothek@tu-harburg.de</a><br/>
+
+<br/>
+The University Library is part of the University of Technics and an institution under public law. Director of the library is Mrs. Inken Feldsien-Sudhaus.<br/><br/>purchase tax identification number: DE 118509725

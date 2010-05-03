@@ -112,4 +112,16 @@ class Home_IndexController extends Zend_Controller_Action {
         $searchForm->setMethod('post');
         $this->view->searchForm = $searchForm;
     }
+
+    public function aboutAction() {
+        if (array_key_exists('content', $this->_request->getParams()) === true) {
+            $this->view->content = $this->_request->getParam("content");
+        }
+    }
+
+    public function helpAction() {
+        if (array_key_exists('content', $this->_request->getParams()) === true) {
+            $this->view->content = $this->_request->getParam("content");
+        }
+    }
 }
