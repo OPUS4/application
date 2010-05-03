@@ -392,47 +392,144 @@
         </tuv>
     </tu>
 
-<!--
-<p class="col3head">help_index_authorhelp => Hilfe für Autoren</p>
-<li><a href="#2.1">Besonderheiten bei der Veröffentlichung von Dissertationen</a></li>
-<li><a href="#2.2">An wen kann ich mich bei Fragen wenden?</a></li>
-<li><a href="#2.3">Sind meine Publikationen frei zugänglich?</a></li>
-<li><a href="#2.4">Was brauche ich, um eine Veröffentlichung zu machen?</a></li>
-<li><a href="#2.5">Welche rechtlichen Aspekte muss ich beachten?</a></li>
-<li><a href="#2.6">Was ist das Präsentationsformat?</a></li>
-<li><a href="#2.7">Welche Anforderungen werden an mein(e) Dokument(e) gestellt?</a></li>
-<li><a href="#2.8">Was muss ich beim Schreiben der Texte beachten?</a></li>
-<li><a href="#2.9">Wie geht der Veröffentlichungsvorgang vor sich?</a></li>
-<li><a href="#2.10">Gibt es Besonderheiten bei der Publikation einer Dissertation?</a></li>
-<li><a href="#2.11">Besonderheiten bei der Publikation eines Preprints</a></li>
-<li><a href="#2.12">Was passiert, nachdem ich mein(e) Dokumente hochgeladen habe?</a></li>
+    <tu tuid="help_index_authorhelp">
+        <tuv xml:lang="en">
+            <seg>Help for authors</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Hilfe für Autoren</seg>
+        </tuv>
+    </tu>
 
-<p class="col3head"><?= $this->translate('help_index_authorhelp') ?></p>
-<ul class="navigation">
-<li><a href="<?= $this->url(array('module' => 'tubdok', 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_diss', 'position' =>.
-'#content'), null, true) ?>"><?= $this->translate('help_index_diss') ?>
+    <tu tuid="help_index_diss">
+        <tuv xml:lang="en">
+            <seg>Publication of thesises</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Veröffentlichung von Dissertationen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="help_index_contact">
+        <tuv xml:lang="en">
+            <seg>I have some more questions - whom shall I contact?</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>An wen kann ich mich bei Fragen wenden?</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="help_index_free">
+        <tuv xml:lang="en">
+            <seg>Are all of my publications publicly available?</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Sind meine Publikationen frei zugänglich?</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="help_index_publneeds">
+        <tuv xml:lang="en">
+            <seg>What do I need to publish here?</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Was brauche ich, um eine Veröffentlichung zu machen?</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="help_index_right">
+        <tuv xml:lang="en">
+            <seg>What legal aspects should I regard?</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Welche rechtlichen Aspekte muss ich beachten?</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="help_index_format">
+        <tuv xml:lang="en">
+            <seg>What`s a presentation format?</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Was ist das Präsentationsformat?</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="help_index_requirements">
+        <tuv xml:lang="en">
+            <seg>What demands do you make on my document(s)?</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Welche Anforderungen werden an mein(e) Dokument(e) gestellt?</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="help_index_write">
+        <tuv xml:lang="en">
+            <seg>What do I have to consider writing my text?</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Was muss ich beim Schreiben der Texte beachten?</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="help_index_publicationprocess">
+        <tuv xml:lang="en">
+            <seg>How do I publish my work here?</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Wie geht der Veröffentlichungsvorgang vor sich?</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="help_index_workflowlibrary">
+        <tuv xml:lang="en">
+            <seg>What happens after uploading my document(s)?</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Was passiert, nachdem ich mein(e) Dokumente hochgeladen habe?</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="help_index_preprint">
+        <tuv xml:lang="en">
+            <seg>Are there any special things to know publishing a preprint?</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Besonderheiten bei der Publikation eines Preprints</seg>
+        </tuv>
+    </tu>
+
+<!--
+help_content_diss
 Besonderheiten bei der Veröffentlichung von Dissertationen</li>
-<li><a href="<?= $this->url(array('module' => 'tubdok', 'controller'=>'index', 'action'=>'contact'), null, true) ?>">
-<?= $this->translate('help_index_contact') ?>An wen kann ich mich bei Fragen wenden?</li>
-<li><a href="<?= $this->url(array('module' => 'tubdok', 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_free', 'position' =>.
-'#content'), null, true) ?>"><?= $this->translate('help_index_free') ?>Sind meine Publikationen frei zugänglich?</li>
-<li><a href="<?= $this->url(array('module' => 'tubdok', 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_publneeds', 'position' =>.
-'#content'), null, true) ?>"><?= $this->translate('help_index_publneeds') ?>Was brauche ich, um eine Veröffentlichung zu machen?</li>
-<li><a href="<?= $this->url(array('module' => 'tubdok', 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_right', 'position' =>.
-'#content'), null, true) ?>"><?= $this->translate('help_index_right') ?>Welche rechtlichen Aspekte muss ich beachten?</li>
-<li><a href="<?= $this->url(array('module' => 'tubdok', 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_format', 'position' =>.
-'#content'), null, true) ?>"><?= $this->translate('help_index_format') ?>Was ist das Präsentationsformat?</li>
-<li><a href="<?= $this->url(array('module' => 'tubdok', 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_requirements', 'position' =>.
-'#content'), null, true) ?>"><?= $this->translate('help_index_requirements') ?>Welche Anforderungen werden an mein(e) Dokument(e) gestellt?</li>
-<li><a href="<?= $this->url(array('module' => 'tubdok', 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_write', 'position' =>.
-'#content'), null, true) ?>"><?= $this->translate('help_index_write') ?>Was muss ich beim Schreiben der Texte beachten?</li>
-<li><a href="<?= $this->url(array('module' => 'tubdok', 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_publicationprocess', 'position' =
-'#content'), null, true) ?>"><?= $this->translate('help_index_publicationprocess') ?>Wie geht der Veröffentlichungsvorgang vor sich?</li>
-<li><a href="<?= $this->url(array('module' => 'tubdok', 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_preprint', 'position' =>.
-'#content'), null, true) ?>"><?= $this->translate('help_index_preprint') ?>Besonderheiten bei der Publikation eines Preprints</li>
-<li><a href="<?= $this->url(array('module' => 'tubdok', 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_workflowlibrary', 'position' =>.
-'#content'), null, true) ?>"><?= $this->translate('help_index_workflowlibrary') ?>Was passiert, nachdem ich mein(e) Dokumente hochgeladen habe?</li>
-</ul>
+
+help_content_free
+Sind meine Publikationen frei zugänglich?
+
+help_content_publneeds
+Was brauche ich, um eine Veröffentlichung zu machen?
+
+help_content_right
+Welche rechtlichen Aspekte muss ich beachten?
+
+help_content_format
+Was ist das Präsentationsformat?
+
+help_content_requirements
+Welche Anforderungen werden an mein(e) Dokument(e) gestellt?
+
+help_content_write
+Was muss ich beim Schreiben der Texte beachten?
+
+help_content_publicationprocess
+Wie geht der Veröffentlichungsvorgang vor sich?
+
+help_content_preprint
+Besonderheiten bei der Publikation eines Preprints
+
+help_content_workflowlibrary
+Was passiert, nachdem ich mein(e) Dokumente hochgeladen habe?
 
 
 
@@ -461,6 +558,8 @@ Besonderheiten bei der Veröffentlichung von Dissertationen</li>
 <li><a href="#3.22">Formularelement Identifizierung</a></li>
 <li><a href="#3.23">Formularelement Anzahl der Dateien, die übermittelt werden sollen</a></li>
 <li><a href="#3.24">Formularelement G&uuml;ltigkeitsdauer</a></li>
+
+Single elemets of the application form</li><ul><li><a href="#3.1">What's metadata?</a></li><li><a href="#3.2">Basic help about the forms</a></li><li><a href="#3.3">Form element Availability</a></li><li><a href="#3.4">Form element Title</a></li><li><a href="#3.5">Form element Author</a></li><li><a href="#3.6">Form element Creator</a></li><li><a href="#3.7">Form element Contributor</a></li><li><a href="#3.8">Form element Controlled keywords (german)</a></li><li><a href="#3.9">Form element Free keywords (german and english)</a></li><li><a href="#3.10">Form element Classification</a></li><li><a href="#3.11">Form element Short Summary</a></li><li><a href="#3.12">Form element Series</a></li><li><a href="#3.13">Form element Advisor</a></li><li><a href="#3.14">Form element University - Faculty (Publisher)</a></li><li><a href="#3.15">Form element Year</a></li><li><a href="#3.16">Form element Resource Type</a></li><li><a href="#3.17">Form element Format</a></li><li><a href="#3.18">Form element ISBN</a></li><li><a href="#3.19">Form element Language</a></li><li><a href="#3.20">Form element Source</a></li><li><a href="#3.21">Form element Resource Identifier</a></li><li><a href="#3.22">Form element E-mail address</a></li><li><a href="#3.23">Form element Number of files to be uploaded</a></li><li><a href="#3.24">Form element Period of validity</a></li></ul><li>Legal hints</li><ul><li><a href="#4.1">What's to regard if I plan to publish my work by a professional publisher or have done that already?</a></li><li><a href="#4.2">How do publishers handle a freely available online-version of my work?</a></li><li><a href="#4.3">What about licenses for my publication?</a></li></ul><li>MD5 checksums</li><ul><li><a href="#5.1">How can I calculate the md5 checksum?</a></li><li><a href="#5.2">What's an md5 checksum?</a></li></ul><li>PGP/GPG</li><ul><li><a href="#6.1">What's PGP/GPG?</a></li><li><a href="#6.2">Why do I need a key for publication?</a></li><li><a href="#6.3">Form element key upload</a></li><li><a href="#6.4">How can I send you my key?</a></li><li><a href="#6.5">What are you doing with my key?</a></li><li><a href="#6.6">How do I sign my documents digitally?</a></li><li><a href="#6.7">Creating a signature with PGP for Windows</a></li><li><a href="#6.8">Creating a signature with GPG für Windows (via WinPT)</a></li><li><a href="#6.9">Creating a signature with GPG via command line</a></li></ul></ol><h2>Using this publication server</h2><a name="1.1"><h3>What's this?</h3></a>Welcome on TUBdok, the electronic document repository of the University of Technics Hamburg-Harburg. This server is maintained by the university library. You can find electronic fulltexts here, starting with single articles via the TUHH-journal Spektrum upon to doctoral thesises developed at the TUHH.<br/>
 
 <p class="col3head">Rechtliches</p>
 <li><a href="#4.1">Was ist, wenn ich meine Publikation bei einem Verlag ver&ouml;ffentlichen lasse oder dies plane?</a></li>
