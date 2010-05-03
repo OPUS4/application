@@ -8,4 +8,4 @@
 <li>Im Suchfeld Freitext durchsuchen Sie gleichzeitig Titel, Schlagwort und Abstract.</li>
 <li>Im Suchfeld Quelle können Sie nach Parallelveröffentlichungen (z.B. in einer Zeitschrift, einem Konferenzband etc.) von Datenbankabfrage-Dokumenten suchen.</li>
 </ol>
-Wenn Sie allgemeinere Suchtipps oder Recherchehinweise brauchen, dann schauen Sie doch mal in unser Tutorial <a href="http://discus.tu-harburg.de" target="_blank">DISCUS</a>!
+Wenn Sie allgemeinere Suchtipps oder Recherchehinweise brauchen, dann schauen Sie doch mal in das Tutorial <a href="http://discus.tu-harburg.de" target="_blank">DISCUS</a>!

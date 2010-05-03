@@ -8,4 +8,4 @@
 <li>Use the search field <b>Source</b> to search for parallel publications (e.g. in a journal, a conference issue etc.) of documents.</li>
 
 </ol>
-If you need more general tipps or hints for research you should have a look into our tutorial <a href="http://discus.tu-harburg.de" target="_blank">DISCUS</a>!
+If you need more general tipps or hints for research you should have a look into the tutorial <a href="http://discus.tu-harburg.de" target="_blank">DISCUS</a>!

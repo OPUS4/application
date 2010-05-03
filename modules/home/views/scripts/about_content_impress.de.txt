@@ -1,5 +1,2 @@
 <h2>Impressum nach §6 Teledienstegesetz</h2>
-Dieser Dokumentenserver ist eine elektronische Dienstleistung der Bibliothek der Technischen Universit&auml;t Hamburg-Harburg.<br/>Technische Universit&auml;t Hamburg-Harburg<br/>Bibliothek<br/>Denickestr. 22<br/>21073 Hamburg<br/>Telefon: +49 (0)40 428 78 28 45<br/>Telefax: +49 (0)40 428 78 22 48<br/>eMail: <a href=\"mailto:bibliothek@tu-harburg.de\">bibliothek@tu-harburg.de</a><br/>
-
-<br/>
-Die Universit&auml;tsbibliothek ist Teil der Technischen Universit&auml;t Hamburg-Harburg und damit eine Anstalt &ouml;ffentlichen Rechts. Bibliotheksdirektorin und damit vertretungsberechtigt ist Frau Inken Feldsien-Sudhaus.<br/><br/>Umsatzsteuer-Identifikationsnummer: DE 118509725
+Bitte hier Impressum einsetzen.
