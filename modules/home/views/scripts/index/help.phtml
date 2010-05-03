@@ -57,10 +57,11 @@
 <li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_workflowlibrary', 'position' => '#helpcontent'), null, true) ?>"><?= $this->translate('help_index_workflowlibrary') ?></a></li>
 </ul>
 
-<p class="col3head">Formularfelder</p>
+<p class="col3head"><?= $this->translate('help_index_formfields') ?></p>
 <ul>
 <li><a href="#3.1">Was sind Metadaten?</a></li>
 <li><a href="#3.2">Allgemeine Hilfe zu den Formularen</a></li>
+<li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_field_doctype', 'position' => '#helpcontent'), null, true) ?>"><?= $this->translate('help_index_field_doctype') ?></a></li>
 <li><a href="#3.3">Formularelement Verfügbarkeit</a></li>
 <li><a href="#3.4">Formularelement Titel (Title)</a></li>
 <li><a href="#3.5">Formularelement Verfasser (Creator)</a></li>
@@ -74,7 +75,6 @@
 <li><a href="#3.13">Formularelement Hochschule bzw. Fakultät (Publisher)</a></li>
 <li><a href="#3.14">Formularelement Hauptberichter (Advisor)</a></li>
 <li><a href="#3.15">Formularelement Datum (Date)</a></li>
-<li><a href="#3.16">Formularelement Dokumentart (Resource Type)</a></li>
 <li><a href="#3.17">Formularelement Format (Format)</a></li>
 <li><a href="#3.18">Formularelement ISBN</a></li>
 <li><a href="#3.19">Formularelement Sprache (Language)</a></li>

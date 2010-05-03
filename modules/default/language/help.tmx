@@ -590,54 +590,118 @@
         </tuv>
     </tu>
 
+    <tu tuid="help_index_formfields">
+        <tuv xml:lang="en">
+            <seg>Single elements of the application form</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Elemente des Veröffentlichungsformulars</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="help_index_field_doctype">
+        <tuv xml:lang="en">
+            <seg>Form element Document Type</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Formularelement Dokumenttyp</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="help_content_field_doctype">
+        <tuv xml:lang="en">
+            <seg>This element is mandatory for every publication! It contains the type of publication, for example thesis, preprint, study paper etc. You can select a type from a list.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Dieses Element muss immer ausgefüllt werden! Es enthält die Art der Publikation wie z.B. Dissertation, Diplomarbeit, Preprint, Studienarbeit usw. Sie können die Dokumentart bei der Veröffentlichung aus einer Liste auswählen.</seg>
+        </tuv>
+    </tu>
+
 <!--
-<p class="col3head">Formularfelder</p>
-<li><a href="#3.1">Was sind Metadaten?</a></li>
-<li><a href="#3.2">Allgemeine Hilfe zu den Formularen</a></li>
-<li><a href="#3.3">Formularelement Verfügbarkeit</a></li>
-<li><a href="#3.4">Formularelement Titel (Title)</a></li>
-<li><a href="#3.5">Formularelement Verfasser (Creator)</a></li>
-<li><a href="#3.6">Formularelement Urheber (Creator)</a></li>
-<li><a href="#3.7">Formularelement Sonstige Beteiligte (Other Contributors)</a></li>
-<li><a href="#3.8">Formularelement Schlagwörter (Subject)</a></li>
-<li><a href="#3.9">Formularelement Freie Schlagwörter</a></li>
-<li><a href="#3.10">Formularelement Klassifikation (Subject)</a></li>
-<li><a href="#3.11">Formularelement Inhaltliche Beschreibung (Description)</a></li>
-<li><a href="#3.12">Formularelement Schriftenreihe</a></li>
-<li><a href="#3.13">Formularelement Hochschule bzw. Fakultät (Publisher)</a></li>
-<li><a href="#3.14">Formularelement Hauptberichter (Advisor)</a></li>
-<li><a href="#3.15">Formularelement Datum (Date)</a></li>
-<li><a href="#3.16">Formularelement Dokumentart (Resource Type)</a></li>
-<li><a href="#3.17">Formularelement Format (Format)</a></li>
-<li><a href="#3.18">Formularelement ISBN</a></li>
-<li><a href="#3.19">Formularelement Sprache (Language)</a></li>
-<li><a href="#3.20">Formularelement Quelle (Source)</a></li>
-<li><a href="#3.21">Formularelement Name der Dokumentdatei (Resource Identifier)</a></li>
-<li><a href="#3.22">Formularelement Identifizierung</a></li>
-<li><a href="#3.23">Formularelement Anzahl der Dateien, die übermittelt werden sollen</a></li>
-<li><a href="#3.24">Formularelement G&uuml;ltigkeitsdauer</a></li>
+<li><a href="#3.1">
+Was sind Metadaten?
+What's metadata?
+</a></li>
+<li><a href="#3.2">Basic help about the forms
+Allgemeine Hilfe zu den Formularen</a></li>
+<li><a href="#3.3">Formularelement Verfügbarkeit
+Form element Availability</a></li>
+<li><a href="#3.4">Formularelement Titel (Title)
+Form element Title</a></li>
+<li><a href="#3.5">Formularelement Verfasser (Creator)
+Form element Author</a></li>
+<li><a href="#3.6">Formularelement Urheber (Creator)
+Form element Creator</a></li>
+<li><a href="#3.7">Formularelement Sonstige Beteiligte (Other Contributors)
+Form element Contributor</a></li>
+<li><a href="#3.8">Formularelement Schlagwörter (Subject)
+Form element Controlled keywords (german)</a></li>
+<li><a href="#3.9">Formularelement Freie Schlagwörter
+Form element Free keywords (german and english)</a></li>
+<li><a href="#3.10">Formularelement Klassifikation (Subject)
+Form element Classification</a></li>
+<li><a href="#3.11">Formularelement Inhaltliche Beschreibung (Description)
+Form element Short Summary</a></li>
+<li><a href="#3.12">Formularelement Schriftenreihe
+Form element Series</a></li>
+<li><a href="#3.13">Formularelement Hochschule bzw. Fakultät (Publisher)
+Form element University - Faculty (Publisher)</a></li>
+<li><a href="#3.14">Formularelement Hauptberichter (Advisor)
+Form element Advisor</a></li>
+<li><a href="#3.15">Formularelement Datum (Date)
+Form element Year</a></li>
+<li><a href="#3.17">Formularelement Format (Format)
+Form element Format</a></li>
+<li><a href="#3.18">Formularelement ISBN
+Form element ISBN</a></li>
+<li><a href="#3.19">Formularelement Sprache (Language)
+Form element Language</a></li>
+<li><a href="#3.20">Formularelement Quelle (Source)
+Form element Source</a></li>
+<li><a href="#3.21">Formularelement Name der Dokumentdatei (Resource Identifier)
+Form element Resource Identifier</a></li>
+<li><a href="#3.22">Formularelement Identifizierung
+Form element E-mail address</a></li>
+<li><a href="#3.23">Formularelement Anzahl der Dateien, die übermittelt werden sollen
+Form element Number of files to be uploaded</a></li>
+<li><a href="#3.24">Formularelement G&uuml;ltigkeitsdauer
+Form element Period of validity</a></li>
 
-Single elemets of the application form</li><ul><li><a href="#3.1">What's metadata?</a></li><li><a href="#3.2">Basic help about the forms</a></li><li><a href="#3.3">Form element Availability</a></li><li><a href="#3.4">Form element Title</a></li><li><a href="#3.5">Form element Author</a></li><li><a href="#3.6">Form element Creator</a></li><li><a href="#3.7">Form element Contributor</a></li><li><a href="#3.8">Form element Controlled keywords (german)</a></li><li><a href="#3.9">Form element Free keywords (german and english)</a></li><li><a href="#3.10">Form element Classification</a></li><li><a href="#3.11">Form element Short Summary</a></li><li><a href="#3.12">Form element Series</a></li><li><a href="#3.13">Form element Advisor</a></li><li><a href="#3.14">Form element University - Faculty (Publisher)</a></li><li><a href="#3.15">Form element Year</a></li><li><a href="#3.16">Form element Resource Type</a></li><li><a href="#3.17">Form element Format</a></li><li><a href="#3.18">Form element ISBN</a></li><li><a href="#3.19">Form element Language</a></li><li><a href="#3.20">Form element Source</a></li><li><a href="#3.21">Form element Resource Identifier</a></li><li><a href="#3.22">Form element E-mail address</a></li><li><a href="#3.23">Form element Number of files to be uploaded</a></li><li><a href="#3.24">Form element Period of validity</a></li></ul><li>Legal hints</li><ul><li><a href="#4.1">What's to regard if I plan to publish my work by a professional publisher or have done that already?</a></li><li><a href="#4.2">How do publishers handle a freely available online-version of my work?</a></li><li><a href="#4.3">What about licenses for my publication?</a></li></ul><li>MD5 checksums</li><ul><li><a href="#5.1">How can I calculate the md5 checksum?</a></li><li><a href="#5.2">What's an md5 checksum?</a></li></ul><li>PGP/GPG</li><ul><li><a href="#6.1">What's PGP/GPG?</a></li><li><a href="#6.2">Why do I need a key for publication?</a></li><li><a href="#6.3">Form element key upload</a></li><li><a href="#6.4">How can I send you my key?</a></li><li><a href="#6.5">What are you doing with my key?</a></li><li><a href="#6.6">How do I sign my documents digitally?</a></li><li><a href="#6.7">Creating a signature with PGP for Windows</a></li><li><a href="#6.8">Creating a signature with GPG für Windows (via WinPT)</a></li><li><a href="#6.9">Creating a signature with GPG via command line</a></li></ul></ol><h2>Using this publication server</h2><a name="1.1"><h3>What's this?</h3></a>Welcome on TUBdok, the electronic document repository of the University of Technics Hamburg-Harburg. This server is maintained by the university library. You can find electronic fulltexts here, starting with single articles via the TUHH-journal Spektrum upon to doctoral thesises developed at the TUHH.<br/>
+<p class="col3head">Rechtliches
+Legal hints</p>
+<li><a href="#4.1">Was ist, wenn ich meine Publikation bei einem Verlag ver&ouml;ffentlichen lasse oder dies plane?
+What's to regard if I plan to publish my work by a professional publisher or have done that already?</a></li>
+<li><a href="#4.2">Wie gehen Verlage mit einer frei verfügbaren Online-Version der Arbeit um?
+How do publishers handle a freely available online-version of my work?</a></li>
+<li><a href="#4.3">Wie sieht es mit Lizenzen für mein Werk aus?
+What about licenses for my publication?</a></li>
 
-<p class="col3head">Rechtliches</p>
-<li><a href="#4.1">Was ist, wenn ich meine Publikation bei einem Verlag ver&ouml;ffentlichen lasse oder dies plane?</a></li>
-<li><a href="#4.2">Wie gehen Verlage mit einer frei verfügbaren Online-Version der Arbeit um?</a></li>
-<li><a href="#4.3">Wie sieht es mit Lizenzen für mein Werk aus?</a></li>
-
-<p class="col3head">MD5-Prüfsummen</p>
-<li><a href="#5.1">Wie berechnet man die Prüfsumme?</a></li>
-<li><a href="#5.2">Was ist eine MD5-Prüfsumme?</a></li>
+<p class="col3head">MD5-Prüfsummen
+MD5 checksums</p>
+<li><a href="#5.1">Wie berechnet man die Prüfsumme?
+How can I calculate the md5 checksum?</a></li>
+<li><a href="#5.2">Was ist eine MD5-Prüfsumme?
+What's an md5 checksum?</a></li>
 
 <p class="col3head">PGP/GPG</p>
-<li><a href="#6.1">Was ist PGP/GPG?</a></li>
-<li><a href="#6.2">Warum brauche ich einen PGP/GPG-Schlüssel für die Veröffentlichung?</a></li>
-<li><a href="#6.3">Formularelement Schlüsselupload</a></li>
-<li><a href="#6.4">Wie stelle ich Ihnen meinen Schl&uuml;ssel zur Verf&uuml;gung?</a></li>
-<li><a href="#6.5">Was machen Sie mit meinem Schlüssel?</a></li>
-<li><a href="#6.6">Wie signiere ich meine Dokumente digital?</a></li>
-<li><a href="#6.7">Signaturerstellung mit PGP für Windows</a></li>
-<li><a href="#6.8">Signaturerstellung mit GPG für Windows (über WinPT)</a></li>
-<li><a href="#6.9">Erstellung einer digitalen Signatur mit GPG über Kommandozeile</a></li>
+<li><a href="#6.1">Was ist PGP/GPG?
+What's PGP/GPG?</a></li>
+<li><a href="#6.2">Warum brauche ich einen PGP/GPG-Schlüssel für die Veröffentlichung?
+Why do I need a key for publication?</a></li>
+<li><a href="#6.3">Formularelement Schlüsselupload
+Form element key upload</a></li>
+<li><a href="#6.4">Wie stelle ich Ihnen meinen Schl&uuml;ssel zur Verf&uuml;gung?
+How can I send you my key?</a></li>
+<li><a href="#6.5">Was machen Sie mit meinem Schlüssel?
+What are you doing with my key?</a></li>
+<li><a href="#6.6">Wie signiere ich meine Dokumente digital?
+How do I sign my documents digitally?</a></li>
+<li><a href="#6.7">Signaturerstellung mit PGP für Windows
+Creating a signature with PGP for Windows</a></li>
+<li><a href="#6.8">Signaturerstellung mit GPG für Windows (über WinPT)
+Creating a signature with GPG für Windows (via WinPT)</a></li>
+<li><a href="#6.9">Erstellung einer digitalen Signatur mit GPG über Kommandozeile
+Creating a signature with GPG via command line</a></li>
 
 -->
 
