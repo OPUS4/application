@@ -1,0 +1,20 @@
+Klicken Sie auf der Startseite auf Veröffentlichen.<br/>
+Es folgt das eigentliche Formular. Hier werden verschiedene Daten zu Ihrer Publikation 
+(sog. Metadaten) abgefragt, die der Beschreibung in Katalogen und anderen bibliographischen Verzeichnissen 
+dienen. Viele der Felder sind Pflichtfelder, müssen also von Ihnen ausgefüllt werden. Die Pflichtfelder 
+unterscheiden sich je nach Dokumenttyp. Zum Beispiel werden erfasst:<br/>
+<ul>
+<li>den Titel Ihrer Veröffentlichung</li>
+<li>Schlagwörter, mit denen das Dokument beschrieben werden kann (diese sollten aus einer Liste entnommen werden)</li>
+<li>Inhaltliche Kurzbeschreibung Ihres Dokuments</li>
+<li>Jahr, in dem das Dokument erstellt wurde</li>
+<li>Dokumentart (aus einer Liste auszuwählen)</li>
+<li>Format Ihres Dokuments (es werden nur bestimmte Formate akzeptiert)</li>
+<li>Sprache (aus einer Liste auszuwählen)</li>
+<li>Identifizierung (Ihre Mailadresse)</li>
+<li>Anzahl der Dateien, die zu Ihrer Publikation gehören</li>
+</ul>
+Wenn Sie nicht wissen, was Sie in einem Formularfeld eintragen sollen, klicken Sie bitte auf den Link auf 
+der entsprechenden Seite. Daraufhin wird ein erläuternder Hilfetext eingeblendet.<br/>
+Zum Abschluss der Datenerfassung werden Ihnen nochmal alle Eingaben angezeigt und Sie bekommen die 
+Gelegenheit, ggf. die Eingaben zu korrigieren. 

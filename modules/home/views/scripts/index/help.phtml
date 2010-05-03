@@ -37,24 +37,24 @@
 <h1><?= $this->translate('home_index_help_title') ?></h1>
 <p class="col3head"><?= $this->translate('help_index_general') ?></p>
 <ul>
-<li><a href="<?= $this->url(array('module' => 'home', 'controller'=>'index', 'action'=>'help', 'content' => 'about_content_whatsthis', 'position' => '#helpcontent'), null, true) ?>"><?= $this->translate('home_index_about_whatsthis') ?></a></li>
-<li><a href="<?= $this->url(array('module' => 'home', 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_costs', 'position' => '#helpcontent'), null, true) ?>"><?= $this->translate('help_index_costs') ?></a></li>
-<li><a href="<?= $this->url(array('module' => 'home', 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_searchtipps', 'position' => '#helpcontent'), null, true) ?>"><?= $this->translate('help_index_searchtipps') ?></a></li>
+<li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'about_content_whatsthis', 'position' => '#helpcontent'), null, true) ?>"><?= $this->translate('home_index_about_whatsthis') ?></a></li>
+<li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_costs', 'position' => '#helpcontent'), null, true) ?>"><?= $this->translate('help_index_costs') ?></a></li>
+<li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_searchtipps', 'position' => '#helpcontent'), null, true) ?>"><?= $this->translate('help_index_searchtipps') ?></a></li>
 </ul>
 
 <p class="col3head"><?= $this->translate('help_index_authorhelp') ?></p>
 <ul>
-<li><a href="<?= $this->url(array('module' => 'home', 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_diss', 'position' => '#helpcontent'), null, true) ?>"><?= $this->translate('help_index_diss') ?></a></li>
-<li><a href="<?= $this->url(array('module' => 'home', 'controller'=>'index', 'action'=>'contact'), null, true) ?>"><?= $this->translate('help_index_contact') ?></a></li>
-<li><a href="<?= $this->url(array('module' => 'home', 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_free', 'position' => '#helpcontent'), null, true) ?>"><?= $this->translate('help_index_free') ?></a></li>
-<li><a href="<?= $this->url(array('module' => 'home', 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_publneeds', 'position' => '#helpcontent'), null, true) ?>"><?= $this->translate('help_index_publneeds') ?></a></li>
-<li><a href="<?= $this->url(array('module' => 'home', 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_right', 'position' => '#helpcontent'), null, true) ?>"><?= $this->translate('help_index_right') ?></a></li>
-<li><a href="<?= $this->url(array('module' => 'home', 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_format', 'position' => '#helpcontent'), null, true) ?>"><?= $this->translate('help_index_format') ?></a></li>
-<li><a href="<?= $this->url(array('module' => 'home', 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_requirements', 'position' => '#helpcontent'), null, true) ?>"><?= $this->translate('help_index_requirements') ?></a></li>
-<li><a href="<?= $this->url(array('module' => 'home', 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_write', 'position' => '#helpcontent'), null, true) ?>"><?= $this->translate('help_index_write') ?></a></li>
-<li><a href="<?= $this->url(array('module' => 'home', 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_publicationprocess', 'position' => '#helpcontent'), null, true) ?>"><?= $this->translate('help_index_publicationprocess') ?></a></li>
-<li><a href="<?= $this->url(array('module' => 'home', 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_preprint', 'position' => '#helpcontent'), null, true) ?>"><?= $this->translate('help_index_preprint') ?></a></li>
-<li><a href="<?= $this->url(array('module' => 'home', 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_workflowlibrary', 'position' => '#helpcontent'), null, true) ?>"><?= $this->translate('help_index_workflowlibrary') ?></a></li>
+<li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_diss', 'position' => '#helpcontent'), null, true) ?>"><?= $this->translate('help_index_diss') ?></a></li>
+<li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'contact'), null, true) ?>"><?= $this->translate('help_index_contact') ?></a></li>
+<li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_free', 'position' => '#helpcontent'), null, true) ?>"><?= $this->translate('help_index_free') ?></a></li>
+<li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_publneeds', 'position' => '#helpcontent'), null, true) ?>"><?= $this->translate('help_index_publneeds') ?></a></li>
+<li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_right', 'position' => '#helpcontent'), null, true) ?>"><?= $this->translate('help_index_right') ?></a></li>
+<li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_format', 'position' => '#helpcontent'), null, true) ?>"><?= $this->translate('help_index_format') ?></a></li>
+<li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_requirements', 'position' => '#helpcontent'), null, true) ?>"><?= $this->translate('help_index_requirements') ?></a></li>
+<li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_write', 'position' => '#helpcontent'), null, true) ?>"><?= $this->translate('help_index_write') ?></a></li>
+<li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_publicationprocess', 'position' => '#helpcontent'), null, true) ?>"><?= $this->translate('help_index_publicationprocess') ?></a></li>
+<li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_preprint', 'position' => '#helpcontent'), null, true) ?>"><?= $this->translate('help_index_preprint') ?></a></li>
+<li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_workflowlibrary', 'position' => '#helpcontent'), null, true) ?>"><?= $this->translate('help_index_workflowlibrary') ?></a></li>
 </ul>
 
 <p class="col3head">Formularfelder</p>

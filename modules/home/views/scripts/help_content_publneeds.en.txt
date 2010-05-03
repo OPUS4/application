@@ -1,0 +1,7 @@
+Please provide the following materials to publish something here:
+<ul>
+<li>your document(s), which you want to publish</li>
+<li>a PGP- or GPG-Key (optional)</li>
+<li>the copyrights for your publication</li>
+</ul>
+... and, well, of course you need a little bit of time to fill the publishing form.

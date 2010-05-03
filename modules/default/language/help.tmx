@@ -410,6 +410,24 @@
         </tuv>
     </tu>
 
+    <tu tuid="help_content_diss">
+        <tuv xml:lang="en">
+            <seg>help_content_diss.en.txt</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>help_content_diss.de.txt</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="help_content_free">
+        <tuv xml:lang="en">
+            <seg>help_content_free.en.txt</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>help_content_free.de.txt</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="help_index_contact">
         <tuv xml:lang="en">
             <seg>I have some more questions - whom shall I contact?</seg>
@@ -500,39 +518,79 @@
         </tuv>
     </tu>
 
+    <tu tuid="help_content_publneeds">
+        <tuv xml:lang="en">
+            <seg>help_content_publneeds.en.txt</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>help_content_publneeds.de.txt</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="help_content_right">
+        <tuv xml:lang="en">
+            <seg>help_content_right.en.txt</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>help_content_right.de.txt</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="help_content_format">
+        <tuv xml:lang="en">
+            <seg>help_content_format.en.txt</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>help_content_format.de.txt</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="help_content_requirements">
+        <tuv xml:lang="en">
+            <seg>help_content_requirements.en.txt</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>help_content_requirements.de.txt</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="help_content_write">
+        <tuv xml:lang="en">
+            <seg>help_content_write.en.txt</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>help_content_write.de.txt</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="help_content_publicationprocess">
+        <tuv xml:lang="en">
+            <seg>help_content_publicationprocess.en.txt</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>help_content_publicationprocess.de.txt</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="help_content_preprint">
+        <tuv xml:lang="en">
+            <seg>help_content_preprint.en.txt</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>help_content_preprint.de.txt</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="help_content_workflowlibrary">
+        <tuv xml:lang="en">
+            <seg>We will verify your documents on functionality and formal issues. If we need more data or we have questions we will get in contact with you.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Wir prüfen das Dokument auf Funktionalität und Formalia. Sollten uns noch Angaben fehlen oder Rückfragen bestehen setzen wir uns mit Ihnen in Verbindung.</seg>
+        </tuv>
+    </tu>
+
 <!--
-help_content_diss
-Besonderheiten bei der Veröffentlichung von Dissertationen</li>
-
-help_content_free
-Sind meine Publikationen frei zugänglich?
-
-help_content_publneeds
-Was brauche ich, um eine Veröffentlichung zu machen?
-
-help_content_right
-Welche rechtlichen Aspekte muss ich beachten?
-
-help_content_format
-Was ist das Präsentationsformat?
-
-help_content_requirements
-Welche Anforderungen werden an mein(e) Dokument(e) gestellt?
-
-help_content_write
-Was muss ich beim Schreiben der Texte beachten?
-
-help_content_publicationprocess
-Wie geht der Veröffentlichungsvorgang vor sich?
-
-help_content_preprint
-Besonderheiten bei der Publikation eines Preprints
-
-help_content_workflowlibrary
-Was passiert, nachdem ich mein(e) Dokumente hochgeladen habe?
-
-
-
 <p class="col3head">Formularfelder</p>
 <li><a href="#3.1">Was sind Metadaten?</a></li>
 <li><a href="#3.2">Allgemeine Hilfe zu den Formularen</a></li>

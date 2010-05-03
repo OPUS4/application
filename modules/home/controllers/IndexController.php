@@ -114,12 +114,30 @@ class Home_IndexController extends Zend_Controller_Action {
     }
 
     public function aboutAction() {
+         $config = Zend_Registry::get('Zend_Config');
+
+		$module = $config->startmodule;
+		if (empty($module) === true) {
+			$module = 'home';
+		}
+		
+		$this->view->startmodule = $module;
+ 
         if (array_key_exists('content', $this->_request->getParams()) === true) {
             $this->view->content = $this->_request->getParam("content");
         }
     }
 
     public function helpAction() {
+        $config = Zend_Registry::get('Zend_Config');
+
+		$module = $config->startmodule;
+		if (empty($module) === true) {
+			$module = 'home';
+		}
+		
+		$this->view->startmodule = $module;
+		
         if (array_key_exists('content', $this->_request->getParams()) === true) {
             $this->view->content = $this->_request->getParam("content");
         }

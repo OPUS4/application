@@ -1,0 +1,20 @@
+Please click on the publication link on the start page.<br/>
+You have to support different data about your publication 
+here (so called metadata), which are used to describe your work in catalogs and other bibliographic 
+directories. Many of these fields are mandatory and have to be filled. Which fields are mandatory depends
+on the document type. Mandatory fields are for example:<br/>
+<ul>
+<li>the title of your publication</li>
+<li>subject headings, which describe the contents of your document (these subject headings should be taken from a list)</li>
+<li>abstract of the contents</li>
+<li>the year your document was created in</li>
+<li>the type of your document (must be taken from a list)</li>
+<li>format of your document (only certain formats are accepted)</li>
+<li>Language (must be taken from a list)</li>
+<li>your eMail-address</li>
+<li>number of files your publication is divided into</li>
+</ul>
+If you do not know what to provide in certain form fields, you can select the link on the corresponding page 
+and an explaining help text should pop up.<br/>
+After you have finished the form all data will be displayed once again and you can recheck them and 
+correct them if necessary.

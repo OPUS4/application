@@ -1,0 +1,1 @@
+Presentation format means the file, that the user can watch. The different format is the original format, which serves as data basis for the presentation format. HTML and XML are well-known formats for presentation on the internet, for electronic documents (like the ones on this repository server) the most common presentation format is PDF.
