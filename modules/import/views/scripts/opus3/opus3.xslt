@@ -162,11 +162,6 @@
                     <xsl:value-of select="field[@name='source_title']" />
                 </xsl:attribute>
             </xsl:if>
-            <xsl:if test="string-length(field[@name='source_swb'])>0">
-                <xsl:attribute name="IdentifierOpac">
-                    <xsl:attribute name="Value"><xsl:value-of select="field[@name='source_swb']" /></xsl:attribute>
-                </xsl:attribute>
-            </xsl:if>
             
             
             <!-- Take date_creation from OPUS3 as ServerDatePublished -->
@@ -548,6 +543,13 @@
         <xsl:element name="IdentifierOpus3">
             <xsl:attribute name="Value"><xsl:value-of select="." /></xsl:attribute>
         </xsl:element>
+    </xsl:template>
+    <xsl:template match="table_data[@name='opus']/row/field[@name='source_swb']">
+         <xsl:if test="string-length(.)>0">
+            <xsl:element name="IdentifierOpac">
+                <xsl:attribute name="Value"><xsl:value-of select="." /></xsl:attribute>
+            </xsl:element>
+         </xsl:if>
     </xsl:template>
     <xsl:template match="table_data[@name='opus']/row/field[@name='urn']">
         <xsl:if test="string-length(.)>0">

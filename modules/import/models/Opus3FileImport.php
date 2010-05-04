@@ -81,6 +81,7 @@ class Opus3FileImport
         $this->searchDir($this->_path, $opusId);
         #echo "Found Files for $opusId in $this->_tmpPath";
         $files = $this->getFiles($this->_tmpPath);
+        $alreadyImportedFiles = $object->getFile();
         
         if (count($files) === 0) {
         	return false;
@@ -104,17 +105,26 @@ class Opus3FileImport
                 $suffix = $filenameArray[(count($filenameArray)-1)];
             
                 // if you got it, build a Opus_File-Object
-                $file = $object->addFile();
-                $file->setLabel(basename($filename));
-                $file->setFileType($suffix);
-                $file->setPathName(basename($filename));
-                $file->setMimeType($mimeType);
-                $file->setTempFile($filename);
-			    $file->setDocumentId($object->getId());
-			    $file->setLanguage($lang);
-			    if ($this->_accessRole !== null) {
-    			    $file->addAccessPermission($this->_accessRole);
-			    }
+                $alreadyImported = false;
+                foreach ($alreadyImportedFiles as $f) {
+                	if (basename($filename) === $f->getPathName()) {
+                	    $alreadyImported = true;
+                	    continue;
+                	}
+                }
+                if ($alreadyImported === false) {
+                    $file = $object->addFile();
+                    $file->setLabel(basename($filename));
+                    $file->setFileType($suffix);
+                    $file->setPathName(basename($filename));
+                    $file->setMimeType($mimeType);
+                    $file->setTempFile($filename);
+			        $file->setDocumentId($object->getId());
+			        $file->setLanguage($lang);
+			        if ($this->_accessRole !== null) {
+    			        $file->addAccessPermission($this->_accessRole);
+			        }
+                }
             }
         }
 
