@@ -1,0 +1,13 @@
+The author can choose, which terms of use must be regarded for his/her publication. These terms are defined 
+in a license.<br/><br/>
+A number of different licensing models are available; you can find an overview at the institute for legal 
+advices on free and open source software (IfrOSS) on 
+<a href="http://www.ifross.de/ifross_html/lizenzcenter-en.html" target="_blank">http://www.ifross.de/ifross_html/lizenzcenter-en.html</a>. 
+The model of the Creative Commons Lizenz should be emphazized here; with this model you can create your own 
+license text covering all of your needs. You can create your personal license on 
+<a href="http://creativecommons.org/license/" target="_blank">http://creativecommons.org/license/</a>. 
+<br/><br/>
+On publications from a professional publisher mostly the publisher specifies the license agreements and they 
+are fixed in the contract or at least the license agreement is influenced by the contract.
+<br/><br/>
+This repository supports different, from which you can choose the one, that is most appropriate to your idea.

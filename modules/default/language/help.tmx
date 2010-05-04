@@ -617,93 +617,104 @@
         </tuv>
     </tu>
 
-<!--
-<li><a href="#3.1">
-Was sind Metadaten?
-What's metadata?
-</a></li>
-<li><a href="#3.2">Basic help about the forms
-Allgemeine Hilfe zu den Formularen</a></li>
-<li><a href="#3.3">Formularelement Verfügbarkeit
-Form element Availability</a></li>
-<li><a href="#3.4">Formularelement Titel (Title)
-Form element Title</a></li>
-<li><a href="#3.5">Formularelement Verfasser (Creator)
-Form element Author</a></li>
-<li><a href="#3.6">Formularelement Urheber (Creator)
-Form element Creator</a></li>
-<li><a href="#3.7">Formularelement Sonstige Beteiligte (Other Contributors)
-Form element Contributor</a></li>
-<li><a href="#3.8">Formularelement Schlagwörter (Subject)
-Form element Controlled keywords (german)</a></li>
-<li><a href="#3.9">Formularelement Freie Schlagwörter
-Form element Free keywords (german and english)</a></li>
-<li><a href="#3.10">Formularelement Klassifikation (Subject)
-Form element Classification</a></li>
-<li><a href="#3.11">Formularelement Inhaltliche Beschreibung (Description)
-Form element Short Summary</a></li>
-<li><a href="#3.12">Formularelement Schriftenreihe
-Form element Series</a></li>
-<li><a href="#3.13">Formularelement Hochschule bzw. Fakultät (Publisher)
-Form element University - Faculty (Publisher)</a></li>
-<li><a href="#3.14">Formularelement Hauptberichter (Advisor)
-Form element Advisor</a></li>
-<li><a href="#3.15">Formularelement Datum (Date)
-Form element Year</a></li>
-<li><a href="#3.17">Formularelement Format (Format)
-Form element Format</a></li>
-<li><a href="#3.18">Formularelement ISBN
-Form element ISBN</a></li>
-<li><a href="#3.19">Formularelement Sprache (Language)
-Form element Language</a></li>
-<li><a href="#3.20">Formularelement Quelle (Source)
-Form element Source</a></li>
-<li><a href="#3.21">Formularelement Name der Dokumentdatei (Resource Identifier)
-Form element Resource Identifier</a></li>
-<li><a href="#3.22">Formularelement Identifizierung
-Form element E-mail address</a></li>
-<li><a href="#3.23">Formularelement Anzahl der Dateien, die übermittelt werden sollen
-Form element Number of files to be uploaded</a></li>
-<li><a href="#3.24">Formularelement G&uuml;ltigkeitsdauer
-Form element Period of validity</a></li>
+    <tu tuid="help_index_metadata">
+        <tuv xml:lang="en">
+            <seg>What's metadata?</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Was sind Metadaten?</seg>
+        </tuv>
+    </tu>
 
-<p class="col3head">Rechtliches
-Legal hints</p>
-<li><a href="#4.1">Was ist, wenn ich meine Publikation bei einem Verlag ver&ouml;ffentlichen lasse oder dies plane?
-What's to regard if I plan to publish my work by a professional publisher or have done that already?</a></li>
-<li><a href="#4.2">Wie gehen Verlage mit einer frei verfügbaren Online-Version der Arbeit um?
-How do publishers handle a freely available online-version of my work?</a></li>
-<li><a href="#4.3">Wie sieht es mit Lizenzen für mein Werk aus?
-What about licenses for my publication?</a></li>
+    <tu tuid="help_content_metadata">
+        <tuv xml:lang="en">
+            <seg>help_content_metadata.en.txt</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>help_content_metadata.de.txt</seg>
+        </tuv>
+    </tu>
 
-<p class="col3head">MD5-Prüfsummen
-MD5 checksums</p>
-<li><a href="#5.1">Wie berechnet man die Prüfsumme?
-How can I calculate the md5 checksum?</a></li>
-<li><a href="#5.2">Was ist eine MD5-Prüfsumme?
-What's an md5 checksum?</a></li>
+    <tu tuid="help_index_form_general">
+        <tuv xml:lang="en">
+            <seg>Basic help about the publication form</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Allgemeine Hilfe zum Veröffentlichungsformular</seg>
+        </tuv>
+    </tu>
 
-<p class="col3head">PGP/GPG</p>
-<li><a href="#6.1">Was ist PGP/GPG?
-What's PGP/GPG?</a></li>
-<li><a href="#6.2">Warum brauche ich einen PGP/GPG-Schlüssel für die Veröffentlichung?
-Why do I need a key for publication?</a></li>
-<li><a href="#6.3">Formularelement Schlüsselupload
-Form element key upload</a></li>
-<li><a href="#6.4">Wie stelle ich Ihnen meinen Schl&uuml;ssel zur Verf&uuml;gung?
-How can I send you my key?</a></li>
-<li><a href="#6.5">Was machen Sie mit meinem Schlüssel?
-What are you doing with my key?</a></li>
-<li><a href="#6.6">Wie signiere ich meine Dokumente digital?
-How do I sign my documents digitally?</a></li>
-<li><a href="#6.7">Signaturerstellung mit PGP für Windows
-Creating a signature with PGP for Windows</a></li>
-<li><a href="#6.8">Signaturerstellung mit GPG für Windows (über WinPT)
-Creating a signature with GPG für Windows (via WinPT)</a></li>
-<li><a href="#6.9">Erstellung einer digitalen Signatur mit GPG über Kommandozeile
-Creating a signature with GPG via command line</a></li>
+    <tu tuid="help_content_form_general">
+        <tuv xml:lang="en">
+            <seg>help_content_form_general.en.txt</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>help_content_form_general.de.txt</seg>
+        </tuv>
+    </tu>
 
--->
+    <tu tuid="help_index_legal_title">
+        <tuv xml:lang="en">
+            <seg>Legal aspects</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Rechtliches</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="help_index_legal_parallel">
+        <tuv xml:lang="en">
+            <seg>What's to regard if I plan to publish my work by a professional publisher or have done that already?</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Was ist, wenn ich meine Publikation bei einem Verlag veröffentlichen lasse oder dies plane?</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="help_content_legal_parallel">
+        <tuv xml:lang="en">
+            <seg>help_content_legal_parallel.en.txt</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>help_content_legal_parallel.de.txt</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="help_index_legal_oa">
+        <tuv xml:lang="en">
+            <seg>How do publishers handle a freely available online-version of my work?</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Wie gehen Verlage mit einer frei verfügbaren Online-Version der Arbeit um?</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="help_content_legal_oa">
+        <tuv xml:lang="en">
+            <seg>help_content_legal_oa.en.txt</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>help_content_legal_oa.de.txt</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="help_index_legal_license">
+        <tuv xml:lang="en">
+            <seg>What about licenses for my publication?</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Wie sieht es mit Lizenzen für mein Werk aus?</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="help_content_legal_license">
+        <tuv xml:lang="en">
+            <seg>help_content_legal_license.en.txt</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>help_content_legal_license.de.txt</seg>
+        </tuv>
+    </tu>
 
     <tu tuid="home_index_contact_pagetitle">
       <tuv xml:lang="en">
@@ -750,87 +761,114 @@ Creating a signature with GPG via command line</a></li>
       </tuv>
     </tu>
 
-    <tu tuid="tubdok_contact_einleitung">
-      <tuv xml:lang="en">
-        <seg>If you have questions, which cannot be answered with this help system or if you do not understand something, please do not hesitate to get in contact with us!</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Wenn Sie Fragen haben, die sich mit diesem Hilfesystem nicht beantworten lassen oder Ihnen etwas unklar ist, dann zögern Sie nicht, uns direkt zu kontaktieren!</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="tubdok_contact_beratung_title">
-      <tuv xml:lang="en">
-        <seg>expert advice</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Beratung</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="tubdok_contact_technics_title">
-        <tuv xml:lang="en">
-            <seg>Technics</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Technik</seg>
-        </tuv>
-    </tu>
-
-    <tu tuid="tubdok_contact_oai_title">
-        <tuv xml:lang="en">
-            <seg>Open Archives Initiative</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Open Archives Initiative</seg>
-        </tuv>
-    </tu>
-
-    <tu tuid="tubdok_contact_hapke">
-        <tuv xml:lang="en">
-            <seg>Thomas Hapke, 428 78 - 33 65</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Thomas Hapke, 428 78 - 33 65</seg>
-        </tuv>
-    </tu>
-
-    <tu tuid="tubdok_contact_weier">
-        <tuv xml:lang="en">
-            <seg>Heiko Weier, 428 78 - 34 49</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Heiko Weier, 428 78 - 34 49</seg>
-        </tuv>
-    </tu>
-
-    <tu tuid="tubdok_contact_marahrens">
-        <tuv xml:lang="en">
-            <seg>Oliver Marahrens, 428 78 - 32 91</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Oliver Marahrens, 428 78 - 32 91</seg>
-        </tuv>
-    </tu>
-
-    <tu tuid="tubdok_contact_brunke">
-        <tuv xml:lang="en">
-            <seg>Angela Brunke, 428 78 - 33 12</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Angela Brunke, 428 78 - 33 12</seg>
-        </tuv>
-    </tu>
-
-    <tu tuid="tubdok_contact_lass">
-        <tuv xml:lang="en">
-            <seg>Karin Lass, 428 78 - 36 22</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Karin Lass, 428 78 - 36 22</seg>
-        </tuv>
-    </tu>
-
   </body>
 
 </tmx>
+
+<!--
+noch fehlende Hilfetexte
+Formularelement Verfügbarkeit
+Form element Availability
+
+Formularelement Titel (Title)
+Form element Title
+
+Formularelement Verfasser (Creator)
+Form element Author
+
+Formularelement Urheber (Creator)
+Form element Creator
+
+Formularelement Sonstige Beteiligte (Other Contributors)
+Form element Contributor
+
+Formularelement Schlagwörter (Subject)
+Form element Controlled keywords (german)
+
+
+Formularelement Freie Schlagwörter
+Form element Free keywords (german and english)
+
+Formularelement Klassifikation (Subject)
+Form element Classification
+
+Formularelement Inhaltliche Beschreibung (Description)
+Form element Short Summary
+
+Formularelement Schriftenreihe
+Form element Series
+
+Formularelement Hochschule bzw. Fakultät (Publisher)
+Form element University - Faculty (Publisher)
+
+Formularelement Hauptberichter (Advisor)
+Form element Advisor
+
+Formularelement Datum (Date)
+Form element Year
+
+Formularelement Format (Format)
+Form element Format
+
+Formularelement ISBN
+Form element ISBN
+
+Formularelement Sprache (Language)
+Form element Language
+
+Formularelement Quelle (Source)
+Form element Source
+
+Formularelement Name der Dokumentdatei (Resource Identifier)
+Form element Resource Identifier
+
+Formularelement Identifizierung
+Form element E-mail address
+
+Formularelement Anzahl der Dateien, die übermittelt werden sollen
+Form element Number of files to be uploaded
+
+Formularelement G&uuml;ltigkeitsdauer
+Form element Period of validity
+
+
+MD5-Prüfsummen
+MD5 checksums
+
+Wie berechnet man die Prüfsumme?
+How can I calculate the md5 checksum?
+
+Was ist eine MD5-Prüfsumme?
+What's an md5 checksum?
+
+
+PGP/GPG
+
+Was ist PGP/GPG?
+What's PGP/GPG?
+
+Warum brauche ich einen PGP/GPG-Schlüssel für die Veröffentlichung?
+Why do I need a key for publication?
+
+Formularelement Schlüsselupload
+Form element key upload
+
+Wie stelle ich Ihnen meinen Schl&uuml;ssel zur Verf&uuml;gung?
+How can I send you my key?
+
+Was machen Sie mit meinem Schlüssel?
+What are you doing with my key?
+
+Wie signiere ich meine Dokumente digital?
+How do I sign my documents digitally?
+
+Signaturerstellung mit PGP für Windows
+Creating a signature with PGP for Windows
+
+Signaturerstellung mit GPG für Windows (über WinPT)
+Creating a signature with GPG für Windows (via WinPT)
+
+Erstellung einer digitalen Signatur mit GPG über Kommandozeile
+Creating a signature with GPG via command line
+
+-->

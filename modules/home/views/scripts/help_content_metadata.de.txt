@@ -1,0 +1,17 @@
+Metadaten können definiert werden als
+<ul>
+<li>Daten, die eine oder mehrere Resourcen beschreiben</li> oder als
+<li>Daten, die mit einem Objekt verbunden sind und dieses Objekt beschreiben</li>
+</ul>
+Prinzipiell stellen Metadaten daher eine Beschreibung von Dokumenten, Objekten oder Diensten dar und 
+enthalten Informationen zu deren Inhalt, Struktur oder Form. Etwas abstarkter formuliert sind Metadaten 
+Beschreibungen von Daten bzw. "Daten über Daten". Bibliographische Datensätze und Katalogeinträge in 
+Bibliotheken können als eine Form von Metadaten gesehen werden.
+<p>
+Als Grundlage für die Metadaten auf diesem Dokumentenserver soll das aus fünfzehn Basiselementen
+bestehende <a href="http://dublincore.org/" target="_blank">Dublin Core Metedata Element Set</A> 
+(kurz Dublin Core bzw. DC) dienen. Dublin Core ist das Ergebnis internationalen Bemühungen, einen 
+gemeinsamen Konsens bei der Beschreibung elektronischer Objekte (im weitesten Sinne) zu finden. 
+Die Library of Congress (LoC), das Online Cataloging Library Center (OCLC) und eine Reihe von 
+Nationalbibliotheken setzen sich in Projekten mit Dublin Core auseinander bzw. stehen kurz vor dessen 
+Einführung.

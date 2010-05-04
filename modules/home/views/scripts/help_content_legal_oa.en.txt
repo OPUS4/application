@@ -1,0 +1,9 @@
+For this repository the multiple publication on different webservers is no problem. But you have to verify,
+if your publisher authorizes parallel publishing. Some publishers have special requirements like setting
+a link to the publishers fulltext on the open access server.<br/>
+You can find information about the publisher's handling of online-publications in the Sherpa/Romeo-list on 
+<a href="http://www.sherpa.ac.uk/romeo.php" target="_blank">http://www.sherpa.ac.uk/romeo.php</a>.
+<br/>
+Please tell us in any case if your work is published by a third person or publisher and that the publication 
+on this repository is a parallel publication. We will investigate the legal aspects for that case and add 
+a link and/or a reference to the (printed or anywhere else published) ressource.

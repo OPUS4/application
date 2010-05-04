@@ -1,0 +1,7 @@
+Describe the document you want to upload using the categories and fields on our publication form. 
+The marked elements are mandatory (you have to type something there). Please describe your document as 
+clear as possible.
+<br/>If you need help with some certain elements, just click on the field name.
+<br/>Thank you for supporting us.
+<br/>If you need german umlauts and cannot find them on your keyboard, here are them to copy and paste:
+<br/>&auml; &ouml; &uuml; &Auml; &Ouml; &Uuml; &szlig;
