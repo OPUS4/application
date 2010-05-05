@@ -102,9 +102,17 @@ class AuthController extends Controller_Action {
             
             if ($form->isValid($data) === true) {
                 // Form data is valid (including the hash field)
-                
+        		$config = Zend_Registry::get('Zend_Config');
+    
+	        	$authenticationModule = $config->authenticationModule;
+        		if ($authenticationModule === 'Ldap') {
+		        	$auth = new Opus_Security_AuthAdapter_Ldap();
+		        }
+		        else {
+		        	$auth = new Opus_Security_AuthAdapter();
+		        }
+ 
                 // Perfom authentication attempt
-                $auth = new Opus_Security_AuthAdapter();
                 $auth->setCredentials($data['login'], $data['password']);
                 $auth_result = $auth->authenticate();
 

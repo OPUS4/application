@@ -43,6 +43,7 @@ db.params.dbname =
 theme = default
 startmodule = home
 security = 0
+authenticationModule = 
 
 ;WOKSPACE-PATH SETTINGS
 path.workspace.temp = 
@@ -92,6 +93,15 @@ oai.contactid =
 oai.max.listrecords = 100
 oai.max.listidentifiers = 200
 
+;LDAP Settings
+ldap.server1.host = s0.foo.net
+ldap.server1.accountDomainName = foo.net
+ldap.server1.accountDomainNameShort = FOO
+ldap.server1.accountCanonicalForm = 3
+ldap.server1.username = "CN=user1,DC=foo,DC=net"
+ldap.server1.password = pass1
+ldap.server1.baseDn = "OU=Sales,DC=foo,DC=net"
+ldap.server1.bindRequiresDn = true
 
 [test : production]
 db.params.profiler = true
