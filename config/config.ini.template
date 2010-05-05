@@ -94,6 +94,8 @@ oai.max.listrecords = 100
 oai.max.listidentifiers = 200
 
 ;LDAP Settings
+ldap.log_path = /var/log/opus-ldap.log
+
 ldap.server1.host = s0.foo.net
 ldap.server1.accountDomainName = foo.net
 ldap.server1.accountDomainNameShort = FOO
