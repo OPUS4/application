@@ -183,24 +183,6 @@
         <seg>Bitte wählen Sie einen Dokumenttyp.</seg>
       </tuv>
     </tu>
-
-
-    <tu tuid="publish_no_identity_error">
-      <tuv xml:lang="en">
-        <seg>Please login to publish new documents.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Bitte loggen Sie sich zum Publizieren neuer Dokumente ein.</seg>
-      </tuv>
-    </tu>
-    <tu tuid="publish_wrong_identity_error">
-      <tuv xml:lang="en">
-        <seg>Your account is not allowed to publish documents. You may relogin with an other identity.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Sie sind nicht berechtigt neue Dokumente zu publizieren. Bitte loggen Sie sich aus und mit einem anderen Account wieder ein.</seg>
-      </tuv>
-    </tu>
     
   </body>
   

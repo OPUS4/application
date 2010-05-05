@@ -120,7 +120,8 @@
            </xsl:otherwise>
        </xsl:choose>
        <xsl:text>
-ID  - OPUS</xsl:text><xsl:value-of select="@Id" />
+ID  - OPUS</xsl:text><xsl:value-of select="@Id" /><xsl:text>
+</xsl:text>
        <xsl:if test="string-length(PersonAuthor/@LastName)>0">
            <xsl:apply-templates select="PersonAuthor" />
        </xsl:if>
