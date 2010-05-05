@@ -1058,7 +1058,7 @@
            <!-- TODO: Use Zend Url-Helper to build href attribute -->
              <xsl:attribute name="href">
                <xsl:value-of select="$baseUrl"/>
-               <xsl:text>/citationExport/index/index/output/bibtex/docId/</xsl:text>
+               <xsl:text>/citationExport/index/download/output/bibtex/docId/</xsl:text>
                <xsl:value-of select="@Id" />
              </xsl:attribute>
            <xsl:element name="img">   
@@ -1083,7 +1083,7 @@
            <!-- TODO: Use Zend Url-Helper to build href attribute -->
              <xsl:attribute name="href">
                <xsl:value-of select="$baseUrl"/>
-               <xsl:text>/citationExport/index/index/output/ris/docId/</xsl:text>
+               <xsl:text>/citationExport/index/download/output/ris/docId/</xsl:text>
                <xsl:value-of select="@Id" />
              </xsl:attribute>
            <xsl:element name="img">   

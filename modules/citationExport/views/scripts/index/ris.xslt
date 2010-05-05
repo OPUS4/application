@@ -83,7 +83,7 @@
                <xsl:text>TY  - THES</xsl:text>
            </xsl:when>
            <xsl:when test="@Type='9'">
-               <xsl:text>TY  - GEN</xsl:text>
+               <xsl:text>TY  - ICOMM</xsl:text>
            </xsl:when>
            <xsl:when test="@Type='11'">
                <xsl:text>TY  - JOUR</xsl:text>
@@ -95,10 +95,10 @@
                <xsl:text>TY  - HEAR</xsl:text>
            </xsl:when>
            <xsl:when test="@Type='17'">
-               <xsl:text>TY  - GEN</xsl:text>
+               <xsl:text>TY  - ICOMM</xsl:text>
            </xsl:when>
            <xsl:when test="@Type='19'">
-               <xsl:text>TY  - GEN</xsl:text>
+               <xsl:text>TY  - ICOMM</xsl:text>
            </xsl:when>
            <xsl:when test="@Type='20'">
                <xsl:text>TY  - RPRT</xsl:text>
@@ -116,7 +116,7 @@
                <xsl:text>TY  - HEAR</xsl:text>
            </xsl:when>
            <xsl:otherwise>
-               <xsl:text>TY  - GEN</xsl:text>
+               <xsl:text>TY  - ICOMM</xsl:text>
            </xsl:otherwise>
        </xsl:choose>
        <xsl:text>
@@ -140,32 +140,30 @@ ID  - OPUS</xsl:text><xsl:value-of select="@Id" /><xsl:text>
        <xsl:if test="string-length(SubjectSwd/@Value)>0">
            <xsl:apply-templates select="SubjectSwd" />
        </xsl:if>
-       <xsl:variable name="year">
        <xsl:choose>
          <xsl:when test="normalize-space(@CompletedYear)">
-             <xsl:value-of select="@CompletedYear" />
+             <xsl:text>Y1  - </xsl:text><xsl:value-of select="@CompletedYear" /> <xsl:text>///
+</xsl:text>
+         </xsl:when>
+         <xsl:when test="string-length(ComletedDate/@Year)>0">
+           <xsl:text>Y1  - </xsl:text><xsl:value-of select="ComletedDate/@Year" /> <xsl:text>///
+</xsl:text>
+         </xsl:when>
+         <xsl:when test="normalize-space(PublishedDate/@Year)">
+             <xsl:text>Y1  - </xsl:text><xsl:value-of select="PublishedDate/@Year" /> <xsl:text>///
+</xsl:text>
          </xsl:when>
          <xsl:otherwise>
-           <xsl:value-of select="ComletedDate/@Year" />
+               <xsl:text>Y1  - </xsl:text><xsl:value-of select="@PublishedYear" /> <xsl:text>///
+</xsl:text>
          </xsl:otherwise>
        </xsl:choose>
-       </xsl:variable>
-       <xsl:if test="not($year)">
-           <xsl:variable name="year">
-           <xsl:choose>
-             <xsl:when test="normalize-space(PublishedDate/@Year)">
-               <xsl:value-of select="PublishedDate/@Year" />
-             </xsl:when>
-             <xsl:otherwise>
-               <xsl:value-of select="@PublishedYear" />
-             </xsl:otherwise>
-           </xsl:choose>
-           </xsl:variable>
-       </xsl:if>
-       <xsl:if test="$year">
-<xsl:text>Y1  - </xsl:text><xsl:value-of select="$year" /> <xsl:text>///
+       <xsl:if test="string-length(IdentifierUrn/@Value)>0">
+<xsl:text>UR  - http://nbn-resolving.de/urn/resolver.pl?</xsl:text><xsl:apply-templates select="IdentifierUrn" /><xsl:text>
 </xsl:text>
        </xsl:if>
+       <xsl:text>UR  - </xsl:text><xsl:value-of select="$url_prefix" /><xsl:text>/frontdoor/index/index/docId/</xsl:text><xsl:value-of select="@Id" /><xsl:text>
+</xsl:text>
        <xsl:if test="string-length(IdentifierUrl/@Value)>0">
 <xsl:text>UR  - </xsl:text><xsl:apply-templates select="IdentifierUrl" /><xsl:text>
 </xsl:text>
@@ -223,6 +221,10 @@ ID  - OPUS</xsl:text><xsl:value-of select="@Id" /><xsl:text>
       <xsl:value-of select="@Value" />
     </xsl:template>
 
+    <xsl:template match="IdentifierUrn">
+      <xsl:value-of select="@Value" />
+    </xsl:template>
+
     <xsl:template match="IdentifierIsbn">
       <xsl:value-of select="@Value" />
     </xsl:template>
@@ -276,7 +278,8 @@ ID  - OPUS</xsl:text><xsl:value-of select="@Id" /><xsl:text>
         <xsl:if test="@Number != ''">
 <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
         </xsl:if>
-<xsl:value-of select="@Name" />
+<xsl:value-of select="@Name" /><xsl:text>
+</xsl:text>
     </xsl:template>
 
 </xsl:stylesheet>

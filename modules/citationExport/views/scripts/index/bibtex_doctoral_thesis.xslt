@@ -67,41 +67,35 @@
        author   =  "<xsl:apply-templates select="PersonAuthor" />",
        title    =  '<xsl:apply-templates select="TitleMain" />',
        school  =  "<xsl:value-of select="@PublisherUniversity" />",
-       <xsl:variable name="year">
+       <xsl:if test="string-length(@PublisherPlace)>0">
+           address =  "<xsl:value-of select="@PublisherPlace" />",
+       </xsl:if>
        <xsl:choose>
          <xsl:when test="normalize-space(@CompletedYear)">
-             <xsl:value-of select="@CompletedYear" />
+             year = <xsl:value-of select="@CompletedYear" />,
+         </xsl:when>
+         <xsl:when test="string-length(ComletedDate/@Year)>0">
+           year = <xsl:value-of select="ComletedDate/@Year" />,
+         </xsl:when>
+         <xsl:when test="normalize-space(PublishedDate/@Year)">
+             year = <xsl:value-of select="PublishedDate/@Year" />,
          </xsl:when>
          <xsl:otherwise>
-           <xsl:value-of select="ComletedDate/@Year" />
+               year = <xsl:value-of select="@PublishedYear" />,
          </xsl:otherwise>
        </xsl:choose>
-       </xsl:variable>
-       <xsl:if test="not($year)">
-           <xsl:variable name="year">
-           <xsl:choose>
-             <xsl:when test="normalize-space(PublishedDate/@Year)">
-               <xsl:value-of select="PublishedDate/@Year" />
-             </xsl:when>
-             <xsl:otherwise>
-               <xsl:value-of select="@PublishedYear" />
-             </xsl:otherwise>
-           </xsl:choose>
-           </xsl:variable>
+       <xsl:if test="string-length(IdentifierUrn/@Value)>0">
+           urn     =  <xsl:apply-templates select="IdentifierUrn" />,
+           url     =  http://nbn-resolving.de/urn/resolver.pl?<xsl:apply-templates select="IdentifierUrn" />,
        </xsl:if>
-       year = <xsl:value-of select="$year" />
        <xsl:if test="string-length(IdentifierUrl/@Value)>0">
-           ,
-           url     =  <xsl:apply-templates select="IdentifierUrl" />
-       </xsl:if>
-       <xsl:if test="string-length(@PublisherPlace)>0">
-           ,
-           address =  "<xsl:value-of select="@PublisherPlace" />"
+           url     =  <xsl:apply-templates select="IdentifierUrl" />,
        </xsl:if>
        <xsl:if test="string-length(Note/@Message)>0">
-           ,
-           note    =  "<xsl:apply-templates select="Note" />"
+           note    =  "<xsl:apply-templates select="Note" />",
        </xsl:if>
+       url         =   <xsl:value-of select="$url_prefix" />/frontdoor/index/index/docId/<xsl:value-of select="@Id" />,
+       howpublished=  'online'
        }
     </xsl:template>
 
@@ -154,6 +148,10 @@
     </xsl:template>
 
     <xsl:template match="IdentifierUrl">
+      <xsl:value-of select="@Value" />
+    </xsl:template>
+
+    <xsl:template match="IdentifierUrn">
       <xsl:value-of select="@Value" />
     </xsl:template>
 

@@ -125,10 +125,24 @@ class CitationExport_IndexController extends Zend_Controller_Action {
 
         // Set up XSLT-Processor
         try {
-        $proc = new XSLTProcessor;
-        $proc->registerPHPFunctions();
-        $proc->importStyleSheet($xslt);
-        
+            $proc = new XSLTProcessor;
+            
+            $url_prefix_array = split('/', $_SERVER["REQUEST_URI"]);
+            $url_prefix = 'http://';
+            $url_prefix .= $_SERVER["SERVER_NAME"];
+            if ($_SERVER["SERVER_PORT"] !== '80') $url_prefix .= ':' . $_SERVER["SERVER_PORT"];
+            foreach ($url_prefix_array as $up) {
+            	if ($up !== 'citationExport' && $up !== '') {
+            		$url_prefix .= '/' . $up;
+            	}
+            	// leave at position citationExport - its just to identify a prefix
+            	if ($up === 'citationExport') break;
+            }
+
+            $proc->setParameter('', 'url_prefix', $url_prefix );
+            $proc->registerPHPFunctions();
+            $proc->importStyleSheet($xslt);
+        	
         	$transform = $proc->transformToXML($xml);
         }
         catch (Exception $e) {

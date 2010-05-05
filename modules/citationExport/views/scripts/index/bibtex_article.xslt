@@ -67,53 +67,44 @@
        author   =  "<xsl:apply-templates select="PersonAuthor" />",
        title    =  '<xsl:apply-templates select="TitleMain" />',
        journal  =  "<xsl:apply-templates select="TitleParent" />",
-       <xsl:variable name="year">
        <xsl:choose>
          <xsl:when test="normalize-space(@CompletedYear)">
-             <xsl:value-of select="@CompletedYear" />
+             year = <xsl:value-of select="@CompletedYear" />,
+         </xsl:when>
+         <xsl:when test="string-length(ComletedDate/@Year)>0">
+           year = <xsl:value-of select="ComletedDate/@Year" />,
+         </xsl:when>
+         <xsl:when test="normalize-space(PublishedDate/@Year)">
+             year = <xsl:value-of select="PublishedDate/@Year" />,
          </xsl:when>
          <xsl:otherwise>
-           <xsl:value-of select="ComletedDate/@Year" />
+               year = <xsl:value-of select="@PublishedYear" />,
          </xsl:otherwise>
        </xsl:choose>
-       </xsl:variable>
-       <xsl:if test="not($year)">
-           <xsl:variable name="year">
-           <xsl:choose>
-             <xsl:when test="normalize-space(PublishedDate/@Year)">
-               <xsl:value-of select="PublishedDate/@Year" />
-             </xsl:when>
-             <xsl:otherwise>
-               <xsl:value-of select="@PublishedYear" />
-             </xsl:otherwise>
-           </xsl:choose>
-           </xsl:variable>
+       <xsl:if test="string-length(IdentifierUrn/@Value)>0">
+           urn     =  <xsl:apply-templates select="IdentifierUrn" />,
+           url     =  http://nbn-resolving.de/urn/resolver.pl?<xsl:apply-templates select="IdentifierUrn" />,
        </xsl:if>
-       year = <xsl:value-of select="$year" />
        <xsl:if test="string-length(IdentifierUrl/@Value)>0">
-           ,
-           url     =  <xsl:apply-templates select="IdentifierUrl" />
-       </xsl:if>
-       <xsl:if test="string-length(@PageFirst)>0">
-           ,
-           pages   =  "<xsl:value-of select="@PageFirst" />, <xsl:value-of select="@PageLast" />"
-       </xsl:if>
-       <xsl:if test="string-length(@Volume)>0">
-           ,
-           volume  =  <xsl:apply-templates select="@Volume" />
-       </xsl:if>   
-       <xsl:if test="string-length(@Issue)>0">
-           ,
-           number =  "<xsl:value-of select="@Issue" />"
-       </xsl:if>
-       <xsl:if test="string-length(@ContributingCorporation)>0">
-           ,
-           organization =  "<xsl:value-of select="@ContributingCorporation" />"
+           url     =  <xsl:apply-templates select="IdentifierUrl" />,
        </xsl:if>
        <xsl:if test="string-length(Note/@Message)>0">
-           ,
-           note    =  "<xsl:apply-templates select="Note" />"
+           note    =  "<xsl:apply-templates select="Note" />",
        </xsl:if>
+       <xsl:if test="string-length(@PageFirst)>0">
+           pages   =  "<xsl:value-of select="@PageFirst" />, <xsl:value-of select="@PageLast" />",
+       </xsl:if>
+       <xsl:if test="string-length(@Volume)>0">
+           volume  =  <xsl:apply-templates select="@Volume" />,
+       </xsl:if>   
+       <xsl:if test="string-length(@Issue)>0">
+           number =  "<xsl:value-of select="@Issue" />",
+       </xsl:if>
+       <xsl:if test="string-length(@ContributingCorporation)>0">
+           organization =  "<xsl:value-of select="@ContributingCorporation" />",
+       </xsl:if>
+       url         =   <xsl:value-of select="$url_prefix" />/frontdoor/index/index/docId/<xsl:value-of select="@Id" />,
+       howpublished=  'online'
        }
     </xsl:template>
 
@@ -163,6 +154,10 @@
     <!-- Templates for "external fields". -->
     <xsl:template match="CompletedDate">
       <xsl:value-of select="@Year" />
+    </xsl:template>
+
+    <xsl:template match="IdentifierUrn">
+      <xsl:value-of select="@Value" />
     </xsl:template>
 
     <xsl:template match="IdentifierUrl">
