@@ -35,26 +35,11 @@
 ?>
 <h1>Opus Application - <?= $this->title ?></h1>
 <ul>
-<li><a href="<?= $this->url(array('controller'=>'licence', 'action'=>'index')) ?>"><?=
-$this->translate('admin_title_licence') ?></a></li>
-<li><a href="<?= $this->url(array('controller'=>'collection', 'action' => 'show', 'role' => 1)) ?>">
-<?=$this->translate('admin_title_organizational_units_show') ?></a></li>
-<li><a href="<?= $this->url(array('controller'=>'collection', 'action' => 'edit', 'role' => 1)) ?>">
-<?=$this->translate('admin_title_organizational_units_edit') ?></a></li>
-<li><a href="<?= $this->url(array('controller'=>'collection', 'action'=>'index')) ?>"><?=
-$this->translate('admin_title_collections') ?></a></li>
-<li><a href="<?= $this->url(array('controller'=>'person', 'action'=>'index')) ?>"><?=
-$this->translate('admin_title_person') ?></a></li>
-<li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'index'), 'default', true) ?>">
-<?=$this->translate('admin_title_documents') ?></a></li>
-<li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'language', 'action' => 'index'), 'default', true) ?>">
-<?=$this->translate('admin_title_languages') ?></a></li>
-<li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'statistic', 'action' => 'index'), 'default', true) ?>">
-<?=$this->translate('admin_title_statistic') ?></a></li>
-<li><a href="<?= $this->url(array('module'=>'pkm', "controller"=>"index", "action"=>"listkeys")) ?>">
-<?= $this->translate('pkm_list_keys') ?></a></li>
-<li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'oailink', 'action' => 'index'), 'default', true) ?>">
-<?=$this->translate('admin_title_oailink') ?></a></li>
+<?php
+foreach ($this->tasks as $key => $value) {
+    print('    <li><a href="' . $value . '">' . $key . '</a></li>' . "\n");
+}
+?>
 </ul>
 
 
