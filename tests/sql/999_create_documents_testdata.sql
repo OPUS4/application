@@ -9557,8 +9557,8 @@ INSERT INTO `file_hashvalues` (`file_id`, `type`, `value`) VALUES
 -- Daten für Tabelle `ipranges`
 --
 
-INSERT INTO `ipranges` (`id`, `ip1byte1`, `ip1byte2`, `ip1byte3`, `ip1byte4`, `ip2byte1`, `ip2byte2`, `ip2byte3`, `ip2byte4`, `name`) VALUES
-(1, 134, 28, 50, 10, 134, 28, 50, 75, 'IP-134.28.50.10-134.28.50.75');
+INSERT INTO `ipranges` (`id`, `startingip`, `endingip`, `name`) VALUES
+(1, INET_ATON('192.168.0.0'), INET_ATON('192.168.0.255'), 'localnet');
 
 
 -- --------------------------------------------------------
@@ -9567,7 +9567,7 @@ INSERT INTO `ipranges` (`id`, `ip1byte1`, `ip1byte2`, `ip1byte3`, `ip1byte4`, `i
 --
 
 INSERT INTO `roles` (`id`, `name`) VALUES
-(3, 'IP-134.28.50.10-134.28.50.75');
+(3, 'localusers');
 
 -- --------------------------------------------------------
 -- Collection Roles

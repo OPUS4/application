@@ -133,10 +133,8 @@ class Opus3Migration extends Application_Bootstrap {
     				$rolename .= '-' . $ipend;
     			}
     		    $iprange = new Opus_Iprange();
-    		    $ip1 = explode(".", $ipstart);
-    		    $ip2 = explode(".", $ipend);
-    		    $iprange->setIp1byte1($ip1[0])->setIp1byte2($ip1[1])->setIp1byte3($ip1[2])->setIp1byte4($ip1[3]);
-    		    $iprange->setIp2byte1($ip2[0])->setIp2byte2($ip2[1])->setIp2byte3($ip2[2])->setIp2byte4($ip2[3]);
+    		    $iprange->setStartingip($ipstart);
+    		    $iprange->setEndingip($ipend);
     		    $iprange->setName('IP-' . $rolename);
     		    $ipid = $iprange->store();
     		}
