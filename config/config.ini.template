@@ -45,6 +45,12 @@ startmodule = home
 security = 0
 authenticationModule = 
 
+; URN SETTINGS
+; if you do not want to set URNs automatically, set these values blank or comment them out
+urn.snid.union = swb
+urn.snid.libid = 14
+urn.niss.prefix = opus
+
 ;WOKSPACE-PATH SETTINGS
 path.workspace.temp = 
 
