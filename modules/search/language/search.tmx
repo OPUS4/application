@@ -271,6 +271,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="searchfield_opac">
+      <tuv xml:lang="en">
+        <seg>Opac-ID</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Opac-ID</seg>
+      </tuv>
+    </tu>
+    
     <tu tuid="boolean_and">
       <tuv xml:lang="en">
         <seg>and</seg>

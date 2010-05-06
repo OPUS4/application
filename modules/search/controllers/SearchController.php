@@ -686,7 +686,7 @@ class Search_SearchController extends Zend_Controller_Action
             'isbn' => 'searchfield_isbn',
             'series' => 'searchfield_series',
             'collection' => 'searchfield_coll',
-            'doctype' => 'searchfield_doctype'
+            'opac-id' => 'searchfield_opac'
             );
     	return $fields;
     }
