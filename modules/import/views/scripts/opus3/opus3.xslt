@@ -411,14 +411,16 @@
         <!-- each value gets its own element -->
         <xsl:if test="string-length(.)>0">
             <xsl:for-each select="str:split(., ' , ')">
-            <xsl:element name="SubjectSwd">
-                <xsl:attribute name="Language">
-                    <xsl:call-template name="mapLanguage"><xsl:with-param name="lang">ger</xsl:with-param></xsl:call-template>
-                </xsl:attribute>
-                <xsl:attribute name="Value">
-                    <xsl:value-of select="." />
-                </xsl:attribute>
-            </xsl:element>
+                <xsl:if test="string-length(.)>0">
+                    <xsl:element name="SubjectSwd">
+                        <xsl:attribute name="Language">
+                            <xsl:call-template name="mapLanguage"><xsl:with-param name="lang">ger</xsl:with-param></xsl:call-template>
+                        </xsl:attribute>
+                        <xsl:attribute name="Value">
+                            <xsl:value-of select="." />
+                        </xsl:attribute>
+                    </xsl:element>
+                </xsl:if>
             </xsl:for-each>
         </xsl:if>
     </xsl:template>
@@ -427,14 +429,16 @@
         <!-- take them as one value in one field ??? -->
         <xsl:if test="string-length(.)>0">
             <xsl:for-each select="str:split(., ',')">
-            <xsl:element name="SubjectUncontrolled">
-                <xsl:attribute name="Language">
-                    <xsl:call-template name="mapLanguage"><xsl:with-param name="lang">eng</xsl:with-param></xsl:call-template>
-                </xsl:attribute>
-                <xsl:attribute name="Value">
-                    <xsl:value-of select="." />
-                </xsl:attribute>
-            </xsl:element>
+                <xsl:if test="string-length(.)>0">
+                    <xsl:element name="SubjectUncontrolled">
+                        <xsl:attribute name="Language">
+                            <xsl:call-template name="mapLanguage"><xsl:with-param name="lang">eng</xsl:with-param></xsl:call-template>
+                        </xsl:attribute>
+                        <xsl:attribute name="Value">
+                            <xsl:value-of select="." />
+                        </xsl:attribute>
+                    </xsl:element>
+                </xsl:if>
             </xsl:for-each>
         </xsl:if>
     </xsl:template>
@@ -443,14 +447,16 @@
         <!-- take them as one value in one field ??? -->
         <xsl:if test="string-length(.)>0">
             <xsl:for-each select="str:split(., ',')">
-            <xsl:element name="SubjectUncontrolled">
-                <xsl:attribute name="Language">
-                    <xsl:call-template name="mapLanguage"><xsl:with-param name="lang">ger</xsl:with-param></xsl:call-template>
-                </xsl:attribute>
-                <xsl:attribute name="Value">
-                    <xsl:value-of select="." />
-                </xsl:attribute>
-            </xsl:element>
+                <xsl:if test="string-length(.)>0">
+                    <xsl:element name="SubjectUncontrolled">
+                        <xsl:attribute name="Language">
+                            <xsl:call-template name="mapLanguage"><xsl:with-param name="lang">ger</xsl:with-param></xsl:call-template>
+                        </xsl:attribute>
+                        <xsl:attribute name="Value">
+                            <xsl:value-of select="." />
+                        </xsl:attribute>
+                    </xsl:element>
+                </xsl:if>
             </xsl:for-each>
         </xsl:if>
     </xsl:template>
