@@ -95,7 +95,7 @@
     </page>
 	
 	<page caption="caption_05_doctoral_thesis">
-	    <field name="SubjectSwd" mandatory="yes" adminformweight="1" publishformweight="401" multiplicity="*" />
+	    <field name="SubjectSwd" mandatory="no" adminformweight="1" publishformweight="401" multiplicity="*" />
 	    <field name="SubjectUncontrolled" mandatory="no" adminformweight="1" publishformweight="403" multiplicity="*" />
 	    <!-- TODO implement it - derzeit Fehlermeldung Specified column "collection" is not in the row -->
 	    <!--<field name="Collection" mandatory="no" adminformweight="1" publishformweight="404" multiplicity="*" />-->

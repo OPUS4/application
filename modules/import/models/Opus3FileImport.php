@@ -84,7 +84,7 @@ class Opus3FileImport
         $alreadyImportedFiles = $object->getFile();
         
         if (count($files) === 0) {
-        	return false;
+        	return 0;
         }
         
         if (true === is_array($object->getLanguage()))
@@ -95,6 +95,8 @@ class Opus3FileImport
         {
     	    $lang = $object->getLanguage();
         }
+        
+        $number = 0;
         
         if (true === isset($files[0])) {
             foreach ($files as $filename) {
@@ -124,12 +126,16 @@ class Opus3FileImport
 			        if ($this->_accessRole !== null) {
     			        $file->addAccessPermission($this->_accessRole);
 			        }
+			        $number++;
                 }
             }
         }
-
-        // return all files in an array
-        return $object;
+        
+        // store the object
+        $object->store();
+        
+        // return number of imported files
+        return $number;
     }
     
     private function getFiles($from) 

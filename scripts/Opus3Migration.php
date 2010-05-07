@@ -170,13 +170,12 @@ class Opus3Migration extends Application_Bootstrap {
 	    	{
 	    		$doc = new Opus_Document($id);
 			    $opus3Id = $doc->getIdentifierOpus3()->getValue();
-			    $documentFiles = $fileImporter->loadFiles($doc);
-			    if ($documentFiles !== false) {
-			        $documentFiles->store();
-			        echo count($doc->getFile()) . " file(s) have been imported successfully for document ID " . $doc->getId() . "!\n";
+			    $numberOfFiles = $fileImporter->loadFiles($doc);
+			    if ($numberOfFiles > 0) {
+			        echo $numberOfFiles . " file(s) have been imported successfully for document ID " . $doc->getId() . "!\n";
 			    }
 			    unset($doc);
-			    unset($documentFiles);
+			    unset($numberOfFiles);
 		    }
 		    echo "finished!\n";
     }
