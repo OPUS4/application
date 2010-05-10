@@ -841,14 +841,12 @@
 
     <!-- Named template to proof, what to show for collections, depending on display_frontdoor -->
     <xsl:template name="checkdisplay">
-       <xsl:if test="contains(@DisplayFrontdoor,'Number') and @Number != ''">
+       <xsl:if test="contains(@RoleDisplayFrontdoor,'Number') and @Number != ''">
            <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
        </xsl:if>
-       <xsl:if test="contains(@DisplayFrontdoor,'Name') and @Name != ''">
+       <xsl:if test="contains(@RoleDisplayFrontdoor,'Name') and @Name != ''">
            <xsl:value-of select="@Name" />
        </xsl:if>
-       <xsl:value-of select="@Number" /><xsl:text> </xsl:text>
-       <xsl:value-of select="@Name" />
     </xsl:template>
 
     <xsl:template name="MailToAuthor">

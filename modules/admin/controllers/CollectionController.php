@@ -473,7 +473,7 @@ class Admin_CollectionController extends Controller_Action {
     private function __createFilter(Opus_Model_Abstract $collection) {
         $filter = new Opus_Model_Filter();
         $filter->setModel($collection);
-        $filter->setBlacklist(array('SubCollection', 'ParentCollection', 'Visibility', 'SeveralAppearances', 'RoleId', 'RoleName'));
+        $filter->setBlacklist(array('SubCollection', 'ParentCollection', 'Visibility', 'SeveralAppearances', 'RoleId', 'RoleName','RoleDisplayFrontdoor'));
         $filter->setSortOrder(array('Name'));
         return $filter;
     }
