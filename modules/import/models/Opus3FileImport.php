@@ -132,7 +132,9 @@ class Opus3FileImport
         }
         
         // store the object
-        $object->store();
+        if ($number > 0) {
+            $object->store();
+        }
         
         // return number of imported files
         return $number;

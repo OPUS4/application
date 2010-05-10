@@ -142,6 +142,10 @@ class SocialBookmarking_BibsonomyController extends Zend_Controller_Action
         $data = $this->_request->getPost();
         
         $params = array('uri' => $connotea->uri, 'tags' => $system_tags . " " . $data['user_tags'], 'usertitle' => $data['usertitle'], 'description' => $data['userdescription']);
+        if ($params['tags'] === ' ') {
+        	// if no tags have been set, tag it with 'notags'
+        	$params['tags'] = 'notags';
+        }
         $post_status = $connoteaPost->addBookmark($params);
         /*if ($post_status) {
             echo $add_success;

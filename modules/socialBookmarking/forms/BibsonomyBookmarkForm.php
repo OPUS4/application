@@ -48,7 +48,7 @@ class BibsonomyBookmarkForm extends Zend_Form
 		$doc = new Opus_Document($connotea->docId);
   		
 		$userTags = new Zend_Form_Element_Text('user_tags');
-		$userTags->setRequired(true);
+		$userTags->setRequired(false);
 		$userTags->setLabel('bibsonomy_usertags');
 
 		$title = new Zend_Form_Element_Text('usertitle');
