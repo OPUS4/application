@@ -46,6 +46,10 @@ class SocialBookmarking_ConnoteaController extends Zend_Controller_Action
 	 */
     public function indexAction() 
     {
+        $data = $this->_request->getParams();            
+            
+        $this->view->frontdoor_url = $this->view->url(array('module' => "frontdoor", "controller"=>'index', "action"=>"index", 'docId'=>$data['docId']));
+
         $connotea = new Zend_Session_Namespace('connotea');
         if (false === isset($connotea->user)) {
         	// show login mask
@@ -61,8 +65,6 @@ class SocialBookmarking_ConnoteaController extends Zend_Controller_Action
             $connoteaPost->password = $connotea->password;
             $this->view->connoteauser = $connotea->user;
             $this->view->note = '<a href="' . $this->view->url(array('module' => "socialBookmarking", "controller"=>'connotea', "action"=>"logout")) . '">Logout</a>';
-
-            $data = $this->_request->getParams();            
 
             if (true === array_key_exists('docId', $data))
             {

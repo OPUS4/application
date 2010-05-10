@@ -53,6 +53,11 @@ class SocialBookmarking_BibsonomyController extends Zend_Controller_Action
             $connotea->sysuser = $config->socialBookmarking->bibsonomy->sysuser;
             $connotea->syspassword = $config->socialBookmarking->bibsonomy->syspassword;
         }
+
+        $data = $this->_request->getParams();            
+            
+        $this->view->frontdoor_url = $this->view->url(array('module' => "frontdoor", "controller"=>'index', "action"=>"index", 'docId'=>$data['docId']));
+
         if (false === isset($connotea->user)) {
         	// show login mask
             $loginForm = new BibsonomyLoginForm();
@@ -71,9 +76,7 @@ class SocialBookmarking_BibsonomyController extends Zend_Controller_Action
             }
             $this->view->connoteauser = $connotea->user;
             $this->view->note = '<a href="' . $this->view->url(array('module' => "socialBookmarking", "controller"=>'bibsonomy', "action"=>"logout")) . '">Logout</a>';
-
-            $data = $this->_request->getParams();            
-
+            
             if (true === array_key_exists('docId', $data))
             {
                 $connotea->uri = 'http://' . $_SERVER['HTTP_HOST'] . $this->view->url(array('module' => "frontdoor", "controller"=>'index', "action"=>"index", 'docId'=>$data['docId']));

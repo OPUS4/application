@@ -25,6 +25,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="frontdoor_link">
+      <tuv xml:lang="en">
+        <seg>Back to frontdoor</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zurück zur Frontdoor</seg>
+      </tuv>
+    </tu>
+    
     <tu tuid="connotea_username">
       <tuv xml:lang="en">
         <seg>Connotea-Username</seg>

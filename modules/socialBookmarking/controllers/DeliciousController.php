@@ -47,6 +47,10 @@ class SocialBookmarking_DeliciousController extends Zend_Controller_Action
     public function indexAction() 
     {
         $connotea = new Zend_Session_Namespace('delicious');
+        $data = $this->_request->getParams();            
+            
+        $this->view->frontdoor_url = $this->view->url(array('module' => "frontdoor", "controller"=>'index', "action"=>"index", 'docId'=>$data['docId']));
+
         try {
         if (true === $connotea->authorized) {
             $connoteaPost = new Delicious;
@@ -55,8 +59,6 @@ class SocialBookmarking_DeliciousController extends Zend_Controller_Action
             $this->view->delicioususer = $connotea->user;
             #$this->view->note = '<a href="' . $this->view->url(array('module' => "socialBookmarking", "controller"=>'delicious', "action"=>"logout")) . '">Logout</a>';
 
-            $data = $this->_request->getParams();            
-   
             if (true === array_key_exists('docId', $data))
             {
                 $connotea->uri = 'http://' . $_SERVER['HTTP_HOST'] . $this->view->url(array('module' => "frontdoor", "controller"=>'index', "action"=>"index", 'docId'=>$data['docId']));
