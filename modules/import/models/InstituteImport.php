@@ -117,6 +117,9 @@ class InstituteImport
     {
         $classification = $this->transferOpusClassification($data);
 
+        // Build a mapping file to associate old IDs with the new ones
+        $fp = fopen('../workspace/tmp/universities.map', 'w');
+
         $subcoll = array();
 
         foreach ($classification as $class) {
@@ -129,10 +132,14 @@ class InstituteImport
             $coll->setDnbContactId($class['ddb_idn']);
             $coll->setTheme('default');
             // store the old ID with the new Collection
-            $subcoll[] = $coll->store();
+            $sc = $coll->store();
+            $subcoll[] = $sc;
+            fputs($fp, str_replace(" ", "_", $class['universitaet']) . ' ' . $sc . "\n");
             $collRole->addSubCollection($coll);
             $collRole->store();
         }
+
+        fclose($fp);
 
         return $subcoll;
     }
@@ -147,6 +154,9 @@ class InstituteImport
 	{
         $classification = $this->transferOpusClassification($data);
 
+        // Build a mapping file to associate old IDs with the new ones
+        $fp = fopen('../workspace/tmp/faculties.map', 'w');
+
 		$subcoll = array();
 
 		foreach ($classification as $class) {
@@ -159,10 +169,13 @@ class InstituteImport
             $coll->setTheme('default');
             $parentColl->setTheme('default');
             $subcoll[$class["nr"]] = $coll->store();
+            fputs($fp, $class['nr'] . ' ' . $subcoll[$class["nr"]] . "\n");
             $parentColl->addSubCollection($coll);
             $parentColl->store();
 		}
-
+        
+        fclose($fp);
+		
 		return $subcoll;
 	}
 

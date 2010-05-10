@@ -166,6 +166,10 @@ class XMLImport
         $oldSeries = null;
         $seriesCollection = null;
         $issue = null;
+        $publisherId = null;
+        $facultyId = null;
+        $publisher = null;
+        $grantor = null;
         
         // Fill initialized variables with current document data
         $oldid = $document->getElementsByTagName('IdentifierOpus3')->Item(0)->getAttribute('Value');
@@ -179,6 +183,26 @@ class XMLImport
         $mscNotations = $document->getElementsByTagName('OldMsc');
         $apaNotations = $document->getElementsByTagName('OldApa');
         $bkNotations = $document->getElementsByTagName('OldBk');
+        $publisherId = $document->getElementsByTagName('OldPublisherUniversity')->Item(0);
+        $facultyId = $document->getElementsByTagName('OldGrantor')->Item(0);
+        
+        if ($facultyId !== null) {
+        	$mappingFile = '../workspace/tmp/faculties.map';
+        	$GrantorNewId = $this->getNewValue($mappingFile, $facultyId->getAttribute('Value'));
+        	if ($GrantorNewId !== null) {
+        	    $grantor = new Opus_OrganisationalUnit($GrantorNewId);
+        	}
+        	$this->document->removeChild($facultyId);
+        }
+        if ($publisherId !== null) {
+        	$mappingFile = '../workspace/tmp/universities.map';
+        	$PublisherNewId = $this->getNewValue($mappingFile, str_replace(" ", "_", $publisherId->getAttribute('Value')));
+        	if ($PublisherNewId !== null) {
+        		$publisher = new Opus_OrganisationalUnit($PublisherNewId);
+        	}
+        	$this->document->removeChild($publisherId);
+        }
+        
         if ($licence !== null)
         {
             $licenceValue = $licence->getAttribute('Value');
@@ -297,6 +321,12 @@ class XMLImport
 			if ($lic !== null) {
 				$doc->addLicence($lic);
 			}
+			if ($publisher !== null) {
+				$doc->addPublisher($publisher);
+			}
+			if ($grantor !== null) {
+				$doc->addGrantor($grantor);
+			}
 		    // Set the publication status to published since only published documents shall be imported
 		    $doc->setServerState('published');
 		    $doc->store();
@@ -397,6 +427,26 @@ class XMLImport
         foreach ($fp as $licence) {
             $mappedLicence = split("\ ", $licence);
             $lic[$mappedLicence[0]] = $mappedLicence[1];
+        }
+        return $lic[$oldId];
+     }
+
+     public function getNewValue($mappingFile, $oldId)
+     {
+        $fp = file($mappingFile);
+        $firstvalue = null;
+        foreach ($fp as $licence) {
+            $mappedLicence = split("\ ", $licence);
+            if ($firstvalue === null) {
+            	$firstvalue = $mappedLicence[0];
+            }
+            $lic[$mappedLicence[0]] = $mappedLicence[1];
+        }
+        if (array_key_exists($oldId, $lic) === false) {
+        	if ($firstvalue !== null) {
+        		return $lic[$firstvalue];
+        	}
+        	return null;
         }
         return $lic[$oldId];
      }

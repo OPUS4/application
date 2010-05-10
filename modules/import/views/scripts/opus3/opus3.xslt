@@ -205,14 +205,7 @@
                     <xsl:value-of select="php:function('date', 'd.m.Y', $dateaccepted)" />
                 </xsl:attribute>
             </xsl:if>
-            <xsl:attribute name="PublisherUniversity">
-                <xsl:value-of select="field[@name='publisher_university']" />
-            </xsl:attribute>           
-            
-            <!-- Fields not used yet -->
-            <!--<xsl:attribute name="RangeId">
-                <xsl:value-of select="field[@name='bereich_id']" />
-            </xsl:attribute>-->
+            <xsl:call-template name="getGrantor"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
             
             <!-- Find persons associated with the document -->
             <xsl:call-template name="getAuthors"><xsl:with-param name="OriginalID"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
@@ -270,6 +263,27 @@
             </xsl:element>
         </xsl:if>
     </xsl:template>
+    <!-- temporary Publisher and Grantor information -->
+    <xsl:template match="table_data[@name='opus']/row/field[@name='publisher_university']">
+        <xsl:if test="string-length(.)>0">
+            <xsl:element name="OldPublisherUniversity">
+                <xsl:attribute name="Value">
+                    <xsl:value-of select="." />
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:if>
+    </xsl:template>
+    <xsl:template name="getGrantor">
+        <xsl:param name="source_id" required="yes" />
+        <xsl:for-each select="/mysqldump/database/table_data[@name='opus_diss']/row[field[@name='source_opus']=$source_id]">
+            <xsl:element name="OldGrantor">
+                <xsl:attribute name="Value">
+                    <xsl:value-of select="field[@name='publisher_faculty']" />
+                </xsl:attribute>
+            </xsl:element>
+        </xsl:for-each>
+    </xsl:template>
+ 
     <!-- temporary series information -->
     <xsl:template name="getSeries">
         <xsl:param name="source_id" required="yes" />
