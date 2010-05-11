@@ -118,7 +118,7 @@ for ($fi = 0; $fi < $this->fileNumber; $fi++) {
                <?= $this->hashtype = $hashtype?>&nbsp;</b>
                <?= $this->translate('frontdoor_current')?>:&nbsp;
                <?
-               if ($this->hashIst[$fi][$hi] != 0) {
+               if ($this->hashIst[$fi][$hi] !== 0) {
                    ?><?= $this->hashIst[$fi][$hi]?></p><?
                } else {
                     ?><?= $this->translate('frontdoor_file_too_big')?></p>
