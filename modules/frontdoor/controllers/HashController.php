@@ -97,6 +97,8 @@ class Frontdoor_HashController extends Zend_Controller_Action
        $hashNumber = array();
        for ($fi = 0; $fi < $fileNumber; $fi++) {
            $fileNames[$fi] = $document->getFile($fi)->getPathName();
+           $hashNumber[$fi] = 0;
+           if ($document->getFile($fi)->exists() === true) {
            if (true === is_array ($hashes = $document->getFile($fi)->getHashValue())) {
                  $countHash = count($hashes);
                  for ($hi = 0; $hi < $countHash; $hi++) {
@@ -116,6 +118,7 @@ class Frontdoor_HashController extends Zend_Controller_Action
                         }
                      }
                  }
+           }
            }
        }
        $this->view->hashType = $hashType;

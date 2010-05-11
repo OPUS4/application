@@ -83,6 +83,7 @@
             <!-- <field name="PublishedYear" adminformweight="1" publishformweight="404" multiplicity="1" /> -->
             <!-- <field name="PublishedDate" adminformweight="1" publishformweight="405" multiplicity="1" /> -->
         <!-- </mandatory> -->
+        <field name="Publisher" mandatory="no" adminformweight="1" publishformweight="404" multiplicity="2" />
     </page>
 
 	<page caption="caption_05_lecture">
