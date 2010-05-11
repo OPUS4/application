@@ -69,7 +69,16 @@
         <seg>aktiv</seg>
       </tuv>
     </tu>
-       
+
+    <tu tuid="transmit">
+      <tuv xml:lang="en">
+        <seg>store data</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Daten abspeichern</seg>
+      </tuv>
+    </tu>
+           
   </body>
   
 </tmx>
