@@ -105,9 +105,24 @@ class Opus3FileImport
             
                 $filenameArray = split('\.', $filename);
                 $suffix = $filenameArray[(count($filenameArray)-1)];
-            
+                                
                 // if you got it, build a Opus_File-Object
                 $alreadyImported = false;
+                
+                // if its a .bem-file, import it as a note
+                if (substr(basename($filename), 0, 5) === '.bem_') {
+                	$alreadyImported = true;
+                	$fileArray = file($filename);
+                	$filecontent = substr(basename($filename), 5) . ": ";
+                	$filecontent .= utf8_encode(implode(' ', $fileArray));
+                	$note = new Opus_Note();
+                    $note->setScope('public');
+                    $note->setCreator('imported');
+                    $note->setMessage($filecontent);
+                    $object->addNote($note);
+                    $object->store();
+                }
+                
                 foreach ($alreadyImportedFiles as $f) {
                 	if (basename($filename) === $f->getPathName()) {
                 	    $alreadyImported = true;
