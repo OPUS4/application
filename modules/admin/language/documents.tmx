@@ -16,15 +16,6 @@
       </tuv>
     </tu>
     
-    <tu tuid="docs_all">
-      <tuv xml:lang="en">
-        <seg>All documents</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Alle Dokumente</seg>
-      </tuv>
-    </tu>
-    
     <tu tuid="answer_yes">
       <tuv xml:lang="en">
         <seg>Yes</seg>
@@ -168,15 +159,6 @@
       </tuv>
     </tu>
 
-    <tu tuid="docs_nodocs">
-      <tuv xml:lang="en">
-        <seg>No documents found!</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Keine Dokumente vorhanden!</seg>
-      </tuv>
-    </tu>
-    
     <tu tuid="docs_call_id">
       <tuv xml:lang="en">
         <seg>Edit</seg>
@@ -192,15 +174,6 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Dokument mit ID direkt aufrufen: </seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="docs_sortorder">
-      <tuv xml:lang="en">
-        <seg>Sort document list by:</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Sortiere Dokumentliste nach:</seg>
       </tuv>
     </tu>
 
