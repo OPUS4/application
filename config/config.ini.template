@@ -102,6 +102,8 @@ oai.max.listidentifiers = 200
 ;LDAP Settings
 ldap.log_path = /var/log/opus-ldap.log
 
+ldap.admin_accounts = ; commaseperated list of usernames of LDAP authenticated users who should get access to admin
+
 ldap.server1.host = s0.foo.net
 ldap.server1.accountDomainName = foo.net
 ldap.server1.accountDomainNameShort = FOO
