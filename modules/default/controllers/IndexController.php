@@ -60,5 +60,50 @@ class IndexController extends Zend_Controller_Action {
 		
 		$this->_helper->getHelper('Redirector')->gotoSimple('index', 'index', $module);
 	}
+	
+	/**
+	 * add a PPN to a OPUS Document
+	 */
+	public function addppnAction() {
+		$data = $this->_request->getParams();
+		$id = null;
+		if (array_key_exists('urn', $data) === true) {
+			if ($data['urn'] !== '') {
+    			// find record by URN
+	    		$ids = Opus_Document::getDocumentByIdentifier($data['urn']);
+		    	// get the first ID as result
+			    if (count($ids) > 0) {
+			        $id = $ids[0];
+			    }
+			}
+		}
+		if (array_key_exists('url', $data) === true && $id === null) {
+			if ($data['url'] !== '') {
+    			// find record by URL
+	    		$ids = Opus_Document::getDocumentByIdentifier(str_replace('<>', '/', $data['url']), 'url');
+		    	// get the first ID as result
+			    if (count($ids) > 0) {
+			        $id = $ids[0];
+			    }
+			}
+		}
+		if ($id !== null) {
+			$doc = new Opus_Document($id);
+			$identifier = new Opus_Identifier();
+			$identifier->setValue($data['ppn']);
+			$doc->addIdentifierOpac($identifier);
+			$doc->store();
+		}
+		
+		$config = Zend_Registry::get('Zend_Config');
+
+		$module = $config->startmodule;
+		if (empty($module) === true) {
+			$module = 'home';
+		}
+		
+		$this->_helper->getHelper('Redirector')->gotoSimple('index', 'index', $module);
+		
+	}
 
 }
