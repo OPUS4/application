@@ -68,7 +68,7 @@ if (count($this->docId)) {
                 else echo "; ";
         }
         ?>
-        <span class="title"><a href="<?=$this->url_frontdoor[$runningIndex]?>"><?=$this->title[$runningIndex]?></a></span>
+        <span class="title"><a href="<?=$this->url_frontdoor[$runningIndex]?>"><?=$this->doctitle[$runningIndex]?></a></span>
         </li>
         <div class="queryhit">
         <?php
@@ -87,74 +87,3 @@ if (count($this->docId)) {
 } else {
     echo '<p>' . $this->translate('search_no_results') . '</p>';
 }
-
-
-
-/*
-if (count($this->hitlist_paginator)) {
-
-    echo $this->paginationControl($this->hitlist_paginator, NULL, 'searchList_ItemCount_pagination.phtml');
-    echo $this->paginationControl($this->hitlist_paginator, 'Sliding', 'searchList_pagination.phtml');
-
-    // FIXME: <ol start="..."> is not valid XHTML 1.0 Strict!
-    // but it will return in (X)HTML 5, so wontfix
-    $pagerInfo = $this->hitlist_paginator->getPages();
-    echo '<ol class="search" start="' . $pagerInfo->firstItemNumber . '">';
-
-    $searchListItemCount = 0;
-    foreach ($this->hitlist_paginator as $hit) {
-        $searchListItemCount++;
-        $searchListOdd = ($searchListItemCount%2 === 1);
-
-        // retrieve hit from hit list
-        $doc = $hit->getSearchHit();
-        $document = $doc->getDocument();
-        $authoriterator = explode('; ', $document['author']);
-
-        echo $searchListOdd ? '<li class="odd">' : '<li class="even">';
-        $counter = 1;
-        foreach ($authoriterator as $obj) {
-           if (empty($obj) === true || $obj === ' ' || $obj === '') {
-           	continue;
-           }
-           echo '<span class="author"><a href="' .
-                 $this->url(
-                     array(
-                         'module'        => 'search',
-                         'controller'    => 'search',
-                         'action'        => 'metadatasearch',
-                         'author'        => $obj
-                     ),
-                     null,
-                      true
-                 ) .
-                 '">';
-
-           echo $obj;
-           echo "</a></span>";
-           if ($counter === count($authoriterator)) echo ": ";
-           else echo "; ";
-           $counter++;
-        }
-        print('<span class="title"><a href="' . $this->url(array('module' => 'frontdoor',
-            'controller' => 'index',
-            'action' => 'index',
-            'docId' => $document['id']), null, true
-        ).'">'.$document["title"]."</a></span>");
-        echo "</li>";
-        echo "<div class=\"queryhit\">";
-        if ($this->noform !== true) {
-        	echo $this->translate('search_titles_relevance').": ".$hit->getRelevance()."<br/>";
-        	echo $document["abstract"];
-        }
-        else {
-            echo strip_tags($document["abstract"]);
-        }
-        echo "</div>";
-    }
-    echo '</ol>';
-    echo $this->paginationControl($this->hitlist_paginator, 'Sliding', 'searchList_pagination.phtml');
-} else {
-    echo '<p>' . $this->translate('search_no_results') . '</p>';
-}
-*/

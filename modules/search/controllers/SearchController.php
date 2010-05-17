@@ -223,10 +223,10 @@ class Search_SearchController extends Zend_Controller_Action
                         $this->view->author[$runningIndex][$counter] = $name;
                     }
                     try {
-                        $this->view->title[$runningIndex] = $d->getTitleMain(0)->getValue();
+                        $this->view->doctitle[$runningIndex] = $d->getTitleMain(0)->getValue();
                     }
                     catch (Exception $e) {
-            	        $this->view->title[$runningIndex] = $this->view->translate('document_no_title') . $id;
+            	        $this->view->doctitle[$runningIndex] = $this->view->translate('document_no_title') . $id;
                     }
                     try {
                     	if (array_key_exists('noform', $data) === false) {
@@ -620,10 +620,10 @@ class Search_SearchController extends Zend_Controller_Action
                         $this->view->author[$runningIndex][$counter] = $name;
                     }
                     try {
-                        $this->view->title[$runningIndex] = $d->getTitleMain(0)->getValue();
+                        $this->view->doctitle[$runningIndex] = $d->getTitleMain(0)->getValue();
                     }
                     catch (Exception $e) {
-            	        $this->view->title[$runningIndex] = $this->view->translate('document_no_title') . $id;
+            	        $this->view->doctitle[$runningIndex] = $this->view->translate('document_no_title') . $id;
                     }
                     try {
                     	if (array_key_exists('noform', $data) === false) {

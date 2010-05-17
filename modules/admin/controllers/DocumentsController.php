@@ -74,6 +74,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
      * @return void
      */
     public function indexAction() {
+    	$this->view->title = $this->view->translate('admin_documents_index');
         $this->view->registers = array(
             array(
                 $this->view->url(array('module' => 'admin', 'controller'=>'documents', 'action'=>'index'), null, true), 'docs_all'
@@ -148,7 +149,6 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             // set page if requested
             $page = $data['page'];
         }
-        $this->view->title = $this->view->translate('search_index_alltitles_browsing');
 
         // Default Ordering...
         if (true === array_key_exists('sort_reverse', $data)) {
@@ -232,7 +232,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         // iterate the paginator and get the attributes we want to show in the view
         $runningIndex = 0;
         $this->view->docId = array();
-        $this->view->title = array();
+        $this->view->doctitle = array();
         $this->view->author = array();
         $this->view->url_frontdoor = array();
         $this->view->url_permanentdelete = array();
@@ -300,10 +300,10 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                 $this->view->author[$runningIndex][$counter] = $name;
             }
             try {
-                $this->view->title[$runningIndex] = $d->getTitleMain(0)->getValue();
+                $this->view->doctitle[$runningIndex] = $d->getTitleMain(0)->getValue();
             }
             catch (Exception $e) {
-            	$this->view->title[$runningIndex] = $this->view->translate('document_no_title') . $id;
+            	$this->view->doctitle[$runningIndex] = $this->view->translate('document_no_title') . $id;
             }
             $runningIndex++;
         }

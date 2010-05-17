@@ -209,7 +209,7 @@ class Search_BrowsingController extends Zend_Controller_Action
         // iterate the paginator and get the attributes we want to show in the view
         $runningIndex = 0;
         $this->view->docId = array();
-        $this->view->title = array();
+        $this->view->doctitle = array();
         $this->view->author = array();
         $this->view->url_frontdoor = array();
         $this->view->url_author = array();
@@ -254,10 +254,10 @@ class Search_BrowsingController extends Zend_Controller_Action
                 $this->view->author[$runningIndex][$counter] = $name;
             }
             try {
-                $this->view->title[$runningIndex] = $d->getTitleMain(0)->getValue();
+                $this->view->doctitle[$runningIndex] = $d->getTitleMain(0)->getValue();
             }
             catch (Exception $e) {
-            	$this->view->title[$runningIndex] = $this->view->translate('document_no_title') . $id;
+            	$this->view->doctitle[$runningIndex] = $this->view->translate('document_no_title') . $id;
             }
             $runningIndex++;
         }
@@ -345,7 +345,7 @@ class Search_BrowsingController extends Zend_Controller_Action
                     // iterate the paginator and get the attributes we want to show in the view
                     $runningIndex = 0;
                     $this->view->docId = array();
-                    $this->view->title = array();
+                    $this->view->doctitle = array();
                     $this->view->author = array();
                     $this->view->url_frontdoor = array();
                     $this->view->url_author = array();
@@ -391,10 +391,10 @@ class Search_BrowsingController extends Zend_Controller_Action
                         	$this->view->author[$runningIndex] = null;
                         }
                         try {
-                            $this->view->title[$runningIndex] = $d->getTitleMain(0)->getValue();
+                            $this->view->doctitle[$runningIndex] = $d->getTitleMain(0)->getValue();
                         }
                         catch (Exception $e) {
-            	            $this->view->title[$runningIndex] = $this->view->translate('document_no_title') . $id;
+            	            $this->view->doctitle[$runningIndex] = $this->view->translate('document_no_title') . $id;
                         }
                         $runningIndex++;
                     }
@@ -427,6 +427,7 @@ class Search_BrowsingController extends Zend_Controller_Action
      */
     public function latestAction() {
     	$hitlist = BrowsingList::getLatestDocuments();
+    	$this->view->title = $this->view->translate('latest_documents_title');
         $data = $this->_request->getParams();
         if (array_key_exists('output', $data) === true && $data['output'] === "rss") {
                 $template = new RSSOutput();
@@ -489,7 +490,7 @@ class Search_BrowsingController extends Zend_Controller_Action
             // iterate the paginator and get the attributes we want to show in the view
             $runningIndex = 0;
             $this->view->docId = array();
-            $this->view->title = array();
+            $this->view->doctitle = array();
             $this->view->abstractValue = array();
             $this->view->author = array();
             $this->view->url_frontdoor = array();
@@ -536,10 +537,10 @@ class Search_BrowsingController extends Zend_Controller_Action
                     $this->view->author[$runningIndex] = null;
                 }
                 try {
-                    $this->view->title[$runningIndex] = $d->getTitleMain(0)->getValue();
+                    $this->view->doctitle[$runningIndex] = $d->getTitleMain(0)->getValue();
                 }
                 catch (Exception $e) {
-            	    $this->view->title[$runningIndex] = $this->view->translate('document_no_title') . $id;
+            	    $this->view->doctitle[$runningIndex] = $this->view->translate('document_no_title') . $id;
                 }
                 try {
                     $this->view->abstractValue[$runningIndex] = $d->getTitleAbstract(0)->getValue();

@@ -144,7 +144,7 @@ if (count($this->docId)) {
                 else echo "; ";
         }
         ?>
-        <span class="title"><a href="<?=$this->url_frontdoor[$runningIndex]?>"><?=$this->title[$runningIndex]?></a></span>
+        <span class="title"><a href="<?=$this->url_frontdoor[$runningIndex]?>"><?=$this->doctitle[$runningIndex]?></a></span>
         <?php
         if ($this->docState[$runningIndex] === 'deleted') { ?>
         <form action="<?= $this->url_permanentdelete[$runningIndex] ?>" method="post" class="crud">
