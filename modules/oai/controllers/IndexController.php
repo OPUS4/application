@@ -742,6 +742,10 @@ class Oai_IndexController extends Controller_Xml {
         $setDocIds = array();
         if (true === array_key_exists('set',$oaiRequest)) {
             $setParam = $oaiRequest['set'];
+            $setParam = str_replace('_',' ',$setParam);
+            $setParam = str_replace('auml;','ä',$setParam);
+            $setParam = str_replace('ouml;','ö',$setParam);
+            $setParam = str_replace('uuml;','ü',$setParam);
             $setarray = explode(':',$setParam);
             if ($setarray[0] != "pub-type") {
                 $setDocIds = Opus_CollectionRole::getDocumentIdsInSet($setParam);
@@ -793,10 +797,10 @@ class Oai_IndexController extends Controller_Xml {
             $set = $collection->getOaiSetName();
             $spec = $this->_xml->createElement("Spec");
             $set_pub_attr = $this->_xml->createAttribute("Value");
-            $pos_dp = strpos($set,":");
-//            $setinfo = utf8_encode($set);
-//            $setinfo = substr($set,0,$pos_dp+1) . rawurlencode(substr($set,$pos_dp+1));
-//            $set_pub_value = $this->_xml->createTextNode($setinfo);
+            $set = str_replace(' ','_',$set);
+            $set = str_replace('ä','auml;',$set);
+            $set = str_replace('ü','uuml;',$set);
+            $set = str_replace('ö','ouml;',$set);
             $set_pub_value = $this->_xml->createTextNode($set);
             $set_pub_attr->appendChild($set_pub_value);
             $spec->appendChild($set_pub_attr);
