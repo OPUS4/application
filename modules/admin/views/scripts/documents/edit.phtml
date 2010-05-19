@@ -37,7 +37,12 @@
 
 <?php echo $this->form; ?>
 
-<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'filemanager', 'action' => 'index', 'docId' => $this->docId), null, true); ?>"><?php echo $this->translate('admin_filemanager_index'); ?></a><br/>
+<?if($this->showFilemanager === true):?> 
+    <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'filemanager', 'action' => 'index', 'docId' => $this->docId), null, true); ?>"><?php echo $this->translate('admin_filemanager_index'); ?></a>
+<?else:?>
+    <?=$this->translate('no_file_according_to_dtd')?>
+<?endif;?>
+<br/>
 <?if (0 < count($this->assignedCollections)):?>
     <?=$this->translate('admin_documents_collectionsassigned')?>
 <?else:?>

@@ -433,6 +433,15 @@
         <seg>Dokument einer organisatorischen Einheit zuweisen</seg>
       </tuv>
     </tu>
+
+    <tu tuid="no_file_according_to_dtd">
+      <tuv xml:lang="en">
+        <seg>This document type does not allow files</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Diesem Dokumenttyp können keine Dateien zugewiesen werden</seg>
+      </tuv>
+    </tu>
     
   </body>
   
