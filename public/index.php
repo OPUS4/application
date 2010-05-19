@@ -31,8 +31,11 @@
  * @version     $Id$
  */
 
+// Saving start time for profiling.
+$GLOBALS['start_mtime'] = microtime(true);
+
 // Configure include path.
-set_include_path('.' . PATH_SEPARATOR
+set_include_path('.'
             . PATH_SEPARATOR . dirname(dirname(__FILE__)) . '/library'
             . PATH_SEPARATOR . get_include_path());
 

@@ -79,7 +79,7 @@ $this->headLink()
         ?>
         <div class="debug dbprofiler">
             <hr/>
-            <h2>Profiling information</h2>
+            <h2>Profiling information (execution time <?= $GLOBALS['start_mtime'] - microtime(true) ?>)</h2>
             <b>Total number of queries: </b><?= $dbprofiler->getTotalNumQueries() ?><br />
             <b>Total query time (s): </b><?= $dbprofiler->getTotalElapsedSecs() ?><br />
             <b>Current memory consumption: </b><?= memory_get_usage(true) ?><br />
