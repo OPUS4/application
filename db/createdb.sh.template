@@ -37,7 +37,7 @@ ${mysql} < ${schema_file}
 
 #Import master data
 if [ -d ${master_dir} ] ; then
-    for i in `find ${master_dir} -name *.sql -type f | sort`; do
+    for i in `find ${master_dir} -name *.sql \( -type f -o -type l \) | sort`; do
         echo "Inserting file '${i}'"
         ${mysql} ${dbname} < "${i}"
     done
