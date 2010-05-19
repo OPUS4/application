@@ -204,24 +204,6 @@
       </tuv>
     </tu>
     
-    <tu tuid="admin_documents_collectionassign">
-      <tuv xml:lang="en">
-        <seg>Assign document to collection</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Dokument einer Sammlung zuweisen</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="admin_documents_organisationalunitassign">
-      <tuv xml:lang="en">
-        <seg>Assign document to organisational unit</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Dokument einer organisatorischen Einheit zuweisen</seg>
-      </tuv>
-    </tu>
-    
     <tu tuid="admin_documents_collectionsassigned">
       <tuv xml:lang="en">
         <seg>The document is assigned to the following collections:</seg>
