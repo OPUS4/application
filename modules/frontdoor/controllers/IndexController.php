@@ -91,6 +91,29 @@ class Frontdoor_IndexController extends Controller_Action {
         $statistics = Opus_Statistic_LocalCounter::getInstance();
         $statistics->countFrontdoor($docId);
     }
+    
+    /**
+     * maps an old ID from OPUS3 to the new one in OPUS4
+     * 
+     * @return void
+     */
+    public function mapopus3Action() {
+    	$docId = $this->getRequest()->getParam('docId');
+    	$newId = Opus_Document::getDocumentByIdentifier($docId, 'opus3-id');
+    	if (count($newId) === 0) {
+    	    // if the document with the given ID in OPUS3 does not exist, redirect to start page
+    	    $config = Zend_Registry::get('Zend_Config');
+
+		    $module = $config->startmodule;
+		    if (empty($module) === true) {
+			    $module = 'home';
+		    }
+		
+		    $this->_helper->getHelper('Redirector')->gotoSimple('index', 'index', $module);
+    	}
+    	$params = array('docId' => $newId[0]);
+    	$this->_helper->_redirector('index', 'index', 'frontdoor', $params);
+    }
 
     /**
      * Gateway function to Zend's translation facilities.
