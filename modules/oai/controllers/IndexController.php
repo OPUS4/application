@@ -660,6 +660,10 @@ class Oai_IndexController extends Controller_Xml {
                $setDocIds = Opus_CollectionRole::getDocumentIdsInSet($oaiset);
                 if (true === is_null($setDocIds) or true === empty($setDocIds)) {
                 } else {
+                   $oaiset = str_replace(' ','_',$oaiset);
+                   $oaiset = str_replace('ä','auml;',$oaiset);
+                   $oaiset = str_replace('ü','uuml;',$oaiset);
+                   $oaiset = str_replace('ö','ouml;',$oaiset);
                    $opus_doc = $this->_xml->createElement('Opus_Sets');
                    $type_attr = $this->_xml->createAttribute("Spec");
                    $type_value = $this->_xml->createTextNode($oaiset);
