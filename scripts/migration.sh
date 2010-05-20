@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# clean files, everything will be imported newly
+
+rm -rf ../workspace/files/*
+
 cd ../tests
 
 mv ../config/xmldoctypes ../config/xmldoctypes.opus
