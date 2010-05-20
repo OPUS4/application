@@ -36,7 +36,7 @@
 define ('x401_host', 'www.bibsonomy.org');
 define ('x401_port', 80);
 // Debugging Connotea interface: 0 = no logging, 1 = Logging in LOGFILE
-define ('DEBUG', 1);
+define ('DEBUG', 0);
 define ('LOGFILE', '/tmp/bibsonomy_debug.log');
 
 class Bibsonomy
