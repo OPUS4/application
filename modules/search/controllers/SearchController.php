@@ -173,7 +173,7 @@ class Search_SearchController extends Zend_Controller_Action
                 // iterate the paginator and get the attributes we want to show in the view
                 $runningIndex = 0;
                 $this->view->docId = array();
-                $this->view->title = array();
+                $this->view->doctitle = array();
                 $this->view->abstractValue = array();
                 $this->view->relevance = array();
                 $this->view->author = array();
@@ -524,7 +524,8 @@ class Search_SearchController extends Zend_Controller_Action
             // do a new query by URL-parameter
             $query = '';
             foreach ($data as $searchField => $searchValue) {
-                if (array_key_exists($searchField, $this->retrieveSearchFields()))
+            	// allow doctype to be searched additionally
+                if (array_key_exists($searchField, $this->retrieveSearchFields()) || $searchField === 'doctype')
                 {
                 	$query .= $searchField . ':' . $searchValue . ' ';
                 }
@@ -570,7 +571,7 @@ class Search_SearchController extends Zend_Controller_Action
                 // iterate the paginator and get the attributes we want to show in the view
                 $runningIndex = 0;
                 $this->view->docId = array();
-                $this->view->title = array();
+                $this->view->doctitle = array();
                 $this->view->abstractValue = array();
                 $this->view->relevance = array();
                 $this->view->author = array();
@@ -673,6 +674,7 @@ class Search_SearchController extends Zend_Controller_Action
     	// Titel, Person, Freitext, Schlagwort, Körperschaft, Fakultät, Institut, Abstract
     	// Dokumentart, Quelle, Jahr, verf. Klassifikationen
     	// Opus4: Personen differenzieren, Quelle raus (?)
+    	// doctype should not be in array, because its a filter option and should not be selectable as search field
     	$fields = array(
             'title' => 'searchfield_title',
             'author' => 'searchfield_author',

@@ -82,13 +82,26 @@ class Opus3SignatureImport
             if (count($sigfiles) > 0) {
                 $key = 0;
                 foreach ($sigfiles as $signatureFile) {
+                	$registered = false;
                 	$signature = implode("", file($signatureFile));
-            		$hash = new Opus_HashValues();
-    	        	$hash->setType('gpg-' . $key);
-    		        $hash->setValue($signature);
+                	// check if this signature has been registered
+                	$hashes = $file->getHashValue();
+                	foreach ($hashes as $hash) {
+                		if (substr($hash->getType(), 0, 4) === 'gpg-') {
+                			$key++;
+                		    if ($signature === $hash->getValue()) {
+                			    $registered = true;
+                		    }
+                		}
+                	}
+                	// if not, add the signature
+                	if ($registered === false) {
+            		    $hash = new Opus_HashValues();
+    	        	    $hash->setType('gpg-' . $key);
+    		            $hash->setValue($signature);
 
-    		        $file->addHashValue($hash);
-                	$key++;
+    		            $file->addHashValue($hash);
+                	}
                 	unset($signatureFile);
                 }
             }
