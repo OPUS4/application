@@ -32,6 +32,11 @@
 # Replace <template> with correct path e.g. /MyProject/public/
 RewriteEngine on
 RewriteBase <template>
+
+# Rewrite old fulltext path
+RewriteCond %{REQUEST_URI} ^/volltexte/(.*)$
+RewriteRule  ^volltexte/..../(.*)$           /frontdoor/index/mapopus3/docId/$1 [L,R]
+
 RewriteCond %{REQUEST_FILENAME} -s [OR] 
 RewriteCond %{REQUEST_FILENAME} -l [OR] 
 RewriteCond %{REQUEST_FILENAME} -d 
