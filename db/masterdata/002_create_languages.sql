@@ -1,7 +1,5 @@
 -- MySQL dump 10.11
 --
--- Host: localhost    Database: opus400
--- ------------------------------------------------------
 -- Server version	5.0.67-0ubuntu6
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;

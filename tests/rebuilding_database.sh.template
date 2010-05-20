@@ -29,12 +29,16 @@ if [ -n "${password}" ]; then
 fi
 
 #Delete database
-echo "Droping database: ${dbname}"
+echo "Dropping database: ${dbname}"
 echo "DROP DATABASE IF EXISTS ${dbname};" | ${mysql}
+
+#Creating database
+echo "Creating database: ${dbname}"
+echo "CREATE SCHEMA IF NOT EXISTS ${dbname} DEFAULT CHARACTER SET = utf8 DEFAULT COLLATE = utf8_general_ci;" | ${mysql}
 
 #Import database schema
 echo "Importing database schema file '${schema_file}'"
-${mysql} < ${schema_file}
+${mysql} ${dbname} < ${schema_file}
 
 #Import master data
 if [ -d ${master_dir} ] ; then

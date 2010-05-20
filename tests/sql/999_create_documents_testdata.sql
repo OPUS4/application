@@ -9,10 +9,6 @@
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
---
--- Datenbank: `opus400`
---
-
 DELETE FROM `collections_structure_9`;
 DELETE FROM `collections_contents_9`;
 DELETE FROM `collections_structure_10`;

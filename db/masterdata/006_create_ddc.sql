@@ -15,10 +15,6 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
 
---
--- Database: `opus400`
---
-
 -- --------------------------------------------------------
 
 --
@@ -2502,7 +2498,7 @@ UPDATE `collections_structure_2` SET `right` = `right` + 2 WHERE `right` > 1493;
 INSERT INTO `collections_structure_2` (`collections_id`, `left`, `right`, `visible`) VALUES
 (1026, 1494, 1495, 1);
 
-UPDATE opus400.collections_structure_2 s , opus400.collections_contents_2 c 
+UPDATE collections_structure_2 s , collections_contents_2 c 
 SET s.visible = 0 
 WHERE s.collections_id = c.id
 AND c.number > 499
@@ -2531,7 +2527,7 @@ AND c.number <> 940
 OR s.collections_id = c.id
 AND c.number = 680;
 
-UPDATE opus400.collections_structure_2 s , opus400.collections_contents_2 c 
+UPDATE collections_structure_2 s , collections_contents_2 c 
 SET s.visible = 1 
 WHERE s.collections_id = c.id
 AND s.left = s.right-1
