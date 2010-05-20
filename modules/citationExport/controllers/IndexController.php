@@ -127,7 +127,7 @@ class CitationExport_IndexController extends Zend_Controller_Action {
         try {
             $proc = new XSLTProcessor;
             
-            $url_prefix_array = split('/', $_SERVER["REQUEST_URI"]);
+            $url_prefix_array = explode('/', $_SERVER["REQUEST_URI"]);
             $url_prefix = 'http://';
             $url_prefix .= $_SERVER["SERVER_NAME"];
             if ($_SERVER["SERVER_PORT"] !== '80') $url_prefix .= ':' . $_SERVER["SERVER_PORT"];
