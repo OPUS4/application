@@ -103,7 +103,7 @@
         <field name="IdentifierUrn" mandatory="no" adminformweight="603" publishformweight="603" multiplicity="1" />
         <field name="IdentifierOpac" mandatory="no" adminformweight="604" publishformweight="0" multiplicity="1" />
         
-        <field name="Note" mandatory="no" adminformweight="701" publishformweight="701" multiplicity="1" />
+        <field name="Note" mandatory="no" adminformweight="701" publishformweight="701" multiplicity="10" />
     </page>
 
 </documenttype>
