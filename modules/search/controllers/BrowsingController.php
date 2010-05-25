@@ -222,8 +222,13 @@ class Search_BrowsingController extends Zend_Controller_Action
             );
             $this->view->url_frontdoor[$runningIndex] = $this->view->url($url_frontdoor, 'default', true);
 
-            $d = new Opus_Document( (int) $id);
-            $this->view->docId[$runningIndex] = $id;
+            try {
+                $d = new Opus_Document( (int) $id);
+                $this->view->docId[$runningIndex] = $id;
+            }
+            catch (Exception $e) {
+            	// do nothing
+            }
             try {
                 $this->view->docState = $d->getServerState();
             }
@@ -503,9 +508,13 @@ class Search_BrowsingController extends Zend_Controller_Action
                     'docId' => $id
                 );
                 $this->view->url_frontdoor[$runningIndex] = $this->view->url($url_frontdoor, 'default', true);
-
-                $d = new Opus_Document( (int) $id);
-                $this->view->docId[$runningIndex] = $id;
+                try {
+                    $d = new Opus_Document( (int) $id);
+                    $this->view->docId[$runningIndex] = $id;
+                }
+                catch (Exception $e) {
+                	// do nothing
+                }
                 try {
                     $this->view->docState = $d->getServerState();
                 }
