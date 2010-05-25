@@ -179,6 +179,7 @@ class Search_SearchController extends Zend_Controller_Action
                 $this->view->author = array();
                 $this->view->url_frontdoor = array();
                 $this->view->url_author = array();
+                $d = null;
                 foreach ($paginator as $hit) {
                 	$h = $hit->getSearchHit();
                 	$doc = $h->getDocument();
@@ -191,20 +192,17 @@ class Search_SearchController extends Zend_Controller_Action
                     );
                     $this->view->url_frontdoor[$runningIndex] = $this->view->url($url_frontdoor, 'default', true);
 
-                    $d = new Opus_Document( (int) $id);
-                    $this->view->docId[$runningIndex] = $id;
                     try {
+                        $d = new Opus_Document( (int) $id);
+                        $this->view->docId[$runningIndex] = $id;
                         $this->view->docState = $d->getServerState();
+                        $c = count($d->getPersonAuthor());
+                        $this->view->doctitle[$runningIndex] = $d->getTitleMain(0)->getValue();
                     }
                     catch (Exception $e) {
                         $this->view->docState = 'undefined';
-                    }
-
-                    try{
-                        $c = count($d->getPersonAuthor());
-                    }
-                    catch (Exception $e) {
-                    	$c = 0;
+                        $c = 0;
+                        $this->view->doctitle[$runningIndex] = $this->view->translate('document_no_title') . $id;
                     }
                     $this->view->author[$runningIndex] = array();
                     $this->view->url_author[$runningIndex] = array();
@@ -223,18 +221,14 @@ class Search_SearchController extends Zend_Controller_Action
                         $this->view->author[$runningIndex][$counter] = $name;
                     }
                     try {
-                        $this->view->doctitle[$runningIndex] = $d->getTitleMain(0)->getValue();
-                    }
-                    catch (Exception $e) {
-            	        $this->view->doctitle[$runningIndex] = $this->view->translate('document_no_title') . $id;
-                    }
-                    try {
                     	if (array_key_exists('noform', $data) === false) {
                     		$this->view->relevance[$runningIndex] = $hit->getRelevance();
                     		$this->view->abstractValue[$runningIndex] = Opus_Search_Adapter_Lucene_SearchHitAdapter::highlight($resultlist->query, $d->getTitleAbstract(0)->getValue());
                     	}
                     	else {
-                    		$this->view->abstractValue[$runningIndex] = $d->getTitleAbstract(0)->getValue();
+                    		if ($d !== null) {
+                    		    $this->view->abstractValue[$runningIndex] = $d->getTitleAbstract(0)->getValue();
+                    		}
                     	}
                     }
                     catch (Exception $e) {
@@ -577,6 +571,7 @@ class Search_SearchController extends Zend_Controller_Action
                 $this->view->author = array();
                 $this->view->url_frontdoor = array();
                 $this->view->url_author = array();
+                $d = null;
                 foreach ($paginator as $hit) {
                 	$h = $hit->getSearchHit();
                 	$doc = $h->getDocument();
@@ -589,20 +584,17 @@ class Search_SearchController extends Zend_Controller_Action
                     );
                     $this->view->url_frontdoor[$runningIndex] = $this->view->url($url_frontdoor, 'default', true);
 
-                    $d = new Opus_Document( (int) $id);
-                    $this->view->docId[$runningIndex] = $id;
                     try {
+                        $d = new Opus_Document( (int) $id);
+                        $this->view->docId[$runningIndex] = $id;
                         $this->view->docState = $d->getServerState();
+                        $c = count($d->getPersonAuthor());
+                        $this->view->doctitle[$runningIndex] = $d->getTitleMain(0)->getValue();
                     }
                     catch (Exception $e) {
                         $this->view->docState = 'undefined';
-                    }
-
-                    try{
-                        $c = count($d->getPersonAuthor());
-                    }
-                    catch (Exception $e) {
-                    	$c = 0;
+                        $c = 0;
+                        $this->view->doctitle[$runningIndex] = $this->view->translate('document_no_title') . $id;
                     }
                     $this->view->author[$runningIndex] = array();
                     $this->view->url_author[$runningIndex] = array();
@@ -621,18 +613,14 @@ class Search_SearchController extends Zend_Controller_Action
                         $this->view->author[$runningIndex][$counter] = $name;
                     }
                     try {
-                        $this->view->doctitle[$runningIndex] = $d->getTitleMain(0)->getValue();
-                    }
-                    catch (Exception $e) {
-            	        $this->view->doctitle[$runningIndex] = $this->view->translate('document_no_title') . $id;
-                    }
-                    try {
                     	if (array_key_exists('noform', $data) === false) {
                     		$this->view->relevance[$runningIndex] = $hit->getRelevance();
                     		$this->view->abstractValue[$runningIndex] = Opus_Search_Adapter_Lucene_SearchHitAdapter::highlight($queryObject->parsedQuery, $d->getTitleAbstract(0)->getValue());
                     	}
                     	else {
-                    		$this->view->abstractValue[$runningIndex] = $d->getTitleAbstract(0)->getValue();
+                    		if ($d !== null) {
+                    		    $this->view->abstractValue[$runningIndex] = $d->getTitleAbstract(0)->getValue();
+                    		}
                     	}
                     }
                     catch (Exception $e) {
