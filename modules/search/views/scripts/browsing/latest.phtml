@@ -36,7 +36,7 @@
 ?>
 <h1><?= $this->translate('latest_documents_title') ?></h1>
 <?php
-if (count($this->docId)) {
+if (count($this->docId) > 0 && $this->docId[0] != 0) {
     echo $this->paginationControl($this->paginator, NULL, 'searchList_ItemCount_pagination.phtml');
     echo $this->paginationControl($this->paginator, 'Sliding', 'searchList_pagination.phtml');
 
@@ -71,4 +71,7 @@ if (count($this->docId)) {
     </ol>
     <?= $this->paginationControl($this->paginator, 'Sliding', 'searchList_pagination.phtml') ?>
 <?php
+}
+else {
+	echo $this->translate('no_docs');
 }

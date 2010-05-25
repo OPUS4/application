@@ -90,7 +90,7 @@
     ><a href="<?= $this->url_sort_desc ?>"><?= $this->translate('sort_descending') ?></a></li>
 </ul>
 <?php
-if (count($this->docId)) {
+if (count($this->docId) > 0 && $this->docId[0] != 0) {
     echo $this->paginationControl($this->paginator, NULL, 'itemCount_pagination.phtml');
     echo $this->paginationControl($this->paginator, 'Sliding', 'results_pagination.phtml');
     echo $this->paginationControl($this->paginator, NULL, 'start_itemlist.phtml');
@@ -123,4 +123,7 @@ if (count($this->docId)) {
     </ol>
     <?= $this->paginationControl($this->paginator, 'Sliding', 'results_pagination.phtml') ?>
 <?php
+}
+else {
+	echo $this->translate('no_docs');
 }

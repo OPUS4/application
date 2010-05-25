@@ -483,6 +483,15 @@
         <seg>Nur Dokumente ohne Volltextdatei</seg>
       </tuv>
     </tu>
+
+    <tu tuid="no_docs">
+      <tuv xml:lang="en">
+        <seg>No documents found!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Keine Dokumente gefunden!</seg>
+      </tuv>
+    </tu>
   </body>
   
 </tmx>
