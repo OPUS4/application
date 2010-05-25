@@ -197,7 +197,7 @@ class Search_SearchController extends Zend_Controller_Action
                         $this->view->docState = $d->getServerState();
                         $c = count($d->getPersonAuthor());
                         $this->view->doctitle[$runningIndex] = $d->getTitleMain(0)->getValue();
-                        $this->view->abstractValue[$runningIndex] = $d->getTitleAbstract(0)->getValue();
+                        #$this->view->abstractValue[$runningIndex] = $d->getTitleAbstract(0)->getValue();
                     }
                     catch (Exception $e) {
                         $this->view->docState = 'undefined';
@@ -584,7 +584,7 @@ class Search_SearchController extends Zend_Controller_Action
                         $this->view->docState = $d->getServerState();
                         $c = count($d->getPersonAuthor());
                         $this->view->doctitle[$runningIndex] = $d->getTitleMain(0)->getValue();
-                        $this->view->abstractValue[$runningIndex] = $d->getTitleAbstract(0)->getValue();
+                        #$this->view->abstractValue[$runningIndex] = $d->getTitleAbstract(0)->getValue();
                     }
                     catch (Exception $e) {
                         $this->view->docState = 'undefined';
