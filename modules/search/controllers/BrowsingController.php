@@ -225,22 +225,14 @@ class Search_BrowsingController extends Zend_Controller_Action
             try {
                 $d = new Opus_Document( (int) $id);
                 $this->view->docId[$runningIndex] = $id;
-            }
-            catch (Exception $e) {
-            	// do nothing
-            }
-            try {
                 $this->view->docState = $d->getServerState();
-            }
-            catch (Exception $e) {
-                $this->view->docState = 'undefined';
-            }
-
-            try {
                 $c = count($d->getPersonAuthor());
+                $this->view->doctitle[$runningIndex] = $d->getTitleMain(0)->getValue();
             }
             catch (Exception $e) {
+            	$this->view->docState = 'undefined';
             	$c = 0;
+            	$this->view->doctitle[$runningIndex] = $this->view->translate('document_no_title') . $id;
             }
             $this->view->author[$runningIndex] = array();
             $this->view->url_author[$runningIndex] = array();
@@ -257,12 +249,6 @@ class Search_BrowsingController extends Zend_Controller_Action
                     true
                 );
                 $this->view->author[$runningIndex][$counter] = $name;
-            }
-            try {
-                $this->view->doctitle[$runningIndex] = $d->getTitleMain(0)->getValue();
-            }
-            catch (Exception $e) {
-            	$this->view->doctitle[$runningIndex] = $this->view->translate('document_no_title') . $id;
             }
             $runningIndex++;
         }
@@ -511,19 +497,17 @@ class Search_BrowsingController extends Zend_Controller_Action
                 try {
                     $d = new Opus_Document( (int) $id);
                     $this->view->docId[$runningIndex] = $id;
-                }
-                catch (Exception $e) {
-                	// do nothing
-                }
-                try {
                     $this->view->docState = $d->getServerState();
+                    $this->view->doctitle[$runningIndex] = $d->getTitleMain(0)->getValue();
+                    $this->view->abstractValue[$runningIndex] = $d->getTitleAbstract(0)->getValue();
+                    $c = count($d->getPersonAuthor());
                 }
                 catch (Exception $e) {
                     $this->view->docState = 'undefined';
+                    $this->view->author[$runningIndex] = null;
+                    $c = 0;
+            	    $this->view->doctitle[$runningIndex] = $this->view->translate('document_no_title') . $id;
                 }
-
-                try {
-                $c = count($d->getPersonAuthor());
                 $this->view->author[$runningIndex] = array();
                 $this->view->url_author[$runningIndex] = array();
                 for ($counter = 0; $counter < $c; $counter++) {
@@ -539,23 +523,6 @@ class Search_BrowsingController extends Zend_Controller_Action
                         true
                     );
                     $this->view->author[$runningIndex][$counter] = $name;
-                }
-                }
-                catch (Exception $e) {
-                  	//no author
-                    $this->view->author[$runningIndex] = null;
-                }
-                try {
-                    $this->view->doctitle[$runningIndex] = $d->getTitleMain(0)->getValue();
-                }
-                catch (Exception $e) {
-            	    $this->view->doctitle[$runningIndex] = $this->view->translate('document_no_title') . $id;
-                }
-                try {
-                    $this->view->abstractValue[$runningIndex] = $d->getTitleAbstract(0)->getValue();
-                }
-                catch (Exception $e) {
-                	// do nothing, there is just no abstract
                 }
                 $runningIndex++;
             }
