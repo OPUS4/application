@@ -226,6 +226,8 @@
             <xsl:call-template name="getBk"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
             
             <xsl:call-template name="getInstitute"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
+            
+            <xsl:call-template name="AddSubmitter"><xsl:with-param name="verification"><xsl:value-of select="field[@name='verification']" /></xsl:with-param></xsl:call-template>
                       
             <xsl:apply-templates select="field" />
         </xsl:element>
@@ -252,6 +254,17 @@
             <xsl:text>eng</xsl:text>
         </xsl:if>
     </xsl:template> 
+
+    <xsl:template name="AddSubmitter">
+        <xsl:param name="verification" required="no" />
+        <xsl:element name="PersonSubmitter">
+            <xsl:attribute name="FirstName">Opus3</xsl:attribute>
+            <xsl:attribute name="LastName">Importer</xsl:attribute>
+            <xsl:if test="string-length($verification)>0">
+                <xsl:attribute name="Email"><xsl:value-of select="$verification" /></xsl:attribute>
+            </xsl:if>
+        </xsl:element>
+    </xsl:template>
 
     <!-- temporary licence information -->
     <xsl:template match="table_data[@name='opus']/row/field[@name='lic']">
