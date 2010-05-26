@@ -131,7 +131,7 @@ class Opus3SignatureImport
                 else {
                 	// Ignore files in the main directory, OPUS3 stores in subdirectories only
                 	if ($from !== $this->_tmpPath) {
-                        if(strstr($path, $filename) !== false && (ereg("\.asc$", $path) !== false || ereg("\.sig$", $path) !== false))
+                        if(strstr($path, $filename) !== false && (ereg("\.asc$", $path) !== false))
                         {
                             $files[] = $path;
                         }
