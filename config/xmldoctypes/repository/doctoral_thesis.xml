@@ -57,7 +57,7 @@
 	<page caption="caption_02_doctoral_thesis">
 	
         <field name="TitleMain" mandatory="yes" adminformweight="201" publishformweight="101" multiplicity="4" />
-        <field name="TitleAdditional" mandatory="yes" adminformweight="202" publishformweight="102" multiplicity="4" />
+        <field name="TitleAdditional" mandatory="no" adminformweight="202" publishformweight="102" multiplicity="4" />
         <field name="TitleAbstract" mandatory="yes" adminformweight="203" publishformweight="103" multiplicity="4" />        
 	</page>
 	
