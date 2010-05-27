@@ -115,7 +115,7 @@
       </tuv>
     </tu>
     
-    <tu tuid="hint_Licence">
+    <tu tuid="hint_Opus_Model_Filter_Licence">
       <tuv xml:lang="en">
         <seg>Please select a license for your document. 
         By choosing a license you decide which legal 
