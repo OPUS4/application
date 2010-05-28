@@ -39,6 +39,8 @@ db.params.username =
 db.params.password = 
 db.params.dbname =
 
+debug = 0
+
 ;GENERAL SETTINGS
 theme = default
 startmodule = home

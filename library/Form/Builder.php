@@ -38,6 +38,8 @@
  */
 class Form_Builder {
 
+    private $DEBUG = false;
+
     /**
      * Returns a form for a model by integrating all necessary subforms.
      *
@@ -45,6 +47,9 @@ class Form_Builder {
      * @return Zend_Form_Form The form for the model.
      */
     public function build(Opus_Model_Abstract $model) {
+        $config = Zend_Registry::get('Zend_Config');
+		$this->DEBUG = (bool) $config->debug;
+        
         // Construct base form
         $form = new Zend_Form;
         $form->removeDecorator('DtDdWrapper');
@@ -338,8 +343,11 @@ class Form_Builder {
     private function __addDescription($key, $element) {
         $translationKey = 'hint_' . $key;
         $translate = Zend_Registry::get('Zend_Translate');
+        if ($this->DEBUG === true) $element->setDescription($translationKey);
         if ($translate->isTranslated($translationKey)) {
-            $element->setDescription($translate->translate($translationKey));
+        	$translationContent = $translate->translate($translationKey);
+        	if ($this->DEBUG === true) $translationContent = $translationKey . ': ' . $translationContent;
+            $element->setDescription($translationContent);
             $element->addDecorator('Description');
         }
     }
