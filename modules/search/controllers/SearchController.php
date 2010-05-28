@@ -208,6 +208,7 @@ class Search_SearchController extends Zend_Controller_Action
                         $this->view->docState = 'undefined';
                         $c = 0;
                         $this->view->doctitle[$runningIndex] = $this->view->translate('document_no_title') . $id;
+                        $this->view->abstractValue[$runningIndex] = '';
                     }
                     $this->view->author[$runningIndex] = array();
                     $this->view->url_author[$runningIndex] = array();
@@ -228,7 +229,7 @@ class Search_SearchController extends Zend_Controller_Action
                     try {
                     	if (array_key_exists('noform', $data) === false) {
                     		$this->view->relevance[$runningIndex] = $hit->getRelevance();
-                    		$this->view->abstractValue[$runningIndex] = Opus_Search_Adapter_Lucene_SearchHitAdapter::highlight($resultlist->query, $d->getTitleAbstract(0)->getValue());
+                    		$this->view->abstractValue[$runningIndex] = Opus_Search_Adapter_Lucene_SearchHitAdapter::highlight($resultlist->query, $this->view->abstractValue[$runningIndex]);
                     	}
                     }
                     catch (Exception $e) {
@@ -600,6 +601,7 @@ class Search_SearchController extends Zend_Controller_Action
                         $this->view->docState = 'undefined';
                         $c = 0;
                         $this->view->doctitle[$runningIndex] = $this->view->translate('document_no_title') . $id;
+                        $this->view->abstractValue[$runningIndex] = '';
                     }
                     $this->view->author[$runningIndex] = array();
                     $this->view->url_author[$runningIndex] = array();
@@ -620,7 +622,7 @@ class Search_SearchController extends Zend_Controller_Action
                     try {
                     	if (array_key_exists('noform', $data) === false) {
                     		$this->view->relevance[$runningIndex] = $hit->getRelevance();
-                    		$this->view->abstractValue[$runningIndex] = Opus_Search_Adapter_Lucene_SearchHitAdapter::highlight($queryObject->parsedQuery, $d->getTitleAbstract(0)->getValue());
+                    		$this->view->abstractValue[$runningIndex] = Opus_Search_Adapter_Lucene_SearchHitAdapter::highlight($queryObject->parsedQuery, $this->view->abstractValue[$runningIndex]);
                     	}
                     }
                     catch (Exception $e) {
