@@ -1733,7 +1733,24 @@
         <seg>Anzeigen</seg>
       </tuv>
     </tu>
-            
+
+    <tu tuid="help_formbuilder_field_link">
+      <tuv xml:lang="en">
+        <seg>Show Help for this field</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Hilfe zu diesem Feld anzeigen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="help_Opus_Model_Filter_Language">
+      <tuv xml:lang="en">
+        <seg>Select the language</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte die Hauptsprache des Werkes angeben</seg>
+      </tuv>
+    </tu>
   </body>
   
 </tmx>

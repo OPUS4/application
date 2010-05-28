@@ -35,6 +35,9 @@
 ?>
 <? $this->title = $this->translate('home_index_about_pagetitle') ?>
 <h1><?= $this->translate('home_index_help_title') ?></h1>
+<?php
+if (!$this->content) {
+?>
 <p class="col3head"><?= $this->translate('help_index_general') ?></p>
 <ul>
 <li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'about_content_whatsthis', 'position' => '#helpcontent'), null, true) ?>"><?= $this->translate('home_index_about_whatsthis') ?></a></li>
@@ -113,8 +116,10 @@
 -->
 
 <?php
-if ($this->content) {
+}
+else {
 ?>
+<div><h2><?=$this->translate($this->contenttitle)?></h2>
 <a name="helpcontent">&nbsp;</a><div><?php
 if (file_exists($this->getScriptPath('') . $this->translate($this->content)) === true) {
     readfile($this->getScriptPath('') . $this->translate($this->content));

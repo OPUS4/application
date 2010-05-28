@@ -139,6 +139,8 @@ class Home_IndexController extends Zend_Controller_Action {
 		$this->view->startmodule = $module;
 		
         if (array_key_exists('content', $this->_request->getParams()) === true) {
+            $contenttitle = str_replace('_content_', '_index_', $this->_request->getParam("content"));
+            $this->view->contenttitle = $contenttitle;
             $this->view->content = $this->_request->getParam("content");
         }
     }

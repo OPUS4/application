@@ -343,13 +343,25 @@ class Form_Builder {
     private function __addDescription($key, $element) {
         $translationKey = 'hint_' . $key;
         $translate = Zend_Registry::get('Zend_Translate');
-        if ($this->DEBUG === true) $element->setDescription($translationKey);
+        $translationContent = null;
+        if ($this->__addHelp($key) !== false) $translationContent .= '<a href="/home/index/help/content/help_' .  $key . '" target="_blank">' . $translate->translate('help_formbuilder_field_link') . '</a>';
+        if ($this->DEBUG === true) $translationContent .= $translationKey;
         if ($translate->isTranslated($translationKey)) {
-        	$translationContent = $translate->translate($translationKey);
-        	if ($this->DEBUG === true) $translationContent = $translationKey . ': ' . $translationContent;
-            $element->setDescription($translationContent);
-            $element->addDecorator('Description');
+        	if ($this->DEBUG === true) $translationContent .= ': ' . $translate->translate($translationKey);
+        	else $translationContent .= $translate->translate($translationKey);
+        	$element->addDecorator('Description');
+        }
+        if ($translationContent !== null) {
+        	$element->setDescription($translationContent);
         }
     }
 
+    private function __addHelp($key) {
+        $translationKey = 'help_' . $key;
+        $translate = Zend_Registry::get('Zend_Translate');
+        if ($translate->isTranslated($translationKey)) {
+        	return true;
+        }
+        return false;
+    }
 }
