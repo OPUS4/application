@@ -129,11 +129,16 @@ class Frontdoor_IndexController extends Controller_Action {
 
     static public function isMailPossible($docId) {
         $document = new Opus_Document($docId);
-        $authors = $document->getPersonAuthor();
         $result = false;
-        foreach ($authors as $author) {
-            $mail = $author->getEmail();
-            $result = $result || ($author->getAllowEmailContact() && !empty($mail));
+        try {
+            $authors = $document->getPersonAuthor();
+            foreach ($authors as $author) {
+                $mail = $author->getEmail();
+                $result = $result || ($author->getAllowEmailContact() && !empty($mail));
+            }
+        }
+        catch (Opus_Model_Exception $e) {
+        	// no author defined in DTD? Dont do anything, just return false...
         }
         return $result;
     }
