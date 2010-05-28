@@ -112,10 +112,12 @@
 
     <xsl:template match="SubjectSwd" mode="oai_dc">
         <xsl:element name="dc:subject">
-            <xsl:attribute name="xml:lang">
-                <xsl:value-of select="@Language" />
-            </xsl:attribute>
-            <xsl:value-of select="@Value" />
+            <xsl:if test="@language != ''">
+              <xsl:attribute name="xml:lang">
+                 <xsl:value-of select="@Language" />
+              </xsl:attribute>
+            </xsl:if>    
+         <xsl:value-of select="@Value" />
         </xsl:element>
     </xsl:template>
 
