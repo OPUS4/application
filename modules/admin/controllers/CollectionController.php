@@ -187,19 +187,25 @@ class Admin_CollectionController extends Controller_Action {
      */
     public function showAction() {
 
-        $theme =Zend_Registry::getInstance()->get('Zend_Config')->theme;
+        $theme = Zend_Registry::getInstance()->get('Zend_Config')->theme;
         if (true === empty($theme)) {
             $theme = 'default';
         }
         $this->view->theme = $theme;
         $this->view->layoutPath = $this->view->baseUrl() .'/layouts/'. $theme;
 
+        $roleId   = (int) $this->getRequest()->getParam('role');
+        $role     = new Opus_CollectionRole($roleId);
+        $roleName = $role->getDisplayName();
 
+        $nodeId   = $this->getRequest()->getParam('node');
+        if (isset($nodeId)) {
+            $node = new Opus_CollectionNode($nodeId);
+        }
+        else {
+            $node = $role->getRootNode();
+        }
 
-        $roleId = (int) $this->getRequest()->getParam('role');
-        $collection = new Opus_CollectionRole($roleId);
-        $roleName = $collection->getDisplayName();
-        $path = $this->getRequest()->getParam('path');
         $copy = $this->getRequest()->getParam('copy');
         if (true === isset($copy)) {
             $cpCollection = $collection;
@@ -212,63 +218,43 @@ class Admin_CollectionController extends Controller_Action {
         } else {
             $copyId = 0;
         }
-        $subcollections     = array();
+
         $breadcrumb         = array();
+        $children           = array();
+        $subcollections     = array();
         $severalAppearances = array();
-        $visibility = array();
-        $nameLength = 0;
-        if (true === isset($path)) {
-            $trail = explode('-', $path);
-            foreach($trail as $step) {
-                if (false === isset($position)) {
-                    $position = $step;
-                } else {
-                    $position .= '-' . $step;
-                }
-                $collection = $collection->getSubCollection($step);
-                $breadcrumb[$position] = $collection->getDisplayName();
-            }
-            foreach($collection->getSubCollection() as $i => $subcollection) {
-                $severalAppearances[$path . '-' . $i] = (true === $subcollection->getSeveralAppearances())?'several':'unique';
-                $visibility[$path . '-' . $i] = (true === $subcollection->getVisibility())?'visible':'hidden';
+        $visibility         = array();
+        $copypaste          = array();
+        $nameLength         = 0;
 
-                // Alle Parents der aktuellen Subcollection
-                // $parentIds = Opus_Collection_Information::getAllParents($roleId, (int) $subcollection->getId());
-                $parentIds = $subcollection->getParents();
+        if (isset($node)) {
 
-                $copypaste[$path . '-' . $i] = ((int) $copyId === (int) $subcollection->getId())?'forbidden':'allowed';
-                $this->view->copypaste = $copypaste;
-                $prn = implode(',', $parentIds);
-                $subcollections[$path . '-' . $i] = $subcollection->getDisplayName();
-                $nameLength = max($nameLength, strlen($subcollection->getDisplayName()));
-            }
-        } else {
-            foreach($collection->getSubCollection() as $i => $subcollection) {
-                $severalAppearances[$i] = (true === $subcollection->getSeveralAppearances())?'several':'unique';
-                $visibility[$i] = (true === $subcollection->getVisibility())?'visible':'hidden';
-                // Alle Parents der aktuellen Subcollection
-                // $parentIds = Opus_Collection_Information::getAllParents($roleId, (int) $subcollection->getId());//print_r($parentIds);
-                $parentIds = $subcollection->getParents();
+            $breadcrumb = array_reverse($node->getParents());
+            array_shift($breadcrumb);
 
-                $copypaste[$i] = ((int) $copyId === (int) $subcollection->getId())?'forbidden':'allowed';
-                $this->view->copypaste = $copypaste;
+            foreach($node->getChildren() as $child) {
+                $subcollection = $child->getCollection();
 
-                $prn = implode(',', $parentIds);
+                $subcollections[$child->getId()]     = $subcollection->getDisplayName();
+                $severalAppearances[$child->getId()] = (true === $subcollection->getSeveralAppearances())?'several':'unique';
+                $visibility[$child->getId()]         = (true === $subcollection->getVisibility())?'visible':'hidden';
+                $copypaste[$child->getId()]          = ((int) $copyId === (int) $subcollection->getId())?'forbidden':'allowed';
 
-                $subcollections[$i] = $subcollection->getDisplayName();
                 $nameLength = max($nameLength, strlen($subcollection->getDisplayName()));
             }
         }
+
         // Freakin' Zend appears to consider layout as file name, not direcory
         // name...
         //$this->_helper->layout->setLayout($collection->getTheme());
+        $this->view->subcollections     = $subcollections;
         $this->view->severalAppearances = $severalAppearances;
-        $this->view->visibility = $visibility;
-        $this->view->subcollections = $subcollections;
-        $this->view->role_id = $roleId;
-        $this->view->role_name = $roleName;
-        $this->view->path = $path;
-        $this->view->copy = $copy;
+        $this->view->visibility         = $visibility;
+        $this->view->copypaste          = $copypaste;
+
+        $this->view->role_id    = $roleId;
+        $this->view->role_name  = $roleName;
+        $this->view->copy       = $copy;
         $this->view->breadcrumb = $breadcrumb;
     }
 
