@@ -120,6 +120,8 @@ class Oai_IndexController extends Controller_Xml {
                     $errorCode = 'badResumptionToken';
                     break;
                 default:
+                    throw new Exception($e->getMessage());
+                    break;
             }
             $this->_proc->setParameter('', 'oai_error_code', $errorCode);
             $this->_proc->setParameter('', 'oai_error_message', $e->getMessage());
@@ -656,15 +658,15 @@ class Oai_IndexController extends Controller_Xml {
             $oaisets = $role->getOaiSetNames();
             foreach ($oaisets as $oaiset) {
                // proof wheather there is a document for this set
-               $setDocIds = array();
-               $setDocIds = Opus_CollectionRole::getDocumentIdsInSet($oaiset);
-                if (true === is_null($setDocIds) or true === empty($setDocIds)) {
-                } else {
-                   $oaiset = str_replace('/','_:',$oaiset);
+//               $setDocIds = array();
+//               $setDocIds = Opus_CollectionRole::getDocumentIdsInSet($oaiset);
+//                if (true === is_null($setDocIds) or true === empty($setDocIds)) {
+//                } else {
+                if ($role->existsDocumentIdsInSet($oaiset)) {
                    $oaiset = str_replace(' ','_',$oaiset);
-                   $oaiset = str_replace('ä','auml',$oaiset);
-                   $oaiset = str_replace('ü','uuml',$oaiset);
-                   $oaiset = str_replace('ö','ouml',$oaiset);
+                   $oaiset = str_replace('ä','auml;',$oaiset);
+                   $oaiset = str_replace('ü','uuml;',$oaiset);
+                   $oaiset = str_replace('ö','ouml;',$oaiset);
                    $opus_doc = $this->_xml->createElement('Opus_Sets');
                    $type_attr = $this->_xml->createAttribute("Spec");
                    $type_value = $this->_xml->createTextNode($oaiset);
@@ -747,11 +749,10 @@ class Oai_IndexController extends Controller_Xml {
         $setDocIds = array();
         if (true === array_key_exists('set',$oaiRequest)) {
             $setParam = $oaiRequest['set'];
-            $setParam = str_replace('_:','/',$setParam);
             $setParam = str_replace('_',' ',$setParam);
-            $setParam = str_replace('auml','ä',$setParam);
-            $setParam = str_replace('ouml','ö',$setParam);
-            $setParam = str_replace('uuml','ü',$setParam);
+            $setParam = str_replace('auml;','ä',$setParam);
+            $setParam = str_replace('ouml;','ö',$setParam);
+            $setParam = str_replace('uuml;','ü',$setParam);
             $setarray = explode(':',$setParam);
             if ($setarray[0] != "pub-type") {
                 $setDocIds = Opus_CollectionRole::getDocumentIdsInSet($setParam);
@@ -803,11 +804,10 @@ class Oai_IndexController extends Controller_Xml {
             $set = $collection->getOaiSetName();
             $spec = $this->_xml->createElement("Spec");
             $set_pub_attr = $this->_xml->createAttribute("Value");
-            $set = str_replace('/','_:',$set);
             $set = str_replace(' ','_',$set);
-            $set = str_replace('ä','auml',$set);
-            $set = str_replace('ü','uuml',$set);
-            $set = str_replace('ö','ouml',$set);
+            $set = str_replace('ä','auml;',$set);
+            $set = str_replace('ü','uuml;',$set);
+            $set = str_replace('ö','ouml;',$set);
             $set_pub_value = $this->_xml->createTextNode($set);
             $set_pub_attr->appendChild($set_pub_value);
             $spec->appendChild($set_pub_attr);
