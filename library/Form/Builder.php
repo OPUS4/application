@@ -269,7 +269,7 @@ class Form_Builder {
                         $widget->removeDecorator('HtmlTag');
                         $widget->setAttrib('class', $fieldName);
                         $this->__addDescription($modelName . '_' . $fieldName, $widget);
-                        $fieldForm->addElement($widget);
+                        $fieldForm->addElement($widget);                        
                     } else {
                         // If value is not a selection of models, embed subform
                         // FIXME: hardcoded check to deal with infinite
@@ -344,7 +344,11 @@ class Form_Builder {
         $translationKey = 'hint_' . $key;
         $translate = Zend_Registry::get('Zend_Translate');
         $translationContent = null;
-        if ($this->__addHelp($key) !== false) $translationContent .= '<a href="/home/index/help/content/help_' .  $key . '" target="_blank">' . $translate->translate('help_formbuilder_field_link') . '</a>';
+        if ($this->__addHelp($key) !== false) {
+        	$translationContent .= '<a href="/home/index/help/content/help_' .  $key . '" target="_blank">' . $translate->translate('help_formbuilder_field_link') . '</a>';
+        	$element->addDecorator('Description');
+        	$element->getDecorator('Description')->setEscape(false);
+        }
         if ($this->DEBUG === true) $translationContent .= $translationKey;
         if ($translate->isTranslated($translationKey)) {
         	if ($this->DEBUG === true) $translationContent .= ': ' . $translate->translate($translationKey);
