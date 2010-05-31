@@ -27,6 +27,7 @@
  *
  * @category    Application
  * @package     Module_Admin
+ * @author     	Thoralf Klein <thoralf.klein@zib.de>
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @author      Tobias Tappe <tobias.tappe@uni-bielefeld.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
@@ -86,11 +87,12 @@ class Admin_CollectionController extends Controller_Action {
             $collection = $node->getCollection();
         }
         else if (true === isset($role) && 1 == $role) {
-            $collection = new Opus_OrganisationalUnits;
+            $role = new Opus_OrganisationalUnits;
+            $collection = $role;
         }
         else if (true === isset($role)) {
             $role = new Opus_CollectionRole($role);
-            $collection = $role->getRootNode()->getCollection();
+            $collection = $role;
         }
         else {
             // FIXME: Proper error handling.
@@ -156,7 +158,8 @@ class Admin_CollectionController extends Controller_Action {
 
         if (false === is_null($this->_request->getParam('deleteall'))) {
             // Delete collection.
-            $object->delete();
+            $object->setVisibility(false);
+            $object->store();
         } else if (false === is_null($this->_request->getParam('undeleteall'))) {
             // Un-Delete collection.
             $object->setVisibility(true);
