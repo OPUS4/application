@@ -94,7 +94,7 @@ class Admin_CollectionController extends Controller_Action {
         }
         else {
             // FIXME: Proper error handling.
-            throw new Exception("Parameters missing.");
+            throw new Exception("edit: Parameters missing.");
         }
 
         $session = new Zend_Session_Namespace('collection');
@@ -143,43 +143,40 @@ class Admin_CollectionController extends Controller_Action {
      * @return void
      */
     public function manageAction() {
-        $role = $this->getRequest()->getUserParam('role');
-        $path = $this->getRequest()->getUserParam('path');
-        $collection = new Opus_CollectionRole($role);
+        $roleId = $this->getRequest()->getUserParam('role');
+        $nodeId = $this->getRequest()->getUserParam('node');
 
         // Store whether we're handling a collection or a collection role.
-        $handlingCollection = (true === isset($path));
-        if (true === $handlingCollection) {
-            $parentCollId = 1;
-            $trail = explode('-', $path);
-            foreach($trail as $step) {
-                $parentCollId = $collection->getId();
-                $collection = $collection->getSubCollection($step);
-            }
-            $path = implode('-', array_slice($trail, 0, sizeof($trail) - 1));
+        if (true === isset($nodeId)) {
+            $object = new Opus_CollectionNode($nodeId);
         }
-        if (false === is_null($this->_request->getParam('deleteall'))) {
-            // Delete collection.
-            $collection->delete();
-        } else if (false === is_null($this->_request->getParam('undeleteall'))) {
-            // Un-Delete collection.
-            $collection->undelete();
-        } else if (false === is_null($this->_request->getParam('delete'))) {
-            // Delete collection.
-            $collection->deletePosition($parentCollId);
-        } else if (false === is_null($this->_request->getParam('move_up'))) {
-            // Move collection up by one position.
-            $collection->setPosition($collection->getPosition() - 1);
-            $collection->store();
-        } else if (false === is_null($this->_request->getParam('move_down'))) {
-            // Move collection up by one position.
-            $collection->setPosition($collection->getPosition() + 1);
-            $collection->store();
+        else {
+            $object = new Opus_CollectionRole($roleId);
         }
 
-        if (true === $handlingCollection) {
+        if (false === is_null($this->_request->getParam('deleteall'))) {
+            // Delete collection.
+            $object->delete();
+        } else if (false === is_null($this->_request->getParam('undeleteall'))) {
+            // Un-Delete collection.
+            $object->setVisibility(true);
+            $object->store();
+        } else if (false === is_null($this->_request->getParam('delete'))) {
+            // Delete collection.
+            $object->deletePosition($parentCollId);
+        } else if (false === is_null($this->_request->getParam('move_up'))) {
+            // Move collection up by one position.
+            $object->setPosition($collection->getPosition() - 1);
+            $object->store();
+        } else if (false === is_null($this->_request->getParam('move_down'))) {
+            // Move collection up by one position.
+            $object->setPosition($collection->getPosition() + 1);
+            $object->store();
+        }
+
+        if (true === isset($nodeId)) {
             $this->_redirectTo('Collection successfully deleted.', 'show', null, null,
-                    array('role' => $role, 'path' => $path));
+                    array('role' => $roleId, 'node' => $nodeId));
         } elseif (false === is_null($this->_request->getParam('deleteall'))) {
             $this->_redirectTo('Role successfully deleted.', 'index');
         } else {
@@ -262,6 +259,7 @@ class Admin_CollectionController extends Controller_Action {
         $this->view->visibility         = $visibility;
         $this->view->copypaste          = $copypaste;
 
+        $this->view->node_id    = $node->getId();
         $this->view->role_id    = $role->getId();
         $this->view->role_name  = $role->getDisplayName();
         $this->view->copy       = $copy;
@@ -289,6 +287,7 @@ class Admin_CollectionController extends Controller_Action {
                 $this->view->form = $form;
             } else {
                 $params = $this->getRequest()->getUserParams();
+
                 if ($form->isValid($data) === true) {
                     // retrieve values from form and save them into model
                     $model = $session->collection;
@@ -296,6 +295,7 @@ class Admin_CollectionController extends Controller_Action {
                     if (true === $model->isNewRecord()) {
                         $below = $this->getRequest()->getParam('below');
                         $above = $this->getRequest()->getParam('above');
+                        $node  = $this->getRequest()->getParam('node');
 
                         // Handling a new collection in an existing collection.
                         if (true === isset($below)) {
@@ -303,18 +303,48 @@ class Admin_CollectionController extends Controller_Action {
                             // Below means: right sibling of node(id $below)
                             $node = new Opus_CollectionNode( $below );
                             $new_node = $node->addNextSibling();
+
+                            $new_node->addCollection($model);
+                            $node->store();
                         } else if (true === isset($above)) {
                             // Insert above specified position
                             // Above means: left sibling of node(id $below)
                             $node = new Opus_CollectionNode( $above );
                             $new_node = $node->addPrevSibling();
-                        } else {
-                            // FIXME: Proper error handling.
-                            throw new Exception("Parameters missing.");
+
+                            $new_node->addCollection($model);
+                            $node->store();
+                        } else if (true === isset($node)) {
+                            // Insert above specified position
+                            // Above means: left sibling of node(id $below)
+                            $node = new Opus_CollectionNode( $node );
+                            $new_node = $node->addLastChild();
+
+                            $new_node->addCollection($model);
+                            $node->store();
+                        }
+                        else if ($model instanceof Opus_CollectionRole) {
+                            if (true === is_null($model->getRootNode())) {
+                                $new_node = $model->addRootNode();
+                            }
+                            else {
+                                $new_node = $model->getRootNode();
+                            }
+                            if (true === is_null($new_node->getCollection())) {
+                                $new_node->addCollection();
+                            }
+                            $model->store();
+
+                            $session->collection = null;
+
+                            $this->_redirectTo('Collection role successfully created.', 'show', null, null,
+                                    array('role' => $model->getId()));
+
+                        }
+                        else {
+                            throw new Exception("create: Parameters missing.");
                         }
 
-                        $new_node->addCollection($model);
-                        $node->store();
                     } else {
                         $model->store();
                     }

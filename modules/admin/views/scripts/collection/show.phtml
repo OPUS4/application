@@ -49,9 +49,9 @@
 <p>
             <? if (isset($this->breadcrumb)) {
                 $node_ids = array_keys($this->breadcrumb);
-                $node_id = array_pop($node_ids);?>
+                $node_id = array_pop($this->node_ids);?>
         <a href="<?=$this->url(array('module'=>'admin', 'controller'=>'collection', 'action'=>'show',
-        'node'=>$node_id), null, true)?>"><img src = "<?= $this->layoutPath . '/img/abort_copy_collection.png';?>" align='middle' border = '0' title = '<?=$this->translate('admin_collections_collection_copy_abort')?>'></a>
+        'node'=>$this->node_id), null, true)?>"><img src = "<?= $this->layoutPath . '/img/abort_copy_collection.png';?>" align='middle' border = '0' title = '<?=$this->translate('admin_collections_collection_copy_abort')?>'></a>
             <? } else {?>
         <a href="<?=$this->url(array('module'=>'admin', 'controller'=>'collection', 'action'=>'show',
         'role'=>$this->role_id), null, true)?>"><?=$this->translate('admin_collections_collection_copy_abort')?></a>
@@ -61,12 +61,12 @@
 
 <!-- ul -->
 <table>
-    <? foreach($this->subcollections as $node_id => $name) : ?>
-    <tr class="<?=$this->visibility[$node_id]?>" <?=('hidden' === $this->visibility[$node_id])?'style="text-decoration:line-through"':''?>>
+    <? foreach($this->subcollections as $this->node_id => $name) : ?>
+    <tr class="<?=$this->visibility[$this->node_id]?>" <?=('hidden' === $this->visibility[$this->node_id])?'style="text-decoration:line-through"':''?>>
         <td width="400">
-        <? if ((true === isset($this->copy)) AND (('allowed' === $this->copypaste[$node_id])) OR (false === isset($this->copy))) { ?>
+        <? if ((true === isset($this->copy)) AND (('allowed' === $this->copypaste[$this->node_id])) OR (false === isset($this->copy))) { ?>
             <a href="<?=$this->url(array('module'=>'admin', 'controller'=>'collection', 'action'=>'show',
-                'node'=>$node_id, 'copy'=>$this->copy), null, true)?>"><?=$name?></a>
+                'node'=>$this->node_id, 'copy'=>$this->copy), null, true)?>"><?=$name?></a>
         <? } else {       ?>
             <?=$name?>
         <? }  ?>
@@ -75,53 +75,53 @@
         <? if (false === in_array('forbidden', $this->copypaste)) { ?>
 
             &nbsp;&nbsp;&nbsp; <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'create',
-                'below' => $node_id, 'copy'=>$this->copy), null, true)?>"><img src = "<?= $this->layoutPath . '/img/add_collection_below.png';?>" align='middle' border = '0' title = '<?=$this->translate('admin_collections_collection_paste_below')?>'></a>
+                'below' => $this->node_id, 'copy'=>$this->copy), null, true)?>"><img src = "<?= $this->layoutPath . '/img/add_collection_below.png';?>" align='middle' border = '0' title = '<?=$this->translate('admin_collections_collection_paste_below')?>'></a>
             &nbsp;&nbsp;&nbsp; <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'create',
-                'above' => $node_id, 'copy'=>$this->copy), null, true)?>"><img src = "<?= $this->layoutPath . '/img/add_collection_above.png';?>" align='middle' border = '0' title = '<?=$this->translate('admin_collections_collection_paste_above')?>'></a>
+                'above' => $this->node_id, 'copy'=>$this->copy), null, true)?>"><img src = "<?= $this->layoutPath . '/img/add_collection_above.png';?>" align='middle' border = '0' title = '<?=$this->translate('admin_collections_collection_paste_above')?>'></a>
         <? }  ?>
 
         <? } else { ?>
 
             &nbsp;&nbsp;&nbsp; <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'edit',
-                'role'=>$this->role_id, 'node'=>$node_id), null, true) ?>"><img src = "<?= $this->layoutPath . '/img/edit_collection.png';?>" align='middle' border = '0' title = '<?=$this->translate('admin_collections_collection_edit')?>'></a>
+                'role'=>$this->role_id, 'node'=>$this->node_id), null, true) ?>"><img src = "<?= $this->layoutPath . '/img/edit_collection.png';?>" align='middle' border = '0' title = '<?=$this->translate('admin_collections_collection_edit')?>'></a>
             &nbsp;&nbsp;&nbsp; <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'new',
-                'role'=>$this->role_id, 'below' => $node_id), null, true)?>"><img src = "<?= $this->layoutPath . '/img/add_collection_below.png';?>" align='middle' border = '0' title = '<?=$this->translate('admin_collections_collection_add_below')?>'></a>
+                'role'=>$this->role_id, 'below' => $this->node_id), null, true)?>"><img src = "<?= $this->layoutPath . '/img/add_collection_below.png';?>" align='middle' border = '0' title = '<?=$this->translate('admin_collections_collection_add_below')?>'></a>
             &nbsp;&nbsp;&nbsp; <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'new',
-                'role'=>$this->role_id, 'above' => $node_id), null, true)?>"><img src = "<?= $this->layoutPath . '/img/add_collection_above.png';?>" align='middle' border = '0' title = '<?=$this->translate('admin_collections_collection_add_above')?>'></a>
+                'role'=>$this->role_id, 'above' => $this->node_id), null, true)?>"><img src = "<?= $this->layoutPath . '/img/add_collection_above.png';?>" align='middle' border = '0' title = '<?=$this->translate('admin_collections_collection_add_above')?>'></a>
             <?
-        if ('several' === $this->severalAppearances[$node_id]) {
+        if ('several' === $this->severalAppearances[$this->node_id]) {
             ?>
             &nbsp;&nbsp;&nbsp; <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'manage',
-                'node' => $node_id, 'deleteall' => 'Delete'), null, true) ?>"><img src = "<?= $this->layoutPath . '/img/delete_collection_everywhere.png';?>" align='middle' border = '0' title = '<?=$this->translate('admin_collections_collection_delete_everywhere')?>'></a>
+                'node' => $this->node_id, 'deleteall' => 'Delete'), null, true) ?>"><img src = "<?= $this->layoutPath . '/img/delete_collection_everywhere.png';?>" align='middle' border = '0' title = '<?=$this->translate('admin_collections_collection_delete_everywhere')?>'></a>
             <?
-        } else if ('visible' === $this->visibility[$node_id]) {
+        } else if ('visible' === $this->visibility[$this->node_id]) {
             ?>
             &nbsp;&nbsp;&nbsp; <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'manage',
-                'node' => $node_id, 'deleteall' => 'Delete'), null, true) ?>"><img src = "<?= $this->layoutPath . '/img/delete_collection.png';?>" align='middle' border = '0' title = '<?=$this->translate('admin_collections_collection_delete')?>'></a>
+                'node' => $this->node_id, 'deleteall' => 'Delete'), null, true) ?>"><img src = "<?= $this->layoutPath . '/img/delete_collection.png';?>" align='middle' border = '0' title = '<?=$this->translate('admin_collections_collection_delete')?>'></a>
             <?
         }
-        if ('several' === $this->severalAppearances[$node_id]) {
+        if ('several' === $this->severalAppearances[$this->node_id]) {
             ?>
             &nbsp;&nbsp;&nbsp; <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'manage',
-                'node' => $node_id, 'undeleteall' => 'UnDelete'), null, true) ?>"><img src = "<?= $this->layoutPath . '/img/undelete_collection_everywhere.png';?>" align='middle' border = '0' title = '<?=$this->translate('admin_collections_collection_undelete_everywhere')?>'></a>
+                'node' => $this->node_id, 'undeleteall' => 'UnDelete'), null, true) ?>"><img src = "<?= $this->layoutPath . '/img/undelete_collection_everywhere.png';?>" align='middle' border = '0' title = '<?=$this->translate('admin_collections_collection_undelete_everywhere')?>'></a>
             <?
-        } else if ('hidden' === $this->visibility[$node_id]) {
+        } else if ('hidden' === $this->visibility[$this->node_id]) {
             ?>
             &nbsp;&nbsp;&nbsp; <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'manage',
-                'node' => $node_id, 'undeleteall' => 'UnDelete'), null, true) ?>"><img src = "<?= $this->layoutPath . '/img/undelete_collection.png';?>" align='middle' border = '0' title = '<?=$this->translate('admin_collections_collection_undelete')?>'></a>
+                'node' => $this->node_id, 'undeleteall' => 'UnDelete'), null, true) ?>"><img src = "<?= $this->layoutPath . '/img/undelete_collection.png';?>" align='middle' border = '0' title = '<?=$this->translate('admin_collections_collection_undelete')?>'></a>
             <?
         }
-        if ('several' === $this->severalAppearances[$node_id]) {
+        if ('several' === $this->severalAppearances[$this->node_id]) {
             ?>
             &nbsp;&nbsp;&nbsp; <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'manage',
-                'node' => $node_id, 'delete' => 'Delete'), null, true) ?>"><img src = "<?= $this->layoutPath . '/img/delete_collection.png';?>" align='middle' border = '0' title = '<?=$this->translate('admin_collections_collection_delete_here')?>'></a>
+                'node' => $this->node_id, 'delete' => 'Delete'), null, true) ?>"><img src = "<?= $this->layoutPath . '/img/delete_collection.png';?>" align='middle' border = '0' title = '<?=$this->translate('admin_collections_collection_delete_here')?>'></a>
             <?
         }
      ?>
      </td><td>
 
             &nbsp;&nbsp;&nbsp; <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'show',
-                'copy' => $node_id), null, true)?>"><img src = "<?= $this->layoutPath . '/img/copy_collection.png';?>" align='middle' border = '0' title = '<?=$this->translate('admin_collections_collection_copy')?>'></a>
+                'copy' => $this->node_id), null, true)?>"><img src = "<?= $this->layoutPath . '/img/copy_collection.png';?>" align='middle' border = '0' title = '<?=$this->translate('admin_collections_collection_copy')?>'></a>
         <? }
         ?>
 </td>
@@ -132,7 +132,7 @@
     <tr class="visible" >
         <td width="400">
     <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'new',
-                'node' => $node_id), null, true)?>">
+                'role'=>$this->role_id, 'node' => $this->node_id), null, true)?>">
                 <img src = "<?= $this->layoutPath . '/img/add_collection_below.png';?>" align='middle' border = '0'
                     title = '<?=$this->translate('admin_collections_collection_add_below')?>'></a>
 </td>
