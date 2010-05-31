@@ -1,0 +1,47 @@
+ALTER TABLE link_persons_documents DROP FOREIGN KEY fk_link_persons_publications_institutes_contents;
+
+DROP TABLE IF EXISTS link_documents_collections_1;
+DROP TABLE IF EXISTS collections_structure_1;
+DROP TABLE IF EXISTS collections_replacement_1;
+DROP TABLE IF EXISTS collections_contents_1;
+
+DROP TABLE IF EXISTS link_documents_collections_2;
+DROP TABLE IF EXISTS collections_structure_2;
+DROP TABLE IF EXISTS collections_replacement_2;
+DROP TABLE IF EXISTS collections_contents_2;
+
+DROP TABLE IF EXISTS link_documents_collections_3;
+DROP TABLE IF EXISTS collections_structure_3;
+DROP TABLE IF EXISTS collections_replacement_3;
+DROP TABLE IF EXISTS collections_contents_3;
+
+DROP TABLE IF EXISTS link_documents_collections_4;
+DROP TABLE IF EXISTS collections_structure_4;
+DROP TABLE IF EXISTS collections_replacement_4;
+DROP TABLE IF EXISTS collections_contents_4;
+
+DROP TABLE IF EXISTS link_documents_collections_5;
+DROP TABLE IF EXISTS collections_structure_5;
+DROP TABLE IF EXISTS collections_replacement_5;
+DROP TABLE IF EXISTS collections_contents_5;
+
+DROP TABLE IF EXISTS link_documents_collections_6;
+DROP TABLE IF EXISTS collections_structure_6;
+DROP TABLE IF EXISTS collections_replacement_6;
+DROP TABLE IF EXISTS collections_contents_6;
+
+DROP TABLE IF EXISTS link_documents_collections_7;
+DROP TABLE IF EXISTS collections_structure_7;
+DROP TABLE IF EXISTS collections_replacement_7;
+DROP TABLE IF EXISTS collections_contents_7;
+
+DROP TABLE IF EXISTS link_documents_collections_9;
+DROP TABLE IF EXISTS collections_structure_9;
+DROP TABLE IF EXISTS collections_replacement_9;
+DROP TABLE IF EXISTS collections_contents_9;
+
+DROP TABLE IF EXISTS link_documents_collections_10;
+DROP TABLE IF EXISTS collections_structure_10;
+DROP TABLE IF EXISTS collections_replacement_10;
+DROP TABLE IF EXISTS collections_contents_10;
+

@@ -1,0 +1,4 @@
+DROP TABLE IF EXISTS link_documents_collections_xxx;
+DROP TABLE IF EXISTS collections_structure_xxx;
+DROP TABLE IF EXISTS collections_replacement_xxx;
+DROP TABLE IF EXISTS collections_contents_xxx;

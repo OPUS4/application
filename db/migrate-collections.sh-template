@@ -1,0 +1,37 @@
+#! /bin/bash
+
+set -ex
+
+#
+# begin editable part
+#
+
+# user should has rights to drop and create a database (grant rights)
+user=
+password=
+host=localhost
+dbname=opus400
+
+# path to mysql binary
+mysql_bin=/usr/bin/mysql
+# path to different sql locations
+migrate_dir=migrate-collections/
+
+#
+# end editable part
+# 
+
+mysql="${mysql_bin} --default-character-set=utf8 --user=${user} --host=${host}"
+
+if [ -n "${password}" ]; then
+    mysql="${mysql} --password=${password}"
+fi
+    
+# migrate data
+if [ -d ${migrate_dir} ] ; then
+    for i in `find ${migrate_dir} -name "*.sql" \( -type f -o -type l \)| sort`; do
+        echo "Inserting file '${i}'"
+        ${mysql} ${dbname} < "${i}"
+    done
+fi
+
