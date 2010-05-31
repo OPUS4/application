@@ -60,11 +60,11 @@
 
         foreach ($subcollections as $coll)    {
             // Hidden collections shouldn't be browsable
-            if(true === $coll->getVisibility()) {
+            $node = $coll->getNode();
+            if(true === $node->getVisibility()) {
 
                 // $documentCount = Opus_Collection_Information::countAllCollectionDocuments($this->collection, $coll->getId());
 
-		$node = $coll->getNode();
                 $documentCountSubtree = $node->getNumSubtreeEntries();
                 $documentCountCurrent = $node->getNumEntries();
 

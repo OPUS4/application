@@ -144,6 +144,9 @@ class BrowsingList
 		$browsinglist = Opus_CollectionRole::getAll();
 		// remove invisible (deleted) CollectionRoles
 		// and ignore the ones which are not visible
+
+		// FIXME: Keine Listen bearbeiten, über die man iteriert!
+		// FIXME: Bug lässt sich mit vielen gelöschten CollectionRoles reproduzieren!
 		for ($counter = 0; isset($browsinglist[$counter]) === true; $counter++) {
 		    if ($browsinglist[$counter]->getVisible() === '0' or $browsinglist[$counter]->getVisibleBrowsingStart() === '0') {
 		        array_splice($browsinglist, ($counter-1), 1);
@@ -166,7 +169,7 @@ class BrowsingList
 		    $browsinglist = new Opus_CollectionRole((int) $role);
 		}
 		else {
-	       $browsinglist = new Opus_Collection((int) $node, (int) $role);
+	       $browsinglist = new Opus_Collection((int) $node);
 		}
 		return $browsinglist;
 	}
