@@ -53,14 +53,14 @@ class Oai_IndexController extends Controller_Xml {
      * @var array  Valid OAI parameters.
      */
     protected static $_validArguments = array(
-                'verb',
-                'identifier',
-                'metadataPrefix',
-                'from',
-                'until',
-                'set',
-                'resumptionToken',
-            );
+            'verb',
+            'identifier',
+            'metadataPrefix',
+            'from',
+            'until',
+            'set',
+            'resumptionToken',
+    );
 
     /**
      * Holds valid OAI queries, i.e. parameter combinations.
@@ -68,31 +68,31 @@ class Oai_IndexController extends Controller_Xml {
      * @var array  Valid OAI queries.
      */
     protected static $_validQueries = array(
-                'GetRecord' => array(
-                    array('required' => array('identifier', 'metadataPrefix'),
-                          'optional' => array()),
-                    ),
-                'ListRecords' => array(
-                    array('required' => array('metadataPrefix'),
-                          'optional' => array('from', 'until', 'set','resumptionToken')),
-                    ),
-                'ListIdentifiers' => array(
-                    array('required' => array('metadataPrefix'),
-                          'optional' => array('from', 'until', 'set','resumptionToken')),
-                    ),
-                'ListSets' => array(
-                    array('required' => array(),
-                          'optional' => array()),
-                    ),
-                'ListMetadataFormats' => array(
-                    array('required' => array(),
-                          'optional' => array()),
-                    ),
-                'Identify' => array(
-                    array('required' => array(),
-                          'optional' => array()),
-                    ),
-            );
+            'GetRecord' => array(
+                            array('required' => array('identifier', 'metadataPrefix'),
+                                            'optional' => array()),
+            ),
+            'ListRecords' => array(
+                            array('required' => array('metadataPrefix'),
+                                            'optional' => array('from', 'until', 'set','resumptionToken')),
+            ),
+            'ListIdentifiers' => array(
+                            array('required' => array('metadataPrefix'),
+                                            'optional' => array('from', 'until', 'set','resumptionToken')),
+            ),
+            'ListSets' => array(
+                            array('required' => array(),
+                                            'optional' => array()),
+            ),
+            'ListMetadataFormats' => array(
+                            array('required' => array(),
+                                            'optional' => array()),
+            ),
+            'Identify' => array(
+                            array('required' => array(),
+                                            'optional' => array()),
+            ),
+    );
 
     /**
      * Entry point for all OAI-PMH requests.
@@ -113,7 +113,7 @@ class Oai_IndexController extends Controller_Xml {
                 case self::NORECORDSMATCH:
                     $errorCode = 'noRecordsMatch';
                     break;
-                    case self::CANNOTDISSEMINATEFORMAT:
+                case self::CANNOTDISSEMINATEFORMAT:
                     $errorCode = 'cannotDisseminateFormat';
                     break;
                 case self::BADRESUMPTIONTOKEN:
@@ -150,7 +150,7 @@ class Oai_IndexController extends Controller_Xml {
         $config = $registry->get('Zend_Config');
         $contactId = '';
         if (true === isset($config->oai->contactid)) {
-           $contactId = $config->oai->contactid;
+            $contactId = $config->oai->contactid;
         }
         $this->_proc->setParameter('', 'contactId', $contactId);
 
@@ -176,7 +176,7 @@ class Oai_IndexController extends Controller_Xml {
     private function __validateRequest(array $oaiRequest) {
         // Evaluate if a proper verb was supplied.
         if (false === array_key_exists('verb', $oaiRequest) or
-            false === in_array($oaiRequest['verb'], array_keys(self::$_validQueries))) {
+                false === in_array($oaiRequest['verb'], array_keys(self::$_validQueries))) {
             // Invalid or unspecified Verb
             throw new Exception('The verb provided in the request is illegal.', self::BADVERB);
         }
@@ -193,7 +193,7 @@ class Oai_IndexController extends Controller_Xml {
         foreach (self::$_validQueries[$oaiRequest['verb']] as $validRequest) {
             $missingRequiredParameters = array_diff($validRequest['required'], $oaiParameters);
             $unknownParameters = array_diff($oaiParameters, array_merge($validRequest['required'],
-                        $validRequest['optional']));
+                    $validRequest['optional']));
             if (false === empty($missingRequiredParameters)) {
                 // Missing required parameter
                 throw new Exception('Missing parameter(s) ' . implode(', ', $missingRequiredParameters), self::BADARGUMENT);
@@ -222,7 +222,7 @@ class Oai_IndexController extends Controller_Xml {
                     try {
                         $this->__validateFromUntil($fromdate,$untildate);
                     }  catch (Exception $e) {
-                         throw $e;
+                        throw $e;
                     }
                 }
                 break;
@@ -241,7 +241,7 @@ class Oai_IndexController extends Controller_Xml {
         $availableMetadataPrefixes = array();
         $prefixPath = $this->view->getScriptPath('index') . '/prefixes';
         foreach (glob($prefixPath . '/*.xslt') as $prefixFile) {
-           $availableMetadataPrefixes[] = basename($prefixFile, '.xslt');
+            $availableMetadataPrefixes[] = basename($prefixFile, '.xslt');
         }
         if (false === in_array($oaiMetadataPrefix, $availableMetadataPrefixes)) {
             // MetadataPrefix not available.
@@ -259,10 +259,10 @@ class Oai_IndexController extends Controller_Xml {
      */
     private function __validateFrom($oaiFrom) {
         try {
-          $from = new Zend_Date($oaiFrom);
+            $from = new Zend_Date($oaiFrom);
         } catch(exception $e) {
-             throw new Exception('The date from is not a correct date',self::BADARGUMENT);
-          }
+            throw new Exception('The date from is not a correct date',self::BADARGUMENT);
+        }
     }
 
 
@@ -275,7 +275,7 @@ class Oai_IndexController extends Controller_Xml {
      */
     private function __validateSet($oaiSet) {
         if (false === strpos($oaiSet,':')) {
-             throw new Exception('The given set is not correct',self::BADARGUMENT);
+            throw new Exception('The given set is not correct',self::BADARGUMENT);
         }
     }
 
@@ -290,10 +290,10 @@ class Oai_IndexController extends Controller_Xml {
      */
     private function __validateUntil($oaiUntil) {
         try {
-          $until = new Zend_Date($oaiUntil);
+            $until = new Zend_Date($oaiUntil);
         } catch(exception $e) {
-             throw new Exception('The date until is not a correct date.',self::BADARGUMENT);
-          }
+            throw new Exception('The date until is not a correct date.',self::BADARGUMENT);
+        }
     }
 
     /**
@@ -344,13 +344,13 @@ class Oai_IndexController extends Controller_Xml {
         // document has to be published
         $serverState = $document->getServerState();
         if ($serverState != 'published' && $serverState != 'deleted') {
-               throw new Exception("The combination of the given values results in an empty list (document not published or deleted).", self::NORECORDSMATCH);
+            throw new Exception("The combination of the given values results in an empty list (document not published or deleted).", self::NORECORDSMATCH);
         }
         // for xMetaDiss it must be habilitation or doctoral-thesis
         if ($oaiRequest['metadataPrefix'] == 'xMetaDiss') {
             $is_hab_doc = $this->filterDocType($document);
             if ($is_hab_doc == 0) {
-               throw new Exception("The combination of the given values results in an empty list (xMetaDiss only for habilitation and doctoral_thesis).", self::NORECORDSMATCH);
+                throw new Exception("The combination of the given values results in an empty list (xMetaDiss only for habilitation and doctoral_thesis).", self::NORECORDSMATCH);
             }
         }
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
@@ -371,19 +371,19 @@ class Oai_IndexController extends Controller_Xml {
         $config = $registry->get('Zend_Config');
         $email = '';
         if (true === isset($config->mail->opus->address)) {
-             $email = $config->mail->opus->address;
+            $email = $config->mail->opus->address;
         }
         $repName = '';
         if (true === isset($config->oai->repository->name)) {
-             $repName = $config->oai->repository->name;
+            $repName = $config->oai->repository->name;
         }
         $repIdentifier = '';
         if (true === isset($config->oai->repository->identifier)) {
-             $repIdentifier = $config->oai->repository->identifier;
+            $repIdentifier = $config->oai->repository->identifier;
         }
         $sampleIdentifier = '';
         if (true === isset($config->oai->sample->identifier)) {
-             $sampleIdentifier = $config->oai->sample->identifier;
+            $sampleIdentifier = $config->oai->sample->identifier;
         }
         $earliestDate = Opus_Document::getEarliestPublicationDate();
         // set parameters for oai-pmh.xslt
@@ -406,7 +406,7 @@ class Oai_IndexController extends Controller_Xml {
         $config = $registry->get('Zend_Config');
         $repIdentifier = '';
         if (true === isset($config->oai->repository->identifier)) {
-             $repIdentifier = $config->oai->repository->identifier;
+            $repIdentifier = $config->oai->repository->identifier;
         }
         $max_identifier = 50;
         if (true === isset($config->oai->max->listidentifiers)) {
@@ -448,48 +448,48 @@ class Oai_IndexController extends Controller_Xml {
                 }
                 // handling all Ids of the resumption file
                 foreach ($reldocIds as $docId) {
-                  $id_max++;
-                  // create xml-document
-                  if ($id_max <= $max_identifier) {
-                     $document = new Opus_Document($docId);
-                     $this->xmlCreationIdentifiers($document);
-                  }
-                  // store the further Ids
-                  else {
-                      $restIds[$ri] = $docId;
-                      $ri++;
-                  }
+                    $id_max++;
+                    // create xml-document
+                    if ($id_max <= $max_identifier) {
+                        $document = new Opus_Document($docId);
+                        $this->xmlCreationIdentifiers($document);
+                    }
+                    // store the further Ids
+                    else {
+                        $restIds[$ri] = $docId;
+                        $ri++;
+                    }
                 }
             } else {
-                 throw new Exception("file could not be read.", self::NORECORDSMATCH);
+                throw new Exception("file could not be read.", self::NORECORDSMATCH);
             }
-        // TODO cronjob for removing files and not here, because token has to be repeatable
-        unlink($fn);
+            // TODO cronjob for removing files and not here, because token has to be repeatable
+            unlink($fn);
 
-        // no resumptionToken is given
+            // no resumptionToken is given
         } else {
             $docIds = array();
             // get docIds for parameter-restrictions
             $docIds = $this->getDocumentIdsByOaiRequest($oaiRequest);
             // handling all documents
             foreach ($docIds as $docId) {
-                    $id_max++;
-                    // create xml-document
-                    if ($id_max <= $max_identifier) {
-                        $document = new Opus_Document($docId);
-                        $this->xmlCreationIdentifiers($document,$docId);
-                   }
-                   // store the further Ids
-                   else {
-                      $restIds[$ri] = $docId;
-                      $ri++;
-                   }
+                $id_max++;
+                // create xml-document
+                if ($id_max <= $max_identifier) {
+                    $document = new Opus_Document($docId);
+                    $this->xmlCreationIdentifiers($document,$docId);
                 }
+                // store the further Ids
+                else {
+                    $restIds[$ri] = $docId;
+                    $ri++;
+                }
+            }
         }
         // no records returned
         if ($id_max == 0) {
             throw new Exception("The combination of the given values results in an empty list.", self::NORECORDSMATCH);
-           }
+        }
 
         // store the further Ids in a resumption-file
         if (count($restIds) > 0) {
@@ -524,17 +524,20 @@ class Oai_IndexController extends Controller_Xml {
         $config = $registry->get('Zend_Config');
         $repIdentifier = '';
         if (true === isset($config->oai->repository->identifier)) {
-             $repIdentifier = $config->oai->repository->identifier;
+            $repIdentifier = $config->oai->repository->identifier;
         }
         $max_records = 50;
         if (true === isset($config->oai->max->listrecords)) {
             $max_records = $config->oai->max->listrecords;
         }
+
+        // FIXME: Error handling is broken - fails if temp-path is empty!
         if (true === isset($config->path->workspace->temp)) {
             $tempPath = $config->path->workspace->temp;
         } else {
             throw new Exception("no path to resumption files set in config-file",self::BADRESUMPTIONTOKEN);
         }
+
         $this->_proc->setParameter('', 'repIdentifier', $repIdentifier);
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
         // do some initialisation
@@ -548,6 +551,7 @@ class Oai_IndexController extends Controller_Xml {
         $ri = 0;
         // parameter resumptionToken is given
         if (!empty($oaiRequest['resumptionToken'])) {
+
             // read the resumption file
             $resParam = $oaiRequest['resumptionToken'];
             $fn = $tempPath.'/resumption/rs_'.$resParam.'.txt';
@@ -566,46 +570,50 @@ class Oai_IndexController extends Controller_Xml {
                 }
                 // handling all Ids of the resumption file
                 foreach ($reldocIds as $docId) {
-                  $id_max++;
-                  if ($id_max <= $max_records) {
-                      $document = new Opus_Document($docId);
-                      $this->xmlCreationRecords($document);
-                  }
-                  else {
-                      $restIds[$ri] = $docId;
-                      $ri++;
-                  }
+                    $id_max++;
+                    if ($id_max <= $max_records) {
+                        $document = new Opus_Document($docId);
+                        $this->xmlCreationRecords($document);
+                    }
+                    else {
+                        $restIds[$ri] = $docId;
+                        $ri++;
+                    }
                 }
             } else {
-                 throw new Exception("file could not be read.", self::NORECORDSMATCH);
+                throw new Exception("file could not be read.", self::NORECORDSMATCH);
             }
-        // TODO cronjob for removing files and not here, because token has to be repeatable
-        unlink($fn);
+            // TODO cronjob for removing files and not here, because token has to be repeatable
+            unlink($fn);
 
-        // no resumptionToken is given
+            // no resumptionToken is given
         } else {
             // get docIds for parameter-restrictions
             $docIds = $this->getDocumentIdsByOaiRequest($oaiRequest);
+
             // handling all relevant docIds
             foreach ($docIds as $docId) {
-               $id_max++;
-               if ($id_max <= $max_records) {
-                   $document = new Opus_Document($docId);
-                   $this->xmlCreationRecords($document);
-               } else {
+                $id_max++;
+                if ($id_max <= $max_records) {
+                    $document = new Opus_Document($docId);
+                    $this->xmlCreationRecords($document);
+                } else {
                     $restIds[$ri] = $docId;
                     $ri++;
-               }
-          }
+                }
+            }
         }
+
         // no records returned
         if ($id_max == 0) {
             throw new Exception("The combination of the given values results in an empty list.", self::NORECORDSMATCH);
-           }
+        }
 
         // store the further Ids in a resumption-file
         if (count($restIds) > 0) {
             if ($totalIds == 0) $totalIds = $max_records + count($restIds);
+
+            // FIXME: Error handling is broken - fails if temp-path is empty!
             $res = $this->writeResumptionFile($start,$totalIds,$tempPath,$restIds);
         }
 
@@ -626,60 +634,60 @@ class Oai_IndexController extends Controller_Xml {
         $config = $registry->get('Zend_Config');
         $repIdentifier = '';
         if (true === isset($config->oai->repository->identifier)) {
-             $repIdentifier = $config->oai->repository->identifier;
+            $repIdentifier = $config->oai->repository->identifier;
         }
         $this->_proc->setParameter('', 'repIdentifier', $repIdentifier);
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
         // list sets pub-type
         $types = Opus_Document_Type::getAvailableTypeNames();
         foreach ($types as $type) {
-        // proof wheather there is a document for this type
+            // proof wheather there is a document for this type
             $docIds = array();
             $countIds = 0;
             $docIds = Opus_Document::getIdsForDocType($type);
             $countIds = count($docIds);
             if ($countIds > 0) {
-               $opus_doc = $this->_xml->createElement('Opus_Sets');
-               $type_attr = $this->_xml->createAttribute("Spec");
-               $type_value = $this->_xml->createTextNode('pub-type:' . $type);
-               $type_attr->appendChild($type_value);
-               $opus_doc->appendChild($type_attr);
-               $name_attr = $this->_xml->createAttribute("Name");
-               $name_value = $this->_xml->createTextNode($type);
-               $name_attr->appendChild($name_value);
-               $opus_doc->appendChild($name_attr);
-               $this->_xml->documentElement->appendChild($opus_doc);
+                $opus_doc = $this->_xml->createElement('Opus_Sets');
+                $type_attr = $this->_xml->createAttribute("Spec");
+                $type_value = $this->_xml->createTextNode('pub-type:' . $type);
+                $type_attr->appendChild($type_value);
+                $opus_doc->appendChild($type_attr);
+                $name_attr = $this->_xml->createAttribute("Name");
+                $name_value = $this->_xml->createTextNode($type);
+                $name_attr->appendChild($name_value);
+                $opus_doc->appendChild($name_attr);
+                $this->_xml->documentElement->appendChild($opus_doc);
             }
         }
         // list sets for all collections for oai
         $roles = Opus_CollectionRole::getAll(true);
         foreach ($roles as $role) {
-          if ($role->getVisibleOai() == '1') {
-            $oaisets = $role->getOaiSetNames();
-            foreach ($oaisets as $oaiset) {
-               // proof wheather there is a document for this set
+            if ($role->getVisibleOai() == '1') {
+                $oaisets = $role->getOaiSetNames();
+                foreach ($oaisets as $oaiset) {
+                    // proof wheather there is a document for this set
 //               $setDocIds = array();
 //               $setDocIds = Opus_CollectionRole::getDocumentIdsInSet($oaiset);
 //                if (true === is_null($setDocIds) or true === empty($setDocIds)) {
 //                } else {
-                if ($role->existsDocumentIdsInSet($oaiset)) {
-                   $oaiset = str_replace(' ','_',$oaiset);
-                   $oaiset = str_replace('ä','auml;',$oaiset);
-                   $oaiset = str_replace('ü','uuml;',$oaiset);
-                   $oaiset = str_replace('ö','ouml;',$oaiset);
-                   $opus_doc = $this->_xml->createElement('Opus_Sets');
-                   $type_attr = $this->_xml->createAttribute("Spec");
-                   $type_value = $this->_xml->createTextNode($oaiset);
-                   $type_attr->appendChild($type_value);
-                   $opus_doc->appendChild($type_attr);
-                   $name_attr = $this->_xml->createAttribute("Name");
-                   $name_value = $this->_xml->createTextNode($oaiset);
-                   $name_attr->appendChild($name_value);
-                   $opus_doc->appendChild($name_attr);
-                   $this->_xml->documentElement->appendChild($opus_doc);
-                   }
+                    if ($role->existsDocumentIdsInSet($oaiset)) {
+                        $oaiset = str_replace(' ','_',$oaiset);
+                        $oaiset = str_replace('ä','auml;',$oaiset);
+                        $oaiset = str_replace('ü','uuml;',$oaiset);
+                        $oaiset = str_replace('ö','ouml;',$oaiset);
+                        $opus_doc = $this->_xml->createElement('Opus_Sets');
+                        $type_attr = $this->_xml->createAttribute("Spec");
+                        $type_value = $this->_xml->createTextNode($oaiset);
+                        $type_attr->appendChild($type_value);
+                        $opus_doc->appendChild($type_attr);
+                        $name_attr = $this->_xml->createAttribute("Name");
+                        $name_value = $this->_xml->createTextNode($oaiset);
+                        $name_attr->appendChild($name_value);
+                        $opus_doc->appendChild($name_attr);
+                        $this->_xml->documentElement->appendChild($opus_doc);
+                    }
+                }
             }
-          }
         }
     }
 
@@ -691,12 +699,12 @@ class Oai_IndexController extends Controller_Xml {
      * @return int $result, 1 oder 0, decides, wheather document is in output or not
      */
     private function filterDocType($document) {
-       $result = 0;
-       $type = $document->getType();
-       if ($type == 'habilitation' || $type == 'doctoral_thesis') {
-           $result = 1;
-       }
-       return $result;
+        $result = 0;
+        $type = $document->getType();
+        if ($type == 'habilitation' || $type == 'doctoral_thesis') {
+            $result = 1;
+        }
+        return $result;
     }
 
 
@@ -757,7 +765,7 @@ class Oai_IndexController extends Controller_Xml {
             if ($setarray[0] != "pub-type") {
                 $setDocIds = Opus_CollectionRole::getDocumentIdsInSet($setParam);
                 if (true === is_null($setDocIds) or true === empty($setDocIds)) {
-                   throw new Exception("The combination of the given values results in an empty list.", self::NORECORDSMATCH);
+                    throw new Exception("The combination of the given values results in an empty list.", self::NORECORDSMATCH);
                 }
             }
         }
@@ -768,10 +776,10 @@ class Oai_IndexController extends Controller_Xml {
         } else {
             foreach ($restDocIds as $restDocId) {
                 foreach ($setDocIds as $setDocId) {
-                   if ($restDocId == $setDocId) {
-                      $docIds[$di] = $restDocId;
-                      unset($setDocIds[$setDocId]);
-                      $di = $di + 1;
+                    if ($restDocId == $setDocId) {
+                        $docIds[$di] = $restDocId;
+                        unset($setDocIds[$setDocId]);
+                        $di = $di + 1;
                     }
                 }
             }
@@ -789,18 +797,18 @@ class Oai_IndexController extends Controller_Xml {
      * @param  xml-node      $node, xml-node where will be appended
      */
     private function setInfoXml($document,$node) {
-       // get affiliation to set pub-type
-       $type = $document->getType();
-       $spec = $this->_xml->createElement("Spec");
-       $set_pub_attr = $this->_xml->createAttribute("Value");
-       $set_pub_value = $this->_xml->createTextNode('pub-type:' . $type);
-       $set_pub_attr->appendChild($set_pub_value);
-       $spec->appendChild($set_pub_attr);
-       $node->appendChild($spec);
-       $this->_xml->documentElement->appendChild($node);
-       // get other set-affiliations
-       $collections = $document->getCollection();
-       foreach($collections as $collection) {
+        // get affiliation to set pub-type
+        $type = $document->getType();
+        $spec = $this->_xml->createElement("Spec");
+        $set_pub_attr = $this->_xml->createAttribute("Value");
+        $set_pub_value = $this->_xml->createTextNode('pub-type:' . $type);
+        $set_pub_attr->appendChild($set_pub_value);
+        $spec->appendChild($set_pub_attr);
+        $node->appendChild($spec);
+        $this->_xml->documentElement->appendChild($node);
+        // get other set-affiliations
+        $collections = $document->getCollection();
+        foreach($collections as $collection) {
             $set = $collection->getOaiSetName();
             $spec = $this->_xml->createElement("Spec");
             $set_pub_attr = $this->_xml->createAttribute("Value");
@@ -813,7 +821,7 @@ class Oai_IndexController extends Controller_Xml {
             $spec->appendChild($set_pub_attr);
             $node->appendChild($spec);
             $this->_xml->documentElement->appendChild($node);
-       }
+        }
     }
 
 
@@ -825,14 +833,14 @@ class Oai_IndexController extends Controller_Xml {
      * @param  int     $totalIds value of the total Ids
      */
     private function setParamResumption($res,$cursor,$totalIds) {
-       $today = new Zend_Date();
-       $today->add(1,Zend_Date::DAY);
-       $tomorrow = $today->get('yyyy-MM-ddThh:mm:ss');
-       $tomorrow = $tomorrow . 'Z';
-       $this->_proc->setParameter('', 'dateDelete', $tomorrow);
-       $this->_proc->setParameter('', 'res', $res);
-       $this->_proc->setParameter('', 'cursor', $cursor);
-       $this->_proc->setParameter('', 'totalIds', $totalIds);
+        $today = new Zend_Date();
+        $today->add(1,Zend_Date::DAY);
+        $tomorrow = $today->get('yyyy-MM-ddThh:mm:ss');
+        $tomorrow = $tomorrow . 'Z';
+        $this->_proc->setParameter('', 'dateDelete', $tomorrow);
+        $this->_proc->setParameter('', 'res', $res);
+        $this->_proc->setParameter('', 'cursor', $cursor);
+        $this->_proc->setParameter('', 'totalIds', $totalIds);
     }
 
 
@@ -846,27 +854,27 @@ class Oai_IndexController extends Controller_Xml {
      * @return string  $res, value for resumptionToken
      */
     private function writeResumptionFile($start,$totalIds,$tempPath,$restIds) {
-            $fc = 0;
-            if (false === is_dir($tempPath. '/resumption')) {
-                mkdir($tempPath. '/resumption',0777);
+        $fc = 0;
+        if (false === is_dir($tempPath. '/resumption')) {
+            mkdir($tempPath. '/resumption',0777);
+        }
+        $fn = $tempPath.'/resumption/rs_'.(string) time();
+        while (file_exists($file=sprintf('%s%02d.txt',$fn,$fc++)));
+        if ($fp = fopen($file,'w+')) {
+            fwrite($fp,$start.' '.$totalIds.' ');
+            foreach ($restIds as $restId) {
+                if (fwrite($fp,$restId.' ')) {
+                } else {
+                    throw new Exception("file could not be written.", self::NORECORDSMATCH);
+                }
             }
-            $fn = $tempPath.'/resumption/rs_'.(string) time();
-            while (file_exists($file=sprintf('%s%02d.txt',$fn,$fc++)));
-            if ($fp = fopen($file,'w+')) {
-                fwrite($fp,$start.' '.$totalIds.' ');
-                foreach ($restIds as $restId) {
-                    if (fwrite($fp,$restId.' ')) {
-                       } else {
-                           throw new Exception("file could not be written.", self::NORECORDSMATCH);
-                         }
-                    }
-                fclose($fp);
-            } else {
+            fclose($fp);
+        } else {
             throw new Exception("file could not be opened.", self::NORECORDSMATCH);
-            }
-            $start_res = strpos($file,'rs_');
-            $res = substr($file,$start_res+3,12);
-            return $res;
+        }
+        $start_res = strpos($file,'rs_');
+        $res = substr($file,$start_res+3,12);
+        return $res;
     }
 
     /**
@@ -875,34 +883,34 @@ class Oai_IndexController extends Controller_Xml {
      * @param  Opus_Document $document
      */
     private function xmlCreationIdentifiers($document,$docId) {
-       $date_mod = $document->getServerDateModified();
-       $date_pub = $document->getServerDatePublished();
-       $server_state = $document->getServerState();
-       $opus_doc = $this->_xml->createElement('Opus_Document');
-       $doc_id_attr = $this->_xml->createAttribute("Id");
-       $doc_id_value = $this->_xml->createTextNode($docId);
-       $doc_id_attr->appendChild($doc_id_value);
-       $opus_doc->appendChild($doc_id_attr);
-       // add attributes ServerDateModified / ServerDatePublished
-       if (!empty($date_mod)) {
+        $date_mod = $document->getServerDateModified();
+        $date_pub = $document->getServerDatePublished();
+        $server_state = $document->getServerState();
+        $opus_doc = $this->_xml->createElement('Opus_Document');
+        $doc_id_attr = $this->_xml->createAttribute("Id");
+        $doc_id_value = $this->_xml->createTextNode($docId);
+        $doc_id_attr->appendChild($doc_id_value);
+        $opus_doc->appendChild($doc_id_attr);
+        // add attributes ServerDateModified / ServerDatePublished
+        if (!empty($date_mod)) {
             $date_mod_attr = $this->_xml->createAttribute("ServerDateModified");
             $date_mod_value = $this->_xml->createTextNode($date_mod);
             $date_mod_attr->appendChild($date_mod_value);
             $opus_doc->appendChild($date_mod_attr);
-       }
-       $date_pub_attr = $this->_xml->createAttribute("ServerDatePublished");
-       $date_pub_value = $this->_xml->createTextNode($date_pub);
-       $date_pub_attr->appendChild($date_pub_value);
-       $opus_doc->appendChild($date_pub_attr);
+        }
+        $date_pub_attr = $this->_xml->createAttribute("ServerDatePublished");
+        $date_pub_value = $this->_xml->createTextNode($date_pub);
+        $date_pub_attr->appendChild($date_pub_value);
+        $opus_doc->appendChild($date_pub_attr);
 
-       // add attribute ServerState (necessary for deleted records)
-       $server_state_attr = $this->_xml->createAttribute("ServerState");
-       $server_state_value = $this->_xml->createTextNode($server_state);
-       $server_state_attr->appendChild($server_state_value);
-       $opus_doc->appendChild($server_state_attr);
+        // add attribute ServerState (necessary for deleted records)
+        $server_state_attr = $this->_xml->createAttribute("ServerState");
+        $server_state_value = $this->_xml->createTextNode($server_state);
+        $server_state_attr->appendChild($server_state_value);
+        $opus_doc->appendChild($server_state_attr);
 
-       // create xml for set information
-       $this->setInfoXml($document,$opus_doc);
+        // create xml for set information
+        $this->setInfoXml($document,$opus_doc);
     }
 
     /**
@@ -911,8 +919,8 @@ class Oai_IndexController extends Controller_Xml {
      * @param  Opus_Document $document
      */
     private function xmlCreationRecords($document) {
-       $node = $this->_xml->importNode($document->toXml()->getElementsByTagName('Opus_Document')->item(0), true);
-       // create xml for set information
-       $this->setInfoXml($document,$node);
+        $node = $this->_xml->importNode($document->toXml()->getElementsByTagName('Opus_Document')->item(0), true);
+        // create xml for set information
+        $this->setInfoXml($document,$node);
     }
 }
