@@ -58,7 +58,7 @@ class Controller_Xml extends Zend_Controller_Action {
     /**
      * Holds the xslt processor.
      *
-     * @var DomDocument  Defaults to null.
+     * @var XSLTProcessor  Defaults to null.
      */
     protected $_proc = null;
 
