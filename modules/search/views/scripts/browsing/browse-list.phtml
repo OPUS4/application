@@ -57,13 +57,18 @@
 	    } else {
 	    	$subcollections = $this->browsinglist->getSubCollection();
 	    }
+
         foreach ($subcollections as $coll)    {
             // Hidden collections shouldn't be browsable
             if(true === $coll->getVisibility()) {
 
-                $documentCount = Opus_Collection_Information::countAllCollectionDocuments($this->collection, $coll->getId());
+                // $documentCount = Opus_Collection_Information::countAllCollectionDocuments($this->collection, $coll->getId());
 
-                if ($hideEmptyCollections && $browseListCountStyle !== 'none' && count($coll->getEntries()) === 0 && $documentCount == 0) {
+		$node = $coll->getNode();
+                $documentCountSubtree = $node->getNumSubtreeEntries();
+                $documentCountCurrent = $node->getNumEntries();
+
+                if ($hideEmptyCollections && $browseListCountStyle !== 'none' && $documentCountCurrent === 0 && $documentCountSubtree == 0) {
                     echo '<li>' . $coll->getDisplayName() . '</li>';
                 }
                 else {
@@ -85,16 +90,16 @@
                  '">';
                     echo $coll->getDisplayName();
                     if ($browseListCountStyle === 'count') {
-                        echo '</a> (' . count($coll->getEntries()) . ') (' . $this->translate('browsing_total_number') . ' ' . $documentCount . ')';
+                        echo '</a> (' . $documentCountCurrent . ') (' . $this->translate('browsing_total_number') . ' ' . $documentCountSubtree . ')';
                     }
                     else if ($browseListCountStyle === 'none') {
                     	echo '</a>';
                     }
                     else if ($browseListCountStyle === 'both') {
-                    	echo '</a> (' . $documentCount . ')';
+                    	echo '</a> (' . $documentCountSubtree . ')';
                     }
                     else {
-                    	echo '</a> (' . count($coll->getEntries()) . ')';
+                    	echo '</a> (' . $documentCountCurrent . ')';
                     }
                     echo '</li>';
                 }
