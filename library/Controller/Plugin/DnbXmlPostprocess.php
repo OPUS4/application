@@ -59,7 +59,12 @@ class Controller_Plugin_DnbXmlPostprocess extends Zend_Controller_Plugin_Abstrac
 
         // build xml document
         $dom = new DOMDocument('1.0', 'utf-8');
-        $dom->loadXml($front->getResponse()->getBody());
+        $body = $front->getResponse()->getBody();
+        
+        // TODO: Add error handling and debugging.
+        // echo "body: $body\n";
+        $dom->loadXml($body);
+
 
         // patch xmlns:xsi namespace attribute
         $this->_addXsiNamespaceAttribute($dom, 'xMetaDiss');
