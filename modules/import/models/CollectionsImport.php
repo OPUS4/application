@@ -207,6 +207,7 @@ class CollectionsImport
 		    $node->setName($class['name']);
 		    $node->setTheme('default');
 			$coll->addCollection($node);
+			$coll->setVisible(1);
 			$root->setVisible(1);
 			$root->store();
 	        fputs($fp, $class['sr_id'] . ' ' . $coll->getId() . "\n");

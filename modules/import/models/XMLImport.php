@@ -190,7 +190,7 @@ class XMLImport
         	$mappingFile = '../workspace/tmp/faculties.map';
         	$GrantorNewId = $this->getNewValue($mappingFile, $facultyId->getAttribute('Value'));
         	if ($GrantorNewId !== null) {
-        	    $grantor = new Opus_OrganisationalUnit($GrantorNewId);
+        	    $grantor = new Opus_CollectionNode($GrantorNewId);
         	}
         	$this->document->removeChild($facultyId);
         }
@@ -198,7 +198,7 @@ class XMLImport
         	$mappingFile = '../workspace/tmp/universities.map';
         	$PublisherNewId = $this->getNewValue($mappingFile, str_replace(" ", "_", $publisherId->getAttribute('Value')));
         	if ($PublisherNewId !== null) {
-        		$publisher = new Opus_OrganisationalUnit($PublisherNewId);
+        		$publisher = new Opus_CollectionNode($PublisherNewId);
         	}
         	$this->document->removeChild($publisherId);
         }
@@ -227,7 +227,7 @@ class XMLImport
                     $ddc_id = $ddcVal;
                 }
                 if ($ddc_id !== null) {
-                    $ddc = new Opus_Collection($ddc_id, $this->collections[$ddcName]);
+                    $ddc = new Opus_Collection($ddc_id);
                 }
                 else {
                 	echo "Mapping file for " . $this->collections[$ddcName]. " does not exist or class not found. Class $ddc_id not imported for old ID $oldid\n";
@@ -244,11 +244,12 @@ class XMLImport
             // Build Subcollection
             if (array_key_exists($seriesName, $this->collections) === true) {
             	if ($newSeriesId !== null) {
-                    $seriesParentCollection = new Opus_Collection($newSeriesId, $this->collections[$seriesName]);
-                    $seriesCollection = new Opus_Collection(null, $this->collections[$seriesName]);
+                    $seriesParentCollection = new Opus_CollectionNode($newSeriesId);
+                    $seriesChild = $seriesParentCollection->addLastChild();
+                    $seriesCollection = new Opus_Collection();
 		            $seriesCollection->setName('Band ' . $issue);
 		            $seriesCollection->setTheme('default');
-                    $seriesParentCollection->addSubCollection($seriesCollection);
+                    $seriesChild->addCollection($seriesCollection);
                     $seriesParentCollection->store();
                 }
                 else {
@@ -276,7 +277,7 @@ class XMLImport
                 }
                 if (array_key_exists($instituteName, $this->collections) === true) {
                     if (false === empty($instituteValue) && $instituteValue !== null) {
-                        $institute[] = new Opus_Collection($instituteValue, $this->collections[$instituteName]);
+                        $institute[] = new Opus_Collection($instituteValue);
                     }
                     else {
                         echo "Mapping file for " . $this->collections[$instituteName]. " does not exist or class not found. Institute assignation $oldInstituteValue not imported for old ID $oldid\n";
@@ -480,7 +481,7 @@ class XMLImport
                 	// do nothing, but continue
                 }
                 if ($id !== null) {
-                    $output[] = new Opus_Collection($id, $this->collections[$name]);
+                    $output[] = new Opus_Collection($id);
                 }
                 else {
 		    		echo "Number $value in $name not found - not imported for old OPUS-ID " . $this->document->getElementsByTagName('IdentifierOpus3')->Item(0)->getAttribute('Value') . "\n";

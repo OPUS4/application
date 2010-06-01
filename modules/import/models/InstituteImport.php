@@ -134,6 +134,7 @@ class InstituteImport
             $coll->setDnbContactId($class['ddb_idn']);
             $coll->setTheme('default');
 			$child->addCollection($coll);
+			$child->setVisible(1);
 			$root->setVisible(1);
 			$root->store();
             $sc = $child->getId();
@@ -171,6 +172,8 @@ class InstituteImport
             $coll->setIsGrantor('1');
             $coll->setTheme('default');
 			$child->addCollection($coll);
+			$child->setVisible(1);
+			$parentColl->setVisible(1);
 			$parentColl->store();            
             $subcoll[$class["nr"]] = $child->getId();
             fputs($fp, $class['nr'] . ' ' . $subcoll[$class["nr"]] . "\n");
@@ -203,6 +206,8 @@ class InstituteImport
             $coll->setName($class['name']);
             $coll->setTheme('default');
 			$child->addCollection($coll);
+			$child->setVisible(1);
+			$parentColl->setVisible(1);
 			$parentColl->store();            
             fputs($fp, $class['nr'] . ' ' . $child->getId() . "\n");
         }

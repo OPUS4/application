@@ -47,6 +47,7 @@
 		<field name="File" mandatory="no" adminformweight="0" publishformweight="0" multiplicity="*" />
 		
 		<field name="ServerDateUnlocking" mandatory="no" adminformweight="0" publishformweight="201" multiplicity="1" />
+	    <field name="PersonSubmitter" mandatory="no" adminformweight="101" publishformweight="101" multiplicity="1" />
 	    <!-- <field name="ServerDateValid" mandatory="no" adminformweight="0" publishformweight="202" multiplicity="1" />  -->   
 	    	    
 	    <!-- for downward compatibility to opus 3 data. Do not show this fields -->	    
