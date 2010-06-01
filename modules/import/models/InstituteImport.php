@@ -125,18 +125,20 @@ class InstituteImport
         foreach ($classification as $class) {
             echo ".";
             // first level category
-            $coll = new Opus_Collection(null, $collRole->getId());
+		    $root = $collRole->getRootNode();
+		    $child = $root->addLastChild();
+            $coll = new Opus_Collection();
             $coll->setName($class['universitaet_anzeige']);
             $coll->setAddress($class['instadresse']);
             $coll->setCity($class['univort']);
             $coll->setDnbContactId($class['ddb_idn']);
             $coll->setTheme('default');
-            // store the old ID with the new Collection
-            $sc = $coll->store();
+			$child->addCollection($coll);
+			$root->setVisible(1);
+			$root->store();
+            $sc = $child->getId();
             $subcoll[] = $sc;
             fputs($fp, str_replace(" ", "_", $class['universitaet']) . ' ' . $sc . "\n");
-            $collRole->addSubCollection($coll);
-            $collRole->store();
         }
 
         fclose($fp);
@@ -161,17 +163,17 @@ class InstituteImport
 
 		foreach ($classification as $class) {
           	echo ".";
-            $parentColl = new Opus_Collection($subColls, $roleId);
+            $parentColl = new Opus_Collection($subColls);
             // second level category
-            $coll = new Opus_Collection(null, $roleId);
+            $child = $parentColl->addLastChild();
+            $coll = new Opus_Collection();
             $coll->setName($class['fakultaet']);
             $coll->setIsGrantor('1');
             $coll->setTheme('default');
-            $parentColl->setTheme('default');
-            $subcoll[$class["nr"]] = $coll->store();
+			$child->addCollection($coll);
+			$parentColl->store();            
+            $subcoll[$class["nr"]] = $child->getId();
             fputs($fp, $class['nr'] . ' ' . $subcoll[$class["nr"]] . "\n");
-            $parentColl->addSubCollection($coll);
-            $parentColl->store();
 		}
         
         fclose($fp);
@@ -194,16 +196,15 @@ class InstituteImport
 
         foreach ($classification as $class) {
             echo ".";
-            $parentColl = new Opus_Collection($subColls[$class['fakultaet']], $roleId);
+            $parentColl = new Opus_Collection($subColls[$class['fakultaet']]);
             // second level category
-            $coll = new Opus_Collection(null, $roleId);
+            $child = $parentColl->addLastChild();
+            $coll = new Opus_Collection();
             $coll->setName($class['name']);
             $coll->setTheme('default');
-            $parentColl->setTheme('default');
-            $id = $coll->store();
-            $parentColl->addSubCollection($coll);
-            $parentColl->store();
-            fputs($fp, $class['nr'] . ' ' . $id . "\n");
+			$child->addCollection($coll);
+			$parentColl->store();            
+            fputs($fp, $class['nr'] . ' ' . $child->getId() . "\n");
         }
 
         fclose($fp);

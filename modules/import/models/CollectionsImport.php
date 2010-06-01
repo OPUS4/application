@@ -50,7 +50,6 @@ class CollectionsImport
 		foreach ($doclist as $document) 
 		{
             if ($document->getAttribute('name') === 'collections') {
-                #$facNumbers = $this->importCollections($document, $collRole);
                 $facNumbers = $this->importCollectionsDirectly($document, $collRole);
 	/*<row>
 		<field name="coll_id">1</field>
@@ -89,6 +88,28 @@ class CollectionsImport
 		return $classification;
 	}
 
+    /**
+     * sort multidimensional arrays
+     */
+    private function msort($array, $id="id") {
+        $temp_array = array();
+        while(count($array)>0) {
+            $lowest_id = 0;
+            $index=0;
+            foreach ($array as $item) {
+                if (isset($item[$id]) && $array[$lowest_id][$id]) {
+                    if ($item[$id]<$array[$lowest_id][$id]) {
+                        $lowest_id = $index;
+                    }
+                }
+                $index++;
+            }
+            $temp_array[] = $array[$lowest_id];
+            $array = array_merge(array_slice($array, 0,$lowest_id), array_slice($array, $lowest_id+1));
+        }
+        return $temp_array;
+    }
+
 	/**
 	 * Imports Collections from Opus3 to Opus4 directly (from DB-table to DB-tables)
 	 *
@@ -98,23 +119,52 @@ class CollectionsImport
 	protected function importCollectionsDirectly($data, $collRole)
 	{
         $collections = $this->transferOpusClassification($data);
-        $contentTable = new Opus_Db_CollectionsContents($collRole->getId());
-        $structTable = new Opus_Db_CollectionsStructure($collRole->getId());
+        $contentTable = new Opus_Db_Collections();
+        $structTable = new Opus_Db_CollectionsNodes();
+        
+        // sort by lft-values
+        $sorted_collections = $this->msort($collections, 'lft');
 
         // 1 is used as a predefined key and should not be used again!
         // so lets increment all old IDs by 1
-        foreach ($collections as $row) {
+        $previousRight = null;
+        $previousLeft = null;
+        $previousId = array();
+        foreach ($sorted_collections as $row) {
             $contentData = array(
-                'id'      => ($row['coll_id']+1),
+                'oldid'   => ($row['coll_id']+1),
+                'role_id' => $collRole->getId(),
                 'name'    => $row['coll_name']
             );
 
-            $contentTable->insert($contentData);
-                        
+            $collId = $contentTable->insert($contentData);
+            
+            // parent_id is needed
+            if ($previousLeft === null && $previousRight === null) {
+            	// no parent, use RootNode
+            	$parentNodeId = $collRole->getRootNode()->getId();
+            	array_push($previousId, $collId);
+            }
+            else if ( (int) $row['lft'] === (int) $previousRight+1) {
+            	// its a brother of previous node
+            	array_pop($previousId);
+            	$parentNodeId = $previousId[count($previousId)-1];
+            	array_push($previousId, $collId);
+            }
+            else {
+            	// its a child of previous node
+            	$parentNodeId = $previousId[count($previousId)-1];
+            	array_push($previousId, $collId);
+            }
+            
+            
             $structureData = array(
-                'collections_id' => ($row['coll_id']+1),
-                'left'           => ($row['lft']+1),
-                'right'          => ($row['rgt']+1)
+                'role_id'        => $collRole->getId(),
+                'collection_id'  => $collId,
+                'left_id'        => ($row['lft']+1),
+                'right_id'       => ($row['rgt']+1),
+                'parent_id'      => $parentNodeId,
+                'visible'        => 1
             );
             
             $structTable->insert($structureData);
@@ -122,83 +172,21 @@ class CollectionsImport
             if ($row['coll_id'] === "1") {
             	// set right-value for ID 1
             	$newRight = array(
-                    'right'      => ($row['rgt']+2)
+                    'right_id'      => ($row['rgt']+2),
+                    'visible'       => 1
                 );
 
-                $where = $structTable->getAdapter()->quoteInto('id = ?', 1);
+                $where = $structTable->getAdapter()->quoteInto('left_id = 1 AND role_id = ?', $collRole->getId());
 
                 $structTable->update($newRight, $where);
             }
+            $previousLeft = $row['lft'];
+            $previousRight = $row['rgt'];
         }
 	}
 	
 	/**
-	 * Imports Collections from Opus3 to Opus4 directly (without XML)
-	 *
-	 * @param DOMDocument $data XML-Document to be imported
-	 * @return array List of documents that have been imported
-	 */
-	protected function importCollections($data, $collRole)
-	{
-        $collections = $this->transferOpusClassification($data);
-        
-        // sort collections array by left-value
-        foreach ($collections as $key => $row) {
-            $colls[$key]    = $row['lft'];
-        }
-
-        sort($colls);
-        
-		$subcoll = array();
-
-        // Build a mapping file to associate old IDs with the new ones
-        $fp = fopen('../workspace/tmp/collections.map', 'w');
-
-		foreach ($colls as $key => $c) {
-		    $class = $collections[$key];
-		    // check if this is first level Collection
-		    // its first level, if coll_id = root_id
-		    if ($class['coll_id'] === $class['root_id']) {
-		        echo ".";
-		        $coll = new Opus_Collection(null, $collRole->getId());
-    		    $coll->setName($class['coll_name']);
-	    	    $coll->setTheme('default');
-	    	    $newCollId = $coll->store();
-		    	fputs($fp, $class['coll_id'] . ' ' . $newCollId . "\n");
-		    	$subcoll[$class['coll_id']] = $newCollId;
-			    $collRole->addSubCollection($coll);
-			    $collRole->store();
-		    }
-		}
-		reset($colls);
-		foreach ($colls as $key => $c) {
-		    $class = $collections[$key];
-		    // check if this is first level Collection
-		    // its first level, if coll_id = root_id
-		    if ($class['coll_id'] !== $class['root_id']) {
-		    	// first level elements are already inside, so lets proceed with next level
-		        echo ".";
-		        // Warning: every Collection is now imported as a direct subcollection of the first level
-		        // This is not necessarily true
-		        // TODO: import real hierarchy
-		        $parentCollId = $subcoll[$class['root_id']];
-		        $parentColl = new Opus_Collection($parentCollId, $collRole->getId());
-		        $coll = new Opus_Collection(null, $collRole->getId());
-    		    $coll->setName($class['coll_name']);
-	    	    $coll->setTheme('default');
-	    	    $newCollId = $coll->store();
-			   	fputs($fp, $class['coll_id'] . ' ' . $newCollId . "\n");
-		    	$subcoll[$class['coll_id']] = $newCollId;
-			    $parentColl->addSubCollection($coll);
-			    $parentColl->store();
-		    }
-		}		
-        echo "\n";
-		fclose($fp);
-	}
-
-	/**
-	 * Imports Series from Opus3 to Opus4 directly (without XML)
+	 * Imports Series from Opus3 to Opus4
 	 *
 	 * @param DOMDocument $data XML-Document to be imported
 	 * @return array List of documents that have been imported
@@ -213,13 +201,16 @@ class CollectionsImport
 		foreach ($classification as $class) {
           	echo ".";
 		    // first level category
-		    $coll = new Opus_Collection(null, $collRole->getId());
-		    $coll->setName($class['name']);
-		    $coll->setTheme('default');
-			fputs($fp, $class['sr_id'] . ' ' . $coll->store() . "\n");
-			$collRole->addSubCollection($coll);
-			$collRole->store();
-		}
+		    $root = $collRole->getRootNode();
+		    $coll = $root->addLastChild();
+            $node = new Opus_Collection();
+		    $node->setName($class['name']);
+		    $node->setTheme('default');
+			$coll->addCollection($node);
+			$root->setVisible(1);
+			$root->store();
+	        fputs($fp, $class['sr_id'] . ' ' . $coll->getId() . "\n");
+		 }
          echo "\n";
 		 fclose($fp);
 	}
