@@ -163,7 +163,7 @@ class InstituteImport
 
 		foreach ($classification as $class) {
           	echo ".";
-            $parentColl = new Opus_Collection($subColls);
+            $parentColl = new Opus_CollectionNode($subColls);
             // second level category
             $child = $parentColl->addLastChild();
             $coll = new Opus_Collection();
@@ -196,7 +196,7 @@ class InstituteImport
 
         foreach ($classification as $class) {
             echo ".";
-            $parentColl = new Opus_Collection($subColls[$class['fakultaet']]);
+            $parentColl = new Opus_CollectionNode($subColls[$class['fakultaet']]);
             // second level category
             $child = $parentColl->addLastChild();
             $coll = new Opus_Collection();
