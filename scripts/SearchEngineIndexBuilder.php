@@ -102,7 +102,7 @@ class SearchEngineIndexBuilder extends Application_Bootstrap {
     	    $indexbuilder = 'Opus_Search_Index_Lucene_Indexer';
     	}
 
-        $docresult = Opus_Document::getAllIds();
+        $docresult = Opus_Document::getAllIdsByState('published');
 
         // Evaluate parameters or set them to default values
         $start = 0;
