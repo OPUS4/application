@@ -27,9 +27,10 @@
  *
  * @category    Application
  * @package     Module_Oai
+ * @author     	Thoralf Klein <thoralf.klein@zib.de>
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @author      Simone Finkbeiner <simone.finkbeiner@ub.uni-stuttgart.de>
- * @copyright   Copyright (c) 2009, OPUS 4 development team
+ * @copyright   Copyright (c) 2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -320,14 +321,28 @@ class Oai_IndexController extends Controller_Xml {
     private function __validateResumptionToken($oaiResumptionToken) {
         $registry = Zend_Registry::getInstance();
         $config = $registry->get('Zend_Config');
+
+        if (!isset($oaiResumptionToken)) {
+            throw new Exception("no resumption token given", self::BADRESUMPTIONTOKEN);
+        }
+
+        if (0 !== preg_match('[^a-zA-Z0-9_-]', $oaiResumptionToken)) {
+            $this->logger("Invalid resumption token $oaiResumptionToken");
+            throw new Exception("invalid resumption token given", self::BADRESUMPTIONTOKEN);
+        }
+
         if (true === isset($config->path->workspace->temp)) {
             $tempPath = $config->path->workspace->temp;
+            $resumptionPath = self::getOrCreateResumptionDirectory($tempPath);
         } else {
             throw new Exception("no path to resumption files set in config-file",self::BADRESUMPTIONTOKEN);
         }
-        $fn = $tempPath.'/resumption/rs_'.$oaiResumptionToken.'.txt';
-        if (!file_exists($fn)) {
-            throw new Exception("The resumptionToken $oaiResumptionToken does not exist or has already expired.",self::BADRESUMPTIONTOKEN);
+
+        $fn = $resumptionPath . '/rs_' . $oaiResumptionToken;
+
+        if (!file_exists($fn) || !is_readable($fn)) {
+            $this->logger("Problem with resumption file: $fn");
+            throw new Exception("The resumptionToken $oaiResumptionToken does not exist, is unreadable or has already expired.",self::BADRESUMPTIONTOKEN);
         }
     }
 
@@ -414,9 +429,11 @@ class Oai_IndexController extends Controller_Xml {
         }
         if (true === isset($config->path->workspace->temp)) {
             $tempPath = $config->path->workspace->temp;
+            $resumptionPath = self::getOrCreateResumptionDirectory($tempPath);
         } else {
             throw new Exception("no path to resumption files set in config-file",self::BADRESUMPTIONTOKEN);
         }
+
         $this->_proc->setParameter('', 'repIdentifier', $repIdentifier);
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
         // do some initialisation
@@ -432,7 +449,7 @@ class Oai_IndexController extends Controller_Xml {
         if (!empty($oaiRequest['resumptionToken'])) {
             // read the resumption file
             $resParam = $oaiRequest['resumptionToken'];
-            $fn = $tempPath.'/resumption/rs_'.$resParam.'.txt';
+            $fn = $resumptionPath . '/rs_' . $resParam; //  . '.txt';
             $data = file_get_contents($fn);
             if ($data != false) {
                 $data = explode(' ',$data);
@@ -494,7 +511,7 @@ class Oai_IndexController extends Controller_Xml {
         // store the further Ids in a resumption-file
         if (count($restIds) > 0) {
             if ($totalIds == 0) $totalIds = $max_identifier + count($restIds);
-            $res = $this->writeResumptionFile($start,$totalIds,$tempPath,$restIds);
+            $res = $this->writeResumptionFile($start,$totalIds,$resumptionPath,$restIds);
         }
 
         // set parameters for the resumptionToken-node
@@ -531,9 +548,9 @@ class Oai_IndexController extends Controller_Xml {
             $max_records = $config->oai->max->listrecords;
         }
 
-        // FIXME: Error handling is broken - fails if temp-path is empty!
         if (true === isset($config->path->workspace->temp)) {
             $tempPath = $config->path->workspace->temp;
+            $resumptionPath = self::getOrCreateResumptionDirectory($tempPath);
         } else {
             throw new Exception("no path to resumption files set in config-file",self::BADRESUMPTIONTOKEN);
         }
@@ -554,7 +571,7 @@ class Oai_IndexController extends Controller_Xml {
 
             // read the resumption file
             $resParam = $oaiRequest['resumptionToken'];
-            $fn = $tempPath.'/resumption/rs_'.$resParam.'.txt';
+            $fn = $resumptionPath . '/rs_'.$resParam; // .'.txt';
             $data = file_get_contents($fn);
             if ($data != false) {
                 $data = explode(' ',$data);
@@ -613,8 +630,7 @@ class Oai_IndexController extends Controller_Xml {
         if (count($restIds) > 0) {
             if ($totalIds == 0) $totalIds = $max_records + count($restIds);
 
-            // FIXME: Error handling is broken - fails if temp-path is empty!
-            $res = $this->writeResumptionFile($start,$totalIds,$tempPath,$restIds);
+            $res = $this->writeResumptionFile($start,$totalIds,$resumptionPath,$restIds);
         }
 
         // set parameters for the resumptionToken-node
@@ -845,6 +861,35 @@ class Oai_IndexController extends Controller_Xml {
 
 
     /**
+     * Get resumption directory and create if necessary.  Returns path name.
+     */
+     private static function getOrCreateResumptionDirectory($tempPath) {
+        if (true !== is_dir($tempPath)
+                || true !== is_writable($tempPath)
+                || true !== is_readable($tempPath)) {
+            throw new Exception("Cannot find/access tempPath directory.");
+        }
+
+        $resumptionPath = $tempPath . '/resumption';
+        if (true !== is_dir($resumptionPath)) {
+            $rv = mkdir($resumptionPath, 0770);
+
+            if ($rv !== true) {
+                throw new Exception("Error creating resumptionDirectory.");
+            }
+        }
+
+        if (true !== is_dir($resumptionPath)
+                || true !== is_writable($resumptionPath)
+                || true !== is_readable($resumptionPath)) {
+            throw new Exception("Cannot find/access resumptionPath directory.");
+        }
+
+        return $resumptionPath;
+    }
+
+
+    /**
      * Set parameters for resumptionToken-line.
      *
      * @param  int     $start, start value of the file
@@ -853,27 +898,35 @@ class Oai_IndexController extends Controller_Xml {
      * @param  array   $restIds, array of ids to store
      * @return string  $res, value for resumptionToken
      */
-    private function writeResumptionFile($start,$totalIds,$tempPath,$restIds) {
-        $fc = 0;
-        if (false === is_dir($tempPath. '/resumption')) {
-            mkdir($tempPath. '/resumption',0777);
+    private function writeResumptionFile($start, $totalIds, $resumptionPath, $restIds) {
+        $fn = $resumptionPath  . '/rs_' . (string) time();
+
+//        $fc = 0;
+//        while (file_exists($file = sprintf('%s%02d.txt',$fn,$fc++)));
+
+        $tmp_filename = tempnam($resumptionPath, 'rs_');
+
+        if (false === is_file($tmp_filename)) {
+            throw new Exception("temp file does not exist.");
         }
-        $fn = $tempPath.'/resumption/rs_'.(string) time();
-        while (file_exists($file=sprintf('%s%02d.txt',$fn,$fc++)));
-        if ($fp = fopen($file,'w+')) {
-            fwrite($fp,$start.' '.$totalIds.' ');
+
+        $fp = fopen($tmp_filename, "w");
+        if ($fp !== false) {
+            fwrite($fp, $start.' '.$totalIds.' ');
             foreach ($restIds as $restId) {
                 if (fwrite($fp,$restId.' ')) {
+
                 } else {
                     throw new Exception("file could not be written.", self::NORECORDSMATCH);
                 }
             }
             fclose($fp);
         } else {
-            throw new Exception("file could not be opened.", self::NORECORDSMATCH);
+            throw new Exception("temp file could not be opened for writing.", self::NORECORDSMATCH);
         }
-        $start_res = strpos($file,'rs_');
-        $res = substr($file,$start_res+3,12);
+
+        $start_res = strpos($tmp_filename,'rs_');
+        $res = substr($tmp_filename, $start_res+3);
         return $res;
     }
 
@@ -923,4 +976,18 @@ class Oai_IndexController extends Controller_Xml {
         // create xml for set information
         $this->setInfoXml($document,$node);
     }
+
+
+    /**
+     *  Debugging helper.  Sends the given message to Zend_Log.
+     *
+     * @param string $message
+     */
+    protected function logger($message) {
+        $registry = Zend_Registry::getInstance();
+        $logger = $registry->get('Zend_Log');
+        $logger->info("Oai_IndexController: $message");
+    }
+
+
 }

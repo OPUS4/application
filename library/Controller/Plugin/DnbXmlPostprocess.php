@@ -59,12 +59,18 @@ class Controller_Plugin_DnbXmlPostprocess extends Zend_Controller_Plugin_Abstrac
 
         // build xml document
         $dom = new DOMDocument('1.0', 'utf-8');
-        $body = $front->getResponse()->getBody();
-        
-        // TODO: Add error handling and debugging.
-        // echo "body: $body\n";
-        $dom->loadXml($body);
 
+        try {
+            $body = $front->getResponse()->getBody();
+            $dom->loadXml($body);
+        } catch (Exception $e) {
+            // FIXME: Create logger method?
+            $registry = Zend_Registry::getInstance();
+            $logger = $registry->get('Zend_Log');
+            $logger->info("DnbXmlPostprocess->postDispatch: error parsing XML: $body");
+            
+            throw new Exception($e);
+        }
 
         // patch xmlns:xsi namespace attribute
         $this->_addXsiNamespaceAttribute($dom, 'xMetaDiss');
