@@ -177,6 +177,14 @@ class Publish_IndexController extends Controller_Action {
 
                     // Store document in session
                     $document = new Opus_Document(null, $selectedDoctype, $workflow);
+                    $userdata = Opus_Security_AuthAdapter_Ldap::getUserdata();
+                    if (isset($userdata['lastName']) === true) {
+                    	$loggedinPerson = new Opus_Person();
+                    	$loggedinPerson->setFirstName($userdata['firstName']);
+                    	$loggedinPerson->setLastName($userdata['lastName']);
+                    	$loggedinPerson->setEmail($userdata['email']);
+                    	$document->addPersonSubmitter($loggedinPerson);
+                    }
                     $documentInSession->document = $document;
 
                     $caption = 'publish_index_create_' . $selectedDoctype;
