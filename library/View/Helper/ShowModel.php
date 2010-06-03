@@ -364,7 +364,7 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
      */
     protected function _displayGeneralElement($name, $value) {
         $result = '';
-        if (false === @is_array($value[0])) {
+        if (false === is_array($value)) {
             if (($this->__saef === false) or (empty($value) === false)) {
                 $data = $this->__skeleton($name, $value);
                 $result = $this->view->partial('_model.phtml', $data);
@@ -528,6 +528,17 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
      * @return string
      */
     protected function _displayPersonTranslator($field, $value) {
+        return $this->__personDisplay($field, $value);
+    }
+
+    /**
+     * Wrapper method for person submitter
+     *
+     * @param string $field Person field for displaying
+     * @param mixed  $value Value of person field
+     * @return string
+     */
+    protected function _displayPersonSubmitter($field, $value) {
         return $this->__personDisplay($field, $value);
     }
 
@@ -713,7 +724,7 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
         }
         $result = '';
         foreach ($modeldata as $field => $value) {
-            if (true === empty($value)) {
+            if (true === empty($value) || (count($value) === 1 && is_array($value) === true && is_string($value[0]) === true && strlen($value[0]) === 0)) {
                 continue;
             }
 
