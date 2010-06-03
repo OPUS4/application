@@ -101,9 +101,9 @@ class XMLImport
     public function __construct($xslt, $stylesheetPath)
     {
         // Reading Collection IDs
-        $roles = Opus_Collection_Information::getAllCollectionRoles();
+        $roles = Opus_CollectionRole::fetchAll();
         foreach ($roles as $role) {
-            $this->collections[$role['name']] = $role['id'];
+            $this->collections[$role->getDisplayName()] = $role->getId();
             // Dont build mapping files, use method to get a id for a number
             #$mf = new MappingFile($role);
         }
@@ -190,7 +190,7 @@ class XMLImport
         	$mappingFile = '../workspace/tmp/faculties.map';
         	$GrantorNewId = $this->getNewValue($mappingFile, $facultyId->getAttribute('Value'));
         	if ($GrantorNewId !== null) {
-        	    $grantor = new Opus_CollectionNode($GrantorNewId);
+        	    $grantor = new Opus_Collection($GrantorNewId);
         	}
         	$this->document->removeChild($facultyId);
         }
@@ -198,7 +198,7 @@ class XMLImport
         	$mappingFile = '../workspace/tmp/universities.map';
         	$PublisherNewId = $this->getNewValue($mappingFile, str_replace(" ", "_", $publisherId->getAttribute('Value')));
         	if ($PublisherNewId !== null) {
-        		$publisher = new Opus_CollectionNode($PublisherNewId);
+        		$publisher = new Opus_Collection($PublisherNewId);
         	}
         	$this->document->removeChild($publisherId);
         }
@@ -218,13 +218,12 @@ class XMLImport
             $ddcValue = $ddcNotation->getAttribute('Value');
             $ddc_id = null;
             if (array_key_exists($ddcName, $this->collections) === true) {
-                //$ddc_id = $this->map(MappingFile::getShortName($ddcName), $ddcValue);
-                $ddcVal = Opus_Collection_Information::getClassification($this->collections[$ddcName], $ddcValue);
+                $ddcVal = Opus_Collection::fetchCollectionsByRoleNumber(new Opus_CollectionRole($this->collections[$ddcName]), $ddcValue);
                 if (true === is_array($ddcVal)) {
-                	$ddc_id = $ddcVal[0];
+                	$ddc_id = $ddcVal[0]->getId();
                 }
                 else {
-                    $ddc_id = $ddcVal;
+                    $ddc_id = $ddcVal->getId();
                 }
                 if ($ddc_id !== null) {
                     $ddc = new Opus_Collection($ddc_id);
@@ -333,44 +332,44 @@ class XMLImport
 		    $doc->store();
 		    // Add this document to its DDC classification
 		    if ($ddc !== null) {
-		        $ddc->addEntry($doc);
+		        $ddc->addDocuments($doc);
 		    }
 		    if ($seriesCollection !== null) {
-		        $seriesCollection->addEntry($doc);
+		        $seriesCollection->addDocuments($doc);
 		    }
             if (count($institute) > 0) {
                 foreach($institute as $instEntry) {
-                    $instEntry->addEntry($doc);
+                    $instEntry->addDocuments($doc);
                 }
             }
 		    if (count($ccs) > 0) {
 		        foreach($ccs as $ccsEntry) {
-		            $ccsEntry->addEntry($doc);
+		            $ccsEntry->addDocuments($doc);
 		        }
 		    }
             if (count($pacs) > 0) {
                 foreach($pacs as $pacsEntry) {
-                    $pacsEntry->addEntry($doc);
+                    $pacsEntry->addDocuments($doc);
                 }
             }
 		    if (count($msc) > 0) {
                 foreach($msc as $mscEntry) {
-                    $mscEntry->addEntry($doc);
+                    $mscEntry->addDocuments($doc);
                 }
             }
 		    if (count($jel) > 0) {
                 foreach($jel as $jelEntry) {
-                    $jelEntry->addEntry($doc);
+                    $jelEntry->addDocuments($doc);
                 }
             }
 		    if (count($apa) > 0) {
                 foreach($apa as $apaEntry) {
-                    $apaEntry->addEntry($doc);
+                    $apaEntry->addDocuments($doc);
                 }
             }
 		    if (count($bk) > 0) {
                 foreach($bk as $bkEntry) {
-                    $bkEntry->addEntry($doc);
+                    $bkEntry->addDocuments($doc);
                 }
             }
 			$imported['result'] = 'success';
@@ -469,12 +468,22 @@ class XMLImport
             $id = null;
             if (array_key_exists($name, $this->collections) === true) {
                 try {
-                    $returnedId = Opus_Collection_Information::getClassification($this->collections[$name], $value);
+                    $returnedId = Opus_Collection::fetchCollectionsByRoleNumber(new Opus_CollectionRole($this->collections[$name]), $value);
                     if (true === is_array($returnedId)) {
-                    	$id = $returnedId[0];
+                    	if (count($returnedId) > 0) {
+                    	if (is_object($returnedId[0]) === true) {
+                    	    $id = $returnedId[0]->getId();
+                    	}
+                    	else {
+                    		$id = null;
+                    	}
+                    	}
+                    	else {
+                    		$id = null;
+                    	}
                     }
                     else {
-            	        $id = $returnedId;
+            	        $id = $returnedId->getId();
                     }
                 }
                 catch (Exception $e) {

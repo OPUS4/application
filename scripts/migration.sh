@@ -14,8 +14,6 @@ mv sql/013_create_institutes_testdata.sql sql/013_create_institutes_testdata.sql
 
 sh ./rebuilding_database.sh
 
-cd ../db
-
 sh ./migrate-collections.sh
 
 cd ../scripts
