@@ -333,43 +333,52 @@ class XMLImport
 		    // Add this document to its DDC classification
 		    if ($ddc !== null) {
 		        $ddc->addDocuments($doc);
+		        $ddc->store();
 		    }
 		    if ($seriesCollection !== null) {
 		        $seriesCollection->addDocuments($doc);
+		        $seriesCollection->store();
 		    }
             if (count($institute) > 0) {
                 foreach($institute as $instEntry) {
                     $instEntry->addDocuments($doc);
+                    $instEntry->store();
                 }
             }
 		    if (count($ccs) > 0) {
 		        foreach($ccs as $ccsEntry) {
 		            $ccsEntry->addDocuments($doc);
+		            $ccsEntry->store();
 		        }
 		    }
             if (count($pacs) > 0) {
                 foreach($pacs as $pacsEntry) {
                     $pacsEntry->addDocuments($doc);
+                    $pacsEntry->store();
                 }
             }
 		    if (count($msc) > 0) {
                 foreach($msc as $mscEntry) {
                     $mscEntry->addDocuments($doc);
+                    $mscEntry->store();
                 }
             }
 		    if (count($jel) > 0) {
                 foreach($jel as $jelEntry) {
                     $jelEntry->addDocuments($doc);
+                    $jelEntry->store();
                 }
             }
 		    if (count($apa) > 0) {
                 foreach($apa as $apaEntry) {
                     $apaEntry->addDocuments($doc);
+                    $apaEntry->store();
                 }
             }
 		    if (count($bk) > 0) {
                 foreach($bk as $bkEntry) {
                     $bkEntry->addDocuments($doc);
+                    $bkEntry->store();
                 }
             }
 			$imported['result'] = 'success';
