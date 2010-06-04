@@ -551,8 +551,8 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             $document_id = $this->getRequest()->getParam('id');
             $role_id = $this->getRequest()->getParam('role');
             $collection_id = $this->getRequest()->getParam('collection');
-            $collection = new Opus_Collection($collection_id, $role_id);
-            $collection->deleteEntry(new Opus_Document($document_id));
+            $collection = new Opus_Collection($collection_id);
+            $collection->unlinkDocumentById($document_id);
             $params = $this->getRequest()->getUserParams();
             $module = array_shift($params);
             $controller = array_shift($params);

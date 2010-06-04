@@ -336,6 +336,23 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
     }
 
     /**
+     * General method for displaying collections.
+     *
+     * @param string $field  Contains field name.
+     * @param array  &$value Contains subject values.
+     * @return string
+     */
+    private function __collectionHelper($field, array &$value) {
+        $result = '';
+        $val = $value['Name'];
+        if (($this->__saef === false) or (empty($val) === false)) {
+            $data = $this->__skeleton($field, $val);
+            $result = $this->view->partial('_model.phtml', $data);
+        }
+        return $result;
+    }
+
+    /**
      * Helper method for displaying urn values.
      *
      * @param string $field  Field to display
@@ -705,6 +722,28 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
      */
     protected function _displayDateAccepted($field, $value) {
         return $this->__dateHelper($field, $value);
+    }
+
+    /**
+     * Wrapper method for displaying Publisher.
+     *
+     * @param string $field Contains field name.
+     * @param array  $value Contains field values.
+     * @return string
+     */
+    protected function _displayPublisher($field, $value) {
+        return $this->__collectionHelper($field, $value);
+    }
+
+    /**
+     * Wrapper method for displaying Grantor.
+     *
+     * @param string $field Contains field name.
+     * @param array  $value Contains field values.
+     * @return string
+     */
+    protected function _displayGrantor($field, $value) {
+        return $this->__collectionHelper($field, $value);
     }
 
     /**
