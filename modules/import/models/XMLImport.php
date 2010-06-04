@@ -274,13 +274,16 @@ class XMLImport
                 else {
         	        $instituteValue = $instituteReturnValue;
                 }
-                if (array_key_exists($instituteName, $this->collections) === true) {
-                    if (false === empty($instituteValue) && $instituteValue !== null) {
+                if (false === empty($instituteValue) && $instituteValue !== null) {
+                    try {
                         $institute[] = new Opus_Collection($instituteValue);
                     }
-                    else {
-                        echo "Mapping file for " . $this->collections[$instituteName]. " does not exist or class not found. Institute assignation $oldInstituteValue not imported for old ID $oldid\n";
+                    catch (Exception $e) {
+                    	echo "Failure mapping document to institute " . $instituteValue . ": Institute not found!";
                     }
+                }
+                else {
+                    echo "Mapping file for " . $instituteName. " does not exist or class not found. Institute assignation $oldInstituteValue not imported for old ID $oldid\n";
                 }
               	$this->document->removeChild($instituteId);
             }
