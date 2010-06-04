@@ -404,11 +404,14 @@ class Publish_IndexController extends Controller_Action {
                 $trail = explode('-', $path);
                 foreach($trail as $i => $step) {
                     if ($i < sizeof($trail)) {
-                        $collection = $collection->getSubCollection($step);
+                        $collections = $collection->getSubCollection($step);
                     }
                 }
             }
-            $collection->addEntry($document);
+            // collections contains only one collection, but this is an array
+            $collection = $collections[0];
+            $collection->addDocuments($document);
+            $collection->store();
             $this->_redirectTo('Document successfully assigned to collection "' . $collection->getDisplayName() . '".'
                     , 'upload', 'index', 'publish');
         } else if (false === isset($role)) {
@@ -433,8 +436,9 @@ class Publish_IndexController extends Controller_Action {
                     } else {
                         $position .= '-' . $step;
                     }
-                    $collection = $collection->getSubCollection($step);
-                    $breadcrumb[$position] = $collection->getDisplayName();
+                    $collections = $collection->getSubCollection($step);
+                    $breadcrumb[$position] = $collections[0]->getDisplayName();
+                    $collection = $collections[0];
                 }
             }
             if ($collection instanceof Opus_CollectionRole) {

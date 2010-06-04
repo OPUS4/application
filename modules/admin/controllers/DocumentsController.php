@@ -343,7 +343,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $this->view->docId = $id;
         $assignedCollections = array();
         foreach ($document->getCollection() as $assignedCollection) {
-            $assignedCollections[] = array('collectionName' => $assignedCollection->getDisplayName(), 'collectionId' => $assignedCollection->getId(), 'roleName' => $assignedCollection->getRoleName(), 'roleId' => $assignedCollection->getRoleId());
+            $assignedCollections[] = array('collectionName' => $assignedCollection->getDisplayName(), 'collectionId' => $assignedCollection->getId(), 'roleName' => $assignedCollection->getRole()->getName(), 'roleId' => $assignedCollection->getRole()->getId());
         }
         $this->view->assignedCollections = $assignedCollections;
     }
