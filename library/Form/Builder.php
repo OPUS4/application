@@ -344,8 +344,13 @@ class Form_Builder {
         $translationKey = 'hint_' . $key;
         $translate = Zend_Registry::get('Zend_Translate');
         $translationContent = null;
+        $helpAvailable = false;
         if ($this->__addHelp($key) !== false) {
-        	$translationContent .= '<a href="/home/index/help/content/help_' .  $key . '" target="_blank">' . $translate->translate('help_formbuilder_field_link') . '</a>';
+        	$helpAvailable = true;
+        	$pseudoView = new Zend_View;
+        	$helpUrl = $pseudoView->url(array('module' => 'home', 'controller' => 'index', 'action' => 'help', 'content' => 'help_' .  $key), null, true);
+        	$translationContent .= '<a href="'.$helpUrl.'" target="_blank">' . $translate->translate('help_formbuilder_field_link') . '</a>';
+        	// set the decorator and set escaping to false in order to show the link correctly
         	$element->addDecorator('Description');
         	$element->getDecorator('Description')->setEscape(false);
         }
@@ -353,7 +358,10 @@ class Form_Builder {
         if ($translate->isTranslated($translationKey)) {
         	if ($this->DEBUG === true) $translationContent .= ': ' . $translate->translate($translationKey);
         	else $translationContent .= $translate->translate($translationKey);
-        	$element->addDecorator('Description');
+        	// set the decorator if that has not been done yet
+        	if ($helpAvailable === false) {
+        	    $element->addDecorator('Description');
+        	}
         }
         if ($translationContent !== null) {
         	$element->setDescription($translationContent);
