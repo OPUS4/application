@@ -429,11 +429,13 @@ class Admin_CollectionController extends Controller_Action {
                 $trail = explode('-', $path);
                 foreach($trail as $i => $step) {
                     if ($i < sizeof($trail)) {
-                        $collection = $collection->getSubCollection($step);
+                        $collections = $collection->getSubCollection();
+                        $collection = $collections[$step];
                     }
                 }
             }
-            $collection->addEntry($document);
+            $collection->addDocuments($document);
+            $collection->store();
             $this->_redirectTo('Document successfully assigned to collection "' . $collection->getDisplayName() . '".'
                     , 'edit', 'documents', 'admin', array('id' => $document->getId()));
         } else if (false === isset($role)) {
@@ -458,7 +460,9 @@ class Admin_CollectionController extends Controller_Action {
                     } else {
                         $position .= '-' . $step;
                     }
-                    $collection = $collection->getSubCollection($step);
+                    echo $step;
+                    $collections = $collection->getSubCollection();
+                    $collection = $collections[$step];
                     $breadcrumb[$position] = $collection->getDisplayName();
                 }
             }
