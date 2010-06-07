@@ -118,6 +118,8 @@ ldap.server1.bindRequiresDn = true
 ldapmappings.server1.firstName = "givenname"
 ldapmappings.server1.lastName = "sn"
 ldapmappings.server1.EMail = "email"
+ldapmappings.server1.personId = "tuhhLibPersonaddridnr"
+
 
 [test : production]
 db.params.profiler = true
