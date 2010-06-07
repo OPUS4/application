@@ -332,7 +332,85 @@ class XMLImport
 			}
 		    // Set the publication status to published since only published documents shall be imported
 		    $doc->setServerState('published');
+		    
+		    // Analyse the persons
+		    $submitter = $doc->getPersonSubmitter();
+		    $identifier = $submitter->getIdentifierLocal();
+		    if (false === empty($identifier)) {
+		    	$ids = Opus_Person::findByIdentifier($identifier->getValue());
+		    	if (count($ids) > 0) {
+		    		$doc->setPersonSubmitter(new Opus_Person($ids[0]));
+		    	}
+		    }
+		    
+		    $authors = null;
+		    $authors = $doc->getPersonAuthor();
+		    $index = 0;
+	        foreach ($authors as $author) {
+	    	    $firstName = $author->getFirstName();
+	    	    $firstNameToSearch = null;
+	    	    if (empty($firstName) === false) {
+   		    		$firstNameToSearch = $firstName;
+    	    	}
+        	    $ids = Opus_Person::findByName($author->getLastName(), $firstNameToSearch);
+    	        if (count($ids) > 0) {
+    		        $authors[$index] = new Opus_Person($ids[0]);
+    	        }
+    	        $index++;
+	        }
+		    if ($authors !== null) {
+		    	$doc->setPersonAuthor($authors);
+		    }
+		    
+		    $contributors = null;
+		    $contributors = $doc->getPersonContributor();
+		    $index = 0;
+	        foreach ($contributors as $cont) {
+	    	    $firstName = $cont->getFirstName();
+	    	    $firstNameToSearch = null;
+	    	    if (empty($firstName) === false) {
+   		    		$firstNameToSearch = $firstName;
+    	    	}
+        	    $ids = Opus_Person::findByName($cont->getLastName(), $firstNameToSearch);
+    	        if (count($ids) > 0) {
+    		        $contributors[$index] = new Opus_Person($ids[0]);
+    	        }
+    	        $index++;
+	        }
+		    if ($contributors !== null) {
+		    	$doc->setPersonContributor($contributors);
+		    }
+
+		    $advisors = null;
+		    try {
+		    $advisors = $doc->getPersonAdvisor();
+		    $index = 0;
+	        foreach ($advisors as $advi) {
+	    	    $firstName = $advi->getFirstName();
+	    	    $firstNameToSearch = null;
+	    	    if (empty($firstName) === false) {
+   		    		$firstNameToSearch = $firstName;
+    	    	}
+        	    $ids = Opus_Person::findByName($advi->getLastName(), $firstNameToSearch);
+    	        if (count($ids) > 0) {
+    		        $advisors[$index] = new Opus_Person($ids[0]);
+    	        }
+    	        $index++;
+	        }
+		    if ($advisors !== null) {
+		        $doc->setPersonAdvisor($advisors);
+		    }
+		    }
+		    catch (Opus_Model_Exception $e) {
+		    	if ($e->getCode() !== 404) {
+		    		echo $e->getMessage();
+		    	}
+		    	// if the field has not been found, dont show an error message, its unimportant
+		    }
+
+		    // store the document
 		    $doc->store();
+            
 		    // Add this document to its DDC classification
 		    if ($ddc !== null) {
 		        $ddc->addDocuments($doc);
