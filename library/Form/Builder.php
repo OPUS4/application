@@ -149,7 +149,7 @@ class Form_Builder {
                         }
                         $this->__populateModel($fieldValue, $value);
                         $fieldValues[] = $fieldValue;
-                    } else {
+                    } else if ('nothing' !== $key) {
                         // Create a new model for the value
                         $clazz = $field->getValueModelClass();
                         $fieldValue = new $clazz;
@@ -247,6 +247,14 @@ class Form_Builder {
         $fieldForm->removeDecorator('DtDdWrapper');
         $fieldForm->setLegend($fieldName);
 
+        if (empty($valueModelClass) !== true) {
+            // add an empty element to allow help- and hint texts for whole subfields
+            $helpElement = new Zend_Form_Element_Hidden('nothing');
+            $helpElement->setAttrib('class', 'hiddenelement');
+            $this->__addDescription( $modelName . '_' . $fieldName . '_field', $helpElement);
+            $fieldForm->addElement($helpElement);
+        }
+
         if (false === empty($fieldValues)) {
             foreach ($fieldValues as $i => $fieldValue) {
                 if ($fieldValue instanceof Opus_File) {
@@ -255,13 +263,7 @@ class Form_Builder {
                     $fileInput->setLabel($fieldName);
                     $this->__addDescription($modelName . '_' . $fieldName, $fileInput);
                     $fieldForm->addElement($fileInput);
-                } else if ($fieldValue instanceof Opus_Model_Abstract) {
-                    // add an empty element to allow help- and hint texts for whole subfields
-                    $helpElement = new Zend_Form_Element_Hidden('nothing');
-                    $helpElement->setAttrib('class', 'hiddenelement');
-                    $this->__addDescription($modelName . '_' . $fieldName . '_field', $helpElement);
-                    $fieldForm->addElement($helpElement);
-                    
+                } else if ($fieldValue instanceof Opus_Model_Abstract) {                    
                     if ($field->isSelection()) {
                         // If value is a selection of models, build selection widget
                         $options = $field->getDefault();
@@ -333,6 +335,12 @@ class Form_Builder {
 
         // Create button to add value when appropriate.
         if (count($fieldValues) < $field->getMultiplicity() or '*' === $field->getMultiplicity()) {
+            // add an empty element to allow help- and hint texts for whole subfields
+            $helpElement = new Zend_Form_Element_Hidden('nothing');
+            $helpElement->setAttrib('class', 'hiddenelement');
+            $this->__addDescription($modelName . '_' . $fieldName . '_field', $helpElement);
+            $fieldForm->addElement($helpElement);
+            
             $element = new Zend_Form_Element_Submit('add');
             $element->removeDecorator('DtDdWrapper');
             $element->setBelongsTo('Actions');
