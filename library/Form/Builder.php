@@ -126,8 +126,9 @@ class Form_Builder {
                         } else if ('' !== $value) {
                             $fieldValues[] = new $clazz($value);
                         }
-                    } else if ('add' !== $key) {
+                    } else if ('add' !== $key && 'nothing' !== $key) {
                         // The 'add' key is reserved for adding a new (blank) subform.
+                        // The 'nothing' key should always be ignored
                         $clazz = $field->getValueModelClass();
                         if (false === array_key_exists('Id', $value) or '' === $value['Id']) {
                             $id = null;
