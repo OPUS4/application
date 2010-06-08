@@ -245,6 +245,7 @@ class Form_Builder {
         $fieldForm->removeDecorator('HtmlTag');
         $fieldForm->removeDecorator('DtDdWrapper');
         $fieldForm->setLegend($fieldName);
+
         if (false === empty($fieldValues)) {
             foreach ($fieldValues as $i => $fieldValue) {
                 if ($fieldValue instanceof Opus_File) {
@@ -254,6 +255,12 @@ class Form_Builder {
                     $this->__addDescription($modelName . '_' . $fieldName, $fileInput);
                     $fieldForm->addElement($fileInput);
                 } else if ($fieldValue instanceof Opus_Model_Abstract) {
+                    // add an empty element to allow help- and hint texts for whole subfields
+                    $helpElement = new Zend_Form_Element_Hidden('nothing');
+                    $helpElement->setAttrib('class', 'hiddenelement');
+                    $this->__addDescription($modelName . '_' . $fieldName . '_field', $helpElement);
+                    $fieldForm->addElement($helpElement);
+                    
                     if ($field->isSelection()) {
                         // If value is a selection of models, build selection widget
                         $options = $field->getDefault();
