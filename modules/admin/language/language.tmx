@@ -7,7 +7,7 @@
  
   <body>
   
-    <tu tuid="Part2B">
+    <tu tuid="language_Part2B">
       <tuv xml:lang="en">
         <seg>639-2 Identifier (bibliographic code)</seg>
       </tuv>
@@ -16,7 +16,7 @@
       </tuv>
     </tu>
     
-    <tu tuid="Part2T">
+    <tu tuid="language_Part2T">
       <tuv xml:lang="en">
         <seg>639-2 Identifier (terminology code)</seg>
       </tuv>
@@ -25,7 +25,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="Part1">
+    <tu tuid="language_Part1">
       <tuv xml:lang="en">
         <seg>639-1 identifier</seg>
       </tuv>
@@ -34,7 +34,7 @@
       </tuv>
     </tu>
     
-    <tu tuid="Scope">
+    <tu tuid="language_Scope">
       <tuv xml:lang="en">
         <seg>I(ndividual), M(acrolanguage), S(pecial)</seg>
       </tuv>
@@ -43,7 +43,7 @@
       </tuv>
     </tu>
     
-    <tu tuid="Type">
+    <tu tuid="language_Type">
       <tuv xml:lang="en">
         <seg>A(ncient), C(onstructed), E(xtinct), H(istorical), L(iving), S(pecial)</seg>
       </tuv>
@@ -52,7 +52,7 @@
       </tuv>
     </tu>
     
-    <tu tuid="RefName">
+    <tu tuid="language_RefName">
       <tuv xml:lang="en">
         <seg>Language Name</seg>
       </tuv>
@@ -61,7 +61,7 @@
       </tuv>
     </tu>
     
-    <tu tuid="Active">
+    <tu tuid="language_Active">
       <tuv xml:lang="en">
         <seg>active</seg>
       </tuv>
@@ -70,7 +70,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="transmit">
+    <tu tuid="language_transmit">
       <tuv xml:lang="en">
         <seg>store data</seg>
       </tuv>

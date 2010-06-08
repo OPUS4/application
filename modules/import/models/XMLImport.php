@@ -342,6 +342,8 @@ class XMLImport
 		    		$doc->setPersonSubmitter(new Opus_Person($ids[0]));
 		    	}
 		    }
+		    unset($submitter);
+		    unset($identifier);
 		    
 		    $authors = null;
 		    $authors = $doc->getPersonAuthor();
@@ -361,6 +363,7 @@ class XMLImport
 		    if ($authors !== null) {
 		    	$doc->setPersonAuthor($authors);
 		    }
+		    unset($authors);
 		    
 		    $contributors = null;
 		    $contributors = $doc->getPersonContributor();
@@ -380,6 +383,7 @@ class XMLImport
 		    if ($contributors !== null) {
 		    	$doc->setPersonContributor($contributors);
 		    }
+		    unset($contributors);
 
 		    $advisors = null;
 		    try {
@@ -407,6 +411,7 @@ class XMLImport
 		    	}
 		    	// if the field has not been found, dont show an error message, its unimportant
 		    }
+		    unset($advisors);
 
 		    // store the document
 		    $doc->store();
@@ -463,8 +468,8 @@ class XMLImport
                 }
             }
 			$imported['result'] = 'success';
-			$imported['entry'] = $this->completeXML->saveXML($this->document);
-			$imported['document'] = $doc;
+			#$imported['entry'] = $this->completeXML->saveXML($this->document);
+			#$imported['document'] = $doc;
 			$imported['oldid'] = $oldid;
 		}
 		catch (Exception $e) {
@@ -473,6 +478,20 @@ class XMLImport
             $imported['entry'] = $this->completeXML->saveXML($this->document);
             $imported['oldid'] = $oldid;
 		}
+		unset($doc);
+		unset($ddc);
+        unset($seriesCollection);
+        unset($institute);
+		unset($ccs);
+        unset($pacs);
+		unset($msc);
+		unset($jel);
+		unset($apa);
+		unset($bk);
+		
+		unset($this->document);
+		unset($document);
+
     	return $imported;
 	}
 
@@ -488,6 +507,7 @@ class XMLImport
 			$mappedLicence = split("\ ", $licence);
 			$lic[$mappedLicence[0]] = $mappedLicence[1];
 		}
+		unset($fp);
 		return $lic[$shortName];
 	 }
 
@@ -503,6 +523,7 @@ class XMLImport
 			$mappedLicence = split("\ ", $licence);
 		    $lic[$mappedLicence[0]] = $mappedLicence[1];
 		}
+		unset($fp);
 		return $lic[$oldId];
 	 }
 
@@ -518,6 +539,7 @@ class XMLImport
             $mappedLicence = split("\ ", $licence);
             $lic[$mappedLicence[0]] = $mappedLicence[1];
         }
+        unset($fp);
         return $lic[$oldId];
      }
 
@@ -538,6 +560,7 @@ class XMLImport
         	}
         	return null;
         }
+        unset($fp);
         return $lic[$oldId];
      }
 
