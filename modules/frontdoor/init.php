@@ -44,6 +44,14 @@ $logger = Zend_Registry::get('Zend_Log');
 
 // try to get docId
 $docId = $this->getRequest()->getParam('docId');
+
+// forward old IDs
+$oldId = $this->getRequest()->getParam('oldId');
+$newId = Opus_Document::getDocumentByIdentifier($oldId, 'opus3-id');
+if (count($newId) > 0) {
+    $docId = $newId[0];
+}
+
 if (isset($docId) === true) {
     $doc = new Opus_Document($docId);
     // check, if we are allowed to read the document metadata

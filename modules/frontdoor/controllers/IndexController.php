@@ -98,9 +98,9 @@ class Frontdoor_IndexController extends Controller_Action {
      * @return void
      */
     public function mapopus3Action() {
-    	$docId = $this->getRequest()->getParam('docId');
+    	$docId = $this->getRequest()->getParam('oldId');
     	$newId = Opus_Document::getDocumentByIdentifier($docId, 'opus3-id');
-    	if (count($newId) === 0) {
+    	if ($newId[0] === 0) {
     	    // if the document with the given ID in OPUS3 does not exist, redirect to start page
     	    $config = Zend_Registry::get('Zend_Config');
 
