@@ -334,6 +334,7 @@ class XMLImport
 		    $doc->setServerState('published');
 		    
 		    // Analyse the persons
+		    /*
 		    $submitter = $doc->getPersonSubmitter();
 		    $identifier = $submitter->getIdentifierLocal();
 		    if (false === empty($identifier)) {
@@ -342,9 +343,12 @@ class XMLImport
 		    		$doc->setPersonSubmitter(new Opus_Person($ids[0]));
 		    	}
 		    }
+		    else {
+		    	$doc->setPersonSubmitter($submitter);
+		    }
 		    unset($submitter);
 		    unset($identifier);
-		    
+		    		    
 		    $authors = null;
 		    $authors = $doc->getPersonAuthor();
 		    $index = 0;
@@ -412,7 +416,7 @@ class XMLImport
 		    	// if the field has not been found, dont show an error message, its unimportant
 		    }
 		    unset($advisors);
-
+*/
 		    // store the document
 		    $doc->store();
             
