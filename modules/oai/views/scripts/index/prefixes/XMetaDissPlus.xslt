@@ -61,8 +61,6 @@
 
     <xsl:output method="xml" indent="yes" />
 
-    <xsl:param name="contactId" />
-
     <xsl:template match="Opus_Document" mode="xmetadissplus">
         <xMetaDiss
             xsi:schemaLocation="http://www.bsz-bw.de/xmetadissplus/1.3 http://www.bsz-bw.de/xmetadissplus/1.3/xmetadissplus.xsd">
@@ -207,7 +205,7 @@
             </xsl:if>
 
             <xsl:element name="ddb:contact">
-                <xsl:attribute name="ddb:contactID"><xsl:value-of select="$contactId" /></xsl:attribute>
+                <xsl:attribute name="ddb:contactID"><xsl:value-of select="Publisher/@DnbContactId" /></xsl:attribute>
             </xsl:element>
             <xsl:element name="ddb:fileNumber">
               <xsl:value-of select="count(//File)"/>

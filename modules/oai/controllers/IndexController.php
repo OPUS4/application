@@ -149,11 +149,6 @@ class Oai_IndexController extends Controller_Xml {
         $this->_proc->setParameter('', 'oai_base_url', $oai_base_url);
         $registry = Zend_Registry::getInstance();
         $config = $registry->get('Zend_Config');
-        $contactId = '';
-        if (true === isset($config->oai->contactid)) {
-            $contactId = $config->oai->contactid;
-        }
-        $this->_proc->setParameter('', 'contactId', $contactId);
 
         try {
             foreach ($oaiRequest as $parameter => $value) {
