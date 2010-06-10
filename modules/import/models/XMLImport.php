@@ -418,8 +418,8 @@ class XMLImport
 		    unset($advisors);
 */
 		    // store the document
-		    $doc->store();
-            
+	        $doc->store();
+
 		    // Add this document to its DDC classification
 		    if ($ddc !== null) {
 		        $ddc->addDocuments($doc);

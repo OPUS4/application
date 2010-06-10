@@ -137,11 +137,38 @@ class Publish_IndexController extends Controller_Action {
             $data = $this->_request->getPost();
             $form_builder = new Form_Builder();
             $documentInSession = new Zend_Session_Namespace('document');
-            if (array_key_exists('selecttype', $data) === true || array_key_exists('gpg_key_upload', $data) === true) {
+            if (array_key_exists('gpg_key_upload', $data) === true) {
+            	$alternateForm = new KeyUpload();
+            	// upload key
+                if ($alternateForm->isValid($data) === true) {
+                    $gpg = new Opus_GPG();
+
+                    $upload = new Zend_File_Transfer_Adapter_Http();
+                    $files = $upload->getFileInfo();
+
+                    // save the file
+                    foreach ($files as $file) {
+                        $gpg->importKeyFile($file['tmp_name']);
+                    }
+                }
+                
+                // build first page of publishing form
+                $selectedDoctype = $documentInSession->doctype;
+                $document = $documentInSession->document;
+                
+                $caption = 'publish_index_create_' . $selectedDoctype;
+                $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create', 'page' => 1));
+
+                $createForm = $form_builder->build($this->__createFilter($document, 0));
+                $createForm->setAction($action_url);
+                $createForm->setDecorators(array('FormElements', array('Description', array('placement' => 'prepend','tag' => 'h2')), 'Form'));
+                $this->view->form = $createForm;
+                return;
+            }
+            if (array_key_exists('selecttype', $data) === true) {
                 // validate document type
                 $form = new Overview($workflow);
-                $alternateForm = new KeyUpload();
-                if ($form->isValid($data) === true || $alternateForm->isValid($data) === true) {
+                if ($form->isValid($data) === true) {
                     $possibleDoctypes = Opus_Document_Type::getAvailableTypeNames($workflow);
                     $selectedDoctype = $form->getValue('selecttype');
                     if ($selectedDoctype !== $documentInSession->doctype && isset($selectedDoctype) === true) {
@@ -155,24 +182,6 @@ class Publish_IndexController extends Controller_Action {
                         // document type does not exists, back to select form
                         $this->_redirectTo($this->view->translate('choose_valid_doctype'),
                             'deposit', 'index', 'publish', array('target' => $workflow));
-                    }
-
-                    if ($alternateForm->isValid($data) === true) {
-                        $gpg = new Opus_GPG();
-
-                        $upload = new Zend_File_Transfer_Adapter_Http();
-                        $files = $upload->getFileInfo();
-
-                        // save the file
-                        foreach ($files as $file) {
-                            $gpg->importKeyFile($file['tmp_name']);
-                        }
-                    }
-                    // If author selected that he has a GPG-Key, redirect to Uploadform
-                    $gpgkey = $form->getValue('gpgkey');
-                    if ($gpgkey === '1') {
-                        $documentInSession->keyupload = true;
-                        $this->_redirectTo('keyupload');
                     }
 
                     // Store document in session
@@ -201,6 +210,17 @@ class Publish_IndexController extends Controller_Action {
                         }
                     }
                     $documentInSession->document = $document;
+
+                    // If author selected that he has a GPG-Key, show Uploadform
+                    if (array_key_exists('gpgkey', $data) === true) {
+                        $gpgkey = $data['gpgkey'];
+                        if ($gpgkey === '1') {
+                            $documentInSession->keyupload = true;
+                            $alternateForm = new KeyUpload();
+                            $this->view->form = $alternateForm;
+                            return;
+                        }
+                    }
 
                     $caption = 'publish_index_create_' . $selectedDoctype;
                     $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create', 'page' => 1));
