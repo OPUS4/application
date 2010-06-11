@@ -32186,7 +32186,7 @@ CREATE TABLE IF NOT EXISTS `link_documents_collections` (
 -- Constraints der Tabelle `collections`
 --
 ALTER TABLE `collections`
-  ADD CONSTRAINT `collections_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `collections_roles` (`id`);
+  ADD CONSTRAINT `collections_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `collections_roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints der Tabelle `collections_attributes`
@@ -32198,15 +32198,15 @@ ALTER TABLE `collections_attributes`
 -- Constraints der Tabelle `collections_nodes`
 --
 ALTER TABLE `collections_nodes`
-  ADD CONSTRAINT `collections_nodes_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `collections_roles` (`id`),
-  ADD CONSTRAINT `collections_nodes_ibfk_2` FOREIGN KEY (`collection_id`) REFERENCES `collections` (`id`),
-  ADD CONSTRAINT `collections_nodes_ibfk_3` FOREIGN KEY (`parent_id`) REFERENCES `collections_nodes` (`id`);
+  ADD CONSTRAINT `collections_nodes_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `collections_roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `collections_nodes_ibfk_2` FOREIGN KEY (`collection_id`) REFERENCES `collections` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `collections_nodes_ibfk_3` FOREIGN KEY (`parent_id`) REFERENCES `collections_nodes` (`id`) ON UPDATE CASCADE;
 
 --
 -- Constraints der Tabelle `link_documents_collections`
 --
 ALTER TABLE `link_documents_collections`
-  ADD CONSTRAINT `link_documents_collections_ibfk_1` FOREIGN KEY (`document_id`) REFERENCES `documents` (`id`),
-  ADD CONSTRAINT `link_documents_collections_ibfk_2` FOREIGN KEY (`collection_id`) REFERENCES `collections` (`id`),
-  ADD CONSTRAINT `link_documents_collections_ibfk_3` FOREIGN KEY (`role_id`) REFERENCES `collections_roles` (`id`),
+  ADD CONSTRAINT `link_documents_collections_ibfk_1` FOREIGN KEY (`document_id`) REFERENCES `documents` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `link_documents_collections_ibfk_2` FOREIGN KEY (`collection_id`) REFERENCES `collections` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `link_documents_collections_ibfk_3` FOREIGN KEY (`role_id`) REFERENCES `collections_roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `link_documents_collections_ibfk_4` FOREIGN KEY (`role_id`, `collection_id`) REFERENCES `collections` (`role_id`, `id`);

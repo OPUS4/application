@@ -404,7 +404,12 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             	// Safety question answered, deleting
             	if (isset($sureyes) === true) {
                     $model = new $this->_modelclass($id);
-                    $model->deletePermanent();
+                    try {
+                    	$model->deletePermanent();
+                    }
+                    catch (Exception $e) {
+                    	$this->_redirectTo($e->getMessage(), 'index');
+                    }
                     $this->_redirectTo('Model successfully deleted.', 'index');
             	}
             	else {
