@@ -471,6 +471,14 @@
       </tuv>
     </tu>
     
+    <tu tuid="frontdoor_doc_id_not_found">
+      <tuv xml:lang="en">
+        <seg>Document with ID %1$s has not been found!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das Dokument mit der ID %1$s existiert nicht in diesem Repository!</seg>
+      </tuv>
+    </tu>
  
  
   </body>

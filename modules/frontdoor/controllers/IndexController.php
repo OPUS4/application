@@ -44,52 +44,59 @@ class Frontdoor_IndexController extends Controller_Action {
         // $logger = Zend_Registry::get('Zend_Log');
         // Load document
         $docId = $this->getRequest()->getParam('docId');
-        $document = new Opus_Document($docId);
+        try {
+            $document = new Opus_Document($docId);
 
-        // Set up filter and get XML-Representation of filtered document.
-        $type = new Opus_Document_Type($document->getType(), $document->getWorkflow());
-        $filter = new Opus_Model_Filter;
-        $filter->setModel($document);
-        $xml = $filter->toXml();
+            // Set up filter and get XML-Representation of filtered document.
+            $type = new Opus_Document_Type($document->getType(), $document->getWorkflow());
+            $filter = new Opus_Model_Filter;
+            $filter->setModel($document);
+            $xml = $filter->toXml();
 
-        // Set up XSLT-Stylesheet
-        $xslt = new DomDocument;
-        if (true === file_exists($this->view->getScriptPath('index') . '/' . $type->getName() . '.xslt')) {
-            $template = $type->getName() . '.xslt';
-        } else {
-            $template = 'index.xslt';
+            // Set up XSLT-Stylesheet
+            $xslt = new DomDocument;
+            if (true === file_exists($this->view->getScriptPath('index') . '/' . $type->getName() . '.xslt')) {
+                $template = $type->getName() . '.xslt';
+            } else {
+                $template = 'index.xslt';
+            }
+            $xslt->load($this->view->getScriptPath('index') . '/' . $template);
+
+            // Set up XSLT-Processor
+            $proc = new XSLTProcessor;
+            $proc->registerPHPFunctions('Frontdoor_IndexController::translate', 'Frontdoor_IndexController::isMailPossible');
+            $proc->importStyleSheet($xslt);
+
+            // Set Base-Url
+            $baseUrl = $this->getRequest()->getBaseUrl();
+            $this->view->baseUrl = $baseUrl;
+            // Set Doctype
+            $this->view->doctype('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"  "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">');
+
+            // Set path for layout
+            $registry = Zend_Registry::getInstance();
+            $config = $registry->get('Zend_Config');
+            $theme = 'default';
+            if (true === isset($config->theme)) {
+                $theme = $config->theme;
+            }
+            $layoutPath = $baseUrl .'/layouts/'. $theme;
+
+            $proc->setParameter('', 'baseUrl', $baseUrl);
+            $proc->setParameter('', 'layoutPath', $layoutPath);
+
+            // Transform to HTML
+            $this->view->frontdoor = $proc->transformToXML($xml);
+
+            // increment counter for document access statistics
+            $statistics = Opus_Statistic_LocalCounter::getInstance();
+            $statistics->countFrontdoor($docId);
         }
-        $xslt->load($this->view->getScriptPath('index') . '/' . $template);
-
-        // Set up XSLT-Processor
-        $proc = new XSLTProcessor;
-        $proc->registerPHPFunctions('Frontdoor_IndexController::translate', 'Frontdoor_IndexController::isMailPossible');
-        $proc->importStyleSheet($xslt);
-
-        // Set Base-Url
-        $baseUrl = $this->getRequest()->getBaseUrl();
-        $this->view->baseUrl = $baseUrl;
-        // Set Doctype
-        $this->view->doctype('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"  "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">');
-
-        // Set path for layout
-        $registry = Zend_Registry::getInstance();
-        $config = $registry->get('Zend_Config');
-        $theme = 'default';
-        if (true === isset($config->theme)) {
-            $theme = $config->theme;
+        catch (Zend_Db_Table_Rowset_Exception $e) {
+        	if ($e->getMessage() === 'No row could be found at position 0') {
+        		$this->view->frontdoor = sprintf($this->view->translate('frontdoor_doc_id_not_found'), $docId);
+        	}
         }
-        $layoutPath = $baseUrl .'/layouts/'. $theme;
-
-        $proc->setParameter('', 'baseUrl', $baseUrl);
-        $proc->setParameter('', 'layoutPath', $layoutPath);
-
-        // Transform to HTML
-        $this->view->frontdoor = $proc->transformToXML($xml);
-
-        // increment counter for document access statistics
-        $statistics = Opus_Statistic_LocalCounter::getInstance();
-        $statistics->countFrontdoor($docId);
     }
     
     /**

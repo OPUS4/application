@@ -55,12 +55,21 @@ if (isset($oldId) === true) {
 }
 
 if (isset($docId) === true) {
-    $doc = new Opus_Document($docId);
+    $translate = Zend_Registry::get('Zend_Translate');
+    try {
+        $doc = new Opus_Document($docId);
+    }
+    catch (Zend_Db_Table_Rowset_Exception $e) {
+    	if ($e->getMessage() === 'No row could be found at position 0') {
+            $req = Zend_Controller_Front::getInstance()->getRequest();
+            $logger->warn('Given docId ' . $docId . ' not found!');
+            Zend_Controller_Action_HelperBroker::getStaticHelper('redirector')->gotoUrl('/');
+    	}
+    }
     // check, if we are allowed to read the document metadata
     if (true !== Opus_Security_Realm::getInstance()->check('readMetadata', $doc->getServerState())) {
         // we are not allowed to read the metadata
         $identity = Zend_Auth::getInstance()->getIdentity();
-        $translate = Zend_Registry::get('Zend_Translate');
         if (is_null($translate) === false) {
             if (empty($identity) === true) {
                 $message = $translate->getAdapter()->translate('frontdoor_no_identity_error');
@@ -79,25 +88,24 @@ if (isset($docId) === true) {
         $params = array();
         foreach (Zend_Controller_Front::getInstance()->getRequest()->getUserParams() as $key => $value) {
             switch ($key) {
-            case 'module' :
-                $params['rmodule'] = $value;
-                break;
-            case 'controller' :
-                $params['rcontroller'] = $value;
-                break;
-            case 'action' :
-                $params['raction'] = $value;
-                break;
-            default :
-                $params[$key] = $value;
-                break;
+                case 'module' :
+                    $params['rmodule'] = $value;
+                    break;
+                case 'controller' :
+                    $params['rcontroller'] = $value;
+                    break;
+                case 'action' :
+                    $params['raction'] = $value;
+                    break;
+                default :
+                    $params[$key] = $value;
+                    break;
             }
         }
         
         // Forward to module auth
         Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger')->addMessage($message);
         Zend_Controller_Action_HelperBroker::getStaticHelper('redirector')->gotoSimple('index', 'auth', 'default', $params);
-
     }
 } else {
     $req = Zend_Controller_Front::getInstance()->getRequest();
