@@ -443,6 +443,24 @@
       </tuv>
     </tu>
     
+    <tu tuid="keyFileToUpload">
+      <tuv xml:lang="en">
+        <seg>Keyfile</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Schlüsseldatei</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="pkm_process">
+      <tuv xml:lang="en">
+        <seg>Send file</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Abschicken</seg>
+      </tuv>
+    </tu>
+
   </body>
   
   
