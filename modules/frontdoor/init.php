@@ -47,9 +47,11 @@ $docId = $this->getRequest()->getParam('docId');
 
 // forward old IDs
 $oldId = $this->getRequest()->getParam('oldId');
-$newId = Opus_Document::getDocumentByIdentifier($oldId, 'opus3-id');
-if (count($newId) > 0) {
-    $docId = $newId[0];
+if (isset($oldId) === true) {
+    $newId = Opus_Document::getDocumentByIdentifier($oldId, 'opus3-id');
+    if (count($newId) > 0) {
+        $docId = $newId[0];
+    }
 }
 
 if (isset($docId) === true) {
