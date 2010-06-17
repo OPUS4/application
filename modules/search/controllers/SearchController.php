@@ -622,7 +622,7 @@ class Search_SearchController extends Zend_Controller_Action
                     try {
                     	if (array_key_exists('noform', $data) === false) {
                     		$this->view->relevance[$runningIndex] = $hit->getRelevance();
-                    		$this->view->abstractValue[$runningIndex] = Opus_Search_Adapter_Lucene_SearchHitAdapter::highlight($queryObject->parsedQuery, $this->view->abstractValue[$runningIndex]);
+                    		$this->view->abstractValue[$runningIndex] = Opus_Search_Adapter_Lucene_SearchHitAdapter::highlight($resultlist->query, $this->view->abstractValue[$runningIndex]);
                     	}
                     }
                     catch (Exception $e) {
