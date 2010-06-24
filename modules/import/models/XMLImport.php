@@ -205,15 +205,11 @@ class XMLImport {
             $ddc_id = null;
             if (array_key_exists($ddcName, $this->collections) === true) {
                 $ddcVal = Opus_Collection::fetchCollectionsByRoleNumber($this->collections[$ddcName], $ddcValue);
-                if (true === is_array($ddcVal)) {
-                    $ddc_id = $ddcVal[0]->getId();
+                if (count($ddcVal) > 0) {
+                    $ddc = $ddcVal[0];
+                    $ddc_id = $ddc->getId();
                 } else {
-                    $ddc_id = $ddcVal->getId();
-                }
-                if ($ddc_id !== null) {
-                    $ddc = new Opus_Collection($ddc_id);
-                } else {
-                    echo "Mapping file for " . $this->collections[$ddcName] . " does not exist or class not found. Class $ddc_id not imported for old ID $oldid\n";
+                    echo "Mapping file for " . $this->collections[$ddcName] . " does not exist or class not found. Class $ddcName/$ddcValue not imported for old ID $oldid\n";
                 }
             }
             $this->document->removeChild($ddcNotation);
@@ -250,15 +246,18 @@ class XMLImport {
                 $instituteReturnValue = null;
                 $instituteReturnValue = $this->getInstitute($instituteId->getAttribute('Value'));
                 if (true === is_array($instituteReturnValue)) {
-                    $instituteValue = $instituteReturnValue[0];
+                    $instituteValue = (int) $instituteReturnValue[0];
                 } else {
-                    $instituteValue = $instituteReturnValue;
+                    $instituteValue = (int) $instituteReturnValue;
                 }
                 if (false === empty($instituteValue) && $instituteValue !== null) {
                     try {
                         $institute[] = new Opus_Collection($instituteValue);
                     } catch (Exception $e) {
                         echo "Failure mapping document to institute " . $instituteValue . ": Institute not found!";
+
+                        // TODO: Added Exception to see what we ignored.
+                        throw new Exception($e);
                     }
                 } else {
                     echo "Mapping file for " . $instituteName . " does not exist or class not found. Institute assignation $oldInstituteValue not imported for old ID $oldid\n";
@@ -394,55 +393,65 @@ class XMLImport {
 
             // Add this document to its DDC classification
             if ($ddc !== null) {
-                $ddc->addDocuments($doc);
-                $ddc->store();
+                $ddc->linkDocument($doc->getId());
+//              $ddc->addDocuments($doc);
+//              $ddc->store();
             }
             if ($seriesCollection !== null) {
-                $seriesCollection->addDocuments($doc);
-                $seriesCollection->store();
+                $seriesCollection->linkDocument($doc->getId());
+//              $seriesCollection->addDocuments($doc);
+//              $seriesCollection->store();
             }
             if (count($institute) > 0) {
                 foreach ($institute as $instEntry) {
-                    $instEntry->addDocuments($doc);
-                    $instEntry->store();
+                    $instEntry->linkDocument($doc->getId());
+//                  $instEntry->addDocuments($doc);
+//                  $instEntry->store();
                 }
             }
             if (count($ccs) > 0) {
                 foreach ($ccs as $ccsEntry) {
-                    $ccsEntry->addDocuments($doc);
-                    $ccsEntry->store();
+                    $ccsEntry->linkDocument($doc->getId());
+//                  $ccsEntry->addDocuments($doc);
+//                  $ccsEntry->store();
                 }
             }
             if (count($pacs) > 0) {
                 foreach ($pacs as $pacsEntry) {
-                    $pacsEntry->addDocuments($doc);
-                    $pacsEntry->store();
+                    $pacsEntry->linkDocument($doc->getId());
+//                  $pacsEntry->addDocuments($doc);
+//                  $pacsEntry->store();
                 }
             }
             if (count($msc) > 0) {
                 foreach ($msc as $mscEntry) {
-                    $mscEntry->addDocuments($doc);
-                    $mscEntry->store();
+                    $mscEntry->linkDocument($doc->getId());
+//                  $mscEntry->addDocuments($doc);
+//                  $mscEntry->store();
                 }
             }
             if (count($jel) > 0) {
                 foreach ($jel as $jelEntry) {
-                    $jelEntry->addDocuments($doc);
-                    $jelEntry->store();
+                    $jelEntry->linkDocument($doc->getId());
+//                    $jelEntry->addDocuments($doc);
+//                    $jelEntry->store();
                 }
             }
             if (count($apa) > 0) {
                 foreach ($apa as $apaEntry) {
-                    $apaEntry->addDocuments($doc);
-                    $apaEntry->store();
+                    $apaEntry->linkDocument($doc->getId());
+//                    $apaEntry->addDocuments($doc);
+//                    $apaEntry->store();
                 }
             }
             if (count($bk) > 0) {
                 foreach ($bk as $bkEntry) {
-                    $bkEntry->addDocuments($doc);
-                    $bkEntry->store();
+                    $bkEntry->linkDocument($doc->getId());
+//                    $bkEntry->addDocuments($doc);
+//                    $bkEntry->store();
                 }
             }
+
             $imported['result'] = 'success';
             #$imported['entry'] = $this->completeXML->saveXML($this->document);
             #$imported['document'] = $doc;
@@ -552,25 +561,17 @@ class XMLImport {
             if (array_key_exists($name, $this->collections) === true) {
                 try {
                     $returnedId = Opus_Collection::fetchCollectionsByRoleNumber($this->collections[$name], $value);
-                    if (true === is_array($returnedId)) {
-                        if (count($returnedId) > 0) {
-                            if (is_object($returnedId[0]) === true) {
-                                $id = $returnedId[0]->getId();
-                            } else {
-                                $id = null;
-                            }
-                        } else {
-                            $id = null;
-                        }
+                    if (count($returnedId) > 0 && is_object($returnedId[0]) === true) {
+                        $id = $returnedId[0]->getId();
                     } else {
-                        $id = $returnedId->getId();
+                        $id = null;
                     }
                 } catch (Exception $e) {
                     // do nothing, but continue
                     // TODO: Dirty hack.  Don't just remove Exceptions.
 
-
-                    // throw new Exception($e);
+                    // TODO: Added Exception to see what we ignored...
+                    throw new Exception($e);
                 }
                 if ($id !== null) {
                     $output[] = new Opus_Collection($id);
