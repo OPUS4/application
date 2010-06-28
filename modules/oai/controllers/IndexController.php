@@ -780,20 +780,13 @@ class Oai_IndexController extends Controller_Xml {
                 }
             }
         }
+
         // get relevant docIds out of the two arrays
         $di = 0;
         if (true === empty($setDocIds)) {
             $docIds = $restDocIds;
         } else {
-            foreach ($restDocIds as $restDocId) {
-                foreach ($setDocIds as $setDocId) {
-                    if ($restDocId == $setDocId) {
-                        $docIds[$di] = $restDocId;
-                        unset($setDocIds[$setDocId]);
-                        $di = $di + 1;
-                    }
-                }
-            }
+            $docIds = array_intersect($setDocIds, $restDocIds);
         }
 
         return $docIds;
