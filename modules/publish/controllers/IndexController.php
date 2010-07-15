@@ -451,7 +451,7 @@ class Publish_IndexController extends Controller_Action {
                     , 'upload', 'index', 'publish');
         } else if (false === isset($role)) {
             $collections = array();
-            foreach (Opus_CollectionRole::getAll() as $collection) {
+            foreach (Opus_CollectionRole::fetchAll() as $collection) {
                 $collections[$collection->getId()] = $collection->getDisplayName();
             }
             $this->view->subcollections = $collections;

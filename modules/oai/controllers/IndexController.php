@@ -671,7 +671,7 @@ class Oai_IndexController extends Controller_Xml {
             }
         }
         // list sets for all collections for oai
-        $roles = Opus_CollectionRole::getAll(true);
+        $roles = Opus_CollectionRole::fetchAll();
         foreach ($roles as $role) {
             if ($role->getVisibleOai() == '1') {
                 $oaisets = $role->getOaiSetNames();

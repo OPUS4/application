@@ -59,7 +59,7 @@ class Admin_CollectionController extends Controller_Action {
      * @return void
      */
     public function indexAction() {
-        $entries = Opus_CollectionRole::getAll();
+        $entries = Opus_CollectionRole::fetchAll();
         $this->view->entries = array();
         foreach ($entries as $entry) {
             $this->view->entries[] = array('id'=>$entry->getId(), 'name'=>$entry->getDisplayName());
@@ -122,7 +122,7 @@ class Admin_CollectionController extends Controller_Action {
             $collection = new Opus_Collection();
         } else {
             $collection = new Opus_CollectionRole();
-            $allRoles = Opus_CollectionRole::getAll();
+            $allRoles = Opus_CollectionRole::fetchAll();
             $countRoles = count($allRoles);
             $pos_field = $collection->getField('Position');
             $pos_field->setDefault(array_combine(range(1,$countRoles+1),range(1,$countRoles+1)))->setSelection(true);
@@ -440,7 +440,7 @@ class Admin_CollectionController extends Controller_Action {
                     , 'edit', 'documents', 'admin', array('id' => $document->getId()));
         } else if (false === isset($role)) {
             $collections = array();
-            foreach (Opus_CollectionRole::getAll() as $collection) {
+            foreach (Opus_CollectionRole::fetchAll() as $collection) {
                 $collections[$collection->getId()] = $collection->getDisplayName();
             }
             $this->view->subcollections = $collections;
