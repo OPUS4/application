@@ -48,7 +48,7 @@ class Frontdoor_IndexController extends Controller_Action {
             $document = new Opus_Document($docId);
 
             // Set up filter and get XML-Representation of filtered document.
-            $type = new Opus_Document_Type($document->getType(), $document->getWorkflow());
+            $type = new Opus_Document_Type($document->getType());
             $filter = new Opus_Model_Filter;
             $filter->setModel($document);
             $xml = $filter->toXml();

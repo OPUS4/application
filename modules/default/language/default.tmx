@@ -241,7 +241,7 @@
       </tuv>
     </tu>
 
-     <tu tuid="/publish/index/create/target/repository/page/1">
+     <tu tuid="/publish/index/create/page/1">
       <tuv xml:lang="en">
         <seg>Das ist ein Hilfetext <b>zur</b> Publish-Funktion</seg>
       </tuv>

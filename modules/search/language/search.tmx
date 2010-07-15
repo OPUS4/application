@@ -459,31 +459,6 @@
       </tuv>
     </tu>
     
-     <tu tuid="search_workflow">
-      <tuv xml:lang="en">
-        <seg>Fulltext Files</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Volltextdateien</seg>
-      </tuv>
-    </tu>
-     <tu tuid="search_repository_only">
-      <tuv xml:lang="en">
-        <seg>Only documents with fulltext file</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Nur Dokumente mit Volltextdatei</seg>
-      </tuv>
-    </tu>
-     <tu tuid="search_bibliographic_only">
-      <tuv xml:lang="en">
-        <seg>Only bibliographic data</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Nur Dokumente ohne Volltextdatei</seg>
-      </tuv>
-    </tu>
-
     <tu tuid="no_docs">
       <tuv xml:lang="en">
         <seg>No documents found!</seg>

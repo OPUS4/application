@@ -341,11 +341,6 @@ class Search_SearchController extends Zend_Controller_Action
         $doctypeList->addMultiOptions($doctypes);
         $doctypeList->setDecorators($decorators);
 
-        $workflowSelector = new Zend_Form_Element_Select('workflow');
-        $workflowSelector->addMultiOptions(array('0' => 'all_hits', 'bibliography' => 'search_bibliographic_only', 'repository' => 'search_repository_only'));
-        $workflowSelector->setLabel('search_workflow');
-        $workflowSelector->setDecorators($decorators);
-
         $query = array();
         $field = array();
         $boolean = array();
@@ -379,7 +374,7 @@ class Search_SearchController extends Zend_Controller_Action
         $submit->setLabel('search_searchaction');
 
         // Add elements to form:
-        $form->addElements(array($truncation, $hitsPerPage, $sort, $languageList, $doctypeList, $workflowSelector));
+        $form->addElements(array($truncation, $hitsPerPage, $sort, $languageList, $doctypeList));
         for ($n = 0; $n < $searchfields->fields; $n++)
         {
             $form->addElements(array($field[$n], $query[$n]));
@@ -472,13 +467,6 @@ class Search_SearchController extends Zend_Controller_Action
                 		$query .= ' AND ';
                 	}
                 	$query .= 'doctype:' . $data['doctype'];
-                }
-                if ($data['workflow'] !== '0')
-                {
-                	if ($query !== '') {
-                		$query .= ' AND ';
-                	}
-                	$query .= 'workflow:' . $data['workflow'];
                 }
                 try {
                     #echo "Complete query: " . $query;

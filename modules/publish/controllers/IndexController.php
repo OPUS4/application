@@ -44,30 +44,17 @@
 class Publish_IndexController extends Controller_Action {
 
     /**
-     * Renders a list of available document types in selected workflow.
-     *
-     * @return void
-     *
-     */
-    public function depositAction() {
-        $this->view->title = $this->view->translate('publish_controller_index');
-        $workflow = $this->_request->getParam('target');
-        $form = new Overview($workflow);
-        $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create'));
-        $form->setAction($action_url);
-        $this->view->form = $form;
-    }
-
-    /**
-     * Renders a list of available workflows.
+     * Renders a list of available document types.
      *
      * @return void
      *
      */
     public function indexAction() {
         $this->view->title = $this->view->translate('publish_controller_index');
-        $workflows = Opus_Document_Type::getAvailableWorkflows();
-        $this->view->workflows = $workflows;
+        $form = new Overview();
+        $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create'));
+        $form->setAction($action_url);
+        $this->view->form = $form;
     }
 
     /**
@@ -93,7 +80,7 @@ class Publish_IndexController extends Controller_Action {
     private function __createFilter(Opus_Document $document, $page = null) {
         $filter = new Opus_Model_Filter();
         $filter->setModel($document);
-        $type = new Opus_Document_Type($document->getType(), $document->getWorkflow());
+        $type = new Opus_Document_Type($document->getType());
         $pages = $type->getPages();
         $alwayshidden = array('IdentifierOpus3', 'Type', 'ServerState', 'ServerDateModified', 'ServerDatePublished', 'File');
         $blacklist = array_merge($alwayshidden, $type->getPublishFormBlackList());
@@ -114,7 +101,7 @@ class Publish_IndexController extends Controller_Action {
      * @return boolean  Whether the page is defined.
      */
     private function __pageExists(Opus_Document $document, $page) {
-        $type = new Opus_Document_Type($document->getType(), $document->getWorkflow());
+        $type = new Opus_Document_Type($document->getType());
         $pages = $type->getPages();
         return array_key_exists($page, $pages);
     }
@@ -133,7 +120,6 @@ class Publish_IndexController extends Controller_Action {
             if (false === is_null($backlink)) {
                 $requested_page--;
             }
-            $workflow = $this->_request->getParam('target');
             $data = $this->_request->getPost();
             $form_builder = new Form_Builder();
             $documentInSession = new Zend_Session_Namespace('document');
@@ -167,9 +153,9 @@ class Publish_IndexController extends Controller_Action {
             }
             if (array_key_exists('selecttype', $data) === true) {
                 // validate document type
-                $form = new Overview($workflow);
+                $form = new Overview();
                 if ($form->isValid($data) === true) {
-                    $possibleDoctypes = Opus_Document_Type::getAvailableTypeNames($workflow);
+                    $possibleDoctypes = Opus_Document_Type::getAvailableTypeNames();
                     $selectedDoctype = $form->getValue('selecttype');
                     if ($selectedDoctype !== $documentInSession->doctype && isset($selectedDoctype) === true) {
                         $documentInSession->doctype = $selectedDoctype;
@@ -181,11 +167,11 @@ class Publish_IndexController extends Controller_Action {
                         // TODO: error message
                         // document type does not exists, back to select form
                         $this->_redirectTo($this->view->translate('choose_valid_doctype'),
-                            'deposit', 'index', 'publish', array('target' => $workflow));
+                            'deposit', 'index', 'publish');
                     }
 
                     // Store document in session
-                    $document = new Opus_Document(null, $selectedDoctype, $workflow);
+                    $document = new Opus_Document(null, $selectedDoctype);
                     // this only works if authentication method is ldap
                     $config = new Zend_Config_Ini('../config/config.ini', 'production');
         
@@ -311,7 +297,7 @@ class Publish_IndexController extends Controller_Action {
                 if (array_key_exists('submit', $postdata) === true) {
                     // type is stored in serialized model as a string only
                     // to validate document it must be a Document_Type
-                    $type = new Opus_Document_Type($document->getType(), $document->getWorkflow());
+                    $type = new Opus_Document_Type($document->getType());
                     $document->setType($type);
                     $id = $document->store();
                     $this->view->title = $this->view->translate('publish_controller_upload');

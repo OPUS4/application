@@ -41,20 +41,13 @@
 class Overview extends Zend_Form {
 
     /**
-     * Holds the name of the workflow (i.e. path of document definitions) to use.
-     *
-     * @var string  Defaults to 'repository'.
-     */
-    protected $_workflow = 'repository';
-
-    /**
      * Looks in a specific directory for xml files.
      *
      * @return array
      */
     protected function _getXmlDocTypeFiles() {
         // TODO Do not use a hardcoded path to xml files
-        $xml_path = "../config/xmldoctypes/$this->_workflow/";
+        $xml_path = "../config/xmldoctypes/repository/";
         $result = array();
         if ($dirhandle = opendir($xml_path)) {
             while (false !== ($file = readdir($dirhandle))) {
@@ -71,16 +64,6 @@ class Overview extends Zend_Form {
             asort($result);
         }
         return $result;
-    }
-
-    /**
-     * Constructor overloaded to handle workflow parameter.
-     *
-     * @param  string  $workflow Optional, defaults to 'repository'.
-     */
-    public function __construct($workflow = 'repository') {
-        $this->_workflow = $workflow;
-        parent::__construct();
     }
 
     /**

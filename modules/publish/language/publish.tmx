@@ -157,24 +157,6 @@
       </tuv>
     </tu>
 
-    <tu tuid="workflow_bibliography">
-      <tuv xml:lang="en">
-        <seg>Bibliography</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Bibliografie</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="workflow_repository">
-      <tuv xml:lang="en">
-        <seg>Repository</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Repository</seg>
-      </tuv>
-    </tu>
-
     <tu tuid="choose_valid_doctype">
       <tuv xml:lang="en">
         <seg>Please choose a document type.</seg>
