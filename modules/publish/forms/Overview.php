@@ -47,7 +47,7 @@ class Overview extends Zend_Form {
      */
     protected function _getXmlDocTypeFiles() {
         // TODO Do not use a hardcoded path to xml files
-        $xml_path = "../application/configs/xmldoctypes/";
+        $xml_path = "../config/xmldoctypes/";
         $result = array();
         if ($dirhandle = opendir($xml_path)) {
             while (false !== ($file = readdir($dirhandle))) {
