@@ -38,7 +38,7 @@ $GLOBALS['start_mtime'] = microtime(true);
 
 // Define path to application directory
 defined('APPLICATION_PATH')
-        || define('APPLICATION_PATH', realpath(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'application');
+        || define('APPLICATION_PATH', realpath(dirname(dirname(__FILE__))));
 
 // Define application environment
 //defined('APPLICATION_ENV')
@@ -71,4 +71,4 @@ $app = new Application_Bootstrap();
 $app->run(
         APPLICATION_PATH,
         Application_Bootstrap::CONFIG_TEST,
-        APPLICATION_PATH . DIRECTORY_SEPARATOR . 'configs');
+        APPLICATION_PATH . DIRECTORY_SEPARATOR . 'config');
