@@ -181,7 +181,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
             $theme = 'default';
         }
 
-        $layoutpath = $this->_applicationRootDirectory . '/../public/layouts/' . $theme;
+        $layoutpath = $this->_applicationRootDirectory . '/public/layouts/' . $theme;
 
         if (false === is_dir($layoutpath)) {
             throw new Exception('Requested theme "' . $theme . '" not found.');
@@ -200,7 +200,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
 
         // Set path to Zend extension view helpers to be accessible in other
         // modules too.
-        $libRealPath = realpath($this->_applicationRootDirectory . '/../library');
+        $libRealPath = realpath($this->_applicationRootDirectory . '/library');
         $view->addHelperPath($libRealPath . '/View/Helper', 'View_Helper');
 
         // Set path to shared view partials
