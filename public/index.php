@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -26,7 +27,8 @@
  *
  * @category    Application
  * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @author      Thoralf Klein <thoralf.klein@zib.de>
+ * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -34,10 +36,32 @@
 // Saving start time for profiling.
 $GLOBALS['start_mtime'] = microtime(true);
 
-// Configure include path.
-set_include_path('.'
-            . PATH_SEPARATOR . dirname(dirname(__FILE__)) . '/library'
-            . PATH_SEPARATOR . get_include_path());
+// Define path to application directory
+defined('APPLICATION_PATH')
+        || define('APPLICATION_PATH', realpath(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'application');
+
+// Define application environment
+//defined('APPLICATION_ENV')
+//    || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
+// Thoralf: Override environment for now...
+define('APPLICATION_ENV', 'testing');
+
+// Ensure library/ is on include_path
+set_include_path(implode(PATH_SEPARATOR, array(
+            realpath(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'library'),
+            get_include_path(),
+        )));
+
+///** Zend_Application */
+//require_once 'Zend/Application.php';
+//
+//// Create application, bootstrap, and run
+//$application = new Zend_Application(
+//                APPLICATION_ENV,
+//                // APPLICATION_PATH . '/configs/config.ini'
+//                APPLICATION_PATH . '/configs/application.ini'
+//);
+//$application->bootstrap()->run();
 
 // Handover control to bootstrap.php. The Parameter passes the root
 // path of the application (where all the modules live).
@@ -45,6 +69,6 @@ set_include_path('.'
 require_once 'Application/Bootstrap.php';
 $app = new Application_Bootstrap();
 $app->run(
-    dirname(dirname(__FILE__)),
-    Application_Bootstrap::CONFIG_TEST,
-    dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'config');
+        APPLICATION_PATH,
+        Application_Bootstrap::CONFIG_TEST,
+        APPLICATION_PATH . DIRECTORY_SEPARATOR . 'configs');
