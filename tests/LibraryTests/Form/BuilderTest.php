@@ -71,11 +71,14 @@ class LibraryTests_Form_BuilderTest extends PHPUnit_Framework_TestCase {
      */
     public function setUp() {
         $dba = Zend_Db_Table::getDefaultAdapter();
-        if ($dba->isExistent('dbmodel') === true) {
-            $dba->deleteTable('dbmodel');
-        }
-        $dba->createTable('dbmodel');
-        $dba->addField('dbmodel', array('name' => 'simple_field', 'type' => 'varchar', 'length' => 50));
+//        if ($dba->isExistent('dbmodel') === true) {
+//            $dba->deleteTable('dbmodel');
+//        }
+        $dba->query("DROP TABLE IF EXISTS dbmodel");
+        $dba->query("CREATE TABLE dbmodel (simple_field varchar(50))");
+
+//        $dba->createTable('dbmodel');
+//        $dba->addField('dbmodel', array('name' => 'simple_field', 'type' => 'varchar', 'length' => 50));
 
         $this->_model = new LibraryTests_Form_BuilderTest_Model(null, new LibraryTests_Form_BuilderTest_DbModel);
         $this->_builder = new Form_Builder();
