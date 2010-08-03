@@ -330,7 +330,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         if ($document->getServerState() === 'deleted') {
             $this->view->actions = 'undelete';
         }
-        $this->view->showFilemanager = $document->hasFileField();
+        $this->view->showFilemanager = $document->hasField('File');
         $type = new Opus_Document_Type($document->getType());
         $documentWithFilter = new Opus_Model_Filter;
         $documentWithFilter->setModel($document)
