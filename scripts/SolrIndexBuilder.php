@@ -48,8 +48,8 @@ require_once 'Application/Bootstrap.php';
  * @category Search
  */
 class SolrIndexBuilder extends Application_Bootstrap {
-    private $start = 0;
-    private $end = -1;
+    private $start = null;
+    private $end = null;
     private $deleteAllDocs = false;
 
     /**
@@ -80,7 +80,7 @@ class SolrIndexBuilder extends Application_Bootstrap {
         if ($argc >= 3) {
             $this->end = $argv[2];
         }
-        if ($this->start === 0 && $this->end === -1) {
+        if (is_null($this->start) && is_null($this->end)) {
             // TODO gesondertes Argument für Indexdeletion einführen
             $this->deleteAllDocs = true;
         }
@@ -101,13 +101,10 @@ class SolrIndexBuilder extends Application_Bootstrap {
         //$indexer = new Opus_Search_Index_Solr_Indexer();
         echo date('Y-m-d H:i:s') . " Start indexing of " . count($docIds) . " documents.\n";
         foreach ($docIds as $docId) {
-            if ($docId < $this->start || ($this->end !== -1 && $docId > $this->end)) {
-                continue;
-            }
-            $indexer->addDocumentToEntryIndex(new Opus_Document((int) $docId));
+            $indexer->addDocumentToEntryIndex(new Opus_Document($docId));
         }
         echo date('Y-m-d H:i:s') . " Finished indexing!\n";
-        $indexer->finalize();
+        $indexer->commit();
     }
 }
 
@@ -116,9 +113,12 @@ try {
     $index->run(dirname(dirname(__FILE__)), Opus_Bootstrap_Base::CONFIG_TEST, dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'config');
     echo "\nOperation completed successfully.\n";
 }
-catch (Exception $e) {
+catch (Opus_Search_Index_Solr_Exception $e) {
     echo "\nAn error occurred while indexing.";
     echo "\nError Message: " . $e->getMessage();
+    if (!is_null($e->getPrevious())) {
+        echo "\nCaused By: " . $e->getPrevious()->getMessage();
+    }
     echo "\nStack Trace: " . $e->getTraceAsString();
     echo "\n\n";
 }
