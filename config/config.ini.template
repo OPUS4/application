@@ -65,9 +65,14 @@ deliver.logoutput = false
 publish.filetypes.allowed = pdf,txt,html,htm ; filetypes that are accepted in publication form
 
 ;SEARCH ENGINE SETTINGS
-searchengine.engine = Lucene ; searchengine to be used: Lucene or Solr
+searchengine.engine = Solr ; searchengine to be used: Lucene or Solr
+searchengine.solr.host = opus4ci.zib.de
+searchengine.solr.port = 8983
+searchengine.solr.app = solr
 searchengine.pdftotext.path = /usr/bin ; path to pdftotext - needed to index PDF fulltexts
 searchengine.ps2ascii.path = /usr/bin ; path to ps2ascii - needed to index PS fulltexts
+searchengine.ps2pdf.path = /usr/bin ; path to ps2pdf - needed to index PS fulltexts
+searchengine.ps.extraction.program = ps2pdf ; program used for postscript text extraction (ps2pdf->pdftotext | ps2ascii)
 searchengine.ocr.enable = 0 ; enable/disable OCR-recognition - WARNING: this can massively slow down your indexing process! 1=enabled, 0=disabled
 searchengine.ocr.timeout = 60 ; timeout for OCR (in s), text is recognized until time limit is reached
 searchengine.ocr.pdfimages.path = /usr/bin ; path to pdfimages binary, needed to ocr pdfs.
