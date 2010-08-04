@@ -106,7 +106,11 @@ INSERT INTO `documents` (`id`, `range_id`, `completed_date`, `completed_year`, `
 (87, NULL, NULL, 0000, NULL, NULL, NULL, 'report', NULL, NULL, 'deu', NULL, NULL, NULL, NULL, 'draft', NULL, 1955, '', NULL, NULL, 'peer', '2010-06-04T02:36:50Z', '2010-03-03T08:26:00Z', NULL, NULL, 'published', NULL, NULL, 'repository'),
 (88, NULL, NULL, 0000, NULL, NULL, NULL, 'report', NULL, NULL, 'deu', NULL, NULL, NULL, NULL, 'draft', NULL, 1961, '', NULL, NULL, 'peer', '2010-06-04T02:36:50Z', '2010-03-03T08:28:06Z', NULL, NULL, 'published', NULL, NULL, 'repository'),
 (89, NULL, NULL, 0000, NULL, NULL, NULL, 'report', NULL, NULL, 'deu', NULL, NULL, NULL, NULL, 'draft', NULL, 1961, '', NULL, NULL, 'peer', '2010-06-04T02:36:51Z', '2010-03-03T08:29:12Z', NULL, NULL, 'published', NULL, NULL, 'repository'),
-(90, NULL, NULL, 2010, NULL, NULL, '2010-02-26', 'doctoral_thesis', NULL, NULL, 'eng', NULL, NULL, NULL, NULL, 'draft', NULL, 2010, '', NULL, NULL, 'peer', '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, NULL, 'published', NULL, NULL, 'repository');
+(90, NULL, NULL, 2010, NULL, NULL, '2010-02-26', 'doctoral_thesis', NULL, NULL, 'eng', NULL, NULL, NULL, NULL, 'draft', NULL, 2010, '', NULL, NULL, 'peer', '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, NULL, 'published', NULL, NULL, 'repository'),
+(91, NULL, NULL, 2010, NULL, NULL, '2010-02-26', 'doctoral_thesis', NULL, NULL, 'eng', NULL, NULL, NULL, NULL, 'draft', NULL, 2010, '', NULL, NULL, 'peer', '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, NULL, 'published', NULL, NULL, 'repository'),
+(92, NULL, NULL, 2010, NULL, NULL, '2010-02-26', 'doctoral_thesis', NULL, NULL, 'eng', NULL, NULL, NULL, NULL, 'draft', NULL, 2010, '', NULL, NULL, 'peer', '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, NULL, 'published', NULL, NULL, 'repository'),
+(93, NULL, NULL, 2010, NULL, NULL, '2010-02-26', 'doctoral_thesis', NULL, NULL, 'eng', NULL, NULL, NULL, NULL, 'draft', NULL, 2010, '', NULL, NULL, 'peer', '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, NULL, 'published', NULL, NULL, 'repository'),
+(94, NULL, NULL, 2010, NULL, NULL, '2010-02-26', 'doctoral_thesis', NULL, NULL, 'eng', NULL, NULL, NULL, NULL, 'draft', NULL, 2010, '', NULL, NULL, 'peer', '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, NULL, 'published', NULL, NULL, 'repository');
 
 --
 -- Daten für Tabelle `document_enrichments`
@@ -232,7 +236,11 @@ INSERT INTO `document_files` (`id`, `document_id`, `path_name`, `sort_order`, `l
 (112, 87, 'Bericht_Nr.016_HughesWieghardt_ber_den_Reibungswiderstand_von_Platten.pdf', 0, 'Bericht_Nr.016_HughesWieghardt_ber_den_Reibungswiderstand_von_Platten.pdf', 'pdf', 'application/pdf', 'deu', 648307),
 (113, 88, 'Bericht_Nr.087_M.Kirsch_Die_Behandlung_von_Problemen_der_Schiffstheorie_mit_Hilfe_eines_elektronischen_Rechenautomaten.pdf', 0, 'Bericht_Nr.087_M.Kirsch_Die_Behandlung_von_Problemen_der_Schiffstheorie_mit_Hilfe_eines_elektronischen_Rechenautomaten.pdf', 'pdf', 'application/pdf', 'deu', 857291),
 (114, 89, 'Bericht_Nr.083_K.Wieghardt_berblick_ber_die_Strmungslehre.pdf', 0, 'Bericht_Nr.083_K.Wieghardt_berblick_ber_die_Strmungslehre.pdf', 'pdf', 'application/pdf', 'deu', 595340),
-(115, 90, 'Einzelseiten_ok.pdf', 0, 'Einzelseiten_ok.pdf', 'pdf', 'application/pdf', 'eng', 2360191);
+(115, 90, 'Einzelseiten_ok.pdf', 0, 'Einzelseiten_ok.pdf', 'pdf', 'application/pdf', 'eng', 2360191),
+(116, 91, 'test.pdf', 0, 'test.pdf', 'pdf', 'application/pdf', 'eng', 6970),
+(117, 92, 'test.html', 0, 'test.html', 'html', 'text/html', 'eng', 125),
+(118, 93, 'test.txt', 0, 'test.txt', 'text', 'text/plain', 'eng', 591),
+(119, 94, 'test.ps', 0, 'test.ps', 'ps', 'application/postscript', 'eng', 22041);
 
 --
 -- Daten für Tabelle `document_identifiers`
@@ -1107,7 +1115,15 @@ INSERT INTO `document_title_abstracts` (`id`, `document_id`, `type`, `value`, `l
 (220, 90, 'main', 'Machbarkeitsstudie von regenwurm-unterstützten Pflanzenkläranlagen und Möglichkeit der Verwendung von alternativen Pflanzen in Pflanzenkläranlagen', 'deu', NULL),
 (221, 90, 'main', 'Implementation of earthworm-assisted constructed wetlands to treat wastewater and possibility of using alternative plants in constructed wetlands', 'eng', NULL),
 (222, 90, 'abstract', 'The aim of this research was to add the earthworms into the constructed wetlands, both in Germany and Thailand, in order to investigate whether they could improve the treatment performances. For Germany, earthworm-assisted constructed wetlands exhibited better treatment efficiency than conventional vertical subsurface-flow constructed wetlands and the unplanted constructed wetlands with earthworms.  For Thailand, the production of sludge on the surface of wetlands was reduced by 40% with earthworms. Apart from that, alternative plants with high resource recovery potential were proposed. The recommendation table was developed with 13 suitable species. There are more than one “most appropriate species” in each climatic region.', 'eng', NULL),
-(223, 90, 'abstract', 'Ziel dieser Forschungsarbeit war die Untersuchung des Potentials zur Steigerung der Effizienz von Pflanzenkläranlagen durch Zugabe von Regenwürmern. In Deutschland zeigte sich für die mit Regenwürmern unterstützen Pflanzenkläranlagen eine deutlich bessere Abbauleistung als für das einfache Pflanzenkläranlagenverfahren. In Thailand war in Versuchen mit den Regenwürmern eine um 40 % geringere Schlammbildung zu beobachten. Zusätzlich wurden verschiedene Pflanzen mit hohem Potenzial zur Wertstoffrückgewinnung in Bezug auf die Anwendung in Pflanzenkläranlagen untersucht. Eine Empfehlungstabelle mit 13 Pflanzenarten wurde entwickelt. Für jedes der  betrachteten klimatischen Gebiete eignen sich mehrere Spezies.', 'deu', NULL);
+(223, 90, 'abstract', 'Ziel dieser Forschungsarbeit war die Untersuchung des Potentials zur Steigerung der Effizienz von Pflanzenkläranlagen durch Zugabe von Regenwürmern. In Deutschland zeigte sich für die mit Regenwürmern unterstützen Pflanzenkläranlagen eine deutlich bessere Abbauleistung als für das einfache Pflanzenkläranlagenverfahren. In Thailand war in Versuchen mit den Regenwürmern eine um 40 % geringere Schlammbildung zu beobachten. Zusätzlich wurden verschiedene Pflanzen mit hohem Potenzial zur Wertstoffrückgewinnung in Bezug auf die Anwendung in Pflanzenkläranlagen untersucht. Eine Empfehlungstabelle mit 13 Pflanzenarten wurde entwickelt. Für jedes der  betrachteten klimatischen Gebiete eignen sich mehrere Spezies.', 'deu', NULL),
+(224, 91, 'main', 'This is a pdf test document', 'deu', NULL),
+(225, 91, 'abstract', 'This is a pdf test document', 'deu', NULL),
+(226, 92, 'main', 'This is a html test document', 'deu', NULL),
+(227, 92, 'abstract', 'This is a html test document', 'deu', NULL),
+(228, 93, 'main', 'This is a plain text test document', 'deu', NULL),
+(229, 93, 'abstract', 'This is a plain text test document', 'deu', NULL),
+(230, 94, 'main', 'This is a postscript test document', 'deu', NULL),
+(231, 94, 'abstract', 'This is a postscript test document', 'deu', NULL);
 
 --
 -- Daten für Tabelle `file_hashvalues`
