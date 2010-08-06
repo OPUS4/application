@@ -1763,10 +1763,19 @@
 
     <tu tuid="transmit">
       <tuv xml:lang="en">
-        <seg>store data</seg>
+        <seg>Save Changes</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Daten abspeichern</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="reset">
+      <tuv xml:lang="en">
+        <seg>Reset Changes</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Änderungen zurücksetzen</seg>
       </tuv>
     </tu>
   </body>
