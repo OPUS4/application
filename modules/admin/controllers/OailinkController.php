@@ -46,12 +46,17 @@ class Admin_OailinkController extends Zend_Controller_Action {
      * @return void
      */
     public function indexAction() {
-
         $this->view->title = $this->view->translate('admin_title_oailink');
+
         $request = $this->getRequest();
-        $this->view->baseUrl = $request->getBaseUrl();
-        $this->view->baseHost = $request->getHttpHost();
-        $this->view->baseScheme = $request->getScheme();
+
+        // set baseLink for OAI requests
+        $baseUrl = $request->getBaseUrl();
+        $baseHost = $request->getHttpHost();
+        $baseScheme = $request->getScheme();
+        $this->view->baseLink = $baseScheme . '://' . $baseHost . $baseUrl . '/oai';
+
+        // set repIdentifier for OAI request examples
         $registry = Zend_Registry::getInstance();
         $config = $registry->get('Zend_Config');
         $repIdentifier = $config->oai->repository->identifier;
