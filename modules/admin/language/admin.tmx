@@ -6,7 +6,7 @@
  </header>
  
   <body>
-  
+
     <tu tuid="admin_index_title">
       <tuv xml:lang="en">
         <seg>Administration menu</seg>
@@ -36,7 +36,7 @@
     
     <tu tuid="admin_title_collections">
       <tuv xml:lang="en">
-        <seg>Administrate collections</seg>
+        <seg>Collections</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Sammlungen verwalten</seg>
@@ -45,7 +45,7 @@
     
     <tu tuid="admin_title_person">
       <tuv xml:lang="en">
-        <seg>Administrate person data</seg>
+        <seg>Person data</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Personendaten verwalten</seg>
@@ -54,7 +54,7 @@
     
     <tu tuid="admin_title_licence">
       <tuv xml:lang="en">
-        <seg>Administrate licence types</seg>
+        <seg>Licence types</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Lizenzen verwalten</seg>
@@ -63,7 +63,7 @@
     
     <tu tuid="admin_title_organizational_units_show">
       <tuv xml:lang="en">
-        <seg>Administrate organizational units</seg>
+        <seg>Organizational units</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Organisatorische Einheiten (Institute, Fakultäten, ...) verwalten</seg>
@@ -72,7 +72,7 @@
     
     <tu tuid="admin_title_organizational_units_edit">
       <tuv xml:lang="en">
-        <seg>Administrate organization tree</seg>
+        <seg>Organization tree</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Organisationsbaum verwalten</seg>
@@ -81,7 +81,7 @@
     
     <tu tuid="admin_title_documents">
       <tuv xml:lang="en">
-        <seg>Administrate document metadata</seg>
+        <seg>Document metadata</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Dokumenten Metadata verwalten</seg>
@@ -90,7 +90,7 @@
     
     <tu tuid="admin_title_languages">
       <tuv xml:lang="en">
-        <seg>Administrate languages</seg>
+        <seg>Languages</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Sprachen verwalten</seg>
@@ -108,13 +108,13 @@
     
     <tu tuid="admin_title_oailink">
       <tuv xml:lang="en">
-        <seg>Show OAI link</seg>
+        <seg>OAI link</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Anzeige des OAI Links</seg>
+        <seg>OAI Link anzeigen</seg>
       </tuv>
     </tu>
-    
+   
   </body>
   
 </tmx>
