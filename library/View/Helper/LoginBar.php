@@ -137,6 +137,9 @@ class View_Helper_LoginBar {
      * returns mixed Associative array containing parameters for auth controller.
      */
     protected function prepareReturnParameters() {
+        // TODO put into constructor
+        $log = Zend_Registry::get('Zend_Log');
+
         $params = array();
         foreach (Zend_Controller_Front::getInstance()->getRequest()->getUserParams() as $key => $value) {
             switch ($key) {
@@ -149,7 +152,11 @@ class View_Helper_LoginBar {
             case 'action' :
                 $params['raction'] = $value;
                 break;
+            case 'error_handler':
+                // don't use for URL generation
+                break;
             default :
+                $log->debug('Login extra param: ' . $key . " -> " . $value);
                 $params[$key] = $value;
                 break;
             }
