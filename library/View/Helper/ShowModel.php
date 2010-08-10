@@ -754,7 +754,7 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
      * @param boolean $spi        (Optional) Supress personal informations.
      * @return string
      */
-    public function showModel(array &$modeldata, $saef = false, $spi = false) {
+    public function showModel(array $modeldata, $saef = false, $spi = false) {
         if (is_bool($saef) === true) {
             $this->__saef = $saef;
         }
