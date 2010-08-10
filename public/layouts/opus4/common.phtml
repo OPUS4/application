@@ -67,26 +67,30 @@
                 </div>
             </div>
 
+            <div id="loginBar" class="login_bar">
+                <?= $this->loginBar(); ?>
+            </div>
+
             <div id="content" class="clearfix">
                 <?= $this->layout()->content ?>
             </div>
 
             <div id="footer">
-                <div id="footerLinks">
-                    <span>
-                        <a href="#">Impressum</a>
+                <div id="footerLinks" class="left">
+                    <span class="footer_link">
+                        <a href="#"><?= $this->translate('credits_label'); ?></a>
                     </span>
 
-                    <span>
-                        <a href="<?= $basePath ?>/home/index/contact">Kontakt</a>
+                    <span class="footer_link">
+                        <a href="home/index/contact"><?= $this->translate('home_index_contact_actionname'); ?></a>
                     </span>
 
-                    <span>
+                    <span class="footer_link">
                         <a href="#">Haftungsausschluss</a>
                     </span>
                 </div>
 
-                <div id="languageSelection">
+                <div id="languageSelection" class="right">
                     <?= $this->languageSelector() ?>
                 </div>
 
