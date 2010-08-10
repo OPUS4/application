@@ -48,16 +48,28 @@ require_once 'Opus/Bootstrap/Base.php';
  */
 class Application_Bootstrap extends Opus_Bootstrap_Base {
 
+    protected $log;
+
+    protected $view;
+
+    protected $translate;
+
     /**
      * Start bootstrapped application.
      *
      * @return void
      */
     protected function _run() {
+        $this->log = Zend_Registry::get('Zend_Log');
+        $this->log->debug('Running Bootstrap.php');
+
+        $this->_initNavigation();
+        
         if (Zend_Registry::isRegistered('Zend_Cache_Page')) {
             $pagecache = Zend_Registry::get('Zend_Cache_Page');
             $pagecache->start();
         }
+
         $response = $this->_frontController->dispatch();
         $response->sendResponse();
     }
@@ -104,8 +116,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
     protected function _setupTranslationCache() {
         $cache = null;
         $frontendOptions = array(
-            // Set cache lifetime to 5 minutes (in seconds)
-            'lifetime' => 600,
+            'lifetime' => 600, // in seconds
             'automatic_serialization' => true,
         );
 
@@ -208,6 +219,8 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
 
         $viewRenderer = new Zend_Controller_Action_Helper_ViewRenderer($view);
         Zend_Controller_Action_HelperBroker::addHelper($viewRenderer);
+
+        $this->view = $view;
     }
 
     /**
@@ -220,21 +233,15 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
     {
         $pagecache = null;
         $frontendOptions = array(
-            // Set cache lifetime to 5 minutes (in seconds)
-            'lifetime' => 600,
+            'lifetime' => 600, // in seconds
             'debug_header' => false,
             // turning on could slow down caching
             'automatic_serialization' => false,
             'default_options' => array(
-                // standard value false
                 'cache_with_get_variables' => true,
-                // standard value false
                 'cache_with_post_variables' => true,
-                // standard value false
                 'cache_with_session_variables' => true,
-                // standard value false
                 'cache_with_files_variables' => true,
-                // standard value false
                 'cache_with_cookie_variables' => true,
                 'make_id_with_get_variables' => true,
                 'make_id_with_post_variables' => true,
@@ -286,7 +293,8 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
             );
 
         if (file_exists($this->_applicationRootDirectory . '/modules/default/language/') === true) {
-            if ($handle = opendir($this->_applicationRootDirectory . '/modules/default/language/')) {
+            $handle = opendir($this->_applicationRootDirectory . '/modules/default/language/');
+            if ($handle) {
                 while (false !== ($file = readdir($handle))) {
                     // ignore directories
                     if (is_dir($file) === true) continue;
@@ -308,6 +316,8 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
 
         $registry = Zend_Registry::getInstance();
         $registry->set('Zend_Translate', $translate);
+
+        $this->translate = $translate;
     }
 
     /**
@@ -345,4 +355,27 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $registry->set('Available_Languages', $languages);
     }
 
+    /**
+     * Initializes top level navigation as configured in APPLICATION_PATH .
+     * 'config/navigation.xml'
+     *
+     * @return void
+     */
+    protected function _initNavigation() {
+
+        $this->log->debug('Initializing Zend_Navigation');
+       
+        $navigationConfigFile = APPLICATION_PATH . '/config/navigation.xml';
+        $config = new Zend_Config_Xml($navigationConfigFile, 'nav');
+
+        $this->log->debug('Navigation config file is: ' . $navigationConfigFile);
+
+        $container = new Zend_Navigation($config);
+
+        if(!isset($this->view))
+            $this->log->error('Error initializing navigation: the view is not set');
+
+        $this->view->navigation($container);
+        $this->log->debug('Zend_Navigation initialization completed');
+    }
 }

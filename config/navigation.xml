@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configdata>
+    <nav>
+
+        <home>
+            <label>Home</label>
+            <module>home</module>
+            <controller>index</controller>
+            <action>index</action>
+        </home>
+
+        <search>
+            <label>Search</label>
+            <module>search</module>
+            <controller>search</controller>
+            <action>index</action>
+        </search>
+
+        <browsing>
+            <label>Browsing</label>
+            <module>search</module>
+            <controller>browsing</controller>
+            <action>index</action>
+        </browsing>
+
+        <publish>
+            <label>Publish</label>
+            <module>publish</module>
+            <controller>index</controller>
+            <action>index</action>
+        </publish>
+
+        <administration>
+            <label>Administration</label>
+            <module>admin</module>
+            <controller>index</controller>
+            <action>index</action>
+        </administration>
+        
+        <about>
+            <label>About</label>
+            <module>home</module>
+            <controller>index</controller>
+            <action>about</action>
+        </about>
+
+        <help>
+            <label>Help</label>
+            <module>home</module>
+            <controller>index</controller>
+            <action>help</action>
+        </help>
+        
+    </nav>
+</configdata>
