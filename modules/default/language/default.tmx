@@ -6,6 +6,78 @@
  </header>
  
   <body>
+
+    <tu tuid="home_menu_label">
+        <tuv xml:lang="en">
+            <seg>Home</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Startseite</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="search_menu_label">
+        <tuv xml:lang="en">
+            <seg>Search</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Suche</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="browsing_menu_label">
+        <tuv xml:lang="en">
+            <seg>Browsing</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Browsing</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="publish_menu_label">
+        <tuv xml:lang="en">
+            <seg>Publish</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Veröffentlichen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="admin_menu_label">
+        <tuv xml:lang="en">
+            <seg>Administration</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Administration</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="about_menu_label">
+        <tuv xml:lang="en">
+            <seg>About</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Über</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="help_menu_label">
+        <tuv xml:lang="en">
+            <seg>Help</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Hilfe</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="credits_label">
+        <tuv xml:lang="en">
+            <seg>Credits</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Impressum</seg>
+        </tuv>
+    </tu>
   
     <tu tuid="publish_modulename">
       <tuv xml:lang="en">

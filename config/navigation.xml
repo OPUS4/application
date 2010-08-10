@@ -4,49 +4,49 @@
     <nav>
 
         <home>
-            <label>Home</label>
+            <label>home_menu_label</label>
             <module>home</module>
             <controller>index</controller>
             <action>index</action>
         </home>
 
         <search>
-            <label>Search</label>
+            <label>search_menu_label</label>
             <module>search</module>
             <controller>search</controller>
             <action>index</action>
         </search>
 
         <browsing>
-            <label>Browsing</label>
+            <label>browsing_menu_label</label>
             <module>search</module>
             <controller>browsing</controller>
             <action>index</action>
         </browsing>
 
         <publish>
-            <label>Publish</label>
+            <label>publish_menu_label</label>
             <module>publish</module>
             <controller>index</controller>
             <action>index</action>
         </publish>
 
         <administration>
-            <label>Administration</label>
+            <label>admin_menu_label</label>
             <module>admin</module>
             <controller>index</controller>
             <action>index</action>
         </administration>
         
         <about>
-            <label>About</label>
+            <label>about_menu_label</label>
             <module>home</module>
             <controller>index</controller>
             <action>about</action>
         </about>
 
         <help>
-            <label>Help</label>
+            <label>help_menu_label</label>
             <module>home</module>
             <controller>index</controller>
             <action>help</action>
