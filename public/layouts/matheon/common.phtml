@@ -1,0 +1,316 @@
+<?php
+     /**
+     * This file is part of OPUS. The software OPUS has been originally developed
+     * at the University of Stuttgart with funding from the German Research Net,
+     * the Federal Department of Higher Education and Research and the Ministry
+     * of Science, Research and the Arts of the State of Baden-Wuerttemberg.
+     *
+     * OPUS 4 is a complete rewrite of the original OPUS software and was developed
+     * by the Stuttgart University Library, the Library Service Center
+     * Baden-Wuerttemberg, the Cooperative Library Network Berlin-Brandenburg,
+     * the Saarland University and State Library, the Saxon State Library -
+     * Dresden State and University Library, the Bielefeld University Library and
+     * the University Library of Hamburg University of Technology with funding from
+     * the German Research Foundation and the European Regional Development Fund.
+     *
+     * LICENCE
+     * OPUS is free software; you can redistribute it and/or modify it under the
+     * terms of the GNU General Public License as published by the Free Software
+     * Foundation; either version 2 of the Licence, or any later version.
+     * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
+     * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+     * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+     * details. You should have received a copy of the GNU General Public License
+     * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
+     * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+     *
+     * @category    Application
+     * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
+     * @author      Felix Ostrowski (ostrowski@hbz-nrw.de)
+     * @copyright   Copyright (c) 2008, OPUS 4 development team
+     * @license     http://www.gnu.org/licenses/gpl.html General Public License
+     * @version     $Id: common.phtml 3229 2009-06-23 10:08:42Z ostrowski $
+     */
+     
+     /*
+     * Configure headMeta helper with content type, language and encoding.
+     */
+     
+     $this->headMeta()
+         ->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8')
+         ->appendHttpEquiv('Content-Language', 'de-DE');
+
+     $this->headTitle('OPUS 4')
+         ->headTitle($this->title)
+         ->setSeparator(' | ');
+
+     $fc = Zend_Controller_Front::getInstance();
+     $basePath = $fc->getRequest()->getBasePath();
+     $this->headLink()
+         ->appendStylesheet($basePath . '/layouts/matheon/css/opus.css')
+         ->appendStylesheet($basePath . '/layouts/matheon/css/thoralf.css');
+?>
+<?= $this->doctype() ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <?= $this->headMeta() ?>
+        <?= $this->headTitle() ?>
+        <?= $this->headLink() ?>
+    </head>
+    <body>
+        <div align="center">
+            <table class="printfriendly" width="1024" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    
+                    <td>
+                        <a href="http://www.matheon.de/index.asp">
+                            <img src="<?= $basePath;?>/layouts/matheon/img/matheon-fries_e.jpg" height="117" width="1024" border="0" />
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+
+            <table width="1024" border="0" cellspacing="0" cellpadding="0">
+                <tr class="printfriendly">
+                    <td class="tab_u tab_l" width="40" height="27">&nbsp;</td>
+                    <td class="tab_u" width="655" height="27">
+                        <table width="655" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td>
+                                    <div id="Tmenu">
+                                        <ul id="Navigation">
+                                            
+                                            <li><a id="aktuell" href="http://www.matheon.de/research/index.asp"><?= $this->translate('home_index_research_label') ?></a> 
+                                                <ul><li><a href="http://www.matheon.de/research/list_publika.asp"  class="navi_links zusammen">
+                                                            <?= $this->translate('home_index_publications_label') ?></a></li>
+                                                    <li><a href="http://www.matheon.de/research/list_preprints.asp"  class="navi_links zusammen"><span>Preprints</span></a></li>
+                                                    <li><a href="http://www.matheon.de/research/list_projects.asp"  class="navi_links zusammen"><?= $this->translate('home_index_projects_label') ?></a></li>
+                                                    <li><a href="http://www.matheon.de/research/list_applications.asp"  class="navi_links zusammen"><?= $this->translate('home_index_areas_label') ?></a></li>
+                                                    <li><a href="http://www.matheon.de/research/mathsfields.asp"  class="navi_links zusammen"><?= $this->translate('home_index_fields_label') ?></a></li>
+                                                    <li><a href="http://www.matheon.de/research/cooperations.asp"  class="navi_links zusammen"><?= $this->translate('home_index_cooperations_label') ?></a></li>
+                                                    <li><a href="/research/library.asp"  class="navi_links zusammen"><?= $this->translate('home_index_library_label') ?></a></li></ul></li>
+                                            
+                                            <li><a  href="http://www.matheon.de/transfer/index.asp">Transfer</a> 
+                                                <ul><li><a href="http://www.matheon.de/transfer/contact.asp"  class="navi_links zusammen"><?= $this->translate('home_index_contact_label') ?></a></li>
+                                                    <li><a href="http://www.matheon.de/transfer/yourindustry.asp"  class="navi_links zusammen"><?= $this->translate('home_index_branche_label') ?></a></li>
+                                                    <li><a href="http://www.matheon.de/transfer/ourservices.asp"  class="navi_links zusammen"><?= $this->translate('home_index_services_label') ?></a></li>
+                                                    <li><a href="http://www.matheon.de/transfer/ourexpertise.asp"  class="navi_links zusammen"><?= $this->translate('home_index_expertise_label') ?></a></li>
+                                                    <li><a href="http://www.matheon.de/transfer/references.asp"  class="navi_links zusammen"><?= $this->translate('home_index_referenzen_label') ?></a></li>
+                                                    <li><a href="http://www.matheon.de/transfer/spinoffs.asp"  class="navi_links zusammen"><?= $this->translate('home_index_spin-offs_label') ?></a></li>
+                                                    <li><a href="http://www.matheon.de/transfer/software.asp"  class="navi_links zusammen"><?= $this->translate('home_index_software_patente_label') ?></a></li>
+                                                    <li><a href="http://www.matheon.de/transfer/internships.asp"  class="navi_links zusammen">Matheon Internships</a></li>
+                                                    <li><a href="http://www.matheon.de/transfer/jobmarket.asp"  class="navi_links zusammen"><?= $this->translate('home_index_jobs_label') ?></a></li>
+                                                    <li><a href="http://www.matheon.de/transfer/events.asp"  class="navi_links zusammen"><?= $this->translate('home_index_events_label') ?></a></li>
+                                                    <li><a href="http://www.matheon.de/transfer/intern/index.asp"  class="navi_links zusammen"><font color="#C0C0C0"><?= $this->translate('home_index_internal_label') ?></font></a></li></ul></li>
+                                            
+                                            <li><a  href="http://www.matheon.de/schools/index.asp"><?= $this->translate('home_index_schule_label') ?></a> 
+                                                <ul><li><a href="http://www.matheon.de/schools/rent_the_center.asp"  class="navi_links zusammen">Rent the Center</a></li>
+                                                    <li><a href="http://www.matheon.de/schools/matheredaktion.asp"  class="navi_links zusammen">MATHEredaktiON</a></li>
+                                                    <li><a href="http://www.matheon.de/schools/mathinside/index.asp"  class="navi_links zusammen">MathInside - Urania</a></li>
+                                                    <li><a href="http://www.matheon.de/schools/mathexperience/index.asp"  class="navi_links zusammen">MathExperience</a></li>
+                                                    <li><a href="http://www.matheon.de/schools/mathekalender.asp"  class="navi_links zusammen"><?= $this->translate('home_index_kalender_label') ?></a></li>
+                                                    <li><a href="http://www.matheon.de/schools/sommerschulen.asp"  class="navi_links zusammen"><?= $this->translate('home_index_summerschool_label') ?></a></li>
+                                                    <li><a href="http://www.matheon.de/schools/lehrerfortbildung.asp"  class="navi_links zusammen"><?= $this->translate('home_index_training_label') ?></a></li>
+                                                    <li><a href=""  class="navi_links zusammen"></a></li></ul></li>
+                                            
+                                            <li><a  href="http://www.matheon.de/activities/index.asp"><?= $this->translate('home_index_activities_label') ?></a> 
+                                                <ul><li><a href="http://www.matheon.de/activities/events.asp"  class="navi_links zusammen">Events</a></li>
+                                                    <li><a href="http://www.matheon.de/activities/workshops.asp"  class="navi_links zusammen">Workshops</a></li>
+                                                    <li><a href="http://www.matheon.de/activities/Jahr_der_Mathematik.asp"  class="navi_links zusammen"><?= $this->translate('home_index_yearofmathematics_label') ?></a></li>
+                                                    <li><a href="http://www.matheon.de/activities/land_of_ideas.asp"  class="navi_links zusammen"><?= $this->translate('home_index_landofideas_label') ?></a></li>
+                                                    <li><a href="http://www.matheon.de/press/index.asp#media_award"  class="navi_links zusammen"><?= $this->translate('home_index_mediaprise_label') ?></a></li>
+                                                    <li><a href="http://www.matheon.de/booklet/booklet.asp"  class="navi_links zusammen"><?= $this->translate('home_index_booklet_label') ?></a></li>
+                                                    <li><a href="http://www.matheon.de/schools/mathekalender.asp"  class="navi_links zusammen"><?= $this->translate('home_index_kalender_label') ?></a></li>
+                                                    <li><a href="http://www.matheon.de/schools/sudoku/sudoku_start.asp"  class="navi_links zusammen">Sudoku</a></li>
+                                                    <li><a href="http://www.matheon.de/activities/LangeNachtderWissenschaften.asp"  class="navi_links zusammen"><?= $this->translate('home_index_langenacht_label') ?></a></li>
+                                                    <li><a href="http://www.matheon.de/matheathlon/index.asp"  class="navi_links zusammen">Matheathlon</a></li>
+                                                    <li><a href=""  class="navi_links zusammen"></a></li></ul></li>
+                                            
+                                            <li><a  href="http://www.matheon.de/about_us/index.asp"><?= $this->translate('home_index_aboutus_label') ?></a>
+                                                <ul><li><a href="http://www.matheon.de/about_us/contact.asp"  class="navi_links zusammen"><?= $this->translate('home_index_contact_label') ?></a></li>
+                                                    <li><a href="http://www.matheon.de/about_us/people.asp"  class="navi_links zusammen"><?= $this->translate('home_index_people_label') ?></a></li>
+                                                    <li><a href="http://www.matheon.de/about_us/visitors.asp"  class="navi_links zusammen"><?= $this->translate('home_index_visitors_label') ?></a></li>
+                                                    <li><a href="http://www.matheon.de/about_us/organization.asp"  class="navi_links zusammen"><?= $this->translate('home_index_organization_label') ?></a></li>
+                                                    <li><a href="http://www.matheon.de/about_us/mission.asp"  class="navi_links zusammen"><?= $this->translate('home_index_mission_label') ?></a></li>
+                                                    <li><a href="http://www.matheon.de/about_us/jobs.asp"  class="navi_links zusammen">Jobs</a></li>
+                                                    <li><a href="http://www.matheon.de/about_us/alumni.asp"  class="navi_links zusammen">Alumni</a></li></ul></li>
+                                        </ul>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div id="lang">
+                                        <?= $this->languageSelector() ?>
+                                        <!-- <img src="<?= $basePath;?>/layouts/matheon/img/lang.gif" border="0" /> -->
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                        </table> 
+                    </td> 
+                    <td class="tab_u" width="31">
+                        &nbsp;
+                    </td>
+
+                    <td class="tab_u" width="298" height="27">
+                        <div id="Tmenu2">
+                            <ul id="Navigation">
+                                <li><a  href="http://www.matheon.de/news/index.asp">News</a> </li>
+                                
+                                <li><a  href="http://www.matheon.de/press/index.asp"><?= $this->translate('home_index_press_label') ?></a> 
+                                    <ul><li><a href="http://www.matheon.de/press/press_release.asp"  class="navi_links zusammen"><?= $this->translate('home_index_releases_label') ?></a></li>
+                                        <li><a href="http://www.matheon.de/press/press_review.asp"  class="navi_links zusammen"><?= $this->translate('home_index_review_label') ?></a></li>
+                                        <li><a href="http://www.matheon.de/press/newsletter/newsletter.asp"  class="navi_links zusammen">Newsletter</a></li>
+                                        <li><a href="http://www.matheon.de/press/teaser.asp"  class="navi_links zusammen">Teaser</a></li></ul></li>
+                                
+                                <li><a  href="http://www.matheon.de/contact.asp"><?= $this->translate('home_index_contact_label') ?></a> </li>
+                                <li><a  href="http://www.matheon.de/search.asp"><?= $this->translate('home_index_sitesearch_label') ?></a> </li>
+                                
+                                <li><a  href="http://www.matheon.de/faq/faq.asp">FAQ</a> 
+                                    <ul><li><a href="http://www.matheon.de/faq/faq.asp?topic=General%20Questions"  class="navi_links zusammen"><?= $this->translate('home_index_general_questions_label') ?></a></li>
+                                        <li><a href="http://www.matheon.de/faq/faq.asp?topic=Scientific%20Activities"  class="navi_links zusammen"><?= $this->translate('home_index_scientific_activities_label') ?></a></li>
+                                        <li><a href="http://www.matheon.de/faq/faq.asp?topic=Contacts/Cognizances/Organization"  class="navi_links zusammen"><?= $this->translate('home_index_cogniazances_label') ?></a></li>
+                                        <li><a href="http://www.matheon.de/faq/faq.asp?topic=Documents"  class="navi_links zusammen"><?= $this->translate('home_index_docs_label') ?></a></li>
+                                        <li><a href="http://www.matheon.de/faq/faq.asp?topic=Project%20Data"  class="navi_links zusammen"><?= $this->translate('home_index_proj_data_label') ?></a></li>
+                                        <li><a href="http://www.matheon.de/faq/faq.asp?topic=Lists"  class="navi_links zusammen"><?= $this->translate('home_index_lists_label') ?></a></li>
+                                        <li><a href="http://www.matheon.de/faq/faq.asp?topic=Login-Questions"  class="navi_links zusammen"><?= $this->translate('home_index_login_label') ?></a></li></ul></li>
+                                
+                                <li><a  href="/members/login.asp">Login</a> </li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td class="tab_u tab_r" width="40" height="27">&nbsp;</td>
+                    <!--</tr>
+            </table>
+        </td>-->
+    </tr>
+    <tr >
+        <td class="breadcrumb tab_l tab_u" height="27" width="40">&nbsp;</td>
+        <td class="breadcrumb tab_u tab_r"  align="left" colspan="5" height="27"><a href="http://www.matheon.de/index.asp">Home</a> &gt;&gt; <a href="http://www.matheon.de/research/index.asp"><?= $this->translate('home_index_research_label') ?></a> &gt;&gt; Preprints</td>
+        
+    </tr>
+
+    <tr class="printfriendly">
+        <td class="tab_l" width="40">&nbsp;</td>
+        <td class="content" valign="top" width="655">
+        <!-- td class="content" valign="top" -->
+            
+            <!-- table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="700" -->
+            <table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0">
+
+                <tr style="display:none;">
+                    <td height="50">&nbsp;</td>
+                    <td height="50">
+                        <div id="header">
+                            <?= $this->menu('home') ?>
+                            <?= $this->menu('primary') ?>
+                            <?= $this->menu('secondary') ?>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <!-- <td width="40"><?= $this->placeholder('messages') ?></td> -->
+                    <!-- <td class="content" valign="top" width="655" -->
+
+                    <td class="content" valign="top">
+                        <div id="content">
+                            <?= $this->layout()->content ?>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td>  
+        <td width="31">&nbsp;</td>
+        <td class="navi_links printfriendly" valign="top" width="309">
+            <table border="0" cellpadding="0" cellspacing="0" width="309">
+                
+                <tr>
+                    <td class="bg_oben" height="27"><a href="http://www.matheon.de/research/list_publika.asp" class="navi_links zusammen">&gt; <?= $this->translate('home_index_publications_label') ?></a></td>
+                </tr>
+                
+                <tr>
+                    <td class="bg_oben" height="27">
+                         <a href="<?= $basePath ?>/search/browsing/browseTitles" class="navi_links zusammen"><strong>&gt; Preprints</strong></a>
+                         <!-- <p style="text-indent:2em;"><a href="<?= $basePath ?>/home" class="navi_links zusammen"><?= $this->translate('home_modulename') ?></a></p> -->
+                         <!-- <p style="text-indent:2em;"><a href="<?= $basePath ?>/search" class="navi_links zusammen"><?= $this->translate('search_modulename') ?></a></p> -->
+                         <p style="text-indent:2em;"><a href="<?= $basePath ?>/search/browsing" class="navi_links zusammen"><?= $this->translate('search_index_browsing') ?></a></p>
+                         <p style="text-indent:2em;"><a href="<?= $basePath ?>/search/search/fulltextsearchform" class="navi_links zusammen"><?= $this->translate('search_index_fulltextsearch') ?></a></p>
+                         <!-- <p style="text-indent:2em;"><a href="<?= $basePath ?>/publish" class="navi_links zusammen"><?= $this->translate('publish_modulename') ?></a></p> -->
+                         <p style="text-indent:2em;"><a href="<?= $basePath ?>/admin" class="navi_links zusammen"><?= $this->translate('admin_modulename') ?></a></p>
+                    </td>
+                    
+                </tr>  
+
+                <tr>
+                    <td class="bg_oben" height="27"><a href="http://www.matheon.de/research/list_projects.asp" class="navi_links zusammen">&gt; <?= $this->translate('home_index_projects_label') ?></a></td>
+                </tr>
+                
+                <tr>
+                    <td class="bg_oben" height="27"><a href="http://www.matheon.de/research/list_applications.asp" class="navi_links zusammen"><?= $this->translate('home_index_areas_label') ?></a></td>
+                </tr>
+                
+                
+                <tr>
+                    <td class="bg_oben" height="27"><a href="http://www.matheon.de/research/mathsfields.asp" class="navi_links zusammen"><?= $this->translate('home_index_fields_label') ?></a></td>
+                </tr>
+                
+                <tr>
+                    <td class="bg_oben" height="27"><a href="http://www.matheon.de/research/cooperations.asp" class="navi_links zusammen">&gt; <?= $this->translate('home_index_cooperations_label') ?></a></td>
+                </tr>
+                
+                <tr>
+                    <td class="bg_oben" height="27"><a href="http://www.matheon.de/research/library.asp" class="navi_links zusammen"><?= $this->translate('home_index_library_label') ?></a></td>
+                </tr>
+
+            </table>
+        </td>
+        <td class="tab_r" width="40">&nbsp;</td>
+    </tr>
+</table>
+
+<table class="printfriendly" width="1024" border="0" cellspacing="0" cellpadding="0" height="27">
+    <tr>
+        <td class="bg_unten" style="border: 1px solid #d8e1ea;">
+            <span class="content">
+                &copy; <span style="font-variant:small-caps">Matheon</span> 
+                &bull; <a href="http://www.matheon.de/impressum.asp">Imprint (German only)</a> 
+                &bull; <a href="http://www.matheon.de/disclaimer.asp">Disclaimer</a> 
+                &bull; <a href="http://www.matheon.de/copyright.asp">Copyright</a> 
+                &bull; <a href="http://www.matheon.de/members/members.asp">Login</a>
+            </span>
+        </td>
+    </tr>
+</table>
+
+<?php
+     $dbprofiler = Zend_Registry::get('db_adapter')->getProfiler();
+     $config = Zend_Registry::get('Zend_Config');
+     $profiler_show_queries = (bool) $config->db->params->showqueries;
+     $profiler_max_queries = (int) $config->db->params->maxqueries;
+     if ($dbprofiler->getEnabled() === true) :
+?>
+
+    <div class="debug dbprofiler" style="clear:both">
+    <hr/>
+    <h2>Profiling information</h2>
+    <b>Total number of queries: </b><?= $dbprofiler->getTotalNumQueries() ?><br />
+    <b>Total query time (s): </b><?= $dbprofiler->getTotalElapsedSecs() ?><br />
+    <b>Current memory consumption: </b><?= memory_get_usage(true) ?><br />
+    <b>Peak memory consumption: </b><?= memory_get_peak_usage(true) ?><br />
+    <?php if ($profiler_show_queries === true and $profiler_query_profiles = $dbprofiler->getQueryProfiles()) : ?>
+        <b>Queries:</b><br />
+        <ul>
+            <?php for ($i=1; ($i < $profiler_max_queries) and ($i < count($profiler_query_profiles)); $i++) : ?>
+                <li><pre><?= $profiler_query_profiles[$i]->getQuery() ?></pre></li>
+            <?php endfor ?>
+            <?php if ($i < count($profiler_query_profiles)) { echo "<li>...</li>"; } ?>
+        </ul>
+    <?php endif ?>
+    </div>
+<?php endif ?>
+            
+        </div>
+        
+    </body>
+</html>

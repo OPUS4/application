@@ -1,0 +1,16 @@
+
+ol.search { list-style-type:decimal; margin-top:1em; margin-bottom:1em; padding-left:1em; }
+
+ol.search li { line-height: 200%; /* padding:0.5em; */ }
+
+ol.search li span.author { }
+
+ol.search li a       { text-decoration: none;  color: #000099; }
+ol.search li a:hover { text-decoration: underline; }
+
+ol.search li span.title { font-weight:bold; display:block; }
+
+ol.search li.even { background-color:#b3c6d6; }
+
+ol.search li.odd { background-color:#F3F6F6; }
+
