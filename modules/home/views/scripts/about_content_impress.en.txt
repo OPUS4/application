@@ -1,2 +1,2 @@
-<h2>Impress according to §6 Teledienstegesetz (Germany)</h2>
-Insert your impress here.
+<h2>Legal notice according to §6 Teledienstegesetz (Germany)</h2>
+Insert your legal notice here.

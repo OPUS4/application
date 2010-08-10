@@ -295,7 +295,7 @@
 
     <tu tuid="home_index_about_whatsthis">
         <tuv xml:lang="en">
-            <seg>Whats this?</seg>
+            <seg>What is this?</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Was ist das hier?</seg>
@@ -331,7 +331,7 @@
 
     <tu tuid="home_index_about_impress">
         <tuv xml:lang="en">
-            <seg>Impress</seg>
+            <seg>Legal Notice</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Impressum</seg>
@@ -361,13 +361,13 @@
             <seg>Is the publication free of charge?</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Kostet die Veröffentlichung Geld?</seg>
+            <seg>Ist die Veröffentlichung kostenpflichtig?</seg>
         </tuv>
     </tu>
 
     <tu tuid="help_index_searchtipps">
         <tuv xml:lang="en">
-            <seg>Tipps concerning your search</seg>
+            <seg>Hints for searching</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tipps für die Suche</seg>
@@ -457,7 +457,7 @@
 
     <tu tuid="help_index_right">
         <tuv xml:lang="en">
-            <seg>What legal aspects should I regard?</seg>
+            <seg>Which legal aspects should I consider?</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Welche rechtlichen Aspekte muss ich beachten?</seg>
@@ -466,7 +466,7 @@
 
     <tu tuid="help_index_format">
         <tuv xml:lang="en">
-            <seg>What`s a presentation format?</seg>
+            <seg>What's a presentation format?</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Was ist das Präsentationsformat?</seg>
@@ -475,7 +475,7 @@
 
     <tu tuid="help_index_requirements">
         <tuv xml:lang="en">
-            <seg>What demands do you make on my document(s)?</seg>
+            <seg>What are the requirements for my document(s)?</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Welche Anforderungen werden an mein(e) Dokument(e) gestellt?</seg>
@@ -511,7 +511,7 @@
 
     <tu tuid="help_index_preprint">
         <tuv xml:lang="en">
-            <seg>Are there any special things to know publishing a preprint?</seg>
+            <seg>Are there any special things to know about publishing a preprint?</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Besonderheiten bei der Publikation eines Preprints</seg>
