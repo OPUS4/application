@@ -82,16 +82,17 @@
                     </span>
 
                     <span class="footer_link">
-                        <a href="home/index/contact"><?= $this->translate('home_index_contact_actionname'); ?></a>
-                    </span>
-
-                    <span class="footer_link">
-                        <a href="#">Haftungsausschluss</a>
+                        <a href="<?= $basePath ?>/home/index/contact"><?= $this->translate('home_index_contact_actionname'); ?></a>
                     </span>
                 </div>
 
                 <div id="languageSelection" class="right">
-                    <?= $this->languageSelector() ?>
+                    <a href="<?= $basePath ?>/home/index/language/language/en">
+                        <img src="#" alt="British flag" title="Switch to english version" />
+                    </a>
+                    <a href="<?= $basePath ?>/home/index/language/language/de">
+                        <img src="#" alt="Deutsche Flagge" title="Auf die deutsche Version umschalten" />
+                    </a>
                 </div>
 
                 <div id="copyright">
