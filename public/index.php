@@ -40,11 +40,10 @@ $GLOBALS['start_mtime'] = microtime(true);
 defined('APPLICATION_PATH')
         || define('APPLICATION_PATH', realpath(dirname(dirname(__FILE__))));
 
-// Define application environment
-//defined('APPLICATION_ENV')
-//    || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
-// Thoralf: Override environment for now...
-define('APPLICATION_ENV', 'testing');
+// Define application environment (use 'production' by default)
+defined('APPLICATION_ENV')
+        || define('APPLICATION_ENV',
+        (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
 
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, array(
@@ -70,5 +69,5 @@ require_once 'Application/Bootstrap.php';
 $app = new Application_Bootstrap();
 $app->run(
         APPLICATION_PATH,
-        Application_Bootstrap::CONFIG_TEST,
+        APPLICATION_ENV,
         APPLICATION_PATH . DIRECTORY_SEPARATOR . 'config');
