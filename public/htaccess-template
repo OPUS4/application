@@ -29,6 +29,7 @@
 # @version     $Id$
 
 # Configure environment for application (test, production)
+# The default is "production" if APPLICATION_ENV is not configured here.
 # SetEnv APPLICATION_ENV test
 
 # Configure on rewriting. Note that the rewrite base has to be adjusted to the base url of the application.
