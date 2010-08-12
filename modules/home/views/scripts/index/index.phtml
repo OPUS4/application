@@ -34,14 +34,40 @@
  */
 ?>
 <? $this->title = $this->translate('home_index_index_pagetitle') ?>
-<div class="box left">
-    <h1><?=$this->translate('search_index_search')?></h1>
-    <?= $this->searchForm ?>
+
+<div class="left">
+
+    <div id="search_form" class="quick_search_form" >
+        <form enctype="application/x-www-form-urlencoded" class="crud" action="search/search/search" method="post">
+            <fieldset>
+                <legend><?=$this->translate('search_index_search')?></legend>
+                <input type="text" name="query" id="query" value="" />
+                <input type="submit" name="submit" id="submit" value="<?= $this->translate('search_searchaction'); ?>" />
+            </fieldset>
+        </form>
+    </div>
+
+    <a href="search/browsing/index">
+        <div id="browsing_button" class="button_large">
+            <img src="#" alt="browsing_icon" class="button_icon" />
+            <span class="button_label"><?= $this->translate('browsing_menu_label'); ?></span>
+        </div>
+    </a>
+
+    <a href="publish/index/index">
+        <div id="publish_button" class="button_large">
+            <img src="#" alt="publish_icon" class="button_icon" />
+            <span class="button_label"><?= $this->translate('publish_modulename'); ?></span>
+        </div>
+    </a>
 </div>
-<div class="box right">
-    <h1><?= $this->translate('home_index_index_title') ?></h1>
-    <p><?= $this->translate('home_index_index_welcome') ?></p>
-</div>
-<div class="box left">
-    <p><?= $this->translate('home_index_index_instructions') ?></p>
+
+<div class="right">
+    <div class="box">
+        <h1><?= $this->translate('home_index_index_title') ?></h1>
+        <p><?= $this->translate('home_index_index_welcome') ?></p>
+    </div>
+    <div class="box">
+        <p><?= $this->translate('home_index_index_instructions') ?></p>
+    </div>
 </div>

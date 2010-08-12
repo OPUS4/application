@@ -75,9 +75,12 @@ class Home_IndexController extends Zend_Controller_Action {
      * @return void
      */
     public function languageAction() {
+
         $origin = $_SERVER['HTTP_REFERER'];
         $language = $this->_request->getParam('language');
-        if (is_string('language') === false or Zend_Registry::get('Zend_Translate')->isAvailable($language) === false) {
+
+        if (is_string('language') === false
+                or Zend_Registry::get('Zend_Translate')->isAvailable($language) === false) {
             $this->_redirector->gotoUrl($origin);
         } else {
             $sessiondata = new Zend_Session_Namespace();
