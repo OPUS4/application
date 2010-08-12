@@ -34,10 +34,17 @@
  * */
 class PublishingSecond extends Zend_Form {
 
-    public $doctype;
-
-    public function __construct($type, $options=null) {
+    //String
+    public $doctype = "";
+    //Integer 0 - 1
+    public $fulltext = "";
+    //array
+    public $additionalFields = array();
+   
+    public function __construct($type, $fulltext, $additionalFields, $options=null) {
         $this->doctype = $type;
+        $this->fulltext = $fulltext;
+        $this->additionalFields = $additionalFields;
         parent::__construct($options);
     }
 
@@ -47,6 +54,9 @@ class PublishingSecond extends Zend_Form {
      * @return void
      */
     public function init() {
+
+        //count the dependencies
+        $i = 0;
 
         //get the xml file for the current doctype
         $xmlFile = "../config/xmldoctypes/" . $this->doctype . ".xml";
@@ -61,37 +71,120 @@ class PublishingSecond extends Zend_Form {
 
         //parse the xml file for the tag "field"
         foreach ($dom->getElementsByTagname('field') as $field) {
-            //catch all interesting attributes
-            $elementName = $field->getAttribute('name');
-            $required = $field->getAttribute('required');
-            $formElement = $field->getAttribute('formelement');
-            $datatype = $field->getAttribute('datatype');
+            //=1= Catch all interesting attributes!
+            if ($field->hasAttributes()) {
+                $elementName = $field->getAttribute('name');
+                $required = $field->getAttribute('required');
+                $formElement = $field->getAttribute('formelement');
+                $datatype = $field->getAttribute('datatype');
+                $multiplicity = $field->getAttribute('multiplicity');
+            }
+            else
+                throw new OpusServerPublishingException("Error while parsing xml document type: Choosen document type has missing attributes in element 'field'!");
 
-            //get the proper validator from the datatape
+            if (empty($elementName) || empty($required) || empty($formElement) || empty($datatype) || empty($multiplicity))
+                throw new OpusServerPublishingException("Error while parsing the xml document type: Found attribute(s) are empty!");
+
+            //=2= Check if there are child nodes -> concerning fulltext or other dependencies!
+            if ($field->hasChildNodes()) {
+                //check if the field has to be required for fulltext
+                if ($this->fulltext === "1") {
+                    $requiredIfFulltext = $field->getElementsByTagName("required-if-fulltext");
+                    //case: fulltext => overwrite the $required value with yes
+                    if ($requiredIfFulltext->length != 0)
+                        $required = "yes";
+                }
+
+                //check if there are dependencies between fields
+                foreach ($field->getElementsByTagName("required-if-given") as $requiredIfGiven) {
+                    if ($requiredIfGiven->hasAttributes()) {
+                        $dependentField = $requiredIfGiven->getAttribute('field');
+                        //store them in hidden fields in the form
+                        $hiddenDep = $this->createElement('hidden', 'dep['.$i."]");
+                        $hiddenDep->setValue($dependentField . ":" .$elementName);
+                        $this->addElement($hiddenDep);
+                        $i++;
+                    }
+                    else
+                        throw new OpusServerPublishingException("Error while parsing xml document type: Choosen document type has missing attributes in element 'required-if-given'!");
+                }
+            }
+            //=3= Get the proper validator from the datatape!
             $validator = $this->getValidatorsByName($datatype);
 
-            if ($datatype != 'Person') {
-                $this->addFormElement($formElement, $elementName, $validator, $required);
-            }
+            //=4= Check if fields has to shown multi times!
+//            if ($elementName == "TitleAbstract") {
+//                $addMoreButton = $this->createElement('submit', 'addMore'.$elementName);
+//                $addMoreButton->setLabel("-add- more ".$elementName. " up to " . $multiplicity);
+//                $this->addElement($addMoreButton);
+//
+//                $countElement = $this->createElement('hidden', 'count'.$elementName);
+//                $countElement->setValue($this->_countTitleAbstractXXX);
+//                $this->addElement($countElement);
+//
+//                $countElement = $this->createElement('submit', 'button'.$elementName);
+//                $countElement->setLabel("Debug: " . $this->_countTitleAbstractXXX);
+//                $this->addElement($countElement);
+//            }
+//            else
 
-            //in case of person -> show 2 field for first and last name
-            else {
-                $nameFirst = $elementName . 'FirstName';
-                $this->addFormElement($formElement, $nameFirst, $validator, $required);
-                $nameLast = $elementName . 'LastName';
-                $this->addFormElement($formElement, $nameLast, $validator, $required);
+            //add form element
+            $this->addFormElement($formElement, $elementName, $validator, $datatype, $required);
+
+            if ($multiplicity != "1") {
+                //hidden element that carries the value of how often the element has to be shown
+                $countMoreHidden = $this->createElement('hidden', 'countMore'.$elementName);
+                $addMoreButton = $this->createElement('submit', 'addMore'.$elementName);
+
+                if ($this->additionalFields != null) {
+                    $allowedNumbers = "";
+                    //echo "Debug: Additional Fields NOT NULL!<br />";
+                    //print_r($this->additionalFields);
+                    //echo 'addMore'.$elementName;
+                    if (array_key_exists('addMore'.$elementName, $this->additionalFields)) {
+                        //$allowedNumbers is set in controller and given to the form by array as parameter
+                        $allowedNumbers = $this->additionalFields['addMore'.$elementName];
+                        //echo "allowed Numbers: " . $allowedNumbers;
+                        //fields do not want int values
+                        $allowedNumbers = (string) $allowedNumbers;
+                        $countMoreHidden->setValue($allowedNumbers);
+                        
+                        $allowedNumbers = (int) $allowedNumbers;
+                        $multiplicity = (int) $multiplicity;
+                        //start counting at lowest possible number -> also used for name
+                        for ($i = $allowedNumbers; $i<$multiplicity; $i++) {
+                            $counter = $multiplicity - $allowedNumbers + 1;
+                            $elementName = $elementName. $counter;
+                            $this->addFormElement($formElement, $elementName, $validator, $datatype, $required);
+                        }                                               
+                    }
+                    
+                    $addMoreButton->setLabel("add more ".$elementName. " upp to " . (string) $allowedNumbers);
+                    
+                } else {
+                    $countMoreHidden->setValue($multiplicity);
+                    $addMoreButton = $this->createElement('submit', 'addMore'.$elementName);
+                    $addMoreButton->setLabel("add more ".$elementName. " up to " . $multiplicity);
+                }
+                $this->addElement($addMoreButton);
+                $this->addElement($countMoreHidden);
             }
         }
+                
+
+        //hidden field for fulltext to cummunicate between different forms
+        $hiddenFull = $this->createElement('hidden', 'fullText');
+        $hiddenFull->setValue($this->fulltext);
+        $this->addElement($hiddenFull);
 
         //hidden field with document type
-        $hidden = $this->createElement('hidden', 'documentType');
-        $hidden->setValue($this->doctype);
+        $hiddenType = $this->createElement('hidden', 'documentType');
+        $hiddenType->setValue($this->doctype);
+        $this->addElement($hiddenType);
 
         //Submit button
         $submit = $this->createElement('submit', 'send');
         $submit->setLabel('Send');
-
-        $this->addElement($hidden);
         $this->addElement($submit);
         
     }
@@ -104,16 +197,13 @@ class PublishingSecond extends Zend_Form {
      */
     public function getValidatorsByName($datatype) {
         switch ($datatype) {
-            case 'Text': return new Zend_Validate_Alnum(true);
-            case 'Integer': return new Zend_Validate_Int(null);
-            case 'Year': return new Zend_Validate_GreaterThan('1900');
-            case 'Person': return new Zend_Validate_Alpha(true);
-            case 'Alpha': return new Zend_Validate_Alpha(false);
+            case 'Text': return new Zend_Validate_Alnum(true); break;
+            case 'Integer': return new Zend_Validate_Int(null); break;
+            case 'Year': return new Zend_Validate_GreaterThan('1900'); break;
+            case 'Person': return new Zend_Validate_Alpha(true); break;
+            case 'Alpha': return new Zend_Validate_Alpha(false); break;
 
-            //case 'LicencesDB': //
-
-            default:
-                break;
+            default: return new OpusServerPublishingException("Error while parsing the xml document type: Found datatype " . $datatype . " is unknown!"); break;
         }
         //TODO: Möglichkeit für den Admin einrichten, die Validatoren zu konfigurieren!!!
     }
@@ -123,14 +213,39 @@ class PublishingSecond extends Zend_Form {
      * @param <type> $formElement parsed from xml
      * @param <type> $elementName parsed from xml
      */
-    public function addFormElement($formElement, $elementName, $validator, $required) {
-        $formField = $this->createElement($formElement, $elementName);
-        $formField->setLabel($elementName);
-        $formField->addValidator($validator);
-        if ($required == 'yes') {
-            $formField->setRequired(true);
+    public function addFormElement($formElement, $elementName, $validator, $datatype, $required) {
+        if ($datatype != 'Person') {
+            $formField = $this->createElement($formElement, $elementName);
+            $formField->setLabel($elementName);
+            $formField->addValidator($validator);
+            if ($required == 'yes') {
+                $formField->setRequired(true);
+            }
+            $this->addElement($formField);
         }
-        $this->addElement($formField);
+        else {
+            $nameFirst = $elementName . 'FirstName';
+            $formField = $this->createElement($formElement, $nameFirst);
+            $formField->setLabel($nameFirst);
+            $formField->addValidator($validator);
+            if ($required == 'yes') {
+                $formField->setRequired(true);
+            }
+            $this->addElement($formField);
+
+            $nameLast = $elementName . 'LastName';
+            $formField = $this->createElement($formElement, $nameLast);
+            $formField->setLabel($nameLast);
+            $formField->addValidator($validator);
+            if ($required == 'yes') {
+                $formField->setRequired(true);
+            }
+            $this->addElement($formField);
+        }
     }
 
+    public function additionalFields($additionalFields) {
+        $this->additionalFields = $additionalFields;
+
+    }
 }

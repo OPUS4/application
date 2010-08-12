@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,15 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Publish
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @author      Henning Gerhardt (henning.gerhardt@slub-dresden.de)
- * @author      Pascal-Nicolas Becker <becker@zib.de>
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @category    TODO
+ * @author      Susanne Gottwald <gottwald@zib.de>
+ * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: IndexController.php 4541 2010-07-15 11:12:28Z tklein $
+ * @version     $Publish_2_IndexController$
  */
 
 /**
@@ -42,23 +39,24 @@
  * @package     Module_Publish
  */
 class Publish_2_IndexController extends Controller_Action {
+
     /**
      * @todo: extends Zend_Controller_Action ausreichend?
      */
+    public $documentType;
+    public $documentId;
 
-     public $doctype;
-
-     /**
-     * Renders a list of available document types.
-     *
+    /**
+     * Renders a list of available document types and provide upload field
+     * STEP 1
      * @return void
      *
      */
     public function indexAction() {
-        // STEP 1
-        $this->view->title = $this->view->translate('publish_controller_index');       
-        
+        // STEP 1: CHOOSE DOCUMENT TYPE AND UPLOAD FILE
+        $this->view->title = $this->view->translate('publish_controller_index');
         $form = new PublishingFirst();
+        $this->logger("Module Publishing <=> PublishingFirst was created.");
         $action_url = $this->view->url(array('controller' => 'index', 'action' => 'step2'));
         $form->setMethod('post');
         $form->setAction($action_url);
@@ -68,569 +66,306 @@ class Publish_2_IndexController extends Controller_Action {
     /**
      * XML GENERATING FORMS
      * used to store the upload and doc type
-     * build the form that depends on the doc type
+     * build the form that depends on the doc type and call render doctype template
+     * STEP 2
      */
     public function step2Action() {
         $this->view->title = $this->view->translate('publish_controller_index');
 
-        //create the step 1 form
+//        $persons = array();
+//        $persons[] = array (
+//            'FirstName' => '',
+//            'LastName' => '',
+//        );
+//        $persons[] = array (
+//            'FirstName' => '',
+//            'LastName' => '',
+//        );
+        //$this->view->Persons = $persons;
+        //check the input from step 1
         $step1Form = new PublishingFirst();
-        
-        //get the post data
         if ($this->getRequest()->isPost() === true) {
             $data = $this->getRequest()->getPost();
-           
+
             if (!$step1Form->isValid($this->getRequest()->getPost())) {
                 $this->view->form = $step1Form;
                 //show errors, go back to index
                 return $this->render('index');
             }
-            
-            // 2) BUILD THE FORM THAT DEPENDS ON THE DOC TYPE
-            $this->doctype = $data['type'];
+            $this->documentType = $data['type'];
+
+            //Flag for checking if fulltext of not => must be string, or else Zend_Form collaps
+            $fulltext = "0";
+            //store the file
+            $upload = new Zend_File_Transfer_Adapter_Http();
+            $files = $upload->getFileInfo();
+            $file = $files['fileupload'];
+
+            if (!empty($file['name'])) {
+                $this->logger("A file was uploaded: " . $file['name'] . " => Fulltext is given.");
+                $document = new Opus_Document();
+                $document->setType($this->documentType);
+                $docId = $document->store();
+                $this->documentId = $docId;
+                $this->logger("The corresponding doucment ID is: " . $this->documentId);
+
+                $docfile = $document->addFile();
+                $docfile->setFromPost($file);
+                $document->store();
+                $fulltext = "1";
+            }
+            else
+                $this->logger("No file uploaded: => Fulltext is NOT given.");
+
+            // STEP 2: BUILD THE FORM THAT DEPENDS ON THE DOC TYPE
+            //
             //use a specified view for the document type
-            $this->_helper->viewRenderer($this->doctype);
+            $this->_helper->viewRenderer($this->documentType);
+            $this->view->documentId = $this->documentId;
+
             //create the form
-            $step2Form = new PublishingSecond($this->doctype, null);
+            $step2Form = new PublishingSecond($this->documentType, $fulltext, null);
             $action_url = $this->view->url(array('controller' => 'index', 'action' => 'check'));
             $step2Form->setAction($action_url);
             $step2Form->setMethod('post');
+
             $this->view->form = $step2Form;
-        }                                                        
-     }
-       
+        }
+    }
+
     /**
      * displays and checks the publishing form contents and calls deposit to store the data
      * uses check_array
      * @return <type>
      */
-    public function checkAction()
-    {
-        if ($this->getRequest()->isPost() === true){
-            $this->doctype = $this->getRequest()->getPost('documentType');
-           //create form object
-            $form = new PublishingSecond($this->doctype);
+    public function checkAction() {
+        if ($this->getRequest()->isPost() === true) {
+            $this->documentType = $this->getRequest()->getPost('documentType');
+            $this->documentId = $this->getRequest()->getPost('documentId');
+            $fulltext = $this->getRequest()->getPost('fullText');
+
+            $form = new PublishingSecond($this->documentType, $fulltext, null);
 
             //check if variables are valid
-            if (!$form->isValid($this->getRequest()->getPost())){
+            if (!$form->isValid($this->getRequest()->getPost())) {
 
-                $this->view->form = $form;
-                //show errors
-                $this->view->errors = $form->getMessages();
-                
-                $errors = $form->getMessages();
-                
-                //regular and error values for placeholders
-                foreach ($form->getElements() as $key => $value) {
-                    //regular value
-                    $this->view->$key = $form->getElement($key)->getValue();
-                    if (isset($errors[$key]))
-                        foreach ($errors[$key] as $error => $errorMessage) {
-                            //error value
-                            $errorElement = $key . 'Error';
-                            $this->view->$errorElement = $errorMessage;
+                if (!$form->send->isChecked()) {
+                    //find out which other submit than send was pressed => add more fields!!!
+                    $foundPressedButton = false;
+                    $pressedButton = "";
+                    $pressedButtonName = "";
+                    foreach ($form->getElements() AS $element) {
+                        if ($element->getType() === 'Zend_Form_Element_Submit' && $element->isChecked()) {
+                            $foundPressedButton = true;
+                            $pressedButton = $element;
+                            $pressedButtonName = $pressedButton->getName();
+                            break;
                         }
+                    }
+
+                    if (!$foundPressedButton) {
+                        throw new Exception("no pressed button found.");
+                    }
+
+                    $fieldName = substr($pressedButtonName, 7);
+                    echo "Fieldname : " . $fieldName;
+                    //hidden field has the allowed value for counting the added fields
+                    //can be *
+                    if (!is_object($form->getElement('countMore'.$fieldName))) {
+                        $msg = "countMore$fieldName\n";
+                        $msg = $msg . var_dump($form->getElement('countMore'.$fieldName), TRUE);
+                        throw new Exception($msg);
+                    }
+                    $allowedNumbers = $form->getElement('countMore'.$fieldName)->getValue();
+                    //echo "Allowed Numbers : " .$hiddenCountField . " direct from form as hidden!!!!<br />";
+                    if ($allowedNumbers == "*") $hiddenCountFields = 99;
+                    else $allowedNumbers = (int) $allowedNumbers - 1;
+                    //echo "HiddenCountField: " .$hiddenCountField . " after substract!!!!<br />";
+                    $additionalFields = array();
+                    //set the decreased value for the pressed button and create a new form
+                    $additionalFields[$pressedButtonName] = $allowedNumbers;
+
+                    $form1 = new PublishingSecond($this->documentType, $fulltext, $additionalFields);
+                    
+                } 
+
+                $this->view->form = $form1;
+                //show errors
+                $errors = $form1->getMessages();
+
+                    //regular and error values for placeholders
+                    foreach ($form1->getElements() as $key => $value) {
+                        //regular values
+                        $this->view->$key = $form1->getElement($key)->getValue();
+                        if (isset($errors[$key]))
+                            foreach ($errors[$key] as $error => $errorMessage) {
+                                //error values
+                                $errorElement = $key . 'Error';
+                                $this->view->$errorElement = $errorMessage;
+                            }
+                    }
+
+                    return $this->render($this->documentType);
                 }
-                $this->render($this->doctype);
+             else {
+                //summery the variables
+                $this->view->title = $this->view->translate('publish_controller_check');
+
+                //send form values to check view
+                $formValues = $form1->getValues();
+                $this->view->formValues = $formValues;
+
+                //finally: deposit the data!
+                $depositForm = new PublishingSecond($this->documentType, $fulltext);
+                $action_url = $this->view->url(array('controller' => 'index', 'action' => 'deposit'));
+                $depositForm->setAction($action_url);
+                $depositForm->setMethod('post');
+
+                foreach ($formValues as $key => $value) {
+                    if ($key != 'send') {
+                        $hidden = $depositForm->createElement('hidden', $key);
+                        $hidden->setValue($value);
+                        $depositForm->addElement($hidden);
+                    } else {
+                        //do not send the field "send" with the form
+                        $depositForm->removeElement('send');
+                    }
+                }
+
+                $hiddenDocId = $depositForm->createElement('hidden', 'documentType');
+                $hiddenDocId->setValue($this->documentType);
+                $hiddenDocId = $depositForm->createElement('hidden', 'documentId');
+                $hiddenDocId->setValue($this->documentId);
+
+                $deposit = $depositForm->createElement('submit', 'deposit');
+                $depositForm->addElement($deposit)
+                        ->addElement($hiddenDocId);
+
+                //send form to view
+                $this->view->form = $depositForm;
             }
-
-            //summery the variables
-            $this->view->title = $this->view->translate('publish_controller_check');
-
-            //send form values to check view
-            $formValues = $form->getValues();
-            $this->view->formValues = $formValues;
-
-            $document = new Opus_Document();
-            $docId = $document->store();
-
-            //finally: deposit the data!
-            $depositForm = new PublishingSecond($this->doctype);
-            $action_url = $this->view->url(array('controller' => 'index', 'action' => 'deposit'));
-            $depositForm->setAction($action_url);
-            $depositForm->setMethod('post');
-
-            foreach ($formValues as $key => $value) {
-                if ($key != 'send') {
-                    $hidden = $depositForm->createElement('hidden', $key);
-                    $hidden->setValue($value);
-                    $depositForm->addElement($hidden);
-                }
-                else {
-                    //do not send the field "send" with the form
-                    $depositForm->removeElement('send');
-                }
-            }
-            //send the created document id as hidden field
-            $hiddenDocId = $depositForm->createElement('hidden', 'DocumentId');
-            $hiddenDocId->setValue($docId);
-            $deposit = $depositForm->createElement('submit', 'deposit');
-            $depositForm->addElement($deposit)
-                    ->addElement($hiddenDocId);
-
-            //send form to view
-            $this->view->form = $depositForm;
         }
     }
-       
+    
+
     /**
      * stores a delivered form as document in the database
      * uses check_array
      */
-    public function depositAction(){
+    public function depositAction() {
         $this->view->title = $this->view->translate('publish_controller_index');
         $this->view->subtitle = $this->view->translate('publish_controller_deposit_successful');
-        
-        if ($this->getRequest()->isPost() === true){
-            
+
+        if ($this->getRequest()->isPost() === true) {
+
             $formValues = $this->getRequest()->getPost();
-            $documentId = $formValues['DocumentId'];
-            $documentType = $formValues['documentType'];
-            $TitleMain = $formValues['TitleMain'];
-            $FirstName = $formValues['AuthorFirstName'];
-            $LastName = $formValues['AuthorLastName'];
-            $PublishedYear = $formValues['PublishedYear'];
-            $TitleAbstract = $formValues['TitleAbstract'];
-            
-            $document = new Opus_Document($documentId);
+            $this->documentType = $this->getRequest()->getPost('documentType');
+            $this->documentId = $this->getRequest()->getPost('documentId');
 
-            $TitleMainAdd = $document->addTitleMain();
-            $TitleMainAdd->setValue($TitleMain);
+            $document = new Opus_Document($this->documentId);
+            $document->setType($this->documentType);
 
-            $TitleAbstracAdd = $document->addTitleAbstract();
-            $TitleAbstracAdd->setValue($TitleAbstract);
+            //delete values that do not concern the document (anymore)
+            unset($formValues['documentType']);
+            unset($formValues['documentId']);
+            unset($formValues['deposit']);
 
-            $document->setPublishedYear($PublishedYear);
+            //get the available external fields of an document
+            $externalFields = $document->getAllExternalFields();
 
-            $person = new Opus_Person();
-            $person->setFirstName($FirstName);
-            $person->setLastName($LastName);
-            $document->addPersonAuthor($person);
+            //save the post variables
+            foreach ($formValues as $key => $value) {
+                if (strstr($key, "Person")) {
 
+                    if ($value != "") {
+                        //store person object using help function
+                        $formValues = $this->storePerson($document, $formValues, $key, $externalFields);
+                    }
+                } else {
+                    if (in_array($key, $externalFields)) {
+                        //echo "<b>external: " . $key . "</b><br>";
+                        // store an external field with adder
+                        $function = "add" . $key;
+                        //echo "Try to add " . $key . " with function " . $function . "<br>";
+                        $addedValue = $document->$function();
+                        $addedValue->setValue($value);
+                    } else {
+                        //store an internal field with setter
+                        //echo "internal: " . $key . "<br>";
+                        $function = "set" . $key;
+                        //echo "Try to set " . $key . " with function " . $function . "<br>";
+                        $addedValue = $document->$function($value);
+                    }
+                }
+            }
             $document->store();
         }
     }
 
-    
-    /**
-     * Show form for key upload and do the key upload
-     *
-     * @return void
-     *
-     */
-    public function keyuploadAction() {
-        $this->view->title = $this->view->translate('publish_controller_keyupload');
-        $form = new KeyUpload();
-        $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create'));
-        $form->setAction($action_url);
-        $this->view->form = $form;
-    }
-
-    /**
-     * Returns a filtered representation of the document.
-     *
-     * @param  Opus_Document  $document The document to be filtered.
-     * @return Opus_Model_Filter The filtered document.
-     */
-    private function __createFilter(Opus_Document $document, $page = null) {
-        $filter = new Opus_Model_Filter();
-        $filter->setModel($document);
-        $type = new Opus_Document_Type($document->getType());
-        $pages = $type->getPages();
-        $alwayshidden = array('IdentifierOpus3', 'Type', 'ServerState', 'ServerDateModified', 'ServerDatePublished', 'File');
-        $blacklist = array_merge($alwayshidden, $type->getPublishFormBlackList());
-        if (false === is_null($page) and true === array_key_exists($page, $pages)) {
-            $filter->setWhitelist(array_diff($pages[$page]['fields'], $blacklist));
+    private function storePerson($document, $formValues, $key, $externalFields) {
+        if ($formValues[$key] == "") {
+            // unrequired Personfield is empty
+            return $formValues;
         } else {
-            $filter->setBlacklist($blacklist);
-        }
-        $filter->setSortOrder($type->getPublishFormSortOrder());
-        return $filter;
-    }
-
-    /**
-     * Returns whether a given page is defined for a document.
-     *
-     * @param  Opus_Document  $document The document to check.
-     * @param  mixed          $page     The page to check for.
-     * @return boolean  Whether the page is defined.
-     */
-    private function __pageExists(Opus_Document $document, $page) {
-        $type = new Opus_Document_Type($document->getType());
-        $pages = $type->getPages();
-        return array_key_exists($page, $pages);
-    }
-
-    /**
-     * Create, recreate and validate a document form. If it is valid store it.
-     *
-     * @return void
-     */
-    public function createAction() {
-        $this->view->title = $this->view->translate('publish_controller_create');
-
-        if ($this->_request->isPost() === true) {
-            $requested_page = $this->_request->getParam('page');
-            $backlink = $this->_request->getParam('back');
-            if (false === is_null($backlink)) {
-                $requested_page--;
-            }
-            $data = $this->_request->getPost();
-            $form_builder = new Form_Builder();
-            $documentInSession = new Zend_Session_Namespace('document');
-            if (array_key_exists('gpg_key_upload', $data) === true) {
-            	$alternateForm = new KeyUpload();
-            	// upload key
-                if ($alternateForm->isValid($data) === true) {
-                    $gpg = new Opus_GPG();
-
-                    $upload = new Zend_File_Transfer_Adapter_Http();
-                    $files = $upload->getFileInfo();
-
-                    // save the file
-                    foreach ($files as $file) {
-                        $gpg->importKeyFile($file['tmp_name']);
-                    }
-                }
-                
-                // build first page of publishing form
-                $selectedDoctype = $documentInSession->doctype;
-                $document = $documentInSession->document;
-                
-                $caption = 'publish_index_create_' . $selectedDoctype;
-                $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create', 'page' => 1));
-
-                $createForm = $form_builder->build($this->__createFilter($document, 0));
-                $createForm->setAction($action_url);
-                $createForm->setDecorators(array('FormElements', array('Description', array('placement' => 'prepend','tag' => 'h2')), 'Form'));
-                $this->view->form = $createForm;
-                return;
-            }
-            if (array_key_exists('selecttype', $data) === true) {
-                // validate document type
-                $form = new Overview();
-                if ($form->isValid($data) === true) {
-                    $possibleDoctypes = Opus_Document_Type::getAvailableTypeNames();
-                    $selectedDoctype = $form->getValue('selecttype');
-                    if ($selectedDoctype !== $documentInSession->doctype && isset($selectedDoctype) === true) {
-                        $documentInSession->doctype = $selectedDoctype;
-                    }
-                    else {
-                        $selectedDoctype = $documentInSession->doctype;
-                    }
-                    if (in_array($selectedDoctype, $possibleDoctypes) === false) {
-                        // TODO: error message
-                        // document type does not exists, back to select form
-                        $this->_redirectTo($this->view->translate('choose_valid_doctype'),
-                            'deposit', 'index', 'publish');
-                    }
-
-                    // Store document in session
-                    $document = new Opus_Document(null, $selectedDoctype);
-                    // this only works if authentication method is ldap
-                    $config = new Zend_Config_Ini('../config/config.ini', 'production');
-        
-                    if ($config->authenticationModule === 'Ldap') {
-                        $userdata = Opus_Security_AuthAdapter_Ldap::getUserdata();
-                        if (isset($userdata['lastName']) === true) {
-                    	    $loggedinPerson = new Opus_Person();
-                    	    $loggedinPerson->setFirstName($userdata['firstName']);
-                    	    $loggedinPerson->setLastName($userdata['lastName']);
-                    	    $loggedinPerson->setEmail($userdata['email']);
-                    	    $identifier = new Opus_Person_ExternalKey();
-                    	    $identifier->setValue($userdata['personId']);
-                    	    $loggedinPerson->setIdentifierLocal($identifier);
-                    	    try {
-                    	        $document->addPersonSubmitter($loggedinPerson);
-                    	    }
-                    	    catch (Exception $e) {
-                    		    if ($e->getCode === 404) {
-                    			    //do nothing, submitter field is not allowed
-                    		    }
-                    	    }
-                        }
-                    }
-                    $documentInSession->document = $document;
-
-                    // If author selected that he has a GPG-Key, show Uploadform
-                    if (array_key_exists('gpgkey', $data) === true) {
-                        $gpgkey = $data['gpgkey'];
-                        if ($gpgkey === '1') {
-                            $documentInSession->keyupload = true;
-                            $alternateForm = new KeyUpload();
-                            $this->view->form = $alternateForm;
-                            return;
-                        }
-                    }
-
-                    $caption = 'publish_index_create_' . $selectedDoctype;
-                    $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create', 'page' => 1));
-
-                    $createForm = $form_builder->build($this->__createFilter($document, 0));
-                    $createForm->setAction($action_url);
-                    $createForm->setDecorators(array('FormElements', array('Description', array('placement' => 'prepend','tag' => 'h2')), 'Form'));
-                    $this->view->form = $createForm;
-                } else {
-                    // submitted form data is not valid, back to select form
-                    $this->view->form = $form;
-                }
-            } else if (false === array_key_exists('submit', $data)) {
-                if (true === array_key_exists('Opus_Model_Filter', $data)) {
-                    $form_builder->buildModelFromPostData($documentInSession->document, $data['Opus_Model_Filter']);
-                }
-                $form = $form_builder->build($this->__createFilter($documentInSession->document, $requested_page - 1));
-                $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create', 'page' => $requested_page));
-                $form->setAction($action_url);
-                if (0 < $requested_page - 1) {
-                    $backButton = new Zend_Form_Element_Submit('back');
-                    $form->addElement($backButton);
-                }
-                $this->view->form = $form;
-            } else if (false === is_null($requested_page) and true === $this->__pageExists($documentInSession->document, $requested_page)) {
-                // if Opus_Model_filter does not exist, an empty form has been submitted
-                // its not necessary to store new data to the model
-                if (true === array_key_exists('Opus_Model_Filter', $data)) {
-                    $form_builder->buildModelFromPostData($documentInSession->document, $data['Opus_Model_Filter']);
-                }
-                $form = $form_builder->build($this->__createFilter($documentInSession->document, $requested_page - 1));
-                if (true === $form->isValid($data)) {
-                    $deliver_page = $requested_page + 1;
-                    $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create', 'page' => $deliver_page));
-                    $form = $form_builder->build($this->__createFilter($documentInSession->document, $requested_page));
-                } else {
-                    $deliver_page = $requested_page;
-                    $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create', 'page' => $deliver_page));
-                }
-                $form->setAction($action_url);
-                if ($deliver_page > 1) {
-                    $backButton = new Zend_Form_Element_Submit('back');
-                    $form->addElement($backButton);
-                }
-                $this->view->form = $form;
-            } else {
-                // if Opus_Model_filter does not exist, an empty form has been submitted
-                // its not necessary to store new data to the model
-                if (true === array_key_exists('Opus_Model_Filter', $data)) {
-                    $form_builder->buildModelFromPostData($documentInSession->document, $data['Opus_Model_Filter']);
-                }
-                $form = $form_builder->build($this->__createFilter($documentInSession->document, $requested_page - 1));
-                if ($form->isValid($data) === true) {
-                    // go ahead to summary
-                    $this->view->document_data = $documentInSession->document->toArray();
-                    $this->view->title = $this->view->translate('publish_controller_summary');
-                    $summaryForm = new Summary();
-                    $action_url = $this->view->url(array('controller' => 'index', 'action' => 'summary'));
-                    $summaryForm->setAction($action_url);
-                    $this->view->form = $summaryForm;
-                    $backLinkForm = new Zend_Form;
-                    $backLinkUrl = $this->view->url(array('controller' => 'index', 'action' => 'create', 'page' => $requested_page + 1));
-                    $backLinkForm->setAction($backLinkUrl);
-                    $backButton = new Zend_Form_Element_Submit('back');
-                    $backLinkForm->addElement($backButton);
-                    $this->view->backLinkForm = $backLinkForm;
-                } else {
-                    $this->view->form = $form;
+            //get all possible Person fields
+            $availablePersons = array();
+            foreach ($externalFields as $value) {
+                if (strstr($value, "Person")) {
+                    array_push($availablePersons, $value);
                 }
             }
-        } else {
-            // action used directly go back to main index
-            $this->_redirectTo('index');
+            $person = new Opus_Person();
+            $first = "FirstName";
+            $last = "LastName";
+            $firstPos = stripos($key, $first);
+            $lastPos = stripos($key, $last);
+
+            if ($firstPos != false) {
+                //FirstName is given
+                echo "1) set first: " . $formValues[$key] . "<br>";
+                $person->setFirstName($formValues[$key]);
+                $personType = substr($key, 0, $firstPos);
+                $lastNameKey = $personType . $last;
+                echo "2) set last: " . $formValues[$lastNameKey] . "<br>";
+                $person->setLastName($formValues[$lastNameKey]);
+                $addFunction = "add" . $personType;
+                $document->$addFunction($person);
+                //"delete" the second value for the name to avoid duplicates
+                $formValues[$lastNameKey] = "";
+            } else if ($lastPos != false) {
+                //LastName is given
+                echo "1) set last: " . $formValues[$key] . "<br>";
+                $person->setLastName($formValues[$key]);
+                //personType example: PersonAuthor
+                $personType = substr($key, 0, $lastPos);
+                $firstNameKey = $personType . $first;
+                echo "2) set first: " . $formValues[$firstNameKey] . "<br>";
+                $person->setFirstName($formValues[$firstNameKey]);
+                $addFunction = "add" . $personType;
+                $document->$addFunction($person);
+                //"delete" the second value for the name to avoid duplicates
+                $formValues[$firstNameKey] = "";
+            }
+
+            return $formValues;
         }
     }
 
-    public function summaryAction() {
-        //$documentInSession = new Zend_Session_Namespace('document');
-        $this->view->title = $this->view->translate('publish_controller_summary');
-        $backUrl = $this->view->url(array('module' => 'publish', 'controller' => 'index', 'action' => 'index'), null, false);
-        $this->view->backlink = "<a href='$backUrl'>" . $this->view->translate('upload_another_publication') . "</a>";
-        if ($this->_request->isPost() === true) {
-            $summaryForm = new Summary();
-            $postdata = $this->_request->getPost();
-            if ($summaryForm->isValid($postdata) === true) {
-                $form_builder = new Form_Builder();
-                $document = $documentInSession->document;
-                if (array_key_exists('submit', $postdata) === true) {
-                    // type is stored in serialized model as a string only
-                    // to validate document it must be a Document_Type
-                    $type = new Opus_Document_Type($document->getType());
-                    $document->setType($type);
-                    $id = $document->store();
-                    $this->view->title = $this->view->translate('publish_controller_upload');
-                    $uploadForm = new FileUpload();
-                    if (false === is_null($document->getField('File'))) {
-                        $action_url = $this->view->url(array('controller' => 'index', 'action' => 'upload'));
-                        $uploadForm->setAction($action_url);
-                        // TODO: Security save id to session not to form
-                        // Actually it is possible to add Files to every document for everybody!
-                        $uploadForm->DocumentId->setValue($id);
-                        $this->view->form = $uploadForm;
-                    }
-                } else {
-                    // invalid form return to index
-                    $this->_redirectTo('index');
-                }
-            } else {
-                // invalid form return to index
-                $this->_redirectTo('index');
-            }
-        } else {
-            // on non post request redirect to index action
-            $this->_redirectTo('index');
-        }
+    protected function logger($message) {
+        $registry = Zend_Registry::getInstance();
+        $logger = $registry->get('Zend_Log');
+        $logger->info(get_class($this) . ": $message");
     }
 
-    /**
-     * Create form and handling file uploading
-     *
-     * @return void
-     */
-    public function uploadAction() {
-        $this->view->title = $this->view->translate('publish_controller_upload');
-        $backUrl = $this->view->url(array('module' => 'publish', 'controller' => 'index', 'action' => 'create'), null, false);
-        $this->view->backlink = "<a href='$backUrl'>" . $this->view->translate('upload_another_publication') . "</a>";
-        $uploadForm = new FileUpload();
-        $action_url = $this->view->url(array('controller' => 'index', 'action' => 'upload'));
-        $uploadForm->setAction($action_url);
-        $documentInSession = new Zend_Session_Namespace('document');
-        // store uploaded data in application temp dir
-        if ($this->_request->isPost() === true) {
-            $data = $this->_request->getPost();
-            if ($uploadForm->isValid($data) === true) {
-                // This works only from Zend 1.7 on
-                // $upload = $uploadForm->getTransferAdapter();
-                try {
-                    $upload = new Zend_File_Transfer_Adapter_Http();
-                    $files = $upload->getFileInfo();
-                    $document = $documentInSession->document;
-
-                    $this->view->message = $this->view->translate('publish_controller_upload_successful');
-
-                    // one form has only one file
-                    $file = $files['fileupload'];
-                    $hash = null;
-                    if (array_key_exists('sigupload', $files) === true) {
-                        $sigfile = $files['sigupload'];
-                    }
-
-                    /*
-                     * if (!$upload->isValid($file)) {
-                     *   $this->view->message = 'Upload failed: Not a valid file or no file submitted!';
-                     *   break;
-                     * }
-                     */
-
-                    $docfile = $document->addFile();
-                    $docfile->setDocumentId($document->getId());
-                    $docfile->setLabel($uploadForm->getValue('comment'));
-                    $docfile->setLanguage($uploadForm->getValue('language'));
-                    $docfile->setPathName($file['name']);
-                    $docfile->setMimeType($file['type']);
-                    $docfile->setTempFile($file['tmp_name']);
-                    $docfile->setFromPost($file);
-                    if (array_key_exists('sigupload', $files) === true) {
-                        $signature = implode("", file($sigfile['tmp_name']));
-                        $hash = $docfile->addHashValue();
-                        $hash->setType('gpg-0');
-                        $hash->setValue($signature);
-                    }
-                    $document->store();
-                }
-                catch (Zend_File_Transfer_Exception $zfte) {
-                    $this->view->message = $zfte->getMessage();
-                }
-
-                // reset input values fo re-displaying
-                $uploadForm->reset();
-                // re-insert document id
-                $uploadForm->DocumentId->setValue($document->getId());
-                $this->view->form = $uploadForm;
-            } else {
-                // invalid form, populate with transmitted data
-                $uploadForm->populate($data);
-                $this->view->form = $uploadForm;
-            }
-        } else {
-            // on non post request redirect to index action
-            if (false === is_null($documentInSession->document)) {
-                if (false === is_null($documentInSession->document->getField('File'))) {
-                    $this->view->form = $uploadForm;
-                }
-            } else {
-                $this->_redirectTo('index');
+    protected function getPressedButton($form) {
+        $pressedButton = "";
+        foreach ($form->getElements() AS $element) {
+            if ($element->getType() == 'Submit' && $element->isChecked()) {
+                $pressedButton = $element;
             }
         }
+        return $pressedButton;
     }
 
-    /**
-     * Assign a document to a collection
-     *
-     * @return void
-     */
-    public function assignAction() {
-        $documentInSession = new Zend_Session_Namespace('document');
-        $document = $documentInSession->document;
-        $documentId = $document->getId();
-        $role = $this->getRequest()->getParam('role');
-        $path = $this->getRequest()->getParam('path');
-        if ($this->_request->isPost() === true) {
-            $collection = new Opus_CollectionRole($role);
-            $roleName = $collection->getDisplayName();
-            if (true === isset($path)) {
-                $trail = explode('-', $path);
-                foreach($trail as $i => $step) {
-                    if ($i < sizeof($trail)) {
-                        $collections = $collection->getSubCollection();
-                        $collection = $collections[$step];
-                    }
-                }
-            }
-            // collections contains only one collection, but this is an array
-            $collection->addDocuments($document);
-            $collection->store();
-            $this->_redirectTo('Document successfully assigned to collection "' . $collection->getDisplayName() . '".'
-                    , 'upload', 'index', 'publish');
-        } else if (false === isset($role)) {
-            $collections = array();
-            foreach (Opus_CollectionRole::fetchAll() as $collection) {
-                $collections[$collection->getId()] = $collection->getDisplayName();
-            }
-            $this->view->subcollections = $collections;
-            $this->view->breadcrumb = array();
-            $this->view->assign = $documentId;
-            $this->view->role_id = null;
-        } else {
-            $collection = new Opus_CollectionRole($role);
-            $roleName = $collection->getDisplayName();
-            $subcollections = array();
-            $breadcrumb = array();
-            if (true === isset($path)) {
-                $trail = explode('-', $path);
-                foreach($trail as $step) {
-                    if (false === isset($position)) {
-                        $position = $step;
-                    } else {
-                        $position .= '-' . $step;
-                    }
-                    $collections = $collection->getSubCollection();
-                    $collection = $collections[$step];
-                    $breadcrumb[$position] = $collection->getDisplayName();
-                }
-            }
-            if ($collection instanceof Opus_CollectionRole) {
-                foreach($collection->getSubCollection() as $i => $subcollection) {
-                    $subcollections[$i] = $subcollection->getDisplayName();
-                }
-            } else {
-                foreach($collection->getSubCollection() as $i => $subcollection) {
-                    $subcollections[$path . '-' . $i] = $subcollection->getDisplayName();
-                }
-            }
-            $this->view->subcollections = $subcollections;
-            $this->view->role_id = $role;
-            $this->view->role_name = $roleName;
-            $this->view->path = $path;
-            $this->view->assign = $documentId;
-            $this->view->breadcrumb = $breadcrumb;
-        }
-    }
 }
+

@@ -26,18 +26,16 @@
  *
  * @category    Application
  * @package     Module_Publish
- * @author      Henning Gerhardt (henning.gerhardt@slub-dresden.de)
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @author      Susanne Gottwald <gottwald@zib.de>
+ * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: FileUpload.php 4063 2010-01-27 14:28:55Z ostrowski $
+ * @version     $Id$
  */
 
 /**
- * Shows a upload form for one or more files
+ * Builds the fist page of an upload form for one file
  *
- * @category    Application
- * @package     Module_Publish
- * */
+ */
 
 class PublishingFirst extends Zend_Form {
 
@@ -47,8 +45,8 @@ class PublishingFirst extends Zend_Form {
      *
      * @return void
      */
-    public function init() {
-        
+    public function init() {        
+
         $documentInSession = new Zend_Session_Namespace('document');
         $config = Zend_Registry::get('Zend_Config');
 
@@ -73,7 +71,7 @@ class PublishingFirst extends Zend_Form {
 
         $fileupload = $this->createElement('File', 'fileupload');
         $fileupload->setLabel('fileupload')
-                ->setRequired(true)
+               // ->setRequired(true)
                 ->setDestination($tempPath)
                 ->addValidator('Count', false, 1)     // ensure only 1 file
                 ->addValidator('Size', false, 1024000) // limit to 1000K
