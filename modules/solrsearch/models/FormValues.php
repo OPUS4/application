@@ -66,6 +66,12 @@ class FormValues {
      */
     private $rows;
 
+    /**
+     * is the underlying form a simple or advanced one
+     * @var boolean
+     */
+    private $simple_search;
+
 
     public function getSelectBoxes() {
         return $this->select_boxes;
@@ -105,6 +111,14 @@ class FormValues {
 
     public function setRows($rows) {
         $this->rows = $rows;
+    }
+
+    public function getSimpleSearch() {
+        return $this->simpleSearch;
+    }
+
+    public function setSimpleSearch($simpleSearch) {
+        $this->simple_search = simpleSearch;
     }
 }
 ?>
