@@ -12,8 +12,8 @@
 
         <search>
             <label>search_menu_label</label>
-            <module>search</module>
-            <controller>search</controller>
+            <module>solrsearch</module>
+            <controller>solrsearch</controller>
             <action>index</action>
         </search>
 
