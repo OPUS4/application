@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -41,36 +42,31 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
      * @var Opus_SolrSearch_Searcher
      */
     private $searcher;
-
     /**
      * Zend Logger
      * @var Zend_Log
      */
     private $log;
-
     /**
      * Current Solr search query
      * @var Opus_SolrSearch_Query
      */
     private $query;
-
     /**
      * Flag for search type. True if a simple search was performed. False if an
      * advanced search was performed
      * @var <type> boolean
      */
     private $simpleSearch;
-
     private $numOfHits;
     private $currentPage;
-
     /**
      *
      * @var Opis_SolrSearch_ResultList
      */
     private $results;
 
-    public function  __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array()) {
+    public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array()) {
         parent::__construct($request, $response, $invokeArgs);
         $this->log = Zend_Registry::getInstance()->get("Zend_Log");
         $this->simpleSearch = true;
@@ -109,7 +105,7 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $this->currentPage++;
         $this->query->setStart($this->query->getStart() + $this->query->getRows());
 
-        if($this->query->getStart() > $this->numOfHits) {
+        if ($this->query->getStart() > $this->numOfHits) {
             $this->query->setStart($this->numOfHits - $this->query->getRows());
             $this->currentPage--;
         }
@@ -126,11 +122,11 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $this->currentPage--;
         $this->query->setStart($this->query->getStart() - $this->query->getRows());
 
-        if($this->query->getStart() < 0) {
+        if ($this->query->getStart() < 0) {
             $this->currentPage++;
             $this->query->setStart(0);
         }
-        
+
         $this->performSearch();
         $this->render("results");
     }
@@ -166,7 +162,7 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $this->currentPage = 1;
         $this->performSearch();
 
-        if(0 === $this->numOfHits)
+        if (0 === $this->numOfHits)
             $this->render('nohits');
         else
             $this->render('results');
@@ -189,7 +185,7 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $this->view->__set("simpleSearch", $this->simpleSearch);
         $this->view->__set("numOfHits", $this->numOfHits);
         $this->view->__set("start", $this->query->getStart());
-        $this->view->__set("numOfPages", $this->numOfHits / $this->query->getRows());
+        $this->view->__set("numOfPages", (int) ($this->numOfHits / $this->query->getRows()));
         $this->view->__set("currentPage", $this->currentPage);
 
         $this->log->debug("search complete");
@@ -201,23 +197,29 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
      */
     private function buildQuery($request) {
 
-        if($request->isPost() === true)  {
+        if ($request->isPost() === true) {
             $this->log->debug("Request is post. Extracting data.");
             $data = $request->getPost();
-        } else {
+        }
+        else {
             $this->log->debug("Request is non post. Trying to extract data. Request should be post normally.");
             $data = $request->getParams();
         }
 
-        if(is_null($data))
+        if (is_null($data)) {
             throw new Opus_Server_Exception("Unable to read request data. Search cannot be performed.");
+        }
 
+        if (!array_key_exists('searchtype', $data)) {
+            throw new Opus_Server_Exception("Unable to create query for unspecified searchtype");
+        }
         $searchtype = $data['searchtype'];
 
-        if($searchtype === 'simple') {
+        if ($searchtype === 'simple') {
             $this->simpleSearch = true;
             return $this->createSimpleSearchQuery($data);
-        } else if($searchtype === 'advanced') {
+        }
+        if ($searchtype === 'advanced') {
             $this->simpleSearch = false;
             return $this->createAdvancedSearchQuery($data);
         }
@@ -237,9 +239,9 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $query->setRows(10);
         $query->setSortField('score');
         $query->setSortOrder('desc');
-        
+
         $this->log->debug("Query complete");
-        
+
         return $query;
     }
 
@@ -247,6 +249,6 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         // TODO implement
         return null;
     }
-}
 
+}
 ?>
