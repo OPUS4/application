@@ -87,7 +87,8 @@
     ?>
         <div class="result_box">
 
-            <a href="#"><?= $result->getTitleDeu(); ?></a>(<?= $result->getYear(); ?>)<br/>
+            <a href="<?=$result->getId()?>"><?= $result->getTitleDeu(); ?></a> (<?= $result->getYear(); ?>)<br/>
+            <!-- TODO: TitleEng -->
 
             <?php
                 foreach($result->getAuthor() as $author) {
@@ -96,8 +97,8 @@
             <?php
                 }
             ?>
-
-            <p><?= $result->getAbstractDeu(); ?></p>
+            <div class="abstract"><?= $result->getAbstractDeu(); ?></div>
+            <!-- TODO: AbstractEng -->
         </div>
     <?php
         }

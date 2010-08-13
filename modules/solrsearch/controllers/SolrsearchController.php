@@ -38,19 +38,19 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
 
     /**
      * A searcher object handling Solr communication
-     * @var <type> Opus_SolrSearch_Searcher
+     * @var Opus_SolrSearch_Searcher
      */
     private $searcher;
 
     /**
      * Zend Logger
-     * @var <type> Zend_Log
+     * @var Zend_Log
      */
     private $log;
 
     /**
      * Current Solr search query
-     * @var <type> Opus_SolrSearch_Query
+     * @var Opus_SolrSearch_Query
      */
     private $query;
 
@@ -63,6 +63,11 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
 
     private $numOfHits;
     private $currentPage;
+
+    /**
+     *
+     * @var Opis_SolrSearch_ResultList
+     */
     private $results;
 
     public function  __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array()) {
@@ -178,6 +183,7 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $this->searcher = new Opus_SolrSearch_Searcher();
         $this->results = $this->searcher->search($this->query);
         $this->numOfHits = $this->results->getNumberOfHits();
+        $this->log->debug("resultlist: " . $this->results);
 
         $this->view->__set("results", $this->results->getResults());
         $this->view->__set("simpleSearch", $this->simpleSearch);
