@@ -33,4 +33,74 @@
 
 ?>
 
-<p>results</p>
+<h2>Suchergebnisse</h2>
+
+<div id="search_options" >
+    --suchoptionen--
+</div>
+
+<div id="pagination" >
+    <p>Seite <?= $this->currentPage ?> von <?= $this->numOfPages ?></p>
+    <ul class="paginationControl">
+
+        <?php
+            if($this->currentPage > 1) {
+        ?>
+        <li>
+            <a href="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'firstpage'));?>">
+                Erste Seite
+            </a>
+        </li>
+        <li>
+            <a href="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'prevpage'));?>">
+                Vorherige Seite
+            </a>
+        </li>
+        <?php
+            }
+        ?>
+
+        <?php
+            if($this->currentPage < $this->numOfPages) {
+        ?>
+        <li>
+            <a href="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'nextpage'));?>">
+                Nächste Seite
+            </a>
+        </li>
+        <li>
+            <a href="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'lastpage'));?>">
+                Letzte Seite
+            </a>
+        </li>
+        <?php
+            }
+        ?>
+    </ul>
+</div>
+
+<div id="search_results" >
+    <p>Ihre Suche ergab <?= $this->numOfHits ?> Treffer</p>
+
+    <?php
+        foreach($this->results as $result) {
+    ?>
+        <div class="result_box">
+
+            <a href="#"><?= $result->getTitleDeu(); ?></a>(<?= $result->getYear(); ?>)<br/>
+
+            <?php
+                foreach($result->getAuthor() as $author) {
+            ?>
+                <a href="#"><?= $author ?></a><br/>
+            <?php
+                }
+            ?>
+
+            <p><?= $result->getAbstractDeu(); ?></p>
+        </div>
+    <?php
+        }
+    ?>
+</div>
+

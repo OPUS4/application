@@ -33,4 +33,163 @@
 
 ?>
 
-<p>advanced search</p>
+<h2><?= $this->translate('solrsearch_title_advanced'); ?></h2>
+
+<form action="#">
+
+    <fieldset>
+        <legend>Allgemeine Suchoptionen</legend>
+        <label for="default_operator">Suchergebnisse enthalten</label>
+        <select name="default_operator" id="default_operator">
+            <option value="AND" >alle Begriffe</option>
+            <option value="OR" >mindestens einen Begriff</option>
+        </select>
+
+        <br/>
+
+        <label for="hits_per_page">Treffer pro Seite</label>
+        <select name="hits_per_page" id="hits_per_page">
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>
+    </fieldset>
+<!--
+    <fieldset>
+        <legend>Sortierung</legend>
+
+        <label for="sorting">Sortieren nach</label>
+        <select name="sorting" id="sorting">
+            <option value="relevance" label="Relevance">Score</option>
+            <option value="year" label="Year">Year</option>
+            <option value="title" label="Title">Title</option>
+            <option value="author" label="Author">Author</option>
+        </select>
+
+        <br/>
+
+        <input id="sortorder_asc" name="sortorder" type="radio" value="asc" />
+        <label for="sortorder_asc">Aufsteigend</label>
+
+        <br/>
+
+        <input id="sortorder_desc" name="sortorder" type="radio" value="desc" checked="checked"/>
+        <label for="sortorder_desc">Absteigend</label>
+
+    </fieldset>
+-->
+    <fieldset>
+        <legend>Dokumente</legend>
+        <label for="doctype">Dokumenttyp</label>
+        <select id="doctype" name="doctype">
+            <option value="0" label="All">All</option>
+            <option value="article" label="Article">Article</option>
+            <option value="bachelor_thesis" label="Bachelor Thesis">Bachelor Thesis</option>
+            <option value="conference" label="Conference">Conference</option>
+            <option value="conference_item" label="Conference Item">Conference Item</option>
+            <option value="demo" label="demo">demo</option>
+            <option value="doctoral_thesis" label="Dissertation">Dissertation</option>
+            <option value="festschrift" label="Festschrift ">Festschrift </option>
+            <option value="habilitation" label="Habil Thesis">Habil Thesis</option>
+            <option value="journal" label="Journal">Journal</option>
+            <option value="lecture" label="Lecture">Lecture</option>
+            <option value="manual" label="Manual">Manual</option>
+            <option value="master_thesis" label="Master Thesis">Master Thesis</option>
+            <option value="monograph" label="Monograph">Monograph</option>
+            <option value="monograph_section" label="Monograph (Section)">Monograph (Section)</option>
+            <option value="other" label="Other">Other</option>
+            <option value="paper" label="Paper">Paper</option>
+            <option value="preprint" label="Preprint">Preprint</option>
+            <option value="report" label="Report">Report</option>
+            <option value="studienarbeit" label="Studienarbeit">Studienarbeit</option>
+        </select>
+        <br/>
+        <label for="doc_language">Sprache</label>
+        <select id="doc_language" name="doc_language">
+            <option value="0" label="All">All</option>
+            <option value="deu" label="German">German</option>
+            <option value="eng" label="English">English</option>
+            <option value="fra" label="French">French</option>
+            <option value="rus" label="Russian">Russian</option>
+            <option value="spa" label="Spanish">Spanish</option>
+        </select>
+    </fieldset>
+
+    <fieldset>
+        <legend>Suchfelder</legend>
+
+        <select id="field_select">
+            <option value="title" label="Title">Title</option>
+            <option value="author" label="Author">Author</option>
+            <option value="persons" label="Persons">Persons</option>
+            <option value="fulltext" label="Fulltext">Fulltext</option>
+            <option value="abstract" label="Abstract">Abstract</option>
+            <option value="subject" label="Subjects">Subjects</option>
+            <option value="year" label="Year of publication">Year of publication</option>
+            <option value="institute" label="Associated institute">Associated institute</option>
+            <option value="urn" label="URN">URN</option>
+            <option value="isbn" label="ISBN">ISBN</option>
+            <option value="series" label="Series">Series</option>
+            <option value="collection" label="Collections">Collections</option>
+            <option value="opac-id" label="Opac-ID">Opac-ID</option>
+        </select>
+        <input type="text" />
+        <select >
+            <option value="AND">und</option>
+            <option value="OR">oder</option>
+        </select>
+        <input type="submit" value="x" title="Klicken Sie hier um diese zeile zu löschen" />
+        <br/>
+        
+        <select id="field_select">
+            <option value="title" label="Title">Title</option>
+            <option value="author" label="Author">Author</option>
+            <option value="persons" label="Persons">Persons</option>
+            <option value="fulltext" label="Fulltext">Fulltext</option>
+            <option value="abstract" label="Abstract">Abstract</option>
+            <option value="subject" label="Subjects">Subjects</option>
+            <option value="year" label="Year of publication">Year of publication</option>
+            <option value="institute" label="Associated institute">Associated institute</option>
+            <option value="urn" label="URN">URN</option>
+            <option value="isbn" label="ISBN">ISBN</option>
+            <option value="series" label="Series">Series</option>
+            <option value="collection" label="Collections">Collections</option>
+            <option value="opac-id" label="Opac-ID">Opac-ID</option>
+        </select>
+        <input type="text" />
+        <select >
+            <option value="AND">und</option>
+            <option value="OR">oder</option>
+        </select>
+        <input type="submit" value="Zeile löschen" title="Klicken Sie hier um diese zeile zu löschen" />
+
+        <br/>
+        
+        <select id="field_select">
+            <option value="title" label="Title">Title</option>
+            <option value="author" label="Author">Author</option>
+            <option value="persons" label="Persons">Persons</option>
+            <option value="fulltext" label="Fulltext">Fulltext</option>
+            <option value="abstract" label="Abstract">Abstract</option>
+            <option value="subject" label="Subjects">Subjects</option>
+            <option value="year" label="Year of publication">Year of publication</option>
+            <option value="institute" label="Associated institute">Associated institute</option>
+            <option value="urn" label="URN">URN</option>
+            <option value="isbn" label="ISBN">ISBN</option>
+            <option value="series" label="Series">Series</option>
+            <option value="collection" label="Collections">Collections</option>
+            <option value="opac-id" label="Opac-ID">Opac-ID</option>
+        </select>
+        <input type="text" />
+        <input type="submit" value="x" title="Klicken Sie hier um diese zeile zu löschen" />
+
+        <br/>
+
+        <input  type="submit" value="Neues Feld" />
+
+
+
+    </fieldset>
+    
+</form>

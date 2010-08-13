@@ -1,0 +1,67 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+
+<tmx version="1.4">
+
+    <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+    </header>
+
+    <body>
+
+        <tu tuid="solrsearch_title_simple">
+            <tuv xml:lang="en">
+                <seg>Search</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Suche</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="solrsearch_title_advanced">
+            <tuv xml:lang="en">
+                <seg>Advanced Search</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Erweiterte Suche</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="solrsearch_searchaction">
+            <tuv xml:lang="en">
+                <seg>Search</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Suchen</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="solrsearch_query_label">
+            <tuv xml:lang="en">
+                <seg>Query</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Suchbegriff</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="solrsearch_title_nohits">
+            <tuv xml:lang="en">
+                <seg>No search results</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Keine Treffer</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="solrsearch_title_results">
+            <tuv xml:lang="en">
+                <seg>Search Results</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Suchergebnisse</seg>
+            </tuv>
+        </tu>
+
+    </body>
+
+</tmx>
