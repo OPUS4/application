@@ -31,6 +31,9 @@
  * @version     $Id$
  */
 
+$this->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8')
+    ->appendHttpEquiv('Content-Language', 'de-DE');
+
 // TODO diesen block da unterbringen, wo er hingehört (view / controller class)
     $this->headTitle('OPUS 4')
         ->headTitle($this->title)
