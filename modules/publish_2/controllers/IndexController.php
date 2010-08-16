@@ -25,7 +25,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
+ * @package     Application - Module Publish
  * @author      Susanne Gottwald <gottwald@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -53,10 +53,11 @@ class Publish_2_IndexController extends Controller_Action {
      *
      */
     public function indexAction() {
+        $log = Zend_Registry::get('Zend_Log');
         // STEP 1: CHOOSE DOCUMENT TYPE AND UPLOAD FILE
         $this->view->title = $this->view->translate('publish_controller_index');
         $form = new PublishingFirst();
-        $this->logger("Module Publishing <=> PublishingFirst was created.");
+        $log->debug("Module Publishing <=> PublishingFirst was created.");
         $action_url = $this->view->url(array('controller' => 'index', 'action' => 'step2'));
         $form->setMethod('post');
         $form->setAction($action_url);
@@ -70,18 +71,10 @@ class Publish_2_IndexController extends Controller_Action {
      * STEP 2
      */
     public function step2Action() {
+        $log = Zend_Registry::get('Zend_Log');
+
         $this->view->title = $this->view->translate('publish_controller_index');
 
-//        $persons = array();
-//        $persons[] = array (
-//            'FirstName' => '',
-//            'LastName' => '',
-//        );
-//        $persons[] = array (
-//            'FirstName' => '',
-//            'LastName' => '',
-//        );
-        //$this->view->Persons = $persons;
         //check the input from step 1
         $step1Form = new PublishingFirst();
         if ($this->getRequest()->isPost() === true) {
@@ -93,6 +86,7 @@ class Publish_2_IndexController extends Controller_Action {
                 return $this->render('index');
             }
             $this->documentType = $data['type'];
+            $this->documentId = "";
 
             //Flag for checking if fulltext of not => must be string, or else Zend_Form collaps
             $fulltext = "0";
@@ -102,12 +96,12 @@ class Publish_2_IndexController extends Controller_Action {
             $file = $files['fileupload'];
 
             if (!empty($file['name'])) {
-                $this->logger("A file was uploaded: " . $file['name'] . " => Fulltext is given.");
+                $log->info("A file was uploaded: " . $file['name'] . " => Fulltext is given.");
                 $document = new Opus_Document();
                 $document->setType($this->documentType);
                 $docId = $document->store();
                 $this->documentId = $docId;
-                $this->logger("The corresponding doucment ID is: " . $this->documentId);
+                $log->info("The corresponding doucment ID is: " . $this->documentId);
 
                 $docfile = $document->addFile();
                 $docfile->setFromPost($file);
@@ -115,20 +109,17 @@ class Publish_2_IndexController extends Controller_Action {
                 $fulltext = "1";
             }
             else
-                $this->logger("No file uploaded: => Fulltext is NOT given.");
+                $log->info("No file uploaded: => Fulltext is NOT given.");
 
             // STEP 2: BUILD THE FORM THAT DEPENDS ON THE DOC TYPE
-            //
             //use a specified view for the document type
             $this->_helper->viewRenderer($this->documentType);
-            $this->view->documentId = $this->documentId;
-
+            
             //create the form
-            $step2Form = new PublishingSecond($this->documentType, $fulltext, null);
+            $step2Form = new PublishingSecond($this->documentType, $this->documentId, $fulltext, null, null);
             $action_url = $this->view->url(array('controller' => 'index', 'action' => 'check'));
             $step2Form->setAction($action_url);
             $step2Form->setMethod('post');
-
             $this->view->form = $step2Form;
         }
     }
@@ -139,64 +130,103 @@ class Publish_2_IndexController extends Controller_Action {
      * @return <type>
      */
     public function checkAction() {
+        $log = Zend_Registry::get('Zend_Log');
+
         if ($this->getRequest()->isPost() === true) {
-            $this->documentType = $this->getRequest()->getPost('documentType');
-            $this->documentId = $this->getRequest()->getPost('documentId');
-            $fulltext = $this->getRequest()->getPost('fullText');
 
-            $form = new PublishingSecond($this->documentType, $fulltext, null);
+            $postData = $this->getRequest()->getPost();
+            
+            //read ans save the most important values
+            $this->documentType = $postData['documentType'];
+            $this->documentId = $postData['documentId'];
+            $fulltext = $postData['fullText'];
 
-            //check if variables are valid
-            if (!$form->isValid($this->getRequest()->getPost())) {
+            //get out the additional fields
+            $additionalFields = array();
+            foreach ($postData AS $element => $value) {
+                $log->debug("Post data: " . $element . " => " . $value);
+                if (substr($element, 0, 9) == "countMore") {
+                    $key = substr($element, 9);
+                    $log->debug("Add Key: " . $key . " => " . $value);
+                    $additionalFields[$key] = (int) $value;
+                }
+            }
 
-                if (!$form->send->isChecked()) {
-                    //find out which other submit than send was pressed => add more fields!!!
-                    $foundPressedButton = false;
-                    $pressedButton = "";
-                    $pressedButtonName = "";
-                    foreach ($form->getElements() AS $element) {
-                        if ($element->getType() === 'Zend_Form_Element_Submit' && $element->isChecked()) {
-                            $foundPressedButton = true;
-                            $pressedButton = $element;
-                            $pressedButtonName = $pressedButton->getName();
-                            break;
-                        }
+            //create the proper form and populate all needed values
+            $form = new PublishingSecond($this->documentType, $this->documentId, $fulltext, $additionalFields, $postData);
+            $action_url = $this->view->url(array('controller' => 'index', 'action' => 'check'));
+            $form->setAction($action_url);
+
+            $form->populate($postData);
+            
+            //check which button other than send was pressed
+            if (!$form->send->isChecked()) {
+                $pressedButton = "";
+                $pressedButtonName = "";
+                $foundPressedButton = false;
+                foreach ($form->getElements() AS $element) {
+                    $log->debug("Check element: " . $element->getName() . ' = ' . $element->getValue() . ' (' . $element->getType() . ')');
+
+                    if ($element->getType() === 'Zend_Form_Element_Submit' && $element->isChecked()) {
+                        $log->debug('Checked: ' . $element->getName());
+                        $foundPressedButton = true;
+                        $pressedButton = $element;
+                        $pressedButtonName = $pressedButton->getName();
+                        break;
                     }
+                }
 
-                    if (!$foundPressedButton) {
-                        throw new Exception("no pressed button found.");
-                    }
-
+                if (!$foundPressedButton) 
+                    throw new Exception("no pressed button found.");                
+                
+                $workflow = "";
+                if (substr($pressedButtonName, 0, 7) == "addMore") {
                     $fieldName = substr($pressedButtonName, 7);
-                    echo "Fieldname : " . $fieldName;
-                    //hidden field has the allowed value for counting the added fields
-                    //can be *
-                    if (!is_object($form->getElement('countMore'.$fieldName))) {
-                        $msg = "countMore$fieldName\n";
-                        $msg = $msg . var_dump($form->getElement('countMore'.$fieldName), TRUE);
-                        throw new Exception($msg);
-                    }
-                    $allowedNumbers = $form->getElement('countMore'.$fieldName)->getValue();
-                    //echo "Allowed Numbers : " .$hiddenCountField . " direct from form as hidden!!!!<br />";
-                    if ($allowedNumbers == "*") $hiddenCountFields = 99;
-                    else $allowedNumbers = (int) $allowedNumbers - 1;
-                    //echo "HiddenCountField: " .$hiddenCountField . " after substract!!!!<br />";
-                    $additionalFields = array();
-                    //set the decreased value for the pressed button and create a new form
-                    $additionalFields[$pressedButtonName] = $allowedNumbers;
+                    $workflow = "add";
+                    $log->debug("Fieldname for addMore => " . $fieldName);
+                }
+                else if (substr ($pressedButtonName, 0, 10) == "deleteMore") {
+                    $fieldName = substr ($pressedButtonName, 10);
+                    $workflow = "delete";
+                    $log->debug("Fieldname for deleteMore => " . $fieldName);
+                }
+                
+                //hidden field has the allowed value for counting the added fields, can be *
+                $currentNumber = $form->getElement('countMore' . $fieldName)->getValue();
+                $log->debug("old current number: " . $currentNumber);               
+                if ($workflow == "add") {
+                    if ($currentNumber == "*")
+                        $hiddenCountFields = 99;
+                    else
+                        $currentNumber = (int) $currentNumber + 1;
+                }
+                else
+                    $currentNumber = (int) $currentNumber - 1;
+                
+                //set the increased value for the pressed button and create a new form
+                $additionalFields[$fieldName] = $currentNumber;
+                $log->debug("new current number: " . $currentNumber);
 
-                    $form1 = new PublishingSecond($this->documentType, $fulltext, $additionalFields);
+                //create the proper form and populate all needed values
+                $form = new PublishingSecond($this->documentType, $this->documentId, $fulltext, $additionalFields, $postData);
+                $action_url = $this->view->url(array('controller' => 'index', 'action' => 'check'));
+                $form->setAction($action_url);
+                
+                $this->view->form = $form;
+
+            }
+            
+            else {
+                //variables NOT valid
+                if (!$form->isValid($this->getRequest()->getPost())) {
+                    $this->view->form = $form;
+                    //show errors
+                    $errors = $form->getMessages();
                     
-                } 
-
-                $this->view->form = $form1;
-                //show errors
-                $errors = $form1->getMessages();
-
                     //regular and error values for placeholders
-                    foreach ($form1->getElements() as $key => $value) {
+                    foreach ($form->getElements() as $key => $value) {
                         //regular values
-                        $this->view->$key = $form1->getElement($key)->getValue();
+                        $this->view->$key = $form->getElement($key)->getValue();
                         if (isset($errors[$key]))
                             foreach ($errors[$key] as $error => $errorMessage) {
                                 //error values
@@ -204,49 +234,49 @@ class Publish_2_IndexController extends Controller_Action {
                                 $this->view->$errorElement = $errorMessage;
                             }
                     }
-
                     return $this->render($this->documentType);
-                }
-             else {
-                //summery the variables
-                $this->view->title = $this->view->translate('publish_controller_check');
+                } 
+                //variables VALID
+                else {
+                    //summery the variables
+                    $this->view->title = $this->view->translate('publish_controller_check');
+                    
+                    //send form values to check view
+                    $formValues = $form1->getValues();
+                    $this->view->formValues = $formValues;
 
-                //send form values to check view
-                $formValues = $form1->getValues();
-                $this->view->formValues = $formValues;
-
-                //finally: deposit the data!
-                $depositForm = new PublishingSecond($this->documentType, $fulltext);
-                $action_url = $this->view->url(array('controller' => 'index', 'action' => 'deposit'));
-                $depositForm->setAction($action_url);
-                $depositForm->setMethod('post');
-
-                foreach ($formValues as $key => $value) {
-                    if ($key != 'send') {
-                        $hidden = $depositForm->createElement('hidden', $key);
-                        $hidden->setValue($value);
-                        $depositForm->addElement($hidden);
-                    } else {
+                    //finally: deposit the data!
+                    $depositForm = new PublishingSecond($this->documentType, $fulltext);
+                    $action_url = $this->view->url(array('controller' => 'index', 'action' => 'deposit'));
+                    $depositForm->setAction($action_url);
+                    $depositForm->setMethod('post');
+                    
+                    foreach ($formValues as $key => $value) {
+                        if ($key != 'send') {
+                            $hidden = $depositForm->createElement('hidden', $key);
+                            $hidden->setValue($value);
+                            $depositForm->addElement($hidden);
+                        }
+                        else {
                         //do not send the field "send" with the form
                         $depositForm->removeElement('send');
+                        }
                     }
+                    $hiddenDocId = $depositForm->createElement('hidden', 'documentType');
+                    $hiddenDocId->setValue($this->documentType);
+                    $hiddenDocId = $depositForm->createElement('hidden', 'documentId');
+                    $hiddenDocId->setValue($this->documentId);
+                    
+                    $deposit = $depositForm->createElement('submit', 'deposit');
+                    $depositForm->addElement($deposit)
+                            ->addElement($hiddenDocId);
+
+                    //send form to view
+                    $this->view->form = $depositForm;
                 }
-
-                $hiddenDocId = $depositForm->createElement('hidden', 'documentType');
-                $hiddenDocId->setValue($this->documentType);
-                $hiddenDocId = $depositForm->createElement('hidden', 'documentId');
-                $hiddenDocId->setValue($this->documentId);
-
-                $deposit = $depositForm->createElement('submit', 'deposit');
-                $depositForm->addElement($deposit)
-                        ->addElement($hiddenDocId);
-
-                //send form to view
-                $this->view->form = $depositForm;
             }
         }
     }
-    
 
     /**
      * stores a delivered form as document in the database
@@ -349,12 +379,6 @@ class Publish_2_IndexController extends Controller_Action {
 
             return $formValues;
         }
-    }
-
-    protected function logger($message) {
-        $registry = Zend_Registry::getInstance();
-        $logger = $registry->get('Zend_Log');
-        $logger->info(get_class($this) . ": $message");
     }
 
     protected function getPressedButton($form) {
