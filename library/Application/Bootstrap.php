@@ -373,7 +373,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $container = new Zend_Navigation($config);
 
         if(!isset($this->view))
-            $this->log->error('Error initializing navigation: the view is not set');
+            $this->log->err('Error initializing navigation: the view is not set');
 
         $this->view->navigation($container);
         $this->log->debug('Zend_Navigation initialization completed');
