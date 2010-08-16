@@ -64,7 +64,7 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
      *
      * @var Opis_SolrSearch_ResultList
      */
-    private $results;
+    private $resultList;
 
     public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array()) {
         parent::__construct($request, $response, $invokeArgs);
@@ -147,7 +147,7 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
      * executed prior to navigate to the last result page.
      */
     public function lastpageAction() {
-        $this->currentPage = $this->numOfHits / $this->query->getRows();
+        $this->currentPage = (int) ($this->numOfHits / $this->query->getRows());
         $this->query->setStart($this->numOfHits - $this->query->getRows());
         $this->performSearch();
         $this->render("results");
@@ -157,7 +157,6 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
      * Entry point for new searches. Redirects to appropriate result view
      */
     public function searchAction() {
-
         $this->query = $this->buildQuery($this->_request);
         $this->currentPage = 1;
         $this->performSearch();
@@ -169,31 +168,46 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
     }
 
     /**
+     *
+     */
+    public function authorSearchAction() {
+        // TODO
+        $this->render('nohits');
+    }
+
+
+    /**
      * Performs the SolrSearch using the $query instance variable. Has side-effect:
      * some view parameters are set in order to display results
      */
     private function performSearch() {
-
         $this->log->debug("performing search");
 
         $this->searcher = new Opus_SolrSearch_Searcher();
-        $this->results = $this->searcher->search($this->query);
-        $this->numOfHits = $this->results->getNumberOfHits();
-        $this->log->debug("resultlist: " . $this->results);
+        $this->resultList = $this->searcher->search($this->query);
+        $this->numOfHits = $this->resultList->getNumberOfHits();
+        $this->log->debug("resultlist: " . $this->resultList);
 
-        $this->view->__set("results", $this->results->getResults());
+        $this->view->__set("results", $this->resultList->getResults());
         $this->view->__set("simpleSearch", $this->simpleSearch);
         $this->view->__set("numOfHits", $this->numOfHits);
+        $this->view->__set("queryTime", $this->resultList->getQueryTime());
         $this->view->__set("start", $this->query->getStart());
-        $this->view->__set("numOfPages", (int) ($this->numOfHits / $this->query->getRows()));
+        $this->view->__set("numOfPages", (int) ($this->numOfHits / $this->query->getRows()) + 1);
         $this->view->__set("currentPage", $this->currentPage);
+
+        $facets = $this->resultList->getFacets();
+        if (array_key_exists('year', $facets)) {
+            $this->view->__set("yearFacet", $facets['year']);
+        }
 
         $this->log->debug("search complete");
     }
 
     /**
-     * Builds an Opus_SolrSearch_Query using form values
-     * @return <type> Opus_SolrSearch_Query
+     * Builds an Opus_SolrSearch_Query using form values.
+     * @return Opus_SolrSearch_Query
+     * @throws Opus_Server_Exception
      */
     private function buildQuery($request) {
 
@@ -233,14 +247,13 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $this->log->debug("Constructing query for simple search.");
 
         $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::SIMPLE);
-
         $query->setStart(0);
-        $query->setCatchAll($data['query']);
+        $query->setCatchAll($data['query']); // TODO: what happens if query does not exist?
         $query->setRows(10);
         $query->setSortField('score');
         $query->setSortOrder('desc');
 
-        $this->log->debug("Query complete");
+        $this->log->debug("Query $query complete");
 
         return $query;
     }
