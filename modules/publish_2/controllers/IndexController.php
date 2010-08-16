@@ -144,10 +144,9 @@ class Publish_2_IndexController extends Controller_Action {
             //get out the additional fields
             $additionalFields = array();
             foreach ($postData AS $element => $value) {
-                $log->debug("Post data: " . $element . " => " . $value);
                 if (substr($element, 0, 9) == "countMore") {
                     $key = substr($element, 9);
-                    $log->debug("Add Key: " . $key . " => " . $value);
+                    $log->debug("Add Key to additionalFields: " . $key . " => " . $value);
                     $additionalFields[$key] = (int) $value;
                 }
             }
@@ -156,29 +155,22 @@ class Publish_2_IndexController extends Controller_Action {
             $form = new PublishingSecond($this->documentType, $this->documentId, $fulltext, $additionalFields, $postData);
             $action_url = $this->view->url(array('controller' => 'index', 'action' => 'check'));
             $form->setAction($action_url);
-
             $form->populate($postData);
-            
-            //check which button other than send was pressed
+
             if (!$form->send->isChecked()) {
+                //a button was pressed, but not the send button => add / remove fields
+                //check which button other than send was pressed
+                //RENDER specific documentType.phtml
                 $pressedButton = "";
                 $pressedButtonName = "";
-                $foundPressedButton = false;
                 foreach ($form->getElements() AS $element) {
-                    $log->debug("Check element: " . $element->getName() . ' = ' . $element->getValue() . ' (' . $element->getType() . ')');
-
                     if ($element->getType() === 'Zend_Form_Element_Submit' && $element->isChecked()) {
-                        $log->debug('Checked: ' . $element->getName());
-                        $foundPressedButton = true;
+                        $log->debug('Following Button Is Checked: ' . $element->getName());
                         $pressedButton = $element;
                         $pressedButtonName = $pressedButton->getName();
                         break;
                     }
                 }
-
-                if (!$foundPressedButton) 
-                    throw new Exception("no pressed button found.");                
-                
                 $workflow = "";
                 if (substr($pressedButtonName, 0, 7) == "addMore") {
                     $fieldName = substr($pressedButtonName, 7);
@@ -194,14 +186,11 @@ class Publish_2_IndexController extends Controller_Action {
                 //hidden field has the allowed value for counting the added fields, can be *
                 $currentNumber = $form->getElement('countMore' . $fieldName)->getValue();
                 $log->debug("old current number: " . $currentNumber);               
-                if ($workflow == "add") {
-                    if ($currentNumber == "*")
-                        $hiddenCountFields = 99;
-                    else
-                        $currentNumber = (int) $currentNumber + 1;
-                }
+                if ($workflow == "add")
+                    $currentNumber = (int) $currentNumber + 1;
                 else
-                    $currentNumber = (int) $currentNumber - 1;
+                    if ($currentNumber > 0)
+                        $currentNumber = (int) $currentNumber - 1;
                 
                 //set the increased value for the pressed button and create a new form
                 $additionalFields[$fieldName] = $currentNumber;
@@ -212,13 +201,14 @@ class Publish_2_IndexController extends Controller_Action {
                 $action_url = $this->view->url(array('controller' => 'index', 'action' => 'check'));
                 $form->setAction($action_url);
                 
+                $this->_helper->viewRenderer($this->documentType);
                 $this->view->form = $form;
 
-            }
-            
-            else {
-                //variables NOT valid
+            } else {
+                //a button was pressed and it was send => check the form
+                //RENDER specific documentType.phtml
                 if (!$form->isValid($this->getRequest()->getPost())) {
+                    //variables NOT valid
                     $this->view->form = $form;
                     //show errors
                     $errors = $form->getMessages();
@@ -235,18 +225,17 @@ class Publish_2_IndexController extends Controller_Action {
                             }
                     }
                     return $this->render($this->documentType);
-                } 
-                //variables VALID
-                else {
-                    //summery the variables
+                } else {
+                    //variables VALID
+                    //RENDER check.phtml
                     $this->view->title = $this->view->translate('publish_controller_check');
                     
                     //send form values to check view
-                    $formValues = $form1->getValues();
+                    $formValues = $form->getValues();
                     $this->view->formValues = $formValues;
 
                     //finally: deposit the data!
-                    $depositForm = new PublishingSecond($this->documentType, $fulltext);
+                    $depositForm = new PublishingSecond($this->documentType, $this->documentId, $fulltext, $additionalFields, $postData);
                     $action_url = $this->view->url(array('controller' => 'index', 'action' => 'deposit'));
                     $depositForm->setAction($action_url);
                     $depositForm->setMethod('post');
@@ -262,14 +251,8 @@ class Publish_2_IndexController extends Controller_Action {
                         $depositForm->removeElement('send');
                         }
                     }
-                    $hiddenDocId = $depositForm->createElement('hidden', 'documentType');
-                    $hiddenDocId->setValue($this->documentType);
-                    $hiddenDocId = $depositForm->createElement('hidden', 'documentId');
-                    $hiddenDocId->setValue($this->documentId);
-                    
                     $deposit = $depositForm->createElement('submit', 'deposit');
-                    $depositForm->addElement($deposit)
-                            ->addElement($hiddenDocId);
+                    $depositForm->addElement($deposit);
 
                     //send form to view
                     $this->view->form = $depositForm;
@@ -287,29 +270,31 @@ class Publish_2_IndexController extends Controller_Action {
         $this->view->subtitle = $this->view->translate('publish_controller_deposit_successful');
 
         if ($this->getRequest()->isPost() === true) {
+            $postData = $this->getRequest()->getPost();
 
-            $formValues = $this->getRequest()->getPost();
-            $this->documentType = $this->getRequest()->getPost('documentType');
-            $this->documentId = $this->getRequest()->getPost('documentId');
+            //read ans save the most important values
+            $this->documentType = $postData['documentType'];
+            $this->documentId = $postData['documentId'];
+            $fulltext = $postData['fullText'];
 
             $document = new Opus_Document($this->documentId);
             $document->setType($this->documentType);
 
             //delete values that do not concern the document (anymore)
-            unset($formValues['documentType']);
-            unset($formValues['documentId']);
-            unset($formValues['deposit']);
+            unset($postData['documentType']);
+            unset($postData['documentId']);
+            unset($postData['deposit']);
 
             //get the available external fields of an document
             $externalFields = $document->getAllExternalFields();
 
             //save the post variables
-            foreach ($formValues as $key => $value) {
+            foreach ($postData as $key => $value) {
                 if (strstr($key, "Person")) {
 
                     if ($value != "") {
                         //store person object using help function
-                        $formValues = $this->storePerson($document, $formValues, $key, $externalFields);
+                        $postData = $this->storePerson($document, $postData, $key, $externalFields);
                     }
                 } else {
                     if (in_array($key, $externalFields)) {

@@ -67,8 +67,8 @@ class PublishingSecond extends Zend_Form {
      */
     public function init() {
 
-        //count the dependencies
-        $i = 0;
+        //formArray for the templates
+        $formArray = array();
 
         //get the xml file for the current doctype
         $xmlFile = "../config/xmldoctypes/" . $this->doctype . ".xml";
@@ -76,7 +76,7 @@ class PublishingSecond extends Zend_Form {
         //create the DOM Parser for reading the xml file
         //if (!$dom = domxml_open_mem(file_get_contents($xmlFile))){
         if (!$dom = new DOMDocument()) {
-            echo "Error while parsing the document\n";
+            echo "Error while trying to begin parsing the document type.";
             exit;
         }
         $dom->load($xmlFile);
@@ -145,17 +145,20 @@ class PublishingSecond extends Zend_Form {
                             $this->prepareFormElement($formElement, $elementName . $counter, $validator, $datatype, $required);
                         }
 
-                        if ($currentNumber < $multiplicity) {
+                        if ($currentNumber == 1) {
+                            $this->addElement($addMoreButton);
+                        }
+                        else if ($currentNumber < $multiplicity) {
                             $this->addElement($addMoreButton);
                             $this->addElement($deleteMoreButton);
-                        } else {
-                            //here only a delete button
-                            $this->addElement($deleteMoreButton);
-                        }
+                            } else {
+                                //here only a delete button
+                                $this->addElement($deleteMoreButton);
+                            }
                     }
                 }
 
-                //additionalFields == null means initial state -> field is shown one time and demand more
+                //additionalFields == null means initial state -> field is shown one time and can be demanded
                 else {
                     //button and hidden element that carries the value of how often the element has to be shown
                     $countMoreHidden = $this->createElement('hidden', 'countMore' . $elementName);
@@ -229,7 +232,7 @@ class PublishingSecond extends Zend_Form {
             $this->addFormElement($formElement, $nameFirst, $validator, 'no');
 
             $nameLast = $elementName . 'LastName';
-            $this->addFormElement($formElement, $nameLast, $validator, 'yes');
+            $this->addFormElement($formElement, $nameLast, $validator, $required);
         }
     }
 
@@ -246,9 +249,16 @@ class PublishingSecond extends Zend_Form {
 
         $this->addElement($formField);
     }
+    
+    /**
+     * brings all form values in an order for the document types templates
+     * @return array of ordererd form values
+     */
+    public function convertToArray($form) {
+        $formArray = array();
+        $formValues = $form->getValues();
+        
 
-    public function additionalFields($additionalFields) {
-        $this->additionalFields = $additionalFields;
+        return $formArray;
     }
-
 }
