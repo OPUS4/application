@@ -114,7 +114,7 @@ class Publish_2_IndexController extends Controller_Action {
             // STEP 2: BUILD THE FORM THAT DEPENDS ON THE DOC TYPE
             //use a specified view for the document type
             $this->_helper->viewRenderer($this->documentType);
-            
+
             //create the form
             $step2Form = new PublishingSecond($this->documentType, $this->documentId, $fulltext, null, null);
             $action_url = $this->view->url(array('controller' => 'index', 'action' => 'check'));
@@ -135,7 +135,7 @@ class Publish_2_IndexController extends Controller_Action {
         if ($this->getRequest()->isPost() === true) {
 
             $postData = $this->getRequest()->getPost();
-            
+
             //read ans save the most important values
             $this->documentType = $postData['documentType'];
             $this->documentId = $postData['documentId'];
@@ -158,9 +158,11 @@ class Publish_2_IndexController extends Controller_Action {
             $form->populate($postData);
 
             if (!$form->send->isChecked()) {
+                $log->debug("A BUTTON WA PRESSED!!!!!!!!!!!!!!!!!");
                 //a button was pressed, but not the send button => add / remove fields
                 //check which button other than send was pressed
                 //RENDER specific documentType.phtml
+                //$this->_helper->viewRenderer($this->documentType);
                 $pressedButton = "";
                 $pressedButtonName = "";
                 foreach ($form->getElements() AS $element) {
@@ -176,22 +178,23 @@ class Publish_2_IndexController extends Controller_Action {
                     $fieldName = substr($pressedButtonName, 7);
                     $workflow = "add";
                     $log->debug("Fieldname for addMore => " . $fieldName);
-                }
-                else if (substr ($pressedButtonName, 0, 10) == "deleteMore") {
-                    $fieldName = substr ($pressedButtonName, 10);
+                } else if (substr($pressedButtonName, 0, 10) == "deleteMore") {
+                    $fieldName = substr($pressedButtonName, 10);
                     $workflow = "delete";
                     $log->debug("Fieldname for deleteMore => " . $fieldName);
                 }
-                
+
                 //hidden field has the allowed value for counting the added fields, can be *
                 $currentNumber = $form->getElement('countMore' . $fieldName)->getValue();
-                $log->debug("old current number: " . $currentNumber);               
+                $log->debug("old current number: " . $currentNumber);
                 if ($workflow == "add")
+                //show one more fields
                     $currentNumber = (int) $currentNumber + 1;
                 else
-                    if ($currentNumber > 0)
-                        $currentNumber = (int) $currentNumber - 1;
-                
+                if ($currentNumber > 0)
+                //remove one more field, only down to 0
+                    $currentNumber = (int) $currentNumber - 1;
+
                 //set the increased value for the pressed button and create a new form
                 $additionalFields[$fieldName] = $currentNumber;
                 $log->debug("new current number: " . $currentNumber);
@@ -200,36 +203,47 @@ class Publish_2_IndexController extends Controller_Action {
                 $form = new PublishingSecond($this->documentType, $this->documentId, $fulltext, $additionalFields, $postData);
                 $action_url = $this->view->url(array('controller' => 'index', 'action' => 'check'));
                 $form->setAction($action_url);
-                
-                $this->_helper->viewRenderer($this->documentType);
-                $this->view->form = $form;
 
+                //$this->view->form = $form;
+                //call help funtion to render the form for specific view
+                //$this->renderFormForView($form);
+
+//                foreach ($form->getElements() as $key => $value) {
+//                    $pos = stripos($key, "FirstName");
+//                    if ($pos != false)
+//                        $name = substr($key, 0, $pos);
+//                    else
+//                        $name=$key;
+//                    $groupName = 'group' . $name;
+//                    $displayGroup = $form->getDisplayGroup($groupName);
+//                    if ($displayGroup != null) {
+//                        $this->view->$groupName = $displayGroup->getElements();
+//                        $log->debug(" --> GROUP <-- found: " . $groupName);
+//                        foreach ($displayGroup->getElements() AS $groupElement)
+//                            $log->debug(" Element: " . $groupElement);
+//                    }
+//                }
+
+                //regular values
+                //$this->view->$key = $form->getElement($key)->getValue();
+                $this->view->form = $form;
+                //return $this->render($this->documentType);
             } else {
                 //a button was pressed and it was send => check the form
                 //RENDER specific documentType.phtml
                 if (!$form->isValid($this->getRequest()->getPost())) {
+                    $log->debug("NOW CHECK THE ERROR CASE!!!!!!!!!!!!!!!!!");
                     //variables NOT valid
                     $this->view->form = $form;
-                    //show errors
-                    $errors = $form->getMessages();
-                    
-                    //regular and error values for placeholders
-                    foreach ($form->getElements() as $key => $value) {
-                        //regular values
-                        $this->view->$key = $form->getElement($key)->getValue();
-                        if (isset($errors[$key]))
-                            foreach ($errors[$key] as $error => $errorMessage) {
-                                //error values
-                                $errorElement = $key . 'Error';
-                                $this->view->$errorElement = $errorMessage;
-                            }
-                    }
+                    //call help funtion to render the form for specific view
+                    $this->renderFormForView($form);
+
                     return $this->render($this->documentType);
                 } else {
                     //variables VALID
                     //RENDER check.phtml
                     $this->view->title = $this->view->translate('publish_controller_check');
-                    
+
                     //send form values to check view
                     $formValues = $form->getValues();
                     $this->view->formValues = $formValues;
@@ -239,16 +253,15 @@ class Publish_2_IndexController extends Controller_Action {
                     $action_url = $this->view->url(array('controller' => 'index', 'action' => 'deposit'));
                     $depositForm->setAction($action_url);
                     $depositForm->setMethod('post');
-                    
+
                     foreach ($formValues as $key => $value) {
                         if ($key != 'send') {
                             $hidden = $depositForm->createElement('hidden', $key);
                             $hidden->setValue($value);
                             $depositForm->addElement($hidden);
-                        }
-                        else {
-                        //do not send the field "send" with the form
-                        $depositForm->removeElement('send');
+                        } else {
+                            //do not send the field "send" with the form
+                            $depositForm->removeElement('send');
                         }
                     }
                     $deposit = $depositForm->createElement('submit', 'deposit');
@@ -314,6 +327,38 @@ class Publish_2_IndexController extends Controller_Action {
                 }
             }
             $document->store();
+        }
+    }
+
+    private function renderFormForView($form) {
+        $log = Zend_Registry::get('Zend_Log');
+        $log->debug("Method renderFormForView begins...");
+        //show errors
+        $errors = $form->getMessages();
+        //regular and error values for placeholders
+        foreach ($form->getElements() as $key => $value) {
+            $pos = stripos($key, "FirstName");
+            if ($pos != false)
+                $name = substr($key, 0, $pos);
+            else
+                $name=$key;
+            $groupName = 'group' . $name;
+            $displayGroup = $form->getDisplayGroup($groupName);
+            if ($displayGroup != null) {
+                $this->view->$groupName = $displayGroup->getElements();
+                $log->debug(" --> GROUP <-- found: " . $groupName);
+                foreach ($displayGroup->getElements() AS $groupElement)
+                    $log->debug(" Element: " . $groupElement);
+            }
+
+            //regular values
+            $this->view->$key = $form->getElement($key)->getValue();
+            if (isset($errors[$key]))
+                foreach ($errors[$key] as $error => $errorMessage) {
+                    //error values
+                    $errorElement = $key . 'Error';
+                    $this->view->$errorElement = $errorMessage;
+                }
         }
     }
 

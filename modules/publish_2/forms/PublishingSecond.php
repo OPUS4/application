@@ -94,7 +94,7 @@ class PublishingSecond extends Zend_Form {
             else
                 throw new OpusServerPublishingException("Error while parsing xml document type: Choosen document type has missing attributes in element 'field'!");
 
-            if (empty($elementName) || empty($required) || empty($formElement) || empty($datatype) || empty($multiplicity))
+            if (empty($elementName) || empty($required) || empty($datatype) || empty($multiplicity))
                 throw new OpusServerPublishingException("Error while parsing the xml document type: Found attribute(s) are empty!");
 
             //=2= Check if there are child nodes -> concerning fulltext or other dependencies!
@@ -106,15 +106,30 @@ class PublishingSecond extends Zend_Form {
                     if ($requiredIfFulltext->length != 0)
                         $required = "yes";
                 }
+                //parse the xml file for the tag "subfield"
+//                foreach ($dom->getElementsByTagname('subfield') as $subField) {
+//                    if ($subField->hasAttributes()) {
+//                        $subElementName = $subField->getAttribute('name');
+//                        $subRequired = $subField->getAttribute('required');
+//                        $subFormElement = $subField->getAttribute('formelement');
+//                    }
+//                    else
+//                        throw new OpusServerPublishingException("Error while parsing xml document type: Choosen document type has missing attributes in element 'subfield'!");
+//               }                                
             }
             //=3= Get the proper validator from the datatape!
             $validator = $this->getValidatorsByName($datatype);
 
-            //prepare form element: create Zend_Form_element with neede attributes
-            $this->prepareFormElement($formElement, $elementName, $validator, $datatype, $required);
-
             //=4= Check if fields has to shown multi times!
             if ($multiplicity != "1") {
+                //array is used to initilaize the display group for this group of elements
+                $group = array();
+                $groupName = 'group' . $elementName;
+                //current element has also to be in that group
+
+                //prepare form element: create Zend_Form_element with neede attributes
+                 $group = $this->prepareFormElement($formElement, $elementName, $validator, $datatype, $required, $group);
+
                 //additionalFields != null means additinal fields have to be shown
                 if ($this->additionalFields != null) {
                     //button and hidden element that carries the value of how often the element has to be shown
@@ -125,13 +140,13 @@ class PublishingSecond extends Zend_Form {
                     $deleteMoreButton = $this->createElement('submit', 'deleteMore' . $elementName);
                     $deleteMoreButton->setLabel("Delete " . $elementName);
 
-
                     $currentNumber = 1;
                     if (array_key_exists($elementName, $this->additionalFields)) {
                         //$allowedNumbers is set in controller and given to the form by array as parameter
                         $currentNumber = $this->additionalFields[$elementName];
                         $countMoreHidden->setValue($currentNumber);
                         $this->addElement($countMoreHidden);
+                        $group[] = $countMoreHidden->getName();
 
                         $this->log->debug("CountMoreHidden for element " . $elementName . " is set to value " . $currentNumber);
                         if ($multiplicity == "*")
@@ -142,34 +157,49 @@ class PublishingSecond extends Zend_Form {
                         //start counting at lowest possible number -> also used for name
                         for ($i = 1; $i < $currentNumber; $i++) {
                             $counter = $i + 1;
-                            $this->prepareFormElement($formElement, $elementName . $counter, $validator, $datatype, $required);
+                            $group = $this->prepareFormElement($formElement, $elementName . $counter, $validator, $datatype, $required, $group);
                         }
 
                         if ($currentNumber == 1) {
+                            //only one field is shown -> nothing to delete
                             $this->addElement($addMoreButton);
+                            $group[] = $addMoreButton->getName();
                         }
                         else if ($currentNumber < $multiplicity) {
+                            //more than one field has to be shown -> delete buttons are needed
                             $this->addElement($addMoreButton);
+                            $group[] = $addMoreButton->getName();
                             $this->addElement($deleteMoreButton);
+                            $group[] = $deleteMoreButton->getName();
                             } else {
-                                //here only a delete button
+                                //maximum fields are shown -> here only a delete button
                                 $this->addElement($deleteMoreButton);
+                                $group[] = $deleteMoreButton->getName();
                             }
                     }
-                }
 
-                //additionalFields == null means initial state -> field is shown one time and can be demanded
-                else {
+                    //add a displaygroup to the form for grouping same elements
+                    $displayGroup = $this->addDisplayGroup($group, $groupName);
+                    $this->log->debug("Added Displaygroup to form: " . $groupName);
+                } else {
+                    //additionalFields == null means initial state -> field is shown one time and can be demanded
                     //button and hidden element that carries the value of how often the element has to be shown
                     $countMoreHidden = $this->createElement('hidden', 'countMore' . $elementName);
                     $countMoreHidden->setValue("1");
                     $this->addElement($countMoreHidden);
+                    $group[] = $countMoreHidden->getName();
 
                     $addMoreButton = $this->createElement('submit', 'addMore' . $elementName);
                     $addMoreButton->setLabel("Add one more " . $elementName);
                     $this->addElement($addMoreButton);
+                    $group[] = $addMoreButton->getName();
+
+                    $displayGroup = $this->addDisplayGroup($group, $groupName);
+                    $this->log->debug("Added Displaygroup to form: " . $groupName);
                 }
             }
+            //prepare element that do not belong to a display group
+            else $this->prepareFormElement($formElement, $elementName, $validator, $datatype, $required, null);
         }
 
 
@@ -219,21 +249,28 @@ class PublishingSecond extends Zend_Form {
         //TODO: Möglichkeit für den Admin einrichten, die Validatoren zu konfigurieren!!!
     }
 
+
     /**
-     * method for creating a new form element and set the most needed values
-     * @param <type> $formElement parsed from xml
-     * @param <type> $elementName parsed from xml
+     * method to add a element to the current form
+     * @param String $formElement
+     * @param String $elementName
+     * @param Zend_Validate $validator
+     * @param String $datatype
+     * @param Sring $required
      */
-    public function prepareFormElement($formElement, $elementName, $validator, $datatype, $required) {
+    protected function prepareFormElement($formElement, $elementName, $validator, $datatype, $required, $group) {
         if ($datatype != 'Person') {
             $this->addFormElement($formElement, $elementName, $validator, $required);
+            $group[] = $elementName;
         } else {
             $nameFirst = $elementName . 'FirstName';
             $this->addFormElement($formElement, $nameFirst, $validator, 'no');
-
+            $group[] = $nameFirst;
             $nameLast = $elementName . 'LastName';
             $this->addFormElement($formElement, $nameLast, $validator, $required);
+            $group[] = $nameLast;
         }
+        return $group;
     }
 
     protected function addFormElement($formElement, $elementName, $validator, $required) {
@@ -248,17 +285,19 @@ class PublishingSecond extends Zend_Form {
                 $formField->setValue($this->postData[$elementName]);
 
         $this->addElement($formField);
-    }
+        return $formField;
+    }    
     
-    /**
-     * brings all form values in an order for the document types templates
-     * @return array of ordererd form values
-     */
-    public function convertToArray($form) {
-        $formArray = array();
-        $formValues = $form->getValues();
+    public function getElementAttributes($elementName) {
+        $elementAttributes = array();
+        $element = $this->getElement($elementName);
+        $elementAttributes["value"] = $element->getValue();
+        $elementAttributes["label"] = $element->getLabel();
+        $elementAttributes["error"] = $element->getMessages();
+        $elementAttributes["id"] = $element->getId();
+        $elementAttributes["hint"] = "Hint-Text";
+        //$element->setAttrib($name, $value) für hint
         
-
-        return $formArray;
+        return $elementAttributes;
     }
 }
