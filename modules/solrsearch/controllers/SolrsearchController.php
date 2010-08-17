@@ -57,8 +57,10 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
      * advanced search was performed
      * @var <type> boolean
      */
-    private $simpleSearch;
+    private $simpleSearch; // FIXME check if obsolete
     private $numOfHits;
+    private $searchtype;
+
     /**
      *
      * @var Opis_SolrSearch_ResultList
@@ -130,12 +132,13 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $this->log->debug("resultlist: " . $this->resultList);
 
         $this->view->__set("results", $this->resultList->getResults());
-        $this->view->__set("simpleSearch", $this->simpleSearch);
+        $this->view->__set("searchType", $this->searchtype);
         $this->view->__set("numOfHits", $this->numOfHits);
         $this->view->__set("queryTime", $this->resultList->getQueryTime());
         $this->view->__set("start", $this->query->getStart());
         $this->view->__set("numOfPages", (int) ($this->numOfHits / $this->query->getRows()) + 1);
         $this->view->__set("rows", $this->query->getRows());
+        $this->view->__set("q", $this->query->getQ());
 
         $facets = $this->resultList->getFacets();
         if (array_key_exists('year', $facets)) {
@@ -170,18 +173,18 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         if (!array_key_exists('searchtype', $data)) {
             throw new Opus_Server_Exception("Unable to create query for unspecified searchtype");
         }
-        $searchtype = $data['searchtype'];
+        $this->searchtype = $data['searchtype'];
 
-        if ($searchtype === 'simple') {
+        if ($this->searchtype === 'simple') {
             $this->simpleSearch = true;
             return $this->createSimpleSearchQuery($data);
         }
-        if ($searchtype === 'advanced') {
+        if ($this->searchtype === 'advanced') {
             $this->simpleSearch = false;
             return $this->createAdvancedSearchQuery($data);
         }
 
-        throw new Opus_Server_Exception("Unable to create query for searchtype " . $searchtype);
+        throw new Opus_Server_Exception("Unable to create query for searchtype " . $this->searchtype);
     }
 
     private function createSimpleSearchQuery($data) {

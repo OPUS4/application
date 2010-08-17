@@ -65,12 +65,12 @@
 
         <?php if($this->start >= $this->rows) : ?>
         <li>
-            <a href="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','start'=>'0','rows'=>$this->rows)); ?>">
+            <a href="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchType,'query'=>$this->q,'start'=>'0','rows'=>$this->rows)); ?>">
                 Erste Seite
             </a>
         </li>
         <li>
-            <a href="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','start'=>(int)($this->start) - (int)($this->rows),'rows'=>$this->rows)); ?>">
+            <a href="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchType,'query'=>$this->q,'start'=>(int)($this->start) - (int)($this->rows),'rows'=>$this->rows)); ?>">
                 Vorherige Seite
             </a>
         </li>
@@ -78,12 +78,12 @@
 
         <?php if($this->start < ((int)($this->numOfHits) - (int)($this->rows))) : ?>
         <li>
-            <a href="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','start'=>(int)($this->start) + (int)($this->rows),'rows'=>$this->rows)); ?>">
+            <a href="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchType,'query'=>$this->q,'start'=>(int)($this->start) + (int)($this->rows),'rows'=>$this->rows)); ?>">
                 Nächste Seite
             </a>
         </li>
         <li>
-            <a href="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','start'=>(int)($this->numOfHits) - (int)($this->rows),'rows'=>$this->rows)); ?>">
+            <a href="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchType,'query'=>$this->q,'start'=>(int)($this->numOfHits) - (int)($this->rows),'rows'=>$this->rows)); ?>">
                 Letzte Seite
             </a>
         </li>
