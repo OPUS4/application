@@ -38,7 +38,7 @@
  * @category    Application
  * @package     Module_Publish
  */
-class Publish_2_IndexController extends Controller_Action {
+class Publish_IndexController extends Controller_Action {
 
     /**
      * @todo: extends Zend_Controller_Action ausreichend?
@@ -56,8 +56,8 @@ class Publish_2_IndexController extends Controller_Action {
         $log = Zend_Registry::get('Zend_Log');
         // STEP 1: CHOOSE DOCUMENT TYPE AND UPLOAD FILE
         $this->view->title = $this->view->translate('publish_controller_index');
-        $form = new PublishingFirst();
-        $log->debug("Module Publishing <=> PublishingFirst was created.");
+        $form = new Publish_Form_PublishingFirst();
+        $log->info("Module Publishing <=> PublishingFirst was created.");
         $action_url = $this->view->url(array('controller' => 'index', 'action' => 'step2'));
         $form->setMethod('post');
         $form->setAction($action_url);
@@ -72,11 +72,10 @@ class Publish_2_IndexController extends Controller_Action {
      */
     public function step2Action() {
         $log = Zend_Registry::get('Zend_Log');
-
         $this->view->title = $this->view->translate('publish_controller_index');
 
         //check the input from step 1
-        $step1Form = new PublishingFirst();
+        $step1Form = new Publish_Form_PublishingFirst();
         if ($this->getRequest()->isPost() === true) {
             $data = $this->getRequest()->getPost();
 
@@ -116,7 +115,7 @@ class Publish_2_IndexController extends Controller_Action {
             $this->_helper->viewRenderer($this->documentType);
 
             //create the form
-            $step2Form = new PublishingSecond($this->documentType, $this->documentId, $fulltext, null, null);
+            $step2Form = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $fulltext, null, null);
             $action_url = $this->view->url(array('controller' => 'index', 'action' => 'check'));
             $step2Form->setAction($action_url);
             $step2Form->setMethod('post');
@@ -131,17 +130,15 @@ class Publish_2_IndexController extends Controller_Action {
      */
     public function checkAction() {
         $log = Zend_Registry::get('Zend_Log');
-
         if ($this->getRequest()->isPost() === true) {
 
             $postData = $this->getRequest()->getPost();
-
-            //read ans save the most important values
+            //read and save the most important values
             $this->documentType = $postData['documentType'];
             $this->documentId = $postData['documentId'];
             $fulltext = $postData['fullText'];
 
-            //get out the additional fields
+            //build the additional fields
             $additionalFields = array();
             foreach ($postData AS $element => $value) {
                 if (substr($element, 0, 9) == "countMore") {
@@ -152,7 +149,7 @@ class Publish_2_IndexController extends Controller_Action {
             }
 
             //create the proper form and populate all needed values
-            $form = new PublishingSecond($this->documentType, $this->documentId, $fulltext, $additionalFields, $postData);
+            $form = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $fulltext, $additionalFields, $postData);
             $action_url = $this->view->url(array('controller' => 'index', 'action' => 'check'));
             $form->setAction($action_url);
             $form->populate($postData);
@@ -200,34 +197,14 @@ class Publish_2_IndexController extends Controller_Action {
                 $log->debug("new current number: " . $currentNumber);
 
                 //create the proper form and populate all needed values
-                $form = new PublishingSecond($this->documentType, $this->documentId, $fulltext, $additionalFields, $postData);
+                $form = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $fulltext, $additionalFields, $postData);
                 $action_url = $this->view->url(array('controller' => 'index', 'action' => 'check'));
                 $form->setAction($action_url);
 
-                //$this->view->form = $form;
                 //call help funtion to render the form for specific view
-                //$this->renderFormForView($form);
-
-//                foreach ($form->getElements() as $key => $value) {
-//                    $pos = stripos($key, "FirstName");
-//                    if ($pos != false)
-//                        $name = substr($key, 0, $pos);
-//                    else
-//                        $name=$key;
-//                    $groupName = 'group' . $name;
-//                    $displayGroup = $form->getDisplayGroup($groupName);
-//                    if ($displayGroup != null) {
-//                        $this->view->$groupName = $displayGroup->getElements();
-//                        $log->debug(" --> GROUP <-- found: " . $groupName);
-//                        foreach ($displayGroup->getElements() AS $groupElement)
-//                            $log->debug(" Element: " . $groupElement);
-//                    }
-//                }
-
-                //regular values
-                //$this->view->$key = $form->getElement($key)->getValue();
+                $this->renderFormForView($form);
                 $this->view->form = $form;
-                //return $this->render($this->documentType);
+                
             } else {
                 //a button was pressed and it was send => check the form
                 //RENDER specific documentType.phtml
@@ -249,7 +226,7 @@ class Publish_2_IndexController extends Controller_Action {
                     $this->view->formValues = $formValues;
 
                     //finally: deposit the data!
-                    $depositForm = new PublishingSecond($this->documentType, $this->documentId, $fulltext, $additionalFields, $postData);
+                    $depositForm = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $fulltext, $additionalFields, $postData);
                     $action_url = $this->view->url(array('controller' => 'index', 'action' => 'deposit'));
                     $depositForm->setAction($action_url);
                     $depositForm->setMethod('post');

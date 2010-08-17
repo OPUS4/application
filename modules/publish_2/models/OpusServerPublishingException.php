@@ -35,7 +35,7 @@
  * Exception that be thrown in module Publish
  *
  */
-class OpusServerPublishingException extends Exception{
+class Publish_Model_OpusServerException extends Exception{
   
     public function __construct($message, $code, $previous) {
         parent::__construct($message, $code, $previous);

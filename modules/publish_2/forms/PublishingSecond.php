@@ -32,7 +32,7 @@
  * @category    Application
  * @package     Module_Publish
  * */
-class PublishingSecond extends Zend_Form {
+class Publish_Form_PublishingSecond extends Zend_Form {
 
     //String
     public $doctype = "";
@@ -287,7 +287,12 @@ class PublishingSecond extends Zend_Form {
         $this->addElement($formField);
         return $formField;
     }    
-    
+
+    /**
+     * method for getting needed attributes for a given element
+     * @param <String> $elementName name of the element
+     * @return <Array> associative attribute array
+     */
     public function getElementAttributes($elementName) {
         $elementAttributes = array();
         $element = $this->getElement($elementName);
@@ -295,9 +300,17 @@ class PublishingSecond extends Zend_Form {
         $elementAttributes["label"] = $element->getLabel();
         $elementAttributes["error"] = $element->getMessages();
         $elementAttributes["id"] = $element->getId();
-        $elementAttributes["hint"] = "Hint-Text";
-        //$element->setAttrib($name, $value) für hint
-        
+        $elementAttributes["hint"] = $element->getAttrib("hint");
         return $elementAttributes;
+    }
+
+    /**
+     * method for setting a hint text for a given element
+     * @param <String> $elementName element to add the hint to
+     * @param <String> $hint hint text to add to $elementName
+     */
+    public function setElementAttributeHint($elementName, $hint) {
+        $element = $this->getElement($elementName);
+        $element->setAttrib("hint", $hint);
     }
 }

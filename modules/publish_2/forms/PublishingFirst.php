@@ -37,7 +37,7 @@
  *
  */
 
-class PublishingFirst extends Zend_Form {
+class Publish_Form_PublishingFirst extends Zend_Form {
 
     /**
      * First publishing form of two forms
