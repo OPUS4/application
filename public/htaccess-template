@@ -28,9 +28,9 @@
 # @license     http://www.gnu.org/licenses/gpl.html General Public License
 # @version     $Id$
 
-# Configure environment for application (test, production)
+# Configure environment for application (testing, production)
 # The default is "production" if APPLICATION_ENV is not configured here.
-# SetEnv APPLICATION_ENV test
+# SetEnv APPLICATION_ENV testing
 
 # Configure on rewriting. Note that the rewrite base has to be adjusted to the base url of the application.
 # Replace <template> with correct path e.g. /MyProject/public/
