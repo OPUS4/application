@@ -32,7 +32,7 @@
  * @category    Application
  * @package     Module_Publish
  * */
-class PublishingSecond extends Zend_Form {
+class Publish_Form_PublishingSecond extends Zend_Form {
 
     //String
     public $doctype = "";
