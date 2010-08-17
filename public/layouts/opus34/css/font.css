@@ -1,0 +1,104 @@
+/**
+ * This file is part of OPUS. The software OPUS has been originally developed
+ * at the University of Stuttgart with funding from the German Research Net,
+ * the Federal Department of Higher Education and Research and the Ministry
+ * of Science, Research and the Arts of the State of Baden-Wuerttemberg.
+ *
+ * OPUS 4 is a complete rewrite of the original OPUS software and was developed
+ * by the Stuttgart University Library, the Library Service Center
+ * Baden-Wuerttemberg, the Cooperative Library Network Berlin-Brandenburg,
+ * the Saarland University and State Library, the Saxon State Library -
+ * Dresden State and University Library, the Bielefeld University Library and
+ * the University Library of Hamburg University of Technology with funding from
+ * the German Research Foundation and the European Regional Development Fund.
+ *
+ * LICENCE
+ * OPUS is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the Licence, or any later version.
+ * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @category    Application
+ * @author      Felix Ostrowski (ostrowski@hbz-nrw.de)
+ * @author      Birgit Dressler (b.dressler@sulb.de)
+ * @author      Christof Mainberger (christof.mainberger@bsz-bw.de)
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ * @version     $Id: font.css 4278 2010-03-12 16:55:37Z mainberger $
+ */
+
+/**
+ * All styles concercing fonts / font-sizes.
+ */
+
+body {
+    font-size: 0.8em;
+    font-family: arial, hevetica, sans-serif;
+    color: #333333;
+    text-align: left;
+    line-height: 17px;
+    }
+
+#content h1 {
+    font-size: 1.6em;
+    color: #ff810e;
+    padding-bottom: 20px;
+}
+
+#content h2 {
+    font-size: 1.35em;
+    color: #ff810e;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+#content h3 {
+    font-size:1.0em;
+    color:#ff810e;
+    padding: 0px;
+}
+
+/* text in an ordered list */
+#content ol {
+    /**
+    * font-size: 0.875em;
+    */
+    font-size: 0.9em;
+}
+
+/**
+* distance between the different list elements
+*/
+#content ol li {
+        padding: 0 0 3px 0;
+}
+
+#content .box h1 {
+    font-size: 1em;
+}
+
+#foot {
+    font-size: 0.75em;
+}
+
+#summary .label {
+    font-weight: bold;
+}
+
+#summary .value {
+    font-style: italic;
+}
+
+#header .navigation.languages {
+    font-size: 0.75em;
+}
+
+div.right h3 {
+       color: #ff810e;
+    }
+
