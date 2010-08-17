@@ -40,11 +40,11 @@
     --suchoptionen--
 </div>
 
--- Refine your search --
 <div id="facets">
+    <h3>Verfeinern Sie Ihre Suche</h3>
     <?php if (isset ($this->yearFacet)) : ?>
         <div id="yearFacet" class="facet">
-            Years:
+            Erscheinungsjahr:
             <ul>
                 <?php foreach ($this->yearFacet as $facetItem) : ?>
                     <li><a href="#"><?= $facetItem->getText() ?></a> (<?= $facetItem->getCount() ?>)</li>
@@ -55,30 +55,35 @@
 </div>
 
 <div id="pagination" >
-    <p>Seite <?= $this->currentPage ?> von <?= $this->numOfPages ?></p>
+    <p class="info_small">
+        Ihre Suche ergab <strong><?= $this->numOfHits ?></strong> Treffer und dauerte <?= $this->queryTime ?> ms.
+    </p>
+    <p class="info_small">
+        Anzeige der Treffer <strong><?= (int)($this->start)+1 ?></strong> bis <strong><?= (int)($this->start) + (int)($this->rows) ?></strong>
+    </p>
     <ul class="paginationControl">
 
-        <?php if($this->currentPage > 1) : ?>
+        <?php if($this->start >= $this->rows) : ?>
         <li>
-            <a href="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'firstpage')); ?>">
+            <a href="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','start'=>'0','rows'=>$this->rows)); ?>">
                 Erste Seite
             </a>
         </li>
         <li>
-            <a href="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'prevpage')); ?>">
+            <a href="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','start'=>(int)($this->start) - (int)($this->rows),'rows'=>$this->rows)); ?>">
                 Vorherige Seite
             </a>
         </li>
         <?php endif ?>
 
-        <?php if($this->currentPage < $this->numOfPages) : ?>
+        <?php if($this->start < ((int)($this->numOfHits) - (int)($this->rows))) : ?>
         <li>
-            <a href="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'nextpage')); ?>">
+            <a href="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','start'=>(int)($this->start) + (int)($this->rows),'rows'=>$this->rows)); ?>">
                 Nächste Seite
             </a>
         </li>
         <li>
-            <a href="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'lastpage')); ?>">
+            <a href="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','start'=>(int)($this->numOfHits) - (int)($this->rows),'rows'=>$this->rows)); ?>">
                 Letzte Seite
             </a>
         </li>
@@ -87,7 +92,6 @@
 </div>
 
 <div id="search_results" >
-    <p>Ihre Suche ergab <?= $this->numOfHits ?> Treffer und dauerte <?= $this->queryTime ?> ms.</p>
 
     <?php foreach($this->results as $result) : ?>
         <div class="result_box">

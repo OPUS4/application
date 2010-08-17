@@ -59,7 +59,6 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
      */
     private $simpleSearch;
     private $numOfHits;
-    private $currentPage;
     /**
      *
      * @var Opis_SolrSearch_ResultList
@@ -98,67 +97,10 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
     }
 
     /**
-     * Redirects to the next page of search results. A new search must have been
-     * executed prior to navigate to the next result page.
-     */
-    public function nextpageAction() {
-        $this->currentPage++;
-        $this->query->setStart($this->query->getStart() + $this->query->getRows());
-
-        if ($this->query->getStart() > $this->numOfHits) {
-            $this->query->setStart($this->numOfHits - $this->query->getRows());
-            $this->currentPage--;
-        }
-
-        $this->performSearch();
-        $this->render("results");
-    }
-
-    /**
-     * Redirects to the previous page of search results. A new search must have been
-     * executed prior to navigate to the previous result page.
-     */
-    public function prevpageAction() {
-        $this->currentPage--;
-        $this->query->setStart($this->query->getStart() - $this->query->getRows());
-
-        if ($this->query->getStart() < 0) {
-            $this->currentPage++;
-            $this->query->setStart(0);
-        }
-
-        $this->performSearch();
-        $this->render("results");
-    }
-
-    /**
-     * Redirects to the first page of search results. A new search must have been
-     * executed prior to navigate to the first result page.
-     */
-    public function firstpageAction() {
-        $this->currentPage = 0;
-        $this->query->setStart(0);
-        $this->performSearch();
-        $this->render("results");
-    }
-
-    /**
-     * Redirects to the last page of search results. A new search must have been
-     * executed prior to navigate to the last result page.
-     */
-    public function lastpageAction() {
-        $this->currentPage = (int) ($this->numOfHits / $this->query->getRows());
-        $this->query->setStart($this->numOfHits - $this->query->getRows());
-        $this->performSearch();
-        $this->render("results");
-    }
-
-    /**
      * Entry point for new searches. Redirects to appropriate result view
      */
     public function searchAction() {
         $this->query = $this->buildQuery($this->_request);
-        $this->currentPage = 1;
         $this->performSearch();
 
         if (0 === $this->numOfHits)
@@ -174,7 +116,6 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         // TODO
         $this->render('nohits');
     }
-
 
     /**
      * Performs the SolrSearch using the $query instance variable. Has side-effect:
@@ -194,7 +135,7 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $this->view->__set("queryTime", $this->resultList->getQueryTime());
         $this->view->__set("start", $this->query->getStart());
         $this->view->__set("numOfPages", (int) ($this->numOfHits / $this->query->getRows()) + 1);
-        $this->view->__set("currentPage", $this->currentPage);
+        $this->view->__set("rows", $this->query->getRows());
 
         $facets = $this->resultList->getFacets();
         if (array_key_exists('year', $facets)) {
@@ -211,6 +152,8 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
      */
     private function buildQuery($request) {
 
+        $data = null;
+        
         if ($request->isPost() === true) {
             $this->log->debug("Request is post. Extracting data.");
             $data = $request->getPost();
@@ -246,10 +189,18 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         // TODO validate request parameters
         $this->log->debug("Constructing query for simple search.");
 
+        $start = $data['start'];
+        if(is_null($start))
+            $start = '0';
+
+        $rows = $data['rows'];
+        if(is_null($rows))
+            $rows = '10';
+
         $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::SIMPLE);
-        $query->setStart(0);
+        $query->setStart($start);
         $query->setCatchAll($data['query']); // TODO: what happens if query does not exist?
-        $query->setRows(10);
+        $query->setRows($rows);
         $query->setSortField('score');
         $query->setSortOrder('desc');
 
