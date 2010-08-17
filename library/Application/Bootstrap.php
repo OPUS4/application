@@ -36,7 +36,7 @@
 /**
  * Autoloader not yet initialized.
  */
-require_once 'Opus/Bootstrap/Base.php';
+// require_once 'Opus/Bootstrap/Base.php';
 
 /**
  * Provide methods to setup and run the application. It also provides a couple of static
@@ -48,8 +48,6 @@ require_once 'Opus/Bootstrap/Base.php';
  */
 class Application_Bootstrap extends Opus_Bootstrap_Base {
 
-    protected $log;
-
     protected $view;
 
     protected $translate;
@@ -59,20 +57,32 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      *
      * @return void
      */
+    /* TODO not used anymore
     protected function _run() {
-        $this->log = Zend_Registry::get('Zend_Log');
         $this->log->debug('Running Bootstrap.php');
 
-        $this->_initNavigation();
+        $this->_setupNavigation();
         
         if (Zend_Registry::isRegistered('Zend_Cache_Page')) {
             $pagecache = Zend_Registry::get('Zend_Cache_Page');
             $pagecache->start();
         }
 
-        $response = $this->_frontController->dispatch();
-        $response->sendResponse();
+        try {
+            $response = $this->_frontController->dispatch();
+            if (isset($response)) {
+                $response->sendResponse();
+            }
+        }
+        catch (Exception $e) {
+            $this->log->debug($e);
+            $response = $this->_frontController->getResponse();
+            $response->clearBody();
+            $response->setBody("<h1>Critical Error</h1");
+            $response->sendResponse();
+        }
     }
+     */
 
     /**
      * Override application frontend setup routine to setup a front controller instance.
@@ -85,6 +95,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $this->_setupLanguageList();
         $this->_setupFrontController();
         $this->_setupView();
+        $this->_setupNavigation();
     }
 
     /**
@@ -140,10 +151,6 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
     protected function _setupFrontController()
     {
         $this->_frontController = Zend_Controller_Front::getInstance();
-        // If you want to use the error controller, disable throwExceptions
-        $this->_frontController->throwExceptions(true);
-        $this->_frontController->returnResponse(true);
-        $this->_frontController->addModuleDirectory($this->_applicationRootDirectory . '/modules');
 
         /*
          * Add a custom front controller plugin for setting up an appropriate
@@ -154,9 +161,9 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         ->appendClassPath('forms');
         $this->_frontController->registerPlugin($moduleprepare);
 
-		// Checks the current requeste module's directory for an initFile and runs it before controller is loaded.
-		$moduleInit = new Controller_Plugin_ModuleInit();
-		$this->_frontController->registerPlugin($moduleInit);
+        // Checks the current requeste module's directory for an initFile and runs it before controller is loaded.
+        $moduleInit = new Controller_Plugin_ModuleInit();
+        $this->_frontController->registerPlugin($moduleInit);
 
         /*
          * Add a custorm front controller plugin of manipulating routing information
@@ -361,21 +368,29 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      *
      * @return void
      */
-    protected function _initNavigation() {
+    protected function _setupNavigation()
+    {
+        $this->bootstrap('Logging');
 
-        $this->log->debug('Initializing Zend_Navigation');
+        $log = $this->getResource('Logging');
+
+        $log->debug('Initializing Zend_Navigation');
        
         $navigationConfigFile = APPLICATION_PATH . '/config/navigation.xml';
+
         $config = new Zend_Config_Xml($navigationConfigFile, 'nav');
 
-        $this->log->debug('Navigation config file is: ' . $navigationConfigFile);
+        $log->debug('Navigation config file is: ' . $navigationConfigFile);
 
         $container = new Zend_Navigation($config);
 
-        if(!isset($this->view))
-            $this->log->err('Error initializing navigation: the view is not set');
+        if (!isset($this->view)) {
+            $log->err('Error initializing navigation: the view is not set');
+        }
 
         $this->view->navigation($container);
-        $this->log->debug('Zend_Navigation initialization completed');
+
+        $log->debug('Zend_Navigation initialization completed');
     }
+
 }

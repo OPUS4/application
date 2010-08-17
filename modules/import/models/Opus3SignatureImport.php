@@ -32,7 +32,7 @@
  * @version     $Id: Opus3FileImport.php 2163 2009-03-12 15:35:16Z marahrens $
  */
 
-class Opus3SignatureImport 
+class Import_Model_Opus3SignatureImport
 {
     /**
      * Holds the path to the fulltexts in Opus3

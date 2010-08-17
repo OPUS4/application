@@ -32,7 +32,7 @@
  * @version     $Id$
  */
 
-class RSSOutput {
+class Search_Model_RSSOutput {
 	
 	
 	/**

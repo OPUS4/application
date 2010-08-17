@@ -38,7 +38,7 @@
  * @category    Application
  * @package     Module_Publish
  * */
-class FileUpload extends Zend_Form {
+class Publish_Form_FileUpload extends Zend_Form {
 
     /**
      * Build easy upload form

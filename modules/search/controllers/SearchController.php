@@ -58,7 +58,7 @@ class Search_SearchController extends Zend_Controller_Action
     {
         $this->view->title = $this->view->translate('search_index_fulltextsearch');
 
-        $searchForm = new FulltextSearch();
+        $searchForm = new Search_Model_FulltextSearch();
         $searchForm->setAction($this->view->url(array("controller"=>"search", "action"=>"search")));
         $searchForm->setMethod('post');
         $searchForm->setAttrib('accept-charset', 'utf-8');
@@ -102,7 +102,7 @@ class Search_SearchController extends Zend_Controller_Action
         if ($this->_request->isPost() === true) {
             // post request
             $data = $this->_request->getPost();
-            $form = new FulltextSearch();
+            $form = new Search_Model_FulltextSearch();
         $form->setAction($this->view->url(array("controller"=>"search", "action"=>"search")));
         $form->setMethod('post');
         $form->setAttrib('accept-charset', 'utf-8');
@@ -126,7 +126,7 @@ class Search_SearchController extends Zend_Controller_Action
             }
         } else {
             // nonpost request
-            $form = new FulltextSearch();
+            $form = new Search_Model_FulltextSearch();
         $form->setAction($this->view->url(array("controller"=>"search", "action"=>"search")));
         $form->setMethod('post');
         $form->setAttrib('accept-charset', 'utf-8');

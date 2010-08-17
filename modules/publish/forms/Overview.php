@@ -38,7 +38,7 @@
  * @category    Application
  * @package     Module_Publish
  */
-class Overview extends Zend_Form {
+class Publish_Form_Overview extends Zend_Form {
 
     /**
      * Looks in a specific directory for xml files.

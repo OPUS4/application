@@ -35,7 +35,7 @@
 /*
  * Miniform
  */
-class Summary extends Zend_Form {
+class Publish_Form_Summary extends Zend_Form {
 
     public function init() {
         $submit = new Zend_Form_Element_Submit('submit');

@@ -33,6 +33,33 @@
 
 [production]
 
+;PHP SETTINGS
+phpSettings.display_startup_errors = 0
+phpSettings.display_errors = 0
+; TODO verify the two settings below
+phpSettings.error_reporting = E_ALL | E_STRICT
+phpSettings.date.timezone = Europe/Berlin
+
+;ZEND SETTINGS
+includePaths.library = APPLICATION_PATH "/library"
+bootstrap.path = APPLICATION_PATH "/library/Application/Bootstrap.php"
+bootstrap.class = "Application_Bootstrap"
+appnamespace = "Application"
+autoloaderNamespaces.apache = 'Apache_'
+autoloaderNamespaces.opus = 'Opus_'
+autoloaderNamespaces.form = 'Form_'
+autoloaderNamespaces.controller = 'Controller_'
+resources.modules[] = ""
+resources.frontController.moduleDirectory = APPLICATION_PATH "/modules"
+resources.frontController.params.displayExceptions = 0
+resources.frontController.throwExceptions=0
+resources.frontController.returnResponse=0
+resources.layout.layoutPath = APPLICATION_PATH "/public/layouts/default"
+
+
+; LOCALE SETTINGS (TODO verify)
+resources.locale.default = de
+
 ;DB SETTINGS
 db.params.host = 
 db.params.username = 
@@ -42,10 +69,12 @@ db.params.dbname =
 debug = 0
 
 ;GENERAL SETTINGS
-theme = default
+theme = default ; TODO currently the theme has to be set using resources.layout.layoutPath (in ZEND SETTINGS)
 startmodule = home
 security = 0
 authenticationModule = 
+showexceptions = 0
+workspacePath = APPLICATION_PATH "/workspace"
 
 ; URN SETTINGS
 ; if you do not want to set URNs automatically, set these values blank or comment them out
@@ -125,8 +154,17 @@ ldapmappings.server1.lastName = "sn"
 ldapmappings.server1.EMail = "email"
 ldapmappings.server1.personId = "tuhhLibPersonaddridnr"
 
+[staging : production]
 
-[test : production]
+[testing : production]
 db.params.profiler = true
 db.params.showqueries = true
 db.params.maxqueries = 500
+
+phpSettings.display_startup_errors = 1
+phpSettings.display_errors = 1
+
+[development : production]
+phpSettings.display_startup_errors = 1
+phpSettings.display_errors = 1
+resources.frontController.params.displayExceptions = 1

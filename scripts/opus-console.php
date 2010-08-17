@@ -39,23 +39,29 @@ set_include_path('.' . PATH_SEPARATOR
             . PATH_SEPARATOR . dirname(dirname(__FILE__)) . '/library'
             . PATH_SEPARATOR . get_include_path());
 
+// Define path to application directory
+defined('APPLICATION_PATH')
+        || define('APPLICATION_PATH', realpath(dirname(dirname(__FILE__))));
+
+define('APPLICATION_ENV', 'testing');
+
 // Zend_Loader is'nt available yet. We have to do a require_once
 // in order to find the bootstrap class.
-require_once 'Application/Bootstrap.php';
+//require_once 'Application/Bootstrap.php';
 
 /**
  * Bootstraps and runs a console application.
  *
  * @category    Application
  */
-class OpusConsole extends Application_Bootstrap {
+class OpusConsole {
 
     /**
      * Starts an Opus console.
      *
      * @return void
      */
-    protected function _run() {
+    public function run() {
     
         $config = Zend_Registry::get('Zend_Config');
         if ($config->security !== '0') {
@@ -76,12 +82,24 @@ class OpusConsole extends Application_Bootstrap {
 }
 
 // Start console
-$console = new OpusConsole;
-$console->run(
-    // application root directory
-    dirname(dirname(__FILE__)),
-    // config level
-    Opus_Bootstrap_Base::CONFIG_TEST,
-    // path to config file
-    dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'config');
+//$console = new OpusConsole;
+//$console->run(
+//    // application root directory
+//    dirname(dirname(__FILE__)),
+//    // config level
+//    Opus_Bootstrap_Base::CONFIG_TEST,
+//    // path to config file
+//    dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'config');
 
+require_once 'Zend/Application.php';
+
+// environment initializiation
+
+$application = new Zend_Application(APPLICATION_ENV,
+        APPLICATION_PATH . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'config.ini');
+
+$application->bootstrap();
+
+$console = new OpusConsole();
+
+$console->run();

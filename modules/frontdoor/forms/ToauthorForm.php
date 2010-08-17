@@ -35,7 +35,7 @@
 /**
  * class to built the mail form for mail contact to author
  */
-class ToauthorForm extends Zend_Form
+class Frontdoor_Form_ToauthorForm extends Zend_Form
 {
     /**
      * hold author information (name, mail)

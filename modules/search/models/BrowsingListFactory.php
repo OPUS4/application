@@ -34,7 +34,7 @@
  * @version     $Id$
  */
 
-class BrowsingListFactory
+class Search_Model_BrowsingListFactory
 {
   /**
    * Holds the browsing list produced in this factory
@@ -66,19 +66,19 @@ class BrowsingListFactory
 		switch ($browsingList)
 		{
 			case 'persons':
-				$browseList = BrowsingList::getPersonsRoleList($role);
+				$browseList = Search_Model_BrowsingList::getPersonsRoleList($role);
 				break;
 			case 'doctypes':
-				$browseList = BrowsingList::getDocumentTypeList();
+				$browseList = Search_Model_BrowsingList::getDocumentTypeList();
 				break;
 			case 'collectionRoles':
-				$browseList = BrowsingList::getCollectionRoleList();
+				$browseList = Search_Model_BrowsingList::getCollectionRoleList();
 				break;
 			case 'collection':
-				$browseList = BrowsingList::getCollectionList($collection, $node);
+				$browseList = Search_Model_BrowsingList::getCollectionList($collection, $node);
 				break;
 			default:
-				throw new BrowsingListFactoryException("This type of list is not supported (yet)!");
+				throw new Search_Model_BrowsingListFactoryException("This type of list is not supported (yet)!");
 		}
 		$this->browsingList = $browseList;
 	}

@@ -40,7 +40,7 @@ require_once 'Zend/Validate/Abstract.php';
 /**
  * validator class to check if at least one of the given fields is not empty
  */
-class AtLeastOneValidator extends Zend_Validate_Abstract
+class Frontdoor_Form_AtLeastOneValidator extends Zend_Validate_Abstract
 {
     const REQUIRED_EMPTY = 'requiredFieldsEmpty';
 

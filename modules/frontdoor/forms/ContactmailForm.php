@@ -35,7 +35,7 @@
 /**
  * class to built the mail mask for contacting authors via e-mail
  */
-class ContactmailForm extends Zend_Form
+class Frontdoor_Form_ContactmailForm extends Zend_Form
 {
     /**
      * Build easy mail form

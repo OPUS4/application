@@ -35,7 +35,7 @@
 /**
  * form to show the search mask
  */
-class SignatureForm extends Zend_Form
+class Admin_Form_SignatureForm extends Zend_Form
 {
     /**
      * Build easy upload form

@@ -32,7 +32,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class XMLImport {
+class Import_Model_XMLImport {
 
     /**
      * Holds xml representation of document information to be processed.

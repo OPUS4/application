@@ -38,16 +38,22 @@ set_include_path('.' . PATH_SEPARATOR
         . PATH_SEPARATOR . dirname(dirname(__FILE__)) . '/library'
         . PATH_SEPARATOR . get_include_path());
 
+// Define path to application directory
+defined('APPLICATION_PATH')
+        || define('APPLICATION_PATH', realpath(dirname(dirname(__FILE__))));
+
+define('APPLICATION_ENV', 'testing');
+
 // Zend_Loader is'nt available yet. We have to do a require_once
 // in order to find the bootstrap class.
-require_once 'Application/Bootstrap.php';
+//require_once 'Application/Bootstrap.php';
 
 /**
  * Bootstraps and runs an import from Opus3
  *
  * @category Search
  */
-class SolrIndexBuilder extends Application_Bootstrap {
+class SolrIndexBuilder { // extends Application_Bootstrap {
     private $start = null;
     private $end = null;
     private $deleteAllDocs = false;
@@ -89,7 +95,7 @@ class SolrIndexBuilder extends Application_Bootstrap {
     /**
      * Starts an Opus console.     
      */
-    public function _run() {
+    public function run() {
         global $argv, $argc;
         if (true === in_array('--help', $argv) || true === in_array('-h', $argv)) {
             $this->printHelpMessage($argv);
@@ -108,9 +114,18 @@ class SolrIndexBuilder extends Application_Bootstrap {
     }
 }
 
+require_once 'Zend/Application.php';
+
+// environment initializiation
+
+$application = new Zend_Application(APPLICATION_ENV,
+        APPLICATION_PATH . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'config.ini');
+
+$application->bootstrap();
+
 $index = new SolrIndexBuilder;
 try {
-    $index->run(dirname(dirname(__FILE__)), Opus_Bootstrap_Base::CONFIG_TEST, dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'config');
+    $index->run();
     echo "\nOperation completed successfully.\n";
 }
 catch (Opus_Search_Index_Solr_Exception $e) {

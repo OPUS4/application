@@ -31,7 +31,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class CollectionsImport
+class Import_Model_CollectionsImport
 {
 	/**
 	 * Imports Collection data to Opus4

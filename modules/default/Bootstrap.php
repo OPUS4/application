@@ -25,59 +25,15 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Search
- * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
+ * @package     Application
+ * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
+ * @author      Simone Finkbeiner (simone.finkbeiner@ub.uni-stuttgart.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: SearchController.php 2435 2009-04-09 14:03:53Z marahrens $
+ * @version     $Id: Bootstrap.php 4742 2010-08-16 19:38:02Z sszott $
  */
 
-/**
- * Controller for search operations
- *
- */
-class Search_OpensearchController extends Controller_Xml
-{
-    /**
-     * Perform a get search request with an OpenSearch compliant result set.
-     *
-     * @return void
-     */
-    public function queryAction() {
-        $requestData = $this->_request->getParams();
-
-        $search = new Search_Model_OpenSearch($requestData['q']);
-        
-        if (true === isset($requestData['format'])) $format = $requestData['format'];
-        else $format = 'rss';
-        if (true === isset($requestData['start'])) $search->startOffset = $requestData['start'];
-        if (true === isset($requestData['items'])) $search->itemsPerPage = $requestData['items'];
-        
-        switch ($format) {
-        	case 'atom':
-        	    $result = $search->getAtomResult();
-        	    break;
-        	case 'rss':
-        	    $result = $search->getRssResult();
-        	    break;
-        	default:
-        	    die('Result format not supported!');
-        	    break;
-        }
-        $this->_xml->loadXml($result['xml']);
-    }
-
-    /**
-     * Output the OpenSearch-description file for this host.
-     *
-     * @return void
-     */
-    public function descriptionAction() {
-        $requestData = $this->_request->getParams();
-
-        $search = new Search_Model_OpenSearch();
-
-        $result = $search->getDescription();
-        $this->_xml->loadXml($result['xml']);
-    }
+class Bootstrap extends Zend_Application_Module_Bootstrap {
 }
+
+?>

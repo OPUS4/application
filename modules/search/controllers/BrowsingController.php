@@ -49,7 +49,7 @@ class Search_BrowsingController extends Zend_Controller_Action
 		$this->view->title = $this->view->translate('search_index_browsing');
         $this->view->baseUrl = $this->getRequest()->getBaseUrl();
 		// Generate a list of all CollectionRoles existing in the repository and pass it as an Iterator to the View
-		$browsingList = new BrowsingListFactory("collectionRoles");
+		$browsingList = new Search_Model_BrowsingListFactory("collectionRoles");
 		$browsingListProduct = $browsingList->getBrowsingList();
 		#print_r($browsingListProduct);
 		$this->view->browsinglist = $browsingListProduct;
@@ -279,25 +279,25 @@ class Search_BrowsingController extends Zend_Controller_Action
                 $this->view->role = $role;
                 $translatestring = 'search_index_' . $role . '_browsing';
                 $this->view->title = $this->view->translate($translatestring);
-                $browsingList = new BrowsingListFactory($list, $role);
+                $browsingList = new Search_Model_BrowsingListFactory($list, $role);
                 $browsingListProduct = $browsingList->getBrowsingList();
                 $this->view->browsinglist = new Opus_Search_Iterator_PersonsListIterator($browsingListProduct);
                 break;
     	    case 'authors':
     			$this->view->title = $this->view->translate('search_index_authors_browsing');
-				$browsingList = new BrowsingListFactory($list);
+				$browsingList = new Search_Model_BrowsingListFactory($list);
 				$browsingListProduct = $browsingList->getBrowsingList();
 				$this->view->browsinglist = new Opus_Search_Iterator_PersonsListIterator($browsingListProduct);
 				break;
             case 'editors':
                 $this->view->title = $this->view->translate('search_index_editors_browsing');
-                $browsingList = new BrowsingListFactory($list);
+                $browsingList = new Search_Model_BrowsingListFactory($list);
                 $browsingListProduct = $browsingList->getBrowsingList();
                 $this->view->browsinglist = new Opus_Search_Iterator_PersonsListIterator($browsingListProduct);
                 break;
 			case 'doctypes':
 				$this->view->title = $this->view->translate('search_index_doctype_browsing');
-				$browsingList = new BrowsingListFactory($list);
+				$browsingList = new Search_Model_BrowsingListFactory($list);
 				$browsingListProduct = $browsingList->getBrowsingList();
 				$this->view->browsinglist = $browsingListProduct;
 				break;
@@ -307,7 +307,7 @@ class Search_BrowsingController extends Zend_Controller_Action
 				$collection = $this->_getParam("collection");
 				$this->view->collection = $this->_getParam("collection");
 				if (isset($collection) === false) $collection = 0;
-				$browsingList = new BrowsingListFactory($list, null, $collection, $node);
+				$browsingList = new Search_Model_BrowsingListFactory($list, null, $collection, $node);
 				$browsingListProduct = $browsingList->getBrowsingList();
 
                 $this->view->title = $browsingListProduct->getDisplayName('browsing');
@@ -417,11 +417,11 @@ class Search_BrowsingController extends Zend_Controller_Action
      * get the latest publications
      */
     public function latestAction() {
-    	$hitlist = BrowsingList::getLatestDocuments();
+    	$hitlist = Search_Model_BrowsingList::getLatestDocuments();
     	$this->view->title = $this->view->translate('latest_documents_title');
         $data = $this->_request->getParams();
         if (array_key_exists('output', $data) === true && $data['output'] === "rss") {
-                $template = new RSSOutput();
+                $template = new Search_Model_RSSOutput();
     	        // We need an OPUS-compliant result list to return
                 $hitlistList = new Opus_Search_List_HitList();
                 foreach ($hitlist as $queryHit) {

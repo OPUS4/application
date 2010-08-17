@@ -32,7 +32,7 @@
  * @version     $Id$
  */
 
-class MappingFile
+class Import_Model_MappingFile
 {
 
     /**

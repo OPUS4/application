@@ -39,16 +39,26 @@ set_include_path('.' . PATH_SEPARATOR
             . PATH_SEPARATOR . dirname(dirname(__FILE__)) . '/library'
             . PATH_SEPARATOR . get_include_path());
 
+defined('APPLICATION_PATH')
+        || define('APPLICATION_PATH', realpath(dirname(dirname(__FILE__))));
+
+define('APPLICATION_ENV', 'testing');
+
+require_once 'Zend/Loader/Autoloader.php';
+$autoloader = Zend_Loader_Autoloader::getInstance();
+$autoloader->suppressNotFoundWarnings(true);
+$autoloader->setFallbackAutoloader(true);
+
 // Zend_Loader is'nt available yet. We have to do a require_once
 // in order to find the bootstrap class.
-require_once 'Opus/Bootstrap/Base.php';
+//require_once 'Opus/Bootstrap/Base.php';
 
 /**
  * Bootstraps and runs the application.
  *
  * @category    Application
  */
-class OpusApacheRewritemap extends Opus_Bootstrap_Base {
+class OpusApacheRewritemap { // extends Opus_Bootstrap_Base {
 
     /**
      * Holds command line arguments passed to the script.
@@ -97,33 +107,33 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
      * @return void
      *
      */
-    protected function _setupTranslation()
-    {
-        $sessiondata = new Zend_Session_Namespace();
-        $options = array(
-            'clear' => false,
-            'scan' => Zend_Translate::LOCALE_FILENAME,
-            'ignore' => '.'
-            );
-        $translate = new Zend_Translate(
-            Zend_Translate::AN_TMX,
-            $this->_applicationRootDirectory . '/modules/',
-            'auto',
-            $options
-            );
-
-        if (empty($sessiondata->language) === false) {
-            // Example for logging something
-            $logger = Zend_Registry::get('Zend_Log');
-            $logger->info('Switching to language "' . $sessiondata->language . '".');
-            $translate->setLocale($sessiondata->language);
-        } else {
-            $sessiondata->language = $translate->getLocale();
-        }
-
-        $registry = Zend_Registry::getInstance();
-        $registry->set('Zend_Translate', $translate);
-    }
+//    protected function _setupTranslation()
+//    {
+//        $sessiondata = new Zend_Session_Namespace();
+//        $options = array(
+//            'clear' => false,
+//            'scan' => Zend_Translate::LOCALE_FILENAME,
+//            'ignore' => '.'
+//            );
+//        $translate = new Zend_Translate(
+//            Zend_Translate::AN_TMX,
+//            $this->_applicationRootDirectory . '/modules/',
+//            'auto',
+//            $options
+//            );
+//
+//        if (empty($sessiondata->language) === false) {
+//            // Example for logging something
+//            $logger = Zend_Registry::get('Zend_Log');
+//            $logger->info('Switching to language "' . $sessiondata->language . '".');
+//            $translate->setLocale($sessiondata->language);
+//        } else {
+//            $sessiondata->language = $translate->getLocale();
+//        }
+//
+//        $registry = Zend_Registry::getInstance();
+//        $registry->set('Zend_Translate', $translate);
+//    }
 
     /**
      * FIXME This is frontend setup needed in backend to instanciate models.
@@ -132,29 +142,29 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
      *
      * @return void
      */
-    protected function _setupLanguageList() {
-        $registry = Zend_Registry::getInstance();
-
-        $sessiondata = new Zend_Session_Namespace();
-        if (false === empty($sessiondata->language)) {
-            $locale = new Zend_Locale($sessiondata->language);
-        } else {
-            $locale = $registry->get('Zend_Translate')->getLocale();
-        }
-
-        $languages = array();
-        $availableLanguages = Opus_Language::getAllActive();
-
-        foreach ($availableLanguages as $availableLanguage) {
-            $trans = $availableLanguage->getPart1();
-            if (true === empty($trans)) {
-                $languages[$availableLanguage->getId()] = $availableLanguage->getDisplayName();
-            } else {
-                $languages[$availableLanguage->getId()] = $locale->getLanguageTranslation($trans);
-            }
-        }
-        $registry->set('Available_Languages', $languages);
-    }
+//    protected function _setupLanguageList() {
+//        $registry = Zend_Registry::getInstance();
+//
+//        $sessiondata = new Zend_Session_Namespace();
+//        if (false === empty($sessiondata->language)) {
+//            $locale = new Zend_Locale($sessiondata->language);
+//        } else {
+//            $locale = $registry->get('Zend_Translate')->getLocale();
+//        }
+//
+//        $languages = array();
+//        $availableLanguages = Opus_Language::getAllActive();
+//
+//        foreach ($availableLanguages as $availableLanguage) {
+//            $trans = $availableLanguage->getPart1();
+//            if (true === empty($trans)) {
+//                $languages[$availableLanguage->getId()] = $availableLanguage->getDisplayName();
+//            } else {
+//                $languages[$availableLanguage->getId()] = $locale->getLanguageTranslation($trans);
+//            }
+//        }
+//        $registry->set('Available_Languages', $languages);
+//    }
 
 
     /**
@@ -162,7 +172,7 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
      *
      * @return void
      */
-    protected function _run() {
+    public function run() {
         $log = Zend_Registry::get('Zend_Log');
         $config = Zend_Registry::get('Zend_Config');
 
@@ -200,14 +210,17 @@ class OpusApacheRewritemap extends Opus_Bootstrap_Base {
 
 }
 
+require_once 'Zend/Application.php';
+
+// environment initializiation
+
+$application = new Zend_Application(APPLICATION_ENV,
+        APPLICATION_PATH . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'config.ini');
+
+$application->bootstrap();
+
 // Bootstrap Zend
 $rwmap = new OpusApacheRewritemap($argv);
 //echo dirname(dirname(__FILE__));
-$rwmap->run(
-    // application root directory
-    dirname(dirname(__FILE__)),
-    // config level
-    Opus_Bootstrap_Base::CONFIG_TEST,
-    // path to config file
-    dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'config');
+$rwmap->run();
 

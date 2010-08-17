@@ -32,7 +32,7 @@
  * @version     $Id$
  */
 
-class Opus3FileImport 
+class Import_Model_Opus3FileImport
 {
     /**
      * Holds the path to the fulltexts in Opus3

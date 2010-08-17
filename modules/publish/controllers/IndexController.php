@@ -51,7 +51,7 @@ class Publish_IndexController extends Controller_Action {
      */
     public function indexAction() {
         $this->view->title = $this->view->translate('publish_controller_index');
-        $form = new Overview();
+        $form = new Publish_Form_Overview();
         $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create'));
         $form->setAction($action_url);
         $this->view->form = $form;
@@ -65,7 +65,7 @@ class Publish_IndexController extends Controller_Action {
      */
     public function keyuploadAction() {
         $this->view->title = $this->view->translate('publish_controller_keyupload');
-        $form = new KeyUpload();
+        $form = new Publish_Form_KeyUpload();
         $action_url = $this->view->url(array('controller' => 'index', 'action' => 'create'));
         $form->setAction($action_url);
         $this->view->form = $form;
@@ -124,7 +124,7 @@ class Publish_IndexController extends Controller_Action {
             $form_builder = new Form_Builder();
             $documentInSession = new Zend_Session_Namespace('document');
             if (array_key_exists('gpg_key_upload', $data) === true) {
-            	$alternateForm = new KeyUpload();
+            	$alternateForm = new Publish_Form_KeyUpload();
             	// upload key
                 if ($alternateForm->isValid($data) === true) {
                     $gpg = new Opus_GPG();
@@ -153,7 +153,7 @@ class Publish_IndexController extends Controller_Action {
             }
             if (array_key_exists('selecttype', $data) === true) {
                 // validate document type
-                $form = new Overview();
+                $form = new Publish_Form_Overview();
                 if ($form->isValid($data) === true) {
                     $possibleDoctypes = Opus_Document_Type::getAvailableTypeNames();
                     $selectedDoctype = $form->getValue('selecttype');
@@ -202,7 +202,7 @@ class Publish_IndexController extends Controller_Action {
                         $gpgkey = $data['gpgkey'];
                         if ($gpgkey === '1') {
                             $documentInSession->keyupload = true;
-                            $alternateForm = new KeyUpload();
+                            $alternateForm = new Publish_Form_KeyUpload();
                             $this->view->form = $alternateForm;
                             return;
                         }
@@ -263,7 +263,7 @@ class Publish_IndexController extends Controller_Action {
                     // go ahead to summary
                     $this->view->document_data = $documentInSession->document->toArray();
                     $this->view->title = $this->view->translate('publish_controller_summary');
-                    $summaryForm = new Summary();
+                    $summaryForm = new Publish_Form_Summary();
                     $action_url = $this->view->url(array('controller' => 'index', 'action' => 'summary'));
                     $summaryForm->setAction($action_url);
                     $this->view->form = $summaryForm;
@@ -289,7 +289,7 @@ class Publish_IndexController extends Controller_Action {
         $backUrl = $this->view->url(array('module' => 'publish', 'controller' => 'index', 'action' => 'create'), null, false);
         $this->view->backlink = "<a href='$backUrl'>" . $this->view->translate('upload_another_publication') . "</a>";
         if ($this->_request->isPost() === true) {
-            $summaryForm = new Summary();
+            $summaryForm = new Publish_Form_Summary();
             $postdata = $this->_request->getPost();
             if ($summaryForm->isValid($postdata) === true) {
                 $form_builder = new Form_Builder();
@@ -301,7 +301,7 @@ class Publish_IndexController extends Controller_Action {
                     $document->setType($type);
                     $id = $document->store();
                     $this->view->title = $this->view->translate('publish_controller_upload');
-                    $uploadForm = new FileUpload();
+                    $uploadForm = new Publish_Form_FileUpload();
                     if (false === is_null($document->getField('File'))) {
                         $action_url = $this->view->url(array('controller' => 'index', 'action' => 'upload'));
                         $uploadForm->setAction($action_url);
@@ -334,7 +334,7 @@ class Publish_IndexController extends Controller_Action {
         $this->view->title = $this->view->translate('publish_controller_upload');
         $backUrl = $this->view->url(array('module' => 'publish', 'controller' => 'index', 'action' => 'create'), null, false);
         $this->view->backlink = "<a href='$backUrl'>" . $this->view->translate('upload_another_publication') . "</a>";
-        $uploadForm = new FileUpload();
+        $uploadForm = new Publish_Form_FileUpload();
         $action_url = $this->view->url(array('controller' => 'index', 'action' => 'upload'));
         $uploadForm->setAction($action_url);
         $documentInSession = new Zend_Session_Namespace('document');

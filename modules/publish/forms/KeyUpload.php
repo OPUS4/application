@@ -35,7 +35,7 @@
 /**
  * form to show the search mask
  */
-class KeyUpload extends Zend_Form
+class Publish_Form_KeyUpload extends Zend_Form
 {
     /**
      * Build easy upload form

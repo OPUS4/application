@@ -35,7 +35,7 @@
 /**
  * form to show the search mask
  */
-class DeleteForm extends Zend_Form
+class Admin_Form_DeleteForm extends Zend_Form
 {
     /**
      * Build easy upload form

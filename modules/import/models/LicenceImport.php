@@ -31,7 +31,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class LicenceImport
+class Import_Model_LicenceImport
 {
 	/**
 	 * Imports licenses data to Opus4

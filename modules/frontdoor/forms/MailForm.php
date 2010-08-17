@@ -36,7 +36,7 @@
 /**
  * class to built the mail mask for document recommendation via e-mail
  */
-class MailForm extends Zend_Form
+class Frontdoor_Form_MailForm extends Zend_Form
 {
     /**
      * Build easy mail form

@@ -37,7 +37,7 @@
  * @category    Application
  * @package     Module_Metis
  */
-class OrderForm extends Zend_Form
+class Metis_Form_OrderForm extends Zend_Form
 {
     /**
      * Build form for pixel-order

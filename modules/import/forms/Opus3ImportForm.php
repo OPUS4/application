@@ -34,7 +34,7 @@
 /**
  * form to show the import
  */
-class Opus3ImportForm extends Zend_Form
+class Import_Form_Opus3ImportForm extends Zend_Form
 {
     /**
      * Build easy search form

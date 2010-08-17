@@ -52,22 +52,40 @@ set_include_path(implode(PATH_SEPARATOR, array(
         )));
 
 ///** Zend_Application */
-//require_once 'Zend/Application.php';
+require_once 'Zend/Application.php';
 //
 //// Create application, bootstrap, and run
-//$application = new Zend_Application(
-//                APPLICATION_ENV,
-//                // APPLICATION_PATH . '/configs/config.ini'
-//                APPLICATION_PATH . '/configs/application.ini'
-//);
-//$application->bootstrap()->run();
+$application = new Zend_Application(
+    APPLICATION_ENV,
+    APPLICATION_PATH . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . "config.ini"
+//    array (
+//        'autoloaderNamespaces' => array('Apache_','Opus_'),
+//        'resources' => array(
+//            'view' => array('encoding' => 'UTF-8'),
+//            'modules' => array(),
+//            'frontController' => array(
+//                'moduleDirectory' => realpath(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules')
+//            )
+//        )
+//    )
+
+//    APPLICATION_PATH . '/config/config.ini'
+//    )
+);
+
+//        throw new Exception("TEST " . APPLICATION_PATH);
+
+
+$application->bootstrap()
+            ->run();
 
 // Handover control to bootstrap.php. The Parameter passes the root
 // path of the application (where all the modules live).
 
-require_once 'Application/Bootstrap.php';
-$app = new Application_Bootstrap();
-$app->run(
-        APPLICATION_PATH,
-        APPLICATION_ENV,
-        APPLICATION_PATH . DIRECTORY_SEPARATOR . 'config');
+//require_once 'Application/Bootstrap.php';
+//$app = new Application_Bootstrap();
+//$app->run(
+//        APPLICATION_PATH,
+//        APPLICATION_ENV,
+//        APPLICATION_PATH . DIRECTORY_SEPARATOR . 'config');
+?>

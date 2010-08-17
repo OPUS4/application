@@ -39,7 +39,7 @@
  * Just to tell PHP that this is an exception class
  * Nothing to be implemented
  */
-class BrowsingListFactoryException extends Exception
+class Search_Model_BrowsingListFactoryException extends Exception
 {
 	
 }
