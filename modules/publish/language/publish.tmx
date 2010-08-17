@@ -15,6 +15,42 @@
         <seg>Veröffentlichen</seg>
       </tuv>
     </tu>
+
+    <tu tuid="publish_controller_step1">
+      <tuv xml:lang="en">
+        <seg>1: Choose document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>1: Dokument wählen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="publish_controller_step2">
+      <tuv xml:lang="en">
+        <seg>2: Personal information</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>2: Persönliche Informationen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="publish_controller_step3">
+      <tuv xml:lang="en">
+        <seg>3: Document metadata</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>3: Metadaten des Dokuments</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="publish_controller_step4">
+      <tuv xml:lang="en">
+        <seg>4: Optional information</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>4: Optionale Angaben</seg>
+      </tuv>
+    </tu>
     
     <tu tuid="publish_controller_create">
       <tuv xml:lang="en">
@@ -42,6 +78,34 @@
         <seg>Veröffentlichen - Vorschau</seg>
       </tuv>
     </tu>
+
+    <tu tuid="publish_controller_check">
+      <tuv xml:lang="en">
+        <seg>Publish - Checking</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Veröffentlichen - Überprüfen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="publish_controller_changes">
+      <tuv xml:lang="en">
+        <seg>Make changes</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Änderungen vornehmen</seg>
+      </tuv>
+    </tu>
+
+     <tu tuid="save_document">
+      <tuv xml:lang="en">
+        <seg>Save document!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokument speichern!</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="publish_controller_upload">
       <tuv xml:lang="en">
         <seg>Publish upload</seg>
@@ -59,6 +123,15 @@
         <seg>Die Datei(en) wurde(n) erfolgreich hochgeladen.</seg>
       </tuv>
     </tu>
+
+    <tu tuid="publish_controller_deposit_successful">
+      <tuv xml:lang="en">
+        <seg>Publishing document successful</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das Dokument wurde erfolgreich gespeichert.</seg>
+      </tuv>
+    </tu>
     
     <tu tuid="selecttype">
       <tuv xml:lang="en">
@@ -66,6 +139,33 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Dokumenttyp</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="fileupload">
+      <tuv xml:lang="en">
+        <seg>Choose file</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datei wählen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="Authorfirstname">
+      <tuv xml:lang="en">
+        <seg>First name</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Vorname</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="Authorlastname">
+      <tuv xml:lang="en">
+        <seg>Last name</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nachname</seg>
       </tuv>
     </tu>
 
