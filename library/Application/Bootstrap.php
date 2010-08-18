@@ -54,7 +54,6 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * @return void
      */
     protected function _setupFrontend() {
-        parent::_setupFrontend();
         $this->_setupTranslation();
         $this->_setupLanguageList();
         $this->_setupFrontController();
@@ -66,7 +65,6 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * @return void
      */
     protected function _setupFrontendCaching() {
-        parent::_setupFrontendCaching();
         $this->_setupTranslationCache();
         //$this->_setupPageCache();
     }
@@ -257,6 +255,8 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      */
     protected function _setupTranslation()
     {
+        $logger = Zend_Registry::get('Zend_Log');
+
         $sessiondata = new Zend_Session_Namespace();
 
         $options = array(
@@ -286,16 +286,13 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         }
 
         if (empty($sessiondata->language) === false) {
-            // Example for logging something
-            $logger = Zend_Registry::get('Zend_Log');
             $logger->info('Switching to language "' . $sessiondata->language . '".');
             $translate->setLocale($sessiondata->language);
         } else {
             $sessiondata->language = $translate->getLocale();
         }
 
-        $registry = Zend_Registry::getInstance();
-        $registry->set('Zend_Translate', $translate);
+        Zend_Registry::set('Zend_Translate', $translate);
 
         $this->translate = $translate;
     }
@@ -307,6 +304,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      */
     protected function _setupLanguageList() {
         $registry = Zend_Registry::getInstance();
+        $logger = $this->getResource('Logging');
 
         $sessiondata = new Zend_Session_Namespace();
         if (false === empty($sessiondata->language)) {
@@ -326,7 +324,6 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
                 try {
                     $languages[$availableLanguage->getPart2T()] = $locale->getTranslation($trans, 'language', $locale);
                 } catch (Zend_Locale_Exception $zle) {
-                    $logger = Zend_Registry::get('Zend_Log');
                     $logger->warn('Caught Zend_Locale_Exception while loading ' . $trans . ': ' . $zle->getMessage());
                     $logger->warn('Ignoring language with ID ' . $availableLanguage->getId());
                 }
