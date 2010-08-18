@@ -1434,6 +1434,22 @@
         <seg>Berichter</seg>
       </tuv>
     </tu>
+    <tu tuid="PersonAdvisorFirstName">
+      <tuv xml:lang="en">
+        <seg>Firstname</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Vorname</seg>
+      </tuv>
+    </tu>
+    <tu tuid="PersonAdvisorLastName">
+      <tuv xml:lang="en">
+        <seg>Lastname</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nachname</seg>
+      </tuv>
+    </tu>
 
     <tu tuid="add_PersonAdvisor">
       <tuv xml:lang="en">

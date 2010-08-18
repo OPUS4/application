@@ -38,7 +38,7 @@ echo '<h3>Artikel</h3>';
         </tr>
     </table>
     <fieldset>
-        <legend>Autor(en)</legend>
+        <legend><?=$this->TitleMain?></legend>
         <table>
              <?php if (isset($this->groupPersonAuthor)) {
                  foreach ($this->groupPersonAuthor["Fields"] AS $field) { ?>
