@@ -111,6 +111,10 @@ class Publish_IndexController extends Controller_Action {
             else
                 $log->info("No file uploaded: => Fulltext is NOT given.");
 
+            $log->debug("TYPE -step2-: " . $this->documentType);
+            $log->debug("ID -step2-: " . $this->documentId);
+            $log->debug("Fulltext -step2-: " . $fulltext);
+
             // STEP 2: BUILD THE FORM THAT DEPENDS ON THE DOC TYPE
             //use a specified view for the document type
             $this->_helper->viewRenderer($this->documentType);
@@ -120,7 +124,8 @@ class Publish_IndexController extends Controller_Action {
             $action_url = $this->view->url(array('controller' => 'index', 'action' => 'check'));
             $step2Form->setAction($action_url);
             $step2Form->setMethod('post');
-            $this->view->form = $step2Form;
+            $this->renderFormForView($step2Form);
+            //$this->view->form = $step2Form;
         }
     }
 
@@ -140,6 +145,9 @@ class Publish_IndexController extends Controller_Action {
             $this->documentType = $postData['documentType'];
             $this->documentId = $postData['documentId'];
             $fulltext = $postData['fullText'];
+            $log->debug("TYPE -check-: " . $this->documentType);
+            $log->debug("ID -check-: " . $this->documentId);
+            $log->debug("Fulltext -check-: " . $fulltext);
 
             //get out the additional fields
             $additionalFields = array();
@@ -158,11 +166,11 @@ class Publish_IndexController extends Controller_Action {
             $form->populate($postData);
 
             if (!$form->send->isChecked()) {
-                $log->debug("A BUTTON WA PRESSED!!!!!!!!!!!!!!!!!");
+                $log->debug("A BUTTON WAS PRESSED!!!!!!!!!!!!!!!!!");
                 //a button was pressed, but not the send button => add / remove fields
                 //check which button other than send was pressed
                 //RENDER specific documentType.phtml
-                //$this->_helper->viewRenderer($this->documentType);
+                $this->_helper->viewRenderer($this->documentType);
                 $pressedButton = "";
                 $pressedButtonName = "";
                 foreach ($form->getElements() AS $element) {
@@ -206,26 +214,8 @@ class Publish_IndexController extends Controller_Action {
 
                 //$this->view->form = $form;
                 //call help funtion to render the form for specific view
-                //$this->renderFormForView($form);
+                $this->renderFormForView($form);
 
-//                foreach ($form->getElements() as $key => $value) {
-//                    $pos = stripos($key, "FirstName");
-//                    if ($pos != false)
-//                        $name = substr($key, 0, $pos);
-//                    else
-//                        $name=$key;
-//                    $groupName = 'group' . $name;
-//                    $displayGroup = $form->getDisplayGroup($groupName);
-//                    if ($displayGroup != null) {
-//                        $this->view->$groupName = $displayGroup->getElements();
-//                        $log->debug(" --> GROUP <-- found: " . $groupName);
-//                        foreach ($displayGroup->getElements() AS $groupElement)
-//                            $log->debug(" Element: " . $groupElement);
-//                    }
-//                }
-
-                //regular values
-                //$this->view->$key = $form->getElement($key)->getValue();
                 $this->view->form = $form;
                 //return $this->render($this->documentType);
             } else {
@@ -245,16 +235,26 @@ class Publish_IndexController extends Controller_Action {
                     $this->view->title = $this->view->translate('publish_controller_check');
 
                     //send form values to check view
-                    $formValues = $form->getValues();
+                    $formElements = $form->getElements();
+                    $formValues = array();
+                    foreach ($formElements as $element) {
+                        if (!($element->getType() == 'Zend_Form_Element_Hidden') && !($element->getType() == 'Zend_Form_Element_Submit'))
+                            $formValues[$element->getName()] = $element->getValue();
+                    }
                     $this->view->formValues = $formValues;
 
                     //finally: deposit the data!
-                    $depositForm = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $fulltext, $additionalFields, $postData);
+                    //$depositForm = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $fulltext, $additionalFields, $postData);
                     $action_url = $this->view->url(array('controller' => 'index', 'action' => 'deposit'));
-                    $depositForm->setAction($action_url);
-                    $depositForm->setMethod('post');
+//                    $depositForm->setAction($action_url);
+//                    $depositForm->setMethod('post');
 
-                    foreach ($formValues as $key => $value) {
+
+                    $depositForm = new Zend_Form();
+                    $depositForm->setAction($action_url);
+                    $deposit = $form->createElement('submit', 'deposit');
+                    $depositForm->addElement($deposit);
+                    foreach ($form->getValues() as $key => $value) {
                         if ($key != 'send') {
                             $hidden = $depositForm->createElement('hidden', $key);
                             $hidden->setValue($value);
@@ -264,11 +264,9 @@ class Publish_IndexController extends Controller_Action {
                             $depositForm->removeElement('send');
                         }
                     }
-                    $deposit = $depositForm->createElement('submit', 'deposit');
-                    $depositForm->addElement($deposit);
-
                     //send form to view
                     $this->view->form = $depositForm;
+                    $log->debug("Check was successful! Next step: deposit data!");
                 }
             }
         }
@@ -279,20 +277,31 @@ class Publish_IndexController extends Controller_Action {
      * uses check_array
      */
     public function depositAction() {
+        $log = Zend_Registry::get('Zend_Log');
         $this->view->title = $this->view->translate('publish_controller_index');
         $this->view->subtitle = $this->view->translate('publish_controller_deposit_successful');
 
         if ($this->getRequest()->isPost() === true) {
             $postData = $this->getRequest()->getPost();
+            $log->debug("Mehtod depositAction begins...");
 
             //read ans save the most important values
             $this->documentType = $postData['documentType'];
-            $this->documentId = $postData['documentId'];
             $fulltext = $postData['fullText'];
+            if (!isset($postData['documentId'])) {
+                $this->documentId = $postData['documentId'];
+                $document = new Opus_Document($this->documentId);
+                $documentType = $document->getField('Type');
+                $documentType->setValue($this->documentType);
+                $id = $document->store();
+            } else {
+                $document = new Opus_Document();
+                $documentType = $document->getField('Type');
+                $documentType->setValue($this->documentType);
+                $id = $document->store();
+            }
 
-            $document = new Opus_Document($this->documentId);
-            $document->setType($this->documentType);
-
+            $log->debug("document generated with id " . $id);
             //delete values that do not concern the document (anymore)
             unset($postData['documentType']);
             unset($postData['documentId']);
@@ -300,6 +309,7 @@ class Publish_IndexController extends Controller_Action {
 
             //get the available external fields of an document
             $externalFields = $document->getAllExternalFields();
+            $log->debug("External fields loaded...");
 
             //save the post variables
             foreach ($postData as $key => $value) {
@@ -307,22 +317,25 @@ class Publish_IndexController extends Controller_Action {
 
                     if ($value != "") {
                         //store person object using help function
+                        $log->debug("wanna store a person...");
                         $postData = $this->storePerson($document, $postData, $key, $externalFields);
+                        $log->debug("person stored! ");
                     }
                 } else {
-                    if (in_array($key, $externalFields)) {
-                        //echo "<b>external: " . $key . "</b><br>";
+                    $log->debug("wanna store something else...");
+                    if (array_key_exists($key, $externalFields)) {
                         // store an external field with adder
                         $function = "add" . $key;
-                        //echo "Try to add " . $key . " with function " . $function . "<br>";
+                        $log->debug("adder function: " . $function);
                         $addedValue = $document->$function();
                         $addedValue->setValue($value);
+                        $log->debug("with value: " . $function);
                     } else {
                         //store an internal field with setter
-                        //echo "internal: " . $key . "<br>";
                         $function = "set" . $key;
-                        //echo "Try to set " . $key . " with function " . $function . "<br>";
+                        $log->debug("setter function: " . $function);
                         $addedValue = $document->$function($value);
+                        $log->debug("with value: " . $function);
                     }
                 }
             }
@@ -338,17 +351,47 @@ class Publish_IndexController extends Controller_Action {
         //regular and error values for placeholders
         foreach ($form->getElements() as $key => $value) {
             $pos = stripos($key, "FirstName");
-            if ($pos != false)
+            if ($pos != false) {
                 $name = substr($key, 0, $pos);
-            else
-                $name=$key;
+            } else {
+                $pos = stripos($key, "1");
+                if ($pos != false)
+                    $name = substr($key, 0, $pos);
+                else
+                    $name=$key;
+            }
             $groupName = 'group' . $name;
+            $this->view->$name = $name;
             $displayGroup = $form->getDisplayGroup($groupName);
             if ($displayGroup != null) {
-                $this->view->$groupName = $displayGroup->getElements();
                 $log->debug(" --> GROUP <-- found: " . $groupName);
-                foreach ($displayGroup->getElements() AS $groupElement)
-                    $log->debug(" Element: " . $groupElement);
+                $groupFields = array();
+                $groupHiddens = array();
+                $groupButtons = array();
+                foreach ($displayGroup->getElements() AS $groupElement) {
+                    //$log->debug(" Element: " . $groupElement);
+                    $elementAttributes = $form->getElementAttributes($groupElement->getName()); //array
+                    if ($groupElement->getType() === 'Zend_Form_Element_Submit') {
+                        //buttons
+                        $groupButtons[$elementAttributes["id"]] = $elementAttributes;
+                    } else if ($groupElement->getType() === 'Zend_Form_Element_Hidden') {
+                        //hidden fields
+                        $groupHiddens[$elementAttributes["id"]] = $elementAttributes;
+                    } else {
+                        //normal fields
+                        $groupFields[$elementAttributes["id"]] = $elementAttributes;
+                    }
+                }
+                $group[] = array();
+                $group["Fields"] = $groupFields;
+                $group["Hiddens"] = $groupHiddens;
+                $group["Buttons"] = $groupButtons;
+//                foreach ($group["Buttons"] as $val) {
+//                    $log->debug("button id: " . $val["id"]);
+//                    $log->debug("button value: " . $val["value"]);
+//                    $log->debug("button label: " . $val["label"]);
+//                }
+                $this->view->$groupName = $group;
             }
 
             //regular values
@@ -363,30 +406,33 @@ class Publish_IndexController extends Controller_Action {
     }
 
     private function storePerson($document, $formValues, $key, $externalFields) {
-        if ($formValues[$key] == "") {
-            // unrequired Personfield is empty
+        $log = Zend_Registry::get('Zend_Log');
+
+        if ($formValues[$key] == "")
             return $formValues;
-        } else {
-            //get all possible Person fields
-            $availablePersons = array();
+        else {
+            //get all possible Person roles
+            $personRoles = array();
             foreach ($externalFields as $value) {
                 if (strstr($value, "Person")) {
-                    array_push($availablePersons, $value);
+                    array_push($personRoles, $value);
                 }
             }
             $person = new Opus_Person();
             $first = "FirstName";
             $last = "LastName";
             $firstPos = stripos($key, $first);
+            $log->debug("key: " . $key);
             $lastPos = stripos($key, $last);
 
             if ($firstPos != false) {
                 //FirstName is given
-                echo "1) set first: " . $formValues[$key] . "<br>";
+                $log->debug("1) set first name: " . $formValues[$key]);
                 $person->setFirstName($formValues[$key]);
                 $personType = substr($key, 0, $firstPos);
+                $log->debug("personType: " . $personType);
                 $lastNameKey = $personType . $last;
-                echo "2) set last: " . $formValues[$lastNameKey] . "<br>";
+                $log->debug("2) set last name: " . $formValues[$lastNameKey]);
                 $person->setLastName($formValues[$lastNameKey]);
                 $addFunction = "add" . $personType;
                 $document->$addFunction($person);
@@ -394,12 +440,12 @@ class Publish_IndexController extends Controller_Action {
                 $formValues[$lastNameKey] = "";
             } else if ($lastPos != false) {
                 //LastName is given
-                echo "1) set last: " . $formValues[$key] . "<br>";
+                $log->debug("1) set last: " . $formValues[$key]);
                 $person->setLastName($formValues[$key]);
                 //personType example: PersonAuthor
                 $personType = substr($key, 0, $lastPos);
                 $firstNameKey = $personType . $first;
-                echo "2) set first: " . $formValues[$firstNameKey] . "<br>";
+                $log->debug("2) set first: " . $formValues[$firstNameKey]);
                 $person->setFirstName($formValues[$firstNameKey]);
                 $addFunction = "add" . $personType;
                 $document->$addFunction($person);

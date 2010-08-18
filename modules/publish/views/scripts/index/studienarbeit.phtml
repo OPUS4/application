@@ -4,7 +4,7 @@ echo '<h3>Studienarbeit</h3>';
 //echo $this->form;
 ?>
 
-<form enctype="application/x-www-form-urlencoded" action="/opus4-devel/index.php/publish_2/index/check" method="post">
+<form enctype="application/x-www-form-urlencoded" action="/opus4-devel/index.php/publish/index/check" method="post">
     <fieldset>
         <legend>Einsteller</legend>
         <table>
@@ -28,7 +28,7 @@ echo '<h3>Studienarbeit</h3>';
         <legend>Autor</legend>
         <table>
              <?php if (isset($this->groupPersonAuthor)) {
-                 foreach ($this->groupPersonAuthor as $author) { ?>
+                 foreach ($this->groupPersonAuthor["Fields"] as $field) { ?>
             <tr>
                 <td><label for="PersonAuthorFirstName" class="required">Vorname</label></td>
                 <td>
@@ -84,7 +84,7 @@ echo '<h3>Studienarbeit</h3>';
         <? if (isset($this->TitleAbstractError)) echo '<ul class="errors">'. $this->TitleAbstractError .'</ul>'; ?>
         </dd>
 
-       <dt id="Licence-label"><label for="Licence" class="required">Lizenz</label></dt>
+        <dt id="Licence-label"><label for="Licence" class="required">Lizenz</label></dt>
         <dd id="Licence-element">
         <input type="text" name="Licence" id="Licence" value="<?=$this->Licence?>" />
         <? if (isset($this->LicenceError)) echo '<ul class="errors">'. $this->LicenceError .'</ul>'; ?>

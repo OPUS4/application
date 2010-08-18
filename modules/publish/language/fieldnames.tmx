@@ -1349,10 +1349,26 @@
         
     <tu tuid="PersonEditor">
       <tuv xml:lang="en">
-        <seg>Editor</seg>
+        <seg>Editor(s)</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Herausgeber</seg>
+      </tuv>
+    </tu>
+    <tu tuid="PersonEditorFirstName">
+      <tuv xml:lang="en">
+        <seg>Editor: Firstname</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Herausgeber: Vorname</seg>
+      </tuv>
+    </tu>
+    <tu tuid="PersonEditorLastName">
+      <tuv xml:lang="en">
+        <seg>Editor: Lastname</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Herausgeber: Nachname</seg>
       </tuv>
     </tu>
 

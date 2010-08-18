@@ -91,11 +91,11 @@ class Publish_Form_PublishingSecond extends Zend_Form {
                 $datatype = $field->getAttribute('datatype');
                 $multiplicity = $field->getAttribute('multiplicity');
             }
-            else
-                throw new OpusServerPublishingException("Error while parsing xml document type: Choosen document type has missing attributes in element 'field'!");
+//            else
+//                throw new Publish_Model_OpusServerPublishingException("Error while parsing xml document type: Choosen document type has missing attributes in element 'field'!");
 
-            if (empty($elementName) || empty($required) || empty($datatype) || empty($multiplicity))
-                throw new OpusServerPublishingException("Error while parsing the xml document type: Found attribute(s) are empty!");
+//            if (empty($elementName) || empty($required) || empty($datatype) || empty($multiplicity))
+//                throw new Publish_Model_OpusServerPublishingException("Error while parsing the xml document type: Found attribute(s) are empty!");
 
             //=2= Check if there are child nodes -> concerning fulltext or other dependencies!
             if ($field->hasChildNodes()) {
@@ -127,8 +127,9 @@ class Publish_Form_PublishingSecond extends Zend_Form {
                 $groupName = 'group' . $elementName;
                 //current element has also to be in that group
 
-                //prepare form element: create Zend_Form_element with neede attributes
-                 $group = $this->prepareFormElement($formElement, $elementName, $validator, $datatype, $required, $group);
+                //prepare form element: create Zend_Form_element with needed attributes
+                $label = $elementName;
+                $group = $this->prepareFormElement($formElement, $elementName."1", $validator, $datatype, $required, $group, $label);
 
                 //additionalFields != null means additinal fields have to be shown
                 if ($this->additionalFields != null) {
@@ -157,7 +158,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
                         //start counting at lowest possible number -> also used for name
                         for ($i = 1; $i < $currentNumber; $i++) {
                             $counter = $i + 1;
-                            $group = $this->prepareFormElement($formElement, $elementName . $counter, $validator, $datatype, $required, $group);
+                            $group = $this->prepareFormElement($formElement, $elementName . $counter, $validator, $datatype, $required, $group, $label);
                         }
 
                         if ($currentNumber == 1) {
@@ -199,7 +200,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
                 }
             }
             //prepare element that do not belong to a display group
-            else $this->prepareFormElement($formElement, $elementName, $validator, $datatype, $required, null);
+            else $this->prepareFormElement($formElement, $elementName, $validator, $datatype, $required, null, $elementName);
         }
 
 
@@ -258,24 +259,27 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      * @param String $datatype
      * @param Sring $required
      */
-    protected function prepareFormElement($formElement, $elementName, $validator, $datatype, $required, $group) {
+    protected function prepareFormElement($formElement, $elementName, $validator, $datatype, $required, $group, $label) {
         if ($datatype != 'Person') {
-            $this->addFormElement($formElement, $elementName, $validator, $required);
+            $this->addFormElement($formElement, $elementName, $validator, $required, $label);
             $group[] = $elementName;
         } else {
-            $nameFirst = $elementName . 'FirstName';
-            $this->addFormElement($formElement, $nameFirst, $validator, 'no');
+            $first = "FirstName";
+            $nameFirst = $elementName . $first;
+            $this->addFormElement($formElement, $nameFirst, $validator, 'no', $label.$first);
             $group[] = $nameFirst;
-            $nameLast = $elementName . 'LastName';
-            $this->addFormElement($formElement, $nameLast, $validator, $required);
+
+            $last = "LastName";
+            $nameLast = $elementName . $last;
+            $this->addFormElement($formElement, $nameLast, $validator, $required, $label.$last);
             $group[] = $nameLast;
         }
         return $group;
     }
 
-    protected function addFormElement($formElement, $elementName, $validator, $required) {
+    protected function addFormElement($formElement, $elementName, $validator, $required, $label) {
         $formField = $this->createElement($formElement, $elementName);
-        $formField->setLabel($elementName);
+        $formField->setLabel($label);
         $formField->addValidator($validator);
         if ($required == 'yes')
             $formField->setRequired(true);
@@ -295,9 +299,22 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         $elementAttributes["label"] = $element->getLabel();
         $elementAttributes["error"] = $element->getMessages();
         $elementAttributes["id"] = $element->getId();
-        $elementAttributes["hint"] = "Hint-Text";
-        //$element->setAttrib($name, $value) für hint
+        if ($element->isRequired()) $elementAttributes["req"] = "required";
+        else $elementAttributes["req"] = "optional";
+        //$elementAttributes["hint"] = $element->getAttrib("hint");
         
         return $elementAttributes;
     }
+
+    /**
+     * used to set special attributes of an element, for example a hint-text
+     * @param <type> $element
+     * @param <type> $attributeName
+     * @param <type> $attributeValue
+     */
+    public function setElementAttribute($element, $attributeName, $attributeValue) {
+        $element = $this->getElement($elementName);
+        $element->setAttrib($attributeName, $attributeValue);
+    }
+
 }
