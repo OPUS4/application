@@ -34,6 +34,12 @@
 
 ?>
 
+<?php
+    if($this->searchType === 'simple')
+        include('simpleSearchForm.php');
+    // TODO include advanced search form
+?>
+
 <h2>Suchergebnisse</h2>
 
 <div id="search_options" >

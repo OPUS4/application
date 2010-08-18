@@ -33,13 +33,4 @@
 
 ?>
 
-<h2><?= $this->translate('solrsearch_title_simple'); ?></h2>
-
-<form action="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search')); ?>/" method="post">
-    <label for="query"><?= $this->translate('solrsearch_query_label'); ?></label>
-    <input id="query" name="query" type="text" value="" />
-    <input type="submit" value="<?= $this->translate('solrsearch_searchaction'); ?>" />
-    <input type="hidden" name="searchtype" id="searchtype" value="simple" />
-</form>
-
-<a href="solrsearch/advanced"><?= $this->translate('solrsearch_title_advanced'); ?></a>
+<?php include('simpleSearchForm.php'); ?>

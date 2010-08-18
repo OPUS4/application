@@ -57,8 +57,17 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
      * advanced search was performed
      * @var <type> boolean
      */
-    private $simpleSearch; // FIXME check if obsolete
+
+    /**
+     * the number of hits returned by the last search request
+     * @var int
+     */
     private $numOfHits;
+
+    /**
+     * the type of search to use; must be either 'simple' or 'advanced'
+     * @var string
+     */
     private $searchtype;
 
     /**
@@ -70,7 +79,6 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
     public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array()) {
         parent::__construct($request, $response, $invokeArgs);
         $this->log = Zend_Registry::getInstance()->get("Zend_Log");
-        $this->simpleSearch = true;
     }
 
     /**
@@ -98,6 +106,33 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $this->view->title = $this->view->translate('solrsearch_title_results');
     }
 
+    public function searchdispatchAction() {
+        $this->log->debug("Received new search request. Redirecting to search action");
+
+        $redirector = $this->_helper->getHelper('Redirector');
+        $redirector->setPrependBase(false);
+        $requestData = null;
+        $url = null;
+
+        if ($this->_request->isPost() === true) 
+            $requestData = $this->_request->getPost();
+        else
+            $requestData = $this->_request->getParams();
+
+        if($requestData['searchtype'] === 'simple') {
+            $url = $this->view->url(array(
+                'module'=>'solrsearch',
+                'controller'=>'solrsearch',
+                'action'=>'search',
+                'searchtype'=>$requestData['searchtype'],
+                'start'=>$requestData['start'],
+                'rows'=>$requestData['rows'],
+                'query'=>$requestData['query']));
+        }
+        $this->log->debug("URL is: " . $url);
+        $redirector->gotoUrl($url);
+    }
+
     /**
      * Entry point for new searches. Redirects to appropriate result view
      */
@@ -115,7 +150,7 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
      *
      */
     public function authorSearchAction() {
-        // TODO
+        // TODO implement
         $this->render('nohits');
     }
 
@@ -156,7 +191,7 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
     /**
      * Builds an Opus_SolrSearch_Query using form values.
      * @return Opus_SolrSearch_Query
-     * @throws Opus_Server_Exception
+     * @throws Application_Exception if any of the parameters couldn't be read
      */
     private function buildQuery($request) {
 
@@ -172,24 +207,22 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         }
 
         if (is_null($data)) {
-            throw new Opus_Server_Exception("Unable to read request data. Search cannot be performed.");
+            throw new Application_Exception("Unable to read request data. Search cannot be performed.");
         }
 
         if (!array_key_exists('searchtype', $data)) {
-            throw new Opus_Server_Exception("Unable to create query for unspecified searchtype");
+            throw new Application_Exception("Unable to create query for unspecified searchtype");
         }
         $this->searchtype = $data['searchtype'];
 
         if ($this->searchtype === 'simple') {
-            $this->simpleSearch = true;
             return $this->createSimpleSearchQuery($data);
         }
         if ($this->searchtype === 'advanced') {
-            $this->simpleSearch = false;
             return $this->createAdvancedSearchQuery($data);
         }
 
-        throw new Opus_Server_Exception("Unable to create query for searchtype " . $this->searchtype);
+        throw new Application_Exception("Unable to create query for searchtype " . $this->searchtype);
     }
 
     private function createSimpleSearchQuery($data) {
@@ -205,9 +238,13 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         if(is_null($rows))
             $rows = '10';
 
+        $catchAll = $data['query'];
+        if(is_null($catchAll))
+            $catchAll = "*:*";
+
         $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::SIMPLE);
         $query->setStart($start);
-        $query->setCatchAll($data['query']); // TODO: what happens if query does not exist?
+        $query->setCatchAll($catchAll);
         $query->setRows($rows);
         $query->setSortField('score');
         $query->setSortOrder('desc');

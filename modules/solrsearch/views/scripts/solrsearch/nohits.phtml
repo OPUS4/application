@@ -33,4 +33,10 @@
 
 ?>
 
+<?php
+    if($this->searchType === 'simple')
+        include('simpleSearchForm.php');
+    // TODO include advanced search form
+?>
+
 <p>Suche ergab keine Treffer</p>

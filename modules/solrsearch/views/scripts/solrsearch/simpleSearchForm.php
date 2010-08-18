@@ -35,11 +35,13 @@
 
 <h2><?= $this->translate('solrsearch_title_simple'); ?></h2>
 
-<form action="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search')); ?>/" method="post">
+<form action="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'searchdispatch')); ?>/" method="post">
     <label for="query"><?= $this->translate('solrsearch_query_label'); ?></label>
-    <input id="query" name="query" type="text" value="" />
+    <input id="query" name="query" type="text" value="<?= $this->q ?>" />
     <input type="submit" value="<?= $this->translate('solrsearch_searchaction'); ?>" />
     <input type="hidden" name="searchtype" id="searchtype" value="simple" />
+    <input type="hidden" name="rows" id="rows" value="10" />
+    <input type="hidden" name="start" id="start" value="0" />
 </form>
 
 <a href="solrsearch/advanced"><?= $this->translate('solrsearch_title_advanced'); ?></a>
