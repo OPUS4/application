@@ -37,15 +37,18 @@
 
 <div class="left">
 
-    <div id="search_form" class="quick_search_form" >
-        <form enctype="application/x-www-form-urlencoded" class="crud" action="search/search/search" method="post">
-            <fieldset>
-                <legend><?=$this->translate('search_index_search')?></legend>
-                <input type="text" name="query" id="query" value="" />
-                <input type="submit" name="submit" id="submit" value="<?= $this->translate('search_searchaction'); ?>" />
-            </fieldset>
-        </form>
-    </div>
+    <h2>Suche</h2>
+
+    <form action="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'searchdispatch')); ?>/" method="post">
+        <label for="query">Suchanfrage</label>
+        <input id="query" name="query" type="text" value="<?= $this->q ?>" />
+        <input type="submit" value="Suchen" />
+        <input type="hidden" name="searchtype" id="searchtype" value="simple" />
+        <input type="hidden" name="rows" id="rows" value="10" />
+        <input type="hidden" name="start" id="start" value="0" />
+    </form>
+
+<a href="solrsearch/advanced">Erweiterte Suche</a>
 
     <a href="search/browsing/index">
         <div id="browsing_button" class="button_large">
