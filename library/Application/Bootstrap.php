@@ -48,42 +48,6 @@
  */
 class Application_Bootstrap extends Opus_Bootstrap_Base {
 
-    protected $view;
-
-    protected $translate;
-
-    /**
-     * Start bootstrapped application.
-     *
-     * @return void
-     */
-    /* TODO not used anymore
-    protected function _run() {
-        $this->log->debug('Running Bootstrap.php');
-
-        $this->_setupNavigation();
-        
-        if (Zend_Registry::isRegistered('Zend_Cache_Page')) {
-            $pagecache = Zend_Registry::get('Zend_Cache_Page');
-            $pagecache->start();
-        }
-
-        try {
-            $response = $this->_frontController->dispatch();
-            if (isset($response)) {
-                $response->sendResponse();
-            }
-        }
-        catch (Exception $e) {
-            $this->log->debug($e);
-            $response = $this->_frontController->getResponse();
-            $response->clearBody();
-            $response->setBody("<h1>Critical Error</h1");
-            $response->sendResponse();
-        }
-    }
-     */
-
     /**
      * Override application frontend setup routine to setup a front controller instance.
      *
@@ -94,8 +58,6 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $this->_setupTranslation();
         $this->_setupLanguageList();
         $this->_setupFrontController();
-        $this->_setupView();
-        $this->_setupNavigation();
     }
 
     /**
@@ -156,7 +118,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
          * Add a custom front controller plugin for setting up an appropriate
          * include path to the form classes of modules.
          */
-        $moduleprepare = new Controller_Plugin_ModulePrepare($this->_applicationRootDirectory . '/modules');
+        $moduleprepare = new Controller_Plugin_ModulePrepare(APPLICATION_PATH . '/modules');
         $moduleprepare->appendClassPath('models')
         ->appendClassPath('forms');
         $this->_frontController->registerPlugin($moduleprepare);
@@ -191,20 +153,25 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * @return void
      *
      */
-    protected function _setupView()
+    protected function _initView()
     {
-        $config = Zend_Registry::get('Zend_Config');
-        $theme = $config->theme;
-        if (true === empty($theme)) {
-            $theme = 'default';
-        }
+        $this->bootstrap('Configuration');
 
-        $layoutpath = $this->_applicationRootDirectory . '/public/layouts/' . $theme;
+        $config = $this->getResource('Configuration');
 
-        if (false === is_dir($layoutpath)) {
-            throw new Exception('Requested theme "' . $theme . '" not found.');
-        }
+//        $theme = $config->theme;
+//        if (true === empty($theme)) {
+//            $theme = 'default';
+//        }
+//
+//        $layoutpath = $this->_applicationRootDirectory . '/public/layouts/' . $theme;
+//
+//        if (false === is_dir($layoutpath)) {
+//            throw new Exception('Requested theme "' . $theme . '" not found.');
+//        }
 
+        $layoutpath = $config->resources->layout->layoutPath;
+        
         Zend_Layout::startMvc(array(
                 'layoutPath'=> $layoutpath,
                 'layout'=>'common'));
@@ -218,16 +185,18 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
 
         // Set path to Zend extension view helpers to be accessible in other
         // modules too.
-        $libRealPath = realpath($this->_applicationRootDirectory . '/library');
+        $libRealPath = realpath(APPLICATION_PATH . '/library');
+
         $view->addHelperPath($libRealPath . '/View/Helper', 'View_Helper');
 
         // Set path to shared view partials
         $view->addScriptPath($libRealPath . '/View/Partials');
 
         $viewRenderer = new Zend_Controller_Action_Helper_ViewRenderer($view);
+
         Zend_Controller_Action_HelperBroker::addHelper($viewRenderer);
 
-        $this->view = $view;
+        return $view;
     }
 
     /**
@@ -294,20 +263,20 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
             );
         $translate = new Zend_Translate(
             Zend_Translate::AN_TMX,
-            $this->_applicationRootDirectory . '/modules/default/language/default.tmx',
+            APPLICATION_PATH . '/modules/default/language/default.tmx',
             'auto',
             $options
             );
 
-        if (file_exists($this->_applicationRootDirectory . '/modules/default/language/') === true) {
-            $handle = opendir($this->_applicationRootDirectory . '/modules/default/language/');
+        if (file_exists(APPLICATION_PATH . '/modules/default/language/') === true) {
+            $handle = opendir(APPLICATION_PATH . '/modules/default/language/');
             if ($handle) {
                 while (false !== ($file = readdir($handle))) {
                     // ignore directories
                     if (is_dir($file) === true) continue;
                     // ignore files with leading dot and files without extension tmx
                     if (preg_match('/^[^.].*\.tmx$/', $file) === 0) continue;
-                    $translate->addTranslation($this->_applicationRootDirectory . '/modules/default/language/' . $file, 'auto', $options);
+                    $translate->addTranslation(APPLICATION_PATH . '/modules/default/language/' . $file, 'auto', $options);
                 }
             }
         }
@@ -368,9 +337,9 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      *
      * @return void
      */
-    protected function _setupNavigation()
+    protected function _initNavigation()
     {
-        $this->bootstrap('Logging');
+        $this->bootstrap('Logging', 'View');
 
         $log = $this->getResource('Logging');
 
@@ -384,13 +353,13 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
 
         $container = new Zend_Navigation($config);
 
-        if (!isset($this->view)) {
-            $log->err('Error initializing navigation: the view is not set');
-        }
+        $view = $this->getResource('View');
 
-        $this->view->navigation($container);
+        $view->navigation($container);
 
         $log->debug('Zend_Navigation initialization completed');
+
+        return $container;
     }
 
 }
