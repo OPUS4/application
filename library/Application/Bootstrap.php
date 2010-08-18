@@ -114,7 +114,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      */
     protected function _setupFrontController()
     {
-        $this->_frontController = Zend_Controller_Front::getInstance();
+        $frontController = Zend_Controller_Front::getInstance();
 
         /*
          * Add a custom front controller plugin for setting up an appropriate
@@ -123,29 +123,29 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $moduleprepare = new Controller_Plugin_ModulePrepare(APPLICATION_PATH . '/modules');
         $moduleprepare->appendClassPath('models')
         ->appendClassPath('forms');
-        $this->_frontController->registerPlugin($moduleprepare);
+        $frontController->registerPlugin($moduleprepare);
 
         // Checks the current requeste module's directory for an initFile and runs it before controller is loaded.
         $moduleInit = new Controller_Plugin_ModuleInit();
-        $this->_frontController->registerPlugin($moduleInit);
+        $frontController->registerPlugin($moduleInit);
 
         /*
          * Add a custorm front controller plugin of manipulating routing information
          * for webapi REST requests.
          */
         $restRouterPlugin = new Controller_Plugin_RestManipulation();
-        $this->_frontController->registerPlugin($restRouterPlugin);
+        $frontController->registerPlugin($restRouterPlugin);
 
         // Add security realm initialization
         $realmSetupPlugin = new Controller_Plugin_SecurityRealm();
-        $this->_frontController->registerPlugin($realmSetupPlugin);
+        $frontController->registerPlugin($realmSetupPlugin);
 
         /*
          * Add a front controller plugin for oai-requests because of
          * DNB-validation
          */
         $oaiPlugin = new Controller_Plugin_DnbXmlPostprocess();
-        $this->_frontController->registerPlugin($oaiPlugin);
+        $frontController->registerPlugin($oaiPlugin);
     }
 
     /**
