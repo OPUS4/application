@@ -87,6 +87,8 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * @return void
      */
     protected function _setupTranslationCache() {
+        $config = $this->getResource('Configuration');
+
         $cache = null;
         $frontendOptions = array(
             'lifetime' => 600, // in seconds
@@ -95,7 +97,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
 
         $backendOptions = array(
             // Directory where to put the cache files. Must be writeable for application server
-            'cache_dir' => $this->_applicationWorkspaceDirectory . '/cache/'
+            'cache_dir' => $config->workspacePath . '/cache/'
             );
 
         $cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
@@ -207,6 +209,8 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      */
     protected function _setupPageCache()
     {
+        $config = $this->getResource('Configuration');
+
         $pagecache = null;
         $frontendOptions = array(
             'lifetime' => 600, // in seconds
@@ -229,7 +233,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
 
         $backendOptions = array(
             // Directory where to put the cache files. Must be writeable for application server
-            'cache_dir' => $this->_applicationWorkspaceDirectory . '/cache/'
+            'cache_dir' => $config->workspacePath . '/cache/'
             );
 
         $pagecache = Zend_Cache::factory('Page', 'File', $frontendOptions, $backendOptions);
