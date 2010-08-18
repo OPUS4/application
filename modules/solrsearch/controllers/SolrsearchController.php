@@ -126,10 +126,13 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
                 'module'=>'solrsearch',
                 'controller'=>'solrsearch',
                 'action'=>'search',
-                'searchtype'=>$requestData['searchtype'],
-                'start'=>$requestData['start'],
-                'rows'=>$requestData['rows'],
-                'query'=>$requestData['query']), null, true);
+                'searchtype'=>  array_key_exists('searchtype', $requestData) ? $requestData['searchtype'] : 'simple',
+                'start'=> array_key_exists('start', $requestData) ? $requestData['start'] : '0',
+                'rows'=> array_key_exists('rows', $requestData) ? $requestData['rows'] : '10',
+                'query'=> array_key_exists('query', $requestData) ? $requestData['query'] : '*:*',
+                'sortfield'=> array_key_exists('sortfield', $requestData) ? $requestData['sortfield'] : 'score',
+                'sortorder'=> array_key_exists('sortorder', $requestData) ? $requestData['sortorder'] : 'desc')
+            , null, true);
         }
         $this->log->debug("URL is: " . $url);
         $redirector->gotoUrl($url);
@@ -230,24 +233,18 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         // TODO validate request parameters
         $this->log->debug("Constructing query for simple search.");
 
-        $start = $data['start'];
-        if(is_null($start))
-            $start = '0';
-
-        $rows = $data['rows'];
-        if(is_null($rows))
-            $rows = '10';
-
-        $catchAll = $data['query'];
-        if(is_null($catchAll))
-            $catchAll = "*:*";
+        $start = array_key_exists('start', $data) ? $data['start'] : '0';
+        $rows = array_key_exists('rows', $data) ? $data['rows'] : '10';
+        $catchAll = array_key_exists('query', $data) ? $data['query'] : '*:*';
+        $sortfield = array_key_exists('sortfield', $data) ? $data['sortfield'] : 'score';
+        $sortorder = array_key_exists('sortorder', $data) ? $data['sortorder'] : 'desc';
 
         $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::SIMPLE);
         $query->setStart($start);
         $query->setCatchAll($catchAll);
         $query->setRows($rows);
-        $query->setSortField('score');
-        $query->setSortOrder('desc');
+        $query->setSortField($sortfield);
+        $query->setSortOrder($sortorder);
 
         if(isset($data['year'])) {
             $this->log->debug("year filter query is set to: ".$data['year']);
