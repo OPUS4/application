@@ -49,45 +49,13 @@
 class Application_Bootstrap extends Opus_Bootstrap_Base {
 
     /**
-     * Override application frontend setup routine to setup a front controller instance.
-     *
-     * @return void
-     */
-    protected function _initFrontend() {
-        $this->bootstrap('FrontendCaching');
-        $this->_setupTranslation();
-        $this->_setupLanguageList();
-        $this->_setupFrontController();
-    }
-
-    /**
-     * Set up custom caching engines.
-     *
-     * @return void
-     */
-    protected function _initFrontendCaching() {
-        $this->bootstrap('Backend');
-        $this->_setupTranslationCache();
-        //$this->_setupPageCache();
-    }
-
-    /**
-     * Set up custom caching engines for any backend functionality.
-     *
-     * @return void
-     */
-    protected function _initBackendCaching() {
-        $this->bootstrap('Configuration');
-        $this->_setupDatabaseCache();
-    }
-
-
-    /**
      * Setup translation cache.
      *
      * @return void
      */
-    protected function _setupTranslationCache() {
+    protected function _initTranslationCache() {
+        $this->bootstrap('Backend');
+
         $config = $this->getResource('Configuration');
 
         $cache = null;
@@ -113,8 +81,10 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * @return void
      *
      */
-    protected function _setupFrontController()
+    protected function _initOpusFrontController()
     {
+        $this->bootstrap(array('LanguageList'));
+
         $frontController = Zend_Controller_Front::getInstance();
 
         /*
@@ -158,7 +128,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      */
     protected function _initView()
     {
-        $this->bootstrap('Configuration');
+        $this->bootstrap(array('Configuration','OpusFrontController'));
 
         $config = $this->getResource('Configuration');
 
@@ -256,9 +226,11 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * @return void
      *
      */
-    protected function _setupTranslation()
+    protected function _initTranslation()
     {
-        $logger = Zend_Registry::get('Zend_Log');
+        $this->bootstrap(array('Logging','TranslationCache'));
+
+        $logger = $this->getResource('Logging');
 
         $sessiondata = new Zend_Session_Namespace();
 
@@ -305,8 +277,10 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      *
      * @return void
      */
-    protected function _setupLanguageList() {
-        $registry = Zend_Registry::getInstance();
+    protected function _initLanguageList()
+    {
+        $this->bootstrap('Translation');
+
         $logger = $this->getResource('Logging');
 
         $sessiondata = new Zend_Session_Namespace();
@@ -332,7 +306,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
                 }
             }
         }
-        $registry->set('Available_Languages', $languages);
+        Zend_Registry::set('Available_Languages', $languages);
     }
 
     /**
