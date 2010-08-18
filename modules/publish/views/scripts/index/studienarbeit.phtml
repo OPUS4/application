@@ -115,22 +115,23 @@ echo '<h3>Studienarbeit</h3>';
     <fieldset>
         <legend><?=$this->TitleAbstract?></legend>
         <table>
-             <?php if (isset($this->groupTitleAbstract)) {
-                 foreach ($this->groupTitleAbstract["Fields"] AS $field) { ?>
-            <tr>
-                <td><label for="<?=$field["id"]?>" class="<?=$field["req"]?>"><?=$field["label"]?></label></td>
-                <td><input type="text" name="<?=$field["id"]?>" id="<?=$field["id"]?>" value="<?=$field["value"]?>" />
-            </tr>
-            <tr><td colspan="2"><?php if ($field["error"]!=null) {echo '<ul class="errors">';foreach($field["error"] AS $err)echo $err;echo '</ul>';} ?></td></tr>
-           <?php }
-            foreach ($this->groupTitleAbstract["Buttons"] AS $button) { ?>
-            <tr>
-                <td><input type="submit" name="<?=$button["id"]?>" id="<?=$button["id"]?>" value="<?=$button["label"]?>" /></td>
-            </tr>
-        <?php }
-            foreach ($this->groupTitleAbstract["Hiddens"] AS $hidden) { ?>
-             <input type="hidden" name="<?=$hidden["id"]?>" id="<?=$hidden["id"]?>" value="<?=$hidden["value"]?>" />
-        <?php }} ?>
+             <?php if (isset($this->groupTitleAbstract)) : ?>
+                 <?php foreach ($this->groupTitleAbstract["Fields"] AS $field) : ?>
+                    <tr>
+                        <td><label for="<?=$field["id"]?>" class="<?=$field["req"]?>"><?=$field["label"]?></label></td>
+                        <td><input type="text" name="<?=$field["id"]?>" id="<?=$field["id"]?>" value="<?=$field["value"]?>" />
+                    </tr>
+                    <tr><td colspan="2"><?php if ($field["error"]!=null) {echo '<ul class="errors">';foreach($field["error"] AS $err)echo $err;echo '</ul>';} ?></td></tr>
+                <?php endforeach ?>
+                <?php foreach ($this->groupTitleAbstract["Buttons"] AS $button) : ?>
+                    <tr>
+                        <td><input type="submit" name="<?=$button["id"]?>" id="<?=$button["id"]?>" value="<?=$button["label"]?>" /></td>
+                    </tr>
+                <?php endforeach ?>
+                <?php foreach ($this->groupTitleAbstract["Hiddens"] AS $hidden) : ?>
+                    <input type="hidden" name="<?=$hidden["id"]?>" id="<?=$hidden["id"]?>" value="<?=$hidden["value"]?>" />
+                <?php endforeach ?>
+            <?php endif ?>
         </table>
     </fieldset>
 
@@ -164,19 +165,29 @@ echo '<h3>Studienarbeit</h3>';
         </table>
     </fieldset>
                       
+    <fieldset>
+        <legend><?=$this->PersonContributor?></legend>
+        <table>
+             <?php if (isset($this->groupPersonContributor)) {
+                 foreach ($this->groupPersonContributor["Fields"] AS $field) { ?>
+            <tr>
+                <td><label for="<?=$field["id"]?>" class="<?=$field["req"]?>"><?=$field["label"]?></label></td>
+                <td><input type="text" name="<?=$field["id"]?>" id="<?=$field["id"]?>" value="<?=$field["value"]?>" />
+            </tr>
+            <tr><td colspan="2"><?php if ($field["error"]!=null) {echo '<ul class="errors">';foreach($field["error"] AS $err)echo $err;echo '</ul>';} ?></td></tr>
+           <?php }
+            foreach ($this->groupPersonContributor["Buttons"] AS $button) { ?>
+            <tr>
+                <td><input type="submit" name="<?=$button["id"]?>" id="<?=$button["id"]?>" value="<?=$button["label"]?>" /></td>
+            </tr>
+        <?php }
+            foreach ($this->groupPersonContributor["Hiddens"] AS $hidden) { ?>
+             <input type="hidden" name="<?=$hidden["id"]?>" id="<?=$hidden["id"]?>" value="<?=$hidden["value"]?>" />
+        <?php }} ?>
+        </table>
+    </fieldset>
 
-
-        <dt id="PersonContributorFirstName-label"><label for="PersonContributorFirstName" class="optional">Beitragender: Vorname</label></dt>
-        <dd id="PersonContributorFirstName-element">
-        <input type="text" name="PersonContributorFirstName" id="PersonContributorFirstName" value="<?=$this->PersonContributorFirstName?>" />
-        <? if (isset($this->PersonContributorFirstNameError)) echo '<ul class="errors">'. $this->PersonContributorFirstNameError .'</ul>'; ?>
-        </dd>
-
-        <dt id="PersonContributorLastName-label"><label for="PersonContributorLastName" class="optional">Beitragender: Nachname</label></dt>
-        <dd id="PersonContributorLastName-element">
-        <input type="text" name="PersonContributorLastName" id="PersonContributorLastName" value="<?=$this->PersonContributorLastName?>" />
-        <? if (isset($this->PersonContributorLastNameError)) echo '<ul class="errors">'. $this->PersonContributorLastNameError .'</ul>'; ?>
-        </dd>
+  
 
         <dt id="CreatingCorporation-label"><label for="CreatingCorporation" class="optional">Urhebende Körperschaft</label></dt>
         <dd id="CreatingCorporation-element">
