@@ -49,6 +49,7 @@ autoloaderNamespaces.apache = 'Apache_'
 autoloaderNamespaces.opus = 'Opus_'
 autoloaderNamespaces.form = 'Form_'
 autoloaderNamespaces.controller = 'Controller_'
+autoloaderNamespaces.application = 'Application_'
 resources.modules[] = ""
 resources.frontController.moduleDirectory = APPLICATION_PATH "/modules"
 resources.frontController.params.displayExceptions = 0
