@@ -361,7 +361,8 @@ class Publish_IndexController extends Controller_Action {
                     $name=$key;
             }
             $groupName = 'group' . $name;
-            $this->view->$name = $name;
+            //translate the group name and gibe to the view
+            $this->view->$name = $this->view->translate($name);
             $displayGroup = $form->getDisplayGroup($groupName);
             if ($displayGroup != null) {
                 $log->debug(" --> GROUP <-- found: " . $groupName);
@@ -386,16 +387,13 @@ class Publish_IndexController extends Controller_Action {
                 $group["Fields"] = $groupFields;
                 $group["Hiddens"] = $groupHiddens;
                 $group["Buttons"] = $groupButtons;
-//                foreach ($group["Buttons"] as $val) {
-//                    $log->debug("button id: " . $val["id"]);
-//                    $log->debug("button value: " . $val["value"]);
-//                    $log->debug("button label: " . $val["label"]);
-//                }
                 $this->view->$groupName = $group;
             }
 
             //regular values
             $this->view->$key = $form->getElement($key)->getValue();
+            $name = $key . "_label";
+            $this->view->$name = $this->view->translate($form->getElement($key)->getLabel());
             if (isset($errors[$key]))
                 foreach ($errors[$key] as $error => $errorMessage) {
                     //error values

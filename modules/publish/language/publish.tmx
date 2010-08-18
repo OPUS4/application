@@ -151,6 +151,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="bibliographie">
+      <tuv xml:lang="en">
+        <seg>Add to bibliography?</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zur Bibliographie hinzufügen?</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="Authorfirstname">
       <tuv xml:lang="en">
         <seg>First name</seg>

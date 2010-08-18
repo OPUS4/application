@@ -8,31 +8,31 @@ echo '<h3>Artikel</h3>';
 <form enctype="application/x-www-form-urlencoded" action="/opus4-devel/index.php/publish/index/check" method="post">
     <table>
         <tr>
-            <td><label for="PersonSubmitterFirstName" class="optional">Einsteller: Vorname</label></td>
+            <td><label for="PersonSubmitterFirstName" class="optional"><?=$this->PersonSubmitterFirstName_label?></label></td>
             <td><input type="text" name="PersonSubmitterFirstName" id="PersonSubmitterFirstName" value="<?=$this->PersonSubmitterFirstName?>" /></td>
             <td><? if (isset($this->PersonSubmitterFirstNameError)) echo '<ul class="errors">'. $this->PersonSubmitterFirstNameError .'</ul>'; ?></td>
         </tr>
         
         <tr>
-            <td><label for="PersonSubmitterLastName" class="required">Einsteller: Nachname</label></td>
+            <td><label for="PersonSubmitterLastName" class="required"><?=$this->PersonSubmitterLastName_label?></label></td>
             <td><input type="text" name="PersonSubmitterLastName" id="PersonSubmitterLastName" value="<?=$this->PersonSubmitterLastName?>" /></td>
             <td><? if (isset($this->PersonSubmitterLastNameError)) echo '<ul class="errors">'. $this->PersonSubmitterLastNameError .'</ul>'; ?></td>
         </tr>
         
         <tr>
-            <td><label for="Licence" class="required">Lizenz</label></td>
+            <td><label for="Licence" class="required"><?=$this->Licence_label?></label></td>
             <td><input type="text" name="Licence" id="Licence" value="<?=$this->Licence?>" /></td>
             <td><? if (isset($this->LicenceError)) echo '<ul class="errors">'. $this->LicenceError .'</ul>'; ?></td>
         </tr>
         
         <tr>
-            <td><label for="Language" class="required">Sprache des Artikels</label></td>
+            <td><label for="Language" class="required"><?=$this->Language_label?></label></td>
             <td><input type="text" name="Language" id="Language" value="<?=$this->Language?>" /></td>
             <td><? if (isset($this->LanguageError)) echo '<ul class="errors">'. $this->LanguageError .'</ul>'; ?></td>
         </tr>
         
         <tr>
-            <td><label for="IdentifierOpus3" class="optional">IdentifierOpus3</label></td>
+            <td><label for="IdentifierOpus3" class="optional"><?=$this->IdentifierOpus3_label?></label></td>
             <td><input type="text" name="IdentifierOpus3" id="IdentifierOpus3" value="<?=$this->IdentifierOpus3?>" /></td>
             <td><? if (isset($this->IdentifierOpus3Error)) echo '<ul class="errors">'. $this->IdentifierOpus3Error .'</ul>'; ?></td>
         </tr>
@@ -62,7 +62,7 @@ echo '<h3>Artikel</h3>';
     </fieldset>
 
     <fieldset>
-        <legend>Titel</legend>
+        <legend><?=$this->TitleMain?></legend>
         <table>
              <?php if (isset($this->groupTitleMain)) {
                  foreach ($this->groupTitleMain["Fields"] AS $field) { ?>
@@ -86,7 +86,7 @@ echo '<h3>Artikel</h3>';
     </fieldset>
 
     <fieldset>
-        <legend>Abstract(s)</legend>
+        <legend><?=$this->TitleAbstract?></legend>
         <table>
              <?php if (isset($this->groupTitleAbstract)) {
                  foreach ($this->groupTitleAbstract["Fields"] AS $field) { ?>
@@ -142,7 +142,7 @@ echo '<h3>Artikel</h3>';
     </fieldset>
 
     <fieldset>
-        <legend>Übersetzer</legend>
+        <legend><?=$this->PersonTranslator?></legend>
         <table>
              <?php if (isset($this->groupPersonTranslator)) {
                  foreach ($this->groupPersonTranslator["Fields"] AS $field) { ?>

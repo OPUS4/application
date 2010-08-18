@@ -71,11 +71,13 @@ class Publish_Form_PublishingFirst extends Zend_Form {
 
         $fileupload = $this->createElement('File', 'fileupload');
         $fileupload->setLabel('fileupload')
-               // ->setRequired(true)
                 ->setDestination($tempPath)
                 ->addValidator('Count', false, 1)     // ensure only 1 file
                 ->addValidator('Size', false, 1024000) // limit to 1000K
                 ->addValidator('Extension', false, $filetypes); // allowed filetypes by extension
+
+        $bib = $this->createElement('checkbox', 'bibliographie');
+        $bib->setLabel('bibliographie');
 
         $submit = $this->createElement('submit', 'send');
         $submit->setLabel('Send');
@@ -84,7 +86,7 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         $documentId->addValidator('NotEmpty')
             ->addValidator('Int');
 
-        $this->addElements(array($doctypes, $fileupload, $documentId, $submit));
+        $this->addElements(array($doctypes, $fileupload, $bib, $documentId, $submit));
         $this->setAttrib('enctype', Zend_Form::ENCTYPE_MULTIPART);
         
 

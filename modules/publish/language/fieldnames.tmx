@@ -12,7 +12,7 @@
         <seg>Submitter: First name</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Einsteller: Vorname</seg>
+        <seg>Vorname des Einstellers</seg>
       </tuv>
     </tu>
 
@@ -21,7 +21,7 @@
         <seg>Submitter: Last name</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Einsteller: Nachname</seg>
+        <seg>Nachname des Einstellers</seg>
       </tuv>
     </tu>
 
@@ -43,12 +43,39 @@
       </tuv>
     </tu>
 
-     <tu tuid="Language">
+  <tu tuid="PersonTranslatorFirstName">
       <tuv xml:lang="en">
-        <seg>Language</seg>
+        <seg>Tranlator: First name</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Sprache</seg>
+        <seg>Übersetzer: Vorname</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="PersonTranslatorLastName">
+      <tuv xml:lang="en">
+        <seg>Translator: Last name</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Übersetzer: Nachname</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="PersonTranslator">
+      <tuv xml:lang="en">
+        <seg>Translator(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Übersetzer</seg>
+      </tuv>
+    </tu>
+
+     <tu tuid="Language">
+      <tuv xml:lang="en">
+        <seg>Language of publication</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sprache der Veröffentlichung</seg>
       </tuv>
     </tu>
     
@@ -804,6 +831,15 @@
         <seg>Quelle</seg>
       </tuv>
     </tu>
+
+    <tu tuid="IdentifierOpus3">
+      <tuv xml:lang="en">
+        <seg>Opus3 Id</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>OPUS 3 Id</seg>
+      </tuv>
+    </tu>
     
     <tu tuid="IdentifierOpac">
       <tuv xml:lang="en">
@@ -1419,13 +1455,30 @@
     
     <tu tuid="PersonContributor">
       <tuv xml:lang="en">
+        <seg>Contributor(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sonstige beteiligte Person(en)</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="PersonContributorFirstName">
+      <tuv xml:lang="en">
         <seg>Contributor</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Sonstige beteiligte Person</seg>
+        <seg>Vorname</seg>
       </tuv>
     </tu>
-    
+    <tu tuid="PersonContributorLastName">
+      <tuv xml:lang="en">
+        <seg>Contributor</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nachname</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="add_PersonContributor">
       <tuv xml:lang="en">
         <seg>add Contributor</seg>
