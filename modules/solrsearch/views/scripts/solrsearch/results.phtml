@@ -52,9 +52,13 @@
         <div id="yearFacet" class="facet">
             Erscheinungsjahr:
             <ul>
-                <?php foreach ($this->yearFacet as $facetItem) : ?>
-                    <li><a href="#"><?= $facetItem->getText() ?></a> (<?= $facetItem->getCount() ?>)</li>
-                <?php endforeach ?>
+            <?php foreach ($this->yearFacet as $facetItem) : ?>
+                <?php
+                    $yearfq = $this->firstPage;
+                    $yearfq['year'] = $facetItem->getText();
+                ?>
+                <li><a href="<?= $this->url($yearfq) ?>"><?= $facetItem->getText() ?></a> (<?= $facetItem->getCount() ?>)</li>
+            <?php endforeach ?>
             </ul>
         </div>
     <?php endif ?>

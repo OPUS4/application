@@ -111,10 +111,12 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
 
         $redirector = $this->_helper->getHelper('Redirector');
         $redirector->setPrependBase(false);
+        $redirector->setGotoUrl('');
+        $redirector->setExit(false);
         $requestData = null;
-        $url = null;
+        $url = '';
 
-        if ($this->_request->isPost() === true) 
+        if ($this->_request->isPost() === true)
             $requestData = $this->_request->getPost();
         else
             $requestData = $this->_request->getParams();
@@ -127,15 +129,12 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
                 'searchtype'=>$requestData['searchtype'],
                 'start'=>$requestData['start'],
                 'rows'=>$requestData['rows'],
-                'query'=>$requestData['query']));
+                'query'=>$requestData['query']), null, true);
         }
         $this->log->debug("URL is: " . $url);
         $redirector->gotoUrl($url);
     }
 
-    /**
-     * Entry point for new searches. Redirects to appropriate result view
-     */
     public function searchAction() {
         $this->query = $this->buildQuery($this->_request);
         $this->performSearch();
@@ -175,6 +174,7 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $this->view->__set("rows", $this->query->getRows());
         $this->view->__set("q", $this->query->getQ());
 
+        // TODO für das erzeugen der arrays eine weiche einbauen um zwischen simple und advanced zu unterscheiden
         $this->view->__set("nextPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'query'=>$this->query->getQ(),'start'=>(int)($this->query->getStart()) + (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
         $this->view->__set("prevPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'query'=>$this->query->getQ(),'start'=>(int)($this->query->getStart()) - (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
         $this->view->__set("lastPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'query'=>$this->query->getQ(),'start'=>(int)($this->numOfHits / $this->query->getRows()) * $this->query->getRows(),'rows'=>$this->query->getRows()));
@@ -248,6 +248,11 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $query->setRows($rows);
         $query->setSortField('score');
         $query->setSortOrder('desc');
+
+        if(isset($data['year'])) {
+            $this->log->debug("year filter query is set to: ".$data['year']);
+            $query->addFilterQuery("year:".$data['year']);
+        }
 
         $this->log->debug("Query $query complete");
 
