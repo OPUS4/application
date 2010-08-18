@@ -53,7 +53,8 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      *
      * @return void
      */
-    protected function _setupFrontend() {
+    protected function _initFrontend() {
+        $this->bootstrap('FrontendCaching');
         $this->_setupTranslation();
         $this->_setupLanguageList();
         $this->_setupFrontController();
@@ -64,7 +65,8 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      *
      * @return void
      */
-    protected function _setupFrontendCaching() {
+    protected function _initFrontendCaching() {
+        $this->bootstrap('Backend');
         $this->_setupTranslationCache();
         //$this->_setupPageCache();
     }
@@ -74,7 +76,8 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      *
      * @return void
      */
-    protected function _setupBackendCaching() {
+    protected function _initBackendCaching() {
+        $this->bootstrap('Configuration');
         $this->_setupDatabaseCache();
     }
 
