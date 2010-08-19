@@ -78,6 +78,17 @@ class Controller_Action extends Zend_Controller_Action {
     }
 
     /**
+     * Forward request to a different action.
+     *
+     * Sets the 'action' parameter so title key is correct.
+     * @return void
+     */
+    protected function _forwardToAction($action) {
+        $this->_request->setParam('action', $action);
+        $this->_forward($action);
+    }
+
+    /**
      * Do some initialization on startup of every action
      *
      * @return void

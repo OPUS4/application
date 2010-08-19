@@ -172,4 +172,27 @@ class Controller_CRUDAction extends Controller_Action {
             $this->_redirectTo('', 'index');
         }
     }
+
+    /**
+     * Dispatches requests to other actions.
+     *
+     * @return void
+     *
+     * FIXME: Implement generic dispatching based on 'action...'
+     */
+    public function dispatchAction() {
+        $logger = Zend_Registry::get('Zend_Log');
+        if ($this->_request->isPost() === true) {
+            $request = $this->getRequest();
+            $buttonEdit = $request->getPost('actionEdit');
+            $buttonDelete = $request->getPost('actionDelete');
+
+            if (isset($buttonEdit)) {
+                $this->_forwardToAction('edit');
+            }
+            else if (isset($buttonDelete)) {
+                $this->_forwardtoAction('delete');
+            }
+        }
+    }
 }
