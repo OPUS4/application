@@ -43,7 +43,30 @@
 <h2>Suchergebnisse</h2>
 
 <div id="search_options" >
-    --suchoptionen--
+
+    <?php
+        $yearDescUrl = $this->firstPage;
+        $yearDescUrl['sortfield'] = 'year';
+        $yearDescUrl['sortorder'] = 'desc';
+
+        $yearAscUrl = $this->firstPage;
+        $yearAscUrl['sortfield'] = 'year';
+        $yearAscUrl['sortorder'] = 'asc';
+
+        $scoreDescUrl = $this->firstPage;
+        $scoreDescUrl['sortfield'] = 'score';
+        $scoreDescUrl['sortorder'] = 'desc';
+
+        $scoreAscUrl = $this->firstPage;
+        $scoreAscUrl['sortfield'] = 'score';
+        $scoreAscUrl['sortorder'] = 'asc';
+    ?>
+
+    Sortieren nach
+    <a href="<?= $this->url($yearAscUrl) ?>">Jahr (aufsteigend)</a>,
+    <a href="<?= $this->url($yearDescUrl) ?>">Jahr (absteigend)</a>,
+    <a href="<?= $this->url($scoreAscUrl) ?>">Relevanz (aufsteigend)</a>
+    <a href="<?= $this->url($scoreDescUrl) ?>">Relevanz (absteigend)</a>
 </div>
 
 <div id="facets">

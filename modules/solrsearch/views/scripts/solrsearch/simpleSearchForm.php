@@ -42,6 +42,8 @@
     <input type="hidden" name="searchtype" id="searchtype" value="simple" />
     <input type="hidden" name="rows" id="rows" value="10" />
     <input type="hidden" name="start" id="start" value="0" />
+    <input type="hidden" name="sortfield" id="sortfield" value="score" />
+    <input type="hidden" name="sordorder" id="sortorder" value="desc" />
 </form>
 
 <a href="solrsearch/advanced"><?= $this->translate('solrsearch_title_advanced'); ?></a>
