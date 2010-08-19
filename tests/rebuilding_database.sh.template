@@ -18,6 +18,11 @@ schema_file=../db/schema/opus400.sql
 master_dir=../db/masterdata/
 test_dir=../tests/sql/
 
+# path to directory that contains test fulltexts
+fulltext_dir=../tests/fulltexts
+# path to workspace directory that contains fulltexts
+workspace_files_dir=../workspace/files
+
 #
 # end editable part
 # 
@@ -55,3 +60,10 @@ if [ -d ${test_dir} ] ; then
         ${mysql} ${dbname} < "${i}"
     done
 fi
+
+#Copy test fulltexts to workspace
+echo "create directory $workspace_files_dir"
+mkdir -p $workspace_files_dir
+echo "copy test fulltexts to $workspace_files_dir"
+cp -r $fulltext_dir/* $workspace_files_dir
+
