@@ -65,7 +65,7 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
     private $numOfHits;
 
     /**
-     * the type of search to use; must be either 'simple' or 'advanced'
+     * the type of search to use; either 'simple' or 'advanced'
      * @var string
      */
     private $searchtype;
@@ -109,10 +109,7 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
     public function searchdispatchAction() {
         $this->log->debug("Received new search request. Redirecting to search action");
 
-        $redirector = $this->_helper->getHelper('Redirector');
-        $redirector->setPrependBase(false);
-        $redirector->setGotoUrl('');
-        $redirector->setExit(false);
+        $redirector = $this->configureRedirector();
         $requestData = null;
         $url = '';
 
@@ -121,21 +118,39 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         else
             $requestData = $this->_request->getParams();
 
-        if($requestData['searchtype'] === 'simple') {
-            $url = $this->view->url(array(
+        if($requestData['searchtype'] === 'simple')
+            $url = $this->createSimpleSearchUrl($requestData);
+
+        $this->log->debug("URL is: " . $url);
+        $redirector->gotoUrl($url);
+    }
+
+    private function configureRedirector() {
+        $redirector = $this->_helper->getHelper('Redirector');
+        $redirector->setPrependBase(false);
+        $redirector->setGotoUrl('');
+        $redirector->setExit(false);
+        return $redirector;
+    }
+
+    /**
+     * Creates an URL for the simple search
+     * @param array $requestData
+     * @return string
+     */
+    private function createSimpleSearchUrl($requestData) {
+        $simpleUrl = $this->view->url(array(
                 'module'=>'solrsearch',
                 'controller'=>'solrsearch',
                 'action'=>'search',
-                'searchtype'=>  array_key_exists('searchtype', $requestData) ? $requestData['searchtype'] : 'simple',
+                'searchtype'=> array_key_exists('searchtype', $requestData) ? $requestData['searchtype'] : 'simple',
                 'start'=> array_key_exists('start', $requestData) ? $requestData['start'] : '0',
                 'rows'=> array_key_exists('rows', $requestData) ? $requestData['rows'] : '10',
                 'query'=> array_key_exists('query', $requestData) ? $requestData['query'] : '*:*',
                 'sortfield'=> array_key_exists('sortfield', $requestData) ? $requestData['sortfield'] : 'score',
                 'sortorder'=> array_key_exists('sortorder', $requestData) ? $requestData['sortorder'] : 'desc')
             , null, true);
-        }
-        $this->log->debug("URL is: " . $url);
-        $redirector->gotoUrl($url);
+        return $simpleUrl;
     }
 
     public function searchAction() {
@@ -148,11 +163,8 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
             $this->render('results');
     }
 
-    /**
-     *
-     */
     public function authorSearchAction() {
-        // TODO implement
+        // TODO implement authorSearchAction
         $this->render('nohits');
     }
 
@@ -162,12 +174,16 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
      */
     private function performSearch() {
         $this->log->debug("performing search");
-
         $this->searcher = new Opus_SolrSearch_Searcher();
         $this->resultList = $this->searcher->search($this->query);
         $this->numOfHits = $this->resultList->getNumberOfHits();
         $this->log->debug("resultlist: " . $this->resultList);
+        $this->setViewValues();
+        $this->createFacetsForView();
+        $this->log->debug("search complete");
+    }
 
+    private function setViewValues() {
         $this->view->__set("results", $this->resultList->getResults());
         $this->view->__set("searchType", $this->searchtype);
         $this->view->__set("numOfHits", $this->numOfHits);
@@ -176,19 +192,18 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $this->view->__set("numOfPages", (int) ($this->numOfHits / $this->query->getRows()) + 1);
         $this->view->__set("rows", $this->query->getRows());
         $this->view->__set("q", $this->query->getQ());
-
         // TODO für das erzeugen der arrays eine weiche einbauen um zwischen simple und advanced zu unterscheiden
         $this->view->__set("nextPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'query'=>$this->query->getQ(),'start'=>(int)($this->query->getStart()) + (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
         $this->view->__set("prevPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'query'=>$this->query->getQ(),'start'=>(int)($this->query->getStart()) - (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
         $this->view->__set("lastPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'query'=>$this->query->getQ(),'start'=>(int)($this->numOfHits / $this->query->getRows()) * $this->query->getRows(),'rows'=>$this->query->getRows()));
         $this->view->__set("firstPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'query'=>$this->query->getQ(),'start'=>'0','rows'=>$this->query->getRows()));
+    }
 
+    private function createFacetsForView() {
         $facets = $this->resultList->getFacets();
         if (array_key_exists('year', $facets)) {
             $this->view->__set("yearFacet", $facets['year']);
         }
-
-        $this->log->debug("search complete");
     }
 
     /**
