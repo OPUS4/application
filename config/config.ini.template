@@ -34,13 +34,18 @@
 
 [production]
 
+debug = 0
+
 ;DB SETTINGS
 db.params.host = 
 db.params.username = 
 db.params.password = 
 db.params.dbname =
 
-debug = 0
+;SEARCH ENGINE SETTINGS
+searchengine.solr.host = 
+searchengine.solr.port = 
+searchengine.solr.app = 
 
 ; The following is needed even if sections are empty.
 [staging : production]
