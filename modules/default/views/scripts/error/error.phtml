@@ -32,4 +32,8 @@
  * @version     $Id$
  */
 ?>
-<h1>Error</h1>
+<h1><?= $this->message ?></h1>
+
+<div class="stacktrace">
+    <?= $this->exception ?>
+</div>
