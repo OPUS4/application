@@ -419,8 +419,15 @@ if (empty($options)) {
  * Bootstrap application.
  */
 require_once 'Zend/Application.php';
-$application = new Zend_Application(APPLICATION_ENV,
-        APPLICATION_PATH . DIRECTORY_SEPARATOR . 'config' . DIRECTORY_SEPARATOR . 'config.ini');
+$application = new Zend_Application(
+    APPLICATION_ENV,
+    array(
+        "config"=>array(
+            APPLICATION_PATH . '/application/configs/application.ini',
+            APPLICATION_PATH . '/config/config.ini'
+        )
+    )
+);
 $application->bootstrap();
 
 /**

@@ -34,34 +34,6 @@
 
 [production]
 
-;PHP SETTINGS
-phpSettings.display_startup_errors = 0
-phpSettings.display_errors = 0
-; TODO verify the two settings below
-phpSettings.error_reporting = E_ALL | E_STRICT
-phpSettings.date.timezone = Europe/Berlin
-
-;ZEND SETTINGS
-includePaths.library = APPLICATION_PATH "/library"
-bootstrap.path = APPLICATION_PATH "/library/Application/Bootstrap.php"
-bootstrap.class = "Application_Bootstrap"
-appnamespace = "Application"
-autoloaderNamespaces.apache = 'Apache_'
-autoloaderNamespaces.opus = 'Opus_'
-autoloaderNamespaces.form = 'Form_'
-autoloaderNamespaces.controller = 'Controller_'
-autoloaderNamespaces.application = 'Application_'
-resources.modules[] = ""
-resources.frontController.moduleDirectory = APPLICATION_PATH "/modules"
-resources.frontController.params.displayExceptions = 0
-resources.frontController.throwExceptions=0
-resources.frontController.returnResponse=0
-resources.layout.layoutPath = APPLICATION_PATH "/public/layouts/default"
-
-
-; LOCALE SETTINGS (TODO verify)
-resources.locale.default = de
-
 ;DB SETTINGS
 db.params.host = 
 db.params.username = 
@@ -70,103 +42,9 @@ db.params.dbname =
 
 debug = 0
 
-;GENERAL SETTINGS
-theme = default ; TODO currently the theme has to be set using resources.layout.layoutPath (in ZEND SETTINGS)
-startmodule = home
-security = 0
-authenticationModule = 
-showexceptions = 0
-workspacePath = APPLICATION_PATH "/workspace"
-
-; URN SETTINGS
-; if you do not want to set URNs automatically, set these values blank or comment them out
-urn.snid.union = swb
-urn.snid.libid = 14
-urn.niss.prefix = opus
-
-;WOKSPACE-PATH SETTINGS
-path.workspace.temp = 
-
-;DELIVER SETTINGS
-deliver.target.prefix = /files
-deliver.logrequest = false
-deliver.logoutput = false
-
-;PUBLICATION SETTINGS
-publish.filetypes.allowed = pdf,txt,html,htm ; filetypes that are accepted in publication form
-
-;SEARCH ENGINE SETTINGS
-searchengine.engine = Solr ; searchengine to be used: Lucene or Solr
-searchengine.solr.host = opus4ci.zib.de
-searchengine.solr.port = 8983
-searchengine.solr.app = solr
-searchengine.pdftotext.path = /usr/bin ; path to pdftotext - needed to index PDF fulltexts
-searchengine.ps2ascii.path = /usr/bin ; path to ps2ascii - needed to index PS fulltexts
-searchengine.ps2pdf.path = /usr/bin ; path to ps2pdf - needed to index PS fulltexts
-searchengine.ps.extraction.program = ps2pdf ; program used for postscript text extraction (ps2pdf->pdftotext | ps2ascii)
-searchengine.ocr.enable = 0 ; enable/disable OCR-recognition - WARNING: this can massively slow down your indexing process! 1=enabled, 0=disabled
-searchengine.ocr.timeout = 60 ; timeout for OCR (in s), text is recognized until time limit is reached
-searchengine.ocr.pdfimages.path = /usr/bin ; path to pdfimages binary, needed to ocr pdfs.
-searchengine.ocr.ocropus.path = /usr/bin ; if OCR is enabled, insert the path to ocropus here - other OCR-programs are not supported.
-searchengine.index.maxFileSize = 0 ; maximum filesize to index (in Byte), 0 means there is no limit
-
-;SOCIAL BOOKMARKING SETTINGS
-socialBookmarking.connotea.systemTags = OPUS Test ; Tags for any document that is bookmarked via this repository
-socialBookmarking.connotea.user = ; Library User for Connotea
-socialBookmarking.connotea.password = ; Password for the library user at Connotea
-socialBookmarking.bibsonomy.sysuser = ; Library User for Bibsonomy
-socialBookmarking.bibsonomy.syspassword = ; API-Password for library user at Bibsonomy Attention: the API-Password is not the one you created for the user at Bibsonomy - you can find it in the account settings on Bibsonomy
-
-;GPG AND CHECKSUM SETTINGS
-gpg.enable.user = 0 ; EXPERIMENTAL - does not work currently! Enable/Disable GPG-Keys for users
-gpg.enable.admin = 0 ; Enable/Disable GPG-Keys for server maintainer
-gpg.path = /usr/bin/gpg ; path to gpg including gpg binary, e.g. /usr/bin/gpg
-gpg.keyring.path = /var/www ; path where the keyring is stored, e.g. /var/www - webserver must have writable access to this directory
-checksum.maxVerificationSize = 1M ; maximum filesize until that verification operations are done, 0 turns off verification operations completely, no value unlimits filesize
-
-;E-MAIL SETTINGS
-mail.opus.smtp = localhost ;E-Mail-Adresse des Admins
-mail.opus.address = ;Name des Admins
-mail.opus.name =
-
-;OAI SETTINGS
-oai.repository.name =
-oai.repository.identifier =
-oai.sample.identifier =
-oai.contactid =
-oai.max.listrecords = 100
-oai.max.listidentifiers = 200
-
-;LDAP Settings
-ldap.log_path = /var/log/opus-ldap.log
-
-ldap.admin_accounts = ; commaseperated list of usernames of LDAP authenticated users who should get access to admin
-
-ldap.server1.host = s0.foo.net
-ldap.server1.accountDomainName = foo.net
-ldap.server1.accountDomainNameShort = FOO
-ldap.server1.accountCanonicalForm = 3
-ldap.server1.username = "CN=user1,DC=foo,DC=net"
-ldap.server1.password = pass1
-ldap.server1.baseDn = "OU=Sales,DC=foo,DC=net"
-ldap.server1.bindRequiresDn = true
-
-ldapmappings.server1.firstName = "givenname"
-ldapmappings.server1.lastName = "sn"
-ldapmappings.server1.EMail = "email"
-ldapmappings.server1.personId = "tuhhLibPersonaddridnr"
-
+; The following is needed even if sections are empty.
 [staging : production]
 
 [testing : production]
-db.params.profiler = true
-db.params.showqueries = true
-db.params.maxqueries = 500
-
-phpSettings.display_startup_errors = 1
-phpSettings.display_errors = 1
 
 [development : production]
-phpSettings.display_startup_errors = 1
-phpSettings.display_errors = 1
-resources.frontController.params.displayExceptions = 1
