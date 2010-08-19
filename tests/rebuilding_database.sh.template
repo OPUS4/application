@@ -20,8 +20,10 @@ test_dir=../tests/sql/
 
 # path to directory that contains test fulltexts
 fulltext_dir=../tests/fulltexts
-# path to workspace directory that contains fulltexts
+# path to workspace directory that hosts fulltexts
 workspace_files_dir=../workspace/files
+# path to test workspace directory that hosts fulltexts
+testworkspace_files_dir=../tests/workspace/files
 
 #
 # end editable part
@@ -67,3 +69,8 @@ mkdir -p $workspace_files_dir
 echo "copy test fulltexts to $workspace_files_dir"
 cp -r $fulltext_dir/* $workspace_files_dir
 
+#Copy test fulltexts to testworkspace
+echo "create directory $testworkspace_files_dir"
+mkdir -p $testworkspace_files_dir
+echo "copy test fulltexts to $testworkspace_files_dir"
+cp -r $fulltext_dir/* $testworkspace_files_dir
