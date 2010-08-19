@@ -34,6 +34,7 @@
  * @version     $Id$
  */
 ?>
-<h1><?= $this->translate($this->title) ?></h1>
+<h1><a href="<?= $this->url(array('action' => 'index')) ?>"
+       >Languages</a> &gt; <?= $this->translate($this->title) ?></h1>
 
 <?= $this->showModel($this->entry); ?>
