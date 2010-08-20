@@ -44,10 +44,12 @@ defined('APPLICATION_PATH')
 
 define('APPLICATION_ENV', 'testing');
 
+require_once('MatheonMigration_Base.php');
+
 /**
  *
  */
-class MatheonMigration_Preprints {
+class MatheonMigration_Preprints extends MatheonMigration_Base {
 
     private $files_dir = null;
     private $dumps_dir = null;
@@ -63,77 +65,6 @@ class MatheonMigration_Preprints {
     function __construct($options) {
         $this->dumps_dir = $options['dumps-dir'];
         $this->files_dir = $options['files-dir'];
-    }
-
-    /**
-     * Load XML document
-     */
-    protected function load_xml_mysqldump($filename) {
-        echo "Loading XML mysqldump '$filename'...\n";
-
-        $xml = new DOMDocument();
-        if (true !== $xml->load($filename)) {
-            throw new Exception("Cannot load XML document $filename");
-        }
-
-        $xml_resultsets = $xml->getElementsByTagName('resultset');
-        $xml_resultset = $xml_resultsets->item(0);
-
-        if (is_null($xml_resultset)) {
-            throw new Exception("Cannot parse XML document $filename: no resultset element.");
-        }
-
-        $statement = $xml_resultset->getAttribute('statement');
-        echo "Found statement: " . $statement . "\n";
-
-        $data = array();
-        foreach ($xml_resultset->childNodes as $row) {
-            if ($row instanceof DOMElement) {
-                // $node_xpath = $row->getNodePath();
-                // $node_name = $row->tagName;
-                // echo "$node_name\n";
-
-                $row_data = array();
-                foreach ($row->childNodes AS $column) {
-                    if ($column instanceof DOMElement) {
-                        if ($column->tagName === 'field') {
-                            $key = $column->getAttribute('name');
-                            $textValue = (is_null($column->textContent) ? '' : $column->textContent);
-                            $row_data[$key] = trim($textValue);
-                        }
-                    }
-                }
-                $data[] = $row_data;
-            }
-        }
-
-        return $data;
-
-    }
-
-    protected static function array2hash($array, $hash_field) {
-        $hash = array();
-        foreach ($array as $element) {
-            $id = $element[$hash_field];
-            $hash[$id] = $element;
-        }
-
-        return $hash;
-
-    }
-
-    protected static function array2grouphash($array, $hash_field) {
-        $hash = array();
-        foreach ($array as $element) {
-            $id = $element[$hash_field];
-            if (false === array_key_exists($id, $hash)) {
-                $hash[$id] = array();
-            }
-            $hash[$id][] = $element;
-        }
-
-        return $hash;
-
     }
 
     public function load_persons($file) {
@@ -230,11 +161,11 @@ class MatheonMigration_Preprints {
     public function run() {
 
         // Load mySQL dump for preprints.
-        $preprints = self::array2hash($this->load_xml_mysqldump($this->dumps_dir . '/preprints.xml'), 'id');
+        $preprints = $this->load_xml_mysqldump($this->dumps_dir . '/preprints.xml');
         echo "found " . count($preprints) . " preprints\n";
 
         // Load mySQL dump for preprints.
-        $preprint_files = self::array2grouphash($this->load_xml_mysqldump($this->dumps_dir . '/preprint_files.xml'), 'table_id');
+        $preprint_files = self::array2hash($this->load_xml_mysqldump($this->dumps_dir . '/preprint_files.xml'), 'table_id');
         echo "found " . count($preprint_files) . " files\n";
 
         // Load mySQL dump for preprint persons.
@@ -253,13 +184,15 @@ class MatheonMigration_Preprints {
         $total = count($preprints);
 
         foreach ($preprints AS $pid => $preprint) {
+            $pid = $preprint['id'];
+
             $doc = new Opus_Document();
             $doc->setType('preprint');
             $doc->setLanguage('eng');
 
             //    <field name="id">1</field>
             $oldid = $doc->addIdentifierOld();
-            $oldid->setValue($preprint['id']);
+            $oldid->setValue($pid);
 
             //    <field name="status">2</field>
             $doc->setServerState('published');
@@ -389,11 +322,6 @@ class MatheonMigration_Preprints {
             }
             catch (Opus_Model_Exception $e) {
                 echo "failed creating document $counter/$total, current document id: serial {$preprint['serial']} ($pid)\n";
-                foreach ($matheon_document_authors[$pid] AS $mda) {
-                    echo "mda->firstName: " . $mda->getFirstName() . "\n";
-                    echo "mda->lastName: " . $mda->getLastName() . "\n";
-                    echo "\n";
-                }
             }
         }
 
