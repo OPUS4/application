@@ -108,10 +108,19 @@
     
     <tu tuid="admin_title_oailink">
       <tuv xml:lang="en">
-        <seg>OAI link</seg>
+        <seg>OAI Link Information</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>OAI Link anzeigen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_title_security">
+      <tuv xml:lang="en">
+        <seg>Access Control</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zugriffskontrolle</seg>
       </tuv>
     </tu>
    

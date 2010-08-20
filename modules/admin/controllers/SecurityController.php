@@ -31,7 +31,7 @@
  * @author      Jens Schwidder (schwidder@zib.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ * @version     $Id: IndexController.php 4656 2010-08-06 10:27:26Z schwidder $
  */
 
 /**
@@ -43,7 +43,7 @@
  * TODO could the array be generated once for each language?
  * TODO could this be made more readable (dynamic list, methods, XML)
  */
-class Admin_IndexController extends Zend_Controller_Action {
+class Admin_SecurityController extends Zend_Controller_Action {
 
     /**
      * Creates array with items for administration menu.
@@ -51,23 +51,16 @@ class Admin_IndexController extends Zend_Controller_Action {
      * @return void
      */
     public function indexAction() {
-        $this->view->title = $this->view->translate('admin_index_title');
+        $this->view->title = $this->view->translate('admin_title_security');
         // Create an array with all possible tasks for an admin.
         // Sort it depending on the language.
-        $this->view->adminTasks = array(
-            $this->view->translate('admin_title_licence') => $this->view->url(array('controller'=>'licence', 'action'=>'index'), null, false),
-            $this->view->translate('admin_title_organizational_units_show') => $this->view->url(array('controller'=>'collection', 'action' => 'show', 'role' => 1), null, false),
-            $this->view->translate('admin_title_organizational_units_edit') => $this->view->url(array('controller'=>'collection', 'action' => 'edit', 'role' => 1), null, false),
-            $this->view->translate('admin_title_collections') => $this->view->url(array('controller'=>'collection', 'action'=>'index'), null, false),
-            $this->view->translate('admin_title_person') => $this->view->url(array('controller'=>'person', 'action'=>'index'), null, false),
-            $this->view->translate('admin_title_documents') => $this->view->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'index'), 'default', true),
-            $this->view->translate('admin_title_languages') => $this->view->url(array('module' => 'admin', 'controller' => 'language', 'action' => 'index'), 'default', true),
-            $this->view->translate('admin_title_statistic') => $this->view->url(array('module' => 'admin', 'controller' => 'statistic', 'action' => 'index'), 'default', true),
-            $this->view->translate('pkm_list_keys') => $this->view->url(array('module'=>'pkm', "controller"=>"index", "action"=>"listkeys"), null, false),
-            $this->view->translate('admin_title_oailink') => $this->view->url(array('module' => 'admin', 'controller' => 'oailink', 'action' => 'index'), 'default', true),
-            $this->view->translate('admin_title_security') => $this->view->url(array('module' => 'admin', 'controller' => 'security', 'action' => 'index'), 'default', true),
-        );
-        ksort($this->view->adminTasks);
+        $securityTasks = array();
+        $securityTasks[$this->view->translate('admin_security_title_ipranges')] = $this->view->url(array('controller'=>'iprange', 'action'=>'index'), null, false);
+        $securityTasks[$this->view->translate('admin_security_title_roles')]    = $this->view->url(array('controller'=>'role',    'action'=>'index'), null, false);
+        $securityTasks[$this->view->translate('admin_security_title_accounts')] = $this->view->url(array('controller'=>'account', 'action'=>'index'), null, false);
+        ksort($securityTasks);
+        $this->view->securityTasks = $securityTasks;
     }
 
 }
+?>
