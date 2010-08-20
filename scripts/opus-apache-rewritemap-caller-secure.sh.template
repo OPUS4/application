@@ -5,7 +5,7 @@
 
 # please configure the next to lines
 PHP='/usr/bin/php5'
-MAP='/home/developer/workspace/bsz_opus_application/scripts/opus-apache-rewritemap.php'
+MAP="`dirname $0`/opus-apache-rewritemap.php"
 
 THIS_UID="`/usr/bin/id -u`"
 USER='www-data'
