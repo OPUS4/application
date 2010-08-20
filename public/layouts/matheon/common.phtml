@@ -134,7 +134,9 @@
                                                     <li><a href="http://www.matheon.de/about_us/organization.asp"  class="navi_links zusammen"><?= $this->translate('home_index_organization_label') ?></a></li>
                                                     <li><a href="http://www.matheon.de/about_us/mission.asp"  class="navi_links zusammen"><?= $this->translate('home_index_mission_label') ?></a></li>
                                                     <li><a href="http://www.matheon.de/about_us/jobs.asp"  class="navi_links zusammen">Jobs</a></li>
-                                                    <li><a href="http://www.matheon.de/about_us/alumni.asp"  class="navi_links zusammen">Alumni</a></li></ul></li>
+                                                    <li><a href="http://www.matheon.de/about_us/alumni.asp"  class="navi_links zusammen">Alumni</a></li>
+                                                </ul>
+                                            </li>
                                         </ul>
                                     </div>
                                 </td>
@@ -173,53 +175,50 @@
                                         <li><a href="http://www.matheon.de/faq/faq.asp?topic=Documents"  class="navi_links zusammen"><?= $this->translate('home_index_docs_label') ?></a></li>
                                         <li><a href="http://www.matheon.de/faq/faq.asp?topic=Project%20Data"  class="navi_links zusammen"><?= $this->translate('home_index_proj_data_label') ?></a></li>
                                         <li><a href="http://www.matheon.de/faq/faq.asp?topic=Lists"  class="navi_links zusammen"><?= $this->translate('home_index_lists_label') ?></a></li>
-                                        <li><a href="http://www.matheon.de/faq/faq.asp?topic=Login-Questions"  class="navi_links zusammen"><?= $this->translate('home_index_login_label') ?></a></li></ul></li>
+                                        <li><a href="http://www.matheon.de/faq/faq.asp?topic=Login-Questions"  class="navi_links zusammen"><?= $this->translate('home_index_login_label') ?></a></li>
+                                    </ul>
+                                </li>
                                 
                                 <li><a  href="/members/login.asp">Login</a> </li>
                             </ul>
                         </div>
                     </td>
                     <td class="tab_u tab_r" width="40" height="27">&nbsp;</td>
-                    <!--</tr>
-            </table>
-        </td>-->
     </tr>
-    <tr >
+
+    <tr>
         <td class="breadcrumb tab_l tab_u" height="27" width="40">&nbsp;</td>
-        <td class="breadcrumb tab_u tab_r"  align="left" colspan="5" height="27"><a href="http://www.matheon.de/index.asp">Home</a> &gt;&gt; <a href="http://www.matheon.de/research/index.asp"><?= $this->translate('home_index_research_label') ?></a> &gt;&gt; Preprints</td>
-        
+        <td class="breadcrumb tab_u tab_r"  align="left" colspan="5" height="27">
+            <a href="http://www.matheon.de/index.asp">Home</a> &gt;&gt;
+            <a href="http://www.matheon.de/research/index.asp">
+                                        <?= $this->translate('home_index_research_label') ?>
+            </a> &gt;&gt; Preprints
+        </td>
     </tr>
 
     <tr class="printfriendly">
         <td class="tab_l" width="40">&nbsp;</td>
         <td class="content" valign="top" width="655">
-        <!-- td class="content" valign="top" -->
-            
-            <!-- table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="700" -->
-            <table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0">
 
-                <tr style="display:none;">
-                    <td height="50">&nbsp;</td>
-                    <td height="50">
-                        <div id="header">
-                            <?= $this->menu('home') ?>
-                            <?= $this->menu('primary') ?>
-                            <?= $this->menu('secondary') ?>
-                        </div>
-                    </td>
-                </tr>
+        <table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0">
 
-                <tr>
-                    <!-- <td width="40"><?= $this->placeholder('messages') ?></td> -->
-                    <!-- <td class="content" valign="top" width="655" -->
+            <tr>
+                <div id="header">
+                    <?= $this->navigation()->menu(); ?>
+                </div>
+            </tr>
+    
+            <tr>
+                <!-- <td width="40"><?= $this->placeholder('messages') ?></td> -->
+                <!-- <td class="content" valign="top" width="655" -->
 
-                    <td class="content" valign="top">
-                        <div id="content">
-                            <?= $this->layout()->content ?>
-                        </div>
-                    </td>
-                </tr>
-            </table>
+                <td class="content" valign="top">
+                    <div id="content">
+                        <?= $this->layout()->content ?>
+                    </div>
+                </td>
+            </tr>
+        </table>
         </td>  
         <td width="31">&nbsp;</td>
         <td class="navi_links printfriendly" valign="top" width="309">
