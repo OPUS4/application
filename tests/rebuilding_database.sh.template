@@ -62,8 +62,6 @@ if [ -d ${test_dir} ] ; then
 fi
 
 #Copy test fulltexts to workspace
-echo "create directory $workspace_files_dir"
-mkdir -p $workspace_files_dir
-echo "copy test fulltexts to $workspace_files_dir"
-cp -r $fulltext_dir/* $workspace_files_dir
+mkdir -pv $workspace_files_dir
+rsync -rv --exclude=.svn $fulltext_dir/* $workspace_files_dir
 
