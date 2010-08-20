@@ -51,5 +51,11 @@ searchengine.solr.app =
 [staging : production]
 
 [testing : production]
+db.params.profiler = true
+db.params.showqueries = true
+db.params.maxqueries = 500
 
 [development : production]
+db.params.profiler = true
+db.params.showqueries = true
+db.params.maxqueries = 500
