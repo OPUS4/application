@@ -54,10 +54,49 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
     private $files_dir = null;
     private $dumps_dir = null;
 
+    /**
+     * Associative array maps user_ids to Opus_Person objects.
+     *
+     * @var array
+     */
     private $persons = array();
-    private $document_authors = array();
 
-    public function parse_msc($msc = '') {
+    /**
+     * Associative array maps preprint_ids to arrays of Opus_Person.
+     *
+     * @var array
+     */
+    private $preprint_authors = array();
+
+    /**
+     * Associative array maps preprint_ids to arrays of file-arrays.
+     *
+     * @var array
+     */
+    private $preprint_files = array();
+
+    /**
+     * Constructur.
+     *
+     * @param array $options Array with input options.
+     */
+    function __construct($options) {
+        $this->dumps_dir = $options['dumps-dir'];
+        $this->files_dir = $options['files-dir'];
+    }
+
+    /**
+     * Parses freeform MSC string and returns associative array with parsing
+     * results.  The hash contains three keys:
+     *
+     * - rest_string: string with all unparsed parts of the input.
+     * - mscs: array with all found MSC values.
+     * - msc_string_clean: string with clean and trimmed input string.
+     *
+     * @param string $msc
+     * @return array
+     */
+    public static function parse_msc($msc = '') {
 
         $msc = str_replace("\n", " ", $msc);
         $msc = str_replace("\r", " ", $msc);
@@ -82,16 +121,35 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
     }
 
     /**
-     * Constructur.
+     * Parses freeform keyword string and returns array with parsing results.
      *
-     * @param array $options Array with input options.
+     * @param string $keywords
+     * @return array
      */
-    function __construct($options) {
-        $this->dumps_dir = $options['dumps-dir'];
-        $this->files_dir = $options['files-dir'];
+    public static function parse_keywords($keywords = '') {
+
+        $keywords = str_replace("\n", " ", $keywords);
+        $keywords = str_replace("\r", " ", $keywords);
+        $keywords = str_replace("\t", " ", $keywords);
+
+        $keyword_list = array();
+        foreach (explode(",", $keywords) AS $keyword) {
+            $keyword_list[] = trim($keyword);
+        }
+
+        return $keyword_list;
     }
 
-    public function load_persons($file) {
+    /**
+     * Loads XML dump of matheon persons and creates Opus_Persons objects.
+     * The result will be stored in $this->persons, which is an associative
+     * array of (matheon_user_id => value:Opus_Person).
+     *
+     * @return void
+     */
+    public function load_preprint_persons() {
+        $file = $this->dumps_dir . '/preprint_persons.xml';
+
         foreach ($this->load_xml_mysqldump($file) AS $person) {
             $opm = new Opus_Person();
             $opm->setAcademicTitle($person['title']);
@@ -110,14 +168,19 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             $this->persons[$person['id']] = $opm;
         }
 
-        return $this->persons;
-
+        return;
     }
 
-    public function load_preprint_authors($file) {
+    /**
+     * Loads XML dump of matheon authors and creates/updates the Opus_Persons
+     * objects from $this->persons.
+     *
+     * @return void
+     */
+    public function load_preprint_authors() {
+        $file = $this->dumps_dir . '/preprint_authors.xml';
 
-        $matheon_document_authors = array();
-
+        $matheon_preprint_authors = array();
         foreach ($this->load_xml_mysqldump($file) AS $author) {
 
             $matheon_author_id = $author['author'];
@@ -167,15 +230,59 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
                 $matheon_user->setLastName("INVALID");
             }
 
-            if (!array_key_exists($matheon_preprint_id, $matheon_document_authors)) {
-                $matheon_document_authors[$matheon_preprint_id] = array();
+            if (!array_key_exists($matheon_preprint_id, $matheon_preprint_authors)) {
+                $matheon_preprint_authors[$matheon_preprint_id] = array();
             }
-            $matheon_document_authors[$matheon_preprint_id][] = $matheon_user;
+            $matheon_preprint_authors[$matheon_preprint_id][] = $matheon_user;
         }
 
-        $this->document_authors = $matheon_document_authors;
-
+        $this->preprint_authors = $matheon_preprint_authors;
+        return;
     }
+
+    /**
+     * Loads XML dump of matheon files and creates files-array by document_id.
+     *
+     * @return void
+     */
+    public function load_preprint_files() {
+        $file = $this->dumps_dir . '/preprint_files.xml';
+        $hash_field = 'table_id';
+
+        $files = array();
+        foreach ($this->load_xml_mysqldump($file) as $element) {
+            $id = $element['table_id'];
+            if (false === array_key_exists($id, $files)) {
+                $files[$id] = array();
+            }
+            $files[$id][] = $element;
+        }
+        $this->preprint_files = $files;
+        return;
+    }
+
+
+    /**
+     * Loads XML dump of matheon projects and creates array by document_id.
+     *
+     * @return void
+     */
+    public function load_preprint_projects() {
+        $file = $this->dumps_dir . '/preprint_files.xml';
+        $hash_field = 'table_id';
+
+        $files = array();
+        foreach ($this->load_xml_mysqldump($file) as $element) {
+            $id = $element['table_id'];
+            if (false === array_key_exists($id, $files)) {
+                $files[$id] = array();
+            }
+            $files[$id][] = $element;
+        }
+        $this->preprint_files = $files;
+        return;
+    }
+
 
     /**
      * Custom run method.
@@ -184,21 +291,21 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
      */
     public function run() {
 
-        // Load mySQL dump for preprints.
-        $preprints = $this->load_xml_mysqldump($this->dumps_dir . '/preprints.xml');
-        echo "found " . count($preprints) . " preprints\n";
-
-        // Load mySQL dump for preprints.
-        $preprint_files = self::array2hash($this->load_xml_mysqldump($this->dumps_dir . '/preprint_files.xml'), 'table_id');
-        echo "found " . count($preprint_files) . " files\n";
-
         // Load mySQL dump for preprint persons.
-        $this->load_persons($this->dumps_dir . '/preprint_persons.xml');
+        $this->load_preprint_persons();
         echo "found and created " . count($this->persons) . " persons\n";
 
         // Load mySQL dump for preprint authors.
-        $this->load_preprint_authors($this->dumps_dir . '/preprint_authors.xml');
-        echo "found " . count($this->document_authors) . " authors\n";
+        $this->load_preprint_authors();
+        echo "found " . count($this->preprint_authors) . " authors\n";
+
+        // Load mySQL dump for preprints.
+        $this->load_preprint_files();
+        echo "found " . count($this->preprint_files) . " files\n";
+
+        // Load mySQL dump for preprints.
+        $preprints = $this->load_xml_mysqldump($this->dumps_dir . '/preprints.xml');
+        echo "found " . count($preprints) . " preprints\n";
 
 
 
@@ -235,8 +342,8 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
 
             //    <field name="filename_ps">bkm2final.ps</field>
             //    <field name="filename_pdf">bkm2final.pdf</field>
-            if (array_key_exists($pid, $preprint_files)) {
-                foreach ($preprint_files[$pid] AS $file) {
+            if (array_key_exists($pid, $this->preprint_files)) {
+                foreach ($this->preprint_files[$pid] AS $file) {
                     $model = $doc->addFile();
                     $model->setLanguage('eng');
                     $model->setSourcePath($this->files_dir . DIRECTORY_SEPARATOR . $pid);
@@ -296,7 +403,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             //    <field name="msc" xsi:nil="true" />
             $field = $preprint['msc'];
             if ($field != '') {
-                $msc_hash = $this->parse_msc($field);
+                $msc_hash = self::parse_msc($field);
 
                 $msc_rest_string = $msc_hash['rest_string'];
                 $mscs = $msc_hash['mscs'];
@@ -316,19 +423,21 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
 
                 foreach ($mscs AS $m) {
                     $model = $doc->addSubjectMSC();
-                    $model->setValue("$m-");
+                    $model->setValue("$m");
                 }
             }
 
             //    <field name="keywords" xsi:nil="true" />
             $field = $preprint['keywords'];
             if ($field != '') {
-                $model = $doc->addSubjectUncontrolled();
-                $model->setValue($field);
+                foreach (self::parse_keywords($field) AS $k) {
+                    $model = $doc->addSubjectUncontrolled();
+                    $model->setValue($k);
+                }
             }
 
             // check for authors key...
-            if (!array_key_exists($pid, $this->document_authors)) {
+            if (!array_key_exists($pid, $this->preprint_authors)) {
                 throw new Exception("No authors for document $pid");
             }
 
@@ -337,7 +446,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             $unique_authors_array = array();
             $duplicate_authors_array = array();
 
-            foreach ($this->document_authors[$pid] AS $mda) {
+            foreach ($this->preprint_authors[$pid] AS $mda) {
                 $mda_id = $mda->store();
 
                 if (false === array_key_exists($mda_id, $unique_authors)) {
