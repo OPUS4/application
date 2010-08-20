@@ -1,0 +1,554 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+ 
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+ 
+  <body>
+  
+    <tu tuid="home_modulename">
+      <tuv xml:lang="en">
+        <seg>Home</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einstieg</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="home_index_index_actionname">
+      <tuv xml:lang="en">
+        <seg>Home</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einstieg</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="home_index_about_actionname">
+      <tuv xml:lang="en">
+        <seg>About</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Über</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="home_index_contact_actionname">
+      <tuv xml:lang="en">
+        <seg>Contact</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Kontakt</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="home_index_index_instructions">
+      <tuv xml:lang="en">
+        <seg>If you want to search for documents of the university, please
+        choose the menu "Search" where you will find several search options.If
+        you want to publish a document, please select the menu "Publish"; here
+        you can submit your document to the publication server in just a few
+        steps.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Wenn Sie nach Texten der Hochschule suchen wollen, wählen Sie bitte
+        das Menü "Suchen"; dort stehen Ihnen verschiedene Recherchemöglichkeiten
+        zur Verfügung. Wollen Sie ein Dokument publizieren, wählen Sie bitte das
+        Menü "Veröffentlichen"; mit wenigen Schritten können Sie dort Ihr
+        Dokument an den Hochschulschriftenserver übertragen.</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="home_index_index_title">
+      <tuv xml:lang="en">
+        <seg>DFG Research Center MATHEON::Preprints</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>DFG-Forschungszentrum MATHEON::Preprints</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="home_index_index_pagetitle">
+      <tuv xml:lang="en">
+        <seg>Home</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einstieg</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="home_index_index_welcome">
+      <tuv xml:lang="en">
+        <seg>The library offers to publish electronically generated and
+        qualified documents on its online publication system. This service is
+        for university members only and free of charge. After publication, the
+        texts are available worldwide on the Internet and will be archived
+        permanently by the library. The documents are indexed and made
+        accessible in library catalogues and Web search engines.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Die Bibliothek bietet allen Angehörigen der Hochschule – Lehrenden
+        und Studierenden – die Möglichkeit, elektronisch erzeugte, qualifizierte
+        Dokumente über ihr Online-Publikations-System kostenlos zu
+        veröffentlichen.  Die Texte stehen nach ihrer Veröffentlichung weltweit
+        im Internet zur Verfügung und werden von der Bibliothek dauerhaft
+        archiviert. Die Dokumente sind über Bibliothekskataloge und über die
+        Suchmaschinen des WWW erschlossen und zugänglich.</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="home_index_about_pagetitle">
+      <tuv xml:lang="en">
+        <seg>About</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Über</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="home_index_about_title">
+      <tuv xml:lang="en">
+        <seg>Lorem ipsum dolor</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Lorem ipsum dolor</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="home_index_about_text">
+      <tuv xml:lang="en">
+        <seg> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+        nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
+        sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
+        rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
+        ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing
+        elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
+        aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+        dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus
+        est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+        sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
+        dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et
+        justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
+        takimata sanctus est Lorem ipsum dolor sit amet. Duis autem vel eum
+        iriure dolor in hendrerit in vulputate velit esse molestie consequat,
+        vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et
+        iusto odio dignissim qui blandit praesent luptatum zzril delenit augue
+        duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet,
+        consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut
+        laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim
+        veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut
+        aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in
+        hendrerit in vulputate velit esse molestie consequat, vel illum dolore
+        eu feugiat nulla facilisis at vero eros et accumsan et iusto odio
+        dignissim qui blandit praesent luptatum zzril delenit augue duis dolore
+        te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend
+        option congue nihil imperdiet doming id quod mazim placerat facer.
+        </seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+        nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
+        sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
+        rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
+        ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing
+        elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
+        aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+        dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus
+        est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+        sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
+        dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et
+        justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
+        takimata sanctus est Lorem ipsum dolor sit amet. Duis autem vel eum
+        iriure dolor in hendrerit in vulputate velit esse molestie consequat,
+        vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et
+        iusto odio dignissim qui blandit praesent luptatum zzril delenit augue
+        duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet,
+        consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut
+        laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim
+        veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut
+        aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in
+        hendrerit in vulputate velit esse molestie consequat, vel illum dolore
+        eu feugiat nulla facilisis at vero eros et accumsan et iusto odio
+        dignissim qui blandit praesent luptatum zzril delenit augue duis dolore
+        te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend
+        option congue nihil imperdiet doming id quod mazim placerat facer.
+        </seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="home_index_contact_pagetitle">
+      <tuv xml:lang="en">
+        <seg>Contact</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Kontakt</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="home_index_contact_title">
+      <tuv xml:lang="en">
+        <seg>Contact us...</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nehmen Sie Kontakt mit uns auf...</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="home_index_language_label">
+      <tuv xml:lang="en">
+        <seg>Language</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sprache</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="home_index_research_label">
+      <tuv xml:lang="en">
+        <seg>Research</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Forschung</seg>
+      </tuv>
+    </tu>
+    <tu tuid="home_index_publications_label">
+      <tuv xml:lang="en">
+        <seg>Publications</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Publikationen</seg>
+      </tuv>
+    </tu>
+    <tu tuid="home_index_areas_label">
+      <tuv xml:lang="en">
+        <seg>Application Areas</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Anwendungsgebiete</seg>
+      </tuv>
+    </tu>
+	<tu tuid="home_index_projects_label">
+      <tuv xml:lang="en">
+        <seg>Projects</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Projekte</seg>
+      </tuv>
+    </tu>
+	<tu tuid="home_index_fields_label">
+      <tuv xml:lang="en">
+        <seg>Mathematical Fields</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Mathematische<br/>Schwerpunktsbereiche</seg>
+      </tuv>
+    </tu>
+     <tu tuid="home_index_cooperations_label">
+      <tuv xml:lang="en">
+        <seg>Cooperations</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Kooperationen</seg>
+      </tuv>
+    </tu>	
+	<tu tuid="home_index_library_label">
+      <tuv xml:lang="en">
+        <seg>Library</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bibliothek</seg>
+      </tuv>
+    </tu>
+     <tu tuid="home_index_contact_label">
+      <tuv xml:lang="en">
+        <seg>Contact</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Kontakt</seg>
+      </tuv>
+     </tu>
+     <tu tuid="home_index_branche_label">
+      <tuv xml:lang="en">
+        <seg>Your Industry</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Ihre Branche</seg>
+      </tuv>
+    </tu>	
+     <tu tuid="home_index_services_label">
+      <tuv xml:lang="en">
+        <seg>Our Services</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Unsere Leistungen</seg>
+      </tuv>
+    </tu>	
+     <tu tuid="home_index_expertise_label">
+      <tuv xml:lang="en">
+        <seg>Our Expertise</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Unsere Expertise</seg>
+      </tuv>
+    </tu>
+        <tu tuid="home_index_referenzen_label">
+      <tuv xml:lang="en">
+        <seg>References</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Referenzen</seg>
+      </tuv>
+    </tu>	
+        <tu tuid="home_index_spin-offs_label">
+      <tuv xml:lang="en">
+        <seg>Spin-Offs</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Spin-Offs</seg>
+      </tuv>
+    </tu>	
+         <tu tuid="home_index_software_patente_label">
+      <tuv xml:lang="en">
+        <seg>Software and Patents</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Software and Patente</seg>
+      </tuv>
+    </tu>		
+     <tu tuid="home_index_jobs_label">
+      <tuv xml:lang="en">
+        <seg>Job Market</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Stellenbörse</seg>
+      </tuv>
+    </tu>	
+        <tu tuid="home_index_events_label">
+      <tuv xml:lang="en">
+        <seg>Events and Activities</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Veranstaltungen</seg>
+      </tuv>
+    </tu>	
+        <tu tuid="home_index_internal_label">
+      <tuv xml:lang="en">
+        <seg>Internal Services</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Interner Service</seg>
+      </tuv>
+    </tu>
+        <tu tuid="home_index_schule_label">
+      <tuv xml:lang="en">
+        <seg>School</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Schule</seg>
+      </tuv>
+    </tu>
+        <tu tuid="home_index_kalender_label">
+      <tuv xml:lang="en">
+        <seg>Digital Advent Calendar</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Mathekalender</seg>
+      </tuv>
+    </tu>	
+    <tu tuid="home_index_summerschool_label">
+      <tuv xml:lang="en">
+        <seg>Summer Schools</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sommerschulen</seg>
+      </tuv>
+    </tu>
+        <tu tuid="home_index_training_label">
+      <tuv xml:lang="en">
+        <seg>Training for Theachers</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Lehrerfortbildung</seg>
+      </tuv>
+    </tu>
+	<tu tuid="home_index_activities_label">
+      <tuv xml:lang="en">
+        <seg>Activities</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Aktivitäten</seg>
+      </tuv>
+    </tu>
+    <tu tuid="home_index_yearofmathematics_label">
+      <tuv xml:lang="en">
+        <seg>Year of Mathematics</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Jahr der Mathematik</seg>
+      </tuv>
+    </tu>
+    <tu tuid="home_index_landofideas_label">
+      <tuv xml:lang="en">
+        <seg>Land of Ideas</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Land der Ideen</seg>
+      </tuv>
+    </tu>
+     <tu tuid="home_index_mediaprise_label">
+      <tuv xml:lang="en">
+        <seg>Matheon Media Prise</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Matehon Medien Preis</seg>
+      </tuv>
+    </tu>
+   <tu tuid="home_index_booklet_label">
+      <tuv xml:lang="en">
+        <seg>New Matheon Booklet</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Matheon Broschüre</seg>
+      </tuv>
+    </tu>
+<tu tuid="home_index_langenacht_label">
+      <tuv xml:lang="en">
+        <seg>Long Night 2009</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Lange Nacht 2009</seg>
+      </tuv>
+    </tu>
+   <tu tuid="home_index_aboutus_label">
+      <tuv xml:lang="en">
+        <seg>About us</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Über uns</seg>
+      </tuv>
+    </tu>
+   <tu tuid="home_index_people_label">
+      <tuv xml:lang="en">
+        <seg>People</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Personen</seg>
+      </tuv>
+    </tu>
+   <tu tuid="home_index_visitors_label">
+      <tuv xml:lang="en">
+        <seg>Visitor Services</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Besucherinformation</seg>
+      </tuv>
+    </tu>
+   <tu tuid="home_index_organization_label">
+      <tuv xml:lang="en">
+        <seg>Organization</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Organisation</seg>
+      </tuv>
+    </tu>
+   <tu tuid="home_index_mission_label">
+      <tuv xml:lang="en">
+        <seg>Mission, Vision and History</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zielsetzung</seg>
+      </tuv>
+    </tu>
+    <tu tuid="home_index_press_label">
+      <tuv xml:lang="en">
+        <seg>Press</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Presse</seg>
+      </tuv>
+    </tu>
+    <tu tuid="home_index_releases_label">
+      <tuv xml:lang="en">
+        <seg>Press releases</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Pressemitteilungen</seg>
+      </tuv>
+    </tu>
+    <tu tuid="home_index_review_label">
+      <tuv xml:lang="en">
+        <seg>Press review</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Pressespiegel</seg>
+      </tuv>
+    </tu>
+    <tu tuid="home_index_sitesearch_label">
+      <tuv xml:lang="en">
+        <seg>Search</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Suche</seg>
+      </tuv>
+    </tu>
+   <tu tuid="home_index_cogniazances_label">
+      <tuv xml:lang="en">
+        <seg>Contacts/Cognizances<br/>/Organization</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Kontakte/Zuständigkeiten<br/>Organisation</seg>
+      </tuv>
+    </tu>
+    <tu tuid="home_index_docs_label">
+      <tuv xml:lang="en">
+        <seg>Documents</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokumente</seg>
+      </tuv>
+    </tu>
+    <tu tuid="home_index_general_questions_label">
+      <tuv xml:lang="en">
+        <seg>General Questions</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Allgemeine Fragen</seg>
+      </tuv>
+    </tu>
+    <tu tuid="home_index_scientific_activities_label">
+      <tuv xml:lang="en">
+        <seg>Scientific Activities</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Wissenschaftliche Aktivitäten</seg>
+      </tuv>
+    </tu>
+    <tu tuid="home_index_proj_data_label">
+      <tuv xml:lang="en">
+        <seg>Project Data</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Projektdaten</seg>
+      </tuv>
+    </tu>
+    <tu tuid="home_index_lists_label">
+      <tuv xml:lang="en">
+        <seg>Lists</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Listen</seg>
+      </tuv>
+    </tu>
+    <tu tuid="home_index_login_label">
+      <tuv xml:lang="en">
+        <seg>Login-Questions</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Login-Fragen</seg>
+      </tuv>
+    </tu>
+
+    </body>
+  
+</tmx>
