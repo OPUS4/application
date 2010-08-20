@@ -56,17 +56,12 @@
         $scoreDescUrl = $this->firstPage;
         $scoreDescUrl['sortfield'] = 'score';
         $scoreDescUrl['sortorder'] = 'desc';
-
-        $scoreAscUrl = $this->firstPage;
-        $scoreAscUrl['sortfield'] = 'score';
-        $scoreAscUrl['sortorder'] = 'asc';
     ?>
 
     Sortieren nach
     <a href="<?= $this->url($yearAscUrl) ?>">Jahr (aufsteigend)</a>,
     <a href="<?= $this->url($yearDescUrl) ?>">Jahr (absteigend)</a>,
-    <a href="<?= $this->url($scoreAscUrl) ?>">Relevanz (aufsteigend)</a>
-    <a href="<?= $this->url($scoreDescUrl) ?>">Relevanz (absteigend)</a>
+    <a href="<?= $this->url($scoreDescUrl) ?>">Relevanz</a>
 </div>
 
 <div id="facets">
