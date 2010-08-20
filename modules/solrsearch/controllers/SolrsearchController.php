@@ -72,13 +72,12 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
 
     /**
      *
-     * @var Opis_SolrSearch_ResultList
+     * @var Opus_SolrSearch_ResultList
      */
     private $resultList;
 
-    public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array()) {
-        parent::__construct($request, $response, $invokeArgs);
-        $this->log = Zend_Registry::getInstance()->get("Zend_Log");
+    public function  init() {
+        $this->log = Zend_Registry::get('Zend_Log');
     }
 
     /**
@@ -236,7 +235,7 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $this->view->__set("numOfPages", (int) ($this->numOfHits / $this->query->getRows()) + 1);
         $this->view->__set("rows", $this->query->getRows());
         $this->view->__set("q", $this->query->getQ());
-        if(isset($this->query->getDefaultOperator())) $this->view->__set("defaultoperator", $this->query->getDefaultOperator());
+        $this->view->__set("defaultoperator", $this->query->getDefaultOperator());
 
         if($this->searchtype === 'simple') {
             $this->view->__set("nextPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'query'=>$this->query->getQ(),'start'=>(int)($this->query->getStart()) + (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
@@ -267,7 +266,7 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
     private function buildQuery($request) {
 
         $data = null;
-        
+
         if ($request->isPost() === true) {
             $this->log->debug("Request is post. Extracting data.");
             $data = $request->getPost();
@@ -326,7 +325,7 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
 
     private function createAdvancedSearchQuery($data) {
         $this->log->debug("constructing query for advanced search");
-        
+
         $start = array_key_exists('start', $data) ? $data['start'] : '0';
         $rows = array_key_exists('rows', $data) ? $data['rows'] : '10';
         $sortfield = array_key_exists('sortfield', $data) ? $data['sortfield'] : 'score';
