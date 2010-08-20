@@ -35,7 +35,7 @@ include ("jpgraph/jpgraph_bar.php");
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class StatisticGraph {
+class Statistic_Model_StatisticGraph {
 
     protected $dataPdf = null;
     protected $dataFrontdoor = null;

@@ -35,7 +35,7 @@ include ("jpgraph/jpgraph_bar.php");
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class StatisticGraphThumb {
+class Statistic_Model_StatisticGraphThumb {
 
     protected $data = null;
     protected $width = 35;

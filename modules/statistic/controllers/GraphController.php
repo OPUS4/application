@@ -82,7 +82,7 @@ class Statistic_GraphController extends Zend_Controller_Action {
         ksort($dataPdf);
         ksort($dataFrontdoor);
 
-        $graph = new StatisticGraph($this->view->translate('graph_year_title'), $dataPdf, $dataFrontdoor);
+        $graph = new Statistic_Model_StatisticGraph($this->view->translate('graph_year_title'), $dataPdf, $dataFrontdoor);
         $graph->setXAxisTitle($this->view->translate('graph_year_xaxis'));
         $graph->setYAxisTitle($this->view->translate('graph_yaxis'));
         $graph->setLegendFilesLabel($this->view->translate('graph_legend_files'));
@@ -120,7 +120,7 @@ class Statistic_GraphController extends Zend_Controller_Action {
         ksort($dataPdf);
         ksort($dataFrontdoor);
 
-        $graph = new StatisticGraph($this->view->translate('graph_month_title'), $dataPdf, $dataFrontdoor);
+        $graph = new Statistic_Model_StatisticGraph($this->view->translate('graph_month_title'), $dataPdf, $dataFrontdoor);
         $graph->setXAxisTitle($this->view->translate('graph_month_xaxis'));
         $graph->setYAxisTitle($this->view->translate('graph_yaxis'));
         $graph->setLegendFilesLabel($this->view->translate('graph_legend_files'));
@@ -148,7 +148,7 @@ class Statistic_GraphController extends Zend_Controller_Action {
         //TODO maybe there is a more elegant way to do this!?
         $layoutPath = $this->view->layout()->getLayoutPath();
 
-        $graph = new StatisticGraphThumb(array(90,150,30), $layoutPath . '/img/statistics_bg.jpg');
+        $graph = new Statistic_Model_StatisticGraphThumb(array(90,150,30), $layoutPath . '/img/statistics_bg.jpg');
         $graph->drawGraph();
 
     }

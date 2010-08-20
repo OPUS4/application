@@ -34,7 +34,7 @@
  */
 
 
-class Test extends Zend_Form {
+class Statistic_Form_Test extends Zend_Form {
     public $elementDecorators = array(
         'ViewHelper',
         'Errors',
