@@ -25,11 +25,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    View
+ * @category    View, SolrSearch
  * @author      Julian Heise <heise@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ * @version     $Id:$
  */
 
 /**
@@ -181,6 +181,18 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         if(isset($data['year']) && $data['year'] != '')
             $urlArray['year'] = $data['year'];
 
+        if(isset($data['authormodifier']) && $data['authormodifier'] != '')
+            $urlArray['authormodifier'] = $data['authormodifier'];
+
+        if(isset($data['titlemodifier']) && $data['titlemodifier'] != '')
+            $urlArray['titlemodifier'] = $data['titlemodifier'];
+
+        if(isset($data['abstractmodifier']) && $data['abstractmodifier'] != '')
+            $urlArray['abstractmodifier'] = $data['abstractmodifier'];
+
+        if(isset($data['yearmodifier']) && $data['yearmodifier'] != '')
+            $urlArray['yearmodifier'] = $data['yearmodifier'];
+
         $advancedUrl = $this->view->url($urlArray, null, true);
         return $advancedUrl;
     }
@@ -224,11 +236,20 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $this->view->__set("numOfPages", (int) ($this->numOfHits / $this->query->getRows()) + 1);
         $this->view->__set("rows", $this->query->getRows());
         $this->view->__set("q", $this->query->getQ());
-        // TODO für das erzeugen der arrays eine weiche einbauen um zwischen simple und advanced zu unterscheiden
-        $this->view->__set("nextPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'query'=>$this->query->getQ(),'start'=>(int)($this->query->getStart()) + (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
-        $this->view->__set("prevPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'query'=>$this->query->getQ(),'start'=>(int)($this->query->getStart()) - (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
-        $this->view->__set("lastPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'query'=>$this->query->getQ(),'start'=>(int)($this->numOfHits / $this->query->getRows()) * $this->query->getRows(),'rows'=>$this->query->getRows()));
-        $this->view->__set("firstPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'query'=>$this->query->getQ(),'start'=>'0','rows'=>$this->query->getRows()));
+        if(isset($this->query->getDefaultOperator())) $this->view->__set("defaultoperator", $this->query->getDefaultOperator());
+
+        if($this->searchtype === 'simple') {
+            $this->view->__set("nextPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'query'=>$this->query->getQ(),'start'=>(int)($this->query->getStart()) + (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
+            $this->view->__set("prevPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'query'=>$this->query->getQ(),'start'=>(int)($this->query->getStart()) - (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
+            $this->view->__set("lastPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'query'=>$this->query->getQ(),'start'=>(int)($this->numOfHits / $this->query->getRows()) * $this->query->getRows(),'rows'=>$this->query->getRows()));
+            $this->view->__set("firstPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'query'=>$this->query->getQ(),'start'=>'0','rows'=>$this->query->getRows()));
+        } else if($this->searchtype === 'advanced') {
+            // FIXME create correct URLs
+            $this->view->__set("nextPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'start'=>(int)($this->query->getStart()) + (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
+            $this->view->__set("prevPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'start'=>(int)($this->query->getStart()) - (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
+            $this->view->__set("lastPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'start'=>(int)($this->numOfHits / $this->query->getRows()) * $this->query->getRows(),'rows'=>$this->query->getRows()));
+            $this->view->__set("firstPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'start'=>'0','rows'=>$this->query->getRows()));
+        }
     }
 
     private function createFacetsForView() {
@@ -304,7 +325,6 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
     }
 
     private function createAdvancedSearchQuery($data) {
-        // TODO implement
         $this->log->debug("constructing query for advanced search");
         
         $start = array_key_exists('start', $data) ? $data['start'] : '0';
@@ -316,17 +336,21 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $title = array_key_exists('title', $data) ? $data['title'] : ''; // FIXME sprache beachten
         $year = array_key_exists('year', $data) ? $data['year'] : '';
         $defaultOperator = array_key_exists('defaultoperator', $data) ? $data['defaultoperator'] : 'AND';
+        $authormodifier = array_key_exists('authormodifier', $data) ? $data['authormodifier'] : '+';
+        $abstractmodifier = array_key_exists('abstractmodifier', $data) ? $data['abstractmodifier'] : '+';
+        $titlemodifier = array_key_exists('titlemodifier', $data) ? $data['titlemodifier'] : '+';
+        $yearmodifier = array_key_exists('yearmodifier', $data) ? $data['yearmodifier'] : '+';
 
         $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::ADVANCED);
         $query->setStart($start);
         $query->setRows($rows);
         $query->setSortField($sortfield);
         $query->setSortOrder($sortorder);
-//        $quety->setDefaultOperator($defaultOperator);
-        if($author != '') $query->setAuthor($author);
-        if($abstract != '') $query->setAbstractDeu($abstract);
-        if($title != '') $query->setTitleDeu($title);
-        if($year != '') $query->setYear($year);
+        $query->setDefaultOperator($defaultOperator);
+        if($author != '') $query->setField('author', $author, $authormodifier);
+        if($abstract != '') $query->setField('abstract_deu', $abstract, $abstractmodifier);
+        if($title != '') $query->setField('title_deu', $title, $titlemodifier);
+        if($year != '') $query->setField('year', $year, $yearmodifier);
 
         if(isset($data['yearfq'])) {
             $this->log->debug("year filter query is set to: ".$data['yearfq']);
@@ -337,6 +361,5 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
 
         return $query;
     }
-
 }
 ?>
