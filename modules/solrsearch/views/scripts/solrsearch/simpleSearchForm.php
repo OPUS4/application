@@ -46,4 +46,4 @@
     <input type="hidden" name="sordorder" id="sortorder" value="desc" />
 </form>
 
-<a href="solrsearch/advanced"><?= $this->translate('solrsearch_title_advanced'); ?></a>
+<a href="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'advanced'),null,true); ?>"><?= $this->translate('solrsearch_title_advanced'); ?></a>

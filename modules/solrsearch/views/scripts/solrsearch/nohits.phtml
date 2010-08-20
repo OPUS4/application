@@ -36,7 +36,8 @@
 <?php
     if($this->searchType === 'simple')
         include('simpleSearchForm.php');
-    // TODO include advanced search form
+    if($this->searchType === 'advanced')
+        include('advancedSearchForm');
 ?>
 
 <p>Die Suche ergab keine Treffer</p>

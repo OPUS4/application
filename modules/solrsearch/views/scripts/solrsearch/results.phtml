@@ -37,6 +37,8 @@
 <?php
     if($this->searchType === 'simple')
         include('simpleSearchForm.php');
+    else if($this->searchType === 'advanced')
+        include('advancedSearchForm.php');
     // TODO include advanced search form
 ?>
 
@@ -73,7 +75,7 @@
             <?php foreach ($this->yearFacet as $facetItem) : ?>
                 <?php
                     $yearfq = $this->firstPage;
-                    $yearfq['year'] = $facetItem->getText();
+                    $yearfq['yearfq'] = $facetItem->getText();
                 ?>
                 <li><a href="<?= $this->url($yearfq) ?>"><?= $facetItem->getText() ?></a> (<?= $facetItem->getCount() ?>)</li>
             <?php endforeach ?>

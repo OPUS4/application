@@ -120,6 +120,8 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
 
         if($requestData['searchtype'] === 'simple')
             $url = $this->createSimpleSearchUrl($requestData);
+        else if($requestData['searchtype'] === 'advanced')
+            $url = $this->createAdvancedSearchUrl($requestData);
 
         $this->log->debug("URL is: " . $url);
         $redirector->gotoUrl($url);
@@ -135,22 +137,52 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
 
     /**
      * Creates an URL for the simple search
-     * @param array $requestData
+     * @param array $data
      * @return string
      */
-    private function createSimpleSearchUrl($requestData) {
+    private function createSimpleSearchUrl($data) {
         $simpleUrl = $this->view->url(array(
                 'module'=>'solrsearch',
                 'controller'=>'solrsearch',
                 'action'=>'search',
-                'searchtype'=> array_key_exists('searchtype', $requestData) ? $requestData['searchtype'] : 'simple',
-                'start'=> array_key_exists('start', $requestData) ? $requestData['start'] : '0',
-                'rows'=> array_key_exists('rows', $requestData) ? $requestData['rows'] : '10',
-                'query'=> array_key_exists('query', $requestData) ? $requestData['query'] : '*:*',
-                'sortfield'=> array_key_exists('sortfield', $requestData) ? $requestData['sortfield'] : 'score',
-                'sortorder'=> array_key_exists('sortorder', $requestData) ? $requestData['sortorder'] : 'desc')
+                'searchtype'=> array_key_exists('searchtype', $data) ? $data['searchtype'] : 'simple',
+                'start'=> array_key_exists('start', $data) ? $data['start'] : '0',
+                'rows'=> array_key_exists('rows', $data) ? $data['rows'] : '10',
+                'query'=> array_key_exists('query', $data) ? $data['query'] : '*:*',
+                'sortfield'=> array_key_exists('sortfield', $data) ? $data['sortfield'] : 'score',
+                'sortorder'=> array_key_exists('sortorder', $data) ? $data['sortorder'] : 'desc')
             , null, true);
         return $simpleUrl;
+    }
+
+    private function createAdvancedSearchUrl($data) {
+
+        $urlArray = array(
+                'module'=>'solrsearch',
+                'controller'=>'solrsearch',
+                'action'=>'search',
+                'searchtype'=> array_key_exists('searchtype', $data) ? $data['searchtype'] : 'simple',
+                'start'=> array_key_exists('start', $data) ? $data['start'] : '0',
+                'rows'=> array_key_exists('rows', $data) ? $data['rows'] : '10',
+                'sortfield'=> array_key_exists('sortfield', $data) ? $data['sortfield'] : 'score',
+                'sortorder'=> array_key_exists('sortorder', $data) ? $data['sortorder'] : 'desc',
+                'defaultoperator'=>array_key_exists('defaultoperator', $data) ? $data['defaultoperator'] : 'AND'
+            );
+
+        if(isset($data['author']) && $data['author'] != '')
+            $urlArray['author'] = $data['author'];
+
+        if(isset($data['title']) && $data['title'] != '')
+            $urlArray['title'] = $data['title'];
+
+        if(isset($data['abstract']) && $data['abstract'] != '')
+            $urlArray['abstract'] = $data['abstract'];
+
+        if(isset($data['year']) && $data['year'] != '')
+            $urlArray['year'] = $data['year'];
+
+        $advancedUrl = $this->view->url($urlArray, null, true);
+        return $advancedUrl;
     }
 
     public function searchAction() {
@@ -261,9 +293,9 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $query->setSortField($sortfield);
         $query->setSortOrder($sortorder);
 
-        if(isset($data['year'])) {
-            $this->log->debug("year filter query is set to: ".$data['year']);
-            $query->addFilterQuery("year:".$data['year']);
+        if(isset($data['yearfq'])) {
+            $this->log->debug("year filter query is set to: ".$data['yearfq']);
+            $query->addFilterQuery("year:".$data['yearfq']);
         }
 
         $this->log->debug("Query $query complete");
@@ -273,7 +305,37 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
 
     private function createAdvancedSearchQuery($data) {
         // TODO implement
-        return null;
+        $this->log->debug("constructing query for advanced search");
+        
+        $start = array_key_exists('start', $data) ? $data['start'] : '0';
+        $rows = array_key_exists('rows', $data) ? $data['rows'] : '10';
+        $sortfield = array_key_exists('sortfield', $data) ? $data['sortfield'] : 'score';
+        $sortorder = array_key_exists('sortorder', $data) ? $data['sortorder'] : 'desc';
+        $author = array_key_exists('author', $data) ? $data['author'] : '';
+        $abstract = array_key_exists('abstract', $data) ? $data['abstract'] : ''; // FIXME sprache beachten
+        $title = array_key_exists('title', $data) ? $data['title'] : ''; // FIXME sprache beachten
+        $year = array_key_exists('year', $data) ? $data['year'] : '';
+        $defaultOperator = array_key_exists('defaultoperator', $data) ? $data['defaultoperator'] : 'AND';
+
+        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::ADVANCED);
+        $query->setStart($start);
+        $query->setRows($rows);
+        $query->setSortField($sortfield);
+        $query->setSortOrder($sortorder);
+//        $quety->setDefaultOperator($defaultOperator);
+        if($author != '') $query->setAuthor($author);
+        if($abstract != '') $query->setAbstractDeu($abstract);
+        if($title != '') $query->setTitleDeu($title);
+        if($year != '') $query->setYear($year);
+
+        if(isset($data['yearfq'])) {
+            $this->log->debug("year filter query is set to: ".$data['yearfq']);
+            $query->addFilterQuery("year:".$data['yearfq']);
+        }
+
+        $this->log->debug("Query $query complete");
+
+        return $query;
     }
 
 }
