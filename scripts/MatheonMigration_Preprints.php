@@ -76,6 +76,13 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
     private $preprint_files = array();
 
     /**
+     * Associative array maps preprint_ids to arrays of project-arrays.
+     *
+     * @var array
+     */
+    private $preprint_projects = array();
+
+    /**
      * Constructur.
      *
      * @param array $options Array with input options.
@@ -247,17 +254,8 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
      */
     public function load_preprint_files() {
         $file = $this->dumps_dir . '/preprint_files.xml';
-        $hash_field = 'table_id';
-
-        $files = array();
-        foreach ($this->load_xml_mysqldump($file) as $element) {
-            $id = $element['table_id'];
-            if (false === array_key_exists($id, $files)) {
-                $files[$id] = array();
-            }
-            $files[$id][] = $element;
-        }
-        $this->preprint_files = $files;
+        $mysqldump = $this->load_xml_mysqldump($file);
+        $this->preprint_files = $this->array2hash($mysqldump, 'table_id');
         return;
     }
 
@@ -268,18 +266,9 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
      * @return void
      */
     public function load_preprint_projects() {
-        $file = $this->dumps_dir . '/preprint_files.xml';
-        $hash_field = 'table_id';
-
-        $files = array();
-        foreach ($this->load_xml_mysqldump($file) as $element) {
-            $id = $element['table_id'];
-            if (false === array_key_exists($id, $files)) {
-                $files[$id] = array();
-            }
-            $files[$id][] = $element;
-        }
-        $this->preprint_files = $files;
+        $file = $this->dumps_dir . '/preprint_projects.xml';
+        $mysqldump = $this->load_xml_mysqldump($file);
+        $this->preprint_projects = $this->array2hash($mysqldump, 'id');
         return;
     }
 
@@ -302,6 +291,10 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
         // Load mySQL dump for preprints.
         $this->load_preprint_files();
         echo "found " . count($this->preprint_files) . " files\n";
+
+        // Load mySQL dump for preprint projects.
+        $this->load_preprint_projects();
+        echo "found and created " . count($this->persons) . " persons\n";
 
         // Load mySQL dump for preprints.
         $preprints = $this->load_xml_mysqldump($this->dumps_dir . '/preprints.xml');
