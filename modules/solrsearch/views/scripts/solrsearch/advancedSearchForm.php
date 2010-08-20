@@ -38,18 +38,18 @@
         <legend>Allgemeine Suchoptionen</legend>
         <label for="default_operator">Suchergebnisse enthalten</label>
         <select name="defaultoperator" id="default_operator">
-            <option value="AND" >alle Begriffe</option>
-            <option value="OR" >mindestens einen Begriff</option>
+            <option value="AND" <?= isset($this->defaultoperator) && $this->defaultoperator === 'AND' ? 'selected="true"' : '' ?>>alle Begriffe</option>
+            <option value="OR" <?= isset($this->defaultoperator) && $this->defaultoperator === 'OR' ? 'selected="true"' : '' ?>>mindestens einen Begriff</option>
         </select>
 
         <br/>
 
-        <label for="hits_per_page">Treffer pro Seite</label>
-        <select name="hits_per_page" id="hits_per_page">
-            <option value="10">10</option>
-            <option value="20">20</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
+        <label for="rows">Treffer pro Seite</label>
+        <select name="rows" id="rows">
+            <option value="10" <?= $this->rows === '10' || !isset($this->rows)? 'selected="true"' : '' ?>>10</option>
+            <option value="20" <?= $this->rows === '20' ? 'selected="true"' : '' ?>>20</option>
+            <option value="50" <?= $this->rows === '50' ? 'selected="true"' : '' ?>>50</option>
+            <option value="100" <?= $this->rows === '100' ? 'selected="true"' : '' ?>>100</option>
         </select>
     </fieldset>
 
@@ -62,12 +62,24 @@
                     <label for="author">Autor</label>
                 </td>
                 <td>
+                    <select name="authormodifier">
+                        <option value="+">enth&auml;lt</option>
+                        <option value="-">enth&auml;lt nicht</option>
+                    </select>
+                </td>
+                <td>
                     <input type="text" id="author" name="author" value="" />
                 </td>
             </tr>
             <tr>
                 <td>
                     <label for="title">Titel</label>
+                </td>
+                <td>
+                    <select name="titlemodifier">
+                        <option value="+">enth&auml;lt</option>
+                        <option value="-">enth&auml;lt nicht</option>
+                    </select>
                 </td>
                 <td>
                     <input type="text" id="title" name="title" value="" />
@@ -78,12 +90,24 @@
                     <label for="abstract">Volltext</label>
                 </td>
                 <td>
+                    <select name="abstractmodifier">
+                        <option value="+">enth&auml;lt</option>
+                        <option value="-">enth&auml;lt nicht</option>
+                    </select>
+                </td>
+                <td>
                     <input type="text" id="abstract" name="abstract" value="" />
                 </td>
             </tr>
             <tr>
                 <td>
                     <label for="year">Erscheinungsjahr</label>
+                </td>
+                <td>
+                    <select name="yearmodifier">
+                        <option value="+">enth&auml;lt</option>
+                        <option value="-">enth&auml;lt nicht</option>
+                    </select>
                 </td>
                 <td>
                     <input type="text" id="year" name="year" value="" />
