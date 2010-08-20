@@ -476,20 +476,6 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
 }
 
 /**
- * Parse options.
- */
-$short_options = "";
-$long_options = array(
-    "dumps-dir:",
-    "files-dir:",
-);
-$options = getopt("", $long_options);
-
-if (empty($options)) {
-    echo "required options: --files-dir=./files/ --dumps-dir=./dumps/ \n";
-}
-
-/**
  * Bootstrap application.
  */
 require_once 'Zend/Application.php';
@@ -503,6 +489,20 @@ $application = new Zend_Application(
     )
 );
 $application->bootstrap();
+
+/**
+ * Parse options.
+ */
+$short_options = "";
+$long_options = array(
+    "dumps-dir:",
+    "files-dir:",
+);
+$options = getopt("", $long_options);
+
+if (empty($options)) {
+    echo "required options: --files-dir=./files/ --dumps-dir=./dumps/ \n";
+}
 
 /**
  * Run import script.
