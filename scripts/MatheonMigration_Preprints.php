@@ -272,6 +272,9 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             //    <field name="msc" xsi:nil="true" />
             $field = $preprint['msc'];
             if ($field != '') {
+                // $msc_array = explode($delimiter, $string);
+                echo "msc: $field\n";
+
                 $model = $doc->addSubjectMSC();
                 $model->setValue($field);
             }
