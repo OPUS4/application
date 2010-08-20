@@ -57,6 +57,30 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
     private $persons = array();
     private $document_authors = array();
 
+    public function parse_msc($msc = '') {
+
+        $msc = str_replace("\n", " ", $msc);
+        $msc = str_replace("\r", " ", $msc);
+        $msc = str_replace("\t", " ", $msc);
+        $msc = str_replace("(IGNORED)", " ", $msc);
+        $msc = trim ($msc);
+        $msc_string_clean = $msc;
+
+        $mscs = array();
+        preg_match_all("/[0-9][0-9]([A-Z-][0-9][0-9]|-XX)/i", $msc, $mscs);
+        $mscs = $mscs[0];
+
+        foreach ($mscs AS $m) {
+            $msc = str_replace($m, " ", $msc);
+        }
+
+        return array(
+            'rest_string'       => trim(preg_replace("/(^[ ,;\.]+|[ ,;\.]+$)/", " ", $msc)),
+            'mscs'              => $mscs,
+            'msc_string_clean'  => $msc_string_clean,
+        );
+    }
+
     /**
      * Constructur.
      *
@@ -272,11 +296,28 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             //    <field name="msc" xsi:nil="true" />
             $field = $preprint['msc'];
             if ($field != '') {
-                // $msc_array = explode($delimiter, $string);
-                echo "msc: $field\n";
+                $msc_hash = $this->parse_msc($field);
 
-                $model = $doc->addSubjectMSC();
-                $model->setValue($field);
+                $msc_rest_string = $msc_hash['rest_string'];
+                $mscs = $msc_hash['mscs'];
+                $msc_string_clean = $msc_hash['msc_string_clean'];
+
+                if (count($mscs) > 0) {
+                    if ($msc_rest_string != '') {
+                        echo "failed to parse msc string:\n";
+                        echo "\tcleaned string: '$msc_string_clean'\n";
+                        echo "\tfound mscs: ('" . implode("','", $mscs) . "')\n";
+                        echo "\tunparsed: '$msc_rest_string'\n";
+                    }
+                    else {
+                        // echo "successfully parsed mscs: ('" . implode("','", $mscs) . "')\n";
+                    }
+                }
+
+                foreach ($mscs AS $m) {
+                    $model = $doc->addSubjectMSC();
+                    $model->setValue("$m-");
+                }
             }
 
             //    <field name="keywords" xsi:nil="true" />
@@ -321,10 +362,10 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             $counter++;
             try {
                 $docid = $doc->store();
-                echo "created $counter/$total documents, current document id: $docid($pid)\n";
+                echo "created $counter/$total documents -- opus_id: $docid, serial: {$preprint['serial']}, pid: $pid\n";
             }
             catch (Opus_Model_Exception $e) {
-                echo "failed creating document $counter/$total, current document id: serial {$preprint['serial']} ($pid)\n";
+                echo "failed creating document $counter/$total --serial: {$preprint['serial']}, pid: $pid\n";
             }
         }
 
