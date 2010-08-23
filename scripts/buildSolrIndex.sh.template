@@ -1,9 +1,0 @@
-#!/bin/sh
-# das Script SolrIndexBuilder.sh muss unter dem Benutzer ausgeführt werden, unter dem auch der Apache Webserver
-# gestartet wurde (unter Ubuntu ist das per Default www-data; unter openSuSE der Benutzer wwwrun),
-# da sonst einige der Zend-Cachedateien unter /tmp unterschiedliche Besitzer haben (entweder von $APACHE_USER oder
-# vom ausführenden Benutzer)
-# wenn das passiert, erhält man die folgende Warning vom Zend-Framework: Failed saving metadata to metadataCache
-
-APACHE_USER=
-sudo -u $APACHE_USER php5 SolrIndexBuilder.php "$@"
