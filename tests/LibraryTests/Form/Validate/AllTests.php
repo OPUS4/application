@@ -29,7 +29,7 @@
  * @author      Ralf Claussnitzer <ralf.claussnitzer@slub-dresden.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ * @version     $Id: AllTests.php 2860 2009-05-22 17:20:50Z claussnitzer $
  */
 
 // bootstrap application environment
@@ -41,7 +41,7 @@ require_once dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'TestHe
  * @category    Application
  * @package     Test
  */
-class LibraryTests_Form_AllTests {
+class LibraryTests_Form_Validate_AllTests {
 
     /**
      * Construct and return the test suite.
@@ -49,12 +49,11 @@ class LibraryTests_Form_AllTests {
      * @return PHPUnit_Framework_TestSuite The suite.
      */
     public static function suite() {
-        $suite = new PHPUnit_Framework_TestSuite('Opus Application Library: Form');
-        $suite->addTestSuite('LibraryTests_Form_BuilderTest');
+        $suite = new PHPUnit_Framework_TestSuite('Opus Application Library: Form_Validate');
         $suite->addTestSuite('LibraryTests_Form_Validate_RequiredIfTest');
-        $suite->addTestSuite('LibraryTests_Form_Validate_RequiredIfValueTest');
         return $suite;
     }
 
 }
 
+?>
