@@ -37,7 +37,7 @@
  *
  * @author Susanne Gottwald
  */
-class View_Helper_Fields extends Zend_View_Helper_Abstract {
+class View_Helper_Field extends Zend_View_Helper_Abstract {
 
     public $view;
 
@@ -57,6 +57,7 @@ class View_Helper_Fields extends Zend_View_Helper_Abstract {
      * @return element to render in view
      */
     public function field($type, $name, $value) {
+        
         $method = "_render" . $type;
         if (method_exists($this, $method) === true) {
             $result = $this->$method($name, $value);
@@ -71,7 +72,7 @@ class View_Helper_Fields extends Zend_View_Helper_Abstract {
      * @param <type> $name 
      */
     public function _renderSubmit($name, $value) {
-        $submit = "<input type='submit' name='" . $name . "' id='" . $name . "' value='" . $value . "'/>";
+        $submit = "\n\t\t<input type='submit' name='" . $name . "' id='" . $name . "' value='" . $value . "'/>";
         return $submit;
     }
 
@@ -82,17 +83,32 @@ class View_Helper_Fields extends Zend_View_Helper_Abstract {
     public function _renderElement($name, $element) {
         switch ($element["type"]) {
             case "Zend_Form_Element_Textarea" :
-                    $elementfield = "<table><tr><td><label for='" . $element["id"] . "' class='" . $element["req"] . "'>" . $element["label"] . "</label></td><td>";
-                    $elementfield .= "<textarea name='" . $element["id"] . "' id='" . $element["id"] . "'>" . $element["value"] . "</textarea></td></tr></table>";
+                    $elementfield = "<table>\n\t<tr>\n\t\t<td>\n\t\t\t<label for='" . $element["id"] . "' class='" . $element["req"] . "'>" . $element["label"] . "</label>\n\t\t</td>\n\t\t";
+                    $elementfield .= "<td>\n\t\t\t<textarea cols='30' rows='9' name='" . $element["id"] . "' id='" . $element["id"] . "'>" . $element["value"] . "</textarea>\n\t\t</td>\n\t</tr>\n\t";
+                    $elementfield .= "<tr>\n\t\t<td colspan='2'>";
+                    if ($element["error"] != null) {
+                        $elementfield .= "<ul class='errors'>";
+                        foreach ($element["error"] AS $err)
+                            $elementfield .= "\n\t\t\t<li>" . $err . "</li>";
+                        $elementfield .= "\n\t\t</ul>";
+                    }
+                    $elementfield .= "</td>\n\t</tr>\n</table>\n\n";
                     return $elementfield;                
 
             case "Zend_Form_Element_Text" :
-                    $elementfield = "<table><tr><td><label for='" . $element["id"] . "' class='" . $element["req"] . "'>" . $element["label"] . "</label></td><td>";
-                    $elementfield .= "<input type='text' name='" . $element["id"] . "' id='" . $element["id"] . "' value='" . $element["value"] . "' /></td></tr></table>";
+                    $elementfield = "<table>\n\t<tr>\n\t\t<td>\n\t\t\t<label for='" . $element["id"] . "' class='" . $element["req"] . "'>" . $element["label"] . "</label>\n\t\t</td>\n\t\t";
+                    $elementfield .= "<td>\n\t\t\t<input type='text' name='" . $element["id"] . "' id='" . $element["id"] . "' value='" . $element["value"] . "' />\n\t\t</td>\n\t</tr>\n\t";
+                    $elementfield .= "<tr>\n\t\t<td colspan='2'>";
+                    if ($element["error"] != null) {
+                        $elementfield .= "<ul class='errors'>";
+                        foreach ($element["error"] AS $err)
+                            $elementfield .= "\n\t\t\t<li>" . $err . "</li>";
+                        $elementfield .= "\n\t\t</ul>";
+                    }
+                    $elementfield .= "</td>\n\t</tr>\n</table>\n\n";
                     return $elementfield;
            }
-        }
-    
+        }   
 
     /**
      *
@@ -112,33 +128,41 @@ class View_Helper_Fields extends Zend_View_Helper_Abstract {
     public function _renderGroup($name, $group) {
         $fieldset = "";
         if (isset($group)) {
-            $fieldset = "<fieldset><legend>" . $group['Name'] . "</legend><table>";
+            $fieldset = "<fieldset>\n<legend>" . $group['Name'] . "</legend>\n\t<table>";
             //show fields
             foreach ($group["Fields"] AS $field) {
-                $fieldset .= "<tr><td>";
-                $fieldset .= "<label for='" . $field["id"] . "' class='" . $field["req"] . "'>" . $field["label"] . "</label>";
-                $fieldset .= "</td><td>";
-                $fieldset .= "<input type='" . $field["type"] . "' name='" . $field["id"] . "' id='" . $field["id"] . "' value='" . $field["value"] . "' />";
-                $fieldset .= "</td></tr><tr><td colspan='2'>";
+                $fieldset .= "\n\t\t<tr>\n\t\t\t<td>";
+                $fieldset .= "\n\t\t\t\t<label for='" . $field["id"] . "' class='" . $field["req"] . "'>" . $field["label"] . "</label>";
+                $fieldset .= "\n\t\t\t</td>\n\t\t\t<td>";
+                switch ($field["type"]) {
+                    case "Zend_Form_Element_Text":
+                        $fieldset .= "\n\t\t\t\t<input type='text' name='" . $field["id"] . "' id='" . $field["id"] . "' value='" . $field["value"] . "' />";
+                        break;
+
+                    case "Zend_Form_Element_Textarea":
+                        $fieldset .= "\n\t\t\t\t<textarea cols='30' rows='9' name='" . $field["id"] . "' id='" . $field["id"] . "'>" . $field["value"] . "</textarea>";
+                        break;
+                }
+                $fieldset .= "\n\t\t\t</td>\n\t\t</tr>\n\t\t<tr>\n\t\t\t<td colspan='2'>";
                 if ($field["error"] != null) {
                     $fieldset .= "<ul class='errors'>";
                     foreach ($field["error"] AS $err)
                         $fieldset .= "<li>" . $err . "</li>";
                     $fieldset .= "</ul>";
                 }
-                $fieldset .= "</td></tr>";
+                $fieldset .= "</td>\n\t\t</tr>";
             }
             //show buttons
             foreach ($group["Buttons"] AS $button) {
-                $fieldset .= "<tr><td>";
-                $fieldset .= "<input type='submit' name='" . $button["id"] . "' id='" . $button["id"] . "' value='" . $button["label"] . "' />";
-                $fieldset .= "</td></tr>";
+                $fieldset .= "\n\t\t<tr>\n\t\t\t<td>";
+                $fieldset .= "\n\t\t\t\t<input type='submit' name='" . $button["id"] . "' id='" . $button["id"] . "' value='" . $button["label"] . "' />";
+                $fieldset .= "\n\t\t\t</td>\n\t\t</tr>";
             }
             //show hidden fields
             foreach ($group["Hiddens"] AS $hidden) {
-                $fieldset .= "<input type='hidden' name='" . $hidden["id"] . "' id='" . $hidden["id"] . "' value='" . $hidden["value"] . "' />";
+                $fieldset .= "\n<input type='hidden' name='" . $hidden["id"] . "' id='" . $hidden["id"] . "' value='" . $hidden["value"] . "' />";
             }
-            $fieldset .= "</table></fieldset>";
+            $fieldset .= "\n\t</table>\n</fieldset>\n\n";
         }
         return $fieldset;
     }
