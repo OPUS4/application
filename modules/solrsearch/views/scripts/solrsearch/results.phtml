@@ -72,12 +72,38 @@
         <div id="yearFacet" class="facet">
             Erscheinungsjahr:
             <ul>
-            <?php foreach ($this->yearFacet as $facetItem) : ?>
-                <?php
-                    $yearfq = $this->firstPage;
-                    $yearfq['yearfq'] = $facetItem->getText();
-                ?>
+            <?php foreach ($this->yearFacet as $facetItem) : 
+                $yearfq = $this->firstPage;
+                $yearfq['yearfq'] = $facetItem->getText();
+            ?>
                 <li><a href="<?= $this->url($yearfq) ?>"><?= $facetItem->getText() ?></a> (<?= $facetItem->getCount() ?>)</li>
+            <?php endforeach ?>
+            </ul>
+            Autor
+            <ul>
+            <?php foreach($this->authorFacet as $facetItem) :
+                $authorfq = $this->firstPage;
+                $authorfq['authorfq'] = $facetItem->getText();
+            ?>
+                <li><a href="<?= $this->url($authorfq) ?>"><?= $facetItem->getText() ?></a> (<?= $facetItem->getCount() ?>)</li>
+            <?php endforeach ?>
+            </ul>
+            Dokumententyp
+            <ul>
+            <?php foreach($this->doctypeFacet as $facetItem) :
+                $doctypefq = $this->firstPage;
+                $doctypefq['doctypefq'] = $facetItem->getText();
+            ?>
+                <li><a href="<?= $this->url($doctypefq) ?>"><?= $facetItem->getText() ?></a> (<?= $facetItem->getCount() ?>)</li>
+            <?php endforeach ?>
+            </ul>
+            Sprache
+            <ul>
+            <?php foreach($this->languageFacet as $facetItem) :
+                $languagefq = $this->firstPage;
+                $languagefq['languagefq'] = $facetItem->getText();
+            ?>
+                <li><a href="<?= $this->url($languagefq) ?>"><?= $facetItem->getText() ?></a> (<?= $facetItem->getCount() ?>)</li>
             <?php endforeach ?>
             </ul>
         </div>

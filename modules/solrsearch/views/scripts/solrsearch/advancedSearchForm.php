@@ -63,12 +63,12 @@
                 </td>
                 <td>
                     <select name="authormodifier">
-                        <option value="+">enth&auml;lt</option>
-                        <option value="-">enth&auml;lt nicht</option>
+                        <option value="+" <?= $this->authorQueryModifier === '+' || !isset($this->authorQueryModifier) ? 'selected="true"' : '' ?>>enth&auml;lt</option>
+                        <option value="-" <?= $this->authorQueryModifier === '-' ? 'selected="true"' : '' ?>>enth&auml;lt nicht</option>
                     </select>
                 </td>
                 <td>
-                    <input type="text" id="author" name="author" value="" />
+                    <input type="text" id="author" name="author" value="<?= isset($this->authorQuery) ? $this->authorQuery : '' ?>" />
                 </td>
             </tr>
             <tr>
@@ -77,12 +77,12 @@
                 </td>
                 <td>
                     <select name="titlemodifier">
-                        <option value="+">enth&auml;lt</option>
-                        <option value="-">enth&auml;lt nicht</option>
+                        <option value="+" <?= $this->titleQueryModifier === '+' || !isset($this->titleQueryModifier) ? 'selected="true"' : '' ?>>enth&auml;lt</option>
+                        <option value="-" <?= $this->titleQueryModifier === '-' ? 'selected="true"' : '' ?>>enth&auml;lt nicht</option>
                     </select>
                 </td>
                 <td>
-                    <input type="text" id="title" name="title" value="" />
+                    <input type="text" id="title" name="title" value="<?= isset($this->titleQuery) ? $this->titleQuery : '' ?>" />
                 </td>
             </tr>
             <tr>
@@ -91,12 +91,12 @@
                 </td>
                 <td>
                     <select name="abstractmodifier">
-                        <option value="+">enth&auml;lt</option>
-                        <option value="-">enth&auml;lt nicht</option>
+                        <option value="+" <?= $this->abstractQueryModifier === '+' || !isset($this->abstractQueryModifier) ? 'selected="true"' : '' ?>>enth&auml;lt</option>
+                        <option value="-" <?= $this->abstractQueryModifier === '-' ? 'selected="true"' : '' ?>>enth&auml;lt nicht</option>
                     </select>
                 </td>
                 <td>
-                    <input type="text" id="abstract" name="abstract" value="" />
+                    <input type="text" id="abstract" name="abstract" value="<?= isset($this->abstractQuery) ? $this->abstractQuery : '' ?>" />
                 </td>
             </tr>
             <tr>
@@ -105,12 +105,12 @@
                 </td>
                 <td>
                     <select name="yearmodifier">
-                        <option value="+">enth&auml;lt</option>
-                        <option value="-">enth&auml;lt nicht</option>
+                        <option value="+" <?= $this->yearQueryModifier === '+' || !isset($this->yearQueryModifier) ? 'selected="true"' : '' ?>>enth&auml;lt</option>
+                        <option value="-" <?= $this->yearQueryModifier === '-' ? 'selected="true"' : '' ?>>enth&auml;lt nicht</option>
                     </select>
                 </td>
                 <td>
-                    <input type="text" id="year" name="year" value="" />
+                    <input type="text" id="year" name="year" value="<?= isset($this->yearQuery) ? $this->yearQuery : '' ?>" />
                 </td>
             </tr>
         </table>

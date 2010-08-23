@@ -249,13 +249,34 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
             $this->view->__set("prevPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'start'=>(int)($this->query->getStart()) - (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
             $this->view->__set("lastPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'start'=>(int)($this->numOfHits / $this->query->getRows()) * $this->query->getRows(),'rows'=>$this->query->getRows()));
             $this->view->__set("firstPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'start'=>'0','rows'=>$this->query->getRows()));
+            $this->view->__set("authorQuery", $this->query->getField('author'));
+            $this->view->__set("titleQuery", $this->query->getField('title_deu'));
+            $this->view->__set("abstractQuery", $this->query->getField('abstract_deu'));
+            $this->view->__set("yearQuery", $this->query->getfield('year'));
+            $this->view->__set("authorQueryModifier", $this->query->getModifier('author'));
+            $this->view->__set("titleQueryModifier", $this->query->getModifier('title_deu'));
+            $this->view->__set("abstractQueryModifier", $this->query->getModifier('abstract_deu'));
+            $this->view->__set("yearQueryModifier", $this->query->getModifier('year'));
         }
     }
 
     private function createFacetsForView() {
         $facets = $this->resultList->getFacets();
         if (array_key_exists('year', $facets)) {
+            $this->log->debug("found year facet in search results");
             $this->view->__set("yearFacet", $facets['year']);
+        }
+        if(array_key_exists('author', $facets)){
+            $this->log->debug("found author facet in search results");
+            $this->view->__set("authorFacet", $facets['author']);
+        }
+        if(array_key_exists('doctype', $facets)) {
+            $this->log->debug("found doctype facet in search results");
+            $this->view->set("doctypeFacet", $facets['doctype']);
+        }
+        if(array_key_exists('language', $facets)) {
+            $this->log->debug("found language facet in search results");
+            $this->view->set("languageFacet", $facets['language']);
         }
     }
 
@@ -314,14 +335,29 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $query->setSortField($sortfield);
         $query->setSortOrder($sortorder);
 
-        if(isset($data['yearfq'])) {
+        $this->addFiltersToQuery($data, $query);
+        $this->log->debug("Query $query complete");
+        return $query;
+    }
+
+    private function addFiltersToQuery($data, $query) {
+
+        if(array_key_exists('yearfq', $data)) {
             $this->log->debug("year filter query is set to: ".$data['yearfq']);
             $query->addFilterQuery("year:".$data['yearfq']);
         }
-
-        $this->log->debug("Query $query complete");
-
-        return $query;
+        if(array_key_exists('authorfq', $data)) {
+            $this->log->debug("author filter query is set to: ".$data['authorfq']);
+            $query->addFilterQuery("author:".$data['authorfq']);
+        }
+        if(array_key_exists('languagefq', $data)) {
+            $this->log->debug("language filter query is set to: ".$data['languagefq']);
+            $query->addFilterQuery("language:".$data['languagefq']);
+        }
+        if(array_key_exists('doctypefq', $data)) {
+            $this->log->debug("doctype filter query is set to: ".$data['doctypefq']);
+            $query->addFilterQuery("doctype:".$data['doctypefq']);
+        }
     }
 
     private function createAdvancedSearchQuery($data) {
@@ -352,13 +388,8 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         if($title != '') $query->setField('title_deu', $title, $titlemodifier);
         if($year != '') $query->setField('year', $year, $yearmodifier);
 
-        if(isset($data['yearfq'])) {
-            $this->log->debug("year filter query is set to: ".$data['yearfq']);
-            $query->addFilterQuery("year:".$data['yearfq']);
-        }
-
+        $this->addFiltersToQuery($data, $query);
         $this->log->debug("Query $query complete");
-
         return $query;
     }
 }
