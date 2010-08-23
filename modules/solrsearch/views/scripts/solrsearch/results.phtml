@@ -79,6 +79,10 @@
                 <li><a href="<?= $this->url($yearfq) ?>"><?= $facetItem->getText() ?></a> (<?= $facetItem->getCount() ?>)</li>
             <?php endforeach ?>
             </ul>
+        </div>
+    <?php endif ?>
+    <?php if(isset($this->authorFacet)) : ?>
+        <div id="authorFacet" class="facet" >
             Autor
             <ul>
             <?php foreach($this->authorFacet as $facetItem) :
@@ -88,6 +92,10 @@
                 <li><a href="<?= $this->url($authorfq) ?>"><?= $facetItem->getText() ?></a> (<?= $facetItem->getCount() ?>)</li>
             <?php endforeach ?>
             </ul>
+        </div>
+    <?php endif ?>
+    <?php if(isset($this->doctypeFacet)) : ?>
+        <div id="doctypeFacet" class="facet">
             Dokumententyp
             <ul>
             <?php foreach($this->doctypeFacet as $facetItem) :
@@ -97,6 +105,10 @@
                 <li><a href="<?= $this->url($doctypefq) ?>"><?= $facetItem->getText() ?></a> (<?= $facetItem->getCount() ?>)</li>
             <?php endforeach ?>
             </ul>
+        </div>
+    <?php endif ?>
+    <?php if(isset($this->languageFacet)) : ?>
+        <div id="languageFacet" class="facet">
             Sprache
             <ul>
             <?php foreach($this->languageFacet as $facetItem) :
@@ -108,7 +120,7 @@
             </ul>
         </div>
     <?php endif ?>
-</div>
+    
 
 <div id="pagination" >
     <p class="info_small">
