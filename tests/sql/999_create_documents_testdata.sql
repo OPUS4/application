@@ -240,7 +240,7 @@ INSERT INTO `document_files` (`id`, `document_id`, `path_name`, `sort_order`, `l
 (114, 89, 'Bericht_Nr.083_K.Wieghardt_berblick_ber_die_Strmungslehre.pdf', 0, 'Bericht_Nr.083_K.Wieghardt_berblick_ber_die_Strmungslehre.pdf', 'pdf', 'application/pdf', 'deu', 595340),
 (115, 90, 'Einzelseiten_ok.pdf', 0, 'Einzelseiten_ok.pdf', 'pdf', 'application/pdf', 'eng', 2360191),
 (116, 91, 'test.pdf', 0, 'test.pdf', 'pdf test', 'application/pdf', 'eng', 6970),
-(117, 92, 'test.html', 0, 'test.xhtml', 'xhtml', 'application/xhtml+xml', 'eng', 125),
+(117, 92, 'test.xhtml', 0, 'test.xhtml', 'xhtml', 'application/xhtml+xml', 'eng', 125),
 (118, 93, 'test.txt', 0, 'test.txt', 'text', 'text/plain', 'eng', 591),
 (119, 94, 'test.ps', 0, 'test.ps', 'ps', 'application/postscript', 'eng', 22041),
 (120, 95, 'test.html', 0, 'test.html', 'html', 'text/html', 'eng', 847);
