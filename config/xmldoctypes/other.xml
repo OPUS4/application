@@ -42,11 +42,11 @@
     </field>-->
     <field name="Language" required="yes" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="IdentifierOpus3" required="no" formelement="Text" datatype="Text" multiplicity="1" />
-    <field name="TitleMain" required="yes" formelement="Text" datatype="Text" multiplicity="4" />
-    <field name="TitleAbstract" required="no" formelement="Text" datatype="Text" multiplicity="4" >
+    <field name="TitleMain" required="yes" formelement="Text" datatype="Title" multiplicity="4" />
+    <field name="TitleAbstract" required="no" formelement="Textarea" datatype="Title" multiplicity="4" >
         <required-if-fulltext />
     </field>
-    <field name="TitleParent" required="no" formelement="Text" datatype="Text" multiplicity="1" />
+    <field name="TitleParent" required="no" formelement="Text" datatype="Title" multiplicity="1" />
     <field name="PersonAuthor" required="no" formelement="Text" datatype="Person" multiplicity="*" />
     <field name="PersonReferee" required="no" formelement="Text" datatype="Person" multiplicity="*" />
     <field name="PersonEditor" required="no" formelement="Text" datatype="Person" multiplicity="*" />
