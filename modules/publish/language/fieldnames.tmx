@@ -911,7 +911,16 @@
       <tuv xml:lang="de">
         <seg>Haupttitel</seg>
       </tuv>
-    </tu>    
+    </tu>
+
+    <tu tuid="TitleMainLanguage">
+      <tuv xml:lang="en">
+        <seg>Title language</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Titelsprache</seg>
+      </tuv>
+    </tu>
     
     <tu tuid="hint_Opus_Model_Filter_TitleMain">
       <tuv xml:lang="en">
@@ -1528,6 +1537,24 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Gutachter</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="PersonRefereeFirstName">
+      <tuv xml:lang="en">
+        <seg>Referee: First name</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Gutachter: Vorname</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="PersonRefereeLastName">
+      <tuv xml:lang="en">
+        <seg>Referee: Last name</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Gutachter: Nachname</seg>
       </tuv>
     </tu>
     

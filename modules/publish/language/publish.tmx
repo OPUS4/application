@@ -131,25 +131,7 @@
       <tuv xml:lang="de">
         <seg>Zur Bibliographie hinzufügen?</seg>
       </tuv>
-    </tu>
-
-    <tu tuid="Authorfirstname">
-      <tuv xml:lang="en">
-        <seg>First name</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Vorname</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="Authorlastname">
-      <tuv xml:lang="en">
-        <seg>Last name</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Nachname</seg>
-      </tuv>
-    </tu>
+    </tu>   
 
     <tu tuid="gpgkeyavailable">
       <tuv xml:lang="en">
