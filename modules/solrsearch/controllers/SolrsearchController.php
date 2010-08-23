@@ -266,9 +266,9 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
             $this->log->debug("found year facet in search results");
             $this->view->__set("yearFacet", $facets['year']);
         }
-        if(array_key_exists('author', $facets)){
+        if(array_key_exists('author_facet', $facets)){
             $this->log->debug("found author facet in search results");
-            $this->view->__set("authorFacet", $facets['author']);
+            $this->view->__set("authorFacet", $facets['author_facet']);
         }
         if(array_key_exists('doctype', $facets)) {
             $this->log->debug("found doctype facet in search results");

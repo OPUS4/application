@@ -164,13 +164,13 @@
     <?php foreach($this->results as $result) : ?>
         <div class="result_box">
             <?php
-                $frontdoorUrl = $this->url(array(
+                $frontdoorUrl = array(
                     'module' => 'frontdoor',
                     'controller' => 'index',
                     'action' => 'index',
-                    'docId' => $result->getId()));
+                    'docId' => $result->getId());
             ?>
-            <a href="<?= $frontdoorUrl ?>"><?= $result->getTitleDeu(); ?></a> (<?= $result->getYear(); ?>)<br/>
+            <a href="<?= $this->url($frontdoorUrl, null, true) ?>"><?= $result->getTitleDeu(); ?></a> (<?= $result->getYear(); ?>)<br/>
             <!-- TODO: TitleEng -->
 
             <?php foreach($result->getAuthors() as $author) :
