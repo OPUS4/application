@@ -371,7 +371,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             if ($field != '') {
                 $model = $doc->addNote();
                 $model->setMessage($field);
-                $model->setCreator('nobody'); // FIXME: Allow empty values.
+                $model->setCreator('import-script');
                 $model->setScope('private');
             }
 
