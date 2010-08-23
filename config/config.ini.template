@@ -47,19 +47,9 @@ searchengine.solr.host =
 searchengine.solr.port = 
 searchengine.solr.app = 
 
-;LOGGING RELATED SETTINGS
-; if set to true all xml that is generated while indexing is prepared for logging
-log.prepare.xml = false
-
 ; The following is needed even if sections are empty.
 [staging : production]
 
 [testing : production]
-db.params.profiler = true
-db.params.showqueries = true
-db.params.maxqueries = 500
 
 [development : production]
-db.params.profiler = true
-db.params.showqueries = true
-db.params.maxqueries = 500
