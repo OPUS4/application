@@ -106,11 +106,13 @@ INSERT INTO `documents` (`id`, `range_id`, `completed_date`, `completed_year`, `
 (87, NULL, NULL, 0000, NULL, NULL, NULL, 'report', NULL, NULL, 'deu', NULL, NULL, NULL, NULL, 'draft', NULL, 1955, '', NULL, NULL, 'peer', '2010-06-04T02:36:50Z', '2010-03-03T08:26:00Z', NULL, NULL, 'published', NULL, NULL, 'repository'),
 (88, NULL, NULL, 0000, NULL, NULL, NULL, 'report', NULL, NULL, 'deu', NULL, NULL, NULL, NULL, 'draft', NULL, 1961, '', NULL, NULL, 'peer', '2010-06-04T02:36:50Z', '2010-03-03T08:28:06Z', NULL, NULL, 'published', NULL, NULL, 'repository'),
 (89, NULL, NULL, 0000, NULL, NULL, NULL, 'report', NULL, NULL, 'deu', NULL, NULL, NULL, NULL, 'draft', NULL, 1961, '', NULL, NULL, 'peer', '2010-06-04T02:36:51Z', '2010-03-03T08:29:12Z', NULL, NULL, 'published', NULL, NULL, 'repository'),
-(90, NULL, NULL, 2010, NULL, NULL, '2010-02-26', 'doctoral_thesis', NULL, NULL, 'eng', NULL, NULL, NULL, NULL, 'draft', NULL, 2010, '', NULL, NULL, 'peer', '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, NULL, 'published', NULL, NULL, 'repository'),
-(91, NULL, NULL, 2010, NULL, NULL, '2010-02-26', 'doctoral_thesis', NULL, NULL, 'eng', NULL, NULL, NULL, NULL, 'draft', NULL, 2010, '', NULL, NULL, 'peer', '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, NULL, 'published', NULL, NULL, 'repository'),
-(92, NULL, NULL, 2010, NULL, NULL, '2010-02-26', 'doctoral_thesis', NULL, NULL, 'eng', NULL, NULL, NULL, NULL, 'draft', NULL, 2010, '', NULL, NULL, 'peer', '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, NULL, 'published', NULL, NULL, 'repository'),
-(93, NULL, NULL, 2010, NULL, NULL, '2010-02-26', 'doctoral_thesis', NULL, NULL, 'eng', NULL, NULL, NULL, NULL, 'draft', NULL, 2010, '', NULL, NULL, 'peer', '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, NULL, 'published', NULL, NULL, 'repository'),
-(94, NULL, NULL, 2010, NULL, NULL, '2010-02-26', 'doctoral_thesis', NULL, NULL, 'eng', NULL, NULL, NULL, NULL, 'draft', NULL, 2010, '', NULL, NULL, 'peer', '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, NULL, 'published', NULL, NULL, 'repository');
+(90, NULL, NULL, 2010, NULL, NULL, '2010-01-26', 'doctoral_thesis', NULL, NULL, 'eng', NULL, NULL, NULL, NULL, 'draft', NULL, 2010, '', NULL, NULL, 'peer', '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, NULL, 'published', NULL, NULL, 'repository'),
+(91, NULL, NULL, 2010, NULL, NULL, '2010-02-26', 'report', NULL, NULL, 'eng', NULL, NULL, NULL, NULL, 'draft', NULL, 2010, '', NULL, NULL, 'peer', '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, NULL, 'published', NULL, NULL, 'repository'),
+(92, NULL, NULL, 2009, NULL, NULL, '2010-03-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, NULL, 'draft', NULL, 2009, '', NULL, NULL, 'peer', '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, NULL, 'published', NULL, NULL, 'repository'),
+(93, NULL, NULL, 2009, NULL, NULL, '2010-04-26', 'doctoral_thesis', NULL, NULL, 'eng', NULL, NULL, NULL, NULL, 'draft', NULL, 2009, '', NULL, NULL, 'peer', '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, NULL, 'published', NULL, NULL, 'repository'),
+(94, NULL, NULL, 2008, NULL, NULL, '2010-05-26', 'report', NULL, NULL, 'eng', NULL, NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, NULL, 'peer', '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, NULL, 'published', NULL, NULL, 'repository'),
+(95, NULL, NULL, 2008, NULL, NULL, '2010-06-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, NULL, 'peer', '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, NULL, 'published', NULL, NULL, 'repository');
+
 
 --
 -- Daten für Tabelle `document_enrichments`
@@ -237,10 +239,11 @@ INSERT INTO `document_files` (`id`, `document_id`, `path_name`, `sort_order`, `l
 (113, 88, 'Bericht_Nr.087_M.Kirsch_Die_Behandlung_von_Problemen_der_Schiffstheorie_mit_Hilfe_eines_elektronischen_Rechenautomaten.pdf', 0, 'Bericht_Nr.087_M.Kirsch_Die_Behandlung_von_Problemen_der_Schiffstheorie_mit_Hilfe_eines_elektronischen_Rechenautomaten.pdf', 'pdf', 'application/pdf', 'deu', 857291),
 (114, 89, 'Bericht_Nr.083_K.Wieghardt_berblick_ber_die_Strmungslehre.pdf', 0, 'Bericht_Nr.083_K.Wieghardt_berblick_ber_die_Strmungslehre.pdf', 'pdf', 'application/pdf', 'deu', 595340),
 (115, 90, 'Einzelseiten_ok.pdf', 0, 'Einzelseiten_ok.pdf', 'pdf', 'application/pdf', 'eng', 2360191),
-(116, 91, 'test.pdf', 0, 'test.pdf', 'pdf', 'application/pdf', 'eng', 6970),
-(117, 92, 'test.html', 0, 'test.html', 'html', 'text/html', 'eng', 125),
+(116, 91, 'test.pdf', 0, 'test.pdf', 'pdf test', 'application/pdf', 'eng', 6970),
+(117, 92, 'test.html', 0, 'test.xhtml', 'xhtml', 'application/xhtml+xml', 'eng', 125),
 (118, 93, 'test.txt', 0, 'test.txt', 'text', 'text/plain', 'eng', 591),
-(119, 94, 'test.ps', 0, 'test.ps', 'ps', 'application/postscript', 'eng', 22041);
+(119, 94, 'test.ps', 0, 'test.ps', 'ps', 'application/postscript', 'eng', 22041),
+(120, 95, 'test.html', 0, 'test.html', 'html', 'text/html', 'eng', 847);
 
 --
 -- Daten für Tabelle `document_identifiers`
@@ -889,7 +892,17 @@ INSERT INTO `document_subjects` (`id`, `document_id`, `language`, `type`, `value
 (296, 90, 'eng', 'uncontrolled', ' domestic wastewater', NULL),
 (297, 90, 'eng', 'uncontrolled', ' swine wastewater', NULL),
 (298, 90, 'eng', 'uncontrolled', ' constructed wetlands', NULL),
-(299, 90, 'eng', 'uncontrolled', ' plants', NULL);
+(299, 90, 'eng', 'uncontrolled', ' plants', NULL),
+(300, 91, 'deu', 'swd', 'Informationssystem ', NULL),
+(301, 92, 'deu', 'swd', 'Informationssystem ', NULL),
+(302, 93, 'deu', 'swd', 'Informationssystem ', NULL),
+(303, 94, 'deu', 'swd', 'Informationssystem ', NULL),
+(304, 95, 'deu', 'swd', 'Informationssystem ', NULL),
+(305, 91, 'deu', 'uncontrolled', 'eBook', NULL),
+(306, 92, 'deu', 'uncontrolled', 'eBook', NULL),
+(307, 93, 'deu', 'uncontrolled', 'eBook', NULL),
+(308, 94, 'deu', 'uncontrolled', 'eBook', NULL),
+(309, 95, 'deu', 'uncontrolled', 'eBook', NULL);
 
 --
 -- Daten für Tabelle `document_title_abstracts`
@@ -1118,12 +1131,14 @@ INSERT INTO `document_title_abstracts` (`id`, `document_id`, `type`, `value`, `l
 (223, 90, 'abstract', 'Ziel dieser Forschungsarbeit war die Untersuchung des Potentials zur Steigerung der Effizienz von Pflanzenkläranlagen durch Zugabe von Regenwürmern. In Deutschland zeigte sich für die mit Regenwürmern unterstützen Pflanzenkläranlagen eine deutlich bessere Abbauleistung als für das einfache Pflanzenkläranlagenverfahren. In Thailand war in Versuchen mit den Regenwürmern eine um 40 % geringere Schlammbildung zu beobachten. Zusätzlich wurden verschiedene Pflanzen mit hohem Potenzial zur Wertstoffrückgewinnung in Bezug auf die Anwendung in Pflanzenkläranlagen untersucht. Eine Empfehlungstabelle mit 13 Pflanzenarten wurde entwickelt. Für jedes der  betrachteten klimatischen Gebiete eignen sich mehrere Spezies.', 'deu', NULL),
 (224, 91, 'main', 'This is a pdf test document', 'deu', NULL),
 (225, 91, 'abstract', 'This is a pdf test document', 'deu', NULL),
-(226, 92, 'main', 'This is a html test document', 'deu', NULL),
-(227, 92, 'abstract', 'This is a html test document', 'deu', NULL),
+(226, 92, 'main', 'This is a xhtml test document', 'deu', NULL),
+(227, 92, 'abstract', 'This is a xhtml test document', 'deu', NULL),
 (228, 93, 'main', 'This is a plain text test document', 'deu', NULL),
 (229, 93, 'abstract', 'This is a plain text test document', 'deu', NULL),
 (230, 94, 'main', 'This is a postscript test document', 'deu', NULL),
-(231, 94, 'abstract', 'This is a postscript test document', 'deu', NULL);
+(231, 94, 'abstract', 'This is a postscript test document', 'deu', NULL),
+(232, 95, 'main', 'This is a html test document', 'deu', NULL),
+(233, 95, 'abstract', 'This is a html test document', 'deu', NULL);
 
 --
 -- Daten für Tabelle `file_hashvalues`
@@ -2263,7 +2278,8 @@ INSERT INTO `persons` (`id`, `academic_title`, `date_of_birth`, `email`, `first_
 (249, NULL, NULL, 'o.marahrens@tu-harburg.de', 'Opus3', 'Importer', NULL),
 (250, NULL, NULL, NULL, ' Ralf Prof. Dr.-Ing.', 'Otterpohl', NULL),
 (251, NULL, NULL, NULL, ' Nathasith', 'Chiarawatchai', NULL),
-(252, NULL, NULL, 'o.marahrens@tu-harburg.de', 'Opus3', 'Importer', NULL);
+(252, NULL, NULL, 'o.marahrens@tu-harburg.de', 'Opus3', 'Importer', NULL),
+(253, NULL, NULL, 'john.doe@example.org', 'John', 'Doe', NULL);
 
 
 --
@@ -2520,7 +2536,12 @@ INSERT INTO `link_persons_documents` (`person_id`, `document_id`, `institute_id`
 (249, 89, NULL, 'submitter', 0, 0),
 (250, 90, NULL, 'advisor', 0, 0),
 (251, 90, NULL, 'author', 0, 0),
-(252, 90, NULL, 'submitter', 0, 0);
+(252, 90, NULL, 'submitter', 0, 0),
+(253, 91, NULL, 'author', 0, 0),
+(254, 92, NULL, 'author', 0, 0),
+(255, 93, NULL, 'author', 0, 0),
+(256, 94, NULL, 'author', 0, 0),
+(257, 95, NULL, 'author', 0, 0);
 
 --
 -- Daten für Tabelle `privileges`
