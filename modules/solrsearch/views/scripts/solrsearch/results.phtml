@@ -136,13 +136,10 @@
             <!-- TODO: TitleEng -->
 
             <?php foreach($result->getAuthors() as $author) :
-                $authorSearchUrl = $this->url(array(
-                    'module' => 'solrsearch',
-                    'controller' => 'solrsearch',
-                    'action' => 'authorSearch',
-                    'author' => $author));
+                $authorSearch = $this->authorSearch;
+                $authorSearch['author'] = $author;
             ?>
-            <a href="<?= $authorSearchUrl ?>"><?= $author ?></a>
+            <a href="<?= $this->url($authorSearch); ?>"><?= $author ?></a>
             <?php endforeach ?>
 
             <div class="abstract"><?= $result->getAbstractDeu(); ?></div>

@@ -236,6 +236,7 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $this->view->__set("rows", $this->query->getRows());
         $this->view->__set("q", $this->query->getQ());
         $this->view->__set("defaultoperator", $this->query->getDefaultOperator());
+        $this->view->__set("authorSearch", array("module"=>"solrsearch","controller"=>"solrsearch","action"=>"search","searchtype"=>"advanced"));
 
         if($this->searchtype === 'simple') {
             $this->view->__set("nextPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'query'=>$this->query->getQ(),'start'=>(int)($this->query->getStart()) + (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
