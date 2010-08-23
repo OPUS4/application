@@ -331,7 +331,7 @@ class Publish_IndexController extends Controller_Action {
                     if ($datasetType != "") {
                         $log->debug("Wanna store a " . $datasetType . "...");
                         $storeMethod = "prepare" . $datasetType . "Object";
-                        $postData = $this->$storeMethod($document, $postData, $key, $externalFields);
+                        $postData = $this->$storeMethod($document, $postData, $key);
                         $log->debug($datasetType . " stored!");
                     } else {
                         $log->debug("wanna store something else...");
@@ -496,20 +496,12 @@ class Publish_IndexController extends Controller_Action {
      * @param <Array> $externalFields
      * @return <Array> $formValues 
      */
-    private function preparePersonObject($document, $formValues, $key, $externalFields) {
+    private function preparePersonObject($document, $formValues, $key) {
         $log = Zend_Registry::get('Zend_Log');
         if ($formValues[$key] == "") {
             $log->debug("Person already stored.");
             return $formValues;
         } else {
-            //get all possible Person roles
-            $personRoles = array();
-            foreach ($externalFields as $value) {
-                if (strstr($value, "Person")) {
-                    array_push($personRoles, $value);
-                }
-            }
-
             $log->debug("try to store person: " . $key);
             $person = new Opus_Person();
             $first = "FirstName";
@@ -610,19 +602,12 @@ class Publish_IndexController extends Controller_Action {
      * @param <type> $externalFields
      * @return <type>
      */
-    private function prepareTitleObject($document, $formValues, $key, $externalFields) {
+    private function prepareTitleObject($document, $formValues, $key) {
         $log = Zend_Registry::get('Zend_Log');
         if ($formValues[$key] == "") {
             $log->debug("Title already stored.");
             return $formValues;
         } else {
-            //get all possible title types
-            $titleTypes = array();
-            foreach ($externalFields as $value) {
-                if (strstr($value, "Title")) {
-                    array_push($titleTypes, $value);
-                }
-            }
             $log->debug("try to store title: " . $key);
             $title = new Opus_Title();
             $language = "Language";
@@ -709,20 +694,12 @@ class Publish_IndexController extends Controller_Action {
      * @param <Array> $externalFields
      * @return <Array> $formValues
      */
-    private function prepareSubjectObject($document, $formValues, $key, $externalFields) {
+    private function prepareSubjectObject($document, $formValues, $key) {
         $log = Zend_Registry::get('Zend_Log');
         if ($formValues[$key] == "") {
             $log->debug("Subject already stored.");
             return $formValues;
         } else {
-            //get all possible Person roles
-            $personRoles = array();
-            foreach ($externalFields as $value) {
-                if (strstr($value, "Subject")) {
-                    array_push($personRoles, $value);
-                }
-            }
-
             $log->debug("try to store subject: " . $key);
             if (strstr($key, "Swd")) {
                 $subject = new Opus_SubjectSwd();
@@ -766,6 +743,54 @@ class Publish_IndexController extends Controller_Action {
         $addFunction = "add" . $subjectType;
         $log->debug("addfunction: " . $addFunction);
         $document->$addFunction($subject);
+
+        return $formValues;
+    }
+
+     /**
+     * method to prepare a note object for storing
+     * @param <Opus_Document> $document
+     * @param <Array> $formValues
+     * @param <String> $key current Element of formValues
+     * @param <Array> $externalFields
+     * @return <Array> $formValues
+     */
+    private function prepareNoteObject($document, $formValues, $key) {
+        $log = Zend_Registry::get('Zend_Log');
+        if ($formValues[$key] == "") {
+            $log->debug("Note already stored.");
+            return $formValues;
+        } else {
+           $log->debug("try to store note: " . $key);
+            $note = new Opus_Note();
+
+            return $this->storeSubjectObject($note, $document, $formValues[$key], $formValues);
+        }
+    }
+
+    /**
+     * method to store a prepared note object
+     * @param <String> $workflow
+     * @param <Opus_Subject> $note
+     * @param <String> $noteType
+     * @param <Opus_Document> $document
+     * @param <Array> $formValues
+     * @param <String> $key
+     * @return <Array> formValues
+     */
+    private function storeNoteObject($note, $document, $value, $formValues) {
+        $log = Zend_Registry::get('Zend_Log');
+        $log->debug("set value: " . $value);
+        $note->setMessage($value);
+
+        if (isset($formValues["PersonSubmitterLastName"]))
+            $note->setCreator($formValues["PersonSubmitterLastName"]);
+        else
+            $note->setCreator("unknown");
+
+        $addFunction = "addNote";
+        $log->debug("addfunction: " . $addFunction);
+        $document->$addFunction($note);
 
         return $formValues;
     }
