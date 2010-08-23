@@ -31,16 +31,6 @@
  * @version     $Id$
  */
 
-// Configure include path.
-set_include_path('.' . PATH_SEPARATOR
-    . PATH_SEPARATOR . dirname(__FILE__)
-    . PATH_SEPARATOR . dirname(dirname(__FILE__)) . '/library'
-    . PATH_SEPARATOR . get_include_path());
-
-// Zend_Loader is'nt available yet. We have to do a require_once
-// in order to find the bootstrap class.
-require_once 'Opus/Bootstrap/Base.php';
-
 /**
  * This class provides a static initializiation method for setting up
  * a test environment including php include path, configuration and
@@ -56,11 +46,11 @@ class TestHelper extends Opus_Bootstrap_Base {
      * @return void
      * @see library/Opus/Bootstrap/Opus_Bootstrap_Base#_setupBackend()
      */
-    protected function _setupBackend() {
-        $this->_setupLogging();
-        $this->_setupTemp();
-        $this->_setupDatabase();
-    }
+//    protected function _initBackend() {
+//        $this->bootstrap('Logging');
+//        $this->_setupTemp();
+//        $this->_setupDatabase();
+//    }
 
     /**
      * Set up database connection. If stored schema version information
@@ -69,8 +59,9 @@ class TestHelper extends Opus_Bootstrap_Base {
      * @throws Exception Thrown if database schema check unveils an revision number mismatch.
      * @return void
      */
-    protected function _setupDatabase() {
-        parent::_setupDatabase();
+    protected function _initDatabase() {
+        parent::_initDatabase();
+
         $log = Zend_Registry::get('Zend_Log');
         
         // Determine current schema revision from opus400.sql
@@ -149,8 +140,4 @@ class TestHelper extends Opus_Bootstrap_Base {
     }
 
 }
-
-// Do test environment initializiation.
-$testhelper = new TestHelper();
-$testhelper->run(dirname(__FILE__), Opus_Bootstrap_Base::CONFIG_TEST);
-
+?>

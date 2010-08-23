@@ -34,7 +34,7 @@
 ; Database adapter configuration using standard Zend_db option names.
 ; Have a look on Zend_Db::factory() method for information about adapter creation.
 
-[test]
+[production]
 db.params.host     =  
 db.params.username = 
 db.params.password = 
@@ -44,4 +44,35 @@ webapi.protocol = http
 webapi.host     = localhost
 webapi.docroot  = /bsz_opus_application/public
 webapi.modul    = webapi
+
+;PHP SETTINGS
+phpSettings.display_startup_errors = 0
+phpSettings.display_errors = 0
+; TODO verify the two settings below
+phpSettings.error_reporting = E_ALL | E_STRICT
+phpSettings.date.timezone = Europe/Berlin
+
+;ZEND_APPLICATION SETTINGS
+includePaths.library = APPLICATION_PATH "/library"
+bootstrap.path = APPLICATION_PATH "/tests/TestHelper.php"
+bootstrap.class = "TestHelper"
+appnamespace = "Application"
+autoloaderNamespaces.apache = 'Apache_'
+autoloaderNamespaces.opus = 'Opus_'
+autoloaderNamespaces.form = 'Form_'
+autoloaderNamespaces.controller = 'Controller_'
+
+workspacePath = APPLICATION_PATH "/tests/workspace"
+
+; LOCALE SETTINGS (TODO verify)
+resources.locale.default = de
+
+;SEARCH ENGINE SETTINGS
+searchengine.engine = Solr              ; searchengine to be used: Lucene or Solr
+searchengine.solr.host = opus4ci.zib.de ; test instance on ci server
+searchengine.solr.port = 8983           ; default port 8983
+searchengine.solr.app = solr
+
+[testing : production]
+sql.schema.path =
 
