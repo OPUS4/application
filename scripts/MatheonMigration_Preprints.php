@@ -266,9 +266,76 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
      * @return void
      */
     public function load_preprint_projects() {
+
+// TODO: Add Unit tests.
+//        $role = new Opus_CollectionRole();
+//        $role->setName('projects-'.rand());
+//        $role->setOaiName('projects-'.rand());
+//
+//        $root_node = $role->addRootNode();
+//        $role_id = $role->store();
+//
+//        echo "role_id: $role_id\n";
+//
+//        $app_node = $root_node->addFirstChild();
+//        // $app_node->setRoleId( $role_id );
+//        $app_node->store();
+
+        $role = new Opus_CollectionRole();
+        $role->setName('projects');
+        $role->setOaiName('projects');
+
+        $root_node = $role->addRootNode()->setVisible(1);
+        $root_collection = $root_node->addCollection();
+        $root_collection->setName('projects');
+        $role->store();
+
+        $collections = array();
+        $app_area_node = array();
+
+        $file = $this->dumps_dir . '/projects.xml';
+        foreach ($this->load_xml_mysqldump($file) AS $project) {
+            $app_area = $project['app_area'];
+            $project = $project['project_id'];
+            
+            if (false === array_key_exists($app_area, $app_area_node)) {
+                $app_node = $root_node->addLastChild()->setVisible(1);
+                $app_collection = $app_node->addCollection();
+                $app_collection->setName($app_area);
+                $root_node->store();
+
+                // TODO: Add Unit tests.
+                // $app_node->store();
+
+                $app_area_node[$app_area] = $app_node;
+            }
+            $app_node = $app_area_node[$app_area];
+
+            if (false === array_key_exists($project, $collections)) {
+                $project_node = $app_node->addLastChild()->setVisible(1);
+                $project_collection = $project_node->addCollection();
+                $project_collection->setName($project);
+                $project_node->store();
+
+                $collections[$project] = $project_collection;
+            }
+            else {
+                throw new Exception("Collection $project already exists.");
+            }
+        }
+
         $file = $this->dumps_dir . '/preprint_projects.xml';
-        $mysqldump = $this->load_xml_mysqldump($file);
-        $this->preprint_projects = $this->array2hash($mysqldump, 'id');
+        foreach ($this->load_xml_mysqldump($file) AS $preprint_project) {
+            $pid = $preprint_project['id'];
+            $project = $preprint_project['project'];
+
+            if (false === array_key_exists($pid, $this->preprint_projects)) {
+                $this->preprint_projects[$pid] = array();
+            }
+            echo "adding collection for project $project to preprint $pid\n";
+            $this->preprint_projects[$pid][] = $collections[$project];
+        }
+
         return;
     }
 
@@ -460,6 +527,13 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
 
             $doc->setPersonAuthor($unique_authors_array);
 
+            // load collections
+            if (array_key_exists($pid, $this->preprint_projects)) {
+                foreach ($this->preprint_projects[$pid] AS $c) {
+                    echo "Adding collection {$c->getId()} to document $pid\n";
+                    $doc->addCollection($c);
+                }
+            }
 
             $counter++;
             try {
