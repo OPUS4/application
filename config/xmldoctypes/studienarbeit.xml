@@ -14,12 +14,12 @@
      </opus:fieldgroup>-->
     <opus:field name="PersonSubmitter" required="yes" formelement="text" datatype="Person" multiplicity="1" />
     <opus:field name="PersonAuthor" required="yes" formelement="text" datatype="Person" multiplicity="*" />
-    <opus:field name="TitleMain" formelement="textarea" required="yes"  datatype="Text" multiplicity="4" />
+    <opus:field name="TitleMain" formelement="textarea" required="yes"  datatype="Title" multiplicity="4" />
     <opus:field name="Language" required="yes" formelement="text"  datatype="Alpha" multiplicity="1"/>
     <opus:field name="PublishedYear" required="yes" formelement="text"  datatype="Year" multiplicity="1" />
     <opus:field name="SubjectSwd" required="yes" formelement="text"  datatype="Text" multiplicity="5" />    
     <opus:field name="IdentifierOpus3" formelement="text" required="no" datatype="Text" multiplicity="1" />
-    <opus:field name="TitleAbstract" required="no" formelement="textarea"  datatype="Text" multiplicity="4">
+    <opus:field name="TitleAbstract" required="no" formelement="textarea"  datatype="Title" multiplicity="4">
         <opus:required-if-fulltext/>
     </opus:field>
 

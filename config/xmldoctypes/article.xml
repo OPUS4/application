@@ -37,12 +37,14 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	
     <field name="PersonSubmitter" required="yes" formelement="Text" datatype="Person" multiplicity="1" />
-    <field name="Licence" required="yes" formelement="Text" datatype="Text" multiplicity="1" />
+    <field name="Licence" required="no" formelement="Text" datatype="Text" multiplicity="1" >
+        <required-if-fulltext />
+    </field>
     <field name="Language" required="yes" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="IdentifierOpus3" required="no" formelement="Text" datatype="Text" multiplicity="1" />
-    <field name="TitleMain" required="yes" formelement="Text" datatype="Text" multiplicity="4" />
-    <field name="TitleAbstract" required="no" formelement="Textarea" datatype="Text" multiplicity="4" />
-    <field name="TitleParent" required="yes" formelement="Text" datatype="Text" multiplicity="1" />
+    <field name="TitleMain" required="yes" formelement="Text" datatype="Title" multiplicity="4" />
+    <field name="TitleAbstract" required="no" formelement="Textarea" datatype="Title" multiplicity="4" />
+    <field name="TitleParent" required="yes" formelement="Text" datatype="Title" multiplicity="1" />
     <field name="PersonAuthor" required="yes" formelement="Text" datatype="Person" multiplicity="*" />
     <field name="PersonEditor" required="no" formelement="Text" datatype="Person" multiplicity="*" />
     <field name="PersonTranslator" required="no" formelement="Text" datatype="Person" multiplicity="*" />
