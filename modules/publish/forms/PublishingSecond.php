@@ -181,7 +181,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
 
         //=4= Check if fields has to shown multi times!
         if ($multiplicity != "1") {
-            $this->_addDisplayGroup($formElement, $elementName, $validator, $datatype, $required);
+            $this->_addDisplayGroup($formElement, $elementName, $validator, $datatype, $required, $multiplicity);
         }
         else {
             //prepare element that do not belong to a display group
@@ -235,7 +235,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      * @param <type> $datatype
      * @param <type> $required
      */
-    protected function _addDisplayGroup($formElement, $elementName, $validator, $datatype, $required) {
+    protected function _addDisplayGroup($formElement, $elementName, $validator, $datatype, $required, $multiplicity) {
         //array is used to initilaize the display group for this group of elements
         $group = array();
         $groupName = 'group' . $elementName;
@@ -332,6 +332,8 @@ class Publish_Form_PublishingSecond extends Zend_Form {
                 break;
             case 'Alpha': return new Zend_Validate_Alpha(false);
                 break;
+            case 'Title': return new Zend_Validate_Alpha(true);
+                break;
 
             default:
                 return new Publish_Model_OpusServerPublishingException("Error while parsing the xml document type: Found datatype " . $datatype . " is unknown!");
@@ -340,33 +342,57 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         //TODO: Möglichkeit für den Admin einrichten, die Validatoren zu konfigurieren!!!
     }
 
-
     /**
-     * method to add a element to the current form
-     * @param String $formElement
-     * @param String $elementName
-     * @param Zend_Validate $validator
-     * @param String $datatype
-     * @param Sring $required
+     * method to prepare a element for the given form, check implicit fields for person and title
+     * @param <type> $formElement
+     * @param <type> $elementName
+     * @param <type> $validator
+     * @param <type> $datatype
+     * @param <type> $required
+     * @param <type> $group
+     * @param <type> $label
+     * @return string 
      */
     protected function prepareFormElement($formElement, $elementName, $validator, $datatype, $required, $group, $label) {
-        if ($datatype != 'Person') {
-            $this->addFormElement($formElement, $elementName, $validator, $required, $label);
-            $group[] = $elementName;
-        } else {
-            $first = "FirstName";
-            $nameFirst = $elementName . $first;
-            $this->addFormElement($formElement, $nameFirst, $validator, 'no', $label.$first);
-            $group[] = $nameFirst;
+        switch ($datatype) {
+            case 'Person' : 
+                $first = "FirstName";
+                $nameFirst = $elementName . $first;
+                $this->addFormElement($formElement, $nameFirst, $validator, $required, $label.$first);
+                $group[] = $nameFirst;
 
-            $last = "LastName";
-            $nameLast = $elementName . $last;
-            $this->addFormElement($formElement, $nameLast, $validator, $required, $label.$last);
-            $group[] = $nameLast;
+                $last = "LastName";
+                $nameLast = $elementName . $last;
+                $this->addFormElement($formElement, $nameLast, $validator, $required, $label.$last);
+                $group[] = $nameLast;
+                break;
+
+            case 'Title':
+                $this->addFormElement($formElement, $elementName, $validator, $required, $label);
+                $group[] = $elementName;
+                
+                $language = "Language";
+                $name = $elementName . $language;
+                $this->addFormElement("text", $name, $validator, $required, $label.$language);
+                $group[] = $name;
+                break;
+
+            default:
+                $this->addFormElement($formElement, $elementName, $validator, $required, $label);
+                $group[] = $elementName;
         }
         return $group;
     }
 
+    /**
+     *
+     * @param <type> $formElement
+     * @param <type> $elementName
+     * @param <type> $validator
+     * @param <type> $required
+     * @param <type> $label
+     * @return <type>
+     */
     protected function addFormElement($formElement, $elementName, $validator, $required, $label) {
         $formField = $this->createElement($formElement, $elementName);
         $formField->setLabel($label);
@@ -381,7 +407,12 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         $this->addElement($formField);
         return $formField;
     }    
-    
+
+    /**
+     *
+     * @param <type> $elementName
+     * @return string
+     */
     public function getElementAttributes($elementName) {
         $elementAttributes = array();
         $element = $this->getElement($elementName);
@@ -389,6 +420,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         $elementAttributes["label"] = $element->getLabel();
         $elementAttributes["error"] = $element->getMessages();
         $elementAttributes["id"] = $element->getId();
+        $elementAttributes["type"] = $element->getType();
         if ($element->isRequired()) $elementAttributes["req"] = "required";
         else $elementAttributes["req"] = "optional";
         //$elementAttributes["hint"] = $element->getAttrib("hint");
