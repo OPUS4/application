@@ -2538,10 +2538,10 @@ INSERT INTO `link_persons_documents` (`person_id`, `document_id`, `institute_id`
 (251, 90, NULL, 'author', 0, 0),
 (252, 90, NULL, 'submitter', 0, 0),
 (253, 91, NULL, 'author', 0, 0),
-(254, 92, NULL, 'author', 0, 0),
-(255, 93, NULL, 'author', 0, 0),
-(256, 94, NULL, 'author', 0, 0),
-(257, 95, NULL, 'author', 0, 0);
+(253, 92, NULL, 'author', 0, 0),
+(253, 93, NULL, 'author', 0, 0),
+(253, 94, NULL, 'author', 0, 0),
+(253, 95, NULL, 'author', 0, 0);
 
 --
 -- Daten für Tabelle `privileges`
