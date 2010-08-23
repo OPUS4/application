@@ -45,6 +45,7 @@ class Publish_IndexController extends Controller_Action {
      */
     public $documentType;
     public $documentId;
+    public $additionalFields;
 
     /**
      * Renders a list of available document types and provide upload field
@@ -56,6 +57,7 @@ class Publish_IndexController extends Controller_Action {
         $log = Zend_Registry::get('Zend_Log');
         // STEP 1: CHOOSE DOCUMENT TYPE AND UPLOAD FILE
         $this->view->title = $this->view->translate('publish_controller_index');
+        $this->view->subtitle = $this->view->translate('publish_controller_indexsub');
         $form = new Publish_Form_PublishingFirst();
         $log->debug("Module Publishing <=> PublishingFirst was created.");
         $action_url = $this->view->url(array('controller' => 'index', 'action' => 'step2'));
@@ -73,8 +75,6 @@ class Publish_IndexController extends Controller_Action {
     public function step2Action() {
         $log = Zend_Registry::get('Zend_Log');
 
-        $this->view->title = $this->view->translate('publish_controller_index');
-
         //check the input from step 1
         $step1Form = new Publish_Form_PublishingFirst();
         if ($this->getRequest()->isPost() === true) {
@@ -87,6 +87,9 @@ class Publish_IndexController extends Controller_Action {
             }
             $this->documentType = $data['type'];
             $this->documentId = "";
+
+            $this->view->title = $this->view->translate('publish_controller_index');
+            $this->view->subtitle = $this->view->translate($this->documentType);
 
             //Flag for checking if fulltext of not => must be string, or else Zend_Form collaps
             $fulltext = "0";
@@ -124,7 +127,7 @@ class Publish_IndexController extends Controller_Action {
             $action_url = $this->view->url(array('controller' => 'index', 'action' => 'check'));
             $step2Form->setAction($action_url);
             $step2Form->setMethod('post');
-            $this->renderFormForView($step2Form);
+            $this->setViewVariables($step2Form);
             //$this->view->form = $step2Form;
         }
     }
@@ -145,9 +148,6 @@ class Publish_IndexController extends Controller_Action {
             $this->documentType = $postData['documentType'];
             $this->documentId = $postData['documentId'];
             $fulltext = $postData['fullText'];
-            $log->debug("TYPE -check-: " . $this->documentType);
-            $log->debug("ID -check-: " . $this->documentId);
-            $log->debug("Fulltext -check-: " . $fulltext);
 
             //get out the additional fields
             $additionalFields = array();
@@ -158,30 +158,24 @@ class Publish_IndexController extends Controller_Action {
                     $additionalFields[$key] = (int) $value;
                 }
             }
+            $this->additionalFields = $additionalFields;
 
             //create the proper form and populate all needed values
-            $form = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $fulltext, $additionalFields, $postData);
+            $form = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $fulltext, $this->additionalFields, $postData);
             $action_url = $this->view->url(array('controller' => 'index', 'action' => 'check'));
             $form->setAction($action_url);
             $form->populate($postData);
 
             if (!$form->send->isChecked()) {
-                $log->debug("A BUTTON WAS PRESSED!!!!!!!!!!!!!!!!!");
+                $log->debug("Send: " . $form->send);
+                $this->view->title = $this->view->translate('publish_controller_index');
+                $this->view->subtitle = $this->view->translate($this->documentType);
+                $log->debug("A BUTTON (NOT SEND) WAS PRESSED!!!!!!!!!!!!!!!!!");
                 //a button was pressed, but not the send button => add / remove fields
-                //check which button other than send was pressed
                 //RENDER specific documentType.phtml
                 $this->_helper->viewRenderer($this->documentType);
-                $pressedButton = "";
-                $pressedButtonName = "";
-                foreach ($form->getElements() AS $element) {
-                    if ($element->getType() === 'Zend_Form_Element_Submit' && $element->isChecked()) {
-                        $log->debug('Following Button Is Checked: ' . $element->getName());
-                        $pressedButton = $element;
-                        $pressedButtonName = $pressedButton->getName();
-                        break;
-                    }
-                }
-                $workflow = "";
+                $pressedButtonName = $this->getPressedButton($form);
+
                 if (substr($pressedButtonName, 0, 7) == "addMore") {
                     $fieldName = substr($pressedButtonName, 7);
                     $workflow = "add";
@@ -212,58 +206,77 @@ class Publish_IndexController extends Controller_Action {
                 $action_url = $this->view->url(array('controller' => 'index', 'action' => 'check'));
                 $form->setAction($action_url);
 
-                //$this->view->form = $form;
                 //call help funtion to render the form for specific view
-                $this->renderFormForView($form);
-
-                $this->view->form = $form;
-                //return $this->render($this->documentType);
+                $this->setViewVariables($form);
+                return $this->render($this->documentType);
             } else {
                 //a button was pressed and it was send => check the form
                 //RENDER specific documentType.phtml
+                $this->view->title = $this->view->translate('publish_controller_check');
+                $this->view->subtitle = $this->view->translate($this->documentType);
+
                 if (!$form->isValid($this->getRequest()->getPost())) {
                     $log->debug("NOW CHECK THE ERROR CASE!!!!!!!!!!!!!!!!!");
                     //variables NOT valid
                     $this->view->form = $form;
                     //call help funtion to render the form for specific view
-                    $this->renderFormForView($form);
+                    $this->setViewVariables($form);
 
                     return $this->render($this->documentType);
                 } else {
                     //variables VALID
                     //RENDER check.phtml
                     $this->view->title = $this->view->translate('publish_controller_check');
-
+                    $log->debug("Variables are valid!");
                     //send form values to check view
-                    $formElements = $form->getElements();
-                    $formValues = array();
-                    foreach ($formElements as $element) {
-                        if (!($element->getType() == 'Zend_Form_Element_Hidden') && !($element->getType() == 'Zend_Form_Element_Submit'))
-                            $formValues[$element->getName()] = $element->getValue();
-                    }
-                    $this->view->formValues = $formValues;
+//                    $formValues = array();
+//                    $formValues["documentId"] = $form->getElement('documentId')->getValue();
+//                    $formValues["documentType"] = $form->getElement('documentType')->getValue();
+//                    foreach ($form->getElements() as $element) {
+//                        //if (!($element->getType() == 'Zend_Form_Element_Hidden') && !($element->getType() == 'Zend_Form_Element_Submit'))
+//                        if ($element->getValue() !== "" && $element->getType() !== "Zend_Form_Element_Submit" && $element->getType() !== "Zend_Form_Element_Hidden") {
+//
+//                            $formValues[$element->getName()] = $element->getValue();
+//                            $log->debug("add " . $element->getName() . " to formValues!");
+//                        }
+//
+//                    }
+                    $this->view->formValues = $form->getValues();
 
                     //finally: deposit the data!
-                    //$depositForm = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $fulltext, $additionalFields, $postData);
+                    //$depositForm = new Zend_Form();
+                    $depositForm = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $fulltext, $this->additionalFields, $form->getValues());
                     $action_url = $this->view->url(array('controller' => 'index', 'action' => 'deposit'));
-//                    $depositForm->setAction($action_url);
-//                    $depositForm->setMethod('post');
-
-
-                    $depositForm = new Zend_Form();
                     $depositForm->setAction($action_url);
-                    $deposit = $form->createElement('submit', 'deposit');
-                    $depositForm->addElement($deposit);
-                    foreach ($form->getValues() as $key => $value) {
-                        if ($key != 'send') {
-                            $hidden = $depositForm->createElement('hidden', $key);
-                            $hidden->setValue($value);
-                            $depositForm->addElement($hidden);
-                        } else {
-                            //do not send the field "send" with the form
-                            $depositForm->removeElement('send');
+                    $depositForm->populate($form->getValues());
+                    foreach ($depositForm->getElements() as $element) {
+                        if ($element->getValue() == "" || $element->getType() == "Zend_Form_Element_Submit" || $element->getType() == "Zend_Form_Element_Hidden") {
+
+                            $depositForm->removeElement($element->getName());
+                            $log->debug("remove " . $element->getName() . "from depositForm!");
                         }
                     }
+                    $docId = $depositForm->createElement("hidden", 'documentId');
+                    $docId->setValue($form->getElement('documentId')->getValue());
+
+                    $docType = $depositForm->createElement('hidden', 'documentType');
+                    $docType->setValue($form->getElement('documentType')->getValue());
+
+                    $fullText = $depositForm->createElement('hidden', 'fullText');
+                    $fullText->setValue($form->getElement('fullText')->getValue());
+                    //$depositForm->addValues($formValues);
+                    $deposit = $depositForm->createElement('submit', 'deposit');
+                    $depositForm->addElements(array($docId, $docType, $fullText, $deposit));
+//                    foreach ($form->getValues() as $key => $value) {
+//                        if ($key != 'send') {
+//                            $hidden = $depositForm->createElement('hidden', $key);
+//                            $hidden->setValue($value);
+//                            $depositForm->addElement($hidden);
+//                        } else {
+//                            //do not send the field "send" with the form
+//                            $depositForm->removeElement('send');
+//                        }
+//                    }
                     //send form to view
                     $this->view->form = $depositForm;
                     $log->debug("Check was successful! Next step: deposit data!");
@@ -282,30 +295,30 @@ class Publish_IndexController extends Controller_Action {
         $this->view->subtitle = $this->view->translate('publish_controller_deposit_successful');
 
         if ($this->getRequest()->isPost() === true) {
+            $log->debug("Method depositAction begins...");
             $postData = $this->getRequest()->getPost();
-            $log->debug("Mehtod depositAction begins...");
 
             //read ans save the most important values
             $this->documentType = $postData['documentType'];
             $fulltext = $postData['fullText'];
-            if (!isset($postData['documentId'])) {
+            if ($postData['documentId'] != "") {
                 $this->documentId = $postData['documentId'];
                 $document = new Opus_Document($this->documentId);
                 $documentType = $document->getField('Type');
                 $documentType->setValue($this->documentType);
                 $id = $document->store();
+                $log->debug("docID: " . $id);
             } else {
                 $document = new Opus_Document();
                 $documentType = $document->getField('Type');
                 $documentType->setValue($this->documentType);
                 $id = $document->store();
+                $log->debug("docID: " . $id);
             }
-
-            $log->debug("document generated with id " . $id);
-            //delete values that do not concern the document (anymore)
-            unset($postData['documentType']);
-            unset($postData['documentId']);
-            unset($postData['deposit']);
+            unset($postData["documentType"]);
+            unset($postData["documentType"]);
+            unset($postData["fullText"]);
+            unset($postData["deposit"]);
 
             //get the available external fields of an document
             $externalFields = $document->getAllExternalFields();
@@ -313,29 +326,29 @@ class Publish_IndexController extends Controller_Action {
 
             //save the post variables
             foreach ($postData as $key => $value) {
-                if (strstr($key, "Person")) {
-
-                    if ($value != "") {
-                        //store person object using help function
-                        $log->debug("wanna store a person...");
-                        $postData = $this->storePerson($document, $postData, $key, $externalFields);
-                        $log->debug("person stored! ");
-                    }
-                } else {
-                    $log->debug("wanna store something else...");
-                    if (array_key_exists($key, $externalFields)) {
-                        // store an external field with adder
-                        $function = "add" . $key;
-                        $log->debug("adder function: " . $function);
-                        $addedValue = $document->$function();
-                        $addedValue->setValue($value);
-                        $log->debug("with value: " . $function);
+                $datasetType = $this->getDatasetType($key);
+                if ($value != "") {
+                    if ($datasetType != "") {
+                        $log->debug("Wanna store a " . $datasetType . "...");
+                        $storeMethod = "prepare" . $datasetType . "Object";
+                        $postData = $this->$storeMethod($document, $postData, $key, $externalFields);
+                        $log->debug($datasetType . " stored!");
                     } else {
-                        //store an internal field with setter
-                        $function = "set" . $key;
-                        $log->debug("setter function: " . $function);
-                        $addedValue = $document->$function($value);
-                        $log->debug("with value: " . $function);
+                        $log->debug("wanna store something else...");
+                        if (array_key_exists($key, $externalFields)) {
+                            // store an external field with adder
+                            $function = "add" . $key;
+                            $log->debug("adder function: " . $function);
+                            $addedValue = $document->$function();
+                            $addedValue->setValue($value);
+                            $log->debug("with value: " . $value);
+                        } else {
+                            //store an internal field with setter
+                            $function = "set" . $key;
+                            $log->debug("setter function: " . $function);
+                            $addedValue = $document->$function($value);
+                            $log->debug("with value: " . $value);
+                        }
                     }
                 }
             }
@@ -343,29 +356,47 @@ class Publish_IndexController extends Controller_Action {
         }
     }
 
-    private function renderFormForView($form) {
+    /**
+     * method to set the different variables and arrays for the view and the templates
+     * @param <Zend_Form> $form
+     */
+    private function setViewVariables($form) {
         $log = Zend_Registry::get('Zend_Log');
         $log->debug("Method renderFormForView begins...");
+
         //show errors
         $errors = $form->getMessages();
-        //regular and error values for placeholders
-        foreach ($form->getElements() as $key => $value) {
-            $pos = stripos($key, "FirstName");
+
+        //group fields and single fields for view placeholders
+        foreach ($form->getElements() AS $currentElement => $value) {
+            //first element names have to loose special strings for finding groups
+            $pos = stripos($currentElement, "FirstName");
             if ($pos != false) {
-                $name = substr($key, 0, $pos);
+                $name = substr($currentElement, 0, $pos);
             } else {
-                $pos = stripos($key, "1");
+                $pos = stripos($currentElement, "1");
                 if ($pos != false)
-                    $name = substr($key, 0, $pos);
+                    $name = substr($currentElement, 0, $pos);
                 else
-                    $name=$key;
+                    $name=$currentElement; //"normal" element name without changes
+
+
+
+
+
+
+
+
+
+
+
             }
+
             $groupName = 'group' . $name;
-            //translate the group name and gibe to the view
+            //translate the group name and give a array to view
             $this->view->$name = $this->view->translate($name);
             $displayGroup = $form->getDisplayGroup($groupName);
             if ($displayGroup != null) {
-                $log->debug(" --> GROUP <-- found: " . $groupName);
                 $groupFields = array();
                 $groupHiddens = array();
                 $groupButtons = array();
@@ -384,31 +415,93 @@ class Publish_IndexController extends Controller_Action {
                     }
                 }
                 $group[] = array();
+                $group["Name"] = $groupName;
                 $group["Fields"] = $groupFields;
                 $group["Hiddens"] = $groupHiddens;
                 $group["Buttons"] = $groupButtons;
                 $this->view->$groupName = $group;
             }
 
-            //regular values
-            $this->view->$key = $form->getElement($key)->getValue();
-            $name = $key . "_label";
-            $this->view->$name = $this->view->translate($form->getElement($key)->getLabel());
-            if (isset($errors[$key]))
-                foreach ($errors[$key] as $error => $errorMessage) {
+            //single fields (for calling with helper class)
+            $log->debug("current Element: " . $currentElement);
+            $singleField = $currentElement . "_";
+            $elementAttributes = $form->getElementAttributes($currentElement); //array
+            foreach ($elementAttributes as $key1 => $value1) {
+                $log->debug($key1 . " => " . $value1);
+            }
+            $this->view->$singleField = $elementAttributes;
+            $log->debug("singlefield" . $singleField . " filled");
+
+            //also support more difficult templates for "expert admins"
+            $this->view->$currentElement = $form->getElement($currentElement)->getValue();
+            $name = $currentElement . "_label";
+            $this->view->$name = $this->view->translate($form->getElement($currentElement)->getLabel());
+            if (isset($errors[$currentElement]))
+                foreach ($errors[$currentElement] as $error => $errorMessage) {
                     //error values
-                    $errorElement = $key . 'Error';
+                    $errorElement = $currentElement . 'Error';
                     $this->view->$errorElement = $errorMessage;
                 }
         }
     }
 
-    private function storePerson($document, $formValues, $key, $externalFields) {
+    /**
+     * method to check which buttob was pressed
+     * @param <Zend_Form> $form
+     * @return <type>
+     */
+    private function getPressedButton($form) {
         $log = Zend_Registry::get('Zend_Log');
+        $log->debug("MethodgetPressedButton begins...");
+        $pressedButton = "";
+        foreach ($form->getElements() AS $element) {
+            if ($element->getType() === 'Zend_Form_Element_Submit' && $element->isChecked()) {
+                $log->debug('Following Button Is Checked: ' . $element->getName());
+                $pressedButton = $element;
+                $pressedButtonName = $pressedButton->getName();
+                break;
+            }
+        }
 
-        if ($formValues[$key] == "")
+        if ($pressedButton == "")
+            throw new Exception("No pressed button found!");
+        //todo: which exeption to choose?
+        else
+            return $pressedButtonName;
+    }
+
+    /**
+     * get the dataset type of the current post data key (used to store the post data in db)
+     * @param <String> $postDataKey
+     * @return <String> Type or ""
+     */
+    private function getDatasetType($postDataKey) {
+        if (strstr($postDataKey, "Person"))
+            return "Person";
+        else if (strstr($postDataKey, "Title"))
+            return "Title";
+        else if (strstr($postDataKey, "Subject"))
+            return "Subject";
+        else if (strstr($postDataKey, "Note"))
+            return "Note";
+        else
+            return "";
+    }
+
+    /**
+     * method to prepare a person object for storing
+     * @param <Opus_Document> $document
+     * @param <Array> $formValues
+     * @param <String> $key current Element of formValues
+     * @param <Array> $externalFields
+     * @return <Array> $formValues 
+     */
+    private function preparePersonObject($document, $formValues, $key, $externalFields) {
+        $log = Zend_Registry::get('Zend_Log');
+        if ($formValues[$key] == "") {
+            $log->debug("Person already stored.");
             return $formValues;
-        else {
+        } else {
             //get all possible Person roles
             $personRoles = array();
             foreach ($externalFields as $value) {
@@ -416,53 +509,265 @@ class Publish_IndexController extends Controller_Action {
                     array_push($personRoles, $value);
                 }
             }
+
+            $log->debug("try to store person: " . $key);
             $person = new Opus_Person();
             $first = "FirstName";
             $last = "LastName";
             $firstPos = stripos($key, $first);
-            $log->debug("key: " . $key);
             $lastPos = stripos($key, $last);
 
             if ($firstPos != false) {
-                //FirstName is given
-                $log->debug("1) set first name: " . $formValues[$key]);
-                $person->setFirstName($formValues[$key]);
-                $personType = substr($key, 0, $firstPos);
-                $log->debug("personType: " . $personType);
-                $lastNameKey = $personType . $last;
+                //store first name of a person
+                $counter = (int) substr($key, $firstPos - 1, $firstPos);
+                $log->debug("counter: " . $counter);
+                if ($counter >= 1) {
+                    //remove the counter at the end of the field name
+                    $personType = substr($key, 0, $firstPos - 1);
+                } else {
+                    $personType = substr($key, 0, $firstPos);
+                }
+                return $this->storePersonObject("first", $counter, $person, $personType, $document, $formValues[$key], $formValues);
+            } else if ($lastPos != false) {
+                //store last name of a person
+                $counter = (int) substr($key, $lastPos - 1, $lastPos);
+                //$log->debug("counter at the end: " . $counter);
+                if ($counter >= 1) {
+                    //remove the counter at the end of the field name
+                    $personType = substr($key, 0, $lastPos - 1);
+                } else {
+                    $personType = substr($key, 0, $lastPos);
+                }
+                return $this->storePersonObject("last", $counter, $person, $personType, $document, $formValues[$key], $formValues);
+            }
+        }
+    }
+
+    /**
+     * method to store a prepared person object
+     * @param <String> $workflow
+     * @param <Opus_Person> $person
+     * @param <String> $personType
+     * @param <Opus_Document> $document
+     * @param <Array> $formValues
+     * @param <String> $key
+     * @return <Array> formValues
+     */
+    private function storePersonObject($workflow, $counter, $person, $personType, $document, $value, $formValues) {
+        $log = Zend_Registry::get('Zend_Log');
+        if ($workflow === "first") {
+            $log->debug("personType: " . $personType);
+            $log->debug("1) set first name: " . $value);
+            $person->setFirstName($value);
+
+            if ($counter != 0) {
+                $lastNameKey = $personType . $counter . "LastName";
                 $log->debug("2) set last name: " . $formValues[$lastNameKey]);
                 $person->setLastName($formValues[$lastNameKey]);
-                $addFunction = "add" . $personType;
-                $document->$addFunction($person);
-                //"delete" the second value for the name to avoid duplicates
-                $formValues[$lastNameKey] = "";
-            } else if ($lastPos != false) {
-                //LastName is given
-                $log->debug("1) set last: " . $formValues[$key]);
-                $person->setLastName($formValues[$key]);
-                //personType example: PersonAuthor
-                $personType = substr($key, 0, $lastPos);
-                $firstNameKey = $personType . $first;
-                $log->debug("2) set first: " . $formValues[$firstNameKey]);
-                $person->setFirstName($formValues[$firstNameKey]);
-                $addFunction = "add" . $personType;
-                $document->$addFunction($person);
-                //"delete" the second value for the name to avoid duplicates
-                $formValues[$firstNameKey] = "";
+            } else {
+                $lastNameKey = $personType . "LastName";
+                $log->debug("2) set last name: " . $formValues[$lastNameKey]);
+                $person->setLastName($formValues[$lastNameKey]);
             }
 
+            $addFunction = "add" . $personType;
+            $log->debug("addfunction: " . $addFunction);
+            $document->$addFunction($person);
+
+            //"delete" the second value for the name to avoid duplicates
+            $formValues[$lastNameKey] = "";
+            return $formValues;
+        } else if ($workflow === "last") {
+            $log->debug("personType: " . $personType);
+            $log->debug("1) set last name: " . $value);
+            $person->setLastName($value);
+
+            if ($counter != 0) {
+                $firstNameKey = $personType . $counter . "FirstName";
+                $log->debug("2) set first name: " . $formValues[$firstNameKey]);
+                $person->setFirstName($formValues[$firstNameKey]);
+            } else {
+                $firstNameKey = $personType . "FirstName";
+                $log->debug("2) set first name: " . $formValues[$firstNameKey]);
+                $person->setFirstName($formValues[$firstNameKey]);
+            }
+
+            $addFunction = "add" . $personType;
+            $log->debug("addfunction: " . $addFunction);
+            $document->$addFunction($person);
+
+            //"delete" the second value for the name to avoid duplicates
+            $formValues[$firstNameKey] = "";
             return $formValues;
         }
     }
 
-    protected function getPressedButton($form) {
-        $pressedButton = "";
-        foreach ($form->getElements() AS $element) {
-            if ($element->getType() == 'Submit' && $element->isChecked()) {
-                $pressedButton = $element;
+    /**
+     *
+     * @param <type> $document
+     * @param <type> $formValues
+     * @param <type> $key
+     * @param <type> $externalFields
+     * @return <type>
+     */
+    private function prepareTitleObject($document, $formValues, $key, $externalFields) {
+        $log = Zend_Registry::get('Zend_Log');
+        if ($formValues[$key] == "") {
+            $log->debug("Title already stored.");
+            return $formValues;
+        } else {
+            //get all possible title types
+            $titleTypes = array();
+            foreach ($externalFields as $value) {
+                if (strstr($value, "Title")) {
+                    array_push($titleTypes, $value);
+                }
+            }
+            $log->debug("try to store title: " . $key);
+            $title = new Opus_Title();
+            $language = "Language";
+            $languagePos = stripos($key, $language);
+
+            if ($languagePos != false) {
+                //store language of a title
+                $counter = (int) substr($key, $languagePos - 1, $languagePos);
+                $log->debug("counter: " . $counter);
+                if ($counter >= 1) {
+                    //remove the counter at the end of the field name
+                    $titleType = substr($key, 0, $languagePos - 1);
+                } else {
+                    $titleType = substr($key, 0, $languagePos);
+                }
+                return $this->storeTitleObject("language", $counter, $title, $titleType, $document, $formValues[$key], $formValues);
+            } else {
+                //store value of a title
+                $len = strlen($key);
+                $counter = (int) substr($key, $len - 1, $len);
+                $log->debug("counter: " . $counter);
+                if ($counter >= 1) {
+                    //remove the counter at the end of the field name
+                    $titleType = substr($key, 0, $len - 1);
+                } else {
+                    $titleType = substr($key, 0, $len);
+                }
+                return $this->storeTitleObject("value", $counter, $title, $titleType, $document, $formValues[$key], $formValues);
             }
         }
-        return $pressedButton;
+    }
+
+    /**
+     *
+     * @param <type> $workflow
+     * @param <type> $counter
+     * @param <type> $title
+     * @param <type> $titleType
+     * @param <type> $document
+     * @param <type> $value
+     * @param <type> $formValues
+     * @return string
+     */
+    private function storeTitleObject($workflow, $counter, $title, $titleType, $document, $value, $formValues) {
+        $log = Zend_Registry::get('Zend_Log');
+        if ($workflow === "Language") {
+            $log->debug("titleType: " . $titleType);
+            $log->debug("1) set language: " . $value);
+            $title->setLanguage($value);
+
+            $valueKey = $titleType . $counter;
+            $log->debug("2) set value: " . $formValues[$valueKey]);
+            $title->setValue($formValues[$valueKey]);
+
+            $addFunction = "add" . $titleType;
+            $document->$addFunction($title);
+
+            //"delete" the second value for the name to avoid duplicates
+            $formValues[$valueKey] = "";
+            return $formValues;
+        } else if ($workflow === "value") {
+            $log->debug("titleType: " . $titleType);
+            $log->debug("1) set value: " . $value);
+            $title->setValue($value);
+
+            $languageKey = $titleType . $counter . "Language";
+            $log->debug("2) set language: " . $formValues[$languageKey]);
+            $title->setLanguage($formValues[$languageKey]);
+
+            $addFunction = "add" . $titleType;
+            $document->$addFunction($title);
+
+            //"delete" the second value for the name to avoid duplicates
+            $formValues[$languageKey] = "";
+            return $formValues;
+        }
+    }
+
+    /**
+     * method to prepare a subject object for storing
+     * @param <Opus_Document> $document
+     * @param <Array> $formValues
+     * @param <String> $key current Element of formValues
+     * @param <Array> $externalFields
+     * @return <Array> $formValues
+     */
+    private function prepareSubjectObject($document, $formValues, $key, $externalFields) {
+        $log = Zend_Registry::get('Zend_Log');
+        if ($formValues[$key] == "") {
+            $log->debug("Subject already stored.");
+            return $formValues;
+        } else {
+            //get all possible Person roles
+            $personRoles = array();
+            foreach ($externalFields as $value) {
+                if (strstr($value, "Subject")) {
+                    array_push($personRoles, $value);
+                }
+            }
+
+            $log->debug("try to store subject: " . $key);
+            if (strstr($key, "Swd")) {
+                $subject = new Opus_SubjectSwd();
+                $log->debug("subject is a swd subject.");
+            }
+            else {
+                $subject = new Opus_Subject();
+                $log->debug("subject is a uncontrolled or other subject.");
+            }
+            
+            $len = strlen($key);
+            $counter = (int) substr($key, $len - 1, $len);
+            $log->debug("counter: " . $counter);
+            
+            if ($counter >= 1)
+                //remove the counter at the end of the field name
+                $subjectType = substr($key, 0, $len - 1);
+            else
+                $subjectType = substr($key, 0, $len);
+                
+            return $this->storeSubjectObject($subject, $subjectType, $document, $formValues[$key], $formValues);
+        }
+    }
+
+    /**
+     * method to store a prepared subject object
+     * @param <String> $workflow
+     * @param <Opus_Subject> $subject
+     * @param <String> $subjectType
+     * @param <Opus_Document> $document
+     * @param <Array> $formValues
+     * @param <String> $key
+     * @return <Array> formValues
+     */
+    private function storeSubjectObject($subject, $subjectType, $document, $value, $formValues) {
+        $log = Zend_Registry::get('Zend_Log');
+        $log->debug("subjectType: " . $subjectType);
+        $log->debug("set value: " . $value);
+        $subject->setValue($value);
+        
+        $addFunction = "add" . $subjectType;
+        $log->debug("addfunction: " . $addFunction);
+        $document->$addFunction($subject);
+
+        return $formValues;
     }
 
 }

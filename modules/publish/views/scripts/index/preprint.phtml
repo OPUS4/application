@@ -1,0 +1,25 @@
+<?
+echo '<h1>'.$this->title.'</h1>';
+echo '<h3>'.$this->subtitle.'</h3>';
+?>
+
+<form enctype="application/x-www-form-urlencoded" action="/opus4-devel/index.php/publish/index/check" method="post">
+
+<?= $this->field("Group", null, $this->groupPersonAuthor); ?>
+<?= $this->field("Element", null, $this->Language_); ?>
+<?= $this->field("Group", null, $this->groupTitleMain); ?>
+<?= $this->field("Group", null, $this->groupTitleAbstract); ?>
+<?= $this->field("Element", null, $this->PersonReferee_); ?>
+<?= $this->field("Element", null, $this->Project_); ?>
+<?= $this->field("Element", null, $this->ApplicationArea_); ?>
+<?= $this->field("Group", null, $this->groupSubjectMSC); ?>
+<?= $this->field("Group", null, $this->groupSubjectUncontrolled); ?>
+<?= $this->field("Element", null, $this->Note_); ?>
+
+<?= $this->field("Hidden", "fullText", $this->fullText); ?>
+<?= $this->field("Hidden", "documentType", "preprint"); ?>
+<?= $this->field("Hidden", "documentId", $this->documentId); ?>
+<?= $this->field("Submit", "send", "Formular abschicken"); ?>
+
+</form>
+

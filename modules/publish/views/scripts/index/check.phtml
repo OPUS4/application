@@ -1,11 +1,13 @@
 <?=
-'<h1>Veröffentlichen - Eingaben prüfen</h1>';
+'<h1>'. $this->title . '</h1>';
+'<h3>'. $this->subtitle . '</h3>';
+
 
 //get the form values to let the user check them
 $values = $this->formValues;
 
 foreach ($values as $key => $val){
-    echo $key."<br /><b>".$val."</b><br /><br />";    
+    if ($val != "") echo $key."<br /><b>".$val."</b><br /><br />";
 }
 //todo: better view expected!
 

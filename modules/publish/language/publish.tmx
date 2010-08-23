@@ -16,39 +16,12 @@
       </tuv>
     </tu>
 
-    <tu tuid="publish_controller_step1">
+    <tu tuid="publish_controller_index_sub">
       <tuv xml:lang="en">
-        <seg>1: Choose document</seg>
+        <seg>Choose document type and file </seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>1: Dokument wählen</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="publish_controller_step2">
-      <tuv xml:lang="en">
-        <seg>2: Personal information</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>2: Persönliche Informationen</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="publish_controller_step3">
-      <tuv xml:lang="en">
-        <seg>3: Document metadata</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>3: Metadaten des Dokuments</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="publish_controller_step4">
-      <tuv xml:lang="en">
-        <seg>4: Optional information</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>4: Optionale Angaben</seg>
+        <seg>Dokumenttyp und Datei wählen</seg>
       </tuv>
     </tu>
     
