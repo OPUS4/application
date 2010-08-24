@@ -153,55 +153,16 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $this->view->sort_reverse = $sort_reverse;
 
         if (true === array_key_exists('state', $data)) {
-        	$this->view->state = $data['state'];
+            $this->view->state = $data['state'];
         }
-        // following could be handled inside a application model
+
         if (true === array_key_exists('sort_order', $data)) {
-        	$this->view->sort_order = $data['sort_order'];
-        	switch ($data['sort_order']) {
-        		case 'author':
-        	    	if (true === array_key_exists('state', $data)) {
-                        $result = Opus_Document::getAllDocumentsByAuthorsByState($data['state'], $sort_reverse);
-                    } else {
-                        $result = Opus_Document::getAllDocumentsByAuthors($sort_reverse);
-                    }
-        		    break;
-        		case 'publicationDate':
-        	    	if (true === array_key_exists('state', $data)) {
-                        $result = Opus_Document::getAllDocumentsByPubDateByState($data['state'], $sort_reverse);
-                    } else {
-                        $result = Opus_Document::getAllDocumentsByPubDate($sort_reverse);
-                    }
-        		    break;
-         		case 'docType':
-        	    	if (true === array_key_exists('state', $data)) {
-                        $result = Opus_Document::getAllDocumentsByDoctypeByState($data['state'], $sort_reverse);
-                    } else {
-                        $result = Opus_Document::getAllDocumentsByDoctype($sort_reverse);
-                    }
-        		    break;
-        		case 'title':
-        		    if (true === array_key_exists('state', $data)) {
-                        $result = Opus_Document::getAllDocumentsByTitlesByState($data['state'], $sort_reverse);
-                    } else {
-                        $result = Opus_Document::getAllDocumentsByTitles($sort_reverse);
-                    }
-                    break;
-        		default:
-                	if (true === array_key_exists('state', $data)) {
-                        $result = Opus_Document::getAllIdsByState($data['state'], $sort_reverse);
-                    } else {
-                        $result = Opus_Document::getAllIds($sort_reverse);
-                    }
-        	}
+            $this->view->sort_order = $data['sort_order'];
         }
-        else {
-        	if (true === array_key_exists('state', $data)) {
-                $result = Opus_Document::getAllIdsByState($data['state'], $sort_reverse);
-            } else {
-                $result = Opus_Document::getAllIds($sort_reverse);
-            }
-        }
+
+        $result = $this->_getResult($this->view->state,
+                                    $this->view->sort_order,
+                                    $sort_reverse);
 
         $paginator = Zend_Paginator::factory($result);
         if (array_key_exists('hitsPerPage', $data)) {
@@ -303,17 +264,64 @@ class Admin_DocumentsController extends Controller_CRUDAction {
     }
 
     /**
+     * Returns documents from database for browsing.
+     *
+     * @param <type> $state
+     * @param <type> $sort_order
+     * @return <type>
+     *
+     * TODO following could be handled inside a application model
+     */
+    protected function _getResult($state, $sort_order, $sort_reverse) {
+        $result = null;
+
+        $method = 'getAllDocumentsBy';
+
+        switch ($sort_order) {
+            case 'author':
+                $method = $method . 'Authors';
+                break;
+            case 'publicationDate':
+                $method = $method . 'PubDate';
+                break;
+            case 'docType':
+                $method = $method . 'Doctype';
+                break;
+            case 'title':
+                $method = $method . 'Titles';
+                break;
+            default:
+                $method = 'getAllIds';
+        }
+
+        if (!empty($state)) {
+            $method = $method . 'ByState';
+            $result = Opus_Document::$method($state, $sort_reverse);
+        } else {
+            $result = Opus_Document::$method($sort_reverse);
+        }
+
+        return $result;
+    }
+
+    /**
      * Edits a model instance
      *
      * @return void
      */
     public function editAction() {
+        // get parameters
         $id = $this->getRequest()->getParam('id');
+
         $this->view->title = $this->view->translate('admin_documents_edit');
+
         $form_builder = new Form_Builder();
         $document = new $this->_modelclass($id);
+
         $documentInSession = new Zend_Session_Namespace('document');
         $documentInSession->document = $document;
+
+
         if ($document->getServerState() === 'unpublished') {
             $this->view->actions = 'publish';
         }
@@ -323,9 +331,12 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         if ($document->getServerState() === 'deleted') {
             $this->view->actions = 'undelete';
         }
+
         $this->view->showFilemanager = $document->hasField('File');
         $documentWithFilter = $this->__createFilter($document);
+
         $modelForm = $form_builder->build($documentWithFilter);
+
         $action_url = $this->view->url(array("action" => "create"));
         $modelForm->setAction($action_url);
         $this->view->form = $modelForm;
