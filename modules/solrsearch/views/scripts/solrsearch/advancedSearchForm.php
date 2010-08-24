@@ -34,6 +34,7 @@
 
 <form action="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'searchdispatch')); ?>" method="post">
 
+    <?php if($this->searchType != 'authorsearch') : ?>
     <fieldset>
         <legend>Allgemeine Suchoptionen</legend>
         <label for="default_operator">Suchergebnisse enthalten</label>
@@ -52,6 +53,7 @@
             <option value="100" <?= $this->rows === '100' ? 'selected="true"' : '' ?>>100</option>
         </select>
     </fieldset>
+    <?php endif ?>
 
     <fieldset>
         <legend>Suchfelder</legend>
@@ -87,16 +89,30 @@
             </tr>
             <tr>
                 <td>
+                    <label for="evaluator">Gutachter</label>
+                </td>
+                <td>
+                    <select name="evaluatormodifier">
+                        <option value="+">enth&auml;lt</option>
+                        <option value="-">enth&auml;lt nicht</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="text" name="evaluator" id="evaluator" value="" />
+                </td>
+            </tr>
+            <tr>
+                <td>
                     <label for="abstract">Volltext</label>
                 </td>
                 <td>
                     enth&auml;lt
-                    <input type="hidden" name="abstractmodifier" value="+" />
                 </td>
                 <td>
                     <input type="text" id="abstract" name="abstract" value="<?= isset($this->abstractQuery) ? $this->abstractQuery : '' ?>" />
                 </td>
             </tr>
+            <?php if($this->searchType != 'authorsearch') : ?>
             <tr>
                 <td>
                     <label for="year">Erscheinungsjahr</label>
@@ -111,6 +127,8 @@
                     <input type="text" id="year" name="year" value="<?= isset($this->yearQuery) ? $this->yearQuery : '' ?>" />
                 </td>
             </tr>
+            <?php endif ?>
+
         </table>
 
     </fieldset>
