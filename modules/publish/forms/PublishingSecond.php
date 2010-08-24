@@ -120,7 +120,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         $formArray = array();
 
         //get the xml file for the current doctype
-        $xmlFile = "../config/xmldoctypes/" . $this->doctype . ".xml";
+        $xmlFile = $config->publish->doctypesPath . DIRECTORY_SEPARATOR . $this->doctype . ".xml";
 
         //create the DOM Parser for reading the xml file
         //if (!$dom = domxml_open_mem(file_get_contents($xmlFile))){
@@ -197,10 +197,11 @@ class Publish_Form_PublishingSecond extends Zend_Form {
     protected function _parseValidation(DOMElement $field) {
         $validationConfig = $field->getElementsByTagName('validation');
         if (!empty($validationConfig)) {
-            foreach ($field->getElementsByTagName('validate') as $validate) {
+            foreach ($field->getElementsByTagName('validator') as $validate) {
                 $name = $validate->getAttribute('name');
                 $negate = $validate->getAttribute('negate');
                 $params = $this->_parseParameters($validate);
+                $validatorInstance = $this->_getValidator($name, $params);
             }
         }
         else {
@@ -224,6 +225,14 @@ class Publish_Form_PublishingSecond extends Zend_Form {
             $parameters[$key] = $value;
         }
         return parameters;
+    }
+
+    protected function _getValidator($name, $params = null) {
+        // TODO change name to lower case
+        switch ($name) {
+            case 'requiredif':
+                return new Form_Validate_RequiredIf($params);
+        }
     }
 
     /**
