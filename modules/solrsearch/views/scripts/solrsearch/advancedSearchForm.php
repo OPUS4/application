@@ -90,10 +90,8 @@
                     <label for="abstract">Volltext</label>
                 </td>
                 <td>
-                    <select name="abstractmodifier">
-                        <option value="+" <?= $this->abstractQueryModifier === '+' || !isset($this->abstractQueryModifier) ? 'selected="true"' : '' ?>>enth&auml;lt</option>
-                        <option value="-" <?= $this->abstractQueryModifier === '-' ? 'selected="true"' : '' ?>>enth&auml;lt nicht</option>
-                    </select>
+                    enth&auml;lt
+                    <input type="hidden" name="abstractmodifier" value="+" />
                 </td>
                 <td>
                     <input type="text" id="abstract" name="abstract" value="<?= isset($this->abstractQuery) ? $this->abstractQuery : '' ?>" />

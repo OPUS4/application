@@ -249,12 +249,12 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
             $this->view->__set("lastPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'start'=>(int)($this->numOfHits / $this->query->getRows()) * $this->query->getRows(),'rows'=>$this->query->getRows()));
             $this->view->__set("firstPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'start'=>'0','rows'=>$this->query->getRows()));
             $this->view->__set("authorQuery", $this->query->getField('author'));
-            $this->view->__set("titleQuery", $this->query->getField('title_deu'));
-            $this->view->__set("abstractQuery", $this->query->getField('abstract_deu'));
+            $this->view->__set("titleQuery", $this->query->getField('title'));
+            $this->view->__set("abstractQuery", $this->query->getField('abstract'));
             $this->view->__set("yearQuery", $this->query->getfield('year'));
             $this->view->__set("authorQueryModifier", $this->query->getModifier('author'));
-            $this->view->__set("titleQueryModifier", $this->query->getModifier('title_deu'));
-            $this->view->__set("abstractQueryModifier", $this->query->getModifier('abstract_deu'));
+            $this->view->__set("titleQueryModifier", $this->query->getModifier('title'));
+            $this->view->__set("abstractQueryModifier", $this->query->getModifier('abstract'));
             $this->view->__set("yearQueryModifier", $this->query->getModifier('year'));
         }
     }
@@ -383,8 +383,8 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $query->setSortOrder($sortorder);
         $query->setDefaultOperator($defaultOperator);
         if($author != '') $query->setField('author', $author, $authormodifier);
-        if($abstract != '') $query->setField('abstract_deu', $abstract, $abstractmodifier);
-        if($title != '') $query->setField('title_deu', $title, $titlemodifier);
+        if($abstract != '') $query->setField('abstract', $abstract, $abstractmodifier);
+        if($title != '') $query->setField('title', $title, $titlemodifier);
         if($year != '') $query->setField('year', $year, $yearmodifier);
 
         $this->addFiltersToQuery($data, $query);
