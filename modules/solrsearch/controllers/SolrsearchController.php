@@ -265,22 +265,12 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
 
     private function createFacetsForView() {
         $facets = $this->resultList->getFacets();
-        if (array_key_exists('year', $facets)) {
-            $this->log->debug("found year facet in search results");
-            $this->view->__set("yearFacet", $facets['year']);
+        $facetArray = array();
+        foreach($facets as $key=>$facet) {
+            $this->log->debug("found ".$key." facet in search results");
+            $facetArray[$key] = $facet;
         }
-        if(array_key_exists('author_facet', $facets)){
-            $this->log->debug("found author facet in search results");
-            $this->view->__set("authorFacet", $facets['author_facet']);
-        }
-        if(array_key_exists('doctype', $facets)) {
-            $this->log->debug("found doctype facet in search results");
-            $this->view->__set("doctypeFacet", $facets['doctype']);
-        }
-        if(array_key_exists('language', $facets)) {
-            $this->log->debug("found language facet in search results");
-            $this->view->__set("languageFacet", $facets['language']);
-        }
+        $this->view->__set("facets", $facetArray);
     }
 
     /**
@@ -344,22 +334,23 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
     }
 
     private function addFiltersToQuery($data, $query) {
+        $config = Zend_Registry::get("Zend_Config");
 
-        if(array_key_exists('yearfq', $data)) {
-            $this->log->debug("year filter query is set to: ".$data['yearfq']);
-            $query->addFilterQuery("year:".$data['yearfq']);
+        if(!isset($config->searchengine->solr->facets)){
+            $this->log->debug("no facets found in config. skipping filter queries");
+            return;
         }
-        if(array_key_exists('authorfq', $data)) {
-            $this->log->debug("author filter query is set to: ".$data['authorfq']);
-            $query->addFilterQuery("author:".$data['authorfq']);
-        }
-        if(array_key_exists('languagefq', $data)) {
-            $this->log->debug("language filter query is set to: ".$data['languagefq']);
-            $query->addFilterQuery("language:".$data['languagefq']);
-        }
-        if(array_key_exists('doctypefq', $data)) {
-            $this->log->debug("doctype filter query is set to: ".$data['doctypefq']);
-            $query->addFilterQuery("doctype:".$data['doctypefq']);
+        
+        $facets = $config->searchengine->solr->facets;
+        $this->log->debug("the following facets are configured within config.ini: " . $facets);
+        $facetsArray = explode(",", $facets);
+
+        foreach($facetsArray as $facet) {
+            $facetKey = $facet."fq";
+            if(array_key_exists($facetKey, $data)) {
+                $this->log->debug("request has facet key: ".$facetKey." value is: ".$data[$facetKey]." corresponding facet is: ".$facet);
+                $query->addFilterQuery($facet.":".$data[$facetKey]);
+            }
         }
     }
 
@@ -391,7 +382,7 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         if($abstract != '') $query->setField('abstract', $abstract, '+');
         if($title != '') $query->setField('title', $title, $titlemodifier);
         if($year != '') $query->setField('year', $year, $yearmodifier);
-        if($evaluator != '') $query->setField('evaluator', $evaluator, $evaluatorModifier);
+        if($evaluator != '') $query->setField('referee', $evaluator, $evaluatorModifier);
 
         $this->addFiltersToQuery($data, $query);
         $this->log->debug("Query $query complete");

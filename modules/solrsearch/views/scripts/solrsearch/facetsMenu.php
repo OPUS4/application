@@ -34,56 +34,20 @@
 
 <div id="facets">
     <h3>Verfeinern Sie Ihre Suche</h3>
-    <?php if (isset ($this->yearFacet)) : ?>
-        <div id="yearFacet" class="facet">
-            Erscheinungsjahr:
-            <ul>
-            <?php foreach ($this->yearFacet as $facetItem) :
-                $yearfq = $this->firstPage;
-                $yearfq['yearfq'] = $facetItem->getText();
+
+    <?php foreach($this->facets as $key=>$facet) : ?>
+
+    <div id="<?= $key ?>_facet" class="facet">
+        <?= $this->translate($key."_facet_heading") ?>
+        <ul>
+            <?php foreach($facet as $facetItem) :
+                $fqUrl = $this->firstPage;
+                $fqUrl[$key.'fq'] = $facetItem->getText();
             ?>
-                <li><a href="<?= $this->url($yearfq) ?>"><?= $facetItem->getText() ?></a> (<?= $facetItem->getCount() ?>)</li>
+                <li><a href="<?= $this->url($fqUrl) ?>"><?= $facetItem->getText() ?></a> (<?= $facetItem->getCount() ?>)</li>
             <?php endforeach ?>
-            </ul>
-        </div>
-    <?php endif ?>
-    <?php if(isset($this->authorFacet)) : ?>
-        <div id="authorFacet" class="facet" >
-            Autor
-            <ul>
-            <?php foreach($this->authorFacet as $facetItem) :
-                $authorfq = $this->firstPage;
-                $authorfq['authorfq'] = $facetItem->getText();
-            ?>
-                <li><a href="<?= $this->url($authorfq) ?>"><?= $facetItem->getText() ?></a> (<?= $facetItem->getCount() ?>)</li>
-            <?php endforeach ?>
-            </ul>
-        </div>
-    <?php endif ?>
-    <?php if(isset($this->doctypeFacet)) : ?>
-        <div id="doctypeFacet" class="facet">
-            Dokumententyp
-            <ul>
-            <?php foreach($this->doctypeFacet as $facetItem) :
-                $doctypefq = $this->firstPage;
-                $doctypefq['doctypefq'] = $facetItem->getText();
-            ?>
-                <li><a href="<?= $this->url($doctypefq) ?>"><?= $facetItem->getText() ?></a> (<?= $facetItem->getCount() ?>)</li>
-            <?php endforeach ?>
-            </ul>
-        </div>
-    <?php endif ?>
-    <?php if(isset($this->languageFacet)) : ?>
-        <div id="languageFacet" class="facet">
-            Sprache
-            <ul>
-            <?php foreach($this->languageFacet as $facetItem) :
-                $languagefq = $this->firstPage;
-                $languagefq['languagefq'] = $facetItem->getText();
-            ?>
-                <li><a href="<?= $this->url($languagefq) ?>"><?= $facetItem->getText() ?></a> (<?= $facetItem->getCount() ?>)</li>
-            <?php endforeach ?>
-            </ul>
-        </div>
-    <?php endif ?>
+        </ul>
+    </div>
+
+    <?php endforeach ?>
 </div>

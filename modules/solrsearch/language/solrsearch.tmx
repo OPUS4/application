@@ -8,6 +8,33 @@
 
     <body>
 
+        <tu tuid="year_facet_heading">
+            <tuv xml:lang="en">
+                <seg>Year of publication</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Erscheinungsjahr</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="doctype_facet_heading">
+            <tuv xml:lang="en">
+                <seg>Document type</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Dokumententyp</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="language_facet_heading">
+            <tuv xml:lang="en">
+                <seg>Language</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sprache</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="solrsearch_title_simple">
             <tuv xml:lang="en">
                 <seg>Search</seg>
