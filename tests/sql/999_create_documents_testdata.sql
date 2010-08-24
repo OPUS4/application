@@ -2279,7 +2279,8 @@ INSERT INTO `persons` (`id`, `academic_title`, `date_of_birth`, `email`, `first_
 (250, NULL, NULL, NULL, ' Ralf Prof. Dr.-Ing.', 'Otterpohl', NULL),
 (251, NULL, NULL, NULL, ' Nathasith', 'Chiarawatchai', NULL),
 (252, NULL, NULL, 'o.marahrens@tu-harburg.de', 'Opus3', 'Importer', NULL),
-(253, NULL, NULL, 'john.doe@example.org', 'John', 'Doe', NULL);
+(253, NULL, NULL, 'john.doe@example.org', 'John', 'Doe', NULL),
+(254, NULL, NULL, 'jane.doe@example.org', 'Jane', 'Doe', NULL);
 
 
 --
@@ -2541,7 +2542,12 @@ INSERT INTO `link_persons_documents` (`person_id`, `document_id`, `institute_id`
 (253, 92, NULL, 'author', 0, 0),
 (253, 93, NULL, 'author', 0, 0),
 (253, 94, NULL, 'author', 0, 0),
-(253, 95, NULL, 'author', 0, 0);
+(253, 95, NULL, 'author', 0, 0),
+(254, 91, NULL, 'referee', 0, 0),
+(254, 92, NULL, 'referee', 0, 0),
+(254, 93, NULL, 'referee', 0, 0),
+(254, 94, NULL, 'referee', 0, 0),
+(254, 95, NULL, 'referee', 0, 0);
 
 --
 -- Daten für Tabelle `privileges`
