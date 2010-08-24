@@ -55,16 +55,9 @@ class Admin_DocumentsController extends Controller_CRUDAction {
     private function __createFilter(Opus_Document $document, $page = null) {
         $filter = new Opus_Model_Filter();
         $filter->setModel($document);
-        $type = new Opus_Document_Type($document->getType());
-        $pages = $type->getPages();
-        $alwayshidden = array('Collection', 'IdentifierOpus3', 'Source', 'File', 'ServerState', 'ServerDatePublished', 'ServerDateModified', 'ServerDateUnlocking');
-        $blacklist = array_merge($alwayshidden, $type->getAdminFormBlackList());
-        if (false === is_null($page) and true === array_key_exists($page, $pages)) {
-            $filter->setWhitelist(array_diff($pages[$page]['fields'], $blacklist));
-        } else {
-            $filter->setBlacklist($blacklist);
-        }
-        $filter->setSortOrder($type->getAdminFormSortOrder());
+        $blacklist = array('Collection', 'IdentifierOpus3', 'Source', 'File', 'ServerState', 'ServerDatePublished', 'ServerDateModified', 'ServerDateUnlocking', 'Type');
+        $filter->setBlacklist($blacklist);
+        // $filter->setSortOrder($type->getAdminFormSortOrder());
         return $filter;
     }
 
@@ -331,11 +324,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             $this->view->actions = 'undelete';
         }
         $this->view->showFilemanager = $document->hasField('File');
-        $type = new Opus_Document_Type($document->getType());
-        $documentWithFilter = new Opus_Model_Filter;
-        $documentWithFilter->setModel($document)
-            ->setBlacklist(array_merge(array('Collection', 'IdentifierOpus3', 'Source', 'File', 'ServerState', 'ServerDatePublished', 'ServerDateModified', 'ServerDateUnlocking', 'Type'), $type->getAdminFormBlackList()))
-            ->setSortOrder($type->getAdminFormSortOrder());
+        $documentWithFilter = $this->__createFilter($document);
         $modelForm = $form_builder->build($documentWithFilter);
         $action_url = $this->view->url(array("action" => "create"));
         $modelForm->setAction($action_url);
