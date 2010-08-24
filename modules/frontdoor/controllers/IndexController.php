@@ -48,15 +48,15 @@ class Frontdoor_IndexController extends Controller_Action {
             $document = new Opus_Document($docId);
 
             // Set up filter and get XML-Representation of filtered document.
-            $type = new Opus_Document_Type($document->getType());
+            $type = $document->getType();
             $filter = new Opus_Model_Filter;
             $filter->setModel($document);
             $xml = $filter->toXml();
 
             // Set up XSLT-Stylesheet
             $xslt = new DomDocument;
-            if (true === file_exists($this->view->getScriptPath('index') . '/' . $type->getName() . '.xslt')) {
-                $template = $type->getName() . '.xslt';
+            if (true === file_exists($this->view->getScriptPath('index') . '/' . $type . '.xslt')) {
+                $template = $type . '.xslt';
             } else {
                 $template = 'index.xslt';
             }
