@@ -346,7 +346,8 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $facetsArray = explode(",", $facets);
 
         foreach($facetsArray as $facet) {
-            $facetKey = trim($facet)."fq";
+            $facet = trim($facet);
+            $facetKey = $facet."fq";
             if(array_key_exists($facetKey, $data)) {
                 $this->log->debug("request has facet key: ".$facetKey." value is: ".$data[$facetKey]." corresponding facet is: ".$facet);
                 $query->addFilterQuery($facet.":".$data[$facetKey]);
