@@ -31,6 +31,13 @@
             <action>index</action>
         </publish>
 
+        <review>
+            <label>review_menu_label</label>
+            <module>review</module>
+            <controller>index</controller>
+            <action>index</action>
+        </review>
+
         <administration>
             <label>admin_menu_label</label>
             <module>admin</module>
