@@ -25,7 +25,6 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    TODO
- * @package     Opus_SolrSearch
  * @author      Julian Heise <heise@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -34,45 +33,24 @@
 
 ?>
 
-<?php
-    if($this->searchType === 'simple')
-        include('simpleSearchForm.php');
-    else if($this->searchType === 'advanced')
-        include('advancedSearchForm.php');
-    // TODO include advanced search form
-?>
+<div id="search_options" >
 
-<h2><?= $this->numOfHits ?> Suchergebnisse</h2>
+    <?php
+        $yearDescUrl = $this->firstPage;
+        $yearDescUrl['sortfield'] = 'year';
+        $yearDescUrl['sortorder'] = 'desc';
 
-<?php include('searchOptions.php') ?>
-<?php include('facetsMenu.php') ?>
-<?php include('pagination.php') ?>
+        $yearAscUrl = $this->firstPage;
+        $yearAscUrl['sortfield'] = 'year';
+        $yearAscUrl['sortorder'] = 'asc';
 
-<div id="search_results" >
+        $scoreDescUrl = $this->firstPage;
+        $scoreDescUrl['sortfield'] = 'score';
+        $scoreDescUrl['sortorder'] = 'desc';
+    ?>
 
-    <?php foreach($this->results as $result) : ?>
-        <div class="result_box">
-            <?php
-                $frontdoorUrl = array(
-                    'module' => 'frontdoor',
-                    'controller' => 'index',
-                    'action' => 'index',
-                    'docId' => $result->getId());
-            ?>
-            <a href="<?= $this->url($frontdoorUrl, null, true) ?>"><?= $result->getTitleDeu(); ?></a> (<?= $result->getYear(); ?>)<br/>
-            <!-- TODO: TitleEng -->
-
-            <?php foreach($result->getAuthors() as $author) :
-                $authorSearch = $this->authorSearch;
-                $authorSearch['author'] = $author;
-            ?>
-            <a href="<?= $this->url($authorSearch); ?>"><?= $author ?></a>
-            <?php endforeach ?>
-
-            <div class="abstract"><?= $result->getAbstractDeu(); ?></div>
-            <!-- TODO: Abstract Eng -->
-        </div>
-    <?php endforeach ?>
+    Sortieren nach
+    <a href="<?= $this->url($yearAscUrl) ?>">Jahr (aufsteigend)</a>,
+    <a href="<?= $this->url($yearDescUrl) ?>">Jahr (absteigend)</a>,
+    <a href="<?= $this->url($scoreDescUrl) ?>">Relevanz</a>
 </div>
-
-<?php include('pagination.php') ?>
