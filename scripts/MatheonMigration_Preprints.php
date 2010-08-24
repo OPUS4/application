@@ -51,8 +51,9 @@ require_once('MatheonMigration_Base.php');
  */
 class MatheonMigration_Preprints extends MatheonMigration_Base {
 
-    private $files_dir = null;
-    private $dumps_dir = null;
+    private $files_dir     = null;
+    private $dumps_dir     = null;
+    private $workspace_dir = null;
 
     /**
      * Associative array maps user_ids to Opus_Person objects.
@@ -90,6 +91,9 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
     function __construct($options) {
         $this->dumps_dir = $options['dumps-dir'];
         $this->files_dir = $options['files-dir'];
+
+        $config = Zend_Registry::get('Zend_Config');
+        $this->workspace_dir = $config->workspacePath;
     }
 
     /**
@@ -282,12 +286,12 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
 //        $app_node->store();
 
         $role = new Opus_CollectionRole();
-        $role->setName('projects');
+        $role->setName('Projects');
         $role->setOaiName('projects');
 
         $root_node = $role->addRootNode()->setVisible(1);
         $root_collection = $root_node->addCollection();
-        $root_collection->setName('projects');
+        $root_collection->setName('Projects');
         $role->store();
 
         $collections = array();
@@ -408,7 +412,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
                     $model->setLanguage('eng');
                     $model->setSourcePath($this->files_dir . DIRECTORY_SEPARATOR . $pid);
                     $model->setTempFile($file['file_name']);
-                    $model->setDestinationPath('/home/tklein/opus4-zib/server/workspace/files');
+                    $model->setDestinationPath($this->workspace_dir . DIRECTORY_SEPARATOR . 'files');
                     $model->setPathName($file['file_name']);
 
                     if (array_key_exists('original_file_name', $file)) {
@@ -562,7 +566,7 @@ $application = new Zend_Application(
         )
     )
 );
-$application->bootstrap();
+$application->bootstrap(array('Configuration', 'Logging', 'Database'));
 
 /**
  * Parse options.
