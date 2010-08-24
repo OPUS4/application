@@ -201,18 +201,18 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             $matheon_user_id = $author['user_id'];
             if (false === empty($matheon_user_id)) {
                 if (false === array_key_exists($matheon_user_id, $this->persons)) {
-                    echo "no maths_id user found for id $matheon_user_id (document $matheon_preprint_id)\n";
+                    echo "-- Kein Benutzer gefunden fuer user_id $matheon_user_id (document $matheon_preprint_id)\n";
                     continue;
                 }
 
                 $matheon_user = $this->persons[$matheon_user_id];
 
                 if ($author['givenname'] != '' && $matheon_user->getFirstName() !== $author['givenname']) {
-                    echo "firstname mismatch found for user_id $matheon_user_id (document $matheon_preprint_id): " . $matheon_user->getFirstName() . " !== {$author['givenname']}\n";
+                    echo "-- Widerspruechlicher Vorname: user_id $matheon_user_id (document $matheon_preprint_id): " . $matheon_user->getFirstName() . " !== {$author['givenname']}\n";
                 }
 
                 if ($author['familyname'] != '' && $matheon_user->getLastName() !== $author['familyname']) {
-                    echo "lastname mismatch found for user_id $matheon_user_id (document $matheon_preprint_id): " . $matheon_user->getLastName() . " !== {$author['familyname']}\n";
+                    echo "-- Widerspruechlicher Nachname: user_id $matheon_user_id (document $matheon_preprint_id): " . $matheon_user->getLastName() . " !== {$author['familyname']}\n";
                 }
             }
             else {
@@ -231,13 +231,13 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
 
             if (empty($firstname)) {
                 // var_dump($author);
-                echo "document $matheon_preprint_id // author $matheon_author_id // user_id $matheon_user_id -- empty FirstName!\n";
+                echo "-- Leerer Vorname: $matheon_preprint_id // author $matheon_author_id // user_id $matheon_user_id -- empty FirstName!\n";
                 $matheon_user->setFirstName("INVALID");
             }
 
             if (empty($lastname)) {
                 // var_dump($author);
-                echo "document $matheon_preprint_id // author $matheon_author_id // user_id $matheon_user_id -- empty LastName!\n";
+                echo "-- Leerer Nachname: document $matheon_preprint_id // author $matheon_author_id // user_id $matheon_user_id\n";
                 $matheon_user->setLastName("INVALID");
             }
 
@@ -336,7 +336,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             if (false === array_key_exists($pid, $this->preprint_projects)) {
                 $this->preprint_projects[$pid] = array();
             }
-            echo "adding collection for project $project to preprint $pid\n";
+            // echo "adding collection for project $project to preprint $pid\n";
             $this->preprint_projects[$pid][] = $collections[$project];
         }
 
@@ -475,10 +475,10 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
 
                 if (count($mscs) > 0) {
                     if ($msc_rest_string != '') {
-                        echo "failed to parse msc string:\n";
-                        echo "\tcleaned string: '$msc_string_clean'\n";
-                        echo "\tfound mscs: ('" . implode("','", $mscs) . "')\n";
-                        echo "\tunparsed: '$msc_rest_string'\n";
+                        echo "-- Unbekannte Zeichenkette in MSC-Werten gefunden:\n";
+                        echo "\tZeichenkette: '$msc_string_clean'\n";
+                        echo "\tGefundene MSCs: ('" . implode("','", $mscs) . "')\n";
+                        echo "\tUnbekannter Anteil: '$msc_rest_string'\n";
                     }
                     else {
                         // echo "successfully parsed mscs: ('" . implode("','", $mscs) . "')\n";
@@ -524,9 +524,9 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             }
 
             foreach ($duplicate_authors_array as $mda) {
-                echo "found (and skipped) duplicate author in serial {$preprint['serial']}:\n";
-                echo "mda->firstName: " . $mda->getFirstName() . "\n";
-                echo "mda->lastName: " . $mda->getLastName() . "\n";
+                echo "-- Doppelter Autor in Dokument (serial: {$preprint['serial']}):\n";
+                echo "\t->firstName: " . $mda->getFirstName() . "\n";
+                echo "\t->lastName: " . $mda->getLastName() . "\n";
             }
 
             $doc->setPersonAuthor($unique_authors_array);
@@ -534,7 +534,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             // load collections
             if (array_key_exists($pid, $this->preprint_projects)) {
                 foreach ($this->preprint_projects[$pid] AS $c) {
-                    echo "Adding collection {$c->getId()} to document $pid\n";
+                    // echo "Adding collection {$c->getId()} to document $pid\n";
                     $doc->addCollection($c);
                 }
             }
