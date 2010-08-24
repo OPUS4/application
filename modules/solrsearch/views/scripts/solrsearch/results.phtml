@@ -42,7 +42,7 @@
     // TODO include advanced search form
 ?>
 
-<h2>Suchergebnisse</h2>
+<h2><?= $this->numOfHits ?> Suchergebnisse</h2>
 
 <div id="search_options" >
 
@@ -122,42 +122,7 @@
     <?php endif ?>
     
 
-<div id="pagination" >
-    <p class="info_small">
-        Ihre Suche ergab <strong><?= $this->numOfHits ?></strong> Treffer und dauerte <?= $this->queryTime ?> ms.
-    </p>
-    <p class="info_small">
-        Anzeige der Treffer <strong><?= (int)($this->start)+1 ?></strong> bis <strong><?php if(((int)($this->start) + (int)($this->rows)) > $this->numOfHits) echo $this->numOfHits; else echo (int)($this->start) + (int)($this->rows); ?></strong>
-    </p>
-    <ul class="paginationControl">
-
-        <?php if($this->start >= $this->rows) : ?>
-        <li>
-            <a href="<?= $this->url($this->firstPage); ?>">
-                Erste Seite
-            </a>
-        </li>
-        <li>
-            <a href="<?= $this->url($this->prevPage); ?>">
-                Vorherige Seite
-            </a>
-        </li>
-        <?php endif ?>
-
-        <?php if($this->start < ((int)($this->numOfHits) - (int)($this->rows))) : ?>
-        <li>
-            <a href="<?= $this->url($this->nextPage); ?>">
-                Nächste Seite
-            </a>
-        </li>
-        <li>
-            <a href="<?= $this->url($this->lastPage); ?>">
-                Letzte Seite
-            </a>
-        </li>
-        <?php endif ?>
-    </ul>
-</div>
+<?php include('pagination.php') ?>
 
 <div id="search_results" >
 
@@ -186,3 +151,4 @@
     <?php endforeach ?>
 </div>
 
+<?php include('pagination.php') ?>
