@@ -321,8 +321,9 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
             $data['start'] = '0';
         }
         if($data['searchtype'] === 'advanced' || $data['searchtype'] === 'authorsearch') {
-            $data['author'] = str_replace(",","",$data['author']);
-            $data['author'] = str_replace(';','',$data['author']);
+            if (isset($data['author'])) {
+                $data['author'] = str_replace(array(',', ';'), '', $data['author']);
+            }
         }
         return $data;
     }
