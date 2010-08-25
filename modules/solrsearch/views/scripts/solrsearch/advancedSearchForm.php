@@ -61,7 +61,7 @@
         <table>
             <tr>
                 <td>
-                    <label for="author">Autor</label>
+                    <label for="author">Autor(en)</label>
                 </td>
                 <td>
                     <select name="authormodifier">
@@ -70,7 +70,7 @@
                     </select>
                 </td>
                 <td>
-                    <input type="text" id="author" name="author" value="<?= $this->authorQuery ?>" />
+                    <input type="text" id="author" name="author" value="<?= htmlspecialchars($this->authorQuery) ?>" title="Sie k&ouml;nnen in dieses Feld auch mehrere Autoren eingeben." />
                 </td>
             </tr>
             <tr>
@@ -84,7 +84,7 @@
                     </select>
                 </td>
                 <td>
-                    <input type="text" id="title" name="title" value="<?= $this->titleQuery ?>" />
+                    <input type="text" id="title" name="title" value="<?= htmlspecialchars($this->titleQuery) ?>" />
                 </td>
             </tr>
             <tr>
@@ -98,7 +98,7 @@
                     </select>
                 </td>
                 <td>
-                    <input type="text" name="evaluator" id="evaluator" value="<?=  $this->evaluatorQuery ?>" />
+                    <input type="text" name="evaluator" id="evaluator" value="<?=  htmlspecialchars($this->evaluatorQuery) ?>" />
                 </td>
             </tr>
             <tr>
@@ -109,7 +109,7 @@
                     enth&auml;lt
                 </td>
                 <td>
-                    <input type="text" id="abstract" name="abstract" value="<?= $this->abstractQuery ?>" />
+                    <input type="text" id="abstract" name="abstract" value="<?= htmlspecialchars($this->abstractQuery) ?>" />
                 </td>
             </tr>
             <?php if($this->searchType != 'authorsearch') : ?>
@@ -124,7 +124,7 @@
                     </select>
                 </td>
                 <td>
-                    <input type="text" id="year" name="year" value="<?= $this->yearQuery ?>" />
+                    <input type="text" id="year" name="year" value="<?= htmlspecialchars($this->yearQuery) ?>" />
                 </td>
             </tr>
             <?php endif ?>
