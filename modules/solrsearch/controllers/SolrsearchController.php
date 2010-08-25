@@ -213,15 +213,11 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $this->setViewValues();
         $this->createFacetsForView();
 
-        if($this->query->getStart() >= $this->numOfHits) {
+        if(0 === $this->numOfHits || $this->query->getStart() >= $this->numOfHits) {
             $this->render('nohits');
             return;
         }
-
-        if (0 === $this->numOfHits)
-            $this->render('nohits');
-        else
-            $this->render('results');
+        $this->render('results');            
     }
 
     private function performSearch() {
@@ -284,7 +280,6 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
      * @throws Application_Exception if any of the parameters couldn't be read
      */
     private function buildQuery($request) {
-
         $data = null;
 
         if ($request->isPost() === true) {
@@ -313,9 +308,17 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
     }
 
     private function validateParameterValues($data) {
-        if((int)$data['rows'] > 100){
-            $this->log->warn("Values greater than 100 are not allowed for the rows paramter.");
+        if(isset($data['rows']) && (int)$data['rows'] > 100) {
+            $this->log->warn("Values greater than 100 are currently not allowed for the rows paramter.");
             $data['rows'] = '100';
+        }
+        if(isset($data['rows']) && (int)$data['rows'] <= 0) {
+            $this->log->warn("row parameter is smaller than 1: adjust it to 1 ");
+            $data['rows'] = '1';
+        }
+        if (isset($data['start']) && (int)$data['start'] < 0) {
+            $this->log->warn("a negative start parameter is ignored");
+            $data['start'] = '0';
         }
         if($data['searchtype'] === 'advanced' || $data['searchtype'] === 'authorsearch') {
             $data['author'] = str_replace(",","",$data['author']);
