@@ -344,12 +344,12 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
     private function addFiltersToQuery($data, $query) {
         $config = Zend_Registry::get("Zend_Config");
 
-        $facets = $config->searchengine->solr->facets;
-        if(is_null($facets)){
+        if(!isset($config->searchengine->solr->facets)){
             $this->log->debug("key searchengine.solr.facets is not present in config. skipping filter queries");
             return;
         }
-                
+        
+        $facets = $config->searchengine->solr->facets;
         $this->log->debug("searchengine.solr.facets is set to " . $facets);
         $facetsArray = explode(",", $facets);
 
