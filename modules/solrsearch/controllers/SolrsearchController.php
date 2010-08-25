@@ -156,7 +156,6 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
     }
 
     private function createAdvancedSearchUrl($data) {
-
         $urlArray = array(
                 'module'=>'solrsearch',
                 'controller'=>'solrsearch',
@@ -178,6 +177,9 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         if(isset($data['abstract']) && $data['abstract'] != '')
             $urlArray['abstract'] = $data['abstract'];
 
+        if(isset($data['fulltext']) && $data['fulltext'] != '')
+            $urlArray['fulltext'] = $data['fulltext'];
+
         if(isset($data['year']) && $data['year'] != '')
             $urlArray['year'] = $data['year'];
 
@@ -186,6 +188,9 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
 
         if(isset($data['titlemodifier']) && $data['titlemodifier'] != '')
             $urlArray['titlemodifier'] = $data['titlemodifier'];
+
+        if(isset($data['abstractmodifier']) && $data['abstractmodifier'] != '')
+            $urlArray['abstractmodifier'] = $data['abstractmodifier'];
 
         if(isset($data['yearmodifier']) && $data['yearmodifier'] != '')
             $urlArray['yearmodifier'] = $data['yearmodifier'];
@@ -252,6 +257,7 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
             $this->view->__set("authorQuery", $this->query->getField('author'));
             $this->view->__set("titleQuery", $this->query->getField('title'));
             $this->view->__set("abstractQuery", $this->query->getField('abstract'));
+            $this->view->__set("fulltextQuery", $this->query->getField('fulltext'));
             $this->view->__set("yearQuery", $this->query->getfield('year'));
             $this->view->__set("authorQueryModifier", $this->query->getModifier('author'));
             $this->view->__set("titleQueryModifier", $this->query->getModifier('title'));
@@ -372,10 +378,12 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $sortorder = array_key_exists('sortorder', $data) ? $data['sortorder'] : 'desc';
         $author = array_key_exists('author', $data) ? $data['author'] : '';
         $abstract = array_key_exists('abstract', $data) ? $data['abstract'] : '';
+        $fulltext = array_key_exists('fulltext', $data) ? $data['fulltext'] : '';
         $title = array_key_exists('title', $data) ? $data['title'] : '';
         $year = array_key_exists('year', $data) ? $data['year'] : '';
         $defaultOperator = array_key_exists('defaultoperator', $data) ? $data['defaultoperator'] : 'AND';
         $authormodifier = array_key_exists('authormodifier', $data) ? $data['authormodifier'] : '+';
+        $abstractmodifier = array_key_exists('abstractmodifier', $data) ? $data['abstractmodifier'] : '+';
         $titlemodifier = array_key_exists('titlemodifier', $data) ? $data['titlemodifier'] : '+';
         $yearmodifier = array_key_exists('yearmodifier', $data) ? $data['yearmodifier'] : '+';
         $evaluator = array_key_exists('evaluator', $data) ? $data['evaluator'] : '';
@@ -388,7 +396,8 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $query->setSortOrder($sortorder);
         $query->setDefaultOperator($defaultOperator);
         if($author != '') $query->setField('author', $author, $authormodifier);
-        if($abstract != '') $query->setField('abstract', $abstract, '+');
+        if($abstract != '') $query->setField('abstract', $abstract, $abstractmodifier);
+        if($fulltext != '') $query->setField('fulltext', $fulltext, '+');
         if($title != '') $query->setField('title', $title, $titlemodifier);
         if($year != '') $query->setField('year', $year, $yearmodifier);
         if($evaluator != '') $query->setField('referee', $evaluator, $evaluatorModifier);

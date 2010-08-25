@@ -65,8 +65,8 @@
                 </td>
                 <td>
                     <select name="authormodifier">
-                        <option value="+" <?= $this->authorQueryModifier === '+' || !isset($this->authorQueryModifier) ? 'selected="true"' : '' ?>>enth&auml;lt</option>
-                        <option value="-" <?= $this->authorQueryModifier === '-' ? 'selected="true"' : '' ?>>enth&auml;lt nicht</option>
+                        <option value="+" <?= $this->authorQueryModifier === '+' || !isset($this->authorQueryModifier) ? 'selected="true"' : '' ?>>enthält</option>
+                        <option value="-" <?= $this->authorQueryModifier === '-' ? 'selected="true"' : '' ?>>enthält nicht</option>
                     </select>
                 </td>
                 <td>
@@ -79,8 +79,8 @@
                 </td>
                 <td>
                     <select name="titlemodifier">
-                        <option value="+" <?= $this->titleQueryModifier === '+' || !isset($this->titleQueryModifier) ? 'selected="true"' : '' ?>>enth&auml;lt</option>
-                        <option value="-" <?= $this->titleQueryModifier === '-' ? 'selected="true"' : '' ?>>enth&auml;lt nicht</option>
+                        <option value="+" <?= $this->titleQueryModifier === '+' || !isset($this->titleQueryModifier) ? 'selected="true"' : '' ?>>enthält</option>
+                        <option value="-" <?= $this->titleQueryModifier === '-' ? 'selected="true"' : '' ?>>enthält nicht</option>
                     </select>
                 </td>
                 <td>
@@ -93,8 +93,8 @@
                 </td>
                 <td>
                     <select name="evaluatormodifier">
-                        <option value="+" <?= $this->evaluatorQueryModifier === '+' || !isset($this->evaluatorQueryModifier) ? 'selected="true"' : '' ?>>enth&auml;lt</option>
-                        <option value="-" <?= $this->evaluatorQueryModifier === '-' ? 'selected"true"' : '' ?>>enth&auml;lt nicht</option>
+                        <option value="+" <?= $this->evaluatorQueryModifier === '+' || !isset($this->evaluatorQueryModifier) ? 'selected="true"' : '' ?>>enthält</option>
+                        <option value="-" <?= $this->evaluatorQueryModifier === '-' ? 'selected"true"' : '' ?>>enthält nicht</option>
                     </select>
                 </td>
                 <td>
@@ -103,13 +103,27 @@
             </tr>
             <tr>
                 <td>
-                    <label for="abstract">Volltext</label>
+                    <label for="abstract">Abstract</label>
                 </td>
                 <td>
-                    enth&auml;lt
+                    <select name="abstractmodifier">
+                        <option value="+" <?= $this->abstractQueryModifier === '+' || !isset($this->abstractQueryModifier) ? 'selected="true"' : '' ?>>enthält</option>
+                        <option value="-" <?= $this->abstractQueryModifier === '-' ? 'selected"true"' : '' ?>>enthält nicht</option>
+                    </select>
                 </td>
                 <td>
                     <input type="text" id="abstract" name="abstract" value="<?= htmlspecialchars($this->abstractQuery) ?>" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="abstract">Volltext</label>
+                </td>
+                <td>
+                    enthält
+                </td>
+                <td>
+                    <input type="text" id="fulltext" name="fulltext" value="<?= htmlspecialchars($this->fulltextQuery) ?>" />
                 </td>
             </tr>
             <?php if($this->searchType != 'authorsearch') : ?>
@@ -119,8 +133,8 @@
                 </td>
                 <td>
                     <select name="yearmodifier">
-                        <option value="+" <?= $this->yearQueryModifier === '+' || !isset($this->yearQueryModifier) ? 'selected="true"' : '' ?>>enth&auml;lt</option>
-                        <option value="-" <?= $this->yearQueryModifier === '-' ? 'selected="true"' : '' ?>>enth&auml;lt nicht</option>
+                        <option value="+" <?= $this->yearQueryModifier === '+' || !isset($this->yearQueryModifier) ? 'selected="true"' : '' ?>>enthält</option>
+                        <option value="-" <?= $this->yearQueryModifier === '-' ? 'selected="true"' : '' ?>>enthält nicht</option>
                     </select>
                 </td>
                 <td>
@@ -134,10 +148,8 @@
     </fieldset>
 
     <input type="submit" value="Suchen" />
-
     <input type="hidden" name="searchtype" value="advanced" />
     <input type="hidden" name="start" value="0" />
     <input type="hidden" name="sortfield" value="score" />
     <input type="hidden" name="sordorder" value="desc" />
-
 </form>
