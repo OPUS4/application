@@ -59,19 +59,19 @@
                     'action' => 'index',
                     'docId' => $result->getId());
             ?>
-            <a href="<?= $this->url($frontdoorUrl, null, true) ?>"><?= $result->getTitleDeu(); ?></a> (<?= $result->getYear(); ?>)<br/>
+            <a href="<?= $this->url($frontdoorUrl, null, true) ?>"><?= $result->getTitle(); ?></a> (<?= $result->getYear(); ?>)<br/>
 
             <?php if(!is_null($result->getAuthors())) : ?>
-            <?php foreach($result->getAuthors() as $author) :
-                $authorSearch = $this->authorSearch;
-                $authorSearch['author'] = '"'.$author.'"';
-                $authorSearch['searchtype'] = 'authorsearch';
-            ?>
-            <a href="<?= $this->url($authorSearch); ?>"><?= $author ?></a>
-            <?php endforeach ?>
+                <?php foreach($result->getAuthors() as $author) :
+                    $authorSearch = $this->authorSearch;
+                    $authorSearch['author'] = '"'.$author.'"';
+                    $authorSearch['searchtype'] = 'authorsearch';
+                ?>
+                <a href="<?= $this->url($authorSearch); ?>"><?= $author ?></a>
+                <?php endforeach ?>
             <?php endif ?>
 
-            <div class="abstract"><?= $result->getAbstractDeu(); ?></div>
+            <div class="abstract"><?= $result->getAbstract(); ?></div>
         </div>
     <?php endforeach ?>
 </div>
