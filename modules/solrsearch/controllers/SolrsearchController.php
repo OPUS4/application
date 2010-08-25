@@ -260,6 +260,8 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
             $this->view->__set("titleQueryModifier", $this->query->getModifier('title'));
             $this->view->__set("abstractQueryModifier", $this->query->getModifier('abstract'));
             $this->view->__set("yearQueryModifier", $this->query->getModifier('year'));
+            $this->view->__set("evaluatorQuery", $this->query->getField('referee'));
+            $this->view->__set("evaluatorQueryModifier", $this->query->getModifier('referee'));
         }
     }
 
