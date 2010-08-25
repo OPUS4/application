@@ -203,6 +203,8 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
     public function searchAction() {
         $this->query = $this->buildQuery($this->_request);
         $this->performSearch();
+        $this->setViewValues();
+        $this->createFacetsForView();
 
         if (0 === $this->numOfHits)
             $this->render('nohits');
@@ -210,24 +212,12 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
             $this->render('results');
     }
 
-    public function authorSearchAction() {
-        // TODO implement authorSearchAction
-        $this->render('nohits');
-    }
-
-    /**
-     * Performs the SolrSearch using the $query instance variable. Has side-effect:
-     * some view parameters are set in order to display results
-     */
     private function performSearch() {
         $this->log->debug("performing search");
         $this->searcher = new Opus_SolrSearch_Searcher();
         $this->resultList = $this->searcher->search($this->query);
         $this->numOfHits = $this->resultList->getNumberOfHits();
         $this->log->debug("resultlist: " . $this->resultList);
-        $this->setViewValues();
-        $this->createFacetsForView();
-        $this->log->debug("search complete");
     }
 
     private function setViewValues() {
@@ -287,29 +277,36 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         if ($request->isPost() === true) {
             $this->log->debug("Request is post. Extracting data.");
             $data = $request->getPost();
-        }
-        else {
+        } else {
             $this->log->debug("Request is non post. Trying to extract data. Request should be post normally.");
             $data = $request->getParams();
         }
 
-        if (is_null($data)) {
+        if (is_null($data)) 
             throw new Application_Exception("Unable to read request data. Search cannot be performed.");
-        }
 
-        if (!array_key_exists('searchtype', $data)) {
+        if (!array_key_exists('searchtype', $data)) 
             throw new Application_Exception("Unable to create query for unspecified searchtype");
-        }
-        $this->searchtype = $data['searchtype'];
+        
+        $data = $this->limitParameterValues($data);
 
-        if ($this->searchtype === 'simple') {
+        $this->searchtype = $data['searchtype'];
+        if ($this->searchtype === 'simple') 
             return $this->createSimpleSearchQuery($data);
-        }
-        if ($this->searchtype === 'advanced' || $this->searchtype === 'authorsearch') {
+        if ($this->searchtype === 'advanced' || $this->searchtype === 'authorsearch')
             return $this->createAdvancedSearchQuery($data);
-        }
 
         throw new Application_Exception("Unable to create query for searchtype " . $this->searchtype);
+    }
+
+    private function limitParameterValues($data) {
+        if((int)$data['rows'] > 100){
+            $this->log->debug("rows is greater than 100. clipping...");
+            $data['rows'] = '100';
+        } else {
+            $this->log->debug("rows is ok");
+        }
+        return $data;
     }
 
     private function createSimpleSearchQuery($data) {
