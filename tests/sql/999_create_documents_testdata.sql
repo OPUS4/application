@@ -111,7 +111,10 @@ INSERT INTO `documents` (`id`, `completed_date`, `completed_year`, `contributing
 (92, NULL, 2009, NULL, NULL, '2010-03-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2009, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'published', NULL),
 (93, NULL, 2009, NULL, NULL, '2010-04-26', 'doctoral_thesis', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2009, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'published', NULL),
 (94, NULL, 2008, NULL, NULL, '2010-05-26', 'report', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'published', NULL),
-(95, NULL, 2008, NULL, NULL, '2010-06-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'published', NULL);
+(95, NULL, 2008, NULL, NULL, '2010-06-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'published', NULL),
+(96, NULL, 2008, NULL, NULL, '2010-07-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL),
+(97, NULL, 2008, NULL, NULL, '2010-08-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL),
+(98, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL);
 
 
 --
@@ -898,11 +901,14 @@ INSERT INTO `document_subjects` (`id`, `document_id`, `language`, `type`, `value
 (302, 93, 'deu', 'swd', 'Informationssystem ', NULL),
 (303, 94, 'deu', 'swd', 'Informationssystem ', NULL),
 (304, 95, 'deu', 'swd', 'Informationssystem ', NULL),
-(305, 91, 'deu', 'uncontrolled', 'eBook', NULL),
-(306, 92, 'deu', 'uncontrolled', 'eBook', NULL),
-(307, 93, 'deu', 'uncontrolled', 'eBook', NULL),
-(308, 94, 'deu', 'uncontrolled', 'eBook', NULL),
-(309, 95, 'deu', 'uncontrolled', 'eBook', NULL);
+(305, 91, 'eng', 'uncontrolled', 'eBook', NULL),
+(306, 92, 'eng', 'uncontrolled', 'eBook', NULL),
+(307, 93, 'eng', 'uncontrolled', 'eBook', NULL),
+(308, 94, 'eng', 'uncontrolled', 'eBook', NULL),
+(309, 95, 'eng', 'uncontrolled', 'eBook', NULL),
+(310, 96, 'eng', 'uncontrolled', ' information science ', NULL),
+(311, 97, 'eng', 'uncontrolled', ' information science ', NULL),
+(312, 98, 'eng', 'uncontrolled', ' information science ', NULL);
 
 --
 -- Daten für Tabelle `document_title_abstracts`
@@ -1129,16 +1135,19 @@ INSERT INTO `document_title_abstracts` (`id`, `document_id`, `type`, `value`, `l
 (221, 90, 'main', 'Implementation of earthworm-assisted constructed wetlands to treat wastewater and possibility of using alternative plants in constructed wetlands', 'eng', NULL),
 (222, 90, 'abstract', 'The aim of this research was to add the earthworms into the constructed wetlands, both in Germany and Thailand, in order to investigate whether they could improve the treatment performances. For Germany, earthworm-assisted constructed wetlands exhibited better treatment efficiency than conventional vertical subsurface-flow constructed wetlands and the unplanted constructed wetlands with earthworms.  For Thailand, the production of sludge on the surface of wetlands was reduced by 40% with earthworms. Apart from that, alternative plants with high resource recovery potential were proposed. The recommendation table was developed with 13 suitable species. There are more than one “most appropriate species” in each climatic region.', 'eng', NULL),
 (223, 90, 'abstract', 'Ziel dieser Forschungsarbeit war die Untersuchung des Potentials zur Steigerung der Effizienz von Pflanzenkläranlagen durch Zugabe von Regenwürmern. In Deutschland zeigte sich für die mit Regenwürmern unterstützen Pflanzenkläranlagen eine deutlich bessere Abbauleistung als für das einfache Pflanzenkläranlagenverfahren. In Thailand war in Versuchen mit den Regenwürmern eine um 40 % geringere Schlammbildung zu beobachten. Zusätzlich wurden verschiedene Pflanzen mit hohem Potenzial zur Wertstoffrückgewinnung in Bezug auf die Anwendung in Pflanzenkläranlagen untersucht. Eine Empfehlungstabelle mit 13 Pflanzenarten wurde entwickelt. Für jedes der  betrachteten klimatischen Gebiete eignen sich mehrere Spezies.', 'deu', NULL),
-(224, 91, 'main', 'This is a pdf test document', 'deu', NULL),
-(225, 91, 'abstract', 'This is a pdf test document', 'deu', NULL),
-(226, 92, 'main', 'This is a xhtml test document', 'deu', NULL),
-(227, 92, 'abstract', 'This is a xhtml test document', 'deu', NULL),
-(228, 93, 'main', 'This is a plain text test document', 'deu', NULL),
-(229, 93, 'abstract', 'This is a plain text test document', 'deu', NULL),
-(230, 94, 'main', 'This is a postscript test document', 'deu', NULL),
-(231, 94, 'abstract', 'This is a postscript test document', 'deu', NULL),
-(232, 95, 'main', 'This is a html test document', 'deu', NULL),
-(233, 95, 'abstract', 'This is a html test document', 'deu', NULL);
+(224, 91, 'main', 'This is a pdf test document', 'eng', NULL),
+(225, 91, 'abstract', 'This is a pdf test document', 'eng', NULL),
+(226, 92, 'main', 'This is a xhtml test document', 'eng', NULL),
+(227, 92, 'abstract', 'This is a xhtml test document', 'eng', NULL),
+(228, 93, 'main', 'This is a plain text test document', 'eng', NULL),
+(229, 93, 'abstract', 'This is a plain text test document', 'eng', NULL),
+(230, 94, 'main', 'This is a postscript test document', 'eng', NULL),
+(231, 94, 'abstract', 'This is a postscript test document', 'eng', NULL),
+(232, 95, 'main', 'This is a html test document', 'eng', NULL),
+(233, 95, 'abstract', 'This is a html test document', 'eng', NULL),
+(234, 96, 'main', 'This is an unpublished test document', 'eng', NULL),
+(235, 97, 'main', 'This is another unpublished test document', 'eng', NULL),
+(236, 98, 'main', 'This is another unpublished document for testing purposes', 'eng', NULL);
 
 --
 -- Daten für Tabelle `file_hashvalues`
@@ -2547,7 +2556,10 @@ INSERT INTO `link_persons_documents` (`person_id`, `document_id`, `institute_id`
 (254, 92, NULL, 'referee', 0, 0),
 (254, 93, NULL, 'referee', 0, 0),
 (254, 94, NULL, 'referee', 0, 0),
-(254, 95, NULL, 'referee', 0, 0);
+(254, 95, NULL, 'referee', 0, 0),
+(253, 96, NULL, 'author', 0, 0),
+(253, 97, NULL, 'author', 0, 0),
+(253, 98, NULL, 'author', 0, 0);
 
 --
 -- Daten für Tabelle `privileges`
