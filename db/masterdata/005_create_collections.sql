@@ -32131,17 +32131,17 @@ INSERT INTO `collections_roles` (`id`, `name`, `oai_name`, `position`, `link_doc
 CREATE TABLE collections_enrichments (
    -- Eindeutige ID fuer die Collection und Referenz auf die role_id,
    -- zu der die Collection gehoert.
-   id           INT UNSIGNED NOT NULL,
-  collection_id INT(10) unsigned NOT NULL,
-   name         VARCHAR(255),
-   value        VARCHAR(255),
+   id            INT UNSIGNED NOT NULL,
+   collection_id INT(10) unsigned NOT NULL,
+   `key`         VARCHAR(255),
+   `value`       VARCHAR(255),
 
    --
    -- Constraints.
    --
    FOREIGN KEY(collection_id)     REFERENCES collections(id),
    PRIMARY KEY(id),
-   INDEX(id, name)
+   INDEX(id, `key`)
 ) ENGINE = InnoDB
 CHARACTER SET = 'utf8'
 COLLATE = 'utf8_general_ci';

@@ -3,8 +3,8 @@ CREATE TABLE collections_enrichments (
    -- zu der die Collection gehoert.
    id            INT UNSIGNED NOT NULL,
    collection_id INT(10) unsigned NOT NULL,                                                                                                                                                                         
-   name          VARCHAR(255),
-   value         VARCHAR(255),
+   `key`         VARCHAR(255),
+   `value`       VARCHAR(255),
 
    --
    -- Constraints.
