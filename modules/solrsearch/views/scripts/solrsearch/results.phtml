@@ -60,8 +60,8 @@
                     'docId' => $result->getId());
             ?>
             <a href="<?= $this->url($frontdoorUrl, null, true) ?>"><?= $result->getTitleDeu(); ?></a> (<?= $result->getYear(); ?>)<br/>
-            <!-- TODO: TitleEng -->
 
+            <?php if(!is_null($result->getAuthors())) : ?>
             <?php foreach($result->getAuthors() as $author) :
                 $authorSearch = $this->authorSearch;
                 $authorSearch['author'] = $author;
@@ -69,9 +69,9 @@
             ?>
             <a href="<?= $this->url($authorSearch); ?>"><?= $author ?></a>
             <?php endforeach ?>
+            <?php endif ?>
 
             <div class="abstract"><?= $result->getAbstractDeu(); ?></div>
-            <!-- TODO: Abstract Eng -->
         </div>
     <?php endforeach ?>
 </div>
