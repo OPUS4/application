@@ -93,12 +93,12 @@
                 </td>
                 <td>
                     <select name="evaluatormodifier">
-                        <option value="+">enth&auml;lt</option>
-                        <option value="-">enth&auml;lt nicht</option>
+                        <option value="+" <?= $this->evaluatorQueryModifier === '+' || !isset($this->evaluatorQueryModifier) ? 'selected="true"' : '' ?>>enth&auml;lt</option>
+                        <option value="-" <?= $this->evaluatorQueryModifier === '-' ? 'selected"true"' : '' ?>>enth&auml;lt nicht</option>
                     </select>
                 </td>
                 <td>
-                    <input type="text" name="evaluator" id="evaluator" value="" />
+                    <input type="text" name="evaluator" id="evaluator" value="<?= isset($this->evaluatorQuery) ? $this->evaluatorQuery : '' ?>" />
                 </td>
             </tr>
             <tr>
