@@ -32085,23 +32085,26 @@ INSERT INTO `collections_nodes` (`id`, `role_id`, `collection_id`, `left_id`, `r
 -- Tabellenstruktur für Tabelle `collections_roles`
 --
 
-CREATE TABLE IF NOT EXISTS `collections_roles` (
-  `id` int(11) unsigned NOT NULL auto_increment COMMENT 'Primary key.',
-  `name` varchar(255) NOT NULL COMMENT 'Name, label or type of the collection role, i.e. a specific classification or conference.',
-  `oai_name` varchar(255) NOT NULL COMMENT 'Shortname identifying role in oai context.',
-  `position` int(11) unsigned NOT NULL COMMENT 'Position of this collection tree (role) in the sorted list of collection roles for browsing and administration.',
-  `link_docs_path_to_root` enum('none','count','display','both') default 'none' COMMENT 'Every document belonging to a collection C automatically belongs to every collection on the path from C to the root of the collection tree for document counting, document diplaying, none or both.',
-  `visible` tinyint(1) unsigned NOT NULL COMMENT 'Deleted collection trees are invisible. (1=visible, 0=invisible).',
-  `visible_browsing_start` tinyint(1) unsigned NOT NULL COMMENT 'Show tree on browsing start page. (1=yes, 0=no).',
-  `display_browsing` varchar(512) default NULL COMMENT 'Comma separated list of collection_contents_x-fields to display in browsing list context.',
-  `visible_frontdoor` tinyint(1) unsigned NOT NULL COMMENT 'Show tree on frontdoor. (1=yes, 0=no).',
-  `display_frontdoor` varchar(512) default NULL COMMENT 'Comma separated list of collection_contents_x-fields to display in frontdoor context.',
-  `visible_oai` tinyint(1) unsigned NOT NULL COMMENT 'Show tree in oai output. (1=yes, 0=no).',
-  `display_oai` varchar(512) default NULL COMMENT 'collection_contents_x-field to display in oai context.',
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `UNIQUE_NAME` (`name`),
-  UNIQUE KEY `UNIQUE_OAI_NAME` (`oai_name`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Administration table for the individual collection trees.' AUTO_INCREMENT=11 ;
+CREATE  TABLE IF NOT EXISTS `collections_roles` (
+   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Primary key.' ,
+   `name` VARCHAR(255) NOT NULL COMMENT 'Name, label or type of the collection role, i.e. a specific classification or conference.' ,
+   `oai_name` VARCHAR(255) NOT NULL COMMENT 'Shortname identifying role in oai context.' ,
+   `position` INT(11) UNSIGNED NOT NULL COMMENT 'Position of this collection tree (role) in the sorted list of collection roles for browsing and administration.' ,
+   `link_docs_path_to_root` ENUM('none', 'count', 'display', 'both') default 'none' COMMENT 'Every document belonging to a collection C automatically belongs to every collection on the path from C to the root of the collection tree for document counting, document diplaying, none or both.',
+   `visible` TINYINT(1) UNSIGNED NOT NULL COMMENT 'Deleted collection trees are invisible. (1=visible, 0=invisible).' ,
+   `visible_browsing_start`     TINYINT(1) UNSIGNED NOT NULL    COMMENT 'Show tree on browsing start page. (1=yes, 0=no).' ,
+   `display_browsing`           VARCHAR(512) NULL               COMMENT 'Comma separated list of collection_contents_x-fields to display in browsing list context.' ,
+   `visible_frontdoor`          TINYINT(1) UNSIGNED NOT NULL    COMMENT 'Show tree on frontdoor. (1=yes, 0=no).' ,
+   `display_frontdoor`          VARCHAR(512) NULL               COMMENT 'Comma separated list of collection_contents_x-fields to display in frontdoor context.' ,
+   `visible_oai`                TINYINT(1) UNSIGNED NOT NULL    COMMENT 'Show tree in oai output. (1=yes, 0=no).' ,
+   `display_oai`                VARCHAR(512) NULL               COMMENT 'collection_contents_x-field to display in oai context.' ,
+   PRIMARY KEY (`id`) ,
+   UNIQUE INDEX `UNIQUE_NAME` (`name` ASC) ,
+   UNIQUE INDEX `UNIQUE_OAI_NAME` (`oai_name` ASC) )
+ ENGINE = InnoDB
+ DEFAULT CHARSET=utf8
+ COMMENT = 'Administration table for the indivdual collection trees.'
+ AUTO_INCREMENT=11;
 
 --
 -- Daten für Tabelle `collections_roles`
@@ -32117,24 +32120,6 @@ INSERT INTO `collections_roles` (`id`, `name`, `oai_name`, `position`, `link_doc
 (7, 'Basisklassifikation (BK)', 'bk', 7, 'none', 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'number'),
 (9, 'Collections', 'coll', 9, 'count', 1, 1, 'Name', 1, 'Name', 1, 'Name'),
 (10, 'Schriftenreihen', 'series', 10, 'count', 1, 1, 'Name', 1, 'Name', 1, 'Name');
-
--- --------------------------------------------------------
-
---
--- Tabellenstruktur für Tabelle `collections_themes`
---
-
-CREATE TABLE IF NOT EXISTS `collections_themes` (
-  `role_id` int(10) unsigned NOT NULL,
-  `collection_id` int(10) unsigned NOT NULL,
-  `theme` text NOT NULL,
-  PRIMARY KEY  (`role_id`,`collection_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Daten für Tabelle `collections_themes`
---
-
 
 -- --------------------------------------------------------
 
