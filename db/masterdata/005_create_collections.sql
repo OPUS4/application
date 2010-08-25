@@ -32157,12 +32157,10 @@ CREATE TABLE IF NOT EXISTS `link_documents_collections` (
   `document_id` int(10) unsigned NOT NULL,
   `collection_id` int(10) unsigned NOT NULL,
   `role_id` int(10) unsigned NOT NULL,
-  `link_type` varchar(255) NOT NULL default '',
-  PRIMARY KEY  (`document_id`,`link_type`,`collection_id`),
+  PRIMARY KEY  (`document_id`,`collection_id`),
   KEY `role_id` (`role_id`,`collection_id`),
-  KEY `collection_id` (`collection_id`,`link_type`),
-  KEY `document_id` (`document_id`,`collection_id`),
-  KEY `document_id_2` (`document_id`,`role_id`)
+  KEY `collection_id` (`collection_id`),
+  KEY `document_id` (`document_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
