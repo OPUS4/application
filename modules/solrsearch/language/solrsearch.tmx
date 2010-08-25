@@ -8,6 +8,15 @@
 
     <body>
 
+        <tu tuid="author_facet_facet_heading">
+            <tuv xml:lang="en">
+                <seg>Author</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Autor</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="year_facet_heading">
             <tuv xml:lang="en">
                 <seg>Year of publication</seg>

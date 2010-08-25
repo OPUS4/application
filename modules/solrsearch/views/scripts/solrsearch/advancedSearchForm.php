@@ -70,7 +70,7 @@
                     </select>
                 </td>
                 <td>
-                    <input type="text" id="author" name="author" value="<?= isset($this->authorQuery) ? $this->authorQuery : '' ?>" />
+                    <input type="text" id="author" name="author" value="<?= $this->authorQuery ?>" />
                 </td>
             </tr>
             <tr>
@@ -84,7 +84,7 @@
                     </select>
                 </td>
                 <td>
-                    <input type="text" id="title" name="title" value="<?= isset($this->titleQuery) ? $this->titleQuery : '' ?>" />
+                    <input type="text" id="title" name="title" value="<?= $this->titleQuery ?>" />
                 </td>
             </tr>
             <tr>
@@ -98,7 +98,7 @@
                     </select>
                 </td>
                 <td>
-                    <input type="text" name="evaluator" id="evaluator" value="<?= isset($this->evaluatorQuery) ? $this->evaluatorQuery : '' ?>" />
+                    <input type="text" name="evaluator" id="evaluator" value="<?=  $this->evaluatorQuery ?>" />
                 </td>
             </tr>
             <tr>
@@ -109,7 +109,7 @@
                     enth&auml;lt
                 </td>
                 <td>
-                    <input type="text" id="abstract" name="abstract" value="<?= isset($this->abstractQuery) ? $this->abstractQuery : '' ?>" />
+                    <input type="text" id="abstract" name="abstract" value="<?= $this->abstractQuery ?>" />
                 </td>
             </tr>
             <?php if($this->searchType != 'authorsearch') : ?>
@@ -124,7 +124,7 @@
                     </select>
                 </td>
                 <td>
-                    <input type="text" id="year" name="year" value="<?= isset($this->yearQuery) ? $this->yearQuery : '' ?>" />
+                    <input type="text" id="year" name="year" value="<?= $this->yearQuery ?>" />
                 </td>
             </tr>
             <?php endif ?>

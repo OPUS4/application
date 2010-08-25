@@ -196,6 +196,8 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         if(isset($data['evaluator']) && $data['evaluator'])
             $urlArray['evaluator'] = $data['evaluator'];
 
+        $this->log->debug("author form param val: " .$data['author']);
+
         $advancedUrl = $this->view->url($urlArray, null, true);
         return $advancedUrl;
     }
@@ -205,6 +207,11 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $this->performSearch();
         $this->setViewValues();
         $this->createFacetsForView();
+
+        if($this->query->getStart() >= $this->numOfHits) {
+            $this->render('nohits');
+            return;
+        }
 
         if (0 === $this->numOfHits)
             $this->render('nohits');
@@ -237,7 +244,7 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
             $this->view->__set("prevPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'query'=>$this->query->getQ(),'start'=>(int)($this->query->getStart()) - (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
             $this->view->__set("lastPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'query'=>$this->query->getQ(),'start'=>(int)($this->numOfHits / $this->query->getRows()) * $this->query->getRows(),'rows'=>$this->query->getRows()));
             $this->view->__set("firstPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'query'=>$this->query->getQ(),'start'=>'0','rows'=>$this->query->getRows()));
-        } else if($this->searchtype === 'advanced') {
+        } else if($this->searchtype === 'advanced' || $this->searchtype === 'authorsearch') {
             $this->view->__set("nextPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'start'=>(int)($this->query->getStart()) + (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
             $this->view->__set("prevPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'start'=>(int)($this->query->getStart()) - (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
             $this->view->__set("lastPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'start'=>(int)($this->numOfHits / $this->query->getRows()) * $this->query->getRows(),'rows'=>$this->query->getRows()));
@@ -288,7 +295,7 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         if (!array_key_exists('searchtype', $data)) 
             throw new Application_Exception("Unable to create query for unspecified searchtype");
         
-        $data = $this->limitParameterValues($data);
+        $data = $this->validateParameterValues($data);
 
         $this->searchtype = $data['searchtype'];
         if ($this->searchtype === 'simple') 
@@ -299,12 +306,14 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         throw new Application_Exception("Unable to create query for searchtype " . $this->searchtype);
     }
 
-    private function limitParameterValues($data) {
+    private function validateParameterValues($data) {
         if((int)$data['rows'] > 100){
-            $this->log->debug("rows is greater than 100. clipping...");
+            $this->log->warn("Values greater than 100 are not allowed for the rows paramter.");
             $data['rows'] = '100';
-        } else {
-            $this->log->debug("rows is ok");
+        }
+        if($data['searchtype'] === 'advanced' || $data['searchtype'] === 'authorsearch') {
+            $data['author'] = str_replace(",","",$data['author']);
+            $data['author'] = str_replace(';','',$data['author']);
         }
         return $data;
     }
