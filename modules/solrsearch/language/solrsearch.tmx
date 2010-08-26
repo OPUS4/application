@@ -8,6 +8,24 @@
 
     <body>
 
+        <tu tuid="has_fulltext_facet_heading">
+            <tuv xml:lang="en">
+                <seg>Has Fulltext</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Volltext vorhanden</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="belongs_to_bibliography_facet_heading">
+            <tuv xml:lang="en">
+                <seg>Is part of the Bibliography</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Gehört zur Bibliographie</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="author_facet_facet_heading">
             <tuv xml:lang="en">
                 <seg>Author</seg>
