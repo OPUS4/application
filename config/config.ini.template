@@ -43,9 +43,12 @@ db.params.password =
 db.params.dbname =
 
 ;SEARCH ENGINE SETTINGS
-searchengine.solr.host = 
-searchengine.solr.port = 
-searchengine.solr.app = 
+searchengine.index.host =
+searchengine.index.port =
+searchengine.index.app =
+searchengine.extract.host =
+searchengine.extract.port =
+searchengine.extract.app = 
 
 ; The following is needed even if sections are empty.
 [staging : production]

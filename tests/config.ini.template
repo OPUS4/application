@@ -68,11 +68,14 @@ workspacePath = APPLICATION_PATH "/tests/workspace"
 resources.locale.default = de
 
 ;SEARCH ENGINE SETTINGS
-searchengine.engine = Solr              ; searchengine to be used: Lucene or Solr
-searchengine.solr.host = opus4ci.zib.de ; test instance on ci server
-searchengine.solr.port = 8983           ; default port 8983
-searchengine.solr.app = solr
+; searchengine to be used: Lucene or Solr
+searchengine.engine = Solr
+searchengine.index.host =
+searchengine.index.port =
+searchengine.index.app =
+searchengine.extract.host =
+searchengine.extract.port =
+searchengine.extract.app =
 
 [testing : production]
 sql.schema.path =
-
