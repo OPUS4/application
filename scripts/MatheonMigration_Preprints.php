@@ -435,15 +435,14 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             }
 
             //    <field name="approve_date">2003-12-10 00:00:00</field>
-            $doc->setDateAccepted($preprint['approve_date']);
+            $doc->setThesisDateAccepted($preprint['approve_date']);
 
             //    <field name="comment" xsi:nil="true" />
             $field = $preprint['comment'];
             if ($field != '') {
                 $model = $doc->addNote();
                 $model->setMessage($field);
-                $model->setCreator('import-script');
-                $model->setScope('private');
+                $model->setVisibility('private');
             }
 
             //    <field name="prevpub" xsi:nil="true" />
