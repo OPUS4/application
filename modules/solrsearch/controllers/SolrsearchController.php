@@ -168,38 +168,41 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
                 'defaultoperator'=>array_key_exists('defaultoperator', $data) ? $data['defaultoperator'] : 'AND'
             );
 
-        if(isset($data['author']) && $data['author'] != '')
+        if(array_key_exists('author', $data) && $data['author'] != '')
             $urlArray['author'] = $data['author'];
 
-        if(isset($data['title']) && $data['title'] != '')
+        if(array_key_exists('title', $data) && $data['title'] != '')
             $urlArray['title'] = $data['title'];
 
-        if(isset($data['abstract']) && $data['abstract'] != '')
+        if(array_key_exists('abstract', $data) && $data['abstract'] != '')
             $urlArray['abstract'] = $data['abstract'];
 
-        if(isset($data['fulltext']) && $data['fulltext'] != '')
+        if(array_key_exists('fulltext', $data) && $data['fulltext'] != '')
             $urlArray['fulltext'] = $data['fulltext'];
 
-        if(isset($data['year']) && $data['year'] != '')
+        if(array_key_exists('year', $data) && $data['year'] != '')
             $urlArray['year'] = $data['year'];
 
-        if(isset($data['authormodifier']) && $data['authormodifier'] != '')
+        if(array_key_exists('authormodifier', $data) && $data['authormodifier'] != '')
             $urlArray['authormodifier'] = $data['authormodifier'];
 
-        if(isset($data['titlemodifier']) && $data['titlemodifier'] != '')
+        if(array_key_exists('titlemodifier', $data) && $data['titlemodifier'] != '')
             $urlArray['titlemodifier'] = $data['titlemodifier'];
 
-        if(isset($data['abstractmodifier']) && $data['abstractmodifier'] != '')
+        if(array_key_exists('abstractmodifier', $data) && $data['abstractmodifier'] != '')
             $urlArray['abstractmodifier'] = $data['abstractmodifier'];
 
-        if(isset($data['yearmodifier']) && $data['yearmodifier'] != '')
+        if(array_key_exists('yearmodifier', $data) && $data['yearmodifier'] != '')
             $urlArray['yearmodifier'] = $data['yearmodifier'];
 
-        if(isset($data['evaluatormodifier']) && $data['evaluatormodifier'])
+        if(array_key_exists('evaluatormodifier', $data) && $data['evaluatormodifier'] != '')
             $urlArray['evaluatormodifier'] = $data['evaluatormodifier'];
 
-        if(isset($data['evaluator']) && $data['evaluator'])
+        if(array_key_exists('evaluator', $data) && $data['evaluator'] != '')
             $urlArray['evaluator'] = $data['evaluator'];
+
+        if(array_key_exists('fulltextmodifier', $data) && $data['fulltextmodifier'] != '')
+            $urlArray['fulltextmodifier'] = $data['fulltextmodifier'];
 
         $this->log->debug("author form param val: " .$data['author']);
 
@@ -386,12 +389,13 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $title = array_key_exists('title', $data) ? $data['title'] : '';
         $year = array_key_exists('year', $data) ? $data['year'] : '';
         $defaultOperator = array_key_exists('defaultoperator', $data) ? $data['defaultoperator'] : 'AND';
-        $authormodifier = array_key_exists('authormodifier', $data) ? $data['authormodifier'] : '+';
-        $abstractmodifier = array_key_exists('abstractmodifier', $data) ? $data['abstractmodifier'] : '+';
-        $titlemodifier = array_key_exists('titlemodifier', $data) ? $data['titlemodifier'] : '+';
-        $yearmodifier = array_key_exists('yearmodifier', $data) ? $data['yearmodifier'] : '+';
+        $authormodifier = array_key_exists('authormodifier', $data) ? $data['authormodifier'] : Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL;
+        $abstractmodifier = array_key_exists('abstractmodifier', $data) ? $data['abstractmodifier'] : Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL;
+        $titlemodifier = array_key_exists('titlemodifier', $data) ? $data['titlemodifier'] : Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL;
+        $yearmodifier = array_key_exists('yearmodifier', $data) ? $data['yearmodifier'] : Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL;
         $evaluator = array_key_exists('evaluator', $data) ? $data['evaluator'] : '';
-        $evaluatorModifier = array_key_exists('evaluatormodifier', $data) ? $data['evaluatormodifier'] : '+';
+        $evaluatorModifier = array_key_exists('evaluatormodifier', $data) ? $data['evaluatormodifier'] : Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL;
+        $fulltextmodifier = array_key_exists('fulltextmodifier', $data) ? $data['fulltextmodifier'] : Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL;
 
         $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::ADVANCED);
         $query->setStart($start);
@@ -401,7 +405,7 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $query->setDefaultOperator($defaultOperator);
         if($author != '') $query->setField('author', $author, $authormodifier);
         if($abstract != '') $query->setField('abstract', $abstract, $abstractmodifier);
-        if($fulltext != '') $query->setField('fulltext', $fulltext, '+');
+        if($fulltext != '') $query->setField('fulltext', $fulltext, $fulltextmodifier);
         if($title != '') $query->setField('title', $title, $titlemodifier);
         if($year != '') $query->setField('year', $year, $yearmodifier);
         if($evaluator != '') $query->setField('referee', $evaluator, $evaluatorModifier);

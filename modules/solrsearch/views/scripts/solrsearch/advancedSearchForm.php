@@ -37,10 +37,10 @@
     <?php if($this->searchType != 'authorsearch') : ?>
     <fieldset>
         <legend>Allgemeine Suchoptionen</legend>
-        <label for="default_operator">Suchergebnisse enthalten</label>
+        <label for="default_operator">Suchen nach den Kriterien aus </label>
         <select name="defaultoperator" id="default_operator">
-            <option value="AND" <?= isset($this->defaultoperator) && $this->defaultoperator === 'AND' ? 'selected="true"' : '' ?>>alle Begriffe</option>
-            <option value="OR" <?= isset($this->defaultoperator) && $this->defaultoperator === 'OR' ? 'selected="true"' : '' ?>>mindestens einen Begriff</option>
+            <option value="AND" <?= isset($this->defaultoperator) && $this->defaultoperator === 'AND' ? 'selected="true"' : '' ?>>allen Zeilen</option>
+            <option value="OR" <?= isset($this->defaultoperator) && $this->defaultoperator === 'OR' ? 'selected="true"' : '' ?>>mindestens einer Zeile</option>
         </select>
 
         <br/>
@@ -65,8 +65,9 @@
                 </td>
                 <td>
                     <select name="authormodifier">
-                        <option value="+" <?= $this->authorQueryModifier === '+' || !isset($this->authorQueryModifier) ? 'selected="true"' : '' ?>>enthält</option>
-                        <option value="-" <?= $this->authorQueryModifier === '-' ? 'selected="true"' : '' ?>>enthält nicht</option>
+                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL ?>" <?= $this->authorQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL || !isset($this->authorQueryModifier) ? 'selected="true"' : '' ?>>alle W&ouml;rter</option>
+                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ?>" <?= $this->authorQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ? 'selected="true"' : '' ?>>mindestens ein Wort</option>
+                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE ?>" <?= $this->authorQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE ? 'selected="true"' : '' ?>>keines der W&ouml;rter</option>
                     </select>
                 </td>
                 <td>
@@ -79,8 +80,9 @@
                 </td>
                 <td>
                     <select name="titlemodifier">
-                        <option value="+" <?= $this->titleQueryModifier === '+' || !isset($this->titleQueryModifier) ? 'selected="true"' : '' ?>>enthält</option>
-                        <option value="-" <?= $this->titleQueryModifier === '-' ? 'selected="true"' : '' ?>>enthält nicht</option>
+                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL ?>" <?= $this->titleQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL || !isset($this->titleQueryModifier) ? 'selected="true"' : '' ?>>alle W&ouml;rter</option>
+                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ?>" <?= $this->titleQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ? 'selected="true"' : '' ?>>mindestens ein Wort</option>
+                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE ?>" <?= $this->titleQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE ? 'selected="true"' : '' ?>>keines der W&ouml;rter</option>
                     </select>
                 </td>
                 <td>
@@ -93,8 +95,9 @@
                 </td>
                 <td>
                     <select name="evaluatormodifier">
-                        <option value="+" <?= $this->evaluatorQueryModifier === '+' || !isset($this->evaluatorQueryModifier) ? 'selected="true"' : '' ?>>enthält</option>
-                        <option value="-" <?= $this->evaluatorQueryModifier === '-' ? 'selected"true"' : '' ?>>enthält nicht</option>
+                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL ?>" <?= $this->evaluatorQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL || !isset($this->evaluatorQueryModifier) ? 'selected="true"' : '' ?>>alle W&ouml;rter</option>
+                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ?>" <?= $this->evaluatorQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ? 'selected"true"' : '' ?>>mindestens ein Wort</option>
+                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE ?>" <?= $this->evaluatorQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE ? 'selected="true"' : '' ?>>keines der W&ouml;rter</option>
                     </select>
                 </td>
                 <td>
@@ -107,8 +110,9 @@
                 </td>
                 <td>
                     <select name="abstractmodifier">
-                        <option value="+" <?= $this->abstractQueryModifier === '+' || !isset($this->abstractQueryModifier) ? 'selected="true"' : '' ?>>enthält</option>
-                        <option value="-" <?= $this->abstractQueryModifier === '-' ? 'selected"true"' : '' ?>>enthält nicht</option>
+                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL ?>" <?= $this->abstractQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL || !isset($this->abstractQueryModifier) ? 'selected="true"' : '' ?>>alle W&ouml;rter</option>
+                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ?>" <?= $this->abstractQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ? 'selected"true"' : '' ?>>mindestens ein Wort</option>
+                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE ?>" <?= $this->abstractQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE ? 'selected="true"' : '' ?>>keines der W&ouml;rter</option>
                     </select>
                 </td>
                 <td>
@@ -120,7 +124,10 @@
                     <label for="abstract">Volltext</label>
                 </td>
                 <td>
-                    enthält
+                    <select name="fulltextmodifier">
+                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL ?>" <?= $this->fulltextQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL || !isset($this->fulltextQueryModifier) ? 'selected="true"' : '' ?>>alle W&ouml;rter</option>
+                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ?>" <?= $this->fulltextQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ? 'selected"true"' : '' ?>>mindestens ein Wort</option>
+                    </select>
                 </td>
                 <td>
                     <input type="text" id="fulltext" name="fulltext" value="<?= htmlspecialchars($this->fulltextQuery) ?>" />
@@ -133,8 +140,9 @@
                 </td>
                 <td>
                     <select name="yearmodifier">
-                        <option value="+" <?= $this->yearQueryModifier === '+' || !isset($this->yearQueryModifier) ? 'selected="true"' : '' ?>>enthält</option>
-                        <option value="-" <?= $this->yearQueryModifier === '-' ? 'selected="true"' : '' ?>>enthält nicht</option>
+                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL ?>" <?= $this->yearQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL || !isset($this->yearQueryModifier) ? 'selected="true"' : '' ?>>alle W&ouml;rter</option>
+                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ?>" <?= $this->yearQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ? 'selected"true"' : '' ?>>mindestens ein Wort</option>
+                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE ?>" <?= $this->yearQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE ? 'selected="true"' : '' ?>>keines der W&ouml;rter</option>
                     </select>
                 </td>
                 <td>
