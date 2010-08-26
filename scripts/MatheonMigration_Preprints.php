@@ -274,7 +274,6 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
      * @return void
      */
     public function load_preprint_projects() {
-
 // TODO: Add Unit tests.
 //        $role = new Opus_CollectionRole();
 //        $role->setName('projects-'.rand());
@@ -541,7 +540,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             }
             catch (Opus_Model_Exception $e) {
                 echo "failed creating document $counter/$total --serial: {$preprint['serial']}, pid: $pid\n";
-                echo $e;
+                throw $e;
             }
         }
 
