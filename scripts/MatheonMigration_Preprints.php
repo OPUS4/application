@@ -145,7 +145,11 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
 
         $keyword_list = array();
         foreach (explode(",", $keywords) AS $keyword) {
-            $keyword_list[] = trim($keyword);
+            $new_keyword = trim($keyword);
+
+            if (!empty($new_keyword)) {
+                $keyword_list[] = $new_keyword;
+            }
         }
 
         return $keyword_list;
@@ -506,29 +510,21 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
 
             // load authors...
             $unique_authors = array();
-            $unique_authors_array = array();
-            $duplicate_authors_array = array();
 
             foreach ($this->preprint_authors[$pid] AS $mda) {
                 $mda_id = $mda->store();
 
                 if (false === array_key_exists($mda_id, $unique_authors)) {
                     $unique_authors[$mda_id] = 0;
-                    $unique_authors_array[] = $mda;
+                    $doc->addPersonAuthor($mda);
                 }
                 else {
-                    $duplicate_authors_array[] = $mda;
+                    echo "-- Doppelter Autor in Dokument (serial: {$preprint['serial']}):\n";
+                    echo "\t->firstName: " . $mda->getFirstName() . "\n";
+                    echo "\t->lastName: " . $mda->getLastName() . "\n";
                 }
                 $unique_authors[$mda_id]++;
             }
-
-            foreach ($duplicate_authors_array as $mda) {
-                echo "-- Doppelter Autor in Dokument (serial: {$preprint['serial']}):\n";
-                echo "\t->firstName: " . $mda->getFirstName() . "\n";
-                echo "\t->lastName: " . $mda->getLastName() . "\n";
-            }
-
-            $doc->setPersonAuthor($unique_authors_array);
 
             // load collections
             if (array_key_exists($pid, $this->preprint_projects)) {
@@ -545,6 +541,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             }
             catch (Opus_Model_Exception $e) {
                 echo "failed creating document $counter/$total --serial: {$preprint['serial']}, pid: $pid\n";
+                echo $e;
             }
         }
 
