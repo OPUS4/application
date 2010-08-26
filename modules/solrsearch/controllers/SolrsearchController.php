@@ -105,6 +105,13 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $this->view->title = $this->view->translate('solrsearch_title_results');
     }
 
+    public function invalidsearchtermAction() {
+        $this->view->title = $this->view->translate('solrsearch_title_invalidsearchterm');
+        $params = $this->_request->isPost() ? $this->_request->getPost() : $this->_request->getParams();
+        $searchtype = array_key_exists('searchtype', $params) ? $params['searchtype'] : 'simple';
+        $this->view->__set('searchType', $searchtype);
+    }
+
     public function searchdispatchAction() {
         $this->log->debug("Received new search request. Redirecting to search action");
 
@@ -118,10 +125,17 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
             $requestData = $this->_request->getParams();
 
         $searchtype = $requestData['searchtype'];
-        if($searchtype === 'simple')
+        if($searchtype === 'simple') {
             $url = $this->createSimpleSearchUrl($requestData);
-        else if($searchtype === 'advanced' || $searchtype === 'authorsearch')
+            if(!$this->isSimpleSearchRequestValid($requestData)) {
+                $url = $this->view->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'invalidsearchterm','searchtype'=>'simple'), null, true);
+            }
+        } else if($searchtype === 'advanced' || $searchtype === 'authorsearch') {
             $url = $this->createAdvancedSearchUrl($requestData);
+            if(!$this->isAdvancedSearchRequestValid($requestData)) {
+                $url = $this->view->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'invalidsearchterm','searchtype'=>$searchtype), null, true);
+            }
+        }
 
         $this->log->debug("URL is: " . $url);
         $redirector->gotoUrl($url);
@@ -133,6 +147,26 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $redirector->setGotoUrl('');
         $redirector->setExit(false);
         return $redirector;
+    }
+
+    private function isSimpleSearchRequestValid($data) {
+        if(!array_key_exists('query', $data) || $data['query'] === '')
+            return false;
+        return true;
+    }
+
+    private function isAdvancedSearchRequestValid($data) {
+        $author = array_key_exists('author', $data) ? $data['author'] : '';
+        $abstract = array_key_exists('abstract', $data) ? $data['abstract'] : '';
+        $fulltext = array_key_exists('fulltext', $data) ? $data['fulltext'] : '';
+        $title = array_key_exists('title', $data) ? $data['title'] : '';
+        $year = array_key_exists('year', $data) ? $data['year'] : '';
+        $evaluator = array_key_exists('evaluator', $data) ? $data['evaluator'] : '';
+
+        if($author === '' && $abstract === '' && $fulltext === '' && $title === '' && $year === '' && $evaluator === '')
+            return false;
+
+        return true;
     }
 
     /**
