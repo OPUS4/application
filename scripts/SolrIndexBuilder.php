@@ -105,14 +105,25 @@ class SolrIndexBuilder { // extends Application_Bootstrap {
         $docIds = Opus_Document::getAllPublishedIds($this->start, $this->end);
         $indexer = new Opus_Search_Index_Solr_Indexer($this->deleteAllDocs);
         //$indexer = new Opus_Search_Index_Solr_Indexer();
-        echo date('Y-m-d H:i:s') . " Start indexing of " . count($docIds) . " documents.";
+        echo date('Y-m-d H:i:s') . " Start indexing of " . count($docIds) . " documents.\n";
         $numOfDocs = 0;
         $runtime = microtime(true);
         foreach ($docIds as $docId) {
+            $time_start = microtime(true);
             $indexer->addDocumentToEntryIndex(new Opus_Document($docId));
+            $time_delta = microtime(true) - $time_start;
+            if ($time_delta > 30) {
+               echo date('Y-m-d H:i:s') . " WARNING: Indexing document $docId took $time_delta seconds.\n";
+            }
+
             $numOfDocs++;
             if ($numOfDocs % 10 == 0) {
-                echo '.';
+                $mem_now = round(memory_get_usage() / 1024 / 1024);
+                $mem_peak = round(memory_get_peak_usage() / 1024 / 1024);
+                $delta_t = microtime(true)-$runtime;
+                $doc_per_second = round($delta_t) == 0 ? 'inf' : round($numOfDocs/$delta_t,2);
+                $seconds_per_doc = round($delta_t/$numOfDocs,2);
+                echo date('Y-m-d H:i:s') . " Stats after $numOfDocs documents -- memory $mem_now MB, peak memory $mem_peak (MB), $doc_per_second docs/second, $seconds_per_doc seconds/doc\n";
             }
         }
         $runtime = microtime(true) - $runtime;
