@@ -49,110 +49,46 @@
 
     <fieldset>
         <legend>Suchfelder</legend>
-
         <table>
+            <?php
+            if ($this->searchType === 'authorsearch') {
+                $fieldnames = array('author', 'title', 'referee', 'abstract', 'fulltext');
+            }
+            else {
+                $fieldnames = array('author', 'title', 'referee', 'abstract', 'fulltext', 'year');
+            }
+            
+            foreach ($fieldnames as $fieldname) :
+                    $fieldnameQuery = $fieldname . 'Query';
+                    $fieldnameQueryModifier = $fieldnameQuery . 'Modifier';
+            ?>
             <tr>
                 <td>
-                    <label for="author">Autor(en)</label>
+                    <label for="<?= $fieldname ?>"><?= $this->translate("solrsearch_advancedsearch_field_$fieldname"); ?></label>
                 </td>
                 <td>
-                    <select name="authormodifier">
-                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL ?>" <?= $this->authorQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL || !isset($this->authorQueryModifier) ? 'selected="true"' : '' ?>>alle W&ouml;rter</option>
-                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ?>" <?= $this->authorQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ? 'selected="true"' : '' ?>>mindestens ein Wort</option>
-                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE ?>" <?= $this->authorQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE ? 'selected="true"' : '' ?>>keines der W&ouml;rter</option>
+                    <select name="<?= $fieldname ?>modifier">
+                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL ?>" <?= $this->$fieldnameQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL || !isset($this->$fieldnameQueryModifier) ? 'selected="true"' : '' ?>>alle Wörter</option>
+                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ?>" <?= $this->$fieldnameQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ? 'selected="true"' : '' ?>>mindestens ein Wort</option>
+                        <?php if ($fieldname !== 'fulltext') : ?>
+                            <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE ?>" <?= $this->$fieldnameQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE ? 'selected="true"' : '' ?>>keines der Wörter</option>
+                        <?php endif ?>
                     </select>
                 </td>
                 <td>
-                    <input type="text" id="author" name="author" value="<?= htmlspecialchars($this->authorQuery) ?>" title="Sie k&ouml;nnen in dieses Feld auch mehrere Autoren eingeben." />
+                    <input type="text" id="<?= $fieldname ?>" name="<?= $fieldname ?>" value="<?= htmlspecialchars($this->$fieldnameQuery) ?>" title="<?= $this->translate("solrsearch_advancedsearch_tooltip_$fieldname"); ?>" />
                 </td>
             </tr>
-            <tr>
-                <td>
-                    <label for="title">Titel</label>
-                </td>
-                <td>
-                    <select name="titlemodifier">
-                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL ?>" <?= $this->titleQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL || !isset($this->titleQueryModifier) ? 'selected="true"' : '' ?>>alle W&ouml;rter</option>
-                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ?>" <?= $this->titleQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ? 'selected="true"' : '' ?>>mindestens ein Wort</option>
-                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE ?>" <?= $this->titleQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE ? 'selected="true"' : '' ?>>keines der W&ouml;rter</option>
-                    </select>
-                </td>
-                <td>
-                    <input type="text" id="title" name="title" value="<?= htmlspecialchars($this->titleQuery) ?>" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="evaluator">Gutachter</label>
-                </td>
-                <td>
-                    <select name="evaluatormodifier">
-                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL ?>" <?= $this->evaluatorQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL || !isset($this->evaluatorQueryModifier) ? 'selected="true"' : '' ?>>alle W&ouml;rter</option>
-                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ?>" <?= $this->evaluatorQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ? 'selected"true"' : '' ?>>mindestens ein Wort</option>
-                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE ?>" <?= $this->evaluatorQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE ? 'selected="true"' : '' ?>>keines der W&ouml;rter</option>
-                    </select>
-                </td>
-                <td>
-                    <input type="text" name="evaluator" id="evaluator" value="<?=  htmlspecialchars($this->evaluatorQuery) ?>" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="abstract">Abstract</label>
-                </td>
-                <td>
-                    <select name="abstractmodifier">
-                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL ?>" <?= $this->abstractQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL || !isset($this->abstractQueryModifier) ? 'selected="true"' : '' ?>>alle W&ouml;rter</option>
-                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ?>" <?= $this->abstractQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ? 'selected"true"' : '' ?>>mindestens ein Wort</option>
-                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE ?>" <?= $this->abstractQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE ? 'selected="true"' : '' ?>>keines der W&ouml;rter</option>
-                    </select>
-                </td>
-                <td>
-                    <input type="text" id="abstract" name="abstract" value="<?= htmlspecialchars($this->abstractQuery) ?>" />
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <label for="abstract">Volltext</label>
-                </td>
-                <td>
-                    <select name="fulltextmodifier">
-                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL ?>" <?= $this->fulltextQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL || !isset($this->fulltextQueryModifier) ? 'selected="true"' : '' ?>>alle W&ouml;rter</option>
-                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ?>" <?= $this->fulltextQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ? 'selected"true"' : '' ?>>mindestens ein Wort</option>
-                    </select>
-                </td>
-                <td>
-                    <input type="text" id="fulltext" name="fulltext" value="<?= htmlspecialchars($this->fulltextQuery) ?>" />
-                </td>
-            </tr>
-            <?php if($this->searchType != 'authorsearch') : ?>
-            <tr>
-                <td>
-                    <label for="year">Erscheinungsjahr</label>
-                </td>
-                <td>
-                    <select name="yearmodifier">
-                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL ?>" <?= $this->yearQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL || !isset($this->yearQueryModifier) ? 'selected="true"' : '' ?>>alle W&ouml;rter</option>
-                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ?>" <?= $this->yearQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ? 'selected"true"' : '' ?>>mindestens ein Wort</option>
-                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE ?>" <?= $this->yearQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE ? 'selected="true"' : '' ?>>keines der W&ouml;rter</option>
-                    </select>
-                </td>
-                <td>
-                    <input type="text" id="year" name="year" value="<?= htmlspecialchars($this->yearQuery) ?>" />
-                </td>
-            </tr>
-            <?php endif ?>
-
+            <?php endforeach ?>
         </table>
-
     </fieldset>
-
     <input type="submit" value="Suchen" />
     <input type="hidden" name="searchtype" value="advanced" />
     <input type="hidden" name="start" value="0" />
     <input type="hidden" name="sortfield" value="score" />
     <input type="hidden" name="sordorder" value="desc" />
 </form>
-<form action="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'advanced'),null,true) ?>">
-    <input type="submit" value="Suche Zur&uuml;cksetzen" />
+
+<form action="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'advanced'), null, true) ?>">
+    <input type="submit" value="Formular zurücksetzen" />
 </form>

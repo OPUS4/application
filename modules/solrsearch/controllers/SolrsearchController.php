@@ -113,7 +113,7 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
     }
 
     public function searchdispatchAction() {
-        $this->log->debug("Received new search request. Redirecting to search action");
+        $this->log->debug('Received new search request. Redirecting to search action.');
 
         $redirector = $this->configureRedirector();
         $requestData = null;
@@ -125,16 +125,17 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
             $requestData = $this->_request->getParams();
 
         $searchtype = $requestData['searchtype'];
-        if($searchtype === 'simple') {
-            $url = $this->createSimpleSearchUrl($requestData);
+        if($searchtype === 'simple') {            
+            $url = $this->createSimpleSearchUrl($requestData);            
             if(!$this->isSimpleSearchRequestValid($requestData)) {
                 $url = $this->view->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'invalidsearchterm','searchtype'=>'simple'), null, true);
             }
-        } else if($searchtype === 'advanced' || $searchtype === 'authorsearch') {
-            $url = $this->createAdvancedSearchUrl($requestData);
+        } 
+        else if($searchtype === 'advanced' || $searchtype === 'authorsearch') {
+            $url = $this->createAdvancedSearchUrl($requestData);            
             if(!$this->isAdvancedSearchRequestValid($requestData)) {
                 $url = $this->view->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'invalidsearchterm','searchtype'=>$searchtype), null, true);
-            }
+            }            
         }
 
         $this->log->debug("URL is: " . $url);
@@ -150,23 +151,19 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
     }
 
     private function isSimpleSearchRequestValid($data) {
-        if(!array_key_exists('query', $data) || $data['query'] === '')
+        if ($this->_getFieldValue($data, 'query') === '') {
             return false;
+        }
         return true;
     }
 
     private function isAdvancedSearchRequestValid($data) {
-        $author = array_key_exists('author', $data) ? $data['author'] : '';
-        $abstract = array_key_exists('abstract', $data) ? $data['abstract'] : '';
-        $fulltext = array_key_exists('fulltext', $data) ? $data['fulltext'] : '';
-        $title = array_key_exists('title', $data) ? $data['title'] : '';
-        $year = array_key_exists('year', $data) ? $data['year'] : '';
-        $evaluator = array_key_exists('evaluator', $data) ? $data['evaluator'] : '';
-
-        if($author === '' && $abstract === '' && $fulltext === '' && $title === '' && $year === '' && $evaluator === '')
-            return false;
-
-        return true;
+        foreach (array('author', 'title', 'referee', 'abstract', 'fulltext',  'year') as $fieldname) {
+            if ($this->_getFieldValue($data, $fieldname) !== '') {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -175,61 +172,41 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
      * @return string
      */
     private function createSimpleSearchUrl($data) {
-        $simpleUrl = $this->view->url(array(
+        return $this->view->url(
+            array(
                 'module'=>'solrsearch',
                 'controller'=>'solrsearch',
                 'action'=>'search',
-                'searchtype'=> array_key_exists('searchtype', $data) ? $data['searchtype'] : 'simple',
-                'start'=> array_key_exists('start', $data) ? $data['start'] : '0',
-                'rows'=> array_key_exists('rows', $data) ? $data['rows'] : '10',
-                'query'=> array_key_exists('query', $data) ? $data['query'] : '*:*',
-                'sortfield'=> array_key_exists('sortfield', $data) ? $data['sortfield'] : 'score',
-                'sortorder'=> array_key_exists('sortorder', $data) ? $data['sortorder'] : 'desc')
+                'searchtype'=> $this->_getFieldValue($data, 'searchtype', 'simple'),
+                'start'=> $this->_getFieldValue($data, 'start', '0'),
+                'rows'=> $this->_getFieldValue($data, 'rows', '10'),
+                'query'=> $this->_getFieldValue($data, 'query', '*:*'),
+                'sortfield'=> $this->_getFieldValue($data, 'sortfield', 'score'),
+                'sortorder'=> $this->_getFieldValue($data, 'sortorder', 'desc')
+            )
             , null, true);
-        return $simpleUrl;
     }
 
     private function createAdvancedSearchUrl($data) {
-        $urlArray = array(
-                'module'=>'solrsearch',
-                'controller'=>'solrsearch',
-                'action'=>'search',
-                'searchtype'=> array_key_exists('searchtype', $data) ? $data['searchtype'] : 'simple',
-                'start'=> array_key_exists('start', $data) ? $data['start'] : '0',
-                'rows'=> array_key_exists('rows', $data) ? $data['rows'] : '10',
-                'sortfield'=> array_key_exists('sortfield', $data) ? $data['sortfield'] : 'score',
-                'sortorder'=> array_key_exists('sortorder', $data) ? $data['sortorder'] : 'desc',
-            );
+        $urlArray =  array (
+            'module'=>'solrsearch',
+            'controller'=>'solrsearch',
+            'action'=>'search',
+            'searchtype'=> $this->_getFieldValue($data, 'searchtype', 'advanced'),
+            'start'=> $this->_getFieldValue($data, 'start', '0'),
+            'rows'=> $this->_getFieldValue($data, 'rows', '10'),
+            'sortfield'=> $this->_getFieldValue($data, 'sortfield', 'score'),
+            'sortorder'=> $this->_getFieldValue($data, 'sortorder', 'desc')
+        );
 
-        if(array_key_exists('author', $data) && $data['author'] != '') {
-            $urlArray['author'] = $data['author'];
-            $urlArray['authormodifier'] = array_key_exists('authormodifier', $data) ? $data['authormodifier'] : Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL;
+        foreach (array('author', 'title', 'abstract', 'fulltext', 'year', 'referee') as $fieldname) {
+            if($this->_getFieldValue($data, $fieldname) !== '') {
+                $urlArray[$fieldname] = $data[$fieldname];
+                $urlArray[$fieldname . 'modifier'] = $this->_getFieldValue($data, $fieldname . 'modifier', Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL);
+            }
         }
 
-        if(array_key_exists('title', $data) && $data['title'] != '') {
-            $urlArray['title'] = $data['title'];
-            $urlArray['titlemodifier'] = array_key_exists('titlemodifier', $data) ? $data['titlemodifier'] : Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL;
-        }
-
-        if(array_key_exists('abstract', $data) && $data['abstract'] != '') {
-            $urlArray['abstract'] = $data['abstract'];
-            $urlArray['abstractmodifier'] = array_key_exists('abstractmodifier', $data) ? $data['abstractmodifier'] : Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL;
-        }
-
-        if(array_key_exists('fulltext', $data) && $data['fulltext'] != '') {
-            $urlArray['fulltext'] = $data['fulltext'];
-            $urlArray['fulltextmodifier'] = array_key_exists('fulltextmodifier', $data) ? $data['fulltextmodifier'] : Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL;
-        }
-
-        if(array_key_exists('year', $data) && $data['year'] != '') {
-            $urlArray['year'] = $data['year'];
-            $urlArray['yearmodifier'] = array_key_exists('yearmodifier', $data) ? $data['yearmodifier'] : Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL;
-        }
-
-        $this->log->debug("author form param val: " .$data['author']);
-
-        $advancedUrl = $this->view->url($urlArray, null, true);
-        return $advancedUrl;
+        return $this->view->url($urlArray, null, true);
     }
 
     public function searchAction() {
@@ -283,8 +260,8 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
             $this->view->__set("titleQueryModifier", $this->query->getModifier('title'));
             $this->view->__set("abstractQueryModifier", $this->query->getModifier('abstract'));
             $this->view->__set("yearQueryModifier", $this->query->getModifier('year'));
-            $this->view->__set("evaluatorQuery", $this->query->getField('referee'));
-            $this->view->__set("evaluatorQueryModifier", $this->query->getModifier('referee'));
+            $this->view->__set("refereeQuery", $this->query->getField('referee'));
+            $this->view->__set("refereeQueryModifier", $this->query->getModifier('referee'));
         }
     }
 
@@ -414,38 +391,32 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
     private function createAdvancedSearchQuery($data) {
         $this->log->debug("constructing query for advanced search");
 
-        $start = array_key_exists('start', $data) ? $data['start'] : '0';
-        $rows = array_key_exists('rows', $data) ? $data['rows'] : '10';
-        $sortfield = array_key_exists('sortfield', $data) ? $data['sortfield'] : 'score';
-        $sortorder = array_key_exists('sortorder', $data) ? $data['sortorder'] : 'desc';
-        $author = array_key_exists('author', $data) ? $data['author'] : '';
-        $abstract = array_key_exists('abstract', $data) ? $data['abstract'] : '';
-        $fulltext = array_key_exists('fulltext', $data) ? $data['fulltext'] : '';
-        $title = array_key_exists('title', $data) ? $data['title'] : '';
-        $year = array_key_exists('year', $data) ? $data['year'] : '';
-        $authormodifier = array_key_exists('authormodifier', $data) ? $data['authormodifier'] : Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL;
-        $abstractmodifier = array_key_exists('abstractmodifier', $data) ? $data['abstractmodifier'] : Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL;
-        $titlemodifier = array_key_exists('titlemodifier', $data) ? $data['titlemodifier'] : Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL;
-        $yearmodifier = array_key_exists('yearmodifier', $data) ? $data['yearmodifier'] : Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL;
-        $evaluator = array_key_exists('evaluator', $data) ? $data['evaluator'] : '';
-        $evaluatorModifier = array_key_exists('evaluatormodifier', $data) ? $data['evaluatormodifier'] : Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL;
-        $fulltextmodifier = array_key_exists('fulltextmodifier', $data) ? $data['fulltextmodifier'] : Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL;
-
         $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::ADVANCED);
-        $query->setStart($start);
-        $query->setRows($rows);
-        $query->setSortField($sortfield);
-        $query->setSortOrder($sortorder);
-        if($author != '') $query->setField('author', $author, $authormodifier);
-        if($abstract != '') $query->setField('abstract', $abstract, $abstractmodifier);
-        if($fulltext != '') $query->setField('fulltext', $fulltext, $fulltextmodifier);
-        if($title != '') $query->setField('title', $title, $titlemodifier);
-        if($year != '') $query->setField('year', $year, $yearmodifier);
-        if($evaluator != '') $query->setField('referee', $evaluator, $evaluatorModifier);
+        $query->setStart($this->_getFieldValue($data, 'start', '0'));
+        $query->setRows($this->_getFieldValue($data, 'rows', '10'));
+        $query->setSortField($this->_getFieldValue($data, 'sortfield', 'score'));
+        $query->setSortOrder($this->_getFieldValue($data, 'sortorder', 'desc'));
+
+        foreach (array('author', 'title', 'referee', 'abstract', 'fulltext', 'year' ) as $fieldname) {
+            $fieldvalue = $this->_getFieldValue($data, $fieldname);
+            if (!empty($fieldvalue)) {
+                $fieldmodifier = $this->_getFieldValue($data, $fieldname . 'modifier', Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL);
+                $query->setField($fieldname, $fieldvalue, $fieldmodifier);
+            }
+        }
 
         $this->addFiltersToQuery($data, $query);
         $this->log->debug("Query $query complete");
         return $query;
     }
+
+    private function _getFieldValue($data, $fieldname, $default = '') {
+        if (array_key_exists($fieldname, $data)) {
+            $this->log->debug("field $fieldname");
+            return $data[$fieldname];
+        }
+        return $default;
+    }
+
 }
 ?>
