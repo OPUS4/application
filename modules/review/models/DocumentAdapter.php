@@ -99,12 +99,8 @@ class Review_Model_DocumentAdapter {
      * @return string
      */
     public function getDocTitle() {
-        try {
-            return $this->document->getTitleMain(0)->getValue();
-        }
-        catch (Exception $e) {
-            return $this->view->translate('document_no_title') . $id;
-        }
+        $titles = $this->document->getTitleMain();
+        return count($titles) > 0 ? $titles[0]->getValue() : ($this->view->translate('document_no_title') . $id);
     }
 
     /**
