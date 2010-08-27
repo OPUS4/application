@@ -39,6 +39,8 @@
 
 class Publish_Form_PublishingFirst extends Zend_Form {
 
+    public $config;
+
     /**
      * First publishing form of two forms
      * Here: Doctype + Upload-File
@@ -48,7 +50,7 @@ class Publish_Form_PublishingFirst extends Zend_Form {
     public function init() {        
 
         $documentInSession = new Zend_Session_Namespace('document');
-        $config = Zend_Registry::get('Zend_Config');
+        $this->config = Zend_Registry::get('Zend_Config');
 
         //Select with different document types given by the used function
         $listOptions = $this->getXmlDocTypeFiles();
@@ -67,22 +69,24 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         }
 
         // get path to store files
-        $tempPath = $config->path->workspace->temp;
+        $tempPath = $this->config->path->workspace->temp;
         if (true === empty($tempPath)) {
             $tempPath = '../workspace/tmp/';
         }
 
         // get allowed filetypes
-        @$filetypes = $config->publish->filetypes->allowed;
+        $filetypes = $this->config->publish->filetypes->allowed;
         if (true === empty($filetypes)) {
             $filetypes = 'pdf,txt,html,htm';
         }
+        //get allowed file size
+        $maxFileSize = (int) $this->config->publish->maxfilesize;
 
         $fileupload = $this->createElement('File', 'fileupload');
         $fileupload->setLabel('fileupload')
                 ->setDestination($tempPath)
                 ->addValidator('Count', false, 1)     // ensure only 1 file
-                ->addValidator('Size', false, 1024000) // limit to 1000K
+                ->addValidator('Size', false, $maxFileSize) // limit to value given in application.ini
                 ->addValidator('Extension', false, $filetypes); // allowed filetypes by extension
 
         $bib = $this->createElement('checkbox', 'bibliographie');
@@ -106,8 +110,10 @@ class Publish_Form_PublishingFirst extends Zend_Form {
      * @return array() of found docTypes
      */
      protected function getXmlDocTypeFiles() {
-        // TODO Do not use a hardcoded path to xml files
-        $xml_path = "../config/xmldoctypes/";
+        $xml_path = $this->config->publish->path->documenttypes;
+        if (true === empty($xml_path)) {
+            $filetypes = "../config/xmldoctypes/";
+        }
         $result = array();
         if ($dirhandle = opendir($xml_path)) {
             while (false !== ($file = readdir($dirhandle))) {
