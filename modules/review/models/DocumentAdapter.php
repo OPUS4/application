@@ -31,24 +31,60 @@
  * @version     $Id$
  */
 
+/**
+ * Wrapper around Opus_Document to prepare presentation.
+ *
+ * TODO split off base class, URLs are controller specific
+ */
 class Review_Model_DocumentAdapter {
 
+    /**
+     * Document identifier.
+     * @var int
+     */
     public $docId = null;
 
+    /**
+     * Wrapped document.
+     * @var Opus_Document
+     */
     public $document = null;
 
+    /**
+     * Zend_View for presentation.
+     * @var Zend_View
+     */
     private $view;
 
+    /**
+     * Array of author names.
+     * @var array
+     */
+    private $authors = null;
+
+    /**
+     * Constructs wrapper around document.
+     * @param Zend_View $view
+     * @param int $id
+     */
     public function __construct($view, $id) {
         $this->view = $view;
         $this->docId = $id;
         $this->document = new Opus_Document( (int) $id);
     }
 
+    /**
+     * Returns document identifier.
+     * @return int
+     */
     public function getDocId() {
         return $this->docId;
     }
 
+    /**
+     * Returns state of document or 'undefined'.
+     * @return string
+     */
     public function getState() {
         try {
             return $this->document->getServerState();
@@ -58,6 +94,10 @@ class Review_Model_DocumentAdapter {
         }
     }
 
+    /**
+     * Returns first title for document.
+     * @return string
+     */
     public function getDocTitle() {
         try {
             return $this->document->getTitleMain(0)->getValue();
@@ -67,6 +107,10 @@ class Review_Model_DocumentAdapter {
         }
     }
 
+    /**
+     * Returns frontdoor URL for document.
+     * @return  url
+     */
     public function getUrlFrontdoor() {
         $url_frontdoor = array(
             'module'     => 'frontdoor',
@@ -77,6 +121,10 @@ class Review_Model_DocumentAdapter {
         return $this->view->url($url_frontdoor, 'default', true);
     }
 
+    /**
+     * Returns URL for editing document.
+     * @return url
+     */
     public function getUrlEdit() {
         $url_edit = array(
             'module'     => 'admin',
@@ -87,6 +135,10 @@ class Review_Model_DocumentAdapter {
         return $this->view->url($url_edit, 'default', true);
     }
 
+    /**
+     * Returns URL for deleting document.
+     * @return url
+     */
     public function getUrlDelete() {
         $url_delete = array (
             'module'     => 'admin',
@@ -97,6 +149,10 @@ class Review_Model_DocumentAdapter {
         return $this->view->url($url_delete, 'default', true);
     }
 
+    /**
+     * Returns URL for permanently deleting document.
+     * @return url
+     */
     public function getUrlPermanentDelete() {
         $url_permadelete = array (
             'module'     => 'admin',
@@ -107,7 +163,15 @@ class Review_Model_DocumentAdapter {
         return $this->view->url($url_permadelete, 'default', true);
     }
 
+    /**
+     * Return list of authors.
+     * @return array
+     */
     public function getAuthors() {
+        if ($this->authors) {
+            return $this->authors;
+        }
+
         try {
             $c = count($this->document->getPersonAuthor());
         }
@@ -118,26 +182,12 @@ class Review_Model_DocumentAdapter {
         $authors = array();
 
         for ($counter = 0; $counter < $c; $counter++) {
-            $name = $d->getPersonAuthor($counter)->getName();
+            $name = $this->document->getPersonAuthor($counter)->getName();
 
-            $authorUrl[$counter] = $this->view->url(
-                array(
-                    'module'     => 'search',
-                    'controller' => 'search',
-                    'action'     => 'metadatasearch',
-                    'author'     => $name
-                ),
-                null,
-                true
-            );
-
-            $author = array();
-
-            $author['name'] = $name;
-            $author['url'] = $authorUrl;
-
-            $authors[$counter] = $author;
+            $authors[$counter] = $name;
         }
+
+        $this->authors = $authors;
 
         return $authors;
     }

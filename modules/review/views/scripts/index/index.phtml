@@ -30,8 +30,78 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
 ?>
 
-<h1><?= $this->translate('review_index_title')?></h1>
+<h1><?= $this->translate('review_index_title')?> 
+    <span class="info">(<?= $this->documentCount ?>
+        <?= $this->translate('review_docs_found_short') ?>)</span></h1>
+
+<!--
+<?= $this->translate('review_docs_found') ?>: <?= $this->documentCount ?>
+-->
+
+<div class="reviewContainer">
+
+    <?PHP if (isset($this->error)) : ?>
+    <div class="error">
+        <?= $this->error ?>
+    </div>
+
+    <?PHP endif; ?>
+
+    <form action="" method="post">
+
+    <div style="text-align: center">
+        <?= $this->translate('review_sort_label') ?>:
+        <select name="sort_order">
+            <?PHP foreach ($this->sortOptions as $value => $label) : ?>
+            <option value="<?= $value ?>" <?= ($value == $this->sort_order) ? 'selected' : '' ?>><?= $label ?></option>
+            <?PHP endforeach; ?>
+        </select>
+
+        <input type="submit" name="buttonUp" value="<?= $this->translate('review_sort_up') ?>" />
+        <input type="submit" name="buttonDown" value="<?= $this->translate('review_sort_down') ?>" />
+    </div>
+
+
+<?PHP echo $this->paginationControl($this->paginator, 'Sliding', 'pagination_control.phtml'); ?>
+
+<table class="result">
+<?PHP foreach ($this->documents as $index => $document) : ?>
+    <tr class="<?= ($index % 2) ? 'odd' : 'even' ?>">
+        <td><input type="checkbox" name="selected[]" value="<?= $document->getDocId()?>"
+                <?= ((in_array($document->getDocId(), $this->selected) || $this->selectAll) && !$this->selectNone)  ? 'checked' : '' ?> /></td>
+        <td class="index"><?= $this->paginator->getAbsoluteItemNumber($index + 1) ?>.</td>
+        <td>
+            <div class="title">
+                <a href="<?= $document->getUrlFrontdoor() ?>" target="_blank">
+                    <?= $document->getDocTitle() ?>
+                </a>
+            </div>
+            <div class="authors">
+            <?PHP $authorsCount = count($document->getAuthors()) - 1; ?>
+            <?PHP foreach($document->getAuthors() as $count => $author) : ?>
+                <?= $author ?>
+                <?= ($count < $authorsCount) ? ';' : ''?>
+            <?PHP endforeach; ?>
+            </div>
+        </td>
+    </tr>
+<?PHP endforeach; ?>
+</table>
+
+<?PHP echo $this->paginationControl($this->paginator, 'Sliding', 'pagination_control.phtml'); ?>
+
+    <div>
+        <input type="submit" name="buttonSelectAll" value="<?= $this->translate('review_select_all') ?>" />
+        <input type="submit" name="buttonSelectNone" value="<?= $this->translate('review_select_none') ?>" />
+    </div>
+
+    <div style="text-align: right">
+        <input type="submit" name="buttonSubmit" value="<?= $this->translate('review_clear_selected') ?>" />
+    </div>
+
+    </form>
+
+</div>
 
