@@ -156,6 +156,8 @@ class Review_IndexController extends Controller_CRUDAction {
      * Action for showing the clear form and processing POST from it.
      */
     public function clearAction() {
+        $this->view->title = $this->view->translate('review_index_title');
+
         $this->view->actionUrl = $this->view->url(array(
             'module' => 'review', 'controller'=>'index', 'action'=>'clear'
         ));
@@ -199,6 +201,7 @@ class Review_IndexController extends Controller_CRUDAction {
      * TODO implement and use
      */
     public function successAction() {
+        $this->view->title = $this->view->translate('review_index_title');
     }
 
     /**
@@ -293,8 +296,7 @@ class Review_IndexController extends Controller_CRUDAction {
                     $person->setFirstName($firstName);
                     $person->setLastName($lastName);
 
-                    $document->addReferee($person);
-
+                    $document->addPersonReferee($person);
                     $document->store();
                 }
                 else {
