@@ -2314,8 +2314,9 @@ INSERT INTO `persons` (`id`, `academic_title`, `date_of_birth`, `email`, `first_
 (252, NULL, NULL, 'o.marahrens@tu-harburg.de', 'Opus3', 'Importer', NULL),
 (253, NULL, NULL, 'john.doe@example.org', 'John', 'Doe', NULL),
 (254, NULL, NULL, 'jane.doe@example.org', 'Jane', 'Doe', NULL),
-(255, NULL, NULL, 'jane.doe@example.org', 'Wally', 'Walruss', NULL);
-
+(255, NULL, NULL, 'wally@example.org', 'Wally', 'Walruss', NULL),
+(256, NULL, NULL, 'rainer.zufall@example.org', 'Rainer', 'Zufall', NULL),
+(257, NULL, NULL, 'klara.fall@example.org', 'Klara', 'Fall', NULL);
 
 --
 -- Daten für Tabelle `link_persons_documents`
@@ -2596,7 +2597,11 @@ INSERT INTO `link_persons_documents` (`person_id`, `document_id`, `institute_id`
 (255, 107, NULL, 'author', 0, 0),
 (255, 108, NULL, 'author', 0, 0),
 (255, 109, NULL, 'author', 0, 0),
-(255, 110, NULL, 'author', 0, 0);
+(255, 110, NULL, 'author', 0, 0),
+(256, 91, NULL, 'author', 0, 0),
+(257, 91, NULL, 'author', 0, 0),
+(256, 92, NULL, 'author', 0, 0),
+(257, 93, NULL, 'author', 0, 0);
 
 --
 -- Daten für Tabelle `privileges`
