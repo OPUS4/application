@@ -153,3 +153,6 @@
     <input type="hidden" name="sortfield" value="score" />
     <input type="hidden" name="sordorder" value="desc" />
 </form>
+<form action="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'advanced'),null,true) ?>">
+    <input type="submit" value="Suche Zur&uuml;cksetzen" />
+</form>
