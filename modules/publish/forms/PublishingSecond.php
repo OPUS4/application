@@ -119,16 +119,25 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      */
     protected function _addSelect($workflow, $elementName, $validator, $required, $label, $data) {
         $this->log->debug('Return select field!');
-        if (count($data) <= 1) {
+        if (count($data) == 1) {
             $value = (array_keys($data));
             $formField = $this->createElement('text', $elementName);
             $formField->setValue($value[0]);
         } else {
+
             $formField = $this->createElement('select', $elementName);
+            //$formField->setDisableTranslator(true);
+
             if ($workflow === 'licence')
                 $formField->setMultiOptions(array_merge(array('' => 'choose_valid_licence'), $data));
-            else if ($workflow === 'language')
-                $formField->setMultiOptions(array_merge(array('' => 'choose_valid_language'), $data));
+
+            else if ($workflow === 'language') {
+//                foreach ($data as $key => $val) {
+//                    $formField->addMultiOption($key, $val);
+//
+//                }
+                $formField->addMultiOptions(array_merge(array('' => 'choose_valid_language'), $data));
+            }           
         }
         $formField->setLabel($label)
                 ->addValidator($validator);
@@ -153,14 +162,14 @@ class Publish_Form_PublishingSecond extends Zend_Form {
     protected function _getDocument() {
         $config = Zend_Registry::get('Zend_Config');
 
-//formArray for the templates
+        //formArray for the templates
         $formArray = array();
 
-//get the xml file for the current doctype
+        //get the xml file for the current doctype
         $xmlFile = $config->publish->doctypesPath . DIRECTORY_SEPARATOR . $this->doctype . ".xml";
 
-//create the DOM Parser for reading the xml file
-//if (!$dom = domxml_open_mem(file_get_contents($xmlFile))){
+        //create the DOM Parser for reading the xml file
+        //if (!$dom = domxml_open_mem(file_get_contents($xmlFile))){
         if (!$dom = new DOMDocument()) {
             echo "Error while trying to begin parsing the document type.";
             exit;
@@ -208,7 +217,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         }
 
         //=3= Get the proper validator from the datatape!
-        $validator = $this->_getValidatorsByName($datatype);
+        $validator = $this->_getValidatorsByDatatype($datatype);
         // TODO combine with result of _parseValidation
         //=4= Check if fields has to shown multi times!
         if ($multiplicity !== "1") {
@@ -355,39 +364,46 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      * the "user datatypes" will be translated in proper Zend_Validator or own Opus_Validator
      * @param <type> $datatype parsed value in a xml document type
      * @return <type> array of validators that belong to the given datatype
+     * @throw Publish_Model_OpusServerException
      */
-    public function _getValidatorsByName($datatype) {
+    protected function _getValidatorsByDatatype($datatype) {
         switch ($datatype) {
             case 'Text':  //todo: validator for texts with signs
                 return new Zend_Validate_Alnum(true);
                 break;
+
             case 'Integer':
                 return new Zend_Validate_Int(null);
                 break;
+
             case 'Year':
                 return new Zend_Validate_GreaterThan('1900');
                 break;
+
             case 'Person':
                 return new Zend_Validate_Alpha(true);
                 break;
+
             case 'Alpha':
                 return new Zend_Validate_Alpha(false);
                 break;
+
             case 'Title': //todo: validator for texts with signs
                 return new Zend_Validate_Alnum(true);
                 break;
+
             case 'Language' :
-                return new Opus_Validate_Language();
+                return new Zend_Validate_InArray(Opus_Language::getAllActive());
                 break;
+
             case 'Licence' :
-                return new Opus_Validate_Licence();
+                return new Zend_Validate_InArray(Opus_Licence::getAll());
                 break;
 
             default:
-                return new Publish_Model_OpusServerPublishingException("Error while parsing the xml document type: Found datatype " . $datatype . " is unknown!");
+                throw new Publish_Model_OpusServerException("Error while parsing the xml document type: Found datatype " . $datatype . " is unknown!");
                 break;
         }
-//TODO: Möglichkeit für den Admin einrichten, die Validatoren zu konfigurieren!!!
     }
 
     /**
@@ -437,8 +453,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      */
     protected function _preparePersonElement($formElement, $elementName, $validator, $required, $group, $label) {
         $groupWas = "0";
-        echo $group;
-        if ($group == null) {
+        if ($group === null) {
             $groupWas = "1";
             $group = array();
         }
@@ -454,7 +469,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         if ($groupWas == "1") {
             $groupName = 'group' . $elementName;
             $displayGroup = $this->addDisplayGroup($group, $groupName);
-             $this->log->debug("Added Displaygroup to form: " . $groupName);
+            $this->log->debug("Added Displaygroup to form: " . $groupName);
         }
 
         return $group;
@@ -471,8 +486,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      */
     protected function _prepareTitleElement($formElement, $elementName, $validator, $required, $group, $label) {
         $groupWas = "0";
-        echo $group;
-        if ($group == null) {
+        if ($group === null) {
             $groupWas = "1";
             $group = array();
         }
@@ -483,29 +497,19 @@ class Publish_Form_PublishingSecond extends Zend_Form {
 
         $language = "Language";
         $languageName = $elementName . $language;
-        $validator = $this->_getValidatorsByName("Language");
+        $validator = $this->_getValidatorsByDatatype("Language");
 
         //create language selection
-        $la = new Opus_Language();
-        $languages = $la::getAll();
-        $this->log->debug("Languages: ");
-        $data = array();
-        foreach ($languages AS $la) {
-            $name = $la->getDisplayName();
-            $data[$name] = $name;
-            $this->log->debug($name);
-        }
-        asort($data);
-        $this->_addSelect('language', $languageName, $validator, $required, $label . $language, $data);
+        $languageName = $elementName . 'Language';
+        $this->_prepareLanguageElement($languageName, $validator, $required, $label . 'Language');
         $group[] = $languageName;
 
         if ($groupWas == "1") {
             $groupName = 'group' . $elementName;
             $displayGroup = $this->addDisplayGroup($group, $groupName);
-             $this->log->debug("Added Displaygroup to form: " . $groupName);
+            $this->log->debug("Added Displaygroup to form: " . $groupName);
         }
         return $group;
-
     }
 
     /**
@@ -516,14 +520,14 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      * @param <type> $label
      */
     protected function _prepareLicenceElement($elementName, $validator, $required, $label) {
-        $li = new Opus_Licence();
-        $licences = $li::getAll();
+        $licences = Opus_Licence::getAll();
         $this->log->debug("Licences: ");
         $data = array();
         foreach ($licences AS $li) {
             $name = $li->getDisplayName();
             $data[$name] = $name;
             $this->log->debug($name);
+            echo $name;
         }
         asort($data);
         $this->_addSelect('licence', $elementName, $validator, $required, $label, $data);
@@ -537,18 +541,20 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      * @param <type> $label
      */
     protected function _prepareLanguageElement($elementName, $validator, $required, $label) {
-        $la = new Opus_Language();
-                $languages = $la::getAll();
-                $validator = $this->_getValidatorsByName("Language");
-                $this->log->debug("Languages: ");
-                $data = array();
-                foreach ($languages AS $la) {
-                    $name = $la->getDisplayName();
-                    $data[$name] = $name;
-                    $this->log->debug($name);
-                }
-                asort($data);
-                $this->_addSelect('language', $elementName, $validator, $required, $label, $data);
+        $languages = Opus_Language::getAllActive();
+        $validator = $this->_getValidatorsByDatatype("Language");
+        $this->log->debug("Languages: ");
+        $data = array();
+        foreach ($languages AS $la) {
+            $name = $la->getDisplayName();
+            $short_name = $la->getPart2B();
+            $this->log->debug("short name of language: " . $short_name);
+            $data[$short_name] = $name;
+            $this->log->debug($name);
+        }
+
+        asort($data);
+        $this->_addSelect('language', $elementName, $validator, $required, $label, $data);
     }
 
     /**

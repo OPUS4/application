@@ -86,18 +86,9 @@
       <tuv xml:lang="de">
         <seg>Sprache der Veröffentlichung</seg>
       </tuv>
-    </tu>
-    
-    <tu tuid="en">
-      <tuv xml:lang="en">
-        <seg>English</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Englisch</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="de">
+    </tu>   
+
+     <tu tuid="de">
       <tuv xml:lang="en">
         <seg>German</seg>
       </tuv>
@@ -105,7 +96,7 @@
         <seg>Deutsch</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="deu">
       <tuv xml:lang="en">
         <seg>German</seg>
@@ -114,7 +105,7 @@
         <seg>Deutsch</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="eng">
       <tuv xml:lang="en">
         <seg>English</seg>
@@ -123,7 +114,7 @@
         <seg>Englisch</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="fra">
       <tuv xml:lang="en">
         <seg>French</seg>
@@ -132,7 +123,7 @@
         <seg>Französisch</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="ita">
       <tuv xml:lang="en">
         <seg>Italian</seg>
@@ -141,7 +132,7 @@
         <seg>Italienisch</seg>
       </tuv>
     </tu>
-        
+
     <tu tuid="por">
       <tuv xml:lang="en">
         <seg>Portuguese</seg>
@@ -150,7 +141,7 @@
         <seg>Portugiesisch</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="rus">
       <tuv xml:lang="en">
         <seg>Russian</seg>
@@ -159,7 +150,7 @@
         <seg>Russisch</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="spa">
       <tuv xml:lang="en">
         <seg>Spanish</seg>
@@ -169,6 +160,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="en">
+      <tuv xml:lang="en">
+        <seg>English</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Englisch</seg>
+      </tuv>
+    </tu>
+   
     <tu tuid="son">
       <tuv xml:lang="en">
         <seg>Misc.</seg>

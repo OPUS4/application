@@ -102,6 +102,7 @@ class Publish_IndexController extends Controller_Action {
                 $log->info("A file was uploaded: " . $file['name'] . " => Fulltext is given.");
                 $document = new Opus_Document();
                 $document->setType($this->documentType);
+                $document->setServerState('temporary');
                 $docId = $document->store();
                 $this->documentId = $docId;
                 $log->info("The corresponding doucment ID is: " . $this->documentId);
@@ -167,7 +168,6 @@ class Publish_IndexController extends Controller_Action {
             $form->populate($postData);
 
             if (!$form->send->isChecked()) {
-                $log->debug("Send: " . $form->send);
                 $this->view->title = $this->view->translate('publish_controller_index');
                 $this->view->subtitle = $this->view->translate($this->documentType);
                 $log->debug("A BUTTON (NOT SEND) WAS PRESSED!!!!!!!!!!!!!!!!!");
@@ -228,23 +228,10 @@ class Publish_IndexController extends Controller_Action {
                     //RENDER check.phtml
                     $this->view->title = $this->view->translate('publish_controller_check');
                     $log->debug("Variables are valid!");
-                    //send form values to check view
-//                    $formValues = array();
-//                    $formValues["documentId"] = $form->getElement('documentId')->getValue();
-//                    $formValues["documentType"] = $form->getElement('documentType')->getValue();
-//                    foreach ($form->getElements() as $element) {
-//                        //if (!($element->getType() == 'Zend_Form_Element_Hidden') && !($element->getType() == 'Zend_Form_Element_Submit'))
-//                        if ($element->getValue() !== "" && $element->getType() !== "Zend_Form_Element_Submit" && $element->getType() !== "Zend_Form_Element_Hidden") {
-//
-//                            $formValues[$element->getName()] = $element->getValue();
-//                            $log->debug("add " . $element->getName() . " to formValues!");
-//                        }
-//
-//                    }
+                    
                     $this->view->formValues = $form->getValues();
 
                     //finally: deposit the data!
-                    //$depositForm = new Zend_Form();
                     $depositForm = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $fulltext, $this->additionalFields, $form->getValues());
                     $action_url = $this->view->url(array('controller' => 'index', 'action' => 'deposit'));
                     $depositForm->setAction($action_url);
@@ -267,16 +254,7 @@ class Publish_IndexController extends Controller_Action {
                     //$depositForm->addValues($formValues);
                     $deposit = $depositForm->createElement('submit', 'deposit');
                     $depositForm->addElements(array($docId, $docType, $fullText, $deposit));
-//                    foreach ($form->getValues() as $key => $value) {
-//                        if ($key != 'send') {
-//                            $hidden = $depositForm->createElement('hidden', $key);
-//                            $hidden->setValue($value);
-//                            $depositForm->addElement($hidden);
-//                        } else {
-//                            //do not send the field "send" with the form
-//                            $depositForm->removeElement('send');
-//                        }
-//                    }
+
                     //send form to view
                     $this->view->form = $depositForm;
                     $log->debug("Check was successful! Next step: deposit data!");
@@ -352,6 +330,7 @@ class Publish_IndexController extends Controller_Action {
                     }
                 }
             }
+            $document->setServerState('unpublished');
             $document->store();
         }
     }
@@ -362,7 +341,7 @@ class Publish_IndexController extends Controller_Action {
      */
     private function setViewVariables($form) {
         $log = Zend_Registry::get('Zend_Log');
-        $log->debug("Method renderFormForView begins...");
+        $log->debug("Method setViewVariables begins...");
 
         //show errors
         $errors = $form->getMessages();
@@ -379,10 +358,6 @@ class Publish_IndexController extends Controller_Action {
                     $name = substr($currentElement, 0, $pos);
                 else
                     $name=$currentElement; //"normal" element name without changes
-
-
-
-
             }
 
             $groupName = 'group' . $name;
@@ -418,16 +393,14 @@ class Publish_IndexController extends Controller_Action {
             //single fields (for calling with helper class)
             $log->debug("current Element: " . $currentElement);
             $singleField = $currentElement . "_";
-            $singleField2 = "element" . $currentElement;
-
+            
             $elementAttributes = $form->getElementAttributes($currentElement); //array
-            foreach ($elementAttributes as $key1 => $value1) {
-                $log->debug($key1 . " => " . $value1);
-            }
+//            foreach ($elementAttributes as $key1 => $value1) {
+//                $log->debug($key1 . " => " . $value1);
+//            }
             $this->view->$singleField = $elementAttributes;
-            $this->view->$singleField2 = $elementAttributes;
-
-            $log->debug("singlefield" . $singleField . " filled");
+            
+            $log->debug("singlefield " . $singleField . " filled");
 
             //also support more difficult templates for "expert admins"
             $this->view->$currentElement = $form->getElement($currentElement)->getValue();
@@ -656,6 +629,15 @@ class Publish_IndexController extends Controller_Action {
         $log = Zend_Registry::get('Zend_Log');
         if ($workflow === "Language") {
             $log->debug("titleType: " . $titleType);
+            $languages = Opus_Language::getAllActive();
+            foreach ($languages as $lang) {
+                if ($lang->getDisplayName() === $value) {
+                        $value = $lang->getPart2B();
+                        echo $value;
+                        break;
+                }
+            }
+
             $log->debug("1) set language: " . $value);
             $title->setLanguage($value);
 
@@ -705,6 +687,23 @@ class Publish_IndexController extends Controller_Action {
             if (strstr($key, "Swd")) {
                 $subject = new Opus_SubjectSwd();
                 $log->debug("subject is a swd subject.");
+            } else if (strstr($key, "MSC")) {
+                $log->debug("subject is a MSC subject and has to be stored as a Collection.");
+                $value = $formValues[$key];
+                $role = Opus_CollectionRole::fetchByOaiName('msc');
+                $log->debug("Role: " . $role);
+                $collArray = Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $value);
+                $log->debug("Role ID: " . $role->getId() . ", value: " . $value);
+               
+                if (count($collArray) === 1) {
+                    $document->addCollection($collArray[0]);
+                    return;
+                } else
+                    throw new Publish_Model_OpusServerException("While trying to store " . $key . " as Collection, an error occurred.
+                        The method fetchCollectionsByRoleNumber returned an array with > 1 values. The " . $key . " cannot be definitely assigned.");
+                $subject = new Opus_Subject();
+                $log->debug("subject has also be stored as subject.");
+
             } else {
                 $subject = new Opus_Subject();
                 $log->debug("subject is a uncontrolled or other subject.");
@@ -810,10 +809,9 @@ class Publish_IndexController extends Controller_Action {
             $log->debug("Collection already stored.");
             return $formValues;
         } else {
-            $value = $formValues[$key];
-            $log->debug("try to store Collection: " . $key . " with value " . $value);
-                       
-            return $this->storeCollectionObject($document, $value, $formValues);
+            $log->debug("try to store Collection: " . $key . " with value " . $formValues[$key]);
+
+            return $this->storeCollectionObject($document, $formValues, $key);
         }
     }
 
@@ -827,13 +825,17 @@ class Publish_IndexController extends Controller_Action {
      * @param <String> $key
      * @return <Array> formValues
      */
-    private function storeCollectionObject($document, $value, $formValues) {
+    private function storeCollectionObject($document, $formValues, $key) {
         $log = Zend_Registry::get('Zend_Log');
-        
+        $value = $formValues[$key];
+
         if (strstr($key, "Project")) {
             $role = Opus_CollectionRole::fetchByOaiName('projects');
-            $collArray = Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $value);
-            if (count($collArray) <= 1)
+            $log->debug("Role: " . $role);
+            $collArray = Opus_Collection::fetchCollectionsByRoleName($role->getId(), $value);
+            $log->debug("Role ID: " . $role->getId() . ", value: " . $value);
+
+            if ($collArray !== null && count($collArray) <= 1)
                 $document->addCollection($collArray[0]);
             else
                 throw new Publish_Model_OpusServerException("While trying to store " . $key . " as Collection, an error occurred.
@@ -841,7 +843,7 @@ class Publish_IndexController extends Controller_Action {
         }
         else if (strstr($key, "Institute")) {
             $role = Opus_CollectionRole::fetchByOaiName('instituts');
-            $collArray = Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $value);
+            $collArray = Opus_Collection::fetchCollectionsByRoleName($role->getId(), $value);
             if (count($collArray) <= 1)
                 $document->addCollection($collArray[0]);
             else
@@ -869,7 +871,7 @@ class Publish_IndexController extends Controller_Action {
             $value = $formValues[$key];
             $log->debug("try to store Licence: " . $key);
             $licence = new Opus_Licence();
-            
+
             return $this->storeLicenceObject($licence, $document, $value, $formValues);
         }
     }

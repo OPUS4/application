@@ -1,6 +1,7 @@
 <?
 echo '<h1>'.$this->title.'</h1>';
 echo '<h3>'.$this->subtitle.'</h3>';
+//echo $this->form;
 ?>
 
 <form enctype="application/x-www-form-urlencoded" action="/opus4-devel/index.php/publish/index/check" method="post">
@@ -9,6 +10,7 @@ echo '<h3>'.$this->subtitle.'</h3>';
 <?= $this->field("Element", null, $this->Language_); ?>
 <?= $this->field("Group", null, $this->groupTitleMain); ?>
 <?= $this->field("Group", null, $this->groupTitleAbstract); ?>
+<?= $this->field("Element", null, $this->ThesisDateAccepted_); ?>
 <?= $this->field("Group", null, $this->groupPersonReferee); ?>
 <?= $this->field("Group", null, $this->groupProject); ?>
 <?= $this->field("Group", null, $this->groupSubjectMSC); ?>

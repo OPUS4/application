@@ -9,7 +9,7 @@
  *
  * @author Susanne Gottwald
  */
-class Publish_Model_OpusServerException extends Opus_Server_Exception {
+class Publish_Model_OpusServerException extends Exception {
     //put your code here
 }
 ?>
