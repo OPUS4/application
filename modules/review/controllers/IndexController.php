@@ -75,6 +75,8 @@ class Review_IndexController extends Controller_CRUDAction {
      * Processes clicked buttons on that page.
      */
     public function indexAction() {
+        $this->view->title = $this->view->translate('review_index_title');
+
         $request = $this->getRequest();
 
         $logger = Zend_Registry::get('Zend_Log');
@@ -286,7 +288,13 @@ class Review_IndexController extends Controller_CRUDAction {
                 if ($state === 'unpublished') {
                     $logger->debug('Change state to \'published\' for document:' . $docId);
                     $document->setServerState('published');
-                    // FIXME add referee
+
+                    $person = new Opus_Person();
+                    $person->setFirstName($firstName);
+                    $person->setLastName($lastName);
+
+                    $document->addReferee($person);
+
                     $document->store();
                 }
                 else {
