@@ -37,14 +37,6 @@
     <?php if($this->searchType != 'authorsearch') : ?>
     <fieldset>
         <legend>Allgemeine Suchoptionen</legend>
-        <label for="default_operator">Suchen nach den Kriterien aus </label>
-        <select name="defaultoperator" id="default_operator">
-            <option value="AND" <?= isset($this->defaultoperator) && $this->defaultoperator === 'AND' ? 'selected="true"' : '' ?>>allen Zeilen</option>
-            <option value="OR" <?= isset($this->defaultoperator) && $this->defaultoperator === 'OR' ? 'selected="true"' : '' ?>>mindestens einer Zeile</option>
-        </select>
-
-        <br/>
-
         <label for="rows">Treffer pro Seite</label>
         <select name="rows" id="rows">
             <option value="10" <?= $this->rows === '10' || !isset($this->rows)? 'selected="true"' : '' ?>>10</option>

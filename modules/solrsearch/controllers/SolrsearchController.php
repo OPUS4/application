@@ -199,7 +199,6 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
                 'rows'=> array_key_exists('rows', $data) ? $data['rows'] : '10',
                 'sortfield'=> array_key_exists('sortfield', $data) ? $data['sortfield'] : 'score',
                 'sortorder'=> array_key_exists('sortorder', $data) ? $data['sortorder'] : 'desc',
-                'defaultoperator'=>array_key_exists('defaultoperator', $data) ? $data['defaultoperator'] : 'AND'
             );
 
         if(array_key_exists('author', $data) && $data['author'] != '')
@@ -273,8 +272,7 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $this->view->__set("start", $this->query->getStart());
         $this->view->__set("numOfPages", (int) ($this->numOfHits / $this->query->getRows()) + 1);
         $this->view->__set("rows", $this->query->getRows());
-        $this->view->__set("q", $this->query->getQ());
-        $this->view->__set("defaultoperator", $this->query->getDefaultOperator());
+        $this->view->__set("q", $this->query->getCatchAll());
         $this->view->__set("authorSearch", array("module"=>"solrsearch","controller"=>"solrsearch","action"=>"search","searchtype"=>"advanced"));
 
         if($this->searchtype === 'simple') {
@@ -422,7 +420,6 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $fulltext = array_key_exists('fulltext', $data) ? $data['fulltext'] : '';
         $title = array_key_exists('title', $data) ? $data['title'] : '';
         $year = array_key_exists('year', $data) ? $data['year'] : '';
-        $defaultOperator = array_key_exists('defaultoperator', $data) ? $data['defaultoperator'] : 'AND';
         $authormodifier = array_key_exists('authormodifier', $data) ? $data['authormodifier'] : Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL;
         $abstractmodifier = array_key_exists('abstractmodifier', $data) ? $data['abstractmodifier'] : Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL;
         $titlemodifier = array_key_exists('titlemodifier', $data) ? $data['titlemodifier'] : Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL;
@@ -436,7 +433,6 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $query->setRows($rows);
         $query->setSortField($sortfield);
         $query->setSortOrder($sortorder);
-        $query->setDefaultOperator($defaultOperator);
         if($author != '') $query->setField('author', $author, $authormodifier);
         if($abstract != '') $query->setField('abstract', $abstract, $abstractmodifier);
         if($fulltext != '') $query->setField('fulltext', $fulltext, $fulltextmodifier);
