@@ -57,14 +57,19 @@ class View_Helper_Field extends Zend_View_Helper_Abstract {
      * @return element to render in view
      */
     public function field($type, $name, $value) {
-        
-        $method = "_render" . $type;
-        if (method_exists($this, $method) === true) {
-            $result = $this->$method($name, $value);
+
+        if ($name == null && $value == null) {
+            $error_message = $this->view->translate('template_error_unknown_field');
+            return "<br/><div style='width: 400px; color:red;'>" . $error_message . "</div><br/><br/>";
         } else {
-            $result = $this->_renderGeneralElement($type, $value, $name);
+            $method = "_render" . $type;
+            if (method_exists($this, $method) === true) {
+                $result = $this->$method($name, $value);
+            } else {
+                $result = $this->_renderGeneralElement($type, $value, $name);
+            }
+            return $result;
         }
-        return $result;
     }
 
     /**
@@ -83,32 +88,53 @@ class View_Helper_Field extends Zend_View_Helper_Abstract {
     public function _renderElement($name, $element) {
         switch ($element["type"]) {
             case "Zend_Form_Element_Textarea" :
-                    $elementfield = "<table>\n\t<tr>\n\t\t<td>\n\t\t\t<label for='" . $element["id"] . "' class='" . $element["req"] . "'>" . $element["label"] . "</label>\n\t\t</td>\n\t\t";
-                    $elementfield .= "<td>\n\t\t\t<textarea cols='30' rows='9' name='" . $element["id"] . "' id='" . $element["id"] . "'>" . $element["value"] . "</textarea>\n\t\t</td>\n\t</tr>\n\t";
-                    $elementfield .= "<tr>\n\t\t<td colspan='2'>";
-                    if ($element["error"] != null) {
-                        $elementfield .= "<ul class='errors'>";
-                        foreach ($element["error"] AS $err)
-                            $elementfield .= "\n\t\t\t<li>" . $err . "</li>";
-                        $elementfield .= "\n\t\t</ul>";
-                    }
-                    $elementfield .= "</td>\n\t</tr>\n</table>\n\n";
-                    return $elementfield;                
+                $elementfield = "<table>\n\t<tr>\n\t\t<td>\n\t\t\t<label for='" . $element["id"] . "' class='" . $element["req"] . "'>" . $element["label"] . "</label>\n\t\t</td>\n\t\t";
+                $elementfield .= "<td>\n\t\t\t<textarea cols='30' rows='9' name='" . $element["id"] . "' id='" . $element["id"] . "'>" . $element["value"] . "</textarea>\n\t\t</td>\n\t</tr>\n\t";
+                $elementfield .= "<tr>\n\t\t<td colspan='2'>";
+                if ($element["error"] != null) {
+                    $elementfield .= "<ul class='errors'>";
+                    foreach ($element["error"] AS $err)
+                        $elementfield .= "\n\t\t\t<li>" . $err . "</li>";
+                    $elementfield .= "\n\t\t</ul>";
+                }
+                $elementfield .= "</td>\n\t</tr>\n</table>\n\n";
+                return $elementfield;
 
             case "Zend_Form_Element_Text" :
-                    $elementfield = "<table>\n\t<tr>\n\t\t<td>\n\t\t\t<label for='" . $element["id"] . "' class='" . $element["req"] . "'>" . $element["label"] . "</label>\n\t\t</td>\n\t\t";
-                    $elementfield .= "<td>\n\t\t\t<input type='text' name='" . $element["id"] . "' id='" . $element["id"] . "' value='" . $element["value"] . "' />\n\t\t</td>\n\t</tr>\n\t";
-                    $elementfield .= "<tr>\n\t\t<td colspan='2'>";
-                    if ($element["error"] != null) {
-                        $elementfield .= "<ul class='errors'>";
-                        foreach ($element["error"] AS $err)
-                            $elementfield .= "\n\t\t\t<li>" . $err . "</li>";
-                        $elementfield .= "\n\t\t</ul>";
-                    }
-                    $elementfield .= "</td>\n\t</tr>\n</table>\n\n";
-                    return $elementfield;
-           }
-        }   
+                $elementfield = "<table>\n\t<tr>\n\t\t<td>\n\t\t\t<label for='" . $element["id"] . "' class='" . $element["req"] . "'>" . $element["label"] . "</label>\n\t\t</td>\n\t\t";
+                $elementfield .= "<td>\n\t\t\t<input type='text' name='" . $element["id"] . "' id='" . $element["id"] . "' value='" . $element["value"] . "' />\n\t\t</td>\n\t</tr>\n\t";
+                $elementfield .= "<tr>\n\t\t<td colspan='2'>";
+                if ($element["error"] != null) {
+                    $elementfield .= "<ul class='errors'>";
+                    foreach ($element["error"] AS $err)
+                        $elementfield .= "\n\t\t\t<li>" . $err . "</li>";
+                    $elementfield .= "\n\t\t</ul>";
+                }
+                $elementfield .= "</td>\n\t</tr>\n</table>\n\n";
+                return $elementfield;
+
+            case "Zend_Form_Element_Select":
+                $elementfield = "<table>\n\t<tr>\n\t\t<td>\n\t\t\t<label for='" . $element["id"] . "' class='" . $element["req"] . "'>" . $element["label"] . "</label>\n\t\t</td>\n\t\t";
+                $elementfield .= "<td>\n\t\t\t<select name='" . $element["id"] . "' id='" . $element["id"] . "'>\n\t\t\t\t";
+                foreach ($element["options"] AS $key => $option) {
+                    $elementfield .= "<option value='" . $option . "'";
+                    if ($option === $element["value"])
+                        $elementfield .= " selected='selected'>";
+                    else
+                        $elementfield .= ">";
+                    $elementfield .= $option . "</option>\n\t\t\t\t";
+                }
+                $elementfield .= "</select></td>\n\t</tr>\n\t<tr>\n\t\t<td colspan='2'>";
+                if ($element["error"] != null) {
+                    $elementfield .= "<ul class='errors'>";
+                    foreach ($element["error"] AS $err)
+                        $elementfield .= "\n\t\t\t<li>" . $err . "</li>";
+                    $elementfield .= "\n\t\t</ul>";
+                }
+                $elementfield .= "</td>\n\t</tr>\n</table>\n\n";
+                return $elementfield;
+        }
+    }
 
     /**
      *
@@ -128,13 +154,13 @@ class View_Helper_Field extends Zend_View_Helper_Abstract {
     public function _renderGroup($name, $group) {
         $fieldset = "";
         if (isset($group)) {
-            $fieldset = "<fieldset>\n<legend>" . $group['Name'] . "</legend>\n\t<table>";
+            $fieldset = "<fieldset>\n<legend>" . $this->view->translate($group['Name']) . "</legend>\n\t<table>";
             //show fields
             foreach ($group["Fields"] AS $field) {
                 $fieldset .= "\n\t\t<tr>\n\t\t\t<td>";
                 $fieldset .= "\n\t\t\t\t<label for='" . $field["id"] . "' class='" . $field["req"] . "'>" . $field["label"] . "</label>";
                 $fieldset .= "\n\t\t\t</td>\n\t\t\t<td>";
-                switch ($field["type"]) {
+                switch ($field['type']) {
                     case "Zend_Form_Element_Text":
                         $fieldset .= "\n\t\t\t\t<input type='text' name='" . $field["id"] . "' id='" . $field["id"] . "' value='" . $field["value"] . "' />";
                         break;
@@ -142,6 +168,20 @@ class View_Helper_Field extends Zend_View_Helper_Abstract {
                     case "Zend_Form_Element_Textarea":
                         $fieldset .= "\n\t\t\t\t<textarea cols='30' rows='9' name='" . $field["id"] . "' id='" . $field["id"] . "'>" . $field["value"] . "</textarea>";
                         break;
+                    case "Zend_Form_Element_Select" :
+                        $fieldset .= "\n\t\t\t\t<select name='" . $field["id"] . "' id='" . $field["id"] . "'>\n\t\t\t\t\t";
+                        foreach ($field["options"] AS $key => $option) {
+                            $fieldset .= "<option value='" . $option . "'";
+                            if ($option === $field["value"])
+                                $fieldset .= " selected='selected'>";
+                            else
+                                $fieldset .= ">";
+                            $fieldset .= $option . "</option>\n\t\t\t\t\t";
+                        }
+                        $fieldset .= "</select>";
+                        break;
+                    default:
+                        throw new Application_Exception("Field Type {$field['type']} not found in View Helper.");
                 }
                 $fieldset .= "\n\t\t\t</td>\n\t\t</tr>\n\t\t<tr>\n\t\t\t<td colspan='2'>";
                 if ($field["error"] != null) {
@@ -173,7 +213,8 @@ class View_Helper_Field extends Zend_View_Helper_Abstract {
      * @param <type> $value 
      */
     public function _renderGeneralElement($type, $value, $name) {
-        
+        echo "Sie wollen weder ein Element noch eine Group anzeigen lassen. <br>Der Fehler trat auf bei: ";
+        echo print_r($value);
     }
 
 }
