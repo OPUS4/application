@@ -118,7 +118,15 @@ INSERT INTO `documents` (`id`, `completed_date`, `completed_year`, `contributing
 (99, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL, 0),
 (100, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL, 0),
 (101, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL, 0),
-(102, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL, 0);
+(102, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL, 0),
+(103, NULL, 2008, NULL, NULL, '2010-06-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'published', NULL, 0),
+(104, NULL, 2008, NULL, NULL, '2010-07-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL, 0),
+(105, NULL, 2008, NULL, NULL, '2010-08-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL, 0),
+(106, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL, 0),
+(107, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL, 0),
+(108, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL, 0),
+(109, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL, 0),
+(110, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL, 0);
 
 
 --
@@ -1155,7 +1163,15 @@ INSERT INTO `document_title_abstracts` (`id`, `document_id`, `type`, `value`, `l
 (237, 99, 'main', 'TOP SECRET - Do not publish!', 'eng'),
 (238, 100, 'main', 'A very unpublished document.', 'eng'),
 (239, 101, 'main', 'This should never be pusblished.', 'eng'),
-(240, 102, 'main', 'Something that should never have been written, but now that it has please do not publish it!', 'eng');
+(240, 102, 'main', 'Something that should never have been written, but now that it has please do not publish it!', 'eng'),
+(241, 103, 'main', 'What you always wanted to know about Opus and never dared to ask!', 'eng'),
+(242, 104, 'main', 'What you never wanted to know about Opus!', 'eng'),
+(243, 105, 'main', 'Learning to program in 5 minutes or less.', 'eng'),
+(244, 106, 'main', 'A day in the life of an Opus developer.', 'eng'),
+(245, 107, 'main', 'Another day in the life of an Opus developer.', 'eng'),
+(246, 108, 'main', 'Wally - The vegetarian walruss.', 'eng'),
+(247, 109, 'main', 'What to do if your build is broken!', 'eng'),
+(248, 110, 'main', 'Internet access broken? - What you could do instead.', 'eng');
 
 --
 -- Daten für Tabelle `file_hashvalues`
@@ -2297,7 +2313,8 @@ INSERT INTO `persons` (`id`, `academic_title`, `date_of_birth`, `email`, `first_
 (251, NULL, NULL, NULL, 'Nathasith', 'Chiarawatchai', NULL),
 (252, NULL, NULL, 'o.marahrens@tu-harburg.de', 'Opus3', 'Importer', NULL),
 (253, NULL, NULL, 'john.doe@example.org', 'John', 'Doe', NULL),
-(254, NULL, NULL, 'jane.doe@example.org', 'Jane', 'Doe', NULL);
+(254, NULL, NULL, 'jane.doe@example.org', 'Jane', 'Doe', NULL),
+(255, NULL, NULL, 'jane.doe@example.org', 'Wally', 'Walruss', NULL);
 
 
 --
@@ -2571,7 +2588,15 @@ INSERT INTO `link_persons_documents` (`person_id`, `document_id`, `institute_id`
 (254, 99, NULL, 'author', 0, 0),
 (253, 100, NULL, 'author', 0, 0),
 (253, 101, NULL, 'author', 0, 0),
-(253, 102, NULL, 'author', 0, 0);
+(253, 102, NULL, 'author', 0, 0),
+(255, 103, NULL, 'author', 0, 0),
+(255, 104, NULL, 'author', 0, 0),
+(255, 105, NULL, 'author', 0, 0),
+(255, 106, NULL, 'author', 0, 0),
+(255, 107, NULL, 'author', 0, 0),
+(255, 108, NULL, 'author', 0, 0),
+(255, 109, NULL, 'author', 0, 0),
+(255, 110, NULL, 'author', 0, 0);
 
 --
 -- Daten für Tabelle `privileges`
