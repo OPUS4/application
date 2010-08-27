@@ -82,7 +82,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         //hidden field with document id
         $this->_addHiddenField('documentId', $this->docId);
 
-        $this->_addSubmit('Send');
+        $this->_addSubmit('Formular abschicken');
     }
 
     /**
@@ -110,20 +110,57 @@ class Publish_Form_PublishingSecond extends Zend_Form {
     }
 
     /**
+     * Adds a Selection field to the form with the given data array as options
+     * @param <String> $elementName
+     * @param <Zend_Validate> $validator
+     * @param <String> $required
+     * @param <String> $label
+     * @param <Array> $data list of options
+     */
+    protected function _addSelect($workflow, $elementName, $validator, $required, $label, $data) {
+        $this->log->debug('Return select field!');
+        if (count($data) <= 1) {
+            $value = (array_keys($data));
+            $formField = $this->createElement('text', $elementName);
+            $formField->setValue($value[0]);
+        } else {
+            $formField = $this->createElement('select', $elementName);
+            if ($workflow === 'licence')
+                $formField->setMultiOptions(array_merge(array('' => 'choose_valid_licence'), $data));
+            else if ($workflow === 'language')
+                $formField->setMultiOptions(array_merge(array('' => 'choose_valid_language'), $data));
+        }
+        $formField->setLabel($label)
+                ->addValidator($validator);
+
+        if ($required === "yes")
+            $formField->setRequired(true);
+        else
+            $formField->setRequired(false);
+
+        if ($this->postData != null)
+            if (array_key_exists($elementName, $this->postData))
+                $formField->setValue($this->postData[$elementName]);
+
+        $this->addElement($formField);
+        return $formField;
+    }
+
+    /**
      * Returns the DOMDocument for the document type.
      * @return DOMDocument
      */
     protected function _getDocument() {
         $config = Zend_Registry::get('Zend_Config');
 
-        //formArray for the templates
+//formArray for the templates
         $formArray = array();
 
-        //get the xml file for the current doctype
+//get the xml file for the current doctype
         $xmlFile = $config->publish->doctypesPath . DIRECTORY_SEPARATOR . $this->doctype . ".xml";
 
-        //create the DOM Parser for reading the xml file
-        //if (!$dom = domxml_open_mem(file_get_contents($xmlFile))){
+//create the DOM Parser for reading the xml file
+//if (!$dom = domxml_open_mem(file_get_contents($xmlFile))){
         if (!$dom = new DOMDocument()) {
             echo "Error while trying to begin parsing the document type.";
             exit;
@@ -146,11 +183,6 @@ class Publish_Form_PublishingSecond extends Zend_Form {
             $datatype = $field->getAttribute('datatype');
             $multiplicity = $field->getAttribute('multiplicity');
         }
-//            else
-//                throw new Publish_Model_OpusServerPublishingException("Error while parsing xml document type: Choosen document type has missing attributes in element 'field'!");
-
-//            if (empty($elementName) || empty($required) || empty($datatype) || empty($multiplicity))
-//                throw new Publish_Model_OpusServerPublishingException("Error while parsing the xml document type: Found attribute(s) are empty!");
 
         //=2= Check if there are child nodes -> concerning fulltext or other dependencies!
         if ($field->hasChildNodes()) {
@@ -162,7 +194,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
                     $required = "yes";
                 }
             }
-            //parse the xml file for the tag "subfield"
+//parse the xml file for the tag "subfield"
 //                foreach ($dom->getElementsByTagname('subfield') as $subField) {
 //                    if ($subField->hasAttributes()) {
 //                        $subElementName = $subField->getAttribute('name');
@@ -176,16 +208,14 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         }
 
         //=3= Get the proper validator from the datatape!
-        $validator = $this->getValidatorsByName($datatype);
+        $validator = $this->_getValidatorsByName($datatype);
         // TODO combine with result of _parseValidation
-
         //=4= Check if fields has to shown multi times!
-        if ($multiplicity != "1") {
+        if ($multiplicity !== "1") {
             $this->_addDisplayGroup($formElement, $elementName, $validator, $datatype, $required, $multiplicity);
-        }
-        else {
+        } else {
             //prepare element that do not belong to a display group
-            $this->prepareFormElement($formElement, $elementName, $validator, $datatype, $required, null, $elementName);
+            $this->_prepareFormElement($formElement, $elementName, $validator, $datatype, $required, null, $elementName);
         }
     }
 
@@ -203,8 +233,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
                 $params = $this->_parseParameters($validate);
                 $validatorInstance = $this->_getValidator($name, $params);
             }
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -219,7 +248,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      */
     protected function _parseParameters(DOMElement $field) {
         $parameters = array();
-        foreach($validate->getElementsByTagName('param') as $param) {
+        foreach ($validate->getElementsByTagName('param') as $param) {
             $key = $param->getAttribute('name');
             $value = $param->getAttribute('value');
             $parameters[$key] = $value;
@@ -228,7 +257,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
     }
 
     protected function _getValidator($name, $params = null) {
-        // TODO change name to lower case
+// TODO change name to lower case
         switch ($name) {
             case 'requiredif':
                 return new Form_Validate_RequiredIf($params);
@@ -249,10 +278,9 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         $group = array();
         $groupName = 'group' . $elementName;
         //current element has also to be in that group
-
         //prepare form element: create Zend_Form_element with needed attributes
         $label = $elementName;
-        $group = $this->prepareFormElement($formElement, $elementName."1", $validator, $datatype, $required, $group, $label);
+        $group = $this->_prepareFormElement($formElement, $elementName . "1", $validator, $datatype, $required, $group, $label);
 
         //additionalFields != null means additinal fields have to be shown
         if ($this->additionalFields != null) {
@@ -281,25 +309,24 @@ class Publish_Form_PublishingSecond extends Zend_Form {
                 //start counting at lowest possible number -> also used for name
                 for ($i = 1; $i < $currentNumber; $i++) {
                     $counter = $i + 1;
-                    $group = $this->prepareFormElement($formElement, $elementName . $counter, $validator, $datatype, $required, $group, $label);
+                    $group = $this->_prepareFormElement($formElement, $elementName . $counter, $validator, $datatype, $required, $group, $label);
                 }
 
                 if ($currentNumber == 1) {
                     //only one field is shown -> nothing to delete
                     $this->addElement($addMoreButton);
                     $group[] = $addMoreButton->getName();
-                }
-                else if ($currentNumber < $multiplicity) {
+                } else if ($currentNumber < $multiplicity) {
                     //more than one field has to be shown -> delete buttons are needed
                     $this->addElement($addMoreButton);
                     $group[] = $addMoreButton->getName();
                     $this->addElement($deleteMoreButton);
                     $group[] = $deleteMoreButton->getName();
-                    } else {
-                        //maximum fields are shown -> here only a delete button
-                        $this->addElement($deleteMoreButton);
-                        $group[] = $deleteMoreButton->getName();
-                    }
+                } else {
+                    //maximum fields are shown -> here only a delete button
+                    $this->addElement($deleteMoreButton);
+                    $group[] = $deleteMoreButton->getName();
+                }
             }
 
             //add a displaygroup to the form for grouping same elements
@@ -329,30 +356,42 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      * @param <type> $datatype parsed value in a xml document type
      * @return <type> array of validators that belong to the given datatype
      */
-    public function getValidatorsByName($datatype) {
+    public function _getValidatorsByName($datatype) {
         switch ($datatype) {
-            case 'Text': return new Zend_Validate_Alnum(true);
+            case 'Text':  //todo: validator for texts with signs
+                return new Zend_Validate_Alnum(true);
                 break;
-            case 'Integer': return new Zend_Validate_Int(null);
+            case 'Integer':
+                return new Zend_Validate_Int(null);
                 break;
-            case 'Year': return new Zend_Validate_GreaterThan('1900');
+            case 'Year':
+                return new Zend_Validate_GreaterThan('1900');
                 break;
-            case 'Person': return new Zend_Validate_Alpha(true);
+            case 'Person':
+                return new Zend_Validate_Alpha(true);
                 break;
-            case 'Alpha': return new Zend_Validate_Alpha(false);
+            case 'Alpha':
+                return new Zend_Validate_Alpha(false);
                 break;
-            case 'Title': return new Zend_Validate_Alpha(true);
+            case 'Title': //todo: validator for texts with signs
+                return new Zend_Validate_Alnum(true);
+                break;
+            case 'Language' :
+                return new Opus_Validate_Language();
+                break;
+            case 'Licence' :
+                return new Opus_Validate_Licence();
                 break;
 
             default:
                 return new Publish_Model_OpusServerPublishingException("Error while parsing the xml document type: Found datatype " . $datatype . " is unknown!");
                 break;
         }
-        //TODO: Möglichkeit für den Admin einrichten, die Validatoren zu konfigurieren!!!
+//TODO: Möglichkeit für den Admin einrichten, die Validatoren zu konfigurieren!!!
     }
 
     /**
-     * method to prepare a element for the given form, check implicit fields for person and title
+     * method to prepare a element for the given form, check implicit fields for person, title, licence, language
      * @param <type> $formElement
      * @param <type> $elementName
      * @param <type> $validator
@@ -360,37 +399,156 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      * @param <type> $required
      * @param <type> $group
      * @param <type> $label
-     * @return string 
+     * @return string
      */
-    protected function prepareFormElement($formElement, $elementName, $validator, $datatype, $required, $group, $label) {
+    protected function _prepareFormElement($formElement, $elementName, $validator, $datatype, $required, $group, $label) {
         switch ($datatype) {
-            case 'Person' : 
-                $first = "FirstName";
-                $nameFirst = $elementName . $first;
-                $this->addFormElement($formElement, $nameFirst, $validator, $required, $label.$first);
-                $group[] = $nameFirst;
-
-                $last = "LastName";
-                $nameLast = $elementName . $last;
-                $this->addFormElement($formElement, $nameLast, $validator, $required, $label.$last);
-                $group[] = $nameLast;
+            case 'Person' :
+                return $this->_preparePersonElement($formElement, $elementName, $validator, $required, $group, $label);
                 break;
 
             case 'Title':
-                $this->addFormElement($formElement, $elementName, $validator, $required, $label);
-                $group[] = $elementName;
-                
-                $language = "Language";
-                $name = $elementName . $language;
-                $this->addFormElement("text", $name, $validator, $required, $label.$language);
-                $group[] = $name;
+                return $this->_prepareTitleElement($formElement, $elementName, $validator, $required, $group, $label);
+                break;
+
+            case 'Licence':
+                $this->_prepareLicenceElement($elementName, $validator, $required, $label);
+                break;
+
+            case 'Language':
+                $this->_prepareLanguageElement($elementName, $validator, $required, $label);
                 break;
 
             default:
-                $this->addFormElement($formElement, $elementName, $validator, $required, $label);
+                $this->_addFormElement($formElement, $elementName, $validator, $required, $label);
                 $group[] = $elementName;
         }
         return $group;
+    }
+
+    /**
+     * prepare Person Element: create implicit fields and group them
+     * @param <type> $formElement
+     * @param <type> $elementName
+     * @param <type> $validator
+     * @param <type> $required
+     * @param <type> $group
+     * @param <type> $label
+     */
+    protected function _preparePersonElement($formElement, $elementName, $validator, $required, $group, $label) {
+        $groupWas = "0";
+        echo $group;
+        if ($group == null) {
+            $groupWas = "1";
+            $group = array();
+        }
+        $first = "FirstName";
+        $nameFirst = $elementName . $first;
+        $this->_addFormElement($formElement, $nameFirst, $validator, $required, $label . $first);
+        $group[] = $nameFirst;
+        $last = "LastName";
+        $nameLast = $elementName . $last;
+        $this->_addFormElement($formElement, $nameLast, $validator, $required, $label . $last);
+        $group[] = $nameLast;
+
+        if ($groupWas == "1") {
+            $groupName = 'group' . $elementName;
+            $displayGroup = $this->addDisplayGroup($group, $groupName);
+             $this->log->debug("Added Displaygroup to form: " . $groupName);
+        }
+
+        return $group;
+    }
+
+    /**
+     * prpeare Title Element: create implicit fields and group them
+     * @param <type> $formElement
+     * @param <type> $elementName
+     * @param <type> $validator
+     * @param <type> $required
+     * @param <type> $group
+     * @param <type> $label
+     */
+    protected function _prepareTitleElement($formElement, $elementName, $validator, $required, $group, $label) {
+        $groupWas = "0";
+        echo $group;
+        if ($group == null) {
+            $groupWas = "1";
+            $group = array();
+        }
+
+        //add Title value
+        $this->_addFormElement($formElement, $elementName, $validator, $required, $label);
+        $group[] = $elementName;
+
+        $language = "Language";
+        $languageName = $elementName . $language;
+        $validator = $this->_getValidatorsByName("Language");
+
+        //create language selection
+        $la = new Opus_Language();
+        $languages = $la::getAll();
+        $this->log->debug("Languages: ");
+        $data = array();
+        foreach ($languages AS $la) {
+            $name = $la->getDisplayName();
+            $data[$name] = $name;
+            $this->log->debug($name);
+        }
+        asort($data);
+        $this->_addSelect('language', $languageName, $validator, $required, $label . $language, $data);
+        $group[] = $languageName;
+
+        if ($groupWas == "1") {
+            $groupName = 'group' . $elementName;
+            $displayGroup = $this->addDisplayGroup($group, $groupName);
+             $this->log->debug("Added Displaygroup to form: " . $groupName);
+        }
+        return $group;
+
+    }
+
+    /**
+     * prpeare Licence Element: create licence list and add selection
+     * @param <type> $elementName
+     * @param <type> $validator
+     * @param <type> $required
+     * @param <type> $label
+     */
+    protected function _prepareLicenceElement($elementName, $validator, $required, $label) {
+        $li = new Opus_Licence();
+        $licences = $li::getAll();
+        $this->log->debug("Licences: ");
+        $data = array();
+        foreach ($licences AS $li) {
+            $name = $li->getDisplayName();
+            $data[$name] = $name;
+            $this->log->debug($name);
+        }
+        asort($data);
+        $this->_addSelect('licence', $elementName, $validator, $required, $label, $data);
+    }
+
+    /**
+     * prepare Language Element: create language list and add selection
+     * @param <type> $elementName
+     * @param <type> $validator
+     * @param <type> $required
+     * @param <type> $label
+     */
+    protected function _prepareLanguageElement($elementName, $validator, $required, $label) {
+        $la = new Opus_Language();
+                $languages = $la::getAll();
+                $validator = $this->_getValidatorsByName("Language");
+                $this->log->debug("Languages: ");
+                $data = array();
+                foreach ($languages AS $la) {
+                    $name = $la->getDisplayName();
+                    $data[$name] = $name;
+                    $this->log->debug($name);
+                }
+                asort($data);
+                $this->_addSelect('language', $elementName, $validator, $required, $label, $data);
     }
 
     /**
@@ -402,7 +560,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      * @param <type> $label
      * @return <type>
      */
-    protected function addFormElement($formElement, $elementName, $validator, $required, $label) {
+    protected function _addFormElement($formElement, $elementName, $validator, $required, $label) {
         $formField = $this->createElement($formElement, $elementName);
         $formField->setLabel($label);
         $formField->addValidator($validator);
@@ -415,7 +573,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
 
         $this->addElement($formField);
         return $formField;
-    }    
+    }
 
     /**
      *
@@ -430,10 +588,16 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         $elementAttributes["error"] = $element->getMessages();
         $elementAttributes["id"] = $element->getId();
         $elementAttributes["type"] = $element->getType();
-        if ($element->isRequired()) $elementAttributes["req"] = "required";
-        else $elementAttributes["req"] = "optional";
-        //$elementAttributes["hint"] = $element->getAttrib("hint");
-        
+        $elementAttributes["hint"] = $elementName . 'Hint';
+
+        if ($element->getType() === 'Zend_Form_Element_Select')
+            $elementAttributes["options"] = $element->getMultiOptions(); //array
+
+            if ($element->isRequired())
+            $elementAttributes["req"] = "required";
+        else
+            $elementAttributes["req"] = "optional";
+
         return $elementAttributes;
     }
 

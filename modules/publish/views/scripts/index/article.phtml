@@ -1,20 +1,20 @@
 <?
 echo '<h1>'.$this->title.'</h1>';
 echo '<h3>'.$this->subtitle.'</h3>';
-
+echo $this->form;
 ?>
 
 
 <form enctype="application/x-www-form-urlencoded" action="/opus4-devel/index.php/publish/index/check" method="post">
 
-<?= $this->field("Element", null, $this->PersonSubmitterFirstName_); ?>
-<?= $this->field("Element", null, $this->PersonSubmitterLastName_); ?>
+<?= $this->field("Group", null, $this->groupPersonSubmitter); ?>
 <?= $this->field("Element", null, $this->Language_); ?>
-<?= $this->field("Element", null, $this->IdentifierOpus3_); ?>  
+<?= $this->field("Element", null, $this->IdentifierOpus3_); ?>
+<?= $this->field("Element", null, $this->Licence_); ?>
 <?= $this->field("Group", null, $this->groupPersonAuthor); ?>
 <?= $this->field("Group", null, $this->groupTitleMain); ?>
 <?= $this->field("Group", null, $this->groupTitleAbstract); ?>
-<?= $this->field("Element", null, $this->TitleParent_); ?>
+<?= $this->field("Group", null, $this->groupTitleParent); ?>
 <?= $this->field("Group", null, $this->groupPersonEditor); ?>
 <?= $this->field("Group", null, $this->groupPersonTranslator); ?>
 <?= $this->field("Group", null, $this->groupPersonContributor); ?>

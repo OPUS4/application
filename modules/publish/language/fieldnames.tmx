@@ -70,7 +70,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="PersonTranslator">
+    <tu tuid="groupPersonTranslator">
       <tuv xml:lang="en">
         <seg>Translator(s)</seg>
       </tuv>
@@ -569,6 +569,15 @@
         <seg>Freies Schlagwort / Tag</seg>
       </tuv>
     </tu>
+
+    <tu tuid="groupSubjectUncontrolled">
+      <tuv xml:lang="en">
+        <seg>Tag(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Schlagwort(e)</seg>
+      </tuv>
+    </tu>
     
     <tu tuid="hint_add_SubjectUncontrolled">
       <tuv xml:lang="en">
@@ -903,6 +912,15 @@
         <seg>Haupttitel</seg>
       </tuv>
     </tu>
+
+    <tu tuid="groupTitleMain">
+      <tuv xml:lang="en">
+        <seg>Main Title(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Haupttitel</seg>
+      </tuv>
+    </tu>
     
     <tu tuid="TitleMainValue">
       <tuv xml:lang="en">
@@ -1000,6 +1018,15 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Abstract / Kurzfassung</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="groupTitleAbstract">
+      <tuv xml:lang="en">
+        <seg>Abstract(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Abstract(s)</seg>
       </tuv>
     </tu>
     
@@ -1216,6 +1243,24 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>URN oder ISBN</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="groupSubjectMSC">
+      <tuv xml:lang="en">
+        <seg>MSC Classification(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>MSC Klassifikation(en)</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="SubjectMSC">
+      <tuv xml:lang="en">
+        <seg>MSC Keyword</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>MSC Schlagwort</seg>
       </tuv>
     </tu>
     
@@ -1531,12 +1576,48 @@
       </tuv>
     </tu>
 
-    <tu tuid="PersonReferee">
+    <tu tuid="groupPersonReferee">
       <tuv xml:lang="en">
-        <seg>Referee</seg>
+        <seg>Referee(s)</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Gutachter</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="groupProject">
+      <tuv xml:lang="en">
+        <seg>Project(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Projekt(e)</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="Project">
+      <tuv xml:lang="en">
+        <seg>Project</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Projekt</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="groupApplicationArea">
+      <tuv xml:lang="en">
+        <seg>Application area(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Anwendungsgebiet(e)</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="ApplicationArea">
+      <tuv xml:lang="en">
+        <seg>Application area</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Anwendungsgebiet</seg>
       </tuv>
     </tu>
 

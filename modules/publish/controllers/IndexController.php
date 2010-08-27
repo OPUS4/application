@@ -128,7 +128,7 @@ class Publish_IndexController extends Controller_Action {
             $step2Form->setAction($action_url);
             $step2Form->setMethod('post');
             $this->setViewVariables($step2Form);
-            //$this->view->form = $step2Form;
+            $this->view->form = $step2Form;
         }
     }
 
@@ -383,13 +383,6 @@ class Publish_IndexController extends Controller_Action {
 
 
 
-
-
-
-
-
-
-
             }
 
             $groupName = 'group' . $name;
@@ -425,11 +418,15 @@ class Publish_IndexController extends Controller_Action {
             //single fields (for calling with helper class)
             $log->debug("current Element: " . $currentElement);
             $singleField = $currentElement . "_";
+            $singleField2 = "element" . $currentElement;
+
             $elementAttributes = $form->getElementAttributes($currentElement); //array
             foreach ($elementAttributes as $key1 => $value1) {
                 $log->debug($key1 . " => " . $value1);
             }
             $this->view->$singleField = $elementAttributes;
+            $this->view->$singleField2 = $elementAttributes;
+
             $log->debug("singlefield" . $singleField . " filled");
 
             //also support more difficult templates for "expert admins"
@@ -464,7 +461,7 @@ class Publish_IndexController extends Controller_Action {
         }
 
         if ($pressedButton == "")
-            throw new Exception("No pressed button found!");
+            throw new Exception("No pressed button found! Possibly the values of the buttons are not equal in the view and Publish class.");
         //todo: which exeption to choose?
         else
             return $pressedButtonName;
@@ -484,6 +481,10 @@ class Publish_IndexController extends Controller_Action {
             return "Subject";
         else if (strstr($postDataKey, "Note"))
             return "Note";
+        else if (strstr($postDataKey, "Project") || strstr($postDataKey, "Institute"))
+            return "Collection";
+        else if (strstr($postDataKey, "Licence"))
+            return "Licence";
         else
             return "";
     }
@@ -704,22 +705,21 @@ class Publish_IndexController extends Controller_Action {
             if (strstr($key, "Swd")) {
                 $subject = new Opus_SubjectSwd();
                 $log->debug("subject is a swd subject.");
-            }
-            else {
+            } else {
                 $subject = new Opus_Subject();
                 $log->debug("subject is a uncontrolled or other subject.");
             }
-            
+
             $len = strlen($key);
             $counter = (int) substr($key, $len - 1, $len);
             $log->debug("counter: " . $counter);
-            
+
             if ($counter >= 1)
-                //remove the counter at the end of the field name
+            //remove the counter at the end of the field name
                 $subjectType = substr($key, 0, $len - 1);
             else
                 $subjectType = substr($key, 0, $len);
-                
+
             return $this->storeSubjectObject($subject, $subjectType, $document, $formValues[$key], $formValues);
         }
     }
@@ -739,7 +739,7 @@ class Publish_IndexController extends Controller_Action {
         $log->debug("subjectType: " . $subjectType);
         $log->debug("set value: " . $value);
         $subject->setValue($value);
-        
+
         $addFunction = "add" . $subjectType;
         $log->debug("addfunction: " . $addFunction);
         $document->$addFunction($subject);
@@ -747,7 +747,7 @@ class Publish_IndexController extends Controller_Action {
         return $formValues;
     }
 
-     /**
+    /**
      * method to prepare a note object for storing
      * @param <Opus_Document> $document
      * @param <Array> $formValues
@@ -761,7 +761,7 @@ class Publish_IndexController extends Controller_Action {
             $log->debug("Note already stored.");
             return $formValues;
         } else {
-           $log->debug("try to store note: " . $key);
+            $log->debug("try to store note: " . $key);
             $note = new Opus_Note();
 
             return $this->storeSubjectObject($note, $document, $formValues[$key], $formValues);
@@ -791,6 +791,107 @@ class Publish_IndexController extends Controller_Action {
         $addFunction = "addNote";
         $log->debug("addfunction: " . $addFunction);
         $document->$addFunction($note);
+
+        return $formValues;
+    }
+
+    /**
+     * method to prepare a Collection object for storing
+     * @param <Opus_Document> $document
+     * @param <Array> $formValues
+     * @param <String> $key current Element of formValues
+     * @param <Array> $externalFields
+     * @return <Array> $formValues
+     * @throws Publish_Model_OpusServerException
+     */
+    private function prepareCollectionObject($document, $formValues, $key) {
+        $log = Zend_Registry::get('Zend_Log');
+        if ($formValues[$key] == "") {
+            $log->debug("Collection already stored.");
+            return $formValues;
+        } else {
+            $value = $formValues[$key];
+            $log->debug("try to store Collection: " . $key . " with value " . $value);
+                       
+            return $this->storeCollectionObject($document, $value, $formValues);
+        }
+    }
+
+    /**
+     * method to store a prepared Collection object
+     * @param <String> $workflow
+     * @param <Opus_Subject> $note
+     * @param <String> $noteType
+     * @param <Opus_Document> $document
+     * @param <Array> $formValues
+     * @param <String> $key
+     * @return <Array> formValues
+     */
+    private function storeCollectionObject($document, $value, $formValues) {
+        $log = Zend_Registry::get('Zend_Log');
+        
+        if (strstr($key, "Project")) {
+            $role = Opus_CollectionRole::fetchByOaiName('projects');
+            $collArray = Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $value);
+            if (count($collArray) <= 1)
+                $document->addCollection($collArray[0]);
+            else
+                throw new Publish_Model_OpusServerException("While trying to store " . $key . " as Collection, an error occurred.
+                        The method fetchCollectionsByRoleNumber returned an array with > 1 values. The " . $key . " cannot be definitely assigned.");
+        }
+        else if (strstr($key, "Institute")) {
+            $role = Opus_CollectionRole::fetchByOaiName('instituts');
+            $collArray = Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $value);
+            if (count($collArray) <= 1)
+                $document->addCollection($collArray[0]);
+            else
+                throw new Publish_Model_OpusServerException("While trying to store " . $key . " as Collection, an error occurred.
+                        The method fetchCollectionsByRoleNumber returned an array with > 1 values. The " . $key . " cannot be definitely assigned.");
+        }
+        return $formValues;
+    }
+
+    /**
+     * method to prepare a Licence object for storing
+     * @param <Opus_Document> $document
+     * @param <Array> $formValues
+     * @param <String> $key current Element of formValues
+     * @param <Array> $externalFields
+     * @return <Array> $formValues
+     * @throws Publish_Model_OpusServerException
+     */
+    private function prepareLicenceObject($document, $formValues, $key) {
+        $log = Zend_Registry::get('Zend_Log');
+        if ($formValues[$key] == "") {
+            $log->debug("Licence already stored.");
+            return $formValues;
+        } else {
+            $value = $formValues[$key];
+            $log->debug("try to store Licence: " . $key);
+            $licence = new Opus_Licence();
+            
+            return $this->storeLicenceObject($licence, $document, $value, $formValues);
+        }
+    }
+
+    /**
+     * method to store a prepared Licence object
+     * @param <String> $workflow
+     * @param <Opus_Subject> $note
+     * @param <String> $noteType
+     * @param <Opus_Document> $document
+     * @param <Array> $formValues
+     * @param <String> $key
+     * @return <Array> formValues
+     */
+    private function storeLicenceObject($licence, $document, $value, $formValues) {
+        $log = Zend_Registry::get('Zend_Log');
+        $log->debug("set value: " . $value);
+        $licence->setNameLong($value);
+
+        $addFunction = "addLicence";
+        $log->debug("addfunction: " . $addFunction);
+        $document->$addFunction($licence);
 
         return $formValues;
     }
