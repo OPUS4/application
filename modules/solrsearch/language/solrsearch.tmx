@@ -116,6 +116,114 @@
             </tuv>
         </tu>
 
+        <tu tuid="solrsearch_advancedsearch_field_author">
+            <tuv xml:lang="en">
+                <seg>Author(s)</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Autor(en)</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="solrsearch_advancedsearch_field_title">
+            <tuv xml:lang="en">
+                <seg>Title</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Titel</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="solrsearch_advancedsearch_field_referee">
+            <tuv xml:lang="en">
+                <seg>Referee(s)</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Gutachter</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="solrsearch_advancedsearch_field_abstract">
+            <tuv xml:lang="en">
+                <seg>Abstract</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Abstract</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="solrsearch_advancedsearch_field_fulltext">
+            <tuv xml:lang="en">
+                <seg>Fulltext</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Fulltext</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="solrsearch_advancedsearch_field_year">
+            <tuv xml:lang="en">
+                <seg>Year(s)</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Jahr(e)</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="solrsearch_advancedsearch_tooltip_author">
+            <tuv xml:lang="en">
+                <seg>ToDo</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sie können in dieses Feld auch mehrere Autoren durch Leerzeichen getrennt eingeben.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="solrsearch_advancedsearch_tooltip_title">
+            <tuv xml:lang="en">
+                <seg>ToDo</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sie können in dieses Feld auch mehrere Titel durch Leerzeichen getrennt eingeben.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="solrsearch_advancedsearch_tooltip_referee">
+            <tuv xml:lang="en">
+                <seg>ToDo</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sie können in dieses Feld auch mehrere Gutachter durch Leerzeichen getrennt eingeben.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="solrsearch_advancedsearch_tooltip_abstract">
+            <tuv xml:lang="en">
+                <seg>ToDo</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sie können in dieses Feld auch mehrere Begriffe durch Leerzeichen getrennt eingeben.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="solrsearch_advancedsearch_tooltip_fulltext">
+            <tuv xml:lang="en">
+                <seg>ToDo</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sie können in dieses Feld auch mehrere Begriffe durch Leerzeichen getrennt eingeben.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="solrsearch_advancedsearch_tooltip_year">
+            <tuv xml:lang="en">
+                <seg>ToDo</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sie können in dieses Feld auch mehrere Jahre durch Leerzeichen getrennt eingeben.</seg>
+            </tuv>
+        </tu>
+
     </body>
 
 </tmx>
