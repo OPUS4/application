@@ -276,10 +276,10 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $this->view->__set("authorSearch", array("module"=>"solrsearch","controller"=>"solrsearch","action"=>"search","searchtype"=>"advanced"));
 
         if($this->searchtype === 'simple') {
-            $this->view->__set("nextPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'query'=>$this->query->getQ(),'start'=>(int)($this->query->getStart()) + (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
-            $this->view->__set("prevPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'query'=>$this->query->getQ(),'start'=>(int)($this->query->getStart()) - (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
-            $this->view->__set("lastPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'query'=>$this->query->getQ(),'start'=>(int)($this->numOfHits / $this->query->getRows()) * $this->query->getRows(),'rows'=>$this->query->getRows()));
-            $this->view->__set("firstPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'query'=>$this->query->getQ(),'start'=>'0','rows'=>$this->query->getRows()));
+            $this->view->__set("nextPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>(int)($this->query->getStart()) + (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
+            $this->view->__set("prevPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>(int)($this->query->getStart()) - (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
+            $this->view->__set("lastPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>(int)($this->numOfHits / $this->query->getRows()) * $this->query->getRows(),'rows'=>$this->query->getRows()));
+            $this->view->__set("firstPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>'0','rows'=>$this->query->getRows()));
         } else if($this->searchtype === 'advanced' || $this->searchtype === 'authorsearch') {
             $this->view->__set("nextPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'start'=>(int)($this->query->getStart()) + (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
             $this->view->__set("prevPage", array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'start'=>(int)($this->query->getStart()) - (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
@@ -304,12 +304,19 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $facets = $this->resultList->getFacets();
         $facetArray = array();
         $selectedFacets = array();
+
         foreach($facets as $key=>$facet) {
+
             $this->log->debug("found $key facet in search results");
-            $facetArray[$key] = $facet;
-            if(array_key_exists($key.'fq', $data) && $data[$key.'fq'] != '')
+
+            $facetIsActive = array_key_exists($key.'fq', $data) && $data[$key.'fq'] != '';
+            if($facetIsActive)
                 $selectedFacets[$key] = $data[$key.'fq'];
+
+            if(count($facets[$key]) > 1 || $facetIsActive)
+                $facetArray[$key] = $facet;
         }
+        
         $this->view->__set('facets', $facetArray);
         $this->view->__set('selectedFacets', $selectedFacets);
     }
