@@ -144,16 +144,6 @@ class Review_IndexController extends Controller_CRUDAction {
         $paginator->setItemCountPerPage(10);
 
         $this->view->paginator = $paginator;
-
-        $documents = array();
-
-        $index = 0;
-        foreach ($paginator as $id) {
-            $documents[$index] = new Review_Model_DocumentAdapter($this->view, $id);
-            $index++;
-        }
-
-        $this->view->documents = $documents;
     }
 
     /**
