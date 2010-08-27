@@ -244,10 +244,10 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
     }
 
     public function searchAction() {
-        $this->query = $this->buildQuery($this->_request);
+        $this->query = $this->buildQuery($this->_request); // refactor: data should be extracted here and kept locally scoped
         $this->performSearch();
         $this->setViewValues();
-        $this->createFacetsForView();
+        $this->setViewFacets($this->_request);
 
         if(0 === $this->numOfHits || $this->query->getStart() >= $this->numOfHits) {
             $this->render('nohits');
@@ -299,14 +299,19 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         }
     }
 
-    private function createFacetsForView() {
+    private function setViewFacets($request) {
+        $data = $request->getParams();
         $facets = $this->resultList->getFacets();
         $facetArray = array();
+        $selectedFacets = array();
         foreach($facets as $key=>$facet) {
-            $this->log->debug("found ".$key." facet in search results");
+            $this->log->debug("found $key facet in search results");
             $facetArray[$key] = $facet;
+            if(array_key_exists($key.'fq', $data) && $data[$key.'fq'] != '')
+                $selectedFacets[$key] = $data[$key.'fq'];
         }
-        $this->view->__set("facets", $facetArray);
+        $this->view->__set('facets', $facetArray);
+        $this->view->__set('selectedFacets', $selectedFacets);
     }
 
     /**
@@ -403,6 +408,8 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
             $facetKey = $facet."fq";
             if(array_key_exists($facetKey, $data)) {
                 $this->log->debug("request has facet key: ".$facetKey." value is: ".$data[$facetKey]." corresponding facet is: ".$facet);
+                if($data[$facetKey] === '')
+                    continue;
                 $query->addFilterQuery($facet.":".$data[$facetKey]);
             }
         }

@@ -44,7 +44,14 @@
                 $fqUrl = $this->firstPage;
                 $fqUrl[$key.'fq'] = $facetItem->getText();
             ?>
-                <li><a href="<?= $this->url($fqUrl) ?>"><?= $facetItem->getText() ?></a> (<?= $facetItem->getCount() ?>)</li>
+                <li <?= array_key_exists($key, $this->selectedFacets) ? 'class="activeFacet"' : '' ?>><a href="<?= $this->url($fqUrl) ?>"><?= $facetItem->getText() ?></a> (<?= $facetItem->getCount() ?>)
+                <?php if(array_key_exists($key, $this->selectedFacets)) :
+                    $fqUrl = $this->firstPage;
+                    $fqUrl[$key.'fq'] = '';
+                ?>
+                <a href="<?= $this->url($fqUrl) ?>" class="removeFacetLink">(entfernen)</a>
+                <?php endif ?>
+                </li>
             <?php endforeach ?>
         </ul>
     </div>
