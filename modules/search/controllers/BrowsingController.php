@@ -396,7 +396,8 @@ class Search_BrowsingController extends Zend_Controller_Action
                 // /usetheme/1/ to the browsing URL.
                 $usetheme = $this->_getParam("usetheme");
                 if (isset ($usetheme) === true && 1 === (int)$usetheme) {
-                    $this->_helper->layout->setLayout('../' . $browsingListProduct->getTheme() . '/common');
+                    // $this->_helper->layout->setLayout('../' . $browsingListProduct->getTheme() . '/common');
+                    $this->_helper->layout->setLayoutPath(APPLICATION_PATH . '/public/layouts/' . $browsingListProduct->getTheme());
                 }
 
                 // If node === 0, then this collection actually is a CollectionRole
