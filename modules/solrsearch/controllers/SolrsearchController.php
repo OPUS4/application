@@ -201,41 +201,30 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
                 'sortorder'=> array_key_exists('sortorder', $data) ? $data['sortorder'] : 'desc',
             );
 
-        if(array_key_exists('author', $data) && $data['author'] != '')
+        if(array_key_exists('author', $data) && $data['author'] != '') {
             $urlArray['author'] = $data['author'];
+            $urlArray['authormodifier'] = array_key_exists('authormodifier', $data) ? $data['authormodifier'] : Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL;
+        }
 
-        if(array_key_exists('title', $data) && $data['title'] != '')
+        if(array_key_exists('title', $data) && $data['title'] != '') {
             $urlArray['title'] = $data['title'];
+            $urlArray['titlemodifier'] = array_key_exists('titlemodifier', $data) ? $data['titlemodifier'] : Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL;
+        }
 
-        if(array_key_exists('abstract', $data) && $data['abstract'] != '')
+        if(array_key_exists('abstract', $data) && $data['abstract'] != '') {
             $urlArray['abstract'] = $data['abstract'];
+            $urlArray['abstractmodifier'] = array_key_exists('abstractmodifier', $data) ? $data['abstractmodifier'] : Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL;
+        }
 
-        if(array_key_exists('fulltext', $data) && $data['fulltext'] != '')
+        if(array_key_exists('fulltext', $data) && $data['fulltext'] != '') {
             $urlArray['fulltext'] = $data['fulltext'];
+            $urlArray['fulltextmodifier'] = array_key_exists('fulltextmodifier', $data) ? $data['fulltextmodifier'] : Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL;
+        }
 
-        if(array_key_exists('year', $data) && $data['year'] != '')
+        if(array_key_exists('year', $data) && $data['year'] != '') {
             $urlArray['year'] = $data['year'];
-
-        if(array_key_exists('authormodifier', $data) && $data['authormodifier'] != '')
-            $urlArray['authormodifier'] = $data['authormodifier'];
-
-        if(array_key_exists('titlemodifier', $data) && $data['titlemodifier'] != '')
-            $urlArray['titlemodifier'] = $data['titlemodifier'];
-
-        if(array_key_exists('abstractmodifier', $data) && $data['abstractmodifier'] != '')
-            $urlArray['abstractmodifier'] = $data['abstractmodifier'];
-
-        if(array_key_exists('yearmodifier', $data) && $data['yearmodifier'] != '')
-            $urlArray['yearmodifier'] = $data['yearmodifier'];
-
-        if(array_key_exists('evaluatormodifier', $data) && $data['evaluatormodifier'] != '')
-            $urlArray['evaluatormodifier'] = $data['evaluatormodifier'];
-
-        if(array_key_exists('evaluator', $data) && $data['evaluator'] != '')
-            $urlArray['evaluator'] = $data['evaluator'];
-
-        if(array_key_exists('fulltextmodifier', $data) && $data['fulltextmodifier'] != '')
-            $urlArray['fulltextmodifier'] = $data['fulltextmodifier'];
+            $urlArray['yearmodifier'] = array_key_exists('yearmodifier', $data) ? $data['yearmodifier'] : Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL;
+        }
 
         $this->log->debug("author form param val: " .$data['author']);
 
