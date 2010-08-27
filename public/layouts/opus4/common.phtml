@@ -42,7 +42,8 @@ $this->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8')
     $fc = Zend_Controller_Front::getInstance();
     $basePath = $fc->getRequest()->getBasePath();
     $this->headLink()
-        ->appendStylesheet($basePath . '/layouts/opus4/css/opus.css');
+        ->appendStylesheet($basePath . '/layouts/opus4/css/opus.css')
+        ->appendStylesheet($basePath . '/layouts/opus4/css/admin.css'); // temporary CSS to style admin and review module pages
 ?>
 
 <?= $this->doctype() ?>
