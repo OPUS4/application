@@ -77,6 +77,10 @@ class Review_IndexController extends Controller_CRUDAction {
     public function indexAction() {
         $this->view->title = $this->view->translate('review_index_title');
 
+        $this->view->actionUrl = $this->view->url(array(
+            'module' => 'review', 'controller'=>'index', 'action'=>'index'
+        ));
+
         $request = $this->getRequest();
 
         $logger = Zend_Registry::get('Zend_Log');
@@ -295,7 +299,6 @@ class Review_IndexController extends Controller_CRUDAction {
                     $person = new Opus_Person();
                     $person->setFirstName($firstName);
                     $person->setLastName($lastName);
-
                     $document->addPersonReferee($person);
                     $document->store();
                 }
