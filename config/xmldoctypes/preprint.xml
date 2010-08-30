@@ -11,9 +11,7 @@
 
 	<opus:field name="TitleAbstract" required="no" formelement="textarea"  datatype="Title" multiplicity="4">
 		<opus:required-if-fulltext/>
-    </opus:field>
-
-	<opus:field name="ThesisDateAccepted" required="yes" formelement="text" datatype="Date" multiplicity="1" />
+    </opus:field>	
 	<opus:field name="PersonReferee" required="yes" formelement="text" datatype="Person" multiplicity="*" />
 	<opus:field name="Project" required="no" formelement="select" datatype="Project" multiplicity="*" />
 
