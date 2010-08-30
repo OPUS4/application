@@ -96,22 +96,25 @@ class Publish_IndexController extends Controller_Action {
             //store the file
             $upload = new Zend_File_Transfer_Adapter_Http();
             $files = $upload->getFileInfo();
-            $file = $files['fileupload'];
 
-            if (!empty($file['name'])) {
-                $log->info("A file was uploaded: " . $file['name'] . " => Fulltext is given.");
+            if (count($files) >= 1) {
+                $log->info("Fileupload of: " . count($files) . " files => Fulltext is '1'.");
+                $fulltext = "1";
                 $document = new Opus_Document();
                 $document->setType($this->documentType);
                 $document->setServerState('temporary');
+
+                foreach ($files AS $file => $fileValues) {
+                    if (!empty($fileValues['name'])) {
+                        $log->info("uploaded: " . $fileValues['name']);
+                        $docfile = $document->addFile();
+                        $docfile->setLanguage("eng");
+                        $docfile->setFromPost($fileValues);
+                    }
+                }
                 $docId = $document->store();
                 $this->documentId = $docId;
                 $log->info("The corresponding doucment ID is: " . $this->documentId);
-
-                $docfile = $document->addFile();
-                $docfile->setLanguage("eng");
-                $docfile->setFromPost($file);
-                $document->store();
-                $fulltext = "1";
             }
             else
                 $log->info("No file uploaded: => Fulltext is NOT given.");
@@ -130,8 +133,7 @@ class Publish_IndexController extends Controller_Action {
             $step2Form->setAction($action_url);
             $step2Form->setMethod('post');
             $this->setViewVariables($step2Form);
-            $this->action_url = $action_url;
-            $log->debug("Action-URL : " . $action_url);
+            $this->view->action_url = $action_url;
             $this->view->form = $step2Form;
         }
     }
@@ -172,6 +174,7 @@ class Publish_IndexController extends Controller_Action {
             $action_url = $this->view->url(array('controller' => 'index', 'action' => 'check'));
             $form->setAction($action_url);
             $form->populate($postData);
+            $this->view->action_url = $action_url;
 
             if (!$form->send->isChecked()) {
                 $this->view->title = $this->view->translate('publish_controller_index');
@@ -214,6 +217,8 @@ class Publish_IndexController extends Controller_Action {
 
                 //call help funtion to render the form for specific view
                 $this->setViewVariables($form);
+                $this->view->action_url = $action_url;
+
                 return $this->render($this->documentType);
             } else {
                 //a button was pressed and it was send => check the form
@@ -225,9 +230,8 @@ class Publish_IndexController extends Controller_Action {
                     $log->debug("NOW CHECK THE ERROR CASE!!!!!!!!!!!!!!!!!");
                     //variables NOT valid
                     $this->view->form = $form;
-                    //call help funtion to render the form for specific view
                     $this->setViewVariables($form);
-
+                    $this->view->action_url = $action_url;
                     return $this->render($this->documentType);
                 } else {
                     //variables VALID
@@ -237,7 +241,7 @@ class Publish_IndexController extends Controller_Action {
                     $this->view->header = $this->view->translate('publish_controller_changes');
 
                     $log->debug("Variables are valid!");
-                    
+
                     //finally: deposit the data!
                     $depositForm = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $fulltext, $this->additionalFields, $form->getValues());
                     $action_url = $this->view->url(array('controller' => 'index', 'action' => 'deposit'));
@@ -261,7 +265,7 @@ class Publish_IndexController extends Controller_Action {
                     $fullText = $depositForm->createElement('hidden', 'fullText');
                     $fullText->setValue($form->getElement('fullText')->getValue());
                     $fullText->removeDecorator('Label');
-                    
+
                     $deposit = $depositForm->createElement('submit', 'Abspeichern');
                     $depositForm->addElements(array($docId, $docType, $fullText, $deposit));
 
@@ -309,7 +313,8 @@ class Publish_IndexController extends Controller_Action {
             unset($postData["deposit"]);
 
             //get the available external fields of an document
-            $externalFields = $document->getAllExternalFields();
+            $externalFields = $document->$_externalFields;
+            //getAllExternalFields();
             $log->debug("External fields loaded...");
 
             //save the post variables
@@ -372,6 +377,11 @@ class Publish_IndexController extends Controller_Action {
                     $name = substr($currentElement, 0, $pos);
                 else
                     $name=$currentElement; //"normal" element name without changes
+
+
+
+
+
             }
 
             $groupName = 'group' . $name;
@@ -407,13 +417,13 @@ class Publish_IndexController extends Controller_Action {
             //single fields (for calling with helper class)
             $log->debug("current Element: " . $currentElement);
             $singleField = $currentElement . "_";
-            
+
             $elementAttributes = $form->getElementAttributes($currentElement); //array
 //            foreach ($elementAttributes as $key1 => $value1) {
 //                $log->debug($key1 . " => " . $value1);
 //            }
             $this->view->$singleField = $elementAttributes;
-            
+
             $log->debug("singlefield " . $singleField . " filled");
 
             //also support more difficult templates for "expert admins"
@@ -643,7 +653,7 @@ class Publish_IndexController extends Controller_Action {
         $log = Zend_Registry::get('Zend_Log');
         if ($workflow === "Language") {
             $log->debug("titleType: " . $titleType);
-            
+
             $log->debug("1) set language: " . $value);
             $title->setLanguage($value);
 
@@ -701,7 +711,7 @@ class Publish_IndexController extends Controller_Action {
                 $log->debug("Role: " . $role);
                 $collArray = Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $value);
                 $log->debug("Role ID: " . $role->getId() . ", value: " . $value);
-               
+
                 if (count($collArray) === 1) {
                     $document->addCollection($collArray[0]);
                     //return;
@@ -710,7 +720,6 @@ class Publish_IndexController extends Controller_Action {
                         The method fetchCollectionsByRoleNumber returned an array with > 1 values. The " . $key . " cannot be definitely assigned.");
                 $subject = new Opus_Subject();
                 $log->debug("subject has also be stored as subject.");
-
             } else {
                 $subject = new Opus_Subject();
                 $log->debug("subject is a uncontrolled or other subject.");
