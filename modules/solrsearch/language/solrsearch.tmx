@@ -8,6 +8,24 @@
 
     <body>
 
+        <tu tuid="eng">
+            <tuv xml:lang="en">
+                <seg>English</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Englisch</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="deu">
+            <tuv xml:lang="en">
+                <seg>German</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Deutsch</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="sorting_relevancy">
             <tuv xml:lang="en">
                 <seg>Relevancy</seg>
