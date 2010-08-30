@@ -50,6 +50,10 @@ searchengine.extract.host =
 searchengine.extract.port =
 searchengine.extract.app = 
 
+;FORM SETTINGS
+form.first.numberoffiles = 
+form.first.bibliographie =
+
 ; The following is needed even if sections are empty.
 [staging : production]
 
