@@ -291,6 +291,12 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
         $role = new Opus_CollectionRole();
         $role->setName('Projects');
         $role->setOaiName('projects');
+        $role->setVisible(1);
+        $role->setDisplayBrowsing('Number, Name');
+        $role->setVisibleBrowsingStart(1);
+        $role->setDisplayFrontdoor('Number, Name');
+        $role->setVisibleFrontdoor(1);
+        $role->setLinkDocsPathToRoot('none');
 
         $root_node = $role->addRootNode()->setVisible(1);
         $root_collection = $root_node->addCollection();
@@ -303,12 +309,17 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
         $file = $this->dumps_dir . '/projects.xml';
         foreach ($this->load_xml_mysqldump($file) AS $project) {
             $app_area = $project['app_area'];
-            $project = $project['project_id'];
-            
+            $app_area_name = $project['app_area_name'];
+            $app_area_visible = $project['app_area_visible'];
+
+            $project_id = $project['project_id'];
+            $project_title = $project['project_title'];
+
             if (false === array_key_exists($app_area, $app_area_node)) {
-                $app_node = $root_node->addLastChild()->setVisible(1);
+                $app_node = $root_node->addLastChild()->setVisible($app_area_visible);
                 $app_collection = $app_node->addCollection();
-                $app_collection->setName($app_area);
+                $app_collection->setNumber($app_area);
+                $app_collection->setName($app_area_name);
                 $root_node->store();
 
                 // TODO: Add Unit tests.
@@ -318,13 +329,14 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             }
             $app_node = $app_area_node[$app_area];
 
-            if (false === array_key_exists($project, $collections)) {
+            if (false === array_key_exists($project_id, $collections)) {
                 $project_node = $app_node->addLastChild()->setVisible(1);
                 $project_collection = $project_node->addCollection();
-                $project_collection->setName($project);
+                $project_collection->setNumber($project_id);
+                $project_collection->setName($project_title);
                 $project_node->store();
 
-                $collections[$project] = $project_collection;
+                $collections[$project_id] = $project_collection;
             }
             else {
                 throw new Exception("Collection $project already exists.");
