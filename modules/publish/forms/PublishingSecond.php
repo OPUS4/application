@@ -125,19 +125,16 @@ class Publish_Form_PublishingSecond extends Zend_Form {
             $formField->setValue($value[0]);
         } else {
 
-            $formField = $this->createElement('select', $elementName);
-            //$formField->setDisableTranslator(true);
+            $formField = new Zend_Form_Element_Select($elementName);
 
             if ($workflow === 'licence')
                 $formField->setMultiOptions(array_merge(array('' => 'choose_valid_licence'), $data));
 
-            else if ($workflow === 'language') {
-//                foreach ($data as $key => $val) {
-//                    $formField->addMultiOption($key, $val);
-//
-//                }
-                $formField->addMultiOptions(array_merge(array('' => 'choose_valid_language'), $data));
-            }           
+            else if ($workflow === 'language')
+                $formField->setMultiOptions(array_merge(array('' => 'choose_valid_language'), $data));
+
+            else if ($workflow === 'projects')
+                $formField->setMultiOptions(array_merge(array('' => 'choose_valid_project'), $data));
         }
         $formField->setLabel($label)
                 ->addValidator($validator);
@@ -147,9 +144,9 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         else
             $formField->setRequired(false);
 
-        if ($this->postData != null)
+        if ($this->postData !== null)
             if (array_key_exists($elementName, $this->postData))
-                $formField->setValue($this->postData[$elementName]);
+                    $formField->setValue($this->postData[$elementName]);
 
         $this->addElement($formField);
         return $formField;
@@ -368,36 +365,57 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      */
     protected function _getValidatorsByDatatype($datatype) {
         switch ($datatype) {
-            case 'Text':  //todo: validator for texts with signs
-                return new Zend_Validate_Alnum(true);
+            case 'Alpha':
+                return new Zend_Validate_Alpha(false);
+                break;
+
+            case 'Date' :
+                return new Zend_Validate_Date();
                 break;
 
             case 'Integer':
                 return new Zend_Validate_Int(null);
                 break;
 
-            case 'Year':
-                return new Zend_Validate_GreaterThan('1900');
+            case 'Language' :
+                $languages = array();
+                foreach (Opus_Language::getAllActive() as $lan) {
+                    $languages[] = $lan->getPart2B();
+                }
+                return new Zend_Validate_InArray($languages);
+                break;
+
+            case 'Licence' :
+                return new Zend_Validate_InArray(Opus_Licence::getAll());
                 break;
 
             case 'Person':
                 return new Zend_Validate_Alpha(true);
                 break;
 
-            case 'Alpha':
-                return new Zend_Validate_Alpha(false);
+            case 'Project' :
+                $role = Opus_CollectionRole::fetchByOaiName('projects');
+                $colls = Opus_Collection::fetchCollectionsByRoleId($role->getId());                
+                $collections = array();
+                foreach ($colls AS $coll) {
+                    //if (strlen($coll->getName()) >= 2 && $coll->getName() !== 'Projects') {
+                    //todo: wenn throalf die db mit den projekten repariert hat, untere zeile ersetzen
+                    $collections[] = $coll->getName();                      
+                }
+                
+                return new Zend_Validate_InArray($collections);
+                break;
+
+            case 'Text':  //todo: validator for texts with signs
+                return new Zend_Validate_Alnum(true);
                 break;
 
             case 'Title': //todo: validator for texts with signs
                 return new Zend_Validate_Alnum(true);
                 break;
 
-            case 'Language' :
-                return new Zend_Validate_InArray(Opus_Language::getAllActive());
-                break;
-
-            case 'Licence' :
-                return new Zend_Validate_InArray(Opus_Licence::getAll());
+            case 'Year':
+                return new Zend_Validate_GreaterThan('1900');
                 break;
 
             default:
@@ -419,20 +437,24 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      */
     protected function _prepareFormElement($formElement, $elementName, $validator, $datatype, $required, $group, $label) {
         switch ($datatype) {
+            case 'Language':
+                return $this->_prepareLanguageElement($elementName, $validator, $required, $label);
+                break;
+
+            case 'Licence':
+                return $this->_prepareLicenceElement($elementName, $validator, $required, $label);
+                break;
+
+            case 'Project' :
+                return $this->_prepareProjectElement($elementName, $validator, $required, $label, $group);
+                break;
+
             case 'Person' :
                 return $this->_preparePersonElement($formElement, $elementName, $validator, $required, $group, $label);
                 break;
 
             case 'Title':
                 return $this->_prepareTitleElement($formElement, $elementName, $validator, $required, $group, $label);
-                break;
-
-            case 'Licence':
-                $this->_prepareLicenceElement($elementName, $validator, $required, $label);
-                break;
-
-            case 'Language':
-                $this->_prepareLanguageElement($elementName, $validator, $required, $label);
                 break;
 
             default:
@@ -472,6 +494,41 @@ class Publish_Form_PublishingSecond extends Zend_Form {
             $this->log->debug("Added Displaygroup to form: " . $groupName);
         }
 
+        return $group;
+    }
+
+    /**
+     * prepare MSC Selection Element: create msc list and add selection
+     * @param <type> $elementName
+     * @param <type> $validator
+     * @param <type> $required
+     * @param <type> $label
+     */
+    protected function _prepareProjectElement($elementName, $validator, $required, $label, $group) {
+
+        $groupWas = "0";
+        if ($group === null) {
+            $groupWas = "1";
+            $group = array();
+        }
+
+        $role = Opus_CollectionRole::fetchByOaiName('projects');
+        $this->log->debug("Role ID: " . $role->getId());
+        $colls = Opus_Collection::fetchCollectionsByRoleId($role->getId());
+        $this->log->debug("#Projekte: " . count($colls));
+        $data = array();
+        foreach ($colls AS $coll) {
+            if (strlen($coll->getName()) >= 2 && $coll->getName() !== 'Projects')
+            //todo: wenn throalf die db mit den projekten repariert hat, untere zeile ersetzen
+                $data[$coll->getName()] = $coll->getName();
+            //$data[$coll->getNumber()] = $coll->getNumber() . " - " . $coll->getName();
+            //$this->log->debug("Project Number: " . $coll->getNumber());
+            $this->log->debug("Project Name: " . $coll->getName());
+        }
+        // asort ($data);
+
+        $this->_addSelect('projects', $elementName, $validator, $required, $label, $data);
+        $group[] = $elementName;
         return $group;
     }
 
@@ -548,7 +605,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         foreach ($languages AS $la) {
             $name = $la->getDisplayName();
             $short_name = $la->getPart2B();
-            $this->log->debug("short name of language: " . $short_name);
+            $this->log->debug("name of language: " . $short_name);
             $data[$short_name] = $name;
             $this->log->debug($name);
         }

@@ -108,6 +108,7 @@ class Publish_IndexController extends Controller_Action {
                 $log->info("The corresponding doucment ID is: " . $this->documentId);
 
                 $docfile = $document->addFile();
+                $docfile->setLanguage("eng");
                 $docfile->setFromPost($file);
                 $document->store();
                 $fulltext = "1";
@@ -145,6 +146,9 @@ class Publish_IndexController extends Controller_Action {
 
             $postData = $this->getRequest()->getPost();
 
+            foreach ($postData AS $pk => $pv) {
+                $log->debug("postdata: " . $pk . " => " . $pv);
+            }
             //read ans save the most important values
             $this->documentType = $postData['documentType'];
             $this->documentId = $postData['documentId'];
@@ -293,7 +297,7 @@ class Publish_IndexController extends Controller_Action {
                 $id = $document->store();
                 $log->debug("docID: " . $id);
             }
-            unset($postData["documentType"]);
+            unset($postData["documentId"]);
             unset($postData["documentType"]);
             unset($postData["fullText"]);
             unset($postData["deposit"]);
@@ -314,6 +318,10 @@ class Publish_IndexController extends Controller_Action {
                     } else {
                         $log->debug("wanna store something else...");
                         if (array_key_exists($key, $externalFields)) {
+                            if ($key === 'Language') {
+                                $file = $document->getFile();
+                                $file->setLanguage($value);
+                            }
                             // store an external field with adder
                             $function = "add" . $key;
                             $log->debug("adder function: " . $function);
@@ -629,15 +637,7 @@ class Publish_IndexController extends Controller_Action {
         $log = Zend_Registry::get('Zend_Log');
         if ($workflow === "Language") {
             $log->debug("titleType: " . $titleType);
-            $languages = Opus_Language::getAllActive();
-            foreach ($languages as $lang) {
-                if ($lang->getDisplayName() === $value) {
-                        $value = $lang->getPart2B();
-                        echo $value;
-                        break;
-                }
-            }
-
+            
             $log->debug("1) set language: " . $value);
             $title->setLanguage($value);
 
@@ -688,6 +688,7 @@ class Publish_IndexController extends Controller_Action {
                 $subject = new Opus_SubjectSwd();
                 $log->debug("subject is a swd subject.");
             } else if (strstr($key, "MSC")) {
+
                 $log->debug("subject is a MSC subject and has to be stored as a Collection.");
                 $value = $formValues[$key];
                 $role = Opus_CollectionRole::fetchByOaiName('msc');
@@ -697,7 +698,7 @@ class Publish_IndexController extends Controller_Action {
                
                 if (count($collArray) === 1) {
                     $document->addCollection($collArray[0]);
-                    return;
+                    //return;
                 } else
                     throw new Publish_Model_OpusServerException("While trying to store " . $key . " as Collection, an error occurred.
                         The method fetchCollectionsByRoleNumber returned an array with > 1 values. The " . $key . " cannot be definitely assigned.");
@@ -763,7 +764,7 @@ class Publish_IndexController extends Controller_Action {
             $log->debug("try to store note: " . $key);
             $note = new Opus_Note();
 
-            return $this->storeSubjectObject($note, $document, $formValues[$key], $formValues);
+            return $this->storeNoteObject($note, $document, $formValues[$key], $formValues);
         }
     }
 
@@ -782,11 +783,7 @@ class Publish_IndexController extends Controller_Action {
         $log->debug("set value: " . $value);
         $note->setMessage($value);
 
-        if (isset($formValues["PersonSubmitterLastName"]))
-            $note->setCreator($formValues["PersonSubmitterLastName"]);
-        else
-            $note->setCreator("unknown");
-
+        $note->setVisibility("private");
         $addFunction = "addNote";
         $log->debug("addfunction: " . $addFunction);
         $document->$addFunction($note);

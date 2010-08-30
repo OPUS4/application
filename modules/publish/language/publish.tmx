@@ -239,6 +239,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="choose_valid_project">
+      <tuv xml:lang="en">
+        <seg>Please choose a Matheon project.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie ein Matheon Projekt.</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="choose_valid_language">
       <tuv xml:lang="en">
         <seg>Please choose a language.</seg>
