@@ -117,8 +117,8 @@ class View_Helper_Field extends Zend_View_Helper_Abstract {
                 $elementfield = "<table>\n\t<tr>\n\t\t<td>\n\t\t\t<label for='" . $element["id"] . "' class='" . $element["req"] . "'>" . $element["label"] . "</label>\n\t\t</td>\n\t\t";
                 $elementfield .= "<td>\n\t\t\t<select name='" . $element["id"] . "' id='" . $element["id"] . "'>\n\t\t\t\t";
                 foreach ($element["options"] AS $key => $option) {
-                    $elementfield .= "<option value='" . $option . "'";
-                    if ($option === $element["value"])
+                    $elementfield .= "<option value='" . $key . "' label='". $option ."'";
+                    if ($option === $element["value"] || $key === $element["value"])
                         $elementfield .= " selected='selected'>";
                     else
                         $elementfield .= ">";
@@ -171,8 +171,8 @@ class View_Helper_Field extends Zend_View_Helper_Abstract {
                     case "Zend_Form_Element_Select" :
                         $fieldset .= "\n\t\t\t\t<select name='" . $field["id"] . "' id='" . $field["id"] . "'>\n\t\t\t\t\t";
                         foreach ($field["options"] AS $key => $option) {
-                            $fieldset .= "<option value='" . $option . "'";
-                            if ($option === $field["value"])
+                            $fieldset .= "<option value='" . $key . "' label='". $option ."'";
+                            if ($option === $field["value"] || $key === $field["value"])
                                 $fieldset .= " selected='selected'>";
                             else
                                 $fieldset .= ">";
