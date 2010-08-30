@@ -82,15 +82,23 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         //get allowed file size
         $maxFileSize = (int) $this->config->publish->maxfilesize;
 
+        //get the initial number of file fields, toto: aus der config holen
+        $number_of_files = (int) $this->config->form->first->numberoffiles;
+
         $fileupload = $this->createElement('File', 'fileupload');
         $fileupload->setLabel('fileupload')
+                ->setMultiFile($number_of_files)
                 ->setDestination($tempPath)
-                ->addValidator('Count', false, 1)     // ensure only 1 file
+                ->addValidator('Count', false, $number_of_files)     // ensure only 1 file
                 ->addValidator('Size', false, $maxFileSize) // limit to value given in application.ini
                 ->addValidator('Extension', false, $filetypes); // allowed filetypes by extension
 
-        $bib = $this->createElement('checkbox', 'bibliographie');
-        $bib->setLabel('bibliographie');
+        //show Bibliographie?
+        if ($this->config->form->first->bibliographie == 1) {
+            $bib = $this->createElement('checkbox', 'bibliographie');
+            $bib->setLabel('bibliographie');
+        }
+        
 
         $submit = $this->createElement('submit', 'send');
         $submit->setLabel('Send');
@@ -99,10 +107,14 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         $documentId->addValidator('NotEmpty')
             ->addValidator('Int');
 
-        $this->addElements(array($doctypes, $fileupload, $bib, $documentId, $submit));
-        $this->setAttrib('enctype', Zend_Form::ENCTYPE_MULTIPART);
-        
+        $this->addElements(array($doctypes, $fileupload));
+        //show Bibliographie?
+        if ($this->config->form->first->bibliographie == 1) {
+            $this->addElement($bib);
+        }
 
+        $this->addElements(array($documentId, $submit));
+        $this->setAttrib('enctype', Zend_Form::ENCTYPE_MULTIPART);        
     }
 
     /**
