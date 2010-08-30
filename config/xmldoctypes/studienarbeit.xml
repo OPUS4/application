@@ -28,8 +28,8 @@
     </opus:field>
     <opus:field name="PersonAdvisor" required="no" formelement="text"  datatype="Person" multiplicity="2" />
     <opus:field name="PersonContributor" required="no" formelement="text"  datatype="Person" multiplicity="*" />
-    <opus:field name="CreatingCorporation" required="no" formelement="text"  datatype="Text" multiplicity="*" />
-    <opus:field name="ContributingCorporation" required="no" formelement="text"  datatype="Text" multiplicity="*"/>
+    <opus:field name="CreatingCorporation" required="no" formelement="text"  datatype="Text" multiplicity="1" />
+    <opus:field name="ContributingCorporation" required="no" formelement="text"  datatype="Text" multiplicity="1"/>
     <opus:field name="PageNumber" required="no" formelement="text" datatype="Integer" multiplicity="1" />
     <opus:field name="IdentifierUrn" required="no" formelement="text"  datatype="Text" multiplicity="1" />
     <opus:field name="IdentifierOpac" required="no" formelement="text"  datatype="Text" multiplicity="1" />
