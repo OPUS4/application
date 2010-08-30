@@ -313,8 +313,7 @@ class Publish_IndexController extends Controller_Action {
             unset($postData["deposit"]);
 
             //get the available external fields of an document
-            $externalFields = $document->$_externalFields;
-            //getAllExternalFields();
+            $externalFields = $document->getAllExternalFields();
             $log->debug("External fields loaded...");
 
             //save the post variables
