@@ -212,12 +212,12 @@
       </tuv>
     </tu>
     
-    <tu tuid="PublishedDateDescr">
+    <tu tuid="PublishedDate">
       <tuv xml:lang="en">
         <seg>Date of Publication</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Datum der Veröffentlichung bitte eingeben</seg>
+        <seg>Datum der Veröffentlichung</seg>
       </tuv>
     </tu>
     
