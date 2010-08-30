@@ -47,21 +47,19 @@ ul.navigation li {
 }
 
 ul.navigation li {
-   background-color: #26517d;
+   
 }
 
 ul.navigation li.active {
-    background-color: #7c96b0;
-   border-bottom: 1px solid white;
+    font-weight:bold;
 }
 
 ul.navigation li a {
-    text-decoration: none;
-    color: white;
+    text-decoration: underline;
 }
 
 ul.navigation li:hover {
-    background-color: #7c96b0;
+    text-decoration:underline;
 }
 
 ul.navigation a:hover {
