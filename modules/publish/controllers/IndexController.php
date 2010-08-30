@@ -57,7 +57,7 @@ class Publish_IndexController extends Controller_Action {
         $log = Zend_Registry::get('Zend_Log');
         // STEP 1: CHOOSE DOCUMENT TYPE AND UPLOAD FILE
         $this->view->title = $this->view->translate('publish_controller_index');
-        $this->view->subtitle = $this->view->translate('publish_controller_indexsub');
+        $this->view->subtitle = $this->view->translate('publish_controller_index_sub');
         $form = new Publish_Form_PublishingFirst();
         $log->debug("Module Publishing <=> PublishingFirst was created.");
         $action_url = $this->view->url(array('controller' => 'index', 'action' => 'step2'));
@@ -310,7 +310,7 @@ class Publish_IndexController extends Controller_Action {
             unset($postData["documentId"]);
             unset($postData["documentType"]);
             unset($postData["fullText"]);
-            unset($postData["deposit"]);
+            unset($postData["Abspeichern"]);
 
             //get the available external fields of an document
             $externalFields = $document->getAllExternalFields();
@@ -843,7 +843,7 @@ class Publish_IndexController extends Controller_Action {
         if (strstr($key, "Project")) {
             $role = Opus_CollectionRole::fetchByOaiName('projects');
             $log->debug("Role: " . $role);
-            $collArray = Opus_Collection::fetchCollectionsByRoleName($role->getId(), $value);
+            $collArray = Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $value);
             $log->debug("Role ID: " . $role->getId() . ", value: " . $value);
 
             if ($collArray !== null && count($collArray) <= 1)
@@ -854,7 +854,7 @@ class Publish_IndexController extends Controller_Action {
         }
         else if (strstr($key, "Institute")) {
             $role = Opus_CollectionRole::fetchByOaiName('instituts');
-            $collArray = Opus_Collection::fetchCollectionsByRoleName($role->getId(), $value);
+            $collArray = Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $value);
             if (count($collArray) <= 1)
                 $document->addCollection($collArray[0]);
             else

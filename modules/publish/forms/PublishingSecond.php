@@ -627,6 +627,10 @@ class Publish_Form_PublishingSecond extends Zend_Form {
             if (array_key_exists($elementName, $this->postData))
                 $formField->setValue($this->postData[$elementName]);
 
+        if ($formElement == 'textarea') {
+            $formField->setAttrib('rows', 9);
+            $formField->setAttrib('cols', 30);
+        }
         $this->addElement($formField);
         return $formField;
     }
