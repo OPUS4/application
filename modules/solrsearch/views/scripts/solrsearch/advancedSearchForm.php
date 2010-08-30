@@ -36,8 +36,8 @@
 
     <?php if($this->searchType != 'authorsearch') : ?>
     <fieldset>
-        <legend>Allgemeine Suchoptionen</legend>
-        <label for="rows">Treffer pro Seite</label>
+        <legend><?= $this->translate('advanced_search_form_general_search_options') ?></legend>
+        <label for="rows"><?= $this->translate('advanced_search_form_hits_per_page') ?></label>
         <select name="rows" id="rows">
             <option value="10" <?= $this->rows === '10' || !isset($this->rows)? 'selected="true"' : '' ?>>10</option>
             <option value="20" <?= $this->rows === '20' ? 'selected="true"' : '' ?>>20</option>
@@ -48,7 +48,7 @@
     <?php endif ?>
 
     <fieldset>
-        <legend>Suchfelder</legend>
+        <legend><?= $this->translate('advanced_search_form_search_fields') ?></legend>
         <table>
             <?php
             if ($this->searchType === 'authorsearch') {
@@ -68,10 +68,10 @@
                 </td>
                 <td>
                     <select name="<?= $fieldname ?>modifier">
-                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL ?>" <?= $this->$fieldnameQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL || !isset($this->$fieldnameQueryModifier) ? 'selected="true"' : '' ?>>alle Wörter</option>
-                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ?>" <?= $this->$fieldnameQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ? 'selected="true"' : '' ?>>mindestens ein Wort</option>
+                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL ?>" <?= $this->$fieldnameQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL || !isset($this->$fieldnameQueryModifier) ? 'selected="true"' : '' ?>><?= $this->translate('advanced_search_form_modifier_all') ?></option>
+                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ?>" <?= $this->$fieldnameQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ? 'selected="true"' : '' ?>><?= $this->translate('advanced_search_form_modifier_one') ?></option>
                         <?php if ($fieldname !== 'fulltext') : ?>
-                            <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE ?>" <?= $this->$fieldnameQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE ? 'selected="true"' : '' ?>>keines der Wörter</option>
+                            <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE ?>" <?= $this->$fieldnameQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE ? 'selected="true"' : '' ?>><?= $this->translate('advanced_search_form_modifier_none') ?></option>
                         <?php endif ?>
                     </select>
                 </td>
@@ -82,7 +82,7 @@
             <?php endforeach ?>
         </table>
     </fieldset>
-    <input type="submit" value="Suchen" />
+    <input type="submit" value="<?= $this->translate('advanced_search_form_search_action') ?>" />
     <input type="hidden" name="searchtype" value="advanced" />
     <input type="hidden" name="start" value="0" />
     <input type="hidden" name="sortfield" value="score" />
@@ -90,5 +90,5 @@
 </form>
 
 <form action="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'advanced'), null, true) ?>">
-    <input type="submit" value="Formular zurücksetzen" />
+    <input type="submit" value="<?= $this->translate('advanced_search_form_reset_action') ?>" />
 </form>

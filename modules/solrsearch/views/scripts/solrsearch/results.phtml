@@ -41,7 +41,7 @@
         include('advancedSearchForm.php');
 ?>
 
-<h2><?= $this->numOfHits ?> Suchergebnisse</h2>
+<h2><?= $this->numOfHits . ' ' . $this->translate('results_title') ?></h2>
 
 <?php include('searchOptions.php') ?>
 <?php include('facetsMenu.php') ?>

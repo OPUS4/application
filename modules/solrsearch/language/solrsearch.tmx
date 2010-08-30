@@ -8,6 +8,222 @@
 
     <body>
 
+        <tu tuid="sorting_relevancy">
+            <tuv xml:lang="en">
+                <seg>Relevancy</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Relevanz</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="sorting_year_descending">
+            <tuv xml:lang="en">
+                <seg>Year (descending)</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Jahr (absteigend)</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="sorting_year_ascending">
+            <tuv xml:lang="en">
+                <seg>Year (ascending)</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Jahr (aufsteigend)</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="sorting_sort_by">
+            <tuv xml:lang="en">
+                <seg>Sort by</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sortieren nach</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="results_title">
+            <tuv xml:lang="en">
+                <seg>Search Results</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Suchergebnisse</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="pagination_last_page">
+            <tuv xml:lang="en">
+                <seg>Last Page</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Letzte Seite</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="pagination_next_page">
+            <tuv xml:lang="en">
+                <seg>Next Page</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Nächste Seite</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="pagination_previous_page">
+            <tuv xml:lang="en">
+                <seg>Previous Page</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Vorherige Seite</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="pagination_first_page">
+            <tuv xml:lang="en">
+                <seg>First Page</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Letzte Seite</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="pagination_to">
+            <tuv xml:lang="en">
+                <seg>to</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>bis</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="pagination_display_hits">
+            <tuv xml:lang="en">
+                <seg>Display of results</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Anzeige der Treffer</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="nohits_message">
+            <tuv xml:lang="en">
+                <seg>Your search did not yield any results. You could use another search term or the advanced search to refine your search criteria.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Ihre Suche ergab leider keine Ergebnisse. Sie können mit einem anderen Suchwort oder der erweiterten Suche versuchen Ihre Kriterien besser einzugrenzen.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="invalid_search_request_message">
+            <tuv xml:lang="en">
+                <seg>Please enter at least one valid search term.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Bitte geben Sie wenigstens einen gültigen Suchbegriff ein.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="invalid_search_request_title">
+            <tuv xml:lang="en">
+                <seg>Invalid search request</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Ungültige Suchanfrage</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="facets_remove">
+            <tuv xml:lang="en">
+                <seg>remove</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>entfernen</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="facets_menu_title">
+            <tuv xml:lang="en">
+                <seg>Refine your search</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Verfeinern Sie Ihre Suche</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="advanced_search_form_reset_action">
+            <tuv xml:lang="en">
+                <seg>Reset form</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Formular zurücksetzen</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="advanced_search_form_search_action">
+            <tuv xml:lang="en">
+                <seg>Search</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Suchen</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="advanced_search_form_modifier_none">
+            <tuv xml:lang="en">
+                <seg>None of the words</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Keines der Wörter</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="advanced_search_form_modifier_one">
+            <tuv xml:lang="en">
+                <seg>At least one word</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Mindestens ein Wort</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="advanced_search_form_modifier_all">
+            <tuv xml:lang="en">
+                <seg>All words</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Alle Wörter</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="advanced_search_form_search_fields">
+            <tuv xml:lang="en">
+                <seg>Search Fields</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Suchfelder</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="advanced_search_form_hits_per_page">
+            <tuv xml:lang="en">
+                <seg>Hits per page</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Treffer pro Seite</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="advanced_search_form_general_search_options">
+            <tuv xml:lang="en">
+                <seg>General search options</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Allgemeine Suchoptionen</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="has_fulltext_facet_heading">
             <tuv xml:lang="en">
                 <seg>Has Fulltext</seg>
@@ -46,7 +262,7 @@
 
         <tu tuid="doctype_facet_heading">
             <tuv xml:lang="en">
-                <seg>Document type</seg>
+                <seg>Document Type</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>Dokumententyp</seg>
@@ -59,6 +275,15 @@
             </tuv>
             <tuv xml:lang="de">
                 <seg>Sprache</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="subject_facet_facet_heading">
+            <tuv xml:lang="en">
+                <seg>Keywords</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Schlagworte</seg>
             </tuv>
         </tu>
 
@@ -91,7 +316,7 @@
 
         <tu tuid="solrsearch_query_label">
             <tuv xml:lang="en">
-                <seg>Query</seg>
+                <seg>Search Term</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>Suchbegriff</seg>
@@ -172,7 +397,7 @@
 
         <tu tuid="solrsearch_advancedsearch_tooltip_author">
             <tuv xml:lang="en">
-                <seg>ToDo</seg>
+                <seg>You can type multiple, blank separated authors into this field.</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>Sie können in dieses Feld auch mehrere Autoren durch Leerzeichen getrennt eingeben.</seg>
@@ -181,7 +406,7 @@
 
         <tu tuid="solrsearch_advancedsearch_tooltip_title">
             <tuv xml:lang="en">
-                <seg>ToDo</seg>
+                <seg>You can type multiple, blank separated titles into this field.</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>Sie können in dieses Feld auch mehrere Titel durch Leerzeichen getrennt eingeben.</seg>
@@ -190,7 +415,7 @@
 
         <tu tuid="solrsearch_advancedsearch_tooltip_referee">
             <tuv xml:lang="en">
-                <seg>ToDo</seg>
+                <seg>You can type multiple, blank separated referees into this field.</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>Sie können in dieses Feld auch mehrere Gutachter durch Leerzeichen getrennt eingeben.</seg>
@@ -199,7 +424,7 @@
 
         <tu tuid="solrsearch_advancedsearch_tooltip_abstract">
             <tuv xml:lang="en">
-                <seg>ToDo</seg>
+                <seg>You can type multiple, blank separated terms into this field.</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>Sie können in dieses Feld auch mehrere Begriffe durch Leerzeichen getrennt eingeben.</seg>
@@ -208,7 +433,7 @@
 
         <tu tuid="solrsearch_advancedsearch_tooltip_fulltext">
             <tuv xml:lang="en">
-                <seg>ToDo</seg>
+                <seg>You can type multiple, blank separated terms into this field.</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>Sie können in dieses Feld auch mehrere Begriffe durch Leerzeichen getrennt eingeben.</seg>
@@ -217,7 +442,7 @@
 
         <tu tuid="solrsearch_advancedsearch_tooltip_year">
             <tuv xml:lang="en">
-                <seg>ToDo</seg>
+                <seg>You can type multiple, blank separated years into this field.</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>Sie können in dieses Feld auch mehrere Jahre durch Leerzeichen getrennt eingeben.</seg>

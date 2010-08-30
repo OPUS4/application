@@ -49,8 +49,8 @@
         $scoreDescUrl['sortorder'] = 'desc';
     ?>
 
-    Sortieren nach
-    <a href="<?= $this->url($yearAscUrl) ?>">Jahr (aufsteigend)</a>,
-    <a href="<?= $this->url($yearDescUrl) ?>">Jahr (absteigend)</a>,
-    <a href="<?= $this->url($scoreDescUrl) ?>">Relevanz</a>
+    <?= $this->translate('sorting_sort_by') ?>
+    <a href="<?= $this->url($yearAscUrl) ?>"><?= $this->translate('sorting_year_ascending') ?></a>,
+    <a href="<?= $this->url($yearDescUrl) ?>"><?= $this->translate('sorting_year_descending') ?></a>,
+    <a href="<?= $this->url($scoreDescUrl) ?>"><?= $this->translate('sorting_relevancy') ?></a>
 </div>

@@ -34,19 +34,19 @@
 
 <div id="pagination" >
     <p class="info_small">
-        Anzeige der Treffer <strong><?= (int)($this->start)+1 ?></strong> bis <strong><?php if(((int)($this->start) + (int)($this->rows)) > $this->numOfHits) echo $this->numOfHits; else echo (int)($this->start) + (int)($this->rows); ?></strong>
+        <?= $this->translate('pagination_display_hits') ?> <strong><?= (int)($this->start)+1 ?></strong> <?= $this->translate('pagination_to') ?> <strong><?php if(((int)($this->start) + (int)($this->rows)) > $this->numOfHits) echo $this->numOfHits; else echo (int)($this->start) + (int)($this->rows); ?></strong>
     </p>
     <ul class="paginationControl">
 
         <?php if($this->start >= $this->rows) : ?>
         <li>
             <a href="<?= $this->url($this->firstPage); ?>">
-                Erste Seite
+                <?= $this->translate('pagination_first_page') ?>
             </a>
         </li>
         <li>
             <a href="<?= $this->url($this->prevPage); ?>">
-                Vorherige Seite
+                <?= $this->translate('pagination_previous_page') ?>
             </a>
         </li>
         <?php endif ?>
@@ -54,12 +54,12 @@
         <?php if($this->start < ((int)($this->numOfHits) - (int)($this->rows))) : ?>
         <li>
             <a href="<?= $this->url($this->nextPage); ?>">
-                Nächste Seite
+                <?= $this->translate('pagination_next_page') ?>
             </a>
         </li>
         <li>
             <a href="<?= $this->url($this->lastPage); ?>">
-                Letzte Seite
+                <?= $this->translate('pagination_last_page') ?>
             </a>
         </li>
         <?php endif ?>

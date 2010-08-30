@@ -33,7 +33,7 @@
 ?>
 
 <div id="facets">
-    <h3>Verfeinern Sie Ihre Suche</h3>
+    <h3><?= $this->translate('facets_menu_title') ?></h3>
 
     <?php foreach($this->facets as $key=>$facet) : ?>
 
@@ -49,7 +49,7 @@
                     $fqUrl = $this->firstPage;
                     $fqUrl[$key.'fq'] = '';
                 ?>
-                <a href="<?= $this->url($fqUrl) ?>" class="removeFacetLink">(entfernen)</a>
+                <a href="<?= $this->url($fqUrl) ?>" class="removeFacetLink">(<?= $this->translate('facets_remove') ?>)</a>
                 <?php endif ?>
                 </li>
             <?php endforeach ?>
