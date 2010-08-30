@@ -32,8 +32,25 @@
  * @version     $Id$
  */
 ?>
-<h1><?= $this->message ?></h1>
+<div class="errorPage">
+    <h1><?= $this->message ?></h1>
 
-<div class="stacktrace">
-    <?= $this->exception ?>
+    <?PHP if (isset($this->exception)) : ?>
+    <div class="stacktrace">
+        <h2>Stacktrace</h2>
+        <pre>
+        <?= $this->exception ?>
+        </pre>
+    </div>
+    <?PHP endif; ?>
+
+    <?PHP if (isset($this->errorRequest)) : ?>
+    <div class="request">
+        <h2>Request</h2>
+        <pre>
+        <?= var_dump($this->errorRequest) ?>
+        </pre>
+    </div>
 </div>
+
+<?PHP endif; ?>

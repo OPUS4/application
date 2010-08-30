@@ -38,33 +38,49 @@
  *
  * @package     Module_Default
  */
-
 class ErrorController extends Zend_Controller_Action
 {
     /**
-     * Just to be there. No actions taken.
+     * Print error information appropriate to environment.
      *
      * @return void
-     *
      */
     public function errorAction()
     {
+        $config = Zend_Registry::get('Zend_Config');
+        $logger = Zend_Registry::get('Zend_Log');
+
         $errors = $this->_getParam('error_handler');
+
         switch ($errors->type) {
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ROUTE:
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER:
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION:
                 // 404 error -- controller or action not found
                 $this->getResponse()->setHttpResponseCode(404);
-                $this->view->message = 'Page not found';
+                $this->view->message = $this->view->translate('error_page_not_found');
                 break;
             default:
                 // application error
                 $this->getResponse()->setHttpResponseCode(500);
-                $this->view->message = 'Application error';
+                $this->view->message = $this->view->translate('error_application');
                 break;
         }
-        $this->view->exception = $errors->exception;
-        $this->view->request   = $errors->request;
+
+        $logger->err($errors->exception);
+
+        $errorConfig = $config->errorController;
+
+        if (isset($errorConfig)) {
+            if ($errorConfig->showException) {
+                $this->view->exception = $errors->exception;
+            }
+            if ($errorConfig->showRequest) {
+                $this->view->errorRequest = $errors->request;
+            }
+        }
+        else {
+            $logger->warn('ErrorController not configured.');
+        }
     }
 }
