@@ -398,9 +398,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
                 $colls = Opus_Collection::fetchCollectionsByRoleId($role->getId());                
                 $collections = array();
                 foreach ($colls AS $coll) {
-                    //if (strlen($coll->getName()) >= 2 && $coll->getName() !== 'Projects') {
-                    //todo: wenn throalf die db mit den projekten repariert hat, untere zeile ersetzen
-                    $collections[] = $coll->getName();                      
+                    $collections[] = $coll->getNumber();
                 }
                 
                 return new Zend_Validate_InArray($collections);
@@ -518,15 +516,10 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         $this->log->debug("#Projekte: " . count($colls));
         $data = array();
         foreach ($colls AS $coll) {
-            if (strlen($coll->getName()) >= 2 && $coll->getName() !== 'Projects')
-            //todo: wenn throalf die db mit den projekten repariert hat, untere zeile ersetzen
-                $data[$coll->getName()] = $coll->getName();
-            //$data[$coll->getNumber()] = $coll->getNumber() . " - " . $coll->getName();
-            //$this->log->debug("Project Number: " . $coll->getNumber());
-            $this->log->debug("Project Name: " . $coll->getName());
+            if (strlen($coll->getNumber()) >= 2)
+                $data[$coll->getNumber()] = $coll->getNumber();
         }
-        // asort ($data);
-
+        
         $this->_addSelect('projects', $elementName, $validator, $required, $label, $data);
         $group[] = $elementName;
         return $group;
