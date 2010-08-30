@@ -54,10 +54,19 @@
 
     <tu tuid="publish_controller_check">
       <tuv xml:lang="en">
-        <seg>Publish - Checking</seg>
+        <seg>Publish</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Veröffentlichen - Überprüfen</seg>
+        <seg>Veröffentlichen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="publish_controller_check2">
+      <tuv xml:lang="en">
+        <seg>Please check your data.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte überprüfen Sie Ihre Eingaben.</seg>
       </tuv>
     </tu>
 

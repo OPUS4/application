@@ -130,6 +130,8 @@ class Publish_IndexController extends Controller_Action {
             $step2Form->setAction($action_url);
             $step2Form->setMethod('post');
             $this->setViewVariables($step2Form);
+            $this->action_url = $action_url;
+            $log->debug("Action-URL : " . $action_url);
             $this->view->form = $step2Form;
         }
     }
@@ -231,10 +233,11 @@ class Publish_IndexController extends Controller_Action {
                     //variables VALID
                     //RENDER check.phtml
                     $this->view->title = $this->view->translate('publish_controller_check');
+                    $this->view->subtitle = $this->view->translate('publish_controller_check2');
+                    $this->view->header = $this->view->translate('publish_controller_changes');
+
                     $log->debug("Variables are valid!");
                     
-                    $this->view->formValues = $form->getValues();
-
                     //finally: deposit the data!
                     $depositForm = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $fulltext, $this->additionalFields, $form->getValues());
                     $action_url = $this->view->url(array('controller' => 'index', 'action' => 'deposit'));
@@ -249,14 +252,17 @@ class Publish_IndexController extends Controller_Action {
                     }
                     $docId = $depositForm->createElement("hidden", 'documentId');
                     $docId->setValue($form->getElement('documentId')->getValue());
+                    $docId->removeDecorator('Label');
 
                     $docType = $depositForm->createElement('hidden', 'documentType');
                     $docType->setValue($form->getElement('documentType')->getValue());
+                    $docType->removeDecorator('Label');
 
                     $fullText = $depositForm->createElement('hidden', 'fullText');
                     $fullText->setValue($form->getElement('fullText')->getValue());
-                    //$depositForm->addValues($formValues);
-                    $deposit = $depositForm->createElement('submit', 'deposit');
+                    $fullText->removeDecorator('Label');
+                    
+                    $deposit = $depositForm->createElement('submit', 'Abspeichern');
                     $depositForm->addElements(array($docId, $docType, $fullText, $deposit));
 
                     //send form to view

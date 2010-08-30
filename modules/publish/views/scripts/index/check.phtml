@@ -1,16 +1,31 @@
-<?=
-'<h1>'. $this->title . '</h1>';
-'<h3>'. $this->subtitle . '</h3>';
+<?php
+echo '<h1>'. $this->title . '</h1>';
+echo '<h3>'. $this->subtitle . '</h3>';
 
+echo "<table cellspacing='10' cellpadding='20'>";
 
-//get the form values to let the user check them
-$values = $this->formValues;
+$elements = $this->form->getElements();
+$i = 1;
 
-foreach ($values as $key => $val){
-    if ($val != "") echo $key."<br /><b>".$val."</b><br /><br />";
+foreach ($elements as $element){
+    if ($element->getType() != "Zend_Form_Element_Submit" && $element->getType() != "Zend_Form_Element_Hidden") {
+        if ($element != "") {
+            if (fmod($i, 2) == 0 ) {
+                
+                echo "<tr><td align='right'><b>" . $element->getLabel(). "</b></td><td>". $element->getValue() ."</td></tr>\n";
+                $i = $i + 1;
+            }
+            else {
+                
+                echo "<tr style='background-color:#efefef;'><td align='right'><b>" . $element->getLabel(). "</b></td><td>". $element->getValue() ."</td></tr>\n";
+                $i = $i + 1;
+            }
+        }
+    }
 }
-//todo: better view expected!
 
+echo "</table><br/><br/><br/>";
+echo '<h3>'. $this->header . '</h3>';
 echo $this->form;
 
 ?>
