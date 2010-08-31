@@ -37,32 +37,20 @@
 
 <div class="left">
 
-    <h2>Suche</h2>
+    <h2><?= $this->translate('solrsearch_title_simple'); ?></h2>
 
-    <form action="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'searchdispatch')); ?>/" method="post">
-        <label for="query">Suchanfrage</label>
-        <input id="query" name="query" type="text" value="<?= $this->q ?>" />
-        <input type="submit" value="Suchen" />
+    <form action="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'searchdispatch')); ?>" method="post">
+        <label for="query"><?= $this->translate('solrsearch_query_label'); ?></label>
+        <input id="query" name="query" type="text" value="<?= htmlspecialchars($this->q) ?>" />
+        <input type="submit" value="<?= $this->translate('solrsearch_searchaction'); ?>" />
         <input type="hidden" name="searchtype" id="searchtype" value="simple" />
         <input type="hidden" name="rows" id="rows" value="10" />
         <input type="hidden" name="start" id="start" value="0" />
+        <input type="hidden" name="sortfield" id="sortfield" value="score" />
+        <input type="hidden" name="sordorder" id="sortorder" value="desc" />
     </form>
 
-<a href="solrsearch/advanced">Erweiterte Suche</a>
-
-    <a href="search/browsing/index">
-        <div id="browsing_button" class="button_large">
-            <img src="<?= $basePath;?>/layouts/default/img/todo" alt="browsing_icon" class="button_icon" />
-            <span class="button_label"><?= $this->translate('browsing_menu_label'); ?></span>
-        </div>
-    </a>
-
-    <a href="publish/index/index">
-        <div id="publish_button" class="button_large">
-            <img src="<?= $basePath;?>/layouts/default/img/todo" alt="publish_icon" class="button_icon" />
-            <span class="button_label"><?= $this->translate('publish_modulename'); ?></span>
-        </div>
-    </a>
+    <a href="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'advanced'),null,true); ?>"><?= $this->translate('solrsearch_title_advanced'); ?></a>
 </div>
 
 <div class="right">
