@@ -55,6 +55,16 @@ searchengine.extract.app =
 form.first.numberoffiles = 
 form.first.bibliographie =
 
+;MAIL SETTINGS
+mail.opus.smtp = ; SMTP server for sending email
+mail.opus.port = 25 ; SMTP server port for sending email
+mail.opus.address = ; email address of administrator
+mail.opus.name = ; Name of administrator
+
+;REFEREES (temporary solution)
+; referees['John Doe'] = john.doe@example.org
+
+
 ; The following is needed even if sections are empty.
 [staging : production]
 
