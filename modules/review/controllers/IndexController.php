@@ -318,12 +318,6 @@ class Review_IndexController extends Controller_CRUDAction {
                     }
 
                     $document->store();
-
-                    $mail = new Opus_Mail_SendMail();
-
-                    $recipient = array(1 => array('address' => 'schwidder@zib.de','name' => 'Jens Schwidder'));
-
-                    $mail->sendMail('schwidder@zib.de', 'Jens Schwidder', 'Test', 'Test message!', $recipient);
                 }
                 else {
                     // already published or deleted
