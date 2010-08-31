@@ -84,6 +84,13 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
     private $preprint_projects = array();
 
     /**
+     * Associative array maps preprint_ids to arrays of institute-arrays.
+     *
+     * @var array
+     */
+    private $preprint_institutes = array();
+
+    /**
      * Constructur.
      *
      * @param array $options Array with input options.
@@ -269,11 +276,35 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
 
 
     /**
+     * Mark all collection roles as invisible.
+     *
+     * @return void
+     */
+    public function disable_all_collectionroles() {
+        foreach (Opus_CollectionRole::fetchAll() AS $cr) {
+            /* @var $cr Opus_CollectionRole */
+            $cr->setVisible(0);
+            $cr->setVisibleBrowsingStart(0);
+            $cr->setVisibleFrontdoor(0);
+            $cr->setVisibleOai(0);
+            $cr->store();
+
+            echo "Disabled collection {$cr->getDisplayName()}.\n";
+        }
+    }
+//(2, 21, "Zuse Institute Berlin"),
+//(3, 15, "Technische Universität Berlin"),
+//(4, 13, "Freie Universität Berlin"),
+//(5, 20, "Weierstraß-Institut"),
+//(6, 16, "Humboldt-Universität zu Berlin"),
+//(7, 23, "DFG Research Center Matheon");
+
+    /**
      * Loads XML dump of matheon projects and creates array by document_id.
      *
      * @return void
      */
-    public function load_preprint_projects() {
+    public function load_projects() {
 // TODO: Add Unit tests.
 //        $role = new Opus_CollectionRole();
 //        $role->setName('projects-'.rand());
@@ -360,6 +391,61 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
 
 
     /**
+     * Loads XML dump of matheon projects and creates array by document_id.
+     *
+     * @return void
+     */
+    public function load_institutes() {
+        $role = new Opus_CollectionRole();
+        $role->setName('Institutes');
+        $role->setOaiName('institutes');
+        $role->setVisible(1);
+        $role->setDisplayBrowsing('Name');
+        $role->setVisibleBrowsingStart(1);
+        $role->setDisplayFrontdoor('Name');
+        $role->setVisibleFrontdoor(1);
+        $role->setLinkDocsPathToRoot('none');
+
+        $root_node = $role->addRootNode()->setVisible(1);
+        $root_collection = $root_node->addCollection();
+        $root_collection->setName('Institutes');
+        $role->store();
+
+        $collections = array();
+
+        $file = $this->dumps_dir . '/institutes.xml';
+        foreach ($this->load_xml_mysqldump($file) AS $institute) {
+            $institute_id = $institute['institute_id'];
+            $institute_name = $institute['institute_name'];
+
+            if (false === array_key_exists($institute_id, $collections)) {
+                $institute_node = $root_node->addLastChild()->setVisible(1);
+                $institute_collection = $institute_node->addCollection();
+                // $institute_collection->setNumber($institute_id);
+                $institute_collection->setName($institute_name);
+                $root_node->store();
+
+                $collections[$institute_id] = $institute_collection;
+            }
+        }
+
+        $file = $this->dumps_dir . '/preprint_institutes.xml';
+        foreach ($this->load_xml_mysqldump($file) AS $institute_project) {
+            $pid = $institute_project['preprint_id'];
+            $institute_id = $institute_project['institute_id'];
+
+            if (false === array_key_exists($pid, $this->preprint_projects)) {
+                $this->preprint_institutes[$pid] = array();
+            }
+            // echo "adding collection for project $project to preprint $pid\n";
+            $this->preprint_institutes[$pid][] = $collections[$institute_id];
+        }
+
+        return;
+    }
+
+
+    /**
      * Custom run method.
      *
      * @return <type>
@@ -378,9 +464,16 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
         $this->load_preprint_files();
         echo "found " . count($this->preprint_files) . " files\n";
 
+        // Disable all un-used collections
+        $this->disable_all_collectionroles();
+
         // Load mySQL dump for preprint projects.
-        $this->load_preprint_projects();
-        echo "found and created " . count($this->persons) . " persons\n";
+        $this->load_projects();
+        echo "found and created " . count($this->preprint_projects) . " projects\n";
+
+        // Load mySQL dump for preprint institutes.
+        $this->load_institutes();
+        echo "found and created " . count($this->preprint_institutes) . " institutes\n";
 
         // Load mySQL dump for preprints.
         $preprints = $this->load_xml_mysqldump($this->dumps_dir . '/preprints.xml');
@@ -537,9 +630,17 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
                 $unique_authors[$mda_id]++;
             }
 
-            // load collections
+            // load collections: projects
             if (array_key_exists($pid, $this->preprint_projects)) {
                 foreach ($this->preprint_projects[$pid] AS $c) {
+                    // echo "Adding collection {$c->getId()} to document $pid\n";
+                    $doc->addCollection($c);
+                }
+            }
+
+            // load collections: institutes
+            if (array_key_exists($pid, $this->preprint_institutes)) {
+                foreach ($this->preprint_institutes[$pid] AS $c) {
                     // echo "Adding collection {$c->getId()} to document $pid\n";
                     $doc->addCollection($c);
                 }
