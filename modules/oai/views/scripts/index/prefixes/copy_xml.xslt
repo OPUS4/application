@@ -50,11 +50,8 @@
 
     <xsl:output method="xml" indent="yes" />
 
-
     <xsl:template match="Opus_Document" mode="copy_xml">
-        <Copy_of_xml_input>
-            <xsl:copy-of select="."/>
-        </Copy_of_xml_input>              
+        <xsl:copy-of select="."/>
     </xsl:template>
 
 
