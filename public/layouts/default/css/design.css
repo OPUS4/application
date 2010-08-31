@@ -71,3 +71,16 @@ ul, li {
     margin-bottom: 1em;
     padding-bottom: 1em;
 }
+
+.sorting_options {
+    list-style: none outside none;
+    margin: 0;
+    padding: 0;
+}
+
+.sorting_option {
+    display: inline;
+    margin: 0;
+    padding: 0;
+    padding-right: .5em;
+}
