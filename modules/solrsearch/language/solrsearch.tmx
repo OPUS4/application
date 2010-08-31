@@ -296,12 +296,48 @@
             </tuv>
         </tu>
 
-        <tu tuid="subject_facet_facet_heading">
+        <tu tuid="subject_facet_heading">
             <tuv xml:lang="en">
                 <seg>Keywords</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>Schlagworte</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="subject_msc_facet_heading">
+            <tuv xml:lang="en">
+                <seg>MSC</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>MSC</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="project_facet_heading">
+            <tuv xml:lang="en">
+                <seg>Project</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Projekt</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="app_area_facet_heading">
+            <tuv xml:lang="en">
+                <seg>Application Area</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Anwendungsgebiet</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="institute_facet_heading">
+            <tuv xml:lang="en">
+                <seg>Institute</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Institut</seg>
             </tuv>
         </tu>
 
