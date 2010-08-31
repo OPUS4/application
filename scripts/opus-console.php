@@ -105,7 +105,8 @@ $application = new Zend_Application(
     )
 );
 
-$application->bootstrap();
+$bootstrap_ressources = array('Configuration', 'Logging', 'Database');
+$application->bootstrap($bootstrap_ressources);
 
 $console = new OpusConsole();
 
