@@ -34,6 +34,29 @@
 /* Zend_Form standard class for required elements */
 form .required {
     font-weight: bold;
+    color: #8a1f11;
+    padding: 3pt;
+}
+
+form .legend {
+    font-weight: bold;
+    padding: 3pt;
+}
+
+form .fieldset {
+    margin-bottom: 3pt;
+}
+
+form .table  {
+    border-spacing: 3pt;
+}
+
+form .hint {    
+    color: #8a1f11;
+    font-weight: bold;
+    font-size: 10pt;
+    padding: 3pt;
+    border: 1pt #8a1f11 dotted;
 }
 
 /* Zend_Form standard class for errros during validation */
@@ -54,6 +77,7 @@ form#language_selector dl, form#language_selector dd, form#language_selector dt 
 form.crud {
     display: inline;
 }
+
 p.description { 
 color:blue; 
 padding: 0 0 10px 10px;
