@@ -75,7 +75,7 @@ class Mail_PublishNotification
         $messageBody = $this->getMessageBody();
         $recipient = $this->getRecipients();
 
-        if (empty($recipients)) {
+        if (empty($recipient)) {
             $this->logger->info('No referees configured. Mail canceled.');
             return true;
         }
