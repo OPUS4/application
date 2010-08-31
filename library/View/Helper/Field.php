@@ -74,35 +74,36 @@ class View_Helper_Field extends Zend_View_Helper_Abstract {
 
     /**
      *
-     * @param <type> $name 
-     */
-    public function _renderSubmit($name, $value) {
-        $submit = "\n\t\t<input type='submit' name='" . $name . "' id='" . $name . "' value='" . $value . "'/>";
-        return $submit;
-    }
-
-    /**
-     *
      * @param <type> $element
      */
     public function _renderElement($name, $element) {
+        $elementfield = "<fieldset class='fieldset'><legend class='legend'>" . $this->view->translate($element["label"]) . "</legend>\n\t\t\n\t\t";
+        $elementfield .= "<table width='100%' class='table'>\n\t<tr>\n\t\t<td width='25%'>\n\t\t\t";
+        $elementfield .= "<label for='" . $element["id"] . "'>" . $element["label"] . "</label></td><td>";
+
         switch ($element["type"]) {
             case "Zend_Form_Element_Textarea" :
-                $elementfield = "<table>\n\t<tr>\n\t\t<td>\n\t\t\t<label for='" . $element["id"] . "' class='" . $element["req"] . "'>" . $element["label"] . "</label>\n\t\t</td>\n\t\t";
-                $elementfield .= "<td>\n\t\t\t<textarea cols='30' rows='9' name='" . $element["id"] . "' id='" . $element["id"] . "'>" . $element["value"] . "</textarea>\n\t\t</td>\n\t</tr>\n\t";
+                $elementfield .= "\n\t\t\t<textarea cols='30' rows='9' name='" . $element["id"] . "' id='" . $element["id"] . "' ";
+                $elementfield .= " title='" . $this->view->translate($element["hint"]) . "'>";
+                $elementfield .=  $element["value"] . "</textarea>";
+
+                if ($element["req"] === 'required')
+                    $elementfield .= $this->getRequiredSign();
+                $elementfield .= "\n\t\t</td>\n\t</tr>\n\t";
                 $elementfield .= "<tr>\n\t\t<td colspan='2'>";
+
                 if ($element["error"] != null) {
                     $elementfield .= "<ul class='errors'>";
                     foreach ($element["error"] AS $err)
                         $elementfield .= "\n\t\t\t<li>" . $err . "</li>";
                     $elementfield .= "\n\t\t</ul>";
                 }
-                $elementfield .= "</td>\n\t</tr>\n</table>\n\n";
-                return $elementfield;
+                break;
 
             case "Zend_Form_Element_Text" :
-                $elementfield = "<table>\n\t<tr>\n\t\t<td>\n\t\t\t<label for='" . $element["id"] . "' class='" . $element["req"] . "'>" . $element["label"] . "</label>\n\t\t</td>\n\t\t";
-                $elementfield .= "<td>\n\t\t\t<input type='text' name='" . $element["id"] . "' id='" . $element["id"] . "' value='" . $element["value"] . "' />\n\t\t</td>\n\t</tr>\n\t";
+                $elementfield .= "\n\t\t\t<input type='text' name='" . $element["id"] . "' id='" . $element["id"] . "'";
+                $elementfield .= " title='" . $this->view->translate($element["hint"]) . "' ";
+                $elementfield .= "value='" . $element["value"] . "' />\n\t\t</td>\n\t</tr>\n\t";
                 $elementfield .= "<tr>\n\t\t<td colspan='2'>";
                 if ($element["error"] != null) {
                     $elementfield .= "<ul class='errors'>";
@@ -110,14 +111,14 @@ class View_Helper_Field extends Zend_View_Helper_Abstract {
                         $elementfield .= "\n\t\t\t<li>" . $err . "</li>";
                     $elementfield .= "\n\t\t</ul>";
                 }
-                $elementfield .= "</td>\n\t</tr>\n</table>\n\n";
-                return $elementfield;
+                break;
 
             case "Zend_Form_Element_Select":
-                $elementfield = "<table>\n\t<tr>\n\t\t<td>\n\t\t\t<label for='" . $element["id"] . "' class='" . $element["req"] . "'>" . $element["label"] . "</label>\n\t\t</td>\n\t\t";
-                $elementfield .= "<td>\n\t\t\t<select name='" . $element["id"] . "' id='" . $element["id"] . "'>\n\t\t\t\t";
+                $elementfield .= "\n\t\t\t<select name='" . $element["id"] . "' id='" . $element["id"] . "'>\n\t\t\t\t";
                 foreach ($element["options"] AS $key => $option) {
-                    $elementfield .= "<option value='" . $key . "' label='". $option ."'";
+                    $elementfield .= "<option value='" . $key . "' label='" . $option . "'";
+                    $elementfield .= " title='" . $this->view->translate($element["hint"]) . "' ";
+
                     if ($option === $element["value"] || $key === $element["value"])
                         $elementfield .= " selected='selected'>";
                     else
@@ -131,9 +132,106 @@ class View_Helper_Field extends Zend_View_Helper_Abstract {
                         $elementfield .= "\n\t\t\t<li>" . $err . "</li>";
                     $elementfield .= "\n\t\t</ul>";
                 }
-                $elementfield .= "</td>\n\t</tr>\n</table>\n\n";
-                return $elementfield;
+                break;
         }
+        $elementfield .= "</td>\n\t</tr>\n</table></fieldset>\n\n";
+        return $elementfield;
+    }
+
+    /**
+     * Method to render a group of elements (group fields, buttons, hidden fields)
+     * @param <Array> $group
+     */
+    public function _renderGroup($name, $group) {
+        $fieldset = "";
+        if (isset($group)) {
+            $fieldset = "<fieldset class='fieldset'>\n<legend class='legend'>" . $this->view->translate($group['Name']) . "</legend>\n\t";
+            $fieldset .= "<table class='table' width='100%'>";
+            
+            //show fields
+            foreach ($group["Fields"] AS $field) {
+                $fieldset .= "\n\t\t<tr>\n\t\t\t<td width='25%' align='right'>";
+                $fieldset .= "\n\t\t\t\t<label for='" . $field["id"] . "'>" . $field["label"] . "</label>";
+                $fieldset .= "\n\t\t\t</td>\n\t\t\t<td>";
+                switch ($field['type']) {
+                    case "Zend_Form_Element_Text":
+                        $fieldset .= "\n\t\t\t\t<input type='text' name='" . $field["id"] . "' id='" . $field["id"] . "'";
+
+                        if (strstr($field["id"], "1"))
+                            $fieldset .= " title='" . $this->view->translate($field["hint"]) . "' ";
+                        $fieldset .= " value='" . $field["value"] . "' />";
+
+                        if ($field["req"] === 'required')
+                            $fieldset .= $this->getRequiredSign();
+                        break;
+
+                    case "Zend_Form_Element_Textarea":
+                        $fieldset .= "\n\t\t\t\t<textarea cols='30' rows='9' name='" . $field["id"] . "' id='" . $field["id"] . "'>";
+
+                        if (strstr($field["id"], "1"))
+                            $fieldset .= " title='" . $this->view->translate($field["hint"]) . "' ";
+                        $fieldset .= $field["value"] . "</textarea>";
+
+                        if ($field["req"] === 'required')
+                            $fieldset .= $this->getRequiredSign();
+                        break;
+
+                    case "Zend_Form_Element_Select" :
+                        $fieldset .= "\n\t\t\t\t<select name='" . $field["id"] . "' id='" . $field["id"] . "'";
+                         if (strstr($field["id"], "1"))
+                            $fieldset .= " title='" . $this->view->translate($field["hint"]) . "'";
+                         $fieldset .= ">\n\t\t\t\t\t";
+                         
+                        foreach ($field["options"] AS $key => $option) {
+                            $fieldset .= "<option value='" . $key . "' label='" . $option . "'";
+                                                       
+                            if ($option === $field["value"] || $key === $field["value"])
+                                $fieldset .= " selected='selected'>";
+                            else
+                                $fieldset .= ">";
+                            $fieldset .= $option . "</option>\n\t\t\t\t\t";
+                        }
+                        $fieldset .= "</select>";
+                        if ($field["req"] === 'required')
+                            $fieldset .= $this->getRequiredSign();
+                        break;
+                        
+                    default:
+                        throw new Application_Exception("Field Type {$field['type']} not found in View Helper.");
+                }
+                $fieldset .= "\n\t\t\t</td>\n\t\t\t";
+                $fieldset .= "</tr>\n\t\t<tr>\n\t\t\t<td colspan='2'>";
+                if ($field["error"] != null) {
+                    $fieldset .= "<ul class='errors'>";
+                    foreach ($field["error"] AS $err)
+                        $fieldset .= "<li>" . $err . "</li>";
+                    $fieldset .= "</ul>";
+                }
+                $fieldset .= "</td>\n\t\t</tr>";
+            }
+            //show buttons
+            foreach ($group["Buttons"] AS $button) {
+                $fieldset .= "\n\t\t<tr>\n\t\t\t<td></td><td align='right'>";
+                $fieldset .= "\n\t\t\t\t<input type='submit' name='" . $button["id"] . "' id='" . $button["id"] . "' value='" . $button["label"] . "' />";
+                $fieldset .= "\n\t\t\t</td>\n\t\t</tr>";
+            }
+            //show hidden fields
+            foreach ($group["Hiddens"] AS $hidden) {
+                $fieldset .= "\n<input type='hidden' name='" . $hidden["id"] . "' id='" . $hidden["id"] . "' value='" . $hidden["value"] . "' />";
+            }
+            $fieldset .= "<tr><td colspan='2' valign='top'>" . $this->getGroupHint($group['Name']) . "</td></tr>";
+            $fieldset .= "\n\t</table>\n</fieldset>\n\n";
+        }
+        return $fieldset;
+    }
+
+    /**
+     *
+     * @param <type> $name 
+     */
+    public function _renderSubmit($name, $value) {
+        $submit = "\n\t\t<input type='submit' name='" . $name . "' id='" . $name . "' value='" . $value . "'/>";
+        return $submit;
     }
 
     /**
@@ -148,66 +246,6 @@ class View_Helper_Field extends Zend_View_Helper_Abstract {
     }
 
     /**
-     * Method to render a group of elements (group fields, buttons, hidden fields)
-     * @param <Array> $group
-     */
-    public function _renderGroup($name, $group) {
-        $fieldset = "";
-        if (isset($group)) {
-            $fieldset = "<fieldset>\n<legend>" . $this->view->translate($group['Name']) . "</legend>\n\t<table>";
-            //show fields
-            foreach ($group["Fields"] AS $field) {
-                $fieldset .= "\n\t\t<tr>\n\t\t\t<td>";
-                $fieldset .= "\n\t\t\t\t<label for='" . $field["id"] . "' class='" . $field["req"] . "'>" . $field["label"] . "</label>";
-                $fieldset .= "\n\t\t\t</td>\n\t\t\t<td>";
-                switch ($field['type']) {
-                    case "Zend_Form_Element_Text":
-                        $fieldset .= "\n\t\t\t\t<input type='text' name='" . $field["id"] . "' id='" . $field["id"] . "' value='" . $field["value"] . "' />";
-                        break;
-
-                    case "Zend_Form_Element_Textarea":
-                        $fieldset .= "\n\t\t\t\t<textarea cols='30' rows='9' name='" . $field["id"] . "' id='" . $field["id"] . "'>" . $field["value"] . "</textarea>";
-                        break;
-                    case "Zend_Form_Element_Select" :
-                        $fieldset .= "\n\t\t\t\t<select name='" . $field["id"] . "' id='" . $field["id"] . "'>\n\t\t\t\t\t";
-                        foreach ($field["options"] AS $key => $option) {
-                            $fieldset .= "<option value='" . $key . "' label='". $option ."'";
-                            if ($option === $field["value"] || $key === $field["value"])
-                                $fieldset .= " selected='selected'>";
-                            else
-                                $fieldset .= ">";
-                            $fieldset .= $option . "</option>\n\t\t\t\t\t";
-                        }
-                        $fieldset .= "</select>";
-                        break;
-                    default:
-                        throw new Application_Exception("Field Type {$field['type']} not found in View Helper.");
-                }
-                $fieldset .= "\n\t\t\t</td>\n\t\t</tr>\n\t\t<tr>\n\t\t\t<td colspan='2'>";
-                if ($field["error"] != null) {
-                    $fieldset .= "<ul class='errors'>";
-                    foreach ($field["error"] AS $err)
-                        $fieldset .= "<li>" . $err . "</li>";
-                    $fieldset .= "</ul>";
-                }
-                $fieldset .= "</td>\n\t\t</tr>";
-            }
-            //show buttons
-            foreach ($group["Buttons"] AS $button) {
-                $fieldset .= "\n\t\t<tr>\n\t\t\t<td>";
-                $fieldset .= "\n\t\t\t\t<input type='submit' name='" . $button["id"] . "' id='" . $button["id"] . "' value='" . $button["label"] . "' />";
-                $fieldset .= "\n\t\t\t</td>\n\t\t</tr>";
-            }
-            //show hidden fields
-            foreach ($group["Hiddens"] AS $hidden) {
-                $fieldset .= "\n<input type='hidden' name='" . $hidden["id"] . "' id='" . $hidden["id"] . "' value='" . $hidden["value"] . "' />";
-            }
-            $fieldset .= "\n\t</table>\n</fieldset>\n\n";
-        }
-        return $fieldset;
-    }
-
-    /**
      *
      * @param <type> $type
      * @param <type> $value 
@@ -215,6 +253,23 @@ class View_Helper_Field extends Zend_View_Helper_Abstract {
     public function _renderGeneralElement($type, $value, $name) {
         echo "Sie wollen weder ein Element noch eine Group anzeigen lassen. <br>Der Fehler trat auf bei: ";
         echo print_r($value);
+    }
+
+    /**
+     * returns the hint string for a required element
+     * @return <type> 
+     */
+    protected function getRequiredSign() {
+        return "<span class='required'>*</span>";
+    }
+
+    /**
+     * returns a html String for displaying the group hint
+     * @param <String> $groupName
+     * @return <type>
+     */
+    protected function getGroupHint($groupName) {
+        return "<table class='table'><tr><td><span class='hint'>?</span></td><td>" . $this->view->translate('hint_' . $groupName) . "</td></tr></table>";
     }
 
 }
