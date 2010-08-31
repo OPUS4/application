@@ -6,6 +6,42 @@
  </header>
  
   <body>
+
+    <tu tuid="solrsearch_title_simple">
+        <tuv xml:lang="en">
+            <seg>Search</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Suche</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="solrsearch_title_advanced">
+        <tuv xml:lang="en">
+            <seg>Advanced Search</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Erweiterte Suche</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="solrsearch_searchaction">
+        <tuv xml:lang="en">
+            <seg>Search</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Suchen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="solrsearch_query_label">
+        <tuv xml:lang="en">
+            <seg>Search Term</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Suchbegriff</seg>
+        </tuv>
+    </tu>
   
     <tu tuid="home_modulename">
       <tuv xml:lang="en">
