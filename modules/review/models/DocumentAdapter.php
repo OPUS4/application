@@ -100,7 +100,12 @@ class Review_Model_DocumentAdapter {
      */
     public function getDocTitle() {
         $titles = $this->document->getTitleMain();
-        return count($titles) > 0 ? $titles[0]->getValue() : ($this->view->translate('document_no_title') . $id);
+        if (count($titles) > 0) {
+            return $titles[0]->getValue();
+        }
+        else {
+            return $this->view->translate('document_no_title') . '(id = ' . $id . ')';
+        }
     }
 
     /**

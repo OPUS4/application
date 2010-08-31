@@ -70,6 +70,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="review_no_docs_found">
+      <tuv xml:lang="en">
+        <seg>No unpublished documents found.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Es wurden keine unpublizierten Dokumente gefunden.</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="review_docs_found">
       <tuv xml:lang="en">
         <seg>Documents found</seg>

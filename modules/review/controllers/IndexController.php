@@ -134,6 +134,11 @@ class Review_IndexController extends Controller_CRUDAction {
 
         $result = $this->_getResult($sort_order, $sort_reverse);
 
+        if (empty($result)) {
+            $this->_forward('nodocs');
+            return;
+        }
+
         $this->view->documentCount = count($result);
 
         $paginator = Zend_Paginator::factory($result);
@@ -195,6 +200,13 @@ class Review_IndexController extends Controller_CRUDAction {
      * TODO implement and use
      */
     public function successAction() {
+        $this->view->title = $this->view->translate('review_index_title');
+    }
+
+    /**
+     * Executed if no unpublished documents are found.
+     */
+    public function nodocsAction() {
         $this->view->title = $this->view->translate('review_index_title');
     }
 
@@ -290,7 +302,28 @@ class Review_IndexController extends Controller_CRUDAction {
                     $person->setFirstName($firstName);
                     $person->setLastName($lastName);
                     $document->addPersonReferee($person);
+
+                    $date = new Opus_Date(new Zend_Date());
+
+                    $document->setServerDatePublished($date);
+
+                    $config = Zend_Registry::get('Zend_Config');
+
+                    $moduleConfig = $config->clearing;
+
+                    if (isset($moduleConfig)) {
+                        if ($moduleConfig->setPublishedDate) {
+                            $document->setPublishedDate($date);
+                        }
+                    }
+
                     $document->store();
+
+                    $mail = new Opus_Mail_SendMail();
+
+                    $recipient = array(1 => array('address' => 'schwidder@zib.de','name' => 'Jens Schwidder'));
+
+                    $mail->sendMail('schwidder@zib.de', 'Jens Schwidder', 'Test', 'Test message!', $recipient);
                 }
                 else {
                     // already published or deleted
@@ -299,6 +332,7 @@ class Review_IndexController extends Controller_CRUDAction {
             }
             catch (Exception $e) {
                 $logger->err($e);
+                // TODO throw something, show something
             }
 
         }
