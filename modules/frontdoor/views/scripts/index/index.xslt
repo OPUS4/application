@@ -140,6 +140,7 @@
        <xsl:apply-templates select="SubjectSwd" />
        <xsl:apply-templates select="SubjectUncontrolled" />
        <xsl:apply-templates select="SubjectPsyndex" />
+       <xsl:apply-templates select="SubjectMSC" />
        <xsl:apply-templates select="@Source" />
        <xsl:apply-templates select="@Volume" />
        <xsl:apply-templates select="@Issue" />
@@ -805,7 +806,7 @@
       <tr>
         <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
         <td><xsl:value-of select="@Value" /></td>
-      </tr>    
+      </tr>
     </xsl:template>
 
     <xsl:template match="SubjectUncontrolled">
@@ -813,6 +814,13 @@
         <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
         <td><xsl:value-of select="@Value" /></td>
       </tr>    
+    </xsl:template>
+
+    <xsl:template match="SubjectMSC">
+      <tr>
+        <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
+        <td><xsl:value-of select="@Value" /></td>
+      </tr>
     </xsl:template>
 
     <xsl:template match="TitleMain">
