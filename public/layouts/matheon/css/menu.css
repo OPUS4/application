@@ -65,18 +65,3 @@ ul.navigation li:hover {
 ul.navigation a:hover {
     color: #26517d;
 }
-
-#pagination {
-    border: 1px solid #26517d;
-}
-
-
-#pagination ul li {
-    display:inline;
-}
-
-.facet li {
-    display:inline;
-    padding:0;
-    margin:0;
-}
