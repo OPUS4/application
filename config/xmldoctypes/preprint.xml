@@ -7,12 +7,12 @@
 	<opus:field name="Language" required="yes" formelement="text"  datatype="Language" multiplicity="1"/>
 	<!-- wird implementiert, sobald die Institutstabelle existiert!
 	<opus:field name="Institute" formelement="textarea" required="yes"  datatype="Text" multiplicity="1" />-->
-	<opus:field name="TitleMain" formelement="textarea" required="yes"  datatype="Title" multiplicity="4" />
+	<opus:field name="TitleMain" formelement="text" required="yes"  datatype="Title" multiplicity="4" />
 
-	<opus:field name="TitleAbstract" required="no" formelement="textarea"  datatype="Title" multiplicity="4">
+	<opus:field name="TitleAbstract" required="no" formelement="text"  datatype="Title" multiplicity="4">
 		<opus:required-if-fulltext/>
     </opus:field>	
-	<opus:field name="PersonReferee" required="yes" formelement="text" datatype="Person" multiplicity="*" />
+	
 	<opus:field name="Project" required="no" formelement="select" datatype="Project" multiplicity="*" />
 
 	<opus:field name="SubjectMSC" required="yes" formelement="text"  datatype="Text" multiplicity="5" />
