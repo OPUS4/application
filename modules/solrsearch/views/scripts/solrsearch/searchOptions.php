@@ -35,22 +35,30 @@
 
 <div id="search_options" class="search_options">
 
-    <?php
-        $yearDescUrl = $this->firstPage;
-        $yearDescUrl['sortfield'] = 'year';
-        $yearDescUrl['sortorder'] = 'desc';
-
-        $yearAscUrl = $this->firstPage;
-        $yearAscUrl['sortfield'] = 'year';
-        $yearAscUrl['sortorder'] = 'asc';
-
-        $scoreDescUrl = $this->firstPage;
-        $scoreDescUrl['sortfield'] = 'score';
-        $scoreDescUrl['sortorder'] = 'desc';
-    ?>
-
     <?= $this->translate('sorting_sort_by') ?>
-    <a href="<?= $this->url($yearAscUrl) ?>"><?= $this->translate('sorting_year_ascending') ?></a>,
-    <a href="<?= $this->url($yearDescUrl) ?>"><?= $this->translate('sorting_year_descending') ?></a>,
-    <a href="<?= $this->url($scoreDescUrl) ?>"><?= $this->translate('sorting_relevancy') ?></a>
+    <ul class="sorting_options">
+    
+    <?php
+        $urlparams = $this->firstPage;
+        $urlparams['sortfield'] = 'score';
+        $urlparams['sortorder'] = 'desc';
+    ?>
+    <li class="sorting_option"><a href="<?= $this->url($urlparams) ?>"><?= $this->translate('sorting_relevancy') ?></a></li>
+
+    <?php 
+        foreach (array('year', 'title', 'author') as $sortfield) :
+            foreach (array('asc', 'desc') as $sortorder) :
+
+                $urlparams = $this->firstPage;
+                $urlparams['sortfield'] = $sortfield;
+                $urlparams['sortorder'] = $sortorder;
+
+    ?>
+    <li class="sorting_option"><a href="<?= $this->url($urlparams) ?>"><?= $this->translate('sorting_' . $sortfield . '_' . $sortorder) ?></a></li>
+    <?php
+            endforeach;
+        endforeach;
+    ?>
+    </ul>
+
 </div>

@@ -35,7 +35,16 @@
             </tuv>
         </tu>
 
-        <tu tuid="sorting_year_descending">
+        <tu tuid="sorting_year_asc">
+            <tuv xml:lang="en">
+                <seg>Year (ascending)</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Jahr (aufsteigend)</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="sorting_year_desc">
             <tuv xml:lang="en">
                 <seg>Year (descending)</seg>
             </tuv>
@@ -44,12 +53,39 @@
             </tuv>
         </tu>
 
-        <tu tuid="sorting_year_ascending">
+        <tu tuid="sorting_title_asc">
             <tuv xml:lang="en">
-                <seg>Year (ascending)</seg>
+                <seg>Title (ascending)</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Jahr (aufsteigend)</seg>
+                <seg>Titel (aufsteigend)</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="sorting_title_desc">
+            <tuv xml:lang="en">
+                <seg>Titel (descending)</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Titel (absteigend)</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="sorting_author_asc">
+            <tuv xml:lang="en">
+                <seg>Author (ascending)</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Autor (aufsteigend)</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="sorting_author_desc">
+            <tuv xml:lang="en">
+                <seg>Author (descending)</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Autor (absteigend)</seg>
             </tuv>
         </tu>
 
