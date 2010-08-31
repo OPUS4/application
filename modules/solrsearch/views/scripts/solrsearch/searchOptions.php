@@ -33,7 +33,7 @@
 
 ?>
 
-<div id="search_options" >
+<div id="search_options" class="search_options">
 
     <?php
         $yearDescUrl = $this->firstPage;

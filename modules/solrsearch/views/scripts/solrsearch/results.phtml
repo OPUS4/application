@@ -44,13 +44,14 @@
 <h2><?= $this->numOfHits . ' ' . $this->translate('results_title') ?></h2>
 
 <?php include('searchOptions.php') ?>
-<?php include('facetsMenu.php') ?>
 <?php include('pagination.php') ?>
+<?php include('facetsMenu.php') ?>
 
-<div id="search_results" >
+<div id="search_results" class="search_results">
 
-    <?php foreach($this->results as $result) : ?>
-        <div class="result_box">
+    <?php $rowCount = 0; ?>
+    <?php foreach($this->results as $result) :?>
+        <div class="result_box <?= $rowCount++ % 2 === 0 ? 'even' : 'odd'; ?>">
             <?php
                 $frontdoorUrl = array(
                     'module' => 'frontdoor',
@@ -58,7 +59,7 @@
                     'action' => 'index',
                     'docId' => $result->getId());
             ?>
-            <a href="<?= $this->url($frontdoorUrl, null, true) ?>"><?= $result->getTitle(); ?></a> (<?= $result->getYear(); ?>)<br/>
+            <span class="results_title"><a href="<?= $this->url($frontdoorUrl, null, true) ?>"><?= $result->getTitle(); ?></a> (<?= $result->getYear(); ?>)</span><br/>
 
             <?php if(!is_null($result->getAuthors())) : ?>
                 <?php foreach($result->getAuthors() as $author) :

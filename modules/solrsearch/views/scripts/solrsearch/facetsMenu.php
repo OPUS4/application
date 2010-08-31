@@ -32,13 +32,13 @@
  */
 ?>
 
-<div id="facets">
+<div id="facets" class="facets">
     <h3><?= $this->translate('facets_menu_title') ?></h3>
 
     <?php foreach($this->facets as $key=>$facet) : ?>
 
     <div id="<?= $key ?>_facet" class="facet">
-        <?= $this->translate($key."_facet_heading") ?>
+        <span class="facet_heading"><?= $this->translate($key."_facet_heading") ?></span>
         <ul>
             <?php foreach($facet as $facetItem) :
                 $fqUrl = $this->firstPage;
@@ -49,7 +49,7 @@
                     $fqUrl = $this->firstPage;
                     $fqUrl[$key.'fq'] = '';
                 ?>
-                <a href="<?= $this->url($fqUrl) ?>" class="removeFacetLink">(<?= $this->translate('facets_remove') ?>)</a>
+                <span class="removeFacetLink"><a href="<?= $this->url($fqUrl) ?>">(<?= $this->translate('facets_remove') ?>)</a></span>
                 <?php endif ?>
                 </li>
             <?php endforeach ?>
