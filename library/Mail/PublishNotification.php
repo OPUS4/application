@@ -75,6 +75,11 @@ class Mail_PublishNotification
         $messageBody = $this->getMessageBody();
         $recipient = $this->getRecipients();
 
+        if (empty($recipients)) {
+            $this->logger->info('No referees configured. Mail canceled.');
+            return true;
+        }
+
         $mailSendMail = new Opus_Mail_SendMail();
 
         try {
