@@ -272,15 +272,16 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
         $selectedFacets = array();
 
         foreach($facets as $key=>$facet) {
-
             $this->log->debug("found $key facet in search results");
 
-            $facetIsActive = array_key_exists($key.'fq', $data) && $data[$key.'fq'] != '';
-            if($facetIsActive)
+            $facetIsActive = $this->_getFieldValue($data, $key.'fq');
+            if($facetIsActive !== '') {
                 $selectedFacets[$key] = $data[$key.'fq'];
+            }
 
-            if(count($facets[$key]) > 1 || $facetIsActive)
+            if(count($facets[$key]) > 1 || $facetIsActive !== '') {
                 $facetArray[$key] = $facet;
+            }
         }
         
         $this->view->__set('facets', $facetArray);

@@ -44,14 +44,18 @@
                 $fqUrl = $this->firstPage;
                 $fqUrl[$key.'fq'] = $facetItem->getText();
             ?>
-                <li <?= array_key_exists($key, $this->selectedFacets) ? 'class="activeFacet"' : '' ?>><a href="<?= $this->url($fqUrl) ?>"><?= $this->translate($facetItem->getText()) ?></a> (<?= $facetItem->getCount() ?>)
-                <?php if(array_key_exists($key, $this->selectedFacets)) :
-                    $fqUrl = $this->firstPage;
-                    $fqUrl[$key.'fq'] = '';
-                ?>
-                <span class="removeFacetLink"><a href="<?= $this->url($fqUrl) ?>">(<?= $this->translate('facets_remove') ?>)</a></span>
-                <?php endif ?>
-                </li>
+                <?php if (array_key_exists($key, $this->selectedFacets)) : ?>
+                    <?php if ($this->selectedFacets[$key] == $facetItem->getText()) :
+                        $remove_fqUrl = $this->firstPage;
+                        $remove_fqUrl[$key.'fq'] = '';
+                    ?>
+                        <li class="activeFacet"><?= $this->translate($facetItem->getText()) ?> (<?= $facetItem->getCount() ?>)
+                        <span class="removeFacetLink"><a href="<?= $this->url($remove_fqUrl) ?>">(<?= $this->translate('facets_remove') ?>)</a></span>
+                        </li>
+                    <?php endif ?>
+                <?php else: ?>
+                    <li><a href="<?= $this->url($fqUrl) ?>"><?= $this->translate($facetItem->getText()) ?></a> (<?= $facetItem->getCount() ?>)</li>
+                <? endif ?>
             <?php endforeach ?>
         </ul>
     </div>
