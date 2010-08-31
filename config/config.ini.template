@@ -41,6 +41,7 @@ db.params.host =
 db.params.username = 
 db.params.password = 
 db.params.dbname =
+db.debug = 0  ; set to 1 if you want to see debugging information
 
 ;SEARCH ENGINE SETTINGS
 searchengine.index.host =
