@@ -146,7 +146,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
 
         if ($this->postData !== null)
             if (array_key_exists($elementName, $this->postData))
-                    $formField->setValue($this->postData[$elementName]);
+                $formField->setValue($this->postData[$elementName]);
 
         $this->addElement($formField);
         return $formField;
@@ -262,6 +262,12 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         return parameters;
     }
 
+    /**
+     *
+     * @param <type> $name
+     * @param <type> $params
+     * @return Form_Validate_RequiredIf
+     */
     protected function _getValidator($name, $params = null) {
 // TODO change name to lower case
         switch ($name) {
@@ -293,10 +299,10 @@ class Publish_Form_PublishingSecond extends Zend_Form {
             //button and hidden element that carries the value of how often the element has to be shown
             $countMoreHidden = $this->createElement('hidden', 'countMore' . $elementName);
             $addMoreButton = $this->createElement('submit', 'addMore' . $elementName);
-            $addMoreButton->setLabel("Add one more " . $elementName);
+            $addMoreButton->setLabel('button_label_add_one_more' . $elementName);
 
             $deleteMoreButton = $this->createElement('submit', 'deleteMore' . $elementName);
-            $deleteMoreButton->setLabel("Delete " . $elementName);
+            $deleteMoreButton->setLabel('button_label_delete' . $elementName);
 
             $currentNumber = 1;
             if (array_key_exists($elementName, $this->additionalFields)) {
@@ -347,7 +353,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
             $group[] = $countMoreHidden->getName();
 
             $addMoreButton = $this->createElement('submit', 'addMore' . $elementName);
-            $addMoreButton->setLabel("Add one more " . $elementName);
+            $addMoreButton->setLabel('button_label_add_one_more' . $elementName);
             $this->addElement($addMoreButton);
             $group[] = $addMoreButton->getName();
 
@@ -395,21 +401,24 @@ class Publish_Form_PublishingSecond extends Zend_Form {
 
             case 'Project' :
                 $role = Opus_CollectionRole::fetchByOaiName('projects');
-                $colls = Opus_Collection::fetchCollectionsByRoleId($role->getId());                
-                $collections = array();
-                foreach ($colls AS $coll) {
-                    $collections[] = $coll->getNumber();
+                if ($role === null)
+                    throw Publish_Model_OpusServerException("No Projects found in database.");
+                else {
+                    $colls = Opus_Collection::fetchCollectionsByRoleId($role->getId());
+                    $collections = array();
+                    foreach ($colls AS $coll) {
+                        $collections[] = $coll->getNumber();
+                    }
                 }
-                
                 return new Zend_Validate_InArray($collections);
                 break;
 
-            case 'Text':  //todo: validator for texts with signs
-                return new Zend_Validate_Alnum(true);
+            case 'Text':
+                return null;
                 break;
 
-            case 'Title': //todo: validator for texts with signs
-                return new Zend_Validate_Alnum(true);
+            case 'Title':
+                return null;
                 break;
 
             case 'Year':
@@ -510,6 +519,8 @@ class Publish_Form_PublishingSecond extends Zend_Form {
             $group = array();
         }
 
+        $start_time = microtime(true);
+
         $role = Opus_CollectionRole::fetchByOaiName('projects');
         $this->log->debug("Role ID: " . $role->getId());
         $colls = Opus_Collection::fetchCollectionsByRoleId($role->getId());
@@ -519,9 +530,13 @@ class Publish_Form_PublishingSecond extends Zend_Form {
             if (strlen($coll->getNumber()) >= 2)
                 $data[$coll->getNumber()] = $coll->getNumber();
         }
-        
+
         $this->_addSelect('projects', $elementName, $validator, $required, $label, $data);
         $group[] = $elementName;
+
+        $delta_time = microtime(true) - $start_time;
+        $this->log->debug("time to fetch projects: $delta_time");
+
         return $group;
     }
 
@@ -619,7 +634,8 @@ class Publish_Form_PublishingSecond extends Zend_Form {
     protected function _addFormElement($formElement, $elementName, $validator, $required, $label) {
         $formField = $this->createElement($formElement, $elementName);
         $formField->setLabel($label);
-        $formField->addValidator($validator);
+        if (isset($validator))
+            $formField->addValidator($validator);
         if ($required == 'yes')
             $formField->setRequired(true);
 
@@ -648,7 +664,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         $elementAttributes["error"] = $element->getMessages();
         $elementAttributes["id"] = $element->getId();
         $elementAttributes["type"] = $element->getType();
-        $elementAttributes["hint"] = $elementName . 'Hint';
+        $elementAttributes["hint"] = 'hint_' . $elementName;
 
         if ($element->getType() === 'Zend_Form_Element_Select')
             $elementAttributes["options"] = $element->getMultiOptions(); //array

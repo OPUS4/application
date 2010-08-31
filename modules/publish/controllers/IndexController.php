@@ -62,7 +62,7 @@ class Publish_IndexController extends Controller_Action {
         $log->debug("Module Publishing <=> PublishingFirst was created.");
         $action_url = $this->view->url(array('controller' => 'index', 'action' => 'step2'));
         $form->setMethod('post');
-        $form->setAction($action_url);
+        $form->setAction($action_url);        
         $this->view->form = $form;
     }
 
@@ -74,7 +74,9 @@ class Publish_IndexController extends Controller_Action {
      */
     public function step2Action() {
         $log = Zend_Registry::get('Zend_Log');
-
+        //disable language selection for template usage and possible refreshing forms
+        $this->view->languageSelectorDisabled = true;
+        
         //check the input from step 1
         $step1Form = new Publish_Form_PublishingFirst();
         if ($this->getRequest()->isPost() === true) {
@@ -126,13 +128,14 @@ class Publish_IndexController extends Controller_Action {
             // STEP 2: BUILD THE FORM THAT DEPENDS ON THE DOC TYPE
             //use a specified view for the document type
             $this->_helper->viewRenderer($this->documentType);
-
+            //$this->view->documentType = $this->documentType;
             //create the form
             $step2Form = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $fulltext, null, null);
             $action_url = $this->view->url(array('controller' => 'index', 'action' => 'check'));
             $step2Form->setAction($action_url);
             $step2Form->setMethod('post');
             $this->setViewVariables($step2Form);
+            
             $this->view->action_url = $action_url;
             $this->view->form = $step2Form;
         }
@@ -145,6 +148,7 @@ class Publish_IndexController extends Controller_Action {
      */
     public function checkAction() {
         $log = Zend_Registry::get('Zend_Log');
+        $this->view->languageSelectorDisabled = true;
 
         if ($this->getRequest()->isPost() === true) {
 
@@ -349,7 +353,12 @@ class Publish_IndexController extends Controller_Action {
                 }
             }
             $document->setServerState('unpublished');
-            $document->store();
+            $docId = $document->store();
+            //finally send an emial to the referrer named in config.ini
+            $mail = new Mail_PublishNotification($docId, $this->view);
+            if ($mail->send() === false)
+                    $log->err("Mail an Gutachter konnte nicht verschickt werden!");
+            
         }
     }
 

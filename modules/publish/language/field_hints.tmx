@@ -1,0 +1,268 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+ 
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+  
+  <body>
+<!-- This language file contains all texts concerning field hints. -->
+
+    <tu tuid="hint_groupPersonAuthor">
+        <tuv xml:lang="en">
+            <seg>Please enter the contact information of the authors. You may add more authors by clicking on the button (or delete them).</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie hier bitte die Kontaktdaten der Autoren ein. Sie können durch Klicken auf den Button weitere Autoren hinzufügen (oder wieder löschen).</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_PersonAuthor1FirstName">
+        <tuv xml:lang="en">
+            <seg>Please enter the first name of an author.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte den Vornamen eines Autoren ein.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_PersonAuthor1LastName">
+        <tuv xml:lang="en">
+            <seg>Please enter the last name of an author.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte den Nachnamen eines Autoren ein.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_PersonAuthorFirstName">
+        <tuv xml:lang="en">
+            <seg>Please enter the first name of an author.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte den Vornamen eines Autoren ein.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_PersonAuthorLastName">
+        <tuv xml:lang="en">
+            <seg>Please enter the last name of an author.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte den Nachnamen eines Autoren ein.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_Language">
+        <tuv xml:lang="en">
+            <seg>Please enter the language of the documents content.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte die Sprache des Dokumenteninhalts ein.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_groupTitleMain">
+        <tuv xml:lang="en">
+            <seg>Please enter the possible main titles. You may add more titles by clicking on the button (or delete them).</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie hier bitte die möglichen Haupttitel und ihre jeweiligen Sprachen ein. Sie können durch Klicken auf den Button weitere Titel hinzufügen (oder wieder löschen).</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_TitleMain1">
+        <tuv xml:lang="en">
+            <seg>Please enter the documents main title.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte den Titel des Dokuments ein.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_TitleMain">
+        <tuv xml:lang="en">
+            <seg>Please enter the documents main title.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte den Titel des Dokuments ein.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_TitleMain1Language">
+        <tuv xml:lang="en">
+            <seg>Please enter the language of the documents main title.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Wählen Sie bitte die Sprache des Dokumententitels aus.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_TitleMainLanguage">
+        <tuv xml:lang="en">
+            <seg>Please enter the language of the documents main title.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Wählen Sie bitte die Sprache des Dokumententitels aus.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_groupTitleAbstract">
+        <tuv xml:lang="en">
+            <seg>Please enter the possible abstracts. You may add more abstracts by clicking on the button (or delete them).</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie hier bitte die möglichen Zusammenfassung Ihres Dokumentes und ihre jeweiligen Sprachen ein. Sie können durch Klicken auf den Button weitere Abstracts hinzufügen (oder wieder löschen).</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_TitleAbstract1">
+        <tuv xml:lang="en">
+            <seg>Please enter the documents abstract.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte den Abstract des Dokuments ein.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_TitleAbstract">
+        <tuv xml:lang="en">
+            <seg>Please enter the documents abstract.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte den Abstract des Dokuments ein.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_TitleAbstract1Language">
+        <tuv xml:lang="en">
+            <seg>Please enter the language of the documents abstract.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Wählen Sie bitte die Sprache des Abstracts aus.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_TitleAbstractLanguage">
+        <tuv xml:lang="en">
+            <seg>Please enter the language of the documents abstract.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Wählen Sie bitte die Sprache des Abstracts aus.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_groupProject">
+        <tuv xml:lang="en">
+            <seg>Please choose the documents Matheon projects. You may add more projects by clicking on the button (or delete them).</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Wählen Sie hier bitte die zugehörigen Matheon Projekte Ihres Dokumentes aus. Sie können durch Klicken auf den Button weitere Projekte hinzufügen (oder wieder löschen)</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_Project1">
+        <tuv xml:lang="en">
+            <seg>Please choose the documents Matheon projects.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Wählen Sie bitte die zugehörigen Matheon Projekte Ihres Dokumentes aus.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_Project">
+        <tuv xml:lang="en">
+            <seg>Please choose the documents Matheon projects.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Wählen Sie bitte die zugehörigen Matheon Projekte Ihres Dokumentes aus.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_groupSubjectMSC">
+        <tuv xml:lang="en">
+            <seg>Please enter the MSC classes of the document. You may add more MSC classes by clicking on the button (or delete them).<br />
+See the manual at <a href="http://www.ams.org/mathscinet/msc/msc2010.html" target="tab" >http://www.ams.org/mathscinet/msc/msc2010.html</a>.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie hier bitte die MSC Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen).<br />
+Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathscinet/msc/msc2010.html" target="tab" >http://www.ams.org/mathscinet/msc/msc2010.html</a></seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_SubjectMSC1">
+        <tuv xml:lang="en">
+            <seg>Please enter a MSC class.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte eine MSC Klasse ein.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_SubjectMSC">
+        <tuv xml:lang="en">
+            <seg>Please enter a MSC class.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte eine MSC Klasse ein.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_groupSubjectUncontrolled">
+        <tuv xml:lang="en">
+            <seg>Please enter keywords of the document. You may add more keywords by clicking on the button (or delete them).</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie hier bitte frei wählbare Keywords Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Keywords hinzufügen (oder wieder löschen).</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_SubjectUncontrolled1">
+        <tuv xml:lang="en">
+            <seg>Please enter a subject of your choice.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte ein beliebiges Schlagwort ein.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_SubjectUncontrolled">
+        <tuv xml:lang="en">
+            <seg>Please enter a subject of your choice.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte ein beliebiges Schlagwort ein.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_groupNote">
+        <tuv xml:lang="en">
+            <seg>You have the possibility to upload notices or a message along with your document.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Sie haben die Möglichkeit, gemeinsam mit Ihrem Dokument Notizen oder eine Nachricht auf unseren Server hochzuladen.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_Note1">
+        <tuv xml:lang="en">
+            <seg>Room for a notification...</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Raum für Notizen und Benachrichtigungen...</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_Note">
+        <tuv xml:lang="en">
+            <seg>Room for a notification...</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Raum für Notizen und Benachrichtigungen...</seg>
+        </tuv>
+    </tu>
+
+
+    
+    </body>
+</tmx>

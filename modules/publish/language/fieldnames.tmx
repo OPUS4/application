@@ -7,6 +7,17 @@
   
   <body>
 
+
+    <tu tuid="button_label_add_one_morePersonAuthor">
+        <tuv xml:lang="en">
+            <seg>Add one more author</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Einen weiteren Autoren hinzufügen</seg>
+        </tuv>
+    </tu>
+
+
   <tu tuid="PersonSubmitterFirstName">
       <tuv xml:lang="en">
         <seg>Submitter: First name</seg>

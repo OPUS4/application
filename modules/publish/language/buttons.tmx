@@ -1,0 +1,120 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+ 
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+  
+  <body>
+<!-- This language file contains all texts concerning button labels. -->
+
+    <tu tuid="button_label_add_one_morePersonAuthor">
+        <tuv xml:lang="en">
+            <seg>Add one more author</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Einen weiteren Autoren hinzufügen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_deletePersonAuthor">
+        <tuv xml:lang="en">
+            <seg>Delete the last author</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Den letzten Autoren löschen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_add_one_moreTitleMain">
+        <tuv xml:lang="en">
+            <seg>Add one more main title</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Einen weiteren Titel hinzufügen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_deleteTitleMain">
+        <tuv xml:lang="en">
+            <seg>Delete the last main title</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Den letzten Titel löschen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_add_one_moreTitleAbstract">
+        <tuv xml:lang="en">
+            <seg>Add one more abstract</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Einen weiteren Abstract hinzufügen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_deleteTitleAbstract">
+        <tuv xml:lang="en">
+            <seg>Delete the last abstract</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Den letzten Abstract löschen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_add_one_moreProject">
+        <tuv xml:lang="en">
+            <seg>Add one more project</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Ein weiteres Projekt hinzufügen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_deleteProject">
+        <tuv xml:lang="en">
+            <seg>Delete the last project</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Das letzte Projekt löschen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_add_one_moreSubjectMSC">
+        <tuv xml:lang="en">
+            <seg>Add one more MSC Word</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Ein weiteres MSC Wort hinzufügen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_deleteSubjectMSC">
+        <tuv xml:lang="en">
+            <seg>Delete the last MSC subject</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Die letzte MSC Klasse löschen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_add_one_moreSubjectUncontrolled">
+        <tuv xml:lang="en">
+            <seg>Add one more subject</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Ein weiteres Schlagwort hinzufügen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_deleteSubjectUncontrolled">
+        <tuv xml:lang="en">
+            <seg>Delete the last keyword</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Das letzte Schlagwort löschen</seg>
+        </tuv>
+    </tu>
+
+    </body>
+</tmx>
