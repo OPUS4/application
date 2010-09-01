@@ -326,10 +326,6 @@ class Search_BrowsingController extends Zend_Controller_Action
                 $numberOfDocuments = count($documentsIds);
                 $this->view->numberOfDocuments = $numberOfDocuments;
 
-                if ($numberOfDocuments < 1) {
-                    throw new Exception("bar");
-                }
-
                 if ($numberOfDocuments > 0) {
                     $searchListItemCount = 0;
                     // iterate the paginator and get the attributes we want to show in the view
