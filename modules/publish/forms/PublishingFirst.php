@@ -70,20 +70,28 @@ class Publish_Form_PublishingFirst extends Zend_Form {
 
         // get path to store files
         $tempPath = $this->config->path->workspace->temp;
-        if (true === empty($tempPath)) {
-            $tempPath = '../workspace/tmp/';
-        }
+        if (true === empty($tempPath)) 
+            $tempPath = '../workspace/tmp/';        
 
         // get allowed filetypes
         $filetypes = $this->config->publish->filetypes->allowed;
-        if (true === empty($filetypes)) {
+        if (true === empty($filetypes)) 
             $filetypes = 'pdf,txt,html,htm';
-        }
+        
         //get allowed file size
         $maxFileSize = (int) $this->config->publish->maxfilesize;
+        if (true === empty($maxFileSize))
+            $maxFileSize = 1024000; //1MB
 
         //get the initial number of file fields, toto: aus der config holen
         $number_of_files = (int) $this->config->form->first->numberoffiles;
+        if (true === empty($number_of_files))
+            $number_of_files = 1;
+
+        //show Bibliographie?
+        $bib = $this->config->form->first->bibliographie == 1;
+        if (true === empty($bib))
+            $bib = 0;
 
         $fileupload = $this->createElement('File', 'fileupload');
         $fileupload->setLabel('fileupload')
@@ -93,10 +101,10 @@ class Publish_Form_PublishingFirst extends Zend_Form {
                 ->addValidator('Size', false, $maxFileSize) // limit to value given in application.ini
                 ->addValidator('Extension', false, $filetypes); // allowed filetypes by extension
 
-        //show Bibliographie?
-        if ($this->config->form->first->bibliographie == 1) {
-            $bib = $this->createElement('checkbox', 'bibliographie');
-            $bib->setLabel('bibliographie');
+
+        if ($bib === 1) {
+            $bibliographie = $this->createElement('checkbox', 'bibliographie');
+            $bibliographie->setLabel('bibliographie');
         }
         
 
@@ -110,7 +118,7 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         $this->addElements(array($doctypes, $fileupload));
         //show Bibliographie?
         if ($this->config->form->first->bibliographie == 1) {
-            $this->addElement($bib);
+            $this->addElement($bibliographie);
         }
 
         $this->addElements(array($documentId, $submit));
