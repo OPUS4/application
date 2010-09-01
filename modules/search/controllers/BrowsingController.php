@@ -310,7 +310,11 @@ class Search_BrowsingController extends Controller_Action {
                 $this->view->page = $this->_getParam("page");
                 #$this->view->hitlist_paginator = Zend_Paginator::factory(Opus_Search_List_CollectionNode::getDocumentIds($collection, $node));
 
-                $documentsIds = $browsingListProduct->getDocumentIds();
+                $documentsIds = array();
+                if ($browsingListProduct instanceof Opus_Collection) {
+                    $documentsIds = $browsingListProduct->getDocumentIds();
+                }
+
                 $documents_paginator = Zend_Paginator::factory($documentsIds);
                 if ($this->view->page > 0) {
                     $documents_paginator->setCurrentPageNumber($this->view->page);
