@@ -15,7 +15,7 @@
 	
 	<opus:field name="Project" required="no" formelement="select" datatype="Project" multiplicity="*" />
 
-	<opus:field name="SubjectMSC" required="yes" formelement="text"  datatype="Text" multiplicity="5" />
+	<opus:field name="SubjectMSC" required="yes" formelement="text"  datatype="msc" multiplicity="5" />
 	
 	<!-- für Keywords -->
 	<opus:field name="SubjectUncontrolled" required="no" formelement="text"  datatype="Text" multiplicity="5" />
