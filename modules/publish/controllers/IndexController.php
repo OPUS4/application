@@ -100,8 +100,8 @@ class Publish_IndexController extends Controller_Action {
             $upload = new Zend_File_Transfer_Adapter_Http();
             $files = $upload->getFileInfo();
 
-            if (count($files) >= 1) {
-                $log->info("Fileupload of: " . count($files) . " files => Fulltext is '1'.");
+            if ($upload->isUploaded()) {
+                $log->info("Fileupload of: " . count($files) . " possible files => Fulltext is '1'.");
                 $fulltext = "1";
                 $document = new Opus_Document();
                 $document->setType($this->documentType);
@@ -121,15 +121,14 @@ class Publish_IndexController extends Controller_Action {
             }
             else
                 $log->info("No file uploaded: => Fulltext is NOT given.");
-
+            
             $log->debug("TYPE -step2-: " . $this->documentType);
             $log->debug("ID -step2-: " . $this->documentId);
             $log->debug("Fulltext -step2-: " . $fulltext);
 
             // STEP 2: BUILD THE FORM THAT DEPENDS ON THE DOC TYPE
-            //use a specified view for the document type
-            $this->_helper->viewRenderer($this->documentType);
-            //$this->view->documentType = $this->documentType;
+           $this->_helper->viewRenderer($this->documentType);
+           
             //create the form
             $step2Form = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $fulltext, null, null);
             $action_url = $this->view->url(array('controller' => 'index', 'action' => 'check'));
@@ -390,6 +389,8 @@ class Publish_IndexController extends Controller_Action {
                     $name = substr($currentElement, 0, $pos);
                 else
                     $name=$currentElement; //"normal" element name without changes
+
+
             }
 
             $groupName = 'group' . $name;
@@ -715,12 +716,11 @@ class Publish_IndexController extends Controller_Action {
                 $collArray = Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $value);
                 $log->debug("Role ID: " . $role->getId() . ", value: " . $value);
 
-                if (count($collArray) === 1) {
-                    $document->addCollection($collArray[0]);
-                    //return;
+                if ($collArray !== null && count($collArray) <= 1) {
+                    $document->addCollection($collArray[0]);                    
                 } else
-                    throw new Publish_Model_OpusServerException("While trying to store " . $key . " as Collection, an error occurred.
-                        The method fetchCollectionsByRoleNumber returned an array with > 1 values. The " . $key . " cannot be definitely assigned.");
+                    throw new Publish_Model_OpusServerException("While trying to store " . $key . " as Collection, an error occurred.".
+                        "The method fetchCollectionsByRoleNumber returned an array with > 1 values. The " . $key . " cannot be definitely assigned.");
                 $subject = new Opus_Subject();
                 $log->debug("subject has also be stored as subject.");
             } else {

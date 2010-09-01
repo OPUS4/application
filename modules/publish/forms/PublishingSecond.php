@@ -50,8 +50,11 @@ class Publish_Form_PublishingSecond extends Zend_Form {
     public $institutes = array();
     //array of projects
     public $projects = array();
+    //array of msc classifications
+    public $msc = array();
     //array of languages
     public $languages = array();
+
 
     public function __construct($type, $id, $fulltext, $additionalFields, $postData, $options=null) {
         $this->doctype = $type;
@@ -208,6 +211,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
                 $requiredIfFulltext = $field->getElementsByTagName("required-if-fulltext");
                 //case: fulltext => overwrite the $required value with yes
                 if ($requiredIfFulltext->length != 0) {
+                    $this->log->debug($elementName . " is required-if-fulltext! And Fulltext ist set to " . $this->fulltext );
                     $required = "yes";
                 }
             }
@@ -405,6 +409,10 @@ class Publish_Form_PublishingSecond extends Zend_Form {
 
             case 'Licence' :
                 return new Zend_Validate_InArray(Opus_Licence::getAll());
+                break;
+
+            case 'msc' :
+                return new Zend_Validate_InArray($this->getCollection('msc'));
                 break;
 
             case 'Person':
