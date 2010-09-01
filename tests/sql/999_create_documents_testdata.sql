@@ -126,7 +126,8 @@ INSERT INTO `documents` (`id`, `completed_date`, `completed_year`, `contributing
 (107, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL, 0),
 (108, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL, 0),
 (109, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL, 0),
-(110, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL, 0);
+(110, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL, 0),
+(111, NULL, 2035, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'published', NULL, 0);
 
 
 --
@@ -1171,7 +1172,9 @@ INSERT INTO `document_title_abstracts` (`id`, `document_id`, `type`, `value`, `l
 (245, 107, 'main', 'Another day in the life of an Opus developer.', 'eng'),
 (246, 108, 'main', 'Wally - The vegetarian walruss.', 'eng'),
 (247, 109, 'main', 'What to do if your build is broken!', 'eng'),
-(248, 110, 'main', 'Internet access broken? - What you could do instead.', 'eng');
+(248, 110, 'main', 'Internet access broken? - What you could do instead.', 'eng'),
+(249, 111, 'main', '<script type="text/javascript">alert(\'title_main\');</script>', 'de'),
+(250, 111, 'abstract', '<script type="text/javascript">alert(\'title_abstract\');</script> test ', 'de');
 
 --
 -- Daten für Tabelle `file_hashvalues`
