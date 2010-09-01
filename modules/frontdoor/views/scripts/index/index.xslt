@@ -54,7 +54,7 @@
  
     <xsl:param name="baseUrl" />
     <xsl:param name="layoutPath" />
-    <xsl:param name="documentsUrl" />
+    <xsl:param name="deliverUrlPrefix" />
 
     <xsl:template match="/"> 
        <div about="{/Opus/Opus_Model_Filter/TitleMain/@Value}"> 
@@ -582,7 +582,8 @@
            <xsl:element name="a">
               <!-- TODO: Use Zend Url-Helper to build href attribute -->
               <xsl:attribute name="href">
-                <xsl:value-of select="$documentsUrl"/>
+                <xsl:value-of select="$deliverUrlPrefix"/>
+                <xsl:text>/</xsl:text>
                 <xsl:value-of select="@DocumentId" />
                 <xsl:text>/</xsl:text>
                 <xsl:value-of select="@PathName" />

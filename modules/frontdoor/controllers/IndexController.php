@@ -82,9 +82,14 @@ class Frontdoor_IndexController extends Controller_Action {
             }
             $layoutPath = $baseUrl .'/layouts/'. $theme;
 
+            $deliver_url_prefix = '/documents';
+            if (isset($config->deliver->url->prefix)) {
+                $deliver_url_prefix = $config->deliver->url->prefix;
+            }
+
             $proc->setParameter('', 'baseUrl', $baseUrl);
             $proc->setParameter('', 'layoutPath', $layoutPath);
-            $proc->setParameter('', 'documentsUrl', '/documents-foobar/');
+            $proc->setParameter('', 'deliverUrlPrefix', "$deliver_url_prefix");
 
             // Transform to HTML
             $this->view->frontdoor = $proc->transformToXML($xml);
