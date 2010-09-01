@@ -272,8 +272,7 @@ class Search_BrowsingController extends Zend_Controller_Action
     {
     	$list = $this->_getParam("list");
     	$this->view->list = $list;
-       	switch ($list)
-    	{
+       	switch ($list) {
             case 'persons':
                 $role = $this->_getParam("role");
                 $this->view->role = $role;
@@ -283,55 +282,55 @@ class Search_BrowsingController extends Zend_Controller_Action
                 $browsingListProduct = $browsingList->getBrowsingList();
                 $this->view->browsinglist = new Opus_Search_Iterator_PersonsListIterator($browsingListProduct);
                 break;
-    	    case 'authors':
-    			$this->view->title = $this->view->translate('search_index_authors_browsing');
-				$browsingList = new Search_Model_BrowsingListFactory($list);
-				$browsingListProduct = $browsingList->getBrowsingList();
-				$this->view->browsinglist = new Opus_Search_Iterator_PersonsListIterator($browsingListProduct);
-				break;
+            case 'authors':
+                $this->view->title = $this->view->translate('search_index_authors_browsing');
+                $browsingList = new Search_Model_BrowsingListFactory($list);
+                $browsingListProduct = $browsingList->getBrowsingList();
+                $this->view->browsinglist = new Opus_Search_Iterator_PersonsListIterator($browsingListProduct);
+                break;
             case 'editors':
                 $this->view->title = $this->view->translate('search_index_editors_browsing');
                 $browsingList = new Search_Model_BrowsingListFactory($list);
                 $browsingListProduct = $browsingList->getBrowsingList();
                 $this->view->browsinglist = new Opus_Search_Iterator_PersonsListIterator($browsingListProduct);
                 break;
-			case 'doctypes':
-				$this->view->title = $this->view->translate('search_index_doctype_browsing');
-				$browsingList = new Search_Model_BrowsingListFactory($list);
-				$browsingListProduct = $browsingList->getBrowsingList();
-				$this->view->browsinglist = $browsingListProduct;
-				break;
-			case 'collection':
-				$node = $this->_getParam("node");
-				if (isset($node) === false) $node = 0;
-				$collection = $this->_getParam("collection");
-				$this->view->collection = $this->_getParam("collection");
-				if (isset($collection) === false) $collection = 0;
-				$browsingList = new Search_Model_BrowsingListFactory($list, null, $collection, $node);
-				$browsingListProduct = $browsingList->getBrowsingList();
+            case 'doctypes':
+                $this->view->title = $this->view->translate('search_index_doctype_browsing');
+                $browsingList = new Search_Model_BrowsingListFactory($list);
+                $browsingListProduct = $browsingList->getBrowsingList();
+                $this->view->browsinglist = $browsingListProduct;
+                break;
+            case 'collection':
+                $node = $this->_getParam("node");
+                if (isset($node) === false)
+                    $node = 0;
+                $collection = $this->_getParam("collection");
+                $this->view->collection = $this->_getParam("collection");
+                if (isset($collection) === false)
+                    $collection = 0;
+                $browsingList = new Search_Model_BrowsingListFactory($list, null, $collection, $node);
+                $browsingListProduct = $browsingList->getBrowsingList();
 
                 $this->view->title = $browsingListProduct->getDisplayName('browsing');
-				$this->view->browsinglist = $browsingListProduct;
-				$this->view->page = $this->_getParam("page");
-				#$this->view->hitlist_paginator = Zend_Paginator::factory(Opus_Search_List_CollectionNode::getDocumentIds($collection, $node));
-				
-				// check for documents in this collection
-                $documents = array();
-                try {
-                    $documents = $browsingListProduct->getEntries();
-                    $documents_paginator = Zend_Paginator::factory($documents);
-                    if ($this->view->page > 0) {
-            	        $documents_paginator->setCurrentPageNumber($this->view->page);
-                    }
-                    $this->view->documents_paginator = $documents_paginator;
+                $this->view->browsinglist = $browsingListProduct;
+                $this->view->page = $this->_getParam("page");
+                #$this->view->hitlist_paginator = Zend_Paginator::factory(Opus_Search_List_CollectionNode::getDocumentIds($collection, $node));
+
+                $documentsIds = $browsingListProduct->getDocumentIds();
+                $documents_paginator = Zend_Paginator::factory($documentsIds);
+                if ($this->view->page > 0) {
+                    $documents_paginator->setCurrentPageNumber($this->view->page);
                 }
-                catch (Exception $e) {
-                    // presumably this is a collection role
-                    // no action necessary
-                }
-                $numberOfDocuments = count($documents);
+                $this->view->documents_paginator = $documents_paginator;
+
+                $numberOfDocuments = count($documentsIds);
                 $this->view->numberOfDocuments = $numberOfDocuments;
-	            if ($numberOfDocuments > 0) {
+
+                if ($numberOfDocuments < 1) {
+                    throw new Exception("bar");
+                }
+
+                if ($numberOfDocuments > 0) {
                     $searchListItemCount = 0;
                     // iterate the paginator and get the attributes we want to show in the view
                     $runningIndex = 0;
@@ -340,8 +339,8 @@ class Search_BrowsingController extends Zend_Controller_Action
                     $this->view->author = array();
                     $this->view->url_frontdoor = array();
                     $this->view->url_author = array();
-                    foreach ($documents_paginator as $d) {
-                    	$id = $d->getId();
+                    foreach ($documents_paginator as $id) {
+                        $d = new Opus_Document($id);
                         $url_frontdoor = array(
                             'module' => 'frontdoor',
                             'controller' => 'index',
@@ -358,44 +357,44 @@ class Search_BrowsingController extends Zend_Controller_Action
                             $this->view->docState = 'undefined';
                         }
 
-                        try{
-                        $c = count($d->getPersonAuthor());
-                        $this->view->author[$runningIndex] = array();
-                        $this->view->url_author[$runningIndex] = array();
-                        for ($counter = 0; $counter < $c; $counter++) {
-        	                $name = $d->getPersonAuthor($counter)->getName();
-                            $this->view->url_author[$runningIndex][$counter] = $this->view->url(
-                                array(
-                                    'module'        => 'search',
-                                    'controller'    => 'search',
-                                    'action'        => 'metadatasearch',
-                                    'author'        => $name
-                                ),
-                                null,
-                                true
-                            );
-                            $this->view->author[$runningIndex][$counter] = $name;
-                        }
+                        try {
+                            $c = count($d->getPersonAuthor());
+                            $this->view->author[$runningIndex] = array();
+                            $this->view->url_author[$runningIndex] = array();
+                            for ($counter = 0; $counter < $c; $counter++) {
+                                $name = $d->getPersonAuthor($counter)->getName();
+                                $this->view->url_author[$runningIndex][$counter] = $this->view->url(
+                                                array(
+                                                    'module' => 'search',
+                                                    'controller' => 'search',
+                                                    'action' => 'metadatasearch',
+                                                    'author' => $name
+                                                ),
+                                                null,
+                                                true
+                                );
+                                $this->view->author[$runningIndex][$counter] = $name;
+                            }
                         }
                         catch (Exception $e) {
-                        	//no author
-                        	$this->view->author[$runningIndex] = null;
+                            //no author
+                            $this->view->author[$runningIndex] = null;
                         }
                         try {
                             $this->view->doctitle[$runningIndex] = $d->getTitleMain(0)->getValue();
                         }
                         catch (Exception $e) {
-            	            $this->view->doctitle[$runningIndex] = $this->view->translate('document_no_title') . $id;
+                            $this->view->doctitle[$runningIndex] = $this->view->translate('document_no_title') . $id;
                         }
                         $runningIndex++;
                     }
-	            }
+                }
 
                 // Get the theme assigned to this collection iff usertheme is
                 // set in the request.  To enable the collection theme, add
                 // /usetheme/1/ to the browsing URL.
                 $usetheme = $this->_getParam("usetheme");
-                if (isset ($usetheme) === true && 1 === (int)$usetheme) {
+                if (isset($usetheme) === true && 1 === (int) $usetheme) {
                     // $this->_helper->layout->setLayout('../' . $browsingListProduct->getTheme() . '/common');
                     $this->_helper->layout->setLayoutPath(APPLICATION_PATH . '/public/layouts/' . $browsingListProduct->getTheme());
                 }
@@ -403,15 +402,16 @@ class Search_BrowsingController extends Zend_Controller_Action
                 // If node === 0, then this collection actually is a CollectionRole
                 // and we want to translate the title (if specified).
                 $translatelabel = 'search_index_custom_browsing_' . $this->view->title;
-                if ($node === 0 && !($translatelabel === $this->view->translate($translatelabel)) ) {
+                if ($node === 0 && !($translatelabel === $this->view->translate($translatelabel))) {
                     $this->view->title = $this->view->translate($translatelabel);
                 }
 
-				break;
-			default:
-				$this->view->title = $this->view->translate('search_index_alltitles_browsing');
-				// Just to be there... List is not supported (Exception is thrown by BrowsingListFactory)
-    	}
+                break;
+            default:
+                $this->view->title = $this->view->translate('search_index_alltitles_browsing');
+               // Just to be there... List is not supported (Exception is thrown by BrowsingListFactory)
+        }
+
     }
     
     /**
