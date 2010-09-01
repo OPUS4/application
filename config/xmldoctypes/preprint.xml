@@ -5,11 +5,11 @@
 	
 	<opus:field name="PersonAuthor" required="yes" formelement="text" datatype="Person" multiplicity="*" />
 	<opus:field name="Language" required="yes" formelement="text"  datatype="Language" multiplicity="1"/>
-	<!-- wird implementiert, sobald die Institutstabelle existiert!
-	<opus:field name="Institute" formelement="textarea" required="yes"  datatype="Text" multiplicity="1" />-->
+	
+	<opus:field name="Institute" formelement="select" required="yes"  datatype="Institute" multiplicity="*" />
 	<opus:field name="TitleMain" formelement="text" required="yes"  datatype="Title" multiplicity="4" />
 
-	<opus:field name="TitleAbstract" required="no" formelement="text"  datatype="Title" multiplicity="4">
+	<opus:field name="TitleAbstract" required="no" formelement="textarea"  datatype="Title" multiplicity="4">
 		<opus:required-if-fulltext/>
     </opus:field>	
 	

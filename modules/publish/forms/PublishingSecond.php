@@ -323,7 +323,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
                 $this->addElement($countMoreHidden);
                 $group[] = $countMoreHidden->getName();
 
-                $this->log->debug("CountMoreHidden for element " . $elementName . " is set to value " . $currentNumber);
+                //$this->log->debug("CountMoreHidden for element " . $elementName . " is set to value " . $currentNumber);
                 if ($multiplicity == "*")
                     $multiplicity = 99;
                 else
@@ -354,7 +354,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
 
             //add a displaygroup to the form for grouping same elements
             $displayGroup = $this->addDisplayGroup($group, $groupName);
-            $this->log->debug("Added Displaygroup to form: " . $groupName);
+            //$this->log->debug("Added Displaygroup to form: " . $groupName);
         } else {
             //additionalFields == null means initial state -> field is shown one time and can be demanded
             //button and hidden element that carries the value of how often the element has to be shown
@@ -369,7 +369,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
             $group[] = $addMoreButton->getName();
 
             $displayGroup = $this->addDisplayGroup($group, $groupName);
-            $this->log->debug("Added Displaygroup to form: " . $groupName);
+            //$this->log->debug("Added Displaygroup to form: " . $groupName);
         }
     }
 
@@ -743,20 +743,23 @@ class Publish_Form_PublishingSecond extends Zend_Form {
     protected function getLanguages() {
         $languages = array();
         if (empty($this->languages)) {
-            $this->log->debug("Lanaguages has to fetched from Registry!");
+            $this->log->debug("Languages has to fetched from Registry!");
             if (Zend_Registry::isRegistered('Available_Languages') === true) {
                 $languages = Zend_Registry::get('Available_Languages');
+                $this->languages = $languages;
 
                 return $languages;
             } else {
-                $this->log->debug("Lanaguages has to fetched from Database!");
+                $this->log->debug("Languages has to fetched from Database!");
                 foreach (Opus_Language::getAllActive() as $lan)
                     $languages[$lan->getPart2B()] = $lan->getDisplayName();
-
+                $this->languages = $languages;
+                
                 return $languages;
             }
+            
         } else {
-            $this->log->debug("Lanaguages can be fetched from cache!");
+            $this->log->debug("Languages can be fetched from cache!");
             return $this->languages;
         }
     }

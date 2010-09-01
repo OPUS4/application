@@ -166,11 +166,12 @@ class View_Helper_Field extends Zend_View_Helper_Abstract {
                         break;
 
                     case "Zend_Form_Element_Textarea":
-                        $fieldset .= "\n\t\t\t\t<textarea cols='30' rows='9' name='" . $field["id"] . "' id='" . $field["id"] . "'>";
+                        $fieldset .= "\n\t\t\t\t<textarea cols='30' rows='9' name='" . $field["id"] . "'";
 
                         if (strstr($field["id"], "1"))
                             $fieldset .= " title='" . $this->view->translate($field["hint"]) . "' ";
-                        $fieldset .= $field["value"] . "</textarea>";
+                        
+                        $fieldset .=  " id='" . $field["id"] . "'>". $field["value"] . "</textarea>";
 
                         if ($field["req"] === 'required')
                             $fieldset .= $this->getRequiredSign();
