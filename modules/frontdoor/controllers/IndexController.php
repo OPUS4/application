@@ -84,6 +84,7 @@ class Frontdoor_IndexController extends Controller_Action {
 
             $proc->setParameter('', 'baseUrl', $baseUrl);
             $proc->setParameter('', 'layoutPath', $layoutPath);
+            $proc->setParameter('', 'documentsUrl', '/documents-foobar/');
 
             // Transform to HTML
             $this->view->frontdoor = $proc->transformToXML($xml);
