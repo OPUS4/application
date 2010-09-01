@@ -65,7 +65,16 @@ $application = new Zend_Application(
     )
 );
 
-$application->bootstrap()
-            ->run();
+try {
+    $application->bootstrap()->run();
+}
+catch (Exception $e) {
+    if (APPLICATION_ENV === 'production') {
+        echo $e->getMessage();
+    }
+    else {
+        throw $e;
+    }
+}
 
 ?>
