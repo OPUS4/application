@@ -714,7 +714,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
             $this->log->debug($oaiName . " has to be fetched from database!");
             $role = Opus_CollectionRole::fetchByOaiName($oaiName);
             if ($role === null)
-                throw Publish_Model_OpusServerException("No Collections found in database for " . $oaiName);
+                throw new Publish_Model_OpusServerException("No Collections found in database for " . $oaiName);
             else {
                 $colls = Opus_Collection::fetchCollectionsByRoleId($role->getId());
                 $collections = array();
