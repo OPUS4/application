@@ -3,7 +3,7 @@ echo '<h1>'.$this->title.'</h1>';
 echo '<h3>'.$this->subtitle.'</h3>';
 ?>        
     
-<form enctype="application/x-www-form-urlencoded" action="<?php echo $this->action_url; ?>" method="post">
+<form enctype="application/x-www-form-urlencoded" action="/opus4-devel/index.php/publish/index/check" method="post">
 
 <?= $this->field("Element", null, $this->PersonSubmitterFirstName_); ?>
 <?= $this->field("Element", null, $this->PersonSubmitterLastName_); ?>
@@ -21,21 +21,20 @@ echo '<h3>'.$this->subtitle.'</h3>';
 <?= $this->field("Element", null, $this->Journal_); ?>
 <?= $this->field("Element", null, $this->Institute_); ?>
 <?= $this->field("Element", null, $this->Collection_); ?>
-<?= $this->field("Element", null, $this->Publisher_); ?>
 <?= $this->field("Element", null, $this->PublishedYear_); ?>
 <?= $this->field("Element", null, $this->PublishedDate_); ?>
 <?= $this->field("Element", null, $this->PublisherName_); ?>
 <?= $this->field("Element", null, $this->PublisherPlace_); ?>
 <?= $this->field("Element", null, $this->CompletedYear_); ?>
 <?= $this->field("Element", null, $this->CompletedDate_); ?>
-<?= $this->field("Element", null, $this->ThesisDateAccepted_); ?>
-<?= $this->field("Element", null, $this->PublisherUniversity_); ?>
+<?= $this->field("Element", null, $this->ThesisDateAccepted); ?>
+<?= $this->field("Element", null, $this->ThesisPublisher); ?>
 <?= $this->field("Element", null, $this->IdentifierOpus3_); ?>
 <?= $this->field("Element", null, $this->IdentifierUrn_); ?>
 <?= $this->field("Element", null, $this->IdentifierIsbn_); ?>
 <?= $this->field("Element", null, $this->IdentifierIssn_); ?>
 <?= $this->field("Element", null, $this->IdentifierOpac_); ?>
-<?= $this->field("Element", null, $this->Grantor_); ?>
+<?= $this->field("Element", null, $this->ThesisGrantor); ?>
 <?= $this->field("Group", null, $this->groupPersonReferee); ?>
 <?= $this->field("Group", null, $this->groupPersonEditor); ?>
 <?= $this->field("Group", null, $this->groupPersonAdvisor); ?>
@@ -47,6 +46,8 @@ echo '<h3>'.$this->subtitle.'</h3>';
 <?= $this->field("Group", null, $this->groupSubjectUncontrolled); ?>
 <?= $this->field("Element", null, $this->ServerDateValid_); ?>
 <?= $this->field("Element", null, $this->Note_); ?>
+<?= $this->field("Element", null, $this->Licence_); ?>
+<?= $this->field("Element", null, $this->ServerDateUnlocking_); ?>
 
 <?= $this->field("Hidden", "fullText", $this->fullText); ?>
 <?= $this->field("Hidden", "documentType", "all"); ?>
