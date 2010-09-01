@@ -47,7 +47,7 @@
     <field name="TitleAbstract" required="no" formelement="Textarea" datatype="Title" multiplicity="4" >
         <required-if-fulltext />
     </field>
-    <field name="TitleSub" required="no" formelement="Text" datatype="Text" multiplicity="1"
+    <field name="TitleSub" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="TitleAdditional" required="no" formelement="Text" datatype="Title" multiplicity="1" />
     <field name="TitleParent" required="no" formelement="Text" datatype="Title" multiplicity="1" />
     <field name="PersonAuthor" required="no" formelement="Text" datatype="Person" multiplicity="*" />
@@ -85,6 +85,6 @@
     <field name="ServerDateUnlocking" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="ThesisDateAccepted" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="ThesisPublisher" required="no" formelement="Text" datatype="Text" multiplicity="1" />
-	<field name="ThesisGrantor" required="no" formelement="Text" datatype="Text" multiplicity="1" />
+    <field name="ThesisGrantor" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     
 </documenttype>
