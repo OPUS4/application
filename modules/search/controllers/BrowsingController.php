@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -36,40 +37,38 @@
  * Controller for any browsing operation
  *
  */
-class Search_BrowsingController extends Zend_Controller_Action
-{
-	/**
-	 * Just to be there. No actions taken.
-	 *
-	 * @return void
-	 *
-	 */
-    public function indexAction()
-    {
-		$this->view->title = $this->view->translate('search_index_browsing');
+class Search_BrowsingController extends Controller_Action {
+
+    /**
+     * Just to be there. No actions taken.
+     *
+     * @return void
+     *
+     */
+    public function indexAction() {
+        $this->view->title = $this->view->translate('search_index_browsing');
         $this->view->baseUrl = $this->getRequest()->getBaseUrl();
-		// Generate a list of all CollectionRoles existing in the repository and pass it as an Iterator to the View
-		$browsingList = new Search_Model_BrowsingListFactory("collectionRoles");
-		$browsingListProduct = $browsingList->getBrowsingList();
-		#print_r($browsingListProduct);
-		$this->view->browsinglist = $browsingListProduct;
+        // Generate a list of all CollectionRoles existing in the repository and pass it as an Iterator to the View
+        $browsingList = new Search_Model_BrowsingListFactory("collectionRoles");
+        $browsingListProduct = $browsingList->getBrowsingList();
+        #print_r($browsingListProduct);
+        $this->view->browsinglist = $browsingListProduct;
     }
 
-	/**
-	 * Build the hitlist to browse titles filtered by some criteria
-	 * Filter criteria has to be passed to the action by URL-parameter filter
-	 * Possible values for filter are:
-	 * author 	- the ID of a person in the OPUS database
-	 * doctype 	- the ID of a doctype in OPUS
-	 * ... to be continued
-	 *
-	 * If no (or an invalid) filter criteria is given, a complete list of all documents is passed to the view
-	 *
-	 * @return void
-	 *
-	 */
-    public function browsetitlesAction()
-    {
+    /**
+     * Build the hitlist to browse titles filtered by some criteria
+     * Filter criteria has to be passed to the action by URL-parameter filter
+     * Possible values for filter are:
+     * author 	- the ID of a person in the OPUS database
+     * doctype 	- the ID of a doctype in OPUS
+     * ... to be continued
+     *
+     * If no (or an invalid) filter criteria is given, a complete list of all documents is passed to the view
+     *
+     * @return void
+     *
+     */
+    public function browsetitlesAction() {
         $this->view->title = $this->view->translate('search_index_alltitles_browsing');
         $url_sort_by_id = array(
             'module' => 'search',
@@ -129,58 +128,56 @@ class Search_BrowsingController extends Zend_Controller_Action
 
         // Default Ordering...
         if (true === array_key_exists('sort_reverse', $data)) {
-           $sort_reverse = $data['sort_reverse'];
-        }
-        else {
-           $sort_reverse = '0';
+            $sort_reverse = $data['sort_reverse'];
+        } else {
+            $sort_reverse = '0';
         }
         $this->view->sort_reverse = $sort_reverse;
-        
+
         if (true === array_key_exists('state', $data)) {
-        	$this->view->state = $data['state'];
+            $this->view->state = $data['state'];
         }
         // following could be handled inside a application model
         if (true === array_key_exists('sort_order', $data)) {
-        	$this->view->sort_order = $data['sort_order'];
-        	switch ($data['sort_order']) {
-        		case 'author':
-        	    	if (true === array_key_exists('state', $data)) {
+            $this->view->sort_order = $data['sort_order'];
+            switch ($data['sort_order']) {
+                case 'author':
+                    if (true === array_key_exists('state', $data)) {
                         $result = Opus_Document::getAllDocumentsByAuthorsByState($data['state'], $sort_reverse);
                     } else {
                         $result = Opus_Document::getAllDocumentsByAuthors($sort_reverse);
                     }
-        		    break;
-        		case 'publicationDate':
-        	    	if (true === array_key_exists('state', $data)) {
+                    break;
+                case 'publicationDate':
+                    if (true === array_key_exists('state', $data)) {
                         $result = Opus_Document::getAllDocumentsByPubDateByState($data['state'], $sort_reverse);
                     } else {
                         $result = Opus_Document::getAllDocumentsByPubDate($sort_reverse);
                     }
-        		    break;
-         		case 'docType':
-        	    	if (true === array_key_exists('state', $data)) {
+                    break;
+                case 'docType':
+                    if (true === array_key_exists('state', $data)) {
                         $result = Opus_Document::getAllDocumentsByDoctypeByState($data['state'], $sort_reverse);
                     } else {
                         $result = Opus_Document::getAllDocumentsByDoctype($sort_reverse);
                     }
-        		    break;
-        		case 'title':
-        		    if (true === array_key_exists('state', $data)) {
+                    break;
+                case 'title':
+                    if (true === array_key_exists('state', $data)) {
                         $result = Opus_Document::getAllDocumentsByTitlesByState($data['state'], $sort_reverse);
                     } else {
                         $result = Opus_Document::getAllDocumentsByTitles($sort_reverse);
                     }
                     break;
-        		default:
-                	if (true === array_key_exists('state', $data)) {
+                default:
+                    if (true === array_key_exists('state', $data)) {
                         $result = Opus_Document::getAllIdsByState($data['state'], $sort_reverse);
                     } else {
                         $result = Opus_Document::getAllIds($sort_reverse);
                     }
-        	}
-        }
-        else {
-        	if (true === array_key_exists('state', $data)) {
+            }
+        } else {
+            if (true === array_key_exists('state', $data)) {
                 $result = Opus_Document::getAllIdsByState($data['state'], $sort_reverse);
             } else {
                 $result = Opus_Document::getAllIds($sort_reverse);
@@ -189,11 +186,10 @@ class Search_BrowsingController extends Zend_Controller_Action
 
         $paginator = Zend_Paginator::factory($result);
         if (array_key_exists('hitsPerPage', $data)) {
-        	if ($data['hitsPerPage'] === '0') {
-        	    $hitsPerPage = '10000';
-        	}
-            else {
-            	$hitsPerPage = $data['hitsPerPage'];
+            if ($data['hitsPerPage'] === '0') {
+                $hitsPerPage = '10000';
+            } else {
+                $hitsPerPage = $data['hitsPerPage'];
             }
             $paginator->setItemCountPerPage($hitsPerPage);
         }
@@ -205,7 +201,7 @@ class Search_BrowsingController extends Zend_Controller_Action
         }
         $paginator->setCurrentPageNumber($page);
         $this->view->paginator = $paginator;
-        
+
         // iterate the paginator and get the attributes we want to show in the view
         $runningIndex = 0;
         $this->view->docId = array();
@@ -223,30 +219,29 @@ class Search_BrowsingController extends Zend_Controller_Action
             $this->view->url_frontdoor[$runningIndex] = $this->view->url($url_frontdoor, 'default', true);
 
             try {
-                $d = new Opus_Document( (int) $id);
+                $d = new Opus_Document((int) $id);
                 $this->view->docId[$runningIndex] = $id;
                 $this->view->docState = $d->getServerState();
                 $c = count($d->getPersonAuthor());
                 $this->view->doctitle[$runningIndex] = $d->getTitleMain(0)->getValue();
-            }
-            catch (Exception $e) {
-            	$this->view->docState = 'undefined';
-            	$c = 0;
-            	$this->view->doctitle[$runningIndex] = $this->view->translate('document_no_title') . $id;
+            } catch (Exception $e) {
+                $this->view->docState = 'undefined';
+                $c = 0;
+                $this->view->doctitle[$runningIndex] = $this->view->translate('document_no_title') . $id;
             }
             $this->view->author[$runningIndex] = array();
             $this->view->url_author[$runningIndex] = array();
             for ($counter = 0; $counter < $c; $counter++) {
-        	    $name = $d->getPersonAuthor($counter)->getName();
+                $name = $d->getPersonAuthor($counter)->getName();
                 $this->view->url_author[$runningIndex][$counter] = $this->view->url(
-                    array(
-                        'module'        => 'search',
-                        'controller'    => 'search',
-                        'action'        => 'metadatasearch',
-                        'author'        => $name
-                    ),
-                    null,
-                    true
+                                array(
+                                    'module' => 'search',
+                                    'controller' => 'search',
+                                    'action' => 'metadatasearch',
+                                    'author' => $name
+                                ),
+                                null,
+                                true
                 );
                 $this->view->author[$runningIndex][$counter] = $name;
             }
@@ -254,25 +249,24 @@ class Search_BrowsingController extends Zend_Controller_Action
         }
     }
 
-	/**
-	 * Build the hitlist to browse titles filtered by some criteria
-	 * Filter criteria has to be passed to the action by URL-parameter filter
-	 * Possible values for list are:
-	 * authors			- list of authors in the OPUS database
-	 * editors          - list of editors in the OPUS database
-	 * doctypes 		- list of document types in this repository
-	 * collection		- list of collections stored in this repository
-	 *
-	 * If no (or an invalid) list is given, there will be an Exception which tells that this list is not supported
-	 *
-	 * @return void
-	 *
-	 */
-    public function browselistAction()
-    {
-    	$list = $this->_getParam("list");
-    	$this->view->list = $list;
-       	switch ($list) {
+    /**
+     * Build the hitlist to browse titles filtered by some criteria
+     * Filter criteria has to be passed to the action by URL-parameter filter
+     * Possible values for list are:
+     * authors			- list of authors in the OPUS database
+     * editors          - list of editors in the OPUS database
+     * doctypes 		- list of document types in this repository
+     * collection		- list of collections stored in this repository
+     *
+     * If no (or an invalid) list is given, there will be an Exception which tells that this list is not supported
+     *
+     * @return void
+     *
+     */
+    public function browselistAction() {
+        $list = $this->_getParam("list");
+        $this->view->list = $list;
+        switch ($list) {
             case 'persons':
                 $role = $this->_getParam("role");
                 $this->view->role = $role;
@@ -348,8 +342,7 @@ class Search_BrowsingController extends Zend_Controller_Action
                         $this->view->docId[$runningIndex] = $id;
                         try {
                             $this->view->docState = $d->getServerState();
-                        }
-                        catch (Exception $e) {
+                        } catch (Exception $e) {
                             $this->view->docState = 'undefined';
                         }
 
@@ -371,15 +364,13 @@ class Search_BrowsingController extends Zend_Controller_Action
                                 );
                                 $this->view->author[$runningIndex][$counter] = $name;
                             }
-                        }
-                        catch (Exception $e) {
+                        } catch (Exception $e) {
                             //no author
                             $this->view->author[$runningIndex] = null;
                         }
                         try {
                             $this->view->doctitle[$runningIndex] = $d->getTitleMain(0)->getValue();
-                        }
-                        catch (Exception $e) {
+                        } catch (Exception $e) {
                             $this->view->doctitle[$runningIndex] = $this->view->translate('document_no_title') . $id;
                         }
                         $runningIndex++;
@@ -405,64 +396,61 @@ class Search_BrowsingController extends Zend_Controller_Action
                 break;
             default:
                 $this->view->title = $this->view->translate('search_index_alltitles_browsing');
-               // Just to be there... List is not supported (Exception is thrown by BrowsingListFactory)
+            // Just to be there... List is not supported (Exception is thrown by BrowsingListFactory)
         }
-
     }
-    
+
     /**
      * get the latest publications
      */
     public function latestAction() {
-    	$hitlist = Search_Model_BrowsingList::getLatestDocuments();
-    	$this->view->title = $this->view->translate('latest_documents_title');
+        $hitlist = Search_Model_BrowsingList::getLatestDocuments();
+        $this->view->title = $this->view->translate('latest_documents_title');
         $data = $this->_request->getParams();
         if (array_key_exists('output', $data) === true && $data['output'] === "rss") {
-                $template = new Search_Model_RSSOutput();
-    	        // We need an OPUS-compliant result list to return
-                $hitlistList = new Opus_Search_List_HitList();
-                foreach ($hitlist as $queryHit) {
-                    $opusHit = new Opus_Search_SearchHit();
-                    $array = array('id' => $queryHit);
-                    $opusdoc = new Opus_Search_Adapter_DocumentAdapter($array);
-                    $opusHit->setDocument($opusdoc);
-           	        $hitlistList->add($opusHit);
-                }
-                $hitlistIterator = new Opus_Search_Iterator_HitListIterator($hitlistList);
-                // Put the hitlist into a Pagionator
-                $hitlist_paginator = Zend_Paginator::factory($hitlistIterator);
-                if (array_key_exists('hitsPerPage', $data)) {
-        	        if ($data['hitsPerPage'] === '0') {
-        	            $hitsPerPage = '10000';
-        	        }
-                    else {
-            	        $hitsPerPage = $data['hitsPerPage'];
-                    }
-                    $hitlist_paginator->setItemCountPerPage($hitsPerPage);
-                }
-                if (array_key_exists('page', $data)) {
-                    // paginator
-                    $page = $data['page'];
+            $template = new Search_Model_RSSOutput();
+            // We need an OPUS-compliant result list to return
+            $hitlistList = new Opus_Search_List_HitList();
+            foreach ($hitlist as $queryHit) {
+                $opusHit = new Opus_Search_SearchHit();
+                $array = array('id' => $queryHit);
+                $opusdoc = new Opus_Search_Adapter_DocumentAdapter($array);
+                $opusHit->setDocument($opusdoc);
+                $hitlistList->add($opusHit);
+            }
+            $hitlistIterator = new Opus_Search_Iterator_HitListIterator($hitlistList);
+            // Put the hitlist into a Pagionator
+            $hitlist_paginator = Zend_Paginator::factory($hitlistIterator);
+            if (array_key_exists('hitsPerPage', $data)) {
+                if ($data['hitsPerPage'] === '0') {
+                    $hitsPerPage = '10000';
                 } else {
-                    $page = 1;
+                    $hitsPerPage = $data['hitsPerPage'];
                 }
-                $hitlist_paginator->setCurrentPageNumber($page);
-                
-    	        $result = $template->getTemplate($hitlist_paginator, 'RSS Feed Latest Documents');
-                $xml = $result['xmlobject'];
-                $this->_helper->viewRenderer->setNoRender(true);
-                $this->_helper->layout()->disableLayout();
-                $this->getResponse()->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);
-                $this->getResponse()->setBody($xml->saveXml());
+                $hitlist_paginator->setItemCountPerPage($hitsPerPage);
+            }
+            if (array_key_exists('page', $data)) {
+                // paginator
+                $page = $data['page'];
+            } else {
+                $page = 1;
+            }
+            $hitlist_paginator->setCurrentPageNumber($page);
+
+            $result = $template->getTemplate($hitlist_paginator, 'RSS Feed Latest Documents');
+            $xml = $result['xmlobject'];
+            $this->_helper->viewRenderer->setNoRender(true);
+            $this->_helper->layout()->disableLayout();
+            $this->getResponse()->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);
+            $this->getResponse()->setBody($xml->saveXml());
         }
-     	if (count($hitlist) > 0) {
+        if (count($hitlist) > 0) {
             $paginator = Zend_Paginator::factory($hitlist);
             if (array_key_exists('hitsPerPage', $data)) {
-        	    if ($data['hitsPerPage'] === '0') {
-        	        $hitsPerPage = '10000';
-        	    }
-                else {
-            	    $hitsPerPage = $data['hitsPerPage'];
+                if ($data['hitsPerPage'] === '0') {
+                    $hitsPerPage = '10000';
+                } else {
+                    $hitsPerPage = $data['hitsPerPage'];
                 }
                 $paginator->setItemCountPerPage($hitsPerPage);
             }
@@ -474,7 +462,7 @@ class Search_BrowsingController extends Zend_Controller_Action
             }
             $paginator->setCurrentPageNumber($page);
             $this->view->paginator = $paginator;
-        
+
             // iterate the paginator and get the attributes we want to show in the view
             $runningIndex = 0;
             $this->view->docId = array();
@@ -492,32 +480,31 @@ class Search_BrowsingController extends Zend_Controller_Action
                 );
                 $this->view->url_frontdoor[$runningIndex] = $this->view->url($url_frontdoor, 'default', true);
                 try {
-                    $d = new Opus_Document( (int) $id);
+                    $d = new Opus_Document((int) $id);
                     $this->view->docId[$runningIndex] = $id;
                     $this->view->docState = $d->getServerState();
                     $this->view->doctitle[$runningIndex] = $d->getTitleMain(0)->getValue();
                     $this->view->abstractValue[$runningIndex] = $d->getTitleAbstract(0)->getValue();
                     $c = count($d->getPersonAuthor());
-                }
-                catch (Exception $e) {
+                } catch (Exception $e) {
                     $this->view->docState = 'undefined';
                     $this->view->author[$runningIndex] = null;
                     $c = 0;
-            	    $this->view->doctitle[$runningIndex] = $this->view->translate('document_no_title') . $id;
+                    $this->view->doctitle[$runningIndex] = $this->view->translate('document_no_title') . $id;
                 }
                 $this->view->author[$runningIndex] = array();
                 $this->view->url_author[$runningIndex] = array();
                 for ($counter = 0; $counter < $c; $counter++) {
-        	        $name = $d->getPersonAuthor($counter)->getName();
+                    $name = $d->getPersonAuthor($counter)->getName();
                     $this->view->url_author[$runningIndex][$counter] = $this->view->url(
-                        array(
-                            'module'        => 'search',
-                            'controller'    => 'search',
-                            'action'        => 'metadatasearch',
-                            'author'        => $name
-                        ),
-                        null,
-                        true
+                                    array(
+                                        'module' => 'search',
+                                        'controller' => 'search',
+                                        'action' => 'metadatasearch',
+                                        'author' => $name
+                                    ),
+                                    null,
+                                    true
                     );
                     $this->view->author[$runningIndex][$counter] = $name;
                 }
@@ -525,4 +512,5 @@ class Search_BrowsingController extends Zend_Controller_Action
             }
         }
     }
+
 }
