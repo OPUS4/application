@@ -106,8 +106,17 @@ class Controller_Action extends Zend_Controller_Action {
      * @return void
      */
     public function postDispatch() {
-        $this->__layout->placeholder('messages')->set(join("",$this->__flashMessenger->getMessages()));
+
+        if(isset($this->__layout))
+            $this->__layout->placeholder('messages')->set(join("",$this->__flashMessenger->getMessages()));
+
         parent::postDispatch();
+    }
+
+    public function initView() {
+        parent::initView();
+        $baseDir = $this->view->basePath;
+        $this->view = new Opus_View(array('basePath' => $baseDir));
     }
 
 }

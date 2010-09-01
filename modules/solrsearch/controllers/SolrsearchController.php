@@ -35,7 +35,7 @@
 /**
  * Controller for Solr search module
  */
-class Solrsearch_SolrsearchController extends Zend_Controller_Action {
+class Solrsearch_SolrsearchController extends Controller_Action {
 
     /**
      * A searcher object handling Solr communication
@@ -135,7 +135,7 @@ class Solrsearch_SolrsearchController extends Zend_Controller_Action {
             $url = $this->createAdvancedSearchUrl($requestData);            
             if(!$this->isAdvancedSearchRequestValid($requestData)) {
                 $url = $this->view->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'invalidsearchterm','searchtype'=>$searchtype), null, true);
-            }            
+            }
         }
 
         $this->log->debug("URL is: " . $url);
