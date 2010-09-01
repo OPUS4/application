@@ -672,6 +672,24 @@
       </tuv>
     </tu>
 
+    <tu tuid="Institute">
+      <tuv xml:lang="en">
+        <seg>Institute</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Institit</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="groupInstitute">
+      <tuv xml:lang="en">
+        <seg>Institute(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Institit(e)</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="add_NonInstituteAffiliation">
       <tuv xml:lang="en">
         <seg>add Non-Institute Affiliation</seg>

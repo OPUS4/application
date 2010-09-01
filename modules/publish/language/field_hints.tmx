@@ -53,6 +53,33 @@
         </tuv>
     </tu>
 
+    <tu tuid="hint_groupInstitute">
+        <tuv xml:lang="en">
+            <seg>Please choose the involved institutes. You may add more instiutes by clicking on the button (or delete them).</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Wählen Sie hier bitte die beteiligten Instiute aus. Sie können durch Klicken auf den Button weitere Institute hinzufügen (oder wieder löschen).</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_Institute1">
+        <tuv xml:lang="en">
+            <seg>Please choose the involved institute. </seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Wählen Sie das beteiligte Institut aus.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_Institute">
+        <tuv xml:lang="en">
+            <seg>Please choose the involved institute. </seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Wählen Sie das beteiligte Institut aus.</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="hint_Language">
         <tuv xml:lang="en">
             <seg>Please enter the language of the documents content.</seg>

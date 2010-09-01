@@ -62,7 +62,7 @@ class Publish_IndexController extends Controller_Action {
         $log->debug("Module Publishing <=> PublishingFirst was created.");
         $action_url = $this->view->url(array('controller' => 'index', 'action' => 'step2'));
         $form->setMethod('post');
-        $form->setAction($action_url);        
+        $form->setAction($action_url);
         $this->view->form = $form;
     }
 
@@ -76,7 +76,7 @@ class Publish_IndexController extends Controller_Action {
         $log = Zend_Registry::get('Zend_Log');
         //disable language selection for template usage and possible refreshing forms
         $this->view->languageSelectorDisabled = true;
-        
+
         //check the input from step 1
         $step1Form = new Publish_Form_PublishingFirst();
         if ($this->getRequest()->isPost() === true) {
@@ -135,7 +135,7 @@ class Publish_IndexController extends Controller_Action {
             $step2Form->setAction($action_url);
             $step2Form->setMethod('post');
             $this->setViewVariables($step2Form);
-            
+
             $this->view->action_url = $action_url;
             $this->view->form = $step2Form;
         }
@@ -354,11 +354,13 @@ class Publish_IndexController extends Controller_Action {
             }
             $document->setServerState('unpublished');
             $docId = $document->store();
+            $log->info("Document was sucessfully stored!");
             //finally send an emial to the referrer named in config.ini
             $mail = new Mail_PublishNotification($docId, $this->view);
             if ($mail->send() === false)
-                    $log->err("Mail an Gutachter konnte nicht verschickt werden!");
-            
+                $log->err("email to referee could not be sended!");
+            else
+                $log->info("Referee has been informed via email.");
         }
     }
 
@@ -385,11 +387,6 @@ class Publish_IndexController extends Controller_Action {
                     $name = substr($currentElement, 0, $pos);
                 else
                     $name=$currentElement; //"normal" element name without changes
-
-
-
-
-
             }
 
             $groupName = 'group' . $name;
@@ -421,26 +418,21 @@ class Publish_IndexController extends Controller_Action {
                 $group["Buttons"] = $groupButtons;
                 $this->view->$groupName = $group;
             }
-
             //single fields (for calling with helper class)
-            $log->debug("current Element: " . $currentElement);
             $singleField = $currentElement . "_";
 
             $elementAttributes = $form->getElementAttributes($currentElement); //array
-//            foreach ($elementAttributes as $key1 => $value1) {
-//                $log->debug($key1 . " => " . $value1);
-//            }
             $this->view->$singleField = $elementAttributes;
-
-            $log->debug("singlefield " . $singleField . " filled");
 
             //also support more difficult templates for "expert admins"
             $this->view->$currentElement = $form->getElement($currentElement)->getValue();
+
             $name = $currentElement . "_label";
             $this->view->$name = $this->view->translate($form->getElement($currentElement)->getLabel());
+
+            //error values
             if (isset($errors[$currentElement]))
                 foreach ($errors[$currentElement] as $error => $errorMessage) {
-                    //error values
                     $errorElement = $currentElement . 'Error';
                     $this->view->$errorElement = $errorMessage;
                 }
@@ -862,8 +854,10 @@ class Publish_IndexController extends Controller_Action {
                         The method fetchCollectionsByRoleNumber returned an array with > 1 values. The " . $key . " cannot be definitely assigned.");
         }
         else if (strstr($key, "Institute")) {
-            $role = Opus_CollectionRole::fetchByOaiName('instituts');
-            $collArray = Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $value);
+            $role = Opus_CollectionRole::fetchByOaiName('institutes');
+            $log->debug("Role: " . $role);
+            $collArray = Opus_Collection::fetchCollectionsByRoleName($role->getId(), $value);
+            $log->debug("Role ID: " . $role->getId() . ", value: " . $value);
             if (count($collArray) <= 1)
                 $document->addCollection($collArray[0]);
             else

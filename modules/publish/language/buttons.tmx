@@ -13,7 +13,7 @@
             <seg>Add one more author</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Einen weiteren Autoren hinzufügen</seg>
+            <seg>Einen weiteren Autor hinzufügen</seg>
         </tuv>
     </tu>
 
@@ -22,9 +22,28 @@
             <seg>Delete the last author</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Den letzten Autoren löschen</seg>
+            <seg>Den letzten Autor löschen</seg>
         </tuv>
     </tu>
+
+    <tu tuid="button_label_add_one_moreInstitute">
+        <tuv xml:lang="en">
+            <seg>Add one more institute</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Ein weiteres Institut hinzufügen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_deleteInstitute">
+        <tuv xml:lang="en">
+            <seg>Delete the last institute</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Das letzte Institut löschen</seg>
+        </tuv>
+    </tu>
+
 
     <tu tuid="button_label_add_one_moreTitleMain">
         <tuv xml:lang="en">
