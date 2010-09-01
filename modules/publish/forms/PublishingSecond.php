@@ -412,7 +412,8 @@ class Publish_Form_PublishingSecond extends Zend_Form {
                 break;
 
             case 'msc' :
-                return new Zend_Validate_InArray($this->getCollection('msc'));
+                //return new Zend_Validate_InArray($this->getCollection('msc')); //dauert lange
+                return new Opus_Validate_SubjectMSC();
                 break;
 
             case 'Person':
