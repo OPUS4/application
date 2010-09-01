@@ -132,19 +132,18 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
 
         $config = $this->getResource('Configuration');
 
-//        $theme = $config->theme;
-//        if (true === empty($theme)) {
-//            $theme = 'default';
-//        }
-//
-//        $layoutpath = $this->_applicationRootDirectory . '/public/layouts/' . $theme;
-//
-//        if (false === is_dir($layoutpath)) {
-//            throw new Exception('Requested theme "' . $theme . '" not found.');
-//        }
+        $theme = $config->theme;
 
-        $layoutpath = $config->resources->layout->layoutPath;
-        
+        if (empty($theme)) {
+            $theme = 'default';
+        }
+
+        $layoutpath = APPLICATION_PATH . '/public/layouts/' . $theme;
+
+        if (false === is_dir($layoutpath)) {
+            throw new Exception('Requested theme "' . $theme . '" not found.');
+        }
+
         Zend_Layout::startMvc(array(
                 'layoutPath'=> $layoutpath,
                 'layout'=>'common'));

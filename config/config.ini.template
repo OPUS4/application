@@ -34,6 +34,9 @@
 
 [production]
 
+; The 'theme' setting can be used to select a different theme.
+; theme = default
+
 debug = 0
 
 ;DB SETTINGS
@@ -63,6 +66,8 @@ mail.opus.name = ; Name of administrator
 
 ;REFEREES (temporary solution)
 ; referees['John Doe'] = john.doe@example.org
+
+
 
 
 ; The following is needed even if sections are empty.
