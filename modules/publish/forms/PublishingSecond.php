@@ -385,7 +385,6 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      * @throw Publish_Model_OpusServerException
      */
     protected function _getValidatorsByDatatype($datatype) {
-        $this->log->debug("method _getValidatorsByDatatype (". $datatype .") ...");
         switch ($datatype) {
             case 'Alpha':
                 return new Zend_Validate_Alpha(false);

@@ -147,6 +147,7 @@ class View_Helper_Field extends Zend_View_Helper_Abstract {
         if (isset($group)) {
             $fieldset = "<fieldset class='fieldset'>\n<legend class='legend'>" . $this->view->translate($group['Name']) . "</legend>\n\t";
             $fieldset .= "<table class='table' width='100%'>";
+            $fieldset .= "<a name='". $group['Name'] ."' />";
             
             //show fields
             foreach ($group["Fields"] AS $field) {

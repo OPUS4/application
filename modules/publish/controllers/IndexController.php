@@ -126,8 +126,7 @@ class Publish_IndexController extends Controller_Action {
             $log->debug("ID -step2-: " . $this->documentId);
             $log->debug("Fulltext -step2-: " . $fulltext);
 
-            // STEP 2: BUILD THE FORM THAT DEPENDS ON THE DOC TYPE
-           $this->_helper->viewRenderer($this->documentType);
+            //$this->_helper->viewRenderer($this->documentType);
            
             //create the form
             $step2Form = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $fulltext, null, null);
@@ -137,7 +136,7 @@ class Publish_IndexController extends Controller_Action {
             $this->setViewVariables($step2Form);
 
             $this->view->action_url = $action_url;
-            $this->view->form = $step2Form;
+            $this->view->doctype= $this->documentType;            
         }
     }
 
@@ -166,8 +165,7 @@ class Publish_IndexController extends Controller_Action {
             $additionalFields = array();
             foreach ($postData AS $element => $value) {
                 if (substr($element, 0, 9) == "countMore") {
-                    $key = substr($element, 9);
-                    //$log->debug("Add Key to additionalFields: " . $key . " => " . $value);
+                    $key = substr($element, 9);                   
                     $additionalFields[$key] = (int) $value;
                 }
             }
@@ -175,18 +173,17 @@ class Publish_IndexController extends Controller_Action {
 
             //create the proper form and populate all needed values
             $form = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $fulltext, $this->additionalFields, $postData);
-            $action_url = $this->view->url(array('controller' => 'index', 'action' => 'check'));
-            $form->setAction($action_url);
+//            $action_url = $this->view->url(array('controller' => 'index', 'action' => 'check'));
+//            $form->setAction($action_url);
             $form->populate($postData);
-            $this->view->action_url = $action_url;
+//            $this->view->action_url = $action_url;
 
             if (!$form->send->isChecked()) {
+                //a button was pressed, but not the send button => add / remove fields
                 $this->view->title = $this->view->translate('publish_controller_index');
                 $this->view->subtitle = $this->view->translate($this->documentType);
                 $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
-                $log->debug("A BUTTON (NOT SEND) WAS PRESSED!!!!!!!!!!!!!!!!!");
-                //a button was pressed, but not the send button => add / remove fields
-                //RENDER specific documentType.phtml
+                                
                 $this->_helper->viewRenderer($this->documentType);
                 $pressedButtonName = $this->getPressedButton($form);
 
@@ -215,9 +212,14 @@ class Publish_IndexController extends Controller_Action {
                 $additionalFields[$fieldName] = $currentNumber;
                 $log->debug("new current number: " . $currentNumber);
 
+                //"jump-anchor" for adding or deleting fields
+                $anchor = 'group' . $fieldName;
+                
+
                 //create the proper form and populate all needed values
                 $form = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $fulltext, $additionalFields, $postData);
                 $action_url = $this->view->url(array('controller' => 'index', 'action' => 'check'));
+                $action_url = $action_url . "#" . $anchor;
                 $form->setAction($action_url);
 
                 //call help funtion to render the form for specific view
@@ -462,7 +464,7 @@ class Publish_IndexController extends Controller_Action {
         }
 
         if ($pressedButton == "")
-            throw new Exception("No pressed button found! Possibly the values of the buttons are not equal in the view and Publish class.");
+            throw new Publish_Model_OpusServerException("No pressed button found! Possibly the values of the buttons are not equal in the view and Publish class.");
         //todo: which exeption to choose?
         else
             return $pressedButtonName;
