@@ -158,7 +158,7 @@
 
     <div class="debug dbprofiler" style="clear:both">
     <hr/>
-    <h2>Profiling information</h2>
+    <h2>Profiling information (execution time <?= round(microtime(true) - $GLOBALS['start_mtime'],3) ?>)</h2>
     <b>Total number of queries: </b><?= $dbprofiler->getTotalNumQueries() ?><br />
     <b>Total query time (s): </b><?= $dbprofiler->getTotalElapsedSecs() ?><br />
     <b>Current memory consumption: </b><?= memory_get_usage(true) ?><br />
