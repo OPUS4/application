@@ -5,7 +5,7 @@ echo '<h3>'.$this->subtitle.'</h3>';
 ?>
 
 
-<form enctype="application/x-www-form-urlencoded" action="/opus4-devel/index.php/publish/index/check" method="post">
+<form enctype="application/x-www-form-urlencoded" action="<?php echo $this->action_url; ?>" method="post">
 
 <?= $this->field("Group", null, $this->groupPersonSubmitter); ?>
 <?= $this->field("Element", null, $this->Language_); ?>

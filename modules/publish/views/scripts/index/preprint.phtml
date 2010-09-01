@@ -7,6 +7,7 @@ echo '<h2>'.$this->subtitle.'</h2>';
 <form enctype="application/x-www-form-urlencoded" action="<?php echo $this->action_url; ?>" method="post">
 
 <?= $this->field("Group", null, $this->groupPersonAuthor); ?>
+<?= $this->field("Group", null, $this->groupInstitute); ?>
 <?= $this->field("Element", null, $this->Language_); ?>
 <?= $this->field("Group", null, $this->groupTitleMain); ?>
 <?= $this->field("Group", null, $this->groupTitleAbstract); ?>
