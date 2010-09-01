@@ -1,24 +1,30 @@
 <?php
-echo '<h1>'.$this->title.'</h1>';
-echo '<h2>'.$this->subtitle.'</h2>';
+echo '<h1>' . $this->title . '</h1>';
+echo '<h2>' . $this->subtitle . '</h2>';
+
+//for printing a generized Zend Form with standard layout:
 //echo $this->form;
 ?>
 
 <form enctype="application/x-www-form-urlencoded" action="<?php echo $this->action_url; ?>" method="post">
 
-<?= $this->field("Group", null, $this->groupPersonAuthor); ?>
-<?= $this->field("Group", null, $this->groupInstitute); ?>
-<?= $this->field("Element", null, $this->Language_); ?>
-<?= $this->field("Group", null, $this->groupTitleMain); ?>
-<?= $this->field("Group", null, $this->groupTitleAbstract); ?>
-<?= $this->field("Group", null, $this->groupProject); ?>
-<?= $this->field("Group", null, $this->groupSubjectMSC); ?>
-<?= $this->field("Group", null, $this->groupSubjectUncontrolled); ?>
-<?= $this->field("Element", null, $this->Note_); ?>
-<?= $this->field("Hidden", "fullText", $this->fullText); ?>
-<?= $this->field("Hidden", "documentType", "preprint"); ?>
-<?= $this->field("Hidden", "documentId", $this->documentId); ?>
-<?= $this->field("Submit", "send", "Formular abschicken"); ?>
+    <div width="100%" align="right">
+        <?= $this->requiredHint; ?>
+    </span>
+
+    <?= $this->field("Group", null, $this->groupPersonAuthor); ?>
+    <?= $this->field("Group", null, $this->groupInstitute); ?>
+    <?= $this->field("Element", null, $this->Language_); ?>
+    <?= $this->field("Group", null, $this->groupTitleMain); ?>
+    <?= $this->field("Group", null, $this->groupTitleAbstract); ?>
+    <?= $this->field("Group", null, $this->groupProject); ?>
+    <?= $this->field("Group", null, $this->groupSubjectMSC); ?>
+    <?= $this->field("Group", null, $this->groupSubjectUncontrolled); ?>
+    <?= $this->field("Element", null, $this->Note_); ?>
+    <?= $this->field("Hidden", "fullText", $this->fullText); ?>
+    <?= $this->field("Hidden", "documentType", "preprint"); ?>
+    <?= $this->field("Hidden", "documentId", $this->documentId); ?>
+    <?= $this->field("Submit", "send", "Formular abschicken"); ?>
 
 </form>
 

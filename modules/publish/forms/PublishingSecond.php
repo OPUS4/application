@@ -124,7 +124,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      * @param <Array> $data list of options
      */
     protected function _addSelect($workflow, $elementName, $validator, $required, $label, $data) {
-        $this->log->debug('Return select field!');
+        $this->log->debug('method _addSelect ... ');
         if (count($data) == 1) {
             $value = (array_keys($data));
             $formField = $this->createElement('text', $elementName);
@@ -381,6 +381,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      * @throw Publish_Model_OpusServerException
      */
     protected function _getValidatorsByDatatype($datatype) {
+        $this->log->debug("method _getValidatorsByDatatype (". $datatype .") ...");
         switch ($datatype) {
             case 'Alpha':
                 return new Zend_Validate_Alpha(false);
@@ -399,7 +400,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
                 break;
 
             case 'Language' :
-                return new Zend_Validate_InArray($this->getLanguages());
+                return new Zend_Validate_InArray(array_keys($this->getLanguages()));
                 break;
 
             case 'Licence' :
@@ -484,16 +485,8 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      * @param <type> $label
      */
     protected function _prepareLanguageElement($elementName, $validator, $required, $label) {
+        $this->log->debug("method _prepareLanguageelement...");
         $languages = $this->getLanguages();
-        $validator = $this->_getValidatorsByDatatype("Language");
-
-        $this->log->debug("Languages: ");
-        $data = array();
-        foreach ($languages AS $key => $val) {
-            $this->log->debug("name of language: " . $val);
-            $this->log->debug("short key of language: " . $key);
-        }
-
         asort($languages);
         $this->_addSelect('language', $elementName, $validator, $required, $label, $languages);
     }

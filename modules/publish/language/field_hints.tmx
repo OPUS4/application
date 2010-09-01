@@ -8,6 +8,16 @@
   <body>
 <!-- This language file contains all texts concerning field hints. -->
 
+    <tu tuid="publish_controller_required_hint">
+        <tuv xml:lang="en">
+            <seg>Fields that are marked with <span class='required'>*</span> have to be filled.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Felder, die mit einem <span class='required'>*</span> markiert sind, müssen ausgefüllt werden.</seg>
+        </tuv>
+    </tu>
+
+
     <tu tuid="hint_groupPersonAuthor">
         <tuv xml:lang="en">
             <seg>Please enter the contact information of the authors. You may add more authors by clicking on the button (or delete them).</seg>

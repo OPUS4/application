@@ -92,6 +92,7 @@ class Publish_IndexController extends Controller_Action {
 
             $this->view->title = $this->view->translate('publish_controller_index');
             $this->view->subtitle = $this->view->translate($this->documentType);
+            $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
 
             //Flag for checking if fulltext of not => must be string, or else Zend_Form collaps
             $fulltext = "0";
@@ -167,7 +168,7 @@ class Publish_IndexController extends Controller_Action {
             foreach ($postData AS $element => $value) {
                 if (substr($element, 0, 9) == "countMore") {
                     $key = substr($element, 9);
-                    $log->debug("Add Key to additionalFields: " . $key . " => " . $value);
+                    //$log->debug("Add Key to additionalFields: " . $key . " => " . $value);
                     $additionalFields[$key] = (int) $value;
                 }
             }
@@ -183,6 +184,7 @@ class Publish_IndexController extends Controller_Action {
             if (!$form->send->isChecked()) {
                 $this->view->title = $this->view->translate('publish_controller_index');
                 $this->view->subtitle = $this->view->translate($this->documentType);
+                $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
                 $log->debug("A BUTTON (NOT SEND) WAS PRESSED!!!!!!!!!!!!!!!!!");
                 //a button was pressed, but not the send button => add / remove fields
                 //RENDER specific documentType.phtml
@@ -229,6 +231,7 @@ class Publish_IndexController extends Controller_Action {
                 //RENDER specific documentType.phtml
                 $this->view->title = $this->view->translate('publish_controller_check');
                 $this->view->subtitle = $this->view->translate($this->documentType);
+                $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
 
                 if (!$form->isValid($this->getRequest()->getPost())) {
                     $log->debug("NOW CHECK THE ERROR CASE!!!!!!!!!!!!!!!!!");
