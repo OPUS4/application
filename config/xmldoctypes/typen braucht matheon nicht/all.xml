@@ -35,7 +35,7 @@
 <documenttype name="all"
     xmlns="http://schemas.opus.org/documenttype"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://schemas.opus.org/documenttype ../../../opus4/framework/library/Opus/Document/documenttype.xsd">
+    xsi:schemaLocation="http://schemas.opus.org/documenttype https://svn.zib.de/opus4dev/framework/trunk/library/Opus/Document/documenttype.xsd">
 
     <field name="PersonSubmitter" required="yes" multiplicity="1" formelement="Text" datatype="Person" />
     <field name="Licence" required="no"  multiplicity="1" formelement="Select" datatype="Licence" >
@@ -47,6 +47,7 @@
     <field name="TitleAbstract" required="no" formelement="Textarea" datatype="Title" multiplicity="4" >
         <required-if-fulltext />
     </field>
+    <field name="TitleSub" required="no" formelement="Text" datatype="Text" multiplicity="1"
     <field name="TitleAdditional" required="no" formelement="Text" datatype="Title" multiplicity="1" />
     <field name="TitleParent" required="no" formelement="Text" datatype="Title" multiplicity="1" />
     <field name="PersonAuthor" required="no" formelement="Text" datatype="Person" multiplicity="*" />
@@ -55,19 +56,15 @@
     <field name="PersonAdvisor" required="no" formelement="Text" datatype="Person" multiplicity="*" />
     <field name="PersonTranslator" required="no" formelement="Text" datatype="Person" multiplicity="*" />
     <field name="PersonContributor" required="no" formelement="Text" datatype="Person" multiplicity="*" />
-    <field name="PersonOther" required="no" formelement="Text" datatype="Person" multiplicity="*" />
     <field name="CreatingCorporation" required="no" formelement="Text" datatype="Text" multiplicity="*" />
     <field name="ContributingCorporation" required="no" formelement="Text" datatype="Text" multiplicity="*"/>
-    <field name="Publisher" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="PublisherName" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="PublisherPlace" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-    <field name="PublisherUniversity" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="PageNumber" required="no" formelement="Text" datatype="Integer" multiplicity="1" />
     <field name="PageFirst" required="no" formelement="Text" datatype="Integer" multiplicity="1" />
     <field name="PageLast" required="no" formelement="Text" datatype="Integer" multiplicity="1" />
     <field name="SubjectSwd" required="yes" formelement="Text" datatype="Text" multiplicity="5" />
     <field name="SubjectUncontrolled" required="no" formelement="Text" datatype="Text" multiplicity="5" />
-    <field name="Grantor" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="PageNumber" required="no" formelement="Text" datatype="Integer" multiplicity="1" />
     <field name="Volume" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="Issue" required="no" formelement="Text" datatype="Text" multiplicity="1" />
@@ -77,14 +74,17 @@
     <field name="PublishedYear" required="no" formelement="Text" datatype="Year" multiplicity="1" />
     <field name="PublishedDate" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="CompletedYear" required="no" formelement="Text" datatype="Year" multiplicity="1" />
-    <field name="ThesisDateAccepted" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="CompletedDate" required="no" formelement="Text" datatype="Text" multiplicity="1" />
-    <field name="IdentifierOpac" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="IdentifierIsbn" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="IdentifierIssn" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="IdentifierUrn" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="IdentifierOpac" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="ServerDateValid" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="Note" required="no" formelement="Textarea" datatype="Text" multiplicity="1" />
-
+    <field name="Licence" required="no" formelement="Select" datatype="Licence" multiplicity="1" />
+    <field name="ServerDateUnlocking" required="no" formelement="Text" datatype="Text" multiplicity="1" />
+    <field name="ThesisDateAccepted" required="no" formelement="Text" datatype="Text" multiplicity="1" />
+    <field name="ThesisPublisher" required="no" formelement="Text" datatype="Text" multiplicity="1" />
+	<field name="ThesisGrantor" required="no" formelement="Text" datatype="Text" multiplicity="1" />
+    
 </documenttype>
