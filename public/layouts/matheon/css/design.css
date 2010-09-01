@@ -60,38 +60,42 @@ div.box h1 {
     background-color: #EFEFEF;
 }
 
-.result_box {
+.search_results .result_box {
     padding:.5em;
     color:black;
 }
 
-.even {
+.search_results .even {
     background-color:#c3d6e6;
 }
 
-.odd {
+.search_results .odd {
     background-color:#f3f6f6;
 }
 
-.results_title {
+.search_results .results_title {
     font-weight:bold;
 }
 
-.pagination {
+.results_pagination {
     clear:both;
     color:black;
     margin:2em;
 }
 
 
-.pagination ul li {
+.results_pagination ul li {
     display:inline;
 }
 
-.facets {
+.results_facets {
     float:left;
     width: 20%;
     color:black;
+}
+
+.results_facets .facet_heading {
+    margin-bottom:2em;
 }
 
 .search_results {
@@ -99,53 +103,61 @@ div.box h1 {
     width: 75%;
 }
 
-.facet {
+.results_facets .facet {
     margin:0;
     padding:0;
+    padding-bottom:1em;
+
 }
 
-.facet li {
+.results_facets .facet li {
     padding:0;
     margin:0;
     list-style-type:none;
     font-size:10px;
-    line-height:80%;
+    
 }
 
-.facet li a {
+.results_facets .facet li a {
     font-size:10px;
+    text-decoration:none;
 }
 
-.facet ul {
+.results_facets .facet li a:hover {
+    text-decoration:underline;
+}
+
+.results_facets .facet ul {
     margin:0;
     padding:0;
     font-size:10px;
+    line-height:115%;
 }
 
 .search_options {
     margin:2em;
 }
 
-.activeFacet {
+.results_facets .activeFacet {
     
 }
 
-.activeFacet a {
+.results_facets .activeFacet a {
     color:#FE0607;
     font-weight:bold;
 }
 
-.removeFacetLink a {
+.results_facets .removeFacetLink a {
     color:#555555;
     font-weight: normal;
     font-style: italic;
 }
 
-.facet_heading {
+.results_facets .facet_heading {
     padding-bottom:2em;
 }
 
-.paginationControl a {
+.results_pagination .paginationControl a {
     border:1px solid #999999;
     background-color: #eeeeee;
     color: black;
@@ -154,7 +166,7 @@ div.box h1 {
     text-decoration:none;
 }
 
-.paginationControl a:hover {
+.results_pagination .paginationControl a:hover {
     background-color:#ffffff;
 }
 

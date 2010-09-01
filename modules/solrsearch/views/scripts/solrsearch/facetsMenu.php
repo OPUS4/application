@@ -32,7 +32,7 @@
  */
 ?>
 
-<div id="facets" class="facets">
+<div id="facets" class="results_facets">
     <h3><?= $this->translate('facets_menu_title') ?></h3>
 
     <?php foreach($this->facets as $key=>$facet) : ?>

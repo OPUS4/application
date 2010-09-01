@@ -32,7 +32,7 @@
  */
 ?>
 
-<div id="pagination" class="pagination">
+<div id="pagination" class="results_pagination">
     <p class="info_small">
         <?= $this->translate('pagination_display_hits') ?> <strong><?= (int)($this->start)+1 ?></strong> <?= $this->translate('pagination_to') ?> <strong><?php if(((int)($this->start) + (int)($this->rows)) > $this->numOfHits) echo $this->numOfHits; else echo (int)($this->start) + (int)($this->rows); ?></strong>
     </p>
