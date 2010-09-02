@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-class LibraryTests_Form_Validate_RequiredIfValueTest extends PHPUnit_Framework_TestCase {
+class Form_Validate_RequiredIfValueTest extends PHPUnit_Framework_TestCase {
 
     private $validator;
 
