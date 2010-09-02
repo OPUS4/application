@@ -143,6 +143,150 @@
             <seg>Das letzte Schlagwort löschen</seg>
         </tuv>
     </tu>
+	
+	<tu tuid="button_label_add_one_morePersonReferee">
+        <tuv xml:lang="en">
+            <seg>Add one more Referee</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Einen weiteren Gutachter hinzufügen</seg>
+        </tuv>
+    </tu>
 
+	<tu tuid="button_label_deletePersonReferee">
+        <tuv xml:lang="en">
+            <seg>Delete the last Referee</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Den letzten Gutachter löschen</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="button_label_add_one_morePersonEditor">
+        <tuv xml:lang="en">
+            <seg>Add one more Editor</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Einen weiteren Herausgeber hinzufügen</seg>
+        </tuv>
+    </tu>
+
+	<tu tuid="button_label_deletePersonEditor">
+        <tuv xml:lang="en">
+            <seg>Delete the last Editor</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Den letzten Herausgeber löschen</seg>
+        </tuv>
+    </tu>
+
+	<tu tuid="button_label_add_one_morePersonAdvisor">
+        <tuv xml:lang="en">
+            <seg>Add one more Advisor</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Einen weiteren Betreuer hinzufügen</seg>
+        </tuv>
+    </tu>
+
+	<tu tuid="button_label_deletePersonAdvisor">
+        <tuv xml:lang="en">
+            <seg>Delete the last Advisor</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Den letzten Betreuer löschen</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="button_label_add_one_morePersonTranslator">
+        <tuv xml:lang="en">
+            <seg>Add one more Translator</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Einen weiteren Übersetzer hinzufügen</seg>
+        </tuv>
+    </tu>
+
+	<tu tuid="button_label_deletePersonTranslator">
+        <tuv xml:lang="en">
+            <seg>Delete the last Translator</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Den letzten Übersetzer löschen</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="button_label_add_one_morePersonContributor">
+        <tuv xml:lang="en">
+            <seg>Add one more Contributor</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Eine weitere beteiligte Person hinzufügen</seg>
+        </tuv>
+    </tu>
+
+	<tu tuid="button_label_deletePersonContributor">
+        <tuv xml:lang="en">
+            <seg>Delete the last Contributor</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Die letzte beteiligte Person löschen</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="button_label_add_one_moreCreatingCorporation">
+        <tuv xml:lang="en">
+            <seg>Add one more Creating Corporation</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Eine weitere urhebende Körperschaft hinzufügen</seg>
+        </tuv>
+    </tu>
+
+	<tu tuid="button_label_deleteCreatingCorporation">
+        <tuv xml:lang="en">
+            <seg>Delete the last Creating Corporation</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Die letzte urhebende Körperschaft löschen</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="button_label_add_one_moreContributingCorporation">
+        <tuv xml:lang="en">
+            <seg>Add one more Contributing Corporation</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Eine weitere beteiligte Körperschaft hinzufügen</seg>
+        </tuv>
+    </tu>
+
+	<tu tuid="button_label_deleteContributingCorporation">
+        <tuv xml:lang="en">
+            <seg>Delete the last Contributing Corporation</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Die letzte beteiligte Körperschaft löschen</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="button_label_add_one_moreSubjectSwd">
+        <tuv xml:lang="en">
+            <seg>Add one more SWD-Keyword</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Eine weiteres SWD-Schlagwort hinzufügen</seg>
+        </tuv>
+    </tu>
+
+	<tu tuid="button_label_deleteSubjectSwd">
+        <tuv xml:lang="en">
+            <seg>Delete the last SWD-Keyword</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Das letzte SWD-Schlagwort löschen</seg>
+        </tuv>
+	
+	</tu>
     </body>
 </tmx>
