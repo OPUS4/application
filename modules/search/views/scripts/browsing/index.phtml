@@ -34,54 +34,31 @@
  * @version     $Id$
  */
 ?>
-	<h2><?= $this->translate('search_index_browsing') ?></h2>
-    <a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'latest'), null, true) ?>"><?= $this->translate('latest_docs_browsing') ?></a> <a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'latest', 'output' => 'rss'), null, true) ?>" class="rss"><img src="<?= $this->baseUrl;?>/layouts/default/img/rss.gif" width="36" height="14" border="0" align="bottom" alt="RSS-Feed Icon" title="RSS-Feed abonnieren" /></a>
-	<br/>
-	<a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseTitles'), null, true) ?>"><?= $this->translate('search_index_alltitles_browsing') ?></a><br/>
-	<?php
-       // TODO: Get roles-list from database
-	   /* Removed
-	    * until we get a mechanism to control person doublettes
-	    * $roles = array('author', 'editor', 'advisor', 'contributor', 'referee', 'other', 'translator');
-	   foreach ($roles as $role) {
-	       $translatelabel = 'search_index_' . $role . '_browsing';
-	       echo '<a href="' . $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'persons', 'role' => $role), null, true) . '">';
-	       echo $this->translate($translatelabel);
-	       echo '</a><br/>';
-	   }*/
-	?>
-	<a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'doctypes'), null, true) ?>"><?= $this->translate('search_index_doctype_browsing') ?></a><br/>
-	<?php
 
-	// Browsable roles of persons:
-    // 'advisor','contributor','referee','other','translator'
-	// get the list of hierarchical lists from the Collections-Classes
-	#print_r($this->browsinglist);
-	if (count($this->browsinglist) > 0) {
-	   foreach ($this->browsinglist as $obj)
-	   {
-		  // No translation is given, if translate(name)===name.  Check it.
-                  $translatelabel = 'search_index_custom_browsing_' . $obj->getName();
-                  if ($translatelabel === $this->translate($translatelabel)) {
-		     $printname = $obj->getName();
-		  }
-		  else {
-		     $printname = $this->translate($translatelabel);
-		  }
+<h2><?= $this->translate('search_index_browsing') ?></h2>
 
-		  echo '<a href="' . $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'collection', 'collection' => $obj->getId()), null, true) . '">';
-		  echo $printname;
-		  echo "</a><br/>";
-	   }
-	}
-	/* static list of hierarchical lists
-	 * <a href="<?= $this->url(array("controller"=>"browsing", "action"=>"browseList", "list" => "institutions")) ?>">Browsing nach Institutionen</a><br/>
-	<a href="<?= $this->url(array("controller"=>"browsing", "action"=>"browseList", "list" => "schriftenreihe")) ?>">Browsing nach Schriftenreihen</a><br/>
-	<a href="<?= $this->url(array("controller"=>"browsing", "action"=>"browseList", "list" => "collections")) ?>">Browsing nach Collections</a><br/>
-	<a href="<?= $this->url(array("controller"=>"browsing", "action"=>"browseList", "list" => "ddc")) ?>">Browsing nach DDC-Sachgruppen</a><br/>
-	<a href="<?= $this->url(array("controller"=>"browsing", "action"=>"browseList", "list" => "ccs")) ?>">Browsing nach CCS-Klassifikation</a><br/>
-	<a href="<?= $this->url(array("controller"=>"browsing", "action"=>"browseList", "list" => "jel")) ?>">Browsing nach JEL-Klassifikation</a><br/>
-	<a href="<?= $this->url(array("controller"=>"browsing", "action"=>"browseList", "list" => "msc")) ?>">Browsing nach MSC-Klassifikation</a><br/>
-	<a href="<?= $this->url(array("controller"=>"browsing", "action"=>"browseList", "list" => "pacs")) ?>">Browsing nach PACS-Klassifikation</a><br/>
-	<a href="<?= $this->url(array("controller"=>"browsing", "action"=>"browseList", "list" => "bkl")) ?>">Browsing nach BKL-Klassifikation</a><br/>
-	**/
+<a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'latest'), null, true) ?>">
+    <?= $this->translate('latest_docs_browsing') ?>
+</a>&nbsp;
+<a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'latest', 'output' => 'rss'), null, true) ?>" class="rss"><img src="<?= $this->baseUrl; ?>/layouts/default/img/rss.gif" width="36" height="14" border="0" align="bottom" alt="RSS-Feed Icon" title="RSS-Feed abonnieren" /></a>
+<br/>
+<a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'solrsearch', 'action' => 'search', 'query'=>'*:*','sortfield'=>'title','sortorder'=>'asc','searchtype'=>'simple'), null, true) ?>"><?= $this->translate('search_index_alltitles_browsing') ?></a><br/>
+<a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'doctypes'), null, true) ?>"><?= $this->translate('search_index_doctype_browsing') ?></a><br/>
+
+<?php if (count($this->browsinglist) > 0) : ?>
+
+   <?php foreach ($this->browsinglist as $obj) :
+        $translatelabel = 'search_index_custom_browsing_' . $obj->getName();
+        $printname = '';
+        if ($translatelabel === $this->translate($translatelabel))
+            $printname = $obj->getName();
+        else
+            $printname = $this->translate($translatelabel);
+   ?>
+
+    <a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'collection', 'collection' => $obj->getId()), null, true)?>">
+        <?= $printname ?>
+    </a>
+    <br/>
+    <?php endforeach ?>
+<?php endif ?>
