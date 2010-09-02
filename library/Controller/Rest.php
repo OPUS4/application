@@ -94,6 +94,9 @@ class Controller_Rest extends Zend_Controller_Action {
     /**
      * Handling for get requests.
      *
+     * For Collection URIs: list available elements
+     * For Element URIs: retrieve element
+     *
      * @return void
      */
     public function getAction() {
@@ -102,6 +105,9 @@ class Controller_Rest extends Zend_Controller_Action {
 
     /**
      * Handling for post requests.
+     *
+     * For Collection URIs: replace whole collection
+     * For Element URIs: update selected element
      *
      * @return void
      */
@@ -112,6 +118,9 @@ class Controller_Rest extends Zend_Controller_Action {
     /**
      * Handling for delete requests.
      *
+     * For Collection URIs: delete whole collection
+     * For Element URIs: delete selected element
+     *
      * @return void
      */
     public function deleteAction() {
@@ -120,6 +129,9 @@ class Controller_Rest extends Zend_Controller_Action {
 
     /**
      * Handling for put requests.
+     *
+     * For Collection URIs: create a new element in the collection
+     * For Element URIs: create a new sub-element in the selected element
      *
      * @return void
      */
