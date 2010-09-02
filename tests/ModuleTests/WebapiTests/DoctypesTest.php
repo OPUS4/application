@@ -34,14 +34,14 @@
  */
 
 /**
- * Test websearch api.
+ * Tests for webapi module doctypes.
  *
  * @category   Application
  * @package    Tests
  *
- * @group WebapiSearchTest
+ * @group    WebapiDoctypesTest
  */
-class ModuleTests_WebapiTests_SearchTests extends PHPUnit_Framework_TestCase {
+class WebapiTests_DoctypesTests extends PHPUnit_Framework_TestCase {
 
     /**
      * Holds uri location for tests. Should be configurable.
@@ -70,90 +70,62 @@ class ModuleTests_WebapiTests_SearchTests extends PHPUnit_Framework_TestCase {
      * @return void
      */
     protected function setUp() {
+        $this->markTestSkipped('Needs fixing.');
         $config = Zend_Registry::get('Zend_Config');
         $config = $config->webapi->toArray();
         $this->__restUri = $config['protocol'] . '://' . $config['host'];
-        $this->__restUrl = $config['docroot'] . '/' . $config['modul'] . '/search';
+        $this->__restUrl = $config['docroot'] . '/' . $config['modul'] . '/doctype';
         $restClient = new Zend_Rest_Client();
         $restClient->setUri($this->__restUri);
         $this->__restClient = $restClient;
     }
 
     /**
-     * Test for a good search.
+     * Test if a request without a doctyoe returns a list of available types.
      *
      * @return void
      */
-    public function testSearchWithResults() {
-        $query = array(
-            'field0' => 'title',
-            'boolean0' => 'and',
-            'query0' => 'gegen',
-            'searchtype' => 'truncated',
-            'language' => '0',
-        );
-
-        $result = $this->__restClient->restGet($this->__restUrl, $query);
+    public function testListingOfDocumentTypes() {
+        $result = $this->__restClient->restGet($this->__restUrl);
 
         $xml = new DOMDocument();
         $xml->loadXML($result->getBody());
-        $search = $xml->getElementsByTagName('Search');
-        $this->assertTrue($search->item(0)->hasAttribute('hits'), 'Search element should has a "hits" attribute.');
-        $this->assertEquals(2, $search->item(0)->getAttribute('hits'), 'Search should return 2 values');
-        $resultlist = $xml->getElementsByTagName('ResultList');
-        $this->assertEquals(1, $resultlist->length, 'A search with at least one hit should contain a ResultList.');
-        $results = $xml->getElementsByTagName('Result');
-        $this->assertGreaterThan(0, $results->length, 'There should be at least one result.');
-        $this->assertTrue($results->item(0)->hasAttribute('number'), 'A result should have a number attribute.');
-        $this->assertTrue($results->item(0)->hasAttribute('xlink:href'), 'A result should have a xlink:ref attribute.');
-        $this->assertTrue($results->item(0)->hasAttribute('title'), 'A result should have a title attribute.');
-        $this->assertTrue($results->item(0)->hasAttribute('author'), 'A result should have an author attribute.');
-        $this->assertTrue($results->item(0)->hasAttribute('abstract'), 'A result should have an abstract attribute.');
+        $typesList = $xml->getElementsByTagName('TypesList');
+        $this->assertEquals(1, $typesList->length, 'Type list should only once in result.');
+        $this->assertTrue($typesList->item(0)->hasChildNodes(), 'Type list should not be empty.');
+        $typexml = $xml->getElementsByTagName('Type');
+        $this->assertGreaterThanOrEqual(1, $typexml->length, 'A type list should contain at least one available type.');
+        $this->assertTrue($typexml->item(0)->hasAttribute('xlink:href'), 'A type should have "xlink:href".');
+        $this->assertNotNull($typexml->item(0)->nodeValue, 'There should be a name for a type.');
     }
 
     /**
-     * Test for good return values if search returns no hits.
+     * Test if requesting a invalid type returns a error.
      *
      * @return void
      */
-    public function testSearchWithNoHits() {
-        $query = array(
-            'field0' => 'title',
-            'boolean0' => 'and',
-            'query0' => 'gegen',
-            'searchtype' => '',
-            'language' => '0',
-        );
-
-        $result = $this->__restClient->restGet($this->__restUrl, $query);
-
-        $xml = new DOMDocument();
-        $xml->loadXML($result->getBody());
-        $search = $xml->getElementsByTagName('Search');
-        $this->assertTrue($search->item(0)->hasAttribute('hits'), 'Search element should has a "hits" attribute.');
-        $this->assertEquals(0, $search->item(0)->getAttribute('hits'), 'Search should return 0 values');
-    }
-
-    /**
-     * Test if a too short query throws a 400 HTPP error.
-     *
-     * @return void
-     */
-    public function testSearchingWithShortQuery() {
-        $query = array(
-            'field0' => 'title',
-            'boolean0' => 'and',
-            'query0' => 'b',
-        );
-
-        $result = $this->__restClient->restGet($this->__restUrl, $query);
-
-        $this->assertEquals(400, $result->getStatus(), 'HTTP status should be 400 (Bad request).');
+    public function testRequestingInvalidType() {
+        $result = $this->__restClient->restGet($this->__restUrl . '/IShouldNotExistsOrChuckNorrisWasThere');
 
         $xml = new DOMDocument();
         $xml->loadXML($result->getBody());
         $error = $xml->getElementsByTagName('Error');
-        $this->assertNotNull($error->item(0)->nodeValue, 'Error element contain no error message.');
+        $this->assertEquals('Requested type is not available!', $error->item(0)->getAttribute('message'), 'Wrong error message returned.');
+    }
 
+    /**
+     * Test for a good structure of a document type.
+     *
+     * @return void
+     */
+    public function testRequestWithValidType() {
+        $result = $this->__restClient->restGet($this->__restUrl . '/doctoral_thesis');
+
+        $xml = new DOMDocument();
+        $xml->loadXML($result->getBody());
+        $document = $xml->getElementsByTagName('Document');
+        $this->assertEquals(1, $document->length, 'Result should only contain one document.');
+        $this->assertTrue($document->item(0)->hasAttribute('Type'), 'A document type should have a type.');
+        $this->assertTrue($document->item(0)->hasChildNodes(), 'A document should not be empty.');
     }
 }
