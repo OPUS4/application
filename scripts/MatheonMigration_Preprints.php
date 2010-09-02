@@ -282,6 +282,10 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
      */
     public function disable_all_collectionroles() {
         foreach (Opus_CollectionRole::fetchAll() AS $cr) {
+            if ($cr->getOaiName() == 'msc') {
+                continue;
+            }
+
             /* @var $cr Opus_CollectionRole */
             $cr->setVisible(0);
             $cr->setVisibleBrowsingStart(0);
@@ -592,9 +596,26 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
                     }
                 }
 
+                $msc_role = Opus_CollectionRole::fetchByOaiName('msc');
+
                 foreach ($mscs AS $m) {
                     $model = $doc->addSubjectMSC();
                     $model->setValue("$m");
+
+                    $msc_collections = Opus_Collection::fetchCollectionsByRoleNumber($msc_role->getId(), trim($m));
+
+                    if (!is_array($msc_collections) or count($msc_collections) < 1) {
+                        echo "-- Unbekannte MSC-Klassifikation gefunden: $m\n";
+                    }
+                    else if (count($msc_collections) > 1) {
+                        echo "-- Doppelte MSC-Klassifikation gefunden: $m\n";
+                    }
+
+                    if (is_array($msc_collections) && count($msc_collections) >= 1) {
+                        foreach ($msc_collections AS $msc_c) {
+                            $doc->addCollection($msc_c);
+                        }
+                    }
                 }
             }
 
