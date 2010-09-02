@@ -100,7 +100,7 @@ class TestHelper extends Opus_Bootstrap_Base {
         }           
             
         // Compare revisions and throw exception if needed
-        if ($sqlRev !== $dbRev) {
+        if (isset($sqlRev, $dbRev) && $sqlRev !== $dbRev) {
             throw new Exception("Database schema revision mismatch. SQL file has '$sqlRev', DB has '$dbRev'. Consider rebuilding the database.\n");            
         }
     }
