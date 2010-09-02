@@ -8,6 +8,15 @@
   <body>
 <!-- This language file contains all texts concerning button labels. -->
 
+    <tu tuid="button_label_send">
+        <tuv xml:lang="en">
+            <seg>Send form</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Formular abschicken</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="button_label_add_one_morePersonAuthor">
         <tuv xml:lang="en">
             <seg>Add one more author</seg>

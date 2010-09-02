@@ -91,7 +91,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         //hidden field with document id
         $this->_addHiddenField('documentId', $this->docId);
 
-        $this->_addSubmit('Formular abschicken');
+        $this->_addSubmit('button_label_send');
     }
 
     /**
