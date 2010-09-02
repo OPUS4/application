@@ -126,7 +126,7 @@ class Publish_IndexController extends Controller_Action {
             $log->debug("ID -step2-: " . $this->documentId);
             $log->debug("Fulltext -step2-: " . $fulltext);
 
-            //$this->_helper->viewRenderer($this->documentType);
+            $this->_helper->viewRenderer($this->documentType);
            
             //create the form
             $step2Form = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $fulltext, null, null);
@@ -134,9 +134,8 @@ class Publish_IndexController extends Controller_Action {
             $step2Form->setAction($action_url);
             $step2Form->setMethod('post');
             $this->setViewVariables($step2Form);
-
             $this->view->action_url = $action_url;
-            $this->view->doctype= $this->documentType;            
+                    
         }
     }
 
