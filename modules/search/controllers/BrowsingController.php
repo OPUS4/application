@@ -33,18 +33,8 @@
  * @version     $Id$
  */
 
-/**
- * Controller for any browsing operation
- *
- */
 class Search_BrowsingController extends Controller_Action {
 
-    /**
-     * Just to be there. No actions taken.
-     *
-     * @return void
-     *
-     */
     public function indexAction() {
         $this->view->title = $this->view->translate('search_index_browsing');
         $this->view->baseUrl = $this->getRequest()->getBaseUrl();
@@ -55,19 +45,6 @@ class Search_BrowsingController extends Controller_Action {
         $this->view->browsinglist = $browsingListProduct;
     }
 
-    /**
-     * Build the hitlist to browse titles filtered by some criteria
-     * Filter criteria has to be passed to the action by URL-parameter filter
-     * Possible values for filter are:
-     * author 	- the ID of a person in the OPUS database
-     * doctype 	- the ID of a doctype in OPUS
-     * ... to be continued
-     *
-     * If no (or an invalid) filter criteria is given, a complete list of all documents is passed to the view
-     *
-     * @return void
-     *
-     */
     public function browsetitlesAction() {
         $this->view->title = $this->view->translate('search_index_alltitles_browsing');
         $url_sort_by_id = array(
@@ -127,57 +104,59 @@ class Search_BrowsingController extends Controller_Action {
         $this->view->title = $this->view->translate('search_index_alltitles_browsing');
 
         // Default Ordering...
-        if (true === array_key_exists('sort_reverse', $data)) {
+        $sort_reverse = null;
+        if (array_key_exists('sort_reverse', $data)) {
             $sort_reverse = $data['sort_reverse'];
         } else {
             $sort_reverse = '0';
         }
         $this->view->sort_reverse = $sort_reverse;
 
-        if (true === array_key_exists('state', $data)) {
+        if (array_key_exists('state', $data)) {
             $this->view->state = $data['state'];
         }
         // following could be handled inside a application model
-        if (true === array_key_exists('sort_order', $data)) {
+        if (array_key_exists('sort_order', $data)) {
             $this->view->sort_order = $data['sort_order'];
+            $result = null;
             switch ($data['sort_order']) {
                 case 'author':
-                    if (true === array_key_exists('state', $data)) {
+                    if (array_key_exists('state', $data)) {
                         $result = Opus_Document::getAllDocumentsByAuthorsByState($data['state'], $sort_reverse);
                     } else {
                         $result = Opus_Document::getAllDocumentsByAuthors($sort_reverse);
                     }
                     break;
                 case 'publicationDate':
-                    if (true === array_key_exists('state', $data)) {
+                    if (array_key_exists('state', $data)) {
                         $result = Opus_Document::getAllDocumentsByPubDateByState($data['state'], $sort_reverse);
                     } else {
                         $result = Opus_Document::getAllDocumentsByPubDate($sort_reverse);
                     }
                     break;
                 case 'docType':
-                    if (true === array_key_exists('state', $data)) {
+                    if (array_key_exists('state', $data)) {
                         $result = Opus_Document::getAllDocumentsByDoctypeByState($data['state'], $sort_reverse);
                     } else {
                         $result = Opus_Document::getAllDocumentsByDoctype($sort_reverse);
                     }
                     break;
                 case 'title':
-                    if (true === array_key_exists('state', $data)) {
+                    if (array_key_exists('state', $data)) {
                         $result = Opus_Document::getAllDocumentsByTitlesByState($data['state'], $sort_reverse);
                     } else {
                         $result = Opus_Document::getAllDocumentsByTitles($sort_reverse);
                     }
                     break;
                 default:
-                    if (true === array_key_exists('state', $data)) {
+                    if (array_key_exists('state', $data)) {
                         $result = Opus_Document::getAllIdsByState($data['state'], $sort_reverse);
                     } else {
                         $result = Opus_Document::getAllIds($sort_reverse);
                     }
             }
         } else {
-            if (true === array_key_exists('state', $data)) {
+            if (array_key_exists('state', $data)) {
                 $result = Opus_Document::getAllIdsByState($data['state'], $sort_reverse);
             } else {
                 $result = Opus_Document::getAllIds($sort_reverse);
