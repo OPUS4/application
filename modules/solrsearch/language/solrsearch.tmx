@@ -73,7 +73,7 @@
 
         <tu tuid="sorting_title_desc">
             <tuv xml:lang="en">
-                <seg>Titel (descending)</seg>
+                <seg>Title (descending)</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>Titel (absteigend)</seg>
