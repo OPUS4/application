@@ -91,12 +91,7 @@ $this->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8')
                 </div>
 
                 <div id="languageSelection" class="right">
-                    <a href="<?= $basePath ?>/home/index/language/language/en">
-                        <img src="<?= $basePath;?>/layouts/opus4/img/todo.png" alt="British flag" title="Switch to english version" />
-                    </a>
-                    <a href="<?= $basePath ?>/home/index/language/language/de">
-                        <img src="<?= $basePath;?>/layouts/opus4/img/todo.png" alt="Deutsche Flagge" title="Auf die deutsche Version umschalten" />
-                    </a>
+                    <?= $this->languageSelector() ?>
                 </div>
 
                 <div id="copyright">
