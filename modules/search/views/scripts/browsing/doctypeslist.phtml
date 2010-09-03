@@ -34,11 +34,9 @@
 ?>
 
 
-<h2>Browse documents by type</h2>
+<h2><?= $this->translate('browse_doctypes_title') ?></h2>
 
-<p>
-    Click on a document type below to view all documents of that type.
-</p>
+<p><?= $this->translate('browse_doctypes_message') ?></p>
 
 <ul>
 <?php foreach($this->facetitems as $facetitem) : ?>
