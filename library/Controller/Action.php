@@ -113,12 +113,6 @@ class Controller_Action extends Zend_Controller_Action {
         parent::postDispatch();
     }
 
-    public function initView() {
-        parent::initView();
-        $baseDir = $this->view->basePath;
-        $this->view = new Opus_View(array('basePath' => $baseDir));
-    }
-
     /**
      * Helper method that redirects to another <b>internal</b> url
      * @param String $url url to redirect to
