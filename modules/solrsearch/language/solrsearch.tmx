@@ -8,6 +8,15 @@
 
     <body>
 
+        <tu tuid="results_title_single">
+            <tuv xml:lang="en">
+                <seg>Search Result</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Suchergebnis</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="eng">
             <tuv xml:lang="en">
                 <seg>English</seg>
