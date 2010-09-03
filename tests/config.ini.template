@@ -31,9 +31,6 @@
 ; Database adapter configuration using standard Zend_db option names.
 ; Have a look on Zend_Db::factory() method for information about adapter creation.
 
-; Database adapter configuration using standard Zend_db option names.
-; Have a look on Zend_Db::factory() method for information about adapter creation.
-
 [production]
 db.params.host     =  
 db.params.username = 
