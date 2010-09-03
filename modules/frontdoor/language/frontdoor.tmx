@@ -3,6 +3,15 @@
   <header adminlang="en" creationtool="locale4j" creationtoolversion="1.1" o-tmf="unknown" segtype="block" srclang="*all*"/>
   <body>
 
+    <tu tuid="frontdoor_title">
+        <tuv xml:lang="en">
+            <seg>Document View</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Dokumentansicht</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="frontdoor_modulename">
       <tuv xml:lang="en">
         <seg>Frontdoor</seg>

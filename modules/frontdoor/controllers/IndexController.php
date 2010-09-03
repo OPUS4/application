@@ -41,8 +41,7 @@ class Frontdoor_IndexController extends Controller_Action {
      * @return void
      */
     public function indexAction() {
-        // $logger = Zend_Registry::get('Zend_Log');
-        // Load document
+        $this->view->title = $this->view->translate('frontdoor_title');
         $docId = $this->getRequest()->getParam('docId');
         try {
             $document = new Opus_Document($docId);
