@@ -289,7 +289,8 @@ class Search_BrowsingController extends Controller_Action {
                 $this->view->browsinglist = new Opus_Search_Iterator_PersonsListIterator($browsingListProduct);
                 break;
             case 'doctypes':
-                $this->redirectToDoctypesList();
+                $url = $this->view->url(array('module'=>'search','controller'=>'browsing','action'=>'doctypeslist'),null,true);
+                $this->redirectTo($url);
                 break;
             case 'collection':
                 $node = $this->_getParam("node");
@@ -399,17 +400,6 @@ class Search_BrowsingController extends Controller_Action {
                 $this->view->title = $this->view->translate('search_index_alltitles_browsing');
             // Just to be there... List is not supported (Exception is thrown by BrowsingListFactory)
         }
-    }
-
-    private function redirectToDoctypesList() {
-        $log = Zend_Registry::get('Zend_Log');
-        $log->debug('Redirecting browse etc');
-        $redirector = $this->_helper->getHelper('Redirector');
-        $redirector->setPrependBase(false);
-        $redirector->setGotoUrl('');
-        $redirector->setExit(false);
-        $url = $this->view->url(array('module'=>'search','controller'=>'browsing','action'=>'doctypeslist'),null,true);
-        $redirector->gotoUrl($url);
     }
 
     public function doctypeslistAction() {

@@ -77,8 +77,6 @@ class Solrsearch_SolrsearchController extends Controller_Action {
 
     public function searchdispatchAction() {
         $this->log->debug('Received new search request. Redirecting to search action.');
-
-        $redirector = $this->configureRedirector();
         $requestData = null;
         $url = '';
 
@@ -102,15 +100,7 @@ class Solrsearch_SolrsearchController extends Controller_Action {
         }
 
         $this->log->debug("URL is: " . $url);
-        $redirector->gotoUrl($url);
-    }
-
-    private function configureRedirector() {
-        $redirector = $this->_helper->getHelper('Redirector');
-        $redirector->setPrependBase(false);
-        $redirector->setGotoUrl('');
-        $redirector->setExit(false);
-        return $redirector;
+        $this->redirectTo($url);
     }
 
     private function isSimpleSearchRequestValid($data) {

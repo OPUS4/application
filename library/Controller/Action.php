@@ -119,4 +119,15 @@ class Controller_Action extends Zend_Controller_Action {
         $this->view = new Opus_View(array('basePath' => $baseDir));
     }
 
+    /**
+     * Helper method that redirects to another url, leaving the current page
+     * @param String $url url to redirect to
+     */
+    protected function redirectTo($url) {
+        $redirector = $this->_helper->getHelper('Redirector');
+        $redirector->setPrependBase(false);
+        $redirector->setGotoUrl('');
+        $redirector->setExit(false);
+        $redirector->gotoUrl($url);
+    }
 }
