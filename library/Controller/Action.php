@@ -120,7 +120,7 @@ class Controller_Action extends Zend_Controller_Action {
     }
 
     /**
-     * Helper method that redirects to another url, leaving the current page
+     * Helper method that redirects to another <b>internal</b> url
      * @param String $url url to redirect to
      */
     protected function redirectTo($url) {
