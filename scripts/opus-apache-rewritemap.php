@@ -46,7 +46,7 @@ define('APPLICATION_ENV', 'testing');
 
 require_once 'Zend/Loader/Autoloader.php';
 $autoloader = Zend_Loader_Autoloader::getInstance();
-$autoloader->suppressNotFoundWarnings(true);
+$autoloader->suppressNotFoundWarnings(false);
 $autoloader->setFallbackAutoloader(true);
 
 // Zend_Loader is'nt available yet. We have to do a require_once
