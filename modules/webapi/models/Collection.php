@@ -36,7 +36,7 @@
 /**
  * Methods for handling collections.
  */
-class Webapi_Model_Collection extends Response {
+class Webapi_Model_Collection extends Webapi_Model_Response {
 
     /**
      * Returns informations about a specific collection.

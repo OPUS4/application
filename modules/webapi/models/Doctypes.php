@@ -36,7 +36,7 @@
 /**
  * Loads a list of document types or present a specific type
  */
-class Doctypes extends Response{
+class Webapi_Model_Doctypes extends Webapi_Model_Response {
 
     /**
      * Holds path to xml doctype files.

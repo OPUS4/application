@@ -30,7 +30,7 @@
  * @author     Henning Gerhardt (henning.gerhardt@slub-dresden.de)
  * @copyright  Copyright (c) 2009, OPUS 4 development team
  * @license    http://www.gnu.org/licenses/gpl.html General Public License
- * @version    $Id:$
+ * @version    $Id$
  */
 
 /**
@@ -46,7 +46,7 @@ class Webapi_LicenceController extends Controller_Rest {
      */
     public function getAction() {
 
-        $licence = new Licence();
+        $licence = new Webapi_Model_Licence();
         $original_action = $this->requestData['original_action'];
         $result = '';
         if ((false === empty($original_action))

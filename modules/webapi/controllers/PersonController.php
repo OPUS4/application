@@ -47,7 +47,7 @@ class Webapi_PersonController extends Controller_Rest {
      * @return void
      */
     public function getAction() {
-        $person = new Person();
+        $person = new Webapi_Model_Person();
         $result = $person->getPerson($this->requestData['original_action']);
         $this->getResponse()->setBody($result);
         $this->getResponse()->setHttpResponseCode($person->getResponseCode());
@@ -60,7 +60,7 @@ class Webapi_PersonController extends Controller_Rest {
      */
     public function putAction() {
         $rawBody = $this->getRequest()->getRawBody();
-        $person = new Person();
+        $person = new Webapi_Model_Person();
         $result = $person->addNewPerson($rawBody);
         $this->getResponse()->setBody($result);
         $this->getResponse()->setHttpResponseCode($person->getResponseCode());
@@ -74,7 +74,7 @@ class Webapi_PersonController extends Controller_Rest {
     public function postAction() {
         $personId = $this->requestData['original_action'];
         $rawBody = $this->getRequest()->getRawBody();
-        $person = new Person();
+        $person = new Webapi_Model_Person();
         $result = $person->update($personId, $rawBody);
         $this->getResponse()->setBody($result);
         $this->getResponse()->setHttpResponseCode($person->getResponseCode());
@@ -87,7 +87,7 @@ class Webapi_PersonController extends Controller_Rest {
      */
     public function deleteAction() {
         $personId = $this->requestData['original_action'];
-        $person = new Person();
+        $person = new Webapi_Model_Person();
         $result = $person->delete($personId);
         $this->getResponse()->setHttpResponseCode($person->getResponseCode());
     }

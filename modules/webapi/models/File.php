@@ -36,7 +36,7 @@
 /**
  * Methods for handling resource file.
  */
-class File extends Response {
+class Webapi_Model_File extends Webapi_Model_Response {
 
     /**
      * Returns informations about a specific file.

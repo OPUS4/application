@@ -36,7 +36,7 @@
 /**
  * Methods for handling resource person.
  */
-class Person extends Response {
+class Webapi_Model_Person extends Webapi_Model_Response {
 
     /**
      * Returns available person information.

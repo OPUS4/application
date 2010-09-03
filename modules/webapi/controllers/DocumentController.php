@@ -45,8 +45,7 @@ class Webapi_DocumentController extends Controller_Rest {
      * @return void
      */
     public function getAction() {
-
-        $doc = new Document();
+        $doc = new Webapi_Model_Document();
         $original_action = $this->requestData['original_action'];
         if ((false === empty($original_action))
             and (true === is_numeric($original_action))) {
@@ -68,7 +67,7 @@ class Webapi_DocumentController extends Controller_Rest {
         $original_action = $this->requestData['original_action'];
         if ((false === empty($original_action))
             and (true === is_numeric($original_action))) {
-            $doc = new Document();
+            $doc = new Webapi_Model_Document();
             $doc->deleteDocument($original_action);
             $this->getResponse()->setHttpResponseCode($doc->getResponseCode());
         } else {
@@ -83,7 +82,7 @@ class Webapi_DocumentController extends Controller_Rest {
      */
     public function putAction() {
         $rawBody = $this->getRequest()->getRawBody();
-        $doc = new Document();
+        $doc = new Webapi_Model_Document();
         $result = $doc->addNewDocument($rawBody);
         $this->getResponse()->setBody($result);
         $this->getResponse()->setHttpResponseCode($doc->getResponseCode());
@@ -97,7 +96,7 @@ class Webapi_DocumentController extends Controller_Rest {
     public function postAction() {
         $docId = $this->requestData['original_action'];
         $rawBody = $this->getRequest()->getRawBody();
-        $doc = new Document();
+        $doc = new Webapi_Model_Document();
         $result = $doc->update($docId, $rawBody);
         $this->getResponse()->setBody($result);
         $this->getResponse()->setHttpResponseCode($doc->getResponseCode());

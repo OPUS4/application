@@ -36,7 +36,7 @@
 /**
  * Methods for handling REST requests for resource licence.
  */
-class Licence extends Response {
+class Webapi_Model_Licence extends Webapi_Model_Response {
 
     /**
      * Returns information for a licence as a xml string.

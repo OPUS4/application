@@ -46,7 +46,7 @@ class Webapi_SearchController extends Controller_Rest {
      */
     public function getAction() {
         $requestData = $this->requestData;
-        $search = new SearchApi($requestData);
+        $search = new Webapi_Model_SearchApi($requestData);
 
         $search->search();
         $this->getResponse()->setBody($search->getXMLResult());

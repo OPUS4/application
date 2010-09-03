@@ -36,7 +36,7 @@
 /**
  * Model for Search API
  */
-class SearchApi extends Response {
+class Webapi_Model_SearchApi extends Webapi_Model_Response {
 
     /**
      * Holds search boolean operators.

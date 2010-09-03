@@ -36,7 +36,7 @@
 /**
  * General class for responding webapi informations.
  */
-class Response {
+class Webapi_Model_Response {
 
     /**
      * Holds webapi host name.

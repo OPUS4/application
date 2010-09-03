@@ -46,7 +46,7 @@ class Webapi_FileController extends Controller_Rest {
      */
     public function getAction() {
 
-        $file = new File();
+        $file = new Webapi_Model_File();
         $result = $file->getFile($this->requestData['original_action']);
         $this->getResponse()->setBody($result);
         $this->getResponse()->setHttpResponseCode($file->getResponseCode());

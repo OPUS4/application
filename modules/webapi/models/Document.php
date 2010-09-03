@@ -36,7 +36,7 @@
 /**
  * Methods for REST handling of resource document.
  */
-class Document extends Response {
+class Webapi_Model_Document extends Webapi_Model_Response {
 
     /**
      * Returns a xml string for a specific document.
