@@ -67,8 +67,12 @@ mail.opus.name = ; Name of administrator
 ;REFEREES (temporary solution)
 ; referees['John Doe'] = john.doe@example.org
 
+;DOCUMENT-DOWNLOAD-DIRECTORIES
+; deliver.target.prefix = /opus4-matheon-files
+; deliver.url.prefix = /documents-matheon
 
-
+;OAI-DIRECORY
+; path.workspace.temp = /home/opus4web/opus4-matheon/server/workspace/tmp
 
 ; The following is needed even if sections are empty.
 [staging : production]
