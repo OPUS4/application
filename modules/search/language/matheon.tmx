@@ -15,4 +15,15 @@
     </tu>
   </body>
 
+  <body>
+    <tu tuid="search_index_custom_browsing_Institutes">
+        <tuv xml:lang="en">
+            <seg>Institutes</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Institutionen</seg>
+        </tuv>
+    </tu>
+  </body>
+
 </tmx>
