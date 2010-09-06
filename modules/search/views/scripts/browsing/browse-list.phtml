@@ -90,7 +90,8 @@
                  '">';
                     echo $coll->getDisplayName();
                     if ($browseListCountStyle === 'count') {
-                        echo '</a> (' . $documentCountCurrent . ') (' . $this->translate('browsing_total_number') . ' ' . $documentCountSubtree . ')';
+                        // Changed for matheon: echo '</a> (' . $documentCountCurrent . ') (' . $this->translate('browsing_total_number') . ' ' . $documentCountSubtree . ')';
+                        echo '</a> (' . $documentCountSubtree . ')';
                     }
                     else if ($browseListCountStyle === 'none') {
                     	echo '</a>';
