@@ -9,6 +9,7 @@
 <!-- This language file contains all texts concerning field hints. -->
 
     <tu tuid="publish_controller_required_hint">
+        <!-- Hint for the required sign -->
         <tuv xml:lang="en">
             <seg>Fields that are marked with <span class='required'>*</span> have to be filled.</seg>
         </tuv>
@@ -17,6 +18,41 @@
         </tuv>
     </tu>
 
+    <tu tuid="hint_no_collection_licence">
+        <tuv xml:lang="en">
+            <seg>Sorry: No licences have been found in our database.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Entschuldigung: Es wurden keine Lizenzen in unserer Datenbank gefunden.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_no_collection_language">
+        <tuv xml:lang="en">
+            <seg>Sorry: No languages have been found in our database.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Entschuldigung: Es wurden keine Sprachen in unserer Datenbank gefunden.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_no_collection_institutes">
+        <tuv xml:lang="en">
+            <seg>Sorry: No institutes have been found in our database.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Entschuldigung: Es wurden keine Institute in unserer Datenbank gefunden.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_no_collection_projects">
+        <tuv xml:lang="en">
+            <seg>Sorry: No projects have been found in our database.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Entschuldigung: Es wurden keine Projekte in unserer Datenbank gefunden.</seg>
+        </tuv>
+    </tu>
 
     <tu tuid="hint_groupPersonAuthor">
         <tuv xml:lang="en">

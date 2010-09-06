@@ -93,6 +93,7 @@ class Publish_IndexController extends Controller_Action {
             $this->view->title = $this->view->translate('publish_controller_index');
             $this->view->subtitle = $this->view->translate($this->documentType);
             $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
+            $this->view->doctype = $this->documentType;
 
             //Flag for checking if fulltext of not => must be string, or else Zend_Form collaps
             $fulltext = "0";
@@ -127,19 +128,17 @@ class Publish_IndexController extends Controller_Action {
             $log->debug("ID -step2-: " . $this->documentId);
             $log->debug("Fulltext -step2-: " . $fulltext);
 
-            $templateName = $this->_helper->documentTypes->getTemplateName(
-                    $this->documentType);
+            $templateName = $this->_helper->documentTypes->getTemplateName($this->documentType);
 
             $this->_helper->viewRenderer($templateName);
            
             //create the form
             $step2Form = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $fulltext, null, null);
-            $action_url = $this->view->url(array('controller' => 'index', 'action' => 'check'));
+            $action_url = $this->view->url(array('controller' => 'index', 'action' => 'check'));                        
             $step2Form->setAction($action_url);
             $step2Form->setMethod('post');
             $this->setViewVariables($step2Form);
             $this->view->action_url = $action_url;
-                    
         }
     }
 
@@ -168,7 +167,7 @@ class Publish_IndexController extends Controller_Action {
             $additionalFields = array();
             foreach ($postData AS $element => $value) {
                 if (substr($element, 0, 9) == "countMore") {
-                    $key = substr($element, 9);                   
+                    $key = substr($element, 9);
                     $additionalFields[$key] = (int) $value;
                 }
             }
@@ -176,17 +175,14 @@ class Publish_IndexController extends Controller_Action {
 
             //create the proper form and populate all needed values
             $form = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $fulltext, $this->additionalFields, $postData);
-//            $action_url = $this->view->url(array('controller' => 'index', 'action' => 'check'));
-//            $form->setAction($action_url);
             $form->populate($postData);
-//            $this->view->action_url = $action_url;
 
             if (!$form->send->isChecked()) {
                 //a button was pressed, but not the send button => add / remove fields
                 $this->view->title = $this->view->translate('publish_controller_index');
                 $this->view->subtitle = $this->view->translate($this->documentType);
                 $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
-                                
+
                 $this->_helper->viewRenderer($this->documentType);
                 $pressedButtonName = $this->getPressedButton($form);
 
@@ -217,18 +213,15 @@ class Publish_IndexController extends Controller_Action {
 
                 //"jump-anchor" for adding or deleting fields
                 $anchor = 'group' . $fieldName;
-                
+                $action_url = $this->view->url(array('controller' => 'index', 'action' => 'check'));
+                $action_url = $action_url . "#" . $anchor;
+                $this->view->action_url = $action_url;
 
                 //create the proper form and populate all needed values
                 $form = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $fulltext, $additionalFields, $postData);
-                $action_url = $this->view->url(array('controller' => 'index', 'action' => 'check'));
-                $action_url = $action_url . "#" . $anchor;
                 $form->setAction($action_url);
-
                 //call help funtion to render the form for specific view
                 $this->setViewVariables($form);
-                $this->view->action_url = $action_url;
-
                 return $this->render($this->documentType);
             } else {
                 //a button was pressed and it was send => check the form
@@ -394,6 +387,7 @@ class Publish_IndexController extends Controller_Action {
                     $name = substr($currentElement, 0, $pos);
                 else
                     $name=$currentElement; //"normal" element name without changes
+
 
 
             }
@@ -722,10 +716,10 @@ class Publish_IndexController extends Controller_Action {
                 $log->debug("Role ID: " . $role->getId() . ", value: " . $value);
 
                 if ($collArray !== null && count($collArray) <= 1) {
-                    $document->addCollection($collArray[0]);                    
+                    $document->addCollection($collArray[0]);
                 } else
-                    throw new Publish_Model_OpusServerException("While trying to store " . $key . " as Collection, an error occurred.".
-                        "The method fetchCollectionsByRoleNumber returned an array with > 1 values. The " . $key . " cannot be definitely assigned.");
+                    throw new Publish_Model_OpusServerException("While trying to store " . $key . " as Collection, an error occurred." .
+                            "The method fetchCollectionsByRoleNumber returned an array with > 1 values. The " . $key . " cannot be definitely assigned.");
                 $subject = new Opus_Subject();
                 $log->debug("subject has also be stored as subject.");
             } else {

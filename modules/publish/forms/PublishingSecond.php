@@ -46,13 +46,15 @@ class Publish_Form_PublishingSecond extends Zend_Form {
     public $postData = array();
     //log-Object
     public $log;
-    //array of institutes
+    //cache for array of institutes
     public $institutes = array();
-    //array of projects
+    //cache for array of projects
     public $projects = array();
-    //array of msc classifications
+    //cache for array of msc classifications
     public $msc = array();
-    //array of languages
+    //cache for array of licences
+    public $licences = array();
+    //cache for array of languages
     public $languages = array();
 
 
@@ -128,31 +130,44 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      * @param <Array> $data list of options
      */
     protected function _addSelect($workflow, $elementName, $validator, $required, $label, $data) {
-        $this->log->debug('method _addSelect ... ');
-        if (count($data) == 1) {
-            $value = (array_keys($data));
+        if (!isset($data) || !isset($validator)) {
+            //no collections found => data is empty and validator is null
+
             $formField = $this->createElement('text', $elementName);
-            $formField->setValue($value[0]);
+            $trans = $formField->getTranslator();
+            $formField->setDescription($trans->translate('hint_no_collection_' . $workflow));
+                    
+            $required = null;
         } else {
 
-            $formField = new Zend_Form_Element_Select($elementName);
+            if (count($data) == 1) {
+                //if theres only one entry, just show an text fields
+                $value = (array_keys($data));
+                $formField = $this->createElement('text', $elementName);
+                $formField->setValue($value[0]);
+            } else {
+                //at least 2 entry: show a select field
+                $formField = new Zend_Form_Element_Select($elementName);
 
-            switch ($workflow) {
-                case 'licence' :
-                    $formField->setMultiOptions(array_merge(array('' => 'choose_valid_licence'), $data));
-                    break;
-                case 'language' :
-                    $formField->setMultiOptions(array_merge(array('' => 'choose_valid_language'), $data));
-                    break;
-                case 'projects' :
-                    $formField->setMultiOptions(array_merge(array('' => 'choose_valid_project'), $data));
-                    break;
-                case 'institutes' :
-                    $formField->setMultiOptions(array_merge(array('' => 'choose_valid_institute'), $data));
+                switch ($workflow) {
+                    case 'licence' :
+                        $formField->setMultiOptions(array_merge(array('' => 'choose_valid_licence'), $data));
+                        break;
+                    case 'language' :
+                        $formField->setMultiOptions(array_merge(array('' => 'choose_valid_language'), $data));
+                        break;
+                    case 'projects' :
+                        $formField->setMultiOptions(array_merge(array('' => 'choose_valid_project'), $data));
+                        break;
+                    case 'institutes' :
+                        $formField->setMultiOptions(array_merge(array('' => 'choose_valid_institute'), $data));
+                }
             }
         }
-        $formField->setLabel($label)
-                ->addValidator($validator);
+        $formField->setLabel($label);
+
+        if (isset($validator))
+            $formField->addValidator($validator);
 
         if ($required === "yes")
             $formField->setRequired(true);
@@ -188,7 +203,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
                 $requiredIfFulltext = $field->getElementsByTagName("required-if-fulltext");
                 //case: fulltext => overwrite the $required value with yes
                 if ($requiredIfFulltext->length != 0) {
-                    $this->log->debug($elementName . " is required-if-fulltext! And Fulltext ist set to " . $this->fulltext );
+                    $this->log->debug($elementName . " is required-if-fulltext! And Fulltext ist set to " . $this->fulltext);
                     $required = "yes";
                 }
             }
@@ -376,7 +391,11 @@ class Publish_Form_PublishingSecond extends Zend_Form {
                 break;
 
             case 'Institute':
-                return new Zend_Validate_InArray($this->getCollection('institutes'));
+                $validValues = $this->getCollection('institutes');
+                if ($validValues == null)
+                    return null;
+                else
+                    return new Zend_Validate_InArray($validValues);
                 break;
 
             case 'Language' :
@@ -384,11 +403,14 @@ class Publish_Form_PublishingSecond extends Zend_Form {
                 break;
 
             case 'Licence' :
-                return new Zend_Validate_InArray(Opus_Licence::getAll());
+                $licences = $this->getLicences();
+                if ($licences == null)
+                    return null;
+                else
+                    return new Zend_Validate_InArray($licences);
                 break;
 
             case 'msc' :
-                //return new Zend_Validate_InArray($this->getCollection('msc')); //dauert lange
                 return new Opus_Validate_SubjectMSC();
                 break;
 
@@ -397,7 +419,11 @@ class Publish_Form_PublishingSecond extends Zend_Form {
                 break;
 
             case 'Project' :
-                return new Zend_Validate_InArray($this->getCollection('projects'));
+                $validValues = $this->getCollection('projects');
+                if ($validValues == null)
+                    return null;
+                else
+                    return new Zend_Validate_InArray($validValues);
                 break;
 
             case 'Text':
@@ -470,9 +496,12 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      * @param <type> $label
      */
     protected function _prepareLanguageElement($elementName, $validator, $required, $label) {
-        $this->log->debug("method _prepareLanguageelement...");
         $languages = $this->getLanguages();
-        asort($languages);
+        if (isset($languages) || count($languages) >= 1) {
+            asort($languages);
+        }
+        else
+            $languages = null;
         $this->_addSelect('language', $elementName, $validator, $required, $label, $languages);
     }
 
@@ -484,15 +513,16 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      * @param <type> $label
      */
     protected function _prepareLicenceElement($elementName, $validator, $required, $label) {
-        $licences = Opus_Licence::getAll();
-        $this->log->debug("Licences: ");
-        $data = array();
-        foreach ($licences AS $li) {
-            $name = $li->getDisplayName();
-            $data[$name] = $name;
-            $this->log->debug($name);
+        $licences = $this->getLicences();
+        if (isset($licences) || count($licences) >= 1) {
+            $data = array();
+            foreach ($licences AS $key => $li) {
+                $data[$key] = $li;
+            }
+            asort($data);
         }
-        asort($data);
+        else
+            $data = null;
         $this->_addSelect('licence', $elementName, $validator, $required, $label, $data);
     }
 
@@ -511,10 +541,15 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         }
         $oaiName = 'institutes';
         $institutes = $this->getCollection($oaiName);
-        $data = array();
-        foreach ($institutes AS $inst) {
-            $data[$inst] = $inst;
+        if (isset($institutes)) {
+            $data = array();
+            foreach ($institutes AS $inst) {
+                $data[$inst] = $inst;
+            }
         }
+        else
+            $data = null;
+
         $this->_addSelect($oaiName, $elementName, $validator, $required, $label, $data);
         $group[] = $elementName;
         return $group;
@@ -691,7 +726,8 @@ class Publish_Form_PublishingSecond extends Zend_Form {
             $this->log->debug($oaiName . " has to be fetched from database!");
             $role = Opus_CollectionRole::fetchByOaiName($oaiName);
             if ($role === null)
-                throw new Publish_Model_OpusServerException("No Collections found in database for " . $oaiName);
+            //throw new Publish_Model_OpusServerException("No Collections found in database for " . $oaiName);
+                return null;
             else {
                 $colls = Opus_Collection::fetchCollectionsByRoleId($role->getId());
                 $collections = array();
@@ -721,24 +757,48 @@ class Publish_Form_PublishingSecond extends Zend_Form {
     protected function getLanguages() {
         $languages = array();
         if (empty($this->languages)) {
-            $this->log->debug("Languages has to fetched from Registry!");
+            $this->log->debug("Languages have to fetched from Registry!");
             if (Zend_Registry::isRegistered('Available_Languages') === true) {
                 $languages = Zend_Registry::get('Available_Languages');
                 $this->languages = $languages;
 
                 return $languages;
             } else {
-                $this->log->debug("Languages has to fetched from Database!");
-                foreach (Opus_Language::getAllActive() as $lan)
-                    $languages[$lan->getPart2B()] = $lan->getDisplayName();
-                $this->languages = $languages;
-                
-                return $languages;
+                $this->log->debug("Languages have to fetched from Database!");
+                $dbLanguages = Opus_Language::getAllActive();
+                if (isset($dbLanguages) || count($dbLanguages) >= 1) {
+                    foreach ($dbLanguages as $lan)
+                        $languages[$lan->getPart2B()] = $lan->getDisplayName();
+                    $this->languages = $languages;
+
+                    return $languages;
+                }else
+                    return null;
             }
-            
         } else {
             $this->log->debug("Languages can be fetched from cache!");
             return $this->languages;
+        }
+    }
+
+    /**
+     * return the available languages from registry, database or chache
+     * @return <Array> languages
+     */
+    protected function getLicences() {
+        $licences = array();
+        if (empty($this->licences)) {
+            $this->log->debug("Licences have to be fetched from Database!");
+            foreach ($licences = Opus_Licence::getAll() as $lic) {
+                $name = $lic->getDisplayName();
+                $licences[$name] = $name;
+            }
+            $this->licences = $licences;
+            return $licences;
+        } else {
+
+            $this->log->debug("Licences can be fetched from cache!");
+            return $this->licences;
         }
     }
 
