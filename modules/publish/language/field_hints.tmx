@@ -18,6 +18,16 @@
         </tuv>
     </tu>
 
+    <tu tuid="publish_controller_one_doctype">
+        <!-- Hint for the required sign -->
+        <tuv xml:lang="en">
+            <seg>Only one document type available.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Nur ein Dokumenttyp verfügbar.</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="hint_no_collection_licence">
         <tuv xml:lang="en">
             <seg>Sorry: No licences have been found in our database.</seg>

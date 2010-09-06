@@ -61,7 +61,9 @@ class Publish_Form_PublishingFirst extends Zend_Form {
             $doctypes = $this->createElement('text', 'type');
             $doctypes->setLabel('selecttype')
                     ->setValue($value[0])
-                    ->setDisabled(); //todo
+                    ->setAttrib('disabled', true)
+                    ->setDescription('publish_controller_one_doctype');
+
         }
         else {
             $doctypes = $this->createElement('select', 'type');
