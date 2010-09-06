@@ -32,7 +32,7 @@
  * @version     $Id$
  */
 
-class Search_Model_OpenSearch {
+class Browse_Model_OpenSearch {
 
     /**
      * Holds the result list from the performed query

@@ -33,13 +33,13 @@
  * @version     $Id$
  */
 
-class Search_BrowsingController extends Controller_Action {
+class Browse_BrowsingController extends Controller_Action {
 
     public function indexAction() {
         $this->view->title = $this->view->translate('search_index_browsing');
         $this->view->baseUrl = $this->getRequest()->getBaseUrl();
         // Generate a list of all CollectionRoles existing in the repository and pass it as an Iterator to the View
-        $browsingList = new Search_Model_BrowsingListFactory("collectionRoles");
+        $browsingList = new Browse_Model_BrowsingListFactory("collectionRoles");
         $browsingListProduct = $browsingList->getBrowsingList();
         #print_r($browsingListProduct);
         $this->view->browsinglist = $browsingListProduct;
@@ -251,19 +251,19 @@ class Search_BrowsingController extends Controller_Action {
                 $this->view->role = $role;
                 $translatestring = 'search_index_' . $role . '_browsing';
                 $this->view->title = $this->view->translate($translatestring);
-                $browsingList = new Search_Model_BrowsingListFactory($list, $role);
+                $browsingList = new Browse_Model_BrowsingListFactory($list, $role);
                 $browsingListProduct = $browsingList->getBrowsingList();
                 $this->view->browsinglist = new Opus_Search_Iterator_PersonsListIterator($browsingListProduct);
                 break;
             case 'authors':
                 $this->view->title = $this->view->translate('search_index_authors_browsing');
-                $browsingList = new Search_Model_BrowsingListFactory($list);
+                $browsingList = new Browse_Model_BrowsingListFactory($list);
                 $browsingListProduct = $browsingList->getBrowsingList();
                 $this->view->browsinglist = new Opus_Search_Iterator_PersonsListIterator($browsingListProduct);
                 break;
             case 'editors':
                 $this->view->title = $this->view->translate('search_index_editors_browsing');
-                $browsingList = new Search_Model_BrowsingListFactory($list);
+                $browsingList = new Browse_Model_BrowsingListFactory($list);
                 $browsingListProduct = $browsingList->getBrowsingList();
                 $this->view->browsinglist = new Opus_Search_Iterator_PersonsListIterator($browsingListProduct);
                 break;
@@ -279,7 +279,7 @@ class Search_BrowsingController extends Controller_Action {
                 $this->view->collection = $this->_getParam("collection");
                 if (isset($collection) === false)
                     $collection = 0;
-                $browsingList = new Search_Model_BrowsingListFactory($list, null, $collection, $node);
+                $browsingList = new Browse_Model_BrowsingListFactory($list, null, $collection, $node);
                 $browsingListProduct = $browsingList->getBrowsingList();
 
                 $this->view->title = $browsingListProduct->getDisplayName('browsing');

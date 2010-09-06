@@ -34,7 +34,7 @@
  * @version     $Id$
  */
 
-class Search_Model_BrowsingList
+class Browse_Model_BrowsingList
 {
 	/**
 	 * Get a list of the 10 latest documents in repository

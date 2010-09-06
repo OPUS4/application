@@ -35,7 +35,7 @@
 /**
  * form to show the search mask
  */
-class Search_Form_FulltextSearch extends Zend_Form
+class Browse_Form_FulltextSearch extends Zend_Form
 {
     /**
      * Build easy search form

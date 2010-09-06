@@ -36,7 +36,7 @@
  * Controller for an overview on the browsing/search component
  * 
  */
-class Search_IndexController extends Zend_Controller_Action
+class Browse_IndexController extends Zend_Controller_Action
 {
 	/**
 	 * Just to be there. No actions taken.

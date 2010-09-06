@@ -36,7 +36,7 @@
  * Controller for search operations
  *
  */
-class Search_OpensearchController extends Controller_Xml
+class Browse_OpensearchController extends Controller_Xml
 {
     /**
      * Perform a get search request with an OpenSearch compliant result set.
@@ -46,7 +46,7 @@ class Search_OpensearchController extends Controller_Xml
     public function queryAction() {
         $requestData = $this->_request->getParams();
 
-        $search = new Search_Model_OpenSearch($requestData['q']);
+        $search = new Browse_Model_OpenSearch($requestData['q']);
         
         if (true === isset($requestData['format'])) $format = $requestData['format'];
         else $format = 'rss';
@@ -75,7 +75,7 @@ class Search_OpensearchController extends Controller_Xml
     public function descriptionAction() {
         $requestData = $this->_request->getParams();
 
-        $search = new Search_Model_OpenSearch();
+        $search = new Browse_Model_OpenSearch();
 
         $result = $search->getDescription();
         $this->_xml->loadXml($result['xml']);

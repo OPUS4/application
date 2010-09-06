@@ -33,7 +33,7 @@
  * @version     $Id: Bootstrap.php 4742 2010-08-16 19:38:02Z sszott $
  */
 
-class Search_Bootstrap extends Zend_Application_Module_Bootstrap {
+class Browse_Bootstrap extends Zend_Application_Module_Bootstrap {
 }
 
 ?>
