@@ -55,18 +55,18 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         //Select with different document types given by the used function
         $listOptions = $this->getXmlDocTypeFiles();
 
-        if (count($listOptions)<=1) {
-            $value = (array_keys($listOptions));
-            $doctypes = $this->createElement('text', 'type');
-            $doctypes->setLabel('selecttype')
-                    ->setValue($value[0]);
-        }
-        else {
+//        if (count($listOptions)<=1) {
+//            $value = (array_keys($listOptions));
+//            $doctypes = $this->createElement('text', 'type');
+//            $doctypes->setLabel('selecttype')
+//                    ->setValue($value[0]);
+//        }
+//        else {
             $doctypes = $this->createElement('select', 'type');
             $doctypes->setLabel('selecttype')
                     ->setMultiOptions(array_merge(array('' => 'choose_valid_doctype'), $listOptions))
                     ->setRequired(true);
-        }
+//        }
 
         // get path to store files
         $tempPath = $this->config->path->workspace->temp;
