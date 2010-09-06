@@ -324,7 +324,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
 //        $app_node->store();
 
         $role = new Opus_CollectionRole();
-        $role->setName('Projects');
+        $role->setName('matheon_projects');
         $role->setOaiName('projects');
         $role->setVisible(1);
         $role->setDisplayBrowsing('Number, Name');
