@@ -19,8 +19,8 @@
 
         <browsing>
             <label>browsing_menu_label</label>
-            <module>search</module>
-            <controller>browsing</controller>
+            <module>browse</module>
+            <controller>index</controller>
             <action>index</action>
         </browsing>
 
