@@ -1,7 +1,7 @@
 <?php
 /**
- * Index View for BrowsingController including links to several browsing lists and search functions 
- * 
+ * Index View for BrowsingController including links to several browsing lists and search functions
+ *
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -34,6 +34,31 @@
  * @version     $Id$
  */
 ?>
-	<h2><?= $this->translate('search_modulename') ?></h2>
-	<a href="<?= $this->url(array("controller"=>"browsing", "action"=>"index")) ?>"><?= $this->translate('search_index_browsing') ?></a><br/>
-	<a href="<?= $this->url(array("controller"=>"search", "action"=>"index")) ?>"><?= $this->translate('search_index_search') ?></a>
+
+<h2><?= $this->translate('search_index_browsing') ?></h2>
+
+<a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'latest'), null, true) ?>"><?= $this->translate('latest_docs_browsing') ?></a>&nbsp;
+<a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'latest', 'output' => 'rss'), null, true) ?>" class="rss"><img src="<?= $this->baseUrl; ?>/layouts/default/img/rss.gif" width="36" height="14" border="0" align="bottom" alt="RSS-Feed Icon" title="RSS-Feed abonnieren" /></a>
+<br/>
+<a href="<?= $this->url(array('module'=>'solrsearch','controller'=>'index','action'=>'search','query'=>'*:*','sortfield'=>'title','sortorder'=>'asc','searchtype'=>'simple'), null, true) ?>"><?= $this->translate('search_index_alltitles_browsing') ?></a>
+<br/>
+<a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'doctypes'), null, true) ?>"><?= $this->translate('search_index_doctype_browsing') ?></a>
+<br/>
+
+<?php if (count($this->browsinglist) > 0) : ?>
+
+   <?php foreach ($this->browsinglist as $obj) :
+        $translatelabel = 'search_index_custom_browsing_' . $obj->getName();
+        $printname = '';
+        if ($translatelabel === $this->translate($translatelabel))
+            $printname = $obj->getName();
+        else
+            $printname = $this->translate($translatelabel);
+   ?>
+
+    <a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'collection', 'collection' => $obj->getId()), null, true)?>">
+        <?= $printname ?>
+    </a>
+    <br/>
+    <?php endforeach ?>
+<?php endif ?>
