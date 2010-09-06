@@ -1,0 +1,79 @@
+<?php
+/**
+ * This file is part of OPUS. The software OPUS has been originally developed
+ * at the University of Stuttgart with funding from the German Research Net,
+ * the Federal Department of Higher Education and Research and the Ministry
+ * of Science, Research and the Arts of the State of Baden-Wuerttemberg.
+ *
+ * OPUS 4 is a complete rewrite of the original OPUS software and was developed
+ * by the Stuttgart University Library, the Library Service Center
+ * Baden-Wuerttemberg, the Cooperative Library Network Berlin-Brandenburg,
+ * the Saarland University and State Library, the Saxon State Library -
+ * Dresden State and University Library, the Bielefeld University Library and
+ * the University Library of Hamburg University of Technology with funding from
+ * the German Research Foundation and the European Regional Development Fund.
+ *
+ * LICENCE
+ * OPUS is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the Licence, or any later version.
+ * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @category    TODO
+ * @package     Opus_SolrSearch
+ * @author      Julian Heise <heise@zib.de>
+ * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ * @version     $Id$
+ */
+
+?>
+
+<?php
+    if($this->searchType === 'simple')
+        include('simpleSearchForm.php');
+    else if($this->searchType === 'advanced' || $this->searchType === 'authorsearch')
+        include('advancedSearchForm.php');
+?>
+
+<h2><?= $this->numOfHits . ' ' . ($this->numOfHits === 1 ? $this->translate('results_title_single') : $this->translate('results_title')); ?></h2>
+
+<?php include('searchOptions.php') ?>
+<?php include('pagination.php') ?>
+<?php include('facetsMenu.php') ?>
+
+<div id="search_results" class="search_results">
+
+    <?php $rowCount = 0; ?>
+    <?php foreach($this->results as $result) :?>
+        <div class="result_box <?= $rowCount++ % 2 === 0 ? 'even' : 'odd'; ?>">
+            <?php
+                $frontdoorUrl = array(
+                    'module' => 'frontdoor',
+                    'controller' => 'index',
+                    'action' => 'index',
+                    'docId' => $result->getId());
+            ?>
+            <span class="results_title"><a href="<?= $this->url($frontdoorUrl, null, true) ?>"><?= $result->getTitle(); ?></a> (<?= $result->getYear(); ?>)</span><br/>
+
+            <?php if(!is_null($result->getAuthors())) : ?>
+                <?php foreach($result->getAuthors() as $author) :
+                    $authorSearch = $this->authorSearch;
+                    $authorSearch['author'] = '"'.$author.'"';
+                    $authorSearch['searchtype'] = 'authorsearch';
+                ?>
+                <a href="<?= $this->url($authorSearch, null, true); ?>"><?= $author ?></a>
+                <?php endforeach ?>
+            <?php endif ?>
+
+            <div class="abstract"><?= $result->getAbstract(); ?></div>
+        </div>
+    <?php endforeach ?>
+</div>
+
+<?php include('pagination.php') ?>

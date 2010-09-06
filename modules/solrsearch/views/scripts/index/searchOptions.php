@@ -33,4 +33,32 @@
 
 ?>
 
-<?php include('simpleSearchForm.php'); ?>
+<div id="search_options" class="search_options">
+
+    <?= $this->translate('sorting_sort_by') ?>
+    <ul class="sorting_options">
+    
+    <?php
+        $urlparams = $this->firstPage;
+        $urlparams['sortfield'] = 'score';
+        $urlparams['sortorder'] = 'desc';
+    ?>
+    <li class="sorting_option"><a href="<?= $this->url($urlparams) ?>"><?= $this->translate('sorting_relevancy') ?></a></li>
+
+    <?php 
+        foreach (array('year', 'title', 'author') as $sortfield) :
+            foreach (array('asc', 'desc') as $sortorder) :
+
+                $urlparams = $this->firstPage;
+                $urlparams['sortfield'] = $sortfield;
+                $urlparams['sortorder'] = $sortorder;
+
+    ?>
+    <li class="sorting_option"><a href="<?= $this->url($urlparams) ?>"><?= $this->translate('sorting_' . $sortfield . '_' . $sortorder) ?></a></li>
+    <?php
+            endforeach;
+        endforeach;
+    ?>
+    </ul>
+
+</div>

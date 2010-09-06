@@ -33,4 +33,11 @@
 
 ?>
 
-<?php include('simpleSearchForm.php'); ?>
+<?php
+    if($this->searchType === 'simple')
+        include('simpleSearchForm.php');
+    else if($this->searchType === 'advanced' || $this->searchType === 'authorsearch')
+        include('advancedSearchForm.php');
+?>
+
+<p><?= $this->translate('nohits_message') ?></p>

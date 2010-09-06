@@ -33,4 +33,13 @@
 
 ?>
 
-<?php include('simpleSearchForm.php'); ?>
+<?php
+    if($this->searchType === 'simple')
+        include('simpleSearchForm.php');
+    else if($this->searchType === 'advanced' || $this->searchType === 'authorsearch')
+        include('advancedSearchForm.php');
+?>
+
+<h2><?= $this->translate('invalid_search_request_title') ?></h2>
+
+<p><?= $this->translate('invalid_search_request_message') ?></p>
