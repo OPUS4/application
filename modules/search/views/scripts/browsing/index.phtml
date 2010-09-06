@@ -43,7 +43,7 @@
 <br/>
 -->
 
-<a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'solrsearch', 'action' => 'search', 'query'=>'*:*','sortfield'=>'title','sortorder'=>'asc','searchtype'=>'simple'), null, true) ?>"><?= $this->translate('search_index_alltitles_browsing') ?></a><br/>
+<a href="<?= $this->url(Solrsearch_SolrsearchController::createSearchUrlArray(array('query'=>'*:*','sortfield'=>'title','sortorder'=>'asc','searchtype'=>'simple'), null, true)) ?>"><?= $this->translate('search_index_alltitles_browsing') ?></a><br/>
 
 <!-- Removed for MATHEON!
 <a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'doctypes'), null, true) ?>"><?= $this->translate('search_index_doctype_browsing') ?></a><br/>
