@@ -13,7 +13,7 @@
         <search>
             <label>search_menu_label</label>
             <module>solrsearch</module>
-            <controller>solrsearch</controller>
+            <controller>index</controller>
             <action>index</action>
         </search>
 

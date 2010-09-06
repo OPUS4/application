@@ -729,7 +729,7 @@
            <!-- TODO: Use Zend Url-Helper to build href attribute -->
            <xsl:attribute name="href">
                <xsl:value-of select="$baseUrl"/>
-               <xsl:text>/solrsearch/solrsearch/search/searchtype/authorsearch/author/</xsl:text>
+               <xsl:text>/solrsearch/index/search/searchtype/authorsearch/author/</xsl:text>
                <xsl:value-of select="concat('&quot;', @FirstName, ' ', @LastName, '&quot;')" />
            </xsl:attribute>
            <xsl:value-of select="concat(@LastName, ', ', @FirstName)" />
