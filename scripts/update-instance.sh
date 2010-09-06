@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-set -ex
+# set -ex
+set -e
 
 INSTANCE="$1"
 echo "updating instance: $INSTANCE"
@@ -16,6 +17,12 @@ for i in server framework; do
    cd $INSTANCE_DIR/$i
    svn up
 done
+
+#
+# Clean directories.
+#
+
+rm -f $INSTANCE/server/workspace/cache/zend*
 
 #
 # Run unit tests
