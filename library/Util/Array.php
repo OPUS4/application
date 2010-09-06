@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,22 +24,34 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Application
- * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2010, OPUS 4 development team
+ * @category    TODO
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: Bootstrap.php 4742 2010-08-16 19:38:02Z sszott $
+ * @version     $Id$
  */
 
-class Publish_Bootstrap extends Zend_Application_Module_Bootstrap {
+/**
+ * Utility methods for arrays.
+ */
+class Util_Array {
 
     /**
+     * Trims an entire array of strings.
+     * @param <type> $array
      *
-     * TODO experiment, maybe place somewhere else
+     * TODO optionally remove empty values
      */
-    public function _initDocumentTypes() {
-        Zend_Controller_Action_HelperBroker::addPrefix('Controller_Helper');
+    public static function trim(&$array) {
+        array_walk($array, array('Util_Array', 'trimValue'));
+    }
+
+    /**
+     * Trims a single string.
+     * @param string $value 
+     */
+    public static function trimValue(&$value) {
+        $value = trim($value);
     }
 
 }

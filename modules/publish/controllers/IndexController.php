@@ -119,14 +119,18 @@ class Publish_IndexController extends Controller_Action {
                 $this->documentId = $docId;
                 $log->info("The corresponding doucment ID is: " . $this->documentId);
             }
-            else
+            else {
                 $log->info("No file uploaded: => Fulltext is NOT given.");
+            }
             
             $log->debug("TYPE -step2-: " . $this->documentType);
             $log->debug("ID -step2-: " . $this->documentId);
             $log->debug("Fulltext -step2-: " . $fulltext);
 
-            $this->_helper->viewRenderer($this->documentType);
+            $templateName = $this->_helper->documentTypes->getTemplateName(
+                    $this->documentType);
+
+            $this->_helper->viewRenderer($templateName);
            
             //create the form
             $step2Form = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $fulltext, null, null);

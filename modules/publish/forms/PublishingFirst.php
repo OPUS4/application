@@ -48,12 +48,15 @@ class Publish_Form_PublishingFirst extends Zend_Form {
      * @return void
      */
     public function init() {        
+        $documentTypes = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
 
         $documentInSession = new Zend_Session_Namespace('document');
         $this->config = Zend_Registry::get('Zend_Config');
 
+
+
         //Select with different document types given by the used function
-        $listOptions = $this->getXmlDocTypeFiles();
+        $listOptions = $documentTypes->getDocumentTypes();
 
 //        if (count($listOptions)<=1) {
 //            $value = (array_keys($listOptions));
@@ -71,12 +74,12 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         // get path to store files
         $tempPath = $this->config->path->workspace->temp;
         if (true === empty($tempPath)) 
-            $tempPath = '../workspace/tmp/';        
+            $tempPath = '../workspace/tmp/'; // TODO defaults are in application.ini => throw exception
 
         // get allowed filetypes
         $filetypes = $this->config->publish->filetypes->allowed;
         if (true === empty($filetypes)) 
-            $filetypes = 'pdf,txt,html,htm';
+            $filetypes = 'pdf,txt,html,htm'; // TODO defaults are in application.ini => throw exception
         
         //get allowed file size
         $maxFileSize = (int) $this->config->publish->maxfilesize;
@@ -90,8 +93,9 @@ class Publish_Form_PublishingFirst extends Zend_Form {
 
         //show Bibliographie?
         $bib = $this->config->form->first->bibliographie == 1;
-        if (true === empty($bib))
+        if (empty($bib)) {
             $bib = 0;
+        }
 
         $fileupload = $this->createElement('File', 'fileupload');
         $fileupload->setLabel('fileupload')
@@ -101,8 +105,9 @@ class Publish_Form_PublishingFirst extends Zend_Form {
                 ->addValidator('Size', false, $maxFileSize) // limit to value given in application.ini
                 ->addValidator('Extension', false, $filetypes); // allowed filetypes by extension
 
+        $bibliographie = null;
 
-        if ($bib === 1) {
+        if ($bib) {
             $bibliographie = $this->createElement('checkbox', 'bibliographie');
             $bibliographie->setLabel('bibliographie');
         }
@@ -117,7 +122,7 @@ class Publish_Form_PublishingFirst extends Zend_Form {
 
         $this->addElements(array($doctypes, $fileupload));
         //show Bibliographie?
-        if ($this->config->form->first->bibliographie == 1) {
+        if ($bib) {
             $this->addElement($bibliographie);
         }
 
@@ -125,36 +130,4 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         $this->setAttrib('enctype', Zend_Form::ENCTYPE_MULTIPART);        
     }
 
-    /**
-     * OLD function getXmlDocFiles, TODO: really needed? or other way of getting the types?
-     * @return array() of found docTypes
-     */
-     protected function getXmlDocTypeFiles() {
-        $xml_path = $this->config->publish->path->documenttypes;
-        if (true === empty($xml_path)) {
-            $filetypes = "../config/xmldoctypes/";
-        }
-        $result = array();
-        if ($dirhandle = opendir($xml_path)) {
-            while (false !== ($file = readdir($dirhandle))) {
-                if (preg_match("/.xml$/", $file) === 0) {
-                    continue;
-                }
-
-                $path_parts = pathinfo($file);
-                $filename = $path_parts['filename'];
-                $basename = $path_parts['basename'];
-                $extension = $path_parts['extension'];
-                if (($basename === '.') or ($basename === '..') or ($extension !== 'xml')) {
-                    continue;
-                }
-                $result[$filename] = $filename;
-            }
-            closedir($dirhandle);
-            asort($result);
-        }
-        return $result;
-    }
 }
-
-

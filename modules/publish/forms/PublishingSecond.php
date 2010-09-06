@@ -75,7 +75,8 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      * @return void
      */
     public function init() {
-        $dom = $this->_getDocument();
+        $dom = Zend_Controller_Action_HelperBroker::getStaticHelper(
+                'DocumentTypes')->getDocument($this->doctype);
 
         //parse the xml file for the tag "field"
         foreach ($dom->getElementsByTagname('field') as $field) {
@@ -164,30 +165,6 @@ class Publish_Form_PublishingSecond extends Zend_Form {
 
         $this->addElement($formField);
         return $formField;
-    }
-
-    /**
-     * Returns the DOMDocument for the document type.
-     * @return DOMDocument
-     */
-    protected function _getDocument() {
-        $config = Zend_Registry::get('Zend_Config');
-
-        //formArray for the templates
-        $formArray = array();
-
-        //get the xml file for the current doctype
-        $xmlFile = $config->publish->doctypesPath . DIRECTORY_SEPARATOR . $this->doctype . ".xml";
-
-        //create the DOM Parser for reading the xml file
-        //if (!$dom = domxml_open_mem(file_get_contents($xmlFile))){
-        if (!$dom = new DOMDocument()) {
-            echo "Error while trying to begin parsing the document type.";
-            exit;
-        }
-        $dom->load($xmlFile);
-
-        return $dom;
     }
 
     /**
