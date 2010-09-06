@@ -38,11 +38,11 @@
 <h2><?= $this->translate('search_index_browsing') ?></h2>
 
 <a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'latest'), null, true) ?>"><?= $this->translate('latest_docs_browsing') ?></a>&nbsp;
-<a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'latest', 'output' => 'rss'), null, true) ?>" class="rss"><img src="<?= $this->baseUrl; ?>/layouts/default/img/rss.gif" width="36" height="14" border="0" align="bottom" alt="RSS-Feed Icon" title="RSS-Feed abonnieren" /></a>
+<a href="<?= $this->url(array('module' => 'browse', 'controller' => 'index', 'action' => 'latest', 'output' => 'rss'), null, true) ?>" class="rss"><img src="<?= $this->baseUrl; ?>/layouts/default/img/rss.gif" width="36" height="14" border="0" align="bottom" alt="RSS-Feed Icon" title="RSS-Feed abonnieren" /></a>
 <br/>
 <a href="<?= $this->url(array('module'=>'solrsearch','controller'=>'index','action'=>'search','query'=>'*:*','sortfield'=>'title','sortorder'=>'asc','searchtype'=>'simple'), null, true) ?>"><?= $this->translate('search_index_alltitles_browsing') ?></a>
 <br/>
-<a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'doctypes'), null, true) ?>"><?= $this->translate('search_index_doctype_browsing') ?></a>
+<a href="<?= $this->url(array('module' => 'browse', 'controller' => 'index', 'action' => 'browseList', 'list' => 'doctypes'), null, true) ?>"><?= $this->translate('search_index_doctype_browsing') ?></a>
 <br/>
 
 <?php if (count($this->browsinglist) > 0) : ?>
@@ -56,7 +56,7 @@
             $printname = $this->translate($translatelabel);
    ?>
 
-    <a href="<?= $this->url(array('module' => 'search', 'controller' => 'browsing', 'action' => 'browseList', 'list' => 'collection', 'collection' => $obj->getId()), null, true)?>">
+    <a href="<?= $this->url(array('module' => 'browse', 'controller' => 'index', 'action' => 'browseList', 'list' => 'collection', 'collection' => $obj->getId()), null, true)?>">
         <?= $printname ?>
     </a>
     <br/>

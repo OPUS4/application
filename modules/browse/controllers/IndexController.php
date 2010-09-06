@@ -48,32 +48,32 @@ class Browse_IndexController extends Controller_Action {
     public function browsetitlesAction() {
         $this->view->title = $this->view->translate('search_index_alltitles_browsing');
         $url_sort_by_id = array(
-            'module' => 'search',
-            'controller' => 'browsing',
+            'module' => 'browse',
+            'controller' => 'index',
             'action' => 'browseTitles',
             'sort_order' => 'id'
         );
         $url_sort_by_title = array(
-            'module' => 'search',
-            'controller' => 'browsing',
+            'module' => 'browse',
+            'controller' => 'index',
             'action' => 'browseTitles',
             'sort_order' => 'title'
         );
         $url_sort_by_author = array(
-            'module' => 'search',
-            'controller' => 'browsing',
+            'module' => 'browse',
+            'controller' => 'index',
             'action' => 'browseTitles',
             'sort_order' => 'author'
         );
         $url_sort_by_date = array(
-            'module' => 'search',
-            'controller' => 'browsing',
+            'module' => 'browse',
+            'controller' => 'index',
             'action' => 'browseTitles',
             'sort_order' => 'publicationDate'
         );
         $url_sort_by_doctype = array(
-            'module' => 'search',
-            'controller' => 'browsing',
+            'module' => 'browse',
+            'controller' => 'index',
             'action' => 'browseTitles',
             'sort_order' => 'docType'
         );
@@ -101,7 +101,7 @@ class Browse_IndexController extends Controller_Action {
             // set page if requested
             $page = $data['page'];
         }
-        $this->view->title = $this->view->translate('search_index_alltitles_browsing');
+        $this->view->title = $this->view->translate('browse_index_alltitles_browsing');
 
         // Default Ordering...
         $sort_reverse = null;
@@ -268,7 +268,7 @@ class Browse_IndexController extends Controller_Action {
                 $this->view->browsinglist = new Opus_Search_Iterator_PersonsListIterator($browsingListProduct);
                 break;
             case 'doctypes':
-                $url = $this->view->url(array('module'=>'search','controller'=>'browsing','action'=>'doctypeslist'),null,true);
+                $url = $this->view->url(array('module'=>'browse','controller'=>'index','action'=>'doctypeslist'),null,true);
                 $this->redirectTo($url);
                 break;
             case 'collection':
