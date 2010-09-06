@@ -39,7 +39,7 @@
 
     <h2><?= $this->translate('solrsearch_title_simple'); ?></h2>
 
-    <form action="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'searchdispatch')); ?>" method="post">
+    <form action="<?= $this->url(array('module'=>'solrsearch','controller'=>'index','action'=>'searchdispatch')); ?>" method="post">
         <label for="query"><?= $this->translate('solrsearch_query_label'); ?></label>
         <input id="query" name="query" type="text" value="<?= htmlspecialchars($this->q) ?>" />
         <input type="submit" value="<?= $this->translate('solrsearch_searchaction'); ?>" />
@@ -50,7 +50,7 @@
         <input type="hidden" name="sordorder" id="sortorder" value="desc" />
     </form>
 
-    <a href="<?= $this->url(array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'advanced'),null,true); ?>"><?= $this->translate('solrsearch_title_advanced'); ?></a>
+    <a href="<?= $this->url(array('module'=>'solrsearch','controller'=>'index','action'=>'advanced'),null,true); ?>"><?= $this->translate('solrsearch_title_advanced'); ?></a>
 </div>
 
 <div class="right">
