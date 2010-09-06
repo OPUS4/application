@@ -58,6 +58,16 @@ searchengine.extract.app =
 form.first.numberoffiles = 
 form.first.bibliographie =
 
+;DOCUMENTTYPE SETTINGS
+; Include document types (comma separated names of XML files without extension)
+; documentTypes.include = preprint, doctype1
+
+; Exclude document types (comma separated names of XML files without extension)
+; documentTypes.exclude = doctype2
+
+; Use to configure templates names that do not match the document type name
+; documentTypes.templates.preprint = defaulttmpl
+
 ;MAIL SETTINGS
 mail.opus.smtp = ; SMTP server for sending email
 mail.opus.port = 25 ; SMTP server port for sending email
