@@ -5,7 +5,7 @@
   <header />
 
   <body>
-    <tu tuid="matheon_projects">
+    <tu tuid="search_index_custom_browsing_matheon_projects">
         <tuv xml:lang="en">
             <seg>Application Areas / Projects</seg>
         </tuv>
