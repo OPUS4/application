@@ -39,13 +39,17 @@
         include('simpleSearchForm.php');
     else if($this->searchType === 'advanced' || $this->searchType === 'authorsearch')
         include('advancedSearchForm.php');
+    else if($this->searchType)
+        include('latestDocsForm.php');
 ?>
 
 <h2><?= $this->numOfHits . ' ' . ($this->numOfHits === 1 ? $this->translate('results_title_single') : $this->translate('results_title')); ?></h2>
 
+<?php if(!$this->isSimpleList) : ?>
 <?php include('searchOptions.php') ?>
 <?php include('pagination.php') ?>
 <?php include('facetsMenu.php') ?>
+<?php endif ?>
 
 <div id="search_results" class="search_results">
 
@@ -76,4 +80,6 @@
     <?php endforeach ?>
 </div>
 
+<?php if(!$this->isSimpleList) : ?>
 <?php include('pagination.php') ?>
+<?php endif ?>

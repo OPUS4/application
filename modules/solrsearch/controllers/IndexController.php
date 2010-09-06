@@ -68,6 +68,33 @@ class Solrsearch_IndexController extends Controller_Action {
         $this->view->title = $this->view->translate('solrsearch_title_results');
     }
 
+    public function latestAction() {
+
+        $data = null;
+        if ($this->_request->isPost() === true)
+            $data = $this->_request->getPost();
+        else
+            $data = $this->_request->getParams();
+
+        $rows = array_key_exists('rows', $data) ? (int)$data['rows'] : 10;
+        if($rows > 100)
+            $rows = 100;
+        if($rows < 10)
+            $rows = 10;
+        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::LATEST_DOCS);
+        $query->setRows($rows);
+        $searcher = new Opus_SolrSearch_Searcher();
+        $this->resultList = $searcher->search($query);
+
+        $this->view->results = $this->resultList->getResults();
+        $this->view->isSimpleList = true;
+        $this->view->specialTitle = $this->view->translate('title_latest_docs_article').' '.$rows. ' '.$this->view->translate('title_latest_docs');
+        $this->view->searchType = 'latest';
+        $this->view->rows = $rows;
+
+        $this->render('results');
+    }
+
     public function invalidsearchtermAction() {
         $this->view->title = $this->view->translate('solrsearch_title_invalidsearchterm');
         $params = $this->_request->isPost() ? $this->_request->getPost() : $this->_request->getParams();
@@ -190,6 +217,7 @@ class Solrsearch_IndexController extends Controller_Action {
         $this->view->numOfPages = (int) ($this->numOfHits / $this->query->getRows()) + 1;
         $this->view->rows = $this->query->getRows();
         $this->view->authorSearch = Solrsearch_IndexController::createSearchUrlArray(array('searchtype'=>Solrsearch_IndexController::ADVANCED_SEARCH));
+        $this->view->isSimpleList = false;
 
         if($this->searchtype === Solrsearch_IndexController::SIMPLE_SEARCH) {
             $this->view->q = $this->query->getCatchAll();

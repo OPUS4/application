@@ -8,6 +8,51 @@
 
     <body>
 
+        <tu tuid="latest_submit">
+            <tuv xml:lang="en">
+                <seg>Refresh</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Aktualisieren</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="latest_options">
+            <tuv xml:lang="en">
+                <seg>Options</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Optionen</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="latest_set_rows">
+            <tuv xml:lang="en">
+                <seg>Change quantity</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Anzahl ändern</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="title_latest_docs_article">
+            <tuv xml:lang="en">
+                <seg>The</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Die</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="title_latest_docs">
+            <tuv xml:lang="en">
+                <seg>latest documents</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>neuesten Dokumente</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="results_title_single">
             <tuv xml:lang="en">
                 <seg>Search Result</seg>
