@@ -120,32 +120,26 @@ class Solrsearch_SolrsearchController extends Controller_Action {
     }
 
     private function createSimpleSearchUrl($data) {
-        return $this->view->url(
-            array(
-                'module'=>'solrsearch',
-                'controller'=>'solrsearch',
-                'action'=>'search',
+        $params = array(
                 'searchtype'=> $this->_getFieldValue($data, 'searchtype', Solrsearch_SolrsearchController::SIMPLE_SEARCH),
                 'start'=> $this->_getFieldValue($data, 'start', '0'),
                 'rows'=> $this->_getFieldValue($data, 'rows', '10'),
                 'query'=> $this->_getFieldValue($data, 'query', '*:*'),
                 'sortfield'=> $this->_getFieldValue($data, 'sortfield', 'score'),
                 'sortorder'=> $this->_getFieldValue($data, 'sortorder', 'desc')
-            )
-            , null, true);
+            );
+        return $this->view->url(Solrsearch_SolrsearchController::createSearchUrlArray($params), null, true);
     }
 
     private function createAdvancedSearchUrl($data) {
-        $urlArray =  array (
-            'module'=>'solrsearch',
-            'controller'=>'solrsearch',
-            'action'=>'search',
+        $params = array (
             'searchtype'=> $this->_getFieldValue($data, 'searchtype', Solrsearch_SolrsearchController::ADVANCED_SEARCH),
             'start'=> $this->_getFieldValue($data, 'start', '0'),
             'rows'=> $this->_getFieldValue($data, 'rows', '10'),
             'sortfield'=> $this->_getFieldValue($data, 'sortfield', 'score'),
             'sortorder'=> $this->_getFieldValue($data, 'sortorder', 'desc')
         );
+        $urlArray = Solrsearch_SolrsearchController::createSearchUrlArray($params);
 
         foreach (array('author', 'title', 'abstract', 'fulltext', 'year', 'referee') as $fieldname) {
             if($this->_getFieldValue($data, $fieldname) !== '') {
@@ -158,12 +152,21 @@ class Solrsearch_SolrsearchController extends Controller_Action {
     }
 
     public function searchAction() {
-        $this->query = $this->buildQuery($this->_request); // refactor: data should be extracted here and kept locally scoped
+        $data = null;
+        if ($this->_request->isPost() === true) {
+            $this->log->debug("Request is post. Extracting data.");
+            $data = $this->_request->getPost();
+        } else {
+            $this->log->debug("Request is non post. Trying to extract data. Request should be post normally.");
+            $data = $this->_request->getParams();
+        }
+
+        $this->query = $this->buildQuery($data);
         $this->performSearch();
         $this->setViewValues();
-        $this->setViewFacets($this->_request);
+        $this->setViewFacets($data);
 
-        if(0 === $this->numOfHits || $this->query->getStart() >= $this->numOfHits) {
+        if($this->numOfHits === 0 || $this->query->getStart() >= $this->numOfHits) {
             $this->render('nohits');
             return;
         }
@@ -186,19 +189,19 @@ class Solrsearch_SolrsearchController extends Controller_Action {
         $this->view->start = $this->query->getStart();
         $this->view->numOfPages = (int) ($this->numOfHits / $this->query->getRows()) + 1;
         $this->view->rows = $this->query->getRows();
-        $this->view->authorSearch = array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>Solrsearch_SolrsearchController::ADVANCED_SEARCH);
+        $this->view->authorSearch = Solrsearch_SolrsearchController::createSearchUrlArray(array('searchtype'=>Solrsearch_SolrsearchController::ADVANCED_SEARCH));
 
         if($this->searchtype === Solrsearch_SolrsearchController::SIMPLE_SEARCH) {
             $this->view->q = $this->query->getCatchAll();
-            $this->view->nextPage = array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>(int)($this->query->getStart()) + (int)($this->query->getRows()),'rows'=>$this->query->getRows());
-            $this->view->prevPage = array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>(int)($this->query->getStart()) - (int)($this->query->getRows()),'rows'=>$this->query->getRows());
-            $this->view->lastPage = array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>(int)($this->numOfHits / $this->query->getRows()) * $this->query->getRows(),'rows'=>$this->query->getRows());
-            $this->view->firstPage = array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>'0','rows'=>$this->query->getRows());
+            $this->view->nextPage = Solrsearch_SolrsearchController::createSearchUrlArray(array('searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>(int)($this->query->getStart()) + (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
+            $this->view->prevPage = Solrsearch_SolrsearchController::createSearchUrlArray(array('searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>(int)($this->query->getStart()) - (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
+            $this->view->lastPage = Solrsearch_SolrsearchController::createSearchUrlArray(array('searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>(int)($this->numOfHits / $this->query->getRows()) * $this->query->getRows(),'rows'=>$this->query->getRows()));
+            $this->view->firstPage = Solrsearch_SolrsearchController::createSearchUrlArray(array('searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>'0','rows'=>$this->query->getRows()));
         } else if($this->searchtype === Solrsearch_SolrsearchController::ADVANCED_SEARCH || $this->searchtype === Solrsearch_SolrsearchController::AUTHOR_SEARCH) {
-            $this->view->nextPage = array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'start'=>(int)($this->query->getStart()) + (int)($this->query->getRows()),'rows'=>$this->query->getRows());
-            $this->view->prevPage = array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'start'=>(int)($this->query->getStart()) - (int)($this->query->getRows()),'rows'=>$this->query->getRows());
-            $this->view->lastPage = array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'start'=>(int)($this->numOfHits / $this->query->getRows()) * $this->query->getRows(),'rows'=>$this->query->getRows());
-            $this->view->firstPage = array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search','searchtype'=>$this->searchtype,'start'=>'0','rows'=>$this->query->getRows());
+            $this->view->nextPage = Solrsearch_SolrsearchController::createSearchUrlArray(array('searchtype'=>$this->searchtype,'start'=>(int)($this->query->getStart()) + (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
+            $this->view->prevPage = Solrsearch_SolrsearchController::createSearchUrlArray(array('searchtype'=>$this->searchtype,'start'=>(int)($this->query->getStart()) - (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
+            $this->view->lastPage = Solrsearch_SolrsearchController::createSearchUrlArray(array('searchtype'=>$this->searchtype,'start'=>(int)($this->numOfHits / $this->query->getRows()) * $this->query->getRows(),'rows'=>$this->query->getRows()));
+            $this->view->firstPage = Solrsearch_SolrsearchController::createSearchUrlArray(array('searchtype'=>$this->searchtype,'start'=>'0','rows'=>$this->query->getRows()));
             $this->view->authorQuery = $this->query->getField('author');
             $this->view->titleQuery = $this->query->getField('title');
             $this->view->abstractQuery = $this->query->getField('abstract');
@@ -213,8 +216,7 @@ class Solrsearch_SolrsearchController extends Controller_Action {
         }
     }
 
-    private function setViewFacets($request) {
-        $data = $request->getParams();
+    private function setViewFacets($data) {
         $facets = $this->resultList->getFacets();
         $facetArray = array();
         $selectedFacets = array();
@@ -236,16 +238,7 @@ class Solrsearch_SolrsearchController extends Controller_Action {
         $this->view->__set('selectedFacets', $selectedFacets);
     }
 
-    private function buildQuery($request) {
-        $data = null;
-
-        if ($request->isPost() === true) {
-            $this->log->debug("Request is post. Extracting data.");
-            $data = $request->getPost();
-        } else {
-            $this->log->debug("Request is non post. Trying to extract data. Request should be post normally.");
-            $data = $request->getParams();
-        }
+    private function buildQuery($data) {
 
         if (is_null($data)) 
             throw new Application_Exception("Unable to read request data. Search cannot be performed.");
@@ -359,6 +352,18 @@ class Solrsearch_SolrsearchController extends Controller_Action {
             return $data[$fieldname];
         }
         return $default;
+    }
+
+    /**
+     * Creates an URl to execute a search. The URL will be mapped to: module=solrsearch,
+     * controller=solrsearch, action=search, plus given parameters
+     * @param array $params parameters for searching
+     */
+    public static function createSearchUrlArray($params = array()) {
+        $url = array('module'=>'solrsearch','controller'=>'solrsearch','action'=>'search');
+        foreach($params as $key=>$value)
+            $url[$key]=$value;
+        return $url;
     }
 }
 ?>
