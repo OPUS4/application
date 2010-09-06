@@ -401,7 +401,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
      */
     public function load_institutes() {
         $role = new Opus_CollectionRole();
-        $role->setName('Institutes');
+        $role->setName('matheon_institutes');
         $role->setOaiName('institutes');
         $role->setVisible(1);
         $role->setDisplayBrowsing('Name');
