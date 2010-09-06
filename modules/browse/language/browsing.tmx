@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+
+  <body>
+
+    <tu tuid="browse_doctypes_title">
+        <tuv xml:lang="en">
+            <seg>Browse documents by type</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Dokumente anhand des Typs durchstöbern</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="browse_doctypes_message">
+        <tuv xml:lang="en">
+            <seg>Please click on a document type below to view all documents of that type.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte klicken Sie auf einen der unten angezeigten Dokumententypen um alle dazugehörigen Dokumente anzuzeigen.</seg>
+        </tuv>
+    </tu>
+
+  </body>
+
+</tmx>

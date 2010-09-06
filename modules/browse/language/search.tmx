@@ -1,0 +1,472 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+ 
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+  
+  <body>
+  
+    <tu tuid="search_index_fulltextsearch">
+      <tuv xml:lang="en">
+        <seg>Fulltext search</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Volltextsuche</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="latest_documents_title">
+      <tuv xml:lang="en">
+        <seg>The latest documents in this repository</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Die zuletzt eingetragenen Dokumente im Repository</seg>
+      </tuv>
+    </tu>
+    <tu tuid="add_searchfield">
+      <tuv xml:lang="en">
+        <seg>Add one search field</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Suchfeld hinzufügen</seg>
+      </tuv>
+    </tu>
+    <tu tuid="remove_searchfield">
+      <tuv xml:lang="en">
+        <seg>Remove last search field</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Letztes Suchfeld entfernen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="search_searchresult">
+      <tuv xml:lang="en">
+        <seg>Search result</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Suchergebnis</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="search_index_metadatasearch">
+      <tuv xml:lang="en">
+        <seg>metadata search</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Metadatensuche</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="search_titles_authors">
+      <tuv xml:lang="en">
+        <seg>Documents by</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokumente von</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_titles_editors">
+      <tuv xml:lang="en">
+        <seg>Documents edited by</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokumente herausgegeben von</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="search_titles_doctypes">
+      <tuv xml:lang="en">
+        <seg>Documents of type</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokumente vom Typ</seg>
+      </tuv>
+    </tu>
+    <tu tuid="search_titles_all">
+      <tuv xml:lang="en">
+        <seg>All documents in this repository</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Alle Dokumente auf diesem Server</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="search_titles_resultlist_one_entry">
+      <tuv xml:lang="en">
+        <seg>Query returned %1$s hit.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Die Suche ergab %1$s Treffer.</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="search_titles_relevance">
+      <tuv xml:lang="en">
+        <seg>Relevance</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Relevanz</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="search_titles_found">
+      <tuv xml:lang="en">
+        <seg>found in</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>gefunden in</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="search_category_documents">
+      <tuv xml:lang="en">
+        <seg>Documents in this category</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokumente in dieser Kategorie</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="browsing_titles_resultlist">
+      <tuv xml:lang="en">
+        <seg>This category has %1$s entries.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dieser Kategorie sind %1$s Dokumente zugeordnet.</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="browsing_titles_resultlist_one_entry">
+      <tuv xml:lang="en">
+        <seg>This category has %1$s entry.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dieser Kategorie ist %1$s Dokument zugeordnet.</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="search_no_results">
+      <tuv xml:lang="en">
+        <seg>Sorry, no matches for your query!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Leider wurde nichts zu Ihrer Suchanfrage gefunden!</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="searchfield_title">
+      <tuv xml:lang="en">
+        <seg>Title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Titel</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="searchfield_author">
+      <tuv xml:lang="en">
+        <seg>Author</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Autor</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="searchfield_persons">
+      <tuv xml:lang="en">
+        <seg>Persons</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>sonstige Personen</seg>
+      </tuv>
+    </tu>
+    <tu tuid="searchfield_fulltext">
+      <tuv xml:lang="en">
+        <seg>Fulltext</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Volltext</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="searchfield_abstract">
+      <tuv xml:lang="en">
+        <seg>Abstract</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Kurzzusammenfassung</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="searchfield_subject">
+      <tuv xml:lang="en">
+        <seg>Subjects</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Klassen und Schlagworte</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="searchfield_series">
+      <tuv xml:lang="en">
+        <seg>Series</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Schriftenreihen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="searchfield_coll">
+      <tuv xml:lang="en">
+        <seg>Collections</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sammlungen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="searchfield_doctype">
+      <tuv xml:lang="en">
+        <seg>Document type</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokumenttyp</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="searchfield_year">
+      <tuv xml:lang="en">
+        <seg>Year of publication</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Publikationsjahr</seg>
+      </tuv>
+    </tu>
+    <tu tuid="searchfield_institute">
+      <tuv xml:lang="en">
+        <seg>Associated institute</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Assoziiertes Institut</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="searchfield_isbn">
+      <tuv xml:lang="en">
+        <seg>ISBN</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>ISBN</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="searchfield_urn">
+      <tuv xml:lang="en">
+        <seg>URN</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>URN</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="searchfield_opac">
+      <tuv xml:lang="en">
+        <seg>Opac-ID</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Opac-ID</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="boolean_and">
+      <tuv xml:lang="en">
+        <seg>and</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>und</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="boolean_or">
+      <tuv xml:lang="en">
+        <seg>or</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>oder</seg>
+      </tuv>
+    </tu>
+    <tu tuid="boolean_not">
+      <tuv xml:lang="en">
+        <seg>not</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>nicht</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="search_result">
+      <tuv xml:lang="en">
+        <seg>Search result</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Suchergebnis</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="exact_search">
+      <tuv xml:lang="en">
+        <seg>Exact query</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Exakte Suche</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="truncated_search">
+      <tuv xml:lang="en">
+        <seg>parts of the words</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Wortteile</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="search_hitsPerPage">
+      <tuv xml:lang="en">
+        <seg>Hits per page</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Treffer pro Seite</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="search_sort">
+      <tuv xml:lang="en">
+        <seg>Sorting</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sortierung</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="all_hits">
+      <tuv xml:lang="en">
+        <seg>All</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Alle</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="search_sort_relevance">
+      <tuv xml:lang="en">
+        <seg>Relevance</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Relevanz</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="search_sort_yearandtitle">
+      <tuv xml:lang="en">
+        <seg>Year and title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Jahr und Titel</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="search_sort_year">
+      <tuv xml:lang="en">
+        <seg>Year</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Jahr</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="search_sort_title">
+      <tuv xml:lang="en">
+        <seg>Title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Titel</seg>
+      </tuv>
+    </tu>
+    
+     <tu tuid="search_sort_author">
+      <tuv xml:lang="en">
+        <seg>Author</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Autor</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="search_sort_relevance_asc">
+      <tuv xml:lang="en">
+        <seg>Relevance (ascending)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Relevanz (aufsteigend)</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="search_sort_yearandtitle_desc">
+      <tuv xml:lang="en">
+        <seg>Year and title (descending)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Jahr und Titel (absteigend)</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="search_sort_year_desc">
+      <tuv xml:lang="en">
+        <seg>Year (descending)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Jahr (absteigend)</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="search_sort_title_desc">
+      <tuv xml:lang="en">
+        <seg>Title (Z-A)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Titel (Z-A)</seg>
+      </tuv>
+    </tu>
+    
+     <tu tuid="search_sort_author_desc">
+      <tuv xml:lang="en">
+        <seg>Author (Z-A)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Autor (Z-A)</seg>
+      </tuv>
+    </tu>
+
+     <tu tuid="latest_docs_browsing">
+      <tuv xml:lang="en">
+        <seg>10 latest documents</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Die 10 letzten Dokumente</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="no_docs">
+      <tuv xml:lang="en">
+        <seg>No documents found!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Keine Dokumente gefunden!</seg>
+      </tuv>
+    </tu>
+  </body>
+  
+</tmx>
