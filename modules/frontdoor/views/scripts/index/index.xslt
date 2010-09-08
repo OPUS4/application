@@ -526,6 +526,24 @@
         </tr>
     </xsl:template>
 
+    <!-- Catch-all for deleted/invisible collections. -->
+    <xsl:template match="Collection[@RoleVisibleFrontdoor='false']">
+        <xsl:comment>
+        <tr>
+          <th class="name">
+            <xsl:value-of select="@Name" />
+            <xsl:text>:</xsl:text>
+            </th>
+          <td>
+            <xsl:text>(deleted) </xsl:text>
+            <xsl:call-template name="checkdisplay"/>
+          </td>
+        </tr>
+        </xsl:comment>
+        <xsl:text>
+        </xsl:text>
+    </xsl:template>
+
     <xsl:template match="CompletedDate">
       <tr>
         <th class="name"><xsl:call-template name="translateFieldname"/>:</th>
