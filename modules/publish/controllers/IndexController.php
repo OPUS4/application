@@ -76,6 +76,7 @@ class Publish_IndexController extends Controller_Action {
         $log = Zend_Registry::get('Zend_Log');
         //disable language selection for template usage and possible refreshing forms
         $this->view->languageSelectorDisabled = true;
+        $log->debug("languageselection disabled");
 
         //check the input from step 1
         $step1Form = new Publish_Form_PublishingFirst();
@@ -87,8 +88,8 @@ class Publish_IndexController extends Controller_Action {
                 //show errors, go back to index
                 return $this->render('index');
             }
-            $this->documentType = $data['type'];
             $this->documentId = "";
+            $this->documentType = $data['type'];                        
 
             $this->view->title = $this->view->translate('publish_controller_index');
             $this->view->subtitle = $this->view->translate($this->documentType);
@@ -140,6 +141,7 @@ class Publish_IndexController extends Controller_Action {
             $this->setViewVariables($step2Form);
             $this->view->action_url = $action_url;
         }
+        else return $this->redirectTo('index');
     }
 
     /**
@@ -279,6 +281,7 @@ class Publish_IndexController extends Controller_Action {
                 }
             }
         }
+        else return $this->redirectTo('index');
     }
 
     /**
