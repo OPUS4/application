@@ -151,16 +151,22 @@ class View_Helper_Field extends Zend_View_Helper_Abstract {
             
             //show fields
             foreach ($group["Fields"] AS $field) {
-                $fieldset .= "\n\t\t<tr>\n\t\t\t<td width='25%' align='right'>";
+                $fieldset .= "\n\t\t<tr>\n\t\t\t<td width='25%' align='right' valign='top'>";
                 $fieldset .= "\n\t\t\t\t<label for='" . $field["id"] . "'>" . $field["label"] . "</label>";
-                $fieldset .= "\n\t\t\t</td>\n\t\t\t<td>";
+                $fieldset .= "\n\t\t\t</td>\n\t\t\t<td valign='top'>";
                 switch ($field['type']) {
                     case "Zend_Form_Element_Text":
                         $fieldset .= "\n\t\t\t\t<input type='text' name='" . $field["id"] . "' id='" . $field["id"] . "'";
 
+                        if ($field["disabled"] === true)
+                            $fieldset .= " disabled='1' ";
+
                         if (strstr($field["id"], "1"))
                             $fieldset .= " title='" . $this->view->translate($field["hint"]) . "' ";
                         $fieldset .= " value='" . $field["value"] . "' />";
+
+                        if (isset ($field["desc"]))
+                            $fieldset .= "<p class='description'>" . $this->view->translate($field["desc"]) . "</p>";
 
                         if ($field["req"] === 'required')
                             $fieldset .= $this->getRequiredSign();

@@ -79,8 +79,8 @@ form.crud {
 }
 
 p.description { 
-color:blue; 
+color:blueviolet;
 padding: 0 0 10px 10px;
-font-size: 90%;
+font-size: smaller;
 }
 

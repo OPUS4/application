@@ -135,8 +135,8 @@ class Publish_Form_PublishingSecond extends Zend_Form {
 
             $formField = $this->createElement('text', $elementName);
             $trans = $formField->getTranslator();
-            $formField->setDescription($trans->translate('hint_no_collection_' . $workflow));
-                    
+            $formField->setDescription($trans->translate('hint_no_collection_' . $workflow))
+                    ->setAttrib('disabled', true);
             $required = null;
         } else {
 
@@ -686,12 +686,14 @@ class Publish_Form_PublishingSecond extends Zend_Form {
     public function getElementAttributes($elementName) {
         $elementAttributes = array();
         $element = $this->getElement($elementName);
-        $elementAttributes["value"] = $element->getValue();
-        $elementAttributes["label"] = $element->getLabel();
-        $elementAttributes["error"] = $element->getMessages();
-        $elementAttributes["id"] = $element->getId();
-        $elementAttributes["type"] = $element->getType();
-        $elementAttributes["hint"] = 'hint_' . $elementName;
+        $elementAttributes['value'] = $element->getValue();
+        $elementAttributes['label'] = $element->getLabel();
+        $elementAttributes['error'] = $element->getMessages();
+        $elementAttributes['id'] = $element->getId();
+        $elementAttributes['type'] = $element->getType();
+        $elementAttributes['desc'] = $element->getDescription();
+        $elementAttributes['hint'] = 'hint_' . $elementName;
+        $elementAttributes['disabled'] = $element->getAttrib('disabled');
 
         if ($element->getType() === 'Zend_Form_Element_Select')
             $elementAttributes["options"] = $element->getMultiOptions(); //array

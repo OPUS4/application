@@ -58,11 +58,15 @@ class Publish_Form_PublishingFirst extends Zend_Form {
 
         if (count($listOptions)<=1) {
             $value = (array_keys($listOptions));
-            $doctypes = $this->createElement('text', 'type');
+            $doctypes = $this->createElement('text', 'type1');
             $doctypes->setLabel('selecttype')
                     ->setValue($value[0])
                     ->setAttrib('disabled', true)
                     ->setDescription('publish_controller_one_doctype');
+
+            $doctypesHidden=$this->createElement('hidden', 'type');
+            $doctypesHidden->setValue($value[0]);
+            $this->addElement($doctypesHidden);
 
         }
         else {
