@@ -462,6 +462,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="SubjectMSC">
+      <tuv xml:lang="en">
+        <seg>MSC-Classfication</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>MSC-Klassifikation</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="SubjectDdc">
       <tuv xml:lang="en">
         <seg>DDC Term</seg>
