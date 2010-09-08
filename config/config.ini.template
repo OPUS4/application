@@ -37,6 +37,10 @@
 ; The 'theme' setting can be used to select a different theme.
 ; theme = default
 
+; The 'startmodule' sets the module, which will be loaded when
+; no module is given in the url.  Defaults to 'home'.
+; startmodule = home
+
 debug = 0
 
 ;DB SETTINGS
