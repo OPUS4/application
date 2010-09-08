@@ -45,13 +45,21 @@ class Mail_PublishNotification
 
     private $view;
 
+    private $projects;
+
     /**
      * Constructs an instance of publish notification.
      * @param <type> $docId
      * @param <type> $view
      */
-    public function __construct($docId, $view) {
+    public function __construct($docId, $projects, $view) {
         $this->docId = $docId;
+        if (is_array($projects)) {
+            $this->projects = $projects;
+        }
+        else {
+            $this->projects = array($projects);
+        }
         $this->view = $view;
         $this->_init();
     }
@@ -142,6 +150,11 @@ class Mail_PublishNotification
 
         $message .= "Please review the document" . "\n\n";
 
+// TODO remove test code
+//        $this->view->documentUrl = $this->getDocumentUrl($this->docId);
+//
+//        $message = $this->view->render('test/mail.phtml');
+
         return $message;
     }
 
@@ -163,17 +176,66 @@ class Mail_PublishNotification
         return $baseUrl . $this->view->url($url_frontdoor, 'default', true);
     }
 
+    public function getRecipients() {
+        $allRecipients = $this->getGlobalRecipients();
+
+        if (empty($allRecipients)) {
+            $allRecipients = array();
+        }
+
+        if (!empty($this->projects)) {
+            foreach ($this->projects as $project) {
+                $collection = substr($project, 0, 1); // MATHEON get first letter of project
+
+                $recipients = $this->getRecipientsForCollection($collection);
+
+                if (!empty($recipients)) {
+                    $allRecipients = array_merge($allRecipients, $recipients);
+                }
+            }
+        }
+
+        // TODO remove duplicates
+
+        return $allRecipients;
+    }
+
+    public function getRecipientsForCollection($collection) {
+        $config = Zend_Registry::get('Zend_Config');
+
+        if (!isset($config->events->collections->$collection)) {
+            return null;
+        }
+
+        $referees = $config->events->collections->$collection->referees;
+
+        $recipients = $this->_readRecipients($referees);
+
+        return $recipients;
+    }
+
     /**
      * Returns recipients for publish notifications.
      *
      * @return array
      */
-    public function getRecipients() {
-        $recipients = array();
-
+    public function getGlobalRecipients() {
         $config = Zend_Registry::get('Zend_Config');
 
         $referees = $config->referees;
+
+        $recipients = $this->_readRecipients($referees);
+
+        return $recipients;
+    }
+
+    /**
+     *
+     * @param <type> $referees
+     * @return string
+     */
+    protected function _readRecipients($referees) {
+        $recipients = array();
 
         if (!empty($referees)) {
             $index = 1;

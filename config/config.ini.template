@@ -81,6 +81,10 @@ mail.opus.name = ; Name of administrator
 ;REFEREES (temporary solution)
 ; referees['John Doe'] = john.doe@example.org
 
+;REFEREES FOR MATHEON COLLECTIONS
+; events.collections.a.referees['Jane Doe'] = jane.doe@example.org
+; events.collections.b.referees['Referee One'] = referee.one@example.org
+
 ;DOCUMENT-DOWNLOAD-DIRECTORIES
 ; deliver.target.prefix = /opus4-matheon-files
 ; deliver.url.prefix = /documents-matheon
