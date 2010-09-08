@@ -489,49 +489,45 @@
     </xsl:template>
 
     <xsl:template match="Collection[@RoleName='Schriftenreihen']">
-      <xsl:choose>
-        <xsl:when test="position()=1">
-          <tr>
+      <tr>
+        <xsl:choose>
+          <xsl:when test="position()=1">
             <th class="name">
             <xsl:call-template name="translateString">
                 <xsl:with-param name="string">col_ser</xsl:with-param>
             </xsl:call-template>
             <xsl:text>:</xsl:text>
             </th>
-            <td>
-               <xsl:call-template name="checkdisplay"/>
-            </td>
-          </tr>
-        </xsl:when>   
-        <xsl:otherwise>
-            <tr>
+          </xsl:when>
+          <xsl:otherwise>
             <td></td>
-               <td> 
-                 <xsl:call-template name="checkdisplay"/>
-              </td>
-            </tr>
-        </xsl:otherwise>
-      </xsl:choose>
+          </xsl:otherwise>
+        </xsl:choose>
+        <td>
+          <xsl:call-template name="checkdisplay"/>
+        </td>
+      </tr>
     </xsl:template>
 
     <xsl:template match="Collection">
-        <tr>
-          <th class="name">
-            <xsl:choose>
-               <xsl:when test="position()=1">
-                  <xsl:call-template name="translateString">
+      <tr>
+        <xsl:choose>
+          <xsl:when test="position()=1">
+            <th class="name">
+            <xsl:call-template name="translateString">
                      <xsl:with-param name="string">collection_role_frontdoor_<xsl:value-of select="@RoleName" /></xsl:with-param>
-                  </xsl:call-template>
-               </xsl:when>
-               <xsl:otherwise>
-                  <xsl:text> </xsl:text>
-               </xsl:otherwise>
-            </xsl:choose>
-          </th>
-          <td>
-            <xsl:call-template name="checkdisplay"/>
-          </td>
-        </tr>
+            </xsl:call-template>
+            <xsl:text>:</xsl:text>
+            </th>
+          </xsl:when>
+          <xsl:otherwise>
+            <td></td>
+          </xsl:otherwise>
+        </xsl:choose>
+        <td>
+          <xsl:call-template name="checkdisplay"/>
+        </td>
+      </tr>
     </xsl:template>
 
     <!-- Catch-all for deleted/invisible collections. -->
