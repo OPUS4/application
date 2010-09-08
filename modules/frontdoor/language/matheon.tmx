@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+
+  <header />
+
+  <body>
+    <tu tuid="collection_role_frontdoor_matheon_projects">
+        <tuv xml:lang="en">
+            <seg>Project</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Projekt</seg>
+        </tuv>
+    </tu>
+  </body>
+
+  <body>
+    <tu tuid="collection_role_frontdoor_matheon_institutes">
+        <tuv xml:lang="en">
+            <seg>Institute</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Institution</seg>
+        </tuv>
+    </tu>
+  </body>
+
+</tmx>
