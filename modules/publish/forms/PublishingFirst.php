@@ -108,7 +108,8 @@ class Publish_Form_PublishingFirst extends Zend_Form {
                 ->setDestination($tempPath)
                 ->addValidator('Count', false, $number_of_files)     // ensure only 1 file
                 ->addValidator('Size', false, $maxFileSize) // limit to value given in application.ini
-                ->addValidator('Extension', false, $filetypes); // allowed filetypes by extension
+                ->addValidator('Extension', false, $filetypes) // allowed filetypes by extension
+                ->setDescription('publish_controller_index_fileupload');
 
         $bibliographie = null;
 

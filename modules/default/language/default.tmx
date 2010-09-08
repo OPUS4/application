@@ -321,19 +321,6 @@
         <seg>Dokumenttyp</seg>
       </tuv>
     </tu>
-
-     <tu tuid="/publish/index/create/page/1">
-      <tuv xml:lang="en">
-        <seg>Das ist ein Hilfetext <b>zur</b> Publish-Funktion</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg><h3>Hilfe zum Veröffentlichen</h3>
-            <ul>
-                <li>Für Fragen zur Veröffentlichung von Dokumenten stehen wir Ihnen gerne zur Verfügung. Schreiben Sie uns eine E-Mail an kontakt@ub.uni-beispiel.de</li>
-                <li>Für weitere Informationen zu den Feldern im Anmeldeformular klicken Sie auf die jeweiligen Überschriften.</li>
-                <li>Ein Hilfedokument bietet Ihnen weiterführende Informationen.</li></ul></seg>
-      </tuv>
-    </tu>
     
      <tu tuid="search_titles_resultlist">
       <tuv xml:lang="en">

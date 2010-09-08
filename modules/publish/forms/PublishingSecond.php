@@ -168,9 +168,14 @@ class Publish_Form_PublishingSecond extends Zend_Form {
 
         if (isset($validator))
             $formField->addValidator($validator);
+        // todo: in eigene methode auslagern
 
-        if ($required === "yes")
+        if ($required === "yes") {
             $formField->setRequired(true);
+            $validate = new Zend_Validate_NotEmpty();
+            $validate->setMessage('publish_error_notempty_isempty', Zend_Validate_NotEmpty::IS_EMPTY);
+            $formField->addValidator($validate);
+        } //todo: in eigene methode auslagern
         else
             $formField->setRequired(false);
 
@@ -378,12 +383,15 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      */
     protected function _getValidatorsByDatatype($datatype) {
         switch ($datatype) {
-            case 'Alpha':
-                return new Zend_Validate_Alpha(false);
-                break;
 
             case 'Date' :
-                return new Zend_Validate_Date();
+                $validator = new Zend_Validate_Date();
+                $messages = array(
+                        Zend_Validate_Date::INVALID => 'publish_validation_error_date_invalid',
+                        Zend_Validate_Date::INVALID_DATE => 'publish_validation_error_date_invaliddate',
+                        Zend_Validate_Date::FALSEFORMAT => 'publish_validation_error_date_falseformat');
+                $validator->setMessages($messages);
+                return $validator;
                 break;
 
             case 'Integer':
@@ -415,7 +423,13 @@ class Publish_Form_PublishingSecond extends Zend_Form {
                 break;
 
             case 'Person':
-                return new Zend_Validate_Alpha(true);
+                $validator = new Zend_Validate_Alpha(true);
+                $messages = array(
+                        Zend_Validate_Alpha::INVALID => 'publish_validation_error_person_invalid',
+                        Zend_Validate_Alpha::NOT_ALPHA => 'publish_validation_error_person_notalpha',
+                        Zend_Validate_Alpha::STRING_EMPTY => 'publish_validation_error_person_stringempty');
+                $validator->setMessages($messages);
+                return $validator;
                 break;
 
             case 'Project' :
@@ -435,7 +449,9 @@ class Publish_Form_PublishingSecond extends Zend_Form {
                 break;
 
             case 'Year':
-                return new Zend_Validate_GreaterThan('1900');
+                $validator = new Zend_Validate_GreaterThan('1900');
+                $validator->setMessage('publish_validation_error_year', Zend_Validate_GreaterThan::NOT_GREATER);
+                return $validator;
                 break;
 
             default:
@@ -659,12 +675,18 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      * @return <type>
      */
     protected function _addFormElement($formElement, $elementName, $validator, $required, $label) {
+        //overwrite the error message for required fields
+
         $formField = $this->createElement($formElement, $elementName);
         $formField->setLabel($label);
         if (isset($validator))
             $formField->addValidator($validator);
-        if ($required == 'yes')
+        if ($required == 'yes') {
             $formField->setRequired(true);
+            $validate = new Zend_Validate_NotEmpty();
+            $validate->setMessage('publish_error_notempty_isempty', Zend_Validate_NotEmpty::IS_EMPTY);
+            $formField->addValidator($validate);
+        }
 
         if ($this->postData != null)
             if (array_key_exists($elementName, $this->postData))

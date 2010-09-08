@@ -46,6 +46,8 @@ class Publish_IndexController extends Controller_Action {
     public $documentType;
     public $documentId;
     public $additionalFields;
+    //projects are needed to inform referees
+    public $projects = array();
 
     /**
      * Renders a list of available document types and provide upload field
@@ -237,7 +239,6 @@ class Publish_IndexController extends Controller_Action {
                     //variables NOT valid
                     $this->view->form = $form;
                     $this->setViewVariables($form);
-                    $this->view->action_url = $action_url;
                     return $this->render($this->documentType);
                 } else {
                     //variables VALID
@@ -359,7 +360,9 @@ class Publish_IndexController extends Controller_Action {
             $docId = $document->store();
             $log->info("Document was sucessfully stored!");
             //finally send an emial to the referrer named in config.ini
-            $mail = new Mail_PublishNotification($docId, $this->view);
+            foreach($this->projects AS $p)
+                    $log->debug("projekte: " . $p);
+            $mail = new Mail_PublishNotification($docId, $this->projects, $this->view);
             if ($mail->send() === false)
                 $log->err("email to referee could not be sended!");
             else
@@ -852,8 +855,11 @@ class Publish_IndexController extends Controller_Action {
             $collArray = Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $value);
             $log->debug("Role ID: " . $role->getId() . ", value: " . $value);
 
-            if ($collArray !== null && count($collArray) <= 1)
+            if ($collArray !== null && count($collArray) <= 1) {
                 $document->addCollection($collArray[0]);
+                $this->projects[] = $value;
+                $log->debug("Projects array for referee, extended by " . $value);
+            }
             else
                 throw new Publish_Model_OpusServerException("While trying to store " . $key . " as Collection, an error occurred.
                         The method fetchCollectionsByRoleNumber returned an array with > 1 values. The " . $key . " cannot be definitely assigned.");

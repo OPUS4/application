@@ -19,12 +19,20 @@
     </tu>
 
     <tu tuid="publish_controller_one_doctype">
-        <!-- Hint for the required sign -->
         <tuv xml:lang="en">
             <seg>Only one document type available.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Nur ein Dokumenttyp verfügbar.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="publish_controller_index_fileupload">
+        <tuv xml:lang="en">
+            <seg>You may upload different files.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Sie können mehrere verschiedene Dateien hochladen.</seg>
         </tuv>
     </tu>
 
@@ -344,7 +352,6 @@ Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathsci
             <seg>Raum für Notizen und Benachrichtigungen...</seg>
         </tuv>
     </tu>
-
 
     
     </body>
