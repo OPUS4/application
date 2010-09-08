@@ -1,4 +1,5 @@
 <?php
+
 /**
  * collection of static mathods to get different browsing lists
  *
@@ -33,142 +34,110 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+class Browse_Model_BrowsingList {
 
-class Browse_Model_BrowsingList
-{
-	/**
-	 * Get a list of the 10 latest documents in repository
-	 *
-	 * @return Hitlist list of the 10 latest entries
-	 * @static
-	 */
-	public static function getLatestDocuments()
-	{
-        $hits = Opus_Document::getLatestIds();
-        return $hits;
-	}
-
-	/**
-	 * Get a list of all authors from the repository
-	 *
-	 * @return PersonsList list of authors, unsorted (call method sort() on it in order to sort it)
-	 * @static
-	 */
-	public static function getPersonsList()
-	{
+    /**
+     * Get a list of all authors from the repository
+     *
+     * @return PersonsList list of authors, unsorted (call method sort() on it in order to sort it)
+     * @static
+     */
+    public static function getPersonsList() {
         $browsinglist = Opus_Person::getAll();
-		$personsList = new Opus_Search_List_PersonsList();
-		$done = array();
-		foreach ($browsinglist as $member)
-		{
-			if (false === array_key_exists($member->getLastName(), $done))
-			{
-			    $pers = new Opus_Search_Adapter_PersonAdapter(array('id' => $member->getId(), 'firstName' => $member->getFirstName(), 'lastName' => $member->getLastName()));
-			    $personsList->add($pers);
-			    $done[$member->getLastName()] = $member->getFirstName();
-			}
-			else if ($done[$member->getLastName()] !== $member->getFirstName())
-			{
-			    $pers = new Opus_Search_Adapter_PersonAdapter(array('id' => $member->getId(), 'firstName' => $member->getFirstName(), 'lastName' => $member->getLastName()));
-			    $personsList->add($pers);
-			    $done[$member->getLastName()] = $member->getFirstName();
-			}
-		}
-		return $personsList;
-	}
+        $personsList = new Opus_Search_List_PersonsList();
+        $done = array();
+        foreach ($browsinglist as $member) {
+            if (false === array_key_exists($member->getLastName(), $done)) {
+                $pers = new Opus_Search_Adapter_PersonAdapter(array('id' => $member->getId(), 'firstName' => $member->getFirstName(), 'lastName' => $member->getLastName()));
+                $personsList->add($pers);
+                $done[$member->getLastName()] = $member->getFirstName();
+            } else if ($done[$member->getLastName()] !== $member->getFirstName()) {
+                $pers = new Opus_Search_Adapter_PersonAdapter(array('id' => $member->getId(), 'firstName' => $member->getFirstName(), 'lastName' => $member->getLastName()));
+                $personsList->add($pers);
+                $done[$member->getLastName()] = $member->getFirstName();
+            }
+        }
+        return $personsList;
+    }
 
-	/**
-	 * Get a list of all authors from the repository
-	 *
-	 * @return PersonsList list of authors, unsorted (call method sort() on it in order to sort it)
-	 * @static
-	 */
-	public static function getPersonsRoleList($role)
-	{
+    /**
+     * Get a list of all authors from the repository
+     *
+     * @return PersonsList list of authors, unsorted (call method sort() on it in order to sort it)
+     * @static
+     */
+    public static function getPersonsRoleList($role) {
         $registry = Zend_Registry::getInstance();
-        //$index = Zend_Search_Lucene::open($registry->get('Zend_LucenePersonsIndexPath'));
-
-        //$browsinglist = $index->find('role:'.$role);
 
         $browsinglist = Opus_Person::getAllIdsByRole($role);
-		$personsList = new Opus_Search_List_PersonsList();
-		$done = array();
+        $personsList = new Opus_Search_List_PersonsList();
+        $done = array();
 
-		foreach ($browsinglist as $person)
-		{
-			$member = new Opus_Person($person);
-			if (false === array_key_exists($member->getLastName(), $done))
-			{
-			    $pers = new Opus_Search_Adapter_PersonAdapter(array('id' => $member->getId(), 'firstName' => $member->getFirstName(), 'lastName' => $member->getLastName()));
-			    $personsList->add($pers);
-			    $done[$member->getLastName()] = $member->getFirstName();
-			}
-			else if ($done[$member->getLastName()] !== $member->getFirstName())
-			{
-			    $pers = new Opus_Search_Adapter_PersonAdapter(array('id' => $member->getId(), 'firstName' => $member->getFirstName(), 'lastName' => $member->getLastName()));
-			    $personsList->add($pers);
-			    $done[$member->getLastName()] = $member->getFirstName();
-			}
-		}
-		$personsList->sort();
-		return $personsList;
-	}
+        foreach ($browsinglist as $person) {
+            $member = new Opus_Person($person);
+            if (false === array_key_exists($member->getLastName(), $done)) {
+                $pers = new Opus_Search_Adapter_PersonAdapter(array('id' => $member->getId(), 'firstName' => $member->getFirstName(), 'lastName' => $member->getLastName()));
+                $personsList->add($pers);
+                $done[$member->getLastName()] = $member->getFirstName();
+            } else if ($done[$member->getLastName()] !== $member->getFirstName()) {
+                $pers = new Opus_Search_Adapter_PersonAdapter(array('id' => $member->getId(), 'firstName' => $member->getFirstName(), 'lastName' => $member->getLastName()));
+                $personsList->add($pers);
+                $done[$member->getLastName()] = $member->getFirstName();
+            }
+        }
+        $personsList->sort();
+        return $personsList;
+    }
 
-	/**
-	 * Get a list of all documentTypes from the repository
-	 *
-	 * @return DocumentTypeList list of documenttypes, unsorted (call method sort() on it in order to sort it)
-	 * @static
-	 */
-	public static function getDocumentTypeList()
-	{
+    /**
+     * Get a list of all documentTypes from the repository
+     *
+     * @return DocumentTypeList list of documenttypes, unsorted (call method sort() on it in order to sort it)
+     * @static
+     */
+    public static function getDocumentTypeList() {
         $result = Opus_Document_Type::getAvailableTypeNames();
         asort($result);
         $return = array();
         foreach ($result as $list) {
-        	$return[$list] = $list;
+            $return[$list] = $list;
         }
         return $return;
-	}
+    }
 
-	/**
-	 * Get a list of all CollectionRoles from the repository
-	 *
-	 * @return CollectionNodeList of all CollectionRole-Titles, unsorted (call method sort() on it in order to sort it)
-	 * @static
-	 *
-	 * @todo get the information from the real CollectionClass
-	 */
-	public static function getCollectionRoleList()
-	{
-                $resultList = array();
+    /**
+     * Get a list of all CollectionRoles from the repository
+     *
+     * @return CollectionNodeList of all CollectionRole-Titles, unsorted (call method sort() on it in order to sort it)
+     * @static
+     *
+     * @todo get the information from the real CollectionClass
+     */
+    public static function getCollectionRoleList() {
+        $resultList = array();
+        foreach (Opus_CollectionRole::fetchAll() AS $role) {
+            if ($role->getVisible() === '1' and $role->getVisibleBrowsingStart() === '1') {
+                $resultList[] = $role;
+            }
+        }
+        return $resultList;
+    }
 
-                // Only keep visible *and* browsing-enabled CollectionRoles
-		foreach (Opus_CollectionRole::fetchAll() AS $role) {
-		    if ($role->getVisible() === '1' and $role->getVisibleBrowsingStart() === '1') {
-		        $resultList[] = $role;
-		    }
-		}
+    /**
+     * Get a list of the addressed CollectionNode from the repository
+     *
+     * @return CollectionNode Including all content of this node
+     * @static
+     *
+     * @todo get the information from the real CollectionClass
+     */
+    public static function getCollectionList($role, $node) {
+        if ($node === 0) {
+            $browsinglist = new Opus_CollectionRole((int) $role);
+        } else {
+            $browsinglist = new Opus_Collection((int) $node);
+        }
+        return $browsinglist;
+    }
 
-                return $resultList;
-	}
-
-	/**
-	 * Get a list of the addressed CollectionNode from the repository
-	 *
-	 * @return CollectionNode Including all content of this node
-	 * @static
-	 *
-	 * @todo get the information from the real CollectionClass
-	 */
-	public static function getCollectionList($role, $node)
-	{
-		if ($node === 0) {
-		    $browsinglist = new Opus_CollectionRole((int) $role);
-		}
-		else {
-	       $browsinglist = new Opus_Collection((int) $node);
-		}
-		return $browsinglist;
-	}
 }
