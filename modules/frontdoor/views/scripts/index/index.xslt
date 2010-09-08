@@ -496,7 +496,8 @@
             <xsl:call-template name="translateString">
                 <xsl:with-param name="string">col_ser</xsl:with-param>
             </xsl:call-template>
-            <xsl:text>:</xsl:text></th>
+            <xsl:text>:</xsl:text>
+            </th>
             <td>
                <xsl:call-template name="checkdisplay"/>
             </td>
@@ -516,10 +517,17 @@
     <xsl:template match="Collection">
         <tr>
           <th class="name">
-            <xsl:call-template name="translateString">
-              <xsl:with-param name="string">collection_role_<xsl:value-of select="@RoleName" /></xsl:with-param>
-            </xsl:call-template>
-            </th>
+            <xsl:choose>
+               <xsl:when test="position()=1">
+                  <xsl:call-template name="translateString">
+                     <xsl:with-param name="string">collection_role_frontdoor_<xsl:value-of select="@RoleName" /></xsl:with-param>
+                  </xsl:call-template>
+               </xsl:when>
+               <xsl:otherwise>
+                  <xsl:text> </xsl:text>
+               </xsl:otherwise>
+            </xsl:choose>
+          </th>
           <td>
             <xsl:call-template name="checkdisplay"/>
           </td>
