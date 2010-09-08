@@ -144,6 +144,7 @@ class View_Helper_Field extends Zend_View_Helper_Abstract {
      */
     public function _renderGroup($name, $group) {
         $fieldset = "";
+        $disable = false;
         if (isset($group)) {
             $fieldset = "<fieldset class='fieldset'>\n<legend class='legend'>" . $this->view->translate($group['Name']) . "</legend>\n\t";
             $fieldset .= "<table class='table' width='100%'>";
@@ -158,8 +159,10 @@ class View_Helper_Field extends Zend_View_Helper_Abstract {
                     case "Zend_Form_Element_Text":
                         $fieldset .= "\n\t\t\t\t<input type='text' name='" . $field["id"] . "' id='" . $field["id"] . "'";
 
-                        if ($field["disabled"] === true)
+                        if ($field["disabled"] === true) {
                             $fieldset .= " disabled='1' ";
+                            $disable = true;
+                        }
 
                         if (strstr($field["id"], "1"))
                             $fieldset .= " title='" . $this->view->translate($field["hint"]) . "' ";
@@ -219,9 +222,11 @@ class View_Helper_Field extends Zend_View_Helper_Abstract {
             }
             //show buttons
             foreach ($group["Buttons"] AS $button) {
-                $fieldset .= "\n\t\t<tr>\n\t\t\t<td></td><td align='right'>";
-                $fieldset .= "\n\t\t\t\t<input type='submit' name='" . $button["id"] . "' id='" . $button["id"] . "' value='" . $button["label"] . "' />";
-                $fieldset .= "\n\t\t\t</td>\n\t\t</tr>";
+                if (!$disable) {
+                    $fieldset .= "\n\t\t<tr>\n\t\t\t<td></td><td align='right'>";
+                    $fieldset .= "\n\t\t\t\t<input type='submit' name='" . $button["id"] . "' id='" . $button["id"] . "' value='" . $button["label"] . "' />";
+                    $fieldset .= "\n\t\t\t</td>\n\t\t</tr>";
+                }
             }
             //show hidden fields
             foreach ($group["Hiddens"] AS $hidden) {
