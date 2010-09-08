@@ -141,7 +141,9 @@
        <xsl:apply-templates select="SubjectSwd" />
        <xsl:apply-templates select="SubjectUncontrolled" />
        <xsl:apply-templates select="SubjectPsyndex" />
-       <xsl:apply-templates select="SubjectMSC" />
+       <xsl:apply-templates select="SubjectMSC" >
+           <xsl:sort select="@Value"/>
+       </xsl:apply-templates>
        <xsl:apply-templates select="@Source" />
        <xsl:apply-templates select="@Volume" />
        <xsl:apply-templates select="@Issue" />
@@ -153,26 +155,17 @@
        <xsl:apply-templates select="Note" />
        <xsl:apply-templates select="@PublicationVersion" />
 
-       <xsl:if test="Collection/@RoleName='Organisatorische Einheiten'">
-          <xsl:apply-templates select="Collection[@RoleName='Organisatorische Einheiten']" />
-       </xsl:if>   
-       <xsl:if test="Collection/@RoleName='Computing Classification System'">
-          <xsl:apply-templates select="Collection[@RoleName='Computing Classification System']" />
-       </xsl:if>   
-       <xsl:if test="Collection/@RoleName='Dewey Decimal Classification'">
-          <xsl:apply-templates select="Collection[@RoleName='Dewey Decimal Classification']" />
-       </xsl:if>   
-       <xsl:if test="Collection/@RoleName='Mathematics Subject Classification'">
-          <xsl:apply-templates select="Collection[@RoleName='Mathematics Subject Classification']" />
-       </xsl:if>   
-       <xsl:if test="Collection/@RoleName='Physics and Astronomy Classification Scheme'">
-          <xsl:apply-templates select="Collection[@RoleName='Physics and Astronomy Classification Scheme']" />
-       </xsl:if>   
-       <xsl:if test="Collection/@RoleName='Schriftenreihen'">
-          <xsl:apply-templates select="Collection[@RoleName='Schriftenreihen']" />
-       </xsl:if>   
+       <xsl:apply-templates select="Collection[@RoleName='Organisatorische Einheiten']" />
+       <xsl:apply-templates select="Collection[@RoleName='Computing Classification System']" />
+       <xsl:apply-templates select="Collection[@RoleName='Dewey Decimal Classification']" />
+       <xsl:apply-templates select="Collection[@RoleName='Mathematics Subject Classification']" >
+           <xsl:sort select="@Number"/>
+       </xsl:apply-templates>
+       <xsl:apply-templates select="Collection[@RoleName='Physics and Astronomy Classification Scheme']" />
+       <xsl:apply-templates select="Collection[@RoleName='Schriftenreihen']" />
 
-       <xsl:apply-templates select="Collection" mode="other"/> 
+       <xsl:apply-templates select="Collection[@RoleName='matheon_projects']" />
+       <xsl:apply-templates select="Collection[@RoleName='matheon_institutes']" />
 
        <xsl:apply-templates select="Licence" />
        </table>
@@ -383,11 +376,11 @@
                <xsl:call-template name="checkdisplay"/>
             </td>
           </tr>
-        </xsl:when>   
+        </xsl:when>
         <xsl:otherwise>
             <tr>
             <td></td>
-               <td> 
+               <td>
                  <xsl:call-template name="checkdisplay"/>
               </td>
             </tr>
@@ -408,11 +401,11 @@
                <xsl:call-template name="checkdisplay"/>
            </td>
          </tr>
-        </xsl:when>   
+        </xsl:when>
         <xsl:otherwise>
             <tr>
             <td></td>
-               <td> 
+               <td>
                  <xsl:call-template name="checkdisplay"/>
               </td>
             </tr>
@@ -433,11 +426,11 @@
                <xsl:call-template name="checkdisplay"/>
             </td>
           </tr>
-        </xsl:when>   
+        </xsl:when>
         <xsl:otherwise>
             <tr>
             <td></td>
-               <td> 
+               <td>
                  <xsl:call-template name="checkdisplay"/>
               </td>
             </tr>
@@ -520,31 +513,17 @@
       </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="Collection" mode="other">
-      <xsl:if test="@RoleName!='Computing Classification System' and @RoleName!='Dewey Decimal Classification' and @RoleName!='Mathematics Subject Classification' and @RoleName!='Physics and Astronomy Classification Scheme' and @RoleName!='Schriftenreihen' and @RoleName!='Organisatorische Einheiten'">
-      <xsl:choose>
-        <xsl:when test="position()=1">
+    <xsl:template match="Collection">
         <tr>
           <th class="name">
             <xsl:call-template name="translateString">
-              <xsl:with-param name="string">col</xsl:with-param>
+              <xsl:with-param name="string">collection_role_<xsl:value-of select="@RoleName" /></xsl:with-param>
             </xsl:call-template>
-            <xsl:text>:</xsl:text></th>
+            </th>
           <td>
-               <xsl:call-template name="checkdisplay"/>
+            <xsl:call-template name="checkdisplay"/>
           </td>
         </tr>
-        </xsl:when>   
-        <xsl:otherwise>
-            <tr>
-            <td></td>
-               <td> 
-                 <xsl:call-template name="checkdisplay"/>
-              </td>
-            </tr>
-        </xsl:otherwise>
-      </xsl:choose>
-      </xsl:if>    
     </xsl:template>
 
     <xsl:template match="CompletedDate">
