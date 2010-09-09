@@ -37,7 +37,7 @@
 
 <h2><?= $this->translate('search_index_browsing') ?></h2>
 
-<a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'latest'), null, true) ?>"><?= $this->translate('latest_docs_browsing') ?></a>&nbsp;
+<a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'latest'), null, true) ?>"><?= $this->translate('latest_documents_title') ?></a>&nbsp;
 <a href="<?= $this->url(array('module' => 'browse', 'controller' => 'index', 'action' => 'latest', 'output' => 'rss'), null, true) ?>" class="rss"><img src="<?= $this->baseUrl; ?>/layouts/default/img/rss.gif" width="36" height="14" border="0" align="bottom" alt="RSS-Feed Icon" title="RSS-Feed abonnieren" /></a>
 <br/>
 <a href="<?= $this->url(array('module'=>'solrsearch','controller'=>'index','action'=>'search','query'=>'*:*','sortfield'=>'title','sortorder'=>'asc','searchtype'=>'simple'), null, true) ?>"><?= $this->translate('search_index_alltitles_browsing') ?></a>
