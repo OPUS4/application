@@ -187,6 +187,8 @@ class Mail_PublishNotification
             foreach ($this->projects as $project) {
                 $collection = substr($project, 0, 1); // MATHEON get first letter of project
 
+                $collection = strtolower($collection);
+
                 $recipients = $this->getRecipientsForCollection($collection);
 
                 if (!empty($recipients)) {
