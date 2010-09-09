@@ -38,12 +38,13 @@
     <?= $this->translate('sorting_sort_by') ?>
     <ul class="sorting_options">
     
-    <?php
+    <?php if(!$this->browsing) :
         $urlparams = $this->firstPage;
         $urlparams['sortfield'] = 'score';
         $urlparams['sortorder'] = 'desc';
     ?>
     <li class="sorting_option"><a href="<?= $this->url($urlparams) ?>"><?= $this->translate('sorting_relevancy') ?></a></li>
+    <?php endif ?>
 
     <?php 
         foreach (array('year', 'title', 'author') as $sortfield) :

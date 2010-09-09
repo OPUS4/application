@@ -190,7 +190,7 @@ class Solrsearch_IndexController extends Controller_Action {
 
         $this->query = $this->buildQuery($data);
         $this->performSearch();
-        $this->setViewValues();
+        $this->setViewValues($data);
         $this->setViewFacets($data);
 
         if($this->numOfHits === 0 || $this->query->getStart() >= $this->numOfHits) {
@@ -208,7 +208,7 @@ class Solrsearch_IndexController extends Controller_Action {
         $this->log->debug("resultlist: $this->resultList");
     }
 
-    private function setViewValues() {
+    private function setViewValues($data) {
         $this->view->results = $this->resultList->getResults();
         $this->view->searchType = $this->searchtype;
         $this->view->numOfHits = $this->numOfHits;
@@ -218,6 +218,9 @@ class Solrsearch_IndexController extends Controller_Action {
         $this->view->rows = $this->query->getRows();
         $this->view->authorSearch = Solrsearch_IndexController::createSearchUrlArray(array('searchtype'=>Solrsearch_IndexController::ADVANCED_SEARCH));
         $this->view->isSimpleList = false;
+        $this->view->browsing = array_key_exists('browsing', $data) ? $data['browsing'] : false;
+        if(array_key_exists('specialtitle', $data))
+            $this->view->specialTitle = $data['specialtitle'];
 
         if($this->searchtype === Solrsearch_IndexController::SIMPLE_SEARCH) {
             $this->view->q = $this->query->getCatchAll();

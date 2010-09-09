@@ -34,16 +34,22 @@
 
 ?>
 
+<?php if(isset($this->specialTitle)) : ?>
+<h1><?= htmlspecialchars($this->translate($this->specialTitle)) ?></h1>
+<?php endif ?>
+
 <?php
-    if($this->searchType === 'simple')
+    if($this->searchType === 'simple' && !$this->browsing)
         include('simpleSearchForm.php');
-    else if($this->searchType === 'advanced' || $this->searchType === 'authorsearch')
+    else if(($this->searchType === 'advanced' || $this->searchType === 'authorsearch') && !$this->browsing)
         include('advancedSearchForm.php');
-    else if($this->searchType)
+    else if($this->searchType === 'latest')
         include('latestDocsForm.php');
 ?>
 
+<?php if(!isset($this->specialTitle)) : ?>
 <h2><?= $this->numOfHits . ' ' . ($this->numOfHits === 1 ? $this->translate('results_title_single') : $this->translate('results_title')); ?></h2>
+<?php endif ?>
 
 <?php if(!$this->isSimpleList) : ?>
 <?php include('searchOptions.php') ?>

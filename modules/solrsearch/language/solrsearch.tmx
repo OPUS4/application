@@ -8,6 +8,24 @@
 
     <body>
 
+        <tu tuid="browsing_title_doctype">
+            <tuv xml:lang="en">
+                <seg>Doctype</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Dokumententyp</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="browsing_title_all_titles">
+            <tuv xml:lang="en">
+                <seg>All titles in this Repository</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Alle Titel aus dem Repository</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="latest_submit">
             <tuv xml:lang="en">
                 <seg>Refresh</seg>

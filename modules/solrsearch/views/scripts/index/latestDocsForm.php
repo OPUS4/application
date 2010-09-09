@@ -33,10 +33,6 @@
 
 ?>
 
-<?php if(isset($this->specialTitle)) : ?>
-<h1><?= htmlspecialchars($this->specialTitle) ?></h1>
-<?php endif ?>
-
 <form action="<?= $this->url(array('module'=>'solrsearch','controller'=>'index','action'=>'latest'),null,true) ?>" method="get">
     <fieldset>
         <legend><?= $this->translate('latest_options') ?></legend>
