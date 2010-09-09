@@ -64,10 +64,10 @@
 
         <tu tuid="title_latest_docs">
             <tuv xml:lang="en">
-                <seg>latest documents</seg>
+                <seg>most recently published documents</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>neuesten Dokumente</seg>
+                <seg>zuletzt veröffentlichten Dokumente</seg>
             </tuv>
         </tu>
 
