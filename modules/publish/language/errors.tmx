@@ -6,7 +6,16 @@
  </header>
   
   <body>
-<!-- This language file contains all texts concerning field hints. -->
+<!-- This language file contains all texts and cases concerning errors. -->
+    <tu tuid="publish_controller_form_errorcase">
+        <tuv xml:lang="en">
+            <seg>Errors occurred. Please check the error messages beside the form fields.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Es sind Fehler aufgetreten. Bitte beachten Sie die Fehlermeldungen an den Formularfeldern.</seg>
+        </tuv>
+    </tu>
+
 
 <!-- **************Errors for Person and their names****************** -->
     <tu tuid="publish_validation_error_person_invalid">

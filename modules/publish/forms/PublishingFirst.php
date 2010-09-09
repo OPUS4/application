@@ -64,13 +64,13 @@ class Publish_Form_PublishingFirst extends Zend_Form {
                     ->setAttrib('disabled', true)
                     ->setDescription('publish_controller_one_doctype');
 
-            $doctypesHidden=$this->createElement('hidden', 'type');
+            $doctypesHidden=$this->createElement('hidden', 'documentType');
             $doctypesHidden->setValue($value[0]);
             $this->addElement($doctypesHidden);
 
         }
         else {
-            $doctypes = $this->createElement('select', 'type');
+            $doctypes = $this->createElement('select', 'documentType');
             $doctypes->setLabel('selecttype')
                     ->setMultiOptions(array_merge(array('' => 'choose_valid_doctype'), $listOptions))
                     ->setRequired(true);
@@ -104,11 +104,12 @@ class Publish_Form_PublishingFirst extends Zend_Form {
 
         $fileupload = $this->createElement('File', 'fileupload');
         $fileupload->setLabel('fileupload')
+                ->setRequired(false)
                 ->setMultiFile($number_of_files)
                 ->setDestination($tempPath)
-                ->addValidator('Count', false, $number_of_files)     // ensure only 1 file
-                ->addValidator('Size', false, $maxFileSize) // limit to value given in application.ini
-                ->addValidator('Extension', false, $filetypes) // allowed filetypes by extension
+                ->addValidator('Count', false, $number_of_files)
+                ->addValidator('Size', false, $maxFileSize)     // limit to value given in application.ini
+                ->addValidator('Extension', false, $filetypes)  // allowed filetypes by extension
                 ->setDescription('publish_controller_index_fileupload');
 
         $bibliographie = null;
