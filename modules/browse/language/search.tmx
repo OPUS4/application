@@ -18,10 +18,10 @@
     
     <tu tuid="latest_documents_title">
       <tuv xml:lang="en">
-        <seg>The latest documents in this repository</seg>
+        <seg>The most recently published documents in this repository</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Die zuletzt eingetragenen Dokumente im Repository</seg>
+        <seg>Die zuletzt veröffentlichten Dokumente im Repository</seg>
       </tuv>
     </tu>
     <tu tuid="add_searchfield">
