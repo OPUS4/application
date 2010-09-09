@@ -283,6 +283,9 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
     public function disable_all_collectionroles() {
         foreach (Opus_CollectionRole::fetchAll() AS $cr) {
             if ($cr->getOaiName() == 'msc') {
+                $cr->setVisibleFrontdoor(0);
+                $cr->store();
+                echo "Updated collection {$cr->getDisplayName()}.\n";
                 continue;
             }
 
