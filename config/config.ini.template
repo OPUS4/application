@@ -82,6 +82,7 @@ mail.opus.name = ; Name of administrator
 ; referees['John Doe'] = john.doe@example.org
 
 ;REFEREES FOR MATHEON COLLECTIONS
+;IMPORTANT: only application areas (e.g. 'a') and all lower case (for now)
 ; events.collections.a.referees['Jane Doe'] = jane.doe@example.org
 ; events.collections.b.referees['Referee One'] = referee.one@example.org
 
