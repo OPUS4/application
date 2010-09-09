@@ -49,12 +49,12 @@
                         $remove_fqUrl = $this->firstPage;
                         $remove_fqUrl[$key.'fq'] = '';
                     ?>
-                        <li class="activeFacet"><?= $this->translate($facetItem->getText()) ?> (<?= $facetItem->getCount() ?>)
+                        <li class="activeFacet"><?= $this->translate(htmlspecialchars($facetItem->getText())) ?> (<?= $facetItem->getCount() ?>)
                         <span class="removeFacetLink"><a href="<?= $this->url($remove_fqUrl) ?>">(<?= $this->translate('facets_remove') ?>)</a></span>
                         </li>
                     <?php endif ?>
                 <?php else: ?>
-                    <li><a href="<?= $this->url($fqUrl) ?>"><?= $this->translate($facetItem->getText()) ?></a> (<?= $facetItem->getCount() ?>)</li>
+                    <li><a href="<?= $this->url($fqUrl) ?>"><?= $this->translate(htmlspecialchars($facetItem->getText())) ?></a> (<?= $facetItem->getCount() ?>)</li>
                 <? endif ?>
             <?php endforeach ?>
         </ul>

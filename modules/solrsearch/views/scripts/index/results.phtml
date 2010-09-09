@@ -63,7 +63,7 @@
                     'action' => 'index',
                     'docId' => $result->getId());
             ?>
-            <span class="results_title"><a href="<?= $this->url($frontdoorUrl, null, true) ?>"><?= $result->getTitle(); ?></a> (<?= $result->getYear(); ?>)</span><br/>
+            <span class="results_title"><a href="<?= $this->url($frontdoorUrl, null, true) ?>"><?= htmlspecialchars($result->getTitle()); ?></a> (<?= htmlspecialchars($result->getYear()); ?>)</span><br/>
 
             <?php if(!is_null($result->getAuthors())) : ?>
                 <?php foreach($result->getAuthors() as $author) :
@@ -71,11 +71,11 @@
                     $authorSearch['author'] = '"'.$author.'"';
                     $authorSearch['searchtype'] = 'authorsearch';
                 ?>
-                <a href="<?= $this->url($authorSearch, null, true); ?>"><?= $author ?></a>
+                <a href="<?= $this->url($authorSearch, null, true); ?>"><?= htmlspecialchars($author) ?></a>
                 <?php endforeach ?>
             <?php endif ?>
 
-            <div class="abstract"><?= $result->getAbstract(); ?></div>
+            <div class="abstract"><?= htmlspecialchars($result->getAbstract()); ?></div>
         </div>
     <?php endforeach ?>
 </div>
