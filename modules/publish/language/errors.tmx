@@ -29,10 +29,10 @@
 
     <tu tuid="publish_validation_error_person_stringempty">
         <tuv xml:lang="en">
-            <seg>Error: you entered an empty string.</seg>
+            <seg>This field is required.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Fehler: Sie haben eine leere Zeichenkette eingetragen.</seg>
+            <seg>Dieses Feld muss ausgefüllt werden.</seg>
         </tuv>
     </tu>
 
@@ -59,33 +59,63 @@
 
     <tu tuid="publish_validation_error_date_falseformat">
         <tuv xml:lang="en">
-            <seg>Error: please change %value% to fit the date format %format%.</seg>
+            <seg>Please change %value% to fit the date format %format%.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Fehler: bitte ändern Sie %value% in das Datumsformat %format%.</seg>
+            <seg>Bitte ändern Sie %value% in das Datumsformat %format%.</seg>
         </tuv>
     </tu>
 <!-- **************END Date************** -->
 
     <tu tuid="publish_validation_error_year">
         <tuv xml:lang="en">
-            <seg>Error: please enter a year that is greater that %min%.</seg>
+            <seg>Please enter a year that is greater that %min%.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Fehler: bitte tragen Sie ein Jahr ein, dass größer als %min% ist.</seg>
+            <seg>Bitte tragen Sie ein Jahr ein, dass größer als %min% ist.</seg>
         </tuv>
     </tu>
+<!-- **************END Year************** -->
 
-    <tu tuid="publish_error_notempty_isempty">
+    <tu tuid="publish_validation_error_notempty_isempty">
         <tuv xml:lang="en">
-            <seg>Error: this value is required, please enter it.</seg>
+            <seg>This field is required.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Fehler: bitte tragen Sie den notwendigen Wert in das Feld ein.</seg>
+            <seg>Dieses Feld muss ausgefüllt werden.</seg>
         </tuv>
     </tu>
+<!-- **************END NotEmpty************** -->
   
+    <tu tuid="publish_validation_error_inarray_notinarray">
+        <tuv xml:lang="en">
+            <seg>The value %value% was not found in the selection.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Der Wert %value% wurde nicht in der Auswahl gefunden.</seg>
+        </tuv>
+    </tu>
+<!-- **************END InArray************** -->
 
+    <tu tuid="publish_validation_error_subjectmsc_msgsubjectmsc">
+        <tuv xml:lang="en">
+            <seg>The value %value% is not a valid MSC class.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Der Wert %value% ist keine gültige MSC Klasse.</seg>
+        </tuv>
+    </tu>
+<!-- **************END SubjectMSC************** -->
+
+    <tu tuid="publish_validation_error_int_notint">
+        <tuv xml:lang="en">
+            <seg>The value %value% is not a number.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Der Wert %value% ist keine Zahl.</seg>
+        </tuv>
+    </tu>
+<!-- **************END Int************** -->
     
     </body>
 </tmx>

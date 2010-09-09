@@ -78,7 +78,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      */
     public function init() {
         $dom = Zend_Controller_Action_HelperBroker::getStaticHelper(
-                'DocumentTypes')->getDocument($this->doctype);
+                        'DocumentTypes')->getDocument($this->doctype);
 
         //parse the xml file for the tag "field"
         foreach ($dom->getElementsByTagname('field') as $field) {
@@ -172,10 +172,8 @@ class Publish_Form_PublishingSecond extends Zend_Form {
 
         if ($required === "yes") {
             $formField->setRequired(true);
-            $validate = new Zend_Validate_NotEmpty();
-            $validate->setMessage('publish_error_notempty_isempty', Zend_Validate_NotEmpty::IS_EMPTY);
-            $formField->addValidator($validate);
-        } //todo: in eigene methode auslagern
+            $formField->setErrorMessages(array('isEmpty' => 'publish_validation_error_notempty_isempty'));
+        } //todo: in eigene Methode auslagern
         else
             $formField->setRequired(false);
 
@@ -203,10 +201,8 @@ class Publish_Form_PublishingSecond extends Zend_Form {
 
         //=2= Check if there are child nodes -> concerning fulltext or other dependencies!
         if ($field->hasChildNodes()) {
-            //check if the field has to be required for fulltext
-            if ($this->fulltext === "1") {
+           if ($this->fulltext === "1") {
                 $requiredIfFulltext = $field->getElementsByTagName("required-if-fulltext");
-                //case: fulltext => overwrite the $required value with yes
                 if ($requiredIfFulltext->length != 0) {
                     $this->log->debug($elementName . " is required-if-fulltext! And Fulltext ist set to " . $this->fulltext);
                     $required = "yes";
@@ -227,6 +223,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
 
         //=3= Get the proper validator from the datatape!
         $validator = $this->_getValidatorsByDatatype($datatype);
+        
         // TODO combine with result of _parseValidation
         //=4= Check if fields has to shown multi times!
         if ($multiplicity !== "1") {
@@ -382,52 +379,72 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      * @throw Publish_Model_OpusServerException
      */
     protected function _getValidatorsByDatatype($datatype) {
+        //todo: wiederholbaren coden in eigene methoden auslagern
         switch ($datatype) {
 
             case 'Date' :
                 $validator = new Zend_Validate_Date();
                 $messages = array(
-                        Zend_Validate_Date::INVALID => 'publish_validation_error_date_invalid',
-                        Zend_Validate_Date::INVALID_DATE => 'publish_validation_error_date_invaliddate',
-                        Zend_Validate_Date::FALSEFORMAT => 'publish_validation_error_date_falseformat');
+                    Zend_Validate_Date::INVALID => 'publish_validation_error_date_invalid',
+                    Zend_Validate_Date::INVALID_DATE => 'publish_validation_error_date_invaliddate',
+                    Zend_Validate_Date::FALSEFORMAT => 'publish_validation_error_date_falseformat');
                 $validator->setMessages($messages);
                 return $validator;
                 break;
 
             case 'Integer':
-                return new Zend_Validate_Int(null);
+                $validator = new Zend_Validate_Int(null);
+                $validator->setMessage('publish_validation_error_int', Zend_Validate_Int::NOT_INT);
                 break;
 
             case 'Institute':
                 $validValues = $this->getCollection('institutes');
                 if ($validValues == null)
                     return null;
-                else
-                    return new Zend_Validate_InArray($validValues);
+                else {
+                    $validator = new Zend_Validate_InArray($validValues);
+                    $messages = array(
+                        Zend_Validate_InArray::NOT_IN_ARRAY => 'publish_validation_error_inarray_notinarray');
+                    $validator->setMessages($messages);
+                    return $validator;
+                }
                 break;
 
             case 'Language' :
-                return new Zend_Validate_InArray(array_keys($this->getLanguages()));
+                $validator = new Zend_Validate_InArray(array_keys($this->getLanguages()));
+                $messages = array(
+                    Zend_Validate_InArray::NOT_IN_ARRAY => 'publish_validation_error_inarray_notinarray');
+                $validator->setMessages($messages);
+                return $validator;
                 break;
 
             case 'Licence' :
                 $licences = $this->getLicences();
                 if ($licences == null)
                     return null;
-                else
-                    return new Zend_Validate_InArray($licences);
+                else {
+                    $validator = new Zend_Validate_InArray($licences);
+                    $messages = array(
+                        Zend_Validate_InArray::NOT_IN_ARRAY => 'publish_validation_error_inarray_notinarray');
+                    $validator->setMessages($messages);
+                    return $validator;
+                }
                 break;
 
             case 'msc' :
-                return new Opus_Validate_SubjectMSC();
+                $validator = new Opus_Validate_SubjectMSC();
+                $messages = array(
+                    Opus_Validate_SubjectMSC::MSG_SUBJECTMSC => 'publish_validation_error_subjectmsc_msgsubjectmsc');
+                $validator->setMessages($messages);
+                return $validator;
                 break;
 
             case 'Person':
                 $validator = new Zend_Validate_Alpha(true);
                 $messages = array(
-                        Zend_Validate_Alpha::INVALID => 'publish_validation_error_person_invalid',
-                        Zend_Validate_Alpha::NOT_ALPHA => 'publish_validation_error_person_notalpha',
-                        Zend_Validate_Alpha::STRING_EMPTY => 'publish_validation_error_person_stringempty');
+                    Zend_Validate_Alpha::INVALID => 'publish_validation_error_person_invalid',
+                    Zend_Validate_Alpha::NOT_ALPHA => 'publish_validation_error_person_notalpha',
+                    Zend_Validate_Alpha::STRING_EMPTY => 'publish_validation_error_person_stringempty');
                 $validator->setMessages($messages);
                 return $validator;
                 break;
@@ -436,8 +453,13 @@ class Publish_Form_PublishingSecond extends Zend_Form {
                 $validValues = $this->getCollection('projects');
                 if ($validValues == null)
                     return null;
-                else
-                    return new Zend_Validate_InArray($validValues);
+                else {
+                    $validator = new Zend_Validate_InArray($validValues);
+                    $messages = array(
+                        Zend_Validate_InArray::NOT_IN_ARRAY => 'publish_validation_error_inarray_notinarray');
+                    $validator->setMessages($messages);
+                    return $validator;
+                }
                 break;
 
             case 'Text':
@@ -674,18 +696,14 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      * @param <type> $label
      * @return <type>
      */
-    protected function _addFormElement($formElement, $elementName, $validator, $required, $label) {
-        //overwrite the error message for required fields
-
+    protected function _addFormElement($formElement, $elementName, $validator, $required, $label) {       
         $formField = $this->createElement($formElement, $elementName);
         $formField->setLabel($label);
         if (isset($validator))
             $formField->addValidator($validator);
         if ($required == 'yes') {
             $formField->setRequired(true);
-            $validate = new Zend_Validate_NotEmpty();
-            $validate->setMessage('publish_error_notempty_isempty', Zend_Validate_NotEmpty::IS_EMPTY);
-            $formField->addValidator($validate);
+            $formField->setErrorMessages(array('isEmpty' => 'publish_validation_error_notempty_isempty'));
         }
 
         if ($this->postData != null)
