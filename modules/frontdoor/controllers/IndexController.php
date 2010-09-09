@@ -41,67 +41,58 @@ class Frontdoor_IndexController extends Controller_Action {
      * @return void
      */
     public function indexAction() {
+
         $this->view->title = $this->view->translate('frontdoor_title');
-        $docId = $this->getRequest()->getParam('docId');
+        $request = $this->getRequest();
+        $docId = $request->getParam('docId');
+        $baseUrl = $request->getBaseUrl();
+
         try {
             $document = new Opus_Document($docId);
 
-            // Set up filter and get XML-Representation of filtered document.
             $type = $document->getType();
-            $filter = new Opus_Model_Filter;
+            $filter = new Opus_Model_Filter();
             $filter->setModel($document);
             $xml = $filter->toXml();
 
-            // Set up XSLT-Stylesheet
             $xslt = new DomDocument;
-            if (true === file_exists($this->view->getScriptPath('index') . '/' . $type . '.xslt')) {
-                $template = $type . '.xslt';
-            } else {
-                $template = 'index.xslt';
-            }
+            $template = $this->setUpXSLTStylesheet($type);
             $xslt->load($this->view->getScriptPath('index') . '/' . $template);
-
-            // Set up XSLT-Processor
             $proc = new XSLTProcessor;
             $proc->registerPHPFunctions('Frontdoor_IndexController::translate', 'Frontdoor_IndexController::isMailPossible');
             $proc->importStyleSheet($xslt);
 
-            // Set Base-Url
-            $baseUrl = $this->getRequest()->getBaseUrl();
             $this->view->baseUrl = $baseUrl;
-            // Set Doctype
             $this->view->doctype('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"  "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">');
 
-            // Set path for layout
-            $registry = Zend_Registry::getInstance();
-            $config = $registry->get('Zend_Config');
-            $theme = 'default';
-            if (true === isset($config->theme)) {
-                $theme = $config->theme;
-            }
-            $layoutPath = $baseUrl .'/layouts/'. $theme;
-
-            $deliver_url_prefix = '/documents';
-            if (isset($config->deliver->url->prefix)) {
-                $deliver_url_prefix = $config->deliver->url->prefix;
-            }
+            $config = Zend_Registry::getInstance()->get('Zend_Config');
+            $deliver_url_prefix = isset($config->deliver->url->prefix) ? $config->deliver->url->prefix : '/documents';
 
             $proc->setParameter('', 'baseUrl', $baseUrl);
-            $proc->setParameter('', 'layoutPath', $layoutPath);
             $proc->setParameter('', 'deliverUrlPrefix', "$deliver_url_prefix");
-
-            // Transform to HTML
             $this->view->frontdoor = $proc->transformToXML($xml);
 
-            // increment counter for document access statistics
-            $statistics = Opus_Statistic_LocalCounter::getInstance();
-            $statistics->countFrontdoor($docId);
+            $this->incrementStatisticsCounter($docId);
         }
         catch (Zend_Db_Table_Rowset_Exception $e) {
-        	if ($e->getMessage() === 'No row could be found at position 0') {
-        		$this->view->frontdoor = sprintf($this->view->translate('frontdoor_doc_id_not_found'), $docId);
-        	}
+            if ($e->getMessage() === 'No row could be found at position 0') {
+                    $this->view->frontdoor = sprintf($this->view->translate('frontdoor_doc_id_not_found'), $docId);
+            }
         }
+    }
+
+    private function setUpXSLTStylesheet($type) {
+        $template = null;
+        if (file_exists($this->view->getScriptPath('index') . '/' . $type . '.xslt'))
+            $template = $type . '.xslt';
+        else
+            $template = 'index.xslt';
+        return $template;
+    }
+
+    private function incrementStatisticsCounter($docId) {
+        $statistics = Opus_Statistic_LocalCounter::getInstance();
+        $statistics->countFrontdoor($docId);
     }
     
     /**
