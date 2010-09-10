@@ -32,8 +32,26 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
 class Publish_FormControllerTest extends ControllerTestCase {
+
+    /**
+     * Method to initialize Zend_Application for each test.
+     */
+    public function setUp() {
+
+        $_FILES = array(
+            'fileupload' => array(
+                'name' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test.pdf',
+                'type' => 'application/pdf',
+                'size' => 8,
+                'tmp_name' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test.pdf',
+                'error' => 0));
+
+        $this->adapter = new MockAdapter();
+
+        parent::setUp();
+
+    }
 
     /**
      * Simple test action to check form action in FormController
@@ -65,10 +83,12 @@ class Publish_FormControllerTest extends ControllerTestCase {
      * Simple test action to check form action with valid POST
      */
     public function testUploadActionWithValidDummyPost() {
-        $this->request
+              $this->request
                 ->setMethod('POST')
                 ->setPost(array(
                     'documentType' => 'preprint',
+                    'type1' => 'preprint',
+                    'MAX_FILE_SIZE' => '134217728',
                     'fileupload' => '',
                     'send' => 'Send'
                 ));
@@ -78,18 +98,63 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertController('form');
         $this->assertAction('upload');
     }
-
+    
     /**
      * Simple test action to check check action in FormController
      */
-    public function testCheckAction() {
+    public function testCheckActionWithoutPost() {
         $this->dispatch('/publish/form/check');
         $this->assertResponseCode(302);
         $this->assertController('form');
         $this->assertAction('check');
     }
 
-   
+    public function testChechActionWithInvalidDummyPost() {
+         $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'foo' => 'bar',
+                ));
+
+        $this->dispatch('/publish/form/check');
+        $this->assertResponseCode(200);
+        $this->assertController('form');
+        $this->assertAction('check');
+
+    }
+
+    public function testChechActionWithValidDummyPost() {
+         $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'PersonAuthor1FirstName' => 'Testi',
+                    'PersonAuthor1LastName' => 'Tester',
+                    'addMorePersonAuthor' => 'Einen weiteren Autoren hinzufügen',
+                    'Institute1' => 'Zuse Institute Berlin (ZIB)',
+                    'addMoreInstitute' => 'Ein weiteres Institut hinzufügen',
+                    'countMoreInstitute' => '1',
+                    'Language' => 'eng',
+                    'TitleMain1' => 'Title',
+                    'TitleMain1Language' => 'eng',
+                    'addMoreTitleMain' => 'Einen weiteren Titel hinzufügen',
+                    'countMoreTitleMain' => '1',
+
+                ));
+
+        $this->dispatch('/publish/form/check');
+        $this->assertResponseCode(200);
+        $this->assertController('form');
+        $this->assertAction('check');
+
+    }
+
+}
+
+class MockAdapter extends Zend_File_Transfer_Adapter_Http {
+
+    public function isValid($files = null) {
+        return true;
+    }
 
 }
 
