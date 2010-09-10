@@ -32,7 +32,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
 class Browse_IndexControllerTest extends Zend_Test_PHPUnit_ControllerTestCase {
 
     /**
@@ -53,6 +52,25 @@ class Browse_IndexControllerTest extends Zend_Test_PHPUnit_ControllerTestCase {
     }
 
     /**
+     * Method to check response for "bad" strings.
+     */
+    protected function checkBadStrings() {
+        // Test output for "bad" strings.
+        // Dirty hack to have some kind of error-checking.  Bad tests are better
+        // than no tests!
+        $bad_strings = array("Exception", "Error", "Fehler", "Stacktrace");
+        $body = strtolower($this->getResponse()->getBody());
+        foreach ($bad_strings AS $bad) {
+            $this->assertNotContains(
+                    strtolower($bad),
+                    $body,
+                    "Response must not contain '$bad'"
+            );
+        }
+
+    }
+
+    /**
      * Simple test action to check "index" module.
      */
     public function testIndexAction() {
@@ -60,6 +78,9 @@ class Browse_IndexControllerTest extends Zend_Test_PHPUnit_ControllerTestCase {
         $this->assertResponseCode(200);
         $this->assertController('index');
         $this->assertAction('index');
+
+        $this->checkBadStrings();
+
     }
 
     /**
@@ -77,6 +98,7 @@ class Browse_IndexControllerTest extends Zend_Test_PHPUnit_ControllerTestCase {
         $this->dispatch('/user/login');
         $this->assertTrue(Zend_Auth::getInstance()->hasIdentity());
         $this->assertRedirectTo('/user/view');
+
     }
 
 }
