@@ -706,12 +706,15 @@ class Publish_Form_PublishingSecond extends Zend_Form {
     protected function _addFormElement($formElement, $elementName, $validator, $required, $label) {
         $formField = $this->createElement($formElement, $elementName);
         $formField->setLabel($label);
-        if (isset($validator))
-            $formField->addValidator($validator);
+        
         if ($required == 'yes') {
             $formField->setRequired(true);
-            $formField->setErrorMessages(array('isEmpty' => 'publish_validation_error_notempty_isempty'));
+            $formField->setAutoInsertNotEmptyValidator(true);
+            //$formField->addErrorMessages(array('isEmpty' => 'publish_validation_error_notempty_isempty'));
         }
+
+        if (isset($validator))
+            $formField->addValidator($validator);
 
         if ($this->postData != null)
             if (array_key_exists($elementName, $this->postData))
@@ -772,10 +775,9 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      */
     protected function getCollection($oaiName) {
         if (empty($this->$oaiName)) {
-            $this->log->debug($oaiName . " has to be fetched from database!");
+           // $this->log->debug($oaiName . " has to be fetched from database!");
             $role = Opus_CollectionRole::fetchByOaiName($oaiName);
             if ($role === null)
-            //throw new Publish_Model_OpusServerException("No Collections found in database for " . $oaiName);
                 return null;
             else {
                 $colls = Opus_Collection::fetchCollectionsByRoleId($role->getId());
@@ -794,7 +796,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
             $this->$oaiName = $collections;
             return $collections;
         } else {
-            $this->log->debug($oaiName . " can be fetched from cache!");
+            //$this->log->debug($oaiName . " can be fetched from cache!");
             return $this->$oaiName;
         }
     }
@@ -806,14 +808,14 @@ class Publish_Form_PublishingSecond extends Zend_Form {
     protected function getLanguages() {
         $languages = array();
         if (empty($this->languages)) {
-            $this->log->debug("Languages have to fetched from Registry!");
+            //$this->log->debug("Languages have to fetched from Registry!");
             if (Zend_Registry::isRegistered('Available_Languages') === true) {
                 $languages = Zend_Registry::get('Available_Languages');
                 $this->languages = $languages;
 
                 return $languages;
             } else {
-                $this->log->debug("Languages have to fetched from Database!");
+               // $this->log->debug("Languages have to fetched from Database!");
                 $dbLanguages = Opus_Language::getAllActive();
                 if (isset($dbLanguages) || count($dbLanguages) >= 1) {
                     foreach ($dbLanguages as $lan)
@@ -825,7 +827,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
                     return null;
             }
         } else {
-            $this->log->debug("Languages can be fetched from cache!");
+           // $this->log->debug("Languages can be fetched from cache!");
             return $this->languages;
         }
     }
@@ -837,7 +839,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
     protected function getLicences() {
         $licences = array();
         if (empty($this->licences)) {
-            $this->log->debug("Licences have to be fetched from Database!");
+          //  $this->log->debug("Licences have to be fetched from Database!");
             foreach ($licences = Opus_Licence::getAll() as $lic) {
                 $name = $lic->getDisplayName();
                 $licences[$name] = $name;
@@ -846,7 +848,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
             return $licences;
         } else {
 
-            $this->log->debug("Licences can be fetched from cache!");
+            //$this->log->debug("Licences can be fetched from cache!");
             return $this->licences;
         }
     }
