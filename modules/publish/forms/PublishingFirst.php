@@ -48,14 +48,47 @@ class Publish_Form_PublishingFirst extends Zend_Form {
      * @return void
      */
     public function init() {        
-        $documentTypes = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
-
+        
         $documentInSession = new Zend_Session_Namespace('document');
+        
         $this->config = Zend_Registry::get('Zend_Config');
+
+        $doctypes = $this->_createDocumentTypeField();
+
+        $fileupload = $this->_createFileuploadField();
+
+        $bibliographie = $this->_createBibliographyField();
+
+        //now add elements to form object
+
+        $this->addElements(array($doctypes, $fileupload));
+
+         //add Bibliographie?
+        if ($bibliographie !== null) {
+            $this->addElement($bibliographie);
+        }
+
+        $submit = $this->createElement('submit', 'send');
+        $submit->setLabel('Send');$this->addElement($submit);
+        $this->addElement($submit);
+
+        $this->setAttrib('enctype', Zend_Form::ENCTYPE_MULTIPART);        
+    }
+
+    /**
+     * Method shows the field for document types by looking in config file
+     * shows selection: >1 Options
+     * shows text field: =1 Option
+     * 
+     * @return <Zend_Element> 
+     */
+    private function _createDocumentTypeField() {
+        $documentTypes = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
 
         //Select with different document types given by the used function
         $listOptions = $documentTypes->getDocumentTypes();
 
+        //field type depends on the number of fields
         if (count($listOptions)===1) {
             $value = (array_keys($listOptions));
             $doctypes = $this->createElement('text', 'type1');
@@ -76,16 +109,24 @@ class Publish_Form_PublishingFirst extends Zend_Form {
                     ->setRequired(true);
         }
 
+        return $doctypes;
+    }
+
+    /**
+     * Method shows the fields for file uploads by looking in config file
+     * @return <Zend_Element> 
+     */
+    private function _createFileuploadField() {
         // get path to store files
         $tempPath = $this->config->path->workspace->temp;
-        if (true === empty($tempPath)) 
+        if (true === empty($tempPath))
             $tempPath = '../workspace/tmp/'; // TODO defaults are in application.ini => throw exception
 
         // get allowed filetypes
         $filetypes = $this->config->publish->filetypes->allowed;
-        if (true === empty($filetypes)) 
+        if (true === empty($filetypes))
             $filetypes = 'pdf,txt,html,htm'; // TODO defaults are in application.ini => throw exception
-        
+
         //get allowed file size
         $maxFileSize = (int) $this->config->publish->maxfilesize;
         if (true === empty($maxFileSize))
@@ -96,12 +137,7 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         if (true === empty($number_of_files))
             $number_of_files = 1;
 
-        //show Bibliographie?
-        $bib = $this->config->form->first->bibliographie == 1;
-        if (empty($bib)) {
-            $bib = 0;
-        }
-
+        //file upload field(s)
         $fileupload = $this->createElement('File', 'fileupload');
         $fileupload->setLabel('fileupload')
                 ->setRequired(false)
@@ -112,6 +148,20 @@ class Publish_Form_PublishingFirst extends Zend_Form {
                 ->addValidator('Extension', false, $filetypes)  // allowed filetypes by extension
                 ->setDescription('publish_controller_index_fileupload');
 
+        return $fileupload;
+    }
+
+    /**
+     * Method shows bibliography field by looking in config file
+     * @return <Zend_Element>
+     */
+    private function _createBibliographyField() {
+        //show Bibliographie?
+        $bib = $this->config->form->first->bibliographie == 1;
+        if (empty($bib)) {
+            $bib = 0;
+        }
+    
         $bibliographie = null;
 
         if ($bib) {
@@ -119,18 +169,6 @@ class Publish_Form_PublishingFirst extends Zend_Form {
             $bibliographie->setLabel('bibliographie');
         }
         
-
-        $submit = $this->createElement('submit', 'send');
-        $submit->setLabel('Send');
-    
-        $this->addElements(array($doctypes, $fileupload));
-        //show Bibliographie?
-        if ($bib) {
-            $this->addElement($bibliographie);
-        }
-
-        $this->addElement($submit);
-        $this->setAttrib('enctype', Zend_Form::ENCTYPE_MULTIPART);        
+        return $bibliographie;
     }
-
 }

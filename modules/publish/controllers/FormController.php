@@ -53,63 +53,37 @@ class Publish_FormController extends Controller_Action {
         $this->view->languageSelectorDisabled = true;
 
         if ($this->getRequest()->isPost() === true) {
-            $step1Form = new Publish_Form_PublishingFirst();
+            $indexForm = new Publish_Form_PublishingFirst();
 
             $data = $this->getRequest()->getPost();
 
-            if (!$step1Form->isValid($this->getRequest()->getPost())) {
+            if (!$indexForm->isValid($data)) {
                 //error case, and redirect to form, show errors
-                $this->view->form = $step1Form;
-
+                $this->view->form = $indexForm;
                 return $this->renderScript('index/index.phtml');
             } else {
 
-                $this->setDocumentParameters($data);
+                $this->_setDocumentParameters($data);
 
                 $this->view->title = $this->view->translate('publish_controller_index');
                 $this->view->subtitle = $this->view->translate($this->documentType);
                 $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
                 $this->view->doctype = $this->documentType;
 
-                $upload = new Zend_File_Transfer_Adapter_Http();
-                $files = $upload->getFileInfo();
-
-                if ($upload->isUploaded()) {
-                    $log->info("Fileupload of: " . count($files) . " possible files => Fulltext is '1'.");
-                    $this->fulltext = "1";
-                    $document = new Opus_Document();
-                    $document->setType($this->documentType);
-                    $document->setServerState('temporary');
-
-                    foreach ($files AS $file => $fileValues) {
-                        if (!empty($fileValues['name'])) {
-                            $log->info("uploaded: " . $fileValues['name']);
-                            $docfile = $document->addFile();
-                            //todo: default language should come from doc type
-                            $docfile->setLanguage("eng");
-                            $docfile->setFromPost($fileValues);
-                        }
-                    }
-                    $docId = $document->store();
-                    $this->documentId = $docId;
-                    $log->info("The corresponding doucment ID is: " . $this->documentId);
-                } else {
-                    $log->info("No file uploaded: => Fulltext is NOT given.");
-                }
+                $this->_setDocumentFiles();
 
                 $templateName = $this->_helper->documentTypes->getTemplateName($this->documentType);
 
                 $this->_helper->viewRenderer($templateName);
 
-                $step2Form = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $this->fulltext, null, null);
+                $publishForm = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $this->fulltext, null, null);
                 $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check'));
-                $step2Form->setAction($action_url);
-                $step2Form->setMethod('post');
-                $this->setViewVariables($step2Form);
+                $publishForm->setAction($action_url);
+                $publishForm->setMethod('post');
+                $this->setViewVariables($publishForm);
                 $this->view->action_url = $action_url;
             }
-        }
-        else {
+        } else {
             // GET Reqquest is redirected to index
             $url = $this->view->url(array('controller' => 'index', 'action' => 'index'));
             return $this->redirectTo($url);
@@ -129,7 +103,7 @@ class Publish_FormController extends Controller_Action {
 
             $postData = $this->getRequest()->getPost();
 
-            $this->setDocumentParameters($postData);
+            $this->_setDocumentParameters($postData);
 
             //initialize the form object
             $form = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $this->fulltext, $this->additionalFields, $postData);
@@ -180,7 +154,7 @@ class Publish_FormController extends Controller_Action {
                 }
             }
         }
-        else 
+        else
             return $this->redirectTo('upload');
     }
 
@@ -211,6 +185,7 @@ class Publish_FormController extends Controller_Action {
 
 
 
+                    
             }
 
             $groupName = 'group' . $name;
@@ -292,7 +267,7 @@ class Publish_FormController extends Controller_Action {
      * Methods sets the documents parameters which are also the memeber variables of this controller
      * @param <array> $postData
      */
-    private function setDocumentParameters($postData = null) {
+    private function _setDocumentParameters($postData = null) {
         if (!empty($postData)) {
 
             if (isset($postData['documentType']))
@@ -320,6 +295,33 @@ class Publish_FormController extends Controller_Action {
             }
 
             $this->additionalFields = $additionalFields;
+        }
+    }
+
+    private function _setDocumentFiles() {
+        $upload = new Zend_File_Transfer_Adapter_Http();
+        $files = $upload->getFileInfo();
+
+        if ($upload->isUploaded()) {
+            $log->info("Fileupload of: " . count($files) . " possible files => Fulltext is '1'.");
+            $this->fulltext = "1";
+            $document = new Opus_Document();
+            $document->setType($this->documentType);
+            $document->setServerState('temporary');
+
+            foreach ($files AS $file => $fileValues) {
+                if (!empty($fileValues['name'])) {
+                    $log->info("uploaded: " . $fileValues['name']);
+                    $docfile = $document->addFile();
+                    //todo: default language should come from doc type
+                    $docfile->setLanguage("eng");
+                    $docfile->setFromPost($fileValues);
+                }
+            }
+            $this->documentId =$document->store();
+            $log->info("The corresponding doucment ID is: " . $this->documentId);
+        } else {
+            $log->info("No file uploaded: => Fulltext is NOT given.");
         }
     }
 
