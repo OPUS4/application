@@ -32,71 +32,52 @@
  * @version     $Id$
  */
 
-/**
- * Test cases to load all class files.
- *
- * @package Application
- * @category Tests
- *
- * @group RequireTest
- *
- */
-class RequireTest extends PHPUnit_Framework_TestCase {
+class Webapi_PersonControllerTest extends ControllerTestCase {
 
     /**
-     * Overwrite standard setUp method, no database connection needed.  Will
-     * create a file listing of class files instead.
-     *
-     * @return void
+     * @todo Implement testGetAction().
      */
-    public function setUp() {
-        require_once 'Zend/Application.php';
-
-        set_include_path('../modules'
-                . PATH_SEPARATOR . get_include_path());
-
-        // Do test environment initializiation.
-        $application = new Zend_Application(
-                        APPLICATION_ENV,
-                        array(
-                            "config" => array(
-                                APPLICATION_PATH . '/application/configs/application.ini',
-                                APPLICATION_PATH . '/tests/config.ini'
-                            )
-                        )
+    public function testGetAction() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
         );
-        $application->bootstrap();
+
     }
 
     /**
-     * Overwrite standard tearDown method, no cleanup needed.
-     *
-     * @return void
+     * @todo Implement testPutAction().
      */
-    public function tearDown() {
+    public function testPutAction() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+
     }
 
     /**
-     * Try to load all class files, just to make sure no syntax error have
-     * been introduced.  As a side effect, all classes will be visible to
-     * code coverage report.
+     * @todo Implement testPostAction().
      */
-    public function testRequire() {
-        // Run find to locate all class files
-        $cmd = 'find ../modules -type f -iname "*php" |cut -d/ -f3-';
-        $classFiles = array();
-        exec($cmd, $classFiles);
+    public function testPostAction() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
 
-        foreach ($classFiles AS $file) {
-            if (strstr($file, '/init.php')
-                    or strstr($file, 'statistic/models/StatisticGraph')
-                    or strstr($file, 'socialBookmarking/models/Connotea.php')
-                    or strstr($file, '/views/') ) {
-                continue;
-            }
+    }
 
-            require_once($file);
-        }
+    /**
+     * @todo Implement testDeleteAction().
+     */
+    public function testDeleteAction() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+
     }
 
 }
+
+?>
