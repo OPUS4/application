@@ -42,16 +42,6 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         parent::setUp();
     }
 
-//    protected function checkForBadStringsInHtml($body) {
-//        $badStrings = array("Exception", "Error", "Fehler", "Stacktrace");
-//        $bodyLowerCase = strtolower($body);
-//        foreach ($badStrings AS $badString)
-//            $this->assertNotContains(
-//                strtolower($badString),
-//                $bodyLowerCase,
-//                "Response must not contain '$badString'");
-//    }
-
     public function testIndexAction() {
         $this->doStandardControllerTest('/solrsearch', 'index', 'index');
     }
@@ -84,11 +74,11 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->dispatch('/solrsearch/index/results');
     }
 
-//    public function testLatestAction() {
-//        $this->doStandardControllerTest('/solrsearch/index/latest', 'index', 'latest');
-//        $response = $this->getResponse();
-//        $this->checkForBadStringsInHtml($response->getBody());
-//    }
+    public function testLatestAction() {
+        $this->doStandardControllerTest('/solrsearch/index/latest', 'index', 'latest');
+        $response = $this->getResponse();
+        $this->checkForBadStringsInHtml($response->getBody());
+    }
 
     public function testInvalidsearchtermAction() {
         $this->request
