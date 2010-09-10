@@ -95,22 +95,8 @@ class Controller_Action extends Zend_Controller_Action {
      */
     public function init() {
         $this->view->title = $this->_request->getModuleName() . '_' . $this->_request->getParam('controller') . '_' . $this->_request->getParam('action');
-        // $this->__layout = Zend_Layout::getMvcInstance()->getView();
         $this->__redirector = $this->_helper->getHelper('Redirector');
         $this->__flashMessenger = $this->_helper->getHelper('FlashMessenger');
-    }
-
-    /**
-     * Actions to be performed after every action
-     *
-     * @return void
-     */
-    public function postDispatch() {
-
-        if(isset($this->__layout))
-            $this->__layout->placeholder('messages')->set(join("",$this->__flashMessenger->getMessages()));
-
-        parent::postDispatch();
     }
 
     /**
