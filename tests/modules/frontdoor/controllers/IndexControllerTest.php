@@ -33,17 +33,10 @@
 
 class Frontdoor_IndexControllerTest extends ControllerTestCase {
 
-    public function setUp() {
-        $this->bootstrap = new Zend_Application(APPLICATION_ENV,
-            array("config" => array(
-                APPLICATION_PATH . '/application/configs/application.ini',
-                APPLICATION_PATH . '/tests/config.ini'))
-        );
-        parent::setUp();
-    }
-    
     private function doStandardControllerTest($url, $controller, $action) {
         $this->dispatch($url);
+        echo "code: " . $this->getResponse()->getHttpResponseCode() . " -- $url\n";
+
         $this->assertResponseCode(200);
         if($controller != null)
             $this->assertController($controller);
@@ -54,10 +47,16 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     }
 
     public function testIndexAction() {
-        $this->doStandardControllerTest('/frontdoor/index/index/docId/1', 'index', 'index');
+        $testDocument = new Opus_Document();
+        $testDocument->setType('foobar');
+        $testDocumentId = $testDocument->store();
+
+        $this->markTestIncomplete("Test waiting for completion.");
+        $this->doStandardControllerTest('/frontdoor/index/index/docId/'.$testDocumentId, 'index', 'index');
     }
 
     public function testMapopus3Action() {
+        $this->markTestIncomplete("Test waiting for completion.");
         $this->doStandardControllerTest('/frontdoor/index/mapopus3Action', 'index', 'mapopus3Action');
     }
 }
