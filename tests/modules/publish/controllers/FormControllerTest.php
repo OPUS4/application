@@ -61,6 +61,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertResponseCode(302);
         $this->assertController('form');
         $this->assertAction('upload');
+
     }
 
     /**
@@ -77,13 +78,14 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200);
         $this->assertController('form');
         $this->assertAction('upload');
+
     }
 
     /**
      * Simple test action to check form action with valid POST
      */
     public function testUploadActionWithValidDummyPost() {
-              $this->request
+        $this->request
                 ->setMethod('POST')
                 ->setPost(array(
                     'documentType' => 'preprint',
@@ -97,8 +99,9 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200);
         $this->assertController('form');
         $this->assertAction('upload');
+
     }
-    
+
     /**
      * Simple test action to check check action in FormController
      */
@@ -107,10 +110,13 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertResponseCode(302);
         $this->assertController('form');
         $this->assertAction('check');
+
     }
 
     public function testChechActionWithInvalidDummyPost() {
-         $this->request
+        $this->markTestIncomplete("Test waiting for completion.");
+
+        $this->request
                 ->setMethod('POST')
                 ->setPost(array(
                     'foo' => 'bar',
@@ -124,7 +130,9 @@ class Publish_FormControllerTest extends ControllerTestCase {
     }
 
     public function testChechActionWithValidDummyPost() {
-         $this->request
+        $this->markTestIncomplete("Test waiting for completion.");
+
+        $this->request
                 ->setMethod('POST')
                 ->setPost(array(
                     'PersonAuthor1FirstName' => 'Testi',
