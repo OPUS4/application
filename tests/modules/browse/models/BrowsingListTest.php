@@ -32,13 +32,24 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Browse_IndexControllerTest extends Zend_Test_PHPUnit_ControllerTestCase {
+
+class Browse_Model_BrowsingListTest extends PHPUnit_Framework_TestCase {
 
     /**
-     * Method to initialize Zend_Application for each test.
+     * @var Browse_Model_BrowsingList
      */
-    public function setUp() {
-        $this->bootstrap = new Zend_Application(
+    protected $object;
+
+    /**
+     * Sets up the fixture, for example, opens a network connection.
+     * This method is called before a test is executed.
+     */
+    protected function setUp() {
+//          require_once 'Zend/Loader/Autoloader.php';
+          require_once 'Zend/Application.php';
+
+        // Do test environment initializiation.
+        $application = new Zend_Application(
                         APPLICATION_ENV,
                         array(
                             "config" => array(
@@ -47,67 +58,71 @@ class Browse_IndexControllerTest extends Zend_Test_PHPUnit_ControllerTestCase {
                             )
                         )
         );
-        parent::setUp();
+        $application->bootstrap();
+
+        $this->object = new Browse_Model_BrowsingList;
+    }
+
+    /**
+     * Tears down the fixture, for example, closes a network connection.
+     * This method is called after a test is executed.
+     */
+    protected function tearDown() {
 
     }
 
     /**
-     * Method to check response for "bad" strings.
+     * @todo Implement testGetPersonsList().
      */
-    protected function checkBadStrings() {
-        // Test output for "bad" strings.
-        // Dirty hack to have some kind of error-checking.  Bad tests are better
-        // than no tests!
-        $bad_strings = array("Exception", "Error", "Fehler", "Stacktrace");
-        $body = strtolower($this->getResponse()->getBody());
-        foreach ($bad_strings AS $bad) {
-            $this->assertNotContains(
-                    strtolower($bad),
-                    $body,
-                    "Response must not contain '$bad'"
-            );
-        }
+    public function testGetPersonsList() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
 
     }
 
     /**
-     * Simple test action to check "index" module.
+     * @todo Implement testGetPersonsRoleList().
      */
-    public function testIndexAction() {
-        $this->dispatch('/browse');
-        $this->assertResponseCode(200);
-        $this->assertController('index');
-        $this->assertAction('index');
-
-        $this->checkBadStrings();
-
-        /**
-         * assertQuery*() allows selections on the DOM tree!
-         *
-         * Tests the page title is present
-         * $this->assertQueryContentContains('div#header-logo', 'ZF Quickstart Application');
-         *
-         * Tests the guestbook link is present
-         * $this->assertQueryContentContains('a', 'Guestbook');
-         */
+    public function testGetPersonsRoleList() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
 
     }
 
     /**
-     * Example test target to demonstrate POST requests.
+     * @todo Implement testGetDocumentTypeList().
      */
-    public function testFoobarLogin() {
-        $this->markTestIncomplete('This test is only a POST-example.');
+    public function testGetDocumentTypeList() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
 
-        $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'username' => 'foobar',
-                    'password' => 'foobar'
-                ));
-        $this->dispatch('/user/login');
-        $this->assertTrue(Zend_Auth::getInstance()->hasIdentity());
-        $this->assertRedirectTo('/user/view');
+    }
+
+    /**
+     * @todo Implement testGetCollectionRoleList().
+     */
+    public function testGetCollectionRoleList() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+
+    }
+
+    /**
+     * @todo Implement testGetCollectionList().
+     */
+    public function testGetCollectionList() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
 
     }
 
