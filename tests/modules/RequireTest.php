@@ -53,7 +53,7 @@ class RequireTest extends PHPUnit_Framework_TestCase {
     public function setUp() {
         require_once 'Zend/Application.php';
 
-        set_include_path('/home/tklein/opus4-zib/server/modules'
+        set_include_path('../modules'
                 . PATH_SEPARATOR . get_include_path());
 
         // Do test environment initializiation.
