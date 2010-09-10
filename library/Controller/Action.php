@@ -42,13 +42,6 @@
 class Controller_Action extends Zend_Controller_Action {
 
     /**
-     * Holds the Layout Helper.
-     *
-     * @var Zend_Layout
-     */
-    private $__layout = null;
-
-    /**
      * Holds the Redirector Helper.
      *
      * @var Zend_Controller_Action_Helper_Redirector
