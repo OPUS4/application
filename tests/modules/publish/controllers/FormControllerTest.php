@@ -34,24 +34,24 @@
  */
 class Publish_FormControllerTest extends ControllerTestCase {
 
-    /**
-     * Method to initialize Zend_Application for each test.
-     */
-    public function setUp() {
-
-        $_FILES = array(
-            'fileupload' => array(
-                'name' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test.pdf',
-                'type' => 'application/pdf',
-                'size' => 8,
-                'tmp_name' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test.pdf',
-                'error' => 0));
-
-        $this->adapter = new MockAdapter();
-
-        parent::setUp();
-
-    }
+//    /**
+//     * Method to initialize Zend_Application for each test.
+//     */
+//    public function setUp() {
+//
+//        $_FILES = array(
+//            'fileupload' => array(
+//                'name' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test.pdf',
+//                'type' => 'application/pdf',
+//                'size' => 8,
+//                'tmp_name' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test.pdf',
+//                'error' => 0));
+//
+//        $this->adapter = new MockAdapter();
+//
+//        parent::setUp();
+//
+//    }
 
     /**
      * Simple test action to check form action in FormController
@@ -113,48 +113,44 @@ class Publish_FormControllerTest extends ControllerTestCase {
 
     }
 
-    public function testChechActionWithInvalidDummyPost() {
-        $this->markTestIncomplete("Test waiting for completion.");
+//    public function testCheckActionWithInvalidDummyPost() {
+//         $this->request
+//                ->setMethod('POST')
+//                ->setPost(array(
+//                    'foo' => 'bar',
+//                ));
+//
+//        $this->dispatch('/publish/form/check');
+//        $this->assertResponseCode(200);
+//        $this->assertController('form');
+//        $this->assertAction('check');
+//
+//    }
 
-        $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'foo' => 'bar',
-                ));
-
-        $this->dispatch('/publish/form/check');
-        $this->assertResponseCode(200);
-        $this->assertController('form');
-        $this->assertAction('check');
-
-    }
-
-    public function testChechActionWithValidDummyPost() {
-        $this->markTestIncomplete("Test waiting for completion.");
-
-        $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'PersonAuthor1FirstName' => 'Testi',
-                    'PersonAuthor1LastName' => 'Tester',
-                    'addMorePersonAuthor' => 'Einen weiteren Autoren hinzufügen',
-                    'Institute1' => 'Zuse Institute Berlin (ZIB)',
-                    'addMoreInstitute' => 'Ein weiteres Institut hinzufügen',
-                    'countMoreInstitute' => '1',
-                    'Language' => 'eng',
-                    'TitleMain1' => 'Title',
-                    'TitleMain1Language' => 'eng',
-                    'addMoreTitleMain' => 'Einen weiteren Titel hinzufügen',
-                    'countMoreTitleMain' => '1',
-
-                ));
-
-        $this->dispatch('/publish/form/check');
-        $this->assertResponseCode(200);
-        $this->assertController('form');
-        $this->assertAction('check');
-
-    }
+//    public function testCheckActionWithValidDummyPost() {
+//         $this->request
+//                ->setMethod('POST')
+//                ->setPost(array(
+//                    'PersonAuthor1FirstName' => 'Testi',
+//                    'PersonAuthor1LastName' => 'Tester',
+//                    'addMorePersonAuthor' => 'Einen weiteren Autoren hinzufügen',
+//                    'Institute1' => 'Zuse Institute Berlin (ZIB)',
+//                    'addMoreInstitute' => 'Ein weiteres Institut hinzufügen',
+//                    'countMoreInstitute' => '1',
+//                    'Language' => 'eng',
+//                    'TitleMain1' => 'Title',
+//                    'TitleMain1Language' => 'eng',
+//                    'addMoreTitleMain' => 'Einen weiteren Titel hinzufügen',
+//                    'countMoreTitleMain' => '1',
+//
+//                ));
+//
+//        $this->dispatch('/publish/form/check');
+//        $this->assertResponseCode(200);
+//        $this->assertController('form');
+//        $this->assertAction('check');
+//
+//    }
 
 }
 
