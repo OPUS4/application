@@ -56,7 +56,7 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         //Select with different document types given by the used function
         $listOptions = $documentTypes->getDocumentTypes();
 
-        if (count($listOptions)<=1) {
+        if (count($listOptions)===1) {
             $value = (array_keys($listOptions));
             $doctypes = $this->createElement('text', 'type1');
             $doctypes->setLabel('selecttype')
@@ -122,18 +122,14 @@ class Publish_Form_PublishingFirst extends Zend_Form {
 
         $submit = $this->createElement('submit', 'send');
         $submit->setLabel('Send');
-
-        $documentId = new Zend_Form_Element_Hidden('DocumentId');
-        $documentId->addValidator('NotEmpty')
-            ->addValidator('Int');
-
+    
         $this->addElements(array($doctypes, $fileupload));
         //show Bibliographie?
         if ($bib) {
             $this->addElement($bibliographie);
         }
 
-        $this->addElements(array($documentId, $submit));
+        $this->addElement($submit);
         $this->setAttrib('enctype', Zend_Form::ENCTYPE_MULTIPART);        
     }
 
