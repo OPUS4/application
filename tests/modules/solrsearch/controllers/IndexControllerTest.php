@@ -54,7 +54,6 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         if($action != null)
             $this->assertAction($action);
         $response = $this->getResponse();
-        echo $response->getBody();
     }
 
     public function testAdvancedAction() {
