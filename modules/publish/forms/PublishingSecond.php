@@ -643,8 +643,10 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         $projects = $this->getCollection($oaiName);
         $data = array();
         foreach ($projects AS $pro) {
-            $data[$pro] = $pro;
+            if ($pro !== 'Projects' && strlen($pro) > 1)
+                $data[$pro] = $pro;
         }
+        asort($data);
         $this->_addSelect($oaiName, $elementName, $validator, $required, $label, $data);
         $group[] = $elementName;
         return $group;
