@@ -201,7 +201,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
 
         //=2= Check if there are child nodes -> concerning fulltext or other dependencies!
         if ($field->hasChildNodes()) {
-           if ($this->fulltext === "1") {
+            if ($this->fulltext === "1") {
                 $requiredIfFulltext = $field->getElementsByTagName("required-if-fulltext");
                 if ($requiredIfFulltext->length != 0) {
                     $this->log->debug($elementName . " is required-if-fulltext! And Fulltext ist set to " . $this->fulltext);
@@ -223,7 +223,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
 
         //=3= Get the proper validator from the datatape!
         $validator = $this->_getValidatorsByDatatype($datatype);
-        
+
         // TODO combine with result of _parseValidation
         //=4= Check if fields has to shown multi times!
         if ($multiplicity !== "1") {
@@ -641,12 +641,17 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         }
         $oaiName = 'projects';
         $projects = $this->getCollection($oaiName);
-        $data = array();
-        foreach ($projects AS $pro) {
-            if ($pro !== 'Projects' && strlen($pro) > 1)
-                $data[$pro] = $pro;
+        if (isset($projects)) {
+            $data = array();
+            foreach ($projects AS $pro) {
+                if ($pro !== 'Projects' && strlen($pro) > 1)
+                    $data[$pro] = $pro;
+            }
+            asort($data);
         }
-        asort($data);
+        else
+            $data = null;
+
         $this->_addSelect($oaiName, $elementName, $validator, $required, $label, $data);
         $group[] = $elementName;
         return $group;
@@ -698,7 +703,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      * @param <type> $label
      * @return <type>
      */
-    protected function _addFormElement($formElement, $elementName, $validator, $required, $label) {       
+    protected function _addFormElement($formElement, $elementName, $validator, $required, $label) {
         $formField = $this->createElement($formElement, $elementName);
         $formField->setLabel($label);
         if (isset($validator))
