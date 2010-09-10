@@ -33,25 +33,9 @@
  * @version     $Id$
  */
 
-class Publish_IndexControllerTest extends Zend_Test_PHPUnit_ControllerTestCase {
+class Publish_IndexControllerTest extends ControllerTestCase {
 
-    /**
-     * Method to initialize Zend_Application for each test.
-     */
-    public function setUp() {
-        $this->bootstrap = new Zend_Application(
-                        APPLICATION_ENV,
-                        array(
-                            "config" => array(
-                                APPLICATION_PATH . '/application/configs/application.ini',
-                                APPLICATION_PATH . '/tests/config.ini'
-                            )
-                        )
-        );
-        parent::setUp();
-
-    }
-
+    
     /**
      * Simple test action to check "index" module.
      */

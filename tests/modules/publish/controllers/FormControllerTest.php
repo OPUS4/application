@@ -33,41 +33,58 @@
  * @version     $Id$
  */
 
-class Publish_FormControllerTest extends Zend_Test_PHPUnit_ControllerTestCase {
-
-    /**
-     * Method to initialize Zend_Application for each test.
-     */
-    public function setUp() {
-        $this->bootstrap = new Zend_Application(
-                        APPLICATION_ENV,
-                        array(
-                            "config" => array(
-                                APPLICATION_PATH . '/application/configs/application.ini',
-                                APPLICATION_PATH . '/tests/config.ini'
-                            )
-                        )
-        );
-        parent::setUp();
-
-    }
+class Publish_FormControllerTest extends ControllerTestCase {
 
     /**
      * Simple test action to check form action in FormController
      */
-    public function testformAction() {
-        $this->dispatch('/publish');
+    public function testUploadActionWithOutPost() {
+        $this->dispatch('/publish/form/upload');
+        $this->assertResponseCode(302);
+        $this->assertController('form');
+        $this->assertAction('upload');
+    }
+
+    /**
+     * Simple test action to check form action with invalid POST
+     */
+    public function testUploadActionWithInvalidDummyPost() {
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'foo' => 'bar',
+                ));
+
+        $this->dispatch('/publish/form/upload');
         $this->assertResponseCode(200);
         $this->assertController('form');
-        $this->assertAction('form');
+        $this->assertAction('upload');
+    }
+
+    /**
+     * Simple test action to check form action with valid POST
+     */
+    public function testUploadActionWithValidDummyPost() {
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'documentType' => 'preprint',
+                    'fileupload' => '',
+                    'send' => 'Send'
+                ));
+
+        $this->dispatch('/publish/form/upload');
+        $this->assertResponseCode(200);
+        $this->assertController('form');
+        $this->assertAction('upload');
     }
 
     /**
      * Simple test action to check check action in FormController
      */
-    public function testcheckAction() {
-        $this->dispatch('/publish');
-        $this->assertResponseCode(200);
+    public function testCheckAction() {
+        $this->dispatch('/publish/form/check');
+        $this->assertResponseCode(302);
         $this->assertController('form');
         $this->assertAction('check');
     }
