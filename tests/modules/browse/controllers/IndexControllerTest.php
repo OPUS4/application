@@ -43,7 +43,7 @@ class Browse_IndexControllerTest extends ControllerTestCase {
         $this->assertController('index');
         $this->assertAction('index');
 
-        $this->checkBadStrings();
+        $this->checkForBadStringsInHtml( $this->getResponse()->getBody() );
 
         /**
          * assertQuery*() allows selections on the DOM tree!
