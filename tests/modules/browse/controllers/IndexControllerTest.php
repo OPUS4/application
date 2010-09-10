@@ -32,43 +32,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Browse_IndexControllerTest extends Zend_Test_PHPUnit_ControllerTestCase {
-
-    /**
-     * Method to initialize Zend_Application for each test.
-     */
-    public function setUp() {
-        $this->bootstrap = new Zend_Application(
-                        APPLICATION_ENV,
-                        array(
-                            "config" => array(
-                                APPLICATION_PATH . '/application/configs/application.ini',
-                                APPLICATION_PATH . '/tests/config.ini'
-                            )
-                        )
-        );
-        parent::setUp();
-
-    }
-
-    /**
-     * Method to check response for "bad" strings.
-     */
-    protected function checkBadStrings() {
-        // Test output for "bad" strings.
-        // Dirty hack to have some kind of error-checking.  Bad tests are better
-        // than no tests!
-        $bad_strings = array("Exception", "Error", "Fehler", "Stacktrace");
-        $body = strtolower($this->getResponse()->getBody());
-        foreach ($bad_strings AS $bad) {
-            $this->assertNotContains(
-                    strtolower($bad),
-                    $body,
-                    "Response must not contain '$bad'"
-            );
-        }
-
-    }
+class Browse_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Simple test action to check "index" module.
