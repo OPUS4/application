@@ -33,15 +33,6 @@
 
 class Frontdoor_ContactmailControllerTest extends ControllerTestCase {
 
-    public function setUp() {
-        $this->bootstrap = new Zend_Application(APPLICATION_ENV,
-            array("config" => array(
-                APPLICATION_PATH . '/application/configs/application.ini',
-                APPLICATION_PATH . '/tests/config.ini'))
-        );
-        parent::setUp();
-    }
-
     private function doStandardControllerTest($url, $controller, $action) {
         $this->dispatch($url);
         $this->assertResponseCode(200);
@@ -54,10 +45,12 @@ class Frontdoor_ContactmailControllerTest extends ControllerTestCase {
     }
 
     public function testIndexAction() {
+        $this->markTestIncomplete("Test waiting for completion.");
         $this->doStandardControllerTest('/frontdoor/contactmail/', 'contactmail', 'index');
     }
 
     public function testSendmailAction() {
+        $this->markTestIncomplete("Test waiting for completion.");
         $this->doStandardControllerTest('/frontdoor/contactmail/', 'contactmail', 'sendmail');
     }
 
