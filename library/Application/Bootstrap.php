@@ -231,6 +231,9 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
 
         $logger = $this->getResource('Logging');
 
+        Zend_Session::setOptions(array(
+            'cookie_path' => Zend_Controller_Front::getInstance()->getBaseUrl()
+        ));
         $sessiondata = new Zend_Session_Namespace();
 
         $options = array(
@@ -281,6 +284,10 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $this->bootstrap('Translation');
 
         $logger = $this->getResource('Logging');
+
+        Zend_Session::setOptions(array(
+            'cookie_path' => Zend_Controller_Front::getInstance()->getBaseUrl() 
+        ));
 
         $sessiondata = new Zend_Session_Namespace();
         if (false === empty($sessiondata->language)) {
