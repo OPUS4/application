@@ -34,7 +34,7 @@
 ?>
 
 <div id="search_options" class="search_options">
-
+    
     <?= $this->translate('sorting_sort_by') ?>
     <ul class="sorting_options">
     
@@ -43,19 +43,32 @@
         $urlparams['sortfield'] = 'score';
         $urlparams['sortorder'] = 'desc';
     ?>
-    <li class="sorting_option"><a href="<?= $this->url($urlparams) ?>"><?= $this->translate('sorting_relevancy') ?></a></li>
+        <li class="sorting_option">
+            <?php if ($this->sortfield === 'score' && $this->sortorder === 'desc') : ?>
+                <?= $this->translate('sorting_relevancy') ?>
+            <?php else : ?>
+                <a href="<?= $this->url($urlparams) ?>"><?= $this->translate('sorting_relevancy') ?></a>
+            <?php endif ?>
+        </li>
     <?php endif ?>
 
     <?php 
         foreach (array('year', 'title', 'author') as $sortfield) :
             foreach (array('asc', 'desc') as $sortorder) :
-
                 $urlparams = $this->firstPage;
                 $urlparams['sortfield'] = $sortfield;
                 $urlparams['sortorder'] = $sortorder;
 
     ?>
-    <li class="sorting_option"><a href="<?= $this->url($urlparams) ?>"><?= $this->translate('sorting_' . $sortfield . '_' . $sortorder) ?></a></li>
+    <li class="sorting_option">
+        <?php if ($this->sortfield === $sortfield && $this->sortorder === $sortorder) : ?>
+            <?= $this->translate('sorting_' . $sortfield . '_' . $sortorder) ?>
+        <?php else : ?>
+            <a href="<?= $this->url($urlparams) ?>">
+                <?= $this->translate('sorting_' . $sortfield . '_' . $sortorder) ?>
+            </a>
+        <?php endif ?>
+    </li>
     <?php
             endforeach;
         endforeach;
