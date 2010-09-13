@@ -39,18 +39,19 @@
 class Webapi_CollectionController extends Controller_Rest {
 
     public function getAction() {
-        //  $loader->addResourceType('Model', 'models', 'Model');
+        $model = new Webapi_Model_Collection();
+        $result = $model->get($this->requestData['original_action']);
 
-
-
-        Zend_Registry::get('Zend_Log')->debug("WebAPI debug get_include_path: " . get_include_path());
-
-        $r = new Webapi_Model_Response();
-        $collection = new Webapi_Model_Collection();
-
-        $result = $collection->getCollection($this->requestData['original_action']);
         $this->getResponse()->setBody($result);
-        $this->getResponse()->setHttpResponseCode($collection->getResponseCode());
+        $this->getResponse()->setHttpResponseCode($model->getResponseCode());
+    }
+
+    public function updateAction() {
+        $model = new Webapi_Model_Collection();
+        $result = $model->update($this->requestData);
+
+        $this->getResponse()->setBody($result);
+        $this->getResponse()->setHttpResponseCode($model->getResponseCode());
     }
 
 }

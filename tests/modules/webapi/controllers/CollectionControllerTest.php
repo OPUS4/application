@@ -44,6 +44,68 @@ class Webapi_CollectionControllerTest extends ControllerTestCase {
         );
 
     }
+        private function createDummyCollection($role_name) {
+        $role = Opus_CollectionRole::fetchByName($role_name);
+
+        $collection_number = "test-number-" . rand();
+        $collection_name = "test-name-" . rand();
+        $collection = new Opus_Collection();
+        $collection->setNumber($collection_number);
+        $collection->setName($collection_name);
+        $collection->setRoleId($role->getId());
+        $collection->store();
+
+        return $collection;
+    }
+
+    /**
+     * @todo Implement testGetAction().
+     */
+    public function testUpdateActionForValidCollection() {
+        $role_name  = "projects";
+        $new_name   = "neuer Titel";
+        $collection = $this->createDummyCollection($role_name);
+
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'role'  => $role_name,
+                    'key'   => $collection->getNumber(),
+                    'title' => $new_name,
+                ));
+        $this->dispatch('/webapi/collection/update');
+
+//        echo $this->getResponse()->getBody();
+
+        $this->assertResponseCode(200);
+        $this->assertController('collection');
+        $this->assertAction('update');
+
+        $collection = new Opus_Collection( $collection->getId() );
+        $this->assertStringStartsWith($new_name, $collection->getName());
+    }
+
+    /**
+     * @todo Implement testGetAction().
+     */
+    public function testUpdateActionForInvalidCollection() {
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'key'   => 'Axxx',
+                    'title' => 'neuer Titel',
+                ));
+        $this->dispatch('/webapi/collection/update');
+
+        echo $this->getResponse()->getHttpResponseCode();
+        echo $this->getResponse()->getBody();
+
+        $this->assertResponseCode(500);
+        $this->assertController('collection');
+        $this->assertAction('update');
+    }
+
+
 
 }
 

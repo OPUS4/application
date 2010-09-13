@@ -44,7 +44,7 @@ class Webapi_Model_Collection extends Webapi_Model_Response {
      * @param mixed $collectionId Requested collection id.
      * @return string
      */
-    public function getCollection($collectionId) {
+    public function get($collectionId) {
 
         $collectionId = (int) $collectionId;
         $xml = $this->_xml;
@@ -52,11 +52,56 @@ class Webapi_Model_Collection extends Webapi_Model_Response {
         try {
             $collection = new Opus_Collection($collectionId);
             $xml = $collection->toXml();
-        } catch (Opus_Model_Exception $e) {
+        }
+        catch (Opus_Model_Exception $e) {
             $this->setError('An error occurs during getting informations. Error reason: ' . $e->getMessage(), 404);
         }
 
         return $xml->saveXML();
     }
+
+    /**
+     * Updates a collection.
+     *
+     * @param  array $data Request parameter(s).
+     * @return void
+     */
+    public function update($data) {
+        $xml = $this->_xml;
+
+        try {
+            foreach (array('role', 'key', 'title') AS $key) {
+                if (!array_key_exists($key, $data)) {
+                    throw new Exception("Missing input parameter: $key");
+                }
+            }
+
+            $role = Opus_CollectionRole::fetchByName($data['role']);
+            if (is_null($role)) {
+                throw new Exception("CollectionRole does not exist.");
+            }
+
+            $collections = Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $data['key']);
+            if (empty($collections) || is_null($collections[0])) {
+                throw new Exception("Collection does not exist.");
+            }
+            $collection = $collections[0];
+
+            $collection->setName($data['title']);
+            $collection->store();
+
+            $collection = new Opus_Collection($collection->getId());
+            $xml = $collection->toXml();
+        }
+        catch (Opus_Model_Exception $e) {
+            $this->setError('An error occurs during getting informations. Error reason: ' . $e->getMessage(), 404);
+        }
+        catch (Exception $e) {
+            $this->setError('Unknown error occured. Error reason: ' . $e->getMessage(), 500);
+        }
+
+        return $xml->saveXML();
+    }
+
 }
 ?>
