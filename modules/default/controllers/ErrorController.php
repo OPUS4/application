@@ -52,6 +52,11 @@ class ErrorController extends Zend_Controller_Action
 
         $errors = $this->_getParam('error_handler');
 
+        if (isset($errors)) {
+            $logger->err('ErrorController: error type = ' . $errors->type);
+            $logger->err('ErrorController: exception = ' . $errors->exception);
+        }
+
         switch ($errors->type) {
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ROUTE:
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER:
@@ -66,8 +71,6 @@ class ErrorController extends Zend_Controller_Action
                 $this->view->message = $this->view->translate('error_application');
                 break;
         }
-
-        $logger->err($errors->exception);
 
         $errorConfig = $config->errorController;
 
