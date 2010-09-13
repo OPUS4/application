@@ -43,8 +43,8 @@ webapi.docroot  = /bsz_opus_application/public
 webapi.modul    = webapi
 
 ;PHP SETTINGS
-phpSettings.display_startup_errors = 0
-phpSettings.display_errors = 0
+phpSettings.display_startup_errors = 1
+phpSettings.display_errors = 1
 ; TODO verify the two settings below
 phpSettings.error_reporting = E_ALL | E_STRICT
 phpSettings.date.timezone = Europe/Berlin
