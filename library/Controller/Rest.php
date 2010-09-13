@@ -83,12 +83,21 @@ class Controller_Rest extends Zend_Controller_Action {
      */
     public function init() {
         $this->_helper->viewRenderer->setNoRender(true);
-        $this->_helper->layout()->disableLayout();
+        ini_set('display_errors', 0);
+
         $this->requestData = $this->getRequest()->getParams();
         $this->getResponse()->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);
 
         $this->_hostname = $_SERVER['HTTP_HOST'];
+    }
 
+    /**
+     * Handling for index request.
+     *
+     * @return void
+     */
+    public function indexAction() {
+        $this->_notImplemented();
     }
 
     /**
