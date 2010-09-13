@@ -38,7 +38,7 @@
     <?= $this->translate('sorting_sort_by') ?>
     <ul class="sorting_options">
     
-    <?php if(!$this->browsing) :
+    <?php if (!$this->browsing && $this->searchType !== 'authorsearch') :
         $urlparams = $this->firstPage;
         $urlparams['sortfield'] = 'score';
         $urlparams['sortorder'] = 'desc';
