@@ -35,16 +35,21 @@
 class Webapi_CollectionControllerTest extends ControllerTestCase {
 
     /**
-     * @todo Implement testGetAction().
+     * ...
      */
-    public function testGetAction() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+    public function setUp() {
+        // Needs initialization, because it's used in Controller_Rest.
+        $_SERVER['HTTP_HOST'] = '127.0.0.1';
 
+        parent::setUp();
     }
-        private function createDummyCollection($role_name) {
+
+    /**
+     * Helper to create collection to test with.
+     *
+     * TODO: Move to test fixture?
+     */
+    private function createDummyCollection($role_name) {
         $role = Opus_CollectionRole::fetchByName($role_name);
 
         $collection_number = "test-number-" . rand();
@@ -61,7 +66,18 @@ class Webapi_CollectionControllerTest extends ControllerTestCase {
     /**
      * @todo Implement testGetAction().
      */
-    public function testUpdateActionForValidCollection() {
+    public function testGetAction() {
+        // Remove the following lines when you implement this test.
+        $this->markTestIncomplete(
+                'This test has not been implemented yet.'
+        );
+
+    }
+
+    /**
+     * Create collection and check if we can update it...
+     */
+    public function testUpdateActionForExistingCollection() {
         $role_name  = "projects";
         $new_name   = "neuer Titel";
         $collection = $this->createDummyCollection($role_name);
@@ -86,9 +102,9 @@ class Webapi_CollectionControllerTest extends ControllerTestCase {
     }
 
     /**
-     * @todo Implement testGetAction().
+     * Test if we handline non-existing collections properly.
      */
-    public function testUpdateActionForInvalidCollection() {
+    public function testUpdateActionForNonExistingCollection() {
         $this->request
                 ->setMethod('POST')
                 ->setPost(array(
@@ -104,8 +120,6 @@ class Webapi_CollectionControllerTest extends ControllerTestCase {
         $this->assertController('collection');
         $this->assertAction('update');
     }
-
-
 
 }
 
