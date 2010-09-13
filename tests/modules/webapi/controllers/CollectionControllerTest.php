@@ -52,6 +52,11 @@ class Webapi_CollectionControllerTest extends ControllerTestCase {
     private function createDummyCollection($role_name) {
         $role = Opus_CollectionRole::fetchByName($role_name);
 
+        if (is_null($role)) {
+            $role = new Opus_CollectionRole();
+            $role->setName($role_name)->store();
+        }
+
         $collection_number = "test-number-" . rand();
         $collection_name = "test-name-" . rand();
         $collection = new Opus_Collection();
@@ -78,7 +83,7 @@ class Webapi_CollectionControllerTest extends ControllerTestCase {
      * Create collection and check if we can update it...
      */
     public function testUpdateActionForExistingCollection() {
-        $role_name  = "projects";
+        $role_name  = "matheon_projects";
         $new_name   = "neuer Titel";
         $collection = $this->createDummyCollection($role_name);
 
@@ -108,6 +113,7 @@ class Webapi_CollectionControllerTest extends ControllerTestCase {
         $this->request
                 ->setMethod('POST')
                 ->setPost(array(
+                    'role'  => 'foo',
                     'key'   => 'Axxx',
                     'title' => 'neuer Titel',
                 ));
