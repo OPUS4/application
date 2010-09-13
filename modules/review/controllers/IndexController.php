@@ -39,7 +39,7 @@
  *
  * TODO Is it necessary to extend Controller_CRUDAction?
  */
-class Review_IndexController extends Controller_CRUDAction {
+class Review_IndexController extends Controller_Action {
 
 
     /**
@@ -48,26 +48,6 @@ class Review_IndexController extends Controller_CRUDAction {
      * @var Opus_Model_Abstract
      */
     protected $_modelclass = 'Opus_Document';
-
-    /**
-     * Returns a filtered representation of the document.
-     *
-     * @param  Opus_Document  $document The document to be filtered.
-     * @return Opus_Model_Filter The filtered document.
-     *
-     * TODO Is this used?
-     */
-    private function __createFilter(Opus_Document $document, $page = null) {
-        $filter = new Opus_Model_Filter();
-        $filter->setModel($document);
-        $blacklist = array('Collection', 'IdentifierOpus3', 'Source', 'File', 
-            'ServerState', 'ServerDatePublished', 'ServerDateModified',
-            'ServerDateUnlocking', 'Type');
-        $filter->setBlacklist($blacklist);
-        // $filter->setSortOrder($type->getAdminFormSortOrder());
-        return $filter;
-    }
-
 
     /**
      * Default action shows the table of unpublished documents.
