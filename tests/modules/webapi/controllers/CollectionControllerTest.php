@@ -96,8 +96,6 @@ class Webapi_CollectionControllerTest extends ControllerTestCase {
                 ));
         $this->dispatch('/webapi/collection/update');
 
-//        echo $this->getResponse()->getBody();
-
         $this->assertResponseCode(200);
         $this->assertController('collection');
         $this->assertAction('update');
@@ -118,9 +116,6 @@ class Webapi_CollectionControllerTest extends ControllerTestCase {
                     'title' => 'neuer Titel',
                 ));
         $this->dispatch('/webapi/collection/update');
-
-        echo $this->getResponse()->getHttpResponseCode();
-        echo $this->getResponse()->getBody();
 
         $this->assertResponseCode(500);
         $this->assertController('collection');
