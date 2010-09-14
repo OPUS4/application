@@ -66,7 +66,7 @@ class Publish_DepositControllerTest extends ControllerTestCase {
      * which leads to a OK Message, code 200 and Saving of all document data
      */
     public function testDepositActionWithValidPost() {
-
+        $this->markTestSkipped();
         $this->request
                 ->setMethod('POST')
                 ->setPost(array(
