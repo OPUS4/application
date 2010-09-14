@@ -54,16 +54,14 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         $this->config = Zend_Registry::get('Zend_Config');
 
         $doctypes = $this->_createDocumentTypeField();
+        if (is_array($doctypes))
+            $this->addElements(array($doctypes[0], $doctypes[1]));
+        else $this->addElement($doctypes);
 
         $fileupload = $this->_createFileuploadField();
+        $this->addElement($fileupload);
 
-        $bibliographie = $this->_createBibliographyField();
-
-        //now add elements to form object
-
-        $this->addElements(array($doctypes, $fileupload));
-
-         //add Bibliographie?
+        $bibliographie = $this->_createBibliographyField();            
         if ($bibliographie !== null) {
             $this->addElement($bibliographie);
         }
@@ -101,15 +99,15 @@ class Publish_Form_PublishingFirst extends Zend_Form {
             $doctypesHidden->setValue($value[0]);
             $this->addElement($doctypesHidden);
 
+            return array($doctypes, $doctypesHidden);
         }
         else {
             $doctypes = $this->createElement('select', 'documentType');
             $doctypes->setLabel('selecttype')
                     ->setMultiOptions(array_merge(array('' => 'choose_valid_doctype'), $listOptions))
                     ->setRequired(true);
-        }
-
-        return $doctypes;
+            return $doctypes;
+        }        
     }
 
     /**

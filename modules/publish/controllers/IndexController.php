@@ -62,8 +62,7 @@ class Publish_IndexController extends Controller_Action {
         $this->view->subtitle = $this->view->translate('publish_controller_index_sub');
 
         $form = new Publish_Form_PublishingFirst();
-        $log->debug("Module Publishing <=> PublishingFirst was created.");
-
+        
         $action_url = $this->view->url(array('controller' => 'form', 'action' => 'upload'));
 
         $form->setMethod('post');

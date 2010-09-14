@@ -34,33 +34,21 @@
  * */
 class Publish_Form_PublishingSecond extends Zend_Form {
 
-    //String
     public $doctype = "";
-    //Integer
-    public $docId = "";
-    //Integer 0 - 1
+    public $docid = "";
     public $fulltext = "";
-    //array of fields to add additionally
     public $additionalFields = array();
-    //array of given post data to fill in fields
     public $postData = array();
-    //log-Object
     public $log;
-    //cache for array of institutes
     public $institutes = array();
-    //cache for array of projects
     public $projects = array();
-    //cache for array of msc classifications
     public $msc = array();
-    //cache for array of licences
     public $licences = array();
-    //cache for array of languages
     public $languages = array();
-
 
     public function __construct($type, $id, $fulltext, $additionalFields, $postData, $options=null) {
         $this->doctype = $type;
-        $this->docId = $id;
+        $this->docid = $id;
         $this->fulltext = $fulltext;
         $this->additionalFields = $additionalFields;
         $this->postData = $postData;
@@ -77,24 +65,25 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      * @return void
      */
     public function init() {
-        $dom = Zend_Controller_Action_HelperBroker::getStaticHelper(
-                        'DocumentTypes')->getDocument($this->doctype);
+        $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument($this->doctype);
 
-        //parse the xml file for the tag "field"
-        foreach ($dom->getElementsByTagname('field') as $field) {
-            $this->_parseField($field);
+        if ($dom !== null) {
+            //parse the xml file for the tag "field"
+            foreach ($dom->getElementsByTagname('field') as $field) {
+                $this->_parseField($field);
+            }
+
+            //hidden field for fulltext to cummunicate between different forms
+            $this->_addHiddenField('fullText', $this->fulltext);
+
+            //hidden field with document type
+            $this->_addHiddenField('documentType', $this->doctype);
+
+            //hidden field with document id
+            $this->_addHiddenField('documentId', $this->docid);
+
+            $this->_addSubmit('button_label_send');
         }
-
-        //hidden field for fulltext to cummunicate between different forms
-        $this->_addHiddenField('fullText', $this->fulltext);
-
-        //hidden field with document type
-        $this->_addHiddenField('documentType', $this->doctype);
-
-        //hidden field with document id
-        $this->_addHiddenField('documentId', $this->docId);
-
-        $this->_addSubmit('button_label_send');
     }
 
     /**
@@ -706,7 +695,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
     protected function _addFormElement($formElement, $elementName, $validator, $required, $label) {
         $formField = $this->createElement($formElement, $elementName);
         $formField->setLabel($label);
-        
+
         if ($required == 'yes') {
             $formField->setRequired(true);
             $formField->setAutoInsertNotEmptyValidator(true);
@@ -775,7 +764,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      */
     protected function getCollection($oaiName) {
         if (empty($this->$oaiName)) {
-           // $this->log->debug($oaiName . " has to be fetched from database!");
+            // $this->log->debug($oaiName . " has to be fetched from database!");
             $role = Opus_CollectionRole::fetchByOaiName($oaiName);
             if ($role === null)
                 return null;
@@ -808,14 +797,13 @@ class Publish_Form_PublishingSecond extends Zend_Form {
     protected function getLanguages() {
         $languages = array();
         if (empty($this->languages)) {
-            //$this->log->debug("Languages have to fetched from Registry!");
             if (Zend_Registry::isRegistered('Available_Languages') === true) {
                 $languages = Zend_Registry::get('Available_Languages');
                 $this->languages = $languages;
 
                 return $languages;
             } else {
-               // $this->log->debug("Languages have to fetched from Database!");
+
                 $dbLanguages = Opus_Language::getAllActive();
                 if (isset($dbLanguages) || count($dbLanguages) >= 1) {
                     foreach ($dbLanguages as $lan)
@@ -826,10 +814,8 @@ class Publish_Form_PublishingSecond extends Zend_Form {
                 }else
                     return null;
             }
-        } else {
-           // $this->log->debug("Languages can be fetched from cache!");
+        } else
             return $this->languages;
-        }
     }
 
     /**
@@ -839,18 +825,14 @@ class Publish_Form_PublishingSecond extends Zend_Form {
     protected function getLicences() {
         $licences = array();
         if (empty($this->licences)) {
-          //  $this->log->debug("Licences have to be fetched from Database!");
             foreach ($licences = Opus_Licence::getAll() as $lic) {
                 $name = $lic->getDisplayName();
                 $licences[$name] = $name;
             }
             $this->licences = $licences;
             return $licences;
-        } else {
-
-            //$this->log->debug("Licences can be fetched from cache!");
+        } else
             return $this->licences;
-        }
     }
 
 }

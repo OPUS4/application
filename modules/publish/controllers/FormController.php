@@ -40,9 +40,6 @@
  */
 class Publish_FormController extends Controller_Action {
 
-    /**
-     * @todo: extends Zend_Controller_Action ausreichend?
-     */
     public $documentType;
     public $documentId;
     public $fulltext;
@@ -70,7 +67,7 @@ class Publish_FormController extends Controller_Action {
                 $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
                 $this->view->doctype = $this->documentType;
 
-                $this->_setDocumentFiles();
+                $this->_storeDocumentFiles();
 
                 $templateName = $this->_helper->documentTypes->getTemplateName($this->documentType);
 
@@ -80,8 +77,9 @@ class Publish_FormController extends Controller_Action {
                 $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check'));
                 $publishForm->setAction($action_url);
                 $publishForm->setMethod('post');
-                $this->setViewVariables($publishForm);
+                $this->_setViewVariables($publishForm);
                 $this->view->action_url = $action_url;
+                $this->view->form = $publishForm;
             }
         } else {
             // GET Reqquest is redirected to index
@@ -100,8 +98,10 @@ class Publish_FormController extends Controller_Action {
         $this->view->languageSelectorDisabled = true;
 
         if ($this->getRequest()->isPost() === true) {
-
             $postData = $this->getRequest()->getPost();
+            foreach ($postData as $key => $value) {
+                $log->debug("POST --> [" . $key . "] : " . $value);
+            }
 
             $this->_setDocumentParameters($postData);
 
@@ -119,7 +119,7 @@ class Publish_FormController extends Controller_Action {
                 $this->_helper->viewRenderer($this->documentType);
 
                 //call method to add or delete buttons
-                return $this->getExtendedForm($form, $postData);
+                return $this->_getExtendedForm($form, $postData);
             } else {
                 // SEND was pressed => check the form
 
@@ -132,7 +132,7 @@ class Publish_FormController extends Controller_Action {
                     //error case, and redirect to form, show errors
                     $this->view->form = $form;
                     $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
-                    $this->setViewVariables($form);
+                    $this->_setViewVariables($form);
 
                     return $this->render($this->documentType);
                 } else {
@@ -146,23 +146,26 @@ class Publish_FormController extends Controller_Action {
                     $depositForm = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $this->fulltext, $this->additionalFields, $form->getValues());
                     $action_url = $this->view->url(array('controller' => 'deposit', 'action' => 'deposit'));
                     $depositForm->setAction($action_url);
+                    $depositForm->setMethod('post');
                     $depositForm->populate($form->getValues());
 
-                    $depositForm = $this->removeUnsavableElements($depositForm, $form);
+                    $depositForm = $this->_removeUnsavableElements($depositForm, $form);
 
                     $this->view->form = $depositForm;
                 }
             }
-        }
-        else
+        } 
+        else {
+            //GET Request on check
             return $this->redirectTo('upload');
+        }
     }
 
     /**
      * method to set the different variables and arrays for the view and the templates
      * @param <Zend_Form> $form
      */
-    private function setViewVariables($form) {
+    private function _setViewVariables($form) {
         //todo: refactor me!!!
         $log = Zend_Registry::get('Zend_Log');
 
@@ -184,8 +187,6 @@ class Publish_FormController extends Controller_Action {
 
 
 
-
-                    
             }
 
             $groupName = 'group' . $name;
@@ -243,7 +244,7 @@ class Publish_FormController extends Controller_Action {
      * @param <Zend_Form> $form
      * @return <type>
      */
-    private function getPressedButton($form) {
+    private function _getPressedButton($form) {
         $log = Zend_Registry::get('Zend_Log');
         $log->debug("Method getPressedButton begins...");
         $pressedButton = "";
@@ -268,6 +269,7 @@ class Publish_FormController extends Controller_Action {
      * @param <array> $postData
      */
     private function _setDocumentParameters($postData = null) {
+        $log = Zend_Registry::get('Zend_Log');
         if (!empty($postData)) {
 
             if (isset($postData['documentType']))
@@ -275,15 +277,20 @@ class Publish_FormController extends Controller_Action {
             else
                 $this->documentType = "";
 
+            $log->debug("documentType = " . $this->documentType);
             if (isset($postData['documentId']))
                 $this->documentId = $postData['documentId'];
             else
                 $this->documentId = "";
 
+            $log->debug("documentId = " . $this->documentId);
+
             if (isset($postData['fullText']))
                 $this->fulltext = $postData['fullText'];
             else
                 $this->fulltext = "0";
+
+            $log->debug("fulltext = " . $this->fulltext);
 
             $additionalFields = array();
 
@@ -298,7 +305,12 @@ class Publish_FormController extends Controller_Action {
         }
     }
 
-    private function _setDocumentFiles() {
+    /**
+     * Method stores th uploaded files
+     */
+    private function _storeDocumentFiles() {
+        $log = Zend_Registry::get('Zend_Log');
+
         $upload = new Zend_File_Transfer_Adapter_Http();
         $files = $upload->getFileInfo();
 
@@ -318,7 +330,7 @@ class Publish_FormController extends Controller_Action {
                     $docfile->setFromPost($fileValues);
                 }
             }
-            $this->documentId =$document->store();
+            $this->documentId = $document->store();
             $log->info("The corresponding doucment ID is: " . $this->documentId);
         } else {
             $log->info("No file uploaded: => Fulltext is NOT given.");
@@ -330,11 +342,11 @@ class Publish_FormController extends Controller_Action {
      * @param Publish_Form_PublishingSecond $form
      * @return <View>
      */
-    private function getExtendedForm($form, $postData=null) {
+    private function _getExtendedForm($form, $postData=null) {
         $log = Zend_Registry::get('Zend_Log');
 
         //find out which button was pressed
-        $pressedButtonName = $this->getPressedButton($form);
+        $pressedButtonName = $this->_getPressedButton($form);
 
         if (substr($pressedButtonName, 0, 7) == "addMore") {
             $fieldName = substr($pressedButtonName, 7);
@@ -364,7 +376,7 @@ class Publish_FormController extends Controller_Action {
         $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check'));
         $form->setAction($action_url);
         $this->view->action_url = $action_url;
-        $this->setViewVariables($form);
+        $this->_setViewVariables($form);
 
         return $this->render($this->documentType);
     }
@@ -375,29 +387,29 @@ class Publish_FormController extends Controller_Action {
      * @param <PublishingSecond> $baseForm
      * @return <PublishingSecond>
      */
-    private function removeUnsavableElements($formToSave, $baseForm) {
+    private function _removeUnsavableElements($formToSave, $baseForm) {
         $log = Zend_Registry::get('Zend_Log');
         foreach ($formToSave->getElements() as $element) {
             if ($element->getValue() == "" || $element->getType() == "Zend_Form_Element_Submit" || $element->getType() == "Zend_Form_Element_Hidden") {
 
                 $formToSave->removeElement($element->getName());
-                $log->debug("remove " . $element->getName() . "from depositForm!");
+                $log->debug("remove " . $element->getName() . " from depositForm!");
             }
         }
-        $docId = $formToSave->createElement("hidden", 'documentId');
-        $docId->setValue($baseForm->getElement('documentId')->getValue());
-        $docId->removeDecorator('Label');
+        $docid = $formToSave->createElement("hidden", 'documentId');
+        $docid->setValue($baseForm->getElement('documentId')->getValue());
+        $docid->removeDecorator('Label');
 
-        $docType = $formToSave->createElement('hidden', 'documentType');
-        $docType->setValue($baseForm->getElement('documentType')->getValue());
-        $docType->removeDecorator('Label');
+        $doctype = $formToSave->createElement('hidden', 'documentType');
+        $doctype->setValue($baseForm->getElement('documentType')->getValue());
+        $doctype->removeDecorator('Label');
 
-        $fullText = $formToSave->createElement('hidden', 'fullText');
-        $fullText->setValue($baseForm->getElement('fullText')->getValue());
-        $fullText->removeDecorator('Label');
+        $fulltext = $formToSave->createElement('hidden', 'fullText');
+        $fulltext->setValue($baseForm->getElement('fullText')->getValue());
+        $fulltext->removeDecorator('Label');
 
         $deposit = $formToSave->createElement('submit', 'Abspeichern');
-        $formToSave->addElements(array($docId, $docType, $fullText, $deposit));
+        $formToSave->addElements(array($docid, $doctype, $fulltext, $deposit));
 
         return $formToSave;
     }
