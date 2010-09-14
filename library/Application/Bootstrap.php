@@ -83,9 +83,9 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      */
     protected function _initOpusFrontController()
     {
-        $this->bootstrap(array('LanguageList'));
+        $this->bootstrap(array('LanguageList','frontController'));
 
-        $frontController = Zend_Controller_Front::getInstance();
+        $frontController = $this->getResource('frontController'); // Zend_Controller_Front::getInstance();
 
         /*
          * Add a custom front controller plugin for setting up an appropriate
@@ -321,7 +321,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      *
      * @return void
      */
-    protected function _initNavigation()
+    protected function _initOpusNavigation()
     {
         $this->bootstrap('Logging', 'View');
 

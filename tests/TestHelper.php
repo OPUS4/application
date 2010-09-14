@@ -38,7 +38,7 @@
  *
  * @category    Tests
  */
-class TestHelper extends Opus_Bootstrap_Base {
+class TestHelper extends Application_Bootstrap {
 
     /**
      * Add setting up database and logging facilities.
