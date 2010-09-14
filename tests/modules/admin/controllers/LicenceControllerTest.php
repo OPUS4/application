@@ -50,7 +50,6 @@ class Admin_LicenceControllerTest extends ControllerTestCase {
      * Tests 'show' action.
      */
     public function testShowAction() {
-        $this->markTestSkipped('Does not work yet.');
         $this->dispatch('/admin/licence/show/id/1');
         $this->assertResponseCode(200);
         $this->assertController('licence');
@@ -61,7 +60,6 @@ class Admin_LicenceControllerTest extends ControllerTestCase {
      * Tests 'new' action.
      */
     public function testNewAction() {
-        $this->markTestSkipped('Does not work yet.');
         $this->dispatch('/admin/licence/new');
         $this->assertResponseCode(200);
         $this->assertController('licence');
