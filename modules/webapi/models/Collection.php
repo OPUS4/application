@@ -63,7 +63,9 @@ class Webapi_Model_Collection extends Webapi_Model_Response {
     /**
      * Updates a collection.
      *
-     * @param  array $data Request parameter(s).
+     * @param string $role  Role name.
+     * @param string $key   Key of the collection to change.
+     * @param string $title New title for the selected collection.
      * @return void
      */
     public function update($role, $key, $title) {
