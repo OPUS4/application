@@ -36,11 +36,8 @@
  * This view gets a filtered one-dimensional associative array ($mydoc_data) from
  * the Frontdoor-Controller and displays it. The order of elements is fixed here.
  * Abstracts and keywords were combined with language information and displayed directly.
- *
- *
  */
 
 ?>
 <? $this->headLink()->appendStylesheet($this->baseUrl.'/layouts/frontdoor.css') ?>
-<!-- <h1><?= $this->translate('frontdoor_pagetitle') ?></h1> -->
 <?= $this->frontdoor ?>

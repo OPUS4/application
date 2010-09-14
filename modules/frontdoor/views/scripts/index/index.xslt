@@ -70,115 +70,115 @@
      if you wish new fields, you have to add a new line xsl:apply-templates...
      and a special template for each new field below, too -->
     <xsl:template match="Opus_Model_Filter">
-
-        <xsl:apply-templates select="AuthorTitle" />
-        <xsl:apply-templates select="TitleMain" />
-        <xsl:apply-templates select="TitleAbstract" />
-        <xsl:if test="normalize-space(File/@PathName)">
-            <div class="fulltext">
-                <xsl:apply-templates select="File" />
+        <div class="frontdoor">
+            <div class="authorTitle">
+                <table>
+                    <xsl:apply-templates select="PersonAuthor" />
+                </table>
             </div>
-        </xsl:if>
-        <xsl:call-template name="MailToAuthor"/>
-       
-        <xsl:call-template name="services"/>
-        <div class="frontdoordata">
-            <table cellspacing="0">
-                <colgroup class="angaben">
-                    <col class="name"/>
-                </colgroup>
-                <xsl:apply-templates select="PersonAuthor" />
-                <xsl:apply-templates select="IdentifierUrn" />
-                <xsl:apply-templates select="IdentifierUrl" />
-                <xsl:apply-templates select="IdentifierHandle" />
-                <xsl:apply-templates select="IdentifierDoi" />
-                <xsl:apply-templates select="IdentifierIsbn" />
-                <xsl:apply-templates select="IdentifierIssn" />
-                <xsl:apply-templates select="ReferenceUrn" />
-                <xsl:apply-templates select="ReferenceUrl" />
-                <xsl:apply-templates select="ReferenceDoi" />
-                <xsl:apply-templates select="ReferenceHandle" />
-                <xsl:apply-templates select="ReferenceIsbn" />
-                <xsl:apply-templates select="ReferenceIssn" />
-                <xsl:apply-templates select="TitleParent" />
-                <xsl:apply-templates select="@PublisherName" />
-                <xsl:apply-templates select="@PublisherPlace" />
-                <xsl:apply-templates select="PersonEditor" />
-                <xsl:apply-templates select="PersonTranslator" />
-                <xsl:apply-templates select="PersonContributor" />
-                <xsl:apply-templates select="PersonOther" />
-                <xsl:apply-templates select="PersonReferee" />
-                <xsl:apply-templates select="PersonAdvisor" />
-                <xsl:apply-templates select="@Type" />
-                <xsl:apply-templates select="@Language" />
+            <xsl:apply-templates select="TitleMain" />
+            <xsl:apply-templates select="TitleAbstract" />
+            <xsl:if test="normalize-space(File/@PathName)">
+                <div class="fulltext">
+                    <xsl:apply-templates select="File" />
+                </div>
+            </xsl:if>
+            <xsl:call-template name="MailToAuthor"/>
 
-                <xsl:choose>
-                    <xsl:when test="normalize-space(@CompletedYear)">
-                        <xsl:apply-templates select="@CompletedYear" />
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:apply-templates select="ComletedDate" />
-                    </xsl:otherwise>
-                </xsl:choose>
+            <!-- TODO: temporarily deactivated -->
+            <!--<xsl:call-template name="services"/>-->
+            <h2>Metadaten</h2>
+            <div class="frontdoordata">
+                <table cellspacing="0">
+                    <colgroup class="angaben">
+                        <col class="name"/>
+                    </colgroup>
+                    <xsl:apply-templates select="PersonAuthor" />
+                    <xsl:apply-templates select="IdentifierUrn" />
+                    <xsl:apply-templates select="IdentifierUrl" />
+                    <xsl:apply-templates select="IdentifierHandle" />
+                    <xsl:apply-templates select="IdentifierDoi" />
+                    <xsl:apply-templates select="IdentifierIsbn" />
+                    <xsl:apply-templates select="IdentifierIssn" />
+                    <xsl:apply-templates select="ReferenceUrn" />
+                    <xsl:apply-templates select="ReferenceUrl" />
+                    <xsl:apply-templates select="ReferenceDoi" />
+                    <xsl:apply-templates select="ReferenceHandle" />
+                    <xsl:apply-templates select="ReferenceIsbn" />
+                    <xsl:apply-templates select="ReferenceIssn" />
+                    <xsl:apply-templates select="TitleParent" />
+                    <xsl:apply-templates select="@PublisherName" />
+                    <xsl:apply-templates select="@PublisherPlace" />
+                    <xsl:apply-templates select="PersonEditor" />
+                    <xsl:apply-templates select="PersonTranslator" />
+                    <xsl:apply-templates select="PersonContributor" />
+                    <xsl:apply-templates select="PersonOther" />
+                    <xsl:apply-templates select="PersonReferee" />
+                    <xsl:apply-templates select="PersonAdvisor" />
+                    <xsl:apply-templates select="@Type" />
+                    <xsl:apply-templates select="@Language" />
 
-                <xsl:choose>
-                    <xsl:when test="normalize-space(PublishedDate/@Year)">
-                        <xsl:apply-templates select="PublishedDate" />
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:apply-templates select="@PublishedYear" />
-                    </xsl:otherwise>
-                </xsl:choose>
+                    <xsl:choose>
+                        <xsl:when test="normalize-space(@CompletedYear)">
+                            <xsl:apply-templates select="@CompletedYear" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:apply-templates select="ComletedDate" />
+                        </xsl:otherwise>
+                    </xsl:choose>
 
-                <xsl:apply-templates select="DateAccepted" />
+                    <xsl:choose>
+                        <xsl:when test="normalize-space(PublishedDate/@Year)">
+                            <xsl:apply-templates select="PublishedDate" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:apply-templates select="@PublishedYear" />
+                        </xsl:otherwise>
+                    </xsl:choose>
 
-                <xsl:if test="@CreatingCorporation != ''">
-                    <xsl:apply-templates select="@CreatingCorporation" />
-                </xsl:if>
-                <xsl:if test="@ContributingCorporation != ''">
-                    <xsl:apply-templates select="@ContributingCorporation" />
-                </xsl:if>
+                    <xsl:apply-templates select="DateAccepted" />
 
-                <xsl:apply-templates select="SubjectSwd" />
-                <xsl:apply-templates select="SubjectUncontrolled" />
-                <xsl:apply-templates select="SubjectPsyndex" />
-                <xsl:apply-templates select="SubjectMSC" >
-                    <xsl:sort select="@Value"/>
-                </xsl:apply-templates>
-                <xsl:apply-templates select="@Source" />
-                <xsl:apply-templates select="@Volume" />
-                <xsl:apply-templates select="@Issue" />
-                <xsl:apply-templates select="@Edition" />
-                <xsl:apply-templates select="@PageNumber" />
-                <xsl:apply-templates select="@PageFirst" />
-                <xsl:apply-templates select="@PageLast" />
-                <xsl:apply-templates select="@Reviewed" />
-                <xsl:apply-templates select="Note" />
-                <xsl:apply-templates select="@PublicationVersion" />
+                    <xsl:if test="@CreatingCorporation != ''">
+                        <xsl:apply-templates select="@CreatingCorporation" />
+                    </xsl:if>
+                    <xsl:if test="@ContributingCorporation != ''">
+                        <xsl:apply-templates select="@ContributingCorporation" />
+                    </xsl:if>
 
-                <xsl:apply-templates select="Collection[@RoleName='Organisatorische Einheiten']" />
-                <xsl:apply-templates select="Collection[@RoleName='Computing Classification System']" />
-                <xsl:apply-templates select="Collection[@RoleName='Dewey Decimal Classification']" />
-                <xsl:apply-templates select="Collection[@RoleName='Mathematics Subject Classification']" >
-                    <xsl:sort select="@Number"/>
-                </xsl:apply-templates>
-                <xsl:apply-templates select="Collection[@RoleName='Physics and Astronomy Classification Scheme']" />
-                <xsl:apply-templates select="Collection[@RoleName='Schriftenreihen']" />
+                    <xsl:apply-templates select="SubjectSwd" />
+                    <xsl:apply-templates select="SubjectUncontrolled" />
+                    <xsl:apply-templates select="SubjectPsyndex" />
+                    <xsl:apply-templates select="SubjectMSC" >
+                        <xsl:sort select="@Value"/>
+                    </xsl:apply-templates>
+                    <xsl:apply-templates select="@Source" />
+                    <xsl:apply-templates select="@Volume" />
+                    <xsl:apply-templates select="@Issue" />
+                    <xsl:apply-templates select="@Edition" />
+                    <xsl:apply-templates select="@PageNumber" />
+                    <xsl:apply-templates select="@PageFirst" />
+                    <xsl:apply-templates select="@PageLast" />
+                    <xsl:apply-templates select="@Reviewed" />
+                    <xsl:apply-templates select="Note" />
+                    <xsl:apply-templates select="@PublicationVersion" />
 
-                <xsl:apply-templates select="Collection[@RoleName='matheon_projects']" />
-                <xsl:apply-templates select="Collection[@RoleName='matheon_institutes']" />
+                    <xsl:apply-templates select="Collection[@RoleName='Organisatorische Einheiten']" />
+                    <xsl:apply-templates select="Collection[@RoleName='Computing Classification System']" />
+                    <xsl:apply-templates select="Collection[@RoleName='Dewey Decimal Classification']" />
+                    <xsl:apply-templates select="Collection[@RoleName='Mathematics Subject Classification']" >
+                        <xsl:sort select="@Number"/>
+                    </xsl:apply-templates>
+                    <xsl:apply-templates select="Collection[@RoleName='Physics and Astronomy Classification Scheme']" />
+                    <xsl:apply-templates select="Collection[@RoleName='Schriftenreihen']" />
 
-                <xsl:apply-templates select="Licence" />
-            </table>
+                    <xsl:apply-templates select="Collection[@RoleName='matheon_projects']" />
+                    <xsl:apply-templates select="Collection[@RoleName='matheon_institutes']" />
+
+                    <xsl:apply-templates select="Licence" />
+                </table>
+            </div>
         </div>
     </xsl:template>
-
-    <xsl:template match="AuthorTitle">
-        <div class="authorTitle">
-            HIER SOLL AUTHOR STEHEN
-        </div>
-    </xsl:template>
-
 
     <!-- here begins the special templates for the fields -->
     <!-- Templates for "internal fields". -->
@@ -846,32 +846,6 @@
             </td>
         </tr>
     </xsl:template>
-
- <!--
-    <xsl:template match="PersonAuthor">
-        <xsl:if test="position()=1">
-            <xsl:element name="br" />
-        </xsl:if>
-        <xsl:element name="a">
-            <xsl:attribute name="href">
-                <xsl:value-of select="$baseUrl"/>
-                <xsl:text>/solrsearch/index/search/searchtype/authorsearch/author/</xsl:text>
-                <xsl:value-of select="concat('&quot;', @FirstName, ' ', @LastName, '&quot;')" />
-            </xsl:attribute>
-            <xsl:value-of select="concat(@LastName, ', ', @FirstName)" />
-        </xsl:element>
-        <xsl:choose>
-            <xsl:when test="position()=last()">
-                <xsl:text>:</xsl:text>
-                <xsl:element name="br"/>
-                <xsl:element name="br"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:text>; </xsl:text>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-    -->
           
     <xsl:template match="PersonOther">
         <tr>
@@ -1003,7 +977,9 @@
     </xsl:template>
 
     <xsl:template match="TitleAbstract">
-        <p class="abstract"><xsl:value-of select="@Value" /></p>
+        <p class="abstract">
+            <xsl:value-of select="@Value" />
+        </p>
     </xsl:template>
     
     <xsl:template match="TitleParent">
@@ -1057,8 +1033,6 @@
 
     <!--  Named template for services-buttons -->
     <xsl:template name="services">
-        <xsl:element name="br"/>
-        <xsl:element name="br"/>
         <!-- integrity -->
         <xsl:element name="a">
            <!-- TODO: Use Zend Url-Helper to build href attribute -->
