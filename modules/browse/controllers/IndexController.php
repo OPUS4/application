@@ -149,13 +149,16 @@ class Browse_IndexController extends Controller_Action {
                             $this->view->author[$runningIndex] = array();
                             $this->view->url_author[$runningIndex] = array();
                             for ($counter = 0; $counter < $c; $counter++) {
+                                $lastname = $d->getPersonAuthor($counter)->getLastName();
+                                $firstname = $d->getPersonAuthor($counter)->getFirstName();
                                 $name = $d->getPersonAuthor($counter)->getName();
                                 $this->view->url_author[$runningIndex][$counter] = $this->view->url(
                                                 array(
-                                                    'module' => 'search',
-                                                    'controller' => 'search',
-                                                    'action' => 'metadatasearch',
-                                                    'author' => $name
+                                                    'module' => 'solrsearch',
+                                                    'controller' => 'index',
+                                                    'action' => 'search',
+                                                    'author' => '"'.$firstname.' '.$lastname.'"',
+                                                    'searchtype'=>'authorsearch'
                                                 ),
                                                 null,
                                                 true
