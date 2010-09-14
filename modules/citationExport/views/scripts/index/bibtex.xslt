@@ -99,7 +99,7 @@
          </xsl:variable>
 
         <xsl:variable name="institution">
-            <xsl:apply-templates select="Collection[@RoleName='Organisatorische Einheiten']" />
+            <xsl:apply-templates select="Collection[@RoleName='institutes']" />
         </xsl:variable>
 
         <xsl:variable name="editor">
@@ -261,7 +261,7 @@
     </xsl:template>
 
     <!-- institutions -->
-    <xsl:template match="Collection[@RoleName='Organisatorische Einheiten']">
+    <xsl:template match="Collection[@RoleName='institutes']">
         <xsl:value-of select="@Name" />
         <xsl:choose>
             <xsl:when test="position()=last()">
