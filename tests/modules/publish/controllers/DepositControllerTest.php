@@ -32,20 +32,62 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
 class Publish_DepositControllerTest extends ControllerTestCase {
 
-   
     /**
-     * Simple test action to check "index" module.
+     * Method tests the deposit action with GET request which leads to a redirect (code 302)
      */
-    public function testdepositAction() {
+    public function testdepositActionWithoutPost() {
+        $this->dispatch('/publish/deposit/deposit');
+        $this->assertResponseCode(302);
+        $this->assertController('deposit');
+        $this->assertAction('deposit');
+    }
+
+    /**
+     * Method tests the deposit action with invalid POST request
+     * which leads to a Error Message and code 200
+     */
+    public function testDepositActionWithInvalidPost() {
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'bla' => 'blubb',
+                ));
+
         $this->dispatch('/publish/deposit/deposit');
         $this->assertResponseCode(200);
         $this->assertController('deposit');
         $this->assertAction('deposit');
     }
 
+    /**
+     * Method tests the deposit action with a valid POST request
+     * which leads to a OK Message, code 200 and Saving of all document data
+     */
+    public function testDepositActionWithValidPost() {
+
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'PersonAuthor1FirstName' => 'Testi',
+                    'PersonAuthor1LastName' => 'Tester',
+                    'Institute1' => 'Zuse Institute Berlin (ZIB)',
+                    'Language' => 'eng',
+                    'TitleMain1' => 'Title',
+                    'TitleMain1Language' => 'eng',
+                    'SubjectMSC1' => '00A09',
+                    'documentType' => 'preprint',
+                    'documentId' => '',
+                    'fullText' => '0',
+                    'Abspeichern' => ''
+                ));
+
+        $this->dispatch('/publish/deposit/deposit');
+        $this->assertResponseCode(200);
+        $this->assertController('deposit');
+        $this->assertAction('deposit');
+    }
 
 }
 
