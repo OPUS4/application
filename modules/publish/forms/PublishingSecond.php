@@ -123,8 +123,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
             //no collections found => data is empty and validator is null
 
             $formField = $this->createElement('text', $elementName);
-            $trans = $formField->getTranslator();
-            $formField->setDescription($trans->translate('hint_no_collection_' . $workflow))
+            $formField->setDescription('hint_no_collection_' . $workflow)
                     ->setAttrib('disabled', true);
             $required = null;
         } else {
@@ -371,7 +370,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         //todo: wiederholbaren coden in eigene methoden auslagern
         switch ($datatype) {
 
-            case 'Date' :
+            case 'Date' : 
                 $validator = new Zend_Validate_Date();
                 $messages = array(
                     Zend_Validate_Date::INVALID => 'publish_validation_error_date_invalid',
