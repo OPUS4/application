@@ -430,33 +430,33 @@ class Publish_Model_Deposit {
         } else {
             $this->log->debug("try to store Collection:");
 
-            if (strstr($dataKey, "Project")) {
-                $role = Opus_CollectionRole::fetchByOaiName('projects');
-                $this->log->debug("Role: " . $role);
-                $collArray = Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $dataValue);
-                $this->log->debug("Role ID: " . $role->getId() . ", value: " . $dataValue);
+            if (strstr($dataKey, "Project")) 
+                $this->_storeCollectionObject('projects', $dataValue);
+            
+            else if (strstr($dataKey, "Institute")) 
+                    $this->_storeCollectionObject('institutes', $dataValue);
+        }
+    }
+
+    private function _storeCollectionObject($collectionRole, $dataValue) {
+        $role = Opus_CollectionRole::fetchByOaiName($collectionRole);
+        if (isset($role)) {
+            $this->log->debug("Role: " . $role);
+            $collArray = Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $dataValue);
+            $this->log->debug("Role ID: " . $role->getId() . ", value: " . $dataValue);
 
                 if ($collArray !== null && count($collArray) <= 1) {
+
                     $this->document->addCollection($collArray[0]);
-                    $this->projects[] = $dataValue;
-                    $this->log->debug("Projects array for referee, extended by " . $dataValue);
+
+                    if (strstr($collectionrole, 'project')) {
+                            $this->projects[] = $dataValue;
+                            $this->log->debug("Project array for referee, extended by " . $dataValue);
+                    }
                 }
                 else
                     throw new Publish_Model_OpusServerException("While trying to store " . $dataKey . " as Collection, an error occurred.
                         The method fetchCollectionsByRoleNumber returned an array with > 1 values. The " . $dataKey . " cannot be definitely assigned.");
-            }
-
-            else if (strstr($dataKey, "Institute")) {
-                $role = Opus_CollectionRole::fetchByOaiName('institutes');
-                $this->log->debug("Role: " . $role);
-                $collArray = Opus_Collection::fetchCollectionsByRoleName($role->getId(), $dataValue);
-                $this->log->debug("Role ID: " . $role->getId() . ", value: " . $dataValue);
-                if (count($collArray) <= 1)
-                    $this->document->addCollection($collArray[0]);
-                else
-                    throw new Publish_Model_OpusServerException("While trying to store " . $dataKey . " as Collection, an error occurred.
-                        The method fetchCollectionsByRoleNumber returned an array with > 1 values. The " . $dataKey . " cannot be definitely assigned.");
-            }
         }
     }
 

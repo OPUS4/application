@@ -50,22 +50,20 @@ class Publish_DepositController extends Controller_Action {
      */
     public function depositAction() {
         $log = Zend_Registry::get('Zend_Log');
-        $log->debug("depositAction begins");
+        
         $this->view->title = $this->view->translate('publish_controller_index');
         $this->view->subtitle = $this->view->translate('publish_controller_deposit_successful');
 
         if ($this->getRequest()->isPost() === true) {
-            $log->debug("post request found");
-
             $this->postData = $this->getRequest()->getPost();            
 
             $this->_setDocumentParameters();
 
-            $log->debug("document parameters set: typ => " . $this->documentType . " id => " . $this->documentId);
             if ($this->documentType !== "") {
                 $depositData = new Publish_Model_Deposit($this->documentId, $this->documentType, $this->postData);
 
                 $document = $depositData->getDocument();
+
                 $projects = $depositData->getDocProjects();
 
                 $document->setServerState('unpublished');
@@ -74,7 +72,7 @@ class Publish_DepositController extends Controller_Action {
 
                 $log->info("Document was sucessfully stored!");
 
-                //$this->_notifyReferee($projects);
+                $this->_notifyReferee($projects);
             }
 
             else
