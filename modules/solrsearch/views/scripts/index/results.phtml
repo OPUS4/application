@@ -75,7 +75,6 @@
                 <?php foreach($result->getAuthors() as $author) :
                     $authorSearch = $this->authorSearch;
                     $authorSearch['author'] = '"'.$author.'"';
-                    $authorSearch['searchtype'] = 'authorsearch';
                 ?>
                 <a href="<?= $this->url($authorSearch, null, true); ?>"><?= htmlspecialchars($author) ?></a>
                 <?php endforeach ?>

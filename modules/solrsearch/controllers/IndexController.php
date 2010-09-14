@@ -41,7 +41,6 @@ class Solrsearch_IndexController extends Controller_Action {
     const ADVANCED_SEARCH = 'advanced';
     const AUTHOR_SEARCH = 'authorsearch';
     
-    private $searcher;
     private $log;
     private $query;
     private $numOfHits;
@@ -76,11 +75,12 @@ class Solrsearch_IndexController extends Controller_Action {
             $data = $this->_request->getParams();
         
         $rows = $this->getRows($data, 10, 100);
-        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::LATEST_DOCS);
-        $query->setRows($rows);
+        $this->query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::LATEST_DOCS);
+        $this->query->setRows($rows);
         $searcher = new Opus_SolrSearch_Searcher();
-        $this->resultList = $searcher->search($query);
+        $this->resultList = $searcher->search($this->query);
 
+        $this->setGeneralViewValues($data);
         $this->view->results = $this->resultList->getResults();
         $this->view->isSimpleList = true;
         $this->view->specialTitle = $this->view->translate('title_latest_docs_article').' '.$rows. ' '.$this->view->translate('title_latest_docs');
@@ -110,7 +110,7 @@ class Solrsearch_IndexController extends Controller_Action {
         }
 
         $searchtype = $requestData['searchtype'];
-        if($searchtype === Solrsearch_IndexController::SIMPLE_SEARCH) {            
+        if($searchtype === self::SIMPLE_SEARCH) {
             if(!$this->isSimpleSearchRequestValid($requestData)) {
                 $url = $this->view->url(array(
                     'module' => 'solrsearch',
@@ -210,25 +210,15 @@ class Solrsearch_IndexController extends Controller_Action {
 
     private function performSearch() {
         $this->log->debug('performing search');
-        $this->searcher = new Opus_SolrSearch_Searcher();
-        $this->resultList = $this->searcher->search($this->query);
+        $searcher = new Opus_SolrSearch_Searcher();
+        $this->resultList = $searcher->search($this->query);
         $this->numOfHits = $this->resultList->getNumberOfHits();
         $this->log->debug("resultlist: $this->resultList");
     }
 
     private function setViewValues($data) {
-        $this->view->results = $this->resultList->getResults();
-        $this->view->searchType = $this->searchtype;
-        $this->view->numOfHits = $this->numOfHits;
-        $this->view->queryTime = $this->resultList->getQueryTime();
-        $this->view->start = $this->query->getStart();
-        $this->view->numOfPages = (int) ($this->numOfHits / $this->query->getRows()) + 1;
-        $this->view->rows = $this->query->getRows();
-        $this->view->authorSearch = self::createSearchUrlArray(array('searchtype' => Solrsearch_IndexController::ADVANCED_SEARCH));
-        $this->view->isSimpleList = false;
-        $this->view->browsing = array_key_exists('browsing', $data) ? $data['browsing'] : false;
-        if(array_key_exists('specialtitle', $data))
-            $this->view->specialTitle = $data['specialtitle'];
+        
+        $this->setGeneralViewValues($data);
 
         if($this->searchtype === Solrsearch_IndexController::SIMPLE_SEARCH) {
             $this->view->q = $this->query->getCatchAll();            
@@ -236,8 +226,6 @@ class Solrsearch_IndexController extends Controller_Action {
             $this->view->prevPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>(int)($this->query->getStart()) - (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
             $this->view->lastPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>(int)($this->numOfHits / $this->query->getRows()) * $this->query->getRows(),'rows'=>$this->query->getRows()));
             $this->view->firstPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>'0','rows'=>$this->query->getRows()));
-            $this->view->sortfield = $this->_getFieldValue($data, 'sortfield', 'score');
-            $this->view->sortorder = $this->_getFieldValue($data, 'sortorder', 'desc');
             return;
         }
         if($this->searchtype === Solrsearch_IndexController::ADVANCED_SEARCH || $this->searchtype === Solrsearch_IndexController::AUTHOR_SEARCH) {
@@ -256,9 +244,24 @@ class Solrsearch_IndexController extends Controller_Action {
             $this->view->yearQueryModifier = $this->query->getModifier('year');
             $this->view->refereeQuery = $this->query->getField('referee');
             $this->view->refereeQueryModifier = $this->query->getModifier('referee');
-            $this->view->sortfield = $this->_getFieldValue($data, 'sortfield', 'score');
-            $this->view->sortorder = $this->_getFieldValue($data, 'sortorder', 'desc');
         }
+    }
+
+    private function setGeneralViewValues($data) {
+        $this->view->results = $this->resultList->getResults();
+        $this->view->searchType = $this->searchtype;
+        $this->view->numOfHits = $this->numOfHits;
+        $this->view->queryTime = $this->resultList->getQueryTime();
+        $this->view->start = $this->query->getStart();
+        $this->view->numOfPages = (int) ($this->numOfHits / $this->query->getRows()) + 1;
+        $this->view->rows = $this->query->getRows();
+        $this->view->authorSearch = self::createSearchUrlArray(array('searchtype' => self::AUTHOR_SEARCH));
+        $this->view->isSimpleList = false;
+        $this->view->browsing = array_key_exists('browsing', $data) ? $data['browsing'] : false;
+        if(array_key_exists('specialtitle', $data))
+            $this->view->specialTitle = $data['specialtitle'];
+        $this->view->sortfield = $this->_getFieldValue($data, 'sortfield', 'score');
+        $this->view->sortorder = $this->_getFieldValue($data, 'sortorder', 'desc');
     }
 
     private function setViewFacets($data) {
@@ -308,7 +311,7 @@ class Solrsearch_IndexController extends Controller_Action {
             $data['rows'] = '100';
         }
         if(isset($data['rows']) && (int)$data['rows'] < 1) {
-            $this->log->warn("row parameter is smaller than 1: adjust it to 1 ");
+            $this->log->warn("row parameter is smaller than 1: adjusting to 1 ");
             $data['rows'] = '1';
         }
         if (isset($data['start']) && (int)$data['start'] < 0) {
@@ -387,7 +390,7 @@ class Solrsearch_IndexController extends Controller_Action {
     private function _getFieldValue($data, $fieldname, $default = '') {
         if (array_key_exists($fieldname, $data)) {
             $fieldvalue = $data[$fieldname];
-            $this->log->debug("field: $fieldname -- value: $fieldvalue");
+            $this->log->debug("retrieved field: $fieldname -- value: $fieldvalue");
             return $fieldvalue;
         }
         return $default;
@@ -430,6 +433,5 @@ class Solrsearch_IndexController extends Controller_Action {
         }
         return $rows;
     }
-
 }
 ?>
