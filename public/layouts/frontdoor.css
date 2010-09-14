@@ -13,12 +13,24 @@
     margin-bottom:.3em;
 }
 
-table {
+.authorTitle {
+
+}
+
+.authorTitle a {
+    font-size:2em;
+}
+
+.authorTitle .name {
+    display:none;
+}
+
+.frontdoor table {
     margin:0px;
     padding:0px;
 }
 
-th {
+.frontdoor table th {
     font-size: 0.9em;
     color: #FFA500;
     font-weight: normal;
@@ -29,7 +41,7 @@ th {
     border: none;
 }
 
-th.name {
+.frontdoor table th.name {
     font-size:0.9em;
     color: #006699; /* hellblau, blue wie Links, #FFA500 orange */
     padding: 2px 2px 2px 2px;
@@ -38,7 +50,7 @@ th.name {
     width: 150px;
 }
 
-td {
+.frontdoor table td {
     border-bottom: none;
     font-size:0.9em;
     padding: 2px 2px 2px 2px;
@@ -46,15 +58,19 @@ td {
     border: none;
 }
 
-td.fulltext {
+.frontdoor table td.fulltext {
     font-size: 0.9em;
     border: 0px;
     vertical-align: top;
     text-align: left;
 }
 
-td.fulltext_label {
+.frontdoor table td.fulltext_label {
     font-size: 1em;
     text-align: left;
     padding-top: 40px;
-}		 
+}
+
+.frontdoor h1 {
+
+}
