@@ -352,15 +352,8 @@ class Publish_Model_Deposit {
 
                 $this->log->debug("subject is a MSC subject and has to be stored as a Collection.");
 
-                $role = Opus_CollectionRole::fetchByOaiName('msc');
-                $collArray = Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $dataValue);
-                $this->log->debug("Role ID: " . $role->getId() . ", value: " . $dataValue);
+                $this->_storeCollectionObject('msc', $dataValue);
 
-                if ($collArray !== null && count($collArray) <= 1) {
-                    $this->document->addCollection($collArray[0]);
-                } else
-                    throw new Publish_Model_OpusServerException("While trying to store " . $dataKey . " as Collection, an error occurred." .
-                            "The method fetchCollectionsByRoleNumber returned an array with null or > 1 values. The " . $dataKey . " cannot be definitely assigned.");
                 $subject = new Opus_Subject();
                 $this->log->debug("subject has also be stored as subject.");
             } else {
@@ -459,6 +452,7 @@ class Publish_Model_Deposit {
                         The method fetchCollectionsByRoleNumber returned an array with > 1 values. The " . $dataKey . " cannot be definitely assigned.");
         }
     }
+
 
     /**
      * method to prepare a Licence object for storing
