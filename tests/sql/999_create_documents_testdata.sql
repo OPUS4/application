@@ -1734,6 +1734,7 @@ INSERT INTO `link_documents_collections` (`document_id`, `collection_id`, `role_
 (60, 16079, 1),
 (84, 16079, 1),
 (24, 16084, 1),
+(111, 16022, 1),
 (1, 15, 2),
 (2, 15, 2),
 (46, 15, 2),
