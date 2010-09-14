@@ -103,7 +103,10 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
                 else
                     $elementfield .= "size='30' ";
                 $elementfield .= " title='" . $this->view->translate($element["hint"]) . "' ";
-                $elementfield .= "value='" . $element["value"] . "' />\n\t\t</td>\n\t</tr>\n\t";
+                $elementfield .= "value='" . $element["value"] . "' />\n\t\t";
+                if ($element["req"] === 'required')
+                    $elementfield .= $this->_getRequiredSign();
+                $elementfield .= "</td>\n\t</tr>\n\t";
                 $elementfield .= "<tr>\n\t\t<td colspan='2'>";
                 if ($element["error"] != null) {
                     $elementfield .= "<ul class='errors'>";
@@ -125,7 +128,10 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
                         $elementfield .= ">";
                     $elementfield .= $option . "</option>\n\t\t\t\t";
                 }
-                $elementfield .= "</select></td>\n\t</tr>\n\t<tr>\n\t\t<td colspan='2'>";
+                $elementfield .= "</select>";
+                if ($element["req"] === 'required')
+                    $elementfield .= $this->_getRequiredSign();
+                $elementfield .= "</td>\n\t</tr>\n\t<tr>\n\t\t<td colspan='2'>";
                 if ($element["error"] != null) {
                     $elementfield .= "<ul class='errors'>";
                     foreach ($element["error"] AS $err)
