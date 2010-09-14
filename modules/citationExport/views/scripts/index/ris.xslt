@@ -64,59 +64,35 @@
      and a special template for each new field below, too -->
     <xsl:template match="Opus_Model_Filter">
        <xsl:choose>
-           <xsl:when test="@Type='1'">
-               <xsl:text>TY  - STAT</xsl:text>
+           <xsl:when test="@Type='article'">
+               <xsl:text>TY  - GEN</xsl:text>
            </xsl:when>
-           <xsl:when test="@Type='2'">
-               <xsl:text>TY  - MGZN</xsl:text>
-           </xsl:when>
-           <xsl:when test="@Type='4'">
-               <xsl:text>TY  - BOOK</xsl:text>
-           </xsl:when>
-           <xsl:when test="@Type='5'">
-               <xsl:text>TY  - CHAP</xsl:text>
-           </xsl:when>
-           <xsl:when test="@Type='7'">
-               <xsl:text>TY  - THES</xsl:text>
-           </xsl:when>
-           <xsl:when test="@Type='8'">
-               <xsl:text>TY  - THES</xsl:text>
-           </xsl:when>
-           <xsl:when test="@Type='9'">
-               <xsl:text>TY  - ICOMM</xsl:text>
-           </xsl:when>
-           <xsl:when test="@Type='11'">
-               <xsl:text>TY  - JOUR</xsl:text>
-           </xsl:when>
-           <xsl:when test="@Type='15'">
+           <xsl:when test="@Type='conference'">
                <xsl:text>TY  - CONF</xsl:text>
            </xsl:when>
-           <xsl:when test="@Type='16'">
-               <xsl:text>TY  - HEAR</xsl:text>
+           <xsl:when test="@Type='conference_item'">
+               <xsl:text>TY  - CONF</xsl:text>
            </xsl:when>
-           <xsl:when test="@Type='17'">
-               <xsl:text>TY  - ICOMM</xsl:text>
-           </xsl:when>
-           <xsl:when test="@Type='19'">
-               <xsl:text>TY  - ICOMM</xsl:text>
-           </xsl:when>
-           <xsl:when test="@Type='20'">
-               <xsl:text>TY  - RPRT</xsl:text>
-           </xsl:when>
-           <xsl:when test="@Type='22'">
-               <xsl:text>TY  - RPRT</xsl:text>
-           </xsl:when>
-           <xsl:when test="@Type='24'">
+           <xsl:when test="@Type='doctoral_thesis'">
                <xsl:text>TY  - THES</xsl:text>
            </xsl:when>
-           <xsl:when test="@Type='25'">
+           <xsl:when test="@Type='festschrift'">
+               <xsl:text>TY  - GEN</xsl:text>
+           </xsl:when>
+           <xsl:when test="@Type='habilitation'">
                <xsl:text>TY  - THES</xsl:text>
            </xsl:when>
-           <xsl:when test="@Type='26'">
-               <xsl:text>TY  - HEAR</xsl:text>
+           <xsl:when test="@Type='monograph_section'">
+               <xsl:text>TY  - CHAPT</xsl:text>
            </xsl:when>
-           <xsl:otherwise>
-               <xsl:text>TY  - ICOMM</xsl:text>
+           <xsl:when test="@Type='paper'">
+               <xsl:text>TY  - GEN</xsl:text>
+           </xsl:when>
+           <xsl:when test="@Type='report'">
+               <xsl:text>TY  - RPRT</xsl:text>
+           </xsl:when>
+             <xsl:otherwise>
+               <xsl:text>TY  - GEN</xsl:text>
            </xsl:otherwise>
        </xsl:choose>
        <xsl:text>
@@ -140,21 +116,22 @@ ID  - OPUS</xsl:text><xsl:value-of select="@Id" /><xsl:text>
        <xsl:if test="string-length(SubjectSwd/@Value)>0">
            <xsl:apply-templates select="SubjectSwd" />
        </xsl:if>
+
        <xsl:choose>
+         <xsl:when test="normalize-space(ComletedDate/@Year)">
+             <xsl:text>Y1  - </xsl:text><xsl:value-of select="ComletedDate/@Year" /> <xsl:text>
+</xsl:text>
+         </xsl:when>
+         <xsl:when test="string-length(PublishedDate/@Year)>0">
+           <xsl:text>Y1  - </xsl:text><xsl:value-of select="PublishedDate/@Year" /> <xsl:text>
+</xsl:text>
+         </xsl:when>
          <xsl:when test="normalize-space(@CompletedYear)">
-             <xsl:text>Y1  - </xsl:text><xsl:value-of select="@CompletedYear" /> <xsl:text>///
-</xsl:text>
-         </xsl:when>
-         <xsl:when test="string-length(ComletedDate/@Year)>0">
-           <xsl:text>Y1  - </xsl:text><xsl:value-of select="ComletedDate/@Year" /> <xsl:text>///
-</xsl:text>
-         </xsl:when>
-         <xsl:when test="normalize-space(PublishedDate/@Year)">
-             <xsl:text>Y1  - </xsl:text><xsl:value-of select="PublishedDate/@Year" /> <xsl:text>///
+             <xsl:text>Y1  - </xsl:text><xsl:value-of select="@CompletedYear" /> <xsl:text>
 </xsl:text>
          </xsl:when>
          <xsl:otherwise>
-               <xsl:text>Y1  - </xsl:text><xsl:value-of select="@PublishedYear" /> <xsl:text>///
+               <xsl:text>Y1  - </xsl:text><xsl:value-of select="@PublishedYear" /> <xsl:text>
 </xsl:text>
          </xsl:otherwise>
        </xsl:choose>
