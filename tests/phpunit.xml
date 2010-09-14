@@ -22,6 +22,11 @@ and open the template in the editor.
          processIsolation="false"
          syntaxCheck="true">
 
+
+    <testsuite name="ServerTests">
+        <directory>./</directory>
+    </testsuite>
+
     <!-- Define directories/files filter for code coverage. -->
     <filter>
         <!-- Define directories to include. -->
