@@ -47,8 +47,14 @@ class Webapi_CollectionController extends Controller_Rest {
     }
 
     public function updateAction() {
+        $request = $this->getRequest();
         $model = new Webapi_Model_Collection();
-        $result = $model->update($this->requestData);
+
+        $result = $model->update(
+                        $request->getParam('role'),
+                        $request->getParam('key'),
+                        $request->getParam('title')
+        );
 
         $this->getResponse()->setBody($result);
         $this->getResponse()->setHttpResponseCode($model->getResponseCode());

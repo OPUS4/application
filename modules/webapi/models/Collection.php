@@ -66,28 +66,22 @@ class Webapi_Model_Collection extends Webapi_Model_Response {
      * @param  array $data Request parameter(s).
      * @return void
      */
-    public function update($data) {
+    public function update($role, $key, $title) {
         $xml = $this->_xml;
 
         try {
-            foreach (array('role', 'key', 'title') AS $key) {
-                if (!array_key_exists($key, $data)) {
-                    throw new Exception("Missing input parameter: $key");
-                }
-            }
-
-            $role = Opus_CollectionRole::fetchByName($data['role']);
+            $role = Opus_CollectionRole::fetchByName($role);
             if (is_null($role)) {
                 throw new Exception("CollectionRole does not exist.");
             }
 
-            $collections = Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $data['key']);
+            $collections = Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $key);
             if (empty($collections) || is_null($collections[0])) {
                 throw new Exception("Collection does not exist.");
             }
             $collection = $collections[0];
 
-            $collection->setName($data['title']);
+            $collection->setName($title);
             $collection->store();
 
             $collection = new Opus_Collection($collection->getId());
