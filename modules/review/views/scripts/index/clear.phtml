@@ -53,11 +53,11 @@
         <table style="margin-left: 2em;">
             <tr>
                 <td align="right"><?= $this->translate('review_person_firstname') ?>*:</td>
-                <td><input type="text" name="firstname" value="<?= $this->firstName ?>"/></td>
+                <td><input type="text" name="firstname" value="<?= htmlspecialchars($this->firstName) ?>"/></td>
             </tr>
             <tr>
                 <td align="right"><?= $this->translate('review_person_lastname') ?>*:</td>
-                <td><input type="text" name="lastname" value="<?= $this->lastName ?>"/></td>
+                <td><input type="text" name="lastname" value="<?= htmlspecialchars($this->lastName) ?>"/></td>
             </tr>
             <tr>
                 <td>&nbsp;</td>

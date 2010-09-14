@@ -78,7 +78,7 @@ class Review_Model_DocumentAdapter {
      * @return int
      */
     public function getDocId() {
-        return $this->docId;
+        return htmlspecialchars($this->docId);
     }
 
     /**
@@ -87,7 +87,7 @@ class Review_Model_DocumentAdapter {
      */
     public function getState() {
         try {
-            return $this->document->getServerState();
+            return htmlspecialchars($this->document->getServerState());
         }
         catch (Exception $e) {
             return 'undefined';
@@ -101,10 +101,10 @@ class Review_Model_DocumentAdapter {
     public function getDocTitle() {
         $titles = $this->document->getTitleMain();
         if (count($titles) > 0) {
-            return $titles[0]->getValue();
+            return htmlspecialchars($titles[0]->getValue());
         }
         else {
-            return $this->view->translate('document_no_title') . '(id = ' . $this->docId . ')';
+            return $this->view->translate('document_no_title') . '(id = ' . $this->getDocId() . ')';
         }
     }
 
@@ -117,7 +117,7 @@ class Review_Model_DocumentAdapter {
             'module'     => 'frontdoor',
             'controller' => 'index',
             'action'     => 'index',
-            'docId'      => $this->docId
+            'docId'      => $this->getDocId()
         );
         return $this->view->url($url_frontdoor, 'default', true);
     }
@@ -131,7 +131,7 @@ class Review_Model_DocumentAdapter {
             'module'     => 'admin',
             'controller' => 'documents',
             'action'     => 'edit',
-            'id'         => $this->docId
+            'id'         => $this->getDocId()
         );
         return $this->view->url($url_edit, 'default', true);
     }
@@ -145,7 +145,7 @@ class Review_Model_DocumentAdapter {
             'module'     => 'admin',
             'controller' => 'documents',
             'action'     => 'delete',
-            'id'         => $this->docId
+            'id'         => $this->getDocId()
         );
         return $this->view->url($url_delete, 'default', true);
     }
@@ -159,7 +159,7 @@ class Review_Model_DocumentAdapter {
             'module'     => 'admin',
             'controller' => 'documents',
             'action'     => 'permanentdelete',
-            'id'         => $this->docId
+            'id'         => $this->getDocId()
         );
         return $this->view->url($url_permadelete, 'default', true);
     }
@@ -185,7 +185,7 @@ class Review_Model_DocumentAdapter {
         for ($counter = 0; $counter < $c; $counter++) {
             $name = $this->document->getPersonAuthor($counter)->getName();
 
-            $authors[$counter] = $name;
+            $authors[$counter] = htmlspecialchars($name);
         }
 
         $this->authors = $authors;

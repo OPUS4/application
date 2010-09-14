@@ -40,7 +40,7 @@
 
     <?PHP if (isset($this->error)) : ?>
     <div class="error">
-        <?= $this->error ?>
+        <?= htmlspecialchars($this->error) ?>
     </div>
 
     <?PHP endif; ?>
