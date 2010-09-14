@@ -55,7 +55,7 @@
    ?>
 
     <a href="<?= $this->url(array('module' => 'browse', 'controller' => 'index', 'action' => 'browseList', 'list' => 'collection', 'collection' => $obj->getId()), null, true)?>">
-        <?= $printname ?>
+        <?= htmlspecialchars($printname) ?>
     </a>
     <br/>
     <?php endforeach ?>

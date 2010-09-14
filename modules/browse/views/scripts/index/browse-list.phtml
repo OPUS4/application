@@ -34,7 +34,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-    echo '<h2>' . $this->title . '</h2>';
+    echo '<h2>' . htmlspecialchars($this->title) . '</h2>';
     // Show list view of the selected list
 
     echo '<ul>';
@@ -69,7 +69,7 @@
                 $documentCountCurrent = $node->getNumEntries();
 
                 if ($hideEmptyCollections && $browseListCountStyle !== 'none' && $documentCountCurrent === 0 && $documentCountSubtree == 0) {
-                    echo '<li>' . $coll->getDisplayName() . '</li>';
+                    echo '<li>' . htmlspecialchars($coll->getDisplayName()) . '</li>';
                 }
                 else {
                 // for Collections $this->browsinglist must be the ListIterator of all ChildNodes, not the current node itself...
@@ -88,7 +88,7 @@
                      true
                  ) .
                  '">';
-                    echo $coll->getDisplayName();
+                    echo htmlspecialchars($coll->getDisplayName());
                     if ($browseListCountStyle === 'count') {
                         // Changed for matheon: echo '</a> (' . $documentCountCurrent . ') (' . $this->translate('browsing_total_number') . ' ' . $documentCountSubtree . ')';
                         echo '</a> (' . $documentCountSubtree . ')';
@@ -129,7 +129,7 @@
                       true
                  ) .
                  '">';
-                 echo $pers['lastName'] . ', ' . $pers['firstName'];
+                 echo htmlspecialchars($pers['lastName']) . ', ' . htmlspecialchars($pers['firstName']);
                  echo '</a>';
                  #echo ' (' . $titleCount. ')';
                  echo '</li>';
