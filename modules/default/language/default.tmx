@@ -9,7 +9,7 @@
 
     <tu tuid="review_menu_label">
         <tuv xml:lang="en">
-            <seg>Clearance</seg>
+            <seg>Review</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Freischalten</seg>

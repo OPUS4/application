@@ -34,7 +34,7 @@
  */
 
 /**
- * Check permissions before any clearance controller will be started.
+ * Check permissions before any "review" controller will be started.
  *
  * @category    Application
  * @package     Module_Admin
@@ -42,18 +42,18 @@
  * TODO translate messages
  */
 // check, if we are allowed to administrate
-if (true !== Opus_Security_Realm::getInstance()->check('clearance')) {
+if (true !== Opus_Security_Realm::getInstance()->check('review')) {
     // we are not allowed to clear documents
     // $logger->info("Unallowed access to module admin!");
 
     $identity = Zend_Auth::getInstance()->getIdentity();
     if (empty($identity) === true) {
         // $message = $this->translate('admin_no_identity_error');
-        $message = "You must be logged in to use Clearance module.";
+        $message = "You must be logged in to use Review module.";
     }
     else {
         // $message = $this->translate('admin_wrong_identity_error');
-        $message = "You do not have access to the Clearance module.";
+        $message = "You do not have access to the Review module.";
     }
 
     // get all parameters to return after login.
