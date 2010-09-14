@@ -28,7 +28,7 @@ and open the template in the editor.
         <whitelist>
             <directory suffix=".php">..</directory>
             <exclude>
-                <directory suffix=".php">../library/Opus</directory>
+                <directory suffix=".php">../library/Zend</directory>
                 <directory suffix=".php">../tests</directory>
             </exclude>
         </whitelist>
