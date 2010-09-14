@@ -114,7 +114,6 @@ class CitationExport_IndexController extends Zend_Controller_Action {
 
         // Set up XSLT-Stylesheet
         $xslt = new DomDocument;
-        if ($outputFormat === 'bibtex' && file_exists($this->view->getScriptPath('index') . '/' . $outputFormat . "_" . $document->getType() . '.xslt')) $outputFormat .= "_" . $document->getType();
         if (true === file_exists($this->view->getScriptPath('index') . '/' . $outputFormat . '.xslt')) {
             $template = $outputFormat . '.xslt';
         } else {
@@ -142,12 +141,11 @@ class CitationExport_IndexController extends Zend_Controller_Action {
             $proc->registerPHPFunctions();
             $proc->importStyleSheet($xslt);
         	
-        	$transform = $proc->transformToXML($xml);
+            $transform = $proc->transformToXML($xml);
         }
         catch (Exception $e) {
         	$transform = $e->getMessage();
         }
-        return    $transform;  	
+        return    $transform;
      }
-
 }
