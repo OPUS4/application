@@ -58,24 +58,3 @@ require_once 'Zend/Loader/Autoloader.php';
 $autoloader = Zend_Loader_Autoloader::getInstance();
 $autoloader->suppressNotFoundWarnings(false);
 $autoloader->setFallbackAutoloader(true);
-
-// Zend_Loader is'nt available yet. We have to do a require_once in order
-// to find the bootstrap class.
-require_once 'Zend/Application.php';
-
-// Do test environment initializiation.
-$application = new Zend_Application(
-        APPLICATION_ENV,
-        array(
-            "config"=>array(
-                APPLICATION_PATH . '/application/configs/application.ini',
-                APPLICATION_PATH . '/tests/config.ini'
-            )
-        )
-    );
-$application->bootstrap(array('database','temp','documentType','opusLocale'));
-
-// Do test environment initializiation.
-//$testhelper = new TestHelper();
-//$testhelper->checkDatabaseRevision();
-
