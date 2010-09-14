@@ -31,19 +31,19 @@
  * @version     $Id$
  */
 
-$this->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8')
+$this->headMeta()
+    ->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8')
     ->appendHttpEquiv('Content-Language', 'de-DE');
 
-// TODO diesen block da unterbringen, wo er hingehört (view / controller class)
-    $this->headTitle('OPUS 4')
-        ->headTitle($this->title)
-        ->setSeparator(' | ');
+$this->headTitle('OPUS 4')
+    ->headTitle($this->title)
+    ->setSeparator(' | ');
 
-    $fc = Zend_Controller_Front::getInstance();
-    $basePath = $fc->getRequest()->getBasePath();
-    $this->headLink()
-        ->appendStylesheet($basePath . '/layouts/opus4/css/opus.css')
-        ->appendStylesheet($basePath . '/layouts/opus4/css/admin.css'); // temporary CSS to style admin and review module pages
+$fc = Zend_Controller_Front::getInstance();
+$basePath = $fc->getRequest()->getBasePath();
+$this->headLink()
+    ->appendStylesheet($basePath . '/layouts/opus4/css/opus.css')
+    ->appendStylesheet($basePath . '/layouts/opus4/css/admin.css'); // temporary CSS to style admin and review module pages
 ?>
 
 <?= $this->doctype() ?>
@@ -53,6 +53,7 @@ $this->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8')
     <head>
         <?= $this->headMeta() ?>
         <?= $this->headTitle() ?>
+        <?= $this->headScript() ?>
         <?= $this->headLink() ?>
     </head>
 

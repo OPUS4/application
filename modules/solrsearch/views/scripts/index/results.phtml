@@ -32,7 +32,21 @@
  * @version     $Id$
  */
 
+$startUpScript = '$(document).ready(function() { init_searchresults(); });';
+$fc = Zend_Controller_Front::getInstance();
+$basePath = $fc->getRequest()->getBasePath();
+$this->headScript()->appendFile($basePath . '/layouts/opus4/js/jquery-1.4.2.min.js')
+        ->appendScript($startUpScript);
+
 ?>
+
+<script type="text/javascript">
+    function init_searchresults() {
+        <?php foreach($this->results as $result) :?>
+            $('#<?= $result->getId() ?>').hide();
+        <?php endforeach ?>
+    }
+</script>
 
 <?php if(isset($this->specialTitle)) : ?>
 <h1><?= htmlspecialchars($this->translate($this->specialTitle)) ?></h1>
@@ -69,6 +83,7 @@
                     'action' => 'index',
                     'docId' => $result->getId());
             ?>
+            <img src="<?= $basePath . '/layouts/opus4/img/page_white_text.png' ?>" alt="Show/Hide Details" title="Click here to expand or collapse the abstract text" onclick="$(function(){$('#<?= $result->getId() ?>').toggle();});" />
             <span class="results_title"><a href="<?= $this->url($frontdoorUrl, null, true) ?>"><?= htmlspecialchars($result->getTitle()); ?></a> (<?= htmlspecialchars($result->getYear()); ?>)</span><br/>
 
             <?php if(!is_null($result->getAuthors())) : ?>
@@ -80,7 +95,11 @@
                 <?php endforeach ?>
             <?php endif ?>
 
-            <div class="abstract"><?= htmlspecialchars($result->getAbstract()); ?></div>
+            <div class="abstract">
+                <div class="abstractText" id="<?= $result->getId() ?>">
+                    <?= $result->getAbstract(); ?>
+                </div>
+            </div>
         </div>
     <?php endforeach ?>
 </div>
