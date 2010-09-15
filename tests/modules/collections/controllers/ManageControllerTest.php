@@ -34,24 +34,35 @@
  */
 class Collections_ManageControllerTest extends ControllerTestCase {
 
-    /**
-     * Simple test action to check "add" module.
-     */
-    public function testAddAction() {
-        $request_data = array(
+    private $requestData = array();
+
+    public function setUp() {
+        parent::setUp();
+
+        $this->requestData = array(
                     'role' => 'Collections',
                     'key' => ('foo ' . rand()),
                     'title' => ('title ' . rand()),
         );
 
+        /* Creating first collection to work with. */
         $this->request
                 ->setMethod('POST')
-                ->setPost($request_data);
+                ->setPost($this->requestData);
         $this->dispatch('/collections/manage/add');
+
         $this->assertResponseCode(200);
         $this->assertController('manage');
         $this->assertAction('add');
 
+    }
+
+    /**
+     * Simple test action to check "add" module.
+     */
+    public function testAddAction() {
+
+        // First request has been issued in setUp.
         $body = $this->getResponse()->getBody();
         $this->checkForBadStringsInHtml($body);
         $this->assertContains('SUCCESS', $body);
@@ -62,29 +73,12 @@ class Collections_ManageControllerTest extends ControllerTestCase {
      * Test action to check "add" module, expect failure at second insert.
      */
     public function testAddDoubleInsertAction() {
-        $request_data = array(
-                    'role' => 'Collections',
-                    'key' => ('foo ' . rand()),
-                    'title' => ('title ' . rand()),
-        );
 
-        /* First insert should success. */
+        // First request has been issued in setUp.
+        // Second insert with same key should fail.
         $this->request
                 ->setMethod('POST')
-                ->setPost($request_data);
-        $this->dispatch('/collections/manage/add');
-        $this->assertResponseCode(200);
-        $this->assertController('manage');
-        $this->assertAction('add');
-
-        $body = $this->getResponse()->getBody();
-        $this->checkForBadStringsInHtml($body);
-        $this->assertContains('SUCCESS', $body);
-
-        /* First insert should fail. */
-        $this->request
-                ->setMethod('POST')
-                ->setPost($request_data);
+                ->setPost($this->requestData);
         $this->dispatch('/collections/manage/add');
         $this->assertNotResponseCode(200);
 
@@ -94,31 +88,15 @@ class Collections_ManageControllerTest extends ControllerTestCase {
      * Test action to check "add" module, expect failure at second insert.
      */
     public function testChangeTitleAction() {
-        $request_data = array(
-                    'role' => 'Collections',
-                    'key' => ('foo ' . rand()),
-                    'title' => ('title ' . rand()),
-        );
 
-        /* First insert should success. */
+        // First request has been issued in setUp.
+        // Now changing existing collection.
+        $this->requestData['title'] = 'another title';
         $this->request
                 ->setMethod('POST')
-                ->setPost($request_data);
-        $this->dispatch('/collections/manage/add');
-        $this->assertResponseCode(200);
-        $this->assertController('manage');
-        $this->assertAction('add');
-
-        $body = $this->getResponse()->getBody();
-        $this->checkForBadStringsInHtml($body);
-        $this->assertContains('SUCCESS', $body);
-
-        /* First insert should fail. */
-        $request_data['title'] = 'another title';
-        $this->request
-                ->setMethod('POST')
-                ->setPost($request_data);
+                ->setPost($this->requestData);
         $this->dispatch('/collections/manage/change-title');
+
         $this->assertResponseCode(200);
         $this->assertController('manage');
         $this->assertAction('change-title');
