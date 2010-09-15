@@ -80,7 +80,7 @@ class Collections_ManageControllerTest extends ControllerTestCase {
                 ->setMethod('POST')
                 ->setPost($this->requestData);
         $this->dispatch('/collections/manage/add');
-        $this->assertNotResponseCode(200);
+        $this->assertResponseCode(400);
 
     }
 

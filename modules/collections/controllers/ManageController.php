@@ -57,31 +57,35 @@ class Collections_ManageController extends Controller_Action {
 //    }
 
     public function addAction() {
-        $request = $this->getRequest();
-        $manage = new Collections_Model_ManageRole($request->getParam('role'));
+        try {
+            $request = $this->getRequest();
+            $manage = new Collections_Model_ManageRole($request->getParam('role'));
 
-        $collection_number = $request->getParam('key');
-        $collection_name = $request->getParam('title');
-        $manage->addCollection( $collection_number, $collection_name );
+            $collection_number = $request->getParam('key');
+            $collection_name = $request->getParam('title');
+            $manage->addCollection($collection_number, $collection_name);
+        }
+        catch (Collections_Model_Exception $e) {
+            $this->getResponse()->setHttpResponseCode(400);
+            $this->view->error = $e->getMessage();
+        }
+
     }
 
     public function changeTitleAction() {
-        $request = $this->getRequest();
-        $manage = new Collections_Model_ManageRole($request->getParam('role'));
+        try {
+            $request = $this->getRequest();
+            $manage = new Collections_Model_ManageRole($request->getParam('role'));
 
-        $collection_number = $request->getParam('key');
-        $collection_name = $request->getParam('title');
-        $collections = $manage->findCollectionByNumber($collection_number);
-
-        if (count($collections) > 1) {
-            throw new Exception("More than one collection exist.");
+            $collection_number = $request->getParam('key');
+            $collection_name = $request->getParam('title');
+            $manage->renameCollectionByNumber($collection_number, $collection_name);
         }
-        else if (count($collections) < 1) {
-            throw new Exception("Collection '$role_name'/'$collection_number' does not exist.");
+        catch (Collections_Model_Exception $e) {
+            $this->getResponse()->setHttpResponseCode(400);
+            $this->view->error = $e->getMessage();
         }
 
-        $collection = $collections[0];
-        $collection->setName($collection_name)->store();
     }
 
 }

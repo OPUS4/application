@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -27,14 +28,10 @@
  * @category    Application
  * @package     Module_Collection
  * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
 
-<?php if (isset($this->error)) : ?>
-        <?= htmlspecialchars($this->error) ?>
-<?php else: ?>
-        SUCCESS
-<?php endif ?>
+class Collections_Model_Exception extends Exception {
+}

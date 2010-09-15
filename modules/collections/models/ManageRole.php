@@ -32,7 +32,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
 class Collections_Model_ManageRole {
 
     private $role = null;
@@ -41,19 +40,20 @@ class Collections_Model_ManageRole {
 
         $this->role = Opus_CollectionRole::fetchByName($role_name);
         if (is_null($this->role)) {
-            throw new Exception("role '$role_name' not found");
+            throw new Collections_Model_Exception("ManageRole: Role with name '$role_name' not found");
         }
 
     }
 
     public function findCollectionByNumber($number) {
-        return Opus_Collection::fetchCollectionsByRoleNumber( $this->role->getId(), $number );
+        return Opus_Collection::fetchCollectionsByRoleNumber($this->role->getId(), $number);
+
     }
 
     public function addCollection($number, $title) {
         $collections = $this->findCollectionByNumber($number);
         if (count($collections) > 0) {
-            throw new Exception("Collection '$number' already exists.");
+            throw new Collections_Model_Exception("ManageRole: Collection with number '$number' already exists.");
         }
 
         $collection = new Opus_Collection();
@@ -61,6 +61,25 @@ class Collections_Model_ManageRole {
                 ->setNumber($number)
                 ->setName($title)
                 ->store();
+
         return $collection;
+
     }
+
+    public function renameCollectionByNumber($number, $title) {
+        $collections = $this->findCollectionByNumber($number);
+        if (count($collections) > 1) {
+            throw new Exception("ManageRole: Found more than one collection with number '$number'.");
+        }
+        else if (count($collections) < 1) {
+            throw new Exception("ManageRole: Collection with number '$number' does not exist.");
+        }
+
+        $collection = $collections[0];
+        $collection->setName($title)->store();
+
+        return $collection;
+
+    }
+
 }
