@@ -50,6 +50,7 @@ class Admin_LicenceControllerTest extends ControllerTestCase {
      * Tests 'show' action.
      */
     public function testShowAction() {
+        $this->markTestSkipped('No test data');
         $this->dispatch('/admin/licence/show/id/1');
         $this->assertResponseCode(200);
         $this->assertController('licence');
