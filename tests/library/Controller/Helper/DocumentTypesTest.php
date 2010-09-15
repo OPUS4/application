@@ -37,10 +37,74 @@
 class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
 
     /**
-     * Tests getDocumentTypes function.
+     * Tests getting document types.
+     *
+     * The available document types are configured in *tests.ini*.
      */
     public function testGetDocumentTypes() {
-        $this->markTestIncomplete();
+        $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
+
+        $documentTypes = $docTypeHelper->getDocumentTypes();
+
+        $this->assertNotNull($documentTypes);
+        $this->assertEquals(3, count($documentTypes));
+        $this->assertArrayHasKey('all', $documentTypes);
+        $this->assertArrayHasKey('preprint', $documentTypes);
+        $this->assertArrayHasKey('other', $documentTypes);
+        $this->assertArrayNotHasKey('article', $documentTypes);
+    }
+
+    /**
+     * Test getting standard template name for document type.
+     */
+    public function testGetTemplateName() {
+        $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
+
+        $template = $docTypeHelper->getTemplateName('preprint');
+
+        $this->assertNotNull($template);
+        $this->assertEquals('preprint', $template);
+    }
+
+    /**
+     * Test getting custom template name for document type.
+     */
+    public function testGetCustomTemplateName() {
+        $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
+
+        $template = $docTypeHelper->getTemplateName('other');
+
+        $this->assertNotNull($template);
+        $this->assertEquals('other_default', $template);
+    }
+
+    /**
+     * Test checking validity of allowed document type.
+     */
+    public function testIsValid() {
+        $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
+
+        $this->assertTrue($docTypeHelper->isValid('preprint'));
+    }
+
+    /**
+     * Test checking validity of excluded document type.
+     */
+    public function testIsNotValid() {
+        $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
+
+        $this->assertFalse($docTypeHelper->isValid('article'));
+    }
+
+    /**
+     * Test getting DOM for document type.
+     */
+    public function testGetDocument() {
+        $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
+
+        $dom = $docTypeHelper->getDocument('preprint');
+
+        $this->assertNotNull($dom);
     }
 
 }

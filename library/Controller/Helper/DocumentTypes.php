@@ -264,7 +264,7 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
 
         $result = null;
 
-        if (!empty($include)) {
+        if (!empty($exclude)) {
             $result = explode(",", $exclude);
             Util_Array::trim($result);
         }
