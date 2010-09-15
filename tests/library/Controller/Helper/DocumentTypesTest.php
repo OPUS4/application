@@ -123,6 +123,46 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
         $this->assertArrayHasKey('article', $documentTypes);
     }
 
+    /**
+     * Test getting document types twice.
+     */
+
+    public function testGetDocumentTypesTwice() {
+        $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
+
+        $documentTypes = $docTypeHelper->getDocumentTypes();
+
+        $documentTypes2 = $docTypeHelper->direct(); // test direct method
+
+        $this->assertEquals($documentTypes, $documentTypes2);
+    }
+
+    /**
+     * Test getting template name for unknown document type.
+     */
+    public function testGetTemplateForInvalidDocumentType() {
+        $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
+
+        $template = $docTypeHelper->getTemplateName('unknownDocType');
+
+        $this->assertNull($template);
+    }
+
+    /**
+     * Test getting path for document types with path not set.
+     *
+     * @expectedException Exception
+     */
+    public function testGetDocumentTypesWithPathNotSet() {
+        $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
+
+        $config = Zend_Registry::get('Zend_Config');
+
+        unset($config->publish->path->documenttypes);
+
+        $path = $docTypeHelper->getDocTypesPath();
+    }
+
 }
 
 ?>
