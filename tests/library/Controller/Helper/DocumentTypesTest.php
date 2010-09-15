@@ -107,6 +107,22 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
         $this->assertNotNull($dom);
     }
 
+    /**
+     * Testing helper without any configuration.
+     */
+    public function testGetAllDocumentTypes() {
+        $config = Zend_Registry::get('Zend_Config');
+
+        unset($config->documentTypes);
+
+        $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
+
+        $documentTypes = $docTypeHelper->getDocumentTypes();
+
+        $this->assertNotNull($documentTypes);
+        $this->assertArrayHasKey('article', $documentTypes);
+    }
+
 }
 
 ?>
