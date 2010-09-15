@@ -42,6 +42,7 @@ class Review_IndexControllerTest extends ControllerTestCase
      */
     public function testCallWithoutActionShouldPullFromIndexAction()
     {
+        $this->markTestSkipped('Requires test data');
         $this->dispatch('/review');
         $this->assertResponseCode(200);
         $this->assertController('index');
