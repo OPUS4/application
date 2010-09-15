@@ -54,6 +54,9 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
 
         // Needed for SecurityRealm
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+
+        // Initializing start_mtime to make tests pass if debugging is enabled.
+        $GLOBALS['start_mtime'] = 0;
     }
 
     /**
