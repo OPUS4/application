@@ -178,24 +178,43 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      * @param <type> $field
      */
     protected function _parseField(DOMElement $field) {
-        //=1= Catch all interesting attributes!
+
         if ($field->hasAttributes()) {
             $elementName = $field->getAttribute('name');
             $required = $field->getAttribute('required');
             $formElement = $field->getAttribute('formelement');
             $datatype = $field->getAttribute('datatype');
             $multiplicity = $field->getAttribute('multiplicity');
+
+            //$currentElement = new Publish_Model_FormElement($elementName, $required, $formElement, $datatype, $multiplicity);
         }
 
-        //=2= Check if there are child nodes -> concerning fulltext or other dependencies!
-        if ($field->hasChildNodes()) {
-            if ($this->fulltext === "1") {
-                $requiredIfFulltext = $field->getElementsByTagName("required-if-fulltext");
-                if ($requiredIfFulltext->length != 0) {
-                    $this->log->debug($elementName . " is required-if-fulltext! And Fulltext ist set to " . $this->fulltext);
-                    $required = "yes";
-                }
+        //Check if there are child nodes
+        if ($field->hasChildNodes())
+            $subfields = $this->_parseSubFields($field);
+
+        $validation = $this->_parseValidation($field);
+
+        //Get the proper validator for the datatape
+        $validator = $this->_getValidatorsByDatatype($datatype);
+
+        // TODO combine with result of _parseValidation
+        //Check if fields has to shown multi times!
+        if ($multiplicity !== "1")
+            $this->_addDisplayGroup($formElement, $elementName, $validator, $datatype, $required, $multiplicity);
+
+        else
+            $this->_prepareFormElement($formElement, $elementName, $validator, $datatype, $required, null, $elementName);
+    }
+
+    private function _parseSubFields($field) {
+        if ($this->fulltext === "1") {
+            $requiredIfFulltext = $field->getElementsByTagName("required-if-fulltext");
+            if ($requiredIfFulltext->length != 0) {
+                $this->log->debug($elementName . " is required-if-fulltext! And Fulltext ist set to " . $this->fulltext);
+                $required = "yes";
             }
+        }
 //parse the xml file for the tag "subfield"
 //                foreach ($dom->getElementsByTagname('subfield') as $subField) {
 //                    if ($subField->hasAttributes()) {
@@ -206,20 +225,6 @@ class Publish_Form_PublishingSecond extends Zend_Form {
 //                    else
 //                        throw new OpusServerPublishingException("Error while parsing xml document type: Choosen document type has missing attributes in element 'subfield'!");
 //               }
-            $validation = $this->_parseValidation($field);
-        }
-
-        //=3= Get the proper validator from the datatape!
-        $validator = $this->_getValidatorsByDatatype($datatype);
-
-        // TODO combine with result of _parseValidation
-        //=4= Check if fields has to shown multi times!
-        if ($multiplicity !== "1") {
-            $this->_addDisplayGroup($formElement, $elementName, $validator, $datatype, $required, $multiplicity);
-        } else {
-            //prepare element that do not belong to a display group
-            $this->_prepareFormElement($formElement, $elementName, $validator, $datatype, $required, null, $elementName);
-        }
     }
 
     /**
@@ -227,7 +232,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      *
      * @param <type> $field
      */
-    protected function _parseValidation(DOMElement $field) {
+    private function _parseValidation(DOMElement $field) {
         $validationConfig = $field->getElementsByTagName('validation');
         if (!empty($validationConfig)) {
             foreach ($field->getElementsByTagName('validator') as $validate) {
@@ -249,7 +254,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      * @param DOMElement $field
      * @return hash of parameters
      */
-    protected function _parseParameters(DOMElement $field) {
+    private function _parseParameters(DOMElement $field) {
         $parameters = array();
         foreach ($validate->getElementsByTagName('param') as $param) {
             $key = $param->getAttribute('name');
@@ -265,7 +270,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      * @param <type> $params
      * @return Form_Validate_RequiredIf
      */
-    protected function _getValidator($name, $params = null) {
+    private function _getValidator($name, $params = null) {
 // TODO change name to lower case
         switch ($name) {
             case 'requiredif':
@@ -282,7 +287,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      * @param <type> $datatype
      * @param <type> $required
      */
-    protected function _addDisplayGroup($formElement, $elementName, $validator, $datatype, $required, $multiplicity) {
+    private function _addDisplayGroup($formElement, $elementName, $validator, $datatype, $required, $multiplicity) {
         //array is used to initilaize the display group for this group of elements
         $group = array();
         $groupName = 'group' . $elementName;
@@ -370,7 +375,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         //todo: wiederholbaren coden in eigene methoden auslagern
         switch ($datatype) {
 
-            case 'Date' : 
+            case 'Date' :
                 $validator = new Zend_Validate_Date();
                 $messages = array(
                     Zend_Validate_Date::INVALID => 'publish_validation_error_date_invalid',
@@ -832,6 +837,28 @@ class Publish_Form_PublishingSecond extends Zend_Form {
             return $licences;
         } else
             return $this->licences;
+    }
+
+    public function removeUnsaveableFields() {
+
+        foreach ($this->getElements() as $element) {
+            if ($element->getValue() == "" || $element->getType() == "Zend_Form_Element_Submit" || $element->getType() == "Zend_Form_Element_Hidden") {
+
+                $this->removeElement($element->getName());
+                $this->log->debug("remove " . $element->getName() . " from form!");
+            }
+        }
+
+        //hidden field for fulltext to cummunicate between different forms
+        $this->_addHiddenField('fullText', $this->fulltext);
+
+        //hidden field with document type
+        $this->_addHiddenField('documentType', $this->doctype);
+
+        //hidden field with document id
+        $this->_addHiddenField('documentId', $this->docid);
+
+        $this->_addSubmit('button_label_send2');
     }
 
 }

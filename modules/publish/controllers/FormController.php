@@ -149,7 +149,7 @@ class Publish_FormController extends Controller_Action {
                     $depositForm->setMethod('post');
                     $depositForm->populate($form->getValues());
 
-                    $depositForm = $this->_removeUnsavableElements($depositForm, $form);
+                    $depositForm->removeUnsaveableFields();
 
                     $this->view->form = $depositForm;
                 }
@@ -183,10 +183,6 @@ class Publish_FormController extends Controller_Action {
                     $name = substr($currentElement, 0, $pos);
                 else
                     $name=$currentElement; //"normal" element name without changes
-
-
-
-
             }
 
             $groupName = 'group' . $name;
@@ -379,39 +375,6 @@ class Publish_FormController extends Controller_Action {
         $this->_setViewVariables($form);
 
         return $this->render($this->documentType);
-    }
-
-    /**
-     * Method deletes elements like submit buttons before sending the form
-     * @param <PublishingSecond> $formToSave
-     * @param <PublishingSecond> $baseForm
-     * @return <PublishingSecond>
-     */
-    private function _removeUnsavableElements($formToSave, $baseForm) {
-        $log = Zend_Registry::get('Zend_Log');
-        foreach ($formToSave->getElements() as $element) {
-            if ($element->getValue() == "" || $element->getType() == "Zend_Form_Element_Submit" || $element->getType() == "Zend_Form_Element_Hidden") {
-
-                $formToSave->removeElement($element->getName());
-                $log->debug("remove " . $element->getName() . " from depositForm!");
-            }
-        }
-        $docid = $formToSave->createElement("hidden", 'documentId');
-        $docid->setValue($baseForm->getElement('documentId')->getValue());
-        $docid->removeDecorator('Label');
-
-        $doctype = $formToSave->createElement('hidden', 'documentType');
-        $doctype->setValue($baseForm->getElement('documentType')->getValue());
-        $doctype->removeDecorator('Label');
-
-        $fulltext = $formToSave->createElement('hidden', 'fullText');
-        $fulltext->setValue($baseForm->getElement('fullText')->getValue());
-        $fulltext->removeDecorator('Label');
-
-        $deposit = $formToSave->createElement('submit', 'Abspeichern');
-        $formToSave->addElements(array($docid, $doctype, $fulltext, $deposit));
-
-        return $formToSave;
-    }
+    }    
 
 }

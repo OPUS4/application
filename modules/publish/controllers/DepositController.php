@@ -42,6 +42,8 @@ class Publish_DepositController extends Controller_Action {
 
     public $documentType;
     public $documentId;
+    public $fulltext;
+    public $additionalFields;
     public $postData;
 
     /**
@@ -50,33 +52,44 @@ class Publish_DepositController extends Controller_Action {
      */
     public function depositAction() {
         $log = Zend_Registry::get('Zend_Log');
-        
+
         $this->view->title = $this->view->translate('publish_controller_index');
         $this->view->subtitle = $this->view->translate('publish_controller_deposit_successful');
 
         if ($this->getRequest()->isPost() === true) {
-            $this->postData = $this->getRequest()->getPost();            
+            $this->postData = $this->getRequest()->getPost();
 
             $this->_setDocumentParameters();
 
-            if ($this->documentType !== "") {
-                $depositData = new Publish_Model_Deposit($this->documentId, $this->documentType, $this->postData);
+            $depositForm = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $this->fulltext, $this->additionalFields, $this->postData);
+                
+                if (!$depositForm->isValid($this->postData)) {
+                    $depositForm->removeUnsaveableFields();
+                    $this->view->form = $depositForm;
+                    return $this->renderScript('form/check.phtml');
+                }
+                else {
+                    if ($this->documentType !== "") {
 
-                $document = $depositData->getDocument();
+                    $depositData = new Publish_Model_Deposit($this->documentId, $this->documentType, $this->postData);
 
-                $projects = $depositData->getDocProjects();
+                    $document = $depositData->getDocument();
 
-                $document->setServerState('unpublished');
+                    $projects = $depositData->getDocProjects();
 
-                $docId = $document->store();
+                    $document->setServerState('unpublished');
 
-                $log->info("Document was sucessfully stored!");
+                    $docId = $document->store();
 
-                $this->_notifyReferee($projects);
+                    $log->info("Document was sucessfully stored!");
+
+                    $this->_notifyReferee($projects);
+                }
+                else
+                return "Error: Unknown DocumentType!";
             }
 
-            else
-                return "Error: Unknown DocumentType!";
+            
         }
         else {
             // GET Reqquest is redirected to index
@@ -107,11 +120,25 @@ class Publish_DepositController extends Controller_Action {
                 $this->documentId = "";
 
 
-            if (isset($this->postData["fullText"]))
+            if (isset($this->postData["fullText"])) {
+                $this->fulltext = $this->postData["fullText"];
                 unset($this->postData["fullText"]);
+            }
+            else $this->fulltext = "0";
 
-            if (isset($this->postData["Abspeichern"]))
-                unset($this->postData["Abspeichern"]);
+            $additionalFields = array();
+
+            foreach ($this->postData AS $element => $value) {
+                if (substr($element, 0, 9) == "countMore") {
+                    $key = substr($element, 9);
+                    $additionalFields[$key] = (int) $value;
+                }
+            }
+
+            $this->additionalFields = $additionalFields;
+
+            if (isset($this->postData["send"]))
+                unset($this->postData["send"]);
         }
     }
 

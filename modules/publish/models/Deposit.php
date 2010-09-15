@@ -435,14 +435,19 @@ class Publish_Model_Deposit {
         $role = Opus_CollectionRole::fetchByOaiName($collectionRole);
         if (isset($role)) {
             $this->log->debug("Role: " . $role);
-            $collArray = Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $dataValue);
+            
+            if ($collectionRole === 'institutes')
+                $collArray = Opus_Collection::fetchCollectionsByRoleName($role->getId(), $dataValue);
+            else 
+                $collArray = Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $dataValue);
+
             $this->log->debug("Role ID: " . $role->getId() . ", value: " . $dataValue);
 
                 if ($collArray !== null && count($collArray) <= 1) {
 
                     $this->document->addCollection($collArray[0]);
 
-                    if (strstr($collectionrole, 'project')) {
+                    if (strstr($collectionRole, 'project')) {
                             $this->projects[] = $dataValue;
                             $this->log->debug("Project array for referee, extended by " . $dataValue);
                     }
