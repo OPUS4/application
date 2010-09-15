@@ -204,11 +204,9 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
                 $basename = $path_parts['basename'];
                 $extension = $path_parts['extension'];
 
-                if (($basename === '.') or ($basename === '..') or ($extension !== 'xml')) {
-                    continue;
+                if (($basename !== '.') and ($basename !== '..') and ($extension === 'xml')) {
+                    $files[$filename] = $filename;
                 }
-
-                $files[$filename] = $filename;
             }
             closedir($dirHandle);
         }
