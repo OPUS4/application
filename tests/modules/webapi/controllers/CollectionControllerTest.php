@@ -34,6 +34,9 @@
 
 class Webapi_CollectionControllerTest extends ControllerTestCase {
 
+    private $role;
+    private $collection;
+
     /**
      * ...
      */
@@ -42,20 +45,12 @@ class Webapi_CollectionControllerTest extends ControllerTestCase {
         $_SERVER['HTTP_HOST'] = '127.0.0.1';
 
         parent::setUp();
-    }
 
-    /**
-     * Helper to create collection to test with.
-     *
-     * TODO: Move to test fixture?
-     */
-    private function createDummyCollection($role_name) {
-        $role = Opus_CollectionRole::fetchByName($role_name);
-
-        if (is_null($role)) {
-            $role = new Opus_CollectionRole();
-            $role->setName($role_name)->store();
-        }
+        $role_name = "foobar-" . rand();
+        $role = new Opus_CollectionRole();
+        $role->setName($role_name)
+                ->setOaiName($role_name)
+                ->store();
 
         $collection_number = "test-number-" . rand();
         $collection_name = "test-name-" . rand();
@@ -65,56 +60,75 @@ class Webapi_CollectionControllerTest extends ControllerTestCase {
         $collection->setRoleId($role->getId());
         $collection->store();
 
-        return $collection;
+        $this->role = $role;
+        $this->collection = $collection;
     }
 
     /**
      * @todo Implement testGetAction().
      */
     public function testGetAction() {
-        // Remove the following lines when you implement this test.
-        $this->markTestIncomplete(
-                'This test has not been implemented yet.'
-        );
+    $this->markTestIncomplete();
 
+        $this->request
+                ->setMethod('POST')
+                ->setRawBody($postData);
+
+        $this->dispatch('/webapi/collection/' . $this->collection->getId());
+
+        echo "http: ", $this->getResponse()->getHttpResponseCode(), "\n";
+        echo "http: ", $this->getResponse()->getBody(), "\n";
+
+        $this->assertResponseCode(200);
+        $this->assertController('collection');
+        $this->assertAction('update');
+
+        $collection = new Opus_Collection( $this->collection->getId() );
+        $this->assertEquals($new_name, $collection->getName());
     }
 
     /**
      * Create collection and check if we can update it...
      */
     public function testUpdateActionForExistingCollection() {
-        $role_name  = "matheon_projects";
         $new_name   = "neuer Titel";
-        $collection = $this->createDummyCollection($role_name);
+
+        $postData = '<?xml version="1.0" encoding="utf-8"?>
+                    <Opus xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <Opus_Collection Name="' . $new_name . '" RoleId="1"/>
+                    </Opus>';
 
         $this->request
                 ->setMethod('POST')
-                ->setPost(array(
-                    'role'  => $role_name,
-                    'key'   => $collection->getNumber(),
-                    'title' => $new_name,
-                ));
-        $this->dispatch('/webapi/collection/update');
+                ->setRawBody($postData);
+        $this->dispatch('/webapi/collection/' . $this->collection->getId());
+
+        echo "http: ", $this->getResponse()->getHttpResponseCode(), "\n";
+        echo "http: ", $this->getResponse()->getBody(), "\n";
 
         $this->assertResponseCode(200);
         $this->assertController('collection');
         $this->assertAction('update');
 
-        $collection = new Opus_Collection( $collection->getId() );
-        $this->assertStringStartsWith($new_name, $collection->getName());
+        $collection = new Opus_Collection( $this->collection->getId() );
+        $this->assertEquals($new_name, $collection->getName());
     }
 
     /**
      * Test if we handline non-existing collections properly.
      */
     public function testUpdateActionForNonExistingCollection() {
+        $new_name   = "neuer Titel";
+        $postData = '<?xml version="1.0" encoding="utf-8"?>
+                    <Opus xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <Opus_Collection>
+                        <Name>' . $new_name . '</Name>
+                    </Opus_Collection>
+                    </Opus>';
+
         $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'role'  => 'foo',
-                    'key'   => 'Axxx',
-                    'title' => 'neuer Titel',
-                ));
+                ->setMethod('PUT')
+                ->setRawBody($postData);
         $this->dispatch('/webapi/collection/update');
 
         $this->assertResponseCode(500);

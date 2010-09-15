@@ -39,22 +39,35 @@
 class Webapi_CollectionController extends Controller_Rest {
 
     public function getAction() {
+        echo "foo: get\n";
+        $collectionId = $this->getRequest()->getParam('id');
+
         $model = new Webapi_Model_Collection();
-        $result = $model->get($this->requestData['original_action']);
+        $result = $model->get($collectionId);
 
         $this->getResponse()->setBody($result);
         $this->getResponse()->setHttpResponseCode($model->getResponseCode());
     }
 
-    public function updateAction() {
-        $request = $this->getRequest();
-        $model = new Webapi_Model_Collection();
+    public function postAction() {
+        echo "foo: post\n";
+        $collectionId = $this->getRequest()->getParam('id');
+        $rawBody = $this->getRequest()->getRawBody();
 
-        $result = $model->update(
-                        $request->getParam('role'),
-                        $request->getParam('key'),
-                        $request->getParam('title')
-        );
+        $model = new Webapi_Model_Collection();
+        $result = $model->update($collectionId, $rawBody);
+
+        $this->getResponse()->setBody($result);
+        $this->getResponse()->setHttpResponseCode($model->getResponseCode());
+    }
+
+    public function putAction() {
+        echo "foo: add\n";
+        $collectionId = $this->getRequest()->getParam('id');
+        $rawBody = $this->getRequest()->getRawBody();
+
+        $model = new Webapi_Model_Collection();
+        $result = $model->add($rawBody);
 
         $this->getResponse()->setBody($result);
         $this->getResponse()->setHttpResponseCode($model->getResponseCode());

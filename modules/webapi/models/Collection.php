@@ -46,6 +46,10 @@ class Webapi_Model_Collection extends Webapi_Model_Response {
      */
     public function get($collectionId) {
 
+        $registry = Zend_Registry::getInstance();
+        $logger = $registry->get('Zend_Log');
+        $logger->info( "collection_id: $collectionId" );
+        
         $collectionId = (int) $collectionId;
         $xml = $this->_xml;
 
@@ -68,36 +72,44 @@ class Webapi_Model_Collection extends Webapi_Model_Response {
      * @param string $title New title for the selected collection.
      * @return void
      */
-    public function update($role, $key, $title) {
+    public function update($collectionId, $updateData) {
+        echo "foobar: update($collectionId)\n";
         $xml = $this->_xml;
+        $collectionId = (int) $collectionId;
 
         try {
-            $role = Opus_CollectionRole::fetchByName($role);
-            if (is_null($role)) {
-                throw new Exception("CollectionRole does not exist.");
-            }
-
-            $collections = Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $key);
-            if (empty($collections) || is_null($collections[0])) {
-                throw new Exception("Collection does not exist.");
-            }
-            $collection = $collections[0];
-
-            $collection->setName($title);
+            $collection = new Opus_Collection($collectionId);
+            $omx = new Opus_Model_Xml();
+            $omx->setModel($collection);
+            $omx->updateFromXml($updateData);
             $collection->store();
-
-            $collection = new Opus_Collection($collection->getId());
-            $xml = $collection->toXml();
+            $documentXml = $xml->createElement('Opus_Collection', 'Update was sucessful.');
+            $this->_root->appendChild($documentXml);
+        } catch (Exception $e) {
+            $this->setError('An error occurs during updating document informations. Error reason: ' . $e->getMessage(), 402);
         }
-        catch (Opus_Model_Exception $e) {
-            $this->setError('An error occurs during getting informations. Error reason: ' . $e->getMessage(), 404);
-        }
-        catch (Exception $e) {
-            $this->setError('Unknown error occured. Error reason: ' . $e->getMessage(), 500);
-        }
-
         return $xml->saveXML();
     }
 
+    /**
+     * Adds a collection.
+     *
+     * @param string $role  Role name.
+     * @param string $key   Key of the added collection.
+     * @param string $name  Name/Title of the added collection.
+     * @return void
+     */
+    public function add($xmlData) {
+        $xml = $this->_xml;
+        try {
+            $collection = Opus_Collection::fromXml($xmlData);
+            $collectionId = $collection->store();
+            $collectionXml = $xml->createElement('Opus_Collection_Id', $collectionId);
+            $this->_root->appendChild($collectionXml);
+        } catch (Exception $e) {
+            $this->setError('An error occurs during adding a collection. Error reason: ' . $e->getMessage(), 402);
+        }
+        return $xml->saveXML();
+    }
 }
 ?>
