@@ -282,21 +282,19 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
      */
     public function disable_all_collectionroles() {
         foreach (Opus_CollectionRole::fetchAll() AS $cr) {
-            if ($cr->getOaiName() == 'msc') {
+            if ($cr->getName() == 'msc') {
+                echo "Updating collection {$cr->getDisplayName()}.\n";
                 $cr->setVisibleFrontdoor(0);
-                $cr->store();
-                echo "Updated collection {$cr->getDisplayName()}.\n";
-                continue;
+            }
+            else {
+                echo "Disabling collection {$cr->getDisplayName()}.\n";
+                $cr->setVisible(0);
+                $cr->setVisibleBrowsingStart(0);
+                $cr->setVisibleFrontdoor(0);
+                $cr->setVisibleOai(0);
             }
 
-            /* @var $cr Opus_CollectionRole */
-            $cr->setVisible(0);
-            $cr->setVisibleBrowsingStart(0);
-            $cr->setVisibleFrontdoor(0);
-            $cr->setVisibleOai(0);
             $cr->store();
-
-            echo "Disabled collection {$cr->getDisplayName()}.\n";
         }
     }
 //(2, 21, "Zuse Institute Berlin"),
@@ -326,9 +324,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
 //        // $app_node->setRoleId( $role_id );
 //        $app_node->store();
 
-        $role = new Opus_CollectionRole();
-        $role->setName('matheon_projects');
-        $role->setOaiName('projects');
+        $role = Opus_CollectionRole::fetchByName('projects');
         $role->setVisible(1);
         $role->setDisplayBrowsing('Number, Name');
         $role->setVisibleBrowsingStart(1);
@@ -336,10 +332,8 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
         $role->setVisibleFrontdoor(1);
         $role->setLinkDocsPathToRoot('none');
 
-        $root_node = $role->addRootNode()->setVisible(1);
-        $root_collection = $root_node->addCollection();
-        $root_collection->setName('Projects');
-        $role->store();
+        $root_node = $role->getRootNode()->setVisible(1);
+        $root_node->store();
 
         $collections = array();
         $app_area_node = array();
@@ -403,9 +397,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
      * @return void
      */
     public function load_institutes() {
-        $role = new Opus_CollectionRole();
-        $role->setName('matheon_institutes');
-        $role->setOaiName('institutes');
+        $role = Opus_CollectionRole::fetchByName('institutes');
         $role->setVisible(1);
         $role->setDisplayBrowsing('Name');
         $role->setVisibleBrowsingStart(1);
@@ -413,10 +405,8 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
         $role->setVisibleFrontdoor(1);
         $role->setLinkDocsPathToRoot('none');
 
-        $root_node = $role->addRootNode()->setVisible(1);
-        $root_collection = $root_node->addCollection();
-        $root_collection->setName('Institutes');
-        $role->store();
+        $root_node = $role->getRootNode()->setVisible(1);
+        $root_node->store();
 
         $collections = array();
 

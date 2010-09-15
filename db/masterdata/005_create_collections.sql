@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `collections` (
   `oai_subset` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `role_id` (`role_id`,`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15984 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15985;
 
 --
 -- Dumping data for table `collections`
@@ -16037,7 +16037,8 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALU
 (15980, 7, '89.94', 'Internationale Beziehungen: Sonstiges', NULL),
 (15981, 7, '89.99', 'Politologie: Sonstiges', NULL),
 (15982, 9, NULL, NULL, NULL),
-(15983, 10, NULL, NULL, NULL);
+(15983, 10, NULL, NULL, NULL),
+(15984, 11, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -16077,7 +16078,7 @@ CREATE TABLE IF NOT EXISTS `collections_nodes` (
   KEY `collection_id` (`collection_id`),
   KEY `id` (`id`,`role_id`),
   KEY `parent_id` (`parent_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15984 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15985;
 
 --
 -- Daten für Tabelle `collections_nodes`
@@ -32077,7 +32078,8 @@ INSERT INTO `collections_nodes` (`id`, `role_id`, `collection_id`, `left_id`, `r
 (15980, 7, 15980, 4265, 4266, 15912, 1),
 (15981, 7, 15981, 4267, 4268, 15912, 1),
 (15982, 9, 15982, 1, 2, NULL, 0),
-(15983, 10, 15983, 1, 2, NULL, 0);
+(15983, 10, 15983, 1, 2, NULL, 0),
+(15984, 11, 15984, 1, 2, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -32104,22 +32106,23 @@ CREATE  TABLE IF NOT EXISTS `collections_roles` (
  ENGINE = InnoDB
  DEFAULT CHARSET=utf8
  COMMENT = 'Administration table for the indivdual collection trees.'
- AUTO_INCREMENT=11;
+ AUTO_INCREMENT=12;
 
 --
 -- Daten für Tabelle `collections_roles`
 --
 
 INSERT INTO `collections_roles` (`id`, `name`, `oai_name`, `position`, `link_docs_path_to_root`, `visible`, `visible_browsing_start`, `display_browsing`, `visible_frontdoor`, `display_frontdoor`, `visible_oai`, `display_oai`) VALUES
-(1, 'Organisatorische Einheiten', 'org', 1, 'count', 1, 1, 'Name', 1, 'Name', 1, 'Name'),
-(2, 'Dewey Decimal Classification', 'ddc', 2, 'count', 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'number'),
-(3, 'Computing Classification System', 'ccs', 3, 'count', 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'number'),
-(4, 'Physics and Astronomy Classification Scheme', 'pacs', 4, 'count', 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'number'),
-(5, 'Journal of Economic Literature (JEL) Classification System', 'jel', 5, 'count', 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'number'),
-(6, 'Mathematics Subject Classification', 'msc', 6, 'count', 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'number'),
-(7, 'Basisklassifikation (BK)', 'bk', 7, 'none', 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'number'),
-(9, 'Collections', 'coll', 9, 'count', 1, 1, 'Name', 1, 'Name', 1, 'Name'),
-(10, 'Schriftenreihen', 'series', 10, 'count', 1, 1, 'Name', 1, 'Name', 1, 'Name');
+(1, 'institutes', 'institutes', 1, 'count', 1, 1, 'Name', 1, 'Name', 1, 'Name'),
+(2, 'ddc', 'ddc', 2, 'count', 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
+(3, 'ccs', 'ccs', 3, 'count', 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
+(4, 'pacs', 'pacs', 4, 'count', 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
+(5, 'jel', 'jel', 5, 'count', 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
+(6, 'msc', 'msc', 6, 'count', 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
+(7, 'bk', 'bk', 7, 'none', 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
+(9, 'collections', 'collections', 9, 'count', 1, 1, 'Name', 1, 'Name', 1, 'Name'),
+(10, 'series', 'series', 10, 'count', 1, 1, 'Name', 1, 'Name', 1, 'Name'),
+(11, 'projects', 'projects', 11, 'count', 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number');
 
 
 -- --------------------------------------------------------
