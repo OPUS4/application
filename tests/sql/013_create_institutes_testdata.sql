@@ -3,7 +3,7 @@
 --
 
 INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
-(15984, 9, NULL, 'TUHH Spektrum Specials', NULL),
+(16148, 9, NULL, 'TUHH Spektrum Specials', NULL),
 (15985, 9, NULL, 'TestCollection', NULL),
 (15986, 9, NULL, 'Neue Collection', NULL),
 (15987, 9, NULL, 'TUHH Spektrum Spezial Unterordner', NULL),
@@ -169,9 +169,9 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALU
 (16147, 10, NULL, 'Band 72', NULL);
 
 INSERT INTO `collections_nodes` (`id`, `role_id`, `collection_id`, `left_id`, `right_id`, `parent_id`, `visible`) VALUES
-(15984, 9, 15984, 2, 9, 15982, 1),
-(15985, 9, 15985, 3, 4, 15984, 1),
-(15986, 9, 15986, 5, 8, 15984, 1),
+(16148, 9, 16148, 2, 9, 15982, 1),
+(15985, 9, 15985, 3, 4, 16148, 1),
+(15986, 9, 15986, 5, 8, 16148, 1),
 (15987, 9, 15987, 6, 7, 15986, 1),
 (15988, 10, 15988, 2, 3, 15983, 1),
 (15989, 10, 15989, 4, 7, 15983, 1),
