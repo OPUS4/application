@@ -399,7 +399,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="col_ccs">
+    <tu tuid="collection_role_frontdoor_ccs">
       <tuv xml:lang="en">
         <seg>CCS-Classification</seg>
       </tuv>
@@ -408,7 +408,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="col_ddc">
+    <tu tuid="collection_role_frontdoor_ddc">
       <tuv xml:lang="en">
         <seg>Dewey Decimal Classification</seg>
       </tuv>
@@ -417,7 +417,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="col_msc">
+    <tu tuid="collection_role_frontdoor_msc">
       <tuv xml:lang="en">
         <seg>MSC-Classification</seg>
       </tuv>
@@ -426,16 +426,25 @@
       </tuv>
     </tu>
  
-    <tu tuid="col_org">
+    <tu tuid="collection_role_frontdoor_institutes">
       <tuv xml:lang="en">
-        <seg>Organizational Unit</seg>
+        <seg>Institute</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Organisatorische Einheit</seg>
+        <seg>Institut</seg>
       </tuv>
     </tu>
  
-    <tu tuid="col_pacs">
+    <tu tuid="collection_role_frontdoor_projects">
+      <tuv xml:lang="en">
+        <seg>Project</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Projekt</seg>
+      </tuv>
+    </tu>
+ 
+    <tu tuid="collection_role_frontdoor_pacs">
       <tuv xml:lang="en">
         <seg>PACS-Classification</seg>
       </tuv>
@@ -444,7 +453,7 @@
       </tuv>
     </tu>
  
-    <tu tuid="col_ser">
+    <tu tuid="collection_role_frontdoor_series">
       <tuv xml:lang="en">
         <seg>Series</seg>
       </tuv>

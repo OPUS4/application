@@ -162,17 +162,16 @@
                     <xsl:apply-templates select="Note" />
                     <xsl:apply-templates select="@PublicationVersion" />
 
-                    <xsl:apply-templates select="Collection[@RoleName='Organisatorische Einheiten']" />
-                    <xsl:apply-templates select="Collection[@RoleName='Computing Classification System']" />
-                    <xsl:apply-templates select="Collection[@RoleName='Dewey Decimal Classification']" />
-                    <xsl:apply-templates select="Collection[@RoleName='Mathematics Subject Classification']" >
+                    <xsl:apply-templates select="Collection[@RoleName='institutes']" />
+                    <xsl:apply-templates select="Collection[@RoleName='projects']" />
+
+                    <xsl:apply-templates select="Collection[@RoleName='ccs']" />
+                    <xsl:apply-templates select="Collection[@RoleName='ddc']" />
+                    <xsl:apply-templates select="Collection[@RoleName='msc']" >
                         <xsl:sort select="@Number"/>
                     </xsl:apply-templates>
-                    <xsl:apply-templates select="Collection[@RoleName='Physics and Astronomy Classification Scheme']" />
-                    <xsl:apply-templates select="Collection[@RoleName='Schriftenreihen']" />
-
-                    <xsl:apply-templates select="Collection[@RoleName='matheon_projects']" />
-                    <xsl:apply-templates select="Collection[@RoleName='matheon_institutes']" />
+                    <xsl:apply-templates select="Collection[@RoleName='pacs']" />
+                    <xsl:apply-templates select="Collection[@RoleName='series']" />
 
                     <xsl:apply-templates select="Licence" />
                 </table>
@@ -422,13 +421,13 @@
 
 
     <!-- Templates for "external fields". -->
-    <xsl:template match="Collection[@RoleName='Computing Classification System']">
+    <xsl:template match="Collection[@RoleName='ccs']">
         <xsl:choose>
             <xsl:when test="position()=1">
                 <tr>
                     <th class="name">
                         <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">col_ccs</xsl:with-param>
+                            <xsl:with-param name="string">collection_role_frontdoor_<xsl:value-of select="@RoleName" /></xsl:with-param>
                         </xsl:call-template>
                         <xsl:text>:</xsl:text>
                     </th>
@@ -448,13 +447,13 @@
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="Collection[@RoleName='Dewey Decimal Classification']">
+    <xsl:template match="Collection[@RoleName='ddc']">
         <xsl:choose>
             <xsl:when test="position()=1">
                 <tr>
                     <th class="name">
                         <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">col_ddc</xsl:with-param>
+                            <xsl:with-param name="string">collection_role_frontdoor_<xsl:value-of select="@RoleName" /></xsl:with-param>
                         </xsl:call-template>
                         <xsl:text>:</xsl:text>
                     </th>
@@ -474,13 +473,13 @@
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="Collection[@RoleName='Mathematics Subject Classification']">
+    <xsl:template match="Collection[@RoleName='msc']">
         <xsl:choose>
             <xsl:when test="position()=1">
                 <tr>
                     <th class="name">
                         <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">col_msc</xsl:with-param>
+                            <xsl:with-param name="string">collection_role_frontdoor_<xsl:value-of select="@RoleName" /></xsl:with-param>
                         </xsl:call-template>
                         <xsl:text>:</xsl:text>
                     </th>
@@ -500,13 +499,13 @@
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="Collection[@RoleName='Organisatorische Einheiten']">
+    <xsl:template match="Collection[@RoleName='institutes']">
         <xsl:choose>
             <xsl:when test="position()=1">
                 <tr>
                     <th class="name">
                         <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">col_org</xsl:with-param>
+                            <xsl:with-param name="string">collection_role_frontdoor_<xsl:value-of select="@RoleName" /></xsl:with-param>
                         </xsl:call-template>
                         <xsl:text>:</xsl:text>
                     </th>
@@ -526,13 +525,13 @@
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="Collection[@RoleName='Physics and Astronomy Classification Scheme']">
+    <xsl:template match="Collection[@RoleName='pacs']">
         <xsl:choose>
             <xsl:when test="position()=1">
                 <tr>
                     <th class="name">
                         <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">col_pacs</xsl:with-param>
+                            <xsl:with-param name="string">collection_role_frontdoor_<xsl:value-of select="@RoleName" /></xsl:with-param>
                         </xsl:call-template>
                         <xsl:text>:</xsl:text>
                     </th>
@@ -552,13 +551,13 @@
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="Collection[@RoleName='Schriftenreihen']">
+    <xsl:template match="Collection[@RoleName='series']">
         <tr>
             <xsl:choose>
                 <xsl:when test="position()=1">
                     <th class="name">
                         <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">col_ser</xsl:with-param>
+                            <xsl:with-param name="string">collection_role_frontdoor_<xsl:value-of select="@RoleName" /></xsl:with-param>
                         </xsl:call-template>
                         <xsl:text>:</xsl:text>
                     </th>
@@ -579,9 +578,7 @@
                 <xsl:when test="position()=1">
                     <th class="name">
                         <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">collection_role_frontdoor_
-                                <xsl:value-of select="@RoleName" />
-                            </xsl:with-param>
+                            <xsl:with-param name="string">collection_role_frontdoor_<xsl:value-of select="@RoleName" /></xsl:with-param>
                         </xsl:call-template>
                         <xsl:text>:</xsl:text>
                     </th>
