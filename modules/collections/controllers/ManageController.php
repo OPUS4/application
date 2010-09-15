@@ -74,7 +74,7 @@ class Collections_ManageController extends Controller_Action {
         $collections = $manage->findCollectionByNumber($collection_number);
 
         if (count($collections) > 1) {
-            throw new Exception("More than one collection exists.");
+            throw new Exception("More than one collection exist.");
         }
         else if (count($collections) < 1) {
             throw new Exception("Collection '$role_name'/'$collection_number' does not exist.");
