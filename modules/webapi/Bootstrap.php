@@ -34,6 +34,41 @@
  */
 
 class Webapi_Bootstrap extends Zend_Application_Module_Bootstrap {
+
+    /**
+     * Setup REST routing.
+     *
+     * @return void
+     */
+    protected function _initRestRouting() {
+        $this->bootstrap('FrontController');
+        $front = $this->getResource('FrontController');
+
+        $restRoute = new Zend_Rest_Route(
+                        $front,
+                        array(),
+                        array(
+                            'webapi' => array(
+                                'collection',
+                            )
+                        )
+        );
+        $front->getRouter()->addRoute('rest', $restRoute);
+
+    }
+
+    /**
+     * Adds every action helper inside controller helper directory
+     *
+     * @return void
+     */
+    protected function _initHelper() {
+        $this->bootstrap('FrontController');
+        $front = $this->getResource('FrontController');
+        $path = $front->getControllerDirectory('webapi') . DIRECTORY_SEPARATOR . 'helpers';
+        Zend_Controller_Action_HelperBroker::addPath($path, 'Webapi_Controller_Helper');
+    }
+
 }
 
 ?>
