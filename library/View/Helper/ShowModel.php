@@ -731,18 +731,18 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
      * @param array  $value Contains field values.
      * @return string
      */
-    protected function _displayPublisher($field, $value) {
+    protected function _displayThesisPublisher($field, $value) {
         return $this->__collectionHelper($field, $value);
     }
 
     /**
-     * Wrapper method for displaying Grantor.
+     * Wrapper method for displaying ThesisGrantor.
      *
      * @param string $field Contains field name.
      * @param array  $value Contains field values.
      * @return string
      */
-    protected function _displayGrantor($field, $value) {
+    protected function _displayThesisGrantor($field, $value) {
         return $this->__collectionHelper($field, $value);
     }
 

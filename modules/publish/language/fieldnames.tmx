@@ -753,7 +753,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="Grantor">
+    <tu tuid="ThesisGrantor">
       <tuv xml:lang="en">
         <seg>Grantor</seg>
       </tuv>
@@ -762,7 +762,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="Publisher">
+    <tu tuid="ThesisPublisher">
       <tuv xml:lang="en">
         <seg>Publisher</seg>
       </tuv>

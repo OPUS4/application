@@ -78,7 +78,7 @@
             <!-- dc:abstract -->
             <xsl:apply-templates select="TitleAbstract" mode="xmetadissplus" />
             <!-- dc:publisher -->
-            <xsl:apply-templates select="Publisher" mode="xmetadissplus" />
+            <xsl:apply-templates select="ThesisPublisher" mode="xmetadissplus" />
             <!-- dc:contributor -->
             <xsl:apply-templates select="PersonAdvisor" mode="xmetadissplus" />
             <xsl:apply-templates select="PersonReferee" mode="xmetadissplus" />
@@ -188,14 +188,14 @@
                    <xsl:attribute name="xsi:type"><xsl:text>cc:Corporate</xsl:text></xsl:attribute>
                    <xsl:element name="cc:universityOrInstitution">
                        <xsl:element name="cc:name">
-                          <xsl:value-of select="Publisher/@Name" />
+                          <xsl:value-of select="ThesisGrantor/@Name" />
                        </xsl:element>   
                        <xsl:element name="cc:place">
-                          <xsl:value-of select="Publisher/@City" />
+                          <xsl:value-of select="ThesisGrantor/@City" />
                        </xsl:element>
                        <xsl:element name="cc:department">
                           <xsl:element name="cc:name">
-                             <xsl:value-of select="Grantor/@Name" />
+                             <xsl:value-of select="ThesisGrantor/@Name" />
                           </xsl:element>
                        </xsl:element>
                    </xsl:element>
@@ -205,7 +205,7 @@
             </xsl:if>
 
             <xsl:element name="ddb:contact">
-                <xsl:attribute name="ddb:contactID"><xsl:value-of select="Publisher/@DnbContactId" /></xsl:attribute>
+                <xsl:attribute name="ddb:contactID"><xsl:value-of select="ThesisPublisher/@DnbContactId" /></xsl:attribute>
             </xsl:element>
             <xsl:element name="ddb:fileNumber">
               <xsl:value-of select="count(//File)"/>
@@ -344,7 +344,7 @@
        </xsl:element>
     </xsl:template>
 
-    <xsl:template match="Publisher" mode="xmetadissplus">
+    <xsl:template match="ThesisPublisher" mode="xmetadissplus">
         <xsl:element name="dc:publisher">
            <xsl:attribute name="xsi:type"><xsl:text>cc:Publisher</xsl:text></xsl:attribute>
                <xsl:element name="cc:universityOrInstitution">
