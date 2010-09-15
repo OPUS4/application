@@ -85,6 +85,11 @@ class Controller_Rest extends Zend_Controller_Action {
         $this->_helper->viewRenderer->setNoRender(true);
         ini_set('display_errors', 0);
 
+        $layout = $this->_helper->getHelper('layout');
+        if (isset($layout)) {
+                $layout->disableLayout();
+        }
+
         $this->requestData = $this->getRequest()->getParams();
         $this->getResponse()->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);
 
