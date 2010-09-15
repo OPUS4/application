@@ -100,13 +100,6 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $moduleInit = new Controller_Plugin_ModuleInit();
         $frontController->registerPlugin($moduleInit);
 
-        /*
-         * Add a custorm front controller plugin of manipulating routing information
-         * for webapi REST requests.
-         */
-        $restRouterPlugin = new Controller_Plugin_RestManipulation();
-        $frontController->registerPlugin($restRouterPlugin);
-
         // Add security realm initialization
         $realmSetupPlugin = new Controller_Plugin_SecurityRealm();
         $frontController->registerPlugin($realmSetupPlugin);
