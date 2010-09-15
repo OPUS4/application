@@ -40,8 +40,8 @@ class Collections_ManageControllerTest extends ControllerTestCase {
     public function testAddAction() {
         $request_data = array(
                     'role' => 'Collections',
-                    'key' => ('foo%20' . rand()),
-                    'title' => ('title%20' . rand()),
+                    'key' => ('foo ' . rand()),
+                    'title' => ('title ' . rand()),
         );
 
         $this->request
@@ -64,8 +64,8 @@ class Collections_ManageControllerTest extends ControllerTestCase {
     public function testAddDoubleInsertAction() {
         $request_data = array(
                     'role' => 'Collections',
-                    'key' => ('foo%20' . rand()),
-                    'title' => ('title%20' . rand()),
+                    'key' => ('foo ' . rand()),
+                    'title' => ('title ' . rand()),
         );
 
         /* First insert should success. */
@@ -88,6 +88,44 @@ class Collections_ManageControllerTest extends ControllerTestCase {
         $this->dispatch('/collections/manage/add');
         $this->assertNotResponseCode(200);
 
+    }
+
+    /**
+     * Test action to check "add" module, expect failure at second insert.
+     */
+    public function testChangeTitleAction() {
+        $request_data = array(
+                    'role' => 'Collections',
+                    'key' => ('foo ' . rand()),
+                    'title' => ('title ' . rand()),
+        );
+
+        /* First insert should success. */
+        $this->request
+                ->setMethod('POST')
+                ->setPost($request_data);
+        $this->dispatch('/collections/manage/add');
+        $this->assertResponseCode(200);
+        $this->assertController('manage');
+        $this->assertAction('add');
+
+        $body = $this->getResponse()->getBody();
+        $this->checkForBadStringsInHtml($body);
+        $this->assertContains('SUCCESS', $body);
+
+        /* First insert should fail. */
+        $request_data['title'] = 'another title';
+        $this->request
+                ->setMethod('POST')
+                ->setPost($request_data);
+        $this->dispatch('/collections/manage/change-title');
+        $this->assertResponseCode(200);
+        $this->assertController('manage');
+        $this->assertAction('change-title');
+
+        $body = $this->getResponse()->getBody();
+        $this->checkForBadStringsInHtml($body);
+        $this->assertContains('SUCCESS', $body);
     }
 
 }
