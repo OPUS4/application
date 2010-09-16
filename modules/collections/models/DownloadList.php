@@ -47,7 +47,7 @@ class Collections_Model_DownloadList {
             $collections = $model->findCollectionByNumber($number);            
         }
         catch (Collections_Model_Exception $e) {
-            $log($e->getMessage());
+            $log->debug($e->getMessage());
             throw $e;
         }
         if (count($collections) === 0) {
