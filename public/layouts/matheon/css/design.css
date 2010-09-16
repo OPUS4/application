@@ -80,7 +80,7 @@ div.box h1 {
 .results_pagination {
     clear:both;
     color:black;
-    margin:2em;
+    margin:0px;
     display:inline;
     margin-bottom:5em;
 }
@@ -208,4 +208,12 @@ div.box h1 {
     margin: 0;
     padding: 0;
     padding-right: .5em;
+}
+
+.printfriendly h1 {
+    font-size: 18px;
+}
+
+.printfriendly a {
+    font-size:14px;
 }
