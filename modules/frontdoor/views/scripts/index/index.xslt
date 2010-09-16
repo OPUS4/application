@@ -80,7 +80,10 @@
             <xsl:apply-templates select="TitleAbstract" />
             <xsl:if test="normalize-space(File/@PathName)">
                 <div class="fulltext">
-                    <xsl:apply-templates select="File" />
+                    <h2>Files</h2>
+                    <ul>
+                        <xsl:apply-templates select="File" />
+                    </ul>
                 </div>
             </xsl:if>
             <xsl:call-template name="MailToAuthor"/>
@@ -634,14 +637,7 @@
     </xsl:template>
 
     <xsl:template match="File">
-        <xsl:choose>
-            <xsl:when test="position()=1">
-                <h2>File(s)</h2>
-            </xsl:when>
-            <xsl:otherwise>
-            </xsl:otherwise>
-        </xsl:choose>
-        <nobr>
+        <li>
             <xsl:element name="a">
               <!-- TODO: Use Zend Url-Helper to build href attribute -->
                 <xsl:attribute name="href">
@@ -674,7 +670,7 @@
                 <xsl:value-of select="@PathName" />
             </xsl:element>
             <xsl:text> </xsl:text>
-        </nobr>
+        </li>
     </xsl:template>
 
     <xsl:template match="PersonAuthor">
