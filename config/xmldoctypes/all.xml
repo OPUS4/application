@@ -38,13 +38,13 @@
     xsi:schemaLocation="http://schemas.opus.org/documenttype https://svn.zib.de/opus4dev/framework/trunk/library/Opus/Document/documenttype.xsd">
 
     <field name="PersonSubmitter" required="yes" multiplicity="1" formelement="Text" datatype="Person" />
-    <field name="Language" required="yes" formelement="Text" datatype="Text" multiplicity="1"/>
+    <field name="Language" required="yes" formelement="Select" datatype="Language" multiplicity="1"/>
     <field name="IdentifierOpus3" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="TitleMain" required="yes" formelement="Text" datatype="Title" multiplicity="4" />
     <field name="TitleAbstract" required="no" formelement="Textarea" datatype="Title" multiplicity="4" >
         <required-if-fulltext />
     </field>
-    <field name="TitleSub" required="no" formelement="Text" datatype="Text" multiplicity="1" />
+    <field name="TitleSub" required="no" formelement="Text" datatype="Title" multiplicity="1" />
     <field name="TitleAdditional" required="no" formelement="Text" datatype="Title" multiplicity="1" />
     <field name="TitleParent" required="no" formelement="Text" datatype="Title" multiplicity="1" />
     <field name="PersonAuthor" required="no" formelement="Text" datatype="Person" multiplicity="*" />
@@ -65,7 +65,7 @@
     <field name="Volume" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="Issue" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="Journal" required="no" formelement="Text" datatype="Text" multiplicity="1" />
-    <field name="Institute" required="no" formelement="Text" datatype="Text" multiplicity="1" />
+    <field name="Institute" required="no" formelement="Select" datatype="Institute" multiplicity="1" />
     <field name="Collection" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="PublishedYear" required="no" formelement="Text" datatype="Year" multiplicity="1" />
     <field name="PublishedDate" required="no" formelement="Text" datatype="Text" multiplicity="1" />
