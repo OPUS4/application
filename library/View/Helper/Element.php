@@ -149,7 +149,7 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
      * @param <type> $name 
      */
     protected function _renderSubmit($value, $options=null, $name=null ) {
-        $submit = "\n\t\t<input type='submit' name='" . $name . "' id='" . $name . "' value='" . $value . "'/>";
+        $submit = "\n\t\t<input type='submit' name='" . $name . "' id='" . $name . "' value='" . $this->view->translate($value) . "'/>";
         return $submit;
     }
 
