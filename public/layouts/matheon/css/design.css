@@ -28,11 +28,11 @@
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id: design.css 2807 2009-05-14 19:51:53Z ostrowski $
- */
+*/
 
 /**
  * All styles concerned with colors, borders and images.
- */
+*/
 
 #header {
     /*border-bottom: 1px solid #d8e1ea;*/
@@ -44,12 +44,12 @@
 }
 
 #summary div {
- padding: 10px;
+    padding: 10px;
 }
 
-ul, li {
-    margin-left: 1em;
-    padding-left: 1em;
+.paginationContainer ul, li {
+    margin-left: .2em;
+    padding-left: .2em;
 }
 
 div.box {
@@ -81,8 +81,15 @@ div.box h1 {
     clear:both;
     color:black;
     margin:2em;
+    display:inline;
+    margin-bottom:5em;
 }
 
+.paginationContainer {
+    margin-bottom:2em;
+    margin-top:2em;
+    clear:both;
+}
 
 .results_pagination ul li {
     display:inline;
@@ -96,6 +103,7 @@ div.box h1 {
 
 .results_facets .facet_heading {
     margin-bottom:2em;
+    color:red;
 }
 
 .search_results {
@@ -115,7 +123,7 @@ div.box h1 {
     margin:0;
     list-style-type:none;
     font-size:10px;
-    
+
 }
 
 .results_facets .facet li a {
@@ -139,7 +147,7 @@ div.box h1 {
 }
 
 .results_facets .activeFacet {
-    
+
 }
 
 .results_facets .activeFacet a {
@@ -157,13 +165,22 @@ div.box h1 {
     padding-bottom:2em;
 }
 
+.results_pagination .info_small {
+    display:inline;
+}
+
+.results_pagination .paginationControl {
+    display:inline;
+}
+
 .results_pagination .paginationControl a {
     border:1px solid #999999;
     background-color: #eeeeee;
     color: black;
-    padding: .6em;
-    margin-top: 1em;
+    padding: .3em;
     text-decoration:none;
+    display:inline;
+    margin:0px;
 }
 
 .results_pagination .paginationControl a:hover {
