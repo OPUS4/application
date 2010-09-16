@@ -35,9 +35,13 @@
 class Collections_Model_DownloadList {
 
     /**
+     * Return a csv representation of all documents that are associated to
+     * the collection identfied by the given role and number.
      *
-     * @return string csv output
-     * @throws Collections_Model_Exception
+     * @return string CSV output.
+     * @throws Collections_Model_Exception Thrown if the database does not contain
+     * a collection with the given properties or in case an error occurred while
+     * getting all associated documents from the Solr index.
      */
     public function getCvsFile($role, $number) {
         $log = Zend_Registry::get('Zend_Log');
@@ -51,13 +55,14 @@ class Collections_Model_DownloadList {
             throw $e;
         }
         if (count($collections) === 0) {
-            $message = 'Number ' . $number . ' does not exist for collection role ' . $role;
+            $message = 'Number \'' . $number . '\' does not exist for collection role ' . $role;
             $log->debug($message);
             throw new Collections_Model_Exception($message);
         }
         $resultList = array();
         try {
             $resultList = $this->getListItems($collections);
+            $log->debug(count($resultList) . ' documents found.');
         }
         catch (Opus_SolrSearch_Exception $e) {
             $log->debug($e->getMessage());
@@ -66,17 +71,33 @@ class Collections_Model_DownloadList {
         return $this->prepareCsv($resultList);
     }
 
+    /**
+     * Returns all documents that are associated to the given collection(s).
+     *
+     * @param array $collections
+     * @return array An array of Opus_SolrSearch_Result objects.
+     * @throws Opus_SolrSearch_Exception
+     */
     private function getListItems($collections) {
-        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::SIMPLE);
-        $query->setCatchAll('*:*');
+        // we cannot use a filter query here since $collections can consist of
+        // more than one element and Solr's fq parameter currently does not support
+        // disjunctive filter queries
+        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::ADVANCED);
+        $collectionIDs = '';
         foreach ($collections as $collection) {
-            $query->addFilterQuery('collection_ids:' . $collection->getId());
+            $collectionIDs .= $collection->getId() . ' ';
         }
+        $query->setField('collection_ids', $collectionIDs, Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY);
         $query->setRows(Opus_SolrSearch_Query::MAX_ROWS);
         $solrsearch = new Opus_SolrSearch_Searcher();
         return $solrsearch->search($query)->getResults();
     }
 
+    /**
+     *
+     * @param array $items
+     * @return string A csv representation of the given items.
+     */
     private function prepareCsv($items) {
         $csv = '';
         foreach ($items as $item) {
