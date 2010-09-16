@@ -26,7 +26,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category   Application
- * @author      Susanne Gottwald <gottwald@zib.de>
+ * @author      Doreen Thiede <thiede@zib.de>
  * @copyright  Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id: all.xml 4892 2010-08-23 13:27:56Z sgottwald $
@@ -38,9 +38,6 @@
     xsi:schemaLocation="http://schemas.opus.org/documenttype https://svn.zib.de/opus4dev/framework/trunk/library/Opus/Document/documenttype.xsd">
 
     <field name="PersonSubmitter" required="yes" multiplicity="1" formelement="Text" datatype="Person" />
-    <field name="Licence" required="no"  multiplicity="1" formelement="Select" datatype="Licence" >
-        <required-if-fulltext />
-    </field>
     <field name="Language" required="yes" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="IdentifierOpus3" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="TitleMain" required="yes" formelement="Text" datatype="Title" multiplicity="4" />
@@ -65,7 +62,6 @@
     <field name="PageLast" required="no" formelement="Text" datatype="Integer" multiplicity="1" />
     <field name="SubjectSwd" required="yes" formelement="Text" datatype="Text" multiplicity="5" />
     <field name="SubjectUncontrolled" required="no" formelement="Text" datatype="Text" multiplicity="5" />
-    <field name="PageNumber" required="no" formelement="Text" datatype="Integer" multiplicity="1" />
     <field name="Volume" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="Issue" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="Journal" required="no" formelement="Text" datatype="Text" multiplicity="1" />
@@ -79,12 +75,11 @@
     <field name="IdentifierIssn" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="IdentifierUrn" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="IdentifierOpac" required="no" formelement="Text" datatype="Text" multiplicity="1" />
-    <field name="ServerDateValid" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="Note" required="no" formelement="Textarea" datatype="Text" multiplicity="1" />
     <field name="Licence" required="no" formelement="Select" datatype="Licence" multiplicity="1" />
     <field name="ServerDateUnlocking" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="ThesisDateAccepted" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="ThesisPublisher" required="no" formelement="Text" datatype="Text" multiplicity="1" />
-    <field name="ThesisGrantor" required="no" formelement="Text" datatype="Text" multiplicity="1" />
+	<field name="ThesisGrantor" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     
 </documenttype>
