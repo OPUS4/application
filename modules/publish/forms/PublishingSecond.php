@@ -185,18 +185,17 @@ class Publish_Form_PublishingSecond extends Zend_Form {
             $formElement = $field->getAttribute('formelement');
             $datatype = $field->getAttribute('datatype');
             $multiplicity = $field->getAttribute('multiplicity');
-            
         }
 
         //Check if there are child nodes
         if ($field->hasChildNodes())
             if ($this->fulltext === "1") {
-            $requiredIfFulltext = $field->getElementsByTagName("required-if-fulltext");
-            if ($requiredIfFulltext->length != 0) {
-                $this->log->debug($elementName . " is required-if-fulltext! And Fulltext ist set to " . $this->fulltext);
-                $required = "yes";
+                $requiredIfFulltext = $field->getElementsByTagName("required-if-fulltext");
+                if ($requiredIfFulltext->length != 0) {
+                    $this->log->debug($elementName . " is required-if-fulltext! And Fulltext ist set to " . $this->fulltext);
+                    $required = "yes";
+                }
             }
-        }
 
         $validation = $this->_parseValidation($field);
 
@@ -760,17 +759,23 @@ class Publish_Form_PublishingSecond extends Zend_Form {
             else {
                 $colls = Opus_Collection::fetchCollectionsByRoleId($role->getId());
                 $collections = array();
-                foreach ($colls AS $coll) {
-                    $number = $coll->getNumber();
-                    if (strlen($number) >= 1 && $number != 'Projects') {
-                        $collections[] = $number;
-                    } else {
+                if ($oaiName === "institutes") {
+                    foreach ($colls AS $coll) {
                         $name = $coll->getName();
                         if (strlen($name) >= 1 && $name != 'Institutes')
                             $collections[] = $name;
                     }
                 }
+                else {
+                    foreach ($colls AS $coll) {
+                        $number = $coll->getNumber();
+                        if (strlen($number) >= 1 && $number != 'Projects') {
+                            $collections[] = $number;
+                        }
+                    }
+                }
             }
+
             $this->$oaiName = $collections;
             return $collections;
         } else {
