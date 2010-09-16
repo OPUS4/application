@@ -415,13 +415,14 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
         $file = $this->dumps_dir . '/institutes.xml';
         foreach ($this->load_xml_mysqldump($file) AS $institute) {
             $institute_id = $institute['institute_id'];
+            $institute_key = $institute['institute_key'];
             $institute_name = $institute['institute_name'];
 
             if (false === array_key_exists($institute_id, $collections)) {
                 $institute_node = $root_node->addLastChild()->setVisible(1);
                 $institute_collection = $institute_node->addCollection();
-                // $institute_collection->setNumber($institute_id);
-                $institute_collection->setName($institute_name);
+                $institute_collection->setName($institute_name)
+                                     ->setNumber($institute_key);
                 $root_node->store();
 
                 $collections[$institute_id] = $institute_collection;
