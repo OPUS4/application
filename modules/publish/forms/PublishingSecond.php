@@ -185,13 +185,18 @@ class Publish_Form_PublishingSecond extends Zend_Form {
             $formElement = $field->getAttribute('formelement');
             $datatype = $field->getAttribute('datatype');
             $multiplicity = $field->getAttribute('multiplicity');
-
-            //$currentElement = new Publish_Model_FormElement($elementName, $required, $formElement, $datatype, $multiplicity);
+            
         }
 
         //Check if there are child nodes
         if ($field->hasChildNodes())
-            $subfields = $this->_parseSubFields($field);
+            if ($this->fulltext === "1") {
+            $requiredIfFulltext = $field->getElementsByTagName("required-if-fulltext");
+            if ($requiredIfFulltext->length != 0) {
+                $this->log->debug($elementName . " is required-if-fulltext! And Fulltext ist set to " . $this->fulltext);
+                $required = "yes";
+            }
+        }
 
         $validation = $this->_parseValidation($field);
 
@@ -205,26 +210,6 @@ class Publish_Form_PublishingSecond extends Zend_Form {
 
         else
             $this->_prepareFormElement($formElement, $elementName, $validator, $datatype, $required, null, $elementName);
-    }
-
-    private function _parseSubFields($field) {
-        if ($this->fulltext === "1") {
-            $requiredIfFulltext = $field->getElementsByTagName("required-if-fulltext");
-            if ($requiredIfFulltext->length != 0) {
-                $this->log->debug($elementName . " is required-if-fulltext! And Fulltext ist set to " . $this->fulltext);
-                $required = "yes";
-            }
-        }
-//parse the xml file for the tag "subfield"
-//                foreach ($dom->getElementsByTagname('subfield') as $subField) {
-//                    if ($subField->hasAttributes()) {
-//                        $subElementName = $subField->getAttribute('name');
-//                        $subRequired = $subField->getAttribute('required');
-//                        $subFormElement = $subField->getAttribute('formelement');
-//                    }
-//                    else
-//                        throw new OpusServerPublishingException("Error while parsing xml document type: Choosen document type has missing attributes in element 'subfield'!");
-//               }
     }
 
     /**
