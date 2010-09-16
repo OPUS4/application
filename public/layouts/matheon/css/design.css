@@ -103,7 +103,8 @@ div.box h1 {
 
 .results_facets .facet_heading {
     margin-bottom:2em;
-    color:red;
+    color:#ff9f0d;
+    font-weight: bold;
 }
 
 .search_results {
