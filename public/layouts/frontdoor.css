@@ -17,6 +17,19 @@
 
 }
 
+.authorTitle table {
+    display:inline;
+}
+
+.authorTitle table tr {
+    display:inline;
+}
+
+.authorTitle table tr td {
+    display:inline;
+    padding-right:1em;
+}
+
 .authorTitle a {
     font-size:2em;
 }

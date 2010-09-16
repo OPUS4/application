@@ -687,14 +687,6 @@
                     </xsl:attribute>
                     <xsl:value-of select="concat(@LastName, ', ', @FirstName)" />
                 </xsl:element>
-                <xsl:choose>
-                    <xsl:when test="position()=last()">
-                        <!-- TODO: this is quick and dirty fixed. it should be: if not position=last then otherwise -->
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:text>; </xsl:text>
-                    </xsl:otherwise>
-                </xsl:choose>
             </td>
         </tr>
     </xsl:template>
