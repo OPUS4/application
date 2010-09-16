@@ -518,8 +518,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
                 foreach ($this->preprint_files[$pid] AS $file) {
                     $model = $doc->addFile();
                     $model->setLanguage('eng');
-                    $model->setSourcePath($this->files_dir . DIRECTORY_SEPARATOR . $pid);
-                    $model->setTempFile($file['file_name']);
+                    $model->setTempFile($this->files_dir . DIRECTORY_SEPARATOR . $pid . DIRECTORY_SEPARATOR . $file['file_name']);
                     $model->setPathName($file['file_name']);
 
                     if (array_key_exists('original_file_name', $file)) {
