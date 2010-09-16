@@ -62,7 +62,7 @@ $this->headScript()->appendFile($basePath . '/layouts/opus4/js/jquery-1.4.2.min.
 ?>
 
 <?php if(!isset($this->specialTitle)) : ?>
-<h2><?= $this->numOfHits . ' ' . ($this->numOfHits === 1 ? $this->translate('results_title_single') : $this->translate('results_title')); ?></h2>
+<h3><?= $this->numOfHits . ' ' . ($this->numOfHits === 1 ? $this->translate('results_title_single') : $this->translate('results_title')); ?></h3>
 <?php endif ?>
 
 <?php if(!$this->isSimpleList) : ?>

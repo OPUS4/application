@@ -218,3 +218,11 @@ div.box h1 {
 .printfriendly a {
     font-size:14px;
 }
+
+.searchform {
+    margin-top:1em;
+}
+
+.searchform h2 {
+    color:red;
+}
