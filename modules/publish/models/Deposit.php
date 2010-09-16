@@ -438,7 +438,7 @@ class Publish_Model_Deposit {
             
             if ($collectionRole === 'institutes')
                 $collArray = Opus_Collection::fetchCollectionsByRoleName($role->getId(), $dataValue);
-            else 
+            else
                 $collArray = Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $dataValue);
 
             $this->log->debug("Role ID: " . $role->getId() . ", value: " . $dataValue);

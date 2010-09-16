@@ -62,7 +62,7 @@ class Publish_DepositController extends Controller_Action {
             $this->_setDocumentParameters();
 
             $depositForm = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $this->fulltext, $this->additionalFields, $this->postData);
-                
+
                 if (!$depositForm->isValid($this->postData)) {
                     $depositForm->removeUnsaveableFields();
                     $this->view->form = $depositForm;
