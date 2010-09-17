@@ -33,6 +33,9 @@
  * @version     $Id$
  */
 ?>
+
+<div class="adminContainer">
+
 <h1><?= $this->translate($this->title) ?></h1>
 
 <table>
@@ -53,3 +56,5 @@
 <form action="<?= $this->url(array('action' => 'new')) ?>" class="crud" method="get">
   <input type='submit' value='<?= $this->translate('ButtonNew') ?>' class="crud">
 </form>
+
+</div>
