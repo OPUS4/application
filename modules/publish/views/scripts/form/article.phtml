@@ -7,32 +7,34 @@ echo '<h3>'.$this->subtitle.'</h3>';
 
 <form enctype="application/x-www-form-urlencoded" action="<?php echo $this->action_url; ?>" method="post">
 
-<?= $this->field("Group", null, $this->groupPersonSubmitter); ?>
-<?= $this->field("Element", null, $this->Language_); ?>
-<?= $this->field("Element", null, $this->IdentifierOpus3_); ?>
-<?= $this->field("Element", null, $this->Licence_); ?>
-<?= $this->field("Group", null, $this->groupPersonAuthor); ?>
-<?= $this->field("Group", null, $this->groupTitleMain); ?>
-<?= $this->field("Group", null, $this->groupTitleAbstract); ?>
-<?= $this->field("Group", null, $this->groupTitleParent); ?>
-<?= $this->field("Group", null, $this->groupPersonEditor); ?>
-<?= $this->field("Group", null, $this->groupPersonTranslator); ?>
-<?= $this->field("Group", null, $this->groupPersonContributor); ?>
-<?= $this->field("Group", null, $this->groupCreatingCorporation); ?>    
-<?= $this->field("Group", null, $this->groupContributingCorporation); ?>
-<?= $this->field("Element", null, $this->PageFirst_); ?>
-<?= $this->field("Element", null, $this->PageLast_); ?>    
-<?= $this->field("Element", null, $this->PublishedYear_); ?>
-<?= $this->field("Group", null, $this->groupSubjectSwd); ?>
-<?= $this->field("Group", null, $this->groupSubjectUncontrolled); ?>
-<?= $this->field("Element", null, $this->IdentifierUrn_); ?>
-<?= $this->field("Element", null, $this->IdentifierOpac_); ?>
-<?= $this->field("Group", null, $this->groupNote); ?>
-    
-<?= $this->field("Hidden", "fullText", $this->fullText); ?>
-<?= $this->field("Hidden", "documentType", "article"); ?>
-<?= $this->field("Hidden", "documentId", $this->documentId); ?>
-<?= $this->field("Submit", "send", "Formular abschicken"); ?>
+<?= $this->group($this->groupPersonSubmitter); ?>
+<?= $this->group($this->groupTitleMain); ?>
+<?= $this->group($this->groupTitleAbstract); ?>
+<?= $this->group($this->groupPersonAuthor); ?>
+<?= $this->element($this->PublishedYear_); ?>
+<?= $this->element($this->PageFirst_); ?>
+<?= $this->element($this->PageLast_); ?>
+<?= $this->element($this->TitleParent_); ?>
+<?= $this->group($this->groupPersonEditor); ?>
+<?= $this->group($this->groupPersonTranslator); ?>
+<?= $this->group($this->groupPersonContributor); ?>
+<?= $this->group($this->groupCreatingCorporation); ?>
+<?= $this->group($this->groupContributingCorporation); ?>
+<?= $this->group($this->groupSubjectDdc); ?>
+<?= $this->group($this->groupSubjectSwd); ?>
+<?= $this->group($this->groupSubjectUncontrolled); ?>
+<?= $this->element($this->IdentifierUrn_); ?>
+<?= $this->element($this->Institute_); ?>
+<?= $this->element($this->Collection_); ?>
+<?= $this->element($this->Note_); ?>
+<?= $this->element($this->Licence_); ?>
+<?= $this->element($this->Language_); ?>
+<?= $this->element($this->ServerDateUnlocking_); ?>
+
+<?= $this->element($this->fullText, null, "Hidden", "fullText"); ?>
+<?= $this->element("all", null, "Hidden",  "documentType"); ?>
+<?= $this->element($this->documentId, null, "Hidden", "documentId"); ?>
+<?= $this->element('button_label_send', null, "Submit",  "send"); ?>
 
 </form>
 
