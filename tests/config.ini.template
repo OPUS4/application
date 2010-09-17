@@ -24,7 +24,8 @@
 ; 
 ; @category    Application
 ; @author      Ralf Claussnitzer <ralf.claussnitzer@slub-dresden.de>
-; @copyright   Copyright (c) 2008, OPUS 4 development team
+; @author      Thoralf Klein <thoralf.klein@zib.de>
+; @copyright   Copyright (c) 2008-2010, OPUS 4 development team
 ; @license     http://www.gnu.org/licenses/gpl.html General Public License
 ; @version     $Id: config.ini.template 659 2008-09-01 11:03:28Z claussnitzer $
 
@@ -36,11 +37,6 @@ db.params.host     =
 db.params.username = 
 db.params.password = 
 db.params.dbname   = 
-
-webapi.protocol = http
-webapi.host     = localhost
-webapi.docroot  = /bsz_opus_application/public
-webapi.modul    = webapi
 
 ;PHP SETTINGS
 phpSettings.display_startup_errors = 1
