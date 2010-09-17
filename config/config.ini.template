@@ -93,6 +93,10 @@ mail.opus.name = ; Name of administrator
 ;OAI-DIRECORY
 ; path.workspace.temp = /home/opus4web/opus4-matheon/server/workspace/tmp
 
+; LOGGING CONFIGURATION (OPTIONAL)
+; Use Zend_Log constants (e.g. DEBUG, INFO, WARN, ERR)
+; log.level = INFO
+
 ; The following is needed even if sections are empty.
 [staging : production]
 
