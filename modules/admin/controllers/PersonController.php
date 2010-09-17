@@ -49,4 +49,22 @@ class Admin_PersonController extends Controller_CRUDAction {
      */
     protected $_modelclass = 'Opus_Person';
 
+    /**
+     * Check of controller is allowed or not.
+     * @return <type>
+     */
+    public function preDispatch() {
+        $config = Zend_Registry::get('Zend_Config');
+
+        if (isset($config->admin->persons->disabled)) {
+            if ($config->admin->persons->disabled) {
+                $url = $this->view->url(array('controller' => 'index', 'action' => 'index'));
+                $this->redirectTo($url);
+            }
+        }
+
+        return parent::preDispatch();
+    }
+
+
 }

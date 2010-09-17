@@ -52,22 +52,38 @@ class Admin_IndexController extends Zend_Controller_Action {
      */
     public function indexAction() {
         $this->view->title = $this->view->translate('admin_index_title');
+
+        $config = Zend_Registry::get('Zend_Config');
+
+        $personDisabled = false;
+
+        if (isset($config->admin->persons->disabled)) {
+            $personDisabled = $config->admin->persons->disabled;
+        }
+
         // Create an array with all possible tasks for an admin.
         // Sort it depending on the language.
-        $this->view->adminTasks = array(
-            $this->view->translate('admin_title_licence') => $this->view->url(array('controller'=>'licence', 'action'=>'index'), null, false),
-            $this->view->translate('admin_title_organizational_units_show') => $this->view->url(array('controller'=>'collection', 'action' => 'show', 'role' => 1), null, false),
-            $this->view->translate('admin_title_organizational_units_edit') => $this->view->url(array('controller'=>'collection', 'action' => 'edit', 'role' => 1), null, false),
-            $this->view->translate('admin_title_collections') => $this->view->url(array('controller'=>'collection', 'action'=>'index'), null, false),
-            $this->view->translate('admin_title_person') => $this->view->url(array('controller'=>'person', 'action'=>'index'), null, false),
-            $this->view->translate('admin_title_documents') => $this->view->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'index'), 'default', true),
-            $this->view->translate('admin_title_languages') => $this->view->url(array('module' => 'admin', 'controller' => 'language', 'action' => 'index'), 'default', true),
-            $this->view->translate('admin_title_statistic') => $this->view->url(array('module' => 'admin', 'controller' => 'statistic', 'action' => 'index'), 'default', true),
-            $this->view->translate('pkm_list_keys') => $this->view->url(array('module'=>'pkm', "controller"=>"index", "action"=>"listkeys"), null, false),
-            $this->view->translate('admin_title_oailink') => $this->view->url(array('module' => 'admin', 'controller' => 'oailink', 'action' => 'index'), 'default', true),
-            $this->view->translate('admin_title_security') => $this->view->url(array('module' => 'admin', 'controller' => 'security', 'action' => 'index'), 'default', true),
-        );
-        ksort($this->view->adminTasks);
+        $adminTasks = array();
+
+        $adminTasks[$this->view->translate('admin_title_licence')] = $this->view->url(array('controller'=>'licence', 'action'=>'index'), null, false);
+        $adminTasks[$this->view->translate('admin_title_organizational_units_show')] = $this->view->url(array('controller'=>'collection', 'action' => 'show', 'role' => 1), null, false);
+        $adminTasks[$this->view->translate('admin_title_organizational_units_edit')] = $this->view->url(array('controller'=>'collection', 'action' => 'edit', 'role' => 1), null, false);
+        $adminTasks[$this->view->translate('admin_title_collections')] = $this->view->url(array('controller'=>'collection', 'action'=>'index'), null, false);
+        
+        if (!$personDisabled) {
+            $adminTasks[$this->view->translate('admin_title_person')] = $this->view->url(array('controller'=>'person', 'action'=>'index'), null, false);
+        }
+        
+        $adminTasks[$this->view->translate('admin_title_documents')] = $this->view->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'index'), 'default', true);
+        $adminTasks[$this->view->translate('admin_title_languages')] = $this->view->url(array('module' => 'admin', 'controller' => 'language', 'action' => 'index'), 'default', true);
+        $adminTasks[$this->view->translate('admin_title_statistic')] = $this->view->url(array('module' => 'admin', 'controller' => 'statistic', 'action' => 'index'), 'default', true);
+        $adminTasks[$this->view->translate('pkm_list_keys')] = $this->view->url(array('module'=>'pkm', "controller"=>"index", "action"=>"listkeys"), null, false);
+        $adminTasks[$this->view->translate('admin_title_oailink')] = $this->view->url(array('module' => 'admin', 'controller' => 'oailink', 'action' => 'index'), 'default', true);
+        $adminTasks[$this->view->translate('admin_title_security')] = $this->view->url(array('module' => 'admin', 'controller' => 'security', 'action' => 'index'), 'default', true);
+
+        ksort($adminTasks);
+
+        $this->view->adminTasks = $adminTasks;
     }
 
 }
