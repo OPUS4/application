@@ -58,46 +58,41 @@ $this->headLink()
     </head>
 
     <body>
-        
-        <div id="page">
-            
-            <div id="header">
-                <div id="logo">
-                    <img src="<?= $basePath;?>/layouts/opus4/img/todo.png" alt="logo" class="logo"/>
-                    <h1>Opus 4</h1>
-                </div>
+
+        <div id="top-header">
+            <div class="wrapper">
+                <span id="language-selector"><?= $this->languageSelector() ?></span>
+                <span id="login-bar"><?= $this->loginBar() ?></span>
+            </div>
+        </div>
+
+        <div id="header">
+            <div class="wrapper">
+                <h1 id="logo">Opus4</h1>
 
                 <div id="navigationMenu">
-                        <?= $this->navigation()->menu(); ?>
+                    <?= $this->navigation()->menu(); ?>
                 </div>
             </div>
+        </div>
 
-            <div id="loginBar" class="login_bar">
-                <?= $this->loginBar(); ?>
-            </div>
-
-            <div id="content" class="clearfix">
+        <div id="content" class="clearfix">
+            <div class="wrapper">
                 <?= $this->layout()->content ?>
             </div>
+        </div>
 
-            <div id="footer">
+        <div id="footer">
+            <div class="wrapper">
                 <div id="footerLinks" class="left">
-                    <span class="footer_link">
-                        <a href="#"><?= $this->translate('credits_label'); ?></a>
-                    </span>
-
-                    <span class="footer_link">
-                        <a href="<?= $basePath ?>/home/index/contact"><?= $this->translate('home_index_contact_actionname'); ?></a>
-                    </span>
+                    <ul id="secondary-nav" class="nav">
+                        <li class="first"><a href="<?= $this->url(array('module'=>'home','controller'=>'index','action'=>'about'),null,true) ?>">About</a></li>
+                        <li><a href="">Imprint</a></li>
+                        <li class="last"><a href="<?= $this->url(array('module'=>'home','controller'=>'index','action'=>'contact'),null,true) ?>"><?= $this->translate('home_index_contact_actionname'); ?></a></li>
+                    </ul>
                 </div>
 
-                <div id="languageSelection" class="right">
-                    <?= $this->languageSelector() ?>
-                </div>
-
-                <div id="copyright">
-                    &copy; KOBV 2010
-                </div>
+                <p>&copy; <abbr lang="de" xml:lang="de" title="Kooperativer Bibliotheksverbund Berlin-Brandenburg">KOBV</abbr> 2010</p>
             </div>
         </div>
 
