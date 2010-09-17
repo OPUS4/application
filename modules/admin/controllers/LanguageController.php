@@ -47,6 +47,7 @@ class Admin_LanguageController extends Controller_CRUDAction {
      * @var Opus_Model_Abstract
      */
     protected $_modelclass = 'Opus_Language';
+
     /**
      * List all available collection role instances
      *
