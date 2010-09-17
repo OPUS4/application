@@ -67,6 +67,8 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
 
     /**
      * Test getting custom template name for document type.
+     *
+     * The custom template name is configured in *tests.ini*.
      */
     public function testGetCustomTemplateName() {
         $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
@@ -74,7 +76,7 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
         $template = $docTypeHelper->getTemplateName('all');
 
         $this->assertNotNull($template);
-        $this->assertEquals('all', $template);
+        $this->assertEquals('all_default', $template);
     }
 
     /**
