@@ -45,6 +45,7 @@ class Frontdoor_IndexController extends Controller_Action {
         $this->view->title = $this->view->translate('frontdoor_title');
         $request = $this->getRequest();
         $docId = $request->getParam('docId');
+        $this->view->docId = $docId;
         $baseUrl = $request->getBaseUrl();
 
         try {
