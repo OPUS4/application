@@ -290,22 +290,29 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         }
 
         $languages = array();
-        $availableLanguages = Opus_Language::getAllActive();
+        try {
+            $availableLanguages = Opus_Language::getAllActive();
 
-        foreach ($availableLanguages as $availableLanguage) {
-            $trans = $availableLanguage->getPart1();
-            if (true === empty($trans)) {
-                $languages[$availableLanguage->getPart2T()] = $availableLanguage->getPart2T();
-            } else {
-                try {
-                    $languages[$availableLanguage->getPart2T()] = $locale->getTranslation($trans, 'language', $locale);
-                } catch (Zend_Locale_Exception $zle) {
-                    $logger->warn('Caught Zend_Locale_Exception while loading ' . $trans . ': ' . $zle->getMessage());
-                    $logger->warn('Ignoring language with ID ' . $availableLanguage->getId());
+            foreach ($availableLanguages as $availableLanguage) {
+                $trans = $availableLanguage->getPart1();
+                if (true === empty($trans)) {
+                    $languages[$availableLanguage->getPart2T()] = $availableLanguage->getPart2T();
+                } else {
+                    try {
+                        $languages[$availableLanguage->getPart2T()] = $locale->getTranslation($trans, 'language', $locale);
+                    } catch (Zend_Locale_Exception $zle) {
+                        $logger->warn('Caught Zend_Locale_Exception while loading ' . $trans . ': ' . $zle->getMessage());
+                        $logger->warn('Ignoring language with ID ' . $availableLanguage->getId());
+                    }
                 }
             }
+            Zend_Registry::set('Available_Languages', $languages);
         }
-        Zend_Registry::set('Available_Languages', $languages);
+        catch (Exception $ex) {
+            $logger->err('Error getting languages from database.');
+            $logger->err($ex);
+            throw new Exception('Opus: Error accessing database.');
+        }
     }
 
     /**
