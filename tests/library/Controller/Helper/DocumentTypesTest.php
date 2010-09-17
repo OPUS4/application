@@ -50,7 +50,6 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
         $this->assertEquals(3, count($documentTypes));
         $this->assertArrayHasKey('all', $documentTypes);
         $this->assertArrayHasKey('preprint', $documentTypes);
-        $this->assertArrayHasKey('other', $documentTypes);
         $this->assertArrayNotHasKey('article', $documentTypes);
     }
 
@@ -72,10 +71,10 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
     public function testGetCustomTemplateName() {
         $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
 
-        $template = $docTypeHelper->getTemplateName('other');
+        $template = $docTypeHelper->getTemplateName('all');
 
         $this->assertNotNull($template);
-        $this->assertEquals('other_default', $template);
+        $this->assertEquals('all', $template);
     }
 
     /**
