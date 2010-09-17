@@ -97,7 +97,7 @@ $this->headScript()->appendFile($basePath . '/layouts/opus4/js/jquery-1.4.2.min.
 
             <div class="abstract">
                 <div class="abstractText" id="<?= $result->getId() ?>">
-                    <?= $result->getAbstract(); ?>
+                    <?= htmlspecialchars($result->getAbstract()) ?>
                 </div>
             </div>
         </div>
