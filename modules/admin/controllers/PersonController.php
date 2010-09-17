@@ -66,5 +66,19 @@ class Admin_PersonController extends Controller_CRUDAction {
         return parent::preDispatch();
     }
 
+    /**
+     * List all available person instances.
+     *
+     * @return void
+     */
+    public function indexAction() {
+        $entries = Opus_Person::getAll();
+        $this->view->entries = array();
+        foreach ($entries as $entry) {
+            $this->view->entries[$entry->getId()] = $entry;
+        }
+    }
+
+
 
 }

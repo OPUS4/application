@@ -33,18 +33,25 @@
  * @version     $Id$
  */
 ?>
+
+<div class="adminContainer">
+
 <h1><?= $this->translate($this->title) ?></h1>
-<ul>
-<? foreach($this->entries as $id => $entry) : ?>
-<li>
-    <?= $entry ?>
-    <form action="<?= $this->url(array('action' => 'delete')) ?>" class="crud" method="post">
-        <input type='button' onClick="javascript:location.href='<?= $this->url(array('action' => 'show', 'id' => $id)) ?>'" value="<?= $this->translate('ButtonShow')?>" class="crud">
-        <input type='button' onClick="javascript:location.href='<?= $this->url(array('action' => 'edit', 'id' => $id)) ?>'" value='<?= $this->translate('ButtonEdit')?>' class="crud">
-        <input type="hidden" name="id" value="<?=$id?>" />
-        <input type="submit" value='<?= $this->translate('ButtonDelete') ?>' />
-    </form>
-</li>
-<? endforeach; ?>
-</ul>
-<input type='button' onClick="javascript:location.href='<?= $this->url(array('action' => 'new')) ?>'" value='<?= $this->translate('ButtonNew') ?>' class="crud">
+
+<table>
+    <?PHP foreach($this->entries as $id => $entry) : ?>
+    <tr>
+        <td><a href="<?= $this->url(array('action' => 'show', 'id' => $id)) ?>"><?= htmlspecialchars($entry) ?></a></td>
+        <td>
+        <form action="<?= $this->url(array('action' => 'dispatch')) ?>" class="crud" method="post">
+            <input type='submit' name="actionEdit" value='<?= $this->translate('ButtonEdit')?>' class="crud">
+            <input type="submit" name="actionDelete" value='<?= $this->translate('ButtonDelete') ?>' />
+            <input type="hidden" name="id" value="<?=$id?>" />
+        </form>
+    </tr>
+    <?PHP endforeach; ?>
+</table>
+
+<a href="<?= $this->url(array('action' => 'new')) ?>"><?= $this->translate('ButtonNew') ?></a>
+
+</div>
