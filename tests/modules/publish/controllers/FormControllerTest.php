@@ -73,7 +73,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
 
     }    
 
-    public function testCheckActionWithValidPostSendButton() {
+    public function testCheckActionWithValidPostAndSendButton() {
          $this->request
                 ->setMethod('POST')
                 ->setPost(array(
@@ -99,23 +99,23 @@ class Publish_FormControllerTest extends ControllerTestCase {
                     'fullText' => '0',
                     'documentType' => 'preprint',
                     'documentId' => '',
-                    'send' => 'Formular abschicken'
+                    'send' => 'button_label_send'
                 ));
 
         $this->dispatch('/publish/form/check');
-        //$this->assertResponseCode(200);
-        //$this->assertController('form');
-        //$this->assertAction('check');
+        $this->assertResponseCode(200);
+        $this->assertController('form');
+        $this->assertAction('check');
     }
 
-    public function testCheckActionWithValidPostAddMoreButton() {
+    public function testCheckActionWithValidPostAndAddMoreButton() {
          $this->request
                 ->setMethod('POST')
                 ->setPost(array(
                     'PersonAuthor1FirstName' => 'Testi',
                     'PersonAuthor1LastName' => 'Tester',
-                    'countMorePersonAuthor' => '1',
-                    'addMorePersonAuthor' => 'Einen weiteren Autoren hinzufügen',
+                    'countMorePersonAuthor' => '1',                    
+                    'addMorePersonAuthor' => 'button_label_add_one_morePersonAuthor',
                     'Institute1' => 'Zuse Institute Berlin (ZIB)',
                     'countMoreInstitute' => '1',
                     'Language' => 'eng',
@@ -138,9 +138,45 @@ class Publish_FormControllerTest extends ControllerTestCase {
                 ));
 
         $this->dispatch('/publish/form/check');
-        //$this->assertResponseCode(200);
-        //$this->assertController('error');
-        //$this->assertAction('check');
+        $this->assertResponseCode(200);
+        $this->assertController('form');
+        $this->assertAction('check');
+
+    }
+
+    public function testCheckActionWithInvalidPostAndAddSendButton() {
+         $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'PersonAuthor1FirstName' => '',
+                    'PersonAuthor1LastName' => '',
+                    'countMorePersonAuthor' => '1',
+                    'Institute1' => 'Zuse Institute Berlin (ZIB)',
+                    'countMoreInstitute' => '1',
+                    'Language' => 'eng',
+                    'TitleMain1' => 'Title',
+                    'TitleMain1Language' => 'eng',
+                    'countMoreTitleMain' => '1',
+                    'TitleAbstract1' => '',
+                    'TitleAbstract1Language' => '',
+                    'countMoreTitleAbstract' => '1',
+                    'Project1' => '',
+                    'countMoreProject' => '1',
+                    'SubjectMSC1' => '00A09',
+                    'countMoreSubjectMSC' => '1',
+                    'SubjectUncontrolled1' => '',
+                    'countMoreSubjectUncontrolled' => '1',
+                    'Note' => '',
+                    'fullText' => '0',
+                    'documentType' => 'preprint',
+                    'documentId' => '',
+                    'send' => 'button_label_send'
+                ));
+
+        $this->dispatch('/publish/form/check');
+        $this->assertResponseCode(200);
+        $this->assertController('form');
+        $this->assertAction('check');
 
     }
 
