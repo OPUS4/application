@@ -48,4 +48,15 @@ class Admin_LicenceController extends Controller_CRUDAction {
      */
     protected $_modelclass = 'Opus_Licence';
 
+    /**
+     * Setup list of licences for rendering.
+     */
+    public function indexAction() {
+        $entries = Opus_Licence::getAll();
+        $this->view->entries = array();
+        foreach ($entries as $entry) {
+            $this->view->entries[$entry->getId()] = $entry;
+        }
+    }
+
 }
