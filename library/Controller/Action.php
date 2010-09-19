@@ -56,6 +56,12 @@ class Controller_Action extends Zend_Controller_Action {
     private $__flashMessenger = null;
 
     /**
+     * Logger instance.
+     * @var Zend_Log
+     */
+    protected $_logger;
+
+    /**
      * Redirects to an action / controller / module, sets a message for the redirect target view.
      *
      * @param  mixed  $message    The message to be displayed
@@ -87,6 +93,7 @@ class Controller_Action extends Zend_Controller_Action {
      * @return void
      */
     public function init() {
+        $this->_logger = Zend_Registry::get('Zend_Log');
         $this->view->title = $this->_request->getModuleName() . '_' . $this->_request->getParam('controller') . '_' . $this->_request->getParam('action');
         $this->__redirector = $this->_helper->getHelper('Redirector');
         $this->__flashMessenger = $this->_helper->getHelper('FlashMessenger');
