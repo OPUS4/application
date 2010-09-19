@@ -220,7 +220,7 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
     }
 
     /**
-     * Get called when the helper is used like a method of the broker.
+     * Gets called when the helper is used like a method of the broker.
      *
      * @return array
      */
