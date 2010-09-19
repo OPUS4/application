@@ -34,6 +34,17 @@
  */
 
 class Default_Bootstrap extends Zend_Application_Module_Bootstrap {
+
+    /**
+     * Add prefix for custom controller helper.
+     *
+     * This method is called for all modules. The application bootstrap process
+     * bundles all the init methods from the different module bootstraps.
+     */
+    public function _initControllerHelpers() {
+        Zend_Controller_Action_HelperBroker::addPrefix('Controller_Helper');
+    }
+
 }
 
 ?>

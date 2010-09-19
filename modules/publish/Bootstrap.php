@@ -33,15 +33,6 @@
  */
 
 class Publish_Bootstrap extends Zend_Application_Module_Bootstrap {
-
-    /**
-     *
-     * TODO experiment, maybe place somewhere else
-     */
-    public function _initDocumentTypes() {
-        Zend_Controller_Action_HelperBroker::addPrefix('Controller_Helper');
-    }
-
 }
 
 ?>
