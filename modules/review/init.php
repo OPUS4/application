@@ -57,11 +57,7 @@ if (true !== Opus_Security_Realm::getInstance()->check('clearance')) {
     }
 
     // get all parameters to return after login.
-    // TODO place this code in central class
-    // TODO check that it works in any situation (see LoginBar helper)
-    $returnParams = Zend_Controller_Action_HelperBroker::getStaticHelper('ReturnParams');
-
-    $params = $returnParams->getReturnParameters();
+    $params = Zend_Controller_Action_HelperBroker::getStaticHelper('ReturnParams')->getReturnParameters();
     
     // Forward to module auth
     Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger')->addMessage($message);
