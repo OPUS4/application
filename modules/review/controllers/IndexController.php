@@ -41,14 +41,6 @@
  */
 class Review_IndexController extends Controller_Action {
 
-
-    /**
-     * The class of the model being administrated.
-     *
-     * @var Opus_Model_Abstract
-     */
-    protected $_modelclass = 'Opus_Document';
-
     /**
      * Default action shows the table of unpublished documents.
      *
@@ -62,8 +54,6 @@ class Review_IndexController extends Controller_Action {
         ));
 
         $request = $this->getRequest();
-
-        $logger = Zend_Registry::get('Zend_Log');
 
         $this->_processParameters();
 
@@ -112,7 +102,7 @@ class Review_IndexController extends Controller_Action {
 
         $this->_prepareSortOptions();
 
-        $result = $this->_getResult($sort_order, $sort_reverse);
+        $result = $this->_helper->documents($sort_order, $sort_reverse, 'unpublished');
 
         if (empty($result)) {
             $this->_forward('nodocs');
@@ -217,43 +207,6 @@ class Review_IndexController extends Controller_Action {
     }
 
     /**
-     * Returns documents from database for browsing.
-     *
-     * @param <type> $state
-     * @param <type> $sort_order
-     * @return <type>
-     *
-     * TODO following could be handled inside a application model
-     */
-    protected function _getResult($sort_order, $sort_reverse) {
-        $result = null;
-
-        $method = 'getAllDocumentsBy';
-
-        switch ($sort_order) {
-            case 'author':
-                $method = $method . 'Authors';
-                break;
-            case 'publicationDate':
-                $method = $method . 'PubDate';
-                break;
-            case 'docType':
-                $method = $method . 'Doctype';
-                break;
-            case 'title':
-                $method = $method . 'Titles';
-                break;
-            default:
-                $method = 'getAllIds';
-        }
-
-        $method = $method . 'ByState';
-        $result = Opus_Document::$method('unpublished', $sort_reverse);
-
-        return $result;
-    }
-
-    /**
      * Publishes documents and adds referee.
      *
      * @param array $docIds
@@ -264,9 +217,7 @@ class Review_IndexController extends Controller_Action {
      * FIXME capture success or failure for display afterwards
      */
     protected function _clearDocuments($docIds, $lastName, $firstName) {
-        $logger = Zend_Registry::get('Zend_Log');
-
-        $logger->debug('Clearing documents.');
+        $this->_logger->debug('Clearing documents.');
 
         foreach ($docIds as $index => $docId) {
             $document = new Opus_Document( (int) $docId);
@@ -275,7 +226,7 @@ class Review_IndexController extends Controller_Action {
                 $state = $document->getServerState();
 
                 if ($state === 'unpublished') {
-                    $logger->debug('Change state to \'published\' for document:' . $docId);
+                    $this->_logger->debug('Change state to \'published\' for document:' . $docId);
                     $document->setServerState('published');
 
                     $person = new Opus_Person();
@@ -301,11 +252,11 @@ class Review_IndexController extends Controller_Action {
                 }
                 else {
                     // already published or deleted
-                    $logger->warn('Document ' . $docId . ' already published.');
+                    $this->_logger->warn('Document ' . $docId . ' already published.');
                 }
             }
             catch (Exception $e) {
-                $logger->err($e);
+                $this->_logger->err($e);
                 // TODO throw something, show something
             }
 
