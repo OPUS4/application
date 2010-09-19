@@ -121,48 +121,15 @@ class View_Helper_LoginBar {
      * @return unknown
      */
     public function __toString() {
+        $returnParams = Zend_Controller_Action_HelperBroker::getStaticHelper('ReturnParams');
         $identity = Zend_Auth::getInstance()->getIdentity();
         if (empty($identity) === true) {
-            $url = $this->_view->url(array_merge($this->_login_url, $this->prepareReturnParameters()));
+            $url = $this->_view->url(array_merge($this->_login_url, $returnParams->getReturnParameters()));
             return '<a href="' . $url . '">Login</a>';
         } else {
-            $url = $this->_view->url(array_merge($this->_logout_url, $this->prepareReturnParameters()));
+            $url = $this->_view->url(array_merge($this->_logout_url, $returnParams->getReturnParameters()));
             return '<a href="' . $url . '">Logout</a>';
         }
-    }
-
-    /**
-     * Look for current module, controller, action and parameters. Forwards them to auth controller.
-     *
-     * returns mixed Associative array containing parameters for auth controller.
-     */
-    protected function prepareReturnParameters() {
-        // TODO put into constructor
-        $log = Zend_Registry::get('Zend_Log');
-
-        $params = array();
-        foreach (Zend_Controller_Front::getInstance()->getRequest()->getUserParams() as $key => $value) {
-            switch ($key) {
-            case 'module' :
-                $params['rmodule'] = $value;
-                break;
-            case 'controller' :
-                $params['rcontroller'] = $value;
-                break;
-            case 'action' :
-                $params['raction'] = $value;
-                break;
-            case 'error_handler':
-                // don't use for URL generation
-                break;
-            default :
-                $log->debug('Login extra param: ' . $key . " -> " . $value);
-                $params[$key] = $value;
-                break;
-            }
-        }
-
-        return $params;
     }
 
 }

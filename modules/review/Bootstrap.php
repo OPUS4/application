@@ -32,6 +32,9 @@
  * @version     $Id$
  */
 
+/**
+ * Empty class seems to be necessary to setup autoloading for modules.
+ */
 class Review_Bootstrap extends Zend_Application_Module_Bootstrap {
 }
 
