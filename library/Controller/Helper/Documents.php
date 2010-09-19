@@ -31,8 +31,19 @@
  * @version     $Id$
  */
 
+/**
+ * Helper for getting a list of document IDs used by admin and review module.
+ */
 class Controller_Helper_Documents extends Zend_Controller_Action_Helper_Abstract {
 
+    /**
+     * Gets called when the helper is used like a function of the helper broker.
+     *
+     * @param string $sortOrder
+     * @param boolean $sortReverse
+     * @param string $state ('published', 'unpublished', ...)
+     * @return array of document identifiers
+     */
     public function direct($sortOrder = null, $sortReverse = 0, $state = 'published') {
         return $this->getSortedDocumentIds($sortOrder, $sortReverse, $state);
     }
@@ -40,9 +51,10 @@ class Controller_Helper_Documents extends Zend_Controller_Action_Helper_Abstract
     /**
      * Returns documents from database for browsing.
      *
-     * @param <type> $state
-     * @param <type> $sort_order
-     * @return <type>
+     * @param string $sortOrder
+     * @param boolean $sortReverse
+     * @param string @state
+     * @return array of document identifiers
      *
      * TODO following could be handled inside a application model
      */
