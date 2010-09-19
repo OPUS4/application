@@ -36,10 +36,16 @@
  *
  * @category    Application
  * @package     Module_Publish
- *
- * TODO Is it necessary to extend Controller_CRUDAction?
  */
 class Review_IndexController extends Controller_Action {
+
+    /**
+     * Setup title.
+     */
+    public function init() {
+        parent::init();
+        $this->view->title = $this->view->translate('review_index_title');
+    }
 
     /**
      * Default action shows the table of unpublished documents.
@@ -47,23 +53,9 @@ class Review_IndexController extends Controller_Action {
      * Processes clicked buttons on that page.
      */
     public function indexAction() {
-        $this->view->title = $this->view->translate('review_index_title');
+        $this->_processSelection();
 
-        $this->view->actionUrl = $this->view->url(array(
-            'module' => 'review', 'controller'=>'index', 'action'=>'index'
-        ));
-
-        $request = $this->getRequest();
-
-        $this->_processParameters();
-
-        $sort_order = $request->getParam('sort_order');
-        $this->view->sort_order = $sort_order;
-        $sort_reverse = $request->getParam('sort_reverse', '0');
-
-        $button = $request->getParam('buttonSubmit');
-
-        if (isset($button)) {
+        if ($this->_isButtonPressed('buttonSubmit', true, false)) {
             if (count($this->view->selected) > 0) {
                 $this->_forward('clear');
             }
@@ -72,72 +64,62 @@ class Review_IndexController extends Controller_Action {
             }
         }
 
-        $button = $request->getParam('buttonUp');
+        $this->view->actionUrl = $this->view->url(array('action'=>'index'));
 
-        if (isset($button)) {
-            $sort_reverse = '0';
-        }
+        $request = $this->getRequest();
 
-        $button = $request->getParam('buttonDown');
+        $sort_order = $request->getParam('sort_order');
+        $this->view->sort_order = $sort_order;
 
-        if (isset($button)) {
-            $sort_reverse = '1';
-        }
-        
-        $button = $request->getParam('buttonSelectAll');
-        if (isset($button)) {
-            $this->view->selectAll = true;
-        }
-        else {
-            $this->view->selectAll = false;
-        }
+        $sort_reverse = $request->getParam('sort_reverse', '0');
+        $sort_reverse = $this->_isButtonPressed('buttonUp', '0');
+        $sort_reverse = $this->_isButtonPressed('buttonDown', '1');
 
-        $button = $request->getParam('buttonSelectNone');
-        if (isset($button)) {
-            $this->view->selectNone = true;
-        }
-        else {
-            $this->view->selectNone = false;
-        }
+        $this->view->selectAll = $this->_isButtonPressed('buttonSelectAll', true, false);
+        $this->view->selectNone = $this->_isButtonPressed('buttonSelectNone', true, false);
 
         $this->_prepareSortOptions();
 
+        // Get list of document identifiers
         $result = $this->_helper->documents($sort_order, $sort_reverse, 'unpublished');
 
         if (empty($result)) {
-            $this->_forward('nodocs');
-            return;
+            $this->_helper->viewRenderer('nodocs');
         }
+        else {
+            $this->view->documentCount = count($result);
 
-        $this->view->documentCount = count($result);
+            $currentPage = $this->_getParam('page', 1);
+            $this->view->currentPage = $currentPage;
 
-        $paginator = Zend_Paginator::factory($result);
-        $currentPage = $this->_getParam('page');
-        $currentPage = ($currentPage) ? $currentPage : 1;
-        $this->view->currentPage = $currentPage;
-        $paginator->setCurrentPageNumber($currentPage);
-        $paginator->setItemCountPerPage(10);
-
-        $this->view->paginator = $paginator;
+            $paginator = Zend_Paginator::factory($result);
+            $paginator->setCurrentPageNumber($currentPage);
+            $paginator->setItemCountPerPage(10);
+            $this->view->paginator = $paginator;
+        }
     }
+
+
 
     /**
      * Action for showing the clear form and processing POST from it.
      */
     public function clearAction() {
-        $this->view->title = $this->view->translate('review_index_title');
+        // redirect get requests to module entry page
+        if (!$this->getRequest()->isPost()) {
+            $redirectUrl = $this->view->url(array('action' => 'index'));
+            $this->_redirectTo($redirectUrl);
+        }
 
-        $this->view->actionUrl = $this->view->url(array(
-            'module' => 'review', 'controller'=>'index', 'action'=>'clear'
-        ));
-
-        $button = $this->getRequest()->getParam('buttonBack');
-        if (isset($button)) {
+        // if back button was pressed return to document selection
+        if ($this->_isButtonPressed('buttonBack', true, false)) {
             $this->_forward('index');
             return;
         }
 
-        $this->_processParameters();
+        $this->view->actionUrl = $this->view->url(array('action'=>'clear'));
+
+        $this->_processSelection();
 
         $this->view->documentCount = count($this->view->selected);
 
@@ -147,8 +129,7 @@ class Review_IndexController extends Controller_Action {
         $lastName = $this->getRequest()->getParam('lastname');
         $this->view->lastName = $lastName;
 
-        $button = $this->getRequest()->getParam('buttonClear');
-        if (isset($button)) {
+        if ($this->_isButtonPressed('buttonClear', true, false)) {
             if (!Zend_Validate::is($firstName, 'NotEmpty')) {
                 $this->view->error = $this->view->translate('review_error_input_missing');
             }
@@ -158,32 +139,17 @@ class Review_IndexController extends Controller_Action {
             }
 
             if (empty($this->view->error)) {
-                $this->_clearDocuments($this->view->selected, $lastName, $firstName);
+                $helper = new Review_Model_ClearDocumentsHelper();
+                $helper->clear($this->view->selected, $lastName, $firstName);
                 $this->_redirectTo('', 'index', 'index', 'review');
             }
         }
     }
 
     /**
-     * Action for showing success message after clearing documents.
-     *
-     * TODO implement and use
-     */
-    public function successAction() {
-        $this->view->title = $this->view->translate('review_index_title');
-    }
-
-    /**
-     * Executed if no unpublished documents are found.
-     */
-    public function nodocsAction() {
-        $this->view->title = $this->view->translate('review_index_title');
-    }
-
-    /**
      * Processes form input, especially selected documents.
      */
-    protected function _processParameters() {
+    protected function _processSelection() {
         $selected = $this->getRequest()->getParam('selected');
 
         if (!isset($selected) || !is_array($selected)) {
@@ -207,61 +173,21 @@ class Review_IndexController extends Controller_Action {
     }
 
     /**
-     * Publishes documents and adds referee.
-     *
-     * @param array $docIds
-     * @param string $lastName
-     * @param string $firstName
-     *
-     * FIXME add referee
-     * FIXME capture success or failure for display afterwards
+     * Checks if a button has been pressed and selects value.
+     * @param <type> $name
+     * @param <type> $value
+     * @param <type> $default
+     * @return mixed
      */
-    protected function _clearDocuments($docIds, $lastName, $firstName) {
-        $this->_logger->debug('Clearing documents.');
+    protected function _isButtonPressed($name, $value, $default = null) {
+        $button = $this->getRequest()->getParam($name);
 
-        foreach ($docIds as $index => $docId) {
-            $document = new Opus_Document( (int) $docId);
-
-            try {
-                $state = $document->getServerState();
-
-                if ($state === 'unpublished') {
-                    $this->_logger->debug('Change state to \'published\' for document:' . $docId);
-                    $document->setServerState('published');
-
-                    $person = new Opus_Person();
-                    $person->setFirstName($firstName);
-                    $person->setLastName($lastName);
-                    $document->addPersonReferee($person);
-
-                    $date = new Opus_Date(new Zend_Date());
-
-                    $document->setServerDatePublished($date);
-
-                    $config = Zend_Registry::get('Zend_Config');
-
-                    $moduleConfig = $config->clearing;
-
-                    if (isset($moduleConfig)) {
-                        if ($moduleConfig->setPublishedDate) {
-                            $document->setPublishedDate($date);
-                        }
-                    }
-
-                    $document->store();
-                }
-                else {
-                    // already published or deleted
-                    $this->_logger->warn('Document ' . $docId . ' already published.');
-                }
-            }
-            catch (Exception $e) {
-                $this->_logger->err($e);
-                // TODO throw something, show something
-            }
-
+        if (isset($button)) {
+            return $value;
         }
-
+        else {
+            return $default;
+        }
     }
 
 }
