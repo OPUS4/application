@@ -35,12 +35,17 @@
 <div class="errorPage">
     <h1><?= $this->message ?></h1>
 
-    <?PHP if (isset($this->exception)) : ?>
+
+    <?PHP if ($this->showException) : ?>
     <div class="stacktrace">
         <h2>Stacktrace</h2>
         <pre>
         <?= $this->exception ?>
         </pre>
+    </div>
+    <?PHP else : ?>
+    <div class="exceptionMessage">
+        <?= $this->exception->getMessage() ?>
     </div>
     <?PHP endif; ?>
 

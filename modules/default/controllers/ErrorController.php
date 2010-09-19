@@ -72,12 +72,12 @@ class ErrorController extends Zend_Controller_Action
                 break;
         }
 
+        $this->view->exception = $errors->exception;
+
         $errorConfig = $config->errorController;
 
         if (isset($errorConfig)) {
-            if ($errorConfig->showException) {
-                $this->view->exception = $errors->exception;
-            }
+            $this->view->showException = $errorConfig->showException;
             if ($errorConfig->showRequest) {
                 $this->view->errorRequest = $errors->request;
             }
