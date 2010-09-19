@@ -44,39 +44,23 @@
 
 // check, if we are allowed to administrate
 if (true !== Opus_Security_Realm::getInstance()->check('administrate')) {
-	// we are not allowed to administrate.
-	// $logger->info("Unallowed access to module admin!");
+    // we are not allowed to administrate.
+    // $logger->info("Unallowed access to module admin!");
+
+    $identity = Zend_Auth::getInstance()->getIdentity();
+    if (empty($identity) === true) {
+            // $message = $this->translate('admin_no_identity_error');
+            $message = "You must be logged in to use module admin.";
+    } else {
+            // $message = $this->translate('admin_wrong_identity_error');
+            $message = "You need another identity to use module admin.";
+    }
 	
-	$identity = Zend_Auth::getInstance()->getIdentity();
-	if (empty($identity) === true) {
-		// $message = $this->translate('admin_no_identity_error');
-		$message = "You must be logged in to use module admin.";
-	} else {
-		// $message = $this->translate('admin_wrong_identity_error');
-		$message = "You need another identity to use module admin.";
-	}
+    // get all parameters to return after login.
+    $params = Zend_Controller_Action_HelperBroker::getStaticHelper('ReturnParams')->getReturnParameters();
 	
-	// get all parameters to return after login.
-	$params = array();
-	foreach (Zend_Controller_Front::getInstance()->getRequest()->getUserParams() as $key => $value) {
-		switch ($key) {
-		case 'module' :
-			$params['rmodule'] = $value;
-			break;
-		case 'controller' :
-			$params['rcontroller'] = $value;
-			break;
-		case 'action' :
-			$params['raction'] = $value;
-			break;
-		default :
-			$params[$key] = $value;
-			break;
-		}
-	}
-	
-	// Forward to module auth
-	Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger')->addMessage($message);
-	Zend_Controller_Action_HelperBroker::getStaticHelper('redirector')->gotoSimple('index', 'auth', 'default', $params);
+    // Forward to module auth
+    Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger')->addMessage($message);
+    Zend_Controller_Action_HelperBroker::getStaticHelper('redirector')->gotoSimple('index', 'auth', 'default', $params);
 
 }

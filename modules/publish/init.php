@@ -62,23 +62,7 @@ if (true !== Opus_Security_Realm::getInstance()->check('publish')) {
     }
     
     // get all parameters to return after login.
-    $params = array();
-    foreach (Zend_Controller_Front::getInstance()->getRequest()->getUserParams() as $key => $value) {
-        switch ($key) {
-        case 'module' :
-            $params['rmodule'] = $value;
-            break;
-        case 'controller' :
-            $params['rcontroller'] = $value;
-            break;
-        case 'action' :
-            $params['raction'] = $value;
-            break;
-        default :
-            $params[$key] = $value;
-            break;
-        }
-    }
+    $params = Zend_Controller_Action_HelperBroker::getStaticHelper('ReturnParams')->getReturnParameters();
     
     // Forward to module auth
     Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger')->addMessage($message);
