@@ -32,7 +32,7 @@
  */
 ?>
 
-<form action="<?= $this->url(array('module'=>'solrsearch','controller'=>'index','action'=>'searchdispatch')); ?>" method="post" class="opus_form">
+<form action="<?= $this->url(array('module'=>'solrsearch','controller'=>'index','action'=>'searchdispatch'),null,true); ?>" method="post" class="opus_form">
 
     <?php if($this->searchType != 'authorsearch') : ?>
     <fieldset>

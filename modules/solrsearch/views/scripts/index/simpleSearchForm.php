@@ -35,7 +35,7 @@
 <div class="searchform">
     <h2><?= $this->translate('solrsearch_title_simple'); ?></h2>
 
-    <form action="<?= $this->url(array('module'=>'solrsearch','controller'=>'index','action'=>'searchdispatch')); ?>" method="post" class="opus_form">
+    <form action="<?= $this->url(array('module'=>'solrsearch','controller'=>'index','action'=>'searchdispatch'),null,true); ?>" method="post" class="opus_form">
         <label for="query"><?= $this->translate('solrsearch_query_label'); ?></label>
         <input id="query" name="query" type="text" value="<?= htmlspecialchars($this->q) ?>" />
         <input type="submit" value="<?= $this->translate('solrsearch_searchaction'); ?>" />
