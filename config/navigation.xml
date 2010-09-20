@@ -2,12 +2,12 @@
 
 <configdata>
     <nav>
-
         <home>
             <label>home_menu_label</label>
             <module>home</module>
             <controller>index</controller>
             <action>index</action>
+            <class>first</class>
         </home>
 
         <search>
@@ -15,6 +15,7 @@
             <module>solrsearch</module>
             <controller>index</controller>
             <action>index</action>
+            <class>icon</class>
         </search>
 
         <browsing>
@@ -22,6 +23,7 @@
             <module>browse</module>
             <controller>index</controller>
             <action>index</action>
+            <class>icon</class>
         </browsing>
 
         <publish>
@@ -29,6 +31,7 @@
             <module>publish</module>
             <controller>index</controller>
             <action>index</action>
+            <class>icon</class>
         </publish>
 
         <review>
@@ -36,6 +39,7 @@
             <module>review</module>
             <controller>index</controller>
             <action>index</action>
+            <class></class>
         </review>
 
         <administration>
@@ -43,6 +47,7 @@
             <module>admin</module>
             <controller>index</controller>
             <action>index</action>
+            <class></class>
         </administration>
         
         <about>
@@ -50,6 +55,7 @@
             <module>home</module>
             <controller>index</controller>
             <action>about</action>
+            <class></class>
         </about>
 
         <help>
@@ -57,6 +63,7 @@
             <module>home</module>
             <controller>index</controller>
             <action>help</action>
+            <class>last</class>
         </help>
         
     </nav>
