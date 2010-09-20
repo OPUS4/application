@@ -34,18 +34,305 @@
  */
 
 /**
- * Main entry point for this module.
+ * Controller for administration of user accounts.
  *
  * @category    Application
  * @package     Module_Admin
+ *
+ * TODO Support GET requests for create and update?
  */
-class Admin_AccountController extends Controller_CRUDAction {
+class Admin_AccountController extends Controller_Action {
+
 
     /**
-     * The class of the model being administrated.
-     *
-     * @var Opus_Model_Abstract
+     * Default action presents list of existing accounts.
      */
-    protected $_modelclass = 'Opus_Account';
+    public function indexAction() {
+        $this->view->title = $this->view->translate('admin_account_index');
+
+        if ($this->_request->isPost() === true) {
+            $request = $this->getRequest();
+            $buttonEdit = $request->getPost('actionEdit');
+            $buttonDelete = $request->getPost('actionDelete');
+
+            if (isset($buttonEdit)) {
+                $this->_forwardToAction('edit');
+            }
+            else if (isset($buttonDelete)) {
+                $this->_forwardToAction('delete');
+            }
+        }
+        else {
+            $accounts = Opus_Account::getAll();
+
+            if (empty($accounts)) {
+                $this->view->render('none');
+            }
+            else {
+                $this->view->accounts = array();
+                foreach ($accounts as $account) {
+                    $this->view->accounts[$account->getId()] = $account->getDisplayName();
+                }
+            }
+        }
+    }
+
+    /**
+     * Shows account information.
+     */
+    public function showAction() {
+        $this->view->title = $this->view->translate('admin_account_show');
+
+        $id = $this->getRequest()->getParam('id');
+        if (empty($id)) {
+            $this->_logger->debug('Missing parameter account id.');
+            $this->_helper->redirector('index');
+        }
+        else {
+            $account = new Opus_Account($id);
+            $this->view->account = $account;
+            return $account;
+        }
+    }
+
+    /**
+     * Shows form for creating new accounts.
+     */
+    public function newAction() {
+        $this->view->title = $this->view->translate('admin_account_new');
+
+        $accountForm = $this->_getAccountForm();
+
+        $actionUrl = $this->view->url(array('controller' => 'account', 'action' => 'create'));
+
+        $accountForm->setAction($actionUrl);
+
+        $this->view->form = $accountForm;
+    }
+
+    /**
+     * Creates new account.
+     */
+    public function createAction() {
+        if ($this->getRequest()->isPost()) {
+
+            $button = $this->getRequest()->getParam('cancel');
+            if (isset($button)) {
+                $this->_helper->redirector('index');
+                return;
+            }
+
+            $accountForm = $this->_getAccountForm();
+
+            $postData = $this->getRequest()->getPost();
+
+            if ($accountForm->isValid($postData)) {
+                $login = $postData['username'];
+                $password = $postData['password'];
+
+                $account = new Opus_Account();
+
+                $account->setLogin($login);
+                $account->setPassword($password);
+
+                $roles = Opus_Role::getAll();
+
+                foreach ($roles as $roleName) {
+                    $roleSelected = $postData['role' . $roleName];
+                    if ($roleSelected) {
+                        $role = Opus_Role::fetchByName($roleName);
+                        $account->addRole($role);
+                    }
+                }
+
+                $account->store();
+
+                $url = $this->view->url(array('controller' => 'account', 'action' => 'index'));
+                $this->redirectTo($url);
+            }
+            else {
+                $actionUrl = $this->view->url(array('controller' => 'account', 'action' => 'create'));
+                $accountForm->setAction($actionUrl);
+                $this->view->form = $accountForm;
+                return $this->renderScript('account/new.phtml');
+            }
+        }
+        else {
+            $this->_helper->redirector('index');
+        }
+    }
+
+    /**
+     * Shows edit form for an account.
+     */
+    public function editAction() {
+        $this->view->title = $this->view->translate('admin_account_edit');
+
+        $accountForm = $this->_getAccountForm();
+
+        $id = $this->getRequest()->getParam('id');
+        if (empty($id)) {
+            $this->_logger->debug('Missing parameter account id.');
+            $this->_helper->redirector('index');
+        }
+        else {
+            $account = new Opus_Account($id);
+
+            $login = $account->getLogin();
+
+            $accountForm->getElement('username')->setValue($login);
+
+            $roles = $account->getRole();
+
+            foreach ($roles as $roleName) {
+                $role = $accountForm->getElement('role' . $roleName);
+                $role->setValue(1);
+            }
+
+            $actionUrl = $this->view->url(array('controller' => 'account', 'action' => 'update', 'id' => $id));
+
+            $accountForm->setAction($actionUrl);
+
+            $this->view->form = $accountForm;
+        }
+    }
+
+    /**
+     * Updates account information.
+     */
+    public function updateAction() {
+        if ($this->getRequest()->isPost()) {
+
+            $button = $this->getRequest()->getParam('cancel');
+            if (isset($button)) {
+                $this->_helper->redirector('index');
+                return;
+            }
+
+            $accountForm = $this->_getAccountForm();
+
+            $postData = $this->getRequest()->getPost();
+
+            $passwordChanged = true;
+
+            if (empty($postData['password'])) {
+                // modify to pass default validation
+                // TODO think about better solution
+                $postData['password'] = 'notchanged';
+                $postData['confirmPassword'] = 'notchanged';
+                $passwordChanged = false;
+            }
+
+            $id = $this->getRequest()->getParam('id');
+
+            if ($accountForm->isValid($postData)) {
+
+                $account = new Opus_Account($id);
+
+                // update login name
+                $login = $postData['username'];
+
+                $account->setLogin($login);
+
+                // update password
+                if ($passwordChanged) {
+                    $password = $postData['password'];
+                    $account->setPassword($password);
+                }
+
+                // update roles
+                $roles = Opus_Role::getAll();
+
+                $newRoles = array();
+
+                foreach ($roles as $roleName) {
+                    $roleSelected = $postData['role' . $roleName];
+                    if ($roleSelected) {
+                        $role = Opus_Role::fetchByName($roleName);
+                        $newRoles[] = $role;
+                    }
+                }
+
+                $account->setRole($newRoles);
+
+                $account->store();
+
+                $this->_helper->redirector('index');
+            }
+            else {
+                $actionUrl = $this->view->url(array('action' => 'update', 'id' => $id));
+                $accountForm->setAction($actionUrl);
+                $this->view->form = $accountForm;
+                return $this->renderScript('account/edit.phtml');
+            }
+        }
+        else {
+            $this->_helper->redirector('index');
+        }
+
+    }
+
+    /**
+     * Deletes account.
+     */
+    public function deleteAction() {
+        $accountId = $this->getRequest()->getParam('id');
+
+        if (!empty($accountId)) {
+            $account = new Opus_Account($accountId);
+
+            if (!empty($account)) {
+                $currentUser = Zend_Auth::getInstance()->getIdentity();
+                
+                // Check that user doesn't delete himself (especially the admin)
+                if ($currentUser === $account->getLogin()) {
+                    // TODO
+                }
+                else {
+                    $account->delete();
+                }
+            }
+        }
+
+        $this->_helper->redirector('index');
+    }
+
+    /**
+     * Creates form for creating and editing an account.
+     *
+     * @return Zend_Form
+     */
+    protected function _getAccountForm() {
+        $config = new Zend_Config_Ini(APPLICATION_PATH . '/modules/admin/forms/account.ini', 'production');
+        $form = new Zend_Form($config->form->account);
+
+        $confirmPassword = $form->getElement('confirmPassword');
+
+        $passwordValidator = new Form_Validate_Password();
+
+        $confirmPassword->addValidator($passwordValidator);
+
+        $roles = Opus_Role::getAll();
+
+        $rolesGroup = array();
+
+        foreach ($roles as $role) {
+            $roleName = $role->getDisplayName();
+            $roleCheckbox = $form->createElement('checkbox', 'role' . $roleName)->setLabel($roleName);
+//            $roleCheckbox->setDecorators(array(
+//                'ViewHelper',
+//                array(array('data' => 'HtmlTag'), array('tag' => 'td', 'class' => 'element')),
+//                array(array('label' => 'HtmlTag'), array('tag' => 'td', 'placement' => 'prepend')),
+//                array(array('row' => 'HtmlTag'), array('tag' => 'tr')),
+//            ));
+            $form->addElement($roleCheckbox);
+            $rolesGroup[] = $roleCheckbox->getName();
+        }
+
+        $form->addDisplayGroup($rolesGroup, 'Roles', array('legend' => 'Roles'));
+
+        return $form;
+    }
+
 
 }

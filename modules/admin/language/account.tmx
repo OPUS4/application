@@ -15,6 +15,61 @@
         <seg>Nutzerkonten</seg>
       </tuv>
     </tu>
+
+    <tu tuid="admin_account_show">
+      <tuv xml:lang="en">
+        <seg>Account</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nutzerkonto</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_account_edit">
+      <tuv xml:lang="en">
+        <seg>Edit Account</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nutzerkonto editieren</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_account_new">
+      <tuv xml:lang="en">
+        <seg>New Account</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Neues Nutzerkonto</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_account_action_new">
+      <tuv xml:lang="en">
+        <seg>Add Account</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Account hinzufügen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_account_action_edit">
+      <tuv xml:lang="en">
+        <seg>Edit</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Editieren</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_account_action_delete">
+      <tuv xml:lang="en">
+        <seg>Delete</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Löschen</seg>
+      </tuv>
+    </tu>
+
        
   </body>
   
