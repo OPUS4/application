@@ -272,36 +272,19 @@ class Admin_DocumentsController extends Controller_CRUDAction {
      *
      * TODO following could be handled inside a application model
      */
-    protected function _getResult($state, $sort_order, $sort_reverse) {
-        $result = null;
-
-        $method = 'getAllDocumentsBy';
-
-        switch ($sort_order) {
+    protected function _getResult($state = 'published', $sortOrder, $sortReverse) {
+        switch ($sortOrder) {
             case 'author':
-                $method = $method . 'Authors';
-                break;
+                return Opus_Document::getAllDocumentsByAuthorsByState($state, $sortReverse);
             case 'publicationDate':
-                $method = $method . 'PubDate';
-                break;
+                return Opus_Document::getAllDocumentsByPubDateByState($state, $sortReverse);
             case 'docType':
-                $method = $method . 'Doctype';
-                break;
+                return Opus_Document::getAllDocumentsByDoctypeByState($state, $sortReverse);
             case 'title':
-                $method = $method . 'Titles';
-                break;
+                return Opus_Document::getAllDocumentsByTitlesByState($state, $sortReverse);
             default:
-                $method = 'getAllIds';
+                return Opus_Document::getAllIdsByState($state, $sortReverse);
         }
-
-        if (!empty($state)) {
-            $method = $method . 'ByState';
-            $result = Opus_Document::$method($state, $sort_reverse);
-        } else {
-            $result = Opus_Document::$method($sort_reverse);
-        }
-
-        return $result;
     }
 
     /**
