@@ -187,7 +187,12 @@ class Admin_AccountController extends Controller_Action {
             foreach ($roles as $roleName) {
                 $role = $accountForm->getElement('role' . $roleName);
                 $role->setValue(1);
+                if (Zend_Auth::getInstance()->getIdentity() === $account->getLogin()) {
+                    $role->setAttrib('disabled', true);
+                }
             }
+
+
 
             $actionUrl = $this->view->url(array('controller' => 'account', 'action' => 'update', 'id' => $id));
 
@@ -232,7 +237,14 @@ class Admin_AccountController extends Controller_Action {
                 // update login name
                 $login = $postData['username'];
 
-                $account->setLogin($login);
+                $oldLogin = $account->getLogin();
+
+                if ($login !== $oldLogin) {
+                    $account->setLogin($login);
+                }
+                else {
+                    $oldLogin = null;
+                }
 
                 // update password
                 if ($passwordChanged) {
@@ -251,12 +263,20 @@ class Admin_AccountController extends Controller_Action {
                         $role = Opus_Role::fetchByName($roleName);
                         $newRoles[] = $role;
                     }
+                    else if ((strtolower($roleName) === 'administrator') &&
+                        (Zend_Auth::getInstance()->getIdentity() === $account->getLogin())) {
+                            $newRoles[] = Opus_Role::fetchByName($roleName);
+                    }
                 }
 
                 $account->setRole($newRoles);
 
                 $account->store();
 
+                if ((Zend_Auth::getInstance()->getIdentity() === $oldLogin) || $passwordChanged) {
+                    Zend_Auth::getInstance()->clearIdentity();
+                }
+                
                 $this->_helper->redirector('index');
             }
             else {

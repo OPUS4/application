@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,33 +24,40 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Licence
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
+ * @category    TODO
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
-<div class="adminContainer">
-<h1><?= $this->title ?></h1>
 
-<table>
-<? $index = -1; foreach($this->accounts as $id => $entry) : ?>
-    <tr class="<?= ($index++ % 2) ? 'odd' : 'even' ?>">
-    <form action="<?= $this->url(array('action' => 'index')) ?>" class="crud" method="post">
-        <td><a href="<?= $this->url(array('action' => 'show', 'id' => $id)) ?>"><?= $entry ?></a></td>
-        <td>
-            <input type="submit" name="actionEdit" value="<?= $this->translate('admin_account_action_edit')?>" />
-            <input type="hidden" name="id" value="<?=$id?>" />
-            <?PHP if (Zend_Auth::getInstance()->getIdentity() !== $entry) : ?>
-                <input type="submit" name="actionDelete" value="<?= $this->translate('admin_account_action_delete')?>" />
-            <?PHP endif; ?>
-        </td>
-        </form>
-    </tr>
-<? endforeach; ?>
-</table>
-<a href="<?= $this->url(array('action' => 'new')) ?>"><?= $this->translate('admin_account_action_new')?></a>
-</div>
+class Form_Validate_Password extends Zend_Validate_Abstract {
+
+    const NOT_MATCH = 'notMatch';
+
+    protected $_messageTemplates = array(
+        self::NOT_MATCH => 'Password confirmation does not match'
+    );
+
+    public function isValid($value, $context = null) {
+        $value = (string) $value;
+
+        $this->_setValue($value);
+
+        if (is_array($context)) {
+            if (isset($context['password']) &&
+                    ($value == $context['password'])) {
+                return true;
+            }
+        }
+        elseif (is_string($context) && ($value == $context)) {
+            return true;
+        }
+
+        $this->_error(self::NOT_MATCH);
+        return false;
+    }
+    
+}
+
+?>
