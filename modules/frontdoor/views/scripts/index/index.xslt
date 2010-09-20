@@ -85,10 +85,11 @@
                 </ul>
             </div>
         </xsl:if>
-        <xsl:call-template name="MailToAuthor"/>
 
-        <!-- TODO: temporarily deactivated -->
+        <xsl:call-template name="MailToAuthor"/>
         <!--<xsl:call-template name="services"/>-->
+        <xsl:call-template name="ExportFunctions" />
+
         <h2>Metadaten</h2>
         <div class="frontdoordata">
             <table cellspacing="0">
@@ -1195,7 +1196,10 @@
             </xsl:element>
             <xsl:text> </xsl:text>
         </xsl:if>
+    </xsl:template>
 
+    <xsl:template name="ExportFunctions">
+        <div class="services">
         <!-- Bib-Export -->
         <xsl:element name="a">
            <!-- TODO: Use Zend Url-Helper to build href attribute -->
@@ -1216,6 +1220,12 @@
                     <xsl:call-template name="translateString">
                         <xsl:with-param name="string">frontdoor_exportbibtex</xsl:with-param>
                     </xsl:call-template>
+                </xsl:attribute>
+                <xsl:attribute name="title">
+                    <xsl:text>Bibtex Export</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="alt">
+                    <xsl:text>Bibtex Export</xsl:text>
                 </xsl:attribute>
             </xsl:element>
         </xsl:element>
@@ -1242,14 +1252,16 @@
                         <xsl:with-param name="string">frontdoor_exportris</xsl:with-param>
                     </xsl:call-template>
                 </xsl:attribute>
+                <xsl:attribute name="title">
+                    <xsl:text>Ris Export</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="alt">
+                    <xsl:text>Ris Export</xsl:text>
+                </xsl:attribute>
             </xsl:element>
         </xsl:element>
-
-
-        <xsl:element name="br"/>
-        <xsl:element name="br"/>
+        </div>
     </xsl:template>
-
 
     <!-- Named template to translate a field's name. Needs no parameter. -->
     <xsl:template name="translateFieldname">

@@ -47,6 +47,7 @@ class Frontdoor_IndexController extends Controller_Action {
         $docId = $request->getParam('docId');
         $this->view->docId = $docId;
         $baseUrl = $request->getBaseUrl();
+        $this->setLayoutPathAndTheme();
 
         try {
             $document = new Opus_Document($docId);
@@ -80,6 +81,14 @@ class Frontdoor_IndexController extends Controller_Action {
                     $this->view->frontdoor = sprintf($this->view->translate('frontdoor_doc_id_not_found'), $docId);
             }
         }
+    }
+
+    private function setLayoutPathAndTheme() {
+        $config = Zend_Registry::get("Zend_Config");
+        if(isset($config->resources->layout->layoutPath))
+            $this->view->layoutPath = $config->resources->layout->layoutPath;
+        if(isset($config->theme))
+            $this->view->theme = $config->theme;
     }
 
     private function setUpXSLTStylesheet($type) {
