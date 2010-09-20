@@ -83,3 +83,12 @@ h1 span.info {
 .reviewContainer .instruction {
     font-weight: normal;
 }
+
+
+.adminContainer table tr.odd {
+    background: #f4f4f4;
+}
+
+.adminContainer table tr.even {
+    background: white;
+}
