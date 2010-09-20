@@ -33,5 +33,20 @@
  * @version     $Id$
  */
 ?>
-<h1>Opus Application - <?= $this->title ?></h1>
-<?= $this->showModel($this->entry); ?>
+<h1><?= $this->title ?></h1>
+
+<table>
+    <tr>
+        <td>Login:</td>
+        <td><?=  htmlspecialchars($this->account->getLogin())?></td>
+    </tr>
+    <tr>
+        <td>Roles:</td>
+        <td>
+            <?PHP foreach ($this->account->getRole() as $role) : ?>
+            <?= $role ?><br>
+            <?PHP endforeach; ?>
+        </td>
+    </tr>
+</table>
+
