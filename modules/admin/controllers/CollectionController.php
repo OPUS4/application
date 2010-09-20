@@ -460,7 +460,7 @@ class Admin_CollectionController extends Controller_Action {
                     } else {
                         $position .= '-' . $step;
                     }
-                    echo $step;
+                    // echo $step;
                     $collections = $collection->getSubCollection();
                     $collection = $collections[$step];
                     $breadcrumb[$position] = $collection->getDisplayName();
