@@ -341,6 +341,9 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
 
         $view->navigation($container);
 
+        // TODO Find better way without Zend_Registry
+        Zend_Registry::set('Opus_Navigation', $container);
+
         $log->debug('Zend_Navigation initialization completed');
 
         return $container;

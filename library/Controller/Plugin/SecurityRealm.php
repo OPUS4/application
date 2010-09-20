@@ -53,16 +53,34 @@ class Controller_Plugin_SecurityRealm extends Zend_Controller_Plugin_Abstract {
         // Create a Realm instance
         $realm = Opus_Security_Realm::getInstance();
 
-		// Overwrite default user if current user is logged on.
+        // Overwrite default user if current user is logged on.
         $identity = Zend_Auth::getInstance()->getIdentity();
-		if (false === empty($identity)) {
-			$realm->setUser($identity);
-		} else {
-			$realm->setUser(null);
-		}
-		
-		// Set ip
-		$realm->setIp($_SERVER['REMOTE_ADDR']);
-    }   
+
+        if (false === empty($identity)) {
+                $realm->setUser($identity);
+        } else {
+                $realm->setUser(null);
+        }
+
+        // Set ip
+        $realm->setIp($_SERVER['REMOTE_ADDR']);
+
+        // Hide menu entries based on privileges
+        // TODO move into other plugin/place?
+        // TODO don't use Zend_Registry?
+        $navigation = Zend_Registry::get('Opus_Navigation');
+        
+        if (!empty($navigation)) {
+            if (!$realm->check('administrate')) {
+                $page = $navigation->findBy('label', 'admin_menu_label');
+                $navigation->removePage($page);
+            }
+            if (!$realm->check('clearance')) {
+                $page = $navigation->findBy('label', 'review_menu_label');
+                $navigation->removePage($page);
+            }
+        }
+
+    }
     
 }
