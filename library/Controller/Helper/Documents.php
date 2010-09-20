@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -26,6 +27,7 @@
  *
  * @category    TODO
  * @author      Jens Schwidder <schwidder@zib.de>
+ * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -58,32 +60,19 @@ class Controller_Helper_Documents extends Zend_Controller_Action_Helper_Abstract
      *
      * TODO following could be handled inside a application model
      */
-    public function getSortedDocumentIds($sortOrder, $sortReverse, $state = 'unpublished') {
-        $result = null;
-
-        $method = 'getAllDocumentsBy';
-
+    public function getSortedDocumentIds($sortOrder, $sortReverse, $state = 'published') {
         switch ($sortOrder) {
             case 'author':
-                $method = $method . 'Authors';
-                break;
+                return Opus_Document::getAllDocumentsByAuthorsByState($state, $sortReverse);
             case 'publicationDate':
-                $method = $method . 'PubDate';
-                break;
+                return Opus_Document::getAllDocumentsByPubDateByState($state, $sortReverse);
             case 'docType':
-                $method = $method . 'Doctype';
-                break;
+                return Opus_Document::getAllDocumentsByDoctypeByState($state, $sortReverse);
             case 'title':
-                $method = $method . 'Titles';
-                break;
+                return Opus_Document::getAllDocumentsByTitlesByState($state, $sortReverse);
             default:
-                $method = 'getAllIds';
+                return Opus_Document::getAllIdsByState($state, $sortReverse);
         }
-
-        $method = $method . 'ByState';
-        $result = Opus_Document::$method($state, $sortReverse);
-
-        return $result;
     }
 
 }
