@@ -47,7 +47,6 @@ class Frontdoor_IndexController extends Controller_Action {
         $docId = $request->getParam('docId');
         $this->view->docId = $docId;
         $baseUrl = $request->getBaseUrl();
-        $this->setLayoutPathAndTheme();
 
         try {
             $document = new Opus_Document($docId);
@@ -69,9 +68,11 @@ class Frontdoor_IndexController extends Controller_Action {
 
             $config = Zend_Registry::getInstance()->get('Zend_Config');
             $deliver_url_prefix = isset($config->deliver->url->prefix) ? $config->deliver->url->prefix : '/documents';
+            $layoutPath = 'layouts/'.(isset($config->theme) ? $config->theme : '');
 
             $proc->setParameter('', 'baseUrl', $baseUrl);
             $proc->setParameter('', 'deliverUrlPrefix', "$deliver_url_prefix");
+            $proc->setParameter('', 'layoutPath', $baseUrl.'/'.$layoutPath);
             $this->view->frontdoor = $proc->transformToXML($xml);
 
             $this->incrementStatisticsCounter($docId);
@@ -81,14 +82,6 @@ class Frontdoor_IndexController extends Controller_Action {
                     $this->view->frontdoor = sprintf($this->view->translate('frontdoor_doc_id_not_found'), $docId);
             }
         }
-    }
-
-    private function setLayoutPathAndTheme() {
-        $config = Zend_Registry::get("Zend_Config");
-        if(isset($config->resources->layout->layoutPath))
-            $this->view->layoutPath = $config->resources->layout->layoutPath;
-        if(isset($config->theme))
-            $this->view->theme = $config->theme;
     }
 
     private function setUpXSLTStylesheet($type) {
