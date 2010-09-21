@@ -1199,7 +1199,8 @@
     </xsl:template>
 
     <xsl:template name="ExportFunctions">
-        <div class="services">
+        <fieldset class="services">
+            <legend>Export</legend>
         <!-- Bib-Export -->
         <xsl:element name="a">
            <!-- TODO: Use Zend Url-Helper to build href attribute -->
@@ -1260,7 +1261,7 @@
                 </xsl:attribute>
             </xsl:element>
         </xsl:element>
-        </div>
+        </fieldset>
     </xsl:template>
 
     <!-- Named template to translate a field's name. Needs no parameter. -->
