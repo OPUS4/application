@@ -88,7 +88,7 @@ $this->headLink()
                 <div id="footerLinks" class="left">
                     <ul id="secondary-nav" class="nav">
                         <li class="first"><a href="<?= $this->url(array('module'=>'home','controller'=>'index','action'=>'about'),null,true) ?>">About</a></li>
-                        <li><a href="">Imprint</a></li>
+                        <li><a href="<?= $this->url(array('module'=>'home','controller'=>'index','action'=>'about','content'=>'about_content_impress'),null,true) ?>">Imprint</a></li>
                         <li class="last"><a href="<?= $this->url(array('module'=>'home','controller'=>'index','action'=>'contact'),null,true) ?>"><?= $this->translate('home_index_contact_actionname'); ?></a></li>
                     </ul>
                 </div>
