@@ -11,6 +11,7 @@ echo '<h3>'.$this->subtitle.'</h3>';
 <?= $this->group($this->groupPersonAuthor); ?>
 
 <?= $this->element($this->ThesisDateAccepted_); ?>
+<?= $this->group($this->groupPersonAdvisor); ?>
 <?= $this->element($this->ThesisGrantor_); ?>
 <?= $this->element($this->ThesisPublisher_); ?>
 
@@ -25,7 +26,6 @@ echo '<h3>'.$this->subtitle.'</h3>';
 <?= $this->element($this->PageNumber_); ?>
 
 <?= $this->group($this->groupPersonEditor); ?>
-<?= $this->group($this->groupPersonAdvisor); ?>
 <?= $this->group($this->groupPersonTranslator); ?>
 <?= $this->group($this->groupPersonContributor); ?>
 <?= $this->group($this->groupCreatingCorporation); ?>
