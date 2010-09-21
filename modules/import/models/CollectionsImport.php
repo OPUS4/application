@@ -31,62 +31,47 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Import_Model_CollectionsImport
-{
-	/**
-	 * Imports Collection data to Opus4
-	 *
-	 * @param Strring $data XML-String with classifications to be imported
-	 * @return array List of documents that have been imported
-	 */
-	public function __construct($data)
-	{
-		// Add a CollectionRole for Collections
-        $collRole = new Opus_CollectionRole(9);
-		// Add a CollectionRole for Series (Schriftenreihen)
-        $seriesRole = new Opus_CollectionRole(10);
-		
-		$doclist = $data->getElementsByTagName('table_data');
-		foreach ($doclist as $document) 
-		{
+class Import_Model_CollectionsImport {
+
+    /**
+     * Imports Collection data to Opus4
+     *
+     * @param Strring $data XML-String with classifications to be imported
+     * @return array List of documents that have been imported
+     */
+    public function __construct($data) {
+        $collRole = Opus_CollectionRole::fetchByName('collections');
+        $seriesRole = Opus_CollectionRole::fetchByName('series');
+        $doclist = $data->getElementsByTagName('table_data');
+	foreach ($doclist as $document)	{
             if ($document->getAttribute('name') === 'collections') {
                 $facNumbers = $this->importCollectionsDirectly($document, $collRole);
-	/*<row>
-		<field name="coll_id">1</field>
-		<field name="root_id">1</field>
-		<field name="coll_name">TUHH Spektrum Specials</field>
-		<field name="lft">1</field>
-		<field name="rgt">2</field>
-	</row>*/
             }
             if ($document->getAttribute('name') === 'schriftenreihen') {
                 $instNumbers = $this->importSeries($document, $seriesRole);
             }
-		}
 	}
+    }
 
-	/**
-	 * transfers any OPUS3-conform classification System into an array
-	 *
-	 * @param DOMDocument $data XML-Document to be imported
-	 * @return array List of documents that have been imported
-	 */
-	protected function transferOpusClassification($data)
-	{
-		$classification = array();
-
-		$doclist = $data->getElementsByTagName('row');
-		$index = 0;
-		foreach ($doclist as $document)
-		{
+    /**
+     * transfers any OPUS3-conform classification System into an array
+     *
+     * @param DOMDocument $data XML-Document to be imported
+     * @return array List of documents that have been imported
+     */
+    protected function transferOpusClassification($data) {
+	$classification = array();
+	$doclist = $data->getElementsByTagName('row');
+	$index = 0;
+	foreach ($doclist as $document)	{
             $classification[$index] = array();
             foreach ($document->getElementsByTagName('field') as $field) {
-           		$classification[$index][$field->getAttribute('name')] = $field->nodeValue;
+           	$classification[$index][$field->getAttribute('name')] = $field->nodeValue;
             }
             $index++;
-		}
-		return $classification;
 	}
+	return $classification;
+    }
 
     /**
      * sort multidimensional arrays
@@ -110,14 +95,13 @@ class Import_Model_CollectionsImport
         return $temp_array;
     }
 
-	/**
-	 * Imports Collections from Opus3 to Opus4 directly (from DB-table to DB-tables)
-	 *
-	 * @param DOMDocument $data XML-Document to be imported
-	 * @return array List of documents that have been imported
-	 */
-	protected function importCollectionsDirectly($data, $collRole)
-	{
+    /**
+     * Imports Collections from Opus3 to Opus4 directly (from DB-table to DB-tables)
+     *
+     * @param DOMDocument $data XML-Document to be imported
+     * @return array List of documents that have been imported
+     */
+    protected function importCollectionsDirectly($data, $collRole)  {
         $collections = $this->transferOpusClassification($data);
         $contentTable = new Opus_Db_Collections();
         $structTable = new Opus_Db_CollectionsNodes();
@@ -132,7 +116,7 @@ class Import_Model_CollectionsImport
         $previousId = array();
         foreach ($sorted_collections as $row) {
             $contentData = array(
-                'oldid'   => ($row['coll_id']+1),
+           //     'oldid'   => ($row['coll_id']+1),
                 'role_id' => $collRole->getId(),
                 'name'    => $row['coll_name']
             );
@@ -183,36 +167,34 @@ class Import_Model_CollectionsImport
             $previousLeft = $row['lft'];
             $previousRight = $row['rgt'];
         }
-	}
+    }
 	
-	/**
-	 * Imports Series from Opus3 to Opus4
-	 *
-	 * @param DOMDocument $data XML-Document to be imported
-	 * @return array List of documents that have been imported
-	 */
-	protected function importSeries($data, $collRole)
-	{
+    /**
+     * Imports Series from Opus3 to Opus4
+     *
+     * @param DOMDocument $data XML-Document to be imported
+     * @return array List of documents that have been imported
+     */
+    protected function importSeries($data, $collRole) {
         $classification = $this->transferOpusClassification($data);
 
         // Build a mapping file to associate old IDs with the new ones
         $fp = fopen('../workspace/tmp/series.map', 'w');
-
-		foreach ($classification as $class) {
-          	echo ".";
-		    // first level category
-		    $root = $collRole->getRootNode();
-		    $coll = $root->addLastChild();
+            foreach ($classification as $class) {
+            echo ".";
+            // first level category
+	    $root = $collRole->getRootNode();
+	    $coll = $root->addLastChild();
             $node = new Opus_Collection();
-		    $node->setName($class['name']);
-		    $node->setTheme('default');
-			$coll->addCollection($node);
-			$coll->setVisible(1);
-			$root->setVisible(1);
-			$root->store();
-	        fputs($fp, $class['sr_id'] . ' ' . $coll->getId() . "\n");
-		 }
-         echo "\n";
-		 fclose($fp);
+	    $node->setName($class['name']);
+	    $node->setTheme('default');
+            $coll->addCollection($node);
+            $coll->setVisible(1);
+            $root->setVisible(1);
+            $root->store();
+	    fputs($fp, $class['sr_id'] . ' ' . $coll->getId() . "\n");
 	}
+        echo "\n";
+	fclose($fp);
+    }
 }
