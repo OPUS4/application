@@ -73,16 +73,16 @@ class Publish_Form_PublishingSecond extends Zend_Form {
                 $this->_parseField($field);
             }
 
-            //hidden field for fulltext to cummunicate between different forms
-            $this->_addHiddenField('fullText', $this->fulltext);
+//            //hidden field for fulltext to cummunicate between different forms
+//            $this->_addHiddenField('fullText', $this->fulltext);
+//
+//            //hidden field with document type
+//            $this->_addHiddenField('documentType', $this->doctype);
+//
+//            //hidden field with document id
+//            $this->_addHiddenField('documentId', $this->docid);
 
-            //hidden field with document type
-            $this->_addHiddenField('documentType', $this->doctype);
-
-            //hidden field with document id
-            $this->_addHiddenField('documentId', $this->docid);
-
-            $this->_addSubmit('button_label_send');
+            $this->_addSubmit('button_label_send', 'send');
         }
     }
 
@@ -90,9 +90,9 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      * Adds submit button to the form.
      * @param <type> $label
      */
-    protected function _addSubmit($label) {
+    protected function _addSubmit($label, $name) {
         //Submit button
-        $submit = $this->createElement('submit', 'send');
+        $submit = $this->createElement('submit', $name);
         $submit->setLabel($label);
         $this->addElement($submit);
     }
@@ -829,26 +829,29 @@ class Publish_Form_PublishingSecond extends Zend_Form {
             return $this->licences;
     }
 
-    public function removeUnsaveableFields() {
-
-        foreach ($this->getElements() as $element) {
-            if ($element->getValue() == "" || $element->getType() == "Zend_Form_Element_Submit" || $element->getType() == "Zend_Form_Element_Hidden") {
-
-                $this->removeElement($element->getName());
-                $this->log->debug("remove " . $element->getName() . " from form!");
-            }
+    public function prepareCheck(Zend_Session_Namespace $defaultNS) {
+        $defaultNS->elements = array();
+        foreach ($this->getDisplayGroups() AS $group) {
+            $this->removeDisplayGroup($group->getName());
         }
 
-        //hidden field for fulltext to cummunicate between different forms
-        $this->_addHiddenField('fullText', $this->fulltext);
+        foreach ($this->getElements() as $element) {
+            $name = $element->getName();
+            if ($element->getValue() == "" || $element->getType() == "Zend_Form_Element_Submit" || $element->getType() == "Zend_Form_Element_Hidden") {
+                $element->removeDecorator('Label');
+                $this->removeElement($name);
 
-        //hidden field with document type
-        $this->_addHiddenField('documentType', $this->doctype);
-
-        //hidden field with document id
-        $this->_addHiddenField('documentId', $this->docid);
-
-        $this->_addSubmit('button_label_send2');
+            }
+            else {
+                $defaultNS->elements[$name]['name'] = $name;
+                $defaultNS->elements[$name]['value'] = $element->getValue();
+                $defaultNS->elements[$name]['label'] = $element->getLabel();
+                $element->removeDecorator('Label');
+                $this->removeElement($name);
+            }
+        }        
+        $this->_addSubmit('button_label_send2', 'send');
+        $this->_addSubmit('button_label_back', 'back');
     }
 
 }
