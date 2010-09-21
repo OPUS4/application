@@ -81,20 +81,23 @@ class View_Helper_LanguageSelector {
 
         $links = array();
         $currentLocale = Zend_Registry::get('Zend_Translate')->getLocale();
+        $i = 0;
+        $count = count($translations);
         foreach ($translations as $trans) {
             if ($trans === $currentLocale) {
-                $links[] = $locale->getTranslation($trans, 'language', $trans);
+                $links[] = '<li class="active'.($i === 0 ? ' first' : '').($i === ($count - 1) ? ' last' : '').'"><em>'.$locale->getTranslation($trans, 'language', $trans).'</em></li>';
             } else {
-                $link = '<a href="';
+                $link = '<li class="'.($i === 0 ? 'first' : '').($i === ($count - 1) ? 'last' : '').'"><a href="';
                 $link .= $this->_view->url(array(
                         'action' => 'language',
                         'controller' => 'index',
                       'module' => 'home',
                         'language' => $trans));
-                $link .= '">' . $locale->getTranslation($trans, 'language', $trans) . '</a>';
+                $link .= '"><span>' . $locale->getTranslation($trans, 'language', $trans) . '</span></a></li>';
                 $links[] = $link;
             }
+            $i++;
         }
-        return '<span class="navigation languages">' . implode(' | ', $links) . '</span>';
+        return implode(' ', $links);
     }
 }
