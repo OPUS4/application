@@ -61,16 +61,17 @@ $this->headLink()
 
         <div id="top-header">
             <div class="wrapper">
-                <span id="language-selector"><?= $this->languageSelector() ?></span>
+                <span id="lang-switch" class="nav"><?= $this->languageSelector() ?></span>
                 <span id="login-bar"><?= $this->loginBar() ?></span>
             </div>
         </div>
 
         <div id="header">
             <div class="wrapper">
-                <h1 id="logo">Opus4</h1>
-
-                <div id="navigationMenu">
+                <h1 id="logo">
+                    <a href="<?= $this->url(array('module'=>'home','controller'=>'index','action'=>'index'),null,true) ?>"><img src="<?= $basePath.'/layouts/opus4/img/theme/logo.gif' ?>" alt="OPUS" title="Home" width="185" height="89" /></a>
+                </h1>
+                <div id="primary-nav">
                     <?= $this->navigation()->menu(); ?>
                 </div>
             </div>
