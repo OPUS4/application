@@ -7,13 +7,10 @@ echo '<h3>'.$this->subtitle.'</h3>';
 <?= $this->group($this->groupPersonSubmitter); ?>
 <?= $this->group($this->groupTitleMain); ?>
 <?= $this->element($this->TitleSub_); ?>
-<?= $this->element($this->TitleParent_); ?>
 <?= $this->group($this->groupTitleAbstract); ?>
 <?= $this->group($this->groupPersonAuthor); ?>
 <?= $this->element($this->CompletedYear_); ?>
 <?= $this->element($this->PageNumber_); ?>
-<?= $this->element($this->PageFirst_); ?>
-<?= $this->element($this->PageLast_); ?>
 <?= $this->group($this->groupPersonContributor); ?>
 <?= $this->group($this->groupCreatingCorporation); ?>
 <?= $this->group($this->groupContributingCorporation); ?>
@@ -28,9 +25,8 @@ echo '<h3>'.$this->subtitle.'</h3>';
 <?= $this->element($this->ServerDateUnlocking_); ?>
 
 <?= $this->element($this->fullText, null, "Hidden", "fullText"); ?>
-<?= $this->element("coursematerial", null, "Hidden",  "documentType"); ?>
+<?= $this->element("lecture", null, "Hidden",  "documentType"); ?>
 <?= $this->element($this->documentId, null, "Hidden", "documentId"); ?>
 <?= $this->element('button_label_send', null, "Submit",  "send"); ?>
 
 </form>
-

@@ -32,7 +32,7 @@
  * @version     $Id: all.xml 4892 2010-08-23 13:27:56Z sgottwald $
  */
  -->
-<documenttype name="coursematerial"
+<documenttype name="lecture"
     xmlns="http://schemas.opus.org/documenttype"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://schemas.opus.org/documenttype https://svn.zib.de/opus4dev/framework/trunk/library/Opus/Document/documenttype.xsd">
@@ -44,14 +44,11 @@
         <required-if-fulltext />
     </field>
     <field name="TitleSub" required="no" formelement="Text" datatype="Title" multiplicity="1" />
-    <field name="TitleParent" required="no" formelement="Text" datatype="Title" multiplicity="1" />
-    <field name="PersonAuthor" required="no" formelement="Text" datatype="Person" multiplicity="*" />
+    <field name="PersonAuthor" required="yes" formelement="Text" datatype="Person" multiplicity="*" />
     <field name="PersonContributor" required="no" formelement="Text" datatype="Person" multiplicity="*" />
     <field name="CreatingCorporation" required="no" formelement="Text" datatype="Text" multiplicity="*" />
     <field name="ContributingCorporation" required="no" formelement="Text" datatype="Text" multiplicity="*"/>
     <field name="PageNumber" required="no" formelement="Text" datatype="Integer" multiplicity="1" />
-    <field name="PageFirst" required="no" formelement="Text" datatype="Integer" multiplicity="1" />
-    <field name="PageLast" required="no" formelement="Text" datatype="Integer" multiplicity="1" />
     <field name="SubjectSwd" required="no" formelement="Text" datatype="Text" multiplicity="5" />
     <field name="SubjectUncontrolled" required="no" formelement="Text" datatype="Text" multiplicity="5" />
     <field name="Institute" required="no" formelement="Select" datatype="Institute" multiplicity="1" />
