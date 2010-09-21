@@ -75,7 +75,7 @@ class OpusConsole {
             try {
                 eval($input);
             } catch (Exception $e) {
-                echo 'Caught exception: ' . $e->getMessage() . "\n" . $e->getTraceAsString() . "\n";
+                echo 'Caught exception ' . get_class($e) . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString() . "\n";
             }
         }
     }
