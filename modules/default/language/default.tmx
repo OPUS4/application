@@ -7,6 +7,24 @@
  
   <body>
 
+    <tu tuid="rss_icon">
+        <tuv xml:lang="en">
+            <seg>RSS Feed Icon</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>RSS Feed Icon</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="rss_subscribe">
+        <tuv xml:lang="en">
+            <seg>Subscribe RSS Feed</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>RSS Feed abbonieren</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="license_pagetitle">
       <tuv xml:lang="en">
         <seg>License</seg>
