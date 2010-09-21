@@ -66,9 +66,11 @@
     </xsl:template>
 
     <!--
-    Suppress fields with nil value
+    Suppress fields with nil value or empty string
     -->
     <xsl:template match="table_data/row/field[@xsi:nil='true']" priority="1" />
+
+
 
     <xsl:template match="table_data[@name='opus']/row">
         <xsl:element name="Opus_Document">            
@@ -260,18 +262,25 @@
     <xsl:template name="AddSubmitter">
         <xsl:param name="verification" required="no" />
         <xsl:param name="author_id" required="no" />
-        <xsl:element name="PersonSubmitter">
-            <xsl:attribute name="FirstName">Opus3</xsl:attribute>
-            <xsl:attribute name="LastName">Importer</xsl:attribute>
-            <xsl:if test="string-length($verification)>0">
-                <xsl:attribute name="Email"><xsl:value-of select="$verification" /></xsl:attribute>
-            </xsl:if>
-            <xsl:if test="string-length($author_id)>0">
-                <xsl:element name="IdentifierLocal">
-                    <xsl:attribute name="Value"><xsl:value-of select="$author_id" /></xsl:attribute>
+        <xsl:for-each select="str:split($verification,';')">
+            <xsl:variable name="verification_tmp"><xsl:value-of select="normalize-space(.)" /></xsl:variable>
+            <xsl:for-each select="str:split($verification_tmp,',')">
+                <xsl:element name="PersonSubmitter">
+                    <xsl:attribute name="FirstName">Opus3</xsl:attribute>
+                    <xsl:attribute name="LastName">Importer</xsl:attribute>
+                    <xsl:if test="string-length(normalize-space(.))>0">
+                        <xsl:attribute name="Email"><xsl:value-of select="normalize-space(.)" /></xsl:attribute>
+                    </xsl:if>
+                    <xsl:if test="string-length($author_id)>0">
+                        <xsl:element name="IdentifierLocal">
+                            <xsl:attribute name="Value"><xsl:value-of select="$author_id" /></xsl:attribute>
+                        </xsl:element>
+                    </xsl:if>
                 </xsl:element>
-            </xsl:if>
-        </xsl:element>
+            </xsl:for-each>
+        </xsl:for-each>
+
+
     </xsl:template>
 
     <!-- temporary licence information -->
@@ -464,7 +473,7 @@
         <!-- take them as one value in one field ??? -->
         <xsl:if test="string-length(.)>0">
             <xsl:for-each select="str:split(., ',')">
-                <xsl:if test="string-length(.)>0">
+                <xsl:if test="string-length(normalize-space(.))>0">
                     <xsl:element name="SubjectUncontrolled">
                         <xsl:attribute name="Language">
                             <xsl:call-template name="mapLanguage"><xsl:with-param name="lang">eng</xsl:with-param></xsl:call-template>
@@ -536,7 +545,7 @@
         </xsl:if>
     </xsl:template>
     <xsl:template match="table_data[@name='opus']/row/field[@name='description']">
-        <xsl:if test="string-length(.)>0">
+        <xsl:if test="string-length(normalize-space(.))>0">
             <xsl:element name="TitleAbstract">
                 <xsl:attribute name="Language">
                     <xsl:choose>
@@ -555,7 +564,7 @@
         </xsl:if>
     </xsl:template>
     <xsl:template match="table_data[@name='opus']/row/field[@name='description2']">
-        <xsl:if test="string-length(.)>0">
+        <xsl:if test="string-length(normalize-space(.))>0">
             <xsl:element name="TitleAbstract">
                 <xsl:attribute name="Language">
                     <xsl:call-template name="mapLanguage"><xsl:with-param name="lang"><xsl:value-of select="../field[@name='description2_lang']" /></xsl:with-param></xsl:call-template>
