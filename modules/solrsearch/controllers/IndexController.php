@@ -375,7 +375,7 @@ class Solrsearch_IndexController extends Controller_Action {
         }
     }
 
-    private function createAdvancedSearchQuery($data) {
+    private function createAdvancedSearchQuery() {
         $this->log->debug("Constructing query for advanced search.");
 
         $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::ADVANCED);
