@@ -40,11 +40,7 @@
  */
 class Publish_DepositController extends Controller_Action {
 
-    public $documentType;
-    public $documentId;
-    public $fulltext;
-    public $additionalFields;
-    public $postData;
+    public $postData = array();
 
     /**
      * stores a delivered form as document in the database
@@ -52,102 +48,59 @@ class Publish_DepositController extends Controller_Action {
      */
     public function depositAction() {
         $log = Zend_Registry::get('Zend_Log');
+        $defaultNS = new Zend_Session_Namespace('Publish');
 
         $this->view->title = $this->view->translate('publish_controller_index');
-        $this->view->subtitle = $this->view->translate('publish_controller_deposit_successful');
 
         if ($this->getRequest()->isPost() === true) {
-            $this->postData = $this->getRequest()->getPost();
 
-            $this->_setDocumentParameters();
+            $post = $this->getRequest()->getPost();
 
-            $depositForm = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $this->fulltext, $this->additionalFields, $this->postData);
-
-                if (!$depositForm->isValid($this->postData)) {
-                    $depositForm->removeUnsaveableFields();
-                    $this->view->form = $depositForm;
-                    return $this->renderScript('form/check.phtml');
-                }
-                else {
-                    if ($this->documentType !== "") {
-
-                    $depositData = new Publish_Model_Deposit($this->documentId, $this->documentType, $this->postData);
-
-                    $document = $depositData->getDocument();
-
-                    $projects = $depositData->getDocProjects();
-
-                    $document->setServerState('unpublished');
-
-                    $docId = $document->store();
-
-                    $log->info("Document was sucessfully stored!");
-
-                    $this->_notifyReferee($projects);
-                }
-                else
-                return "Error: Unknown DocumentType!";
+            foreach ($defaultNS->elements AS $element) {
+                $this->postData[$element['name']] = $element['value'];
             }
 
-            
-        }
-        else {
+            $this->postData = array_merge($this->postData, $post);            
+
+            $depositForm = new Publish_Form_PublishingSecond($defaultNS->documentType, $defaultNS->documentId, $defaultNS->fulltext, $defaultNS->additionalFields, $this->postData);
+            $depositForm->populate($this->postData);
+
+            if (array_key_exists('back', $post)) {                
+                $this->view->form = $depositForm;
+                return $this->renderScript('form/check.phtml');
+                
+            } else {
+                if (isset($this->postData['send']))
+                    unset($this->postData['send']);
+
+                $depositData = new Publish_Model_Deposit($defaultNS->documentId, $defaultNS->documentType, $this->postData);
+
+                $document = $depositData->getDocument();
+
+                $projects = $depositData->getDocProjects();
+
+                $document->setServerState('unpublished');
+
+                $docId = $document->store();
+
+                $log->info("Document was sucessfully stored!");
+
+                $this->_notifyReferee($projects);
+            }
+        } else {
             // GET Reqquest is redirected to index
             $url = $this->view->url(array('controller' => 'index', 'action' => 'index'));
             return $this->redirectTo($url);
         }
-    }
-
-    /**
-     * Methods sets the documents parameters which are also the member variables of this controller
-     * @param <array> $this->postData
-     */
-    private function _setDocumentParameters() {
-        if (!empty($this->postData)) {
-
-            if (isset($this->postData['documentType'])) {
-                $this->documentType = $this->postData['documentType'];
-                unset($this->postData["documentType"]);
-            }
-            else
-                $this->documentType = "";
-
-            if (isset($this->postData['documentId'])) {
-                $this->documentId = $this->postData['documentId'];
-                unset($this->postData["documentId"]);
-            }
-            else
-                $this->documentId = "";
-
-
-            if (isset($this->postData["fullText"])) {
-                $this->fulltext = $this->postData["fullText"];
-                unset($this->postData["fullText"]);
-            }
-            else $this->fulltext = "0";
-
-            $additionalFields = array();
-
-            foreach ($this->postData AS $element => $value) {
-                if (substr($element, 0, 9) == "countMore") {
-                    $key = substr($element, 9);
-                    $additionalFields[$key] = (int) $value;
-                }
-            }
-
-            $this->additionalFields = $additionalFields;
-
-            if (isset($this->postData["send"]))
-                unset($this->postData["send"]);
-        }
-    }
+    }    
 
     /**
      *  Method finally sends an email to the referrers named in config.ini
      */
     private function _notifyReferee($projects = null) {
         $log = Zend_Registry::get('Zend_Log');
-        $mail = new Mail_PublishNotification($this->documentId, $projects, $this->view);
+        $defaultNS = new Zend_Session_Namespace('Publish');
+        $mail = new Mail_PublishNotification($defaultNS->documentId, $projects, $this->view);
         if ($mail->send() === false)
             $log->err("email to referee could not be sended!");
         else

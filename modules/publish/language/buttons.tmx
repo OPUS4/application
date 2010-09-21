@@ -8,6 +8,16 @@
   <body>
 <!-- This language file contains all texts concerning button labels. -->
 
+    <tu tuid="button_label_back">
+        <tuv xml:lang="en">
+            <seg>Make changes</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Einträge ändern</seg>
+        </tuv>
+    </tu>
+
+
     <tu tuid="button_label_send">
         <tuv xml:lang="en">
             <seg>Send form</seg>

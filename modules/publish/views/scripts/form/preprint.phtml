@@ -7,6 +7,13 @@ echo '<h2>' . $this->subtitle . '</h2>';
 
 //element($value, $options = null, $type = null, $name = null)
 //group($value, $options = null, $name = null)
+/**
+ * <?= $this->element($this->fullText, null, "Hidden", "fullText"); ?>
+    <?= $this->element("preprint", null, "Hidden",  "documentType"); ?>
+    <?= $this->element($this->documentId, null, "Hidden", "documentId"); ?>
+    
+
+ */
 ?>
 <span style="color:red; font-weight:big; padding: 10pt;"> <?= $this->errorCaseMessage; ?> </span>
 
@@ -26,11 +33,8 @@ echo '<h2>' . $this->subtitle . '</h2>';
     <?= $this->group($this->groupSubjectMSC); ?>
     <?= $this->group($this->groupSubjectUncontrolled); ?>
     <?= $this->element($this->Note_, "cols='60' rows='9'"); ?>
-    
-    <?= $this->element($this->fullText, null, "Hidden", "fullText"); ?>
-    <?= $this->element("preprint", null, "Hidden",  "documentType"); ?>
-    <?= $this->element($this->documentId, null, "Hidden", "documentId"); ?>
-    <?= $this->element('button_label_send', null, "Submit",  "send"); ?>
 
+    <?= $this->element('button_label_send', null, "Submit",  "send"); ?>
+    
 </form>
 

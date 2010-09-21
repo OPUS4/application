@@ -40,13 +40,15 @@
  */
 class Publish_FormController extends Controller_Action {
 
-    public $documentType;
-    public $documentId;
-    public $fulltext;
-    public $additionalFields;
+//    public $documentType;
+//    public $documentId;
+//    public $fulltext;
+//    public $additionalFields;
 
     public function uploadAction() {
         $log = Zend_Registry::get('Zend_Log');
+        $defaultNS = new Zend_Session_Namespace('Publish');
+
         $this->view->languageSelectorDisabled = true;
 
         if ($this->getRequest()->isPost() === true) {
@@ -63,17 +65,17 @@ class Publish_FormController extends Controller_Action {
                 $this->_setDocumentParameters($data);
 
                 $this->view->title = $this->view->translate('publish_controller_index');
-                $this->view->subtitle = $this->view->translate($this->documentType);
+                $this->view->subtitle = $this->view->translate($defaultNS->documentType);
                 $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
-                $this->view->doctype = $this->documentType;
+                $this->view->doctype = $defaultNS->documentType;
 
                 $this->_storeDocumentFiles();
 
-                $templateName = $this->_helper->documentTypes->getTemplateName($this->documentType);
+                $templateName = $this->_helper->documentTypes->getTemplateName($defaultNS->documentType);
 
                 $this->_helper->viewRenderer($templateName);
 
-                $publishForm = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $this->fulltext, null, null);
+                $publishForm = new Publish_Form_PublishingSecond($defaultNS->documentType, $defaultNS->documentId, $defaultNS->fulltext, null, null);
                 $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check'));
                 $publishForm->setAction($action_url);
                 $publishForm->setMethod('post');
@@ -95,6 +97,8 @@ class Publish_FormController extends Controller_Action {
      */
     public function checkAction() {
         $log = Zend_Registry::get('Zend_Log');
+        $defaultNS = new Zend_Session_Namespace('Publish');
+
         $this->view->languageSelectorDisabled = true;
 
         if ($this->getRequest()->isPost() === true) {
@@ -106,17 +110,17 @@ class Publish_FormController extends Controller_Action {
             $this->_setDocumentParameters($postData);
 
             //initialize the form object
-            $form = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $this->fulltext, $this->additionalFields, $postData);
+            $form = new Publish_Form_PublishingSecond($defaultNS->documentType, $defaultNS->documentId, $defaultNS->fulltext, $defaultNS->additionalFields, $postData);
             $form->populate($postData);
 
             if (!$form->send->isChecked()) {
                 // A button (not SEND) was pressed => add / remove fields
 
                 $this->view->title = $this->view->translate('publish_controller_index');
-                $this->view->subtitle = $this->view->translate($this->documentType);
+                $this->view->subtitle = $this->view->translate($defaultNS->documentType);
                 $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
 
-                $this->_helper->viewRenderer($this->documentType);
+                $this->_helper->viewRenderer($defaultNS->documentType);
 
                 //call method to add or delete buttons
                 return $this->_getExtendedForm($form, $postData);
@@ -124,7 +128,7 @@ class Publish_FormController extends Controller_Action {
                 // SEND was pressed => check the form
 
                 $this->view->title = $this->view->translate('publish_controller_check');
-                $this->view->subtitle = $this->view->translate($this->documentType);
+                $this->view->subtitle = $this->view->translate($defaultNS->documentType);
                 $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
 
                 if (!$form->isValid($this->getRequest()->getPost())) {
@@ -134,7 +138,7 @@ class Publish_FormController extends Controller_Action {
                     $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
                     $this->_setViewVariables($form);
 
-                    return $this->render($this->documentType);
+                    return $this->render($defaultNS->documentType);
                 } else {
                     // Form variables all VALID
                     $log->debug("Variables are valid!");
@@ -143,19 +147,18 @@ class Publish_FormController extends Controller_Action {
                     $this->view->subtitle = $this->view->translate('publish_controller_check2');
                     $this->view->header = $this->view->translate('publish_controller_changes');
 
-                    $depositForm = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $this->fulltext, $this->additionalFields, $form->getValues());
+                    $depositForm = new Publish_Form_PublishingSecond($defaultNS->documentType, $defaultNS->documentId, $defaultNS->fulltext, $defaultNS->additionalFields, $form->getValues());
                     $action_url = $this->view->url(array('controller' => 'deposit', 'action' => 'deposit'));
                     $depositForm->setAction($action_url);
                     $depositForm->setMethod('post');
                     $depositForm->populate($form->getValues());
 
-                    $depositForm->removeUnsaveableFields();
+                    $depositForm->prepareCheck($defaultNS);
 
                     $this->view->form = $depositForm;
                 }
             }
-        } 
-        else {
+        } else {
             //GET Request on check
             return $this->redirectTo('upload');
         }
@@ -261,44 +264,57 @@ class Publish_FormController extends Controller_Action {
     }
 
     /**
-     * Methods sets the documents parameters which are also the memeber variables of this controller
+     * Methods sets session parameters of the document.
+     * If they are not set in session then the value ist fetched from the post request.
      * @param <array> $postData
      */
     private function _setDocumentParameters($postData = null) {
         $log = Zend_Registry::get('Zend_Log');
-        if (!empty($postData)) {
+        $defaultNS = new Zend_Session_Namespace('Publish');
 
-            if (isset($postData['documentType']))
-                $this->documentType = $postData['documentType'];
-            else
-                $this->documentType = "";
-
-            $log->debug("documentType = " . $this->documentType);
-            if (isset($postData['documentId']))
-                $this->documentId = $postData['documentId'];
-            else
-                $this->documentId = "";
-
-            $log->debug("documentId = " . $this->documentId);
-
-            if (isset($postData['fullText']))
-                $this->fulltext = $postData['fullText'];
-            else
-                $this->fulltext = "0";
-
-            $log->debug("fulltext = " . $this->fulltext);
-
-            $additionalFields = array();
-
-            foreach ($postData AS $element => $value) {
-                if (substr($element, 0, 9) == "countMore") {
-                    $key = substr($element, 9);
-                    $additionalFields[$key] = (int) $value;
-                }
+        if (!isset($defaultNS->documentType)) {
+            if (isset($postData['documentType'])) {
+                $defaultNS->documentType = $postData['documentType'];
+                unset($postData['documentType']);
             }
+            else
+                $defaultNS->documentType = "";
 
-            $this->additionalFields = $additionalFields;
+            $log->info("documentType = " . $defaultNS->documentType);
         }
+
+        if (!isset($defaultNS->documentId)) {
+            if (isset($postData['documentId'])) {
+                $defaultNS->documentId = $postData['documentId'];
+                unset($postData['documentId']);
+            }
+            else
+                $defaultNS->documentId = "";
+
+            $log->info("documentId = " . $defaultNS->documentId);
+        }
+
+        if (!isset($defaultNS->fulltext)) {
+            if (isset($postData['fullText'])) {
+                $defaultNS->fulltext = $postData['fullText'];
+                unset($postData['fulltext']);
+            }
+            else
+                $defaultNS->fulltext = "0";
+
+            $log->info("fulltext = " . $defaultNS->fulltext);
+        }
+
+        $additionalFields = array();
+
+        foreach ($postData AS $element => $value) {
+            if (substr($element, 0, 9) == "countMore") {
+                $key = substr($element, 9);
+                $additionalFields[$key] = (int) $value;
+            }
+        }
+
+        $defaultNS->additionalFields = $additionalFields;
     }
 
     /**
@@ -306,31 +322,33 @@ class Publish_FormController extends Controller_Action {
      */
     private function _storeDocumentFiles() {
         $log = Zend_Registry::get('Zend_Log');
+        $defaultNS = new Zend_Session_Namespace('Publish');
 
         $upload = new Zend_File_Transfer_Adapter_Http();
         $files = $upload->getFileInfo();
 
+        $defaultNS->document = new Opus_Document();
+        $defaultNS->document->setType($defaultNS->documentType);
+        $defaultNS->document->setServerState('temporary');
+
         if ($upload->isUploaded()) {
             $log->info("Fileupload of: " . count($files) . " possible files => Fulltext is '1'.");
-            $this->fulltext = "1";
-            $document = new Opus_Document();
-            $document->setType($this->documentType);
-            $document->setServerState('temporary');
+            $defaultNS->fulltext = "1";
 
             foreach ($files AS $file => $fileValues) {
                 if (!empty($fileValues['name'])) {
                     $log->info("uploaded: " . $fileValues['name']);
-                    $docfile = $document->addFile();
+                    $docfile = $defaultNS->document->addFile();
                     //todo: default language should come from doc type
                     $docfile->setLanguage("eng");
                     $docfile->setFromPost($fileValues);
                 }
             }
-            $this->documentId = $document->store();
-            $log->info("The corresponding doucment ID is: " . $this->documentId);
         } else {
             $log->info("No file uploaded: => Fulltext is NOT given.");
         }
+        $defaultNS->documentId = $defaultNS->document->store();
+        $log->info("The corresponding doucment ID is: " . $defaultNS->documentId);
     }
 
     /**
@@ -340,6 +358,7 @@ class Publish_FormController extends Controller_Action {
      */
     private function _getExtendedForm($form, $postData=null) {
         $log = Zend_Registry::get('Zend_Log');
+        $defaultNS = new Zend_Session_Namespace('Publish');
 
         //find out which button was pressed
         $pressedButtonName = $this->_getPressedButton($form);
@@ -366,15 +385,15 @@ class Publish_FormController extends Controller_Action {
         }
 
         //set the increased value for the pressed button and create a new form
-        $this->additionalFields[$fieldName] = $currentNumber;
+        $defaultNS->additionalFields[$fieldName] = $currentNumber;
 
-        $form = new Publish_Form_PublishingSecond($this->documentType, $this->documentId, $this->fulltext, $this->additionalFields, $postData);
+        $form = new Publish_Form_PublishingSecond($defaultNS->documentType, $defaultNS->documentId, $defaultNS->fulltext, $defaultNS->additionalFields, $postData);
         $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check'));
         $form->setAction($action_url);
         $this->view->action_url = $action_url;
         $this->_setViewVariables($form);
 
-        return $this->render($this->documentType);
-    }    
+        return $this->render($defaultNS->documentType);
+    }
 
 }

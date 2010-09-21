@@ -3,29 +3,28 @@ echo '<h1>'. $this->title . '</h1>';
 echo '<h3>'. $this->subtitle . '</h3>';
 
 echo "<table cellspacing='10' cellpadding='20'>";
+$defaultNS = new Zend_Session_Namespace('Publish');
 
-$elements = $this->form->getElements();
+$elements = $defaultNS->elements;
 $i = 1;
 
 foreach ($elements as $element){
-    if ($element->getType() != "Zend_Form_Element_Submit" && $element->getType() != "Zend_Form_Element_Hidden") {
+    
         if ($element != "") {
             if (fmod($i, 2) == 0 ) {
                 
-                echo "<tr><td align='right'><b>" . $element->getLabel(). "</b></td><td>". $element->getValue() ."</td></tr>\n";
+                echo "<tr><td align='right'><b>" . $element['label']. "</b></td><td>". $element['value'] ."</td></tr>\n";
                 $i = $i + 1;
             }
             else {
                 
-                echo "<tr style='background-color:#efefef;'><td align='right'><b>" . $element->getLabel(). "</b></td><td>". $element->getValue() ."</td></tr>\n";
+                echo "<tr style='background-color:#efefef;'><td align='right'><b>" . $element['label']. "</b></td><td>". $element['value'] ."</td></tr>\n";
                 $i = $i + 1;
             }
         }
-    }
+    
 }
 
-echo "</table><br/><br/><br/>";
-echo '<h3>'. $this->header . '</h3>';
 echo $this->form;
 
 ?>

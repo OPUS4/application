@@ -38,14 +38,7 @@
  * @category    Application
  * @package     Module_Publish
  */
-class Publish_IndexController extends Controller_Action {
-
-    /**
-     * @todo: extends Zend_Controller_Action ausreichend?
-     */
-    public $documentType;
-    public $documentId;
-    public $additionalFields;
+class Publish_IndexController extends Controller_Action {      
 
     /**
      * Renders the first form:
@@ -57,6 +50,7 @@ class Publish_IndexController extends Controller_Action {
      */
     public function indexAction() {
         $log = Zend_Registry::get('Zend_Log');
+        $defaultNS = new Zend_Session_Namespace('Publish');
         
         $this->view->title = $this->view->translate('publish_controller_index');
         $this->view->subtitle = $this->view->translate('publish_controller_index_sub');
