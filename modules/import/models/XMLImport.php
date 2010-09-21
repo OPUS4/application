@@ -32,7 +32,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Import_Model_XMLImport {
+class Import_Model_XMLImport { 
 
     /**
      * Holds xml representation of document information to be processed.
@@ -152,7 +152,7 @@ class Import_Model_XMLImport {
         $apa = null;
         $bkNotations = null;
         $bk = null;
-        $oldSeries = null;
+        $oldSeries = null; 
         $seriesCollection = null;
         $issue = null;
         $publisherId = null;
@@ -183,21 +183,25 @@ class Import_Model_XMLImport {
             }
             $this->document->removeChild($facultyId);
         }
-        if ($publisherId !== null) {
+       if ($publisherId !== null) {
+            /*
             $mappingFile = '../workspace/tmp/universities.map';
             $PublisherNewId = $this->getNewValue($mappingFile, str_replace(" ", "_", $publisherId->getAttribute('Value')));
             if ($PublisherNewId !== null) {
                 $publisher = new Opus_Collection($PublisherNewId);
             }
+             * 
+             */
             $this->document->removeChild($publisherId);
         }
-
-        if ($licence !== null) {
-            $licenceValue = $licence->getAttribute('Value');
-            $lic = new Opus_Licence($this->getLicence($licenceValue));
-            $this->document->removeChild($licence);
-        } else {
-            $lic = new Opus_Licence('1');
+        if (false) { /* TODO */
+            if ($licence !== null) {
+                $licenceValue = $licence->getAttribute('Value');
+                $lic = new Opus_Licence($this->getLicence($licenceValue));
+                $this->document->removeChild($licence);
+            } else {
+                $lic = new Opus_Licence('1');
+            }
         }
         if ($ddcNotation !== null) {
             $ddcName = 'Dewey Decimal Classification';
@@ -214,8 +218,9 @@ class Import_Model_XMLImport {
             }
             $this->document->removeChild($ddcNotation);
         }
+
         if ($oldSeries !== null) {
-            $seriesName = 'Schriftenreihen';
+            $seriesName = 'series';
             $oldSeriesId = $oldSeries->getAttribute('Value');
             $issue = $oldSeries->getAttribute('Issue');
             $newSeriesId = $this->getSeries($oldSeriesId);
@@ -227,17 +232,19 @@ class Import_Model_XMLImport {
                     $seriesCollection = new Opus_Collection();
                     $seriesCollection->setName('Band ' . $issue);
                     $seriesCollection->setTheme('default');
-                    $seriesChild->addCollection($seriesCollection);
+                    $seriesChild->addCollection($seriesCollection);          
+                    $seriesChild->setVisible(1);
                     $seriesParentCollection->store();
-                } else {
+            } else {
                     echo "Mapping file for " . $this->collections[$seriesName] . " does not exist or class not found. Series $series not imported for old ID $oldid\n";
                 }
             }
             $this->document->removeChild($oldSeries);
         }
-        if ($institutes->length > 0) {
+
+        if ($institutes->length > 0) { /*TODO*/
             $institute = array();
-            $instituteName = 'Organisatorische Einheiten';
+            //$instituteName = 'Organisatorische Einheiten';
             $length = $institutes->length;
             for ($c = 0; $c < $length; $c++) {
                 // The item index is 0 any time, because the item is removed after processing
@@ -291,7 +298,7 @@ class Import_Model_XMLImport {
         }
         try {
             // Dummyobject, does not need any content, because only one node is transformed
-            $doc = Opus_Document::fromXml('<Opus>' . $this->completeXML->saveXML($this->document) . '</Opus>');
+            $doc = Opus_Document::fromXml('<Opus>' . $this->completeXML->saveXML($this->document) . '</Opus>');                  
             if ($lic !== null) {
                 $doc->addLicence($lic);
             }
@@ -401,12 +408,14 @@ class Import_Model_XMLImport {
                 $seriesCollection->linkDocument($doc->getId());
 //              $seriesCollection->addDocuments($doc);
 //              $seriesCollection->store();
+                //echo "Link Document to seriesCollection ".$seriesCollection->getName()."\n";
             }
             if (count($institute) > 0) {
                 foreach ($institute as $instEntry) {
                     $instEntry->linkDocument($doc->getId());
 //                  $instEntry->addDocuments($doc);
 //                  $instEntry->store();
+                    //echo "Link Document to institute ".$instEntry->getName()."\n";
                 }
             }
             if (count($ccs) > 0) {
