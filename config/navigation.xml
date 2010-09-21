@@ -21,9 +21,9 @@
 
         <browsing>
             <label>browsing_menu_label</label>
-            <module>browse</module>
+            <module>solrsearch</module>
             <controller>index</controller>
-            <action>index</action>
+            <action>browse</action>
             <id>primary-nav-browsing</id>
             <class>icon</class>
         </browsing>
