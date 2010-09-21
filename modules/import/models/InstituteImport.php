@@ -31,27 +31,17 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Import_Model_InstituteImport
-{
-	/**
-	 * Imports Collection data to Opus4
-	 *
-	 * @param Strring $data XML-String with classifications to be imported
-	 * @return array List of documents that have been imported
-	 */
-	public function __construct($data)
-	{
-        #$roles = Opus_Collection_Information::getAllCollectionRoles();
-        #foreach ($roles as $role) {
-        #    if ($role['name'] ===  'Organisatorische Einheiten') {
-        #        $cr = new Opus_CollectionRole($role['id']);
-        #        $cr->delete();
-        #    }
-        #}
+class Import_Model_InstituteImport {
 
-        // Use the institutes collection - always ID 1
-        $collRole = new Opus_CollectionRole(1);
 
+    /**
+     * Imports Collection data to Opus4
+     *
+     * @param Strring $data XML-String with classifications to be imported
+     * @return array List of documents that have been imported
+     */
+    public function __construct($data)	{
+        $collRole = Opus_CollectionRole::fetchByName('institutes');
         $xml = new DomDocument;
         $xslt = new DomDocument;
         $xslt->load('../modules/import/views/scripts/opus3/institute_structure.xslt');
@@ -59,18 +49,10 @@ class Import_Model_InstituteImport
         $proc->registerPhpFunctions();
         $proc->importStyleSheet($xslt);
         $xml->loadXML($proc->transformToXml($data));
-        // Build the Institutes Collection
-        #$collRole = new Opus_CollectionRole();
-        #$collRole->setName('Organisatorische Einheiten');
-        #$collRole->setPosition(1);
-        #$collRole->setVisible(1);
-        #$collRole->setLinkDocsPathToRoot('count');
-        #$collRole->store();
 
         $doclist = $xml->getElementsByTagName('table_data');
 
-        foreach ($doclist as $document)
-        {
+        foreach ($doclist as $document) {
             if ($document->getAttribute('name') === 'university_de') {
                 $uniNumbers = $this->importUniversities($document, $collRole);
             }
@@ -82,30 +64,28 @@ class Import_Model_InstituteImport
             }
         }
         echo "\n";
-	}
+    }
 
-	/**
-	 * transfers any OPUS3-conform classification System into an array
-	 *
-	 * @param DOMDocument $data XML-Document to be imported
-	 * @return array List of documents that have been imported
-	 */
-	protected function transferOpusClassification($data)
-	{
-		$classification = array();
+    /**
+     * transfers any OPUS3-conform classification System into an array
+     *
+     * @param DOMDocument $data XML-Document to be imported
+     * @return array List of documents that have been imported
+     */
+    protected function transferOpusClassification($data) {
+	$classification = array();
 
-		$doclist = $data->getElementsByTagName('row');
-		$index = 0;
-		foreach ($doclist as $document)
-		{
+	$doclist = $data->getElementsByTagName('row');
+	$index = 0;
+	foreach ($doclist as $document)	{
             $classification[$index] = array();
             foreach ($document->getElementsByTagName('field') as $field) {
-           		$classification[$index][$field->getAttribute('name')] = $field->nodeValue;
+            	$classification[$index][$field->getAttribute('name')] = $field->nodeValue;
             }
             $index++;
-		}
-		return $classification;
 	}
+	return $classification;
+    }
 
     /**
      * Imports Universities from Opus3 to Opus4 directly (without XML)
@@ -113,8 +93,7 @@ class Import_Model_InstituteImport
      * @param DOMDocument $data XML-Document to be imported
      * @return array List of documents that have been imported
      */
-    protected function importUniversities($data, $collRole)
-    {
+    protected function importUniversities($data, $collRole) {
         $classification = $this->transferOpusClassification($data);
 
         // Build a mapping file to associate old IDs with the new ones
@@ -125,18 +104,18 @@ class Import_Model_InstituteImport
         foreach ($classification as $class) {
             echo ".";
             // first level category
-		    $root = $collRole->getRootNode();
-		    $child = $root->addLastChild();
+            $root = $collRole->getRootNode();
+	    $child = $root->addLastChild();
             $coll = new Opus_Collection();
             $coll->setName($class['universitaet_anzeige']);
-            $coll->setAddress($class['instadresse']);
-            $coll->setCity($class['univort']);
-            $coll->setDnbContactId($class['ddb_idn']);
+            //$coll->setAddress($class['instadresse']);
+            //$coll->setCity($class['univort']);
+            //$coll->setDnbContactId($class['ddb_idn']);
             $coll->setTheme('default');
-			$child->addCollection($coll);
-			$child->setVisible(1);
-			$root->setVisible(1);
-			$root->store();
+            $child->addCollection($coll);
+            $child->setVisible(1);
+            $root->setVisible(1);
+            $root->store();
             $sc = $child->getId();
             $subcoll[] = $sc;
             fputs($fp, str_replace(" ", "_", $class['universitaet']) . ' ' . $sc . "\n");
@@ -147,51 +126,50 @@ class Import_Model_InstituteImport
         return $subcoll;
     }
 
-	/**
-	 * Imports Faculties from Opus3 to Opus4 directly (without XML)
-	 *
-	 * @param DOMDocument $data XML-Document to be imported
-	 * @return array List of documents that have been imported
-	 */
-	protected function importFaculties($data, $subColls, $roleId)
-	{
+	
+    /**
+     * Imports Faculties from Opus3 to Opus4 directly (without XML)
+     *
+     * @param DOMDocument $data XML-Document to be imported
+     * @return array List of documents that have been imported
+     */
+    protected function importFaculties($data, $subColls, $roleId) {
         $classification = $this->transferOpusClassification($data);
 
         // Build a mapping file to associate old IDs with the new ones
         $fp = fopen('../workspace/tmp/faculties.map', 'w');
 
-		$subcoll = array();
+        $subcoll = array();
 
-		foreach ($classification as $class) {
-          	echo ".";
+        foreach ($classification as $class) {
+            echo ".";
             $parentColl = new Opus_CollectionNode($subColls);
             // second level category
             $child = $parentColl->addLastChild();
             $coll = new Opus_Collection();
             $coll->setName($class['fakultaet']);
-            $coll->setIsGrantor('1');
+            //$coll->setIsGrantor('1');
             $coll->setTheme('default');
-			$child->addCollection($coll);
-			$child->setVisible(1);
-			$parentColl->setVisible(1);
-			$parentColl->store();            
+            $child->addCollection($coll);
+            $child->setVisible(1);
+            $parentColl->setVisible(1);
+            $parentColl->store();
             $subcoll[$class["nr"]] = $child->getId();
             fputs($fp, $class['nr'] . ' ' . $subcoll[$class["nr"]] . "\n");
-		}
+	}
         
         fclose($fp);
 		
-		return $subcoll;
-	}
+	return $subcoll;
+    }
 
-	/**
+    /**
      * Imports Institutes from Opus3 to Opus4 directly (without XML)
      *
      * @param DOMDocument $data XML-Document to be imported
      * @return array List of documents that have been imported
      */
-    protected function importInstitutes($data, $subColls, $roleId)
-    {
+    protected function importInstitutes($data, $subColls, $roleId)     {
         $classification = $this->transferOpusClassification($data);
 
         // Build a mapping file to associate old IDs with the new ones
@@ -205,10 +183,10 @@ class Import_Model_InstituteImport
             $coll = new Opus_Collection();
             $coll->setName($class['name']);
             $coll->setTheme('default');
-			$child->addCollection($coll);
-			$child->setVisible(1);
-			$parentColl->setVisible(1);
-			$parentColl->store();            
+	    $child->addCollection($coll);
+	    $child->setVisible(1);
+	    $parentColl->setVisible(1);
+	    $parentColl->store();
             fputs($fp, $class['nr'] . ' ' . $child->getId() . "\n");
         }
 
