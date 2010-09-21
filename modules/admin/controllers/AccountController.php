@@ -234,16 +234,21 @@ class Admin_AccountController extends Controller_Action {
 
                 $account = new Opus_Account($id);
 
-                // update login name
-                $login = $postData['username'];
-
                 $oldLogin = $account->getLogin();
 
-                if ($login !== $oldLogin) {
-                    $account->setLogin($login);
+                $currentUser = Zend_Auth::getInstance()->getIdentity();
+
+                $isCurrentUser = ($currentUser === $oldLogin) ? true : false;
+
+                // update login name
+                $newLogin = $postData['username'];
+
+                if ($newLogin !== $oldLogin) {
+                    $account->setLogin($newLogin);
+                    $loginChanged = true;
                 }
                 else {
-                    $oldLogin = null;
+                    $loginChanged = false;
                 }
 
                 // update password
@@ -263,9 +268,8 @@ class Admin_AccountController extends Controller_Action {
                         $role = Opus_Role::fetchByName($roleName);
                         $newRoles[] = $role;
                     }
-                    else if ((strtolower($roleName) === 'administrator') &&
-                        (Zend_Auth::getInstance()->getIdentity() === $account->getLogin())) {
-                            $newRoles[] = Opus_Role::fetchByName($roleName);
+                    else if ((strtolower($roleName) === 'administrator') && $isCurrentUser) {
+                        $newRoles[] = Opus_Role::fetchByName($roleName);
                     }
                 }
 
@@ -273,7 +277,7 @@ class Admin_AccountController extends Controller_Action {
 
                 $account->store();
 
-                if ((Zend_Auth::getInstance()->getIdentity() === $oldLogin) || $passwordChanged) {
+                if ($isCurrentUser &&  ($loginChanged || $passwordChanged))  {
                     Zend_Auth::getInstance()->clearIdentity();
                 }
                 
@@ -339,12 +343,6 @@ class Admin_AccountController extends Controller_Action {
         foreach ($roles as $role) {
             $roleName = $role->getDisplayName();
             $roleCheckbox = $form->createElement('checkbox', 'role' . $roleName)->setLabel($roleName);
-//            $roleCheckbox->setDecorators(array(
-//                'ViewHelper',
-//                array(array('data' => 'HtmlTag'), array('tag' => 'td', 'class' => 'element')),
-//                array(array('label' => 'HtmlTag'), array('tag' => 'td', 'placement' => 'prepend')),
-//                array(array('row' => 'HtmlTag'), array('tag' => 'tr')),
-//            ));
             $form->addElement($roleCheckbox);
             $rolesGroup[] = $roleCheckbox->getName();
         }
