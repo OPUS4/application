@@ -61,7 +61,7 @@
     <field name="IdentifierIsbn" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="IdentifierUrn" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="Note" required="no" formelement="Textarea" datatype="Text" multiplicity="1" />
-    <field name="Licence" required="no" formelement="Select" datatype="Licence" multiplicity="1" />
+    <field name="Licence" required="yes" formelement="Select" datatype="Licence" multiplicity="1" />
     <field name="ServerDateUnlocking" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     
 </documenttype>

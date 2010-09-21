@@ -8,11 +8,10 @@ echo '<h3>'.$this->subtitle.'</h3>';
 <?= $this->group($this->groupTitleMain); ?>
 <?= $this->element($this->TitleSub_); ?>
 <?= $this->group($this->groupTitleAbstract); ?>
-<?= $this->element($this->CompletedYear_); ?>
+<?= $this->element($this->PublishedYear_); ?>
 <?= $this->group($this->groupPersonAuthor); ?>
 <?= $this->group($this->groupPersonTranslator); ?>
 <?= $this->group($this->groupPersonContributor); ?>
-<?= $this->group($this->groupPersonEditor); ?>
 <?= $this->group($this->groupCreatingCorporation); ?>
 <?= $this->group($this->groupContributingCorporation); ?>
 <?= $this->group($this->groupSubjectSwd); ?>
@@ -26,7 +25,7 @@ echo '<h3>'.$this->subtitle.'</h3>';
 <?= $this->element($this->ServerDateUnlocking_); ?>
 
 <?= $this->element($this->fullText, null, "Hidden", "fullText"); ?>
-<?= $this->element("movingimage", null, "Hidden",  "documentType"); ?>
+<?= $this->element("image", null, "Hidden",  "documentType"); ?>
 <?= $this->element($this->documentId, null, "Hidden", "documentId"); ?>
 <?= $this->element('button_label_send', null, "Submit",  "send"); ?>
 
