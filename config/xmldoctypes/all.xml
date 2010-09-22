@@ -70,6 +70,7 @@
     <field name="PublishedDate" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="CompletedYear" required="no" formelement="Text" datatype="Year" multiplicity="1" />
     <field name="CompletedDate" required="no" formelement="Text" datatype="Text" multiplicity="1" />
+    <field name="IdentifierOpus3" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="IdentifierIsbn" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="IdentifierIssn" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="IdentifierUrn" required="no" formelement="Text" datatype="Text" multiplicity="1" />
