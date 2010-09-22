@@ -1,0 +1,37 @@
+<?
+echo '<h1>'.$this->title.'</h1>';
+echo '<h3>'.$this->subtitle.'</h3>';
+?>        
+<form enctype="application/x-www-form-urlencoded" action="<?php echo $this->action_url; ?>" method="post">
+
+<?= $this->group($this->groupPersonSubmitter); ?>
+<?= $this->group($this->groupTitleMain); ?>
+<?= $this->element($this->TitleSub_); ?>
+<?= $this->group($this->groupTitleAbstract); ?>
+<?= $this->group($this->groupPersonAuthor); ?>
+<?= $this->element($this->CompletedDate_); ?>
+<?= $this->element($this->PublishedDate_); ?>
+<?= $this->element($this->PageNumber_); ?>
+<?= $this->group($this->groupPersonEditor); ?>
+<?= $this->group($this->groupPersonTranslator); ?>
+<?= $this->group($this->groupPersonContributor); ?>
+<?= $this->group($this->groupCreatingCorporation); ?>
+<?= $this->group($this->groupContributingCorporation); ?>
+<?= $this->element($this->PublisherName_); ?>
+<?= $this->element($this->PublisherPlace_); ?>
+<?= $this->group($this->groupSubjectSwd); ?>
+<?= $this->group($this->groupSubjectUncontrolled); ?>
+<?= $this->element($this->Institute_); ?>
+<?= $this->element($this->Collection_); ?>
+<?= $this->element($this->IdentifierUrn_); ?>
+<?= $this->element($this->Note_); ?>
+<?= $this->element($this->Language_); ?>
+<?= $this->element($this->Licence_); ?>
+<?= $this->element($this->ServerDateUnlocking_); ?>
+
+<?= $this->element($this->fullText, null, "Hidden", "fullText"); ?>
+<?= $this->element("workingpaper", null, "Hidden",  "documentType"); ?>
+<?= $this->element($this->documentId, null, "Hidden", "documentId"); ?>
+<?= $this->element('button_label_send', null, "Submit",  "send"); ?>
+
+</form>
