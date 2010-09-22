@@ -529,7 +529,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
 
             //    <field name="submitter">25</field>
             //    <field name="submit_date">2003-12-03 00:00:00</field>
-            $doc->setPublishedDate($preprint['submit_date']);
+            $doc->setServerDatePublished($preprint['submit_date']);
 
             //    <field name="referee">842</field>
             $field = $preprint['referee'];
@@ -541,7 +541,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             }
 
             //    <field name="approve_date">2003-12-10 00:00:00</field>
-            $doc->setPublishedDate($preprint['approve_date']);
+            $doc->setCompletedDate($preprint['approve_date']);
 
             //    <field name="comment" xsi:nil="true" />
             $field = $preprint['comment'];
