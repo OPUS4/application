@@ -25,6 +25,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_iprange_action_show">
+      <tuv xml:lang="en">
+        <seg>IP Range</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>IP Bereich</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_iprange_none_defined">
       <tuv xml:lang="en">
         <seg>No IP ranges defined.</seg>
