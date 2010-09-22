@@ -72,6 +72,15 @@
         </tuv>
     </tu>
 
+	<tu tuid="hint_groupPersonSubmitter">
+        <tuv xml:lang="en">
+            <seg>Please enter your contact information.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie hier bitte Ihre Kontaktdaten ein.</seg>
+        </tuv>
+    </tu>
+	
     <tu tuid="hint_groupPersonAuthor">
         <tuv xml:lang="en">
             <seg>Please enter the contact information of the authors. You may add more authors by clicking on the button (or delete them).</seg>
@@ -243,6 +252,15 @@
         </tuv>
     </tu>
 
+	<tu tuid="hint_TitleSub">
+        <tuv xml:lang="en">
+            <seg>Please enter the document's subtitle.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte ggf. den Untertitel des Dokuments ein.</seg>
+        </tuv>
+    </tu>
+	
     <tu tuid="hint_groupProject">
         <tuv xml:lang="en">
             <seg>Please choose the documents Matheon projects. You may add more projects by clicking on the button (or delete them).</seg>
