@@ -42,7 +42,9 @@
 	<field name="ServerDateUnlocking" required="no" formelement="Text" datatype="Year" multiplicity="1" />
 	<field name="TitleMain" required="yes" formelement="Text" datatype="Title" multiplicity="4"/>
 	<field name="TitleSub" required="no" formelement="Text" datatype="Title" multiplicity="1" />
-	<field name="TitleAbstract" required="no" formelement="Textarea" datatype="Title" multiplicity="4"/>
+	<field name="TitleAbstract" required="no" formelement="Textarea" datatype="Title" multiplicity="4" >
+        <required-if-fulltext />
+    </field>
 	<field name="TitleParent" required="no" formelement="Text" datatype="Title" multiplicity="1"/>
 	<field name="PersonAuthor" required="yes" formelement="Text" datatype="Person" multiplicity="*"/>
 	<field name="PersonEditor" required="no" formelement="Text" datatype="Person" multiplicity="*"/>
@@ -52,7 +54,8 @@
 	<field name="ContributingCorporation" required="no" formelement="Text" datatype="Text" multiplicity="*"/>
 	<field name="PageFirst" required="no" formelement="Text" datatype="Integer" multiplicity="1"/>
 	<field name="PageLast" required="no" formelement="Text" datatype="Integer" multiplicity="1"/>
-	<field name="PublishedYear" required="yes" formelement="Text" datatype="Year" multiplicity="1"/>
+	<field name="CompletedDate" required="yes" formelement="Text" datatype="Year" multiplicity="1"/>
+	<field name="PublishedDate" required="no" formelement="Text" datatype="Year" multiplicity="1"/>
 	<field name="SubjectSwd" required="no" formelement="Text" datatype="Text" multiplicity="5"/>
 	<field name="SubjectUncontrolled" required="no" formelement="Text" datatype="Text" multiplicity="5"/>
 	<field name="IdentifierUrn" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
