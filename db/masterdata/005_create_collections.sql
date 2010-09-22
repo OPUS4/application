@@ -32092,7 +32092,6 @@ CREATE  TABLE IF NOT EXISTS `collections_roles` (
    `name` VARCHAR(255) NOT NULL COMMENT 'Name, label or type of the collection role, i.e. a specific classification or conference.' ,
    `oai_name` VARCHAR(255) NOT NULL COMMENT 'Shortname identifying role in oai context.' ,
    `position` INT(11) UNSIGNED NOT NULL COMMENT 'Position of this collection tree (role) in the sorted list of collection roles for browsing and administration.' ,
-   `link_docs_path_to_root` ENUM('none', 'count', 'display', 'both') default 'none' COMMENT 'Every document belonging to a collection C automatically belongs to every collection on the path from C to the root of the collection tree for document counting, document diplaying, none or both.',
    `visible` TINYINT(1) UNSIGNED NOT NULL COMMENT 'Deleted collection trees are invisible. (1=visible, 0=invisible).' ,
    `visible_browsing_start`     TINYINT(1) UNSIGNED NOT NULL    COMMENT 'Show tree on browsing start page. (1=yes, 0=no).' ,
    `display_browsing`           VARCHAR(512) NULL               COMMENT 'Comma separated list of collection_contents_x-fields to display in browsing list context.' ,
@@ -32112,17 +32111,17 @@ CREATE  TABLE IF NOT EXISTS `collections_roles` (
 -- Daten für Tabelle `collections_roles`
 --
 
-INSERT INTO `collections_roles` (`id`, `name`, `oai_name`, `position`, `link_docs_path_to_root`, `visible`, `visible_browsing_start`, `display_browsing`, `visible_frontdoor`, `display_frontdoor`, `visible_oai`, `display_oai`) VALUES
-(1, 'institutes', 'institutes', 1, 'count', 1, 1, 'Name', 1, 'Name', 1, 'Name'),
-(2, 'ddc', 'ddc', 2, 'count', 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
-(3, 'ccs', 'ccs', 3, 'count', 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
-(4, 'pacs', 'pacs', 4, 'count', 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
-(5, 'jel', 'jel', 5, 'count', 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
-(6, 'msc', 'msc', 6, 'count', 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
-(7, 'bk', 'bk', 7, 'none', 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
-(9, 'collections', 'collections', 9, 'count', 1, 1, 'Name', 1, 'Name', 1, 'Name'),
-(10, 'series', 'series', 10, 'count', 1, 1, 'Name', 1, 'Name', 1, 'Name'),
-(11, 'projects', 'projects', 11, 'count', 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number');
+INSERT INTO `collections_roles` (`id`, `name`, `oai_name`, `position`, `visible`, `visible_browsing_start`, `display_browsing`, `visible_frontdoor`, `display_frontdoor`, `visible_oai`, `display_oai`) VALUES
+(1, 'institutes', 'institutes', 1, 1, 1, 'Name', 1, 'Name', 1, 'Name'),
+(2, 'ddc', 'ddc', 2, 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
+(3, 'ccs', 'ccs', 3, 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
+(4, 'pacs', 'pacs', 4, 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
+(5, 'jel', 'jel', 5, 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
+(6, 'msc', 'msc', 6, 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
+(7, 'bk', 'bk', 7, 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
+(9, 'collections', 'collections', 9, 1, 1, 'Name', 1, 'Name', 1, 'Name'),
+(10, 'series', 'series', 10, 1, 1, 'Name', 1, 'Name', 1, 'Name'),
+(11, 'projects', 'projects', 11, 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number');
 
 
 -- --------------------------------------------------------

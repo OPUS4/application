@@ -47,9 +47,11 @@
       # calculated over all SubCollections and we can use it to skip
       # empty collections!  Disable with "$hideEmptyCollections = false;"
 
-      $thisCollectionRole = new Opus_CollectionRole($this->collection);
-      $browseListCountStyle = $thisCollectionRole->getLinkDocsPathToRoot();
-      $trustDocumentCount = (($browseListCountStyle === 'count') || ($browseListCountStyle === 'both'));
+      //$thisCollectionRole = new Opus_CollectionRole($this->collection);
+      //$browseListCountStyle = $thisCollectionRole->getLinkDocsPathToRoot();
+      //$trustDocumentCount = (($browseListCountStyle === 'count') || ($browseListCountStyle === 'both'));
+      $browseListCountStyle = 'count';
+
       $hideEmptyCollections = true;
 
 	    if (in_array('Collections', $this->browsinglist->describe())) {

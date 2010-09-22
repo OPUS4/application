@@ -186,15 +186,6 @@
       </tuv>
     </tu>
 
-    <tu tuid="LinkDocsPathToRoot">
-      <tuv xml:lang="en">
-        <seg>Are collection members inherent members of superior collections</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Zählen Dokumente in einer Sammlung inhärent zu übergeordneten Sammlungen gehörig?</seg>
-      </tuv>
-    </tu>
-
     <tu tuid="count">
       <tuv xml:lang="en">
         <seg>Only in document count context</seg>

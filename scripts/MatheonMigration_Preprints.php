@@ -330,7 +330,6 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
         $role->setVisibleBrowsingStart(1);
         $role->setDisplayFrontdoor('Number, Name');
         $role->setVisibleFrontdoor(1);
-        $role->setLinkDocsPathToRoot('none');
         $role->store();
 
         $root_node = $role->getRootNode()->setVisible(1);
@@ -404,7 +403,6 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
         $role->setVisibleBrowsingStart(1);
         $role->setDisplayFrontdoor('Name');
         $role->setVisibleFrontdoor(1);
-        $role->setLinkDocsPathToRoot('none');
         $role->store();
 
         $root_node = $role->getRootNode()->setVisible(1);
