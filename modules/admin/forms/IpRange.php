@@ -36,16 +36,47 @@
  */
 class Admin_Form_IpRange extends Zend_Form {
 
-    public function __construct() {
-        $config = new Zend_Config_Ini(APPLICATION_PATH . '/modules/admin/forms/iprange.ini', 'production');
+    /**
+     * Constructs empty form or populates it with values from Opus_Iprange($id).
+     * @param integer $id
+     */
+    public function __construct($id = null) {
+        $config = new Zend_Config_Ini(APPLICATION_PATH .
+                '/modules/admin/forms/iprange.ini', 'production');
         parent::__construct($config->form->iprange);
+
+        if (!empty($id)) {
+            $ipRange = new Opus_Iprange($id);
+
+            $this->populate($ipRange);
+        }
     }
 
+    /**
+     * Initializes form and adds display group for roles.
+     */
     public function init() {
         parent::init();
         $this->_addRolesGroup();
     }
 
+    /**
+     * Populates form with values from Opus_Iprange instance.
+     * @param Opus_Iprange $ipRange
+     */
+    public function populate($ipRange) {
+        $this->getElement('name')->setValue($ipRange->getName());
+        $this->getElement('startingip')->setValue($ipRange->getStartingip());
+        $this->getElement('endingip')->setValue($ipRange->getEndingip());
+
+        $roles = $ipRange->getRole();
+
+        $this->setSelectedRoles($roles);
+    }
+
+    /**
+     * Adds display group for roles.
+     */
     protected function _addRolesGroup() {
         $roles = Opus_Role::getAll();
 
@@ -61,7 +92,12 @@ class Admin_Form_IpRange extends Zend_Form {
         $this->addDisplayGroup($rolesGroup, 'Roles', array('legend' => 'Roles'));
     }
 
-    public function getSelectedRoles($postData) {
+    /**
+     * Parses post data and returns array with Opus_Role instances.
+     * @param array $postData
+     * @return array of Opus_Role instances
+     */
+    public static function parseSelectedRoles($postData) {
         $roles = Opus_Role::getAll();
 
         $selectedRoles = array();
@@ -75,6 +111,17 @@ class Admin_Form_IpRange extends Zend_Form {
         }
 
         return $selectedRoles;
+    }
+
+    /**
+     * Sets checkboxes for roles according to provided array.
+     * @param array $roles
+     */
+    public function setSelectedRoles($roles) {
+        foreach ($roles as $roleName) {
+            $role = $this->getElement('role' . $roleName);
+            $role->setValue(1);
+        }
     }
 
 

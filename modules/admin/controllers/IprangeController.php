@@ -25,7 +25,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Iprange
+ * @package     Module_Admin
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @author      Pascal-Nicolas Becker <becker@zib.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
@@ -37,7 +37,7 @@
  * Controller for management of IP ranges.
  *
  * @category    Application
- * @package     Module_Iprange
+ * @package     Module_Admin
  */
 class Admin_IprangeController extends Controller_Action {
 
@@ -89,11 +89,31 @@ class Admin_IprangeController extends Controller_Action {
             $this->_helper->redirector('index');
         }
     }
-    
+
+    /**
+     * Shows edit form for IP range.
+     */
     public function editAction() {
-        
+        $id = $this->getRequest()->getParam('id');
+
+        if (!empty($id)) {
+            $this->view->title = $this->view->translate($this->view->title);
+
+            $form = new Admin_Form_IpRange($id);
+
+            $actionUrl = $this->view->url(array('action' => 'update', 'id' => $id));
+            $form->setAction($actionUrl);
+
+            $this->view->form = $form;
+        }
+        else {
+            $this->_helper->redirector('index');
+        }
     }
-    
+
+    /**
+     * Shows form for creating a new IP range.
+     */
     public function newAction() {
         $this->view->title = $this->view->translate('admin_iprange_index');
 
@@ -104,41 +124,25 @@ class Admin_IprangeController extends Controller_Action {
         $form->setAction($actionUrl);
 
         $this->view->form = $form;
-
-
     }
-    
+
+    /**
+     * Creates a new IP range.
+     * @return <type>
+     */
     public function createAction() {
         $form = new Admin_Form_IpRange();
 
         if ($this->getRequest()->isPost()) {
             $postData = $this->getRequest()->getPost();
 
-            $button = $postData['cancel'];
+            $button = $this->getRequest()->getPost('cancel');
             if (isset($button)) {
                 $this->_helper->redirector('index');
             }
 
             if ($form->isValid($postData)) {
-                $name = $postData['name'];
-                $startingIp = $postData['startingip'];
-                $endingIp = $postData['endingip'];
-
-                if (empty($endingIp)) {
-                    // single address IP range
-                    $endingIp = $startingIp;
-                }
-
-                $roles = $form->getSelectedRoles($postData);
-
-                $ipRange = new Opus_Iprange();
-
-                $ipRange->setName($name);
-                $ipRange->setStartingip($startingIp);
-                $ipRange->setEndingip($endingIp);
-                $ipRange->setRole($roles);
-                
-                $ipRange->store();
+                $this->_updateIpRange($postData);
             }
             else {
                 $actionUrl = $this->view->url(array('action' => 'create'));
@@ -150,19 +154,84 @@ class Admin_IprangeController extends Controller_Action {
 
         $this->_helper->redirector('index');
     }
-    
+
+    /**
+     * Updates an IP range.
+     * @return <type>
+     */
     public function updateAction() {
-        
+        $form = new Admin_Form_IpRange();
+
+        if ($this->getRequest()->isPost()) {
+            $postData = $this->getRequest()->getPost();
+
+            $button = $this->getRequest()->getPost('cancel');
+            if (isset($button)) {
+                $this->_helper->redirector('index');
+                return;
+            }
+
+            $id = $this->getRequest()->getParam('id');
+
+            if ($form->isValid($postData)) {
+                $this->_updateIpRange($postData, $id);
+            }
+            else {
+                $actionUrl = $this->view->url(array('action' => 'update', 'id' => $id));
+                $form->setAction($actionUrl);
+                $this->view->form = $form;
+                return $this->renderScript('iprange/edit.phtml');
+            }
+        }
+
+        $this->_helper->redirector('index');
     }
 
+    /**
+     * Deletes an IP range.
+     */
     public function deleteAction() {
         $id = $this->getRequest()->getParam('id');
 
-        $ipRange = new Opus_Iprange($id);
+        if (!empty($id)) {
+            $ipRange = new Opus_Iprange($id);
 
-        $ipRange->delete();
+            $ipRange->delete();
+        }
 
         $this->_helper->redirector('index');
+    }
+
+    /**
+     * Updates IP range in database.
+     * @param array $postData
+     * @param integer $id
+     */
+    protected function _updateIpRange($postData, $id = null) {
+        $name = $postData['name'];
+        $startingIp = $postData['startingip'];
+        $endingIp = $postData['endingip'];
+
+        if (empty($endingIp)) {
+            // single address IP range
+            $endingIp = $startingIp;
+        }
+
+        $roles = Admin_Form_ipRange::parseSelectedRoles($postData);
+
+        if (empty($id)) {
+            $ipRange = new Opus_Iprange();
+        }
+        else {
+            $ipRange = new Opus_Iprange($id);
+        }
+
+        $ipRange->setName($name);
+        $ipRange->setStartingip($startingIp);
+        $ipRange->setEndingip($endingIp);
+        $ipRange->setRole($roles);
+
+        $ipRange->store();
     }
 
 }

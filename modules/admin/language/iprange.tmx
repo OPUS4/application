@@ -34,6 +34,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_iprange_edit">
+      <tuv xml:lang="en">
+        <seg>Edit IP range</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>IP Bereich editieren</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_iprange_none_defined">
       <tuv xml:lang="en">
         <seg>No IP ranges defined.</seg>
