@@ -41,7 +41,7 @@ class IndexControllerTest extends ControllerTestCase {
      */
     public function testIndexAction() {
         $this->dispatch('/');
-        $this->assertRedirect();
+        $this->assertRedirectTo('/home');
     }
 
 }
