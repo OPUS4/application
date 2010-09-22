@@ -62,17 +62,16 @@ class Admin_AccountController extends Controller_Action {
                 $this->_forwardToAction('delete');
             }
         }
-        else {
-            $accounts = Opus_Account::getAll();
+        
+        $accounts = Opus_Account::getAll();
 
-            if (empty($accounts)) {
-                $this->view->render('none');
-            }
-            else {
-                $this->view->accounts = array();
-                foreach ($accounts as $account) {
-                    $this->view->accounts[$account->getId()] = $account->getDisplayName();
-                }
+        if (empty($accounts)) {
+            $this->view->render('none');
+        }
+        else {
+            $this->view->accounts = array();
+            foreach ($accounts as $account) {
+                $this->view->accounts[$account->getId()] = $account->getDisplayName();
             }
         }
     }
@@ -128,30 +127,40 @@ class Admin_AccountController extends Controller_Action {
 
             if ($accountForm->isValid($postData)) {
                 $login = $postData['username'];
-                $password = $postData['password'];
 
-                $account = new Opus_Account();
+                if (!$this->_isLoginUsed($login)) {
+                    $password = $postData['password'];
 
-                $account->setLogin($login);
-                $account->setPassword($password);
+                    $account = new Opus_Account();
 
-                $roles = Opus_Role::getAll();
+                    $account->setLogin($login);
+                    $account->setPassword($password);
 
-                foreach ($roles as $roleName) {
-                    $roleSelected = $postData['role' . $roleName];
-                    if ($roleSelected) {
-                        $role = Opus_Role::fetchByName($roleName);
-                        $account->addRole($role);
+                    $roles = Opus_Role::getAll();
+
+                    foreach ($roles as $roleName) {
+                        $roleSelected = $postData['role' . $roleName];
+                        if ($roleSelected) {
+                            $role = Opus_Role::fetchByName($roleName);
+                            $account->addRole($role);
+                        }
                     }
+
+                    $account->store();
+
+                    $url = $this->view->url(array('action' => 'index'));
+                    $this->redirectTo($url);
                 }
-
-                $account->store();
-
-                $url = $this->view->url(array('controller' => 'account', 'action' => 'index'));
-                $this->redirectTo($url);
+                else {
+                    $accountForm->getElement('username')->addError($this->view->translate('admin_account_error_login_used'));
+                    $actionUrl = $this->view->url(array('action' => 'create'));
+                    $accountForm->setAction($actionUrl);
+                    $this->view->form = $accountForm;
+                    return $this->renderScript('account/new.phtml');
+                }
             }
             else {
-                $actionUrl = $this->view->url(array('controller' => 'account', 'action' => 'create'));
+                $actionUrl = $this->view->url(array('action' => 'create'));
                 $accountForm->setAction($actionUrl);
                 $this->view->form = $accountForm;
                 return $this->renderScript('account/new.phtml');
@@ -194,7 +203,7 @@ class Admin_AccountController extends Controller_Action {
 
 
 
-            $actionUrl = $this->view->url(array('controller' => 'account', 'action' => 'update', 'id' => $id));
+            $actionUrl = $this->view->url(array('action' => 'update', 'id' => $id));
 
             $accountForm->setAction($actionUrl);
 
@@ -244,8 +253,17 @@ class Admin_AccountController extends Controller_Action {
                 $newLogin = $postData['username'];
 
                 if ($newLogin !== $oldLogin) {
-                    $account->setLogin($newLogin);
-                    $loginChanged = true;
+                    if (!$this->_isLoginUsed($login)) {
+                        $account->setLogin($newLogin);
+                        $loginChanged = true;
+                    }
+                    else {
+                        $accountForm->getElement('username')->addError($this->view->translate('admin_account_error_login_used'));
+                        $actionUrl = $this->view->url(array('action' => 'update', 'id' => $id));
+                        $accountForm->setAction($actionUrl);
+                        $this->view->form = $accountForm;
+                        return $this->renderScript('account/edit.phtml');
+                    }
                 }
                 else {
                     $loginChanged = false;
@@ -350,6 +368,15 @@ class Admin_AccountController extends Controller_Action {
         $form->addDisplayGroup($rolesGroup, 'Roles', array('legend' => 'Roles'));
 
         return $form;
+    }
+
+    protected function _isLoginUsed($login) {
+        try {
+            $account = new Opus_Account(null, null, $login);
+        } catch (Exception $ex) {
+            return false;
+        }
+        return true;
     }
 
 

@@ -70,6 +70,14 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_account_error_login_used">
+      <tuv xml:lang="en">
+        <seg>Login name already used.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Der Login Name existiert bereits.</seg>
+      </tuv>
+    </tu>
        
   </body>
   
