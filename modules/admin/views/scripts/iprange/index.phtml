@@ -27,23 +27,34 @@
  * @category    Application
  * @package     Module_Licence
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
+ * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id: index.phtml 2159 2009-03-12 13:36:06Z claussnitzer $
  */
 ?>
-<h1><?= $this->translate($this->title) ?></h1>
-<ul>
-<? foreach($this->entries as $id => $entry) : ?>
-<li>
-    <?= $entry ?>
-    <form action="<?= $this->url(array('action' => 'delete')) ?>" class="crud" method="post">
-        <a href="<?= $this->url(array('action' => 'show', 'id' => $id)) ?>">Show</a>
-        <a href="<?= $this->url(array('action' => 'edit', 'id' => $id)) ?>">Edit</a>
-        <input type="hidden" name="id" value="<?=$id?>" />
-        <input type="submit" value="Delete" />
+
+<div class="adminContainer">
+
+<h1><?= $this->title ?></h1>
+
+<table>
+    <? foreach($this->ipRanges as $id => $ipRange) : ?>
+    <form action="<?= $this->url(array('action' => 'index')) ?>" class="crud" method="post">
+    <tr>
+        <td>
+            <div><a href="<?= $this->url(array('action' => 'show', 'id' => $id)) ?>"><?= htmlspecialchars($ipRange->getName()) ?></a></div>
+            <div><?= $ipRange->getStartingip() ?> - <?= $ipRange->getEndingip() ?></div>
+        </td>
+        <td>
+            <input type="submit" name="actionEdit" value="<?= $this->translate('admin_form_action_edit') ?>" />
+            <input type="submit" name="actionDelete" value="Delete" />
+            <input type="hidden" name="id" value="<?=$id?>" />
+        </td>
+    </tr>
     </form>
-</li>
-<? endforeach; ?>
-</ul>
-<a href="<?= $this->url(array('action' => 'new')) ?>">New</a>
+    <? endforeach; ?>
+</table>
+
+<a href="<?= $this->url(array('action' => 'new')) ?>"><?= $this->translate('admin_iprange_action_new') ?></a>
+</div>
