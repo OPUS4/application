@@ -17,8 +17,16 @@
         </tuv>
     </tu>
 
-
-  <tu tuid="PersonSubmitterFirstName">
+	<tu tuid="groupPersonSubmitter">
+      <tuv xml:lang="en">
+        <seg>Submitter</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einsteller</seg>
+      </tuv>
+    </tu>
+	
+   <tu tuid="PersonSubmitterFirstName">
       <tuv xml:lang="en">
         <seg>Submitter: First name</seg>
       </tuv>
@@ -63,7 +71,34 @@
       </tuv>
     </tu>
 
-  <tu tuid="PersonTranslatorFirstName">
+	<tu tuid="groupPersonEditor">
+      <tuv xml:lang="en">
+        <seg>Editor</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Herausgeber</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="PersonEditorFirstName">
+      <tuv xml:lang="en">
+        <seg>First name</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Vorname</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="PersonEditorLastName">
+      <tuv xml:lang="en">
+        <seg>Last name</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nachname</seg>
+      </tuv>
+    </tu>
+  
+	<tu tuid="PersonTranslatorFirstName">
       <tuv xml:lang="en">
         <seg>Tranlator: First name</seg>
       </tuv>
@@ -90,6 +125,78 @@
       </tuv>
     </tu>
 
+	<tu tuid="PersonAdvisorFirstName">
+      <tuv xml:lang="en">
+        <seg>First name</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Vorname</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="PersonAdvisorLastName">
+      <tuv xml:lang="en">
+        <seg>Last name</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nachname</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="groupPersonAdvisor">
+      <tuv xml:lang="en">
+        <seg>Advisor</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Betreuer</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="PersonContributorFirstName">
+      <tuv xml:lang="en">
+        <seg>First name</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Vorname</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="PersonContributorLastName">
+      <tuv xml:lang="en">
+        <seg>Last name</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nachname</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="groupPersonContributor">
+      <tuv xml:lang="en">
+        <seg>Contributor</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Beteiligte Person</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="groupCreatingCorporation">
+      <tuv xml:lang="en">
+        <seg>Creating Corporation</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Urhebende Körperschaft</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="groupContributingCorporation">
+      <tuv xml:lang="en">
+        <seg>Contributing Corporation</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Beteiligte Körperschaft</seg>
+      </tuv>
+    </tu>
+	
      <tu tuid="Language">
       <tuv xml:lang="en">
         <seg>Language of publication</seg>
@@ -458,6 +565,15 @@
       </tuv>
     </tu>
 
+	<tu tuid="groupCreatingCorporation">
+      <tuv xml:lang="en">
+        <seg>Creating Corporation</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Urhebende Körperschaft</seg>
+      </tuv>
+    </tu>
+	
     <tu tuid="CreatingCorporation">
       <tuv xml:lang="en">
         <seg>Creating Corporation</seg>
@@ -753,24 +869,6 @@
       </tuv>
     </tu>
 
-    <tu tuid="ThesisGrantor">
-      <tuv xml:lang="en">
-        <seg>Grantor</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Institution für akademischen Grad</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="ThesisPublisher">
-      <tuv xml:lang="en">
-        <seg>Publisher</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Veröffentlicher</seg>
-      </tuv>
-    </tu>
-
     <tu tuid="add_Publisher">
       <tuv xml:lang="en">
         <seg>add Publisher</seg>
@@ -996,7 +1094,16 @@
       </tuv>
     </tu>
         
-    <tu tuid="TitleParent">
+	<tu tuid="TitleSub">
+      <tuv xml:lang="en">
+        <seg>Subtitle</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Untertitel</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="TitleParent">
       <tuv xml:lang="en">
         <seg>Parent Title</seg>
       </tuv>
@@ -1118,7 +1225,7 @@
         <seg>Title Additional</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Zusatztitel</seg>
+        <seg>Zusätzlicher Titel</seg>
       </tuv>
     </tu>
     
@@ -1830,15 +1937,33 @@
       </tuv>
     </tu>
     
-    <tu tuid="PublisherUniversity">
+	<tu tuid="ThesisDateAccepted">
       <tuv xml:lang="en">
-        <seg>Publisher University</seg>
+        <seg>Acceptance Date of the Thesis</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Universität (Veröffentlicher)</seg>
+        <seg>Datum der Annahme der Abschlussarbeit</seg>
+      </tuv>
+    </tu>
+	
+    <tu tuid="ThesisPublisher">
+      <tuv xml:lang="en">
+        <seg>Publishing Institution</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Veröffentlichende Institution</seg>
       </tuv>
     </tu>
     
+	<tu tuid="ThesisGrantor">
+      <tuv xml:lang="en">
+        <seg>Granting Institution</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Titel verleihende Institution</seg>
+      </tuv>
+    </tu>
+	
     <tu tuid="PublisherPlace">
       <tuv xml:lang="en">
         <seg>Place of publication</seg>

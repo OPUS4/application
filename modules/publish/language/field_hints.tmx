@@ -126,7 +126,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_GroupPersonReferee">
+	<tu tuid="hint_groupPersonReferee">
         <tuv xml:lang="en">
             <seg>Please enter the Referee.</seg>
         </tuv>
@@ -171,7 +171,7 @@
         </tuv>
     </tu>
 
-	<tu tuid="hint_GroupPersonEditor">
+	<tu tuid="hint_groupPersonEditor">
         <tuv xml:lang="en">
             <seg>Please enter the Editor.</seg>
         </tuv>
