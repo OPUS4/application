@@ -33,5 +33,28 @@
  * @version     $Id: show.phtml 2159 2009-03-12 13:36:06Z claussnitzer $
  */
 ?>
-<h1>Opus Application - <?= $this->title ?></h1>
-<?= $this->showModel($this->entry); ?>
+<h1><?= $this->title ?></h1>
+
+<table>
+    <tr>
+        <td>Name:</td>
+        <td><?= $this->ipRange->getName() ?><td>
+    </tr>
+    <tr>
+        <td>Starting IP:</td>
+        <td><?= $this->ipRange->getStartingip() ?><td>
+    </tr>
+    <tr>
+        <td>Ending IP:</td>
+        <td><?= $this->ipRange->getEndingip() ?><td>
+    </tr>
+    <tr>
+        <td>Roles:</td>
+        <td>
+            <?PHP foreach ($this->ipRange->getRole() as $role) : ?>
+            <div><?= $role ?></div>
+            <?PHP endforeach; ?>
+        </td>
+    </tr>
+</table>
+
