@@ -79,9 +79,14 @@ class Controller_CRUDAction extends Controller_Action {
      */
     public function showAction() {
         $id = $this->getRequest()->getParam('id');
-        $model = new $this->_modelclass($id);
-        $this->view->entry = $model->toArray();
-        return $model;
+        if (!empty($id) && is_numeric($id)) {
+            $model = new $this->_modelclass($id);
+            $this->view->entry = $model->toArray();
+            return $model;
+        }
+        else {
+            $this->_helper->redirector('index');
+        }
     }
 
     /**
@@ -147,14 +152,19 @@ class Controller_CRUDAction extends Controller_Action {
      */
     public function editAction() {
         $id = $this->getRequest()->getParam('id');
-        $form_builder = new Form_Builder();
-        $model = new $this->_modelclass($id);
-        $session = new Zend_Session_Namespace('crud');
-        $session->{$this->_modelclass} = $model;
-        $modelForm = $form_builder->build($model);
-        $action_url = $this->view->url(array("action" => "create"));
-        $modelForm->setAction($action_url);
-        $this->view->form = $modelForm;
+        if (!empty($id) && is_numeric($id)) {
+            $form_builder = new Form_Builder();
+            $model = new $this->_modelclass($id);
+            $session = new Zend_Session_Namespace('crud');
+            $session->{$this->_modelclass} = $model;
+            $modelForm = $form_builder->build($model);
+            $action_url = $this->view->url(array("action" => "create"));
+            $modelForm->setAction($action_url);
+            $this->view->form = $modelForm;
+        }
+        else {
+            $this->_helper->redirector('index');
+        }
     }
 
     /**
