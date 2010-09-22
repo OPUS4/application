@@ -16,6 +16,24 @@
       </tuv>
     </tu>
        
+    <tu tuid="admin_iprange_action_new">
+      <tuv xml:lang="en">
+        <seg>Add IP range</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Neuen IP Bereich hinzufügen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_iprange_none_defined">
+      <tuv xml:lang="en">
+        <seg>No IP ranges defined.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Keine IP Bereiche definiert.</seg>
+      </tuv>
+    </tu>
+
   </body>
   
 </tmx>
