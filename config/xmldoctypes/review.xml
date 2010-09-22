@@ -55,8 +55,8 @@
     <field name="PublisherPlace" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
 	<field name="PageFirst" required="no" formelement="Text" datatype="Integer" multiplicity="1"/>
 	<field name="PageLast" required="no" formelement="Text" datatype="Integer" multiplicity="1"/>
-	<field name="CompletedYear" required="yes" formelement="Text" datatype="Year" multiplicity="1"/>
-	<field name="PublishedYear" required="no" formelement="Text" datatype="Year" multiplicity="1"/>
+	<field name="CompletedDate" required="yes" formelement="Text" datatype="Year" multiplicity="1"/>
+	<field name="PublishedDate" required="no" formelement="Text" datatype="Year" multiplicity="1"/>
 	<field name="SubjectSwd" required="no" formelement="Text" datatype="Text" multiplicity="5"/>
 	<field name="SubjectUncontrolled" required="no" formelement="Text" datatype="Text" multiplicity="5"/>
 	<field name="IdentifierUrn" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
