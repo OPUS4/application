@@ -37,22 +37,22 @@
 
 <table>
     <tr>
-        <td>Name:</td>
+        <td><?= $this->translate('admin_iprange_label_description') ?></td>
         <td><?= $this->ipRange->getName() ?><td>
     </tr>
     <tr>
-        <td>Starting IP:</td>
+        <td><?= $this->translate('admin_iprange_label_startingip') ?></td>
         <td><?= $this->ipRange->getStartingip() ?><td>
     </tr>
     <tr>
-        <td>Ending IP:</td>
+        <td><?= $this->translate('admin_iprange_label_endingip') ?></td>
         <td><?= $this->ipRange->getEndingip() ?><td>
     </tr>
     <tr>
-        <td>Roles:</td>
+        <td><?= $this->translate('admin_iprange_label_roles') ?></td>
         <td>
             <?PHP foreach ($this->ipRange->getRole() as $role) : ?>
-            <div><?= $role ?></div>
+            <div><?= htmlspecialchars($role) ?></div>
             <?PHP endforeach; ?>
         </td>
     </tr>

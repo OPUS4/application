@@ -43,6 +43,42 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_iprange_label_description">
+      <tuv xml:lang="en">
+        <seg>Description:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Beschreibung:</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_iprange_label_startingip">
+      <tuv xml:lang="en">
+        <seg>Starting IP:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Anfangs IP:</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_iprange_label_endingip">
+      <tuv xml:lang="en">
+        <seg>Endig IP:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>End IP:</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_iprange_label_roles">
+      <tuv xml:lang="en">
+        <seg>Roles:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Rolen:</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_iprange_none_defined">
       <tuv xml:lang="en">
         <seg>No IP ranges defined.</seg>

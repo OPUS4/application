@@ -48,7 +48,7 @@ class Admin_Form_IpRange extends Zend_Form {
         if (!empty($id)) {
             $ipRange = new Opus_Iprange($id);
 
-            $this->populate($ipRange);
+            $this->populateFromIpRange($ipRange);
         }
     }
 
@@ -64,7 +64,7 @@ class Admin_Form_IpRange extends Zend_Form {
      * Populates form with values from Opus_Iprange instance.
      * @param Opus_Iprange $ipRange
      */
-    public function populate($ipRange) {
+    public function populateFromIpRange($ipRange) {
         $this->getElement('name')->setValue($ipRange->getName());
         $this->getElement('startingip')->setValue($ipRange->getStartingip());
         $this->getElement('endingip')->setValue($ipRange->getEndingip());
