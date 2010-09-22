@@ -77,21 +77,26 @@
         </div>
         <xsl:apply-templates select="TitleMain" />
         <xsl:apply-templates select="TitleAbstract" />
-        <xsl:if test="normalize-space(File/@PathName)">
-            <div class="fulltext">
-                <h2>Files</h2>
-                <ul>
-                    <xsl:apply-templates select="File" />
-                </ul>
-            </div>
-        </xsl:if>
+        
+        <div id="services" class="services-menu">
+            <xsl:if test="normalize-space(File/@PathName)">
+                <fieldset id="download-fulltext">
+                    <legend>Download</legend>
+                    <ul>
+                        <xsl:apply-templates select="File" />
+                    </ul>
+                </fieldset>
+            </xsl:if>
+            <xsl:call-template name="MailToAuthor"/>
+            <!--<xsl:call-template name="services"/>-->
+            <fieldset id="export">
+                <legend>Export</legend>
+                <xsl:call-template name="ExportFunctions" />
+            </fieldset>
+        </div>
 
-        <xsl:call-template name="MailToAuthor"/>
-        <!--<xsl:call-template name="services"/>-->
-        <xsl:call-template name="ExportFunctions" />
-
-        <h2>Metadaten</h2>
         <div class="frontdoordata">
+            <h2>Metadaten</h2>
             <table cellspacing="0">
                 <colgroup class="angaben">
                     <col class="name"/>
@@ -429,7 +434,9 @@
                 <tr>
                     <th class="name">
                         <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">collection_role_frontdoor_<xsl:value-of select="@RoleName" /></xsl:with-param>
+                            <xsl:with-param name="string">collection_role_frontdoor_
+                                <xsl:value-of select="@RoleName" />
+                            </xsl:with-param>
                         </xsl:call-template>
                         <xsl:text>:</xsl:text>
                     </th>
@@ -455,7 +462,9 @@
                 <tr>
                     <th class="name">
                         <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">collection_role_frontdoor_<xsl:value-of select="@RoleName" /></xsl:with-param>
+                            <xsl:with-param name="string">collection_role_frontdoor_
+                                <xsl:value-of select="@RoleName" />
+                            </xsl:with-param>
                         </xsl:call-template>
                         <xsl:text>:</xsl:text>
                     </th>
@@ -481,7 +490,9 @@
                 <tr>
                     <th class="name">
                         <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">collection_role_frontdoor_<xsl:value-of select="@RoleName" /></xsl:with-param>
+                            <xsl:with-param name="string">collection_role_frontdoor_
+                                <xsl:value-of select="@RoleName" />
+                            </xsl:with-param>
                         </xsl:call-template>
                         <xsl:text>:</xsl:text>
                     </th>
@@ -507,7 +518,9 @@
                 <tr>
                     <th class="name">
                         <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">collection_role_frontdoor_<xsl:value-of select="@RoleName" /></xsl:with-param>
+                            <xsl:with-param name="string">collection_role_frontdoor_
+                                <xsl:value-of select="@RoleName" />
+                            </xsl:with-param>
                         </xsl:call-template>
                         <xsl:text>:</xsl:text>
                     </th>
@@ -533,7 +546,9 @@
                 <tr>
                     <th class="name">
                         <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">collection_role_frontdoor_<xsl:value-of select="@RoleName" /></xsl:with-param>
+                            <xsl:with-param name="string">collection_role_frontdoor_
+                                <xsl:value-of select="@RoleName" />
+                            </xsl:with-param>
                         </xsl:call-template>
                         <xsl:text>:</xsl:text>
                     </th>
@@ -559,7 +574,9 @@
                 <xsl:when test="position()=1">
                     <th class="name">
                         <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">collection_role_frontdoor_<xsl:value-of select="@RoleName" /></xsl:with-param>
+                            <xsl:with-param name="string">collection_role_frontdoor_
+                                <xsl:value-of select="@RoleName" />
+                            </xsl:with-param>
                         </xsl:call-template>
                         <xsl:text>:</xsl:text>
                     </th>
@@ -580,7 +597,9 @@
                 <xsl:when test="position()=1">
                     <th class="name">
                         <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">collection_role_frontdoor_<xsl:value-of select="@RoleName" /></xsl:with-param>
+                            <xsl:with-param name="string">collection_role_frontdoor_
+                                <xsl:value-of select="@RoleName" />
+                            </xsl:with-param>
                         </xsl:call-template>
                         <xsl:text>:</xsl:text>
                     </th>
@@ -638,7 +657,6 @@
     <xsl:template match="File">
         <li>
             <xsl:element name="a">
-              <!-- TODO: Use Zend Url-Helper to build href attribute -->
                 <xsl:attribute name="href">
                     <xsl:value-of select="$deliverUrlPrefix"/>
                     <xsl:text>/</xsl:text>
@@ -649,23 +667,42 @@
                 <xsl:element name="img">
                     <xsl:attribute name="src">
                         <xsl:value-of select="$layoutPath"/>
-                        <xsl:text>/img/filetypelogo_</xsl:text>
-                        <xsl:value-of select="@FileType"/>
+                        <xsl:text>/img/filetype/</xsl:text>
+                        <xsl:call-template name="replaceCharsInString">
+                            <xsl:with-param name="stringIn" select="string(@MimeType)"/>
+                            <xsl:with-param name="charsIn" select="'/'"/>
+                            <xsl:with-param name="charsOut" select="'_'"/>
+                        </xsl:call-template>
                         <xsl:text>.png</xsl:text>
                     </xsl:attribute>
                     <xsl:attribute name="width">
-                        <xsl:text>50</xsl:text>
+                        <xsl:text>16</xsl:text>
                     </xsl:attribute>
                     <xsl:attribute name="height">
-                        <xsl:text>53</xsl:text>
+                        <xsl:text>16</xsl:text>
                     </xsl:attribute>
                     <xsl:attribute name="border">
                         <xsl:text>0</xsl:text>
                     </xsl:attribute>
                     <xsl:attribute name="title">
-                        <xsl:text>Download</xsl:text>
+                        <xsl:text>Download </xsl:text>
+                        <xsl:value-of select="@PathName" />
+                        <xsl:text> (</xsl:text>
+                        <xsl:value-of select="@MimeType" />
+                        <xsl:text>)</xsl:text>
                     </xsl:attribute>
                 </xsl:element>
+            </xsl:element>
+            
+
+            <xsl:element name="a">
+                <xsl:attribute name="href">
+                    <xsl:value-of select="$deliverUrlPrefix"/>
+                    <xsl:text>/</xsl:text>
+                    <xsl:value-of select="@DocumentId" />
+                    <xsl:text>/</xsl:text>
+                    <xsl:value-of select="@PathName" />
+                </xsl:attribute>
                 <xsl:value-of select="@PathName" />
             </xsl:element>
             <xsl:text> </xsl:text>
@@ -792,7 +829,8 @@
                         <xsl:element name="a">
                    <!-- TODO: Use Zend Url-Helper to build href attribute -->
                             <xsl:attribute name="href">
-                                <xsl:value-of select="$baseUrl"/>/default/license/index/licId/<xsl:value-of select="@Id" />
+                                <xsl:value-of select="$baseUrl"/>/default/license/index/licId/
+                                <xsl:value-of select="@Id" />
                             </xsl:attribute>
                             <xsl:value-of select="@NameLong" />
                         </xsl:element>
@@ -1195,69 +1233,66 @@
     </xsl:template>
 
     <xsl:template name="ExportFunctions">
-        <fieldset class="services">
-            <legend>Export</legend>
         <!-- Bib-Export -->
-            <xsl:element name="a">
+        <xsl:element name="a">
            <!-- TODO: Use Zend Url-Helper to build href attribute -->
-                <xsl:attribute name="href">
-                    <xsl:value-of select="$baseUrl"/>
-                    <xsl:text>/citationExport/index/download/output/bibtex/docId/</xsl:text>
-                    <xsl:value-of select="@Id" />
+            <xsl:attribute name="href">
+                <xsl:value-of select="$baseUrl"/>
+                <xsl:text>/citationExport/index/download/output/bibtex/docId/</xsl:text>
+                <xsl:value-of select="@Id" />
+            </xsl:attribute>
+            <xsl:element name="img">
+                <xsl:attribute name="src">
+                    <xsl:value-of select="$layoutPath"/>
+                    <xsl:text>/img/bibtex.jpg</xsl:text>
                 </xsl:attribute>
-                <xsl:element name="img">
-                    <xsl:attribute name="src">
-                        <xsl:value-of select="$layoutPath"/>
-                        <xsl:text>/img/bibtex.jpg</xsl:text>
-                    </xsl:attribute>
-                    <xsl:attribute name="border">
-                        <xsl:text>0</xsl:text>
-                    </xsl:attribute>
-                    <xsl:attribute name="title">
-                        <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">frontdoor_exportbibtex</xsl:with-param>
-                        </xsl:call-template>
-                    </xsl:attribute>
-                    <xsl:attribute name="title">
-                        <xsl:text>Bibtex Export</xsl:text>
-                    </xsl:attribute>
-                    <xsl:attribute name="alt">
-                        <xsl:text>Bibtex Export</xsl:text>
-                    </xsl:attribute>
-                </xsl:element>
+                <xsl:attribute name="border">
+                    <xsl:text>0</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="title">
+                    <xsl:call-template name="translateString">
+                        <xsl:with-param name="string">frontdoor_exportbibtex</xsl:with-param>
+                    </xsl:call-template>
+                </xsl:attribute>
+                <xsl:attribute name="title">
+                    <xsl:text>Bibtex Export</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="alt">
+                    <xsl:text>Bibtex Export</xsl:text>
+                </xsl:attribute>
             </xsl:element>
-            <xsl:text> </xsl:text>
+        </xsl:element>
+        <xsl:text> </xsl:text>
 
         <!-- Ris-Export -->
-            <xsl:element name="a">
+        <xsl:element name="a">
            <!-- TODO: Use Zend Url-Helper to build href attribute -->
-                <xsl:attribute name="href">
-                    <xsl:value-of select="$baseUrl"/>
-                    <xsl:text>/citationExport/index/download/output/ris/docId/</xsl:text>
-                    <xsl:value-of select="@Id" />
+            <xsl:attribute name="href">
+                <xsl:value-of select="$baseUrl"/>
+                <xsl:text>/citationExport/index/download/output/ris/docId/</xsl:text>
+                <xsl:value-of select="@Id" />
+            </xsl:attribute>
+            <xsl:element name="img">
+                <xsl:attribute name="src">
+                    <xsl:value-of select="$layoutPath"/>
+                    <xsl:text>/img/ris.jpg</xsl:text>
                 </xsl:attribute>
-                <xsl:element name="img">
-                    <xsl:attribute name="src">
-                        <xsl:value-of select="$layoutPath"/>
-                        <xsl:text>/img/ris.jpg</xsl:text>
-                    </xsl:attribute>
-                    <xsl:attribute name="border">
-                        <xsl:text>0</xsl:text>
-                    </xsl:attribute>
-                    <xsl:attribute name="title">
-                        <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">frontdoor_exportris</xsl:with-param>
-                        </xsl:call-template>
-                    </xsl:attribute>
-                    <xsl:attribute name="title">
-                        <xsl:text>Ris Export</xsl:text>
-                    </xsl:attribute>
-                    <xsl:attribute name="alt">
-                        <xsl:text>Ris Export</xsl:text>
-                    </xsl:attribute>
-                </xsl:element>
+                <xsl:attribute name="border">
+                    <xsl:text>0</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="title">
+                    <xsl:call-template name="translateString">
+                        <xsl:with-param name="string">frontdoor_exportris</xsl:with-param>
+                    </xsl:call-template>
+                </xsl:attribute>
+                <xsl:attribute name="title">
+                    <xsl:text>Ris Export</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="alt">
+                    <xsl:text>Ris Export</xsl:text>
+                </xsl:attribute>
             </xsl:element>
-        </fieldset>
+        </xsl:element>
     </xsl:template>
 
     <!-- Named template to translate a field's name. Needs no parameter. -->
@@ -1280,6 +1315,24 @@
         <xsl:value-of select="php:functionString('Frontdoor_IndexController::translate', $string)" />
     </xsl:template>
 
+    <xsl:template name="replaceCharsInString">
+        <xsl:param name="stringIn"/>
+        <xsl:param name="charsIn"/>
+        <xsl:param name="charsOut"/>
+        <xsl:choose>
+            <xsl:when test="contains($stringIn,$charsIn)">
+                <xsl:value-of select="concat(substring-before($stringIn,$charsIn),$charsOut)"/>
+                <xsl:call-template name="replaceCharsInString">
+                    <xsl:with-param name="stringIn" select="substring-after($stringIn,$charsIn)"/>
+                    <xsl:with-param name="charsIn" select="$charsIn"/>
+                    <xsl:with-param name="charsOut" select="$charsOut"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$stringIn"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
 
 
 </xsl:stylesheet>

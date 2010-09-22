@@ -37,20 +37,17 @@
  * the Frontdoor-Controller and displays it. The order of elements is fixed here.
  * Abstracts and keywords were combined with language information and displayed directly.
  */
-
 ?>
 
 <!-- FIXME: Matheon only -->
-<? $this->headLink()->appendStylesheet($this->baseUrl.'/layouts/frontdoor.css') ?>
+<? $this->headLink()->appendStylesheet($this->baseUrl . '/layouts/frontdoor.css') ?>
 
-<?php if(Opus_Security_Realm::getInstance()->check('administrate')) : ?>
-<a href="<?= $this->url(array('module'=>'admin','controller'=>'documents','action'=>'edit','id'=>$this->docId),null,true) ?>" id="admin-edit-document">
-    <?= $this->translate('frontdoor_edit_document') ?>
+<?php if (Opus_Security_Realm::getInstance()->check('administrate')) : ?>
+    <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'edit', 'id' => $this->docId), null, true) ?>" id="admin-edit-document">
+        <?= $this->translate('frontdoor_edit_document') ?>
 </a>
 <?php endif ?>
 
 <div class="frontdoor">
-    <div class="wrapper">
-        <?= $this->frontdoor ?>
-    </div>
+    <?= $this->frontdoor ?>
 </div>

@@ -3,11 +3,6 @@
     margin-bottom:.3em;
 }
 
-.fulltext {
-    margin-top:3em;
-    margin-bottom:1em;
-}
-
 .abstract {
     margin-top:.2em;
     margin-bottom:.3em;
@@ -71,13 +66,6 @@
     border: none;
 }
 
-.frontdoor table td.fulltext {
-    font-size: 0.9em;
-    border: 0px;
-    vertical-align: top;
-    text-align: left;
-}
-
 .frontdoor table td.fulltext_label {
     font-size: 1em;
     text-align: left;
@@ -86,4 +74,20 @@
 
 .frontdoor h1 {
 
+}
+
+.frontdoor .services-menu fieldset {
+    width:auto;
+}
+
+.frontdoor #export {
+    float:left;
+}
+
+.frontdoor #download-fulltext {
+    float:left;
+}
+
+.frontdoor .frontdoordata {
+    clear:both;
 }
