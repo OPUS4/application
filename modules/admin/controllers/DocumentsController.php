@@ -296,39 +296,44 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         // get parameters
         $id = $this->getRequest()->getParam('id');
 
-        $this->view->title = $this->view->translate('admin_documents_edit');
+        if (!empty($id) && is_numeric($id)) {
+            $this->view->title = $this->view->translate('admin_documents_edit');
 
-        $form_builder = new Form_Builder();
-        $document = new $this->_modelclass($id);
+            $form_builder = new Form_Builder();
+            $document = new $this->_modelclass($id);
 
-        $documentInSession = new Zend_Session_Namespace('document');
-        $documentInSession->document = $document;
+            $documentInSession = new Zend_Session_Namespace('document');
+            $documentInSession->document = $document;
 
 
-        if ($document->getServerState() === 'unpublished') {
-            $this->view->actions = 'publish';
+            if ($document->getServerState() === 'unpublished') {
+                $this->view->actions = 'publish';
+            }
+            else if ($document->getServerState() === 'published') {
+                $this->view->actions = 'unpublish';
+            }
+            if ($document->getServerState() === 'deleted') {
+                $this->view->actions = 'undelete';
+            }
+
+            $this->view->showFilemanager = $document->hasField('File');
+            $documentWithFilter = $this->__createFilter($document);
+
+            $modelForm = $form_builder->build($documentWithFilter);
+
+            $action_url = $this->view->url(array("action" => "create"));
+            $modelForm->setAction($action_url);
+            $this->view->form = $modelForm;
+            $this->view->docId = $id;
+            $assignedCollections = array();
+            foreach ($document->getCollection() as $assignedCollection) {
+                $assignedCollections[] = array('collectionName' => $assignedCollection->getDisplayName(), 'collectionId' => $assignedCollection->getId(), 'roleName' => $assignedCollection->getRole()->getName(), 'roleId' => $assignedCollection->getRole()->getId());
+            }
+            $this->view->assignedCollections = $assignedCollections;
         }
-        else if ($document->getServerState() === 'published') {
-            $this->view->actions = 'unpublish';
+        else {
+            $this->_helper->redirector('index');
         }
-        if ($document->getServerState() === 'deleted') {
-            $this->view->actions = 'undelete';
-        }
-
-        $this->view->showFilemanager = $document->hasField('File');
-        $documentWithFilter = $this->__createFilter($document);
-
-        $modelForm = $form_builder->build($documentWithFilter);
-
-        $action_url = $this->view->url(array("action" => "create"));
-        $modelForm->setAction($action_url);
-        $this->view->form = $modelForm;
-        $this->view->docId = $id;
-        $assignedCollections = array();
-        foreach ($document->getCollection() as $assignedCollection) {
-            $assignedCollections[] = array('collectionName' => $assignedCollection->getDisplayName(), 'collectionId' => $assignedCollection->getId(), 'roleName' => $assignedCollection->getRole()->getName(), 'roleId' => $assignedCollection->getRole()->getId());
-        }
-        $this->view->assignedCollections = $assignedCollections;
     }
 
     /**
