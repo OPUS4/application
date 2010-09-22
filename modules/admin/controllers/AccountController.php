@@ -201,8 +201,6 @@ class Admin_AccountController extends Controller_Action {
                 }
             }
 
-
-
             $actionUrl = $this->view->url(array('action' => 'update', 'id' => $id));
 
             $accountForm->setAction($actionUrl);
