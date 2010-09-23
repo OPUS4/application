@@ -37,14 +37,14 @@
 
 <table>
     <tr>
-        <td>Login:</td>
+        <td><?= $this->translate('admin_account_label_login') ?></td>
         <td><?=  htmlspecialchars($this->account->getLogin())?></td>
     </tr>
     <tr>
-        <td>Roles:</td>
+        <td><?= $this->translate('admin_account_label_roles') ?></td>
         <td>
             <?PHP foreach ($this->account->getRole() as $role) : ?>
-            <?= $role ?><br>
+            <?= htmlspecialchars($role) ?><br>
             <?PHP endforeach; ?>
         </td>
     </tr>

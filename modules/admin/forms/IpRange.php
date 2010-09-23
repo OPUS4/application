@@ -41,8 +41,11 @@ class Admin_Form_IpRange extends Zend_Form {
      * @param integer $id
      */
     public function __construct($id = null) {
+        $env = (empty($id)) ? 'new' : 'edit';
+
         $config = new Zend_Config_Ini(APPLICATION_PATH .
-                '/modules/admin/forms/iprange.ini', 'production');
+                '/modules/admin/forms/iprange.ini', $env);
+        
         parent::__construct($config->form->iprange);
 
         if (!empty($id)) {
@@ -89,7 +92,7 @@ class Admin_Form_IpRange extends Zend_Form {
             $rolesGroup[] = $roleCheckbox->getName();
         }
 
-        $this->addDisplayGroup($rolesGroup, 'Roles', array('legend' => 'Roles'));
+        $this->addDisplayGroup($rolesGroup, 'Roles', array('legend' => 'admin_form_group_roles'));
     }
 
     /**
