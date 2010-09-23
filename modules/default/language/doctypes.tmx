@@ -142,6 +142,15 @@
         </tuv>
    </tu>
 
+    <tu tuid="movingimage">
+        <tuv xml:lang="en">
+            <seg>Moving Images</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bewegte Bilder</seg>
+        </tuv>
+   </tu>
+   
    <tu tuid="preprint">
         <tuv xml:lang="en">
             <seg>Preprint</seg>
