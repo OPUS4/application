@@ -169,6 +169,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_form_update">
+      <tuv xml:lang="en">
+        <seg>Update</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Speichern</seg>
+      </tuv>
+    </tu>
+
   </body>
   
 </tmx>

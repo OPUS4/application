@@ -105,6 +105,16 @@
         <seg>Passwort bestaetigen:</seg>
       </tuv>
     </tu>
+
+    <tu tuid="admin_account_label_roles">
+      <tuv xml:lang="en">
+        <seg>Roles:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Rollen:</seg>
+      </tuv>
+    </tu>
+
   </body>
   
 </tmx>
