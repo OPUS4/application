@@ -85,10 +85,20 @@ class SolrSearch_Model_CollectionList {
 
     /**
      *
-     * @return array An array of CollectionNode objects (first array item is the node itself)
+     * @return array An array of CollectionNode objects along the path to the root.
      */
     public function getParents() {
-        return $this->collectionNode->getParents();
+        $parents = $this->collectionNode->getParents();
+        $numOfParents = count($parents);
+        if ($numOfParents < 2) {
+            // only the current node and the root node are present in $parents
+            return array();
+        }                
+        $results = array();
+        for ($i = 1; $i < $numOfParents; $i++) {
+            array_push($results, $parents[$numOfParents - $i]);
+        }
+        return $results;
     }
 
     public function getSubNodes() {
@@ -103,7 +113,7 @@ class SolrSearch_Model_CollectionList {
 
     public function getTitle() {
         if ($this->isRootNode()) {
-            return 'search_index_custom_browsing_' . $this->collectionRole->getDisplayName('browsing');
+            return $this->getCollectionRoleTitle();
         }
         return $this->collection->getDisplayName('browsing');
     }
@@ -114,6 +124,10 @@ class SolrSearch_Model_CollectionList {
 
     public function getCollectionId() {
         return $this->collection->getId();
+    }
+
+    public function getCollectionRoleTitle() {
+        return 'search_index_custom_browsing_' . $this->collectionRole->getDisplayName('browsing');
     }
 }
 ?>

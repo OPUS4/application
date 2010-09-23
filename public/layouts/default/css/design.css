@@ -84,3 +84,19 @@ ul, li {
     padding: 0;
     padding-right: .5em;
 }
+
+#breadcrumb {
+    background-color: #EFEFEF;
+    padding: 1em;
+    margin: 2em 0;
+    font-size: 85%;
+}
+
+#breadcrumb li {
+    list-style-type: none;
+    padding: 0;
+}
+
+#subnodes {
+    margin: 2em 0;
+}

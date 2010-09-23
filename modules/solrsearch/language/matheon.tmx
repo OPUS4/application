@@ -1,9 +1,7 @@
 <?xml version="1.0" ?>
 <!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
 <tmx version="1.4">
-
   <header />
-
   <body>
     <tu tuid="search_index_custom_browsing_projects">
         <tuv xml:lang="en">

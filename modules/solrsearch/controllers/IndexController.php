@@ -66,30 +66,6 @@ class Solrsearch_IndexController extends Controller_Action {
         $this->view->title = $this->view->translate('solrsearch_title_results');
     }
 
-    public function browseAction() {
-        $this->view->baseUrl = $this->getRequest()->getBaseUrl();
-        $collectionRoles = array();
-        foreach (Opus_CollectionRole::fetchAll() as $role) {
-            if ($role->getVisible() === '1' and $role->getVisibleBrowsingStart() === '1') {
-                if ($role->getRootNode()->getVisible()) {
-                    array_push($collectionRoles, $role);
-                }
-            }
-        }
-        $this->view->collectionRoles = $collectionRoles;
-    }
-
-    public function browsedoctypesAction() {
-        $facetname = 'doctype';
-        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::FACET_ONLY);
-        $query->setFacetField($facetname);
-        $searcher = new Opus_SolrSearch_Searcher();
-        $result = $searcher->search($query);
-        $facets = $result->getFacets();
-        $facetitems = $facets[$facetname];
-        $this->view->facetitems = $facetitems;
-    }
-
     public function invalidsearchtermAction() {
         $this->view->title = $this->view->translate('solrsearch_title_invalidsearchterm');
         $params = $this->_request->isPost() ? $this->_request->getPost() : $this->_request->getParams();
@@ -363,6 +339,7 @@ class Solrsearch_IndexController extends Controller_Action {
         
         $this->view->subnodes = $collectionList->getSubNodes();
         $this->view->parents = $collectionList->getParents();
+        $this->view->collectionRoleTitle = $this->view->translate($collectionList->getCollectionRoleTitle());
 
         if ($collectionList->isRootNode()) {
             $this->view->title = $this->view->translate($collectionList->getTitle());

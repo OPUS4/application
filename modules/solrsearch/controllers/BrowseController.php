@@ -1,7 +1,5 @@
 <?php
 /**
- * Index View for BrowsingController including links to several browsing lists and search functions
- *
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -28,35 +26,37 @@
  *
  * @category    Application
  * @package     Module_SolrSearch
- * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+
+class Solrsearch_BrowseController extends Controller_Action {
+
+    public function indexAction() {
+        $this->view->baseUrl = $this->getRequest()->getBaseUrl();
+        $collectionRoles = array();
+        foreach (Opus_CollectionRole::fetchAll() as $role) {
+            if ($role->getVisible() === '1' and $role->getVisibleBrowsingStart() === '1') {
+                if ($role->getRootNode()->getVisible()) {
+                    array_push($collectionRoles, $role);
+                }
+            }
+        }
+        $this->view->collectionRoles = $collectionRoles;
+    }
+
+    public function doctypesAction() {
+        $facetname = 'doctype';
+        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::FACET_ONLY);
+        $query->setFacetField($facetname);
+        $searcher = new Opus_SolrSearch_Searcher();
+        $result = $searcher->search($query);
+        $facets = $result->getFacets();
+        $facetitems = $facets[$facetname];
+        $this->view->facetitems = $facetitems;
+    }
+
+}
 ?>
-
-<h2><?= $this->translate('search_index_browsing') ?></h2>
-
-<ul>
-    <li>
-        <a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'latest'), null, true) ?>"><?= $this->translate('latest_documents_title') ?></a>&nbsp;
-        <a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'latest', 'output' => 'rss'), null, true) ?>" class="rss"><img src="<?= $this->baseUrl; ?>/layouts/default/img/feed.png" width="16" height="16" alt="RSS-Feed Icon" title="RSS-Feed abonnieren" /></a>
-    </li>
-    <li>
-        <a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'browseDoctypes'), null, true) ?>"><?= $this->translate('search_index_doctype_browsing') ?></a>
-    </li>
-
-    <?php foreach ($this->collectionRoles as $collectionRole) :
-        $translatelabel = 'search_index_custom_browsing_' . $collectionRole->getName();
-        $printname = '';
-        if ($translatelabel === $this->translate($translatelabel))
-            $printname = $collectionRole->getName();
-        else
-            $printname = $this->translate($translatelabel);        
-    ?>
-    <li>
-        <a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'collection', 'id' => $collectionRole->getRootNode()->getId()), null, true)?>"><?= htmlspecialchars($printname) ?></a>
-    </li>
-    <?php endforeach ?>
-</ul>
