@@ -53,12 +53,3 @@ function resetComboBox(id) {
     if(comboBox != null)
         comboBox.selectedIndex = 0;
 }
-
-function setEventhandlerForResetbutton() {
-    var resetButton = document.getElementById('advanced-search-reset-button');
-    if(resetButton == null)
-        return;
-    resetButton.onclick= function() {
-        resetAdvancedSearchForm();
-    };
-}
