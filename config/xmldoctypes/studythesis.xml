@@ -58,6 +58,5 @@
     <field name="Note" required="no" formelement="Textarea" datatype="Text" multiplicity="1" />
     <field name="Language" required="yes" formelement="Text" datatype="Text" multiplicity="1"/>
 	<field name="Licence" required="yes"  formelement="Select" datatype="Licence" multiplicity="1" />
-	<field name="ServerDateUnlocking" required="no" formelement="Text" datatype="Year" multiplicity="1" />
-
+	
 </documenttype>

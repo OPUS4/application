@@ -39,7 +39,6 @@
 	<field name="PersonSubmitter" required="yes" formelement="Text" datatype="Person" multiplicity="1"/>
 	<field name="Licence" required="yes" formelement="Select" datatype="Licence" multiplicity="1"/>
 	<field name="Language" required="yes" formelement="Select" datatype="Language" multiplicity="1"/>
-	<field name="ServerDateUnlocking" required="no" formelement="Text" datatype="Year" multiplicity="1" />
 	<field name="TitleMain" required="yes" formelement="Text" datatype="Title" multiplicity="4"/>
 	<field name="TitleSub" required="no" formelement="Text" datatype="Title" multiplicity="1" />
 	<field name="TitleAbstract" required="no" formelement="Textarea" datatype="Title" multiplicity="4" >

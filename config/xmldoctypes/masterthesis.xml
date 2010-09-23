@@ -59,10 +59,10 @@
     <field name="IdentifierIsbn" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="ThesisPublisher" required="yes" formelement="Text" datatype="Text" multiplicity="1" />
 	<field name="ThesisGrantor" required="yes" formelement="Text" datatype="Text" multiplicity="1" />    
-    <field name="PublishedYear" required="no" formelement="Text" datatype="Year" multiplicity="1" />
+    <field name="PublishedDate" required="no" formelement="Text" datatype="Year" multiplicity="1" />
+    <field name="CompletedDate" required="yes" formelement="Text" datatype="Year" multiplicity="1" />
     <field name="Note" required="no" formelement="Textarea" datatype="Text" multiplicity="1" />
     <field name="Language" required="yes" formelement="Text" datatype="Text" multiplicity="1"/>
 	<field name="Licence" required="yes"  formelement="Select" datatype="Licence" multiplicity="1" />
-	<field name="ServerDateUnlocking" required="no" formelement="Text" datatype="Year" multiplicity="1" />
-
+	
 </documenttype>

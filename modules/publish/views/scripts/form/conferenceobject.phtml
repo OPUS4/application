@@ -9,12 +9,13 @@ echo '<h3>'.$this->subtitle.'</h3>';
 <?= $this->element($this->TitleSub_); ?>
 <?= $this->group($this->groupTitleAbstract); ?>
 <?= $this->group($this->groupPersonAuthor); ?>
-<?= $this->element($this->PublishedYear_); ?>
+<?= $this->element($this->CompletedDate_); ?>
 <?= $this->element($this->PageNumber_); ?>
 <?= $this->element($this->PageFirst_); ?>
 <?= $this->element($this->PageLast_); ?>
 <?= $this->element($this->PublisherName_); ?>
 <?= $this->element($this->PublisherPlace_); ?>
+<?= $this->element($this->PublishedDate_); ?>
 <?= $this->element($this->TitleParent_); ?>
 <?= $this->group($this->groupPersonEditor); ?>
 <?= $this->group($this->groupPersonTranslator); ?>
@@ -31,7 +32,6 @@ echo '<h3>'.$this->subtitle.'</h3>';
 <?= $this->element($this->Note_); ?>
 <?= $this->element($this->Language_); ?>
 <?= $this->element($this->Licence_); ?>
-<?= $this->element($this->ServerDateUnlocking_); ?>
 
 <?= $this->element($this->fullText, null, "Hidden", "fullText"); ?>
 <?= $this->element("conferenceobject", null, "Hidden",  "documentType"); ?>
