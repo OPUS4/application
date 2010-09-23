@@ -17,6 +17,14 @@
         </tuv>
     </tu>
 
+    <tu tuid="button_label_collection">
+        <tuv xml:lang="en">
+            <seg>Select a collection</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Kollektion auswählen</seg>
+        </tuv>
+    </tu>
 
     <tu tuid="button_label_send">
         <tuv xml:lang="en">

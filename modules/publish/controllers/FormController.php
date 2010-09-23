@@ -62,7 +62,7 @@ class Publish_FormController extends Controller_Action {
                 return $this->renderScript('index/index.phtml');
             } else {
 
-                $this->_setDocumentParameters($data);
+                $this->_setDocumentParameters($data, true);
 
                 $this->view->title = $this->view->translate('publish_controller_index');
                 $this->view->subtitle = $this->view->translate($defaultNS->documentType);
@@ -75,7 +75,7 @@ class Publish_FormController extends Controller_Action {
 
                 $this->_helper->viewRenderer($templateName);
 
-                $publishForm = new Publish_Form_PublishingSecond($defaultNS->documentType, $defaultNS->documentId, $defaultNS->fulltext, null, null);
+                $publishForm = new Publish_Form_PublishingSecond($defaultNS->documentType, $defaultNS->documentId, $defaultNS->fulltext, $defaultNS->additionalFields, null);
                 $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check'));
                 $publishForm->setAction($action_url);
                 $publishForm->setMethod('post');
@@ -100,6 +100,7 @@ class Publish_FormController extends Controller_Action {
         $defaultNS = new Zend_Session_Namespace('Publish');
 
         $this->view->languageSelectorDisabled = true;
+        $log->debug("check action begins");
 
         if ($this->getRequest()->isPost() === true) {
             $postData = $this->getRequest()->getPost();
@@ -107,11 +108,11 @@ class Publish_FormController extends Controller_Action {
                 $log->debug("POST --> [" . $key . "] : " . $value);
             }
 
-            $this->_setDocumentParameters($postData);
+            //$this->_setDocumentParameters($postData);
 
             //initialize the form object
             $form = new Publish_Form_PublishingSecond($defaultNS->documentType, $defaultNS->documentId, $defaultNS->fulltext, $defaultNS->additionalFields, $postData);
-            $form->populate($postData);
+            //$form->populate($postData);
 
             if (!$form->send->isChecked()) {
                 // A button (not SEND) was pressed => add / remove fields
@@ -149,11 +150,15 @@ class Publish_FormController extends Controller_Action {
 
                     $depositForm = new Publish_Form_PublishingSecond($defaultNS->documentType, $defaultNS->documentId, $defaultNS->fulltext, $defaultNS->additionalFields, $form->getValues());
                     $action_url = $this->view->url(array('controller' => 'deposit', 'action' => 'deposit'));
+                    //$action_url = $this->view->url(array('controller' => 'collection', 'action' => 'top'));
                     $depositForm->setAction($action_url);
                     $depositForm->setMethod('post');
                     $depositForm->populate($form->getValues());
 
-                    $depositForm->prepareCheck($defaultNS);
+                    $depositForm->prepareCheck();
+
+                    foreach ($depositForm->getValues() AS $key => $value)
+                            $defaultNS->documentData[$key] = $value;
 
                     $this->view->form = $depositForm;
                 }
@@ -268,11 +273,11 @@ class Publish_FormController extends Controller_Action {
      * If they are not set in session then the value ist fetched from the post request.
      * @param <array> $postData
      */
-    private function _setDocumentParameters($postData = null) {
+    private function _setDocumentParameters($postData = null, $set = null) {
         $log = Zend_Registry::get('Zend_Log');
         $defaultNS = new Zend_Session_Namespace('Publish');
 
-        if (!isset($defaultNS->documentType)) {
+        if (!isset($defaultNS->documentType) || $set === true) {
             if (isset($postData['documentType'])) {
                 $defaultNS->documentType = $postData['documentType'];
                 unset($postData['documentType']);
@@ -283,7 +288,7 @@ class Publish_FormController extends Controller_Action {
             $log->info("documentType = " . $defaultNS->documentType);
         }
 
-        if (!isset($defaultNS->documentId)) {
+        if (!isset($defaultNS->documentId) || $set === true) {
             if (isset($postData['documentId'])) {
                 $defaultNS->documentId = $postData['documentId'];
                 unset($postData['documentId']);
@@ -294,7 +299,7 @@ class Publish_FormController extends Controller_Action {
             $log->info("documentId = " . $defaultNS->documentId);
         }
 
-        if (!isset($defaultNS->fulltext)) {
+        if (!isset($defaultNS->fulltext) || $set === true) {
             if (isset($postData['fullText'])) {
                 $defaultNS->fulltext = $postData['fullText'];
                 unset($postData['fulltext']);
@@ -304,17 +309,6 @@ class Publish_FormController extends Controller_Action {
 
             $log->info("fulltext = " . $defaultNS->fulltext);
         }
-
-        $additionalFields = array();
-
-        foreach ($postData AS $element => $value) {
-            if (substr($element, 0, 9) == "countMore") {
-                $key = substr($element, 9);
-                $additionalFields[$key] = (int) $value;
-            }
-        }
-
-        $defaultNS->additionalFields = $additionalFields;
     }
 
     /**
@@ -372,13 +366,14 @@ class Publish_FormController extends Controller_Action {
             $workflow = "delete";
             $log->debug("Fieldname for deleteMore => " . $fieldName);
         }
-
-        $currentNumber = $form->getElement('countMore' . $fieldName)->getValue();
+        
+        $currentNumber = $defaultNS->additionalFields[$fieldName];
+        $log->debug("old current number: " . $currentNumber);
         if ($workflow == "add") {
             //show one more fields
             $currentNumber = (int) $currentNumber + 1;
         } else {
-            if ($currentNumber > 0) {
+            if ($currentNumber > 1) {
                 //remove one more field, only down to 0
                 $currentNumber = (int) $currentNumber - 1;
             }
@@ -386,6 +381,7 @@ class Publish_FormController extends Controller_Action {
 
         //set the increased value for the pressed button and create a new form
         $defaultNS->additionalFields[$fieldName] = $currentNumber;
+        $log->debug("new current number: " . $currentNumber . " for field ". $fieldName);
 
         $form = new Publish_Form_PublishingSecond($defaultNS->documentType, $defaultNS->documentId, $defaultNS->fulltext, $defaultNS->additionalFields, $postData);
         $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check'));

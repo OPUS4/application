@@ -55,12 +55,15 @@ class Publish_Model_Validation {
 
         $this->_datatypeValidation();
 
-        $this->_extendedValidation();
+        //$this->_extendedValidation();
     }
 
     private function _datatypeValidation() {
         switch ($this->datatype) {
             case 'Date' : $this->validator = $this->_validateDate();
+                break;
+
+            case 'Email' : $this->validator = $this->_validateEmail();
                 break;
 
             case 'Integer': $this->validator = $this->_validateInteger();
@@ -109,6 +112,14 @@ class Publish_Model_Validation {
             Zend_Validate_Date::INVALID => 'publish_validation_error_date_invalid',
             Zend_Validate_Date::INVALID_DATE => 'publish_validation_error_date_invaliddate',
             Zend_Validate_Date::FALSEFORMAT => 'publish_validation_error_date_falseformat');
+        $validator->setMessages($messages);
+        return $validator;
+    }
+
+    private function _validateEmail() {
+        $validator = new Zend_Validate_EmailAddress();
+        $messages = array(
+            Zend_Validate_EmailAddress::INVALID => 'publish_validation_error_email_invalid');
         $validator->setMessages($messages);
         return $validator;
     }
@@ -176,8 +187,13 @@ class Publish_Model_Validation {
         return $validator;
     }
 
-    public function selectOptions() {
-        switch ($this->datatype) {
+    public function selectOptions($datatype=null) {
+        if (isset($datatype))
+            $switchVar = $datatype;
+        else
+            $switchVar = $this->datatype;
+
+        switch ($switchVar) {
             case 'Language':
                 $languages = $this->getLanguages();
                 if (isset($languages) || count($languages) >= 1) {
@@ -251,13 +267,16 @@ class Publish_Model_Validation {
                 $colls = Opus_Collection::fetchCollectionsByRoleId($role->getId());
                 $collections = array();
                 foreach ($colls AS $coll) {
-                    $number = $coll->getNumber();
-                    if (strlen($number) >= 1 && $number != 'Projects') {
-                        $collections[] = $number;
-                    } else {
+                    if ($oaiName === 'institutes') {
                         $name = $coll->getName();
                         if (strlen($name) >= 1 && $name != 'Institutes')
                             $collections[] = $name;
+                    }
+                    else {
+                        $number = $coll->getNumber();
+                        if (strlen($number) >= 1 && $number != 'Projects') {
+                            $collections[] = $number;
+                        }
                     }
                 }
             }

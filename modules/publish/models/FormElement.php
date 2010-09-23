@@ -36,6 +36,7 @@ class Publish_Model_FormElement {
     public $form;
     public $log;
     public $additionalFields = array();
+    public $postValues = array();
     //private member variables
     private $elementName;
     private $label;
@@ -55,52 +56,97 @@ class Publish_Model_FormElement {
     private $group;         //Publish_Model_Group
     private $subFormElements = array();         //array of Zend_Form_Element
 
-    public function __construct($name = null, $required = null, $formElement = null, $datatype = null, $multiplicity = null) {
+    //Constants
+    const FIRST = "FirstName";
+    const LAST = "LastName";
+    const VALUE = "Value";
+    const LANG = "Language";
+
+    public function __construct($form, $name = null, $required = null, $formElement = null, $datatype = null, $multiplicity = null) {
 
         $this->log = Zend_Registry::get('Zend_Log');
+        $this->form = $form;
 
         $this->elementName = $name;
         $this->label = $name;
 
-        if (isset($required) && $required === 'yes')
-            $this->required = true;
-        else
-            $this->required = false;
+        $this->required = $required;
 
-        $this->formElement = $formelement;
+        $this->formElement = $formElement;
         $this->datatype = $datatype;
         $this->multiplicity = $multiplicity;
 
-        if (isst($this->datatype))
+        if (isset($this->datatype))
             $this->initValidation();
-
-        $this->initGroup();
     }
 
     private function initValidation() {
         $this->validationObject = new Publish_Model_Validation($this->datatype);
         $this->validationObject->validate();
-        return $this->validation = $this->validationObject->validator;
+        $this->validation = $this->validationObject->validator;
     }
 
-    private function initGroup() {
+    public function initGroup() {
+        if ($this->isGroup()) {
+            if ($this->isSubField === false) {
+                $this->group = new Publish_Model_DisplayGroup($this->elementName, $this->form, $this->multiplicity);
 
-        if ($this->isSubField === false) {
-            if ($this->isPersonElement())
-                $this->group = new Publish_Model_DisplayGroup('Person', $this->elementName);
+                if ($this->isPersonElement()) {
+                    $this->log->debug("FormElement -> initGroup(): person element");
+                    $implicitFields = $this->implicitFields('Person');
+                    $this->addSubFormElements($implicitFields);
+                } else if ($this->isTitleElement()) {
+                    $this->log->debug("FormElement -> initGroup(): title element");
+                    $implicitFields = $this->implicitFields('Title');
+                    $this->addSubFormElements($implicitFields);
+                } else {
+                    $this->log->debug("FormElement -> initGroup(): other element");
+                    $this->addSubFormElement($this->transform());
+                }
 
-            else {
-                if ($this->isTitleElement())
-                    $this->group = new Publish_Model_DisplayGroup('Title', $this->elementName);
+                $this->group->setAdditionalFields($this->additionalFields);
+                $this->group->setSubFields($this->subFormElements);
+                $this->group->makeDisplayGroup();
             }
-            $this->group->setAddtionalFields($this->additionalFields);
-            $this->group->setSubFields($this->subFormElements);
-            $group = $group->getGroupLabel();
-            return;
+            $displayGroup = $this->form->addDisplayGroup($this->group->elements, $this->group->label);            
+            return $displayGroup;
+        }
+    }
 
-            if ($this->multiplicity !== '1') {
-                $this->group = new Publish_Model_DisplayGroup('Multi', $this->elementName);
-            }
+    private function isGroup() {
+        if ($this->isTitleElement())
+            return true;
+        else if ($this->isPersonElement())
+            return true;
+        else if ($this->multiplicity !== '1')
+            return true;
+
+        else
+            return false;
+    }
+
+    private function implicitFields($workflow) {
+        switch ($workflow) {
+            case 'Person':
+                $first = new Publish_Model_FormElement($this->form, $this->elementName . self::FIRST, $this->required, 'text', 'Text');
+                $first->isSubField = true;
+                $elementFirst = $first->transform();
+                $last = new Publish_Model_FormElement($this->form, $this->elementName . self::LAST, $this->required, 'text', 'Text');
+                $last->isSubField = true;
+                $elementLast = $last->transform();
+                return array($elementFirst, $elementLast);
+                break;
+
+            case 'Title':
+
+                $value = new Publish_Model_FormElement($this->form, $this->elementName, $this->required, 'text', 'Text');
+                $value->isSubField = true;
+                $elementValue = $value->transform();
+                $lang = new Publish_Model_FormElement($this->form, $this->elementName . self::LANG, $this->required, 'select', 'Language');
+                $lang->isSubField = true;
+                $elementLang = $lang->transform();
+                return array($elementValue, $elementLang);
+                break;
         }
     }
 
@@ -130,10 +176,9 @@ class Publish_Model_FormElement {
             return false;
     }
 
-    public function setPostValue($postValues) {
-        if (isset($postValues) && is_array($postValues))
-            if (array_key_exists($this->elementName, $postValues))
-                $this->value = $postValues[$this->elementName];
+    public function setPostValues($postValues) {
+        $this->postValues = $postValues;
+        
     }
 
     public function setAdditionalFields($additionalFields) {
@@ -144,50 +189,60 @@ class Publish_Model_FormElement {
         if (isset($this->form)) {
 
             if (false === $this->isSelectElement()) {
-
-                $element = $this->form->createElement($this->formElement, $this->elementName);
+                $element = $this->form->createElement($this->formElement, $this->elementName);              
             } else {
                 $options = $this->validationObject->selectOptions();
-                if (!isset($options)) {
+                if (!isset($options)) {                    
                     //no options found in database / session / cache
                     $element = $this->form->createElement('text', $this->elementName);
                     $element->setDescription('hint_no_collection_' . $workflow)
                             ->setAttrib('disabled', true);
                     $required = null;
+                } else {                    
+                    $element = $this->showSelectField($options);                    
                 }
-                else
-                    $element = $this->showSelectField($options);
             }
 
             $element->setRequired($this->required);
 
-            if (isset($this->default['value']))
+            if (isset($this->default['value']) && !empty($this->default['value'])) {
                 $element->setValue($this->default['value']);
-            else
-                $element->setValue($this->value);
-
+                $this->log->debug("Value set to default for " . $this->elementName . " => " . $this->default['value']);
+            }
+            
             if (isset($this->default['edit']) && $this->default['edit'] === 'no') {
                 $element->setAttrib('disabled', true);
                 $element->setRequired(false);
             }
             $element->setLabel($this->label);
-            $element->addValidator($this->validation);
+            if (isset($this->validation))
+                $element->addValidator($this->validation);
 
             return $element;
         }
     }
 
-    private function showSelectField($options) {
+    private function showSelectField($options, $datatype=null, $elementName=null) {
+        if (isset($elementName))
+            $name = $elementName;
+        else
+            $name = $this->elementName;
+
         if (count($options) == 1) {
             //if theres only one entry, just show an text fields
             $value = (array_keys($options));
-            $element = $this->createElement('text', $elementName);
+            $element = $this->createElement('text', $name);
             $element->setValue($value[0]);
         } else {
             //at least 2 entry: show a select field
-            $element = $this->form->createElement('select', $this->elementName);
+            $element = $this->form->createElement('select', $name);
 
-            switch ($this->datatype) {
+            if (isset($datatype))
+                $switchVar = $datatype;
+            else
+                $switchVar = $this->datatype;
+
+            switch ($switchVar) {
                 case 'Licence' :
                     $element->setMultiOptions(array_merge(array('' => 'choose_valid_licence'), $options));
                     break;
@@ -201,6 +256,7 @@ class Publish_Model_FormElement {
                     $element->setMultiOptions(array_merge(array('' => 'choose_valid_institute'), $options));
             }
         }
+        return $element;
     }
 
     public function setForm(Publish_Form_PublishingSecond $form) {
@@ -213,6 +269,7 @@ class Publish_Model_FormElement {
 
     public function setElementName($elementName) {
         $this->elementName = $elementName;
+        $this->label = $elementName;
     }
 
     public function getValue() {
@@ -268,6 +325,7 @@ class Publish_Model_FormElement {
 
     public function setDatatype($datatype) {
         $this->datatype = $datatype;
+        $this->initValidation();
     }
 
     public function getRequired() {
@@ -298,12 +356,11 @@ class Publish_Model_FormElement {
         return $this->subFormElements;
     }
 
-    public function setSubFormElements($subFormElements) {
-        $this->subFormElements = $subFormElements;
+    public function addSubFormElements($subFormElements) {
+        $this->subFormElements = array_merge($subFormElements, $this->subFormElements);
     }
 
-    public function addSubFormElement(Publish_Model_FormElement $subFormElement) {
-        $subField = $subFormElement->transform();
+    public function addSubFormElement($subField) {
         $this->subFormElements[] = $subField;
     }
 

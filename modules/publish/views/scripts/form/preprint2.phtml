@@ -26,10 +26,7 @@ echo '<h2>' . $this->subtitle . '</h2>';
     <?= $this->group($this->groupSubjectMSC); ?>
     <?= $this->group($this->groupSubjectUncontrolled); ?>
     <?= $this->element($this->Note_, "cols='60' rows='9'"); ?>
-    
-    <?= $this->element($this->fullText, null, "Hidden", "fullText"); ?>
-    <?= $this->element("preprint", null, "Hidden",  "documentType"); ?>
-    <?= $this->element($this->documentId, null, "Hidden", "documentId"); ?>
+        
     <?= $this->element('button_label_send', null, "Submit",  "send"); ?>
 
 </form>

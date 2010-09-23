@@ -39,6 +39,7 @@
  */
 class Publish_Model_DocumenttypeParser {
 
+    private $log;
     public $dom;
     public $form; //PublishingSecond
     public $formElements = array(); // Array of FormElement
@@ -48,13 +49,13 @@ class Publish_Model_DocumenttypeParser {
 
     public function __construct(DOMDocument $dom, Publish_Form_PublishingSecond $form) {
         $this->form = $form;
-
+        $this->log = Zend_Registry::get('Zend_Log');
         if ($dom !== null)
             $this->dom = $dom;
         else
             return false;
     }
-    
+
     public function setAdditionalFields($additionalFields) {
         if (isset($additionalFields) && is_array($additionalFields))
             $this->additionalFields = $additionalFields;
@@ -69,7 +70,9 @@ class Publish_Model_DocumenttypeParser {
         //parse root node for tags named 'field'
         foreach ($this->dom->getElementsByTagname('field') as $field) {
 
-            $this->currentElement = new Publish_Model_FormElement();
+            $this->currentElement = new Publish_Model_FormElement($this->form);
+
+            $this->currentElement->setAdditionalFields($this->additionalFields);            
 
             $this->_parseAttributes($field);
 
@@ -77,17 +80,18 @@ class Publish_Model_DocumenttypeParser {
 
             $this->_parseDefaultEntry($field);
 
+            $this->currentElement->setPostValues($this->postValues);
+
+            $group = $this->currentElement->initGroup();
+
+            $this->formElements[] = $group;
+
             //$this->_parseValidation($field);
 
-            $this->currentElement->setForm($this->form);
-             
-            $this->currentElement->setPostValue($this->postValues);
-
-            $this->currentElement->setAdditionalFields($this->additionalFields);
-
-            $element = $this->currentElement->transform();
-
-            $formElements[] = $element;
+            if (!isset($group)) {
+                $element = $this->currentElement->transform();
+                $this->formElements[] = $element;
+            }
         }
     }
 
@@ -101,10 +105,14 @@ class Publish_Model_DocumenttypeParser {
             $multiplicity = $field->getAttribute('multiplicity');
 
             $this->currentElement->setElementName($elementName);
-            $this->currentElement->setRequired($required);
+            if ($required === 'yes')
+                $this->currentElement->setRequired(true);
+            else
+                $this->currentElement->setRequired(false);
+            
             $this->currentElement->setFormElement($formElement);
             $this->currentElement->setDatatype($datatype);
-            $this->currentElement->setMultiplicity($multiplicity);
+            $this->currentElement->setMultiplicity($multiplicity);           
         }
         // No Attributes found
         else
@@ -117,7 +125,7 @@ class Publish_Model_DocumenttypeParser {
 
             foreach ($field->getElementsByTagname('subfield') as $subField) {
                 //subfields have also type FormElement
-                $currentSubField = new Publish_Model_FormElement();
+                $currentSubField = new Publish_Model_FormElement($this->form);
 
                 if ($subField->hasAttributes()) {
 
@@ -126,21 +134,23 @@ class Publish_Model_DocumenttypeParser {
                     $subFormElement = $subField->getAttribute('formelement');
                     $subDatatype = $subField->getAttribute('datatype');
 
-                    $currentSubField->setElementName($subElementName);
-                    $currentSubField->setRequired($subRequired);
+                    $currentSubField->setElementName($this->currentElement->getElementName().$subElementName);
+                    if ($subRequired === 'yes')
+                        $currentSubField->setRequired(true);
+                    else
+                        $currentSubField->setRequired(false);
                     $currentSubField->setFormElement($subFormElement);
                     $currentSubField->setDatatype($subDatatype);
 
                     $currentSubField->isSubField = true;
-                    $this->currentElement->addSubFormElement($currentSubField);
                 }
+                else
+                    throw new Publish_Model_OpusServerException("Error while parsing xml document type: Choosen document type has missing attributes in element 'subfield'!");
 
                 if ($subField->hasChildNodes()) {
                     $this->_parseDefaultEntry($subField, $currentSubField);
                 }
-
-                else
-                    throw new OpusServerPublishingException("Error while parsing xml document type: Choosen document type has missing attributes in element 'subfield'!");
+                $this->currentElement->addSubFormElement($currentSubField->transform());
             }
         }
         //No Subfields found
@@ -150,31 +160,31 @@ class Publish_Model_DocumenttypeParser {
 
     private function _parseDefaultEntry(DOMElement $field, Publish_Model_FormElement $subfield=null) {
         if ($field->hasChildNodes()) {
+            foreach ($field->getElementsByTagname('default') as $default) {
 
-            $default = $field->getElementsByTagname('default');
+                if ($default->hasAttributes()) {
+                    $defaultArray = array();
+                    $value = $default->getAttribute('value');
+                    $defaultArray['value'] = $value;
 
-            if ($default->hasAttributes()) {
-                $defaultArray = array();
-                $value = $default->getAttribute('value');
-                $defaultArray['value'] = $value;
+                    $edit = $default->getAttribute('edit');
+                    if (isset($edit))
+                        $defaultArray['edit'] = $edit;
 
-                $edit = $default->getAttribute('edit');
-                if (isset($edit))
-                    $defaultArray['edit'] = $edit;
+                    $public = $default->getAttribute('public');
+                    if (isset($public))
+                        $defaultArray['public'] = $public;
 
-                $public = $default->getAttribute('public');
-                if (isset($public))
-                    $defaultArray['public'] = $public;
-
-                if (!isset($subfield))
-                    $this->currentElement->setDefaultValue($defaultArray);
-                else
-                    $subfield->setDefaultValue($defaultArray);
+                    if (!isset($subfield)) {
+                        $this->currentElement->setDefaultValue($defaultArray);
+                        $this->log->debug("Parser -> parseDefault(): " . $value);
+                    } else {
+                        $subfield->setDefaultValue($defaultArray);
+                    }
+                }
             }
         }
     }
-
-    
 
 }
 

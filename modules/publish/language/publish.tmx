@@ -26,6 +26,16 @@
         <seg>Dokumenttyp und Datei wählen</seg>
       </tuv>
     </tu>
+
+
+    <tu tuid="publish_controller_collection_sub">
+      <tuv xml:lang="en">
+        <seg>Choose collection for your documents</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Kollektion für das Dokument wählen</seg>
+      </tuv>
+    </tu>
     
     <tu tuid="publish_controller_create">
       <tuv xml:lang="en">

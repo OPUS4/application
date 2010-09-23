@@ -7,16 +7,6 @@
   
   <body>
 
-
-    <tu tuid="button_label_add_one_morePersonAuthor">
-        <tuv xml:lang="en">
-            <seg>Add one more author</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Einen weiteren Autoren hinzufügen</seg>
-        </tuv>
-    </tu>
-
 	<tu tuid="groupPersonSubmitter">
       <tuv xml:lang="en">
         <seg>Submitter</seg>
@@ -71,7 +61,43 @@
       </tuv>
     </tu>
 
-	<tu tuid="groupPersonEditor">
+    <tu tuid="PersonAuthorPlaceOfBirth">
+      <tuv xml:lang="en">
+        <seg>Birth place</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Geburtsort</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="PersonAuthorDateOfBirth">
+      <tuv xml:lang="en">
+        <seg>Birth date</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Geburtsdatum</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="PersonAuthorEmail">
+      <tuv xml:lang="en">
+        <seg>Email</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Email</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="PersonAuthorAcademicTitle">
+      <tuv xml:lang="en">
+        <seg>Academic title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Akademischer Titel</seg>
+      </tuv>
+    </tu>
+
+  <tu tuid="PersonTranslatorFirstName">
       <tuv xml:lang="en">
         <seg>Editor</seg>
       </tuv>

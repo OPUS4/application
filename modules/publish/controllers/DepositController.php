@@ -56,6 +56,14 @@ class Publish_DepositController extends Controller_Action {
 
             $post = $this->getRequest()->getPost();
 
+            // TODO: Hier oder früher überprüfen?
+            if (is_null($defaultNS->elements)) {
+                throw new Exception("is null");
+            }
+            if (!is_array($defaultNS->elements)) {
+                throw new Exception("no array");
+            }
+            
             foreach ($defaultNS->elements AS $element) {
                 $this->postData[$element['name']] = $element['value'];
             }
@@ -71,7 +79,7 @@ class Publish_DepositController extends Controller_Action {
                 
             } else {
                 if (isset($this->postData['send']))
-                    unset($this->postData['send']);
+                    unset($this->postData['send']);                
 
                 $depositData = new Publish_Model_Deposit($defaultNS->documentId, $defaultNS->documentType, $this->postData);
 
