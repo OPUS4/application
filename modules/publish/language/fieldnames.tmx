@@ -22,7 +22,7 @@
         <seg>Submitter</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Einsteller</seg>
+        <seg>Kontaktdaten des Einstellers</seg>
       </tuv>
     </tu>
 	
@@ -55,19 +55,19 @@
 
     <tu tuid="PersonAuthorFirstName">
       <tuv xml:lang="en">
-        <seg>Author: First name</seg>
+        <seg>First name</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Autor: Vorname</seg>
+        <seg>Vorname</seg>
       </tuv>
     </tu>
 
     <tu tuid="PersonAuthorLastName">
       <tuv xml:lang="en">
-        <seg>Author: Last name</seg>
+        <seg>Last name</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Autor: Nachname</seg>
+        <seg>Nachname</seg>
       </tuv>
     </tu>
 
@@ -100,19 +100,19 @@
   
 	<tu tuid="PersonTranslatorFirstName">
       <tuv xml:lang="en">
-        <seg>Tranlator: First name</seg>
+        <seg>First name</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Übersetzer: Vorname</seg>
+        <seg>Vorname</seg>
       </tuv>
     </tu>
 
     <tu tuid="PersonTranslatorLastName">
       <tuv xml:lang="en">
-        <seg>Translator: Last name</seg>
+        <seg>Last name</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Übersetzer: Nachname</seg>
+        <seg>Nachname</seg>
       </tuv>
     </tu>
 
@@ -1021,7 +1021,7 @@
         <seg>Main Title</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Haupttitel</seg>
+        <seg>Titel</seg>
       </tuv>
     </tu>
 
@@ -1039,7 +1039,7 @@
         <seg>Main Title</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Haupttitel</seg>
+        <seg>Titel</seg>
       </tuv>
     </tu>
 
@@ -1063,10 +1063,10 @@
     
     <tu tuid="add_TitleMain">
       <tuv xml:lang="en">
-        <seg>add Main Title</seg>
+        <seg>add Title</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Haupttitel hinzufügen</seg>
+        <seg>Titel hinzufügen</seg>
       </tuv>
     </tu>
         
@@ -1075,7 +1075,7 @@
         <seg>remove Main Title</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Haupttitel entfernen</seg>
+        <seg>Titel entfernen</seg>
       </tuv>
     </tu>
         
@@ -1088,7 +1088,7 @@
       </tuv>
     </tu>
 	
-	<tu tuid="TitleParent">
+	<tu tuid="groupTitleParent">
       <tuv xml:lang="en">
         <seg>Parent Title</seg>
       </tuv>
@@ -1577,18 +1577,18 @@
     </tu>
     <tu tuid="PersonEditorFirstName">
       <tuv xml:lang="en">
-        <seg>Editor: Firstname</seg>
+        <seg>First name</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Herausgeber: Vorname</seg>
+        <seg>Vorname</seg>
       </tuv>
     </tu>
     <tu tuid="PersonEditorLastName">
       <tuv xml:lang="en">
-        <seg>Editor: Lastname</seg>
+        <seg>Last name</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Herausgeber: Nachname</seg>
+        <seg>Nachname</seg>
       </tuv>
     </tu>
 
@@ -1615,12 +1615,12 @@
         <seg>Advisor</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Berichter</seg>
+        <seg>Betreuer</seg>
       </tuv>
     </tu>
     <tu tuid="PersonAdvisorFirstName">
       <tuv xml:lang="en">
-        <seg>Firstname</seg>
+        <seg>First name</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Vorname</seg>
@@ -1628,7 +1628,7 @@
     </tu>
     <tu tuid="PersonAdvisorLastName">
       <tuv xml:lang="en">
-        <seg>Lastname</seg>
+        <seg>Last name</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Nachname</seg>
@@ -1640,7 +1640,7 @@
         <seg>add Advisor</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Berichter hinzufügen</seg>
+        <seg>Betreuer hinzufügen</seg>
       </tuv>
     </tu>
     
@@ -1649,7 +1649,7 @@
         <seg>remove Advisor</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Berichter entfernen</seg>
+        <seg>Betreuer entfernen</seg>
       </tuv>
     </tu>
     
@@ -1664,7 +1664,7 @@
 
     <tu tuid="PersonContributorFirstName">
       <tuv xml:lang="en">
-        <seg>Contributor</seg>
+        <seg>First name</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Vorname</seg>
@@ -1672,7 +1672,7 @@
     </tu>
     <tu tuid="PersonContributorLastName">
       <tuv xml:lang="en">
-        <seg>Contributor</seg>
+        <seg>Last name</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Nachname</seg>
@@ -1744,19 +1744,19 @@
 
     <tu tuid="PersonRefereeFirstName">
       <tuv xml:lang="en">
-        <seg>Referee: First name</seg>
+        <seg>First name</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Gutachter: Vorname</seg>
+        <seg>Vorname</seg>
       </tuv>
     </tu>
 
     <tu tuid="PersonRefereeLastName">
       <tuv xml:lang="en">
-        <seg>Referee: Last name</seg>
+        <seg>Last name</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Gutachter: Nachname</seg>
+        <seg>Nachname</seg>
       </tuv>
     </tu>
     
@@ -1802,33 +1802,6 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Übersetzer entfernen</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="PersonOther">
-      <tuv xml:lang="en">
-        <seg>Other Person(s)</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Weitere Person</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="add_PersonOther">
-      <tuv xml:lang="en">
-        <seg>add Other Person</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>weitere Person hinzufügen</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="remove_PersonOther">
-      <tuv xml:lang="en">
-        <seg>remove Other Person</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>weitere Person entfernen</seg>
       </tuv>
     </tu>
     
