@@ -111,7 +111,23 @@ class Admin_AccountControllerTest extends ControllerTestCase {
      * @depends testCreateAction
      */
     public function testUpdateAction() {
-        // $this->markTestIncomplete('Implement.');
+        $account = new Opus_Account(null, null, 'wally');
+        $id = $account->getId();
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'id' => $id,
+                    'username' => 'wally2',
+                    'roleguest' => '1',
+                    'roleadministrator' => '0',
+                    'submit' => 'submit'
+                ));
+
+        $this->dispatch('/admin/account/update');
+        $this->assertController('account');
+        $this->assertAction('update');
+        $this->assertRedirect();
+        $this->assertNotNull(new Opus_Account(null, null, 'wally2'));
     }
 
     /**
@@ -120,7 +136,7 @@ class Admin_AccountControllerTest extends ControllerTestCase {
      * @depends testUpdateAction
      */
     public function testDeleteAction() {
-        $account = new Opus_Account(null, null, 'wally');
+        $account = new Opus_Account(null, null, 'wally2');
         $id = $account->getId();
         $this->dispatch('/admin/account/delete/id/' . $id);
         $this->assertController('account');
