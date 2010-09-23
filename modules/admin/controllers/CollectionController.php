@@ -50,7 +50,7 @@ class Admin_CollectionController extends Controller_Action {
      */
     public function init() {
         parent::init();
-        Opus_Collection::setThemesPath('./layouts');
+        Opus_Collection::setThemesPath(APPLICATION_PATH . '/public/layouts');
     }
 
     /**
