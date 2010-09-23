@@ -58,7 +58,7 @@
     <field name="Institute" required="no" formelement="Select" datatype="Institute" multiplicity="1" />
     <field name="Collection" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="CompletedDate" required="yes" formelement="Text" datatype="Year" multiplicity="1" />
-    <field name="PublishedDate" required="yes" formelement="Text" datatype="Year" multiplicity="1" />
+    <field name="PublishedDate" required="no" formelement="Text" datatype="Year" multiplicity="1" />
     <field name="IdentifierIsbn" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="IdentifierUrn" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="Note" required="no" formelement="Textarea" datatype="Text" multiplicity="1" />
