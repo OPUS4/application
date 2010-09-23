@@ -251,7 +251,7 @@ class Admin_AccountController extends Controller_Action {
                 $newLogin = $postData['username'];
 
                 if ($newLogin !== $oldLogin) {
-                    if (!$this->_isLoginUsed($login)) {
+                    if (!$this->_isLoginUsed($newLogin)) {
                         $account->setLogin($newLogin);
                         $loginChanged = true;
                     }
