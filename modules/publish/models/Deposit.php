@@ -74,26 +74,16 @@ class Publish_Model_Deposit {
     }
 
     private function _storeDocumentData() {
+
         foreach ($this->documentData as $dataKey => $dataValue) {
-            $this->log->info("-");
-            $datasetType = $this->_getDatasetType($dataKey);
+            $datasetType = $this->_getDatasetType($dataKey, $dataValue);
 
             if (isset($datasetType) && !empty($datasetType)) {
                 $this->log->info("Wanna store a " . $datasetType . "!");
                 $this->log->info("dataKey: " . $dataKey . " AND dataValue " . $dataValue);
                 $storeMethod = "_prepare" . $datasetType . "Object";
 
-                $this->log->info(get_class($this) . "->" . $storeMethod);
-                $this->log->info('method exists: ' . (method_exists($this, $storeMethod) ? 'true' : 'false'));
-
-                if ($storeMethod == '_preparePersonObject') {
-                    $this->log->info("direct call to $storeMethod");
-                    $this->_preparePersonObject($dataKey, $dataValue);
-                } else {
-                    $this->$storeMethod($dataKey, $dataValue);
-                }
-
-                $this->log->info("after call to $storeMethod");
+                $this->$storeMethod($dataKey, $dataValue);
             } else {
                 $this->log->info("wanna store something else...");
                 if (array_key_exists($dataKey, $this->externalFields)) {
@@ -121,21 +111,21 @@ class Publish_Model_Deposit {
 
     /**
      * get the dataset type of the current post data key (used to store the post data in db)
-     * @param <String> $postDataKey
+     * @param <String> $dataKey
      * @return <String> Type or ""
      */
-    private function _getDatasetType($postDataKey) {
-        if (strstr($postDataKey, "Person"))
+    private function _getDatasetType($dataKey, $dataValue) {
+        if (strstr($dataKey, "Person"))
             return "Person";
-        else if (strstr($postDataKey, "Title"))
+        else if (strstr($dataKey, "Title"))
             return "Title";
-        else if (strstr($postDataKey, "Subject"))
+        else if (strstr($dataKey, "Subject"))
             return "Subject";
-        else if (strstr($postDataKey, "Note"))
+        else if (strstr($dataKey, "Note"))
             return "Note";
-        else if (strstr($postDataKey, "Project") || strstr($postDataKey, "Institute"))
+        else if (strstr($dataKey, "Project") || strstr($dataKey, "Institute"))
             return "Collection";
-        else if (strstr($postDataKey, "Licence"))
+        else if (strstr($dataKey, "Licence"))
             return "Licence";
         else
             return "";
@@ -146,9 +136,7 @@ class Publish_Model_Deposit {
         return (substr($dataKey, -1, 1));
     }
 
-    private function getObjectType($dataKey, $removeString=null) {
-        if ($removeString === null)
-            $removeString = "";
+    private function getObjectType($dataKey, $removeString) {
         $pos = strpos($dataKey, $removeString);
         if ($pos !== false)
             return substr($dataKey, 0, $pos);
@@ -171,33 +159,25 @@ class Publish_Model_Deposit {
         else
         if (strstr($dataKey, $last))
             $type = $this->getObjectType($dataKey, $last);
-        $this->log->debug("Person type:" . $type);
 
         if (isset($type)) {
+            $this->log->debug("Person type:" . $type);
+
             $counter = (int) $this->getCounter($dataKey);
             $this->log->debug("counter: " . $counter);
 
-            $this->storeFirstName($person, $type, $first, $counter);
-            $this->log->debug("firstname stored");
+            if ($this->documentData[$type . $last . $counter] == "") {
+                $this->storeFirstName($person, $type, $first, $counter);
+                $this->storeLastName($person, $type, $last, $counter);
+                $this->storeEmail($person, $type, $email, $counter);
+                $this->storePlaceOfBirth($person, $type, $birthplace, $counter);
+                $this->storeAcademicTitle($person, $type, $academic, $counter);
+                $this->storeDateOfBirth($person, $type, $birthdate, $counter);
 
-            $this->storeLastName($person, $type, $last, $counter);
-            $this->log->debug("lastname stored");
-
-            $this->storeEmail($person, $type, $email, $counter);
-            $this->log->debug("email stored");
-
-            $this->storePlaceOfBirth($person, $type, $birthplace, $counter);
-            $this->log->debug("birthplace stored");
-
-            $this->storeAcademicTitle($person, $type, $academic, $counter);
-            $this->log->debug("title stored");
-
-            $this->storeDateOfBirth($person, $type, $birthdate, $counter);
-            $this->log->debug("birthdate stored");
-
-            $addFunction = 'add' . $type;
-            $this->document->$addFunction($person);
-            $this->log->debug("person stored");
+                $addFunction = 'add' . $type;
+                $this->document->$addFunction($person);
+                $this->log->debug("person stored");
+            }
         }
     }
 
@@ -316,23 +296,23 @@ class Publish_Model_Deposit {
             if (strstr($dataKey, $lang))
                 $type = $this->getObjectType($dataKey, $lang);
             else
-                $type = $this->getObjectType($dataKey);
-
-            $this->log->debug("Title type:" . $type);
+                $type = substr($dataKey, 0, strlen($dataKey) - 1);
 
             if (isset($type)) {
+                $this->log->debug("Title type:" . $type);
                 $counter = (int) $this->getCounter($dataKey);
                 $this->log->debug("counter: " . $counter);
+                if ($this->documentData[$type . $counter] == "") {
+                    $this->storeTitleValue($title, $type, $counter);
+                    $this->log->debug("title value stored");
 
-                $this->storeTitleValue($title, $type, $counter);
-                $this->log->debug("title value stored");
+                    $this->storeTitleLanguage($title, $type, $lang, $counter);
+                    $this->log->debug("title language stored");
 
-                $this->storeTitleLanguage($title, $type, $lang, $counter);
-                $this->log->debug("title language stored");
-
-                $addFunction = 'add' . $type;
-                $this->document->$addFunction($title);
-                $this->log->debug("title stored");
+                    $addFunction = 'add' . $type;
+                    $this->document->$addFunction($title);
+                    $this->log->debug("title stored");
+                }
             }
         }
     }
