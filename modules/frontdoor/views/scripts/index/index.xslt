@@ -718,6 +718,11 @@
                         <xsl:text>/solrsearch/index/search/searchtype/authorsearch/author/</xsl:text>
                         <xsl:value-of select="concat('&quot;', @FirstName, ' ', @LastName, '&quot;')" />
                     </xsl:attribute>
+                    <xsl:attribute name="title">
+                        <xsl:call-template name="translateString">
+                            <xsl:with-param name="string">frontdoor_author_search</xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:attribute>
                     <xsl:value-of select="concat(@LastName, ', ', @FirstName)" />
                 </xsl:element>
             </td>

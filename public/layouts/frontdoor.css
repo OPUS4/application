@@ -38,6 +38,10 @@
     padding:0px;
 }
 
+.frontdoor table tr td {
+    border: none;
+}
+
 .frontdoor table th {
     font-size: 0.9em;
     color: #FFA500;
@@ -46,6 +50,7 @@
     width: 10%;
     vertical-align: top;
     width: 30px;
+    width:auto;
     border: none;
 }
 
@@ -55,7 +60,6 @@
     padding: 2px 2px 2px 2px;
     vertical-align: top;
     text-align: left;
-    width: 150px;
 }
 
 .frontdoor table td {
@@ -82,5 +86,7 @@
 }
 
 .frontdoor #download-fulltext ul li img {
+    padding:0px;
+    margin:0px;
     margin-right:.5em;
 }

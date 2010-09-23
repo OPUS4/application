@@ -2,7 +2,16 @@
 <tmx version="2.0" xmlns="http://www.lisa.org/tmx20">
   <header adminlang="en" creationtool="locale4j" creationtoolversion="1.1" o-tmf="unknown" segtype="block" srclang="*all*"/>
   <body>
-    
+
+    <tu tuid="frontdoor_author_search">
+        <tuv xml:lang="en">
+            <seg>Search for other publications by this author</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Nach weiteren Publikationen von diesem Autor suchen</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="frontdoor_export_options">
         <tuv xml:lang="en">
             <seg>Export metadata</seg>
