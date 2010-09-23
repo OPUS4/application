@@ -58,6 +58,40 @@ class Admin_IprangeControllerTest extends ControllerTestCase {
         $this->assertAction('new');
     }
 
+    /**
+     * Tests creating a new IP range.
+     */
+    public function testCreateAction() {
+        $this->markTestIncomplete();
+    }
+
+    /**
+     * Tests showing the information about an IP range.
+     */
+    public function testShowAction() {
+        $this->markTestIncomplete();
+    }
+
+    /**
+     * Tests showing an edit form for an IP range.
+     */
+    public function testEditAction() {
+        $this->markTestIncomplete();
+    }
+
+    /**
+     * Tests storing updated information for an IP range.
+     */
+    public function testUpdateAction() {
+        $this->markTestIncomplete();
+    }
+
+    /**
+     * Tests deleting an IP range.
+     */
+    public function testDeleteAction() {
+        $this->markTestIncomplete();
+    }
 
 }
 

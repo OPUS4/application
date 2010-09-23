@@ -57,6 +57,16 @@ class Admin_LanguageControllerTest extends ControllerTestCase {
     }
 
     /**
+     * Tests 'new' action.
+     */
+    public function testNewAction() {
+        $this->dispatch('/admin/language/new');
+        $this->assertResponseCode(200);
+        $this->assertController('language');
+        $this->assertAction('new');
+    }
+
+    /**
      * Tests 'edit' action.
      */
     public function testEditAction() {

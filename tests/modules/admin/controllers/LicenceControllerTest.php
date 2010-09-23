@@ -66,6 +66,16 @@ class Admin_LicenceControllerTest extends ControllerTestCase {
         $this->assertAction('new');
     }
 
+    /**
+     * Tests 'edit' action.
+     */
+    public function testEditAction() {
+        $this->dispatch('/admin/licence/edit/id/1');
+        $this->assertResponseCode(200);
+        $this->assertController('licence');
+        $this->assertAction('edit');
+    }
+
 }
 
 ?>
