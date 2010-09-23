@@ -141,3 +141,4 @@ class Browse_Model_BrowsingList {
     }
 
 }
+?>

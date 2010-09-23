@@ -93,3 +93,4 @@ class Browse_Model_BrowsingListFactory
 		return $this->browsingList;
 	}
 }
+?>

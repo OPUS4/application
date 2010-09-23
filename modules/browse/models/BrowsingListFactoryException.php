@@ -43,3 +43,4 @@ class Browse_Model_BrowsingListFactoryException extends Exception
 {
 	
 }
+?>

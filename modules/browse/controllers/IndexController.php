@@ -212,3 +212,4 @@ class Browse_IndexController extends Controller_Action {
         $this->view->facetitems = $facetitems;
     }
 }
+?>
