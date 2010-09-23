@@ -619,8 +619,7 @@
       </tuv>
      </tu>
      
-    	
-	<tu tuid="groupSubjectSwd">
+    <tu tuid="groupSubjectSwd">
       <tuv xml:lang="en">
         <seg>SWD-Keyword</seg>
       </tuv>
@@ -884,19 +883,19 @@
     
     <tu tuid="PublishedDate">
       <tuv xml:lang="en">
-        <seg>Date of Publication</seg>
+        <seg>Date of first Publication</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Datum der Veröffentlichung</seg>
+        <seg>Datum der Erstveröffentlichung</seg>
       </tuv>
     </tu>
     
     <tu tuid="CompletedDate">
       <tuv xml:lang="en">
-        <seg>Date of Completion</seg>
+        <seg>Publication Date</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Datum der Fertigstellung</seg>
+        <seg>Veröffentlichungsdatum (online)</seg>
       </tuv>
     </tu>
     
