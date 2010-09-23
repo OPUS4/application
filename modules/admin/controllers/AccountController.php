@@ -102,7 +102,7 @@ class Admin_AccountController extends Controller_Action {
 
         $accountForm = $this->_getAccountForm();
 
-        $actionUrl = $this->view->url(array('controller' => 'account', 'action' => 'create'));
+        $actionUrl = $this->view->url(array('action' => 'create'));
 
         $accountForm->setAction($actionUrl);
 
@@ -363,7 +363,7 @@ class Admin_AccountController extends Controller_Action {
             $rolesGroup[] = $roleCheckbox->getName();
         }
 
-        $form->addDisplayGroup($rolesGroup, 'Roles', array('legend' => 'Roles'));
+        $form->addDisplayGroup($rolesGroup, 'Roles', array('legend' => 'admin_form_group_roles'));
 
         return $form;
     }

@@ -79,6 +79,32 @@
       </tuv>
     </tu>
        
+    <tu tuid="admin_account_label_login">
+      <tuv xml:lang="en">
+        <seg>Login:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Login:</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_account_label_password">
+      <tuv xml:lang="en">
+        <seg>Password:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Passwort:</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_account_label_confirmpassword">
+      <tuv xml:lang="en">
+        <seg>Confirm password:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Passwort bestaetigen:</seg>
+      </tuv>
+    </tu>
   </body>
   
 </tmx>

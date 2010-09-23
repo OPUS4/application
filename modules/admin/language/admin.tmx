@@ -123,7 +123,52 @@
         <seg>Zugriffskontrolle</seg>
       </tuv>
     </tu>
+
+    <tu tuid="admin_form_action_edit">
+      <tuv xml:lang="en">
+        <seg>Edit</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Editieren</seg>
+      </tuv>
+    </tu>
    
+    <tu tuid="admin_form_action_delete">
+      <tuv xml:lang="en">
+        <seg>Delete</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Löschen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_form_group_roles">
+      <tuv xml:lang="en">
+        <seg>User Roles</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nutzerrollen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_form_create">
+      <tuv xml:lang="en">
+        <seg>Create</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Speichern</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_form_cancel">
+      <tuv xml:lang="en">
+        <seg>Cancel</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zurueck</seg>
+      </tuv>
+    </tu>
+
   </body>
   
 </tmx>
