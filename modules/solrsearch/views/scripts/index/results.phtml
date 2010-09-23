@@ -24,20 +24,24 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
+ * @category    Application
+ * @package     Module_SolrSearch
  * @package     Opus_SolrSearch
  * @author      Julian Heise <heise@zib.de>
+ * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+?>
 
-$startUpScript = '$(document).ready(function() { init_searchresults(); });';
-$fc = Zend_Controller_Front::getInstance();
-$basePath = $fc->getRequest()->getBasePath();
-$this->headScript()->appendFile($basePath . '/layouts/opus4/js/jquery-1.4.2.min.js')
+<?php
+    $startUpScript = '$(document).ready(function() { init_searchresults(); });';
+    $fc = Zend_Controller_Front::getInstance();
+    $basePath = $fc->getRequest()->getBasePath();
+    $this->headScript()
+        ->appendFile($basePath . '/layouts/opus4/js/jquery-1.4.2.min.js')
         ->appendScript($startUpScript);
-
 ?>
 
 <script type="text/javascript">
@@ -48,28 +52,37 @@ $this->headScript()->appendFile($basePath . '/layouts/opus4/js/jquery-1.4.2.min.
     }
 </script>
 
-<?php if(isset($this->specialTitle)) : ?>
+<?php if (isset($this->specialTitle)) : ?>
 <h1><?= htmlspecialchars($this->translate($this->specialTitle)) ?></h1>
 <?php endif ?>
 
 <?php
-    if($this->searchType === 'simple' && !$this->browsing)
-        include('simpleSearchForm.php');
+    if ($this->searchType === 'simple' && !$this->browsing)
+        include('simpleSearchForm.phtml');
     else if(($this->searchType === 'advanced' || $this->searchType === 'authorsearch') && !$this->browsing)
-        include('advancedSearchForm.php');
+        include('advancedSearchForm.phtml');
     else if($this->searchType === 'latest')
-        include('latestDocsForm.php');
+        include('latestDocsForm.phtml');
+    else if ($this->searchType === 'collection')
+        include('browsecollection.phtml');
 ?>
 
-<?php if(!isset($this->specialTitle)) : ?>
+<?php if (!isset($this->specialTitle)) : ?>
 <h3><?= $this->numOfHits . ' ' . ($this->numOfHits === 1 ? $this->translate('results_title_single') : $this->translate('results_title')); ?></h3>
 <?php endif ?>
 
-<?php if(!$this->isSimpleList) : ?>
-<?php include('searchOptions.php') ?>
-<?php include('pagination.php') ?>
-<?php include('facetsMenu.php') ?>
-<?php endif ?>
+<?php
+    if ($this->isSimpleList === false) {
+        if ($this->saechType !== 'collection') {
+            include('pagination.phtml');
+        }
+        else {
+            include('searchOptions.phtml');
+            include('pagination.phtml');
+            include('facetsMenu.phtml');
+        }
+    }
+?>
 
 <div id="search_results" class="search_results">
 
@@ -105,5 +118,5 @@ $this->headScript()->appendFile($basePath . '/layouts/opus4/js/jquery-1.4.2.min.
 </div>
 
 <?php if(!$this->isSimpleList) : ?>
-<?php include('pagination.php') ?>
+<?php include('pagination.phtml') ?>
 <?php endif ?>

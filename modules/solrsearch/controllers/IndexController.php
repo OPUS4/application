@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,22 +24,21 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    View, SolrSearch
+ * @category    Module_SolrSearch
  * @author      Julian Heise <heise@zib.de>
+ * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id:$
  */
 
-/**
- * Controller for Solr search module
- */
 class Solrsearch_IndexController extends Controller_Action {
 
     const SIMPLE_SEARCH = 'simple';
     const ADVANCED_SEARCH = 'advanced';
     const AUTHOR_SEARCH = 'authorsearch';
     const COLLECTION_SEARCH = 'collection';
+    const LATEST_SEARCH = 'latest';
     
     private $log;
     private $query;
@@ -68,27 +66,28 @@ class Solrsearch_IndexController extends Controller_Action {
         $this->view->title = $this->view->translate('solrsearch_title_results');
     }
 
-    public function latestAction() {
-        $data = null;
-        if ($this->_request->isPost() === true)
-            $data = $this->_request->getPost();
-        else
-            $data = $this->_request->getParams();
-        
-        $rows = $this->getRows($data, 10, 100);
-        $this->query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::LATEST_DOCS);
-        $this->query->setRows($rows);
+    public function browseAction() {
+        $this->view->baseUrl = $this->getRequest()->getBaseUrl();
+        $collectionRoles = array();
+        foreach (Opus_CollectionRole::fetchAll() as $role) {
+            if ($role->getVisible() === '1' and $role->getVisibleBrowsingStart() === '1') {
+                if ($role->getRootNode()->getVisible()) {
+                    array_push($collectionRoles, $role);
+                }
+            }
+        }
+        $this->view->collectionRoles = $collectionRoles;
+    }
+
+    public function browsedoctypesAction() {
+        $facetname = 'doctype';
+        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::FACET_ONLY);
+        $query->setFacetField($facetname);
         $searcher = new Opus_SolrSearch_Searcher();
-        $this->resultList = $searcher->search($this->query);
-
-        $this->setGeneralViewValues($data);
-        $this->view->results = $this->resultList->getResults();
-        $this->view->isSimpleList = true;
-        $this->view->specialTitle = $this->view->translate('title_latest_docs_article').' '.$rows. ' '.$this->view->translate('title_latest_docs');
-        $this->view->searchType = 'latest';
-        $this->view->rows = $rows;
-
-        $this->render('results');
+        $result = $searcher->search($query);
+        $facets = $result->getFacets();
+        $facetitems = $facets[$facetname];
+        $this->view->facetitems = $facetitems;
     }
 
     public function invalidsearchtermAction() {
@@ -204,7 +203,7 @@ class Solrsearch_IndexController extends Controller_Action {
         $this->log->debug("resultlist: $this->resultList");
     }
 
-    private function setViewValues() {        
+    private function setViewValues() {
         $this->setGeneralViewValues();
 
         if($this->searchtype === self::SIMPLE_SEARCH || $this->searchtype === self::COLLECTION_SEARCH) {
@@ -231,6 +230,12 @@ class Solrsearch_IndexController extends Controller_Action {
             $this->view->yearQueryModifier = $this->query->getModifier('year');
             $this->view->refereeQuery = $this->query->getField('referee');
             $this->view->refereeQueryModifier = $this->query->getModifier('referee');
+            return;
+        }
+        if ($this->searchtype === self::LATEST_SEARCH) {            
+            $this->view->isSimpleList = true;
+            $this->view->specialTitle = $this->view->translate('title_latest_docs_article').' '.$this->query->getRows(). ' '.$this->view->translate('title_latest_docs');
+            return;
         }
     }
 
@@ -275,7 +280,6 @@ class Solrsearch_IndexController extends Controller_Action {
     }
 
     private function buildQuery() {
-
         if (is_null($this->getRequest()->getParams()))
             throw new Application_Exception("Unable to read request data. Search cannot be performed.");
 
@@ -288,6 +292,8 @@ class Solrsearch_IndexController extends Controller_Action {
             $query = $this->createSimpleSearchQuery();
         else if ($this->searchtype === self::ADVANCED_SEARCH || $this->searchtype === self::AUTHOR_SEARCH)
             $query = $this->createAdvancedSearchQuery();
+        else if ($this->searchtype === self::LATEST_SEARCH)
+            $query = $this->createLatestSearchQuery();
         else if ($this->searchtype === self::COLLECTION_SEARCH)
             $query = $this->createCollectionSearchQuery();
         else
@@ -298,6 +304,7 @@ class Solrsearch_IndexController extends Controller_Action {
     }
 
     private function validateQuery($query) {
+        // TODO check if the two subsequent rows checks are obsolete
         if($query->getRows() > 100) {
             $this->log->warn("Values greater than 100 are currently not allowed for the rows paramter.");
             $query->setRows('100');
@@ -310,8 +317,7 @@ class Solrsearch_IndexController extends Controller_Action {
             $this->log->warn("A negative start parameter is ignored.");
             $query->setStart('0');
         }
-        $searchType = $query->getSearchType();
-        if($searchType === self::ADVANCED_SEARCH || $searchType === self::AUTHOR_SEARCH) {
+        if($this->searchtype === self::ADVANCED_SEARCH || $this->searchtype === self::AUTHOR_SEARCH) {
             //im Falle einer Autorensuche werden Kommas und Semikolons aus dem Suchstring entfernt
             if (!is_null($query->getField('author'))) {
                 $author = $query->getField('author');
@@ -336,8 +342,49 @@ class Solrsearch_IndexController extends Controller_Action {
         return $query;
     }
 
+    private function createLatestSearchQuery() {
+        $this->log->debug("Constructing query for latest search.");
+        
+        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::LATEST_DOCS);
+        $query->setRows($this->getRows($this->getRequest()->getParam('rows', Opus_SolrSearch_Query::DEFAULT_ROWS), 10, 100));
+        $this->log->debug("Query $query complete");
+        return $query;
+    }
+
+    private function prepareSubCollections() {
+        $collectionList = null;
+        try {
+            $collectionList = new SolrSearch_Model_CollectionList($this->getRequest()->getParam('id'));
+        }
+        catch (SolrSearch_Model_Exception $e) {
+            $this->log->debug($e->getMessage());
+            $this->_helper->redirector('browse');
+        }        
+        
+        $this->view->subnodes = $collectionList->getSubNodes();
+        $this->view->parents = $collectionList->getParents();
+
+        if ($collectionList->isRootNode()) {
+            $this->view->title = $this->view->translate($collectionList->getTitle());
+        }
+        else {
+            $this->view->title = $collectionList->getTitle();
+        }
+        
+        // Get the theme assigned to this collection iff usertheme is
+        // set in the request.  To enable the collection theme, add
+        // /usetheme/1/ to the URL.
+        $usetheme = $this->getRequest()->getParam("usetheme");
+        if (!is_null($usetheme) && 1 === (int) $usetheme) {
+            $this->_helper->layout->setLayoutPath(APPLICATION_PATH . '/public/layouts/' . $collectionList->getTheme());
+        }
+        return $collectionList->getCollectionId();
+    }
+
     private function createCollectionSearchQuery() {
         $this->log->debug("Constructing query for collection search.");
+
+        $collectionId = $this->prepareSubCollections();
 
         $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::SIMPLE);
         $query->setStart($this->getRequest()->getParam('start', Opus_SolrSearch_Query::DEFAULT_START));
@@ -346,7 +393,6 @@ class Solrsearch_IndexController extends Controller_Action {
         $query->setSortField($this->getRequest()->getParam('sortfield', Opus_SolrSearch_Query::DEFAULT_SORTFIELD));
         $query->setSortOrder($this->getRequest()->getParam('sortorder', Opus_SolrSearch_Query::DEFAULT_SORTORDER));
 
-        $collectionId = $this->getRequest()->getParam('id');
         $query->addFilterQuery('collection_ids:' . $collectionId);
         $this->log->debug("Query $query complete");
         return $query;

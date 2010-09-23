@@ -24,41 +24,13 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
- * @author      Julian Heise <heise@zib.de>
+ * @category    Application
+ * @package     Module_SolrSearch
+ * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+class SolrSearch_Model_Exception extends Exception {    
+}
 ?>
-
-<div id="facets" class="results_facets">
-    <h3><?= $this->translate('facets_menu_title') ?></h3>
-
-    <?php foreach($this->facets as $key=>$facet) : ?>
-
-    <div id="<?= $key ?>_facet" class="facet">
-        <span class="facet_heading"><?= $this->translate($key."_facet_heading") ?></span>
-        <ul>
-            <?php foreach($facet as $facetItem) :
-                $fqUrl = $this->firstPage;
-                $fqUrl[$key.'fq'] = $facetItem->getText();
-            ?>
-                <?php if (array_key_exists($key, $this->selectedFacets)) : ?>
-                    <?php if ($this->selectedFacets[$key] == $facetItem->getText()) :
-                        $remove_fqUrl = $this->firstPage;
-                        $remove_fqUrl[$key.'fq'] = '';
-                    ?>
-                        <li class="activeFacet"><?= $this->translate(htmlspecialchars($facetItem->getText())) ?> (<?= $facetItem->getCount() ?>)
-                        <span class="removeFacetLink"><a href="<?= $this->url($remove_fqUrl) ?>">(<?= $this->translate('facets_remove') ?>)</a></span>
-                        </li>
-                    <?php endif ?>
-                <?php else: ?>
-                    <li><a href="<?= $this->url($fqUrl) ?>"><?= $this->translate(htmlspecialchars($facetItem->getText())) ?></a> (<?= $facetItem->getCount() ?>)</li>
-                <? endif ?>
-            <?php endforeach ?>
-        </ul>
-    </div>
-
-    <?php endforeach ?>
-</div>
