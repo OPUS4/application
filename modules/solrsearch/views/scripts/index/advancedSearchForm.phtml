@@ -33,6 +33,14 @@
  */
 ?>
 
+<?php
+    $fc = Zend_Controller_Front::getInstance();
+    $basePath = $fc->getRequest()->getBasePath();
+    $this->headScript()
+        ->appendFile($basePath . '/layouts/opus4/js/jquery-1.4.2.min.js')
+        ->appendFile($basePath . '/layouts/opus4/js/searchutil.js');
+?>
+
 <form action="<?= $this->url(array('module'=>'solrsearch','controller'=>'index','action'=>'searchdispatch'),null,true); ?>" method="post" class="opus_form">
 
     <?php if($this->searchType != 'authorsearch') : ?>
@@ -68,7 +76,7 @@
                     <label for="<?= $fieldname ?>"><?= $this->translate("solrsearch_advancedsearch_field_$fieldname"); ?></label>
                 </td>
                 <td>
-                    <select name="<?= $fieldname ?>modifier">
+                    <select name="<?= $fieldname ?>modifier" id="<?= $fieldname ?>Modifier">
                         <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL ?>" <?= $this->$fieldnameQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL || !isset($this->$fieldnameQueryModifier) ? 'selected="true"' : '' ?>><?= $this->translate('advanced_search_form_modifier_all') ?></option>
                         <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ?>" <?= $this->$fieldnameQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ? 'selected="true"' : '' ?>><?= $this->translate('advanced_search_form_modifier_one') ?></option>
                         <?php if ($fieldname !== 'fulltext') : ?>
@@ -90,6 +98,6 @@
     <input type="hidden" name="sordorder" value="desc" />
 </form>
 
-<form action="<?= $this->url(array('module'=>'solrsearch','controller'=>'index','action'=>'advanced'), null, true) ?>">
-    <input type="submit" value="<?= $this->translate('advanced_search_form_reset_action') ?>" />
+<form id="reset-form" onSubmit="return resetAdvancedSearchForm();" action="<?= $this->url(array('module'=>'solrsearch','controller'=>'index','action'=>'advanced'), null, true) ?>">
+    <input id="advanced-search-reset-button" id="form-reset" type="submit" value="<?= $this->translate('advanced_search_form_reset_action') ?>" />
 </form>

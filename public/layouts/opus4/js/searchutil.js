@@ -32,17 +32,20 @@
 
 function resetAdvancedSearchForm() {
     var fields = ['author','title','referee','abstract','fulltext','year'];
-    for(var id in fields) {
+    for(i=0; i<fields.length; i++) {
+        var id = fields[i];
         resetTextBox(id);
         resetComboBox(id+'Modifier');
     }
     resetComboBox('rows');
+    return false;
 }
 
 function resetTextBox(id) {
     var textBox = document.getElementById(id);
-    if(textBox != null)
+    if(textBox != null) {
         textBox.value = '';
+    }
 }
 
 function resetComboBox(id) {
@@ -52,7 +55,7 @@ function resetComboBox(id) {
 }
 
 function setEventhandlerForResetbutton() {
-    var resetButton = document.getElementById('reset-button');
+    var resetButton = document.getElementById('advanced-search-reset-button');
     if(resetButton == null)
         return;
     resetButton.onclick= function() {
