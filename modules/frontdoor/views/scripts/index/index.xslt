@@ -442,9 +442,7 @@
                 <tr>
                     <th class="name">
                         <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">collection_role_frontdoor_
-                                <xsl:value-of select="@RoleName" />
-                            </xsl:with-param>
+                            <xsl:with-param name="string">collection_role_frontdoor_<xsl:value-of select="@RoleName" /></xsl:with-param>
                         </xsl:call-template>
                         <xsl:text>:</xsl:text>
                     </th>
@@ -470,9 +468,7 @@
                 <tr>
                     <th class="name">
                         <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">collection_role_frontdoor_
-                                <xsl:value-of select="@RoleName" />
-                            </xsl:with-param>
+                            <xsl:with-param name="string">collection_role_frontdoor_<xsl:value-of select="@RoleName" /></xsl:with-param>
                         </xsl:call-template>
                         <xsl:text>:</xsl:text>
                     </th>
@@ -498,9 +494,7 @@
                 <tr>
                     <th class="name">
                         <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">collection_role_frontdoor_
-                                <xsl:value-of select="@RoleName" />
-                            </xsl:with-param>
+                            <xsl:with-param name="string">collection_role_frontdoor_<xsl:value-of select="@RoleName" /></xsl:with-param>
                         </xsl:call-template>
                         <xsl:text>:</xsl:text>
                     </th>
@@ -526,9 +520,7 @@
                 <tr>
                     <th class="name">
                         <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">collection_role_frontdoor_
-                                <xsl:value-of select="@RoleName" />
-                            </xsl:with-param>
+                            <xsl:with-param name="string">collection_role_frontdoor_<xsl:value-of select="@RoleName" /></xsl:with-param>
                         </xsl:call-template>
                         <xsl:text>:</xsl:text>
                     </th>
@@ -554,9 +546,7 @@
                 <tr>
                     <th class="name">
                         <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">collection_role_frontdoor_
-                                <xsl:value-of select="@RoleName" />
-                            </xsl:with-param>
+                            <xsl:with-param name="string">collection_role_frontdoor_<xsl:value-of select="@RoleName" /></xsl:with-param>
                         </xsl:call-template>
                         <xsl:text>:</xsl:text>
                     </th>
@@ -582,9 +572,7 @@
                 <xsl:when test="position()=1">
                     <th class="name">
                         <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">collection_role_frontdoor_
-                                <xsl:value-of select="@RoleName" />
-                            </xsl:with-param>
+                            <xsl:with-param name="string">collection_role_frontdoor_<xsl:value-of select="@RoleName" /></xsl:with-param>
                         </xsl:call-template>
                         <xsl:text>:</xsl:text>
                     </th>
@@ -605,9 +593,7 @@
                 <xsl:when test="position()=1">
                     <th class="name">
                         <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">collection_role_frontdoor_
-                                <xsl:value-of select="@RoleName" />
-                            </xsl:with-param>
+                            <xsl:with-param name="string">collection_role_frontdoor_<xsl:value-of select="@RoleName" /></xsl:with-param>
                         </xsl:call-template>
                         <xsl:text>:</xsl:text>
                     </th>
