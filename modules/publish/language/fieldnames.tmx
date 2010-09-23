@@ -619,7 +619,8 @@
       </tuv>
      </tu>
      
-     <tu tuid="SubjectSwd">
+    	
+	<tu tuid="groupSubjectSwd">
       <tuv xml:lang="en">
         <seg>SWD-Keyword</seg>
       </tuv>
@@ -628,21 +629,6 @@
       </tuv>
     </tu>
     
-    <tu tuid="hint_SubjectSwd">
-      <tuv xml:lang="en">
-        <seg>Please insert SWD-keywords here. 
-        You have to determine them external at
-        the moment. We will integrate the 
-        OSWD later.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Bitte vergeben Sie SWD-Schlagwörter 
-        für Ihr Dokument. Momentan müssen Sie diese 
-        noch extern ermitteln. Später wird die OSWD 
-        wieder eingebunden</seg>
-      </tuv>
-    </tu>
-
     <tu tuid="add_SubjectSwd">
       <tuv xml:lang="en">
         <seg>add SWD-Keyword</seg>
