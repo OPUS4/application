@@ -40,11 +40,11 @@
 	<field name="Licence" required="yes" formelement="Select" datatype="Licence" multiplicity="1"/>
 	<field name="Language" required="yes" formelement="Select" datatype="Language" multiplicity="1"/>
 	<field name="TitleMain" required="yes" formelement="Text" datatype="Title" multiplicity="4"/>
-	<field name="TitleSub" required="no" formelement="Text" datatype="Title" multiplicity="1" />
+	<field name="TitleSub" required="no" formelement="Text" datatype="Text" multiplicity="1" />
 	<field name="TitleAbstract" required="no" formelement="Textarea" datatype="Title" multiplicity="4" >
         <required-if-fulltext />
     </field>
-	<field name="TitleParent" required="no" formelement="Text" datatype="Title" multiplicity="1"/>
+	<field name="TitleParent" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
 	<field name="PersonAuthor" required="yes" formelement="Text" datatype="Person" multiplicity="*"/>
 	<field name="PersonEditor" required="no" formelement="Text" datatype="Person" multiplicity="*"/>
 	<field name="PersonTranslator" required="no" formelement="Text" datatype="Person" multiplicity="*"/>
