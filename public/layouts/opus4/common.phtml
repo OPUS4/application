@@ -107,8 +107,8 @@ $this->container = Zend_Registry::get('Opus_Navigation');
             <div class="wrapper">
                 <div id="footerLinks" class="left">
                     <ul id="secondary-nav" class="nav">
-                        <li class="first"><a href="<?= $this->url(array('module'=>'home','controller'=>'index','action'=>'about'),null,true) ?>">About</a></li>
-                        <li><a href="<?= $this->url(array('module'=>'home','controller'=>'index','action'=>'about','content'=>'about_content_impress'),null,true) ?>">Imprint</a></li>
+                        <li class="first"><a href="<?= $this->url(array('module'=>'home','controller'=>'index','action'=>'about'),null,true) ?>"><?= $this->translate('about_menu_label') ?></a></li>
+                        <li><a href="<?= $this->url(array('module'=>'home','controller'=>'index','action'=>'about','content'=>'about_content_impress'),null,true) ?>"><?= $this->translate('credits_label') ?></a></li>
                         <li class="last"><a href="<?= $this->url(array('module'=>'home','controller'=>'index','action'=>'contact'),null,true) ?>"><?= $this->translate('home_index_contact_actionname'); ?></a></li>
                     </ul>
                 </div>

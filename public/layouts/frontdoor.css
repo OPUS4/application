@@ -72,22 +72,15 @@
     padding-top: 40px;
 }
 
-.frontdoor h1 {
-
-}
 
 .frontdoor .services-menu fieldset {
     width:auto;
 }
 
-.frontdoor #export {
-    float:left;
+.frontdoor #download-fulltext ul {
+    list-style-type: none;
 }
 
-.frontdoor #download-fulltext {
-    float:left;
-}
-
-.frontdoor .frontdoordata {
-    clear:both;
+.frontdoor #download-fulltext ul li img {
+    margin-right:.5em;
 }

@@ -108,7 +108,7 @@
 
     <tu tuid="credits_label">
         <tuv xml:lang="en">
-            <seg>Credits</seg>
+            <seg>Impress</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Impressum</seg>

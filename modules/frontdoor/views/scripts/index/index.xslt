@@ -80,19 +80,27 @@
         
         <div id="services" class="services-menu">
             <xsl:if test="normalize-space(File/@PathName)">
-                <fieldset id="download-fulltext">
-                    <legend>Download</legend>
+                <div id="download-fulltext">
+                    <h2>
+                        <xsl:call-template name="translateString">
+                            <xsl:with-param name="string">frontdoor_download_options</xsl:with-param>
+                        </xsl:call-template>
+                    </h2>
                     <ul>
                         <xsl:apply-templates select="File" />
                     </ul>
-                </fieldset>
+                </div>
             </xsl:if>
             <xsl:call-template name="MailToAuthor"/>
             <!--<xsl:call-template name="services"/>-->
-            <fieldset id="export">
-                <legend>Export</legend>
+            <div id="export">
+                <h2>
+                    <xsl:call-template name="translateString">
+                        <xsl:with-param name="string">frontdoor_export_options</xsl:with-param>
+                    </xsl:call-template>
+                </h2>
                 <xsl:call-template name="ExportFunctions" />
-            </fieldset>
+            </div>
         </div>
 
         <div class="frontdoordata">
@@ -685,7 +693,10 @@
                         <xsl:text>0</xsl:text>
                     </xsl:attribute>
                     <xsl:attribute name="title">
-                        <xsl:text>Download </xsl:text>
+                        <xsl:call-template name="translateString">
+                            <xsl:with-param name="string">frontdoor_download_file</xsl:with-param>
+                        </xsl:call-template>
+                        <xsl:text> </xsl:text>
                         <xsl:value-of select="@PathName" />
                         <xsl:text> (</xsl:text>
                         <xsl:value-of select="@MimeType" />
