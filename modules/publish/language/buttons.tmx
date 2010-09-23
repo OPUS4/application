@@ -44,6 +44,24 @@
         </tuv>
     </tu>
 
+    <tu tuid="button_label_add_one_moreLicence">
+        <tuv xml:lang="en">
+            <seg>Add one more licence</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Eine weitere Lizenz hinzufügen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_deleteLicence">
+        <tuv xml:lang="en">
+            <seg>Delete the last licence</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Die letzte Lizenz löschen</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="button_label_add_one_morePersonAuthor">
         <tuv xml:lang="en">
             <seg>Add one more author</seg>
@@ -150,6 +168,24 @@
         </tuv>
         <tuv xml:lang="de">
             <seg>Die letzte MSC Klasse löschen</seg>
+        </tuv>
+    </tu>
+
+<tu tuid="button_label_add_one_moreSubjectDDC">
+        <tuv xml:lang="en">
+            <seg>Add one more DDC Word</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Ein weiteres DDC Wort hinzufügen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_deleteSubjectDDC">
+        <tuv xml:lang="en">
+            <seg>Delete the last DDC subject</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Die letzte DDC Klasse löschen</seg>
         </tuv>
     </tu>
 

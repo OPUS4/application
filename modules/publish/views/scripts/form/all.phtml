@@ -1,6 +1,7 @@
 <?
 echo '<h1>'.$this->title.'</h1>';
 echo '<h3>'.$this->subtitle.'</h3>';
+
 ?>        
 <form enctype="application/x-www-form-urlencoded" action="<?php echo $this->action_url; ?>" method="post">
 
@@ -9,9 +10,9 @@ echo '<h3>'.$this->subtitle.'</h3>';
 <?= $this->element($this->Language_); ?>
 <?= $this->group($this->groupTitleMain); ?>
 <?= $this->group($this->groupTitleAbstract); ?>
-<?= $this->element($this->TitleSub_); ?>
-<?= $this->element($this->TitleAdditional_); ?>
-<?= $this->element($this->TitleParent_); ?>
+<?= $this->group($this->groupTitleSub); ?>
+<?= $this->group($this->groupTitleAdditional); ?>
+<?= $this->group($this->groupTitleParent); ?>
 <?= $this->element($this->PageNumber_); ?>
 <?= $this->element($this->PageFirst_); ?>
 <?= $this->element($this->PageLast_); ?>
@@ -46,10 +47,8 @@ echo '<h3>'.$this->subtitle.'</h3>';
 <?= $this->element($this->Note_); ?>
 <?= $this->element($this->Licence_); ?>
 <?= $this->element($this->ServerDateUnlocking_); ?>
+<?= $this->group($this->groupSubjectDDC); ?>
 
-<?= $this->element($this->fullText, null, "Hidden", "fullText"); ?>
-<?= $this->element("all", null, "Hidden",  "documentType"); ?>
-<?= $this->element($this->documentId, null, "Hidden", "documentId"); ?>
 <?= $this->element('button_label_send', null, "Submit",  "send"); ?>
 
 </form>

@@ -36,7 +36,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="hint_no_collection_licence">
+    <tu tuid="hint_no_collection_Licence">
         <tuv xml:lang="en">
             <seg>Sorry: No licences have been found in our database.</seg>
         </tuv>
@@ -45,7 +45,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="hint_no_collection_language">
+    <tu tuid="hint_no_collection_Language">
         <tuv xml:lang="en">
             <seg>Sorry: No languages have been found in our database.</seg>
         </tuv>
@@ -54,7 +54,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="hint_no_collection_institutes">
+    <tu tuid="hint_no_collection_Institute">
         <tuv xml:lang="en">
             <seg>Sorry: No institutes have been found in our database.</seg>
         </tuv>
@@ -72,7 +72,7 @@
         </tuv>
     </tu>
 
-	<tu tuid="hint_groupPersonSubmitter">
+    <tu tuid="hint_groupPersonSubmitter">
         <tuv xml:lang="en">
             <seg>Please enter your contact information.</seg>
         </tuv>
@@ -80,7 +80,15 @@
             <seg>Tragen Sie hier bitte Ihre Kontaktdaten ein.</seg>
         </tuv>
     </tu>
-	
+
+    <tu tuid="hint_groupLicence">
+        <tuv xml:lang="en">
+            <seg>Please choose the licence(s) for the document.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte wählen Sie hier die Lizenz(en) für Ihr Dokument aus.</seg>
+        </tuv>
+    </tu>
     <tu tuid="hint_groupPersonAuthor">
         <tuv xml:lang="en">
             <seg>Please enter the contact information of the authors. You may add more authors by clicking on the button (or delete them).</seg>
@@ -629,6 +637,33 @@ Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathsci
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte eine MSC Klasse ein.</seg>
+        </tuv>
+    </tu>
+
+<tu tuid="hint_groupSubjectDDC">
+        <tuv xml:lang="en">
+            <seg>Please enter Hint text for this group in modules/publish/language/field_hints.tmx</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte tragen Sie einen Text für dieses Gruppe ein in modules/publish/language/field_hints.tmx</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_SubjectDDC1">
+        <tuv xml:lang="en">
+            <seg>Please enter a DDC class.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte eine DDC Klasse ein.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_SubjectDDC">
+        <tuv xml:lang="en">
+            <seg>Please enter a DDC class.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte eine DDC Klasse ein.</seg>
         </tuv>
     </tu>
 

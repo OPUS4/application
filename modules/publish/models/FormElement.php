@@ -108,7 +108,7 @@ class Publish_Model_FormElement {
                 $this->group->setSubFields($this->subFormElements);
                 $this->group->makeDisplayGroup();
             }
-            $displayGroup = $this->form->addDisplayGroup($this->group->elements, $this->group->label);            
+            $displayGroup = $this->form->addDisplayGroup($this->group->elements, $this->group->label);
             return $displayGroup;
         }
     }
@@ -138,8 +138,10 @@ class Publish_Model_FormElement {
                 break;
 
             case 'Title':
-
-                $value = new Publish_Model_FormElement($this->form, $this->elementName, $this->required, 'text', 'Text');
+                if ($this->isTextareaElement())
+                    $value = new Publish_Model_FormElement($this->form, $this->elementName, $this->required, 'textarea', 'Text');
+                else
+                    $value = new Publish_Model_FormElement($this->form, $this->elementName, $this->required, 'text', 'Text');
                 $value->isSubField = true;
                 $elementValue = $value->transform();
                 $lang = new Publish_Model_FormElement($this->form, $this->elementName . self::LANG, $this->required, 'select', 'Language');
@@ -152,7 +154,8 @@ class Publish_Model_FormElement {
 
     private function isTitleElement() {
         if (strstr($this->elementName, 'Title')
-                || strstr($this->elementName, 'Abstract'))
+                || strstr($this->elementName, 'Abstract'
+                        || $this->datatype === 'Title'))
             return true;
         else
             return false;
@@ -170,7 +173,14 @@ class Publish_Model_FormElement {
     }
 
     private function isSelectElement() {
-        if ($this->formElement === 'select')
+        if ($this->formElement === 'select' || $this->formElement === 'Select')
+            return true;
+        else
+            return false;
+    }
+
+    private function isTextareaElement() {
+        if ($this->formElement === 'textarea' || $this->formElement === 'Textarea')
             return true;
         else
             return false;
@@ -178,7 +188,6 @@ class Publish_Model_FormElement {
 
     public function setPostValues($postValues) {
         $this->postValues = $postValues;
-        
     }
 
     public function setAdditionalFields($additionalFields) {
@@ -189,17 +198,20 @@ class Publish_Model_FormElement {
         if (isset($this->form)) {
 
             if (false === $this->isSelectElement()) {
-                $element = $this->form->createElement($this->formElement, $this->elementName);              
+                $element = $this->form->createElement($this->formElement, $this->elementName);
             } else {
-                $options = $this->validationObject->selectOptions();
-                if (!isset($options)) {                    
+                $options = $this->validationObject->selectOptions($this->datatype);
+                if ($options === null) {
                     //no options found in database / session / cache
+                    $this->log->debug("No options found for element " . $this->elementName);
                     $element = $this->form->createElement('text', $this->elementName);
-                    $element->setDescription('hint_no_collection_' . $workflow)
-                            ->setAttrib('disabled', true);
-                    $required = null;
-                } else {                    
-                    $element = $this->showSelectField($options);                    
+                    $element->setDescription('hint_no_collection_' . $this->datatype);
+                    $element->setAttrib('disabled', true);
+                    $this->required = false;
+                } else {
+                    $this->log->debug("Options found for element " . $this->elementName);
+
+                    $element = $this->showSelectField($options);
                 }
             }
 
@@ -209,7 +221,7 @@ class Publish_Model_FormElement {
                 $element->setValue($this->default['value']);
                 $this->log->debug("Value set to default for " . $this->elementName . " => " . $this->default['value']);
             }
-            
+
             if (isset($this->default['edit']) && $this->default['edit'] === 'no') {
                 $element->setAttrib('disabled', true);
                 $element->setRequired(false);
@@ -256,6 +268,7 @@ class Publish_Model_FormElement {
                     $element->setMultiOptions(array_merge(array('' => 'choose_valid_institute'), $options));
             }
         }
+
         return $element;
     }
 

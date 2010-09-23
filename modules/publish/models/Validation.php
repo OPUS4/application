@@ -43,12 +43,13 @@ class Publish_Model_Validation {
     public $validator;
     public $institutes = array();
     public $projects = array();
-    public $msc = array();
     public $licences = array();
     public $languages = array();
+    public $log;
 
     public function __construct($datatype) {
         $this->datatype = $datatype;
+        $this->log = Zend_Registry::get('Zend_Log');
     }
 
     public function validate() {
@@ -61,6 +62,9 @@ class Publish_Model_Validation {
     private function _datatypeValidation() {
         switch ($this->datatype) {
             case 'Date' : $this->validator = $this->_validateDate();
+                break;
+
+            case 'ddc' : $this->validator = $this->_validateDDC();
                 break;
 
             case 'Email' : $this->validator = $this->_validateEmail();
@@ -112,6 +116,14 @@ class Publish_Model_Validation {
             Zend_Validate_Date::INVALID => 'publish_validation_error_date_invalid',
             Zend_Validate_Date::INVALID_DATE => 'publish_validation_error_date_invaliddate',
             Zend_Validate_Date::FALSEFORMAT => 'publish_validation_error_date_falseformat');
+        $validator->setMessages($messages);
+        return $validator;
+    }
+
+    private function _validateDDC() {
+        $validator = new Opus_Validate_SubjectDDC();
+        $messages = array(
+            Opus_Validate_SubjectDDC::MSG_SUBJECTDDC => 'publish_validation_error_subjectddc_msgsubjectddc');
         $validator->setMessages($messages);
         return $validator;
     }
@@ -206,14 +218,16 @@ class Publish_Model_Validation {
 
             case 'Licence':
                 $licences = $this->getLicences();
-                if (isset($licences) || count($licences) >= 1) {
+                if (isset($licences) && count($licences) >= 1) {
                     $data = array();
                     foreach ($licences AS $key => $li)
                         $data[$key] = $li;
                     asort($data);
+                    $this->log->debug("LIZENZEN NOT NULL");
                     return $data;
                 } else {
                     $data = null;
+                    $this->log->debug("LIZENZEN NULL!!!");
                     return $data;
                 }
 
@@ -309,7 +323,7 @@ class Publish_Model_Validation {
                     $this->languages = $languages;
 
                     return $languages;
-                }else
+                } else
                     return null;
             }
         } else
@@ -317,15 +331,16 @@ class Publish_Model_Validation {
     }
 
     /**
-     * return the available languages from registry, database or chache
+     * return the available licences from registry, database or chache
      * @return <Array> languages
      */
     private function getLicences() {
         $licences = array();
         if (empty($this->licences)) {
-            foreach ($licences = Opus_Licence::getAll() as $lic) {
-                $name = $lic->getDisplayName();
+            foreach ($dbLicences = Opus_Licence::getAll() as $lic) {
+                $name = $lic->getDisplayName();                
                 $licences[$name] = $name;
+                $this->log->debug("Lizenz " . $name);
             }
             $this->licences = $licences;
             return $licences;

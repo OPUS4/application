@@ -1966,6 +1966,15 @@
       </tuv>
     </tu>
 
+	<tu tuid="groupLicence">
+      <tuv xml:lang="en">
+        <seg>Licence(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Lizenz(en)</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_language_edit">
       <tuv xml:lang="en">
         <seg>Edit Language</seg>
