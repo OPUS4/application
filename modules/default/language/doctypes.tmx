@@ -7,6 +7,15 @@
  
    <body>
 
+   <tu tuid="all">
+        <tuv xml:lang="en">
+            <seg>All fields (testing documenttype)</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Alle Felder (Testdokumenttyp)</seg>
+        </tuv>
+   </tu>
+   
    <tu tuid="article">
         <tuv xml:lang="en">
             <seg>Article</seg>
@@ -16,21 +25,12 @@
         </tuv>
    </tu>
 
-   <tu tuid="bachelor_thesis">
+   <tu tuid="bachelorthesis">
         <tuv xml:lang="en">
             <seg>Bachelor Thesis</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Bachelorarbeit</seg>
-        </tuv>
-   </tu>
-
-   <tu tuid="article">
-        <tuv xml:lang="en">
-            <seg>Article</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Wissenschaftlicher Artikel</seg>
         </tuv>
    </tu>
 
@@ -43,16 +43,7 @@
         </tuv>
    </tu>
 
-   <tu tuid="article">
-        <tuv xml:lang="en">
-            <seg>Article</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Wissenschaftlicher Artikel</seg>
-        </tuv>
-   </tu>
-
-   <tu tuid="book_part">
+   <tu tuid="bookpart">
         <tuv xml:lang="en">
             <seg>Part of a Book</seg>
         </tuv>
@@ -61,7 +52,7 @@
         </tuv>
    </tu>
 
-   <tu tuid="conference_object">
+   <tu tuid="conferenceobject">
         <tuv xml:lang="en">
             <seg>Conference Proceeding</seg>
         </tuv>
@@ -70,7 +61,7 @@
         </tuv>
    </tu>
 
-   <tu tuid="contribution_to_periodical">
+   <tu tuid="contributiontoperiodical">
         <tuv xml:lang="en">
             <seg>Contribution to a Periodical</seg>
         </tuv>
@@ -79,7 +70,7 @@
         </tuv>
    </tu>
 
-   <tu tuid="course_material">
+   <tu tuid="coursematerial">
         <tuv xml:lang="en">
             <seg>Course Material</seg>
         </tuv>
@@ -88,7 +79,7 @@
         </tuv>
    </tu>
 
-   <tu tuid="doctoral_thesis">
+   <tu tuid="doctoralthesis">
         <tuv xml:lang="en">
             <seg>Doctoral Thesis</seg>
         </tuv>
@@ -133,7 +124,7 @@
         </tuv>
    </tu>
 
-   <tu tuid="master_thesis">
+   <tu tuid="masterthesis">
         <tuv xml:lang="en">
             <seg>Master's Thesis</seg>
         </tuv>
@@ -148,15 +139,6 @@
         </tuv>
         <tuv xml:lang="de">
             <seg>Sonstiges</seg>
-        </tuv>
-   </tu>
-
-   <tu tuid="periodical">
-        <tuv xml:lang="en">
-            <seg>Periodical</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Zeitschrift</seg>
         </tuv>
    </tu>
 
@@ -196,7 +178,7 @@
         </tuv>
    </tu>
 
-   <tu tuid="study_thesis">
+   <tu tuid="studythesis">
         <tuv xml:lang="en">
             <seg>Study Thesis</seg>
         </tuv>
@@ -205,7 +187,7 @@
         </tuv>
    </tu>
 
-   <tu tuid="working_paper">
+   <tu tuid="workingpaper">
         <tuv xml:lang="en">
             <seg>Working Paper</seg>
         </tuv>
