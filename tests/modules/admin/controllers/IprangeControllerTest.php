@@ -62,35 +62,93 @@ class Admin_IprangeControllerTest extends ControllerTestCase {
      * Tests creating a new IP range.
      */
     public function testCreateAction() {
-        $this->markTestIncomplete();
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'name' => 'Localhost',
+                    'startingip' => '127.0.0.1',
+                    'endingip' => '127.0.0.1',
+                    'roleguest' => '1',
+                    'roleadministrator' => '0',
+                    'submit' => 'submit'
+                ));
+
+        $this->dispatch('/admin/iprange/create');
+        $this->assertController('iprange');
+        $this->assertAction('create');
+        $this->assertRedirect();
     }
 
     /**
      * Tests showing the information about an IP range.
+     *
+     * @depends testCreateAction
      */
     public function testShowAction() {
-        $this->markTestIncomplete();
+        $ipRanges = Opus_Iprange::getAll();
+        $id = $ipRanges[0]->getId();
+
+        $this->dispatch('/admin/iprange/show/id/' . $id);
+        $this->assertResponseCode(200);
+        $this->assertModule('admin');
+        $this->assertController('iprange');
+        $this->assertAction('show');
     }
 
     /**
      * Tests showing an edit form for an IP range.
+     *
+     * @depends testCreateAction
      */
     public function testEditAction() {
-        $this->markTestIncomplete();
+        $ipRanges = Opus_Iprange::getAll();
+        $id = $ipRanges[0]->getId();
+
+        $this->dispatch('/admin/iprange/edit/id/' . $id);
+        $this->assertResponseCode(200);
+        $this->assertModule('admin');
+        $this->assertController('iprange');
+        $this->assertAction('edit');
     }
 
     /**
      * Tests storing updated information for an IP range.
+     *
+     * @depends testEditAction
      */
     public function testUpdateAction() {
-        $this->markTestIncomplete();
+        $ipRanges = Opus_Iprange::getAll();
+        $id = $ipRanges[0]->getId();
+
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'id' => $id,
+                    'name' => 'MyComputer',
+                    'startingip' => '127.0.0.1',
+                    'endingip' => '127.0.0.1',
+                    'roleguest' => '1',
+                    'roleadministrator' => '0',
+                    'submit' => 'submit'
+                ));
+
+        $this->dispatch('/admin/iprange/update');
+        $this->assertController('iprange');
+        $this->assertAction('update');
+        $this->assertRedirect();
     }
 
     /**
      * Tests deleting an IP range.
+     *
+     * @depends testUpdateAction
      */
     public function testDeleteAction() {
-        $this->markTestIncomplete();
+        $ipRanges = Opus_Iprange::getAll();
+        $id = $ipRanges[0]->getId();
+
+        $this->dispatch('/admin/iprange/delete/id/' . $id);
+        $this->assertRedirectTo('/admin/iprange');
     }
 
 }
