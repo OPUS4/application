@@ -60,6 +60,15 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
     }
 
     /**
+     * Clean up database instances.
+     */
+    protected function tearDown() {
+        Opus_Db_TableGateway::clearInstances();
+        
+        parent::tearDown();
+    }
+
+    /**
      * Method to check response for "bad" strings.
      */
     protected function checkForBadStringsInHtml($body) {
