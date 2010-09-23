@@ -54,6 +54,7 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
             $error_message = $this->view->translate('template_error_unknown_field');
             return "<br/><div style='width: 400px; color:red;'>" . $error_message . "</div><br/><br/>";
         } else {
+            //TODO: überüprüfen, ob group im Namen
             $result = $this->_renderGroup($value, $options, $name);
             return $result;
         }

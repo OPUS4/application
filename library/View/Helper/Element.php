@@ -68,7 +68,7 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
      *
      * @param <type> $element
      */
-    protected function _renderElement($element, $options=null, $name=null ) {
+    protected function _renderElement($element, $options=null, $name=null) {
         $elementfield = "<fieldset class='fieldset'><legend class='legend'>" . $this->view->translate($element["label"]) . "</legend>\n\t\t\n\t\t";
         $elementfield .= "<table width='100%' class='table'>\n\t<tr>\n\t\t<td width='25%'>\n\t\t\t";
         $elementfield .= "<label for='" . $element["id"] . "'>" . $element["label"] . "</label></td><td>";
@@ -103,7 +103,14 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
                 else
                     $elementfield .= "size='30' ";
                 $elementfield .= " title='" . $this->view->translate($element["hint"]) . "' ";
+                if ($element["disabled"] === true) {
+                    $elementfield .= " disabled='1' ";
+                    $disable = true;
+                }
                 $elementfield .= "value='" . $element["value"] . "' />\n\t\t";
+                if (isset($element["desc"]))
+                    $elementfield .= "<p class='description'>" . $this->view->translate($element["desc"]) . "</p>";
+
                 if ($element["req"] === 'required')
                     $elementfield .= $this->_getRequiredSign();
                 $elementfield .= "</td>\n\t</tr>\n\t";
@@ -148,7 +155,7 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
      *
      * @param <type> $name 
      */
-    protected function _renderSubmit($value, $options=null, $name=null ) {
+    protected function _renderSubmit($value, $options=null, $name=null) {
         $submit = "\n\t\t<input type='submit' name='" . $name . "' id='" . $name . "' value='" . $this->view->translate($value) . "'/>";
         return $submit;
     }
@@ -159,7 +166,7 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
      * @param <type> $name
      * @return string 
      */
-    protected function _renderHidden($value, $options = null, $name=null ) {
+    protected function _renderHidden($value, $options = null, $name=null) {
         $hiddenfield = "<input type='hidden' name='" . $name . "' id='" . $name . "' value='" . $value . "' />";
         return $hiddenfield;
     }
@@ -171,7 +178,7 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
     protected function _getRequiredSign() {
         return "<span class='required'>*</span>";
     }
-    
+
 }
 
 ?>
