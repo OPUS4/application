@@ -42,7 +42,7 @@
     'role'=>$this->role_id, 'copy'=>$this->copy), null, true)?>"><?=$this->role_name?></a>
 <? foreach($this->breadcrumb as $parent) : ?>
 &gt;&nbsp;<a href="<?=$this->url(array('module'=>'admin', 'controller'=>'collection', 'action'=>'show',
-    'node'=>$parent->getId(), 'copy'=>$this->copy), null, true)?>"><?= $parent->getCollection()->getDisplayName() ?></a>
+    'node'=>$parent->getId(), 'copy'=>$this->copy), null, true)?>"><?= $parent->getDisplayName() ?></a>
 <? endforeach; ?>
 </p>
         <? if (isset($this->copy)) { ?>

@@ -78,20 +78,15 @@ class Admin_CollectionController extends Controller_Action {
      * @return void
      */
     public function editAction() {
-        $role = $this->getRequest()->getParam('role');
-        $node = $this->getRequest()->getParam('node');
+        $roleId       = $this->getRequest()->getParam('role');
+        $collectionId = $this->getRequest()->getParam('node');
 
         $form_builder = new Form_Builder();
-        if (true === isset($node)) {
-            $node = new Opus_CollectionNode($node);
-            $collection = $node->getCollection();
+        if (true === isset($collectionId)) {
+            $collection = new Opus_Collection($collectionId);
         }
-        else if (true === isset($role) && 1 == $role) {
-            $role = new Opus_OrganisationalUnits;
-            $collection = $role;
-        }
-        else if (true === isset($role)) {
-            $role = new Opus_CollectionRole($role);
+        else if (true === isset($roleId)) {
+            $role = new Opus_CollectionRole($roleId);
             $collection = $role;
         }
         else {
@@ -201,33 +196,34 @@ class Admin_CollectionController extends Controller_Action {
         $this->view->theme = $theme;
         $this->view->layoutPath = $this->view->baseUrl() .'/layouts/'. $theme;
 
-        $nodeId   = $this->getRequest()->getParam('node');
-        $roleId   = (int) $this->getRequest()->getParam('role');
+        $collectionId   = $this->getRequest()->getParam('node');
+        $roleId         = $this->getRequest()->getParam('role');
 
-        if (isset($nodeId)) {
-            $node = new Opus_CollectionNode($nodeId);
-            $role = new Opus_CollectionRole( $node->getRoleId() );
+        if (isset($collectionId)) {
+            $collection = new Opus_Collection($collectionId);
+            $role = new Opus_CollectionRole( $collection->getRoleId() );
         }
         else if (isset($roleId)) {
             $role = new Opus_CollectionRole($roleId);
-            $node = $role->getRootNode();
+            $collection = $role->getRootCollection();
         }
 
+        $copyId = 0;
         $copy = $this->getRequest()->getParam('copy');
-        if (true === isset($copy)) {
-            // FIXME: Implement or remove this feature.
-            throw new Exception("Copy not supported for collections.");
-
-            $cpCollection = $collection;
-            $trail = explode('-', $copy);
-            foreach($trail as $step) {
-                $cpCollection = $cpCollection->getSubCollection($step);
-            }
-            $copyId = $cpCollection->getId();
-            unset($position);
-        } else {
-            $copyId = 0;
-        }
+//        if (true === isset($copy)) {
+//            // FIXME: Implement or remove this feature.
+//            throw new Exception("Copy not supported for collections.");
+//
+//            $cpCollection = $collection;
+//            $trail = explode('-', $copy);
+//            foreach($trail as $step) {
+//                $cpCollection = $cpCollection->getSubCollection($step);
+//            }
+//            $copyId = $cpCollection->getId();
+//            unset($position);
+//        } else {
+//            $copyId = 0;
+//        }
 
         $breadcrumb         = array();
         $children           = array();
@@ -237,20 +233,18 @@ class Admin_CollectionController extends Controller_Action {
         $copypaste          = array();
         $nameLength         = 0;
 
-        if (isset($node)) {
+        if (isset($collection)) {
 
-            $breadcrumb = array_reverse($node->getParents());
+            $breadcrumb = array_reverse($collection->getParents());
             array_shift($breadcrumb);
 
-            foreach($node->getChildren() as $child) {
-                $subcollection = $child->getCollection();
+            foreach($collection->getChildren() as $child) {
+                $subcollections[$child->getId()]     = $child->getDisplayName();
+                $severalAppearances[$child->getId()] = 'unique'; // TODO: Kann weg.
+                $visibility[$child->getId()]         = ('1' === $child->getVisible())?'visible':'hidden';
+                $copypaste[$child->getId()]          = ((int) $copyId === (int) $child->getId())?'forbidden':'allowed';
 
-                $subcollections[$child->getId()]     = $subcollection->getDisplayName();
-                $severalAppearances[$child->getId()] = (true === $subcollection->getSeveralAppearances())?'several':'unique';
-                $visibility[$child->getId()]         = (true === $subcollection->getVisibility())?'visible':'hidden';
-                $copypaste[$child->getId()]          = ((int) $copyId === (int) $subcollection->getId())?'forbidden':'allowed';
-
-                $nameLength = max($nameLength, strlen($subcollection->getDisplayName()));
+                $nameLength = max($nameLength, strlen($child->getDisplayName()));
             }
         }
 
@@ -262,7 +256,7 @@ class Admin_CollectionController extends Controller_Action {
         $this->view->visibility         = $visibility;
         $this->view->copypaste          = $copypaste;
 
-        $this->view->node_id    = $node->getId();
+        $this->view->node_id    = $collection->getId();
         $this->view->role_id    = $role->getId();
         $this->view->role_name  = $role->getDisplayName();
         $this->view->copy       = $copy;
