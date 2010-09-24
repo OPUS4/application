@@ -16,10 +16,10 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `collections`
+-- Table structure for table `collections_old`
 --
 
-CREATE TABLE IF NOT EXISTS `collections` (
+CREATE TABLE IF NOT EXISTS `collections_old` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `role_id` int(10) unsigned NOT NULL,
   `number` varchar(255) DEFAULT NULL,
@@ -30,10 +30,10 @@ CREATE TABLE IF NOT EXISTS `collections` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15985;
 
 --
--- Dumping data for table `collections`
+-- Dumping data for table `collections_old`
 --
 
-INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
+INSERT INTO `collections_old` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
 (1, 1, NULL, NULL, NULL),
 (2, 2, NULL, NULL, NULL),
 (3, 2, '000', 'Informatik, Informationswissenschaft, allgemeine Werke', NULL),
@@ -961,7 +961,7 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALU
 (925, 2, '896', 'Afrikanische Literaturen', NULL),
 (926, 2, '897', 'Literaturen nordamerikanischer Indianersprachen', NULL),
 (927, 2, '898', 'Literaturen südamerikanischer Indianersprachen', NULL);
-INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
+INSERT INTO `collections_old` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
 (928, 2, '899', 'Austronesische und andere Literaturen', NULL),
 (929, 2, '900', 'Geschichte und Geografie', NULL),
 (930, 2, '901', 'Geschichtsphilosophie, Geschichtstheorie', NULL),
@@ -1980,7 +1980,7 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALU
 (1943, 3, '', 'Web-based services (NEW)', NULL),
 (1944, 3, 'H.3.6', 'Library Automation', NULL),
 (1945, 3, '', 'Large text archives', NULL);
-INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
+INSERT INTO `collections_old` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
 (1946, 3, 'H.3.7', 'Digital Libraries (NEW)', NULL),
 (1947, 3, '', 'Collection (NEW)', NULL),
 (1948, 3, '', 'Dissemination (NEW)', NULL),
@@ -2828,7 +2828,7 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALU
 (2790, 4, '07.05.Tp', 'Computer modeling and simulation', NULL),
 (2791, 4, '07.05.Wr', 'Computer interfaces (for nuclear physics applications, see 29.50.+v)', NULL),
 (2792, 4, '07.07.-a', 'General equipment', NULL);
-INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
+INSERT INTO `collections_old` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
 (2793, 4, '07.07.Df', 'Sensors (chemical, optical, electrical, movement, gas, etc.); remote sensing', NULL),
 (2794, 4, '07.07.Hj', 'Display and recording equipment, oscilloscopes, TV cameras, etc.', NULL),
 (2795, 4, '07.07.Mp', 'Transducers', NULL),
@@ -3452,7 +3452,7 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALU
 (3413, 4, '32.60.+i', 'Zeeman and Stark effects', NULL),
 (3414, 4, '32.70.-n', 'Intensities and shapes of atomic spectral lines (see also 31.15.-p Calculations and mathematical techniques)', NULL),
 (3415, 4, '32.70.Cs', 'Oscillator strengths, lifetimes, transition moments', NULL);
-INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
+INSERT INTO `collections_old` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
 (3416, 4, '32.70.Fw', 'Absolute and relative intensities', NULL),
 (3417, 4, '32.70.Jz', 'Line shapes, widths, and shifts', NULL),
 (3418, 4, '32.80.-t', 'Photoionization and excitation', NULL),
@@ -4021,7 +4021,7 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALU
 (3981, 4, '47.63.mc', 'High-Reynolds-number motions', NULL),
 (3982, 4, '47.63.mf', 'Low-Reynolds-number motions', NULL),
 (3983, 4, '47.63.mh', 'Transport processes and drug delivery', NULL);
-INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
+INSERT INTO `collections_old` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
 (3984, 4, '47.65.-d', 'Magnetohydrodynamics and electrohydrodynamics (see also 47.35.Tv Magnetohydrodynamic waves; 52.30.Cv Magnetohydrodynamics, and 52.65.Kj Magnetohydrodynamics and fluid equation in Physics of plasmas and electric discharges; 83.80.Gv Electro- and magnetorhe', NULL),
 (3985, 4, '47.65.Cb', 'Magnetic fluids and ferrofluids', NULL),
 (3986, 4, '47.65.Gx', 'Electrorheological fluids', NULL),
@@ -4587,7 +4587,7 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALU
 (4546, 4, '68.03.Kn', 'Dynamics (capillary waves)', NULL),
 (4547, 4, '68.05.-n', 'Liquid-liquid interfaces', NULL),
 (4548, 4, '68.05.Cf', 'Liquid-liquid interface structure: measurements and simulations', NULL);
-INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
+INSERT INTO `collections_old` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
 (4549, 4, '68.05.Gh', 'Interfacial properties of microemulsions', NULL),
 (4550, 4, '68.08.-p', 'Liquid-solid interfaces', NULL),
 (4551, 4, '68.08.Bc', 'Wetting', NULL),
@@ -5174,7 +5174,7 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALU
 (5132, 4, '81.07.Wx', 'Nanopowders', NULL),
 (5133, 4, '81.10.-h', 'Methods of crystal growth; physics of crystal growth (for crystal structure, see section 61)', NULL),
 (5134, 4, '81.10.Aj', 'Theory and models of crystal growth; physics of crystal growth, crystal morphology, and orientation', NULL);
-INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
+INSERT INTO `collections_old` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
 (5135, 4, '81.10.Bk', 'Growth from vapor', NULL),
 (5136, 4, '81.10.Dn', 'Growth from solutions', NULL),
 (5137, 4, '81.10.Fq', 'Growth from melts; zone melting and refining', NULL),
@@ -5740,7 +5740,7 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALU
 (5697, 4, '87.19.xd', 'Viral diseases', NULL),
 (5698, 4, '87.19.xe', 'Parasitic diseases', NULL),
 (5699, 4, '87.19.xg', 'Fungal diseases', NULL);
-INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
+INSERT INTO `collections_old` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
 (5700, 4, '87.19.xh', 'Prion diseases', NULL),
 (5701, 4, '87.19.xj', 'Cancer', NULL),
 (5702, 4, '87.19.xk', 'Genetic diseases', NULL),
@@ -6411,7 +6411,7 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALU
 (6367, 4, '95.30.Ky', 'Atomic and molecular data, spectra, and spectral parameters (opacities, rotation constants, line identification, oscillator strengths, <i>gf</i> values, transition probabilities, etc.)', NULL),
 (6368, 4, '95.30.Lz', 'Hydrodynamics', NULL),
 (6369, 4, '95.30.Qd', 'Magnetohydrodynamics and plasmas (see also 52.30.Cv and 52.72.+v-in physics of plasmas)', NULL);
-INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
+INSERT INTO `collections_old` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
 (6370, 4, '95.30.Sf', 'Relativity and gravitation (see also section 04 General relativity and gravitation; 98.80.Jk Mathematical and relativistic aspects of cosmology)', NULL),
 (6371, 4, '95.30.Tg', 'Thermodynamic processes, conduction, convection, equations of state', NULL),
 (6372, 4, '95.30.Wi', 'Dust processes (condensation, evaporation, sputtering, mantle growth, etc.)', NULL),
@@ -7175,7 +7175,7 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALU
 (7130, 5, 'I29', 'Other', NULL),
 (7131, 5, 'I3', 'Welfare and Poverty', NULL),
 (7132, 5, 'I30', 'General', NULL);
-INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
+INSERT INTO `collections_old` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
 (7133, 5, 'I31', 'General Welfare', NULL),
 (7134, 5, 'I32', 'Measurement and Analysis of Poverty', NULL),
 (7135, 5, 'I38', 'Government Policy; Provision and Effects of Welfare Programs', NULL),
@@ -8009,7 +8009,7 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALU
 (7963, 6, '06-06', 'Proceedings, conferences, collections, etc.', NULL),
 (7964, 6, '06Axx', 'Ordered sets', NULL),
 (7965, 6, '06A05', 'Total order', NULL);
-INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
+INSERT INTO `collections_old` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
 (7966, 6, '06A06', 'Partial order, general', NULL),
 (7967, 6, '06A07', 'Combinatorics of partially ordered sets', NULL),
 (7968, 6, '06A11', 'Algebraic aspects of posets', NULL),
@@ -8698,7 +8698,7 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALU
 (8651, 6, '14J32', 'Calabi-Yau manifolds', NULL),
 (8652, 6, '14J33', 'Mirror symmetry [See also 11G42, 53D37]', NULL),
 (8653, 6, '14J35', '4-folds', NULL);
-INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
+INSERT INTO `collections_old` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
 (8654, 6, '14J40', 'n-folds (n > 4)', NULL),
 (8655, 6, '14J45', 'Fano varieties', NULL),
 (8656, 6, '14J50', 'Automorphisms of surfaces and higher-dimensional varieties', NULL),
@@ -9379,7 +9379,7 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALU
 (9331, 6, '22-01', 'Instructional exposition (textbooks, tutorial papers, etc.)', NULL),
 (9332, 6, '22-02', 'Research exposition (monographs, survey articles)', NULL),
 (9333, 6, '22-03', 'Historical (must also be assigned at least one classification number from Section 01)', NULL);
-INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
+INSERT INTO `collections_old` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
 (9334, 6, '22-04', 'Explicit machine computation and programs (not the theory of computation or programming)', NULL),
 (9335, 6, '22-06', 'Proceedings, conferences, collections, etc.', NULL),
 (9336, 6, '22Axx', 'Topological and differentiable algebraic systems (For topological rings and fields, see 12Jxx, 13Jxx, 16W80)', NULL),
@@ -10015,7 +10015,7 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALU
 (9966, 6, '34C05', 'Location of integral curves, singular points, limit cycles', NULL),
 (9967, 6, '34C07', 'Theory of limit cycles of polynomial and analytic vector fields (existence, uniqueness, bounds, Hilbert`s 16th problem and ramifications)', NULL),
 (9968, 6, '34C08', 'Connections with real algebraic geometry (fewnomials, desingularization, zeros of Abelian integrals, etc.)', NULL);
-INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
+INSERT INTO `collections_old` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
 (9969, 6, '34C10', 'Oscillation theory, zeros, disconjugacy and comparison theory', NULL),
 (9970, 6, '34C11', 'Growth, boundedness', NULL),
 (9971, 6, '34C12', 'Monotone systems', NULL),
@@ -10677,7 +10677,7 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALU
 (10627, 6, '40-XX', 'SEQUENCES, SERIES, SUMMABILITY', NULL),
 (10628, 6, '40-00', 'General reference works (handbooks, dictionaries, bibliographies, etc.)', NULL),
 (10629, 6, '40-01', 'Instructional exposition (textbooks, tutorial papers, etc.)', NULL);
-INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
+INSERT INTO `collections_old` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
 (10630, 6, '40-02', 'Research exposition (monographs, survey articles)', NULL),
 (10631, 6, '40-03', 'Historical (must also be assigned at least one classification number from Section 01)', NULL),
 (10632, 6, '40-04', 'Explicit machine computation and programs (not the theory of computation or programming)', NULL),
@@ -11266,7 +11266,7 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALU
 (11215, 6, '47S20', 'Nonstandard operator theory [See also 03H05]', NULL),
 (11216, 6, '47S30', 'Constructive operator theory [See also 03F60]', NULL),
 (11217, 6, '47S40', 'Fuzzy operator theory [See also 03E72]', NULL);
-INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
+INSERT INTO `collections_old` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
 (11218, 6, '47S50', 'Operator theory in probabilistic metric linear spaces [See also 54E70]', NULL),
 (11219, 6, '47S99', 'None of the above, but in this section', NULL),
 (11220, 6, '49-XX', 'CALCULUS OF VARIATIONS AND OPTIMAL CONTROL; OPTIMIZATION [See also 34H05, 34K35, 65Kxx, 90Cxx, 93-XX]', NULL),
@@ -11956,7 +11956,7 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALU
 (11904, 6, '57T35', 'Applications of Eilenberg-Moore spectral sequences [See also 55R20, 55T20]', NULL),
 (11905, 6, '57T99', 'None of the above, but in this section', NULL),
 (11906, 6, '58-XX', 'GLOBAL ANALYSIS, ANALYSIS ON MANIFOLDS [See also 32Cxx, 32Fxx, 32Wxx, 46-XX, 47Hxx, 53Cxx](For geometric integration theory, see 49Q15)', NULL);
-INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
+INSERT INTO `collections_old` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
 (11907, 6, '58-00', 'General reference works (handbooks, dictionaries, bibliographies, etc.)', NULL),
 (11908, 6, '58-01', 'Instructional exposition (textbooks, tutorial papers, etc.)', NULL),
 (11909, 6, '58-02', 'Research exposition (monographs, survey articles)', NULL),
@@ -12667,7 +12667,7 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALU
 (12614, 6, '70H07', 'Nonintegrable systems', NULL),
 (12615, 6, '70H08', 'Nearly integrable Hamiltonian systems, KAM theory', NULL),
 (12616, 6, '70H09', 'Perturbation theories', NULL);
-INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
+INSERT INTO `collections_old` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
 (12617, 6, '70H11', 'Adiabatic invariants', NULL),
 (12618, 6, '70H12', 'Periodic and almost periodic solutions', NULL),
 (12619, 6, '70H14', 'Stability problems', NULL),
@@ -13412,7 +13412,7 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALU
 (13358, 6, '90Cxx', 'Mathematical programming [See also 49Mxx, 65Kxx]', NULL),
 (13359, 6, '90C05', 'Linear programming', NULL),
 (13360, 6, '90C06', 'Large-scale problems', NULL);
-INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
+INSERT INTO `collections_old` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
 (13361, 6, '90C08', 'Special problems of linear programming (transportation, multi-index, etc.)', NULL),
 (13362, 6, '90C09', 'Boolean programming', NULL),
 (13363, 6, '90C10', 'Integer programming', NULL),
@@ -14251,7 +14251,7 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALU
 (14196, 7, '17.89', 'Literaturtheorie: Sonstiges', NULL),
 (14197, 7, '17.90', 'Literatur in Beziehung zu anderen Bereichen von Wissenschaft und Kultur', NULL),
 (14198, 7, '17.91', 'Literatursoziologie', NULL);
-INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
+INSERT INTO `collections_old` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
 (14199, 7, '17.92', 'Vergleichende Literaturwissenschaft: Allgemeines', NULL),
 (14200, 7, '17.93', 'Literarische Stoffe, literarische Motive, literarische Themen', NULL),
 (14201, 7, '17.94', 'Literarische Einflüsse und Beziehungen, Rezeption', NULL),
@@ -15165,7 +15165,7 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALU
 (15109, 7, '53.83', 'Überwachungstechnik, Leittechnik', NULL),
 (15110, 7, '53.84', 'Ortungstechnik, Radartechnik', NULL),
 (15111, 7, '53.89', 'Nachrichtentechnik, Kommunikationstechnik: Sonstiges', NULL);
-INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
+INSERT INTO `collections_old` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
 (15112, 7, '53.99', 'Elektrotechnik: Sonstiges', NULL),
 (15113, 7, '54', 'Informatik', NULL),
 (15114, 7, '54.00', 'Informatik: Allgemeines', NULL),
@@ -32141,7 +32141,7 @@ CREATE TABLE collections_enrichments (
    --
    -- Constraints.
    --
-   FOREIGN KEY(collection_id)     REFERENCES collections(id),
+   FOREIGN KEY(collection_id)     REFERENCES collections_old(id),
    PRIMARY KEY(id),
    INDEX(collection_id, key_name)
 ) ENGINE = InnoDB
@@ -32175,23 +32175,23 @@ CREATE TABLE IF NOT EXISTS `link_documents_collections` (
 --
 
 --
--- Constraints der Tabelle `collections`
+-- Constraints der Tabelle `collections_old`
 --
-ALTER TABLE `collections`
+ALTER TABLE `collections_old`
   ADD CONSTRAINT `collections_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `collections_roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints der Tabelle `collections_attributes`
 --
 ALTER TABLE `collections_attributes`
-  ADD CONSTRAINT `collections_attributes_ibfk_1` FOREIGN KEY (`id`) REFERENCES `collections` (`id`);
+  ADD CONSTRAINT `collections_attributes_ibfk_1` FOREIGN KEY (`id`) REFERENCES `collections_old` (`id`);
 
 --
 -- Constraints der Tabelle `collections_nodes`
 --
 ALTER TABLE `collections_nodes`
   ADD CONSTRAINT `collections_nodes_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `collections_roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `collections_nodes_ibfk_2` FOREIGN KEY (`collection_id`) REFERENCES `collections` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `collections_nodes_ibfk_2` FOREIGN KEY (`collection_id`) REFERENCES `collections_old` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `collections_nodes_ibfk_3` FOREIGN KEY (`parent_id`) REFERENCES `collections_nodes` (`id`) ON UPDATE CASCADE;
 
 --
@@ -32199,6 +32199,6 @@ ALTER TABLE `collections_nodes`
 --
 ALTER TABLE `link_documents_collections`
   ADD CONSTRAINT `link_documents_collections_ibfk_1` FOREIGN KEY (`document_id`) REFERENCES `documents` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `link_documents_collections_ibfk_2` FOREIGN KEY (`collection_id`) REFERENCES `collections` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `link_documents_collections_ibfk_2` FOREIGN KEY (`collection_id`) REFERENCES `collections_old` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `link_documents_collections_ibfk_3` FOREIGN KEY (`role_id`) REFERENCES `collections_roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `link_documents_collections_ibfk_4` FOREIGN KEY (`role_id`, `collection_id`) REFERENCES `collections` (`role_id`, `id`);
+  ADD CONSTRAINT `link_documents_collections_ibfk_4` FOREIGN KEY (`role_id`, `collection_id`) REFERENCES `collections_old` (`role_id`, `id`);
