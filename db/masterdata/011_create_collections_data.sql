@@ -9,29 +9,7 @@
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
---
--- Datenbank: `opus400`
---
-
 -- --------------------------------------------------------
-
---
--- Table structure for table `collections_old`
---
-
-CREATE TABLE IF NOT EXISTS `collections_old` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `role_id` int(10) unsigned NOT NULL,
-  `number` varchar(255) DEFAULT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `oai_subset` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `role_id` (`role_id`,`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15985;
-
---
--- Dumping data for table `collections_old`
---
 
 INSERT INTO `collections_old` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
 (1, 1, NULL, NULL, NULL),
@@ -16042,48 +16020,6 @@ INSERT INTO `collections_old` (`id`, `role_id`, `number`, `name`, `oai_subset`) 
 
 -- --------------------------------------------------------
 
---
--- Tabellenstruktur für Tabelle `collections_attributes`
---
-
-CREATE TABLE IF NOT EXISTS `collections_attributes` (
-  `id` int(10) unsigned NOT NULL,
-  `name` varchar(255) default NULL,
-  `value` varchar(255) default NULL,
-  KEY `id` (`id`,`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Daten für Tabelle `collections_attributes`
---
-
-
--- --------------------------------------------------------
-
---
--- Tabellenstruktur für Tabelle `collections_nodes`
---
-
-CREATE TABLE IF NOT EXISTS `collections_nodes` (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `role_id` int(10) unsigned NOT NULL,
-  `collection_id` int(10) unsigned default NULL,
-  `left_id` int(10) unsigned NOT NULL,
-  `right_id` int(10) unsigned NOT NULL,
-  `parent_id` int(10) unsigned default NULL,
-  `visible` tinyint(1) unsigned NOT NULL,
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `role_id` (`role_id`,`left_id`),
-  UNIQUE KEY `role_id_2` (`role_id`,`right_id`),
-  KEY `collection_id` (`collection_id`),
-  KEY `id` (`id`,`role_id`),
-  KEY `parent_id` (`parent_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15985;
-
---
--- Daten für Tabelle `collections_nodes`
---
-
 INSERT INTO `collections_nodes` (`id`, `role_id`, `collection_id`, `left_id`, `right_id`, `parent_id`, `visible`) VALUES
 (1, 1, 1, 1, 2, NULL, 1),
 (2, 2, 2, 1, 2054, NULL, 1),
@@ -32083,34 +32019,6 @@ INSERT INTO `collections_nodes` (`id`, `role_id`, `collection_id`, `left_id`, `r
 
 -- --------------------------------------------------------
 
---
--- Tabellenstruktur für Tabelle `collections_roles`
---
-
-CREATE  TABLE IF NOT EXISTS `collections_roles` (
-   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Primary key.' ,
-   `name` VARCHAR(255) NOT NULL COMMENT 'Name, label or type of the collection role, i.e. a specific classification or conference.' ,
-   `oai_name` VARCHAR(255) NOT NULL COMMENT 'Shortname identifying role in oai context.' ,
-   `position` INT(11) UNSIGNED NOT NULL COMMENT 'Position of this collection tree (role) in the sorted list of collection roles for browsing and administration.' ,
-   `visible` TINYINT(1) UNSIGNED NOT NULL COMMENT 'Deleted collection trees are invisible. (1=visible, 0=invisible).' ,
-   `visible_browsing_start`     TINYINT(1) UNSIGNED NOT NULL    COMMENT 'Show tree on browsing start page. (1=yes, 0=no).' ,
-   `display_browsing`           VARCHAR(512) NULL               COMMENT 'Comma separated list of collection_contents_x-fields to display in browsing list context.' ,
-   `visible_frontdoor`          TINYINT(1) UNSIGNED NOT NULL    COMMENT 'Show tree on frontdoor. (1=yes, 0=no).' ,
-   `display_frontdoor`          VARCHAR(512) NULL               COMMENT 'Comma separated list of collection_contents_x-fields to display in frontdoor context.' ,
-   `visible_oai`                TINYINT(1) UNSIGNED NOT NULL    COMMENT 'Show tree in oai output. (1=yes, 0=no).' ,
-   `display_oai`                VARCHAR(512) NULL               COMMENT 'collection_contents_x-field to display in oai context.' ,
-   PRIMARY KEY (`id`) ,
-   UNIQUE INDEX `UNIQUE_NAME` (`name` ASC) ,
-   UNIQUE INDEX `UNIQUE_OAI_NAME` (`oai_name` ASC) )
- ENGINE = InnoDB
- DEFAULT CHARSET=utf8
- COMMENT = 'Administration table for the indivdual collection trees.'
- AUTO_INCREMENT=12;
-
---
--- Daten für Tabelle `collections_roles`
---
-
 INSERT INTO `collections_roles` (`id`, `name`, `oai_name`, `position`, `visible`, `visible_browsing_start`, `display_browsing`, `visible_frontdoor`, `display_frontdoor`, `visible_oai`, `display_oai`) VALUES
 (1, 'institutes', 'institutes', 1, 1, 1, 'Name', 1, 'Name', 1, 'Name'),
 (2, 'ddc', 'ddc', 2, 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
@@ -32123,82 +32031,3 @@ INSERT INTO `collections_roles` (`id`, `name`, `oai_name`, `position`, `visible`
 (10, 'series', 'series', 10, 1, 1, 'Name', 1, 'Name', 1, 'Name'),
 (11, 'projects', 'projects', 11, 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number');
 
-
--- --------------------------------------------------------
-
---
--- Tabellenstruktur für Tabelle `collections_enrichments`
---
-
-CREATE TABLE collections_enrichments (
-   -- Eindeutige ID fuer die Collection und Referenz auf die role_id,
-   -- zu der die Collection gehoert.
-   id            INT UNSIGNED NOT NULL,
-   collection_id INT(10) unsigned NOT NULL,
-   key_name      VARCHAR(255),
-   value         VARCHAR(255),
-
-   --
-   -- Constraints.
-   --
-   FOREIGN KEY(collection_id)     REFERENCES collections_old(id),
-   PRIMARY KEY(id),
-   INDEX(collection_id, key_name)
-) ENGINE = InnoDB
-CHARACTER SET = 'utf8'
-COLLATE = 'utf8_general_ci';
-
-
--- --------------------------------------------------------
-
---
--- Tabellenstruktur für Tabelle `link_documents_collections`
---
-
-CREATE TABLE IF NOT EXISTS `link_documents_collections` (
-  `document_id` int(10) unsigned NOT NULL,
-  `collection_id` int(10) unsigned NOT NULL,
-  `role_id` int(10) unsigned NOT NULL,
-  PRIMARY KEY  (`document_id`,`collection_id`),
-  KEY `role_id` (`role_id`,`collection_id`),
-  KEY `collection_id` (`collection_id`),
-  KEY `document_id` (`document_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Daten für Tabelle `link_documents_collections`
---
-
-
---
--- Constraints der exportierten Tabellen
---
-
---
--- Constraints der Tabelle `collections_old`
---
-ALTER TABLE `collections_old`
-  ADD CONSTRAINT `collections_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `collections_roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Constraints der Tabelle `collections_attributes`
---
-ALTER TABLE `collections_attributes`
-  ADD CONSTRAINT `collections_attributes_ibfk_1` FOREIGN KEY (`id`) REFERENCES `collections_old` (`id`);
-
---
--- Constraints der Tabelle `collections_nodes`
---
-ALTER TABLE `collections_nodes`
-  ADD CONSTRAINT `collections_nodes_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `collections_roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `collections_nodes_ibfk_2` FOREIGN KEY (`collection_id`) REFERENCES `collections_old` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `collections_nodes_ibfk_3` FOREIGN KEY (`parent_id`) REFERENCES `collections_nodes` (`id`) ON UPDATE CASCADE;
-
---
--- Constraints der Tabelle `link_documents_collections`
---
-ALTER TABLE `link_documents_collections`
-  ADD CONSTRAINT `link_documents_collections_ibfk_1` FOREIGN KEY (`document_id`) REFERENCES `documents` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `link_documents_collections_ibfk_2` FOREIGN KEY (`collection_id`) REFERENCES `collections_old` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `link_documents_collections_ibfk_3` FOREIGN KEY (`role_id`) REFERENCES `collections_roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `link_documents_collections_ibfk_4` FOREIGN KEY (`role_id`, `collection_id`) REFERENCES `collections_old` (`role_id`, `id`);
