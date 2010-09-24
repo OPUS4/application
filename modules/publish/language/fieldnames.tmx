@@ -18,22 +18,58 @@
 	
    <tu tuid="PersonSubmitterFirstName">
       <tuv xml:lang="en">
-        <seg>Submitter: First name</seg>
+        <seg>First name</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Vorname des Einstellers</seg>
+        <seg>Vorname</seg>
       </tuv>
     </tu>
 
     <tu tuid="PersonSubmitterLastName">
       <tuv xml:lang="en">
-        <seg>Submitter: Last name</seg>
+        <seg>Last name</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Nachname des Einstellers</seg>
+        <seg>Nachname</seg>
       </tuv>
     </tu>
 
+	<tu tuid="PersonSubmitterEmail">
+      <tuv xml:lang="en">
+        <seg>email address</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>E-Mail-Adresse</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="PersonSubmitterAcademicTitle">
+      <tuv xml:lang="en">
+        <seg>Academic Title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Akademischer Titel</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="PersonSubmitterDateOfBirth">
+      <tuv xml:lang="en">
+        <seg>Date of Birth</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Geburtsdatum</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="PersonSubmitterPlaceOfBirth">
+      <tuv xml:lang="en">
+        <seg>Place of Birth</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Geburtsort</seg>
+      </tuv>
+    </tu>
+	
     <tu tuid="groupPersonAuthor">
       <tuv xml:lang="en">
         <seg>Author(s)</seg>
