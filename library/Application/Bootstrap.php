@@ -329,7 +329,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
 
         $log->debug('Initializing Zend_Navigation');
        
-        $navigationConfigFile = APPLICATION_PATH . '/config/navigation.xml';
+        $navigationConfigFile = APPLICATION_PATH . '/application/configs/navigation.xml';
 
         $config = new Zend_Config_Xml($navigationConfigFile, 'nav');
 
