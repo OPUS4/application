@@ -188,6 +188,12 @@ class Solrsearch_IndexController extends Controller_Action {
             $this->view->prevPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>(int)($this->query->getStart()) - (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
             $this->view->lastPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>(int)($this->numOfHits / $this->query->getRows()) * $this->query->getRows(),'rows'=>$this->query->getRows()));
             $this->view->firstPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>'0','rows'=>$this->query->getRows()));
+            $browsing = (boolean)$this->getRequest()->getParam('browsing', 'false');
+            $this->log->debug("Browsing: $browsing");
+            if($browsing) {
+                $this->log->debug('im browsing!!!!!!!!');
+                $this->view->specialTitle = $this->getRequest()->getParam('doctypefq', '');
+            }
             return;
         }
         if($this->searchtype === self::ADVANCED_SEARCH || $this->searchtype === self::AUTHOR_SEARCH) {
@@ -226,9 +232,6 @@ class Solrsearch_IndexController extends Controller_Action {
         $this->view->authorSearch = self::createSearchUrlArray(array('searchtype' => self::AUTHOR_SEARCH));
         $this->view->isSimpleList = false;
         $this->view->browsing = (boolean) $this->getRequest()->getParam('browsing', false);
-        $specialTitle = $this->getRequest()->getParam('specialtitle','');
-        if($specialTitle !== '')
-            $this->view->specialTitle = $specialTitle;
         $this->view->sortfield = $this->getRequest()->getParam('sortfield', 'score');
         $this->view->sortorder = $this->getRequest()->getParam('sortorder', 'desc');
     }
