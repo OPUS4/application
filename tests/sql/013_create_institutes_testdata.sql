@@ -2,7 +2,7 @@
 -- Daten für Tabelle `collections`
 --
 
-INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
+INSERT INTO `collections_old` (`id`, `role_id`, `number`, `name`, `oai_subset`) VALUES
 (16148, 9, NULL, 'TUHH Spektrum Specials', NULL),
 (15985, 9, NULL, 'TestCollection', NULL),
 (15986, 9, NULL, 'Neue Collection', NULL),
