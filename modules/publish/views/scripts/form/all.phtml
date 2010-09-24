@@ -1,9 +1,21 @@
-<?
-echo '<h1>'.$this->title.'</h1>';
-echo '<h3>'.$this->subtitle.'</h3>';
+<?php
+echo '<h1>' . $this->title . '</h1>';
+echo '<h2>' . $this->subtitle . '</h2>';
 
-?>        
+//for printing a generized Zend Form with standard layout:
+//echo $this->form;
+
+//element($value, $options = null, $type = null, $name = null)
+//group($value, $options = null, $name = null)
+?>
+<span style="color:red; font-weight:big; padding: 10pt;"> <?= $this->errorCaseMessage; ?> </span>
+
+<br />
 <form enctype="application/x-www-form-urlencoded" action="<?php echo $this->action_url; ?>" method="post">
+
+    <div width="100%" align="right">
+        <?= $this->requiredHint; ?>
+    </div>
 
 <?= $this->group($this->groupPersonSubmitter); ?>
 <?= $this->group($this->groupPersonAuthor); ?>
