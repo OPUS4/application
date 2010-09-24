@@ -56,7 +56,11 @@
             $printname = $this->translate($translatelabel);        
     ?>
     <li>
-        <a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'collection', 'id' => $collectionRole->getRootCollection()->getId()), null, true)?>"><?= htmlspecialchars($printname) ?></a>
+        <?php if (is_null($collectionRole->getRootCollection())) : ?>
+            <?= htmlspecialchars($printname) ?>
+        <?php else : ?>
+            <a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'collection', 'id' => $collectionRole->getRootCollection()->getId()), null, true)?>"><?= htmlspecialchars($printname) ?></a>
+        <?php endif ?>
     </li>
     <?php endforeach ?>
 </ul>
