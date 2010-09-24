@@ -351,11 +351,11 @@ class Publish_Model_Deposit {
 
     private function getSubjectType($dataKey) {
         if (strstr($dataKey, 'MSC'))
-            return 'msc';
+            return 'MSC';
         else if (stsrstr($dataKey, 'DDC'))
-            return 'ddc';
+            return 'DDC';
         else if (strstr($dataKey, 'Swd'))
-            return 'swd';
+            return 'Swd';
         else
             return 'Uncontrolled';
     }
@@ -507,11 +507,9 @@ class Publish_Model_Deposit {
         if ($dataValue == "") {
             $this->log->debug("Licence already stored.");
         } else {
-            $dataValue = substr($dataValue, 2);
-            $dataValue = (int) $dataValue;
+            $dataValue = substr($dataValue, 3);            
 
-            $this->log->debug("try to store Licence with id: " . $dataKey);
-            throw Exception("bla");
+            $this->log->debug("try to store Licence with id: " . $dataValue);
 
             $licence = new Opus_Licence($dataValue);
 

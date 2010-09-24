@@ -26,6 +26,15 @@
         </tuv>
     </tu>
 
+    <tu tuid="button_label_choose_subcollection">
+        <tuv xml:lang="en">
+            <seg>Select a sub collection</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Sub-Kollektion auswählen</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="button_label_send">
         <tuv xml:lang="en">
             <seg>Send form</seg>

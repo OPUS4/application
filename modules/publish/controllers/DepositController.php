@@ -42,25 +42,25 @@ class Publish_DepositController extends Controller_Action {
 
     public $postData = array();
 
-    public function preDispatch() {
-        if ($this->getRequest()->isPost() === true) {
-            $post = $this->getRequest()->getPost();
-
-            if (array_key_exists('back', $post)) {
-                // redirect to form/check
-                $url = $this->view->url(array('controller' => 'form', 'action' => 'check'));
-                $this->_forward('check', 'form');
-            } else
-            if (array_key_exists('collection', $post)) {
-                // forward to collection selection
-                $this->_forward('top', 'collection');
-            } else
-            if (array_key_exists('send', $post)) {
-                // forward to save the data
-                $this->_forward('deposit');
-            }
-        }
-    }
+//    public function preDispatch() {
+//        if ($this->getRequest()->isPost() === true) {
+//            $post = $this->getRequest()->getPost();
+//
+//            if (array_key_exists('back', $post)) {
+//                // redirect to form/check
+//                $url = $this->view->url(array('controller' => 'form', 'action' => 'check'));
+//                $this->_forward('check', 'form');
+//            } else
+//            if (array_key_exists('collection', $post)) {
+//                // forward to collection selection
+//                $this->_forward('top', 'collection');
+//            } else
+//            if (array_key_exists('send', $post)) {
+//                // forward to save the data
+//                $this->_forward('deposit');
+//            }
+//        }
+//    }
 
     /**
      * stores a delivered form as document in the database
@@ -77,7 +77,22 @@ class Publish_DepositController extends Controller_Action {
 
             $post = $this->getRequest()->getPost();
 
-            if (is_null($defaultNS->elements)) {
+//            if (array_key_exists('back', $post)) {
+//                // redirect to form/check
+//                $url = $this->view->url(array('controller' => 'form', 'action' => 'check'));
+//                $this->forward('check', 'form');
+//            } else
+//            if (array_key_exists('collection', $post)) {
+//                // forward to collection selection
+//                $this->forward('top', 'collection');
+//            } else
+//            if (array_key_exists('send', $post)) {
+//                // forward to save the data
+//                $this->forward('deposit');
+//            }
+            
+
+            if (!is_null($defaultNS->elements)) {
 
                 foreach ($defaultNS->elements AS $element) {
                     $this->postData[$element['name']] = $element['value'];
@@ -111,7 +126,7 @@ class Publish_DepositController extends Controller_Action {
                 $this->_notifyReferee($projects);
             }
         } else {
-            // GET Reqquest is redirected to index
+            // GET Request is redirected to index
             $url = $this->view->url(array('controller' => 'index', 'action' => 'index'));
             return $this->redirectTo($url);
         }

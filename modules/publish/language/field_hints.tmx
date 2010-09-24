@@ -98,7 +98,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="hint_PersonAuthor1FirstName">
+    <tu tuid="hint_PersonAuthorFirstName1">
         <tuv xml:lang="en">
             <seg>Please enter the first name of an author.</seg>
         </tuv>
@@ -107,7 +107,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="hint_PersonAuthor1LastName">
+    <tu tuid="hint_PersonAuthorLastName1">
         <tuv xml:lang="en">
             <seg>Please enter the last name of an author.</seg>
         </tuv>
@@ -143,7 +143,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonReferee1FirstName">
+	<tu tuid="hint_PersonRefereeFirstName1">
         <tuv xml:lang="en">
             <seg>Please enter the first name of the referee.</seg>
         </tuv>
@@ -152,7 +152,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonReferee1LastName">
+	<tu tuid="hint_PersonRefereeLastName1">
         <tuv xml:lang="en">
             <seg>Please enter the last name of the referee.</seg>
         </tuv>
@@ -161,7 +161,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonReferee2FirstName">
+	<tu tuid="hint_PersonRefereeFirstName2">
         <tuv xml:lang="en">
             <seg>Please enter the first name of the 2. referee.</seg>
         </tuv>
@@ -170,7 +170,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonReferee2LastName">
+	<tu tuid="hint_PersonRefereeLastName2">
         <tuv xml:lang="en">
             <seg>Please enter the last name of the 2. referee.</seg>
         </tuv>
@@ -188,7 +188,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonEditor1FirstName">
+	<tu tuid="hint_PersonEditorFirstName1">
         <tuv xml:lang="en">
             <seg>Please enter the first name of the Editor.</seg>
         </tuv>
@@ -197,7 +197,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonEditor1LastName">
+	<tu tuid="hint_PersonEditorLastName1">
         <tuv xml:lang="en">
             <seg>Please enter the last name of the Editor.</seg>
         </tuv>
@@ -206,7 +206,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonEditor2FirstName">
+	<tu tuid="hint_PersonEditorFirstName2">
         <tuv xml:lang="en">
             <seg>Please enter the first name of the 2. Editor.</seg>
         </tuv>
@@ -215,7 +215,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonEditor2LastName">
+	<tu tuid="hint_PersonEditorLastName2">
         <tuv xml:lang="en">
             <seg>Please enter the last name of the 2. Editor.</seg>
         </tuv>
