@@ -28,7 +28,8 @@
  * @package     Module_Admin
  * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @author      Sascha Szott <szott@zib.de>
+ * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -46,33 +47,37 @@
             $printname = $this->translate($translatelabel);
     ?>
     <li>
-        <a href="<?= $this->url(array('action' => 'show', 'id' => $collectionRole->getRootCollection()->getId()), null, true)?>"><?= htmlspecialchars($printname) ?></a>
-        <a href="<?= $this->url(array('action' => 'edit', 'id' => $collectionRole->getId()), null, true)?>">
-        <img src = "<?= $this->layoutPath . '/img/edit_collections_properties.gif'; ?>"
+        <?php if (is_null($collectionRole->getRootCollection())) : ?>
+            <?= htmlspecialchars($printname) ?>
+        <?php else : ?>
+            <a href="<?= $this->url(array('action' => 'show', 'id' => $collectionRole->getRootCollection()->getId()), null, true)?>"><?= htmlspecialchars($printname) ?></a>
+        <?php endif ?>        
+        <a href="<?= $this->url(array('action' => 'edit', 'id' => $collectionRole->getId()), null, true) ?>">
+        <img src = "<?= $this->layoutPath ?>/img/edit_collections_properties.gif"
              alt = "edit"
-             title = '<?= $this->translate('admin_collections_role_edit') ?>' /></a>
-        <a href="<?= $this->url(array('action' => 'manage', 'id' => $collectionRole->getId(), 'deleteall' => 'Delete'), null, true)?>">
-        <img src = "<?= $this->layoutPath . '/img/delete_collection_tree.gif'; ?>"
+             title = "<?= $this->translate('admin_collections_role_edit') ?>" /></a>
+        <a href="<?= $this->url(array('action' => 'manage', 'id' => $collectionRole->getId(), 'deleteall' => 'Delete'), null, true) ?>">
+        <img src = "<?= $this->layoutPath ?>/img/delete_collection_tree.gif"
              alt = "delete all"
-             title = '<?= $this->translate('admin_collections_role_delete') ?>' /></a>
+             title = "<?= $this->translate('admin_collections_role_delete') ?>" /></a>
         <?php if ($i > 0) : ?>
-        <a href="<?= $this->url(array('action' => 'manage', 'id' => $collectionRole->getId(), 'move_up' => 'Up'), null, true)?>">
-        <img src = "<?= $this->layoutPath . '/img/move_up_collection_tree.gif'; ?>"
+        <a href="<?= $this->url(array('action' => 'manage', 'id' => $collectionRole->getId(), 'move_up' => 'Up'), null, true) ?>">
+        <img src = "<?= $this->layoutPath ?>/img/move_up_collection_tree.gif"
              alt = "move up"
-             title = '<?= $this->translate('admin_collections_role_move_up') ?>' /></a>
+             title = "<?= $this->translate('admin_collections_role_move_up') ?>" /></a>
         <?php endif ?>
         <?php if ($i < count($this->collectionRoles) - 1) : ?>
         <a href="<?= $this->url(array('action' => 'manage', 'id' => $collectionRole->getId(), 'move_down' => 'Down'), null, true)?>">
-        <img src = "<?= $this->layoutPath . '/img/move_down_collection_tree.gif'; ?>"
+        <img src = "<?= $this->layoutPath ?>/img/move_down_collection_tree.gif"
              alt = "move down"
-             title = '<?= $this->translate('admin_collections_role_move_down') ?>' /></a>
+             title = "<?= $this->translate('admin_collections_role_move_down') ?>" /></a>
         <?php endif ?>
     </li>
     <?php endforeach ?>
 </ul>
 
 <a href="<?= $this->url(array('action' => 'new')) ?>">
-<img src = "<?= $this->layoutPath . '/img/new_collection_tree.gif'; ?>"
-     alt = "new collection role"
-     title = '<?= $this->translate('admin_collections_role_new') ?>' />
+<img src = "<?= $this->layoutPath ?>/img/new_collection_tree.gif"
+     alt = "create new collection role"
+     title = "<?= $this->translate('admin_collections_role_new') ?>" />
 </a>
