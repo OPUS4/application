@@ -352,7 +352,7 @@ class Publish_Model_Deposit {
     private function getSubjectType($dataKey) {
         if (strstr($dataKey, 'MSC'))
             return 'MSC';
-        else if (stsrstr($dataKey, 'DDC'))
+        else if (strstr($dataKey, 'DDC'))
             return 'DDC';
         else if (strstr($dataKey, 'Swd'))
             return 'Swd';
