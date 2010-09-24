@@ -56,9 +56,9 @@ class Collections_Model_ManageRole {
             throw new Collections_Model_Exception("ManageRole: Collection with number '$number' already exists.");
         }
 
-        $collection = new Opus_Collection();
-        $collection->setRoleId($this->role->getId())
-                ->setNumber($number)
+        $root = $this->role->getRootCollection();
+        $collection = $root->addLastChild();
+        $collection->setNumber($number)
                 ->setName($title)
                 ->store();
 
