@@ -191,7 +191,6 @@ class Solrsearch_IndexController extends Controller_Action {
             $browsing = (boolean)$this->getRequest()->getParam('browsing', 'false');
             $this->log->debug("Browsing: $browsing");
             if($browsing) {
-                $this->log->debug('im browsing!!!!!!!!');
                 $this->view->specialTitle = $this->getRequest()->getParam('doctypefq', '');
             }
             return;
