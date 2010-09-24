@@ -188,14 +188,14 @@ class Solrsearch_IndexController extends Controller_Action {
         $this->setGeneralViewValues();
 
         if($this->searchtype === self::SIMPLE_SEARCH || $this->searchtype === self::COLLECTION_SEARCH) {
-            $this->view->q = $this->query->getCatchAll();            
+            $this->view->q = $this->query->getCatchAll();
             $this->view->nextPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>(int)($this->query->getStart()) + (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
             $this->view->prevPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>(int)($this->query->getStart()) - (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
             $this->view->lastPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>(int)($this->numOfHits / $this->query->getRows()) * $this->query->getRows(),'rows'=>$this->query->getRows()));
             $this->view->firstPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>'0','rows'=>$this->query->getRows()));
-            $browsing = (boolean)$this->getRequest()->getParam('browsing', 'false');
+            $browsing = $this->getRequest()->getParam('browsing', 'false');
             $this->log->debug("Browsing: $browsing");
-            if($browsing) {
+            if($browsing === 'true') {
                 $this->view->specialTitle = $this->getRequest()->getParam('doctypefq', '');
             }
             return;
