@@ -52,18 +52,22 @@ class Solrsearch_IndexController extends Controller_Action {
 
     public function indexAction() {
         $this->view->title = $this->view->translate('solrsearch_title_simple');
+        $this->setTheme();
     }
 
     public function advancedAction() {
         $this->view->title = $this->view->translate('solrsearch_title_advanced');
+        $this->setTheme();
     }
 
     public function nohitsAction() {
         $this->view->title = $this->view->translate('solrsearch_title_nohits');
+        $this->setTheme();
     }
 
     public function resultsAction() {
         $this->view->title = $this->view->translate('solrsearch_title_results');
+        $this->setTheme();
     }
 
     public function invalidsearchtermAction() {
@@ -71,6 +75,7 @@ class Solrsearch_IndexController extends Controller_Action {
         $params = $this->_request->isPost() ? $this->_request->getPost() : $this->_request->getParams();
         $searchtype = array_key_exists('searchtype', $params) ? $params['searchtype'] : Solrsearch_IndexController::SIMPLE_SEARCH;
         $this->view->__set('searchType', $searchtype);
+        $this->setTheme();
     }
 
     public function searchdispatchAction() {
@@ -233,6 +238,12 @@ class Solrsearch_IndexController extends Controller_Action {
         $this->view->browsing = (boolean) $this->getRequest()->getParam('browsing', false);
         $this->view->sortfield = $this->getRequest()->getParam('sortfield', 'score');
         $this->view->sortorder = $this->getRequest()->getParam('sortorder', 'desc');
+        $this->setTheme();
+    }
+
+    private function setTheme() {
+        $config = Zend_Registry::get('Zend_Config');
+        $this->view->theme = $config->theme;
     }
 
     private function setViewFacets() {

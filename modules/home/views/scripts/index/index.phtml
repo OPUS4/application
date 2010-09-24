@@ -38,7 +38,7 @@ $config = Zend_Registry::get('Zend_Config');
 $jsEnabled = isset($config->javascript->jquery->path);
 if($jsEnabled) {
 $this->headScript()
-        ->appendFile($basePath . '/layouts/opus4/js/jquery-1.4.2.min.js');
+        ->appendFile($basePath . $config->javascript->jquery->path);
 }
 
 ?>
