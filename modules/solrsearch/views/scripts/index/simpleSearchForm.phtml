@@ -34,9 +34,12 @@
 
 $fc = Zend_Controller_Front::getInstance();
 $basePath = $fc->getRequest()->getBasePath();
+$config = Zend_Registry::get('Zend_Config');
+$jsEnabled = isset($config->javascript->jquery->path);
+if($jsEnabled) {
 $this->headScript()
         ->appendFile($basePath . '/layouts/opus4/js/jquery-1.4.2.min.js');
-
+}
 ?>
 <div class="searchform">
     <h2><?= $this->translate('solrsearch_title_simple'); ?></h2>
@@ -55,8 +58,10 @@ $this->headScript()
     <a href="<?= $this->url(array('module'=>'solrsearch','controller'=>'index','action'=>'advanced'),null,true); ?>"><?= $this->translate('solrsearch_title_advanced'); ?></a>
 </div>
 
+<?php if($jsEnabled) : ?>
 <script type="text/javascript">
     $(function(){
         document.forms['simpleSearchForm'].query.focus();
     });
 </script>
+<?php endif ?>

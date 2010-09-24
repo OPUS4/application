@@ -33,17 +33,19 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
 
-<?php
+$fc = Zend_Controller_Front::getInstance();
+$basePath = $fc->getRequest()->getBasePath();
+$config = Zend_Registry::get('Zend_Config');
+$jsEnabled = isset($config->javascript->jquery->path);
+if($jsEnabled) {
     $startUpScript = '$(document).ready(function() { init_searchresults(); });';
-    $fc = Zend_Controller_Front::getInstance();
-    $basePath = $fc->getRequest()->getBasePath();
     $this->headScript()
         ->appendFile($basePath . '/layouts/opus4/js/jquery-1.4.2.min.js')
         ->appendScript($startUpScript);
+}
 ?>
-
+<?php if($jsEnabled) : ?>
 <script type="text/javascript">
     function init_searchresults() {
         <?php foreach($this->results as $result) :?>
@@ -51,6 +53,7 @@
         <?php endforeach ?>
     }
 </script>
+<?php endif ?>
 
 <?php if (isset($this->specialTitle)) : ?>
 <h1><?= htmlspecialchars($this->translate($this->specialTitle)) ?></h1>
@@ -97,7 +100,10 @@
                     'action' => 'index',
                     'docId' => $result->getId());
             ?>
+            <?php if($jsEnabled) : ?>
             <img src="<?= $basePath . '/layouts/opus4/img/page_white_text.png' ?>" alt="Show/Hide Details" title="Click here to expand or collapse the abstract text" onclick="$(function(){$('#<?= $result->getId() ?>').toggle();});" />
+            <?php endif ?>
+
             <span class="results_title"><a href="<?= $this->url($frontdoorUrl, null, true) ?>"><?= htmlspecialchars($result->getTitle()); ?></a> (<?= htmlspecialchars($result->getYear()); ?>)</span><br/>
 
             <?php if(!is_null($result->getAuthors())) : ?>

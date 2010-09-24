@@ -31,14 +31,16 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
 
-<?php
-    $fc = Zend_Controller_Front::getInstance();
-    $basePath = $fc->getRequest()->getBasePath();
+$fc = Zend_Controller_Front::getInstance();
+$basePath = $fc->getRequest()->getBasePath();
+$config = Zend_Registry::get('Zend_Config');
+$jsEnabled = isset($config->javascript->jquery->path);
+if($jsEnabled) {
     $this->headScript()
         ->appendFile($basePath . '/layouts/opus4/js/jquery-1.4.2.min.js')
         ->appendFile($basePath . '/layouts/opus4/js/searchutil.js');
+}
 ?>
 
 <form action="<?= $this->url(array('module'=>'solrsearch','controller'=>'index','action'=>'searchdispatch'),null,true); ?>" method="post" class="opus_form">
@@ -98,6 +100,6 @@
     <input type="hidden" name="sordorder" value="desc" />
 </form>
 
-<form id="reset-form" onSubmit="return resetAdvancedSearchForm();" action="<?= $this->url(array('module'=>'solrsearch','controller'=>'index','action'=>'advanced'), null, true) ?>">
+<form id="reset-form" <?= $jsEnabled ? 'onSubmit="return resetAdvancedSearchForm();"' : '' ?> action="<?= $this->url(array('module'=>'solrsearch','controller'=>'index','action'=>'advanced'), null, true) ?>">
     <input id="advanced-search-reset-button" id="form-reset" type="submit" value="<?= $this->translate('advanced_search_form_reset_action') ?>" />
 </form>
