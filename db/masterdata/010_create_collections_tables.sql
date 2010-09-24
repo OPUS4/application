@@ -16,6 +16,32 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `collections`
+--
+
+CREATE TABLE IF NOT EXISTS `collections` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `role_id` int(10) unsigned NOT NULL,
+
+  `number` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `oai_subset` varchar(255) DEFAULT NULL,
+
+  `left_id` int(10) unsigned NOT NULL,
+  `right_id` int(10) unsigned NOT NULL,
+  `parent_id` int(10) unsigned default NULL,
+  `visible` tinyint(1) unsigned NOT NULL,
+
+  PRIMARY KEY (`id`),
+  KEY `role_id` (`role_id`,`id`),
+  UNIQUE KEY `role_id_left` (`role_id`,`left_id`),
+  UNIQUE KEY `role_id_right` (`role_id`,`right_id`),
+  KEY `parent_id` (`parent_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15985;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `collections_old`
 --
 
