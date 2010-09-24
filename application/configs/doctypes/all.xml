@@ -48,7 +48,9 @@
 	<field name="Language" required="yes" formelement="Select" datatype="Language" multiplicity="1">
 		<default value="deu" edit="yes" public="yes"/>
 	</field>
-	<field name="TitleMain" required="yes" formelement="Text" datatype="Title" multiplicity="4"/>
+	<field name="TitleMain" required="yes" formelement="Text" datatype="Title" multiplicity="4">
+		<default value="deu" edit="yes" public="yes"/>
+	</field>
 	<field name="TitleAbstract" required="no" formelement="Textarea" datatype="Title" multiplicity="4">
 		<required-if-fulltext/>
 	</field>
