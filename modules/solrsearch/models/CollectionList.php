@@ -38,20 +38,20 @@ class SolrSearch_Model_CollectionList {
     private $collectionRole;
     private $collectionNode;
 
-    public function __construct($collectionId) {       
-        if (is_null($collectionId)) {
+    public function __construct($collectionNodeId) {
+        if (is_null($collectionNodeId)) {
             throw new SolrSearch_Model_Exception('Could not browse collection due to missing id parameter.');
         }
 
         $collectionNode = null;
         try {
-            $collectionNode = new Opus_CollectionNode((int) $collectionId);
+            $collectionNode = new Opus_CollectionNode((int) $collectionNodeId);
         }
         catch (Opus_Model_NotFoundException $e) {
-            throw new SolrSearch_Model_Exception("Collection node with id '" . $collectionId . "' does not exist.");
+            throw new SolrSearch_Model_Exception("Collection node with id '" . $collectionNodeId . "' does not exist.");
         }
         if ($collectionNode->getVisibility() === false) {
-            throw new SolrSearch_Model_Exception("Collection node with id '" . $collectionId . "' is not visible.");
+            throw new SolrSearch_Model_Exception("Collection node with id '" . $collectionNodeId . "' is not visible.");
         }
 
         $collectionRole = null;
