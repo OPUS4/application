@@ -59,12 +59,8 @@ class Admin_CollectionController extends Controller_Action {
      * @return void
      */
     public function indexAction() {
-        $entries = Opus_CollectionRole::fetchAll();
-        $this->view->entries = array();
-        foreach ($entries as $entry) {
-            $this->view->entries[] = array('id'=>$entry->getId(), 'name'=>$entry->getDisplayName());
-        }
-        $theme =Zend_Registry::getInstance()->get('Zend_Config')->theme;
+        $this->view->collectionRoles = Opus_CollectionRole::fetchAll();
+        $theme = Zend_Registry::getInstance()->get('Zend_Config')->theme;
         if (true === empty($theme)) {
             $theme = 'default';
         }
@@ -196,37 +192,11 @@ class Admin_CollectionController extends Controller_Action {
         $this->view->theme = $theme;
         $this->view->layoutPath = $this->view->baseUrl() .'/layouts/'. $theme;
 
-        $collectionId   = $this->getRequest()->getParam('node');
-        $roleId         = $this->getRequest()->getParam('role');
-
-        if (isset($collectionId)) {
-            $collection = new Opus_Collection($collectionId);
-            $role = new Opus_CollectionRole( $collection->getRoleId() );
-        }
-        else if (isset($roleId)) {
-            $role = new Opus_CollectionRole($roleId);
-            $collection = $role->getRootCollection();
-        }
-
-        $copyId = 0;
-        $copy = $this->getRequest()->getParam('copy');
-//        if (true === isset($copy)) {
-//            // FIXME: Implement or remove this feature.
-//            throw new Exception("Copy not supported for collections.");
-//
-//            $cpCollection = $collection;
-//            $trail = explode('-', $copy);
-//            foreach($trail as $step) {
-//                $cpCollection = $cpCollection->getSubCollection($step);
-//            }
-//            $copyId = $cpCollection->getId();
-//            unset($position);
-//        } else {
-//            $copyId = 0;
-//        }
-
+        $collectionId = $this->getRequest()->getParam('node');
+        $collection = new Opus_Collection($collectionId);
+        $role = new Opus_CollectionRole($collection->getRoleId());
+      
         $breadcrumb         = array();
-        $children           = array();
         $subcollections     = array();
         $severalAppearances = array();
         $visibility         = array();
@@ -242,7 +212,7 @@ class Admin_CollectionController extends Controller_Action {
                 $subcollections[$child->getId()]     = $child->getDisplayName();
                 $severalAppearances[$child->getId()] = 'unique'; // TODO: Kann weg.
                 $visibility[$child->getId()]         = ('1' === $child->getVisible())?'visible':'hidden';
-                $copypaste[$child->getId()]          = ((int) $copyId === (int) $child->getId())?'forbidden':'allowed';
+                $copypaste[$child->getId()]          = 'forbidden';
 
                 $nameLength = max($nameLength, strlen($child->getDisplayName()));
             }
@@ -259,7 +229,7 @@ class Admin_CollectionController extends Controller_Action {
         $this->view->node_id    = $collection->getId();
         $this->view->role_id    = $role->getId();
         $this->view->role_name  = $role->getDisplayName();
-        $this->view->copy       = $copy;
+        $this->view->copy       = null;
         $this->view->breadcrumb = $breadcrumb;
     }
 

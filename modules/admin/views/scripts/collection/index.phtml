@@ -33,43 +33,46 @@
  * @version     $Id$
  */
 ?>
-<h1>Opus Application - <?=$this->translate('admin_title_collections') ?></h1>
-<table>
-<? foreach($this->entries as $i=>$entry) : ?>
-<tr>
-<td><a href="<?= $this->url(array('action' => 'show', 'role' => $entry['id'])) ?>"><?= $entry['name'] ?></a>
-</td>
-<td><a href="<?= $this->url(array('action' => 'edit', 'role' => $entry['id'])) ?>">
-<img src = "<?= $this->layoutPath . '/img/edit_collections_properties.gif';?>"
-align='middle' border = '0' title = '<?=$this->translate('admin_collections_role_edit')?>'>
+<h1>Opus Application - <?= $this->translate('admin_title_collections') ?></h1>
+
+<ul>
+
+    <?php foreach ($this->collectionRoles as $i => $collectionRole) :
+        $translatelabel = 'search_index_custom_browsing_' . $collectionRole->getName();
+        $printname = '';
+        if ($translatelabel === $this->translate($translatelabel))
+            $printname = $collectionRole->getName();
+        else
+            $printname = $this->translate($translatelabel);
+    ?>
+    <li>
+        <a href="<?= $this->url(array('action' => 'show', 'id' => $collectionRole->getRootCollection()->getId()), null, true)?>"><?= htmlspecialchars($printname) ?></a>
+        <a href="<?= $this->url(array('action' => 'edit', 'id' => $collectionRole->getId()), null, true)?>">
+        <img src = "<?= $this->layoutPath . '/img/edit_collections_properties.gif'; ?>"
+             alt = "edit"
+             title = '<?= $this->translate('admin_collections_role_edit') ?>' /></a>
+        <a href="<?= $this->url(array('action' => 'manage', 'id' => $collectionRole->getId(), 'deleteall' => 'Delete'), null, true)?>">
+        <img src = "<?= $this->layoutPath . '/img/delete_collection_tree.gif'; ?>"
+             alt = "delete all"
+             title = '<?= $this->translate('admin_collections_role_delete') ?>' /></a>
+        <?php if ($i > 0) : ?>
+        <a href="<?= $this->url(array('action' => 'manage', 'id' => $collectionRole->getId(), 'move_up' => 'Up'), null, true)?>">
+        <img src = "<?= $this->layoutPath . '/img/move_up_collection_tree.gif'; ?>"
+             alt = "move up"
+             title = '<?= $this->translate('admin_collections_role_move_up') ?>' /></a>
+        <?php endif ?>
+        <?php if ($i < count($this->collectionRoles) - 1) : ?>
+        <a href="<?= $this->url(array('action' => 'manage', 'id' => $collectionRole->getId(), 'move_down' => 'Down'), null, true)?>">
+        <img src = "<?= $this->layoutPath . '/img/move_down_collection_tree.gif'; ?>"
+             alt = "move down"
+             title = '<?= $this->translate('admin_collections_role_move_down') ?>' /></a>
+        <?php endif ?>
+    </li>
+    <?php endforeach ?>
+</ul>
+
+<a href="<?= $this->url(array('action' => 'new')) ?>">
+<img src = "<?= $this->layoutPath . '/img/new_collection_tree.gif'; ?>"
+     alt = "new collection role"
+     title = '<?= $this->translate('admin_collections_role_new') ?>' />
 </a>
-</td>
-<td>
-<a href="<?= $this->url(array('action' => 'manage', 'role' => $entry['id'], 'deleteall' => 'Delete'))?>">
-<img src = "<?= $this->layoutPath . '/img/delete_collection_tree.gif';?>"
-align='middle' border = '0' title = '<?=$this->translate('admin_collections_role_delete')?>'>
-</a>
-</td>
-<td>
-<? if ($i > 0) {?>
-&nbsp;
-<a href="<?= $this->url(array('action' => 'manage', 'role' => $entry['id'], 'move_up' => 'Up'))?>">
-<img src = "<?= $this->layoutPath . '/img/move_up_collection_tree.gif';?>"
-align='middle' border = '0' title = '<?=$this->translate('admin_collections_role_move_up')?>'>
-</a>
-<? }?>
-</td>
-<td>
-<? if ($i < (count($this->entries) - 1)) {?>
-&nbsp;
-<a href="<?= $this->url(array('action' => 'manage', 'role' => $entry['id'], 'move_down' => 'Down'))?>">
-<img src = "<?= $this->layoutPath . '/img/move_down_collection_tree.gif';?>"
-align='middle' border = '0' title = '<?=$this->translate('admin_collections_role_move_down')?>'>
-</a>
-</td>
-<? }?>
-</tr>
-<? endforeach; ?>
-</table>
-<a href="<?= $this->url(array('action' => 'new')) ?>"><img src = "<?= $this->layoutPath . '/img/new_collection_tree.gif';?>"
-align='middle' border = '0' title = '<?=$this->translate('admin_collections_role_new') ?>'></a>
