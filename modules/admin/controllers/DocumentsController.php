@@ -353,10 +353,10 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             	if (isset($sureyes) === true) {
                     $model = new $this->_modelclass($id);
                     $model->delete();
-                    $this->_redirectTo('Model successfully deleted.', 'index');
+                    $this->_redirectTo('index', 'Model successfully deleted.');
             	}
             	else {
-            		$this->_redirectTo('', 'index');
+            		$this->_redirectTo('index');
             	}
             }
             else {
@@ -372,7 +372,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                 $this->view->form = $yesnoForm;
             }
         } else {
-            $this->_redirectTo('', 'index');
+            $this->_redirectTo('index');
         }
     }
 
@@ -396,12 +396,12 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                     	$model->deletePermanent();
                     }
                     catch (Exception $e) {
-                    	$this->_redirectTo($e->getMessage(), 'index');
+                    	$this->_redirectTo('index', $e->getMessage());
                     }
-                    $this->_redirectTo('Model successfully deleted.', 'index');
+                    $this->_redirectTo('index', 'Model successfully deleted.');
             	}
             	else {
-            		$this->_redirectTo('', 'index');
+            		$this->_redirectTo('index');
             	}
             }
             else {
@@ -417,7 +417,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                 $this->view->form = $yesnoForm;
             }
         } else {
-            $this->_redirectTo('', 'index');
+            $this->_redirectTo('index');
         }
     }
 
@@ -463,7 +463,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                         $module = array_shift($params);
                         $controller = array_shift($params);
                         $action = array_shift($params);
-                        $this->_redirectTo('', 'edit', $controller, $module, $params);
+                        $this->_redirectTo('edit', '', $controller, $module, $params);
                     } else {
                         $this->view->form = $form;
                     }
@@ -473,7 +473,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                 }
             }
         } else {
-            $this->_redirectTo('', 'edit');
+            $this->_redirectTo('edit');
         }
     }
 
@@ -486,7 +486,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $id = $this->getRequest()->getParam('docId');
         $doc = new Opus_Document($id);
         if (false === is_null($doc->getField('ServerDateUnlocking')) and $doc->getServerDateUnlocking() > date('Y-m-d')) {
-        	$this->_redirectTo('publish_unlocking_date_not_reached', 'index');
+        	$this->_redirectTo('index', 'publish_unlocking_date_not_reached');
         }
         $doc->setServerState('published');
 //        $doc->setServerDatePublished(date('Y-m-d'));
@@ -506,7 +506,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $indexer = new $engineclass();
         $indexer->addDocumentToEntryIndex($doc);
 
-        $this->_redirectTo('document_published', 'index');
+        $this->_redirectTo('index', 'document_published');
     }
 
     /**
@@ -531,7 +531,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $indexer = new $engineclass();
         $indexer->removeDocumentFromEntryIndex($doc);
 
-        $this->_redirectTo('', 'index');
+        $this->_redirectTo('index');
     }
 
     /**
@@ -550,9 +550,9 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             $module = array_shift($params);
             $controller = array_shift($params);
             $action = array_shift($params);
-            $this->_redirectTo('', 'edit', $controller, $module, $params);
+            $this->_redirectTo('edit', '', $controller, $module, $params);
         } else {
-            $this->_redirectTo('', 'index');
+            $this->_redirectTo('index');
         }
     }
 }

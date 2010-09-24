@@ -178,12 +178,12 @@ class Admin_CollectionController extends Controller_Action {
         }
 
         if (true === isset($nodeId)) {
-            $this->_redirectTo('Collection successfully deleted.', 'show', null, null,
+            $this->_redirectTo('show', 'Collection successfully deleted.', null, null,
                     array('role' => $roleId, 'node' => $nodeId));
         } elseif (false === is_null($this->_request->getParam('deleteall'))) {
-            $this->_redirectTo('Role successfully deleted.', 'index');
+            $this->_redirectTo('index', 'Role successfully deleted.');
         } else {
-            $this->_redirectTo('', 'index');
+            $this->_redirectTo('index');
         }
     }
 
@@ -340,7 +340,7 @@ class Admin_CollectionController extends Controller_Action {
 
                             $session->collection = null;
 
-                            $this->_redirectTo('Collection role successfully created.', 'show', null, null,
+                            $this->_redirectTo('show', 'Collection role successfully created.', null, null,
                                     array('role' => $model->getId()));
 
                         }
@@ -355,7 +355,7 @@ class Admin_CollectionController extends Controller_Action {
                     $module = array_shift($params);
                     $controller = array_shift($params);
                     $action = array_shift($params);
-                    $this->_redirectTo('', 'show', $controller, $module, $params);
+                    $this->_redirectTo('show', '', $controller, $module, $params);
                 } else {
                     $this->view->form = $form;
                 }
@@ -405,10 +405,10 @@ class Admin_CollectionController extends Controller_Action {
             array_pop($trail);
             $path = implode('-', $trail);
 
-            $this->_redirectTo('Collection successfully copied.', 'show', null, null,
+            $this->_redirectTo('show', 'Collection successfully copied.', null, null,
                     array('role' => $role, 'path' => $path));
         } else {
-            $this->_redirectTo('', 'index');
+            $this->_redirectTo('index');
         }
     }
 
@@ -436,8 +436,10 @@ class Admin_CollectionController extends Controller_Action {
             }
             $collection->addDocuments($document);
             $collection->store();
-            $this->_redirectTo('Document successfully assigned to collection "' . $collection->getDisplayName() . '".'
-                    , 'edit', 'documents', 'admin', array('id' => $document->getId()));
+            $this->_redirectTo(
+                    'edit',
+                    'Document successfully assigned to collection "' . $collection->getDisplayName() . '".',
+                    'documents', 'admin', array('id' => $document->getId()));
         } else if (false === isset($role)) {
             $collections = array();
             foreach (Opus_CollectionRole::fetchAll() as $collection) {

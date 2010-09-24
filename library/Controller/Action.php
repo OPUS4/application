@@ -33,12 +33,6 @@
  * @version     $Id$
  */
 
-/**
- * Controller for Opus Applications.
- *
- * @category    Application
- * @package     Controller
- */
 class Controller_Action extends Zend_Controller_Action {
 
     /**
@@ -64,15 +58,16 @@ class Controller_Action extends Zend_Controller_Action {
     /**
      * Redirects to an action / controller / module, sets a message for the redirect target view.
      *
-     * @param  mixed  $message    The message to be displayed
      * @param  array  $action     The redirect target action
+     * @param  mixed  $message    The message to be displayed
      * @param  mixed  $controller The redirect target controller
      * @param  mixed  $module     The redirect target model
      * @param  mixed  $params     Parameters for the redirect target action
      * @return void
      */
-    protected function _redirectTo($message = '', $action, $controller = null, $module = null, $params = array()) {
+    protected function _redirectTo($action, $message = '', $controller = null, $module = null, $params = array()) {
         $this->__flashMessenger->addMessage($message);
+        $this->_logger->debug("redirect to module: $module controller: $controller action: $action");
         $this->__redirector->gotoSimple($action, $controller, $module, $params);
     }
 
@@ -103,11 +98,11 @@ class Controller_Action extends Zend_Controller_Action {
      * Helper method that redirects to another <b>internal</b> url
      * @param String $url url to redirect to
      */
-    protected function redirectTo($url) {
+    protected function redirectTo($url, $exit = false) {
         $redirector = $this->_helper->getHelper('Redirector');
         $redirector->setPrependBase(false);
         $redirector->setGotoUrl('');
-        $redirector->setExit(false);
+        $redirector->setExit($exit);
         $redirector->gotoUrl($url);
     }
 }

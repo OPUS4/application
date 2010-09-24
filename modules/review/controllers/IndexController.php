@@ -107,8 +107,7 @@ class Review_IndexController extends Controller_Action {
     public function clearAction() {
         // redirect get requests to module entry page
         if (!$this->getRequest()->isPost()) {
-            $redirectUrl = $this->view->url(array('action' => 'index'));
-            $this->_redirectTo($redirectUrl);
+            $this->_redirectTo('index');
         }
 
         // if back button was pressed return to document selection
@@ -141,7 +140,7 @@ class Review_IndexController extends Controller_Action {
             if (empty($this->view->error)) {
                 $helper = new Review_Model_ClearDocumentsHelper();
                 $helper->clear($this->view->selected, $lastName, $firstName);
-                $this->_redirectTo('', 'index', 'index', 'review');
+                $this->_redirectTo('index');
             }
         }
     }

@@ -135,13 +135,13 @@ class Controller_CRUDAction extends Controller_Action {
                     $module = array_shift($params);
                     $controller = array_shift($params);
                     $action = array_shift($params);
-                    $this->_redirectTo('', 'show', $controller, $module, $params);
+                    $this->_redirectTo('show', '', $controller, $module, $params);
                 } else {
                     $this->view->form = $form;
                 }
             }
         } else {
-            $this->_redirectTo('', 'index');
+            $this->_redirectTo('index');
         }
     }
 
@@ -177,9 +177,9 @@ class Controller_CRUDAction extends Controller_Action {
             $id = $this->getRequest()->getPost('id');
             $model = new $this->_modelclass($id);
             $model->delete();
-            $this->_redirectTo('Model successfully deleted.', 'index');
+            $this->_redirectTo('index', 'Model successfully deleted.');
         } else {
-            $this->_redirectTo('', 'index');
+            $this->_redirectTo('index');
         }
     }
 
