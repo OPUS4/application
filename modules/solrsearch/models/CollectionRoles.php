@@ -26,54 +26,28 @@
  *
  * @category    Application
  * @package     Module_SolrSearch
- * @author      Julian Heise <heise@zib.de>
+ * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
+class SolrSearch_Model_CollectionRoles {
+
+    private $collectionRoles = array();
+
+    public function __construct() {
+        foreach (Opus_CollectionRole::fetchAll() as $collectionRole) {
+            if ($collectionRole->getVisible() === '1' and $collectionRole->getVisibleBrowsingStart() === '1') {
+                if ($collectionRole->getRootNode()->getVisible()) {
+                    array_push($this->collectionRoles, $collectionRole);
+                }
+            }
+        }
+    }
+
+    public function getAllVisible() {
+        return $this->collectionRoles;
+    }
+}
 ?>
-
-<div id="search_options" class="search_options">
-    
-    <?= $this->translate('sorting_sort_by') ?>
-    <ul class="sorting_options">
-    
-    <?php if (!$this->browsing && $this->searchType !== 'authorsearch' && $this->searchType !== 'collection') :
-        $urlparams = $this->firstPage;
-        $urlparams['sortfield'] = 'score';
-        $urlparams['sortorder'] = 'desc';
-    ?>
-        <li class="sorting_option">
-            <?php if ($this->sortfield === 'score' && $this->sortorder === 'desc') : ?>
-                <?= $this->translate('sorting_relevancy') ?>
-            <?php else : ?>
-                <a href="<?= $this->url($urlparams) ?>"><?= $this->translate('sorting_relevancy') ?></a>
-            <?php endif ?>
-        </li>
-    <?php endif ?>
-
-    <?php 
-        foreach (array('year', 'title', 'author') as $sortfield) :
-            foreach (array('asc', 'desc') as $sortorder) :
-                $urlparams = $this->firstPage;
-                $urlparams['sortfield'] = $sortfield;
-                $urlparams['sortorder'] = $sortorder;
-
-    ?>
-    <li class="sorting_option">
-        <?php if ($this->sortfield === $sortfield && $this->sortorder === $sortorder) : ?>
-            <?= $this->translate('sorting_' . $sortfield . '_' . $sortorder) ?>
-        <?php else : ?>
-            <a href="<?= $this->url($urlparams) ?>">
-                <?= $this->translate('sorting_' . $sortfield . '_' . $sortorder) ?>
-            </a>
-        <?php endif ?>
-    </li>
-    <?php
-            endforeach;
-        endforeach;
-    ?>
-    </ul>
-
-</div>

@@ -225,7 +225,7 @@ class Solrsearch_IndexController extends Controller_Action {
         $this->view->rows = $this->query->getRows();
         $this->view->authorSearch = self::createSearchUrlArray(array('searchtype' => self::AUTHOR_SEARCH));
         $this->view->isSimpleList = false;
-        $this->view->browsing = (boolean)$this->getRequest()->getParam('browsing',false);
+        $this->view->browsing = (boolean) $this->getRequest()->getParam('browsing', false);
         $specialTitle = $this->getRequest()->getParam('specialtitle','');
         if($specialTitle !== '')
             $this->view->specialTitle = $specialTitle;

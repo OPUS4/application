@@ -36,15 +36,8 @@ class Solrsearch_BrowseController extends Controller_Action {
 
     public function indexAction() {
         $this->view->baseUrl = $this->getRequest()->getBaseUrl();
-        $collectionRoles = array();
-        foreach (Opus_CollectionRole::fetchAll() as $role) {
-            if ($role->getVisible() === '1' and $role->getVisibleBrowsingStart() === '1') {
-                if ($role->getRootNode()->getVisible()) {
-                    array_push($collectionRoles, $role);
-                }
-            }
-        }
-        $this->view->collectionRoles = $collectionRoles;
+        $collectionRoles = new SolrSearch_Model_CollectionRoles();
+        $this->view->collectionRoles = $collectionRoles->getAllVisible();
     }
 
     public function doctypesAction() {
@@ -52,8 +45,7 @@ class Solrsearch_BrowseController extends Controller_Action {
         $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::FACET_ONLY);
         $query->setFacetField($facetname);
         $searcher = new Opus_SolrSearch_Searcher();
-        $result = $searcher->search($query);
-        $facets = $result->getFacets();
+        $facets = $searcher->search($query)->getFacets();
         $facetitems = $facets[$facetname];
         $this->view->facetitems = $facetitems;
     }

@@ -142,5 +142,15 @@
         </tuv>
     </tu>
 
+    <tu tuid="rss_title">
+        <tuv xml:lang="en">
+            <seg>subscribe to RSS feed</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>RSS-Feed abonnieren</seg>
+        </tuv>
+    </tu>
+
+
   </body>
 </tmx>
