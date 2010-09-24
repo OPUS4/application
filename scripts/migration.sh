@@ -6,8 +6,8 @@ rm -rf ../workspace/files/*
 
 cd ../tests
 
-mv ../config/xmldoctypes ../config/xmldoctypes.opus
-mv ../config/xmldoctypes.import ../config/xmldoctypes
+mv ../application/configs/doctypes ../config/xmldoctypes.opus
+mv ../application/configs/doctypes/import ../config/xmldoctypes
 
 mv sql/999_create_documents_testdata.sql sql/999_create_documents_testdata.sql.disabled
 mv sql/013_create_institutes_testdata.sql sql/013_create_institutes_testdata.sql.disabled
@@ -18,6 +18,6 @@ cd ../scripts
 
 php Opus3Migration.php
 
-mv ../config/xmldoctypes ../config/xmldoctypes.import
-mv ../config/xmldoctypes.opus ../config/xmldoctypes
+mv ../config/xmldoctypes ../application/configs/doctypes/import
+mv ../config/xmldoctypes.opus ../application/configs/doctypes
 
