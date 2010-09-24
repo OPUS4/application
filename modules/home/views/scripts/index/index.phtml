@@ -32,6 +32,12 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+
+$fc = Zend_Controller_Front::getInstance();
+$basePath = $fc->getRequest()->getBasePath();
+$this->headScript()
+        ->appendFile($basePath . '/layouts/opus4/js/jquery-1.4.2.min.js');
+
 ?>
 <? $this->title = $this->translate('home_index_index_pagetitle') ?>
 
@@ -39,7 +45,7 @@
 
     <h2><?= $this->translate('solrsearch_title_simple'); ?></h2>
 
-    <form action="<?= $this->url(array('module'=>'solrsearch','controller'=>'index','action'=>'searchdispatch')); ?>" method="post">
+    <form id="simpleSearchForm" action="<?= $this->url(array('module'=>'solrsearch','controller'=>'index','action'=>'searchdispatch')); ?>" method="post">
         <label for="query"><?= $this->translate('solrsearch_query_label'); ?></label>
         <input id="query" name="query" type="text" value="<?= htmlspecialchars($this->q) ?>" />
         <input type="submit" value="<?= $this->translate('solrsearch_searchaction'); ?>" />
@@ -52,6 +58,12 @@
 
     <a href="<?= $this->url(array('module'=>'solrsearch','controller'=>'index','action'=>'advanced'),null,true); ?>"><?= $this->translate('solrsearch_title_advanced'); ?></a>
 </div>
+
+<script type="text/javascript">
+    $(function(){
+        document.forms['simpleSearchForm'].query.focus();
+    });
+</script>
 
 <div class="right">
     <div class="box">
