@@ -39,7 +39,7 @@ $jsEnabled = isset($config->javascript->jquery->path);
 if($jsEnabled) {
     $this->headScript()
         ->appendFile($basePath . $config->javascript->jquery->path)
-        ->appendFile($basePath . '/layouts/opus4/js/searchutil.js');
+        ->appendFile($basePath . '/layouts/'.$this->theme.'/js/searchutil.js');
 }
 ?>
 
