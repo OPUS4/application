@@ -108,8 +108,6 @@ class Publish_FormController extends Controller_Action {
                 $log->debug("POST --> [" . $key . "] : " . $value);
             }
 
-            //$this->_setDocumentParameters($postData);
-
             //initialize the form object
             $form = new Publish_Form_PublishingSecond($defaultNS->documentType, $defaultNS->documentId, $defaultNS->fulltext, $defaultNS->additionalFields, $postData);
             //$form->populate($postData);
@@ -128,7 +126,7 @@ class Publish_FormController extends Controller_Action {
             } else {
                 // SEND was pressed => check the form
 
-                $this->view->title = $this->view->translate('publish_controller_check');
+                $this->view->title = $this->view->translate('publish_controller_index');
                 $this->view->subtitle = $this->view->translate($defaultNS->documentType);
                 $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
 
@@ -144,7 +142,7 @@ class Publish_FormController extends Controller_Action {
                     // Form variables all VALID
                     $log->debug("Variables are valid!");
 
-                    $this->view->title = $this->view->translate('publish_controller_check');
+                    $this->view->title = $this->view->translate('publish_controller_index');
                     $this->view->subtitle = $this->view->translate('publish_controller_check2');
                     $this->view->header = $this->view->translate('publish_controller_changes');
 

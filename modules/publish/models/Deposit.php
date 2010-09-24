@@ -349,6 +349,17 @@ class Publish_Model_Deposit {
         }
     }
 
+    private function getSubjectType($dataKey) {
+        if (strstr($dataKey, 'MSC'))
+            return 'msc';
+        else if (stsrstr($dataKey, 'DDC'))
+            return 'ddc';
+        else if (strstr($dataKey, 'Swd'))
+            return 'swd';
+        else
+            return 'Uncontrolled';
+    }
+
     /**
      * method to prepare a subject object for storing
      * @param <Opus_Document> $this->document
@@ -363,39 +374,45 @@ class Publish_Model_Deposit {
             $this->log->debug("Subject already stored.");
         } else {
             $this->log->debug("try to store subject: " . $dataKey);
-            if (strstr($dataKey, "Swd")) {
-                $subject = new Opus_SubjectSwd();
-                $this->log->debug("subject is a swd subject.");
-            } else if (strstr($dataKey, "MSC")) {
+            $type = $this->getSubjectType($dataKey);
+            switch ($type) {
+                case 'MSC' :
+                    $this->log->debug("subject is a MSC subject and has to be stored as a Collection.");
+                    $this->_storeCollectionObject('msc', $dataValue);
+                    $this->log->debug("subject has also be stored as subject.");
+                    $subject = new Opus_Subject();
+                    break;
 
-                $this->log->debug("subject is a MSC subject and has to be stored as a Collection.");
+                case 'DDC' :
+                    $this->log->debug("subject is a DDC subject and has to be stored as a Collection.");
+                    $this->_storeCollectionObject('ddc', $dataValue);
+                    $this->log->debug("subject has also be stored as subject.");
+                    $subject = new Opus_Subject();
+                    break;
 
-                $this->_storeCollectionObject('msc', $dataValue);
+                case 'Swd' :
+                    $this->log->debug("subject is a swd subject.");
+                    $subject = new Opus_SubjectSwd();
+                    break;
 
-                $subject = new Opus_Subject();
-                $this->log->debug("subject has also be stored as subject.");
-            } else {
-                $subject = new Opus_Subject();
-                $this->log->debug("subject is a uncontrolled or other subject.");
+                case 'Uncontrolled':
+                    $this->log->debug("subject is a uncontrolled or other subject.");
+                    $subject = new Opus_Subject();
+                    break;
             }
 
-            $len = strlen($dataKey);
-            $counter = (int) substr($dataKey, $len - 1, $len);
+            $counter = (int) $this->getCounter($dataKey);
             $this->log->debug("counter: " . $counter);
 
-            if ($counter >= 1)
-            //remove the counter at the end of the field name
-                $subjectType = substr($dataKey, 0, $len - 1);
-            else
-                $subjectType = substr($dataKey, 0, $len);
-
-            $this->log->debug("subjectType: " . $subjectType);
-            $this->log->debug("set value: " . $dataValue);
-            $subject->setValue($dataValue);
-
-            $addFunction = "add" . $subjectType;
-            $this->log->debug("addfunction: " . $addFunction);
-            $this->document->$addFunction($subject);
+            if ($counter >= 1) {
+                $subjectType = 'Subject' . $type;
+                $this->log->debug("subjectType: " . $subjectType);
+                $subject->setValue($dataValue);
+                
+                $addFunction = "add" . $subjectType;
+                $this->log->debug("addfunction: " . $addFunction);
+                $this->document->$addFunction($subject);
+            }
         }
     }
 
@@ -490,12 +507,13 @@ class Publish_Model_Deposit {
         if ($dataValue == "") {
             $this->log->debug("Licence already stored.");
         } else {
+            $dataValue = substr($dataValue, 2);
+            $dataValue = (int) $dataValue;
 
-            $this->log->debug("try to store Licence: " . $dataKey);
-            $licence = new Opus_Licence();
+            $this->log->debug("try to store Licence with id: " . $dataKey);
+            throw Exception("bla");
 
-            $this->log->debug("set value: " . $dataValue);
-            $licence->setNameLong($dataValue);
+            $licence = new Opus_Licence($dataValue);
 
             $addFunction = "addLicence";
             $this->log->debug("addfunction: " . $addFunction);

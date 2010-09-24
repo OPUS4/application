@@ -37,14 +37,7 @@
       </tuv>
     </tu>
     
-    <tu tuid="publish_controller_create">
-      <tuv xml:lang="en">
-        <seg>Publish create</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Veröffentlichen - Beschreibungsdaten eingeben</seg>
-      </tuv>
-    </tu>
+   
     
     <tu tuid="upload_another_publication">
       <tuv xml:lang="en">
@@ -64,14 +57,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="publish_controller_check">
-      <tuv xml:lang="en">
-        <seg>Publish</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Veröffentlichen</seg>
-      </tuv>
-    </tu>
+
 
     <tu tuid="publish_controller_check2">
       <tuv xml:lang="en">

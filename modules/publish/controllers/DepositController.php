@@ -42,6 +42,26 @@ class Publish_DepositController extends Controller_Action {
 
     public $postData = array();
 
+    public function preDispatch() {
+        if ($this->getRequest()->isPost() === true) {
+            $post = $this->getRequest()->getPost();
+
+            if (array_key_exists('back', $post)) {
+                // redirect to form/check
+                $url = $this->view->url(array('controller' => 'form', 'action' => 'check'));
+                $this->_forward('check', 'form');
+            } else
+            if (array_key_exists('collection', $post)) {
+                // forward to collection selection
+                $this->_forward('top', 'collection');
+            } else
+            if (array_key_exists('send', $post)) {
+                // forward to save the data
+                $this->_forward('deposit');
+            }
+        }
+    }
+
     /**
      * stores a delivered form as document in the database
      * uses check_array
@@ -51,35 +71,30 @@ class Publish_DepositController extends Controller_Action {
         $defaultNS = new Zend_Session_Namespace('Publish');
 
         $this->view->title = $this->view->translate('publish_controller_index');
+        $this->view->subtitle = $this->view->translate('publish_controller_deposit_successful');
 
         if ($this->getRequest()->isPost() === true) {
 
             $post = $this->getRequest()->getPost();
 
-            // TODO: Hier oder früher überprüfen?
             if (is_null($defaultNS->elements)) {
-                throw new Exception("is null");
-            }
-            if (!is_array($defaultNS->elements)) {
-                throw new Exception("no array");
-            }
-            
-            foreach ($defaultNS->elements AS $element) {
-                $this->postData[$element['name']] = $element['value'];
+
+                foreach ($defaultNS->elements AS $element) {
+                    $this->postData[$element['name']] = $element['value'];
+                }
             }
 
-            $this->postData = array_merge($this->postData, $post);            
+            $this->postData = array_merge($this->postData, $post);
 
             $depositForm = new Publish_Form_PublishingSecond($defaultNS->documentType, $defaultNS->documentId, $defaultNS->fulltext, $defaultNS->additionalFields, $this->postData);
             $depositForm->populate($this->postData);
 
-            if (array_key_exists('back', $post)) {                
+            if (array_key_exists('back', $post)) {
                 $this->view->form = $depositForm;
                 return $this->renderScript('form/check.phtml');
-                
             } else {
                 if (isset($this->postData['send']))
-                    unset($this->postData['send']);                
+                    unset($this->postData['send']);
 
                 $depositData = new Publish_Model_Deposit($defaultNS->documentId, $defaultNS->documentType, $this->postData);
 
@@ -100,7 +115,7 @@ class Publish_DepositController extends Controller_Action {
             $url = $this->view->url(array('controller' => 'index', 'action' => 'index'));
             return $this->redirectTo($url);
         }
-    }    
+    }
 
     /**
      *  Method finally sends an email to the referrers named in config.ini

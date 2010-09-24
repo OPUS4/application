@@ -163,7 +163,7 @@ class Publish_Model_Validation {
     }
 
     private function _validateLicence() {
-        $licences = $this->getLicences();
+        $licences = array_keys($this->getLicences());
         if ($licences == null)
             return null;
         else {
@@ -338,8 +338,9 @@ class Publish_Model_Validation {
         $licences = array();
         if (empty($this->licences)) {
             foreach ($dbLicences = Opus_Licence::getAll() as $lic) {
-                $name = $lic->getDisplayName();                
-                $licences[$name] = $name;
+                $name = $lic->getDisplayName();
+                $id = $lic->getId();
+                $licences["ID:".$id] = $name;
                 $this->log->debug("Lizenz " . $name);
             }
             $this->licences = $licences;
