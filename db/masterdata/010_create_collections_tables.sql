@@ -138,7 +138,7 @@ CREATE TABLE collections_enrichments (
    --
    -- Constraints.
    --
-   FOREIGN KEY(collection_id)     REFERENCES collections_old(id),
+   FOREIGN KEY(collection_id)     REFERENCES collections(id),
    PRIMARY KEY(id),
    INDEX(collection_id, key_name)
 ) ENGINE = InnoDB
