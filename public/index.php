@@ -60,7 +60,7 @@ $application = new Zend_Application(
     array(
         "config"=>array(
             APPLICATION_PATH . '/application/configs/application.ini',
-            APPLICATION_PATH . '/config/config.ini'
+            APPLICATION_PATH . '/application/configs/config.ini'
         )
     )
 );

@@ -61,7 +61,7 @@ class RequireTest extends PHPUnit_Framework_TestCase {
                         array(
                             "config" => array(
                                 APPLICATION_PATH . '/application/configs/application.ini',
-                                APPLICATION_PATH . '/tests/config.ini'
+                                APPLICATION_PATH . '/application/configs/config.ini'
                             )
                         )
         );

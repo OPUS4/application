@@ -123,7 +123,7 @@ class SocialBookmarking_ConnoteaController extends Zend_Controller_Action
         $connoteaPost->user = $connotea->user;
         $connoteaPost->password = $connotea->password;
         
-        $config = new Zend_Config_Ini('../config/config.ini');
+        $config = new Zend_Config_Ini('../application/configs/config.ini');
 		$system_tags = $config->production->socialBookmarking->connotea->systemTags;
         
         $data = $this->_request->getPost();

@@ -48,7 +48,7 @@ class SocialBookmarking_BibsonomyController extends Zend_Controller_Action
     {
         $connotea = new Zend_Session_Namespace('bibsonomy');
         // Auto Login with library account
-        $config = new Zend_Config_Ini('../config/config.ini');
+        $config = new Zend_Config_Ini('../application/configs/config.ini');
         if (empty($config->socialBookmarking->bibsonomy->sysuser) === false) {
             $connotea->sysuser = $config->socialBookmarking->bibsonomy->sysuser;
             $connotea->syspassword = $config->socialBookmarking->bibsonomy->syspassword;
@@ -134,7 +134,7 @@ class SocialBookmarking_BibsonomyController extends Zend_Controller_Action
         $connoteaPost->user = $connotea->user;
         $connoteaPost->password = $connotea->password;
         
-        $config = new Zend_Config_Ini('../config/config.ini');
+        $config = new Zend_Config_Ini('../application/configs/config.ini');
         if (empty($config->socialBookmarking->connotea->systemTags) === false) {
 		    $system_tags = $config->socialBookmarking->connotea->systemTags;
         }
