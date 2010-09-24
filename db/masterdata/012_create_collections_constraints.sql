@@ -20,12 +20,6 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 --
 
 --
--- Constraints der Tabelle `collections_old`
---
-ALTER TABLE `collections_old`
-  ADD CONSTRAINT `collections_old_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `collections_roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
 -- Constraints der Tabelle `collections`
 --
 ALTER TABLE `collections`
@@ -36,14 +30,6 @@ ALTER TABLE `collections`
 --
 ALTER TABLE `collections_attributes`
   ADD CONSTRAINT `collections_attributes_ibfk_1` FOREIGN KEY (`id`) REFERENCES `collections` (`id`);
-
---
--- Constraints der Tabelle `collections_nodes`
---
-ALTER TABLE `collections_nodes`
-  ADD CONSTRAINT `collections_nodes_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `collections_roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `collections_nodes_ibfk_2` FOREIGN KEY (`collection_id`) REFERENCES `collections` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `collections_nodes_ibfk_3` FOREIGN KEY (`parent_id`) REFERENCES `collections_nodes` (`id`) ON UPDATE CASCADE;
 
 --
 -- Constraints der Tabelle `link_documents_collections`

@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `collections` (
 
   `left_id` int(10) unsigned NOT NULL,
   `right_id` int(10) unsigned NOT NULL,
-  `parent_id` int(10) unsigned default NULL,
+  `parent_id` int(10) unsigned DEFAULT NULL,
   `visible` tinyint(1) unsigned NOT NULL,
 
   PRIMARY KEY (`id`),
@@ -37,22 +37,6 @@ CREATE TABLE IF NOT EXISTS `collections` (
   UNIQUE KEY `role_id_left` (`role_id`,`left_id`),
   UNIQUE KEY `role_id_right` (`role_id`,`right_id`),
   KEY `parent_id` (`parent_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15985;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `collections_old`
---
-
-CREATE TABLE IF NOT EXISTS `collections_old` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `role_id` int(10) unsigned NOT NULL,
-  `number` varchar(255) DEFAULT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `oai_subset` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `role_id` (`role_id`,`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15985;
 
 -- --------------------------------------------------------
@@ -72,28 +56,6 @@ CREATE TABLE IF NOT EXISTS `collections_attributes` (
 -- Daten für Tabelle `collections_attributes`
 --
 
-
--- --------------------------------------------------------
-
---
--- Tabellenstruktur für Tabelle `collections_nodes`
---
-
-CREATE TABLE IF NOT EXISTS `collections_nodes` (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `role_id` int(10) unsigned NOT NULL,
-  `collection_id` int(10) unsigned default NULL,
-  `left_id` int(10) unsigned NOT NULL,
-  `right_id` int(10) unsigned NOT NULL,
-  `parent_id` int(10) unsigned default NULL,
-  `visible` tinyint(1) unsigned NOT NULL,
-  PRIMARY KEY  (`id`),
-  UNIQUE KEY `role_id` (`role_id`,`left_id`),
-  UNIQUE KEY `role_id_2` (`role_id`,`right_id`),
-  KEY `collection_id` (`collection_id`),
-  KEY `id` (`id`,`role_id`),
-  KEY `parent_id` (`parent_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15985;
 
 -- --------------------------------------------------------
 
@@ -118,8 +80,8 @@ CREATE TABLE IF NOT EXISTS `collections_roles` (
    UNIQUE INDEX `UNIQUE_OAI_NAME` (`oai_name` ASC) )
  ENGINE = InnoDB
  DEFAULT CHARSET=utf8
- COMMENT = 'Administration table for the indivdual collection trees.'
- AUTO_INCREMENT=12;
+ COMMENT = 'Administration table for the individual collection trees.'
+ AUTO_INCREMENT=17;
 
 -- --------------------------------------------------------
 
