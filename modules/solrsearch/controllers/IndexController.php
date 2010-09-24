@@ -335,7 +335,7 @@ class Solrsearch_IndexController extends Controller_Action {
         return $query;
     }
 
-    private function prepareSubCollections() {
+    private function prepareChildren() {
         $collectionList = null;
         try {
             $collectionList = new SolrSearch_Model_CollectionList($this->getRequest()->getParam('id'));
@@ -345,11 +345,11 @@ class Solrsearch_IndexController extends Controller_Action {
             $this->_redirectToAndExit('index', '', 'browse', null, array(), true);
         }        
         
-        $this->view->subnodes = $collectionList->getSubNodes();
+        $this->view->children = $collectionList->getChildren();
         $this->view->parents = $collectionList->getParents();
         $this->view->collectionRoleTitle = $this->view->translate($collectionList->getCollectionRoleTitle());
 
-        if ($collectionList->isRootNode()) {
+        if ($collectionList->isRootCollection()) {
             $this->view->title = $this->view->translate($collectionList->getTitle());
         }
         else {
@@ -369,7 +369,7 @@ class Solrsearch_IndexController extends Controller_Action {
     private function createCollectionSearchQuery() {
         $this->log->debug("Constructing query for collection search.");
 
-        $collectionId = $this->prepareSubCollections();
+        $collectionId = $this->prepareChildren();
 
         $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::SIMPLE);
         $query->setStart($this->getRequest()->getParam('start', Opus_SolrSearch_Query::DEFAULT_START));

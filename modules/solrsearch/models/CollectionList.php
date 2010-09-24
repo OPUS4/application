@@ -36,83 +36,72 @@ class SolrSearch_Model_CollectionList {
 
     private $collection;
     private $collectionRole;
-    private $collectionNode;
 
-    public function __construct($collectionNodeId) {
-        if (is_null($collectionNodeId)) {
+    public function __construct($collectionId) {
+        if (is_null($collectionId)) {
             throw new SolrSearch_Model_Exception('Could not browse collection due to missing id parameter.');
         }
 
-        $collectionNode = null;
+        $collection = null;
         try {
-            $collectionNode = new Opus_CollectionNode((int) $collectionNodeId);
+            $collection = new Opus_Collection((int) $collectionId);
         }
         catch (Opus_Model_NotFoundException $e) {
-            throw new SolrSearch_Model_Exception("Collection node with id '" . $collectionNodeId . "' does not exist.");
+            throw new SolrSearch_Model_Exception("Collection with id '" . $collectionId . "' does not exist.");
         }
-        if ($collectionNode->getVisibility() === false) {
-            throw new SolrSearch_Model_Exception("Collection node with id '" . $collectionNodeId . "' is not visible.");
+        if ($collection->getVisible() !== '1') {
+            throw new SolrSearch_Model_Exception("Collection with id '" . $collectionId . "' is not visible.");
         }
 
         $collectionRole = null;
         try {
-            $collectionRole = new Opus_CollectionRole($collectionNode->getRoleId());
+            $collectionRole = new Opus_CollectionRole($collection->getRoleId());
         }
         catch (Opus_Model_NotFoundException $e) {
-            throw new SolrSearch_Model_Exception("Collection role with id '" . $collectionNode->getRoleId() . "' does not exist.");
+            throw new SolrSearch_Model_Exception("Collection role with id '" . $collection->getRoleId() . "' does not exist.");
         }
         
         if (!($collectionRole->getVisible() === '1' and $collectionRole->getVisibleBrowsingStart() === '1')) {
             throw new SolrSearch_Model_Exception("Collection role with id '" . $collectionRole->getId() . "' is not visible.");
         }
 
-        $collection = null;
-        try {
-            $collection = new Opus_Collection($collectionNode->getCollectionId());
-        }
-        catch (Opus_Model_NotFoundException $e) {
-            throw new SolrSearch_Model_Exception("Collection with id '" . $collectionNode->getCollectionId() . "' does not exist.");
-        }
-                
-        $this->collectionNode = $collectionNode;
         $this->collectionRole = $collectionRole;
         $this->collection = $collection;
     }
 
-    public function isRootNode() {
-        return count($this->collectionNode->getParents()) === 1;
+    public function isRootCollection() {
+        return count($this->collection->getParents()) === 1;
     }
 
     /**
      *
-     * @return array An array of CollectionNode objects along the path to the root.
+     * @return array An array of Collection objects along the path to the root.
      */
     public function getParents() {
-        $parents = $this->collectionNode->getParents();
+        $parents = $this->collection->getParents();
         $numOfParents = count($parents);
         if ($numOfParents < 2) {
-            // only the current node and the root node are present in $parents
             return array();
         }                
         $results = array();
         for ($i = 1; $i < $numOfParents; $i++) {
-            array_push($results, $parents[$numOfParents - $i]);
+            $results[] = $parents[$numOfParents - $i];
         }
         return $results;
     }
 
-    public function getSubNodes() {
-        $subnodes = array();
-        foreach ($this->collectionNode->getChildren() as $subnode) {
-            if ($subnode->getVisibility() === true) {
-                array_push($subnodes, $subnode);
+    public function getChildren() {
+        $children = array();
+        foreach ($this->collection->getChildren() as $child) {
+            if ($child->getVisible() === '1') {
+                $children[] = $child;
             }
         }
-        return $subnodes;
+        return $children;
     }
 
     public function getTitle() {
-        if ($this->isRootNode()) {
+        if ($this->isRootCollection()) {
             return $this->getCollectionRoleTitle();
         }
         return $this->collection->getDisplayName('browsing');

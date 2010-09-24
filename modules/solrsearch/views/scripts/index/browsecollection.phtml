@@ -44,7 +44,7 @@
                 $first = false; ?>
                 <li><a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'collection', 'id' => $parent->getId()), null, true) ?>"><?= htmlspecialchars($this->collectionRoleTitle) ?></a>
             <?php else : ?>
-                <li><a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'collection', 'id' => $parent->getId()), null, true) ?>"><?= htmlspecialchars($parent->getCollection()->getDisplayName()) ?></a>
+                <li><a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'collection', 'id' => $parent->getId()), null, true) ?>"><?= htmlspecialchars($parent->getDisplayName()) ?></a>
             <?php endif ?>
         <?php endforeach ?>
     </ul>
@@ -53,15 +53,15 @@
 
 <h2><?= htmlspecialchars($this->title) ?></h2>
 
-<div id="subnodes">
+<div id="children">
     <ul>
-    <?php foreach ($this->subnodes as $subnode) : ?>
-        <?php $documentCount = $subnode->getNumSubtreeEntries(); ?>
+    <?php foreach ($this->children as $child) : ?>
+        <?php $documentCount = $child->getNumSubtreeEntries(); ?>
             <?php if ($documentCount === 0) : ?>
-                <li><?= htmlspecialchars($subnode->getCollection()->getDisplayName()) ?></li>
+                <li><?= htmlspecialchars($child->getDisplayName()) ?></li>
             <?php else: ?>
                 <li>
-                    <a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'collection', 'id' => $subnode->getId()), null, true) ?>"><?= htmlspecialchars($subnode->getCollection()->getDisplayName()) ?></a>
+                    <a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'collection', 'id' => $child->getId()), null, true) ?>"><?= htmlspecialchars($child->getDisplayName()) ?></a>
                     (<?= $documentCount ?>)
                 </li>
             <?php endif ?>

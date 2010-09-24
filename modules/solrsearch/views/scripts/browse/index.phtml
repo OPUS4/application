@@ -28,7 +28,6 @@
  *
  * @category    Application
  * @package     Module_SolrSearch
- * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -57,7 +56,7 @@
             $printname = $this->translate($translatelabel);        
     ?>
     <li>
-        <a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'collection', 'id' => $collectionRole->getRootNode()->getId()), null, true)?>"><?= htmlspecialchars($printname) ?></a>
+        <a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'collection', 'id' => $collectionRole->getRootCollection()->getId()), null, true)?>"><?= htmlspecialchars($printname) ?></a>
     </li>
     <?php endforeach ?>
 </ul>

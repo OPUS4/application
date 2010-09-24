@@ -39,7 +39,7 @@ class SolrSearch_Model_CollectionRoles {
     public function __construct() {
         foreach (Opus_CollectionRole::fetchAll() as $collectionRole) {
             if ($collectionRole->getVisible() === '1' and $collectionRole->getVisibleBrowsingStart() === '1') {
-                if ($collectionRole->getRootNode()->getVisible()) {
+                if ($collectionRole->getRootCollection()->getVisible()) {
                     array_push($this->collectionRoles, $collectionRole);
                 }
             }
