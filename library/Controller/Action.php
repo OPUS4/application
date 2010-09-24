@@ -56,33 +56,6 @@ class Controller_Action extends Zend_Controller_Action {
     protected $_logger;
 
     /**
-     * Redirects to an action / controller / module, sets a message for the redirect target view.
-     *
-     * @param  array  $action     The redirect target action
-     * @param  mixed  $message    The message to be displayed
-     * @param  mixed  $controller The redirect target controller
-     * @param  mixed  $module     The redirect target model
-     * @param  mixed  $params     Parameters for the redirect target action
-     * @return void
-     */
-    protected function _redirectTo($action, $message = '', $controller = null, $module = null, $params = array()) {
-        $this->__flashMessenger->addMessage($message);
-        $this->_logger->debug("redirect to module: $module controller: $controller action: $action");
-        $this->__redirector->gotoSimple($action, $controller, $module, $params);
-    }
-
-    /**
-     * Forward request to a different action.
-     *
-     * Sets the 'action' parameter so title key is correct.
-     * @return void
-     */
-    protected function _forwardToAction($action) {
-        $this->_request->setParam('action', $action);
-        $this->_forward($action);
-    }
-
-    /**
      * Do some initialization on startup of every action
      *
      * @return void
@@ -95,14 +68,38 @@ class Controller_Action extends Zend_Controller_Action {
     }
 
     /**
-     * Helper method that redirects to another <b>internal</b> url
-     * @param String $url url to redirect to
+     * Redirects to an action / controller / module, sets a message for the redirect target view.
+     *
+     * @param  array  $action     The redirect target action
+     * @param  mixed  $message    The message to be displayed
+     * @param  mixed  $controller The redirect target controller
+     * @param  mixed  $module     The redirect target model
+     * @param  mixed  $params     Parameters for the redirect target action
+     * @return void
      */
-    protected function redirectTo($url, $exit = false) {
-        $redirector = $this->_helper->getHelper('Redirector');
-        $redirector->setPrependBase(false);
-        $redirector->setGotoUrl('');
-        $redirector->setExit($exit);
-        $redirector->gotoUrl($url);
+    protected function _redirectTo($action, $message = '', $controller = null, $module = null, $params = array()) {
+        $this->performRedirect($action, $message, $controller, $module, $params);
+    }
+
+    protected function _redirectToAndExit($action, $message = '', $controller = null, $module = null, $params = array()) {
+        $this->performRedirect($action, $message, $controller, $module, $params, true);
+    }
+
+    private function performRedirect($action, $message = '', $controller = null, $module = null, $params = array(), $exit = false) {
+        $this->__flashMessenger->addMessage($message);
+        $this->_logger->debug("redirect to module: $module controller: $controller action: $action");
+        $this->__redirector->gotoSimple($action, $controller, $module, $params);
+        $this->__redirector->setExit($exit);
+    }
+
+    /**
+     * Forward request to a different action.
+     *
+     * Sets the 'action' parameter so title key is correct.
+     * @return void
+     */
+    protected function _forwardToAction($action) {
+        $this->_request->setParam('action', $action);
+        $this->_forward($action);
     }
 }

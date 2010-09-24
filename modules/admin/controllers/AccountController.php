@@ -147,9 +147,7 @@ class Admin_AccountController extends Controller_Action {
                     }
 
                     $account->store();
-
-                    $url = $this->view->url(array('action' => 'index'));
-                    $this->redirectTo($url);
+                    $this->_redirectTo('index');
                 }
                 else {
                     $accountForm->getElement('username')->addError($this->view->translate('admin_account_error_login_used'));

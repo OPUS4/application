@@ -83,10 +83,8 @@ class Publish_FormController extends Controller_Action {
                 $this->view->action_url = $action_url;
                 $this->view->form = $publishForm;
             }
-        } else {
-            // GET Reqquest is redirected to index
-            $url = $this->view->url(array('controller' => 'index', 'action' => 'index'));
-            return $this->redirectTo($url);
+        } else {            
+            return $this->_redirectTo('index');
         }
     }
 
@@ -162,8 +160,7 @@ class Publish_FormController extends Controller_Action {
                 }
             }
         } else {
-            //GET Request on check
-            return $this->redirectTo('upload');
+            return $this->_redirectTo('upload');
         }
     }
 

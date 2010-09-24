@@ -47,6 +47,7 @@ class Solrsearch_IndexController extends Controller_Action {
     private $resultList;
 
     public function  init() {
+        parent::init();
         $this->log = Zend_Registry::get('Zend_Log');
     }
 
@@ -80,36 +81,30 @@ class Solrsearch_IndexController extends Controller_Action {
 
     public function searchdispatchAction() {
         $this->log->debug('Received new search request. Redirecting to search action.');
-        $url = '';
+        $params = array();
+        $action = 'search';
 
         $searchtype = $this->getRequest()->getParam('searchtype', 'invalid searchtype');
         if($searchtype === self::SIMPLE_SEARCH) {
             if(!$this->isSimpleSearchRequestValid()) {
-                $url = $this->view->url(array(
-                    'module' => 'solrsearch',
-                    'controller' => 'index',
-                    'action' => 'invalidsearchterm',
-                    'searchtype' => self::SIMPLE_SEARCH), null, true);
+                $action = 'invalidsearchterm';
+                $params = array('searchtype' => self::SIMPLE_SEARCH);
             }
             else {
-                $url = $this->createSimpleSearchUrl();
+                $params= $this->createSimpleSearchUrlParams();
             }
         } 
         else if($searchtype === self::ADVANCED_SEARCH || $searchtype === self::AUTHOR_SEARCH) {
             if(!$this->isAdvancedSearchRequestValid()) {
-                $url = $this->view->url(array(
-                    'module' => 'solrsearch',
-                    'controller' => 'index',
-                    'action' => 'invalidsearchterm',
-                    'searchtype' => $searchtype), null, true);
+                $action = 'invalidsearchterm';
+                $params = array('searchtype' =>  $searchtype);
             }
             else {
-                $url = $this->createAdvancedSearchUrl();
+                $params = $this->createAdvancedSearchUrlParams();
             }
         }
 
-        $this->log->debug("URL is: " . $url);
-        $this->redirectTo($url);     
+        $this->_redirectTo($action, '', null, null, $params);
     }
 
     private function isSimpleSearchRequestValid() {
@@ -130,7 +125,7 @@ class Solrsearch_IndexController extends Controller_Action {
         return false;
     }
 
-    private function createSimpleSearchUrl() {
+    private function createSimpleSearchUrlParams() {
         $params = array(
                 'searchtype'=> $this->getRequest()->getParam('searchtype', Solrsearch_IndexController::SIMPLE_SEARCH),
                 'start'=> $this->getRequest()->getParam('start','0'),
@@ -139,10 +134,10 @@ class Solrsearch_IndexController extends Controller_Action {
                 'sortfield'=> $this->getRequest()->getParam('sortfield', 'score'),
                 'sortorder'=> $this->getRequest()->getParam('sortorder','desc')
             );
-        return $this->view->url(self::createSearchUrlArray($params), null, true);
+        return $params;
     }
 
-    private function createAdvancedSearchUrl() {
+    private function createAdvancedSearchUrlParams() {
         $params = array (
             'searchtype'=> $this->getRequest()->getParam('searchtype',Solrsearch_IndexController::ADVANCED_SEARCH),
             'start'=> $this->getRequest()->getParam('start', '0'),
@@ -159,7 +154,7 @@ class Solrsearch_IndexController extends Controller_Action {
             }
         }
 
-        return $this->view->url(self::createSearchUrlArray($params), null, true);
+        return $params;
     }
 
     public function searchAction() {
@@ -347,7 +342,7 @@ class Solrsearch_IndexController extends Controller_Action {
         }
         catch (SolrSearch_Model_Exception $e) {
             $this->log->debug($e->getMessage());
-            $this->_helper->redirector('browse');
+            $this->_redirectToAndExit('index', '', 'browse', null, array(), true);
         }        
         
         $this->view->subnodes = $collectionList->getSubNodes();

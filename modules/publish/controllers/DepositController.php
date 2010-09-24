@@ -126,9 +126,7 @@ class Publish_DepositController extends Controller_Action {
                 $this->_notifyReferee($projects);
             }
         } else {
-            // GET Request is redirected to index
-            $url = $this->view->url(array('controller' => 'index', 'action' => 'index'));
-            return $this->redirectTo($url);
+            return $this->_redirectTo('index', '', 'index');
         }
     }
 
