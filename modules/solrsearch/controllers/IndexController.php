@@ -264,25 +264,35 @@ class Solrsearch_IndexController extends Controller_Action {
     }
 
     private function buildQuery() {
-        if (is_null($this->getRequest()->getParams()))
-            throw new Application_Exception("Unable to read request data. Search cannot be performed.");
+        if (is_null($this->getRequest()->getParams())) {
+            $this->log->info('Unable to read request data. Search cannot be performed.');
+            $this->_redirectToAndExit ('index');
+        }
 
-        if (is_null($this->getRequest()->getParam('searchtype')))
-            throw new Application_Exception("Unable to create query for unspecified searchtype");
+        if (is_null($this->getRequest()->getParam('searchtype'))) {
+            $this->log->info('Unable to create query for unspecified searchtype');
+            $this->_redirectToAndExit ('index');
+        }
 
         $query = null;
         $this->searchtype = $this->getRequest()->getParam('searchtype');
-        if ($this->searchtype === self::SIMPLE_SEARCH)
+        if ($this->searchtype === self::SIMPLE_SEARCH) {
             $query = $this->createSimpleSearchQuery();
-        else if ($this->searchtype === self::ADVANCED_SEARCH || $this->searchtype === self::AUTHOR_SEARCH)
+        }
+        else if ($this->searchtype === self::ADVANCED_SEARCH || $this->searchtype === self::AUTHOR_SEARCH) {
             $query = $this->createAdvancedSearchQuery();
-        else if ($this->searchtype === self::LATEST_SEARCH)
+        }
+        else if ($this->searchtype === self::LATEST_SEARCH) {
             $query = $this->createLatestSearchQuery();
-        else if ($this->searchtype === self::COLLECTION_SEARCH)
+        }
+        else if ($this->searchtype === self::COLLECTION_SEARCH) {
             $query = $this->createCollectionSearchQuery();
-        else
-            throw new Application_Exception("Unable to create query for searchtype " . $this->searchtype);
-
+        }
+        else {
+            $this->log->info('Unable to create query for searchtype ' . $this->searchtype);
+            $this->_redirectToAndExit ('index');
+        }
+        
         $this->validateQuery($query);
         return $query;
     }
@@ -465,5 +475,5 @@ class Solrsearch_IndexController extends Controller_Action {
         }
         return $rows;
     }
-}
+        }
 ?>
