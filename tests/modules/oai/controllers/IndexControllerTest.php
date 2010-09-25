@@ -37,12 +37,17 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
 
     public function testInvalidVerb() {
+    try{
         $this->dispatch('/oai?verb=InvalidVerb');
         $this->assertResponseCode(200);
 
         $response = $this->getResponse();
-        $this->assertContains('badVerb', $response,
+        $this->assertContains('badVerb', $response>getBody(),
            "Response must contain 'badVerb'");
+    }
+    catch (Exception $e) {
+        $this->fail($e->getMessage());
+    }
     }
 
     public function testNoVerb() {
@@ -50,7 +55,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200);
 
         $response = $this->getResponse();
-        $this->assertContains('badVerb', $response,
+        $this->assertContains('badVerb', $response>getBody(),
            "Response must contain 'badVerb'");
     }
 
@@ -63,11 +68,16 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
 
     public function testListMetadataFormats() {
-        $this->dispatch('http://opus4web.zib.de/opus4-devel/oai?verb=ListSets');
+    try{
+        $this->dispatch('/opus4-devel/oai?verb=ListSets');
         $this->assertResponseCode(200);
 
         $response = $this->getResponse();
         $this->checkForBadStringsInHtml($response->getBody());
+    }
+    catch (Exception $e) {
+        $this->fail($e->getMessage());
+    }
     }
 
     public function testSets() {
@@ -87,11 +97,16 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
 
     public function testGetRecordOaiDc() {
+    try{
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::35');
         $this->assertResponseCode(200);
 
         $response = $this->getResponse();
         $this->checkForBadStringsInHtml($response->getBody());
+    }
+    catch (Exception $e) {
+        $this->fail($e->getMessage());
+    }
     }
 
     public function testGetRecordxMetaDissPlus() {
@@ -111,7 +126,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
 
     public function testListRecords() {
-        $this->dispatch('http://opus4web.zib.de/opus4-devel/oai?verb=ListRecords&metadataPrefix=oai_dc&from=2006-01-01');
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&from=2006-01-01');
         $this->assertResponseCode(200);
 
         $response = $this->getResponse();
