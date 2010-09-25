@@ -42,7 +42,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200);
 
         $response = $this->getResponse();
-        $this->assertContains('badVerb', $response>getBody(),
+        $this->assertContains('badVerb', $response->getBody(),
            "Response must contain 'badVerb'");
     }
     catch (Exception $e) {
@@ -55,7 +55,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200);
 
         $response = $this->getResponse();
-        $this->assertContains('badVerb', $response>getBody(),
+        $this->assertContains('badVerb', $response->getBody(),
            "Response must contain 'badVerb'");
     }
 
