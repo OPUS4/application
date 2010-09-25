@@ -36,15 +36,15 @@
 <?php if (!empty($this->parents)) : ?>
 <div id="breadcrumb">
     <ul>        
-        <?php
-            $first = true;
-            foreach ($this->parents as $parent) : 
-        ?>
-            <?php if ($first) :
-                $first = false; ?>
-                <li><a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'collection', 'id' => $parent->getId()), null, true) ?>"><?= htmlspecialchars($this->collectionRoleTitle) ?></a>
+        <?php foreach ($this->parents as $id => $parent) : ?>
+            <?php if ($id === 0) : ?>
+                <li><a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'collection', 'id' => $parent->getId()), null, true) ?>"><?= htmlspecialchars($this->collectionRoleTitle) ?></a></li>
             <?php else : ?>
-                <li><a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'collection', 'id' => $parent->getId()), null, true) ?>"><?= htmlspecialchars($parent->getDisplayName()) ?></a>
+                <?php if ($parent->getVisible() === '1') : ?>
+                    <li><a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'collection', 'id' => $parent->getId()), null, true) ?>"><?= htmlspecialchars($parent->getDisplayName()) ?></a></li>
+                <?php else : ?>
+                    <li><?= htmlspecialchars($parent->getDisplayName()) ?></li>
+                <?php endif ?>                
             <?php endif ?>
         <?php endforeach ?>
     </ul>

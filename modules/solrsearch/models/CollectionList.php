@@ -74,15 +74,18 @@ class SolrSearch_Model_CollectionList {
     }
 
     /**
+     * Returns an array of Collection objects along the path to the root.
+     * In case the current collection is a root collection an empty array is returned.
      *
-     * @return array An array of Collection objects along the path to the root.
+     * @return array
      */
     public function getParents() {
         $parents = $this->collection->getParents();
         $numOfParents = count($parents);
         if ($numOfParents < 2) {
             return array();
-        }                
+        }
+        // remove the first array element and reverse order of remaining array elements
         $results = array();
         for ($i = 1; $i < $numOfParents; $i++) {
             $results[] = $parents[$numOfParents - $i];
@@ -90,6 +93,10 @@ class SolrSearch_Model_CollectionList {
         return $results;
     }
 
+    /**
+     *
+     * @return array
+     */
     public function getChildren() {
         $children = array();
         foreach ($this->collection->getChildren() as $child) {
