@@ -46,7 +46,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
            "Response must contain 'badVerb'");
     }
     catch (Exception $e) {
-        $this->fail($e->getMessage());
+        $this->fail($e->getMessage() . "\n--\n" . $this->getResponse() . "\n--\n");
     }
     }
 
@@ -76,24 +76,34 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->checkForBadStringsInHtml($response->getBody());
     }
     catch (Exception $e) {
-        $this->fail($e->getMessage());
+        $this->fail($e->getMessage() . "\n--\n" . $this->getResponse() . "\n--\n");
     }
     }
 
     public function testSets() {
+    try{
         $this->dispatch('/oai?verb=ListMetadataFormats');
         $this->assertResponseCode(200);
 
         $response = $this->getResponse();
         $this->checkForBadStringsInHtml($response->getBody());
     }
+    catch (Exception $e) {
+        $this->fail($e->getMessage() . "\n--\n" . $this->getResponse() . "\n--\n");
+    }
+    }
 
     public function testGetRecordxMetaDiss() {
+    try{
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDiss&identifier=oai::35');
         $this->assertResponseCode(200);
 
         $response = $this->getResponse();
         $this->checkForBadStringsInHtml($response->getBody());
+    }
+    catch (Exception $e) {
+        $this->fail($e->getMessage() . "\n--\n" . $this->getResponse() . "\n--\n");
+    }
     }
 
     public function testGetRecordOaiDc() {
@@ -105,7 +115,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->checkForBadStringsInHtml($response->getBody());
     }
     catch (Exception $e) {
-        $this->fail($e->getMessage());
+        $this->fail($e->getMessage() . "\n--\n" . $this->getResponse() . "\n--\n");
     }
     }
 
