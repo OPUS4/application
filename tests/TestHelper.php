@@ -79,7 +79,7 @@ class TestHelper extends Application_Bootstrap {
         }
         while(false === feof($handle)) {
             $line = fgets($handle);
-            if (1 === preg_match('/\$Rev: 5890 $line, $matches)) {
+            if (1 === preg_match('/\$Rev: \d*\s\$/', $line, $matches)) {
                 $sqlRev = $matches[0];
                 break;
             }
