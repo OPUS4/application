@@ -42,24 +42,6 @@ CREATE TABLE IF NOT EXISTS `collections` (
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `collections_attributes`
---
-
-CREATE TABLE IF NOT EXISTS `collections_attributes` (
-  `id` int(10) unsigned NOT NULL,
-  `name` varchar(255) default NULL,
-  `value` varchar(255) default NULL,
-  KEY `id` (`id`,`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Daten für Tabelle `collections_attributes`
---
-
-
--- --------------------------------------------------------
-
---
 -- Tabellenstruktur für Tabelle `collections_roles`
 --
 
