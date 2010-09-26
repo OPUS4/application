@@ -109,6 +109,39 @@ class Review_Model_DocumentAdapter {
     }
 
     /**
+     * Returns document type.
+     * @return string
+     */
+    public function getDocType() {
+        try {
+            return htmlspecialchars($this->document->getType());
+        }
+        catch (Exception $e) {
+            return 'undefined';
+        }
+    }
+
+    /**
+     * Return published date.
+     *
+     * TODO or should it be getPublishedYear (?)
+     */
+    public function getPublishedDate() {
+        try {
+            $date = $this->document->getPublishedDate();
+
+            if (empty($date)) {
+                $date = $this->document->getPublishedYear();
+            }
+
+            return htmlspecialchars($date);
+        }
+        catch (Exception $e) {
+            return 'unknown';
+        }
+    }
+
+    /**
      * Returns frontdoor URL for document.
      * @return  url
      */
