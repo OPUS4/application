@@ -174,7 +174,6 @@ class Admin_AccountController extends Controller_Action {
             $postData = $this->getRequest()->getPost();
 
             $passwordChanged = true;
-
             if (empty($postData['password'])) {
                 // modify to pass default validation
                 // TODO think about better solution
@@ -190,10 +189,6 @@ class Admin_AccountController extends Controller_Action {
             if ($accountForm->isValid($postData)) {
 
                 $oldLogin = $account->getLogin();
-
-                $currentUser = Zend_Auth::getInstance()->getIdentity();
-
-                $isCurrentUser = ($currentUser === $oldLogin) ? true : false;
 
                 // update login name
                 $newLogin = $postData['username'];
@@ -225,6 +220,9 @@ class Admin_AccountController extends Controller_Action {
                     }
                 }
                     
+                $currentUser = Zend_Auth::getInstance()->getIdentity();
+                $isCurrentUser = ($currentUser === $oldLogin) ? true : false;
+
                 if (!$hasAdministratorRole && $isCurrentUser) {
                     $newRoles[] = Opus_Role::fetchByName('administrator');
                 }
