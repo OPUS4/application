@@ -32,69 +32,32 @@
  */
 
 /**
- * Basic unit tests for account module.
+ * Unit tests for authentication controller.
+ *
+ * TODO complete tests
  */
-class Account_IndexControllerTest extends ControllerTestCase {
+class AuthControllerTest extends ControllerTestCase {
 
-    /**
-     * Test showing account information.
-     */
     public function testIndexAction() {
-        $this->loginUser('admin', 'adminadmin');
-        $this->dispatch('/account');
+        $this->dispatch('/auth');
         $this->assertResponseCode(200);
-        $this->assertModule('account');
-        $this->assertController('index');
-        $this->assertAction('index');
     }
 
-    /**
-     * Test modifying account information.
-     */
-    public function testChangePassword() {
-        $user = new Opus_Account();
-        $user->setLogin('john');
-        $user->setPassword('testpwd');
-        $user->store();
+    public function testIndexActionLoggedIn() {
+        $this->loginUser('admin', 'adminadmin');
+        $this->dispatch('/auth');
+        $this->assertResponseCode(200);
+    }
 
-        $this->loginUser('john', 'testpwd');
+    public function testLoginAction() {
         $this->request
                 ->setMethod('POST')
                 ->setPost(array(
-                   'username' => 'john',
-                   'password' => 'newpassword',
-                   'confirmPassword' => 'newpassword'
+                   'login' => 'admin',
+                   'password' => 'adminadmin'
                 ));
-        $this->dispatch('/account/index/save');
-        $this->assertRedirect();
-
-        $this->loginUser('john', 'newpassword');
-
-        $user->delete();
-    }
-
-    /**
-     * Test changing login.
-     */
-    public function testChangeLogin() {
-        $user = new Opus_Account();
-        $user->setLogin('john');
-        $user->setPassword('testpwd');
-        $user->store();
-
-        $this->loginUser('john', 'testpwd');
-        $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                   'username' => 'john2'
-                ));
-        $this->dispatch('/account/index/save');
-        $this->assertRedirect();
-
-        $this->loginUser('john2', 'testpwd');
-
-        $user = new Opus_Account(null, null, 'john2');
-        $user->delete();
+        $this->dispatch('/auth/login');
+        // $this->assertRedirect();
     }
 
 }

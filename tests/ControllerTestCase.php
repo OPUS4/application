@@ -80,6 +80,21 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
                 $bodyLowerCase,
                 "Response must not contain '$badString'");
     }
+
+    /**
+     * Login user.
+     * 
+     * @param string $login
+     * @param string $password
+     */
+    public function loginUser($login, $password) {
+        $adapter = new Opus_Security_AuthAdapter();
+        $adapter->setCredentials($login, $password);
+        $auth = Zend_Auth::getInstance();
+        $result = $auth->authenticate($adapter);
+        $this->assertTrue($auth->hasIdentity());
+    }
+
 }
 
 ?>
