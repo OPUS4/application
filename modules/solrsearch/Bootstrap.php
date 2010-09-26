@@ -29,7 +29,7 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: Bootstrap.php 4742 2010-08-16 19:38:02Z sszott $
+ * @version     $Id$
  */
 
 class SolrSearch_Bootstrap extends Zend_Application_Module_Bootstrap {

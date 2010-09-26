@@ -15,7 +15,7 @@
 # @copyright   Copyright (c) 2009-2010
 #              Saechsische Landesbibliothek - Staats- und Universitaetsbibliothek Dresden (SLUB)
 # @license     http://www.gnu.org/licenses/gpl.html General Public License
-# @version     $Id: index_optimizer.sh 5765 2010-06-07 14:15:00Z claussni $
+# @version     $Id$
 #
 
 # run daily at 1:45 on sdvqucosa-app00, sdvqucosa-app01

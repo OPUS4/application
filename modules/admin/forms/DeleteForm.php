@@ -29,7 +29,7 @@
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: SignatureForm.php 2760 2009-05-14 07:13:38Z marahrens $
+ * @version     $Id$
  */
 
 /**

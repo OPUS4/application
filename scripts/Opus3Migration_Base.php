@@ -31,7 +31,7 @@
  * @author      Gunar Maiwald <maiwald@zib.de>
  * @copyright   Copyright (c) 2009, 2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: Opus3Migration.php 4497 2010-06-24 15:59:30Z radu $
+ * @version     $Id$
  */
 
 class Opus3Migration_Base { 

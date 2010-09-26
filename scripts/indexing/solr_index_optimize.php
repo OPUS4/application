@@ -16,7 +16,7 @@
  * @copyright   Copyright (c) 2010
  *              Saechsische Landesbibliothek - Staats- und Universitaetsbibliothek Dresden (SLUB)
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: solr_index_optimize.php 5765 2010-06-07 14:15:00Z claussni $
+ * @version     $Id$
  */
 
 define('APPLICATION_ENV', 'production');

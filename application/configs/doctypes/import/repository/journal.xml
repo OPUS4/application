@@ -33,7 +33,7 @@
     * @author     Ulrich Herb <u.herb@sulb.uni-saarland.de>
 	* @copyright  Copyright (c) 2009, OPUS 4 development team
 	* @license    http://www.gnu.org/licenses/gpl.html General Public License
-	* @version    $Id: journal.xml 4126 2010-02-08 14:15:30Z uherb $
+	* @version    $Id$
 -->
 
 <documenttype name="journal"

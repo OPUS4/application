@@ -31,7 +31,7 @@
  * @author      Jens Schwidder (schwidder@zib.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: IndexController.php 4656 2010-08-06 10:27:26Z schwidder $
+ * @version     $Id$
  */
 
 /**

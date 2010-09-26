@@ -30,7 +30,7 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: Builder.php 4483 2010-06-08 16:17:55Z marahrens $
+ * @version     $Id$
  */
 
 /**

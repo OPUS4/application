@@ -32,7 +32,7 @@
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: opus3.xslt 3927 2009-12-10 08:21:22Z marahrens $
+ * @version     $Id$
  */
 -->
 
