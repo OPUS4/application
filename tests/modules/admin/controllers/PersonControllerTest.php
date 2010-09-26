@@ -66,6 +66,14 @@ class Amdin_PersonController extends ControllerTestCase {
         $config->admin->persons->disabled = $enabled;
     }
 
+    public function testShowAction() {
+        $this->dispatch('/admin/person/show/id/1');
+        $this->assertResponseCode(200);
+        $this->assertModule('admin');
+        $this->assertController('person');
+        $this->assertAction('show');
+    }
+
 }
 
 ?>

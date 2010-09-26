@@ -76,6 +76,31 @@ class Admin_LanguageControllerTest extends ControllerTestCase {
         $this->assertAction('edit');
     }
 
+    public function testCreateAction() {
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'Opus_Language[Part2B][1]' => 'eng',
+                    'Opus_Language[Part2T][1]' => 'eng',
+                    'Opus_Language[Part1][1]' => 'en',
+                    'Opus_Language[Scope][1]' => 'I',
+                    'Opus_Language[Type][1]' => 'L',
+                    'Opus_Language[RefName][1]' => 'English',
+                    'Opus_Language[Active][1]' => '1',
+                    'submit' => 'Save Changes'
+                ));
+        $this->dispatch('/admin/language/create');
+        $this->markTestIncomplete();
+    }
+
+    public function testUpdateAction() {
+        $this->markTestIncomplete();
+    }
+
+    public function testDeleteAction() {
+        $this->markTestIncomplete();
+    }
+
 }
 
 ?>
