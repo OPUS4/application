@@ -26,12 +26,6 @@ ALTER TABLE `collections`
   ADD CONSTRAINT `collections_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `collections_roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Constraints der Tabelle `collections_attributes`
---
-ALTER TABLE `collections_attributes`
-  ADD CONSTRAINT `collections_attributes_ibfk_1` FOREIGN KEY (`id`) REFERENCES `collections` (`id`);
-
---
 -- Constraints der Tabelle `link_documents_collections`
 --
 ALTER TABLE `link_documents_collections`
