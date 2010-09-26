@@ -32,49 +32,58 @@
  */
 
 /**
- * Form for creating or editing IP ranges.
+ * Abstract class for supporting editing of Opus roles in form.
  */
-class Admin_Form_IpRange extends Admin_Form_RolesAbstract {
+abstract class Admin_Form_RolesAbstract extends Zend_Form {
 
     /**
-     * Constructs empty form or populates it with values from Opus_Iprange($id).
-     * @param integer $id
+     * Adds display group for roles.
      */
-    public function __construct($id = null) {
-        $env = (empty($id)) ? 'new' : 'edit';
+    protected function _addRolesGroup() {
+        $roles = Opus_Role::getAll();
 
-        $config = new Zend_Config_Ini(APPLICATION_PATH .
-                '/modules/admin/forms/iprange.ini', $env);
-        
-        parent::__construct($config->form->iprange);
+        $rolesGroup = array();
 
-        if (!empty($id)) {
-            $ipRange = new Opus_Iprange($id);
-
-            $this->populateFromIpRange($ipRange);
+        foreach ($roles as $role) {
+            $roleName = $role->getDisplayName();
+            $roleCheckbox = $this->createElement('checkbox', 'role' . $roleName)->setLabel($roleName);
+            $this->addElement($roleCheckbox);
+            $rolesGroup[] = $roleCheckbox->getName();
         }
+
+        $this->addDisplayGroup($rolesGroup, 'Roles', array('legend' => 'admin_form_group_roles'));
     }
 
     /**
-     * Initializes form and adds display group for roles.
+     * Parses post data and returns array with Opus_Role instances.
+     * @param array $postData
+     * @return array of Opus_Role instances
      */
-    public function init() {
-        parent::init();
-        $this->_addRolesGroup();
+    public static function parseSelectedRoles($postData) {
+        $roles = Opus_Role::getAll();
+
+        $selectedRoles = array();
+
+        foreach ($roles as $roleName) {
+            $roleSelected = $postData['role' . $roleName];
+            if ($roleSelected) {
+                $role = Opus_Role::fetchByName($roleName);
+                $selectedRoles[] = $role;
+            }
+        }
+
+        return $selectedRoles;
     }
 
     /**
-     * Populates form with values from Opus_Iprange instance.
-     * @param Opus_Iprange $ipRange
+     * Sets checkboxes for roles according to provided array.
+     * @param array $roles
      */
-    public function populateFromIpRange($ipRange) {
-        $this->getElement('name')->setValue($ipRange->getName());
-        $this->getElement('startingip')->setValue($ipRange->getStartingip());
-        $this->getElement('endingip')->setValue($ipRange->getEndingip());
-
-        $roles = $ipRange->getRole();
-
-        $this->setSelectedRoles($roles);
+    public function setSelectedRoles($roles) {
+        foreach ($roles as $roleName) {
+            $role = $this->getElement('role' . $roleName);
+            $role->setValue(1);
+        }
     }
 
 }
