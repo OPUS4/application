@@ -332,11 +332,15 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
         $role->setVisibleFrontdoor(1);
         $role->store();
 
-        $root_node = $role->getRootNode()->setVisible(1);
-        $root_node->store();
+        $root = $role->addRootCollection()->setVisible(1);
+
+        // TODO: write unit test
+        $role->store();
+
+        $role->store();
 
         $collections = array();
-        $app_area_node = array();
+        $app_area_collection = array();
 
         $file = $this->dumps_dir . '/projects.xml';
         foreach ($this->load_xml_mysqldump($file) AS $project) {
@@ -347,26 +351,24 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             $project_id = $project['project_id'];
             $project_title = $project['project_title'];
 
-            if (false === array_key_exists($app_area, $app_area_node)) {
-                $app_node = $root_node->addLastChild()->setVisible($app_area_visible);
-                $app_collection = $app_node->addCollection();
+            if (false === array_key_exists($app_area, $app_area_collection)) {
+                $app_collection = $root->addLastChild()->setVisible($app_area_visible);
                 $app_collection->setNumber($app_area);
                 $app_collection->setName($app_area_name);
-                $root_node->store();
+                $root->store();
 
                 // TODO: Add Unit tests.
                 // $app_node->store();
 
-                $app_area_node[$app_area] = $app_node;
+                $app_area_collection[$app_area] = $app_collection;
             }
-            $app_node = $app_area_node[$app_area];
+            $app_collection = $app_area_collection[$app_area];
 
             if (false === array_key_exists($project_id, $collections)) {
-                $project_node = $app_node->addLastChild()->setVisible(1);
-                $project_collection = $project_node->addCollection();
+                $project_collection = $app_collection->addLastChild()->setVisible(1);
                 $project_collection->setNumber($project_id);
                 $project_collection->setName($project_title);
-                $project_node->store();
+                $project_collection->store();
 
                 $collections[$project_id] = $project_collection;
             }
@@ -405,8 +407,12 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
         $role->setVisibleFrontdoor(1);
         $role->store();
 
-        $root_node = $role->getRootNode()->setVisible(1);
-        $root_node->store();
+        $root = $role->addRootCollection()->setVisible(1);
+
+        // TODO: Write unit test.
+        // $root->store();
+
+        $role->store();
 
         $collections = array();
 
@@ -417,11 +423,10 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             $institute_name = $institute['institute_name'];
 
             if (false === array_key_exists($institute_id, $collections)) {
-                $institute_node = $root_node->addLastChild()->setVisible(1);
-                $institute_collection = $institute_node->addCollection();
+                $institute_collection = $root->addLastChild()->setVisible(1);
                 $institute_collection->setName($institute_name)
                                      ->setNumber($institute_key);
-                $root_node->store();
+                $root->store();
 
                 $collections[$institute_id] = $institute_collection;
             }
