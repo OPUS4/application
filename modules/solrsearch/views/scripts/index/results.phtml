@@ -25,7 +25,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_SolrSearch
+ * @package     Module_Solrsearch
  * @package     Opus_SolrSearch
  * @author      Julian Heise <heise@zib.de>
  * @author      Sascha Szott <szott@zib.de>
@@ -33,18 +33,21 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+?>
 
+<?php
 $fc = Zend_Controller_Front::getInstance();
 $basePath = $fc->getRequest()->getBasePath();
 $config = Zend_Registry::get('Zend_Config');
 $jsEnabled = isset($config->javascript->jquery->path);
-if($jsEnabled) {
+if ($jsEnabled) {
     $startUpScript = '$(document).ready(function() { init_searchresults(); });';
     $this->headScript()
         ->appendFile($basePath . $config->javascript->jquery->path)
         ->appendScript($startUpScript);
 }
 ?>
+
 <?php if($jsEnabled) : ?>
 <script type="text/javascript">
     function init_searchresults() {
@@ -124,6 +127,4 @@ if($jsEnabled) {
     <?php endforeach ?>
 </div>
 
-<?php if(!$this->isSimpleList) : ?>
-<?php include('pagination.phtml') ?>
-<?php endif ?>
+<?php if (!$this->isSimpleList) include('pagination.phtml') ?>
