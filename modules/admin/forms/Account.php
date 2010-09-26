@@ -50,12 +50,7 @@ class Admin_Form_Account extends Admin_Form_RolesAbstract {
         parent::__construct($config->form->account);
 
         if (!empty($id)) {
-            if (is_numeric($id)) {
-                $account = new Opus_Account($id);
-            }
-            else {
-                $account = new Opus_Account(null, null, $id);
-            }
+            $account = new Opus_Account($id);
 
             $this->populateFromAccount($account);
         }
