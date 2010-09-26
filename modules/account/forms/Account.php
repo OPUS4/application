@@ -1,4 +1,4 @@
-<?PHP
+<?php
 /*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -30,8 +30,37 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+
+class Account_Form_Account extends Zend_Form {
+
+    public function __construct($login) {
+        $config = new Zend_Config_Ini(APPLICATION_PATH .
+                '/modules/account/forms/account.ini', 'production');
+
+        parent::__construct($config->form->account);
+
+        if (!empty($login)) {
+            $account = new Opus_Account(null, null, $login);
+
+            $this->populateFromAccount($account);
+        }
+    }
+
+    public function init() {
+        parent::init();
+
+        $this->getElement('confirmPassword')->addValidator(
+                new Form_Validate_Password());
+
+        $this->getElement('username')->addValidator(
+                new Form_Validate_LoginAvailable());
+    }
+
+    public function populateFromAccount($account) {
+        $this->getElement('username')->setValue($account->getLogin());
+    }
+
+
+
+}
 ?>
-
-<h1><?= $this->translate($this->title) ?></h1>
-
-<?= $this->accountForm ?>

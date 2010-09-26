@@ -34,8 +34,79 @@
 class Account_IndexController extends Controller_Action {
 
     public function indexAction() {
-        $accountForm = new Admin_Form_Account();
-        $this->view->accountForm = $accountForm;
+        $login = Zend_Auth::getInstance()->getIdentity();
+
+        if (!empty($login)) {
+            $accountForm = new Account_Form_Account($login);
+
+            $actionUrl = $this->view->url(array('action' => 'save'));
+
+            $accountForm->setAction($actionUrl);
+
+            $this->view->accountForm = $accountForm;
+        }
+        else {
+            $params = $this->_helper->returnParams->getReturnParameters();
+            $this->_helper->redirector->gotoSimple('index', 'auth', 'default', $params);
+        }
+    }
+
+    public function saveAction() {
+        $login = Zend_Auth::getInstance()->getIdentity();
+
+        if (!empty($login) && $this->getRequest()->isPost()) {
+            $accountForm = new Account_Form_Account($login);
+
+            $postData = $this->getRequest()->getPost();
+
+            $isPasswordChanged = true;
+
+            if (empty($postData['password'])) {
+                // modify to pass default validation
+                // TODO think about better solution
+                $postData['password'] = 'notchanged';
+                $postData['confirmPassword'] = 'notchanged';
+                $isPasswordChanged = false;
+            }
+
+            $postData['oldLogin'] = $login;
+
+            if ($accountForm->isValid($postData)) {
+                $account = new Opus_Account(null, null, $login);
+
+                $newLogin = $postData['username'];
+                $password = $postData['password'];
+
+                $this->_logger->debug('login = ' . $login);
+                $this->_logger->debug('new login = ' . $newLogin);
+
+                $isLoginChanged = ($login == $newLogin) ? false : true;
+
+                if ($isLoginChanged) {
+                    $this->_logger->debug('login changed');
+                    $account->setLogin($newLogin);
+                }
+
+                if ($isPasswordChanged) {
+                    $this->_logger->debug('Password changed');
+                    $account->setPassword($password);
+                }
+
+                $account->store();
+
+                if ($isLoginChanged || $isPasswordChanged) {
+                    Zend_Auth::getInstance()->clearIdentity();
+                }
+            }
+            else {
+                $actionUrl = $this->view->url(array('action' => 'save'));
+                $accountForm->setAction($actionUrl);
+                $this->view->accountForm = $accountForm;
+                return $this->renderScript('index/index.phtml');
+            }
+        }
+
+        $this->_helper->redirector('index');
     }
 
 }
