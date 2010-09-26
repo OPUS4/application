@@ -25,17 +25,14 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
+ * @category    Application
+ * @package     Module_Solrsearch
  * @author      Julian Heise <heise@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 class Solrsearch_IndexControllerTest extends ControllerTestCase {
-
-    public function testIndexAction() {
-        $this->doStandardControllerTest('/solrsearch', 'index', 'index');
-    }
 
     private function doStandardControllerTest($url, $controller, $action) {
         $this->dispatch($url);
@@ -44,7 +41,10 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
             $this->assertController($controller);
         if($action != null)
             $this->assertAction($action);
-        $response = $this->getResponse();
+    }
+
+    public function testIndexAction() {
+        $this->doStandardControllerTest('/solrsearch', 'index', 'index');
     }
 
     public function testAdvancedAction() {

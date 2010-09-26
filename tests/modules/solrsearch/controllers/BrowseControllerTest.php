@@ -25,17 +25,23 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Tests
+ * @package     Module_Solrsearch
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-class SolrSearch_Model_ExceptionTest extends ControllerTestCase {
+class Solrsearch_BrowseControllerTest extends ControllerTestCase {
 
-    public function testConstructor() {
-        new SolrSearch_Model_Exception();
+    public function testIndexAction() {
+        $this->dispatch('/solrsearch/browse');
+        $this->assertResponseCode(200);
+    }
+
+    public function testDoctypesAction() {
+        $this->dispatch('/solrsearch/browse/doctypes');
+        $this->assertResponseCode(200);
     }
 }
 ?>

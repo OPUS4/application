@@ -160,6 +160,14 @@
         </tuv>
     </tu>
 
+    <tu tuid="rss_icon">
+        <tuv xml:lang="en">
+            <seg>subscribe to RSS feed</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>RSS-Feed abonnieren</seg>
+        </tuv>
+    </tu>
 
   </body>
 </tmx>

@@ -34,10 +34,6 @@
 
 class SolrSearch_Model_CollectionListTest extends ControllerTestCase {
     
-    public function setUp() {
-        parent::setUp();
-    }
-
     public function testMissingCollectionId() {
         $this->setExpectedException('SolrSearch_Model_Exception');
         new SolrSearch_Model_CollectionList(null);

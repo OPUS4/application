@@ -34,15 +34,9 @@
 
 class SolrSearch_Model_CollectionRolesTest extends ControllerTestCase {
 
-    public function setUp() {
-        parent::setUp();
-    }
-
     public function testGetAllVisible() {
         $collectionRoles = new SolrSearch_Model_CollectionRoles();
         $collectionRoles->getAllVisible();
     }
-
 }
-
 ?>
