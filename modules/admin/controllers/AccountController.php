@@ -199,17 +199,8 @@ class Admin_AccountController extends Controller_Action {
                 $newLogin = $postData['username'];
 
                 if ($newLogin !== $oldLogin) {
-                    if (Zend_Validate::is($newLogin, 'LoginAvailable')) {
-                        $account->setLogin($newLogin);
-                        $loginChanged = true;
-                    }
-                    else {
-                        $accountForm->getElement('username')->addError($this->view->translate('admin_account_error_login_used'));
-                        $actionUrl = $this->view->url(array('action' => 'update', 'id' => $id));
-                        $accountForm->setAction($actionUrl);
-                        $this->view->form = $accountForm;
-                        return $this->renderScript('account/edit.phtml');
-                    }
+                    $account->setLogin($newLogin);
+                    $loginChanged = true;
                 }
                 else {
                     $loginChanged = false;
