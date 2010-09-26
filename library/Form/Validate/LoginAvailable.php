@@ -32,69 +32,70 @@
  */
 
 /**
- * Account administration form.
- *
+ * Checks if a login already exists.
  */
-class Admin_Form_Account extends Admin_Form_RolesAbstract {
+class Form_Validate_LoginAvailable extends Zend_Validate_Abstract {
 
     /**
-     * Constructs empty form or populates it with values from Opus_Account($id).
-     * @param mixed $id
+     * Constant for login is not available anymore.
      */
-    public function __construct($id = null) {
-        $env = (empty($id)) ? 'new' : 'edit';
+    const NOT_AVAILABLE = 'isAvailable';
 
-        $config = new Zend_Config_Ini(APPLICATION_PATH .
-                '/modules/admin/forms/account.ini', $env);
+    /**
+     * Error messages.
+     */
+    protected $_messageTemplates = array(
+        self::NOT_AVAILABLE => 'admin_account_error_login_used'
+    );
 
-        parent::__construct($config->form->account);
+    /**
+     * Checks if a login already exists.
+     *
+     * Returns true if a login does not exist or if the oldLogin value equals
+     * the current value. Which means the login hasn't changed.
+     *
+     * TODO Is there a better way to deal with updates?
+     *
+     * @param string $value
+     * @param mixed $context
+     * @return boolean
+     */
+    public function isValid($value, $context = null) {
+        $value = (string) $value;
 
-        if (!empty($id)) {
-            if (is_numeric($id)) {
-                $account = new Opus_Account($id);
+        $this->_setValue($value);
+
+        $oldLogin = null;
+
+        if (is_array($context)) {
+            if (isset($context['oldLogin'])) {
+                $oldLogin = $context['oldLogin'];
             }
-            else {
-                $account = new Opus_Account(null, null, $id);
-            }
-
-            $this->populateFromAccount($account);
         }
+        elseif (is_string($context)) {
+            $oldLogin = $context;
+        }
+
+        if (($this->_isLoginUsed($value)) && !($oldLogin === $value)) {
+            $this->_error(self::NOT_AVAILABLE);
+            return false;
+        }
+
+        return true;
     }
 
     /**
-     * Create form elements.
+     * Checks if a login name already exists in database.
+     * @param string $login
+     * @return boolean
      */
-    public function init() {
-        parent::init();
-
-        $this->getElement('username')->addValidator(
-                new Form_Validate_LoginAvailable());
-
-        // add password validator
-        $confirmPassword = $this->getElement('confirmPassword');
-        $passwordValidator = new Form_Validate_Password();
-        $confirmPassword->addValidator($passwordValidator);
-
-        // add form elements for selecting roles
-        $this->_addRolesGroup();
-    }
-    
-    /**
-     * Populate the form values from Opus_Account instance.
-     * @param <type> $account
-     */
-    public function populateFromAccount($account) {
-        $this->getElement('username')->setValue($account->getLogin());
-
-        $roles = $account->getRole();
-
-        $this->setSelectedRoles($roles);
-
-        $adminRoleElement = $this->getElement('roleadministrator');
-
-        if (Zend_Auth::getInstance()->getIdentity() === $account->getLogin()) {
-            $adminRoleElement->setAttrib('disabled', true);
+    protected function _isLoginUsed($login) {
+        try {
+            $account = new Opus_Account(null, null, $login);
+        } catch (Exception $ex) {
+            return false;
         }
+        return true;
     }
 
 }

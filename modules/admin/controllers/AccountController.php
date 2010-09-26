@@ -43,30 +43,16 @@
  */
 class Admin_AccountController extends Controller_Action {
 
-
     /**
      * Default action presents list of existing accounts.
      */
     public function indexAction() {
         $this->view->title = $this->view->translate('admin_account_index');
 
-        if ($this->_request->isPost() === true) {
-            $request = $this->getRequest();
-            $buttonEdit = $request->getPost('actionEdit');
-            $buttonDelete = $request->getPost('actionDelete');
-
-            if (isset($buttonEdit)) {
-                $this->_forwardToAction('edit');
-            }
-            else if (isset($buttonDelete)) {
-                $this->_forwardToAction('delete');
-            }
-        }
-        
         $accounts = Opus_Account::getAll();
 
         if (empty($accounts)) {
-            $this->view->render('none');
+            return $this->renderScript('account/none.phtml');
         }
         else {
             $this->view->accounts = array();
@@ -100,7 +86,7 @@ class Admin_AccountController extends Controller_Action {
     public function newAction() {
         $this->view->title = $this->view->translate('admin_account_new');
 
-        $accountForm = $this->_getAccountForm();
+        $accountForm = new Admin_Form_Account();
 
         $actionUrl = $this->view->url(array('action' => 'create'));
 
@@ -121,41 +107,22 @@ class Admin_AccountController extends Controller_Action {
                 return;
             }
 
-            $accountForm = $this->_getAccountForm();
+            $accountForm = new Admin_Form_Account();
 
             $postData = $this->getRequest()->getPost();
 
             if ($accountForm->isValid($postData)) {
                 $login = $postData['username'];
+                $password = $postData['password'];
+                $roles = Admin_Form_Account::parseSelectedRoles($postData);
 
-                if (!$this->_isLoginUsed($login)) {
-                    $password = $postData['password'];
+                $account = new Opus_Account();
 
-                    $account = new Opus_Account();
+                $account->setLogin($login);
+                $account->setPassword($password);
+                $account->setRole($roles);
 
-                    $account->setLogin($login);
-                    $account->setPassword($password);
-
-                    $roles = Opus_Role::getAll();
-
-                    foreach ($roles as $roleName) {
-                        $roleSelected = $postData['role' . $roleName];
-                        if ($roleSelected) {
-                            $role = Opus_Role::fetchByName($roleName);
-                            $account->addRole($role);
-                        }
-                    }
-
-                    $account->store();
-                    $this->_redirectTo('index');
-                }
-                else {
-                    $accountForm->getElement('username')->addError($this->view->translate('admin_account_error_login_used'));
-                    $actionUrl = $this->view->url(array('action' => 'create'));
-                    $accountForm->setAction($actionUrl);
-                    $this->view->form = $accountForm;
-                    return $this->renderScript('account/new.phtml');
-                }
+                $account->store();
             }
             else {
                 $actionUrl = $this->view->url(array('action' => 'create'));
@@ -164,9 +131,8 @@ class Admin_AccountController extends Controller_Action {
                 return $this->renderScript('account/new.phtml');
             }
         }
-        else {
-            $this->_helper->redirector('index');
-        }
+
+        $this->_helper->redirector->gotoSimple('index');
     }
 
     /**
@@ -175,34 +141,16 @@ class Admin_AccountController extends Controller_Action {
     public function editAction() {
         $this->view->title = $this->view->translate('admin_account_edit');
 
-        $accountForm = $this->_getAccountForm();
-
         $id = $this->getRequest()->getParam('id');
+
         if (empty($id)) {
             $this->_logger->debug('Missing parameter account id.');
             $this->_helper->redirector('index');
         }
         else {
-            $account = new Opus_Account($id);
-
-            $login = $account->getLogin();
-
-            $accountForm->getElement('username')->setValue($login);
-
-            $roles = $account->getRole();
-
-            foreach ($roles as $roleName) {
-                $role = $accountForm->getElement('role' . $roleName);
-                $role->setValue(1);
-                if (Zend_Auth::getInstance()->getIdentity() === $account->getLogin()) {
-                    $role->setAttrib('disabled', true);
-                }
-            }
-
+            $accountForm = new Admin_Form_Account($id);
             $actionUrl = $this->view->url(array('action' => 'update', 'id' => $id));
-
             $accountForm->setAction($actionUrl);
-
             $this->view->form = $accountForm;
         }
     }
@@ -219,7 +167,9 @@ class Admin_AccountController extends Controller_Action {
                 return;
             }
 
-            $accountForm = $this->_getAccountForm();
+            $id = $this->getRequest()->getParam('id');
+
+            $accountForm = new Admin_Form_Account($id);
 
             $postData = $this->getRequest()->getPost();
 
@@ -233,11 +183,11 @@ class Admin_AccountController extends Controller_Action {
                 $passwordChanged = false;
             }
 
-            $id = $this->getRequest()->getParam('id');
+            $account = new Opus_Account($id);
+
+            $postData['oldLogin'] = $account->getLogin();
 
             if ($accountForm->isValid($postData)) {
-
-                $account = new Opus_Account($id);
 
                 $oldLogin = $account->getLogin();
 
@@ -249,7 +199,7 @@ class Admin_AccountController extends Controller_Action {
                 $newLogin = $postData['username'];
 
                 if ($newLogin !== $oldLogin) {
-                    if (!$this->_isLoginUsed($newLogin)) {
+                    if (Zend_Validate::is($newLogin, 'LoginAvailable')) {
                         $account->setLogin($newLogin);
                         $loginChanged = true;
                     }
@@ -272,19 +222,20 @@ class Admin_AccountController extends Controller_Action {
                 }
 
                 // update roles
-                $roles = Opus_Role::getAll();
+                $newRoles = Admin_Form_Account::parseSelectedRoles($postData);
 
-                $newRoles = array();
-
-                foreach ($roles as $roleName) {
-                    $roleSelected = $postData['role' . $roleName];
-                    if ($roleSelected) {
-                        $role = Opus_Role::fetchByName($roleName);
-                        $newRoles[] = $role;
+                // TODO optimize code
+                $hasAdministratorRole = false;
+                
+                foreach ($newRoles as $role) {
+                    if (strtolower($role->getDisplayName()) === 'administrator') {
+                        $hasAdministratorRole = true;
+                        break;
                     }
-                    else if ((strtolower($roleName) === 'administrator') && $isCurrentUser) {
-                        $newRoles[] = Opus_Role::fetchByName($roleName);
-                    }
+                }
+                    
+                if (!$hasAdministratorRole && $isCurrentUser) {
+                    $newRoles[] = Opus_Role::fetchByName('administrator');
                 }
 
                 $account->setRole($newRoles);
@@ -294,8 +245,6 @@ class Admin_AccountController extends Controller_Action {
                 if ($isCurrentUser &&  ($loginChanged || $passwordChanged))  {
                     Zend_Auth::getInstance()->clearIdentity();
                 }
-                
-                $this->_helper->redirector('index');
             }
             else {
                 $actionUrl = $this->view->url(array('action' => 'update', 'id' => $id));
@@ -304,10 +253,8 @@ class Admin_AccountController extends Controller_Action {
                 return $this->renderScript('account/edit.phtml');
             }
         }
-        else {
-            $this->_helper->redirector('index');
-        }
 
+        $this->_helper->redirector('index');
     }
 
     /**
@@ -324,7 +271,7 @@ class Admin_AccountController extends Controller_Action {
                 
                 // Check that user doesn't delete himself (especially the admin)
                 if ($currentUser === $account->getLogin()) {
-                    // TODO
+                    // TODO show message
                 }
                 else {
                     $account->delete();
@@ -334,46 +281,5 @@ class Admin_AccountController extends Controller_Action {
 
         $this->_helper->redirector('index');
     }
-
-    /**
-     * Creates form for creating and editing an account.
-     *
-     * @return Zend_Form
-     */
-    protected function _getAccountForm() {
-        $config = new Zend_Config_Ini(APPLICATION_PATH . '/modules/admin/forms/account.ini', 'production');
-        $form = new Zend_Form($config->form->account);
-
-        $confirmPassword = $form->getElement('confirmPassword');
-
-        $passwordValidator = new Form_Validate_Password();
-
-        $confirmPassword->addValidator($passwordValidator);
-
-        $roles = Opus_Role::getAll();
-
-        $rolesGroup = array();
-
-        foreach ($roles as $role) {
-            $roleName = $role->getDisplayName();
-            $roleCheckbox = $form->createElement('checkbox', 'role' . $roleName)->setLabel($roleName);
-            $form->addElement($roleCheckbox);
-            $rolesGroup[] = $roleCheckbox->getName();
-        }
-
-        $form->addDisplayGroup($rolesGroup, 'Roles', array('legend' => 'admin_form_group_roles'));
-
-        return $form;
-    }
-
-    protected function _isLoginUsed($login) {
-        try {
-            $account = new Opus_Account(null, null, $login);
-        } catch (Exception $ex) {
-            return false;
-        }
-        return true;
-    }
-
 
 }

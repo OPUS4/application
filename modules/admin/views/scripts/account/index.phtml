@@ -36,21 +36,21 @@
 <div class="adminContainer">
 <h1><?= $this->title ?></h1>
 
+<div>
+<a href="<?= $this->url(array('action' => 'new')) ?>"><?= $this->translate('admin_account_action_new')?></a>
+</div>
+
 <table>
 <? $index = -1; foreach($this->accounts as $id => $entry) : ?>
     <tr class="<?= ($index++ % 2) ? 'odd' : 'even' ?>">
-    <form action="<?= $this->url(array('action' => 'index')) ?>" class="crud" method="post">
         <td><a href="<?= $this->url(array('action' => 'show', 'id' => $id)) ?>"><?= $entry ?></a></td>
         <td>
-            <input type="submit" name="actionEdit" value="<?= $this->translate('admin_account_action_edit')?>" />
-            <input type="hidden" name="id" value="<?=$id?>" />
+            <a href="<?= $this->url(array('action' => 'edit', 'id' => $id)) ?>"><?= $this->translate('admin_account_action_edit')?></a>
             <?PHP if (Zend_Auth::getInstance()->getIdentity() !== $entry) : ?>
-                <input type="submit" name="actionDelete" value="<?= $this->translate('admin_account_action_delete')?>" />
+                <a href="<?= $this->url(array('action' => 'delete', 'id' => $id)) ?>"><?= $this->translate('admin_account_action_delete')?></a>
             <?PHP endif; ?>
         </td>
-        </form>
     </tr>
 <? endforeach; ?>
 </table>
-<a href="<?= $this->url(array('action' => 'new')) ?>"><?= $this->translate('admin_account_action_new')?></a>
 </div>
