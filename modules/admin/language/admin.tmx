@@ -9,10 +9,10 @@
 
     <tu tuid="admin_index_title">
       <tuv xml:lang="en">
-        <seg>Administration menu</seg>
+        <seg>Administration</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Administrationsmenu</seg>
+        <seg>Administration</seg>
       </tuv>
     </tu>
     

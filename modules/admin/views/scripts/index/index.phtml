@@ -35,13 +35,14 @@
  */
 ?>
 <h1><?= $this->title ?></h1>
+
 <div id="adminMenuContainer">
-<ul>
-<?php
-foreach ($this->adminTasks as $linkTitle => $linkUrl) {
-    print('    <li><a href="' . $linkUrl . '">' . $linkTitle . '</a></li>' . "\n");
-}
+<?PHP
+echo $this->navigation()
+          ->menu()
+          ->setOnlyActiveBranch(true)
+          ->setRenderParents(false);
 ?>
-</ul>
 </div>
+
 

@@ -49,6 +49,66 @@
             <module>admin</module>
             <controller>index</controller>
             <action>index</action>
+            <pages>
+                <security>
+                    <label>admin_title_security</label>
+                    <module>admin</module>
+                    <controller>security</controller>
+                    <action>index</action>
+                </security>
+
+                <documents>
+                    <label>admin_title_documents</label>
+                    <module>admin</module>
+                    <controller>documents</controller>
+                    <action>index</action>
+                </documents>
+
+                <licence>
+                    <label>admin_title_licence</label>
+                    <module>admin</module>
+                    <controller>licence</controller>
+                    <action>index</action>
+                </licence>
+
+                <collections>
+                    <label>admin_title_collections</label>
+                    <module>admin</module>
+                    <controller>collection</controller>
+                    <action>index</action>
+                </collections>
+
+                <languages>
+                    <label>admin_title_languages</label>
+                    <module>admin</module>
+                    <controller>language</controller>
+                    <action>index</action>
+                </languages>
+
+                <statistic>
+                    <label>admin_title_statistic</label>
+                    <module>admin</module>
+                    <controller>statistic</controller>
+                    <action>index</action>
+                </statistic>
+
+                <oailink>
+                    <label>admin_title_oailink</label>
+                    <module>admin</module>
+                    <controller>oailink</controller>
+                    <action>index</action>
+                </oailink>
+
+                <organizationalUnits>
+                    <label>admin_title_organizational_units_show</label>
+                    <module>admin</module>
+                    <controller>collection</controller>
+                    <action>show</action>
+                    <params>
+                        <role>1</role>
+                    </params>
+                </organizationalUnits>
+            </pages>
         </administration>
 
         <help>
