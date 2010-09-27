@@ -99,18 +99,25 @@ class Publish_FormController extends Controller_Action {
 
         $this->view->languageSelectorDisabled = true;
         $log->debug("check action begins");
+        $reload = true;
 
         if ($this->getRequest()->isPost() === true) {
             $postData = $this->getRequest()->getPost();
             foreach ($postData as $key => $value) {
                 $log->debug("POST --> [" . $key . "] : " . $value);
             }
+            if (array_key_exists('back', $postData)) {
+                $reload = false;
+                if (isset($defaultNS->elements))
+                    foreach ($defaultNS->elements AS $element)
+                        $postData[$element['name']] = $element['value'];
+            }
 
             //initialize the form object
             $form = new Publish_Form_PublishingSecond($defaultNS->documentType, $defaultNS->documentId, $defaultNS->fulltext, $defaultNS->additionalFields, $postData);
             //$form->populate($postData);
 
-            if (!$form->send->isChecked()) {
+            if (!$form->send->isChecked() || array_key_exists('back', $postData)) {
                 // A button (not SEND) was pressed => add / remove fields
 
                 $this->view->title = $this->view->translate('publish_controller_index');
@@ -120,7 +127,7 @@ class Publish_FormController extends Controller_Action {
                 $this->_helper->viewRenderer($defaultNS->documentType);
 
                 //call method to add or delete buttons
-                return $this->_getExtendedForm($form, $postData);
+                return $this->_getExtendedForm($form, $postData, $reload);
             } else {
                 // SEND was pressed => check the form
 
@@ -153,8 +160,9 @@ class Publish_FormController extends Controller_Action {
 
                     $depositForm->prepareCheck();
 
-                    foreach ($depositForm->getValues() AS $key => $value)
-                            $defaultNS->documentData[$key] = $value;
+//                    $docNS = new Zend_Session_Namespace('Document');
+//                    foreach ($depositForm->getValues() AS $key => $value)
+//                            $docNS->documentData[$key] = $value;
 
                     $this->view->form = $depositForm;
                 }
@@ -186,6 +194,8 @@ class Publish_FormController extends Controller_Action {
                     $name = substr($currentElement, 0, $pos);
                 else
                     $name=$currentElement; //"normal" element name without changes
+
+
             }
 
             $groupName = 'group' . $name;
@@ -345,38 +355,41 @@ class Publish_FormController extends Controller_Action {
      * @param Publish_Form_PublishingSecond $form
      * @return <View>
      */
-    private function _getExtendedForm($form, $postData=null) {
+    private function _getExtendedForm($form, $postData=null, $reload) {
         $log = Zend_Registry::get('Zend_Log');
         $defaultNS = new Zend_Session_Namespace('Publish');
 
-        //find out which button was pressed
-        $pressedButtonName = $this->_getPressedButton($form);
+        if ($reload === true) {
+            //find out which button was pressed
+            $pressedButtonName = $this->_getPressedButton($form);
 
-        if (substr($pressedButtonName, 0, 7) == "addMore") {
-            $fieldName = substr($pressedButtonName, 7);
-            $workflow = "add";
-            $log->debug("Fieldname for addMore => " . $fieldName);
-        } else if (substr($pressedButtonName, 0, 10) == "deleteMore") {
-            $fieldName = substr($pressedButtonName, 10);
-            $workflow = "delete";
-            $log->debug("Fieldname for deleteMore => " . $fieldName);
-        }
-        
-        $currentNumber = $defaultNS->additionalFields[$fieldName];
-        $log->debug("old current number: " . $currentNumber);
-        if ($workflow == "add") {
-            //show one more fields
-            $currentNumber = (int) $currentNumber + 1;
-        } else {
-            if ($currentNumber > 1) {
-                //remove one more field, only down to 0
-                $currentNumber = (int) $currentNumber - 1;
+            if (substr($pressedButtonName, 0, 7) == "addMore") {
+                $fieldName = substr($pressedButtonName, 7);
+                $workflow = "add";
+                $log->debug("Fieldname for addMore => " . $fieldName);
+            } else if (substr($pressedButtonName, 0, 10) == "deleteMore") {
+                $fieldName = substr($pressedButtonName, 10);
+                $workflow = "delete";
+                $log->debug("Fieldname for deleteMore => " . $fieldName);
             }
+
+            $currentNumber = $defaultNS->additionalFields[$fieldName];
+            $log->debug("old current number: " . $currentNumber);
+            if ($workflow == "add") {
+                //show one more fields
+                $currentNumber = (int) $currentNumber + 1;
+            } else {
+                if ($currentNumber > 1) {
+                    //remove one more field, only down to 0
+                    $currentNumber = (int) $currentNumber - 1;
+                }
+            }
+
+            //set the increased value for the pressed button and create a new form
+            $defaultNS->additionalFields[$fieldName] = $currentNumber;
+            $log->debug("new current number: " . $currentNumber . " for field " . $fieldName);
         }
 
-        //set the increased value for the pressed button and create a new form
-        $defaultNS->additionalFields[$fieldName] = $currentNumber;
-        $log->debug("new current number: " . $currentNumber . " for field ". $fieldName);
 
         $form = new Publish_Form_PublishingSecond($defaultNS->documentType, $defaultNS->documentId, $defaultNS->fulltext, $defaultNS->additionalFields, $postData);
         $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check'));

@@ -43,23 +43,20 @@ class Publish_DepositController extends Controller_Action {
     public $postData = array();
 
 //    public function preDispatch() {
-//        if ($this->getRequest()->isPost() === true) {
-//            $post = $this->getRequest()->getPost();
+//        $post = $this->getRequest()->getPost();
+//        if (array_key_exists('back', $post))
+//            throw new Exception('back');
 //
-//            if (array_key_exists('back', $post)) {
-//                // redirect to form/check
-//                $url = $this->view->url(array('controller' => 'form', 'action' => 'check'));
-//                $this->_forward('check', 'form');
-//            } else
-//            if (array_key_exists('collection', $post)) {
-//                // forward to collection selection
-//                $this->_forward('top', 'collection');
-//            } else
-//            if (array_key_exists('send', $post)) {
-//                // forward to save the data
-//                $this->_forward('deposit');
-//            }
+//        else
+//        if (array_key_exists('collection', $post))
+//            $this->_forward('top', 'collection');
+//        else
+//        if (array_key_exists('send', $post)) {
+//
+//            $this->_forward('deposit');
 //        }
+//
+//        parent::preDispatch();
 //    }
 
     /**
@@ -69,6 +66,7 @@ class Publish_DepositController extends Controller_Action {
     public function depositAction() {
         $log = Zend_Registry::get('Zend_Log');
         $defaultNS = new Zend_Session_Namespace('Publish');
+        //$docNS = new Zend_Session_Namespace('Document');
 
         $this->view->title = $this->view->translate('publish_controller_index');
         $this->view->subtitle = $this->view->translate('publish_controller_deposit_successful');
@@ -76,38 +74,22 @@ class Publish_DepositController extends Controller_Action {
         if ($this->getRequest()->isPost() === true) {
 
             $post = $this->getRequest()->getPost();
-
-//            if (array_key_exists('back', $post)) {
-//                // redirect to form/check
-//                $url = $this->view->url(array('controller' => 'form', 'action' => 'check'));
-//                $this->forward('check', 'form');
-//            } else
-//            if (array_key_exists('collection', $post)) {
-//                // forward to collection selection
-//                $this->forward('top', 'collection');
-//            } else
-//            if (array_key_exists('send', $post)) {
-//                // forward to save the data
-//                $this->forward('deposit');
-//            }
-            
-
-            if (!is_null($defaultNS->elements)) {
-
-                foreach ($defaultNS->elements AS $element) {
-                    $this->postData[$element['name']] = $element['value'];
-                }
-            }
-
-            $this->postData = array_merge($this->postData, $post);
-
-            $depositForm = new Publish_Form_PublishingSecond($defaultNS->documentType, $defaultNS->documentId, $defaultNS->fulltext, $defaultNS->additionalFields, $this->postData);
-            $depositForm->populate($this->postData);
-
             if (array_key_exists('back', $post)) {
-                $this->view->form = $depositForm;
-                return $this->renderScript('form/check.phtml');
-            } else {
+                //go back                
+                $this->_forward('check', 'form');                
+            } 
+            
+            else {
+                //deposit data
+                if (isset($defaultNS->elements)) {
+                    foreach ($defaultNS->elements AS $element)
+                            $this->postData[$element['name']] = $element['value'];
+                }
+
+                $depositForm = new Publish_Form_PublishingSecond($defaultNS->documentType, $defaultNS->documentId, $defaultNS->fulltext, $defaultNS->additionalFields, $this->postData);
+                $depositForm->populate($this->postData);
+
+
                 if (isset($this->postData['send']))
                     unset($this->postData['send']);
 
@@ -125,7 +107,8 @@ class Publish_DepositController extends Controller_Action {
 
                 $this->_notifyReferee($projects);
             }
-        } else {
+        }
+        else {
             return $this->_redirectTo('index', '', 'index');
         }
     }

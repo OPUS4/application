@@ -160,7 +160,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
             }
         }
         $this->_addSubmit('button_label_back', 'back');
-        $this->_addSubmit('button_label_collection', 'collection');
+        //$this->_addSubmit('button_label_collection', 'collection');
         $this->_addSubmit('button_label_send2', 'send');
     }
 

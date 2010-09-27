@@ -54,10 +54,7 @@ class Publish_CollectionController extends Controller_Action {
             if (array_key_exists('top', $post)) {
                 $defaultNS->documentData['top'] = $post['top'];
             }
-
-            foreach ($defaultNS->documentData AS $d => $v)
-                    $log->debug("Session doc: " . $d . " => " . $v);
-
+            
             $this->view->title = $this->view->translate('publish_controller_index');
             $this->view->subtitle = $this->view->translate('publish_controller_collection_sub');
 

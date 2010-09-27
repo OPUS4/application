@@ -59,7 +59,7 @@ class Publish_Form_PublishingThird extends Zend_Form {
             $this->defaultNS->step = '2';
         } else {
             if (isset($this->defaultNS->documentData['top'])) {
-                
+
 
                 $roleId = $this->defaultNS->documentData['top'];
                 $this->log->debug("roleID: " . $roleId);

@@ -166,7 +166,7 @@ class Publish_Model_Deposit {
             $counter = (int) $this->getCounter($dataKey);
             $this->log->debug("counter: " . $counter);
 
-            if ($this->documentData[$type . $last . $counter] == "") {
+            if ($this->documentData[$type . $last . $counter] !== "") {
                 $this->storeFirstName($person, $type, $first, $counter);
                 $this->storeLastName($person, $type, $last, $counter);
                 $this->storeEmail($person, $type, $email, $counter);
@@ -183,102 +183,126 @@ class Publish_Model_Deposit {
 
     private function storeFirstName($person, $type, $first, $counter) {
         if ($counter >= 1) {
-            $entry = $this->documentData[$type . $first . $counter];
-            if ($entry !== "") {
-                $this->log->debug("Value: " . $entry);
-                $person->setFirstName($entry);
-                $this->documentData[$type . $first . $counter] = "";
+            if (isset($this->documentData[$type . $first . $counter])) {
+                $entry = $this->documentData[$type . $first . $counter];
+                if ($entry !== "") {
+                    $this->log->debug("Value: " . $entry);
+                    $person->setFirstName($entry);
+                    $this->documentData[$type . $first . $counter] = "";
+                }
             }
         } else {
-            $entry = $this->documentData[$type . $first];
-            $person->setFirstName($entry);
-            $this->documentData[$type . $first] = "";
+            if (isset($this->documentData[$type . $first])) {
+                $entry = $this->documentData[$type . $first];
+                $person->setFirstName($entry);
+                $this->documentData[$type . $first] = "";
+            }
         }
     }
 
     private function storeLastName($person, $type, $last, $counter) {
         if ($counter >= 1) {
-            $entry = $this->documentData[$type . $last . $counter];
-            if ($entry !== "") {
-                $person->setLastName($entry);
-                $this->log->debug("Value: " . $entry);
-                $this->documentData[$type . $last . $counter] = "";
+            if (isset($this->documentData[$type . $last . $counter])) {
+                $entry = $this->documentData[$type . $last . $counter];
+                if ($entry !== "") {
+                    $person->setLastName($entry);
+                    $this->log->debug("Value: " . $entry);
+                    $this->documentData[$type . $last . $counter] = "";
+                }
             }
         } else {
-            $entry = $this->documentData[$type . $last];
-            $person->setLastName($entry);
-            $this->documentData[$type . $last] = "";
+            if (isset($this->documentData[$type . $last])) {
+                $entry = $this->documentData[$type . $last];
+                $person->setLastName($entry);
+                $this->documentData[$type . $last] = "";
+            }
         }
     }
 
     private function storeEmail($person, $type, $email, $counter) {
         if ($counter >= 1) {
-            $entry = $this->documentData[$type . $email . $counter];
-            if ($entry !== "") {
-                $this->log->debug("Value: " . $entry);
-                $person->setEmail($entry);
-                $this->documentData[$type . $email . $counter] = "";
+            if (isset($this->documentData[$type . $email . $counter])) {
+                $entry = $this->documentData[$type . $email . $counter];
+                if ($entry !== "") {
+                    $this->log->debug("Value: " . $entry);
+                    $person->setEmail($entry);
+                    $this->documentData[$type . $email . $counter] = "";
+                }
             }
         } else {
-            $entry = $this->documentData[$type . $email];
-            if ($entry !== "") {
-                $this->log->debug("Value: " . $entry);
-                $person->setEmail($entry);
-                $this->documentData[$type . $email] = "";
+            if (isset($this->documentData[$type . $email])) {
+                $entry = $this->documentData[$type . $email];
+                if ($entry !== "") {
+                    $this->log->debug("Value: " . $entry);
+                    $person->setEmail($entry);
+                    $this->documentData[$type . $email] = "";
+                }
             }
         }
     }
 
     private function storePlaceOfBirth($person, $type, $birthplace, $counter) {
         if ($counter >= 1) {
-            $entry = $this->documentData[$type . $birthplace . $counter];
-            if ($entry !== "") {
-                $this->log->debug("Value: " . $entry);
-                $person->setPlaceOfBirth($entry);
-                $this->documentData[$type . $birthplace . $counter] = "";
+            if (isset($this->documentData[$type . $birthplace . $counter])) {
+                $entry = $this->documentData[$type . $birthplace . $counter];
+                if ($entry !== "") {
+                    $this->log->debug("Value: " . $entry);
+                    $person->setPlaceOfBirth($entry);
+                    $this->documentData[$type . $birthplace . $counter] = "";
+                }
             }
         } else {
-            $entry = $this->documentData[$type . $birthplace];
-            if ($entry !== "") {
-                $this->log->debug("Value: " . $entry);
-                $person->setPlaceOfBirth($entry);
-                $this->documentData[$type . $birthplace] = "";
+            if (isset($this->documentData[$type . $birthplace])) {
+                $entry = $this->documentData[$type . $birthplace];
+                if ($entry !== "") {
+                    $this->log->debug("Value: " . $entry);
+                    $person->setPlaceOfBirth($entry);
+                    $this->documentData[$type . $birthplace] = "";
+                }
             }
         }
     }
 
     private function storeDateOfBirth($person, $type, $birthdate, $counter) {
         if ($counter >= 1) {
-            $entry = $this->documentData[$type . $birthdate . $counter];
-            if ($entry !== "") {
-                $this->log->debug("Value: " . $entry);
-                $person->setDateOfBirth($entry);
-                $this->documentData[$type . $birthdate . $counter] = "";
+            if (isset($this->documentData[$type . $birthdate . $counter])) {
+                $entry = $this->documentData[$type . $birthdate . $counter];
+                if ($entry !== "") {
+                    $this->log->debug("Value: " . $entry);
+                    $person->setDateOfBirth($entry);
+                    $this->documentData[$type . $birthdate . $counter] = "";
+                }
             }
         } else {
-            $entry = $this->documentData[$type . $birthdate];
-            if ($entry !== "") {
-                $this->log->debug("Value: " . $entry);
-                $person->setDateOfBirth($entry);
-                $this->documentData[$type . $birthdate] = "";
+            if (isset($this->documentData[$type . $birthdate])) {
+                $entry = $this->documentData[$type . $birthdate];
+                if ($entry !== "") {
+                    $this->log->debug("Value: " . $entry);
+                    $person->setDateOfBirth($entry);
+                    $this->documentData[$type . $birthdate] = "";
+                }
             }
         }
     }
 
     private function storeAcademicTitle($person, $type, $academic, $counter) {
         if ($counter >= 1) {
-            $entry = $this->documentData[$type . $academic . $counter];
-            if ($entry !== "") {
-                $this->log->debug("Value: " . $entry);
-                $person->setAcademicTitle($entry);
-                $this->documentData[$type . $academic . $counter] = "";
+            if (isset($this->documentData[$type . $academic . $counter])) {
+                $entry = $this->documentData[$type . $academic . $counter];
+                if ($entry !== "") {
+                    $this->log->debug("Value: " . $entry);
+                    $person->setAcademicTitle($entry);
+                    $this->documentData[$type . $academic . $counter] = "";
+                }
             }
         } else {
-            $entry = $this->documentData[$type . $academic];
-            if ($entry !== "") {
-                $this->log->debug("Value: " . $entry);
-                $person->setAcademicTitle($entry);
-                $this->documentData[$type . $academic] = "";
+            if (isset($this->documentData[$type . $academic])) {
+                $entry = $this->documentData[$type . $academic];
+                if ($entry !== "") {
+                    $this->log->debug("Value: " . $entry);
+                    $person->setAcademicTitle($entry);
+                    $this->documentData[$type . $academic] = "";
+                }
             }
         }
     }
@@ -291,7 +315,6 @@ class Publish_Model_Deposit {
             $lang = "Language";
             $this->log->info("try to store title: " . $dataKey);
             $title = new Opus_Title();
-            $this->log->info("try to store title: " . $dataKey . " ...");
 
             if (strstr($dataKey, $lang))
                 $type = $this->getObjectType($dataKey, $lang);
@@ -302,7 +325,7 @@ class Publish_Model_Deposit {
                 $this->log->debug("Title type:" . $type);
                 $counter = (int) $this->getCounter($dataKey);
                 $this->log->debug("counter: " . $counter);
-                if ($this->documentData[$type . $counter] == "") {
+                if ($this->documentData[$type . $counter] !== "") {
                     $this->storeTitleValue($title, $type, $counter);
                     $this->log->debug("title value stored");
 
@@ -408,7 +431,7 @@ class Publish_Model_Deposit {
                 $subjectType = 'Subject' . $type;
                 $this->log->debug("subjectType: " . $subjectType);
                 $subject->setValue($dataValue);
-                
+
                 $addFunction = "add" . $subjectType;
                 $this->log->debug("addfunction: " . $addFunction);
                 $this->document->$addFunction($subject);
@@ -507,7 +530,7 @@ class Publish_Model_Deposit {
         if ($dataValue == "") {
             $this->log->debug("Licence already stored.");
         } else {
-            $dataValue = substr($dataValue, 3);            
+            $dataValue = substr($dataValue, 3);
 
             $this->log->debug("try to store Licence with id: " . $dataValue);
 
