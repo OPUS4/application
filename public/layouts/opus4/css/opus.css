@@ -174,3 +174,15 @@ body > #top-header{
 	padding: 0;
 	list-style: none;
 }
+
+/* publication form related css rules */
+
+.formerror {
+	color:red; 
+	font-weight: big; 
+	padding: 10pt;
+}
+
+.formhint {
+	text-align: right;
+}

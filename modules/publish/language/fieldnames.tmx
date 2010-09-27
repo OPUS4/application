@@ -717,6 +717,15 @@
       </tuv>
     </tu>
 
+	<tu tuid="groupSubjectDdc">
+      <tuv xml:lang="en">
+        <seg>DDC Term</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>DDC Sachgruppe</seg>
+      </tuv>
+    </tu>
+	
     <tu tuid="add_SubjectDdc">
       <tuv xml:lang="en">
         <seg>add DDC Term</seg>
@@ -1141,7 +1150,7 @@
       </tuv>
     </tu>
         
-	<tu tuid="TitleSub">
+	<tu tuid="groupTitleSub">
       <tuv xml:lang="en">
         <seg>Subtitle</seg>
       </tuv>
@@ -1276,6 +1285,15 @@
       </tuv>
     </tu>
     
+	<tu tuid="groupTitleAdditional">
+      <tuv xml:lang="en">
+        <seg>Title Additional</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zusätzlicher Titel</seg>
+      </tuv>
+    </tu>
+	
     <tu tuid="hint_Opus_Model_Filter_TitleAdditional">
       <tuv xml:lang="en">
         <seg>Please insert an additional title in german, if the original title is in english. And vice versa.</seg>
