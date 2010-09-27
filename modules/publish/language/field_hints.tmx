@@ -557,6 +557,15 @@
         </tuv>
     </tu>
 
+	<tu tuid="hint_groupTitleSub">
+        <tuv xml:lang="en">
+            <seg>Please enter the document's subtitle.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte den Untertitel des Dokuments ein.</seg>
+        </tuv>
+    </tu>
+	
 	<tu tuid="hint_TitleSub">
         <tuv xml:lang="en">
             <seg>Please enter the document's subtitle.</seg>
@@ -566,12 +575,30 @@
         </tuv>
     </tu>
 	
+	<tu tuid="hint_groupTitleAdditional">
+        <tuv xml:lang="en">
+            <seg>Please enter the document's additional title.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie hier bitte einen zusätzlichen Titel des Dokuments ein.</seg>
+        </tuv>
+    </tu>
+	
 	<tu tuid="hint_TitleAdditional">
         <tuv xml:lang="en">
             <seg>Please enter the document's additional title.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie hier bitte einen zusätzlichen Titel des Dokuments ein.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_groupTitleParent">
+        <tuv xml:lang="en">
+            <seg>Please enter the document's parent title.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte den übergeordneten Titel des Dokuments ein.</seg>
         </tuv>
     </tu>
 	
@@ -640,7 +667,7 @@ Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathsci
         </tuv>
     </tu>
 
-<tu tuid="hint_groupSubjectDDC">
+<tu tuid="hint_groupSubjectDdc">
         <tuv xml:lang="en">
             <seg>Please enter Hint text for this group in modules/publish/language/field_hints.tmx</seg>
         </tuv>
@@ -649,7 +676,7 @@ Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathsci
         </tuv>
     </tu>
 
-    <tu tuid="hint_SubjectDDC1">
+    <tu tuid="hint_SubjectDdc1">
         <tuv xml:lang="en">
             <seg>Please enter a DDC class.</seg>
         </tuv>
@@ -658,7 +685,7 @@ Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathsci
         </tuv>
     </tu>
 
-    <tu tuid="hint_SubjectDDC">
+    <tu tuid="hint_SubjectDdc">
         <tuv xml:lang="en">
             <seg>Please enter a DDC class.</seg>
         </tuv>

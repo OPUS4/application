@@ -180,7 +180,7 @@
         </tuv>
     </tu>
 
-<tu tuid="button_label_add_one_moreSubjectDDC">
+<tu tuid="button_label_add_one_moreSubjectDdc">
         <tuv xml:lang="en">
             <seg>Add one more DDC Word</seg>
         </tuv>
@@ -189,7 +189,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="button_label_deleteSubjectDDC">
+    <tu tuid="button_label_deleteSubjectDdc">
         <tuv xml:lang="en">
             <seg>Delete the last DDC subject</seg>
         </tuv>

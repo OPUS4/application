@@ -1159,6 +1159,24 @@
       </tuv>
     </tu>
 	
+	<tu tuid="TitleSub">
+      <tuv xml:lang="en">
+        <seg>Subtitle</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Untertitel</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="TitleSubLanguage">
+      <tuv xml:lang="en">
+        <seg>Language</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sprache</seg>
+      </tuv>
+    </tu>
+	
 	<tu tuid="groupTitleParent">
       <tuv xml:lang="en">
         <seg>Parent Title</seg>
@@ -1168,6 +1186,15 @@
       </tuv>
     </tu>
 
+	<tu tuid="TitleParentLanguage">
+      <tuv xml:lang="en">
+        <seg>Language</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sprache</seg>
+      </tuv>
+    </tu>
+	
     <tu tuid="add_TitleParent">
       <tuv xml:lang="en">
         <seg>add Parent Title</seg>
@@ -1647,6 +1674,15 @@
       </tuv>
     </tu>
         
+	<tu tuid="groupPersonEditor">
+      <tuv xml:lang="en">
+        <seg>Editor(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Herausgeber</seg>
+      </tuv>
+    </tu>
+	
     <tu tuid="PersonEditor">
       <tuv xml:lang="en">
         <seg>Editor(s)</seg>
@@ -1655,6 +1691,7 @@
         <seg>Herausgeber</seg>
       </tuv>
     </tu>
+	
     <tu tuid="PersonEditorFirstName">
       <tuv xml:lang="en">
         <seg>First name</seg>
@@ -1663,6 +1700,7 @@
         <seg>Vorname</seg>
       </tuv>
     </tu>
+	
     <tu tuid="PersonEditorLastName">
       <tuv xml:lang="en">
         <seg>Last name</seg>
