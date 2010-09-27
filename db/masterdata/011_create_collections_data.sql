@@ -16029,7 +16029,7 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`, `lef
 -- --------------------------------------------------------
 
 INSERT INTO `collections_roles` (`id`, `name`, `oai_name`, `position`, `visible`, `visible_browsing_start`, `display_browsing`, `visible_frontdoor`, `display_frontdoor`, `visible_oai`, `display_oai`) VALUES
-(1, 'org', 'org', 1, 1, 1, 'Name', 1, 'Name', 1, 'Name'),
+(1, 'institutes', 'institutes', 1, 1, 1, 'Name', 1, 'Name', 1, 'Name'),
 (2, 'ddc', 'ddc', 2, 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
 (3, 'ccs', 'ccs', 3, 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
 (4, 'pacs', 'pacs', 4, 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
@@ -16039,6 +16039,5 @@ INSERT INTO `collections_roles` (`id`, `name`, `oai_name`, `position`, `visible`
 (9, 'collections', 'collections', 9, 1, 1, 'Name', 1, 'Name', 1, 'Name'),
 (10, 'series', 'series', 10, 1, 1, 'Name', 1, 'Name', 1, 'Name'),
 (11, 'reports', 'reports', 11, 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
-(15, 'projects', 'projects', 12, 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
-(12, 'institutes', 'institutes', 15, 1, 1, 'Name', 1, 'Name', 1, 'Name');
+(15, 'projects', 'projects', 12, 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number');
 
