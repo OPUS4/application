@@ -60,7 +60,7 @@
     <field name="ThesisPublisher" required="yes" formelement="Text" datatype="Text" multiplicity="1" />
 	<field name="ThesisGrantor" required="yes" formelement="Text" datatype="Text" multiplicity="1" />    
     <field name="Note" required="no" formelement="Textarea" datatype="Text" multiplicity="1" />
-    <field name="Language" required="yes" formelement="Text" datatype="Language" multiplicity="1"/>
+    <field name="Language" required="yes" formelement="Select" datatype="Language" multiplicity="1"/>
 	<field name="Licence" required="yes"  formelement="Select" datatype="Licence" multiplicity="1" />
 	
 </documenttype>
