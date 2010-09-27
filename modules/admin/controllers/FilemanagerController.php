@@ -96,7 +96,7 @@ class Admin_FilemanagerController extends Zend_Controller_Action
 
     	if (true === array_key_exists('docId', $requestData))
     	{
-            $uploadForm = new FileUpload();
+            $uploadForm = new Admin_Form_FileUpload();
             $action_url = $this->view->url(array('controller' => 'filemanager', 'action' => 'index'));
             $uploadForm->setAction($action_url);
             // store uploaded data in application temp dir
@@ -205,7 +205,7 @@ class Admin_FilemanagerController extends Zend_Controller_Action
             $verified = array();
             for ($fi = 0; $fi < $fileNumber; $fi++) {
                 try {
-                    $form = new SignatureForm();
+                    $form = new Admin_Form_SignatureForm();
                     $form->FileObject->setValue($document->getFile($fi)->getId());
                     $form->setAction($this->view->url(array('module' => 'admin', 'controller' => 'filemanager', 'action' => 'index', 'docId' => $requestData['docId']), null, true));
 
