@@ -78,9 +78,9 @@
 	<field name="Institute" required="no" formelement="Select" datatype="Institute" multiplicity="1"/>
 	<field name="Collection" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
 	<field name="PublishedYear" required="no" formelement="Text" datatype="Year" multiplicity="1"/>
-	<field name="PublishedDate" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
+	<field name="PublishedDate" required="no" formelement="Text" datatype="Date" multiplicity="1"/>
 	<field name="CompletedYear" required="no" formelement="Text" datatype="Year" multiplicity="1"/>
-	<field name="CompletedDate" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
+	<field name="CompletedDate" required="no" formelement="Text" datatype="Date" multiplicity="1"/>
 	<field name="IdentifierOpus3" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
 	<field name="IdentifierIsbn" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
 	<field name="IdentifierIssn" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
@@ -92,5 +92,5 @@
 	<field name="Note" required="no" formelement="Textarea" datatype="Text" multiplicity="1"/>
 	<field name="Licence" required="no" formelement="Select" datatype="Licence" multiplicity="1"/>
 	<field name="ServerDateUnlocking" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-	<field name="SubjectDdc" required="no" formelement="Select" datatype="ddc" multiplicity="5"/>
+	<field name="SubjectDdc" required="no" formelement="Text" datatype="ddc" multiplicity="5"/>
 </documenttype>

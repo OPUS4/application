@@ -1,43 +1,52 @@
-<?
-echo '<h1>'.$this->title.'</h1>';
-echo '<h3>'.$this->subtitle.'</h3>';
-?>        
-    
-<form enctype="application/x-www-form-urlencoded" action="/opus4-devel/index.php/publish/index/check" method="post">
+<?php
+echo '<h1>' . $this->title . '</h1>';
+echo '<h2>' . $this->subtitle . '</h2>';
 
-<?= $this->group($this->groupPersonSubmitter); ?>
-<?= $this->group($this->groupTitleMain); ?>
-<?= $this->element($this->TitleSub_); ?>
-<?= $this->group($this->groupTitleAbstract); ?>
-<?= $this->group($this->groupPersonAuthor); ?>
-<?= $this->element($this->CompletedDate_); ?>
+//for printing a generized Zend Form with standard layout:
+//echo $this->form;
 
-<?= $this->group($this->groupPersonAdvisor); ?>
-<?= $this->element($this->ThesisGrantor_); ?>
-<?= $this->element($this->ThesisPublisher_); ?>
+//element($value, $options = null, $type = null, $name = null)
+//group($value, $options = null, $name = null)
+?>
+<span class="formerror"><?= $this->errorCaseMessage; ?></span>
 
-<?= $this->element($this->Institute_); ?>
-<?= $this->element($this->Collection_); ?>
+<br />
+<form enctype="application/x-www-form-urlencoded" action="<?php echo $this->action_url; ?>" method="post">
 
-<?= $this->element($this->PublisherName_); ?>
-<?= $this->element($this->PublisherPlace_); ?>
-<?= $this->element($this->PageNumber_); ?>
-<?= $this->element($this->PublishedDate_); ?>
-<?= $this->element($this->IdentifierIsbn_); ?>
+    <div class="formhint">
+        <?= $this->requiredHint; ?>
+    </div>
+	
+	<?= $this->group($this->groupPersonSubmitter); ?>
+	<?= $this->group($this->groupTitleMain); ?>
+	<?= $this->group($this->groupTitleSub); ?>
+	<?= $this->group($this->groupTitleAbstract); ?>
+	<?= $this->group($this->groupPersonAuthor); ?>
+	<?= $this->element($this->CompletedDate_); ?>
 
-<?= $this->group($this->groupPersonContributor); ?>
-<?= $this->group($this->groupContributingCorporation); ?>
-<?= $this->group($this->groupSubjectSwd); ?>
-<?= $this->group($this->groupSubjectUncontrolled); ?>
-<?= $this->element($this->IdentifierUrn_); ?>
-<?= $this->element($this->Note_); ?>
-<?= $this->element($this->Language_); ?>
-<?= $this->element($this->Licence_); ?>
+	<?= $this->group($this->groupPersonAdvisor); ?>
+	<?= $this->element($this->ThesisGrantor_); ?>
+	<?= $this->element($this->ThesisPublisher_); ?>
 
-<?= $this->element($this->fullText, null, "Hidden", "fullText"); ?>
-<?= $this->element("masterthesis", null, "Hidden",  "documentType"); ?>
-<?= $this->element($this->documentId, null, "Hidden", "documentId"); ?>
-<?= $this->element('button_label_send', null, "Submit",  "send"); ?>
+	<?= $this->element($this->Institute_); ?>
+	
+	<?= $this->element($this->PublisherName_); ?>
+	<?= $this->element($this->PublisherPlace_); ?>
+	<?= $this->element($this->PageNumber_); ?>
+	<?= $this->element($this->PublishedDate_); ?>
+	<?= $this->element($this->IdentifierIsbn_); ?>
+
+	<?= $this->group($this->groupPersonContributor); ?>
+	<?= $this->group($this->groupContributingCorporation); ?>
+	<?= $this->group($this->groupSubjectDdc); ?>
+	<?= $this->group($this->groupSubjectSwd); ?>
+	<?= $this->group($this->groupSubjectUncontrolled); ?>
+	<?= $this->element($this->IdentifierUrn_); ?>
+	<?= $this->element($this->Note_); ?>
+	<?= $this->element($this->Language_); ?>
+	<?= $this->element($this->Licence_); ?>
+
+	<?= $this->element('button_label_send', null, "Submit",  "send"); ?>
 
 </form>
 
