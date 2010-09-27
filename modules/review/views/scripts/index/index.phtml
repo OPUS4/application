@@ -74,7 +74,7 @@
     <tr class="<?= ($index % 2) ? 'odd' : 'even' ?>">
         <td><input type="checkbox" name="selected[]" value="<?= $document->getDocId()?>"
                 <?= ((in_array($document->getDocId(), $this->selected) || $this->selectAll) && !$this->selectNone)  ? 'checked' : '' ?> /></td>
-        <td class="index"><?= $this->paginator->getAbsoluteItemNumber($index + 1) ?>.</td>
+        <td class="index"><?= $document->getDocId() // $this->paginator->getAbsoluteItemNumber($index + 1) ?>.</td>
         <td>
             <div class="title">
                 <a href="<?= $document->getUrlFrontdoor() ?>" target="_blank">
