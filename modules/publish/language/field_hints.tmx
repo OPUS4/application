@@ -669,10 +669,10 @@ Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathsci
 
 <tu tuid="hint_groupSubjectDdc">
         <tuv xml:lang="en">
-            <seg>Please enter Hint text for this group in modules/publish/language/field_hints.tmx</seg>
+            <seg>Please enter a DDC class.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Bitte tragen Sie einen Text für dieses Gruppe ein in modules/publish/language/field_hints.tmx</seg>
+            <seg>Tragen Sie bitte eine DDC Klasse ein.</seg>
         </tuv>
     </tu>
 
