@@ -34,7 +34,7 @@
 /**
  * Basic unit tests for Admin_PersonController class.
  */
-class Admin_PersonController extends ControllerTestCase {
+class Admin_PersonControllerTest extends ControllerTestCase {
 
     /**
      * Test routing to and successfull execution of index action.
