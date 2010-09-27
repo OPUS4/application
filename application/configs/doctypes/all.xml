@@ -59,9 +59,6 @@
 	<field name="TitleParent" required="no" formelement="Text" datatype="Title" multiplicity="1"/>
 	<field name="PersonAuthor" required="no" formelement="Text" datatype="Person" multiplicity="*">
 	<subfield name="Email" required="no" formelement="text" datatype="Email" />
-        <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" >
-            <default value="Dr." edit="yes" public="yes"  />
-        </subfield>
         <subfield name="DateOfBirth" required="no" formelement="text" datatype="Date" />
         <subfield name="PlaceOfBirth" required="no" formelement="text" datatype="Text" />
     </field>
