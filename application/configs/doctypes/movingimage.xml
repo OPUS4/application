@@ -46,6 +46,7 @@
 	</field>
 	<field name="PersonAuthor" required="no" formelement="Text" datatype="Person" multiplicity="*"/>
 	<field name="PersonTranslator" required="no" formelement="Text" datatype="Person" multiplicity="*"/>
+	<field name="PersonEditor" required="no" formelement="Text" datatype="Person" multiplicity="*"/>
 	<field name="PersonContributor" required="no" formelement="Text" datatype="Person" multiplicity="*"/>
 	<field name="CreatingCorporation" required="no" formelement="Text" datatype="Text" multiplicity="*"/>
 	<field name="ContributingCorporation" required="no" formelement="Text" datatype="Text" multiplicity="*"/>
