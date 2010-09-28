@@ -162,6 +162,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
 
     public function testListRecords() {
+        $this->markTestIncomplete();
+
     try{
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&from=2006-01-01');
         $this->assertResponseCode(200);
