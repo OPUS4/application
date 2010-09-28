@@ -119,6 +119,11 @@ $this->container = Zend_Registry::get('Opus_Navigation');
             </div>
         </div>
 
+        <div class="debug revision">
+            <hr/>
+            <b>$Rev$</b>
+        </div>
+
         <?php
             $dbprofiler = Zend_Registry::get('db_adapter')->getProfiler();
             $config = Zend_Registry::get('Zend_Config');
