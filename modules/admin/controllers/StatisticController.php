@@ -151,14 +151,27 @@ class Admin_StatisticController extends Zend_Controller_Action {
 
 
         // institution statistics
-        $institutes = new Opus_OrganisationalUnits;
+        //$institutes = new Opus_OrganisationalUnits;
+        $role = Opus_CollectionRole::fetchByName('org');
+        $colls = Opus_Collection::fetchCollectionsByRoleId($role->getId());
+        //$institutes = Opus_CollectionRole::fetchByName('institutes');
         $instStat = array();
         $db = Zend_Registry::get('db_adapter');
-        foreach ($institutes->getSubCollection() as $institut) {
+        //foreach ($institutes->getSubCollection() as $institut) {
+        foreach ($colls as $institut) {
+            //$institut = $c->getName();
+            /*
             $query = "SELECT COUNT(d.id) AS entries FROM link_documents_collections_1 AS l JOIN documents AS d ON d.id =
                 l.documents_id WHERE l.collections_id IN (SELECT collections_id FROM collections_structure_1 WHERE
                 `left` >= (SELECT `left` FROM collections_structure_1 WHERE collections_id = ?) AND `right` <=
                 (SELECT `right` FROM collections_structure_1 WHERE collections_id = ?)AND
+                YEAR(d.server_date_published) = ?)";
+             *
+             */
+            $query = "SELECT COUNT(d.id) AS entries FROM link_documents_collections AS l JOIN documents AS d ON d.id =
+                l.document_id WHERE l.collection_id IN (SELECT id FROM collections WHERE `left_id` >=
+                (SELECT `left_id` FROM collections WHERE id = ?) AND `right_id` <=
+                (SELECT `right_id` FROM collections WHERE id = ?)AND
                 YEAR(d.server_date_published) = ?)";
             $res = $db->query($query, array($institut->getId(), $institut->getId(), $postData['selectedYear']))->fetchAll();
             $instStat[$institut->getDisplayName()] = $res[0]['entries'];
