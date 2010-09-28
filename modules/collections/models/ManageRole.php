@@ -72,10 +72,10 @@ class Collections_Model_ManageRole {
     public function renameCollectionByNumber($number, $title) {
         $collections = $this->findCollectionByNumber($number);
         if (count($collections) > 1) {
-            throw new Exception("ManageRole: Found more than one collection with number '$number'.");
+            throw new Collections_Model_Exception("ManageRole: Found more than one collection with number '$number'.");
         }
         else if (count($collections) < 1) {
-            throw new Exception("ManageRole: Collection with number '$number' does not exist.");
+            throw new Collections_Model_Exception("ManageRole: Collection with number '$number' does not exist.");
         }
 
         $collection = $collections[0];
