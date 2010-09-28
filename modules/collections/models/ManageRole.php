@@ -43,6 +43,9 @@ class Collections_Model_ManageRole {
             throw new Collections_Model_Exception("ManageRole: Role with name '$role_name' not found");
         }
 
+        if (is_null($this->role->getRootCollection())) {
+            throw new Collections_Model_Exception("ManageRole: Root Collection for role does not exist.");
+        }
     }
 
     public function findCollectionByNumber($number) {

@@ -35,14 +35,18 @@
 
 class Collections_Model_ManageRoleTest extends ControllerTestCase {
 
-    public function setUp() {
-        parent::setUp();
+    public function testNewModelOnCollectionRoleWithoutRoot() {
+        // In our test data, this role does not have any associated collections.
+
+        $this->setExpectedException('Collections_Model_Exception');
+        new Collections_Model_ManageRole('no-root-test');
     }
 
-    public function testAddCollection() {
-        $this->markTestIncomplete('This test throws a PHP Fatal error (null pointer exception).');
-        $manageRole = new Collections_Model_ManageRole('projects'); // this role does not have any associated collections
-        $manageRole->addCollection(-1, 'foo');
+    public function testNewModelOnNonexistentCollectionRole() {
+        // In our test data, this role does not have any associated collections.
+
+        $this->setExpectedException('Collections_Model_Exception');
+        new Collections_Model_ManageRole('foo-'.rand());
     }
 }
 ?>
