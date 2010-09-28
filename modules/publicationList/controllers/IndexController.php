@@ -59,11 +59,11 @@ class PublicationList_IndexController extends Controller_Action {
         $this->createPublicationLists();
         $this->setPublicationView();
 
-        if($this->numOfHits === 0 || $this->query->getStart() >= $this->numOfHits) {
-            $this->render('nohits');
+        if ($this->getRequest()->getParam("theme") === 'plain') {
+            $this->render('plainresults');
         }
         else {
-            $this->render('presults');
+            $this->render('results');
         }
     }
 
@@ -140,9 +140,9 @@ class PublicationList_IndexController extends Controller_Action {
 
     private function validateQuery($query) {
         // TODO check if the two subsequent rows checks are obsolete
-        if($query->getRows() > 100) {
+        if($query->getRows() > 1000) {
             $this->log->warn("Values greater than 100 are currently not allowed for the rows paramter.");
-            $query->setRows('100');
+            $query->setRows('1000');
         }
         if($query->getRows() < 1) {
             $this->log->warn("row parameter is smaller than 1: adjusting to 1.");
@@ -166,7 +166,7 @@ class PublicationList_IndexController extends Controller_Action {
         $this->publicationSite = new PublicationList_Model_PublicationSite();
         foreach ($this->resultList->getResults() as $resultHit) {
             $publication = new PublicationList_Model_Publication($resultHit->getId());
-            $year = $publication->getYear();
+            $year = $publication->getDoc()->getPublishedYear();
             $inListe = 0;
             foreach ($this->publicationSite->getSingleList() as $sl) {
                 if ($sl->getYear() === $year) {
@@ -186,7 +186,7 @@ class PublicationList_IndexController extends Controller_Action {
 
 
     private function setPublicationView() {
-        //$this->setTheme("typo3zib");
+        if (!is_null($this->getRequest()->getParam("theme"))) { $this->setTheme($this->getRequest()->getParam("theme")); };
         $this->view->results = $this->publicationSite->getSingleList();
     }
 

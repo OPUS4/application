@@ -34,44 +34,17 @@
 
 class PublicationList_Model_Publication {
 
-    private $address;
+    private $doc;
     private $authors = array();
     private $bibtexUrl;
-    private $completedYear;
     private $editors = array();
-    private $institution;
-    private $issue;
-    private $pageFirst;
-    private $pageLast;
-    private $publisher;
     private $risUrl;
-    private $school;
-    private $title;
-    private $titleParent;
-    private $volume;
-    private $year;
-
 
     public function __construct($id) {
-        $doc = new Opus_Document($id);
-        $collections = $doc->getCollection();
-        if ($doc->getCompletedYear() && ($doc->getCompletedYear() !== "0000")) {
-           $this->setCompletedYear($doc->getCompletedYear());
-        }
-        if ($doc->getIssue()) {
-            $this->setIssue($doc->getIssue());
-        }
+        $this->doc = new Opus_Document($id);
+        $collections = $this->doc->getCollection();
 
-        if ($doc->getPageFirst()) {
-            $this->setpageFirst($doc->getPageFirst());
-        }
-
-        if ($doc->getPageLast()) {
-            $this->setpageLast($doc->getPageLast());
-        }
-
-
-        foreach ($doc->getPersonAuthor() as $author) {
+        foreach ($this->doc->getPersonAuthor() as $author) {
              $firstName = $author->getFirstName();
              $lastName = $author->getLastName();
              $author = new PublicationList_Model_Author($firstName, $lastName);
@@ -79,35 +52,17 @@ class PublicationList_Model_Publication {
              foreach ($collections as $c) {
                    if (strcmp($c->getName(), $lastName.", ".$firstName) === 0) {
                        $author->setUrl($c->getId());
+                       $author->setIdentifier($c->getNumber());
                    }
              }
-  
              $this->addAuthor($author);
-
         }
 
-        foreach ($doc->getPersonEditor() as $editor) {
+        foreach ($this->doc->getPersonEditor() as $editor) {
               $firstName = $editor->getFirstName();
               $lastName = $editor->getLastName();
               $this->addEditor($firstName." ".$lastName);
         }
-
-        if ($doc->getPublishedYear()) {
-              $this->setYear($doc->getPublishedYear());
-        }
-
-        if ($doc->getTitleMain()) {
-              $this->setTitle($doc->getTitleMain(0)->getValue());
-        }
-
-        if ($doc->getTitleParent()) {
-              $this->setTitleParent($doc->getTitleParent(0)->getValue());
-        }
-
-        if ($doc->getVolume()) {
-              $this->setVolume($doc->getVolume());
-        }
-
 
         $this->bibtexUrl = array(
                 'module' => 'citationExport',
@@ -123,16 +78,12 @@ class PublicationList_Model_Publication {
                 'output' => 'ris',
                 'docId' => $id);
 
+   
     }
 
-    public function setAddress($string) {
-        $this->address = $string;
+    public function getDoc() {
+        return $this->doc;
     }
-
-    public function getAddress() {
-        return $this->address;
-    }
-
 
     public function addAuthor($author) {
         array_push($this->authors, $author);
@@ -140,32 +91,6 @@ class PublicationList_Model_Publication {
 
     public function getAuthors() {
         return $this->authors;
-    }
-    
-    public function getAuthorString() {
-        $string = "";
-        foreach ($this->authors as $author) {
-            $string .= $author.", ";
-        }
-        return preg_replace('/,\s$/', '', $string);
-     }
-     /*
-     public function setBibtexUrl($string) {
-        $this->bibtexUrl = "<a href=\"http://maiwald.zib.de/opus4-devel/citationExport/index/index/output/bibtex/docId/".$string."\">BibTeX</a>";
-    }
-      * */
-
-    public function getBibtexUrl() {
-        return $this->bibtexUrl;
-    }
-
-
-    public function setCompletedYear($string) {
-        $this->completedYear = $string;
-    }
-
-    public function getCompletedYear() {
-        return $this->completedYear;
     }
 
     public function addEditor($string) {
@@ -176,106 +101,13 @@ class PublicationList_Model_Publication {
         return $this->editors;
     }
 
-    public function getEditorString() {
-        $string = "";
-        foreach ($this->editors as $editor) {
-            $string .= $editor.", ";
-        }
-        return preg_replace('/,\s$/', '', $string);
-     }
-
-    public function setInstitution($string) {
-        $this->instituition = $string;
-    }
-
-    public function getInstitution() {
-        return $this->institution;
-    }
-
-    public function setIssue($string) {
-        $this->issue = $string;
-    }
-
-    public function getIssue() {
-        return $this->issue;
-    }
-
-    public function setPageFirst($string) {
-        $this->pageFirst = $string;
-    }
-
-    public function getPageFirst() {
-        return $this->pageFirst;
-    }
-
-
-    public function setPageLast($string) {
-        $this->pageLast = $string;
-    }
-
-    public function getPageLast() {
-        return $this->pageLast;
-    }
-
-
-    public function setPublisher($string) {
-        $this->publisher = $string;
-    }
-
-    public function getPublisher() {
-        return $this->publisher;
-    }
-    /*
-     public function setRisUrl($string) {
-        $this->risUrl = "<a href=\"http://maiwald.zib.de/opus4-devel/citationExport/index/index/output/ris/docId/".$string."\">RIS</a>";
-    }
-     *
-     */
-
     public function getRisUrl() {
         return $this->risUrl;
-    }       
-
-
-    public function setSchool($string) {
-        $this->school = $string;
+    }
+    
+    public function getBibtexUrl() {
+        return $this->bibtexUrl;
     }
 
-    public function getSchool() {
-        return $this->title;
-    }
-
-    public function setTitle($string) {
-        $this->title = $string;
-    }
-
-    public function getTitle() {
-        return $this->title;
-    }
-
-    public function setTitleParent($string) {
-        $this->titleParent = $string;
-    }
-
-    public function getTitleParent() {
-        return $this->titleParent;
-    }
-
-    public function setVolume($string) {
-        $this->volume = $string;
-    }
-
-    public function getVolume() {
-        return $this->volume;
-    }
-
-
-    public function setYear($string) {
-        $this->year = $string;
-    }
-
-    public function getYear() {
-        return $this->year;
-    }
 }
 ?>

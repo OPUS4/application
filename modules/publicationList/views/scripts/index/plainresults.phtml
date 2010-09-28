@@ -1,0 +1,129 @@
+<?php
+/**
+ * This file is part of OPUS. The software OPUS has been originally developed
+ * at the University of Stuttgart with funding from the German Research Net,
+ * the Federal Department of Higher Education and Research and the Ministry
+ * of Science, Research and the Arts of the State of Baden-Wuerttemberg.
+ *
+ * OPUS 4 is a complete rewrite of the original OPUS software and was developed
+ * by the Stuttgart University Library, the Library Service Center
+ * Baden-Wuerttemberg, the Cooperative Library Network Berlin-Brandenburg,
+ * the Saarland University and State Library, the Saxon State Library -
+ * Dresden State and University Library, the Bielefeld University Library and
+ * the University Library of Hamburg University of Technology with funding from
+ * the German Research Foundation and the European Regional Development Fund.
+ *
+ * LICENCE
+ * OPUS is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the Licence, or any later version.
+ * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @category    Application
+ * @package     Module_SolrSearch
+ * @package     Opus_SolrSearch
+ * @author      Julian Heise <heise@zib.de>
+ * @author      Sascha Szott <szott@zib.de>
+ * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ * @version     $Id$
+ */
+?>
+
+<?php
+    $startUpScript = '$(document).ready(function() { init_searchresults(); });';
+    $fc = Zend_Controller_Front::getInstance();
+    $basePath = $fc->getRequest()->getBasePath();
+    $this->headScript()
+        ->appendFile($basePath . '/layouts/opus4/js/jquery-1.4.2.min.js')
+        ->appendScript($startUpScript);
+?>
+
+
+<div id="search_results" class="search_results">
+    <!-- NaviBar -->
+    <?php foreach($this->results as $result) :?>
+	<a href="#<?= htmlspecialchars($result->getYear()) ?>"><b><?= htmlspecialchars($result->getYear()) ?></b></a> 
+    <?php endforeach ?>
+    <?php foreach($this->results as $result) :?>
+        <div class="result_box"">
+	<a name="<?= htmlspecialchars($result->getYear()) ?>"></a>
+        <b> <?= htmlspecialchars($result->getYear()) ?> </b>
+         <ul>
+         <?php foreach($result->getPublicationList() as $publication) :?>
+            <li>
+	     <?php if(!count($publication->getAuthors()) == 0) : ?>
+		 <?php $counter=0 ?>
+                    <?php foreach($publication->getAuthors() as $author) :?>
+		    <?php $counter++ ?>
+                        <?php if(!is_null($author->getUrl())) : ?>
+                            <a href="/de/menschen/mitarbeiter/member.html?mail=<?= $author->getIdentifier() ?>">
+                            <?= htmlspecialchars($author->getFirstName()) ?>
+                            <?= $author->getLastName() ?></a>
+                        <?php endif ?>
+                        <?php if(is_null($author->getUrl())) : ?>
+                            <?= htmlspecialchars($author->getFirstName()) ?> <?= htmlspecialchars($author->getLastName()) ?>
+                        <?php endif ?>
+		   <?php if($counter < count($publication->getAuthors())) : ?>,<?php endif ?>
+                    <?php endforeach ?>:
+                <?php endif ?>
+	    
+                 <?php if(!count($publication->getDoc()->getTitleMain()) == 0) : ?>
+                   <i><?= htmlspecialchars($publication->getDoc()->getTitleMain(0)->getValue()) ?></i>
+                <?php endif ?>
+
+                <?php if(!count($publication->getDoc()->getTitleParent()) == 0) : ?>
+                    in: <?= htmlspecialchars($publication->getDoc()->getTitleParent(0)->getValue()) ?>
+                <?php endif ?>
+
+                <?php if(!count($publication->getEditors()) == 0) : ?>
+		, <?php $counter=0 ?>
+                    <?php foreach($publication->getEditors() as $editor) :?>
+		    <?php $counter++ ?>
+                        <?= htmlspecialchars($editor) ?>
+		<?php if($counter < count($publication->getEditors())) : ?>,<?php endif ?>
+                    <?php endforeach ?> (Ed.)
+                <?php endif ?>
+
+                <?php if(!is_null($publication->getDoc()->getVolume())) : ?>
+                    , Vol. <?= htmlspecialchars($publication->getDoc()->getVolume()) ?>
+                <?php endif ?>
+
+                <?php if(!is_null($publication->getDoc()->getIssue())) : ?>
+                    , Issue <?= htmlspecialchars($publication->getDoc()->getIssue()) ?>
+                <?php endif ?>
+
+                <?php if(!is_null($publication->getDoc()->getPageFirst())) : ?>
+                    , pp. <?= htmlspecialchars($publication->getDoc()->getPageFirst()) ?>
+                <?php endif ?>
+
+                <?php if(!is_null($publication->getDoc()->getPageLast())) : ?>
+                    - <?= htmlspecialchars($publication->getDoc()->getPageLast()) ?>
+                <?php endif ?>
+
+                <?php if(!is_null($publication->getDoc()->getCompletedYear())) : ?>
+                    <?php if(!($publication->getDoc()->getCompletedYear() == '0000')) : ?>
+                    , <?= htmlspecialchars($publication->getDoc()->getCompletedYear()) ?>
+                     <?php endif ?>
+                <?php endif ?>
+
+                <?php if(!is_null($publication->getBibtexUrl())) : ?>
+                    <a href="http://maiwald.zib.de<?= $this->url($publication->getBibtexUrl(), null, true); ?>/theme/plain">BibTeX</a>
+                <?php endif ?>
+
+	        <?php if(!is_null($publication->getRisUrl())) : ?>
+                    <a href="http://maiwald.zib.de<?= $this->url($publication->getRisUrl(), null, true); ?>/theme/plain">RIS</a>
+                <?php endif ?>
+
+            </li>
+         <?php endforeach ?>
+         </ul>
+        </div>
+     <?php endforeach ?>
+</div>
+

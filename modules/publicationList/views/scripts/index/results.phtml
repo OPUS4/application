@@ -55,10 +55,12 @@
 	<a name="<?= htmlspecialchars($result->getYear()) ?>"></a>
         <b> <?= htmlspecialchars($result->getYear()) ?> </b>
          <ul>
-         <?php foreach($result->getPublicationList() as $publication) :?>
+	<?php foreach($result->getPublicationList() as $publication) :?>
             <li>
-                <?php if(!is_null($publication->getAuthors())) :?>
+                 <?php if(!count($publication->getAuthors()) == 0) : ?>
+		 <?php $counter=0 ?>
                     <?php foreach($publication->getAuthors() as $author) :?>
+		    <?php $counter++ ?>
                         <?php if(!is_null($author->getUrl())) : ?>
                             <a href="<?= $this->url($author->getUrl(), null, true); ?>">
                             <?= htmlspecialchars($author->getFirstName()) ?>
@@ -67,34 +69,54 @@
                         <?php if(is_null($author->getUrl())) : ?>
                             <?= htmlspecialchars($author->getFirstName()) ?> <?= htmlspecialchars($author->getLastName()) ?>
                         <?php endif ?>
-                    <?php endforeach ?>
-                <?php endif ?>:
-                <i><?= htmlspecialchars($publication->getTitle()) ?></i>
-                 <?php if(!is_null($publication->getTitleParent())) : ?>
-                    in: <?= htmlspecialchars($publication->getTitleParent()) ?>
+		   <?php if($counter < count($publication->getAuthors())) : ?>,<?php endif ?>
+                    <?php endforeach ?>:
                 <?php endif ?>
-                <?php if(strlen($publication->getEditorString())>0 ) : ?>
-                    , <?= htmlspecialchars($publication->getEditorString()) ?> (Ed.)
+
+                 <?php if(!count($publication->getDoc()->getTitleMain()) == 0) : ?>
+                   <i><?= htmlspecialchars($publication->getDoc()->getTitleMain(0)->getValue()) ?></i>
                 <?php endif ?>
-                <?php if(!is_null($publication->getVolume())) : ?>
-                    , Vol. <?= htmlspecialchars($publication->getVolume()) ?>
+
+                <?php if(!count($publication->getDoc()->getTitleParent()) == 0) : ?>
+                    in: <?= htmlspecialchars($publication->getDoc()->getTitleParent(0)->getValue()) ?>
                 <?php endif ?>
-                <?php if(!is_null($publication->getIssue())) : ?>
-                    , Issue <?= htmlspecialchars($publication->getIssue()) ?>
+
+                <?php if(!count($publication->getEditors()) == 0) : ?>
+		, <?php $counter=0 ?>
+                    <?php foreach($publication->getEditors() as $editor) :?>
+		    <?php $counter++ ?>
+                        <?= htmlspecialchars($editor) ?>
+		<?php if($counter < count($publication->getEditors())) : ?>,<?php endif ?>
+                    <?php endforeach ?> (Ed.)
                 <?php endif ?>
-                <?php if(!is_null($publication->getPageFirst())) : ?>
-                    , pp. <?= htmlspecialchars($publication->getPageFirst()) ?>
+
+                <?php if(!is_null($publication->getDoc()->getVolume())) : ?>
+                    , Vol. <?= htmlspecialchars($publication->getDoc()->getVolume()) ?>
                 <?php endif ?>
-                <?php if(!is_null($publication->getPageLast())) : ?>
-                    - <?= htmlspecialchars($publication->getPageLast()) ?>
+
+                <?php if(!is_null($publication->getDoc()->getIssue())) : ?>
+                    , Issue <?= htmlspecialchars($publication->getDoc()->getIssue()) ?>
                 <?php endif ?>
-                <?php if(!is_null($publication->getCompletedYear())) : ?>
-                    , <?= htmlspecialchars($publication->getCompletedYear()) ?>
+
+                <?php if(!is_null($publication->getDoc()->getPageFirst())) : ?>
+                    , pp. <?= htmlspecialchars($publication->getDoc()->getPageFirst()) ?>
                 <?php endif ?>
+
+                <?php if(!is_null($publication->getDoc()->getPageLast())) : ?>
+                    - <?= htmlspecialchars($publication->getDoc()->getPageLast()) ?>
+                <?php endif ?>
+
+                <?php if(!is_null($publication->getDoc()->getCompletedYear())) : ?>
+                    <?php if(!($publication->getDoc()->getCompletedYear() == '0000')) : ?>
+                    , <?= htmlspecialchars($publication->getDoc()->getCompletedYear()) ?>
+                     <?php endif ?>
+                <?php endif ?>
+
                 <?php if(!is_null($publication->getBibtexUrl())) : ?>
                     <a href="<?= $this->url($publication->getBibtexUrl(), null, true); ?>">BibTeX</a>
                 <?php endif ?>
-	      <?php if(!is_null($publication->getRisUrl())) : ?>
+
+	        <?php if(!is_null($publication->getRisUrl())) : ?>
                     <a href="<?= $this->url($publication->getRisUrl(), null, true); ?>">RIS</a>
                 <?php endif ?>
 
