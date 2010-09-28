@@ -593,7 +593,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
                     }
                 }
 
-                $msc_role = Opus_CollectionRole::fetchByOaiName('msc');
+                $msc_role = Opus_CollectionRole::fetchByName('msc');
 
                 foreach ($mscs AS $m) {
                     $model = $doc->addSubjectMSC();
