@@ -34,7 +34,9 @@
  */
 ?>
 <div class="adminContainer">
-<h1><?= $this->title ?></h1>
+<div>
+<?= $this->navigation()->breadcrumbs() ?>
+</div>
 
 <div>
 <a href="<?= $this->url(array('action' => 'new')) ?>"><?= $this->translate('admin_account_action_new')?></a>

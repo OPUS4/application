@@ -34,9 +34,10 @@
  * @version     $Id$
  */
 ?>
-<h1><?= $this->title ?></h1>
 <div id="adminMenuContainer">
 <?PHP
+echo $this->navigation()->breadcrumbs(); 
+
 echo $this->navigation()
           ->menu()
           ->setOnlyActiveBranch(true)
