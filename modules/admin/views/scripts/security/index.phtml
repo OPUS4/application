@@ -36,10 +36,11 @@
 ?>
 <h1><?= $this->title ?></h1>
 <div id="adminMenuContainer">
-<ul>
-<?php foreach ($this->securityTasks as $linkTitle => $linkUrl) { ?>
-    <li class="menuItem"><a href="<?=$linkUrl ?>"><?= $linkTitle ?></a></li>
-<?php } ?>
-</ul>
+<?PHP
+echo $this->navigation()
+          ->menu()
+          ->setOnlyActiveBranch(true)
+          ->setRenderParents(false);
+?>
 </div>
 

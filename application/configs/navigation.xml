@@ -55,6 +55,28 @@
                     <module>admin</module>
                     <controller>security</controller>
                     <action>index</action>
+                    <pages>
+                        <accounts>
+                            <label>admin_security_title_accounts</label>
+                            <module>admin</module>
+                            <controller>account</controller>
+                            <action>index</action>
+                        </accounts>
+
+                        <ipranges>
+                            <label>admin_security_title_ipranges</label>
+                            <module>admin</module>
+                            <controller>iprange</controller>
+                            <action>index</action>
+                        </ipranges>
+
+                        <roles>
+                            <label>admin_security_title_roles</label>
+                            <module>admin</module>
+                            <controller>role</controller>
+                            <action>index</action>
+                        </roles>
+                    </pages>
                 </security>
 
                 <documents>

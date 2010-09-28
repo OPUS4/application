@@ -52,14 +52,6 @@ class Admin_SecurityController extends Zend_Controller_Action {
      */
     public function indexAction() {
         $this->view->title = $this->view->translate('admin_title_security');
-        // Create an array with all possible tasks for an admin.
-        // Sort it depending on the language.
-        $securityTasks = array();
-        $securityTasks[$this->view->translate('admin_security_title_ipranges')] = $this->view->url(array('controller'=>'iprange', 'action'=>'index'), null, false);
-        $securityTasks[$this->view->translate('admin_security_title_roles')]    = $this->view->url(array('controller'=>'role',    'action'=>'index'), null, false);
-        $securityTasks[$this->view->translate('admin_security_title_accounts')] = $this->view->url(array('controller'=>'account', 'action'=>'index'), null, false);
-        ksort($securityTasks);
-        $this->view->securityTasks = $securityTasks;
     }
 
 }
