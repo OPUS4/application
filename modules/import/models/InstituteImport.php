@@ -41,7 +41,7 @@ class Import_Model_InstituteImport {
      * @return array List of documents that have been imported
      */
     public function __construct($data)	{
-        $collRole = Opus_CollectionRole::fetchByName('institutes');
+        $role = Opus_CollectionRole::fetchByName('institutes');
         $xml = new DomDocument;
         $xslt = new DomDocument;
         $xslt->load('../modules/import/views/scripts/opus3/institute_structure.xslt');
@@ -54,13 +54,13 @@ class Import_Model_InstituteImport {
 
         foreach ($doclist as $document) {
             if ($document->getAttribute('name') === 'university_de') {
-                $uniNumbers = $this->importUniversities($document, $collRole);
+                $uniNumbers = $this->importUniversities($document, $role);
             }
             if ($document->getAttribute('name') === 'faculty_de') {
-                $facNumbers = $this->importFaculties($document, $uniNumbers[0], $collRole->getId());
+                $facNumbers = $this->importFaculties($document, $uniNumbers[0]);
             }
             if ($document->getAttribute('name') === 'institute_de') {
-                $instNumbers = $this->importInstitutes($document, $facNumbers, $collRole->getId());
+                $instNumbers = $this->importInstitutes($document, $facNumbers);
             }
         }
         echo "\n";
@@ -93,34 +93,22 @@ class Import_Model_InstituteImport {
      * @param DOMDocument $data XML-Document to be imported
      * @return array List of documents that have been imported
      */
-    protected function importUniversities($data, $collRole) {
+    protected function importUniversities($data, $role) {
         $classification = $this->transferOpusClassification($data);
+        $subcoll = array();
 
         // Build a mapping file to associate old IDs with the new ones
         $fp = fopen('../workspace/tmp/universities.map', 'w');
-
-        $subcoll = array();
-
         foreach ($classification as $class) {
             echo ".";
-            // first level category
-            $root = $collRole->getRootNode();
-	    $child = $root->addLastChild();
-            $coll = new Opus_Collection();
+            $root = $role->getRootCollection();
+	    $coll = $root->addLastChild();
             $coll->setName($class['universitaet_anzeige']);
-            //$coll->setAddress($class['instadresse']);
-            //$coll->setCity($class['univort']);
-            //$coll->setDnbContactId($class['ddb_idn']);
-            $coll->setTheme('default');
-            $child->addCollection($coll);
-            $child->setVisible(1);
-            $root->setVisible(1);
+            $coll->setVisible(1);
             $root->store();
-            $sc = $child->getId();
-            $subcoll[] = $sc;
-            fputs($fp, str_replace(" ", "_", $class['universitaet']) . ' ' . $sc . "\n");
+            $subcoll[] = $coll->getId();
+            fputs($fp, str_replace(" ", "_", $class['universitaet']) . ' ' .  $coll->getId() . "\n");
         }
-
         fclose($fp);
 
         return $subcoll;
@@ -133,33 +121,24 @@ class Import_Model_InstituteImport {
      * @param DOMDocument $data XML-Document to be imported
      * @return array List of documents that have been imported
      */
-    protected function importFaculties($data, $subColls, $roleId) {
+    protected function importFaculties($data, $pColl) {
         $classification = $this->transferOpusClassification($data);
+        $subcoll = array();
 
         // Build a mapping file to associate old IDs with the new ones
         $fp = fopen('../workspace/tmp/faculties.map', 'w');
-
-        $subcoll = array();
-
         foreach ($classification as $class) {
             echo ".";
-            $parentColl = new Opus_CollectionNode($subColls);
-            // second level category
-            $child = $parentColl->addLastChild();
-            $coll = new Opus_Collection();
+            $root = new Opus_Collection($pColl);
+            $coll = $root->addLastChild();
             $coll->setName($class['fakultaet']);
-            //$coll->setIsGrantor('1');
-            $coll->setTheme('default');
-            $child->addCollection($coll);
-            $child->setVisible(1);
-            $parentColl->setVisible(1);
-            $parentColl->store();
-            $subcoll[$class["nr"]] = $child->getId();
+            $coll->setVisible(1);
+            $root->store();
+            $subcoll[$class["nr"]] = $coll->getId();
             fputs($fp, $class['nr'] . ' ' . $subcoll[$class["nr"]] . "\n");
 	}
         
         fclose($fp);
-		
 	return $subcoll;
     }
 
@@ -169,25 +148,19 @@ class Import_Model_InstituteImport {
      * @param DOMDocument $data XML-Document to be imported
      * @return array List of documents that have been imported
      */
-    protected function importInstitutes($data, $subColls, $roleId)     {
+    protected function importInstitutes($data, $pColls)     {
         $classification = $this->transferOpusClassification($data);
 
         // Build a mapping file to associate old IDs with the new ones
         $fp = fopen('../workspace/tmp/institute.map', 'w');
-
         foreach ($classification as $class) {
             echo ".";
-            $parentColl = new Opus_CollectionNode($subColls[$class['fakultaet']]);
-            // second level category
-            $child = $parentColl->addLastChild();
-            $coll = new Opus_Collection();
+            $root = new Opus_Collection($pColls[$class['fakultaet']]);
+            $coll = $root->addLastChild();
             $coll->setName($class['name']);
-            $coll->setTheme('default');
-	    $child->addCollection($coll);
-	    $child->setVisible(1);
-	    $parentColl->setVisible(1);
-	    $parentColl->store();
-            fputs($fp, $class['nr'] . ' ' . $child->getId() . "\n");
+	    $coll->setVisible(1);
+	    $root->store();
+            fputs($fp, $class['nr'] . ' ' . $coll->getId() . "\n");
         }
 
         fclose($fp);
