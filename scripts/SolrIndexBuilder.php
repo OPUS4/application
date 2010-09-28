@@ -160,6 +160,6 @@ catch (Opus_Search_Index_Solr_Exception $e) {
     if (!is_null($e->getPrevious())) {
         echo "\nCaused By: " . $e->getPrevious()->getMessage();
     }
-    echo "\nStack Trace: " . $e->getTraceAsString();
+    echo "\nStack Trace:\n" . $e->getTraceAsString();
     echo "\n\n";
 }
