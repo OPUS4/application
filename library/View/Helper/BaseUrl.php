@@ -33,11 +33,10 @@
  */
 
 /**
+ * 
  * This helper class defines only one method baseUrl() to retrieve the
- * application base url for absolut url's in views.
- *
- * @category    Application
- * @package     View
+ * application base url for absolute urls in views.
+ * 
  */
 class View_Helper_BaseUrl {
 
@@ -51,5 +50,4 @@ class View_Helper_BaseUrl {
 		$request=$fc->getRequest();
 		return $request->getBaseUrl();
 	}
-
 }
