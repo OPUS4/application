@@ -62,8 +62,12 @@ class Controller_Plugin_SecurityRealm extends Zend_Controller_Plugin_Abstract {
                 $realm->setUser(null);
         }
 
-        // Set ip
-        $realm->setIp($_SERVER['REMOTE_ADDR']);
+        // OPUS_Security does not support IPv6.  Skip setting IP address, if
+        // IPv6 address has been detected.  This means, that authentication by
+        // IPv6 address does not work, but username-password still does.
+        if (preg_match('/:/', $_SERVER['REMOTE_ADDR']) === 0) {
+            $realm->setIp($_SERVER['REMOTE_ADDR']);
+        }
 
         // Hide menu entries based on privileges
         // TODO move into other plugin/place?
