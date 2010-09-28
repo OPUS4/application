@@ -41,13 +41,13 @@ class Import_Model_CollectionsImport {
      */
     public function __construct($data) {
 
-        $collRole = Opus_CollectionRole::fetchByName('series');
+        $collRole = Opus_CollectionRole::fetchByName('collections');
         $seriesRole = Opus_CollectionRole::fetchByName('series');
        
         $doclist = $data->getElementsByTagName('table_data');
 	foreach ($doclist as $document)	{
             if ($document->getAttribute('name') === 'collections') {
-                //$facNumbers = $this->importCollectionsDirectly($document, $collRole);
+                $facNumbers = $this->importCollectionsDirectly($document, $collRole);
             }
             if ($document->getAttribute('name') === 'schriftenreihen') {
                 $instNumbers = $this->importSeries($document, $seriesRole);
@@ -105,68 +105,60 @@ class Import_Model_CollectionsImport {
      */
     protected function importCollectionsDirectly($data, $collRole)  {
         $collections = $this->transferOpusClassification($data);
-        $contentTable = new Opus_Db_Collections();
-        $structTable = new Opus_Db_CollectionsNodes();
         
         // sort by lft-values
         $sorted_collections = $this->msort($collections, 'lft');
 
+        if (count($sorted_collections) == 0) {
+            // TODO: Improve error handling in case of empty collections.
+            throw new Exception("ERROR: Sorted collections empty.");
+        }
+
+        if ($sorted_collections[0]['lft'] != 1) {
+            var_dump($sorted_collections[0]);
+            // TODO: Improve error handling in case of wrong left-ids.
+            throw new Exception("ERROR: First left_id is not 1.");
+        }
+
         // 1 is used as a predefined key and should not be used again!
         // so lets increment all old IDs by 1
         $previousRight = null;
-        $previousLeft = null;
-        $previousId = array();
-        foreach ($sorted_collections as $row) {
-            $contentData = array(
-           //     'oldid'   => ($row['coll_id']+1),
-                'role_id' => $collRole->getId(),
-                'name'    => $row['coll_name']
-            );
+        $previousNode = array();
 
-            $collId = $contentTable->insert($contentData);
-            
+        foreach ($sorted_collections as $row) {
+
             // parent_id is needed
-            if ($previousLeft === null && $previousRight === null) {
-            	// no parent, use RootNode
-            	$parentNodeId = $collRole->getRootNode()->getId();
-            	array_push($previousId, $collId);
+            if ($previousRight === null) {
+                $new_collection = $collRole->getRootCollection();
+//                $collRole->store();
+
+                array_push($previousNode, $new_collection);
             }
             else if ( (int) $row['lft'] === (int) $previousRight+1) {
             	// its a brother of previous node
-            	array_pop($previousId);
-            	$parentNodeId = $previousId[count($previousId)-1];
-            	array_push($previousId, $collId);
+            	$left_brother = array_pop($previousNode);
+                $new_collection = $left_brother->addNextSibling();
+                $left_brother->store();
+                
+                array_push($previousNode, $new_collection);
+            }
+            else if ($row['rgt'] < $previousRight) {
+            	// its a child of previous node
+            	$father = array_pop($previousNode);
+                $new_collection = $father->addLastChild();
+                $father->store();
+
+            	array_push($previousNode, $father);
+            	array_push($previousNode, $new_collection);
             }
             else {
-            	// its a child of previous node
-            	$parentNodeId = $previousId[count($previousId)-1];
-            	array_push($previousId, $collId);
+                throw new Exception("Should never happen, ({$row['rgt']} < $previousRight) failed");
             }
-            
-            
-            $structureData = array(
-                'role_id'        => $collRole->getId(),
-                'collection_id'  => $collId,
-                'left_id'        => ($row['lft']+1),
-                'right_id'       => ($row['rgt']+1),
-                'parent_id'      => $parentNodeId,
-                'visible'        => 1
-            );
-            
-            $structTable->insert($structureData);
 
-            if ($row['coll_id'] === "1") {
-            	// set right-value for ID 1
-            	$newRight = array(
-                    'right_id'      => ($row['rgt']+2),
-                    'visible'       => 1
-                );
+            $new_collection->setVisible(1);
+            $new_collection->setName($row['coll_name']);
+            $new_collection->store();
 
-                $where = $structTable->getAdapter()->quoteInto('left_id = 1 AND role_id = ?', $collRole->getId());
-
-                $structTable->update($newRight, $where);
-            }
-            $previousLeft = $row['lft'];
             $previousRight = $row['rgt'];
         }
     }
