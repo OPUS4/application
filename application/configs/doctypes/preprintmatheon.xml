@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://schemas.opus.org/documenttype ../../../opus4/framework/library/Opus/Document/documenttype.xsd">
 	
 	<opus:field name="PersonAuthor" required="yes" formelement="text" datatype="Person" multiplicity="*" />
-	<opus:field name="Language" required="yes" formelement="text"  datatype="Language" multiplicity="1"/>
+	<opus:field name="Language" required="yes" formelement="select"  datatype="Language" multiplicity="1"/>
 	
 	<opus:field name="Institute" formelement="select" required="yes"  datatype="Institute" multiplicity="*" />
 	<opus:field name="TitleMain" formelement="text" required="yes"  datatype="Title" multiplicity="4" />
