@@ -559,7 +559,7 @@
 
 	<tu tuid="hint_groupTitleSub">
         <tuv xml:lang="en">
-            <seg>Please enter the document's subtitle.</seg>
+            <seg>Please enter the subtitle of the document.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte den Untertitel des Dokuments ein.</seg>
@@ -568,7 +568,7 @@
 	
 	<tu tuid="hint_TitleSub">
         <tuv xml:lang="en">
-            <seg>Please enter the document's subtitle.</seg>
+            <seg>Please enter the subtitle of the document.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte den Untertitel des Dokuments ein.</seg>
@@ -577,7 +577,7 @@
 	
 	<tu tuid="hint_groupTitleAdditional">
         <tuv xml:lang="en">
-            <seg>Please enter the document's additional title.</seg>
+            <seg>Please enter the additional title of the document.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie hier bitte einen zusätzlichen Titel des Dokuments ein.</seg>
@@ -586,7 +586,7 @@
 	
 	<tu tuid="hint_TitleAdditional">
         <tuv xml:lang="en">
-            <seg>Please enter the document's additional title.</seg>
+            <seg>Please enter the additional title of the document.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie hier bitte einen zusätzlichen Titel des Dokuments ein.</seg>
@@ -595,7 +595,7 @@
 	
 	<tu tuid="hint_groupTitleParent">
         <tuv xml:lang="en">
-            <seg>Please enter the document's parent title.</seg>
+            <seg>Please enter the parent title of the document.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte den übergeordneten Titel des Dokuments ein.</seg>
@@ -604,7 +604,7 @@
 	
 	<tu tuid="hint_TitleParent">
         <tuv xml:lang="en">
-            <seg>Please enter the document's parent title.</seg>
+            <seg>Please enter the parent title of the document.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte den übergeordneten Titel des Dokuments ein.</seg>
@@ -804,7 +804,7 @@ Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathsci
 	
 	<tu tuid="hint_PageNumber">
         <tuv xml:lang="en">
-            <seg>Please enter the document's page number.</seg>
+            <seg>Please enter the page number of the document.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte die Seitenanzahl des Dokuments ein.</seg>
@@ -813,7 +813,7 @@ Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathsci
 	
 	<tu tuid="hint_PageFirst">
         <tuv xml:lang="en">
-            <seg>Please enter the number of the document's first page.</seg>
+            <seg>Please enter the first page number of the document.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte die Nummer der ersten Seite des Dokuments ein.</seg>
@@ -822,7 +822,7 @@ Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathsci
     
 	<tu tuid="hint_PageLast">
         <tuv xml:lang="en">
-            <seg>Please enter the number of the document's last page.</seg>
+            <seg>Please enter the last page number of the document.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte die Nummer der letzten Seite des Dokuments ein.</seg>
@@ -840,7 +840,7 @@ Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathsci
 	
 	<tu tuid="hint_PublishedDate">
         <tuv xml:lang="en">
-            <seg>Please enter the date of the document's first publishing.</seg>
+            <seg>Please enter the date of first publishing the document.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte das Erstveröffentlichungsdatum des Dokuments ein.</seg>
@@ -849,7 +849,7 @@ Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathsci
 	
 	<tu tuid="hint_CompletedDate">
         <tuv xml:lang="en">
-            <seg>Please enter the date of the document's publishing.</seg>
+            <seg>Please enter the date of publishing the document.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte das Veröffentlichungsdatum (online) des Dokuments ein.</seg>
