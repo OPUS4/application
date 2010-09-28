@@ -97,6 +97,10 @@ mail.opus.name = ; Name of administrator
 ; Use Zend_Log constants (e.g. DEBUG, INFO, WARN, ERR)
 ; log.level = INFO
 
+;PUBLICATIONLIST
+publicationlist.external.baseurl.de = ; (Base_Url for external Linking, german)
+publicationlist.external.baseurl.eng = ; (Base_Url for external Linking, englisch)
+
 ; The following is needed even if sections are empty.
 [staging : production]
 
