@@ -37,7 +37,7 @@ class PublicationList_Model_Author {
     private $firstName;
     private $lastName;
     private $url = null;
-    private $identifier;
+    private $externalUrl;
 
     public function __construct($firstName, $lastName) {
         $this->firstName = $firstName;
@@ -66,12 +66,12 @@ class PublicationList_Model_Author {
         return $this->url;
     }
 
-    public function setIdentifier($string) {
-        $this->identifier = $string;
+    public function setExternalUrl($baseUrl, $identifier) {
+        $this->externalUrl = $baseUrl.$identifier;
     }
 
-    public function getIdentifier() {
-        return $this->identifier;
+    public function getExternalUrl() {
+        return $this->externalUrl;
     }
 
 

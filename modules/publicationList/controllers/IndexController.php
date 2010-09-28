@@ -163,9 +163,24 @@ class PublicationList_IndexController extends Controller_Action {
     }
 
     private function createPublicationLists() {
+        $config = Zend_Registry::get('Zend_Config');
+       
+
+
         $this->publicationSite = new PublicationList_Model_PublicationSite();
         foreach ($this->resultList->getResults() as $resultHit) {
-            $publication = new PublicationList_Model_Publication($resultHit->getId());
+             if (isset($config->publicationlist->external->baseurl)) {
+                 if ($this->getRequest()->getParam("lang") === 'eng') {
+                    $publication = new PublicationList_Model_Publication($resultHit->getId(), $config->publicationlist->external->baseurl->eng);
+                 }
+                 else {
+                    $publication = new PublicationList_Model_Publication($resultHit->getId(), $config->publicationlist->external->baseurl->de);
+                 }
+             }
+             else {
+                 $publication = new PublicationList_Model_Publication($resultHit->getId());
+             }
+            
             $year = $publication->getDoc()->getPublishedYear();
             $inListe = 0;
             foreach ($this->publicationSite->getSingleList() as $sl) {

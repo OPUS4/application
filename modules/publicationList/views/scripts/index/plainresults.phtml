@@ -61,12 +61,12 @@
 		 <?php $counter=0 ?>
                     <?php foreach($publication->getAuthors() as $author) :?>
 		    <?php $counter++ ?>
-                        <?php if(!is_null($author->getUrl())) : ?>
-                            <a href="/de/menschen/mitarbeiter/member.html?mail=<?= $author->getIdentifier() ?>">
+                        <?php if(!is_null($author->getExternalUrl())) : ?>
+                            <a href="<?= $author->getExternalUrl() ?>">
                             <?= htmlspecialchars($author->getFirstName()) ?>
                             <?= $author->getLastName() ?></a>
                         <?php endif ?>
-                        <?php if(is_null($author->getUrl())) : ?>
+                        <?php if(is_null($author->getExternalUrl())) : ?>
                             <?= htmlspecialchars($author->getFirstName()) ?> <?= htmlspecialchars($author->getLastName()) ?>
                         <?php endif ?>
 		   <?php if($counter < count($publication->getAuthors())) : ?>,<?php endif ?>
@@ -113,11 +113,11 @@
                 <?php endif ?>
 
                 <?php if(!is_null($publication->getBibtexUrl())) : ?>
-                    <a href="http://maiwald.zib.de<?= $this->url($publication->getBibtexUrl(), null, true); ?>/theme/plain">BibTeX</a>
+                    <a href="http://<?= $this->hostname() ?><?= $this->url($publication->getBibtexUrl(), null, true); ?>/theme/plain">BibTeX</a>
                 <?php endif ?>
 
 	        <?php if(!is_null($publication->getRisUrl())) : ?>
-                    <a href="http://maiwald.zib.de<?= $this->url($publication->getRisUrl(), null, true); ?>/theme/plain">RIS</a>
+                    <a href="http://<?= $this->hostname() ?><?= $this->url($publication->getRisUrl(), null, true); ?>/theme/plain">RIS</a>
                 <?php endif ?>
 
             </li>

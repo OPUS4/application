@@ -40,7 +40,7 @@ class PublicationList_Model_Publication {
     private $editors = array();
     private $risUrl;
 
-    public function __construct($id) {
+    public function __construct($id, $baseUrl = null) {
         $this->doc = new Opus_Document($id);
         $collections = $this->doc->getCollection();
 
@@ -52,7 +52,9 @@ class PublicationList_Model_Publication {
              foreach ($collections as $c) {
                    if (strcmp($c->getName(), $lastName.", ".$firstName) === 0) {
                        $author->setUrl($c->getId());
-                       $author->setIdentifier($c->getNumber());
+                       if (!is_null($baseUrl)) {
+                            $author->setExternalUrl($baseUrl, $c->getNumber());
+                       }
                    }
              }
              $this->addAuthor($author);

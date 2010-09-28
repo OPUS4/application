@@ -47,6 +47,7 @@
 
 <div id="search_results" class="search_results">
     <!-- NaviBar -->
+    <b><?= $this->hostname() ?><?= $this->baseUrl() ?></b>
     <?php foreach($this->results as $result) :?>
 	<a href="#<?= htmlspecialchars($result->getYear()) ?>"><b><?= htmlspecialchars($result->getYear()) ?></b></a> 
     <?php endforeach ?>
@@ -111,14 +112,21 @@
                     , <?= htmlspecialchars($publication->getDoc()->getCompletedYear()) ?>
                      <?php endif ?>
                 <?php endif ?>
+                <?php if(!count($publication->getDoc()->getNote()) == 0) : ?>
+                     (<?= htmlspecialchars($publication->getDoc()->getNote(0)->getMessage()) ?>)
+                <?php endif ?>
 
                 <?php if(!is_null($publication->getBibtexUrl())) : ?>
-                    <a href="<?= $this->url($publication->getBibtexUrl(), null, true); ?>">BibTeX</a>
+                    <a href="<?= $this->url($publication->getBibtexUrl(), null, true) ?>">BibTeX</a>
                 <?php endif ?>
 
 	        <?php if(!is_null($publication->getRisUrl())) : ?>
-                    <a href="<?= $this->url($publication->getRisUrl(), null, true); ?>">RIS</a>
+                    <a href="<?= $this->url($publication->getRisUrl(), null, true) ?>">RIS</a>
                 <?php endif ?>
+
+                <?php if(!is_null($publication->getDoc()->getIdentifierUrl())) : ?>
+                    <a href="<?= $publication->getDoc()->getIdentifierUrl() ?>">PDF</a>
+                <?php endif ?>                        
 
             </li>
          <?php endforeach ?>
