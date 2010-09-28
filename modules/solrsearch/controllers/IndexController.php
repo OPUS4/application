@@ -24,7 +24,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Module_SolrSearch
+ * @category    Module_Solrsearch
  * @author      Julian Heise <heise@zib.de>
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
@@ -73,9 +73,13 @@ class Solrsearch_IndexController extends Controller_Action {
 
     public function invalidsearchtermAction() {
         $this->view->title = $this->view->translate('solrsearch_title_invalidsearchterm');
-        $params = $this->_request->isPost() ? $this->_request->getPost() : $this->_request->getParams();
-        $searchtype = array_key_exists('searchtype', $params) ? $params['searchtype'] : Solrsearch_IndexController::SIMPLE_SEARCH;
-        $this->view->__set('searchType', $searchtype);
+        $searchtype = $this->getRequest()->getParam('searchtype');
+        if ($searchtype === self::ADVANCED_SEARCH) {
+            $this->view->searchType = self::ADVANCED_SEARCH;
+        }
+        else {
+            $this->view->searchType = self::SIMPLE_SEARCH;
+        }                
         $this->setTheme();
     }
 
@@ -108,17 +112,14 @@ class Solrsearch_IndexController extends Controller_Action {
     }
 
     private function isSimpleSearchRequestValid() {
-        $query = $this->getRequest()->getParam('query', '');
-        if ($query === '') {
-            return false;
-        }
-        return true;
+        $query = $this->getRequest()->getParam('query');
+        return !is_null($query);
     }
 
     private function isAdvancedSearchRequestValid() {
         foreach (array('author', 'title', 'referee', 'abstract', 'fulltext',  'year') as $fieldname) {
-            $fieldvalue = $this->getRequest()->getParam($fieldname, '');
-            if ($fieldvalue !== '') {
+            $fieldvalue = $this->getRequest()->getParam($fieldname);
+            if (!is_null($fieldvalue)) {
                 return true;
             }
         }

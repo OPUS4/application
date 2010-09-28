@@ -25,16 +25,15 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_SolrSearch
+ * @package     Module_Solsearch
  * @author      Julian Heise <heise@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
 ?>
 
-<form action="<?= $this->url(array('module'=>'solrsearch','controller'=>'index','action'=>'search'),null,true) ?>" method="get">
+<form action="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search'), null, true) ?>" method="get">
     <fieldset>
         <legend><?= $this->translate('latest_options') ?></legend>
         <label for="rows"><?= $this->translate('latest_set_rows') ?></label>
