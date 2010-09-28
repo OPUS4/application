@@ -84,7 +84,7 @@ class Publish_FormController extends Controller_Action {
                 $this->view->form = $publishForm;
             }
         } else {            
-            return $this->_redirectTo('index');
+            return $this->_redirectTo('index', '', 'index');
         }
     }
 
