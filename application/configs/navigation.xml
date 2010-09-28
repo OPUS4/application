@@ -120,16 +120,6 @@
                     <controller>oailink</controller>
                     <action>index</action>
                 </oailink>
-
-                <organizationalUnits>
-                    <label>admin_title_organizational_units_show</label>
-                    <module>admin</module>
-                    <controller>collection</controller>
-                    <action>show</action>
-                    <params>
-                        <role>1</role>
-                    </params>
-                </organizationalUnits>
             </pages>
         </administration>
 
