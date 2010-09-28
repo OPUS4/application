@@ -91,9 +91,13 @@
                                     <div id="Tmenu">
                                         <?PHP 
                                         $adminPage = $this->navigation()->findBy('label', 'admin_menu_label');
-                                        $this->navigation()->removePage($adminPage);
+                                        if ($adminPage->hidden) {
+                                            $this->navigation()->removePage($adminPage);
+                                        }
                                         $helpPage = $this->navigation()->findBy('label', 'help_menu_label');
-                                        $this->navigation()->removePage($helpPage);
+                                        if ($helpPage->hidden) {
+                                            $this->navigation()->removePage($helpPage);
+                                        }
                                         ?>
                                         <?= $this->navigation()->menu()->setMaxDepth(0) ?>
                                     </div>
