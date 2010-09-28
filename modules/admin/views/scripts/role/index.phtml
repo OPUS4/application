@@ -32,18 +32,27 @@
  * @version     $Id$
  */
 ?>
-<h1><?= $this->translate($this->title) ?></h1>
-<ul>
-<? foreach($this->entries as $id => $entry) : ?>
-<li>
-    <?= $entry ?>
-    <form action="<?= $this->url(array('action' => 'delete')) ?>" class="crud" method="post">
-        <a href="<?= $this->url(array('action' => 'show', 'id' => $id)) ?>">Show</a>
-        <a href="<?= $this->url(array('action' => 'edit', 'id' => $id)) ?>">Edit</a>
-        <input type="hidden" name="id" value="<?=$id?>" />
-        <input type="submit" value="Delete" />
-    </form>
-</li>
-<? endforeach; ?>
-</ul>
+
+<div class="adminContainer">
+
+<h1><?= $this->title ?></h1>
+
+<?= $this->navigation()->breadcrumbs() ?>
+
+<div>
 <a href="<?= $this->url(array('action' => 'new')) ?>">New</a>
+</div>
+
+<table>
+    <? $index = -1; foreach($this->roles as $id => $role) : ?>
+    <tr class="<?= ($index++ % 2) ? 'odd' : 'even' ?>">
+        <td><a href="<?= $this->url(array('action' => 'show', 'id' => $id)) ?>"><?= $role ?></a></td>
+        <td>
+            <a href="<?= $this->url(array('action' => 'edit', 'id' => $id)) ?>"><?= $this->translate('admin_form_action_edit') ?></a>
+            <a href="<?= $this->url(array('action' => 'delete', 'id' => $id)) ?>"><?= $this->translate('admin_form_action_delete') ?></a>
+        </td>
+    </tr>
+    <? endforeach; ?>
+</table>
+
+</div>

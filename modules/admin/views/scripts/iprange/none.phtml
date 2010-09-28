@@ -34,6 +34,8 @@
 ?>
 <h1><?= $this->title ?></h1>
 
+<?= $this->navigation()->breadcrumbs() ?>
+
 <div><?= $this->translate('admin_iprange_none_defined') ?></div>
 
 <a href="<?= $this->url(array('action' => 'new')) ?>"><?= $this->translate('admin_iprange_action_new') ?></a>

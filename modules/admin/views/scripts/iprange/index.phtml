@@ -38,6 +38,8 @@
 
 <h1><?= $this->title ?></h1>
 
+<?= $this->navigation()->breadcrumbs() ?>
+
 <table>
     <? foreach($this->ipRanges as $id => $ipRange) : ?>
     <form action="<?= $this->url(array('action' => 'index')) ?>" class="crud" method="post">
