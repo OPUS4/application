@@ -152,7 +152,7 @@ class Admin_StatisticController extends Zend_Controller_Action {
 
         // institution statistics
         //$institutes = new Opus_OrganisationalUnits;
-        $role = Opus_CollectionRole::fetchByName('org');
+        $role = Opus_CollectionRole::fetchByName('institutes');
         $colls = Opus_Collection::fetchCollectionsByRoleId($role->getId());
         //$institutes = Opus_CollectionRole::fetchByName('institutes');
         $instStat = array();
