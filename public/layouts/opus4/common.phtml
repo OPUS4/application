@@ -75,7 +75,7 @@ $this->container = Zend_Registry::get('Opus_Navigation');
                 </h1>
                 <ul id="primary-nav" class="nav">
                 <?php foreach ($this->container as $page) : 
-                        $pageIsActive = $page->isActive(false);
+                        $pageIsActive = $page->isActive(true);
                 ?>
                     <li id="<?= $page->getId() ?>" class="<?= $page->getClass().($pageIsActive ? ' active' : '')?>">
                         <?php if(!$pageIsActive) : ?>
