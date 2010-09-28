@@ -68,7 +68,7 @@ $this->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8')
                 </div>
 
                 <div id="navigationMenu">
-                        <?= $this->navigation()->menu(); ?>
+                        <?= $this->navigation()->menu()->setMaxDepth(0); ?>
                 </div>
             </div>
 
