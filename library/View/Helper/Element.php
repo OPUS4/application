@@ -100,7 +100,7 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
                 if ($options !== null)
                     $elementfield .= $options . " ";
                 else
-                    $elementfield .= "size='30' ";
+                    $elementfield .= " size='30' ";
                 $elementfield .= " title='" . $this->view->translate($element["hint"]) . "' ";
                 if ($element["disabled"] === true) {
                     $elementfield .= " disabled='1' ";
