@@ -83,6 +83,11 @@ class Review_IndexController extends Controller_Action {
         // Get list of document identifiers
         $result = $this->_helper->documents($sort_order, $sort_reverse, 'unpublished');
 
+        // TODO remove or disable if log level is not DEBUG
+        foreach ($result as $testid) {
+            $this->_logger->debug('Document '. $testid);
+        }
+
         if (empty($result)) {
             $this->_helper->viewRenderer('nodocs');
         }
