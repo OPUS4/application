@@ -40,12 +40,14 @@ class Import_Model_CollectionsImport {
      * @return array List of documents that have been imported
      */
     public function __construct($data) {
-        $collRole = Opus_CollectionRole::fetchByName('collections');
+
+        $collRole = Opus_CollectionRole::fetchByName('series');
         $seriesRole = Opus_CollectionRole::fetchByName('series');
+       
         $doclist = $data->getElementsByTagName('table_data');
 	foreach ($doclist as $document)	{
             if ($document->getAttribute('name') === 'collections') {
-                $facNumbers = $this->importCollectionsDirectly($document, $collRole);
+                //$facNumbers = $this->importCollectionsDirectly($document, $collRole);
             }
             if ($document->getAttribute('name') === 'schriftenreihen') {
                 $instNumbers = $this->importSeries($document, $seriesRole);
@@ -175,25 +177,20 @@ class Import_Model_CollectionsImport {
      * @param DOMDocument $data XML-Document to be imported
      * @return array List of documents that have been imported
      */
-    protected function importSeries($data, $collRole) {
+    protected function importSeries($data, $role) {
         $classification = $this->transferOpusClassification($data);
 
         // Build a mapping file to associate old IDs with the new ones
         $fp = fopen('../workspace/tmp/series.map', 'w');
             foreach ($classification as $class) {
-            echo ".";
-            // first level category
-	    $root = $collRole->getRootNode();
-	    $coll = $root->addLastChild();
-            $node = new Opus_Collection();
-	    $node->setName($class['name']);
-	    $node->setTheme('default');
-            $coll->addCollection($node);
-            $coll->setVisible(1);
-            $root->setVisible(1);
-            $root->store();
-	    fputs($fp, $class['sr_id'] . ' ' . $coll->getId() . "\n");
-	}
+                echo ".";
+                $root = $role->getRootCollection();
+                $coll = $root->addLastChild();
+                $coll->setVisible(1);
+                $coll->setName($class['name']);
+                $root->store();
+                fputs($fp, $class['sr_id'] . ' ' . $coll->getId() . "\n");
+            }
         echo "\n";
 	fclose($fp);
     }
