@@ -1,36 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<opus:documenttype name="preprint2" xmlns:opus="http://schemas.opus.org/documenttype"
+<documenttype name="preprint2" xmlns:opus="http://schemas.opus.org/documenttype"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://schemas.opus.org/documenttype ../../../opus4/framework/library/Opus/Document/documenttype.xsd">
 	
-    <opus:field name="PersonAuthor" required="yes" formelement="text" datatype="Person" multiplicity="*" >
-        <opus:subfield name="Email" required="no" formelement="text" datatype="Email" />
-        <opus:subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" >
-            <opus:default value="Dr." edit="yes" public="yes"  />
-        </opus:subfield>
-        <opus:subfield name="DateOfBirth" required="no" formelement="text" datatype="Date" />
-        <opus:subfield name="PlaceOfBirth" required="no" formelement="text" datatype="Text" />
-    </opus:field>
+    <field name="PersonAuthor" required="yes" formelement="text" datatype="Person" multiplicity="*" >
+        <subfield name="Email" required="no" formelement="text" datatype="Email" />
+        <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" >
+            <default value="Dr." edit="yes" public="yes"  />
+        </subfield>
+        <subfield name="DateOfBirth" required="no" formelement="text" datatype="Date" />
+        <subfield name="PlaceOfBirth" required="no" formelement="text" datatype="Text" />
+    </field>
     
-    <opus:field name="Language" required="yes" formelement="select"  datatype="Language" multiplicity="1" >
+    <field name="Language" required="yes" formelement="select"  datatype="Language" multiplicity="1" >
         <opus:default value="eng" edit="yes" public="yes" />
-        </opus:field>
+        </field>
 	
-    <opus:field name="Institute" formelement="select" required="yes"  datatype="Institute" multiplicity="*" />
+    <field name="Institute" formelement="select" required="yes"  datatype="Institute" multiplicity="*" />
 
-    <opus:field name="TitleMain" formelement="text" required="yes"  datatype="Title" multiplicity="4" />
+    <field name="TitleMain" formelement="text" required="yes"  datatype="Title" multiplicity="4" />
 
-    <opus:field name="TitleAbstract" required="no" formelement="textarea"  datatype="Title" multiplicity="4">
-        <opus:required-if-fulltext/>
-    </opus:field>
+    <field name="TitleAbstract" required="no" formelement="textarea"  datatype="Title" multiplicity="4">
+        <required-if-fulltext/>
+    </field>
 	
-    <opus:field name="Project" required="no" formelement="select" datatype="Project" multiplicity="*" />
+    <field name="Project" required="no" formelement="select" datatype="Project" multiplicity="*" />
 
-    <opus:field name="SubjectMSC" required="yes" formelement="text"  datatype="msc" multiplicity="5" />
+    <field name="SubjectMSC" required="yes" formelement="text"  datatype="msc" multiplicity="5" />
+
+    <field name="Licence" required="yes" formelement="select" datatype="Licence" multiplicity="1" />
 	
 	<!-- für Keywords -->
-    <opus:field name="SubjectUncontrolled" required="no" formelement="text"  datatype="Text" multiplicity="5" />
+    <field name="SubjectUncontrolled" required="no" formelement="text"  datatype="Text" multiplicity="5" />
 	
-    <opus:field name="Note" required="no" formelement="textarea"  datatype="Text" multiplicity="1" />
+    <field name="Note" required="no" formelement="textarea"  datatype="Text" multiplicity="1" />
 		
-</opus:documenttype>
+</documenttype>
