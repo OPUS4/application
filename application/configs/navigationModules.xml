@@ -144,6 +144,35 @@
                     <controller>oailink</controller>
                     <action>index</action>
                 </oailink>
+
+                <dnbInstitute>
+                    <label>admin_title_dnbinstitute</label>
+                    <module>admin</module>
+                    <controller>dnbinstitute</controller>
+                    <action>index</action>
+                    <pages>
+                        <show>
+                            <label>admin_dnbinstitute_show</label>
+                            <module>admin</module>
+                            <controller>dnbinstitute</controller>
+                            <action>show</action>
+                        </show>
+
+                        <new>
+                            <label>admin_dnbinstitute_new</label>
+                            <module>admin</module>
+                            <controller>dnbinstitute</controller>
+                            <action>new</action>
+                        </new>
+
+                        <edit>
+                            <label>admin_dnbinstitute_edit</label>
+                            <module>admin</module>
+                            <controller>dnbinstitute</controller>
+                            <action>edit</action>
+                        </edit>
+                    </pages>
+                </dnbInstitute>
             </pages>
         </administration>
     </nav>

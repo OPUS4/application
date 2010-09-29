@@ -115,6 +115,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_title_dnbinstitute">
+      <tuv xml:lang="en">
+        <seg>DNB Institutes</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>DNB Institute</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_title_security">
       <tuv xml:lang="en">
         <seg>Access Control</seg>
