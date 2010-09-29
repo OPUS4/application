@@ -42,9 +42,7 @@ class Publish_CollectionController extends Controller_Action {
     public function topAction() {
         $log = Zend_Registry::get('Zend_Log');
         $defaultNS = new Zend_Session_Namespace('Publish');
-        $defaultNS->step = 1;
-
-        $log->debug("TOP Session step: " . $defaultNS->step);
+        $defaultNS->step = 1;        
 
         $this->view->title = $this->view->translate('publish_controller_index');
         $this->view->subtitle = $this->view->translate('publish_controller_collection_sub');
