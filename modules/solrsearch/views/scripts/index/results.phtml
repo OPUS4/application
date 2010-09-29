@@ -87,7 +87,7 @@ if($this->jQueryEnabled()) {
                     'docId' => $result->getId());
             ?>
             <?php if($this->jQueryEnabled()) : ?>
-            <img src="<?= $this->layoutPath() ?>/img/page_white_text.png" alt="Show/Hide Details" title="Click here to expand or collapse the abstract text" onclick="$(function(){$('#<?= $result->getId() ?>').toggle();});" />
+            <img src="<?= $this->layoutPath() ?>/img/page_white_text.png" alt="<?= $this->translate('results_hideabstract_alt') ?>" title="<?= $this->translate('results_hideabstract_title') ?>" onclick="$(function(){$('#<?= $result->getId() ?>').toggle();});" />
             <?php endif ?>
 
             <span class="results_title"><a href="<?= $this->url($frontdoorUrl, null, true) ?>"><?= htmlspecialchars($result->getTitle()); ?></a> (<?= htmlspecialchars($result->getYear()); ?>)</span><br/>

@@ -611,6 +611,31 @@
             </tuv>
         </tu>
 
-    </body>
+        <tu tuid="solrsearch_results_hideabstract_alt">
+            <tuv xml:lang="en">
+                <seg></seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg></seg>
+            </tuv>
+        </tu>
 
+        <tu tuid="results_hideabstract_alt">
+            <tuv xml:lang="en">
+                <seg>Show/Hide Abstract</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Abstract anzeigen/verbergen</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="results_hideabstract_title">
+            <tuv xml:lang="en">
+                <seg>Click here to expand or collapse the abstract text.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Klicken Sie auf das Icon, um den Abstract anzuzeigen bzw. zu verbergen.</seg>
+            </tuv>
+        </tu>
+    </body>
 </tmx>
