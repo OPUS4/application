@@ -60,12 +60,6 @@ class Admin_CollectionController extends Controller_Action {
      */
     public function indexAction() {
         $this->view->collectionRoles = Opus_CollectionRole::fetchAll();
-        $theme = Zend_Registry::getInstance()->get('Zend_Config')->theme;
-        if (true === empty($theme)) {
-            $theme = 'default';
-        }
-        $this->view->theme = $theme;
-        $this->view->layoutPath = $this->view->baseUrl() .'/layouts/'. $theme;
     }
 
     /**
@@ -184,14 +178,6 @@ class Admin_CollectionController extends Controller_Action {
      * @return void
      */
     public function showAction() {
-
-        $theme = Zend_Registry::getInstance()->get('Zend_Config')->theme;
-        if (true === empty($theme)) {
-            $theme = 'default';
-        }
-        $this->view->theme = $theme;
-        $this->view->layoutPath = $this->view->baseUrl() .'/layouts/'. $theme;
-
         $collectionId = $this->getRequest()->getParam('node');
         $collection = new Opus_Collection($collectionId);
         $role = new Opus_CollectionRole($collection->getRoleId());
