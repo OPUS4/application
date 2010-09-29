@@ -112,6 +112,7 @@ class Publish_Model_Validation {
 
     private function _validateDate() {
         $validator = new Zend_Validate_Date();
+        //$validator = new Opus_Validate_Date();
         $messages = array(
             Zend_Validate_Date::INVALID => 'publish_validation_error_date_invalid',
             Zend_Validate_Date::INVALID_DATE => 'publish_validation_error_date_invaliddate',

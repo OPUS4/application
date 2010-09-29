@@ -1311,7 +1311,16 @@
         <seg>Zusätzlicher Titel</seg>
       </tuv>
     </tu>
-    
+
+    <tu tuid="TitleAdditionalLanguage">
+      <tuv xml:lang="en">
+        <seg>Language</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sprache</seg>
+      </tuv>
+    </tu>
+
 	<tu tuid="groupTitleAdditional">
       <tuv xml:lang="en">
         <seg>Title Additional</seg>
