@@ -94,14 +94,14 @@ class SolrSearch_Model_CollectionListTest extends ControllerTestCase {
         $this->fail('Expected exception SolrSearch_Model_Exception was not raised.');
     }
 
-    public function testIsRootNode() {
+    public function testIsRootCollection() {
         $rootCollection = $this->getRootCollection(1);
         
         $collectionList = new SolrSearch_Model_CollectionList($rootCollection->getId());
         $this->assertTrue($collectionList->isRootCollection());
     }
 
-    public function testIsNotRootNode() {
+    public function testIsNotRootCollection() {
         $rootCollection = $this->getRootCollection(1);
 
         $this->assertGreaterThan(0, count($rootCollection->getChildren()));

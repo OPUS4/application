@@ -449,7 +449,7 @@ class Admin_CollectionController extends Controller_Action {
         // print_r( $collection->describe() );
 
         // TODO: Hardcoded values.  Check required fields.
-        $filter->setBlacklist(array('SubCollection', 'ParentCollection', 'Visibility', 'SeveralAppearances', 'RoleId', 'RoleName','RoleDisplayFrontdoor', 'Role', 'SubCollections', 'Nodes', 'Documents', 'RootNode'));
+        $filter->setBlacklist(array('ParentCollection', 'RoleId', 'RoleName', 'RoleDisplayFrontdoor', 'Role'));
         $filter->setSortOrder(array('Name'));
         return $filter;
     }
