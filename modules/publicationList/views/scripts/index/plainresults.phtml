@@ -27,23 +27,12 @@
  * @category    Application
  * @package     Module_SolrSearch
  * @package     Opus_SolrSearch
- * @author      Julian Heise <heise@zib.de>
- * @author      Sascha Szott <szott@zib.de>
+ * @author      Gunar Maiwald <maiwald@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 ?>
-
-<?php
-    $startUpScript = '$(document).ready(function() { init_searchresults(); });';
-    $fc = Zend_Controller_Front::getInstance();
-    $basePath = $fc->getRequest()->getBasePath();
-    $this->headScript()
-        ->appendFile($basePath . '/layouts/opus4/js/jquery-1.4.2.min.js')
-        ->appendScript($startUpScript);
-?>
-
 
 <div id="search_results" class="search_results">
     <!-- NaviBar -->
@@ -51,7 +40,7 @@
 	<a href="#<?= htmlspecialchars($result->getYear()) ?>"><b><?= htmlspecialchars($result->getYear()) ?></b></a> 
     <?php endforeach ?>
     <?php foreach($this->results as $result) :?>
-        <div class="result_box"">
+        <div class="result_box">
 	<a name="<?= htmlspecialchars($result->getYear()) ?>"></a>
         <b> <?= htmlspecialchars($result->getYear()) ?> </b>
          <ul>
