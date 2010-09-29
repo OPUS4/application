@@ -42,53 +42,40 @@ class Publish_DepositController extends Controller_Action {
 
     public $postData = array();
 
-//    public function preDispatch() {
-//        $post = $this->getRequest()->getPost();
-//        if (array_key_exists('back', $post))
-//            throw new Exception('back');
-//
-//        else
-//        if (array_key_exists('collection', $post))
-//            $this->_forward('top', 'collection');
-//        else
-//        if (array_key_exists('send', $post)) {
-//
-//            $this->_forward('deposit');
-//        }
-//
-//        parent::preDispatch();
-//    }
-
     /**
      * stores a delivered form as document in the database
      * uses check_array
      */
     public function depositAction() {
-        $log = Zend_Registry::get('Zend_Log');
-        $defaultNS = new Zend_Session_Namespace('Publish');
-        //$docNS = new Zend_Session_Namespace('Document');
-
-        $this->view->title = $this->view->translate('publish_controller_index');
-        $this->view->subtitle = $this->view->translate('publish_controller_deposit_successful');
 
         if ($this->getRequest()->isPost() === true) {
 
             $post = $this->getRequest()->getPost();
             if (array_key_exists('back', $post)) {
-                //go back                
-                $this->_forward('check', 'form');                
-            } 
-            
-            else {
+                //go back
+                $this->_forward('check', 'form');
+            } else
+            if (array_key_exists('collection', $post)) {
+                //choose collections
+                $this->_forward('top', 'collection');
+            } else {
+
                 //deposit data
+                $log = Zend_Registry::get('Zend_Log');
+                $log->debug("deposit Action begins..");
+                $defaultNS = new Zend_Session_Namespace('Publish');
+
+                $this->view->title = $this->view->translate('publish_controller_index');
+                $this->view->subtitle = $this->view->translate('publish_controller_deposit_successful');
+
+
                 if (isset($defaultNS->elements)) {
                     foreach ($defaultNS->elements AS $element)
-                            $this->postData[$element['name']] = $element['value'];
+                        $this->postData[$element['name']] = $element['value'];
                 }
 
                 $depositForm = new Publish_Form_PublishingSecond($defaultNS->documentType, $defaultNS->documentId, $defaultNS->fulltext, $defaultNS->additionalFields, $this->postData);
                 $depositForm->populate($this->postData);
-
 
                 if (isset($this->postData['send']))
                     unset($this->postData['send']);

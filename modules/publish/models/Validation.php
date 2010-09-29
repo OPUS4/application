@@ -274,7 +274,7 @@ class Publish_Model_Validation {
     private function getCollection($oaiName) {
         if (empty($this->$oaiName)) {
             // $this->log->debug($oaiName . " has to be fetched from database!");
-            $role = Opus_CollectionRole::fetchByOaiName($oaiName);
+            $role = Opus_CollectionRole::fetchByName($oaiName);
             if ($role === null)
                 return null;
             else {

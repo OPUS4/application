@@ -123,7 +123,7 @@ class Publish_Model_Deposit {
             return "Subject";
         else if (strstr($dataKey, "Note"))
             return "Note";
-        else if (strstr($dataKey, "Project") || strstr($dataKey, "Institute"))
+        else if (strstr($dataKey, "Project") || strstr($dataKey, "Institute") || strstr($dataKey, "Collection"))
             return "Collection";
         else if (strstr($dataKey, "Licence"))
             return "Licence";
@@ -486,33 +486,41 @@ class Publish_Model_Deposit {
 
             else if (strstr($dataKey, "Institute"))
                 $this->_storeCollectionObject('institutes', $dataValue);
+
+            else if (strstr($dataKey, "Collection"))
+                $this->_storeCollectionObject('', $dataValue);
         }
     }
 
     private function _storeCollectionObject($collectionRole, $dataValue) {
-        $role = Opus_CollectionRole::fetchByOaiName($collectionRole);
-        if (isset($role)) {
-            $this->log->debug("Role: " . $role);
+        if ($collectionRole == "") {
+            $this->document->addCollection(new Opus_Collection($dataValue));
+            
+        } else {
+            $role = Opus_CollectionRole::fetchByName($collectionRole);
+            if (isset($role)) {
+                $this->log->debug("Role: " . $role);
 
-            if ($collectionRole === 'institutes')
-                $collArray = Opus_Collection::fetchCollectionsByRoleName($role->getId(), $dataValue);
-            else
-                $collArray = Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $dataValue);
+                if ($collectionRole === 'institutes')
+                    $collArray = Opus_Collection::fetchCollectionsByRoleName($role->getId(), $dataValue);
+                else
+                    $collArray = Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $dataValue);
 
-            $this->log->debug("Role ID: " . $role->getId() . ", value: " . $dataValue);
+                $this->log->debug("Role ID: " . $role->getId() . ", value: " . $dataValue);
 
-            if ($collArray !== null && count($collArray) <= 1) {
+                if ($collArray !== null && count($collArray) <= 1) {
 
-                $this->document->addCollection($collArray[0]);
+                    $this->document->addCollection($collArray[0]);
 
-                if (strstr($collectionRole, 'project')) {
-                    $this->projects[] = $dataValue;
-                    $this->log->debug("Project array for referee, extended by " . $dataValue);
+                    if (strstr($collectionRole, 'project')) {
+                        $this->projects[] = $dataValue;
+                        $this->log->debug("Project array for referee, extended by " . $dataValue);
+                    }
                 }
-            }
-            else
-                throw new Publish_Model_OpusServerException("While trying to store " . $dataKey . " as Collection, an error occurred.
+                else
+                    throw new Publish_Model_OpusServerException("While trying to store " . $dataKey . " as Collection, an error occurred.
                         The method fetchCollectionsByRoleNumber returned an array with > 1 values. The " . $dataKey . " cannot be definitely assigned.");
+            }
         }
     }
 

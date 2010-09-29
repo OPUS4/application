@@ -45,41 +45,11 @@ class Publish_CollectionController extends Controller_Action {
         $defaultNS->step = 1;
 
         $log->debug("TOP Session step: " . $defaultNS->step);
-        if ($this->getRequest()->isPost() === true) {
-
-            $post = $this->getRequest()->getPost();
-            foreach ($post AS $p => $v)
-                $log->debug("Post: " . $p . " => " . $v);
-
-            if (array_key_exists('top', $post)) {
-                $defaultNS->documentData['top'] = $post['top'];
-            }
-            
-            $this->view->title = $this->view->translate('publish_controller_index');
-            $this->view->subtitle = $this->view->translate('publish_controller_collection_sub');
-
-            $form = new Publish_Form_PublishingThird($defaultNS->documentData, $defaultNS->step);
-
-            $action_url = $this->view->url(array('controller' => 'collection', 'action' => 'sub'));
-
-            $form->setMethod('post');
-
-            $form->setAction($action_url);
-
-            $this->view->form = $form;
-        }
-    }
-
-    public function subAction() {
-        $log = Zend_Registry::get('Zend_Log');
-        $defaultNS = new Zend_Session_Namespace('Publish');
-
-        $log->debug("SUB Session step: " . $defaultNS->step);
 
         $this->view->title = $this->view->translate('publish_controller_index');
         $this->view->subtitle = $this->view->translate('publish_controller_collection_sub');
 
-        $form = new Publish_Form_PublishingThird($defaultNS->documentData, $defaultNS->step);
+        $form = new Publish_Form_PublishingThird();
 
         $action_url = $this->view->url(array('controller' => 'collection', 'action' => 'sub'));
 
@@ -88,6 +58,48 @@ class Publish_CollectionController extends Controller_Action {
         $form->setAction($action_url);
 
         $this->view->form = $form;
+    }
+
+    public function subAction() {
+        $log = Zend_Registry::get('Zend_Log');
+        $defaultNS = new Zend_Session_Namespace('Publish');
+
+        if ($this->getRequest()->isPost() === true) {
+
+            $post = $this->getRequest()->getPost();
+
+            if (array_key_exists('send', $post)) {
+                $this->_forward('deposit', 'deposit');
+            } else {
+                if (array_key_exists('top', $post)) {
+                    $defaultNS->collection['top'] = $post['top'];
+                }
+
+                foreach ($post AS $p => $v) {
+                    $log->debug("Post: " . $p . " => " . $v);
+                    $defaultNS->collection[$p] = $v;
+                }
+
+                $defaultNS->step = (int) $defaultNS->step + 1;
+
+                $log->debug("SUB Session step: " . $defaultNS->step);
+
+                $this->view->title = $this->view->translate('publish_controller_index');
+                $this->view->subtitle = $this->view->translate('publish_controller_collection_sub');
+
+                $form = new Publish_Form_PublishingThird();
+
+                $action_url = $this->view->url(array('controller' => 'collection', 'action' => 'sub'));
+
+                $form->setMethod('post');
+
+                $form->setAction($action_url);
+
+                $this->view->form = $form;
+            }
+        } else {
+            return $this->_redirectTo('index', '', 'index');
+        }
     }
 
 }

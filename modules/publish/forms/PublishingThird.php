@@ -40,42 +40,88 @@
 class Publish_Form_PublishingThird extends Zend_Form {
 
     public $log;
-    public $defaultNS;
+    CONST SIZE = 100;
 
     public function __construct($options=null) {
-        $this->log = Zend_Registry::get('Zend_Log');
-        $this->defaultNS = new Zend_Session_Namespace('Publish');
+        $this->log = Zend_Registry::get('Zend_Log');        
         parent::__construct($options);
     }
 
     public function init() {
+        $end = false;
+        $defaultNS = new Zend_Session_Namespace('Publish');
 
-        if ($this->defaultNS->step == '1') {
+        if ($defaultNS->step == '1') {
             $top = new Zend_Form_Element_Select('top');
             $top->setLabel('choose_collection_role');
             $options = $this->getCollection();
             $top->setMultiOptions($options);
             $this->addElement($top);
-            $this->defaultNS->step = '2';
         } else {
-            if (isset($this->defaultNS->documentData['top'])) {
-
-
-                $roleId = $this->defaultNS->documentData['top'];
+            if (isset($defaultNS->collection['top'])) {
+                $roleId = $defaultNS->collection['top'];
                 $this->log->debug("roleID: " . $roleId);
-                $role = Opus_Collection::fetchCollectionsByRoleId($roleId);
 
                 $top = $this->createElement('text', 'top');
-                $top->setValue($role[0]->getDisplayName());
+                $top->setValue($roleId . " - " . $this->getCollectionName($roleId));
+                //$top->setValue($roleId);
                 $top->setAttrib('disabled', 'true');
+                $top->setAttrib('size', self::SIZE);
                 $this->addElement($top);
+
+                $subText = new Zend_Form_Element_Select('sub1');
+                $subText->setLabel('choose_collection_subcollection');
+                $options = $this->getCollection($roleId);
+                if ($options !== null) {
+                    $subText->setMultiOptions($options);
+                    $this->addElement($subText);
+                }
+                else
+                    $end = true;
+                
+
+                for ($i = 2; $i < $defaultNS->step; $i++) {
+                    $i = (int) $i - 1;
+                    if (isset($defaultNS->collection['sub' . $i])) {
+                        $collectionId = (int) $defaultNS->collection['sub' . $i];
+                        $this->log->debug("collectionID : " . $collectionId);
+
+                        $subText = $this->createElement('text', 'sub' . $i);
+                        $subText->setValue($collectionId. " - " . $this->getCollectionName($collectionId));
+                        //$subText->setValue($collectionId);
+                        $subText->setAttrib('disabled', 'true');
+                        $subText->setAttrib('size', self::SIZE);
+                        $this->addElement($subText);
+
+                        $i = (int) $i + 1;
+                        $options = $this->getCollection($collectionId);
+                        if ($options !== null) {
+                            $subSelect = new Zend_Form_Element_Select('sub' . $i);
+                            $subSelect->setLabel('choose_collection_subcollection');
+                            $subSelect->setMultiOptions($options);
+                            $this->addElement($subSelect);
+                        }
+                        else {
+                            $end = true;
+                            $this->log->debug("reduce i");
+                            $j = $i - 1;
+                            $this->log->debug("elements collection begins");
+                            $defaultNS->elements['collection']['name'] = 'Collection';
+                            $defaultNS->elements['collection']['value'] = $defaultNS->collection['sub' . $j];
+                            $defaultNS->elements['collection']['label'] = 'collection';
+                            $this->log->debug("behind elements collection");
+                        }
+                    }
+                }
             }
         }
 
-        $submit = $this->createElement('submit', 'collection');
-        $submit->setLabel('button_label_choose_subcollection');
-        $this->addElement($submit);
-        $this->addElement($submit);
+        if (false === $end) {
+            $submit = $this->createElement('submit', 'collection');
+            $submit->setLabel('button_label_choose_subcollection');
+            $this->addElement($submit);
+            $this->addElement($submit);
+        }
 
         $submit = $this->createElement('submit', 'send');
         $submit->setLabel('button_label_send');
@@ -86,27 +132,45 @@ class Publish_Form_PublishingThird extends Zend_Form {
     /**
      * Method to fetch collections for select options.
      * @param <type> $oaiName
-     * @param <type> $roleId
+     * @param <type> $collectionId
      * @return array of options
      */
-    protected function getCollection($roleId=null) {
+    protected function getCollection($collectionId=null) {
         $collections = array();
-        if (false === isset($roleId)) {
+
+        if (false === isset($collectionId) ) {
             //get top classes of collectin_role
             $roles = Opus_CollectionRole::fetchAll();
 
             foreach ($roles as $role) {
-                $collections[] = $role->getDisplayName();
+                if (!is_null($role->getRootCollection())) {
+                    $collections[$role->getRootCollection()->getId()] = $role->getDisplayName();
+                }
             }
         } else {
-            //get collections for special roleID
-            $colls = Opus_Collection::fetchCollectionsByRoleId($role->getId());
-
-            foreach ($colls as $coll) {
-                $collections[] = $coll->getDisplayName();
+            $collection = new Opus_Collection($collectionId);
+            $colls = $collection->getChildren();
+            if (isset($colls) && count($colls) > 1) {
+                foreach ($colls as $coll) {
+                    $collections[$coll->getId()] = $coll->getDisplayName();
+                }
             }
+            else
+                return null;
         }
         return $collections;
+    }
+
+    protected function getCollectionName($collectionId = null) {
+        if (isset($collectionId)) {
+            $collection = new Opus_Collection($collectionId);
+            $name = $collection->getDisplayName();
+            if (empty($name)) {
+                
+                $name = $collection->getRoleName();
+            }
+            return $name;
+        }
     }
 
 }
