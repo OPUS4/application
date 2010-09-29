@@ -39,13 +39,172 @@
  * @category    Application
  * @package     Module_Admin
  */
-class Admin_RoleController extends Controller_CRUDAction {
+class Admin_RoleController extends Controller_Action {
 
     /**
-     * The class of the model being administrated.
-     *
-     * @var Opus_Model_Abstract
+     * Shows list of all roles.
      */
-    protected $_modelclass = 'Opus_Role';
+    public function indexAction() {
+        $this->view->title = $this->view->translate('admin_role_index');
+
+        $roles = Opus_Role::getAll();
+
+        if (empty($roles)) {
+            $this->view->render('none');
+        }
+        else {
+            $this->view->roles = array();
+            foreach ($roles as $role) {
+                $this->view->roles[$role->getId()] = $role->getDisplayName();
+            }
+        }
+    }
+    
+    /**
+     * Show a role.
+     */
+    public function showAction() {
+        $roleId = $this->getRequest()->getParam('id');
+
+        if (!empty($roleId)) {
+            $this->view->title = $this->view->translate('admin_role_show');
+
+            $role = new Opus_Role($roleId);
+            $this->view->role = $role;
+        }
+        else {
+            $this->_helper->redirector('index');
+        }
+    }
+    
+    /**
+     * Shows form for creating a new role.
+     */
+    public function newAction() {
+        $form = new Admin_Form_Role();
+
+        $actionUrl = $this->view->url(array('action' => 'create'));
+
+        $form->setAction($actionUrl);
+
+        $this->view->form = $form;
+    }
+    
+    /**
+     * Creates a new role in the database.
+     */
+    public function createAction() {
+        if ($this->getRequest()->isPost()) {
+            $postData = $this->getRequest()->getPost();
+
+            if ($this->getRequest()->getPost('cancel')) {
+                $this->_helper->redirector('index');
+            }
+
+            $form = new Admin_Form_Role();
+
+            if ($form->isValid($postData)) {
+
+                
+            }
+            else {
+                $actionUrl = $this->view->url(array('action' => 'new'));
+                $form->setAction($actionUrl);
+                $this->view->form = $form;
+                return $this->renderScript('role/new.phtml');
+            }
+        }
+
+        $this->_helper->redirector('index');
+    }
+    
+    /**
+     * Shows form for editing a role.
+     */
+    public function editAction() {
+        $roleId = $this->getRequest()->getParam('id');
+
+        if (!empty($roleId)) {
+            $roleForm = new Admin_Form_Role($roleId);
+            $actionUrl = $this->view->url(array('action' => 'update', 'id' => $roleId));
+            $roleForm->setAction($actionUrl);
+            $this->view->roleForm = $roleForm;
+        }
+        else {
+            $this->_helper->redirector('index');
+        }
+    }
+    
+    /**
+     * Updates a role in the database.
+     */
+    public function updateAction() {
+        $roleId = $this->getRequest()->getParam('id');
+
+        if (!empty($roleId)) {
+            $postData = $this->getRequest()->getPost();
+
+            $name = $postData['name'];
+            $selectedPrivileges = Admin_Form_Role::parseSelectedPrivileges($postData);
+
+//            Zend_Registry::get('Zend_Log')->debug(count($privileges));
+//
+//            foreach ($privileges as $privilege) {
+//                Zend_Registry::get('Zend_Log')->debug('Selected privilege = ' . $privilege->getPrivilege());
+//            }
+
+            $this->_updateRole($roleId, $name, $selectedPrivileges);
+        }
+
+        $this->_helper->redirector('index');
+    }
+
+    /**
+     * Deletes a role from the database.
+     */
+    public function deleteAction() {
+        $roleId = $this->getRequest()->getParam($id);
+
+        if (!empty($roleId)) {
+            $role = new Opus_Role($roleId);
+
+            $role->delete();
+        }
+
+        $this->_helper->redirector('index');
+    }
+
+    protected function _updateRole($roleId, $name, $selectedPrivileges) {
+        $role = new Opus_Role($roleId);
+
+        if (!empty($name)) {
+            $role->setDisplayName($name);
+        }
+
+        $currentPrivileges = $role->getPrivilege();
+
+        // check which privileges are already granted and
+        // remove the ones that are not selected anymore
+        foreach ($currentPrivileges as $currentPrivilege) {
+            $name = $currentPrivilege->getDisplayName();
+            if (isset($selectedPrivileges[$name])) {
+                // remove from list of selected, since the role already has it
+                unset($selectedPrivileges[$name]);
+            }
+            else {
+                // remove from role, since it isn't a selected privilege
+                $role->removePrivilege($currentPrivilege);
+            }
+        }
+
+        // add remaining selected privileges
+        foreach($selectedPrivileges as $newPrivilege) {
+            $privilege = new Opus_Privilege();
+            $privilege->setDisplayName($newPrivilege);
+            $role->addPrivilege($privilege);
+        }
+
+        $role->store();
+    }
 
 }
