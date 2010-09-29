@@ -28,6 +28,7 @@
  * @category    Application
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @author      Ralf Claussnitzer <ralf.claussnitzer@slub-dresden.de>
+ * @author      Pascal-Nicolas Becker <becker@zib.de>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
