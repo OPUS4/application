@@ -25,35 +25,21 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Solrsearch
- * @author      Julian Heise <heise@zib.de>
+ * @package     View_Helper
+ * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
 
-<?php
-if ($this->jQueryEnabled()) {
-    $script = "$(function() { $('input[name=query]').focus(); });";
-    $this->inlineScript()->appendScript($script);
-    echo $this->inlineScript();
+class View_Helper_JQueryEnabled extends Zend_View_Helper_Abstract {
+
+    public function jQueryEnabled() {
+        $config = Zend_Registry::get('Zend_Config');
+        if (!isset($config->javascript->jquery->path)) {
+            return false;
+        }
+        return is_file(APPLICATION_PATH . '/public/' . $config->javascript->jquery->path);
+    }
 }
 ?>
-
-<div class="searchform">
-    <h2><?= $this->translate('solrsearch_title_simple'); ?></h2>
-
-    <form id="simpleSearchForm" action="<?= $this->url(array('module'=>'solrsearch','controller'=>'index','action'=>'searchdispatch'),null,true); ?>" method="post" class="opus_form">
-        <label for="query"><?= $this->translate('solrsearch_query_label'); ?></label>
-        <input id="query" name="query" type="text" value="<?= htmlspecialchars($this->q) ?>" />
-        <input type="submit" value="<?= $this->translate('solrsearch_searchaction'); ?>" />
-        <input type="hidden" name="searchtype" id="searchtype" value="simple" />
-        <input type="hidden" name="rows" id="rows" value="10" />
-        <input type="hidden" name="start" id="start" value="0" />
-        <input type="hidden" name="sortfield" id="sortfield" value="score" />
-        <input type="hidden" name="sordorder" id="sortorder" value="desc" />
-    </form>
-
-    <a href="<?= $this->url(array('module'=>'solrsearch','controller'=>'index','action'=>'advanced'),null,true); ?>"><?= $this->translate('solrsearch_title_advanced'); ?></a>
-</div>

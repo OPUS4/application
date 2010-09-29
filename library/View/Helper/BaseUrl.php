@@ -40,14 +40,14 @@
  */
 class View_Helper_BaseUrl {
 
-	/**
-	 * Return the base url of the application.
-	 *
-	 * @return Base url string.
-	 */
-	public function baseUrl() {
-		$fc = Zend_Controller_Front::getInstance();
-		$request=$fc->getRequest();
-		return $request->getBaseUrl();
-	}
+    /**
+     * Return the base url of the application.
+     *
+     * @return Base url string.
+     */
+    public function baseUrl() {
+        $fc = Zend_Controller_Front::getInstance();
+        $request=$fc->getRequest();
+        return $request->getBaseUrl();
+    }
 }

@@ -36,27 +36,10 @@
 ?>
 
 <?php
-$fc = Zend_Controller_Front::getInstance();
-$basePath = $fc->getRequest()->getBasePath();
-$config = Zend_Registry::get('Zend_Config');
-$jsEnabled = isset($config->javascript->jquery->path);
-if ($jsEnabled) {
-    $startUpScript = '$(document).ready(function() { init_searchresults(); });';
-    $this->headScript()
-        ->appendFile($basePath . $config->javascript->jquery->path)
-        ->appendScript($startUpScript);
+if($this->jQueryEnabled()) {
+    $this->headScript()->appendScript("$(document).ready(function () { $('.abstractText').hide(); });");
 }
 ?>
-
-<?php if($jsEnabled) : ?>
-<script type="text/javascript">
-    function init_searchresults() {
-        <?php foreach($this->results as $result) :?>
-            $('#<?= $result->getId() ?>').hide();
-        <?php endforeach ?>
-    }
-</script>
-<?php endif ?>
 
 <?php if (isset($this->specialTitle)) : ?>
 <h1><?= htmlspecialchars($this->translate($this->specialTitle)) ?></h1>
@@ -103,8 +86,8 @@ if ($jsEnabled) {
                     'action' => 'index',
                     'docId' => $result->getId());
             ?>
-            <?php if($jsEnabled) : ?>
-            <img src="<?= $basePath . '/layouts/'.$this->theme.'/img/page_white_text.png' ?>" alt="Show/Hide Details" title="Click here to expand or collapse the abstract text" onclick="$(function(){$('#<?= $result->getId() ?>').toggle();});" />
+            <?php if($this->jQueryEnabled()) : ?>
+            <img src="<?= $this->layoutPath() ?>/img/page_white_text.png" alt="Show/Hide Details" title="Click here to expand or collapse the abstract text" onclick="$(function(){$('#<?= $result->getId() ?>').toggle();});" />
             <?php endif ?>
 
             <span class="results_title"><a href="<?= $this->url($frontdoorUrl, null, true) ?>"><?= htmlspecialchars($result->getTitle()); ?></a> (<?= htmlspecialchars($result->getYear()); ?>)</span><br/>

@@ -126,13 +126,11 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $config = $this->getResource('Configuration');
 
         $theme = $config->theme;
-
         if (empty($theme)) {
-            $theme = 'default';
+            $theme = 'opus4';
         }
 
         $layoutpath = APPLICATION_PATH . '/public/layouts/' . $theme;
-
         if (false === is_dir($layoutpath)) {
             throw new Exception('Requested theme "' . $theme . '" not found.');
         }
@@ -329,7 +327,15 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $log->debug('Initializing Zend_Navigation');
 
         $config = $this->getResource('configuration');
-       
+
+        $log->debug("config path: " . $config->configPath);
+        if (is_null($config)) {
+            $log->debug("config is null");
+        }
+        else {
+            $log->debug("config is not null");
+        }
+
         $navigationConfigFile = $config->configPath . '/navigationModules.xml';
 
         $navConfig = new Zend_Config_Xml($navigationConfigFile, 'nav');

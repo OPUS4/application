@@ -25,7 +25,8 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @author      Julian Heise (heise@zib.de)
+ * @author      Julian Heise <heise@zib.de>
+ * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -39,15 +40,20 @@ $this->headTitle('OPUS 4')
     ->headTitle($this->title)
     ->setSeparator(' | ');
 
-$fc = Zend_Controller_Front::getInstance();
-$basePath = $fc->getRequest()->getBasePath();
 $this->headLink()
-    ->appendStylesheet($basePath . '/layouts/opus4/css/opus.css')
-    ->appendStylesheet($basePath . '/layouts/opus4/css/design.css')
-    ->appendStylesheet($basePath . '/layouts/opus4/css/form.css')
-    ->appendStylesheet($basePath . '/layouts/opus4/css/admin.css'); // temporary CSS to style admin and review module pages
+    ->appendStylesheet($this->layoutPath() . '/css/opus.css')
+    ->appendStylesheet($this->layoutPath() . '/css/design.css')
+    ->appendStylesheet($this->layoutPath() . '/css/form.css')
+    ->appendStylesheet($this->layoutPath() . '/css/admin.css'); // temporary CSS to style admin and review module pages
 
 $this->container = Zend_Registry::get('Opus_Navigation');
+
+if ($this->jQueryEnabled()) {
+    $config = Zend_Registry::get('Zend_Config');
+    $this->headScript()
+         ->prependFile($this->baseUrl() . '/' . $config->javascript->jquery->path)
+         ->appendFile($this->layoutPath() . '/js/searchutil.js');
+}
 ?>
 
 <?= $this->doctype() ?>
@@ -62,7 +68,6 @@ $this->container = Zend_Registry::get('Opus_Navigation');
     </head>
 
     <body>
-
         <div id="top-header">
             <div class="wrapper">
                 <ul id="lang-switch" class="nav"><?= $this->languageSelector() ?></ul>
@@ -73,7 +78,7 @@ $this->container = Zend_Registry::get('Opus_Navigation');
         <div id="header">
             <div class="wrapper">
                 <h1 id="logo">
-                    <a href="<?= $this->url(array('module'=>'home','controller'=>'index','action'=>'index'),null,true) ?>"><img src="<?= $basePath.'/layouts/opus4/img/theme/logo.gif' ?>" alt="OPUS" title="Home" width="185" height="89" /></a>
+                    <a href="<?= $this->url(array('module' => 'home', 'controller' => 'index', 'action' => 'index'), null, true) ?>"><img src="<?= $this->layoutPath() ?>/img/theme/logo.gif" alt="OPUS" title="Home" width="185" height="89" /></a>
                 </h1>
                 <ul id="primary-nav" class="nav">
                 <?php foreach ($this->container as $page) : ?>

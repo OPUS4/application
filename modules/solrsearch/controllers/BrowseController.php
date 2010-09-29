@@ -38,7 +38,6 @@ class Solrsearch_BrowseController extends Controller_Action {
         $this->view->baseUrl = $this->getRequest()->getBaseUrl();
         $collectionRoles = new SolrSearch_Model_CollectionRoles();
         $this->view->collectionRoles = $collectionRoles->getAllVisible();
-        $this->setTheme();
     }
 
     public function doctypesAction() {
@@ -49,13 +48,6 @@ class Solrsearch_BrowseController extends Controller_Action {
         $facets = $searcher->search($query)->getFacets();
         $facetitems = $facets[$facetname];
         $this->view->facetitems = $facetitems;
-        $this->setTheme();
     }
-
-    private function setTheme() {
-        $config = Zend_Registry::get('Zend_Config');
-        $this->view->theme = $config->theme;
-    }
-
 }
 ?>
