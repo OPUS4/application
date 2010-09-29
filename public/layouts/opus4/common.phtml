@@ -77,7 +77,17 @@ $this->container = Zend_Registry::get('Opus_Navigation');
                 </h1>
                 <ul id="primary-nav" class="nav">
                 <?php foreach ($this->container as $page) : ?>
-                    <?php $pageIsActive = $page->isActive(true); ?>
+                    <?php
+                        $pageIsActive = $page->isActive(false);
+                        // TODO move into View Helper
+                        // TODO find solution that is not module specific
+                        if (!$pageIsActive) {
+                            $module = Zend_Controller_Front::getInstance()->getRequest()->getModuleName();
+                            if (($page->getModule() === $module) && ($module === 'admin')) {
+                                $pageIsActive = true;
+                            }
+                        }
+                    ?>
                     <li id="<?= $page->getId() ?>" class="<?= $page->getClass().($pageIsActive ? ' active' : '')?>">
                         <?php if(!$pageIsActive) : ?>
                         <a href="<?= $page->getHref() ?>" title="<?= $page->getTitle() ?>">
