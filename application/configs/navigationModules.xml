@@ -19,6 +19,28 @@
                             <module>admin</module>
                             <controller>account</controller>
                             <action>index</action>
+                            <pages>
+                                <show>
+                                    <label>admin_account_show</label>
+                                    <module>admin</module>
+                                    <controller>account</controller>
+                                    <action>show</action>
+                                </show>
+
+                                <new>
+                                    <label>admin_account_new</label>
+                                    <module>admin</module>
+                                    <controller>account</controller>
+                                    <action>new</action>
+                                </new>
+
+                                <edit>
+                                    <label>admin_account_edit</label>
+                                    <module>admin</module>
+                                    <controller>account</controller>
+                                    <action>edit</action>
+                                </edit>
+                            </pages>
                         </accounts>
 
                         <ipranges>
@@ -26,6 +48,28 @@
                             <module>admin</module>
                             <controller>iprange</controller>
                             <action>index</action>
+                            <pages>
+                                <show>
+                                    <label>admin_iprange_show</label>
+                                    <module>admin</module>
+                                    <controller>iprange</controller>
+                                    <action>show</action>
+                                </show>
+
+                                <new>
+                                    <label>admin_iprange_new</label>
+                                    <module>admin</module>
+                                    <controller>iprange</controller>
+                                    <action>new</action>
+                                </new>
+
+                                <edit>
+                                    <label>admin_iprange_edit</label>
+                                    <module>admin</module>
+                                    <controller>iprange</controller>
+                                    <action>edit</action>
+                                </edit>
+                            </pages>
                         </ipranges>
 
                         <roles>

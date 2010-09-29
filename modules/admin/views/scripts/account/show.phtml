@@ -35,6 +35,11 @@
 ?>
 <h1><?= $this->title ?></h1>
 
+<div>
+<?= $this->navigation()->breadcrumbs() ?>
+</div>
+
+
 <table>
     <tr>
         <td><?= $this->translate('admin_account_label_login') ?></td>
