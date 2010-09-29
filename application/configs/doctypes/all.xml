@@ -90,8 +90,8 @@
 	<field name="IdentifierUrn" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
 	<field name="IdentifierOpac" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
 	<field name="ThesisDateAccepted" required="no" formelement="Text" datatype="Year" multiplicity="1"/>
-	<field name="ThesisPublisher" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-	<field name="ThesisGrantor" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
+	<field name="ThesisPublisher" required="no" formelement="Select" datatype="ThesisPublisher" multiplicity="1"/>
+	<field name="ThesisGrantor" required="no" formelement="Select" datatype="ThesisGrantor" multiplicity="1"/>
 	<field name="Note" required="no" formelement="Textarea" datatype="Text" multiplicity="1"/>
 	<field name="Licence" required="no" formelement="Select" datatype="Licence" multiplicity="1"/>
 	<field name="ServerDateUnlocking" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
