@@ -361,7 +361,13 @@ class Solrsearch_IndexController extends Controller_Action {
         // /usetheme/1/ to the URL.
         $usetheme = $this->getRequest()->getParam("usetheme");
         if (!is_null($usetheme) && 1 === (int) $usetheme) {
-            $this->_helper->layout->setLayoutPath(APPLICATION_PATH . '/public/layouts/' . $collectionList->getTheme());
+            $layoutPath = APPLICATION_PATH . '/public/layouts/' . $collectionList->getTheme();
+            if (file_exists($layoutPath . '/common.phtml')) {
+                $this->_helper->layout->setLayoutPath($layoutPath);
+            }
+            else {
+                $this->log->debug("The requested theme '" . $collectionList->getTheme() . "' does not exist - use default theme instead.");
+            }
         }
         return $collectionList->getCollectionId();
     }

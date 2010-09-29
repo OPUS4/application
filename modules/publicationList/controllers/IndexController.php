@@ -40,53 +40,43 @@ class PublicationList_IndexController extends Controller_Action {
     const COLLECTION_SEARCH = 'collection';
     const LATEST_SEARCH = 'latest';
 
-    
     private $log;
     private $query;
     private $numOfHits;
     private $searchtype;
-    private $resultList;
-    private $publicationSite;
+    private $resultList;   
    
-    public function  init() {
+    public function init() {
         $this->log = Zend_Registry::get('Zend_Log');
     }
 
-
     public function searchAction() {
-        $this->query = $this->buildQuery();  /* OKAY*/
+        $this->query = $this->buildQuery();
         $this->performSearch();
         $this->createPublicationLists();
-        $this->setPublicationView();
-
-        if ($this->getRequest()->getParam("theme") === 'plain') {
-            $this->render('plainresults');
+        
+        $theme = $this->getRequest()->getParam("theme");
+        if ($theme === 'plain') {
+            $this->_helper->layout->setLayoutPath(APPLICATION_PATH . '/public/layouts/plain');
+            $this->render('plainresults');            
         }
         else {
             $this->render('results');
         }
     }
 
-
     private function buildQuery() {
-        if (is_null($this->getRequest()->getParams()))
-            throw new Application_Exception("Unable to read request data. Search cannot be performed.");
-
-        if (is_null($this->getRequest()->getParam('searchtype')))
-            throw new Application_Exception("Unable to create query for unspecified searchtype");
-
-        $query = null;
         $this->searchtype = $this->getRequest()->getParam('searchtype');
-        if ($this->searchtype === self::COLLECTION_SEARCH)
+        $query = null;
+        if ($this->searchtype === self::COLLECTION_SEARCH) {
             $query = $this->createCollectionSearchQuery();
-        else
-            throw new Application_Exception("Unable to create query for searchtype " . $this->searchtype);
-
+        }
+        else {
+            throw new Exception("Unable to create query for searchtype " . $this->searchtype);
+        }
         $this->validateQuery($query);
         return $query;
     }
-
-
 
     private function createCollectionSearchQuery() {
         $this->log->debug("Constructing query for collection search.");
@@ -105,7 +95,6 @@ class PublicationList_IndexController extends Controller_Action {
         $this->log->debug("Query $query complete");
         return $query;
     }
-
 
     private function prepareChildren() {
         $collectionList = null;
@@ -126,14 +115,6 @@ class PublicationList_IndexController extends Controller_Action {
         }
         else {
             $this->view->title = $collectionList->getTitle();
-        }
-
-        // Get the theme assigned to this collection iff usertheme is
-        // set in the request.  To enable the collection theme, add
-        // /usetheme/1/ to the URL.
-        $usetheme = $this->getRequest()->getParam("usetheme");
-           if (!is_null($usetheme) && 1 === (int) $usetheme) {
-            $this->_helper->layout->setLayoutPath(APPLICATION_PATH . '/public/layouts/' . $collectionList->getTheme());
         }
         return $collectionList->getCollectionId();
     }
@@ -164,10 +145,8 @@ class PublicationList_IndexController extends Controller_Action {
 
     private function createPublicationLists() {
         $config = Zend_Registry::get('Zend_Config');
-       
-
-
-        $this->publicationSite = new PublicationList_Model_PublicationSite();
+        
+        $publicationSite = new PublicationList_Model_PublicationSite();
         foreach ($this->resultList->getResults() as $resultHit) {
              if (isset($config->publicationlist->external->baseurl)) {
                  if ($this->getRequest()->getParam("lang") === 'eng') {
@@ -183,7 +162,7 @@ class PublicationList_IndexController extends Controller_Action {
             
             $year = $publication->getDoc()->getPublishedYear();
             $inListe = 0;
-            foreach ($this->publicationSite->getSingleList() as $sl) {
+            foreach ($publicationSite->getSingleList() as $sl) {
                 if ($sl->getYear() === $year) {
                     $sl->addPublication($publication);
                     $inListe = 1;
@@ -192,30 +171,17 @@ class PublicationList_IndexController extends Controller_Action {
             if ($inListe === 0) {
                 $sl = new PublicationList_Model_SingleList($year);
                 $sl->addPublication($publication);
-                $this->publicationSite->addSingleList($sl);
+                $publicationSite->addSingleList($sl);
             }
         }
-        $this->publicationSite->orderSingleLists();
-
+        $publicationSite->orderSingleLists();
+        $this->view->results = $publicationSite->getSingleList();
     }
-
-
-    private function setPublicationView() {
-        if (!is_null($this->getRequest()->getParam("theme"))) { $this->setTheme($this->getRequest()->getParam("theme")); };
-        $this->view->results = $this->publicationSite->getSingleList();
-    }
-
-    private function setTheme($theme) {
-        $this->_helper->layout->setLayoutPath(APPLICATION_PATH . '/public/layouts/' . $theme);
-    }
-
-
 
     /**
      * Creates an URL to execute a search. The URL will be mapped to:
      * module=solrsearch, controller=index, action=search
-     */
-    
+     */    
     public static function createSearchUrlArray($params = array()) {
         $url = array(
             'module' => 'solrsearch',
@@ -226,6 +192,5 @@ class PublicationList_IndexController extends Controller_Action {
         }
         return $url;
     }
-
 }
 ?>
