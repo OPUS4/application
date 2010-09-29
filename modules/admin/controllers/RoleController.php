@@ -105,7 +105,13 @@ class Admin_RoleController extends Controller_Action {
 
             if ($form->isValid($postData)) {
 
-                
+                $name = $postData['name'];
+
+                $roleExists = $this->_isRoleNameExists($name);
+
+                $selectedPrivileges = Admin_Form_Role::parseSelectedPrivileges($postData);
+
+                $this->_updateRole(null, $name, $selectedPrivileges);
             }
             else {
                 $actionUrl = $this->view->url(array('action' => 'new'));
@@ -163,7 +169,7 @@ class Admin_RoleController extends Controller_Action {
      * Deletes a role from the database.
      */
     public function deleteAction() {
-        $roleId = $this->getRequest()->getParam($id);
+        $roleId = $this->getRequest()->getParam('id');
 
         if (!empty($roleId)) {
             $role = new Opus_Role($roleId);
@@ -175,36 +181,72 @@ class Admin_RoleController extends Controller_Action {
     }
 
     protected function _updateRole($roleId, $name, $selectedPrivileges) {
-        $role = new Opus_Role($roleId);
-
-        if (!empty($name)) {
-            $role->setDisplayName($name);
+        if (!empty($roleId)) {
+            $role = new Opus_Role($roleId);
+            $currentPrivileges = $role->getPrivilege();
+        }
+        else {
+            $role = new Opus_Role();
+            $currentPrivileges = array();
         }
 
-        $currentPrivileges = $role->getPrivilege();
+        if (!empty($name)) {
+            $role->setName($name);
+        }
 
         // check which privileges are already granted and
         // remove the ones that are not selected anymore
-        foreach ($currentPrivileges as $currentPrivilege) {
-            $name = $currentPrivilege->getDisplayName();
-            if (isset($selectedPrivileges[$name])) {
-                // remove from list of selected, since the role already has it
-                unset($selectedPrivileges[$name]);
-            }
-            else {
-                // remove from role, since it isn't a selected privilege
-                $role->removePrivilege($currentPrivilege);
+        foreach ($currentPrivileges as $index => $currentPrivilege) {
+            $name = $currentPrivilege->getPrivilege();
+            switch ($name) {
+            case 'readMetadata':
+                $state = $currentPrivilege->getDocumentServerState();
+                if (isset($selectedPrivileges['readMetadata.' . $state])) {
+                    unset($selectedPrivileges['readMetadata.' . $state]);
+                }
+                else {
+                    $currentPrivileges[$index] = null;
+                }
+                break;
+            case 'readFile':
+                // don't modify in this controller
+                break;
+            default:
+                if (isset($selectedPrivileges[$name])) {
+                    unset($selectedPrivileges[$name]);
+                }
+                else {
+                    $currentPrivileges[$index] = null;
+                }
+                break;
             }
         }
 
         // add remaining selected privileges
         foreach($selectedPrivileges as $newPrivilege) {
-            $privilege = new Opus_Privilege();
-            $privilege->setDisplayName($newPrivilege);
-            $role->addPrivilege($privilege);
+            $name = strstr($newPrivilege, '.', true);
+            if ($name) {
+                if ($name === 'readMetadata') {
+                    $state = substr(strstr($newPrivilege, '.', false), 1);
+                    $privilege = new Opus_Privilege();
+                    $privilege->setPrivilege('readMetadata');
+                    $privilege->setDocumentServerState($state);
+                    $currentPrivileges[] = $privilege;
+                }
+            }
+            else {
+                $privilege = new Opus_Privilege();
+                $privilege->setPrivilege($newPrivilege);
+                $currentPrivileges[] = $privilege;
+            }
         }
 
+        $role->setPrivilege($currentPrivileges);
+
         $role->store();
+    }
+
+    protected function _isRoleNameExists($name) {
     }
 
 }

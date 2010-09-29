@@ -33,5 +33,42 @@
  * @version     $Id$
  */
 ?>
-<h1>Opus Application - <?= $this->title ?></h1>
-<?= $this->showModel($this->entry); ?>
+
+<div class="adminContainer">
+
+<?= $this->navigation()->breadcrumbs() ?>
+
+<table>
+    <tr>
+        <td><?= $this->translate('admin_role_label_name') ?></td>
+        <td><?= htmlspecialchars($this->role->getDisplayName()) ?></td>
+    </tr>
+    <tr>
+        <td>Privileges:</td>
+        <td>
+            <?PHP foreach($this->role->getPrivilege() as $privilege) : ?>
+            <div>
+                <?PHP
+                    // TODO move into helper or controller
+                    $name = $privilege->getPrivilege();
+                    switch($name) {
+                        case 'readMetadata':
+                            $state = $privilege->getDocumentServerState();
+                            echo $name . ' -> ' . $state;
+                            break;
+                        case 'readFile':
+                            $fileId = $privilege->getFileId();
+                            echo $name . ' -> ' . $fileId;
+                            break;
+                        default:
+                            echo $name;
+                            break;
+                    }
+                ?>
+            </div>
+            <?PHP endforeach; ?>
+        </td>
+    </tr>
+</table>
+
+</div>

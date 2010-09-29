@@ -12,10 +12,64 @@
         <seg>Manage User Roles and Privileges</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Nutzerrolen und Privilegien verwalten</seg>
+        <seg>Nutzerrollen und Privilegien verwalten</seg>
       </tuv>
     </tu>
        
+    <tu tuid="admin_role_show">
+      <tuv xml:lang="en">
+        <seg>Role</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nutzerrolle</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_role_new">
+      <tuv xml:lang="en">
+        <seg>New Role</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Neue Nutzerrolle</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_role_edit">
+      <tuv xml:lang="en">
+        <seg>Edit Role</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nutzerrolle editieren</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_role_label_name">
+      <tuv xml:lang="en">
+        <seg>Name:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Name:</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_role_group_basic">
+      <tuv xml:lang="en">
+        <seg>Basic Privileges</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einfache Rechte</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_role_group_metadata">
+      <tuv xml:lang="en">
+        <seg>Read Metadata Privileges</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Metadaten Lesen</seg>
+      </tuv>
+    </tu>
+
   </body>
   
 </tmx>

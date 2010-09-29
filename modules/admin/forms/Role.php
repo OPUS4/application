@@ -145,12 +145,12 @@ class Admin_Form_Role extends Zend_Form {
             }
         }
 
-//        foreach (self::$serverStates as $state) {
-//            $value = $postData['metadata' . $state];
-//            if ($value) {
-//                $privileges[] = 'readMetadata.' . $state;
-//            }
-//        }
+        foreach (self::$serverStates as $state) {
+            $value = $postData['metadata' . $state];
+            if ($value) {
+                $privileges[] = 'readMetadata.' . $state;
+            }
+        }
 
         return $privileges;
     }
