@@ -89,17 +89,10 @@
                             <tr>
                                 <td>
                                     <div id="Tmenu">
-                                        <?PHP 
-                                        $adminPage = $this->navigation()->findBy('label', 'admin_menu_label');
-                                        if ($adminPage->hidden) {
-                                            $this->navigation()->removePage($adminPage);
-                                        }
-                                        $helpPage = $this->navigation()->findBy('label', 'help_menu_label');
-                                        if ($helpPage->hidden) {
-                                            $this->navigation()->removePage($helpPage);
-                                        }
-                                        ?>
-                                        <?= $this->navigation()->menu()->setMaxDepth(0) ?>
+                                        <?= $this->navigation()
+                                                 ->menu($this->navigationMainMenu)
+                                                 ->setMaxDepth(0)
+                                                 ->setOnlyActiveBranch(0) ?>
                                     </div>
                                 </td>
                                 <td>

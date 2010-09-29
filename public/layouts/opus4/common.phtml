@@ -76,9 +76,8 @@ $this->container = Zend_Registry::get('Opus_Navigation');
                     <a href="<?= $this->url(array('module'=>'home','controller'=>'index','action'=>'index'),null,true) ?>"><img src="<?= $basePath.'/layouts/opus4/img/theme/logo.gif' ?>" alt="OPUS" title="Home" width="185" height="89" /></a>
                 </h1>
                 <ul id="primary-nav" class="nav">
-                <?php foreach ($this->container as $page) : 
-                        $pageIsActive = $page->isActive(true);
-                ?>
+                <?php foreach ($this->container as $page) : ?>
+                    <?php $pageIsActive = $page->isActive(true); ?>
                     <li id="<?= $page->getId() ?>" class="<?= $page->getClass().($pageIsActive ? ' active' : '')?>">
                         <?php if(!$pageIsActive) : ?>
                         <a href="<?= $page->getHref() ?>" title="<?= $page->getTitle() ?>">

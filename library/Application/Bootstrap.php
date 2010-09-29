@@ -316,8 +316,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
     }
 
     /**
-     * Initializes top level navigation as configured in APPLICATION_PATH .
-     * 'config/navigation.xml'
+     * Initializes general navigation as configured in navigationModules.xml'
      *
      * @return void
      */
@@ -331,7 +330,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
 
         $config = $this->getResource('configuration');
        
-        $navigationConfigFile = $config->configPath . '/navigation.xml';
+        $navigationConfigFile = $config->configPath . '/navigationModules.xml';
 
         $navConfig = new Zend_Config_Xml($navigationConfigFile, 'nav');
 
@@ -344,9 +343,34 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $view->navigation($container);
 
         // TODO Find better way without Zend_Registry
-        Zend_Registry::set('Opus_Navigation', $container);
+ //       Zend_Registry::set('Opus_Navigation', $container);
 
         $log->debug('Zend_Navigation initialization completed');
+
+        return $container;
+    }
+
+    /**
+     * Initializes navigation container for main menu.
+     * @return Zend_Navigation
+     */
+    protected function _initMainMenu() {
+        $this->bootstrap('Logging', 'View');
+
+        $config = $this->getResource('configuration');
+
+        $navigationConfigFile = $config->configPath . '/navigation.xml';
+
+        $navConfig = new Zend_Config_Xml($navigationConfigFile, 'nav');
+
+        $container = new Zend_Navigation($navConfig);
+
+        $view = $this->getResource('View');
+
+        $view->navigationMainMenu = $container;
+
+        // TODO Find better way without Zend_Registry
+        Zend_Registry::set('Opus_Navigation', $container);
 
         return $container;
     }

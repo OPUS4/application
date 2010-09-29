@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configdata>
+    <nav>
+        <administration>
+            <label>admin_menu_label</label>
+            <module>admin</module>
+            <controller>index</controller>
+            <action>index</action>
+            <pages>
+                <security>
+                    <label>admin_title_security</label>
+                    <module>admin</module>
+                    <controller>security</controller>
+                    <action>index</action>
+                    <pages>
+                        <accounts>
+                            <label>admin_security_title_accounts</label>
+                            <module>admin</module>
+                            <controller>account</controller>
+                            <action>index</action>
+                        </accounts>
+
+                        <ipranges>
+                            <label>admin_security_title_ipranges</label>
+                            <module>admin</module>
+                            <controller>iprange</controller>
+                            <action>index</action>
+                        </ipranges>
+
+                        <roles>
+                            <label>admin_security_title_roles</label>
+                            <module>admin</module>
+                            <controller>role</controller>
+                            <action>index</action>
+                            <pages>
+                                <show>
+                                    <label>admin_role_show</label>
+                                    <module>admin</module>
+                                    <controller>role</controller>
+                                    <action>show</action>
+                                </show>
+
+                                <new>
+                                    <label>admin_role_new</label>
+                                    <module>admin</module>
+                                    <controller>role</controller>
+                                    <action>new</action>
+                                </new>
+
+                                <edit>
+                                    <label>admin_role_edit</label>
+                                    <module>admin</module>
+                                    <controller>role</controller>
+                                    <action>edit</action>
+                                </edit>
+                            </pages>
+                        </roles>
+                    </pages>
+                </security>
+
+                <documents>
+                    <label>admin_title_documents</label>
+                    <module>admin</module>
+                    <controller>documents</controller>
+                    <action>index</action>
+                </documents>
+
+                <licence>
+                    <label>admin_title_licence</label>
+                    <module>admin</module>
+                    <controller>licence</controller>
+                    <action>index</action>
+                </licence>
+
+                <collections>
+                    <label>admin_title_collections</label>
+                    <module>admin</module>
+                    <controller>collection</controller>
+                    <action>index</action>
+                </collections>
+
+                <languages>
+                    <label>admin_title_languages</label>
+                    <module>admin</module>
+                    <controller>language</controller>
+                    <action>index</action>
+                </languages>
+
+                <statistic>
+                    <label>admin_title_statistic</label>
+                    <module>admin</module>
+                    <controller>statistic</controller>
+                    <action>index</action>
+                </statistic>
+
+                <oailink>
+                    <label>admin_title_oailink</label>
+                    <module>admin</module>
+                    <controller>oailink</controller>
+                    <action>index</action>
+                </oailink>
+            </pages>
+        </administration>
+    </nav>
+</configdata>
