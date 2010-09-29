@@ -27,63 +27,68 @@
  * @category    Application
  * @package     Module_Import
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
- * @copyright   Copyright (c) 2009, OPUS 4 development team
+ * @author      Gunar Maiwald <maiwald@zib.de>
+ * @copyright   Copyright (c) 2009, 2010 OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Import_Model_LicenceImport
-{
-	/**
-	 * Imports licenses data to Opus4
-	 *
-	 * @param Strring $data XML-String with classifications to be imported
-	 * @return array List of documents that have been imported
-	 */
-	public function __construct($data)
-	{
-		$doclist = $data->getElementsByTagName('table_data');
-		foreach ($doclist as $document)
-		{
+class Import_Model_LicenceImport {
+	
+    /**
+     * Imports licenses data to Opus4
+     *
+     * @param Strring $data XML-String with classifications to be imported
+     * @return array List of documents that have been imported
+     */
+    public function __construct($data) {
+	$doclist = $data->getElementsByTagName('table_data');
+	foreach ($doclist as $document) {
             if ($document->getAttribute('name') === 'license_de') {
-            	$mappingTable = $this->readLicenses($document);
+                $this->readLicenses($document);
             }
-		}
-		echo "\n";
-	}
+        }
+        echo "\n";
+    }
 
-	/**
-	 * transfers any OPUS3-conform classification System into an array
-	 *
-	 * @param DOMDocument $data XML-Document to be imported
-	 * @return array List of documents that have been imported
-	 */
-	protected function transferOpus3Licence($data)
-	{
-		$classification = array();
-		$doclist = $data->getElementsByTagName('row');
-		foreach ($doclist as $document)
-		{
-			$lic = new Opus_Licence();
+    /**
+     * transfers any OPUS3-conform classification System into an array
+     *
+     * @param DOMDocument $data XML-Document to be imported
+     * @return array List of documents that have been imported
+     */
+    protected function transferOpus3Licence($data) {
+    	//$classification = array();
+	$doclist = $data->getElementsByTagName('row');
+        $licenses = array();
+	foreach ($doclist as $document) {
+            $lic = new Opus_Licence();
+            $shortname = "";
             foreach ($document->getElementsByTagName('field') as $field) {
-           		if ($field->getAttribute('name') === 'shortname') $shortname = $field->nodeValue;
-           		if ($field->getAttribute('name') === 'longname') $lic->setNameLong(html_entity_decode($field->nodeValue, ENT_COMPAT, 'UTF-8'));
-           		if ($field->getAttribute('name') === 'desc_text') $lic->setDescText(html_entity_decode($field->nodeValue, ENT_COMPAT, 'UTF-8'));
-           		if ($field->getAttribute('name') === 'active') $lic->setActive($field->nodeValue);
-           		if ($field->getAttribute('name') === 'sort') $lic->setSortOrder($field->nodeValue);
-           		if ($field->getAttribute('name') === 'pod_allowed') $lic->setPodAllowed($field->nodeValue);
-           		if ($field->getAttribute('name') === 'language') $lic->setLanguage($this->mapLanguage($field->nodeValue));
-           		if ($field->getAttribute('name') === 'link') $lic->setLinkLicence($field->nodeValue);
-           		if ($field->getAttribute('name') === 'link_tosign') $lic->setLinkSign($field->nodeValue);
-           		if ($field->getAttribute('name') === 'desc_html') $lic->setDescMarkup($field->nodeValue);
+           	if ($field->getAttribute('name') === 'shortname') $shortname = $field->nodeValue;
+           	if ($field->getAttribute('name') === 'longname') $lic->setNameLong(html_entity_decode($field->nodeValue, ENT_COMPAT, 'UTF-8'));
+           	if ($field->getAttribute('name') === 'desc_text') $lic->setDescText(html_entity_decode($field->nodeValue, ENT_COMPAT, 'UTF-8'));
+           	if ($field->getAttribute('name') === 'active') $lic->setActive($field->nodeValue);
+           	if ($field->getAttribute('name') === 'sort') $lic->setSortOrder($field->nodeValue);
+           	if ($field->getAttribute('name') === 'pod_allowed') $lic->setPodAllowed($field->nodeValue);
+           	if ($field->getAttribute('name') === 'language') $lic->setLanguage($this->mapLanguage($field->nodeValue));
+           	if ($field->getAttribute('name') === 'link') $lic->setLinkLicence($field->nodeValue);
+           	if ($field->getAttribute('name') === 'link_tosign') $lic->setLinkSign($field->nodeValue);
+           	if ($field->getAttribute('name') === 'desc_html') $lic->setDescMarkup($field->nodeValue);
                 if ($field->getAttribute('name') === 'mime_type') $lic->setMimeType($field->nodeValue);
                 if ($field->getAttribute('name') === 'logo') $lic->setLinkLogo($field->nodeValue);
                 if ($field->getAttribute('name') === 'comment') $lic->setCommentInternal($field->nodeValue);
             }
             $licenses[$shortname] = $lic;
-		}
-		return $licenses;
 	}
+	return $licenses;
+    }
 
+    /**
+     * Map Languages from Opus3-Notation to Opus4-Notation
+     *
+     * @param Opus3-Language-String
+     * @return Opus4-Language-String
+     */
     private function mapLanguage($lang) {
     	switch ($lang) {
             case 'ger':
@@ -104,23 +109,22 @@ class Import_Model_LicenceImport
     	}
     }
 
-	/**
-	 * reates a mapping file from old licence identifiers to the ones in Opus4
-	 *
-	 * @param DOMDocument $data XML-Document to be imported
-	 * @return array List of documents that have been imported
-	 */
-	protected function readLicenses($data)
-	{
-		$licenses = $this->transferOpus3Licence($data);
+    /**
+     * reates a mapping file from old licence identifiers to the ones in Opus4
+     *
+     * @param DOMDocument $data XML-Document to be imported
+     * @return array List of documents that have been imported
+     */
+    protected function readLicenses($data) {
+        $licenses = $this->transferOpus3Licence($data);
 
-		// Store the licenses and create a mapping file for migration
-		$fp = fopen('../workspace/tmp/license.map', 'w');
-		foreach ($licenses as $key => $licence) {
-		    echo '.';
-			$id = $licence->store();
-			fputs($fp, $key . ' ' . $id . "\n");
-		}
-		fclose($fp);
+	// Store the licenses and create a mapping file for migration
+	$fp = fopen('../workspace/tmp/license.map', 'w');
+	foreach ($licenses as $key => $licence) {
+            echo '.';
+            $id = $licence->store();
+            fputs($fp, $key . ' ' . $id . "\n");
 	}
+	fclose($fp);
+    }
 }
