@@ -84,7 +84,8 @@ class Publish_Model_Deposit {
                 $storeMethod = "_prepare" . $datasetType . "Object";
 
                 $this->$storeMethod($dataKey, $dataValue);
-            } else {
+            }
+            else {
                 $this->log->info("wanna store something else...");
                 if (array_key_exists($dataKey, $this->externalFields)) {
 
@@ -98,7 +99,8 @@ class Publish_Model_Deposit {
                     $addedValue = $this->document->$function();
                     $addedValue->setValue($dataValue);
                     $this->log->debug("with value: " . $dataValue);
-                } else {
+                }
+                else {
                     //store an internal field with setter
                     $function = "set" . $dataKey;
                     $this->log->debug("internal field with setter function: " . $function);
@@ -127,8 +129,9 @@ class Publish_Model_Deposit {
             return "Collection";
         else if (strstr($dataKey, "Licence"))
             return "Licence";
-        else
-            return "";
+        else if (strstr($dataKey, 'ThesisGrantor') || strstr($dataKey, 'ThesisPublisher'))
+            return "Thesis";
+        return "";
     }
 
     private function getCounter($dataKey) {
@@ -191,7 +194,8 @@ class Publish_Model_Deposit {
                     $this->documentData[$type . $first . $counter] = "";
                 }
             }
-        } else {
+        }
+        else {
             if (isset($this->documentData[$type . $first])) {
                 $entry = $this->documentData[$type . $first];
                 $person->setFirstName($entry);
@@ -210,7 +214,8 @@ class Publish_Model_Deposit {
                     $this->documentData[$type . $last . $counter] = "";
                 }
             }
-        } else {
+        }
+        else {
             if (isset($this->documentData[$type . $last])) {
                 $entry = $this->documentData[$type . $last];
                 $person->setLastName($entry);
@@ -229,7 +234,8 @@ class Publish_Model_Deposit {
                     $this->documentData[$type . $email . $counter] = "";
                 }
             }
-        } else {
+        }
+        else {
             if (isset($this->documentData[$type . $email])) {
                 $entry = $this->documentData[$type . $email];
                 if ($entry !== "") {
@@ -251,7 +257,8 @@ class Publish_Model_Deposit {
                     $this->documentData[$type . $birthplace . $counter] = "";
                 }
             }
-        } else {
+        }
+        else {
             if (isset($this->documentData[$type . $birthplace])) {
                 $entry = $this->documentData[$type . $birthplace];
                 if ($entry !== "") {
@@ -273,7 +280,8 @@ class Publish_Model_Deposit {
                     $this->documentData[$type . $birthdate . $counter] = "";
                 }
             }
-        } else {
+        }
+        else {
             if (isset($this->documentData[$type . $birthdate])) {
                 $entry = $this->documentData[$type . $birthdate];
                 if ($entry !== "") {
@@ -295,7 +303,8 @@ class Publish_Model_Deposit {
                     $this->documentData[$type . $academic . $counter] = "";
                 }
             }
-        } else {
+        }
+        else {
             if (isset($this->documentData[$type . $academic])) {
                 $entry = $this->documentData[$type . $academic];
                 if ($entry !== "") {
@@ -310,7 +319,8 @@ class Publish_Model_Deposit {
     private function _prepareTitleObject($dataKey, $dataValue) {
         if (!isset($dataValue)) {
             return;
-        } else {
+        }
+        else {
             //String can be changed here
             $lang = "Language";
             $this->log->info("try to store title: " . $dataKey);
@@ -348,7 +358,8 @@ class Publish_Model_Deposit {
                 $title->setValue($entry);
                 $this->documentData[$type . $counter] = "";
             }
-        } else {
+        }
+        else {
             $entry = $this->documentData[$type];
             $this->log->debug("Value: " . $entry);
             $title->setValue($entry);
@@ -364,7 +375,8 @@ class Publish_Model_Deposit {
                 $title->setLanguage($entry);
                 $this->documentData[$type . $short . $counter] = "";
             }
-        } else {
+        }
+        else {
             $entry = $this->documentData[$type . $short];
             $this->log->debug("Value: " . $entry);
             $title->setLanguage($entry);
@@ -395,7 +407,8 @@ class Publish_Model_Deposit {
 
         if ($dataValue == "") {
             $this->log->debug("Subject already stored.");
-        } else {
+        }
+        else {
             $this->log->debug("try to store subject: " . $dataKey);
             $type = $this->getSubjectType($dataKey);
             switch ($type) {
@@ -451,7 +464,8 @@ class Publish_Model_Deposit {
 
         if ($dataValue == "") {
             $this->log->debug("Note already stored.");
-        } else {
+        }
+        else {
             $this->log->debug("try to store note: " . $dataKey);
             $note = new Opus_Note();
 
@@ -478,7 +492,8 @@ class Publish_Model_Deposit {
 
         if ($dataValue == "") {
             $this->log->debug("Collection already stored.");
-        } else {
+        }
+        else {
             $this->log->debug("try to store Collection:");
 
             if (strstr($dataKey, "Project"))
@@ -495,8 +510,8 @@ class Publish_Model_Deposit {
     private function _storeCollectionObject($collectionRole, $dataValue) {
         if ($collectionRole == "") {
             $this->document->addCollection(new Opus_Collection($dataValue));
-            
-        } else {
+        }
+        else {
             $role = Opus_CollectionRole::fetchByName($collectionRole);
             if (isset($role)) {
                 $this->log->debug("Role: " . $role);
@@ -525,19 +540,16 @@ class Publish_Model_Deposit {
     }
 
     /**
-     * method to prepare a Licence object for storing
-     * @param <Opus_Document> $this->document
-     * @param <Array> $formValues
-     * @param <String> $key current Element of formValues
-     * @param <Array> $externalFields
-     * @return <Array> $formValues
-     * @throws Publish_Model_OpusServerException
+     * Prepare and store a licence for the current document.
+     * @param <type> $dataKey
+     * @param <type> $dataValue
      */
     private function _prepareLicenceObject($dataKey, $dataValue) {
 
         if ($dataValue == "") {
             $this->log->debug("Licence already stored.");
-        } else {
+        }
+        else {
             $dataValue = substr($dataValue, 3);
 
             $this->log->debug("try to store Licence with id: " . $dataValue);
@@ -547,6 +559,36 @@ class Publish_Model_Deposit {
             $addFunction = "addLicence";
             $this->log->debug("addfunction: " . $addFunction);
             $this->document->$addFunction($licence);
+        }
+    }
+
+    /**
+     * Prepare and store a dnb institute for the current document.
+     * @param <type> $dataKey
+     * @param <type> $dataValue
+     */
+    private function _prepareThesisObject($dataKey, $dataValue) {
+
+        if ($dataValue == "") {
+            $this->log->debug("ThesisGrantor or ThesisPublisher already stored.");
+        }
+        else {
+            $dataValue = substr($dataValue, 3);
+
+            $this->log->debug("try to store " . $dataKey . " with id: " . $dataValue);
+
+            $thesis = new Opus_DnbInstitute($dataValue);
+
+            if (strstr($dataKey, 'Grantor')) {
+                $addFunction = "addThesisGrantor";
+                $this->log->debug("addfunction: " . $addFunction);
+                $this->document->$addFunction($thesis);
+            }
+            else if (strstr($dataKey, 'Publisher')) {
+                $addFunction = "addThesisPublisher";
+                $this->log->debug("addfunction: " . $addFunction);
+                $this->document->$addFunction($thesis);
+            }
         }
     }
 

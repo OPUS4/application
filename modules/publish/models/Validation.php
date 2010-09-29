@@ -94,6 +94,12 @@ class Publish_Model_Validation {
             case 'Text': $this->validator = null;
                 break;
 
+            case 'ThesisGrantor' : $this->validator = $this->_validateThesis(true);
+                break;
+
+            case 'ThesisPublisher' : $this->validator = $this->_validateThesis();
+                break;
+
             case 'Title': $this->validator = null;
                 break;
 
@@ -111,8 +117,8 @@ class Publish_Model_Validation {
     }
 
     private function _validateDate() {
-        $validator = new Zend_Validate_Date();
-        //$validator = new Opus_Validate_Date();
+        //$validator = new Zend_Validate_Date();
+        $validator = new Opus_Validate_Date();
         $messages = array(
             Zend_Validate_Date::INVALID => 'publish_validation_error_date_invalid',
             Zend_Validate_Date::INVALID_DATE => 'publish_validation_error_date_invaliddate',
@@ -194,6 +200,19 @@ class Publish_Model_Validation {
         return $validator;
     }
 
+    private function _validateThesis($grantors = null) {
+        $thesises = array_keys($this->getThesis($grantors));
+        if ($thesises == null)
+            return null;
+        else {
+            $validator = new Zend_Validate_InArray($thesises);
+            $messages = array(
+                Zend_Validate_InArray::NOT_IN_ARRAY => 'publish_validation_error_inarray_notinarray');
+            $validator->setMessages($messages);
+            return $validator;
+        }
+    }
+
     private function _validateYear() {
         $validator = new Zend_Validate_GreaterThan('1900');
         $validator->setMessage('publish_validation_error_year', Zend_Validate_GreaterThan::NOT_GREATER);
@@ -207,63 +226,91 @@ class Publish_Model_Validation {
             $switchVar = $this->datatype;
 
         switch ($switchVar) {
-            case 'Language':
-                $languages = $this->getLanguages();
-                if (isset($languages) || count($languages) >= 1) {
-                    asort($languages);
-                    return $languages;
-                } else {
-                    $languages = null;
-                    return $languages;
-                }
-
-            case 'Licence':
-                $licences = $this->getLicences();
-                if (isset($licences) && count($licences) >= 1) {
-                    $data = array();
-                    foreach ($licences AS $key => $li)
-                        $data[$key] = $li;
-                    asort($data);
-                    $this->log->debug("LIZENZEN NOT NULL");
-                    return $data;
-                } else {
-                    $data = null;
-                    $this->log->debug("LIZENZEN NULL!!!");
-                    return $data;
-                }
-
-            case 'Institute' :
-                $oaiName = 'institutes';
-                $institutes = $this->getCollection($oaiName);
-                if (isset($institutes)) {
-                    $data = array();
-                    foreach ($institutes AS $inst)
-                        $data[$inst] = $inst;
-
-                    return $data;
-                } else {
-                    $data = null;
-                    return $data;
-                }
+            case 'Language': return $this->_languageSelect();
                 break;
 
-            case 'Project' :
-                $oaiName = 'projects';
-                $projects = $this->getCollection($oaiName);
-                if (isset($projects)) {
-                    $data = array();
-                    foreach ($projects AS $pro) {
-                        if ($pro !== 'Projects' && strlen($pro) > 1)
-                            $data[$pro] = $pro;
-                    }
-                    asort($data);
-                    return $data;
-                }
-                else {
-                    $data = null;
-                    return $data;
-                }
+            case 'Licence': return $this->_licenceSelect();
+                break;
+
+            case 'Institute' : return $this->_instituteSelect();
+                break;
+
+            case 'Project' : return $this->_projectSelect();
+                break;
+
+            case 'ThesisGrantor' : return $this->_thesisSelect(true);
+                break;
+
+            case 'ThesisPublisher' : return $this->_thesisSelect();
+                break;
+
+            default : throw new Publish_Model_OpusServerException("Error while parsing the xml document type: Found datatype " . $this->datatype . " is unknown!");
+                break;
         }
+    }
+
+    private function _instituteSelect() {
+        $oaiName = 'institutes';
+        $institutes = $this->getCollection($oaiName);
+        if (isset($institutes)) {
+            $data = array();
+            foreach ($institutes AS $inst)
+                $data[$inst] = $inst;
+            return $data;
+        } else {
+            $data = null;
+            return $data;
+        }
+    }
+
+    private function _languageSelect() {
+        $languages = $this->getLanguages();
+        if (isset($languages) || count($languages) >= 1) {
+            asort($languages);
+            return $languages;
+        } else {
+            $languages = null;
+            return $languages;
+        }
+    }
+
+    private function _licenceSelect() {
+        $licences = $this->getLicences();
+        if (isset($licences) && count($licences) >= 1) {
+            $data = array();
+            foreach ($licences AS $key => $li)
+                $data[$key] = $li;
+            asort($data);            
+            return $data;
+        } else {
+            $data = null;            
+            return $data;
+        }
+    }
+
+    private function _projectSelect() {
+        $oaiName = 'projects';
+        $projects = $this->getCollection($oaiName);
+        if (isset($projects)) {
+            $data = array();
+            foreach ($projects AS $pro) {
+                if ($pro !== 'Projects' && strlen($pro) > 1)
+                    $data[$pro] = $pro;
+            }
+            asort($data);
+            return $data;
+        }
+        else {
+            $data = null;
+            return $data;
+        }
+    }
+
+    private function _thesisSelect($grantors = null) {
+        $thesisList = $this->getThesis($grantors);
+        asort($thesisList);
+        return $thesisList;
+
     }
 
     /**
@@ -341,13 +388,38 @@ class Publish_Model_Validation {
             foreach ($dbLicences = Opus_Licence::getAll() as $lic) {
                 $name = $lic->getDisplayName();
                 $id = $lic->getId();
-                $licences["ID:".$id] = $name;
-                $this->log->debug("Lizenz " . $name);
+                $licences["ID:" . $id] = $name;
             }
             $this->licences = $licences;
             return $licences;
         } else
             return $this->licences;
+    }
+
+    /**
+     * Retrieves all available ThesisGrantors or ThesisPublishers in a array.
+     * Used for generating a select box.
+     * @param <type> $grantors true -> ThesisGrantors, null -> ThesisPublishers
+     * @return Array of Dnb_Institutes Objects
+     */
+    private function getThesis($grantors = null) {
+        $thesisList = array();
+        if ($grantors === true) {
+            //get all grantors
+            $thesises = Opus_DnbInstitute::getGrantors();
+            if ($thesises === null || empty ($thesises))
+                return null;
+        } else if ($grantors === null) {
+            //get all = publishers
+            $thesises = Opus_DnbInstitute::getAll();
+            if ($thesises === null || empty ($thesises))
+                return null;
+        }
+
+        foreach ($thesises AS $thesis) {
+            $thesisList["ID:" . $thesis->getId()] = $thesis->getDisplayName();
+        }
+        return $thesisList;
     }
 
 }

@@ -273,6 +273,24 @@
       </tuv>
     </tu>
 
+    <tu tuid="choose_valid_thesisgrantor">
+      <tuv xml:lang="en">
+        <seg>Please choose a granting institution.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie eine Titel verleihende Institution.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="choose_valid_thesispublisher">
+      <tuv xml:lang="en">
+        <seg>Please choose a publisher institution.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie eine veröffentlichende Institution.</seg>
+      </tuv>
+    </tu>
+
      <tu tuid="template_error_unknown_field">
       <tuv xml:lang="en">
         <seg>You try to create an unknown element that doesn't exist in the document type in that form. Please check the variable name. Hint: single elements end with underscore _ multiple elements which are forming a group begin with group. And attention: Persons alsways have the type "Group".</seg>

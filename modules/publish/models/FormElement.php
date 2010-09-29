@@ -243,8 +243,9 @@ class Publish_Model_FormElement {
         if (count($options) == 1) {
             //if theres only one entry, just show an text fields
             $value = (array_keys($options));
-            $element = $this->createElement('text', $name);
+            $element = $this->form->createElement('text', $name);
             $element->setValue($value[0]);
+            
         } else {
             //at least 2 entry: show a select field
             $element = $this->form->createElement('select', $name);
@@ -266,6 +267,13 @@ class Publish_Model_FormElement {
                     break;
                 case 'Institute' :
                     $element->setMultiOptions(array_merge(array('' => 'choose_valid_institute'), $options));
+                    break;
+                case 'ThesisGrantor' :
+                    $element->setMultiOptions(array_merge(array('' => 'choose_valid_thesisgrantor'), $options));
+                    break;
+                case 'ThesisPublisher':
+                    $element->setMultiOptions(array_merge(array('' => 'choose_valid_thesispublisher'), $options));
+                    break;
             }
         }
 
