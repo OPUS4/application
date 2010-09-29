@@ -50,8 +50,8 @@
     <field name="PersonAdvisor" required="yes" formelement="Text" datatype="Person" multiplicity="*" />
     <field name="PersonTranslator" required="no" formelement="Text" datatype="Person" multiplicity="*" />
     <field name="PersonContributor" required="no" formelement="Text" datatype="Person" multiplicity="*" />
-    <field name="CreatingCorporation" required="no" formelement="Text" datatype="Text" multiplicity="*" />
-    <field name="ContributingCorporation" required="no" formelement="Text" datatype="Text" multiplicity="*"/>
+    <field name="CreatingCorporation" required="no" formelement="Text" datatype="Text" multiplicity="1" />
+    <field name="ContributingCorporation" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="PublisherName" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="PublisherPlace" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="PageNumber" required="no" formelement="Text" datatype="Integer" multiplicity="1" />
@@ -64,8 +64,8 @@
     <field name="IdentifierIsbn" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="IdentifierUrn" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="ThesisDateAccepted" required="yes" formelement="Text" datatype="Date" multiplicity="1" />
-    <field name="ThesisPublisher" required="yes" formelement="Text" datatype="Text" multiplicity="1" />
-	<field name="ThesisGrantor" required="yes" formelement="Text" datatype="Text" multiplicity="1" />    
+    <field name="ThesisPublisher" required="yes" formelement="Select" datatype="ThesisPublisher" multiplicity="1" />
+    <field name="ThesisGrantor" required="yes" formelement="Select" datatype="ThesisGrantor" multiplicity="1" />
     <field name="Note" required="no" formelement="Textarea" datatype="Text" multiplicity="1" />
     <field name="Licence" required="yes" formelement="Select" datatype="Licence" multiplicity="1" />
     
