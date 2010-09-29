@@ -27,6 +27,7 @@
  * @category    Application
  * @package     Module_Import
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
+ * @author      Gunar Maiwald <maiwald@zib.de>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
