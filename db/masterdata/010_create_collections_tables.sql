@@ -103,5 +103,5 @@ CREATE TABLE IF NOT EXISTS `link_documents_collections` (
   KEY `role_id` (`role_id`,`collection_id`),
   KEY `collection_id` (`collection_id`),
   KEY `document_id` (`document_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=20;
 
