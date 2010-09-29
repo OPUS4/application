@@ -79,7 +79,13 @@ class OpusConsole {
             array_shift($files);
             foreach ($files as $file) {
                 if (true === file_exists($file)) {
-                    include_once($file);
+                    try {
+                        include_once($file);
+                    } catch (Exception $e) {
+                        echo 'Caught exception ' . get_class($e) . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString() . "\n";
+                        // exit here, so nobody thinks that the script was loaded.
+                        exit(1);
+                    }
                 }
             }
         }
