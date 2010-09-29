@@ -110,7 +110,6 @@ class Import_Model_InstituteImport {
             fputs($fp, str_replace(" ", "_", $class['universitaet']) . ' ' .  $coll->getId() . "\n");
         }
         fclose($fp);
-
         return $subcoll;
     }
 
