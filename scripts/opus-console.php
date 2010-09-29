@@ -68,6 +68,21 @@ class OpusConsole {
             // setup realm 
             $realm = Opus_Security_Realm::getInstance();
         }
+
+        $register_argc_argv = ini_get('register_argc_argv');
+        if (false === is_null($register_argc_argv) 
+            && $register_argc_argv == 1
+            && $_SERVER['argc'] > 1)
+        {
+            $files = $_SERVER['argv'];
+            // removes script name
+            array_shift($files);
+            foreach ($files as $file) {
+                if (true === file_exists($file)) {
+                    include_once($file);
+                }
+            }
+        }
     
         while (1) {
             $input = readline('opus> ');
