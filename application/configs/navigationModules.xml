@@ -92,6 +92,13 @@
                                     <action>new</action>
                                 </new>
 
+                                <create>
+                                    <label>admin_role_new</label>
+                                    <module>admin</module>
+                                    <controller>role</controller>
+                                    <action>create</action>
+                                </create>
+
                                 <edit>
                                     <label>admin_role_edit</label>
                                     <module>admin</module>

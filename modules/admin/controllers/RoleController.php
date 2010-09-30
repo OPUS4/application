@@ -122,7 +122,7 @@ class Admin_RoleController extends Controller_Action {
                 $form->setAction($actionUrl);
                 $this->view->form = $form;
                 $this->_helper->viewRenderer->setRender('new');
-                // return $this->render('new');
+                return $this->render('new');
             }
         }
 
@@ -155,16 +155,25 @@ class Admin_RoleController extends Controller_Action {
         if (!empty($roleId)) {
             $postData = $this->getRequest()->getPost();
 
-            $name = $postData['name'];
-            $selectedPrivileges = Admin_Form_Role::parseSelectedPrivileges($postData);
+            $role = new Opus_Role($roleId);
 
-//            Zend_Registry::get('Zend_Log')->debug(count($privileges));
-//
-//            foreach ($privileges as $privilege) {
-//                Zend_Registry::get('Zend_Log')->debug('Selected privilege = ' . $privilege->getPrivilege());
-//            }
+            $postData['oldRole'] = $role->getName();
 
-            $this->_updateRole($roleId, $name, $selectedPrivileges);
+            $roleForm = new Admin_Form_Role();
+
+            if ($roleForm->isValid($postData)) {
+                $name = $postData['name'];
+                $selectedPrivileges = Admin_Form_Role::parseSelectedPrivileges($postData);
+
+                $this->_updateRole($roleId, $name, $selectedPrivileges);
+            }
+            else {
+                $actionUrl = $this->view->url(array('action' => 'update', 'id' => $roleId));
+                $roleForm->setAction($actionUrl);
+                $this->view->roleForm = $roleForm;
+                $this->_helper->viewRenderer->setRender('edit');
+                return $this->render('edit');
+            }
         }
 
         $this->_helper->redirector('index');

@@ -70,6 +70,14 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_role_error_role_used">
+      <tuv xml:lang="en">
+        <seg>Role name already exists.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Der Rollenname existiert bereits.</seg>
+      </tuv>
+    </tu>
   </body>
   
 </tmx>

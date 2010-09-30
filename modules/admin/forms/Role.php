@@ -76,6 +76,7 @@ class Admin_Form_Role extends Zend_Form {
     public function init() {
         parent::init();
 
+        $this->getElement('name')->addValidator(new Form_Validate_RoleAvailable());
         $this->_addBasicPrivilegesGroup();
         $this->_addMetadataPrivilegesGroup();
     }
