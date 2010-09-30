@@ -90,9 +90,6 @@ mail.opus.name = ; Name of administrator
 ; deliver.target.prefix = /opus4-matheon-files
 ; deliver.url.prefix = /documents-matheon
 
-;OAI-DIRECORY
-; path.workspace.temp = /home/opus4web/opus4-matheon/server/workspace/tmp
-
 ; LOGGING CONFIGURATION (OPTIONAL)
 ; Use Zend_Log constants (e.g. DEBUG, INFO, WARN, ERR)
 ; log.level = INFO
