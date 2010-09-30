@@ -40,11 +40,6 @@
  */
 class Publish_FormController extends Controller_Action {
 
-//    public $documentType;
-//    public $documentId;
-//    public $fulltext;
-//    public $additionalFields;
-
     public function uploadAction() {
         $log = Zend_Registry::get('Zend_Log');
         $defaultNS = new Zend_Session_Namespace('Publish');
@@ -290,29 +285,29 @@ class Publish_FormController extends Controller_Action {
             else
                 $defaultNS->documentType = "";
 
-            $log->info("documentType = " . $defaultNS->documentType);
+            $log->info("(FormController) documentType = " . $defaultNS->documentType);
         }
 
         if (!isset($defaultNS->documentId) || $set === true) {
             if (isset($postData['documentId'])) {
-                $defaultNS->documentId = $postData['documentId'];
+               // $defaultNS->documentId = $postData['documentId'];
                 unset($postData['documentId']);
             }
             else
                 $defaultNS->documentId = "";
 
-            $log->info("documentId = " . $defaultNS->documentId);
+            $log->info("(FormController) documentId = " . $defaultNS->documentId);
         }
 
-        if (!isset($defaultNS->fulltext) || $set === true) {
+        if (!($defaultNS->fulltext) || $set === true) {
             if (isset($postData['fullText'])) {
-                $defaultNS->fulltext = $postData['fullText'];
+              //  $defaultNS->fulltext = $postData['fullText'];
                 unset($postData['fulltext']);
             }
             else
-                $defaultNS->fulltext = "0";
+                $defaultNS->fulltext = '0';
 
-            $log->info("fulltext = " . $defaultNS->fulltext);
+            $log->info("(FormController) fulltext = " . $defaultNS->fulltext);
         }
     }
 
@@ -330,9 +325,9 @@ class Publish_FormController extends Controller_Action {
         $defaultNS->document->setType($defaultNS->documentType);
         $defaultNS->document->setServerState('temporary');
 
-        if ($upload->isUploaded()) {
+        if ($upload->isUploaded(true)) {        
             $log->info("Fileupload of: " . count($files) . " possible files => Fulltext is '1'.");
-            $defaultNS->fulltext = "1";
+            $defaultNS->fulltext = '1';            
 
             foreach ($files AS $file => $fileValues) {
                 if (!empty($fileValues['name'])) {
@@ -345,11 +340,13 @@ class Publish_FormController extends Controller_Action {
             }
         } else {
             $log->info("No file uploaded: => Fulltext is NOT given.");
+            $defaultNS->fulltext = '0';
         }
         $defaultNS->documentId = $defaultNS->document->store();
         $log->info("The corresponding doucment ID is: " . $defaultNS->documentId);
+        $log->info("(FormController) fulltext: " . $defaultNS->fulltext);
     }
-
+   
     /**
      * Methodgets the current form and finds out which fields has to be edded or deleted
      * @param Publish_Form_PublishingSecond $form
