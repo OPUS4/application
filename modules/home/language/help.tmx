@@ -1,0 +1,177 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+    <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool"></header>
+    <body>
+        <tu tuid="about_content_policies">
+            <tuv xml:lang="en">
+                <seg>about_content_policies.en.txt</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>about_content_policies.de.txt</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="about_content_documentation">
+            <tuv xml:lang="en">
+                <seg>about_content_documentation.en.txt</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>about_content_documentation.de.txt</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="about_content_disclaimer">
+            <tuv xml:lang="en">
+                <seg>about_content_disclaimer.en.txt</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>about_content_disclaimer.de.txt</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="about_content_impress">
+            <tuv xml:lang="en">
+                <seg>about_content_impress.en.txt</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>about_content_impress.de.txt</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_content_searchtipps">
+            <tuv xml:lang="en">
+                <seg>searchtipps.en.txt</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>searchtipps.de.txt</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_content_diss">
+            <tuv xml:lang="en">
+                <seg>diss.en.txt</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>diss.de.txt</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_content_free">
+            <tuv xml:lang="en">
+                <seg>free.en.txt</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>free.de.txt</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_content_publneeds">
+            <tuv xml:lang="en">
+                <seg>publneeds.en.txt</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>publneeds.de.txt</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_content_right">
+            <tuv xml:lang="en">
+                <seg>right.en.txt</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>right.de.txt</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_content_format">
+            <tuv xml:lang="en">
+                <seg>format.en.txt</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>format.de.txt</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_content_requirements">
+            <tuv xml:lang="en">
+                <seg>requirements.en.txt</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>requirements.de.txt</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_content_write">
+            <tuv xml:lang="en">
+                <seg>write.en.txt</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>write.de.txt</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_content_publicationprocess">
+            <tuv xml:lang="en">
+                <seg>publicationprocess.en.txt</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>publicationprocess.de.txt</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_content_preprint">
+            <tuv xml:lang="en">
+                <seg>preprint.en.txt</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>preprint.de.txt</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_content_metadata">
+            <tuv xml:lang="en">
+                <seg>metadata.en.txt</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>metadata.de.txt</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_content_form_general">
+            <tuv xml:lang="en">
+                <seg>form_general.en.txt</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>form_general.de.txt</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_content_legal_parallel">
+            <tuv xml:lang="en">
+                <seg>legal_parallel.en.txt</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>legal_parallel.de.txt</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_content_legal_oa">
+            <tuv xml:lang="en">
+                <seg>legal_oa.en.txt</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>legal_oa.de.txt</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_content_legal_license">
+            <tuv xml:lang="en">
+                <seg>legal_license.en.txt</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>legal_license.de.txt</seg>
+            </tuv>
+        </tu>
+    </body>
+</tmx>

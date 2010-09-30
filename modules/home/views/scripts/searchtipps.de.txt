@@ -1,4 +1,4 @@
-<h3>Tipps für die Suche</h3></a><ol>
+<ol>
 <li>Personennamen sind wie folgt aufgebaut: Nachname, Vorname</li>
 <li>Bei exakter Suche müssen die Suchbegriffe einschließlich Artikel etc. genau in der Reihenfolge eingegeben werden, in der sie auch in der Datenbank vorkommen.</li>
 <li>Bei Teilwortsuche können beliebige Begriffe oder Teile von Begriffen gesucht werden. Es kann jedoch nur ein Begriff pro Suchfeld eingegeben werden.</li>

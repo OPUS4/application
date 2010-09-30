@@ -27,17 +27,12 @@
  * @category    Application
  * @package     Module_Home
  * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @author      Sascha Szott <szott@zib.de>
+ * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-/**
- * Main entry point for this module.
- *
- * @category    Application
- * @package     Module_Home
- */
 class Home_IndexController extends Zend_Controller_Action {
 
     /**
@@ -132,19 +127,25 @@ class Home_IndexController extends Zend_Controller_Action {
     }
 
     public function helpAction() {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = Zend_Registry::get('Zend_Config');        
+        $module = $config->startmodule;
+        if (!isset($module) || empty($module)) {
+            $module = 'home';
+        }
+        $this->view->startmodule = $module;
 
-		$module = $config->startmodule;
-		if (empty($module) === true) {
-			$module = 'home';
-		}
-		
-		$this->view->startmodule = $module;
-		
-        if (array_key_exists('content', $this->_request->getParams()) === true) {
-            $contenttitle = str_replace('_content_', '_index_', $this->_request->getParam("content"));
-            $this->view->contenttitle = $contenttitle;
-            $this->view->content = $this->_request->getParam("content");
+        $content = $this->getRequest()->getParam('content');
+        if (!is_null($content)) {
+            $translation = $this->view->translate('help_content_' . $content);
+
+            if (file_exists($this->view->getScriptPath('') . $translation)) {
+                $this->view->contenttitle = 'help_index_' . $content;
+                $this->view->content = file_get_contents($this->view->getScriptPath('') . $translation);
+            }
+            elseif ($translation !== $content) {
+                $this->view->contenttitle = 'help_index_' . $content;
+                $this->view->content = $translation;
+            }
         }
     }
 }
