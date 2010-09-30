@@ -385,9 +385,9 @@ class Publish_Model_Deposit {
     }
 
     private function getSubjectType($dataKey) {
-        if (strstr($dataKey, 'MSC'))
+        if (strstr($dataKey, 'Msc'))
             return 'MSC';
-        else if (strstr($dataKey, 'DDC'))
+        else if (strstr($dataKey, 'Ddc'))
             return 'DDC';
         else if (strstr($dataKey, 'Swd'))
             return 'Swd';
@@ -523,7 +523,8 @@ class Publish_Model_Deposit {
 
                 $this->log->debug("Role ID: " . $role->getId() . ", value: " . $dataValue);
 
-                if (!is_null($collArray) && count($collArray) <= 1) {
+                //if (!is_null($collArray) && count($collArray) <= 1) {
+                if (!is_null($collArray)) {
 
                     $this->document->addCollection($collArray[0]);
 
@@ -532,9 +533,14 @@ class Publish_Model_Deposit {
                         $this->log->debug("Project array for referee, extended by " . $dataValue);
                     }
                 }
-                else
-                    throw new Publish_Model_OpusServerException("While trying to store " . $dataKey . " as Collection, an error occurred.
-                        The method fetchCollectionsByRoleNumber returned an array with > 1 values. The " . $dataKey . " cannot be definitely assigned.");
+                if (count($collArray) >=2) {
+                    $this->log->info("While trying to store " . $collectionRole . " as Collection, an error occurred. ".
+                        "The method fetchCollectionsByRoleNumber returned an array with > 1 values. The " . $collectionRole .
+                            " cannot be definitely assigned but was stored to the first entry.");
+                }
+//                else
+//                    throw new Publish_Model_OpusServerException("While trying to store " . $collectionRole . " as Collection, an error occurred.
+//                        The method fetchCollectionsByRoleNumber returned an array with > 1 values. The " . $collectionRole . " cannot be definitely assigned.");
             }
         }
     }
