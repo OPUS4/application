@@ -37,12 +37,21 @@ class PublicationList_Model_Publication {
     private $doc;
     private $authors = array();
     private $bibtexUrl;
+    private $externalBibtexUrl;
     private $editors = array();
     private $risUrl;
+    private $externalRistexUrl;
 
-    public function __construct($id, $baseUrl = null) {
+    public function __construct($id, $externalUrl = null) {
         $this->doc = new Opus_Document($id);
         $collections = $this->doc->getCollection();
+
+        $fc = new Zend_Controller_Request_Http();
+        $hostname = $fc->getHttpHost();
+
+        $fc = Zend_Controller_Front::getInstance();
+        $request = $fc->getRequest();
+        $baseUrl = $request->getBaseUrl();
 
         foreach ($this->doc->getPersonAuthor() as $author) {
              $firstName = $author->getFirstName();
@@ -51,9 +60,9 @@ class PublicationList_Model_Publication {
 
              foreach ($collections as $c) {
                    if (strcmp($c->getName(), $lastName.", ".$firstName) === 0) {
-                       $author->setUrl($c->getId());
+                       $author->setUrl($baseUrl."/publicationList/index/search/collection/".$c->getId());
                        if (!is_null($baseUrl)) {
-                            $author->setExternalUrl($baseUrl, $c->getNumber());
+                            $author->setExternalUrl($externalUrl.$c->getNumber());
                        }
                    }
              }
@@ -66,22 +75,12 @@ class PublicationList_Model_Publication {
               $this->addEditor($firstName." ".$lastName);
         }
 
-        $this->bibtexUrl = array(
-                'module' => 'citationExport',
-                'controller' => 'index',
-                'action' => 'index',
-                'output' => 'bibtex',
-                'docId' => $id);
+        $this->bibtexUrl = $baseUrl."/citationExport/index/index/output/bibtex/docId/".$id;
+        $this->risUrl = $baseUrl."/citationExport/index/index/output/ris/docId/".$id;
 
-        $this->risUrl = array(
-                'module' => 'citationExport',
-                'controller' => 'index',
-                'action' => 'index',
-                'output' => 'ris',
-                'docId' => $id);
-
-   
-    }
+        $this->externalBibtexUrl = "http://".$hostname.$this->bibtexUrl."/theme/plain";
+        $this->externalRisUrl = "http://".$hostname.$this->risUrl."/theme/plain";
+   }
 
     public function getDoc() {
         return $this->doc;
@@ -103,13 +102,30 @@ class PublicationList_Model_Publication {
         return $this->editors;
     }
 
+    public function setRisUrl($string) {
+        $this->risUrl = $string;
+    }
+
     public function getRisUrl() {
         return $this->risUrl;
+    }
+
+    public function getExternalRisUrl() {
+        return $this->externalRisUrl;
+    }
+
+    public function setBibtexUrl($string) {
+        $this->bibtexUrl = $string;
     }
     
     public function getBibtexUrl() {
         return $this->bibtexUrl;
     }
+
+    public function getExternalBibtexUrl() {
+        return $this->externalBibtexUrl;
+    }
+
 
 }
 ?>

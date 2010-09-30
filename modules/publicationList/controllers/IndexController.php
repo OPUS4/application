@@ -58,11 +58,11 @@ class PublicationList_IndexController extends Controller_Action {
         $theme = $this->getRequest()->getParam("theme");
         if ($theme === 'plain') {
             $this->_helper->layout->setLayoutPath(APPLICATION_PATH . '/public/layouts/plain');
-            $this->render('plainresults');            
+
         }
-        else {
-            $this->render('results');
-        }
+        //else {
+        $this->render('results');
+        //}
     }
 
     private function buildQuery() {
@@ -145,7 +145,7 @@ class PublicationList_IndexController extends Controller_Action {
 
     private function createPublicationLists() {
         $config = Zend_Registry::get('Zend_Config');
-        
+
         $publicationSite = new PublicationList_Model_PublicationSite();
         foreach ($this->resultList->getResults() as $resultHit) {
              if (isset($config->publicationlist->external->baseurl)) {
@@ -172,6 +172,16 @@ class PublicationList_IndexController extends Controller_Action {
                 $sl = new PublicationList_Model_SingleList($year);
                 $sl->addPublication($publication);
                 $publicationSite->addSingleList($sl);
+            }
+
+            $theme = $this->getRequest()->getParam("theme");
+            if ($theme === 'plain') {
+                $publication->setBibtexUrl($publication->getExternalBibtexUrl());
+                $publication->setRisUrl($publication->getExternalRisUrl());
+
+                foreach ($publication->getAuthors() as $a) {
+                    $a->setUrl($a->getExternalUrl());
+                }
             }
         }
         $publicationSite->orderSingleLists();

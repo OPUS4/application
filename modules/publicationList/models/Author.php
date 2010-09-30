@@ -36,7 +36,7 @@ class PublicationList_Model_Author {
 
     private $firstName;
     private $lastName;
-    private $url = null;
+    private $url;
     private $externalUrl;
 
     public function __construct($firstName, $lastName) {
@@ -54,20 +54,15 @@ class PublicationList_Model_Author {
     }
 
     public function setUrl($string) {
-        $this->url = array(
-                'module' => 'publicationList',
-                'controller' => 'index',
-                'action' => 'search',
-                'searchtype' => 'collection',
-                'id' => $string);
+        $this->url = $string;
     }
 
     public function getUrl() {
         return $this->url;
     }
 
-    public function setExternalUrl($baseUrl, $identifier) {
-        $this->externalUrl = $baseUrl.$identifier;
+    public function setExternalUrl($string) {
+        $this->externalUrl = $string; 
     }
 
     public function getExternalUrl() {

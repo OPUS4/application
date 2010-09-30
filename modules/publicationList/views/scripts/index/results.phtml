@@ -36,7 +36,6 @@
 
 <div id="search_results" class="search_results">
     <!-- NaviBar -->
-    <b><?= $this->hostname() ?><?= $this->baseUrl() ?></b>
     <?php foreach($this->results as $result) :?>
 	<a href="#<?= htmlspecialchars($result->getYear()) ?>"><b><?= htmlspecialchars($result->getYear()) ?></b></a> 
     <?php endforeach ?>
@@ -52,7 +51,7 @@
                     <?php foreach($publication->getAuthors() as $author) :?>
 		    <?php $counter++ ?>
                         <?php if(!is_null($author->getUrl())) : ?>
-                            <a href="<?= $this->url($author->getUrl(), null, true); ?>">
+                            <a href="<?= $author->getUrl() ?>">
                             <?= htmlspecialchars($author->getFirstName()) ?>
                             <?= $author->getLastName() ?></a>
                         <?php endif ?>
@@ -106,11 +105,11 @@
                 <?php endif ?>
 
                 <?php if(!is_null($publication->getBibtexUrl())) : ?>
-                    <a href="<?= $this->url($publication->getBibtexUrl(), null, true) ?>">BibTeX</a>
+                    <a href="<?= $publication->getBibtexUrl() ?>">BibTeX</a>
                 <?php endif ?>
 
 	        <?php if(!is_null($publication->getRisUrl())) : ?>
-                    <a href="<?= $this->url($publication->getRisUrl(), null, true) ?>">RIS</a>
+                    <a href="<?= $publication->getRisUrl() ?>">RIS</a>
                 <?php endif ?>
 
                 <?php if(!is_null($publication->getDoc()->getIdentifierUrl())) : ?>
