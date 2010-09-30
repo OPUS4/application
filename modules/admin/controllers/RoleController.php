@@ -211,7 +211,9 @@ class Admin_RoleController extends Controller_Action {
             $currentPrivileges = array();
         }
 
-        if (!empty($name)) {
+        $oldName = $role->getName();
+
+        if (!empty($name) && (!in_array($roleName, self::$protectedRoles))) {
             $role->setName($name);
         }
 

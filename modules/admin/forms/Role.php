@@ -36,6 +36,8 @@
  */
 class Admin_Form_Role extends Zend_Form {
 
+    private static $protectedRoles = array('administrator', 'guest');
+
     /**
      * Names of basic privileges.
      */
@@ -112,7 +114,12 @@ class Admin_Form_Role extends Zend_Form {
     }
 
     public function populateFromRole($role) {
-        $this->getElement('name')->setValue($role->getName());
+        $nameElement = $this->getElement('name');
+        $roleName = $role->getName();
+        $nameElement->setValue($roleName);
+        if (in_array($roleName, self::$protectedRoles)) {
+            $nameElement->setAttrib('disabled', 'true');
+        }
 
         $privileges = $role->getPrivilege();
 
