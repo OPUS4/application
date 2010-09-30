@@ -202,7 +202,7 @@ class Publish_FormController extends Controller_Action {
             //translate the group name and give a array to view
             $this->view->$name = $this->view->translate($name);
             $displayGroup = $form->getDisplayGroup($groupName);
-            if ($displayGroup != null) {
+            if (!is_null($displayGroup)) {
                 $groupFields = array();
                 $groupHiddens = array();
                 $groupButtons = array();
@@ -366,11 +366,11 @@ class Publish_FormController extends Controller_Action {
             if (substr($pressedButtonName, 0, 7) == "addMore") {
                 $fieldName = substr($pressedButtonName, 7);
                 $workflow = "add";
-                $log->debug("Fieldname for addMore => " . $fieldName);
+                //$log->debug("Fieldname for addMore => " . $fieldName);
             } else if (substr($pressedButtonName, 0, 10) == "deleteMore") {
                 $fieldName = substr($pressedButtonName, 10);
                 $workflow = "delete";
-                $log->debug("Fieldname for deleteMore => " . $fieldName);
+                //$log->debug("Fieldname for deleteMore => " . $fieldName);
             }
 
             $currentNumber = $defaultNS->additionalFields[$fieldName];
@@ -387,7 +387,7 @@ class Publish_FormController extends Controller_Action {
 
             //set the increased value for the pressed button and create a new form
             $defaultNS->additionalFields[$fieldName] = $currentNumber;
-            $log->debug("new current number: " . $currentNumber . " for field " . $fieldName);
+            //$log->debug("new current number: " . $currentNumber . " for field " . $fieldName);
         }
 
 

@@ -89,16 +89,13 @@ class Publish_Model_DisplayGroup {
 
     private function maxNumber() {
         $maxNumber = 1;
-        if (isset($this->additionalFields)) {
-            $this->log->debug("maxNumber(): additionalFields are set!");
-            if (array_key_exists($this->elementName, $this->additionalFields)) {
-                //$this->log->debug("DisplayGroup -> maxNumber(): key " . $this->elementName . " exists");
+        if (isset($this->additionalFields)) {            
+            if (array_key_exists($this->elementName, $this->additionalFields)) {                
                 $maxNumber = (int) $this->additionalFields[$this->elementName];
-                $this->log->debug("maxNumber(): key " . $this->elementName . " exists, maxnumberr = " . $maxNumber);
-                //$this->log->debug("initial max number: " . $maxNumber);
+                //$this->log->debug("maxNumber(): key " . $this->elementName . " exists, maxnumberr = " . $maxNumber);
             }
         }
-        $this->log->debug("DisplayGroup -> maxNumber()  = " . $maxNumber);
+        //$this->log->debug("DisplayGroup -> maxNumber()  = " . $maxNumber);
         return $maxNumber;
     }
 

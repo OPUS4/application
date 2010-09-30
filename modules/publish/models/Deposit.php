@@ -523,7 +523,7 @@ class Publish_Model_Deposit {
 
                 $this->log->debug("Role ID: " . $role->getId() . ", value: " . $dataValue);
 
-                if ($collArray !== null && count($collArray) <= 1) {
+                if (!is_null($collArray) && count($collArray) <= 1) {
 
                     $this->document->addCollection($collArray[0]);
 

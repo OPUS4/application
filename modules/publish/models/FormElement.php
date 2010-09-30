@@ -201,11 +201,11 @@ class Publish_Model_FormElement {
                 $element = $this->form->createElement($this->formElement, $this->elementName);
             } else {
                 $options = $this->validationObject->selectOptions($this->datatype);
-                if ($options === null) {
+                if (is_null($options)) {
                     //no options found in database / session / cache
                     $this->log->debug("No options found for element " . $this->elementName);
                     $element = $this->form->createElement('text', $this->elementName);
-                    $element->setDescription('hint_no_collection_' . $this->datatype);
+                    $element->setDescription('hint_no_selection_' . $this->datatype);
                     $element->setAttrib('disabled', true);
                     $this->required = false;
                 } else {
@@ -240,13 +240,14 @@ class Publish_Model_FormElement {
         else
             $name = $this->elementName;
 
-        if (count($options) == 1) {
-            //if theres only one entry, just show an text fields
-            $value = (array_keys($options));
-            $element = $this->form->createElement('text', $name);
-            $element->setValue($value[0]);
-            
-        } else {
+//        if (count($options) == 1) {
+//            //if theres only one entry, just show an text fields
+//            $value = (array_keys($options));
+//            $element = $this->form->createElement('text', $name);
+//            $element->setValue($value[0]);
+//            $element->setDescription('hint_one_entry');
+//
+//        } else {
             //at least 2 entry: show a select field
             $element = $this->form->createElement('select', $name);
 
@@ -275,7 +276,7 @@ class Publish_Model_FormElement {
                     $element->setMultiOptions(array_merge(array('' => 'choose_valid_thesispublisher'), $options));
                     break;
             }
-        }
+//        }
 
         return $element;
     }
