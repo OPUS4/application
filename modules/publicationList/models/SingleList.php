@@ -41,21 +41,22 @@ class PublicationList_Model_SingleList {
     public function __construct($year) {
         $this->year = $year;
     }
-    
-    public function setYear($year) {
-        $this->year = $year; 
-    }
-
-    public function getYear() {
-        return $this->year;
-    }
 
     public function addPublication($publication) {
         array_push($this->publicationList, $publication);
     }
 
+
+    public function getYear() {
+        return $this->year;
+    }
+
     public function getPublicationList() {
         return $this->publicationList;
+    }
+
+    public function setYear($year) {
+        $this->year = $year;
     }
 
 }

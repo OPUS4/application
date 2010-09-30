@@ -148,6 +148,7 @@ class PublicationList_IndexController extends Controller_Action {
 
         $publicationSite = new PublicationList_Model_PublicationSite();
         foreach ($this->resultList->getResults() as $resultHit) {
+            $publication = null;
              if (isset($config->publicationlist->external->baseurl)) {
                  if ($this->getRequest()->getParam("lang") === 'eng') {
                     $publication = new PublicationList_Model_Publication($resultHit->getId(), $config->publicationlist->external->baseurl->eng);
@@ -160,7 +161,7 @@ class PublicationList_IndexController extends Controller_Action {
                  $publication = new PublicationList_Model_Publication($resultHit->getId());
              }
             
-            $year = $publication->getDoc()->getPublishedYear();
+            $year = $publication->getPublishedYear();
             $inListe = 0;
             foreach ($publicationSite->getSingleList() as $sl) {
                 if ($sl->getYear() === $year) {
@@ -174,13 +175,14 @@ class PublicationList_IndexController extends Controller_Action {
                 $publicationSite->addSingleList($sl);
             }
 
-            $theme = $this->getRequest()->getParam("theme");
-            if ($theme === 'plain') {
-                $publication->setBibtexUrl($publication->getExternalBibtexUrl());
-                $publication->setRisUrl($publication->getExternalRisUrl());
+            if ($this->getRequest()->getParam("theme") === 'plain') {
+                $publication->setBibtexUrl($publication->getBibtexUrlExternal());
+                $publication->setRisUrl($publication->getRisUrlExternal());
 
-                foreach ($publication->getAuthors() as $a) {
-                    $a->setUrl($a->getExternalUrl());
+                if(!count($publication->getAuthors()) == 0) {
+                    foreach ($publication->getAuthors() as $a) {
+                        $a->setUrl($a->getUrlExternal());
+                    }
                 }
             }
         }

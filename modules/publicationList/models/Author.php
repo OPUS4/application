@@ -37,36 +37,40 @@ class PublicationList_Model_Author {
     private $firstName;
     private $lastName;
     private $url;
-    private $externalUrl;
+    private $urlExternal;
 
     public function __construct($firstName, $lastName) {
         $this->firstName = $firstName;
         $this->lastName = $lastName;
     }
 
-    public function getFirstname() {
-        return $this->firstName;
-    }
-
-
-    public function getLastname() {
-        return $this->lastName;
-    }
+    /* Setter-Methoden */
 
     public function setUrl($string) {
         $this->url = $string;
     }
 
+    public function setUrlExternal($string) {
+        $this->urlExternal = $string;
+    }
+
+    /* Getter-Methoden */
+
+    public function getFirstname() {
+        return $this->firstName;
+    }
+
+    public function getLastname() {
+        return $this->lastName;
+    }
+
+
     public function getUrl() {
         return $this->url;
     }
 
-    public function setExternalUrl($string) {
-        $this->externalUrl = $string; 
-    }
-
-    public function getExternalUrl() {
-        return $this->externalUrl;
+    public function getUrlExternal() {
+        return $this->urlExternal;
     }
 
 
