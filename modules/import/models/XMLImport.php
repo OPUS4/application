@@ -126,6 +126,9 @@ class Import_Model_XMLImport {
     public function import($document) {
         // Use the document as attribute
         $this->document = $document;
+
+       //  echo "BEFORE:".$this->completeXML->saveXML($this->document)."\n";
+
         $doc = null;
 
         $oldid = null;
@@ -135,29 +138,9 @@ class Import_Model_XMLImport {
         $ddcNotation = $document->getElementsByTagName('OldDdc')->Item(0);
         $ddcValue = null;
 
-        $ccsNotations = null;
-        $ccsNotations = $document->getElementsByTagName('OldCcs');
-        $ccsValues = array();
-
-        $pacsNotations = null;
-        $pacsNotations = $document->getElementsByTagName('OldPacs');
-        $pacsValues = array();
-
-        $jelNotations = null;
-        $jelNotations = $document->getElementsByTagName('OldJel');
-        $jelValues = array();
-
-        $mscNotations = null;
-        $mscNotations = $document->getElementsByTagName('OldMsc');
-        $mscValues = array();
-
-        $bkNotations = null;
-        $bkNotations = $document->getElementsByTagName('OldBk');
-        $bkValues = array();
-
-        //$apaNotations = null;
-        //$apaNotations = $document->getElementsByTagName('OldApa')->Item(0)->getAttribute('Value');
-        //$apaValues = null;
+        $oldclasses = array();
+        $oldclasses = $document->getElementsByTagName('OldClasses');
+        $newclasses = array();
 
         $licence = null;
         $licence = $document->getElementsByTagName('OldLicence');
@@ -187,35 +170,17 @@ class Import_Model_XMLImport {
             $ddcValue = $ddcNotation->getAttribute('Value');
             $this->document->removeChild($ddcNotation);
         }
-        if ($ccsNotations->length > 0) {
-            $ccsName = 'Computing Classification System';
-            $ccsValues = $this->map($ccsNotations, $ccsName);
-        }
-        if ($pacsNotations->length > 0) {
-            $pacsName = 'Physics and Astronomy Classification Scheme';
-            $pacsValues = $this->map($pacsNotations, $pacsName);
-        }
-        if ($jelNotations->length > 0) {
-            $jelName = 'Journal of Economic Literature (JEL) Classification System';
-            $jelValues = $this->map($jelNotations, $jelName);
-        }
-        if ($mscNotations->length > 0) {
-            $mscName = 'Mathematics Subject Classification';
-            $mscValues = $this->map($mscNotations, $mscName);
-        }
-        if ($bkNotations->length > 0) {
-            $bkName = 'Basisklassifikation (BK)';
-            $bkValues = $this->map($bkNotations, $bkName);
+
+        if (count($oldclasses) > 0) { // Array: (Key=>...,Value=>...)
+
+            while ($oldclasses->length >0) {
+                $oc=$oldclasses->Item(0);
+                $nc = array('Key'=>strtolower($oc->getAttribute('Key')), 'Value'=>$oc->getAttribute('Value'));
+                array_push($newclasses, $nc);
+                $this->document->removeChild($oc);
+            }
         }
 	
-        /*
-		if ($apaNotations->length > 0) {
-            $apaName = 'American Psychological Association (APA) Klassifikation';
-            $apaValues = $this->map($apaNotations, $apaName);
-        }
-         *
-         */
-	 
         if ($licence->length > 0) {
             foreach ($licence as $l) {
                 $mappingFile = '../workspace/tmp/license.map';
@@ -250,7 +215,7 @@ class Import_Model_XMLImport {
          *
          * Nur fÃ¼r Dissertationen oder habilitation
          * $doc->setThesisGrantor($dnbinstitute)
-	* für alle ZIB-Publikationen
+	* fï¿½r alle ZIB-Publikationen
          * $doc->SetThesisPublisher($dnbinstitute)
          */
 
@@ -287,7 +252,10 @@ class Import_Model_XMLImport {
             
             // Dummyobject, does not need any content, because only one node is transformed
 
-            $doc = Opus_Document::fromXml('<Opus>' . $this->completeXML->saveXML($this->document) . '</Opus>');                  
+            $doc = Opus_Document::fromXml('<Opus>' . $this->completeXML->saveXML($this->document) . '</Opus>');
+
+           // echo "BEFORE:".$this->completeXML->saveXML($this->document)."\n";
+
             if ($licenceValue !== null) {
                 /* TODO: Throw Exception if Licence not valid */
                 $doc->addLicence(new Opus_Licence($licenceValue));
@@ -321,44 +289,13 @@ class Import_Model_XMLImport {
                 $this->addDocumentToCollectionNumber($doc, 'ddc', $ddcValue);
             }
 
-            if (count($ccsValues) > 0) {
-                foreach ($ccsValues as $c) {
-                    $this->addDocumentToCollectionNumber($doc, 'ccs', $c);
+            if (count($newclasses) > 0) {
+                foreach ($newclasses as $c) {
+                    $this->addDocumentToCollectionNumber($doc, $c['Key'], $c['Value']);
                 }
             }
-
-            if (count($pacsValues) > 0) {
-                foreach ($pacsValues as $p) {
-                    $this->addDocumentToCollectionNumber($doc, 'pacs', $p);
-                }
-            }
-
-            if (count($mscValues) > 0) {
-                foreach ($mscValues as $m) {
-                    $this->addDocumentToCollectionNumber($doc, 'msc', $m);
-                }
-            }
-
-            if (count($jelValues) > 0) {
-                foreach ($jelValues as $j) {
-                    $this->addDocumentToCollectionNumber($doc, 'jel', $j);
-                }
-            }
-
-           if (count($bkValues) > 0) {
-                foreach ($bkValues as $b) {
-                    $this->addDocumentToCollectionNumber($doc, 'bk', $b);
-                }
-            }
-            /*
-            if (count(apaValues) > 0) {
-                foreach ($apaValues as $apaValue) {
-                    $this->addDocumentToCollection($doc, 'apa', $apaValue);
-                }
-            }
-             *
-             */
-            // store the document
+             // store the document
+            //echo "AFTER:".$this->completeXML->saveXML($this->document)."\n";
             $doc->store();
 
             $imported['result'] = 'success';
@@ -376,18 +313,8 @@ class Import_Model_XMLImport {
         unset($oldid );
         unset($ddcNotation);
         unset($ddcValue);
-        unset($ccsNotations);
-        unset($ccsValues);
-	unset($pacsNotations);
-	unset($pacsValues);
-	unset($jelNotations);
-	unset($jelValues);
-	unset($mscNotations);
-	unset($mscValues);
-	unset($bkNotations);
-	unset($bkValues);
-	//unset($apaNotations);
-	//unset($apaValues);
+        unset($oldclasses);
+        unset($newclasses);
 	unset($licence);
 	unset($licenceValue);
 	unset($institutes);
@@ -440,43 +367,6 @@ class Import_Model_XMLImport {
         return $lic[$oldId];
     }
 
-    /**
-     * maps a notation from Opus3 on Opus4 schema
-     *
-     * @param string $data notation
-     * @return integer ID in Opus4
-     */
-    protected function map($inputCollection, $name) {
-        $output = array();
-        $length = $inputCollection->length;
-        for ($c = 0; $c < $length; $c++) {
-            // The item index is 0 any time, because the item is removed after processing
-            $item = $inputCollection->Item(0);
-            $value = $item->getAttribute('Value');
-            $id = null;
-            if (array_key_exists($name, $this->collections) === true) {
-                try {
-                    $returnedId = Opus_Collection::fetchCollectionsByRoleNumber($this->collections[$name], $value);
-                    if (count($returnedId) > 0 && is_object($returnedId[0]) === true) {
-                        $id = $returnedId[0]->getId();
-                    } else {
-                        $id = null;
-                    }
-                } catch (Exception $e) {
-                    // TODO: Added Exception to see what we ignored...
-                    throw new Exception($e);
-                }
-                if ($id !== null) {
-                    $output[] = new Opus_Collection($id);
-                } else {
-                    echo "Number $value in $name not found - not imported for old OPUS-ID " . $this->document->getElementsByTagName('IdentifierOpus3')->Item(0)->getAttribute('Value') . "\n";
-                    fputs($this->_logfile, "Number $value in $name not found - not imported for old OPUS-ID " . $this->document->getElementsByTagName('IdentifierOpus3')->Item(0)->getAttribute('Value') . "\n");
-                }
-            }
-            $this->document->removeChild($item);
-        }
-        return $output;
-    }
 
     protected function addDocumentToCollectionNumber($document, $role_name, $number) {
         $role = Opus_CollectionRole::fetchByName($role_name);
@@ -484,8 +374,10 @@ class Import_Model_XMLImport {
 
         if (count($colls) > 0) {
             foreach ($colls as $c) {
+                /* TODO: DDC-Hack */
+                if (($role_name == 'ddc') and (count($c->getChildren()) > 0)) { continue; }
                 $document->addCollection($c);
-                //echo "Document added to $role_name Collection $number \n";
+                echo "Document added to $role_name Collection $number \n";
             }
         }
         else {
