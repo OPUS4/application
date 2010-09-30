@@ -202,16 +202,17 @@ class Publish_Model_Validation {
 
     private function _validateThesis($grantors = null) {
         $thesisGrantors = $this->getThesis($grantors);
-        if (!is_null($thesisGrantors))
+        if (!is_null($thesisGrantors)) {
             $thesises = array_keys($thesisGrantors);
-        if (is_null($thesises))
-            return null;
-        else {
-            $validator = new Zend_Validate_InArray($thesises);
-            $messages = array(
-                Zend_Validate_InArray::NOT_IN_ARRAY => 'publish_validation_error_inarray_notinarray');
-            $validator->setMessages($messages);
-            return $validator;
+            if (is_null($thesises))
+                return null;
+            else {
+                $validator = new Zend_Validate_InArray($thesises);
+                $messages = array(
+                    Zend_Validate_InArray::NOT_IN_ARRAY => 'publish_validation_error_inarray_notinarray');
+                $validator->setMessages($messages);
+                return $validator;
+            }
         }
     }
 
