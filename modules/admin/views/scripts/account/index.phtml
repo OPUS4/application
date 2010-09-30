@@ -49,7 +49,7 @@
         <td><a href="<?= $this->url(array('action' => 'show', 'id' => $id)) ?>"><?= $entry ?></a></td>
         <td>
             <a href="<?= $this->url(array('action' => 'edit', 'id' => $id)) ?>"><?= $this->translate('admin_account_action_edit')?></a>
-            <?PHP if (Zend_Auth::getInstance()->getIdentity() !== $entry) : ?>
+            <?PHP if ((Zend_Auth::getInstance()->getIdentity() !== $entry) && ($entry !== 'admin')) : ?>
                 <a href="<?= $this->url(array('action' => 'delete', 'id' => $id)) ?>"><?= $this->translate('admin_account_action_delete')?></a>
             <?PHP endif; ?>
         </td>

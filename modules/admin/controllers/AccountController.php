@@ -258,8 +258,8 @@ class Admin_AccountController extends Controller_Action {
             if (!empty($account)) {
                 $currentUser = Zend_Auth::getInstance()->getIdentity();
                 
-                // Check that user doesn't delete himself (especially the admin)
-                if ($currentUser === $account->getLogin()) {
+                // Check that user doesn't delete himself and protect admin account
+                if (($currentUser === $account->getLogin()) || ($account->getLogin() === 'admin')) {
                     // TODO show message
                 }
                 else {
