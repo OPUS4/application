@@ -59,27 +59,30 @@ if (isset($docId) === true) {
     try {
         $doc = new Opus_Document($docId);
     }
-    catch (Zend_Db_Table_Rowset_Exception $e) {
-    	if ($e->getMessage() === 'No row could be found at position 0') {
-            $req = Zend_Controller_Front::getInstance()->getRequest();
-            $logger->warn('Given docId ' . $docId . ' not found!');
-            Zend_Controller_Action_HelperBroker::getStaticHelper('redirector')->gotoUrl('/');
-    	}
+    catch (Opus_Model_NotFoundException $e) {
+        $req = Zend_Controller_Front::getInstance()->getRequest();
+        $logger->warn('Given docId ' . $docId . ' not found!');
+        Zend_Controller_Action_HelperBroker::getStaticHelper('redirector')->gotoUrl('/');
     }
+
     // check, if we are allowed to read the document metadata
     if (true !== Opus_Security_Realm::getInstance()->check('readMetadata', $doc->getServerState())) {
         // we are not allowed to read the metadata
         $identity = Zend_Auth::getInstance()->getIdentity();
-        if (is_null($translate) === false) {
-            if (empty($identity) === true) {
+
+        if (empty($identity) === true) {
+            if (is_null($translate) === false) {
                 $message = $translate->getAdapter()->translate('frontdoor_no_identity_error');
-            } else {
+            }
+            else {
+                $message = "You must be logged in to see the document metadata.";
+            }
+        }
+        else {
+            if (is_null($translate) === false) {
                 $message = $translate->getAdapter()->translate('frontdoor_wrong_identity_error');
             }
-        } else {
-            if (empty($identity) === true) {
-                $message = "You must be logged in to see the document metadata.";
-            } else {
+            else {
                 $message = "You need another identity to see the document metadata.";
             }
         }
@@ -91,7 +94,8 @@ if (isset($docId) === true) {
         Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger')->addMessage($message);
         Zend_Controller_Action_HelperBroker::getStaticHelper('redirector')->gotoSimple('index', 'auth', 'default', $params);
     }
-} else {
+}
+else {
     $req = Zend_Controller_Front::getInstance()->getRequest();
     $logger->warn('No docId found while calling module frontdoor, controller ' . $req->getParam('controller') . ', action ' . $req->getParam('action') . '!');
     Zend_Controller_Action_HelperBroker::getStaticHelper('redirector')->gotoUrl('/');
