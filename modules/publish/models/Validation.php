@@ -150,7 +150,7 @@ class Publish_Model_Validation {
 
     private function _validateCollection($role) {
         $validValues = $this->getCollection($role);
-        if ($validValues == null)
+        if (is_null($validValues))
             return null;
         else {
             $validator = new Zend_Validate_InArray($validValues);
@@ -171,7 +171,7 @@ class Publish_Model_Validation {
 
     private function _validateLicence() {
         $licences = array_keys($this->getLicences());
-        if ($licences == null)
+        if (is_null($licences))
             return null;
         else {
             $validator = new Zend_Validate_InArray($licences);
@@ -201,8 +201,10 @@ class Publish_Model_Validation {
     }
 
     private function _validateThesis($grantors = null) {
-        $thesises = array_keys($this->getThesis($grantors));
-        if ($thesises == null)
+        $thesisGrantors = $this->getThesis($grantors);
+        if (!is_null($thesisGrantors))
+            $thesises = array_keys($thesisGrantors);
+        if (is_null($thesises))
             return null;
         else {
             $validator = new Zend_Validate_InArray($thesises);
@@ -308,7 +310,8 @@ class Publish_Model_Validation {
 
     private function _thesisSelect($grantors = null) {
         $thesisList = $this->getThesis($grantors);
-        asort($thesisList);
+        if (!is_null($thesisList))
+            asort($thesisList);
         return $thesisList;
 
     }
@@ -323,7 +326,7 @@ class Publish_Model_Validation {
         if (empty($this->$oaiName)) {
             // $this->log->debug($oaiName . " has to be fetched from database!");
             $role = Opus_CollectionRole::fetchByName($oaiName);
-            if ($role === null)
+            if (is_null($role))
                 return null;
             else {
                 $colls = Opus_Collection::fetchCollectionsByRoleId($role->getId());
@@ -407,12 +410,12 @@ class Publish_Model_Validation {
         if ($grantors === true) {
             //get all grantors
             $thesises = Opus_DnbInstitute::getGrantors();
-            if ($thesises === null || empty ($thesises))
+            if (is_null($thesises) || empty ($thesises))
                 return null;
-        } else if ($grantors === null) {
+        } else if (is_null($grantors)) {
             //get all = publishers
             $thesises = Opus_DnbInstitute::getAll();
-            if ($thesises === null || empty ($thesises))
+            if (is_null($thesises) || empty ($thesises))
                 return null;
         }
 
