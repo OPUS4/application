@@ -900,7 +900,7 @@
     
     <tu tuid="PageNumber">
       <tuv xml:lang="en">
-        <seg>Pagenumber</seg>
+        <seg>Number of page</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Seitenzahl</seg>
@@ -1152,7 +1152,7 @@
         
 	<tu tuid="groupTitleSub">
       <tuv xml:lang="en">
-        <seg>Subtitle</seg>
+        <seg>Subtitle(s)</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Untertitel</seg>

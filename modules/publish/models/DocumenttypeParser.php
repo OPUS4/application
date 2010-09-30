@@ -40,6 +40,7 @@
 class Publish_Model_DocumenttypeParser {
 
     private $log;
+    private $session;
     public $dom;
     public $form; //PublishingSecond
     public $formElements = array(); // Array of FormElement
@@ -50,6 +51,7 @@ class Publish_Model_DocumenttypeParser {
     public function __construct(DOMDocument $dom, Publish_Form_PublishingSecond $form) {
         $this->form = $form;
         $this->log = Zend_Registry::get('Zend_Log');
+        $this->session = new Zend_Session_Namespace('Publish');
         if ($dom !== null)
             $this->dom = $dom;
         else
@@ -79,6 +81,8 @@ class Publish_Model_DocumenttypeParser {
             $this->_parseSubFields($field);
 
             $this->_parseDefaultEntry($field);
+
+            $this->_parseRequiredIfFulltext($field);
 
             $this->currentElement->setPostValues($this->postValues);
 
@@ -182,6 +186,15 @@ class Publish_Model_DocumenttypeParser {
                         $subfield->setDefaultValue($defaultArray);
                     }
                 }
+            }
+        }
+    }
+
+    private function _parseRequiredIfFulltext(DomElement $field) {
+        if ($field->hasChildNodes()) {
+            foreach ($field->getElementsByTagname('required-if-fulltext') as $fulltext) {
+                if ($this->session->fulltext === true)
+                    $this->currentElement->setRequired(true);
             }
         }
     }
