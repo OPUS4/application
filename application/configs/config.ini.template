@@ -100,6 +100,7 @@ mail.opus.name = ; Name of administrator
 ;PUBLICATIONLIST
 publicationlist.external.baseurl.de = ; (Base_Url for external Linking, german)
 publicationlist.external.baseurl.eng = ; (Base_Url for external Linking, english)
+publicationlist.doiresolver = ; (Url for Resolving Dois e.g. dx.doi.org )
 
 ; The following is needed even if sections are empty.
 [staging : production]
