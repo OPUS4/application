@@ -26,10 +26,11 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
- * @author      Ralf Claussnitzer <ralf.claussnitzer@slub-dresden.de>
  * @author      Pascal-Nicolas Becker <becker@zib.de>
- * @copyright   Copyright (c) 2009, OPUS 4 development team
+ * @author      Ralf Claussnitzer <ralf.claussnitzer@slub-dresden.de>
+ * @author      Thoralf Klein <thoralf.klein@zib.de>
+ * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
+ * @copyright   Copyright (c) 2009-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -45,10 +46,6 @@ defined('APPLICATION_PATH')
         || define('APPLICATION_PATH', realpath(dirname(dirname(__FILE__))));
 
 define('APPLICATION_ENV', 'testing');
-
-// Zend_Loader is'nt available yet. We have to do a require_once
-// in order to find the bootstrap class.
-//require_once 'Application/Bootstrap.php';
 
 /**
  * Bootstraps and runs a console application.
@@ -103,20 +100,10 @@ class OpusConsole {
     }
 }
 
-// Start console
-//$console = new OpusConsole;
-//$console->run(
-//    // application root directory
-//    dirname(dirname(__FILE__)),
-//    // config level
-//    Opus_Bootstrap_Base::CONFIG_TEST,
-//    // path to config file
-//    dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'config');
 
 require_once 'Zend/Application.php';
 
 // environment initializiation
-
 $application = new Zend_Application(
     APPLICATION_ENV,
     array(
@@ -130,6 +117,6 @@ $application = new Zend_Application(
 $bootstrap_ressources = array('Configuration', 'Logging', 'Database');
 $application->bootstrap($bootstrap_ressources);
 
+// Start console
 $console = new OpusConsole();
-
 $console->run();
