@@ -96,7 +96,7 @@ class PublicationList_Model_Publication {
 
         if (isset($config->publicationlist->doiresolver->url)) {
             if ($doc->getIdentifierDoi()) {
-                $this->identifierDoi = "http://".$config->publicationlist->doiresolver->url.$doc->getIdentifierDoi(0)->getValue();
+                $this->identifierDoi = "http://".$config->publicationlist->doiresolver->url."/".$doc->getIdentifierDoi(0)->getValue();
             }
         }
 
