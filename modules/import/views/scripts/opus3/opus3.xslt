@@ -73,7 +73,7 @@
 
 
     <xsl:template match="table_data[@name='opus']/row">
-        <xsl:element name="Opus_Document">            
+        <xsl:element name="Opus_Document">
             <xsl:variable name="OriginalID"><xsl:value-of select="field[@name='source_opus']" /></xsl:variable>
             <xsl:attribute name="Type">
                 <xsl:choose>
@@ -219,13 +219,8 @@
             <xsl:call-template name="getSeries"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
             
             <!-- Classifications and Subjects -->
-            <xsl:call-template name="getCcs"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
-            <xsl:call-template name="getPacs"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
-            <xsl:call-template name="getJel"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
-            <xsl:call-template name="getMsc"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
-            <xsl:call-template name="getApa"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
-            <xsl:call-template name="getBk"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
-            
+            <xsl:call-template name="getClasses"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
+
             <xsl:call-template name="getInstitute"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
             
             <xsl:call-template name="AddSubmitter">
@@ -349,73 +344,21 @@
             </xsl:element>
         </xsl:if>
     </xsl:template>
-    <!-- temporary CCS information -->
-    <xsl:template name="getCcs">
+
+    <!-- temporary classification -->
+     <xsl:template name="getClasses">
         <xsl:param name="source_id" required="yes" />
-        <xsl:for-each select="/mysqldump/database/table_data[@name='opus_ccs']/row[field[@name='source_opus']=$source_id]">
-            <xsl:element name="OldCcs">
+        <xsl:for-each select="/mysqldump/database/table_data[@name='opus_klassifikationen']/row[field[@name='source_opus']=$source_id]">
+            <xsl:element name="OldClasses">
+                <xsl:attribute name="Key">
+                    <xsl:value-of select="field[@name='name_kurz']" />
+                </xsl:attribute>
                 <xsl:attribute name="Value">
                     <xsl:value-of select="field[@name='class']" />
                 </xsl:attribute>
             </xsl:element>
         </xsl:for-each>
     </xsl:template>
-    <!-- temporary PACS information -->
-    <xsl:template name="getPacs">
-        <xsl:param name="source_id" required="yes" />
-        <xsl:for-each select="/mysqldump/database/table_data[@name='opus_pacs']/row[field[@name='source_opus']=$source_id]">
-            <xsl:element name="OldPacs">
-                <xsl:attribute name="Value">
-                    <xsl:value-of select="field[@name='class']" />
-                </xsl:attribute>
-            </xsl:element>
-        </xsl:for-each>
-    </xsl:template>
-    <!-- temporary JEL information -->
-    <xsl:template name="getJel">
-        <xsl:param name="source_id" required="yes" />
-        <xsl:for-each select="/mysqldump/database/table_data[@name='opus_jel']/row[field[@name='source_opus']=$source_id]">
-            <xsl:element name="OldJel">
-                <xsl:attribute name="Value">
-                    <xsl:value-of select="field[@name='class']" />
-                </xsl:attribute>
-            </xsl:element>
-        </xsl:for-each>
-    </xsl:template>
-    <!-- temporary MSC information -->
-    <xsl:template name="getMsc">
-        <xsl:param name="source_id" required="yes" />
-        <xsl:for-each select="/mysqldump/database/table_data[@name='opus_msc']/row[field[@name='source_opus']=$source_id]">
-            <xsl:element name="OldMsc">
-                <xsl:attribute name="Value">
-                    <xsl:value-of select="field[@name='class']" />
-                </xsl:attribute>
-            </xsl:element>
-        </xsl:for-each>
-    </xsl:template>
-    <!-- temporary APA information -->
-    <xsl:template name="getApa">
-        <xsl:param name="source_id" required="yes" />
-        <xsl:for-each select="/mysqldump/database/table_data[@name='opus_apa']/row[field[@name='source_opus']=$source_id]">
-            <xsl:element name="OldApa">
-                <xsl:attribute name="Value">
-                    <xsl:value-of select="field[@name='class']" />
-                </xsl:attribute>
-            </xsl:element>
-        </xsl:for-each>
-    </xsl:template>
-    <!-- temporary Bk information -->
-    <xsl:template name="getBk">
-        <xsl:param name="source_id" required="yes" />
-        <xsl:for-each select="/mysqldump/database/table_data[@name='opus_bk']/row[field[@name='source_opus']=$source_id]">
-            <xsl:element name="OldBk">
-                <xsl:attribute name="Value">
-                    <xsl:value-of select="field[@name='class']" />
-                </xsl:attribute>
-            </xsl:element>
-        </xsl:for-each>
-    </xsl:template>
-    
 
     <!-- Notes -->
     <xsl:template match="table_data[@name='opus']/row/field[@name='bem_intern']">
