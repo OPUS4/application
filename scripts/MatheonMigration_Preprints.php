@@ -407,7 +407,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
         $role->setVisibleFrontdoor(1);
         $role->store();
 
-        $root = $role->addRootCollection()->setVisible(1);
+        $root = $role->getRootCollection()->setVisible(1);
 
         // TODO: Write unit test.
         // $root->store();
