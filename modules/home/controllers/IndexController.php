@@ -33,7 +33,7 @@
  * @version     $Id$
  */
 
-class Home_IndexController extends Zend_Controller_Action {
+class Home_IndexController extends Controller_Action {
 
     /**
      * Redirector - defined for code completion
@@ -48,6 +48,7 @@ class Home_IndexController extends Zend_Controller_Action {
      * @return void
      */
     public function init() {
+        parent::init();
         $this->_redirector = $this->_helper->getHelper('Redirector');
     }
 
@@ -89,8 +90,7 @@ class Home_IndexController extends Zend_Controller_Action {
      *
      * @return void
      */
-    public function indexAction()
-    {
+    public function indexAction() {
         $searchForm = new Zend_Form;
         $searchForm->setAttrib('class', 'crud');
         $query = new Zend_Form_Element_Text('query');
@@ -136,14 +136,21 @@ class Home_IndexController extends Zend_Controller_Action {
 
         $content = $this->getRequest()->getParam('content');
         if (!is_null($content)) {
-            $translation = $this->view->translate('help_content_' . $content);
+            if ($content === 'contact') {
+                $this->_redirectToAndExit('contact');
+            }
+            if ($content === 'whatsthis') {
+                $this->_redirectToAndExit('about', '', null, null, array('content' => 'about_content_whatsthis'));
+            }
 
+            $translation = $this->view->translate('help_content_' . $content);
+            
             if (file_exists($this->view->getScriptPath('') . $translation)) {
-                $this->view->contenttitle = 'help_index_' . $content;
+                $this->view->contenttitle = 'help_title_' . $content;
                 $this->view->content = file_get_contents($this->view->getScriptPath('') . $translation);
             }
             elseif ($translation !== $content) {
-                $this->view->contenttitle = 'help_index_' . $content;
+                $this->view->contenttitle = 'help_title_' . $content;
                 $this->view->content = $translation;
             }
         }

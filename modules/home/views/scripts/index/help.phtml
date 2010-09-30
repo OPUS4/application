@@ -35,50 +35,45 @@
  */
 ?>
 
-<? $this->title = $this->translate('home_index_about_pagetitle') ?>
-<h1><?= $this->translate('home_index_help_title') ?></h1>
+<? $this->title = $this->translate('help_index_pagetitle') ?>
 
-<?php if (!isset($this->content)) : ?>
-    <p class="col3head"><?= $this->translate('help_index_general') ?></p>
-    <ul>
-    <li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'about_content_whatsthis'), null, true) ?>"><?= $this->translate('home_index_about_whatsthis') ?></a></li>
-    <li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_costs'), null, true) ?>"><?= $this->translate('help_index_costs') ?></a></li>
-    <li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'searchtipps'), null, true) ?>"><?= $this->translate('help_index_searchtipps') ?></a></li>
-    </ul>
+<h1><?= $this->translate('help_index_title') ?></h1>
 
-    <p class="col3head"><?= $this->translate('help_index_authorhelp') ?></p>
-    <ul>
-        <li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'diss'), null, true) ?>"><?= $this->translate('help_index_diss') ?></a></li>
-        <li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'contact'), null, true) ?>"><?= $this->translate('help_index_contact') ?></a></li>
-        <li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'free'), null, true) ?>"><?= $this->translate('help_index_free') ?></a></li>
-        <li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'publneeds'), null, true) ?>"><?= $this->translate('help_index_publneeds') ?></a></li>
-        <li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'right'), null, true) ?>"><?= $this->translate('help_index_right') ?></a></li>
-        <li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'format'), null, true) ?>"><?= $this->translate('help_index_format') ?></a></li>
-        <li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'requirements'), null, true) ?>"><?= $this->translate('help_index_requirements') ?></a></li>
-        <li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'write'), null, true) ?>"><?= $this->translate('help_index_write') ?></a></li>
-        <li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'publicationprocess'), null, true) ?>"><?= $this->translate('help_index_publicationprocess') ?></a></li>
-        <li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'preprint'), null, true) ?>"><?= $this->translate('help_index_preprint') ?></a></li>
-        <li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_workflowlibrary'), null, true) ?>"><?= $this->translate('help_index_workflowlibrary') ?></a></li>
-    </ul>
-
-    <p class="col3head"><?= $this->translate('help_index_formfields') ?></p>
-    <ul>
-    <li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'metadata'), null, true) ?>"><?= $this->translate('help_index_metadata') ?></a></li>
-    <li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'form_general'), null, true) ?>"><?= $this->translate('help_index_form_general') ?></a></li>
-    <li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'help_content_field_doctype'), null, true) ?>"><?= $this->translate('help_index_field_doctype') ?></a></li>
-    </ul>
-
-    <p class="col3head"><?= $this->translate('help_index_legal_title') ?></p>
-    <ul>
-    <li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'legal_parallel'), null, true) ?>"><?= $this->translate('help_index_legal_parallel') ?></a></li>
-    <li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'legal_oa'), null, true) ?>"><?= $this->translate('help_index_legal_oa') ?></a></li>
-    <li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller'=>'index', 'action'=>'help', 'content' => 'legal_license'), null, true) ?>"><?= $this->translate('help_index_legal_license') ?></a></li>
-    </ul>
-<?php else : ?>
+<?php if (isset($this->content)) : ?>
     <div>
         <h2><?= $this->translate($this->contenttitle) ?></h2>
         <div>
             <?= $this->content ?>
         </div>
+    </div>
+<?php else : ?>
+    <div>
+        <p class="col3head"><?= $this->translate('help_index_general') ?></p>
+        <ul>
+            <?php foreach (array('whatsthis', 'costs', 'searchtipps') as $content) : ?>
+                <li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller' => 'index', 'action' => 'help', 'content' => $content), null, true) ?>"><?= $this->translate('help_title_' . $content) ?></a></li>
+            <?php endforeach; ?>
+        </ul>
+
+        <p class="col3head"><?= $this->translate('help_index_authorhelp') ?></p>
+        <ul>
+            <?php foreach (array('diss', 'contact', 'free', 'publneeds', 'right', 'format', 'requirements', 'write', 'publicationprocess', 'preprint', 'workflowlibrary') as $content) : ?>
+                <li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller' => 'index', 'action' => 'help', 'content' => $content), null, true) ?>"><?= $this->translate('help_title_' . $content) ?></a></li>
+            <?php endforeach; ?>
+        </ul>        
+
+        <p class="col3head"><?= $this->translate('help_index_formfields') ?></p>
+        <ul>
+            <?php foreach (array('metadata', 'form_general', 'field_doctype') as $content) : ?>
+                <li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller' => 'index', 'action' => 'help', 'content' => $content), null, true) ?>"><?= $this->translate('help_title_' . $content) ?></a></li>
+            <?php endforeach; ?>
+        </ul>
+
+        <p class="col3head"><?= $this->translate('help_index_legal_title') ?></p>
+        <ul>
+            <?php foreach (array('legal_parallel', 'legal_oa', 'legal_license') as $content) : ?>
+                <li><a href="<?= $this->url(array('module' => $this->startmodule, 'controller' => 'index', 'action' => 'help', 'content' => $content), null, true) ?>"><?= $this->translate('help_title_' . $content) ?></a></li>
+            <?php endforeach; ?>
+        </ul>
     </div>
 <?php endif ?>
