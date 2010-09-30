@@ -48,33 +48,36 @@ class Publish_Model_DocumenttypeParser {
     private $postValues = array();
     private $additionalFields = array();
 
+    /**
+     * Constructor!!!
+     * Allocates the member variables form, log, session and dom.
+     * @param DOMDocument $dom
+     * @param Publish_Form_PublishingSecond $form
+     * @return false: Dom Object couldn't be accessed
+     */
     public function __construct(DOMDocument $dom, Publish_Form_PublishingSecond $form) {
         $this->form = $form;
         $this->log = Zend_Registry::get('Zend_Log');
         $this->session = new Zend_Session_Namespace('Publish');
-        if ($dom !== null)
+        if (!is_null($dom))
             $this->dom = $dom;
         else
             return false;
     }
 
-    public function setAdditionalFields($additionalFields) {
-        if (isset($additionalFields) && is_array($additionalFields))
-            $this->additionalFields = $additionalFields;
-    }
-
-    public function setPostValues($postValues) {
-        if (isset($postValues) && is_array($postValues))
-            $this->postValues = $postValues;
-    }
-
+    /**
+     * Parsing the XML Doumenttype for elements named "field"!
+     * Allocates the member variables currentElement, formElements.
+     * Parses "field" for existing attributes, subfields and subelements like "default" and "required-if-fulltext".
+     * At the end each found element is transformed to Zend_Element and stored in array.
+     */
     public function parse() {
         //parse root node for tags named 'field'
         foreach ($this->dom->getElementsByTagname('field') as $field) {
 
             $this->currentElement = new Publish_Model_FormElement($this->form);
 
-            $this->currentElement->setAdditionalFields($this->additionalFields);            
+            $this->currentElement->setAdditionalFields($this->additionalFields);
 
             $this->_parseAttributes($field);
 
@@ -99,6 +102,30 @@ class Publish_Model_DocumenttypeParser {
         }
     }
 
+    /**
+     * Allocates member variable additionalFields. Used for Publishing_Second.
+     * @param <Array> $additionalFields
+     */
+    public function setAdditionalFields($additionalFields) {
+        if (isset($additionalFields) && is_array($additionalFields))
+            $this->additionalFields = $additionalFields;
+    }
+
+    /**
+     * Allocates member variable postValues. Used for Publishing_Second.
+     * @param <Array> $postValues
+     */
+    public function setPostValues($postValues) {
+        if (isset($postValues) && is_array($postValues))
+            $this->postValues = $postValues;
+    }
+
+    /**
+     * Allocates member variables of currentElement with found attributes in XML Documenttype for element "field".
+     * Parses for top elements "field" and their atrributes.
+     * @param DomElement $field
+     * @return false: field has no attributes
+     */
     private function _parseAttributes(DomElement $field) {
 
         if ($field->hasAttributes()) {
@@ -113,16 +140,22 @@ class Publish_Model_DocumenttypeParser {
                 $this->currentElement->setRequired(true);
             else
                 $this->currentElement->setRequired(false);
-            
+
             $this->currentElement->setFormElement($formElement);
             $this->currentElement->setDatatype($datatype);
-            $this->currentElement->setMultiplicity($multiplicity);           
+            $this->currentElement->setMultiplicity($multiplicity);
         }
-        // No Attributes found
+        // No Attributes found!
         else
             return false;
     }
 
+    /**
+     * Allocates member variables of currentElement and its children.
+     * Parses for child nodes and there atrributes.
+     * @param DomElement $field
+     * @return false: no child nodes or no attributes have been found.
+     */
     private function _parseSubFields(DomElement $field) {
 
         if ($field->hasChildNodes()) {
@@ -138,7 +171,7 @@ class Publish_Model_DocumenttypeParser {
                     $subFormElement = $subField->getAttribute('formelement');
                     $subDatatype = $subField->getAttribute('datatype');
 
-                    $currentSubField->setElementName($this->currentElement->getElementName().$subElementName);
+                    $currentSubField->setElementName($this->currentElement->getElementName() . $subElementName);
                     if ($subRequired === 'yes')
                         $currentSubField->setRequired(true);
                     else
@@ -149,7 +182,8 @@ class Publish_Model_DocumenttypeParser {
                     $currentSubField->isSubField = true;
                 }
                 else
-                    throw new Publish_Model_OpusServerException("Error while parsing xml document type: Choosen document type has missing attributes in element 'subfield'!");
+                //No Attributes found!
+                    return false;
 
                 if ($subField->hasChildNodes()) {
                     $this->_parseDefaultEntry($subField, $currentSubField);
@@ -157,11 +191,18 @@ class Publish_Model_DocumenttypeParser {
                 $this->currentElement->addSubFormElement($currentSubField->transform());
             }
         }
-        //No Subfields found
+        //No Subfields found!
         else
             return false;
     }
 
+    /**
+     * Allocates member variables of currentElement or can be used for subfields.
+     * Parses for default values and the possibility of edit and make it public.
+     * @param DOMElement $field
+     * @param Publish_Model_FormElement $subfield
+     * @return false if there are no child nodes
+     */
     private function _parseDefaultEntry(DOMElement $field, Publish_Model_FormElement $subfield=null) {
         if ($field->hasChildNodes()) {
             foreach ($field->getElementsByTagname('default') as $default) {
@@ -182,18 +223,26 @@ class Publish_Model_DocumenttypeParser {
                     if (!isset($subfield)) {
                         $this->currentElement->setDefaultValue($defaultArray);
                         $this->log->debug("Parser -> parseDefault(): " . $value);
-                    } else {
+                    }
+                    else {
                         $subfield->setDefaultValue($defaultArray);
                     }
                 }
+                else
+                    return false;
             }
         }
     }
 
+    /**
+     * Allocates member variables currentElement.
+     * Parses for specific child node "required-if-fulltext" and sets the value "required" to true in case a fulltext has been uploaded.
+     * @param DomElement $field
+     */
     private function _parseRequiredIfFulltext(DomElement $field) {
         if ($field->hasChildNodes()) {
             foreach ($field->getElementsByTagname('required-if-fulltext') as $fulltext) {
-                if ($this->session->fulltext === true)
+                if ($this->session->fulltext === '1')
                     $this->currentElement->setRequired(true);
             }
         }
