@@ -46,10 +46,12 @@
 <table>
     <? $index = -1; foreach($this->roles as $id => $role) : ?>
     <tr class="<?= ($index++ % 2) ? 'odd' : 'even' ?>">
-        <td><a href="<?= $this->url(array('action' => 'show', 'id' => $id)) ?>"><?= $role ?></a></td>
+        <td><a href="<?= $this->url(array('action' => 'show', 'id' => $id)) ?>"><?= htmlspecialchars($role) ?></a></td>
         <td>
             <a href="<?= $this->url(array('action' => 'edit', 'id' => $id)) ?>"><?= $this->translate('admin_form_action_edit') ?></a>
-            <a href="<?= $this->url(array('action' => 'delete', 'id' => $id)) ?>"><?= $this->translate('admin_form_action_delete') ?></a>
+            <?PHP if (!in_array($role, $this->protectedRoles)) : ?>
+                <a href="<?= $this->url(array('action' => 'delete', 'id' => $id)) ?>"><?= $this->translate('admin_form_action_delete') ?></a>
+            <?PHP endif; ?>
         </td>
     </tr>
     <? endforeach; ?>

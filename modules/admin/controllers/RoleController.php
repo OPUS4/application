@@ -41,6 +41,8 @@
  */
 class Admin_RoleController extends Controller_Action {
 
+    private static $protectedRoles = array('guest', 'administrator');
+
     /**
      * Shows list of all roles.
      */
@@ -58,6 +60,8 @@ class Admin_RoleController extends Controller_Action {
                 $this->view->roles[$role->getId()] = $role->getDisplayName();
             }
         }
+
+        $this->view->protectedRoles = self::$protectedRoles;
     }
     
     /**
@@ -114,10 +118,11 @@ class Admin_RoleController extends Controller_Action {
                 $this->_updateRole(null, $name, $selectedPrivileges);
             }
             else {
-                $actionUrl = $this->view->url(array('action' => 'new'));
+                $actionUrl = $this->view->url(array('action' => 'create'));
                 $form->setAction($actionUrl);
                 $this->view->form = $form;
-                return $this->renderScript('role/new.phtml');
+                $this->_helper->viewRenderer->setRender('new');
+                // return $this->render('new');
             }
         }
 
@@ -173,8 +178,15 @@ class Admin_RoleController extends Controller_Action {
 
         if (!empty($roleId)) {
             $role = new Opus_Role($roleId);
-
-            $role->delete();
+            
+            $roleName = $role->getName();
+            
+            if (in_array($roleName, self::$protectedRoles)) {
+                // TODO deliver message to user
+            }
+            else {
+                $role->delete();
+            }
         }
 
         $this->_helper->redirector('index');
@@ -247,6 +259,14 @@ class Admin_RoleController extends Controller_Action {
     }
 
     protected function _isRoleNameExists($name) {
+        $role = Opus_Role::fetchByName($name);
+
+        if (empty($role)) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 
 }
