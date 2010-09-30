@@ -48,10 +48,10 @@ class Import_Model_CollectionsImport {
         $doclist = $data->getElementsByTagName('table_data');
 	foreach ($doclist as $document)	{
             if ($document->getAttribute('name') === 'collections') {
-                $facNumbers = $this->importCollectionsDirectly($document, $collRole);
+                $this->importCollectionsDirectly($document, $collRole);
             }
             if ($document->getAttribute('name') === 'schriftenreihen') {
-                $instNumbers = $this->importSeries($document, $seriesRole);
+                $this->importSeries($document, $seriesRole);
             }
 	}
     }
@@ -125,6 +125,7 @@ class Import_Model_CollectionsImport {
         // so lets increment all old IDs by 1
         $previousRight = null;
         $previousNode = array();
+        $new_collection = null;
 
         foreach ($sorted_collections as $row) {
 
