@@ -121,3 +121,22 @@ h1 span.info {
     font-size: large;
     margin-bottom: 0.5em;
 }
+
+.adminContainer span.label {
+    display: table-cell;
+    width: 15em;
+    padding: 2px;
+    padding-left: 0.5em;
+    border-bottom: 2px solid white;
+    background-color: lightgray;
+}
+
+.adminContainer span.value {
+    display: table-cell;
+    text-align: left;
+    padding: 2px;
+    padding-left: 0.5em;
+    border-bottom: 2px solid white;
+    background-color: #eeeeee;
+    width: 50em;
+}
