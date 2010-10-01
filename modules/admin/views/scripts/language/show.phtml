@@ -34,7 +34,12 @@
  * @version     $Id$
  */
 ?>
-<h1><a href="<?= $this->url(array('action' => 'index')) ?>"
-       >Languages</a> &gt; <?= $this->translate($this->title) ?></h1>
+<div class="adminContainer">
 
-<?= $this->showModel($this->entry); ?>
+    <div class="breadcrumbsContainer">
+        <?= $this->navigation()->breadcrumbs() ?>
+    </div>
+
+    <?= $this->showModel($this->entry); ?>
+
+</div>

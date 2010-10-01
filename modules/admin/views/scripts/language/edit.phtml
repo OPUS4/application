@@ -33,6 +33,12 @@
  * @version     $Id$
  */
 ?>
-<h1><?= $this->translate($this->title) ?></h1>
+<div class="adminContainer">
 
-<?= $this->form ?>
+    <div class="breadcrumbsContainer">
+        <?= $this->navigation()->breadcrumbs() ?>
+    </div>
+
+    <?= $this->form ?>
+
+</div>

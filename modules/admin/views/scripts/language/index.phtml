@@ -36,7 +36,9 @@
 
 <div class="adminContainer">
 
-<h1><?= $this->translate($this->title) ?></h1>
+    <div class="breadcrumbsContainer">
+        <?= $this->navigation()->breadcrumbs() ?>
+    </div>
 
 <table>
     <? foreach($this->entries as $id => $entry) : ?>
