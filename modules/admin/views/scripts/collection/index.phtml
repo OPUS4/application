@@ -34,7 +34,11 @@
  * @version     $Id$
  */
 ?>
-<h1>Opus Application - <?= $this->translate('admin_title_collections') ?></h1>
+<div class="adminContainer">
+
+    <div class="breadcrumbsContainer">
+        <?= $this->navigation()->breadcrumbs() ?>
+    </div>
 
 <ul>
 
@@ -81,3 +85,5 @@
      alt = "create new collection role"
      title = "<?= $this->translate('admin_collections_role_new') ?>" />
 </a>
+
+</div>
