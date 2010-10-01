@@ -91,9 +91,7 @@ $languageSelectors = $this->languageSelector();
                 <?php foreach ($this->container as $page) : ?>
                     <?php $pageIsActive = $page->isActive(false); ?>
                     <li id="<?= $page->getId() ?>" class="<?= ($pageIsActive ? 'active ' : '').$page->getClass()?>">
-                        <?php if(!$pageIsActive) : ?>
                         <a href="<?= $page->getHref() ?>" title="<?= $page->getTitle() ?>">
-                        <?php endif ?>
                             <?php if($pageIsActive) : ?>
                             <em>
                             <?php endif ?>
@@ -101,9 +99,7 @@ $languageSelectors = $this->languageSelector();
                             <?php if($pageIsActive) : ?>
                             </em>
                             <?php endif ?>
-                        <?php if(!$pageIsActive) : ?>
                         </a>
-                        <?php endif ?>
                     </li>
                 <?php endforeach ?>
                 </ul>
