@@ -168,9 +168,14 @@ class Solrsearch_IndexController extends Controller_Action {
     }
 
     private function performSearch() {
-        $this->log->debug('performing search');
-        $searcher = new Opus_SolrSearch_Searcher();
-        $this->resultList = $searcher->search($this->query);
+        $this->log->debug('performing search');        
+        try {
+            $searcher = new Opus_SolrSearch_Searcher();
+            $this->resultList = $searcher->search($this->query);
+        }
+        catch (Opus_SolrSearch_Exception $e) {
+            throw new Application_Exception('Solr search server is out of service.');
+        }
         $this->numOfHits = $this->resultList->getNumberOfHits();
         $this->log->debug("resultlist: $this->resultList");
     }
