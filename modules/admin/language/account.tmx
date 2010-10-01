@@ -115,6 +115,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_account_none_found">
+      <tuv xml:lang="en">
+        <seg>No arrounts are configured.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Keine Nutzerkonten vorhanden.</seg>
+      </tuv>
+    </tu>
+
   </body>
   
 </tmx>
