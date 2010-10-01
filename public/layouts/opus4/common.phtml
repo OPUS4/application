@@ -52,6 +52,8 @@ if ($this->jQueryEnabled()) {
          ->prependFile($this->baseUrl() . '/' . $config->javascript->jquery->path)
          ->appendFile($this->layoutPath() . '/js/searchutil.js');
 }
+
+$languageSelectors = $this->languageSelector();
 ?>
 
 <?= $this->doctype() ?>
@@ -68,7 +70,13 @@ if ($this->jQueryEnabled()) {
     <body>
         <div id="top-header">
             <div class="wrapper">
-                <ul id="lang-switch" class="nav" title="Choose your language"><?= $this->languageSelector() ?></ul>
+                <?php if(!is_null($languageSelectors)) : ?>
+                    <ul id="lang-switch" class="nav" title="Choose your language">
+                        <?php foreach ($languageSelectors as $name => $url) : ?>
+                            <li><a href="<?= $url ?>" title="<?= $name ?>"><?= $name ?></a></li>
+                        <?php endforeach ?>
+                    </ul>
+                <?php endif ?>
                 <ul id="login-bar" class="nav"><?= $this->loginBar() ?></ul>
             </div>
         </div>
@@ -109,11 +117,10 @@ if ($this->jQueryEnabled()) {
 
         <div id="page-footer">
             <div class="wrapper">
-               <ul id="secondary-nav" class="nav">
-                 <li class="first"><a href="<?= $this->url(array('module'=>'home','controller'=>'index','action'=>'about'),null,true) ?>"><?= $this->translate('about_menu_label') ?></a></li>
-                 <li><a href="<?= $this->url(array('module'=>'home','controller'=>'index','action'=>'about','content'=>'about_content_impress'),null,true) ?>"><?= $this->translate('credits_label') ?></a></li>
-                 <li class="last"><a href="<?= $this->url(array('module'=>'home','controller'=>'index','action'=>'contact'),null,true) ?>"><?= $this->translate('home_index_contact_actionname'); ?></a></li>
-               </ul>
+                <ul id="secondary-nav" class="nav">
+                    <li class="first"><a href="<?= $this->url(array('module' => 'home', 'controller' => 'index', 'action' => 'about','content'=>'about_content_impress'),null,true) ?>"><?= $this->translate('credits_label') ?></a></li>
+                    <li class="last"><a href="<?= $this->url(array('module' => 'home', 'controller' => 'index', 'action' => 'contact'),null,true) ?>"><?= $this->translate('home_index_contact_actionname'); ?></a></li>
+                </ul>
                 <p id="copyright">&copy; <abbr xml:lang="de" title="Kooperativer Bibliotheksverbund Berlin-Brandenburg" lang="de">KOBV</abbr> 2010</p>
             </div>
         </div>
@@ -131,7 +138,6 @@ if ($this->jQueryEnabled()) {
             if ($dbprofiler->getEnabled() === true) :
         ?>
         <div class="debug dbprofiler">
-            <hr/>
             <h2>Profiling information (execution time <?= microtime(true) - $GLOBALS['start_mtime'] ?>)</h2>
             <b>Total number of queries: </b><?= $dbprofiler->getTotalNumQueries() ?><br />
             <b>Total query time (s): </b><?= $dbprofiler->getTotalElapsedSecs() ?><br />

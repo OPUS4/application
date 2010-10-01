@@ -28,6 +28,7 @@
  * @category   Application
  * @package    View
  * @author     Felix Ostrowski <ostrowski@hbz-nrw.de>
+ * @author     Sascha Szott <szott@zib.de>
  * @copyright  Copyright (c) 2009, OPUS 4 development team
  * @license    http://www.gnu.org/licenses/gpl.html General Public License
  * @version    $Id$
@@ -36,10 +37,8 @@
 /**
  * Builds the language selection form.
  *
- * @category    Application
- * @package     View
  */
-class View_Helper_LanguageSelector {
+class View_Helper_LanguageSelector extends Zend_View_Helper_Abstract {
 
     /**
      * Holds the current view object.
@@ -64,40 +63,33 @@ class View_Helper_LanguageSelector {
      * @return Opus_View_Helper_LanguageSelector
      */
     public function languageSelector() {
-        return $this;
-    }
-
-    /**
-     * Return view helper output.
-     *
-     * @return string
-     */
-    public function __toString() {
-        if ($this->_view->languageSelectorDisabled === true) return '';
-
-        $translations = Zend_Registry::get('Zend_Translate')->getList();
-
-        $locale = new Zend_Locale();
-
-        $links = array();
-        $currentLocale = Zend_Registry::get('Zend_Translate')->getLocale();
-        $i = 0;
-        $count = count($translations);
-        foreach ($translations as $trans) {
-            if ($trans === $currentLocale) {
-                $links[] = '<li class="active'.($i === 0 ? ' first' : '').($i === ($count - 1) ? ' last' : '').'"><em>'.$locale->getTranslation($trans, 'language', $trans).'</em></li>';
-            } else {
-                $link = '<li class="'.($i === 0 ? 'first' : '').($i === ($count - 1) ? 'last' : '').'"><a href="';
-                $link .= $this->_view->url(array(
-                        'action' => 'language',
-                        'controller' => 'index',
-                      'module' => 'home',
-                        'language' => $trans));
-                $link .= '"><span>' . $locale->getTranslation($trans, 'language', $trans) . '</span></a></li>';
-                $links[] = $link;
-            }
-            $i++;
+        if (isset($this->_view->languageSelectorDisabled) && $this->_view->languageSelectorDisabled === true) {
+            return null;
         }
-        return implode(' ', $links);
+        $returnParams = Zend_Controller_Action_HelperBroker::getStaticHelper('ReturnParams');
+        
+        $translations = Zend_Registry::get('Zend_Translate')->getList();
+        $locale = new Zend_Locale();
+        $currentLocale = Zend_Registry::get('Zend_Translate')->getLocale();
+
+        $result = array();
+        foreach ($translations as $translations) {
+            if ($translations !== $currentLocale) {
+                $log = Zend_Registry::get('Zend_Log');
+                $log->debug("foo");
+
+                $languageName = $locale->getTranslation($translations, 'language', $translations);
+                $log->debug("languageName : $languageName");
+
+                $languageUrl = $this->_view->url(array_merge(array(
+                    'action' => 'language',
+                    'controller' => 'index',
+                    'module' => 'home',
+                    'language' => $translations), $returnParams->getReturnParameters()), null, true);
+                $log->debug("languageUrl : $languageUrl");
+                $result[$languageName] = $languageUrl;
+            }
+        }
+        return $result;
     }
 }
