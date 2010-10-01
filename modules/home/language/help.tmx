@@ -64,7 +64,14 @@
             </tuv>
         </tu>
 
-
+		<tu tuid="help_index_test">
+            <tuv xml:lang="en">
+                <seg>Test</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Test</seg>
+            </tuv>
+        </tu>
 
         <!--
 
@@ -411,6 +418,23 @@
             </tuv>
             <tuv xml:lang="de">
                 <seg>legal_license.de.txt</seg>
+            </tuv>
+        </tu>
+		
+		<tu tuid="help_title_test">
+            <tuv xml:lang="en">
+                <seg>This is a Test</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Das ist ein Test</seg>
+            </tuv>
+        </tu>
+        <tu tuid="help_content_test">
+            <tuv xml:lang="en">
+                <seg>This is a test content.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Dies ist ein Testinhalt.</seg>
             </tuv>
         </tu>
     </body>
