@@ -31,37 +31,63 @@
  * @version     $Id$
  */
 ?>
-<h1><?php echo $this->title ?></h1>
-<h2>
-<?= $this->translate('Total_Number_Documents')?>
-: <?= $this->totalNumber?>
-</h2>
-<h2>
-<?= $this->translate('Month_Overview_Title')?>
-</h2>
-<table>
-<tr><th><?= $this->translate('Month_Title');?></th><th><?= $this->translate('Count_Title');?></th></tr>
-<?php foreach ($this->monthStat as $month => $count):?>
-<?= "<tr><td>".$this->translate('Month_'.$month)."</td><td>$count</td></tr>"?>
-<?php endforeach;?>
-</table>
-<br>
-<h2>
-<?= $this->translate('Type_Overview_Title')?>
-</h2>
-<table>
-<tr><th><?= $this->translate('Doc_Type');?></th><th><?= $this->translate('Count_Title');?></th></tr>
-<?php foreach ($this->typeStat as $type => $count):?>
-<?= "<tr><td>".$this->translate($type)."</td><td>$count</td></tr>"?>
-<?php endforeach;?>
-</table>
-<br>
-<?= "<h2>".$this->translate('Institute_Overview_Title')."</h2>"?>
-</h2>
-<table>
-<tr><th><?= $this->translate('Institute_Title');?></th><th><?= $this->translate('Count_Title');?></th></tr>
-<?php foreach ($this->instStat as $instName => $count):?>
-<?= "<tr><td>".$instName."</td><td>$count</td></tr>"?>
-<?php endforeach;?>
-</table>
-<?php echo $this->form?>
+<div class="adminContainer">
+
+    <div class="breadcrumbsContainer">
+        <?= $this->navigation()->breadcrumbs() ?>
+    </div>
+
+    <h2><?= $this->translate('Total_Number_Documents') ?> : <?= $this->totalNumber ?></h2>
+
+    <h2><?= $this->translate('Month_Overview_Title') ?></h2>
+
+    <table>
+        <tr>
+            <th><?= $this->translate('Month_Title') ?></th>
+            <th><?= $this->translate('Count_Title') ?></th>
+        </tr>
+        <?php foreach ($this->monthStat as $month => $count) : ?>
+        <tr>
+            <td><?= $this->translate('Month_'.$month) ?></td>
+            <td><?= $count ?></td>
+        </tr>
+        <?php endforeach; ?>
+    </table>
+
+    <br>
+
+    <h2><?= $this->translate('Type_Overview_Title')?></h2>
+
+    <table>
+        <tr>
+            <th><?= $this->translate('Doc_Type');?></th>
+            <th><?= $this->translate('Count_Title');?></th>
+        </tr>
+        <?php foreach ($this->typeStat as $type => $count) : ?>
+        <tr>
+            <td><?= $this->translate($type) ?></td>
+            <td><?= $count ?></td>
+        </tr>
+        <?php endforeach;?>
+    </table>
+
+    <br>
+
+    <h2><?= $this->translate('Institute_Overview_Title') ?></h2>
+
+    <table>
+        <tr>
+            <th><?= $this->translate('Institute_Title') ?></th>
+            <th><?= $this->translate('Count_Title') ?></th>
+        </tr>
+        <?php foreach ($this->instStat as $instName => $count) : ?>
+        <tr>
+            <td><?= htmlspecialchars($instName) ?></td>
+            <td><?= $count ?></td>
+        </tr>
+        <?php endforeach; ?>
+    </table>
+
+    <?= $this->form ?>
+
+</div>

@@ -31,6 +31,12 @@
  * @version     $Id$
  */
 ?>
-<h1><?php echo $this->title ?></h1>
+<div class="adminContainer">
 
-<?php echo $this->form ?>
+    <div class="breadcrumbsContainer">
+        <?= $this->navigation()->breadcrumbs() ?>
+    </div>
+
+    <?= $this->form ?>
+
+</div>
