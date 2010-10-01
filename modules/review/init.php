@@ -64,4 +64,6 @@ if (true !== Opus_Security_Realm::getInstance()->check('clearance')) {
     Zend_Controller_Action_HelperBroker::getStaticHelper('redirector')->gotoSimple('index', 'auth', 'default', $params);
 }
 
+Zend_Controller_Action_HelperBroker::getStaticHelper('MainMenu')->setActive('review');
+
 ?>
