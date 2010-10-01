@@ -64,8 +64,10 @@ class Admin_Form_Role extends Zend_Form {
      * @param int $id
      */
     public function __construct($id = null) {
+        $section = empty($id) ? 'new' : 'edit';
+
         $config = new Zend_Config_Ini(APPLICATION_PATH .
-                '/modules/admin/forms/role.ini', 'production');
+                '/modules/admin/forms/role.ini', $section);
 
         parent::__construct($config->form->role);
 
