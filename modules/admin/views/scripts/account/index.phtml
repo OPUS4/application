@@ -35,7 +35,7 @@
 ?>
 <div class="adminContainer">
 
-<div>
+<div class="breadcrumbsContainer">
 <?= $this->navigation()->breadcrumbs() ?>
 </div>
 
@@ -46,7 +46,7 @@
 <table>
 <? $index = -1; foreach($this->accounts as $id => $entry) : ?>
     <tr class="<?= ($index++ % 2) ? 'odd' : 'even' ?>">
-        <td><a href="<?= $this->url(array('action' => 'show', 'id' => $id)) ?>"><?= $entry ?></a></td>
+        <td><a href="<?= $this->url(array('action' => 'show', 'id' => $id)) ?>"><?= htmlspecialchars($entry) ?></a></td>
         <td>
             <a href="<?= $this->url(array('action' => 'edit', 'id' => $id)) ?>"><?= $this->translate('admin_account_action_edit')?></a>
             <?PHP if ((Zend_Auth::getInstance()->getIdentity() !== $entry) && ($entry !== 'admin')) : ?>
@@ -56,4 +56,5 @@
     </tr>
 <? endforeach; ?>
 </table>
+    
 </div>

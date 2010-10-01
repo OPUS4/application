@@ -35,13 +35,17 @@
 
 ?>
 
-<div>
+<div class="adminContainer">
+
+<div class="breadcrumbsContainer">
 <?= $this->navigation()->breadcrumbs() ?>
 </div>
 
-<h2>Accounts (none found)</h2>
+<h2><?= $this->translate('admin_account_none_found') ?></h2>
 
 <div>
 <a href="<?= $this->url(array('action' => 'new')) ?>"><?= $this->translate('admin_account_action_new')?></a>
+</div>
+
 </div>
 
