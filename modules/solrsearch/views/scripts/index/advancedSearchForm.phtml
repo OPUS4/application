@@ -91,7 +91,11 @@ if ($this->jQueryEnabled()) {
             <?php endforeach ?>
         </table>
     </fieldset>
-    <input type="submit" value="<?= $this->translate('advanced_search_form_search_action') ?>" />
+    <div id="edit-submit-advanced-search-wrapper" class="form-item">
+        <span class="form-submit-wrapper">
+            <input type="submit" id="edit-submit-advanced-search" class="form-submit" value="<?= $this->translate('advanced_search_form_search_action') ?>" />
+        </span>
+    </div>
     <input type="hidden" name="searchtype" value="advanced" />
     <input type="hidden" name="start" value="0" />
     <input type="hidden" name="sortfield" value="score" />
@@ -99,5 +103,9 @@ if ($this->jQueryEnabled()) {
 </form>
 
 <form id="reset-form" <?= $this->jQueryEnabled() ? 'onSubmit="return resetAdvancedSearchForm();"' : '' ?> action="<?= $this->url(array('module'=>'solrsearch','controller'=>'index','action'=>'advanced'), null, true) ?>">
-    <input id="advanced-search-reset-button" id="form-reset" type="submit" value="<?= $this->translate('advanced_search_form_reset_action') ?>" />
+    <div id="edit-reset-advanced-search-wrapper" class="form-item">
+        <span class="form-submit-wrapper">
+            <input id="edit-reset-advanced-search" class="form-submit" type="submit" value="<?= $this->translate('advanced_search_form_reset_action') ?>" />
+        </span>
+    </div>
 </form>
