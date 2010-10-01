@@ -36,7 +36,12 @@
 
 <div class="adminContainer">
 
-<h1><?= $this->translate($this->title) ?></h1>
+<div class="breadcrumbsContainer">
+    <?= $this->navigation()->breadcrumbs() ?>
+</div>
+
+<a href="<?= $this->url(array('action' => 'new'))?>"><?= $this->translate('ButtonNew') ?></a>
+
 <table>
     <? foreach($this->entries as $id => $entry) : ?>
     <tr>
@@ -45,13 +50,11 @@
             <form action="<?= $this->url(array('action' => 'dispatch')) ?>" class="crud" method="post">
                 <input type='submit' name="actionEdit" value='<?= $this->translate('ButtonEdit')?>' class="crud">
                 <input type="submit" name="actionDelete" value='<?= $this->translate('ButtonDelete') ?>' />
-                <input type="hidden" name="id" value="<?=$id?>" />
+                <input type="hidden" name="id" value="<?= $id ?>" />
             </form>
         </td>
     </tr>
     <? endforeach; ?>
 </table>
-
-<a href="<?= $this->url(array('action' => 'new'))?>"><?= $this->translate('ButtonNew') ?></a>
 
 </div>
