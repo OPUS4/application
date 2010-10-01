@@ -34,12 +34,26 @@
                                     <action>new</action>
                                 </new>
 
+                                <create>
+                                    <label>admin_account_new</label>
+                                    <module>admin</module>
+                                    <controller>account</controller>
+                                    <action>create</action>
+                                </create>
+
                                 <edit>
                                     <label>admin_account_edit</label>
                                     <module>admin</module>
                                     <controller>account</controller>
                                     <action>edit</action>
                                 </edit>
+
+                                <update>
+                                    <label>admin_account_edit</label>
+                                    <module>admin</module>
+                                    <controller>account</controller>
+                                    <action>update</action>
+                                </update>
                             </pages>
                         </accounts>
 
@@ -63,12 +77,26 @@
                                     <action>new</action>
                                 </new>
 
+                                <create>
+                                    <label>admin_iprange_new</label>
+                                    <module>admin</module>
+                                    <controller>iprange</controller>
+                                    <action>create</action>
+                                </create>
+
                                 <edit>
                                     <label>admin_iprange_edit</label>
                                     <module>admin</module>
                                     <controller>iprange</controller>
                                     <action>edit</action>
                                 </edit>
+
+                                <update>
+                                    <label>admin_iprange_edit</label>
+                                    <module>admin</module>
+                                    <controller>iprange</controller>
+                                    <action>update</action>
+                                </update>
                             </pages>
                         </ipranges>
 
@@ -105,6 +133,13 @@
                                     <controller>role</controller>
                                     <action>edit</action>
                                 </edit>
+
+                                <update>
+                                    <label>admin_role_edit</label>
+                                    <module>admin</module>
+                                    <controller>role</controller>
+                                    <action>update</action>
+                                </update>
                             </pages>
                         </roles>
                     </pages>
@@ -122,6 +157,42 @@
                     <module>admin</module>
                     <controller>licence</controller>
                     <action>index</action>
+                    <pages>
+                        <show>
+                            <label>admin_licence_show</label>
+                            <module>admin</module>
+                            <controller>licence</controller>
+                            <action>show</action>
+                        </show>
+
+                        <new>
+                            <label>admin_licence_new</label>
+                            <module>admin</module>
+                            <controller>licence</controller>
+                            <action>new</action>
+                        </new>
+
+                        <create>
+                            <label>admin_licence_new</label>
+                            <module>admin</module>
+                            <controller>licence</controller>
+                            <action>create</action>
+                        </create>
+
+                        <edit>
+                            <label>admin_licence_edit</label>
+                            <module>admin</module>
+                            <controller>licence</controller>
+                            <action>edit</action>
+                        </edit>
+
+                        <update>
+                            <label>admin_licence_edit</label>
+                            <module>admin</module>
+                            <controller>licence</controller>
+                            <action>update</action>
+                        </update>
+                    </pages>
                 </licence>
 
                 <collections>
@@ -136,6 +207,42 @@
                     <module>admin</module>
                     <controller>language</controller>
                     <action>index</action>
+                    <pages>
+                        <show>
+                            <label>admin_language_show</label>
+                            <module>admin</module>
+                            <controller>language</controller>
+                            <action>show</action>
+                        </show>
+
+                        <new>
+                            <label>admin_language_new</label>
+                            <module>admin</module>
+                            <controller>language</controller>
+                            <action>new</action>
+                        </new>
+
+                        <create>
+                            <label>admin_language_new</label>
+                            <module>admin</module>
+                            <controller>language</controller>
+                            <action>create</action>
+                        </create>
+
+                        <edit>
+                            <label>admin_language_edit</label>
+                            <module>admin</module>
+                            <controller>language</controller>
+                            <action>edit</action>
+                        </edit>
+
+                        <update>
+                            <label>admin_language_edit</label>
+                            <module>admin</module>
+                            <controller>language</controller>
+                            <action>update</action>
+                        </update>
+                    </pages>
                 </languages>
 
                 <statistic>
@@ -143,6 +250,14 @@
                     <module>admin</module>
                     <controller>statistic</controller>
                     <action>index</action>
+                    <pages>
+                        <show>
+                            <label>admin_statistic_show</label>
+                            <module>admin</module>
+                            <controller>statistic</controller>
+                            <action>show</action>
+                        </show>
+                    </pages>
                 </statistic>
 
                 <oailink>
@@ -171,6 +286,13 @@
                             <controller>dnbinstitute</controller>
                             <action>new</action>
                         </new>
+
+                        <create>
+                            <label>admin_dnbinstitute_new</label>
+                            <module>admin</module>
+                            <controller>dnbinstitute</controller>
+                            <action>create</action>
+                        </create>
 
                         <edit>
                             <label>admin_dnbinstitute_edit</label>
