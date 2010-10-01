@@ -35,5 +35,5 @@
 ?>
 <div class="<?= $this->divclass?>">
     <span class="<?= $this->labelclass ?>"><?= $this->prefix . $this->translate($this->label) ?></span>
-    <span class="<?= $this->valueclass ?>"><?= $this->value ?></span>
+    <span class="<?= $this->valueclass ?>"><?= htmlspecialchars($this->value) ?></span>
 </div>
