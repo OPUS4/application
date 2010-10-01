@@ -101,7 +101,7 @@ class Publish_Form_PublishingFirst extends Zend_Form {
 
             return array($doctypes, $doctypesHidden);
         }
-        else {
+        else {            
             $doctypes = $this->createElement('select', 'documentType');
             $doctypes->setLabel('selecttype')
                     ->setMultiOptions(array_merge(array('' => 'choose_valid_doctype'), $listOptions))

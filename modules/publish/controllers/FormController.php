@@ -39,10 +39,17 @@
  * @package     Module_Publish
  */
 class Publish_FormController extends Controller_Action {
+    CONST FIRST = "Firstname";
+    CONST COUNTER = "1";
+    CONST GROUP = "group";
+    CONST EXPERT = "X";
+    CONST LABEL = "_label";
+    CONST ERROR = "Error";
 
     public function uploadAction() {
         $log = Zend_Registry::get('Zend_Log');
         $defaultNS = new Zend_Session_Namespace('Publish');
+        $log->debug("uploadActions begins...");
 
         $this->view->languageSelectorDisabled = true;
 
@@ -55,9 +62,11 @@ class Publish_FormController extends Controller_Action {
                 //error case, and redirect to form, show errors
                 $this->view->form = $indexForm;
                 return $this->renderScript('index/index.phtml');
-            } else {
+            }
+            else {
+                $log->debug("build publishing_second");
 
-                $this->_setDocumentParameters($data, true);
+                $this->_setDocumentParameters($data);
 
                 $this->view->title = $this->view->translate('publish_controller_index');
                 $this->view->subtitle = $this->view->translate($defaultNS->documentType);
@@ -78,7 +87,8 @@ class Publish_FormController extends Controller_Action {
                 $this->view->action_url = $action_url;
                 $this->view->form = $publishForm;
             }
-        } else {            
+        }
+        else {
             return $this->_redirectTo('index', '', 'index');
         }
     }
@@ -123,7 +133,8 @@ class Publish_FormController extends Controller_Action {
 
                 //call method to add or delete buttons
                 return $this->_getExtendedForm($form, $postData, $reload);
-            } else {
+            }
+            else {
                 // SEND was pressed => check the form
 
                 $this->view->title = $this->view->translate('publish_controller_index');
@@ -138,7 +149,8 @@ class Publish_FormController extends Controller_Action {
                     $this->_setViewVariables($form);
 
                     return $this->render($defaultNS->documentType);
-                } else {
+                }
+                else {
                     // Form variables all VALID
                     $log->debug("Variables are valid!");
 
@@ -155,14 +167,11 @@ class Publish_FormController extends Controller_Action {
 
                     $depositForm->prepareCheck();
 
-//                    $docNS = new Zend_Session_Namespace('Document');
-//                    foreach ($depositForm->getValues() AS $key => $value)
-//                            $docNS->documentData[$key] = $value;
-
                     $this->view->form = $depositForm;
                 }
             }
-        } else {
+        }
+        else {
             return $this->_redirectTo('upload');
         }
     }
@@ -172,75 +181,96 @@ class Publish_FormController extends Controller_Action {
      * @param <Zend_Form> $form
      */
     private function _setViewVariables($form) {
-        //todo: refactor me!!!
         $log = Zend_Registry::get('Zend_Log');
-
         $errors = $form->getMessages();
 
         //group fields and single fields for view placeholders
         foreach ($form->getElements() AS $currentElement => $value) {
-            //first element names have to loose special strings for finding groups
-            $pos = stripos($currentElement, "FirstName");
-            if ($pos != false) {
-                $name = substr($currentElement, 0, $pos);
-            } else {
-                $pos = stripos($currentElement, "1");
-                if ($pos != false)
-                    $name = substr($currentElement, 0, $pos);
-                else
-                    $name=$currentElement; //"normal" element name without changes
+            //element names have to loose special strings for finding groups
+            $name = $this->_getRawElementName($currentElement);
 
+            //build group name
+            $groupName = self::GROUP . $name;
 
-            }
-
-            $groupName = 'group' . $name;
-            //translate the group name and give a array to view
             $this->view->$name = $this->view->translate($name);
+
+            //get the display group for the current element and build the complete group
             $displayGroup = $form->getDisplayGroup($groupName);
             if (!is_null($displayGroup)) {
-                $groupFields = array();
-                $groupHiddens = array();
-                $groupButtons = array();
-                foreach ($displayGroup->getElements() AS $groupElement) {
-                    //$log->debug(" Element: " . $groupElement);
-                    $elementAttributes = $form->getElementAttributes($groupElement->getName()); //array
-                    if ($groupElement->getType() === 'Zend_Form_Element_Submit') {
-                        //buttons
-                        $groupButtons[$elementAttributes["id"]] = $elementAttributes;
-                    } else if ($groupElement->getType() === 'Zend_Form_Element_Hidden') {
-                        //hidden fields
-                        $groupHiddens[$elementAttributes["id"]] = $elementAttributes;
-                    } else {
-                        //normal fields
-                        $groupFields[$elementAttributes["id"]] = $elementAttributes;
-                    }
-                }
-                $group[] = array();
+                $group = $this->_buildViewDisplayGroup($displayGroup, $form);
                 $group["Name"] = $groupName;
-                $group["Fields"] = $groupFields;
-                $group["Hiddens"] = $groupHiddens;
-                $group["Buttons"] = $groupButtons;
                 $this->view->$groupName = $group;
             }
-            //single fields (for calling with helper class)
-            $singleField = $currentElement . "_";
 
+            //single field name (for calling with helper class)
             $elementAttributes = $form->getElementAttributes($currentElement); //array
-            $this->view->$singleField = $elementAttributes;
+            $this->view->$currentElement = $elementAttributes;
 
+            $label = $currentElement . self::LABEL;
+            $this->view->$label = $this->view->translate($form->getElement($currentElement)->getLabel());
+
+            //EXPERT VIEW:
             //also support more difficult templates for "expert admins"
-            $this->view->$currentElement = $form->getElement($currentElement)->getValue();
-
-            $name = $currentElement . "_label";
-            $this->view->$name = $this->view->translate($form->getElement($currentElement)->getLabel());
-
-            //error values
-            if (isset($errors[$currentElement]))
+            $expertField = $currentElement . self::EXPERT;
+            $this->view->$expertField = $form->getElement($currentElement)->getValue();
+            //error values for expert fields view
+            if (isset($errors[$currentElement])) {
                 foreach ($errors[$currentElement] as $error => $errorMessage) {
-                    $errorElement = $currentElement . 'Error';
+                    $errorElement = $expertField . self::ERROR;
                     $this->view->$errorElement = $errorMessage;
                 }
+            }
         }
+    }
+
+    private function _getRawElementName($element) {
+        $name = "";
+        //element is a person element
+        $pos = stripos($element, self::FIRST);
+        if ($pos !== false) {
+            $name = substr($element, 0, $pos);
+        }
+        else {
+            //element belongs to a group
+            $pos = stripos($element, self::COUNTER);
+            if ($pos != false) {
+                $name = substr($element, 0, $pos);
+            }
+            else {
+                //"normal" element name without changes
+                $name = $element;
+            }
+        }
+        return $name;
+    }
+
+    private function _buildViewDisplayGroup($displayGroup, $form) {
+        $groupFields = array(); //Fields
+        $groupHiddens = array(); //Hidden fields for adding and deleting fields
+        $groupButtons = array(); //Buttons
+
+        foreach ($displayGroup->getElements() AS $groupElement) {
+
+            $elementAttributes = $form->getElementAttributes($groupElement->getName()); //array
+            if ($groupElement->getType() === 'Zend_Form_Element_Submit') {
+                //buttons
+                $groupButtons[$elementAttributes["id"]] = $elementAttributes;
+            }
+            else if ($groupElement->getType() === 'Zend_Form_Element_Hidden') {
+                //hidden fields
+                $groupHiddens[$elementAttributes["id"]] = $elementAttributes;
+            }
+            else {
+                //normal fields
+                $groupFields[$elementAttributes["id"]] = $elementAttributes;
+            }
+        }
+        $group[] = array();
+        $group["Fields"] = $groupFields;
+        $group["Hiddens"] = $groupHiddens;
+        $group["Buttons"] = $groupButtons;
+
+        return $group;
     }
 
     /**
@@ -263,7 +293,6 @@ class Publish_FormController extends Controller_Action {
 
         if ($pressedButton == "")
             throw new Publish_Model_OpusServerException("No pressed button found! Possibly the values of the buttons are not equal in the view and Publish class.");
-        //todo: which exeption to choose?
         else
             return $pressedButtonName;
     }
@@ -273,42 +302,26 @@ class Publish_FormController extends Controller_Action {
      * If they are not set in session then the value ist fetched from the post request.
      * @param <array> $postData
      */
-    private function _setDocumentParameters($postData = null, $set = null) {
+    private function _setDocumentParameters($postData = null) {
         $log = Zend_Registry::get('Zend_Log');
         $defaultNS = new Zend_Session_Namespace('Publish');
 
-        if (!isset($defaultNS->documentType) || $set === true) {
-            if (isset($postData['documentType'])) {
-                $defaultNS->documentType = $postData['documentType'];
-                unset($postData['documentType']);
-            }
-            else
-                $defaultNS->documentType = "";
-
-            $log->info("(FormController) documentType = " . $defaultNS->documentType);
+        if (isset($postData['documentType'])) {
+            $defaultNS->documentType = $postData['documentType'];
+            unset($postData['documentType']);
         }
+        else
+            $defaultNS->documentType = "";
 
-        if (!isset($defaultNS->documentId) || $set === true) {
-            if (isset($postData['documentId'])) {
-               // $defaultNS->documentId = $postData['documentId'];
-                unset($postData['documentId']);
-            }
-            else
-                $defaultNS->documentId = "";
+        $log->info("(FormController) documentType = " . $defaultNS->documentType);
 
-            $log->info("(FormController) documentId = " . $defaultNS->documentId);
-        }
+        $defaultNS->documentId = "";
 
-        if (!($defaultNS->fulltext) || $set === true) {
-            if (isset($postData['fullText'])) {
-              //  $defaultNS->fulltext = $postData['fullText'];
-                unset($postData['fulltext']);
-            }
-            else
-                $defaultNS->fulltext = '0';
+        $log->info("(FormController) documentId = " . $defaultNS->documentId);
 
-            $log->info("(FormController) fulltext = " . $defaultNS->fulltext);
-        }
+        $defaultNS->fulltext = '0';
+
+        $log->info("(FormController) fulltext = " . $defaultNS->fulltext);
     }
 
     /**
@@ -325,9 +338,10 @@ class Publish_FormController extends Controller_Action {
         $defaultNS->document->setType($defaultNS->documentType);
         $defaultNS->document->setServerState('temporary');
 
-        if ($upload->isUploaded(true)) {        
+        if ($upload->isUploaded(true)) {
+            //if (!empty($files)) {
             $log->info("Fileupload of: " . count($files) . " possible files => Fulltext is '1'.");
-            $defaultNS->fulltext = '1';            
+            $defaultNS->fulltext = '1';
 
             foreach ($files AS $file => $fileValues) {
                 if (!empty($fileValues['name'])) {
@@ -338,7 +352,8 @@ class Publish_FormController extends Controller_Action {
                     $docfile->setFromPost($fileValues);
                 }
             }
-        } else {
+        }
+        else {
             $log->info("No file uploaded: => Fulltext is NOT given.");
             $defaultNS->fulltext = '0';
         }
@@ -346,13 +361,13 @@ class Publish_FormController extends Controller_Action {
         $log->info("The corresponding doucment ID is: " . $defaultNS->documentId);
         $log->info("(FormController) fulltext: " . $defaultNS->fulltext);
     }
-   
+
     /**
      * Methodgets the current form and finds out which fields has to be edded or deleted
      * @param Publish_Form_PublishingSecond $form
      * @return <View>
      */
-    private function _getExtendedForm($form, $postData=null, $reload) {
+    private function _getExtendedForm($form, $postData=null, $reload=true) {
         $log = Zend_Registry::get('Zend_Log');
         $defaultNS = new Zend_Session_Namespace('Publish');
 
@@ -364,7 +379,8 @@ class Publish_FormController extends Controller_Action {
                 $fieldName = substr($pressedButtonName, 7);
                 $workflow = "add";
                 //$log->debug("Fieldname for addMore => " . $fieldName);
-            } else if (substr($pressedButtonName, 0, 10) == "deleteMore") {
+            }
+            else if (substr($pressedButtonName, 0, 10) == "deleteMore") {
                 $fieldName = substr($pressedButtonName, 10);
                 $workflow = "delete";
                 //$log->debug("Fieldname for deleteMore => " . $fieldName);
@@ -375,7 +391,8 @@ class Publish_FormController extends Controller_Action {
             if ($workflow == "add") {
                 //show one more fields
                 $currentNumber = (int) $currentNumber + 1;
-            } else {
+            }
+            else {
                 if ($currentNumber > 1) {
                     //remove one more field, only down to 0
                     $currentNumber = (int) $currentNumber - 1;

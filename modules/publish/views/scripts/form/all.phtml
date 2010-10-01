@@ -4,64 +4,62 @@ echo '<h2>' . $this->subtitle . '</h2>';
 
 //for printing a generized Zend Form with standard layout:
 //echo $this->form;
-
 //element($value, $options = null, $type = null, $name = null)
 //group($value, $options = null, $name = null)
 ?>
-<span style="color:red; font-weight:big; padding: 10pt;"> <?= $this->errorCaseMessage; ?> </span>
+<span class="formerror"> <?= $this->errorCaseMessage; ?> </span>
 
 <br />
 <form enctype="application/x-www-form-urlencoded" action="<?php echo $this->action_url; ?>" method="post">
 
-    <div width="100%" align="right">
-        <?= $this->requiredHint; ?>
+    <div class="formhint">
+<?= $this->requiredHint; ?>
     </div>
 
-<?= $this->group($this->groupPersonSubmitter); ?>
-<?= $this->group($this->groupPersonAuthor); ?>
-<?= $this->element($this->Language_); ?>
-<?= $this->group($this->groupTitleMain); ?>
-<?= $this->group($this->groupTitleAbstract); ?>
-<?= $this->group($this->groupTitleSub); ?>
-<?= $this->group($this->groupTitleAdditional); ?>
-<?= $this->group($this->groupTitleParent); ?>
-<?= $this->element($this->PageNumber_); ?>
-<?= $this->element($this->PageFirst_); ?>
-<?= $this->element($this->PageLast_); ?>
-<?= $this->element($this->Volume_); ?>
-<?= $this->element($this->Issue_); ?>
+    <?= $this->group($this->groupPersonSubmitter); ?>
+    <?= $this->group($this->groupPersonAuthor); ?>
+    <?= $this->element($this->Language); ?>
+    <?= $this->group($this->groupTitleMain); ?>
+    <?= $this->group($this->groupTitleAbstract); ?>
+    <?= $this->group($this->groupTitleSub); ?>
+    <?= $this->group($this->groupTitleAdditional); ?>
+    <?= $this->group($this->groupTitleParent); ?>
+    <?= $this->element($this->PageNumber); ?>
+    <?= $this->element($this->PageFirst); ?>
+    <?= $this->element($this->PageLast); ?>
+    <?= $this->element($this->Volume); ?>
+    <?= $this->element($this->Issue); ?>
+    <?= $this->element($this->Institute); ?>
+    <?= $this->element($this->Collection); ?>
+    <?= $this->element($this->PublishedYear); ?>
+    <?= $this->element($this->PublishedDate); ?>
+    <?= $this->element($this->PublisherName); ?>
+    <?= $this->element($this->PublisherPlace); ?>
+    <?= $this->element($this->CompletedYear); ?>
+    <?= $this->element($this->CompletedDate); ?>
+    <?= $this->element($this->IdentifierOpus3); ?>
+    <?= $this->element($this->IdentifierUrn); ?>
+    <?= $this->element($this->IdentifierIsbn); ?>
+    <?= $this->element($this->IdentifierIssn); ?>
+    <?= $this->element($this->IdentifierOpac); ?>
+    <?= $this->element($this->ThesisDateAccepted); ?>
+    <?= $this->element($this->ThesisGrantor); ?>
+    <?= $this->element($this->ThesisPublisher); ?>
+    <?= $this->group($this->groupPersonReferee); ?>
+    <?= $this->group($this->groupPersonEditor); ?>
+    <?= $this->group($this->groupPersonAdvisor); ?>
+    <?= $this->group($this->groupPersonTranslator); ?>
+    <?= $this->group($this->groupPersonContributor); ?>
+    <?= $this->element($this->CreatingCorporation); ?>
+    <?= $this->element($this->ContributingCorporation); ?>
+    <?= $this->group($this->groupSubjectSwd); ?>
+    <?= $this->group($this->groupSubjectUncontrolled); ?>
+    <?= $this->element($this->Note); ?>
+    <?= $this->element($this->Licence); ?>
+    <?= $this->element($this->ServerDateUnlocking); ?>
+    <?= $this->group($this->groupSubjectDdc); ?>
 
-<?= $this->element($this->Institute_); ?>
-<?= $this->element($this->Collection_); ?>
-<?= $this->element($this->PublishedYear_); ?>
-<?= $this->element($this->PublishedDate_); ?>
-<?= $this->element($this->PublisherName_); ?>
-<?= $this->element($this->PublisherPlace_); ?>
-<?= $this->element($this->CompletedYear_); ?>
-<?= $this->element($this->CompletedDate_); ?>
-<?= $this->element($this->IdentifierOpus3_); ?>
-<?= $this->element($this->IdentifierUrn_); ?>
-<?= $this->element($this->IdentifierIsbn_); ?>
-<?= $this->element($this->IdentifierIssn_); ?>
-<?= $this->element($this->IdentifierOpac_); ?>
-<?= $this->element($this->ThesisDateAccepted_); ?>
-<?= $this->element($this->ThesisGrantor_); ?>
-<?= $this->element($this->ThesisPublisher_); ?>
-<?= $this->group($this->groupPersonReferee); ?>
-<?= $this->group($this->groupPersonEditor); ?>
-<?= $this->group($this->groupPersonAdvisor); ?>
-<?= $this->group($this->groupPersonTranslator); ?>
-<?= $this->group($this->groupPersonContributor); ?>
-<?= $this->element($this->CreatingCorporation_); ?>
-<?= $this->element($this->ContributingCorporation_); ?>
-<?= $this->group($this->groupSubjectSwd); ?>
-<?= $this->group($this->groupSubjectUncontrolled); ?>
-<?= $this->element($this->Note_); ?>
-<?= $this->element($this->Licence_); ?>
-<?= $this->element($this->ServerDateUnlocking_); ?>
-<?= $this->group($this->groupSubjectDdc); ?>
-
-<?= $this->element('button_label_send', null, "Submit",  "send"); ?>
+<?= $this->element('button_label_send', null, "Submit", "send"); ?>
 
 </form>
 
