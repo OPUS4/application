@@ -32,23 +32,27 @@
  * @version     $Id$
  */
 ?>
-<h1><?php echo $this->translate('admin_title_oailink');?></h1>
+<div class="adminContainer">
 
-<p><?php echo $this->translate('admin_oailink_general');?></p>
+    <div class="breadcrumbsContainer">
+        <?= $this->navigation()->breadcrumbs() ?>
+    </div>
 
-<div class="code">
-<b><?php echo $this->baseLink ?></b>
+    <p><?php echo $this->translate('admin_oailink_general');?></p>
+
+    <div class="code">
+    <b><?php echo $this->baseLink ?></b>
+    </div>
+
+    <p><?php echo $this->translate('admin_oailink_examples'); ?></p>
+    <ul>
+        <li><a href="<?php echo $this->baseLink . '?verb=GetRecord&metadataPrefix=xMetaDiss&identifier=oai:' . $this->repIdentifier . ':35'?>"><?php echo $this->translate('admin_oailink_example_getrecord').' (xMetaDiss)';?></a></li>
+        <li><a href="<?php echo $this->baseLink . '?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai:' . $this->repIdentifier . ':41'?>"><?php echo $this->translate('admin_oailink_example_getrecord').' (XMetaDissPlus)';?></a></li>
+        <li><a href="<?php echo $this->baseLink . '?verb=Identify'?>"><?php echo $this->translate('admin_oailink_example_identify');?></a></li>
+        <li><a href="<?php echo $this->baseLink . '?verb=ListIdentifiers&metadataPrefix=oai_dc'?>"><?php echo $this->translate('admin_oailink_example_listidentifiers');?></a></li>
+        <li><a href="<?php echo $this->baseLink . '?verb=ListMetadataFormats'?>"><?php echo $this->translate('admin_oailink_example_listmetadataformats');?></a></li>
+        <li><a href="<?php echo $this->baseLink . '?verb=ListRecords&metadataPrefix=oai_dc&from=2006-01-01'?>"><?php echo $this->translate('admin_oailink_example_listrecords');?></a></li>
+        <li><a href="<?php echo $this->baseLink . '?verb=ListSets'?>"><?php echo $this->translate('admin_oailink_example_listsets');?></a></li>
+    </ul>
+
 </div>
-
-<p><?php echo $this->translate('admin_oailink_examples'); ?></p>
-<ul>
-    <li><a href="<?php echo $this->baseLink . '?verb=GetRecord&metadataPrefix=xMetaDiss&identifier=oai:' . $this->repIdentifier . ':35'?>"><?php echo $this->translate('admin_oailink_example_getrecord').' (xMetaDiss)';?></a></li>
-    <li><a href="<?php echo $this->baseLink . '?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai:' . $this->repIdentifier . ':41'?>"><?php echo $this->translate('admin_oailink_example_getrecord').' (XMetaDissPlus)';?></a></li>
-    <li><a href="<?php echo $this->baseLink . '?verb=Identify'?>"><?php echo $this->translate('admin_oailink_example_identify');?></a></li>
-    <li><a href="<?php echo $this->baseLink . '?verb=ListIdentifiers&metadataPrefix=oai_dc'?>"><?php echo $this->translate('admin_oailink_example_listidentifiers');?></a></li>
-    <li><a href="<?php echo $this->baseLink . '?verb=ListMetadataFormats'?>"><?php echo $this->translate('admin_oailink_example_listmetadataformats');?></a></li>
-    <li><a href="<?php echo $this->baseLink . '?verb=ListRecords&metadataPrefix=oai_dc&from=2006-01-01'?>"><?php echo $this->translate('admin_oailink_example_listrecords');?></a></li>
-    <li><a href="<?php echo $this->baseLink . '?verb=ListSets'?>"><?php echo $this->translate('admin_oailink_example_listsets');?></a></li>
-</ul>
-
-<p />
