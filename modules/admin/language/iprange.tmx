@@ -16,7 +16,7 @@
       </tuv>
     </tu>
        
-    <tu tuid="admin_iprange_action_new">
+    <tu tuid="admin_iprange_new">
       <tuv xml:lang="en">
         <seg>Add IP range</seg>
       </tuv>
@@ -25,7 +25,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_iprange_action_show">
+    <tu tuid="admin_iprange_show">
       <tuv xml:lang="en">
         <seg>IP Range</seg>
       </tuv>
