@@ -109,6 +109,8 @@ class Home_IndexController extends Controller_Action {
             'action' => 'search')));
         $searchForm->setMethod('post');
         $this->view->searchForm = $searchForm;
+
+        $this->_helper->mainMenu('home');
     }
 
     public function aboutAction() {
@@ -154,5 +156,7 @@ class Home_IndexController extends Controller_Action {
                 $this->view->content = $translation;
             }
         }
+
+        $this->_helper->mainMenu('help');
     }
 }

@@ -64,7 +64,8 @@ class Controller_Helper_MainMenu extends Zend_Controller_Action_Helper_Abstract 
         $mainMenu = Zend_Registry::get('Opus_Navigation');
 
         foreach ($mainMenu as $page) {
-            if ($page->getLabel() === $entry . '_menu_label') {
+            $label = $page->getLabel();
+            if (($label === $entry . '_menu_label') || ($label === $entry)) {
                 $page->setActive(true);
             }
             else {

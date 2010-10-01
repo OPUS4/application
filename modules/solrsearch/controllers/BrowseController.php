@@ -34,6 +34,11 @@
 
 class Solrsearch_BrowseController extends Controller_Action {
 
+    public function  preDispatch() {
+        parent::preDispatch();
+        $this->_helper->mainMenu('browsing');
+    }
+
     public function indexAction() {
         $this->view->baseUrl = $this->getRequest()->getBaseUrl();
         $collectionRoles = new SolrSearch_Model_CollectionRoles();
