@@ -33,7 +33,11 @@
  */
 ?>
 <div class="adminContainer">
-<?= $this->navigation()->breadcrumbs() ?>
 
-<?= $this->roleForm ?>
+    <div class="breadcrumbsContainer">
+        <?= $this->navigation()->breadcrumbs() ?>
+    </div>
+
+    <?= $this->roleForm ?>
+    
 </div>

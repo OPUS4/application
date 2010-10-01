@@ -35,12 +35,12 @@
 
 <div class="adminContainer">
 
-    <div>
+    <div class="breadcrumbsContainer">
         <?= $this->navigation()->breadcrumbs() ?>
     </div>
 
 <div>
-<a href="<?= $this->url(array('action' => 'new')) ?>">New</a>
+<a href="<?= $this->url(array('action' => 'new')) ?>"><?= $this->translate('admin_role_new') ?></a>
 </div>
 
 <table>

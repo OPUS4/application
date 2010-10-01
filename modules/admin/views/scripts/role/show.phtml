@@ -36,7 +36,9 @@
 
 <div class="adminContainer">
 
-<?= $this->navigation()->breadcrumbs() ?>
+    <div class="breadcrumbsContainer">
+        <?= $this->navigation()->breadcrumbs() ?>
+    </div>
 
 <table>
     <tr>
@@ -54,14 +56,14 @@
                     switch($name) {
                         case 'readMetadata':
                             $state = $privilege->getDocumentServerState();
-                            echo $name . ' -> ' . $state;
+                            echo htmlspecialchars($name . ' -> ' . $state);
                             break;
                         case 'readFile':
                             $fileId = $privilege->getFileId();
-                            echo $name . ' -> ' . $fileId;
+                            echo htmlspecialchars($name . ' -> ' . $fileId);
                             break;
                         default:
-                            echo $name;
+                            echo htmlspecialchars($name);
                             break;
                     }
                 ?>
