@@ -41,19 +41,26 @@ if ($this->jQueryEnabled()) {
 }
 ?>
 
-<div class="searchform">
-    <h2><?= $this->translate('solrsearch_title_simple'); ?></h2>
+<div class="content">
 
-    <form id="simpleSearchForm" action="<?= $this->url(array('module'=>'solrsearch','controller'=>'index','action'=>'searchdispatch'),null,true); ?>" method="post" class="opus_form">
-        <label for="query"><?= $this->translate('solrsearch_query_label'); ?></label>
-        <input id="query" name="query" type="text" value="<?= htmlspecialchars($this->q) ?>" />
-        <input type="submit" value="<?= $this->translate('solrsearch_searchaction'); ?>" />
+    <form id="form-search" action="<?= $this->url(array('module'=>'solrsearch','controller'=>'index','action'=>'searchdispatch'),null,true); ?>" method="post">
+         <div>
+            <div id="fieldset-search" class="fieldset-wrapper">
+                <fieldset>
+                    <div id="edit-search-wrapper" class="form-item">
+                        <input type="text" size="30" name="search" id="edit-search" class="form-text" value="<?= htmlspecialchars($this->q) ?>" />
+                    </div>
+                    <div id="edit-submit-search-wrapper" class="form-item">
+                        <span class="form-submit-wrapper"><input type="submit" id="edit-submit-search" class="form-submit" value="<?= $this->translate('solrsearch_searchaction'); ?>" /></span>
+                    </div>
+                </fieldset>
+                <p class="footer-link"><a class="link" href="<?= $this->url(array('module'=>'solrsearch','controller'=>'index','action'=>'advanced'),null,true); ?>"><?= $this->translate('solrsearch_title_advanced'); ?></a></p>
+            </div>
+        </div>
         <input type="hidden" name="searchtype" id="searchtype" value="simple" />
         <input type="hidden" name="rows" id="rows" value="10" />
         <input type="hidden" name="start" id="start" value="0" />
         <input type="hidden" name="sortfield" id="sortfield" value="score" />
         <input type="hidden" name="sordorder" id="sortorder" value="desc" />
     </form>
-
-    <a href="<?= $this->url(array('module'=>'solrsearch','controller'=>'index','action'=>'advanced'),null,true); ?>"><?= $this->translate('solrsearch_title_advanced'); ?></a>
 </div>
