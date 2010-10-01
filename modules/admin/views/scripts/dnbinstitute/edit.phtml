@@ -33,8 +33,13 @@
  * @version     $Id: edit.phtml 5890 2010-09-26 17:13:48Z tklein $
  */
 ?>
-<div>
-<?= $this->navigation()->breadcrumbs() ?>
-</div>
 
-<?= $this->form ?>
+<div class="adminContainer">
+
+    <div class="breadcrumbsContainer">
+        <?= $this->navigation()->breadcrumbs() ?>
+    </div>
+
+    <?= $this->form ?>
+
+</div>

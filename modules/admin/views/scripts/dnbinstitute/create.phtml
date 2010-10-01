@@ -32,5 +32,13 @@
  * @version     $Id: create.phtml 5890 2010-09-26 17:13:48Z tklein $
  */
 ?>
-<h1><?= $this->title ?></h1>
-<?= $this->form ?>
+
+<div class="adminContainer">
+
+    <div class="breadcrumbsContainer"> 
+        <?= $this->navigation()->breadcrumbs() ?>
+    </div>
+    
+    <?= $this->form ?>
+
+</div>
