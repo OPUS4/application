@@ -34,15 +34,21 @@
  * @version     $Id$
  */
 ?>
-<h1><?= $this->title ?></h1>
+<div class="adminContainer">
 
-<div id="adminMenuContainer">
-<?PHP
-echo $this->navigation()
-          ->menu()
-          ->setOnlyActiveBranch(true)
-          ->setRenderParents(false);
-?>
+    <div class="breadcrumbsContainer">
+        <?= $this->title ?>
+    </div>
+
+    <div id="adminMenuContainer">
+        <?PHP
+        echo $this->navigation()
+                  ->menu()
+                  ->setOnlyActiveBranch(true)
+                  ->setRenderParents(false);
+        ?>
+    </div>
+
 </div>
 
 
