@@ -33,22 +33,25 @@
  * @version     $Id$
  */
 ?>
-<div>
+
+<div class="adminContainer">
+
+<div class="breadcrumbsContainer">
 <?= $this->navigation()->breadcrumbs() ?>
 </div>
 
 <table>
     <tr>
         <td><?= $this->translate('admin_iprange_label_description') ?></td>
-        <td><?= $this->ipRange->getName() ?><td>
+        <td><?= htmlspecialchars($this->ipRange->getName()) ?><td>
     </tr>
     <tr>
         <td><?= $this->translate('admin_iprange_label_startingip') ?></td>
-        <td><?= $this->ipRange->getStartingip() ?><td>
+        <td><?= htmlspecialchars($this->ipRange->getStartingip()) ?><td>
     </tr>
     <tr>
         <td><?= $this->translate('admin_iprange_label_endingip') ?></td>
-        <td><?= $this->ipRange->getEndingip() ?><td>
+        <td><?= htmlspecialchars($this->ipRange->getEndingip()) ?><td>
     </tr>
     <tr>
         <td><?= $this->translate('admin_iprange_label_roles') ?></td>
@@ -60,3 +63,4 @@
     </tr>
 </table>
 
+</div>

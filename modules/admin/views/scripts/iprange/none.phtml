@@ -32,11 +32,16 @@
  * @version     $Id$
  */
 ?>
-<div>
-<?= $this->navigation()->breadcrumbs() ?>
+
+<div class="adminContainer">
+
+    <div class="breadcrumbsContainer">
+        <?= $this->navigation()->breadcrumbs() ?>
+    </div>
+
+    <div><?= $this->translate('admin_iprange_none_defined') ?></div>
+
+    <a href="<?= $this->url(array('action' => 'new')) ?>"><?= $this->translate('admin_iprange_action_new') ?></a>
+
 </div>
-
-<div><?= $this->translate('admin_iprange_none_defined') ?></div>
-
-<a href="<?= $this->url(array('action' => 'new')) ?>"><?= $this->translate('admin_iprange_action_new') ?></a>
 

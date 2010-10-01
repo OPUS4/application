@@ -36,9 +36,7 @@
 
 <div class="adminContainer">
 
-<h1><?= $this->title ?></h1>
-
-<div>
+<div class="breadcrumbsContainer">
 <?= $this->navigation()->breadcrumbs() ?>
 </div>
 
@@ -60,5 +58,6 @@
     <? endforeach; ?>
 </table>
 
-<a href="<?= $this->url(array('action' => 'new')) ?>"><?= $this->translate('admin_iprange_action_new') ?></a>
+<a href="<?= $this->url(array('action' => 'new')) ?>"><?= $this->translate('admin_iprange_new') ?></a>
+
 </div>
