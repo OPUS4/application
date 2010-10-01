@@ -1,3 +1,4 @@
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,11 +26,27 @@
  *
  * @category    Application
  * @author      Julian Heise <heise@zib.de>
+ * @author      Gunar Maiwald <maiwald@zib.de>
  * @copyright   Copyright (c) 2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
+
+/* Page specific settings
+------------------------------------------------------------ */
+#page-home #content{
+	background: #eaedf2 url(../img/theme/bg_content.jpg) repeat-x;
+}
+#page-search #form-search{
+	margin: 3em 0 0;
+}
+#page-advanced-search h2{
+	background: url(../img/theme/icon-search.gif) no-repeat 0 50%;
+	padding: 0 0 0 28px;
+}
+/* HTML elements
+------------------------------------------------------------ */
 body{
 	margin: 0;
 	padding: 0;
@@ -37,8 +54,66 @@ body{
 	background: #26517c;
 	font: 100.01% Verdana, Geneva, Arial, Helvetica, sans-serif;
 }
+h1, h2, p{
+	margin: 0 0 0.8em;
+}
+h2{
+	color: #26517D;
+	background-color: transparent;
+	font-weight: normal;
+	font-size: 1.7em;
+}
+a{
+	color: #26517D;
+	background-color: transparent;
+}
+a:hover{
+	/*text-decoration: none;*/
+	color: #FE7C25;
+	background-color: transparent;
+}
+a:active{
+	color: black;
+	background-color: transparent;
+}
 a img{
 	border: none;
+}
+form{
+	margin: 0;
+}
+fieldset{
+	border: #d4dde6 solid;
+	border-width: 1px 0 0;
+	padding: 0 10px 10px;
+	margin: 0 1em 1em;
+}
+legend{
+	color: #26517d;
+	min-width: 130px;
+	padding: 17px 15px 22px;
+	text-align: center;
+	text-transform: uppercase;
+	font-size: 0.9em;
+	background: url(../img/theme/bg_legend_white.jpg) no-repeat bottom center;
+}
+/* IDs and Classes
+--------------------------------------------------------------------- */
+.intro{
+	color: #26517D;
+	background-color: transparent;
+	line-height: 1.6em;
+	float: left;
+	padding: 0 0 40px;
+}
+.intro .col{
+	width: 47%;
+}
+.col-left{
+	float: left;
+}
+.col-right{
+	float: right;
 }
 #logo{
 	margin: 0;
@@ -53,8 +128,12 @@ a img{
 }
 #top-header{
 	background: #f4f6f8 url(../img/theme/bg_top-header.jpg) repeat-x bottom;
+	color: #26517d;
 	height: 33px;
-
+	font: normal 12px Arial, Helvetica, sans-serif;
+	line-height: 30px;
+	float: left;
+	width: 100%;
 }
 body > #top-header{
 	height: auto;
@@ -64,48 +143,52 @@ body > #top-header{
 	width: 1024px;
 	margin: auto;
 }
-.nav a{
-	text-decoration: none;
-}
 #lang-switch{
-	float: right;
-	color: #26517d;
-	font: normal 12px Arial, Helvetica, sans-serif;
+	float: left;
+	/*margin: 0 0 0 10px;*/
+	margin: 0;
 }
 #lang-switch li{
 	padding: 0 7px 0 11px;
 	background: url(../img/theme/langswitch-separator.png) no-repeat left center;
 	float: left;
-	line-height: 30px;
 }
 #lang-switch li.first{
 	background: url(../img/theme/flag_ie.jpg) no-repeat left center;
-	padding-left:22px;
+	padding-left: 22px;
 }
-
 #lang-switch > li.first{
 	background: url(../img/theme/flag.png) no-repeat left center;
 }
-#lang-switch em{
+#top-header em{
 	font-style: normal;
 	color: black;
 	background-color: transparent;
 }
-#lang-switch a{
+#top-header a{
 	color: #26517d;
 	background-color: transparent;
 	text-decoration: none;
 }
-#lang-switch a:hover{
+#top-header a:hover{
 	text-decoration: underline;
+}
+#login-bar{
+	float: right;
+	padding: 0 23px 0 0;
+	margin: 0;
 }
 #header{
 	height: 97px;
 	background: url(../img/theme/bg_header.jpg) repeat-x;
 	padding: 1px 0 0;
+	float: left;
+	width: 100%;
 }
+
 #primary-nav{
 	float: right;
+	height: 89px;
 }
 #primary-nav *{
 	float: left;
@@ -151,8 +234,7 @@ body > #top-header{
 	background-position: 50% 0;
 }
 #primary-nav .icon em span{
-	background-position: 50% -89px;
-	behavior: url("/pngbehavior.htc");
+	background-position: 50% -90px;
 }
 #primary-nav-search span{
 	background-image: url(../img/theme/icon-search.png);
@@ -166,26 +248,31 @@ body > #top-header{
 #content{
 	background: white;
 	min-height: 600px;
+	clear: both;
 }
 #content .wrapper{
-	padding: 20px 0 3em 0;
+	padding: 20px 0 3em;
 	font-size: 0.8em;
 }
-#footer{
+.content{
+	float: left;
+	width: 100%;
+}
+#page-footer{
 	height: 163px;
 	background: #e7ecf0 url(../img/theme/bg_footer.jpg) repeat-x bottom;
 }
-#footer .wrapper{
+#page-footer .wrapper{
 	font-size: 12px;
 	padding: 40px 0 0;
 	color: white;
 	background-color: transparent;
 }
-#footer .wrapper a{
+#page-footer .wrapper a{
 	color: #dee5eb;
 	background-color: transparent;
 }
-#footer .wrapper a:hover{
+#page-footer .wrapper a:hover{
 	text-decoration: underline;
 }
 #secondary-nav li{
@@ -206,15 +293,78 @@ body > #top-header{
 	padding: 0;
 	list-style: none;
 }
-
-/* publication form related css rules */
-
-.formerror {
-	color:red; 
-	font-weight: big; 
-	padding: 10pt;
+.nav a{
+	text-decoration: none;
 }
+/* Sections */
 
-.formhint {
-	text-align: right;
+/* Styled search form
+----------------------------------------------------------------------------------- */
+.form-submit-wrapper,
+.form-submit{
+	display: inline-block;
+	height: 28px;
+}
+.form-submit-wrapper{
+	background: url(../img/theme/bg_button_l.gif) no-repeat left center;
+}
+.form-submit{
+	background: transparent url(../img/theme/bg_button_r.gif) no-repeat right center;
+	border: none;
+	color: white;
+	font-size: 16px;
+	font-family: Arial, Helvetica, sans-serif;
+	padding: 0 15px;
+}
+#edit-submit-advanced-search-wrapper{
+	float: left;
+	padding: 0 1em 0 0;
+}
+#form-search p.footer-link{
+	padding: 10px 0 0 10px;
+}
+#fieldset-search{
+	background: url(../img/theme/bg_search.png) no-repeat;
+	height: 38px;
+	width: 535px;
+	margin: 0 auto 3em;
+}
+#fieldset-search fieldset{
+	padding: 5px 5px 0 40px;
+	margin: 0;
+	border: none;
+}
+#edit-search-wrapper{
+	float: left;
+}
+#edit-submit-search-wrapper{
+	float: right;
+}
+#fieldset-search .form-text{
+	width: 370px;
+	font-size: 18px;
+	border: none;
+	background-color: transparent;
+	padding: 2px 0 0;
+	font-family: Arial, Helvetica, sans-serif;
+}
+#fieldset-search .form-submit-wrapper,
+#fieldset-search .form-submit{
+	display: inline-block;
+	height: 28px;
+}
+#fieldset-search .form-submit-wrapper{
+	background: url(../img/theme/bg_button_l.gif) no-repeat left center;
+}
+#fieldset-search .form-submit{
+	background: transparent url(../img/theme/bg_button_r.gif) no-repeat right center;
+	border: none;
+	color: white;
+	font-size: 16px;
+	font-family: Arial, Helvetica, sans-serif;
+	width: 100px;
+}
+ .form-submit:hover,
+#fieldset-search .form-submit:hover{
+	color: #feb07c;
 }
