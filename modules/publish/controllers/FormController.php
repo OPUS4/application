@@ -120,8 +120,7 @@ class Publish_FormController extends Controller_Action {
             }
 
             //initialize the form object
-            $form = new Publish_Form_PublishingSecond($defaultNS->documentType, $defaultNS->documentId, $defaultNS->fulltext, $defaultNS->additionalFields, $postData);
-            //$form->populate($postData);
+            $form = new Publish_Form_PublishingSecond($defaultNS->documentType, $defaultNS->documentId, $defaultNS->fulltext, $defaultNS->additionalFields, $postData);            
 
             if (!$form->send->isChecked() || array_key_exists('back', $postData)) {
                 // A button (not SEND) was pressed => add / remove fields
@@ -224,6 +223,11 @@ class Publish_FormController extends Controller_Action {
         }
     }
 
+    /**
+     * Method to find out the element name stemming.
+     * @param <String> $element element name
+     * @return <String> $name
+     */
     private function _getRawElementName($element) {
         $name = "";
         //element is a person element
@@ -245,6 +249,12 @@ class Publish_FormController extends Controller_Action {
         return $name;
     }
 
+    /**
+     * Method to build a disply group by a number of arrays for fields, hidden fields and buttons.
+     * @param <Zend_Form_DisplayGroup> $displayGroup
+     * @param <Publishing_Second> $form
+     * @return <Array> $group
+     */
     private function _buildViewDisplayGroup($displayGroup, $form) {
         $groupFields = array(); //Fields
         $groupHiddens = array(); //Hidden fields for adding and deleting fields
@@ -275,9 +285,9 @@ class Publish_FormController extends Controller_Action {
     }
 
     /**
-     * method to check which buttob was pressed
+     * Method to check which button in the form was pressed.
      * @param <Zend_Form> $form
-     * @return <type>
+     * @return <String> name of button
      */
     private function _getPressedButton($form) {
         $log = Zend_Registry::get('Zend_Log');
@@ -323,6 +333,8 @@ class Publish_FormController extends Controller_Action {
         $defaultNS->fulltext = '0';
 
         $log->info("(FormController) fulltext = " . $defaultNS->fulltext);
+
+        $defaultNS->additionalFields = array();
     }
 
     /**
@@ -359,8 +371,7 @@ class Publish_FormController extends Controller_Action {
             $defaultNS->fulltext = '0';
         }
         $defaultNS->documentId = $defaultNS->document->store();
-        $log->info("The corresponding doucment ID is: " . $defaultNS->documentId);
-        $log->info("(FormController) fulltext: " . $defaultNS->fulltext);
+        $log->info("The corresponding doucment ID is: " . $defaultNS->documentId);        
     }
 
     /**
@@ -378,13 +389,11 @@ class Publish_FormController extends Controller_Action {
 
             if (substr($pressedButtonName, 0, 7) == "addMore") {
                 $fieldName = substr($pressedButtonName, 7);
-                $workflow = "add";
-                //$log->debug("Fieldname for addMore => " . $fieldName);
+                $workflow = "add";                
             }
             else if (substr($pressedButtonName, 0, 10) == "deleteMore") {
                 $fieldName = substr($pressedButtonName, 10);
-                $workflow = "delete";
-                //$log->debug("Fieldname for deleteMore => " . $fieldName);
+                $workflow = "delete";                
             }
 
             $currentNumber = $defaultNS->additionalFields[$fieldName];
@@ -401,8 +410,7 @@ class Publish_FormController extends Controller_Action {
             }
 
             //set the increased value for the pressed button and create a new form
-            $defaultNS->additionalFields[$fieldName] = $currentNumber;
-            //$log->debug("new current number: " . $currentNumber . " for field " . $fieldName);
+            $defaultNS->additionalFields[$fieldName] = $currentNumber;            
         }
 
 
