@@ -4,7 +4,6 @@ echo '<h2>' . $this->subtitle . '</h2>';
 
 //for printing a generized Zend Form with standard layout:
 //echo $this->form;
-
 //element($value, $options = null, $type = null, $name = null)
 //group($value, $options = null, $name = null)
 ?>
@@ -14,35 +13,36 @@ echo '<h2>' . $this->subtitle . '</h2>';
 <form enctype="application/x-www-form-urlencoded" action="<?php echo $this->action_url; ?>" method="post">
 
     <div class="formhint">
-        <?= $this->requiredHint; ?>
+<?= $this->requiredHint; ?>
     </div>
-	
-	<?= $this->group($this->groupPersonSubmitter); ?>
-	<?= $this->group($this->groupTitleMain); ?>
-	<?= $this->group($this->groupTitleSub); ?>
-	<?= $this->group($this->groupTitleAbstract); ?>
-	<?= $this->group($this->groupPersonAuthor); ?>
-	<?= $this->element($this->CompletedDate); ?>
-	<?= $this->element($this->PageNumber); ?>
-	<?= $this->group($this->groupPersonEditor); ?>
-	<?= $this->group($this->groupPersonTranslator); ?>
-	<?= $this->group($this->groupPersonContributor); ?>
-	<?= $this->group($this->groupCreatingCorporation); ?>
-	<?= $this->group($this->groupContributingCorporation); ?>
-	<?= $this->element($this->PublisherName); ?>
-	<?= $this->element($this->PublisherPlace); ?>
-	<?= $this->element($this->IdentifierIsbn); ?>
-	<?= $this->element($this->PublishedDate); ?>
-	<?= $this->group($this->groupSubjectDdc); ?>
-	<?= $this->group($this->groupSubjectSwd); ?>
-	<?= $this->group($this->groupSubjectUncontrolled); ?>
-	<?= $this->element($this->Institute); ?>
-	<?= $this->element($this->IdentifierUrn); ?>
-	<?= $this->element($this->Note); ?>
-	<?= $this->element($this->Language); ?>
-	<?= $this->element($this->Licence); ?>
 
-	<?= $this->element('button_label_send', null, "Submit",  "send"); ?>
+<?= $this->group($this->groupPersonSubmitter); ?>
+    <?= $this->group($this->groupTitleMain); ?>
+    <?= $this->group($this->groupTitleSub); ?>
+    <?= $this->group($this->groupTitleAbstract); ?>
+    <?= $this->group($this->groupPersonAuthor); ?>
+    <?= $this->element($this->CompletedDate); ?>
+    <?= $this->element($this->PageNumber); ?>
+    <?= $this->group($this->groupPersonEditor); ?>
+    <?= $this->group($this->groupPersonTranslator); ?>
+    <?= $this->group($this->groupPersonContributor); ?>
+    <?= $this->group($this->groupCreatingCorporation); ?>
+    <?= $this->group($this->groupContributingCorporation); ?>
+    <?= $this->element($this->PublisherName); ?>
+    <?= $this->element($this->PublisherPlace); ?>
+    <?= $this->element($this->IdentifierIsbn); ?>
+    <?= $this->element($this->PublishedDate); ?>
+    <?= $this->group($this->groupSubjectDdc); ?>
+    <?= $this->group($this->groupSubjectSwd); ?>
+    <?= $this->group($this->groupSubjectUncontrolled); ?>
+    <?= $this->element($this->Institute); ?>
+    <?= $this->element($this->IdentifierUrn); ?>
+    <?= $this->element($this->Note); ?>
+    <?= $this->element($this->Language); ?>
+    <?= $this->element($this->Licence); ?>
+
+<?= $this->element('button_label_abort', null, "Submit", "abort"); ?>
+<?= $this->element('button_label_send', null, "Submit", "send"); ?>
 
 </form>
 

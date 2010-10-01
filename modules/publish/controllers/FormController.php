@@ -108,9 +108,10 @@ class Publish_FormController extends Controller_Action {
 
         if ($this->getRequest()->isPost() === true) {
             $postData = $this->getRequest()->getPost();
-            foreach ($postData as $key => $value) {
-                $log->debug("POST --> [" . $key . "] : " . $value);
-            }
+
+            if (array_key_exists('abort', $postData))
+                    return $this->_redirectTo ('index', '', 'index');
+
             if (array_key_exists('back', $postData)) {
                 $reload = false;
                 if (isset($defaultNS->elements))
