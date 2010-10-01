@@ -41,10 +41,8 @@ $this->headTitle('OPUS 4')
     ->setSeparator(' | ');
 
 $this->headLink()
-    ->appendStylesheet($this->layoutPath() . '/css/opus.css')
-    ->appendStylesheet($this->layoutPath() . '/css/design.css')
-    ->appendStylesheet($this->layoutPath() . '/css/form.css')
-    ->appendStylesheet($this->layoutPath() . '/css/admin.css'); // temporary CSS to style admin and review module pages
+    ->appendStylesheet($this->layoutPath() . '/css/admin.css')
+    ->appendStylesheet($this->layoutPath() . '/css/opus.css');
 
 $this->container = Zend_Registry::get('Opus_Navigation');
 
@@ -58,7 +56,7 @@ if ($this->jQueryEnabled()) {
 
 <?= $this->doctype() ?>
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
 
     <head>
         <?= $this->headMeta() ?>
@@ -70,8 +68,8 @@ if ($this->jQueryEnabled()) {
     <body>
         <div id="top-header">
             <div class="wrapper">
-                <ul id="lang-switch" class="nav"><?= $this->languageSelector() ?></ul>
-                <span id="login-bar"><?= $this->loginBar() ?></span>
+                <ul id="lang-switch" class="nav" title="Choose your language"><?= $this->languageSelector() ?></ul>
+                <ul id="login-bar" class="nav"><?= $this->loginBar() ?></ul>
             </div>
         </div>
 
@@ -83,7 +81,7 @@ if ($this->jQueryEnabled()) {
                 <ul id="primary-nav" class="nav">
                 <?php foreach ($this->container as $page) : ?>
                     <?php $pageIsActive = $page->isActive(false); ?>
-                    <li id="<?= $page->getId() ?>" class="<?= $page->getClass().($pageIsActive ? ' active' : '')?>">
+                    <li id="<?= $page->getId() ?>" class="<?= ($pageIsActive ? 'active ' : '').$page->getClass()?>">
                         <?php if(!$pageIsActive) : ?>
                         <a href="<?= $page->getHref() ?>" title="<?= $page->getTitle() ?>">
                         <?php endif ?>
@@ -103,22 +101,19 @@ if ($this->jQueryEnabled()) {
             </div>
         </div>
 
-        <div id="content" class="clearfix">
+        <div id="content">
             <div class="wrapper">
                 <?= $this->layout()->content ?>
             </div>
         </div>
 
-        <div id="footer">
+        <div id="page-footer">
             <div class="wrapper">
-                <div id="footerLinks" class="left">
-                    <ul id="secondary-nav" class="nav">
-                        <li class="first"><a href="<?= $this->url(array('module'=>'home','controller'=>'index','action'=>'about'),null,true) ?>"><?= $this->translate('about_menu_label') ?></a></li>
-                        <li><a href="<?= $this->url(array('module'=>'home','controller'=>'index','action'=>'about','content'=>'about_content_impress'),null,true) ?>"><?= $this->translate('credits_label') ?></a></li>
-                        <li class="last"><a href="<?= $this->url(array('module'=>'home','controller'=>'index','action'=>'contact'),null,true) ?>"><?= $this->translate('home_index_contact_actionname'); ?></a></li>
-                    </ul>
-                </div>
-
+               <ul id="secondary-nav" class="nav">
+                 <li class="first"><a href="<?= $this->url(array('module'=>'home','controller'=>'index','action'=>'about'),null,true) ?>"><?= $this->translate('about_menu_label') ?></a></li>
+                 <li><a href="<?= $this->url(array('module'=>'home','controller'=>'index','action'=>'about','content'=>'about_content_impress'),null,true) ?>"><?= $this->translate('credits_label') ?></a></li>
+                 <li class="last"><a href="<?= $this->url(array('module'=>'home','controller'=>'index','action'=>'contact'),null,true) ?>"><?= $this->translate('home_index_contact_actionname'); ?></a></li>
+               </ul>
                 <p id="copyright">&copy; <abbr xml:lang="de" title="Kooperativer Bibliotheksverbund Berlin-Brandenburg" lang="de">KOBV</abbr> 2010</p>
             </div>
         </div>
