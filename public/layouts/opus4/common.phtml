@@ -37,7 +37,7 @@ $this->headMeta()
     ->appendHttpEquiv('Content-Language', 'de-DE');
 
 $this->headTitle('OPUS 4')
-    ->headTitle($this->title)
+    ->headTitle($this->translate($this->title))
     ->setSeparator(' | ');
 
 $this->headLink()
