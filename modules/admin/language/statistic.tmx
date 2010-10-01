@@ -15,6 +15,15 @@
         <seg>Admin: Veröffentlichungstatistik</seg>
       </tuv>
     </tu>
+
+    <tu tuid="admin_statistic_show">
+      <tuv xml:lang="en">
+        <seg>Number of Publications</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Veröffentlichungstatistik</seg>
+      </tuv>
+    </tu>
     
     <tu tuid="Total_Number_Documents">
       <tuv xml:lang="en">
