@@ -46,10 +46,12 @@ class Publish_Model_Validation {
     public $licences = array();
     public $languages = array();
     public $log;
+    public $session;
 
     public function __construct($datatype) {
         $this->datatype = $datatype;
         $this->log = Zend_Registry::get('Zend_Log');
+        $this->session = new Zend_Session_Namespace();
     }
 
     public function validate() {
@@ -117,13 +119,27 @@ class Publish_Model_Validation {
     }
 
     private function _validateDate() {
-        //$validator = new Zend_Validate_Date();
-        $validator = new Opus_Validate_Date();
+        $format_de = "DD.MM.YYYY";
+        $format_en = "YYYY/MM/DD";
+
+        $lang = $this->session->language;
+        $this->log->debug("Language for Opus_Validate_Date: " . $lang . "**********************");
+        $validator = array();
+
+        switch ($lang) {
+            case 'en' : $validator = new Zend_Validate_Date(array('format' => $format_en, 'locale' => $lang));
+                break;
+            case 'de' : $validator = new Zend_Validate_Date(array('format' => $format_de, 'locale' => $lang));
+                break;
+            default :  $validator = new Zend_Validate_Date(array('format' => $format_en, 'locale' => $lang));
+                break;
+        }
         $messages = array(
             Zend_Validate_Date::INVALID => 'publish_validation_error_date_invalid',
             Zend_Validate_Date::INVALID_DATE => 'publish_validation_error_date_invaliddate',
             Zend_Validate_Date::FALSEFORMAT => 'publish_validation_error_date_falseformat');
         $validator->setMessages($messages);
+        
         return $validator;
     }
 
