@@ -71,62 +71,42 @@ class Home_IndexController extends Controller_Action {
      * @return void
      */
     public function languageAction() {
+        $module = null;
+        $controller = null;
+        $action = null;
+        $language = null;
+        $params = array();
 
-        $origin = $_SERVER['HTTP_REFERER'];
-        $language = $this->_request->getParam('language');
+        foreach ($this->getRequest()->getParams() as $param => $value) {
+            switch ($param) {
+                case 'rmodule':
+                    $module = $value;
+                    break;
+                case 'rcontroller':
+                    $controller = $value;
+                    break;
+                case 'raction':
+                    $action = $value;
+                    break;
+                case 'language':
+                    $language = $value;
+                    break;
+                default:
+                    $params[$param] = $value;
+            }
+        }
 
-        if (is_string('language') === false
-                or Zend_Registry::get('Zend_Translate')->isAvailable($language) === false) {
-            $this->_redirector->gotoUrl($origin);
-        } else {
+        if (!is_null($language) && Zend_Registry::get('Zend_Translate')->isAvailable($language)) {
             $sessiondata = new Zend_Session_Namespace();
             $sessiondata->language = $language;
-            $this->_redirector->gotoUrl($origin);
         }
+        $this->_redirectTo($action, '', $controller, $module, $params);
     }
 
-    /**
-     * Show fulltext search form
-     *
-     * @return void
-     */
     public function indexAction() {
-        $searchForm = new Zend_Form;
-        $searchForm->setAttrib('class', 'crud');
-        $query = new Zend_Form_Element_Text('query');
-        $query->addValidator('stringLength', false, array(3, 100))
-            ->setRequired(true);
-
-        $submit = new Zend_Form_Element_Submit('submit');
-        $submit->setLabel('search_searchaction');
-
-        // Add elements to form:
-        $searchForm->addElements(array($query, $submit));
-
-        $searchForm->setAction($this->view->url(array(
-            'module' => 'search',
-            'controller' => 'search',
-            'action' => 'search')));
-        $searchForm->setMethod('post');
-        $this->view->searchForm = $searchForm;
-
         $this->_helper->mainMenu('home');
     }
 
-    public function aboutAction() {
-         $config = Zend_Registry::get('Zend_Config');
-
-		$module = $config->startmodule;
-		if (empty($module) === true) {
-			$module = 'home';
-		}
-		
-		$this->view->startmodule = $module;
- 
-        if (array_key_exists('content', $this->_request->getParams()) === true) {
-            $this->view->content = $this->_request->getParam("content");
-        }
-    }
 
     public function helpAction() {
         $config = Zend_Registry::get('Zend_Config');        
@@ -138,12 +118,15 @@ class Home_IndexController extends Controller_Action {
 
         $content = $this->getRequest()->getParam('content');
         if (!is_null($content)) {
+
+            // TODO remove this after deletion of about action
             if ($content === 'contact') {
                 $this->_redirectToAndExit('contact');
             }
             if ($content === 'whatsthis') {
                 $this->_redirectToAndExit('about', '', null, null, array('content' => 'about_content_whatsthis'));
             }
+            
 
             $translation = $this->view->translate('help_content_' . $content);
             
