@@ -258,3 +258,19 @@
     padding: 0.5em;
     background-color: white; /* #efefef; */
 }
+
+.adminContainer dl.menu {
+    margin-left: 2em;
+}
+
+.adminContainer dl.menu dt {
+    font-size: 120%;
+    margin-left: 0em;
+}
+
+.adminContainer dl.menu dd {
+    margin-left: 0em;
+    color: gray;
+    font-style: italic;
+    margin-bottom: 0.5em;
+}

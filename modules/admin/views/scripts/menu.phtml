@@ -1,5 +1,5 @@
-<?php
-/**
+<?PHP
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,30 +25,20 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Admin
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
- * @author      Jens Schwidder (schwidder@zib.de)
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 ?>
-<div class="adminContainer">
 
-    <div class="breadcrumbsContainer">
-        <?= $this->title ?>
-    </div>
-
-    <div id="adminMenuContainer">
-        <?PHP
-        $partial = array('menu.phtml', 'admin');
-        $this->navigation()->menu()->setPartial($partial);
-        echo $this->navigation()->menu()->render();
-        $this->navigation()->menu()->setPartial(null); // prevents invluencing main menu
-        ?>
-    </div>
-
-</div>
-
-
+<?PHP foreach ($this->container as $parent) : ?>
+    <?PHP if ($parent->isActive()) : ?>
+    <dl class="menu">
+        <?PHP foreach ($parent->getPages() as $page) : ?>
+        <dt><?= $this->navigation()->menu()->htmlify($page) ?></dt>
+        <dd><?= $this->translate($page->description) ?></dd>
+        <?PHP endforeach; ?>
+    </dl>
+    <?PHP endif; ?>
+<?PHP endforeach; ?>

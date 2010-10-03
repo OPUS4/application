@@ -42,6 +42,15 @@
         <seg>Sammlungen verwalten</seg>
       </tuv>
     </tu>
+
+    <tu tuid="admin_title_collections_description">
+      <tuv xml:lang="en">
+        <seg>Create, editing, and delete collections.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sammlungen erstellen, editieren und löschen.</seg>
+      </tuv>
+    </tu>
     
     <tu tuid="admin_title_person">
       <tuv xml:lang="en">
@@ -61,6 +70,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="admin_title_licence_description">
+      <tuv xml:lang="en">
+        <seg>Add, edit or remove licences.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Lizenzen hinzfügen, editieren, oder löschen.</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_title_organizational_units_show">
       <tuv xml:lang="en">
         <seg>Organizational units</seg>
@@ -88,6 +106,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="admin_title_documents_description">
+      <tuv xml:lang="en">
+        <seg>Edit document metadata. Delete documents and manage files.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokumenten Meta-Daten editieren. Dokumente löschen und Dateien verwalten.</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_title_languages">
       <tuv xml:lang="en">
         <seg>Languages</seg>
@@ -97,21 +124,48 @@
       </tuv>
     </tu>
     
-    <tu tuid="admin_title_statistic">
+    <tu tuid="admin_title_languages_description">
       <tuv xml:lang="en">
-        <seg>Show number of publications</seg>
+        <seg>Add, edit or remove languages. Aktivate or deaktive languages.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Veröffentlichungsstatistik anzeigen</seg>
+        <seg>Sprachen hinzufügen, editieren, entfernen und ein- oder ausschalten.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_title_statistic">
+      <tuv xml:lang="en">
+        <seg>Publication statistics</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Veröffentlichungsstatistik</seg>
       </tuv>
     </tu>
     
+    <tu tuid="admin_title_statistic_description">
+      <tuv xml:lang="en">
+        <seg>Shows publication statistics for individual years.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zeigt Veröffentlichungsstatistiken für einzelne Jahre.</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_title_oailink">
       <tuv xml:lang="en">
         <seg>OAI Link Information</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>OAI Link anzeigen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_title_oailink_description">
+      <tuv xml:lang="en">
+        <seg>Base URL for OAI requests and examples.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>URL für OAI Anfragen und Beispiele.</seg>
       </tuv>
     </tu>
 
@@ -124,12 +178,30 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_title_dnbinstitute_description">
+      <tuv xml:lang="en">
+        <seg>Add, edit, or remove DNB Institutes.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>DNB Institute hinzufügen, editieren, oder löschen.</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_title_security">
       <tuv xml:lang="en">
         <seg>Access Control</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Zugriffskontrolle</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_title_security_description">
+      <tuv xml:lang="en">
+        <seg>Manage user account, IP ranges, and roles and their privileges.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Verwalten von Nutzerkonten, IP Bereichen, und Rollen sowie deren Privilegien.</seg>
       </tuv>
     </tu>
 

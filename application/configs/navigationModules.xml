@@ -10,6 +10,7 @@
             <pages>
                 <security>
                     <label>admin_title_security</label>
+                    <description>admin_title_security_description</description>
                     <module>admin</module>
                     <controller>security</controller>
                     <action>index</action>
@@ -147,6 +148,7 @@
 
                 <documents>
                     <label>admin_title_documents</label>
+                    <description>admin_title_documents_description</description>
                     <module>admin</module>
                     <controller>documents</controller>
                     <action>index</action>
@@ -154,6 +156,7 @@
 
                 <licence>
                     <label>admin_title_licence</label>
+                    <description>admin_title_licence_description</description>
                     <module>admin</module>
                     <controller>licence</controller>
                     <action>index</action>
@@ -197,6 +200,7 @@
 
                 <collections>
                     <label>admin_title_collections</label>
+                    <description>admin_title_collections_description</description>
                     <module>admin</module>
                     <controller>collection</controller>
                     <action>index</action>
@@ -204,6 +208,7 @@
 
                 <languages>
                     <label>admin_title_languages</label>
+                    <description>admin_title_languages_description</description>
                     <module>admin</module>
                     <controller>language</controller>
                     <action>index</action>
@@ -247,6 +252,7 @@
 
                 <statistic>
                     <label>admin_title_statistic</label>
+                    <description>admin_title_statistic_description</description>
                     <module>admin</module>
                     <controller>statistic</controller>
                     <action>index</action>
@@ -262,6 +268,7 @@
 
                 <oailink>
                     <label>admin_title_oailink</label>
+                    <description>admin_title_oailink_description</description>
                     <module>admin</module>
                     <controller>oailink</controller>
                     <action>index</action>
@@ -269,6 +276,7 @@
 
                 <dnbInstitute>
                     <label>admin_title_dnbinstitute</label>
+                    <description>admin_title_dnbinstitute_description</description>
                     <module>admin</module>
                     <controller>dnbinstitute</controller>
                     <action>index</action>
