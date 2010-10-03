@@ -1,2 +1,2 @@
-<h2>Technische Dokumentation dieses Dokumentenservers</h2>
+<!-- @todo: text need to be checked -->
 Dieser Dokumentenserver wird auf Basis der Software OPUS 4.0 betrieben. OPUS ist dokumentiert unter http://opusdev.bsz-bw.de

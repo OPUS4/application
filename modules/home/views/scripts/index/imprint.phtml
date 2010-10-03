@@ -26,26 +26,17 @@
  *
  * @category    Application
  * @package     Module_Home
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @author      Felix Ostrowski (ostrowski@hbz-nrw.de)
- * @author      Gunar Maiwald (maiwald@zib.de)
+ * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 ?>
 
-<? $this->title = $this->translate('home_index_index_pagetitle') ?>
+<? $this->title = $this->translate('home_index_imprint_pagetitle') ?>
 
-<h2><?= $this->translate('home_index_index_title') ?></h2>
+<h1><?= $this->translate('home_index_imprint_title') ?></h1>
 
-<div class="intro">
-    <div class="col col-left">
-        <p><?= $this->translate('home_index_index_welcome') ?></p>
-    </div>
-    <div class="col col-right">
-        <p><?= $this->translate('home_index_index_instructions') ?></p>
-    </div>
-</div>
-
-<?php include(APPLICATION_PATH . '/modules/solrsearch/views/scripts/index/simpleSearchForm.phtml') ?>
+<p>
+<?= $this->translate('home_index_imprint_content') ?>
+</p>

@@ -1,4 +1,4 @@
-<h2>Disclaimer</h2>
+<!-- @todo: text need to be checked -->
 The information published here is collected with care, but do not claim to be current, absolutely correct or complete, we do not guarantee this. All services free of charge are non-binding. The maintainer reserves the right, to change, add or terminate certain services or parts of them without explicit notification.
 <br/><br/>
 The maintainer of this service is not liable for contents of foreign pages, which are accessible via a hyperlink. The hyperlinks used in this service are collected with reasonable care. The maintainer cannot influence the current contents or the ones in the future for foreign pages. So the maintainer is not liable for those contents of those pages and does not usurp it. Only the maintainer of the external pages is liable for illegal, deficient or non-complete contents as for damages, which may occur by using or not-using of his information. The liability of the one who makes a hyperlink to that page is excluded.

@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+    <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool"></header>
+    <body>
+        <tu tuid="home_index_imprint_pagetitle">
+          <tuv xml:lang="en">
+            <seg>Imprint</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Impressum</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="home_index_imprint_title">
+          <tuv xml:lang="en">
+            <seg>Legal notice according to §6 Teledienstegesetz (Germany)</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Impressum nach §6 Teledienstegesetz</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="home_index_imprint_content">
+          <tuv xml:lang="en">
+            <seg>Add your imprint.</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Tragen Sie das Impressum ein.</seg>
+          </tuv>
+        </tu>
+    </body>
+</tmx>

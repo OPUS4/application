@@ -1,0 +1,3 @@
+<!-- @todo: text need to be checked -->
+Welcome on this electronic document repository. This server is maintained by the university library. You can find electronic fulltexts here.
+If you have created a doctoral thesis or state doctorate or anything else interesting for the scientific community at this university and want to publish your work online, you can do that by clicking on "Publish".

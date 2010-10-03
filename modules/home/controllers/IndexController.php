@@ -109,32 +109,21 @@ class Home_IndexController extends Controller_Action {
 
 
     public function helpAction() {
-        $config = Zend_Registry::get('Zend_Config');        
-        $module = $config->startmodule;
-        if (!isset($module) || empty($module)) {
-            $module = 'home';
-        }
-        $this->view->startmodule = $module;
-
         $content = $this->getRequest()->getParam('content');
         if (!is_null($content)) {
-
-            // TODO remove this after deletion of about action
             if ($content === 'contact') {
                 $this->_redirectToAndExit('contact');
             }
-            if ($content === 'whatsthis') {
-                $this->_redirectToAndExit('about', '', null, null, array('content' => 'about_content_whatsthis'));
+            if ($content === 'imprint') {
+                $this->_redirectToAndExit('imprint');
             }
-            
 
-            $translation = $this->view->translate('help_content_' . $content);
-            
+            $translation = $this->view->translate('help_content_' . $content);            
             if (file_exists($this->view->getScriptPath('') . $translation)) {
                 $this->view->contenttitle = 'help_title_' . $content;
                 $this->view->content = file_get_contents($this->view->getScriptPath('') . $translation);
             }
-            elseif ($translation !== $content) {
+            elseif ($translation !== 'help_content_' . $content) {
                 $this->view->contenttitle = 'help_title_' . $content;
                 $this->view->content = $translation;
             }

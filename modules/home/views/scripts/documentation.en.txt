@@ -1,2 +1,2 @@
-<h2>Technical Documentation of TUBdok</h2>
+<!-- @todo: text need to be checked -->
 This document server is running on OPUS 4.0. OPUS is documented on http://opusdev.bsz-bw.de.

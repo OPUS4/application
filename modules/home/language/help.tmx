@@ -64,7 +64,16 @@
             </tuv>
         </tu>
 
-		<tu tuid="help_index_test">
+        <tu tuid="help_index_misc">
+            <tuv xml:lang="en">
+                <seg>Miscellaneous</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sonstiges</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_index_test">
             <tuv xml:lang="en">
                 <seg>Test</seg>
             </tuv>
@@ -78,12 +87,20 @@
             headlines help sections
 
         -->
-        <tu tuid="help_title_whatsthis">
+        <tu tuid="help_title_about">
             <tuv xml:lang="en">
                 <seg>What is this?</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>Was ist das hier?</seg>
+            </tuv>
+        </tu>
+        <tu tuid="help_content_about">
+            <tuv xml:lang="en">
+                <seg>about.en.txt</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>about.de.txt</seg>
             </tuv>
         </tu>
 
@@ -150,6 +167,7 @@
                 <seg>An wen kann ich mich bei Fragen wenden?</seg>
             </tuv>
         </tu>
+        <!-- to edit help_content_contact open contact.tmx -->
 
 
         <tu tuid="help_title_free">
@@ -420,8 +438,93 @@
                 <seg>legal_license.de.txt</seg>
             </tuv>
         </tu>
-		
-		<tu tuid="help_title_test">
+
+
+
+
+        <tu tuid="help_title_policies">
+            <tuv xml:lang="en">
+                <seg>Policies</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Leitlinien</seg>
+            </tuv>
+        </tu>
+        <tu tuid="help_content_policies">
+            <tuv xml:lang="en">
+                <seg>policies.en.txt</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>policies.de.txt</seg>
+            </tuv>
+        </tu>
+
+
+        <tu tuid="help_title_documentation">
+            <tuv xml:lang="en">
+                <seg>Documentation</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Dokumentation</seg>
+            </tuv>
+        </tu>
+        <tu tuid="help_content_documentation">
+            <tuv xml:lang="en">
+                <seg>documentation.en.txt</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>documentation.de.txt</seg>
+            </tuv>
+        </tu>
+
+
+        <tu tuid="help_title_disclaimer">
+            <tuv xml:lang="en">
+                <seg>Disclaimer</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Haftungsausschluss</seg>
+            </tuv>
+        </tu>
+        <tu tuid="help_content_disclaimer">
+            <tuv xml:lang="en">
+                <seg>disclaimer.en.txt</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>disclaimer.de.txt</seg>
+            </tuv>
+        </tu>
+
+
+        <tu tuid="help_title_imprint">
+            <tuv xml:lang="en">
+                <seg>Imprint</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Impressum</seg>
+            </tuv>
+        </tu>
+        <!-- to edit help_content_imprint open imprint.tmx -->
+
+        <tu tuid="help_title_termsofuse">
+            <tuv xml:lang="en">
+                <seg>Terms of Use</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Nutzungsbedingungen</seg>
+            </tuv>
+        </tu>
+        <tu tuid="help_content_termsofuse">
+            <tuv xml:lang="en">
+                <seg>terms_of_use.en.txt</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>terms_of_use.de.txt</seg>
+            </tuv>
+        </tu>
+
+	
+        <tu tuid="help_title_test">
             <tuv xml:lang="en">
                 <seg>This is a Test</seg>
             </tuv>
