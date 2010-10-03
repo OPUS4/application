@@ -31,14 +31,16 @@
  * @version     $Id$
  */
 ?>
+<?PHP
+$activePages = $this->navigation()->findActive($this->container, 0, 1);
+$parent = $activePages['page'];
+// Figure out using the following
+// echo $this->navigation()->current();
+?>
 
-<?PHP foreach ($this->container as $parent) : ?>
-    <?PHP if ($parent->isActive()) : ?>
-    <dl class="menu">
-        <?PHP foreach ($parent->getPages() as $page) : ?>
-        <dt><?= $this->navigation()->menu()->htmlify($page) ?></dt>
-        <dd><?= $this->translate($page->description) ?></dd>
-        <?PHP endforeach; ?>
-    </dl>
-    <?PHP endif; ?>
-<?PHP endforeach; ?>
+<dl class="menu">
+    <?PHP foreach ($parent->getPages() as $page) : ?>
+    <dt><?= $this->navigation()->menu()->htmlify($page) ?></dt>
+    <dd><?= $this->translate($page->description) ?></dd>
+    <?PHP endforeach; ?>
+</dl>

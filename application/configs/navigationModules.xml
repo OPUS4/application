@@ -17,6 +17,7 @@
                     <pages>
                         <accounts>
                             <label>admin_security_title_accounts</label>
+                            <description>admin_security_title_accounts_description</description>
                             <module>admin</module>
                             <controller>account</controller>
                             <action>index</action>
@@ -60,6 +61,7 @@
 
                         <ipranges>
                             <label>admin_security_title_ipranges</label>
+                            <description>admin_security_title_ipranges_description</description>
                             <module>admin</module>
                             <controller>iprange</controller>
                             <action>index</action>
@@ -103,6 +105,7 @@
 
                         <roles>
                             <label>admin_security_title_roles</label>
+                            <description>admin_security_title_roles_description</description>
                             <module>admin</module>
                             <controller>role</controller>
                             <action>index</action>

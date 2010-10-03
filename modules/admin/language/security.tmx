@@ -16,7 +16,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_security_title_ipranges_hint">
+    <tu tuid="admin_security_title_ipranges_description">
       <tuv xml:lang="en">
         <seg>Manage role based access for IP ranges.</seg>
       </tuv>
@@ -34,7 +34,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_security_title_roles_hint">
+    <tu tuid="admin_security_title_roles_description">
       <tuv xml:lang="en">
         <seg>Manage roles and their privileges.</seg>
       </tuv>
@@ -53,16 +53,14 @@
       </tuv>
     </tu>
 
-    <!--
-    <tu tuid="admin_security_title_accounts_hint">
+    <tu tuid="admin_security_title_accounts_description">
       <tuv xml:lang="en">
-        <seg>Manager user accounts.</seg>
+        <seg>Create, edit, or remove user accounts.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>IP Adressbereiche</seg>
+        <seg>Erstellen, editieren und löschen von Nutzerkonten.</seg>
       </tuv>
     </tu>
-    -->
    
   </body>
   
