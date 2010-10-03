@@ -170,10 +170,23 @@ class Review_Model_DocumentAdapter {
     }
 
     /**
-     * Returns URL for deleting document.
+     * Returns the correct delete url depending on document state.
      * @return url
      */
     public function getUrlDelete() {
+        if ($this->getDocState() === 'deleted') {
+            return $this->getUrlPermanentDelete();
+        }
+        else {
+            return $this->getUrlSimpleDelete();
+        }
+    }
+
+    /**
+     * Returns URL for deleting document.
+     * @return url
+     */
+    public function getUrlSimpleDelete() {
         $url_delete = array (
             'module'     => 'admin',
             'controller' => 'documents',
@@ -224,6 +237,58 @@ class Review_Model_DocumentAdapter {
         $this->authors = $authors;
 
         return $authors;
+    }
+
+    /**
+     * Returns the search URL for an author.
+     */
+    public function getAuthorUrl() {
+        throw new Exception('not implemented yet');
+        $this->view->author[$runningIndex] = array();
+        $this->view->url_author[$runningIndex] = array();
+        for ($counter = 0; $counter < $c; $counter++) {
+                $name = $d->getPersonAuthor($counter)->getName();
+            $this->view->url_author[$runningIndex][$counter] = $this->view->url(
+                array(
+                    'module'        => 'search',
+                    'controller'    => 'search',
+                    'action'        => 'metadatasearch',
+                    'author'        => $name
+                ),
+                null,
+                true
+            );
+            $this->view->author[$runningIndex][$counter] = $name;
+        }
+    }
+
+    /**
+     * Returns the document state.
+     * @return string
+     */
+    public function getDocState() {
+        try {
+            return $this->document->getServerState();
+        }
+        catch (Exception $e) {
+            return 'undefined';
+        }
+    }
+
+    /**
+     * Returns true if the document is deleted.
+     * @return boolean
+     */
+    public function isDeleted() {
+        return ($this->getDocState() === 'deleted');
+    }
+
+    public function isPublished() {
+        return ($this->getDocState() === 'published');
+    }
+
+    public function isUnpublished() {
+        return ($this->getDocState() === 'unpublished');
     }
 
 }

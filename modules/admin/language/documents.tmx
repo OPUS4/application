@@ -60,30 +60,48 @@
       </tuv>
     </tu>
 
-    <tu tuid="docs_published">
+    <tu tuid="admin_documents_show_docs">
       <tuv xml:lang="en">
-        <seg>Published documents</seg>
+        <seg>Show documents:</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Publizierte Dokumente</seg>
+        <seg>Zeige Dokumente:</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_documents_state_all">
+      <tuv xml:lang="en">
+        <seg>All</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Alle</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_documents_state_published">
+      <tuv xml:lang="en">
+        <seg>Published</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Publizierte</seg>
       </tuv>
     </tu>
     
-    <tu tuid="docs_unpublished">
+    <tu tuid="admin_documents_state_unpublished">
       <tuv xml:lang="en">
-        <seg>Unpublished documents</seg>
+        <seg>Unpublished</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Nicht publizierte Dokumente</seg>
+        <seg>Nicht publizierte</seg>
       </tuv>
     </tu>
     
-    <tu tuid="docs_deleted">
+    <tu tuid="admin_documents_state_deleted">
       <tuv xml:lang="en">
-        <seg>Deleted documents</seg>
+        <seg>Deleted</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Gelöschte Dokumente</seg>
+        <seg>Gelöschte</seg>
       </tuv>
     </tu>
     

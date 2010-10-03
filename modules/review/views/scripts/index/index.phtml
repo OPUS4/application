@@ -63,18 +63,12 @@
 <?PHP echo $this->paginationControl($this->paginator, 'Sliding', 'pagination_control.phtml'); ?>
 
 <table class="result">
-<?PHP
-    $index = -1;
-    foreach ($this->paginator as $docId) :
-?>
-    <?PHP
-        $document = new Review_Model_DocumentAdapter($this, $docId);
-        $index++;
-    ?>
-    <tr class="<?= ($index % 2) ? 'odd' : 'even' ?>">
+<?PHP $index = 0; foreach ($this->paginator as $docId) : ?>
+    <?PHP $document = new Review_Model_DocumentAdapter($this, $docId); ?>
+    <tr class="<?= ($index++ % 2) ? 'even' : 'odd' ?>">
         <td><input type="checkbox" name="selected[]" value="<?= $document->getDocId()?>"
                 <?= ((in_array($document->getDocId(), $this->selected) || $this->selectAll) && !$this->selectNone)  ? 'checked' : '' ?> /></td>
-        <td class="index"><?= $document->getDocId() // $this->paginator->getAbsoluteItemNumber($index + 1) ?>.</td>
+        <td class="index"><?= $document->getDocId() ?>.</td>
         <td>
             <div class="title">
                 <a href="<?= $document->getUrlFrontdoor() ?>" target="_blank">

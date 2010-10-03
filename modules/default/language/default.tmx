@@ -250,7 +250,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="sort_ascending">
+    <tu tuid="admin_documents_sort_ascending">
       <tuv xml:lang="en">
         <seg>Ascending</seg>
       </tuv>
@@ -259,7 +259,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="sort_descending">
+    <tu tuid="admin_documents_sort_descending">
       <tuv xml:lang="en">
         <seg>Descending</seg>
       </tuv>
@@ -268,7 +268,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="docs_by_id">
+    <tu tuid="admin_documents_sortby_id">
       <tuv xml:lang="en">
         <seg>ID</seg>
       </tuv>
@@ -313,36 +313,36 @@
       </tuv>
     </tu>
 
-    <tu tuid="docs_by_title">
+    <tu tuid="admin_documents_sortby_title">
       <tuv xml:lang="en">
-        <seg>title</seg>
+        <seg>Title</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Titel</seg>
       </tuv>
     </tu>
 
-    <tu tuid="docs_by_date">
+    <tu tuid="admin_documents_sortby_publicationDate">
       <tuv xml:lang="en">
-        <seg>date</seg>
+        <seg>Date</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Datum</seg>
       </tuv>
     </tu>
 
-    <tu tuid="docs_by_author">
+    <tu tuid="admin_documents_sortby_author">
       <tuv xml:lang="en">
-        <seg>author</seg>
+        <seg>Author</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Autor</seg>
       </tuv>
     </tu>
 
-    <tu tuid="docs_by_doctype">
+    <tu tuid="admin_documents_sortby_docType">
       <tuv xml:lang="en">
-        <seg>document type</seg>
+        <seg>Document type</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Dokumenttyp</seg>
@@ -351,19 +351,19 @@
     
      <tu tuid="search_titles_resultlist">
       <tuv xml:lang="en">
-        <seg>Query returned %1$s hits.</seg>
+        <seg>Query returned <b>%1$s</b> hits.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Die Suche ergab %1$s Treffer.</seg>
+        <seg>Die Suche ergab <b>%1$s</b> Treffer.</seg>
       </tuv>
     </tu>
     
      <tu tuid="search_results_from_to">
       <tuv xml:lang="en">
-        <seg>Showing results %1$s to %2$s</seg>
+        <seg>Showing results <b>%1$s</b> to <b>%2$s</b></seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Ergebnisse %1$s bis %2$s</seg>
+        <seg>Ergebnisse <b>%1$s</b> bis <b>%2$s</b></seg>
       </tuv>
     </tu>
     

@@ -35,143 +35,77 @@
  */
 ?>
 
-<h1><?= $this->translate('admin_documents_index') ?></h1>
-<p>
-<form action="<?= $this->url_call_id ?>" method="post" class="crud">
-     <?= $this->translate('docs_call_id_label') ?>
-     <input type="text" name="id" size="5" />
-     <input type="submit" value="<?= $this->translate('docs_call_id') ?>" />
-</form>
-</p>
-<br/><br/>
-<p>
-<ul class="navigation">
-<?php
-foreach ($this->registers as $register) {
-	?>
-	<li
-    <?php
-        $urlArray = explode('/', $register[0]);
-        $state = $urlArray[count($urlArray)-1];
-        if ($this->state === $state) {
-            echo 'class="active"';
-        }
-        if (empty($this->state) === true && $state === 'documents') {
-            echo 'class="active"';
-        }
-    ?>
-	><a href="<?=$register[0] ?>"><?= $this->translate($register[1]) ?></a></li>
-	<?php
-}
-?></ul>
-</p>
-<br/>
-<ul class="navigation">
-    <?= $this->translate('docs_sortorder') ?>
-    <li
-    <?php
-        if ($this->sort_order === 'id' || empty($this->sort_order) === true) {
-            echo 'class="active"';
-        }
-    ?>
-    ><a href="<?= $this->url_sort_by_id ?>"><?= $this->translate('docs_by_id') ?></a></li>
-    <li
-    <?php
-        if ($this->sort_order === 'title') {
-            echo 'class="active"';
-        }
-    ?>
-    ><a href="<?= $this->url_sort_by_title ?>"><?= $this->translate('docs_by_title') ?></a></li>
-    <li
-    <?php
-        if ($this->sort_order === 'author') {
-            echo 'class="active"';
-        }
-    ?>
-    ><a href="<?= $this->url_sort_by_author ?>"><?= $this->translate('docs_by_author') ?></a></li>
-    <li
-    <?php
-        if ($this->sort_order === 'publicationDate') {
-            echo 'class="active"';
-        }
-    ?>
-    ><a href="<?= $this->url_sort_by_date ?>"><?= $this->translate('docs_by_date') ?></a></li>
-    <li
-    <?php
-        if ($this->sort_order === 'docType') {
-            echo 'class="active"';
-        }
-    ?>
-    ><a href="<?= $this->url_sort_by_doctype ?>"><?= $this->translate('docs_by_doctype') ?></a></li>
-    <li
-    <?php
-        if ($this->sort_reverse === '0' || $this->sort_reverse === false || empty($this->sort_reverse) === true) {
-            echo 'class="active"';
-        }
-    ?>
-    style="margin-left:30px;"><a href="<?= $this->url_sort_asc ?>"><?= $this->translate('sort_ascending') ?></a></li>
-    <li
-    <?php
-        if ($this->sort_reverse === '1' || $this->sort_reverse === true) {
-            echo 'class="active"';
-        }
-    ?>
-    ><a href="<?= $this->url_sort_desc ?>"><?= $this->translate('sort_descending') ?></a></li>
-</ul>
-<?php
-if (count($this->docId)) {
-    echo $this->paginationControl($this->paginator, NULL, 'itemCount_pagination.phtml');
-    echo $this->paginationControl($this->paginator, 'Sliding', 'results_pagination.phtml');
-    echo $this->paginationControl($this->paginator, NULL, 'start_itemlist.phtml');
+<div class="adminContainer">
 
-    // FIXME: <ol start="..."> is not valid XHTML 1.0 Strict!
-    // but it will return in (X)HTML 5 - so wontfix
-    $pagerInfo = $this->paginator->getPages();
-    ?>
-    <ol class="search " start="<?= $pagerInfo->firstItemNumber ?>">
-    <?php
-    $searchListItemCount = 0;    
-    for ($runningIndex = 0; $runningIndex < count($this->docId); $runningIndex++) {
-        $searchListItemCount++;
-        $searchListOdd = ($searchListItemCount%2 === 1);
-        echo $searchListOdd ? '<li class="odd">' : '<li class="even">';
-        $authorcount = count($this->author[$runningIndex]);
-        for ($counter = 0; $counter < $authorcount; $counter++) {
-        ?>
-            <span class="author"><a href="<?=$this->url_author[$runningIndex][$counter]?>"><?=$this->author[$runningIndex][$counter]?></a></span>
-        <?php
-                if ($counter === $authorcount-1) echo ": ";
-                else echo "; ";
-        }
-        ?>
-        <span class="title"><a href="<?=$this->url_frontdoor[$runningIndex]?>"><?=$this->doctitle[$runningIndex]?></a></span>
-        <?php
-        if ($this->docState[$runningIndex] === 'deleted') { ?>
-        <form action="<?= $this->url_permanentdelete[$runningIndex] ?>" method="post" class="crud">
-        <?php
-        } else {
-        ?>
-        <form action="<?= $this->url_delete[$runningIndex] ?>" method="post" class="crud">
-        <?php
-        }
-        ?>
-        <input type='button' onClick="javascript:location.href='<?= $this->url_edit[$runningIndex] ?>'" value='<?= $this->translate('docs_edit') ?>' class="crud">
-        <input type="hidden" name="id" value="<?= $this->docId[$runningIndex] ?>" />
-        <?php if ($this->docState[$runningIndex] === 'deleted') { ?>
-        <input type="submit" value="<?= $this->translate('docs_permadelete') ?>" />
-        <?php
-        } else {
-        ?>
-        <input type="submit" value="<?= $this->translate('docs_delete') ?>" />
-        <?php
-        }
-        ?>
+    <div class="breadcrumbsContainer">
+        <?= $this->navigation()->breadcrumbs() ?>
+    </div>
+
+    <div style="text-align: center; margin: 0.1em 0em">
+        <form action="<?= $this->url_call_id ?>" method="post" class="crud">
+             <?= $this->translate('docs_call_id_label') ?>
+             <input type="text" name="id" size="5" />
+             <input type="submit" value="<?= $this->translate('docs_call_id') ?>" />
         </form>
-        </li>
-<?php
-    }
-?>
-    </ol>
+    </div>
+
+    <div class="documentOptions">
+        <div class="docstateMenu">
+            <span><?= $this->translate('admin_documents_show_docs') ?></span>
+            <?php foreach ($this->registers as $state => $link) : ?>
+            <span class="<?= ($this->state === $state) ? 'active' : '' ?>">
+                <a href="<?= $link ?>"><?= $this->translate('admin_documents_state_' . $state) ?></a>
+            </span>
+            <?php endforeach; ?>
+        </div>
+
+        <div class="docstateMenu">
+            <span><?= $this->translate('docs_sortorder') ?></span>
+            <?PHP foreach ($this->sortingLinks as $key => $link) : ?>
+            <span class="<?= ($this->sort_order === $key) ? 'active' : '' ?>">
+                <a href="<?= $link ?>"><?= $this->translate('admin_documents_sortby_' . $key) ?></a>
+            </span>
+            <?PHP endforeach; ?>
+            <span>-</span>
+            <?PHP foreach ($this->directionLinks as $key => $link) : ?>
+            <span class="<?= ($key === $this->sortDirection) ? 'active' : '' ?>">
+                <a href="<?= $link ?>"><?= $this->translate('admin_documents_sort_' . $key) ?></a>
+            </span>
+            <?PHP endforeach; ?>
+        </div>
+    </div>
+
+    <?= $this->paginationControl($this->paginator, NULL, 'itemCount_pagination.phtml') ?>
+    
     <?= $this->paginationControl($this->paginator, 'Sliding', 'results_pagination.phtml') ?>
-<?php
-}
+
+    <table class="documents">
+        <?PHP $index = 0; foreach ($this->paginator as $docId) : ?>
+        <?PHP $document = new Review_Model_DocumentAdapter($this, $docId); ?>
+        <tr class="<?= ($index++ % 2) ? 'even' : 'odd' ?>">
+            <td class="id"><?= $docId ?></td>
+            <td class="info">
+                <?PHP $authorsCount = count($document->getAuthors()) - 1; ?>
+                <?PHP foreach($document->getAuthors() as $count => $author) : ?>
+                    <span class="author"><a href=""><?= $author ?></a></span>
+                    <?= ($count < $authorsCount) ? '; ' : ': '?>
+                <?PHP endforeach; ?>
+                <span class="title"><a href="<?=$document->getUrlFrontdoor() ?>"><?= $document->getDocTitle() ?></a></span>
+                (<span class="doctype"><?= $document->getDocType() ?></span>,
+                <span class="pubDate"><?= $document->getPublishedDate() ?></span>)
+            </td>
+            <td class="actions">
+                <form action="<?= $document->getUrlDelete() ?>" method="post" class="crud">
+                    <input type='button' onClick="javascript:location.href='<?= $document->getUrlEdit() ?>'" value='<?= $this->translate('docs_edit') ?>' class="crud">
+                    <input type="hidden" name="id" value="<?= $document->getDocId() ?>" />
+                    <input type="submit" value="<?= $this->translate(($document->isDeleted()) ? 'docs_permadelete' : 'docs_delete') ?>" />
+                </form>
+            </td>
+        </tr>
+        <?PHP endforeach; ?>
+    </table>
+
+    <?= $this->paginationControl($this->paginator, 'Sliding', 'results_pagination.phtml') ?>
+
+</div>
+

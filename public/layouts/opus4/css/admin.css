@@ -106,6 +106,35 @@
     font-weight: normal;
 }
 
+.adminContainer table.documents {
+    border-collapse: collapse;
+    border-top: 1px solid gray;
+    border-bottom: 1px solid gray;
+    font-size: small;
+    width: 100%;
+    margin: 0;
+}
+
+.adminContainer table.documents td {
+    vertical-align: top;
+    padding: 0.2em 0.5em;
+    vertical-align: top;
+}
+
+.adminContainer table.documents td.id {
+    text-align: right;
+}
+
+.adminContainer table.documents td.info {
+}
+
+.adminContainer table.documents td.info span.author {
+    font-style: italic;
+}
+
+.adminContainer table.documents td.actions {
+    white-space: inherit;
+}
 
 .adminContainer table tr.odd {
     background: #f4f4f4;
@@ -137,4 +166,95 @@
     border-bottom: 2px solid white;
     background-color: #eeeeee;
     width: 50em;
+}
+
+.adminContainer ul.sortingNavigation {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    background-color: green;
+}
+
+.adminContainer ul.sortingNavigation li {
+    float: left;
+    margin: 0;
+    padding: 0;
+    padding-right: 2em;
+}
+
+.adminContainer ul.sortingNavigation li a {
+}
+
+.adminContainer ul.sortingNavigation li.active {
+    font-weight: bold;
+}
+
+.adminContainer .paginationInfo {
+    clear: both;
+    padding: 0.5em;
+    text-align: center;
+}
+
+.adminContainer .paginationControl {
+    text-align: center;
+    margin: 4px 0px;
+    padding: 2px;
+    background-color: #b3c6d6;
+}
+
+.adminContainer .paginationControl a {
+    text-decoration: none;
+    color: black;
+}
+
+.adminContainer .paginationControl a:visited {
+    text-decoration: none;
+    color: black;
+}
+
+.adminContainer .paginationControl a:hover {
+    text-decoration: none;
+    color: blue;
+}
+
+.adminContainer .paginationControl span.currentPage {
+    font-weight: bold;
+}
+
+.adminContainer .paginationControl span.disabled {
+    color: gray;
+}
+
+.adminContainer .docstateMenu {
+    text-align: center;
+    padding: 0.1em 0em;
+    margin-bottom: 0.5em;
+}
+
+.adminContainer .docstateMenu span {
+    padding: 0 0.5em;
+}
+
+.adminContainer .docstateMenu span.active {
+    font-weight: bold;
+}
+
+.adminContainer .docstateMenu a {
+    background-color: #dfefff;
+    color: black;
+    padding: 0px 6px;
+    padding-bottom: 1px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    text-decoration: none;
+}
+
+.adminContainer .docstateMenu span.active a {
+    background-color: #0088bb;
+    color: white;
+}
+
+.adminContainer .documentOptions {
+    padding: 0.5em;
+    background-color: white; /* #efefef; */
 }

@@ -46,6 +46,11 @@ class Admin_DocumentsController extends Controller_CRUDAction {
      */
     protected $_modelclass = 'Opus_Document';
 
+    protected $sortingOptions = array('id', 'title', 'author',
+        'publicationDate', 'docType');
+
+    protected $docOptions = array('all', 'published', 'unpublished', 'deleted');
+
     /**
      * Returns a filtered representation of the document.
      *
@@ -68,69 +73,17 @@ class Admin_DocumentsController extends Controller_CRUDAction {
      */
     public function indexAction() {
     	$this->view->title = $this->view->translate('admin_documents_index');
-        $this->view->registers = array(
-            array(
-                $this->view->url(array('module' => 'admin', 'controller'=>'documents', 'action'=>'index'), null, true), 'docs_all'
-            ),
-            array(
-                $this->view->url(array('module' => 'admin', 'controller'=>'documents', 'action'=>'index', 'state' => 'published'), null, true), 'docs_published'
-            ),
-            array(
-                $this->view->url(array('module' => 'admin', 'controller'=>'documents', 'action'=>'index', 'state' => 'unpublished'), null, true), 'docs_unpublished'
-            ),
-            array(
-                $this->view->url(array('module' => 'admin', 'controller'=>'documents', 'action'=>'index', 'state' => 'deleted'), null, true), 'docs_deleted'
-            )
-            );
+
+        $this->_prepareDocStateLinks();
+
         $url_call_id = array(
             'module' => 'admin',
             'controller' => 'documents',
             'action' => 'edit'
         );
         $this->view->url_call_id = $this->view->url($url_call_id, 'default', true);
-        $url_sort_by_id = array(
-            'module' => 'admin',
-            'controller' => 'documents',
-            'action' => 'index',
-            'sort_order' => 'id'
-        );
-        $url_sort_by_title = array(
-            'module' => 'admin',
-            'controller' => 'documents',
-            'action' => 'index',
-            'sort_order' => 'title'
-        );
-        $url_sort_by_author = array(
-            'module' => 'admin',
-            'controller' => 'documents',
-            'action' => 'index',
-            'sort_order' => 'author'
-        );
-        $url_sort_by_date = array(
-            'module' => 'admin',
-            'controller' => 'documents',
-            'action' => 'index',
-            'sort_order' => 'publicationDate'
-        );
-        $url_sort_by_doctype = array(
-            'module' => 'admin',
-            'controller' => 'documents',
-            'action' => 'index',
-            'sort_order' => 'docType'
-        );
-        $url_sort_asc = array(
-            'sort_reverse' => '0'
-        );
-        $url_sort_desc = array(
-            'sort_reverse' => '1'
-        );
-        $this->view->url_sort_by_id = $this->view->url($url_sort_by_id, 'default', false);
-        $this->view->url_sort_by_title = $this->view->url($url_sort_by_title, 'default', false);
-        $this->view->url_sort_by_author = $this->view->url($url_sort_by_author, 'default', false);
-        $this->view->url_sort_by_date = $this->view->url($url_sort_by_date, 'default', false);
-        $this->view->url_sort_by_doctype = $this->view->url($url_sort_by_doctype, 'default', false);
-        $this->view->url_sort_asc = $this->view->url($url_sort_asc, 'default', false);
-        $this->view->url_sort_desc = $this->view->url($url_sort_desc, 'default', false);
+
+        $this->_prepareSortingLinks();
 
         $data = $this->_request->getParams();
         $filter = $this->_getParam("filter");
@@ -151,18 +104,27 @@ class Admin_DocumentsController extends Controller_CRUDAction {
            $sort_reverse = '0';
         }
         $this->view->sort_reverse = $sort_reverse;
+        $this->view->sortDirection = ($sort_reverse) ? 'descending' : 'ascending';
 
         if (true === array_key_exists('state', $data)) {
-            $this->view->state = $data['state'];
+            $state = $data['state'];
+            $this->view->state = $state;
+        }
+        else {
+            $state = null;
+            $this->view->state = 'all';
         }
 
         if (true === array_key_exists('sort_order', $data)) {
-            $this->view->sort_order = $data['sort_order'];
+            $sort_order = $data['sort_order'];
         }
+        else {
+            $sort_order = 'id';
+        }
+        
+        $this->view->sort_order = $sort_order;
 
-        $result = $this->_getResult($this->view->state,
-                                    $this->view->sort_order,
-                                    $sort_reverse);
+        $result = $this->_helper->documents($sort_order, $sort_reverse, $state);
 
         $paginator = Zend_Paginator::factory($result);
         if (array_key_exists('hitsPerPage', $data)) {
@@ -182,109 +144,45 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         }
         $paginator->setCurrentPageNumber($page);
         $this->view->paginator = $paginator;
-
-        // iterate the paginator and get the attributes we want to show in the view
-        $runningIndex = 0;
-        $this->view->docId = array();
-        $this->view->doctitle = array();
-        $this->view->author = array();
-        $this->view->url_frontdoor = array();
-        $this->view->url_permanentdelete = array();
-        $this->view->url_delete = array();
-        $this->view->url_edit = array();
-        $this->view->url_author = array();
-        $this->view->docState = array();
-        foreach ($paginator as $id) {
-            $url_frontdoor = array(
-                'module' => 'frontdoor',
-                'controller' => 'index',
-                'action' => 'index',
-                'docId' => $id
-            );
-            $url_edit = array(
-                'module' => 'admin',
-                'controller' => 'documents',
-                'action' => 'edit',
-                'id' => $id
-            );
-            $url_delete = array (
-                'module' => 'admin',
-                'controller' => 'documents',
-                'action' => 'delete',
-            );
-            $url_permadelete = array (
-                'module' => 'admin',
-                'controller' => 'documents',
-                'action' => 'permanentdelete',
-            );
-            $this->view->url_edit[$runningIndex] = $this->view->url($url_edit, 'default', true);
-            $this->view->url_delete[$runningIndex] = $this->view->url($url_delete, 'default', true);
-            $this->view->url_permanentdelete[$runningIndex] = $this->view->url($url_permadelete, 'default', true);
-            $this->view->url_frontdoor[$runningIndex] = $this->view->url($url_frontdoor, 'default', true);
-
-            $d = new Opus_Document( (int) $id);
-            $this->view->docId[$runningIndex] = $id;
-            try {
-                $this->view->docState[$runningIndex] = $d->getServerState();
-            }
-            catch (Exception $e) {
-                $this->view->docState[$runningIndex] = 'undefined';
-            }
-
-            try {
-                $c = count($d->getPersonAuthor());
-            }
-            catch (Exception $e) {
-            	$c = 0;
-            }
-            $this->view->author[$runningIndex] = array();
-            $this->view->url_author[$runningIndex] = array();
-            for ($counter = 0; $counter < $c; $counter++) {
-        	    $name = $d->getPersonAuthor($counter)->getName();
-                $this->view->url_author[$runningIndex][$counter] = $this->view->url(
-                    array(
-                        'module'        => 'search',
-                        'controller'    => 'search',
-                        'action'        => 'metadatasearch',
-                        'author'        => $name
-                    ),
-                    null,
-                    true
-                );
-                $this->view->author[$runningIndex][$counter] = $name;
-            }
-            try {
-                $this->view->doctitle[$runningIndex] = $d->getTitleMain(0)->getValue();
-            }
-            catch (Exception $e) {
-            	$this->view->doctitle[$runningIndex] = $this->view->translate('document_no_title') . $id;
-            }
-            $runningIndex++;
-        }
     }
 
-    /**
-     * Returns documents from database for browsing.
-     *
-     * @param <type> $state
-     * @param <type> $sort_order
-     * @return <type>
-     *
-     * TODO following could be handled inside a application model
-     */
-    protected function _getResult($state = 'published', $sortOrder, $sortReverse) {
-        switch ($sortOrder) {
-            case 'author':
-                return Opus_Document::getAllDocumentsByAuthorsByState($state, $sortReverse);
-            case 'publicationDate':
-                return Opus_Document::getAllDocumentsByPubDateByState($state, $sortReverse);
-            case 'docType':
-                return Opus_Document::getAllDocumentsByDoctypeByState($state, $sortReverse);
-            case 'title':
-                return Opus_Document::getAllDocumentsByTitlesByState($state, $sortReverse);
-            default:
-                return Opus_Document::getAllIdsByState($state, $sortReverse);
+    protected function _prepareDocStateLinks() {
+        $registers = array();
+
+        foreach ($this->docOptions as $name) {
+            $params = array('module' => 'admin', 'controller'=>'documents', 'action'=>'index');
+            if ($name !== 'all') {
+                $params['state'] = $name;
+            }
+            $url = $this->view->url($params, null, true);
+            $registers[$name] = $url;
         }
+
+        $this->view->registers = $registers;
+    }
+
+    protected function _prepareSortingLinks() {
+        $sortingLinks = array();
+
+        foreach ($this->sortingOptions as $name) {
+            $params = array(
+                'module' => 'admin',
+                'controller' => 'documents',
+                'action' => 'index',
+                'sort_order' => $name
+            );
+            $sortUrl = $this->view->url($params, 'default', false);
+            $sortingLinks[$name] = $sortUrl;
+        }
+
+        $this->view->sortingLinks = $sortingLinks;
+
+        $directionLinks = array();
+
+        $directionLinks['ascending'] = $this->view->url(array('sort_reverse' => '0'), 'default', false);
+        $directionLinks['descending'] = $this->view->url(array('sort_reverse' => '1'), 'default', false);
+
+        $this->view->directionLinks = $directionLinks;
     }
 
     /**
@@ -363,7 +261,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                 // show safety question
                 $this->view->title = $this->view->translate('admin_doc_delete');
                 $this->view->text = $this->view->translate('admin_doc_delete_sure');
-                $yesnoForm = new YesNoForm();
+                $yesnoForm = new Admin_Model_YesNoForm();
                 $idElement = new Zend_Form_Element_Hidden('id');
                 $idElement->setValue($id);
                 $yesnoForm->addElement($idElement);
@@ -408,7 +306,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                 // show safety question
                 $this->view->title = $this->view->translate('admin_doc_delete_permanent');
                 $this->view->text = $this->view->translate('admin_doc_delete_permanent_sure');
-                $yesnoForm = new YesNoForm();
+                $yesnoForm = new Admin_Model_YesNoForm();
                 $idElement = new Zend_Form_Element_Hidden('id');
                 $idElement->setValue($id);
                 $yesnoForm->addElement($idElement);
@@ -495,7 +393,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $doc->setServerDatePublished($date->get('yyyy-MM-ddThh:mm:ss') . 'Z');
         $doc->store();
 
-   		$config = Zend_Registry::get('Zend_Config');
+        $config = Zend_Registry::get('Zend_Config');
 
         $searchEngine = $config->searchengine->engine;
         if (empty($searchEngine) === true) {
@@ -551,8 +449,10 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             $controller = array_shift($params);
             $action = array_shift($params);
             $this->_redirectTo('edit', '', $controller, $module, $params);
-        } else {
+        }
+        else {
             $this->_redirectTo('index');
         }
     }
+    
 }
