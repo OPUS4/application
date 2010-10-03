@@ -9,7 +9,7 @@
   
     <tu tuid="admin_documents_index">
       <tuv xml:lang="en">
-        <seg>Administration of documents</seg>
+        <seg>Administration of Documents</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Administration der Dokumente</seg>
@@ -197,7 +197,7 @@
 
     <tu tuid="admin_documents_edit">
       <tuv xml:lang="en">
-        <seg>Edit document metadata</seg>
+        <seg>Edit Document Metadata</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Dokument Metadaten ändern</seg>
