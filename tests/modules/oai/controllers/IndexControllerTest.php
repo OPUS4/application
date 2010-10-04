@@ -35,9 +35,10 @@
 
 class Oai_IndexControllerTest extends ControllerTestCase {
 
-
+    /**
+     * Basic test for invalid verbs.
+     */
     public function testInvalidVerb() {
-    try{
         $this->dispatch('/oai?verb=InvalidVerb');
         $this->assertResponseCode(200);
 
@@ -45,11 +46,10 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('badVerb', $response->getBody(),
            "Response must contain 'badVerb'");
     }
-    catch (Exception $e) {
-        $this->fail($e->getMessage() . "\n--\n" . $this->getResponse() . "\n--\n");
-    }
-    }
 
+    /**
+     * Basic test for requests without verb.
+     */
     public function testNoVerb() {
         $this->dispatch('/oai');
         $this->assertResponseCode(200);
@@ -59,6 +59,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
            "Response must contain 'badVerb'");
     }
 
+    /**
+     * Test verb=Identify.
+     */
     public function testIdentify() {
         $this->dispatch('/oai?verb=Identify');
         $this->assertResponseCode(200);
@@ -67,36 +70,32 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->checkForBadStringsInHtml($response->getBody());
     }
 
+    /**
+     * Test verb=ListMetadataFormats.
+     */
     public function testListMetadataFormats() {
-    try{
-        $this->dispatch('/oai?verb=ListSets');
-        $this->assertResponseCode(200);
-
-        $response = $this->getResponse();
-        $this->checkForBadStringsInHtml($response->getBody());
-    }
-    catch (Exception $e) {
-        echo $this->getResponse()->getBody() . "\n";
-        $this->fail($e->getMessage() . "\n--\n" . $this->getResponse() . "\n--\n");
-    }
-    }
-
-    public function testSets() {
-    try{
         $this->dispatch('/oai?verb=ListMetadataFormats');
         $this->assertResponseCode(200);
 
         $response = $this->getResponse();
         $this->checkForBadStringsInHtml($response->getBody());
     }
-    catch (Exception $e) {
-        echo $this->getResponse()->getBody() . "\n";
-        $this->fail($e->getMessage() . "\n--\n" . $this->getResponse() . "\n--\n");
-    }
+
+    /**
+     * Test verb=ListSets.
+     */
+    public function testListSets() {
+        $this->dispatch('/oai?verb=ListSets');
+        $this->assertResponseCode(200);
+
+        $response = $this->getResponse();
+        $this->checkForBadStringsInHtml($response->getBody());
     }
 
+    /**
+     * Test verb=GetRecord, prefix=xMetaDiss.
+     */
     public function testGetRecordxMetaDiss() {
-    try{
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDiss&identifier=oai::80');
         $this->assertResponseCode(200);
 
@@ -105,35 +104,29 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
         $this->assertContains('oai::80', $response->getBody(),
            "Response must contain 'oai::80'");
-           
-    }
-    catch (Exception $e) {
-        echo $this->getResponse()->getBody() . "\n";
-        $this->fail($e->getMessage() . "\n--\n" . $this->getResponse() . "\n--\n");
-    }
     }
 
+    /**
+     * Test verb=GetRecord, prefix=oai_dc.
+     */
     public function testGetRecordOaiDc() {
-    try{
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::35');
         $this->assertResponseCode(200);
 
         $response = $this->getResponse();
         $this->checkForBadStringsInHtml($response->getBody());
     }
-    catch (Exception $e) {
-        echo $this->getResponse()->getBody() . "\n";
-        $this->fail($e->getMessage() . "\n--\n" . $this->getResponse() . "\n--\n");
-    }
-    }
 
+    /**
+     * Test verb=GetRecord, prefix=XMetaDissPlus.
+     */
     public function testGetRecordxMetaDissPlus() {
-    try{
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::41');
         $this->assertResponseCode(200);
 
         $response = $this->getResponse();
-//        $this->checkForBadStringsInHtml($response->getBody());
+        $badStrings = array("Exception", "Error", "Stacktrace", "badVerb");
+        $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
 
         $this->assertContains('oai::41', $response->getBody(),
            "Response must contain 'oai::80'");
@@ -141,45 +134,33 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('xMetaDiss', $response->getBody(),
            "Response must contain 'xMetaDiss'");
     }
-    catch (Exception $e) {
-        echo $this->getResponse()->getBody() . "\n";
-        $this->fail($e->getMessage() . "\n--\n" . $this->getResponse() . "\n--\n");
-    }
-    }
 
+    /**
+     * Test verb=ListIdentifiers.
+     */
     public function testListIdentifiers() {
-    try{
         $this->dispatch('/oai?verb=ListIdentifiers&metadataPrefix=oai_dc');
         $this->assertResponseCode(200);
 
         $response = $this->getResponse();
         $this->checkForBadStringsInHtml($response->getBody());
     }
-    catch (Exception $e) {
-        echo $this->getResponse()->getBody() . "\n";
-        $this->fail($e->getMessage() . "\n--\n" . $this->getResponse() . "\n--\n");
-    }
-    }
 
+    /**
+     * Test verb=ListRecords, metadataPrefix=oai_dc.
+     */
     public function testListRecords() {
-        $this->markTestIncomplete();
-
-    try{
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&from=2006-01-01');
         $this->assertResponseCode(200);
 
         $response = $this->getResponse();
-//        $this->checkForBadStringsInHtml($response->getBody());
+        $badStrings = array("Exception", "Fehler", "Stacktrace", "badVerb");
+        $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
 
         $this->assertContains('<ListRecords>', $response->getBody(),
            "Response must contain '<ListRecords>'");
         $this->assertContains('<record>', $response->getBody(),
            "Response must contain '<record>'");
-    }
-    catch (Exception $e) {
-        echo $this->getResponse()->getBody() . "\n";
-        $this->fail($e->getMessage() . "\n--\n" . $this->getResponse() . "\n--\n");
-    }
     }
 
 }
