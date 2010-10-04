@@ -71,14 +71,21 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
     /**
      * Method to check response for "bad" strings.
      */
-    protected function checkForBadStringsInHtml($body) {
-        $badStrings = array("Exception", "Error", "Fehler", "Stacktrace", "badVerb");
+    protected function checkForCustomBadStringsInHtml($body, array $badStrings) {
         $bodyLowerCase = strtolower($body);
         foreach ($badStrings AS $badString)
             $this->assertNotContains(
                 strtolower($badString),
                 $bodyLowerCase,
                 "Response must not contain '$badString'");
+    }
+
+    /**
+     * Method to check response for "bad" strings.
+     */
+    protected function checkForBadStringsInHtml($body) {
+        $badStrings = array("Exception", "Error", "Fehler", "Stacktrace", "badVerb");
+        $this->checkForCustomBadStringsInHtml($body, $badStrings);
     }
 
     /**
