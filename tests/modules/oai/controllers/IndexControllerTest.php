@@ -154,7 +154,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200);
 
         $response = $this->getResponse();
-        $badStrings = array("Exception", "Fehler", "Stacktrace", "badVerb");
+        $badStrings = array("Exception", "Stacktrace", "badVerb");
         $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
 
         $this->assertContains('<ListRecords>', $response->getBody(),
