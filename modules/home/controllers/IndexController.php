@@ -131,4 +131,18 @@ class Home_IndexController extends Controller_Action {
 
         $this->_helper->mainMenu('help');
     }
+
+    /**
+     * only for testing purposes to display a warning via Zend's FlashMessenger
+     */
+    public function failureAction() {
+        $this->_redirectTo('index', array('failure' => 'This is a warning.'));
+    }
+
+    /**
+     * only for testing purposes to display a notice via Zend's FlashMessenger
+     */
+    public function noticeAction() {
+        $this->_redirectTo('index', array('notice' => 'This is a notice.'));
+    }
 }
