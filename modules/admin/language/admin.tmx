@@ -99,7 +99,7 @@
     
     <tu tuid="admin_title_documents">
       <tuv xml:lang="en">
-        <seg>Document metadata</seg>
+        <seg>Document Metadata</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Dokumenten Metadata verwalten</seg>
