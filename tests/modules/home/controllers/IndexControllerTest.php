@@ -24,8 +24,10 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
+ * @category    Application
+ * @package     Tests
  * @author      Jens Schwidder <schwidder@zib.de>
+ * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -57,17 +59,6 @@ class Home_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
-     * Test about action.
-     */
-    public function testAboutAction() {
-        $this->dispatch('/home/index/about');
-        $this->assertResponseCode(200);
-        $this->assertModule('home');
-        $this->assertController('index');
-        $this->assertAction('about');
-    }
-
-    /**
      * Test help action.
      */
     public function testHelpAction() {
@@ -78,6 +69,26 @@ class Home_IndexControllerTest extends ControllerTestCase {
         $this->assertAction('help');
     }
 
-}
+    /**
+     * Test help action.
+     */
+    public function testContactAction() {
+        $this->dispatch('/home/index/contact');
+        $this->assertResponseCode(200);
+        $this->assertModule('home');
+        $this->assertController('index');
+        $this->assertAction('contact');
+    }
 
+    /**
+     * Test help action.
+     */
+    public function testImprintAction() {
+        $this->dispatch('/home/index/imprint');
+        $this->assertResponseCode(200);
+        $this->assertModule('home');
+        $this->assertController('index');
+        $this->assertAction('imprint');
+    }
+}
 ?>
