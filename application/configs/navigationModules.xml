@@ -15,6 +15,49 @@
                     <controller>security</controller>
                     <action>index</action>
                     <pages>
+                        <roles>
+                            <label>admin_security_title_roles</label>
+                            <description>admin_security_title_roles_description</description>
+                            <module>admin</module>
+                            <controller>role</controller>
+                            <action>index</action>
+                            <pages>
+                                <show>
+                                    <label>admin_role_show</label>
+                                    <module>admin</module>
+                                    <controller>role</controller>
+                                    <action>show</action>
+                                </show>
+
+                                <new>
+                                    <label>admin_role_new</label>
+                                    <module>admin</module>
+                                    <controller>role</controller>
+                                    <action>new</action>
+                                </new>
+
+                                <create>
+                                    <label>admin_role_new</label>
+                                    <module>admin</module>
+                                    <controller>role</controller>
+                                    <action>create</action>
+                                </create>
+
+                                <edit>
+                                    <label>admin_role_edit</label>
+                                    <module>admin</module>
+                                    <controller>role</controller>
+                                    <action>edit</action>
+                                </edit>
+
+                                <update>
+                                    <label>admin_role_edit</label>
+                                    <module>admin</module>
+                                    <controller>role</controller>
+                                    <action>update</action>
+                                </update>
+                            </pages>
+                        </roles>
                         <accounts>
                             <label>admin_security_title_accounts</label>
                             <description>admin_security_title_accounts_description</description>
@@ -103,49 +146,7 @@
                             </pages>
                         </ipranges>
 
-                        <roles>
-                            <label>admin_security_title_roles</label>
-                            <description>admin_security_title_roles_description</description>
-                            <module>admin</module>
-                            <controller>role</controller>
-                            <action>index</action>
-                            <pages>
-                                <show>
-                                    <label>admin_role_show</label>
-                                    <module>admin</module>
-                                    <controller>role</controller>
-                                    <action>show</action>
-                                </show>
-
-                                <new>
-                                    <label>admin_role_new</label>
-                                    <module>admin</module>
-                                    <controller>role</controller>
-                                    <action>new</action>
-                                </new>
-
-                                <create>
-                                    <label>admin_role_new</label>
-                                    <module>admin</module>
-                                    <controller>role</controller>
-                                    <action>create</action>
-                                </create>
-
-                                <edit>
-                                    <label>admin_role_edit</label>
-                                    <module>admin</module>
-                                    <controller>role</controller>
-                                    <action>edit</action>
-                                </edit>
-
-                                <update>
-                                    <label>admin_role_edit</label>
-                                    <module>admin</module>
-                                    <controller>role</controller>
-                                    <action>update</action>
-                                </update>
-                            </pages>
-                        </roles>
+                        
                     </pages>
                 </security>
 
