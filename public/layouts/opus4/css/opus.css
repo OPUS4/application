@@ -357,7 +357,7 @@ body > #top-header{
 	background: url(../img/theme/bg_button_l.gif) no-repeat left center;
 }
 #fieldset-search .form-submit{
-	background: transparent url(../img/theme/bg_button_r.gif) no-repeat right center;
+	background: transparent url(../img/theme/bg_button_r.gif)  right center;
 	border: none;
 	color: white;
 	font-size: 16px;
@@ -368,3 +368,4 @@ body > #top-header{
 #fieldset-search .form-submit:hover{
 	color: #feb07c;
 }
+
