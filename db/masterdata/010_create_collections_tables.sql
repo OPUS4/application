@@ -72,17 +72,10 @@ CREATE TABLE IF NOT EXISTS `collections_roles` (
 --
 
 CREATE TABLE collections_enrichments (
-   -- Eindeutige ID fuer die Collection und Referenz auf die role_id,
-   -- zu der die Collection gehoert.
    id            INT UNSIGNED NOT NULL,
    collection_id INT(10) unsigned NOT NULL,
    key_name      VARCHAR(255),
    value         VARCHAR(255),
-
-   --
-   -- Constraints.
-   --
-   FOREIGN KEY(collection_id)     REFERENCES collections(id),
    PRIMARY KEY(id),
    INDEX(collection_id, key_name)
 ) ENGINE = InnoDB
