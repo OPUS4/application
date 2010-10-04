@@ -39,10 +39,10 @@ class Collections_Model_DownloadListTest extends ControllerTestCase {
         parent::setUp();
     }
 
-    public function testGetCvsFile() {
+    public function testGetCsvFile() {
         $downloadList = new Collections_Model_DownloadList();
-        $csv = $downloadList->getCvsFile('ddc', '116');
-        $this->assertRegExp('/1 ,/', $csv);
+        $csv = $downloadList->getCvsFile('ddc', '004');
+        $this->assertRegExp('/10 , /', $csv);
         $this->assertRegExp('/\n/', $csv);
     }
 
