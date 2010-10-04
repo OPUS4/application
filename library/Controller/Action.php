@@ -103,7 +103,6 @@ class Controller_Action extends Zend_Controller_Action {
                 $this->__flashMessenger->addMessage(array('level' => 'notice', 'message' => $message));
             }
         }
-        else
         $this->_logger->debug("redirect to module: $module controller: $controller action: $action");
         $this->__redirector->gotoSimple($action, $controller, $module, $params);
         $this->__redirector->setExit($exit);
