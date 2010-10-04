@@ -71,5 +71,13 @@ searchengine.extract.host =
 searchengine.extract.port =
 searchengine.extract.app =
 
+;OAI SETTINGS
+oai.repository.name =
+oai.repository.identifier =
+oai.sample.identifier =
+oai.contactid =
+oai.max.listrecords = 10
+oai.max.listidentifiers = 10
+
 [testing : production]
 sql.schema.path =
