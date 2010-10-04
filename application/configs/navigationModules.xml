@@ -156,6 +156,14 @@
                     <module>admin</module>
                     <controller>documents</controller>
                     <action>index</action>
+                    <pages>
+                        <edit>
+                            <label>admin_documents_edit</label>
+                            <module>admin</module>
+                            <controller>documents</controller>
+                            <action>edit</action>
+                        </edit>
+                    </pages>
                 </documents>
 
                 <licence>
