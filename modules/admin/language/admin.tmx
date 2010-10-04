@@ -39,7 +39,7 @@
         <seg>Collections</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Sammlungen verwalten</seg>
+        <seg>Collections verwalten</seg>
       </tuv>
     </tu>
 
@@ -48,7 +48,7 @@
         <seg>Create, editing, and delete collections.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Sammlungen erstellen, editieren und löschen.</seg>
+        <seg>Collections erstellen, editieren und löschen.</seg>
       </tuv>
     </tu>
     
@@ -99,10 +99,10 @@
     
     <tu tuid="admin_title_documents">
       <tuv xml:lang="en">
-        <seg>Document Metadata</seg>
+        <seg>Manage Documents</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Dokumenten Metadata verwalten</seg>
+        <seg>Dokumente verwalten</seg>
       </tuv>
     </tu>
     
@@ -111,7 +111,7 @@
         <seg>Edit document metadata. Delete documents and manage files.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Dokumenten Meta-Daten editieren. Dokumente löschen und Dateien verwalten.</seg>
+        <seg>Metadaten der Dokumente editieren. Dokumente löschen und Dateien verwalten.</seg>
       </tuv>
     </tu>
 
@@ -126,7 +126,7 @@
     
     <tu tuid="admin_title_languages_description">
       <tuv xml:lang="en">
-        <seg>Add, edit or remove languages. Aktivate or deaktive languages.</seg>
+        <seg>Add, edit or remove languages. Aktivate or deaktivate languages.</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Sprachen hinzufügen, editieren, entfernen und ein- oder ausschalten.</seg>
