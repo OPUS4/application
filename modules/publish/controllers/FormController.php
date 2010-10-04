@@ -47,11 +47,11 @@ class Publish_FormController extends Controller_Action {
     CONST ERROR = "Error";
 
     public $log;
-    public $session;
+    public $session;    
 
     public function  __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array()) {
         $this->log = Zend_Registry::get('Zend_Log');
-        $this->session = new Zend_Session_Namespace('Publish');
+        $this->session = new Zend_Session_Namespace('Publish');        
 
         parent::__construct($request, $response, $invokeArgs);
     }
@@ -63,13 +63,21 @@ class Publish_FormController extends Controller_Action {
             $indexForm = new Publish_Form_PublishingFirst();
 
             $data = $this->getRequest()->getPost();
+            $this->log->debug("MaxFileSize in session: " . $this->session->maxFileSize);
+            $this->log->debug("MaxFileSize as hidden field in post: " . $data['MAX_FILE_SIZE']);
 
-            if (!$indexForm->isValid($data)) {
+            if (isset($data['MAX_FILE_SIZE']) && $data['MAX_FILE_SIZE'] != $this->session->maxFileSize) {
+                //manipulated hidden field for file size???                
+                return $this->_redirectTo('index', '', 'index');                
+            }
+
+            if (!$indexForm->isValid($data)) {                
                 //error case, and redirect to form, show errors
                 $this->view->form = $indexForm;
                 return $this->renderScript('index/index.phtml');
             }
             else {
+
                 $this->log->debug("build publishing_second");
 
                 $this->_setDocumentParameters($data);
@@ -348,8 +356,9 @@ class Publish_FormController extends Controller_Action {
         $this->session->document->setType($this->session->documentType);
         $this->session->document->setServerState('temporary');
 
-        if ($upload->isUploaded(true)) {
-            //if (!empty($files)) {
+        //if ($upload->isUploaded(true)) {
+          if (!empty($files)) {
+
             $this->log->info("Fileupload of: " . count($files) . " possible files => Fulltext is '1'.");
             $this->session->fulltext = '1';
 

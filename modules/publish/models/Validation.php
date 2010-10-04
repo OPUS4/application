@@ -46,11 +46,13 @@ class Publish_Model_Validation {
     public $licences = array();
     public $languages = array();
     public $log;
+    public $sessionP;
     public $session;
 
     public function __construct($datatype) {
         $this->datatype = $datatype;
         $this->log = Zend_Registry::get('Zend_Log');
+        $this->sessionP = new Zend_Session_Namespace('Publish');
         $this->session = new Zend_Session_Namespace();
     }
 

@@ -25,6 +25,15 @@
         </tuv>
     </tu>
 
+    <tu tuid="fileUploadErrorFormSize">
+        <tuv xml:lang="en">
+            <seg>Your file in field %value% exceeds the defined form size.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Ihre Datei im Feld %value% übersteigt die definierte Formulargröße.</seg>
+        </tuv>
+    </tu>
+
 
 <!-- **************Errors for Person and their names****************** -->
     <tu tuid="publish_validation_error_person_invalid">

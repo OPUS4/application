@@ -40,6 +40,7 @@
 class Publish_Form_PublishingFirst extends Zend_Form {
 
     public $config;
+    public $session;
 
     /**
      * First publishing form of two forms
@@ -49,7 +50,7 @@ class Publish_Form_PublishingFirst extends Zend_Form {
      */
     public function init() {        
         
-        $documentInSession = new Zend_Session_Namespace('document');
+        $this->session = new Zend_Session_Namespace('Publish');
         
         $this->config = Zend_Registry::get('Zend_Config');
 
@@ -127,24 +128,33 @@ class Publish_Form_PublishingFirst extends Zend_Form {
 
         //get allowed file size
         $maxFileSize = (int) $this->config->publish->maxfilesize;
-        if (true === empty($maxFileSize))
+        if (true === empty($maxFileSize)) {
             $maxFileSize = 1024000; //1MB
+        }
+        $this->session->maxFileSize = $maxFileSize;
 
         //get the initial number of file fields, toto: aus der config holen
         $number_of_files = (int) $this->config->form->first->numberoffiles;
         if (true === empty($number_of_files))
-            $number_of_files = 1;
+            $number_of_files = 1;        
 
         //file upload field(s)
-        $fileupload = $this->createElement('File', 'fileupload');
+        $fileupload = new Zend_Form_Element_File('fileupload');
+        $validate = new Zend_Validate_File_Upload();
+        $messages = array(Zend_Validate_File_Upload::FORM_SIZE => 'publish_validation_error_person_invalid');
+        $validate->setMessages($messages);
+
         $fileupload->setLabel('fileupload')
                 ->setRequired(false)
                 ->setMultiFile($number_of_files)
                 ->setDestination($tempPath)
                 ->addValidator('Count', false, $number_of_files)
                 ->addValidator('Size', false, $maxFileSize)     // limit to value given in application.ini
+                ->setMaxFileSize($maxFileSize)
                 ->addValidator('Extension', false, $filetypes)  // allowed filetypes by extension
-                ->setDescription('publish_controller_index_fileupload');
+                ->setDescription('publish_controller_index_fileupload')
+                ->setValueDisabled(true)
+                ->setAttrib('enctype', 'multipart/form-data');
 
         return $fileupload;
     }
