@@ -99,7 +99,7 @@ class Controller_Action extends Zend_Controller_Action {
                     $this->__flashMessenger->addMessage(array ('level' => 'notice', 'message' => $message[$key]));
                 }
             }
-            else if (is_string($message)) {
+            else if (is_string($message) && $message != '') {
                 $this->__flashMessenger->addMessage(array('level' => 'notice', 'message' => $message));
             }
         }
