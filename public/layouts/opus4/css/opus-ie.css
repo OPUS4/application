@@ -1,0 +1,29 @@
+#content {
+    height: 600px;
+}
+#primary-nav-search span {
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='img/theme/icon-search.png', sizingMethod='crop');
+    background: none no-repeat 50% 0;
+}
+#primary-nav-browsing span {
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='img/theme/icon-browsing.png', sizingMethod='crop');
+    background: none no-repeat 50% 0;
+}
+#primary-nav-publish span {
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='img/theme/icon-publish.png', sizingMethod='crop');
+    background: none no-repeat 50% 0;
+}
+#primary-nav .icon em span{
+    background-position: 50% -89px;
+}
+#fieldset-search{
+   filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='img/theme/bg_search.png', sizingMethod='crop');
+	background: none no-repeat;
+}
+#fieldset-search .form-submit,
+#fieldset-search .form-text{
+	position: relative;
+}
+legend{
+	width: 130px;
+}
