@@ -107,6 +107,12 @@ $languageSelectors = $this->languageSelector();
         </div>
 
         <div id="content">
+            <div class="messages">
+                <?php foreach ($this->flashMessenger->getMessages() as $message) : ?>
+                    <?= $message ?><br/>
+                <?php endforeach ?>
+            </div>
+
             <div class="wrapper">
                 <?= $this->layout()->content ?>
             </div>

@@ -28,6 +28,7 @@
  * @category    Application
  * @package     Controller
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
+ * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -65,6 +66,7 @@ class Controller_Action extends Zend_Controller_Action {
         $this->view->title = $this->_request->getModuleName() . '_' . $this->_request->getParam('controller') . '_' . $this->_request->getParam('action');
         $this->__redirector = $this->_helper->getHelper('Redirector');
         $this->__flashMessenger = $this->_helper->getHelper('FlashMessenger');
+        $this->view->flashMessenger = $this->__flashMessenger;
     }
 
     /**
@@ -86,7 +88,9 @@ class Controller_Action extends Zend_Controller_Action {
     }
 
     private function performRedirect($action, $message = '', $controller = null, $module = null, $params = array(), $exit = false) {
-        $this->__flashMessenger->addMessage($message);
+        if (!is_null($message) && $message !== '') {
+            $this->__flashMessenger->addMessage($message);
+        }
         $this->_logger->debug("redirect to module: $module controller: $controller action: $action");
         $this->__redirector->gotoSimple($action, $controller, $module, $params);
         $this->__redirector->setExit($exit);
