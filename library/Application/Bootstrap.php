@@ -81,8 +81,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * @return void
      *
      */
-    protected function _initOpusFrontController()
-    {
+    protected function _initOpusFrontController() {
         $this->bootstrap(array('LanguageList','frontController'));
 
         $frontController = $this->getResource('frontController'); // Zend_Controller_Front::getInstance();
@@ -119,8 +118,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * @return void
      *
      */
-    protected function _initView()
-    {
+    protected function _initView() {
         $this->bootstrap(array('Configuration','OpusFrontController'));
 
         $config = $this->getResource('Configuration');
@@ -168,8 +166,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * @return void
      *
      */
-    protected function _setupPageCache()
-    {
+    protected function _setupPageCache() {
         $config = $this->getResource('Configuration');
 
         $pagecache = null;
@@ -216,16 +213,14 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * @return void
      *
      */
-    protected function _initTranslation()
-    {
+    protected function _initTranslation()  {
         $this->bootstrap(array('Logging','TranslationCache'));
 
         $logger = $this->getResource('Logging');
 
         Zend_Session::setOptions(array(
             'cookie_path' => Zend_Controller_Front::getInstance()->getBaseUrl()
-        ));
-        $sessiondata = new Zend_Session_Namespace();
+        ));        
 
         $options = array(
             'clear' => false,
@@ -253,15 +248,30 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
             }
         }
 
-        if (empty($sessiondata->language) === false) {
-            $logger->info('Switching to language "' . $sessiondata->language . '".');
-            $translate->setLocale($sessiondata->language);
-        } else {
-            $sessiondata->language = $translate->getLocale();
+        $sessiondata = new Zend_Session_Namespace();
+        if (empty($sessiondata->language)) {
+            $language = 'en';
+            $logger->debug("language need to be set");
+            $supportedLanguages = array();
+            $config = $this->getResource('configuration');            
+            if (isset($config->supportedLanguages)) {
+                $supportedLanguages = explode(",", $config->supportedLanguages);
+                $logger->debug(count($supportedLanguages) . " supported languages: " . $config->supportedLanguages);
+            }
+            $currentLocale = new Zend_Locale();
+            $currentLanguage = $currentLocale->getLanguage();
+            $logger->debug("current locale: " . $currentLocale);
+            foreach ($supportedLanguages as $supportedLanguage) {
+                if ($currentLanguage === $supportedLanguage) {
+                    $language = $currentLanguage;
+                    break;
+                }
+            }
+            $sessiondata->language = $language;
         }
-
+        $logger->info('Set language to "' . $sessiondata->language . '".');
+        $translate->setLocale($sessiondata->language);
         Zend_Registry::set('Zend_Translate', $translate);
-
         $this->translate = $translate;
     }
 
@@ -270,22 +280,14 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      *
      * @return void
      */
-    protected function _initLanguageList()
-    {
+    protected function _initLanguageList() {
         $this->bootstrap('Translation');
 
         $logger = $this->getResource('Logging');
-
         Zend_Session::setOptions(array(
-            'cookie_path' => Zend_Controller_Front::getInstance()->getBaseUrl() 
+            'cookie_path' => Zend_Controller_Front::getInstance()->getBaseUrl()
         ));
-
         $sessiondata = new Zend_Session_Namespace();
-        if (false === empty($sessiondata->language)) {
-            $locale = new Zend_Locale($sessiondata->language);
-        } else {
-            $locale = $registry->get('Zend_Translate')->getLocale();
-        }
 
         $languages = array();
         try {
@@ -297,6 +299,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
                     $languages[$availableLanguage->getPart2T()] = $availableLanguage->getPart2T();
                 } else {
                     try {
+                        $locale = new Zend_Locale($sessiondata->language);
                         $languages[$availableLanguage->getPart2T()] = $locale->getTranslation($trans, 'language', $locale);
                     } catch (Zend_Locale_Exception $zle) {
                         $logger->warn('Caught Zend_Locale_Exception while loading ' . $trans . ': ' . $zle->getMessage());
@@ -318,8 +321,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      *
      * @return void
      */
-    protected function _initOpusNavigation()
-    {
+    protected function _initOpusNavigation() {
         $this->bootstrap('Logging', 'View');
 
         $log = $this->getResource('Logging');
