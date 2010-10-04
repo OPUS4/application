@@ -88,9 +88,22 @@ class Controller_Action extends Zend_Controller_Action {
     }
 
     private function performRedirect($action, $message = '', $controller = null, $module = null, $params = array(), $exit = false) {
-        if (!is_null($message) && $message !== '') {
-            $this->__flashMessenger->addMessage($message);
+        if (!is_null($message)) {
+            if (is_array($message) && count($message) !==  0) {
+                $keys = array_keys($message);
+                $key = $keys[0];
+                if ($key === 'failure' || $key === 'notice') {
+                    $this->__flashMessenger->addMessage(array ('level' => $key, 'message' => $message[$key]));
+                }
+                else {
+                    $this->__flashMessenger->addMessage(array ('level' => 'notice', 'message' => $message[$key]));
+                }
+            }
+            else if (is_string($message)) {
+                $this->__flashMessenger->addMessage(array('level' => 'notice', 'message' => $message));
+            }
         }
+        else
         $this->_logger->debug("redirect to module: $module controller: $controller action: $action");
         $this->__redirector->gotoSimple($action, $controller, $module, $params);
         $this->__redirector->setExit($exit);
