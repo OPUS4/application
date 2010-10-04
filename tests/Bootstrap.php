@@ -51,7 +51,6 @@ define('APPLICATION_ENV', 'testing');
 set_include_path('.' . PATH_SEPARATOR
     . PATH_SEPARATOR . dirname(__FILE__)
     . PATH_SEPARATOR . dirname(dirname(__FILE__)) . '/library'
-    . PATH_SEPARATOR . dirname(dirname(__FILE__)) . '/modules'
     . PATH_SEPARATOR . get_include_path());
 
 // enable fallback autoloader for testing

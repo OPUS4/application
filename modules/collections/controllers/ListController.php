@@ -36,8 +36,8 @@ class Collections_ListController extends Controller_Action {
 
     public function csvAction() {
         $request = $this->getRequest();        
-        $role = $request->getParam('role');
-        $number = $request->getParam('number');
+        $role = $request->getParam('role', '');
+        $number = $request->getParam('number', '');
         
         $downloadList = new Collections_Model_DownloadList();
 
@@ -48,12 +48,7 @@ class Collections_ListController extends Controller_Action {
             $this->getResponse()->setBody($downloadList->getCvsFile($role, $number));
         }
         catch (Collections_Model_Exception $e) {
-            if ($e->nameIsNotUnique()) {
-                $this->getResponse()->setHttpResponseCode(501);
-            }
-            else {
-                $this->getResponse()->setHttpResponseCode(400);
-            }
+            $this->getResponse()->setHttpResponseCode(400);
             return;
         }
         $this->getResponse()->setHeader('Content-Type', 'text/plain; charset=UTF-8', true);
