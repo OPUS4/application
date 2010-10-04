@@ -46,11 +46,17 @@ class Publish_FormController extends Controller_Action {
     CONST LABEL = "_label";
     CONST ERROR = "Error";
 
-    public function uploadAction() {
-        $log = Zend_Registry::get('Zend_Log');
-        $defaultNS = new Zend_Session_Namespace('Publish');
-        $log->debug("uploadActions begins...");
+    public $log;
+    public $session;
 
+    public function  __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array()) {
+        $this->log = Zend_Registry::get('Zend_Log');
+        $this->session = new Zend_Session_Namespace('Publish');
+
+        parent::__construct($request, $response, $invokeArgs);
+    }
+
+    public function uploadAction() {
         $this->view->languageSelectorDisabled = true;
 
         if ($this->getRequest()->isPost() === true) {
@@ -64,22 +70,25 @@ class Publish_FormController extends Controller_Action {
                 return $this->renderScript('index/index.phtml');
             }
             else {
-                $log->debug("build publishing_second");
+                $this->log->debug("build publishing_second");
 
                 $this->_setDocumentParameters($data);
 
                 $this->view->title = $this->view->translate('publish_controller_index');
-                $this->view->subtitle = $this->view->translate($defaultNS->documentType);
+                $this->view->subtitle = $this->view->translate($this->session->documentType);
                 $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
-                $this->view->doctype = $defaultNS->documentType;
+                $this->view->doctype = $this->session->documentType;
 
-                $this->_storeDocumentFiles();
+                foreach($data AS $k => $v)
+                    $this->log->debug("(FormController), POST: " . $k . " => " . $v);
 
-                $templateName = $this->_helper->documentTypes->getTemplateName($defaultNS->documentType);
+                $this->_storeFilesAndBibliographie($data);
+
+                $templateName = $this->_helper->documentTypes->getTemplateName($this->session->documentType);
 
                 $this->_helper->viewRenderer($templateName);
 
-                $publishForm = new Publish_Form_PublishingSecond($defaultNS->documentType, $defaultNS->documentId, $defaultNS->fulltext, $defaultNS->additionalFields, null);
+                $publishForm = new Publish_Form_PublishingSecond($this->session->documentType, $this->session->documentId, $this->session->fulltext, $this->session->additionalFields, null);
                 $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check'));
                 $publishForm->setAction($action_url);
                 $publishForm->setMethod('post');
@@ -99,11 +108,7 @@ class Publish_FormController extends Controller_Action {
      * @return <type>
      */
     public function checkAction() {
-        $log = Zend_Registry::get('Zend_Log');
-        $defaultNS = new Zend_Session_Namespace('Publish');
-
-        $this->view->languageSelectorDisabled = true;
-        $log->debug("check action begins");
+        $this->view->languageSelectorDisabled = true;        
         $reload = true;
 
         if ($this->getRequest()->isPost() === true) {
@@ -114,22 +119,22 @@ class Publish_FormController extends Controller_Action {
 
             if (array_key_exists('back', $postData)) {
                 $reload = false;
-                if (isset($defaultNS->elements))
-                    foreach ($defaultNS->elements AS $element)
+                if (isset($this->session->elements))
+                    foreach ($this->session->elements AS $element)
                         $postData[$element['name']] = $element['value'];
             }
 
             //initialize the form object
-            $form = new Publish_Form_PublishingSecond($defaultNS->documentType, $defaultNS->documentId, $defaultNS->fulltext, $defaultNS->additionalFields, $postData);            
+            $form = new Publish_Form_PublishingSecond($this->session->documentType, $this->session->documentId, $this->session->fulltext, $this->session->additionalFields, $postData);
 
             if (!$form->send->isChecked() || array_key_exists('back', $postData)) {
                 // A button (not SEND) was pressed => add / remove fields
 
                 $this->view->title = $this->view->translate('publish_controller_index');
-                $this->view->subtitle = $this->view->translate($defaultNS->documentType);
+                $this->view->subtitle = $this->view->translate($this->session->documentType);
                 $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
 
-                $this->_helper->viewRenderer($defaultNS->documentType);
+                $this->_helper->viewRenderer($this->session->documentType);
 
                 //call method to add or delete buttons
                 return $this->_getExtendedForm($form, $postData, $reload);
@@ -138,7 +143,7 @@ class Publish_FormController extends Controller_Action {
                 // SEND was pressed => check the form
 
                 $this->view->title = $this->view->translate('publish_controller_index');
-                $this->view->subtitle = $this->view->translate($defaultNS->documentType);
+                $this->view->subtitle = $this->view->translate($this->session->documentType);
                 $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
 
                 if (!$form->isValid($this->getRequest()->getPost())) {
@@ -148,17 +153,17 @@ class Publish_FormController extends Controller_Action {
                     $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
                     $this->_setViewVariables($form);
 
-                    return $this->render($defaultNS->documentType);
+                    return $this->render($this->session->documentType);
                 }
                 else {
                     // Form variables all VALID
-                    $log->debug("Variables are valid!");
+                    $this->log->debug("Variables are valid!");
 
                     $this->view->title = $this->view->translate('publish_controller_index');
                     $this->view->subtitle = $this->view->translate('publish_controller_check2');
                     $this->view->header = $this->view->translate('publish_controller_changes');
 
-                    $depositForm = new Publish_Form_PublishingSecond($defaultNS->documentType, $defaultNS->documentId, $defaultNS->fulltext, $defaultNS->additionalFields, $form->getValues());
+                    $depositForm = new Publish_Form_PublishingSecond($this->session->documentType, $this->session->documentId, $this->session->fulltext, $this->session->additionalFields, $form->getValues());
                     $action_url = $this->view->url(array('controller' => 'deposit', 'action' => 'deposit'));
                     //$action_url = $this->view->url(array('controller' => 'collection', 'action' => 'top'));
                     $depositForm->setAction($action_url);
@@ -180,8 +185,7 @@ class Publish_FormController extends Controller_Action {
      * method to set the different variables and arrays for the view and the templates
      * @param <Zend_Form> $form
      */
-    private function _setViewVariables($form) {
-        $log = Zend_Registry::get('Zend_Log');
+    private function _setViewVariables($form) {        
         $errors = $form->getMessages();
 
         //group fields and single fields for view placeholders
@@ -290,12 +294,11 @@ class Publish_FormController extends Controller_Action {
      * @return <String> name of button
      */
     private function _getPressedButton($form) {
-        $log = Zend_Registry::get('Zend_Log');
-        $log->debug("Method getPressedButton begins...");
+        $this->log->debug("Method getPressedButton begins...");
         $pressedButton = "";
         foreach ($form->getElements() AS $element) {
             if ($element->getType() === 'Zend_Form_Element_Submit' && $element->isChecked()) {
-                $log->debug('Following Button Is Checked: ' . $element->getName());
+                $this->log->debug('Following Button Is Checked: ' . $element->getName());
                 $pressedButton = $element;
                 $pressedButtonName = $pressedButton->getName();
                 break;
@@ -314,52 +317,46 @@ class Publish_FormController extends Controller_Action {
      * @param <array> $postData
      */
     private function _setDocumentParameters($postData = null) {
-        $log = Zend_Registry::get('Zend_Log');
-        $defaultNS = new Zend_Session_Namespace('Publish');
-
         if (isset($postData['documentType'])) {
-            $defaultNS->documentType = $postData['documentType'];
+            $this->session->documentType = $postData['documentType'];
             unset($postData['documentType']);
         }
         else
-            $defaultNS->documentType = "";
+            $this->session->documentType = "";
 
-        $log->info("(FormController) documentType = " . $defaultNS->documentType);
+        $this->log->info("(FormController) documentType = " . $this->session->documentType);
 
-        $defaultNS->documentId = "";
+        $this->session->documentId = "";
 
-        $log->info("(FormController) documentId = " . $defaultNS->documentId);
+        $this->log->info("(FormController) documentId = " . $this->session->documentId);
 
-        $defaultNS->fulltext = '0';
+        $this->session->fulltext = '0';
 
-        $log->info("(FormController) fulltext = " . $defaultNS->fulltext);
+        $this->log->info("(FormController) fulltext = " . $this->session->fulltext);
 
-        $defaultNS->additionalFields = array();
+        $this->session->additionalFields = array();
     }
 
     /**
      * Method stores th uploaded files
      */
-    private function _storeDocumentFiles() {
-        $log = Zend_Registry::get('Zend_Log');
-        $defaultNS = new Zend_Session_Namespace('Publish');
-
+    private function _storeFilesAndBibliographie($data) {
         $upload = new Zend_File_Transfer_Adapter_Http();
         $files = $upload->getFileInfo();
 
-        $defaultNS->document = new Opus_Document();
-        $defaultNS->document->setType($defaultNS->documentType);
-        $defaultNS->document->setServerState('temporary');
+        $this->session->document = new Opus_Document();
+        $this->session->document->setType($this->session->documentType);
+        $this->session->document->setServerState('temporary');
 
         if ($upload->isUploaded(true)) {
             //if (!empty($files)) {
-            $log->info("Fileupload of: " . count($files) . " possible files => Fulltext is '1'.");
-            $defaultNS->fulltext = '1';
+            $this->log->info("Fileupload of: " . count($files) . " possible files => Fulltext is '1'.");
+            $this->session->fulltext = '1';
 
             foreach ($files AS $file => $fileValues) {
                 if (!empty($fileValues['name'])) {
-                    $log->info("uploaded: " . $fileValues['name']);
-                    $docfile = $defaultNS->document->addFile();
+                    $this->log->info("uploaded: " . $fileValues['name']);
+                    $docfile = $this->session->document->addFile();
                     //todo: default language should come from doc type
                     $docfile->setLanguage("eng");
                     $docfile->setFromPost($fileValues);
@@ -367,12 +364,19 @@ class Publish_FormController extends Controller_Action {
             }
         }
         else {
-            $log->info("No file uploaded: => Fulltext is NOT given.");
-            $defaultNS->fulltext = '0';
+            $this->log->info("No file uploaded: => Fulltext is NOT given.");
+            $this->session->fulltext = '0';
         }
-        $defaultNS->documentId = $defaultNS->document->store();
-        $log->info("The corresponding doucment ID is: " . $defaultNS->documentId);        
-    }
+
+        if (isset($data['bibliographie']) && $data['bibliographie'] === '1') {
+            $this->log->debug("Bibliographie is set -> store it!");
+            //store the document internal field BelongsToBibliography
+            $this->session->document->setBelongsToBibliography(1);
+        }
+
+        $this->session->documentId = $this->session->document->store();
+        $this->log->info("The corresponding doucment ID is: " . $this->session->documentId);
+    }    
 
     /**
      * Methodgets the current form and finds out which fields has to be edded or deleted
@@ -380,9 +384,6 @@ class Publish_FormController extends Controller_Action {
      * @return <View>
      */
     private function _getExtendedForm($form, $postData=null, $reload=true) {
-        $log = Zend_Registry::get('Zend_Log');
-        $defaultNS = new Zend_Session_Namespace('Publish');
-
         if ($reload === true) {
             //find out which button was pressed
             $pressedButtonName = $this->_getPressedButton($form);
@@ -396,8 +397,8 @@ class Publish_FormController extends Controller_Action {
                 $workflow = "delete";                
             }
 
-            $currentNumber = $defaultNS->additionalFields[$fieldName];
-            $log->debug("old current number: " . $currentNumber);
+            $currentNumber = $this->session->additionalFields[$fieldName];
+            $this->log->debug("old current number: " . $currentNumber);
             if ($workflow == "add") {
                 //show one more fields
                 $currentNumber = (int) $currentNumber + 1;
@@ -410,17 +411,17 @@ class Publish_FormController extends Controller_Action {
             }
 
             //set the increased value for the pressed button and create a new form
-            $defaultNS->additionalFields[$fieldName] = $currentNumber;            
+            $this->session->additionalFields[$fieldName] = $currentNumber;
         }
 
 
-        $form = new Publish_Form_PublishingSecond($defaultNS->documentType, $defaultNS->documentId, $defaultNS->fulltext, $defaultNS->additionalFields, $postData);
+        $form = new Publish_Form_PublishingSecond($this->session->documentType, $this->session->documentId, $this->session->fulltext, $this->session->additionalFields, $postData);
         $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check'));
         $form->setAction($action_url);
         $this->view->action_url = $action_url;
         $this->_setViewVariables($form);
 
-        return $this->render($defaultNS->documentType);
+        return $this->render($this->session->documentType);
     }
 
 }
