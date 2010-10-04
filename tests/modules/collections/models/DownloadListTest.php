@@ -41,13 +41,14 @@ class Collections_Model_DownloadListTest extends ControllerTestCase {
 
     public function testGetCvsFile() {
         $downloadList = new Collections_Model_DownloadList();
-        $csv = $downloadList->getCvsFile('ddc', '620');
-        $this->assertRegExp('/\n90 ,/', $csv);
+        $csv = $downloadList->getCvsFile('ddc', '116');
+        $this->assertRegExp('/1 ,/', $csv);
+        $this->assertRegExp('/\n/', $csv);
     }
 
     public function testGetEmptyCsvFile() {
         $downloadList = new Collections_Model_DownloadList();
-        $csv = $downloadList->getCvsFile('ddc', '220');
+        $csv = $downloadList->getCvsFile('ddc', '621');
         $this->assertRegExp('//', $csv);
     }
 }

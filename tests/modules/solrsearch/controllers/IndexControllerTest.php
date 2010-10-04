@@ -28,6 +28,7 @@
  * @category    Application
  * @package     Module_Solrsearch
  * @author      Julian Heise <heise@zib.de>
+ * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -72,17 +73,6 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->checkForBadStringsInHtml($response->getBody());
     }
 
-    public function testInvalidsearchtermAction() {
-        $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'searchtype' => 'simple',
-                    'query'=>''
-                ));
-        $this->dispatch('/solrsearch/index/searchdispatch');
-        $this->assertRedirect();
-    }
-
     public function testSearchdispatchAction() {
         $this->request
                 ->setMethod('POST')
@@ -114,5 +104,40 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $body = strtolower($response->getBody());
         $this->assertContains('results_title', $body);
     }
+
+    public function testInvalidsearchtermAction() {
+        $searchtypeParams = array ('', 'searchtype/simple', 'searchtype/advanced', 'searchtype/foo');
+        foreach ($searchtypeParams as $searchtypeParam) {
+            $this->dispatch('/solrsearch/index/invalidsearchterm/' . $searchtypeParam);
+            $this->assertResponseCode(200);
+            $responseBody = $this->getResponse()->getBody();
+            echo $responseBody;
+            $this->assertContains('<div class="invalidsearchterm">', $responseBody);
+        }
+    }
+
+    public function testEmptySimpleQuery() {
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'searchtype' => 'simple',
+                    'query' => ''
+                ));
+        $this->dispatch('/solrsearch/index/searchdispatch');
+        $this->assertRedirect();
+        //$this->assertRedirectTo('/solrsearch/index/invalidsearchterm');
+    }
+
+    public function testEmptyAdvancedQuery() {
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'searchtype' => 'advanced'
+                ));
+        $this->dispatch('/solrsearch/index/searchdispatch');
+        $this->assertRedirect();
+        //$this->assertRedirectTo('/solrsearch/index/invalidsearchterm');
+    }
+
 }
 ?>
