@@ -41,7 +41,7 @@
  * @group RequireTest
  *
  */
-class RequireTest extends PHPUnit_Framework_TestCase {
+class RequireTest extends ControllerTestCase {
 
     /**
      * Overwrite standard setUp method, no database connection needed.  Will
@@ -49,7 +49,8 @@ class RequireTest extends PHPUnit_Framework_TestCase {
      *
      * @return void
      */
-    public function setUp() {
+    //public function setUp() {
+        /*
         require_once 'Zend/Application.php';
 
         set_include_path('../modules'
@@ -66,15 +67,16 @@ class RequireTest extends PHPUnit_Framework_TestCase {
                         )
         );
         $application->bootstrap();
-    }
+        */
+    //}
 
     /**
      * Overwrite standard tearDown method, no cleanup needed.
      *
      * @return void
      */
-    public function tearDown() {
-    }
+//    public function tearDown() {
+//    }
 
     /**
      * Try to load all class files, just to make sure no syntax error have

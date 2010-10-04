@@ -34,4 +34,11 @@
  */
 
 class Collections_Model_Exception extends Exception {
+
+    const NAME_IS_NOT_UNIQUE = 1;
+
+    public function nameIsNotUnique() {
+        return $this->getCode() === self::NAME_IS_NOT_UNIQUE;
+    }
+    
 }

@@ -274,3 +274,11 @@
     font-style: italic;
     margin-bottom: 0.5em;
 }
+
+.adminContainer div.collection_new {
+    margin-top: 2em;
+}
+
+.adminContainer table.collections td {
+    padding: 1em;
+}

@@ -45,6 +45,11 @@ class Collections_Model_DownloadList {
      */
     public function getCvsFile($role, $number) {
         $log = Zend_Registry::get('Zend_Log');
+        if (is_null($role) || is_null($number)) {
+            $log->debug('role and / or number parameter is empty - could not process request.');
+            throw new Collections_Model_Exception();
+        }
+
         $collections = array();
         try {
             $model = new Collections_Model_ManageRole($role);
@@ -55,13 +60,18 @@ class Collections_Model_DownloadList {
             throw $e;
         }
         if (count($collections) === 0) {
-            $message = 'Number \'' . $number . '\' does not exist for collection role ' . $role;
+            $message = "Number '" . $number . "' does not exist for collection role " . $role;
             $log->debug($message);
             throw new Collections_Model_Exception($message);
         }
+        if (count($collections) > 1) {
+            $message = "Number '" . $number . "' is not unique for collection role " . $role;
+            $log->debug($message);
+            throw new Collections_Model_Exception($message, Collections_Model_Exception::NAME_IS_NOT_UNIQUE);
+        }
         $resultList = array();
         try {
-            $resultList = $this->getListItems($collections);
+            $resultList = $this->getListItems($collections[0]->getId());
             $log->debug(count($resultList) . ' documents found.');
         }
         catch (Opus_SolrSearch_Exception $e) {
@@ -72,22 +82,16 @@ class Collections_Model_DownloadList {
     }
 
     /**
-     * Returns all documents that are associated to the given collection(s).
+     * Returns all index documents that are associated to the given collection id.
      *
-     * @param array $collections
+     * @param int $collectionId
      * @return array An array of Opus_SolrSearch_Result objects.
      * @throws Opus_SolrSearch_Exception
      */
-    private function getListItems($collections) {
-        // we cannot use a filter query here since $collections can consist of
-        // more than one element and Solr's fq parameter currently does not support
-        // disjunctive filter queries
-        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::ADVANCED);
-        $collectionIDs = '';
-        foreach ($collections as $collection) {
-            $collectionIDs .= $collection->getId() . ' ';
-        }
-        $query->setField('collection_ids', $collectionIDs, Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY);
+    private function getListItems($collectionId) {
+        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::SIMPLE);
+        $query->setCatchAll('*:*');
+        $query->addFilterQuery('collection_ids:' . $collectionId);
         $query->setRows(Opus_SolrSearch_Query::MAX_ROWS);
         $solrsearch = new Opus_SolrSearch_Searcher();
         return $solrsearch->search($query)->getResults();
