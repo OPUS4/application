@@ -42,6 +42,7 @@ $this->headTitle('OPUS 4')
 
 $this->headLink()
     ->appendStylesheet($this->layoutPath() . '/css/admin.css')
+    ->appendStylesheet($this->layoutPath() . '/css/pl.css')    
     ->appendStylesheet($this->layoutPath() . '/css/opus.css');
 
 $this->container = Zend_Registry::get('Opus_Navigation');
@@ -106,7 +107,7 @@ $languageSelectors = $this->languageSelector();
             </div>
         </div>
 
-        <div id="content">
+        <div id="content" class="<?= $this->moduleName ?><?= ($this->controllerName === 'index' ? '' : '_'.$this->controllerName)?><?= ($this->actionName === 'index' ? '' : '_'.$this->actionName)?>">
             <?php if (!is_null($this->flashMessenger)) : ?>
             <div class="messages">
                 <?php foreach ($this->flashMessenger->getMessages() as $message) : ?>
