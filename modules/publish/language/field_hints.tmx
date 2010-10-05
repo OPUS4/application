@@ -36,7 +36,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="hint_no_selection_Licence">
+    <tu tuid="hint_no_collection_Licence">
         <tuv xml:lang="en">
             <seg>Sorry: No licences have been found in our database.</seg>
         </tuv>
@@ -45,7 +45,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="hint_no_selection_Language">
+    <tu tuid="hint_no_collection_Language">
         <tuv xml:lang="en">
             <seg>Sorry: No languages have been found in our database.</seg>
         </tuv>
@@ -54,7 +54,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="hint_no_selection_Institute">
+    <tu tuid="hint_no_collection_Institute">
         <tuv xml:lang="en">
             <seg>Sorry: No institutes have been found in our database.</seg>
         </tuv>
@@ -63,30 +63,12 @@
         </tuv>
     </tu>
 
-    <tu tuid="hint_no_selection_projects">
+    <tu tuid="hint_no_collection_projects">
         <tuv xml:lang="en">
             <seg>Sorry: No projects have been found in our database.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Entschuldigung: Es wurden keine Projekte in unserer Datenbank gefunden.</seg>
-        </tuv>
-    </tu>
-
-    <tu tuid="hint_no_selection_ThesisGrantor">
-        <tuv xml:lang="en">
-            <seg>Sorry: No institutions have been found in our database.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Entschuldigung: Es wurden keine Institutionen in unserer Datenbank gefunden.</seg>
-        </tuv>
-    </tu>
-
-    <tu tuid="hint_no_selection_ThesisPublisher">
-        <tuv xml:lang="en">
-            <seg>Sorry: No institutions have been found in our database.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Entschuldigung: Es wurden keine Institutionen in unserer Datenbank gefunden.</seg>
         </tuv>
     </tu>
 
@@ -577,7 +559,7 @@
 
 	<tu tuid="hint_groupTitleSub">
         <tuv xml:lang="en">
-            <seg>Please enter the subtitle of the document.</seg>
+            <seg>Please enter the document's subtitle.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte den Untertitel des Dokuments ein.</seg>
@@ -586,7 +568,7 @@
 	
 	<tu tuid="hint_TitleSub">
         <tuv xml:lang="en">
-            <seg>Please enter the subtitle of the document.</seg>
+            <seg>Please enter the document's subtitle.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte den Untertitel des Dokuments ein.</seg>
@@ -595,7 +577,7 @@
 	
 	<tu tuid="hint_groupTitleAdditional">
         <tuv xml:lang="en">
-            <seg>Please enter the additional title of the document.</seg>
+            <seg>Please enter the document's additional title.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie hier bitte einen zusätzlichen Titel des Dokuments ein.</seg>
@@ -604,7 +586,7 @@
 	
 	<tu tuid="hint_TitleAdditional">
         <tuv xml:lang="en">
-            <seg>Please enter the additional title of the document.</seg>
+            <seg>Please enter the document's additional title.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie hier bitte einen zusätzlichen Titel des Dokuments ein.</seg>
@@ -613,7 +595,7 @@
 	
 	<tu tuid="hint_groupTitleParent">
         <tuv xml:lang="en">
-            <seg>Please enter the parent title of the document.</seg>
+            <seg>Please enter the document's parent title.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte den übergeordneten Titel des Dokuments ein.</seg>
@@ -622,7 +604,7 @@
 	
 	<tu tuid="hint_TitleParent">
         <tuv xml:lang="en">
-            <seg>Please enter the parent title of the document.</seg>
+            <seg>Please enter the document's parent title.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte den übergeordneten Titel des Dokuments ein.</seg>
@@ -822,7 +804,7 @@ Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathsci
 	
 	<tu tuid="hint_PageNumber">
         <tuv xml:lang="en">
-            <seg>Please enter the page number of the document.</seg>
+            <seg>Please enter the document's page number.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte die Seitenanzahl des Dokuments ein.</seg>
@@ -831,7 +813,7 @@ Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathsci
 	
 	<tu tuid="hint_PageFirst">
         <tuv xml:lang="en">
-            <seg>Please enter the first page number of the document.</seg>
+            <seg>Please enter the number of the document's first page.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte die Nummer der ersten Seite des Dokuments ein.</seg>
@@ -840,7 +822,7 @@ Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathsci
     
 	<tu tuid="hint_PageLast">
         <tuv xml:lang="en">
-            <seg>Please enter the last page number of the document.</seg>
+            <seg>Please enter the number of the document's last page.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte die Nummer der letzten Seite des Dokuments ein.</seg>
@@ -858,16 +840,16 @@ Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathsci
 	
 	<tu tuid="hint_PublishedDate">
         <tuv xml:lang="en">
-            <seg>Please enter the date of first publishing the document.</seg>
+            <seg>Please enter the date of the document's first publishing in the format MM/DD/YYYY.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte das Erstveröffentlichungsdatum des Dokuments ein.</seg>
+            <seg>Tragen Sie bitte das Erstveröffentlichungsdatum des Dokuments im Format TT.MM.JJJJ ein.</seg>
         </tuv>
     </tu>
 	
 	<tu tuid="hint_CompletedDate">
         <tuv xml:lang="en">
-            <seg>Please enter the date of publishing the document.</seg>
+            <seg>Please enter the date of the document's publishing.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte das Veröffentlichungsdatum (online) des Dokuments ein.</seg>
