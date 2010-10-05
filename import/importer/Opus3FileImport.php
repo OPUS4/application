@@ -111,8 +111,8 @@ class Opus3FileImport {
         if (true === isset($files[0])) {
             foreach ($files as $filename) {
                 echo $filename."\n";
-                $finfo = new finfo(FILEINFO_MIME, $this->_magicPath);
-                $mimeType = $finfo->file($filename);
+                //$finfo = new finfo(FILEINFO_MIME, $this->_magicPath);
+                //$mimeType = $finfo->file($filename);
             
                 $filenameArray = preg_split('/\./', $filename);
                 $suffix = $filenameArray[(count($filenameArray)-1)];
@@ -145,7 +145,7 @@ class Opus3FileImport {
                     $file->setLabel(basename($filename));
                     //$file->setFileType($suffix);
                     $file->setPathName(basename($filename));
-                    $file->setMimeType($mimeType);
+                    //$file->setMimeType($mimeType);
                     $file->setTempFile($filename);
 			        $file->setDocumentId($object->getId());
 			        $file->setLanguage($lang);
