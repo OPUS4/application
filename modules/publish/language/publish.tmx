@@ -300,6 +300,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="home_index_redirect_from_publish">
+      <tuv xml:lang="en">
+        <seg>Your document was sucessfully stored.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das Dokument wurde erfolgreich gespeichert.</seg>
+      </tuv>
+    </tu>
+
   </body>
   
 </tmx>
