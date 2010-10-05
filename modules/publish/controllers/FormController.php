@@ -356,8 +356,8 @@ class Publish_FormController extends Controller_Action {
         $this->session->document->setType($this->session->documentType);
         $this->session->document->setServerState('temporary');
 
-        //if ($upload->isUploaded(true)) {
-          if (!empty($files)) {
+        if ($upload->isUploaded(true)) {
+        //  if (!empty($files)) {
 
             $this->log->info("Fileupload of: " . count($files) . " possible files => Fulltext is '1'.");
             $this->session->fulltext = '1';
@@ -418,11 +418,9 @@ class Publish_FormController extends Controller_Action {
                     $currentNumber = (int) $currentNumber - 1;
                 }
             }
-
             //set the increased value for the pressed button and create a new form
             $this->session->additionalFields[$fieldName] = $currentNumber;
         }
-
 
         $form = new Publish_Form_PublishingSecond($this->session->documentType, $this->session->documentId, $this->session->fulltext, $this->session->additionalFields, $postData);
         $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check'));
