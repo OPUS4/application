@@ -39,20 +39,35 @@ class PublicationList_Model_Publication {
     private $bibtexUrlExternal;
     private $completedYear;
     private $editors = array();
-    private $identifierDoi;
-    private $identifierUrl;
+    private $doiUrl;
+    private $imageAbstract;
+    private $imageAbstractExternal;
+    private $imageBibtex;
+    private $imageBibtexExternal;
+    private $imageDoi;
+    private $imageDoiExternal;
+    private $imageRis;
+    private $imageRisExternal;
+    private $imageUrl;
+    private $imageUrlExternal;
+    private $inSeries;
     private $issue;
     private $note;
     private $pageFirst;
     private $pageLast;
+    private $pdfUrl;
+    private $pdfUrlExternal;
     private $publishedYear;
     private $risUrl;
     private $risUrlExternal;
+    private $titleAbstract;
     private $titleMain;
     private $titleParent;
     private $volume;
     
     public function __construct($id, $externalUrl = null) {
+        $config = Zend_Registry::get('Zend_Config');
+
         $doc = new Opus_Document($id);
         $collections = $doc->getCollection();
 
@@ -63,7 +78,8 @@ class PublicationList_Model_Publication {
         $request = $fc->getRequest();
         $baseUrl = $request->getBaseUrl();
 
-        $config = Zend_Registry::get('Zend_Config');
+        $theme = null;
+        if (isset($config->theme)) { $theme = $config->theme; }
 
         foreach ($doc->getPersonAuthor() as $author) {
              $firstName = $author->getFirstName();
@@ -71,20 +87,23 @@ class PublicationList_Model_Publication {
              $author = new PublicationList_Model_Author($firstName, $lastName);
 
              foreach ($collections as $c) {
-                   if (strcmp($c->getName(), $lastName.", ".$firstName) === 0) {
-                       $author->setUrl($baseUrl."/publicationList/index/search/searchtype/collection/id/".$c->getId());
+                 $names = explode(", ", $c->getName());
+		 if (strcmp($names[0], trim($lastName)) != 0) { continue; }
+		 $first = trim(str_replace(".","", $firstName));
+		 if (stripos($names[1], $first) === 0) {
+                       $author->setUrl($baseUrl."/publicationList/index/index/id/".$c->getId());
                        if (!is_null($baseUrl)) {
                             $author->setUrlExternal($externalUrl.$c->getNumber());
                        }
-                   }
+                 }
              }
              $this->addAuthor($author);
         }
 
-        $this->bibtexUrl = $baseUrl."/citationExport/index/index/output/bibtex/docId/".$id;
+        $this->bibtexUrl = $baseUrl."/citationExport/index/index/output/bibtex/docId/".$doc->getId();
         $this->bibtexUrlExternal = "http://".$hostname.$this->bibtexUrl."/theme/plain";
 
-        if ($doc->getCompletedYear() && ($doc->getCompletedYear() !== "0000")) {
+        if ($doc->getCompletedYear() && ($doc->getCompletedYear() !== "0000") && ($doc->getCompletedYear() !== $doc->getPublishedYear())) {
             $this->completedYear = $doc->getCompletedYear();
         }
 
@@ -96,12 +115,30 @@ class PublicationList_Model_Publication {
 
         if (isset($config->publicationlist->doiresolver->url)) {
             if ($doc->getIdentifierDoi()) {
-                $this->identifierDoi = "http://".$config->publicationlist->doiresolver->url."/".$doc->getIdentifierDoi(0)->getValue();
+                $this->doiUrl = "http://".$config->publicationlist->doiresolver->url."/".$doc->getIdentifierDoi(0)->getValue();
             }
         }
 
         if ($doc->getIdentifierUrl()) {
-            $this->identifierUrl = $doc->getIdentifierUrl(0)->getValue();
+            $this->pdfUrl = $doc->getIdentifierUrl(0)->getValue();
+        }
+
+        if (!is_null($theme)) {
+            $this->imageAbstract = $baseUrl."/layouts/".$theme."/img/publicationlist/Abstract_icon.png";
+            $this->imageBibtex = $baseUrl."/layouts/".$theme."/img/publicationlist/BibTeX_icon.png";
+            $this->imagePdf = $baseUrl."/layouts/".$theme."/img/publicationlist/PDF_icon.png";
+	    $this->imageDoi = $baseUrl."/layouts/".$theme."/img/publicationlist/DOI_icon.png";
+            $this->imageRis = $baseUrl."/layouts/".$theme."/img/publicationlist/RIS_icon.png";
+        }
+
+        foreach ($collections as $c) {
+            $roleId = $c->getRoleId();
+            $role = new Opus_CollectionRole($roleId);
+            if ($role->getName() === 'series') {
+                $this->inSeries = "Erschienen als ".$c->getName();
+                $this->pdfUrl = $baseUrl."/frontdoor/index/index/docId/".$doc->getId();
+                $this->pdfUrlExternal = "http://".$hostname.$this->pdfUrl."/theme/plain";
+            }
         }
         
         if ($doc->getIssue()) {
@@ -109,7 +146,13 @@ class PublicationList_Model_Publication {
         }
 
         if ($doc->getNote()) {
-            $this->note = $doc->getNote(0)->getMessage();
+            $note = $doc->getNote(0)->getMessage();
+            if (strcmp($note, 'printed version not available') === 0) { 
+                /* TODO: muss im Import abgefangen werden */
+                $note = str_replace("(","", $note);
+                $note = str_replace(")","", $note);
+                $this->note = $note;
+            }
         }
 
         if ($doc->getPageFirst()) {
@@ -120,7 +163,7 @@ class PublicationList_Model_Publication {
             $this->pageLast = $doc->getPageLast();
         }
 
-        $this->risUrl = $baseUrl."/citationExport/index/index/output/ris/docId/".$id;
+        $this->risUrl = $baseUrl."/citationExport/index/index/output/ris/docId/".$doc->getId();
         $this->risUrlExternal = "http://".$hostname.$this->risUrl."/theme/plain";
 
 
@@ -166,6 +209,9 @@ class PublicationList_Model_Publication {
         $this->bibtexUrl = $string;
     }
 
+    public function setPdfUrl($string) {
+        $this->pdfUrl = $string;
+    }
 
     public function setRisUrl($string) {
         $this->risUrl = $string;
@@ -190,17 +236,36 @@ class PublicationList_Model_Publication {
         return $this->completedYear;
     }
 
+    public function getDoiUrl() {
+        return $this->doiUrl;
+    }
+
     public function getEditors() {
         return $this->editors;
     }
 
-    public function getIdentifierDoi() {
-        return $this->identifierDoi;
+    public function getImageAbstract() {
+        return $this->imageAbstract;
     }
 
+    public function getImageBibtex() {
+        return $this->imageBibtex;
+    }
 
-    public function getIdentifierUrl() {
-        return $this->identifierUrl;
+    public function getImageDoi() {
+        return $this->imageDoi;
+    }
+
+    public function getImagePdf() {
+        return $this->imagePdf;
+    }
+
+    public function getImageRis() {
+        return $this->imageRis;
+    }
+
+    public function getInSeries() {
+        return $this->inSeries;
     }
 
     public function getIssue() {
@@ -219,17 +284,26 @@ class PublicationList_Model_Publication {
         return $this->pageLast;
     }
 
+    public function getPdfUrl() {
+        return $this->pdfUrl;
+    }
+
+    public function getPdfUrlExternal() {
+        return $this->pdfUrlExternal;
+    }
+
     public function getPublishedYear() {
         return $this->publishedYear;
+    }
+
+    public function getRisUrl() {
+        return $this->risUrl;
     }
 
     public function getRisUrlExternal() {
         return $this->risUrlExternal;
     }
 
-    public function getRisUrl() {
-        return $this->risUrl;
-    }
     
     public function getTitleMain() {
         return $this->titleMain;

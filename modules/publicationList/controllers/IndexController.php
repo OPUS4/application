@@ -34,131 +34,53 @@
 
 class PublicationList_IndexController extends Controller_Action {
 
-    const SIMPLE_SEARCH = 'simple';
-    const ADVANCED_SEARCH = 'advanced';
-    const AUTHOR_SEARCH = 'authorsearch';
-    const COLLECTION_SEARCH = 'collection';
-    const LATEST_SEARCH = 'latest';
-
     private $log;
-    private $query;
-    private $numOfHits;
-    private $searchtype;
     private $resultList;   
    
     public function init() {
         $this->log = Zend_Registry::get('Zend_Log');
     }
 
-    public function searchAction() {
-        $this->query = $this->buildQuery();
-        $this->performSearch();
+    public function indexAction() {
+        /* TODO: zulässige-Query-parameters
+         * theme = 'plain'
+         * lang = 'de' o 'eng'
+         * id = '...'
+         */
+
         $this->createPublicationLists();
-        
         $theme = $this->getRequest()->getParam("theme");
         if ($theme === 'plain') {
             $this->_helper->layout->setLayoutPath(APPLICATION_PATH . '/public/layouts/plain');
 
         }
-        //else {
         $this->render('results');
-        //}
-    }
-
-    private function buildQuery() {
-        $this->searchtype = $this->getRequest()->getParam('searchtype');
-        $query = null;
-        if ($this->searchtype === self::COLLECTION_SEARCH) {
-            $query = $this->createCollectionSearchQuery();
-        }
-        else {
-            throw new Exception("Unable to create query for searchtype " . $this->searchtype);
-        }
-        $this->validateQuery($query);
-        return $query;
-    }
-
-    private function createCollectionSearchQuery() {
-        $this->log->debug("Constructing query for collection search.");
-
-        $collectionId = $this->prepareChildren();
-
-        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::SIMPLE);
-        $query->setStart($this->getRequest()->getParam('start', Opus_SolrSearch_Query::DEFAULT_START));
-        $query->setCatchAll('*:*');
-        //$query->setRows($this->getRequest()->getParam('rows', Opus_SolrSearch_Query::DEFAULT_ROWS));
-        $query->setRows(1000);
-        $query->setSortField($this->getRequest()->getParam('sortfield', Opus_SolrSearch_Query::DEFAULT_SORTFIELD));
-        $query->setSortOrder($this->getRequest()->getParam('sortorder', Opus_SolrSearch_Query::DEFAULT_SORTORDER));
-
-        $query->addFilterQuery('collection_ids:' . $collectionId);
-        $this->log->debug("Query $query complete");
-        return $query;
-    }
-
-    private function prepareChildren() {
-        $collectionList = null;
-        try {
-            $collectionList = new SolrSearch_Model_CollectionList($this->getRequest()->getParam('id'));
-        }
-        catch (SolrSearch_Model_Exception $e) {
-            $this->log->debug($e->getMessage());
-            $this->_redirectToAndExit('index', '', 'browse', null, array(), true);
-        }
-
-        $this->view->children = $collectionList->getChildren();
-        $this->view->parents = $collectionList->getParents();
-        $this->view->collectionRoleTitle = $this->view->translate($collectionList->getCollectionRoleTitle());
-
-        if ($collectionList->isRootCollection()) {
-            $this->view->title = $this->view->translate($collectionList->getTitle());
-        }
-        else {
-            $this->view->title = $collectionList->getTitle();
-        }
-        return $collectionList->getCollectionId();
-    }
-
-    private function validateQuery($query) {
-        // TODO check if the two subsequent rows checks are obsolete
-        if($query->getRows() > 1000) {
-            $this->log->warn("Values greater than 100 are currently not allowed for the rows paramter.");
-            $query->setRows('1000');
-        }
-        if($query->getRows() < 1) {
-            $this->log->warn("row parameter is smaller than 1: adjusting to 1.");
-            $query->setRows('1');
-        }
-        if ($query->getStart() < 0) {
-            $this->log->warn("A negative start parameter is ignored.");
-            $query->setStart('0');
-        }
-    }
-
-    private function performSearch() {
-        $this->log->debug('performing search');
-        $searcher = new Opus_SolrSearch_Searcher();
-        $this->resultList = $searcher->search($this->query);
-        $this->numOfHits = $this->resultList->getNumberOfHits();
-        $this->log->debug("resultlist: $this->resultList");
     }
 
     private function createPublicationLists() {
         $config = Zend_Registry::get('Zend_Config');
 
+        $coll_id = $this->getRequest()->getParam('id');
+        $coll = new Opus_Collection($coll_id);
+        $doc_ids = $coll->getDocumentIds();
+        
         $publicationSite = new PublicationList_Model_PublicationSite();
-        foreach ($this->resultList->getResults() as $resultHit) {
+
+        $this->view->title = $coll->getName();
+
+
+        foreach ($doc_ids as $id) {
             $publication = null;
              if (isset($config->publicationlist->external->baseurl)) {
                  if ($this->getRequest()->getParam("lang") === 'eng') {
-                    $publication = new PublicationList_Model_Publication($resultHit->getId(), $config->publicationlist->external->baseurl->eng);
+                    $publication = new PublicationList_Model_Publication($id, $config->publicationlist->external->baseurl->eng);
                  }
                  else {
-                    $publication = new PublicationList_Model_Publication($resultHit->getId(), $config->publicationlist->external->baseurl->de);
+                    $publication = new PublicationList_Model_Publication($id, $config->publicationlist->external->baseurl->de);
                  }
              }
              else {
-                 $publication = new PublicationList_Model_Publication($resultHit->getId());
+                 $publication = new PublicationList_Model_Publication($id);
              }
             
             $year = $publication->getPublishedYear();
@@ -190,19 +112,5 @@ class PublicationList_IndexController extends Controller_Action {
         $this->view->results = $publicationSite->getSingleList();
     }
 
-    /**
-     * Creates an URL to execute a search. The URL will be mapped to:
-     * module=solrsearch, controller=index, action=search
-     */    
-    public static function createSearchUrlArray($params = array()) {
-        $url = array(
-            'module' => 'solrsearch',
-            'controller' => 'index',
-            'action' => 'search');
-        foreach($params as $key=>$value) {
-            $url[$key]=$value;
-        }
-        return $url;
-    }
 }
 ?>

@@ -34,97 +34,136 @@
  */
 ?>
 
-<div id="search_results" class="search_results">
-    <!-- NaviBar -->
-    <?php foreach($this->results as $result) :?>
-	<a href="#<?= htmlspecialchars($result->getYear()) ?>"><b><?= htmlspecialchars($result->getYear()) ?></b></a> 
-    <?php endforeach ?>
-    <?php foreach($this->results as $result) :?>
-        <div class="result_box">
-	<a name="<?= htmlspecialchars($result->getYear()) ?>"></a>
-        <b> <?= htmlspecialchars($result->getYear()) ?> </b>
-         <ul>
+<div id="publication_lists" class="search_results">
+<h3>Publikationen</h3>
+<?php $rowCounter=0 ?>
+<table cellspacing="0">
+<?php foreach($this->results as $result) :?>
+	<tr class="year"> <td colspan="4"><h4><?= htmlspecialchars($result->getYear()) ?></h4></td></tr>
 	<?php foreach($result->getPublicationList() as $publication) :?>
-            <li>
-                 <?php if(!count($publication->getAuthors()) == 0) : ?>
-		 <?php $counter=0 ?>
-                    <?php foreach($publication->getAuthors() as $author) :?>
-		    <?php $counter++ ?>
-                        <?php if(!is_null($author->getUrl())) : ?>
-                            <a href="<?= $author->getUrl() ?>">
-                            <?= htmlspecialchars($author->getFirstName()) ?>
-                            <?= $author->getLastName() ?></a>
-                        <?php endif ?>
-                        <?php if(is_null($author->getUrl())) : ?>
-                            <?= htmlspecialchars($author->getFirstName()) ?> <?= htmlspecialchars($author->getLastName()) ?>
-                        <?php endif ?>
-		   <?php if($counter < count($publication->getAuthors())) : ?>,<?php endif ?>
-                    <?php endforeach ?>:
-                <?php endif ?>
+	<tr class="<?= $rowCounter++ % 2 === 0 ? 'even' : 'odd'; ?>">
+		<!-- Spalte1: Autoren -->
+		<td class="first" valign="top">
+			<?php if(!count($publication->getAuthors()) == 0) : ?>
+				<?php $authorCounter=0 ?>
+				<?php foreach($publication->getAuthors() as $author) :?>
+					<?php $authorCounter++ ?>
+					<?php if(!is_null($author->getUrl())) : ?>
+						<a href="<?= $author->getUrl() ?>">
+						<?= htmlspecialchars($author->getFirstName()) ?>
+						<?= $author->getLastName() ?></a>
+					<?php endif ?>
+					<?php if(is_null($author->getUrl())) : ?>
+						<?= htmlspecialchars($author->getFirstName()) ?> <?= htmlspecialchars($author->getLastName()) ?>
+					<?php endif ?>
+					<?php if($authorCounter < count($publication->getAuthors())) : ?>,<?php endif ?>
+				<?php endforeach ?>
+			<?php endif ?>
+		</td>
+		
+		<!-- Spalte TitleMain -->
+		<td class="second" valign="top">
+			<?php if(!is_null($publication->getTitleMain())) : ?>
+				<b><?= htmlspecialchars($publication->getTitleMain()) ?></b>
+			<?php endif ?>
+		</td>
+		
+		<!-- Spalte weiter bibliografische Angaben -->
+		<td class="third" valign="top">
+                        <?php $cellCounter=0 ?>
+                        <?php if(!is_null($publication->getTitleParent())) : ?>
+				<?= htmlspecialchars($publication->getTitleParent()) ?>
+                                <?php $cellCounter++ ?>
+			<?php endif ?>
+			
+			<?php if(!count($publication->getEditors()) == 0) : ?>
+				<?php $editorCounter=0 ?>
+                                <?= $cellCounter === 0 ? '' : ','; ?>
+				<?php foreach($publication->getEditors() as $editor) :?>
+					<?php $editorCounter++ ?>
+					<?= htmlspecialchars($editor) ?>
+					<?php if($editorCounter < count($publication->getEditors())) : ?>,<?php endif ?>
+				<?php endforeach ?> (Ed.)
+                                <?php $cellCounter++ ?>
+			<?php endif ?>
 
-                 <?php if(!is_null($publication->getTitleMain())) : ?>
-                   <i><?= htmlspecialchars($publication->getTitleMain()) ?></i>
-                <?php endif ?>
+			<?php if(!is_null($publication->getVolume())) : ?>
+                                <?= $cellCounter === 0 ? '' : ','; ?>
+				Vol. <?= htmlspecialchars($publication->getVolume()) ?>
+                                <?php $cellCounter++ ?>
+			<?php endif ?>
 
-                <?php if(!is_null($publication->getTitleParent())) : ?>
-                    in: <?= htmlspecialchars($publication->getTitleParent()) ?>
-                <?php endif ?>
+			<?php if(!is_null($publication->getIssue())) : ?>
+                                <?= $cellCounter === 0 ? '' : ','; ?>
+				Issue <?= htmlspecialchars($publication->getIssue()) ?>
+                                <?php $cellCounter++ ?>
+			<?php endif ?>
 
-                <?php if(!count($publication->getEditors()) == 0) : ?>
-		, <?php $counter=0 ?>
-                    <?php foreach($publication->getEditors() as $editor) :?>
-		    <?php $counter++ ?>
-                        <?= htmlspecialchars($editor) ?>
-		<?php if($counter < count($publication->getEditors())) : ?>,<?php endif ?>
-                    <?php endforeach ?> (Ed.)
-                <?php endif ?>
+			<?php if(!is_null($publication->getPageFirst())) : ?>
+                                <?= $cellCounter === 0 ? '' : ','; ?>
+				pp. <?= htmlspecialchars($publication->getPageFirst()) ?>
+                                <?php if(!is_null($publication->getPageLast())) : ?>
+                                    - <?= htmlspecialchars($publication->getPageLast()) ?>
+                                <?php endif ?>
+                                <?php $cellCounter++ ?>
+			<?php endif ?>
 
-                <?php if(!is_null($publication->getVolume())) : ?>
-                    , Vol. <?= htmlspecialchars($publication->getVolume()) ?>
-                <?php endif ?>
+			<?php if(!is_null($publication->getNote())) : ?>
+				<?= $cellCounter === 0 ? '' : ','; ?>
+                                <?= htmlspecialchars($publication->getNote()) ?>
+                                <?php if(!is_null($publication->getCompletedYear())) : ?>
+                                    in <?= htmlspecialchars($publication->getCompletedYear()) ?>
+                                <?php endif ?>
+                                <?php $cellCounter++ ?>
+			<?php endif ?>
 
-                <?php if(!is_null($publication->getIssue())) : ?>
-                    , Issue <?= htmlspecialchars($publication->getIssue()) ?>
-                <?php endif ?>
+			<?php if(!is_null($publication->getInSeries())) : ?>
+                                <?= $cellCounter === 0 ? '' : ','; ?>
+				<?= htmlspecialchars($publication->getInSeries()) ?>
+                                <?php $cellCounter++ ?>
+			<?php endif ?>
 
-                <?php if(!is_null($publication->getPageFirst())) : ?>
-                    , pp. <?= htmlspecialchars($publication->getPageFirst()) ?>
-                <?php endif ?>
+		</td>
 
-                <?php if(!is_null($publication->getPageLast())) : ?>
-                    - <?= htmlspecialchars($publication->getPageLast()) ?>
-                <?php endif ?>
+		<td class="fourth" valign="top">
+			<?php if(!is_null($publication->getBibtexUrl())) : ?>
+				<a href="<?= $publication->getBibtexUrl() ?>">
+                                    <?php if(!is_null($publication->getImageBibtex())) : ?>
+                                        <img src="<?= $publication->getImageBibtex() ?>"/>	
+                                    <?php endif ?>
+                                    <?php if(is_null($publication->getImageBibtex())) : ?>BibTeX<?php endif ?>
+                                </a>
+			<?php endif ?>
 
-                <?php if(!is_null($publication->getCompletedYear())) : ?>
-                    , <?= htmlspecialchars($publication->getCompletedYear()) ?>
-                <?php endif ?>
-                <?php if(!is_null($publication->getNote())) : ?>
-                    , <?= htmlspecialchars($publication->getNote()) ?>
-                <?php endif ?>
+			<?php if(!is_null($publication->getRisUrl())) : ?>
+				<a href="<?= $publication->getRisUrl() ?>">
+                                    <?php if(!is_null($publication->getImageRis())) : ?>
+                                         <img src="<?= $publication->getImageRis() ?>"/>
+                                    <?php endif ?>
+                                    <?php if(is_null($publication->getImageRis())) : ?>RIS<?php endif ?>
+                                </a>
+			<?php endif ?>
+			<br/>
+			<?php if(!is_null($publication->getPdfUrl())) : ?>
+				<a href="<?= $publication->getPdfUrl() ?>">
+                                   <?php if(!is_null($publication->getImagePdf())) : ?>
+                                        <img src="<?= $publication->getImagePdf() ?>"/>
+                                    <?php endif ?>
+                                    <?php if(is_null($publication->getImagePdf())) : ?>PDF<?php endif ?>
+                                </a>
+			<?php endif ?>
 
-                <?php if(!count($publication->getNote()) == 0) : ?>
-                     (<?= htmlspecialchars($publication->getNote()) ?>)
-                <?php endif ?>
-
-                <?php if(!is_null($publication->getBibtexUrl())) : ?>
-                    <a href="<?= $publication->getBibtexUrl() ?>">BibTeX</a>
-                <?php endif ?>
-
-	        <?php if(!is_null($publication->getRisUrl())) : ?>
-                    <a href="<?= $publication->getRisUrl() ?>">RIS</a>
-                <?php endif ?>
-                
-                <?php if(!is_null($publication->getIdentifierUrl())) : ?>
-                    <a href="<?= $publication->getIdentifierUrl() ?>">PDF</a>
-                <?php endif ?>
-
-                <?php if(!is_null($publication->getIdentifierDoi())) : ?>
-                    <a href="<?= $publication->getIdentifierDoi() ?>">DOI</a>
-                <?php endif ?>
-
-            </li>
-         <?php endforeach ?>
-         </ul>
-        </div>
-     <?php endforeach ?>
+			<?php if(!is_null($publication->getDoiUrl())) : ?>
+				<a href="<?= $publication->getDoiUrl() ?>">
+                                   <?php if(!is_null($publication->getImageDoi())) : ?>
+                                        <img src="<?= $publication->getImageDoi() ?>"/>
+                                    <?php endif ?>
+                                    <?php if(is_null($publication->getImageDoi())) : ?>DOI<?php endif ?>
+                                </a>
+			<?php endif ?>		
+		</td>
+	</tr>	
+         <?php endforeach ?>	
+<?php endforeach ?>	 
+</table>
 </div>
