@@ -25,15 +25,15 @@
                 <seg>Search</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Suche</seg>
+                <seg>Suchen</seg>
             </tuv>
         </tu>
         <tu tuid="browsing_menu_label">
             <tuv xml:lang="en">
-                <seg>Browsing</seg>
+                <seg>Browse</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Browsing</seg>
+                <seg>Browsen</seg>
             </tuv>
         </tu>
         <tu tuid="publish_menu_label">
@@ -70,10 +70,10 @@
         </tu>
         <tu tuid="help_menu_label">
             <tuv xml:lang="en">
-                <seg>Help</seg>
+                <seg>FAQ</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Hilfe</seg>
+                <seg>FAQ</seg>
             </tuv>
         </tu>
 
