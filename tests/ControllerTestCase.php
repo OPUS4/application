@@ -40,7 +40,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
      * Method to initialize Zend_Application for each test.
      */
     public function setUp() {
-        $this->bootstrap = new Zend_Application(
+        $this->application = new Zend_Application(
             APPLICATION_ENV,
             array(
                 "config" => array(
@@ -50,6 +50,8 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
                 )
             )
         );
+        $this->bootstrap = $this->application;
+
         parent::setUp();
 
         // Needed for SecurityRealm
