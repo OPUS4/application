@@ -6,10 +6,10 @@
   <body>
     <tu tuid="search_index_browsing">
       <tuv xml:lang="en">
-        <seg>Browsing</seg>
+        <seg>Browse</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Browsing</seg>
+        <seg>Browsen</seg>
       </tuv>
     </tu>
 
@@ -54,7 +54,7 @@
         <seg>Collections</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Kollektionen</seg>
+        <seg>Collections</seg>
       </tuv>
     </tu>
 
@@ -138,7 +138,7 @@
             <seg>Browse documents by type</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Dokumente anhand des Typs durchstöbern</seg>
+            <seg>Dokumenttypen</seg>
         </tuv>
     </tu>
 
@@ -147,7 +147,7 @@
             <seg>Please click on a document type below to view all documents of that type.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Bitte klicken Sie auf einen der unten angezeigten Dokumententypen um alle dazugehörigen Dokumente anzuzeigen.</seg>
+            <seg>Bitte klicken Sie auf einen der unten angezeigten Dokumenttypen um alle dazugehörigen Dokumente anzuzeigen.</seg>
         </tuv>
     </tu>
 
