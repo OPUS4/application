@@ -63,25 +63,33 @@ class Publish_DepositController extends Controller_Action {
                 //deposit data
                 $log = Zend_Registry::get('Zend_Log');
                 $log->debug("deposit Action begins..");
-                $defaultNS = new Zend_Session_Namespace('Publish');
+                $session = new Zend_Session_Namespace('Publish');
 
                 $this->view->title = $this->view->translate('publish_controller_index');
                 $this->view->subtitle = $this->view->translate('publish_controller_deposit_successful');
 
 
-                if (isset($defaultNS->elements)) {
-                    foreach ($defaultNS->elements AS $element)
+                if (isset($session->elements)) {
+                    foreach ($session->elements AS $element)
                         $this->postData[$element['name']] = $element['value'];
                 }
 
-                $depositForm = new Publish_Form_PublishingSecond($defaultNS->documentType, $defaultNS->documentId, $defaultNS->fulltext, $defaultNS->additionalFields, $this->postData);
+                $depositForm = new Publish_Form_PublishingSecond($session->documentType, $session->documentId, $session->fulltext, $session->additionalFields, $this->postData);
                 $depositForm->populate($this->postData);
+
+                //avoid vulnerability by populate postdata to form => hacked fields won't be saved
+                $depositForm->prepareCheck();
+                $this->postData = array();
+                if (isset($session->elements)) {
+                    foreach ($session->elements AS $element)
+                        $this->postData[$element['name']] = $element['value'];
+                }
+                
 
                 if (isset($this->postData['send']))
                     unset($this->postData['send']);
 
-                $depositData = new Publish_Model_Deposit($defaultNS->documentId, $defaultNS->documentType, $this->postData);
-
+                $depositData = new Publish_Model_Deposit($session->documentId, $session->documentType, $this->postData);
                 $document = $depositData->getDocument();
 
                 $projects = $depositData->getDocProjects();
@@ -93,6 +101,9 @@ class Publish_DepositController extends Controller_Action {
                 $log->info("Document was sucessfully stored!");
 
                 $this->_notifyReferee($projects);
+
+                //Redirect to front door                
+                return $this->_redirectToAndExit('index', 'redirect_to_document', 'index', 'frontdoor', array('docId' => $docId));
             }
         }
         else {
