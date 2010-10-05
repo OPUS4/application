@@ -49,7 +49,7 @@
                     <?= $this->translate('no_file_according_to_dtd') ?>
                 <?PHP endif; ?>
             </li>
-            <li><a href="#collections">Sammlungen</a></li>
+            <li><a href="#collections"><?= $this->translate('admin_documents_label_collections') ?></a></li>
         </ul>
         <ul>
             <?php if ($this->actions === 'publish') : ?>
@@ -67,7 +67,9 @@
 
     <?= $this->form; ?>
 
-    <a name="collections">Sammlungen</a>
+    <fieldset>
+        
+        <legend><a name="collections"><?= $this->translate('admin_documents_label_collections') ?></a></legend>
 
     <div>
         <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'assign', 'document' => $this->docId), null, true); ?>"><?= $this->translate('admin_documents_collectionassign'); ?></a><br/>
@@ -91,5 +93,5 @@
     </ul>
 
     <a href="<?=$this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'assign', 'role' => 1, 'document' => $this->docId), null, true); ?>"><?= $this->translate('admin_documents_organisationalunitassign'); ?></a><br/>
-
+    </fieldset>
 </div>
