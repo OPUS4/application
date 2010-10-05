@@ -7,7 +7,6 @@
             <module>home</module>
             <controller>index</controller>
             <action>index</action>
-            <class>first</class>
         </home>
 
         <administration>
