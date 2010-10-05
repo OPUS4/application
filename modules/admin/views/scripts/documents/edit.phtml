@@ -33,56 +33,63 @@
  * @version     $Id$
  */
 ?>
-<h1><?php echo $this->title ?></h1>
 
-<?php echo $this->form; ?>
+<div class="adminContainer">
 
-<?if($this->showFilemanager === true):?> 
-    <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'filemanager', 'action' => 'index', 'docId' => $this->docId), null, true); ?>"><?php echo $this->translate('admin_filemanager_index'); ?></a>
-<?else:?>
-    <?=$this->translate('no_file_according_to_dtd')?>
-<?endif;?>
-<br/>
-<?if (0 < count($this->assignedCollections)):?>
-    <?=$this->translate('admin_documents_collectionsassigned')?>
-<?else:?>
-    <?echo $this->translate('admin_documents_nocollectionsassigned')?>
-<?endif;?>
+    <div class="breadcrumbsContainer">
+        <?= $this->navigation()->breadcrumbs() ?>
+    </div>
+
+    <div>
+        <ul>
+            <li>
+                <?PHP if($this->showFilemanager === true) : ?>
+                    <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'filemanager', 'action' => 'index', 'docId' => $this->docId), null, true); ?>"><?= $this->translate('admin_filemanager_index'); ?></a>
+                <?PHP else : ?>
+                    <?= $this->translate('no_file_according_to_dtd') ?>
+                <?PHP endif; ?>
+            </li>
+            <li><a href="#collections">Sammlungen</a></li>
+        </ul>
+        <ul>
+            <?php if ($this->actions === 'publish') : ?>
+            <li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'delete', 'docId' => $this->docId), null, true); ?>"><?= $this->translate('admin_doc_delete'); ?></a></li>
+            <li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'publish', 'docId' => $this->docId), null, true); ?>"><?= $this->translate('admin_documents_publish'); ?></a></li>
+            <?php elseif ($this->actions === 'unpublish') : ?>
+            <li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'delete', 'docId' => $this->docId), null, true); ?>"><?= $this->translate('admin_doc_delete'); ?></a></li>
+            <li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'unpublish', 'docId' => $this->docId), null, true); ?>"><?= $this->translate('admin_documents_unpublish'); ?></a></li>
+            <?php elseif ($this->actions === 'undelete') : ?>
+            <li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'publish', 'docId' => $this->docId), null, true); ?>"><?= $this->translate('admin_doc_undelete'); ?></a></li>
+            <li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'permanentdelete', 'docId' => $this->docId), null, true); ?>"><?= $this->translate('admin_doc_delete_permanent'); ?></a></li>
+            <?php endif; ?>
+        </ul>
+    </div>
+
+    <?= $this->form; ?>
+
+    <a name="collections">Sammlungen</a>
+
+    <div>
+        <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'assign', 'document' => $this->docId), null, true); ?>"><?= $this->translate('admin_documents_collectionassign'); ?></a><br/>
+    </div>
+
+    <?PHP if (0 < count($this->assignedCollections)) : ?>
+        <?= $this->translate('admin_documents_collectionsassigned') ?>
+    <?PHP else : ?>
+        <?= $this->translate('admin_documents_nocollectionsassigned') ?>
+    <?PHP endif; ?>
+
     <ul>
-    <?foreach ($this->assignedCollections as $collection):?>
+        <?PHP foreach ($this->assignedCollections as $collection) : ?>
         <li>
-            <?=$collection['roleName']?>: <?=$collection['collectionName']?>
-            <form method="post" action="<?=$this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'unlinkcollection', 'role' => $collection['roleId'], 'collection' => $collection['collectionId']))?>">
-                <input type="submit" value="<?=$this->translate('admin_documents_unlinkcollection')?>" />
+            <?= $collection['roleName']?>: <?= $collection['collectionName'] ?>
+            <form method="post" action="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'unlinkcollection', 'role' => $collection['roleId'], 'collection' => $collection['collectionId'])) ?>">
+                <input type="submit" value="<?= $this->translate('admin_documents_unlinkcollection') ?>" />
             </form>
         </li>
-    <?endforeach;?>
-        <li>
-            <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'assign', 'document' => $this->docId), null, true); ?>"><?php echo $this->translate('admin_documents_collectionassign'); ?></a><br/>
-        </li>
+        <?PHP endforeach; ?>
     </ul>
-<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'assign', 'role' => 1, 'document' => $this->docId), null, true); ?>"><?php echo $this->translate('admin_documents_organisationalunitassign'); ?></a><br/>
-<?php
-if ($this->actions === 'publish') {
-?>
-<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'delete', 'docId' => $this->docId), null, true); ?>"><?php echo $this->translate('admin_doc_delete'); ?></a><br/>
-<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'publish', 'docId' => $this->docId), null, true); ?>"><?php echo $this->translate('admin_documents_publish'); ?></a><br/>
-<?php
-}
-else if ($this->actions === 'unpublish') {
-?>
-<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'delete', 'docId' => $this->docId), null, true); ?>"><?php echo $this->translate('admin_doc_delete'); ?></a><br/>
-<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'unpublish', 'docId' => $this->docId), null, true); ?>"><?php echo $this->translate('admin_documents_unpublish'); ?></a><br/>
-<?php
-}
-?>
-<?php
-if ($this->actions === 'undelete') {
-?>
-    <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'publish', 'docId' => $this->docId), null, true); ?>"><?php echo $this->translate('admin_doc_undelete'); ?></a><br/>
-    <a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'permanentdelete', 'docId' => $this->docId), null, true); ?>"><?php echo $this->translate('admin_doc_delete_permanent'); ?></a><br/>
-<?php
-}
-?>
-<a href="<?php echo $this->url(array('module' => 'admin', 'controller' => 'documents'), null, true); ?>"><?php echo $this->translate('admin_documents_index'); ?></a><br/>
-<a href="<?php echo $this->url(array('module' => 'admin'), null, true); ?>"><?php echo $this->translate('admin_index_title'); ?></a><br/>
+
+    <a href="<?=$this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'assign', 'role' => 1, 'document' => $this->docId), null, true); ?>"><?= $this->translate('admin_documents_organisationalunitassign'); ?></a><br/>
+
+</div>
