@@ -349,7 +349,7 @@ class Publish_FormController extends Controller_Action {
         //$form->fileupload->receive();
 
         $files = $upload->getFileInfo();
-        print_r($files);
+        //print_r($files);
         $this->session->document = new Opus_Document();
         $this->session->document->setType($this->session->documentType);
         $this->session->document->setServerState('temporary');
