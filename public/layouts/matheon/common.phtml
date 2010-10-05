@@ -102,7 +102,7 @@
                                         <?php if(!is_null($languageSelectors)) : ?>
                                             <ul id="lang-switch" class="nav" title="Choose your language">
                                                 <?php foreach ($languageSelectors as $i => $languageSelector) : ?>
-                                                    <li class="<? ($i === 0) ? 'first' : '' ?>"><a href="<?= $languageSelector['url'] ?>" title="<?= $languageSelector['name'] ?>"><?= $languageSelector['name'] ?></a></li>
+                                                    <li class="<?= ($i === 0) ? 'first' : '' ?>"><a href="<?= $languageSelector['url'] ?>" title="<?= $languageSelector['name'] ?>"><?= $languageSelector['name'] ?></a></li>
                                                 <?php endforeach ?>
                                             </ul>
                                         <?php endif ?>
