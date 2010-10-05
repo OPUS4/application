@@ -206,7 +206,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonSubmitterPlaceOfBirth1">
+	<tu tuid="hint_PersonAuthorPlaceOfBirth1">
         <tuv xml:lang="en">
             <seg>Please enter the author's place of birth.</seg>
         </tuv>
