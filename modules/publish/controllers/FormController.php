@@ -63,8 +63,6 @@ class Publish_FormController extends Controller_Action {
             $indexForm = new Publish_Form_PublishingFirst();
 
             $data = $this->getRequest()->getPost();
-            $this->log->debug("MaxFileSize in session: " . $this->session->maxFileSize);
-            $this->log->debug("MaxFileSize as hidden field in post: " . $data['MAX_FILE_SIZE']);
 
             if (isset($data['MAX_FILE_SIZE']) && $data['MAX_FILE_SIZE'] != $this->session->maxFileSize) {
                 //manipulated hidden field for file size???                
@@ -76,9 +74,7 @@ class Publish_FormController extends Controller_Action {
                 $this->view->form = $indexForm;
                 return $this->renderScript('index/index.phtml');
             }
-            else {
-
-                $this->log->debug("build publishing_second");
+            else {               
 
                 $this->_setDocumentParameters($data);
 
@@ -90,7 +86,7 @@ class Publish_FormController extends Controller_Action {
                 foreach($data AS $k => $v)
                     $this->log->debug("(FormController), POST: " . $k . " => " . $v);
 
-                $this->_storeFilesAndBibliographie($data);
+                $this->_storeFilesAndBibliographie($data, $indexForm);
 
                 $templateName = $this->_helper->documentTypes->getTemplateName($this->session->documentType);
 
@@ -348,25 +344,29 @@ class Publish_FormController extends Controller_Action {
     /**
      * Method stores th uploaded files
      */
-    private function _storeFilesAndBibliographie($data) {
+    private function _storeFilesAndBibliographie($data, $form) {
         $upload = new Zend_File_Transfer_Adapter_Http();
-        $files = $upload->getFileInfo();
+        //$form->fileupload->receive();
 
+        $files = $upload->getFileInfo();
+        print_r($files);
         $this->session->document = new Opus_Document();
         $this->session->document->setType($this->session->documentType);
         $this->session->document->setServerState('temporary');
 
-        if ($upload->isUploaded(true)) {
-        //  if (!empty($files)) {
+        //if ($form->fileupload->isUploaded() ) {
 
+        if ($upload->isUploaded()) {
+//          if (!empty($files)) {        
             $this->log->info("Fileupload of: " . count($files) . " possible files => Fulltext is '1'.");
             $this->session->fulltext = '1';
 
             foreach ($files AS $file => $fileValues) {
                 if (!empty($fileValues['name'])) {
+
                     $this->log->info("uploaded: " . $fileValues['name']);
                     $docfile = $this->session->document->addFile();
-                    //todo: default language should come from doc type
+                    //file always requires a language, this value is later overwritten by the exact language
                     $docfile->setLanguage("eng");
                     $docfile->setFromPost($fileValues);
                 }
