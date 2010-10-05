@@ -261,7 +261,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                 // show safety question
                 $this->view->title = $this->view->translate('admin_doc_delete');
                 $this->view->text = $this->view->translate('admin_doc_delete_sure');
-                $yesnoForm = new Admin_Model_YesNoForm();
+                $yesnoForm = new Admin_Form_YesNoForm();
                 $idElement = new Zend_Form_Element_Hidden('id');
                 $idElement->setValue($id);
                 $yesnoForm->addElement($idElement);
@@ -306,7 +306,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                 // show safety question
                 $this->view->title = $this->view->translate('admin_doc_delete_permanent');
                 $this->view->text = $this->view->translate('admin_doc_delete_permanent_sure');
-                $yesnoForm = new Admin_Model_YesNoForm();
+                $yesnoForm = new Admin_Form_YesNoForm();
                 $idElement = new Zend_Form_Element_Hidden('id');
                 $idElement->setValue($id);
                 $yesnoForm->addElement($idElement);
