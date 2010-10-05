@@ -40,7 +40,6 @@ class Admin_RoleControllerTest extends ControllerTestCase {
      * Test showing index page.
      */
     public function testIndexAction() {
-        $this->markTestSkipped('Do not know why.');
         $this->dispatch('/admin/role');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
