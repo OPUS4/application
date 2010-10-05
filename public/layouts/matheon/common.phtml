@@ -104,8 +104,7 @@
                                         <?php if(!is_null($languageSelectors)) : ?>
                                             <ul id="lang-switch" class="nav" title="Choose your language">
                                                 <?php foreach ($languageSelectors as $i => $languageSelector) : ?>
-                                                    <?php if ($i === 0) $class = 'first' ?>
-                                                    <li class="<?= $class ?>"><a href="<?= $languageSelector['url'] ?>" title="<?= $languageSelector['name'] ?>"><?= $languageSelector['name'] ?></a></li>
+                                                    <li class="<? ($i === 0) ? 'first' : '' ?>"><a href="<?= $languageSelector['url'] ?>" title="<?= $languageSelector['name'] ?>"><?= $languageSelector['name'] ?></a></li>
                                                 <?php endforeach ?>
                                             </ul>
                                         <?php endif ?>
@@ -131,8 +130,18 @@
                         <table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0">
                             <tr>
                                 <td class="content" valign="top">
-                                    <div id="content">
-                                        <?= $this->layout()->content ?>
+                                    <div id="content" class="<?= $this->moduleName ?><?= ($this->controllerName === 'index' ? '' : '_'.$this->controllerName)?><?= ($this->actionName === 'index' ? '' : '_'.$this->actionName)?>">
+                                        <?php if (!is_null($this->flashMessenger)) : ?>
+                                        <div class="messages">
+                                            <?php foreach ($this->flashMessenger->getMessages() as $message) : ?>
+                                                <div class="<?= $message['level'] ?>"><?= $message['message'] ?></div>
+                                            <?php endforeach ?>
+                                        </div>
+                                        <?php endif ?>
+
+                                        <div class="wrapper">
+                                            <?= $this->layout()->content ?>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
