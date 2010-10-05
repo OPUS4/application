@@ -81,6 +81,60 @@
         </tuv>
     </tu>
 
+	<tu tuid="hint_PersonSubmitterFirstName1">
+        <tuv xml:lang="en">
+            <seg>Please enter the submitter's first name.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte den Vornamen des Einstellers ein.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_PersonSubmitterLastName1">
+        <tuv xml:lang="en">
+            <seg>Please enter the submitter's last name.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte den Nachnamen des Einstellers ein.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_PersonSubmitterEmail1">
+        <tuv xml:lang="en">
+            <seg>Please enter the submitter's email adress.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte eine E-Mailadresse des Einstellers ein.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_PersonSubmitterAcademicTitle1">
+        <tuv xml:lang="en">
+            <seg>Please enter the submitter's academic title.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte den akademischen Titel des Einstellers ein.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_PersonSubmitterDateOfBirth1">
+        <tuv xml:lang="en">
+            <seg>Please enter the submitter's date of birth.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte das Geburtsdatum des Einstellers ein.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_PersonSubmitterPlaceOfBirth1">
+        <tuv xml:lang="en">
+            <seg>Please enter the submitter's place of birth.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte den Geburtsort des Einstellers ein.</seg>
+        </tuv>
+    </tu>
+	
     <tu tuid="hint_groupLicence">
         <tuv xml:lang="en">
             <seg>Please choose the licence(s) for the document.</seg>
@@ -131,6 +185,33 @@
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte den Nachnamen eines Autoren ein.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_PersonAuthorEmail1">
+        <tuv xml:lang="en">
+            <seg>Please enter the author's email adress.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte eine E-Mailadresse des Autors ein.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_PersonAuthorDateOfBirth1">
+        <tuv xml:lang="en">
+            <seg>Please enter the author's date of birth.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte das Geburtsdatum des Autors ein.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_PersonSubmitterPlaceOfBirth1">
+        <tuv xml:lang="en">
+            <seg>Please enter the author's place of birth.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte den Geburtsort des Autors ein.</seg>
         </tuv>
     </tu>
 	
@@ -386,6 +467,15 @@
         </tuv>
     </tu>
 	
+	<tu tuid="hint_CreatingCorporation">
+        <tuv xml:lang="en">
+            <seg>Please enter the creating Corporation.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte die urhebende Körperschaft ein.</seg>
+        </tuv>
+    </tu>
+	
 	<tu tuid="hint_CreatingCorporation1">
         <tuv xml:lang="en">
             <seg>Please enter the creating Corporation.</seg>
@@ -405,6 +495,15 @@
     </tu>
 	
 	<tu tuid="hint_groupContributingCorporation">
+        <tuv xml:lang="en">
+            <seg>Please enter the contributing Corporation.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte die beteiligte Körperschaft ein.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_ContributingCorporation">
         <tuv xml:lang="en">
             <seg>Please enter the contributing Corporation.</seg>
         </tuv>
@@ -566,7 +665,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_TitleSub">
+	<tu tuid="hint_TitleSub1">
         <tuv xml:lang="en">
             <seg>Please enter the document's subtitle.</seg>
         </tuv>
@@ -584,7 +683,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_TitleAdditional">
+	<tu tuid="hint_TitleAdditional1">
         <tuv xml:lang="en">
             <seg>Please enter the document's additional title.</seg>
         </tuv>
@@ -602,7 +701,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_TitleParent">
+	<tu tuid="hint_TitleParent1">
         <tuv xml:lang="en">
             <seg>Please enter the document's parent title.</seg>
         </tuv>
@@ -847,12 +946,30 @@ Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathsci
         </tuv>
     </tu>
 	
+	<tu tuid="hint_PublishedYear">
+        <tuv xml:lang="en">
+            <seg>Please enter the year of the document's first publishing.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte das Erstveröffentlichungsjahr des Dokuments ein.</seg>
+        </tuv>
+    </tu>
+	
 	<tu tuid="hint_CompletedDate">
         <tuv xml:lang="en">
             <seg>Please enter the date of the document's publishing in the format MM/DD/YYYY.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte das Veröffentlichungsdatum (online) des Dokuments im Format TT.MM.JJJJ ein.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_CompletedYear">
+        <tuv xml:lang="en">
+            <seg>Please enter the year of the document's publishing.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte das Veröffentlichungsjahr des Dokuments ein.</seg>
         </tuv>
     </tu>
 	
@@ -892,7 +1009,7 @@ Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathsci
         </tuv>
     </tu>
 	
-	<tu tuid="hint_IdentifierISSN">
+	<tu tuid="hint_IdentifierIssn">
         <tuv xml:lang="en">
             <seg>Please enter the ISSN.</seg>
         </tuv>
