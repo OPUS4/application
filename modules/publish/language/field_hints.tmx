@@ -233,7 +233,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonAdvisor1FirstName">
+	<tu tuid="hint_PersonAdvisorFirstName1">
         <tuv xml:lang="en">
             <seg>Please enter the first name of the Advisor.</seg>
         </tuv>
@@ -242,7 +242,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonAdvisor1LastName">
+	<tu tuid="hint_PersonAdvisorLastName1">
         <tuv xml:lang="en">
             <seg>Please enter the last name of the Advisor.</seg>
         </tuv>
@@ -251,7 +251,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonAdvisor2FirstName">
+	<tu tuid="hint_PersonAdvisorFirstName2">
         <tuv xml:lang="en">
             <seg>Please enter the first name of the 2. Advisor.</seg>
         </tuv>
@@ -260,7 +260,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonAdvisor2LastName">
+	<tu tuid="hint_PersonAdvisorLastName2">
         <tuv xml:lang="en">
             <seg>Please enter the last name of the 2. Advisor.</seg>
         </tuv>
@@ -269,7 +269,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonAdvisor3FirstName">
+	<tu tuid="hint_PersonAdvisorFirstName3">
         <tuv xml:lang="en">
             <seg>Please enter the first name of the 3. Advisor.</seg>
         </tuv>
@@ -278,7 +278,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonAdvisor3LastName">
+	<tu tuid="hint_PersonAdvisorLastName3">
         <tuv xml:lang="en">
             <seg>Please enter the last name of the 3. Advisor.</seg>
         </tuv>
@@ -296,7 +296,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonTranslator1FirstName">
+	<tu tuid="hint_PersonTranslatorFirstName1">
         <tuv xml:lang="en">
             <seg>Please enter the first name of the Translator.</seg>
         </tuv>
@@ -305,7 +305,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonTranslator1LastName">
+	<tu tuid="hint_PersonTranslatorLastName1">
         <tuv xml:lang="en">
             <seg>Please enter the last name of the Translator.</seg>
         </tuv>
@@ -314,7 +314,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonTranslator2FirstName">
+	<tu tuid="hint_PersonTranslatorFirstName2">
         <tuv xml:lang="en">
             <seg>Please enter the first name of the 2. Translator.</seg>
         </tuv>
@@ -323,7 +323,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonTranslator2LastName">
+	<tu tuid="hint_PersonTranslatorLastName2">
         <tuv xml:lang="en">
             <seg>Please enter the last name of the 2. Translator.</seg>
         </tuv>
@@ -341,7 +341,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonContributor1FirstName">
+	<tu tuid="hint_PersonContributorFirstName1">
         <tuv xml:lang="en">
             <seg>Please enter the first name of the Contributor.</seg>
         </tuv>
@@ -350,7 +350,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonContributor1LastName">
+	<tu tuid="hint_PersonContributorLastName1">
         <tuv xml:lang="en">
             <seg>Please enter the last name of the Contributor.</seg>
         </tuv>
@@ -359,7 +359,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonContributor2FirstName">
+	<tu tuid="hint_PersonContributorFirstName2">
         <tuv xml:lang="en">
             <seg>Please enter the first name of the 2. Contributor.</seg>
         </tuv>
@@ -368,7 +368,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonContributor2LastName">
+	<tu tuid="hint_PersonContributorLastName2">
         <tuv xml:lang="en">
             <seg>Please enter the last name of the 2. Contributor.</seg>
         </tuv>
@@ -849,10 +849,10 @@ Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathsci
 	
 	<tu tuid="hint_CompletedDate">
         <tuv xml:lang="en">
-            <seg>Please enter the date of the document's publishing.</seg>
+            <seg>Please enter the date of the document's publishing in the format MM/DD/YYYY.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte das Veröffentlichungsdatum (online) des Dokuments ein.</seg>
+            <seg>Tragen Sie bitte das Veröffentlichungsdatum (online) des Dokuments im Format TT.MM.JJJJ ein.</seg>
         </tuv>
     </tu>
 	
