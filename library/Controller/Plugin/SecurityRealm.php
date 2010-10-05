@@ -75,12 +75,12 @@ class Controller_Plugin_SecurityRealm extends Zend_Controller_Plugin_Abstract {
         $navigation = Zend_Registry::get('Opus_Navigation');
         
         if (!empty($navigation)) {
-            if (!$realm->check('administrate')) {
-                $page = $navigation->findBy('label', 'admin_menu_label');
+            if ($realm->check('administrate') || !$realm->check('clearance')) {
+                $page = $navigation->findBy('label', 'review_menu_label');
                 $navigation->removePage($page);
             }
-            if (!$realm->check('clearance')) {
-                $page = $navigation->findBy('label', 'review_menu_label');
+            if (!$realm->check('administrate')) {
+                $page = $navigation->findBy('label', 'admin_menu_label');
                 $navigation->removePage($page);
             }
         }

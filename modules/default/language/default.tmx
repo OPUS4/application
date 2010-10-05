@@ -52,6 +52,14 @@
                 <seg>Freischalten</seg>
             </tuv>
         </tu>
+        <tu tuid="review_menu_label_description">
+            <tuv xml:lang="en">
+                <seg>Publish unpublished documents.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Unveröffentlichte Dokumente freischalten.</seg>
+            </tuv>
+        </tu>
         <tu tuid="admin_menu_label">
             <tuv xml:lang="en">
                 <seg>Administration</seg>

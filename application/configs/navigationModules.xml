@@ -23,8 +23,16 @@
                         </edit>
                     </pages>
                 </documents>
+
+                <review>
+                    <label>review_menu_label</label>
+                    <description>review_menu_label_description</description>
+                    <module>review</module>
+                    <controller>index</controller>
+                    <action>index</action>
+                </review>
                 
-				<security>
+        	<security>
                     <label>admin_title_security</label>
                     <description>admin_title_security_description</description>
                     <module>admin</module>
