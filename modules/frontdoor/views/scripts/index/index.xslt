@@ -48,10 +48,11 @@
     <xsl:param name="baseUrl" />
     <xsl:param name="layoutPath" />
     <xsl:param name="deliverUrlPrefix" />
+    <xsl:param name="isMailPossible" />
 
     <xsl:template match="/">
-        <div about="{/Opus/Opus_Model_Filter/TitleMain/@Value}">
-            <xsl:apply-templates select="Opus/Opus_Model_Filter" />
+        <div about="{/Opus/Opus_Document/TitleMain/@Value}">
+            <xsl:apply-templates select="Opus/Opus_Document" />
         </div>
     </xsl:template>
 
@@ -62,7 +63,7 @@
      if there is a choose-block for the field, you have to move the whole choose-block
      if you wish new fields, you have to add a new line xsl:apply-templates...
      and a special template for each new field below, too -->
-    <xsl:template match="Opus_Model_Filter">
+    <xsl:template match="Opus_Document">
         <div class="authorTitle">
             <table>
                 <xsl:apply-templates select="PersonAuthor" />
@@ -1026,7 +1027,7 @@
     </xsl:template>
 
     <xsl:template name="MailToAuthor">
-        <xsl:if test ="php:functionString('Frontdoor_IndexController::isMailPossible', @Id)">
+        <xsl:if test ="$isMailPossible">
             <xsl:element name="br"/>
             <xsl:element name="a">
 	           	<!-- TODO: Use Zend Url-Helper to build href attribute -->

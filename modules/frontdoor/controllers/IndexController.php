@@ -52,9 +52,14 @@ class Frontdoor_IndexController extends Controller_Action {
             $document = new Opus_Document($docId);
 
             $type = $document->getType();
-            $filter = new Opus_Model_Filter();
-            $filter->setModel($document);
-            $xml = $filter->toXml();
+
+            $xmlModel = new Opus_Model_Xml;
+            $xmlModel->setModel($document);
+            $xmlModel->excludeEmptyFields(); // needed for preventing handling errors
+            $xmlModel->setStrategy(new Opus_Model_Xml_Version1);
+            $xmlModel->setXmlCache(new Opus_Model_Xml_Cache);
+
+            $xml = $xmlModel->getDomDocument()->getElementsByTagName('Opus_Document')->item(0);
 
             $xslt = new DomDocument;
             $template = $this->setUpXSLTStylesheet($type);
@@ -73,6 +78,7 @@ class Frontdoor_IndexController extends Controller_Action {
             $proc->setParameter('', 'baseUrl', $baseUrl);
             $proc->setParameter('', 'deliverUrlPrefix', "$deliver_url_prefix");
             $proc->setParameter('', 'layoutPath', $baseUrl.'/'.$layoutPath);
+            $proc->setParameter('', 'isMailPossible', ($this->isMailPossible($document) ? true : false));
             $this->view->frontdoor = $proc->transformToXML($xml);
 
             $this->incrementStatisticsCounter($docId);
@@ -133,20 +139,15 @@ class Frontdoor_IndexController extends Controller_Action {
         return $translate->_($key);
     }
 
-    static public function isMailPossible($docId) {
-        $document = new Opus_Document($docId);
-        $result = false;
-        try {
-            $authors = $document->getPersonAuthor();
-            foreach ($authors as $author) {
-                $mail = $author->getEmail();
-                $result = $result || ($author->getAllowEmailContact() && !empty($mail));
+    private function isMailPossible($document) {
+        foreach ($document->getPersonAuthor() as $author) {
+            $mail = $author->getEmail();
+            if ($author->getAllowEmailContact() && !empty($mail)) {
+                return true;
             }
         }
-        catch (Opus_Model_Exception $e) {
-        	// no author defined in DTD? Dont do anything, just return false...
-        }
-        return $result;
+
+        return false;
     }
 
 }
