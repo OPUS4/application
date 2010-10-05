@@ -50,7 +50,10 @@
          ->appendStylesheet($basePath . '/layouts/matheon/css/opus.css')
          ->appendStylesheet($basePath . '/layouts/matheon/css/thoralf.css')
          ->appendStylesheet($basePath . '/layouts/matheon/css/frontdoor.css');
+
+     $languageSelectors = $this->languageSelector();
 ?>
+
 <?= $this->doctype() ?>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
@@ -98,7 +101,14 @@
                                 </td>
                                 <td>
                                     <div id="lang">
-                                        <?= $this->languageSelector() ?>
+                                        <?php if(!is_null($languageSelectors)) : ?>
+                                            <ul id="lang-switch" class="nav" title="Choose your language">
+                                                <?php foreach ($languageSelectors as $i => $languageSelector) : ?>
+                                                    <?php if ($i === 0) $class = 'first' ?>
+                                                    <li class="<?= $class ?>"><a href="<?= $languageSelector['url'] ?>" title="<?= $languageSelector['name'] ?>"><?= $languageSelector['name'] ?></a></li>
+                                                <?php endforeach ?>
+                                            </ul>
+                                        <?php endif ?>
                                     </div>
                                 </td>
                             </tr>
