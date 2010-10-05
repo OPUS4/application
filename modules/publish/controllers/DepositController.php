@@ -103,7 +103,7 @@ class Publish_DepositController extends Controller_Action {
                 $this->_notifyReferee($projects);
 
                 //Redirect to front door                
-                return $this->_redirectToAndExit('index', 'redirect_to_document', 'index', 'frontdoor', array('docId' => $docId));
+                return $this->_redirectToAndExit('index', 'home_index_redirect_from_publish', 'index', 'home');
             }
         }
         else {
