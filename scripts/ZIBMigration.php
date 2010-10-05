@@ -154,7 +154,8 @@ class ZIBMigration extends OpusMigrationBase {
                 $ipStart = readline('The IP-range starts at (e.g. 192.168.1.1): ');
                 $ipEnd = readline('The IP-range ends at (e.g. 192.168.1.10): ');
                 $this->path = $path;
-                $this->importFiles($ipStart, $ipEnd, $this->doclist);
+                //$this->importFiles($ipStart, $ipEnd, $this->doclist);
+                $this->importFiles($ipStart, $ipEnd);
                 $input = readline('Do you want to enter another fulltext path for files from another Opus3-area? (y/n) ');
                 $path = null;
             } while ($input === 'y');
