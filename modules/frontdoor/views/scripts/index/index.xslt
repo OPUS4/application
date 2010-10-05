@@ -825,7 +825,8 @@
                         <xsl:element name="a">
                    <!-- TODO: Use Zend Url-Helper to build href attribute -->
                             <xsl:attribute name="href">
-                                <xsl:value-of select="$baseUrl"/>/default/license/index/licId/
+                                <xsl:value-of select="$baseUrl"/>
+                                <xsl:text>/default/license/index/licId/</xsl:text>
                                 <xsl:value-of select="@Id" />
                             </xsl:attribute>
                             <xsl:value-of select="@NameLong" />
