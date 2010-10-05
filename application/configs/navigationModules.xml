@@ -2,6 +2,14 @@
 
 <configdata>
     <nav>
+        <home>
+            <label>home_menu_label</label>
+            <module>home</module>
+            <controller>index</controller>
+            <action>index</action>
+            <class>first</class>
+        </home>
+
         <administration>
             <label>admin_menu_label</label>
             <module>admin</module>
