@@ -94,7 +94,7 @@ class OpusMigrationBase {
     }
 
 
-    protected function importFiles($ipstart, $ipend, $doclist) {
+    protected function importFiles($ipstart, $ipend) {
         echo "Importing files\n";
         $iprange = null;
         $rolename = null;
@@ -139,7 +139,7 @@ class OpusMigrationBase {
         }
         
         $fileImporter = new Opus3FileImport($this->path, $this->magicPath, $accessRole);
-        //$docList = Opus_Document::getAllIds();
+        $doclist = Opus_Document::getAllIds();
         foreach ($doclist as $id) {
             $doc = new Opus_Document($id);
             //$opus3Id = $doc->getIdentifierOpus3()->getValue();
