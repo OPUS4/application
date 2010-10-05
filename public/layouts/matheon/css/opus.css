@@ -26,7 +26,8 @@
  * @category    Application
  * @author      Henning Gerhardt (henning.gerhardt@slub-dresden.de)
  * @author      Felix Ostrowski (ostrowski@hbz-nrw.de)
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @author      Thoralf Klein <thoralf.klein@zib.de>
+ * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -52,3 +53,7 @@
     padding: 0;
     margin: 0;
 }
+
+#fieldset-search fieldset { border: 0; }
+
+#lang-switch li.first { list-style: none; }
