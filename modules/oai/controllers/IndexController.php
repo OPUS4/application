@@ -960,7 +960,16 @@ class Oai_IndexController extends Controller_Xml {
      * @param  Opus_Document $document
      */
     private function xmlCreationRecords($document) {
-        $node = $this->_xml->importNode($document->toXml()->getElementsByTagName('Opus_Document')->item(0), true);
+
+        $xmlModel = new Opus_Model_Xml;
+        $xmlModel->setModel($document);
+        $xmlModel->excludeEmptyFields(); // needed for preventing handling errors
+        $xmlModel->setStrategy(new Opus_Model_Xml_Version1);
+        $xmlModel->setXmlCache(new Opus_Model_Xml_Cache);
+
+        $xmldoc = $xmlModel->getDomDocument()->getElementsByTagName('Opus_Document')->item(0);
+
+        $node = $this->_xml->importNode($xmldoc, true);
         // create xml for set information
         $this->setInfoXml($document,$node);
     }
