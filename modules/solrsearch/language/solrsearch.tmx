@@ -10,10 +10,10 @@
 
         <tu tuid="browsing_title_doctype">
             <tuv xml:lang="en">
-                <seg>Doctype</seg>
+                <seg>Document Type</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Dokumententyp</seg>
+                <seg>Dokumenttyp</seg>
             </tuv>
         </tu>
 
@@ -67,7 +67,7 @@
                 <seg>most recently published documents</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>zuletzt veröffentlichten Dokumente</seg>
+                <seg>zuletzt veröffentlichte Dokumente</seg>
             </tuv>
         </tu>
 
@@ -247,7 +247,7 @@
                 <seg>Please enter at least one valid search term.</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Bitte geben Sie wenigstens einen gültigen Suchbegriff ein.</seg>
+                <seg>Bitte geben Sie mindestens einen gültigen Suchbegriff ein.</seg>
             </tuv>
         </tu>
 
@@ -274,7 +274,7 @@
                 <seg>Refine your search</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Verfeinern Sie Ihre Suche</seg>
+                <seg>Grenzen Sie Ihre Suchergebnisse weiter ein</seg>
             </tuv>
         </tu>
 
@@ -391,7 +391,7 @@
                 <seg>Document Type</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Dokumententyp</seg>
+                <seg>Dokumenttyp</seg>
             </tuv>
         </tu>
 
