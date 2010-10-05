@@ -29,111 +29,102 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
+ * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+
+// FIXME This page should not be displayed if no document has been selected
 ?>
-<h1><?= $this->title ?></h1>
-<a href="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'edit', 'id' => $this->docId), null, true); ?>"><?= $this->translate('admin_documents_edit'); ?></a>
+
+<div class="adminContainer">
+
+    <div class="breadcrumbsContainer">
+        <?= $this->navigation()->breadcrumbs() ?>
+    </div>
+
+<a href="<?= $this->editUrl ?>"><?= $this->translate('admin_documents_edit'); ?></a>
+
 <?= $this->uploadform ?>
+
 <?= $this->actionresult ?>
-<?php
-    if ($this->noFileSelected === true)
-    {
-    	echo $this->translate('pkm_no_publication_selected');
-    }
-    else if (empty($this->noFileSelected) === false) {
-        echo $this->noFileSelected;
-    } else {
-        ?>
-        <ol>
-        <?
-for ($fi = 0; $fi < $this->fileNumber; $fi++) {
-      $file = $this->fileNames[$fi];
-      $hashNumber = $this->hashNumber[$fi];
-      $show_gpg = false;
-      for ($hi = 0; $hi < $hashNumber; $hi++) {
-          $hashtype = $this->hashType[$fi][$hi];
-          if (true === isset($hashtype)) {
-            $this->signtype = $signtype = substr($hashtype, 0, 3);
-            if ($signtype == 'gpg') {
-              if ($show_gpg === false) {
-              // Show GPG-Signatures only once
-               $show_gpg = true;
-               ?>
-               <p><b><?= $this->translate('SignatureValue');?> (<?= $this->file = $file?>)</b></p>
-               <p><?= $this->signtype?>:
-               <?php
-               // Controller stores signature verification results in $this->verifyResult[$file]
-               $verification = $this->verifyResult[$file];
-               if (count($verification) === 0) {
-                   ?>
-                   <?= $this->translate('pkm_no_signature') ?>
-                   <?php
-               }
-               $sigindex = 0;
-               foreach($verification as $verifiedArray) {
-                   foreach($verifiedArray as $index => $verificationResult) {
-                       if ($index === 'result') {
-                          foreach ($verificationResult as $verified) {
-                              if (false === is_object($verified)) {
-                                  ?><?= $verified ?><br/>
-                              <?}
-                              else if ($verified->isValid() === true) {
-                                  printf($this->translate('pkm_sigcheck_valid'), $verified->getUserId()->getName());
-                                  echo "<br/>";
-                                  } else {
-                                     printf($this->translate('pkm_sigcheck_invalid'), $verified->getUserId()->getName());
-                                     echo "<br/>";
-                                  }
-                              // Show key used for signature
-                              if (true === is_object($verified)) {
-                                 ?>
-                                 <a href="<?= $this->url(array('module' => 'pkm', 'controller' => 'index', 'action' => 'showkey', 'fingerprint' => $verified->getKeyFingerprint()), null, true) ?>"><?= $this->translate('pkm_show_signature_key') ?></a><br/>
-                                 <?
-                              }
-                          }
-                       } else {
-                          $signaturelist->signatures[$sigindex] = $verificationResult;
-                          ?>
-                          <a href="<?= $this->url(array('module' => 'pkm', 'controller' => 'index', 'action' => 'showsignature', 'signature' => $sigindex), null, true) ?>"><?= $this->translate('pkm_show_signature') ?></a><br/>
-                          <?
-                          $sigindex++;
-                       }
-                  }
-              }
-              ?>
-             </p><?
-              }
-            } else {
-               ?><br>
-               <p><b><?= $this->translate ('HashValue')?>&nbsp;(<?= $this->file = $file?>):</b></p>
-               <p><b>
-               <?= $hashtype?>&nbsp;</b>
-               <?= $this->translate('frontdoor_fixpoint')?>:&nbsp;
-               <?= $this->hashSoll[$fi][$hi]?></p>
-               <p><b>
-               <?= $this->hashtype = $hashtype?>&nbsp;</b>
-               <?= $this->translate('frontdoor_current')?>:&nbsp;
-               <?
-               if ($this->hashIst[$fi][$hi] != 0) {
-                   ?><?= $this->hashIst[$fi][$hi]?></p><?
-               } else {
-                    ?><?= $this->translate('frontdoor_file_too_big')?></p>
-                    <?
-               }
-             }
-         } else {
-            ?><p><b><?= $this->translate('frontdoor_no_hash')?></b></p>
-            <?
-         }
-      }
-      if (isset($this->fileForm[$fi]) === true) {
-          echo $this->fileForm[$fi];
-      }
-      echo "<hr/>";
-}
-}
-?>
-        </ol>
+
+<ol>
+<?PHP foreach ($this->fileHelpers as $file) : ?>
+    <?PHP
+        $fileName = $file->getFileName();
+        $show_gpg = true;
+    ?>
+    <?PHP foreach ($file->getHashes() as $hash) : ?>
+        <?PHP $hashType = $hash->getHashType(); ?>
+        <?PHP if (!empty($hashType)) : ?>
+            <?PHP $signtype = $hash->getSignatureType(); ?>
+            <?PHP if ($signtype == 'gpg') : ?>
+                <?PHP if ($show_gpg === true) : ?>
+                    <?PHP $show_gpg = false; // Show GPG-Signatures only once ?>
+                    <p><b><?= $this->translate('SignatureValue'); ?> (<?= $fileName ?>)</b></p>
+                    <p><?= $signtype ?>:
+                    <?PHP
+                        // Controller stores signature verification results in $this->verifyResult[$fileName]
+                        $verification = $this->verifyResult[$fileName];
+                    ?>
+                    <?PHP if (count($verification) === 0) : ?>
+                        <?= $this->translate('pkm_no_signature') ?>
+                    <?php endif; ?>
+                    <?PHP $sigindex = 0; ?>
+                    <?PHP foreach($verification as $verifiedArray) : ?>
+                        <?PHP foreach($verifiedArray as $index => $verificationResult) : ?>
+                            <?PHP if ($index === 'result') : ?>
+                                <?PHP foreach ($verificationResult as $verified) : ?>
+                                    <?PHP if (false === is_object($verified)) : ?>
+                                        <?= $verified ?><br/>
+                                    <?PHP elseif ($verified->isValid() === true) : ?>
+                                        <?= $this->translate('pkm_sigcheck_valid', $verified->getUserId()->getName()); ?><br/>
+                                    <?PHP else : ?>
+                                        <?= $this->translate('pkm_sigcheck_invalid', $verified->getUserId()->getName()); ?><br/>
+                                    <?PHP endif; ?>
+                                    <?PHP if (true === is_object($verified)) : // Show key used for signature ?>
+                                        <a href="<?= $this->url(array('module' => 'pkm', 'controller' => 'index', 'action' => 'showkey', 'fingerprint' => $verified->getKeyFingerprint()), null, true) ?>"><?= $this->translate('pkm_show_signature_key') ?></a><br/>
+                                    <?PHP endif; ?>
+                                <?PHP endforeach; ?>
+                            <?PHP else : ?>
+                                <? $signaturelist->signatures[$sigindex] = $verificationResult; ?>
+                                <a href="<?= $this->url(array('module' => 'pkm', 'controller' => 'index', 'action' => 'showsignature', 'signature' => $sigindex), null, true) ?>"><?= $this->translate('pkm_show_signature') ?></a><br/>
+                                <? $sigindex++; ?>
+                            <?PHP endif; ?>
+                        <?PHP endforeach; ?>
+                    <?PHP endforeach; ?>
+                    </p>
+                <?PHP endif; ?>
+            <?PHP else : ?>
+                <br>
+                <p>
+                    <b><?= $this->translate('HashValue')?>(<?= $fileName ?>):</b>
+                </p>
+                <p>
+                    <b><?= $hash->getHashType() ?></b>
+                    <?= $this->translate('frontdoor_fixpoint')?>:
+                    <?= $hash->getSoll()?>
+                </p>
+                <p>
+                    <b><?= $hash->getHashType() ?></b>
+                    <?= $this->translate('frontdoor_current')?>:
+                    <?PHP if ($hash->getIst() != 0) : ?>
+                        <?= $hash->getIst() ?>
+                    <?PHP else : ?>
+                        <?= $this->translate('frontdoor_file_too_big')?>
+                    <?PHP endif; ?>
+                </p>
+            <?PHP endif; ?>
+        <?PHP else : ?>
+            <p><b><?= $this->translate('frontdoor_no_hash')?></b></p>
+        <?PHP endif; ?>
+    <?PHP endforeach; ?>
+    <?PHP foreach ($file->getForms() as $fileForm) : ?>
+        <?= $fileForm ?>
+    <?PHP endforeach; ?>
+<?PHP endforeach; ?>
+</ol>
+
+</div>

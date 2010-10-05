@@ -74,4 +74,5 @@ class Admin_Form_FileUpload extends Zend_Form {
         $this->addElements(array($fileupload, $comment, $languageList, $documentId, $submit));
         $this->setAttrib('enctype', Zend_Form::ENCTYPE_MULTIPART);
     }
+
 }

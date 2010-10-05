@@ -36,253 +36,193 @@
 
 class Admin_FilemanagerController extends Zend_Controller_Action
 {
+
     /**
-     * Do some initialization on startup of every action
+     * Just to be there. No actions taken.
      *
      * @return void
+     *
      */
-    public function init()
-    {
-        $this->_redirector = $this->_helper->getHelper('Redirector');
-    }
-
-	/**
-	 * Just to be there. No actions taken.
-	 *
-	 * @return void
-	 *
-	 */
     public function indexAction()
     {
         $this->view->title = $this->view->translate('admin_filemanager_index');
 
         $data = $this->_request->getPost();
 
-        $gpg = new Opus_GPG();
-
-        if (true === array_key_exists('signsubmit', $data))
-        {
-            $e = null;
-            try {
-                $gpg->signPublicationFile(new Opus_File($data['FileObject']), $data['password']);
-            }
-            catch (Exception $e) {
-                $this->view->actionresult = $e->getMessage();
-            }
-            if ($e === null) {
-                $this->view->actionresult = $this->view->translate('admin_filemanager_signsuccess');
-            }
+        if (true === array_key_exists('signsubmit', $data)) {
+            $this->_processSignSubmit($data);
         }
 
-        if (true === array_key_exists('deletesubmit', $data))
-        {
-            $e = null;
-            try {
-                $file = new Opus_File($data['FileObject']);
-                // Really delete this file
-                $file->doDelete($file->delete());
-            }
-            catch (Exception $e) {
-                $this->view->actionresult = $e->getMessage();
-            }
-            if ($e === null) {
-                $this->view->actionresult = $this->view->translate('admin_filemanager_deletesuccess');
-            }
+        if (true === array_key_exists('deletesubmit', $data)) {
+            $this->_processDeleteSubmit($data);
         }
 
-        $requestData = $this->_request->getParams();
-        $this->view->docId = $requestData['docId'];
-    	$this->view->noFileSelected = false;
+        $docId = $this->getRequest()->getParam('docId');
 
-    	if (true === array_key_exists('docId', $requestData))
+        $this->view->docId = $docId;
+
+    	if (!empty($docId))
     	{
-            $uploadForm = new Admin_Form_FileUpload();
-            $action_url = $this->view->url(array('controller' => 'filemanager', 'action' => 'index'));
-            $uploadForm->setAction($action_url);
+            $this->view->editUrl = $this->view->url(array('action' => 'edit', 'id' => $docId), null, true);
+
+            $uploadForm = $this->_getUploadForm();
+
             // store uploaded data in application temp dir
             if (true === array_key_exists('uploadsubmit', $data)) {
                 if ($uploadForm->isValid($data) === true) {
-                    // This works only from Zend 1.7 on
-                    // $upload = $uploadForm->getTransferAdapter();
-                    $upload = new Zend_File_Transfer_Adapter_Http();
-                    $files = $upload->getFileInfo();
-                    // TODO: Validate document id, error message on fail
-                    $documentId = $requestData['docId'];
-                    $document = new Opus_Document($documentId);
-
-                    // save each file
-                    foreach ($files as $file) {
-                        /* TODO: Uncaught exception 'Zend_File_Transfer_Exception' with message '"fileupload" not found by file transfer adapter
-                        * if (!$upload->isValid($file)) {
-                        *    $this->view->message = 'Upload failed: Not a valid file!';
-                        *    break;
-                        * }
-                        */
-                        $docfile = $document->addFile();
-                        $docfile->setDocumentId($document->getId());
-                        $docfile->setLabel($uploadForm->getValue('comment'));
-                        $docfile->setLanguage($uploadForm->getValue('language'));
-                        $docfile->setPathName($file['name']);
-                        $docfile->setMimeType($file['type']);
-                        $docfile->setTempFile($file['tmp_name']);
-                        $docfile->setFromPost($file);
-                    }
-                    $e = null;
-                    try {
-                        $document->store();
-                        $config = Zend_Registry::get('Zend_Config');
-
-                        $searchEngine = $config->searchengine->engine;
-                        if (empty($searchEngine) === true) {
-                            $searchEngine = 'Lucene';
-                        }
-                        // Reindex
-                        $engineclass = 'Opus_Search_Index_'.$searchEngine.'_Indexer';
-                        $indexer = new $engineclass();
-                        $indexer->removeDocumentFromEntryIndex($document);
-                        $indexer->addDocumentToEntryIndex($document);
-                    }
-                    catch (Exception $e) {
-                        $this->view->actionresult = $this->view->translate('admin_filemanager_uploadfailure');
-                    }
-                    if ($e === null) {
-                        $this->view->actionresult = $this->view->translate('admin_filemanager_uploadsuccess');
-                    }
-
-                    // reset input values fo re-displaying
-                    $uploadForm->reset();
-                    // re-insert document id
-                    $uploadForm->DocumentId->setValue($document->getId());
+                    $this->_storeUpload($docId, $uploadForm);
                 }
                 else {
                     // invalid form, populate with transmitted data
                     $uploadForm->populate($data);
                     $this->view->form = $uploadForm;
                 }
-
             }
+
             $this->view->uploadform = $uploadForm;
-            $document = new Opus_Document($requestData['docId']);
-            $this->view->files = array();
+
+            $document = new Opus_Document($docId);
 
             //searching for files, getting filenumbers and hashes
-            $fileNumber = 0;
             $files = $document->getFile();
-            if (true === is_array($files) && count($files) > 0) {
-                $fileNumber = count($files);
-                $this->view->fileNumber = $fileNumber;
+            if (true === is_array($files)) {
+                $this->view->fileNumber = count($files);
             }
+
             // Iteration over all files, hashtypes and -values
             // Check if GPG for admin is enabled
             $config = Zend_Registry::get('Zend_Config');
+                
+            $this->view->verifyResult = array();
 
-            $use_gpg = $config->gpg->enable->admin;
-            if (empty($use_gpg) === true) {
-                $use_gpg = 0;
-		    }
-                
-            // Initialize masterkey
-            $masterkey = false;
-                
-            if ($use_gpg === '1') {                
-                $gpg = new Opus_GPG();
-                if ($gpg->getMasterkey() !== false) {
+            $fileHelpers = array();
+            if (empty($files)) {
+                $this->view->actionresult = $this->view->translate('admin_filemanager_nofiles');
+            }
+            else {
+                foreach ($files as $file) {
                     try {
-                        $masterkey = $gpg->getMasterkey()->getPrimaryKey()->getFingerprint();
+                        $fileHelpers[] = new Admin_Model_FileHelper($this->view, $document, $file);
                     }
                     catch (Exception $e) {
-                        // do nothing, masterkey is already set to false
+                        $this->view->noDocumentSelectedMessage = $e->getMessage();
+                        // TODO collect multiple error messages?
+                        return $this->renderScript('filemanager/error.phtml');
                     }
                 }
             }
-            $this->view->verifyResult = array();
-            $fileNames = array();
-            $hashType = array();
-            $hashSoll = array();
-            $hashIst = array();
-            $hashNumber = array();
-            $fileForms = array();
-            $verified = array();
-            for ($fi = 0; $fi < $fileNumber; $fi++) {
-                try {
-                    $form = new Admin_Form_SignatureForm();
-                    $form->FileObject->setValue($document->getFile($fi)->getId());
-                    $form->setAction($this->view->url(array('module' => 'admin', 'controller' => 'filemanager', 'action' => 'index', 'docId' => $requestData['docId']), null, true));
 
-                    $fileNames[$fi] = $document->getFile($fi)->getPathName();
-                    #if (file_exists($fileNames[$fi]) === false) {
-                    #	$fileNumber--;
-                    #	continue;
-                    #}
-                    if (true === is_array ($hashes = $document->getFile($fi)->getHashValue())) {
-                        $countHash = count($hashes);
-                        for ($hi = 0; $hi < $countHash; $hi++) {
-                            $hashNumber[$fi] = $countHash;
-                            $hashSoll[$fi][$hi] = $document->getFile($fi)->getHashValue($hi)->getValue();
-                            $hashType[$fi][$hi] = $document->getFile($fi)->getHashValue($hi)->getType();
-                            if (substr($hashType[$fi][$hi], 0, 3) === 'gpg') {
-                                // Check if GPG is used
-                                // GPG is not used 
-                                // * by default
-                                // * if admin has disabled it in config
-                                // * if no masterkey has been found
-                                // TODO * if GPG is not configured correctly
-                                if ($use_gpg === '1') {
-                                try {
-                                    $this->view->verifyResult[$fileNames[$fi]] = $gpg->verifyPublicationFile($document->getFile($fi));
-                                    foreach($this->view->verifyResult[$fileNames[$fi]] as $verifiedArray) {
-                                        foreach($verifiedArray as $index => $verificationResult) {
-                                            if ($index === 'result') {
-                                                foreach ($verificationResult as $result) {
-                                                    // Show key used for signature
-                                                    if (true === is_object($result) && get_class($result) === 'Crypt_GPG_Signature') {
-                                                        $verified[] = $result->getKeyFingerprint();
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                } catch (Exception $e) {
-                                    $this->view->verifyResult[$fileNames[$fi]] = array('result' => array($e->getMessage()), 'signature' => $hashSoll[$fi][$hi]);
-                                }
-                                }
-                            } else {
-                                $hashIst[$fi][$hi] = 0;
-                                if (true === $document->getFile($fi)->canVerify()) {
-                                    $hashIst[$fi][$hi] = $document->getFile($fi)->getRealHash($hashType[$fi][$hi]);
-                                }
-                            }
-                        }
-                        if ($masterkey !== false && in_array($masterkey, $verified) === false) {
-                            $fileForms[$fi] = $form;
-                        }
-                        else {
-                        	$fileForms[$fi] = '';
-                        }
-                        $deleteForm = new DeleteForm();
-                        $deleteForm->FileObject->setValue($document->getFile($fi)->getId());
-                        $deleteForm->setAction($this->view->url(array('module' => 'admin', 'controller' => 'filemanager', 'action' => 'index', 'docId' => $requestData['docId']), null, true));
-                        $fileForms[$fi] .= $deleteForm;
-                    }
-                }
-                catch (Exception $e) {
-                    $this->view->noFileSelected = $e->getMessage();
-                }
-                $this->view->hashType = $hashType;
-                $this->view->hashSoll = $hashSoll;
-                $this->view->hashIst = $hashIst;
-                $this->view->hashNumber = $hashNumber;
-                $this->view->fileNames = $fileNames;
-                $this->view->fileNumber = $fileNumber;
-                $this->view->fileForm = $fileForms;
-                if ($fileNumber === 0) {
-                    $this->view->actionresult = $this->view->translate('admin_filemanager_nofiles');
-                }
-    	    }
+            $this->view->fileHelpers = $fileHelpers;
     	}
-    	else
-    	{
-    		$this->view->noFileSelected = true;
+    	else {
+            return $this->renderScript('filemanager/nodoc.phtml');
     	}
     }
+
+    protected function _getUploadForm() {
+        $uploadForm = new Admin_Form_FileUpload();
+
+        $actionUrl = $this->view->url(array('controller' => 'filemanager', 'action' => 'index'));
+
+        $uploadForm->setAction($actionUrl);
+
+        return $uploadForm;
+    }
+
+    protected function _processSignSubmit($postData) {
+        $gpg = new Opus_GPG();
+
+        $e = null;
+        try {
+            $gpg->signPublicationFile(new Opus_File($postData['FileObject']), $postData['password']);
+        }
+        catch (Exception $e) {
+            $this->view->actionresult = $e->getMessage();
+        }
+        if ($e === null) {
+            $this->view->actionresult = $this->view->translate('admin_filemanager_signsuccess');
+        }
+    }
+
+    protected function _isGpgEnabled() {
+        if (isset($config->gpg->enable->admin)) {
+            return ($config->gpg->enable->admin === 1) ? true : false;
+        }
+        else {
+            return false;
+        }
+    }
+
+    protected function _processDeleteSubmit($postData) {
+        $e = null;
+        try {
+            $file = new Opus_File($postData['FileObject']);
+            // Really delete this file
+            $file->doDelete($file->delete());
+        }
+        catch (Exception $e) {
+            $this->view->actionresult = $e->getMessage();
+        }
+        if ($e === null) {
+            $this->view->actionresult = $this->view->translate('admin_filemanager_deletesuccess');
+        }
+    }
+
+    protected function _storeUpload($docId, $uploadForm) {
+        // This works only from Zend 1.7 on
+        // $upload = $uploadForm->getTransferAdapter();
+        $upload = new Zend_File_Transfer_Adapter_Http();
+
+        $files = $upload->getFileInfo();
+
+        // TODO: Validate document id, error message on fail
+        $document = new Opus_Document($docId);
+
+        // save each file
+        foreach ($files as $file) {
+            /* TODO: Uncaught exception 'Zend_File_Transfer_Exception' with message '"fileupload" not found by file transfer adapter
+            * if (!$upload->isValid($file)) {
+            *    $this->view->message = 'Upload failed: Not a valid file!';
+            *    break;
+            * }
+            */
+            $docfile = $document->addFile();
+            $docfile->setDocumentId($document->getId());
+            $docfile->setLabel($uploadForm->getValue('comment'));
+            $docfile->setLanguage($uploadForm->getValue('language'));
+            $docfile->setPathName($file['name']);
+            $docfile->setMimeType($file['type']);
+            $docfile->setTempFile($file['tmp_name']);
+            $docfile->setFromPost($file);
+        }
+
+        $e = null;
+
+        try {
+            $document->store();
+            $config = Zend_Registry::get('Zend_Config');
+
+            $searchEngine = $config->searchengine->engine;
+            if (empty($searchEngine) === true) {
+                $searchEngine = 'Lucene';
+            }
+            // Reindex
+            $engineclass = 'Opus_Search_Index_'.$searchEngine.'_Indexer';
+            $indexer = new $engineclass();
+            $indexer->removeDocumentFromEntryIndex($document);
+            $indexer->addDocumentToEntryIndex($document);
+        }
+        catch (Exception $e) {
+            $this->view->actionresult = $this->view->translate('admin_filemanager_uploadfailure');
+        }
+        if ($e === null) {
+            $this->view->actionresult = $this->view->translate('admin_filemanager_uploadsuccess');
+        }
+
+        // reset input values fo re-displaying
+        $uploadForm->reset();
+        // re-insert document id
+        $uploadForm->DocumentId->setValue($document->getId());
+    }
+
 }

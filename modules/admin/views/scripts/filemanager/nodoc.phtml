@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,32 +25,23 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Admin
- * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
- * @copyright   Copyright (c) 2009, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+?>
 
-/**
- * form to show the search mask
- */
-class Admin_Form_SignatureForm extends Zend_Form {
+<div class="adminContainer">
 
-    /**
-     * Build easy upload form
-     *
-     * @return void
-     */
-    public function init() {
-        $keyupload = new Zend_Form_Element_Password('password');
-        $keyupload->setLabel('keyPassword');
+    <div class="breadcrumbsContainer">
+        <?= $this->navigation()->breadcrumbs() ?>
+    </div>
 
-        $fileToSign = new Zend_Form_Element_Hidden('FileObject');
+    <a href="<?= $this->editUrl ?>"><?= $this->translate('admin_documents_edit'); ?></a>
 
-        $submit = new Zend_Form_Element_Submit('signsubmit');
-        $submit->setLabel('pkm_signFile');
+    <div>
+        <?= $this->translate('pkm_no_publication_selected') ?>
+    </div>
 
-        $this->addElements(array($keyupload, $fileToSign, $submit));
-    }
-}
+</div>
