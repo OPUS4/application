@@ -240,9 +240,9 @@ div.box h1 {
 
 .messages .failure{
 	color: #a40000;
-	background-colo
-        r: #ffd4d4;
+	background-color: #ffd4d4;
 }
+
 .messages .notice{
 	color: #008644;
 	background-color: #d4ffea;
