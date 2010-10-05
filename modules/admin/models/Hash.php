@@ -57,7 +57,7 @@ class Admin_Model_Hash {
     public function getIst() {
         if (!($this->getSignatureType() === 'gpg') && !($this->_isGpgEnabled())) {
             if (true === $this->file->canVerify()) {
-                return $this->file->getRealHash($hashType);
+                return $this->file->getRealHash($this->getHashType());
             }
             else {
                 return 0;

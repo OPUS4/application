@@ -115,7 +115,7 @@ class Admin_Model_FileHelper {
 
         if (is_array($hashes)) {
             foreach ($hashes as $hash) {
-                $hashHelper = new Admin_Model_Hash($hash);
+                $hashHelper = new Admin_Model_Hash($this->file, $hash);
                 $hashHelpers[] = $hashHelper;
             }
         }
