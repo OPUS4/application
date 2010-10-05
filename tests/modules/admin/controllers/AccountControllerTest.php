@@ -40,7 +40,6 @@ class Admin_AccountControllerTest extends ControllerTestCase {
      * Tests routing to and successfull execution of 'index' action.
      */
     public function testIndexAction() {
-        $this->markTestSkipped('No idea right now why it fails. Works for me.');
         $this->dispatch('/admin/account');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
