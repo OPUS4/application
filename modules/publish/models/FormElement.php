@@ -33,6 +33,7 @@
  */
 class Publish_Model_FormElement {
 
+    public $session;
     public $form;
     public $log;
     public $additionalFields = array();
@@ -63,7 +64,7 @@ class Publish_Model_FormElement {
     const LANG = "Language";
 
     public function __construct($form, $name = null, $required = null, $formElement = null, $datatype = null, $multiplicity = null) {
-
+        $this->session = new Zend_Session_Namespace();
         $this->log = Zend_Registry::get('Zend_Log');
         $this->form = $form;
 
@@ -95,11 +96,13 @@ class Publish_Model_FormElement {
                     $this->log->debug("FormElement -> initGroup(): person element");
                     $implicitFields = $this->implicitFields('Person');
                     $this->addSubFormElements($implicitFields);
-                } else if ($this->isTitleElement()) {
+                }
+                else if ($this->isTitleElement()) {
                     $this->log->debug("FormElement -> initGroup(): title element");
                     $implicitFields = $this->implicitFields('Title');
                     $this->addSubFormElements($implicitFields);
-                } else {
+                }
+                else {
                     $this->log->debug("FormElement -> initGroup(): other element");
                     $this->addSubFormElement($this->transform());
                 }
@@ -199,7 +202,8 @@ class Publish_Model_FormElement {
 
             if (false === $this->isSelectElement()) {
                 $element = $this->form->createElement($this->formElement, $this->elementName);
-            } else {
+            }
+            else {
                 $options = $this->validationObject->selectOptions($this->datatype);
                 if (is_null($options)) {
                     //no options found in database / session / cache
@@ -208,7 +212,8 @@ class Publish_Model_FormElement {
                     $element->setDescription('hint_no_selection_' . $this->datatype);
                     $element->setAttrib('disabled', true);
                     $this->required = false;
-                } else {
+                }
+                else {
                     $this->log->debug("Options found for element " . $this->elementName);
 
                     $element = $this->showSelectField($options);
@@ -240,43 +245,33 @@ class Publish_Model_FormElement {
         else
             $name = $this->elementName;
 
-//        if (count($options) == 1) {
-//            //if theres only one entry, just show an text fields
-//            $value = (array_keys($options));
-//            $element = $this->form->createElement('text', $name);
-//            $element->setValue($value[0]);
-//            $element->setDescription('hint_one_entry');
-//
-//        } else {
-            //at least 2 entry: show a select field
-            $element = $this->form->createElement('select', $name);
+        $element = $this->form->createElement('select', $name);
 
-            if (isset($datatype))
-                $switchVar = $datatype;
-            else
-                $switchVar = $this->datatype;
+        if (isset($datatype))
+            $switchVar = $datatype;
+        else
+            $switchVar = $this->datatype;
 
-            switch ($switchVar) {
-                case 'Licence' :
-                    $element->setMultiOptions(array_merge(array('' => 'choose_valid_licence'), $options));
-                    break;
-                case 'Language' :
-                    $element->setMultiOptions(array_merge(array('' => 'choose_valid_language'), $options));
-                    break;
-                case 'Project' :
-                    $element->setMultiOptions(array_merge(array('' => 'choose_valid_project'), $options));
-                    break;
-                case 'Institute' :
-                    $element->setMultiOptions(array_merge(array('' => 'choose_valid_institute'), $options));
-                    break;
-                case 'ThesisGrantor' :
-                    $element->setMultiOptions(array_merge(array('' => 'choose_valid_thesisgrantor'), $options));
-                    break;
-                case 'ThesisPublisher':
-                    $element->setMultiOptions(array_merge(array('' => 'choose_valid_thesispublisher'), $options));
-                    break;
-            }
-//        }
+        switch ($switchVar) {
+            case 'Licence' :
+                $element->setMultiOptions(array_merge(array('' => 'choose_valid_licence'), $options));
+                break;
+            case 'Language' :
+                $element->setMultiOptions(array_merge(array('' => 'choose_valid_language'), $options));
+                break;
+            case 'Project' :
+                $element->setMultiOptions(array_merge(array('' => 'choose_valid_project'), $options));
+                break;
+            case 'Institute' :
+                $element->setMultiOptions(array_merge(array('' => 'choose_valid_institute'), $options));
+                break;
+            case 'ThesisGrantor' :
+                $element->setMultiOptions(array_merge(array('' => 'choose_valid_thesisgrantor'), $options));
+                break;
+            case 'ThesisPublisher':
+                $element->setMultiOptions(array_merge(array('' => 'choose_valid_thesispublisher'), $options));
+                break;
+        }
 
         return $element;
     }
@@ -299,7 +294,7 @@ class Publish_Model_FormElement {
     }
 
     public function setValue($value) {
-        $this->value;
+        $this->value = $value;
     }
 
     public function getDefault() {
@@ -307,8 +302,17 @@ class Publish_Model_FormElement {
     }
 
     public function setDefaultValue($defaultValue) {
-        if (isset($defaultValue['value']))
-            $this->default['value'] = $defaultValue['value'];
+        if (isset($defaultValue['value'])) {
+            //Date Field has be set to current date
+            if ($defaultValue['value'] === 'today') {
+                if ($this->session->language === 'de')
+                    $this->default['value'] = date('d.m.Y');
+                else
+                    $this->default['value'] = date('Y/m/d');
+            }
+            else
+                $this->default['value'] = $defaultValue['value'];
+        }
 
         if (isset($defaultValue['edit']))
             $this->default['edit'] = $defaultValue['edit'];
