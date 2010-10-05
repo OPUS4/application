@@ -37,30 +37,14 @@ class Publish_IndexControllerTest extends ControllerTestCase {
 
     
     /**
-     * Simple test action to check "index" module.
+     * Simple test action to check "index" action in publish module.
      */
     public function testIndexAction() {
         $this->dispatch('/publish');
         $this->assertResponseCode(200);
         $this->assertController('index');
         $this->assertAction('index');
-    }
-
-    /**
-     * Example test target to demonstrate POST requests.
-     */
-    public function testDocTypeSelection() {
-        $this->markTestIncomplete('This test is only a POST-example.');
-
-        $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'documentType' => 'preprint',
-                ));
-        $this->dispatch('/index/index');
-        $this->assertTrue(Zend_Auth::getInstance()->hasIdentity());
-        $this->assertRedirectTo('/form/form');
-    }
+    }   
 
 }
 
