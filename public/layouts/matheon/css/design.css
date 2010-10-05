@@ -226,3 +226,24 @@ div.box h1 {
 .searchform h2 {
     color:red;
 }
+
+.messages{
+	font: 0.8em "Courier New", Courier, monospace;
+}
+
+.failure, .notice{
+	padding: 5px 10px;
+	margin: 1em 0 1em;
+	float: left;
+	width: 100%;
+}
+
+.messages .failure{
+	color: #a40000;
+	background-colo
+        r: #ffd4d4;
+}
+.messages .notice{
+	color: #008644;
+	background-color: #d4ffea;
+}
