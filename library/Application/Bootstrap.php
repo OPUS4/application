@@ -329,8 +329,6 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $log->debug('Initializing Zend_Navigation');
 
         $config = $this->getResource('configuration');
-
-        $log->debug("config path: " . $config->configPath);
         if (is_null($config)) {
             $log->debug("config is null");
         }
@@ -338,7 +336,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
             $log->debug("config is not null");
         }
 
-        $navigationConfigFile = $config->configPath . '/navigationModules.xml';
+        $navigationConfigFile = APPLICATION_PATH . '/application/configs/navigationModules.xml';
 
         $navConfig = new Zend_Config_Xml($navigationConfigFile, 'nav');
 
@@ -367,7 +365,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
 
         $config = $this->getResource('configuration');
 
-        $navigationConfigFile = $config->configPath . '/navigation.xml';
+        $navigationConfigFile = APPLICATION_PATH . '/application/configs/navigation.xml';
 
         $navConfig = new Zend_Config_Xml($navigationConfigFile, 'nav');
 
