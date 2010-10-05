@@ -72,7 +72,7 @@
 
     <tu tuid="language_transmit">
       <tuv xml:lang="en">
-        <seg>store data</seg>
+        <seg>Store Data</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Daten abspeichern</seg>
