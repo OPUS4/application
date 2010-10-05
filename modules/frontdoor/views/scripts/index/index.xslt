@@ -81,7 +81,7 @@
                         </xsl:call-template>
                     </h2>
                     <ul>
-                        <xsl:apply-templates select="File" />
+                        <xsl:apply-templates select="File[@VisibleInFrontdoor='1']" />
                     </ul>
                 </div>
             </xsl:if>
