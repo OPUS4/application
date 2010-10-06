@@ -120,7 +120,9 @@ class PublicationList_Model_Publication {
         }
 
         if ($doc->getIdentifierUrl()) {
-            $this->pdfUrl = $doc->getIdentifierUrl(0)->getValue();
+            if (stripos($this->pdfUrl, "http:") === 0) {
+                $this->pdfUrl = $doc->getIdentifierUrl(0)->getValue();
+            } 
         }
 
        
@@ -129,7 +131,7 @@ class PublicationList_Model_Publication {
         $this->imageBibtex = $baseUrl."/layouts/".$theme."/img/publicationlist/BibTeX_icon.png";
         $this->imageBibtexExternal = "../../img/BibTeX_icon.png";
         $this->imagePdf = $baseUrl."/layouts/".$theme."/img/publicationlist/PDF_icon.png";
-        $this->imagePdfExternal = "../img/PDF_icon.png";
+        $this->imagePdfExternal = "../../img/PDF_icon.png";
 	$this->imageDoi = $baseUrl."/layouts/".$theme."/img/publicationlist/DOI_icon.png";
         $this->imageDoiExternal = "../../img/DOI_icon.png";
         $this->imageRis = $baseUrl."/layouts/".$theme."/img/publicationlist/RIS_icon.png";
