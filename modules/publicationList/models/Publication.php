@@ -120,7 +120,7 @@ class PublicationList_Model_Publication {
         }
 
         if ($doc->getIdentifierUrl()) {
-            if (stripos($this->pdfUrl, "http:") === 0) {
+            if (stripos($doc->getIdentifierUrl(), "http:") === 0) {
                 $this->pdfUrl = $doc->getIdentifierUrl(0)->getValue();
             } 
         }
