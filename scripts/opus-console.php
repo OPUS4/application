@@ -54,6 +54,10 @@ define('APPLICATION_ENV', 'testing');
  */
 class OpusConsole {
 
+    // using member variables to avoid namespace polution
+    public $snippet_files;
+    private $_snippet_file;
+
     /**
      * Starts an Opus console.
      *
@@ -67,18 +71,17 @@ class OpusConsole {
             $realm = Opus_Security_Realm::getInstance();
         }
 
-        $register_argc_argv = ini_get('register_argc_argv');
-        if (false === is_null($register_argc_argv) 
-            && $register_argc_argv == 1
+        if (false === is_null(ini_get('register_argc_argv')) 
+            && ini_get('register_argc_argv') == 1
             && $_SERVER['argc'] > 1)
         {
-            $files = $_SERVER['argv'];
+            $this->snippet_files = $_SERVER['argv'];
             // removes script name
-            array_shift($files);
-            foreach ($files as $file) {
-                if (true === file_exists($file)) {
+            array_shift($this->snippet_files);
+            foreach ($this->snippet_files as $this->_snippet_file) {
+                if (true === file_exists($this->_snippet_file)) {
                     try {
-                        include_once($file);
+                        include_once($this->_snippet_file);
                     } catch (Exception $e) {
                         echo 'Caught exception ' . get_class($e) . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString() . "\n";
                         // exit here, so nobody thinks that the script was loaded.
