@@ -47,11 +47,11 @@ class Publish_FormController extends Controller_Action {
     CONST ERROR = "Error";
 
     public $log;
-    public $session;    
+    public $session;
 
-    public function  __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array()) {
+    public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array()) {
         $this->log = Zend_Registry::get('Zend_Log');
-        $this->session = new Zend_Session_Namespace('Publish');        
+        $this->session = new Zend_Session_Namespace('Publish');
 
         parent::__construct($request, $response, $invokeArgs);
     }
@@ -66,15 +66,15 @@ class Publish_FormController extends Controller_Action {
 
             if (isset($data['MAX_FILE_SIZE']) && $data['MAX_FILE_SIZE'] != $this->session->maxFileSize) {
                 //manipulated hidden field for file size???                
-                return $this->_redirectTo('index', '', 'index');                
+                return $this->_redirectTo('index', '', 'index');
             }
 
-            if (!$indexForm->isValid($data)) {                
+            if (!$indexForm->isValid($data)) {
                 //error case, and redirect to form, show errors
                 $this->view->form = $indexForm;
                 return $this->renderScript('index/index.phtml');
             }
-            else {               
+            else {
 
                 $this->_setDocumentParameters($data);
 
@@ -83,7 +83,7 @@ class Publish_FormController extends Controller_Action {
                 $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
                 $this->view->doctype = $this->session->documentType;
 
-                foreach($data AS $k => $v)
+                foreach ($data AS $k => $v)
                     $this->log->debug("(FormController), POST: " . $k . " => " . $v);
 
                 $this->_storeFilesAndBibliographie($data, $indexForm);
@@ -112,14 +112,14 @@ class Publish_FormController extends Controller_Action {
      * @return <type>
      */
     public function checkAction() {
-        $this->view->languageSelectorDisabled = true;        
+        $this->view->languageSelectorDisabled = true;
         $reload = true;
 
         if ($this->getRequest()->isPost() === true) {
             $postData = $this->getRequest()->getPost();
 
             if (array_key_exists('abort', $postData))
-                    return $this->_redirectTo ('index', '', 'index');
+                return $this->_redirectTo('index', '', 'index');
 
             if (array_key_exists('back', $postData)) {
                 $reload = false;
@@ -189,7 +189,7 @@ class Publish_FormController extends Controller_Action {
      * method to set the different variables and arrays for the view and the templates
      * @param <Zend_Form> $form
      */
-    private function _setViewVariables($form) {        
+    private function _setViewVariables($form) {
         $errors = $form->getMessages();
 
         //group fields and single fields for view placeholders
@@ -345,22 +345,26 @@ class Publish_FormController extends Controller_Action {
      * Method stores th uploaded files
      */
     private function _storeFilesAndBibliographie($data, $form) {
-        $upload = new Zend_File_Transfer_Adapter_Http();
-        //$form->fileupload->receive();
-
-        $files = $upload->getFileInfo();
-        //print_r($files);
         $this->session->document = new Opus_Document();
         $this->session->document->setType($this->session->documentType);
         $this->session->document->setServerState('temporary');
 
-        //if ($form->fileupload->isUploaded() ) {
+        $upload = new Zend_File_Transfer_Adapter_Http();
+        $files = $upload->getFileInfo();
+        $upload_count = 0;
 
-        if ($upload->isUploaded()) {
-//          if (!empty($files)) {        
-            $this->log->info("Fileupload of: " . count($files) . " possible files => Fulltext is '1'.");
+        foreach ($files as $file) {
+            if (!empty($file['name'])) {
+                $upload_count++;
+            }
+        }
+
+        $this->log->info("Fileupload of: " . count($files) . " potential files (vs. $upload_count really uploaded)");
+        
+        if ($upload_count >= 1) {        
+            $this->log->debug("File uploaded!!!");
             $this->session->fulltext = '1';
-
+            
             foreach ($files AS $file => $fileValues) {
                 if (!empty($fileValues['name'])) {
 
@@ -373,7 +377,7 @@ class Publish_FormController extends Controller_Action {
             }
         }
         else {
-            $this->log->info("No file uploaded: => Fulltext is NOT given.");
+            $this->log->debug("NO File uploaded!!!");
             $this->session->fulltext = '0';
         }
 
@@ -385,7 +389,7 @@ class Publish_FormController extends Controller_Action {
 
         $this->session->documentId = $this->session->document->store();
         $this->log->info("The corresponding doucment ID is: " . $this->session->documentId);
-    }    
+    }
 
     /**
      * Methodgets the current form and finds out which fields has to be edded or deleted
@@ -399,11 +403,11 @@ class Publish_FormController extends Controller_Action {
 
             if (substr($pressedButtonName, 0, 7) == "addMore") {
                 $fieldName = substr($pressedButtonName, 7);
-                $workflow = "add";                
+                $workflow = "add";
             }
             else if (substr($pressedButtonName, 0, 10) == "deleteMore") {
                 $fieldName = substr($pressedButtonName, 10);
-                $workflow = "delete";                
+                $workflow = "delete";
             }
 
             $currentNumber = $this->session->additionalFields[$fieldName];
