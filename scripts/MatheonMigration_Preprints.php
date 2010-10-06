@@ -558,7 +558,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             //    <field name="owner_id">606</field>
             $field = $preprint['owner_id'];
             if (array_key_exists($field, $this->persons)) {
-                $doc->addPersonOwner($this->persons[$field]);
+                $doc->addPersonSubmitter($this->persons[$field]);
             }
             else {
                 // throw new Exception("No owner for document $pid");
