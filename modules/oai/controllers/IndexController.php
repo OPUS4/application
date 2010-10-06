@@ -43,11 +43,12 @@
  */
 class Oai_IndexController extends Controller_Xml {
 
-    const BADVERB = 0;
-    const BADARGUMENT = 1;
-    const CANNOTDISSEMINATEFORMAT = 2;
-    const BADRESUMPTIONTOKEN = 3;
-    const NORECORDSMATCH = 4;
+    const BADVERB = 1010;
+    const BADARGUMENT = 1011;
+    const CANNOTDISSEMINATEFORMAT = 1012;
+    const BADRESUMPTIONTOKEN = 1013;
+    const NORECORDSMATCH = 1014;
+
     /**
      * Holds valid OAI parameters.
      *
@@ -963,7 +964,7 @@ class Oai_IndexController extends Controller_Xml {
 
         $xmlModel = new Opus_Model_Xml;
         $xmlModel->setModel($document);
-        $xmlModel->excludeEmptyFields(); // needed for preventing handling errors
+        // $xmlModel->excludeEmptyFields(); // needed for preventing handling errors
         $xmlModel->setStrategy(new Opus_Model_Xml_Version1);
         $xmlModel->setXmlCache(new Opus_Model_Xml_Cache);
 
