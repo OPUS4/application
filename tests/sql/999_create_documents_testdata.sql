@@ -1174,7 +1174,8 @@ INSERT INTO `document_title_abstracts` (`id`, `document_id`, `type`, `value`, `l
 (247, 109, 'main', 'What to do if your build is broken!', 'eng'),
 (248, 110, 'main', 'Internet access broken? - What you could do instead.', 'eng'),
 (249, 111, 'main', '<script type="text/javascript">alert(\'title_main\');</script>', 'deu'),
-(250, 111, 'abstract', '<script type="text/javascript">alert(\'title_abstract\');</script> test ', 'deu');
+(250, 111, 'abstract', '<script type="text/javascript">alert(\'title_abstract\');</script> test ', 'deu'),
+(251, 91, 'parent', 'This is a parent title', 'eng');
 
 --
 -- Daten für Tabelle `file_hashvalues`
