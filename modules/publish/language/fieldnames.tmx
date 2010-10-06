@@ -133,6 +133,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="PersonAuthorAllowEmailContact">
+      <tuv xml:lang="en">
+        <seg>Allow Email Contact?</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Emailkontakt erlauben?</seg>
+      </tuv>
+    </tu>
+
   <tu tuid="PersonTranslatorFirstName">
       <tuv xml:lang="en">
         <seg>Editor</seg>

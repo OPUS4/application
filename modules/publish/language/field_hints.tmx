@@ -145,10 +145,10 @@
     </tu>
     <tu tuid="hint_groupPersonAuthor">
         <tuv xml:lang="en">
-            <seg>Please enter the contact information of the authors. You may add more authors by clicking on the button (or delete them).</seg>
+            <seg>Please enter the contact information of the authors. You may add more authors by clicking on the button (or delete them).<br /> You can accept or refuse receiving emails. Your email address wil NOT be published.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie hier bitte die Kontaktdaten der Autoren ein. Sie können durch Klicken auf den Button weitere Autoren hinzufügen (oder wieder löschen).</seg>
+            <seg>Tragen Sie hier bitte die Kontaktdaten der Autoren ein. Sie können durch Klicken auf den Button weitere Autoren hinzufügen (oder wieder löschen). <br />  Sie können dem Empfang von Emails zustimmen oder ihn ablehnen. Ihre Email-Adresse wird NICHT veröffentlicht.</seg>
         </tuv>
     </tu>
 
@@ -349,24 +349,7 @@
             <seg>Tragen Sie bitte den Nachnamen des 2. Betreuers ein.</seg>
         </tuv>
     </tu>
-	
-	<tu tuid="hint_PersonAdvisorFirstName3">
-        <tuv xml:lang="en">
-            <seg>Please enter the first name of the 3. Advisor.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Vornamen des 3. Betreuers ein.</seg>
-        </tuv>
-    </tu>
-	
-	<tu tuid="hint_PersonAdvisorLastName3">
-        <tuv xml:lang="en">
-            <seg>Please enter the last name of the 3. Advisor.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Nachnamen des 3. Betreuers ein.</seg>
-        </tuv>
-    </tu>
+
 	
 	<tu tuid="hint_groupPersonTranslator">
         <tuv xml:lang="en">
@@ -1052,6 +1035,15 @@ Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathsci
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte das Datum ein, an dem Ihr Dokument freigeschaltet werden soll.</seg>
         </tuv>
+    </tu>
+
+    <tu tuid="hint_PersonAuthorAllowEmailContact">
+      <tuv xml:lang="en">
+        <seg>Allow users to send you an email when they have found your document?</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dürfen Benutzer Ihnen Emails schreiben, wenn sie Ihr Dokument gefunden haben?</seg>
+      </tuv>
     </tu>
 	
     </body>
