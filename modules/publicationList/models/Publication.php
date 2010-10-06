@@ -118,13 +118,13 @@ class PublicationList_Model_Publication {
                 $this->doiUrl = "http://".$config->publicationlist->doiresolver->url."/".$doc->getIdentifierDoi(0)->getValue();
             }
         }
-
+        /*
         if ($doc->getIdentifierUrl()) {
             if (strpos($doc->getIdentifierUrl(0)->getValue(), "http:") != false) {
                 $this->pdfUrl = $doc->getIdentifierUrl(0)->getValue();
             }
         }
-
+        */
        
         $this->imageAbstract = $baseUrl."/layouts/".$theme."/img/publicationlist/Abstract_icon.png";
         $this->imageAbstractExternal = "../../img/Abstract_icon.png";
