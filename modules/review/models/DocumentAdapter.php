@@ -292,6 +292,4 @@ class Review_Model_DocumentAdapter {
     }
 
 }
-
 ?>
-

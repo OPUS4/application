@@ -76,4 +76,3 @@ class PublicationList_Model_Author {
 
 }
 ?>
-
