@@ -157,6 +157,10 @@ class Admin_RoleController extends Controller_Action {
 
             $role = new Opus_Role($roleId);
 
+            if (!isset($postData['name'])) {
+                $postData['name'] = $role->getName();
+            }
+
             $postData['oldRole'] = $role->getName();
 
             $roleForm = new Admin_Form_Role();
