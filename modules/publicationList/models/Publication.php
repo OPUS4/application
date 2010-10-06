@@ -125,15 +125,15 @@ class PublicationList_Model_Publication {
 
        
         $this->imageAbstract = $baseUrl."/layouts/".$theme."/img/publicationlist/Abstract_icon.png";
-        $this->imageAbstractExternal = "../img/Abstract_icon.png";
+        $this->imageAbstractExternal = "../../img/Abstract_icon.png";
         $this->imageBibtex = $baseUrl."/layouts/".$theme."/img/publicationlist/BibTeX_icon.png";
-        $this->imageBibtexExternal = "../img/BibTeX_icon.png";
+        $this->imageBibtexExternal = "../../img/BibTeX_icon.png";
         $this->imagePdf = $baseUrl."/layouts/".$theme."/img/publicationlist/PDF_icon.png";
         $this->imagePdfExternal = "../img/PDF_icon.png";
 	$this->imageDoi = $baseUrl."/layouts/".$theme."/img/publicationlist/DOI_icon.png";
-        $this->imageDoiExternal = "../img/DOI_icon.png";
+        $this->imageDoiExternal = "../../img/DOI_icon.png";
         $this->imageRis = $baseUrl."/layouts/".$theme."/img/publicationlist/RIS_icon.png";
-        $this->imageRisExternal = "../img/RIS_icon.png";
+        $this->imageRisExternal = "../../img/RIS_icon.png";
 
 
         foreach ($collections as $c) {
