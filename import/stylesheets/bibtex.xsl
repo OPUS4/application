@@ -100,18 +100,18 @@
             <xsl:choose>
             	<xsl:when test="bibtex:article"><xsl:text>article</xsl:text></xsl:when>
             	<xsl:when test="bibtex:book"><xsl:text>book</xsl:text></xsl:when>
-            	<xsl:when test="bibtex:booklet"><xsl:text>booklet</xsl:text></xsl:when>
-            	<xsl:when test="bibtex:conference"><xsl:text>conference</xsl:text></xsl:when>
-            	<xsl:when test="bibtex:inbook"><xsl:text>inbook</xsl:text></xsl:when>
-            	<xsl:when test="bibtex:incollection"><xsl:text>incolletcion</xsl:text></xsl:when>
-            	<xsl:when test="bibtex:inproceedings"><xsl:text>inproceedings</xsl:text></xsl:when>
-                <xsl:when test="bibtex:mastersthesis"><xsl:text>mastersthesis</xsl:text></xsl:when>
+            	<xsl:when test="bibtex:booklet"><xsl:text>misc</xsl:text></xsl:when>
+            	<xsl:when test="bibtex:conference"><xsl:text>conferenceobject</xsl:text></xsl:when>
+            	<xsl:when test="bibtex:inbook"><xsl:text>bookpart</xsl:text></xsl:when>
+            	<xsl:when test="bibtex:incollection"><xsl:text>bookpart</xsl:text></xsl:when>
+            	<xsl:when test="bibtex:inproceedings"><xsl:text>conferenceobject</xsl:text></xsl:when>
+                <xsl:when test="bibtex:mastersthesis"><xsl:text>masterthesis</xsl:text></xsl:when>
                 <xsl:when test="bibtex:misc"><xsl:text>misc</xsl:text></xsl:when>
                 <!-- Problem: BibTex unterscheidet nicht zwischen doctoralthesis und habilitation -->
-            	<xsl:when test="bibtex:phdthesis"><xsl:text>phdthesis</xsl:text></xsl:when>
-            	<xsl:when test="bibtex:proceedings"><xsl:text>proceedings</xsl:text></xsl:when>
-            	<xsl:when test="bibtex:techreport"><xsl:text>techreport</xsl:text></xsl:when>
-            	<xsl:when test="bibtex:unpublished"><xsl:text>unpublished</xsl:text></xsl:when>
+            	<xsl:when test="bibtex:phdthesis"><xsl:text>doctoralthesis</xsl:text></xsl:when>
+            	<xsl:when test="bibtex:proceedings"><xsl:text>conferenceobject</xsl:text></xsl:when>
+            	<xsl:when test="bibtex:techreport"><xsl:text>report</xsl:text></xsl:when>
+            	<xsl:when test="bibtex:unpublished"><xsl:text>preprint</xsl:text></xsl:when>
             	<xsl:otherwise><xsl:text>misc</xsl:text></xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
@@ -165,7 +165,7 @@
             </xsl:if>
 
             <xsl:if test="string-length($pages) > 0">
-                <xsl:if test="$doctype='article' or $doctype='inbook' or $doctype='incollection' or $doctype='inproceedings'">
+                <xsl:if test="$doctype='article' or $doctype='bookpart' or $doctype='conferenceobject'">
                     <xsl:attribute name="PageFirst">
                        <xsl:call-template name="getFirstPage">
                             <xsl:with-param name="pages">
@@ -181,7 +181,7 @@
                         </xsl:call-template>
                     </xsl:attribute>
                 </xsl:if>
-                <xsl:if test="$doctype='book' or $doctype='booklet' or $doctype='conference'">
+                <xsl:if test="$doctype='book' or $doctype='misc'">
                     <xsl:attribute name="PageNumber"><xsl:value-of select="$pages" /></xsl:attribute>
                 </xsl:if>
             </xsl:if>
@@ -207,23 +207,7 @@
             </xsl:if>
 
             <xsl:if test="string-length($doctype) > 0">
-                <xsl:attribute name="Type">
-                    <xsl:choose>
-                        <xsl:when test="$doctype='article'"><xsl:text>article</xsl:text></xsl:when>
-                        <xsl:when test="$doctype='book'"><xsl:text>book</xsl:text></xsl:when>
-                        <xsl:when test="$doctype='booklet'"><xsl:text>misc</xsl:text></xsl:when>
-                        <xsl:when test="$doctype='conference'"><xsl:text>conferenceobject</xsl:text></xsl:when>
-                        <xsl:when test="$doctype='inbook'"><xsl:text>bookpart</xsl:text></xsl:when>
-                        <xsl:when test="$doctype='incollection'"><xsl:text>bookpart</xsl:text></xsl:when>
-                        <xsl:when test="$doctype='inproceedings'"><xsl:text>conferenceobject</xsl:text></xsl:when>
-                        <xsl:when test="$doctype='manual'"><xsl:text>misc</xsl:text></xsl:when>
-                        <xsl:when test="$doctype='masterthesis'"><xsl:text>studythesis</xsl:text></xsl:when>
-                        <xsl:when test="$doctype='phdthesis'"><xsl:text>doctoralthesis</xsl:text></xsl:when>
-                        <xsl:when test="$doctype='proceedings'"><xsl:text>conferenceobject</xsl:text></xsl:when>
-                        <xsl:when test="$doctype='techreport'"><xsl:text>conferenceobject</xsl:text></xsl:when>
-                        <xsl:otherwise><xsl:text>misc</xsl:text></xsl:otherwise>
-                    </xsl:choose>
-                </xsl:attribute>
+                <xsl:attribute name="Type"><xsl:value-of select="$doctype" /></xsl:attribute>
             </xsl:if>
 
             <xsl:if test="string-length($volume) > 0">
@@ -320,7 +304,7 @@
                     </xsl:if>
                 </xsl:element>
             </xsl:if>
-            <xsl:if test="$doctype='inbook' or $doctype='incollection' or $doctype='inproceedings'">
+            <xsl:if test="$doctype='bookpart' or $doctype='conferenceobject'">
                 <xsl:if test="string-length($booktitle) > 0">
                     <xsl:element name="TitleParent">
                     <xsl:attribute name="Value"><xsl:value-of select="$booktitle" /></xsl:attribute>
@@ -377,9 +361,14 @@
                 </xsl:element>
             </xsl:if>
 
-            <xsl:if test="string-length($note) > 0">
+            <!-- TODO: School-Attribute of a Thesis will be mapped to Note -->
+            <xsl:if test="string-length($institution) > 0 or string-length($school) > 0 or string-length($note) > 0">
                 <xsl:element name="Note">
-                    <xsl:attribute name="Message"><xsl:value-of select="$note" /></xsl:attribute>
+                    <xsl:attribute name="Message">
+                        <xsl:if test="string-length($institution) > 0"><xsl:value-of select="$institution" /></xsl:if>
+                        <xsl:if test="string-length($school) > 0"><xsl:value-of select="$school" /></xsl:if>
+                        <xsl:if test="string-length($note) > 0"><xsl:value-of select="$note" /></xsl:if>
+                    </xsl:attribute>
                 </xsl:element>
             </xsl:if>
 
