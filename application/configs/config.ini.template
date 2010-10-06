@@ -25,79 +25,100 @@
 ; @category    Application
 ; @author      Ralf Claussnitzer <ralf.claussnitzer@slub-dresden.de>
 ; @author      Thoralf Klein <thoralf.klein@zib.de>
+; @author      Pascal-Nicolas Becker <becker@zib.de>
 ; @copyright   Copyright (c) 2008-2010, OPUS 4 development team
 ; @license     http://www.gnu.org/licenses/gpl.html General Public License
 ; @version     $Id$
 
-; Database adapter configuration using standard Zend_db option names.
-; Have a look on Zend_Db::factory() method for information about adapter creation.
-
 [production]
 
 ; The 'theme' setting can be used to select a different theme.
-; theme = default
+; theme = opus4
 
 ; The 'startmodule' sets the module, which will be loaded when
-; no module is given in the url.  Defaults to 'home'.
+; no module is given in the url.
 ; startmodule = home
 
-debug = 0
-
 ;DB SETTINGS
-db.params.host = 
+; Please insert the credential to connect to your mysql db.
+; db.params.host = localhost
 db.params.username = 
 db.params.password = 
 db.params.dbname =
-db.debug = 0  ; set to 1 if you want to see debugging information
 
 ;SEARCH ENGINE SETTINGS
+; OPUS4 uses a solr server for search and browsing.
+; The solr server can run on the same or on a different host.
+; Please enter the credentials to connect to your solr server.
 searchengine.index.host =
 searchengine.index.port =
 searchengine.index.app =
+; The text extraction can run on a different solr server as the metadata indexer
+; doese. You can also use the same solr server, then you would have to enter
+; the same credentials as above.
 searchengine.extract.host =
 searchengine.extract.port =
-searchengine.extract.app = 
+searchengine.extract.app =
+; Facets fields to be considered.
+;searchengine.solr.facets = author_facet,year,doctype,language,has_fulltext,belongs_to_bibliography,subject,institute
 
-;FORM SETTINGS
-form.first.numberoffiles = 
-form.first.bibliographie =
+;MAIL SETTINGS
+; mail.opus.smtp = localhost; SMTP server for sending email
+; mail.opus.port = 25 ; SMTP server port for sending email
+mail.opus.address = ; email address of administrator
+mail.opus.name = ; Name of administrator
+
+;DOCUMENT-DOWNLOAD-DIRECTORIES
+; Please read the documentation about the delivery proccess of OPUS.
+; Here you can configure the internal address of the fulltext directory.
+; deliver.target.prefix = /files
+; Here you can configure the external address of the fulltext directory.
+; deliver.url.prefix = /documents
+
+; URN SETTINGS
+; If you do not want to set URNs automatically, set these values blank or
+; comment them out
+;urn.snid.union = kobv
+;urn.snid.libid = 82
+;urn.niss.prefix = opus
 
 ;DOCUMENTTYPE SETTINGS
-; Include document types (comma separated names of XML files without extension)
+; You can define which document types should be shown in the publish module or
+; which ones should be excluded (comma separated names of XML files without
+; extension). If you don't set documentTypes.include an documentTypes.exclude
+; all document types will be shown.
 ; documentTypes.include = preprint, doctype1
-
-; Exclude document types (comma separated names of XML files without extension)
 ; documentTypes.exclude = doctype2
 
 ; Use to configure templates names that do not match the document type name
 ; documentTypes.templates.preprint = defaulttmpl
+; documentTypes.templates.doctype1 = doctype2
 
-;MAIL SETTINGS
-mail.opus.smtp = ; SMTP server for sending email
-mail.opus.port = 25 ; SMTP server port for sending email
-mail.opus.address = ; email address of administrator
-mail.opus.name = ; Name of administrator
+; publish.maxfilesize defines the allowed maximum size of a file.
+; This does not changes any values of your Apache or php.ini. Please assure
+; the values in your Apache or php settings are big enough.
+;publish.maxfilesize = 10240000
+; publish.filetypes.allowed defines which filetypes can be uploaded.
+;publish.filetypes.allowed = pdf,txt,html,htm ; filetypes that are accepted in publication form
 
-;REFEREES (temporary solution)
+;FORM SETTINGS
+; This configures the count of files a user can upload while publishing a document.
+;form.first.numberoffiles = 2
+; If you would like to use opus to save bibliographical items you should set
+; this to 1. It will ask on the first site of the publish module if a new
+; document should be added to the bibliography.
+;form.first.bibliographie = 0
+
+;REFEREES
+; Who should be informed, if a new document gets published?
 ; referees['John Doe'] = john.doe@example.org
 
-;REFEREES FOR MATHEON COLLECTIONS
-;IMPORTANT: only application areas (e.g. 'a') and all lower case (for now)
-; events.collections.a.referees['Jane Doe'] = jane.doe@example.org
-; events.collections.b.referees['Referee One'] = referee.one@example.org
+;OAI SETTINGS
+oai.repository.name =
+oai.repository.identifier =
+oai.sample.identifier =
+oai.contactid =
 
-;DOCUMENT-DOWNLOAD-DIRECTORIES
-; deliver.target.prefix = /opus4-matheon-files
-; deliver.url.prefix = /documents-matheon
-
-; LOGGING CONFIGURATION (OPTIONAL)
-; Use Zend_Log constants (e.g. DEBUG, INFO, WARN, ERR)
-; log.level = INFO
-
-;PUBLICATIONLIST
-publicationlist.external.baseurl.de = ; (Base_Url for external Linking, german)
-publicationlist.external.baseurl.eng = ; (Base_Url for external Linking, english)
-publicationlist.doiresolver.url = ; (Url for Resolving Dois e.g. dx.doi.org )
 
 ; The following is needed even if sections are empty.
 [staging : production]
