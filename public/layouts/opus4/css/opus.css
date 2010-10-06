@@ -1,4 +1,4 @@
-/* Page specific settings
+﻿/* Page specific settings
 ------------------------------------------------------------ */
 #content.home{
 	background: #eaedf2 url(../img/theme/bg_content.jpg) repeat-x;
@@ -151,6 +151,9 @@ body > #top-header{
 	float: left;
 	width: 100%;
 }
+#facets{
+	float: left;
+}
 #primary-nav{
 	float: right;
 	height: 89px;
@@ -198,27 +201,28 @@ body > #top-header{
 #content{
 	background: white;
 	min-height: 600px;
-	clear: both;
+	float: left;
+	width: 100%;
+	padding: 20px 0 3em;
 }
 #content .wrapper{
-	padding: 20px 0 3em;
 	font-size: 0.8em;
 }
-.messages{
+.opus .messages{
 	font: 0.8em "Courier New", Courier, monospace;
 }
-.failure,
-.notice{
+.opus .failure,
+.opus .notice{
 	padding: 5px 10px;
 	margin: 1em 0 1em;
 	float: left;
 	width: 100%;
 }
-.messages .failure{
+.opus .messages .failure{
 	color: #a40000;
 	background-color: #ffd4d4;
 }
-.messages .notice{
+.opus .messages .notice{
 	color: #008644;
 	background-color: #d4ffea;
 }
@@ -227,6 +231,7 @@ body > #top-header{
 	width: 100%;
 }
 #page-footer{
+	clear: both;
 	height: 163px;
 	background: #e7ecf0 url(../img/theme/bg_footer.jpg) repeat-x bottom;
 }
@@ -265,7 +270,61 @@ body > #top-header{
 	text-decoration: none;
 }
 /* Sections */
-
+.sorting_options li,
+.paginationControl li{
+	float: left;
+	padding: 0 1em;
+}
+.results_pagination{
+	float: left;
+	width: 100%;
+}
+#facets ul,
+#searchbar ul{
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+#facets{
+	width: 220px;
+}
+#searchbar{
+/*	padding: 0 0 0 245px;*/
+margin: 0 0 0 245px;
+}
+#search_results{
+	float: left;
+	width: 100%;
+}
+.result_box dt{
+	background: #f3f6f8 no-repeat 24px 4px;
+	padding: 4px 8px 0 41px;
+}
+.results_title img{
+	float: left;
+	cursor: pointer;
+	margin: -14px 0 0 -50px;
+	/*position: relative;
+	top: -14px;
+	left: -16px;*/
+	vertical-align: bottom;
+}
+.result_box .results_title{
+	background-image: url(../img/theme/icon-title.gif);
+	border-top: 1px solid #e2e6e9;
+}
+.results_title a{
+	font-weight: bold;
+}
+.result_box .results_author{
+	padding-bottom: 5px;
+	background-image: url(../img/theme/icon-author.gif);
+}
+.result_box dd{
+	padding: 3px 6px;
+	margin: 0;
+	line-height: 1.5em;
+}
 /* Styled search form
 ----------------------------------------------------------------------------------- */
 .form-submit-wrapper,
