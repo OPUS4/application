@@ -33,6 +33,39 @@
 
 class Frontdoor_IndexControllerTest extends ControllerTestCase {
 
+    /**
+     * Document to count on :)
+     *
+     * @var Opus_Document
+     */
+    protected $_document = null;
+
+    /**
+     * Provide clean documents and statistics table and remove temporary files.
+     * Create document for counting.
+     *
+     * @return void
+     */
+
+    public function setUp() {
+        parent::setUp();
+
+        $path = Zend_Registry::get('temp_dir') . '~localstat.xml';
+        @unlink($path);
+
+        $this->_document = new Opus_Document();
+        $this->_document->setType("doctoral_thesis");
+        $doc_id = $this->_document->store();
+
+        $this->_document->addIdentifierOpus3()->setValue('foobar-'.$doc_id);
+        $this->_document->store();
+
+        //setting server globals
+        $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
+        $_SERVER['HTTP_USER_AGENT'] = 'bla';
+        $_SERVER['REDIRECT_STATUS'] = 200;
+    }
+
     private function doStandardControllerTest($url, $controller, $action) {
         $this->dispatch($url);
         echo "code: " . $this->getResponse()->getHttpResponseCode() . " -- $url\n";
@@ -47,17 +80,37 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     }
 
     public function testIndexAction() {
-        $testDocument = new Opus_Document();
-        $testDocument->setType('foobar');
-        $testDocumentId = $testDocument->store();
+        $doc_id = $this->_document->getId();
+        $this->dispatch('/frontdoor/index/index/docId/'.$doc_id);
 
-        $this->markTestIncomplete("Test waiting for completion.");
-        $this->doStandardControllerTest('/frontdoor/index/index/docId/'.$testDocumentId, 'index', 'index');
+        $this->assertResponseCode(200);
+        $this->assertController('index');
+        $this->assertAction('index');
+
+        $response = $this->getResponse();
+        $this->checkForBadStringsInHtml($response->getBody());
     }
 
     public function testMapopus3Action() {
-        $this->markTestIncomplete("Test waiting for completion.");
-        $this->doStandardControllerTest('/frontdoor/index/mapopus3Action', 'index', 'mapopus3Action');
+        $doc_id = $this->_document->getId();
+        $opus3_id = 'foobar-'.$doc_id;
+
+    	$newId = Opus_Document::getDocumentByIdentifier($opus3_id, 'opus3-id');
+        echo "found documents #" . count($newId) . "\n";
+
+        $this->dispatch('/frontdoor/index/mapopus3/oldId/'.$opus3_id);
+
+        $this->assertResponseCode(302);
+        $this->assertController('index');
+        $this->assertAction('mapopus3');
+
+        $response = $this->getResponse();
+        $headers = $response->getHeaders();
+
+        $this->assertEquals('Location', $headers[0]['name']);
+        $this->assertStringEndsWith('docId/' . $doc_id, $headers[0]['value']);
+
+        $this->checkForBadStringsInHtml($response->getBody());
     }
 }
 ?>
