@@ -126,15 +126,15 @@ class PublicationList_Model_Publication {
         }
         
        
-        $this->imageAbstract = $baseUrl."/layouts/".$theme."/img/publicationlist/Abstract_icon.png";
+        $this->imageAbstract = $baseUrl."/layouts/".$theme."/img/pl/Abstract_icon.png";
         $this->imageAbstractExternal = "fileadmin/publicationlists/img/Abstract_icon.png";
-        $this->imageBibtex = $baseUrl."/layouts/".$theme."/img/publicationlist/BibTeX_icon.png";
+        $this->imageBibtex = $baseUrl."/layouts/".$theme."/img/pl/BibTeX_icon.png";
         $this->imageBibtexExternal = "fileadmin/publicationlists/img/BibTeX_icon.png";
-        $this->imagePdf = $baseUrl."/layouts/".$theme."/img/publicationlist/PDF_icon.png";
+        $this->imagePdf = $baseUrl."/layouts/".$theme."/img/pl/PDF_icon.png";
         $this->imagePdfExternal = "fileadmin/publicationlists/img/PDF_icon.png";
-	$this->imageDoi = $baseUrl."/layouts/".$theme."/img/publicationlist/DOI_icon.png";
+	$this->imageDoi = $baseUrl."/layouts/".$theme."/img/pl/DOI_icon.png";
         $this->imageDoiExternal = "fileadmin/publicationlists/img/DOI_icon.png";
-        $this->imageRis = $baseUrl."/layouts/".$theme."/img/publicationlist/RIS_icon.png";
+        $this->imageRis = $baseUrl."/layouts/".$theme."/img/pl/RIS_icon.png";
         $this->imageRisExternal = "fileadmin/publicationlists/img/RIS_icon.png";
 
 
