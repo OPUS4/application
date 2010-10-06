@@ -115,6 +115,24 @@
       </tuv>
     </tu>
     
+	<tu tuid="add_Licence">
+      <tuv xml:lang="en">
+        <seg>Add Licence</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Lizenz hinzufügen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="remove_Licence">
+      <tuv xml:lang="en">
+        <seg>Remove Licence</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Lizenz entfernen</seg>
+      </tuv>
+    </tu>
+	
     <tu tuid="hint_Opus_Model_Filter_Licence">
       <tuv xml:lang="en">
         <seg>Please select a license for your document. 
@@ -402,7 +420,7 @@
       </tuv>
     </tu>
     
-    <tu tuid="DateAccepted">
+    <tu tuid="ThesisDateAccepted">
       <tuv xml:lang="en">
         <seg>Date of final exam</seg>
       </tuv>
@@ -411,6 +429,24 @@
       </tuv>
     </tu>
     
+	<tu tuid="add_ThesisDateAccepted">
+      <tuv xml:lang="en">
+        <seg>Add date of final exam</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datum der Abschlussprüfung hinzufügen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="remove_ThesisDateAccepted">
+      <tuv xml:lang="en">
+        <seg>Remove date of final exam</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datum der Abschlussprüfung entfernen</seg>
+      </tuv>
+    </tu>
+	
     <tu tuid="Type">
       <tuv xml:lang="en">
         <seg>Document Type</seg>
@@ -471,7 +507,25 @@
       </tuv>
     </tu>
 
-    <tu tuid="SubjectDdc">
+	<tu tuid="add_SubjectMSC">
+      <tuv xml:lang="en">
+        <seg>add MSC-Keyword</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>MSC-Schlagwort hinzufügen</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="remove_SubjectMSC">
+      <tuv xml:lang="en">
+        <seg>remove MSC-Keyword</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>MSC-Schlagwort entfernen</seg>
+      </tuv>
+    </tu>
+	
+    <tu tuid="SubjectDDC">
       <tuv xml:lang="en">
         <seg>DDC Term</seg>
       </tuv>
@@ -480,7 +534,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="add_SubjectDdc">
+    <tu tuid="add_SubjectDDC">
       <tuv xml:lang="en">
         <seg>add DDC Term</seg>
       </tuv>
@@ -489,7 +543,7 @@
       </tuv>
     </tu>
     
-    <tu tuid="remove_SubjectDdc">
+    <tu tuid="remove_SubjectDDC">
       <tuv xml:lang="en">
         <seg>remove DDC Term</seg>
       </tuv>
@@ -654,67 +708,139 @@
 
     <tu tuid="ThesisGrantor">
       <tuv xml:lang="en">
-        <seg>Grantor</seg>
+        <seg>Granting Institution</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Institution für akademischen Grad</seg>
+        <seg>Titel verleihende Institution</seg>
       </tuv>
     </tu>
 
+	<tu tuid="add_ThesisGrantor">
+      <tuv xml:lang="en">
+        <seg>Add Granting Institution</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Titel verleihende Institution hinzufügen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="remove_ThesisGrantor">
+      <tuv xml:lang="en">
+        <seg>Remove Granting Institution</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Titel verleihende Institution entfernen</seg>
+      </tuv>
+    </tu>
+	
     <tu tuid="ThesisPublisher">
       <tuv xml:lang="en">
-        <seg>Publisher</seg>
+        <seg>Publishing Institution</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Veröffentlicher</seg>
+        <seg>Veröffentlichende Institution</seg>
       </tuv>
     </tu>
 
-    <tu tuid="add_Publisher">
+    <tu tuid="add_ThesisPublisher">
       <tuv xml:lang="en">
-        <seg>add Publisher</seg>
+        <seg>add Publishing Institution</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Veröffentlicher hinzufügen</seg>
+        <seg>Veröffentlichende Institution hinzufügen</seg>
       </tuv>
     </tu>
     
-    <tu tuid="remove_Publisher">
+    <tu tuid="remove_ThesisPublisher">
       <tuv xml:lang="en">
-        <seg>remove Publisher</seg>
+        <seg>remove Publishing Institution</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Veröffentlicher entfernen</seg>
+        <seg>Veröffentlichende Institution entfernen</seg>
       </tuv>
     </tu>
         
     <tu tuid="PublishedYear">
       <tuv xml:lang="en">
-        <seg>Year of Publication</seg>
+        <seg>Year of first Publication</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Jahr der Veröffentlichung</seg>
+        <seg>Jahr der Erstveröffentlichung</seg>
       </tuv>
     </tu>
     
+	<tu tuid="add_PublishedYear">
+      <tuv xml:lang="en">
+        <seg>Add year of first Publication</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Jahr der Erstveröffentlichung hinzufügen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="remove_PublishedYear">
+      <tuv xml:lang="en">
+        <seg>Remove year of first Publication</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Jahr der Erstveröffentlichung entfernen</seg>
+      </tuv>
+    </tu>
+	
     <tu tuid="PublishedDate">
       <tuv xml:lang="en">
-        <seg>Date of Publication</seg>
+        <seg>Date of first Publication</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Datum der Veröffentlichung</seg>
+        <seg>Datum der Erstveröffentlichung</seg>
       </tuv>
     </tu>
     
+	<tu tuid="add_PublishedDate">
+      <tuv xml:lang="en">
+        <seg>Add date of first Publication</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datum der Erstveröffentlichung hinzufügen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="remove_PublishedDate">
+      <tuv xml:lang="en">
+        <seg>Remove date of first Publication</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datum der Erstveröffentlichung entfernen</seg>
+      </tuv>
+    </tu>
+	
     <tu tuid="CompletedDate">
       <tuv xml:lang="en">
-        <seg>Date of Completion</seg>
+        <seg>Date of Publication (online)</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Datum der Fertigstellung</seg>
+        <seg>Datum der Veröffentlichung (online)</seg>
       </tuv>
     </tu>
     
+	<tu tuid="add_CompletedDate">
+      <tuv xml:lang="en">
+        <seg>Add date of Publication (online)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datum der Veröffentlichung (online) hinzufügen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="remove_CompletedDate">
+      <tuv xml:lang="en">
+        <seg>Remove date of Publication (online)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datum der Veröffentlichung (online) entfernen</seg>
+      </tuv>
+    </tu>
+	
     <tu tuid="Reviewed">
       <tuv xml:lang="en">
         <seg>Style of Review</seg>
@@ -825,19 +951,19 @@
     
     <tu tuid="TitleMain">
       <tuv xml:lang="en">
-        <seg>Main Title</seg>
+        <seg>Title</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Haupttitel</seg>
+        <seg>Titel</seg>
       </tuv>
     </tu>
     
     <tu tuid="TitleMainValue">
       <tuv xml:lang="en">
-        <seg>Main Title</seg>
+        <seg>Title</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Haupttitel</seg>
+        <seg>Titel</seg>
       </tuv>
     </tu>    
     
@@ -852,19 +978,19 @@
     
     <tu tuid="add_TitleMain">
       <tuv xml:lang="en">
-        <seg>add Main Title</seg>
+        <seg>add Title</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Haupttitel hinzufügen</seg>
+        <seg>Titel hinzufügen</seg>
       </tuv>
     </tu>
         
     <tu tuid="remove_TitleMain">
       <tuv xml:lang="en">
-        <seg>remove Main Title</seg>
+        <seg>remove Title</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Haupttitel entfernen</seg>
+        <seg>Titel entfernen</seg>
       </tuv>
     </tu>
         
@@ -906,10 +1032,10 @@
     
     <tu tuid="hint_Opus_Model_Filter_TitleParent">
       <tuv xml:lang="en">
-        <seg>Please insert the title of the journal, to which the article belongs to.</seg>
+        <seg>Please insert the parent title, which the article belongs to.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Geben Sie bitte die Zeitschrift ein, zu der der Artikel gehört</seg>
+        <seg>Geben Sie bitte das übergeordnete Werk ein, zu dem der Artikel gehört</seg>
       </tuv>
     </tu>
     
@@ -918,7 +1044,7 @@
         <seg>Abstract</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Abstract / Kurzfassung</seg>
+        <seg>Zusammenfassung</seg>
       </tuv>
     </tu>
     
@@ -936,7 +1062,7 @@
         <seg>add Abstract</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Kurzfassung hinzufügen</seg>
+        <seg>Zusammenfassung hinzufügen</seg>
       </tuv>
     </tu>
         
@@ -945,7 +1071,7 @@
         <seg>remove Abstract</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Kurzfassung entfernen</seg>
+        <seg>Zusammenfassung entfernen</seg>
       </tuv>
     </tu>
         
@@ -963,7 +1089,7 @@
         <seg>Abstract</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Abstract / Kurzfassung</seg>
+        <seg>Zusammenfassung</seg>
       </tuv>
     </tu>
 
@@ -981,7 +1107,7 @@
         <seg>Title Additional</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Zusatztitel</seg>
+        <seg>zusätzlicher Titel</seg>
       </tuv>
     </tu>
     
@@ -999,7 +1125,7 @@
         <seg>add Title Additional</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Zusatztitel hinzufügen</seg>
+        <seg>zusätzlichen Titel hinzufügen</seg>
       </tuv>
     </tu>
         
@@ -1008,10 +1134,64 @@
         <seg>remove Titel Additional</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Zusatztitel entfernen</seg>
+        <seg>zusätzlichen Titel entfernen</seg>
       </tuv>
     </tu>
-            
+    
+	<tu tuid="TitleSub">
+      <tuv xml:lang="en">
+        <seg>Subtitle</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Untertitel</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="add_TitleSub">
+      <tuv xml:lang="en">
+        <seg>add Subtitle</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Untertitel hinzufügen</seg>
+      </tuv>
+    </tu>
+        
+    <tu tuid="remove_TitleSub">
+      <tuv xml:lang="en">
+        <seg>remove Subtitel</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Untertitel entfernen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="IdentifierOld">
+      <tuv xml:lang="en">
+        <seg>old Identifier</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>alter Identifier</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="add_IdentifierOld">
+      <tuv xml:lang="en">
+        <seg>add old Identifier</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>alten Identifier hinzufügen</seg>
+      </tuv>
+    </tu>
+        
+    <tu tuid="remove_IdentifierOld">
+      <tuv xml:lang="en">
+        <seg>remove old Identifier</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>alten Identifier entfernen</seg>
+      </tuv>
+    </tu>
+	
     <tu tuid="IdentifierIsbn">
       <tuv xml:lang="en">
         <seg>ISBN</seg>
@@ -1038,7 +1218,34 @@
         <seg>ISBN entfernen</seg>
       </tuv>
     </tu>
-            
+     
+	<tu tuid="IdentifierSerial">
+      <tuv xml:lang="en">
+        <seg>SICI</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>SICI</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="add_IdentifierSerial">
+      <tuv xml:lang="en">
+        <seg>add SICI</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>SICI hinzufügen</seg>
+      </tuv>
+    </tu>
+        
+    <tu tuid="remove_IdentifierSerial">
+      <tuv xml:lang="en">
+        <seg>remove SICI</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>SICI entfernen</seg>
+      </tuv>
+    </tu>
+	
     <tu tuid="IdentifierIssn">
       <tuv xml:lang="en">
         <seg>ISSN</seg>
@@ -1128,7 +1335,34 @@
         <seg>URN entfernen</seg>
       </tuv>
     </tu>
-                
+    
+	<tu tuid="IdentifierDoi">
+      <tuv xml:lang="en">
+        <seg>DOI</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>DOI</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="add_IdentifierDoi">
+      <tuv xml:lang="en">
+        <seg>add DOI</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>DOI hinzufügen</seg>
+      </tuv>
+    </tu>
+        
+    <tu tuid="remove_IdentifierDoi">
+      <tuv xml:lang="en">
+        <seg>remove DOI</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>DOI entfernen</seg>
+      </tuv>
+    </tu>
+	
      <tu tuid="IdentifierValue">
       <tuv xml:lang="en">
         <seg>URN or ISBN</seg>
@@ -1138,6 +1372,141 @@
       </tuv>
     </tu>
     
+	<tu tuid="IdentifierHandle">
+      <tuv xml:lang="en">
+        <seg>Handle</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Handle</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="add_IdentifierHandle">
+      <tuv xml:lang="en">
+        <seg>add Handle</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Handle hinzufügen</seg>
+      </tuv>
+    </tu>
+        
+    <tu tuid="remove_IdentifierHandle">
+      <tuv xml:lang="en">
+        <seg>remove Handle</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Handle entfernen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="IdentifierUrl">
+      <tuv xml:lang="en">
+        <seg>URL</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>URL</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="add_IdentifierUrl">
+      <tuv xml:lang="en">
+        <seg>add URL</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>URL hinzufügen</seg>
+      </tuv>
+    </tu>
+        
+    <tu tuid="remove_IdentifierUrl">
+      <tuv xml:lang="en">
+        <seg>remove URL</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>URL entfernen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="IdentifierStdDoi">
+      <tuv xml:lang="en">
+        <seg>STD-DOI</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>STD-DOI</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="add_IdentifierStdDoi">
+      <tuv xml:lang="en">
+        <seg>add STD-DOI</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>STD-DOI hinzufügen</seg>
+      </tuv>
+    </tu>
+        
+    <tu tuid="remove_IdentifierStdDoi">
+      <tuv xml:lang="en">
+        <seg>remove STD-DOI</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>STD-DOI entfernen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="IdentifierCrisLink">
+      <tuv xml:lang="en">
+        <seg>CRIS-Link</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>CRIS-Link</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="add_IdentifierCrisLink">
+      <tuv xml:lang="en">
+        <seg>add CRIS-Link</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>CRIS-Link hinzufügen</seg>
+      </tuv>
+    </tu>
+        
+    <tu tuid="remove_IdentifierCrisLink">
+      <tuv xml:lang="en">
+        <seg>remove CRIS-Link</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>CRIS-Link entfernen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="IdentifierSplashUrl">
+      <tuv xml:lang="en">
+        <seg>SplashURL</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>SplashURL</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="add_IdentifierSplashUrl">
+      <tuv xml:lang="en">
+        <seg>add SplashURL</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>SplashURL hinzufügen</seg>
+      </tuv>
+    </tu>
+        
+    <tu tuid="remove_IdentifierSplashUrl">
+      <tuv xml:lang="en">
+        <seg>remove SplashURL</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>SplashURL entfernen</seg>
+      </tuv>
+    </tu>
+	
     <tu tuid="SubjectSwdValue">
       <tuv xml:lang="en">
         <seg>SWD Keywords</seg>
@@ -1156,8 +1525,249 @@
       </tuv>
     </tu>
     
-     
+    <tu tuid="ReferenceIsbn">
+      <tuv xml:lang="en">
+        <seg>Reference ISBN</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Referenz-ISBN</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="add_ReferenceIsbn">
+      <tuv xml:lang="en">
+        <seg>add Reference ISBN</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Referenz-ISBN hinzufügen</seg>
+      </tuv>
+    </tu> 
     
+	<tu tuid="remove_ReferenceIsbn">
+      <tuv xml:lang="en">
+        <seg>remove Reference ISBN</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Referenz-ISBN entfernen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="ReferenceUrn">
+      <tuv xml:lang="en">
+        <seg>Reference URN</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Referenz-URN</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="add_ReferenceUrn">
+      <tuv xml:lang="en">
+        <seg>add Reference URN</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Referenz-URN hinzufügen</seg>
+      </tuv>
+    </tu> 
+    
+	<tu tuid="remove_ReferenceUrn">
+      <tuv xml:lang="en">
+        <seg>remove Reference URN</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Referenz-URN entfernen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="ReferenceDoi">
+      <tuv xml:lang="en">
+        <seg>Reference DOI</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Referenz-DOI</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="add_ReferenceDoi">
+      <tuv xml:lang="en">
+        <seg>add Reference DOI</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Referenz-DOI hinzufügen</seg>
+      </tuv>
+    </tu> 
+    
+	<tu tuid="remove_ReferenceDoi">
+      <tuv xml:lang="en">
+        <seg>remove Reference DOI</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Referenz-DOI entfernen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="ReferenceHandle">
+      <tuv xml:lang="en">
+        <seg>Reference Handle</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Referenz-Handle</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="add_ReferenceHandle">
+      <tuv xml:lang="en">
+        <seg>add Reference Handle</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Referenz-Handle hinzufügen</seg>
+      </tuv>
+    </tu> 
+    
+	<tu tuid="remove_ReferenceHandle">
+      <tuv xml:lang="en">
+        <seg>remove Reference Handle</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Referenz-Handle entfernen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="ReferenceUrl">
+      <tuv xml:lang="en">
+        <seg>Reference URL</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Referenz-URL</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="add_ReferenceUrl">
+      <tuv xml:lang="en">
+        <seg>add Reference URL</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Referenz-URL hinzufügen</seg>
+      </tuv>
+    </tu> 
+    
+	<tu tuid="remove_ReferenceUrl">
+      <tuv xml:lang="en">
+        <seg>remove Reference URL</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Referenz-URL entfernen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="ReferenceIsbn">
+      <tuv xml:lang="en">
+        <seg>Reference ISBN</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Referenz-ISBN</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="add_ReferenceIssn">
+      <tuv xml:lang="en">
+        <seg>add Reference ISSN</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Referenz-ISSN hinzufügen</seg>
+      </tuv>
+    </tu> 
+    
+	<tu tuid="remove_ReferenceIssn">
+      <tuv xml:lang="en">
+        <seg>remove Reference ISSN</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Referenz-ISSN entfernen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="ReferenceStdDoi">
+      <tuv xml:lang="en">
+        <seg>Reference STD-DOI</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Referenz-STD-DOI</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="add_ReferenceStdDoi">
+      <tuv xml:lang="en">
+        <seg>add Reference STD-DOI</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Referenz-STD-DOI hinzufügen</seg>
+      </tuv>
+    </tu> 
+    
+	<tu tuid="remove_ReferenceStdDoi">
+      <tuv xml:lang="en">
+        <seg>remove Reference STD-DOI</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Referenz-STD-DOI entfernen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="ReferenceCrisLink">
+      <tuv xml:lang="en">
+        <seg>Reference CRIS-Link</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Referenz-CRIS-Link</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="add_ReferenceCrisLink">
+      <tuv xml:lang="en">
+        <seg>add Reference CRIS-Link</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Referenz-CRIS-Link hinzufügen</seg>
+      </tuv>
+    </tu> 
+    
+	<tu tuid="remove_ReferenceCrisLink">
+      <tuv xml:lang="en">
+        <seg>remove Reference CRIS-Link</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Referenz-CRIS-Link entfernen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="ReferenceSplashUrl">
+      <tuv xml:lang="en">
+        <seg>Reference SplashURL</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Referenz-SplashURL</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="add_ReferenceSplashUrl">
+      <tuv xml:lang="en">
+        <seg>add Reference SplashURL</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Referenz-SplashURL hinzufügen</seg>
+      </tuv>
+    </tu> 
+    
+	<tu tuid="remove_ReferenceSplashUrl">
+      <tuv xml:lang="en">
+        <seg>remove Reference SplashURL</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Referenz-SplashURL entfernen</seg>
+      </tuv>
+    </tu>
+	
     <tu tuid="SubjectPsyndexValue">
       <tuv xml:lang="en">
         <seg>Psyndex Keywords</seg>
@@ -1230,6 +1840,24 @@
       </tuv>
     </tu>
     
+	<tu tuid="add_Patent">
+      <tuv xml:lang="en">
+        <seg>Add Patent Specifications</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Patentinformationen hinzufügen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="remove_Patent">
+      <tuv xml:lang="en">
+        <seg>Remove Patent Specifications</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Patentinformationen entfernen</seg>
+      </tuv>
+    </tu>
+	
     <tu tuid="Countries">
       <tuv xml:lang="en">
         <seg>Country of Patent Application</seg>
@@ -1248,6 +1876,24 @@
       </tuv>
     </tu>
     
+	<tu tuid="add_DateGranted">
+      <tuv xml:lang="en">
+        <seg>Add date of Patent Granted</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datum der Patenterteilung hinzufügen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="remove_DateGranted">
+      <tuv xml:lang="en">
+        <seg>Remove date of Patent Granted</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datum der Patenterteilung entfernen</seg>
+      </tuv>
+    </tu>
+	
     <tu tuid="Number">
       <tuv xml:lang="en">
         <seg>Number</seg>
@@ -1284,6 +1930,24 @@
       </tuv>
     </tu>
     
+	<tu tuid="add_Enrichment">
+      <tuv xml:lang="en">
+        <seg>Add Enrichment</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Erweiterung hinzufügen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="removeEnrichment">
+      <tuv xml:lang="en">
+        <seg>Remove Enrichment</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Erweiterung entfernen</seg>
+      </tuv>
+    </tu>
+	
     <tu tuid="EnrichmentType">
       <tuv xml:lang="en">
         <seg>Enrichment Type</seg>
@@ -1352,7 +2016,7 @@
         <seg>Advisor</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Berichter</seg>
+        <seg>Betreuer</seg>
       </tuv>
     </tu>
 
@@ -1361,7 +2025,7 @@
         <seg>add Advisor</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Berichter hinzufügen</seg>
+        <seg>Betreuer hinzufügen</seg>
       </tuv>
     </tu>
     
@@ -1370,7 +2034,7 @@
         <seg>remove Advisor</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Berichter entfernen</seg>
+        <seg>Betreuer entfernen</seg>
       </tuv>
     </tu>
     
@@ -1482,6 +2146,60 @@
       </tuv>
     </tu>
     
+	<tu tuid="PersonOwner">
+      <tuv xml:lang="en">
+        <seg>Other Person(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Besitzende Person</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="add_PersonOwner">
+      <tuv xml:lang="en">
+        <seg>add owning Person</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Besitzende Person hinzufügen</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="remove_PersonOwner">
+      <tuv xml:lang="en">
+        <seg>remove owning Person</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>besitzende Person entfernen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="PersonSubmitter">
+      <tuv xml:lang="en">
+        <seg>Submitter</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einsteller</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="add_PersonSubmitter">
+      <tuv xml:lang="en">
+        <seg>add Submitter</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einsteller hinzufügen</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="remove_PersonSubmitter">
+      <tuv xml:lang="en">
+        <seg>remove Submitter</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einsteller entfernen</seg>
+      </tuv>
+    </tu>
+	
     <tu tuid="AcademicTitle">
       <tuv xml:lang="en">
         <seg>Academic Title</seg>
@@ -1500,6 +2218,24 @@
       </tuv>
     </tu>
     
+	<tu tuid="add_DateOfBirth">
+      <tuv xml:lang="en">
+        <seg>Add date of Birth</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Geburtsdatum hinzufügen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="remove_DateOfBirth">
+      <tuv xml:lang="en">
+        <seg>Remove date of Birth</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Geburtsdatum entfernen</seg>
+      </tuv>
+    </tu>
+	
     <tu tuid="PlaceOfBirth">
       <tuv xml:lang="en">
         <seg>Place of Birth</seg>
@@ -1554,6 +2290,60 @@
       </tuv>
     </tu>
     
+	<tu tuid="IdentifierPnd">
+      <tuv xml:lang="en">
+        <seg>PND</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>PND</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="add_IdentifierPnd">
+      <tuv xml:lang="en">
+        <seg>Add PND</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>PND hinzufügen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="remove_IdentifierPnd">
+      <tuv xml:lang="en">
+        <seg>Remove PND</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>PND entfernen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="IdentifierLocal">
+      <tuv xml:lang="en">
+        <seg>Local Identifier</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>PND</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="add_IdentifierLocal">
+      <tuv xml:lang="en">
+        <seg>Add local Identifier</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Lokalen Identifier hinzufügen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="remove_IdentifierLocal">
+      <tuv xml:lang="en">
+        <seg>Remove local Identifier</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Lokalen Identifier entfernen</seg>
+      </tuv>
+    </tu>
+	
     <tu tuid="Value">
       <tuv xml:lang="en">
         <seg>Value</seg>
