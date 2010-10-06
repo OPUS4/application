@@ -66,19 +66,6 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $_SERVER['REDIRECT_STATUS'] = 200;
     }
 
-    private function doStandardControllerTest($url, $controller, $action) {
-        $this->dispatch($url);
-        echo "code: " . $this->getResponse()->getHttpResponseCode() . " -- $url\n";
-
-        $this->assertResponseCode(200);
-        if($controller != null)
-            $this->assertController($controller);
-        if($action != null)
-            $this->assertAction($action);
-        $response = $this->getResponse();
-        $this->checkForBadStringsInHtml($response->getBody());
-    }
-
     public function testIndexAction() {
         $doc_id = $this->_document->getId();
         $this->dispatch('/frontdoor/index/index/docId/'.$doc_id);
