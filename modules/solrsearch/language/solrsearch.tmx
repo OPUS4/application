@@ -17,12 +17,12 @@
             </tuv>
         </tu>
 
-        <tu tuid="browsing_title_all_titles">
+        <tu tuid="solrsearch_title_all_docs">
             <tuv xml:lang="en">
-                <seg>All titles in this Repository</seg>
+                <seg>All documents</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Alle Titel aus dem Repository</seg>
+                <seg>Alle Dokumente</seg>
             </tuv>
         </tu>
 

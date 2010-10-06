@@ -35,11 +35,11 @@
 
 <?php if (is_array($this->results) and count($this->results) > 1) : ?>
 <div id="search_options" class="search_options">
-    
+
     <?= $this->translate('sorting_sort_by') ?>
     <ul class="sorting_options">
     
-    <?php if (!$this->browsing && $this->searchType !== 'authorsearch' && $this->searchType !== 'collection') :
+    <?php if ($this->q !== '' && !$this->browsing && $this->searchType !== 'authorsearch' && $this->searchType !== 'collection' && $this->searchType !== 'all') :
         $urlparams = $this->firstPage;
         $urlparams['sortfield'] = 'score';
         $urlparams['sortorder'] = 'desc';
