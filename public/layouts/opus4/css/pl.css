@@ -1,0 +1,21 @@
+#publication_lists table tr.year {
+	background: #FFFFFF;
+}
+
+#publication_lists table tr.even  {
+	background: #C9C9C9;
+}
+
+#publication_lists table tr.odd  {
+	background: #E5E5E5;
+}
+
+#publication_lists table td {
+	padding: 8px;
+}
+
+#publication_lists table td.fourth {
+	white-space:nowrap;
+}
+
+
