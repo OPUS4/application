@@ -68,40 +68,40 @@
             <xsl:attribute name="Type">
                 <xsl:choose>
                     <xsl:when test="field[@name='type']='1'">
-                        <xsl:text>manual</xsl:text>
+                        <xsl:text>misc</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='2'">
                         <xsl:text>article</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='4'">
-                        <xsl:text>monograph</xsl:text>
+                        <xsl:text>book</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='5'">
-                        <xsl:text>monograph_section</xsl:text>
+                        <xsl:text>bookpart</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='7'">
-                        <xsl:text>master_thesis</xsl:text>
+                        <xsl:text>masterthesis</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='8'">
-                        <xsl:text>doctoral_thesis</xsl:text>
+                        <xsl:text>phdthesis</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='9'">
-                        <xsl:text>festschrift</xsl:text>
+                        <xsl:text>misc</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='11'">
-                        <xsl:text>journal</xsl:text>
+                        <xsl:text>misc</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='15'">
-                        <xsl:text>conference</xsl:text>
+                        <xsl:text>conferenceobject</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='16'">
-                        <xsl:text>conference_item</xsl:text>
+                        <xsl:text>conferenceobject</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='17'">
-                        <xsl:text>paper</xsl:text>
+                        <xsl:text>workingpaper</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='19'">
-                        <xsl:text>studienarbeit</xsl:text>
+                        <xsl:text>misc</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='20'">
                         <xsl:text>report</xsl:text>
@@ -110,19 +110,19 @@
                         <xsl:text>preprint</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='23'">
-                        <xsl:text>other</xsl:text>
+                        <xsl:text>misc</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='24'">
                         <xsl:text>habilitation</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='25'">
-                        <xsl:text>bachelor_thesis</xsl:text>
+                        <xsl:text>studythesis</xsl:text>
                     </xsl:when>
                     <xsl:when test="field[@name='type']='26'">
                         <xsl:text>lecture</xsl:text>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:text>other</xsl:text>
+                        <xsl:text>misc</xsl:text>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:attribute>
