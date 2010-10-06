@@ -36,8 +36,6 @@
 /**
  * Check permissions before any citationExport controller will be started.
  *
- * @category    Application
- * @package     Module_CitationExport
  */
 $logger = Zend_Registry::get('Zend_Log');
 // $logger->info("starting autorisitation check for module citationExport!");
@@ -53,6 +51,7 @@ if (isset($docId) === true) {
         
         $identity = Zend_Auth::getInstance()->getIdentity();
         $translate = Zend_Registry::get('Zend_Translate');
+        $message = null;
         if (is_null($translate) === false) {
             if (empty($identity) === true) {
                 $message = $translate->getAdapter()->translate('frontdoor_no_identity_error');
@@ -68,7 +67,7 @@ if (isset($docId) === true) {
         $params = Zend_Controller_Action_HelperBroker::getStaticHelper('ReturnParams')->getReturnParameters();
         
         // Forward to module auth
-        Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger')->addMessage($message);
+        Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger')->addMessage(array('level' => 'failure', 'message' => $message));
         Zend_Controller_Action_HelperBroker::getStaticHelper('redirector')->gotoSimple('index', 'auth', 'default', $params);
 
     }

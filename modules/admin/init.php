@@ -36,8 +36,6 @@
 /**
  * Check permissions before any admin controller will be started.
  *
- * @category    Application
- * @package     Module_Admin
  */
 // $logger = Zend_Registry::get('Zend_Log');
 // $logger->info("starting autorisitation check for module admin!");
@@ -48,19 +46,20 @@ if (true !== Opus_Security_Realm::getInstance()->check('administrate')) {
     // $logger->info("Unallowed access to module admin!");
 
     $identity = Zend_Auth::getInstance()->getIdentity();
+    $message = null;
     if (empty($identity) === true) {
-            // $message = $this->translate('admin_no_identity_error');
-            $message = "You must be logged in to use module admin.";
+        // $message = $this->translate('admin_no_identity_error');
+        $message = "You must be logged in to use module admin.";
     } else {
-            // $message = $this->translate('admin_wrong_identity_error');
-            $message = "You need another identity to use module admin.";
+        // $message = $this->translate('admin_wrong_identity_error');
+        $message = "You need another identity to use module admin.";
     }
 	
     // get all parameters to return after login.
     $params = Zend_Controller_Action_HelperBroker::getStaticHelper('ReturnParams')->getReturnParameters();
 	
     // Forward to module auth
-    Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger')->addMessage($message);
+    Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger')->addMessage(array('level' => 'failure', 'message' => $message));
     Zend_Controller_Action_HelperBroker::getStaticHelper('redirector')->gotoSimple('index', 'auth', 'default', $params);
 }
 

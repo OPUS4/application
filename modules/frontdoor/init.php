@@ -36,8 +36,6 @@
 /**
  * Check permissions before any frontdoor controller will be started.
  *
- * @category    Application
- * @package     Module_Frontdoor
  */
 $logger = Zend_Registry::get('Zend_Log');
 // $logger->info("starting autorisitation check for module frontdoor!");
@@ -70,6 +68,7 @@ if (isset($docId) === true) {
         // we are not allowed to read the metadata
         $identity = Zend_Auth::getInstance()->getIdentity();
 
+        $message = null;
         if (empty($identity) === true) {
             if (is_null($translate) === false) {
                 $message = $translate->getAdapter()->translate('frontdoor_no_identity_error');
@@ -91,7 +90,7 @@ if (isset($docId) === true) {
         $params = Zend_Controller_Action_HelperBroker::getStaticHelper('ReturnParams')->getReturnParameters();
         
         // Forward to module auth
-        Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger')->addMessage($message);
+        Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger')->addMessage(array('level' => 'failure', 'message' => $message));
         Zend_Controller_Action_HelperBroker::getStaticHelper('redirector')->gotoSimple('index', 'auth', 'default', $params);
     }
 }

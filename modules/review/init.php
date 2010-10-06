@@ -36,9 +36,6 @@
 /**
  * Check permissions before any "review" controller will be started.
  *
- * @category    Application
- * @package     Module_Admin
- *
  * TODO translate messages
  */
 // check, if we are allowed to administrate
@@ -48,6 +45,7 @@ if ((true !== Opus_Security_Realm::getInstance()->check('clearance')) ||
     // $logger->info("Unallowed access to module admin!");
 
     $identity = Zend_Auth::getInstance()->getIdentity();
+    $message = null;
     if (empty($identity) === true) {
         // $message = $this->translate('admin_no_identity_error');
         $message = "You must be logged in to use Review module.";
@@ -61,7 +59,7 @@ if ((true !== Opus_Security_Realm::getInstance()->check('clearance')) ||
     $params = Zend_Controller_Action_HelperBroker::getStaticHelper('ReturnParams')->getReturnParameters();
     
     // Forward to module auth
-    Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger')->addMessage($message);
+    Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger')->addMessage(array('level' => 'failure', 'message' => $message));
     Zend_Controller_Action_HelperBroker::getStaticHelper('redirector')->gotoSimple('index', 'auth', 'default', $params);
 }
 

@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,7 +24,8 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
+ * @category    Application
+ * @package     Module_Account
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -32,23 +33,19 @@
  */
 
 /**
- * Check permissions before any admin controller will be started.
- *
- * @category    Application
- * @package     Module_Admin
+ * Check permissions before any account controller will be started.
+ * 
  */
 $identity = Zend_Auth::getInstance()->getIdentity();
 
-if (empty($identity) === true) {
-    $message = "You must be logged in to use module admin.";
-    
+if (empty($identity) === true) {   
     // get all parameters to return after login.
     $params = Zend_Controller_Action_HelperBroker::getStaticHelper('ReturnParams')->getReturnParameters();
 
     // Forward to module auth
-    Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger')->addMessage($message);
+    $message = 'You must be logged in to use module admin.';
+    Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger')->addMessage(array('level' => 'failure', 'message' => $message));
     Zend_Controller_Action_HelperBroker::getStaticHelper('redirector')->gotoSimple('index', 'auth', 'default', $params);
 }
-
 
 ?>

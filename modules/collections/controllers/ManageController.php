@@ -51,7 +51,7 @@ class Collections_ManageController extends Controller_Action {
 //            throw new Exception($message);
 //
 //            // Forward to module auth
-//            Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger')->addMessage($message);
+//            Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger')->addMessage(array('level' => 'failure', 'message' => $message));
 //            Zend_Controller_Action_HelperBroker::getStaticHelper('redirector')->gotoSimple('index', 'auth', 'default');
 //        }
 //    }

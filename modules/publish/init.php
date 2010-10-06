@@ -36,8 +36,6 @@
 /**
  * Check permissions before any Publish controller will be started.
  *
- * @category    Application
- * @package     Module_Publish
  */
 $logger = Zend_Registry::get('Zend_Log');
 // $logger->info("starting autorisitation check for module publish!");
@@ -47,6 +45,7 @@ if (true !== Opus_Security_Realm::getInstance()->check('publish')) {
     // we are not allowed to publish
     $identity = Zend_Auth::getInstance()->getIdentity();
     $translate = Zend_Registry::get('Zend_Translate');
+    $message = null;
     if (is_null($translate) === false) {
         if (empty($identity) === true) {
             $message = $translate->getAdapter()->translate('publish_no_identity_error');
@@ -65,7 +64,7 @@ if (true !== Opus_Security_Realm::getInstance()->check('publish')) {
     $params = Zend_Controller_Action_HelperBroker::getStaticHelper('ReturnParams')->getReturnParameters();
     
     // Forward to module auth
-    Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger')->addMessage($message);
+    Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger')->addMessage(array('level' => 'failure', 'message' => $message));
     Zend_Controller_Action_HelperBroker::getStaticHelper('redirector')->gotoSimple('index', 'auth', 'default', $params);
 
 }
