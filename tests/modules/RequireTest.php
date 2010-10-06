@@ -90,7 +90,6 @@ class RequireTest extends PHPUnit_Framework_TestCase {
         foreach ($classFiles AS $file) {
             if (strstr($file, '/init.php')
                     or strstr($file, 'statistic/models/StatisticGraph')
-                    or strstr($file, 'socialBookmarking/models/Connotea.php')
                     or strstr($file, '/views/') ) {
                 continue;
             }
