@@ -55,9 +55,6 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
 
         $this->_document = new Opus_Document();
         $this->_document->setType("doctoral_thesis");
-        $doc_id = $this->_document->store();
-
-        $this->_document->addIdentifierOpus3()->setValue('foobar-'.$doc_id);
         $this->_document->store();
 
         //setting server globals
@@ -79,11 +76,9 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     }
 
     public function testMapopus3Action() {
-        $doc_id = $this->_document->getId();
-        $opus3_id = 'foobar-'.$doc_id;
-
-    	$newId = Opus_Document::getDocumentByIdentifier($opus3_id, 'opus3-id');
-        echo "found documents #" . count($newId) . "\n";
+        $opus3_id = 'foobar-'.rand();
+        $this->_document->addIdentifierOpus3()->setValue($opus3_id);
+        $doc_id = $this->_document->store();
 
         $this->dispatch('/frontdoor/index/mapopus3/oldId/'.$opus3_id);
 
