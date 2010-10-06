@@ -1,25 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<opus:documenttype name="preprint" xmlns:opus="http://schemas.opus.org/documenttype" 
+<!--
+/**
+ * This file is part of OPUS. The software OPUS has been originally developed
+ * at the University of Stuttgart with funding from the German Research Net,
+ * the Federal Department of Higher Education and Research and the Ministry
+ * of Science, Research and the Arts of the State of Baden-Wuerttemberg.
+ *
+ * OPUS 4 is a complete rewrite of the original OPUS software and was developed
+ * by the Stuttgart University Library, the Library Service Center
+ * Baden-Wuerttemberg, the Cooperative Library Network Berlin-Brandenburg,
+ * the Saarland University and State Library, the Saxon State Library -
+ * Dresden State and University Library, the Bielefeld University Library and
+ * the University Library of Hamburg University of Technology with funding from
+ * the German Research Foundation and the European Regional Development Fund.
+ *
+ * LICENCE
+ * OPUS is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the Licence, or any later version.
+ * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @category    Application
+ * @author      Susanne Gottwald <gottwald@zib.de>
+ * @author      Doreen Thiede <thiede@zib.de>
+ * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ * @version     $Id$
+ */
+ -->
+<documenttype name="preprintmatheon" xmlns:opus="http://schemas.opus.org/documenttype"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xsi:schemaLocation="http://schemas.opus.org/documenttype ../../../opus4/framework/library/Opus/Document/documenttype.xsd">
+	xsi:schemaLocation="http://schemas.opus.org/documenttype https://svn.zib.de/opus4dev/framework/trunk/library/Opus/Document/documenttype.xsd">
 	
-	<opus:field name="PersonAuthor" required="yes" formelement="text" datatype="Person" multiplicity="*" />
-	<opus:field name="Language" required="yes" formelement="select"  datatype="Language" multiplicity="1"/>
-	
-	<opus:field name="Institute" formelement="select" required="yes"  datatype="Institute" multiplicity="*" />
-	<opus:field name="TitleMain" formelement="text" required="yes"  datatype="Title" multiplicity="4" />
+    <field name="PersonAuthor" required="no" formelement="text" datatype="Person" multiplicity="*">
+        <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" >
+            <default value="Dr." edit="yes" public="yes"  />
+        </subfield>
+        <subfield name="Email" required="no" formelement="text" datatype="Email" />
+        <subfield name="AllowEmailContact" required="no" formelement="checkbox"  />
+        <subfield name="DateOfBirth" required="no" formelement="text" datatype="Date" />
+        <subfield name="PlaceOfBirth" required="no" formelement="text" datatype="Text" />
+    </field>
 
-	<opus:field name="TitleAbstract" required="no" formelement="textarea"  datatype="Title" multiplicity="4">
-		<opus:required-if-fulltext/>
-    </opus:field>	
-	
-	<opus:field name="Project" required="no" formelement="select" datatype="Project" multiplicity="*" />
-
-	<opus:field name="SubjectMSC" required="yes" formelement="text"  datatype="msc" multiplicity="5" />
-	
-	<!-- für Keywords -->
-	<opus:field name="SubjectUncontrolled" required="no" formelement="text"  datatype="Text" multiplicity="5" />
-	
-	<opus:field name="Note" required="no" formelement="textarea"  datatype="Text" multiplicity="1" />
+    <field name="Language" required="yes" formelement="select"  datatype="Language" multiplicity="1"/>	
+    <field name="Institute" formelement="select" required="yes"  datatype="Institute" multiplicity="*" />
+    <field name="TitleMain" formelement="text" required="yes"  datatype="Title" multiplicity="4" />
+    <field name="TitleAbstract" required="no" formelement="textarea"  datatype="Title" multiplicity="4">
+        <required-if-fulltext/>
+    </field>
+    <field name="CompletedDate" required="yes" formelement="Text" datatype="Date" multiplicity="1">
+        <default value="today" edit="yes" public="yes" />
+    </field>
+    <field name="Project" required="no" formelement="select" datatype="Project" multiplicity="*" />
+    <field name="SubjectMSC" required="yes" formelement="text"  datatype="msc" multiplicity="5" />
+    <field name="SubjectUncontrolled" required="no" formelement="text"  datatype="Text" multiplicity="5" />	
+    <field name="Note" required="no" formelement="textarea"  datatype="Text" multiplicity="1" />
 		
-</opus:documenttype>
+</documenttype>

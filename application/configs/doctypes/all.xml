@@ -25,9 +25,10 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category   Application
+ * @category    Application
+ * @author      Susanne Gottwald <gottwald@zib.de>
  * @author      Doreen Thiede <thiede@zib.de>
- * @copyright  Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -37,63 +38,64 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://schemas.opus.org/documenttype https://svn.zib.de/opus4dev/framework/trunk/library/Opus/Document/documenttype.xsd">
 	
-	<field name="PersonSubmitter" required="yes" multiplicity="1" formelement="Text" datatype="Person">
-		<subfield name="Email" required="no" formelement="text" datatype="Email" />
+    <field name="PersonSubmitter" required="yes" multiplicity="1" formelement="text" datatype="Person" />
+    <field name="Language" required="no" formelement="select" datatype="Language" multiplicity="1">
+        <default value="deu" edit="yes" public="yes"/>
+    </field>
+    <field name="TitleMain" required="no" formelement="text" datatype="Title" multiplicity="4">
+        <default value="deu" edit="yes" public="yes"/>
+    </field>
+    <field name="TitleAbstract" required="no" formelement="textarea" datatype="Title" multiplicity="4">
+        <required-if-fulltext/>
+    </field>
+    <field name="TitleSub" required="no" formelement="text" datatype="Title" multiplicity="1"/>
+    <field name="TitleAdditional" required="no" formelement="Text" datatype="Title" multiplicity="1"/>
+    <field name="TitleParent" required="no" formelement="text" datatype="Title" multiplicity="1"/>
+    
+    <field name="PersonAuthor" required="no" formelement="text" datatype="Person" multiplicity="*">
         <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" >
             <default value="Dr." edit="yes" public="yes"  />
         </subfield>
+        <subfield name="Email" required="no" formelement="text" datatype="Email" />
+        <subfield name="AllowEmailContact" required="no" formelement="checkbox"  />
         <subfield name="DateOfBirth" required="no" formelement="text" datatype="Date" />
         <subfield name="PlaceOfBirth" required="no" formelement="text" datatype="Text" />
     </field>
-	<field name="Language" required="no" formelement="Select" datatype="Language" multiplicity="1">
-		<default value="deu" edit="yes" public="yes"/>
-	</field>
-	<field name="TitleMain" required="no" formelement="Text" datatype="Title" multiplicity="4">
-		<default value="deu" edit="yes" public="yes"/>
-	</field>
-	<field name="TitleAbstract" required="no" formelement="Textarea" datatype="Title" multiplicity="4">
-		<required-if-fulltext/>
-	</field>
-	<field name="TitleSub" required="no" formelement="Text" datatype="Title" multiplicity="1"/>
-	<field name="TitleAdditional" required="no" formelement="Text" datatype="Title" multiplicity="1"/>
-	<field name="TitleParent" required="no" formelement="Text" datatype="Title" multiplicity="1"/>
-	<field name="PersonAuthor" required="no" formelement="Text" datatype="Person" multiplicity="*">
-	<subfield name="Email" required="no" formelement="text" datatype="Email" />
-        <subfield name="DateOfBirth" required="no" formelement="text" datatype="Date" />
-        <subfield name="PlaceOfBirth" required="no" formelement="text" datatype="Text" />
+    
+    <field name="PersonReferee" required="no" formelement="text" datatype="Person" multiplicity="*"/>
+    <field name="PersonEditor" required="no" formelement="text" datatype="Person" multiplicity="*"/>
+    <field name="PersonAdvisor" required="no" formelement="text" datatype="Person" multiplicity="*"/>
+    <field name="PersonTranslator" required="no" formelement="text" datatype="Person" multiplicity="*"/>
+    <field name="PersonContributor" required="no" formelement="text" datatype="Person" multiplicity="*"/>
+    <field name="CreatingCorporation" required="no" formelement="text" datatype="Text" multiplicity="1"/>
+    <field name="ContributingCorporation" required="no" formelement="text" datatype="Text" multiplicity="1"/>
+    <field name="PublisherName" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
+    <field name="PublisherPlace" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
+    <field name="PageNumber" required="no" formelement="Text" datatype="Integer" multiplicity="1"/>
+    <field name="PageFirst" required="no" formelement="Text" datatype="Integer" multiplicity="1"/>
+    <field name="PageLast" required="no" formelement="Text" datatype="Integer" multiplicity="1"/>
+    <field name="SubjectSwd" required="no" formelement="Text" datatype="Text" multiplicity="5"/>
+    <field name="SubjectUncontrolled" required="no" formelement="Text" datatype="Text" multiplicity="5"/>
+    <field name="Volume" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
+    <field name="Issue" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
+    <field name="Institute" required="no" formelement="Select" datatype="Institute" multiplicity="1"/>
+    <field name="Collection" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
+    <field name="PublishedYear" required="no" formelement="Text" datatype="Year" multiplicity="1"/>
+    <field name="PublishedDate" required="no" formelement="Text" datatype="Date" multiplicity="1"/>
+    <field name="CompletedYear" required="no" formelement="Text" datatype="Year" multiplicity="1"/>
+    <field name="CompletedDate" required="yes" formelement="Text" datatype="Date" multiplicity="1">
+        <default value="today" edit="yes" public="yes" />
     </field>
-	<field name="PersonReferee" required="no" formelement="Text" datatype="Person" multiplicity="*"/>
-	<field name="PersonEditor" required="no" formelement="Text" datatype="Person" multiplicity="*"/>
-	<field name="PersonAdvisor" required="no" formelement="Text" datatype="Person" multiplicity="*"/>
-	<field name="PersonTranslator" required="no" formelement="Text" datatype="Person" multiplicity="*"/>
-	<field name="PersonContributor" required="no" formelement="Text" datatype="Person" multiplicity="*"/>
-	<field name="CreatingCorporation" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-	<field name="ContributingCorporation" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-	<field name="PublisherName" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-	<field name="PublisherPlace" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-	<field name="PageNumber" required="no" formelement="Text" datatype="Integer" multiplicity="1"/>
-	<field name="PageFirst" required="no" formelement="Text" datatype="Integer" multiplicity="1"/>
-	<field name="PageLast" required="no" formelement="Text" datatype="Integer" multiplicity="1"/>
-	<field name="SubjectSwd" required="no" formelement="Text" datatype="Text" multiplicity="5"/>
-	<field name="SubjectUncontrolled" required="no" formelement="Text" datatype="Text" multiplicity="5"/>
-	<field name="Volume" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-	<field name="Issue" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-	<field name="Institute" required="no" formelement="Select" datatype="Institute" multiplicity="1"/>
-	<field name="Collection" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-	<field name="PublishedYear" required="no" formelement="Text" datatype="Year" multiplicity="1"/>
-	<field name="PublishedDate" required="no" formelement="Text" datatype="Date" multiplicity="1"/>
-	<field name="CompletedYear" required="no" formelement="Text" datatype="Year" multiplicity="1"/>
-	<field name="CompletedDate" required="no" formelement="Text" datatype="Date" multiplicity="1"/>
-	<field name="IdentifierOpus3" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-	<field name="IdentifierIsbn" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-	<field name="IdentifierIssn" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-	<field name="IdentifierUrn" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-	<field name="IdentifierOpac" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-	<field name="ThesisDateAccepted" required="no" formelement="Text" datatype="Date" multiplicity="1"/>
-	<field name="ThesisPublisher" required="no" formelement="Select" datatype="ThesisPublisher" multiplicity="1"/>
-	<field name="ThesisGrantor" required="no" formelement="Select" datatype="ThesisGrantor" multiplicity="1"/>
-	<field name="Note" required="no" formelement="Textarea" datatype="Text" multiplicity="1"/>
-	<field name="Licence" required="no" formelement="Select" datatype="Licence" multiplicity="1"/>
-	<field name="ServerDateUnlocking" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-	<field name="SubjectDdc" required="no" formelement="Text" datatype="ddc" multiplicity="5"/>
+    <field name="IdentifierOpus3" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
+    <field name="IdentifierIsbn" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
+    <field name="IdentifierIssn" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
+    <field name="IdentifierUrn" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
+    <field name="IdentifierOpac" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
+    <field name="ThesisDateAccepted" required="no" formelement="Text" datatype="Date" multiplicity="1"/>
+    <field name="ThesisPublisher" required="no" formelement="Select" datatype="ThesisPublisher" multiplicity="1"/>
+    <field name="ThesisGrantor" required="no" formelement="Select" datatype="ThesisGrantor" multiplicity="1"/>
+    <field name="Note" required="no" formelement="Textarea" datatype="Text" multiplicity="1"/>
+    <field name="Licence" required="no" formelement="Select" datatype="Licence" multiplicity="1"/>
+    <field name="ServerDateUnlocking" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
+    <field name="SubjectDdc" required="no" formelement="Text" datatype="ddc" multiplicity="5"/>
 </documenttype>
