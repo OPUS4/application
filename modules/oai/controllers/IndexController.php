@@ -103,7 +103,7 @@ class Oai_IndexController extends Controller_Xml {
     public function indexAction() {
         try {
             $this->__handleRequest($this->getRequest()->getQuery());
-        } catch (Exception $e) {
+        } catch (Oai_Model_Exception $e) {
             switch ($e->getCode()) {
                 case self::BADVERB:
                     $errorCode = 'badVerb';
@@ -121,7 +121,7 @@ class Oai_IndexController extends Controller_Xml {
                     $errorCode = 'badResumptionToken';
                     break;
                 default:
-                    throw new Exception($e->getMessage());
+                    throw new Oai_Model_Exception($e->getMessage());
                     break;
             }
             $this->_proc->setParameter('', 'oai_error_code', $errorCode);
@@ -174,14 +174,14 @@ class Oai_IndexController extends Controller_Xml {
         if (false === array_key_exists('verb', $oaiRequest) or
                 false === in_array($oaiRequest['verb'], array_keys(self::$_validQueries))) {
             // Invalid or unspecified Verb
-            throw new Exception('The verb provided in the request is illegal.', self::BADVERB);
+            throw new Oai_Model_Exception('The verb provided in the request is illegal.', self::BADVERB);
         }
 
         // Evaluate if any invalid parameters are provided
         $invalidArguments = array_diff(array_keys($oaiRequest), self::$_validArguments);
         if (false === empty($invalidArguments)) {
             // Error occured
-            throw new Exception(implode(', ', $invalidArguments), self::BADARGUMENT);
+            throw new Oai_Model_Exception(implode(', ', $invalidArguments), self::BADARGUMENT);
         }
 
         // Evaluate if the query is valid, i.e. check for proper parameter combinations.
@@ -192,10 +192,10 @@ class Oai_IndexController extends Controller_Xml {
                     $validRequest['optional']));
             if (false === empty($missingRequiredParameters)) {
                 // Missing required parameter
-                throw new Exception('Missing parameter(s) ' . implode(', ', $missingRequiredParameters), self::BADARGUMENT);
+                throw new Oai_Model_Exception('Missing parameter(s) ' . implode(', ', $missingRequiredParameters), self::BADARGUMENT);
             } else if (false === empty($unknownParameters)) {
                 // Superflous parameter
-                throw new Exception('badArgument', self::BADARGUMENT);
+                throw new Oai_Model_Exception('badArgument', self::BADARGUMENT);
             } else {
                 foreach ($oaiRequest as $parameter => $value) {
                     $callname = '__validate' . ucfirst($parameter);
@@ -241,7 +241,7 @@ class Oai_IndexController extends Controller_Xml {
         }
         if (false === in_array($oaiMetadataPrefix, $availableMetadataPrefixes)) {
             // MetadataPrefix not available.
-            throw new Exception("The metadata format $oaiMetadataPrefix given by metadataPrefix is not supported by the item or this repository.",self::CANNOTDISSEMINATEFORMAT);
+            throw new Oai_Model_Exception("The metadata format $oaiMetadataPrefix given by metadataPrefix is not supported by the item or this repository.",self::CANNOTDISSEMINATEFORMAT);
         }
     }
 
@@ -257,7 +257,7 @@ class Oai_IndexController extends Controller_Xml {
         try {
             $from = new Zend_Date($oaiFrom);
         } catch(exception $e) {
-            throw new Exception('The date from is not a correct date',self::BADARGUMENT);
+            throw new Oai_Model_Exception('The date from is not a correct date',self::BADARGUMENT);
         }
     }
 
@@ -271,7 +271,7 @@ class Oai_IndexController extends Controller_Xml {
      */
     private function __validateSet($oaiSet) {
         if (false === strpos($oaiSet,':')) {
-            throw new Exception('The given set is not correct',self::BADARGUMENT);
+            throw new Oai_Model_Exception('The given set is not correct',self::BADARGUMENT);
         }
     }
 
@@ -288,7 +288,7 @@ class Oai_IndexController extends Controller_Xml {
         try {
             $until = new Zend_Date($oaiUntil);
         } catch(exception $e) {
-            throw new Exception('The date until is not a correct date.',self::BADARGUMENT);
+            throw new Oai_Model_Exception('The date until is not a correct date.',self::BADARGUMENT);
         }
     }
 
@@ -303,7 +303,7 @@ class Oai_IndexController extends Controller_Xml {
         $datefrom = new DateTime($from);
         $dateuntil = new DateTime($until);
         if ($datefrom > $dateuntil) {
-            throw new Exception("The date $from is greater than the date $until.",self::BADARGUMENT);
+            throw new Oai_Model_Exception("The date $from is greater than the date $until.",self::BADARGUMENT);
         }
     }
     /**
@@ -318,26 +318,26 @@ class Oai_IndexController extends Controller_Xml {
         $config = $registry->get('Zend_Config');
 
         if (!isset($oaiResumptionToken)) {
-            throw new Exception("no resumption token given", self::BADRESUMPTIONTOKEN);
+            throw new Oai_Model_Exception("no resumption token given", self::BADRESUMPTIONTOKEN);
         }
 
         if (0 !== preg_match('[^a-zA-Z0-9_-]', $oaiResumptionToken)) {
             $this->logger("Invalid resumption token $oaiResumptionToken");
-            throw new Exception("invalid resumption token given", self::BADRESUMPTIONTOKEN);
+            throw new Oai_Model_Exception("invalid resumption token given", self::BADRESUMPTIONTOKEN);
         }
 
         if (true === isset($config->path->workspace->temp)) {
             $tempPath = $config->path->workspace->temp;
             $resumptionPath = self::getOrCreateResumptionDirectory($tempPath);
         } else {
-            throw new Exception("no path to resumption files set in config-file",self::BADRESUMPTIONTOKEN);
+            throw new Oai_Model_Exception("no path to resumption files set in config-file",self::BADRESUMPTIONTOKEN);
         }
 
         $fn = $resumptionPath . '/rs_' . $oaiResumptionToken;
 
         if (!file_exists($fn) || !is_readable($fn)) {
             $this->logger("Problem with resumption file: $fn");
-            throw new Exception("The resumptionToken $oaiResumptionToken does not exist, is unreadable or has already expired.",self::BADRESUMPTIONTOKEN);
+            throw new Oai_Model_Exception("The resumptionToken $oaiResumptionToken does not exist, is unreadable or has already expired.",self::BADRESUMPTIONTOKEN);
         }
     }
 
@@ -354,13 +354,13 @@ class Oai_IndexController extends Controller_Xml {
         // document has to be published
         $serverState = $document->getServerState();
         if ($serverState != 'published' && $serverState != 'deleted') {
-            throw new Exception("The combination of the given values results in an empty list (document not published or deleted).", self::NORECORDSMATCH);
+            throw new Oai_Model_Exception("The combination of the given values results in an empty list (document not published or deleted).", self::NORECORDSMATCH);
         }
         // for xMetaDiss it must be habilitation or doctoral-thesis
         if ($oaiRequest['metadataPrefix'] == 'xMetaDiss') {
             $is_hab_doc = $this->filterDocType($document);
             if ($is_hab_doc == 0) {
-                throw new Exception("The combination of the given values results in an empty list (xMetaDiss only for habilitation and doctoral_thesis).", self::NORECORDSMATCH);
+                throw new Oai_Model_Exception("The combination of the given values results in an empty list (xMetaDiss only for habilitation and doctoral_thesis).", self::NORECORDSMATCH);
             }
         }
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
@@ -426,7 +426,7 @@ class Oai_IndexController extends Controller_Xml {
             $tempPath = $config->path->workspace->temp;
             $resumptionPath = self::getOrCreateResumptionDirectory($tempPath);
         } else {
-            throw new Exception("no path to resumption files set in config-file",self::BADRESUMPTIONTOKEN);
+            throw new Oai_Model_Exception("no path to resumption files set in config-file",self::BADRESUMPTIONTOKEN);
         }
 
         $this->_proc->setParameter('', 'repIdentifier', $repIdentifier);
@@ -473,7 +473,7 @@ class Oai_IndexController extends Controller_Xml {
                     }
                 }
             } else {
-                throw new Exception("file could not be read.", self::NORECORDSMATCH);
+                throw new Oai_Model_Exception("file could not be read.", self::NORECORDSMATCH);
             }
             // TODO cronjob for removing files and not here, because token has to be repeatable
             unlink($fn);
@@ -500,7 +500,7 @@ class Oai_IndexController extends Controller_Xml {
         }
         // no records returned
         if ($id_max == 0) {
-            throw new Exception("The combination of the given values results in an empty list.", self::NORECORDSMATCH);
+            throw new Oai_Model_Exception("The combination of the given values results in an empty list.", self::NORECORDSMATCH);
         }
 
         // store the further Ids in a resumption-file
@@ -547,7 +547,7 @@ class Oai_IndexController extends Controller_Xml {
             $tempPath = $config->path->workspace->temp;
             $resumptionPath = self::getOrCreateResumptionDirectory($tempPath);
         } else {
-            throw new Exception("no path to resumption files set in config-file",self::BADRESUMPTIONTOKEN);
+            throw new Oai_Model_Exception("no path to resumption files set in config-file",self::BADRESUMPTIONTOKEN);
         }
 
         $this->_proc->setParameter('', 'repIdentifier', $repIdentifier);
@@ -593,7 +593,7 @@ class Oai_IndexController extends Controller_Xml {
                     }
                 }
             } else {
-                throw new Exception("file could not be read.", self::NORECORDSMATCH);
+                throw new Oai_Model_Exception("file could not be read.", self::NORECORDSMATCH);
             }
             // TODO cronjob for removing files and not here, because token has to be repeatable
             unlink($fn);
@@ -618,7 +618,7 @@ class Oai_IndexController extends Controller_Xml {
 
         // no records returned
         if ($id_max == 0) {
-            throw new Exception("The combination of the given values results in an empty list.", self::NORECORDSMATCH);
+            throw new Oai_Model_Exception("The combination of the given values results in an empty list.", self::NORECORDSMATCH);
         }
 
         // store the further Ids in a resumption-file
@@ -742,7 +742,7 @@ class Oai_IndexController extends Controller_Xml {
             // by xMetaDiss as metadataPrefix no other pub-type-sets are allowed
             if (false === empty($setInfo)) {
                 if (false === in_array($setInfo,$restriction['Type'])) {
-                    throw new Exception("The combination of given values results in an empty list.", self::NORECORDSMATCH);
+                    throw new Oai_Model_Exception("The combination of given values results in an empty list.", self::NORECORDSMATCH);
                 }
                 $restriction['Type'] = array($setInfo);
             }
@@ -776,7 +776,7 @@ class Oai_IndexController extends Controller_Xml {
             if ($setarray[0] != "pub-type") {
                 $setDocIds = Opus_CollectionRole::getDocumentIdsInSet($setParam);
                 if (true === is_null($setDocIds) or true === empty($setDocIds)) {
-                    throw new Exception("The combination of the given values results in an empty list.", self::NORECORDSMATCH);
+                    throw new Oai_Model_Exception("The combination of the given values results in an empty list.", self::NORECORDSMATCH);
                 }
             }
         }
@@ -855,7 +855,7 @@ class Oai_IndexController extends Controller_Xml {
         if (true !== is_dir($tempPath)
                 || true !== is_writable($tempPath)
                 || true !== is_readable($tempPath)) {
-            throw new Exception("Cannot find/access tempPath directory.");
+            throw new Oai_Model_Exception("Cannot find/access tempPath directory.");
         }
 
         $resumptionPath = $tempPath . '/resumption';
@@ -863,14 +863,14 @@ class Oai_IndexController extends Controller_Xml {
             $rv = mkdir($resumptionPath, 0770);
 
             if ($rv !== true) {
-                throw new Exception("Error creating resumptionDirectory.");
+                throw new Oai_Model_Exception("Error creating resumptionDirectory.");
             }
         }
 
         if (true !== is_dir($resumptionPath)
                 || true !== is_writable($resumptionPath)
                 || true !== is_readable($resumptionPath)) {
-            throw new Exception("Cannot find/access resumptionPath directory.");
+            throw new Oai_Model_Exception("Cannot find/access resumptionPath directory.");
         }
 
         return $resumptionPath;
@@ -895,7 +895,7 @@ class Oai_IndexController extends Controller_Xml {
         $tmp_filename = tempnam($resumptionPath, 'rs_');
 
         if (false === is_file($tmp_filename)) {
-            throw new Exception("temp file does not exist.");
+            throw new Oai_Model_Exception("temp file does not exist.");
         }
 
         $fp = fopen($tmp_filename, "w");
@@ -905,12 +905,12 @@ class Oai_IndexController extends Controller_Xml {
                 if (fwrite($fp,$restId.' ')) {
 
                 } else {
-                    throw new Exception("file could not be written.", self::NORECORDSMATCH);
+                    throw new Oai_Model_Exception("file could not be written.", self::NORECORDSMATCH);
                 }
             }
             fclose($fp);
         } else {
-            throw new Exception("temp file could not be opened for writing.", self::NORECORDSMATCH);
+            throw new Oai_Model_Exception("temp file could not be opened for writing.", self::NORECORDSMATCH);
         }
 
         $start_res = strpos($tmp_filename,'rs_');
