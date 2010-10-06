@@ -56,11 +56,13 @@ class Admin_PersonController extends Controller_CRUDAction {
     public function preDispatch() {
         $config = Zend_Registry::get('Zend_Config');
 
+        /* FIXME: Flag for disabling controllers or not?
         if (isset($config->admin->persons->disabled)) {
             if ($config->admin->persons->disabled) {
                 $this->_redirectTo('index');
             }
         }
+         */
 
         return parent::preDispatch();
     }

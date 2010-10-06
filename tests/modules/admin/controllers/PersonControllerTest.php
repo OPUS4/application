@@ -40,7 +40,6 @@ class Admin_PersonControllerTest extends ControllerTestCase {
      * Test routing to and successfull execution of index action.
      */
     public function testIndexAction() {
-        $this->_setPersonDisabled(false);
         $this->dispatch('/admin/person');
         $this->assertResponseCode(200);
         $this->assertController('person');
@@ -51,7 +50,7 @@ class Admin_PersonControllerTest extends ControllerTestCase {
      * Test index action in case the person administration is disabled.
      */
     public function testIndexActionIfDisabled() {
-        $this->_setPersonDisabled(true);
+        $this->markTestSkipped('Currently not functionality for disabling.');
         $this->dispatch('/admin/person');
         $this->assertRedirect();
         $this->markTestIncomplete("Validate redirect URL.");
@@ -67,7 +66,6 @@ class Admin_PersonControllerTest extends ControllerTestCase {
     }
 
     public function testShowAction() {
-        $this->_setPersonDisabled(false);
         $this->dispatch('/admin/person/show/id/1');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
