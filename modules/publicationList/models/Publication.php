@@ -123,13 +123,18 @@ class PublicationList_Model_Publication {
             $this->pdfUrl = $doc->getIdentifierUrl(0)->getValue();
         }
 
-        if (!is_null($theme)) {
-            $this->imageAbstract = $baseUrl."/layouts/".$theme."/img/publicationlist/Abstract_icon.png";
-            $this->imageBibtex = $baseUrl."/layouts/".$theme."/img/publicationlist/BibTeX_icon.png";
-            $this->imagePdf = $baseUrl."/layouts/".$theme."/img/publicationlist/PDF_icon.png";
-	    $this->imageDoi = $baseUrl."/layouts/".$theme."/img/publicationlist/DOI_icon.png";
-            $this->imageRis = $baseUrl."/layouts/".$theme."/img/publicationlist/RIS_icon.png";
-        }
+       
+        $this->imageAbstract = $baseUrl."/layouts/".$theme."/img/publicationlist/Abstract_icon.png";
+        $this->imageAbstractExternal = "../img/Abstract_icon.png";
+        $this->imageBibtex = $baseUrl."/layouts/".$theme."/img/publicationlist/BibTeX_icon.png";
+        $this->imageBibtexExternal = "../img/BibTeX_icon.png";
+        $this->imagePdf = $baseUrl."/layouts/".$theme."/img/publicationlist/PDF_icon.png";
+        $this->imagePdfExternal = "../img/PDF_icon.png";
+	$this->imageDoi = $baseUrl."/layouts/".$theme."/img/publicationlist/DOI_icon.png";
+        $this->imageDoiExternal = "../img/DOI_icon.png";
+        $this->imageRis = $baseUrl."/layouts/".$theme."/img/publicationlist/RIS_icon.png";
+        $this->imageRisExternal = "../img/RIS_icon.png";
+
 
         foreach ($collections as $c) {
             $roleId = $c->getRoleId();
@@ -209,6 +214,26 @@ class PublicationList_Model_Publication {
         $this->bibtexUrl = $string;
     }
 
+    public function setImageAbstract($string) {
+        $this->imageAbstract = $string;
+    }
+
+    public function setImageBibtex($string) {
+        $this->imageBibtex = $string;
+    }
+
+    public function setImageDoi($string) {
+        $this->imageDoi = $string;
+    }
+    
+    public function setImagePdf($string) {
+        $this->imagePdf = $string;
+    }
+
+    public function setImageRis($string) {
+        $this->imageRis = $string;
+    }
+
     public function setPdfUrl($string) {
         $this->pdfUrl = $string;
     }
@@ -248,20 +273,40 @@ class PublicationList_Model_Publication {
         return $this->imageAbstract;
     }
 
+    public function getImageAbstractExternal() {
+        return $this->imageAbstractExternal;
+    }
+
     public function getImageBibtex() {
         return $this->imageBibtex;
+    }
+
+    public function getImageBibtexExternal() {
+        return $this->imageBibtexExternal;
     }
 
     public function getImageDoi() {
         return $this->imageDoi;
     }
 
+    public function getImageDoiExternal() {
+        return $this->imageDoiExternal;
+    }
+
     public function getImagePdf() {
         return $this->imagePdf;
     }
 
+    public function getImagePdfExternal() {
+        return $this->imagePdfExternal;
+    }
+
     public function getImageRis() {
         return $this->imageRis;
+    }
+
+    public function getImageRisExternal() {
+        return $this->imageRisExternal;
     }
 
     public function getInSeries() {

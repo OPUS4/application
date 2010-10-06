@@ -101,6 +101,12 @@ class PublicationList_IndexController extends Controller_Action {
                 $publication->setBibtexUrl($publication->getBibtexUrlExternal());
                 $publication->setRisUrl($publication->getRisUrlExternal());
 
+                $publication->setImageAbstract($publication->getImageAbstractExternal());
+                $publication->setImageBibtex($publication->getImageBibtexExternal());
+                $publication->setImageDoi($publication->getImageDoiExternal());
+                $publication->setImagePdf($publication->getImagePdfExternal());
+                $publication->setImageRis($publication->getImageRisExternal());
+
                 if(!count($publication->getAuthors()) == 0) {
                     foreach ($publication->getAuthors() as $a) {
                         $a->setUrl($a->getUrlExternal());
