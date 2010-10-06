@@ -33,38 +33,36 @@
  */
 ?>
 
-<div class="paginationContainer">
-    <div id="pagination" class="results_pagination">
-        <div class="info_small">
-            <?= $this->translate('pagination_display_hits') ?> <strong><?= (int)($this->start)+1 ?></strong> <?= $this->translate('pagination_to') ?> <strong><?php if(((int)($this->start) + (int)($this->rows)) > $this->numOfHits) echo $this->numOfHits; else echo (int)($this->start) + (int)($this->rows); ?></strong>
-        </div>
-        <ul class="paginationControl">
+<div class="results_pagination">
+    <p class="info_small">
+        <?= $this->translate('pagination_display_hits') ?> <strong><?= (int)($this->start)+1 ?></strong> <?= $this->translate('pagination_to') ?> <strong><?php if(((int)($this->start) + (int)($this->rows)) > $this->numOfHits) echo $this->numOfHits; else echo (int)($this->start) + (int)($this->rows); ?></strong>
+    </p>
+    <ul class="paginationControl">
 
-            <?php if($this->start >= $this->rows) : ?>
-            <li>
-                <a href="<?= $this->url($this->firstPage); ?>">
-                    <?= $this->translate('pagination_first_page') ?>
-                </a>
-            </li>
-            <li>
-                <a href="<?= $this->url($this->prevPage); ?>">
-                    <?= $this->translate('pagination_previous_page') ?>
-                </a>
-            </li>
-            <?php endif ?>
+        <?php if($this->start >= $this->rows) : ?>
+        <li>
+            <a href="<?= $this->url($this->firstPage); ?>">
+                <?= $this->translate('pagination_first_page') ?>
+            </a>
+        </li>
+        <li>
+            <a href="<?= $this->url($this->prevPage); ?>">
+                <?= $this->translate('pagination_previous_page') ?>
+            </a>
+        </li>
+        <?php endif ?>
 
-            <?php if($this->start < ((int)($this->numOfHits) - (int)($this->rows))) : ?>
-            <li>
-                <a href="<?= $this->url($this->nextPage); ?>">
-                    <?= $this->translate('pagination_next_page') ?>
-                </a>
-            </li>
-            <li>
-                <a href="<?= $this->url($this->lastPage); ?>">
-                    <?= $this->translate('pagination_last_page') ?>
-                </a>
-            </li>
-            <?php endif ?>
-        </ul>
-    </div>
+        <?php if($this->start < ((int)($this->numOfHits) - (int)($this->rows))) : ?>
+        <li>
+            <a href="<?= $this->url($this->nextPage); ?>">
+                <?= $this->translate('pagination_next_page') ?>
+            </a>
+        </li>
+        <li>
+            <a href="<?= $this->url($this->lastPage); ?>">
+                <?= $this->translate('pagination_last_page') ?>
+            </a>
+        </li>
+        <?php endif ?>
+    </ul>
 </div>

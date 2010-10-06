@@ -58,7 +58,7 @@
                     $urlparams = $this->firstPage;
                     $urlparams['sortfield'] = $sortfield;
                     $urlparams['sortorder'] = $sortorder; ?>
-        <li class="sorting_option">
+        <li class="sorting_option sort_<?= $sortorder ?>">
             <?php if ($this->sortfield === $sortfield && $this->sortorder === $sortorder) : ?>
                 <?= $this->translate('sorting_' . $sortfield . '_' . $sortorder) ?>
             <?php else : ?>

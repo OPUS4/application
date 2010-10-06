@@ -40,74 +40,68 @@ if($this->jQueryEnabled()) {
     $this->headScript()->appendScript("$(document).ready(function () { $('.abstractText').hide(); });");
 }
 ?>
-
 <?php if (isset($this->specialTitle)) : ?>
-<h1><?= htmlspecialchars($this->translate($this->specialTitle)) ?></h1>
+<h2><?= htmlspecialchars($this->translate($this->specialTitle)) ?></h2>
 <?php endif ?>
-
-<?php
-    if ($this->searchType === 'simple' && !$this->browsing)
-        include('simpleSearchForm.phtml');
-    else if(($this->searchType === 'advanced' || $this->searchType === 'authorsearch') && !$this->browsing)
-        include('advancedSearchForm.phtml');
-    else if($this->searchType === 'latest')
-        include('latestDocsForm.phtml');
-    else if ($this->searchType === 'collection')
-        include('browsecollection.phtml');
-?>
-
-<?php if (!isset($this->specialTitle)) : ?>
-<h3><?= $this->numOfHits . ' ' . ($this->numOfHits === 1 ? $this->translate('results_title_single') : $this->translate('results_title')); ?></h3>
-<?php endif ?>
-
-<?php
-    if ($this->isSimpleList === false) {
-        if ($this->searchType === 'collection') {
-            include('searchOptions.phtml');
-            include('pagination.phtml');
-        }
-        else {
-            include('searchOptions.phtml');
-            include('pagination.phtml');
-            include('facetsMenu.phtml');
-        }
-    }
-?>
-
-<div id="search_results" class="search_results">
-
-    <?php $rowCount = 0; ?>
-    <?php foreach($this->results as $result) :?>
-        <div class="result_box <?= $rowCount++ % 2 === 0 ? 'even' : 'odd'; ?>">
-            <?php
-                $frontdoorUrl = array(
-                    'module' => 'frontdoor',
-                    'controller' => 'index',
-                    'action' => 'index',
-                    'docId' => $result->getId());
-            ?>
-            <?php if($this->jQueryEnabled()) : ?>
-            <img src="<?= $this->layoutPath() ?>/img/page_white_text.png" alt="<?= $this->translate('results_hideabstract_alt') ?>" title="<?= $this->translate('results_hideabstract_title') ?>" onclick="$(function(){$('#<?= $result->getId() ?>').toggle();});" />
-            <?php endif ?>
-
-            <span class="results_title"><a href="<?= $this->url($frontdoorUrl, null, true) ?>"><?= htmlspecialchars($result->getTitle()); ?></a> (<?= htmlspecialchars($result->getYear()); ?>)</span><br/>
-
-            <?php if(!is_null($result->getAuthors())) : ?>
-                <?php foreach($result->getAuthors() as $author) :
-                    $authorSearch = $this->authorSearch;
-                    $authorSearch['author'] = '"'.$author.'"';
-                ?>
-                <a href="<?= $this->url($authorSearch, null, true); ?>"><?= htmlspecialchars($author) ?></a>
-                <?php endforeach ?>
-            <?php endif ?>
-
-            <div class="abstract">
-                <div class="abstractText" id="<?= $result->getId() ?>">
-                    <?= htmlspecialchars($result->getAbstract()) ?>
-                </div>
-            </div>
-        </div>
-    <?php endforeach ?>
+<div class="content">
+    <?php
+        if ($this->searchType === 'simple' && !$this->browsing)
+            include('simpleSearchForm.phtml');
+        else if(($this->searchType === 'advanced' || $this->searchType === 'authorsearch') && !$this->browsing)
+            include('advancedSearchForm.phtml');
+        else if($this->searchType === 'latest')
+            include('latestDocsForm.phtml');
+        else if ($this->searchType === 'collection')
+            include('browsecollection.phtml');
+    ?>
 </div>
-
-<?php if (!$this->isSimpleList) include('pagination.phtml') ?>
+<div class="content">
+    <?php
+         if ($this->isSimpleList === false && $this->searchType !== 'collection') {
+             include('facetsMenu.phtml');
+        }
+    ?>
+    <div id="searchbar">
+        <?php if (!isset($this->specialTitle)) : ?>
+            <h3><?= $this->numOfHits . ' ' . ($this->numOfHits === 1 ? $this->translate('results_title_single') : $this->translate('results_title')); ?></h3>
+        <?php endif ?>
+        <?php
+            if ($this->isSimpleList === false) {
+                include('searchOptions.phtml');
+                include('pagination.phtml');
+            }
+        ?>
+        <div id="search_results" class="search_results">
+            <?php $rowCount = 0; ?>
+            <?php foreach($this->results as $result) :?>
+                <dl class="result_box <?= $rowCount++ % 2 === 0 ? 'even' : 'odd'; ?>">
+                    <?php
+                        $frontdoorUrl = array(
+                            'module' => 'frontdoor',
+                            'controller' => 'index',
+                            'action' => 'index',
+                            'docId' => $result->getId());
+                    ?>
+                    <dt class="results_title">
+                        <?php if($this->jQueryEnabled()) : ?>
+                            <img src="<?= $this->layoutPath() ?>/img/theme/icon-on-off.png" alt="<?= $this->translate('results_hideabstract_alt') ?>" title="<?= $this->translate('results_hideabstract_title') ?>" onclick="$(function(){$('#<?= $result->getId() ?>').toggle();});" />
+                        <?php endif ?>
+                        <a href="<?= $this->url($frontdoorUrl, null, true) ?>"><?= htmlspecialchars($result->getTitle()); ?></a> (<?= htmlspecialchars($result->getYear()); ?>)
+                    </dt>
+                    <?php if(!is_null($result->getAuthors())) : ?>
+                        <dt class="results_author">
+                            <?php foreach($result->getAuthors() as $author) :
+                               $authorSearch = $this->authorSearch;
+                               $authorSearch['author'] = '"'.$author.'"';
+                            ?>
+                                <a href="<?= $this->url($authorSearch, null, true); ?>"><?= htmlspecialchars($author) ?></a>
+                            <?php endforeach ?>
+                        </dt>
+                    <?php endif ?>
+                    <dd class="abstractText" id="<?= $result->getId() ?>"><?= htmlspecialchars($result->getAbstract()) ?></dd>
+                </dl>
+            <?php endforeach ?>
+        </div>
+        <?php if (!$this->isSimpleList) include('pagination.phtml') ?>
+    </div>
+</div>
