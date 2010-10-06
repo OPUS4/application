@@ -61,7 +61,6 @@
     <field name="PublisherName" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="PublisherPlace" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="SubjectDdc" required="no" formelement="Text" datatype="ddc" multiplicity="5"/>
-    <field name="SubjectSwd" required="no" formelement="Text" datatype="Text" multiplicity="5" />
     <field name="SubjectUncontrolled" required="no" formelement="Text" datatype="Text" multiplicity="5" />
     <field name="Institute" required="no" formelement="Select" datatype="Institute" multiplicity="1" />
     <field name="CompletedDate" required="yes" formelement="Text" datatype="Date" multiplicity="1">

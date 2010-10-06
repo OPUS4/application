@@ -44,7 +44,6 @@
     <field name="TitleAbstract" required="no" formelement="Textarea" datatype="Title" multiplicity="4" >
         <required-if-fulltext />
     </field>
-    <field name="TitleSub" required="no" formelement="Text" datatype="Title" multiplicity="1" />
 
     <field name="PersonAuthor" required="no" formelement="text" datatype="Person" multiplicity="*">
         <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" >

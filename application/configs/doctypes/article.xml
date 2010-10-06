@@ -41,7 +41,6 @@
     <field name="Licence" required="yes" formelement="Select" datatype="Licence" multiplicity="1"/>
     <field name="Language" required="yes" formelement="Select" datatype="Language" multiplicity="1"/>
     <field name="TitleMain" required="yes" formelement="Text" datatype="Title" multiplicity="4"/>
-    <field name="TitleSub" required="no" formelement="Text" datatype="Title" multiplicity="1" />
     <field name="TitleAbstract" required="no" formelement="Textarea" datatype="Title" multiplicity="4" >
         <required-if-fulltext />
     </field>
@@ -57,11 +56,7 @@
         <subfield name="PlaceOfBirth" required="no" formelement="text" datatype="Text" />
     </field>
 
-    <field name="PersonEditor" required="no" formelement="Text" datatype="Person" multiplicity="*"/>
-    <field name="PersonTranslator" required="no" formelement="Text" datatype="Person" multiplicity="*"/>
-    <field name="PersonContributor" required="no" formelement="Text" datatype="Person" multiplicity="*"/>
-    <field name="CreatingCorporation" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-    <field name="ContributingCorporation" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
+    <field name="PersonEditor" required="no" formelement="Text" datatype="Person" multiplicity="*"/>       
     <field name="PageFirst" required="no" formelement="Text" datatype="Integer" multiplicity="1"/>
     <field name="PageLast" required="no" formelement="Text" datatype="Integer" multiplicity="1"/>
     <field name="CompletedDate" required="yes" formelement="Text" datatype="Date" multiplicity="1">
@@ -69,7 +64,6 @@
     </field>
     <field name="PublishedDate" required="no" formelement="Text" datatype="Date" multiplicity="1"/>
     <field name="SubjectDdc" required="no" formelement="Text" datatype="ddc" multiplicity="5"/>
-    <field name="SubjectSwd" required="no" formelement="Text" datatype="Text" multiplicity="5"/>
     <field name="SubjectUncontrolled" required="no" formelement="Text" datatype="Text" multiplicity="5"/>
     <field name="IdentifierUrn" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="Note" required="no" formelement="Textarea" datatype="Text" multiplicity="1" />

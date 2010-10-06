@@ -43,8 +43,7 @@
     <field name="TitleMain" required="yes" formelement="Text" datatype="Title" multiplicity="4" />
     <field name="TitleAbstract" required="no" formelement="Textarea" datatype="Title" multiplicity="4" >
         <required-if-fulltext />
-    </field>
-    <field name="TitleSub" required="no" formelement="Text" datatype="Title" multiplicity="1" />
+    </field>    
     <field name="TitleParent" required="no" formelement="Text" datatype="Title" multiplicity="1" />
 
     <field name="PersonAuthor" required="no" formelement="text" datatype="Person" multiplicity="*">
@@ -57,14 +56,9 @@
         <subfield name="PlaceOfBirth" required="no" formelement="text" datatype="Text" />
     </field>
     
-    <field name="PersonContributor" required="no" formelement="Text" datatype="Person" multiplicity="*" />
-    <field name="CreatingCorporation" required="no" formelement="Text" datatype="Text" multiplicity="1" />
-    <field name="ContributingCorporation" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-    <field name="PageNumber" required="no" formelement="Text" datatype="Integer" multiplicity="1" />
-    <field name="PageFirst" required="no" formelement="Text" datatype="Integer" multiplicity="1" />
-    <field name="PageLast" required="no" formelement="Text" datatype="Integer" multiplicity="1" />
+    <field name="PersonContributor" required="no" formelement="Text" datatype="Person" multiplicity="*" />    
+    <field name="PageNumber" required="no" formelement="Text" datatype="Integer" multiplicity="1" />    
     <field name="SubjectDdc" required="no" formelement="Text" datatype="ddc" multiplicity="5"/>
-    <field name="SubjectSwd" required="no" formelement="Text" datatype="Text" multiplicity="5" />
     <field name="SubjectUncontrolled" required="no" formelement="Text" datatype="Text" multiplicity="5" />
     <field name="Institute" required="no" formelement="Select" datatype="Institute" multiplicity="1" />
     <field name="CompletedDate" required="yes" formelement="Text" datatype="Date" multiplicity="1">

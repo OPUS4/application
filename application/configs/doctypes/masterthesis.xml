@@ -40,7 +40,6 @@
     
     <field name="PersonSubmitter" required="yes" formelement="Text" datatype="Person" multiplicity="1"/>
     <field name="TitleMain" required="yes" formelement="Text" datatype="Title" multiplicity="4"/>
-    <field name="TitleSub" required="no" formelement="Text" datatype="Title" multiplicity="1"/>
     <field name="TitleAbstract" required="no" formelement="Textarea" datatype="Title" multiplicity="4">
         <required-if-fulltext/>
     </field>
@@ -67,7 +66,6 @@
     <field name="SubjectUncontrolled" required="no" formelement="Text" datatype="Text" multiplicity="5"/>
     <field name="Institute" required="no" formelement="Select" datatype="Institute" multiplicity="1"/>
     <field name="IdentifierUrn" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-    <field name="IdentifierIsbn" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="ThesisPublisher" required="yes" formelement="Select" datatype="ThesisPublisher" multiplicity="1"/>
     <field name="ThesisGrantor" required="yes" formelement="Select" datatype="ThesisGrantor" multiplicity="1"/>
     <field name="CompletedDate" required="yes" formelement="Text" datatype="Date" multiplicity="1">
