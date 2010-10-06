@@ -36,7 +36,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="hint_no_collection_Licence">
+    <tu tuid="hint_no_selection_Licence">
         <tuv xml:lang="en">
             <seg>Sorry: No licences have been found in our database.</seg>
         </tuv>
@@ -45,7 +45,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="hint_no_collection_Language">
+    <tu tuid="hint_no_selection_Language">
         <tuv xml:lang="en">
             <seg>Sorry: No languages have been found in our database.</seg>
         </tuv>
@@ -54,7 +54,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="hint_no_collection_Institute">
+    <tu tuid="hint_no_selection_Institute">
         <tuv xml:lang="en">
             <seg>Sorry: No institutes have been found in our database.</seg>
         </tuv>
@@ -63,12 +63,29 @@
         </tuv>
     </tu>
 
-    <tu tuid="hint_no_collection_projects">
+    <tu tuid="hint_no_selection_projects">
         <tuv xml:lang="en">
             <seg>Sorry: No projects have been found in our database.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Entschuldigung: Es wurden keine Projekte in unserer Datenbank gefunden.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_no_selection_ThesisPublisher">
+        <tuv xml:lang="en">
+            <seg>Sorry: No institutions have been found in our database.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Entschuldigung: Es wurden keine Institutionen in unserer Datenbank gefunden.</seg>
+        </tuv>
+    </tu>
+    <tu tuid="hint_no_selection_ThesisGrantor">
+        <tuv xml:lang="en">
+            <seg>Sorry: No institutions have been found in our database.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Entschuldigung: Es wurden keine Institutionen in unserer Datenbank gefunden.</seg>
         </tuv>
     </tu>
 

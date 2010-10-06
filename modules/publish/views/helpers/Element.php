@@ -44,6 +44,10 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
      * @return element to render in view
      */
     public function element($value, $options = null, $type=null, $name = null) {
+        $session = new Zend_Session_Namespace('Publish');
+        $log = Zend_Registry::get('Zend_Log');
+        $session->elementCount = $session->elementCount + 1;
+        $log->debug("elementCount = " . $session->elementCount . " for element " );
 
         if ($name == null && $value == null) {
             $error_message = $this->view->translate('template_error_unknown_field');

@@ -51,7 +51,7 @@ class Publish_FormController extends Controller_Action {
 
     public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array()) {
         $this->log = Zend_Registry::get('Zend_Log');
-        $this->session = new Zend_Session_Namespace('Publish');
+        $this->session = new Zend_Session_Namespace('Publish');        
 
         parent::__construct($request, $response, $invokeArgs);
     }
@@ -83,13 +83,9 @@ class Publish_FormController extends Controller_Action {
                 $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
                 $this->view->doctype = $this->session->documentType;
 
-                foreach ($data AS $k => $v)
-                    $this->log->debug("(FormController), POST: " . $k . " => " . $v);
-
                 $this->_storeFilesAndBibliographie($data, $indexForm);
 
                 $templateName = $this->_helper->documentTypes->getTemplateName($this->session->documentType);
-
                 $this->_helper->viewRenderer($templateName);
 
                 $publishForm = new Publish_Form_PublishingSecond($this->session->documentType, $this->session->documentId, $this->session->fulltext, $this->session->additionalFields, null);
@@ -156,6 +152,7 @@ class Publish_FormController extends Controller_Action {
                     $this->view->form = $form;
                     $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
                     $this->_setViewVariables($form);
+                    
 
                     return $this->render($this->session->documentType);
                 }
@@ -168,14 +165,11 @@ class Publish_FormController extends Controller_Action {
                     $this->view->header = $this->view->translate('publish_controller_changes');
 
                     $depositForm = new Publish_Form_PublishingSecond($this->session->documentType, $this->session->documentId, $this->session->fulltext, $this->session->additionalFields, $form->getValues());
-                    $action_url = $this->view->url(array('controller' => 'deposit', 'action' => 'deposit'));
-                    //$action_url = $this->view->url(array('controller' => 'collection', 'action' => 'top'));
+                    $action_url = $this->view->url(array('controller' => 'deposit', 'action' => 'deposit'));                   
                     $depositForm->setAction($action_url);
                     $depositForm->setMethod('post');
                     $depositForm->populate($form->getValues());
-
                     $depositForm->prepareCheck();
-
                     $this->view->form = $depositForm;
                 }
             }
@@ -190,6 +184,7 @@ class Publish_FormController extends Controller_Action {
      * @param <Zend_Form> $form
      */
     private function _setViewVariables($form) {
+        $this->session->elementCount = 0;
         $errors = $form->getMessages();
 
         //group fields and single fields for view placeholders
@@ -208,11 +203,13 @@ class Publish_FormController extends Controller_Action {
                 $group = $this->_buildViewDisplayGroup($displayGroup, $form);
                 $group["Name"] = $groupName;
                 $this->view->$groupName = $group;
+                $this->viewElementsCount++;
             }
 
             //single field name (for calling with helper class)
             $elementAttributes = $form->getElementAttributes($currentElement); //array
             $this->view->$currentElement = $elementAttributes;
+            $this->viewElementsCount++;
 
             $label = $currentElement . self::LABEL;
             $this->view->$label = $this->view->translate($form->getElement($currentElement)->getLabel());
@@ -431,6 +428,7 @@ class Publish_FormController extends Controller_Action {
         $form->setAction($action_url);
         $this->view->action_url = $action_url;
         $this->_setViewVariables($form);
+        $this->view->form = $form;
 
         return $this->render($this->session->documentType);
     }
