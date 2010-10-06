@@ -36,7 +36,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="hint_no_selection_Licence">
+    <tu tuid="hint_no_collection_Licence">
         <tuv xml:lang="en">
             <seg>Sorry: No licences have been found in our database.</seg>
         </tuv>
@@ -45,7 +45,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="hint_no_selection_Language">
+    <tu tuid="hint_no_collection_Language">
         <tuv xml:lang="en">
             <seg>Sorry: No languages have been found in our database.</seg>
         </tuv>
@@ -54,7 +54,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="hint_no_selection_Institute">
+    <tu tuid="hint_no_collection_Institute">
         <tuv xml:lang="en">
             <seg>Sorry: No institutes have been found in our database.</seg>
         </tuv>
@@ -63,29 +63,12 @@
         </tuv>
     </tu>
 
-    <tu tuid="hint_no_selection_projects">
+    <tu tuid="hint_no_collection_projects">
         <tuv xml:lang="en">
             <seg>Sorry: No projects have been found in our database.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Entschuldigung: Es wurden keine Projekte in unserer Datenbank gefunden.</seg>
-        </tuv>
-    </tu>
-
-    <tu tuid="hint_no_selection_ThesisPublisher">
-        <tuv xml:lang="en">
-            <seg>Sorry: No institutions have been found in our database.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Entschuldigung: Es wurden keine Institutionen in unserer Datenbank gefunden.</seg>
-        </tuv>
-    </tu>
-    <tu tuid="hint_no_selection_ThesisGrantor">
-        <tuv xml:lang="en">
-            <seg>Sorry: No institutions have been found in our database.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Entschuldigung: Es wurden keine Institutionen in unserer Datenbank gefunden.</seg>
         </tuv>
     </tu>
 
@@ -162,10 +145,10 @@
     </tu>
     <tu tuid="hint_groupPersonAuthor">
         <tuv xml:lang="en">
-            <seg>Please enter the contact information of the authors. You may add more authors by clicking on the button (or delete them).<br /> You can accept or refuse receiving emails. Your email address wil NOT be published.</seg>
+            <seg>Please enter the contact information of the authors. You may add more authors by clicking on the button (or delete them).</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie hier bitte die Kontaktdaten der Autoren ein. Sie können durch Klicken auf den Button weitere Autoren hinzufügen (oder wieder löschen). <br />  Sie können dem Empfang von Emails zustimmen oder ihn ablehnen. Ihre Email-Adresse wird NICHT veröffentlicht.</seg>
+            <seg>Tragen Sie hier bitte die Kontaktdaten der Autoren ein. Sie können durch Klicken auf den Button weitere Autoren hinzufügen (oder wieder löschen).</seg>
         </tuv>
     </tu>
 
@@ -366,7 +349,24 @@
             <seg>Tragen Sie bitte den Nachnamen des 2. Betreuers ein.</seg>
         </tuv>
     </tu>
-
+	
+	<tu tuid="hint_PersonAdvisorFirstName3">
+        <tuv xml:lang="en">
+            <seg>Please enter the first name of the 3. Advisor.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte den Vornamen des 3. Betreuers ein.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_PersonAdvisorLastName3">
+        <tuv xml:lang="en">
+            <seg>Please enter the last name of the 3. Advisor.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte den Nachnamen des 3. Betreuers ein.</seg>
+        </tuv>
+    </tu>
 	
 	<tu tuid="hint_groupPersonTranslator">
         <tuv xml:lang="en">
@@ -568,16 +568,16 @@
 
     <tu tuid="hint_groupTitleMain">
         <tuv xml:lang="en">
-            <seg>Please enter the possible main titles. You may add more titles by clicking on the button (or delete them).</seg>
+            <seg>Please enter the titles and its language. You may add more titles by clicking on the button (or delete them).</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie hier bitte die möglichen Haupttitel und ihre jeweiligen Sprachen ein. Sie können durch Klicken auf den Button weitere Titel hinzufügen (oder wieder löschen).</seg>
+            <seg>Tragen Sie hier bitte den Titel und seine Sprachen ein. Sie können durch Klicken auf den Button weitere Titel hinzufügen (oder wieder löschen).</seg>
         </tuv>
     </tu>
 
     <tu tuid="hint_TitleMain1">
         <tuv xml:lang="en">
-            <seg>Please enter the documents main title.</seg>
+            <seg>Please enter the documents title.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte den Titel des Dokuments ein.</seg>
@@ -1052,15 +1052,6 @@ Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathsci
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte das Datum ein, an dem Ihr Dokument freigeschaltet werden soll.</seg>
         </tuv>
-    </tu>
-
-    <tu tuid="hint_PersonAuthorAllowEmailContact">
-      <tuv xml:lang="en">
-        <seg>Allow users to send you an email when they have found your document?</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Dürfen Benutzer Ihnen Emails schreiben, wenn sie Ihr Dokument gefunden haben?</seg>
-      </tuv>
     </tu>
 	
     </body>
