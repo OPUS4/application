@@ -108,13 +108,13 @@ class Solrsearch_IndexController extends Controller_Action {
 
     private function isSimpleSearchRequestValid() {
         $query = $this->getRequest()->getParam('query');
-        return !is_null($query);
+        return !is_null($query) && trim($query) != '';
     }
 
     private function isAdvancedSearchRequestValid() {
         foreach (array('author', 'title', 'referee', 'abstract', 'fulltext',  'year') as $fieldname) {
             $fieldvalue = $this->getRequest()->getParam($fieldname);
-            if (!is_null($fieldvalue)) {
+            if (!is_null($fieldvalue) && trim($fieldvalue) != '') {
                 return true;
             }
         }
@@ -174,10 +174,9 @@ class Solrsearch_IndexController extends Controller_Action {
             $this->resultList = $searcher->search($this->query);
         }
         catch (Opus_SolrSearch_Exception $e) {
-            throw new Application_Exception('Solr search server is out of service.');
+            throw new Application_Exception('Sorry, an internal server error occurred.');
         }
         $this->numOfHits = $this->resultList->getNumberOfHits();
-        $this->log->debug("resultlist: $this->resultList");
     }
 
     private function setViewValues() {
