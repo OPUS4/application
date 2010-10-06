@@ -118,24 +118,24 @@ class PublicationList_Model_Publication {
                 $this->doiUrl = "http://".$config->publicationlist->doiresolver->url."/".$doc->getIdentifierDoi(0)->getValue();
             }
         }
-        /*
+       
         if ($doc->getIdentifierUrl()) {
             if (strpos($doc->getIdentifierUrl(0)->getValue(), "http:") != false) {
                 $this->pdfUrl = $doc->getIdentifierUrl(0)->getValue();
             }
         }
-        */
+        
        
         $this->imageAbstract = $baseUrl."/layouts/".$theme."/img/publicationlist/Abstract_icon.png";
-        $this->imageAbstractExternal = "../../img/Abstract_icon.png";
+        $this->imageAbstractExternal = "fileadmin/publicationlists/img/Abstract_icon.png";
         $this->imageBibtex = $baseUrl."/layouts/".$theme."/img/publicationlist/BibTeX_icon.png";
-        $this->imageBibtexExternal = "../../img/BibTeX_icon.png";
+        $this->imageBibtexExternal = "fileadmin/publicationlists/img/BibTeX_icon.png";
         $this->imagePdf = $baseUrl."/layouts/".$theme."/img/publicationlist/PDF_icon.png";
-        $this->imagePdfExternal = "../../img/PDF_icon.png";
+        $this->imagePdfExternal = "fileadmin/publicationlists/img/PDF_icon.png";
 	$this->imageDoi = $baseUrl."/layouts/".$theme."/img/publicationlist/DOI_icon.png";
-        $this->imageDoiExternal = "../../img/DOI_icon.png";
+        $this->imageDoiExternal = "fileadmin/publicationlists/img/DOI_icon.png";
         $this->imageRis = $baseUrl."/layouts/".$theme."/img/publicationlist/RIS_icon.png";
-        $this->imageRisExternal = "../../img/RIS_icon.png";
+        $this->imageRisExternal = "fileadmin/publicationlists/img/RIS_icon.png";
 
 
         foreach ($collections as $c) {
