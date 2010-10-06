@@ -49,8 +49,6 @@ class Rewritemap_ApacheTest extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testRewriteCallWithEmptyArgumentReturns403ErrorFile() {
-        $this->markTestSkipped('Needs fixing.');
-
         $rwm = new Rewritemap_Apache;
         $result =$rwm->rewriteRequest('');
         
@@ -63,8 +61,6 @@ class Rewritemap_ApacheTest extends PHPUnit_Framework_TestCase {
      * @return void
      */   
     public function testGotRequestLogMessage() {
-        $this->markTestSkipped('Needs fixing.');
-        
         $logWriter = new Zend_Log_Writer_Mock();
         $log = new Zend_Log($logWriter);
         $rwm = new Rewritemap_Apache('/files', $log);

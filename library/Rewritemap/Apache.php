@@ -114,7 +114,16 @@ class Rewritemap_Apache {
             }
             $request .= 'index.html';
         }
-        list($docId, $path) = preg_split('/\//', $request, 2);
+
+        // extract docId from path
+        $path_array = preg_split('/\//', $request , 2);
+        if (count($path_array) < 2) {
+            $this->_logger->err("Got request: $request, will send "
+                                 . $this->_targetPrefix . "/error/send403.php'");
+            return $this->_targetPrefix ."/error/send403.php";
+        }
+        list($docId, $path) = $path_array;
+
         // check input: docId should only be numbers, path should not contain ../
         if ((mb_strlen($docId) < 1) ||
                 (mb_strlen($path) < 1) ||
@@ -122,7 +131,7 @@ class Rewritemap_Apache {
                 (preg_match('/\.\.\//', $path) === 1)) {
             $this->_logger->err("Got path: $path and docId: $docId, will send "
                                  . $this->_targetPrefix . "/error/send403.php'");
-            return $this->_targetPrefix ."/error/send403.php"; // Forbidden, indipendent from authorization.
+            return $this->_targetPrefix ."/error/send403.php"; // Forbidden, independent from authorization.
         }
 
         // check for security
