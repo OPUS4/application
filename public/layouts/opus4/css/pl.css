@@ -18,4 +18,8 @@
 	white-space:nowrap;
 }
 
+#publication_lists a {
+	background: none;
+}
+
 
