@@ -111,7 +111,8 @@ class Publish_Model_Validation {
                 break;
 
             default:
-                throw new Publish_Model_OpusServerException("Error while parsing the xml document type: Found datatype " . $this->datatype . " is unknown!");
+                //else no datatype required! 
+                //throw new Publish_Model_OpusServerException("Error while parsing the xml document type: Found datatype " . $this->datatype . " is unknown!");
                 break;
         }
     }

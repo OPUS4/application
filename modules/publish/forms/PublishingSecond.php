@@ -70,21 +70,21 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         $parser = new Publish_Model_DocumenttypeParser($dom, $this);
         $this->log->debug("Parser created");
         $parser->setAdditionalFields($this->additionalFields);
-        
+
         $parser->setPostValues($this->postData);
-        
+
         if ($parser !== false)
             $parser->parse();
 
         $this->log->debug("Parsing ready");
 
         $formElements = $parser->formElements;
-        $this->addElements($formElements);        
+        $this->addElements($formElements);
 
         $this->_addSubmit('button_label_send', 'send');
 
         if (isset($this->postData))
-                $this->populate($this->postData);
+            $this->populate($this->postData);
     }
 
     /**
@@ -96,7 +96,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         $submit = $this->createElement('submit', $name);
         $submit->setLabel($label);
         $this->addElement($submit);
-    }    
+    }
 
     /**
      *
@@ -114,6 +114,10 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         $elementAttributes['desc'] = $element->getDescription();
         $elementAttributes['hint'] = 'hint_' . $elementName;
         $elementAttributes['disabled'] = $element->getAttrib('disabled');
+
+        if ($element->getType() === 'Zend_Form_Element_Checkbox') {            
+            $elementAttributes['value'] = $element->getCheckedValue();            
+        }
 
         if ($element->getType() === 'Zend_Form_Element_Select')
             $elementAttributes["options"] = $element->getMultiOptions(); //array
@@ -149,7 +153,6 @@ class Publish_Form_PublishingSecond extends Zend_Form {
             if ($element->getValue() == "" || $element->getType() == "Zend_Form_Element_Submit" || $element->getType() == "Zend_Form_Element_Hidden") {
                 $element->removeDecorator('Label');
                 $this->removeElement($name);
-
             }
             else {
                 $defaultNS->elements[$name]['name'] = $name;

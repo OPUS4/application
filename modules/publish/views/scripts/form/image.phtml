@@ -25,8 +25,8 @@ echo '<h2>' . $this->subtitle . '</h2>';
 	<?= $this->group($this->groupPersonAuthor); ?>
 	<?= $this->group($this->groupPersonEditor); ?>
 	<?= $this->group($this->groupPersonContributor); ?>
-	<?= $this->group($this->groupCreatingCorporation); ?>
-	<?= $this->group($this->groupContributingCorporation); ?>
+	<?= $this->element($this->CreatingCorporation); ?>
+	<?= $this->element($this->ContributingCorporation); ?>
 	<?= $this->group($this->groupSubjectDdc); ?>
 	<?= $this->group($this->groupSubjectSwd); ?>
 	<?= $this->group($this->groupSubjectUncontrolled); ?>

@@ -145,8 +145,7 @@ class Publish_Model_Deposit {
             return substr($dataKey, 0, $pos);
     }
 
-    private function _preparePersonObject($dataKey = null, $dataValue = null) {
-        // $this->log->debug("_preparePersonObject()");
+    private function _preparePersonObject($dataKey = null, $dataValue = null) {        
         //String can be changed here
         $first = "FirstName";
         $last = "LastName";
@@ -154,8 +153,8 @@ class Publish_Model_Deposit {
         $birthplace = "PlaceOfBirth";
         $birthdate = "DateOfBirth";
         $academic = "AcademicTitle";
+        $allowEmail = "AllowEmailContact";
 
-        $person = new Opus_Person();
 
         if (strstr($dataKey, $first))
             $type = $this->getObjectType($dataKey, $first);
@@ -170,6 +169,11 @@ class Publish_Model_Deposit {
             $this->log->debug("counter: " . $counter);
 
             if ($this->documentData[$type . $last . $counter] !== "") {
+    
+                $addFunction = 'add' . $type;
+                $person = $this->document->$addFunction(new Opus_Person());
+
+                // person model
                 $this->storeFirstName($person, $type, $first, $counter);
                 $this->storeLastName($person, $type, $last, $counter);
                 $this->storeEmail($person, $type, $email, $counter);
@@ -177,8 +181,9 @@ class Publish_Model_Deposit {
                 $this->storeAcademicTitle($person, $type, $academic, $counter);
                 $this->storeDateOfBirth($person, $type, $birthdate, $counter);
 
-                $addFunction = 'add' . $type;
-                $this->document->$addFunction($person);
+                // link-person-model
+                $this->storeEmailCheckbox($person, $type, $allowEmail, $counter);
+
                 $this->log->debug("person stored");
             }
         }
@@ -242,6 +247,31 @@ class Publish_Model_Deposit {
                     $this->log->debug("Value: " . $entry);
                     $person->setEmail($entry);
                     $this->documentData[$type . $email] = "";
+                }
+            }
+        }
+    }
+
+    private function storeEmailCheckbox($person, $type, $checkbox, $counter) {
+        if ($counter >= 1) {
+            if (isset($this->documentData[$type . $checkbox . $counter])) {
+                $entry = $this->documentData[$type . $checkbox . $counter];
+                if (!empty($entry)) {
+                    $this->log->debug("Value: " . $entry);
+                    $entry = (int) $entry;
+                    $person->setAllowEmailContact($entry);
+                    $this->documentData[$type . $checkbox . $counter] = "";
+                }
+            }
+        }
+        else {
+            if (isset($this->documentData[$type . $checkbox])) {
+                $entry = $this->documentData[$type . $checkbox];
+                if ($entry !== "") {
+                    $this->log->debug("Value: " . $entry);
+                    $entry = (int) $entry;
+                    $person->setEmail($entry);
+                    $this->documentData[$type . $checkbox] = "";
                 }
             }
         }

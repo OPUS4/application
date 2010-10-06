@@ -53,7 +53,8 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
         if ($name == null && $value == null) {
             $error_message = $this->view->translate('template_error_unknown_field');
             return "<br/><div style='width: 400px; color:red;'>" . $error_message . "</div><br/><br/>";
-        } else {
+        }
+        else {
             //TODO: überüprüfen, ob group im Namen
             $result = $this->_renderGroup($value, $options, $name);
             return $result;
@@ -70,8 +71,8 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
         if (isset($group)) {
             $fieldset = "<fieldset class='fieldset'>\n<legend class='legend'>" . $this->view->translate($group['Name']) . "</legend>\n\t";
             $fieldset .= "<table class='table' width='100%'>";
-            $fieldset .= "<a name='". $group['Name'] ."' />";
-            
+            $fieldset .= "<a name='" . $group['Name'] . "' />";
+
             //show fields
             foreach ($group["Fields"] AS $field) {
                 $fieldset .= "\n\t\t<tr>\n\t\t\t<td width='25%' align='right' valign='top'>";
@@ -94,7 +95,7 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                             $fieldset .= " title='" . $this->view->translate($field["hint"]) . "' ";
                         $fieldset .= " value='" . $field["value"] . "' />";
 
-                        if (isset ($field["desc"]))
+                        if (isset($field["desc"]))
                             $fieldset .= "<p class='description'>" . $this->view->translate($field["desc"]) . "</p>";
 
                         if ($field["req"] === 'required')
@@ -110,8 +111,8 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
 
                         if (strstr($field["id"], "1"))
                             $fieldset .= " title='" . $this->view->translate($field["hint"]) . "' ";
-                        
-                        $fieldset .=  " id='" . $field["id"] . "'>". $field["value"] . "</textarea>";
+
+                        $fieldset .= " id='" . $field["id"] . "'>" . $field["value"] . "</textarea>";
 
                         if ($field["req"] === 'required')
                             $fieldset .= $this->_getRequiredSign();
@@ -119,13 +120,13 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
 
                     case "Zend_Form_Element_Select" :
                         $fieldset .= "\n\t\t\t\t<select name='" . $field["id"] . "' id='" . $field["id"] . "'";
-                         if (strstr($field["id"], "1"))
+                        if (strstr($field["id"], "1"))
                             $fieldset .= " title='" . $this->view->translate($field["hint"]) . "'";
-                         $fieldset .= ">\n\t\t\t\t\t";
-                         
+                        $fieldset .= ">\n\t\t\t\t\t";
+
                         foreach ($field["options"] AS $key => $option) {
                             $fieldset .= "<option value='" . $key . "' label='" . $option . "'";
-                                                       
+
                             if ($option === $field["value"] || $key === $field["value"])
                                 $fieldset .= " selected='selected'>";
                             else
@@ -135,6 +136,16 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                         $fieldset .= "</select>";
                         if ($field["req"] === 'required')
                             $fieldset .= $this->_getRequiredSign();
+                        break;
+
+                    case 'Zend_Form_Element_Checkbox' :
+                        $fieldset .= "<input type='hidden' name='" . $field['id'] . "' value='0' />";
+                        $fieldset .= "\n\t\t\t\t<input type='checkbox' name='" . $field['id'] . "' id='". $field['id'] ."' ";
+                        $fieldset .= "title='". $this->view->translate($field['hint']) ."' value='". $field['value'] ."' ";
+                        if ($field['value'] === '1')
+                            $fieldset .= " checked='checked' />";
+                        else
+                            $fieldset .= " />";
                         break;
                         
                     default:

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -31,11 +32,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
-/**
- * Description of RenderForm
- *
- */
 class View_Helper_Element extends Zend_View_Helper_Abstract {
 
     public $view;
@@ -52,11 +48,13 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
         if ($name == null && $value == null) {
             $error_message = $this->view->translate('template_error_unknown_field');
             return "<br/><div style='width: 400px; color:red;'>" . $error_message . "</div><br/><br/>";
-        } else {
+        }
+        else {
             $method = "_render" . $type;
             if (method_exists($this, $method) === true) {
                 $result = $this->$method($value, $options, $name);
-            } else {
+            }
+            else {
                 $result = $this->_renderElement($value, $options, $name);
             }
             return $result;
@@ -144,6 +142,16 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
                         $elementfield .= "\n\t\t\t<li>" . $err . "</li>";
                     $elementfield .= "\n\t\t</ul>";
                 }
+                break;
+
+            case 'Zend_Form_Element_Checkbox' :
+                $elementfield .= "<input type='hidden' name='" . $element['id'] . "' value='0' />";
+                $elementfield .= "\n\t\t\t\t<input type='checkbox' name='" . $element['id'] . "' id='" . $element['id'] . "' ";
+                $elementfield .= "title='" . $this->view->translate($element['hint']) . "' value='" . $element['value'] . "' ";
+                if ($element['value'] === '1')
+                    $elementfield .= " checked='checked' />";
+                else
+                    $elementfield .= " />";
                 break;
         }
         $elementfield .= "</td>\n\t</tr>\n</table></fieldset>\n\n";
