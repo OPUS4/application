@@ -111,7 +111,6 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
             $this->dispatch('/solrsearch/index/invalidsearchterm/' . $searchtypeParam);
             $this->assertResponseCode(200);
             $responseBody = $this->getResponse()->getBody();
-            echo $responseBody;
             $this->assertContains('<div class="invalidsearchterm">', $responseBody);
         }
     }
