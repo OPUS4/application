@@ -149,16 +149,20 @@ class Admin_Form_Role extends Zend_Form {
         $privileges = array();
 
         foreach (self::$basicPrivileges as $name) {
-            $value = $postData['privilege' . $name];
-            if ($value) {
-                $privileges[] = $name;
+            if (isset($postData['privilege' . $name])) {
+                $value = $postData['privilege' . $name];
+                if ($value) {
+                    $privileges[] = $name;
+                }
             }
         }
 
         foreach (self::$serverStates as $state) {
-            $value = $postData['metadata' . $state];
-            if ($value) {
-                $privileges[] = 'readMetadata.' . $state;
+            if (isset($postData['metadata' . $state])) {
+                $value = $postData['metadata' . $state];
+                if ($value) {
+                    $privileges[] = 'readMetadata.' . $state;
+                }
             }
         }
 
