@@ -40,6 +40,7 @@
 class View_Helper_Group extends Zend_View_Helper_Abstract {
 
     public $view;
+    public $session;
 
     /**
      * method to render specific elements of an form
@@ -49,10 +50,10 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
      * @return element to render in view
      */
     public function group($value, $options = null, $name = null) {
-        $session = new Zend_Session_Namespace('Publish');
+        $this->session = new Zend_Session_Namespace('Publish');
         $log = Zend_Registry::get('Zend_Log');
-        $session->elementCount = $session->elementCount + 1;
-        $log->debug("elementCount = " . $session->elementCount . " for group" );
+        $this->session->elementCount = $this->session->elementCount + 1;
+        $log->debug("elementCount = " . $this->session->elementCount . " for group" );
 
         if ($name == null && $value == null) {
             $error_message = $this->view->translate('template_error_unknown_field');
@@ -73,7 +74,9 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
         $fieldset = "";
         $disable = false;
         if (isset($group)) {
-            $fieldset = "<fieldset class='fieldset'>\n<legend class='legend'>" . $this->view->translate($group['Name']) . "</legend>\n\t";
+            if ($this->session->currentAnchor === $group['Name'])
+                    $fieldset = "<a name='current' />";
+            $fieldset .= "<fieldset class='fieldset'>\n<legend class='legend'>" . $this->view->translate($group['Name']) . "</legend>\n\t";
             $fieldset .= "<table class='table' width='100%'>";
             $fieldset .= "<a name='" . $group['Name'] . "' />";
 

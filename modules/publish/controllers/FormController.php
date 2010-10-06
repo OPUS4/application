@@ -89,7 +89,7 @@ class Publish_FormController extends Controller_Action {
                 $this->_helper->viewRenderer($templateName);
 
                 $publishForm = new Publish_Form_PublishingSecond($this->session->documentType, $this->session->documentId, $this->session->fulltext, $this->session->additionalFields, null);
-                $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check'));
+                $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check')) . '#current';
                 $publishForm->setAction($action_url);
                 $publishForm->setMethod('post');
                 $this->_setViewVariables($publishForm);
@@ -394,6 +394,7 @@ class Publish_FormController extends Controller_Action {
      * @return <View>
      */
     private function _getExtendedForm($form, $postData=null, $reload=true) {
+        $this->session->currentAnchor = "";
         if ($reload === true) {
             //find out which button was pressed
             $pressedButtonName = $this->_getPressedButton($form);
@@ -408,6 +409,7 @@ class Publish_FormController extends Controller_Action {
             }
 
             $currentNumber = $this->session->additionalFields[$fieldName];
+            $this->session->currentAnchor = 'group' . $fieldName;
             $this->log->debug("old current number: " . $currentNumber);
             if ($workflow == "add") {
                 //show one more fields
@@ -424,7 +426,7 @@ class Publish_FormController extends Controller_Action {
         }
 
         $form = new Publish_Form_PublishingSecond($this->session->documentType, $this->session->documentId, $this->session->fulltext, $this->session->additionalFields, $postData);
-        $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check'));
+        $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check')) . '#current';
         $form->setAction($action_url);
         $this->view->action_url = $action_url;
         $this->_setViewVariables($form);
