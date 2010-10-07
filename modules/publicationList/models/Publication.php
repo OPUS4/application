@@ -38,8 +38,13 @@ class PublicationList_Model_Publication {
     private $bibtexUrl;
     private $bibtexUrlExternal;
     private $completedYear;
-    private $editors = array();
     private $doiUrl;
+    private $enrichmentAddress;
+    private $enrichmentInstitution;
+    private $enrichmentMonth;
+    private $enrichmentSchool;
+    private $enrichmentType;
+    private $editors = array();
     private $imageAbstract;
     private $imageAbstractExternal;
     private $imageBibtex;
@@ -58,11 +63,14 @@ class PublicationList_Model_Publication {
     private $pdfUrl;
     private $pdfUrlExternal;
     private $publishedYear;
+    private $publisherName;
+    private $publisherPlace;
     private $risUrl;
     private $risUrlExternal;
     private $titleAbstract;
     private $titleMain;
     private $titleParent;
+    private $titleSub;
     private $volume;
     
     public function __construct($id, $externalUrl = null) {
@@ -100,8 +108,8 @@ class PublicationList_Model_Publication {
              $this->addAuthor($author);
         }
 
-        $this->bibtexUrl = $baseUrl."/citationExport/index/index/output/bibtex/docId/".$doc->getId();
-        $this->bibtexUrlExternal = "http://".$hostname.$this->bibtexUrl."/theme/plain";
+        $this->bibtexUrl = $baseUrl."/citationExport/index/download/output/bibtex/docId/".$doc->getId();
+        //$this->bibtexUrlExternal = "http://".$hostname.$this->bibtexUrl."/theme/plain";
 
         if ($doc->getCompletedYear() && ($doc->getCompletedYear() !== "0000") && ($doc->getCompletedYear() !== $doc->getPublishedYear())) {
             $this->completedYear = $doc->getCompletedYear();
@@ -120,24 +128,22 @@ class PublicationList_Model_Publication {
         }
        
         if ($doc->getIdentifierUrl()) {
-            if (strpos($doc->getIdentifierUrl(0)->getValue(), "http:") != false) {
-                $this->pdfUrl = $doc->getIdentifierUrl(0)->getValue();
-            }
+            $this->pdfUrl = $doc->getIdentifierUrl(0)->getValue();
         }
         
        
-        $this->imageAbstract = $baseUrl."/layouts/".$theme."/img/pl/Abstract_icon.png";
-        $this->imageAbstractExternal = "fileadmin/publicationlists/img/Abstract_icon.png";
-        $this->imageBibtex = $baseUrl."/layouts/".$theme."/img/pl/BibTeX_icon.png";
-        $this->imageBibtexExternal = "fileadmin/publicationlists/img/BibTeX_icon.png";
-        $this->imagePdf = $baseUrl."/layouts/".$theme."/img/pl/PDF_icon.png";
-        $this->imagePdfExternal = "fileadmin/publicationlists/img/PDF_icon.png";
-	$this->imageDoi = $baseUrl."/layouts/".$theme."/img/pl/DOI_icon.png";
-        $this->imageDoiExternal = "fileadmin/publicationlists/img/DOI_icon.png";
-        $this->imageRis = $baseUrl."/layouts/".$theme."/img/pl/RIS_icon.png";
-        $this->imageRisExternal = "fileadmin/publicationlists/img/RIS_icon.png";
+        //$this->imageAbstract = $baseUrl."/layouts/".$theme."/img/pl/Abstract_icon.png";
+        //$this->imageAbstractExternal = "fileadmin/publicationlists/img/Abstract_icon.png";
+        $this->imageBibtex = $baseUrl."/layouts/".$theme."/img/pl/bibtex_icon.png";
+        $this->imageBibtexExternal = "fileadmin/publicationlists/img/bibtex_icon.png";
+        $this->imagePdf = $baseUrl."/layouts/".$theme."/img/pl/pdf_icon.png";
+        $this->imagePdfExternal = "fileadmin/publicationlists/img/pdf_icon.png";
+	$this->imageDoi = $baseUrl."/layouts/".$theme."/img/pl/doi_icon.png";
+        $this->imageDoiExternal = "fileadmin/publicationlists/img/doi_icon.png";
+        $this->imageRis = $baseUrl."/layouts/".$theme."/img/pl/ris_icon.png";
+        $this->imageRisExternal = "fileadmin/publicationlists/img/ris_icon.png";
 
-
+        /*
         foreach ($collections as $c) {
             $roleId = $c->getRoleId();
             $role = new Opus_CollectionRole($roleId);
@@ -147,6 +153,8 @@ class PublicationList_Model_Publication {
                 $this->pdfUrlExternal = "http://".$hostname.$this->pdfUrl."/theme/plain";
             }
         }
+         *
+         */
         
         if ($doc->getIssue()) {
             $this->issue = $doc->getIssue();
@@ -154,11 +162,29 @@ class PublicationList_Model_Publication {
 
         if ($doc->getNote()) {
             $note = $doc->getNote(0)->getMessage();
-            if (strcmp($note, 'printed version not available') === 0) { 
+            //if (strcmp($note, 'printed version not available') === 0) {
                 /* TODO: muss im Import abgefangen werden */
                 $note = str_replace("(","", $note);
                 $note = str_replace(")","", $note);
                 $this->note = $note;
+            //}
+        }
+
+        foreach ($doc->getEnrichment() as $enrichment) {
+            if ($enrichment->getKeyName() === 'address') {
+                $this->enrichmentAddress = $enrichment->getValue();
+            }
+            if ($enrichment->getKeyName() === 'institution') {
+                $this->enrichmentInstitution = $enrichment->getValue();
+            }
+            if ($enrichment->getKeyName() === 'month') {
+                $this->enrichmentMonth = $enrichment->getValue();
+            }
+            if ($enrichment->getKeyName() === 'school') {
+                $this->enrichmentSchool = $enrichment->getValue();
+            }
+            if ($enrichment->getKeyName() === 'type') {
+                $this->enrichmentType = $enrichment->getValue();
             }
         }
 
@@ -170,8 +196,17 @@ class PublicationList_Model_Publication {
             $this->pageLast = $doc->getPageLast();
         }
 
-        $this->risUrl = $baseUrl."/citationExport/index/index/output/ris/docId/".$doc->getId();
-        $this->risUrlExternal = "http://".$hostname.$this->risUrl."/theme/plain";
+        if ($doc->getPublisherName()) {
+            $this->publisherName = $doc->getPublisherName();
+        }
+
+        if ($doc->getPublisherPlace()) {
+            $this->publisherPlace = $doc->getPublisherPlace();
+        }
+
+
+        $this->risUrl = $baseUrl."/citationExport/index/download/output/ris/docId/".$doc->getId();
+        //$this->risUrlExternal = "http://".$hostname.$this->risUrl."/theme/plain";
 
 
         if ($doc->getPublishedYear()) {
@@ -184,7 +219,11 @@ class PublicationList_Model_Publication {
         
         if ($doc->getTitleParent()) {
             $this->titleParent = $doc->getTitleParent(0)->getValue();
-        }        
+        }
+
+        if ($doc->getTitleSub()) {
+            $this->titleSub = $doc->getTitleSub(0)->getValue();
+        }
 
         if ($doc->getVolume()) {
             $this->volume = $doc->getVolume();
@@ -271,6 +310,27 @@ class PublicationList_Model_Publication {
         return $this->editors;
     }
 
+    public function getEnrichmentAddress() {
+        return $this->enrichmentAddress;
+    }
+
+    public function getEnrichmentInstitution() {
+        return $this->enrichmentInstitution;
+    }
+
+    public function getEnrichmentMonth() {
+        return $this->enrichmentMonth;
+    }
+
+    public function getEnrichmentSchool() {
+        return $this->enrichmentSchool;
+    }
+
+    public function getEnrichmentType() {
+        return $this->enrichmentType;
+    }
+
+
     public function getImageAbstract() {
         return $this->imageAbstract;
     }
@@ -343,6 +403,14 @@ class PublicationList_Model_Publication {
         return $this->publishedYear;
     }
 
+    public function getPublisherName() {
+        return $this->publisherName;
+    }
+    
+    public function getPublisherPlace() {
+        return $this->publisherPlace;
+    }
+
     public function getRisUrl() {
         return $this->risUrl;
     }
@@ -350,7 +418,6 @@ class PublicationList_Model_Publication {
     public function getRisUrlExternal() {
         return $this->risUrlExternal;
     }
-
     
     public function getTitleMain() {
         return $this->titleMain;
@@ -358,6 +425,10 @@ class PublicationList_Model_Publication {
 
     public function getTitleParent() {
         return $this->titleParent;
+    }
+
+    public function getTitleSub() {
+        return $this->titleSub;
     }
 
     public function getVolume() {

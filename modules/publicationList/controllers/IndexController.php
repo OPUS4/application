@@ -67,6 +67,7 @@ class PublicationList_IndexController extends Controller_Action {
         $publicationSite = new PublicationList_Model_PublicationSite();
 
         $this->view->title = $coll->getName();
+        $this->view->name = $publicationSite->getNameGerman();
 
 
         foreach ($doc_ids as $id) {
@@ -74,6 +75,7 @@ class PublicationList_IndexController extends Controller_Action {
              if (isset($config->publicationlist->external->baseurl)) {
                  if ($this->getRequest()->getParam("lang") === 'eng') {
                     $publication = new PublicationList_Model_Publication($id, $config->publicationlist->external->baseurl->eng);
+                    $this->view->name = $publicationSite->getNameEnglish();
                  }
                  else {
                     $publication = new PublicationList_Model_Publication($id, $config->publicationlist->external->baseurl->de);
@@ -98,10 +100,10 @@ class PublicationList_IndexController extends Controller_Action {
             }
 
             if ($this->getRequest()->getParam("theme") === 'plain') {
-                $publication->setBibtexUrl($publication->getBibtexUrlExternal());
-                $publication->setRisUrl($publication->getRisUrlExternal());
+                //$publication->setBibtexUrl($publication->getBibtexUrlExternal());
+                //$publication->setRisUrl($publication->getRisUrlExternal());
 
-                $publication->setImageAbstract($publication->getImageAbstractExternal());
+                //$publication->setImageAbstract($publication->getImageAbstractExternal());
                 $publication->setImageBibtex($publication->getImageBibtexExternal());
                 $publication->setImageDoi($publication->getImageDoiExternal());
                 $publication->setImagePdf($publication->getImagePdfExternal());
@@ -115,6 +117,7 @@ class PublicationList_IndexController extends Controller_Action {
             }
         }
         $publicationSite->orderSingleLists();
+
         $this->view->results = $publicationSite->getSingleList();
     }
 

@@ -35,6 +35,9 @@
 class PublicationList_Model_PublicationSite {
 
     private $singleList = array();
+    private $name;
+    private $nameGerman = "Publikationen";
+    private $nameEnglish = "Publications";
 
     public function __construct() {
     }
@@ -46,6 +49,14 @@ class PublicationList_Model_PublicationSite {
 
     public function getSingleList() {
         return $this->singleList;
+    }
+
+    private function getNameGerman() {
+        return $this->nameGerman;
+    }
+
+    private function getNameEnglish() {
+        return $this->nameEnglish;
     }
 
     public function orderSingleLists() {
