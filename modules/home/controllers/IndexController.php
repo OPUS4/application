@@ -109,24 +109,34 @@ class Home_IndexController extends Controller_Action {
 
 
     public function helpAction() {
-        $content = $this->getRequest()->getParam('content');
-        if (!is_null($content)) {
-            if ($content === 'contact') {
-                $this->_redirectToAndExit('contact');
-            }
-            if ($content === 'imprint') {
-                $this->_redirectToAndExit('imprint');
-            }
+        $config = Zend_Registry::get('Zend_Config');
+        if (isset($config->help->separate)) {
+            $this->view->separate = (boolean) $config->help->separate;
+        }
+        else {
+            $this->view->separate = false;
+        }
 
-            $translation = $this->view->translate('help_content_' . $content);            
-            if (file_exists($this->view->getScriptPath('') . $translation)) {
-                $this->view->contenttitle = 'help_title_' . $content;
-                $this->view->content = file_get_contents($this->view->getScriptPath('') . $translation);
-            }
-            elseif ($translation !== 'help_content_' . $content) {
-                $this->view->contenttitle = 'help_title_' . $content;
-                $this->view->content = $translation;
-            }
+        if ($this->view->separate) {
+            $content = $this->getRequest()->getParam('content');
+            if (!is_null($content)) {
+                if ($content === 'contact') {
+                    $this->_redirectToAndExit('contact');
+                }
+                if ($content === 'imprint') {
+                    $this->_redirectToAndExit('imprint');
+                }
+
+                $translation = $this->view->translate('help_content_' . $content);
+                if (file_exists($this->view->getScriptPath('') . $translation)) {
+                    $this->view->contenttitle = 'help_title_' . $content;
+                    $this->view->content = file_get_contents($this->view->getScriptPath('') . $translation);
+                }
+                elseif ($translation !== 'help_content_' . $content) {
+                    $this->view->contenttitle = 'help_title_' . $content;
+                    $this->view->content = $translation;
+                }
+            }            
         }
 
         $this->_helper->mainMenu('help');

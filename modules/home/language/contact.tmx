@@ -21,13 +21,6 @@
           </tuv>
         </tu>
 
-        <tu tuid="home_index_contact_content">
-          <tuv xml:lang="en">
-            <seg>Add your contact data.</seg>
-          </tuv>
-          <tuv xml:lang="de">
-            <seg>Tragen Sie Ihre Kontaktinformationen ein.</seg>
-          </tuv>
-        </tu>
+        <!-- to edit help_content_contact open help.tmx -->
     </body>
 </tmx>

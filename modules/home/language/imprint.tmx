@@ -21,13 +21,6 @@
           </tuv>
         </tu>
 
-        <tu tuid="home_index_imprint_content">
-          <tuv xml:lang="en">
-            <seg>Add your imprint.</seg>
-          </tuv>
-          <tuv xml:lang="de">
-            <seg>Tragen Sie das Impressum ein.</seg>
-          </tuv>
-        </tu>
+        <!-- to edit help_content_imprint open help.tmx -->
     </body>
 </tmx>

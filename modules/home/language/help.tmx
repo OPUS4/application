@@ -185,7 +185,14 @@
                 <seg>An wen kann ich mich bei Fragen wenden?</seg>
             </tuv>
         </tu>
-        <!-- to edit help_content_contact open contact.tmx -->
+        <tu tuid="help_content_contact">
+          <tuv xml:lang="en">
+            <seg>Add your contact data.</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Tragen Sie Ihre Kontaktinformationen ein.</seg>
+          </tuv>
+        </tu>
 
 
         <tu tuid="help_title_free">
@@ -522,7 +529,15 @@
                 <seg>Impressum</seg>
             </tuv>
         </tu>
-        <!-- to edit help_content_imprint open imprint.tmx -->
+        <tu tuid="help_content_imprint">
+          <tuv xml:lang="en">
+            <seg>Add your imprint.</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Tragen Sie das Impressum ein.</seg>
+          </tuv>
+        </tu>
+
 
         <tu tuid="help_title_termsofuse">
             <tuv xml:lang="en">
