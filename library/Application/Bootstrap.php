@@ -109,6 +109,10 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
          */
         $oaiPlugin = new Controller_Plugin_DnbXmlPostprocess();
         $frontController->registerPlugin($oaiPlugin);
+
+        // Get Name of Module, Controller and Action for Use in View
+        $viewSetup = new Controller_Plugin_ViewSetup();
+        $frontController->registerPlugin($viewSetup);
     }
 
     /**
