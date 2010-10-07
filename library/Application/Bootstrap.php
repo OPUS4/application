@@ -321,7 +321,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      *
      * @return void
      */
-    protected function _initOpusNavigation() {
+    protected function _initNavigation() {
         $this->bootstrap('Logging', 'View');
 
         $log = $this->getResource('Logging');
@@ -358,7 +358,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * @return Zend_Navigation
      */
     protected function _initMainMenu() {
-        $this->bootstrap('Logging', 'View', 'OpusNavigation');
+        $this->bootstrap('Logging', 'View', 'Navigation');
 
         $config = $this->getResource('configuration');
 
