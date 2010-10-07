@@ -1,28 +1,15 @@
 <?xml version="1.0" ?>
 <!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
-
 <tmx version="1.4">
-
     <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
     </header>
-
     <body>
-
         <tu tuid="browsing_title_doctype">
             <tuv xml:lang="en">
                 <seg>Document Type</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>Dokumenttyp</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="solrsearch_title_all_docs">
-            <tuv xml:lang="en">
-                <seg>All documents</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Alle Dokumente</seg>
             </tuv>
         </tu>
 
@@ -419,33 +406,6 @@
             </tuv>
             <tuv xml:lang="de">
                 <seg>Institut</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="solrsearch_title_simple">
-            <tuv xml:lang="en">
-                <seg>Search</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Suche</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="solrsearch_title_advanced">
-            <tuv xml:lang="en">
-                <seg>Advanced Search</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Erweiterte Suche</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="solrsearch_searchaction">
-            <tuv xml:lang="en">
-                <seg>Search</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Suchen</seg>
             </tuv>
         </tu>
 

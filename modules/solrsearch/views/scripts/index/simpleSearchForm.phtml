@@ -52,9 +52,9 @@ if ($this->jQueryEnabled()) {
                 <span class="form-submit-wrapper"><input type="submit" id="edit-submit-search" class="form-submit" value="<?= $this->translate('solrsearch_searchaction'); ?>" /></span>
             </div>
         </fieldset>
-        <p class="footer-link">
+        <p class="footer-link">            
             <a class="link" href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'advanced'),null,true); ?>"><?= $this->translate('solrsearch_title_advanced'); ?></a>
-            <a class="link" href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'all'),null,true); ?>"><?= $this->translate('solrsearch_title_all_docs'); ?></a>
+            <a class="link" href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'all'),null,true); ?>"><?= $this->translate('solrsearch_title_alldocs'); ?></a>
         </p>
     </div>
         
