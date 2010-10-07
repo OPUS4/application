@@ -74,6 +74,14 @@ class Review_Model_DocumentAdapter {
     }
 
     /**
+     * Returns the Opus_Document object for this adapter.
+     * @return Opus_Document
+     */
+    public function getDocument() {
+        return $this->document;
+    }
+
+    /**
      * Returns document identifier.
      * @return int
      */
