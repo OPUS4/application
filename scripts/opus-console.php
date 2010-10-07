@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -35,65 +36,22 @@
  * @version     $Id$
  */
 
-// basic bootstrapping
+// Bootstrapping
 require_once dirname(__FILE__) . '/common/bootstrap.php';
 
-/**
- * Bootstraps and runs a console application.
- *
- * @category    Application
- */
-class OpusConsole {
-
-    // using member variables to avoid namespace polution
-    public $snippet_files;
-    private $_snippet_file;
-
-    /**
-     * Starts an Opus console.
-     *
-     * @return void
-     */
-    public function run() {
-    
-        $config = Zend_Registry::get('Zend_Config');
-        if ($config->security !== '0') {
-            // setup realm 
-            $realm = Opus_Security_Realm::getInstance();
-        }
-
-        if (false === is_null(ini_get('register_argc_argv')) 
-            && ini_get('register_argc_argv') == 1
-            && $_SERVER['argc'] > 1)
-        {
-            $this->snippet_files = $_SERVER['argv'];
-            // removes script name
-            array_shift($this->snippet_files);
-            foreach ($this->snippet_files as $this->_snippet_file) {
-                if (true === file_exists($this->_snippet_file)) {
-                    try {
-                        include_once($this->_snippet_file);
-                    } catch (Exception $e) {
-                        echo 'Caught exception ' . get_class($e) . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString() . "\n";
-                        // exit here, so nobody thinks that the script was loaded.
-                        exit(1);
-                    }
-                }
-            }
-        }
-
-        while (1) {
-            $input = readline('opus> ');
-            readline_add_history($input);
-            try {
-                eval($input);
-            } catch (Exception $e) {
-                echo 'Caught exception ' . get_class($e) . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString() . "\n";
-            }
-        }
-    }
+$config = Zend_Registry::get('Zend_Config');
+if ($config->security !== '0') {
+    // setup realm
+    $realm = Opus_Security_Realm::getInstance();
 }
 
-// Start console
-$console = new OpusConsole();
-$console->run();
+while (1) {
+    $input = readline('opus> ');
+    readline_add_history($input);
+    try {
+        eval($input);
+    }
+    catch (Exception $e) {
+        echo 'Caught exception ' . get_class($e) . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString() . "\n";
+    }
+}
