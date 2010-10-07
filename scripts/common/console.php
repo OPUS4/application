@@ -36,7 +36,19 @@
  * @version     $Id$
  */
 
-// Bootstrapping
-require_once dirname(__FILE__) . '/common/bootstrap.php';
+$config = Zend_Registry::get('Zend_Config');
+if ($config->security !== '0') {
+    // setup realm
+    $realm = Opus_Security_Realm::getInstance();
+}
 
-require_once dirname(__FILE__) . '/common/console.php';
+while (1) {
+    $input = readline('opus> ');
+    readline_add_history($input);
+    try {
+        eval($input);
+    }
+    catch (Exception $e) {
+        echo 'Caught exception ' . get_class($e) . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString() . "\n";
+    }
+}

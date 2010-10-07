@@ -223,3 +223,4 @@ $ddc->setValue('Allgemeines, Wissenschaft')->setLanguage('deu')->setExternalKey(
 
 $doc->store();
 print("Document stored. ID: " . $doc->getId() . "\n");
+
