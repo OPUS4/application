@@ -37,7 +37,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://schemas.opus.org/documenttype https://svn.zib.de/opus4dev/framework/trunk/library/Opus/Document/documenttype.xsd">
 	
-    <field name="PersonAuthor" required="no" formelement="text" datatype="Person" multiplicity="*">
+    <field name="PersonAuthor" required="yes" formelement="text" datatype="Person" multiplicity="*">
         <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" >
             <default value="Dr." edit="yes" public="yes"  />
         </subfield>
@@ -47,7 +47,9 @@
         <subfield name="PlaceOfBirth" required="no" formelement="text" datatype="Text" />
     </field>
 
-    <field name="Language" required="yes" formelement="select"  datatype="Language" multiplicity="1"/>	
+    <field name="Language" required="yes" formelement="select"  datatype="Language" multiplicity="1">
+        <default value="eng" edit="yes" public="yes" />F
+    </field>
     <field name="Institute" formelement="select" required="yes"  datatype="Institute" multiplicity="*" />
     <field name="TitleMain" formelement="text" required="yes"  datatype="Title" multiplicity="4" />
     <field name="TitleAbstract" required="no" formelement="textarea"  datatype="Title" multiplicity="4">
@@ -58,7 +60,7 @@
     </field>
     <field name="Project" required="no" formelement="select" datatype="Project" multiplicity="*" />
     <field name="SubjectMSC" required="yes" formelement="text"  datatype="msc" multiplicity="5" />
-    <field name="SubjectUncontrolled" required="no" formelement="text"  datatype="Text" multiplicity="5" />	
+    <field name="SubjectUncontrolled" required="no" formelement="text"  datatype="Text" multiplicity="5" />
     <field name="Note" required="no" formelement="textarea"  datatype="Text" multiplicity="1" />
 		
 </documenttype>
