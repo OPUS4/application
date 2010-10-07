@@ -53,8 +53,8 @@
 
 <h2><?= htmlspecialchars($this->title) ?></h2>
 
-<div id="children">
-    <ul>
+<div class="content">
+    <ul class="nav browsing">
     <?php foreach ($this->children as $child) : ?>
         <?php $documentCount = $child->getNumSubtreeEntries(); ?>
             <?php if ($documentCount === 0) : ?>
