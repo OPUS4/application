@@ -44,16 +44,18 @@ if($this->jQueryEnabled()) {
 <h2><?= htmlspecialchars($this->translate($this->specialTitle)) ?></h2>
 <?php endif ?>
 <div class="content">
-    <?php
-        if ($this->searchType === 'simple' && !$this->browsing)
-            include('simpleSearchForm.phtml');
-        else if(($this->searchType === 'advanced' || $this->searchType === 'authorsearch') && !$this->browsing)
-            include('advancedSearchForm.phtml');
-        else if($this->searchType === 'latest')
-            include('latestDocsForm.phtml');
-        else if ($this->searchType === 'collection')
-            include('browsecollection.phtml');
-    ?>
+    <div class="form-wrapper">
+        <?php
+         if ($this->searchType === 'simple' && !$this->browsing)
+             include('simpleSearchForm.phtml');
+            else if(($this->searchType === 'advanced' || $this->searchType === 'authorsearch') && !$this->browsing)
+             include('advancedSearchForm.phtml');
+            else if($this->searchType === 'latest')
+                include('latestDocsForm.phtml');
+            else if ($this->searchType === 'collection')
+                include('browsecollection.phtml');
+        ?>
+    </div>
 </div>
 <div class="content">
     <?php
