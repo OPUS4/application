@@ -11,13 +11,15 @@
 .opus.solrsearch h2{
 	margin-bottom: 0;
 }
-.solrsearch #form-search{
+.solrsearch #form-search,
+.solrsearch_search .form-wrapper{
 	/*margin: 3em 0 0;*/
 	background-color: #f3f6f8;
 	margin: 0 0 1em;
-	padding: 15px 0 0;
-	border: solid #e2e6e9;
-	border-width: 0 0 0px;
+	padding: 15px 220px;
+}
+.solrsearch_advanced fieldset{
+	padding: 15px 245px;
 }
 /* HTML elements
 ------------------------------------------------------------ */
@@ -34,13 +36,21 @@ h1,
 	margin: 0 0 0.8em;
 }
 .opus h2{
-	color: #333;
+	/*color: #333;*/
+	color: #26517d;
 	background-color: #f3f6f8;
 	padding: 4px 10px;
 	border: solid #e2e6e9;
 	border-width: 0px 0 0px;
 	font-weight: normal;
 	font-size: 1.7em;
+}
+.opus h3{
+	color: #333;
+	font-size: 1.2em;
+	text-transform: uppercase;
+	font-weight: normal;
+	padding: 0 10px 4px;
 }
 a{
 	color: #26517D;
@@ -64,17 +74,15 @@ a img{
 .opus fieldset{
 	border: #d4dde6 solid;
 	border-width: 1px 0 0;
-	padding: 0 10px 10px;
+	padding: 10px 10px 10px;
 	margin: 0 1em 1em;
 }
 .opus legend{
 	color: #26517d;
-	min-width: 130px;
-	padding: 17px 15px 22px;
-	text-align: center;
+	padding: 0 0 4px;
 	text-transform: uppercase;
 	font-size: 0.9em;
-	background: url(../img/theme/bg_legend_white.jpg) no-repeat bottom center;
+	border-bottom: 4px solid #e2e6e9;
 }
 /* IDs and Classes
 --------------------------------------------------------------------- */
@@ -309,9 +317,6 @@ body > #top-header{
 	padding: 0 0 0 245px;
 /*margin: 0 0 0 245px;*/
 }
-#searchbar{
-	background-color: #f4f6f8;
-}
 .breadcrumb_results{
 	float: left;
 	width: 100%;
@@ -331,14 +336,17 @@ body > #top-header{
 #facets h3{
 	padding: 0 10px;
 	font-size: 14px;
+	text-transform: none;
 }
-.breadcrumb_results h3,
-.breadcrumb_results .info_small,
-.breadcrumb_results .paginationControl li{
+.opus .breadcrumb_results h3,
+.opus .breadcrumb_results .info_small,
+.opus .breadcrumb_results .paginationControl li{
 	float: left;
 	margin: 0;
 	font-size: 14px;
 	font-weight: normal;
+	color: #333;
+	text-transform: none;
 }
 .breadcrumb_results h3{
 	padding: 0 20px 0 10px;
@@ -416,12 +424,16 @@ body > #top-header{
 }
 /* Browsing */
 
+.nav.help li,
+.nav.browsing li{
+	background: url(../img/theme/list-arrow.gif) no-repeat;
+}
 .nav.browsing li{
 	font-size: 1.1em;
 	padding: 0.6em 25px;
 	border: solid #E2E6E9;
 	border-width: 0 0 1px;
-	background: url(../img/theme/list-arrow.gif) no-repeat 10px 1em;
+	background-position: 10px 1em;
 }
 .nav.browsing li.last{
 	border: none;
@@ -434,6 +446,31 @@ body > #top-header{
 }
 .nav.browsing .rss img{
 	vertical-align: bottom;
+}
+/* Help */
+.opus .section h3{
+	border-bottom: 4px solid #e2e6e9;
+}
+.nav.help li{
+	padding: 0.3em 25px;
+	background-position: 10px 0.7em;
+}
+.section.answers{
+	padding: 25px 0 0;
+}
+.section.answers dt{
+	color: #333;
+	font-weight: normal;
+	font-size: 1.2em;
+	padding: 10px 0 4px;
+}
+.section.answers dd{
+	line-height: 1.4em;
+	/*margin: 6px 0 0 0;*/
+}
+.backlink{
+	background: url(../img/theme/icon-arrow-top.gif) no-repeat 0 50%;
+	padding: 0 0 0 12px;
 }
 /* Styled search form
 ----------------------------------------------------------------------------------- */
@@ -455,7 +492,7 @@ body > #top-header{
 }
 #edit-submit-advanced-search-wrapper{
 	float: left;
-	padding: 0 1em 0 0;
+	padding: 0 1em 0 25px;
 }
 #form-search p.footer-link{
 	padding: 10px 0 0 10px;
@@ -465,7 +502,7 @@ body > #top-header{
 	/*height: 38px;*/
 	width: 535px;
 	margin: auto;
-	padding: 0 0 25px;
+	padding: 0 0 0;
 }
 #fieldset-search fieldset{
 	padding: 5px 5px 0 40px;
