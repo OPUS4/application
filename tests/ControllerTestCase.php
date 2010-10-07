@@ -67,6 +67,8 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
     protected function tearDown() {
         Opus_Db_TableGateway::clearInstances();
 
+        Zend_Registry::set('Opus_Navigation', null); // FIXME Does it help with the mystery bug?
+
         parent::tearDown();
     }
 
