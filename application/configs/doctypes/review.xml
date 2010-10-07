@@ -36,10 +36,13 @@
 	xmlns="http://schemas.opus.org/documenttype" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://schemas.opus.org/documenttype https://svn.zib.de/opus4dev/framework/trunk/library/Opus/Document/documenttype.xsd">
-	
+
+<!-- required fields -->        
     <field name="PersonSubmitter" required="yes" formelement="Text" datatype="Person" multiplicity="1"/>
     <field name="Licence" required="yes" formelement="Select" datatype="Licence" multiplicity="1"/>
-    <field name="Language" required="yes" formelement="Select" datatype="Language" multiplicity="1"/>
+    <field name="Language" required="yes" formelement="Select" datatype="Language" multiplicity="1">
+        <default value="eng" edit="yes" public="yes" />
+    </field> 
     <field name="TitleMain" required="yes" formelement="Text" datatype="Title" multiplicity="4"/>
     <field name="TitleAbstract" required="no" formelement="Textarea" datatype="Title" multiplicity="4" >
         <required-if-fulltext />
@@ -54,14 +57,15 @@
         <subfield name="DateOfBirth" required="no" formelement="text" datatype="Date" />
         <subfield name="PlaceOfBirth" required="no" formelement="text" datatype="Text" />
     </field>
-    
-    <field name="PublisherName" required="no" formelement="Text" datatype="Text" multiplicity="1" />
-    <field name="PublisherPlace" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-    <field name="PageFirst" required="no" formelement="Text" datatype="Integer" multiplicity="1"/>
-    <field name="PageLast" required="no" formelement="Text" datatype="Integer" multiplicity="1"/>
     <field name="CompletedDate" required="yes" formelement="Text" datatype="Date" multiplicity="1">
         <default value="today" edit="yes" public="yes" />
     </field>
+
+<!-- unrequired fields -->
+    <field name="PublisherName" required="no" formelement="Text" datatype="Text" multiplicity="1" />
+    <field name="PublisherPlace" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
+    <field name="PageFirst" required="no" formelement="Text" datatype="Integer" multiplicity="1"/>
+    <field name="PageLast" required="no" formelement="Text" datatype="Integer" multiplicity="1"/>    
     <field name="PublishedDate" required="no" formelement="Text" datatype="Date" multiplicity="1"/>
     <field name="SubjectDdc" required="no" formelement="Text" datatype="ddc" multiplicity="5"/>
     <field name="SubjectUncontrolled" required="no" formelement="Text" datatype="Text" multiplicity="5"/>

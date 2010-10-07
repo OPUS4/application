@@ -36,7 +36,8 @@
 <documenttype name="preprintmatheon" xmlns:opus="http://schemas.opus.org/documenttype"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://schemas.opus.org/documenttype https://svn.zib.de/opus4dev/framework/trunk/library/Opus/Document/documenttype.xsd">
-	
+
+<!-- required fields -->
     <field name="PersonAuthor" required="yes" formelement="text" datatype="Person" multiplicity="*">
         <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" >
             <default value="Dr." edit="yes" public="yes"  />
@@ -58,8 +59,10 @@
     <field name="CompletedDate" required="yes" formelement="Text" datatype="Date" multiplicity="1">
         <default value="today" edit="yes" public="yes" />
     </field>
-    <field name="Project" required="no" formelement="select" datatype="Project" multiplicity="*" />
     <field name="SubjectMSC" required="yes" formelement="text"  datatype="msc" multiplicity="5" />
+
+<!-- unrequired fields -->
+    <field name="Project" required="no" formelement="select" datatype="Project" multiplicity="*" />    
     <field name="SubjectUncontrolled" required="no" formelement="text"  datatype="Text" multiplicity="5" />
     <field name="Note" required="no" formelement="textarea"  datatype="Text" multiplicity="1" />
 		

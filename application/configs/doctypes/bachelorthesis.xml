@@ -38,10 +38,11 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   
     xsi:schemaLocation="http://schemas.opus.org/documenttype D:\opus4\framework\library\Opus\Document\documenttype.xsd">
 
+<!-- required fields -->
     <field name="PersonSubmitter" required="yes" multiplicity="1" formelement="Text" datatype="Person" />
     <field name="TitleMain" required="yes" formelement="Text" datatype="Title" multiplicity="4" />
-    <field name="TitleAbstract" required="no" formelement="Textarea" datatype="Title" multiplicity="4" >
-        <required-if-fulltext />
+    <field name="Language" required="yes" formelement="Select" datatype="Language" multiplicity="1">
+        <default value="eng" edit="yes" public="yes" />
     </field>
     
     <field name="PersonAuthor" required="yes" formelement="Text" datatype="Person" multiplicity="*" >
@@ -53,25 +54,30 @@
         <subfield name="DateOfBirth" required="no" formelement="text" datatype="Date" />
         <subfield name="PlaceOfBirth" required="no" formelement="text" datatype="Text" />
     </field>
+    <field name="Licence" required="yes"  formelement="Select" datatype="Licence" multiplicity="1" />
+    <field name="ThesisPublisher" required="yes" formelement="Text" datatype="ThesisPublisher" multiplicity="1" />
+    <field name="ThesisGrantor" required="yes" formelement="Text" datatype="ThesisGrantor" multiplicity="1" />
+    
+    <field name="TitleAbstract" required="no" formelement="Textarea" datatype="Title" multiplicity="4" >
+        <required-if-fulltext />
+    </field>
+    <field name="CompletedDate" required="yes" formelement="Text" datatype="Date" multiplicity="1">
+        <default value="today" edit="yes" public="yes" />
+    </field>
 
+<!-- unrequired fields -->
     <field name="PersonAdvisor" required="no" formelement="Text" datatype="Person" multiplicity="*" />
     <field name="PersonContributor" required="no" formelement="Text" datatype="Person" multiplicity="*" />
     <field name="ContributingCorporation" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="PublisherName" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="PublisherPlace" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-    <field name="CompletedDate" required="yes" formelement="Text" datatype="Date" multiplicity="1">
-        <default value="today" edit="yes" public="yes" />
-    </field>
     <field name="PageNumber" required="no" formelement="Text" datatype="Integer" multiplicity="1" />
-    <field name="SubjectDdc" required="no" formelement="Text" datatype="ddc" multiplicity="5"/>    
+    <field name="SubjectDdc" required="no" formelement="Text" datatype="ddc" multiplicity="5"/>
     <field name="SubjectUncontrolled" required="no" formelement="Text" datatype="Text" multiplicity="5" />
     <field name="Institute" required="no" formelement="Select" datatype="Institute" multiplicity="1" />
     <field name="IdentifierUrn" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="IdentifierIsbn" required="no" formelement="Text" datatype="Text" multiplicity="1" />
-    <field name="ThesisPublisher" required="yes" formelement="Text" datatype="ThesisPublisher" multiplicity="1" />
-    <field name="ThesisGrantor" required="yes" formelement="Text" datatype="ThesisGrantor" multiplicity="1" />
     <field name="Note" required="no" formelement="Textarea" datatype="Text" multiplicity="1" />
-    <field name="Language" required="yes" formelement="Select" datatype="Language" multiplicity="1"/>
-    <field name="Licence" required="yes"  formelement="Select" datatype="Licence" multiplicity="1" />
+    
 	
 </documenttype>
