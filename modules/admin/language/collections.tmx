@@ -272,19 +272,8 @@
         </tu>
 
         <tu tuid="DisplayBrowsing">
-          <tuv xml:lang="en"><seg>Shown metadata fields in browsing context.
-          These must be comma separated collection field designators
-          (See "Metadata fields of collections"). Additionally to there defined
-          field designators every collection has an implicit designator "Name" you
-          can use here. Example: "Number, Name"
-          </seg></tuv>
-          <tuv xml:lang="de"><seg>Anzuzeigende Metadaten-Felder im Browsing-Kontext.
-          Dies müssen durch Kommata getrennte gültige Sammlungs-Feldbezeichner sein.
-          (Siehe "Metadaten-Felder der Sammlungen"). Neben den dort definierten
-          Feldbezeichnern hat jede Sammlung einen impliziten Bezeichner "Name",
-          der hier auch verwendet werden kann.
-          Beispiel: "Number, Name"
-          </seg></tuv>
+          <tuv xml:lang="en"><seg>Shown metadata fields in browsing context.</seg></tuv>
+          <tuv xml:lang="de"><seg>Anzuzeigende Metadaten-Felder im Browsing.</seg></tuv>
         </tu>
 
         <tu tuid="VisibleFrontdoor">
@@ -298,10 +287,10 @@
 
         <tu tuid="DisplayFrontdoor">
           <tuv xml:lang="en">
-            <seg>Shown metadata fields in frontdoor context. (See "Shown metadata fields in browsing context")</seg>
+            <seg>Shown metadata fields in frontdoor context.</seg>
           </tuv>
           <tuv xml:lang="de">
-            <seg>Anzuzeigende Metadaten-Felder im Frontdoor-Kontext. (Siehe "Anzuzeigende Metadaten-Felder im Browsing-Kontext")</seg>
+            <seg>Anzuzeigende Metadaten-Felder auf der Frontdoor.</seg>
           </tuv>
         </tu>
 
@@ -316,10 +305,10 @@
 
         <tu tuid="DisplayOai">
           <tuv xml:lang="en">
-            <seg>Shown metadata fields in OAI set context. (See "Shown metadata fields in browsing context")</seg>
+            <seg>Shown metadata fields in OAI set context.</seg>
           </tuv>
           <tuv xml:lang="de">
-            <seg>Auszugebende Metadaten-Felder im OAI-Set-Kontext. (Siehe "Anzuzeigende Metadaten-Felder im Browsing-Kontext")</seg>
+            <seg>Auszugebende Metadaten-Felder im OAI-Set.</seg>
           </tuv>
         </tu>
 
