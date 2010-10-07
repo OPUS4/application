@@ -107,61 +107,34 @@
             </tuv>
         </tu>
 
-        <tu tuid="sorting_year_asc">
+        <tu tuid="sorting_author">
             <tuv xml:lang="en">
-                <seg>Year (ascending)</seg>
+                <seg>Author</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Jahr (aufsteigend)</seg>
+                <seg>Autor</seg>
             </tuv>
         </tu>
 
-        <tu tuid="sorting_year_desc">
+        <tu tuid="sorting_year">
             <tuv xml:lang="en">
-                <seg>Year (descending)</seg>
+                <seg>Year</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Jahr (absteigend)</seg>
+                <seg>Jahr</seg>
             </tuv>
         </tu>
 
-        <tu tuid="sorting_title_asc">
+        <tu tuid="sorting_title">
             <tuv xml:lang="en">
-                <seg>Title (ascending)</seg>
+                <seg>Title</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Titel (aufsteigend)</seg>
+                <seg>Titel</seg>
             </tuv>
         </tu>
 
-        <tu tuid="sorting_title_desc">
-            <tuv xml:lang="en">
-                <seg>Titel (descending)</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Titel (absteigend)</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="sorting_author_asc">
-            <tuv xml:lang="en">
-                <seg>Author (ascending)</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Autor (aufsteigend)</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="sorting_author_desc">
-            <tuv xml:lang="en">
-                <seg>Author (descending)</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Autor (absteigend)</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="sorting_sort_by">
+         <tu tuid="sorting_sort_by">
             <tuv xml:lang="en">
                 <seg>Sort by</seg>
             </tuv>
