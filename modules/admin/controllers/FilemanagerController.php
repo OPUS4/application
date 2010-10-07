@@ -57,6 +57,10 @@ class Admin_FilemanagerController extends Zend_Controller_Action
             $this->_processDeleteSubmit($data);
         }
 
+        if (true === array_key_exists('accesssubmit', $data)) {
+            $this->_processAccessSubmit($data);
+        }
+
         $docId = $this->getRequest()->getParam('docId');
 
         $this->view->docId = $docId;
@@ -81,7 +85,9 @@ class Admin_FilemanagerController extends Zend_Controller_Action
 
             $this->view->uploadform = $uploadForm;
 
-            $document = new Opus_Document($docId);
+            $this->view->document = new Review_Model_DocumentAdapter($this->view, $docId);
+
+            $document = $this->view->document->getDocument();
 
             //searching for files, getting filenumbers and hashes
             $files = $document->getFile();
@@ -150,6 +156,56 @@ class Admin_FilemanagerController extends Zend_Controller_Action
         }
         else {
             return false;
+        }
+    }
+
+    protected function _processAccessSubmit($postData) {
+        $log = Zend_Registry::get('Zend_Log');
+
+        if (isset($postData['FileObject'])) {
+            $fileId = $postData['FileObject'];
+
+            $file = new Opus_File($fileId);
+
+            $currentRoleNames = Admin_Model_FileHelper::getRolesForFile($file);
+
+            $selectedRoleNames = Admin_Form_FileAccess::parseSelectedRoleNames($postData);
+
+            // remove roles that are not selected
+            foreach ($currentRoleNames as $roleName) {
+                if (!in_array($roleName, $selectedRoleNames)) {
+                    $role = Opus_Role::fetchByName($roleName);
+                    $privileges = $role->getPrivilege();
+                    foreach ($privileges as $index => $privilege) {
+                        if ($privilege->getPrivilege() === 'readFile') {
+                            if ($privilege->getFileId() === $fileId) {
+                                $log->debug('remove readFile: ' . $fileId . ' from role ' . $roleName);
+                                $privileges[$index] = null;
+                            }
+                        }
+                    }
+                    $role->setPrivilege($privileges);
+                    $role->store();
+                }
+            }
+
+            // add selected roles
+            foreach ($selectedRoleNames as $roleName) {
+                $role = Opus_Role::fetchByName($roleName);
+                if (in_array($roleName, $currentRoleNames)) {
+                    $log->debug('readFile for role ' . $roleName . ' already set');
+                }
+                else {
+                    $log->debug('add readFile to role ' . $roleName);
+                    $privilege = $role->addPrivilege();
+                    $privilege->setPrivilege('readFile');
+                    $privilege->setFile($file);
+                    $role->store();
+                }
+            }
+        }
+        else {
+            // TODO error message?
         }
     }
 

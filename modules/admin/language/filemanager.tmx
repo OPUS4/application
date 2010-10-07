@@ -77,6 +77,15 @@
         <seg>Prüfsumme</seg>
       </tuv>
     </tu>
+
+    <tu tuid="admin_filemanager_legend_fileroles">
+      <tuv xml:lang="en">
+        <seg>Accessible for Roles</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Lesbar für Nutzerrollen</seg>
+      </tuv>
+    </tu>
     
   </body>
   

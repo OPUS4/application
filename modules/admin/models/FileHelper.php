@@ -48,8 +48,6 @@ class Admin_Model_FileHelper {
 
     private $document;
 
-    private $signatureForm = null;
-
     private $file = null;
 
     private $hashes;
@@ -61,25 +59,48 @@ class Admin_Model_FileHelper {
     }
 
     public function getSignatureForm() {
-        if (empty($this->signatureForm)) {
-            $form = new Admin_Form_SignatureForm();
-            $form->FileObject->setValue($this->file->getId());
-            $form->setAction($this->view->url(array('module' => 'admin',
-                'controller' => 'filemanager', 'action' => 'index',
-                'docId' => $this->document->getId()), null, true));
-            $this->signatureForm = form;
-        }
-
-        return $this->signatureForm;
+        $form = new Admin_Form_SignatureForm();
+        $form->FileObject->setValue($this->file->getId());
+        $form->setAction($this->_getActionUrl());
+        return $form;
     }
 
     public function getDeleteForm() {
         $deleteForm = new Admin_Form_DeleteForm();
         $deleteForm->FileObject->setValue($this->file->getId());
-        $deleteForm->setAction($this->view->url(array('module' => 'admin', 
-            'controller' => 'filemanager', 'action' => 'index',
-            'docId' => $this->document->getId()), null, true));
+        $deleteForm->setAction($this->_getActionUrl());
         return $deleteForm;
+    }
+
+    public function getAccessForm() {
+        $accessForm = new Admin_Form_FileAccess($this->file->getId());
+        $accessForm->FileObject->setValue($this->file->getId());
+        $accessForm->setSelectedRoles($this->_getRolesForFile());
+        $accessForm->setAction($this->_getActionUrl());
+        return $accessForm;
+    }
+
+    protected function _getRolesForFile() {
+        return Admin_Model_FileHelper::getRolesForFile($this->file);
+    }
+
+    public static function getRolesForFile($file) {
+        $roles = array();
+        $privilegeIds = Opus_Privilege::fetchPrivilegeIdsByFile($file);
+        foreach ($privilegeIds as $privilegeId) {
+            $privilege = new Opus_Privilege($privilegeId);
+            $roleName = $privilege->getRole()->getName();
+            $roles[] = $roleName;
+        }
+
+        return $roles;
+    }
+
+    protected function _getActionUrl() {
+        $actionUrl = $this->view->url(array('module' => 'admin',
+            'controller' => 'filemanager', 'action' => 'index',
+            'docId' => $this->document->getId()), null, true);
+        return $actionUrl;
     }
 
     // fileForms
@@ -99,6 +120,7 @@ class Admin_Model_FileHelper {
         }
 
         $fileForms[] = $this->getDeleteForm();
+        $fileForms[] = $this->getAccessForm();
 
         return $fileForms;
     }

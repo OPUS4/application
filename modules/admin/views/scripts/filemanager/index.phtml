@@ -46,6 +46,11 @@
 
 <a href="<?= $this->editUrl ?>"><?= $this->translate('admin_documents_edit'); ?></a>
 
+<div style="padding: 1em; margin-left: 2em">
+    <span class="label"><?= $this->translate('TitleMain') ?></span>
+    <span class="value"><?= $this->document->getDocTitle() ?></span>
+</div>
+
 <?= $this->uploadform ?>
 
 <?= $this->actionresult ?>
@@ -56,6 +61,8 @@
         $fileName = $file->getFileName();
         $show_gpg = true;
     ?>
+    <fieldset>
+    <legend><?= $fileName ?></legend>
     <?PHP foreach ($file->getHashes() as $hash) : ?>
         <?PHP $hashType = $hash->getHashType(); ?>
         <?PHP if (!empty($hashType)) : ?>
@@ -80,9 +87,9 @@
                                     <?PHP if (false === is_object($verified)) : ?>
                                         <?= $verified ?><br/>
                                     <?PHP elseif ($verified->isValid() === true) : ?>
-                                        <?= $this->translate('pkm_sigcheck_valid', $verified->getUserId()->getName()); ?><br/>
+                                        <?= $this->translate('pkm_sigcheck_valid', $verified->getUserId()->getName()); ?>
                                     <?PHP else : ?>
-                                        <?= $this->translate('pkm_sigcheck_invalid', $verified->getUserId()->getName()); ?><br/>
+                                        <?= $this->translate('pkm_sigcheck_invalid', $verified->getUserId()->getName()); ?>
                                     <?PHP endif; ?>
                                     <?PHP if (true === is_object($verified)) : // Show key used for signature ?>
                                         <a href="<?= $this->url(array('module' => 'pkm', 'controller' => 'index', 'action' => 'showkey', 'fingerprint' => $verified->getKeyFingerprint()), null, true) ?>"><?= $this->translate('pkm_show_signature_key') ?></a><br/>
@@ -98,32 +105,30 @@
                     </p>
                 <?PHP endif; ?>
             <?PHP else : ?>
-                <br>
-                <p>
-                    <b><?= $this->translate('HashValue')?>(<?= $fileName ?>):</b>
-                </p>
-                <p>
-                    <b><?= $hash->getHashType() ?></b>
-                    <?= $this->translate('frontdoor_fixpoint')?>:
-                    <?= $hash->getSoll()?>
-                </p>
-                <p>
-                    <b><?= $hash->getHashType() ?></b>
-                    <?= $this->translate('frontdoor_current')?>:
+                <div><?= $this->translate('HashValue')?> - <?= $hash->getHashType() ?></div>
+                <div>
+                    <span class="label"><?= $this->translate('frontdoor_fixpoint')?>:</span>
+                    <span class="value"><?= $hash->getSoll()?></span>
+                </div>
+                <div>
+                    <span class="label"><?= $this->translate('frontdoor_current')?>:</span>
+                    <span class="value" style="white-space: normal">
                     <?PHP if ($hash->getIst() != 0) : ?>
                         <?= $hash->getIst() ?>
                     <?PHP else : ?>
                         <?= $this->translate('frontdoor_file_too_big')?>
                     <?PHP endif; ?>
-                </p>
+                    </span>
+                </div>
             <?PHP endif; ?>
         <?PHP else : ?>
-            <p><b><?= $this->translate('frontdoor_no_hash')?></b></p>
+            <div><b><?= $this->translate('frontdoor_no_hash')?></b></div>
         <?PHP endif; ?>
     <?PHP endforeach; ?>
     <?PHP foreach ($file->getForms() as $fileForm) : ?>
         <?= $fileForm ?>
     <?PHP endforeach; ?>
+    </fieldset>
 <?PHP endforeach; ?>
 </ol>
 

@@ -36,6 +36,8 @@
  */
 abstract class Admin_Form_RolesAbstract extends Zend_Form {
 
+    protected $roleGroupLegendKey = 'admin_form_group_roles';
+
     /**
      * Adds display group for roles.
      */
@@ -51,7 +53,7 @@ abstract class Admin_Form_RolesAbstract extends Zend_Form {
             $rolesGroup[] = $roleCheckbox->getName();
         }
 
-        $this->addDisplayGroup($rolesGroup, 'Roles', array('legend' => 'admin_form_group_roles'));
+        $this->addDisplayGroup($rolesGroup, 'Roles', array('legend' => $this->roleGroupLegendKey));
     }
 
     /**
@@ -69,6 +71,21 @@ abstract class Admin_Form_RolesAbstract extends Zend_Form {
             if ($roleSelected) {
                 $role = Opus_Role::fetchByName($roleName);
                 $selectedRoles[] = $role;
+            }
+        }
+
+        return $selectedRoles;
+    }
+
+    public static function parseSelectedRoleNames($postData) {
+        $roles = Opus_Role::getAll();
+
+        $selectedRoles = array();
+
+        foreach ($roles as $roleName) {
+            $roleSelected = $postData['role' . $roleName];
+            if ($roleSelected) {
+                $selectedRoles[] = $roleName;
             }
         }
 
