@@ -5,10 +5,28 @@
     <body>
         <tu tuid="help_index_title">
             <tuv xml:lang="en">
-                <seg>Help about OPUS</seg>
+                <seg>Help</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Hilfe zu OPUS</seg>
+                <seg>Hilfe</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_index_answerstitle">
+            <tuv xml:lang="en">
+                <seg>Answers</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Antworten</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="help_index_up">
+            <tuv xml:lang="en">
+                <seg>Back to Help topics</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Zurück zu den Hilfe-Topics</seg>
             </tuv>
         </tu>
 

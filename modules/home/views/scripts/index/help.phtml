@@ -36,34 +36,60 @@
 ?>
 
 <? $this->title = $this->translate('help_index_pagetitle') ?>
+<h2><?= $this->translate('help_index_title') ?></h2>
 
-<h1><?= $this->translate('help_index_title') ?></h1>
 
 <?php if (isset($this->content)) : ?>
-    <div>
-        <h2><?= $this->translate($this->contenttitle) ?></h2>
-        <div>
+    <h2><?= $this->translate($this->contenttitle) ?></h2>
+        <div class="content">
+            <div id="section-help" class="section help">
             <?= $this->content ?>
+            </div>
         </div>
-    </div>
 <?php else : ?>
-    <div>
+        <div class="content">
+            <div id="section-help" class="section help">
+    
         <?php $help_entries = array (
             'help_index_general' => array('about', 'costs', 'searchtipps'),
             'help_index_authorhelp' => array('diss', 'contact', 'free', 'publneeds', 'right', 'format', 'requirements', 'write', 'publicationprocess', 'preprint', 'workflowlibrary'),
             'help_index_formfields' => array('metadata', 'form_general', 'field_doctype'),
             'help_index_legal_title' => array('legal_parallel', 'legal_oa', 'legal_license'),
             'help_index_misc' => array('policies', 'documentation', 'imprint', 'disclaimer', 'termsofuse'),
-            'help_index_test' => array('test'),
+            
         )
         ?>
         <?php foreach ($help_entries as $section => $entries) : ?>
-            <p class="col3head"><?= $this->translate($section) ?></p>
-            <ul>
+            <h3><?= $this->translate($section) ?></h3>
+            <ul class="nav help">
                 <?php foreach ($entries as $entry) : ?>
-                    <li><a href="<?= $this->url(array('module' => 'home', 'controller' => 'index', 'action' => 'help', 'content' => $entry), null, true) ?>"><?= $this->translate('help_title_' . $entry) ?></a></li>
+                    <li>
+                        <a href="#<?= $entry; ?>">
+                            <?= $this->translate('help_title_' . $entry) ?>
+                        </a>
+                    
+                        </li>
                 <?php endforeach; ?>
             </ul>
         <?php endforeach; ?>
-    </div>
+     </div>
+     <div class="section answers">
+        <h2><?= $this->translate('help_index_answerstitle') ?></h2>
+            <dl>
+              <?php foreach ($help_entries as $section => $entries) : ?>
+                  <?php foreach ($entries as $entry) : ?>
+                    <dt id="<?= $entry ?>"> <?= $this->translate('help_title_'.$entry) ?></dt>
+                    <?php $translation = $this->translate('help_content_'.$entry); ?>
+                    <?php if (file_exists($this->getScriptPath('') . $translation)) :  ?>
+                        <dd><p><?= file_get_contents($this->getScriptPath('').$translation); ?></p>
+                        <p class="backlink"><a href="#section-help"><?= $this->translate('help_index_up'); ?></a></p></dd>
+                    <?php endif ?>
+                <?php endforeach; ?>
+        <?php endforeach; ?>  
+            </dl>
+            </div>
+        </div>
 <?php endif ?>
+
+<!--$this->url(array('module' => 'home', 'controller' => 'index', 'action' => 'help', 'content' => $entry), null, true)) ?>-->
+                     
