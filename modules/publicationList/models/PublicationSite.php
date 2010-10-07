@@ -51,11 +51,11 @@ class PublicationList_Model_PublicationSite {
         return $this->singleList;
     }
 
-    private function getNameGerman() {
+    public function getNameGerman() {
         return $this->nameGerman;
     }
 
-    private function getNameEnglish() {
+    public function getNameEnglish() {
         return $this->nameEnglish;
     }
 
