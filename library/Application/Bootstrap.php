@@ -348,9 +348,6 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
 
         $view->navigation($container);
 
-        // TODO Find better way without Zend_Registry
- //       Zend_Registry::set('Opus_Navigation', $container);
-
         $log->debug('Zend_Navigation initialization completed');
 
         return $container;
@@ -361,7 +358,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * @return Zend_Navigation
      */
     protected function _initMainMenu() {
-        $this->bootstrap('Logging', 'View');
+        $this->bootstrap('Logging', 'View', 'OpusNavigation');
 
         $config = $this->getResource('configuration');
 
@@ -378,7 +375,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         // TODO Find better way without Zend_Registry
         Zend_Registry::set('Opus_Navigation', $container);
 
-        return $container;
+        // return $container;
     }
 
 }
