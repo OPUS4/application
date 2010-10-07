@@ -150,9 +150,9 @@ class Opus3FileImport {
 			        $file->setDocumentId($object->getId());
 			        $file->setLanguage($lang);
 			        if ($this->_accessRole !== null) {
-    			        $file->addAccessPermission($this->_accessRole);
+                                    //$file->addAccessPermission($this->_accessRole);
 			        }
-			        $number++;
+                    $number++;
                 }
             }
         }
