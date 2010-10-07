@@ -36,7 +36,7 @@
 <?php if (is_array($this->results) and count($this->results) > 1) : ?>
 <div id="search_options" class="search_options">
 
-    <?= $this->translate('sorting_sort_by') ?>
+    <p class="label"><?= $this->translate('sorting_sort_by') ?></p>
     <ul class="sorting_options">
     
     <?php if ($this->q !== '' && !$this->browsing && $this->searchType !== 'authorsearch' && $this->searchType !== 'collection' && $this->searchType !== 'all') :
@@ -60,10 +60,10 @@
                     $urlparams['sortorder'] = $sortorder; ?>
         <li class="sorting_option sort_<?= $sortorder ?>">
             <?php if ($this->sortfield === $sortfield && $this->sortorder === $sortorder) : ?>
-                <?= $this->translate('sorting_' . $sortfield . '_' . $sortorder) ?>
+                <?= $this->translate('sorting_' . $sortfield ) ?>
             <?php else : ?>
                 <a href="<?= $this->url($urlparams) ?>">
-                    <?= $this->translate('sorting_' . $sortfield . '_' . $sortorder) ?>
+                    <?= $this->translate('sorting_' . $sortfield ) ?>
                 </a>
             <?php endif ?>
         </li>
