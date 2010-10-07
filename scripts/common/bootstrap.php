@@ -35,65 +35,38 @@
  * @version     $Id$
  */
 
-// basic bootstrapping
-require_once dirname(__FILE__) . '/common/bootstrap.php';
+// Configure include path.
+set_include_path(implode(PATH_SEPARATOR, array(
+    '.',
+    dirname(__FILE__),
+    dirname(dirname(dirname(__FILE__))) . '/library',
+    get_include_path(),
+)));
 
-/**
- * Bootstraps and runs a console application.
- *
- * @category    Application
- */
-class OpusConsole {
+// Define path to application directory
+defined('APPLICATION_PATH')
+    || define('APPLICATION_PATH', realpath( dirname(dirname(dirname(__FILE__))) ));
 
-    // using member variables to avoid namespace polution
-    public $snippet_files;
-    private $_snippet_file;
+// Define application environment
+defined('APPLICATION_ENV')
+    || define('APPLICATION_ENV', (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
 
-    /**
-     * Starts an Opus console.
-     *
-     * @return void
-     */
-    public function run() {
-    
-        $config = Zend_Registry::get('Zend_Config');
-        if ($config->security !== '0') {
-            // setup realm 
-            $realm = Opus_Security_Realm::getInstance();
-        }
+// environment initializiation
+require_once 'Zend/Application.php';
+$application = new Zend_Application(
+    APPLICATION_ENV,
+    array(
+        "config"=>array(
+            APPLICATION_PATH . '/application/configs/application.ini',
+            APPLICATION_PATH . '/application/configs/config.ini'
+        )
+    )
+);
 
-        if (false === is_null(ini_get('register_argc_argv')) 
-            && ini_get('register_argc_argv') == 1
-            && $_SERVER['argc'] > 1)
-        {
-            $this->snippet_files = $_SERVER['argv'];
-            // removes script name
-            array_shift($this->snippet_files);
-            foreach ($this->snippet_files as $this->_snippet_file) {
-                if (true === file_exists($this->_snippet_file)) {
-                    try {
-                        include_once($this->_snippet_file);
-                    } catch (Exception $e) {
-                        echo 'Caught exception ' . get_class($e) . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString() . "\n";
-                        // exit here, so nobody thinks that the script was loaded.
-                        exit(1);
-                    }
-                }
-            }
-        }
+// Bootstrapping application
+$bootstrap_ressources = array('Configuration', 'Logging', 'Database');
+$application->bootstrap($bootstrap_ressources);
 
-        while (1) {
-            $input = readline('opus> ');
-            readline_add_history($input);
-            try {
-                eval($input);
-            } catch (Exception $e) {
-                echo 'Caught exception ' . get_class($e) . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString() . "\n";
-            }
-        }
-    }
-}
+// Bootstrapping modules
+$application->getBootstrap()->getPluginResource('modules')->init();
 
-// Start console
-$console = new OpusConsole();
-$console->run();
