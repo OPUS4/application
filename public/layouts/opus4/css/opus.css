@@ -1,4 +1,4 @@
-﻿/* Page specific settings
+/* Page specific settings
 ------------------------------------------------------------ */
 #content.home{
 	background: #eaedf2 url(../img/theme/bg_content.jpg) repeat-x;
@@ -12,7 +12,7 @@
 	margin-bottom: 0;
 }
 .solrsearch #form-search,
-.solrsearch_search .form-wrapper{
+.solrsearch_advanced .form-wrapper{
 	/*margin: 3em 0 0;*/
 	background-color: #f3f6f8;
 	margin: 0 0 1em;
@@ -504,6 +504,13 @@ body > #top-header{
 	margin: auto;
 	padding: 0 0 0;
 }
+#fieldset-download{
+	background: url(../img/theme/bg_download.png) no-repeat;
+	/*height: 38px;*/
+	width: 535px;
+	margin: auto;
+	padding: 0 0 0;
+}
 #fieldset-search fieldset{
 	padding: 5px 5px 0 40px;
 	margin: 0;
@@ -511,6 +518,8 @@ body > #top-header{
 }
 #edit-search-wrapper{
 	float: left;
+	margin-left: 50px;
+	text-align: center;
 }
 #edit-submit-search-wrapper{
 	float: right;
