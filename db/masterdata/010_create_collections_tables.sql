@@ -80,7 +80,8 @@ CREATE TABLE collections_enrichments (
    INDEX(collection_id, key_name)
 ) ENGINE = InnoDB
 CHARACTER SET = 'utf8'
-COLLATE = 'utf8_general_ci';
+COLLATE = 'utf8_general_ci'
+AUTO_INCREMENT=1;
 
 -- --------------------------------------------------------
 
