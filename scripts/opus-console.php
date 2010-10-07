@@ -39,4 +39,8 @@
 // Bootstrapping
 require_once dirname(__FILE__) . '/common/bootstrap.php';
 
+// Snippet reader
+require_once dirname(__FILE__) . '/common/snippets.php';
+
+// Start console
 require_once dirname(__FILE__) . '/common/console.php';

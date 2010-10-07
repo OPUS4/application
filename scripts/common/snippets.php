@@ -37,13 +37,13 @@
 if (false === is_null(ini_get('register_argc_argv'))
         && ini_get('register_argc_argv') == 1
         && $_SERVER['argc'] > 1) {
-    $this->snippet_files = $_SERVER['argv'];
+    $snippet_files = $_SERVER['argv'];
     // removes script name
-    array_shift($this->snippet_files);
-    foreach ($this->snippet_files as $this->_snippet_file) {
-        if (true === file_exists($this->_snippet_file)) {
+    array_shift($snippet_files);
+    foreach ($snippet_files as $snippet_file) {
+        if (true === file_exists($snippet_file)) {
             try {
-                include_once($this->_snippet_file);
+                include_once($snippet_file);
             }
             catch (Exception $e) {
                 echo 'Caught exception ' . get_class($e) . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString() . "\n";
