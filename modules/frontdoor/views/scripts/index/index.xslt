@@ -1241,7 +1241,20 @@
             <xsl:element name="img">
                 <xsl:attribute name="src">
                     <xsl:value-of select="$layoutPath"/>
-                    <xsl:text>/img/bibtex.jpg</xsl:text>
+                    <xsl:text>/img/bibtex_w.png</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="name">
+                    <xsl:text>bibtex</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="onmouseover">
+                    <xsl:text>document.bibtex.src='</xsl:text>
+                    <xsl:value-of select="$layoutPath"/>
+                    <xsl:text>/img/bibtex_o.png';</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="onmouseout">
+                    <xsl:text>document.bibtex.src='</xsl:text>
+                    <xsl:value-of select="$layoutPath"/>
+                    <xsl:text>/img/bibtex_w.png';</xsl:text>
                 </xsl:attribute>
                 <xsl:attribute name="border">
                     <xsl:text>0</xsl:text>
@@ -1272,7 +1285,20 @@
             <xsl:element name="img">
                 <xsl:attribute name="src">
                     <xsl:value-of select="$layoutPath"/>
-                    <xsl:text>/img/ris.jpg</xsl:text>
+                    <xsl:text>/img/ris_w.png</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="name">
+                    <xsl:text>ris</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="onmouseover">
+                    <xsl:text>document.ris.src='</xsl:text>
+                    <xsl:value-of select="$layoutPath"/>
+                    <xsl:text>/img/ris_o.png';</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="onmouseout">
+                    <xsl:text>document.ris.src='</xsl:text>
+                    <xsl:value-of select="$layoutPath"/>
+                    <xsl:text>/img/ris_w.png';</xsl:text>
                 </xsl:attribute>
                 <xsl:attribute name="border">
                     <xsl:text>0</xsl:text>
