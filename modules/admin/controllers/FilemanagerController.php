@@ -67,7 +67,9 @@ class Admin_FilemanagerController extends Zend_Controller_Action
 
     	if (!empty($docId))
     	{
-            $this->view->editUrl = $this->view->url(array('action' => 'edit', 'id' => $docId), null, true);
+            $this->view->editUrl = $this->view->url(array('module' => 'admin', 
+                'controller' => 'documents', 'action' => 'edit', 'id' => $docId),
+                    null, true);
 
             $uploadForm = $this->_getUploadForm();
 
