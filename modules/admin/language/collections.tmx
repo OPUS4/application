@@ -346,12 +346,30 @@
         </tu>
 
         <tu tuid="breadcrumb_title">
-			<tuv xml:lang="en">
-				<seg>Your current position:</seg>
-			</tuv>
-			<tuv xml:lang="de">
-				<seg>Ihre aktuelle Position:</seg>
-			</tuv>
+            <tuv xml:lang="en">
+                    <seg>Your current position:</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                    <seg>Ihre aktuelle Position:</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="confirm_deletion">
+            <tuv xml:lang="en">
+                <seg>Are you sure?</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sind Sie sicher?</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="confirm_deletion_empty">
+            <tuv xml:lang="en">
+                <seg>Are you sure?</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sind Sie sicher?</seg>
+            </tuv>
         </tu>
     </body>
 </tmx>
