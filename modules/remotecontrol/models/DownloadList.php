@@ -57,7 +57,7 @@ class Remotecontrol_Model_DownloadList {
         $errorMsgPrefix = null;
         $collections = array();
         try {
-            $model = new Remotecontrol_Model_ManageRole($role);
+            $model = new Remotecontrol_Model_CollectionRole($role);
             if (is_null($name)) {
                 $collections = $model->findCollectionByNumber($number);
                 $errorMsgPrefix = "Number '" . $number;

@@ -32,7 +32,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Remotecontrol_Model_ManageRole {
+class Remotecontrol_Model_CollectionRole {
 
     private $role = null;
 
@@ -40,11 +40,11 @@ class Remotecontrol_Model_ManageRole {
 
         $this->role = Opus_CollectionRole::fetchByName($role_name);
         if (is_null($this->role)) {
-            throw new Remotecontrol_Model_Exception("ManageRole: Role with name '$role_name' not found");
+            throw new Remotecontrol_Model_Exception("CollectionRole: Role with name '$role_name' not found");
         }
 
         if (is_null($this->role->getRootCollection())) {
-            throw new Remotecontrol_Model_Exception("ManageRole: Root Collection for role does not exist.");
+            throw new Remotecontrol_Model_Exception("CollectionRole: Root Collection for role does not exist.");
         }
     }
 
@@ -59,7 +59,7 @@ class Remotecontrol_Model_ManageRole {
     public function addCollection($number, $title) {
         $collections = $this->findCollectionByNumber($number);
         if (count($collections) > 0) {
-            throw new Remotecontrol_Model_Exception("ManageRole: Collection with number '$number' already exists.");
+            throw new Remotecontrol_Model_Exception("CollectionRole: Collection with number '$number' already exists.");
         }
 
         $root = $this->role->getRootCollection();
@@ -75,10 +75,10 @@ class Remotecontrol_Model_ManageRole {
     public function renameCollectionByNumber($number, $title) {
         $collections = $this->findCollectionByNumber($number);
         if (count($collections) > 1) {
-            throw new Remotecontrol_Model_Exception("ManageRole: Found more than one collection with number '$number'.");
+            throw new Remotecontrol_Model_Exception("CollectionRole: Found more than one collection with number '$number'.");
         }
         else if (count($collections) < 1) {
-            throw new Remotecontrol_Model_Exception("ManageRole: Collection with number '$number' does not exist.");
+            throw new Remotecontrol_Model_Exception("CollectionRole: Collection with number '$number' does not exist.");
         }
 
         $collection = $collections[0];

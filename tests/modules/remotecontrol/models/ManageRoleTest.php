@@ -32,19 +32,19 @@
  * @version     $Id$
  */
 
-class Remotecontrol_Model_ManageRoleTest extends ControllerTestCase {
+class Remotecontrol_Model_CollectionRoleTest extends ControllerTestCase {
 
     public function testNewModelOnCollectionRoleWithoutRoot() {
         // In our test data, this role does not have any associated collections.
 
         $this->setExpectedException('Remotecontrol_Model_Exception');
-        new Remotecontrol_Model_ManageRole('no-root-test');
+        new Remotecontrol_Model_CollectionRole('no-root-test');
     }
 
     public function testNewModelOnNonexistentCollectionRole() {
         // In our test data, this role does not have any associated collections.
 
         $this->setExpectedException('Remotecontrol_Model_Exception');
-        new Remotecontrol_Model_ManageRole('foo-'.rand());
+        new Remotecontrol_Model_CollectionRole('foo-'.rand());
     }
 }
