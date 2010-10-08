@@ -32,36 +32,35 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
-echo '<h1>'. $this->title . '</h1>';
-echo '<h3>'. $this->subtitle . '</h3>';
-
-echo "<table cellspacing='10' cellpadding='20'>";
-$defaultNS = new Zend_Session_Namespace('Publish');
-
-$elements = $defaultNS->elements;
-//$elements = $this->form->getValues();
-$i = 1;
-
-foreach ($elements as $element){
-    
-        if ($element['label'] != "") {
-            if (fmod($i, 2) == 0 ) {
-                
-                echo "<tr><td align='right'><b>" . $element['label']. "</b></td><td>". $element['value'] ."</td></tr>\n";
-                $i = $i + 1;
-            }
-            else {
-                
-                echo "<tr style='background-color:#efefef;'><td align='right'><b>" . $element['label']. "</b></td><td>". $element['value'] ."</td></tr>\n";
-                $i = $i + 1;
-            }
-        }
-    
-}
-
-echo $this->form;
-
 ?>
+
+<h2><?= $this->title ?></h2>
+<h3><?= $this->subtitle ?></h3>
+
+<table cellspacing='10' cellpadding='20'>
+
+<?php
+    $defaultNS = new Zend_Session_Namespace('Publish');
+    $elements = $defaultNS->elements;
+    $i = 1;
+?>
+
+    <?php foreach ($elements as $element) : ?>
+        <?php if ($element['label'] != "") : ?>
+            <?php if (fmod($i, 2) == 0) : ?>
+                <tr><td align='right'><b> <?= $element['label']?> </b></td><td><?= $element['value'] ?></td></tr>
+                <?php $i = $i + 1; ?>
+
+            <?php else : ?>
+                <tr style='background-color:#efefef;'><td align='right'><b><?= $element['label'] ?></b></td><td><?= $element['value'] ?></td></tr>
+                <?php $i = $i + 1; ?>
+        
+                <?php endif; ?>
+        <?php endif; ?>
+    <?php endforeach;?>
+
+</table>
+
+<?= $this->form; ?>
 
 
