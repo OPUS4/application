@@ -32,7 +32,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Remotecontrol_ManageControllerTest extends ControllerTestCase {
+class Remotecontrol_CollectionControllerTest extends ControllerTestCase {
 
     private $requestData = array();
 
@@ -49,10 +49,10 @@ class Remotecontrol_ManageControllerTest extends ControllerTestCase {
         $this->request
                 ->setMethod('POST')
                 ->setPost($this->requestData);
-        $this->dispatch('/remotecontrol/manage/add');
+        $this->dispatch('/remotecontrol/collection/add');
 
         $this->assertResponseCode(200);
-        $this->assertController('manage');
+        $this->assertController('collection');
         $this->assertAction('add');
 
     }
@@ -79,7 +79,7 @@ class Remotecontrol_ManageControllerTest extends ControllerTestCase {
         $this->request
                 ->setMethod('POST')
                 ->setPost($this->requestData);
-        $this->dispatch('/remotecontrol/manage/add');
+        $this->dispatch('/remotecontrol/collection/add');
         $this->assertResponseCode(400);
 
     }
@@ -95,10 +95,10 @@ class Remotecontrol_ManageControllerTest extends ControllerTestCase {
         $this->request
                 ->setMethod('POST')
                 ->setPost($this->requestData);
-        $this->dispatch('/remotecontrol/manage/change-title');
+        $this->dispatch('/remotecontrol/collection/change-title');
 
         $this->assertResponseCode(200);
-        $this->assertController('manage');
+        $this->assertController('collection');
         $this->assertAction('change-title');
 
         $body = $this->getResponse()->getBody();

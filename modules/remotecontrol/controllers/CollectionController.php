@@ -32,7 +32,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Remotecontrol_ManageController extends Controller_Action {
+class Remotecontrol_CollectionController extends Controller_Action {
 
 //    public function init() {
 //        parent::init();
