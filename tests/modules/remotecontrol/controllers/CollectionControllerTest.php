@@ -28,6 +28,7 @@
  * @category    Application
  * @package     Tests
  * @author      Thoralf Klein <thoralf.klein@zib.de>
+ * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -92,6 +93,7 @@ class Remotecontrol_CollectionControllerTest extends ControllerTestCase {
      * Test action to check "add" module, expect failure at second insert.
      */
     public function testChangeTitleAction() {
+        $this->addTestCollection();
 
         // First request has been issued in setUp.
         // Now changing existing collection.
@@ -110,4 +112,34 @@ class Remotecontrol_CollectionControllerTest extends ControllerTestCase {
         $this->assertContains('SUCCESS', $body);
     }
 
+    public function testCsvActionWithoutArgs() {
+        $this->request->setMethod('GET');
+        $this->dispatch('/remotecontrol/collection/list');
+        $this->assertResponseCode(400);
+    }
+
+    public function testCsvActionWithMissingArg() {
+        $this->request->setMethod('GET');
+        $this->dispatch('/remotecontrol/collection/list?role=ddc');
+        $this->assertResponseCode(400);
+    }
+
+    public function testCsvActionWithInvalidCollectionName() {
+        $this->request->setMethod('GET');
+        $this->dispatch('/remotecontrol/collection/list?role=ddc&number=-1');
+        $this->assertResponseCode(400);
+    }
+
+    public function testCsvActionWithNonUniqueCollectionName() {
+        $this->request->setMethod('GET');
+        $this->dispatch('/remotecontrol/collection/list?role=ddc&number=510');
+        $this->assertResponseCode(501);
+    }
+
+    public function testCsvAction() {
+        $this->request->setMethod('GET');
+        $this->dispatch('/remotecontrol/collection/list?role=ddc&number=521');
+        $this->assertResponseCode(200);
+        $this->assertHeaderContains('Content-Disposition', 'filename=ddc_521.csv');
+    }
 }

@@ -28,6 +28,7 @@
  * @category    Application
  * @package     Module_Collection
  * @author      Thoralf Klein <thoralf.klein@zib.de>
+ * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -86,6 +87,32 @@ class Remotecontrol_CollectionController extends Controller_Action {
             $this->view->error = $e->getMessage();
         }
 
+    }
+
+    public function listAction() {
+        $request = $this->getRequest();
+        $role = $request->getParam('role');
+        $number = $request->getParam('number');
+
+        $downloadList = new Remotecontrol_Model_DownloadList();
+
+        $this->_helper->viewRenderer->setNoRender(true);
+        $this->_helper->layout()->disableLayout();
+
+        try {
+            $this->getResponse()->setBody($downloadList->getCvsFile($role, $number));
+        }
+        catch (Remotecontrol_Model_Exception $e) {
+            if ($e->nameIsNotUnique()) {
+                $this->getResponse()->setHttpResponseCode(501);
+            }
+            else {
+                $this->getResponse()->setHttpResponseCode(400);
+            }
+            return;
+        }
+        $this->getResponse()->setHeader('Content-Type', 'text/plain; charset=UTF-8', true);
+        $this->getResponse()->setHeader('Content-Disposition', 'attachment; filename=' . $role . '_' . $number . '.csv', true);
     }
 
 }
