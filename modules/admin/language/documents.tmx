@@ -272,7 +272,7 @@
         <seg>No document was found.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Kein Dokument wurde gefunden.</seg>
+        <seg>Es wurde kein Dokument gefunden.</seg>
       </tuv>
     </tu>
   </body>
