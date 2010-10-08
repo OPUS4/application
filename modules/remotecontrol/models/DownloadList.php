@@ -32,14 +32,14 @@
  * @version     $Id$
  */
 
-class Collections_Model_DownloadList {
+class Remotecontrol_Model_DownloadList {
 
     /**
      * Return a csv representation of all documents that are associated to
      * the collection identfied by the given role and number.
      *
      * @return string CSV output.
-     * @throws Collections_Model_Exception Thrown if the database does not contain
+     * @throws Remotecontrol_Model_Exception Thrown if the database does not contain
      * a collection with the given properties or in case an error occurred while
      * getting all associated documents from the Solr index.
      */
@@ -47,27 +47,27 @@ class Collections_Model_DownloadList {
         $log = Zend_Registry::get('Zend_Log');
         if (is_null($role) || is_null($number)) {
             $log->debug('role and / or number parameter is empty - could not process request.');
-            throw new Collections_Model_Exception();
+            throw new Remotecontrol_Model_Exception();
         }
 
         $collections = array();
         try {
-            $model = new Collections_Model_ManageRole($role);
+            $model = new Remotecontrol_Model_ManageRole($role);
             $collections = $model->findCollectionByNumber($number);            
         }
-        catch (Collections_Model_Exception $e) {
+        catch (Remotecontrol_Model_Exception $e) {
             $log->debug($e->getMessage());
             throw $e;
         }
         if (count($collections) === 0) {
             $message = "Number '" . $number . "' does not exist for collection role " . $role;
             $log->debug($message);
-            throw new Collections_Model_Exception($message);
+            throw new Remotecontrol_Model_Exception($message);
         }
         if (count($collections) > 1) {
             $message = "Number '" . $number . "' is not unique for collection role " . $role;
             $log->debug($message);
-            throw new Collections_Model_Exception($message, Collections_Model_Exception::NAME_IS_NOT_UNIQUE);
+            throw new Remotecontrol_Model_Exception($message, Remotecontrol_Model_Exception::NAME_IS_NOT_UNIQUE);
         }
         $resultList = array();
         try {
@@ -76,7 +76,7 @@ class Collections_Model_DownloadList {
         }
         catch (Opus_SolrSearch_Exception $e) {
             $log->debug($e->getMessage());
-            throw new Collections_Model_Exception($e->getMessage());
+            throw new Remotecontrol_Model_Exception($e->getMessage());
         }
         return $this->prepareCsv($resultList);
     }

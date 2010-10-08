@@ -32,7 +32,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Collections_ManageController extends Controller_Action {
+class Remotecontrol_ManageController extends Controller_Action {
 
 //    public function init() {
 //        parent::init();
@@ -59,13 +59,13 @@ class Collections_ManageController extends Controller_Action {
     public function addAction() {
         try {
             $request = $this->getRequest();
-            $manage = new Collections_Model_ManageRole($request->getParam('role'));
+            $manage = new Remotecontrol_Model_ManageRole($request->getParam('role'));
 
             $collection_number = $request->getParam('key');
             $collection_name = $request->getParam('title');
             $manage->addCollection($collection_number, $collection_name);
         }
-        catch (Collections_Model_Exception $e) {
+        catch (Remotecontrol_Model_Exception $e) {
             $this->getResponse()->setHttpResponseCode(400);
             $this->view->error = $e->getMessage();
         }
@@ -75,13 +75,13 @@ class Collections_ManageController extends Controller_Action {
     public function changeTitleAction() {
         try {
             $request = $this->getRequest();
-            $manage = new Collections_Model_ManageRole($request->getParam('role'));
+            $manage = new Remotecontrol_Model_ManageRole($request->getParam('role'));
 
             $collection_number = $request->getParam('key');
             $collection_name = $request->getParam('title');
             $manage->renameCollectionByNumber($collection_number, $collection_name);
         }
-        catch (Collections_Model_Exception $e) {
+        catch (Remotecontrol_Model_Exception $e) {
             $this->getResponse()->setHttpResponseCode(400);
             $this->view->error = $e->getMessage();
         }

@@ -25,31 +25,14 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Tests
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @package     Application
+ * @author      Thoralf Klein <thoralf.klein@zib.de>
+ * @copyright   Copyright (c) 2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-
-class Collections_Model_DownloadListTest extends ControllerTestCase {
-
-    public function setUp() {
-        parent::setUp();
-    }
-
-    public function testGetCsvFile() {
-        $downloadList = new Collections_Model_DownloadList();
-        $csv = $downloadList->getCvsFile('ddc', '004');
-        $this->assertRegExp('/10 , /', $csv);
-        $this->assertRegExp('/\n/', $csv);
-    }
-
-    public function testGetEmptyCsvFile() {
-        $downloadList = new Collections_Model_DownloadList();
-        $csv = $downloadList->getCvsFile('ddc', '621');
-        $this->assertRegExp('//', $csv);
-    }
+class Remotecontrol_Bootstrap extends Zend_Application_Module_Bootstrap {
 }
+
 ?>

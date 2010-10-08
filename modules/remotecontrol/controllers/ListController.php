@@ -25,28 +25,39 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Tests
+ * @package     Module_Collection
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
+class Remotecontrol_ListController extends Controller_Action {    
 
-class Collections_Model_ManageRoleTest extends ControllerTestCase {
+    public function csvAction() {
+        $request = $this->getRequest();        
+        $role = $request->getParam('role');
+        $number = $request->getParam('number');
+        
+        $downloadList = new Remotecontrol_Model_DownloadList();
 
-    public function testNewModelOnCollectionRoleWithoutRoot() {
-        // In our test data, this role does not have any associated collections.
+        $this->_helper->viewRenderer->setNoRender(true);
+        $this->_helper->layout()->disableLayout();
 
-        $this->setExpectedException('Collections_Model_Exception');
-        new Collections_Model_ManageRole('no-root-test');
-    }
-
-    public function testNewModelOnNonexistentCollectionRole() {
-        // In our test data, this role does not have any associated collections.
-
-        $this->setExpectedException('Collections_Model_Exception');
-        new Collections_Model_ManageRole('foo-'.rand());
+        try {    
+            $this->getResponse()->setBody($downloadList->getCvsFile($role, $number));
+        }
+        catch (Remotecontrol_Model_Exception $e) {
+            if ($e->nameIsNotUnique()) {
+                $this->getResponse()->setHttpResponseCode(501);
+            }
+            else {
+                $this->getResponse()->setHttpResponseCode(400);
+            }
+            return;
+        }
+        $this->getResponse()->setHeader('Content-Type', 'text/plain; charset=UTF-8', true);
+        $this->getResponse()->setHeader('Content-Disposition', 'attachment; filename=' . $role . '_' . $number . '.csv', true);
     }
 }
 ?>

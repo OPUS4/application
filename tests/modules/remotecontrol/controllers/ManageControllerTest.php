@@ -32,7 +32,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Collections_ManageControllerTest extends ControllerTestCase {
+class Remotecontrol_ManageControllerTest extends ControllerTestCase {
 
     private $requestData = array();
 
@@ -107,5 +107,3 @@ class Collections_ManageControllerTest extends ControllerTestCase {
     }
 
 }
-
-?>

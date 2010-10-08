@@ -25,14 +25,26 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Application
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2010, OPUS 4 development team
+ * @package     Tests
+ * @author      Sascha Szott <szott@zib.de>
+ * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-class Collections_Bootstrap extends Zend_Application_Module_Bootstrap {
-}
+class Remotecontrol_Model_ManageRoleTest extends ControllerTestCase {
 
-?>
+    public function testNewModelOnCollectionRoleWithoutRoot() {
+        // In our test data, this role does not have any associated collections.
+
+        $this->setExpectedException('Remotecontrol_Model_Exception');
+        new Remotecontrol_Model_ManageRole('no-root-test');
+    }
+
+    public function testNewModelOnNonexistentCollectionRole() {
+        // In our test data, this role does not have any associated collections.
+
+        $this->setExpectedException('Remotecontrol_Model_Exception');
+        new Remotecontrol_Model_ManageRole('foo-'.rand());
+    }
+}

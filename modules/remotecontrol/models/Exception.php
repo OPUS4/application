@@ -32,57 +32,12 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Collections_Model_ManageRole {
 
-    private $role = null;
+class Remotecontrol_Model_Exception extends Exception {
 
-    public function __construct($role_name) {
+    const NAME_IS_NOT_UNIQUE = 1;
 
-        $this->role = Opus_CollectionRole::fetchByName($role_name);
-        if (is_null($this->role)) {
-            throw new Collections_Model_Exception("ManageRole: Role with name '$role_name' not found");
-        }
-
-        if (is_null($this->role->getRootCollection())) {
-            throw new Collections_Model_Exception("ManageRole: Root Collection for role does not exist.");
-        }
+    public function nameIsNotUnique() {
+        return $this->getCode() === self::NAME_IS_NOT_UNIQUE;
     }
-
-    public function findCollectionByNumber($number) {
-        return Opus_Collection::fetchCollectionsByRoleNumber($this->role->getId(), $number);
-
-    }
-
-    public function addCollection($number, $title) {
-        $collections = $this->findCollectionByNumber($number);
-        if (count($collections) > 0) {
-            throw new Collections_Model_Exception("ManageRole: Collection with number '$number' already exists.");
-        }
-
-        $root = $this->role->getRootCollection();
-        $collection = $root->addLastChild();
-        $collection->setNumber($number)
-                ->setName($title)
-                ->store();
-
-        return $collection;
-
-    }
-
-    public function renameCollectionByNumber($number, $title) {
-        $collections = $this->findCollectionByNumber($number);
-        if (count($collections) > 1) {
-            throw new Collections_Model_Exception("ManageRole: Found more than one collection with number '$number'.");
-        }
-        else if (count($collections) < 1) {
-            throw new Collections_Model_Exception("ManageRole: Collection with number '$number' does not exist.");
-        }
-
-        $collection = $collections[0];
-        $collection->setName($title)->store();
-
-        return $collection;
-
-    }
-
 }

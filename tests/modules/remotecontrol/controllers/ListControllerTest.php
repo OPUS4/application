@@ -25,39 +25,47 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Collection
+ * @package     Tests
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-class Collections_ListController extends Controller_Action {    
+class Remotecontrol_ListControllerTest extends ControllerTestCase {
 
-    public function csvAction() {
-        $request = $this->getRequest();        
-        $role = $request->getParam('role');
-        $number = $request->getParam('number');
-        
-        $downloadList = new Collections_Model_DownloadList();
+    public function setUp() {
+        parent::setUp();
+    }
 
-        $this->_helper->viewRenderer->setNoRender(true);
-        $this->_helper->layout()->disableLayout();
+    public function testCsvActionWithoutArgs() {
+        $this->request->setMethod('GET');
+        $this->dispatch('/collections/list/csv');
+        $this->assertResponseCode(400);
+    }
 
-        try {    
-            $this->getResponse()->setBody($downloadList->getCvsFile($role, $number));
-        }
-        catch (Collections_Model_Exception $e) {
-            if ($e->nameIsNotUnique()) {
-                $this->getResponse()->setHttpResponseCode(501);
-            }
-            else {
-                $this->getResponse()->setHttpResponseCode(400);
-            }
-            return;
-        }
-        $this->getResponse()->setHeader('Content-Type', 'text/plain; charset=UTF-8', true);
-        $this->getResponse()->setHeader('Content-Disposition', 'attachment; filename=' . $role . '_' . $number . '.csv', true);
+    public function testCsvActionWithMissingArg() {
+        $this->request->setMethod('GET');
+        $this->dispatch('/collections/list/csv?role=ddc');
+        $this->assertResponseCode(400);
+    }
+
+    public function testCsvActionWithInvalidCollectionName() {
+        $this->request->setMethod('GET');
+        $this->dispatch('/collections/list/csv?role=ddc&number=-1');
+        $this->assertResponseCode(400);
+    }
+
+    public function testCsvActionWithNonUniqueCollectionName() {
+        $this->request->setMethod('GET');
+        $this->dispatch('/collections/list/csv?role=ddc&number=510');
+        $this->assertResponseCode(501);
+    }
+
+    public function testCsvAction() {
+        $this->request->setMethod('GET');
+        $this->dispatch('/collections/list/csv?role=ddc&number=521');
+        $this->assertResponseCode(200);
+        $this->assertHeaderContains('Content-Disposition', 'filename=ddc_521.csv');
     }
 }
-?>

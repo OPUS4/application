@@ -32,42 +32,22 @@
  * @version     $Id$
  */
 
-class Collections_ListControllerTest extends ControllerTestCase {
+class Remotecontrol_Model_DownloadListTest extends ControllerTestCase {
 
     public function setUp() {
         parent::setUp();
     }
 
-    public function testCsvActionWithoutArgs() {
-        $this->request->setMethod('GET');
-        $this->dispatch('/collections/list/csv');
-        $this->assertResponseCode(400);
+    public function testGetCsvFile() {
+        $downloadList = new Remotecontrol_Model_DownloadList();
+        $csv = $downloadList->getCvsFile('ddc', '004');
+        $this->assertRegExp('/10 , /', $csv);
+        $this->assertRegExp('/\n/', $csv);
     }
 
-    public function testCsvActionWithMissingArg() {
-        $this->request->setMethod('GET');
-        $this->dispatch('/collections/list/csv?role=ddc');
-        $this->assertResponseCode(400);
-    }
-
-    public function testCsvActionWithInvalidCollectionName() {
-        $this->request->setMethod('GET');
-        $this->dispatch('/collections/list/csv?role=ddc&number=-1');
-        $this->assertResponseCode(400);
-    }
-
-    public function testCsvActionWithNonUniqueCollectionName() {
-        $this->request->setMethod('GET');
-        $this->dispatch('/collections/list/csv?role=ddc&number=510');
-        $this->assertResponseCode(501);
-    }
-
-    public function testCsvAction() {
-        $this->request->setMethod('GET');
-        $this->dispatch('/collections/list/csv?role=ddc&number=521');
-        $this->assertResponseCode(200);
-        $this->assertHeaderContains('Content-Disposition', 'filename=ddc_521.csv');
+    public function testGetEmptyCsvFile() {
+        $downloadList = new Remotecontrol_Model_DownloadList();
+        $csv = $downloadList->getCvsFile('ddc', '621');
+        $this->assertRegExp('//', $csv);
     }
 }
-
-?>
