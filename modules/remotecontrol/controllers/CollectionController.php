@@ -58,12 +58,15 @@ class Remotecontrol_CollectionController extends Controller_Action {
 //    }
 
     public function addAction() {
-        try {
-            $request = $this->getRequest();
-            $manage = new Remotecontrol_Model_ManageRole($request->getParam('role'));
+        $this->_helper->layout()->disableLayout();
+        $request = $this->getRequest();
 
-            $collection_number = $request->getParam('key');
-            $collection_name = $request->getParam('title');
+        $role_name = $request->getParam('role');
+        $collection_number = $request->getParam('key');
+        $collection_name = $request->getParam('title');
+
+        try {
+            $manage = new Remotecontrol_Model_ManageRole($role_name);
             $manage->addCollection($collection_number, $collection_name);
         }
         catch (Remotecontrol_Model_Exception $e) {
@@ -74,12 +77,15 @@ class Remotecontrol_CollectionController extends Controller_Action {
     }
 
     public function changeTitleAction() {
-        try {
-            $request = $this->getRequest();
-            $manage = new Remotecontrol_Model_ManageRole($request->getParam('role'));
+        $this->_helper->layout()->disableLayout();
+        $request = $this->getRequest();
 
-            $collection_number = $request->getParam('key');
-            $collection_name = $request->getParam('title');
+        $role_name = $request->getParam('role');
+        $collection_number = $request->getParam('key');
+        $collection_name = $request->getParam('title');
+
+        try {
+            $manage = new Remotecontrol_Model_ManageRole($role_name);
             $manage->renameCollectionByNumber($collection_number, $collection_name);
         }
         catch (Remotecontrol_Model_Exception $e) {
