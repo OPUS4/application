@@ -18,7 +18,14 @@
 
 set -e
 
-TEMPDIR=$1
+# Create opus-400-r6503.tgz from subversion-subdirectory tags/2010-10-08_4.00rc:
+# ./prepare_tarball.sh tags/2010-10-08_4.00rc opus-400-r6503
+#
+# Create opus-trunk.tgz from subversion-subdirectory trunk:
+# ./prepare_tarball.sh trunk opus-trunk
+
+TAG=$1
+TEMPDIR=$2
 
 mkdir -vp $TEMPDIR
 cd $TEMPDIR
@@ -27,9 +34,9 @@ cd $TEMPDIR
 # Checkout opus4-trunk
 #
 
-svn export https://svn.zib.de/opus4dev/server/trunk opus4
-svn export https://svn.zib.de/opus4dev/framework/trunk/db/schema opus4/db/schema
-svn export https://svn.zib.de/opus4dev/framework/trunk/library/Opus opus4/library/Opus
+svn export https://svn.zib.de/opus4dev/server/$TAG opus4
+svn export https://svn.zib.de/opus4dev/framework/$TAG/db/schema opus4/db/schema
+svn export https://svn.zib.de/opus4dev/framework/$TAG/library/Opus opus4/library/Opus
 
 
 #
@@ -40,6 +47,13 @@ find . -P -name .gitignore -print0 |xargs -r0 rm -v
 
 rm -rv opus4/{docs,nbproject,tests,workspace}
 rm -rv opus4/public/layouts/{opus33,opus34,darker,matheon}
+rm -rv opus4/import
+rm -v  opus4/modules/publish/views/scripts/form/preprintmatheon.phtml
+rm -rv opus4/application/configs/doctypes/import/{bibliography,repository}
+rm -rv opus4/modules/{pkm,publicationList}
+rm -rv opus4/scripts/{packaging,cron,indexing,install}
+rm -r  opus4/scripts/*{Matheon,ZIB}*.php
+rm -rv opus4/library/Opus/Search/{Adapter,Index}/Lucene/
 
 
 #
@@ -61,10 +75,10 @@ ln -sv "../workspace" "opus4/workspace"
 
 touch workspace/logs/opus.log
 chmod 666 workspace/logs/opus.log
-chmod 777 workspace/files
+chmod 777 workspace/{files,cache,tmp}
 
 #
 # Build tarball
 #
 
-tar czvf opus-4.0.0-rc.tgz opus4 workspace libs
+tar czvf ../$(basename $(pwd)).tgz opus4 workspace libs
