@@ -69,6 +69,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="admin_filemanager_delete_success">
+      <tuv xml:lang="en">
+        <seg>Successfully deleted file '%1$s'!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datei '%1$s' wurde erfolgreich entfernt.</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_filemanager_checksum">
       <tuv xml:lang="en">
         <seg>Checksum</seg>

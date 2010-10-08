@@ -131,9 +131,12 @@ class Admin_FilemanagerController extends Controller_Action
         $docId = $this->getRequest()->getParam('docId');
         $fileId = $this->getRequest()->getParam('fileId');
 
+        $fileName = null;
+
         if (!empty($fileId)) {
             try {
                 $file = new Opus_File($fileId);
+                $fileName = $file->getPathName();
                 // Really delete this file
                 $file->doDelete($file->delete());
             }
@@ -144,7 +147,7 @@ class Admin_FilemanagerController extends Controller_Action
 //                $this->view->actionresult = $this->view->translate('admin_filemanager_deletesuccess');
 //            }
 
-            $this->_redirectTo('index', '', 'filemanager', 'admin', array('docId' => $docId));
+            $this->_redirectTo('index', $this->view->translate('admin_filemanager_delete_success', $fileName), 'filemanager', 'admin', array('docId' => $docId));
         }
 
         $this->_redirectTo('index', '', 'filemanager', 'admin', array('docId' => $docId));
