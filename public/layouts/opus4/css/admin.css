@@ -274,3 +274,25 @@
     font-style: italic;
     margin-bottom: 0.5em;
 }
+
+.adminContainer .form dt {
+}
+
+.adminContainer .form dd {
+}
+
+.adminContainer #upload-form {
+    background-color: #f3f6f8;
+    padding: 0.5em 2em;
+}
+
+.adminContainer fieldset.file {
+    margin: 0.5em;
+    border-width: 1px;
+    border-style: solid;
+}
+
+.adminContainer fieldset.file legend {
+    padding-left: 1em;
+    padding-right: 1em;
+}

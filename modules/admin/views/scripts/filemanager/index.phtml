@@ -51,17 +51,19 @@
     <span class="value"><?= $this->document->getDocTitle() ?></span>
 </div>
 
+<div id="upload-form">
 <?= $this->uploadform ?>
+</div>
 
 <?= $this->actionresult ?>
 
-<ol>
+<div id="file-list">
 <?PHP foreach ($this->fileHelpers as $file) : ?>
     <?PHP
         $fileName = $file->getFileName();
         $show_gpg = true;
     ?>
-    <fieldset>
+    <fieldset class="file">
     <legend><?= $fileName ?></legend>
     <?PHP foreach ($file->getHashes() as $hash) : ?>
         <?PHP $hashType = $hash->getHashType(); ?>
@@ -130,6 +132,6 @@
     <?PHP endforeach; ?>
     </fieldset>
 <?PHP endforeach; ?>
-</ol>
+</div>
 
 </div>
