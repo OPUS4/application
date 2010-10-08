@@ -100,7 +100,12 @@ class Publish_DepositController extends Controller_Action {
 
                 $log->info("Document was sucessfully stored!");
 
-                $this->_notifyReferee($projects);
+                $this->__notifyReferee($projects);
+                // FIXME replace line above with code below to use asychronous notifications
+//                $subject = $this->view->translation('mail_publish_notification_subject', $docId);
+//                $docUrl = $this->__getDocumentUrl($docId);
+//                $message = $this->view->translation('mail_publish_notification', $docUrl);
+//                $this->__scheduleNotification($subject, $message, $projects);
 
                 //Redirect to front door                
                 return $this->_redirectToAndExit('index', $this->view->translate('home_index_redirect_from_publish'), 'index', 'home');
@@ -114,7 +119,7 @@ class Publish_DepositController extends Controller_Action {
     /**
      *  Method finally sends an email to the referrers named in config.ini
      */
-    private function _notifyReferee($projects = null) {
+    private function __notifyReferee($projects = null) {
         $log = Zend_Registry::get('Zend_Log');
         $defaultNS = new Zend_Session_Namespace('Publish');
         $mail = new Mail_PublishNotification($defaultNS->documentId, $projects, $this->view);
@@ -122,6 +127,48 @@ class Publish_DepositController extends Controller_Action {
             $log->err("email to referee could not be sended!");
         else
             $log->info("Referee has been informed via email.");
+    }
+
+    /**
+     * Schedules notifications for referees.
+     * @param <type> $projects
+     */
+    private function __scheduleNotification($subject, $message, $projects = null) {
+        $defaultNS = new Zend_Session_Namespace('Publish');
+        $docId = $defaultNS->documentId;
+
+        $job = new Opus_Job();
+        $job->setLabel(Opus_Job_Worker_MailPublishNotification::LABEL);
+        $job->setData(array(
+            'subject' => subject,
+            'message' => $message,
+            'projects' => $projects
+            ));
+
+        // skip creating job if equal job already exists
+        if (true === $job->isUniqueInQueue()) {
+            $job->store();
+        }
+    }
+
+    /**
+     * Return frontdoor URL for document.
+     * @param <type> $docId
+     * @return <type>
+     *
+     * FIXME move into controller or view helper
+     */
+    private function __getDocumentUrl($docId) {
+        $url_frontdoor = array(
+            'module'     => 'frontdoor',
+            'controller' => 'index',
+            'action'     => 'index',
+            'docId'      => $this->docId
+        );
+
+        $baseUrl = $this->view->serverUrl(); // TODO doesn't work
+
+        return $baseUrl . $this->view->url($url_frontdoor, 'default', true);
     }
 
 }
