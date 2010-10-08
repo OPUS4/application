@@ -44,18 +44,16 @@ class Remotecontrol_AccountController extends Controller_Action {
         $password   = $request->getParam('password');
         $user_roles = $request->getParam('user-roles');
 
+        $test_account = Opus_Account::fetchAccountByLogin($login);
+        if (!is_null($test_account)) {
+            $this->getResponse()->setHttpResponseCode(400);
+            $this->getResponse()->setBody("ERROR: Account '$login' already exists.");
+            return;
+        }
+
         $account = new Opus_Account();
         $account->setLogin($login);
         $account->setPassword($password);
-
-        try {
-            $account->store();
-        }
-        catch (Opus_Mail_Exception $e) {
-            $this->getResponse()->setHttpResponseCode(400);
-            $this->getResponse()->setBody("ERROR (while creating new account): " . $e->getMessage());
-            return;
-        }
 
         foreach (explode(",", $user_roles) AS $role_name) {
             $role_name = trim($role_name);
@@ -69,9 +67,51 @@ class Remotecontrol_AccountController extends Controller_Action {
         try {
             $account->store();
         }
-        catch (Opus_Mail_Exception $e) {
+        catch (Opus_Security_Exception $e) {
             $this->getResponse()->setHttpResponseCode(400);
-            $this->getResponse()->setBody("ERROR (while creating roles): " . $e->getMessage());
+            $this->getResponse()->setBody("ERROR: " . $e->getMessage());
+            return;
+        }
+
+        $this->getResponse()->setBody('SUCCESS');
+    }
+
+    public function changePasswordAction() {
+        $this->_helper->layout()->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(true);
+
+        $request = $this->getRequest();
+
+        $login        = $request->getParam('login');
+        $password     = $request->getParam('password');
+        $password_new = $request->getParam('password-new');
+
+        if (is_null($password_new) || trim($password_new) == '') {
+            $this->getResponse()->setHttpResponseCode(400);
+            $this->getResponse()->setBody("ERROR: Empty password given.");
+            return;
+        }
+
+        $account = Opus_Account::fetchAccountByLogin($login);
+        if (is_null($account)) {
+            $this->getResponse()->setHttpResponseCode(400);
+            $this->getResponse()->setBody("ERROR: Account '$login' does not exist.");
+            return;
+        }
+
+        if (true !== $account->isPasswordCorrect($password)) {
+            $this->getResponse()->setHttpResponseCode(400);
+            $this->getResponse()->setBody("ERROR: Incorrect password given.");
+            return;
+        }
+
+        try {
+            $account->setPassword($password_new);
+            $account->store();
+        }
+        catch (Opus_Security_Exception $e) {
+            $this->getResponse()->setHttpResponseCode(400);
+            $this->getResponse()->setBody("ERROR: " . $e->getMessage());
             return;
         }
 
