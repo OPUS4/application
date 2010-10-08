@@ -343,15 +343,8 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                         // store document
                         $document->store();
 
-                		$config = Zend_Registry::get('Zend_Config');
-
-		                $searchEngine = $config->searchengine->engine;
-		                if (empty($searchEngine) === true) {
-			                $searchEngine = 'Lucene';
-		                }
-                        // Reindex
-                        $engineclass = 'Opus_Search_Index_'.$searchEngine.'_Indexer';
-                        $indexer = new $engineclass();
+                        // reindex
+                        $indexer = new Opus_Search_Index_Solr_Indexer();
                         $indexer->removeDocumentFromEntryIndex($document);
                         $indexer->addDocumentToEntryIndex($document);
 
@@ -393,15 +386,8 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $doc->setServerDatePublished($date->get('yyyy-MM-ddThh:mm:ss') . 'Z');
         $doc->store();
 
-        $config = Zend_Registry::get('Zend_Config');
-
-        $searchEngine = $config->searchengine->engine;
-        if (empty($searchEngine) === true) {
-            $searchEngine = 'Lucene';
-	    }
-        // Add to index
-        $engineclass = 'Opus_Search_Index_'.$searchEngine.'_Indexer';
-        $indexer = new $engineclass();
+        // add document to index
+        $indexer = new Opus_Search_Index_Solr_Indexer();
         $indexer->addDocumentToEntryIndex($doc);
 
         $this->_redirectTo('index', 'document_published');
@@ -418,15 +404,8 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $doc->setServerState('unpublished');
         $doc->store();
 
-   		$config = Zend_Registry::get('Zend_Config');
-
-        $searchEngine = $config->searchengine->engine;
-        if (empty($searchEngine) === true) {
-            $searchEngine = 'Lucene';
-	    }
-        // Add to index
-        $engineclass = 'Opus_Search_Index_'.$searchEngine.'_Indexer';
-        $indexer = new $engineclass();
+        // remove document from to index
+        $indexer = new Opus_Search_Index_Solr_Indexer();
         $indexer->removeDocumentFromEntryIndex($doc);
 
         $this->_redirectTo('index');
