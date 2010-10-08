@@ -11,8 +11,13 @@
 .opus.solrsearch h2{
 	margin-bottom: 0;
 }
+.opus.solrsearch_search h2,
+.opus.solrsearch_advanced h2{
+	margin-bottom: 15px;
+}
 .solrsearch #form-search,
-.solrsearch_advanced .form-wrapper{
+.solrsearch_advanced .form-wrapper,
+.solrsearch_search .form_wrapper{
 	/*margin: 3em 0 0;*/
 	background-color: #f3f6f8;
 	margin: 0 0 1em;
@@ -20,6 +25,43 @@
 }
 .solrsearch_advanced fieldset{
 	padding: 15px 245px;
+}
+/* form styles
+----------------------------------------------------------- */
+fieldset{
+	position: relative;
+}
+fieldset .form-errors{
+	clear: both;
+}
+.left-labels label,
+.right-labels label{
+	width: 28%;
+	padding: 0 1em 0 0;
+	float: left;
+}
+.right-labels label{
+	text-align: right;
+}
+.top-labels label{
+	text-align: left;
+	display: block;
+	float: none;
+}
+fieldset .form-item{
+	float: left;
+	clear: left;
+	width: 59%;
+	padding: 0.2em 0;
+}
+fieldset .button-wrapper{
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	width: 40%;
+}
+fieldset .description{
+	font-size: 0.85em;
 }
 /* HTML elements
 ------------------------------------------------------------ */
@@ -37,6 +79,7 @@ h1,
 }
 .opus h2{
 	/*color: #333;*/
+	/*color: #1d4065;*/
 	color: #26517d;
 	background-color: #f3f6f8;
 	padding: 4px 10px;
@@ -79,7 +122,7 @@ a img{
 }
 .opus legend{
 	color: #26517d;
-	padding: 0 0 4px;
+	padding: 0 0 2px;
 	text-transform: uppercase;
 	font-size: 0.9em;
 	border-bottom: 4px solid #e2e6e9;
@@ -315,7 +358,6 @@ body > #top-header{
 }
 #searchbar{
 	padding: 0 0 0 245px;
-/*margin: 0 0 0 245px;*/
 }
 .breadcrumb_results{
 	float: left;
@@ -324,40 +366,45 @@ body > #top-header{
 #facets h3,
 .breadcrumb_results{
 	background-color: #f3f6f8;
-	line-height: 30px;
-	/*padding: 15px 0;*/
+	/*line-height: 30px;*/
 	border: solid #e2e6e9;
 	border-width: 0 0 4px;
 	margin: 0;
 	font-weight: normal;
 	color: #333;
-
 }
 #facets h3{
-	padding: 0 10px;
-	font-size: 14px;
+	padding: 7px 10px;
 	text-transform: none;
 }
+#facets h3,
+/*.breadcrumb_results,*/
+.breadcrumb_results h3,
+.breadcrumb_results .info_small,
+.breadcrumb_results .paginationControl li{
+	font-size: 14px;
+	line-height: normal;
+}
+
 .opus .breadcrumb_results h3,
 .opus .breadcrumb_results .info_small,
 .opus .breadcrumb_results .paginationControl li{
 	float: left;
 	margin: 0;
-	font-size: 14px;
 	font-weight: normal;
 	color: #333;
 	text-transform: none;
 }
 .breadcrumb_results h3{
-	padding: 0 20px 0 10px;
+	padding: 7px 20px 7px 10px;
 	background: url(../img/theme/breadcrumb_results.png) no-repeat right center;
 }
 .breadcrumb_results .info_small{
-	padding: 0 20px 0 10px;
+	padding: 7px 20px 7px 10px;
 	background: url(../img/theme/breadcrumb_results.png) no-repeat right center;
 }
 .breadcrumb_results .paginationControl li{
-	padding: 0 0 0 10px;
+	padding: 7px 0 7px 10px;
 }
 #search_options p.label{
 	float: left;
@@ -504,13 +551,6 @@ body > #top-header{
 	margin: auto;
 	padding: 0 0 0;
 }
-#fieldset-download{
-	background: url(../img/theme/bg_download.png) no-repeat;
-	/*height: 38px;*/
-	width: 535px;
-	margin: auto;
-	padding: 0 0 0;
-}
 #fieldset-search fieldset{
 	padding: 5px 5px 0 40px;
 	margin: 0;
@@ -518,8 +558,6 @@ body > #top-header{
 }
 #edit-search-wrapper{
 	float: left;
-	margin-left: 50px;
-	text-align: center;
 }
 #edit-submit-search-wrapper{
 	float: right;
