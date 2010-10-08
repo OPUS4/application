@@ -292,9 +292,15 @@
     border-style: solid;
 }
 
-.adminContainer fieldset.file legend {
+.adminContainer fieldset.file legend.filename {
+    font-size: large;
     padding-left: 1em;
     padding-right: 1em;
+}
+
+.adminContainer fieldset.file .file-actions {
+    font-size: 110%;
+    padding: 0.5em;
 }
 
 .adminContainer div.collection_new {

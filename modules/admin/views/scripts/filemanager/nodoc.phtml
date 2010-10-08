@@ -40,8 +40,14 @@
 
     <a href="<?= $this->editUrl ?>"><?= $this->translate('admin_documents_edit'); ?></a>
 
+    <div id="upload-form">
+    <?= $this->uploadform ?>
+    </div>
+
+    <?= $this->actionresult ?>
+
     <div>
-        <?= $this->translate('pkm_no_publication_selected') ?>
+        <?= $this->translate('admin_filemanager_no_files') ?>
     </div>
 
 </div>

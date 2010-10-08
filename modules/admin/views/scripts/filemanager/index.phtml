@@ -64,7 +64,13 @@
         $show_gpg = true;
     ?>
     <fieldset class="file">
-    <legend><?= $fileName ?></legend>
+    <legend class="filename"><?= $fileName ?></legend>
+
+    <div class="file-actions">
+        <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'filemanager', 'action' => 'delete', 'fileId' => $file->getId()), null, false) ?>"
+           ><?= $this->translate('admin_filemanager_delete') ?></a>
+    </div>
+
     <?PHP foreach ($file->getHashes() as $hash) : ?>
         <?PHP $hashType = $hash->getHashType(); ?>
         <?PHP if (!empty($hashType)) : ?>

@@ -58,6 +58,10 @@ class Admin_Model_FileHelper {
         $this->file = $file;
     }
 
+    public function getId() {
+        return $this->file->getId();
+    }
+
     public function getSignatureForm() {
         $form = new Admin_Form_SignatureForm();
         $form->FileObject->setValue($this->file->getId());
@@ -119,7 +123,7 @@ class Admin_Model_FileHelper {
             $fileForms = '';
         }
 
-        $fileForms[] = $this->getDeleteForm();
+        // $fileForms[] = $this->getDeleteForm();
         $fileForms[] = $this->getAccessForm();
 
         return $fileForms;

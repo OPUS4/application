@@ -34,7 +34,7 @@
  * @version     $Id$
  */
 
-class Admin_FilemanagerController extends Zend_Controller_Action
+class Admin_FilemanagerController extends Controller_Action
 {
 
     /**
@@ -125,6 +125,29 @@ class Admin_FilemanagerController extends Zend_Controller_Action
     	else {
             return $this->renderScript('filemanager/nodoc.phtml');
     	}
+    }
+
+    public function deleteAction() {
+        $docId = $this->getRequest()->getParam('docId');
+        $fileId = $this->getRequest()->getParam('fileId');
+
+        if (!empty($fileId)) {
+            try {
+                $file = new Opus_File($fileId);
+                // Really delete this file
+                $file->doDelete($file->delete());
+            }
+            catch (Exception $e) {
+//                $this->view->actionresult = $e->getMessage();
+            }
+//            if ($e === null) {
+//                $this->view->actionresult = $this->view->translate('admin_filemanager_deletesuccess');
+//            }
+
+            $this->_redirectTo('index', '', 'filemanager', 'admin', array('docId' => $docId));
+        }
+
+        $this->_redirectTo('index', '', 'filemanager', 'admin', array('docId' => $docId));
     }
 
     protected function _getUploadForm() {
