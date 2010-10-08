@@ -99,14 +99,15 @@ class Remotecontrol_CollectionController extends Controller_Action {
         $request = $this->getRequest();
         $role = $request->getParam('role');
         $number = $request->getParam('number');
+        $name = $request->getParam('name');
 
         $downloadList = new Remotecontrol_Model_DownloadList();
-
+        
         $this->_helper->viewRenderer->setNoRender(true);
         $this->_helper->layout()->disableLayout();
 
         try {
-            $this->getResponse()->setBody($downloadList->getCvsFile($role, $number));
+            $this->getResponse()->setBody($downloadList->getCvsFile($role, $number, $name));
         }
         catch (Remotecontrol_Model_Exception $e) {
             if ($e->nameIsNotUnique()) {

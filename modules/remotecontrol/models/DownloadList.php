@@ -36,36 +36,48 @@ class Remotecontrol_Model_DownloadList {
 
     /**
      * Return a csv representation of all documents that are associated to
-     * the collection identfied by the given role and number.
+     * the collection identfied by the given role and number (or name).
      *
      * @return string CSV output.
      * @throws Remotecontrol_Model_Exception Thrown if the database does not contain
      * a collection with the given properties or in case an error occurred while
      * getting all associated documents from the Solr index.
      */
-    public function getCvsFile($role, $number) {
+    public function getCvsFile($role, $number, $name) {
         $log = Zend_Registry::get('Zend_Log');
-        if (is_null($role) || is_null($number)) {
-            $log->debug('role and / or number parameter is empty - could not process request.');
+        if (is_null($role) || (is_null($number) && is_null($name))) {
+            $log->debug('role, number or name parameter is empty - could not process request.');
+            throw new Remotecontrol_Model_Exception();
+        }
+        if (!is_null($number) && !is_null($name)) {
+            $log->debug('both number and name are given - could not process request.');
             throw new Remotecontrol_Model_Exception();
         }
 
+        $errorMsgPrefix = null;
         $collections = array();
         try {
             $model = new Remotecontrol_Model_ManageRole($role);
-            $collections = $model->findCollectionByNumber($number);            
+            if (is_null($name)) {
+                $collections = $model->findCollectionByNumber($number);
+                $errorMsgPrefix = "Number '" . $number;
+            }
+            else {
+                $collections = $model->findCollectionByName($name);
+                $errorMsgPrefix = "Name '" . $name;
+            }
         }
         catch (Remotecontrol_Model_Exception $e) {
             $log->debug($e->getMessage());
             throw $e;
         }
         if (count($collections) === 0) {
-            $message = "Number '" . $number . "' does not exist for collection role " . $role;
+            $message =  $errorMsgPrefix . "' does not exist for collection role " . $role;
             $log->debug($message);
             throw new Remotecontrol_Model_Exception($message);
         }
         if (count($collections) > 1) {
-            $message = "Number '" . $number . "' is not unique for collection role " . $role;
+            $message = $errorMsgPrefix . "' is not unique for collection role " . $role;
             $log->debug($message);
             throw new Remotecontrol_Model_Exception($message, Remotecontrol_Model_Exception::NAME_IS_NOT_UNIQUE);
         }

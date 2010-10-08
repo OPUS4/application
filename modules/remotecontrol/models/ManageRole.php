@@ -50,7 +50,10 @@ class Remotecontrol_Model_ManageRole {
 
     public function findCollectionByNumber($number) {
         return Opus_Collection::fetchCollectionsByRoleNumber($this->role->getId(), $number);
+    }
 
+    public function findCollectionByName($name) {
+        return Opus_Collection::fetchCollectionsByRoleName($this->role->getId(), $name);
     }
 
     public function addCollection($number, $title) {
