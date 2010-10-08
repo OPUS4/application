@@ -38,7 +38,9 @@ class Remotecontrol_CollectionControllerTest extends ControllerTestCase {
 
     public function setUp() {
         parent::setUp();
+    }
 
+    private function addTestCollection() {
         $this->requestData = array(
                     'role' => 'Collections',
                     'key' => ('foo ' . rand()),
@@ -61,6 +63,7 @@ class Remotecontrol_CollectionControllerTest extends ControllerTestCase {
      * Simple test action to check "add" module.
      */
     public function testAddAction() {
+        $this->addTestCollection();
 
         // First request has been issued in setUp.
         $body = $this->getResponse()->getBody();
@@ -73,6 +76,7 @@ class Remotecontrol_CollectionControllerTest extends ControllerTestCase {
      * Test action to check "add" module, expect failure at second insert.
      */
     public function testAddDoubleInsertAction() {
+        $this->addTestCollection();
 
         // First request has been issued in setUp.
         // Second insert with same key should fail.
