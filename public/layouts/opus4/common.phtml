@@ -133,5 +133,31 @@ $languageSelectors = $this->languageSelector();
             <hr/>
             <b>$Rev$</b>
         </div>
+
+        <?php
+            $dbprofiler = Zend_Registry::get('db_adapter')->getProfiler();
+            $config = Zend_Registry::get('Zend_Config');
+            $profiler_show_queries = (bool) $config->db->params->showqueries;
+            $profiler_max_queries = (int) $config->db->params->maxqueries;
+            if ($dbprofiler->getEnabled() === true) :
+        ?>
+        <div class="debug dbprofiler">
+            <h2>Profiling information (execution time <?= microtime(true) - $GLOBALS['start_mtime'] ?>)</h2>
+            <b>Total number of queries: </b><?= $dbprofiler->getTotalNumQueries() ?><br />
+            <b>Total query time (s): </b><?= $dbprofiler->getTotalElapsedSecs() ?><br />
+            <b>Current memory consumption: </b><?= memory_get_usage(true) ?><br />
+            <b>Peak memory consumption: </b><?= memory_get_peak_usage(true) ?><br />
+            <?php if ($profiler_show_queries === true and $profiler_query_profiles = $dbprofiler->getQueryProfiles()) : ?>
+                <b>Queries:</b><br />
+                <ul>
+                <?php for ($i=1; ($i < $profiler_max_queries) and ($i < count($profiler_query_profiles)); $i++) : ?>
+                    <li><pre><?= $profiler_query_profiles[$i]->getQuery() ?></pre></li>
+                <?php endfor ?>
+                <?php if ($i < count($profiler_query_profiles)) { echo "<li>...</li>"; } ?>
+                </ul>
+            <?php endif ?>
+        </div>
+        <?php endif ?>
+
     </body>
 </html>
