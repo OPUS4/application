@@ -49,17 +49,24 @@ class Controller_Plugin_SecurityRealm extends Zend_Controller_Plugin_Abstract {
      * @return void
      */
     public function routeStartup(Zend_Controller_Request_Abstract $request) {
-        //$logger = Zend_Registry::get('Zend_Log');
-        // Create a Realm instance
+
+        // Create a Realm instance.  Initialize privileges to empty.
         $realm = Opus_Security_Realm::getInstance();
+        $realm->setUser(null);
+        $realm->setIp(null);
 
         // Overwrite default user if current user is logged on.
-        $identity = Zend_Auth::getInstance()->getIdentity();
+        $auth = Zend_Auth::getInstance();
+        $identity = $auth->getIdentity();
 
         if (false === empty($identity)) {
+            try {
                 $realm->setUser($identity);
-        } else {
-                $realm->setUser(null);
+            }
+            catch (Exception $e) {
+                $auth->clearIdentity();
+                throw new Exception($e);
+            }
         }
 
         // OPUS_Security does not support IPv6.  Skip setting IP address, if
