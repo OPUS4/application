@@ -49,7 +49,7 @@ class Remotecontrol_ManageControllerTest extends ControllerTestCase {
         $this->request
                 ->setMethod('POST')
                 ->setPost($this->requestData);
-        $this->dispatch('/collections/manage/add');
+        $this->dispatch('/remotecontrol/manage/add');
 
         $this->assertResponseCode(200);
         $this->assertController('manage');
@@ -79,7 +79,7 @@ class Remotecontrol_ManageControllerTest extends ControllerTestCase {
         $this->request
                 ->setMethod('POST')
                 ->setPost($this->requestData);
-        $this->dispatch('/collections/manage/add');
+        $this->dispatch('/remotecontrol/manage/add');
         $this->assertResponseCode(400);
 
     }
@@ -95,7 +95,7 @@ class Remotecontrol_ManageControllerTest extends ControllerTestCase {
         $this->request
                 ->setMethod('POST')
                 ->setPost($this->requestData);
-        $this->dispatch('/collections/manage/change-title');
+        $this->dispatch('/remotecontrol/manage/change-title');
 
         $this->assertResponseCode(200);
         $this->assertController('manage');

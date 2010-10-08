@@ -40,31 +40,31 @@ class Remotecontrol_ListControllerTest extends ControllerTestCase {
 
     public function testCsvActionWithoutArgs() {
         $this->request->setMethod('GET');
-        $this->dispatch('/collections/list/csv');
+        $this->dispatch('/remotecontrol/list/csv');
         $this->assertResponseCode(400);
     }
 
     public function testCsvActionWithMissingArg() {
         $this->request->setMethod('GET');
-        $this->dispatch('/collections/list/csv?role=ddc');
+        $this->dispatch('/remotecontrol/list/csv?role=ddc');
         $this->assertResponseCode(400);
     }
 
     public function testCsvActionWithInvalidCollectionName() {
         $this->request->setMethod('GET');
-        $this->dispatch('/collections/list/csv?role=ddc&number=-1');
+        $this->dispatch('/remotecontrol/list/csv?role=ddc&number=-1');
         $this->assertResponseCode(400);
     }
 
     public function testCsvActionWithNonUniqueCollectionName() {
         $this->request->setMethod('GET');
-        $this->dispatch('/collections/list/csv?role=ddc&number=510');
+        $this->dispatch('/remotecontrol/list/csv?role=ddc&number=510');
         $this->assertResponseCode(501);
     }
 
     public function testCsvAction() {
         $this->request->setMethod('GET');
-        $this->dispatch('/collections/list/csv?role=ddc&number=521');
+        $this->dispatch('/remotecontrol/list/csv?role=ddc&number=521');
         $this->assertResponseCode(200);
         $this->assertHeaderContains('Content-Disposition', 'filename=ddc_521.csv');
     }
