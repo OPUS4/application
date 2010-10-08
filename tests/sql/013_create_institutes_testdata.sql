@@ -16,7 +16,7 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`, `lef
 (15995, 1, NULL, 'Bauwesen', NULL, 3, 22, 15994, 1),
 (15996, 1, NULL, 'Elektrotechnik und Informationstechnik', NULL, 23, 62, 15994, 1),
 (15997, 1, NULL, 'Gewerblich-Technische Wissenschaften', NULL, 63, 70, 15994, 1),
-(15998, 1, NULL, 'Fr&uuml;here Institute', NULL, 71, 74, 15994, 1),
+(15998, 1, NULL, 'Frühere Institute', NULL, 71, 74, 15994, 1),
 (15999, 1, NULL, 'Maschinenbau', NULL, 75, 126, 15994, 1),
 (16000, 1, NULL, 'Verfahrenstechnik', NULL, 127, 146, 15994, 1),
 (16001, 1, NULL, 'Serviceeinrichtungen', NULL, 147, 164, 15994, 1),

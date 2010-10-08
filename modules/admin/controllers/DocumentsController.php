@@ -418,16 +418,26 @@ class Admin_DocumentsController extends Controller_CRUDAction {
      */
     public function unlinkcollectionAction() {
         if (true === $this->_request->isPost()) {
-            $document_id = $this->getRequest()->getParam('id');
-            $role_id = $this->getRequest()->getParam('role');
-            $collection_id = $this->getRequest()->getParam('collection');
-            $collection = new Opus_Collection($collection_id);
-            $collection->unlinkDocumentById($document_id);
+            $document_id = $this->getRequest()->getParam('id');            
+            $collection_id = $this->getRequest()->getParam('collection');            
+            $document = new Opus_Document($document_id);
+            $collections = array();
+            $deletedCollectionName = null;
+            foreach ($document->getCollection() as $collection) {
+                if ($collection->getId() !== $collection_id) {
+                    array_push($collections, $collection);
+                }
+                else {
+                    $deletedCollectionName = $collection->getDisplayName();
+                }
+            }
+            $document->setCollection($collections);
+            $document->store();
             $params = $this->getRequest()->getUserParams();
             $module = array_shift($params);
             $controller = array_shift($params);
             $action = array_shift($params);
-            $this->_redirectTo('edit', '', $controller, $module, $params);
+            $this->_redirectTo('edit', 'collection \'' . $deletedCollectionName . '\' was removed successfully', $controller, $module, $params);
         }
         else {
             $this->_redirectTo('index');
