@@ -145,7 +145,15 @@
 }
 
 .adminContainer .breadcrumbsContainer {
-    font-size: large;
+    /*color: #333;*/
+    /*color: #1d4065;*/
+    color: #26517d;
+    background-color: #f3f6f8;
+    padding: 4px 10px;
+    border: solid #e2e6e9;
+    border-width: 0px 0 0px;
+    font-weight: normal;
+    font-size: 1.7em;
     margin-bottom: 0.5em;
 }
 
