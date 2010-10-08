@@ -83,14 +83,14 @@
         <?php endif ?>
         <td>
             <?php if ($i > 0) : ?>
-                <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'moverole', 'roleid' => $collectionRole->getId(), 'pos' => $this->collectionRoles[$i - 1]->getPosition()), null, true) ?>">
+                <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'moverole', 'roleid' => $collectionRole->getId(), 'pos' => $i), null, true) ?>">
                 <?= $this->translate('admin_collections_role_move_up') ?>
                 </a>
             <?php endif ?>
         </td>
         <td>
             <?php if ($i < count($this->collectionRoles) - 1) : ?>
-                <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'moverole', 'roleid' => $collectionRole->getId(), 'pos' => $this->collectionRoles[$i + 1]->getPosition()), null, true)?>">
+                <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'moverole', 'roleid' => $collectionRole->getId(), 'pos' => $i + 2), null, true)?>">
                 <?= $this->translate('admin_collections_role_move_down') ?>
                 </a>
             <?php endif ?>
