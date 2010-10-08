@@ -296,3 +296,52 @@
     padding-left: 1em;
     padding-right: 1em;
 }
+
+.adminContainer div.collection_new {
+    margin: 3em 0;
+}
+
+.adminContainer table.collections td {
+    padding: 1em;
+}
+
+.adminContainer table.collections td.visible, .adminContainer table.collections td.visible a {
+    color: green;
+}
+
+.adminContainer table.collections td.unvisible, .adminContainer table.collections td.unvisible a {
+    color: red;
+}
+
+.adminContainer a.add {
+    font-size: 80%;
+    color: #26517D;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #26517D;
+    padding: .25em .5em;
+    text-decoration: none;
+}
+
+.adminContainer div.failure, .adminContainer ul.errors {
+    background-color: lightpink;
+    color: red;
+    font-family: monospace;
+    font-size: large;
+}
+
+.adminContainer ul.errors li {
+    margin: 1em;
+    list-style: none;
+    padding: .5em;
+}
+
+.adminContainer .collection_breadcrumbs {
+    padding: 1em .5em;
+    margin-bottom: 1em;
+    background-color: #dfefff;
+}
+
+.adminContainer table.collections {
+    margin: 2em 0;
+}
