@@ -149,10 +149,10 @@
 
         <tu tuid="admin_collections_collection_add">
 			<tuv xml:lang="en">
-				<seg>Add a new collection at this position</seg>
+				<seg>Add a new collection entry at this position</seg>
 			</tuv>
 			<tuv xml:lang="de">
-				<seg>Füge neue Sammlung hier ein</seg>
+				<seg>Füge neuen Sammlungseintrag hier ein</seg>
 			</tuv>
         </tu>
 
@@ -257,10 +257,10 @@
 
         <tu tuid="Visible">
 			<tuv xml:lang="en">
-				<seg>Collection is in use</seg>
+				<seg>visible</seg>
 			</tuv>
 			<tuv xml:lang="de">
-				<seg>Sammlung wird verwendet</seg>
+				<seg>sichtbar</seg>
 			</tuv>
         </tu>
 
