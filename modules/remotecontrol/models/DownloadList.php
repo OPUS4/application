@@ -46,12 +46,14 @@ class Remotecontrol_Model_DownloadList {
     public function getCvsFile($role, $number, $name) {
         $log = Zend_Registry::get('Zend_Log');
         if (is_null($role) || (is_null($number) && is_null($name))) {
-            $log->debug('role, number or name parameter is empty - could not process request.');
-            throw new Remotecontrol_Model_Exception();
+            $msg = 'role, number or name parameter is empty - could not process request.';
+            $log->debug($msg);
+            throw new Remotecontrol_Model_Exception($msg);
         }
         if (!is_null($number) && !is_null($name)) {
-            $log->debug('both number and name are given - could not process request.');
-            throw new Remotecontrol_Model_Exception();
+            $msg = 'both number and name are given - could not process request.';
+            $log->debug($msg);
+            throw new Remotecontrol_Model_Exception($msg);
         }
 
         $errorMsgPrefix = null;
