@@ -119,7 +119,14 @@ class Remotecontrol_CollectionController extends Controller_Action {
             return;
         }
         $this->getResponse()->setHeader('Content-Type', 'text/plain; charset=UTF-8', true);
-        $this->getResponse()->setHeader('Content-Disposition', 'attachment; filename=' . $role . '_' . $number . '.csv', true);
+        $filename = $role . '_';
+        if (is_null($name)) {
+            $filename .= $number;
+        }
+        else {
+            $filename .= $name;
+        }
+        $this->getResponse()->setHeader('Content-Disposition', 'attachment; filename=' . $filename . '.csv', true);
     }
 
 }

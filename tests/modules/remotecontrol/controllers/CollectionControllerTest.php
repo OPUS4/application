@@ -136,10 +136,23 @@ class Remotecontrol_CollectionControllerTest extends ControllerTestCase {
         $this->assertResponseCode(501);
     }
 
-    public function testCsvAction() {
+    public function testCsvActionForNumber() {
         $this->request->setMethod('GET');
         $this->dispatch('/remotecontrol/collection/list?role=ddc&number=521');
         $this->assertResponseCode(200);
         $this->assertHeaderContains('Content-Disposition', 'filename=ddc_521.csv');
+    }
+
+    public function testCsvActionForName() {
+        $this->request->setMethod('GET');
+        $this->dispatch('/remotecontrol/collection/list?role=institutes&name=Bauwesen');
+        $this->assertResponseCode(200);
+        $this->assertHeaderContains('Content-Disposition', 'filename=institutes_Bauwesen.csv');
+    }
+
+    public function testCsvActionForNameAndNumber() {
+        $this->request->setMethod('GET');
+        $this->dispatch('/remotecontrol/collection/list?role=institutes&name=Bauwesen&number=1');
+        $this->assertResponseCode(400);
     }
 }
