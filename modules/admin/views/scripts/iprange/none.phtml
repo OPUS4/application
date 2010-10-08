@@ -39,9 +39,9 @@
         <?= $this->navigation()->breadcrumbs() ?>
     </div>
 
-    <div><?= $this->translate('admin_iprange_none_defined') ?></div>
+    <a href="<?= $this->url(array('action' => 'new')) ?>"><?= $this->translate('admin_iprange_new') ?></a>
 
-    <a href="<?= $this->url(array('action' => 'new')) ?>"><?= $this->translate('admin_iprange_action_new') ?></a>
+    <div><?= $this->translate('admin_iprange_none_defined') ?></div>
 
 </div>
 

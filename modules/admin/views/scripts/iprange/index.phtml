@@ -36,9 +36,13 @@
 
 <div class="adminContainer">
 
-<div class="breadcrumbsContainer">
-<?= $this->navigation()->breadcrumbs() ?>
-</div>
+    <div class="breadcrumbsContainer">
+    <?= $this->navigation()->breadcrumbs() ?>
+    </div>
+
+    <div>
+    <a href="<?= $this->url(array('action' => 'new')) ?>"><?= $this->translate('admin_iprange_new') ?></a>
+    </div>
 
 <table>
     <? foreach($this->ipRanges as $id => $ipRange) : ?>
@@ -57,7 +61,5 @@
     </form>
     <? endforeach; ?>
 </table>
-
-<a href="<?= $this->url(array('action' => 'new')) ?>"><?= $this->translate('admin_iprange_new') ?></a>
 
 </div>
