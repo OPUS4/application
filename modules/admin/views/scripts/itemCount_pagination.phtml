@@ -35,8 +35,10 @@
     <span style="padding-right: 5em">
     <?PHP if ($this->totalItemCount > 1) : ?>
         <?= $this->translate("search_titles_resultlist", $this->totalItemCount) ?>
+    <?PHP elseif ($this->totalItemCount == 1) : ?>
+        <?= $this->translate("search_titles_resultlist_one_entry") ?>
     <?PHP else : ?>
-        <?= $this->translate("search_titles_resultlist_one_entry", $this->totalItemCount) ?>
+        <?= $this->translate("search_titles_resultlist_no_entry") ?>
     <?PHP endif; ?>
     </span>
 

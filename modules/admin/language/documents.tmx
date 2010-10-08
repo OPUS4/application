@@ -257,6 +257,24 @@
         <seg>Collections</seg>
       </tuv>
     </tu>
+
+    <tu tuid="search_titles_resultlist_one_entry">
+      <tuv xml:lang="en">
+        <seg>One document was found.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Ein Dokument wurde gefunden.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="search_titles_resultlist_no_entry">
+      <tuv xml:lang="en">
+        <seg>No document was found.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Kein Dokument wurde gefunden.</seg>
+      </tuv>
+    </tu>
   </body>
   
 </tmx>
