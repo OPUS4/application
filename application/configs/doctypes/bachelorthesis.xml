@@ -55,8 +55,8 @@
         <subfield name="PlaceOfBirth" required="no" formelement="text" datatype="Text" />
     </field>
     <field name="Licence" required="yes"  formelement="Select" datatype="Licence" multiplicity="1" />
-    <field name="ThesisPublisher" required="yes" formelement="Text" datatype="ThesisPublisher" multiplicity="1" />
-    <field name="ThesisGrantor" required="yes" formelement="Text" datatype="ThesisGrantor" multiplicity="1" />
+    <field name="ThesisPublisher" required="yes" formelement="Select" datatype="ThesisPublisher" multiplicity="1" />
+    <field name="ThesisGrantor" required="yes" formelement="Select" datatype="ThesisGrantor" multiplicity="1" />
     
     <field name="TitleAbstract" required="no" formelement="Textarea" datatype="Title" multiplicity="4" >
         <required-if-fulltext />
