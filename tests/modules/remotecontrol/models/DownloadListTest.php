@@ -57,6 +57,8 @@ class Remotecontrol_Model_DownloadListTest extends ControllerTestCase {
     public function testGetEmptyCsvFile() {
         $downloadList = new Remotecontrol_Model_DownloadList();
         $csv = $downloadList->getCvsFile('ddc', '621', null);
-        $this->assertRegExp('//', $csv);
+        $this->assertRegExp('/^$/', $csv);
+        $csv = $downloadList->getCvsFile('ddc', '621');
+        $this->assertRegExp('/^$/', $csv);
     }
 }
