@@ -149,6 +149,7 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
                     $elementfield .= " checked='checked' />";
                 else
                     $elementfield .= " />";
+                $elementfield .= "</div>";
                 break;
         }
         $elementfield .= "</div></fieldset>\n\n";

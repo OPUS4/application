@@ -148,8 +148,10 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                         if ($field['value'] === '1')
                             $fieldset .= " checked='checked' />";
                         else
-                            $fieldset .= " /></div>";
+                            $fieldset .= " />";
+                        $fieldset .= "</div>";
                         break;
+
                         
                     default:
                         throw new Application_Exception("Field Type {$field['type']} not found in View Helper.");
