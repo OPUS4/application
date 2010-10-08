@@ -11,10 +11,20 @@
     <tu tuid="publish_controller_required_hint">
         <!-- Hint for the required sign -->
         <tuv xml:lang="en">
-            <seg>Fields that are marked with <span class='required'>*</span> have to be filled.</seg>
+            <seg>Fields that are marked with <span class="required" title="This field has to be filled.">*</span> have to be filled. </seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Felder, die mit einem <span class='required'>*</span> markiert sind, müssen ausgefüllt werden.</seg>
+            <seg>Felder, die mit einem <span class="required" title="Dieses Feld muss ausgefüllt werden">*</span> markiert sind, müssen ausgefüllt werden. </seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="publish_controller_required_hint_sort">
+        <!-- Hint for the required sign -->
+        <tuv xml:lang="en">
+            <seg>This field has to be filled.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Dieses Feld muss ausgefüllt werden.</seg>
         </tuv>
     </tu>
 

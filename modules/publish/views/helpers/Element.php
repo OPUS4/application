@@ -70,9 +70,13 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
      * @param <type> $element
      */
     protected function _renderElement($element, $options=null, $name=null) {
-        $elementfield = "<fieldset class='fieldset'><legend class='legend'>" . $this->view->translate($element["label"]) . "</legend>\n\t\t\n\t\t";
-        $elementfield .= "<table width='100%' class='table'>\n\t<tr>\n\t\t<td width='25%'>\n\t\t\t";
-        $elementfield .= "<label for='" . $element["id"] . "'>" . $element["label"] . "</label></td><td>";
+        $elementfield = "<fieldset class='left-labels'>";
+        $elementfield .= "<legend>" . $this->view->translate($element["label"]) . "</legend>\n\t\t\n\t\t";        
+        $elementfield .= "<div class='form-item'>";
+        $elementfield .= "<label for='" . $element["id"] . "'>" . $element["label"];
+        if ($element["req"] === 'required')
+            $elementfield .= $this->_getRequiredSign();
+        $elementfield .= "</label>";
 
         switch ($element["type"]) {
             case "Zend_Form_Element_Textarea" :
@@ -82,18 +86,13 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
                 else
                     $elementfield .= "cols='30' rows='10' ";
                 $elementfield .= " title='" . $this->view->translate($element["hint"]) . "'>";
-                $elementfield .= $element["value"] . "</textarea>";
-
-                if ($element["req"] === 'required')
-                    $elementfield .= $this->_getRequiredSign();
-                $elementfield .= "\n\t\t</td>\n\t</tr>\n\t";
-                $elementfield .= "<tr>\n\t\t<td colspan='2'>";
+                $elementfield .= $element["value"] . "</textarea>";                           
 
                 if ($element["error"] != null) {
-                    $elementfield .= "<ul class='errors'>";
+                    $elementfield .= "<div class='form-errors'><ul>";
                     foreach ($element["error"] AS $err)
                         $elementfield .= "\n\t\t\t<li>" . $err . "</li>";
-                    $elementfield .= "\n\t\t</ul>";
+                    $elementfield .= "\n\t\t</ul></div>";
                 }
                 break;
 
@@ -111,21 +110,17 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
                 $elementfield .= "value='" . $element["value"] . "' />\n\t\t";
                 if (isset($element["desc"]))
                     $elementfield .= "<p class='description'>" . $this->view->translate($element["desc"]) . "</p>";
-
-                if ($element["req"] === 'required')
-                    $elementfield .= $this->_getRequiredSign();
-                $elementfield .= "</td>\n\t</tr>\n\t";
-                $elementfield .= "<tr>\n\t\t<td colspan='2'>";
+                                
                 if ($element["error"] != null) {
-                    $elementfield .= "<ul class='errors'>";
+                    $elementfield .= "<div class='form-errors'><ul>";
                     foreach ($element["error"] AS $err)
                         $elementfield .= "\n\t\t\t<li>" . $err . "</li>";
-                    $elementfield .= "\n\t\t</ul>";
+                    $elementfield .= "\n\t\t</ul></div>";
                 }
                 break;
 
             case "Zend_Form_Element_Select":
-                $elementfield .= "\n\t\t\t<select name='" . $element["id"] . "' id='" . $element["id"] . "'>\n\t\t\t\t";
+                $elementfield .= "\n\t\t\t<select class='form-selectfield' name='" . $element["id"] . "' id='" . $element["id"] . "'>\n\t\t\t\t";
                 foreach ($element["options"] AS $key => $option) {
                     $elementfield .= "<option value='" . $key . "' label='" . $option . "'";
                     $elementfield .= " title='" . $this->view->translate($element["hint"]) . "' ";
@@ -137,14 +132,12 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
                     $elementfield .= $option . "</option>\n\t\t\t\t";
                 }
                 $elementfield .= "</select>";
-                if ($element["req"] === 'required')
-                    $elementfield .= $this->_getRequiredSign();
-                $elementfield .= "</td>\n\t</tr>\n\t<tr>\n\t\t<td colspan='2'>";
+                
                 if ($element["error"] != null) {
-                    $elementfield .= "<ul class='errors'>";
+                    $elementfield .= "<div class='form-errors'><ul>";
                     foreach ($element["error"] AS $err)
                         $elementfield .= "\n\t\t\t<li>" . $err . "</li>";
-                    $elementfield .= "\n\t\t</ul>";
+                    $elementfield .= "\n\t\t</ul></div>";
                 }
                 break;
 
@@ -158,7 +151,7 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
                     $elementfield .= " />";
                 break;
         }
-        $elementfield .= "</td>\n\t</tr>\n</table></fieldset>\n\n";
+        $elementfield .= "</div></fieldset>\n\n";
         return $elementfield;
     }
 
@@ -167,7 +160,9 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
      * @param <type> $name 
      */
     protected function _renderSubmit($value, $options=null, $name=null) {
-        $submit = "\n\t\t<input type='submit' name='" . $name . "' id='" . $name . "' value='" . $this->view->translate($value) . "'/>";
+        $submit = "\n\t\t<input type='submit' name='" . $name . "' id='" . $name . "' value='" . $this->view->translate($value) . "' ";
+        if (isset($options))
+            $submit .= $options ." />";
         return $submit;
     }
 
@@ -187,7 +182,7 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
      * @return <type> 
      */
     protected function _getRequiredSign() {
-        return "<span class='required'>*</span>";
+        return "<span class='required' title='" . $this->view->translate('publish_controller_required_hint_sort') . "'>*</span>";
     }
 
 }
