@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+    <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool"></header>
+    <body>
+        <tu tuid="mail_publish_notification_subject">
+          <tuv xml:lang="en">
+            <seg>New document (%1$s) published</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Neues Dokument (%1$s) publiziert</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="mail_publish_notification">
+            <tuv xml:lang="en">
+                <seg>
+A new document was published.
+
+%1$s
+                </seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>
+Ein neues Dokument ist veröffentlicht worden.
+
+%1$s
+                </seg>
+            </tuv>
+        </tu>
+    </body>
+</tmx>
