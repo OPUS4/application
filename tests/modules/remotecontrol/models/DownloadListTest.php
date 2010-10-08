@@ -41,24 +41,22 @@ class Remotecontrol_Model_DownloadListTest extends ControllerTestCase {
     public function testGetCsvFileForCollectionNumber() {
         $downloadList = new Remotecontrol_Model_DownloadList();
         $csv = $downloadList->getCvsFile('ddc', '004', null);
-        $this->assertRegExp('/10 , /', $csv);
+        $this->assertRegExp('/^10\D/', $csv);
         $this->assertRegExp('/\n/', $csv);
     }
 
     public function testGetCsvFileForCollectionName() {
         $downloadList = new Remotecontrol_Model_DownloadList();
         $csv = $downloadList->getCvsFile('institutes', null, 'Bauwesen');
-        $this->assertRegExp('/3 , /', $csv);
-        $this->assertRegExp('/8 , /', $csv);
-        $this->assertRegExp('/10 , /', $csv);
-        $this->assertRegExp('/90 , /', $csv);
+        $this->assertRegExp('/3\D*,/', $csv);
+        $this->assertRegExp('/8\D*,/', $csv);
+        $this->assertRegExp('/10\D*,/', $csv);
+        $this->assertRegExp('/90\D*,/', $csv);
     }
 
     public function testGetEmptyCsvFile() {
         $downloadList = new Remotecontrol_Model_DownloadList();
         $csv = $downloadList->getCvsFile('ddc', '621', null);
-        $this->assertRegExp('/^$/', $csv);
-        $csv = $downloadList->getCvsFile('ddc', '621');
         $this->assertRegExp('/^$/', $csv);
     }
 }
