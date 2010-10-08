@@ -84,9 +84,8 @@ class Remotecontrol_AccountController extends Controller_Action {
 
         $login        = $request->getParam('login');
         $password     = $request->getParam('password');
-        $password_new = $request->getParam('password-new');
 
-        if (is_null($password_new) || trim($password_new) == '') {
+        if (is_null($password) || !is_string($password) || $password == '') {
             $this->getResponse()->setHttpResponseCode(400);
             $this->getResponse()->setBody("ERROR: Empty password given.");
             return;
@@ -99,14 +98,8 @@ class Remotecontrol_AccountController extends Controller_Action {
             return;
         }
 
-        if (true !== $account->isPasswordCorrect($password)) {
-            $this->getResponse()->setHttpResponseCode(400);
-            $this->getResponse()->setBody("ERROR: Incorrect password given.");
-            return;
-        }
-
         try {
-            $account->setPassword($password_new);
+            $account->setPassword($password);
             $account->store();
         }
         catch (Opus_Security_Exception $e) {
