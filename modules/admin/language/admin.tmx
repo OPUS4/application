@@ -36,19 +36,19 @@
     
     <tu tuid="admin_title_collections">
       <tuv xml:lang="en">
-        <seg>Collections</seg>
+        <seg>Edit Collections</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Collections verwalten</seg>
+        <seg>Sammlungen verwalten</seg>
       </tuv>
     </tu>
 
     <tu tuid="admin_title_collections_description">
       <tuv xml:lang="en">
-        <seg>Create, editing, and delete collections.</seg>
+        <seg>Create, edit, and delete collections.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Collections erstellen, editieren und löschen.</seg>
+        <seg>Sammlungen erstellen, editieren und löschen.</seg>
       </tuv>
     </tu>
     
