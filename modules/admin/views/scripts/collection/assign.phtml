@@ -28,47 +28,60 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
+ * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 ?>
-<h1>Opus Application - <?=$this->translate('admin_title_collections') ?></h1>
 
-<p>
-<a href="<?=$this->url(array('module'=>'admin', 'controller'=>'collection', 'action'=>'assign', 'document'=>$this->assign), null,
-    true)?>">Collections</a>
-&gt;&nbsp;<a href="<?=$this->url(array('module'=>'admin', 'controller'=>'collection', 'action'=>'assign',
-    'role'=>$this->role_id, 'copy'=>$this->copy, 'document'=>$this->assign), null, true)?>"><?=$this->role_name?></a>
-<? foreach($this->breadcrumb as $path => $name) : ?>
-&gt;&nbsp;<a href="<?=$this->url(array('module'=>'admin', 'controller'=>'collection', 'action'=>'show',
-    'role'=>$this->role_id, 'path'=>$path, 'copy'=>$this->copy, 'assign'=>$this->assign), null, true)?>"><?=$name?></a>
-<? endforeach; ?>
-</p>
 
-<a href="<?=$this->url(array('module'=>'admin', 'controller'=>'documents', 'action'=>'edit',
-'id'=>$this->assign), null, true)?>"><?=$this->translate('admin_collections_collection_assign_abort')?></a>
+<h1><?=$this->translate('admin_title_collections') ?></h1>
 
-<table>
-    <? foreach($this->subcollections as $path => $name) : ?>
-    <tr>
-        <? if (false === is_null($this->role_id)): ?>
-        <td width="400">
-            <a href="<?=$this->url(array('module'=>'admin', 'controller'=>'collection', 'action'=>'assign',
-                'role'=>$this->role_id, 'path'=>$path, 'document'=>$this->assign), null, true)?>"><?=$name?></a>
+<div class="adminContainer">
+
+<?php if (!empty($this->breadcrumb)) : ?>
+<div class="collection_breadcrumbs">
+    <?= $this->translate('breadcrumb_title') ?>
+    <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'assign', 'document' => $this->documentId), null, true)?>">Collections</a>
+    <?php foreach($this->breadcrumb as $i => $parent) : ?>
+        &raquo;
+        <?php if ($i === 0) : ?>
+            <?php if (count($this->breadcrumb) > 1) : ?>
+                <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'assign', 'id' => $parent->getId(), 'document' => $this->documentId), null, true) ?>"><?= $this->role_name ?></a>
+            <?php else : ?>
+                <?= $this->role_name ?>
+            <?php endif ?>
+        <?php elseif ($i === count($this->breadcrumb) - 1) : ?>            
+            <?= $parent->getDisplayName() ?>
+        <?php else : ?>            
+            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'assign', 'id' => $parent->getId(), 'document' => $this->documentId), null, true) ?>"><?= $parent->getDisplayName() ?></a>
+        <?php endif ?>
+    <?php endforeach; ?>
+</div>
+<?php endif ?>
+
+<div>
+<a class="add" href="<?=$this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'edit', 'id' => $this->documentId), null, true)?>"><?=$this->translate('admin_collections_collection_assign_abort')?></a>
+</div>
+
+<table class="collections">
+    <?php foreach($this->collections as $i => $collection) : ?>
+    <tr class="<?= ($i %2 == 0) ? 'even' : 'odd'?>">
+        <td>
+            <?php if ($collection['hasChildren']) : ?>
+                <a href="<?=$this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'assign', 'id' => $collection['id'], 'document' => $this->documentId), null, true)?>"><?= $collection['name'] ?></a>
+            <?php else : ?>
+                <?= $collection['name'] ?>
+            <?php endif ?>            
         </td>
         <td>
-            <form method="post" action="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'assign',
-            'role' => $this->role_id, 'path' => $path, 'document'=>$this->assign), null, true)?>">
+            <form method="post" action="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'assign', 'id' => $collection['id'], 'document' => $this->documentId), null, true)?>">
                 <input type="submit" value="<?=$this->translate('admin_collections_collection_assign_here')?>" />
             </form>
         </td>
-        <? else: ?>
-        <td width="400">
-            <a href="<?=$this->url(array('module'=>'admin', 'controller'=>'collection', 'action'=>'assign',
-                'role'=>$this->role_id, 'role'=>$path, 'document'=>$this->assign), null, true)?>"><?=$name?></a>
-        </td>
-        <? endif ?>
     </tr>
     <? endforeach; ?>
 </table>
+
+</div>

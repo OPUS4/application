@@ -26,12 +26,13 @@
  *
  * @category    Application
  * @package     Module_Admin
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @author      Sascha Szott <szott@zib.de>
+ * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
 
-<h1><?= $this->title ?></h1>
-<?= $this->form ?>
+class Admin_Model_Exception extends Application_Exception {
+    
+}
+?>

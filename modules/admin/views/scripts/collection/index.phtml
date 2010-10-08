@@ -34,14 +34,19 @@
  * @version     $Id$
  */
 ?>
-<div class="adminContainer">
 
+<div class="adminContainer">
     <div class="breadcrumbsContainer">
         <?= $this->navigation()->breadcrumbs() ?>
     </div>
 
-<ul>
+    <div class="collection_new">
+        <a class="add" href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'newrole')) ?>">
+        <?= $this->translate('admin_collections_role_new') ?>
+        </a>
+    </div>
 
+    <table class="collections">
     <?php foreach ($this->collectionRoles as $i => $collectionRole) :
         $translatelabel = 'search_index_custom_browsing_' . $collectionRole->getName();
         $printname = '';
@@ -50,40 +55,60 @@
         else
             $printname = $this->translate($translatelabel);
     ?>
-    <li>
+    <tr class="<?= ($i % 2 === 0) ? 'even' : 'odd' ?>">
+        <td class="<?= ($collectionRole->getVisible() === '1') ? 'visible' : 'unvisible' ?>">
         <?php if (is_null($collectionRole->getRootCollection())) : ?>
-            <?= htmlspecialchars($printname) ?>
+            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'show', 'role' => $collectionRole->getId()), null, true)?>"><?= htmlspecialchars($printname) ?></a>
         <?php else : ?>
-            <a href="<?= $this->url(array('action' => 'show', 'id' => $collectionRole->getRootCollection()->getId()), null, true)?>"><?= htmlspecialchars($printname) ?></a>
-        <?php endif ?>        
-        <a href="<?= $this->url(array('action' => 'edit', 'id' => $collectionRole->getId()), null, true) ?>">
-        <img src = "<?= $this->layoutPath() ?>/img/edit_collections_properties.gif"
-             alt = "edit"
-             title = "<?= $this->translate('admin_collections_role_edit') ?>" /></a>
-        <a href="<?= $this->url(array('action' => 'manage', 'id' => $collectionRole->getId(), 'deleteall' => 'Delete'), null, true) ?>">
-        <img src = "<?= $this->layoutPath() ?>/img/delete_collection_tree.gif"
-             alt = "delete all"
-             title = "<?= $this->translate('admin_collections_role_delete') ?>" /></a>
-        <?php if ($i > 0) : ?>
-        <a href="<?= $this->url(array('action' => 'manage', 'id' => $collectionRole->getId(), 'move_up' => 'Up'), null, true) ?>">
-        <img src = "<?= $this->layoutPath() ?>/img/move_up_collection_tree.gif"
-             alt = "move up"
-             title = "<?= $this->translate('admin_collections_role_move_up') ?>" /></a>
+            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'show', 'id' => $collectionRole->getRootCollection()->getId()), null, true)?>"><?= htmlspecialchars($printname) ?></a>
+        <?php endif ?>            
+        </td>
+        <td>
+            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'editrole', 'roleid' => $collectionRole->getId()), null, true) ?>">
+            <?= $this->translate('admin_collections_role_edit') ?>
+            </a>
+        </td>
+        <?php if ($collectionRole->getVisible() === '1') : ?>
+        <td>
+            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'hiderole', 'roleid' => $collectionRole->getId()), null, true) ?>">
+            <?= $this->translate('admin_collections_role_hide') ?>
+            </a>
+        </td>
+        <?php else : ?>
+        <td>
+            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'unhiderole', 'roleid' => $collectionRole->getId()), null, true) ?>">
+            <?= $this->translate('admin_collections_role_unhide') ?>
+            </a>
+        </td>
         <?php endif ?>
-        <?php if ($i < count($this->collectionRoles) - 1) : ?>
-        <a href="<?= $this->url(array('action' => 'manage', 'id' => $collectionRole->getId(), 'move_down' => 'Down'), null, true)?>">
-        <img src = "<?= $this->layoutPath() ?>/img/move_down_collection_tree.gif"
-             alt = "move down"
-             title = "<?= $this->translate('admin_collections_role_move_down') ?>" /></a>
-        <?php endif ?>
-    </li>
+        <td>
+            <?php if ($i > 0) : ?>
+                <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'moverole', 'roleid' => $collectionRole->getId(), 'pos' => $this->collectionRoles[$i - 1]->getPosition()), null, true) ?>">
+                <?= $this->translate('admin_collections_role_move_up') ?>
+                </a>
+            <?php endif ?>
+        </td>
+        <td>
+            <?php if ($i < count($this->collectionRoles) - 1) : ?>
+                <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'moverole', 'roleid' => $collectionRole->getId(), 'pos' => $this->collectionRoles[$i + 1]->getPosition()), null, true)?>">
+                <?= $this->translate('admin_collections_role_move_down') ?>
+                </a>
+            <?php endif ?>
+        </td>
+        <td>
+            <?php
+            if (is_null($collectionRole->getRootCollection()) || count($collectionRole->getRootCollection()->getChildren()) === 0) {
+                $confirmKey = 'confirm_deletion_empty';
+            }
+            else {
+                $confirmKey = 'confirm_deletion';
+            }
+            ?>
+            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'deleterole', 'roleid' => $collectionRole->getId()), null, true) ?>" onclick="return confirm('<?= $this->translate($confirmKey) ?>');">
+            <?= $this->translate('admin_collections_role_delete') ?>
+            </a>
+        </td>
+    </tr>
     <?php endforeach ?>
-</ul>
-
-<a href="<?= $this->url(array('action' => 'new')) ?>">
-<img src = "<?= $this->layoutPath() ?>/img/new_collection_tree.gif"
-     alt = "create new collection role"
-     title = "<?= $this->translate('admin_collections_role_new') ?>" />
-</a>
-
+    </table>
 </div>

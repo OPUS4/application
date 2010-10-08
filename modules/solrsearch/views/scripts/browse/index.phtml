@@ -40,8 +40,10 @@
 <ul class="nav browsing">
     <li>
         <a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'latest'), null, true) ?>"><?= $this->translate('latest_documents_title') ?></a>&nbsp;
+        <?php /*
         <a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'latest', 'output' => 'rss'), null, true) ?>" class="rss">
         <img src="<?= $this->layoutPath() ?>/img/feed.png" width="16" height="16" alt="<?= $this->translate('rss_icon') ?>" title="<?= $this->translate('rss_title') ?>" /></a>
+        */ ?>
     </li>
     <li>
         <a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'browse', 'action' => 'doctypes'), null, true) ?>"><?= $this->translate('search_index_doctype_browsing') ?></a>

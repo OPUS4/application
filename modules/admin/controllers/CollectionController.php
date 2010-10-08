@@ -27,10 +27,11 @@
  *
  * @category    Application
  * @package     Module_Admin
+ * @author      Sascha Szott <szott@zib.de>
  * @author     	Thoralf Klein <thoralf.klein@zib.de>
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @author      Tobias Tappe <tobias.tappe@uni-bielefeld.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -38,8 +39,6 @@
 /**
  * Controller for administration of collections.
  *
- * @category    Framework
- * @package     Module_Admin
  */
 class Admin_CollectionController extends Controller_Action {
 
@@ -62,37 +61,14 @@ class Admin_CollectionController extends Controller_Action {
         $this->view->collectionRoles = Opus_CollectionRole::fetchAll();
     }
 
-    /**
-     * Edits a collection instance
-     *
-     * @return void
-     */
-    public function editAction() {
-        $roleId       = $this->getRequest()->getParam('role');
-        $collectionId = $this->getRequest()->getParam('node');
+    public function newroleAction() {
+        $collectionRoleModel = new Admin_Model_CollectionRole();        
+        $this->view->form = $this->getRoleForm($collectionRoleModel->getObject());
+    }
 
-        $form_builder = new Form_Builder();
-        if (true === isset($collectionId)) {
-            $collection = new Opus_Collection($collectionId);
-        }
-        else if (true === isset($roleId)) {
-            $role = new Opus_CollectionRole($roleId);
-            $collection = $role;
-        }
-        else {
-            // FIXME: Proper error handling.
-            throw new Exception("edit: Parameters missing.");
-        }
-
-        $session = new Zend_Session_Namespace('collection');
-        $session->collection = $collection;
-        $filter = $this->__createFilter($collection);
-        $collectionForm = $form_builder->build($filter);
-        $action_url = $this->view->url(array('action' => 'create'));
-        $collectionForm->setAction($action_url);
-
-        $this->view->role = $role;
-        $this->view->form = $collectionForm;
+    public function editroleAction() {
+        $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('roleid', ''));
+        $this->view->form = $this->getRoleForm($collectionRoleModel->getObject());
     }
 
     /**
@@ -101,357 +77,417 @@ class Admin_CollectionController extends Controller_Action {
      * @return void
      */
     public function newAction() {
-        $role = $this->getRequest()->getParam('role');
-
-        if (true === isset($role)) {
-            $collection = new Opus_Collection();
-        } else {
-            $collection = new Opus_CollectionRole();
-            $allRoles = Opus_CollectionRole::fetchAll();
-            $countRoles = count($allRoles);
-            $pos_field = $collection->getField('Position');
-            $pos_field->setDefault(array_combine(range(1,$countRoles+1),range(1,$countRoles+1)))->setSelection(true);
+        $id = $this->getRequest()->getParam('id');
+        if (is_null($id)) {
+            $this->_redirectToAndExit('index', 'id parameter is missing');
+        }
+        $type = $this->getRequest()->getParam('type');
+        if (is_null($type)) {
+            $this->_redirectToAndExit('index', 'type parameter is missing');
         }
 
-        $session = new Zend_Session_Namespace('collection');
-        $session->collection = $collection;
-        $filter = $this->__createFilter($collection);
-
-        $form_builder = new Form_Builder();
-        $collectionForm = $form_builder->build($filter);
-        $action_url = $this->view->url(array('action' => 'create'));
-        $collectionForm->setAction($action_url);
-        $this->view->form = $collectionForm;
+        $collectionModel = new Admin_Model_Collection();
+        $this->view->form = $this->getForm($collectionModel->getObject(), $id, $type);
     }
 
     /**
-     * Deletes a collection or collection role instance
+     * Edits a collection instance
      *
      * @return void
      */
-    public function manageAction() {
-        $roleId = $this->getRequest()->getUserParam('role');
-        $nodeId = $this->getRequest()->getUserParam('node');
+    public function editAction() {
+        $collectionModel = new Admin_Model_Collection($this->getRequest()->getParam('id', ''));
+        $this->view->form = $this->getForm($collectionModel->getObject());
+    }
 
-        // Store whether we're handling a collection or a collection role.
-        if (true === isset($nodeId)) {
-            $object = new Opus_CollectionNode($nodeId);
+    private function moveCollection($increment) {
+        throw new Application_Exception('Method is not implemented!');
+        $collectionModel = new Admin_Model_Collection($this->getRequest()->getParam('id', ''));
+
+        // evaluate parameter ref
+    }
+
+    public function moveroleAction() {
+        try {
+            $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('roleid', ''));
+            $collectionRoleModel->move($this->getRequest()->getParam('pos'));
+            $this->_redirectTo('index', 'Operation completed successfully.');
+        }
+        catch (Application_Exception $e) {
+            $this->_redirectToAndExit('index', $e->getMessage(), 'collection');
+        }
+    }
+
+    public function moveupAction() {
+        $collectionParentId = $this->moveCollection(-1);
+        if (is_null($collectionParentId)) {
+            $this->_redirectTo('index', 'Operation completed successfully.');
         }
         else {
-            $object = new Opus_CollectionRole($roleId);
-        }
-
-        if (false === is_null($this->_request->getParam('deleteall'))) {
-            // Delete collection.
-            $object->setVisibility(false);
-            $object->store();
-        } else if (false === is_null($this->_request->getParam('undeleteall'))) {
-            // Un-Delete collection.
-            $object->setVisibility(true);
-            $object->store();
-        } else if (false === is_null($this->_request->getParam('delete'))) {
-            // Delete collection.
-            $object->deletePosition($parentCollId);
-        } else if (false === is_null($this->_request->getParam('move_up'))) {
-            // Move collection up by one position.
-            $object->setPosition($collection->getPosition() - 1);
-            $object->store();
-        } else if (false === is_null($this->_request->getParam('move_down'))) {
-            // Move collection up by one position.
-            $object->setPosition($collection->getPosition() + 1);
-            $object->store();
-        }
-
-        if (true === isset($nodeId)) {
-            $this->_redirectTo('show', 'Collection successfully deleted.', null, null,
-                    array('role' => $roleId, 'node' => $nodeId));
-        } elseif (false === is_null($this->_request->getParam('deleteall'))) {
-            $this->_redirectTo('index', 'Role successfully deleted.');
-        } else {
-            $this->_redirectTo('index');
+            $this->_redirectTo('show', 'Operation completed successfully.', 'controller', 'admin', array('id' => $collectionParentId));
         }
     }
 
-    /**
-     * Display subcollections of collections and collection roles.
-     *
-     * @return void
-     */
+    public function movedownAction() {
+        $collectionParentId = $this->moveCollection(+1);
+        if (is_null($collectionParentId)) {
+            $this->_redirectTo('index', 'Operation completed successfully.');
+        }
+        else {
+            $this->_redirectTo('show', 'Operation completed successfully.', 'controller', 'admin', array('id' => $collectionParentId));
+        }
+    }
+
+    private function changeRoleVisibility($visibility) {        
+        try {
+            $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('roleid', ''));
+            $collectionRoleModel->setVisibility($visibility);
+        }
+        catch (Application_Exception $e) {
+            $this->_redirectToAndExit('index', $e->getMessage(), 'collection');
+        }
+    }
+
+    private function changeCollectionVisibility($visibility) {
+        try {
+            $collectionModel = new Admin_Model_Collection($this->getRequest()->getParam('id', ''));
+            return $collectionModel->setVisiblity($visibility);
+        }
+        catch (Application_Exception $e) {
+            $this->_redirectToAndExit('index', $e->getMessage(), 'collection');
+        }
+    }
+
+    public function hideroleAction() {
+        $this->changeRoleVisibility(false);
+        $this->_redirectTo('index', 'Operation completed successfully.');
+    }
+    
+    public function unhideroleAction() {
+        $this->changeRoleVisibility(true);
+        $this->_redirectTo('index', 'Operation completed successfully.');
+    }
+
+    public function hideAction() {
+        $id = $this->changeCollectionVisibility(false);
+        $this->_redirectTo('show', 'Operation completed successfully.', 'collection', 'admin', array('id' => $id));
+    }
+
+    public function unhideAction() {
+        $id = $this->changeCollectionVisibility(true);
+        $this->_redirectTo('show', 'Operation completed successfully.', 'collection', 'admin', array('id' => $id));
+    }
+
+    public function deleteroleAction() {
+        try {
+            $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('roleid', ''));
+            $collectionRoleModel->delete();
+        }
+        catch (Application_Exception $e) {
+            $this->_redirectToAndExit('index', $e->getMessage(), 'collection');
+            return;
+        }
+        $this->_redirectTo('index', 'Operation completed successfully.');
+    }
+
+    public function deleteAction() {
+        try {
+            $collectionModel = new Admin_Model_Collection($this->getRequest()->getParam('id', ''));
+            $returnId = $collectionModel->delete();
+            $this->_redirectTo('show', 'Operation completed successfully.', 'collection', 'admin', array ('id' => $returnId));
+        }
+        catch (Application_Exception $e) {
+            $this->_redirectToAndExit('index', $e->getMessage(), 'collection');            
+        }        
+    }
+
     public function showAction() {
-        $collectionId = $this->getRequest()->getParam('node');
-        $collection = new Opus_Collection($collectionId);
-        $role = new Opus_CollectionRole($collection->getRoleId());
-      
-        $breadcrumb         = array();
-        $subcollections     = array();
-        $severalAppearances = array();
-        $visibility         = array();
-        $copypaste          = array();
-        $nameLength         = 0;
-
-        if (isset($collection)) {
-
-            $breadcrumb = array_reverse($collection->getParents());
-            array_shift($breadcrumb);
-
-            foreach($collection->getChildren() as $child) {
-                $subcollections[$child->getId()]     = $child->getDisplayName();
-                $severalAppearances[$child->getId()] = 'unique'; // TODO: Kann weg.
-                $visibility[$child->getId()]         = ('1' === $child->getVisible())?'visible':'hidden';
-                $copypaste[$child->getId()]          = 'forbidden';
-
-                $nameLength = max($nameLength, strlen($child->getDisplayName()));
-            }
+        $roleId = $this->getRequest()->getParam('role');
+        $id = null;
+        if (!is_null($roleId)) {
+            // collection role without root collection: create a root collection
+            $rootCollection = new Opus_Collection();
+            $collectionRole = new Opus_CollectionRole($roleId);
+            $collectionRole->addRootCollection($rootCollection);
+            $collectionRole->store();
+            $id = $rootCollection->getId();
+        }
+        else {
+            $id = $this->getRequest()->getParam('id', '');
         }
 
-        // Freakin' Zend appears to consider layout as file name, not direcory
-        // name...
-        //$this->_helper->layout->setLayout($collection->getTheme());
-        $this->view->subcollections     = $subcollections;
-        $this->view->severalAppearances = $severalAppearances;
-        $this->view->visibility         = $visibility;
-        $this->view->copypaste          = $copypaste;
-
-        $this->view->node_id    = $collection->getId();
+        $collectionModel = null;
+        try {
+            $collectionModel = new Admin_Model_Collection($id);
+        }
+        catch (Application_Exception $e) {
+            $this->_redirectToAndExit('index', $e);
+            return;
+        }
+        $collection = $collectionModel->getObject();
+        
+        $this->view->breadcrumb = array_reverse($collection->getParents());
+        $this->view->collections = $collection->getChildren();
+        $this->view->collection_id = $collection->getId();
+        
+        $role = $collection->getRole();
         $this->view->role_id    = $role->getId();
         $this->view->role_name  = $role->getDisplayName();
-        $this->view->copy       = null;
-        $this->view->breadcrumb = $breadcrumb;
+        
     }
 
-    /**
-     * Save model instance
-     *
-     * @return void
-     */
+    private function returnIfNotPost() {
+        if (!$this->getRequest()->isPost()) {
+            $this->_redirectToAndExit('index');
+        }
+    }
+
+    private function initCreateRoleForm($form, $collectionRole) {
+        if ($collectionRole->isNewRecord()) {
+            $form->setAction($this->view->url(array('action' => 'createrole')));
+        }
+        else {
+            $form->setAction($this->view->url(array('action' => 'createrole', 'oid' => $collectionRole->getId())));
+        }
+        return $form;        
+    }
+
+    public function createroleAction() {
+        $this->returnIfNotPost();
+
+        $data = $this->_request->getPost();
+
+        $objectId = $this->getRequest()->getParam('oid');
+        $collectionRole = null;
+        if (is_null($objectId)) {
+            $collectionRole = new Opus_CollectionRole();
+        }
+        else {
+            $collectionRole = new Opus_CollectionRole($objectId);
+        }
+
+        $form_builder = new Form_Builder();        
+        $form_builder->buildModelFromPostData($collectionRole, $data['Opus_Model_Filter']);
+        $form = $form_builder->build($this->__createRoleFilter($collectionRole));
+        
+        if (!$form->isValid($data)) {
+            $this->view->form = $this->initCreateRoleForm($form, $collectionRole);
+        }
+        else {
+            // manuelles Überprüfen der IBs in Tabelle collections_roles
+            $tmpRole = Opus_CollectionRole::fetchByName($collectionRole->getName());
+            if (!is_null($tmpRole) && $tmpRole->getId() !== $collectionRole->getId()) {
+                $this->view->form = $this->initCreateRoleForm($form, $collectionRole);
+                $this->view->message = 'name is not unique';
+                return;
+            }
+            
+            $tmpRole = Opus_CollectionRole::fetchByOaiName($collectionRole->getOaiName());
+            if (!is_null($tmpRole) && $tmpRole->getId() !== $collectionRole->getId()) {
+                $this->view->form = $this->initCreateRoleForm($form, $collectionRole);
+                $this->view->message = 'oainame is not unique';
+                return;
+            }
+
+            if (true === $collectionRole->isNewRecord()) {
+                if (true === is_null($collectionRole->getRootCollection())) {
+                    $collectionRole->addRootCollection();
+                    $collectionRole->getRootCollection()->setVisible('1');
+                }
+                $collectionRole->store();
+                $this->_redirectTo('index', 'Collection role \'' . $collectionRole->getName() . '\' successfully created.');
+            }
+            else {
+                $collectionRole->store();
+                $this->_redirectTo('index', 'Collection role \'' . $collectionRole->getName() . '\' successfully edited.');
+            }
+        }
+    }
+
     public function createAction() {
-        $copy = $this->getRequest()->getParam('copy');
+        $this->returnIfNotPost();
+        
+        $data = $this->_request->getPost();
 
-        if ($this->_request->isPost() === true) {
-            $data = $this->_request->getPost();
-            $form_builder = new Form_Builder();
-            $session = new Zend_Session_Namespace('collection');
-            $form_builder->buildModelFromPostData($session->collection, $data['Opus_Model_Filter']);
-            $form = $form_builder->build($this->__createFilter($session->collection));
+        $objectId = $this->getRequest()->getParam('oid');
+        $collection = null;
+        if (is_null($objectId)) {
+            $collection = new Opus_Collection();
+        }
+        else {
+            $collection = new Opus_Collection($objectId);
+        }
 
-            if (array_key_exists('submit', $data) === false) {
-                $action_url = $this->view->url(array('action' => 'create'));
-                $form->setAction($action_url);
-                $this->view->form = $form;
-            } else {
-                $params = $this->getRequest()->getUserParams();
+        $form_builder = new Form_Builder();
+        $form_builder->buildModelFromPostData($collection, $data['Opus_Model_Filter']);
+        $form = $form_builder->build($this->__createFilter($collection));
 
-                if ($form->isValid($data) === true) {
-                    // retrieve values from form and save them into model
-                    $model = $session->collection;
-
-                    if (true === $model->isNewRecord()) {
-                        $below = $this->getRequest()->getParam('below');
-                        $above = $this->getRequest()->getParam('above');
-                        $node  = $this->getRequest()->getParam('node');
-
-                        // Handling a new collection in an existing collection.
-                        if (true === isset($below)) {
-                            // Insert below specified position
-                            // Below means: right sibling of node(id $below)
-                            $node = new Opus_CollectionNode( $below );
-                            $new_node = $node->addNextSibling();
-
-                            $new_node->addCollection($model);
-                            $node->store();
-                        } else if (true === isset($above)) {
-                            // Insert above specified position
-                            // Above means: left sibling of node(id $below)
-                            $node = new Opus_CollectionNode( $above );
-                            $new_node = $node->addPrevSibling();
-
-                            $new_node->addCollection($model);
-                            $node->store();
-                        } else if (true === isset($node)) {
-                            // Insert above specified position
-                            // Above means: left sibling of node(id $below)
-                            $node = new Opus_CollectionNode( $node );
-                            $new_node = $node->addLastChild();
-
-                            $new_node->addCollection($model);
-                            $node->store();
-                        }
-                        else if ($model instanceof Opus_CollectionRole) {
-                            if (true === is_null($model->getRootNode())) {
-                                $new_node = $model->addRootNode();
-                            }
-                            else {
-                                $new_node = $model->getRootNode();
-                            }
-                            if (true === is_null($new_node->getCollection())) {
-                                $new_node->addCollection();
-                            }
-                            $model->store();
-
-                            $session->collection = null;
-
-                            $this->_redirectTo('show', 'Collection role successfully created.', null, null,
-                                    array('role' => $model->getId()));
-
-                        }
-                        else {
-                            throw new Exception("create: Parameters missing.");
-                        }
-
-                    } else {
-                        $model->store();
-                    }
-
-                    $module = array_shift($params);
-                    $controller = array_shift($params);
-                    $action = array_shift($params);
-                    $this->_redirectTo('show', '', $controller, $module, $params);
-                } else {
-                    $this->view->form = $form;
+        if (!$form->isValid($data)) {
+            if ($collection->isNewRecord()) {
+                $form->setAction($this->view->url(array('action' => 'create', 'id' => $this->getRequest()->getParam('id'), 'type' => $this->getRequest()->getParam('type'))));
+            }
+            else {
+                $form->setAction($this->view->url(array('action' => 'create', 'oid' => $objectId, 'id' => $this->getRequest()->getParam('id'), 'type' => $this->getRequest()->getParam('type'))));
+            }
+            $this->view->form = $form;
+        }
+        else {            
+            if (true === $collection->isNewRecord()) {
+                $id = $this->getRequest()->getParam('id');
+                $type = $this->getRequest()->getParam('type');
+                if (is_null($id)) {
+                    $this->_redirectToAndExit('index', 'id parameter is missing');
+                    return;
+                }
+                if (is_null($type)) {
+                    $this->_redirectToAndExit('index', 'type parameter is missing');
+                    return;
+                }
+                if ($type === 'child') {
+                    $refCollection = new Opus_Collection($id);
+                    $refCollection->addFirstChild($collection);
+                    $refCollection->store();
+                }
+                else if ($type === 'sibling') {
+                    $refCollection = new Opus_Collection($id);
+                    $refCollection->addNextSibling($collection);
+                    $refCollection->store();
+                }
+                else {
+                    $this->_redirectToAndExit('index', 'type paramter invalid');
+                    return;
+                }
+                $this->_redirectTo('show', 'Insert successful', 'collection', 'admin', array('id' => $collection->getId()));
+            }
+            else {
+                // nur Änderungen
+                $collection->store();
+                $parents = $collection->getParents();
+                if (count($parents) === 1) {
+                    $this->_redirectTo('show', 'Edit successful', 'collection', 'admin', array('id' => $collection->getRoleId()));
+                }
+                else {
+                    $this->_redirectTo('show', 'Edit successful', 'collection', 'admin', array('id' => $parents[1]->getId()));
                 }
             }
-        } else if (true === isset($copy)) {
-            // Copying a reference to a collection  to a new position
-            $role  = $this->getRequest()->getParam('role');
-            $below = $this->getRequest()->getParam('below');
-            $above = $this->getRequest()->getParam('above');
-
-            $sourceCollection = new Opus_CollectionRole($role);
-            // $copy is the path to the source collection
-            // fetch corresponding collection model
-            if (true === isset($copy)) {
-                $trail = explode('-', $copy);
-                foreach($trail as $i => $step) {
-                    if ($i < sizeof($trail)) {
-                        $sourceCollection = $sourceCollection->getSubCollection($step);
-                    }
-                }
-            }
-
-            $targetCollection = new Opus_CollectionRole($role);
-            // $below/$above is the path to the destination collection
-            if (true === isset($below)) {
-                // Insert below specified position
-                $trail = explode('-', $below);
-                foreach($trail as $i => $step) {
-                    if ($i < sizeof($trail) - 1) {
-                        $targetCollection = $targetCollection->getSubCollection($step);
-                    }
-                }
-                $targetCollection->insertSubCollectionAt(end($trail) + 1, $sourceCollection);
-            } else if (true === isset($above)) {
-                // Insert above specified position
-                $trail = explode('-', $above);
-                foreach($trail as $i => $step) {
-                    if ($i < sizeof($trail) - 1) {
-                        $targetCollection = $targetCollection->getSubCollection($step);
-                    }
-                }
-                $targetCollection->insertSubCollectionAt(end($trail), $sourceCollection);
-            }
-            $targetCollection->store();
-
-            // redirect to parent of created collection
-            array_pop($trail);
-            $path = implode('-', $trail);
-
-            $this->_redirectTo('show', 'Collection successfully copied.', null, null,
-                    array('role' => $role, 'path' => $path));
-        } else {
-            $this->_redirectTo('index');
         }
     }
 
     /**
-     * Assign a document to a collection
+     * Assign a document to a collection (used in document administration)
      *
      * @return void
      */
     public function assignAction() {
         $documentId = $this->getRequest()->getParam('document');
-        $role = $this->getRequest()->getParam('role');
-        $path = $this->getRequest()->getParam('path');
-        $document = new Opus_Document($documentId);
-        if ($this->_request->isPost() === true) {
-            $collection = new Opus_CollectionRole($role);
-            $roleName = $collection->getDisplayName();
-            if (true === isset($path)) {
-                $trail = explode('-', $path);
-                foreach($trail as $i => $step) {
-                    if ($i < sizeof($trail)) {
-                        $collections = $collection->getSubCollection();
-                        $collection = $collections[$step];
-                    }
-                }
-            }
-            $collection->addDocuments($document);
-            $collection->store();
-            $this->_redirectTo(
-                    'edit',
-                    'Document successfully assigned to collection "' . $collection->getDisplayName() . '".',
-                    'documents', 'admin', array('id' => $document->getId()));
-        } else if (false === isset($role)) {
-            $collections = array();
-            foreach (Opus_CollectionRole::fetchAll() as $collection) {
-                $collections[$collection->getId()] = $collection->getDisplayName();
-            }
-            $this->view->subcollections = $collections;
-            $this->view->breadcrumb = array();
-            $this->view->assign = $documentId;
-            $this->view->role_id = null;
-        } else {
-            $collection = new Opus_CollectionRole($role);
-            $roleName = $collection->getDisplayName();
-            $subcollections = array();
-            $breadcrumb = array();
-            if (true === isset($path)) {
-                $trail = explode('-', $path);
-                foreach($trail as $step) {
-                    if (false === isset($position)) {
-                        $position = $step;
-                    } else {
-                        $position .= '-' . $step;
-                    }
-                    // echo $step;
-                    $collections = $collection->getSubCollection();
-                    $collection = $collections[$step];
-                    $breadcrumb[$position] = $collection->getDisplayName();
-                }
-            }
-            if ($collection instanceof Opus_CollectionRole) {
-                foreach($collection->getSubCollection() as $i => $subcollection) {
-                    $subcollections[$i] = $subcollection->getDisplayName();
-                }
-            } else {
-                foreach($collection->getSubCollection() as $i => $subcollection) {
-                    $subcollections[$path . '-' . $i] = $subcollection->getDisplayName();
-                }
-            }
-            $this->view->subcollections = $subcollections;
-            $this->view->role_id = $role;
-            $this->view->role_name = $roleName;
-            $this->view->path = $path;
-            $this->view->assign = $documentId;
-            $this->view->breadcrumb = $breadcrumb;
+        if (is_null($documentId)) {
+            $this->_redirectToAndExit('index', array('level' => 'failure', 'message' => 'document parameter missing'), 'index');
+            return;
         }
+        
+        if ($this->getRequest()->isPost() === true) {
+            // Zuordnung des Dokuments zur Collection ist erfolgt
+            $collectionModel = new Admin_Model_Collection($this->getRequest()->getParam('id', ''));
+            $collectionModel->addDocument($documentId);
+            $this->_redirectToAndExit(
+                    'edit',
+                    'Document successfully assigned to collection "' . $collectionModel->getDisplayName() . '".',
+                    'documents', 'admin', array('id' => $documentId));
+            return;
+        }
+        $collectionId = $this->getRequest()->getParam('id');
+        if (is_null($collectionId)) {
+            // Einsprungseite anzeigen
+            $this->prepareAssignStartPage($documentId);
+        }
+        else {
+            // Collection ausgewählt: Subcollections anzeigen
+            $this->prepareAssignSubPage($documentId, $collectionId);
+        }
+    }
+
+    private function prepareAssignStartPage($documentId) {
+        $collectionRoles = Opus_CollectionRole::fetchAll();
+        $this->view->collections = array();
+        foreach ($collectionRoles as $collectionRole) {
+            $rootCollection = $collectionRole->getRootCollection();
+            if (!is_null($rootCollection)) {
+                array_push($this->view->collections,
+                        array(
+                            'id' => $rootCollection->getId(),
+                            'name' => $collectionRole->getDisplayName(),
+                            'hasChildren' => (count($rootCollection->getChildren()) > 0)));
+            }
+        }
+        $this->view->documentId = $documentId;
+        $this->view->breadcrumb = array();
+        $this->view->role_name = $collectionRole->getDisplayName();
+    }
+
+    private function prepareAssignSubPage($documentId, $collectionId) {
+        $collection = new Opus_Collection($collectionId);
+        $children = $collection->getChildren();
+        if (count($children) === 0) {
+            // zurück zur Ausgangsansicht
+            $this->_redirectToAndExit('assign', array('level' => 'failure', 'message' => 'specified collection does not have any subcollections'), 'collection', 'admin', array('document' => $documentId));
+        }
+        else {
+            $this->view->collections = array();
+            foreach ($children as $child) {
+                array_push($this->view->collections,
+                        array(
+                            'id' => $child->getId(),
+                            'name' => $child->getDisplayName(),
+                            'hasChildren' => (count($child->getChildren()) > 0)));
+            }
+            $this->view->documentId = $documentId;
+            $this->view->breadcrumb = array_reverse($collection->getParents());
+            $this->view->role_name = $collection->getRole()->getDisplayName();
+        }
+    }
+
+    private function getForm($collection, $id = null, $type = null) {
+        $form_builder = new Form_Builder();
+        $collectionForm = $form_builder->build($this->__createFilter($collection));
+        if ($collection->isNewRecord()) {
+            $collectionForm->setAction($this->view->url(array('action' => 'create', 'id' => $id, 'type' => $type)));
+        }
+        else {
+            $collectionForm->setAction($this->view->url(array('action' => 'create', 'oid' => $collection->getId(), 'id' => $id, 'type' => $type)));
+        }
+        return $collectionForm;
     }
 
     /**
      * Returns a filtered representation of the collection.
      *
-     * @param  Opus_Model_Abstract  $collection The collection to be filtered.
+     * @param  Opus_Model_Abstract $collection The collection to be filtered.
      * @return Opus_Model_Filter The filtered collection.
      */
     private function __createFilter(Opus_Model_Abstract $collection) {
         $filter = new Opus_Model_Filter();
         $filter->setModel($collection);
+        $filter->setBlacklist(array('Parents', 'Children', 'PendingNodes', 'RoleId', 'RoleName', 'RoleDisplayFrontdoor', 'RoleVisibleFrontdoor', 'PositionKey', 'PositionId', 'SortOrder'));
+        $filter->setSortOrder(array('Name', 'Number', 'Visible'));
+        return $filter;
+    }
 
-        // print_r( $collection->describe() );
+    private function getRoleForm(Opus_CollectionRole $collectionRole) {
+        $form_builder = new Form_Builder();
+        $collectionForm = $form_builder->build($this->__createRoleFilter($collectionRole));
+        if ($collectionRole->isNewRecord()) {
+            $collectionForm->setAction($this->view->url(array('action' => 'createrole')));
+        }
+        else {
+            $collectionForm->setAction($this->view->url(array('action' => 'createrole', 'oid' => $collectionRole->getId())));
+        }
+        return $collectionForm;
+    }
 
-        // TODO: Hardcoded values.  Check required fields.
-        $filter->setBlacklist(array('ParentCollection', 'RoleId', 'RoleName', 'RoleDisplayFrontdoor', 'Role'));
-        $filter->setSortOrder(array('Name'));
+    private function __createRoleFilter(Opus_CollectionRole $collectionRole) {
+        $filter = new Opus_Model_Filter();
+        $filter->setModel($collectionRole);
+        $filter->setBlacklist(array('RootCollection'));
         return $filter;
     }
 }
-
