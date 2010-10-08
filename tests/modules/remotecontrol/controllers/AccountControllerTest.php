@@ -119,8 +119,8 @@ class Remotecontrol_AccountControllerTest extends ControllerTestCase {
 
         // Test if changing password works...
         $requestData = array(
-                    'login'        => $this->login,
-                    'password'     => $this->password,
+                    'login'    => $this->login,
+                    'password' => '',
         );
 
         /* Creating first collection to work with. */
@@ -152,11 +152,10 @@ class Remotecontrol_AccountControllerTest extends ControllerTestCase {
         $this->addTestAccountWithRoles();
 
         // Test if changing password works...
-        $password_new = "bla-new-".rand();
+        $password = "bla-new-".rand();
         $requestData = array(
-                    'login'        => $this->login,
-                    'password'     => $this->password,
-                    'password-new' => $password_new,
+                    'login'    => $this->login,
+                    'password' => $password,
         );
 
         /* Creating first collection to work with. */
@@ -178,7 +177,7 @@ class Remotecontrol_AccountControllerTest extends ControllerTestCase {
         $account = Opus_Account::fetchAccountByLogin($this->login);
         $this->assertTrue($account instanceof Opus_Account);
         $this->assertEquals($this->login, $account->getLogin());
-        $this->assertTrue($account->isPasswordCorrect($password_new));
+        $this->assertTrue($account->isPasswordCorrect($password));
         $this->assertFalse($account->isPasswordCorrect($this->password));
 
     }
