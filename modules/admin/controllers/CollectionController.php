@@ -257,14 +257,8 @@ class Admin_CollectionController extends Controller_Action {
 
         $data = $this->_request->getPost();
 
-        $objectId = $this->getRequest()->getParam('oid');
-        $collectionRole = null;
-        if (is_null($objectId)) {
-            $collectionRole = new Opus_CollectionRole();
-        }
-        else {
-            $collectionRole = new Opus_CollectionRole($objectId);
-        }
+        $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('oid'));
+        $collectionRole = $collectionRoleModel->getObject();
 
         $form_builder = new Form_Builder();        
         $form_builder->buildModelFromPostData($collectionRole, $data['Opus_Model_Filter']);
@@ -308,16 +302,9 @@ class Admin_CollectionController extends Controller_Action {
         $this->returnIfNotPost();
         
         $data = $this->_request->getPost();
-
-        $objectId = $this->getRequest()->getParam('oid');
-        $collection = null;
-        if (is_null($objectId)) {
-            $collection = new Opus_Collection();
-        }
-        else {
-            $collection = new Opus_Collection($objectId);
-        }
-
+        $collectionModel = new Admin_Model_Collection($this->getRequest()->getParam('oid'));
+        $collection = $collectionModel->getObject();
+        
         $form_builder = new Form_Builder();
         $form_builder->buildModelFromPostData($collection, $data['Opus_Model_Filter']);
         $form = $form_builder->build($this->__createFilter($collection));
@@ -327,7 +314,7 @@ class Admin_CollectionController extends Controller_Action {
                 $form->setAction($this->view->url(array('action' => 'create', 'id' => $this->getRequest()->getParam('id'), 'type' => $this->getRequest()->getParam('type'))));
             }
             else {
-                $form->setAction($this->view->url(array('action' => 'create', 'oid' => $objectId, 'id' => $this->getRequest()->getParam('id'), 'type' => $this->getRequest()->getParam('type'))));
+                $form->setAction($this->view->url(array('action' => 'create', 'oid' => $collection->getId(), 'id' => $this->getRequest()->getParam('id'), 'type' => $this->getRequest()->getParam('type'))));
             }
             $this->view->form = $form;
         }
