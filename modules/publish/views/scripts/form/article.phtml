@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -32,23 +31,21 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
-echo '<h1>' . $this->title . '</h1>';
-echo '<h2>' . $this->subtitle . '</h2>';
-
 //for printing a generized Zend Form with standard layout:
 //echo $this->form;
 //element($value, $options = null, $type = null, $name = null)
 //group($value, $options = null, $name = null)
 ?>
-<span class="formerror"><?= $this->errorCaseMessage; ?></span>
 
-<br />
-<form enctype="application/x-www-form-urlencoded" action="<?php echo $this->action_url; ?>" method="post">
+<h2><?= $this->title ?></h2>
+<div class="content">
+<h3><?= $this->subtitle?></h3>
 
-    <div class="formhint">
-<?= $this->requiredHint; ?>
-    </div>
+<div class="form-errors"><?= $this->errorCaseMessage; ?></div>
+
+<form enctype="application/x-www-form-urlencoded" action="<?= $this->action_url; ?>" method="post">
+    <div class="form-items-wrapper">
+        <div class="form-hint"><?= $this->requiredHint; ?></div>
 
     <?= $this->group($this->groupPersonSubmitter); ?>
     <?= $this->group($this->groupTitleMain); ?>
@@ -68,10 +65,13 @@ echo '<h2>' . $this->subtitle . '</h2>';
     <?= $this->element($this->Licence); ?>
     <?= $this->element($this->Language); ?>
 
-    <?= $this->element('button_label_abort', null, "Submit", "abort"); ?>
-    <?= $this->element('button_label_send', null, "Submit", "send"); ?>
-    
+        <div class="button-wrapper">
+            <?= $this->element('button_label_abort', "class='form-button abort-button'", "Submit", "abort"); ?>
+            <?= $this->element('button_label_send', "class='form-button submit-button'", "Submit", "send"); ?>
+        </div>
 
+    </div>
 </form>
 
-<span class="formerror"><?= $this->endTemplate($this->form); ?></span>
+<div class="form-errors"><?= $this->endTemplate($this->form); ?></div>
+</div>

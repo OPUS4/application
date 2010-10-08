@@ -31,40 +31,40 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+//for printing a generized Zend Form with standard layout:
+//echo $this->form;
+//element($value, $options = null, $type = null, $name = null)
+//group($value, $options = null, $name = null)
 ?>
 
 <h2><?= $this->title ?></h2>
 <div class="content">
-    <h3 class="document-type"><?= $this->subtitle ?></h3>
+<h3><?= $this->subtitle?></h3>
 
-<?php
-//for printing a generized Zend Form with standard layout:
-//echo $this->form;
-//element($value, $options = null, $type = null, $name = null)
-//group($value, $options = null, $name = null)   
-?>
-    <div class="form-hint form-errors"> <?= $this->errorCaseMessage; ?> </div>
+<div class="form-errors"><?= $this->errorCaseMessage; ?></div>
 
-    <form enctype="application/x-www-form-urlencoded" action="<?php echo $this->action_url; ?>" method="post">
-        <div class="form-items-wrapper">
-            <div class="form-hint"><?= $this->requiredHint; ?></div><p></p>
+<form enctype="application/x-www-form-urlencoded" action="<?= $this->action_url; ?>" method="post">
+    <div class="form-items-wrapper">
+        <div class="form-hint"><?= $this->requiredHint; ?></div>
 
-                 <?= $this->group($this->groupPersonAuthor); ?>
-                 <?= $this->group($this->groupInstitute); ?>
-                 <?= $this->element($this->Language); ?>
-                 <?= $this->group($this->groupTitleMain, "size='60'"); ?>
-                 <?= $this->group($this->groupTitleAbstract, "cols='60' rows='9'"); ?>
-                 <?= $this->group($this->groupProject); ?>
-                 <?= $this->element($this->CompletedDate); ?>
-                 <?= $this->group($this->groupSubjectMSC); ?>
-                 <?= $this->group($this->groupSubjectUncontrolled); ?>
-                 <?= $this->element($this->Note, "cols='60' rows='9'"); ?>
+    <?= $this->group($this->groupPersonAuthor); ?>
+    <?= $this->group($this->groupInstitute); ?>
+    <?= $this->element($this->Language); ?>
+    <?= $this->group($this->groupTitleMain, "size='60'"); ?>
+    <?= $this->group($this->groupTitleAbstract, "cols='60' rows='9'"); ?>
+    <?= $this->group($this->groupProject); ?>
+    <?= $this->element($this->CompletedDate); ?>
+    <?= $this->group($this->groupSubjectMSC); ?>
+    <?= $this->group($this->groupSubjectUncontrolled); ?>
+    <?= $this->element($this->Note, "cols='60' rows='9'"); ?>
 
-            <div class="button-wrapper">
-                 <?= $this->element('button_label_abort', "class='form-button submit-button'", "Submit", "send"); ?>
-                 <?= $this->element('button_label_send', "class='form-button abort-button'", "Submit", "abort"); ?>
-            </div>
-         </div>
-     </form>
-<div class="form-hint form-errors"><?= $this->endTemplate($this->form); ?></div>
+    <div class="button-wrapper">
+        <?= $this->element('button_label_abort', "class='form-button abort-button'", "Submit", "abort"); ?>
+        <?= $this->element('button_label_send', "class='form-button submit-button'", "Submit", "send"); ?>
+    </div>
+
+    </div>
+</form>
+
+<div class="form-errors"><?= $this->endTemplate($this->form); ?></div>
 </div>

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -32,48 +31,49 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
-echo '<h1>' . $this->title . '</h1>';
-echo '<h2>' . $this->subtitle . '</h2>';
-
 //for printing a generized Zend Form with standard layout:
 //echo $this->form;
-
 //element($value, $options = null, $type = null, $name = null)
 //group($value, $options = null, $name = null)
 ?>
-<span class="formerror"><?= $this->errorCaseMessage; ?></span>
 
-<br />
-<form enctype="application/x-www-form-urlencoded" action="<?php echo $this->action_url; ?>" method="post">
+<h2><?= $this->title ?></h2>
+<div class="content">
+    <h3><?= $this->subtitle ?></h3>
 
-    <div class="formhint">
-        <?= $this->requiredHint; ?>
-    </div>
-	
-	<?= $this->group($this->groupPersonSubmitter); ?>
-	<?= $this->group($this->groupTitleMain); ?>
-	<?= $this->group($this->groupTitleParent); ?>
-	<?= $this->group($this->groupTitleAbstract); ?>
-	<?= $this->group($this->groupPersonAuthor); ?>
-	<?= $this->element($this->CompletedDate); ?>
-	<?= $this->element($this->PageFirst); ?>
-	<?= $this->element($this->PageLast); ?>
-	<?= $this->element($this->PublisherName); ?>
-	<?= $this->element($this->PublisherPlace); ?>
-	<?= $this->element($this->PublishedDate); ?>
-	<?= $this->group($this->groupSubjectDdc); ?>
-	<?= $this->group($this->groupSubjectSwd); ?>
-	<?= $this->group($this->groupSubjectUncontrolled); ?>
-	<?= $this->element($this->Institute); ?>
-	<?= $this->element($this->IdentifierUrn); ?>
-	<?= $this->element($this->Note); ?>
-	<?= $this->element($this->Language); ?>
-	<?= $this->element($this->Licence); ?>
+    <div class="form-errors"><?= $this->errorCaseMessage; ?></div>
 
-        <?= $this->element('button_label_abort', null, "Submit", "abort"); ?>
-	<?= $this->element('button_label_send', null, "Submit",  "send"); ?>
+    <form enctype="application/x-www-form-urlencoded" action="<?= $this->action_url; ?>" method="post">
+        <div class="form-items-wrapper">
+            <div class="form-hint"><?= $this->requiredHint; ?></div>
 
-</form>
+            <?= $this->group($this->groupPersonSubmitter); ?>
+            <?= $this->group($this->groupTitleMain); ?>
+            <?= $this->group($this->groupTitleParent); ?>
+            <?= $this->group($this->groupTitleAbstract); ?>
+            <?= $this->group($this->groupPersonAuthor); ?>
+            <?= $this->element($this->CompletedDate); ?>
+            <?= $this->element($this->PageFirst); ?>
+            <?= $this->element($this->PageLast); ?>
+            <?= $this->element($this->PublisherName); ?>
+            <?= $this->element($this->PublisherPlace); ?>
+            <?= $this->element($this->PublishedDate); ?>
+            <?= $this->group($this->groupSubjectDdc); ?>
+            <?= $this->group($this->groupSubjectSwd); ?>
+            <?= $this->group($this->groupSubjectUncontrolled); ?>
+            <?= $this->element($this->Institute); ?>
+            <?= $this->element($this->IdentifierUrn); ?>
+            <?= $this->element($this->Note); ?>
+            <?= $this->element($this->Language); ?>
+            <?= $this->element($this->Licence); ?>
 
-<span class="formerror"><?= $this->endTemplate($this->form); ?></span>
+            <div class="button-wrapper">
+                <?= $this->element('button_label_abort', "class='form-button abort-button'", "Submit", "abort"); ?>
+                <?= $this->element('button_label_send', "class='form-button submit-button'", "Submit", "send"); ?>
+            </div>
+
+        </div>
+    </form>
+
+    <div class="form-errors"><?= $this->endTemplate($this->form); ?></div>
+</div>
