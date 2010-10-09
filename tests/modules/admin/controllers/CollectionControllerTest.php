@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,7 +24,9 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
+ * @category    Application
+ * @package     Tests
+ * @author      Sascha Szott <szott@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -51,18 +53,8 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
      * Test show first level of collection.
      */
     public function testShowAction() {
-        $this->dispatch('/admin/collection/show/role/1');
-        $this->assertResponseCode(200);
-        $this->assertModule('admin');
-        $this->assertController('collection');
-        $this->assertAction('show');
-    }
-
-    /**
-     * Test showing node.
-     */
-    public function testShowNode() {
-        $this->dispatch('/admin/collection/show/node/3');
+        $this->markTestIncomplete('todo');
+        $this->dispatch('/admin/collection/show/id/2');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
         $this->assertController('collection');
@@ -72,15 +64,23 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
     /**
      * Test opening collection role for editing.
      */
+    public function testEditRoleAction() {
+        $this->dispatch('/admin/collection/editrole/roleid/1');
+        $this->assertResponseCode(200);
+        $this->assertModule('admin');
+        $this->assertController('collection');
+        $this->assertAction('editrole');
+    }
+
+    /**
+     * Test opening collection for editing.
+     */
     public function testEditAction() {
-        $this->dispatch('/admin/collection/edit/role/1');
+        $this->dispatch('/admin/collection/edit/id/3');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
         $this->assertController('collection');
         $this->assertAction('edit');
     }
-
-
 }
-
 ?>
