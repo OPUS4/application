@@ -25,8 +25,8 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_SolrSearch
- * @author      Sascha Szott <szott@zib.de>
+ * @package     Module_PublicationList
+ * @author      Gunar Maiwald <maiwald@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -39,7 +39,7 @@ class PublicationList_Model_CollectionList {
 
     public function __construct($collectionId) {
         if (is_null($collectionId)) {
-            throw new SolrSearch_Model_Exception('Could not browse collection due to missing id parameter.');
+            throw new PublicationList_Model_Exception('Could not browse collection due to missing id parameter.');
         }
 
         $collection = null;
@@ -47,10 +47,10 @@ class PublicationList_Model_CollectionList {
             $collection = new Opus_Collection((int) $collectionId);
         }
         catch (Opus_Model_NotFoundException $e) {
-            throw new SolrSearch_Model_Exception("Collection with id '" . $collectionId . "' does not exist.");
+            throw new PublicationList_Model_Exception("Collection with id '" . $collectionId . "' does not exist.");
         }
         if ($collection->getVisible() !== '1') {
-            throw new SolrSearch_Model_Exception("Collection with id '" . $collectionId . "' is not visible.");
+            throw new PublicationList_Model_Exception("Collection with id '" . $collectionId . "' is not visible.");
         }
 
         $collectionRole = null;
@@ -58,11 +58,11 @@ class PublicationList_Model_CollectionList {
             $collectionRole = new Opus_CollectionRole($collection->getRoleId());
         }
         catch (Opus_Model_NotFoundException $e) {
-            throw new SolrSearch_Model_Exception("Collection role with id '" . $collection->getRoleId() . "' does not exist.");
+            throw new PublicationList_Model_Exception("Collection role with id '" . $collection->getRoleId() . "' does not exist.");
         }
 
         if (!($collectionRole->getVisible() === '1' and $collectionRole->getVisibleBrowsingStart() === '1')) {
-            throw new SolrSearch_Model_Exception("Collection role with id '" . $collectionRole->getId() . "' is not visible.");
+            throw new PublicationList_Model_Exception("Collection role with id '" . $collectionRole->getId() . "' is not visible.");
         }
 
         $this->collectionRole = $collectionRole;
