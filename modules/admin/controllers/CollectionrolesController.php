@@ -104,14 +104,11 @@ class Admin_CollectionrolesController extends Controller_Action {
         return $form;
     }
 
-    private function returnIfNotPost() {
+    public function createAction() {
         if (!$this->getRequest()->isPost()) {
             $this->_redirectToAndExit('index');
+            return;
         }
-    }
-
-    public function createAction() {
-        $this->returnIfNotPost();
 
         $data = $this->_request->getPost();
 
@@ -180,12 +177,12 @@ class Admin_CollectionrolesController extends Controller_Action {
         try {
             $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('roleid', ''));
             $collectionRoleModel->delete();
+            $this->_redirectTo('index', 'Operation completed successfully.');
         }
         catch (Application_Exception $e) {
             $this->_redirectToAndExit('index', array('failure' => $e->getMessage()));
-            return;
         }
-        $this->_redirectTo('index', 'Operation completed successfully.');
+        
     }
 
 }
