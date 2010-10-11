@@ -41,7 +41,7 @@
     </div>
 
     <div class="collection_new">
-        <a class="add" href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'newrole')) ?>">
+        <a class="add" href="<?= $this->url(array('module' => 'admin', 'controller' => 'collectionroles', 'action' => 'new')) ?>">
         <?= $this->translate('admin_collections_role_new') ?>
         </a>
     </div>
@@ -64,33 +64,33 @@
         <?php endif ?>            
         </td>
         <td>
-            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'editrole', 'roleid' => $collectionRole->getId()), null, true) ?>">
+            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collectionroles', 'action' => 'edit', 'roleid' => $collectionRole->getId()), null, true) ?>">
             <?= $this->translate('admin_collections_role_edit') ?>
             </a>
         </td>
         <?php if ($collectionRole->getVisible() === '1') : ?>
         <td>
-            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'hiderole', 'roleid' => $collectionRole->getId()), null, true) ?>">
+            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collectionroles', 'action' => 'hide', 'roleid' => $collectionRole->getId()), null, true) ?>">
             <?= $this->translate('admin_collections_role_hide') ?>
             </a>
         </td>
         <?php else : ?>
         <td>
-            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'unhiderole', 'roleid' => $collectionRole->getId()), null, true) ?>">
+            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collectionroles', 'action' => 'unhide', 'roleid' => $collectionRole->getId()), null, true) ?>">
             <?= $this->translate('admin_collections_role_unhide') ?>
             </a>
         </td>
         <?php endif ?>
         <td>
             <?php if ($i > 0) : ?>
-                <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'moverole', 'roleid' => $collectionRole->getId(), 'pos' => $i), null, true) ?>">
+                <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collectionroles', 'action' => 'move', 'roleid' => $collectionRole->getId(), 'pos' => $i), null, true) ?>">
                 <?= $this->translate('admin_collections_role_move_up') ?>
                 </a>
             <?php endif ?>
         </td>
         <td>
             <?php if ($i < count($this->collectionRoles) - 1) : ?>
-                <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'moverole', 'roleid' => $collectionRole->getId(), 'pos' => $i + 2), null, true)?>">
+                <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collectionroles', 'action' => 'move', 'roleid' => $collectionRole->getId(), 'pos' => $i + 2), null, true)?>">
                 <?= $this->translate('admin_collections_role_move_down') ?>
                 </a>
             <?php endif ?>
@@ -104,7 +104,7 @@
                 $confirmKey = 'confirm_deletion';
             }
             ?>
-            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'deleterole', 'roleid' => $collectionRole->getId()), null, true) ?>" onclick="return confirm('<?= $this->translate($confirmKey) ?>');">
+            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collectionroles', 'action' => 'delete', 'roleid' => $collectionRole->getId()), null, true) ?>" onclick="return confirm('<?= $this->translate($confirmKey) ?>');">
             <?= $this->translate('admin_collections_role_delete') ?>
             </a>
         </td>

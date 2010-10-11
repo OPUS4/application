@@ -231,7 +231,7 @@
                     <label>admin_title_collections</label>
                     <description>admin_title_collections_description</description>
                     <module>admin</module>
-                    <controller>collection</controller>
+                    <controller>collectionroles</controller>
                     <action>index</action>
                 </collections>
 

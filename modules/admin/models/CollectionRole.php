@@ -45,7 +45,7 @@ class Admin_Model_CollectionRole {
             return;
         }
         try {
-            $this->collectionRole = new Opus_CollectionRole($id);
+            $this->collectionRole = new Opus_CollectionRole((int) $id);
             $this->setDisplayOptions($this->collectionRole->getPosition());
         }
         catch (Opus_Model_NotFoundException $e) {
@@ -63,7 +63,7 @@ class Admin_Model_CollectionRole {
 
     private function setDisplayOptions($position = null) {
         $allCollectionRoles = Opus_CollectionRole::fetchAll();
-        $selectValues = array();
+        $selectValues = array(0);
         foreach ($allCollectionRoles as $collectionRole) {
             array_push($selectValues, $collectionRole->getPosition());
         }
@@ -74,10 +74,13 @@ class Admin_Model_CollectionRole {
             array_push($selectValues, 1 + $lastPosition);
         }
         $pos_field = $this->collectionRole->getField('Position');
-        $options = range(1, $countRoles);
+        $options = range(0, $countRoles);
         $pos_field->setDefault(array_combine($selectValues, $options))->setSelection(true);
         if (!is_null($position)) {
             $pos_field->setValue($position);
+        }
+        else {
+            $pos_field->setValue($countRoles);
         }
         foreach (array('DisplayBrowsing', 'DisplayFrontdoor', 'DisplayOai') as $fieldname) {
             $field = $this->collectionRole->getField($fieldname);

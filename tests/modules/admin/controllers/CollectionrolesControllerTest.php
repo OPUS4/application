@@ -27,31 +27,26 @@
  * @category    Application
  * @package     Tests
  * @author      Sascha Szott <szott@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-/**
- * Basic unit tests for the collections controller in admin module.
- */
-class Admin_CollectionControllerTest extends ControllerTestCase {
+class Admin_CollectionrolesControllerTest extends ControllerTestCase {
 
     private $emptyCollectionRole = null;
     private $nonEmptyCollectionRole = null;
-    private $collection = null;
 
     public function setUp() {
         parent::setUp();
-        
+
         $this->emptyCollectionRole = new Opus_CollectionRole();
         $this->emptyCollectionRole->setName("test1role");
         $this->emptyCollectionRole->setOaiName("test1role");
         $this->emptyCollectionRole->setDisplayBrowsing("Name");
         $this->emptyCollectionRole->setDisplayFrontdoor("Name");
         $this->emptyCollectionRole->setDisplayOai("Name");
-        $this->emptyCollectionRole->setPosition(100);        
+        $this->emptyCollectionRole->setPosition(100);
         $this->emptyCollectionRole->store();
 
         $this->nonEmptyCollectionRole = new Opus_CollectionRole();
@@ -63,151 +58,102 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
         $this->nonEmptyCollectionRole->setPosition(101);
         $this->nonEmptyCollectionRole->store();
 
-        $this->collection = new Opus_Collection();        
         $rootCollection = $this->nonEmptyCollectionRole->addRootCollection();
         $rootCollection->store();
-        $rootCollection->addFirstChild($this->collection);
-        $this->collection->store();
     }
 
-    public function tearDown() {        
-        parent::tearDown();        
+    public function tearDown() {
+        parent::tearDown();
         if (!is_null($this->nonEmptyCollectionRole->getId())) $this->nonEmptyCollectionRole->delete();
         if (!is_null($this->emptyCollectionRole->getId())) $this->emptyCollectionRole->delete();
     }
-
+    
     public function testIndexAction() {
-        $this->dispatch('/admin/collection');
-        $this->assertRedirect();
+        $this->dispatch('/admin/collectionroles');
+        $this->assertResponseCode(200);
         $this->assertModule('admin');
-        $this->assertController('collection');
+        $this->assertController('collectionroles');
         $this->assertAction('index');
     }
 
-    /**
-     * Test show first level of collection.
-     */
-    public function testShowAction() {
-        $this->dispatch('/admin/collection/show/id/' . $this->collection->getId());
-        $this->assertResponseCode(200);
-        $this->assertModule('admin');
-        $this->assertController('collection');
-        $this->assertAction('show');
-    }
-
-    public function testShowActionWithEmptyRole() {
-        $this->dispatch('/admin/collection/show/role/' . $this->emptyCollectionRole->getId());
-        $this->assertResponseCode(200);
-        $this->assertModule('admin');
-        $this->assertController('collection');
-        $this->assertAction('show');
-    }
-
-    public function testShowActionWithNonEmptyRole() {
-        $this->dispatch('/admin/collection/show/role/' . $this->nonEmptyCollectionRole->getId());
-        $this->assertResponseCode(200);
-        $this->assertModule('admin');
-        $this->assertController('collection');
-        $this->assertAction('show');
-    }
-
-    public function testShowActionMissingArg() {
-        $this->dispatch('/admin/collection/show');
-        $this->assertRedirect();
-        $this->assertModule('admin');
-        $this->assertController('collection');
-        $this->assertAction('show');
-    }
-
-    /**
-     * Test opening collection for editing.
-     */
     public function testEditAction() {
-        $this->dispatch('/admin/collection/edit/id/' . $this->collection->getId());
+        $this->dispatch('/admin/collectionroles/edit/roleid/' . $this->nonEmptyCollectionRole->getId());
         $this->assertResponseCode(200);
         $this->assertModule('admin');
-        $this->assertController('collection');
+        $this->assertController('collectionroles');
         $this->assertAction('edit');
     }
 
     public function testDeleteAction() {
-        $this->dispatch('/admin/collection/delete/id/' . $this->collection->getId());
+        $this->dispatch('/admin/collectionroles/delete/roleid/' . $this->nonEmptyCollectionRole->getId());
         $this->assertRedirect();
         $this->assertModule('admin');
-        $this->assertController('collection');
+        $this->assertController('collectionroles');
         $this->assertAction('delete');
     }
 
     public function testDeleteActionWithMissingParam() {
-        $this->dispatch('/admin/collection/delete');
+        $this->dispatch('/admin/collectionroles/delete');
         $this->assertRedirect();
         $this->assertModule('admin');
-        $this->assertController('collection');
+        $this->assertController('collectionroles');
         $this->assertAction('delete');
     }
 
-    public function testNewAction() {
-        $this->dispatch('/admin/collection/new/type/child/id/' . $this->collection->getId());
-        $this->assertResponseCode(200);
-        $this->assertModule('admin');
-        $this->assertController('collection');
-        $this->assertAction('new');
-    }
-    
-    public function testNewActionWithMissingParams() {
-        $this->dispatch('/admin/collection/new');
+    public function testMoveAction() {
+        $this->dispatch('/admin/collectionroles/move/pos/1/roleid/' . $this->emptyCollectionRole->getId());
         $this->assertRedirect();
         $this->assertModule('admin');
-        $this->assertController('collection');
-        $this->assertAction('new');
+        $this->assertController('collectionroles');
+        $this->assertAction('move');
     }
 
-    public function testNewActionWithMissingParam() {
-        $this->dispatch('/admin/collection/new/id/' . $this->collection->getId());
+    public function testMoveActionWithMissingParam() {
+        $this->dispatch('/admin/collectionroles/move');
         $this->assertRedirect();
         $this->assertModule('admin');
-        $this->assertController('collection');
+        $this->assertController('collectionroles');
+        $this->assertAction('move');
+    }
+
+    public function testNewAction() {
+        $this->dispatch('/admin/collectionroles/new');
+        $this->assertResponseCode(200);
+        $this->assertModule('admin');
+        $this->assertController('collectionroles');
         $this->assertAction('new');
     }
 
     public function testHideAction() {
-        $this->dispatch('/admin/collection/hide/id/' . $this->collection->getId());
+        $this->dispatch('/admin/collectionroles/hide/roleid/' . $this->nonEmptyCollectionRole->getId());
         $this->assertRedirect();
         $this->assertModule('admin');
-        $this->assertController('collection');
+        $this->assertController('collectionroles');
         $this->assertAction('hide');
     }
 
     public function testHideActionWithMissingParam() {
-        $this->dispatch('/admin/collection/hide');
+        $this->dispatch('/admin/collectionroles/hide');
         $this->assertRedirect();
         $this->assertModule('admin');
-        $this->assertController('collection');
+        $this->assertController('collectionroles');
         $this->assertAction('hide');
     }
 
     public function testUnhideAction() {
-        $this->dispatch('/admin/collection/unhide/id/' . $this->collection->getId());
+        $this->dispatch('/admin/collectionroles/unhide/roleid/' . $this->nonEmptyCollectionRole->getId());
         $this->assertRedirect();
         $this->assertModule('admin');
-        $this->assertController('collection');
+        $this->assertController('collectionroles');
         $this->assertAction('unhide');
     }
 
     public function testUnhideActionWithMissingParam() {
-        $this->dispatch('/admin/collection/unhide');
+        $this->dispatch('/admin/collectionroles/unhide');
         $this->assertRedirect();
         $this->assertModule('admin');
-        $this->assertController('collection');
+        $this->assertController('collectionroles');
         $this->assertAction('unhide');
-    }
-
-    public function testAssignActionWithMissingParam() {
-        $this->dispatch('/admin/collection/assign');
-        $this->assertRedirect();
-        $this->assertModule('admin');
-        $this->assertController('collection');
-        $this->assertAction('assign');
-    }
+    }    
 }
 ?>

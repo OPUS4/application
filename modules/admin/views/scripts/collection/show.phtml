@@ -41,7 +41,7 @@
 
     <div class="collection_breadcrumbs">
         <?= $this->translate('breadcrumb_title') ?>
-        <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'index'), null, true) ?>"><?= $this->translate('admin_title_collections') ?></a>
+        <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collectionroles', 'action' => 'index'), null, true) ?>"><?= $this->translate('admin_title_collections') ?></a>
         <?php foreach($this->breadcrumb as $i => $parent) : ?>
             &raquo;
             <?php if ($i === 0) : ?>
@@ -120,7 +120,15 @@
             */ ?>
 
             <td>
-                <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'delete', 'id' => $collection->getId()), null, true) ?>" onclick="return confirm('<?= $this->translate(confirm_deletion) ?>');"><?=$this->translate('admin_collections_collection_delete')?></a>
+                <?php
+                    if (count($collection->getChildren()) > 0) {
+                        $confirmKey = 'confirm_deletion';
+                    }
+                    else {
+                        $confirmKey = 'confirm_deletion_empty';
+                    }
+                ?>
+                <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'delete', 'id' => $collection->getId()), null, true) ?>" onclick="return confirm('<?= $this->translate($confirmKey) ?>');"><?=$this->translate('admin_collections_collection_delete')?></a>
             </td>
         </tr>
         <tr>

@@ -353,5 +353,23 @@
 				<seg>Ihre aktuelle Position:</seg>
 			</tuv>
         </tu>
+
+      <tu tuid="confirm_deletion">
+            <tuv xml:lang="en">
+                <seg>The element you are trying to delete has subelements. By continuing the deletion operation those subelements will also be deleted. Are you sure to continue the operation?</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Das zu löschende Element hat Unterelemente. Der Löschvorgang führt dazu, dass auch diese Elemente gelöscht werden. Wollen Sie den Löschvorgang wirklich durchführen?</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="confirm_deletion_empty">
+            <tuv xml:lang="en">
+                <seg>Are you sure?</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sind Sie sicher?</seg>
+            </tuv>
+        </tu>
     </body>
 </tmx>

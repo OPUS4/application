@@ -52,23 +52,8 @@ class Admin_CollectionController extends Controller_Action {
         Opus_Collection::setThemesPath(APPLICATION_PATH . '/public/layouts');
     }
 
-    /**
-     * List all available collection role instances
-     *
-     * @return void
-     */
     public function indexAction() {
-        $this->view->collectionRoles = Opus_CollectionRole::fetchAll();
-    }
-
-    public function newroleAction() {
-        $collectionRoleModel = new Admin_Model_CollectionRole();        
-        $this->view->form = $this->getRoleForm($collectionRoleModel->getObject());
-    }
-
-    public function editroleAction() {
-        $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('roleid', ''));
-        $this->view->form = $this->getRoleForm($collectionRoleModel->getObject());
+        $this->_redirectToAndExit('index', '', 'collectionroles');
     }
 
     /**
@@ -79,11 +64,13 @@ class Admin_CollectionController extends Controller_Action {
     public function newAction() {
         $id = $this->getRequest()->getParam('id');
         if (is_null($id)) {
-            $this->_redirectToAndExit('index', 'id parameter is missing');
+            $this->_redirectToAndExit('index', array('failure' => 'id parameter is missing'), 'collectionroles');
+            return;
         }
         $type = $this->getRequest()->getParam('type');
         if (is_null($type)) {
-            $this->_redirectToAndExit('index', 'type parameter is missing');
+            $this->_redirectToAndExit('index', array('failure' => 'type parameter is missing'), 'collectionroles');
+            return;
         }
 
         $collectionModel = new Admin_Model_Collection();
@@ -107,21 +94,10 @@ class Admin_CollectionController extends Controller_Action {
         // evaluate parameter ref
     }
 
-    public function moveroleAction() {
-        try {
-            $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('roleid', ''));
-            $collectionRoleModel->move($this->getRequest()->getParam('pos'));
-            $this->_redirectTo('index', 'Operation completed successfully.');
-        }
-        catch (Application_Exception $e) {
-            $this->_redirectToAndExit('index', $e->getMessage(), 'collection');
-        }
-    }
-
     public function moveupAction() {
         $collectionParentId = $this->moveCollection(-1);
         if (is_null($collectionParentId)) {
-            $this->_redirectTo('index', 'Operation completed successfully.');
+            $this->_redirectTo('index', 'Operation completed successfully.', 'collectionroles');
         }
         else {
             $this->_redirectTo('show', 'Operation completed successfully.', 'controller', 'admin', array('id' => $collectionParentId));
@@ -131,63 +107,30 @@ class Admin_CollectionController extends Controller_Action {
     public function movedownAction() {
         $collectionParentId = $this->moveCollection(+1);
         if (is_null($collectionParentId)) {
-            $this->_redirectTo('index', 'Operation completed successfully.');
+            $this->_redirectTo('index', 'Operation completed successfully.', 'collectionroles');
         }
         else {
             $this->_redirectTo('show', 'Operation completed successfully.', 'controller', 'admin', array('id' => $collectionParentId));
         }
     }
 
-    private function changeRoleVisibility($visibility) {        
-        try {
-            $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('roleid', ''));
-            $collectionRoleModel->setVisibility($visibility);
-        }
-        catch (Application_Exception $e) {
-            $this->_redirectToAndExit('index', $e->getMessage(), 'collection');
-        }
-    }
-
     private function changeCollectionVisibility($visibility) {
         try {
             $collectionModel = new Admin_Model_Collection($this->getRequest()->getParam('id', ''));
-            return $collectionModel->setVisiblity($visibility);
+            $id = $collectionModel->setVisiblity($visibility);
+            $this->_redirectTo('show', 'Operation completed successfully.', 'collection', 'admin', array('id' => $id));
         }
         catch (Application_Exception $e) {
-            $this->_redirectToAndExit('index', $e->getMessage(), 'collection');
-        }
-    }
-
-    public function hideroleAction() {
-        $this->changeRoleVisibility(false);
-        $this->_redirectTo('index', 'Operation completed successfully.');
-    }
-    
-    public function unhideroleAction() {
-        $this->changeRoleVisibility(true);
-        $this->_redirectTo('index', 'Operation completed successfully.');
+            $this->_redirectToAndExit('index', array('failure' => $e->getMessage()), 'collectionroles');
+        }        
     }
 
     public function hideAction() {
-        $id = $this->changeCollectionVisibility(false);
-        $this->_redirectTo('show', 'Operation completed successfully.', 'collection', 'admin', array('id' => $id));
+        $this->changeCollectionVisibility(false);        
     }
 
     public function unhideAction() {
-        $id = $this->changeCollectionVisibility(true);
-        $this->_redirectTo('show', 'Operation completed successfully.', 'collection', 'admin', array('id' => $id));
-    }
-
-    public function deleteroleAction() {
-        try {
-            $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('roleid', ''));
-            $collectionRoleModel->delete();
-        }
-        catch (Application_Exception $e) {
-            $this->_redirectToAndExit('index', $e->getMessage(), 'collection');
-            return;
-        }
-        $this->_redirectTo('index', 'Operation completed successfully.');
+        $this->changeCollectionVisibility(true);        
     }
 
     public function deleteAction() {
@@ -197,19 +140,21 @@ class Admin_CollectionController extends Controller_Action {
             $this->_redirectTo('show', 'Operation completed successfully.', 'collection', 'admin', array ('id' => $returnId));
         }
         catch (Application_Exception $e) {
-            $this->_redirectToAndExit('index', $e->getMessage(), 'collection');            
+            $this->_redirectToAndExit('index', array('failure' => $e->getMessage()), 'collectionroles');
         }        
     }
 
     public function showAction() {
         $roleId = $this->getRequest()->getParam('role');
         $id = null;
-        if (!is_null($roleId)) {
-            // collection role without root collection: create a root collection
-            $rootCollection = new Opus_Collection();
+        if (!is_null($roleId)) {            
             $collectionRole = new Opus_CollectionRole($roleId);
-            $collectionRole->addRootCollection($rootCollection);
-            $collectionRole->store();
+            $rootCollection = $collectionRole->getRootCollection();
+            if (is_null($rootCollection)) {
+                // collection role without root collection: create a new root collection
+                $rootCollection = $collectionRole->addRootCollection();
+                $collectionRole->store();
+            }
             $id = $rootCollection->getId();
         }
         else {
@@ -221,85 +166,25 @@ class Admin_CollectionController extends Controller_Action {
             $collectionModel = new Admin_Model_Collection($id);
         }
         catch (Application_Exception $e) {
-            $this->_redirectToAndExit('index', $e);
+            $this->_redirectToAndExit('index', array('failure' => $e->getMessage()), 'collectionroles');
             return;
         }
-        $collection = $collectionModel->getObject();
-        
+
+        $collection = $collectionModel->getObject();        
         $this->view->breadcrumb = array_reverse($collection->getParents());
         $this->view->collections = $collection->getChildren();
         $this->view->collection_id = $collection->getId();
         
         $role = $collection->getRole();
         $this->view->role_id    = $role->getId();
-        $this->view->role_name  = $role->getDisplayName();
-        
-    }
-
-    private function returnIfNotPost() {
-        if (!$this->getRequest()->isPost()) {
-            $this->_redirectToAndExit('index');
-        }
-    }
-
-    private function initCreateRoleForm($form, $collectionRole) {
-        if ($collectionRole->isNewRecord()) {
-            $form->setAction($this->view->url(array('action' => 'createrole')));
-        }
-        else {
-            $form->setAction($this->view->url(array('action' => 'createrole', 'oid' => $collectionRole->getId())));
-        }
-        return $form;        
-    }
-
-    public function createroleAction() {
-        $this->returnIfNotPost();
-
-        $data = $this->_request->getPost();
-
-        $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('oid'));
-        $collectionRole = $collectionRoleModel->getObject();
-
-        $form_builder = new Form_Builder();        
-        $form_builder->buildModelFromPostData($collectionRole, $data['Opus_Model_Filter']);
-        $form = $form_builder->build($this->__createRoleFilter($collectionRole));
-        
-        if (!$form->isValid($data)) {
-            $this->view->form = $this->initCreateRoleForm($form, $collectionRole);
-        }
-        else {
-            // manuelles Überprüfen der IBs in Tabelle collections_roles
-            $tmpRole = Opus_CollectionRole::fetchByName($collectionRole->getName());
-            if (!is_null($tmpRole) && $tmpRole->getId() !== $collectionRole->getId()) {
-                $this->view->form = $this->initCreateRoleForm($form, $collectionRole);
-                $this->view->message = 'name is not unique';
-                return;
-            }
-            
-            $tmpRole = Opus_CollectionRole::fetchByOaiName($collectionRole->getOaiName());
-            if (!is_null($tmpRole) && $tmpRole->getId() !== $collectionRole->getId()) {
-                $this->view->form = $this->initCreateRoleForm($form, $collectionRole);
-                $this->view->message = 'oainame is not unique';
-                return;
-            }
-
-            if (true === $collectionRole->isNewRecord()) {
-                if (true === is_null($collectionRole->getRootCollection())) {
-                    $collectionRole->addRootCollection();
-                    $collectionRole->getRootCollection()->setVisible('1');
-                }
-                $collectionRole->store();
-                $this->_redirectTo('index', 'Collection role \'' . $collectionRole->getName() . '\' successfully created.');
-            }
-            else {
-                $collectionRole->store();
-                $this->_redirectTo('index', 'Collection role \'' . $collectionRole->getName() . '\' successfully edited.');
-            }
-        }
+        $this->view->role_name  = $role->getDisplayName();        
     }
 
     public function createAction() {
-        $this->returnIfNotPost();
+        if (!$this->getRequest()->isPost()) {
+            $this->_redirectToAndExit('index', '', 'collectionroles');
+            return;
+        }
         
         $data = $this->_request->getPost();
         $collectionModel = new Admin_Model_Collection($this->getRequest()->getParam('oid'));
@@ -323,11 +208,11 @@ class Admin_CollectionController extends Controller_Action {
                 $id = $this->getRequest()->getParam('id');
                 $type = $this->getRequest()->getParam('type');
                 if (is_null($id)) {
-                    $this->_redirectToAndExit('index', 'id parameter is missing');
+                    $this->_redirectToAndExit('index', array('failure' => 'id parameter is missing'), 'collectionroles');
                     return;
                 }
                 if (is_null($type)) {
-                    $this->_redirectToAndExit('index', 'type parameter is missing');
+                    $this->_redirectToAndExit('index', array('failure' => 'type parameter is missing'), 'collectionroles');
                     return;
                 }
                 if ($type === 'child') {
@@ -341,7 +226,7 @@ class Admin_CollectionController extends Controller_Action {
                     $refCollection->store();
                 }
                 else {
-                    $this->_redirectToAndExit('index', 'type paramter invalid');
+                    $this->_redirectToAndExit('index', array('failure' => 'type paramter invalid'), 'collectionroles');
                     return;
                 }
                 $this->_redirectTo('show', 'Insert successful', 'collection', 'admin', array('id' => $collection->getId()));
@@ -368,7 +253,7 @@ class Admin_CollectionController extends Controller_Action {
     public function assignAction() {
         $documentId = $this->getRequest()->getParam('document');
         if (is_null($documentId)) {
-            $this->_redirectToAndExit('index', array('level' => 'failure', 'message' => 'document parameter missing'), 'index');
+            $this->_redirectToAndExit('index', array('failure' => 'document parameter missing'), 'collectionroles');
             return;
         }
         
@@ -416,7 +301,8 @@ class Admin_CollectionController extends Controller_Action {
         $children = $collection->getChildren();
         if (count($children) === 0) {
             // zurück zur Ausgangsansicht
-            $this->_redirectToAndExit('assign', array('level' => 'failure', 'message' => 'specified collection does not have any subcollections'), 'collection', 'admin', array('document' => $documentId));
+            $this->_redirectToAndExit('assign', array('failure' => 'specified collection does not have any subcollections'), 'collection', 'admin', array('document' => $documentId));
+            return;
         }
         else {
             $this->view->collections = array();
@@ -456,25 +342,6 @@ class Admin_CollectionController extends Controller_Action {
         $filter->setModel($collection);
         $filter->setBlacklist(array('Parents', 'Children', 'PendingNodes', 'RoleId', 'RoleName', 'RoleDisplayFrontdoor', 'RoleVisibleFrontdoor', 'PositionKey', 'PositionId', 'SortOrder'));
         $filter->setSortOrder(array('Name', 'Number', 'Visible'));
-        return $filter;
-    }
-
-    private function getRoleForm(Opus_CollectionRole $collectionRole) {
-        $form_builder = new Form_Builder();
-        $collectionForm = $form_builder->build($this->__createRoleFilter($collectionRole));
-        if ($collectionRole->isNewRecord()) {
-            $collectionForm->setAction($this->view->url(array('action' => 'createrole')));
-        }
-        else {
-            $collectionForm->setAction($this->view->url(array('action' => 'createrole', 'oid' => $collectionRole->getId())));
-        }
-        return $collectionForm;
-    }
-
-    private function __createRoleFilter(Opus_CollectionRole $collectionRole) {
-        $filter = new Opus_Model_Filter();
-        $filter->setModel($collectionRole);
-        $filter->setBlacklist(array('RootCollection'));
         return $filter;
     }
 }
