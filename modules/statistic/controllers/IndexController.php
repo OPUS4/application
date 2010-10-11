@@ -32,12 +32,6 @@
  * @version     $Id$
  */
 
-/**
- * Main entry point for this module.
- *
- * @category    Application
- * @package     Module_statistik
- */
 class Statistic_IndexController extends Zend_Controller_Action {
 
     /**
