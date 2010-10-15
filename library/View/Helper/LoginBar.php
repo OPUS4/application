@@ -104,7 +104,6 @@ class View_Helper_LoginBar {
         }
     }
 
-
     /**
      * Return an instance of the view helper.
      *
@@ -127,8 +126,9 @@ class View_Helper_LoginBar {
             $url = $this->_view->url(array_merge($this->_login_url, $returnParams->getReturnParameters()));
             return '<a href="' . $url . '">Login</a>';
         } else {
+            $accountUrl = $this->_view->url(array('module' => 'account'));
             $url = $this->_view->url(array_merge($this->_logout_url, $returnParams->getReturnParameters()));
-            return '<a href="' . $url . '">Logout</a>';
+            return '<a style="padding-right: 1em" href="' . $accountUrl . '">Account</a> <a href="' . $url . '">Logout</a>';
         }
     }
 

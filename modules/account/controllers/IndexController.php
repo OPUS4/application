@@ -24,15 +24,21 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
+ * @category    Application
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
+/**
+ * Controller for editing account of logged in user.
+ */
 class Account_IndexController extends Controller_Action {
 
+    /**
+     * Show account form for logged in user.
+     */
     public function indexAction() {
         $login = Zend_Auth::getInstance()->getIdentity();
 
@@ -51,6 +57,10 @@ class Account_IndexController extends Controller_Action {
         }
     }
 
+    /**
+     * Save account information.
+     * @return <type>
+     */
     public function saveAction() {
         $login = Zend_Auth::getInstance()->getIdentity();
 
@@ -82,7 +92,7 @@ class Account_IndexController extends Controller_Action {
 
                 $isLoginChanged = ($login == $newLogin) ? false : true;
 
-                if ($isLoginChanged) {
+                if ($isLoginChanged && ($login !== 'admin')) {
                     $this->_logger->debug('login changed');
                     $account->setLogin($newLogin);
                 }

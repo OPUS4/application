@@ -57,10 +57,14 @@ class Account_Form_Account extends Zend_Form {
     }
 
     public function populateFromAccount($account) {
-        $this->getElement('username')->setValue($account->getLogin());
+        $login = $account->getLogin();
+
+        $this->getElement('username')->setValue($login);
+
+        if ($login === 'admin') {
+            $this->getElement('username')->setAttrib('disabled', true);
+        }
     }
-
-
 
 }
 ?>
