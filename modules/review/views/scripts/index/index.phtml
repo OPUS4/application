@@ -32,11 +32,11 @@
  */
 ?>
 
-<h1><?= $this->translate('review_index_title')?> 
-    <span class="info">(<?= $this->documentCount ?>
-        <?= $this->translate('review_docs_found_short') ?>)</span></h1>
+<div class="adminContainer">
 
-<div class="reviewContainer">
+    <h2><?= $this->translate('review_index_title')?>
+        <span class="info">(<?= $this->documentCount ?>
+            <?= $this->translate('review_docs_found_short') ?>)</span></h2>
 
     <?PHP if (isset($this->error)) : ?>
     <div class="error">

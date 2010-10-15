@@ -32,11 +32,11 @@
  */
 ?>
 
-<h1><?= $this->translate('review_clear_title')?>
-    <span class="info">(<?= $this->documentCount ?> <?= $this->translate('review_clear_document_count') ?>)</span>
-</h1>
+<div class="adminContainer">
 
-<div class="reviewContainer">
+    <h2><?= $this->translate('review_clear_title')?>
+        <span class="info">(<?= $this->documentCount ?> <?= $this->translate('review_clear_document_count') ?>)</span>
+    </h2>
 
     <form action="<?= $this->actionUrl ?>" method="post" style="margin: 1em 2em">
 
@@ -68,7 +68,7 @@
             </tr>
         </table>
 
-        <h2><?= $this->translate('review_selected_documents_list') ?></h2>
+        <h3><?= $this->translate('review_selected_documents_list') ?></h3>
 
         <ol style="margin-left: 2em">
         <?PHP foreach( $this->selected as $index => $docId ) : ?>
