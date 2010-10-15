@@ -30,6 +30,14 @@
  * @version     $Id$
  */
 
+.adminContainer .title {
+    font-weight: normal;
+}
+
+.adminContainer .instruction {
+    font-weight: normal;
+}
+
 .adminContainer table.documents {
     border-collapse: collapse;
     border-top: 1px solid gray;
@@ -42,7 +50,6 @@
 .adminContainer table.documents td {
     vertical-align: top;
     padding: 0.2em 0.5em;
-    vertical-align: top;
 }
 
 .adminContainer table.documents td.id {
@@ -50,6 +57,10 @@
 }
 
 .adminContainer table.documents td.info {
+}
+
+.adminContainer table.documents td .authors {
+    font-style: italic;
 }
 
 .adminContainer table.documents td.info span.author {
