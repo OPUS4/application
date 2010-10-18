@@ -87,7 +87,7 @@ class Publish_Model_Deposit {
             }
             else {
                 $this->log->info("wanna store something else...");
-                if (array_key_exists($dataKey, $this->externalFields)) {
+                if ($this->document->hasMultipleValueField($dataKey)) {
 
                     if ($dataKey === 'Language') {
                         $file = $this->document->getFile();
