@@ -682,6 +682,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
 
             $counter++;
             try {
+                $doc->setBelongsToBibliography(0);
                 $docid = $doc->store();
                 echo "created $counter/$total documents -- opus_id: $docid, serial: {$preprint['serial']}, pid: $pid\n";
             }
