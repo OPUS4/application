@@ -34,7 +34,6 @@
 class Publish_Model_Deposit {
 
     public $document;
-    public $externalFields;
     public $documentData;
     public $projects = array();
     public $log;
@@ -57,8 +56,6 @@ class Publish_Model_Deposit {
         if (isset($documentData)) {
             $this->documentData = $documentData;
         }
-
-        $this->externalFields = $this->document->getAllExternalFields();
 
         $this->log = Zend_Registry::get('Zend_Log');
 
