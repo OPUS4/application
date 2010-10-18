@@ -489,6 +489,15 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
         $counter = 0;
         $total = count($preprints);
 
+        // Write imported documents to seperate text file
+        $experiments = true;
+        if ($experiments) {
+           $experiments_fh = fopen('experiments.txt', 'w');
+           if ($experiments_fh == false) {
+               throw new Exception('Cannot write output to experiments.txt');
+           }
+        }
+
         foreach ($preprints AS $pid => $preprint) {
             $pid = $preprint['id'];
 
@@ -508,11 +517,14 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             $serial->setValue($preprint['serial']);
 
             //    <field name="title">Skew-Hamiltonian and Hamiltonian eigenvalue problems: Theory, algorithms and applications</field>
-            $field = $preprint['title'];
-            if ($field != '') {
+            $document_title = trim($preprint['title']);
+            if ($document_title != '') {
+                $document_title = str_replace("\n", " ", $document_title);
+                $document_title = trim(str_replace("\r", " ", $document_title));
+
                 $model = $doc->addTitleMain();
                 $model->setLanguage('eng');
-                $model->setValue($field);
+                $model->setValue($document_title);
             }
 
             //    <field name="filename_ps">bkm2final.ps</field>
@@ -633,8 +645,11 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             // load authors...
             $unique_authors = array();
 
+            $authors_array = array();
             foreach ($this->preprint_authors[$pid] AS $mda) {
                 $mda_id = $mda->store();
+
+                $authors_array[] = $mda->getLastName() . ", " . $mda->getFirstName();
 
                 if (false === array_key_exists($mda_id, $unique_authors)) {
                     $unique_authors[$mda_id] = 0;
@@ -672,6 +687,20 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             catch (Opus_Model_Exception $e) {
                 echo "failed creating document $counter/$total --serial: {$preprint['serial']}, pid: $pid\n";
                 throw $e;
+            }
+
+            // Finally: Write collected experiment data.
+            if ($experiments) {
+               fwrite($experiments_fh, "*SERIAL: $pid\n");
+               fwrite($experiments_fh, "*ID: $docid\n\n");
+
+               fwrite($experiments_fh, "*AU: ".implode("; ", $authors_array)."\n");
+               fwrite($experiments_fh, "*TI: $document_title\n");
+               fwrite($experiments_fh, "*PY: ".substr($preprint['submit_date'],0,4)."\n");
+
+               if (!empty($mscs)) {
+                  fwrite($experiments_fh, "*CC: ".implode(" ", $mscs)."\n");
+               }
             }
         }
 
