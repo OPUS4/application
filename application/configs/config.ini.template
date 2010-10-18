@@ -107,6 +107,8 @@ mail.opus.name = ; Name of administrator
 ; this to 1. It will ask on the first site of the publish module if a new
 ; document should be added to the bibliography.
 ;form.first.bibliographie = 0
+; States, if the upload-fields are required to enter the second form.
+;form.first.requireupload = 0
 
 ;REFEREES
 ; Who should be informed, if a new document gets published?

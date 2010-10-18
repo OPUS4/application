@@ -158,8 +158,8 @@ class Publish_Form_PublishingFirst extends Zend_Form {
 
         // Upload-fields required to enter second stage
         // TODO: Make it configurable per-document-type.
-        if (isset($this->config->form->first->require_upload)) {
-            if ($this->config->form->first->require_upload) {
+        if (isset($this->config->form->first->requireupload)) {
+            if ($this->config->form->first->requireupload) {
                 $fileupload->setRequired(true);
             }
         }
