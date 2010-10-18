@@ -556,7 +556,8 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             }
 
             //    <field name="approve_date">2003-12-10 00:00:00</field>
-            $doc->setCompletedDate($preprint['approve_date']);
+            // $doc->setCompletedDate($preprint['approve_date']);
+            $doc->setPublishedDate($preprint['approve_date']);
 
             //    <field name="comment" xsi:nil="true" />
             $field = $preprint['comment'];
