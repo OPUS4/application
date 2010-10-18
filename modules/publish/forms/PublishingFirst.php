@@ -156,6 +156,14 @@ class Publish_Form_PublishingFirst extends Zend_Form {
                 ->setValueDisabled(true)
                 ->setAttrib('enctype', 'multipart/form-data');
 
+        // Upload-fields required to enter second stage
+        // TODO: Make it configurable per-document-type.
+        if (isset($this->config->form->first->require_upload)) {
+            if ($this->config->form->first->require_upload) {
+                $fileupload->setRequired(true);
+            }
+        }
+
         return $fileupload;
     }
 
