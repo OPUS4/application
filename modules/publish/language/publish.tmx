@@ -300,7 +300,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="home_index_redirect_from_publish">
+    <tu tuid="success_redirect">
       <tuv xml:lang="en">
         <seg>Your document was successfully stored.</seg>
       </tuv>

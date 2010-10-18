@@ -107,8 +107,8 @@ class Publish_DepositController extends Controller_Action {
 //                $message = $this->view->translation('mail_publish_notification', $docUrl);
 //                $this->__scheduleNotification($subject, $message, $projects);
 
-                //Redirect to front door                
-                return $this->_redirectToAndExit('index', $this->view->translate('home_index_redirect_from_publish'), 'index', 'home');
+                // Redirect to publish start page and print message
+                return $this->_redirectToAndExit('index', $this->view->translate('success_redirect'), 'index', 'publish');
             }
         }
         else {
