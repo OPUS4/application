@@ -133,7 +133,7 @@ class Review_IndexController extends Controller_Action {
         $lastName = $this->getRequest()->getParam('lastname');
         $this->view->lastName = $lastName;
 
-        if ($this->_isButtonPressed('buttonClear', true, false)) {
+        if ($this->_isButtonPressed('buttonAccept', true, false)) {
             if (!Zend_Validate::is($firstName, 'NotEmpty')) {
                 $this->view->error = $this->view->translate('review_error_input_missing');
             }

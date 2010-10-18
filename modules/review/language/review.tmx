@@ -18,7 +18,7 @@
   
     <tu tuid="review_index_title">
       <tuv xml:lang="en">
-        <seg>Clearing Documents</seg>
+        <seg>Review Documents</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Freigabe von Dokumenten</seg>
@@ -178,18 +178,18 @@
       </tuv>
     </tu>
 
-    <tu tuid="review_clear_selected">
+    <tu tuid="review_accept_selected">
       <tuv xml:lang="en">
-        <seg>Clear Selected Documents</seg>
+        <seg>Accept selected documents</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Ausgewählte Dokumente freischalten</seg>
       </tuv>
     </tu>
 
-    <tu tuid="review_clear_title">
+    <tu tuid="review_accept_title">
       <tuv xml:lang="en">
-        <seg>Clear Documents</seg>
+        <seg>Accept documents</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Dokumente freischalten</seg>
@@ -214,9 +214,9 @@
       </tuv>
     </tu>
 
-    <tu tuid="review_button_clear">
+    <tu tuid="review_button_accept">
       <tuv xml:lang="en">
-        <seg>Clear Documents</seg>
+        <seg>Accept Documents</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Dokumente freigeben</seg>
@@ -250,7 +250,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="review_clear_document_count">
+    <tu tuid="review_accept_document_count">
       <tuv xml:lang="en">
         <seg>selected</seg>
       </tuv>
