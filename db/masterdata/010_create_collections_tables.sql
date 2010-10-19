@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `collections` (
   KEY `role_id` (`role_id`,`id`),
   UNIQUE KEY `role_id_left` (`role_id`,`left_id`),
   UNIQUE KEY `role_id_right` (`role_id`,`right_id`),
-  UNIQUE KEY `role_id_number` (`role_id`,`number`),
+  -- UNIQUE KEY `role_id_number` (`role_id`,`number`), -- Uniqueness-constraint on number?
   KEY `parent_id` (`parent_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15985;
 
