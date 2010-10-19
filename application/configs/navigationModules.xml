@@ -28,6 +28,13 @@
                             <controller>documents</controller>
                             <action>edit</action>
                         </edit>
+
+                        <show>
+                            <label>admin_documents_show</label>
+                            <module>admin</module>
+                            <controller>documents</controller>
+                            <action>show</action>
+                        </show>
                     </pages>
                 </documents>
 

@@ -204,6 +204,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="admin_documents_show">
+      <tuv xml:lang="en">
+        <seg>Document Metadata</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokument Metadaten</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_documents_publish">
       <tuv xml:lang="en">
         <seg>Publish document</seg>

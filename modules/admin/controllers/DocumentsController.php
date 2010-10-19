@@ -241,9 +241,11 @@ class Admin_DocumentsController extends Controller_CRUDAction {
      */
     public function deleteAction() {
         if ($this->_request->isPost() === true || $this->getRequest()->getParam('docId') !== null) {
-        	$id = null;
-        	$id = $this->getRequest()->getParam('docId');
-            if ($id === null) $id = $this->getRequest()->getPost('id');
+            $id = null;
+            $id = $this->getRequest()->getParam('docId');
+            if ($id === null) {
+                $id = $this->getRequest()->getPost('id');
+            }
             $sureyes = $this->getRequest()->getPost('sureyes');
             $sureno = $this->getRequest()->getPost('sureno');
             if (isset($sureyes) === true or isset($sureno) === true) {
@@ -281,9 +283,11 @@ class Admin_DocumentsController extends Controller_CRUDAction {
      */
     public function permanentdeleteAction() {
         if ($this->_request->isPost() === true || $this->getRequest()->getParam('docId') !== null) {
-        	$id = null;
-        	$id = $this->getRequest()->getParam('docId');
-            if ($id === null) $id = $this->getRequest()->getPost('id');
+            $id = null;
+            $id = $this->getRequest()->getParam('docId');
+            if ($id === null) {
+                $id = $this->getRequest()->getPost('id');
+            }
             $sureyes = $this->getRequest()->getPost('sureyes');
             $sureno = $this->getRequest()->getPost('sureno');
             if (isset($sureyes) === true or isset($sureno) === true) {
@@ -299,7 +303,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                     $this->_redirectTo('index', 'Model successfully deleted.');
             	}
             	else {
-            		$this->_redirectTo('index');
+                    $this->_redirectTo('index');
             	}
             }
             else {
@@ -326,7 +330,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
      */
     public function createAction() {
         if ($this->_request->isPost() === true) {
-        	$data = $this->_request->getPost();
+            $data = $this->_request->getPost();
             $form_builder = new Form_Builder();
             $id = $this->getRequest()->getParam('id');
             $documentInSession = new Zend_Session_Namespace('document');
@@ -337,8 +341,9 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                 $action_url = $this->view->url(array("action" => "create"));
                 $form->setAction($action_url);
                 $this->view->form = $form;
-            } else {
-                try{
+            }
+            else {
+                try {
                     if ($form->isValid($data) === true) {
                         // store document
                         $document->store();
@@ -355,15 +360,17 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                         $controller = array_shift($params);
                         $action = array_shift($params);
                         $this->_redirectTo('edit', '', $controller, $module, $params);
-                    } else {
+                    }
+                    else {
                         $this->view->form = $form;
                     }
                 }
                 catch (Exception $e) {
-                	echo $e->getMessage();
+                    echo $e->getMessage();
                 }
             }
-        } else {
+        }
+        else {
             $this->_redirectTo('edit');
         }
     }
