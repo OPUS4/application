@@ -39,7 +39,7 @@
  * TODO translate messages
  */
 // check, if we are allowed to administrate
-if ((true !== Opus_Security_Realm::getInstance()->check('clearance')) ||
+if ((true !== Opus_Security_Realm::getInstance()->check('clearance')) &&
         (true !== Opus_Security_Realm::getInstance()->check('administrate'))) {
     // we are not allowed to review documents
     // $logger->info("Unallowed access to module admin!");
