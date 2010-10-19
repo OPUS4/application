@@ -86,6 +86,20 @@ class Admin_DocumentsControllerTest extends ControllerTestCase {
         $this->assertAction('error');
     }
 
+    public function testShowAction() {
+        $this->dispatch('/admin/documents/show/id/1');
+        $this->assertModule('admin');
+        $this->assertController('documents');
+        $this->assertAction('show');
+    }
+
+    public function testShowActionDoc91() {
+        $this->dispatch('/admin/documents/show/id/91');
+        $this->assertModule('admin');
+        $this->assertController('documents');
+        $this->assertAction('show');
+    }
+
 }
 
 ?>
