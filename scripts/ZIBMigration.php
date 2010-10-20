@@ -214,6 +214,13 @@ class ZIBMigration extends OpusMigrationBase {
         	//if ($tr->find('td[class=linie]',0)) {
 		if ($tr->find('td',1)) {
 		    if ($tr->find('td[class="aussen"]')) { continue; }
+
+                    $abteilung = $tr->find('td',2)->find('a',0)->plaintext;
+
+                    if ($abteilung === 'IT-Service') { continue; }
+                    if ($abteilung === 'Supercomputing') { continue; }
+                    if ($abteilung === 'Verwaltung') { continue; }
+
                     $name = $tr->find('td',1)->find('a',0)->plaintext;
 
                     $name = str_replace("&auml;","ä",$name);
@@ -283,7 +290,7 @@ class ZIBMigration extends OpusMigrationBase {
                 $file = readline('Please type the path to your Bibtex-File: ');
             }
 
-            $this->stylesheet = '../modules/import/views/scripts/bibtex';
+            $this->stylesheet = '../import/stylesheets';
             $this->xslt = 'bibtex.xsl';
             $this->importfile = $file;
 	    
@@ -295,8 +302,10 @@ class ZIBMigration extends OpusMigrationBase {
 	    foreach (Opus_Document::getAllIds() as $id) {
 		$doc = new Opus_Document($id);
 		if (!is_null($doc->getTitleMain())){
+                    if (!is_null($doc->getTitleMain(0))) {
 			$title = $doc->getTitleMain(0)->getValue();
 			array_push($opus_titles, $title);
+                    }
 		}
 	    }
 
@@ -311,7 +320,8 @@ class ZIBMigration extends OpusMigrationBase {
 		$doctitle = trim($doctitle);
 	
 		// Semiautomatic Deduplication with Levenstein-Distance
-		if (!is_null($doctitle)) {
+                
+                if (!is_null($doctitle)) {
 	    		$shortest = -1;
 			$closest = null;
 			
@@ -344,12 +354,13 @@ class ZIBMigration extends OpusMigrationBase {
 				}
 			}
 		}
-               
+ 
+                 
                 $result = $import->import($document);
                 if ($result['result'] === 'success') {
                     //echo "Successfully imported oldId " . $result['oldid'] . "\n";
 		    echo "Successfully imported Bibtex-Entry\n";
-		    //array_push($opus_titles, $doctitle);
+		    array_push($opus_titles, $doctitle);
                 }
                 else if ($result['result'] === 'failure') {
                     echo "Failure: " . $result['message'] . "\n";
@@ -430,7 +441,7 @@ class ZIBMigration extends OpusMigrationBase {
         $this->load_licences();
 
         // Load Institutes
-        $this->load_documents('7','8');
+        //$this->load_documents();
 
         // Import files
         //$this->load_fulltext();
@@ -443,17 +454,16 @@ class ZIBMigration extends OpusMigrationBase {
         //$this->sign_publications();
 	
 	// Create Person-Collections
-	//$this->create_person_collections("http://typo.zib.de/de/menschen/mitarbeiter.html");
+	$this->create_person_collections("http://www.zib.de/de/menschen/mitarbeiter.html");
 
 	// Create Project-Collections
 	//$this->create_project_collections("http://typo.zib.de/de/projekte/aktuelle-projekte.html");
 	//$this->create_project_collections("http://typo.zib.de/de/projekte/aktuelle-projekte/browse/1.html");
 
 	// Import Bibtex-Files
-	//$this->import_bibtex("/home/gunar/opus4/bibtex/Dummy.bib.xml");
         $this->import_bibtex("/home/gunar/opus4/bibtex/Numerische.bib.xml");
 	//$this->import_bibtex("/home/gunar/opus4/bibtex/Optimierung.bib.xml");
-	//$this->import_bibtex("/home/gunar/opus4/bibtex/Visualisierung.bib.xml");
+	$this->import_bibtex("/home/gunar/opus4/bibtex/Visualisierung.bib.xml");
 
 	// Fill Person-Colelctiosn
         $this->fill_person_collections();
