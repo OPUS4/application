@@ -16,6 +16,24 @@
         </tuv>
     </tu>
 
+    <tu tuid="publish_controller_form_template1">
+        <tuv xml:lang="en">
+            <seg>Error: document type fields <b>are missing</b> in the template. Please compare template with document type and complete it.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Fehler: es <b>fehlen</b> Dokumenttyp-Felder innerhalb des Templates. Bitte vergleichen und ergänzen Sie. </seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="publish_controller_form_template2">
+        <tuv xml:lang="en">
+            <seg>Error: there are too many document type fields in thetemplate. Please compare template with document type and delete.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Fehler: es gibt <b>zu viele</b> Dokumenttyp-Felder innerhalb des Templates. Bitte vergleichen und löschen Sie.</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="isEmpty">
         <tuv xml:lang="en">
             <seg>Value is required and can't be empty.</seg>

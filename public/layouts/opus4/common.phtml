@@ -105,7 +105,8 @@ $languageSelectors = $this->languageSelector();
             </div>
         </div>
 
-        <div id="content" class="opus <?= $this->moduleName ?><?= ($this->controllerName === 'index' ? '' : '_'.$this->controllerName)?><?= ($this->actionName === 'index' ? '' : '_'.$this->actionName)?>">
+        <div id="content" class="opus <?= $this->moduleName ?>">
+
             <?php if (!is_null($this->flashMessenger)) : ?>
             <div class="messages">
                 <?php foreach ($this->flashMessenger->getMessages() as $message) : ?>

@@ -1,4 +1,4 @@
-/* Page specific settings
+﻿/* Page specific settings
 ------------------------------------------------------------ */
 #content.home{
 	background: #eaedf2 url(../img/theme/bg_content.jpg) repeat-x;
@@ -11,15 +11,142 @@
 .opus.solrsearch h2{
 	margin-bottom: 0;
 }
+.opus.solrsearch_search h2,
+.opus.solrsearch_advanced h2{
+	margin-bottom: 15px;
+}
 .solrsearch #form-search,
-.solrsearch_advanced .form-wrapper{
+.solrsearch_advanced .form-wrapper,
+.solrsearch_search .form_wrapper{
 	/*margin: 3em 0 0;*/
 	background-color: #f3f6f8;
 	margin: 0 0 1em;
-	padding: 15px 220px;
+	padding: 15px 225px;
 }
 .solrsearch_advanced fieldset{
-	padding: 15px 245px;
+	padding: 15px 235px;
+}
+/* form styles
+----------------------------------------------------------- */
+.opus h3.document-type{
+	text-transform: none;
+	font-style: italic;
+	background: url(../img/theme/icon-publish-black.gif) no-repeat 0 50%;
+	font-size: 1.4em;
+	padding: 0.5em 0 0.5em 34px;
+	margin: 0 0 1em;
+}
+.button-wrapper{
+	padding: 10px;
+}
+.required{
+	color: #fe7c25;
+}
+fieldset .add-delete-wrapper{
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	width: 44%;
+	padding: 0 10px 15px 0;
+}
+.publish fieldset .form-item{
+	float: left;
+	clear: left;
+	width: 55%;
+	padding: 0.2em 0;
+}
+.form-multiple.even {
+	/*color: #6a7a7b;*/
+	padding: 0.5em 5px;
+	margin: 0.5em -5px;
+	float: left;
+	width: 100%;
+	background: #e2e6e9;
+}
+
+div > .form-button{
+	background: #2b5580 url(../img/theme/bg_button.gif) repeat-x center;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	border: 1px solid #26517d;
+	color: white;
+	padding: 5px 5px;
+	font-family: Arial, Helvetica, sans-serif;
+}
+div > .add-button,
+div > .delete-button{
+	padding-left: 22px;
+}
+div > .add-button{
+	background: url(../img/theme/bg_button-add.gif) no-repeat 0 50%;
+}
+div > .delete-button{
+	background: url(../img/theme/bg_button-del.gif) no-repeat 0 50%;
+	border-color: #a5b5b5;
+	color: black;
+        margin-left: 5px;
+}
+div > .abort-button{
+	background: url(../img/theme/bg_button-abort.gif) repeat-x center;
+	border-color: #a5b5b5;
+	color: black;
+}
+.opus.publish fieldset{
+	position: relative;
+	border-top: 1px solid #e2e6e9;
+	min-height: 8em;
+	background: #f3f6f8;
+	margin: 1em 0 1em;
+}
+.publish fieldset .hint{
+	/*background: #e1e6ec;*/
+	background: url(../img/theme/icon-hint-small.gif) no-repeat 0 0.2em;
+	padding: 4px 6px 4px 20px;
+	color: #6a7a7b;
+	margin: 0 0 1em;
+}
+.opus fieldset .form-errors{
+	clear: both;
+}
+.left-labels label,
+.right-labels label{
+	width: 28%;	
+	padding: 0 1em 0 0;
+	float: left;
+}
+.right-labels label{
+	text-align: right;
+}
+.top-labels label{
+	text-align: left;
+	display: block;
+	float: none;
+}
+.opus fieldset .description,
+.opus fieldset .form-errors{
+	font-size: 0.85em;
+}
+.opus fieldset .form-errors ul,
+.opus fieldset .form-errors p{
+	margin: 0 0 0.8em;
+	padding: 0;
+	list-style: none;
+	color: #cc3300;
+}
+.opus fieldset .form-errors li{
+	background: url(../img/theme/icon-dash-small.gif) no-repeat 0 50%;
+	padding: 0 0 0 9px;
+}
+.opus .form-hint{
+	padding: 0 10px;
+}
+.opus .form-hint.form-errors{
+	padding: 4px 10px 4px 30px;
+	margin: 1em 0;
+	background: transparent url(../img/theme/icon-errors-small.gif) no-repeat 10px 0.4em;
+}
+.opus fieldset .form-errors{
+	padding: 2px 0 4px 20px;
 }
 /* HTML elements
 ------------------------------------------------------------ */
@@ -37,6 +164,7 @@ h1,
 }
 .opus h2{
 	/*color: #333;*/
+	/*color: #1d4065;*/
 	color: #26517d;
 	background-color: #f3f6f8;
 	padding: 4px 10px;
@@ -75,11 +203,11 @@ a img{
 	border: #d4dde6 solid;
 	border-width: 1px 0 0;
 	padding: 10px 10px 10px;
-	margin: 0 1em 1em;
+	margin: 0 10px 1em;
 }
 .opus legend{
 	color: #26517d;
-	padding: 0 0 4px;
+	padding: 0 0 2px;
 	text-transform: uppercase;
 	font-size: 0.9em;
 	border-bottom: 4px solid #e2e6e9;
@@ -105,14 +233,6 @@ a img{
 #logo{
 	margin: 0;
 	float: left;
-	height: 89px;
-	width: 185px;
-	padding: 0 10px 0 0;
-	background: white url(../img/theme/bg_logo.jpg) no-repeat right;
-}
-#logo2{
-	margin: 0;
-	float: right;
 	height: 89px;
 	width: 185px;
 	padding: 0 10px 0 0;
@@ -248,7 +368,8 @@ body > #top-header{
 	float: left;
 	width: 100%;
 }
-.opus .messages .failure{
+.opus .messages .failure,
+.opus .form-hint.form-errors{
 	color: #a40000;
 	background-color: #ffd4d4;
 }
@@ -323,7 +444,6 @@ body > #top-header{
 }
 #searchbar{
 	padding: 0 0 0 245px;
-/*margin: 0 0 0 245px;*/
 }
 .breadcrumb_results{
 	float: left;
@@ -332,40 +452,49 @@ body > #top-header{
 #facets h3,
 .breadcrumb_results{
 	background-color: #f3f6f8;
-	line-height: 30px;
-	/*padding: 15px 0;*/
+	/*line-height: 30px;*/
 	border: solid #e2e6e9;
 	border-width: 0 0 4px;
 	margin: 0;
 	font-weight: normal;
 	color: #333;
-
 }
 #facets h3{
-	padding: 0 10px;
-	font-size: 14px;
+	padding: 7px 10px;
 	text-transform: none;
 }
+#facets h3,
+/*.breadcrumb_results,*/
+.breadcrumb_results h3,
+.breadcrumb_results .info_small,
+.breadcrumb_results .paginationControl li{
+	font-size: 14px;
+	line-height: normal;
+}
+
 .opus .breadcrumb_results h3,
 .opus .breadcrumb_results .info_small,
 .opus .breadcrumb_results .paginationControl li{
 	float: left;
 	margin: 0;
-	font-size: 14px;
 	font-weight: normal;
 	color: #333;
 	text-transform: none;
 }
 .breadcrumb_results h3{
-	padding: 0 20px 0 10px;
+	padding: 7px 20px 7px 10px;
 	background: url(../img/theme/breadcrumb_results.png) no-repeat right center;
 }
 .breadcrumb_results .info_small{
-	padding: 0 20px 0 10px;
-	background: url(../img/theme/breadcrumb_results.png) no-repeat right center;
+	padding: 7px 0 7px 10px;
+}
+#searchbar .breadcrumb_results .paginationControl{
+	padding: 0 0 0 30px;
+	float: left;
+	background: url(../img/theme/breadcrumb_results.png) no-repeat left center;	
 }
 .breadcrumb_results .paginationControl li{
-	padding: 0 0 0 10px;
+	padding: 7px 10px 7px 0;
 }
 #search_options p.label{
 	float: left;
@@ -446,8 +575,10 @@ body > #top-header{
 .nav.browsing li.last{
 	border: none;
 }
-.nav.browsing li:hover{
+.nav.browsing li:hover,
+.nav.browsing li:hover a{
 	background-color: #f3f6f8;
+	color: #fe7c25;
 }
 .nav.browsing a.rss{
 	padding: 0 0 0 10px;
@@ -480,43 +611,6 @@ body > #top-header{
 	background: url(../img/theme/icon-arrow-top.gif) no-repeat 0 50%;
 	padding: 0 0 0 12px;
 }
-/* form styles
------------------------------------------------------------ */
-fieldset{
-	position: relative;
-}
-fieldset .form-errors{
-	clear: both;
-}
-.left-labels label,
-.right-labels label{
-	width: 28%;
-	padding: 0 1em 0 0;
-	float: left;
-}
-.right-labels label{
-	text-align: right;
-}
-.top-labels label{
-	text-align: left;
-	display: block;
-	float: none;
-}
-/*fieldset .form-item{
-	float: left;
-	clear: left;
-	width: 59%;
-	padding: 0.2em 0;
-}fehlerhafte Klasse - Konflikt mit Startseite und Suchbutton*/
-fieldset .button-wrapper{
-	position: absolute;
-	right: 0;
-	bottom: 0;
-	width: 40%;
-}
-fieldset .description{
-	font-size: 0.85em;
-}
 /* Styled search form
 ----------------------------------------------------------------------------------- */
 .form-submit-wrapper,
@@ -537,20 +631,13 @@ fieldset .description{
 }
 #edit-submit-advanced-search-wrapper{
 	float: left;
-	padding: 0 1em 0 25px;
+	padding: 0 1em 0 20px;
 }
 #form-search p.footer-link{
 	padding: 10px 0 0 10px;
 }
 #fieldset-search{
 	background: url(../img/theme/bg_search.png) no-repeat;
-	/*height: 38px;*/
-	width: 535px;
-	margin: auto;
-	padding: 0 0 0;
-}
-#fieldset-download{
-	background: url(../img/theme/bg_download.png) no-repeat;
 	/*height: 38px;*/
 	width: 535px;
 	margin: auto;
@@ -563,8 +650,9 @@ fieldset .description{
 }
 #edit-search-wrapper{
 	float: left;
-	margin-left: 5px;
-	text-align: center;
+	clear: none;
+	width: auto;
+	padding: 0;
 }
 #edit-submit-search-wrapper{
 	float: right;
@@ -593,7 +681,7 @@ fieldset .description{
 	font-family: Arial, Helvetica, sans-serif;
 	width: 100px;
 }
- .form-submit:hover,
+.form-submit:hover,
 #fieldset-search .form-submit:hover{
 	color: #feb07c;
 }

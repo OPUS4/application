@@ -46,7 +46,7 @@ class Publish_Model_DisplayGroup {
     public $form;
     private $multiplicity;
     private $log;
-    private $defaultNS;
+    private $session;
 
     public function __construct($elementName, Publish_Form_PublishingSecond $form, $multiplicity) {
         $this->elementName = $elementName;
@@ -54,7 +54,7 @@ class Publish_Model_DisplayGroup {
         $this->form = $form;
         $this->multiplicity = $multiplicity;
         $this->log = Zend_Registry::get('Zend_Log');
-        $this->defaultNS = new Zend_Session_Namespace('Publish');
+        $this->session = new Zend_Session_Namespace('Publish');
     }
 
     public function makeDisplayGroup() {
@@ -71,20 +71,33 @@ class Publish_Model_DisplayGroup {
             }
         }
 
-        if ($maxNum > 1) {
-            $deleteButton = $this->addDeleteButtonToGroup();
-            $this->form->addElement($deleteButton);
-            $displayGroup[] = $deleteButton->getName();
+        $number = count($displayGroup);
+        $groupCount = "num" . $this->label;
+        if (!isset($this->session->$groupCount)) {
+                $this->session->$groupCount = $number;
+                $this->log->debug("initial field number = " . $this->session->$groupCount . " for group " . $this->label);
         }
-
-        $this->defaultNS->additionalFields[$this->elementName] = $this->maxNumber();
+        else {
+            if ($number < $this->session->$groupCount)
+                    $this->session->$groupCount = $number;
+            $this->log->debug("initial field number = " . $this->session->$groupCount . " for group " . $this->label);
+        }
+        
+        $this->session->additionalFields[$this->elementName] = $this->maxNumber();
         if ($this->maxNumber() < (int) $this->multiplicity || $this->multiplicity === '*') {
             $addButton = $this->addAddButtontoGroup();
             $this->form->addElement($addButton);
             $displayGroup[] = $addButton->getName();
         }
 
+        if ($maxNum > 1) {
+            $deleteButton = $this->addDeleteButtonToGroup();
+            $this->form->addElement($deleteButton);
+            $displayGroup[] = $deleteButton->getName();
+        }
+
         $this->elements = $displayGroup;
+
     }
 
     private function maxNumber() {

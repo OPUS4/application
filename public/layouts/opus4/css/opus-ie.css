@@ -11,7 +11,10 @@ this.runtimeStyle.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(s
 this.runtimeStyle.backgroundImage = "none")),this.pngSet=true)
 );
 }
-
+.breadcrumb_results h3,
+#searchbar .breadcrumb_results .paginationControl{
+	background-image: none;
+}
 #content {
     height: 600px;
 }
@@ -29,4 +32,10 @@ this.runtimeStyle.backgroundImage = "none")),this.pngSet=true)
 }
 .opus legend{
 	width: 130px;
+}
+.form-button{
+	font-family: Arial, Helvetica, sans-serif;
+}
+.opus.publish fieldset{
+	height: 8em;
 }

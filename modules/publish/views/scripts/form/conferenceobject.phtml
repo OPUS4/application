@@ -39,13 +39,15 @@
 
 <h2><?= $this->title ?></h2>
 <div class="content">
-    <h3><?= $this->subtitle ?></h3>
+<h3 class="document-type" tile="Dokumententyp"><?= $this->subtitle?></h3>
 
-    <div class="form-errors"><?= $this->errorCaseMessage; ?></div>
+<?php if (isset($this->errorCaseMessage)) : ?>
+    <div class="form-hint form-errors"><p><?= $this->errorCaseMessage; ?></p></div>
+<? endif; ?>
 
-    <form enctype="application/x-www-form-urlencoded" action="<?= $this->action_url; ?>" method="post">
-        <div class="form-items-wrapper">
-            <div class="form-hint"><?= $this->requiredHint; ?></div>
+<form enctype="application/x-www-form-urlencoded" action="<?= $this->action_url; ?>" method="post">
+    <div class="form-items-wrapper">
+        <div class="form-hint"><p><?= $this->requiredHint; ?></p></div>
 
             <?= $this->group($this->groupPersonSubmitter); ?>
             <?= $this->group($this->groupTitleMain); ?>
@@ -75,12 +77,15 @@
             <?= $this->element($this->Licence); ?>
 
             <div class="button-wrapper">
-                <?= $this->element('button_label_abort', "class='form-button abort-button'", "Submit", "abort"); ?>
-                <?= $this->element('button_label_send', "class='form-button submit-button'", "Submit", "send"); ?>
-            </div>
+        <?= $this->element('button_label_abort', "class='form-button abort-button'", "Submit", "abort"); ?>
+        <?= $this->element('button_label_send', "class='form-button submit-button'", "Submit", "send"); ?>
+    </div>
 
-        </div>
-    </form>
+    </div>
+</form>
 
-    <div class="form-errors"><?= $this->endTemplate($this->form); ?></div>
+<?php if ($this->endTemplate($this->form) !== "") : ?>
+    <div class="form-hint form-errors"><?= $this->endTemplate($this->form); ?></div>
+<? endif; ?>
+
 </div>
