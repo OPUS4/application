@@ -66,13 +66,23 @@
     <xsl:template match="bibtex:entry">
 
         <!-- Lese alle Variablen ein -->
+        <!-- absurl wird gemappt auf Reference Url -->
+        <!-- <xsl:variable name="abstag"><xsl:value-of select="*/bibtex:abstag" /></xsl:variable> -->
+        <xsl:variable name="absurl"><xsl:value-of select="*/bibtex:absurl" /></xsl:variable>
         <!-- address: muss nicht zwingend publisher_pplace sein -->
         <xsl:variable name="address"><xsl:value-of select="*/bibtex:address" /></xsl:variable>
+        <!-- altsrcurl und altsrctag koennten auf ReferenceUrl (Label = Ä'preprint o.ae.) gemappt werden -->
+        <!-- <xsl:variable name="altsrctag"><xsl:value-of select="*/bibtex:altsrctag" /></xsl:variable> -->
+        <!-- <xsl:variable name="altsrcurl"><xsl:value-of select="*/bibtex:altsrcurl" /></xsl:variable> -->
         <xsl:variable name="author"><xsl:value-of select="*/bibtex:author" /></xsl:variable>
         <xsl:variable name="booktitle"><xsl:value-of select="*/bibtex:booktitle" /></xsl:variable>
         <xsl:variable name="doi"><xsl:value-of select="*/bibtex:doi" /></xsl:variable>
         <xsl:variable name="edition"><xsl:value-of select="*/bibtex:edition" /></xsl:variable>
         <xsl:variable name="editor"><xsl:value-of select="*/bibtex:editor" /></xsl:variable>
+        <!-- TODO: Die Arbeitsgruppe muss noch gemappt werden -->
+        <!-- <xsl:variable name="group"><xsl:value-of select="*/bibtex:group" /></xsl:variable> -->
+        <xsl:variable name="howpublished"><xsl:value-of select="*/bibtex:howpublished" /></xsl:variable>
+        <!-- Institution eines Techreports -->
         <xsl:variable name="institution"><xsl:value-of select="*/bibtex:institution" /></xsl:variable>
         <xsl:variable name="isbn"><xsl:value-of select="*/bibtex:isbn" /></xsl:variable>
         <xsl:variable name="issn"><xsl:value-of select="*/bibtex:issn" /></xsl:variable>
@@ -81,19 +91,29 @@
         <xsl:variable name="language"><xsl:value-of select="*/bibtex:language" /></xsl:variable>
         <!-- listyear: in welchem jahr soll die Publikation gelistet werden (visualisierung) -->
         <xsl:variable name="listyear"><xsl:value-of select="*/bibtex:listyear" /></xsl:variable>
+        <!-- Inproceedings: das Datum der Konferenz -->
+        <!-- Doctoralthesis das Datum der Abgabe/Verteidigung? -->
+        <xsl:variable name="month"><xsl:value-of select="*/bibtex:month" /></xsl:variable>
         <xsl:variable name="note"><xsl:value-of select="*/bibtex:note" /></xsl:variable>
+        <!-- Article: der Issue eines Hefts -->
         <xsl:variable name="number"><xsl:value-of select="*/bibtex:number" /></xsl:variable>
         <xsl:variable name="pages"><xsl:value-of select="*/bibtex:pages" /></xsl:variable>
         <xsl:variable name="publisher"><xsl:value-of select="*/bibtex:publisher" /></xsl:variable>
         <xsl:variable name="school"><xsl:value-of select="*/bibtex:school" /></xsl:variable>
+        <!-- ConferenceObject: TitleSub -->
         <xsl:variable name="series"><xsl:value-of select="*/bibtex:series" /></xsl:variable>
+        <!--<xsl:variable name="srctagl"><xsl:value-of select="*/bibtex:srctag" /></xsl:variable> -->
         <xsl:variable name="srcurl"><xsl:value-of select="*/bibtex:srcurl" /></xsl:variable>
+        <!--<xsl:variable name="target"><xsl:value-of select="*/bibtex:target" /></xsl:variable>-->
         <xsl:variable name="title"><xsl:value-of select="*/bibtex:title" /></xsl:variable>
+        <!-- Doctoralthesis: Phdthesis -->
         <xsl:variable name="type"><xsl:value-of select="*/bibtex:type" /></xsl:variable>
-        <xsl:variable name="url"><xsl:value-of select="*/bibtex:url" /></xsl:variable>
+        <!-- Das Feld Url beinhaltet z.t. ungepruefte Urls -->
+        <xsl:variable name="url"><xsl:value-of select="*/bibtex:url" /></xsl:variable> 
         <xsl:variable name="urlpdf"><xsl:value-of select="*/bibtex:urlpdf" /></xsl:variable>
         <xsl:variable name="volume"><xsl:value-of select="*/bibtex:volume" /></xsl:variable>
         <xsl:variable name="year"><xsl:value-of select="*/bibtex:year" /></xsl:variable>
+        <!-- <xsl:variable name="zib"><xsl:value-of select="*/bibtex:zib" /></xsl:variable> -->
 
         <!-- Der Publikationstyp -->
         <xsl:variable name="doctype">
@@ -154,6 +174,12 @@
                 <xsl:attribute name="Issue"><xsl:value-of select="$issue" /></xsl:attribute>
             </xsl:if>
 
+            <xsl:if test="$doctype='article' or $doctype='misc'">
+                <xsl:if test="string-length($number) > 0">
+                    <xsl:attribute name="Issue"><xsl:value-of select="$number" /></xsl:attribute>
+                </xsl:if>
+            </xsl:if>
+
             <xsl:if test="string-length($language) > 0">
                 <xsl:attribute name="Language">
                     <xsl:call-template name="getLanguage">
@@ -163,6 +189,7 @@
                     </xsl:call-template>
                 </xsl:attribute>
             </xsl:if>
+
 
             <xsl:if test="string-length($pages) > 0">
                 <xsl:if test="$doctype='article' or $doctype='bookpart' or $doctype='conferenceobject'">
@@ -189,21 +216,25 @@
             <xsl:if test="string-length($year) > 0">
                 <xsl:choose>
                     <xsl:when test="string-length($listyear) > 0">
-                        <xsl:attribute name="CompletedYear"><xsl:value-of select="$year" /></xsl:attribute>
+                        <xsl:attribute name="CompletedYear"><xsl:value-of select="php:function('preg_replace', '/[^\d]/','', $year)" /></xsl:attribute>
                         <xsl:attribute name="PublishedYear"><xsl:value-of select="$listyear" /></xsl:attribute>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:attribute name="PublishedYear"><xsl:value-of select="$year" /></xsl:attribute>
+                        <xsl:attribute name="CompletedYear"><xsl:value-of select="php:function('preg_replace', '/[^\d]/','', $year)" /></xsl:attribute>
+                        <xsl:attribute name="PublishedYear"><xsl:value-of select="php:function('preg_replace', '/[^\d]/','', $year)" /></xsl:attribute>
                     </xsl:otherwise>
                 </xsl:choose>
             </xsl:if>
 
-            <xsl:if test="string-length($publisher) > 0">
-                <xsl:attribute name="PublisherName"><xsl:value-of select="$publisher" /></xsl:attribute>
-            </xsl:if>
 
-            <xsl:if test="string-length($address) > 0">
-                <xsl:attribute name="PublisherPlace"><xsl:value-of select="$address" /></xsl:attribute>
+            <!-- PublisherName und PublisherPlace (bei article) -->
+            <xsl:if test="$doctype='article' or $doctype='misc'">
+                <xsl:if test="string-length($publisher) > 0">
+                    <xsl:attribute name="PublisherName"><xsl:value-of select="$publisher" /></xsl:attribute>
+                    <xsl:if test="string-length($address) > 0">
+                        <xsl:attribute name="PublisherPlace"><xsl:value-of select="$address" /></xsl:attribute>
+                    </xsl:if>
+                </xsl:if>
             </xsl:if>
 
             <xsl:if test="string-length($doctype) > 0">
@@ -290,21 +321,21 @@
             </xsl:if>
 
              <!-- TitleParent -->
-            <xsl:if test="$doctype='article' and string-length($journal) > 0">
-                <xsl:element name="TitleParent">
-                <xsl:attribute name="Value"><xsl:value-of select="$journal" /></xsl:attribute>
-                    <xsl:if test="string-length($language) > 0">
-                        <xsl:attribute name="Language">
-                            <xsl:call-template name="getLanguage">
-                                <xsl:with-param name="lang">
-                                    <xsl:value-of select="$language" />
-                                </xsl:with-param>
-                            </xsl:call-template>
-                        </xsl:attribute>
-                    </xsl:if>
-                </xsl:element>
-            </xsl:if>
-            <xsl:if test="$doctype='bookpart' or $doctype='conferenceobject'">
+                <xsl:if test="string-length($journal) > 0">
+                    <xsl:element name="TitleParent">
+                        <xsl:attribute name="Value"><xsl:value-of select="$journal" /></xsl:attribute>
+                        <xsl:if test="string-length($language) > 0">
+                            <xsl:attribute name="Language">
+                                <xsl:call-template name="getLanguage">
+                                    <xsl:with-param name="lang">
+                                        <xsl:value-of select="$language" />
+                                    </xsl:with-param>
+                                </xsl:call-template>
+                            </xsl:attribute>
+                        </xsl:if>
+                    </xsl:element>
+                </xsl:if>
+
                 <xsl:if test="string-length($booktitle) > 0">
                     <xsl:element name="TitleParent">
                     <xsl:attribute name="Value"><xsl:value-of select="$booktitle" /></xsl:attribute>
@@ -319,9 +350,31 @@
                         </xsl:if>
                     </xsl:element>
                 </xsl:if>
+
+            <!--
+            <xsl:if test="$doctype='article' or $doctype='conferenceobject' or $doctype='misc'">
+            -->
+                <xsl:if test="string-length($series) > 0">
+                    <xsl:element name="TitleSub">
+                    <xsl:attribute name="Value">
+                            <xsl:value-of select="$series" />
+                        </xsl:attribute>
+                        <xsl:if test="string-length($language) > 0">
+                            <xsl:attribute name="Language">
+                                <xsl:call-template name="getLanguage">
+                                    <xsl:with-param name="lang">
+                                        <xsl:value-of select="$language" />
+                                    </xsl:with-param>
+                                </xsl:call-template>
+                            </xsl:attribute>
+                        </xsl:if>
+                    </xsl:element>
+                </xsl:if>
+                <!--
             </xsl:if>
+            -->
 
-
+            <!-- Identifier section-->
             <xsl:if test="string-length($isbn) > 0">
                 <xsl:element name="IdentifierIsbn">
                     <xsl:attribute name="Value"><xsl:value-of select="$isbn" /></xsl:attribute>
@@ -348,25 +401,79 @@
                     <xsl:attribute name="Value"><xsl:value-of select="$srcurl" /></xsl:attribute>
                 </xsl:element>
             </xsl:if>
-
+  
             <xsl:if test="string-length($url) > 0">
                 <xsl:element name="IdentifierUrl">
                     <xsl:attribute name="Value"><xsl:value-of select="$url" /></xsl:attribute>
                 </xsl:element>
             </xsl:if>
-
+    
             <xsl:if test="string-length($urlpdf) > 0">
                 <xsl:element name="IdentifierUrl">
                     <xsl:attribute name="Value"><xsl:value-of select="$urlpdf" /></xsl:attribute>
                 </xsl:element>
             </xsl:if>
 
-            <!-- TODO: School-Attribute of a Thesis will be mapped to Note -->
-            <xsl:if test="string-length($institution) > 0 or string-length($school) > 0 or string-length($note) > 0">
+            <!-- Reference section-->
+            <xsl:if test="string-length($absurl) > 0">
+                <xsl:element name="ReferenceUrl">
+                    <xsl:attribute name="Label">Abstract</xsl:attribute>
+                    <xsl:attribute name="Value"><xsl:value-of select="$absurl" /></xsl:attribute>
+                </xsl:element>
+            </xsl:if>
+
+            <!-- School/Type/Month/Year-Attributes of a PhdThesis will be mapped to Note -->
+            <xsl:if test="string-length($note) > 0">
+                <xsl:element name="Note">
+                    <xsl:attribute name="Message"><xsl:value-of select="$note" /></xsl:attribute>
+                </xsl:element>
+            </xsl:if>
+
+            <!-- alles was nirgendwo passt kommt in die enrichments -->
+                 <xsl:if test="string-length($school) > 0">
+                     <xsl:element name="Enrichment">
+                         <xsl:attribute name="KeyName">school</xsl:attribute>
+                         <xsl:attribute name="Value"><xsl:value-of select="$school" /></xsl:attribute>
+                     </xsl:element>
+                 </xsl:if>
+                 <xsl:if test="string-length($month) > 0">
+                      <xsl:element name="Enrichment">
+                         <xsl:attribute name="KeyName">month</xsl:attribute>
+                         <xsl:attribute name="Value"><xsl:value-of select="$month" /></xsl:attribute>
+                     </xsl:element>
+                 </xsl:if>
+                 <xsl:if test="string-length($type) > 0">
+                      <xsl:element name="Enrichment">
+                         <xsl:attribute name="KeyName">type</xsl:attribute>
+                         <xsl:attribute name="Value"><xsl:value-of select="$type" /></xsl:attribute>
+                     </xsl:element>
+                 </xsl:if>
+                 <xsl:if test="string-length($howpublished) > 0">
+                      <xsl:element name="Enrichment">
+                         <xsl:attribute name="KeyName">howpublished</xsl:attribute>
+                         <xsl:attribute name="Value"><xsl:value-of select="$howpublished" /></xsl:attribute>
+                     </xsl:element>
+                 </xsl:if>
+                 <xsl:if test="string-length($institution) > 0">
+                      <xsl:element name="Enrichment">
+                         <xsl:attribute name="KeyName">institution</xsl:attribute>
+                         <xsl:attribute name="Value"><xsl:value-of select="$institution" /></xsl:attribute>
+                     </xsl:element>
+                 </xsl:if>
+
+
+            <xsl:if test="string-length($publisher) = 0">
+                <xsl:if test="string-length($address) > 0">
+                    <xsl:element name="Enrichment">
+                        <xsl:attribute name="KeyName">address</xsl:attribute>
+                        <xsl:attribute name="Value"><xsl:value-of select="$address" /></xsl:attribute>
+                    </xsl:element>
+                </xsl:if>
+            </xsl:if>
+
+            <xsl:if test="string-length($note) > 0">
                 <xsl:element name="Note">
                     <xsl:attribute name="Message">
-                        <xsl:if test="string-length($institution) > 0"><xsl:value-of select="$institution" /></xsl:if>
-                        <xsl:if test="string-length($school) > 0"><xsl:value-of select="$school" /></xsl:if>
                         <xsl:if test="string-length($note) > 0"><xsl:value-of select="$note" /></xsl:if>
                     </xsl:attribute>
                 </xsl:element>
