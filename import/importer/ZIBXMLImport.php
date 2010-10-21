@@ -228,7 +228,7 @@ class ZIBXMLImport {
             foreach ($faculty as $f) {
                 $mappingFile = '../workspace/tmp/faculties.map';
                 $grantorValue =  $this->getMapping($mappingFile, $f->getAttribute('Value'));
-                echo "ThesisGrantor: ".$f->getAttribute('Value')."\n";
+                //echo "ThesisGrantor: ".$f->getAttribute('Value')."\n";
                 $this->document->removeChild($f);
             }
         }
@@ -237,7 +237,7 @@ class ZIBXMLImport {
         if (count($publisher) > 0) {
             foreach ($publisher as $p) {
                $publisherValue =  $p->getAttribute('Value');
-               echo "ThesisPublisher: ".$p->getAttribute('Value')."\n";
+               //echo "ThesisPublisher: ".$p->getAttribute('Value')."\n";
                $this->document->removeChild($p);
             }
         }
@@ -379,7 +379,7 @@ class ZIBXMLImport {
                 /* TODO: DDC-Hack */
                 if (($role_name == 'ddc') and (count($c->getChildren()) > 0)) { continue; }
                 $document->addCollection($c);
-                echo "Document added to $role_name Collection $number \n";
+                //echo "Document added to $role_name Collection $number \n";
             }
         }
         else {
