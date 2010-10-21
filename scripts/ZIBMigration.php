@@ -360,12 +360,13 @@ class ZIBMigration extends OpusMigrationBase {
                  
                 $result = $import->import($document);
                 if ($result['result'] === 'success') {
-                    //echo "Successfully imported oldId " . $result['oldid'] . "\n";
-		    echo "Successfully imported Bibtex-Entry\n";
+                    echo "Successfully imported Bibtex-Entry " . $result['oldid'] . "\n";
+		    //echo "Successfully imported Bibtex-Entry\n";
 		    array_push($opus_titles, $doctitle);
                 }
                 else if ($result['result'] === 'failure') {
-                    echo "Failure: " . $result['message'] . "\n";
+                    echo "Failure while importing Bibtex-Entry " . $result['oldid'] . "\n";
+                    echo $result['message'] . "\n";
                 }
             }
         }
