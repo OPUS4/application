@@ -320,6 +320,7 @@ class ZIBMigration extends OpusMigrationBase {
 		$doctitle = trim($doctitle);
 	
 		// Semiautomatic Deduplication with Levenstein-Distance
+                /*
                 if (!is_null($doctitle)) {
 	    		$shortest = -1;
 			$closest = null;
@@ -355,6 +356,8 @@ class ZIBMigration extends OpusMigrationBase {
 			}
 
 		}
+                 * 
+                 */
 
                  
                 $result = $import->import($document);
