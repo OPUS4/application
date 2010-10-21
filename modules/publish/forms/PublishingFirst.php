@@ -147,7 +147,7 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         $fileupload->setLabel('fileupload')                
                 ->setMultiFile($number_of_files)
                 ->setDestination($tempPath)
-                ->addValidator('Count', false, $number_of_files)
+                ->addValidator('Count', false, array('max' => $number_of_files))
                 ->addValidator('Size', false, $maxFileSize)     // limit to value given in application.ini
                 ->setMaxFileSize($maxFileSize)
                 ->addValidator('Extension', false, $filetypes)  // allowed filetypes by extension
