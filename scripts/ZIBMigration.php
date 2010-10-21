@@ -320,7 +320,6 @@ class ZIBMigration extends OpusMigrationBase {
 		$doctitle = trim($doctitle);
 	
 		// Semiautomatic Deduplication with Levenstein-Distance
-                /*
                 if (!is_null($doctitle)) {
 	    		$shortest = -1;
 			$closest = null;
@@ -329,7 +328,7 @@ class ZIBMigration extends OpusMigrationBase {
 				
 				$opustitle = strtolower($opustitle);
 				$opustitle = preg_replace('/\s{2,}/','  ', $opustitle);
-				$opustitle = preg_replace('/[^a-zA-Z0-9]/', ' ', $opustitle);				
+				$opustitle = preg_replace('/[^a-zA-Z0-9]/', '', $opustitle);				
 				$opustitle = trim($opustitle);
 				
 				$lev = levenshtein($doctitle, $opustitle);
@@ -343,8 +342,9 @@ class ZIBMigration extends OpusMigrationBase {
 				echo "SKIP:".$doctitle."\n";
 				continue;
 			}
-			
-			if ($shortest < 10) {
+
+                        
+			if ($shortest < 5) {
 				echo "THIS:".$doctitle."#\n";
 				echo "OPUS:".$closest."#\n";
 				echo "LEV: ".$shortest."\n";
@@ -354,9 +354,7 @@ class ZIBMigration extends OpusMigrationBase {
 				}
 			}
 		}
-                 * 
-                 */
- 
+
                  
                 $result = $import->import($document);
                 if ($result['result'] === 'success') {
