@@ -429,46 +429,53 @@
                 </xsl:element>
             </xsl:if>
 
-            <!-- School/Type/Month/Year-Attributes of a PhdThesis will be mapped to Note -->
+            <!-- Notes contains a note or a url -->
             <xsl:if test="string-length($note) > 0">
-                <xsl:element name="Note">
-                    <xsl:attribute name="Message"><xsl:value-of select="$note" /></xsl:attribute>
-                </xsl:element>
+                <xsl:choose>
+                    <xsl:when test="contains($note, 'http://')">
+                    <xsl:element name="IdentifierUrl">
+                        <xsl:attribute name="Value"><xsl:value-of select="$note" /></xsl:attribute>
+                    </xsl:element>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:element name="Note">
+                            <xsl:attribute name="Message"><xsl:value-of select="$note" /></xsl:attribute>
+                        </xsl:element>
+                    </xsl:otherwise>
+               </xsl:choose>
             </xsl:if>
 
             <!-- alles was nirgendwo passt kommt in die enrichments -->
-                 <xsl:if test="string-length($school) > 0">
-                     <xsl:element name="Enrichment">
-                         <xsl:attribute name="KeyName">school</xsl:attribute>
-                         <xsl:attribute name="Value"><xsl:value-of select="$school" /></xsl:attribute>
-                     </xsl:element>
-                 </xsl:if>
-                 <xsl:if test="string-length($month) > 0">
-                      <xsl:element name="Enrichment">
-                         <xsl:attribute name="KeyName">month</xsl:attribute>
-                         <xsl:attribute name="Value"><xsl:value-of select="$month" /></xsl:attribute>
-                     </xsl:element>
-                 </xsl:if>
-                 <xsl:if test="string-length($type) > 0">
-                      <xsl:element name="Enrichment">
-                         <xsl:attribute name="KeyName">type</xsl:attribute>
-                         <xsl:attribute name="Value"><xsl:value-of select="$type" /></xsl:attribute>
-                     </xsl:element>
-                 </xsl:if>
-                 <xsl:if test="string-length($howpublished) > 0">
-                      <xsl:element name="Enrichment">
-                         <xsl:attribute name="KeyName">howpublished</xsl:attribute>
-                         <xsl:attribute name="Value"><xsl:value-of select="$howpublished" /></xsl:attribute>
-                     </xsl:element>
-                 </xsl:if>
-                 <xsl:if test="string-length($institution) > 0">
-                      <xsl:element name="Enrichment">
-                         <xsl:attribute name="KeyName">institution</xsl:attribute>
-                         <xsl:attribute name="Value"><xsl:value-of select="$institution" /></xsl:attribute>
-                     </xsl:element>
-                 </xsl:if>
-
-
+            <xsl:if test="string-length($school) > 0">
+                 <xsl:element name="Enrichment">
+                     <xsl:attribute name="KeyName">school</xsl:attribute>
+                     <xsl:attribute name="Value"><xsl:value-of select="$school" /></xsl:attribute>
+                 </xsl:element>
+            </xsl:if>
+            <xsl:if test="string-length($month) > 0">
+                <xsl:element name="Enrichment">
+                    <xsl:attribute name="KeyName">month</xsl:attribute>
+                    <xsl:attribute name="Value"><xsl:value-of select="$month" /></xsl:attribute>
+                 </xsl:element>
+            </xsl:if>
+            <xsl:if test="string-length($type) > 0">
+                 <xsl:element name="Enrichment">
+                     <xsl:attribute name="KeyName">type</xsl:attribute>
+                     <xsl:attribute name="Value"><xsl:value-of select="$type" /></xsl:attribute>
+                 </xsl:element>
+            </xsl:if>
+            <xsl:if test="string-length($howpublished) > 0">
+                 <xsl:element name="Enrichment">
+                     <xsl:attribute name="KeyName">howpublished</xsl:attribute>
+                     <xsl:attribute name="Value"><xsl:value-of select="$howpublished" /></xsl:attribute>
+                 </xsl:element>
+            </xsl:if>
+            <xsl:if test="string-length($institution) > 0">
+                 <xsl:element name="Enrichment">
+                     <xsl:attribute name="KeyName">institution</xsl:attribute>
+                     <xsl:attribute name="Value"><xsl:value-of select="$institution" /></xsl:attribute>
+                 </xsl:element>
+            </xsl:if>
 
             <xsl:if test="string-length($publisher) = 0">
                 <xsl:if test="string-length($address) > 0">
@@ -478,15 +485,6 @@
                     </xsl:element>
                 </xsl:if>
             </xsl:if>
-
-            <xsl:if test="string-length($note) > 0">
-                <xsl:element name="Note">
-                    <xsl:attribute name="Message">
-                        <xsl:if test="string-length($note) > 0"><xsl:value-of select="$note" /></xsl:if>
-                    </xsl:attribute>
-                </xsl:element>
-            </xsl:if>
-
 
             <xsl:if test="string-length($author) > 0">
                <xsl:call-template name="getAuthors">
