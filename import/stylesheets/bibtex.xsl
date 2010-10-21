@@ -630,6 +630,9 @@
                 <xsl:variable name="pos"><xsl:value-of select="php:function('strrpos', $name, '.')"/></xsl:variable>
                 <xsl:value-of select="normalize-space(php:function('substr', $name, 0, $pos))"/>
             </xsl:when>
+            <xsl:otherwise>
+                <xsl:text> </xsl:text>
+            </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 
