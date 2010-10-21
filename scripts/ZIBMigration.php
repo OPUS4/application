@@ -310,7 +310,14 @@ class ZIBMigration extends OpusMigrationBase {
 	    }
 
 
+            $totalCount = 0;
+            $successCount = 0;
+            $failureCount = 0;
+
+
 	    foreach ($toImport as $document) {
+
+                $totalCount++;
 		$doctitle = null;
 		$doctitle = $import->getTitle($document);
 		
@@ -365,12 +372,17 @@ class ZIBMigration extends OpusMigrationBase {
                     echo "Successfully imported Bibtex-Entry " . $result['oldid'] . "\n";
 		    //echo "Successfully imported Bibtex-Entry\n";
 		    array_push($opus_titles, $doctitle);
+                    $successCount++;
                 }
                 else if ($result['result'] === 'failure') {
                     echo "Failure while importing Bibtex-Entry " . $result['oldid'] . " :: ";
                     echo $result['message'] . "\n";
+                    $failureCount ++;
                 }
             }
+
+            echo "Imported " . $successCount . " documents successfully.\n";
+            echo $failureCount . " documents have not been imported due to failures listed above. See $logfile for details about failed entries.\n";
         }
     }
     
