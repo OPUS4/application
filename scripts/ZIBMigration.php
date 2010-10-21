@@ -298,6 +298,11 @@ class ZIBMigration extends OpusMigrationBase {
             $importData = $this->loadImportFile();
             $import = new ZIBBibtexImport($this->xslt, $this->stylesheet, $this->importfile);
             $toImport = $import->initImportFile($importData);
+            $logfile = '../workspace/tmp/importerrors.xml';
+
+            $totalCount = 0;
+            $successCount = 0;
+            $failureCount = 0;
             
 	    $opus_titles = array();
 	    foreach (Opus_Document::getAllIds() as $id) {
@@ -309,11 +314,6 @@ class ZIBMigration extends OpusMigrationBase {
                     }
 		}
 	    }
-
-
-            $totalCount = 0;
-            $successCount = 0;
-            $failureCount = 0;
 
 
 	    foreach ($toImport as $document) {
@@ -328,7 +328,6 @@ class ZIBMigration extends OpusMigrationBase {
 		$doctitle = trim($doctitle);
 	
 		// Semiautomatic Deduplication with Levenstein-Distance
-               /*
                 if (!is_null($doctitle)) {
 	    		$shortest = -1;
 			$closest = null;
@@ -364,9 +363,6 @@ class ZIBMigration extends OpusMigrationBase {
 			}
 
 		}
-                * 
-                */
-
                  
                 $result = $import->import($document);
                 if ($result['result'] === 'success') {
