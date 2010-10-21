@@ -64,6 +64,7 @@
 
     <!--  Second-Level-Template -->
     <xsl:template match="bibtex:entry">
+        <xsl:variable name="id"><xsl:value-of select="@id" /></xsl:variable>
 
         <!-- Lese alle Variablen ein -->
         <!-- absurl wird gemappt auf Reference Url -->
@@ -414,6 +415,12 @@
                 </xsl:element>
             </xsl:if>
 
+            <xsl:if test="string-length($id) > 0">
+                <xsl:element name="IdentifierOld">
+                    <xsl:attribute name="Value"><xsl:value-of select="$id" /></xsl:attribute>
+                </xsl:element>
+            </xsl:if>
+
             <!-- Reference section-->
             <xsl:if test="string-length($absurl) > 0">
                 <xsl:element name="ReferenceUrl">
@@ -460,6 +467,7 @@
                          <xsl:attribute name="Value"><xsl:value-of select="$institution" /></xsl:attribute>
                      </xsl:element>
                  </xsl:if>
+
 
 
             <xsl:if test="string-length($publisher) = 0">
