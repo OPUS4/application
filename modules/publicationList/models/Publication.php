@@ -109,7 +109,7 @@ class PublicationList_Model_Publication {
         }
 
         $this->bibtexUrl = $baseUrl."/citationExport/index/download/output/bibtex/docId/".$doc->getId();
-        //$this->bibtexUrlExternal = "http://".$hostname.$this->bibtexUrl."/theme/plain";
+        $this->bibtexUrlExternal = "http://".$hostname.$this->bibtexUrl."/theme/plain";
 
         if ($doc->getCompletedYear() && ($doc->getCompletedYear() !== "0000") && ($doc->getCompletedYear() !== $doc->getPublishedYear())) {
             $this->completedYear = $doc->getCompletedYear();
@@ -206,7 +206,7 @@ class PublicationList_Model_Publication {
 
 
         $this->risUrl = $baseUrl."/citationExport/index/download/output/ris/docId/".$doc->getId();
-        //$this->risUrlExternal = "http://".$hostname.$this->risUrl."/theme/plain";
+        $this->risUrlExternal = "http://".$hostname.$this->risUrl."/theme/plain";
 
 
         if ($doc->getPublishedYear()) {
