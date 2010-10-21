@@ -663,9 +663,6 @@
                     <xsl:attribute name="LastName">
                         <xsl:value-of select="field[@name='creator_name']" />
                     </xsl:attribute>
-                    <xsl:attribute name="FirstName">
-                        <xsl:text>FirstNameUnknown</xsl:text>
-                    </xsl:attribute>
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:element>
@@ -706,9 +703,6 @@
                 <xsl:when test="not(contains($contributor,','))">
                     <xsl:attribute name="LastName">
                         <xsl:value-of select="." />
-                    </xsl:attribute>
-                    <xsl:attribute name="FirstName">
-                        <xsl:text>FirstNameUnknown</xsl:text>
                     </xsl:attribute>
                 </xsl:when>
                 <xsl:otherwise>
