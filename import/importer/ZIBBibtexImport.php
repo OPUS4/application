@@ -157,6 +157,20 @@ class ZIBBibtexImport {
             $doc = Opus_Document::fromXml('<Opus>' . $this->completeXML->saveXML($this->document) . '</Opus>');
             // Set the publication status to published since only published documents shall be imported
             $doc->setServerState('published');
+
+            // ZIB_reports or ZIB_Preprints will be ignored
+            foreach ($doc->getEnrichment() as $enrichment) {
+                if ($enrichment->getKeyName() === 'type') {
+                    if(preg_match('/ZIB/', $enrichment->getValue())) {
+                        throw new Exception("ZIB Preprint/Report/Technical report will be ignored");
+                    }
+                }
+                if ($enrichment->getKeyName() === 'howpublished') {
+                    if(preg_match('/ZIB/', $enrichment->getValue())) {
+                        throw new Exception("ZIB Preprint/Report/Technical report will be ignored");
+                    }
+                }
+            }
   
 	     // The Institutes-Name is part of the import-file
 	    $role = Opus_CollectionRole::fetchByName('institutes');
