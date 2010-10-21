@@ -161,6 +161,9 @@ class Publish_Form_PublishingFirst extends Zend_Form {
             if ($this->config->form->first->requireupload) {
                 $fileupload->setRequired(true);
             }
+            else {
+                $fileupload->setRequired(false);
+            }
         }
 
         return $fileupload;
