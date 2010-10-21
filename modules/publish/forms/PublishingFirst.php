@@ -144,10 +144,9 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         $messages = array(Zend_Validate_File_Upload::FORM_SIZE => 'publish_validation_error_person_invalid');
         $validate->setMessages($messages);
 
-        $fileupload->setLabel('fileupload')                
+        $fileupload->setLabel('fileupload')
                 ->setMultiFile($number_of_files)
-                ->setDestination($tempPath)
-                ->addValidator('Count', false, array('max' => $number_of_files))
+                ->setDestination($tempPath)                
                 ->addValidator('Size', false, $maxFileSize)     // limit to value given in application.ini
                 ->setMaxFileSize($maxFileSize)
                 ->addValidator('Extension', false, $filetypes)  // allowed filetypes by extension
@@ -159,10 +158,12 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         // TODO: Make it configurable per-document-type.
         if (isset($this->config->form->first->requireupload)) {
             if ($this->config->form->first->requireupload) {
-                $fileupload->setRequired(true);
+                $fileupload->setRequired(true)
+                        ->addValidator('Count', false, array('min' => 1, 'max' => $number_of_files));
             }
             else {
-                $fileupload->setRequired(false);
+                $fileupload->setRequired(false)
+                         ->addValidator('Count', false, array('min' => 0, 'max' => $number_of_files));
             }
         }
 
