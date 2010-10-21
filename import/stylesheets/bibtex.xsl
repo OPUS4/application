@@ -631,7 +631,7 @@
                 <xsl:value-of select="normalize-space(php:function('substr', $name, 0, $pos))"/>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:text> </xsl:text>
+                <xsl:text>none</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
