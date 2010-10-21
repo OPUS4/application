@@ -332,7 +332,7 @@ class ZIBMigration extends OpusMigrationBase {
 				$opustitle = trim($opustitle);
 				
 				$lev = levenshtein($doctitle, $opustitle);
-				if ($lev <= $shortest || $shortest < 0) {
+				if (($lev <= $shortest) || ($shortest < 0)) {
 					$closest  = $opustitle;
 					$shortest = $lev;
 				}
