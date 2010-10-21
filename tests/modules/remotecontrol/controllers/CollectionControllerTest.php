@@ -131,6 +131,8 @@ class Remotecontrol_CollectionControllerTest extends ControllerTestCase {
     }
 
     public function testCsvActionWithNonUniqueCollectionName() {
+        $this->markTestIncomplete('FIXME: Testdata does not contain non-unique collections.');
+    
         $this->request->setMethod('GET');
         $this->dispatch('/remotecontrol/collection/list?role=ddc&number=510');
         $this->assertResponseCode(501);
