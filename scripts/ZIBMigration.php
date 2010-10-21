@@ -374,6 +374,7 @@ class ZIBMigration extends OpusMigrationBase {
                 else if ($result['result'] === 'failure') {
                     echo "Failure while importing Bibtex-Entry " . $result['oldid'] . " :: ";
                     echo $result['message'] . "\n";
+                    echo $result['entry'] . "\n";
                     $failureCount ++;
                 }
             }
