@@ -430,6 +430,7 @@
             </xsl:if>
 
             <!-- Notes contains a note or a url -->
+            <!--
             <xsl:if test="string-length($note) > 0">
                 <xsl:choose>
                     <xsl:when test="contains($note, 'http://')">
@@ -444,6 +445,7 @@
                     </xsl:otherwise>
                </xsl:choose>
             </xsl:if>
+            -->
 
             <!-- alles was nirgendwo passt kommt in die enrichments -->
             <xsl:if test="string-length($school) > 0">
