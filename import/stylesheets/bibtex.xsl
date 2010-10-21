@@ -431,18 +431,20 @@
 
             <!-- Notes contains a note or a url -->
             <xsl:if test="string-length($note) > 0">
+                <!--
                 <xsl:choose>
                     <xsl:when test="contains($note, 'http://')">
-                    <xsl:element name="IdentifierUrl">
-                        <xsl:attribute name="Value"><xsl:value-of select="$note" /></xsl:attribute>
-                    </xsl:element>
+                        <xsl:element name="IdentifierUrl">
+                            <xsl:attribute name="Value"><xsl:value-of select="$note" /></xsl:attribute>
+                        </xsl:element>
                     </xsl:when>
-                    <xsl:otherwise>
+                    <xsl:otherwise>-->
                         <xsl:element name="Note">
                             <xsl:attribute name="Message"><xsl:value-of select="$note" /></xsl:attribute>
                         </xsl:element>
+                        <!--
                     </xsl:otherwise>
-               </xsl:choose>
+               </xsl:choose>-->
             </xsl:if>
 
             <!-- alles was nirgendwo passt kommt in die enrichments -->
