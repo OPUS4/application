@@ -82,6 +82,24 @@
         </tuv>
     </tu>
 
+    <tu tuid="hint_no_selection_ThesisGrantor">
+        <tuv xml:lang="en">
+            <seg>Sorry: No institutions have been found in our database.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Entschuldigung: Es wurden keine Institutionen in unserer Datenbank gefunden.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_no_selection_ThesisPublisher">
+        <tuv xml:lang="en">
+            <seg>Sorry: No institutions have been found in our database.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Entschuldigung: Es wurden keine Institutionen in unserer Datenbank gefunden.</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="hint_groupPersonSubmitter">
         <tuv xml:lang="en">
             <seg>Please enter your contact information.</seg>
