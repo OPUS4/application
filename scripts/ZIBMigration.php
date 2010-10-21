@@ -431,7 +431,8 @@ class ZIBMigration extends OpusMigrationBase {
 
         // Load Opus3-mySQL-XML-dump
         //$this->init();
-        $this->init('/home/gunar/opus4/dumps/opuszib_20100920.xml');
+        //$this->init('/home/gunar/opus4/dumps/opuszib_20100920.xml');
+        $this->init('/home/gunar/opus4/dumps/opus3_zib_20101021.xml');
         
         // Load Collections
         $this->load_collections();
