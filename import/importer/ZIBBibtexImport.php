@@ -191,7 +191,7 @@ class ZIBBibtexImport {
 		
                 if (strrpos($c->getName(), $filename) !== false) {
                     $doc->addCollection($c);
-                    echo "Add Document  to Abteilungs-Collection ".$c->getName()."\n";
+                    //echo "Add Document  to Abteilungs-Collection ".$c->getName()."\n";
                 }
             }
 
