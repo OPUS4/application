@@ -315,8 +315,8 @@ class ZIBMigration extends OpusMigrationBase {
 		$doctitle = $import->getTitle($document);
 		
 		$doctitle = strtolower($doctitle);
-		$doctitle = preg_replace('/\s{2,}/','  ', $doctitle);
-		$doctitle = preg_replace('/[^a-zA-Z0-9]/', ' ', $doctitle);
+		$doctitle = preg_replace('/\s{2,}/',' ', $doctitle);
+		$doctitle = preg_replace('/[^a-zA-Z0-9\s]/', '', $doctitle);
 		$doctitle = trim($doctitle);
 	
 		// Semiautomatic Deduplication with Levenstein-Distance
@@ -327,8 +327,8 @@ class ZIBMigration extends OpusMigrationBase {
 			foreach($opus_titles as $opustitle) {
 				
 				$opustitle = strtolower($opustitle);
-				$opustitle = preg_replace('/\s{2,}/','  ', $opustitle);
-				$opustitle = preg_replace('/[^a-zA-Z0-9]/', '', $opustitle);				
+				$opustitle = preg_replace('/\s{2,}/',' ', $opustitle);
+				$opustitle = preg_replace('/[^a-zA-Z0-9\s]/', '', $opustitle);
 				$opustitle = trim($opustitle);
 				
 				$lev = levenshtein($doctitle, $opustitle);
