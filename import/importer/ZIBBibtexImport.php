@@ -140,7 +140,22 @@ class ZIBBibtexImport {
 	}
 	return null;
     }
-    
+
+    /**
+     * Returns the oldidentifuier auf a document from an import-file
+     *
+     * @param DOMDocument $document XML-Document to be imported
+     * @return array information about the document that has been imported
+     */
+    public function getId($document) {
+	$this->document = $document;
+	$doc = Opus_Document::fromXml('<Opus>' . $this->completeXML->saveXML($this->document) . '</Opus>');
+	 if ($doc->getIdentifierOld()) {
+	    return $doc->getIdentifierOld(0)->getValue();
+	}
+	return null;
+    }
+
 
     /**
      * Imports metadata from an XML-Document
