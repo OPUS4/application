@@ -88,28 +88,28 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         $listOptions = $documentTypes->getDocumentTypes();
 
         //field type depends on the number of fields
-        if (count($listOptions)===1) {
-            $value = (array_keys($listOptions));
-            $doctypes = $this->createElement('text', 'type1');
-            $doctypes->setLabel('selecttype')
-                    ->setValue($value[0])
-                    ->setAttrib('disabled', true)
-                    ->setDescription('publish_controller_one_doctype');
-
-            $doctypesHidden=$this->createElement('hidden', 'documentType');
-            $doctypesHidden->setValue($value[0]);
-            $this->addElement($doctypesHidden);
-
-            return array($doctypes, $doctypesHidden);
-        }
-        else {            
+//        if (count($listOptions)===1) {
+//            $value = (array_keys($listOptions));
+//            $doctypes = $this->createElement('text', 'type1');
+//            $doctypes->setLabel('selecttype')
+//                    ->setValue($value[0])
+//                    ->setAttrib('disabled', true)
+//                    ->setDescription('publish_controller_one_doctype');
+//
+//            $doctypesHidden=$this->createElement('hidden', 'documentType');
+//            $doctypesHidden->setValue($value[0]);
+//            $this->addElement($doctypesHidden);
+//
+//            return array($doctypes, $doctypesHidden);
+//        }
+//        else {
             $doctypes = $this->createElement('select', 'documentType');
             $doctypes->setLabel('selecttype')
                     ->setMultiOptions(array_merge(array('' => 'choose_valid_doctype'), $listOptions))
                     ->setRequired(true);
             return $doctypes;
         }        
-    }
+//    }
 
     /**
      * Method shows the fields for file uploads by looking in config file
