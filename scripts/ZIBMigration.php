@@ -361,7 +361,7 @@ class ZIBMigration extends OpusMigrationBase {
 				echo "LEV: ".$shortest."\n";
 				$input = readline('Do you want to skip this title ? (y/n) ');
 				if ($input === 'y' || $input === 'yes') {
-                                    $fp = fopen('../workspace/tmp/bibtexduplicates.map', 'w');
+                                    $fp = fopen('../workspace/tmp/bibtexduplicates.map', 'a');
                                     fputs($fp, $docid . "_". $import->getTitle($document) . "\n");
                                     fclose($fp);
                                     echo "SKIP:".$docid."_".$doctitle."\n";
@@ -371,7 +371,7 @@ class ZIBMigration extends OpusMigrationBase {
 
 			if ($shortest == 0) {
 				echo "SKIP:".$docid."_".$doctitle."\n";
-                                $fp = fopen('../workspace/tmp/bibtexduplicates.map', 'w');
+                                $fp = fopen('../workspace/tmp/bibtexduplicates.map', 'a');
                                 fputs($fp, $docid . "_". $import->getTitle($document) . "\n");
                                 fclose($fp);
 				continue;
