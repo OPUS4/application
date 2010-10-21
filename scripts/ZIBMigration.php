@@ -284,8 +284,8 @@ class ZIBMigration extends OpusMigrationBase {
 
     // Import collections and series
     public function import_bibtex($file = null) {
-        //$input = readline('Do you want to import bibtex from file? (y/n) ');
-        $input = 'y';
+        $input = readline('Do you want to import bibtex from file? (y/n) ');
+        //$input = 'y';
         
         $dedup_input = readline('Do you want to ignore deduplicated documents? (yes/no/new) ');
 
