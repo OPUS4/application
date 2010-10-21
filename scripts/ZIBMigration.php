@@ -323,11 +323,12 @@ class ZIBMigration extends OpusMigrationBase {
 	    foreach ($toImport as $document) {
 
                 $totalCount++;
-
+                $doctitle = null;
+                $doctitle = $import->getTitle($document);
+                $docid = $import->getId($document);
+                
                 if ($dedup_input === 'new') {
-                    $doctitle = null;
-                    $doctitle = $import->getTitle($document);
-                    $docid = $import->getId($document);
+
 
                     $doctitle = strtolower($doctitle);
                     $doctitle = preg_replace('/\s{2,}/',' ', $doctitle);
@@ -363,13 +364,13 @@ class ZIBMigration extends OpusMigrationBase {
                                     $fp = fopen('../workspace/tmp/bibtexduplicates.map', 'w');
                                     fputs($fp, $docid . "_". $import->getTitle($document) . "\n");
                                     fclose($fp);
-                                    echo "SKIP:".$docId."_".$doctitle."\n";
+                                    echo "SKIP:".$docid."_".$doctitle."\n";
                                     continue;
 				}
 			}
 
 			if ($shortest == 0) {
-				echo "SKIP:".$docId."_".$doctitle."\n";
+				echo "SKIP:".$docid."_".$doctitle."\n";
                                 $fp = fopen('../workspace/tmp/bibtexduplicates.map', 'w');
                                 fputs($fp, $docid . "_". $import->getTitle($document) . "\n");
                                 fclose($fp);
@@ -381,7 +382,7 @@ class ZIBMigration extends OpusMigrationBase {
                 
                 if ($dedup_input === 'yes') {
                     $fp = fopen('../workspace/tmp/bibtexduplicates.map', 'r');
-                    $duplicate;
+                    $duplicate = '';
                     while (! feof ($fp)) {
                         $line= fgets ($fp);
                         if ($line === $docid ."_" . $doctitle) {
@@ -391,7 +392,7 @@ class ZIBMigration extends OpusMigrationBase {
                     fclose($fp);
 
                     if ($duplicate === 'y') {
-                        echo "SKIP:".$docId."_".$doctitle."\n";
+                        echo "SKIP:".$docid."_".$doctitle."\n";
                         continue;
                     }
                     
