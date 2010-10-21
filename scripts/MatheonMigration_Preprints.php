@@ -350,11 +350,13 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
 
             $project_id = $project['project_id'];
             $project_title = $project['project_title'];
+            $project_no = $project['project_no'];
 
             if (false === array_key_exists($app_area, $app_area_collection)) {
                 $app_collection = $root->addLastChild()->setVisible($app_area_visible);
                 $app_collection->setNumber($app_area);
                 $app_collection->setName($app_area_name);
+                $app_collection->setSortOrder(count($app_area_collection));
                 $root->store();
 
                 // TODO: Add Unit tests.
@@ -368,6 +370,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
                 $project_collection = $app_collection->addLastChild()->setVisible(1);
                 $project_collection->setNumber($project_id);
                 $project_collection->setName($project_title);
+                $project_collection->setSortOrder((int)$project_no);
                 $project_collection->store();
 
                 $collections[$project_id] = $project_collection;
