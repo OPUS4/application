@@ -338,13 +338,8 @@ class ZIBMigration extends OpusMigrationBase {
 				}
 			}
 			
-			if ($shortest == 0) {
-				echo "SKIP:".$doctitle."\n";
-				continue;
-			}
-
-                        
-			if ($shortest < 5) {
+                       
+			if (($shortest < 5) && ($shortest > 0)) {
 				echo "THIS:".$doctitle."#\n";
 				echo "OPUS:".$closest."#\n";
 				echo "LEV: ".$shortest."\n";
@@ -353,6 +348,12 @@ class ZIBMigration extends OpusMigrationBase {
 					continue;
 				}
 			}
+
+			if ($shortest == 0) {
+				echo "SKIP:".$doctitle."\n";
+				continue;
+			}
+
 		}
 
                  
