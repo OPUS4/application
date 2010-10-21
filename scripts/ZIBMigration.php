@@ -462,7 +462,8 @@ class ZIBMigration extends OpusMigrationBase {
 
 	// Import Bibtex-Files
         $this->import_bibtex("/home/gunar/opus4/bibtex/Numerische.bib.xml");
-	//$this->import_bibtex("/home/gunar/opus4/bibtex/Optimierung.bib.xml");
+	$this->import_bibtex("/home/gunar/opus4/bibtex/Optimierung.bib.xml");
+        $this->import_bibtex("/home/gunar/opus4/bibtex/Parallele.bib.xml");
 	$this->import_bibtex("/home/gunar/opus4/bibtex/Visualisierung.bib.xml");
 
 	// Fill Person-Colelctiosn
