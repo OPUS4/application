@@ -374,7 +374,7 @@ class ZIBMigration extends OpusMigrationBase {
                 else if ($result['result'] === 'failure') {
                     echo "Failure while importing Bibtex-Entry " . $result['oldid'] . " :: ";
                     echo $result['message'] . "\n";
-                    echo $result['entry'] . "\n";
+                    //echo $result['entry'] . "\n";
                     $failureCount ++;
                 }
             }
@@ -457,7 +457,7 @@ class ZIBMigration extends OpusMigrationBase {
         $this->load_licences();
 
         // Load Institutes
-        //$this->load_documents();
+        $this->load_documents();
 
         // Import files
         //$this->load_fulltext();
