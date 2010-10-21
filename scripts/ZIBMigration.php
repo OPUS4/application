@@ -286,6 +286,10 @@ class ZIBMigration extends OpusMigrationBase {
     public function import_bibtex($file = null) {
         //$input = readline('Do you want to import bibtex from file? (y/n) ');
         $input = 'y';
+        
+        $dedup_input = readline('Do you want to ignore deduplicated documents? (yes/no/new) ');
+
+
         if ($input === 'y' || $input === 'yes') {
             while (false === file_exists($file)) {
                 $file = readline('Please type the path to your Bibtex-File: ');
@@ -319,16 +323,19 @@ class ZIBMigration extends OpusMigrationBase {
 	    foreach ($toImport as $document) {
 
                 $totalCount++;
-		$doctitle = null;
-		$doctitle = $import->getTitle($document);
-		
-		$doctitle = strtolower($doctitle);
-		$doctitle = preg_replace('/\s{2,}/',' ', $doctitle);
-		$doctitle = preg_replace('/[^a-zA-Z0-9\s]/', '', $doctitle);
-		$doctitle = trim($doctitle);
+
+                if ($dedup_input === 'new') {
+                    $doctitle = null;
+                    $doctitle = $import->getTitle($document);
+                    $docid = $import->getId($document);
+
+                    $doctitle = strtolower($doctitle);
+                    $doctitle = preg_replace('/\s{2,}/',' ', $doctitle);
+                    $doctitle = preg_replace('/[^a-zA-Z0-9\s]/', '', $doctitle);
+                    $doctitle = trim($doctitle);
 	
-		// Semiautomatic Deduplication with Levenstein-Distance
-                if (!is_null($doctitle)) {
+                    // Semiautomatic Deduplication with Levenstein-Distance
+                     if (!is_null($doctitle)) {
 	    		$shortest = -1;
 			$closest = null;
 			
@@ -353,16 +360,44 @@ class ZIBMigration extends OpusMigrationBase {
 				echo "LEV: ".$shortest."\n";
 				$input = readline('Do you want to skip this title ? (y/n) ');
 				if ($input === 'y' || $input === 'yes') {
-					continue;
+                                    $fp = fopen('../workspace/tmp/bibtexduplicates.map', 'w');
+                                    fputs($fp, $docid . "_". $import->getTitle($document) . "\n");
+                                    fclose($fp);
+                                    echo "SKIP:".$docId."_".$doctitle."\n";
+                                    continue;
 				}
 			}
 
 			if ($shortest == 0) {
-				echo "SKIP:".$doctitle."\n";
+				echo "SKIP:".$docId."_".$doctitle."\n";
+                                $fp = fopen('../workspace/tmp/bibtexduplicates.map', 'w');
+                                fputs($fp, $docid . "_". $import->getTitle($document) . "\n");
+                                fclose($fp);
 				continue;
 			}
+                     }
 
 		}
+                
+                if ($dedup_input === 'yes') {
+                    $fp = fopen('../workspace/tmp/bibtexduplicates.map', 'r');
+                    $duplicate;
+                    while (! feof ($fp)) {
+                        $line= fgets ($fp);
+                        if ($line === $docid ."_" . $doctitle) {
+                            $duplicate = 'y';
+                        }
+                    }
+                    fclose($fp);
+
+                    if ($duplicate === 'y') {
+                        echo "SKIP:".$docId."_".$doctitle."\n";
+                        continue;
+                    }
+                    
+                }
+
+
                  
                 $result = $import->import($document);
                 if ($result['result'] === 'success') {
