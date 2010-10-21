@@ -72,6 +72,8 @@ class Publish_FormController extends Controller_Action {
             if (!$indexForm->isValid($data)) {
                 //error case, and redirect to form, show errors
                 $this->view->form = $indexForm;
+                $this->view->title = $this->view->translate('publish_controller_index');
+                $this->view->subtitle = $this->view->translate('publish_controller_index_sub');
                 return $this->renderScript('index/index.phtml');
             }
             else {
