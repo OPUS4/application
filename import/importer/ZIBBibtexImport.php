@@ -160,7 +160,7 @@ class ZIBBibtexImport {
 
             $oldid = null;
             if ($doc->getIdentifierOld()) {
-                $oldid = $doc->getIdentifierOld()->getValue();
+                $oldid = $doc->getIdentifierOld(0)->getValue();
             }
 
 
