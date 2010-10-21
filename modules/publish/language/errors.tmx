@@ -43,6 +43,15 @@
         </tuv>
     </tu>
 
+    <tu tuid="fileCountTooFew">
+        <tuv xml:lang="en">
+            <seg>Please upload at least one file.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte laden Sie mindestens eine Datei hoch.</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="fileUploadErrorFormSize">
         <tuv xml:lang="en">
             <seg>Your file in field %value% exceeds the defined form size.</seg>
