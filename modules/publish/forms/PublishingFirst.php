@@ -158,12 +158,12 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         // TODO: Make it configurable per-document-type.
         if (isset($this->config->form->first->requireupload)) {
             if ($this->config->form->first->requireupload) {
-                $fileupload->setRequired(true);
-                        //->addValidator('Count', false, array('min' => 1, 'max' => $number_of_files));
+                //$fileupload->setRequired(true);
+                $fileupload->addValidator('Count', false, array('min' => 1, 'max' => $number_of_files));
             }
             else {
-                $fileupload->setRequired(false);
-                        // ->addValidator('Count', false, array('min' => 0, 'max' => $number_of_files));
+                //$fileupload->setRequired(false);
+                $fileupload->addValidator('Count', false, array('min' => 0, 'max' => $number_of_files));
             }
         }
 
