@@ -144,8 +144,7 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         $messages = array(Zend_Validate_File_Upload::FORM_SIZE => 'publish_validation_error_person_invalid');
         $validate->setMessages($messages);
 
-        $fileupload->setLabel('fileupload')
-                ->setRequired(false)
+        $fileupload->setLabel('fileupload')                
                 ->setMultiFile($number_of_files)
                 ->setDestination($tempPath)
                 ->addValidator('Count', false, $number_of_files)
