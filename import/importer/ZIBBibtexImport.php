@@ -158,6 +158,12 @@ class ZIBBibtexImport {
             // Set the publication status to published since only published documents shall be imported
             $doc->setServerState('published');
 
+            $oldid = null;
+            if ($doc->getIdentifierOld()) {
+                $oldid = $doc->getIdentifierOld()->getValue();
+            }
+
+
             // ZIB_reports or ZIB_Preprints will be ignored
             foreach ($doc->getEnrichment() as $enrichment) {
                 if ($enrichment->getKeyName() === 'type') {
@@ -195,12 +201,12 @@ class ZIBBibtexImport {
 	    $imported['result'] = 'success';
             #$imported['entry'] = $this->completeXML->saveXML($this->document);
             #$imported['document'] = $doc;
-            //$imported['oldid'] = $oldid;
+            $imported['oldid'] = $oldid;
         } catch (Exception $e) {
             $imported['result'] = 'failure';
             $imported['message'] = $e->getMessage();
             $imported['entry'] = $this->completeXML->saveXML($this->document);
-            //$imported['oldid'] = $oldid;
+            $imported['oldid'] = $oldid;
         }
 
         unset($this->document);
