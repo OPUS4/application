@@ -165,13 +165,13 @@ class ZIBBibtexImport {
 
             // ZIB_reports or ZIB_Preprints will be ignored
             if ($doc->getNote()) {
-                if(preg_match('/^ZIB/', $doc->getNote(0)->getValue())) {
+                if(preg_match('/^ZIB/', $doc->getNote(0)->getMessage())) {
                     throw new Exception("ZIB Preprint/Report/Technical report will be ignored");
                 }
-                if(preg_match('/^Preprint SC/', $doc->getNote(0)->getValue())) {
+                if(preg_match('/^Preprint SC/', $doc->getNote(0)->getMessage())) {
                     throw new Exception("ZIB Preprint/Report/Technical report will be ignored");
                 }
-                if(preg_match('/^ZR\s/', $doc->getNote(0)->getValue())) {
+                if(preg_match('/^ZR\s/', $doc->getNote(0)->getMessage())) {
                     throw new Exception("ZIB Preprint/Report/Technical report will be ignored");
                 }
              }
