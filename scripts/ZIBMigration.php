@@ -480,8 +480,7 @@ class ZIBMigration extends OpusMigrationBase {
 
         // Load Opus3-mySQL-XML-dump
         //$this->init();
-        //$this->init('/home/gunar/opus4/dumps/opuszib_20100920.xml');
-        $this->init('/home/gunar/opus4/dumps/opus3_zib_20101021.xml');
+        $this->init('../../dumps/opus3_zib.new.xml');
         
         // Load Collections
         $this->load_collections();
@@ -497,7 +496,7 @@ class ZIBMigration extends OpusMigrationBase {
 
         // Import files
         //$this->load_fulltext();
-        //$this->load_fulltext('/home/gunar/opus4/volltexte');
+        $this->load_fulltext('../../volltexte');
 
         // Import Signatures
         //$this->load_signatures();
@@ -509,14 +508,14 @@ class ZIBMigration extends OpusMigrationBase {
 	$this->create_person_collections("http://www.zib.de/de/menschen/mitarbeiter.html");
 
 	// Create Project-Collections
-	//$this->create_project_collections("http://typo.zib.de/de/projekte/aktuelle-projekte.html");
-	//$this->create_project_collections("http://typo.zib.de/de/projekte/aktuelle-projekte/browse/1.html");
+	//$this->create_project_collections("http://www.zib.de/de/projekte/aktuelle-projekte.html");
+	//$this->create_project_collections("http://www.zib.de/de/projekte/aktuelle-projekte/browse/1.html");
 
 	// Import Bibtex-Files
-        $this->import_bibtex("/home/gunar/opus4/bibtex/Numerische.bib.xml");
-	$this->import_bibtex("/home/gunar/opus4/bibtex/Optimierung.bib.xml");
-        $this->import_bibtex("/home/gunar/opus4/bibtex/Parallele.bib.xml");
-	$this->import_bibtex("/home/gunar/opus4/bibtex/Visualisierung.bib.xml");
+        $this->import_bibtex("../../bibtex/Numerische.bib.xml");
+	$this->import_bibtex("../../bibtex/Optimierung.bib.xml");
+        $this->import_bibtex("../../bibtex/Parallele.bib.xml");
+	$this->import_bibtex("../../bibtex/Visualisierung.bib.xml");
 
 	// Fill Person-Colelctiosn
         $this->fill_person_collections();
