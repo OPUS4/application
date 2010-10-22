@@ -280,6 +280,7 @@ class ZIBXMLImport {
                 foreach ($seriesValues as $s) {
                     $coll = new Opus_Collection($s);
                     $doc->addCollection($coll);
+                    echo "Document added to Series-Collection ". $coll->getName(). "\n";
                 }
             }
 
