@@ -54,7 +54,8 @@ class ZIBCollectionsImport {
         $doclist = $data->getElementsByTagName('table_data');
 	foreach ($doclist as $document)	{
             if ($document->getAttribute('name') === 'collections') {
-                $this->importCollectionsDirectly($document, $seriesRole);
+                //$this->importCollectionsDirectly($document, $seriesRole);
+                $this->importCollections($document, $seriesRole);
             }
             if ($document->getAttribute('name') === 'schriftenreihen') {
                 $this->importSeries($document, $seriesRole);
@@ -206,4 +207,29 @@ class ZIBCollectionsImport {
         echo "\n";
 	fclose($fp);
     }
+
+    /**
+     * Imports Collections from Opus3 to Opus4
+     *
+     * @param DOMDocument $data XML-Document to be imported
+     * @return array List of documents that have been imported
+     */
+    protected function importCollections($data, $role) {
+        $classification = $this->transferOpusClassification($data);
+
+        // Build a mapping file to associate old IDs with the new ones
+        $fp = fopen('../workspace/tmp/collections.map', 'w');
+            foreach ($classification as $class) {
+                echo ".";
+                $root = $role->getRootCollection();
+                $coll = $root->addLastChild();
+                $coll->setVisible(1);
+                $coll->setName($class['name']);
+                $root->store();
+                fputs($fp, $class['sr_id'] . ' ' . $coll->getId() . "\n");
+            }
+        echo "\n";
+	fclose($fp);
+    }
+
 }
