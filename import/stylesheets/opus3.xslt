@@ -200,12 +200,14 @@
             
             <!-- Find persons associated with the document -->
             <xsl:call-template name="getAuthors"><xsl:with-param name="OriginalID"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
+
             <xsl:if test="string-length(field[@name='contributors_name'])>0">
                 <xsl:call-template name="getContributors">
                     <xsl:with-param name="list"><xsl:value-of select="field[@name='contributors_name']" /></xsl:with-param>
                     <xsl:with-param name="delimiter">;</xsl:with-param>
                 </xsl:call-template>
             </xsl:if>
+            
             <xsl:call-template name="getAdvisors"><xsl:with-param name="OriginalID"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
             
             <!-- Series -->
