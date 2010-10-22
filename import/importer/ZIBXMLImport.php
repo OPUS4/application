@@ -148,7 +148,7 @@ class ZIBXMLImport {
 
         $series = null;
         $series = $document->getElementsByTagName('OldSeries');
-        $seriesValues = array();
+        $newseries = array();
 
         $collections = null;
         $collections = $document->getElementsByTagName('OldCollections');
@@ -190,13 +190,15 @@ class ZIBXMLImport {
         if (count($series) > 0) {
            foreach ($series as $s) {
                $mappingFile = '../workspace/tmp/series.map';
-               echo "Found a series\n";
-               array_push($seriesValues, $this->getMapping($mappingFile, $s->getAttribute('Value')));
+               //echo "Found a series\n";
+               $ns = array('Key'=>$this->getMapping($mappingFile, $s->getAttribute('Value')), 'Value'=>$s->getAttribute('Issue'));
+               array_push($newseries, $ns);
                $this->document->removeChild($s);
            }
         }
 
         /* Special-ZIB: Collections and Series are the same */
+        /*
         if (count($collections) > 0) {
            foreach ($collections as $c) {
                $mappingFile = '../workspace/tmp/collections.map';
@@ -204,6 +206,8 @@ class ZIBXMLImport {
                $this->document->removeChild($c);
            }
         }
+         *
+         */
 
         if (count($institutes) > 0) {
             foreach ($institutes as $i) {
@@ -277,6 +281,15 @@ class ZIBXMLImport {
                   }
             }
 
+            if (count($newseries) > 0) {
+                foreach ($newseries as $s) {
+                    $coll = new Opus_Collection($s['Key']);
+                    $doc->addCollection($coll);
+                    //$this->addDocumentToCollectionNumber($doc, $c['Key'], $c['Value']);
+                    $doc->setIssue($s['Value']);
+                }
+            }
+/*
             if (count($seriesValues) > 0) {
                 foreach ($seriesValues as $s) {
                     $coll = new Opus_Collection($s);
@@ -284,7 +297,7 @@ class ZIBXMLImport {
                     echo "Document added to Series-Collection ". $coll->getName(). "\n";
                 }
             }
-
+*/
             if ($ddcValue !== null) {
                 $this->addDocumentToCollectionNumber($doc, 'ddc', $ddcValue);
             }
