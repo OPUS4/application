@@ -81,6 +81,12 @@
                                 <?php $cellCounter++ ?>
 			<?php endif ?>
 
+			<?php if(!is_null($publication->getSeries())) : ?>
+                                <?= $cellCounter === 0 ? '' : ','; ?>
+				<?= htmlspecialchars($publication->getSeries()) ?>
+                                <?php $cellCounter++ ?>
+			<?php endif ?>
+
 			<?php if(!is_null($publication->getEnrichmentAddress())) : ?>
                                 <?= $cellCounter === 0 ? '' : ','; ?>
 				<?= htmlspecialchars($publication->getEnrichmentAddress()) ?>
@@ -119,12 +125,6 @@
 					<?= htmlspecialchars($editor) ?>
 					<?php if($editorCounter < count($publication->getEditors())) : ?>,<?php endif ?>
 				<?php endforeach ?> (Ed.)
-                                <?php $cellCounter++ ?>
-			<?php endif ?>
-
-			<?php if(!is_null($publication->getSeries())) : ?>
-                                <?= $cellCounter === 0 ? '' : ','; ?>
-				<?= htmlspecialchars($publication->getSeries()) ?>
                                 <?php $cellCounter++ ?>
 			<?php endif ?>
 
