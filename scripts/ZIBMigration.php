@@ -286,11 +286,11 @@ class ZIBMigration extends OpusMigrationBase {
     public function import_bibtex($file = null) {
         $input = readline('Do you want to import bibtex from file? (y/n) ');
         //$input = 'y';
-        
-        $dedup_input = readline('Do you want to ignore deduplicated documents? (yes/no/new) ');
-
 
         if ($input === 'y' || $input === 'yes') {
+        
+            $dedup_input = readline('Do you want to ignore deduplicated documents? (yes/no/new) ');
+
             while (false === file_exists($file)) {
                 $file = readline('Please type the path to your Bibtex-File: ');
             }
