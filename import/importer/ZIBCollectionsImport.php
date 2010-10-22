@@ -123,6 +123,8 @@ class ZIBCollectionsImport {
         $fp = fopen('../workspace/tmp/collections.map', 'w');
             foreach ($classification as $class) {
                 echo ".";
+                // ZIB-Hack:
+                if ($class['name'] === 'ZIB') { continue; }   
                 $root = $role->getRootCollection();
                 $coll = $root->addLastChild();
                 $coll->setVisible(1);
