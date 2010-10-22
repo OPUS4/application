@@ -128,9 +128,15 @@
                                 <?php $cellCounter++ ?>
 			<?php endif ?>
 
+			<?php if(!is_null($publication->getSeries())) : ?>
+                                <?= $cellCounter === 0 ? '' : ','; ?>
+				<?= htmlspecialchars($publication->getSeries()) ?>
+                                <?php $cellCounter++ ?>
+			<?php endif ?>
+
 			<?php if(!is_null($publication->getIssue())) : ?>
                                 <?= $cellCounter === 0 ? '' : ','; ?>
-				Issue <?= htmlspecialchars($publication->getIssue()) ?>
+				<?= htmlspecialchars($publication->getIssue()) ?>
                                 <?php $cellCounter++ ?>
 			<?php endif ?>
 
@@ -170,12 +176,6 @@
                                 <?php $cellCounter++ ?>
 			<?php endif ?>
                         
-			<?php if(!is_null($publication->getInSeries())) : ?>
-                                <?= $cellCounter === 0 ? '' : ','; ?>
-				<?= htmlspecialchars($publication->getInSeries()) ?>
-                                <?php $cellCounter++ ?>
-			<?php endif ?>
-
 
 
 		</td>
