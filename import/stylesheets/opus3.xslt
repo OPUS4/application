@@ -144,10 +144,7 @@
             </xsl:if>
             <xsl:if test="string-length(field[@name='contributors_corporate'])>0">
                 <xsl:attribute name="ContributingCorporation">
-                    <!-- Hier nur der Name der Institution
                     <xsl:value-of select="field[@name='contributors_corporate']" />
-                    -->
-                    <xsl:value-of select="substring-before(field[@name='contributors_corporate'], ',')" />
                  </xsl:attribute>
             </xsl:if>
             <!-- Source holds source_title? -->
