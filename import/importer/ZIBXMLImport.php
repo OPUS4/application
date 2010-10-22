@@ -200,6 +200,7 @@ class ZIBXMLImport {
         /* Special-ZIB: Collections and Series are the same */
         if (count($collections) > 0) {
            foreach ($collections as $c) {
+               echo "Collection Found\n";
                $mappingFile = '../workspace/tmp/collections.map';
                array_push($collectionValues, $this->getMapping($mappingFile, $c->getAttribute('Value')));
                $this->document->removeChild($c);
