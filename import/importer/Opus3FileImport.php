@@ -71,39 +71,35 @@ class Opus3FileImport {
      * @param Opus_Document $object Opus-Document for that the files should be registered
      * @return void
      */
-    public function loadFiles($object)
+    public function loadFiles($id)
     {
-        //echo $object->toXml()->saveXml()."\n";
-
-        //return 0;
-        $opusId = $object->getIdentifierOpus3(0)->getValue();
-        //$completedYear = $object->getCompletedYear();
-        //$publishedYear = $object->getPublishedYear();
-
-        //if ($publishedYear != $completedYear) { echo "..\n"; }
+        //$opusId = $object->getIdentifierOpus3(0)->getValue();
+        $doc = new Opus_Document($id);
      	// Initialize path
     	$this->_tmpPath = '';
 
 
         // Search the ID-directory in fulltext tree
-        $this->searchDir($this->_path, $opusId);
-        echo "Found Files for $opusId in $this->_tmpPath \n";
+        $this->searchDir($this->_path, $id);
+        echo "Found Files for $id in $this->_tmpPath \n";
         $files = $this->getFiles($this->_tmpPath);
 
         //echo "Count:".count($files)."\n";
-        $alreadyImportedFiles = $object->getFile();
+        $alreadyImportedFiles = $doc->getFile();
         
         if (count($files) === 0) {
         	return 0;
         }
+
+        $lang = "";
         
-        if (true === is_array($object->getLanguage()))
+        if (true === is_array($doc->getLanguage()))
         {
-    	    $lang = $object->getLanguage(0);
+    	    $lang = $doc->getLanguage(0);
         }
         else
         {
-    	    $lang = $object->getLanguage();
+    	    $lang = $doc->getLanguage();
         }
         
         $number = 0;
@@ -130,8 +126,8 @@ class Opus3FileImport {
                         $note->setVisibility('public');
                         //$note->setCreator('imported');
                         $note->setMessage($filecontent);
-                        $object->addNote($note);
-                        $object->store();
+                        $doc->addNote($note);
+                        $doc->store();
                 }
                 
                 foreach ($alreadyImportedFiles as $f) {
@@ -141,7 +137,7 @@ class Opus3FileImport {
                 	}
                 }
                 if ($alreadyImported === false) {
-                    $file = $object->addFile();
+                    $file = $doc->addFile();
                     $file->setLabel(basename($filename));
                     //$file->setFileType($suffix);
                     $file->setPathName(basename($filename));
@@ -159,7 +155,7 @@ class Opus3FileImport {
         
         // store the object
         if ($number > 0) {
-            $object->store();
+            $doc->store();
         }
         
         // return number of imported files
