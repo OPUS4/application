@@ -327,7 +327,6 @@
     </xsl:template>
 
     <!-- temporary series information -->
-    <!--
     <xsl:template name="getCollections">
         <xsl:param name="source_id" required="yes" />
         <xsl:for-each select="/mysqldump/database/table_data[@name='opus_coll']/row[field[@name='source_opus']=$source_id]">
@@ -338,8 +337,7 @@
             </xsl:element>
         </xsl:for-each>
     </xsl:template>
-    -->
-
+ 
     <!-- temporary Institute information -->
     <xsl:template name="getInstitute">
         <xsl:param name="source_id" required="yes" />
