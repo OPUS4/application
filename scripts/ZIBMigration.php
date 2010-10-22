@@ -492,8 +492,8 @@ class ZIBMigration extends OpusMigrationBase {
         $this->load_licences();
 
         // Load Institutes
-        $this->load_documents();
-        //$this->load_documents(1000, 1100);
+        //$this->load_documents();
+        $this->load_documents(1000, 1050);
 
         // Import files
         //$this->load_fulltext();
