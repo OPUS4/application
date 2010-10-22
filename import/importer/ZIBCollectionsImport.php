@@ -125,6 +125,8 @@ class ZIBCollectionsImport {
                 echo ".";
                 // ZIB-Hack:
                 if ($class['coll_name'] === 'ZIB') { continue; }
+                if ($class['name'] === 'Dissertationen') { $class['name'] = 'Dissertation'; }
+                if ($class['name'] === 'Studienabschlussarbeiten') { $class['name'] = 'Studienabschlussarbeit'; }
                 $root = $role->getRootCollection();
                 $coll = $root->addLastChild();
                 $coll->setVisible(1);
