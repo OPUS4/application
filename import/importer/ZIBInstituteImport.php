@@ -159,6 +159,8 @@ class ZIBInstituteImport {
         $fp = fopen('../workspace/tmp/institute.map', 'w');
         foreach ($classification as $class) {
             echo ".";
+            // ZIB-Hack:
+            if ($class['name'] === 'High Performance Computing') { $class['name'] = 'Parallele und Verteilte Algorithmen'; }
             $root = $role->getRootCollection();
 	    $coll = $root->addLastChild();
             $coll->setName($class['name']);
