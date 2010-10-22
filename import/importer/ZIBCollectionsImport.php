@@ -124,7 +124,7 @@ class ZIBCollectionsImport {
             foreach ($classification as $class) {
                 echo ".";
                 // ZIB-Hack:
-                if ($class['name'] === 'ZIB') { continue; }   
+                if ($class['coll_name'] === 'ZIB') { continue; }
                 $root = $role->getRootCollection();
                 $coll = $root->addLastChild();
                 $coll->setVisible(1);
