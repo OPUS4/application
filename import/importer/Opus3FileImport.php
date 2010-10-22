@@ -131,7 +131,7 @@ class Opus3FileImport {
                         //$note->setCreator('imported');
                         $note->setMessage($filecontent);
                         $object->addNote($note);
-                        $object->store();
+                        //$object->store();
                 }
                 
                 foreach ($alreadyImportedFiles as $f) {
@@ -160,7 +160,7 @@ class Opus3FileImport {
         
         // store the object
         if ($number > 0) {
-            $object->store();
+            //$object->store();
         }
         
         // return number of imported files
