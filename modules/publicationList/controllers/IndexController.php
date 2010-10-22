@@ -35,7 +35,8 @@
 class PublicationList_IndexController extends Controller_Action {
 
     private $log;
-    private $resultList;   
+    private $resultList;
+    private $renderer;
    
     public function init() {
         $this->log = Zend_Registry::get('Zend_Log');
@@ -47,14 +48,14 @@ class PublicationList_IndexController extends Controller_Action {
          * lang = 'de' o 'eng'
          * id = '...'
          */
-
+        $this->renderer = 'results';
         $this->createPublicationLists();
         $theme = $this->getRequest()->getParam("theme");
         if ($theme === 'plain') {
             $this->_helper->layout->setLayoutPath(APPLICATION_PATH . '/public/layouts/plain');
 
         }
-        $this->render('results');
+        $this->render($this->renderer);
     }
 
     private function createPublicationLists() {
@@ -62,6 +63,10 @@ class PublicationList_IndexController extends Controller_Action {
 
         $coll_id = $this->getRequest()->getParam('id');
         $coll = new Opus_Collection($coll_id);
+        $coll_name = $coll->getName();
+
+        if ($coll_name === 'Jahresbericht') { $this->renderer = 'results_jahresbericht'; }
+
         $doc_ids = $coll->getDocumentIds();
         
         $publicationSite = new PublicationList_Model_PublicationSite();
