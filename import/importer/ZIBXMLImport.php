@@ -191,8 +191,10 @@ class ZIBXMLImport {
            foreach ($series as $s) {
                $mappingFile = '../workspace/tmp/series.map';
                //echo "Found a series\n";
-               $ns = array('Key'=>$this->getMapping($mappingFile, $s->getAttribute('Value')), 'Value'=>$s->getAttribute('Issue'));
-               array_push($newseries, $ns);
+               if (!is_null($this->getMapping($mappingFile, $s->getAttribute('Value')))) {
+                    $ns = array('Key'=>$this->getMapping($mappingFile, $s->getAttribute('Value')), 'Value'=>$s->getAttribute('Issue'));
+                    array_push($newseries, $ns);
+               }
                $this->document->removeChild($s);
            }
         }
@@ -202,7 +204,9 @@ class ZIBXMLImport {
            foreach ($collections as $c) {
                echo "Collection Found\n";
                $mappingFile = '../workspace/tmp/collections.map';
-               array_push($collectionValues, $this->getMapping($mappingFile, $c->getAttribute('Value')));
+               if (!is_null( $this->getMapping($mappingFile, $c->getAttribute('Value')))) {
+                    array_push($collectionValues, $this->getMapping($mappingFile, $c->getAttribute('Value')));
+               }
                $this->document->removeChild($c);
            }
         }
@@ -210,7 +214,9 @@ class ZIBXMLImport {
         if (count($institutes) > 0) {
             foreach ($institutes as $i) {
                 $mappingFile = '../workspace/tmp/institute.map';
-                array_push($instituteValues, $this->getMapping($mappingFile, $i->getAttribute('Value')));
+                if (!is_null($this->getMapping($mappingFile, $i->getAttribute('Value')))) {
+                    array_push($instituteValues, $this->getMapping($mappingFile, $i->getAttribute('Value')));
+                }
                 $this->document->removeChild($i);
             }
         }
@@ -219,7 +225,9 @@ class ZIBXMLImport {
         if (count($licence) > 0) {
             foreach ($licence as $l) {
                 $mappingFile = '../workspace/tmp/license.map';
-                $licenceValue = $this->getMapping($mappingFile, $l->getAttribute('Value'));
+                if (!is_null($this->getMapping($mappingFile, $l->getAttribute('Value')))) {
+                    $licenceValue = $this->getMapping($mappingFile, $l->getAttribute('Value'));
+                }
                 $this->document->removeChild($l);
             }
         } else {
@@ -230,13 +238,15 @@ class ZIBXMLImport {
         if (count($faculty) > 0) {
             foreach ($faculty as $f) {
                 $mappingFile = '../workspace/tmp/faculties.map';
-                $grantorValue =  $this->getMapping($mappingFile, $f->getAttribute('Value'));
-                //echo "ThesisGrantor: ".$f->getAttribute('Value')."\n";
+                if (!is_null($this->getMapping($mappingFile, $f->getAttribute('Value')))) {
+                    $grantorValue =  $this->getMapping($mappingFile, $f->getAttribute('Value'));
+                    //echo "ThesisGrantor: ".$f->getAttribute('Value')."\n";
+                }
                 $this->document->removeChild($f);
             }
         }
 
-        /* Special-ZIB: Der OldPublisher soll nicht als ThesisPublsiher sondern als "echter" Publisher gelistet werden */
+        /* Special-ZIB: Der OldPublisher soll nicht als ThesisPublisher sondern als "echter" Publisher gelistet werden */
         if (count($publisher) > 0) {
             foreach ($publisher as $p) {
                $publisherValue =  $p->getAttribute('Value');
@@ -353,30 +363,11 @@ class ZIBXMLImport {
             $mapping[$values[0]] = $values[1];
         }
         unset($fp);
-        return $mapping[$id];
-    }
-
-
-    public function getNewValue($mappingFile, $oldId) {
-        $fp = file($mappingFile);
-        $firstvalue = null;
-        foreach ($fp as $licence) {
-            $mappedLicence = explode(" ", $licence);
-            if ($firstvalue === null) {
-                $firstvalue = $mappedLicence[0];
-            }
-            $lic[$mappedLicence[0]] = $mappedLicence[1];
-        }
-        if (array_key_exists($oldId, $lic) === false) {
-            if ($firstvalue !== null) {
-                return $lic[$firstvalue];
-            }
+        if (array_key_exists($id, $mapping) === false) {
             return null;
         }
-        unset($fp);
-        return $lic[$oldId];
+        return $mapping[$id];
     }
-
 
     protected function addDocumentToCollectionNumber($document, $role_name, $number) {
 
