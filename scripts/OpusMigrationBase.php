@@ -143,7 +143,7 @@ class OpusMigrationBase {
         foreach ($doclist as $id) {
             $doc = new Opus_Document($id);
             //$opus3Id = $doc->getIdentifierOpus3()->getValue();
-            $numberOfFiles = $fileImporter->loadFiles($doc);
+            $numberOfFiles = $fileImporter->loadFiles($id);
             //echo $numberOfFiles."\n";
             if ($numberOfFiles > 0) {
                 echo $numberOfFiles . " file(s) have been imported successfully for document ID " . $doc->getId() . "!\n";
