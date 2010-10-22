@@ -152,7 +152,7 @@ class ZIBXMLImport {
 
         $collections = null;
         $collections = $document->getElementsByTagName('OldCollections');
-        $collectionsValues = array();
+        $collectionValues = array();
 
         $licence = null;
         $licence = $document->getElementsByTagName('OldLicence');
@@ -198,16 +198,13 @@ class ZIBXMLImport {
         }
 
         /* Special-ZIB: Collections and Series are the same */
-        /*
         if (count($collections) > 0) {
            foreach ($collections as $c) {
                $mappingFile = '../workspace/tmp/collections.map';
-               array_push($seriesValues, $this->getMapping($mappingFile, $c->getAttribute('Value')));
+               array_push($collectionValues, $this->getMapping($mappingFile, $c->getAttribute('Value')));
                $this->document->removeChild($c);
            }
         }
-         *
-         */
 
         if (count($institutes) > 0) {
             foreach ($institutes as $i) {
