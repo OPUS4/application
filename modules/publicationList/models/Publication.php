@@ -38,6 +38,8 @@ class PublicationList_Model_Publication {
     private $bibtexUrl;
     private $bibtexUrlExternal;
     private $completedYear;
+    private $contributingCorporation;
+    private $contributors = array();
     private $doiUrl;
     private $enrichmentAddress;
     private $enrichmentInstitution;
@@ -113,6 +115,16 @@ class PublicationList_Model_Publication {
 
         if ($doc->getCompletedYear() && ($doc->getCompletedYear() !== "0000") && ($doc->getCompletedYear() !== $doc->getPublishedYear())) {
             $this->completedYear = $doc->getCompletedYear();
+        }
+
+        if ($doc->getContributingCorporation()) {
+            $this->contributingCorporation = $doc->getContributingCorporation();
+        }
+
+        foreach ($doc->getPersonContributor() as $contributor) {
+            $firstName = $contributor->getFirstName();
+            $lastName = $contributor->getLastName();
+            $this->addContributor($firstName." ".$lastName);
         }
 
         foreach ($doc->getPersonEditor() as $editor) {
@@ -243,6 +255,9 @@ class PublicationList_Model_Publication {
         array_push($this->authors, $author);
     }
 
+    public function addContributor($string) {
+        array_push($this->contributors, $string);
+    }
 
     public function addEditor($string) {
         array_push($this->editors, $string);
@@ -299,6 +314,14 @@ class PublicationList_Model_Publication {
 
     public function getCompletedYear() {
         return $this->completedYear;
+    }
+
+    public function getContributingCorporation() {
+        return $this->contributingCorporation;
+    }
+
+    public function getContributors() {
+        return $this->contributors;
     }
 
     public function getDoiUrl() {
