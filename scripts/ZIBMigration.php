@@ -497,7 +497,7 @@ class ZIBMigration extends OpusMigrationBase {
 
         // Import files
         //$this->load_fulltext();
-        //$this->load_fulltext('../../volltexte');
+        $this->load_fulltext('../../volltexte');
 
         // Import Signatures
         //$this->load_signatures();
