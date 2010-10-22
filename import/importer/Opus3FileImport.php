@@ -141,17 +141,18 @@ class Opus3FileImport {
                 	}
                 }
                 if ($alreadyImported === false) {
-                    $file = $object->addFile();
+                    $file = new Opus_File();
                     $file->setLabel(basename($filename));
                     //$file->setFileType($suffix);
                     $file->setPathName(basename($filename));
                     //$file->setMimeType($mimeType);
                     $file->setTempFile($filename);
-			        $file->setDocumentId($object->getId());
-			        $file->setLanguage($lang);
-			        if ($this->_accessRole !== null) {
-                                    //$file->addAccessPermission($this->_accessRole);
-			        }
+                    $file->setDocumentId($object->getId());
+                    $file->setLanguage($lang);
+		    if ($this->_accessRole !== null) {
+                            //$file->addAccessPermission($this->_accessRole);
+		    }
+                    $object->addFile($file);
                     $number++;
                 }
             }
