@@ -224,9 +224,9 @@ class ZIBCollectionsImport {
                 $root = $role->getRootCollection();
                 $coll = $root->addLastChild();
                 $coll->setVisible(1);
-                $coll->setName($class['name']);
+                $coll->setName($class['coll_name']);
                 $root->store();
-                fputs($fp, $class['sr_id'] . ' ' . $coll->getId() . "\n");
+                fputs($fp, $class['coll_id'] . ' ' . $coll->getId() . "\n");
             }
         echo "\n";
 	fclose($fp);
