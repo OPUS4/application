@@ -53,12 +53,12 @@ class ZIBCollectionsImport {
        
         $doclist = $data->getElementsByTagName('table_data');
 	foreach ($doclist as $document)	{
+            if ($document->getAttribute('name') === 'schriftenreihen') {
+                $this->importSeries($document, $seriesRole);
+            }
             if ($document->getAttribute('name') === 'collections') {
                 //$this->importCollectionsDirectly($document, $seriesRole);
                 $this->importCollections($document, $seriesRole);
-            }
-            if ($document->getAttribute('name') === 'schriftenreihen') {
-                $this->importSeries($document, $seriesRole);
             }
 	}
     }
