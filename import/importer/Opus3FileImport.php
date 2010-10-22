@@ -121,6 +121,7 @@ class Opus3FileImport {
                 $alreadyImported = false;
                 
                 // if its a .bem-file, import it as a note
+                /*
                 if (substr(basename($filename), 0, 5) === '.bem_') {
                 	$alreadyImported = true;
                 	$fileArray = file($filename);
@@ -133,6 +134,8 @@ class Opus3FileImport {
                         $object->addNote($note);
                         //$object->store();
                 }
+                 *
+                 */
                 
                 foreach ($alreadyImportedFiles as $f) {
                 	if (basename($filename) === $f->getPathName()) {
@@ -140,6 +143,7 @@ class Opus3FileImport {
                 	    continue;
                 	}
                 }
+
                 if ($alreadyImported === false) {
                     $file = new Opus_File();
                     $file->setLabel(basename($filename));
@@ -152,7 +156,8 @@ class Opus3FileImport {
 		    if ($this->_accessRole !== null) {
                             //$file->addAccessPermission($this->_accessRole);
 		    }
-                    $object->addFile($file);
+                    $file->store();
+                    //$object->addFile($file);
                     $number++;
                 }
             }
