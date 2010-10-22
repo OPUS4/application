@@ -121,7 +121,6 @@ class Opus3FileImport {
                 $alreadyImported = false;
                 
                 // if its a .bem-file, import it as a note
-                /*
                 if (substr(basename($filename), 0, 5) === '.bem_') {
                 	$alreadyImported = true;
                 	$fileArray = file($filename);
@@ -132,10 +131,8 @@ class Opus3FileImport {
                         //$note->setCreator('imported');
                         $note->setMessage($filecontent);
                         $object->addNote($note);
-                        //$object->store();
+                        $object->store();
                 }
-                 *
-                 */
                 
                 foreach ($alreadyImportedFiles as $f) {
                 	if (basename($filename) === $f->getPathName()) {
@@ -143,21 +140,18 @@ class Opus3FileImport {
                 	    continue;
                 	}
                 }
-
                 if ($alreadyImported === false) {
-                    $file = new Opus_File();
+                    $file = $object->addFile();
                     $file->setLabel(basename($filename));
                     //$file->setFileType($suffix);
                     $file->setPathName(basename($filename));
                     //$file->setMimeType($mimeType);
                     $file->setTempFile($filename);
-                    $file->setDocumentId($object->getId());
-                    $file->setLanguage($lang);
+                    //$file->setDocumentId($object->getId());
+		    $file->setLanguage($lang);
 		    if ($this->_accessRole !== null) {
-                            //$file->addAccessPermission($this->_accessRole);
+                                 //$file->addAccessPermission($this->_accessRole);
 		    }
-                    $file->store();
-                    //$object->addFile($file);
                     $number++;
                 }
             }
@@ -165,7 +159,7 @@ class Opus3FileImport {
         
         // store the object
         if ($number > 0) {
-            //$object->store();
+            $object->store();
         }
         
         // return number of imported files
