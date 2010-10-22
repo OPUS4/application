@@ -210,7 +210,10 @@
             
             <!-- Series -->
             <xsl:call-template name="getSeries"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
-            
+           
+           <!-- Collections -->
+            <xsl:call-template name="getCollections"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
+
             <!-- Classifications and Subjects -->
             <xsl:call-template name="getClasses"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
 
