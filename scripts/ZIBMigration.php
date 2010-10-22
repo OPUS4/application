@@ -492,11 +492,12 @@ class ZIBMigration extends OpusMigrationBase {
         $this->load_licences();
 
         // Load Institutes
-        $this->load_documents();
+        //$this->load_documents();
+        $this->load_documents(1195, 1200);
 
         // Import files
         //$this->load_fulltext();
-        $this->load_fulltext('../../volltexte');
+        //$this->load_fulltext('../../volltexte');
 
         // Import Signatures
         //$this->load_signatures();
@@ -505,6 +506,7 @@ class ZIBMigration extends OpusMigrationBase {
         //$this->sign_publications();
 	
 	// Create Person-Collections
+        /*
 	$this->create_person_collections("http://www.zib.de/de/menschen/mitarbeiter.html");
 
 	// Create Project-Collections
@@ -516,6 +518,8 @@ class ZIBMigration extends OpusMigrationBase {
 	$this->import_bibtex("../../bibtex/Optimierung.bib.xml");
         $this->import_bibtex("../../bibtex/Parallele.bib.xml");
 	$this->import_bibtex("../../bibtex/Visualisierung.bib.xml");
+         * 
+         */
 
 	// Fill Person-Colelctiosn
         $this->fill_person_collections();
