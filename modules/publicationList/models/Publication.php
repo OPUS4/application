@@ -55,7 +55,6 @@ class PublicationList_Model_Publication {
     private $imageRisExternal;
     private $imageUrl;
     private $imageUrlExternal;
-    private $inSeries;
     private $issue;
     private $note;
     private $pageFirst;
@@ -67,6 +66,7 @@ class PublicationList_Model_Publication {
     private $publisherPlace;
     private $risUrl;
     private $risUrlExternal;
+    private $series;
     private $titleAbstract;
     private $titleMain;
     private $titleParent;
@@ -148,7 +148,7 @@ class PublicationList_Model_Publication {
             $roleId = $c->getRoleId();
             $role = new Opus_CollectionRole($roleId);
             if ($role->getName() === 'series') {
-                $this->inSeries = "Erschienen als ".$c->getName();
+                $this->series = $c->getName();
                 $this->pdfUrl = $baseUrl."/frontdoor/index/index/docId/".$doc->getId();
                 $this->pdfUrlExternal = "http://".$hostname.$this->pdfUrl."/theme/plain";
             }
@@ -370,10 +370,6 @@ class PublicationList_Model_Publication {
         return $this->imageRisExternal;
     }
 
-    public function getInSeries() {
-        return $this->inSeries;
-    }
-
     public function getIssue() {
         return $this->issue;
     }
@@ -416,6 +412,10 @@ class PublicationList_Model_Publication {
 
     public function getRisUrlExternal() {
         return $this->risUrlExternal;
+    }
+
+    public function getSeries() {
+        return $this->series;
     }
     
     public function getTitleMain() {
