@@ -143,7 +143,7 @@ class PublicationList_Model_Publication {
         $this->imageRis = $baseUrl."/layouts/".$theme."/img/pl/ris_icon.png";
         $this->imageRisExternal = "fileadmin/publicationlists/img/ris_icon.png";
 
-        /*
+ 
         foreach ($collections as $c) {
             $roleId = $c->getRoleId();
             $role = new Opus_CollectionRole($roleId);
@@ -153,8 +153,7 @@ class PublicationList_Model_Publication {
                 $this->pdfUrlExternal = "http://".$hostname.$this->pdfUrl."/theme/plain";
             }
         }
-         *
-         */
+  
         
         if ($doc->getIssue()) {
             $this->issue = $doc->getIssue();
