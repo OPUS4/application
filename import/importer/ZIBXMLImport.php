@@ -282,19 +282,17 @@ class ZIBXMLImport {
                 foreach ($newseries as $s) {
                     $coll = new Opus_Collection($s['Key']);
                     $doc->addCollection($coll);
-                    //$this->addDocumentToCollectionNumber($doc, $c['Key'], $c['Value']);
                     $doc->setIssue($s['Value']);
                 }
             }
-/*
-            if (count($seriesValues) > 0) {
-                foreach ($seriesValues as $s) {
-                    $coll = new Opus_Collection($s);
+
+            if (count($collectionValues) > 0) {
+                foreach ($collectionValues as $c) {
+                    $coll = new Opus_Collection($c);
                     $doc->addCollection($coll);
-                    echo "Document added to Series-Collection ". $coll->getName(). "\n";
                 }
             }
-*/
+
             if ($ddcValue !== null) {
                 $this->addDocumentToCollectionNumber($doc, 'ddc', $ddcValue);
             }
