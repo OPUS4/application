@@ -122,15 +122,15 @@
                                 <?php $cellCounter++ ?>
 			<?php endif ?>
 
-			<?php if(!is_null($publication->getVolume())) : ?>
-                                <?= $cellCounter === 0 ? '' : ','; ?>
-				Vol. <?= htmlspecialchars($publication->getVolume()) ?>
-                                <?php $cellCounter++ ?>
-			<?php endif ?>
-
 			<?php if(!is_null($publication->getSeries())) : ?>
                                 <?= $cellCounter === 0 ? '' : ','; ?>
 				<?= htmlspecialchars($publication->getSeries()) ?>
+                                <?php $cellCounter++ ?>
+			<?php endif ?>
+
+			<?php if(!is_null($publication->getVolume())) : ?>
+                                <?= $cellCounter === 0 ? '' : ','; ?>
+				Vol. <?= htmlspecialchars($publication->getVolume()) ?>
                                 <?php $cellCounter++ ?>
 			<?php endif ?>
 
