@@ -100,8 +100,8 @@ class PublicationList_IndexController extends Controller_Action {
             }
 
             if ($this->getRequest()->getParam("theme") === 'plain') {
-                //$publication->setBibtexUrl($publication->getBibtexUrlExternal());
-                //$publication->setRisUrl($publication->getRisUrlExternal());
+                $publication->setBibtexUrl($publication->getBibtexUrlExternal());
+                $publication->setRisUrl($publication->getRisUrlExternal());
 
                 //$publication->setImageAbstract($publication->getImageAbstractExternal());
                 $publication->setImageBibtex($publication->getImageBibtexExternal());
