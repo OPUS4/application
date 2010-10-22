@@ -190,6 +190,7 @@ class ZIBXMLImport {
         if (count($series) > 0) {
            foreach ($series as $s) {
                $mappingFile = '../workspace/tmp/series.map';
+               echo "Found a series\n";
                array_push($seriesValues, $this->getMapping($mappingFile, $s->getAttribute('Value')));
                $this->document->removeChild($s);
            }
