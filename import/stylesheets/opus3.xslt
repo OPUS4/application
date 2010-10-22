@@ -217,6 +217,7 @@
             <!-- Classifications and Subjects -->
             <xsl:call-template name="getClasses"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
 
+            <!-- Institutes -->
             <xsl:call-template name="getInstitute"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
             
             <xsl:call-template name="AddSubmitters">
