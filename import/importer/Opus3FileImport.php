@@ -78,6 +78,7 @@ class Opus3FileImport {
      	// Initialize path
     	$this->_tmpPath = '';
 
+        echo "Num Collections:".count($doc->getCollection())."\n";
 
         // Search the ID-directory in fulltext tree
         $this->searchDir($this->_path, $id);
@@ -157,6 +158,8 @@ class Opus3FileImport {
         if ($number > 0) {
             $doc->store();
         }
+
+        echo "Num Collections:".count($doc->getCollection())."\n";
         
         // return number of imported files
         return $number;
