@@ -74,56 +74,47 @@
 				<i><?= htmlspecialchars($publication->getTitleParent()) ?></i>
                                 <?php $cellCounter++ ?>
 			<?php endif ?>
-                                
 			<?php if(!is_null($publication->getTitleSub())) : ?>
                                 <?= $cellCounter === 0 ? '' : ','; ?>
 				<?= htmlspecialchars($publication->getTitleSub()) ?>
                                 <?php $cellCounter++ ?>
 			<?php endif ?>
-
 			<?php if(!is_null($publication->getSeries())) : ?>
                                 <?= $cellCounter === 0 ? '' : ','; ?>
 				<?= htmlspecialchars($publication->getSeries()) ?>
                                 <?php $cellCounter++ ?>
 			<?php endif ?>
-
 			<?php if(!is_null($publication->getContributingCorporation())) : ?>
                                 <?= $cellCounter === 0 ? '' : ','; ?>
 				<?= htmlspecialchars($publication->getContributingCorporation()) ?>
                                 <?php $cellCounter++ ?>
 			<?php endif ?>
-
                         <!-- TODO: Adrress, School, Institution goes to ContributingCorporation -->
 			<?php if(!is_null($publication->getEnrichmentAddress())) : ?>
                                 <?= $cellCounter === 0 ? '' : ','; ?>
 				<?= htmlspecialchars($publication->getEnrichmentAddress()) ?>
                                 <?php $cellCounter++ ?>
 			<?php endif ?>
-
 			<?php if(!is_null($publication->getEnrichmentSchool())) : ?>
                                 <?= $cellCounter === 0 ? '' : ','; ?>
 				<?= htmlspecialchars($publication->getEnrichmentSchool()) ?>
                                 <?php $cellCounter++ ?>
 			<?php endif ?>
-
 			<?php if(!is_null($publication->getEnrichmentInstitution())) : ?>
                                 <?= $cellCounter === 0 ? '' : ','; ?>
 				<?= htmlspecialchars($publication->getEnrichmentInstitution()) ?>
                                 <?php $cellCounter++ ?>
 			<?php endif ?>
-
 			<?php if(!is_null($publication->getEnrichmentType())) : ?>
                                 <?= $cellCounter === 0 ? '' : ','; ?>
 				<?= htmlspecialchars($publication->getEnrichmentType()) ?>
                                 <?php $cellCounter++ ?>
 			<?php endif ?>
-
 			<?php if(!is_null($publication->getEnrichmentMonth())) : ?>
                                 <?= $cellCounter === 0 ? '' : ','; ?>
 				<?= htmlspecialchars($publication->getEnrichmentMonth()) ?>
                                 <?php $cellCounter++ ?>
 			<?php endif ?>
-	
 			<?php if(!count($publication->getEditors()) == 0) : ?>
 				<?php $editorCounter=0 ?>
                                 <?= $cellCounter === 0 ? '' : ','; ?>
@@ -134,19 +125,16 @@
 				<?php endforeach ?> (Ed.)
                                 <?php $cellCounter++ ?>
 			<?php endif ?>
-
 			<?php if(!is_null($publication->getVolume())) : ?>
                                 <?= $cellCounter === 0 ? '' : ','; ?>
 				Vol. <?= htmlspecialchars($publication->getVolume()) ?>
                                 <?php $cellCounter++ ?>
 			<?php endif ?>
-
 			<?php if(!is_null($publication->getIssue())) : ?>
                                 <?= $cellCounter === 0 ? '' : ','; ?>
 				<?= htmlspecialchars($publication->getIssue()) ?>
                                 <?php $cellCounter++ ?>
 			<?php endif ?>
-
 			<?php if(!is_null($publication->getPageFirst())) : ?>
                                 <?= $cellCounter === 0 ? '' : ','; ?>
 				pp. <?= htmlspecialchars($publication->getPageFirst()) ?>
@@ -155,19 +143,16 @@
                                 <?php endif ?>
                                 <?php $cellCounter++ ?>
 			<?php endif ?>
-
-			<?php if(!is_null($publication->getPublisherName())) : ?>
+        		<?php if(!is_null($publication->getPublisherName())) : ?>
                                 <?= $cellCounter === 0 ? '' : ','; ?>
 				<?= htmlspecialchars($publication->getPublisherName()) ?>
                                 <?php $cellCounter++ ?>
 			<?php endif ?>
-
 			<?php if(!is_null($publication->getPublisherPlace())) : ?>
                                 <?= $cellCounter === 0 ? '' : ','; ?>
 				<?= htmlspecialchars($publication->getPublisherPlace()) ?>
                                 <?php $cellCounter++ ?>
 			<?php endif ?>
-
 			<?php if(!is_null($publication->getNote())) : ?>
 				<?= $cellCounter === 0 ? '' : ','; ?>
                                 <?= htmlspecialchars($publication->getNote()) ?>
@@ -176,15 +161,11 @@
                                 <?php endif ?>
                                 <?php $cellCounter++ ?>
 			<?php endif ?>
-
 			<?php if(!is_null($publication->getPublishedYear())) : ?>
                                 <?= $cellCounter === 0 ? '' : ','; ?>
 				<?= htmlspecialchars($publication->getPublishedYear()) ?>
                                 <?php $cellCounter++ ?>
 			<?php endif ?>
-                        
-
-
 		</td>
 
 		<td class="fourth" valign="top">
@@ -196,7 +177,6 @@
                                     <?php if(is_null($publication->getImageBibtex())) : ?>BibTeX<?php endif ?>
                                 </a>
 			<?php endif ?>
-
 			<?php if(!is_null($publication->getRisUrl())) : ?>
 				<a href="<?= $publication->getRisUrl() ?>">
                                     <?php if(!is_null($publication->getImageRis())) : ?>

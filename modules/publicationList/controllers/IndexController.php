@@ -55,11 +55,17 @@ class PublicationList_IndexController extends Controller_Action {
             $this->_helper->layout->setLayoutPath(APPLICATION_PATH . '/public/layouts/plain');
 
         }
+        $this->view->addFilterPath('View/Filter', 'View_Filter')
+            ->addFilter('RemoveWhitespaces');
+
         $this->render($this->renderer);
     }
 
     private function createPublicationLists() {
         $config = Zend_Registry::get('Zend_Config');
+        $log = Zend_Registry::get('Zend_Log');
+
+        $log->debug('XXX');
 
         $coll_id = $this->getRequest()->getParam('id');
         $coll = new Opus_Collection($coll_id);
