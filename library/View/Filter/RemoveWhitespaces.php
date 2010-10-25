@@ -54,7 +54,7 @@ class View_Filter_RemoveWhitespaces implements Zend_Filter_Interface {
         );
          *
          */
-        return preg_replace('a', 'XX' ,$string);
+        return preg_replace('/a/', '/XX/' ,$string);
     }
 }
 
