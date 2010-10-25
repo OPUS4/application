@@ -9,4 +9,5 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 --
 INSERT INTO roles (id, name) VALUES
 (1, 'administrator'),
-(2, 'guest');
+(2, 'guest'),
+(4, 'reviewer');
