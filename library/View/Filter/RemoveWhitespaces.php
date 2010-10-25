@@ -41,6 +41,8 @@
  *
  */
 
+require_once 'Zend/Filter/Interface.php';
+
 class View_Filter_RemoveWhitespaces implements Zend_Filter_Interface {
 
     public function filter($string) {
