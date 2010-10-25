@@ -452,6 +452,42 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
 
 
     /**
+     * Loads XML dump of matheon authors and creates/updates the Opus_Persons
+     * objects from $this->persons.
+     *
+     * @return void
+     */
+    public function load_accounts() {
+        $file = $this->dumps_dir . '/accounts.xml';
+        $users = $this->load_xml_mysqldump($file);
+
+        $guest_role = Opus_Role::fetchByName('guest');
+        $reviewer_role = Opus_Role::fetchByName('reviewer');
+
+        foreach ($users AS $user) {
+            $account_login    = trim($user['first_name']) . "" . trim($user['last_name']);
+            $account_email    = trim($user['email_address']);
+            $account_password = trim($user['password']);
+
+            $account = new Opus_Account();
+            $account->setLogin($account_login);
+            $account->setPassword($account_password);
+            $account->setEmail($account_email);
+
+            if ($user['referee'] || trim($user['last_name']) == 'Kunz') {
+                $account->addRole( $reviewer_role );
+            }
+            
+            $account->addRole( $guest_role );
+            $account->store();
+
+
+        }
+
+        return count($users);
+    }
+
+    /**
      * Custom run method.
      *
      * @return <type>
@@ -469,6 +505,10 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
         // Load mySQL dump for preprints.
         $this->load_preprint_files();
         echo "found " . count($this->preprint_files) . " files\n";
+
+        // Load mySQL dump for preprints.
+        $num_accounts = $this->load_accounts();
+        echo "found $num_accounts accounts\n";
 
         // Disable all un-used collections
         $this->disable_all_collectionroles();
