@@ -62,18 +62,10 @@ abstract class Admin_Form_RolesAbstract extends Zend_Form {
      * @return array of Opus_Role instances
      */
     public static function parseSelectedRoles($postData) {
-        $roles = Opus_Role::getAll();
-
         $selectedRoles = array();
-
-        foreach ($roles as $roleName) {
-            $roleSelected = $postData['role' . $roleName];
-            if ($roleSelected) {
-                $role = Opus_Role::fetchByName($roleName);
-                $selectedRoles[] = $role;
-            }
+        foreach (self::parseSelectedRoleNames($postData) as $roleName) {
+            $selectedRoles[] = Opus_Role::fetchByName($roleName);
         }
-
         return $selectedRoles;
     }
 
@@ -83,8 +75,15 @@ abstract class Admin_Form_RolesAbstract extends Zend_Form {
         $selectedRoles = array();
 
         foreach ($roles as $roleName) {
-            $roleSelected = $postData['role' . $roleName];
-            if ($roleSelected) {
+            $keyName = 'role' . $roleName;
+
+            // FIXME: Kludge to avoid undefined array indices.
+            if (!array_key_exists($keyName, $postData)) {
+                continue;
+            }
+
+            // If role-checkbox is activated, add role to returned array.
+            if ($postData[$keyName]) {
                 $selectedRoles[] = $roleName;
             }
         }
