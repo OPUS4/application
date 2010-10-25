@@ -47,7 +47,7 @@ class View_Filter_RemoveWhitespaces implements Zend_Filter_Interface {
 
     public function filter($string) {
 
-       $string = preg_replace('/[\n]+/', '\n', $string);
+       $string = preg_replace('/[\n]+/', "\n", $string);
        $string = preg_replace('/[ \t]+/', ' ', $string);
        $string = preg_replace('/\s+,/', ',', $string);
 
