@@ -46,15 +46,12 @@ require_once 'Zend/Filter/Interface.php';
 class View_Filter_RemoveWhitespaces implements Zend_Filter_Interface {
 
     public function filter($string) {
-        /*
-       return preg_replace(
-            array('/>\s+/', '/\s+</'),
-            array('>', '<'),
-            $string
-        );
-         *
-         */
-        return preg_replace('/[ \t]+/', ' ' ,$string);
+
+       $string = preg_replace('/[\n]+/', '\n', $string);
+       $string = preg_replace('/[ \t]+/', ' ', $string);
+       $string = preg_replace('/\s+,/', ',', $string);
+
+       return $string;
     }
 }
 
