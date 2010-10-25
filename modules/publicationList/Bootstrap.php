@@ -35,8 +35,8 @@
 class PublicationList_Bootstrap extends Zend_Application_Module_Bootstrap {
 
     protected function _initViewFilter() {
-        $this->bootstrap('view');
-        $view = $this->getResource('view');
+        //$this->bootstrap('view');
+        $view = $this->getResource('View');
         $view->addFilterPath('View/Filter', 'View_Filter')
             ->addFilter('RemoveWhitespaces');
     }
