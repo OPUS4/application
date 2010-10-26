@@ -648,7 +648,7 @@
                 <xsl:attribute name="href">
                     <xsl:value-of select="$deliverUrlPrefix"/>
                     <xsl:text>/</xsl:text>
-                    <xsl:value-of select="@DocumentId" />
+                    <xsl:value-of select="/Opus/Opus_Document/@Id" />
                     <xsl:text>/</xsl:text>
                     <xsl:value-of select="@PathName" />
                 </xsl:attribute>
@@ -690,7 +690,7 @@
                 <xsl:attribute name="href">
                     <xsl:value-of select="$deliverUrlPrefix"/>
                     <xsl:text>/</xsl:text>
-                    <xsl:value-of select="@DocumentId" />
+                    <xsl:value-of select="/Opus/Opus_Document/@Id" />
                     <xsl:text>/</xsl:text>
                     <xsl:value-of select="@PathName" />
                 </xsl:attribute>
