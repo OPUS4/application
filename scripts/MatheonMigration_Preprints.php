@@ -554,6 +554,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
 
         $counter = 0;
         $total = count($preprints);
+        $guest_role = Opus_Role::fetchByName('guest');
 
         // Write imported documents to seperate text file
         $experiments = true;
@@ -569,7 +570,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
 
             $doc = new Opus_Document();
             $doc->setType('preprint');
-            $doc->setLanguage('eng');
+            $doc->setLanguage('misc');
 
             //    <field name="id">1</field>
             $oldid = $doc->addIdentifierOld();
@@ -589,7 +590,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
                 $document_title = trim(str_replace("\r", " ", $document_title));
 
                 $model = $doc->addTitleMain();
-                $model->setLanguage('eng');
+                $model->setLanguage('misc');
                 $model->setValue($document_title);
             }
 
@@ -598,13 +599,15 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             if (array_key_exists($pid, $this->preprint_files)) {
                 foreach ($this->preprint_files[$pid] AS $file) {
                     $model = $doc->addFile();
-                    $model->setLanguage('eng');
+                    $model->setLanguage('misc');
                     $model->setTempFile($this->files_dir . DIRECTORY_SEPARATOR . $pid . DIRECTORY_SEPARATOR . $file['file_name']);
                     $model->setPathName($file['file_name']);
 
                     if (array_key_exists('original_file_name', $file)) {
                         $model->setLabel($file['original_file_name']);
                     }
+
+                    $model->addAccessPermission($guest_role);
                 }
             }
 
@@ -647,7 +650,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             $field = $preprint['abstract'];
             if ($field != '') {
                 $model = $doc->addTitleAbstract();
-                $model->setLanguage('eng');
+                $model->setLanguage('misc');
                 $model->setValue($field);
             }
 
