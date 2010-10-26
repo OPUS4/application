@@ -317,7 +317,7 @@
                <xsl:value-of select="@PathName" />
             </xsl:attribute>
             <xsl:attribute name="ddb:fileID"><xsl:text>file</xsl:text>
-            <xsl:value-of select="@DocumentId"/>-<xsl:number value="position()-1"/>
+            <xsl:value-of select="../@Id"/>-<xsl:number value="position()-1"/>
             </xsl:attribute> 
 
        <!-- not yet in XML-Output -->            
