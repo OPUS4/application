@@ -465,7 +465,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
         $reviewer_role = Opus_Role::fetchByName('reviewer');
 
         foreach ($users AS $user) {
-            $account_login    = trim($user['first_name']) . "" . trim($user['last_name']);
+            $account_login    = trim($user['email_address']);
             $account_email    = trim($user['email_address']);
             $account_password = trim($user['password']);
 
