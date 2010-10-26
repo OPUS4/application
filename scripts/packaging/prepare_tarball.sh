@@ -51,7 +51,7 @@ rm -rv opus4/public/layouts/{opus33,opus34,darker,matheon}
 rm -rv opus4/import
 rm -v  opus4/modules/publish/views/scripts/form/preprintmatheon.phtml
 rm -rv opus4/application/configs/doctypes/import/{bibliography,repository}
-rm -rv opus4/modules/{pkm,publicationList,collections}
+rm -rv opus4/modules/{pkm,publicationList,remotecontrol}
 rm -rv opus4/scripts/{packaging,cron,indexing,install}
 rm -r  opus4/scripts/*{Matheon,ZIB}*.php
 rm -rv opus4/library/Opus/Search/{Adapter,Index}/Lucene/
