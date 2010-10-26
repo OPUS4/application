@@ -89,7 +89,7 @@ class Rewritemap_Apache {
         $this->_logger = $logger;
         $this->_realm = $realm;
 
-        $this->_logger->info("got request '$request'");
+        $this->_logger->info("Initialized " . __CLASS__);
     }
 
 
