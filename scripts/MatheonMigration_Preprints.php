@@ -452,7 +452,30 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
 
 
     /**
-     * Loads XML dump of matheon authors and creates/updates the Opus_Persons
+     * Creates table entries for access control...
+     *
+     * @return void
+     */
+    public function create_access_control() {
+        $remoteupdate_role = new Opus_Role();
+        $remoteupdate_role->setName('remoteupdate');
+        $remotecontrol_privilege = $remoteupdate_role->addPrivilege();
+        $remotecontrol_privilege->setPrivilege('remotecontrol');
+        $remoteupdate_role->store();
+
+        $remoteupdate_ips = array('127.0.23.42', '160.45.117.167');
+        foreach ($remoteupdate_ips AS $ip) {
+            $iprange = new Opus_Iprange();
+            $iprange->setStartingip($ip);
+            $iprange->setEndingip($ip);
+            $iprange->setName("IP set by migration script: $ip");
+            $iprange->addRole( $remoteupdate_role );
+            $iprange->store();
+        }
+    }
+
+    /**
+     * Loads XML dump of matheon accounts and creates/updates the Opus_Persons
      * objects from $this->persons.
      *
      * @return void
@@ -494,6 +517,13 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
      */
     public function run() {
 
+        // Disable all un-used collections
+        $this->disable_all_collectionroles();
+
+        // Create access control privileges/users/roles...
+        $this->create_access_control();
+
+
         // Load mySQL dump for preprint persons.
         $this->load_preprint_persons();
         echo "found and created " . count($this->persons) . " persons\n";
@@ -509,9 +539,6 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
         // Load mySQL dump for preprints.
         $num_accounts = $this->load_accounts();
         echo "found $num_accounts accounts\n";
-
-        // Disable all un-used collections
-        $this->disable_all_collectionroles();
 
         // Load mySQL dump for preprint projects.
         $this->load_projects();
