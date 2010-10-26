@@ -66,7 +66,7 @@ class Rewritemap_ApacheTest extends PHPUnit_Framework_TestCase {
         $rwm = new Rewritemap_Apache('/files', $log);
         $rwm->rewriteRequest('');
 
-        $this->assertEquals('got request \'\'', $logWriter->events[0]['message'],
+        $this->assertEquals('got request \'\'', $logWriter->events[1]['message'],
             'Message log expected "got request" entry.');
     }
 
