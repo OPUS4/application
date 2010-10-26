@@ -271,7 +271,6 @@ class Admin_FilemanagerController extends Controller_Action
             * }
             */
             $docfile = $document->addFile();
-            $docfile->setDocumentId($document->getId());
             $docfile->setLabel($uploadForm->getValue('comment'));
             $docfile->setLanguage($uploadForm->getValue('language'));
             $docfile->setPathName($file['name']);

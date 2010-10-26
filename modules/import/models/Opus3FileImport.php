@@ -136,7 +136,6 @@ class Import_Model_Opus3FileImport
                     $file->setPathName(basename($filename));
                     $file->setMimeType($mimeType);
                     $file->setTempFile($filename);
-			        $file->setDocumentId($object->getId());
 			        $file->setLanguage($lang);
 			        if ($this->_accessRole !== null) {
     			        $file->addAccessPermission($this->_accessRole);
