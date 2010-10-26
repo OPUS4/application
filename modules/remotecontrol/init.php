@@ -37,6 +37,10 @@
  * Check permissions before any remotecontrole controllers will be started.
  */
 
+$log = Zend_Registry::get('Zend_Log');
+$msg = 'remotecontrol -- REMOTE_ADDR: ' . $_SERVER['REMOTE_ADDR'];
+$log->debug($msg);
+
 // check, if we are allowed to use remotecontrol
 if (true !== Opus_Security_Realm::getInstance()->check('remotecontrol')) {
     
