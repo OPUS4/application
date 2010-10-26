@@ -488,14 +488,12 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
         $reviewer_role = Opus_Role::fetchByName('reviewer');
 
         foreach ($users AS $user) {
-            $account_login    = trim($user['email_address']);
-            $account_email    = trim($user['email_address']);
-            $account_password = trim($user['password']);
-
             $account = new Opus_Account();
-            $account->setLogin($account_login);
-            $account->setPassword($account_password);
-            $account->setEmail($account_email);
+            $account->setLogin(trim($user['email_address']));
+            $account->setPassword(trim($user['password']));
+            $account->setEmail(trim($user['email_address']));
+            $account->setFirstName(trim($user['last_name']));
+            $account->setLastName(trim($user['first_name']));
 
             if ($user['referee'] || trim($user['last_name']) == 'Kunz') {
                 $account->addRole( $reviewer_role );
@@ -503,8 +501,6 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             
             $account->addRole( $guest_role );
             $account->store();
-
-
         }
 
         return count($users);
