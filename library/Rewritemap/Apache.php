@@ -88,6 +88,8 @@ class Rewritemap_Apache {
         $this->_targetPrefix = $targetPrefix;
         $this->_logger = $logger;
         $this->_realm = $realm;
+
+        $this->_logger->info("got request '$request'");
     }
 
 
@@ -136,11 +138,12 @@ class Rewritemap_Apache {
 
         // check for security
         $conf = Zend_Registry::get('Zend_Config');
+        $target = $this->_targetPrefix . "/$docId/$path";
         $secu = $conf->security;
-		if ($secu === '0') {
+        if ($secu === '0') {
             // security switched off, deliver everything
-            $this->_logger->info("return " . $this->_targetPrefix . "'files/$docId/$path'");
-            return $this->_targetPrefix ."/$docId/$path";
+            $this->_logger->info("security switched off, return '$target'");
+            return $target;
         }
         // set ip/username in realm
 		$this->__setupIdentity($ip, $cookies);
