@@ -90,7 +90,7 @@
                     <span class="author"><a href=""><?= $author ?></a></span>
                     <?= ($count < $authorsCount) ? '; ' : ': '?>
                 <?PHP endforeach; ?>
-                <span class="title"><a href="<?=$document->getUrlFrontdoor() ?>"><?= $document->getDocTitle() ?></a></span>
+                <span class="title"><a href="<?=$document->getUrlShow() ?>"><?= $document->getDocTitle() ?></a></span>
                 (<span class="doctype"><?= $document->getDocType() ?></span>,
                 <span class="pubDate"><?= $document->getPublishedDate() ?></span>)
             </td>
