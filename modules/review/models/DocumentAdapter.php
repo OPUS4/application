@@ -164,6 +164,20 @@ class Review_Model_DocumentAdapter {
     }
 
     /**
+     * Returns URL for showing all document metadata.
+     * @return url
+     */
+    public function getUrlShow() {
+        $url_show = array(
+            'module'     => 'admin',
+            'controller' => 'documents',
+            'action'     => 'show',
+            'id'         => $this->getDocId()
+        );
+        return $this->view->url($url_show, 'default', true);
+    }
+
+    /**
      * Returns URL for editing document.
      * @return url
      */
