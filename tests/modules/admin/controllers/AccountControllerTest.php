@@ -58,6 +58,14 @@ class Admin_AccountControllerTest extends ControllerTestCase {
         $this->assertAction('show');
     }
 
+    public function testShowActionWithoutId() {
+        $this->dispatch('/admin/account/show');
+        $this->assertModule('admin');
+        $this->assertController('account');
+        $this->assertAction('show');
+        $this->assertRedirect('/admin/account/index');
+    }
+
     /**
      * Tests showing form for new account.
      */
@@ -102,6 +110,19 @@ class Admin_AccountControllerTest extends ControllerTestCase {
         $this->assertAction('create');
         $this->assertRedirect();
         $this->assertNotNull(new Opus_Account(null, null, 'wally'));
+    }
+
+    public function testCreateActionCancel() {
+         $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'cancel' => 'cancel'
+                ));
+
+        $this->dispatch('/admin/account/create');
+        $this->assertController('account');
+        $this->assertAction('create');
+        $this->assertRedirect('/admin/account/index');
     }
 
     /**
