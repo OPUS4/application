@@ -149,11 +149,25 @@ class Admin_DocumentsControllerTest extends ControllerTestCase {
     }
 
     public function testPublishAction() {
+        $this->dispatch('/admin/documents/publish/docId/100');
+        $this->assertModule('admin');
+        $this->assertController('documents');
+        $this->assertAction('publish');
+        $this->assertRedirect('/admin/documents/index');
 
+        $doc = new Opus_Document(100);
+        $this->assertEquals('published', $doc->getServerState());
     }
 
     public function testUnpublishAction() {
+        $this->dispatch('/admin/documents/unpublish/docId/100');
+        $this->assertModule('admin');
+        $this->assertController('documents');
+        $this->assertAction('unpublish');
+        $this->assertRedirect('/admin/documents/index');
 
+        $doc = new Opus_Document(100);
+        $this->assertEquals('unpublished', $doc->getServerState());
     }
 
 }
