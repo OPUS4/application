@@ -80,6 +80,64 @@ class Admin_RoleControllerTest extends ControllerTestCase {
         $this->assertAction('edit');
     }
 
+    public function testCreateAction() {
+         $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'name' => 'testrole',
+                    'privilegeadministrate' => '1',
+                    'metadatadeleted' => '1',
+                    'submit' => 'submit'
+                ));
+
+        $this->dispatch('/admin/role/create');
+        $this->assertModule('admin');
+        $this->assertController('role');
+        $this->assertAction('create');
+        $this->assertRedirect();
+        $this->assertNotNull(Opus_Role::fetchByName('testrole'));
+    }
+
+    /**
+     * @depends testCreateAction
+     */
+    public function testUpdateAction() {
+        $role = Opus_Role::fetchByName('testrole');
+
+         $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'name' => 'testrole2',
+                    'privilegeclearance' => '1',
+                    'metadatapublished' => '1',
+                    'metadatadeleted' => '1',
+                    'submit' => 'submit'
+                ));
+
+        $this->dispatch('/admin/role/update/id/' . $role->getId());
+        $this->assertModule('admin');
+        $this->assertController('role');
+        $this->assertAction('update');
+        $this->assertRedirect();
+        $role = Opus_Role::fetchByName('testrole2');
+        $this->assertNotNull($role);
+        $this->assertNotNull($role->getId());
+        $this->assertEquals('testrole2', $role->getDisplayName());
+    }
+
+    /**
+     * @depends testUpdateAction
+     */
+    public function testDeleteAction() {
+        $role = Opus_Role::fetchByName('testrole2');
+        $this->assertNotNull($role);
+        $this->dispatch('/admin/role/delete/id/' . $role->getId());
+        $this->assertModule('admin');
+        $this->assertController('role');
+        $this->assertAction('delete');
+        $this->assertRedirect();
+    }
+
 }
 
 
