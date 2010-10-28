@@ -100,6 +100,62 @@ class Admin_DocumentsControllerTest extends ControllerTestCase {
         $this->assertAction('show');
     }
 
+    public function testDeleteAction() {
+        $this->dispatch('/admin/documents/delete/docId/24');
+        $this->assertResponseCode(200);
+        $this->assertModule('admin');
+        $this->assertController('documents');
+        $this->assertAction('delete');
+    }
+
+    public function testDeleteActionConfirmNo() {
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'id' => '24',
+                    'sureno' => 'sureno'
+                ));
+        $this->dispatch('/admin/documents/delete');
+        $this->assertModule('admin');
+        $this->assertController('documents');
+        $this->assertAction('delete');
+        $this->assertRedirect('/admin/documents/index');
+
+        $doc = new Opus_Document(24);
+        $this->assertNotEquals('deleted', $doc->getServerState());
+    }
+
+    /**
+     *
+     */
+    public function testDeleteActionConfirmYes() {
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'id' => '25',
+                    'sureyes' => 'sureyes'
+                ));
+        $this->dispatch('/admin/documents/delete');
+        $this->assertModule('admin');
+        $this->assertController('documents');
+        $this->assertAction('delete');
+        $this->assertRedirect('/admin/documents/index');
+
+        $doc = new Opus_Document(25);
+        $this->assertEquals('deleted', $doc->getServerState());
+    }
+
+    public function testPermanentDeleteAction() {
+    }
+
+    public function testPublishAction() {
+
+    }
+
+    public function testUnpublishAction() {
+
+    }
+
 }
 
 ?>
