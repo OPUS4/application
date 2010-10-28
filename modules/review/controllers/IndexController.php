@@ -113,6 +113,7 @@ class Review_IndexController extends Controller_Action {
         // redirect get requests to module entry page
         if (!$this->getRequest()->isPost()) {
             $this->_redirectTo('index');
+            return;
         }
 
         // if back button was pressed return to document selection

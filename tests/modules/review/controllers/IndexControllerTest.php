@@ -47,6 +47,29 @@ class Review_IndexControllerTest extends ControllerTestCase
         $this->assertController('index');
         $this->assertAction('index');
     }
+
+    public function testClearActionWithoutPost() {
+        $this->dispatch('/review/index/clear');
+        $this->assertController('index');
+        $this->assertAction('clear');
+        $this->assertRedirect('/review/index');
+    }
+
+    public function testClearActionWithOneDocument() {
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'selected[]' => '105',
+                    'firstname' => 'John',
+                    'lastname' => 'Doe',
+                    'buttonAccept' => 'buttonAccept',
+                ));
+        $this->dispatch('/review/index/clear');
+        $this->assertModule('review');
+        $this->assertController('index');
+        $this->assertAction('clear');
+        $this->assertRedirect('/review/index');
+    }
     
 }
 
