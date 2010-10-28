@@ -45,7 +45,7 @@ class Admin_FilemanagerController extends Controller_Action
      */
     public function indexAction()
     {
-        $this->view->title = $this->view->translate('admin_filemanager_index');
+        $this->view->title = 'admin_filemanager_index';
 
         $data = $this->_request->getPost();
 
