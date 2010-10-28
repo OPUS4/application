@@ -607,7 +607,9 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
                         $model->setLabel($file['original_file_name']);
                     }
 
-                    $model->addAccessPermission($guest_role);
+                    $privilege = $guest_role->addPrivilege();
+                    $privilege->setPrivilege('readFile');
+                    $privilege->setFile($model);
                 }
             }
 
@@ -774,6 +776,9 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
                }
             }
         }
+
+        echo "Storing privileges...\n";
+        $guest_role->store();
 
     }
 
