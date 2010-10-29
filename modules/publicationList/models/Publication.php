@@ -153,12 +153,11 @@ class PublicationList_Model_Publication {
                 $this->doiUrl = "http://".$config->publicationlist->doiresolver->url."/".$doc->getIdentifierDoi(0)->getValue();
             }
         }
-       /*
+
         if ($doc->getIdentifierUrl()) {
             $this->pdfUrl = $doc->getIdentifierUrl(0)->getValue();
         }
-        * 
-        */
+ 
 
         if (isset($config->deliver->url->prefix)) {
             if ($doc->getFile()) {
@@ -167,13 +166,6 @@ class PublicationList_Model_Publication {
                 $this->pdfUrlExternal = "http://".$hostname.$this->pdfUrl;
             }
         }
-        /*
-        if ($doc->getFile()) {
-            $file = $doc->getFile(0)->getPathName();
-            $this->pdfUrl = $baseUrl."/frontdoor/index/index/docId/".$doc->getId();
-
-        }
-         */
 
         foreach ($collections as $c) {
             $roleId = $c->getRoleId();
