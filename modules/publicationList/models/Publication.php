@@ -173,17 +173,16 @@ class PublicationList_Model_Publication {
             $this->pdfUrl = $baseUrl."/frontdoor/index/index/docId/".$doc->getId();
 
         }
+         */
+
         foreach ($collections as $c) {
             $roleId = $c->getRoleId();
             $role = new Opus_CollectionRole($roleId);
             if ($role->getName() === 'series') {
                 $this->series = $c->getName();
-                $this->pdfUrl = $baseUrl."/frontdoor/index/index/docId/".$doc->getId();
-                $this->pdfUrlExternal = "http://".$hostname.$this->pdfUrl."/theme/plain";
             }
         }
-         * 
-         */
+
   
         
         if ($doc->getIssue()) {
