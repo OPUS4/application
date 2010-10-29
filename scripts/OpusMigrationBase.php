@@ -94,7 +94,7 @@ class OpusMigrationBase {
     }
 
 
-    protected function importFiles($ipstart, $ipend) {
+    protected function importFiles($ipstart = null, $ipend = null) {
         echo "Importing files\n";
         $iprange = null;
         $rolename = null;
