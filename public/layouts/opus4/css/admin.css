@@ -294,3 +294,8 @@
 .adminContainer table.collections {
     margin: 2em 0;
 }
+
+.adminContainer #showdocmenu a {
+    padding: 0.2em 0.5em;
+    margin-right: 0.5em;
+}
