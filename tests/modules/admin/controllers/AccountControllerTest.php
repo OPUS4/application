@@ -191,9 +191,56 @@ class Admin_AccountControllerTest extends ControllerTestCase {
     }
 
     /**
+     * @depends testUpdateAction
+     */
+    public function testUpdateActionMissingInput() {
+        $account = new Opus_Account(null, null, 'wally2');
+        $id = $account->getId();
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'id' => $id,
+                    'roleguest' => '1',
+                    'roleadministrator' => '0',
+                    'submit' => 'submit'
+                ));
+
+        $this->dispatch('/admin/account/update');
+        $this->assertResponseCode(200);
+        $this->assertModule('admin');
+        $this->assertController('account');
+        $this->assertAction('update');
+    }
+
+    /**
+     * @depends testUpdateActionMissingInput
+     */
+    public function testUpdateActionChangePassword() {
+        $account = new Opus_Account(null, null, 'wally2');
+        $id = $account->getId();
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'id' => $id,
+                    'username' => 'wally2',
+                    'password' => 'newpassword',
+                    'confirmPassword' => 'newpassword',
+                    'roleguest' => '1',
+                    'roleadministrator' => '0',
+                    'submit' => 'submit'
+                ));
+
+        $this->dispatch('/admin/account/update');
+        $this->assertController('account');
+        $this->assertAction('update');
+        $this->assertRedirect();
+        $this->assertNotNull(new Opus_Account(null, null, 'wally2'));
+    }
+
+    /**
      * Tests deleting an account.
      *
-     * @depends testUpdateAction
+     * @depends testUpdateActionChangePassword
      */
     public function testDeleteAction() {
         $account = new Opus_Account(null, null, 'wally2');
