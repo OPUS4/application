@@ -219,7 +219,7 @@ class Review_Model_DocumentAdapter {
             'module'     => 'admin',
             'controller' => 'documents',
             'action'     => 'delete',
-            'id'         => $this->getDocId()
+            'docId'         => $this->getDocId()
         );
         return $this->view->url($url_delete, 'default', true);
     }
@@ -233,7 +233,7 @@ class Review_Model_DocumentAdapter {
             'module'     => 'admin',
             'controller' => 'documents',
             'action'     => 'permanentdelete',
-            'id'         => $this->getDocId()
+            'docId'         => $this->getDocId()
         );
         return $this->view->url($url_permadelete, 'default', true);
     }
