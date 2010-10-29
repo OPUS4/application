@@ -109,7 +109,7 @@ class ZIBMigration extends OpusMigrationBase {
             $logfile = '../workspace/tmp/importerrors.xml';
 
             // TODO: Add error handling to fopen()
-            $f = fopen($logfile, 'w');
+            //$f = fopen($logfile, 'w');
             $totalCount = 0;
             $successCount = 0;
             $failureCount = 0;
@@ -129,12 +129,13 @@ class ZIBMigration extends OpusMigrationBase {
                 } else if ($result['result'] === 'failure') {
                     echo "ERROR: " . $result['message'] . " for old ID " . $result['oldid'] . "\n";
                     $import->log("ERROR: " . $result['message'] . " for old ID " . $result['oldid'] . "\n");
-                    fputs($f, $result['entry'] . "\n");
+                    $import->log("ERROR: " .  $result['entry'] . "\n");
+                    //fputs($f, $result['entry'] . "\n");
                     $failureCount++;
                 }
                 flush();
             }
-            fclose($f);
+            //fclose($f);
             $import->finalize();
             echo "Imported " . $successCount . " documents successfully.\n";
             echo $failureCount . " documents have not been imported due to failures listed above. See $logfile for details about failed entries.\n";
@@ -150,12 +151,13 @@ class ZIBMigration extends OpusMigrationBase {
                while (false === file_exists($path)) {
                     $path = readline('Please type the path to your OPUS3 fulltext files (e.g. /usr/local/opus/htdocs/volltexte): ');
                 }
-                echo "Please specify the access rights for this fulltext path (Opus3 ranges)!\n";
-                $ipStart = readline('The IP-range starts at (e.g. 192.168.1.1): ');
-                $ipEnd = readline('The IP-range ends at (e.g. 192.168.1.10): ');
+                //echo "Please specify the access rights for this fulltext path (Opus3 ranges)!\n";
+                //$ipStart = readline('The IP-range starts at (e.g. 192.168.1.1): ');
+               // $ipEnd = readline('The IP-range ends at (e.g. 192.168.1.10): ');
                 $this->path = $path;
                 //$this->importFiles($ipStart, $ipEnd, $this->doclist);
-                $this->importFiles($ipStart, $ipEnd);
+                //$this->importFiles($ipStart, $ipEnd);
+                $this->importFiles();
                 $input = readline('Do you want to enter another fulltext path for files from another Opus3-area? (y/n) ');
                 $path = null;
             } while ($input === 'y');
@@ -206,9 +208,23 @@ class ZIBMigration extends OpusMigrationBase {
         if ($input === 'y' || $input === 'yes') {
             $html = file_get_html($url);
 
-            $role = Opus_CollectionRole::fetchByName('collections');
+            $role = new Opus_CollectionRole();
+            $role->setName('persons');
+            $role->setOaiName('persons');
+            $role->setPosition(12);
+            $role->setVisible(1);
+            $role->setVisibleBrowsingStart(1);
+            $role->setDisplayBrowsing('Name');
+            $role->setVisibleFrontdoor(1);
+            $role->setDisplayFrontdoor('Name');
+            $role->setVisibleOai(1);
+            $role->setDisplayOai('Name');
+            $role->store();
+
+            //$role = Opus_CollectionRole::fetchByName('collections');
             //$role->store();
-            $root = $role->getRootCollection();
+            $root = $role->addRootCollection()->setVisible(1);
+            $root->store();
 
             foreach($html->find('tr') as $tr) {
         	//if ($tr->find('td[class=linie]',0)) {
@@ -283,13 +299,14 @@ class ZIBMigration extends OpusMigrationBase {
     }
 
     // Import collections and series
-    public function import_bibtex($file = null) {
-        $input = readline('Do you want to import bibtex from file? (y/n) ');
-        //$input = 'y';
+    public function import_bibtex($file = null, $num = null) {
+        //$input = readline('Do you want to import bibtex from file? (y/n) ');
+        $input = 'y';
 
         if ($input === 'y' || $input === 'yes') {
         
-            $dedup_input = readline('Do you want to ignore deduplicated documents? (yes/no/new) ');
+            //$dedup_input = readline('Do you want to ignore deduplicated documents? (yes/no/new) ');
+            $dedup_input = 'yes';
 
             while (false === file_exists($file)) {
                 $file = readline('Please type the path to your Bibtex-File: ');
@@ -326,9 +343,10 @@ class ZIBMigration extends OpusMigrationBase {
                 $doctitle = null;
                 $doctitle = $import->getTitle($document);
                 $docid = $import->getId($document);
+
+                if (!(is_null($num)) && ($totalCount > $num)) { break; }
                 
                 if ($dedup_input === 'new') {
-
 
                     $doctitle = strtolower($doctitle);
                     $doctitle = preg_replace('/\s{2,}/',' ', $doctitle);
@@ -379,14 +397,16 @@ class ZIBMigration extends OpusMigrationBase {
                      }
 
 		}
-                
+                //echo $docid ."_" . $doctitle."\n";
                 if ($dedup_input === 'yes') {
                     $fp = fopen('../workspace/tmp/bibtexduplicates.map', 'r');
                     $duplicate = '';
                     while (! feof ($fp)) {
                         $line= fgets ($fp);
-                        if ($line === $docid ."_" . $doctitle) {
+                        
+                        if ($line === $docid ."_" . $doctitle."\n") {
                             $duplicate = 'y';
+                            //echo $line;
                         }
                     }
                     fclose($fp);
@@ -398,11 +418,10 @@ class ZIBMigration extends OpusMigrationBase {
                     
                 }
 
-
-                 
+               
                 $result = $import->import($document);
                 if ($result['result'] === 'success') {
-                    echo "Successfully imported Bibtex-Entry " . $result['oldid'] . "\n";
+                    echo "Successfully imported " . $result['newid'] . " Bibtex-Entry " . $result['oldid'] . " \n";
 		    //echo "Successfully imported Bibtex-Entry\n";
 		    array_push($opus_titles, $doctitle);
                     $successCount++;
@@ -424,23 +443,13 @@ class ZIBMigration extends OpusMigrationBase {
     public function fill_person_collections() {
         $input = readline('Do you want to fill person-collections with documents? (y/n) ');
 	if ($input === 'y' || $input === 'yes') {
-            $f = fopen('./persons.txt', 'w');
-          
-
 	    /* Mitarbeiter nutzen die Colelction 'collections' */
-            $role = Opus_CollectionRole::fetchByName('collections');
+            $role = Opus_CollectionRole::fetchByName('persons');
             $colls = Opus_Collection::fetchCollectionsByRoleId($role->getId());
 	    
 	    foreach (Opus_Document::getAllIds() as $id) {
 		//echo "Check Document ".$id."\n";
-		fputs($f, "Check Document ".$id."\n");
-		$doc = new Opus_Document($id);		
-		if ($doc->getTitleMain()) {
-			fputs($f, $doc->getTitleMain(0)->getValue()."\n");
-		}
-		foreach ($doc->getPersonAuthor() as $author) {
-			fputs($f, "Autor:#".$author->getLastName()."#,#".$author->getFirstName()."#\n");
-		}		
+		$doc = new Opus_Document($id);
 		foreach ($colls as $c) { 
 				
 			$names = explode(", ", $c->getName());
@@ -455,17 +464,12 @@ class ZIBMigration extends OpusMigrationBase {
 				//echo "Check:#".$names[1]."# and #".$firstname."#\n";
 				if (stripos($names[1], $firstname) === 0) {
 					$doc->addCollection($c);
-                                        echo "Add Document from ".$author->getLastName().",".$author->getFirstName()." to Mitarbeiter-Collection ".$c->getName()."\n";
-					fputs($f, "Add Document from ".$author->getLastName().",".$author->getFirstName()." to Mitarbeiter-Collection ".$c->getName()."\n");
+                                        $doc->store();
+                                        echo "Add Document " .$id. " from ".$author->getLastName().",".$author->getFirstName()." to Mitarbeiter-Collection ".$c->getName()."\n";
 				}
 			}
 		}
-		$doc->store();		
-		fputs($f, "\n");
 	   }	
-	   
-	   fclose($f);
-
 	}
    }
 	
@@ -492,8 +496,8 @@ class ZIBMigration extends OpusMigrationBase {
         $this->load_licences();
 
         // Load Institutes
-        $this->load_documents();
-        //$this->load_documents(1000, 1100);
+        //$this->load_documents();
+        $this->load_documents(1, 20);
 
         // Import files
         //$this->load_fulltext();
@@ -506,20 +510,27 @@ class ZIBMigration extends OpusMigrationBase {
         //$this->sign_publications();
 	
 	// Create Person-Collections
-        /*
-	$this->create_person_collections("http://www.zib.de/de/menschen/mitarbeiter.html");
+	$this->create_person_collections('http://www.zib.de/de/menschen/mitarbeiter.html');
 
 	// Create Project-Collections
 	//$this->create_project_collections("http://www.zib.de/de/projekte/aktuelle-projekte.html");
 	//$this->create_project_collections("http://www.zib.de/de/projekte/aktuelle-projekte/browse/1.html");
 
 	// Import Bibtex-Files
-        $this->import_bibtex("../../bibtex/Numerische.bib.xml");
-	$this->import_bibtex("../../bibtex/Optimierung.bib.xml");
-        $this->import_bibtex("../../bibtex/Parallele.bib.xml");
-	$this->import_bibtex("../../bibtex/Visualisierung.bib.xml");
-         * 
-         */
+       
+        $this->import_bibtex('../../bibtex/Numerische.bib.xml', 20);
+	$this->import_bibtex('../../bibtex/Optimierung.bib.xml', 20);
+        $this->import_bibtex('../../bibtex/Parallele.bib.xml', 20);
+	$this->import_bibtex('../../bibtex/Visualisierung.bib.xml', 20);
+
+         /*
+        $this->import_bibtex('../../bibtex/Numerische.bib.xml');
+	$this->import_bibtex('../../bibtex/Optimierung.bib.xml');
+        $this->import_bibtex('../../bibtex/Parallele.bib.xml');
+	$this->import_bibtex('../../bibtex/Visualisierung.bib.xml');
+          *
+          */
+  
 
 	// Fill Person-Colelctiosn
         $this->fill_person_collections();
