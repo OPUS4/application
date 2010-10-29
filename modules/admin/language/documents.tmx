@@ -284,6 +284,16 @@
         <seg>Es wurde kein Dokument gefunden.</seg>
       </tuv>
     </tu>
+
+    <tu tuid="admin_documents_open_frontdoor">
+      <tuv xml:lang="en">
+        <seg>Open in Frontdoor</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>In Frontdoor zeigen</seg>
+      </tuv>
+    </tu>
+
   </body>
   
 </tmx>
