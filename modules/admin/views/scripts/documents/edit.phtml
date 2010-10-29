@@ -44,7 +44,7 @@
         <ul>
             <li>
                 <?PHP if($this->showFilemanager === true) : ?>
-                    <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'filemanager', 'action' => 'index', 'docId' => $this->docId), null, true); ?>"><?= $this->translate('admin_filemanager_index'); ?></a>
+                    <a href="<?= $this->docHelper->getUrlFileManager() ?>"><?= $this->translate('admin_filemanager_index'); ?></a>
                 <?PHP else : ?>
                     <?= $this->translate('no_file_according_to_dtd') ?>
                 <?PHP endif; ?>
@@ -52,15 +52,15 @@
             <li><a href="#collections"><?= $this->translate('admin_documents_label_collections') ?></a></li>
         </ul>
         <ul>
-            <?php if ($this->actions === 'publish') : ?>
-            <li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'delete', 'docId' => $this->docId), null, true); ?>"><?= $this->translate('admin_doc_delete'); ?></a></li>
-            <li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'publish', 'docId' => $this->docId), null, true); ?>"><?= $this->translate('admin_documents_publish'); ?></a></li>
-            <?php elseif ($this->actions === 'unpublish') : ?>
-            <li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'delete', 'docId' => $this->docId), null, true); ?>"><?= $this->translate('admin_doc_delete'); ?></a></li>
-            <li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'unpublish', 'docId' => $this->docId), null, true); ?>"><?= $this->translate('admin_documents_unpublish'); ?></a></li>
-            <?php elseif ($this->actions === 'undelete') : ?>
-            <li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'publish', 'docId' => $this->docId), null, true); ?>"><?= $this->translate('admin_doc_undelete'); ?></a></li>
-            <li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'permanentdelete', 'docId' => $this->docId), null, true); ?>"><?= $this->translate('admin_doc_delete_permanent'); ?></a></li>
+            <?php if ($this->docHelper->getDocState() === 'unpublished') : ?>
+            <li><a href="<?= $this->docHelper->getUrlDelete() ?>"><?= $this->translate('admin_doc_delete'); ?></a></li>
+            <li><a href="<?= $this->docHelper->getUrlPublish() ?>"><?= $this->translate('admin_documents_publish'); ?></a></li>
+            <?php elseif ($this->docHelper->getDocState() === 'published') : ?>
+            <li><a href="<?= $this->docHelper->getUrlDelete() ?>"><?= $this->translate('admin_doc_delete'); ?></a></li>
+            <li><a href="<?= $this->docHelper->getUrlUnpublish() ?>"><?= $this->translate('admin_documents_unpublish'); ?></a></li>
+            <?php elseif ($this->docHelper->getDocState() === 'deleted') : ?>
+            <li><a href="<?= $this->docHelper->getUrlPublish() ?>"><?= $this->translate('admin_doc_undelete'); ?></a></li>
+            <li><a href="<?= $this->docHelper->getUrlPermanentDelete() ?>"><?= $this->translate('admin_doc_delete_permanent'); ?></a></li>
             <?php endif; ?>
         </ul>
     </div>

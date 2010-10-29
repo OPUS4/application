@@ -31,13 +31,32 @@
  * @version     $Id$
  */
 ?>
-
 <div class="adminContainer">
 
     <div class="breadcrumbsContainer">
-        <?= $this->navigation()->breadcrumbs() ?>
+        <?= $this->navigation()->breadcrumbs() ?> (<?= $this->objectId ?>)
     </div>
 
-    <?= $this->showModel($this->entry); ?>
+    <?PHP $doc = new Review_Model_DocumentAdapter($this, $this->objectId); ?>
+
+    <div id="showdocmenu" style="padding: 0.5em 1em">
+        <a href="<?= $this->docHelper->getUrlFrontdoor() ?>"><?= $this->translate('admin_documents_open_frontdoor') ?></a>
+        <a href="<?= $this->docHelper->getUrlEdit() ?>"><?= $this->translate('docs_edit') ?></a>
+        <?PHP if ($this->docHelper->hasFiles()) : ?>
+        <a href="<?= $this->docHelper->getUrlFileManager() ?>"><?= $this->translate('admin_filemanager_index') ?></a>
+        <?PHP endif; ?>
+        <?php if ($this->docHelper->getDocState() === 'unpublished') : ?>
+        <a href="<?= $this->docHelper->getUrlDelete() ?>"><?= $this->translate('admin_doc_delete'); ?></a>
+        <a href="<?= $this->docHelper->getUrlPublish() ?>"><?= $this->translate('admin_documents_publish'); ?></a>
+        <?php elseif ($this->docHelper->getDocState() === 'published') : ?>
+        <a href="<?= $this->docHelper->getUrlDelete() ?>"><?= $this->translate('admin_doc_delete'); ?></a>
+        <a href="<?= $this->docHelper->getUrlUnpublish() ?>"><?= $this->translate('admin_documents_unpublish'); ?></a>
+        <?php elseif ($this->docHelper->getDocState() === 'deleted') : ?>
+        <a href="<?= $this->docHelper->getUrlPublish() ?>"><?= $this->translate('admin_doc_undelete'); ?></a>
+        <a href="<?= $this->docHelper->getUrlPermanentDelete() ?>"><?= $this->translate('admin_doc_delete_permanent'); ?></a>
+        <?php endif; ?>
+    </div>
+
+    <?= $this->showModel($this->entry) ?>
 
 </div>
