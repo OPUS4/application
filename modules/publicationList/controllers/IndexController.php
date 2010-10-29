@@ -65,14 +65,12 @@ class PublicationList_IndexController extends Controller_Action {
         $config = Zend_Registry::get('Zend_Config');
         $log = Zend_Registry::get('Zend_Log');
 
-        $log->debug('XXX');
-
         $coll_id = $this->getRequest()->getParam('id');
         $coll = new Opus_Collection($coll_id);
         $coll_name = $coll->getName();
 
-        if ($coll_name === 'Jahresbericht') { $this->renderer = 'results_jahresbericht'; }
-
+	if ($coll_name === 'Jahresbericht') { $this->renderer = 'annual'; }
+	
         $doc_ids = $coll->getDocumentIds();
         
         $publicationSite = new PublicationList_Model_PublicationSite();
@@ -83,18 +81,37 @@ class PublicationList_IndexController extends Controller_Action {
 
         foreach ($doc_ids as $id) {
             $publication = null;
-             if (isset($config->publicationlist->external->baseurl)) {
-                 if ($this->getRequest()->getParam("lang") === 'eng') {
-                    $publication = new PublicationList_Model_Publication($id, $config->publicationlist->external->baseurl->eng);
-                    $this->view->name = $publicationSite->getNameEnglish();
+
+            if ($this->getRequest()->getParam("theme") === 'local') {
+                 if (isset($config->publicationlist->local->baseurl)) {
+                     if ($this->getRequest()->getParam("lang") === 'eng') {
+                        $publication = new PublicationList_Model_Publication($id, $config->publicationlist->local->baseurl->eng);
+                        $this->view->name = $publicationSite->getNameEnglish();
+                     }
+                     else {
+                        $publication = new PublicationList_Model_Publication($id, $config->publicationlist->local->baseurl->de);
+                     }
                  }
                  else {
-                    $publication = new PublicationList_Model_Publication($id, $config->publicationlist->external->baseurl->de);
+                     $publication = new PublicationList_Model_Publication($id);
                  }
-             }
-             else {
-                 $publication = new PublicationList_Model_Publication($id);
-             }
+            }
+            else {
+                 if (isset($config->publicationlist->external->baseurl)) {
+                     if ($this->getRequest()->getParam("lang") === 'eng') {
+                        $publication = new PublicationList_Model_Publication($id, $config->publicationlist->external->baseurl->eng);
+                        $this->view->name = $publicationSite->getNameEnglish();
+                     }
+                     else {
+                        $publication = new PublicationList_Model_Publication($id, $config->publicationlist->external->baseurl->de);
+                     }
+                 }
+                 else {
+                     $publication = new PublicationList_Model_Publication($id);
+                 }
+            }
+
+
             
             $year = $publication->getPublishedYear();
             $inListe = 0;
@@ -113,6 +130,7 @@ class PublicationList_IndexController extends Controller_Action {
             if ($this->getRequest()->getParam("theme") === 'plain') {
                 $publication->setBibtexUrl($publication->getBibtexUrlExternal());
                 $publication->setRisUrl($publication->getRisUrlExternal());
+                $publication->setPdfUrl($publication->getPdfUrlExternal());
 
                 //$publication->setImageAbstract($publication->getImageAbstractExternal());
                 $publication->setImageBibtex($publication->getImageBibtexExternal());
@@ -126,6 +144,24 @@ class PublicationList_IndexController extends Controller_Action {
                     }
                 }
             }
+
+            if ($this->getRequest()->getParam("theme") === 'local') {
+                $publication->setBibtexUrl($publication->getBibtexUrlExternal());
+                $publication->setRisUrl($publication->getRisUrlExternal());
+
+                //$publication->setImageAbstract($publication->getImageAbstractExternal());
+                $publication->setImageBibtex($publication->getImageBibtexLocal());
+                $publication->setImageDoi($publication->getImageDoiLocal());
+                $publication->setImagePdf($publication->getImagePdfLocal());
+                $publication->setImageRis($publication->getImageRisLocal());
+
+                if(!count($publication->getAuthors()) == 0) {
+                    foreach ($publication->getAuthors() as $a) {
+                        $a->setUrl($a->getUrlLocal());
+                    }
+                }
+            }
+
         }
         $publicationSite->orderSingleLists();
 

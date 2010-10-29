@@ -31,47 +31,36 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
-class PublicationList_Model_Author {
-
-    private $firstName;
-    private $lastName;
-    private $url;
-    private $urlExternal;
-
-    public function __construct($firstName, $lastName) {
-        $this->firstName = $firstName;
-        $this->lastName = $lastName;
-    }
-
-    /* Setter-Methoden */
-
-    public function setUrl($string) {
-        $this->url = $string;
-    }
-
-    public function setUrlExternal($string) {
-        $this->urlExternal = $string;
-    }
-
-    /* Getter-Methoden */
-
-    public function getFirstname() {
-        return $this->firstName;
-    }
-
-    public function getLastname() {
-        return $this->lastName;
-    }
-
-
-    public function getUrl() {
-        return $this->url;
-    }
-
-    public function getUrlExternal() {
-        return $this->urlExternal;
-    }
-
-}
 ?>
+
+
+<?php $cellCounter=0 ?>
+<?php if(!is_null($publication->getEnrichmentType())) : ?>
+        <?= $cellCounter === 0 ? '' : ','; ?>
+        <?= htmlspecialchars($publication->getEnrichmentType()) ?>
+        <?php $cellCounter++ ?>
+<?php endif ?>
+
+<?php if(!is_null($publication->getContributingCorporation())) : ?>
+        <?= $cellCounter === 0 ? '' : ','; ?>
+        <?= htmlspecialchars($publication->getContributingCorporation()) ?>
+        <?php $cellCounter++ ?>
+<?php endif ?>
+
+<?php if(!is_null($publication->getEnrichmentAddress())) : ?>
+        <?= $cellCounter === 0 ? '' : ','; ?>
+        <?= htmlspecialchars($publication->getEnrichmentAddress()) ?>
+        <?php $cellCounter++ ?>
+<?php endif ?>
+
+<?php if(!is_null($publication->getEnrichmentMonth())) : ?>
+        <?= $cellCounter === 0 ? '' : ','; ?>
+        <?= htmlspecialchars($publication->getEnrichmentMonth()) ?>
+        <?php $cellCounter++ ?>
+<?php endif ?>
+
+<?php if(!is_null($publication->getPublishedYear())) : ?>
+        <?= $cellCounter === 0 ? '' : ','; ?>
+        <?= htmlspecialchars($publication->getPublishedYear()) ?>
+        <?php $cellCounter++ ?>
+<?php endif ?>

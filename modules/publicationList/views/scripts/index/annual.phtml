@@ -40,14 +40,16 @@
 <?php foreach($this->results as $result) :?>
 	<?php foreach($result->getPublicationList() as $publication) :?>
 	<tr class="<?= $rowCounter++ % 2 === 0 ? 'even' : 'odd'; ?>">
-		
-		<!-- Spalte TitleMain -->
-		<td class="second" valign="top">
+        	<td class="second" valign="top">
 			<?php if(!is_null($publication->getTitleMain())) : ?>
 				<b><?= htmlspecialchars($publication->getTitleMain()) ?></b>
 			<?php endif ?>
 		</td>
-		
+
+                <td class="third" valign="top">
+                    Konrad-Zuse-Zentrum für Informationstechnik Berlin (ZIB)
+                </td>
+
 
 		<td class="fourth" valign="top">
 			<?php if(!is_null($publication->getBibtexUrl())) : ?>
