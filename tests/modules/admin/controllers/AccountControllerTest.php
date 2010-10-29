@@ -88,6 +88,14 @@ class Admin_AccountControllerTest extends ControllerTestCase {
         $this->assertAction('edit');
     }
 
+    public function testEditActionWithoutId() {
+        $this->dispatch('/admin/account/edit');
+        $this->assertModule('admin');
+        $this->assertController('account');
+        $this->assertAction('edit');
+        $this->assertRedirect('/admin/account/index');
+    }
+
     /**
      * Tests creating a new account.
      *
@@ -106,6 +114,7 @@ class Admin_AccountControllerTest extends ControllerTestCase {
                 ));
 
         $this->dispatch('/admin/account/create');
+        $this->assertModule('admin');
         $this->assertController('account');
         $this->assertAction('create');
         $this->assertRedirect();
@@ -120,9 +129,27 @@ class Admin_AccountControllerTest extends ControllerTestCase {
                 ));
 
         $this->dispatch('/admin/account/create');
+        $this->assertModule('admin');
         $this->assertController('account');
         $this->assertAction('create');
         $this->assertRedirect('/admin/account/index');
+    }
+
+    public function testCreateActionMissingInput() {
+         $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'password' => 'dummypassword',
+                    'confirmPassword' => 'dummypassword',
+                    'roleguest' => '1',
+                    'roleadministrator' => '0',
+                    'submit' => 'submit'
+                ));
+        $this->dispatch('/admin/account/create');
+        $this->assertResponseCode(200);
+        $this->assertModule('admin');
+        $this->assertController('account');
+        $this->assertAction('create');
     }
 
     /**
@@ -148,6 +175,19 @@ class Admin_AccountControllerTest extends ControllerTestCase {
         $this->assertAction('update');
         $this->assertRedirect();
         $this->assertNotNull(new Opus_Account(null, null, 'wally2'));
+    }
+
+    public function testUpdateActionCancel() {
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'cancel' => 'cancel'
+                ));
+        $this->dispatch('/admin/account/update');
+        $this->assertModule('admin');
+        $this->assertController('account');
+        $this->assertAction('update');
+        $this->assertRedirect('/admin/account/index');
     }
 
     /**
