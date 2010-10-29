@@ -34,9 +34,15 @@
 
 <div class="adminContainer">
 
-    <h2><?= $this->translate('review_index_title')?>
-        <span class="info">(<?= $this->documentCount ?>
-            <?= $this->translate('review_docs_found_short') ?>)</span></h2>
+    <div class="breadcrumbsContainer">
+    <?PHP if (true === Opus_Security_Realm::getInstance()->check('administrate')) : ?>
+        <?= $this->navigation()->breadcrumbs() ?>
+    <?PHP else : ?>
+        <?= $this->translate('review_index_title')?>
+    <?PHP endif; ?>
+    <span class="info">(<?= $this->documentCount ?>
+        <?= $this->translate('review_docs_found_short') ?>)</span>
+    </div>
 
     <?PHP if (isset($this->error)) : ?>
     <div class="error">
