@@ -145,7 +145,35 @@ class Admin_DocumentsControllerTest extends ControllerTestCase {
         $this->assertEquals('deleted', $doc->getServerState());
     }
 
+    /**
+     * @depends testDeleteActionConfirmYes
+     */
     public function testPermanentDeleteAction() {
+        $this->dispatch('/admin/documents/permanentdelete/docId/25');
+        $this->assertResponseCode(200);
+        $this->assertModule('admin');
+        $this->assertController('documents');
+        $this->assertAction('permanentdelete');
+    }
+
+    /**
+     * @depends testPermanentDeleteAction
+     */
+    public function testPermanentDeleteActionConfirmNo() {
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'id' => '24',
+                    'sureno' => 'sureno'
+                ));
+        $this->dispatch('/admin/documents/permanentdelete');
+        $this->assertModule('admin');
+        $this->assertController('documents');
+        $this->assertAction('permanentdelete');
+        $this->assertRedirect('/admin/documents/index');
+
+        $doc = new Opus_Document(25);
+        $this->assertEquals('deleted', $doc->getServerState());
     }
 
     public function testPublishAction() {
