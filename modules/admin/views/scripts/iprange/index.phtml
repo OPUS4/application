@@ -46,19 +46,16 @@
 
 <table>
     <? foreach($this->ipRanges as $id => $ipRange) : ?>
-    <form action="<?= $this->url(array('action' => 'index')) ?>" class="crud" method="post">
     <tr>
         <td>
             <div><a href="<?= $this->url(array('action' => 'show', 'id' => $id)) ?>"><?= htmlspecialchars($ipRange->getName()) ?></a></div>
             <div><?= $ipRange->getStartingip() ?> - <?= $ipRange->getEndingip() ?></div>
         </td>
         <td>
-            <input type="submit" name="actionEdit" value="<?= $this->translate('admin_form_action_edit') ?>" />
-            <input type="submit" name="actionDelete" value="Delete" />
-            <input type="hidden" name="id" value="<?=$id?>" />
+            <a href="<?= $this->url(array('action' => 'edit', 'id' => $id)) ?>"><?= $this->translate('admin_form_action_edit') ?></a>
+            <a href="<?= $this->url(array('action' => 'delete', 'id' => $id)) ?>"><?= $this->translate('admin_form_action_delete') ?></a>
         </td>
     </tr>
-    </form>
     <? endforeach; ?>
 </table>
 

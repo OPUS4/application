@@ -45,19 +45,6 @@ class Admin_IprangeController extends Controller_Action {
      * Show table with all defined IP ranges and process requests.
      */
     public function indexAction() {
-        if ($this->getRequest()->isPost()) {
-            $request = $this->getRequest();
-            $buttonEdit = $request->getPost('actionEdit');
-            $buttonDelete = $request->getPost('actionDelete');
-
-            if (isset($buttonEdit)) {
-                $this->_forwardToAction('edit');
-            }
-            else if (isset($buttonDelete)) {
-                $this->_forwardToAction('delete');
-            }
-        }
-
         $this->view->title = $this->view->translate('admin_iprange_index');
 
         $ipRanges = Opus_Iprange::getAll();
