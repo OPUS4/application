@@ -75,7 +75,7 @@ class Opus3FileImport {
     {
         
         $doc = new Opus_Document($id);
-        $opusId = $doc->getIdentifierOpus3(0)->getValue();
+        $opus3Id = $doc->getIdentifierOpus3(0)->getValue();
      	// Initialize path
     	$this->_tmpPath = '';
 
@@ -83,7 +83,7 @@ class Opus3FileImport {
         //echo "Before Num Collections:".count($doc->getCollection())."\n";
 
         // Search the ID-directory in fulltext tree
-        $this->searchDir($this->_path, $opusId);
+        $this->searchDir($this->_path, $opus3Id);
         //echo "Found Files for $id in $this->_tmpPath \n";
         $files = $this->getFiles($this->_tmpPath);
 
