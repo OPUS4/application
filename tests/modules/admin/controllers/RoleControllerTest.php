@@ -98,6 +98,39 @@ class Admin_RoleControllerTest extends ControllerTestCase {
         $this->assertNotNull(Opus_Role::fetchByName('testrole'));
     }
 
+    public function testCreateActionCancel() {
+         $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'name' => 'testrole',
+                    'privilegeadministrate' => '1',
+                    'metadatadeleted' => '1',
+                    'cancel' => 'cancel'
+                ));
+
+        $this->dispatch('/admin/role/create');
+        $this->assertModule('admin');
+        $this->assertController('role');
+        $this->assertAction('create');
+        $this->assertRedirect('/admin/role/index');
+    }
+
+    public function testCreateActionMissingInput() {
+         $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'privilegeadministrate' => '1',
+                    'metadatadeleted' => '1',
+                    'submit' => 'submit'
+                ));
+
+        $this->dispatch('/admin/role/create');
+        $this->assertModule('admin');
+        $this->assertController('role');
+        $this->assertAction('create');
+        $this->assertResponseCode(200);
+    }
+
     /**
      * @depends testCreateAction
      */
