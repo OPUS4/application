@@ -127,7 +127,7 @@ class ZIBXMLImport {
         // Use the document as attribute
         $this->document = $document;
 
-       //  echo "BEFORE:".$this->completeXML->saveXML($this->document)."\n";
+        //echo "BEFORE:".$this->completeXML->saveXML($this->document)."\n";
 
         $doc = null;
 
@@ -150,7 +150,7 @@ class ZIBXMLImport {
         $series = $document->getElementsByTagName('OldSeries');
         $newseries = array();
 
-        $collections = null;
+        $collections = array();
         $collections = $document->getElementsByTagName('OldCollections');
         $collectionValues = array();
 
@@ -199,14 +199,16 @@ class ZIBXMLImport {
            }
         }
 
-        /* Special-ZIB: Collections and Series are the same */
         if (count($collections) > 0) {
-           foreach ($collections as $c) {
-               //echo "Collection Found\n";
+           while ($collections->length > 0) {
+               $c=$collections->Item(0);
+               //echo "Collection Found: ". $c->getAttribute('Value')."\n";
                $mappingFile = '../workspace/tmp/collections.map';
                if (!is_null( $this->getMapping($mappingFile, $c->getAttribute('Value')))) {
+                    //echo "Collection resolved\n";
                     array_push($collectionValues, $this->getMapping($mappingFile, $c->getAttribute('Value')));
                }
+               //echo "Collection remove\n";
                $this->document->removeChild($c);
            }
         }
@@ -257,7 +259,7 @@ class ZIBXMLImport {
 
 
         try {
-            
+            //echo "AFTER:".$this->completeXML->saveXML($this->document)."\n";
             // Dummyobject, does not need any content, because only one node is transformed
             $doc = Opus_Document::fromXml('<Opus>' . $this->completeXML->saveXML($this->document) . '</Opus>');
 
@@ -314,7 +316,7 @@ class ZIBXMLImport {
                 }
             }
              // store the document
-            //echo "AFTER:".$this->completeXML->saveXML($this->document)."\n";
+           
             $doc->store();
 
             $imported['result'] = 'success';
@@ -374,7 +376,6 @@ class ZIBXMLImport {
         //echo "addDocumentToCollectionNumber:".$role_name.":".$number."\n";
         $role = Opus_CollectionRole::fetchByName($role_name);
         $colls = Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $number);
-
 
         if (count($colls) > 0) {
             foreach ($colls as $c) {

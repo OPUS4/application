@@ -52,7 +52,7 @@ class ZIBCollectionsImport {
          * - Studienabschlussarbeiten
          * - Dissertationen
          */
-        //$collRole = Opus_CollectionRole::fetchByName('collections');
+        $collRole = Opus_CollectionRole::fetchByName('collections');
         $seriesRole = Opus_CollectionRole::fetchByName('series');
        
         $doclist = $data->getElementsByTagName('table_data');
@@ -61,7 +61,7 @@ class ZIBCollectionsImport {
                 $this->importSeries($document, $seriesRole);
             }
             if ($document->getAttribute('name') === 'collections') {
-                $this->importCollections($document, $seriesRole);
+                $this->importCollections($document, $collRole);
             }
 	}
     }
@@ -125,8 +125,8 @@ class ZIBCollectionsImport {
                 echo ".";
                 // ZIB-Hack:
                 if ($class['coll_name'] === 'ZIB') { continue; }
-                if ($class['coll_name'] === 'Dissertationen') { $class['coll_name'] = 'Dissertation'; }
-                if ($class['coll_name'] === 'Studienabschlussarbeiten') { $class['coll_name'] = 'Studienabschlussarbeit'; }
+                //if ($class['coll_name'] === 'Dissertationen') { $class['coll_name'] = 'Dissertation'; }
+                //if ($class['coll_name'] === 'Studienabschlussarbeiten') { $class['coll_name'] = 'Studienabschlussarbeit'; }
                 $root = $role->getRootCollection();
                 $coll = $root->addLastChild();
                 $coll->setVisible(1);

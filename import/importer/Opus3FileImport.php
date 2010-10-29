@@ -78,11 +78,12 @@ class Opus3FileImport {
      	// Initialize path
     	$this->_tmpPath = '';
 
-        echo "Num Collections:".count($doc->getCollection())."\n";
+        $doc->getCollection();
+        //echo "Before Num Collections:".count($doc->getCollection())."\n";
 
         // Search the ID-directory in fulltext tree
         $this->searchDir($this->_path, $id);
-        echo "Found Files for $id in $this->_tmpPath \n";
+        //echo "Found Files for $id in $this->_tmpPath \n";
         $files = $this->getFiles($this->_tmpPath);
 
         //echo "Count:".count($files)."\n";
@@ -107,7 +108,7 @@ class Opus3FileImport {
         
         if (true === isset($files[0])) {
             foreach ($files as $filename) {
-                echo $filename."\n";
+                //echo $filename."\n";
                 //$finfo = new finfo(FILEINFO_MIME, $this->_magicPath);
                 //$mimeType = $finfo->file($filename);
             
@@ -159,7 +160,7 @@ class Opus3FileImport {
             $doc->store();
         }
 
-        echo "Num Collections:".count($doc->getCollection())."\n";
+        //echo "After Num Collections:".count($doc->getCollection())."\n";
         
         // return number of imported files
         return $number;

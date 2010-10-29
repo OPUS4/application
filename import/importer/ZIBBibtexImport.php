@@ -223,16 +223,18 @@ class ZIBBibtexImport {
 		
                 if (strrpos($c->getName(), $filename) !== false) {
                     $doc->addCollection($c);
+                    $doc->store();
                     //echo "Add Document  to Abteilungs-Collection ".$c->getName()."\n";
                 }
             }
 
             // store the document
-            $doc->store();
+            
 
 	    $imported['result'] = 'success';
             #$imported['entry'] = $this->completeXML->saveXML($this->document);
             #$imported['document'] = $doc;
+            $imported['newid'] = $doc->getId();
             $imported['oldid'] = $oldid;
         } catch (Exception $e) {
             $imported['result'] = 'failure';

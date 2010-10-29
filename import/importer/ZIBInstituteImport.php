@@ -161,6 +161,7 @@ class ZIBInstituteImport {
             echo ".";
             // ZIB-Hack:
             if ($class['name'] === 'High Performance Computing') { $class['name'] = 'Parallele und Verteilte Algorithmen'; }
+            if ($class['name'] === 'KOBV') { fputs($fp, $class['nr'] . ' 15994' . "\n"); continue; }
             $root = $role->getRootCollection();
 	    $coll = $root->addLastChild();
             $coll->setName($class['name']);
