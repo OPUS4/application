@@ -95,11 +95,8 @@
                 <span class="pubDate"><?= $document->getPublishedDate() ?></span>)
             </td>
             <td class="actions">
-                <form action="<?= $document->getUrlDelete() ?>" method="post" class="crud">
-                    <input type='button' onClick="javascript:location.href='<?= $document->getUrlEdit() ?>'" value='<?= $this->translate('docs_edit') ?>' class="crud">
-                    <input type="hidden" name="id" value="<?= $document->getDocId() ?>" />
-                    <input type="submit" value="<?= $this->translate(($document->isDeleted()) ? 'docs_permadelete' : 'docs_delete') ?>" />
-                </form>
+                <a href="<?= $document->getUrlEdit() ?>"><?= $this->translate('docs_edit') ?></a>
+                <a href="<?= $document->getUrlDelete() ?>"><?= $this->translate(($document->isDeleted()) ? 'docs_permadelete' : 'docs_delete') ?></a>
             </td>
         </tr>
         <?PHP endforeach; ?>
