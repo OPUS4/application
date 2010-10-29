@@ -82,6 +82,7 @@ class Controller_CRUDAction extends Controller_Action {
         if (!empty($id) && is_numeric($id)) {
             $model = new $this->_modelclass($id);
             $this->view->entry = $model->toArray();
+            $this->view->objectId = $id;
             return $model;
         }
         else {
