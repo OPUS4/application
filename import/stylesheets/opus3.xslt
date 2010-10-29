@@ -60,177 +60,472 @@
     -->
     <xsl:template match="table_data/row/field[@xsi:nil='true']" priority="1" />
 
-
-
+    <!-- All Fields of table 'opus' -->
     <xsl:template match="table_data[@name='opus']/row">
         <xsl:element name="Opus_Document">
-            <xsl:variable name="OriginalID"><xsl:value-of select="field[@name='source_opus']" /></xsl:variable>
-            <xsl:attribute name="Type">
-                <xsl:choose>
-                    <xsl:when test="field[@name='type']='1'">
-                        <xsl:text>misc</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='2'">
-                        <xsl:text>article</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='4'">
-                        <xsl:text>book</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='5'">
-                        <xsl:text>bookpart</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='7'">
-                        <xsl:text>masterthesis</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='8'">
-                        <xsl:text>phdthesis</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='9'">
-                        <xsl:text>misc</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='11'">
-                        <xsl:text>misc</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='15'">
-                        <xsl:text>conferenceobject</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='16'">
-                        <xsl:text>conferenceobject</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='17'">
-                        <xsl:text>workingpaper</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='19'">
-                        <xsl:text>misc</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='20'">
-                        <xsl:text>report</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='22'">
-                        <xsl:text>preprint</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='23'">
-                        <xsl:text>misc</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='24'">
-                        <xsl:text>habilitation</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='25'">
-                        <xsl:text>studythesis</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='26'">
-                        <xsl:text>lecture</xsl:text>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:text>misc</xsl:text>
-                    </xsl:otherwise>
-                </xsl:choose>
+            <!-- Variables for internal use -->
+            <xsl:variable name="OriginalID">
+                <xsl:value-of select="field[@name='source_opus']" />
+            </xsl:variable>
+            <!-- Ist fuer das ZIB nicht relevant
+            <xsl:variable name="date_accepted">
+                <xsl:value-of select="/mysqldump/database/table_data[@name='opus_diss']/row[field[@name='source_opus']=$OriginalID]/field[@name='date_accepted']" />
+            </xsl:variable>
+            -->
+            <xsl:variable name="date_creation">
+                <xsl:value-of select="field[@name='date_creation']" />
+            </xsl:variable>
+            <xsl:variable name="date_modified">
+                <xsl:value-of select="field[@name='date_modified']" />
+            </xsl:variable>
+            <!-- Ist fuer das ZIB nicht relevant
+            <xsl:variable name="date_validd">
+                <xsl:value-of select="field[@name='date_valid']" />
+            </xsl:variable>
+            -->
+
+            <!-- CompletedDate -->
+            <!--CompletedDate is left out, because Opus3 only stores the year -->
+
+            <!-- CompletedYear -->
+            <xsl:attribute name="CompletedYear">
+                <xsl:value-of select="field[@name='date_year']" />
             </xsl:attribute>
-            
-            <!-- All publications in the OPUS table are published, so we can set this statically -->
-            <!--<xsl:attribute name="ServerState">
-                <xsl:text>published</xsl:text>
-            </xsl:attribute>-->
-            
-            <!-- Language might be a multivalue field in Opus4; in Opus3 there can be only one language -->
-            <!-- if the document type defines it as multivalue, there will be problems importing -->
-            <xsl:attribute name="Language">
-                <xsl:call-template name="mapLanguage"><xsl:with-param name="lang"><xsl:value-of select="field[@name='language']" /></xsl:with-param></xsl:call-template>
-            </xsl:attribute>
-            <xsl:if test="string-length(field[@name='creator_corporate'])>0">
+
+            <!-- ContributingCorporation -->
+            <xsl:if test="string-length(field[@name='contributors_corporate']) > 0">
+                <xsl:attribute name="ContributingCorporation">
+                    <xsl:value-of select="field[@name='contributors_corporate']" />
+                </xsl:attribute>
+            </xsl:if>
+
+            <!-- CreatingCorporation -->
+            <xsl:if test="string-length(field[@name='creator_corporate']) > 0">
                 <xsl:attribute name="CreatingCorporation">
                     <xsl:value-of select="field[@name='creator_corporate']" />
                 </xsl:attribute>
             </xsl:if>
-            <xsl:if test="string-length(field[@name='contributors_corporate'])>0">
-                <xsl:attribute name="ContributingCorporation">
-                    <xsl:value-of select="field[@name='contributors_corporate']" />
-                 </xsl:attribute>
-            </xsl:if>
-            <!-- Source holds source_title? -->
-            <xsl:if test="string-length(field[@name='source_title'])>0">
-                <xsl:attribute name="Source">
-                    <xsl:value-of select="field[@name='source_title']" />
+
+            <!-- ThesisDateAccepted -->
+            <!-- Ist fuer das ZIB nicht relevant -->
+            <!--
+            <xsl:if test="$date_accepted >0">
+                <xsl:attribute name="ThesisDateAccepted">
+                    <xsl:value-of select="php:function('date', 'd.m.Y', $date_accepted)" />
                 </xsl:attribute>
             </xsl:if>
-            
-            
-            <!-- Take date_creation from OPUS3 as ServerDatePublished -->
-            <!-- date_creation is stored as a unix timestamp -->
-            <!-- its transferred by date function in PHP -->
-            <xsl:variable name="date_creation"><xsl:value-of select="field[@name='date_creation']" /></xsl:variable>
-            <xsl:variable name="date_modified"><xsl:value-of select="field[@name='date_modified']" /></xsl:variable>
-            <xsl:variable name="date_valid"><xsl:value-of select="field[@name='date_valid']" /></xsl:variable>
-            <xsl:attribute name="CompletedYear">
-                <xsl:value-of select="field[@name='date_year']" />
+            -->
+
+            <!-- Type-->
+            <xsl:attribute name="Type">
+                <xsl:choose>
+                     <!-- Preprint -->
+                     <xsl:when test="field[@name='type'] = '17'">
+                        <xsl:text>preprint</xsl:text>     
+                     </xsl:when>  
+                     <!-- Technical Report -->
+                     <xsl:when test="field[@name='type'] = '20'">
+                        <xsl:text>report</xsl:text>     
+                     </xsl:when>  
+                     <!-- ZIB-Report -->
+                     <xsl:when test="field[@name='type'] = '22'">
+                        <xsl:text>report</xsl:text>     
+                     </xsl:when> 
+                     <!-- ZIB-Jahresbericht -->
+                     <xsl:when test="field[@name='type'] = '70'">
+                        <xsl:text>misc</xsl:text>     
+                     </xsl:when>  
+                     <!-- Examensarbeit -->
+                     <xsl:when test="field[@name='type'] = '71'">
+                        <xsl:text>masterthesis</xsl:text>
+                     </xsl:when>
+                </xsl:choose>
             </xsl:attribute>
-            <!--PublishedYear is not stored by Opus 3, but necessary for some doctypes in OPUS4, so import date_year into both fields -->
+
+            <!-- Edition -->
+
+            <!-- Issue -->
+
+            <!-- Language -->
+            <!-- Language might be a multivalue field in Opus4; in Opus3 there can be only one language -->
+            <!-- if the document type defines it as multivalue, there will be problems importing -->
+            <xsl:attribute name="Language">
+                <xsl:call-template name="mapLanguage">
+                    <xsl:with-param name="lang">
+                        <xsl:value-of select="field[@name='language']" />
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:attribute>
+
+            <!-- PageFirst -->
+
+            <!-- PageLast -->
+
+            <!-- PageNumber -->
+
+            <!-- PublicationState -->
+
+            <!-- PublishedDate -->
+            <!-- PublishedDate is left out, because Opus3 only stores the year -->
+
+            <!-- PublishedYear -->
+            <!-- PublishedYear is not stored by Opus 3, but necessary for some doctypes in OPUS4, so import date_year into both fields -->
             <xsl:attribute name="PublishedYear">
                 <xsl:value-of select="field[@name='date_year']" />
             </xsl:attribute>
-            <!--CompletedDate is left out, because Opus3 only stores the year -->
-            <xsl:if test="$date_creation>0">
-                <xsl:attribute name="ServerDatePublished">
-                    <!--Hours, minutes, seconds not needed in new format -->
-                    <!--<xsl:value-of select="php:function('date', 'Y-m-d H:i:s', $date_creation)" />-->
-                    <xsl:value-of select="php:function('date', 'c', $date_creation)" />
-                </xsl:attribute>
-            </xsl:if>
-            <xsl:if test="$date_modified>0">
+
+            <!-- PublisherName -->
+
+            <!-- PublisherPlace -->
+
+            <!-- ServerDateModified -->
+            <xsl:if test="$date_modified > 0">
                 <xsl:attribute name="ServerDateModified">
-                    <!--Hours, minutes, seconds not needed in new format -->
-                    <!--<xsl:value-of select="php:function('date', 'Y-m-d H:i:s', $date_modified)" />-->
                     <xsl:value-of select="php:function('date', 'c', $date_modified)" />
                 </xsl:attribute>
             </xsl:if>
-            <xsl:if test="$date_valid>0">
-                <xsl:attribute name="ServerDateValid">
-                    <!--Hours, minutes, seconds not needed in new format -->
-                    <!--<xsl:value-of select="php:function('date', 'Y-m-d H:i:s', $date_valid)" />-->
-                    <xsl:value-of select="php:function('date', 'd.m.Y', $date_valid)" />
-                </xsl:attribute>
-            </xsl:if>
-            <xsl:variable name="dateaccepted"><xsl:value-of select="/mysqldump/database/table_data[@name='opus_diss']/row[field[@name='source_opus']=$OriginalID]/field[@name='date_accepted']" /></xsl:variable>
-            <xsl:if test="$dateaccepted>0">
-                <xsl:attribute name="DateAccepted">
-                    <xsl:value-of select="php:function('date', 'd.m.Y', $dateaccepted)" />
-                </xsl:attribute>
-            </xsl:if>
-            <xsl:call-template name="getGrantor"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
-            
-            <!-- Find persons associated with the document -->
-            <xsl:call-template name="getAuthors"><xsl:with-param name="OriginalID"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
 
+            <!-- ServerDatePublished -->
+            <xsl:if test="$date_creation > 0">
+                <xsl:attribute name="ServerDatePublished">
+                    <xsl:value-of select="php:function('date', 'c', $date_creation)" />
+                </xsl:attribute>
+            </xsl:if>
+
+            <!-- ServerDateUnlocking -->
+
+            <!-- ServerState -->
+            <!-- All publications in the OPUS table are published, so we can set this statically -->
+            <xsl:attribute name="ServerState">
+                <xsl:text>published</xsl:text>
+            </xsl:attribute>
+
+            <!-- Volume -->
+
+            <!-- BelongstoBibliography -->
+
+            <!-- All Related Identifiers -->
+            <!-- IdentifierOpus3 -->
+            <xsl:if test="string-length(field[@name='source_opus']) > 0">
+                <xsl:element name="IdentifierOpus3">
+                    <xsl:attribute name="Value">
+                        <xsl:value-of select="field[@name='source_opus']" />
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:if>
+
+            <!-- IdentifierUrn -->
+            <xsl:if test="string-length(field[@name='urn']) > 0">
+                <xsl:element name="IdentifierUrn">
+                    <xsl:attribute name="Value">
+                        <xsl:value-of select="field[@name='urn']" />
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:if>
+
+            <!-- IdentifierIsbn -->
+            <xsl:if test="string-length(field[@name='isbn']) > 0">
+                <xsl:element name="IdentifierIsbn">
+                    <xsl:attribute name="Value">
+                        <xsl:value-of select="field[@name='isbn']" />
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:if>
+
+            <!-- IdentifierUrl -->
+            <xsl:if test="string-length(field[@name='url']) > 0">
+                <xsl:element name="IdentifierUrl">
+                    <xsl:attribute name="Value">
+                        <xsl:value-of select="field[@name='url']" />
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:if>
+
+
+            <!-- All Related Titles (Main/Abstract/...) -->
+            <!-- TitleMain -->
+            <xsl:if test="string-length(field[@name='title']) > 0">
+                <xsl:element name="TitleMain">
+                    <xsl:attribute name="Language">
+                        <xsl:call-template name="mapLanguage">
+                            <xsl:with-param name="lang">
+                                <xsl:value-of select="field[@name='language']" />
+                            </xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:attribute>
+                    <xsl:attribute name="Value">
+                        <xsl:value-of select="field[@name='title']" />
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:if>
+            <!-- TitleMain (english) -->
+            <xsl:if test="string-length(field[@name='title_en']) > 0">
+                <xsl:element name="TitleMain">
+                    <xsl:attribute name="Language">
+                        <xsl:call-template name="mapLanguage">
+                            <xsl:with-param name="lang">eng</xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:attribute>
+                    <xsl:attribute name="Value">
+                        <xsl:value-of select="field[@name='title_en']" />
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:if>
+
+            <!-- TitleAbstract -->
+            <xsl:if test="string-length(normalize-space(field[@name='description'])) > 0">
+                <xsl:element name="TitleAbstract">
+                    <xsl:attribute name="Language">
+                        <xsl:choose>
+                            <xsl:when test="string-length(field[@name='description_lang']) > 0">
+                                <xsl:call-template name="mapLanguage">
+                                    <xsl:with-param name="lang">
+                                        <xsl:value-of select="field[@name='description_lang']" />
+                                    </xsl:with-param>
+                                </xsl:call-template>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:call-template name="mapLanguage">
+                                    <xsl:with-param name="lang">
+                                        <xsl:value-of select="field[@name='language']" />
+                                    </xsl:with-param>
+                                </xsl:call-template>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:attribute>
+                    <xsl:attribute name="Value">
+                        <xsl:value-of select="normalize-space(field[@name='description'])" />
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:if>
+            <!-- TitleAbstract (2nd) -->
+            <xsl:if test="string-length(normalize-space(field[@name='description2'])) > 0">
+                <xsl:element name="TitleAbstract">
+                    <xsl:attribute name="Language">
+                        <xsl:call-template name="mapLanguage">
+                            <xsl:with-param name="lang">
+                                <xsl:value-of select="field[@name='description2_lang']" />
+                            </xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:attribute>
+                    <xsl:attribute name="Value">
+                        <xsl:value-of select="normalize-space(field[@name='description2'])" />
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:if>
+
+            <!-- PersonContributor -->
+            <!-- TODO: shoold be PersonContributor -->
+            <!--
             <xsl:if test="string-length(field[@name='contributors_name'])>0">
-                <xsl:call-template name="getContributors">
-                    <xsl:with-param name="list"><xsl:value-of select="field[@name='contributors_name']" /></xsl:with-param>
+                <xsl:call-template name="AddPersons">
+                    <xsl:with-param name="role">PersonContributor</xsl:with-param>
+                    <xsl:with-param name="list">
+                        <xsl:value-of select="field[@name='contributors_name']" />
+                    </xsl:with-param>
                     <xsl:with-param name="delimiter">;</xsl:with-param>
                 </xsl:call-template>
             </xsl:if>
-            
-            <xsl:call-template name="getAdvisors"><xsl:with-param name="OriginalID"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
-            
-            <!-- Series -->
-            <xsl:call-template name="getSeries"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
-           
-           <!-- Collections -->
-            <xsl:call-template name="getCollections"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
+            -->
+	    
+	  <!-- Enrichment-Contributor -->   
+            <xsl:if test="string-length(field[@name='contributors_name']) > 0">
+                <xsl:element name="Enrichment">
+                    <xsl:attribute name="KeyName">
+                        <xsl:text>contributor</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="Value">
+                        <xsl:value-of select="normalize-space(field[@name='contributors_name'])" />
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:if>
+	    
+	   <!-- Enrichment-Source --> 
+            <xsl:if test="string-length(field[@name='source_title']) > 0">
+                <xsl:element name="Enrichment">
+                    <xsl:attribute name="KeyName">
+                        <xsl:text>source</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="Value">
+                        <xsl:value-of select="normalize-space(field[@name='source_title'])" />
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:if>	    
 
-            <!-- Classifications and Subjects -->
-            <xsl:call-template name="getClasses"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
+            <!-- All Related Persons (Author/Editor/Submitter/Contributor/...)-->
+            <!-- PersonSubmitter -->
+            <xsl:if test="string-length(field[@name='verification'])>0">
+                <xsl:call-template name="AddPersons">
+                    <xsl:with-param name="role">PersonSubmitter</xsl:with-param>
+                    <xsl:with-param name="list">
+                        <xsl:value-of select="field[@name='verification']" />
+                    </xsl:with-param>
+                    <xsl:with-param name="delimiter">;</xsl:with-param>
+                </xsl:call-template>
+            </xsl:if>
+	    
+            <!-- PersonAuthor -->
+            <xsl:for-each select="/mysqldump/database/table_data[@name='opus_autor']/row[field[@name='source_opus']=$OriginalID]">
+                <xsl:call-template name="AddPerson" >
+                    <xsl:with-param name="role">PersonAuthor</xsl:with-param>
+                    <xsl:with-param name="name">
+                        <xsl:value-of select="field[@name='creator_name']" />
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:for-each>
 
-            <!-- Institutes -->
-            <xsl:call-template name="getInstitute"><xsl:with-param name="source_id"><xsl:value-of select="$OriginalID" /></xsl:with-param></xsl:call-template>
+            <!-- PersonAdvisor -->
+            <xsl:for-each select="/mysqldump/database/table_data[@name='opus_diss']/row[field[@name='source_opus']=$OriginalID]">
+                <xsl:call-template name="AddPerson" >
+                    <xsl:with-param name="role">PersonAdvisor</xsl:with-param>
+                    <xsl:with-param name="name">
+                        <xsl:value-of select="field[@name='advisor']" />
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:for-each>
+
+            <!-- Subjects -->
+            <xsl:if test="string-length(normalize-space(field[@name='subject_swd'])) > 0">
+                <xsl:call-template name="AddSubjects">
+                    <xsl:with-param name="type">SubjectSwd</xsl:with-param>
+                    <xsl:with-param name="list">
+                        <xsl:value-of select="field[@name='subject_swd']" />
+                    </xsl:with-param>
+                    <xsl:with-param name="delimiter">,</xsl:with-param>
+                    <xsl:with-param name="language">ger</xsl:with-param>
+                </xsl:call-template>
+            </xsl:if>
+            <xsl:if test="string-length(normalize-space(field[@name='subject_uncontrolled_german'])) > 0">
+                <xsl:call-template name="AddSubjects">
+                    <xsl:with-param name="type">SubjectUncontrolled</xsl:with-param>
+                    <xsl:with-param name="list">
+                        <xsl:value-of select="field[@name='subject_uncontrolled_german']" />
+                    </xsl:with-param>
+                    <xsl:with-param name="delimiter">,</xsl:with-param>
+                    <xsl:with-param name="language">ger</xsl:with-param>
+                </xsl:call-template>
+            </xsl:if>
+            <xsl:if test="string-length(normalize-space(field[@name='subject_uncontrolled_english'])) > 0">
+                <xsl:call-template name="AddSubjects">
+                    <xsl:with-param name="type">SubjectUncontrolled</xsl:with-param>
+                    <xsl:with-param name="list">
+                        <xsl:value-of select="field[@name='subject_uncontrolled_english']" />
+                    </xsl:with-param>
+                    <xsl:with-param name="delimiter">,</xsl:with-param>
+                    <xsl:with-param name="language">eng</xsl:with-param>
+                </xsl:call-template>
+            </xsl:if>
+
+            <!-- Notes -->
+            <xsl:if test="string-length(field[@name='bem_intern']) > 0">
+                <xsl:element name="Note">
+                    <xsl:attribute name="Scope">
+                        <xsl:text>private</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="Message">
+                        <xsl:value-of select="field[@name='bem_intern']" />
+                    </xsl:attribute>
+                    <xsl:attribute name="Creator">
+                        <xsl:text>unknown</xsl:text>
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:if>
+            <xsl:if test="string-length(field[@name='bem_extern']) > 0">
+                <xsl:element name="Note">
+                    <xsl:attribute name="Scope">
+                        <xsl:text>public</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="Message">
+                        <xsl:value-of select="field[@name='bem_extern']" />
+                    </xsl:attribute>
+                    <xsl:attribute name="Creator">
+                        <xsl:text>unknown</xsl:text>
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:if>
+
+            <!-- Old Opus3-data must be mapped later -->
+            <!-- Old Licence -->
+            <xsl:if test="string-length(field[@name='lic']) > 0">
+                <xsl:element name="OldLicence">
+                    <xsl:attribute name="Value">
+                        <xsl:value-of select="field[@name='lic']" />
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:if>  
             
-            <xsl:call-template name="AddSubmitters">
-                <xsl:with-param name="list"><xsl:value-of select="field[@name='verification']" /></xsl:with-param>
-                <xsl:with-param name="delimiter">;</xsl:with-param>
-            </xsl:call-template>
-                      
-            <xsl:apply-templates select="field" />
+            <!-- Old OldPublisherUniversity -->
+            <xsl:if test="string-length(field[@name='publisher_university']) > 0">
+                <xsl:element name="OldPublisherUniversity">
+                    <xsl:attribute name="Value">
+                        <xsl:value-of select="field[@name='publisher_university']" />
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:if>
+            
+            <!-- OldGrantor -->
+            <xsl:for-each select="/mysqldump/database/table_data[@name='opus_diss']/row[field[@name='source_opus']=$OriginalID]">
+                <xsl:element name="OldGrantor">
+                    <xsl:attribute name="Value">
+                        <xsl:value-of select="field[@name='publisher_faculty']" />
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:for-each>
+
+            <!-- OldSeries -->
+            <xsl:for-each select="/mysqldump/database/table_data[@name='opus_schriftenreihe']/row[field[@name='source_opus']=$OriginalID]">
+                <xsl:element name="OldSeries">
+                    <xsl:attribute name="Value">
+                        <xsl:value-of select="field[@name='sr_id']" />
+                    </xsl:attribute>
+                    <xsl:attribute name="Issue">
+                        <xsl:value-of select="field[@name='sequence_nr']" />
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:for-each>
+
+            <!-- OldCollections -->
+            <xsl:for-each select="/mysqldump/database/table_data[@name='opus_coll']/row[field[@name='source_opus']=$OriginalID]">
+                <xsl:element name="OldCollections">
+                    <xsl:attribute name="Value">
+                        <xsl:value-of select="field[@name='coll_id']" />
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:for-each>
+
+            <!-- OldInstitutes -->
+            <xsl:for-each select="/mysqldump/database/table_data[@name='opus_inst']/row[field[@name='source_opus']=$OriginalID]">
+                <xsl:element name="OldInstitute">
+                    <xsl:attribute name="Value">
+                        <xsl:value-of select="field[@name='inst_nr']" />
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:for-each>
+
+            <!-- OldClasses -->
+            <xsl:for-each select="/mysqldump/database/table_data[@name='opus_klassifikationen']/row[field[@name='source_opus']=$OriginalID]">
+                <xsl:element name="OldClasses">
+                    <xsl:attribute name="Key">
+                        <xsl:value-of select="field[@name='name_kurz']" />
+                    </xsl:attribute>
+                    <xsl:attribute name="Value">
+                        <xsl:value-of select="field[@name='class']" />
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:for-each>
+
+            <!-- OldDdc -->
+            <xsl:if test="string-length(field[@name='sachgruppe_ddc']) > 0">
+                <xsl:element name="OldDdc">
+                    <xsl:attribute name="Value">
+                        <xsl:value-of select="field[@name='sachgruppe_ddc']" />
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:if>
         </xsl:element>
     </xsl:template>
 
+    <!-- This template maps Language -->
     <xsl:template name="mapLanguage">
         <xsl:param name="lang" required="yes" />
         <xsl:if test="$lang='ger'">
@@ -253,7 +548,9 @@
         </xsl:if>
     </xsl:template> 
 
-    <xsl:template name="AddSubmitters">
+    <!-- This template adds multiple Persons from a <delimiter>-separated list to Opus4-DB (recursively) -->
+    <xsl:template name="AddPersons">
+        <xsl:param name="role" required="yes" />
         <xsl:param name="list" required="yes" />
         <xsl:param name="delimiter" required="yes" />
         <xsl:variable name="newlist">
@@ -264,509 +561,156 @@
         </xsl:variable>
         <xsl:variable name="first" select="substring-before($newlist, $delimiter)" />
         <xsl:variable name="remaining" select="substring-after($newlist, $delimiter)" />
-        <xsl:call-template name="AddSubmitter">
-             <xsl:with-param name="verification" select="$first" />
+        <xsl:call-template name="AddPerson">
+             <xsl:with-param name="role" select="$role" />
+             <xsl:with-param name="name" select="$first" />
         </xsl:call-template>
         <xsl:if test="$remaining">
-            <xsl:call-template name="AddSubmitters">
-                <xsl:with-param name="list"><xsl:value-of select="$remaining" /> </xsl:with-param>
-                <xsl:with-param name="delimiter"><xsl:value-of select="$delimiter" /> </xsl:with-param>
-            </xsl:call-template>
-        </xsl:if>
-    </xsl:template>
-    <xsl:template name="AddSubmitter">
-        <xsl:param name="verification" required="yes" />
-        <xsl:element name="PersonSubmitter">
-            <xsl:attribute name="FirstName">Opus3</xsl:attribute>
-            <xsl:attribute name="LastName">Importer</xsl:attribute>
-            <xsl:if test="string-length(normalize-space($verification))>0">
-                <xsl:attribute name="Email"><xsl:value-of select="normalize-space($verification)" /></xsl:attribute>
-            </xsl:if>
-        </xsl:element>
-    </xsl:template>
-
-    <!-- temporary licence information -->
-    <xsl:template match="table_data[@name='opus']/row/field[@name='lic']">
-        <xsl:if test="string-length(.)>0">
-            <xsl:element name="OldLicence">
-                <xsl:attribute name="Value">
-                    <xsl:value-of select="." />
-                </xsl:attribute>
-            </xsl:element>
-        </xsl:if>
-    </xsl:template>
-
-    <!-- temporary Publisher and Grantor information -->
-    <xsl:template match="table_data[@name='opus']/row/field[@name='publisher_university']">
-        <xsl:if test="string-length(.)>0">
-            <xsl:element name="OldPublisherUniversity">
-                <xsl:attribute name="Value">
-                    <xsl:value-of select="." />
-                </xsl:attribute>
-            </xsl:element>
-        </xsl:if>
-    </xsl:template>
-    <xsl:template name="getGrantor">
-        <xsl:param name="source_id" required="yes" />
-        <xsl:for-each select="/mysqldump/database/table_data[@name='opus_diss']/row[field[@name='source_opus']=$source_id]">
-            <xsl:element name="OldGrantor">
-                <xsl:attribute name="Value">
-                    <xsl:value-of select="field[@name='publisher_faculty']" />
-                </xsl:attribute>
-            </xsl:element>
-        </xsl:for-each>
-    </xsl:template>
- 
-    <!-- temporary series information -->
-    <xsl:template name="getSeries">
-        <xsl:param name="source_id" required="yes" />
-        <xsl:for-each select="/mysqldump/database/table_data[@name='opus_schriftenreihe']/row[field[@name='source_opus']=$source_id]">
-            <xsl:element name="OldSeries">
-                <xsl:attribute name="Value">
-                    <xsl:value-of select="field[@name='sr_id']" />
-                </xsl:attribute>
-                <xsl:attribute name="Issue">
-                    <xsl:value-of select="field[@name='sequence_nr']" />
-                </xsl:attribute>
-            </xsl:element>
-        </xsl:for-each>
-    </xsl:template>
-
-    <!-- temporary series information -->
-    <xsl:template name="getCollections">
-        <xsl:param name="source_id" required="yes" />
-        <xsl:for-each select="/mysqldump/database/table_data[@name='opus_coll']/row[field[@name='source_opus']=$source_id]">
-            <xsl:element name="OldCollections">
-                <xsl:attribute name="Value">
-                    <xsl:value-of select="field[@name='coll_id']" />
-                </xsl:attribute>
-            </xsl:element>
-        </xsl:for-each>
-    </xsl:template>
- 
-    <!-- temporary Institute information -->
-    <xsl:template name="getInstitute">
-        <xsl:param name="source_id" required="yes" />
-        <xsl:for-each select="/mysqldump/database/table_data[@name='opus_inst']/row[field[@name='source_opus']=$source_id]">
-            <xsl:element name="OldInstitute">
-                <xsl:attribute name="Value">
-                    <xsl:value-of select="field[@name='inst_nr']" />
-                </xsl:attribute>
-            </xsl:element>
-        </xsl:for-each>
-    </xsl:template>
-
-    <!-- temporary DDC information -->
-    <xsl:template match="table_data[@name='opus']/row/field[@name='sachgruppe_ddc']">
-        <xsl:if test="string-length(.)>0">
-            <xsl:element name="OldDdc">
-                <xsl:attribute name="Value">
-                    <xsl:value-of select="." />
-                </xsl:attribute>
-            </xsl:element>
-        </xsl:if>
-    </xsl:template>
-
-    <!-- temporary classification -->
-     <xsl:template name="getClasses">
-        <xsl:param name="source_id" required="yes" />
-        <xsl:for-each select="/mysqldump/database/table_data[@name='opus_klassifikationen']/row[field[@name='source_opus']=$source_id]">
-            <xsl:element name="OldClasses">
-                <xsl:attribute name="Key">
-                    <xsl:value-of select="field[@name='name_kurz']" />
-                </xsl:attribute>
-                <xsl:attribute name="Value">
-                    <xsl:value-of select="field[@name='class']" />
-                </xsl:attribute>
-            </xsl:element>
-        </xsl:for-each>
-    </xsl:template>
-
-    <!-- Notes -->
-    <xsl:template match="table_data[@name='opus']/row/field[@name='bem_intern']">
-        <xsl:if test="string-length(.)>0">
-            <xsl:element name="Note">
-                <xsl:attribute name="Scope">
-                    <xsl:text>private</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="Message">
-                    <xsl:value-of select="." />
-                </xsl:attribute>
-                <xsl:attribute name="Creator">
-                    <xsl:text>unknown</xsl:text>
-                </xsl:attribute>
-            </xsl:element>
-        </xsl:if>
-    </xsl:template>
-    <xsl:template match="table_data[@name='opus']/row/field[@name='bem_extern']">
-        <xsl:if test="string-length(.)>0">
-            <xsl:element name="Note">
-                <xsl:attribute name="Scope">
-                    <xsl:text>public</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="Message">
-                    <xsl:value-of select="." />
-                </xsl:attribute>
-                <xsl:attribute name="Creator">
-                    <xsl:text>unknown</xsl:text>
-                </xsl:attribute>
-            </xsl:element>
-        </xsl:if>
-    </xsl:template>
-
-    <!-- Subjects SWD -->
-    <xsl:template match="table_data[@name='opus']/row/field[@name='subject_swd']">
-        <xsl:if test="string-length(normalize-space(.))>0">
-            <xsl:call-template name="getSubjectsSwd">
-                <xsl:with-param name="list"><xsl:value-of select="." /></xsl:with-param>
-                <xsl:with-param name="delimiter">,</xsl:with-param>
-                <xsl:with-param name="language">ger</xsl:with-param>
-            </xsl:call-template>
-        </xsl:if>
-    </xsl:template>
-     <xsl:template name="getSubjectsSwd">
-        <xsl:param name="list" required="yes" />
-        <xsl:param name="delimiter" required="yes" />
-        <xsl:param name="language" required="yes" />
-        <xsl:variable name="newlist">
-            <xsl:choose>
-                <xsl:when test="contains($list, $delimiter)"><xsl:value-of select="normalize-space($list)" /></xsl:when>
-                <xsl:otherwise><xsl:value-of select="concat(normalize-space($list), $delimiter)"/></xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        <xsl:variable name="first" select="substring-before($newlist, $delimiter)" />
-        <xsl:variable name="remaining" select="substring-after($newlist, $delimiter)" />
-        <xsl:call-template name="getSubjectsSwd">
-             <xsl:with-param name="subject" select="$first" />
-             <xsl:with-param name="language" select="$language" />
-        </xsl:call-template>
-        <xsl:if test="$remaining">
-            <xsl:call-template name="getSubjectsSwd">
-                <xsl:with-param name="list"><xsl:value-of select="$remaining" /> </xsl:with-param>
-                <xsl:with-param name="delimiter"><xsl:value-of select="$delimiter" /> </xsl:with-param>
-                <xsl:with-param name="language"><xsl:value-of select="$language" /> </xsl:with-param>
-            </xsl:call-template>
-        </xsl:if>
-    </xsl:template>
-    <xsl:template name="getSubjectSwd">
-        <xsl:param name="subject" required="yes" />
-        <xsl:param name="language" required="yes" />
-        <xsl:element name="SubjectSwd">
-            <xsl:attribute name="Language">
-                <xsl:call-template name="mapLanguage"><xsl:with-param name="lang"><xsl:value-of select="$language" /></xsl:with-param></xsl:call-template>
-            </xsl:attribute>
-            <xsl:attribute name="Value">
-                <xsl:value-of select="$subject" />
-            </xsl:attribute>
-        </xsl:element>
-    </xsl:template>
-
-
-
-    <!-- Subjects Uncontrolled -->
-    <xsl:template match="table_data[@name='opus']/row/field[@name='subject_uncontrolled_german']">
-        <xsl:if test="string-length(normalize-space(.))>0">
-            <xsl:call-template name="getSubjectsUncontrolled">
-                <xsl:with-param name="list"><xsl:value-of select="." /></xsl:with-param>
-                <xsl:with-param name="delimiter">,</xsl:with-param>
-                <xsl:with-param name="language">ger</xsl:with-param>
-            </xsl:call-template>
-        </xsl:if>
-    </xsl:template>
-
-    <xsl:template match="table_data[@name='opus']/row/field[@name='subject_uncontrolled_english']">
-        <xsl:if test="string-length(normalize-space(.))>0">
-            <xsl:call-template name="getSubjectsUncontrolled">
-                <xsl:with-param name="list"><xsl:value-of select="." /></xsl:with-param>
-                <xsl:with-param name="delimiter">,</xsl:with-param>
-                <xsl:with-param name="language">eng</xsl:with-param>
-            </xsl:call-template>
-        </xsl:if>
-    </xsl:template>
-
-    <xsl:template name="getSubjectsUncontrolled">
-        <xsl:param name="list" required="yes" />
-        <xsl:param name="delimiter" required="yes" />
-        <xsl:param name="language" required="yes" />
-        <xsl:variable name="newlist">
-            <xsl:choose>
-                <xsl:when test="contains($list, $delimiter)"><xsl:value-of select="normalize-space($list)" /></xsl:when>
-                <xsl:otherwise><xsl:value-of select="concat(normalize-space($list), $delimiter)"/></xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        <xsl:variable name="first" select="substring-before($newlist, $delimiter)" />
-        <xsl:variable name="remaining" select="substring-after($newlist, $delimiter)" />       
-        <xsl:call-template name="getSubjectUncontrolled">
-             <xsl:with-param name="subject" select="$first" />
-             <xsl:with-param name="language" select="$language" />
-        </xsl:call-template>
-        <xsl:if test="$remaining">
-            <xsl:call-template name="getSubjectsUncontrolled">
-                <xsl:with-param name="list"><xsl:value-of select="$remaining" /> </xsl:with-param>
-                <xsl:with-param name="delimiter"><xsl:value-of select="$delimiter" /> </xsl:with-param>
-                <xsl:with-param name="language"><xsl:value-of select="$language" /> </xsl:with-param>
-            </xsl:call-template>
-        </xsl:if>
-    </xsl:template>
-
-    <xsl:template name="getSubjectUncontrolled">
-        <xsl:param name="subject" required="yes" />
-        <xsl:param name="language" required="yes" />
-        <xsl:element name="SubjectUncontrolled">
-            <xsl:attribute name="Language">
-                <xsl:call-template name="mapLanguage"><xsl:with-param name="lang"><xsl:value-of select="$language" /></xsl:with-param></xsl:call-template>
-            </xsl:attribute>
-            <xsl:attribute name="Value">
-                <xsl:value-of select="$subject" />
-            </xsl:attribute>
-        </xsl:element>
-    </xsl:template>
-
-
-
-    <!-- Subjects (controleld) -->
-    <xsl:template name="getSubjects">
-        <xsl:param name="subject" required="yes" />
-        <xsl:param name="source_id" required="yes" />
-        <xsl:variable name="subject_table">opus_<xsl:value-of select="$subject" /></xsl:variable>
-        <xsl:variable name="subject_object">Subject<xsl:value-of select="php:function('strtoupper', substring($subject, 1, 1))" /><xsl:value-of select="substring($subject, 2)" /></xsl:variable>
-        <xsl:if test="string-length(/mysqldump/database/table_data[@name=$subject_table]/row[field[@name='source_opus']=$source_id]/field[@name='class'])>0">
-            <xsl:element name="{$subject_object}">
-                <xsl:attribute name="Language">
-                    <xsl:call-template name="mapLanguage"><xsl:with-param name="lang">ger</xsl:with-param></xsl:call-template>
-                </xsl:attribute>
-                <xsl:attribute name="Value">
-                    <xsl:value-of select="/mysqldump/database/table_data[@name=$subject_table]/row[field[@name='source_opus']=$source_id]/field[@name='class']" />
-                </xsl:attribute>
-            </xsl:element>
-        </xsl:if>
-    </xsl:template>
-    
-    <!-- Titles and abstracts -->
-    <xsl:template match="table_data[@name='opus']/row/field[@name='title']">
-        <xsl:element name="TitleMain">
-            <xsl:attribute name="Language">
-                <xsl:call-template name="mapLanguage"><xsl:with-param name="lang"><xsl:value-of select="../field[@name='language']" /></xsl:with-param></xsl:call-template>
-            </xsl:attribute>
-            <xsl:attribute name="Value">
-                <xsl:value-of select="." />
-            </xsl:attribute>
-        </xsl:element>
-    </xsl:template>
-    <xsl:template match="table_data[@name='opus']/row/field[@name='title_en']">
-        <xsl:if test="string-length(.)>0">
-            <xsl:element name="TitleMain">
-                <xsl:attribute name="Language">
-                    <xsl:call-template name="mapLanguage"><xsl:with-param name="lang">eng</xsl:with-param></xsl:call-template>
-                </xsl:attribute>
-                <xsl:attribute name="Value">
-                    <xsl:value-of select="." />
-                </xsl:attribute>
-            </xsl:element>
-        </xsl:if>
-    </xsl:template>
-    <xsl:template match="table_data[@name='opus']/row/field[@name='description']">
-        <xsl:if test="string-length(normalize-space(.))>0">
-            <xsl:element name="TitleAbstract">
-                <xsl:attribute name="Language">
-                    <xsl:choose>
-                        <xsl:when test="string-length(../field[@name='description_lang'])>0">
-                            <xsl:call-template name="mapLanguage"><xsl:with-param name="lang"><xsl:value-of select="../field[@name='description_lang']" /></xsl:with-param></xsl:call-template>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:call-template name="mapLanguage"><xsl:with-param name="lang"><xsl:value-of select="../field[@name='language']" /></xsl:with-param></xsl:call-template>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                </xsl:attribute>
-                <xsl:attribute name="Value">
-                    <xsl:value-of select="." />
-                </xsl:attribute>
-            </xsl:element>
-        </xsl:if>
-    </xsl:template>
-    <xsl:template match="table_data[@name='opus']/row/field[@name='description2']">
-        <xsl:if test="string-length(normalize-space(.))>0">
-            <xsl:element name="TitleAbstract">
-                <xsl:attribute name="Language">
-                    <xsl:call-template name="mapLanguage"><xsl:with-param name="lang"><xsl:value-of select="../field[@name='description2_lang']" /></xsl:with-param></xsl:call-template>
-                </xsl:attribute>
-                <xsl:attribute name="Value">
-                    <xsl:value-of select="." />
-                </xsl:attribute>
-            </xsl:element>
-        </xsl:if>
-    </xsl:template>
-    <xsl:template name="getGermanTitle">
-        <xsl:if test="string-length(field[@name='title_de'])>0">
-            <xsl:element name="TitleMain">
-                <xsl:attribute name="Language">
-                    <xsl:call-template name="mapLanguage"><xsl:with-param name="lang">ger</xsl:with-param></xsl:call-template>
-                </xsl:attribute>
-                <xsl:attribute name="Value">
-                    <xsl:value-of select="field[@name='title_de']" />
-                </xsl:attribute>
-            </xsl:element>
-        </xsl:if>
-    </xsl:template>
-    
-    <!-- Identifiers -->
-    <xsl:template match="table_data[@name='opus']/row/field[@name='source_opus']">
-        <xsl:element name="IdentifierOpus3">
-            <xsl:attribute name="Value"><xsl:value-of select="." /></xsl:attribute>
-        </xsl:element>
-    </xsl:template>
-    <xsl:template match="table_data[@name='opus']/row/field[@name='source_swb']">
-         <xsl:if test="string-length(.)>0">
-            <xsl:element name="IdentifierOpac">
-                <xsl:attribute name="Value"><xsl:value-of select="." /></xsl:attribute>
-            </xsl:element>
-         </xsl:if>
-    </xsl:template>
-    <xsl:template match="table_data[@name='opus']/row/field[@name='urn']">
-        <xsl:if test="string-length(.)>0">
-            <xsl:element name="IdentifierUrn">
-                <xsl:attribute name="Value"><xsl:value-of select="." /></xsl:attribute>
-            </xsl:element>
-        </xsl:if>
-    </xsl:template>
-    <xsl:template match="table_data[@name='opus']/row/field[@name='isbn']">
-        <xsl:if test="string-length(.)>0">
-            <xsl:element name="IdentifierIsbn">
-                <xsl:attribute name="Value"><xsl:value-of select="." /></xsl:attribute>
-            </xsl:element>
-        </xsl:if>
-    </xsl:template>
-    <xsl:template match="table_data[@name='opus']/row/field[@name='url']">
-        <xsl:element name="IdentifierUrl">
-            <xsl:attribute name="Value"><xsl:value-of select="." /></xsl:attribute>
-        </xsl:element>
-    </xsl:template>
-    
-    <!-- Person templates, called in main template -->
-    <!-- PersonAuthor -->
-    <xsl:template name="getAuthors">
-        <xsl:param name="OriginalID" required="yes" />
-        <xsl:for-each select="/mysqldump/database/table_data[@name='opus_autor']/row[field[@name='source_opus']=$OriginalID]">
-            <xsl:call-template name="getAuthor" />
-        </xsl:for-each>
-    </xsl:template>
-    <xsl:template name="getAuthor">
-        <xsl:element name="PersonAuthor">
-            <xsl:attribute name="AcademicTitle"></xsl:attribute>
-            <xsl:attribute name="DateOfBirth"></xsl:attribute>
-            <xsl:attribute name="PlaceOfBirth"></xsl:attribute>
-            <xsl:attribute name="Email"></xsl:attribute>
-            <xsl:choose>
-                <xsl:when test="contains(field[@name='creator_name'],',')">
-                    <xsl:attribute name="FirstName">
-                        <xsl:value-of select="substring-after(field[@name='creator_name'],',')" />
-                    </xsl:attribute>
-                    <xsl:attribute name="LastName">
-                        <xsl:value-of select="substring-before(field[@name='creator_name'],',')" />
-                    </xsl:attribute>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:attribute name="LastName">
-                        <xsl:value-of select="field[@name='creator_name']" />
-                    </xsl:attribute>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:element>
-    </xsl:template>
-
-    <!-- PersonContributor -->
-    <xsl:template name="getContributors">
-        <xsl:param name="list" required="yes" />
-        <xsl:param name="delimiter" required="yes" />
-        <xsl:variable name="newlist">
-            <xsl:choose>
-                <xsl:when test="contains($list, $delimiter)"><xsl:value-of select="normalize-space($list)" /></xsl:when>
-                <xsl:otherwise><xsl:value-of select="concat(normalize-space($list), $delimiter)"/></xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        <xsl:variable name="first" select="substring-before($newlist, $delimiter)" />
-        <xsl:variable name="remaining" select="substring-after($newlist, $delimiter)" />
-        <xsl:call-template name="getContributor">
-             <xsl:with-param name="contributor" select="$first" />
-        </xsl:call-template>
-        <xsl:if test="$remaining">
-            <xsl:call-template name="getContributors">
+            <xsl:call-template name="AddPersons">
+                <xsl:with-param name="role"><xsl:value-of select="$role" /> </xsl:with-param>
                 <xsl:with-param name="list"><xsl:value-of select="$remaining" /> </xsl:with-param>
                 <xsl:with-param name="delimiter"><xsl:value-of select="$delimiter" /> </xsl:with-param>
             </xsl:call-template>
         </xsl:if>
     </xsl:template>
 
-
-    <xsl:template name="getContributor">
-        <xsl:param name="contributor" required="yes" />
-        <xsl:element name="PersonContributor">
-            <xsl:attribute name="AcademicTitle"></xsl:attribute>
-            <xsl:attribute name="DateOfBirth"></xsl:attribute>
-            <xsl:attribute name="PlaceOfBirth"></xsl:attribute>
-            <xsl:attribute name="Email"></xsl:attribute>
-            <xsl:choose>
-                <xsl:when test="not(contains($contributor,','))">
-                    <xsl:attribute name="LastName">
-                        <xsl:value-of select="." />
-                    </xsl:attribute>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:attribute name="FirstName">
-                        <xsl:value-of select="substring-after($contributor,',')" />
-                    </xsl:attribute>
-                    <xsl:attribute name="LastName">
-                        <xsl:value-of select="substring-before($contributor,',')" />
-                    </xsl:attribute>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:element>
-    </xsl:template>
-
-    <xsl:template name="getAdvisors">
-        <xsl:param name="OriginalID" required="yes" />
-        <xsl:for-each select="/mysqldump/database/table_data[@name='opus_diss']/row[field[@name='source_opus']=$OriginalID]">
-            <xsl:call-template name="getAdvisor" />
-            <xsl:call-template name="getGermanTitle" />
-        </xsl:for-each>
-     </xsl:template>
-    <xsl:template name="getAdvisor">
-        <xsl:element name="PersonAdvisor">
+    <!-- Erzeugt ein Personenelement -->
+    <xsl:template name="AddPerson">
+        <xsl:param name="role" required="yes" />
+        <xsl:param name="name" required="yes" />
+        <xsl:element name="{$role}">
             <xsl:attribute name="AcademicTitle">
-                <xsl:if test="string-length(substring-after(substring-before(field[@name='advisor'],')'),'('))>0">
-                    <xsl:value-of select="substring-after(substring-before(field[@name='advisor'],')'),'(')" />
-                </xsl:if>
+                <xsl:call-template name="getAcademicTitle">
+                    <xsl:with-param name="name">
+                        <xsl:value-of select="$name" />
+                    </xsl:with-param>
+                </xsl:call-template>
             </xsl:attribute>
-            <xsl:attribute name="DateOfBirth"></xsl:attribute>
-            <xsl:attribute name="PlaceOfBirth"></xsl:attribute>
-            <xsl:attribute name="Email"></xsl:attribute>
-            <xsl:choose>
-                <xsl:when test="string-length(substring-before(field[@name='advisor'],', '))=0">
-                    <xsl:attribute name="LastName">
-                        <xsl:value-of select="field[@name='advisor']" />
-                    </xsl:attribute>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:choose>
-                        <xsl:when test="string-length(substring-after(substring-before(field[@name='advisor'],'('),', '))>0">
-                            <xsl:attribute name="FirstName">
-                                <xsl:value-of select="substring-after(substring-before(field[@name='advisor'],'('),', ')" />
-                            </xsl:attribute>
-                        </xsl:when>
-                        <xsl:otherwise>
-                            <xsl:attribute name="FirstName">
-                                <xsl:value-of select="substring-after(field[@name='advisor'],',')" />
-                            </xsl:attribute>
-                        </xsl:otherwise>
-                    </xsl:choose>
-                    <xsl:attribute name="LastName">
-                        <xsl:value-of select="substring-before(field[@name='advisor'],', ')" />
-                    </xsl:attribute>
-                </xsl:otherwise>
-            </xsl:choose>
+             <xsl:attribute name="Email">
+                <xsl:call-template name="getEmail">
+                    <xsl:with-param name="name">
+                        <xsl:value-of select="$name" />
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:attribute>
+            <xsl:attribute name="FirstName">
+                <xsl:call-template name="getFirstName">
+                    <xsl:with-param name="name">
+                        <xsl:value-of select="$name" />
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:attribute>
+            <xsl:attribute name="LastName">
+                <xsl:call-template name="getLastName">
+                    <xsl:with-param name="name">
+                        <xsl:value-of select="$name" />
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:attribute>
         </xsl:element>
     </xsl:template>
+    
+   <!-- Holt den Vornamen des Autors -->
+   <xsl:template name="getAcademicTitle">
+        <xsl:param name="name" required="yes" />
+        <xsl:if test="string-length(substring-after(substring-before($name,')'),'(')) > 0">
+            <xsl:value-of select="substring-after(substring-before($name,')'),'(')" />
+        </xsl:if>
+    </xsl:template>
 
+   <!-- Holt den Vornamen des Autors -->
+   <xsl:template name="getEmail">
+        <xsl:param name="name" required="yes" />
+        <xsl:if test="contains($name, '@')">
+            <xsl:value-of select="normalize-space($name)" />
+        </xsl:if>
+    </xsl:template>
+    
+   <!-- Holt den Vornamen des Autors -->
+   <xsl:template name="getFirstName">
+        <xsl:param name="name" required="yes" />
+        <xsl:choose>
+            <xsl:when test="contains($name, '@')">unknown</xsl:when>
+            <xsl:when test="contains($name, ',')">
+                <xsl:value-of select="normalize-space(substring-after($name,','))" />
+            </xsl:when>
+            <xsl:when test="contains($name, ' ')">
+                <xsl:variable name="pos"><xsl:value-of select="php:function('strrpos', $name, ' ')"/></xsl:variable>
+                <xsl:value-of select="normalize-space(php:function('substr', $name, 0, $pos))"/>
+            </xsl:when>
+            <xsl:when test="contains($name, '.')">
+                <xsl:variable name="pos"><xsl:value-of select="php:function('strrpos', $name, '.')"/></xsl:variable>
+                <xsl:value-of select="normalize-space(php:function('substr', $name, 0, $pos))"/>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:template>
 
+   <!-- Holt den Nachnamen des Autors -->
+   <xsl:template name="getLastName">
+        <xsl:param name="name" required="yes" />
+        <xsl:choose>
+            <xsl:when test="contains($name, '@')">unknown</xsl:when>
+            <xsl:when test="contains($name, ',')">
+                <xsl:value-of select="normalize-space(substring-before($name,','))" />
+            </xsl:when>
+            <xsl:when test="contains($name, ' ')">
+                <xsl:variable name="pos"><xsl:value-of select="php:function('strrpos', $name, ' ')"/></xsl:variable>
+                <xsl:value-of select="normalize-space(php:function('substr', $name, $pos+1))"/>
+            </xsl:when>
+            <xsl:when test="contains($name, '.')">
+                <xsl:variable name="pos"><xsl:value-of select="php:function('strrpos', $name, '.')"/></xsl:variable>
+                <xsl:value-of select="normalize-space(php:function('substr', $name, $pos+1))"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="normalize-space($name)" />
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
 
+    <!-- This Templat add Subjects to Opus4 -->
+    <xsl:template name="AddSubjects">
+        <xsl:param name="type" required="yes" />
+        <xsl:param name="list" required="yes" />
+        <xsl:param name="delimiter" required="yes" />
+        <xsl:param name="language" required="yes" />
+        <xsl:variable name="newlist">
+            <xsl:choose>
+                <xsl:when test="contains($list, $delimiter)"><xsl:value-of select="normalize-space($list)" /></xsl:when>
+                <xsl:otherwise><xsl:value-of select="concat(normalize-space($list), $delimiter)"/></xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="first" select="substring-before($newlist, $delimiter)" />
+        <xsl:variable name="remaining" select="substring-after($newlist, $delimiter)" />
+        <xsl:call-template name="AddSubject">
+             <xsl:with-param name="type" select="$type" />
+             <xsl:with-param name="subject" select="$first" />
+             <xsl:with-param name="language" select="$language" />
+        </xsl:call-template>
+        <xsl:if test="$remaining">
+            <xsl:call-template name="AddSubjects">
+                <xsl:with-param name="type"><xsl:value-of select="$type" /> </xsl:with-param>
+                <xsl:with-param name="list"><xsl:value-of select="$remaining" /> </xsl:with-param>
+                <xsl:with-param name="delimiter"><xsl:value-of select="$delimiter" /> </xsl:with-param>
+                <xsl:with-param name="language"><xsl:value-of select="$language" /> </xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+    </xsl:template>
+    
+    <xsl:template name="AddSubject">
+        <xsl:param name="type" required="yes" />
+        <xsl:param name="subject" required="yes" />
+        <xsl:param name="language" required="yes" />
+        <xsl:element name="{$type}">
+            <xsl:attribute name="Language">
+                <xsl:call-template name="mapLanguage">
+                    <xsl:with-param name="lang">
+                        <xsl:value-of select="$language" />
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:attribute>
+            <xsl:attribute name="Value">
+                <xsl:value-of select="$subject" />
+            </xsl:attribute>
+        </xsl:element>
+    </xsl:template>
 </xsl:stylesheet>
