@@ -67,10 +67,16 @@ class Review_Model_DocumentAdapter {
      * @param Zend_View $view
      * @param int $id
      */
-    public function __construct($view, $id) {
+    public function __construct($view, $value) {
         $this->view = $view;
-        $this->docId = $id;
-        $this->document = new Opus_Document( (int) $id);
+        if ($value instanceof Opus_Document) {
+            $this->document = $value;
+            $this->docId = $this->document->getId();
+        }
+        else {
+            $this->docId = $value;
+            $this->document = new Opus_Document( (int) $value);
+        }
     }
 
     /**
@@ -223,13 +229,53 @@ class Review_Model_DocumentAdapter {
      * @return url
      */
     public function getUrlPermanentDelete() {
-        $url_permadelete = array (
+        $url_permadelete = array(
             'module'     => 'admin',
             'controller' => 'documents',
             'action'     => 'permanentdelete',
             'id'         => $this->getDocId()
         );
         return $this->view->url($url_permadelete, 'default', true);
+    }
+
+    public function getUrlFileManager() {
+        $url = array(
+            'module'     => 'admin',
+            'controller' => 'filemanager',
+            'action'     => 'index',
+            'docId'         => $this->getDocId()
+        );
+        return $this->view->url($url, null, true);
+    }
+
+    public function getUrlPublish() {
+        $url = array(
+            'module'     => 'admin',
+            'controller' => 'documents',
+            'action'     => 'publish',
+            'docId'         => $this->getDocId()
+        );
+        return $this->view->url($url, null, true);
+    }
+
+    public function getUrlUnpublish() {
+        $url = array(
+            'module'     => 'admin',
+            'controller' => 'documents',
+            'action'     => 'unpublish',
+            'docId'         => $this->getDocId()
+        );
+        return $this->view->url($url, null, true);
+    }
+
+    public function getUrlUndelete() {
+        $url = array(
+            'module'     => 'admin',
+            'controller' => 'documents',
+            'action'     => 'publish',
+            'docId'      => $this->getDocId()
+        );
+        return $this->view->url($url, null, true);
     }
 
     /**
@@ -311,6 +357,10 @@ class Review_Model_DocumentAdapter {
 
     public function isUnpublished() {
         return ($this->getDocState() === 'unpublished');
+    }
+
+    public function hasFiles() {
+        return $this->document->hasField('File');
     }
 
 }
