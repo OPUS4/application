@@ -251,6 +251,34 @@ class Admin_AccountControllerTest extends ControllerTestCase {
         $this->assertRedirect('/admin/account/index');
     }
 
+    public function testDeleteActionDeleteSelf() {
+        $user = new Opus_Account();
+        $user->setLogin('john');
+        $user->setPassword('testpwd');
+        $user->store();
+
+        $this->loginUser('john', 'testpwd');
+
+        $this->dispatch('/admin/account/delete/id/' . $user->getId());
+        $this->assertController('account');
+        $this->assertAction('delete');
+        $this->assertRedirect('/admin/account/index');
+
+        $user = new Opus_Account(null, null, 'john');
+        $this->assertNotNull($user);
+        $user->delete();
+    }
+
+    public function testDeleteActionDeleteAdmin() {
+        $user = new Opus_Account(null, null, 'admin');
+        $this->dispatch('/admin/account/delete/id/' . $user->getId());
+        $this->assertController('account');
+        $this->assertAction('delete');
+        $this->assertRedirect('/admin/account/index');
+        $user = new Opus_Account(null, null, 'admin');
+        $this->assertNotNull($user);
+    }
+
 }
 
 ?>
