@@ -48,6 +48,36 @@ class Account_IndexControllerTest extends ControllerTestCase {
         $this->assertAction('index');
     }
 
+    public function testIndexActionWithoutLogin() {
+        $this->dispatch('/account');
+        $this->assertModule('account');
+        $this->assertController('index');
+        $this->assertAction('index');
+        $this->assertRedirect('/default/auth/index');
+    }
+
+    public function testSaveActionMissingInput() {
+        $user = new Opus_Account();
+        $user->setLogin('john');
+        $user->setPassword('testpwd');
+        $user->store();
+
+        $this->loginUser('john', 'testpwd');
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                   'password' => 'newpassword',
+                   'confirmPassword' => 'newpassword'
+                ));
+        $this->dispatch('/account/index/save');
+        $this->assertResponseCode(200);
+        $this->assertModule('account');
+        $this->assertController('index');
+        $this->assertAction('save');
+
+        $user->delete();
+    }
+
     /**
      * Test modifying account information.
      */
