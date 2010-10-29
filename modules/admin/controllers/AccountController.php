@@ -252,23 +252,45 @@ class Admin_AccountController extends Controller_Action {
     public function deleteAction() {
         $accountId = $this->getRequest()->getParam('id');
 
+        $message = null;
+
         if (!empty($accountId)) {
             $account = new Opus_Account($accountId);
 
             if (!empty($account)) {
                 $currentUser = Zend_Auth::getInstance()->getIdentity();
-                
-                // Check that user doesn't delete himself and protect admin account
-                if (($currentUser === $account->getLogin()) || ($account->getLogin() === 'admin')) {
-                    // TODO show message
+
+                // Check that user does not delete himself and protect admin
+                // account
+                if ($currentUser === $account->getLogin()) {
+                    $message = 'admin_account_error_delete_self';
+                }
+                else if ($account->getLogin() === 'admin') {
+                    $message = 'admin_account_error_delete_admin';
                 }
                 else {
                     $account->delete();
                 }
             }
+            else {
+                $message = 'admin_account_error_badid';
+            }
+        }
+        else {
+            $message = 'admin_account_error_missingid';
         }
 
-        $this->_helper->redirector('index');
+        $messages = array();
+
+        if ($message === null) {
+            $messages['notice'] = $this->view->translate(
+                    'admin_account_delete_success');
+        }
+        else {
+            $messages['failure'] = $this->view->translate($message);
+        }
+
+        $this->_redirectTo('index', $messages);
     }
 
 }

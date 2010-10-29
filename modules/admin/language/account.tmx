@@ -124,6 +124,50 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_account_delete_success">
+      <tuv xml:lang="en">
+        <seg>Account successfully deleted.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das Nutzerkonto wurde erfolgreich gelöscht.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_account_error_delete_self">
+      <tuv xml:lang="en">
+        <seg>You cannot delete your own account.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sie können nicht Ihr eigenes Nutzerkonto löschen.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_account_error_delete_admin">
+      <tuv xml:lang="en">
+        <seg>The admin account cannot be deleted.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das Administationskonto kann nicht gelöscht werden.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_account_error_badid">
+      <tuv xml:lang="en">
+        <seg>Account does not exist.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nutzerkonto existiert nicht.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_account_error_missingid">
+      <tuv xml:lang="en">
+        <seg>No account ID provided.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Keine ID für Nutzerkonto angegeben.</seg>
+      </tuv>
+    </tu>
   </body>
   
 </tmx>
