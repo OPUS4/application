@@ -69,6 +69,8 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
 
         Zend_Registry::set('Opus_Navigation', null); // FIXME Does it help with the mystery bug?
 
+        $this->logoutUser();
+
         parent::tearDown();
     }
 
@@ -104,6 +106,10 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         $auth = Zend_Auth::getInstance();
         $result = $auth->authenticate($adapter);
         $this->assertTrue($auth->hasIdentity());
+    }
+
+    public function logoutUser() {
+        Zend_Auth::getInstance()->clearIdentity();
     }
 
 }

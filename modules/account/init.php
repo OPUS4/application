@@ -43,7 +43,7 @@ if (empty($identity) === true) {
     $params = Zend_Controller_Action_HelperBroker::getStaticHelper('ReturnParams')->getReturnParameters();
 
     // Forward to module auth
-    $message = 'You must be logged in to use module admin.';
+    $message = 'You must be logged in to edit account.';
     Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger')->addMessage(array('level' => 'failure', 'message' => $message));
     Zend_Controller_Action_HelperBroker::getStaticHelper('redirector')->gotoSimple('index', 'auth', 'default', $params);
 }
