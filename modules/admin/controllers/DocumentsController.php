@@ -185,6 +185,13 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $this->view->directionLinks = $directionLinks;
     }
 
+    public function showAction() {
+        $model = parent::showAction();
+        if (!empty($model)) {
+            $this->view->docHelper = new Review_Model_DocumentAdapter($this->view, $model);
+        }
+    }
+
     /**
      * Edits a model instance
      *
@@ -203,17 +210,6 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             $documentInSession = new Zend_Session_Namespace('document');
             $documentInSession->document = $document;
 
-
-            if ($document->getServerState() === 'unpublished') {
-                $this->view->actions = 'publish';
-            }
-            else if ($document->getServerState() === 'published') {
-                $this->view->actions = 'unpublish';
-            }
-            if ($document->getServerState() === 'deleted') {
-                $this->view->actions = 'undelete';
-            }
-
             $this->view->showFilemanager = $document->hasField('File');
             $documentWithFilter = $this->__createFilter($document);
 
@@ -228,6 +224,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                 $assignedCollections[] = array('collectionName' => $assignedCollection->getDisplayName(), 'collectionId' => $assignedCollection->getId(), 'roleName' => $assignedCollection->getRole()->getName(), 'roleId' => $assignedCollection->getRole()->getId());
             }
             $this->view->assignedCollections = $assignedCollections;
+            $this->view->docHelper = new Review_Model_DocumentAdapter($this->view, $document);
         }
         else {
             $this->_helper->redirector('index');
@@ -256,19 +253,14 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                     $this->_redirectTo('index', 'Model successfully deleted.');
             	}
             	else {
-            		$this->_redirectTo('index');
+                    $this->_redirectTo('index');
             	}
             }
             else {
                 // show safety question
                 $this->view->title = $this->view->translate('admin_doc_delete');
                 $this->view->text = $this->view->translate('admin_doc_delete_sure');
-                $yesnoForm = new Admin_Form_YesNoForm();
-                $idElement = new Zend_Form_Element_Hidden('id');
-                $idElement->setValue($id);
-                $yesnoForm->addElement($idElement);
-                $yesnoForm->setAction($this->view->url(array("controller"=>"documents", "action"=>"delete")));
-                $yesnoForm->setMethod('post');
+                $yesnoForm = $this->_getConfirmationForm($id, 'delete');
                 $this->view->form = $yesnoForm;
             }
         } else {
@@ -310,17 +302,22 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                 // show safety question
                 $this->view->title = $this->view->translate('admin_doc_delete_permanent');
                 $this->view->text = $this->view->translate('admin_doc_delete_permanent_sure');
-                $yesnoForm = new Admin_Form_YesNoForm();
-                $idElement = new Zend_Form_Element_Hidden('id');
-                $idElement->setValue($id);
-                $yesnoForm->addElement($idElement);
-                $yesnoForm->setAction($this->view->url(array("controller"=>"documents", "action"=>"permanentdelete")));
-                $yesnoForm->setMethod('post');
+                $yesnoForm = $this->_getConfirmationForm($id, 'permanentdelete');
                 $this->view->form = $yesnoForm;
             }
         } else {
             $this->_redirectTo('index');
         }
+    }
+
+    protected function _getConfirmationForm($id, $action) {
+        $yesnoForm = new Admin_Form_YesNoForm();
+        $idElement = new Zend_Form_Element_Hidden('id');
+        $idElement->setValue($id);
+        $yesnoForm->addElement($idElement);
+        $yesnoForm->setAction($this->view->url(array("controller"=>"documents", "action"=>$action)));
+        $yesnoForm->setMethod('post');
+        return $yesnoForm;
     }
 
     /**
