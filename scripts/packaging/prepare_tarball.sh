@@ -44,7 +44,7 @@ svn export https://svn.zib.de/opus4dev/solrconfig solrconfig
 # Clean everything the user doesn't need
 #
 
-find . -P -name .gitignore -print0 |xargs -r0 rm -v 
+find -P . -name .gitignore -print0 | xargs -r0 rm -v 
 
 rm -rv opus4/{docs,nbproject,tests,workspace}
 rm -rv opus4/public/layouts/{opus33,opus34,darker,matheon}
