@@ -49,15 +49,46 @@ class AuthControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200);
     }
 
+    /**
+     * <input type="hidden" name="hash" value="641c4c9e211577ecdd0bd3fcfc1375b8" id="hash" />
+     */
+    public function testGetLoginPage() {
+        $this->dispatch('/auth/index/rmodule/home/rcontroller/index/raction/index');
+        $this->assertResponseCode(200);
+        $response = $this->getResponse();
+        $treffer = preg_match('/<input.*name="hash".*value="(.*?)".*\/>/', $response->getBody(), $matches);
+        $this->assertEquals(1, $treffer);
+    }
+
+    /**
+     * @depends testGetLoginPage
+     */
     public function testLoginAction() {
+        $this->dispatch('/auth/index/rmodule/home/rcontroller/index/raction/index');
+        $this->assertResponseCode(200);
+        $response = $this->getResponse();
+        $treffer = preg_match('/<input.*name="hash".*value="(.*?)".*\/>/', $response->getBody(), $matches);
+        $this->assertEquals(1, $treffer);
+        $hash = $matches[1];
+        $this->resetRequest();
         $this->request
                 ->setMethod('POST')
                 ->setPost(array(
+                   'hash' => $hash,
                    'login' => 'admin',
                    'password' => 'adminadmin'
                 ));
-        $this->dispatch('/auth/login');
-        // $this->assertRedirect();
+        $this->dispatch('/auth/login/rmodule/home/rcontroller/index/raction/index');
+        $this->assertRedirect('/home/index/index');
+        $this->assertModule('default');
+        $this->assertController('auth');
+        $this->assertAction('login');
+    }
+
+    public function testLogoutAction() {
+        $this->loginUser('admin', 'adminadmin');
+        $this->dispatch('/auth/logout/rmodule/home/rcontroller/index/raction/index');
+        $this->assertNull(Zend_Auth::getInstance()->getIdentity());
     }
 
 }
