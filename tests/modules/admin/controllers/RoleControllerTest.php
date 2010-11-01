@@ -58,6 +58,14 @@ class Admin_RoleControllerTest extends ControllerTestCase {
         $this->assertAction('show');
     }
 
+    public function testShowActionWithoutId() {
+        $this->dispatch('/admin/role/show');
+        $this->assertRedirect('/admin/role/index');
+        $this->assertModule('admin');
+        $this->assertController('role');
+        $this->assertAction('show');
+    }
+
     /**
      * Test showing form for new role.
      */
@@ -75,6 +83,14 @@ class Admin_RoleControllerTest extends ControllerTestCase {
     public function testEditAction() {
         $this->dispatch('/admin/role/edit/id/1');
         $this->assertResponseCode(200);
+        $this->assertModule('admin');
+        $this->assertController('role');
+        $this->assertAction('edit');
+    }
+
+    public function testEditActionWithoutId() {
+        $this->dispatch('/admin/role/edit');
+        $this->assertRedirect('/admin/role/index');
         $this->assertModule('admin');
         $this->assertController('role');
         $this->assertAction('edit');
@@ -160,6 +176,29 @@ class Admin_RoleControllerTest extends ControllerTestCase {
 
     /**
      * @depends testUpdateAction
+     */
+    public function testUpdateActionInvalidInput() {
+        $role = Opus_Role::fetchByName('testrole2');
+
+         $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'name' => '',
+                    'privilegeclearance' => '1',
+                    'metadatapublished' => '1',
+                    'metadatadeleted' => '1',
+                    'submit' => 'submit'
+                ));
+
+        $this->dispatch('/admin/role/update/id/' . $role->getId());
+        $this->assertResponseCode(200);
+        $this->assertModule('admin');
+        $this->assertController('role');
+        $this->assertAction('update');
+    }
+
+    /**
+     * @depends testUpdateActionInvalidInput
      */
     public function testDeleteAction() {
         $role = Opus_Role::fetchByName('testrole2');
