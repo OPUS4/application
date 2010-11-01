@@ -36,9 +36,14 @@ $this->headMeta()
     ->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8')
     ->appendHttpEquiv('Content-Language', 'de-DE');
 
-$this->headTitle('OPUS 4')
-    ->headTitle($this->translate($this->title))
-    ->setSeparator(' | ');
+if (isset($this->title)) {
+    $this->headTitle('OPUS 4')
+        ->headTitle($this->translate($this->title))
+        ->setSeparator(' | ');
+}
+else {
+    $this->headTitle('OPUS 4');
+}
 
 $this->headLink()
     ->appendStylesheet($this->layoutPath() . '/css/admin.css') 
