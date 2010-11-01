@@ -69,6 +69,17 @@ class Home_IndexControllerTest extends ControllerTestCase {
         $this->assertAction('help');
     }
 
+    public function testHelpActionSeparate() {
+        $this->markTestSkipped('Is *help.separate* parameter still supported?');
+        $config = Zend_Registry::get('Zend_Config');
+        $config->help->separate = true;
+        $this->dispatch('/home/index/help');
+        $this->assertResponseCode(200);
+        $this->assertModule('home');
+        $this->assertController('index');
+        $this->assertAction('help');
+    }
+
     /**
      * Test help action.
      */
@@ -89,6 +100,22 @@ class Home_IndexControllerTest extends ControllerTestCase {
         $this->assertModule('home');
         $this->assertController('index');
         $this->assertAction('imprint');
+    }
+
+    public function testFailureAction() {
+        $this->dispatch('/home/index/failure');
+        $this->assertRedirect('/home/index/index');
+        $this->assertModule('home');
+        $this->assertController('index');
+        $this->assertAction('failure');
+    }
+
+    public function testNoticeAction() {
+        $this->dispatch('/home/index/notice');
+        $this->assertRedirect('/home/index/index');
+        $this->assertModule('home');
+        $this->assertController('index');
+        $this->assertAction('notice');
     }
 }
 ?>
