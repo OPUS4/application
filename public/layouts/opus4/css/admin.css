@@ -92,7 +92,7 @@
     margin-bottom: 0.5em;
 }
 
-.adminContainer span.label {
+.adminContainer div span.label {
     display: table-cell;
     width: 15em;
     padding: 2px;
@@ -101,7 +101,7 @@
     background-color: lightgray;
 }
 
-.adminContainer span.value {
+.adminContainer div span.value {
     display: table-cell;
     text-align: left;
     padding: 2px;
@@ -109,6 +109,26 @@
     border-bottom: 2px solid white;
     background-color: #eeeeee;
     width: 50em;
+}
+
+.adminContainer div span.value div span.label {
+    width: 10em;
+    border-bottom: 1px solid white;
+}
+
+.adminContainer div span.value div span.value {
+    width: 38em;
+    border-bottom: 1px solid white;
+}
+
+.adminContainer div span.value div:last-child span.label {
+    width: 10em;
+    border-bottom: none;
+}
+
+.adminContainer div span.value div:last-child span.value {
+    width: 38em;
+    border-bottom: none;
 }
 
 .adminContainer ul.sortingNavigation {
