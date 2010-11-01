@@ -53,7 +53,7 @@ rm -v  opus4/modules/publish/views/scripts/form/preprintmatheon.phtml
 rm -rv opus4/modules/{pkm,publicationList,remotecontrol}
 rm -rv opus4/scripts/{packaging,cron,indexing,install}
 rm -r  opus4/scripts/*{Matheon,ZIB}*.php
-rm -rv opus4/library/Opus/Search/{Adapter,Index}/Lucene/
+rm -rvf opus4/library/Opus/Search/{Adapter,Index}/Lucene/
 
 
 #
