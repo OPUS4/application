@@ -77,7 +77,7 @@ class Frontdoor_MailController extends Zend_Controller_Action
         $type = $document->getType();
         $this->view->type = $type;
         // show mail form
-        $mailForm = new MailForm();
+        $mailForm = new Frontdoor_Form_MailForm();
         $mailForm->title->setValue($title_value);
        	$mailForm->doc_id->setValue($docId);
         $mailForm->doc_type->setValue($this->view->translate($type));
@@ -168,7 +168,7 @@ class Frontdoor_MailController extends Zend_Controller_Action
         $this->view->type = $type;
 
         // show mail form
-        $form = new ToauthorForm(array('authors' => $authors));
+        $form = new Frontdoor_Form_ToauthorForm(array('authors' => $authors));
         $form->setAction($this->view->url(array('module' => "frontdoor", "controller"=>'mail', "action"=>'toauthor')));
         $form->setMethod('post');
 
