@@ -86,7 +86,6 @@
 
             <!-- CompletedDate -->
             <!--CompletedDate is left out, because Opus3 only stores the year -->
-
             <!-- CompletedYear -->
             <xsl:attribute name="CompletedYear">
                 <xsl:value-of select="field[@name='date_year']" />
@@ -215,6 +214,8 @@
             </xsl:if>
 
             <!-- IdentifierUrn -->
+            <!-- Fuer das ZIB irrelevant -->
+            <!--
             <xsl:if test="string-length(field[@name='urn']) > 0">
                 <xsl:element name="IdentifierUrn">
                     <xsl:attribute name="Value">
@@ -222,6 +223,7 @@
                     </xsl:attribute>
                 </xsl:element>
             </xsl:if>
+            -->
 
             <!-- IdentifierIsbn -->
             <xsl:if test="string-length(field[@name='isbn']) > 0">
