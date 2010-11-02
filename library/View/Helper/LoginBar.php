@@ -126,7 +126,7 @@ class View_Helper_LoginBar {
             $url = $this->_view->url(array_merge($this->_login_url, $returnParams->getReturnParameters()));
             return '<a href="' . $url . '">Login</a>';
         } else {
-            $accountUrl = $this->_view->url(array('module' => 'account'));
+            $accountUrl = $this->_view->url(array('module' => 'account'), null, true);
             $url = $this->_view->url(array_merge($this->_logout_url, $returnParams->getReturnParameters()));
             return '<a style="padding-right: 1em" href="' . $accountUrl . '">Account</a> <a href="' . $url . '">Logout</a>';
         }
