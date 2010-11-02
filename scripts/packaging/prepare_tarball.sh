@@ -81,4 +81,4 @@ chmod 777 workspace/{files,cache,tmp}
 # Build tarball
 #
 
-tar czvf ../$(basename $(pwd)).tgz opus4 workspace libs
+tar czvf ../$(basename $(pwd)).tgz opus4 workspace libs solrconfig
