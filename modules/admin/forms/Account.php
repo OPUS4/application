@@ -53,6 +53,12 @@ class Admin_Form_Account extends Admin_Form_RolesAbstract {
             $account = new Opus_Account($id);
 
             $this->populateFromAccount($account);
+
+            // when editing account password isn't required
+            $this->getElement('password')->setRequired(false);
+            $this->getElement('confirmPassword')->setRequired(false);
+            // force validation on empty field to check identity to password
+            $this->getElement('confirmPassword')->setAllowEmpty(false);
         }
     }
 
@@ -80,6 +86,9 @@ class Admin_Form_Account extends Admin_Form_RolesAbstract {
      */
     public function populateFromAccount($account) {
         $this->getElement('username')->setValue($account->getLogin());
+        $this->getElement('firstname')->setValue($account->getFirstName());
+        $this->getElement('lastname')->setValue($account->getLastName());
+        $this->getElement('email')->setValue($account->getEmail());
 
         $roles = $account->getRole();
 

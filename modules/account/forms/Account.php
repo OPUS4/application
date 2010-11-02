@@ -60,6 +60,9 @@ class Account_Form_Account extends Zend_Form {
         $login = $account->getLogin();
 
         $this->getElement('username')->setValue($login);
+        $this->getElement('firstname')->setValue($account->getFirstName());
+        $this->getElement('lastname')->setValue($account->getLastName());
+        $this->getElement('email')->setValue($account->getEmail());
 
         if ($login === 'admin') {
             $this->getElement('username')->setAttrib('disabled', true);

@@ -79,6 +79,10 @@ class Account_IndexController extends Controller_Action {
                 $isPasswordChanged = false;
             }
 
+            if (!isset($postData['username'])) {
+                $postData['username'] = $login;
+            }
+
             $postData['oldLogin'] = $login;
 
             if ($accountForm->isValid($postData)) {
@@ -86,6 +90,13 @@ class Account_IndexController extends Controller_Action {
 
                 $newLogin = $postData['username'];
                 $password = $postData['password'];
+                $firstname = $postData['firstname'];
+                $lastname = $postData['lastname'];
+                $email = $postData['email'];
+
+                $account->setFirstName($firstname);
+                $account->setLastName($lastname);
+                $account->setEmail($email);
 
                 $this->_logger->debug('login = ' . $login);
                 $this->_logger->debug('new login = ' . $newLogin);

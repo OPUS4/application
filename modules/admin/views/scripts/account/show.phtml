@@ -43,7 +43,19 @@
 <table>
     <tr>
         <td><?= $this->translate('admin_account_label_login') ?></td>
-        <td><?=  htmlspecialchars($this->account->getLogin())?></td>
+        <td><?= htmlspecialchars($this->account->getLogin())?></td>
+    </tr>
+    <tr>
+        <td><?= $this->translate('admin_account_label_firstname') ?></td>
+        <td><?= htmlspecialchars($this->account->getFirstName()) ?></td>
+    </tr>
+    <tr>
+        <td><?= $this->translate('admin_account_label_lastname') ?></td>
+        <td><?= htmlspecialchars($this->account->getLastName()) ?></td>
+    </tr>
+    <tr>
+        <td><?= $this->translate('admin_account_label_email') ?></td>
+        <td><?= htmlspecialchars($this->account->getEmail()) ?></td>
     </tr>
     <tr>
         <td><?= $this->translate('admin_account_label_roles') ?></td>

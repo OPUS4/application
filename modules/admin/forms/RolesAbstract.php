@@ -48,7 +48,8 @@ abstract class Admin_Form_RolesAbstract extends Zend_Form {
 
         foreach ($roles as $role) {
             $roleName = $role->getDisplayName();
-            $roleCheckbox = $this->createElement('checkbox', 'role' . $roleName)->setLabel($roleName);
+            $roleCheckbox = $this->createElement('checkbox',
+                    'role' . $roleName)->setLabel($roleName);
             $this->addElement($roleCheckbox);
             $rolesGroup[] = $roleCheckbox->getName();
         }

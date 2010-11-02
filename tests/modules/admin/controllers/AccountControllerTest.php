@@ -106,6 +106,9 @@ class Admin_AccountControllerTest extends ControllerTestCase {
                 ->setMethod('POST')
                 ->setPost(array(
                     'username' => 'wally',
+                    'firstname' => 'wally',
+                    'lastname' => 'walross',
+                    'email' => 'wally@example.org',
                     'password' => 'dummypassword',
                     'confirmPassword' => 'dummypassword',
                     'roleguest' => '1',
@@ -165,6 +168,9 @@ class Admin_AccountControllerTest extends ControllerTestCase {
                 ->setPost(array(
                     'id' => $id,
                     'username' => 'wally2',
+                    'firstname' => 'wally',
+                    'lastname' => 'walross',
+                    'email' => 'wally@example.org',
                     'roleguest' => '1',
                     'roleadministrator' => '0',
                     'submit' => 'submit'
@@ -223,6 +229,9 @@ class Admin_AccountControllerTest extends ControllerTestCase {
                 ->setPost(array(
                     'id' => $id,
                     'username' => 'wally2',
+                    'firstname' => 'wally',
+                    'lastname' => 'walross',
+                    'email' => 'wally@example.org',
                     'password' => 'newpassword',
                     'confirmPassword' => 'newpassword',
                     'roleguest' => '1',

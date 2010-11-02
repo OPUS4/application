@@ -114,12 +114,18 @@ class Admin_AccountController extends Controller_Action {
             if ($accountForm->isValid($postData)) {
                 $login = $postData['username'];
                 $password = $postData['password'];
+                $firstname = $postData['firstname'];
+                $lastname = $postData['lastname'];
+                $email = $postData['email'];
                 $roles = Admin_Form_Account::parseSelectedRoles($postData);
 
                 $account = new Opus_Account();
 
                 $account->setLogin($login);
                 $account->setPassword($password);
+                $account->setFirstName($firstname);
+                $account->setLastName($lastname);
+                $account->setEmail($email);
                 $account->setRole($roles);
 
                 $account->store();
@@ -187,6 +193,10 @@ class Admin_AccountController extends Controller_Action {
             $postData['oldLogin'] = $account->getLogin();
 
             if ($accountForm->isValid($postData)) {
+
+                $account->setFirstName($postData['firstname']);
+                $account->setLastName($postData['lastname']);
+                $account->setEmail($postData['email']);
 
                 $oldLogin = $account->getLogin();
 

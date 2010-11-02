@@ -60,7 +60,8 @@ class Review_IndexController extends Controller_Action {
                 $this->_forward('clear');
             }
             else {
-                $this->view->error = $this->view->translate('review_error_noselection');
+                $this->view->error = $this->view->translate(
+                        'review_error_noselection');
             }
         }
 
@@ -75,13 +76,16 @@ class Review_IndexController extends Controller_Action {
         $sort_reverse = $this->_isButtonPressed('buttonUp', '0');
         $sort_reverse = $this->_isButtonPressed('buttonDown', '1');
 
-        $this->view->selectAll = $this->_isButtonPressed('buttonSelectAll', true, false);
-        $this->view->selectNone = $this->_isButtonPressed('buttonSelectNone', true, false);
+        $this->view->selectAll = $this->_isButtonPressed('buttonSelectAll',
+                true, false);
+        $this->view->selectNone = $this->_isButtonPressed('buttonSelectNone',
+                true, false);
 
         $this->_prepareSortOptions();
 
         // Get list of document identifiers
-        $result = $this->_helper->documents($sort_order, $sort_reverse, 'unpublished');
+        $result = $this->_helper->documents($sort_order, $sort_reverse,
+                'unpublished');
 
         // TODO remove or disable if log level is not DEBUG
         foreach ($result as $testid) {
@@ -116,6 +120,8 @@ class Review_IndexController extends Controller_Action {
             return;
         }
 
+        $config = Zend_Registry::get('Zend_Config');
+
         // if back button was pressed return to document selection
         if ($this->_isButtonPressed('buttonBack', true, false)) {
             $this->_forward('index');
@@ -126,27 +132,49 @@ class Review_IndexController extends Controller_Action {
 
         $this->_processSelection();
 
-        $this->view->documentCount = count($this->view->selected);
+        if (isset($config->clearing->addCurrentUserAsReferee)) {
+            $useCurrentUser = $config->clearing->addCurrentUserAsReferee;
+        }
+        else {
+            $useCurrentUser = false;
+        }
 
-        $firstName = $this->getRequest()->getParam('firstname');
-        $this->view->firstName = $firstName;
+        if ($useCurrentUser) {
+            $userId = Zend_Auth::getInstance()->getIdentity();
+            $user = new Opus_Account(null, null, $userId);
+            $firstName = $user->getFirstName();
+            $lastName = $user->getLastName();
+            $email = $user->getEmail();
+            $helper = new Review_Model_ClearDocumentsHelper();
+            $helper->clear($this->view->selected, $lastName, $firstName,
+                    $email);
+            $this->_redirectTo('index');
+        }
+        else {
+            $this->view->documentCount = count($this->view->selected);
 
-        $lastName = $this->getRequest()->getParam('lastname');
-        $this->view->lastName = $lastName;
+            $firstName = $this->getRequest()->getParam('firstname');
+            $this->view->firstName = $firstName;
 
-        if ($this->_isButtonPressed('buttonAccept', true, false)) {
-            if (!Zend_Validate::is($firstName, 'NotEmpty')) {
-                $this->view->error = $this->view->translate('review_error_input_missing');
-            }
+            $lastName = $this->getRequest()->getParam('lastname');
+            $this->view->lastName = $lastName;
 
-            if (!Zend_Validate::is($lastName, 'NotEmpty')) {
-                $this->view->error = $this->view->translate('review_error_input_missing');
-            }
+            if ($this->_isButtonPressed('buttonAccept', true, false)) {
+                if (!Zend_Validate::is($firstName, 'NotEmpty')) {
+                    $this->view->error = $this->view->translate(
+                            'review_error_input_missing');
+                }
 
-            if (empty($this->view->error)) {
-                $helper = new Review_Model_ClearDocumentsHelper();
-                $helper->clear($this->view->selected, $lastName, $firstName);
-                $this->_redirectTo('index');
+                if (!Zend_Validate::is($lastName, 'NotEmpty')) {
+                    $this->view->error = $this->view->translate(
+                            'review_error_input_missing');
+                }
+
+                if (empty($this->view->error)) {
+                    $helper = new Review_Model_ClearDocumentsHelper();
+                    $helper->clear($this->view->selected, $lastName, $firstName);
+                    $this->_redirectTo('index');
+                }
             }
         }
     }

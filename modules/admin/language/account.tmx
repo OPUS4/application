@@ -88,6 +88,32 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_account_label_firstname">
+      <tuv xml:lang="en">
+        <seg>Firstname:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Vorname:</seg>
+      </tuv>
+    </tu>
+    <tu tuid="admin_account_label_lastname">
+      <tuv xml:lang="en">
+        <seg>Lastname:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nachnahme:</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_account_label_email">
+      <tuv xml:lang="en">
+        <seg>Email:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Email:</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_account_label_password">
       <tuv xml:lang="en">
         <seg>Password:</seg>

@@ -36,6 +36,21 @@
  */
 class Account_IndexControllerTest extends ControllerTestCase {
 
+    private $user;
+
+    public function setUp() {
+        parent::setUp();
+        $this->user = new Opus_Account();
+        $this->user->setLogin('john');
+        $this->user->setPassword('testpwd');
+        $this->user->store();
+    }
+
+    public function tearDown() {
+        parent::tearDown();
+        $this->user->delete();
+    }
+
     /**
      * Test showing account information.
      */
@@ -57,41 +72,31 @@ class Account_IndexControllerTest extends ControllerTestCase {
     }
 
     public function testSaveActionMissingInput() {
-        $user = new Opus_Account();
-        $user->setLogin('john');
-        $user->setPassword('testpwd');
-        $user->store();
-
         $this->loginUser('john', 'testpwd');
         $this->request
                 ->setMethod('POST')
                 ->setPost(array(
-                   'password' => 'newpassword',
-                   'confirmPassword' => 'newpassword'
+                   'password' => 'newpassword'
                 ));
         $this->dispatch('/account/index/save');
         $this->assertResponseCode(200);
         $this->assertModule('account');
         $this->assertController('index');
         $this->assertAction('save');
-
-        $user->delete();
     }
 
     /**
      * Test modifying account information.
      */
     public function testChangePassword() {
-        $user = new Opus_Account();
-        $user->setLogin('john');
-        $user->setPassword('testpwd');
-        $user->store();
-
         $this->loginUser('john', 'testpwd');
         $this->request
                 ->setMethod('POST')
                 ->setPost(array(
                    'username' => 'john',
+                   'firstname' => '',
+                   'lastname' => '',
+                   'email' => '',
                    'password' => 'newpassword',
                    'confirmPassword' => 'newpassword'
                 ));
@@ -99,24 +104,20 @@ class Account_IndexControllerTest extends ControllerTestCase {
         $this->assertRedirect();
 
         $this->loginUser('john', 'newpassword');
-
-        $user->delete();
     }
 
     /**
      * Test changing login.
      */
     public function testChangeLogin() {
-        $user = new Opus_Account();
-        $user->setLogin('john');
-        $user->setPassword('testpwd');
-        $user->store();
-
         $this->loginUser('john', 'testpwd');
         $this->request
                 ->setMethod('POST')
                 ->setPost(array(
-                   'username' => 'john2'
+                   'username' => 'john2',
+                   'firstname' => '',
+                   'lastname' => '',
+                   'email' => ''
                 ));
         $this->dispatch('/account/index/save');
         $this->assertRedirect();
@@ -124,7 +125,6 @@ class Account_IndexControllerTest extends ControllerTestCase {
         $this->loginUser('john2', 'testpwd');
 
         $user = new Opus_Account(null, null, 'john2');
-        $user->delete();
     }
 
 }

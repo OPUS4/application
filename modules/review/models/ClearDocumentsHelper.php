@@ -46,7 +46,7 @@ class Review_Model_ClearDocumentsHelper {
      * FIXME add referee
      * FIXME capture success or failure for display afterwards
      */
-    public function clear($docIds, $lastName, $firstName) {
+    public function clear($docIds, $lastName = null, $firstName = null, $email = null) {
         $logger = Zend_Registry::get('Zend_Log');
 
         $logger->debug('Clearing documents.');
@@ -56,7 +56,7 @@ class Review_Model_ClearDocumentsHelper {
 
             try {
                 $state = $document->getServerState();
-
+ 
                 if ($state === 'unpublished') {
                     $logger->debug('Change state to \'published\' for document:' . $docId);
                     $document->setServerState('published');
@@ -64,6 +64,7 @@ class Review_Model_ClearDocumentsHelper {
                     $person = new Opus_Person();
                     $person->setFirstName($firstName);
                     $person->setLastName($lastName);
+                    $person->setEmail($email);
                     $document->addPersonReferee($person);
 
                     $date = new Opus_Date(new Zend_Date());
