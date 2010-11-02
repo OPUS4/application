@@ -50,10 +50,10 @@ defined('APPLICATION_PATH')
 define('APPLICATION_ENV', 'testing');
 
 require_once 'Zend/Application.php';
-require_once 'OpusMigrationBase.php';
+require_once 'ZIBMigration_Base.php';
 require_once 'ZIBCollectionsImport.php';
 require_once 'ZIBInstituteImport.php';
-require_once 'Opus3LicenceImport.php';
+require_once 'ZIBLicenceImport.php';
 require_once 'ZIBXMLImport.php';
 require_once 'ZIBBibtexImport.php';
 require_once 'simplehtmldom/simple_html_dom.php';
@@ -496,8 +496,8 @@ class ZIBMigration extends OpusMigrationBase {
         $this->load_licences();
 
         // Load Institutes
-        //$this->load_documents();
-        $this->load_documents(1, 20);
+        $this->load_documents();
+        //$this->load_documents(1, 20);
 
         // Import files
         //$this->load_fulltext();
@@ -517,19 +517,18 @@ class ZIBMigration extends OpusMigrationBase {
 	//$this->create_project_collections("http://www.zib.de/de/projekte/aktuelle-projekte/browse/1.html");
 
 	// Import Bibtex-Files
-       
+       /*
         $this->import_bibtex('../../bibtex/Numerische.bib.xml', 20);
 	$this->import_bibtex('../../bibtex/Optimierung.bib.xml', 20);
         $this->import_bibtex('../../bibtex/Parallele.bib.xml', 20);
 	$this->import_bibtex('../../bibtex/Visualisierung.bib.xml', 20);
-
-         /*
+*/
+         
         $this->import_bibtex('../../bibtex/Numerische.bib.xml');
 	$this->import_bibtex('../../bibtex/Optimierung.bib.xml');
         $this->import_bibtex('../../bibtex/Parallele.bib.xml');
 	$this->import_bibtex('../../bibtex/Visualisierung.bib.xml');
-          *
-          */
+
   
 
 	// Fill Person-Colelctiosn
