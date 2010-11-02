@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -36,11 +37,18 @@
  * Builds the fist page of an upload form for one file
  *
  */
-
 class Publish_Form_PublishingFirst extends Zend_Form {
 
     public $config;
     public $session;
+    public $disable;
+
+    public function __construct($disable = null, $options = null) {
+        if (isset($disable))
+            $this->disable = $disable;
+
+        parent::__construct($options);
+    }
 
     /**
      * First publishing form of two forms
@@ -48,30 +56,36 @@ class Publish_Form_PublishingFirst extends Zend_Form {
      *
      * @return void
      */
-    public function init() {        
-        
+    public function init() {
+
         $this->session = new Zend_Session_Namespace('Publish');
-        
+
         $this->config = Zend_Registry::get('Zend_Config');
 
+        //create and add document type
         $doctypes = $this->_createDocumentTypeField();
-        if (is_array($doctypes))
-            $this->addElements(array($doctypes[0], $doctypes[1]));
-        else $this->addElement($doctypes);
+        $this->addElement($doctypes);
 
+        //create and add file upload
         $fileupload = $this->_createFileuploadField();
         $this->addElement($fileupload);
 
-        $bibliographie = $this->_createBibliographyField();            
-        if ($bibliographie !== null) {
+        //create and add bibliographie
+        $bibliographie = $this->_createBibliographyField();
+        if ($bibliographie !== null)
             $this->addElement($bibliographie);
-        }
 
+        //create and add add-button
+        $addAnotherFile = $this->createElement('submit', 'addAnotherFile');
+        $addAnotherFile->setLabel('addAnotherFile');
+        $this->addElement($addAnotherFile);
+
+        //create and add send-button
         $submit = $this->createElement('submit', 'send');
-        $submit->setLabel('Send');$this->addElement($submit);
+        $submit->setLabel('Send');
         $this->addElement($submit);
 
-        $this->setAttrib('enctype', Zend_Form::ENCTYPE_MULTIPART);        
+        $this->setAttrib('enctype', Zend_Form::ENCTYPE_MULTIPART);
     }
 
     /**
@@ -83,33 +97,25 @@ class Publish_Form_PublishingFirst extends Zend_Form {
      */
     private function _createDocumentTypeField() {
         $documentTypes = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
-
+        //todo: order ba name for german translation
         //Select with different document types given by the used function
         $listOptions = $documentTypes->getDocumentTypes();
 
-        //field type depends on the number of fields
-//        if (count($listOptions)===1) {
-//            $value = (array_keys($listOptions));
-//            $doctypes = $this->createElement('text', 'type1');
-//            $doctypes->setLabel('selecttype')
-//                    ->setValue($value[0])
-//                    ->setAttrib('disabled', true)
-//                    ->setDescription('publish_controller_one_doctype');
-//
-//            $doctypesHidden=$this->createElement('hidden', 'documentType');
-//            $doctypesHidden->setValue($value[0]);
-//            $this->addElement($doctypesHidden);
-//
-//            return array($doctypes, $doctypesHidden);
-//        }
-//        else {
-            $doctypes = $this->createElement('select', 'documentType');
-            $doctypes->setLabel('selecttype')
-                    ->setMultiOptions(array_merge(array('' => 'choose_valid_doctype'), $listOptions))
-                    ->setRequired(true);
-            return $doctypes;
-        }        
-//    }
+        asort($listOptions);
+
+        $doctypes = $this->createElement('select', 'documentType');
+        $doctypes->setLabel('selecttype')
+                ->setMultiOptions(array_merge(array('' => 'choose_valid_doctype'), $listOptions));
+
+        if ($this->disable === true) {
+            $doctypes->setAttrib('disabled', true)
+                    ->setRequired(false);
+        }
+        else
+            $doctypes->setRequired(true);
+
+        return $doctypes;
+    }
 
     /**
      * Method shows the fields for file uploads by looking in config file
@@ -119,12 +125,12 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         // get path to store files
         $tempPath = $this->config->path->workspace->temp;
         if (true === empty($tempPath))
-            $tempPath = '../workspace/tmp/'; // TODO defaults are in application.ini => throw exception
+            $tempPath = '../workspace/tmp/';
 
         // get allowed filetypes
         $filetypes = $this->config->publish->filetypes->allowed;
         if (true === empty($filetypes))
-            $filetypes = 'pdf,txt,html,htm'; // TODO defaults are in application.ini => throw exception
+            $filetypes = 'pdf,txt,html,htm';
 
         //get allowed file size
         $maxFileSize = (int) $this->config->publish->maxfilesize;
@@ -136,7 +142,12 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         //get the initial number of file fields, toto: aus der config holen
         $number_of_files = (int) $this->config->form->first->numberoffiles;
         if (true === empty($number_of_files))
-            $number_of_files = 1;        
+            $number_of_files = 1;
+
+        // Upload-fields required to enter second stage
+        $requireUpload = $this->config->form->first->requireupload;
+        if (true === empty($requireUpload))
+            $requireUpload = 0;
 
         //file upload field(s)
         $fileupload = new Zend_Form_Element_File('fileupload');
@@ -145,26 +156,22 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         $validate->setMessages($messages);
 
         $fileupload->setLabel('fileupload')
-                ->setMultiFile($number_of_files)
-                ->setDestination($tempPath)                
+                //->setMultiFile($number_of_files)
+                ->setDestination($tempPath)
                 ->addValidator('Size', false, $maxFileSize)     // limit to value given in application.ini
                 ->setMaxFileSize($maxFileSize)
                 ->addValidator('Extension', false, $filetypes)  // allowed filetypes by extension
-                ->setDescription('publish_controller_index_fileupload')
+                //->setDescription('publish_controller_index_fileupload')
                 ->setValueDisabled(true)
                 ->setAttrib('enctype', 'multipart/form-data');
 
-        // Upload-fields required to enter second stage
-        // TODO: Make it configurable per-document-type.
-        if (isset($this->config->form->first->requireupload)) {
-            if ($this->config->form->first->requireupload) {
-                //$fileupload->setRequired(true);
-                $fileupload->addValidator('Count', false, array('min' => 1, 'max' => $number_of_files));
-            }
-            else {
-                //$fileupload->setRequired(false);
-                $fileupload->addValidator('Count', false, array('min' => 0, 'max' => $number_of_files));
-            }
+        if (1 === $requireUpload) {
+            //$fileupload->addValidator('Count', false, array('min' => 1, 'max' => $number_of_files));
+            $fileupload->setRequired(true);
+        }
+        else {
+            //$fileupload->addValidator('Count', false, array('min' => 0, 'max' => $number_of_files));
+            $fileupload->setRequired(false);
         }
 
         return $fileupload;
@@ -177,17 +184,53 @@ class Publish_Form_PublishingFirst extends Zend_Form {
     private function _createBibliographyField() {
         //show Bibliographie?
         $bib = $this->config->form->first->bibliographie == 1;
-        if (empty($bib)) {
+        if (true === empty($bib)) {
             $bib = 0;
         }
-    
+
         $bibliographie = null;
 
         if ($bib) {
             $bibliographie = $this->createElement('checkbox', 'bibliographie');
             $bibliographie->setLabel('bibliographie');
+            if ($this->disable === true)
+                $bibliographie->setAttrib('disabled', true);
         }
-        
+
         return $bibliographie;
     }
+
+    /**
+     *
+     * @param <type> $elementName
+     * @return string
+     */
+    public function getElementAttributes($elementName) {
+        $elementAttributes = array();
+        $element = $this->getElement($elementName);
+        $elementAttributes['value'] = $element->getValue();
+        $elementAttributes['label'] = $element->getLabel();
+        $elementAttributes['error'] = $element->getMessages();
+        $elementAttributes['id'] = $element->getId();
+        $elementAttributes['type'] = $element->getType();
+        $elementAttributes['desc'] = $element->getDescription();
+        $elementAttributes['hint'] = 'hint_' . $elementName;
+        $elementAttributes['disabled'] = $element->getAttrib('disabled');
+
+        if ($element->getType() === 'Zend_Form_Element_Checkbox') {
+            $elementAttributes['value'] = $element->getCheckedValue();
+        }
+
+        if ($element->getType() === 'Zend_Form_Element_Select') {
+            $elementAttributes["options"] = $element->getMultiOptions(); //array
+        }
+
+        if ($element->isRequired())
+            $elementAttributes["req"] = "required";
+        else
+            $elementAttributes["req"] = "optional";
+
+        return $elementAttributes;
+    }
+
 }

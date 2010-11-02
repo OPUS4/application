@@ -38,7 +38,11 @@
  * @category    Application
  * @package     Module_Publish
  */
-class Publish_IndexController extends Controller_Action {      
+class Publish_IndexController extends Controller_Action {
+
+    public $session;
+    public $log;
+    CONST LABEL = "_label";
 
     /**
      * Renders the first form:
@@ -49,20 +53,49 @@ class Publish_IndexController extends Controller_Action {
      *
      */
     public function indexAction() {
-        $log = Zend_Registry::get('Zend_Log');
-        $defaultNS = new Zend_Session_Namespace('Publish');
-        
+        $this->log = Zend_Registry::get('Zend_Log');
+
+        $this->session = new Zend_Session_Namespace('Publish');
+
         $this->view->title = $this->view->translate('publish_controller_index');
         $this->view->subtitle = $this->view->translate('publish_controller_index_sub');
 
         $form = new Publish_Form_PublishingFirst();
-        
+
+        //set action_url and give it to the view
         $action_url = $this->view->url(array('controller' => 'form', 'action' => 'upload'));
+        $form->setAction($action_url);
+        $this->view->action_url = $action_url;
 
         $form->setMethod('post');
 
-        $form->setAction($action_url);
-
+        //give the form to the view and the view variables for different rendering
         $this->view->form = $form;
+        $this->_setFirstFormViewVariables($form);
+
+        //initialize session variables
+        $this->session->documentType = "";
+        $this->session->documentId = "";
+        $this->session->fullText = 0;
     }
+
+    /**
+     * method to set the different variables and arrays for the view and the templates
+     * @param <Zend_Form> $form
+     */
+    private function _setFirstFormViewVariables($form) {
+        $errors = $form->getMessages();
+
+        //group fields and single fields for view placeholders
+        foreach ($form->getElements() AS $currentElement => $value) {
+
+            //single field name (for calling with helper class)
+            $elementAttributes = $form->getElementAttributes($currentElement); //array
+            $this->view->$currentElement = $elementAttributes;
+        }
+
+        $this->session->publishFiles = array();
+        $this->view->MAX_FILE_SIZE = $this->session->maxFileSize;
+    }
+
 }

@@ -46,7 +46,7 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
     public function element($value, $options = null, $type=null, $name = null) {
         $session = new Zend_Session_Namespace('Publish');
         $log = Zend_Registry::get('Zend_Log');
-        $session->elementCount = $session->elementCount + 1;       
+        $session->elementCount = $session->elementCount + 1;
 
         if ($name == null && $value == null) {
             $error_message = $this->view->translate('template_error_unknown_field');
@@ -70,7 +70,7 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
      */
     protected function _renderElement($element, $options=null, $name=null) {
         $elementfield = "<fieldset class='left-labels'>";
-        $elementfield .= "<legend>" . $this->view->translate($element["label"]) . "</legend>\n\t\t\n\t\t";        
+        $elementfield .= "<legend>" . $this->view->translate($element["label"]) . "</legend>\n\t\t\n\t\t";
         $elementfield .= "<div class='form-item'>";
         $elementfield .= "<label for='" . $element["id"] . "'>" . $element["label"];
         if ($element["req"] === 'required')
@@ -85,7 +85,7 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
                 else
                     $elementfield .= "cols='30' rows='10' ";
                 $elementfield .= " title='" . $this->view->translate($element["hint"]) . "'>";
-                $elementfield .= $element["value"] . "</textarea>";                           
+                $elementfield .= $element["value"] . "</textarea>";
 
                 if ($element["error"] != null) {
                     $elementfield .= "<div class='form-errors'><ul>";
@@ -109,7 +109,7 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
                 $elementfield .= "value='" . $element["value"] . "' />\n\t\t";
                 if (isset($element["desc"]))
                     $elementfield .= "<p class='description'>" . $this->view->translate($element["desc"]) . "</p>";
-                                
+
                 if ($element["error"] != null) {
                     $elementfield .= "<div class='form-errors'><ul>";
                     foreach ($element["error"] AS $err)
@@ -119,7 +119,13 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
                 break;
 
             case "Zend_Form_Element_Select":
-                $elementfield .= "\n\t\t\t<select class='form-selectfield' name='" . $element["id"] . "' id='" . $element["id"] . "'>\n\t\t\t\t";
+                $elementfield .= "\n\t\t\t<select class='form-selectfield' name='" . $element["id"] . "' id='" . $element["id"] . "'";
+
+                if ($element["disabled"] === true) {
+                    $elementfield .= " disabled='disabled' ";
+                    $disable = true;
+                }
+                $elementfield .= ">\n\t\t\t\t";
                 foreach ($element["options"] AS $key => $option) {
                     $elementfield .= "<option value='" . $key . "' label='" . $option . "'";
                     $elementfield .= " title='" . $this->view->translate($element["hint"]) . "' ";
@@ -131,7 +137,7 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
                     $elementfield .= $option . "</option>\n\t\t\t\t";
                 }
                 $elementfield .= "</select>";
-                
+
                 if ($element["error"] != null) {
                     $elementfield .= "<div class='form-errors'><ul>";
                     foreach ($element["error"] AS $err)
@@ -145,10 +151,34 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
                 $elementfield .= "\n\t\t\t\t<input type='checkbox' name='" . $element['id'] . "' id='" . $element['id'] . "' ";
                 $elementfield .= "title='" . $this->view->translate($element['hint']) . "' value='" . $element['value'] . "' ";
                 if ($element['value'] === '1')
-                    $elementfield .= " checked='checked' />";
-                else
-                    $elementfield .= " />";
+                    $elementfield .= " checked='checked' ";
+
+                if ($element["disabled"] === true) {
+                    $elementfield .= " disabled='disabled' ";
+                    $disable = true;
+                }
+
+                $elementfield .= " />";
                 $elementfield .= "</div>";
+                break;
+
+            case "Zend_Form_Element_File" :
+
+                $elementfield .= "\n\t\t\t<input type='file' name='" . $element["id"] . "' id='" . $element["id"] . "' enctype='multipart/form-data' ";
+                if ($options !== null)
+                    $elementfield .= $options . " ";
+                else
+                    $elementfield .= "size='30'";
+
+                $elementfield .= " title='" . $this->view->translate($element["hint"]) . "' />";
+
+
+                if ($element["error"] != null) {
+                    $elementfield .= "<div class='form-errors'><ul>";
+                    foreach ($element["error"] AS $err)
+                        $elementfield .= "\n\t\t\t<li>" . $err . "</li>";
+                    $elementfield .= "\n\t\t</ul></div>";
+                }
                 break;
         }
         $elementfield .= "</div></fieldset>\n\n";
@@ -162,7 +192,7 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
     protected function _renderSubmit($value, $options=null, $name=null) {
         $submit = "\n\t\t<input type='submit' name='" . $name . "' id='" . $name . "' value='" . $this->view->translate($value) . "' ";
         if (isset($options))
-            $submit .= $options ." />";
+            $submit .= $options . " />";
         return $submit;
     }
 
@@ -174,6 +204,7 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
      */
     protected function _renderHidden($value, $options = null, $name=null) {
         $hiddenfield = "<input type='hidden' name='" . $name . "' id='" . $name . "' value='" . $value . "' />";
+
         return $hiddenfield;
     }
 

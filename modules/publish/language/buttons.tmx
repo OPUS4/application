@@ -8,6 +8,15 @@
   <body>
 <!-- This language file contains all texts concerning button labels. -->
 
+    <tu tuid="addAnotherFile">
+        <tuv xml:lang="en">
+            <seg>Save and upload another file</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Speichern und weitere Datei hochladen</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="button_label_back">
         <tuv xml:lang="en">
             <seg>Make changes</seg>

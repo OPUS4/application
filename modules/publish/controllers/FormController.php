@@ -51,7 +51,7 @@ class Publish_FormController extends Controller_Action {
 
     public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array()) {
         $this->log = Zend_Registry::get('Zend_Log');
-        $this->session = new Zend_Session_Namespace('Publish');        
+        $this->session = new Zend_Session_Namespace('Publish');
 
         parent::__construct($request, $response, $invokeArgs);
     }
@@ -65,19 +65,24 @@ class Publish_FormController extends Controller_Action {
             $data = $this->getRequest()->getPost();
 
             if (isset($data['MAX_FILE_SIZE']) && $data['MAX_FILE_SIZE'] != $this->session->maxFileSize) {
-                //manipulated hidden field for file size???                
+                //manipulated hidden field for file size???
+                $this->log->debug("wrong Max_file_size and redirect to index");
                 return $this->_redirectTo('index', '', 'index');
             }
 
             if (!$indexForm->isValid($data)) {
-                //error case, and redirect to form, show errors
+                //error case, and redirect to index, show errors
                 $this->view->form = $indexForm;
                 $this->view->title = $this->view->translate('publish_controller_index');
                 $this->view->subtitle = $this->view->translate('publish_controller_index_sub');
-                return $this->renderScript('index/index.phtml');
+                $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
+                $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
+                $this->_setFirstFormViewVariables($indexForm);
+
+                return $this->renderScript('index/index.phtml');                               
             }
             else {
-
+                //form entries are valid
                 $this->_setDocumentParameters($data);
 
                 $this->view->title = $this->view->translate('publish_controller_index');
@@ -87,6 +92,23 @@ class Publish_FormController extends Controller_Action {
 
                 $this->_storeFilesAndBibliographie($data, $indexForm);
 
+                //upload another file?
+                if (array_key_exists('addAnotherFile', $data)) {
+                    $this->session->first = false;
+                    $this->view->title = $this->view->translate('publish_controller_index');
+                    $this->view->subtitle = $this->view->translate('publish_controller_index_anotherFile');
+//                    $form2 = new Publish_Form_PublishingFirst(true);
+//                    $form2->populate($data);
+//                    $this->view->form = $form2;
+//                    $this->_setFirstFormViewVariables($form2);
+                    $this->view->form = $indexForm;
+                    $this->_setFirstFormViewVariables($indexForm);
+
+                    return $this->renderScript('index/index.phtml');
+                    
+                }
+
+                unset($this->session->first);
                 $templateName = $this->_helper->documentTypes->getTemplateName($this->session->documentType);
                 $this->_helper->viewRenderer($templateName);
 
@@ -94,7 +116,7 @@ class Publish_FormController extends Controller_Action {
                 $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check')) . '#current';
                 $publishForm->setAction($action_url);
                 $publishForm->setMethod('post');
-                $this->_setViewVariables($publishForm);
+                $this->_setSecondFormViewVariables($publishForm);
                 $this->view->action_url = $action_url;
                 $this->view->form = $publishForm;
             }
@@ -153,8 +175,8 @@ class Publish_FormController extends Controller_Action {
                     //error case, and redirect to form, show errors
                     $this->view->form = $form;
                     $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
-                    $this->_setViewVariables($form);
-                    
+                    $this->_setSecondFormViewVariables($form);
+
 
                     return $this->render($this->session->documentType);
                 }
@@ -167,7 +189,7 @@ class Publish_FormController extends Controller_Action {
                     $this->view->header = $this->view->translate('publish_controller_changes');
 
                     $depositForm = new Publish_Form_PublishingSecond($this->session->documentType, $this->session->documentId, $this->session->fulltext, $this->session->additionalFields, $form->getValues());
-                    $action_url = $this->view->url(array('controller' => 'deposit', 'action' => 'deposit'));                   
+                    $action_url = $this->view->url(array('controller' => 'deposit', 'action' => 'deposit'));
                     $depositForm->setAction($action_url);
                     $depositForm->setMethod('post');
                     $depositForm->populate($form->getValues());
@@ -181,11 +203,30 @@ class Publish_FormController extends Controller_Action {
         }
     }
 
+    private function _setFirstFormViewVariables($form) {
+        $errors = $form->getMessages();
+
+        //group fields and single fields for view placeholders
+        foreach ($form->getElements() AS $currentElement => $value) {
+            $this->log->debug("(IndexController): currentElement = " . $currentElement);
+
+            //single field name (for calling with helper class)
+            $elementAttributes = $form->getElementAttributes($currentElement); //array
+            $this->view->$currentElement = $elementAttributes;
+
+            $label = $currentElement . self::LABEL;
+            $this->view->$label = $this->view->translate($form->getElement($currentElement)->getLabel());
+
+        }
+
+        $this->view->MAX_FILE_SIZE = $this->session->maxFileSize;
+    }
+
     /**
      * method to set the different variables and arrays for the view and the templates
      * @param <Zend_Form> $form
      */
-    private function _setViewVariables($form) {
+    private function _setSecondFormViewVariables($form) {
         $this->session->elementCount = 0;
         $errors = $form->getMessages();
 
@@ -324,18 +365,8 @@ class Publish_FormController extends Controller_Action {
             $this->session->documentType = $postData['documentType'];
             unset($postData['documentType']);
         }
-        else
-            $this->session->documentType = "";
 
         $this->log->info("(FormController) documentType = " . $this->session->documentType);
-
-        $this->session->documentId = "";
-
-        $this->log->info("(FormController) documentId = " . $this->session->documentId);
-
-        $this->session->fulltext = '0';
-
-        $this->log->info("(FormController) fulltext = " . $this->session->fulltext);
 
         $this->session->additionalFields = array();
     }
@@ -344,7 +375,13 @@ class Publish_FormController extends Controller_Action {
      * Method stores th uploaded files
      */
     private function _storeFilesAndBibliographie($data, $form) {
-        $this->session->document = new Opus_Document();
+        if ($this->session->documentId !== "") {
+            $this->log->debug("documentID not empty: " . $this->session->documentId);
+            $this->session->document = new Opus_Document($this->session->documentId);
+        }
+        else
+            $this->session->document = new Opus_Document();
+
         $this->session->document->setType($this->session->documentType);
         $this->session->document->setServerState('temporary');
 
@@ -359,14 +396,14 @@ class Publish_FormController extends Controller_Action {
         }
 
         $this->log->info("Fileupload of: " . count($files) . " potential files (vs. $upload_count really uploaded)");
-        
-        if ($upload_count >= 1) {        
+
+        if ($upload_count >= 1) {
             $this->log->debug("File uploaded!!!");
-            $this->session->fulltext = '1';
-            
+            $this->session->fulltext = '1';            
+
             foreach ($files AS $file => $fileValues) {
                 if (!empty($fileValues['name'])) {
-
+                    $this->session->publishFiles[] =  $fileValues['name'];
                     $this->log->info("uploaded: " . $fileValues['name']);
                     $docfile = $this->session->document->addFile();
                     //file always requires a language, this value is later overwritten by the exact language
@@ -386,7 +423,11 @@ class Publish_FormController extends Controller_Action {
             $this->session->document->setBelongsToBibliography(1);
         }
 
-        $this->session->documentId = $this->session->document->store();
+        if ($this->session->documentId === "") {
+            $this->session->documentId = $this->session->document->store();
+        }
+        $this->session->document->store();
+
         $this->log->info("The corresponding doucment ID is: " . $this->session->documentId);
     }
 
@@ -431,7 +472,7 @@ class Publish_FormController extends Controller_Action {
         $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check')) . '#current';
         $form->setAction($action_url);
         $this->view->action_url = $action_url;
-        $this->_setViewVariables($form);
+        $this->_setSecondFormViewVariables($form);
         $this->view->form = $form;
 
         return $this->render($this->session->documentType);

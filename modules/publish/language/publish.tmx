@@ -5,9 +5,7 @@
  <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
  </header>
   
-  <body>
-
-    
+  <body>    
   
     <tu tuid="publish_controller_index">
       <tuv xml:lang="en">
@@ -27,6 +25,14 @@
       </tuv>
     </tu>
 
+    <tu tuid="publish_controller_index_anotherFile">
+      <tuv xml:lang="en">
+        <seg>Choose another file to upload</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Wählen Sie eine weitere Datei zum Hochladen</seg>
+      </tuv>
+    </tu>
 
     <tu tuid="publish_controller_collection_sub">
       <tuv xml:lang="en">
@@ -35,9 +41,7 @@
       <tuv xml:lang="de">
         <seg>Kollektion für das Dokument wählen</seg>
       </tuv>
-    </tu>
-    
-   
+    </tu>       
     
     <tu tuid="upload_another_publication">
       <tuv xml:lang="en">
