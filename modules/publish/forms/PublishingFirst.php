@@ -140,9 +140,9 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         $this->session->maxFileSize = $maxFileSize;
 
         //get the initial number of file fields, toto: aus der config holen
-        $number_of_files = (int) $this->config->form->first->numberoffiles;
-        if (true === empty($number_of_files))
-            $number_of_files = 1;
+//        $number_of_files = (int) $this->config->form->first->numberoffiles;
+//        if (true === empty($number_of_files))
+//            $number_of_files = 1;
 
         // Upload-fields required to enter second stage
         $requireUpload = $this->config->form->first->requireupload;
@@ -163,14 +163,14 @@ class Publish_Form_PublishingFirst extends Zend_Form {
                 ->setValueDisabled(true)
                 ->setAttrib('enctype', 'multipart/form-data');        
         
-        if ($number_of_files > 1) {            
-            $fileupload->setMultiFile($number_of_files)
-                    ->setDescription('publish_controller_index_fileupload');
-            if (1 === $requireUpload)
-                $fileupload->addValidator('Count', false, array('min' => 1, 'max' => $number_of_files));
-            else
-                $fileupload->addValidator('Count', false, array('min' => 0, 'max' => $number_of_files));
-        }
+//        if ($number_of_files > 1) {
+//            $fileupload->setMultiFile($number_of_files)
+//                    ->setDescription('publish_controller_index_fileupload');
+//            if (1 === $requireUpload)
+//                $fileupload->addValidator('Count', false, array('min' => 1, 'max' => $number_of_files));
+//            else
+//                $fileupload->addValidator('Count', false, array('min' => 0, 'max' => $number_of_files));
+//        }
 
         if (1 === $requireUpload)
             $fileupload->setRequired(true);
