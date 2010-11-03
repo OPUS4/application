@@ -138,7 +138,7 @@ class ZIBMigration_Base {
             }
         }
         
-        $fileImporter = new Opus3FileImport($this->path, $this->magicPath, $accessRole);
+        $fileImporter = new ZIBFileImport($this->path, $this->magicPath, $accessRole);
         $doclist = Opus_Document::getAllIds();
         foreach ($doclist as $id) {
             $doc = new Opus_Document($id);

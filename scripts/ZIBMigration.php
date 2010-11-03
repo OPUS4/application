@@ -96,7 +96,7 @@ class ZIBMigration extends ZIBMigration_Base {
     public function load_licences() {
         $input = readline('Do you want to import licences from OPUS3? (y/n) ');
         if ($input === 'y' || $input === 'yes') {
-            $import= new Opus3LicenceImport($this->importData);
+            $import= new ZIBLicenceImport($this->importData);
         }
     }
 
