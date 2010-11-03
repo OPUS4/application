@@ -52,7 +52,7 @@ class Frontdoor_Form_ToauthorForm extends Zend_Form
     {
         $first = true;
         $numberOfAuthors = 0;
-        $atLeastOne = new AtLeastOneValidator();
+        $atLeastOne = new Frontdoor_Form_AtLeastOneValidator();
         $displayGroupElements = array();
         $authorSub = new Zend_Form_SubForm('a');
 
