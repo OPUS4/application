@@ -164,6 +164,18 @@ div > .abort-button{
 .opus fieldset .form-errors{
     padding: 2px 0 4px 20px;
 }
+
+#form-table-check td.label{
+    border-right: 1px solid #26517C;
+    text-align: right;
+}
+
+#form-table-check td.group{
+    border-bottom: 1px solid #26517C;
+    background-color: #E2E6E9;
+    color: #6a7a7b;
+    text-align: left;
+}
 /* HTML elements
 ------------------------------------------------------------ */
 body{
