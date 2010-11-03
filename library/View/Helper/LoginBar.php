@@ -126,9 +126,23 @@ class View_Helper_LoginBar {
             $url = $this->_view->url(array_merge($this->_login_url, $returnParams->getReturnParameters()));
             return '<a href="' . $url . '">Login</a>';
         } else {
-            $accountUrl = $this->_view->url(array('module' => 'account'), null, true);
-            $url = $this->_view->url(array_merge($this->_logout_url, $returnParams->getReturnParameters()));
-            return '<a style="padding-right: 1em" href="' . $accountUrl . '">Account</a> <a href="' . $url . '">Logout</a>';
+            $config = Zend_Registry::get('Zend_Config');
+            if (isset($config->account->editOwnAccount)) {
+                $addAccountLink = $config->account->editOwnAccount;
+            }
+            else {
+                $addAccountLink = true;
+            }
+
+            if ($addAccountLink) {
+                $accountUrl = $this->_view->url(array('module' => 'account'), null, true);
+                $url = $this->_view->url(array_merge($this->_logout_url, $returnParams->getReturnParameters()));
+                return '<a style="padding-right: 1em" href="' . $accountUrl . '">Account</a> <a href="' . $url . '">Logout</a>';
+            }
+            else {
+                $url = $this->_view->url(array_merge($this->_logout_url, $returnParams->getReturnParameters()));
+                return '<a href="' . $url . '">Logout</a>';
+            }
         }
     }
 

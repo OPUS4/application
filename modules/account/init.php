@@ -38,14 +38,28 @@
  */
 $identity = Zend_Auth::getInstance()->getIdentity();
 
-if (empty($identity) === true) {   
-    // get all parameters to return after login.
-    $params = Zend_Controller_Action_HelperBroker::getStaticHelper('ReturnParams')->getReturnParameters();
+$config = Zend_Registry::get('Zend_Config');
 
-    // Forward to module auth
-    $message = 'You must be logged in to edit account.';
-    Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger')->addMessage(array('level' => 'failure', 'message' => $message));
-    Zend_Controller_Action_HelperBroker::getStaticHelper('redirector')->gotoSimple('index', 'auth', 'default', $params);
+if (isset($config->account->editOwnAccount)) {
+    $allowed = $config->account->editOwnAccount;
+}
+else {
+    $allowed = true;
+}
+
+if ((empty($identity) === true) || !$allowed) {
+    if ($allowed) {
+        // get all parameters to return after login.
+        $params = Zend_Controller_Action_HelperBroker::getStaticHelper('ReturnParams')->getReturnParameters();
+
+        // Forward to module auth
+        $message = 'You must be logged in to edit account.';
+        Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger')->addMessage(array('level' => 'failure', 'message' => $message));
+        Zend_Controller_Action_HelperBroker::getStaticHelper('redirector')->gotoSimple('index', 'auth', 'default', $params);
+    }
+    else {
+        Zend_Controller_Action_HelperBroker::getStaticHelper('redirector')->gotoSimple('index', 'index', 'home');
+    }
 }
 
 ?>
