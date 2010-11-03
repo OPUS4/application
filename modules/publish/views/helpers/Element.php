@@ -35,6 +35,7 @@
 class View_Helper_Element extends Zend_View_Helper_Abstract {
 
     public $view;
+    public $session;
 
     /**
      * method to render specific elements of an form
@@ -44,9 +45,9 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
      * @return element to render in view
      */
     public function element($value, $options = null, $type=null, $name = null) {
-        $session = new Zend_Session_Namespace('Publish');
+        $this->session = new Zend_Session_Namespace('Publish');
         $log = Zend_Registry::get('Zend_Log');
-        $session->elementCount = $session->elementCount + 1;
+        $this->session->elementCount = $this->session->elementCount + 1;
 
         if ($name == null && $value == null) {
             $error_message = $this->view->translate('template_error_unknown_field');
@@ -179,8 +180,17 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
                         $elementfield .= "\n\t\t\t<li>" . $err . "</li>";
                     $elementfield .= "\n\t\t</ul></div>";
                 }
+
+                if (isset($this->session->publishFiles) && count($this->session->publishFiles)>=1 ) {
+                    $elementfield .= "<div class='form-files'><ul>" . $this->view->translate('already_uploaded_files');
+                    foreach ($this->session->publishFiles as $file) {
+                        $elementfield .= "\n<li>" . $file . "</li>";
+                    }
+                    $elementfield .= "</ul></div>";
+                }
                 break;
         }
+
         $elementfield .= "</div></fieldset>\n\n";
         return $elementfield;
     }
@@ -213,7 +223,7 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
      * @return <type> 
      */
     protected function _getRequiredSign() {
-        return "<span class='required' title='" . $this->view->translate('publish_controller_required_hint_sort') . "'>*</span>";
+        return "<span class='required' title='" . $this->view->translate('required_star_title') . "'>*</span>";
     }
 
 }

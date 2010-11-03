@@ -18,8 +18,17 @@
         </tuv>
     </tu>
 
-    <tu tuid="publish_controller_required_hint_sort">
-        <!-- Hint for the required sign -->
+    <tu tuid="already_uploaded_files">
+        <!-- Text for alreaded uploaded files -->
+        <tuv xml:lang="en">
+            <seg>You uploaded the following file(s):</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Sie haben folgende Datei(en) hochgeladen: </seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="required_star_title">
         <tuv xml:lang="en">
             <seg>This field has to be filled.</seg>
         </tuv>
