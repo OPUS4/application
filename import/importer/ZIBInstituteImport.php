@@ -46,7 +46,7 @@ class ZIBInstituteImport {
         $role = Opus_CollectionRole::fetchByName('institutes');
         $xml = new DomDocument;
         $xslt = new DomDocument;
-        $xslt->load('../import/stylesheets/institute_structure.xslt');
+        $xslt->load('../import/stylesheets/zib_institute_structure.xslt');
         $proc = new XSLTProcessor;
         $proc->registerPhpFunctions();
         $proc->importStyleSheet($xslt);
