@@ -58,7 +58,7 @@ require_once 'ZIBXMLImport.php';
 require_once 'ZIBBibtexImport.php';
 require_once 'simplehtmldom/simple_html_dom.php';
 
-class ZIBMigration extends OpusMigrationBase {
+class ZIBMigration extends ZIBMigration_Base {
 
     private $importData;
     private $fileinput;
