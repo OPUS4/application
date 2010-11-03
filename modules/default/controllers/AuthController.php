@@ -179,7 +179,7 @@ class AuthController extends Controller_Action {
 
         // Login name element.
         $login = new Zend_Form_Element_Text('login');
-        $login->addValidator(new Zend_Validate_Alnum())
+        $login->addValidator(new Zend_Validate_Regex('/^[A-Za-z0-9@._-]+$/'))
             ->setRequired()
             ->setLabel('Login');
 
