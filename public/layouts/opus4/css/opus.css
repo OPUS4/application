@@ -135,7 +135,7 @@ div > .abort-button{
 .opus fieldset .form-errors{
     font-size: 0.85em;
 }
-.opus fieldset .form-errors ul,,
+.opus fieldset .form-errors ul,
 .opus fieldset .form-errors p{
     margin: 0 0 0.8em;
     padding: 0;
