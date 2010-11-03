@@ -94,18 +94,24 @@ class Account_IndexController extends Controller_Action {
                 $lastname = $postData['lastname'];
                 $email = $postData['email'];
 
-                $account->setFirstName($firstname);
-                $account->setLastName($lastname);
-                $account->setEmail($email);
+                $config = Zend_Registry::get('Zend_Config');
 
-                $this->_logger->debug('login = ' . $login);
-                $this->_logger->debug('new login = ' . $newLogin);
+                $isLoginChanged = false;
 
-                $isLoginChanged = ($login == $newLogin) ? false : true;
+                if (isset($config->account->editPasswordOnly) && !$config->account->editPasswordOnly) {
+                    $account->setFirstName($firstname);
+                    $account->setLastName($lastname);
+                    $account->setEmail($email);
 
-                if ($isLoginChanged && ($login !== 'admin')) {
-                    $this->_logger->debug('login changed');
-                    $account->setLogin($newLogin);
+                    $this->_logger->debug('login = ' . $login);
+                    $this->_logger->debug('new login = ' . $newLogin);
+
+                    $isLoginChanged = ($login == $newLogin) ? false : true;
+
+                    if ($isLoginChanged && ($login !== 'admin')) {
+                        $this->_logger->debug('login changed');
+                        $account->setLogin($newLogin);
+                    }
                 }
 
                 if ($isPasswordChanged) {
