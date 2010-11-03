@@ -35,32 +35,43 @@
 ?>
 
 <h2><?= $this->title ?></h2>
-<h3><?= $this->subtitle ?></h3>
-
-<table cellspacing='10' cellpadding='20'>
+<div class="content">
+<h3 class="document-type" ><?= $this->subtitle?></h3>
 
 <?php
     $defaultNS = new Zend_Session_Namespace('Publish');
     $elements = $defaultNS->elements;
-    $i = 1;
+    $form = $defaultNS->depositForm;        
+
+   
 ?>
-
-    <?php foreach ($elements as $element) : ?>
-        <?php if ($element['label'] != "") : ?>
-            <?php if (fmod($i, 2) == 0) : ?>
-                <tr><td align='right'><b> <?= $element['label']?> </b></td><td><?= $element['value'] ?></td></tr>
-                <?php $i = $i + 1; ?>
-
-            <?php else : ?>
-                <tr style='background-color:#efefef;'><td align='right'><b><?= $element['label'] ?></b></td><td><?= $element['value'] ?></td></tr>
-                <?php $i = $i + 1; ?>
+<div id="form-table-check">
+<table cellspacing='5' cellpadding='10' width="60%" border="0">
+    
+    <?php foreach ($form->getDisplayGroups() as $group) : ?>
+        <?php if (count($group->getElements())>=1 ) { ?>
+            <tr><td class='group' colspan="2"><b><?= $this->translate($group->getName()) ?></b></td></tr>
         
-                <?php endif; ?>
-        <?php endif; ?>
+        <?php } foreach ($group->getElements() AS $element) : ?>
+             <?php if ($element->getValue() != "") : ?>                
+                    <tr><td class='label'><?= $element->getLabel() ?></td><td><?= $element->getValue() ?></td></tr>
+            <?php endif; ?>
+        <?php endforeach;?>
     <?php endforeach;?>
 
 </table>
+</div>
 
-<?= $this->form; ?>
+<form enctype="application/x-www-form-urlencoded" action="/opus4-devel/publish/deposit/deposit" method="post">
+    <div class="button-wrapper">
+        <?= $this->element('button_label_back', "class='form-button abort-button'", "Submit", "back"); ?>
+        <?= $this->element('button_label_collection', "class='form-button add-button'", "Submit", "collection"); ?>
+        <?= $this->element('button_label_send2', "class='form-button submit-button'", "Submit", "send"); ?>
+    </div>
+</form>
+
+</div>
+
+
 
 

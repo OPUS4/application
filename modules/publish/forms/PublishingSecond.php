@@ -146,9 +146,10 @@ class Publish_Form_PublishingSecond extends Zend_Form {
     public function prepareCheck() {
         $defaultNS = new Zend_Session_Namespace('Publish');
         $defaultNS->elements = array();
-        foreach ($this->getDisplayGroups() AS $group) {
-            $this->removeDisplayGroup($group->getName());
-        }
+        $defaultNS->depositForm = $this;
+//        foreach ($this->getDisplayGroups() AS $group) {
+//            $this->removeDisplayGroup($group->getName());
+//        }
 
         foreach ($this->getElements() as $element) {
             $name = $element->getName();
@@ -161,7 +162,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
                 $defaultNS->elements[$name]['value'] = $element->getValue();
                 $defaultNS->elements[$name]['label'] = $element->getLabel();
                 $element->removeDecorator('Label');
-                $this->removeElement($name);
+          //      $this->removeElement($name);
             }
         }
         $this->_addSubmit('button_label_back', 'back');
