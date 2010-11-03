@@ -556,5 +556,5 @@ $application = new Zend_Application(
 
 $application->bootstrap(array('Configuration', 'Logging', 'Database'));
 
-$import = new ZIBMigration;
+$import = new ZIBMigration_Base;
 $import->run();
