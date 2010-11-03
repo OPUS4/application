@@ -77,6 +77,13 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
     private $preprint_files = array();
 
     /**
+     * Associative array maps preprint_ids to arrays of abstracts.
+     *
+     * @var array
+     */
+    private $preprint_abstracts = array();
+
+    /**
      * Associative array maps preprint_ids to arrays of project-arrays.
      *
      * @var array
@@ -271,6 +278,19 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
         $file = $this->dumps_dir . '/preprint_files.xml';
         $mysqldump = $this->load_xml_mysqldump($file);
         $this->preprint_files = $this->array2hash($mysqldump, 'table_id');
+        return;
+    }
+
+
+    /**
+     * Loads XML dump of matheon files and creates files-array by document_id.
+     *
+     * @return void
+     */
+    public function load_preprint_abstracts() {
+        $file = $this->dumps_dir . '/preprint_abstracts_katja.xml';
+        $mysqldump = $this->load_xml_mysqldump($file);
+        $this->preprint_abstracts = $this->array2hash($mysqldump, 'serial');
         return;
     }
 
@@ -532,6 +552,10 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
         $this->load_preprint_files();
         echo "found " . count($this->preprint_files) . " files\n";
 
+        // Load mySQL dump for cleaned abstracts.
+        $this->load_preprint_abstracts();
+        echo "found " . count($this->preprint_abstracts) . " cleaned abstracts\n";
+
         // Load mySQL dump for preprints.
         $num_accounts = $this->load_accounts();
         echo "found $num_accounts accounts\n";
@@ -567,6 +591,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
 
         foreach ($preprints AS $pid => $preprint) {
             $pid = $preprint['id'];
+            $sid = $preprint['serial'];
 
             $doc = new Opus_Document();
             $doc->setType('preprint');
@@ -581,7 +606,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
 
             //    <field name="serial">2</field>
             $serial = $doc->addIdentifierSerial();
-            $serial->setValue($preprint['serial']);
+            $serial->setValue($sid);
 
             //    <field name="title">Skew-Hamiltonian and Hamiltonian eigenvalue problems: Theory, algorithms and applications</field>
             $document_title = trim($preprint['title']);
@@ -620,7 +645,8 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             //    <field name="referee">842</field>
             $field = $preprint['referee'];
             if (array_key_exists($field, $this->persons)) {
-                $doc->addPersonReferee($this->persons[$field]);
+                $lmda = $doc->addPersonReferee($this->persons[$field]);
+                $lmda->setSortOrder(1);
             }
             else {
                 throw new Exception("No referee for document $pid");
@@ -642,7 +668,8 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             //    <field name="owner_id">606</field>
             $field = $preprint['owner_id'];
             if (array_key_exists($field, $this->persons)) {
-                $doc->addPersonSubmitter($this->persons[$field]);
+                $lmda = $doc->addPersonSubmitter($this->persons[$field]);
+                $lmda->setSortOrder(1);
             }
             else {
                 // throw new Exception("No owner for document $pid");
@@ -654,6 +681,31 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
                 $model = $doc->addTitleAbstract();
                 $model->setLanguage('eng');
                 $model->setValue($field);
+            }
+
+            // Add cleaned abstracts.
+            if (array_key_exists($sid, $this->preprint_abstracts)) {
+                $new_abstracts = $this->preprint_abstracts[$sid];
+
+                foreach ($new_abstracts AS $new_abstract) {
+                    if (false === array_key_exists('abstract', $new_abstract)) {
+                        throw new Exception("Invalid abstracts entry.");
+                    }
+
+                    if (false === is_string($new_abstract['abstract'])) {
+                        throw new Exception("Invalid abstracts entry..");
+                    }
+
+                    $new_abstract['abstract'] = trim($new_abstract['abstract']);
+                    if ('' === $new_abstract['abstract']) {
+                        echo "-- Fehlender Abstract fuer serial $sid / id $pid!\n";
+                    }
+                    else {
+                        $model = $doc->addTitleAbstract();
+                        $model->setLanguage('eng');
+                        $model->setValue($new_abstract['abstract']);
+                    }
+                }
             }
 
             //    <field name="msc" xsi:nil="true" />
@@ -725,7 +777,8 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
 
                 if (false === array_key_exists($mda_id, $unique_authors)) {
                     $unique_authors[$mda_id] = 0;
-                    $doc->addPersonAuthor($mda);
+                    $lmda = $doc->addPersonAuthor($mda);
+                    $lmda->setSortOrder(count($unique_authors));
                 }
                 else {
                     echo "-- Doppelter Autor in Dokument (serial: {$preprint['serial']}):\n";
