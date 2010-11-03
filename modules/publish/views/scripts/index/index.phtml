@@ -57,7 +57,9 @@ $session = new Zend_Session_Namespace('Publish');
         <?= $this->element($this->bibliographie); ?>
 
     <div class="button-wrapper">
-        <?= $this->element('addAnotherFile', "class='form-button add-button'", "Submit", "addAnotherFile"); ?>
+        <?php if ($session->publishMultiFiles === 1) : ?>
+            <?= $this->element('addAnotherFile', "class='form-button add-button'", "Submit", "addAnotherFile"); ?>
+        <? endif; ?>
         <?= $this->element('button_label_send', "class='form-button submit-button'", "Submit", "send"); ?>
     </div>
 
