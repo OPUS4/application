@@ -199,7 +199,7 @@
 }
 
 .adminContainer .docstateMenu span.active {
-    font-weight: bold;
+    /* font-weight: bold; */
 }
 
 .adminContainer .docstateMenu a {

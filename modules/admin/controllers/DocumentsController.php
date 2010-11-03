@@ -49,7 +49,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
     protected $sortingOptions = array('id', 'title', 'author',
         'publicationDate', 'docType');
 
-    protected $docOptions = array('all', 'published', 'unpublished', 'deleted');
+    protected $docOptions = array(/* 'all', */ 'published', 'unpublished', 'deleted');
 
     /**
      * Returns a filtered representation of the document.
@@ -106,14 +106,27 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $this->view->sort_reverse = $sort_reverse;
         $this->view->sortDirection = ($sort_reverse) ? 'descending' : 'ascending';
 
+        $config = Zend_Registry::get('Zend_Config');
+
+        $state = null;
+
         if (true === array_key_exists('state', $data)) {
             $state = $data['state'];
-            $this->view->state = $state;
         }
         else {
-            $state = null;
-            $this->view->state = 'all';
+            if (isset($config->admin->documents->defaultview)) {
+                $state = $config->admin->documents->defaultview;
+            }
+            else {
+                $state = 'unpublished';
+            }
         }
+        
+        if (!empty($state) && !in_array($state, $this->docOptions)) {
+            $state = 'unpublished';
+        }
+
+        $this->view->state = $state;
 
         if (true === array_key_exists('sort_order', $data)) {
             $sort_order = $data['sort_order'];
