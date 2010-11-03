@@ -195,7 +195,7 @@ class Publish_Form_PublishingFirst extends Zend_Form {
 
         $bibliographie = null;
 
-        if ($bib === 1) {
+        if ($bib == 1) {
             $this->session->bibliographie = 1;
             $bibliographie = $this->createElement('checkbox', 'bibliographie');
             $bibliographie->setLabel('bibliographie');
