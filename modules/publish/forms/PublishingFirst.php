@@ -156,23 +156,27 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         $validate->setMessages($messages);
 
         $fileupload->setLabel('fileupload')
-                //->setMultiFile($number_of_files)
                 ->setDestination($tempPath)
                 ->addValidator('Size', false, $maxFileSize)     // limit to value given in application.ini
                 ->setMaxFileSize($maxFileSize)
-                ->addValidator('Extension', false, $filetypes)  // allowed filetypes by extension
-                //->setDescription('publish_controller_index_fileupload')
+                ->addValidator('Extension', false, $filetypes)  // allowed filetypes by extension                
                 ->setValueDisabled(true)
                 ->setAttrib('enctype', 'multipart/form-data');
 
-        if (1 === $requireUpload) {
-            //$fileupload->addValidator('Count', false, array('min' => 1, 'max' => $number_of_files));
+        if ($number_of_files > 1) {
+            $fileupload->setMultiFile($number_of_files)
+                    ->setDescription('publish_controller_index_fileupload');
+            if (1 === $requireUpload)
+                $fileupload->addValidator('Count', false, array('min' => 1, 'max' => $number_of_files));
+            else
+                $fileupload->addValidator('Count', false, array('min' => 0, 'max' => $number_of_files));
+        }
+
+        if (1 === $requireUpload)
             $fileupload->setRequired(true);
-        }
-        else {
-            //$fileupload->addValidator('Count', false, array('min' => 0, 'max' => $number_of_files));
+        else
             $fileupload->setRequired(false);
-        }
+
 
         return $fileupload;
     }
