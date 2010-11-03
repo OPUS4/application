@@ -313,10 +313,10 @@
 
     <tu tuid="success_redirect">
       <tuv xml:lang="en">
-        <seg>Your document was successfully stored.</seg>
+        <seg>Your document was successfully stored. The Document ID is %id%.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Das Dokument wurde erfolgreich gespeichert.</seg>
+        <seg>Das Dokument wurde erfolgreich gespeichert. Die Dokument ID lautet %id%.</seg>
       </tuv>
     </tu>
 
