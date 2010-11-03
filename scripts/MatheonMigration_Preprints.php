@@ -570,7 +570,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
 
             $doc = new Opus_Document();
             $doc->setType('preprint');
-            $doc->setLanguage('misc');
+            $doc->setLanguage('eng');
 
             //    <field name="id">1</field>
             $oldid = $doc->addIdentifierOld();
@@ -590,7 +590,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
                 $document_title = trim(str_replace("\r", " ", $document_title));
 
                 $model = $doc->addTitleMain();
-                $model->setLanguage('misc');
+                $model->setLanguage('eng');
                 $model->setValue($document_title);
             }
 
@@ -599,7 +599,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             if (array_key_exists($pid, $this->preprint_files)) {
                 foreach ($this->preprint_files[$pid] AS $file) {
                     $model = $doc->addFile();
-                    $model->setLanguage('misc');
+                    $model->setLanguage('eng');
                     $model->setTempFile($this->files_dir . DIRECTORY_SEPARATOR . $pid . DIRECTORY_SEPARATOR . $file['file_name']);
                     $model->setPathName($file['file_name']);
 
@@ -652,7 +652,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             $field = $preprint['abstract'];
             if ($field != '') {
                 $model = $doc->addTitleAbstract();
-                $model->setLanguage('misc');
+                $model->setLanguage('eng');
                 $model->setValue($field);
             }
 
