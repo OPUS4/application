@@ -563,5 +563,14 @@
                 <seg>Suchbegriff</seg>
             </tuv>
         </tu>
+
+        <tu tuid="license_id_not_found">
+            <tuv xml:lang="en">
+                <seg>License with ID %1$s not found.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Lizenz mit ID %1$s nicht gefunden.</seg>
+            </tuv>
+        </tu>
     </body>
 </tmx>

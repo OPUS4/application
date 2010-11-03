@@ -36,12 +36,9 @@
  * This view gets a filtered one-dimensional associative array ($mydoc_data) from
  * the Frontdoor-Controller and displays it. The order of elements is fixed here.
  * Abstracts and keywords were combined with language information and displayed directly.
- *
- *
  */
-
 ?>
 <h1><?= $this->translate('license_pagetitle') ?></h1>
-<?= $this->license->getDescMarkup() ?><br/>
-<?= $this->license->getDescText() ?><br/>
+<?= htmlspecialchars($this->license->getDescMarkup()) ?><br/>
+<?= htmlspecialchars($this->license->getDescText()) ?><br/>
 <a href="<?= $this->license->getLinkLicence() ?>"><?= $this->license->getNameLong() ?></a>

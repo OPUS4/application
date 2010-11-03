@@ -49,10 +49,8 @@ class LicenseController extends Controller_Action {
 
             $this->view->license = $license;
         }
-        catch (Zend_Db_Table_Rowset_Exception $e) {
-        	if ($e->getMessage() === 'No row could be found at position 0') {
-        		$this->view->frontdoor = sprintf($this->view->translate('license_id_not_found'), $licId);
-        	}
+        catch (Opus_Model_NotFoundException $e) {
+            throw new Exception($this->view->translate('license_id_not_found', $licId));
         }
     }
 

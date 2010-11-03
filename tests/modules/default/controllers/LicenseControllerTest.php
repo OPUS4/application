@@ -40,11 +40,18 @@ class LicenseControllerTest extends ControllerTestCase {
      * Show license.
      */
     public function testIndexAction() {
-        $this->dispatch('/license/index/licId/1');
+        $this->dispatch('/default/license/index/licId/1');
         $this->assertResponseCode(200);
         $this->assertModule('default');
         $this->assertController('license');
         $this->assertAction('index');
+    }
+
+    public function testIndexActionWrongId() {
+        $this->dispatch('/default/license/index/licId/100');
+        $this->assertModule('default');
+        $this->assertController('error');
+        $this->assertAction('error');
     }
 
 }
