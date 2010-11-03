@@ -52,8 +52,8 @@ class Publish_Model_FormElement {
         'public' => 'yes'
     );
     public $isSubField = false;
-    private $validationObject;
-    private $validation;    //Publish_Model_Validation
+    private $validationObject; //Publish_Model_Validation
+    private $validation = array();
     private $group;         //Publish_Model_Group
     private $subFormElements = array();         //array of Zend_Form_Element
 
@@ -232,8 +232,12 @@ class Publish_Model_FormElement {
                 $element->setRequired(false);
             }
             $element->setLabel($this->label);
-            if (isset($this->validation))
-                $element->addValidator($this->validation);
+            if (!is_null($this->validation)) {
+                if (is_array($this->validation))
+                        $element->addValidators($this->validation);
+                else
+                    $element->addValidator($this->validation);
+            }
 
             return $element;
         }

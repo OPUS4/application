@@ -107,8 +107,7 @@ class Publish_Model_DisplayGroup {
                 $maxNumber = (int) $this->additionalFields[$this->elementName];
                 //$this->log->debug("maxNumber(): key " . $this->elementName . " exists, maxnumberr = " . $maxNumber);
             }
-        }
-        //$this->log->debug("DisplayGroup -> maxNumber()  = " . $maxNumber);
+        }        
         return $maxNumber;
     }
 

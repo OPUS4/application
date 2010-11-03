@@ -54,7 +54,7 @@ $session = new Zend_Session_Namespace('Publish');
         <?= $this->element($this->documentType); ?>        
         <?= $this->element($this->MAX_FILE_SIZE, null, 'hidden', 'MAX_FILE_SIZE'); ?>
         <?= $this->element($this->fileupload); ?>   
-        <?php if ($session->bibliographie === 1) : ?>
+        <?php if ($session->bibliographie == 1) : ?>
             <?= $this->element($this->bibliographie); ?>
         <? endif; ?>
 

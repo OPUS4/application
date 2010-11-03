@@ -40,7 +40,7 @@
 class Publish_Model_Validation {
 
     public $datatype;
-    public $validator;
+    public $validator = array();
     public $institutes = array();
     public $projects = array();
     public $licences = array();
@@ -65,6 +65,7 @@ class Publish_Model_Validation {
 
     private function _datatypeValidation() {
         switch ($this->datatype) {
+
             case 'Date' : $this->validator = $this->_validateDate();
                 break;
 
@@ -89,13 +90,12 @@ class Publish_Model_Validation {
             case 'msc' : $this->validator = $this->_validateMSC();
                 break;
 
-            case 'Person': $this->validator = $this->_validatePerson();
-                break;
-
             case 'Project' : $this->validator = $this->_validateCollection('projects');
                 break;
 
-            case 'Text': $this->validator = null;
+            case 'Text': //$this->validator = $this->_validateText();
+                $this->validator = null;
+
                 break;
 
             case 'ThesisGrantor' : $this->validator = $this->_validateThesis(true);
@@ -127,14 +127,14 @@ class Publish_Model_Validation {
 
         $lang = $this->session->language;
         $this->log->debug("Language for Opus_Validate_Date: " . $lang . "**********************");
-        $validator = array();
+        $validators = array();
 
         switch ($lang) {
             case 'en' : $validator = new Zend_Validate_Date(array('format' => $format_en, 'locale' => $lang));
                 break;
             case 'de' : $validator = new Zend_Validate_Date(array('format' => $format_de, 'locale' => $lang));
                 break;
-            default :  $validator = new Zend_Validate_Date(array('format' => $format_en, 'locale' => $lang));
+            default : $validator = new Zend_Validate_Date(array('format' => $format_en, 'locale' => $lang));
                 break;
         }
         $messages = array(
@@ -142,32 +142,44 @@ class Publish_Model_Validation {
             Zend_Validate_Date::INVALID_DATE => 'publish_validation_error_date_invaliddate',
             Zend_Validate_Date::FALSEFORMAT => 'publish_validation_error_date_falseformat');
         $validator->setMessages($messages);
-        
-        return $validator;
+
+        $validators[] = $validator;
+        return $validators;
     }
 
     private function _validateDDC() {
+        $validators = array();
         $validator = new Opus_Validate_SubjectDDC();
         $messages = array(
             Opus_Validate_SubjectDDC::MSG_SUBJECTDDC => 'publish_validation_error_subjectddc_msgsubjectddc');
         $validator->setMessages($messages);
-        return $validator;
+
+        $validators[] = $validator;
+        return $validators;
     }
 
     private function _validateEmail() {
+        $validators = array();
         $validator = new Zend_Validate_EmailAddress();
         $messages = array(
             Zend_Validate_EmailAddress::INVALID => 'publish_validation_error_email_invalid');
         $validator->setMessages($messages);
-        return $validator;
+
+        $validators[] = $validator;
+        return $validators;
     }
 
     private function _validateInteger() {
-        $validator = new Zend_Validate_Int(null);
+        $validators = array();
+        $validator = new Zend_Validate_Int();
         $validator->setMessage('publish_validation_error_int', Zend_Validate_Int::NOT_INT);
+
+        $validators[] = $validator;
+        return $validators;
     }
 
     private function _validateCollection($role) {
+        $validators = array();
         $validValues = $this->getCollection($role);
         if (is_null($validValues))
             return null;
@@ -176,19 +188,25 @@ class Publish_Model_Validation {
             $messages = array(
                 Zend_Validate_InArray::NOT_IN_ARRAY => 'publish_validation_error_inarray_notinarray');
             $validator->setMessages($messages);
-            return $validator;
+
+            $validators[] = $validator;
+            return $validators;
         }
     }
 
     private function _validateLanguage() {
+        $validators = array();
         $validator = new Zend_Validate_InArray(array_keys($this->getLanguages()));
         $messages = array(
             Zend_Validate_InArray::NOT_IN_ARRAY => 'publish_validation_error_inarray_notinarray');
         $validator->setMessages($messages);
-        return $validator;
+
+        $validators[] = $validator;
+        return $validators;
     }
 
     private function _validateLicence() {
+        $validators = array();
         $licences = array_keys($this->getLicences());
         if (is_null($licences))
             return null;
@@ -197,29 +215,50 @@ class Publish_Model_Validation {
             $messages = array(
                 Zend_Validate_InArray::NOT_IN_ARRAY => 'publish_validation_error_inarray_notinarray');
             $validator->setMessages($messages);
-            return $validator;
+
+            $validators[] = $validator;
+            return $validators;
         }
     }
 
     private function _validateMSC() {
+        $validators = array();
         $validator = new Opus_Validate_SubjectMSC();
         $messages = array(
             Opus_Validate_SubjectMSC::MSG_SUBJECTMSC => 'publish_validation_error_subjectmsc_msgsubjectmsc');
         $validator->setMessages($messages);
-        return $validator;
+
+        $validators[] = $validator;
+        return $validators;
     }
 
-    private function _validatePerson() {
+//    private function _validatePerson() {
+//        //allow characters and whitespace
+//        $validator = new Zend_Validate_Alpha(true);
+//        $messages = array(
+//            Zend_Validate_Alpha::INVALID => 'publish_validation_error_person_invalid',
+//            Zend_Validate_Alpha::NOT_ALPHA => 'publish_validation_error_person_notalpha',
+//            Zend_Validate_Alpha::STRING_EMPTY => 'publish_validation_error_person_stringempty');
+//        $validator->setMessages($messages);
+//        return $validator;
+//    }
+
+    private function _validateText() {
+        $validators = array();
+        //allow characters, numbers and whitespace
         $validator = new Zend_Validate_Alpha(true);
         $messages = array(
-            Zend_Validate_Alpha::INVALID => 'publish_validation_error_person_invalid',
-            Zend_Validate_Alpha::NOT_ALPHA => 'publish_validation_error_person_notalpha',
-            Zend_Validate_Alpha::STRING_EMPTY => 'publish_validation_error_person_stringempty');
+            Zend_Validate_Alpha::INVALID => 'publish_validation_error_text_invalid',
+            Zend_Validate_Alpha::NOT_ALPHA => 'publish_validation_error_text_notalnum',
+            Zend_Validate_Alpha::STRING_EMPTY => 'publish_validation_error_text_stringempty');
         $validator->setMessages($messages);
-        return $validator;
+
+        $validators[] = $validator;
+        return $validators;
     }
 
     private function _validateThesis($grantors = null) {
+        $validators = array();
         $thesisGrantors = $this->getThesis($grantors);
         if (!is_null($thesisGrantors)) {
             $thesises = array_keys($thesisGrantors);
@@ -230,15 +269,28 @@ class Publish_Model_Validation {
                 $messages = array(
                     Zend_Validate_InArray::NOT_IN_ARRAY => 'publish_validation_error_inarray_notinarray');
                 $validator->setMessages($messages);
-                return $validator;
+
+                $validators[] = $validator;
+                return $validators;
             }
         }
     }
 
     private function _validateYear() {
-        $validator = new Zend_Validate_GreaterThan('1900');
-        $validator->setMessage('publish_validation_error_year', Zend_Validate_GreaterThan::NOT_GREATER);
-        return $validator;
+        $validators = array();
+
+        $validator1 = new Zend_Validate_GreaterThan('1900');
+        $validator1->setMessage('publish_validation_error_year_greaterthan', Zend_Validate_GreaterThan::NOT_GREATER);
+        $validators[] = $validator1;
+
+        $validator2 = new Zend_Validate_Int();
+        $messages = array(
+            Zend_Validate_Int::INVALID => 'publish_validation_error_year_intinvalid',
+            Zend_Validate_Int::NOT_INT => 'publish_validation_error_year_notint');
+        $validator2->setMessages($messages);
+        $validators[] = $validator2;
+
+        return $validators;
     }
 
     public function selectOptions($datatype=null) {
@@ -279,7 +331,8 @@ class Publish_Model_Validation {
             foreach ($institutes AS $inst)
                 $data[$inst] = $inst;
             return $data;
-        } else {
+        }
+        else {
             $data = null;
             return $data;
         }
@@ -290,7 +343,8 @@ class Publish_Model_Validation {
         if (isset($languages) || count($languages) >= 1) {
             asort($languages);
             return $languages;
-        } else {
+        }
+        else {
             $languages = null;
             return $languages;
         }
@@ -302,10 +356,11 @@ class Publish_Model_Validation {
             $data = array();
             foreach ($licences AS $key => $li)
                 $data[$key] = $li;
-            asort($data);            
+            asort($data);
             return $data;
-        } else {
-            $data = null;            
+        }
+        else {
+            $data = null;
             return $data;
         }
     }
@@ -333,7 +388,6 @@ class Publish_Model_Validation {
         if (!is_null($thesisList))
             asort($thesisList);
         return $thesisList;
-
     }
 
     /**
@@ -367,7 +421,8 @@ class Publish_Model_Validation {
             }
             $this->$oaiName = $collections;
             return $collections;
-        } else {
+        }
+        else {
             //$this->log->debug($oaiName . " can be fetched from cache!");
             return $this->$oaiName;
         }
@@ -385,7 +440,8 @@ class Publish_Model_Validation {
                 $this->languages = $languages;
 
                 return $languages;
-            } else {
+            }
+            else {
 
                 $dbLanguages = Opus_Language::getAllActive();
                 if (isset($dbLanguages) || count($dbLanguages) >= 1) {
@@ -430,12 +486,12 @@ class Publish_Model_Validation {
         if ($grantors === true) {
             //get all grantors
             $thesises = Opus_DnbInstitute::getGrantors();
-            if (is_null($thesises) || empty ($thesises))
+            if (is_null($thesises) || empty($thesises))
                 return null;
         } else if (is_null($grantors)) {
             //get all = publishers
             $thesises = Opus_DnbInstitute::getAll();
-            if (is_null($thesises) || empty ($thesises))
+            if (is_null($thesises) || empty($thesises))
                 return null;
         }
 
