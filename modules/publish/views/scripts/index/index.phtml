@@ -53,8 +53,10 @@ $session = new Zend_Session_Namespace('Publish');
     <div class="form-items-wrapper">
         <?= $this->element($this->documentType); ?>        
         <?= $this->element($this->MAX_FILE_SIZE, null, 'hidden', 'MAX_FILE_SIZE'); ?>
-        <?= $this->element($this->fileupload); ?>        
-        <?= $this->element($this->bibliographie); ?>
+        <?= $this->element($this->fileupload); ?>   
+        <?php if ($session->bibliographie === 1) : ?>
+            <?= $this->element($this->bibliographie); ?>
+        <? endif; ?>
 
     <div class="button-wrapper">
         <?= $this->element('addAnotherFile', "class='form-button add-button'", "Submit", "addAnotherFile"); ?>

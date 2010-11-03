@@ -194,6 +194,7 @@ class Publish_FormController extends Controller_Action {
                     $depositForm->setMethod('post');
                     $depositForm->populate($form->getValues());
                     $depositForm->prepareCheck();
+                    $this->view->action_url = $action_url;
                     $this->view->form = $depositForm;
                 }
             }

@@ -41,8 +41,7 @@
 <?php
     $defaultNS = new Zend_Session_Namespace('Publish');
     $elements = $defaultNS->elements;
-    $form = $defaultNS->depositForm;        
-
+    $form = $defaultNS->depositForm;            
    
 ?>
 <div id="form-table-check">
@@ -55,14 +54,22 @@
         <?php } foreach ($group->getElements() AS $element) : ?>
              <?php if ($element->getValue() != "") : ?>                
                     <tr><td class='label'><?= $element->getLabel() ?></td><td><?= $element->getValue() ?></td></tr>
+                    <?php $form->removeElement($element->getName()); ?>
             <?php endif; ?>
         <?php endforeach;?>
     <?php endforeach;?>
 
+    <tr><td class='group' colspan="2"><b><?= $this->translate('publish_controller_check_otherElements') ?></b></td></tr>
+    <?php foreach ($form->getElements() AS $elem) : ?>
+        <?php if ($elem->getValue() != "") : ?>
+            <tr><td class='label'><?= $elem->getLabel() ?></td><td><?= $elem->getValue() ?></td></tr>
+            <?php $form->removeElement($elem->getName()); ?>
+        <?php endif; ?>
+    <?php endforeach;?>
 </table>
 </div>
 
-<form enctype="application/x-www-form-urlencoded" action="/opus4-devel/publish/deposit/deposit" method="post">
+<form enctype="application/x-www-form-urlencoded" action="<?= $this->action_url; ?>" method="post">
     <div class="button-wrapper">
         <?= $this->element('button_label_back', "class='form-button abort-button'", "Submit", "back"); ?>
         <?= $this->element('button_label_collection', "class='form-button add-button'", "Submit", "collection"); ?>

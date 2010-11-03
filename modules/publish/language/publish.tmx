@@ -61,14 +61,21 @@
       </tuv>
     </tu>
 
-
-
     <tu tuid="publish_controller_check2">
       <tuv xml:lang="en">
         <seg>Please check your data.</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Bitte überprüfen Sie Ihre Eingaben.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="publish_controller_check_otherElements">
+      <tuv xml:lang="en">
+        <seg>Further form data:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Weitere Formulardaten:</seg>
       </tuv>
     </tu>
 

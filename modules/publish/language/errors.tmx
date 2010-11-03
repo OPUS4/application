@@ -92,6 +92,36 @@
 
 <!-- **************END Person************** -->
 
+<!-- **************Errors for Texts (Birthplace, Akademischer Titel etc.) ****************** -->
+    <tu tuid="publish_validation_error_text_invalid">
+        <tuv xml:lang="en">
+            <seg>Invalid datatype: please enter just a string.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Unerlaubter Datentyp: bitte tragen Sie ausschließlich eine Zeichenkette ein.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="publish_validation_error_text_notalnum">
+        <tuv xml:lang="en">
+            <seg>Error: %value% may only contain alphabetic characters and numbers.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Fehler: %value% darf nur alphabetische Zeichen und Ziffern enthalten.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="publish_validation_error_text_stringempty">
+        <tuv xml:lang="en">
+            <seg>This field is required.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Dieses Feld muss ausgefüllt werden.</seg>
+        </tuv>
+    </tu>
+
+<!-- **************END Person************** -->
+
 <!-- **************Errors for Date****************** -->
     <tu tuid="publish_validation_error_date_invalid">
         <tuv xml:lang="en">
