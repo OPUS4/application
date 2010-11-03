@@ -163,7 +163,10 @@ class Publish_Form_PublishingFirst extends Zend_Form {
                 ->setValueDisabled(true)
                 ->setAttrib('enctype', 'multipart/form-data');
 
+        $this->session->publishMultiFiles = false;
+        
         if ($number_of_files > 1) {
+            $this->session->publishMultiFiles = true;
             $fileupload->setMultiFile($number_of_files)
                     ->setDescription('publish_controller_index_fileupload');
             if (1 === $requireUpload)
@@ -171,6 +174,7 @@ class Publish_Form_PublishingFirst extends Zend_Form {
             else
                 $fileupload->addValidator('Count', false, array('min' => 0, 'max' => $number_of_files));
         }
+
 
         if (1 === $requireUpload)
             $fileupload->setRequired(true);
