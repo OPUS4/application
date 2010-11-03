@@ -52,22 +52,8 @@ class ZIBMigration_Base {
     protected $stopAtId = null;
 
     protected function setStylesheet() {
-        $stylesheetPath = '../import/stylesheets';
-        $stylesheet = $this->format;
-        // Set the stylesheet to use for XML-input transformation
-        switch ($stylesheet) {
-            case 'mysqldump':
-                $xslt = 'opus3.xslt';
-                break;
-            case 'phpmyadmin':
-                $xslt = 'opus3.phpmyadmin.xslt';
-                break;
-            default:
-                $xslt = 'opus3.xslt';
-                break;
-        }
-        $this->stylesheet = $stylesheetPath;
-        $this->xslt = $xslt;
+        $this->stylesheet = '../import/stylesheets';
+        $this->xslt = 'zib_opus3.xslt';
     }
 
     protected function loadImportFile() {

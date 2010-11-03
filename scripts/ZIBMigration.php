@@ -313,7 +313,7 @@ class ZIBMigration extends ZIBMigration_Base {
             }
 
             $this->stylesheet = '../import/stylesheets';
-            $this->xslt = 'bibtex.xsl';
+            $this->xslt = 'zib_bibtex.xslt';
             $this->importfile = $file;
 	    
             $importData = $this->loadImportFile();
