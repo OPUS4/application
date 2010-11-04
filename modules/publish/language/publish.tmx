@@ -239,6 +239,16 @@
       </tuv>
     </tu>
 
+<!-- selection options -->
+    <tu tuid="inherit_document_language">
+      <tuv xml:lang="en">
+        <seg>Inherit publication language</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sprache der Veröffentlichung übernehmen</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="choose_valid_doctype">
       <tuv xml:lang="en">
         <seg>Please choose a document type.</seg>
@@ -301,6 +311,7 @@
         <seg>Bitte wählen Sie eine veröffentlichende Institution.</seg>
       </tuv>
     </tu>
+<!-- end select options -->
 
      <tu tuid="template_error_unknown_field">
       <tuv xml:lang="en">

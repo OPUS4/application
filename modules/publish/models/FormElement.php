@@ -234,7 +234,7 @@ class Publish_Model_FormElement {
             $element->setLabel($this->label);
             if (!is_null($this->validation)) {
                 if (is_array($this->validation))
-                        $element->addValidators($this->validation);
+                    $element->addValidators($this->validation);
                 else
                     $element->addValidator($this->validation);
             }
@@ -261,7 +261,10 @@ class Publish_Model_FormElement {
                 $element->setMultiOptions(array_merge(array('' => 'choose_valid_licence'), $options));
                 break;
             case 'Language' :
-                $element->setMultiOptions(array_merge(array('' => 'choose_valid_language'), $options));
+                if ($this->elementName === 'Language')
+                    $element->setMultiOptions(array_merge(array('' => 'choose_valid_language'), $options));
+                else
+                    $element->setMultiOptions(array_merge(array('' => 'inherit_document_language'), $options));
                 break;
             case 'Project' :
                 $element->setMultiOptions(array_merge(array('' => 'choose_valid_project'), $options));

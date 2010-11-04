@@ -86,8 +86,7 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
 
                 //show other div in case intial field number is extended
                 $groupCount = 'num' . $group['Name'];
-                $j = $i / $this->session->$groupCount;
-                $this->log->debug("i: " . $i . " => j = " . $j);
+                $j = $i / $this->session->$groupCount;                
                 if (fmod($j, 2) == 1)
                         $fieldset .= "</div><div class='form-multiple even'>";
                 else
@@ -143,9 +142,9 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                             $fieldset .= "<option value='" . $key . "' label='" . $option . "'";
 
                             if ($option === $field["value"] || $key === $field["value"])
-                                $fieldset .= " selected='selected'>";
-                            else
-                                $fieldset .= ">";
+                                $fieldset .= " selected='selected'";
+
+                            $fieldset .= ">";
                             $fieldset .= $option . "</option>\n\t\t\t\t\t";
                         }
                         $fieldset .= "</select>\n</div>";

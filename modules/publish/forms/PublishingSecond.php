@@ -60,6 +60,26 @@ class Publish_Form_PublishingSecond extends Zend_Form {
     }
 
     /**
+     * Overwritten method isValid to support extended validation
+     * @param <type> $data 
+     */
+    public function isValid($data) {
+        $extended = new Publish_Model_ExtendedValidation($this, $data);
+        $valid1 = $extended->validate();
+        //inherit data changes during validation
+        $this->populate($extended->data);
+        $data = $extended->data;
+        $this->postData = $extended->data;
+
+        $valid2 = parent::isValid($data);
+
+        if ($valid1 == true && $valid2 == true)
+            return true;
+        else
+            return false;
+    }
+
+    /**
      * Build document publishing form that depends on the doc type
      * @param $doctype
      * @return void
@@ -117,8 +137,8 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         $elementAttributes['hint'] = 'hint_' . $elementName;
         $elementAttributes['disabled'] = $element->getAttrib('disabled');
 
-        if ($element->getType() === 'Zend_Form_Element_Checkbox') {            
-            $elementAttributes['value'] = $element->getCheckedValue();            
+        if ($element->getType() === 'Zend_Form_Element_Checkbox') {
+            $elementAttributes['value'] = $element->getCheckedValue();
         }
 
         if ($element->getType() === 'Zend_Form_Element_Select')
@@ -162,7 +182,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
                 $defaultNS->elements[$name]['value'] = $element->getValue();
                 $defaultNS->elements[$name]['label'] = $element->getLabel();
                 $element->removeDecorator('Label');
-          //      $this->removeElement($name);
+                //      $this->removeElement($name);
             }
         }
         $this->_addSubmit('button_label_back', 'back');
