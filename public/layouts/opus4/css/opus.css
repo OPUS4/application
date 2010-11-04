@@ -114,9 +114,10 @@ div > .abort-button{
 .opus fieldset .form-files{
     clear: both;
     width: 100%;
-    margin-left:500px;
-    margin-top:-200px;
+    margin-left:520px;
+    margin-top:-30px;
     color: #26517D;
+    position:absolute;
 }
 
 .left-labels label,
