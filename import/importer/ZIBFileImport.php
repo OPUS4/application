@@ -107,9 +107,9 @@ class ZIBFileImport {
         
         $number = 0;
         
-        if (true === isset($files[0])) {
+        //if (true === isset($files[0])) {
             foreach ($files as $filename) {
-                //echo $filename."\n";
+                //echo "Filename = ".$filename."\n";
                 //$finfo = new finfo(FILEINFO_MIME, $this->_magicPath);
                 //$mimeType = $finfo->file($filename);
             
@@ -154,7 +154,7 @@ class ZIBFileImport {
                     $number++;
                 }
             }
-        }
+       // }
         
         // store the object
         if ($number > 0) {
@@ -166,40 +166,37 @@ class ZIBFileImport {
         // return number of imported files
         return $number;
     }
-    
-    private function getFiles($from) 
-    {
-        if(! is_dir($from))
-            return false;
-     
+
+
+    private function getFiles($from) {
+        if(! is_dir($from)) { return false; }
+
+        $handle =  opendir($from);
         $files = array();
 
-        //echo "Get Files from $from\n";
-     
-        if( $dh = opendir($from))
-        {
-            while( false !== ($file = readdir($dh)))
-            {
-                // Skip '.' and '..' and '.svn' (that should not exist, but if it does...) and .asc files (they shouldnt be here also)
-                if( $file == '.' || $file == '..' || $file === '.svn' || preg_match('/\.asc$/', $file) != false || preg_match('/\.sig$/', $file) != false)
-                    continue;
-                $path = $from . '/' . $file;
-                if( is_dir($path) )
-                    $files += $this->getFiles($path);
-                else {
-                	// Ignore files in the main directory, OPUS3 stores in subdirectories only
-                	if ($from !== $this->_tmpPath) {
-                        $files[] = $path;
-                	}
+        while ($file = readdir($handle)) {
+            // Skip '.' and '..' and '.svn' (that should not exist, but if it does...) and .asc or .sig or 'index.html' files (they shouldnt be here also)
+            if (preg_match('/^\..*$/',$file)) { continue; }
+            if (preg_match('/\.asc$/',$file)) { continue; }
+            if (preg_match('/\.sig$/',$file)) { continue; }
+            if (preg_match('/^index\.html$/',$file)) { continue; }
+
+            // If $file is a directory get files from there recursively!
+            if (is_dir($from. '/' . $file)) {
+                foreach ($this->getFiles($from.'/'. $file) as $f) {
+                    array_push($files, $f);
                 }
+                continue;
             }
-            closedir($dh);
+            array_push($files, $from.'/'. $file);
         }
+
+        closedir($handle);
         return $files;
+
     }
     
-    private function searchDir($from, $search)
-    {
+    private function searchDir($from, $search)  {
         if(! is_dir($from))
             return false;
 
