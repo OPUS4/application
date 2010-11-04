@@ -8,15 +8,6 @@
   <body>
 <!-- This language file contains all texts concerning button labels. -->
 
-    <tu tuid="addAnotherFile">
-        <tuv xml:lang="en">
-            <seg>Save and upload another file</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Speichern und weitere Datei hochladen</seg>
-        </tuv>
-    </tu>
-
     <tu tuid="button_label_back">
         <tuv xml:lang="en">
             <seg>Make changes</seg>
@@ -26,30 +17,21 @@
         </tuv>
     </tu>
 
-    <tu tuid="button_label_collection">
-        <tuv xml:lang="en">
-            <seg>Select a collection</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Kollektion auswählen</seg>
-        </tuv>
-    </tu>
-
-    <tu tuid="button_label_choose_subcollection">
-        <tuv xml:lang="en">
-            <seg>Select a sub collection</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Sub-Kollektion auswählen</seg>
-        </tuv>
-    </tu>
-
     <tu tuid="button_label_send">
         <tuv xml:lang="en">
-            <seg>Next</seg>
+            <seg>Next step</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Weiter</seg>
+            <seg>Weiter zum nächsten Schritt</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="addAnotherFile">
+        <tuv xml:lang="en">
+            <seg>Upload another file</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Weitere Datei hochladen</seg>
         </tuv>
     </tu>
 
@@ -375,8 +357,25 @@
         </tuv>
         <tuv xml:lang="de">
             <seg>Das letzte SWD-Schlagwort löschen</seg>
-        </tuv>
-	
+        </tuv>	
 	</tu>
+
+    <tu tuid="button_label_collection">
+        <tuv xml:lang="en">
+            <seg>Select a collection</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Kollektion auswählen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_choose_subcollection">
+        <tuv xml:lang="en">
+            <seg>Select a sub collection</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Sub-Kollektion auswählen</seg>
+        </tuv>
+    </tu>
     </body>
 </tmx>

@@ -42,30 +42,32 @@ $session = new Zend_Session_Namespace('Publish');
 
 <h2><?= $this->title ?></h2>
 <div class="content">
-<h3 class="document-type"><?= $this->subtitle?></h3>
+    <h3 class="document-type"><?= $this->subtitle ?></h3>
 
-<?php if (isset($this->errorCaseMessage)) : ?>
-    <div class="form-hint form-errors"><p><?= $this->errorCaseMessage; ?></p></div>
-<? endif; ?>
+    <?php if (isset($this->errorCaseMessage)) : ?>
+        <div class="form-hint form-errors"><p><?= $this->errorCaseMessage; ?></p></div>
+    <? endif; ?>
 
-<form enctype="multipart/form-data" action="<?= $this->action_url; ?>" method="post">
+        <form enctype="multipart/form-data" action="<?= $this->action_url; ?>" method="post">
 
-    <div class="form-items-wrapper">
-        <?= $this->element($this->documentType); ?>        
-        <?= $this->element($this->MAX_FILE_SIZE, null, 'hidden', 'MAX_FILE_SIZE'); ?>
-        <?= $this->element($this->fileupload); ?>   
-        <?php if ($session->bibliographie == 1) : ?>
+            <div class="form-items-wrapper">
+            <?= $this->element($this->documentType); ?>
+            <?= $this->element($this->MAX_FILE_SIZE, null, 'hidden', 'MAX_FILE_SIZE'); ?>
+            <?= $this->element($this->fileupload); ?>
+            <div class="button-wrapper">
+                <?= $this->element('addAnotherFile', "class='form-button add-button'", "Submit", "addAnotherFile"); ?>
+            </div>
+            <?php if ($session->bibliographie == 1) : ?>
             <?= $this->element($this->bibliographie); ?>
-        <? endif; ?>
+            <? endif; ?>
 
-    <div class="button-wrapper">
-        <?= $this->element('addAnotherFile', "class='form-button add-button'", "Submit", "addAnotherFile"); ?>
-        <?= $this->element('button_label_send', "class='form-button submit-button'", "Submit", "send"); ?>
-    </div>
+                    <div class="button-wrapper">
+                <?= $this->element('button_label_send', "class='form-button submit-button'", "Submit", "send"); ?>
+            </div>
 
-    </div>
+        </div>
 
-</form>
+    </form>
 </div>
 
 
