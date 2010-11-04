@@ -46,10 +46,10 @@
 
     <tu tuid="button_label_send">
         <tuv xml:lang="en">
-            <seg>Send form</seg>
+            <seg>Go to metadata</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Formular abschicken</seg>
+            <seg>Weiter zu den Metadaten</seg>
         </tuv>
     </tu>
 
