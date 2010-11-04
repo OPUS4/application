@@ -1,5 +1,6 @@
 ﻿/* Page specific settings
 ------------------------------------------------------------ */
+
 #content.home{
     background: #eaedf2 url(../img/theme/bg_content.jpg) repeat-x;
 }
@@ -38,6 +39,7 @@
 }
 .button-wrapper{
     padding: 10px;
+    text-align:right;
 }
 .required{
     color: #fe7c25;
