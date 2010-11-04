@@ -46,10 +46,10 @@
 
     <tu tuid="button_label_send">
         <tuv xml:lang="en">
-            <seg>Go to metadata</seg>
+            <seg>Next</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Weiter zu den Metadaten</seg>
+            <seg>Weiter</seg>
         </tuv>
     </tu>
 
@@ -64,10 +64,10 @@
 
     <tu tuid="button_label_send2">
         <tuv xml:lang="en">
-            <seg>Save</seg>
+            <seg>Save document</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Abspeichern</seg>
+            <seg>Dokument abspeichern</seg>
         </tuv>
     </tu>
 
