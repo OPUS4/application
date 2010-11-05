@@ -5,11 +5,11 @@
 #
 
 # user should has rights to drop and create a database (grant rights)
-user=
-password=
-host=localhost
-port=3306
-dbname=opus400
+user=<user>
+password=<password>
+host=<host>
+port=<port>
+dbname=<dbname>
 
 # path to mysql binary
 mysql_bin=/usr/bin/mysql
