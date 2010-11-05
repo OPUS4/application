@@ -37,7 +37,11 @@
 <div class="adminContainer">
 
     <div class="breadcrumbsContainer">
-        <?= $this->navigation()->breadcrumbs() ?>
+        <?= $this->navigation()->breadcrumbs()
+                 ->setMaxDepth(1)
+                 ->setLinkLast(true) ?>
+        &gt;
+        <?= $this->translate('admin_documents_edit', $this->docHelper->getDocId()) ?>
     </div>
 
     <div>

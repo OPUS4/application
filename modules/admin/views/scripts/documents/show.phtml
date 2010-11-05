@@ -57,6 +57,11 @@
         <?php endif; ?>
     </div>
 
+    <div>
+        <span class="label"><?= $this->translate('DocumentId') ?></span>
+        <span class="value"><?= $this->docHelper->getDocId() ?></span>
+    </div>
+
     <?= $this->showModel($this->entry) ?>
 
 </div>

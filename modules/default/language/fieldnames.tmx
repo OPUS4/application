@@ -949,6 +949,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="DocumentId">
+      <tuv xml:lang="en">
+        <seg>Document ID</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokument-ID</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="TitleMain">
       <tuv xml:lang="en">
         <seg>Title</seg>

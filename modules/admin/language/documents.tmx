@@ -197,10 +197,10 @@
 
     <tu tuid="admin_documents_edit">
       <tuv xml:lang="en">
-        <seg>Edit Document Metadata</seg>
+        <seg>Edit Document (%1$s) Metadata</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Dokument Metadaten ändern</seg>
+        <seg>Dokument (%1$s) Metadaten ändern</seg>
       </tuv>
     </tu>
     
