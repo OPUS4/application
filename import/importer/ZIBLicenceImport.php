@@ -47,7 +47,6 @@ class ZIBLicenceImport {
                 $this->readLicenses($document);
             }
         }
-        echo "\n";
     }
 
     /**
