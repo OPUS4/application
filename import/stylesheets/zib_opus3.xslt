@@ -352,7 +352,19 @@
                         <xsl:value-of select="normalize-space(field[@name='source_title'])" />
                     </xsl:attribute>
                 </xsl:element>
-            </xsl:if>	    
+            </xsl:if>
+
+           <!-- Enrichment Institution -->
+            <xsl:if test="string-length(field[@name='publisher_university']) > 0">
+                <xsl:element name="Enrichment">
+                    <xsl:attribute name="KeyName">
+                        <xsl:text>institution</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="Value">
+                        <xsl:value-of select="normalize-space(field[@name='publisher_university'])" />
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:if>
 
             <!-- All Related Persons (Author/Editor/Submitter/Contributor/...)-->
             <!-- PersonSubmitter -->
@@ -457,6 +469,7 @@
             </xsl:if>  
             
             <!-- Old OldPublisherUniversity -->
+            <!--
             <xsl:if test="string-length(field[@name='publisher_university']) > 0">
                 <xsl:element name="OldPublisherUniversity">
                     <xsl:attribute name="Value">
@@ -464,6 +477,7 @@
                     </xsl:attribute>
                 </xsl:element>
             </xsl:if>
+            -->
             
             <!-- OldGrantor -->
             <xsl:for-each select="/mysqldump/database/table_data[@name='opus_diss']/row[field[@name='source_opus']=$OriginalID]">
