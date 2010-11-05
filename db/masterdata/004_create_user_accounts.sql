@@ -12,5 +12,5 @@ INSERT INTO `accounts` (`id`, `login`, `password`) VALUES
 --
 INSERT INTO `link_accounts_roles` (`account_id`, `role_id`) VALUES
 (1, 2), -- "user" has role "guest"
-(2, 1); -- "admin" has role "admin"
+(2, 1), -- "admin" has role "admin"
 (4, 4); -- "referee" has role "reviewer"
