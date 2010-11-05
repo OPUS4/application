@@ -37,25 +37,25 @@
     padding: 0.5em 0 0.5em 34px;
     margin: 0 0 1em;
 }
-.button-wrapper{
-    padding: 10px;
-    text-align:right;
+.button-wrapper{    
+   
+    text-align:right;    
+    margin-left: 560px;
 }
 .required{
     color: #fe7c25;
 }
-fieldset .add-delete-wrapper{
-    position: absolute;
+fieldset .add-delete-wrapper{    
     right: 0;
     bottom: 0;
     width: 44%;
-    padding: 0 10px 15px 0;
+    
 }
 .publish fieldset .form-item{
     float: left;
     clear: left;
-    width: 55%;
-    padding: 0.2em 0;
+    width: 80%;
+    padding: 0 0 0 0;
 }
 .form-multiple.even {
     /*color: #6a7a7b;*/
@@ -122,8 +122,8 @@ div > .abort-button{
 
 .left-labels label,
 .right-labels label{
-    width: 28%;
-    padding: 0 1em 0 0;
+    width: 25%;
+    padding: 0 0 0 0;
     float: left;
 }
 .right-labels label{
