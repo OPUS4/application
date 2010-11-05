@@ -104,7 +104,7 @@ class ZIBInstituteImport {
         // Build a mapping file to associate old IDs with the new ones
         $fp = fopen('../workspace/tmp/universities.map', 'w');
         foreach ($classification as $class) {
-            echo ".";
+            //echo ".";
             $uni = new Opus_DnbInstitute();
             $uni->setName($class['universitaet_anzeige']);
             $this->uniname = $class['universitaet_anzeige'];
@@ -114,9 +114,12 @@ class ZIBInstituteImport {
             $uni->setDnbContactId($class['ddb_idn']);
             $uni->setIsGrantor('1');
             $uni->store();
+
+            echo "University imported: " . $class['universitaet_anzeige'] ."\n";
+
             fputs($fp, str_replace(" ", "_", $class['universitaet']) . ' ' .  $uni->getId() . "\n");
         }
-        echo "\n";
+        //echo "\n";
         fclose($fp);
     }
 
@@ -133,15 +136,18 @@ class ZIBInstituteImport {
         // Build a mapping file to associate old IDs with the new ones
         $fp = fopen('../workspace/tmp/faculties.map', 'w');
         foreach ($classification as $class) {
-            echo ".";
+            //echo ".";
             $fac = new Opus_DnbInstitute();
             $fac->setName($this->uniname.",".$class['fakultaet']);
             $fac->setCity($this->unicity);
             $fac->setIsGrantor('1');
             $fac->store();
+
+            echo "Faculty imported: " . $class['fakultaet'] ."\n";
+
             fputs($fp, str_replace(" ", "_", $class['nr']) . ' ' .  $fac->getId() . "\n");
         }
-        echo "\n";
+        //echo "\n";
         fclose($fp);
     }
 
@@ -158,7 +164,7 @@ class ZIBInstituteImport {
         // Build a mapping file to associate old IDs with the new ones
         $fp = fopen('../workspace/tmp/institute.map', 'w');
         foreach ($classification as $class) {
-            echo ".";
+            //echo ".";
             // ZIB-Hack:
             if ($class['name'] === 'High Performance Computing') { $class['name'] = 'Parallele und Verteilte Algorithmen'; }
             if ($class['name'] === 'KOBV') { fputs($fp, $class['nr'] . ' 15994' . "\n"); continue; }
@@ -167,9 +173,12 @@ class ZIBInstituteImport {
             $coll->setName($class['name']);
 	    $coll->setVisible(1);
 	    $root->store();
+
+            echo "Institute imported: " . $class['name'] ."\n";
+
             fputs($fp, $class['nr'] . ' ' . $coll->getId() . "\n");
         }
-        echo "\n";
+        //echo "\n";
         fclose($fp);
     }
 }
