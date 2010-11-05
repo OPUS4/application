@@ -105,6 +105,32 @@
       </tuv>
     </tu>
     
+    <tu tuid="admin_filemanager_label_visibleinfrontdoor">
+      <tuv xml:lang="en">
+        <seg>Visible in Frontdoor</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datei in Frontdoor anzeigen.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_filemanager_label_visibleinoai">
+      <tuv xml:lang="en">
+        <seg>Visible in OAI</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datei in OAI anzeigen.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_filemanager_label_filesize">
+      <tuv xml:lang="en">
+        <seg>Filesize:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dateigröße:</seg>
+      </tuv>
+    </tu>
   </body>
   
 </tmx>

@@ -62,6 +62,10 @@ class Admin_Model_FileHelper {
         return $this->file->getId();
     }
 
+    public function getSize() {
+        return $this->file->getFileSize();
+    }
+
     public function getSignatureForm() {
         $form = new Admin_Form_SignatureForm();
         $form->FileObject->setValue($this->file->getId());

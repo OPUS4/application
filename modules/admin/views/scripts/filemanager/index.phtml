@@ -66,6 +66,13 @@
     <fieldset class="file">
     <legend class="filename"><?= $fileName ?></legend>
 
+    <table width="100%">
+        <tr>
+          <td class="label"><?= $this->translate('admin_filemanager_label_filesize') ?></td>
+          <td class="value"><?= $file->getSize() ?></td>
+        </tr>
+    </table>
+
     <div class="file-actions">
         <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'filemanager', 'action' => 'delete', 'fileId' => $file->getId()), null, false) ?>"
            ><?= $this->translate('admin_filemanager_delete') ?></a>
