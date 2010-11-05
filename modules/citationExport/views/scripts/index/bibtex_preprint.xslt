@@ -32,7 +32,7 @@
  * @author      Gunar Maiwald <maiwald@zib.de>
  * @copyright   Copyright (c) 2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ * @version     $Id: bibtex.xslt 5890 2010-09-26 17:13:48Z tklein $
  */
 -->
 
@@ -97,15 +97,15 @@
         </xsl:variable>
 
         <!-- II) Output: print Opus-Document in bibtex -->
-        <xsl:text>@techreport{</xsl:text><xsl:value-of select="$identifier" />,
+        <xsl:text>@unpublished{</xsl:text><xsl:value-of select="$identifier" />,
 <xsl:text></xsl:text>
         <xsl:call-template name="outputFieldValue">
-            <xsl:with-param name="field">author   </xsl:with-param>
+            <xsl:with-param name="field">author </xsl:with-param>
             <xsl:with-param name="value"><xsl:value-of select="$author" /></xsl:with-param>
             <xsl:with-param name="delimiter">,</xsl:with-param>
         </xsl:call-template>
         <xsl:call-template name="outputFieldValue">
-            <xsl:with-param name="field">title    </xsl:with-param>
+            <xsl:with-param name="field">title  </xsl:with-param>
             <xsl:with-param name="value"><xsl:value-of select ="TitleMain/@Value" /></xsl:with-param>
             <xsl:with-param name="delimiter">,</xsl:with-param>
         </xsl:call-template>
@@ -116,7 +116,7 @@
                 <xsl:with-param name="delimiter">,</xsl:with-param>
             </xsl:call-template>
             <xsl:call-template name="outputFieldValue">
-                <xsl:with-param name="field">number   </xsl:with-param>
+                <xsl:with-param name="field">number  </xsl:with-param>
                 <xsl:with-param name="value"><xsl:value-of select ="@Issue" /></xsl:with-param>
                 <xsl:with-param name="delimiter">,</xsl:with-param>
             </xsl:call-template>
@@ -127,7 +127,7 @@
             </xsl:call-template>
         </xsl:if>
         <xsl:call-template name="outputFieldValue">
-            <xsl:with-param name="field">pages    </xsl:with-param>
+            <xsl:with-param name="field">pages  </xsl:with-param>
             <xsl:with-param name="value"><xsl:value-of select ="$pages" /></xsl:with-param>
             <xsl:with-param name="delimiter">,</xsl:with-param>
         </xsl:call-template>
@@ -137,7 +137,7 @@
             <xsl:with-param name="delimiter">,</xsl:with-param>
         </xsl:call-template>
         <xsl:call-template name="outputFieldValue">
-            <xsl:with-param name="field">year     </xsl:with-param>
+            <xsl:with-param name="field">year   </xsl:with-param>
             <xsl:with-param name="value"><xsl:value-of select="$year" /></xsl:with-param>
         </xsl:call-template>
 <xsl:text>}</xsl:text>
@@ -159,16 +159,16 @@
             </xsl:choose>
            </xsl:when>
           <xsl:when test="$type='identifier'">
-	<xsl:choose>
+	<xsl:choose>	
 	<xsl:when test="position()=1 or position()=2 or position()=3">
 		<xsl:value-of select="@LastName" />
-	</xsl:when>
+	</xsl:when>	
 	<xsl:when test="position()=4">
 		<xsl:text>etal</xsl:text>
 	</xsl:when>
 	<xsl:otherwise>
                <xsl:text></xsl:text>
-          </xsl:otherwise>
+          </xsl:otherwise>	
 	</xsl:choose>
            </xsl:when>
       </xsl:choose>
@@ -196,7 +196,6 @@
          </xsl:when>
       </xsl:choose>
     </xsl:template>
-
 
     <!-- output field and value -->
     <xsl:template name="outputFieldValue">

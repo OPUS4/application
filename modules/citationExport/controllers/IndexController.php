@@ -106,6 +106,7 @@ class CitationExport_IndexController extends Zend_Controller_Action {
      	// Load document
         $docId = $this->getRequest()->getParam('docId');
         $document = new Opus_Document($docId);
+        $docType = $document->getType();
 
         // Set up filter and get XML-Representation of filtered document.
         $filter = new Opus_Model_Filter;
@@ -114,7 +115,10 @@ class CitationExport_IndexController extends Zend_Controller_Action {
 
         // Set up XSLT-Stylesheet
         $xslt = new DomDocument;
-        if (true === file_exists($this->view->getScriptPath('index') . '/' . $outputFormat . '.xslt')) {
+        if (true === file_exists($this->view->getScriptPath('index') . '/' . $outputFormat . '_' . $docType. '.xslt')) {
+           $template = $outputFormat . '_' . $docType. '.xslt';
+        }
+        else if (true === file_exists($this->view->getScriptPath('index') . '/' . $outputFormat . '.xslt')) {
             $template = $outputFormat . '.xslt';
         } else {
             return false;

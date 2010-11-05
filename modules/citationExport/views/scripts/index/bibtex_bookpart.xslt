@@ -32,7 +32,7 @@
  * @author      Gunar Maiwald <maiwald@zib.de>
  * @copyright   Copyright (c) 2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ * @version     $Id: bibtex.xslt 5890 2010-09-26 17:13:48Z tklein $
  */
 -->
 
@@ -92,12 +92,14 @@
 
         <xsl:variable name="pages">
             <xsl:call-template name="Pages">
-                <xsl:with-param name="number"><xsl:value-of select="@PageNumber" /></xsl:with-param>
+                <xsl:with-param name="first"><xsl:value-of select="@PageFirst" /></xsl:with-param>
+                <xsl:with-param name="last"><xsl:value-of select="@PageLast" /></xsl:with-param>
             </xsl:call-template>
         </xsl:variable>
 
+
         <!-- II) Output: print Opus-Document in bibtex -->
-        <xsl:text>@techreport{</xsl:text><xsl:value-of select="$identifier" />,
+        <xsl:text>@incollection{</xsl:text><xsl:value-of select="$identifier" />,
 <xsl:text></xsl:text>
         <xsl:call-template name="outputFieldValue">
             <xsl:with-param name="field">author   </xsl:with-param>
@@ -109,31 +111,59 @@
             <xsl:with-param name="value"><xsl:value-of select ="TitleMain/@Value" /></xsl:with-param>
             <xsl:with-param name="delimiter">,</xsl:with-param>
         </xsl:call-template>
-        <xsl:if test="Collection/@RoleName='series' = 'true'">
-            <xsl:call-template name="outputFieldValue">
-                <xsl:with-param name="field">series   </xsl:with-param>
-                <xsl:with-param name="value"><xsl:value-of select ="Collection[@RoleName='series']/@Name" /></xsl:with-param>
-                <xsl:with-param name="delimiter">,</xsl:with-param>
-            </xsl:call-template>
-            <xsl:call-template name="outputFieldValue">
-                <xsl:with-param name="field">number   </xsl:with-param>
-                <xsl:with-param name="value"><xsl:value-of select ="@Issue" /></xsl:with-param>
-                <xsl:with-param name="delimiter">,</xsl:with-param>
-            </xsl:call-template>
-            <xsl:call-template name="outputFieldValue">
-                <xsl:with-param name="field">institution</xsl:with-param>
-                <xsl:with-param name="value"><xsl:value-of select ="Enrichment[@KeyName='institution']/@Value" /></xsl:with-param>
-                <xsl:with-param name="delimiter">,</xsl:with-param>
-            </xsl:call-template>
-        </xsl:if>
         <xsl:call-template name="outputFieldValue">
-            <xsl:with-param name="field">pages    </xsl:with-param>
-            <xsl:with-param name="value"><xsl:value-of select ="$pages" /></xsl:with-param>
+            <xsl:with-param name="field">booktitle</xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="TitleParent/@Value" /></xsl:with-param>
             <xsl:with-param name="delimiter">,</xsl:with-param>
         </xsl:call-template>
         <xsl:call-template name="outputFieldValue">
-            <xsl:with-param name="field">pages      </xsl:with-param>
-            <xsl:with-param name="value"><xsl:value-of select ="$pages" /></xsl:with-param>
+            <xsl:with-param name="field">edition  </xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="@Edition" /></xsl:with-param>
+            <xsl:with-param name="delimiter">,</xsl:with-param>
+	</xsl:call-template>
+        <xsl:call-template name="outputFieldValue">
+            <xsl:with-param name="field">series   </xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="TitleSub/@Value" /></xsl:with-param>
+            <xsl:with-param name="delimiter">,</xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="outputFieldValue">
+            <xsl:with-param name="field">editor   </xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select="$editor" /></xsl:with-param>
+            <xsl:with-param name="delimiter">,</xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="outputFieldValue">
+            <xsl:with-param name="field">publisher</xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="PublisherName" /></xsl:with-param>
+            <xsl:with-param name="delimiter">,</xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="outputFieldValue">
+            <xsl:with-param name="field">address  </xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="PublisherPlace" /></xsl:with-param>
+            <xsl:with-param name="delimiter">,</xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="outputFieldValue">
+            <xsl:with-param name="field">volume   </xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="@Volume" /></xsl:with-param>
+            <xsl:with-param name="delimiter">,</xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="outputFieldValue">
+            <xsl:with-param name="field">number   </xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="@Issue" /></xsl:with-param>
+            <xsl:with-param name="delimiter">,</xsl:with-param>
+	</xsl:call-template>
+        <xsl:call-template name="outputFieldValue">
+            <xsl:with-param name="field">isbn     </xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="IdentifierIsbn/@Value" /></xsl:with-param>
+            <xsl:with-param name="delimiter">,</xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="outputFieldValue">
+            <xsl:with-param name="field">doi      </xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="IdentifierDoi/@Value" /></xsl:with-param>
+            <xsl:with-param name="delimiter">,</xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="outputFieldValue">
+            <xsl:with-param name="field">url      </xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="IdentifierUrl/@Value" /></xsl:with-param>
             <xsl:with-param name="delimiter">,</xsl:with-param>
         </xsl:call-template>
         <xsl:call-template name="outputFieldValue">
@@ -159,20 +189,21 @@
             </xsl:choose>
            </xsl:when>
           <xsl:when test="$type='identifier'">
-	<xsl:choose>
+	<xsl:choose>	
 	<xsl:when test="position()=1 or position()=2 or position()=3">
 		<xsl:value-of select="@LastName" />
-	</xsl:when>
+	</xsl:when>	
 	<xsl:when test="position()=4">
 		<xsl:text>etal</xsl:text>
 	</xsl:when>
 	<xsl:otherwise>
                <xsl:text></xsl:text>
-          </xsl:otherwise>
+          </xsl:otherwise>	
 	</xsl:choose>
            </xsl:when>
       </xsl:choose>
     </xsl:template>
+
 
     <!-- bibtex-style for editors  -->
     <xsl:template match="PersonEditor">
@@ -187,16 +218,22 @@
       </xsl:choose>
     </xsl:template>
 
-    <!-- bibtex-style for pages  -->
+    <!-- bibtex-style for editors  -->
     <xsl:template name="Pages">
-      <xsl:param name="number" required="yes" />
+      <xsl:param name="first" required="yes" />
+      <xsl:param name="last" required="yes" />
       <xsl:choose>
-         <xsl:when test="string-length($number) > 0">
-            <xsl:value-of select="$number" />
+         <xsl:when test="string-length($first) > 0 and string-length($last) > 0">
+            <xsl:value-of select="$first" /><xsl:text> - </xsl:text><xsl:value-of select="$last" />
          </xsl:when>
+         <xsl:when test="string-length($first)">
+            <xsl:value-of select="$first" />
+         </xsl:when>
+         <xsl:otherwise>
+            <xsl:text>Bla</xsl:text>
+         </xsl:otherwise>
       </xsl:choose>
     </xsl:template>
-
 
     <!-- output field and value -->
     <xsl:template name="outputFieldValue">

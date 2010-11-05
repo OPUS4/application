@@ -32,7 +32,7 @@
  * @author      Gunar Maiwald <maiwald@zib.de>
  * @copyright   Copyright (c) 2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ * @version     $Id: bibtex.xslt 5890 2010-09-26 17:13:48Z tklein $
  */
 -->
 
@@ -86,10 +86,6 @@
             <xsl:value-of select="$year" />
          </xsl:variable>
 
-        <xsl:variable name="editor">
-            <xsl:apply-templates select="PersonEditor" />
-        </xsl:variable>
-
         <xsl:variable name="pages">
             <xsl:call-template name="Pages">
                 <xsl:with-param name="number"><xsl:value-of select="@PageNumber" /></xsl:with-param>
@@ -97,37 +93,45 @@
         </xsl:variable>
 
         <!-- II) Output: print Opus-Document in bibtex -->
-        <xsl:text>@techreport{</xsl:text><xsl:value-of select="$identifier" />,
+        <xsl:text>@mastersthesis{</xsl:text><xsl:value-of select="$identifier" />,
 <xsl:text></xsl:text>
         <xsl:call-template name="outputFieldValue">
-            <xsl:with-param name="field">author   </xsl:with-param>
+            <xsl:with-param name="field">author     </xsl:with-param>
             <xsl:with-param name="value"><xsl:value-of select="$author" /></xsl:with-param>
             <xsl:with-param name="delimiter">,</xsl:with-param>
         </xsl:call-template>
         <xsl:call-template name="outputFieldValue">
-            <xsl:with-param name="field">title    </xsl:with-param>
+            <xsl:with-param name="field">title      </xsl:with-param>
             <xsl:with-param name="value"><xsl:value-of select ="TitleMain/@Value" /></xsl:with-param>
             <xsl:with-param name="delimiter">,</xsl:with-param>
         </xsl:call-template>
-        <xsl:if test="Collection/@RoleName='series' = 'true'">
-            <xsl:call-template name="outputFieldValue">
-                <xsl:with-param name="field">series   </xsl:with-param>
-                <xsl:with-param name="value"><xsl:value-of select ="Collection[@RoleName='series']/@Name" /></xsl:with-param>
-                <xsl:with-param name="delimiter">,</xsl:with-param>
-            </xsl:call-template>
-            <xsl:call-template name="outputFieldValue">
-                <xsl:with-param name="field">number   </xsl:with-param>
-                <xsl:with-param name="value"><xsl:value-of select ="@Issue" /></xsl:with-param>
-                <xsl:with-param name="delimiter">,</xsl:with-param>
-            </xsl:call-template>
-            <xsl:call-template name="outputFieldValue">
-                <xsl:with-param name="field">institution</xsl:with-param>
-                <xsl:with-param name="value"><xsl:value-of select ="Enrichment[@KeyName='institution']/@Value" /></xsl:with-param>
-                <xsl:with-param name="delimiter">,</xsl:with-param>
-            </xsl:call-template>
-        </xsl:if>
         <xsl:call-template name="outputFieldValue">
-            <xsl:with-param name="field">pages    </xsl:with-param>
+            <xsl:with-param name="field">type       </xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="Enrichment[@KeyName='type']/@Value" /></xsl:with-param>
+            <xsl:with-param name="delimiter">,</xsl:with-param>
+        </xsl:call-template>
+       <xsl:call-template name="outputFieldValue">
+            <xsl:with-param name="field">institution</xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select="@ContributingCorporation" /></xsl:with-param>
+            <xsl:with-param name="delimiter">,</xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="outputFieldValue">
+            <xsl:with-param name="field">address    </xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="Enrichment[@KeyName='address']/@Value" /></xsl:with-param>
+            <xsl:with-param name="delimiter">,</xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="outputFieldValue">
+            <xsl:with-param name="field">contributor</xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="Enrichment[@KeyName='contributor']/@Value" /></xsl:with-param>
+            <xsl:with-param name="delimiter">,</xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="outputFieldValue">
+            <xsl:with-param name="field">month      </xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="Enrichment[@KeyName='month']/@Value" /></xsl:with-param>
+            <xsl:with-param name="delimiter">,</xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="outputFieldValue">
+            <xsl:with-param name="field">pages      </xsl:with-param>
             <xsl:with-param name="value"><xsl:value-of select ="$pages" /></xsl:with-param>
             <xsl:with-param name="delimiter">,</xsl:with-param>
         </xsl:call-template>
@@ -137,7 +141,7 @@
             <xsl:with-param name="delimiter">,</xsl:with-param>
         </xsl:call-template>
         <xsl:call-template name="outputFieldValue">
-            <xsl:with-param name="field">year     </xsl:with-param>
+            <xsl:with-param name="field">year       </xsl:with-param>
             <xsl:with-param name="value"><xsl:value-of select="$year" /></xsl:with-param>
         </xsl:call-template>
 <xsl:text>}</xsl:text>
@@ -174,29 +178,15 @@
       </xsl:choose>
     </xsl:template>
 
-    <!-- bibtex-style for editors  -->
-    <xsl:template match="PersonEditor">
-      <xsl:value-of select="concat(@LastName, ', ', @FirstName)" />
-      <xsl:choose>
-         <xsl:when test="position()=last()">
-            <xsl:text></xsl:text>
-         </xsl:when>
-         <xsl:otherwise>
-            <xsl:text> and </xsl:text>
-         </xsl:otherwise>
-      </xsl:choose>
-    </xsl:template>
-
     <!-- bibtex-style for pages  -->
     <xsl:template name="Pages">
       <xsl:param name="number" required="yes" />
       <xsl:choose>
-         <xsl:when test="string-length($number) > 0">
+         <xsl:when test="string-length($number)">
             <xsl:value-of select="$number" />
          </xsl:when>
       </xsl:choose>
     </xsl:template>
-
 
     <!-- output field and value -->
     <xsl:template name="outputFieldValue">

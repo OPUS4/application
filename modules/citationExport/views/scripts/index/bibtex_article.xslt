@@ -22,13 +22,14 @@
  * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details. You should have received a copy of the GNU General Public License 
- * along with OPUS; if not, write to the Free Software Foundation, Inc., 51 
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
  * @package     Module_Frontdoor
- * @author      Oliver Marahrens <o.marahrens@tu-harburg.de> 
+ * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
+ * @author      Gunar Maiwald <maiwald@zib.de>
  * @copyright   Copyright (c) 2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -49,140 +50,155 @@
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     exclude-result-prefixes="php">
 
-    <xsl:output method="text" omit-xml-declaration="yes" />  
- 
-    <xsl:template match="/"> 
-      <xsl:apply-templates select="Opus/Opus_Model_Filter" />   
+    <xsl:output method="text" omit-xml-declaration="yes" />
+
+    <xsl:template match="/">
+      <xsl:apply-templates select="Opus/Opus_Model_Filter" />
     </xsl:template>
 
     <!-- Suppress spilling values with no corresponding templates -->
-      <xsl:template match="@*|node()" /> 
+    <xsl:template match="@*|node()" />
 
-<!-- here you can change the order of the fields, just change the order of the apply-templates-rows
-     if there is a choose-block for the field, you have to move the whole choose-block
-     if you wish new fields, you have to add a new line xsl:apply-templates...
-     and a special template for each new field below, too -->
     <xsl:template match="Opus_Model_Filter">
-       @article{OPUS-Bibtex<xsl:value-of select="@Id" />,
-       author   =  "<xsl:apply-templates select="PersonAuthor" />",
-       title    =  '<xsl:apply-templates select="TitleMain" />',
-       journal  =  "<xsl:apply-templates select="TitleParent" />",
-       <xsl:choose>
-         <xsl:when test="normalize-space(@CompletedYear)">
-             year = <xsl:value-of select="@CompletedYear" />,
-         </xsl:when>
-         <xsl:when test="string-length(ComletedDate/@Year)>0">
-           year = <xsl:value-of select="ComletedDate/@Year" />,
-         </xsl:when>
-         <xsl:when test="normalize-space(PublishedDate/@Year)">
-             year = <xsl:value-of select="PublishedDate/@Year" />,
-         </xsl:when>
-         <xsl:otherwise>
-               year = <xsl:value-of select="@PublishedYear" />,
-         </xsl:otherwise>
-       </xsl:choose>
-       <xsl:if test="string-length(IdentifierUrn/@Value)>0">
-           urn     =  <xsl:apply-templates select="IdentifierUrn" />,
-           url     =  http://nbn-resolving.de/urn/resolver.pl?<xsl:apply-templates select="IdentifierUrn" />,
-       </xsl:if>
-       <xsl:if test="string-length(IdentifierUrl/@Value)>0">
-           url     =  <xsl:apply-templates select="IdentifierUrl" />,
-       </xsl:if>
-       <xsl:if test="string-length(Note/@Message)>0">
-           note    =  "<xsl:apply-templates select="Note" />",
-       </xsl:if>
-       <xsl:if test="string-length(@PageFirst)>0">
-           pages   =  "<xsl:value-of select="@PageFirst" />, <xsl:value-of select="@PageLast" />",
-       </xsl:if>
-       <xsl:if test="string-length(@Volume)>0">
-           volume  =  <xsl:apply-templates select="@Volume" />,
-       </xsl:if>   
-       <xsl:if test="string-length(@Issue)>0">
-           number =  "<xsl:value-of select="@Issue" />",
-       </xsl:if>
-       <xsl:if test="string-length(@ContributingCorporation)>0">
-           organization =  "<xsl:value-of select="@ContributingCorporation" />",
-       </xsl:if>
-       url         =   <xsl:value-of select="$url_prefix" />/frontdoor/index/index/docId/<xsl:value-of select="@Id" />,
-       howpublished=  'online'
-       }
-    </xsl:template>
 
-    <!-- here begins the special templates for the fields -->
-    <!-- Templates for "internal fields". -->
-    <xsl:template match="@CompletedYear">
-      <xsl:value-of select="." />
-    </xsl:template>
+        <!-- Preprocessing: some variables will be defined -->
+        <xsl:variable name="year">
+            <xsl:choose>
+                <xsl:when test="string-length(@PublishedYear)>0">
+                    <xsl:value-of select="@PublishedYear" />
+                </xsl:when>
+                <xsl:when test="string-length(@CompletedYear)>0">
+                    <xsl:value-of select="@CompletedYear" />
+                </xsl:when>
+           </xsl:choose>
+       </xsl:variable>
 
-    <xsl:template match="@ContributingCorporation">
-      <xsl:value-of select="." />
-    </xsl:template>
+        <xsl:variable name="author">
+            <xsl:apply-templates select="PersonAuthor">
+                 <xsl:with-param name="type">author</xsl:with-param>
+            </xsl:apply-templates>
+        </xsl:variable>
 
-    <xsl:template match="@CreatingCorporation">
-      <xsl:value-of select="." />
-    </xsl:template>
+        <xsl:variable name="identifier">
+            <xsl:apply-templates select="PersonAuthor">
+                 <xsl:with-param name="type">identifier</xsl:with-param>
+            </xsl:apply-templates>
+            <xsl:value-of select="$year" />
+         </xsl:variable>
 
-    <xsl:template match="@Edition">
-     <xsl:value-of select="." />
-    </xsl:template>
+        <xsl:variable name="editor">
+            <xsl:apply-templates select="PersonEditor" />
+        </xsl:variable>
 
-    <xsl:template match="@Issue">
-      <xsl:value-of select="." />
-    </xsl:template>
+        <xsl:variable name="pages">
+            <xsl:call-template name="Pages">
+                <xsl:with-param name="first"><xsl:value-of select="@PageFirst" /></xsl:with-param>
+                <xsl:with-param name="last"><xsl:value-of select="@PageLast" /></xsl:with-param>
+            </xsl:call-template>
+        </xsl:variable>
 
-    <xsl:template match="@PageNumber">
-      <xsl:value-of select="." />  
-    </xsl:template>
+        <!-- II) Output: print Opus-Document in bibtex -->
+        <xsl:text>@article{</xsl:text><xsl:value-of select="$identifier" />,
+<xsl:text></xsl:text>
+        <xsl:call-template name="outputFieldValue">
+            <xsl:with-param name="field">author   </xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select="$author" /></xsl:with-param>
+            <xsl:with-param name="delimiter">,</xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="outputFieldValue">
+            <xsl:with-param name="field">title    </xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="TitleMain/@Value" /></xsl:with-param>
+            <xsl:with-param name="delimiter">,</xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="outputFieldValue">
+            <xsl:with-param name="field">journal  </xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="TitleParent/@Value" /></xsl:with-param>
+            <xsl:with-param name="delimiter">,</xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="outputFieldValue">
+            <xsl:with-param name="field">series   </xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="TitleSub/@Value" /></xsl:with-param>
+            <xsl:with-param name="delimiter">,</xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="outputFieldValue">
+            <xsl:with-param name="field">editor   </xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="$editor" /></xsl:with-param>
+            <xsl:with-param name="delimiter">,</xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="outputFieldValue">
+            <xsl:with-param name="field">volume   </xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="@Volume" /></xsl:with-param>
+            <xsl:with-param name="delimiter">,</xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="outputFieldValue">
+            <xsl:with-param name="field">number   </xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="@Issue" /></xsl:with-param>
+            <xsl:with-param name="delimiter">,</xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="outputFieldValue">
+            <xsl:with-param name="field">pages    </xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="$pages" /></xsl:with-param>
+            <xsl:with-param name="delimiter">,</xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="outputFieldValue">
+            <xsl:with-param name="field">publisher</xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="PublisherName" /></xsl:with-param>
+            <xsl:with-param name="delimiter">,</xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="outputFieldValue">
+            <xsl:with-param name="field">address  </xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="PublisherPlace" /></xsl:with-param>
+            <xsl:with-param name="delimiter">,</xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="outputFieldValue">
+            <xsl:with-param name="field">doi      </xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="IdentifierDoi/@Value" /></xsl:with-param>
+            <xsl:with-param name="delimiter">,</xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="outputFieldValue">
+            <xsl:with-param name="field">url      </xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="IdentifierUrl/@Value" /></xsl:with-param>
+            <xsl:with-param name="delimiter">,</xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="outputFieldValue">
+            <xsl:with-param name="field">year     </xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select="$year" /></xsl:with-param>
+        </xsl:call-template>
+<xsl:text>}</xsl:text>
+     </xsl:template>
 
-    <xsl:template match="@PublishedYear">
-      <xsl:value-of select="." />
-    </xsl:template>
-
-    <xsl:template match="@PublisherName">
-      <xsl:value-of select="." />
-    </xsl:template>
-
-    <xsl:template match="@PublisherPlace">
-      <xsl:value-of select="." />
-    </xsl:template>
-
-    <xsl:template match="@Volume">
-      <xsl:value-of select="." />
-    </xsl:template>
-
-
-    <!-- Templates for "external fields". -->
-    <xsl:template match="CompletedDate">
-      <xsl:value-of select="@Year" />
-    </xsl:template>
-
-    <xsl:template match="IdentifierUrn">
-      <xsl:value-of select="@Value" />
-    </xsl:template>
-
-    <xsl:template match="IdentifierUrl">
-      <xsl:value-of select="@Value" />
-    </xsl:template>
-
-    <xsl:template match="Note">
-      <xsl:value-of select="@Message" />
-    </xsl:template>
- 
-    <xsl:template match="Institute"/>
-    <xsl:template match="Patent"/>
- 
+    <!-- bibtex-style for authors  -->
     <xsl:template match="PersonAuthor">
-      <xsl:value-of select="concat(@LastName, ', ', @FirstName)" />
+      <xsl:param name="type" required="yes" />
       <xsl:choose>
-         <xsl:when test="position()=last()">
-            <xsl:text></xsl:text>
-         </xsl:when>
-         <xsl:otherwise>
-            <xsl:text> and </xsl:text>
-         </xsl:otherwise>
+          <xsl:when test="$type='author'">
+            <xsl:value-of select="concat(@LastName, ', ', @FirstName)" />
+            <xsl:choose>
+                <xsl:when test="position()=last()">
+                    <xsl:text></xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text> and </xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
+           </xsl:when>
+          <xsl:when test="$type='identifier'">
+	<xsl:choose>	
+	<xsl:when test="position()=1 or position()=2 or position()=3">
+		<xsl:value-of select="@LastName" />
+	</xsl:when>	
+	<xsl:when test="position()=4">
+		<xsl:text>etal</xsl:text>
+	</xsl:when>
+	<xsl:otherwise>
+               <xsl:text></xsl:text>
+          </xsl:otherwise>	
+	</xsl:choose>
+           </xsl:when>
       </xsl:choose>
-    </xsl:template>  
-          
+    </xsl:template>
+
+    <!-- bibtex-style for editors  -->
     <xsl:template match="PersonEditor">
       <xsl:value-of select="concat(@LastName, ', ', @FirstName)" />
       <xsl:choose>
@@ -194,21 +210,35 @@
          </xsl:otherwise>
       </xsl:choose>
     </xsl:template>
- 
-    <xsl:template match="PublisherUniversity"/>
 
-    <xsl:template match="TitleMain">
-        <xsl:value-of select="@Value" />
+    <!-- bibtex-style for pages  -->
+    <xsl:template name="Pages">
+      <xsl:param name="first" required="yes" />
+      <xsl:param name="last" required="yes" />
+      <xsl:choose>
+         <xsl:when test="string-length($first) > 0 and string-length($last) > 0">
+            <xsl:value-of select="$first" /><xsl:text> - </xsl:text><xsl:value-of select="$last" />
+         </xsl:when>
+         <xsl:when test="string-length($first)">
+            <xsl:value-of select="$first" />
+         </xsl:when>
+      </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="TitleParent">
-      <xsl:value-of select="@Value" />
+    <!-- output field and value -->
+    <xsl:template name="outputFieldValue">
+        <xsl:param name="field" required="yes" />
+        <xsl:param name="value" required="yes" />
+        <xsl:param name="delimiter" required="no" />
+        <xsl:if test="string-length($field)>0">
+            <xsl:if test="string-length($value)>0">
+<xsl:text>  </xsl:text><xsl:value-of select="$field" /><xsl:text> = "</xsl:text><xsl:value-of select="$value" /><xsl:text>"</xsl:text>
+	  <xsl:if test="string-length($delimiter)>0">
+		<xsl:value-of select="$delimiter" />
+	  </xsl:if>
+<xsl:text>
+</xsl:text>
+            </xsl:if>
+        </xsl:if>
     </xsl:template>
-
-    <!-- Named template to translate an arbitrary string. Needs the translation key as a parameter. -->
-    <xsl:template name="translateString">
-        <xsl:param name="string" />
-        <xsl:value-of select="string" />
-    </xsl:template>
-
 </xsl:stylesheet>
