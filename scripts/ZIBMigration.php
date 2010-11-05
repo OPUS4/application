@@ -546,8 +546,8 @@ class ZIBMigration extends ZIBMigration_Base {
         $this->load_licences();
 
         // Load Institutes
-        //$this->load_documents();
-        $this->load_documents(1, 50);
+        $this->load_documents();
+        //$this->load_documents(1, 50);
 
         // Import files
         //$this->load_fulltext();
@@ -565,7 +565,7 @@ class ZIBMigration extends ZIBMigration_Base {
 	// Create Project-Collections
 	//$this->create_project_collections("http://www.zib.de/de/projekte/aktuelle-projekte.html");
 	//$this->create_project_collections("http://www.zib.de/de/projekte/aktuelle-projekte/browse/1.html");
-
+/*
         $input = readline('Do you want to import bibtex from file? (y/n) ');
         if ($input === 'y' || $input === 'yes') {
             $this->import_bibtex('../../bibtex/Numerische.bib.xml', 20);
@@ -573,8 +573,8 @@ class ZIBMigration extends ZIBMigration_Base {
             $this->import_bibtex('../../bibtex/Parallele.bib.xml', 20);
             $this->import_bibtex('../../bibtex/Visualisierung.bib.xml', 20);
         }
-
-        /*
+*/
+        
         $input = readline('Do you want to import bibtex from file? (y/n) ');
         if ($input === 'y' || $input === 'yes') {
             $this->import_bibtex('../../bibtex/Numerische.bib.xml');
@@ -582,7 +582,7 @@ class ZIBMigration extends ZIBMigration_Base {
             $this->import_bibtex('../../bibtex/Parallele.bib.xml');
             $this->import_bibtex('../../bibtex/Visualisierung.bib.xml');
         }
-        */
+        
   
 
 	// Fill Person-Colelctiosn
