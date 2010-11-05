@@ -73,6 +73,7 @@ class ZIBMigration extends ZIBMigration_Base {
         }
         $this->importfile = $file;
         $this->importData = $this->loadImportFile();
+        echo "\n";
     }
 
     // Import collections and series
@@ -148,10 +149,10 @@ class ZIBMigration extends ZIBMigration_Base {
                     //fputs($f, $result['entry'] . "\n");
                     $failureCount++;
                 }
-                unset ($result);
+                //unset ($result);
 		//echo "(4) after unset result: ".memory_get_usage()."\n";
-		var_dump($document);
-		unset ($document);
+		//var_dump($document);
+		//unset ($document);
 		//echo "(5) after unset document: ".memory_get_usage()."\n";
                 flush();
             }
@@ -159,8 +160,8 @@ class ZIBMigration extends ZIBMigration_Base {
 
             $import->finalize();
 
-            unset($import);
-            unset($toImport);
+            //unset($import);
+            //unset($toImport);
             
             echo "Imported " . $successCount . " documents successfully.\n";
             echo $failureCount . " documents have not been imported due to failures listed above. See $logfile for details about failed entries.\n";
@@ -301,6 +302,7 @@ class ZIBMigration extends ZIBMigration_Base {
             unset($role);
             unset($root);
        }
+       echo "\n";
     }
 
 
@@ -530,7 +532,6 @@ class ZIBMigration extends ZIBMigration_Base {
     public function run() {
 
         echo "Start ZIB-Migration\n";
-
         // Load Opus3-mySQL-XML-dump
         //$this->init();
         $this->init('../../dumps/opus3_zib.new.xml');
