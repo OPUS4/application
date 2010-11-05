@@ -169,7 +169,7 @@ class ZIBXMLImport {
         $grantorValue = null;
 
         $imported = array();
-
+	
         if ($ddcNotation !== null) {
             $ddcValue = $ddcNotation->getAttribute('Value');
             $this->document->removeChild($ddcNotation);
@@ -315,8 +315,8 @@ class ZIBXMLImport {
                     $this->addDocumentToCollectionNumber($doc, $c['Key'], $c['Value']);
                 }
             }
-             // store the document
-           
+            // store the document
+     
             $doc->store();
 
             $imported['result'] = 'success';
@@ -328,7 +328,7 @@ class ZIBXMLImport {
             $imported['entry'] = $this->completeXML->saveXML($this->document);
             $imported['oldid'] = $oldid;
         }
-
+	
         /* TODO: Handle Unset */
         unset($doc);
 	unset($this->document);
@@ -372,11 +372,11 @@ class ZIBXMLImport {
     }
 
     protected function addDocumentToCollectionNumber($document, $role_name, $number) {
-
+    
         //echo "addDocumentToCollectionNumber:".$role_name.":".$number."\n";
         $role = Opus_CollectionRole::fetchByName($role_name);
         $colls = Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $number);
-
+	
         if (count($colls) > 0) {
             foreach ($colls as $c) {
                 /* TODO: DDC-Hack */
