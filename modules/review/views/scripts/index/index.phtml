@@ -80,16 +80,18 @@
                 <a href="<?= $document->getUrlFrontdoor() ?>" target="_blank">
                     <?= $document->getDocTitle() ?>
                 </a>
-                (<span class="doctype"><?= $document->getDocType() ?></span>,
-                <span class="pubDate"><?= $document->getPublishedDate() ?></span>)
+                (<span class="pubDate"><?= $document->getPublishedDate() ?></span>)
             </div>
             <div class="authors">
             <?PHP $authorsCount = count($document->getAuthors()) - 1; ?>
             <?PHP foreach($document->getAuthors() as $count => $author) : ?>
-                <?= $author ?>
+                <?= $author['name'] ?>
                 <?= ($count < $authorsCount) ? ';' : ''?>
             <?PHP endforeach; ?>
             </div>
+        </td>
+        <td>
+            <span class="doctype"><?= $document->getDocType() ?></span>
         </td>
     </tr>
 <?PHP endforeach; ?>

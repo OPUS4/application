@@ -297,9 +297,17 @@ class Review_Model_DocumentAdapter {
         $authors = array();
 
         for ($counter = 0; $counter < $c; $counter++) {
-            $name = $this->document->getPersonAuthor($counter)->getName();
 
-            $authors[$counter] = htmlspecialchars($name);
+            $name = $this->document->getPersonAuthor($counter)->getName();
+            $firstName = $this->document->getPersonAuthor($counter)->getFirstName();
+            $lastName = $this->document->getPersonAuthor($counter)->getLastName();
+
+            $author = array();
+
+            $author['name'] = htmlspecialchars($name);
+            $author['url'] = $this->getAuthorUrl($firstName . ' ' . $lastName);
+
+            $authors[$counter] = $author;
         }
 
         $this->authors = $authors;
@@ -310,24 +318,15 @@ class Review_Model_DocumentAdapter {
     /**
      * Returns the search URL for an author.
      */
-    public function getAuthorUrl() {
-        throw new Exception('not implemented yet');
-        $this->view->author[$runningIndex] = array();
-        $this->view->url_author[$runningIndex] = array();
-        for ($counter = 0; $counter < $c; $counter++) {
-                $name = $d->getPersonAuthor($counter)->getName();
-            $this->view->url_author[$runningIndex][$counter] = $this->view->url(
-                array(
-                    'module'        => 'search',
-                    'controller'    => 'search',
-                    'action'        => 'metadatasearch',
-                    'author'        => $name
-                ),
-                null,
-                true
-            );
-            $this->view->author[$runningIndex][$counter] = $name;
-        }
+    public function getAuthorUrl($author) {
+        $author = str_replace(' ', '+', $author);
+        $url = array(
+            'module' => 'solrsearch',
+            'controller' => 'index',
+            'action' => 'search',
+            'searchtype' => 'authorsearch',
+            'author' => '"' . $author . '"');
+        return $this->view->url($url, null, true);
     }
 
     /**
