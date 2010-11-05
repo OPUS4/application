@@ -133,6 +133,7 @@ class Admin_Form_Role extends Zend_Form {
     protected function _populatePrivilege($privilege) {
         switch ($privilege->getPrivilege()) {
         case 'readFile':
+            // readFile permissions are managed in file manager
             break;
         case 'readMetadata':
             $serverState = $privilege->getDocumentServerState();
