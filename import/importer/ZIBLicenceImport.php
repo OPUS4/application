@@ -121,7 +121,10 @@ class ZIBLicenceImport {
 	// Store the licenses and create a mapping file for migration
 	$fp = fopen('../workspace/tmp/license.map', 'w');
 	foreach ($licenses as $key => $licence) {
-            echo '.';
+            //echo '.';
+
+            echo "Licence imported: " . $key . "\n";
+
             $id = $licence->store();
             fputs($fp, $key . ' ' . $id . "\n");
 	}
