@@ -8,6 +8,7 @@
 user=
 password=
 host=localhost
+port=3306
 dbname=opus400
 
 # path to mysql binary
@@ -21,7 +22,7 @@ master_dir=masterdata/
 # end editable part
 # 
 
-mysql="${mysql_bin} --default-character-set=utf8 --user=${user} --host=${host}"
+mysql="${mysql_bin} --default-character-set=utf8 --user=${user} --host=${host} --port=${port}"
 
 if [ -n "${password}" ]; then
     mysql="${mysql} --password=${password}"
