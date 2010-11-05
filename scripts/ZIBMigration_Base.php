@@ -131,12 +131,17 @@ class ZIBMigration_Base {
             //$opus3Id = $doc->getIdentifierOpus3()->getValue();
             $numberOfFiles = $fileImporter->loadFiles($id);
             //echo $numberOfFiles."\n";
+
+            $mem_now = round(memory_get_usage() / 1024 / 1024);
+            $mem_peak = round(memory_get_peak_usage() / 1024 / 1024);
+
             if ($numberOfFiles > 0) {
-                echo $numberOfFiles . " file(s) have been imported successfully for document ID " . $doc->getId() . "!\n";
+                echo $numberOfFiles . " file(s) have been imported successfully for document ID " . $doc->getId() . " -- memory $mem_now MB, peak memory $mem_peak (MB)\n";
             }
             unset($doc);
             unset($numberOfFiles);
         }
+        unset($fileImporter);
         echo "finished!\n";
     }
 
