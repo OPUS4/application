@@ -81,7 +81,7 @@ class ZIBMigration extends ZIBMigration_Base {
         if ($input === 'y' || $input === 'yes') {
             $import = new ZIBCollectionsImport($this->importData);
         }
-
+        echo "\n";
     }
 
     // Import faculties and institutes
@@ -90,6 +90,7 @@ class ZIBMigration extends ZIBMigration_Base {
         if ($input === 'y' || $input === 'yes') {
             $import = new ZIBInstituteImport($this->importData);
         }
+        echo "\n";
     }
 
     // Import Licences
@@ -98,6 +99,7 @@ class ZIBMigration extends ZIBMigration_Base {
         if ($input === 'y' || $input === 'yes') {
             $import= new ZIBLicenceImport($this->importData);
         }
+        echo "\n";
     }
 
    // Import Documents
@@ -163,6 +165,7 @@ class ZIBMigration extends ZIBMigration_Base {
             echo "Imported " . $successCount . " documents successfully.\n";
             echo $failureCount . " documents have not been imported due to failures listed above. See $logfile for details about failed entries.\n";
         }
+        echo "\n";
     }
 
     // Import Fulltext-Files
@@ -185,6 +188,7 @@ class ZIBMigration extends ZIBMigration_Base {
                 $path = null;
             } while ($input === 'y');
         }
+        echo "\n";
     }
 
     // Import signatures
@@ -477,6 +481,7 @@ class ZIBMigration extends ZIBMigration_Base {
             unset($import);
             unset($toImport);
         }
+        echo "\n";
     }
     
     
@@ -514,6 +519,7 @@ class ZIBMigration extends ZIBMigration_Base {
 		}
 	   }	
 	}
+        echo "\n";
    }
 	
    /**
