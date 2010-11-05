@@ -109,34 +109,57 @@ class ZIBMigration extends ZIBMigration_Base {
             $logfile = '../workspace/tmp/importerrors.xml';
 
             // TODO: Add error handling to fopen()
-            //$f = fopen($logfile, 'w');
             $totalCount = 0;
             $successCount = 0;
             $failureCount = 0;
-
+	    
+	    //echo $toImport."\n";
+	    //echo $toImport[0]."\n";
+	    
+	    
+	    //for ($pos = 0; $pos < $toImport->length; $pos++) {
             foreach ($toImport as $document) {
+
                 //echo "Memory amount: " . round(memory_get_usage() / 1024 / 1024, 2) . " (MB), peak memory " . round(memory_get_peak_usage() / 1024 / 1024, 2) . " (MB)\n";
                 $totalCount++;
                 if (!(is_null($start)) && ($totalCount < $start)) { continue; }
                 if (!(is_null($end)) && ($totalCount > $end)) { break; }
+		
+		//echo "(1) loop begin : ".memory_get_usage()."\n";
+		//$document = $toImport->item($pos);
+		//echo "(2) after document definition  : ".memory_get_usage()."\n";
+
+                $mem_now = round(memory_get_usage() / 1024 / 1024);
+                $mem_peak = round(memory_get_peak_usage() / 1024 / 1024);
 
                 $result = $import->import($document);
+		//echo "(3) after import  : ".memory_get_usage()."\n";
                 if ($result['result'] === 'success') {
-                    echo "Successfully imported old ID " . $result['oldid'] . " with new ID " . $result['newid'] . "\n";
+                    echo "Successfully imported old ID " . $result['oldid'] . " with new ID " . $result['newid'] . " -- memory $mem_now MB, peak memory $mem_peak (MB)\n";
                     $import->log("Successfully imported old ID " . $result['oldid'] . " with new ID " . $result['newid'] . "\n");
                     array_push($this->doclist, $result['newid']);
                     $successCount++;
                 } else if ($result['result'] === 'failure') {
                     echo "ERROR: " . $result['message'] . " for old ID " . $result['oldid'] . "\n";
                     $import->log("ERROR: " . $result['message'] . " for old ID " . $result['oldid'] . "\n");
-                    $import->log("ERROR: " .  $result['entry'] . "\n");
+                    //$import->log("ERROR: " .  $result['entry'] . "\n");
                     //fputs($f, $result['entry'] . "\n");
                     $failureCount++;
                 }
+                unset ($result);
+		//echo "(4) after unset result: ".memory_get_usage()."\n";
+		var_dump($document);
+		unset ($document);
+		//echo "(5) after unset document: ".memory_get_usage()."\n";
                 flush();
             }
             //fclose($f);
+
             $import->finalize();
+
+            unset($import);
+            unset($toImport);
+            
             echo "Imported " . $successCount . " documents successfully.\n";
             echo $failureCount . " documents have not been imported due to failures listed above. See $logfile for details about failed entries.\n";
         }
@@ -264,9 +287,15 @@ class ZIBMigration extends ZIBMigration_Base {
                     $coll->setNumber($identifier);
                     $root->store();
 
-                    echo "Person-Collection for ".$name." with id ".$identifier." created\n";
+                    $mem_now = round(memory_get_usage() / 1024 / 1024);
+                    $mem_peak = round(memory_get_peak_usage() / 1024 / 1024);
+
+                    echo "Person-Collection for ".$name." with id ".$identifier." created -- memory $mem_now MB, peak memory $mem_peak (MB)\n";
 		}
             }
+
+            unset($role);
+            unset($root);
        }
     }
 
@@ -290,7 +319,11 @@ class ZIBMigration extends ZIBMigration_Base {
                         $coll->setName($name);
                         //$coll->setNumber($identifier);
                         $root->store();
-                        echo "Project-Collection for ".$name." created\n";
+
+                        $mem_now = round(memory_get_usage() / 1024 / 1024);
+                        $mem_peak = round(memory_get_peak_usage() / 1024 / 1024);
+
+                        echo "Project-Collection for ".$name." created -- memory $mem_now MB, peak memory $mem_peak (MB)\n";
                     }
                 }
             }
@@ -418,10 +451,12 @@ class ZIBMigration extends ZIBMigration_Base {
                     
                 }
 
-               
+                $mem_now = round(memory_get_usage() / 1024 / 1024);
+                $mem_peak = round(memory_get_peak_usage() / 1024 / 1024);
+
                 $result = $import->import($document);
                 if ($result['result'] === 'success') {
-                    echo "Successfully imported " . $result['newid'] . " Bibtex-Entry " . $result['oldid'] . " \n";
+                    echo "Successfully imported " . $result['newid'] . " Bibtex-Entry " . $result['oldid'] . " -- memory $mem_now MB, peak memory $mem_peak (MB) \n";
 		    //echo "Successfully imported Bibtex-Entry\n";
 		    array_push($opus_titles, $doctitle);
                     $successCount++;
@@ -436,6 +471,11 @@ class ZIBMigration extends ZIBMigration_Base {
 
             echo "Imported " . $successCount . " documents successfully.\n";
             echo $failureCount . " documents have not been imported due to failures listed above. See $logfile for details about failed entries.\n";
+
+
+            unset($importData);
+            unset($import);
+            unset($toImport);
         }
     }
     
@@ -450,7 +490,8 @@ class ZIBMigration extends ZIBMigration_Base {
 	    foreach (Opus_Document::getAllIds() as $id) {
 		//echo "Check Document ".$id."\n";
 		$doc = new Opus_Document($id);
-		foreach ($colls as $c) { 
+
+                foreach ($colls as $c) {
 				
 			$names = explode(", ", $c->getName());
 			foreach ($doc->getPersonAuthor() as $author) {
@@ -465,7 +506,9 @@ class ZIBMigration extends ZIBMigration_Base {
 				if (stripos($names[1], $firstname) === 0) {
 					$doc->addCollection($c);
                                         $doc->store();
-                                        echo "Add Document " .$id. " from ".$author->getLastName().",".$author->getFirstName()." to Mitarbeiter-Collection ".$c->getName()."\n";
+                                        $mem_now = round(memory_get_usage() / 1024 / 1024);
+                                        $mem_peak = round(memory_get_peak_usage() / 1024 / 1024);
+                                        echo "Add Document " .$id. " to Mitarbeiter-Collection ".$c->getName()." -- memory $mem_now MB, peak memory $mem_peak (MB) \n";
 				}
 			}
 		}
@@ -496,8 +539,8 @@ class ZIBMigration extends ZIBMigration_Base {
         $this->load_licences();
 
         // Load Institutes
-        $this->load_documents();
-        //$this->load_documents(1, 20);
+        //$this->load_documents();
+        $this->load_documents(1, 50);
 
         // Import files
         //$this->load_fulltext();
@@ -516,19 +559,23 @@ class ZIBMigration extends ZIBMigration_Base {
 	//$this->create_project_collections("http://www.zib.de/de/projekte/aktuelle-projekte.html");
 	//$this->create_project_collections("http://www.zib.de/de/projekte/aktuelle-projekte/browse/1.html");
 
-	// Import Bibtex-Files
-       /*
-        $this->import_bibtex('../../bibtex/Numerische.bib.xml', 20);
-	$this->import_bibtex('../../bibtex/Optimierung.bib.xml', 20);
-        $this->import_bibtex('../../bibtex/Parallele.bib.xml', 20);
-	$this->import_bibtex('../../bibtex/Visualisierung.bib.xml', 20);
-*/
-         
-        $this->import_bibtex('../../bibtex/Numerische.bib.xml');
-	$this->import_bibtex('../../bibtex/Optimierung.bib.xml');
-        $this->import_bibtex('../../bibtex/Parallele.bib.xml');
-	$this->import_bibtex('../../bibtex/Visualisierung.bib.xml');
+        $input = readline('Do you want to import bibtex from file? (y/n) ');
+        if ($input === 'y' || $input === 'yes') {
+            $this->import_bibtex('../../bibtex/Numerische.bib.xml', 20);
+            $this->import_bibtex('../../bibtex/Optimierung.bib.xml', 20);
+            $this->import_bibtex('../../bibtex/Parallele.bib.xml', 20);
+            $this->import_bibtex('../../bibtex/Visualisierung.bib.xml', 20);
+        }
 
+        /*
+        $input = readline('Do you want to import bibtex from file? (y/n) ');
+        if ($input === 'y' || $input === 'yes') {
+            $this->import_bibtex('../../bibtex/Numerische.bib.xml');
+            $this->import_bibtex('../../bibtex/Optimierung.bib.xml');
+            $this->import_bibtex('../../bibtex/Parallele.bib.xml');
+            $this->import_bibtex('../../bibtex/Visualisierung.bib.xml');
+        }
+        */
   
 
 	// Fill Person-Colelctiosn
