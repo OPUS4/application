@@ -80,7 +80,7 @@
         <xsl:variable name="doi"><xsl:value-of select="*/bibtex:doi" /></xsl:variable>
         <xsl:variable name="edition"><xsl:value-of select="*/bibtex:edition" /></xsl:variable>
         <xsl:variable name="editor"><xsl:value-of select="*/bibtex:editor" /></xsl:variable>
-        <!-- TODO: Die Arbeitsgruppe muss noch gemappt werden -->
+        <!-- TODO: Die Arbeitsgruppe muss noch gemappt werden (Visualisierung) -->
         <!-- <xsl:variable name="group"><xsl:value-of select="*/bibtex:group" /></xsl:variable> -->
         <xsl:variable name="howpublished"><xsl:value-of select="*/bibtex:howpublished" /></xsl:variable>
         <!-- Institution eines Techreports -->
@@ -101,6 +101,8 @@
         <xsl:variable name="pages"><xsl:value-of select="*/bibtex:pages" /></xsl:variable>
         <xsl:variable name="publisher"><xsl:value-of select="*/bibtex:publisher" /></xsl:variable>
         <xsl:variable name="school"><xsl:value-of select="*/bibtex:school" /></xsl:variable>
+        <!-- TODO: Die Arbeitsgruppe muss noch gemappt werden (Numerik) -->
+        <!-- <xsl:variable name="selectiontags"><xsl:value-of select="*/bibtex:group" /></xsl:variable> -->
         <!-- ConferenceObject: TitleSub -->
         <xsl:variable name="series"><xsl:value-of select="*/bibtex:series" /></xsl:variable>
         <!--<xsl:variable name="srctagl"><xsl:value-of select="*/bibtex:srctag" /></xsl:variable> -->
@@ -406,7 +408,7 @@
             <!-- ReferenceUrl-->
             <xsl:if test="string-length($absurl) > 0">
                 <xsl:element name="ReferenceUrl">
-                    <xsl:attribute name="Label">Abstract</xsl:attribute>
+                    <xsl:attribute name="Label">abstract</xsl:attribute>
                     <xsl:attribute name="Value"><xsl:value-of select="$absurl" /></xsl:attribute>
                 </xsl:element>
             </xsl:if>
