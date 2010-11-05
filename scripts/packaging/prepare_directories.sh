@@ -12,6 +12,7 @@
 # GNU General Public License for more details.
 #
 # @author      Thoralf Klein <thoralf.klein@zib.de>
+# @author      Sascha Szott <szott@zib.de>
 # @copyright   Copyright (c) 2010, OPUS 4 development team
 # @license     http://www.gnu.org/licenses/gpl.html General Public License
 # @version     $Id$
@@ -24,17 +25,24 @@ TEMPDIR=$2
 
 mkdir -vp $TEMPDIR
 cd $TEMPDIR
-
+rm -rfv {opus4,solrconfig,libs,workspace,apacheconf,install,testdata}
 
 #
 # Checkout opus4-trunk
 #
 
-svn export https://svn.zib.de/opus4dev/server/$TAG opus4
-svn export https://svn.zib.de/opus4dev/framework/$TAG/db/schema opus4/db/schema
-svn export https://svn.zib.de/opus4dev/framework/$TAG/library/Opus opus4/library/Opus
-svn export https://svn.zib.de/opus4dev/solrconfig solrconfig
+svn --force export https://svn.zib.de/opus4dev/server/$TAG opus4
+svn --force export https://svn.zib.de/opus4dev/framework/$TAG/db/schema opus4/db/schema
+svn --force export https://svn.zib.de/opus4dev/framework/$TAG/library/Opus opus4/library/Opus
+svn --force export https://svn.zib.de/opus4dev/solrconfig solrconfig
+svn --force export https://svn.zib.de/opus4dev/apacheconf apacheconf
+svn --force export https://svn.zib.de/opus4dev/install install
 
+mkdir -pv testdata
+cd testdata
+svn --force export https://svn.zib.de/opus4dev/server/$TAG/tests/fulltexts fulltexts
+svn --force export https://svn.zib.de/opus4dev/server/$TAG/tests/sql sql
+cd ..
 
 #
 # Clean everything the user doesn't need
@@ -50,6 +58,8 @@ rm -rv opus4/modules/{pkm,publicationList,remotecontrol}
 rm -rv opus4/scripts/{packaging,cron,indexing,install}
 rm -r  opus4/scripts/*{Matheon,ZIB}*.php
 rm -rvf opus4/library/Opus/Search/{Adapter,Index}/Lucene/
+rm -rvf testdata/sql/992_create_documents_testdata__security.sql
+rm -rvf testdata/sql/990_create_documents_testdata__hhhar.sql
 
 
 #
@@ -66,9 +76,9 @@ ln -sv "../../libs/ZendFramework/library/Zend" "opus4/library/Zend"
 # Prepare workspace directory
 #
 
-mkdir -vp workspace/{cache,logs,files,tmp}
+mkdir -vp workspace/{cache,log,files,tmp}
 ln -sv "../workspace" "opus4/workspace"
 
-touch workspace/logs/opus.log
-chmod 666 workspace/logs/opus.log
+touch workspace/log/opus.log
+chmod 666 workspace/log/opus.log
 chmod 777 workspace/{files,cache,tmp}
