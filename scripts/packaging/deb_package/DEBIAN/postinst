@@ -1,0 +1,11 @@
+#!/bin/bash
+
+sudo a2enmod rewrite proxy proxy_http php5
+sudo ln -s /var/local/opus4/apacheconf/opus4 /etc/apache2/sites-available
+sudo a2ensite opus4
+cp /var/local/opus4/opus4/scripts/opus-apache-rewritemap-caller-secure.sh.template /var/local/opus4/opus4/scripts/opus-apache-rewritemap-caller-secure.sh
+chmod +x /var/local/opus4/opus4/scripts/opus-apache-rewritemap-caller-secure.sh
+sudo /etc/init.d/apache2 reload
+
+sudo chmod +x /var/local/opus4/install/install.sh
+sudo /var/local/opus4/install/install.sh
