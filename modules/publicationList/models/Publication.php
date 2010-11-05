@@ -34,42 +34,57 @@
 
 class PublicationList_Model_Publication {
 
-    private $authors = array();
+    /* table Opus_Document */
     private $completedYear;
     private $contributingCorporation;
     private $creatingCorporation;
     private $docType;
-    private $doiUrl;
+    private $edition;
+    private $issue;
+    private $note;
+    private $pageFirst;
+    private $pageLast;
+    private $pageNumber;
+    private $publishedYear;
+    private $publisherName;
+    private $publisherPlace;
+    private $volume;
+    
+    /* table Opus_Person */
+    private $authors = array();
+    private $editors = array();
+
+    /* table Opus_Title */
+    private $titleAbstract;
+    private $titleMain;
+    private $titleParent;
+    private $titleSub;
+    
+    /* table Opus_Document_Enrichment */
     private $enrichmentAddress;
     private $enrichmentContributor;
     private $enrichmentHowpublished;
     private $enrichmentMonth;
     private $enrichmentSource;    
     private $enrichmentType;
-    private $edition;
-    private $editors = array();
-    private $issue;
-    private $note;
-    private $pageFirst;
-    private $pageLast;
-    private $pageNumber;
+
+    /* table Url-Identifiers */
+    private $doiUrl;
     private $pdfUrl;
     private $pdfUrlExternal;
-    private $publishedYear;
-    private $publisherName;
-    private $publisherPlace;
-    private $series;
-    private $titleAbstract;
-    private $titleMain;
-    private $titleParent;
-    private $titleSub;
-    private $volume;
+    private $psUrl;
+    private $psUrlExternal;
 
+    /* metadata-export via ris and bibtex */
     private $bibtexUrl;
     private $bibtexUrlExternal;
     private $risUrl;
     private $risUrlExternal;
 
+    /* name od Series-Collection */
+    private $series;
+
+    /* images */
     private $imageAbstract;
     private $imageAbstractExternal;
     private $imageBibtex;
@@ -160,10 +175,16 @@ class PublicationList_Model_Publication {
  
 
         if (isset($config->deliver->url->prefix)) {
-            if ($doc->getFile()) {
-                $file = $doc->getFile(0)->getPathName();
-                $this->pdfUrl = $config->deliver->url->prefix."/".$doc->getId()."/".$file;
-                $this->pdfUrlExternal = "http://".$hostname.$this->pdfUrl;
+            foreach ($doc->getFile() as $f) {
+                $file = $f->getPathName();
+                if (preg_match('/\.pdf$/', $f->getPathName())) {
+                    $this->pdfUrl = $config->deliver->url->prefix."/".$doc->getId()."/".$file;
+                    $this->pdfUrlExternal = "http://".$hostname.$this->pdfUrl;
+                }
+                else if (preg_match('/\.ps$/', $f->getPathName())) {
+                    $this->psUrl = $config->deliver->url->prefix."/".$doc->getId()."/".$file;
+                    $this->psUrlExternal = "http://".$hostname.$this->pdfUrl;
+                }
             }
         }
 
@@ -329,6 +350,10 @@ class PublicationList_Model_Publication {
         $this->pdfUrl = $string;
     }
 
+    public function setPsUrl($string) {
+        $this->psUrl = $string;
+    }
+
     public function setRisUrl($string) {
         $this->risUrl = $string;
     }
@@ -483,6 +508,14 @@ class PublicationList_Model_Publication {
 
     public function getPdfUrlExternal() {
         return $this->pdfUrlExternal;
+    }
+
+    public function getPsUrl() {
+        return $this->psUrl;
+    }
+
+    public function getPsUrlExternal() {
+        return $this->psUrlExternal;
     }
 
     public function getPublishedYear() {

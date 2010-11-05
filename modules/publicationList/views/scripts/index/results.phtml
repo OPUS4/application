@@ -129,6 +129,14 @@
                     <?php if(is_null($publication->getImagePdf())) : ?>PDF<?php endif ?>
                 </a>
             <?php endif ?>
+            <?php if(is_null($publication->getPdfUrl()) && !is_null($publication->getPsUrl())) : ?>
+                <a href="<?= $publication->getPsUrl() ?>">
+                   <?php if(!is_null($publication->getImagePdf())) : ?>
+                        <img src="<?= $publication->getImagePdf() ?>"/>
+                    <?php endif ?>
+                    <?php if(is_null($publication->getImagePdf())) : ?>PS<?php endif ?>
+                </a>
+            <?php endif ?>
             <?php if(!is_null($publication->getDoiUrl())) : ?>
                 <a href="<?= $publication->getDoiUrl() ?>">
                    <?php if(!is_null($publication->getImageDoi())) : ?>

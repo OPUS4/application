@@ -131,6 +131,7 @@ class PublicationList_IndexController extends Controller_Action {
                 $publication->setBibtexUrl($publication->getBibtexUrlExternal());
                 $publication->setRisUrl($publication->getRisUrlExternal());
                 $publication->setPdfUrl($publication->getPdfUrlExternal());
+                $publication->setPsUrl($publication->getPsUrlExternal());
 
                 //$publication->setImageAbstract($publication->getImageAbstractExternal());
                 $publication->setImageBibtex($publication->getImageBibtexExternal());
