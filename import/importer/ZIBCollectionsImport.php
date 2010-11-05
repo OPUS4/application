@@ -98,15 +98,18 @@ class ZIBCollectionsImport {
         // Build a mapping file to associate old IDs with the new ones
         $fp = fopen('../workspace/tmp/series.map', 'w');
             foreach ($classification as $class) {
-                echo ".";
+                //echo ".";
                 $root = $role->getRootCollection();
                 $coll = $root->addLastChild();
                 $coll->setVisible(1);
                 $coll->setName($class['name']);
                 $root->store();
+
+                echo "Series imported: " . $class['name'] ."\n";
+
                 fputs($fp, $class['sr_id'] . ' ' . $coll->getId() . "\n");
             }
-        echo "\n";
+        //echo "\n";
 	fclose($fp);
     }
 
@@ -122,7 +125,7 @@ class ZIBCollectionsImport {
         // Build a mapping file to associate old IDs with the new ones
         $fp = fopen('../workspace/tmp/collections.map', 'w');
             foreach ($classification as $class) {
-                echo ".";
+                //echo ".";
                 // ZIB-Hack:
                 if ($class['coll_name'] === 'ZIB') { continue; }
                 //if ($class['coll_name'] === 'Dissertationen') { $class['coll_name'] = 'Dissertation'; }
@@ -132,9 +135,12 @@ class ZIBCollectionsImport {
                 $coll->setVisible(1);
                 $coll->setName($class['coll_name']);
                 $root->store();
+
+                echo "Collection imported: " . $class['coll_name'] ."\n";
+
                 fputs($fp, $class['coll_id'] . ' ' . $coll->getId() . "\n");
             }
-        echo "\n";
+        //echo "\n";
 	fclose($fp);
     }
 
