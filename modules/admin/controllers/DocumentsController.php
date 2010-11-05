@@ -407,7 +407,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $indexer = new Opus_Search_Index_Solr_Indexer();
         $indexer->addDocumentToEntryIndex($doc);
 
-        $this->_redirectTo('index', 'document_published');
+        $this->_redirectTo('index', $this->view->translate('document_published', $id));
     }
 
     /**
@@ -425,7 +425,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $indexer = new Opus_Search_Index_Solr_Indexer();
         $indexer->removeDocumentFromEntryIndex($doc);
 
-        $this->_redirectTo('index');
+        $this->_redirectTo('index', $this->view->translate('document_unpublished', $id));
     }
 
     /**

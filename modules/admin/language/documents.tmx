@@ -44,10 +44,19 @@
 
     <tu tuid="document_published">
       <tuv xml:lang="en">
-        <seg>Document published successfully!</seg>
+        <seg>Document %1$s published successfully!</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Das Dokument wurde freigeschaltet!</seg>
+        <seg>Das Dokument %1$s wurde freigeschaltet!</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="document_unpublished">
+      <tuv xml:lang="en">
+        <seg>Document %1$s successfully unpublished!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das Dokument %1$s wurde zurückgezogen!</seg>
       </tuv>
     </tu>
 
