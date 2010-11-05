@@ -67,6 +67,7 @@ class Publish_FormController extends Controller_Action {
             if (isset($data['MAX_FILE_SIZE']) && $data['MAX_FILE_SIZE'] != $this->session->maxFileSize) {
                 //manipulated hidden field for file size???
                 $this->log->debug("wrong Max_file_size and redirect to index");
+
                 return $this->_redirectTo('index', '', 'index');
             }
 
@@ -79,7 +80,7 @@ class Publish_FormController extends Controller_Action {
                 $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
                 $this->_setFirstFormViewVariables($indexForm);
 
-                return $this->renderScript('index/index.phtml');                               
+                return $this->renderScript('index/index.phtml');
             }
             else {
                 //form entries are valid
@@ -105,7 +106,6 @@ class Publish_FormController extends Controller_Action {
                     $this->_setFirstFormViewVariables($indexForm);
 
                     return $this->renderScript('index/index.phtml');
-                    
                 }
 
                 unset($this->session->first);
@@ -171,12 +171,12 @@ class Publish_FormController extends Controller_Action {
                 $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
 
                 if (!$form->isValid($this->getRequest()->getPost())) {
-
+                    
+                    $this->_setSecondFormViewVariables($form);
                     //error case, and redirect to form, show errors
                     $this->view->form = $form;
                     $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
-                    $this->_setSecondFormViewVariables($form);
-
+                    
 
                     return $this->render($this->session->documentType);
                 }
@@ -217,7 +217,6 @@ class Publish_FormController extends Controller_Action {
 
             $label = $currentElement . self::LABEL;
             $this->view->$label = $this->view->translate($form->getElement($currentElement)->getLabel());
-
         }
 
         $this->view->MAX_FILE_SIZE = $this->session->maxFileSize;
@@ -400,11 +399,11 @@ class Publish_FormController extends Controller_Action {
 
         if ($upload_count >= 1) {
             $this->log->debug("File uploaded!!!");
-            $this->session->fulltext = '1';            
+            $this->session->fulltext = '1';
 
             foreach ($files AS $file => $fileValues) {
                 if (!empty($fileValues['name'])) {
-                    $this->session->publishFiles[] =  $fileValues['name'];
+                    $this->session->publishFiles[] = $fileValues['name'];
                     $this->log->info("uploaded: " . $fileValues['name']);
                     $docfile = $this->session->document->addFile();
                     //file always requires a language, this value is later overwritten by the exact language

@@ -66,12 +66,13 @@ class Publish_Form_PublishingSecond extends Zend_Form {
     public function isValid($data) {
         $extended = new Publish_Model_ExtendedValidation($this, $data);
         $valid1 = $extended->validate();
+
+        $valid2 = parent::isValid($extended->data);
+
+        $valid1 = $extended->validate();        
         //inherit data changes during validation
         $this->populate($extended->data);
-        $data = $extended->data;
         $this->postData = $extended->data;
-
-        $valid2 = parent::isValid($data);
 
         if ($valid1 == true && $valid2 == true)
             return true;
@@ -128,6 +129,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
     public function getElementAttributes($elementName) {
         $elementAttributes = array();
         $element = $this->getElement($elementName);
+        
         $elementAttributes['value'] = $element->getValue();
         $elementAttributes['label'] = $element->getLabel();
         $elementAttributes['error'] = $element->getMessages();
@@ -141,8 +143,10 @@ class Publish_Form_PublishingSecond extends Zend_Form {
             $elementAttributes['value'] = $element->getCheckedValue();
         }
 
-        if ($element->getType() === 'Zend_Form_Element_Select')
+        if ($element->getType() === 'Zend_Form_Element_Select') {
             $elementAttributes["options"] = $element->getMultiOptions(); //array
+            $elementAttributes["selectedOption"] = $element->getMultiOption($element->getValue());
+        }
 
             if ($element->isRequired())
             $elementAttributes["req"] = "required";

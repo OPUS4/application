@@ -64,9 +64,9 @@ class Publish_Model_ExtendedValidation {
         else
             $this->documentLanguage = null;
 
-        $validPersons = $this->_validateAllPersons();
+        $validPersons = $this->_validatePersons();
 
-        $validTitles = $this->_validateAllTitles();
+        $validTitles = $this->_validateTitles();
 
         if ($validPersons && $validTitles)
             return true;
@@ -78,7 +78,7 @@ class Publish_Model_ExtendedValidation {
      * Checks if filled first names also have a last name
      * @return boolean
      */
-    private function _validateAllPersons() {
+    private function _validatePersons() {
         $validPersons = true;
         $firstNames = $this->_getPersonFirstNameFields();
 
@@ -91,9 +91,12 @@ class Publish_Model_ExtendedValidation {
                 if ($this->data[$lastKey] == "" || $this->data[$lastKey] == null) {
                     //error case: Firstname exists but Lastname not
                     $element = $this->form->getElement($lastKey);
-                    if (!$element->isRequired())
-                        $element->addError('publish_error_noLastButFirstName');
-                    $validPersons = false;
+                    if (!$element->isRequired()) {
+                        if (!$element->hasErrors()) {
+                            $element->addError('publish_error_noLastButFirstName');
+                            $validPersons = false;
+                        }
+                    }
                 }
             }
         }
@@ -101,33 +104,62 @@ class Publish_Model_ExtendedValidation {
     }
 
     /**
-     * Checks if filled titles also have an language.
-     * @return boolean
+     * Validate all given titles with different constraint checks.
+     * @return <Bool> true, if all checks were positive, else false
      */
-    private function _validateAllTitles() {
+    private function _validateTitles() {
         $validTitles = true;
 
         //1) validate language Fields
+        $validate1 = $this->_validateTitleLanguages();
+
+        //2) validate title fields
+        $validate2 = $this->_validateTitleValues();
+
+        //3) validate titles per language
+        $validate3 = $this->_validateTitlesPerLanguage();
+
+        $validTitles = $validate1 && $validate2 && $validate3;
+
+        return $validTitles;
+    }
+
+    /**
+     * Checks if filled languages also have an title value.
+     * @return boolean
+     */
+    private function _validateTitleLanguages() {
+        $validTitles = true;
         $languages = $this->_getTitleLanguageFields();
 
         foreach ($languages as $key => $lang) {
-            //$this->log->debug("(Validation): language: " . $key . " with value ". $lang);
             if ($lang !== "") {
+
                 //if $lang is set and not null, find the corresponding title
                 $titleKey = str_replace('Language', '', $key);
-                //$this->log->debug("(Validation): Replaced: " . $titleKey);
+
                 if ($this->data[$titleKey] == "" || $this->data[$titleKey] == null) {
+
                     //error case: language exists but title not
                     $element = $this->form->getElement($titleKey);
                     if (!$element->isRequired()) {
-                        $element->addError('publish_error_noTitleButLanguage');
-                        $validTitles = false;
+                        if (!$element->hasErrors()) {
+                            $element->addError('publish_error_noTitleButLanguage');
+                            $validTitles = false;
+                        }
                     }
                 }
             }
         }
+        return $validTitles;
+    }
 
-        //2) validate title fields
+    /**
+     * Checks if filled titles also have an language.
+     * @return boolean
+     */
+    private function _validateTitleValues() {
+        $validTitles = true;
         $titles = $this->_getTitleFields();
 
         foreach ($titles as $key => $title) {
@@ -135,37 +167,84 @@ class Publish_Model_ExtendedValidation {
             if ($title !== "") {
                 //if $name is set and not null, find the corresponding lastname
                 $lastChar = substr($key, -1, 1);
-                if ((int) $lastChar >= 1) {
+
+                if ((int) $lastChar >= 1)
                     $languageKey = substr($key, 0, strlen($key) - 1) . 'Language' . $lastChar;
-                }
                 else
                     $languageKey = $key . 'Language';
 
-                $this->log->debug("(Validation): Found: " . $languageKey);
                 if ($this->data[$languageKey] == "" || $this->data[$languageKey] == null) {
                     //error case: Title exists but Language not
                     $element = $this->form->getElement($languageKey);
                     //set language value to the document language
                     if ($this->documentLanguage != null) {
                         $this->log->debug("(Validation): Set value of " . $languageKey . " to " . $this->documentLanguage);
-                        $element->setValue($this->documentLanguage);                        
+                        $element->setValue($this->documentLanguage);
                         //store the new value in $data array
                         $this->data[$languageKey] = $this->documentLanguage;
-                        
                     }
                     else {
                         //error: no document language set -> throw error message
                         if (!$element->isRequired()) {
-                            $element->addError('publish_error_noLanguageButTitle');
-                            $validTitles = false;
+                            if (!$element->hasErrors()) {
+                                $element->addError('publish_error_noLanguageButTitle');
+                                $validTitles = false;
+                            }
                         }
                     }
                 }
             }
         }
 
+        return $validTitles;
+    }
 
+    /**
+     * Method counts the same title types per language and throws an error, if there are more than one titles with the same language
+     * @return boolean
+     */
+    private function _validateTitlesPerLanguage() {
+        $validTitles = true;
+        $titles = $this->_getTitleFields();
 
+        $languagesPerTitleType = array();
+
+        foreach ($titles as $key => $title) {
+            $this->log->debug("(Validation): Title: " . $key . " with value " . $title);
+            if ($title !== "") {
+                //if $name is set and not null, find the corresponding lastname
+                $lastChar = substr($key, -1, 1);
+                if ((int) $lastChar >= 1) {
+                    $titleType = substr($key, 0, strlen($key) - 1);
+                    $languageKey = substr($key, 0, strlen($key) - 1) . 'Language' . $lastChar;
+                }
+                else {
+                    $titleType = $key;
+                    $languageKey = $key . 'Language';
+                }
+
+                if ($this->data[$languageKey] != "") {
+                    //count title types and languages => same languages for same title type must produce an error
+                    $index = $titleType . $this->data[$languageKey]; //z.B. TitleSubdeu
+                    $this->log->debug("(Validation): language is set, titletype " . $titleType . " and language " . $languageKey . " index = " . $index);
+
+                    if (isset($languagesPerTitleType[$index])) {
+                        $languagesPerTitleType[$index] = $languagesPerTitleType[$index] + 1;
+                    }
+                    else {
+                        $languagesPerTitleType[$index] = 1;
+                    }
+
+                    if ($languagesPerTitleType[$index] > 1) {
+                        $this->log->debug("(Validation): > 1 -> error for element " . $languageKey);
+                        $element = $this->form->getElement($languageKey);
+                        $element->clearErrorMessages();
+                        $element->addError('publish_error_justOneLanguagePerTitleType');
+                        $validTitles = false;
+                    }
+                }
+            }
+        }
         return $validTitles;
     }
 

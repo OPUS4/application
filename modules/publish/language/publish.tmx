@@ -331,6 +331,24 @@
       </tuv>
     </tu>
 
+    <tu tuid="yes">
+      <tuv xml:lang="en">
+        <seg>Yes</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Ja</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="no">
+      <tuv xml:lang="en">
+        <seg>No</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nein</seg>
+      </tuv>
+    </tu>
+
   </body>
   
 </tmx>

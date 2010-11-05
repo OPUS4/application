@@ -125,8 +125,7 @@ class Publish_Model_Validation {
         $format_de = "DD.MM.YYYY";
         $format_en = "YYYY/MM/DD";
 
-        $lang = $this->session->language;
-        $this->log->debug("Language for Opus_Validate_Date: " . $lang . "**********************");
+        $lang = $this->session->language;        
         $validators = array();
 
         switch ($lang) {

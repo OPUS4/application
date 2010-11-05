@@ -170,12 +170,13 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                         throw new Application_Exception("Field Type {$field['type']} not found in View Helper.");
                 }
                 
-                if ($field["error"] != null) {
-                    $fieldset .= "<div class='form-errors'><ul>";
-                    foreach ($field["error"] AS $err)
+                if (isset($field["error"])) {
+                    $fieldset .= "<div class='form-errors'><ul>";                                        
+                    foreach ($field["error"] AS $err)                        
                         $fieldset .= "<li>" . $err . "</li>";
                     $fieldset .= "</ul></div>";
                 }
+               
                 $i++;
             }
             $fieldset .= "</div>";
