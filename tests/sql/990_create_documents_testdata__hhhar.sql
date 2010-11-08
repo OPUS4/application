@@ -2481,8 +2481,8 @@ INSERT INTO `link_persons_documents` (`person_id`, `document_id`, `role`, `sort_
 --
 
 INSERT INTO `privileges` (`id`, `role_id`, `privilege`, `document_server_state`, `file_id`) VALUES
-(3, 2, 'readFile', NULL, 1),
-(4, 2, 'readFile', NULL, 2),
+(119, 2, 'readFile', NULL, 1),
+(120, 2, 'readFile', NULL, 2),
 (118, 2, 'readFile', NULL, 3),
 (6, 2, 'readFile', NULL, 4),
 (7, 2, 'readFile', NULL, 5),
