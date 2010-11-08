@@ -1,7 +1,3 @@
-Beschreiben Sie hier anhand der vorgegebenen Kategorien das Dokument, das einbringen wollen. 
-Die <span class="required">gekennzeichneten Felder</span> sind obligatorisch auszufüllen (Pflichtelemente). 
-Machen Sie ansonsten so genaue Angaben wie möglich.
-<br/>Wenn Sie Hilfe zu einem Eingabefeld benötigen, klicken Sie bitte auf den Feldnamen.
-<br/>Vielen Dank für Ihre Mithilfe.
+﻿Beschreiben Sie hier anhand der vorgegebenen Kategorien das Dokument, das einbringen wollen. Die <span class="required">gekennzeichneten Felder</span> sind obligatorisch auszufüllen (Pflichtelemente). Machen Sie ansonsten so genaue Angaben wie möglich. <br/>Wenn Sie Hilfe zu einem Eingabefeld benötigen, fahren Sie mit der Maus über den Feldnamen, um den Hilfetext angezeigt zu bekommen. <br/>Vielen Dank für Ihre Mithilfe.
 <br/>(Falls Sie keine deutsche Tastatur haben, hier die deutschen Sonderzeichen
 <br/>ä ö ü Ä Ö Ü ß zum Kopieren und Einfügen)
