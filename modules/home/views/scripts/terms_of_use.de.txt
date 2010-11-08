@@ -1,2 +1,1 @@
-<!-- @todo: text need to be checked -->
-Die auf diesem Server liegenden Dokumente dürfen zu wissenschaftlichen Zwecken und zum Eigengebrauch kopiert, ausgedruckt und zitiert werden. Die Urheberrechte liegen bei den Autoren. Jede kommerzielle Nutzung der Dokumente, auch von Teilen und Auszügen, ist ohne vorherige Zustimmung und Absprache mit den Serverbetreibern ausdrücklich verboten.
+﻿Die auf diesem Server liegenden Dokumente dürfen zu wissenschaftlichen Zwecken und zum Eigengebrauch kopiert, ausgedruckt und zitiert werden. Die Urheberrechte liegen bei den Autoren. Jede kommerzielle Nutzung der Dokumente, auch von Teilen und Auszügen, ist ohne vorherige Zustimmung und Absprache mit den Serverbetreibern ausdrücklich verboten.

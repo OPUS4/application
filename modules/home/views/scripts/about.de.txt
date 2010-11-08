@@ -1,3 +1,1 @@
-<!-- @todo: text need to be checked -->
-Willkommen auf diesem Dokumentenserver. Dieser Server wird betrieben von der Bibliothek. Hier sind elektronische Volltexte zu finden.
-Wenn Sie selbst eine Dissertation bzw. Habilitation oder ein anderes wissenschaftliches Dokument verfasst haben und diese online verfügbar machen möchten, dann können Sie das über "Veröffentlichen" tun.
+﻿Willkommen auf diesem Dokumentenserver. Dieser Server wird betrieben von der Bibliothek. Hier sind elektronische Volltexte zu finden. Wenn Sie selbst eine Dissertation bzw. Habilitation oder ein anderes wissenschaftliches Dokument verfasst haben und diese online verfügbar machen möchten, dann können Sie das über "Veröffentlichen" tun.
