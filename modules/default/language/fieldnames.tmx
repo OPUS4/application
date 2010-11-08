@@ -1669,12 +1669,12 @@
       </tuv>
     </tu>
 	
-	<tu tuid="ReferenceIsbn">
+	<tu tuid="ReferenceIssn">
       <tuv xml:lang="en">
-        <seg>Reference ISBN</seg>
+        <seg>Reference ISSN</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Referenz-ISBN</seg>
+        <seg>Referenz-ISSN</seg>
       </tuv>
     </tu>
 
