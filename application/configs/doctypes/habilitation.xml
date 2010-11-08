@@ -56,8 +56,8 @@
     
     <field name="Licence" required="yes" formelement="Select" datatype="Licence" multiplicity="1" />
     <field name="ThesisDateAccepted" required="yes" formelement="Text" datatype="Date" multiplicity="1" />
-    <field name="ThesisPublisher" required="yes" formelement="Text" datatype="ThesisPublisher" multiplicity="1" />
-    <field name="ThesisGrantor" required="yes" formelement="Text" datatype="ThesisPublisher" multiplicity="1" />
+    <field name="ThesisPublisher" required="yes" formelement="Select" datatype="ThesisPublisher" multiplicity="1" />
+    <field name="ThesisGrantor" required="yes" formelement="Select" datatype="ThesisPublisher" multiplicity="1" />
     <field name="PersonAdvisor" required="yes" formelement="Text" datatype="Person" multiplicity="*" />
     <field name="TitleAbstract" required="no" formelement="Textarea" datatype="Title" multiplicity="4" >
         <required-if-fulltext />
