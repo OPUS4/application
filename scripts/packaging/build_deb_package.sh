@@ -18,6 +18,8 @@
 
 set -e
 
+rm -rf deb_package/var/local/opus4
+
 echo "create directory deb_package/var/local/opus4"
 mkdir -p deb_package/var/local/opus4
 
