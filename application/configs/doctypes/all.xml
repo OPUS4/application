@@ -38,7 +38,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://schemas.opus.org/documenttype https://svn.zib.de/opus4dev/framework/trunk/library/Opus/Document/documenttype.xsd">
 	
-    <field name="PersonSubmitter" required="yes" multiplicity="1" formelement="text" datatype="Person" >
+    <field name="PersonSubmitter" required="yes" multiplicity="1" formelement="text" datatype="Person">
 		<subfield name="Email" required="yes" formelement="text" datatype="Email" />
 	</field>
     <field name="Language" required="no" formelement="select" datatype="Language" multiplicity="1">
