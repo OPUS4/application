@@ -41,11 +41,11 @@
 
 ;DB SETTINGS
 ; Please insert the credential to connect to your mysql db.
-db.params.host = <db.params.host>
-db.params.port = <db.params.port>
-db.params.username = <db.params.username>
-db.params.password = <db.params.password>
-db.params.dbname = <db.params.dbname>
+db.params.host =
+db.params.port =
+db.params.username =
+db.params.password =
+db.params.dbname = 
 
 ;SEARCH ENGINE SETTINGS
 ; OPUS4 uses a solr server for search and browsing.
