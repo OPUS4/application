@@ -57,7 +57,8 @@ class Frontdoor_IndexController extends Controller_Action {
             $xmlModel->setModel($document);
             $xmlModel->excludeEmptyFields(); // needed for preventing handling errors
             $xmlModel->setStrategy(new Opus_Model_Xml_Version1);
-            $xmlModel->setXmlCache(new Opus_Model_Xml_Cache);
+            // FIXME: Xml_Cache contains empty fields
+            //$xmlModel->setXmlCache(new Opus_Model_Xml_Cache);
 
             $xml = $xmlModel->getDomDocument()->getElementsByTagName('Opus_Document')->item(0);
 
