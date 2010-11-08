@@ -152,10 +152,10 @@
 
     <tu tuid="admin_doc_delete_sure">
       <tuv xml:lang="en">
-        <seg>Are you sure you want to delete this document?</seg>
+        <seg>Are you sure you want to delete document %1$s?</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Sind Sie sicher, dass dieses Dokument gelöscht werden soll?</seg>
+        <seg>Sind Sie sicher, dass Dokument %1$s gelöscht werden soll?</seg>
       </tuv>
     </tu>
 
@@ -179,10 +179,46 @@
 
     <tu tuid="admin_doc_delete_permanent_sure">
       <tuv xml:lang="en">
-        <seg>Are you sure you want to delete this document permanently? All contents will be removed from disk without the possibility to undelete!</seg>
+        <seg>Are you sure you want to delete document %1$s permanently? All contents will be removed from disk without the possibility to undelete!</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Sind Sie sicher, dass dieses Dokument komplett gelöscht werden soll? Alle Daten zum Dokument werden vollständig entfernt und es gibt keine Möglichkeit, dies rückgängig zu machen!</seg>
+        <seg>Sind Sie sicher, dass Dokument %1$s komplett gelöscht werden soll? Alle Daten zum Dokument werden vollständig entfernt und es gibt keine Möglichkeit, dies rückgängig zu machen!</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_doc_publish">
+      <tuv xml:lang="en">
+        <seg>Publish document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokument freischalten</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_doc_publish_sure">
+      <tuv xml:lang="en">
+        <seg>Are you sure you want to publish document %1$s?</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sind Sie sicher, daß Dokument %1$s freigeschaltet werden soll?</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_doc_unpublish">
+      <tuv xml:lang="en">
+        <seg>Unpublish document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokument zurückziehen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_doc_unpublish_sure">
+      <tuv xml:lang="en">
+        <seg>Are you sure you want to unpublish document %1$s?</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sind Sie sicher, dass Dokument %1$s zurück gezogen werden soll?</seg>
       </tuv>
     </tu>
 

@@ -572,5 +572,14 @@
                 <seg>Lizenz mit ID %1$s nicht gefunden.</seg>
             </tuv>
         </tu>
+
+        <tu tuid="default_auth_index">
+            <tuv xml:lang="en">
+                <seg>Login</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Einloggen</seg>
+            </tuv>
+        </tu>
     </body>
 </tmx>

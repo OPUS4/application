@@ -272,7 +272,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             else {
                 // show safety question
                 $this->view->title = $this->view->translate('admin_doc_delete');
-                $this->view->text = $this->view->translate('admin_doc_delete_sure');
+                $this->view->text = $this->view->translate('admin_doc_delete_sure', $id);
                 $yesnoForm = $this->_getConfirmationForm($id, 'delete');
                 $this->view->form = $yesnoForm;
             }
@@ -314,7 +314,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             else {
                 // show safety question
                 $this->view->title = $this->view->translate('admin_doc_delete_permanent');
-                $this->view->text = $this->view->translate('admin_doc_delete_permanent_sure');
+                $this->view->text = $this->view->translate('admin_doc_delete_permanent_sure', $id);
                 $yesnoForm = $this->_getConfirmationForm($id, 'permanentdelete');
                 $this->view->form = $yesnoForm;
             }
@@ -391,23 +391,49 @@ class Admin_DocumentsController extends Controller_CRUDAction {
      * @return void
      */
     public function publishAction() {
-        $id = $this->getRequest()->getParam('docId');
-        $doc = new Opus_Document($id);
-        if (false === is_null($doc->getField('ServerDateUnlocking')) and $doc->getServerDateUnlocking() > date('Y-m-d')) {
-        	$this->_redirectTo('index', 'publish_unlocking_date_not_reached');
+        if (($this->_request->isPost() === false) && ($this->getRequest()->getParam('docId') === null)) {
+            $this->_redirect('index');
         }
-        $doc->setServerState('published');
-//        $doc->setServerDatePublished(date('Y-m-d'));
-//        $doc->setServerDatePublished(date('c'));
-        $date = new Zend_Date();
-        $doc->setServerDatePublished($date->get('yyyy-MM-ddThh:mm:ss') . 'Z');
-        $doc->store();
 
-        // add document to index
-        $indexer = new Opus_Search_Index_Solr_Indexer();
-        $indexer->addDocumentToEntryIndex($doc);
+        $id = null;
+        $id = $this->getRequest()->getParam('docId');
+        if ($id === null) {
+            $id = $this->getRequest()->getPost('id');
+        }
+        $sureyes = $this->getRequest()->getPost('sureyes');
+        $sureno = $this->getRequest()->getPost('sureno');
 
-        $this->_redirectTo('index', $this->view->translate('document_published', $id));
+        if (isset($sureyes) === true || isset($sureno) === true) {
+            // publish document
+            if (isset($sureyes) === true) {
+                $doc = new Opus_Document($id);
+                if (false === is_null($doc->getField('ServerDateUnlocking')) and $doc->getServerDateUnlocking() > date('Y-m-d')) {
+                        $this->_redirectTo('index', 'publish_unlocking_date_not_reached');
+                }
+                $doc->setServerState('published');
+        //        $doc->setServerDatePublished(date('Y-m-d'));
+        //        $doc->setServerDatePublished(date('c'));
+                $date = new Zend_Date();
+                $doc->setServerDatePublished($date->get('yyyy-MM-ddThh:mm:ss') . 'Z');
+                $doc->store();
+
+                // add document to index
+                $indexer = new Opus_Search_Index_Solr_Indexer();
+                $indexer->addDocumentToEntryIndex($doc);
+
+                $this->_redirectTo('index', $this->view->translate('document_published', $id));
+            }
+            else {
+                $this->_redirectTo('index');
+            }
+        }
+        else {
+            // show safety question
+            $this->view->title = $this->view->translate('admin_doc_publish');
+            $this->view->text = $this->view->translate('admin_doc_publish_sure', $id);
+            $yesnoForm = $this->_getConfirmationForm($id, 'publish');
+            $this->view->form = $yesnoForm;
+        }
     }
 
     /**
@@ -416,16 +442,41 @@ class Admin_DocumentsController extends Controller_CRUDAction {
      * @return void
      */
     public function unpublishAction() {
+        if (($this->_request->isPost() === false) && ($this->getRequest()->getParam('docId') === null)) {
+            $this->_redirect('index');
+        }
+
+        $id = null;
         $id = $this->getRequest()->getParam('docId');
-        $doc = new Opus_Document($id);
-        $doc->setServerState('unpublished');
-        $doc->store();
+        if ($id === null) {
+            $id = $this->getRequest()->getPost('id');
+        }
+        $sureyes = $this->getRequest()->getPost('sureyes');
+        $sureno = $this->getRequest()->getPost('sureno');
 
-        // remove document from to index
-        $indexer = new Opus_Search_Index_Solr_Indexer();
-        $indexer->removeDocumentFromEntryIndex($doc);
+        if (isset($sureyes) === true || isset($sureno) === true) {
+            if (isset($sureyes)) {
+                $doc = new Opus_Document($id);
+                $doc->setServerState('unpublished');
+                $doc->store();
 
-        $this->_redirectTo('index', $this->view->translate('document_unpublished', $id));
+                // remove document from to index
+                $indexer = new Opus_Search_Index_Solr_Indexer();
+                $indexer->removeDocumentFromEntryIndex($doc);
+
+                $this->_redirectTo('index', $this->view->translate('document_unpublished', $id));
+            }
+            else {
+                $this->_redirectTo('index');
+            }
+        }
+        else {
+            // show safety question
+            $this->view->title = $this->view->translate('admin_doc_unpublish');
+            $this->view->text = $this->view->translate('admin_doc_unpublish_sure', $id);
+            $yesnoForm = $this->_getConfirmationForm($id, 'unpublish');
+            $this->view->form = $yesnoForm;
+        }
     }
 
     /**
