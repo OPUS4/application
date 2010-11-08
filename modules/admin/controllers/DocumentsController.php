@@ -408,7 +408,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             if (isset($sureyes) === true) {
                 $doc = new Opus_Document($id);
                 if (false === is_null($doc->getField('ServerDateUnlocking')) and $doc->getServerDateUnlocking() > date('Y-m-d')) {
-                        $this->_redirectTo('index', 'publish_unlocking_date_not_reached');
+                    $this->_redirectTo('index', 'publish_unlocking_date_not_reached');
                 }
                 $doc->setServerState('published');
         //        $doc->setServerDatePublished(date('Y-m-d'));
@@ -421,10 +421,13 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                 $indexer = new Opus_Search_Index_Solr_Indexer();
                 $indexer->addDocumentToEntryIndex($doc);
 
-                $this->_redirectTo('index', $this->view->translate('document_published', $id));
+                $this->_redirectTo('show', $this->view->translate(
+                        'document_published', $id), 'documents', 'admin',
+                        array('id' => $id));
             }
             else {
-                $this->_redirectTo('index');
+                $this->_redirectTo('show', null, 'documents', 'admin',
+                        array('id' => $id));
             }
         }
         else {
@@ -464,10 +467,13 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                 $indexer = new Opus_Search_Index_Solr_Indexer();
                 $indexer->removeDocumentFromEntryIndex($doc);
 
-                $this->_redirectTo('index', $this->view->translate('document_unpublished', $id));
+                $this->_redirectTo('show', $this->view->translate(
+                        'document_unpublished', $id), 'documents', 'admin',
+                        array('id' => $id));
             }
             else {
-                $this->_redirectTo('index');
+                $this->_redirectTo('show', null, 'documents', 'admin',
+                        array('id' => $id));
             }
         }
         else {
