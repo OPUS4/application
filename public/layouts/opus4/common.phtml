@@ -46,7 +46,7 @@ else {
 }
 
 $this->headLink()
-    ->appendStylesheet($this->layoutPath() . '/css/admin.css') 
+    ->appendStylesheet($this->layoutPath() . '/css/admin.css')
     ->appendStylesheet($this->layoutPath() . '/css/opus.css');
 
 $this->container = Zend_Registry::get('Opus_Navigation');
@@ -77,7 +77,7 @@ $languageSelectors = $this->languageSelector();
             <div class="wrapper">
                 <?php if(!is_null($languageSelectors)) : ?>
                     <ul id="lang-switch" class="nav" title="Choose your language">
-                        <?php foreach ($languageSelectors as $i => $languageSelector) : ?>                            
+                        <?php foreach ($languageSelectors as $i => $languageSelector) : ?>
                             <li class="<?= ($i === 0) ? 'first' : '' ?>"><a href="<?= $languageSelector['url'] ?>" title="<?= $languageSelector['name'] ?>"><?= $languageSelector['name'] ?></a></li>
                         <?php endforeach ?>
                     </ul>
@@ -111,8 +111,8 @@ $languageSelectors = $this->languageSelector();
         </div>
 
         <div id="content" class="opus <?= $this->moduleName ?><?php if ($this->moduleName === 'publish') : ?>"><?php else : ?><?= ($this->controllerName === 'index' ? '' : '_'.$this->controllerName)?><?= ($this->actionName === 'index' ? '' : '_'.$this->actionName)?>">
-                        
-                                
+
+
                         <?  endif; ?>
             <?php if (!is_null($this->flashMessenger)) : ?>
             <div class="messages">
