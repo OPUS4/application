@@ -5,11 +5,11 @@
 #
 
 # user should has rights to drop and create a database (grant rights)
-user=<user>
-password=<password>
-host=<host>
-port=<port>
-dbname=<dbname>
+user=
+password=
+host=
+port=
+dbname=
 
 # path to mysql binary
 mysql_bin=/usr/bin/mysql
