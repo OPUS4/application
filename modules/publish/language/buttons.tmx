@@ -182,19 +182,19 @@
 
 <tu tuid="button_label_add_one_moreSubjectDdc">
         <tuv xml:lang="en">
-            <seg>Add one more DDC Word</seg>
+            <seg>Add one more DDC-Subject group</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Ein weiteres DDC Wort hinzufügen</seg>
+            <seg>Ein weiteres DDC-Sachgruppe hinzufügen</seg>
         </tuv>
     </tu>
 
     <tu tuid="button_label_deleteSubjectDdc">
         <tuv xml:lang="en">
-            <seg>Delete the last DDC subject</seg>
+            <seg>Delete the last DDC-Subject group</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Die letzte DDC Klasse löschen</seg>
+            <seg>Die letzte DDC-Sachgruppe löschen</seg>
         </tuv>
     </tu>
 
@@ -365,16 +365,16 @@
             <seg>Select a collection</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Kollektion auswählen</seg>
+            <seg>Sammlung auswählen</seg>
         </tuv>
     </tu>
 
     <tu tuid="button_label_choose_subcollection">
         <tuv xml:lang="en">
-            <seg>Select a sub collection</seg>
+            <seg>Select a collection entry</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Sub-Kollektion auswählen</seg>
+            <seg>Sammlungseintrag auswählen</seg>
         </tuv>
     </tu>
     </body>
