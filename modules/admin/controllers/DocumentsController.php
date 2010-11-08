@@ -215,7 +215,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $id = $this->getRequest()->getParam('id');
 
         if (!empty($id) && is_numeric($id)) {
-            $this->view->title = $this->view->translate('admin_documents_edit');
+            $this->view->title = $this->view->translate('admin_documents_edit', $id);
 
             $form_builder = new Form_Builder();
             $document = new $this->_modelclass($id);
