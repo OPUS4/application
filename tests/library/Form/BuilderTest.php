@@ -41,7 +41,7 @@
  *
  * @group    FormBuilderTest
  */
-class Form_BuilderTest extends PHPUnit_Framework_TestCase {
+class Form_BuilderTest extends ControllerTestCase {
 
     /**
      * Test fixture holding an instance of Form_BuilderTest_Model.
@@ -65,45 +65,12 @@ class Form_BuilderTest extends PHPUnit_Framework_TestCase {
     protected $_builder = null;
 
     /**
-     * Set up test fixtures and tables.
-     *
-     * @return void
-     */
-    public function setUp() {
-        $this->markTestSkipped('Needs fixing.');
-
-        $dba = Zend_Db_Table::getDefaultAdapter();
-//        if ($dba->isExistent('dbmodel') === true) {
-//            $dba->deleteTable('dbmodel');
-//        }
-        $dba->query("DROP TABLE IF EXISTS dbmodel");
-        $dba->query("CREATE TABLE dbmodel (simple_field varchar(50))");
-
-//        $dba->createTable('dbmodel');
-//        $dba->addField('dbmodel', array('name' => 'simple_field', 'type' => 'varchar', 'length' => 50));
-
-        $this->_model = new LibraryTests_Form_BuilderTest_Model(null, new LibraryTests_Form_BuilderTest_DbModel);
-        $this->_builder = new Form_Builder();
-
-        // Set up a mock language list.
-        $list = array('de' => 'Test_Deutsch', 'en' => 'Test_Englisch');
-        Zend_Registry::set('Available_Languages', $list);
-
-        $testTranslation = array('test1Descr' => 'test 1');
-        $translate = new Zend_Translate(
-            Zend_Translate::AN_ARRAY,
-            $testTranslation,
-            'en'
-        );
-        Zend_Registry::set('Zend_Translate', $translate);
-    }
-
-    /**
      * Test of creating a Zend Form.
      *
      * @return void
      */
     public function testCreateFormFromDocument() {
+        $this->markTestSkipped('Needs fixing.');
         $form = $this->_builder->build($this->_model);
         $this->assertType('Zend_Form', $form);
         $elements = $form->getElements();
@@ -116,6 +83,7 @@ class Form_BuilderTest extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testModelIsSerializedCorrectly() {
+        $this->markTestSkipped('Needs fixing.');
         $form = $this->_builder->build($this->_model);
         $serializedModel = $this->_builder->compressModel($this->_model);
         $serializedModelFromForm = $form->getElement(Form_Builder::HIDDEN_MODEL_ELEMENT_NAME)->getValue();
@@ -128,6 +96,7 @@ class Form_BuilderTest extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testFieldValueIsSetInForm() {
+        $this->markTestSkipped('Needs fixing.');
         $this->_model->setSimpleField('Testvalue!');
         $form = $this->_builder->build($this->_model);
         $value = $form->getElement('SimpleField')->getValue();
@@ -140,6 +109,7 @@ class Form_BuilderTest extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testReferenceModelMappedToSubForm() {
+        $this->markTestSkipped('Needs fixing.');
         $form = $this->_builder->build($this->_model);
         $subForms = $form->getSubForms();
         $this->assertArrayHasKey('ReferenceField', $subForms, 'Sub form for field "ReferenceField" is missing in form.');
@@ -152,6 +122,7 @@ class Form_BuilderTest extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testReferenceModelSubFormHasCorrectField() {
+        $this->markTestSkipped('Needs fixing.');
         $form = $this->_builder->build($this->_model);
         $subForm = $form->getSubForm('ReferenceField');
         $element = $subForm->getElement('Field1');
@@ -164,6 +135,7 @@ class Form_BuilderTest extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testFieldHasAValidator() {
+        $this->markTestSkipped('Needs fixing.');
         $field = $this->_model->getField('SimpleField');
 
         $field->setValidator(new Zend_Validate_Alnum());
@@ -178,6 +150,7 @@ class Form_BuilderTest extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testFieldHasCorrectValidators() {
+        $this->markTestSkipped('Needs fixing.');
         $field = $this->_model->getField('SimpleField');
 
         $val1 = new Zend_Validate_Alnum();
@@ -198,6 +171,7 @@ class Form_BuilderTest extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testRecreateFormFromPostDataRendersSameForm() {
+        $this->markTestSkipped('Needs fixing.');
 
         $this->_model->setMultiField(array(1,2,3));
         $this->_model->addMultiModel()->setField1('foo');
@@ -235,6 +209,7 @@ class Form_BuilderTest extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testMultivaluedFieldsAreMappedToSubform() {
+        $this->markTestSkipped('Needs fixing.');
         $form = $this->_builder->build($this->_model);
         $subForm = $form->getSubForm('MultiField');
         $this->assertNotNull($subForm, 'Sub form for "MultiField" is missing.');
@@ -247,6 +222,7 @@ class Form_BuilderTest extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testMultivaluedFieldSubformHasRightCountOfFieldElements() {
+        $this->markTestSkipped('Needs fixing.');
         $this->_model->setMultiField(array('hana', 'dul', 'set'));
 
         $form = $this->_builder->build($this->_model);
@@ -279,6 +255,7 @@ class Form_BuilderTest extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testMultivaluedFieldSubformFieldElementsInitializedCorrectly() {
+        $this->markTestSkipped('Needs fixing.');
         $expected = array('hana', 'dul', 'set');
         $this->_model->setMultiField($expected);
 
@@ -298,6 +275,7 @@ class Form_BuilderTest extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testSkippingOfPostData() {
+        $this->markTestSkipped('Needs fixing.');
         $form = $this->_builder->build($this->_model);
         $modelname = Form_Builder::HIDDEN_MODEL_ELEMENT_NAME;
 
@@ -323,6 +301,7 @@ class Form_BuilderTest extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testAddingAdditionalFieldToForm() {
+        $this->markTestSkipped('Needs fixing.');
         $start_values = array('hana', 'dul', 'set');
         $this->_model->setMultiField($start_values);
         $form = $this->_builder->build($this->_model);
@@ -379,6 +358,7 @@ class Form_BuilderTest extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testRemovingAFieldFromForm() {
+        $this->markTestSkipped('Needs fixing.');
         $start_values = array('hana', 'dul', 'set');
         $this->_model->setMultiField($start_values);
         $form = $this->_builder->build($this->_model);
@@ -422,7 +402,6 @@ class Form_BuilderTest extends PHPUnit_Framework_TestCase {
         $result[] = $subForm->getSubForm('2')->getElement('MultiField')->getValue();
         array_shift($expected);
         $this->assertEquals($expected, $result, 'Multifield does not contain correct values');
-
     }
 
     /**
@@ -431,6 +410,7 @@ class Form_BuilderTest extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testGettingCorrectModelFromForm() {
+        $this->markTestSkipped('Needs fixing.');
         $form = $this->_builder->build($this->_model);
         $form_model = $this->_builder->getModelFromForm($form);
         $this->assertEquals($this->_model, $form_model, 'Returned model should be the same as original model.');
@@ -442,6 +422,7 @@ class Form_BuilderTest extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testGettingNullIfNoModelIsInForm() {
+        $this->markTestSkipped('Needs fixing.');
         $form = $this->_builder->build($this->_model);
         $modelelementname = Form_Builder::HIDDEN_MODEL_ELEMENT_NAME;
         unset($form->$modelelementname);
@@ -455,6 +436,7 @@ class Form_BuilderTest extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testDoNotEmptyingMultiFields() {
+        $this->markTestSkipped('Needs fixing.');
         $expected = array('hana');
         $this->_model->setMultiField($expected);
         $form = $this->_builder->build($this->_model);
@@ -500,6 +482,7 @@ class Form_BuilderTest extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testDoNotRemovingElementWithNonWrongIndex() {
+        $this->markTestSkipped('Needs fixing.');
         $expected = array('hana', 'dul');
         $this->_model->setMultiField($expected);
         $form = $this->_builder->build($this->_model);
@@ -548,6 +531,7 @@ class Form_BuilderTest extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testSetFilterForElement() {
+        $this->markTestSkipped('Needs fixing.');
         $field = $this->_model->getField('SimpleField');
 
         $field->setFilter(new Zend_Filter_StringTrim());
@@ -563,6 +547,7 @@ class Form_BuilderTest extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testBuildingOfSelectionElement() {
+        $this->markTestSkipped('Needs fixing.');
         $values = array('hana', 'dul');
         $selection = new Opus_Model_Field('SelectionField');
         $selection->setSelection(true);
@@ -581,6 +566,7 @@ class Form_BuilderTest extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testBuildingOfTextAreaElement() {
+        $this->markTestSkipped('Needs fixing.');
         $value = 'Hello World';
         $textarea = new Opus_Model_Field('TextAreaField');
         $textarea->setTextarea(true);
@@ -600,6 +586,7 @@ class Form_BuilderTest extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testBuildingSelectionFromLinkedModels() {
+        $this->markTestSkipped('Needs fixing.');
         // Set up test licences in the database.
         // It's crucial to call store() to provide an id to each licence model.
         $lica = new Opus_Licence();
@@ -639,6 +626,7 @@ class Form_BuilderTest extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testBuildingOfCheckboxElement() {
+        $this->markTestSkipped('Needs fixing.');
         $value = 1;
         $checkbox = new Opus_Model_Field('CheckboxField');
         $checkbox->setCheckbox(true);
@@ -657,6 +645,7 @@ class Form_BuilderTest extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testDescriptionIsAddedToAElement() {
+        $this->markTestSkipped('Needs fixing.');
         // translation of description is set up in setUp()
         $testfield1 = new Opus_Model_Field('test1');
         $this->_model->addField($testfield1);
@@ -671,6 +660,7 @@ class Form_BuilderTest extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testDescriptionIsNotAddedToAElement() {
+        $this->markTestSkipped('Needs fixing.');
         // translation of description is set up in setUp()
         $testfield2 = new Opus_Model_Field('test2');
         $this->_model->addField($testfield2);
@@ -678,4 +668,33 @@ class Form_BuilderTest extends PHPUnit_Framework_TestCase {
         $element = $form->getElement('test2');
         $this->assertNull($element->getDescription(), 'Description of a field contains a unexpected value.');
     }
+
+    public function testPopulatingOpusLanguage() {
+        $data = array();
+        $data['Opus_Language'] = array(
+                'Part2B' => array('ita'),
+                'Part2T' => array('ita'),
+                'Part1' => array('it'),
+                'Scope' => array('i'),
+                'Type' => array('L'),
+                'RefName' => array('Italien'),
+                'Comment' => array('Italienisch'),
+                'Active' => array('1')
+            );
+        $data['submit'] = 'submit';
+        
+        $builder = new Form_Builder();
+        $model = new Opus_Language();
+        $model->setRefName('Russian'); // __toString method throws exception 
+        $builder->buildModelFromPostData($model, $data['Opus_Language']);
+        $this->assertEquals('ita', $model->getPart2B());
+        $this->assertEquals('ita', $model->getPart2T());
+        $this->assertEquals('it', $model->getPart1());
+        $this->assertEquals('i', $model->getScope());
+        $this->assertEquals('L', $model->getType());
+        $this->assertEquals('Italien', $model->getRefName());
+        $this->assertEquals('Italienisch', $model->getComment());
+        $this->assertEquals('1', $model->getActive());
+    }
+
 }
