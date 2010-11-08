@@ -176,8 +176,14 @@ class Admin_DocumentsControllerTest extends ControllerTestCase {
         $this->assertEquals('deleted', $doc->getServerState());
     }
 
-    public function testPublishAction() {
-        $this->dispatch('/admin/documents/publish/docId/100');
+    public function testPublishActionConfirmYes() {
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'id' => '100',
+                    'sureyes' => 'sureyes'
+                ));
+        $this->dispatch('/admin/documents/publish');
         $this->assertModule('admin');
         $this->assertController('documents');
         $this->assertAction('publish');
@@ -187,8 +193,17 @@ class Admin_DocumentsControllerTest extends ControllerTestCase {
         $this->assertEquals('published', $doc->getServerState());
     }
 
+    /**
+     * @depends testPublishActionConfirmYes
+     */
     public function testUnpublishAction() {
-        $this->dispatch('/admin/documents/unpublish/docId/100');
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'id' => '100',
+                    'sureyes' => 'sureyes'
+                ));
+        $this->dispatch('/admin/documents/unpublish');
         $this->assertModule('admin');
         $this->assertController('documents');
         $this->assertAction('unpublish');
