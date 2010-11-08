@@ -59,7 +59,7 @@
     ?>
     <li>
         <?php if (is_null($collectionRole->getRootCollection())) : ?>
-            <?= htmlspecialchars($printname) ?>
+            <span class="empty-collection"><?= htmlspecialchars($printname) ?></span>
         <?php else : ?>
             <a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'collection', 'id' => $collectionRole->getRootCollection()->getId()), null, true)?>"><?= htmlspecialchars($printname) ?></a>
         <?php endif ?>

@@ -60,10 +60,10 @@
 
         <tu tuid="results_title_single">
             <tuv xml:lang="en">
-                <seg>Search Result</seg>
+                <seg>search hit</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Suchergebnis</seg>
+                <seg>Treffer</seg>
             </tuv>
         </tu>
 
@@ -132,10 +132,10 @@
 
         <tu tuid="results_title">
             <tuv xml:lang="en">
-                <seg>Search Results</seg>
+                <seg>search hits</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Suchergebnisse</seg>
+                <seg>Treffer</seg>
             </tuv>
         </tu>
 
@@ -181,15 +181,6 @@
             </tuv>
             <tuv xml:lang="de">
                 <seg>bis</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="pagination_display_hits">
-            <tuv xml:lang="en">
-                <seg>Display of results</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Anzeige der Treffer</seg>
             </tuv>
         </tu>
 
