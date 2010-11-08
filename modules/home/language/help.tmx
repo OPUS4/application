@@ -531,10 +531,10 @@
         </tu>
         <tu tuid="help_content_imprint">
           <tuv xml:lang="en">
-            <seg>Add your imprint.</seg>
+            <seg>imprint.en.txt</seg>
           </tuv>
           <tuv xml:lang="de">
-            <seg>Tragen Sie das Impressum ein.</seg>
+            <seg>imprint.de.txt</seg>
           </tuv>
         </tu>
 
