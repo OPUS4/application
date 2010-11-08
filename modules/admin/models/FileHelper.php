@@ -90,8 +90,8 @@ class Admin_Model_FileHelper {
         $privilegeIds = Opus_Privilege::fetchPrivilegeIdsByFile($file);
         foreach ($privilegeIds as $privilegeId) {
             $privilege = new Opus_Privilege($privilegeId);
-            $roleName = $privilege->getRole()->getName();
-            $roles[] = $roleName;
+            $role = new Opus_Role($privilege->getParentId());
+            $roles[] = $role->getName();
         }
 
         return $roles;
