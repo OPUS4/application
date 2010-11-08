@@ -55,15 +55,6 @@ class Admin_Model_FileHelperTest extends ControllerTestCase {
         $this->assertNotNull($fileHelper);
     }
 
-    /**
-     * @depends testCreateFileHelper
-     */
-    public function testGetDeleteForm() {
-        $this->markTestSkipped('Have not figured out yet how to get view for unit tests.');
-        $fileHelper = $this->_getFileHelper();
-        $form = $fileHelper->getDeleteForm();
-    }
-
     public function testGetFileName() {
         $fileHelper = $this->_getFileHelper();
 

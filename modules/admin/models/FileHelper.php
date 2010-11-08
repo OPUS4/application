@@ -73,13 +73,6 @@ class Admin_Model_FileHelper {
         return $form;
     }
 
-    public function getDeleteForm() {
-        $deleteForm = new Admin_Form_DeleteForm();
-        $deleteForm->FileObject->setValue($this->file->getId());
-        $deleteForm->setAction($this->_getActionUrl());
-        return $deleteForm;
-    }
-
     public function getAccessForm() {
         $accessForm = new Admin_Form_FileAccess($this->file->getId());
         $accessForm->FileObject->setValue($this->file->getId());
