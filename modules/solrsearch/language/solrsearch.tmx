@@ -231,10 +231,10 @@
 
         <tu tuid="facets_menu_title">
             <tuv xml:lang="en">
-                <seg>Refine your search</seg>
+                <seg>Refine</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Grenzen Sie Ihre Suchergebnisse weiter ein</seg>
+                <seg>Filtern</seg>
             </tuv>
         </tu>
 
