@@ -73,6 +73,8 @@ class Frontdoor_Form_AtLeastOneValidator extends Zend_Validate_Abstract
             return true;
         }
 
+        $result = false;
+
         if (is_array($context))
         {
             $empty = true;
@@ -93,12 +95,14 @@ class Frontdoor_Form_AtLeastOneValidator extends Zend_Validate_Abstract
             {
                 $this->_error(self::REQUIRED_EMPTY);
 
-                return false;
+                $result = false;
             }
-            return true;
+            else {
+                $result = true;
+            }
         }
-        echo 'no context in validator';
-        exit; // throw exception
+        
+        return $result;
     }
 }
 ?>

@@ -60,5 +60,15 @@ class Frontdoor_Form_AtLeastOneValidatorTest extends ControllerTestCase {
             'checkbox2' => '0'
             )));
     }
+
+    public function testNoFieldRequired() {
+        $validator = new Frontdoor_Form_AtLeastOneValidator();
+
+        $this->assertTrue($validator->isValid(null, array(
+            'checkbox1' => '0',
+            'checkbox2' => '0'
+            )));
+    }
+
 }
 ?>
