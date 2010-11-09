@@ -379,6 +379,8 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                     echo $e->getMessage();
                 }
             }
+            
+            $this->view->docHelper = new Review_Model_DocumentAdapter($this->view, $document);
         }
         else {
             $this->_redirectTo('edit');

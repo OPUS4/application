@@ -33,6 +33,14 @@
                             <action>edit</action>
                         </edit>
 
+                        <create>
+                            <type>mvc</type>
+                            <label>admin_documents_edit</label>
+                            <module>admin</module>
+                            <controller>documents</controller>
+                            <action>create</action>
+                        </create>
+
                         <show>
                             <type>mvc</type>
                             <label>admin_documents_show</label>
@@ -40,6 +48,14 @@
                             <controller>documents</controller>
                             <action>show</action>
                         </show>
+
+                        <filemanager>
+                            <type>mvc</type>
+                            <label>admin_filemanager_index</label>
+                            <module>admin</module>
+                            <controller>filemanager</controller>
+                            <action>index</action>
+                        </filemanager>
                     </pages>
                 </documents>
 

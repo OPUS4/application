@@ -34,6 +34,16 @@
  */
 ?>
 
-<h1><?php echo $this->title ?></h1>
+<div class="adminContainer">
 
-<?= $this->form ?>
+    <div class="breadcrumbsContainer">
+        <?= $this->navigation()->breadcrumbs()
+                 ->setMaxDepth(1)
+                 ->setLinkLast(true) ?>
+        &gt;
+        <?= $this->translate('admin_documents_edit', $this->docHelper->getDocId()) ?>
+    </div>
+
+    <?= $this->form ?>
+
+</div>
