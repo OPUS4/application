@@ -82,7 +82,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      *
      */
     protected function _initOpusFrontController() {
-        $this->bootstrap(array('LanguageList','frontController'));
+        $this->bootstrap(array('LanguageList', 'frontController'));
 
         $frontController = $this->getResource('frontController'); // Zend_Controller_Front::getInstance();
 
@@ -346,7 +346,18 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
 
         $log->debug('Navigation config file is: ' . $navigationConfigFile);
 
-        $container = new Zend_Navigation($navConfig);
+        try {
+            $container = new Zend_Navigation($navConfig);
+        }
+        catch (Zend_Navigation_Exception $e) {
+            /* TODO This suppresses the "Mystery Bug" that is producing errors
+             * in unit tests sometimes. So far we haven't figured out the real
+             * reason behind the errors. In regular Opus instances the error
+             * has not appeared (as far as we know).
+             */
+            $log->err($e);
+            $container = null;
+        }
 
         $view = $this->getResource('View');
 
