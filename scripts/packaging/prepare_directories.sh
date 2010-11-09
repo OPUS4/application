@@ -51,7 +51,7 @@ cd ..
 find -P . -name .gitignore -print0 | xargs -r0 rm -v 
 
 rm -rv opus4/{docs,nbproject,tests,workspace}
-rm -rvf opus4/public/layouts/{opus33,opus34,darker,matheon,plain}
+rm -rvf opus4/public/layouts/{opus33,opus34,darker,matheon,plain,opus4-matheon}
 rm -rv opus4/import
 rm -v  opus4/modules/publish/views/scripts/form/preprintmatheon.phtml
 rm -rv opus4/modules/{pkm,publicationList,remotecontrol}
