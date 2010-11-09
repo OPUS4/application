@@ -1092,7 +1092,7 @@
         <seg>Volume</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Jahrgang</seg>
+        <seg>Band</seg>
       </tuv>
     </tu>
     
@@ -1125,10 +1125,10 @@
 
     <tu tuid="TitleMainLanguage">
       <tuv xml:lang="en">
-        <seg>Title language</seg>
+        <seg>Language</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Titelsprache</seg>
+        <seg>Sprache</seg>
       </tuv>
     </tu>
     

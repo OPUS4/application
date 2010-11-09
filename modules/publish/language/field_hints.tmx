@@ -225,6 +225,24 @@
         </tuv>
     </tu>
 	
+	<tu tuid="hint_PersonAuthorAcademicTitle">
+        <tuv xml:lang="en">
+            <seg>Please enter the author's shortened academic title (i.e. Dr., Prof., PhD).</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte den akademischen Titel des Autors in abgekürzter Form (z.B. Dr., Prof., Dr. jur.) ein.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_PersonAuthorAcademicTitle1">
+        <tuv xml:lang="en">
+            <seg>Please enter the author's shortened academic title (i.e. Dr., Prof., PhD).</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte den akademischen Titel des Autors in abgekürzter Form (z.B. Dr., Prof., Dr. jur.) ein.</seg>
+        </tuv>
+    </tu>
+	
 	<tu tuid="hint_PersonAuthorEmail1">
         <tuv xml:lang="en">
             <seg>Please enter the author's email adress.</seg>
@@ -794,7 +812,7 @@
 	
 	<tu tuid="hint_groupTitleParent">
         <tuv xml:lang="en">
-            <seg>Please enter the parent work's title (i.e. Journal, Collected Edition, Anthology).</seg>
+            <seg>Please enter the parent work's title (i.e. Journal, Compilation, Anthology).</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte den Titel des übergeordneten Werks (z.B. Zeitschrift, Sammelwerk, Sammelband) ein.</seg>
