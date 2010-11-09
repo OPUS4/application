@@ -1317,7 +1317,7 @@
         <seg>Title Additional</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Zusätzlicher Titel</seg>
+        <seg>Übersetzter Titel</seg>
       </tuv>
     </tu>
 
@@ -1335,7 +1335,7 @@
         <seg>Title Additional</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Zusätzlicher Titel</seg>
+        <seg>Übersetzter Titel</seg>
       </tuv>
     </tu>
 	
@@ -1350,19 +1350,19 @@
     
     <tu tuid="add_TitleAdditional">
       <tuv xml:lang="en">
-        <seg>add Title Additional</seg>
+        <seg>add translated Title</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Zusatztitel hinzufügen</seg>
+        <seg>Übersetzten Titel hinzufügen</seg>
       </tuv>
     </tu>
         
     <tu tuid="remove_TitleAdditional">
       <tuv xml:lang="en">
-        <seg>remove Titel Additional</seg>
+        <seg>remove translated Titel</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Zusatztitel entfernen</seg>
+        <seg>Übersetzten Titel entfernen</seg>
       </tuv>
     </tu>
             
