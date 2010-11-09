@@ -79,16 +79,33 @@ class Publish_Model_ExtendedValidation {
      * @return boolean
      */
     private function _validatePersons() {
+        //1) validate: for every given first name must exist a last name
+        $valid1 = $this->_validateFirstNames();
+
+        //2) validate: for a given email notification checkbox must exist an email
+        $valid2 = $this->_validateEmailNotification();
+
+        if ($valid1 && $valid2)
+            return true;
+        else
+            return false;
+    }
+
+    /**
+     * Checks if there are last names for every filled first name or else there would be an exception from the database.
+     * @return boolean true, if yes
+     */
+    private function _validateFirstNames() {
         $validPersons = true;
         $firstNames = $this->_getPersonFirstNameFields();
 
         foreach ($firstNames as $key => $name) {
-            //$this->log->debug("(Validation): Firstname: " . $key . " with value ". $name);
+            $this->log->debug("(Validation): Firstname: " . $key . " with value " . $name);
             if ($name !== "") {
                 //if $name is set and not null, find the corresponding lastname
                 $lastKey = str_replace('First', 'Last', $key);
-                //$this->log->debug("(Validation): Replaced: " . $lastKey);
-                if ($this->data[$lastKey] == "" || $this->data[$lastKey] == null) {
+                $this->log->debug("(Validation): Replaced: " . $lastKey);
+                if ($this->data[$lastKey] == "") {
                     //error case: Firstname exists but Lastname not
                     $element = $this->form->getElement($lastKey);
                     if (!$element->isRequired()) {
@@ -101,6 +118,75 @@ class Publish_Model_ExtendedValidation {
             }
         }
         return $validPersons;
+    }
+
+    /**
+     * Checks if there are email adresses for a filled checkbox for email notification.
+     * @return boolean true, if yes
+     */
+    private function _validateEmailNotification() {
+        $validMails = true;
+        $emailNotifications = $this->_getPersonEmailFields();
+
+        foreach ($emailNotifications as $key => $check) {
+            $this->log->debug("(Validation): Email Notification: " . $key . " with value " . $check);
+            if ($check == "1") {
+                //if $check is set and not null, find the corresponding email and name
+                $emailKey = str_replace('Allow', '', $key);
+                $emailKey = str_replace('Contact', '', $emailKey);
+                $lastName = str_replace('Email', 'LastName', $emailKey);
+                $firstName = $lastName = str_replace('Last', 'First', $lastName);
+                $this->log->debug("(Validation): Replaced: " . $emailKey);
+
+                if ($this->data[$lastName] != "" || $this->data[$lastName] != "") {
+                    //just check the email if first or last name is given
+                    if ($this->data[$emailKey] == "" || $this->data[$emailKey] == null) {
+                        //error case: Email Check exists but Email not
+                        $element = $this->form->getElement($emailKey);
+                        if (!$element->isRequired()) {
+                            if (!$element->hasErrors()) {
+                                $element->addError('publish_error_noEmailButNotification');
+                                $validMails = false;
+                            }
+                        }
+                    }
+                }
+                else {
+                    unset ($this->data[$key]);
+                }
+            }
+        }
+        return $validMails;
+    }
+
+    /**
+     * Retrieves all first names from form data
+     * @return <Array> of first names
+     */
+    private function _getPersonFirstNameFields() {
+        $firstNames = array();
+
+        foreach ($this->data as $key => $value) {
+            if (strstr($key, 'Person') && strstr($key, 'FirstName'))
+                $firstNames[$key] = $value;
+        }
+
+        return $firstNames;
+    }
+
+    /**
+     * Retrieves all first names from form data
+     * @return <Array> of first names
+     */
+    private function _getPersonEmailFields() {
+        $emails = array();
+
+        foreach ($this->data as $key => $value) {
+            if (strstr($key, 'Person') && strstr($key, 'AllowEmail'))
+                $emails[$key] = $value;
+        }
+
+        return $emails;
     }
 
     /**
@@ -276,21 +362,6 @@ class Publish_Model_ExtendedValidation {
         }
 
         return $titles;
-    }
-
-    /**
-     * Retrieves all first names from form data
-     * @return <Array> of first names
-     */
-    private function _getPersonFirstNameFields() {
-        $firstNames = array();
-
-        foreach ($this->data as $key => $value) {
-            if (strstr($key, 'Person') && strstr($key, 'FirstName'))
-                $firstNames[$key] = $value;
-        }
-
-        return $firstNames;
     }
 
 }

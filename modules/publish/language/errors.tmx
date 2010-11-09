@@ -17,6 +17,15 @@
         </tuv>
     </tu>
 
+    <tu tuid="publish_error_noEmailButNotification">
+        <tuv xml:lang="en">
+            <seg>Please fill in a email or delete the checkbox.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte geben Sie auch eine Emailadresse an oder löschen Sie das Häkchen.</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="publish_error_noLastButFirstName">
         <tuv xml:lang="en">
             <seg>Please fill in a last name or delete the first name.</seg>

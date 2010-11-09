@@ -69,12 +69,12 @@ class Publish_Form_PublishingSecond extends Zend_Form {
 
         $valid2 = parent::isValid($extended->data);
 
-        $valid1 = $extended->validate();        
+        $valid3 = $extended->validate();
         //inherit data changes during validation
         $this->populate($extended->data);
         $this->postData = $extended->data;
 
-        if ($valid1 == true && $valid2 == true)
+        if ($valid1 && $valid2 && $valid3)
             return true;
         else
             return false;
