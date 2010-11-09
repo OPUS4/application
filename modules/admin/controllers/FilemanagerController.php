@@ -193,7 +193,19 @@ class Admin_FilemanagerController extends Controller_Action
         if (isset($postData['FileObject'])) {
             $fileId = $postData['FileObject'];
 
-            $file = new Opus_File($fileId);
+            $file = new Opus_File(( int )$fileId);
+
+            if (!$file->exists()) {
+                throw new Exception('file ' . $fileId . ' does not exist.');
+            }
+
+            $visibleInFrontdoor = $postData['visibleInFrontdoor'];
+            $file->setVisibleInFrontdoor($visibleInFrontdoor);
+
+            $visibleInOai = $postData['visibleInOai'];
+            $file->setVisibleInOai($visibleInOai);
+
+            $file->store();
 
             $currentRoleNames = Admin_Model_FileHelper::getRolesForFile($file);
 
@@ -283,17 +295,6 @@ class Admin_FilemanagerController extends Controller_Action
 
         try {
             $document->store();
-            $config = Zend_Registry::get('Zend_Config');
-
-            $searchEngine = $config->searchengine->engine;
-            if (empty($searchEngine) === true) {
-                $searchEngine = 'Lucene';
-            }
-            // Reindex
-            $engineclass = 'Opus_Search_Index_'.$searchEngine.'_Indexer';
-            $indexer = new $engineclass();
-            $indexer->removeDocumentFromEntryIndex($document);
-            $indexer->addDocumentToEntryIndex($document);
         }
         catch (Exception $e) {
             $this->view->actionresult = $this->view->translate('admin_filemanager_uploadfailure');
