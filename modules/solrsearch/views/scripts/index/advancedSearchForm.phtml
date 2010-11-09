@@ -41,69 +41,71 @@ if ($this->jQueryEnabled()) {
 }
 ?>
 
-<form action="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'searchdispatch'), null, true); ?>" method="post" class="opus_form">
-    <?php if($this->searchType != 'authorsearch') : ?>
-    <fieldset>
-        <legend><?= $this->translate('advanced_search_form_general_search_options') ?></legend>
-        <label for="rows"><?= $this->translate('advanced_search_form_hits_per_page') ?></label>
-        <select name="rows" id="rows">
-            <option value="10" <?= $this->rows === '10' || !isset($this->rows)? 'selected="true"' : '' ?>>10</option>
-            <option value="20" <?= $this->rows === '20' ? 'selected="true"' : '' ?>>20</option>
-            <option value="50" <?= $this->rows === '50' ? 'selected="true"' : '' ?>>50</option>
-            <option value="100" <?= $this->rows === '100' ? 'selected="true"' : '' ?>>100</option>
-        </select>
-    </fieldset>
-    <?php endif ?>
-    <fieldset>
-        <legend><?= $this->translate('advanced_search_form_search_fields') ?></legend>
-        <table>
-            <?php
-            if ($this->searchType === 'authorsearch') {
-                $fieldnames = array('author', 'title', 'referee', 'abstract', 'fulltext');
-            }
-            else {
-                $fieldnames = array('author', 'title', 'referee', 'abstract', 'fulltext', 'year');
-            }
-            
-            foreach ($fieldnames as $fieldname) :
-                    $fieldnameQuery = $fieldname . 'Query';
-                    $fieldnameQueryModifier = $fieldnameQuery . 'Modifier';
-            ?>
-            <tr>
-                <td>
-                    <label for="<?= $fieldname ?>"><?= $this->translate("solrsearch_advancedsearch_field_$fieldname"); ?></label>
-                </td>
-                <td>
-                    <select name="<?= $fieldname ?>modifier" id="<?= $fieldname ?>Modifier">
-                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL ?>" <?= $this->$fieldnameQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL || !isset($this->$fieldnameQueryModifier) ? 'selected="true"' : '' ?>><?= $this->translate('advanced_search_form_modifier_all') ?></option>
-                        <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ?>" <?= $this->$fieldnameQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ? 'selected="true"' : '' ?>><?= $this->translate('advanced_search_form_modifier_one') ?></option>
-                        <?php if ($fieldname !== 'fulltext') : ?>
-                            <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE ?>" <?= $this->$fieldnameQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE ? 'selected="true"' : '' ?>><?= $this->translate('advanced_search_form_modifier_none') ?></option>
-                        <?php endif ?>
-                    </select>
-                </td>
-                <td>
-                    <input type="text" id="<?= $fieldname ?>" name="<?= $fieldname ?>" value="<?= htmlspecialchars($this->$fieldnameQuery) ?>" title="<?= $this->translate("solrsearch_advancedsearch_tooltip_$fieldname"); ?>" />
-                </td>
-            </tr>
-            <?php endforeach ?>
-        </table>
-    </fieldset>
-    <div id="edit-submit-advanced-search-wrapper" class="form-item">
-        <span class="form-submit-wrapper">
-            <input type="submit" id="edit-submit-advanced-search" class="form-submit" value="<?= $this->translate('advanced_search_form_search_action') ?>" />
-        </span>
-    </div>
-    <input type="hidden" name="searchtype" value="advanced" />
-    <input type="hidden" name="start" value="0" />
-    <input type="hidden" name="sortfield" value="score" />
-    <input type="hidden" name="sordorder" value="desc" />
-</form>
+<div class="form-wrapper">
+    <form action="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'searchdispatch'), null, true); ?>" method="post" class="opus_form">
+        <?php if($this->searchType != 'authorsearch') : ?>
+        <fieldset>
+            <legend><?= $this->translate('advanced_search_form_general_search_options') ?></legend>
+            <label for="rows"><?= $this->translate('advanced_search_form_hits_per_page') ?></label>
+            <select name="rows" id="rows">
+                <option value="10" <?= $this->rows === '10' || !isset($this->rows)? 'selected="true"' : '' ?>>10</option>
+                <option value="20" <?= $this->rows === '20' ? 'selected="true"' : '' ?>>20</option>
+                <option value="50" <?= $this->rows === '50' ? 'selected="true"' : '' ?>>50</option>
+                <option value="100" <?= $this->rows === '100' ? 'selected="true"' : '' ?>>100</option>
+            </select>
+        </fieldset>
+        <?php endif ?>
+        <fieldset>
+            <legend><?= $this->translate('advanced_search_form_search_fields') ?></legend>
+            <table>
+                <?php
+                if ($this->searchType === 'authorsearch') {
+                    $fieldnames = array('author', 'title', 'referee', 'abstract', 'fulltext');
+                }
+                else {
+                    $fieldnames = array('author', 'title', 'referee', 'abstract', 'fulltext', 'year');
+                }
 
-<form id="reset-form" <?= $this->jQueryEnabled() ? 'onSubmit="return resetAdvancedSearchForm();"' : '' ?> action="<?= $this->url(array('module'=>'solrsearch','controller'=>'index','action'=>'advanced'), null, true) ?>">
-    <div id="edit-reset-advanced-search-wrapper" class="form-item">
-        <span class="form-submit-wrapper">
-            <input id="edit-reset-advanced-search" class="form-submit" type="submit" value="<?= $this->translate('advanced_search_form_reset_action') ?>" />
-        </span>
-    </div>
-</form>
+                foreach ($fieldnames as $fieldname) :
+                        $fieldnameQuery = $fieldname . 'Query';
+                        $fieldnameQueryModifier = $fieldnameQuery . 'Modifier';
+                ?>
+                <tr>
+                    <td>
+                        <label for="<?= $fieldname ?>"><?= $this->translate("solrsearch_advancedsearch_field_$fieldname"); ?></label>
+                    </td>
+                    <td>
+                        <select name="<?= $fieldname ?>modifier" id="<?= $fieldname ?>Modifier">
+                            <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL ?>" <?= $this->$fieldnameQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL || !isset($this->$fieldnameQueryModifier) ? 'selected="true"' : '' ?>><?= $this->translate('advanced_search_form_modifier_all') ?></option>
+                            <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ?>" <?= $this->$fieldnameQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY ? 'selected="true"' : '' ?>><?= $this->translate('advanced_search_form_modifier_one') ?></option>
+                            <?php if ($fieldname !== 'fulltext') : ?>
+                                <option value="<?= Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE ?>" <?= $this->$fieldnameQueryModifier === Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE ? 'selected="true"' : '' ?>><?= $this->translate('advanced_search_form_modifier_none') ?></option>
+                            <?php endif ?>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" id="<?= $fieldname ?>" name="<?= $fieldname ?>" value="<?= htmlspecialchars($this->$fieldnameQuery) ?>" title="<?= $this->translate("solrsearch_advancedsearch_tooltip_$fieldname"); ?>" />
+                    </td>
+                </tr>
+                <?php endforeach ?>
+            </table>
+        </fieldset>
+        <div id="edit-submit-advanced-search-wrapper" class="form-item">
+            <span class="form-submit-wrapper">
+                <input type="submit" id="edit-submit-advanced-search" class="form-submit" value="<?= $this->translate('advanced_search_form_search_action') ?>" />
+            </span>
+        </div>
+        <input type="hidden" name="searchtype" value="advanced" />
+        <input type="hidden" name="start" value="0" />
+        <input type="hidden" name="sortfield" value="score" />
+        <input type="hidden" name="sordorder" value="desc" />
+    </form>
+
+    <form id="reset-form" <?= $this->jQueryEnabled() ? 'onSubmit="return resetAdvancedSearchForm();"' : '' ?> action="<?= $this->url(array('module'=>'solrsearch','controller'=>'index','action'=>'advanced'), null, true) ?>">
+        <div id="edit-reset-advanced-search-wrapper" class="form-item">
+            <span class="form-submit-wrapper">
+                <input id="edit-reset-advanced-search" class="form-submit" type="submit" value="<?= $this->translate('advanced_search_form_reset_action') ?>" />
+            </span>
+        </div>
+    </form>
+</div>
