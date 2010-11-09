@@ -677,10 +677,10 @@
 
     <tu tuid="hint_TitleMainLanguage1">
         <tuv xml:lang="en">
-            <seg>Please enter the language of the documents main title.</seg>
+            <seg>Please enter the language.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Wählen Sie bitte die Sprache des Dokumententitels aus.</seg>
+            <seg>Wählen Sie bitte die Sprache aus.</seg>
         </tuv>
     </tu>
 
@@ -798,15 +798,6 @@
         </tuv>
         <tuv xml:lang="de">
             <seg>Bitte wählen Sie eine Sprache aus.</seg>
-        </tuv>
-    </tu>
-	
-	<tu tuid="hint_TitleSubLanguage1">
-        <tuv xml:lang="en">
-            <seg>Please choose a Language.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Bitte wählen Sie eine Sprache.</seg>
         </tuv>
     </tu>
 	
@@ -1145,12 +1136,21 @@ Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathsci
         </tuv>
     </tu>
 	
+	<tu tuid="hint_groupThesisDateAccepted">
+        <tuv xml:lang="en">
+            <seg>Please enter the date, when the Thesis has been accepted in terms of the examination regulations. In most cases this will be equal to the date of the (last) oral exam.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte das Datum ein, an dem die Abschlussarbeit im Sinne der Prüfungsordnung angenommen wurde. In den meisten Fällen ist dies mit dem Datum der (letzten) mündlichen Prüfung gleichzusetzen.</seg>
+        </tuv>
+    </tu>
+	
 	<tu tuid="hint_ThesisDateAccepted">
         <tuv xml:lang="en">
             <seg>Please enter the date, when the Thesis has been accepted.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte das Datum ein, an dem die Abschlussarbeit angenommen wurde.</seg>
+            <seg>Tragen Sie bitte das Datum ein, an dem die Abschlussarbeit im Sinne der Prüfungsordnung angenommen wurde .</seg>
         </tuv>
     </tu>
 	
@@ -1178,6 +1178,24 @@ Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathsci
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte das Datum ein, an dem Ihr Dokument freigeschaltet werden soll.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_IdentifierOpus3">
+        <tuv xml:lang="en">
+            <seg>Please enter the document's OPUS3-ID-Number.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte die OPUS3-ID-Nummer des Dokuments ein.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_IdentifierOpac">
+        <tuv xml:lang="en">
+            <seg>Please enter the document's OPAC-Number.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte die OPAC-Nummer des Dokuments ein.</seg>
         </tuv>
     </tu>
 	
