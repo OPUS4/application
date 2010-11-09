@@ -1,7 +1,5 @@
 #!/bin/bash
 
-clear
-
 sudo a2enmod rewrite proxy proxy_http php5
 sudo ln -si /var/local/opus4/apacheconf/opus4 /etc/apache2/sites-available
 sudo a2ensite opus4

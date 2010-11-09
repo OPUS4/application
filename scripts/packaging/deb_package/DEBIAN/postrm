@@ -1,7 +1,5 @@
 #!/bin/bash
 
-clear
-
 if [ -f /etc/apache2/sites-enabled/opus4 ]; then
   sudo a2dissite opus4
   read -p "Delete OPUS4 Apache HTTPD config files in /etc/apache2/sites-available/opus4 [Y]: " DELETE_APACHE_CONFIG
