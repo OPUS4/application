@@ -3,7 +3,8 @@ Version: 4.0.0
 Section: World Wide Web
 Priority: Optional
 Architecture: all
-Depends: curl, wget, subversion, default-jdk, apache2, php5, php5-cgi, php5-cli, php5-common, php5-curl, php5-dev, php5-gd, php5-mcrypt, php5-mysql, php5-uuid, php5-xdebug, php5-xsl, php-crypt-gpg, mysql-server-5.1
+Depends: curl, wget, subversion, default-jdk, libapache2-mod-php5 (>= 5.3.0) | php5-cgi (>= 5.3.0) | php5 (>= 5.3.0), php5-curl, php5-gd, php5-mcrypt, php5-mysql, php5-uuid, php5-xdebug, php5-xsl, php-crypt-gpg, mysql-server-5.1
+Recommends: apache2, mysql-client, php5-cli
 Maintainer: Opus 4 Development Team <opus4@kobv.de>
 Homepage: http://opus4.kobv.de/
 Description: An open-source publication repository software.

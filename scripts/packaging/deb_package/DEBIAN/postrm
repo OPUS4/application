@@ -9,5 +9,7 @@ if [ -z $DELETE_APACHE_CONFIG ] || [ $DELETE_APACHE_CONFIG = 'Y' ]; then
 fi
 sudo /etc/init.d/apache2 reload
 
-sudo chmod +x /var/local/opus4/install/uninstall.sh
-sudo /var/local/opus4/install/uninstall.sh
+if [ -f /var/local/opus4/install/uninstall.sh ]; then
+  sudo chmod +x /var/local/opus4/install/uninstall.sh
+  sudo /var/local/opus4/install/uninstall.sh
+fi
