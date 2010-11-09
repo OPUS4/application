@@ -567,6 +567,33 @@
         </tuv>
     </tu>
 	
+	<tu tuid="hint_Edition">
+        <tuv xml:lang="en">
+            <seg>Please enter the Edition.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte die Auflage ein.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_Volume">
+        <tuv xml:lang="en">
+            <seg>Please enter the Volume.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte die Bandangabe ein.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_Issue">
+        <tuv xml:lang="en">
+            <seg>Please enter the Issue.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte die Heftangabe ein.</seg>
+        </tuv>
+    </tu>
+	
     <tu tuid="hint_groupInstitute">
         <tuv xml:lang="en">
             <seg>Please choose the involved institutes. You may add more instiutes by clicking on the button (or delete them).</seg>
@@ -630,16 +657,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="hint_TitleMain1Language">
-        <tuv xml:lang="en">
-            <seg>Please enter the language of the documents main title.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Wählen Sie bitte die Sprache des Dokumententitels aus.</seg>
-        </tuv>
-    </tu>
-
-    <tu tuid="hint_TitleMainLanguage">
+    <tu tuid="hint_TitleMainLanguage1">
         <tuv xml:lang="en">
             <seg>Please enter the language of the documents main title.</seg>
         </tuv>
@@ -675,18 +693,18 @@
         </tuv>
     </tu>
 
-    <tu tuid="hint_TitleAbstract1Language">
+    <tu tuid="hint_TitleAbstractLanguage1">
         <tuv xml:lang="en">
-            <seg>Please enter the language of the documents abstract.</seg>
+            <seg>Please choose the language.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Wählen Sie bitte die Sprache des Abstracts aus.</seg>
+            <seg>Wählen Sie bitte die Sprache aus.</seg>
         </tuv>
     </tu>
 
     <tu tuid="hint_TitleAbstractLanguage">
         <tuv xml:lang="en">
-            <seg>Please enter the language of the documents abstract.</seg>
+            <seg>Please choose the language of the document's abstract.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Wählen Sie bitte die Sprache des Abstracts aus.</seg>
@@ -711,39 +729,93 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_groupTitleAdditional">
+	<tu tuid="hint_TitleSubLanguage">
         <tuv xml:lang="en">
-            <seg>Please enter the document's additional title.</seg>
+            <seg>Please choose the language of the document's subtitle.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie hier bitte einen zusätzlichen Titel des Dokuments ein.</seg>
+            <seg>Bitte wählen Sie die Sprache des Untertitels aus.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_TitleSubLanguage1">
+        <tuv xml:lang="en">
+            <seg>Please choose a Language.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte wählen Sie eine Sprache.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_groupTitleAdditional">
+        <tuv xml:lang="en">
+            <seg>Please enter the document's translated title.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie hier bitte den übersetzten Titel des Dokuments ein.</seg>
         </tuv>
     </tu>
 	
 	<tu tuid="hint_TitleAdditional1">
         <tuv xml:lang="en">
-            <seg>Please enter the document's additional title.</seg>
+            <seg>Please enter the document's translated title.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie hier bitte einen zusätzlichen Titel des Dokuments ein.</seg>
+            <seg>Tragen Sie hier bitte den übersetzten Titel des Dokuments ein.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_TitleAdditionalLanguage">
+        <tuv xml:lang="en">
+            <seg>Please choose the language of the translated title.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte wählen Sie die Sprache des übersetzten Titels aus.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_TitleAdditionalLanguage1">
+        <tuv xml:lang="en">
+            <seg>Please choose a language.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte wählen Sie eine Sprache aus.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_TitleSubLanguage1">
+        <tuv xml:lang="en">
+            <seg>Please choose a Language.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte wählen Sie eine Sprache.</seg>
         </tuv>
     </tu>
 	
 	<tu tuid="hint_groupTitleParent">
         <tuv xml:lang="en">
-            <seg>Please enter the document's parent title.</seg>
+            <seg>Please enter the parent work's title (i.e. Journal, Collected Edition, Anthology).</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den übergeordneten Titel des Dokuments ein.</seg>
+            <seg>Tragen Sie bitte den Titel des übergeordneten Werks (z.B. Zeitschrift, Sammelwerk, Sammelband) ein.</seg>
         </tuv>
     </tu>
 	
 	<tu tuid="hint_TitleParent1">
         <tuv xml:lang="en">
-            <seg>Please enter the document's parent title.</seg>
+            <seg>Please enter the parent work's title (i.e. Journal, Collected Edition, Anthology).</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den übergeordneten Titel des Dokuments ein.</seg>
+            <seg>Tragen Sie bitte den Titel des übergeordneten Werks (z.B. Zeitschrift, Sammelwerk, Sammelband) ein.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_TitleParentLanguage1">
+        <tuv xml:lang="en">
+            <seg>Please choose a Language.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte wählen Sie eine Sprache.</seg>
         </tuv>
     </tu>
 	
