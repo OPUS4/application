@@ -379,7 +379,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                     echo $e->getMessage();
                 }
             }
-            
+            $this->view->title = $this->view->translate('admin_documents_edit', $id);
             $this->view->docHelper = new Review_Model_DocumentAdapter($this->view, $document);
         }
         else {
