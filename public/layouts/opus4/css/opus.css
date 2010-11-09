@@ -39,10 +39,8 @@
     margin: 0 0 1em;
 }
 .button-wrapper{    
-  /*
-    text-align:right;    
-    margin-left: 560px;
-  */
+  text-align:right;    
+  margin-left: 560px;
   padding: 10px;
 }
 .required{
@@ -52,9 +50,6 @@ fieldset .add-delete-wrapper{
     right: 0;
     bottom: 0;
     width: 44%;
-    position: absolute;
-    padding: 0 10px 15px 0;
-    
 }
 .publish fieldset .form-item{
     float: left;
