@@ -3,6 +3,7 @@
 <configdata>
     <nav>
         <home>
+            <type>mvc</type>
             <label>home_menu_label</label>
             <module>home</module>
             <controller>index</controller>
@@ -10,12 +11,14 @@
         </home>
 
         <administration>
+            <type>mvc</type>
             <label>admin_menu_label</label>
             <module>admin</module>
             <controller>index</controller>
             <action>index</action>
             <pages>
                 <documents>
+                    <type>mvc</type>
                     <label>admin_title_documents</label>
                     <description>admin_title_documents_description</description>
                     <module>admin</module>
@@ -23,6 +26,7 @@
                     <action>index</action>
                     <pages>
                         <edit>
+                            <type>mvc</type>
                             <label>admin_documents_edit</label>
                             <module>admin</module>
                             <controller>documents</controller>
@@ -30,6 +34,7 @@
                         </edit>
 
                         <show>
+                            <type>mvc</type>
                             <label>admin_documents_show</label>
                             <module>admin</module>
                             <controller>documents</controller>
@@ -39,6 +44,7 @@
                 </documents>
 
                 <review>
+                    <type>mvc</type>
                     <label>review_menu_label</label>
                     <description>review_menu_label_description</description>
                     <module>review</module>
@@ -47,6 +53,7 @@
                 </review>
                 
         	<security>
+                    <type>mvc</type>
                     <label>admin_title_security</label>
                     <description>admin_title_security_description</description>
                     <module>admin</module>
@@ -54,6 +61,7 @@
                     <action>index</action>
                     <pages>
                         <roles>
+                            <type>mvc</type>
                             <label>admin_security_title_roles</label>
                             <description>admin_security_title_roles_description</description>
                             <module>admin</module>
@@ -61,6 +69,7 @@
                             <action>index</action>
                             <pages>
                                 <show>
+                                    <type>mvc</type>
                                     <label>admin_role_show</label>
                                     <module>admin</module>
                                     <controller>role</controller>
@@ -68,6 +77,7 @@
                                 </show>
 
                                 <new>
+                                    <type>mvc</type>
                                     <label>admin_role_new</label>
                                     <module>admin</module>
                                     <controller>role</controller>
@@ -75,6 +85,7 @@
                                 </new>
 
                                 <create>
+                                    <type>mvc</type>
                                     <label>admin_role_new</label>
                                     <module>admin</module>
                                     <controller>role</controller>
@@ -82,6 +93,7 @@
                                 </create>
 
                                 <edit>
+                                    <type>mvc</type>
                                     <label>admin_role_edit</label>
                                     <module>admin</module>
                                     <controller>role</controller>
@@ -89,6 +101,7 @@
                                 </edit>
 
                                 <update>
+                                    <type>mvc</type>
                                     <label>admin_role_edit</label>
                                     <module>admin</module>
                                     <controller>role</controller>
@@ -97,6 +110,7 @@
                             </pages>
                         </roles>
                         <accounts>
+                            <type>mvc</type>
                             <label>admin_security_title_accounts</label>
                             <description>admin_security_title_accounts_description</description>
                             <module>admin</module>
@@ -104,6 +118,7 @@
                             <action>index</action>
                             <pages>
                                 <show>
+                                    <type>mvc</type>
                                     <label>admin_account_show</label>
                                     <module>admin</module>
                                     <controller>account</controller>
@@ -111,6 +126,7 @@
                                 </show>
 
                                 <new>
+                                    <type>mvc</type>
                                     <label>admin_account_new</label>
                                     <module>admin</module>
                                     <controller>account</controller>
@@ -118,6 +134,7 @@
                                 </new>
 
                                 <create>
+                                    <type>mvc</type>
                                     <label>admin_account_new</label>
                                     <module>admin</module>
                                     <controller>account</controller>
@@ -125,6 +142,7 @@
                                 </create>
 
                                 <edit>
+                                    <type>mvc</type>
                                     <label>admin_account_edit</label>
                                     <module>admin</module>
                                     <controller>account</controller>
@@ -132,6 +150,7 @@
                                 </edit>
 
                                 <update>
+                                    <type>mvc</type>
                                     <label>admin_account_edit</label>
                                     <module>admin</module>
                                     <controller>account</controller>
@@ -141,6 +160,7 @@
                         </accounts>
 
                         <ipranges>
+                            <type>mvc</type>
                             <label>admin_security_title_ipranges</label>
                             <description>admin_security_title_ipranges_description</description>
                             <module>admin</module>
@@ -148,6 +168,7 @@
                             <action>index</action>
                             <pages>
                                 <show>
+                                    <type>mvc</type>
                                     <label>admin_iprange_show</label>
                                     <module>admin</module>
                                     <controller>iprange</controller>
@@ -155,6 +176,7 @@
                                 </show>
 
                                 <new>
+                                    <type>mvc</type>
                                     <label>admin_iprange_new</label>
                                     <module>admin</module>
                                     <controller>iprange</controller>
@@ -162,6 +184,7 @@
                                 </new>
 
                                 <create>
+                                    <type>mvc</type>
                                     <label>admin_iprange_new</label>
                                     <module>admin</module>
                                     <controller>iprange</controller>
@@ -169,6 +192,7 @@
                                 </create>
 
                                 <edit>
+                                    <type>mvc</type>
                                     <label>admin_iprange_edit</label>
                                     <module>admin</module>
                                     <controller>iprange</controller>
@@ -176,6 +200,7 @@
                                 </edit>
 
                                 <update>
+                                    <type>mvc</type>
                                     <label>admin_iprange_edit</label>
                                     <module>admin</module>
                                     <controller>iprange</controller>
@@ -183,14 +208,11 @@
                                 </update>
                             </pages>
                         </ipranges>
-
-                        
                     </pages>
                 </security>
 
-                
-
                 <licence>
+                    <type>mvc</type>
                     <label>admin_title_licence</label>
                     <description>admin_title_licence_description</description>
                     <module>admin</module>
@@ -198,6 +220,7 @@
                     <action>index</action>
                     <pages>
                         <show>
+                            <type>mvc</type>
                             <label>admin_licence_show</label>
                             <module>admin</module>
                             <controller>licence</controller>
@@ -205,6 +228,7 @@
                         </show>
 
                         <new>
+                            <type>mvc</type>
                             <label>admin_licence_new</label>
                             <module>admin</module>
                             <controller>licence</controller>
@@ -212,6 +236,7 @@
                         </new>
 
                         <create>
+                            <type>mvc</type>
                             <label>admin_licence_new</label>
                             <module>admin</module>
                             <controller>licence</controller>
@@ -219,6 +244,7 @@
                         </create>
 
                         <edit>
+                            <type>mvc</type>
                             <label>admin_licence_edit</label>
                             <module>admin</module>
                             <controller>licence</controller>
@@ -226,6 +252,7 @@
                         </edit>
 
                         <update>
+                            <type>mvc</type>
                             <label>admin_licence_edit</label>
                             <module>admin</module>
                             <controller>licence</controller>
@@ -235,6 +262,7 @@
                 </licence>
 
                 <collections>
+                    <type>mvc</type>
                     <label>admin_title_collections</label>
                     <description>admin_title_collections_description</description>
                     <module>admin</module>
@@ -243,6 +271,7 @@
                 </collections>
 
                 <languages>
+                    <type>mvc</type>
                     <label>admin_title_languages</label>
                     <description>admin_title_languages_description</description>
                     <module>admin</module>
@@ -250,6 +279,7 @@
                     <action>index</action>
                     <pages>
                         <show>
+                            <type>mvc</type>
                             <label>admin_language_show</label>
                             <module>admin</module>
                             <controller>language</controller>
@@ -257,6 +287,7 @@
                         </show>
 
                         <new>
+                            <type>mvc</type>
                             <label>admin_language_new</label>
                             <module>admin</module>
                             <controller>language</controller>
@@ -264,6 +295,7 @@
                         </new>
 
                         <create>
+                            <type>mvc</type>
                             <label>admin_language_new</label>
                             <module>admin</module>
                             <controller>language</controller>
@@ -271,6 +303,7 @@
                         </create>
 
                         <edit>
+                            <type>mvc</type>
                             <label>admin_language_edit</label>
                             <module>admin</module>
                             <controller>language</controller>
@@ -278,6 +311,7 @@
                         </edit>
 
                         <update>
+                            <type>mvc</type>
                             <label>admin_language_edit</label>
                             <module>admin</module>
                             <controller>language</controller>
@@ -287,6 +321,7 @@
                 </languages>
 
                 <statistic>
+                    <type>mvc</type>
                     <label>admin_title_statistic</label>
                     <description>admin_title_statistic_description</description>
                     <module>admin</module>
@@ -294,6 +329,7 @@
                     <action>index</action>
                     <pages>
                         <show>
+                            <type>mvc</type>
                             <label>admin_statistic_show</label>
                             <module>admin</module>
                             <controller>statistic</controller>
@@ -303,6 +339,7 @@
                 </statistic>
 
                 <oailink>
+                    <type>mvc</type>
                     <label>admin_title_oailink</label>
                     <description>admin_title_oailink_description</description>
                     <module>admin</module>
@@ -311,6 +348,7 @@
                 </oailink>
 
                 <dnbInstitute>
+                    <type>mvc</type>
                     <label>admin_title_dnbinstitute</label>
                     <description>admin_title_dnbinstitute_description</description>
                     <module>admin</module>
@@ -318,6 +356,7 @@
                     <action>index</action>
                     <pages>
                         <show>
+                            <type>mvc</type>
                             <label>admin_dnbinstitute_show</label>
                             <module>admin</module>
                             <controller>dnbinstitute</controller>
@@ -325,6 +364,7 @@
                         </show>
 
                         <new>
+                            <type>mvc</type>
                             <label>admin_dnbinstitute_new</label>
                             <module>admin</module>
                             <controller>dnbinstitute</controller>
@@ -332,6 +372,7 @@
                         </new>
 
                         <create>
+                            <type>mvc</type>
                             <label>admin_dnbinstitute_new</label>
                             <module>admin</module>
                             <controller>dnbinstitute</controller>
@@ -339,6 +380,7 @@
                         </create>
 
                         <edit>
+                            <type>mvc</type>
                             <label>admin_dnbinstitute_edit</label>
                             <module>admin</module>
                             <controller>dnbinstitute</controller>

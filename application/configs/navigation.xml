@@ -3,6 +3,7 @@
 <configdata>
     <nav>
         <home>
+            <type>mvc</type>
             <label>home_menu_label</label>
             <module>home</module>
             <controller>index</controller>
@@ -11,6 +12,7 @@
         </home>
 
         <search>
+            <type>mvc</type>
             <label>search_menu_label</label>
             <module>solrsearch</module>
             <controller>index</controller>
@@ -20,6 +22,7 @@
         </search>
 
         <browsing>
+            <type>mvc</type>
             <label>browsing_menu_label</label>
             <module>solrsearch</module>
             <controller>browse</controller>
@@ -29,6 +32,7 @@
         </browsing>
 
         <publish>
+            <type>mvc</type>
             <label>publish_menu_label</label>
             <module>publish</module>
             <controller>index</controller>
@@ -38,6 +42,7 @@
         </publish>
 
         <review>
+            <type>mvc</type>
             <label>review_menu_label</label>
             <module>review</module>
             <controller>index</controller>
@@ -45,6 +50,7 @@
         </review>
 
         <administration>
+            <type>mvc</type>
             <label>admin_menu_label</label>
             <module>admin</module>
             <controller>index</controller>
@@ -52,6 +58,7 @@
         </administration>
 
         <help>
+            <type>mvc</type>
             <label>help_menu_label</label>
             <module>home</module>
             <controller>index</controller>
