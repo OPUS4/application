@@ -35,17 +35,35 @@ class Admin_Form_FileAccess extends Admin_Form_RolesAbstract {
 
     protected $roleGroupLegendKey = 'admin_filemanager_legend_fileroles';
 
-    public function __construct($fileId) {
+    private $fileId;
 
+    private $file;
+
+    public function __construct($fileId) {
+        $this->fileId = $fileId;
+        $this->file = new Opus_File($this->fileId);
         parent::__construct();
     }
 
     public function init() {
         parent::init();
 
-        $file = $this->createElement('hidden', 'FileObject');
+        $translate = Zend_Registry::get('Zend_Translate');
 
+        $file = $this->createElement('hidden', 'FileObject');
         $this->addElement($file);
+
+        $frontdoorCheckbox =
+                $this->createElement('checkbox', 'visibleInFrontdoor')
+                     ->setLabel('admin_filemanager_label_visibleinfrontdoor');
+        $frontdoorCheckbox->setValue($this->file->getVisibleInFrontdoor());
+        $this->addElement($frontdoorCheckbox);
+
+
+        $oaiCheckbox = $this->createElement('checkbox', 'visibleInOai')
+                            ->setLabel('admin_filemanager_label_visibleinoai');
+        $oaiCheckbox->setValue($this->file->getVisibleInOai());
+        $this->addElement($oaiCheckbox);
 
         $submit = $this->createElement('submit', 'accesssubmit');
         $submit->setLabel('Save');

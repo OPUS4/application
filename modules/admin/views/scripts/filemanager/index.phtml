@@ -40,12 +40,16 @@
 
 <div class="adminContainer">
 
-    <div class="breadcrumbsContainer">
-        <?= $this->navigation()->breadcrumbs() ?>
+    <div class="breadcrumbsContainer" style="font-size: medium">
+        <?= $this->navigation()->breadcrumbs()
+                 ->setMaxDepth(1)
+                 ->setMinDepth(0)
+                 ->setLinkLast(true) ?>
+        &gt;
+        <a href="<?= $this->document->getUrlEdit() ?>"><?= $this->translate('admin_documents_edit', $this->document->getDocId()) ?></a>
+        &gt;
+        <?= $this->translate('admin_filemanager_index') ?>
     </div>
-
-<a href="<?= $this->editUrl ?>"><?= $this->translate('admin_documents_edit'); ?></a>
-
 
 <div style="padding: 1em; margin-left: 2em">
     <div>
