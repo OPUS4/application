@@ -109,7 +109,7 @@ class Frontdoor_Form_ToauthorForm extends Zend_Form
         $message->setLabel('frontdoor_messagetext');
 
         $captcha = new Zend_Form_Element_Captcha('foo', array(
-            'label' => 'Please verify you are human.',
+            'label' => 'label_captcha',
             'captcha' => array(
                 'captcha' => 'Figlet',
                 'wordLen' => 6,

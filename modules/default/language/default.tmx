@@ -600,5 +600,14 @@
       </tuv>
     </tu>
 
+    <tu tuid="label_captcha">
+      <tuv xml:lang="en">
+        <seg>Please enter the following characters to verify your are not a robot.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte geben Sie die folgende Zeichenfolge ein.</seg>
+      </tuv>
+    </tu>
+
     </body>
 </tmx>

@@ -28,5 +28,15 @@ Ein neues Dokument ist veröffentlicht worden.
                 </seg>
             </tuv>
         </tu>
+
+        <tu tuid="mail_toauthor_subject">
+          <tuv xml:lang="en">
+            <seg>Request about your OPUS document</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Anfrage für Ihr OPUS-Dokument</seg>
+          </tuv>
+        </tu>
+
     </body>
 </tmx>

@@ -190,7 +190,7 @@ class Frontdoor_MailController extends Zend_Controller_Action {
             if (true === $form->isValid($data)) {
                 $from = $form->getValue('sender_mail');
                 $fromName = $form->getValue('sender');
-                $subject = $this->view->translate('frontdoor_sendmailsubject');
+                $subject = $this->view->translate('mail_toauthor_subject');
                 $bodyText = $form->getValue('message');
 
                 $checkBoxResult = $form->getValue('authors');
