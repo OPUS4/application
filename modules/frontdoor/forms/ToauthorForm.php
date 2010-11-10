@@ -108,11 +108,19 @@ class Frontdoor_Form_ToauthorForm extends Zend_Form
         $message->setRequired(true);
         $message->setLabel('frontdoor_messagetext');
 
+        $captcha = new Zend_Form_Element_Captcha('foo', array(
+            'label' => 'Please verify you are human.',
+            'captcha' => array(
+                'captcha' => 'Figlet',
+                'wordLen' => 6,
+                'timeout' => 300,
+            )));
+
         $submit = new Zend_Form_Element_Submit('frontdoor_send_mailtoauthor');
         $submit->setLabel('frontdoor_send_mailtoauthor');
 
         // Add elements to form:
-        $this->addElements(array($sender, $sender_mail, $message, $submit));
+        $this->addElements(array($sender, $sender_mail, $message, $captcha, $submit));
     }
 
     public function setAuthors($authors) {
