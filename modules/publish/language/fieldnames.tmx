@@ -2264,6 +2264,16 @@
         <seg>Daten abspeichern</seg>
       </tuv>
     </tu>
+
+    <tu tuid="EnrichmentNeuesFeld">
+      <tuv xml:lang="en">
+        <seg>A new self defined field</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Ein neues selbst definiertes Feld</seg>
+      </tuv>
+    </tu>
+
   </body>
   
 </tmx>
