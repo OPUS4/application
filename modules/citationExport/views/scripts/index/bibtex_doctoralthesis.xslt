@@ -52,6 +52,8 @@
 
     <xsl:output method="text" omit-xml-declaration="yes" />
 
+    <xsl:include href="bibtex_output.xslt" />
+
     <xsl:template match="/">
       <xsl:apply-templates select="Opus/Opus_Model_Filter" />
     </xsl:template>
@@ -157,7 +159,7 @@
       <xsl:param name="type" required="yes" />
       <xsl:choose>
           <xsl:when test="$type='author'">
-            <xsl:value-of select="concat(@LastName, ', ', @FirstName)" />
+            <xsl:value-of select="concat(@FirstName, ' ', @LastName)" />
             <xsl:choose>
                 <xsl:when test="position()=last()">
                     <xsl:text></xsl:text>
@@ -193,20 +195,4 @@
       </xsl:choose>
     </xsl:template>
 
-    <!-- output field and value -->
-    <xsl:template name="outputFieldValue">
-        <xsl:param name="field" required="yes" />
-        <xsl:param name="value" required="yes" />
-        <xsl:param name="delimiter" required="no" />
-        <xsl:if test="string-length($field)>0">
-            <xsl:if test="string-length($value)>0">
-<xsl:text>  </xsl:text><xsl:value-of select="$field" /><xsl:text> = "</xsl:text><xsl:value-of select="$value" /><xsl:text>"</xsl:text>
-	  <xsl:if test="string-length($delimiter)>0">
-		<xsl:value-of select="$delimiter" />
-	  </xsl:if>
-<xsl:text>
-</xsl:text>
-            </xsl:if>
-        </xsl:if>
-    </xsl:template>
 </xsl:stylesheet>
