@@ -377,5 +377,14 @@
             <seg>Sammlungseintrag auswählen</seg>
         </tuv>
     </tu>
+
+    <tu tuid="button_label_choose_parentcollection">
+        <tuv xml:lang="en">
+            <seg>Go back to parent collection</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Zurück zur Eltern-Sammlung gehen</seg>
+        </tuv>
+    </tu>
     </body>
 </tmx>
