@@ -91,7 +91,7 @@
                     <?= ($count < $authorsCount) ? '; ' : ': '?>
                 <?PHP endforeach; ?>
                 <span class="title"><a href="<?=$document->getUrlShow() ?>"><?= $document->getDocTitle() ?></a></span>
-                (<span class="pubDate"><?= $document->getDate() ?></span>)
+                (<span class="pubDate"><?= $document->getYear() ?></span>)
             </td>
             <td class="doctype">
                 <span class="doctype"><?= $document->getDocType() ?></span>

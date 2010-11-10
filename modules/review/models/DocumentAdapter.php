@@ -176,8 +176,18 @@ class Review_Model_DocumentAdapter {
             $date = $this->getPublishedDate();
         }
         if (empty($date)) {
-            $date = "[unknown]";
+            $date = '[unknown]';
         }
+        return $date;
+    }
+
+    public function getYear() {
+        $date = $this->getDate();
+
+        if ($date instanceof Opus_Date) {
+            $date = $date->getYear();
+        }
+
         return $date;
     }
 
