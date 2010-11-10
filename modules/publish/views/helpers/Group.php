@@ -53,13 +53,13 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
     public function group($value, $options = null, $name = null) {
         $this->session = new Zend_Session_Namespace('Publish');
         $this->log = Zend_Registry::get('Zend_Log');
-        $this->session->elementCount = $this->session->elementCount + 1;        
+        $this->session->elementCount = $this->session->elementCount + 1;
 
         if ($name == null && $value == null) {
             $error_message = $this->view->translate('template_error_unknown_field');
             return "<br/><div style='width: 400px; color:red;'>" . $error_message . "</div><br/><br/>";
         }
-        else {            
+        else {
             $result = $this->_renderGroup($value, $options, $name);
             return $result;
         }
@@ -74,11 +74,11 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
         $disable = false;
         if (isset($group)) {
             if ($this->session->currentAnchor === $group['Name'])
-                    $fieldset .= "<a name='current'></a>";
-            $fieldset .= "<fieldset class='left-labels' id='". $group['Name'] ."' />\n";
+                $fieldset .= "<a name='current'></a>";
+            $fieldset .= "<fieldset class='left-labels' id='" . $group['Name'] . "' />\n";
             $fieldset .= "<legend>" . $this->view->translate($group['Name']) . "</legend>\n\t";
             $fieldset .= "<div class='description hint'><p>" . $this->_getGroupHint($group['Name']) . "</div></p>";
-           // $fieldset .= "\n<div class='form-multiple odd'>";
+            // $fieldset .= "\n<div class='form-multiple odd'>";
 
             $i = 0;
             //show fields
@@ -86,19 +86,20 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
 
                 //show other div in case intial field number is extended
                 $groupCount = 'num' . $group['Name'];
-                $j = $i / $this->session->$groupCount;                
-                if (fmod($j, 2) == 1)
+                if ($this->session->$groupCount !== 0) {
+                    $j = $i / $this->session->$groupCount;
+                    if (fmod($j, 2) == 1)
                         $fieldset .= "<div class='form-multiple even'>";
-                else
+                    else
                     if (fmod($j, 2) == 0)
-                            $fieldset .= "<div class='form-multiple odd'>";
-
+                        $fieldset .= "<div class='form-multiple odd'>";
+                }
                 $fieldset .= "\n<div class='form-item'>\n";
                 $fieldset .= "<label for='" . $field["id"] . "'>" . $field["label"];
                 if ($field["req"] === 'required')
                     $fieldset .= $this->_getRequiredSign();
                 $fieldset .= "</label>";
-               
+
                 switch ($field['type']) {
                     case "Zend_Form_Element_Text":
                         $fieldset .= "\n\t\t\t\t<input type='text' class='form-textfield' name='" . $field["id"] . "' id='" . $field["id"] . "' ";
@@ -115,7 +116,7 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                         if (strstr($field["id"], "1"))
                             $fieldset .= " title='" . $this->view->translate($field["hint"]) . "' ";
                         $fieldset .= " value='" . $field["value"] . "' />\n</div>";
-                        
+
                         break;
 
                     case "Zend_Form_Element_Textarea":
@@ -129,7 +130,7 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                             $fieldset .= " title='" . $this->view->translate($field["hint"]) . "' ";
 
                         $fieldset .= " id='" . $field["id"] . "'>" . $field["value"] . "</textarea></div>";
-                        
+
                         break;
 
                     case "Zend_Form_Element_Select" :
@@ -149,15 +150,15 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                         }
                         $fieldset .= "</select>\n</div>";
 
-                         if (isset($field["desc"]))
+                        if (isset($field["desc"]))
                             $fieldset .= "<div class='description hint'>" . $this->view->translate($field["desc"]) . "</div>";
 
                         break;
 
                     case 'Zend_Form_Element_Checkbox' :
                         $fieldset .= "<input type='hidden' name='" . $field['id'] . "' value='0' />";
-                        $fieldset .= "\n\t\t\t\t<input type='checkbox' class='form-checkbox' name='" . $field['id'] . "' id='". $field['id'] ."' ";
-                        $fieldset .= "title='". $this->view->translate($field['hint']) ."' value='". $field['value'] ."' ";
+                        $fieldset .= "\n\t\t\t\t<input type='checkbox' class='form-checkbox' name='" . $field['id'] . "' id='" . $field['id'] . "' ";
+                        $fieldset .= "title='" . $this->view->translate($field['hint']) . "' value='" . $field['value'] . "' ";
                         if ($field['value'] === '1')
                             $fieldset .= " checked='checked' />";
                         else
@@ -165,18 +166,18 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                         $fieldset .= "\n</div>";
                         break;
 
-                        
+
                     default:
                         throw new Application_Exception("Field Type {$field['type']} not found in View Helper.");
                 }
-                
+
                 if (isset($field["error"])) {
-                    $fieldset .= "<div class='form-errors'><ul>";                                        
-                    foreach ($field["error"] AS $err)                        
+                    $fieldset .= "<div class='form-errors'><ul>";
+                    foreach ($field["error"] AS $err)
                         $fieldset .= "<li>" . $err . "</li>";
                     $fieldset .= "</ul></div>";
                 }
-               
+
                 $i++;
             }
             $fieldset .= "</div>";
@@ -184,13 +185,13 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
             //show buttons
             $fieldset .= "\n\t\t\t\t<div class='button-wrapper add-delete-wrapper'>";
             foreach ($group["Buttons"] AS $button) {
-                if (!$disable) {                    
+                if (!$disable) {
                     $fieldset .= "<input type='submit' ";
                     if (strstr($button['id'], 'add') !== false)
-                            $fieldset .= "class='form-button add-button' ";
+                        $fieldset .= "class='form-button add-button' ";
                     else {
                         if (strstr($button['id'], 'delete') !== false)
-                                $fieldset .= "class='form-button delete-button' ";
+                            $fieldset .= "class='form-button delete-button' ";
                     }
 
                     $fieldset .= "name='" . $button["id"] . "' id='" . $button["id"] . "' value='" . $button["label"] . "' />";
@@ -201,7 +202,7 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
             foreach ($group["Hiddens"] AS $hidden) {
                 $fieldset .= "\n<input type='hidden' name='" . $hidden["id"] . "' id='" . $hidden["id"] . "' value='" . $hidden["value"] . "' />";
             }
-            
+
             $fieldset .= "\n\n</fieldset>\n\n";
         }
         return $fieldset;
