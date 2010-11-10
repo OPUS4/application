@@ -78,7 +78,7 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
             $fieldset .= "<fieldset class='left-labels' id='". $group['Name'] ."' />\n";
             $fieldset .= "<legend>" . $this->view->translate($group['Name']) . "</legend>\n\t";
             $fieldset .= "<div class='description hint'><p>" . $this->_getGroupHint($group['Name']) . "</div></p>";
-            $fieldset .= "\n<div class='form-multiple odd'>";
+           // $fieldset .= "\n<div class='form-multiple odd'>";
 
             $i = 0;
             //show fields
@@ -88,10 +88,10 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                 $groupCount = 'num' . $group['Name'];
                 $j = $i / $this->session->$groupCount;                
                 if (fmod($j, 2) == 1)
-                        $fieldset .= "</div><div class='form-multiple even'>";
+                        $fieldset .= "<div class='form-multiple even'>";
                 else
                     if (fmod($j, 2) == 0)
-                            $fieldset .= "</div><div class='form-multiple odd'>";
+                            $fieldset .= "<div class='form-multiple odd'>";
 
                 $fieldset .= "\n<div class='form-item'>\n";
                 $fieldset .= "<label for='" . $field["id"] . "'>" . $field["label"];

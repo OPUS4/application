@@ -65,24 +65,18 @@ class Publish_Model_DisplayGroup {
         for ($i = $minNum; $i <= $maxNum; $i++) {
             foreach ($this->elements as $element) {
                 $elem = clone $element;
-                $elem->setName($element->getName() . $i);                
+                $elem->setName($element->getName() . $i);
                 $this->form->addElement($elem);
-                $displayGroup[] = $elem->getName();
+                $displayGroup[] = $elem->getName();                
             }
         }
 
-        $number = count($displayGroup);
+        $number = count($displayGroup);        
         $groupCount = "num" . $this->label;
-        if (!isset($this->session->$groupCount)) {
-                $this->session->$groupCount = $number;
-                $this->log->debug("initial field number = " . $this->session->$groupCount . " for group " . $this->label);
-        }
-        else {
-            if ($number < $this->session->$groupCount)
-                    $this->session->$groupCount = $number;
-            $this->log->debug("initial field number = " . $this->session->$groupCount . " for group " . $this->label);
-        }
-        
+
+        if ($number < $this->session->$groupCount)
+            $this->session->$groupCount = $number;
+
         $this->session->additionalFields[$this->elementName] = $this->maxNumber();
         if ($this->maxNumber() < (int) $this->multiplicity || $this->multiplicity === '*') {
             $addButton = $this->addAddButtontoGroup();
@@ -97,17 +91,16 @@ class Publish_Model_DisplayGroup {
         }
 
         $this->elements = $displayGroup;
-
     }
 
     private function maxNumber() {
         $maxNumber = 1;
-        if (isset($this->additionalFields)) {            
-            if (array_key_exists($this->elementName, $this->additionalFields)) {                
+        if (isset($this->additionalFields)) {
+            if (array_key_exists($this->elementName, $this->additionalFields)) {
                 $maxNumber = (int) $this->additionalFields[$this->elementName];
                 //$this->log->debug("maxNumber(): key " . $this->elementName . " exists, maxnumberr = " . $maxNumber);
             }
-        }        
+        }
         return $maxNumber;
     }
 

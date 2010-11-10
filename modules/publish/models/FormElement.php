@@ -77,8 +77,9 @@ class Publish_Model_FormElement {
         $this->datatype = $datatype;
         $this->multiplicity = $multiplicity;
 
-        if (isset($this->datatype))
+        if (isset($this->datatype)) 
             $this->initValidation();
+        
     }
 
     private function initValidation() {

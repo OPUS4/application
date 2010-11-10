@@ -58,9 +58,7 @@ class Publish_Model_Validation {
 
     public function validate() {
 
-        $this->_datatypeValidation();
-
-        //$this->_extendedValidation();
+        $this->_datatypeValidation();       
     }
 
     private function _datatypeValidation() {
@@ -73,6 +71,9 @@ class Publish_Model_Validation {
                 break;
 
             case 'Email' : $this->validator = $this->_validateEmail();
+                break;
+
+            case 'Enrichment' : $this->validator = null;
                 break;
 
             case 'Integer': $this->validator = $this->_validateInteger();

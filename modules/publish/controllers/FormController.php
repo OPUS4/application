@@ -171,12 +171,12 @@ class Publish_FormController extends Controller_Action {
                 $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
 
                 if (!$form->isValid($this->getRequest()->getPost())) {
-                    
+
                     $this->_setSecondFormViewVariables($form);
                     //error case, and redirect to form, show errors
                     $this->view->form = $form;
                     $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
-                    
+
 
                     return $this->render($this->session->documentType);
                 }
@@ -237,7 +237,6 @@ class Publish_FormController extends Controller_Action {
 
             //build group name
             $groupName = self::GROUP . $name;
-
             $this->view->$name = $this->view->translate($name);
 
             //get the display group for the current element and build the complete group
@@ -251,8 +250,17 @@ class Publish_FormController extends Controller_Action {
 
             //single field name (for calling with helper class)
             $elementAttributes = $form->getElementAttributes($currentElement); //array
-            $this->view->$currentElement = $elementAttributes;
-            $this->viewElementsCount++;
+
+            if (strstr($currentElement, 'Enrichment')) {
+                $name = str_replace('Enrichment', '', $currentElement);
+                $this->view->$name = $elementAttributes;
+                $this->viewElementsCount++;
+            }
+
+            else {
+                $this->view->$currentElement = $elementAttributes;
+                $this->viewElementsCount++;
+            }
 
             $label = $currentElement . self::LABEL;
             $this->view->$label = $this->view->translate($form->getElement($currentElement)->getLabel());

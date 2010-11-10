@@ -92,9 +92,7 @@ class Publish_Model_DocumenttypeParser {
             $group = $this->currentElement->initGroup();
 
             $this->formElements[] = $group;
-
-            //$this->_parseValidation($field);
-
+            
             if (!isset($group)) {
                 $element = $this->currentElement->transform();
                 $this->formElements[] = $element;
@@ -135,6 +133,9 @@ class Publish_Model_DocumenttypeParser {
             $datatype = $field->getAttribute('datatype');
             $multiplicity = $field->getAttribute('multiplicity');
 
+            if ($datatype === 'Enrichment')
+                $elementName = 'Enrichment' . $elementName;
+            
             $this->currentElement->setElementName($elementName);
             if ($required === 'yes')
                 $this->currentElement->setRequired(true);

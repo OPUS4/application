@@ -114,23 +114,37 @@ class Publish_Model_Deposit {
      * @return <String> Type or ""
      */
     private function _getDatasetType($dataKey, $dataValue) {
-        if (strstr($dataKey, "Person"))
-            return "Person";
-        else if (strstr($dataKey, "Title"))
-            return "Title";
-        else if (strstr($dataKey, "Subject"))
-            return "Subject";
-        else if (strstr($dataKey, "Note"))
-            return "Note";
-        else if (strstr($dataKey, "Project") || strstr($dataKey, "Institute") || strstr($dataKey, "Collection"))
-            return "Collection";
-        else if (strstr($dataKey, "Licence"))
-            return "Licence";
+        if (strstr($dataKey, 'Person'))
+            return 'Person';
+        else if (strstr($dataKey, 'Title'))
+            return 'Title';
+        else if (strstr($dataKey, 'Subject'))
+            return 'Subject';
+        else if (strstr($dataKey, 'Note'))
+            return 'Note';
+        else if (strstr($dataKey, 'Project') || strstr($dataKey, 'Institute') || strstr($dataKey, 'Collection'))
+            return 'Collection';
+        else if (strstr($dataKey, 'Licence'))
+            return 'Licence';
         else if (strstr($dataKey, 'ThesisGrantor') || strstr($dataKey, 'ThesisPublisher'))
-            return "Thesis";
+            return 'Thesis';
+        else if (strstr($dataKey, 'Identifier'))
+            return 'Identifier';
+        else if (strstr($dataKey, 'Reference'))
+            return 'Reference';
+        else if (strstr($dataKey, 'Patent'))
+            return 'Patent';
+        else if (strstr($dataKey, 'Enrichment'))
+            return 'Enrichment';
+
         return "";
     }
 
+    /**
+     * Method to retrieve the last character of an data key. If that is a number, it is a counter.
+     * @param <String> $dataKey
+     * @return <String> last character
+     */
     private function getCounter($dataKey) {
         //always on last position
         return (substr($dataKey, -1, 1));
@@ -142,7 +156,12 @@ class Publish_Model_Deposit {
             return substr($dataKey, 0, $pos);
     }
 
-    private function _preparePersonObject($dataKey = null, $dataValue = null) {        
+    /**
+     * Methode to prepare a person object for saving in database.
+     * @param <type> $dataKey
+     * @param <type> $dataValue
+     */
+    private function _preparePersonObject($dataKey = null, $dataValue = null) {
         //String can be changed here
         $first = "FirstName";
         $last = "LastName";
@@ -151,7 +170,6 @@ class Publish_Model_Deposit {
         $birthdate = "DateOfBirth";
         $academic = "AcademicTitle";
         $allowEmail = "AllowEmailContact";
-
 
         if (strstr($dataKey, $first))
             $type = $this->getObjectType($dataKey, $first);
@@ -166,180 +184,69 @@ class Publish_Model_Deposit {
             $this->log->debug("counter: " . $counter);
 
             if ($this->documentData[$type . $last . $counter] !== "") {
-    
+
                 $addFunction = 'add' . $type;
                 $person = $this->document->$addFunction(new Opus_Person());
 
-                // person model
-                $this->storeFirstName($person, $type, $first, $counter);
-                $this->storeLastName($person, $type, $last, $counter);
-                $this->storeEmail($person, $type, $email, $counter);
-                $this->storePlaceOfBirth($person, $type, $birthplace, $counter);
-                $this->storeAcademicTitle($person, $type, $academic, $counter);
-                $this->storeDateOfBirth($person, $type, $birthdate, $counter);
+                // person model                
+                $this->storePersonAttribute($person, $type, $first, 'first', $counter);
+                $this->storePersonAttribute($person, $type, $last, 'last', $counter);
+                $this->storePersonAttribute($person, $type, $email, 'email', $counter);
+                $this->storePersonAttribute($person, $type, $birthplace, 'pob', $counter);
+                $this->storePersonAttribute($person, $type, $academic, 'title', $counter);
+                $this->storePersonAttribute($person, $type, $birthdate, 'dob', $counter);
 
-                // link-person-model
-                $this->storeEmailCheckbox($person, $type, $allowEmail, $counter);
+                // link-person-model                
+                $this->storePersonAttribute($person, $type, $allowEmail, 'check', $counter);
 
                 $this->log->debug("person stored");
             }
         }
     }
 
-    private function storeFirstName($person, $type, $first, $counter) {
-        if ($counter >= 1) {
-            if (isset($this->documentData[$type . $first . $counter])) {
-                $entry = $this->documentData[$type . $first . $counter];
-                if ($entry !== "") {
-                    $this->log->debug("Value: " . $entry);
-                    $person->setFirstName($entry);
-                    $this->documentData[$type . $first . $counter] = "";
-                }
-            }
+    /**
+     * Method stores attributes like name or email for a given person object.
+     * @param <Opus_Person> $person - given person object
+     * @param <String> $personType - type of person (editor, author etc.)
+     * @param <String> $attribute - the value to store
+     * @param <String> $attributeType - type of attribute (first name, email etc.)
+     * @param <Int> $counter - number in case of more than one person per type
+     */
+    private function storePersonAttribute($person, $personType, $attribute, $attributeType, $counter) {
+        $entry = "";
+        if (isset($this->documentData[$personType . $attribute . $counter])) {
+            $entry = $this->documentData[$personType . $attribute . $counter];
         }
         else {
-            if (isset($this->documentData[$type . $first])) {
-                $entry = $this->documentData[$type . $first];
-                $person->setFirstName($entry);
-                $this->documentData[$type . $first] = "";
+            if (isset($this->documentData[$personType . $attribute])) {
+                $entry = $this->documentData[$personType . $attribute];
             }
         }
-    }
 
-    private function storeLastName($person, $type, $last, $counter) {
-        if ($counter >= 1) {
-            if (isset($this->documentData[$type . $last . $counter])) {
-                $entry = $this->documentData[$type . $last . $counter];
-                if ($entry !== "") {
-                    $person->setLastName($entry);
-                    $this->log->debug("Value: " . $entry);
-                    $this->documentData[$type . $last . $counter] = "";
-                }
+        if ($entry !== "") {
+            $this->log->debug("Value: " . $entry);
+            switch ($attributeType) {
+                case 'first' : $person->setFirstName($entry);
+                    break;
+                case 'last' : $person->setLastName($entry);
+                    break;
+                case 'email' : $person->setEmail($entry);
+                    break;
+                case 'pob' : $person->setPlaceOfBirth($entry);
+                    break;
+                case 'title' : $person->setAcademicTitle($entry);
+                    break;
+                case 'dob' : $person->setDateOfBirth($entry);
+                    break;
+                case 'check' : $person->setAllowEmailContact($entry);
+                    break;
             }
-        }
-        else {
-            if (isset($this->documentData[$type . $last])) {
-                $entry = $this->documentData[$type . $last];
-                $person->setLastName($entry);
-                $this->documentData[$type . $last] = "";
-            }
-        }
-    }
 
-    private function storeEmail($person, $type, $email, $counter) {
-        if ($counter >= 1) {
-            if (isset($this->documentData[$type . $email . $counter])) {
-                $entry = $this->documentData[$type . $email . $counter];
-                if ($entry !== "") {
-                    $this->log->debug("Value: " . $entry);
-                    $person->setEmail($entry);
-                    $this->documentData[$type . $email . $counter] = "";
-                }
-            }
-        }
-        else {
-            if (isset($this->documentData[$type . $email])) {
-                $entry = $this->documentData[$type . $email];
-                if ($entry !== "") {
-                    $this->log->debug("Value: " . $entry);
-                    $person->setEmail($entry);
-                    $this->documentData[$type . $email] = "";
-                }
-            }
-        }
-    }
+            if ($counter >= '1')
+                $this->documentData[$personType . $attribute . $counter] = "";
 
-    private function storeEmailCheckbox($person, $type, $checkbox, $counter) {
-        if ($counter >= 1) {
-            if (isset($this->documentData[$type . $checkbox . $counter])) {
-                $entry = $this->documentData[$type . $checkbox . $counter];
-                if (!empty($entry)) {
-                    $this->log->debug("Value: " . $entry);
-                    $entry = (int) $entry;
-                    $person->setAllowEmailContact($entry);
-                    $this->documentData[$type . $checkbox . $counter] = "";
-                }
-            }
-        }
-        else {
-            if (isset($this->documentData[$type . $checkbox])) {
-                $entry = $this->documentData[$type . $checkbox];
-                if ($entry !== "") {
-                    $this->log->debug("Value: " . $entry);
-                    $entry = (int) $entry;
-                    $person->setEmail($entry);
-                    $this->documentData[$type . $checkbox] = "";
-                }
-            }
-        }
-    }
-
-    private function storePlaceOfBirth($person, $type, $birthplace, $counter) {
-        if ($counter >= 1) {
-            if (isset($this->documentData[$type . $birthplace . $counter])) {
-                $entry = $this->documentData[$type . $birthplace . $counter];
-                if ($entry !== "") {
-                    $this->log->debug("Value: " . $entry);
-                    $person->setPlaceOfBirth($entry);
-                    $this->documentData[$type . $birthplace . $counter] = "";
-                }
-            }
-        }
-        else {
-            if (isset($this->documentData[$type . $birthplace])) {
-                $entry = $this->documentData[$type . $birthplace];
-                if ($entry !== "") {
-                    $this->log->debug("Value: " . $entry);
-                    $person->setPlaceOfBirth($entry);
-                    $this->documentData[$type . $birthplace] = "";
-                }
-            }
-        }
-    }
-
-    private function storeDateOfBirth($person, $type, $birthdate, $counter) {
-        if ($counter >= 1) {
-            if (isset($this->documentData[$type . $birthdate . $counter])) {
-                $entry = $this->documentData[$type . $birthdate . $counter];
-                if ($entry !== "") {
-                    $this->log->debug("Value: " . $entry);
-                    $person->setDateOfBirth($entry);
-                    $this->documentData[$type . $birthdate . $counter] = "";
-                }
-            }
-        }
-        else {
-            if (isset($this->documentData[$type . $birthdate])) {
-                $entry = $this->documentData[$type . $birthdate];
-                if ($entry !== "") {
-                    $this->log->debug("Value: " . $entry);
-                    $person->setDateOfBirth($entry);
-                    $this->documentData[$type . $birthdate] = "";
-                }
-            }
-        }
-    }
-
-    private function storeAcademicTitle($person, $type, $academic, $counter) {
-        if ($counter >= 1) {
-            if (isset($this->documentData[$type . $academic . $counter])) {
-                $entry = $this->documentData[$type . $academic . $counter];
-                if ($entry !== "") {
-                    $this->log->debug("Value: " . $entry);
-                    $person->setAcademicTitle($entry);
-                    $this->documentData[$type . $academic . $counter] = "";
-                }
-            }
-        }
-        else {
-            if (isset($this->documentData[$type . $academic])) {
-                $entry = $this->documentData[$type . $academic];
-                if ($entry !== "") {
-                    $this->log->debug("Value: " . $entry);
-                    $person->setAcademicTitle($entry);
-                    $this->documentData[$type . $academic] = "";
-                }
-            }
+            else
+                $this->documentData[$personType . $attribute] = "";
         }
     }
 
@@ -560,9 +467,9 @@ class Publish_Model_Deposit {
                         $this->log->debug("Project array for referee, extended by " . $dataValue);
                     }
                 }
-                if (count($collArray) >=2) {
-                    $this->log->info("While trying to store " . $collectionRole . " as Collection, an error occurred. ".
-                        "The method fetchCollectionsByRoleNumber returned an array with > 1 values. The " . $collectionRole .
+                if (count($collArray) >= 2) {
+                    $this->log->info("While trying to store " . $collectionRole . " as Collection, an error occurred. " .
+                            "The method fetchCollectionsByRoleNumber returned an array with > 1 values. The " . $collectionRole .
                             " cannot be definitely assigned but was stored to the first entry.");
                 }
 //                else
@@ -625,6 +532,134 @@ class Publish_Model_Deposit {
         }
     }
 
+    private function _prepareIdentifierObject($dataKey, $dataValue) {
+        if ($dataValue == "") {
+            $this->log->debug("Identifier already stored.");
+        }
+        else {
+
+            $this->log->debug("try to store " . $dataKey . " with id: " . $dataValue);
+
+            $identifier = new Opus_Identifier();
+            $identifier->setValue($dataValue);
+            $addFunction = 'addIdentifier';
+
+            if (strstr($dataKey, 'Old')) {
+                $addFunction .= 'Old';
+            }
+            else if (strstr($dataKey, 'Serial')) {
+                $addFunction .= 'Serial';
+            }
+            else if (strstr($dataKey, 'Uuid')) {
+                $addFunction .= 'Uuid';
+            }
+            else if (strstr($dataKey, 'Isbn')) {
+                $addFunction .= 'Isbn';
+            }
+            else if (strstr($dataKey, 'Urn')) {
+                $addFunction .= 'Urn';
+            }
+            else if (strstr($dataKey, 'Doi')) {
+                $addFunction .= 'Doi';
+            }
+            else if (strstr($dataKey, 'Handle')) {
+                $addFunction .= 'Handle';
+            }
+            else if (strstr($dataKey, 'Url')) {
+                $addFunction .= 'Url';
+            }
+            else if (strstr($dataKey, 'Issn')) {
+                $addFunction .= 'Issn';
+            }
+            else if (strstr($dataKey, 'StdDoi')) {
+                $addFunction .= 'StdDoi';
+            }
+            else if (strstr($dataKey, 'CrisLink')) {
+                $addFunction .= 'CrisLink';
+            }
+            else if (strstr($dataKey, 'SplashUrl')) {
+                $addFunction .= 'SplashUrl';
+            }
+            else if (strstr($dataKey, 'Opus3')) {
+                $addFunction .= 'Opus3';
+            }
+            else if (strstr($dataKey, 'Opac')) {
+                $addFunction .= 'Opac';
+            }
+
+            $this->log->debug("addfunction: " . $addFunction);
+            $this->document->$addFunction($identifier);
+        }
+    }
+
+    private function _prepareReferenceObject($dataKey, $dataValue) {
+        //TODO: probably no valid storing possible because a label is missing
+        //a reference should be a new datatype with implicit fields value and label
+
+        if ($dataValue == "") {
+            $this->log->debug("Reference already stored.");
+        }
+        else {
+
+            $this->log->debug("try to store " . $dataKey . " with id: " . $dataValue);
+
+            $reference = new Opus_Reference();
+            $reference->setValue($dataValue);
+            $reference->setLabel("no Label given");
+            $addFunction = 'addReference';
+
+            if (strstr($dataKey, 'Isbn')) {
+                $addFunction .= 'Isbn';
+            }
+            else if (strstr($dataKey, 'Urn')) {
+                $addFunction .= 'Urn';
+            }
+            else if (strstr($dataKey, 'Doi')) {
+                $addFunction .= 'Doi';
+            }
+            else if (strstr($dataKey, 'Handle')) {
+                $addFunction .= 'Handle';
+            }
+            else if (strstr($dataKey, 'Url')) {
+                $addFunction .= 'Url';
+            }
+            else if (strstr($dataKey, 'Issn')) {
+                $addFunction .= 'Issn';
+            }
+            else if (strstr($dataKey, 'StdDoi')) {
+                $addFunction .= 'StdDoi';
+            }
+            else if (strstr($dataKey, 'CrisLink')) {
+                $addFunction .= 'CrisLink';
+            }
+            else if (strstr($dataKey, 'SplashUrl')) {
+                $addFunction .= 'SplashUrl';
+            }            
+
+            $this->log->debug("addfunction: " . $addFunction);
+            $this->document->$addFunction($reference);
+        }
+    }
+
+    private function _prepareEnrichmentObject($dataKey, $dataValue) {
+        if ($dataValue == "") {
+            $this->log->debug("Enrichment already stored.");
+        }
+        else {
+
+            $this->log->debug("try to store " . $dataKey . " with id: " . $dataValue);
+
+            $enrichment = new Opus_Enrichment();
+            $enrichment->setValue($dataValue);
+
+            $keyName = str_replace('Enrichment', '', $dataKey);
+            $enrichment->setKeyName($keyName);
+            $addFunction = 'addEnrichment';
+           
+            $this->log->debug("addfunction: " . $addFunction);
+            $this->document->$addFunction($enrichment);
+        }
+    }
 }
 
 ?>
