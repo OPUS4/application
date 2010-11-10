@@ -66,8 +66,7 @@
     <field name="PublisherPlace" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="PageFirst" required="no" formelement="Text" datatype="Integer" multiplicity="1"/>
     <field name="PageLast" required="no" formelement="Text" datatype="Integer" multiplicity="1"/>
-    <field name="PublishedDate" required="no" formelement="Text" datatype="Date" multiplicity="1"/>
-    <field name="SubjectDdc" required="no" formelement="Text" datatype="ddc" multiplicity="5"/>
+    <field name="PublishedDate" required="no" formelement="Text" datatype="Date" multiplicity="1"/>    
     <field name="SubjectUncontrolled" required="no" formelement="Text" datatype="Text" multiplicity="5"/>
     <field name="IdentifierUrn" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="Note" required="no" formelement="Textarea" datatype="Text" multiplicity="1" />

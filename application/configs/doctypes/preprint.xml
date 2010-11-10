@@ -63,8 +63,7 @@
     <field name="Licence" required="yes" formelement="Select" datatype="Licence" multiplicity="1" />
 
 <!-- unrequired fields -->
-    <field name="PageNumber" required="no" formelement="Text" datatype="Integer" multiplicity="1" />
-    <field name="SubjectDdc" required="no" formelement="Text" datatype="ddc" multiplicity="5"/>
+    <field name="PageNumber" required="no" formelement="Text" datatype="Integer" multiplicity="1" />    
     <field name="SubjectUncontrolled" required="no" formelement="Text" datatype="Text" multiplicity="5" />
     <field name="Institute" required="no" formelement="Select" datatype="Institute" multiplicity="1" />
     <field name="IdentifierUrn" required="no" formelement="Text" datatype="Text" multiplicity="1" />

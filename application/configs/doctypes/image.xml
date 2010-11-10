@@ -66,8 +66,7 @@
 <!-- unrequired fields -->
     <field name="PersonContributor" required="no" formelement="Text" datatype="Person" multiplicity="*"/>
     <field name="CreatingCorporation" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-    <field name="ContributingCorporation" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-    <field name="SubjectDdc" required="no" formelement="Text" datatype="ddc" multiplicity="5"/>
+    <field name="ContributingCorporation" required="no" formelement="Text" datatype="Text" multiplicity="1"/>   
     <field name="SubjectUncontrolled" required="no" formelement="Text" datatype="Text" multiplicity="5"/>
     <field name="Institute" required="no" formelement="Select" datatype="Institute" multiplicity="1"/>
     <field name="IdentifierUrn" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
