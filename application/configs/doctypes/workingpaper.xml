@@ -49,9 +49,7 @@
     </field>
 
     <field name="PersonAuthor" required="no" formelement="text" datatype="Person" multiplicity="*">
-        <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" >
-            <default value="Dr." edit="yes" public="yes"  />
-        </subfield>
+        <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" />   
         <subfield name="Email" required="no" formelement="text" datatype="Email" />
         <subfield name="AllowEmailContact" required="no" formelement="checkbox"  />
         <subfield name="DateOfBirth" required="no" formelement="text" datatype="Date" />

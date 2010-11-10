@@ -39,8 +39,8 @@
 	xsi:schemaLocation="http://schemas.opus.org/documenttype https://svn.zib.de/opus4dev/framework/trunk/library/Opus/Document/documenttype.xsd">
 	
     <field name="PersonSubmitter" required="yes" multiplicity="1" formelement="text" datatype="Person">
-		<subfield name="Email" required="yes" formelement="text" datatype="Email" />
-	</field>
+        <subfield name="Email" required="yes" formelement="text" datatype="Email" />
+    </field>
     <field name="Language" required="no" formelement="select" datatype="Language" multiplicity="1">
         <default value="deu" edit="yes" public="yes"/>
     </field>
@@ -73,6 +73,7 @@
     <field name="ContributingCorporation" required="no" formelement="text" datatype="Text" multiplicity="1"/>
     <field name="PublisherName" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="PublisherPlace" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
+    <field name="NeuesFeld" required="no" formelement="Text" datatype="Enrichment" multiplicity="1"/>
     <field name="PageNumber" required="no" formelement="Text" datatype="Integer" multiplicity="1"/>
     <field name="PageFirst" required="no" formelement="Text" datatype="Integer" multiplicity="1"/>
     <field name="PageLast" required="no" formelement="Text" datatype="Integer" multiplicity="1"/>
@@ -80,8 +81,8 @@
     <field name="SubjectUncontrolled" required="no" formelement="Text" datatype="Text" multiplicity="5"/>
     <field name="Volume" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="Issue" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-	<field name="Edition" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-    <field name="Institute" required="no" formelement="Select" datatype="Institute" multiplicity="1"/>    
+    <field name="Edition" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
+    <field name="Institute" required="no" formelement="Select" datatype="Institute" multiplicity="1"/>
     <field name="PublishedYear" required="no" formelement="Text" datatype="Year" multiplicity="1"/>
     <field name="PublishedDate" required="no" formelement="Text" datatype="Date" multiplicity="1"/>
     <field name="CompletedYear" required="no" formelement="Text" datatype="Year" multiplicity="1"/>
@@ -100,4 +101,5 @@
     <field name="Licence" required="no" formelement="Select" datatype="Licence" multiplicity="1"/>
     <field name="ServerDateUnlocking" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="SubjectDdc" required="no" formelement="Text" datatype="ddc" multiplicity="5"/>
+
 </documenttype>

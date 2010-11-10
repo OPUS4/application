@@ -39,8 +39,8 @@
 
 <!-- required fields -->
     <field name="PersonSubmitter" required="yes" formelement="Text" datatype="Person" multiplicity="1">
-		<subfield name="Email" required="yes" formelement="text" datatype="Email" />
-	</field>
+        <subfield name="Email" required="yes" formelement="text" datatype="Email" />
+    </field>
     <field name="Licence" required="yes" formelement="Select" datatype="Licence" multiplicity="1"/>
     <field name="Language" required="yes" formelement="Select" datatype="Language" multiplicity="1">
         <default value="eng" edit="yes" public="yes" />
@@ -48,9 +48,7 @@
     <field name="TitleMain" required="yes" formelement="Text" datatype="Title" multiplicity="4"/>
     
     <field name="PersonAuthor" required="yes" formelement="Text" datatype="Person" multiplicity="*">
-        <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" >
-            <default value="Dr." edit="yes" public="yes"  />
-        </subfield>
+        <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" />
         <subfield name="Email" required="no" formelement="text" datatype="Email" />
         <subfield name="AllowEmailContact" required="no" formelement="checkbox"  />
         <subfield name="DateOfBirth" required="no" formelement="text" datatype="Date" />
