@@ -27,6 +27,7 @@
  * @category    Application
  * @package     Module_Frontdoor
  * @author      Simone Finkbeiner-Franke <simone.finkbeiner@ub.uni-stuttgart.de>
+ * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id:
@@ -36,15 +37,14 @@
  * Controller for document recommendation starting from Frontdoor
  *
  */
-class Frontdoor_MailController extends Zend_Controller_Action
-{
+class Frontdoor_MailController extends Zend_Controller_Action {
+
     /**
      *
      * @return void
      *
      */
-    public function indexAction()
-    {
+    public function indexAction() {
         $request = $this->getRequest();
         $docId = $request->getParam('docId');
         $this->view->docId = $docId;
@@ -135,22 +135,30 @@ class Frontdoor_MailController extends Zend_Controller_Action
     $this->view->form = $form;
     }
 
-    public function toauthorAction()
-    {
+    /**
+     * Send mail to author(s) of document.
+     */
+    public function toauthorAction() {
         $request = $this->getRequest();
         $docId = $request->getParam('docId');
         $this->view->docId = $docId;
         $document = new Opus_Document($docId);
         $authorFromDb = $document->getPersonAuthor();
+
         if (true === is_array($authorFromDb)) {
             foreach ($authorFromDb as $au) {
                 $authorId = $au->getId();
-                $authors[] = array('id' => $authorId[0], 'name' => $au->getName(), 'mail' => $au->getEmail(), 'allowMail' => $au->getAllowEmailContact());
+                $authors[] = array(
+                    'id' => $authorId[0],
+                    'name' => $au->getName(),
+                    'mail' => $au->getEmail(),
+                    'allowMail' => $au->getAllowEmailContact());
 
             }
         }
         else {
-            throw new Exception('Error determine the author of this document');
+            throw new Exception('Error - No author for document ' . $docId .
+                    ' found');
             //$authors[] = array('name' => $authorFromDb->getName(), 'mail' => $authorFromDb->getEmail());
         }
         $this->view->author = $authors;
@@ -169,7 +177,10 @@ class Frontdoor_MailController extends Zend_Controller_Action
 
         // show mail form
         $form = new Frontdoor_Form_ToauthorForm(array('authors' => $authors));
-        $form->setAction($this->view->url(array('module' => "frontdoor", "controller"=>'mail', "action"=>'toauthor')));
+        $form->setAction($this->view->url(array(
+            'module' => 'frontdoor',
+            'controller' => 'mail',
+            'action' => 'toauthor')));
         $form->setMethod('post');
 
         // try to get formular data
@@ -203,13 +214,15 @@ class Frontdoor_MailController extends Zend_Controller_Action
 
                     $this->view->success = 'frontdoor_mail_ok';
                     $this->render('feedback');
-                } catch (Exception $e) {
+                }
+                catch (Exception $e) {
                     $this->view->ok = false;
                     $this->view->form = $e->getMessage();
                     $this->view->success = 'frontdoor_mail_notok';
                     $this->render('feedback');
                 }
-            } else {
+            }
+            else {
                 $this->view->form = $form;
             }
         }

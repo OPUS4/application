@@ -27,6 +27,7 @@
  * @category    Application
  * @package     Module_Frontdoor
  * @author      Tobias Leidinger <tobias.leidinger@googlemail.com>
+ * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -48,8 +49,7 @@ class Frontdoor_Form_ToauthorForm extends Zend_Form
      *
      * @return void
      */
-    public function init()
-    {
+    public function init() {
         $first = true;
         $numberOfAuthors = 0;
         $atLeastOne = new Frontdoor_Form_AtLeastOneValidator();
@@ -88,6 +88,7 @@ class Frontdoor_Form_ToauthorForm extends Zend_Form
             }
             if ($numberOfAuthors == 1) {
                 $firstAuthorCheckbox->setOptions(array('disabled' => true));
+                $firstAuthorCheckbox->setUncheckedValue(1);
             }
             $authCheck->addValidator($atLeastOne);
             //print_r($displayGroupElements);
