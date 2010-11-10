@@ -120,7 +120,7 @@
 
 	<tu tuid="hint_PersonSubmitterFirstName1">
         <tuv xml:lang="en">
-            <seg>Please enter the submitter's first name.</seg>
+            <seg>Please enter the first name of the submitter.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte den Vornamen des Einstellers ein.</seg>
@@ -129,7 +129,7 @@
 	
 	<tu tuid="hint_PersonSubmitterLastName1">
         <tuv xml:lang="en">
-            <seg>Please enter the submitter's last name.</seg>
+            <seg>Please enter the last name of the submitter.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte den Nachnamen des Einstellers ein.</seg>
@@ -138,7 +138,7 @@
 	
 	<tu tuid="hint_PersonSubmitterEmail1">
         <tuv xml:lang="en">
-            <seg>Please enter the submitter's email adress.</seg>
+            <seg>Please enter the email adress of the submitter.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte eine E-Mailadresse des Einstellers ein.</seg>
@@ -147,7 +147,7 @@
 	
 	<tu tuid="hint_PersonSubmitterAcademicTitle1">
         <tuv xml:lang="en">
-            <seg>Please enter the submitter's academic title.</seg>
+            <seg>Please enter the academic title of the submitter.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte den akademischen Titel des Einstellers ein.</seg>
@@ -156,7 +156,7 @@
 	
 	<tu tuid="hint_PersonSubmitterDateOfBirth1">
         <tuv xml:lang="en">
-            <seg>Please enter the submitter's date of birth.</seg>
+            <seg>Please enter the date of birth of the submitter.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte das Geburtsdatum des Einstellers ein.</seg>
@@ -165,7 +165,7 @@
 	
 	<tu tuid="hint_PersonSubmitterPlaceOfBirth1">
         <tuv xml:lang="en">
-            <seg>Please enter the submitter's place of birth.</seg>
+            <seg>Please enter the place of birth of the submitter.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte den Geburtsort des Einstellers ein.</seg>
@@ -1179,6 +1179,15 @@ Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathsci
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte das Datum ein, an dem Ihr Dokument freigeschaltet werden soll.</seg>
         </tuv>
+    </tu>
+    
+    <tu tuid="hint_EnrichmentNeuesFeld">
+      <tuv xml:lang="en">
+        <seg>You can define whatever you want</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sie können hier definieren, was Sie möchten.</seg>
+      </tuv>
     </tu>
 	
 	<tu tuid="hint_IdentifierOpus3">
