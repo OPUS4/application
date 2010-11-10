@@ -40,18 +40,20 @@
 class Publish_Form_PublishingThird extends Zend_Form {
 
     public $log;
+    public $session;
     CONST SIZE = 100;
 
     public function __construct($options=null) {
         $this->log = Zend_Registry::get('Zend_Log');
+        $this->session = new Zend_Session_Namespace('Publish');
+
         parent::__construct($options);
     }
 
     public function init() {
-        $end = false;
-        $defaultNS = new Zend_Session_Namespace('Publish');
+        $this->session->endOfCollection = false;
 
-        if ($defaultNS->step == '1') {
+        if ($this->session->step == '1') {
             // get the root collections
             $top = new Zend_Form_Element_Select('top');
             $top->setLabel('choose_collection_role');
@@ -61,16 +63,18 @@ class Publish_Form_PublishingThird extends Zend_Form {
         }
         else {
             // get children for choosen root collection
-            if (isset($defaultNS->collection['top'])) {
-                $roleId = $defaultNS->collection['top'];
+            if (isset($this->session->collection['top'])) {
+                $roleId = $this->session->collection['top'];
+                $this->session->collection['topName'] = $this->getCollectionName($roleId);
+
                 $this->log->debug("roleID: " . $roleId);
 
-                $top = $this->createElement('text', 'top');
-                $top->setValue($roleId . " - " . $this->getCollectionName($roleId));
-                //$top->setValue($roleId);
-                $top->setAttrib('disabled', 'true');
-                $top->setAttrib('size', self::SIZE);
-                $this->addElement($top);
+//                $top = $this->createElement('text', 'top');
+//                $top->setValue($roleId . " - " . $this->getCollectionName($roleId));
+//                //$top->setValue($roleId);
+//                $top->setAttrib('disabled', 'true');
+//                $top->setAttrib('size', self::SIZE);
+//                $this->addElement($top);
 
                 $subText = new Zend_Form_Element_Select('sub1');
                 $subText->setLabel('choose_collection_subcollection');
@@ -80,22 +84,24 @@ class Publish_Form_PublishingThird extends Zend_Form {
                     $this->addElement($subText);
                 }
                 else
-                    $end = true;
+                    $this->session->endOfCollection = true;
 
 
-                for ($i = 2; $i < $defaultNS->step; $i++) {
+                for ($i = 2; $i < $this->session->step; $i++) {
                     $i = (int) $i - 1;
-                    if (isset($defaultNS->collection['sub' . $i])) {
-                        $collectionId = (int) $defaultNS->collection['sub' . $i];
+                    if (isset($this->session->collection['sub' . $i])) {
+                        $collectionId = (int) $this->session->collection['sub' . $i];
                         $this->log->debug("collectionID : " . $collectionId);
 
-                        $subText = $this->createElement('text', 'sub' . $i);
-                        $subText->setValue($collectionId . " - " . $this->getCollectionName($collectionId));
-                        //$subText->setValue($collectionId);
-                        $subText->setAttrib('disabled', 'true');
-                        $subText->setAttrib('size', self::SIZE);
-                        $this->addElement($subText);
+//                        $subText = $this->createElement('text', 'sub' . $i);
+//                        $subText->setValue($collectionId . " - " . $this->getCollectionName($collectionId));
+//                        $subText->setLabel('choosen_collection');
+//                        $subText->setAttrib('disabled', 'true');
+//                        $subText->setAttrib('size', self::SIZE);
+//                        $this->addElement($subText);
 
+                        $this->session->collection['sub'.$i] = $this->getCollectionName($collectionId);
+                        
                         $i = (int) $i + 1;
                         $options = $this->getCollection($collectionId);
                         if ($options !== null) {
@@ -105,13 +111,13 @@ class Publish_Form_PublishingThird extends Zend_Form {
                             $this->addElement($subSelect);
                         }
                         else {
-                            $end = true;
+                            $this->session->endOfCollection = true;
                             $this->log->debug("reduce i");
                             $j = $i - 1;
                             $this->log->debug("elements collection begins");
-                            $defaultNS->elements['collection']['name'] = 'Collection';
-                            $defaultNS->elements['collection']['value'] = $defaultNS->collection['sub' . $j];
-                            $defaultNS->elements['collection']['label'] = 'collection';
+                            $this->session->elements['collection']['name'] = 'Collection';
+                            $this->session->elements['collection']['value'] = $this->session->collection['sub' . $j];
+                            $this->session->elements['collection']['label'] = 'collection';
                             $this->log->debug("behind elements collection");
                         }
                     }
@@ -119,7 +125,7 @@ class Publish_Form_PublishingThird extends Zend_Form {
             }
         }
 
-        if (false === $end) {
+        if (false === $this->session->endOfCollection) {
             //the end in a tree has not been reached yet?
             $submit = $this->createElement('submit', 'goToSubCollection');
             $submit->setLabel('button_label_choose_subcollection');
@@ -127,7 +133,7 @@ class Publish_Form_PublishingThird extends Zend_Form {
             $this->addElement($submit);
         }
 
-        if ((int) $defaultNS->step >= 2){
+        if ((int) $this->session->step >= 2){
             //go up to the previous collection node
             $submit = $this->createElement('submit', 'goToParentCollection');
             $submit->setLabel('button_label_choose_parentcollection');

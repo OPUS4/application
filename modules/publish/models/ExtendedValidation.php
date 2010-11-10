@@ -135,11 +135,14 @@ class Publish_Model_ExtendedValidation {
                 $emailKey = str_replace('Allow', '', $key);
                 $emailKey = str_replace('Contact', '', $emailKey);
                 $lastName = str_replace('Email', 'LastName', $emailKey);
-                $firstName = $lastName = str_replace('Last', 'First', $lastName);
+                $firstName = str_replace('Last', 'First', $lastName);
+                $titleName = str_replace('LastName', 'AcademicTitle', $lastName);
+
                 $this->log->debug("(Validation): Replaced: " . $emailKey);
 
                 if ($this->data[$lastName] != "" || $this->data[$lastName] != "") {
                     //just check the email if first or last name is given
+                    
                     if ($this->data[$emailKey] == "" || $this->data[$emailKey] == null) {
                         //error case: Email Check exists but Email not
                         $element = $this->form->getElement($emailKey);
@@ -152,7 +155,8 @@ class Publish_Model_ExtendedValidation {
                     }
                 }
                 else {
-                    unset ($this->data[$key]);
+                   $this->data[$key] = "";
+                   $this->data[$titleName] = "";
                 }
             }
         }

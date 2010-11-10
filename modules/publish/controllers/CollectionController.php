@@ -51,6 +51,8 @@ class Publish_CollectionController extends Controller_Action {
 
     public function topAction() {
 
+        $this->view->languageSelectorDisabled = true;
+        
         $this->session->step = 1;
         $this->view->title = $this->view->translate('publish_controller_index');
         $this->view->subtitle = $this->view->translate('publish_controller_collection_sub');

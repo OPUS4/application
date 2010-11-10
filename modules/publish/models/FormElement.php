@@ -77,9 +77,8 @@ class Publish_Model_FormElement {
         $this->datatype = $datatype;
         $this->multiplicity = $multiplicity;
 
-        if (isset($this->datatype)) 
+        if (isset($this->datatype))
             $this->initValidation();
-        
     }
 
     private function initValidation() {
@@ -310,23 +309,25 @@ class Publish_Model_FormElement {
     }
 
     public function setDefaultValue($defaultValue) {
-        if (isset($defaultValue['value'])) {
-            //Date Field has be set to current date
-            if ($defaultValue['value'] === 'today') {
-                if ($this->session->language === 'de')
-                    $this->default['value'] = date('d.m.Y');
+        if (!isset($this->value) || is_null($this->value)) {
+            if (isset($defaultValue['value'])) {
+                //Date Field has be set to current date
+                if ($defaultValue['value'] === 'today') {
+                    if ($this->session->language === 'de')
+                        $this->default['value'] = date('d.m.Y');
+                    else
+                        $this->default['value'] = date('Y/m/d');
+                }
                 else
-                    $this->default['value'] = date('Y/m/d');
+                    $this->default['value'] = $defaultValue['value'];
             }
-            else
-                $this->default['value'] = $defaultValue['value'];
+
+            if (isset($defaultValue['edit']))
+                $this->default['edit'] = $defaultValue['edit'];
+
+            if (isset($defaultValue['public']))
+                $this->default['public'] = $defaultValue['public'];
         }
-
-        if (isset($defaultValue['edit']))
-            $this->default['edit'] = $defaultValue['edit'];
-
-        if (isset($defaultValue['public']))
-            $this->default['public'] = $defaultValue['public'];
     }
 
     public function getLabel() {
