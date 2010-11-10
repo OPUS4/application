@@ -18,14 +18,17 @@
 
 set -e
 
-rm -rf deb_package/var/local/opus4
+BASEDIR='/var/local/opus4'
 
-echo "create directory deb_package/var/local/opus4"
-mkdir -p deb_package/var/local/opus4
+rm -rf deb_package/$BASEDIR
+
+echo "create directory deb_package/$BASEDIR"
+mkdir -p deb_package/$BASEDIR
 
 echo "get OPUS 4 source code"
-./prepare_directories.sh trunk deb_package/var/local/opus4
+./prepare_directories.sh trunk deb_package/$BASEDIR
 
 echo "create deb package"
 chmod +x deb_package/DEBIAN/postinst
+chmod +x deb_package/DEBIAN/prerm
 dpkg-deb --build deb_package .

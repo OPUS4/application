@@ -1,5 +1,7 @@
 #!/bin/bash
 
+BASEDIR='/var/local/opus4'
+
 if [ -f /etc/apache2/sites-enabled/opus4 ]; then
   sudo a2dissite opus4
   read -p "Delete OPUS4 Apache HTTPD config files in /etc/apache2/sites-available/opus4 [Y]: " DELETE_APACHE_CONFIG
@@ -9,7 +11,7 @@ if [ -f /etc/apache2/sites-enabled/opus4 ]; then
   sudo /etc/init.d/apache2 reload
 fi
 
-if [ -f /var/local/opus4/install/uninstall.sh ]; then
-  sudo chmod +x /var/local/opus4/install/uninstall.sh
-  sudo /var/local/opus4/install/uninstall.sh
+if [ -f $BASEDIR/install/uninstall.sh ]; then
+  sudo chmod +x $BASEDIR/install/uninstall.sh
+  sudo $BASEDIR/install/uninstall.sh
 fi
