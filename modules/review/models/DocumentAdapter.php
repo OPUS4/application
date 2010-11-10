@@ -140,7 +140,7 @@ class Review_Model_DocumentAdapter {
      *
      * TODO or should it be getPublishedYear (?)
      */
-    public function getPublishedDate() {
+    public function getPublishedDate($yearOnly = false) {
         try {
             $date = $this->document->getPublishedDate();
 
@@ -148,14 +148,19 @@ class Review_Model_DocumentAdapter {
                 $date = $this->document->getPublishedYear();
             }
 
-            return htmlspecialchars($date);
+            if ($yearOnly && !empty($date) && ($date instanceof Opus_Date)) {
+                return htmlspecialchars($date);
+            }
+            else {
+                return htmlspecialchars($date);
+            }
         }
         catch (Exception $e) {
             return 'unknown';
         }
     }
 
-    public function getCompletedDate() {
+    public function getCompletedDate($yearOnly = false) {
         try {
             $date = $this->document->getCompletedDate();
 
@@ -163,31 +168,31 @@ class Review_Model_DocumentAdapter {
                 $date = $this->document->getCompletedYear();
             }
 
-            return htmlspecialchars($date);
+            if ($yearOnly && !empty($date) && ($date instanceof Opus_Date)) {
+                return htmlspecialchars($date->getYear());
+            }
+            else {
+                return htmlspecialchars($date);
+            }
         }
         catch (Exception $e) {
             return 'unknown';
         }
     }
 
-    public function getDate() {
-        $date = $this->getCompletedDate();
-        if (empty($date)) {
-            $date = $this->getPublishedDate();
+    public function getDate($yearOnly = false) {
+        $date = $this->getCompletedDate($yearOnly);
+        if (empty($date) || strcmp($date, 'unknown') === 0) {
+            $date = $this->getPublishedDate($yearOnly);
         }
-        if (empty($date)) {
-            $date = '[unknown]';
+        if (empty($date) || strcmp($date, 'unknown') === 0) {
+            $date = 'unknown';
         }
         return $date;
     }
 
     public function getYear() {
-        $date = $this->getDate();
-
-        if ($date instanceof Opus_Date) {
-            $date = $date->getYear();
-        }
-
+        $date = $this->getDate(true);
         return $date;
     }
 
