@@ -45,6 +45,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
     public $msc = array();
     public $licences = array();
     public $languages = array();
+    public $session;
 
     public function __construct($type, $id, $fulltext, $additionalFields, $postData, $options=null) {
         $this->doctype = $type;
@@ -52,7 +53,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         $this->fulltext = $fulltext;
         $this->additionalFields = $additionalFields;
         $this->postData = $postData;
-
+        $this->session = new Zend_Session_Namespace('Publish');
         $log = Zend_Registry::get('Zend_Log');
         $this->log = $log;
 
@@ -74,10 +75,14 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         $this->populate($extended->data);
         $this->postData = $extended->data;
 
-        if ($valid1 && $valid2 && $valid3)
+        if ($valid1 && $valid2 && $valid3) {
+            $this->session->invalidForm = '1';
             return true;
-        else
+        }
+        else {
+            $this->session->invalidForm = '1';
             return false;
+        }
     }
 
     /**
@@ -167,13 +172,13 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         $element->setAttrib($attributeName, $attributeValue);
     }
 
+    /**
+     * Methods removes unused label, hidden fields, submit fields and empty fields from form to support a proper check page.
+     */
     public function prepareCheck() {
         $defaultNS = new Zend_Session_Namespace('Publish');
         $defaultNS->elements = array();
         $defaultNS->depositForm = $this;
-//        foreach ($this->getDisplayGroups() AS $group) {
-//            $this->removeDisplayGroup($group->getName());
-//        }
 
         foreach ($this->getElements() as $element) {
             $name = $element->getName();
@@ -185,8 +190,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
                 $defaultNS->elements[$name]['name'] = $name;
                 $defaultNS->elements[$name]['value'] = $element->getValue();
                 $defaultNS->elements[$name]['label'] = $element->getLabel();
-                $element->removeDecorator('Label');
-                //      $this->removeElement($name);
+                $element->removeDecorator('Label');                
             }
         }
         $this->_addSubmit('button_label_back', 'back');

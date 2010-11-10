@@ -2274,6 +2274,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="choose_collection_role">
+      <tuv xml:lang="en">
+        <seg>Main collection</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Haupt-Sammlung</seg>
+      </tuv>
+    </tu>
+
   </body>
   
 </tmx>

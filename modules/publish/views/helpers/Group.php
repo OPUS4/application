@@ -73,8 +73,13 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
         $fieldset = "";
         $disable = false;
         if (isset($group)) {
-            if ($this->session->currentAnchor === $group['Name'])
-                $fieldset .= "<a name='current'></a>";
+            if (isset($this->session->invalidForm) && $this->session->invalidForm == '1')
+                $fieldset .= "";
+            else {
+                if ($this->session->currentAnchor === $group['Name'])
+                    $fieldset .= "<a name='current'></a>";
+            }
+
             $fieldset .= "<fieldset class='left-labels' id='" . $group['Name'] . "' />\n";
             $fieldset .= "<legend>" . $this->view->translate($group['Name']) . "</legend>\n\t";
             $fieldset .= "<div class='description hint'><p>" . $this->_getGroupHint($group['Name']) . "</div></p>";

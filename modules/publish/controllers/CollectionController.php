@@ -39,64 +39,92 @@
  */
 class Publish_CollectionController extends Controller_Action {
 
-    public function topAction() {
-        $log = Zend_Registry::get('Zend_Log');
-        $defaultNS = new Zend_Session_Namespace('Publish');
-        $defaultNS->step = 1;        
+    public $session;
+    public $log;
 
+    public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array()) {
+        $this->log = Zend_Registry::get('Zend_Log');
+        $this->session = new Zend_Session_Namespace('Publish');
+
+        parent::__construct($request, $response, $invokeArgs);
+    }
+
+    public function topAction() {
+
+        $this->session->step = 1;
         $this->view->title = $this->view->translate('publish_controller_index');
         $this->view->subtitle = $this->view->translate('publish_controller_collection_sub');
 
         $form = new Publish_Form_PublishingThird();
 
         $action_url = $this->view->url(array('controller' => 'collection', 'action' => 'sub'));
-
         $form->setMethod('post');
-
         $form->setAction($action_url);
 
+        $this->_setThirdFormViewVariables($form);
+        $this->view->action_url = $action_url;
         $this->view->form = $form;
     }
 
     public function subAction() {
-        $log = Zend_Registry::get('Zend_Log');
-        $defaultNS = new Zend_Session_Namespace('Publish');
-
         if ($this->getRequest()->isPost() === true) {
 
             $post = $this->getRequest()->getPost();
 
             if (array_key_exists('send', $post)) {
                 $this->_forward('deposit', 'deposit');
-            } else {
+            }
+            else {
+                if (array_key_exists('goToParentCollection', $post)) {
+                    if ((int) $this->session->step >= 2)
+                        $this->session->step = $this->session->step - 1;
+                }
+                else if (array_key_exists('goToSubCollection', $post)) {
+                    $this->session->step = $this->session->step + 1;
+                }
+
                 if (array_key_exists('top', $post)) {
-                    $defaultNS->collection['top'] = $post['top'];
+                    $this->session->collection['top'] = $post['top'];
                 }
 
                 foreach ($post AS $p => $v) {
-                    $log->debug("Post: " . $p . " => " . $v);
-                    $defaultNS->collection[$p] = $v;
+                    $this->log->debug("Post: " . $p . " => " . $v);
+                    $this->session->collection[$p] = $v;
                 }
 
-                $defaultNS->step = (int) $defaultNS->step + 1;
-
-                $log->debug("SUB Session step: " . $defaultNS->step);
+                $this->log->debug("SUB Session step: " . $this->session->step);
 
                 $this->view->title = $this->view->translate('publish_controller_index');
                 $this->view->subtitle = $this->view->translate('publish_controller_collection_sub');
 
                 $form = new Publish_Form_PublishingThird();
-
                 $action_url = $this->view->url(array('controller' => 'collection', 'action' => 'sub'));
-
                 $form->setMethod('post');
-
                 $form->setAction($action_url);
-
+                $this->_setThirdFormViewVariables($form);
+                $this->view->action_url = $action_url;
                 $this->view->form = $form;
             }
-        } else {
+        }
+        else {
             return $this->_redirectTo('index', '', 'index');
+        }
+    }
+
+    /**
+     * method to set the different variables and arrays for the view and the templates
+     * @param <Zend_Form> $form
+     */
+    private function _setThirdFormViewVariables($form) {
+        $errors = $form->getMessages();
+
+        //group fields and single fields for view placeholders
+        foreach ($form->getElements() AS $currentElement => $value) {
+
+            //single field name (for calling with helper class)
+            $elementAttributes = $form->getElementAttributes($currentElement); //array
+            $this->view->$currentElement = $elementAttributes;
+            $this->log->debug("Third: set view var " . $currentElement);
         }
     }
 
