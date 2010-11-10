@@ -155,6 +155,32 @@ class Review_Model_DocumentAdapter {
         }
     }
 
+    public function getCompletedDate() {
+        try {
+            $date = $this->document->getCompletedDate();
+
+            if (empty($date)) {
+                $date = $this->document->getCompletedYear();
+            }
+
+            return htmlspecialchars($date);
+        }
+        catch (Exception $e) {
+            return 'unknown';
+        }
+    }
+
+    public function getDate() {
+        $date = $this->getCompletedDate();
+        if (empty($date)) {
+            $date = $this->getPublishedDate();
+        }
+        if (empty($date)) {
+            $date = "[unknown]";
+        }
+        return $date;
+    }
+
     /**
      * Returns frontdoor URL for document.
      * @return  url
