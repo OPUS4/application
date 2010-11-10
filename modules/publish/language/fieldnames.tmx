@@ -2283,6 +2283,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="choose_collection_subcollection">
+      <tuv xml:lang="en">
+        <seg>Sub Collection</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sub-Sammlung</seg>
+      </tuv>
+    </tu>
+
   </body>
   
 </tmx>
