@@ -52,6 +52,8 @@
 
     <xsl:output method="text" omit-xml-declaration="yes" />
 
+    <xsl:include href="bibtex_output.xslt" />
+
     <xsl:template match="/">
       <xsl:apply-templates select="Opus/Opus_Model_Filter" />
     </xsl:template>
