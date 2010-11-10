@@ -76,6 +76,7 @@ class Publish_Model_DisplayGroup {
 
         if ($number < $this->session->$groupCount)
             $this->session->$groupCount = $number;
+        $this->log->debug("initial number for group elements = " . $number . " for group " . $this->label);
 
         $this->session->additionalFields[$this->elementName] = $this->maxNumber();
         if ($this->maxNumber() < (int) $this->multiplicity || $this->multiplicity === '*') {
