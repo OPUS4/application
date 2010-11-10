@@ -86,14 +86,14 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
 
                 //show other div in case intial field number is extended
                 $groupCount = 'num' . $group['Name'];
-                if ($this->session->$groupCount != 0) {
-                    $j = $i / $this->session->$groupCount;
-                    if (fmod($j, 2) == 1)
-                        $fieldset .= "<div class='form-multiple even'>";
-                    else
-                    if (fmod($j, 2) == 0)
-                        $fieldset .= "<div class='form-multiple odd'>";
-                }
+
+                $j = $i / $this->session->$groupCount;
+                if (fmod($j, 2) == 1)
+                    $fieldset .= "<div class='form-multiple even'>";
+                else
+                if (fmod($j, 2) == 0)
+                    $fieldset .= "<div class='form-multiple odd'>";
+
                 $fieldset .= "\n<div class='form-item'>\n";
                 $fieldset .= "<label for='" . $field["id"] . "'>" . $field["label"];
                 if ($field["req"] === 'required')
