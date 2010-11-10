@@ -97,6 +97,29 @@ class Review_Model_ClearDocumentsHelper {
 
     }
 
+    public function reject($docIds) {
+        foreach ($docIds as $index => $docId) {
+            $document = new Opus_Document( (int) $docId);
+
+            try {
+                $state = $document->getServerState();
+
+                if ($state === 'unpublished') {
+                    $document->delete();
+                }
+                else {
+                    // already published or deleted
+                    $logger->warn('Document ' . $docId . ' not in unpublished
+                        state.');
+                }
+            }
+            catch (Exception $e) {
+                $logger->err($e);
+                // TODO throw something, show something
+            }
+        }
+    }
+
 }
 
 ?>

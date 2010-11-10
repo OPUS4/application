@@ -1,4 +1,4 @@
-<?php
+<?PHP
 /*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -24,7 +24,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @package     Application - Module Review
+ * @category    Application
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -34,7 +34,7 @@
 
 <div class="adminContainer">
 
-    <h2><?= $this->translate('review_accept_title')?>
+    <h2><?= $this->translate('review_reject_title')?>
         <span class="info">(<?= $this->documentCount ?> <?= $this->translate('review_accept_document_count') ?>)</span>
     </h2>
 
@@ -47,23 +47,15 @@
         </div>
 
         <div class="instruction">
-        <?= $this->translate('review_referee_instruction') ?>
+            <?= $this->text ?>
         </div>
 
         <table style="margin-left: 2em;">
             <tr>
-                <td align="right"><?= $this->translate('review_person_firstname') ?>*:</td>
-                <td><input type="text" name="firstname" value="<?= htmlspecialchars($this->firstName) ?>"/></td>
-            </tr>
-            <tr>
-                <td align="right"><?= $this->translate('review_person_lastname') ?>*:</td>
-                <td><input type="text" name="lastname" value="<?= htmlspecialchars($this->lastName) ?>"/></td>
-            </tr>
-            <tr>
                 <td>&nbsp;</td>
                 <td>
-                    <input type="submit" name="buttonBack" value="<?= $this->translate('review_button_back') ?>" />
-                    <input type="submit" name="buttonAccept" value="<?= $this->translate('review_button_accept') ?>" />
+                    <input type="submit" name="sureyes" value="<?= $this->translate('answer_yes') ?>" />
+                    <input type="submit" name="sureno" value="<?= $this->translate('answer_no') ?>" />
                 </td>
             </tr>
         </table>
@@ -72,15 +64,15 @@
 
         <table style="margin-left: 2em">
         <?PHP foreach( $this->selected as $index => $docId ) : ?>
-            <?PHP $document = new Review_Model_DocumentAdapter($this, $docId); ?>
             <tr>
-            <td style="vertical-align: top; padding-right: 1em;"><?= $docId ?></td>
+            <?PHP $document = new Review_Model_DocumentAdapter($this, $docId); ?>
+            <td style="vertical-align: top; padding-right: 1em"><?= $docId ?></td>
             <td>
                 <div class="title" style="font-weight: bold"><?= $document->getDocTitle() ?></div>
                 <div class="authors">
                     <?PHP $authorsCount = count($document->getAuthors()) - 1; ?>
                     <?PHP foreach($document->getAuthors() as $count => $author) : ?>
-                        <?= $author ?>
+                        <?= $author['name'] ?>
                         <?= ($count < $authorsCount) ? ';' : ''?>
                     <?PHP endforeach; ?>
                 </div>

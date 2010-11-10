@@ -187,12 +187,30 @@
       </tuv>
     </tu>
 
+    <tu tuid="review_reject_selected">
+      <tuv xml:lang="en">
+        <seg>Reject selected documents</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Ausgewählte Dokumente ablehnen</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="review_accept_title">
       <tuv xml:lang="en">
         <seg>Accept documents</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Dokumente freischalten</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="review_reject_title">
+      <tuv xml:lang="en">
+        <seg>Reject documents</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokumente ablehnen</seg>
       </tuv>
     </tu>
 
@@ -274,6 +292,15 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Eingaben fehlen.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="review_reject_sure">
+      <tuv xml:lang="en">
+        <seg>Are you sure you want to reject the selected documents.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Wollen Sie die ausgewählten Dokumente wirklich ablehnen.</seg>
       </tuv>
     </tu>
 

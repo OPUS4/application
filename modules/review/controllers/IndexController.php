@@ -65,6 +65,15 @@ class Review_IndexController extends Controller_Action {
             }
         }
 
+        if ($this->_isButtonPressed('buttonReject', true, false)) {
+            if (count($this->view->selected) > 0) {
+                $this->_forward('reject');
+            }
+            else {
+                $this->view->error = $this->view->translate('review_error_noselection');
+            }
+        }
+
         $this->view->actionUrl = $this->view->url(array('action'=>'index'));
 
         $request = $this->getRequest();
@@ -177,6 +186,36 @@ class Review_IndexController extends Controller_Action {
                 }
             }
         }
+    }
+
+    /**
+     * Confirm rejection of selected documents and reject.
+     */
+    public function rejectAction() {
+        // redirect get requests to module entry page
+        if (!$this->getRequest()->isPost()) {
+            $this->_redirectTo('index');
+            return;
+        }
+
+        $this->_processSelection();
+
+        $this->view->documentCount = count($this->view->selected);
+
+        if ($this->_isButtonPressed('sureno', true, false)) {
+            $this->_forward('index');
+            return;
+        }
+ 
+        if ($this->_isButtonPressed('sureyes', true, false)) {
+            $helper = new Review_Model_ClearDocumentsHelper();
+            $helper->reject($this->view->selected);
+            $this->_redirectTo('index');
+        }
+
+//        $this->view->title = $this->view->translate('admin_doc_delete');
+        $this->view->text = $this->view->translate('review_reject_sure');
+        $this->view->actionUrl = $this->view->url(array('action' => 'reject'));
     }
 
     /**
