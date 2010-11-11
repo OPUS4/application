@@ -180,6 +180,16 @@
             <seg>Bitte wählen Sie hier die Lizenz(en) für Ihr Dokument aus.</seg>
         </tuv>
     </tu>
+
+    <tu tuid="hint_Licence">
+        <tuv xml:lang="en">
+            <seg>Please choose the licence(s) for the document.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte wählen Sie hier die Lizenz(en) für Ihr Dokument aus.</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="hint_groupPersonAuthor">
         <tuv xml:lang="en">
             <seg>Please enter the contact information of the authors. You may add more authors by clicking on the button (or delete them).</seg>
@@ -1206,7 +1216,45 @@ Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathsci
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte die OPAC-Nummer des Dokuments ein.</seg>
         </tuv>
+
     </tu>
+
+    <tu tuid="hint_documentType">
+        <tuv xml:lang="en">
+            <seg>Please choose a document type from the list.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte wählen Sie einen Dokumenttyp aus der Liste aus.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_fileupload">
+        <tuv xml:lang="en">
+            <seg>Choose your document. In case you want to upload more files, click the button.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Wählen Sie Ihr Dokument. Wenn Sie mehrere Dateien hochladen möchten, klicken Sie auf den Button.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_bibliographie">
+        <tuv xml:lang="en">
+            <seg>Shall your document appear in bibliography collection?</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Soll Ihr Dokument in der Bibliographie Sammlung erscheinen?</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_collection1">
+        <tuv xml:lang="en">
+            <seg>Please choose the main collection. You can then choose other sub collections.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte wählen Sie die Hauptsammlung aus. Sie können dann weitere Untersammlung auswählen.</seg>
+        </tuv>
+    </tu>
+
 	
     </body>
 </tmx>

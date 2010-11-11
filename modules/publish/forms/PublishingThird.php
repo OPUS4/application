@@ -55,97 +55,73 @@ class Publish_Form_PublishingThird extends Zend_Form {
 
         if ($this->session->step == '1') {
             // get the root collections
-            $top = new Zend_Form_Element_Select('top');
+            $top = new Zend_Form_Element_Select('collection1');
             $top->setLabel('choose_collection_role');
             $options = $this->getCollection();
             $top->setMultiOptions($options);
             $this->addElement($top);
         }
         else {
-            // get children for choosen root collection
-            if (isset($this->session->collection['top'])) {
-                $roleId = $this->session->collection['top'];
-                $this->session->collection['topName'] = $this->getCollectionName($roleId);
 
-                $this->log->debug("roleID: " . $roleId);
+            for ($i = 2; $i <= $this->session->step; $i++) {
+                //decrease
+                $i = (int) $i - 1;
+                if (isset($this->session->collection['collection' . $i])) {
+                    //get previous collection
+                    $collectionId = (int) $this->session->collection['collection' . $i];
+                    $this->session->collection['collection' . $i . 'Name'] = $this->getCollectionName($collectionId);
 
-//                $top = $this->createElement('text', 'top');
-//                $top->setValue($roleId . " - " . $this->getCollectionName($roleId));
-//                //$top->setValue($roleId);
-//                $top->setAttrib('disabled', 'true');
-//                $top->setAttrib('size', self::SIZE);
-//                $this->addElement($top);
+                    //increase and get next collection
+                    $i = (int) $i + 1;
+                    $options = $this->getCollection($collectionId);
+                    if ($options !== null) {
+                        $subSelect = new Zend_Form_Element_Select('collection' . $i);
+                        $subSelect->setLabel('choose_collection_subcollection');
+                        $subSelect->setMultiOptions($options);
+                        $this->addElement($subSelect);
+                    }
+                    else {
+                        //end of collection tree
+                        $this->session->endOfCollection = true;
+                        //decrease
+                        $j = $i - 1;
 
-                $subText = new Zend_Form_Element_Select('sub1');
-                $subText->setLabel('choose_collection_subcollection');
-                $options = $this->getCollection($roleId);
-                if ($options !== null) {
-                    $subText->setMultiOptions($options);
-                    $this->addElement($subText);
-                }
-                else
-                    $this->session->endOfCollection = true;
-
-
-                for ($i = 2; $i < $this->session->step; $i++) {
-                    $i = (int) $i - 1;
-                    if (isset($this->session->collection['sub' . $i])) {
-                        $collectionId = (int) $this->session->collection['sub' . $i];
-                        $this->log->debug("collectionID : " . $collectionId);
-
-//                        $subText = $this->createElement('text', 'sub' . $i);
-//                        $subText->setValue($collectionId . " - " . $this->getCollectionName($collectionId));
-//                        $subText->setLabel('choosen_collection');
-//                        $subText->setAttrib('disabled', 'true');
-//                        $subText->setAttrib('size', self::SIZE);
-//                        $this->addElement($subText);
-
-                        $this->session->collection['sub'.$i] = $this->getCollectionName($collectionId);
-                        
-                        $i = (int) $i + 1;
-                        $options = $this->getCollection($collectionId);
-                        if ($options !== null) {
-                            $subSelect = new Zend_Form_Element_Select('sub' . $i);
-                            $subSelect->setLabel('choose_collection_subcollection');
-                            $subSelect->setMultiOptions($options);
-                            $this->addElement($subSelect);
-                        }
-                        else {
-                            $this->session->endOfCollection = true;
-                            $this->log->debug("reduce i");
-                            $j = $i - 1;
-                            $this->log->debug("elements collection begins");
-                            $this->session->elements['collection']['name'] = 'Collection';
-                            $this->session->elements['collection']['value'] = $this->session->collection['sub' . $j];
-                            $this->session->elements['collection']['label'] = 'collection';
-                            $this->log->debug("behind elements collection");
-                        }
+                        $this->session->elements['collection']['name'] = 'Collection' . $this->session->countCollections;
+                        $this->session->elements['collection']['value'] = $this->session->collection['collection' . $j];
+                        $this->session->elements['collection']['label'] = 'collection';
                     }
                 }
             }
         }
 
+
         if (false === $this->session->endOfCollection) {
-            //the end in a tree has not been reached yet?
+            //the end in a tree has not been reached yet? -> go down
+            //go down to child collection
             $submit = $this->createElement('submit', 'goToSubCollection');
             $submit->setLabel('button_label_choose_subcollection');
             $this->addElement($submit);
+        }
+
+        if (true === $this->session->endOfCollection) {
+            //the end has been reached? -> save or choose another collection
+            //choose another collection
+            $submit = $this->createElement('submit', 'chooseAnotherCollection');
+            $submit->setLabel('button_label_choose_another_collection');
+            $this->addElement($submit);
+
+            //save
+            $submit = $this->createElement('submit', 'send');
+            $submit->setLabel('button_label_send');
             $this->addElement($submit);
         }
 
-        if ((int) $this->session->step >= 2){
-            //go up to the previous collection node
+        if ((int) $this->session->step >= 2) {
+            //go up to parent collection
             $submit = $this->createElement('submit', 'goToParentCollection');
             $submit->setLabel('button_label_choose_parentcollection');
             $this->addElement($submit);
-            $this->addElement($submit);
         }
-
-        // a send button is always shown to save the current choose state
-        $submit = $this->createElement('submit', 'send');
-        $submit->setLabel('button_label_send');
-        $this->addElement($submit);
-        $this->addElement($submit);
     }
 
     /**
@@ -232,6 +208,7 @@ class Publish_Form_PublishingThird extends Zend_Form {
 
         return $elementAttributes;
     }
+
 }
 
 ?>

@@ -441,7 +441,6 @@
       </tuv>
     </tu>
 
-
     <tu tuid="projects">
       <tuv xml:lang="en">
         <seg>Application Areas / Projects</seg>
@@ -450,6 +449,15 @@
         <seg>Anwendungsgebiete / Projekte</seg>
       </tuv>
     </tu>
-  </body>
-  
+
+    <tu tuid="endOfCollectionTree">
+      <tuv xml:lang="en">
+        <seg>You reached the end of that collection tree.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sie haben das Ende dieser Sammlung erreicht.</seg>
+      </tuv>
+    </tu>
+
+  </body>  
 </tmx>

@@ -386,5 +386,25 @@
             <seg>Zurück zur Eltern-Sammlung gehen</seg>
         </tuv>
     </tu>
+
+    <tu tuid="button_label_choose_another_collection">
+        <tuv xml:lang="en">
+            <seg>Choose another collection</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Weitere Sammlung auswählen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_send_collection">
+        <tuv xml:lang="en">
+            <seg>Save document with collections</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Dokument mit Sammlungen speichern</seg>
+        </tuv>
+    </tu>
+
+
     </body>
 </tmx>

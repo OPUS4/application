@@ -72,6 +72,7 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
     protected function _renderElement($element, $options=null, $name=null) {
         $elementfield = "<fieldset class='left-labels'>";
         $elementfield .= "<legend>" . $this->view->translate($element["label"]) . "</legend>\n\t\t\n\t\t";
+        $elementfield .= "<div class='description hint'><p>" . $this->_getElementHint($element["id"]) . "</div></p>";
         $elementfield .= "<div class='form-item'>";
         $elementfield .= "<label for='" . $element["id"] . "'>" . $element["label"];
         if ($element["req"] === 'required')
@@ -127,15 +128,19 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
                     $disable = true;
                 }
                 $elementfield .= ">\n\t\t\t\t";
-                foreach ($element["options"] AS $key => $option) {
-                    $elementfield .= "<option value='" . $key . "' label='" . $option . "'";
-                    $elementfield .= " title='" . $this->view->translate($element["hint"]) . "' ";
+                if (!is_null($element['options'])) {
+                    $options = $element['options'];
+                    
+                    foreach ($options AS $key => $option) {
+                        $elementfield .= "<option value='" . $key . "' label='" . $option . "'";
+                        $elementfield .= " title='" . $this->view->translate($element["hint"]) . "' ";
 
-                    if ($option === $element["value"] || $key === $element["value"])
-                        $elementfield .= " selected='selected'>";
-                    else
-                        $elementfield .= ">";
-                    $elementfield .= $option . "</option>\n\t\t\t\t";
+                        if ($option === $element["value"] || $key === $element["value"])
+                            $elementfield .= " selected='selected'>";
+                        else
+                            $elementfield .= ">";
+                        $elementfield .= $option . "</option>\n\t\t\t\t";
+                    }
                 }
                 $elementfield .= "</select>";
 
@@ -181,7 +186,7 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
                     $elementfield .= "\n\t\t</ul></div>";
                 }
 
-                if (isset($this->session->publishFiles) && count($this->session->publishFiles)>=1 ) {
+                if (isset($this->session->publishFiles) && count($this->session->publishFiles) >= 1) {
                     $elementfield .= "<div class='form-files'><ul>" . $this->view->translate('already_uploaded_files');
                     foreach ($this->session->publishFiles as $file) {
                         $elementfield .= "\n<li>" . $file . "</li>";
@@ -224,6 +229,15 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
      */
     protected function _getRequiredSign() {
         return "<span class='required' title='" . $this->view->translate('required_star_title') . "'>*</span>";
+    }
+
+    /**
+     * returns a html String for displaying the group hint
+     * @param <String> $groupName
+     * @return <type>
+     */
+    protected function _getelementHint($elementName) {
+        return $this->view->translate('hint_' . $elementName);
     }
 
 }

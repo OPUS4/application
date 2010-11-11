@@ -104,7 +104,7 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         //todo: order ba name for german translation
         //Select with different document types given by the used function
         $listOptions = $documentTypes->getDocumentTypes();
-
+        
         $translatedOptions = array();
 
         foreach($listOptions as $option) {

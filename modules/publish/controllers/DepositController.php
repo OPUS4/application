@@ -40,7 +40,15 @@
  */
 class Publish_DepositController extends Controller_Action {
 
-    public $postData = array();
+    public $session;
+    public $log;
+
+    public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array()) {
+        $this->log = Zend_Registry::get('Zend_Log');
+        $this->session = new Zend_Session_Namespace('Publish');
+
+        parent::__construct($request, $response, $invokeArgs);
+    }
 
     /**
      * stores a delivered form as document in the database
@@ -54,42 +62,40 @@ class Publish_DepositController extends Controller_Action {
             if (array_key_exists('back', $post)) {
                 //go back
                 $this->_forward('check', 'form');
-            } else
+            }
+            else
             if (array_key_exists('collection', $post)) {
                 //choose collections
+                $this->session->countCollections = 1;
                 $this->_forward('top', 'collection');
-            } else {
+            }
+            else {
 
-                //deposit data
-                $log = Zend_Registry::get('Zend_Log');
-                $log->debug("deposit Action begins..");
-                $session = new Zend_Session_Namespace('Publish');
-
+                //deposit data                
+                $this->log->debug("deposit Action begins..");
                 $this->view->title = $this->view->translate('publish_controller_index');
                 $this->view->subtitle = $this->view->translate('publish_controller_deposit_successful');
 
-
-                if (isset($session->elements)) {
-                    foreach ($session->elements AS $element)
+                if (isset($this->session->elements)) {
+                    foreach ($this->session->elements AS $element)
                         $this->postData[$element['name']] = $element['value'];
                 }
 
-                $depositForm = new Publish_Form_PublishingSecond($session->documentType, $session->documentId, $session->fulltext, $session->additionalFields, $this->postData);
+                $depositForm = new Publish_Form_PublishingSecond($this->session->documentType, $this->session->documentId, $this->session->fulltext, $this->session->additionalFields, $this->postData);
                 $depositForm->populate($this->postData);
 
                 //avoid vulnerability by populate postdata to form => hacked fields won't be saved
                 $depositForm->prepareCheck();
                 $this->postData = array();
-                if (isset($session->elements)) {
-                    foreach ($session->elements AS $element)
+                if (isset($this->session->elements)) {
+                    foreach ($this->session->elements AS $element)
                         $this->postData[$element['name']] = $element['value'];
                 }
-                
 
                 if (isset($this->postData['send']))
                     unset($this->postData['send']);
 
-                $depositData = new Publish_Model_Deposit($session->documentId, $session->documentType, $this->postData);
+                $depositData = new Publish_Model_Deposit($this->session->documentId, $this->session->documentType, $this->postData);
                 $document = $depositData->getDocument();
 
                 $projects = $depositData->getDocProjects();
@@ -98,13 +104,12 @@ class Publish_DepositController extends Controller_Action {
 
                 $docId = $document->store();
 
-                $log->info("Document was sucessfully stored!");
+                $this->log->info("Document was sucessfully stored!");
 
                 $subject = $this->view->translate('mail_publish_notification_subject', $docId);
                 $docUrl = $this->__getDocumentUrl($docId);
                 $message = $this->view->translate('mail_publish_notification', $docUrl);
                 $this->__scheduleNotification($subject, $message, $docId, $projects);
-
                 // Redirect to publish start page and print message
                 $docUrl = $this->view->url(array(
                     'module' => 'frontdoor',
@@ -123,12 +128,22 @@ class Publish_DepositController extends Controller_Action {
     }
 
     /**
+     *  Method finally sends an email to the referrers named in config.ini
+     */
+    private function __notifyReferee($projects = null) {
+        $mail = new Mail_PublishNotification($this->session->documentId, $projects, $this->view);
+        if ($mail->send() === false)
+            $this->log->err("email to referee could not be sended!");
+        else
+            $this->log->info("Referee has been informed via email.");
+    }
+
+    /**
      * Schedules notifications for referees.
      * @param <type> $projects
      */
     private function __scheduleNotification($subject, $message, $docId, $projects = null) {
-        $defaultNS = new Zend_Session_Namespace('Publish');
-        $docId = $defaultNS->documentId;
+        $docId = $this->session->documentId;
 
         $job = new Opus_Job();
         $job->setLabel(Opus_Job_Worker_MailPublishNotification::LABEL);
@@ -137,7 +152,7 @@ class Publish_DepositController extends Controller_Action {
             'message' => $message,
             'projects' => $projects,
             'docId' => $docId
-            ));
+        ));
 
         $config = Zend_Registry::get('Zend_Config');
 
@@ -165,10 +180,10 @@ class Publish_DepositController extends Controller_Action {
      */
     private function __getDocumentUrl($docId) {
         $url_frontdoor = array(
-            'module'     => 'frontdoor',
+            'module' => 'frontdoor',
             'controller' => 'index',
-            'action'     => 'index',
-            'docId'      => $docId
+            'action' => 'index',
+            'docId' => $this->docId
         );
 
         $baseUrl = $this->view->serverUrl(); // TODO doesn't work

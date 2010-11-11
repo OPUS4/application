@@ -85,8 +85,9 @@ class Publish_CollectionController extends Controller_Action {
                     $this->session->step = $this->session->step + 1;
                 }
 
-                if (array_key_exists('top', $post)) {
-                    $this->session->collection['top'] = $post['top'];
+                else if (array_key_exists('chooseAnotherCollection', $post)) {
+                    $this->session->countCollections = (int) $this->session->countCollections + 1;
+                    $this->_forward('top');
                 }
 
                 foreach ($post AS $p => $v) {
@@ -129,6 +130,7 @@ class Publish_CollectionController extends Controller_Action {
             $this->log->debug("Third: set view var " . $currentElement);
         }
     }
+
 
 }
 

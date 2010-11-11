@@ -51,10 +51,10 @@ $session = new Zend_Session_Namespace('Publish');
         <form enctype="multipart/form-data" action="<?= $this->action_url; ?>" method="post">
 
             <div class="form-items-wrapper">
-            <?= $this->element($this->top); ?>
+            <?= $this->element($this->collection1); ?>
             
             <div class="button-wrapper">
-                <?= $this->element('button_label_choose_subcollection', "class='form-button add-button'", "Submit", "goToSubCollection"); ?>
+                <?= $this->element('button_label_choose_subcollection', "class='form-button down-button'", "Submit", "goToSubCollection"); ?>
                 <?= $this->element('button_label_send', "class='form-button submit-button'", "Submit", "send"); ?>
             </div>
 

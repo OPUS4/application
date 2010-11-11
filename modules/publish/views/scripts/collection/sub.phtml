@@ -35,9 +35,10 @@
 //echo $this->form;
 //element($value, $options = null, $type = null, $name = null)
 //group($value, $options = null, $name = null)
-echo $this->form;
+//echo $this->form;
 
 $session = new Zend_Session_Namespace('Publish');
+$step = $session->step;
 ?>
 
 <h2><?= $this->title ?></h2>
@@ -49,50 +50,39 @@ $session = new Zend_Session_Namespace('Publish');
     <? endif; ?>
 
         <form enctype="multipart/form-data" action="<?= $this->action_url; ?>" method="post">
-
             <div class="form-items-wrapper">
-                <ul class="nav browsing">
-                    <li><?= $this->translate($session->collection['topName']); ?></li>
-                    <?php for ($i=1; $i<=20; $i++) : ?>
-                    <li><?= $this->translate($session->collection['sub'.$i]); ?></li>
-                    <?php 
-                        $j = $i+1;
-                        if (!isset($session->collection['sub'.$j]))
-                                break; ?>
-                    <?php endfor; ?>
 
+<!-- already chosen selections -->
+                <ul class="nav browsing">
+                    <?php for ($i = 1; $i <= $step-1; $i++)  : ?>
+                        <li><?= $this->translate($session->collection['collection'.$i.'Name']); ?></li>
+                    <?php endfor; ?>
                 </ul>
 
-            <?php if (isset($this->sub1)) : ?>
-            <?= $this->element($this->sub1); ?>
-            <?php endif; ?>
+<!-- new Selection Field -->
+            
+                <?php $step = (int) $step; $sub = 'collection' . $step; ?>
+                <?php if(isset($this->$sub)) : ?>
+                     <?= $this->element($this->$sub); ?>
+                <?php else : ?>
+                    <h4><?= $this->translate('endOfCollectionTree'); ?></h4>
+                <?php endif; ?>
+          
 
-            <?php if (isset($this->sub2)) : ?>
-            <?= $this->element($this->sub2); ?>
-            <?php endif; ?>
-
-            <?php if (isset($this->sub3)) : ?>
-            <?= $this->element($this->sub3); ?>
-            <?php endif; ?>
-
-            <?php if (isset($this->sub4)) : ?>
-            <?= $this->element($this->sub4); ?>
-            <?php endif; ?>
-
-            <?php if (isset($this->sub5)) : ?>
-            <?= $this->element($this->sub5); ?>
-            <?php endif; ?>
-
-                                <div class="button-wrapper">
-                <?php if ((int) $session->step >= 2) : ?>
-                <?= $this->element('button_label_choose_parentcollection', "class='form-button abort-button'", "Submit", "goToParentCollection"); ?>
+<!-- Buttons -->
+            <div class="button-wrapper">
+                <?php if ($step > 1) : ?>
+                <?= $this->element('button_label_choose_parentcollection', "class='form-button up-button'", "Submit", "goToParentCollection"); ?>
                 <?php endif; ?>
 
                 <?php if (false === $session->endOfCollection) : ?>
-                <?= $this->element('button_label_choose_subcollection', "class='form-button add-button'", "Submit", "goToSubCollection"); ?>
+                <?= $this->element('button_label_choose_subcollection', "class='form-button down-button'", "Submit", "goToSubCollection"); ?>
                 <?php endif; ?>
 
-                <?= $this->element('button_label_send', "class='form-button submit-button'", "Submit", "send"); ?>
+                <?php if (true === $session->endOfCollection) : ?>
+                <?= $this->element('button_label_choose_another_collection', "class='form-button add-button'", "Submit", "chooseAnotherCollection"); ?>
+                <?= $this->element('button_label_send_collection', "class='form-button submit-button'", "Submit", "send"); ?>
+                <?php endif; ?>                
             </div>
 
         </div>
