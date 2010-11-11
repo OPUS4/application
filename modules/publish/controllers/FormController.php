@@ -60,7 +60,7 @@ class Publish_FormController extends Controller_Action {
         $this->view->languageSelectorDisabled = true;
 
         if ($this->getRequest()->isPost() === true) {
-            $indexForm = new Publish_Form_PublishingFirst();
+            $indexForm = new Publish_Form_PublishingFirst($this->view);
 
             $data = $this->getRequest()->getPost();
 

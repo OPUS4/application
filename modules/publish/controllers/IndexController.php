@@ -60,7 +60,7 @@ class Publish_IndexController extends Controller_Action {
         $this->view->title = $this->view->translate('publish_controller_index');
         $this->view->subtitle = $this->view->translate('publish_controller_index_sub');
 
-        $form = new Publish_Form_PublishingFirst();
+        $form = new Publish_Form_PublishingFirst($this->view);
 
         //set action_url and give it to the view
         $action_url = $this->view->url(array('controller' => 'form', 'action' => 'upload'));

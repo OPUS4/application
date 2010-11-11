@@ -42,12 +42,16 @@ class Publish_Form_PublishingFirst extends Zend_Form {
     public $config;
     public $session;
     public $disable;
+    public $view;
 
-    public function __construct($disable = null, $options = null) {
+    public function __construct($view, $disable = null, $options = null) {
         if (isset($disable))
             $this->disable = $disable;
 
+        $this->view = $view;
+        
         parent::__construct($options);
+
     }
 
     /**
@@ -101,11 +105,17 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         //Select with different document types given by the used function
         $listOptions = $documentTypes->getDocumentTypes();
 
-        asort($listOptions);
+        $translatedOptions = array();
+
+        foreach($listOptions as $option) {
+            $translatedOptions[] = $this->view->translate($option);
+        }
+
+        asort($translatedOptions);
 
         $doctypes = $this->createElement('select', 'documentType');
         $doctypes->setLabel('selecttype')
-                ->setMultiOptions(array_merge(array('' => 'choose_valid_doctype'), $listOptions));
+                ->setMultiOptions(array_merge(array('' => 'choose_valid_doctype'), $translatedOptions));
 
         if ($this->disable === true) {
             $doctypes->setAttrib('disabled', true)
