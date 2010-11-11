@@ -108,7 +108,7 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         $translatedOptions = array();
 
         foreach($listOptions as $option) {
-            $translatedOptions[] = $this->view->translate($option);
+            $translatedOptions[$option] = $this->view->translate($option);
         }
 
         asort($translatedOptions);
