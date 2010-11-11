@@ -41,7 +41,6 @@ set_include_path('.' . PATH_SEPARATOR
         . PATH_SEPARATOR . dirname(dirname(__FILE__)) . '/modules'
         . PATH_SEPARATOR . get_include_path());
 
-
 // Define path to application directory
 defined('APPLICATION_PATH')
        || define('APPLICATION_PATH', realpath(dirname(dirname(__FILE__))));
@@ -50,10 +49,8 @@ define('APPLICATION_ENV', 'testing');
 
 require_once 'Zend/Application.php';
 require_once 'Opus3Migration_Readline.php';
-require_once 'Opus3Migration_Parameters.php';
 
-// environment initializiation
-
+// Bootstrap application.
 $application = new Zend_Application(
     APPLICATION_ENV,
     array(
@@ -63,24 +60,8 @@ $application = new Zend_Application(
         )
     )
 );
-
 $application->bootstrap(array('Configuration', 'Logging', 'Database'));
 
-
-if ($argc === 1) {
-    $import = new Opus3Migration_Readline;
-} else {
-    $import = new Opus3Migration_Parameters;
-    $analyse = $import->analyseParameters($argv);
-    if ($analyse === false) {
-        echo "There is at least one failure in the paramters - aborting\n";
-        exit;
-    }
-}
-
-/*
-$import->run(dirname(dirname(__FILE__)), Opus_Bootstrap_Base::CONFIG_TEST,
-        dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'config');
-*/
-
-$import->run();
+// Start Opus3Migration
+$migration = new Opus3Migration_Readline();
+$migration->run();
