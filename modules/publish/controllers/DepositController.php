@@ -100,12 +100,10 @@ class Publish_DepositController extends Controller_Action {
 
                 $log->info("Document was sucessfully stored!");
 
-                $this->__notifyReferee($projects);
-                // FIXME replace line above with code below to use asychronous notifications
-//                $subject = $this->view->translate('mail_publish_notification_subject', $docId);
-//                $docUrl = $this->__getDocumentUrl($docId);
-//                $message = $this->view->translate('mail_publish_notification', $docUrl);
-//                $this->__scheduleNotification($subject, $message, $projects);
+                $subject = $this->view->translate('mail_publish_notification_subject', $docId);
+                $docUrl = $this->__getDocumentUrl($docId);
+                $message = $this->view->translate('mail_publish_notification', $docUrl);
+                $this->__scheduleNotification($subject, $message, $docId, $projects);
 
                 // Redirect to publish start page and print message
                 $docUrl = $this->view->url(array(
@@ -125,23 +123,10 @@ class Publish_DepositController extends Controller_Action {
     }
 
     /**
-     *  Method finally sends an email to the referrers named in config.ini
-     */
-    private function __notifyReferee($projects = null) {
-        $log = Zend_Registry::get('Zend_Log');
-        $defaultNS = new Zend_Session_Namespace('Publish');
-        $mail = new Mail_PublishNotification($defaultNS->documentId, $projects, $this->view);
-        if ($mail->send() === false)
-            $log->err("email to referee could not be sended!");
-        else
-            $log->info("Referee has been informed via email.");
-    }
-
-    /**
      * Schedules notifications for referees.
      * @param <type> $projects
      */
-    private function __scheduleNotification($subject, $message, $projects = null) {
+    private function __scheduleNotification($subject, $message, $docId, $projects = null) {
         $defaultNS = new Zend_Session_Namespace('Publish');
         $docId = $defaultNS->documentId;
 
@@ -150,12 +135,24 @@ class Publish_DepositController extends Controller_Action {
         $job->setData(array(
             'subject' => subject,
             'message' => $message,
-            'projects' => $projects
+            'projects' => $projects,
+            'docId' => $docId
             ));
 
-        // skip creating job if equal job already exists
-        if (true === $job->isUniqueInQueue()) {
-            $job->store();
+        $config = Zend_Registry::get('Zend_Config');
+
+        if (isset($config->runjobs->asynchronous) &&
+                $config->runjobs->asynchronous) {
+            // Queue job (execute asynchronously)
+            // skip creating job if equal job already exists
+            if (true === $job->isUniqueInQueue()) {
+                $job->store();
+            }
+        }
+        else {
+            // Execute job immediately (synchronously)
+            $mail = new Opus_Job_Worker_MailPublishNotification($log);
+            $mail->work($job);
         }
     }
 
@@ -171,7 +168,7 @@ class Publish_DepositController extends Controller_Action {
             'module'     => 'frontdoor',
             'controller' => 'index',
             'action'     => 'index',
-            'docId'      => $this->docId
+            'docId'      => $docId
         );
 
         $baseUrl = $this->view->serverUrl(); // TODO doesn't work
