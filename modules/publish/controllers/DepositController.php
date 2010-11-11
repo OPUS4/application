@@ -102,15 +102,21 @@ class Publish_DepositController extends Controller_Action {
 
                 $this->__notifyReferee($projects);
                 // FIXME replace line above with code below to use asychronous notifications
-//                $subject = $this->view->translation('mail_publish_notification_subject', $docId);
+//                $subject = $this->view->translate('mail_publish_notification_subject', $docId);
 //                $docUrl = $this->__getDocumentUrl($docId);
-//                $message = $this->view->translation('mail_publish_notification', $docUrl);
+//                $message = $this->view->translate('mail_publish_notification', $docUrl);
 //                $this->__scheduleNotification($subject, $message, $projects);
 
                 // Redirect to publish start page and print message
-                $message = $this->view->translate('success_redirect');
-                $message = str_replace('%id%', (string) $docId, $message);
-                return $this->_redirectToAndExit('index', $message, 'index', 'publish');
+                $docUrl = $this->view->url(array(
+                    'module' => 'frontdoor',
+                    'controller' => 'index',
+                    'action' => 'index',
+                    'docId' => $docId));
+                $message = $this->view->translate('success_redirect', $docUrl,
+                        $docId);
+                return $this->_redirectToAndExit('index', $message, 'index',
+                        'publish');
             }
         }
         else {
