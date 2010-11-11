@@ -16,19 +16,37 @@
 # @license     http://www.gnu.org/licenses/gpl.html General Public License
 # @version     $Id$
 
+
+# usage:
+# create opus_4.0.0_all.deb using temporary directory debtmp
+# ./build_deb_package.sh debtmp 
+
 set -e
 
+TEMPDIR=$1
 BASEDIR='/var/local/opus4'
 
-rm -rf deb_package/$BASEDIR
+if [ -z $TEMPDIR ]; then
+  echo "argument missing"
+  exit
+fi
 
-echo "create directory deb_package/$BASEDIR"
-mkdir -p deb_package/$BASEDIR
+if [ -d $TEMPDIR ]; then
+  echo "directory $TEMPDIR exists -- choose another one or delete it first"
+  exit
+fi
+
+echo "create directory $TEMPDIR"
+mkdir -vp $TEMPDIR/$BASEDIR
+
+svn --force export https://svn.zib.de/opus4dev/server/trunk/scripts/packaging/deb_package/DEBIAN/ $TEMPDIR/DEBIAN
 
 echo "get OPUS 4 source code"
-./prepare_directories.sh trunk deb_package/$BASEDIR
+./prepare_directories.sh trunk $TEMPDIR/$BASEDIR
 
 echo "create deb package"
-chmod +x deb_package/DEBIAN/postinst
-chmod +x deb_package/DEBIAN/prerm
-dpkg-deb --build deb_package .
+chmod +x $TEMPDIR/DEBIAN/{postinst,prerm}
+dpkg-deb --build $TEMPDIR .
+
+echo "remove directory $TEMPDIR"
+#rm -rf $TEMPDIR
