@@ -49,4 +49,4 @@ chmod +x $TEMPDIR/DEBIAN/{postinst,prerm}
 dpkg-deb --build $TEMPDIR .
 
 echo "remove directory $TEMPDIR"
-#rm -rf $TEMPDIR
+rm -rf $TEMPDIR
