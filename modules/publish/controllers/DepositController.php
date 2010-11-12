@@ -40,8 +40,9 @@
  */
 class Publish_DepositController extends Controller_Action {
 
-    public $session;
+    public $postData = array();
     public $log;
+    public $session;
 
     public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array()) {
         $this->log = Zend_Registry::get('Zend_Log');
@@ -66,19 +67,19 @@ class Publish_DepositController extends Controller_Action {
             else
             if (array_key_exists('collection', $post)) {
                 //choose collections
-                $this->session->countCollections = 1;
                 $this->_forward('top', 'collection');
             }
             else {
 
-                //deposit data                
-                $this->log->debug("deposit Action begins..");
+                //deposit data
                 $this->view->title = $this->view->translate('publish_controller_index');
                 $this->view->subtitle = $this->view->translate('publish_controller_deposit_successful');
 
                 if (isset($this->session->elements)) {
-                    foreach ($this->session->elements AS $element)
+                    foreach ($this->session->elements AS $element) {
                         $this->postData[$element['name']] = $element['value'];
+                        $this->log->debug('SAVING DATA: ' . $element['name'] . ' + ' . $element['value']);
+                    }
                 }
 
                 $depositForm = new Publish_Form_PublishingSecond($this->session->documentType, $this->session->documentId, $this->session->fulltext, $this->session->additionalFields, $this->postData);
@@ -86,11 +87,6 @@ class Publish_DepositController extends Controller_Action {
 
                 //avoid vulnerability by populate postdata to form => hacked fields won't be saved
                 $depositForm->prepareCheck();
-                $this->postData = array();
-                if (isset($this->session->elements)) {
-                    foreach ($this->session->elements AS $element)
-                        $this->postData[$element['name']] = $element['value'];
-                }
 
                 if (isset($this->postData['send']))
                     unset($this->postData['send']);
@@ -106,26 +102,20 @@ class Publish_DepositController extends Controller_Action {
 
                 $this->log->info("Document was sucessfully stored!");
 
-                $subject = $this->view->translate('mail_publish_notification_subject', $docId);
-                $docUrl = $this->__getDocumentUrl($docId);
-                $message = $this->view->translate('mail_publish_notification', $docUrl);
-                $this->__scheduleNotification($subject, $message, $docId, $projects);
+                $this->__notifyReferee($projects);
+                // FIXME replace line above with code below to use asychronous notifications
+//                $subject = $this->view->translate('mail_publish_notification_subject', $docId);
+//                $docUrl = $this->__getDocumentUrl($docId);
+//                $message = $this->view->translate('mail_publish_notification', $docUrl);
+//                $this->__scheduleNotification($subject, $message, $projects);
                 // Redirect to publish start page and print message
                 $docUrl = $this->view->url(array(
-                    'module' => 'frontdoor',
-                    'controller' => 'index',
-                    'action' => 'index',
-                    'docId' => $docId));
-                if (true !== Opus_Security_Realm::getInstance()->check('clearance')) {
-                    $message = $this->view->translate('success_redirect',
-                            $docId);
-                }
-                else {
-                    $message = $this->view->translate(
-                            'success_redirect_with_link', $docUrl, $docId);
-                }
-                return $this->_redirectToAndExit('index', $message, 'index',
-                        'publish');
+                            'module' => 'frontdoor',
+                            'controller' => 'index',
+                            'action' => 'index',
+                            'docId' => $docId));
+                $message = $this->view->translate('success_redirect', $docUrl, $docId);
+                return $this->_redirectToAndExit('index', $message, 'index', 'publish');
             }
         }
         else {
@@ -134,10 +124,21 @@ class Publish_DepositController extends Controller_Action {
     }
 
     /**
+     *  Method finally sends an email to the referrers named in config.ini
+     */
+    private function __notifyReferee($projects = null) {
+        $mail = new Mail_PublishNotification($defaultNS->documentId, $projects, $this->view);
+        if ($mail->send() === false)
+            $this->log->err("email to referee could not be sended!");
+        else
+            $this->log->info("Referee has been informed via email.");
+    }
+
+    /**
      * Schedules notifications for referees.
      * @param <type> $projects
      */
-    private function __scheduleNotification($subject, $message, $docId, $projects = null) {
+    private function __scheduleNotification($subject, $message, $projects = null) {
         $docId = $this->session->documentId;
 
         $job = new Opus_Job();
@@ -145,24 +146,12 @@ class Publish_DepositController extends Controller_Action {
         $job->setData(array(
             'subject' => $subject,
             'message' => $message,
-            'projects' => $projects,
-            'docId' => $docId
+            'projects' => $projects
         ));
 
-        $config = Zend_Registry::get('Zend_Config');
-
-        if (isset($config->runjobs->asynchronous) &&
-                $config->runjobs->asynchronous) {
-            // Queue job (execute asynchronously)
-            // skip creating job if equal job already exists
-            if (true === $job->isUniqueInQueue()) {
-                $job->store();
-            }
-        }
-        else {
-            // Execute job immediately (synchronously)
-            $mail = new Opus_Job_Worker_MailPublishNotification($log);
-            $mail->work($job);
+        // skip creating job if equal job already exists
+        if (true === $job->isUniqueInQueue()) {
+            $job->store();
         }
     }
 
@@ -178,7 +167,7 @@ class Publish_DepositController extends Controller_Action {
             'module' => 'frontdoor',
             'controller' => 'index',
             'action' => 'index',
-            'docId' => $this->docId
+            'docId' => $docId
         );
 
         $baseUrl = $this->view->serverUrl(); // TODO doesn't work

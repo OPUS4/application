@@ -85,10 +85,11 @@ class Publish_Form_PublishingThird extends Zend_Form {
                         $this->session->endOfCollection = true;
                         //decrease
                         $j = $i - 1;
-
-                        $this->session->elements['collection']['name'] = 'Collection' . $this->session->countCollections;
-                        $this->session->elements['collection']['value'] = $this->session->collection['collection' . $j];
-                        $this->session->elements['collection']['label'] = 'collection';
+                        $name = 'Collection' . $this->session->countCollections;
+                        $this->session->elements[$name]['name'] = $name;
+                        $this->session->elements[$name]['value'] = $this->session->collection['collection' . $j];
+                        $this->session->elements[$name]['label'] = 'collection';
+                        $this->log->debug('Collection stored in session!');
                     }
                 }
             }
