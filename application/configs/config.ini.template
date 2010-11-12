@@ -122,12 +122,6 @@ oai.repository.identifier = opus4.demo
 oai.sample.identifier = oai:opus4.demo:90
 oai.ddb.contactid = 
 
-; $docid gets replaced with the actual document id
-oai.repository.frontdoorurl =
-; File download URL pattern e.g. http://www.example.com/fileadmin/$docid/$filename
-; $filename gets replaced with the actual filename
-oai.repository.fileurl =
-
 
 ; The following is needed even if sections are empty.
 [staging : production]
