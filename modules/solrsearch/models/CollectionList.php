@@ -49,7 +49,7 @@ class SolrSearch_Model_CollectionList {
         catch (Opus_Model_NotFoundException $e) {
             throw new SolrSearch_Model_Exception("Collection with id '" . $collectionId . "' does not exist.");
         }
-        if ($collection->getVisible() !== '1') {
+        if (!$collection->isRoot() && $collection->getVisible() !== '1') {
             throw new SolrSearch_Model_Exception("Collection with id '" . $collectionId . "' is not visible.");
         }
 
