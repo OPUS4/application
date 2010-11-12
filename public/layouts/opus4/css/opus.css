@@ -151,7 +151,11 @@ table.authorTitle th{
 }
 .button-wrapper{
 	padding: 10px;
+        text-align:right;
 	clear: both;
+}
+.required{
+    color: #fe7c25;
 }
 fieldset .add-delete-wrapper{
 	padding: 0;
@@ -189,16 +193,28 @@ div > .form-button{
 	font-family: Arial, Helvetica, sans-serif;
 }
 div > .add-button,
-div > .delete-button{
-	padding-left: 22px;
+div > .delete-button,
+div > .up-button,
+div > .down-button
+{
+    padding-left: 22px;
 }
 div > .add-button{
 	background: url(../img/theme/bg_button-add.gif) no-repeat 0 50%;
+}
+div > .down-button{
+    background: url(../img/theme/bg_button-down.gif) no-repeat 0 50%;
 }
 div > .delete-button{
 	background: url(../img/theme/bg_button-delete.gif) no-repeat 0 50%;
 	border-color: #a5b5b5;
 	color: black;
+}
+div > .up-button{
+    background: url(../img/theme/bg_button-up.gif) no-repeat 0 50%;
+    border-color: #a5b5b5;
+    color: black;
+    margin-left: 5px;
 }
 div > .abort-button{
 	background: url(../img/theme/bg_button-abort.gif) repeat-x center;
@@ -222,6 +238,13 @@ div > .abort-button{
 .opus fieldset .form-errors{
 	clear: both;
 }
+.opus fieldset .form-files{   
+    width: 100%;
+    margin-left:610px;
+    margin-top:-70px;
+    color: #26517D;
+   
+}
 .left-labels label,
 .right-labels label{
 	width: 24%;	
@@ -242,10 +265,20 @@ div > .abort-button{
 }
 .opus fieldset .form-errors ul,
 .opus fieldset .form-errors p{
-	margin: 0 0 0.8em;
+	margin: 0 0 0 10px;
 	padding: 0;
 	list-style: none;
 	color: #cc3300;
+}
+.opus fieldset .form-files ul {
+    margin: 0 0 0 0;
+    padding-left: 1em;
+    list-style: none;
+}
+.opus fieldset .form-files li
+{
+    background: url(../img/theme/icon-dash-small.gif) no-repeat 0 50%;
+    padding: 0 0 0 9px;
 }
 .opus .form-hint{
 	padding: 0 10px;
@@ -263,6 +296,17 @@ div > .abort-button{
 .opus fieldset .form-errors{
 	background-image: url(../img/theme/icon-errors-small.gif);
 	background-repeat: no-repeat;
+}
+#form-table-check td.label{
+    border-right: 1px solid #26517C;
+    text-align: right;
+}
+
+#form-table-check td.group{
+    border-bottom: 1px solid #26517C;
+    background-color: #E2E6E9;
+    color: #6a7a7b;
+    text-align: left;
 }
 /* HTML elements
 ------------------------------------------------------------ */
