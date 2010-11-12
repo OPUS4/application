@@ -380,10 +380,10 @@
 
     <tu tuid="button_label_choose_parentcollection">
         <tuv xml:lang="en">
-            <seg>Go back to parent collection</seg>
+            <seg>Move up one level.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Zurück zur Eltern-Sammlung gehen</seg>
+            <seg>Eine Ebene nach oben gehen</seg>
         </tuv>
     </tu>
 
