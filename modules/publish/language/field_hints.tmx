@@ -1070,7 +1070,7 @@ Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathsci
             <seg>Please enter the collection.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Bitte wählen Sie eine Collection.</seg>
+            <seg>Bitte wählen Sie eine Sammlung.</seg>
         </tuv>
     </tu>
 	
@@ -1257,10 +1257,10 @@ Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathsci
 
     <tu tuid="hint_collection1">
         <tuv xml:lang="en">
-            <seg>Please choose the main collection. You can then choose other sub collections.</seg>
+            <seg>Please choose a collection. After that you can navigate to the collection entries of that collection.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Bitte wählen Sie die Hauptsammlung aus. Sie können dann weitere Untersammlung auswählen.</seg>
+            <seg>Bitte wählen Sie eine Sammlung aus. Sie können danach zu weiteren Sammlungeinträgen der Sammlung navigieren.</seg>
         </tuv>
     </tu>
 
