@@ -86,6 +86,8 @@ class Admin_StatisticController extends Zend_Controller_Action {
     }
 
     public function showAction() {
+        $this->view->languageSelectorDisabled = true;
+
         $documents = new Opus_Db_Documents();
         $postData = $this->_request->getPost();
         // get month overview from database
