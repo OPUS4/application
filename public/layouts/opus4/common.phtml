@@ -71,6 +71,10 @@ $languageSelectors = $this->languageSelector();
         <?= $this->headTitle() ?>
         <?= $this->headScript() ?>
         <?= $this->headLink() ?>
+
+        <!--[if IE 6]>
+        <link rel="stylesheet" type="text/css" href="<?= $this->layoutPath() ?>/css/opus-ie.css" />
+        <![endif]-->
     </head>
 
     <body>
