@@ -417,24 +417,6 @@
       </tuv>
     </tu>
 
-    <tu tuid="frontdoor_no_identity_error">
-      <tuv xml:lang="en">
-        <seg>You are not allowed to see the document metadata. Please login.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Sie sind nicht berechtigt die Metadaten des Dokuments zu sehen. Bitte loggen Sie sich ein.</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="frontdoor_wrong_identity_error">
-      <tuv xml:lang="en">
-        <seg>You are not allowed to see the document metadata. Please relogin with a nother identity.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Sie sind nicht berechtigt die Metadaten des Dokuments zu sehen. Bitte loggen Sie sich aus und mit einem anderen Usernamen wieder ein.</seg>
-      </tuv>
-    </tu>
-
     <tu tuid="col">
       <tuv xml:lang="en">
         <seg>Collection</seg>

@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+
+  <body>
+
+    <tu tuid="frontdoor_no_identity_error">
+      <tuv xml:lang="en">
+        <seg>You are not allowed to see the document metadata. Please login.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sie sind nicht berechtigt die Metadaten des Dokuments zu sehen. Bitte loggen Sie sich ein.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="frontdoor_wrong_identity_error">
+      <tuv xml:lang="en">
+        <seg>You are not allowed to see the document metadata. Please relogin with a nother identity.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sie sind nicht berechtigt die Metadaten des Dokuments zu sehen. Bitte loggen Sie sich aus und mit einem anderen Usernamen wieder ein.</seg>
+      </tuv>
+    </tu>
+
+  </body>
+
+</tmx>
