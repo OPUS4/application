@@ -488,7 +488,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="header_Collection1">
+    <tu tuid="header_collection1">
       <tuv xml:lang="en">
         <seg>Choose main collection</seg>
       </tuv>
@@ -497,7 +497,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="header_Collection2">
+    <tu tuid="header_collection2">
       <tuv xml:lang="en">
         <seg>Choose sub collection</seg>
       </tuv>
@@ -506,7 +506,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="header_Collection3">
+    <tu tuid="header_collection3">
       <tuv xml:lang="en">
         <seg>Choose main collection</seg>
       </tuv>
@@ -515,7 +515,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="header_Collection4">
+    <tu tuid="header_collection4">
       <tuv xml:lang="en">
         <seg>Choose main collection</seg>
       </tuv>
@@ -524,7 +524,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="header_Collection5">
+    <tu tuid="header_collection5">
       <tuv xml:lang="en">
         <seg>Choose main collection</seg>
       </tuv>
@@ -533,7 +533,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="header_Collection6">
+    <tu tuid="header_collection6">
       <tuv xml:lang="en">
         <seg>Choose main collection</seg>
       </tuv>
@@ -542,7 +542,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="header_Collection7">
+    <tu tuid="header_collection7">
       <tuv xml:lang="en">
         <seg>Choose main collection</seg>
       </tuv>
