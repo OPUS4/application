@@ -250,6 +250,10 @@
     padding: 0.5em 2em;
 }
 
+.adminContainer fieldset {
+    background: #f3f6f8;
+}
+
 .adminContainer fieldset.file {
     margin: 0.5em;
     border-width: 1px;
