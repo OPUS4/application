@@ -116,8 +116,14 @@ class Publish_DepositController extends Controller_Action {
                     'controller' => 'index',
                     'action' => 'index',
                     'docId' => $docId));
-                $message = $this->view->translate('success_redirect', $docUrl,
-                        $docId);
+                if (true !== Opus_Security_Realm::getInstance()->check('clearance')) {
+                    $message = $this->view->translate('success_redirect',
+                            $docId);
+                }
+                else {
+                    $message = $this->view->translate(
+                            'success_redirect_with_link', $docUrl, $docId);
+                }
                 return $this->_redirectToAndExit('index', $message, 'index',
                         'publish');
             }
