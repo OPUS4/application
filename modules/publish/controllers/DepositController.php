@@ -134,17 +134,6 @@ class Publish_DepositController extends Controller_Action {
     }
 
     /**
-     *  Method finally sends an email to the referrers named in config.ini
-     */
-    private function __notifyReferee($projects = null) {
-        $mail = new Mail_PublishNotification($this->session->documentId, $projects, $this->view);
-        if ($mail->send() === false)
-            $this->log->err("email to referee could not be sended!");
-        else
-            $this->log->info("Referee has been informed via email.");
-    }
-
-    /**
      * Schedules notifications for referees.
      * @param <type> $projects
      */
@@ -154,7 +143,7 @@ class Publish_DepositController extends Controller_Action {
         $job = new Opus_Job();
         $job->setLabel(Opus_Job_Worker_MailPublishNotification::LABEL);
         $job->setData(array(
-            'subject' => subject,
+            'subject' => $subject,
             'message' => $message,
             'projects' => $projects,
             'docId' => $docId
