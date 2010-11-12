@@ -60,12 +60,11 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         $valid2 = parent::isValid($data);
 
         $rights = $data['rights'];
-        $this->log->debug('************************'. $rights .'*********************');
         if ($rights == '0') {
             $rights = $this->getElement('rights');
             $rights->addError('publish_error_rights_checkbox_empty');
             $valid2 = false;
-        }        
+        }
 
         return ($valid1 && $valid2);
     }
@@ -229,7 +228,9 @@ class Publish_Form_PublishingFirst extends Zend_Form {
     private function _createRightsCheckBox() {
         $rights = $this->createElement('checkbox', 'rights')
                         ->setLabel('rights')
-                        ->setRequired(true);
+                        ->setRequired(true)
+                        ->setChecked(false);
+
         return $rights;
     }
 
@@ -254,6 +255,10 @@ class Publish_Form_PublishingFirst extends Zend_Form {
 
         if ($element->getType() === 'Zend_Form_Element_Checkbox') {
             $elementAttributes['value'] = $element->getCheckedValue();
+            if ($element->isChecked())
+                $elementAttributes['check'] = 'checked';
+            else
+                $elementAttributes['check'] = '';
         }
 
         if ($element->getType() === 'Zend_Form_Element_Select') {

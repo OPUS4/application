@@ -147,6 +147,10 @@ class Publish_Form_PublishingSecond extends Zend_Form {
 
         if ($element->getType() === 'Zend_Form_Element_Checkbox') {
             $elementAttributes['value'] = $element->getCheckedValue();
+            if ($element->isChecked())
+                $elementAttributes['check'] = 'checked';
+            else
+                $elementAttributes['check'] = '';
         }
 
         if ($element->getType() === 'Zend_Form_Element_Select') {
