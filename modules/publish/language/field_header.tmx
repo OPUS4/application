@@ -362,7 +362,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="header_">
+    <tu tuid="header_CompletedDate">
       <tuv xml:lang="en">
         <seg>Publication online</seg>
       </tuv>
