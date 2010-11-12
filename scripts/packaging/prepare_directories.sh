@@ -52,11 +52,14 @@ find -P . -name .gitignore -print0 | xargs -r0 rm -v
 
 rm -rv opus4/{docs,nbproject,tests,workspace}
 rm -rvf opus4/public/layouts/{opus33,opus34,darker,matheon,plain,opus4-matheon}
-rm -rv opus4/import
+rm -r opus4/import/importer/ZIB*.php
+rm -r opus4/import/stylesheets/zib*.xslt
 rm -v  opus4/modules/publish/views/scripts/form/preprintmatheon.phtml
 rm -rv opus4/modules/{pkm,publicationList,remotecontrol}
 rm -rv opus4/scripts/{packaging,cron,indexing,install}
 rm -r  opus4/scripts/*{Matheon,ZIB}*.php
+rm -r  opus4/scripts/*{Base,Parameters}*.php
+rm -r  opus4/scripts/migration.sh
 rm -rvf opus4/library/Opus/Search/{Adapter,Index}/Lucene/
 rm -rvf testdata/sql/992_create_documents_testdata__security.sql
 rm -rvf testdata/sql/990_create_documents_testdata__hhhar.sql
