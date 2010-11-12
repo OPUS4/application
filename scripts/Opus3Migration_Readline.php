@@ -1,24 +1,45 @@
 <?php
 
-/* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
- * Description of Opus3Migration_Base
+ * This file is part of OPUS. The software OPUS has been originally developed
+ * at the University of Stuttgart with funding from the German Research Net,
+ * the Federal Department of Higher Education and Research and the Ministry
+ * of Science, Research and the Arts of the State of Baden-Wuerttemberg.
  *
- * @author gunar
+ * OPUS 4 is a complete rewrite of the original OPUS software and was developed
+ * by the Stuttgart University Library, the Library Service Center
+ * Baden-Wuerttemberg, the Cooperative Library Network Berlin-Brandenburg,
+ * the Saarland University and State Library, the Saxon State Library -
+ * Dresden State and University Library, the Bielefeld University Library and
+ * the University Library of Hamburg University of Technology with funding from
+ * the German Research Foundation and the European Regional Development Fund.
+ *
+ * LICENCE
+ * OPUS is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the Licence, or any later version.
+ * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @category    Application
+ * @package     Module_Import
+ * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
+ * @author      Gunar Maiwald <maiwald@zib.de>
+ * @copyright   Copyright (c) 2009, 2010, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ * @version     $Id$
  */
 
-//require_once 'Opus3Migration_Base.php';
 require_once 'Opus3CollectionsImport.php';
 require_once 'Opus3FileImport.php';
 require_once 'Opus3InstituteImport.php';
 require_once 'Opus3LicenceImport.php';
 require_once 'Opus3XMLImport.php';
 
-//class Opus3Migration_Readline extends Opus3Migration_Base {
 class Opus3Migration_Readline  {
 
     private $importfile;
@@ -210,11 +231,7 @@ class Opus3Migration_Readline  {
         echo "Start Opus3-Migration\n";
 
         // Load Opus3-mySQL-XML-dump
-        //$this->init();
-        //$this->init('/home/gunar/opus4-btu/dumps/opus3_btu_20101110_utf8.xml');
-        //$this->init('/home/gunar/opus4-ubp/dumps/opus3_ubp_20101110_latin1.xml');
-        $this->init('/home/gunar/opus4-btu/dumps/opus3_btu_20101111.xml');
-        //$this->init('/home/gunar/opus4-ubp/dumps/opus3_ubp_20101111.xml');
+        $this->init();
 
         // Create Collection Roles
         $this->create_collection_roles();
@@ -229,14 +246,10 @@ class Opus3Migration_Readline  {
         $this->load_licences();
 
         // Load Institutes
-        //$this->load_documents();
-        $this->load_documents('1', '50');
+        $this->load_documents();
 
         // Import files
-        //$this->load_fulltext();
-        $this->load_fulltext('/home/gunar/opus4-btu/volltexte');
-        //$this->load_fulltext('/home/gunar/opus4-ubp/volltexte');
-
+        $this->load_fulltext();
 
         // Be Careful: cleanup will delete all Mapping Files for Institutes, Faculties etc.
         $this->cleanup();
