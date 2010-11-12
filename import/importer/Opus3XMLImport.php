@@ -159,9 +159,12 @@ class Opus3XMLImport {
         $licenceValue = null;
 
         /*  ThesisPublisher */
+        /*
         $publisher = null;
         $publisher = $document->getElementsByTagName('OldPublisherUniversity');
         $publisherValue = null;
+         *
+         */
         
 	/* ThesisGrantor */
         $faculty = null;
@@ -224,6 +227,7 @@ class Opus3XMLImport {
                 if (!is_null($this->getMapping($mappingFile, $l->getAttribute('Value')))) {
                     $licenceValue = $this->getMapping($mappingFile, $l->getAttribute('Value'));
                 }
+                //echo "ThesisGrantor: ".$licenceValue."\n";
                 $this->document->removeChild($l);
             }
         } else {
@@ -233,15 +237,16 @@ class Opus3XMLImport {
 
         if (count($faculty) > 0) {
             foreach ($faculty as $f) {
-                $mappingFile = '../workspace/tmp/faculties.map';
+                $mappingFile = '../workspace/tmp/grantor.map';
                 if (!is_null($this->getMapping($mappingFile, $f->getAttribute('Value')))) {
                     $grantorValue =  $this->getMapping($mappingFile, $f->getAttribute('Value'));
                 }
-                echo "ThesisGrantor: ".$f->getAttribute('Value')."\n";
+                //echo "ThesisGrantor: ".$grantorValue."\n";
                 $this->document->removeChild($f);
             }
         }
 
+        /*
         if (count($publisher) > 0) {
             foreach ($publisher as $p) {
                $mappingFile = '../workspace/tmp/universities.map';
@@ -252,25 +257,34 @@ class Opus3XMLImport {
                $this->document->removeChild($p);
             }
         }
+         * 
+         */
 
         try {
             
             // Dummyobject, does not need any content, because only one node is transformed
             $doc = Opus_Document::fromXml('<Opus>' . $this->completeXML->saveXML($this->document) . '</Opus>');
 
+            //echo "BEFORE:".$this->completeXML->saveXML($this->document)."\n";
+
 
             if ($licenceValue !== null) {
                 /* TODO: Throw Exception if Licence not valid */
                 $doc->addLicence(new Opus_Licence($licenceValue));
             }
-
+/*
             if ($publisherValue !== null) {
                 $doc->setThesisPublisher($publisherValue);
             }
+ */
 
             if ($grantorValue !== null) {
-                $doc->setThesisGrantor($grantorValue);
+                $dnbInstitute = new Opus_DnbInstitute($grantorValue);
+                $doc->setThesisGrantor($dnbInstitute);
+                $dnbInstitute = new Opus_DnbInstitute(1);
+                $doc->setThesisPublisher($dnbInstitute);
             }
+
             // Set the publication status to published since only published documents shall be imported
             $doc->setServerState('published');
 

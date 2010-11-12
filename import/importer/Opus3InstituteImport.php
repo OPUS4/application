@@ -44,7 +44,7 @@ class Opus3InstituteImport {
         $role = Opus_CollectionRole::fetchByName('institutes');
         $xml = new DomDocument;
         $xslt = new DomDocument;
-        $xslt->load('../modules/import/views/scripts/opus3/institute_structure.xslt');
+        $xslt->load('../import/stylesheets/institute_structure.xslt');
         $proc = new XSLTProcessor;
         $proc->registerPhpFunctions();
         $proc->importStyleSheet($xslt);
@@ -89,6 +89,7 @@ class Opus3InstituteImport {
 
     /**
      * Imports Universities from Opus3 to Opus4 directly (without XML)
+     * University is also a DNB Institute
      *
      * @param DOMDocument $data XML-Document to be imported
      * @return array List of documents that have been imported
@@ -100,18 +101,32 @@ class Opus3InstituteImport {
         // Build a mapping file to associate old IDs with the new ones
         $fp = fopen('../workspace/tmp/universities.map', 'w');
         foreach ($classification as $class) {
+
             if (array_key_exists('universitaet_anzeige', $class) === false) { continue; }
             if (array_key_exists('universitaet', $class) === false) { continue; }
-            echo ".";
+           
+            /* Create a Collection for University */
             $root = $role->getRootCollection();
 	    $coll = $root->addLastChild();
             $coll->setName($class['universitaet_anzeige']);
             $coll->setVisible(1);
             $root->store();
             $subcoll[] = $coll->getId();
+
+            /* Create a DNB-Institute for University */
+            $uni = new Opus_DnbInstitute();
+            $uni->setName($class['universitaet_anzeige']);
+            $this->uniname = $class['universitaet_anzeige'];
+            $uni->setAddress($class['instadresse']);
+            $uni->setCity($class['univort']);
+            $this->unicity = $class['univort'];
+            $uni->setDnbContactId($class['ddb_idn']);
+            $uni->setIsGrantor('1');
+            $uni->store();
+
+            echo "University imported: " . $class['universitaet_anzeige'] ."\n";
             fputs($fp, str_replace(" ", "_", $class['universitaet']) . ' ' .  $coll->getId() . "\n");
         }
-        echo "\n";
         fclose($fp);
         return $subcoll;
     }
@@ -119,6 +134,7 @@ class Opus3InstituteImport {
 	
     /**
      * Imports Faculties from Opus3 to Opus4 directly (without XML)
+     * Faculty is also a DNB Institute
      *
      * @param DOMDocument $data XML-Document to be imported
      * @return array List of documents that have been imported
@@ -129,20 +145,33 @@ class Opus3InstituteImport {
 
         // Build a mapping file to associate old IDs with the new ones
         $fp = fopen('../workspace/tmp/faculties.map', 'w');
+        $fp2 = fopen('../workspace/tmp/grantor.map', 'w');
         foreach ($classification as $class) {
             if (array_key_exists('fakultaet', $class) === false) { continue; }
             if (array_key_exists('nr', $class) === false) { continue; }
-            echo ".";
+
+            /* Create a Collection for Faculty */
             $root = new Opus_Collection($pColl);
             $coll = $root->addLastChild();
             $coll->setName($class['fakultaet']);
             $coll->setVisible(1);
             $root->store();
             $subcoll[$class["nr"]] = $coll->getId();
+
+            /* Create a DNB-Institute for Faculty */
+            $fac = new Opus_DnbInstitute();
+            $fac->setName($this->uniname.",".$class['fakultaet']);
+            $fac->setCity($this->unicity);
+            $fac->setIsGrantor('1');
+            $fac->store();
+
+            echo "Faculty imported: " . $class['fakultaet'] ."\n";
             fputs($fp, $class['nr'] . ' ' . $subcoll[$class["nr"]] . "\n");
+            fputs($fp2, $class['nr'] . ' ' . $fac->getId() . "\n");
+
 	}
-        echo "\n";
         fclose($fp);
+        fclose($fp2);
 	return $subcoll;
     }
 
@@ -161,15 +190,17 @@ class Opus3InstituteImport {
             if (array_key_exists('fakultaet', $class) === false) { continue; }
             if (array_key_exists('name', $class) === false) { continue; }
             if (array_key_exists('nr', $class) === false) { continue; }
-            echo ".";
+
+            /*  Create a Collection for Institute */
             $root = new Opus_Collection($pColls[$class['fakultaet']]);
             $coll = $root->addLastChild();
             $coll->setName($class['name']);
 	    $coll->setVisible(1);
 	    $root->store();
+
+            echo "Institute imported: " . $class['name'] ."\n";
             fputs($fp, $class['nr'] . ' ' . $coll->getId() . "\n");
         }
-        echo "\n";
         fclose($fp);
     }
 }

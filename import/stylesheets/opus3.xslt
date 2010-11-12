@@ -67,25 +67,24 @@
             <xsl:variable name="OriginalID">
                 <xsl:value-of select="field[@name='source_opus']" />
             </xsl:variable>
-            <!-- Ist fuer das ZIB nicht relevant
             <xsl:variable name="date_accepted">
                 <xsl:value-of select="/mysqldump/database/table_data[@name='opus_diss']/row[field[@name='source_opus']=$OriginalID]/field[@name='date_accepted']" />
             </xsl:variable>
-            -->
             <xsl:variable name="date_creation">
                 <xsl:value-of select="field[@name='date_creation']" />
             </xsl:variable>
             <xsl:variable name="date_modified">
                 <xsl:value-of select="field[@name='date_modified']" />
             </xsl:variable>
-            <!-- Ist fuer das ZIB nicht relevant
-            <xsl:variable name="date_validd">
+            <!-- Ist nicht relevant
+            <xsl:variable name="date_valid">
                 <xsl:value-of select="field[@name='date_valid']" />
             </xsl:variable>
             -->
 
             <!-- CompletedDate -->
             <!--CompletedDate is left out, because Opus3 only stores the year -->
+
             <!-- CompletedYear -->
             <xsl:attribute name="CompletedYear">
                 <xsl:value-of select="field[@name='date_year']" />
@@ -106,38 +105,84 @@
             </xsl:if>
 
             <!-- ThesisDateAccepted -->
-            <!-- Ist fuer das ZIB nicht relevant -->
-            <!--
             <xsl:if test="$date_accepted >0">
                 <xsl:attribute name="ThesisDateAccepted">
                     <xsl:value-of select="php:function('date', 'd.m.Y', $date_accepted)" />
                 </xsl:attribute>
             </xsl:if>
-            -->
 
             <!-- Type-->
             <xsl:attribute name="Type">
                 <xsl:choose>
-                     <!-- Preprint -->
-                     <xsl:when test="field[@name='type'] = '17'">
-                        <xsl:text>preprint</xsl:text>     
-                     </xsl:when>  
-                     <!-- Technical Report -->
-                     <xsl:when test="field[@name='type'] = '20'">
-                        <xsl:text>report</xsl:text>     
-                     </xsl:when>  
-                     <!-- ZIB-Report -->
-                     <xsl:when test="field[@name='type'] = '22'">
-                        <xsl:text>report</xsl:text>     
-                     </xsl:when> 
-                     <!-- ZIB-Jahresbericht -->
-                     <xsl:when test="field[@name='type'] = '70'">
-                        <xsl:text>misc</xsl:text>     
-                     </xsl:when>  
-                     <!-- Examensarbeit -->
-                     <xsl:when test="field[@name='type'] = '71'">
+                   <xsl:when test="field[@name='type']='1'">
+                        <xsl:text>report</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="field[@name='type']='2'">
+                        <xsl:text>article</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="field[@name='type']='4'">
+                        <xsl:text>book</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="field[@name='type']='5'">
+                        <xsl:text>bookpart</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="field[@name='type']='7'">
                         <xsl:text>masterthesis</xsl:text>
-                     </xsl:when>
+                    </xsl:when>
+                    <xsl:when test="field[@name='type']='8'">
+                        <xsl:text>doctoralthesis</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="field[@name='type']='9'">
+                        <xsl:text>book</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="field[@name='type']='11'">
+                        <xsl:text>misc</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="field[@name='type']='15'">
+                        <xsl:text>conferenceobject</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="field[@name='type']='16'">
+                        <xsl:text>article</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="field[@name='type']='17'">
+                        <xsl:text>workingpaper</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="field[@name='type']='19'">
+                        <xsl:text>studythesis</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="field[@name='type']='20'">
+                        <xsl:text>report</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="field[@name='type']='22'">
+                        <xsl:text>preprint</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="field[@name='type']='23'">
+                        <xsl:text>misc</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="field[@name='type']='24'">
+                        <xsl:text>habilitation</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="field[@name='type']='25'">
+                        <xsl:text>bachelorthesis</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="field[@name='type']='26'">
+                        <xsl:text>lecture</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="field[@name='type']='71'">
+                        <xsl:text>article</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="field[@name='type']='76'">
+                        <xsl:text>misc</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="field[@name='type']='78'">
+                        <xsl:text>lecture</xsl:text>
+                    </xsl:when>
+                    <xsl:when test="field[@name='type']='79'">
+                        <xsl:text>book</xsl:text>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:text>other</xsl:text>
+                    </xsl:otherwise>
                 </xsl:choose>
             </xsl:attribute>
 
@@ -214,8 +259,6 @@
             </xsl:if>
 
             <!-- IdentifierUrn -->
-            <!-- Fuer das ZIB irrelevant -->
-            <!--
             <xsl:if test="string-length(field[@name='urn']) > 0">
                 <xsl:element name="IdentifierUrn">
                     <xsl:attribute name="Value">
@@ -223,7 +266,6 @@
                     </xsl:attribute>
                 </xsl:element>
             </xsl:if>
-            -->
 
             <!-- IdentifierIsbn -->
             <xsl:if test="string-length(field[@name='isbn']) > 0">
@@ -315,9 +357,24 @@
                     </xsl:attribute>
                 </xsl:element>
             </xsl:if>
+            <!-- Dissertation:TitleMain, Language="deu" (2nd) -->
+            <xsl:for-each select="/mysqldump/database/table_data[@name='opus_diss']/row[field[@name='source_opus']=$OriginalID]">
+                <xsl:if test="string-length(field[@name='title_de'])>0">
+                    <xsl:element name="TitleAbstract">
+                        <xsl:attribute name="Language">
+                            <xsl:call-template name="mapLanguage">
+                                <xsl:with-param name="lang">ger</xsl:with-param>
+                            </xsl:call-template>
+                        </xsl:attribute>
+                        <xsl:attribute name="Value">
+                            <xsl:value-of select="field[@name='title_de']" />
+                        </xsl:attribute>
+                    </xsl:element>
+                </xsl:if>
+            </xsl:for-each>
 
-            <!-- PersonContributor -->
-            <!-- TODO: shoold be PersonContributor -->
+
+            <!-- Old: PersonContributor -->
             <!--
             <xsl:if test="string-length(field[@name='contributors_name'])>0">
                 <xsl:call-template name="AddPersons">
@@ -330,7 +387,7 @@
             </xsl:if>
             -->
 	    
-	  <!-- Enrichment-Contributor -->   
+	   <!-- New: Enrichment-Contributor -->
             <xsl:if test="string-length(field[@name='contributors_name']) > 0">
                 <xsl:element name="Enrichment">
                     <xsl:attribute name="KeyName">
@@ -352,7 +409,30 @@
                         <xsl:value-of select="normalize-space(field[@name='source_title'])" />
                     </xsl:attribute>
                 </xsl:element>
-            </xsl:if>	    
+            </xsl:if>	
+            
+            <!-- Old: OldPublisherUniversity -->
+            <!--
+            <xsl:if test="string-length(field[@name='publisher_university']) > 0">
+                <xsl:element name="OldPublisherUniversity">
+                    <xsl:attribute name="Value">
+                        <xsl:value-of select="field[@name='publisher_university']" />
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:if>
+            -->
+
+           <!-- New: Enrichment Institution -->
+            <xsl:if test="string-length(field[@name='publisher_university']) > 0">
+                <xsl:element name="Enrichment">
+                    <xsl:attribute name="KeyName">
+                        <xsl:text>institution</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="Value">
+                        <xsl:value-of select="normalize-space(field[@name='publisher_university'])" />
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:if>
 
             <!-- All Related Persons (Author/Editor/Submitter/Contributor/...)-->
             <!-- PersonSubmitter -->
@@ -455,15 +535,6 @@
                     </xsl:attribute>
                 </xsl:element>
             </xsl:if>  
-            
-            <!-- Old OldPublisherUniversity -->
-            <xsl:if test="string-length(field[@name='publisher_university']) > 0">
-                <xsl:element name="OldPublisherUniversity">
-                    <xsl:attribute name="Value">
-                        <xsl:value-of select="field[@name='publisher_university']" />
-                    </xsl:attribute>
-                </xsl:element>
-            </xsl:if>
             
             <!-- OldGrantor -->
             <xsl:for-each select="/mysqldump/database/table_data[@name='opus_diss']/row[field[@name='source_opus']=$OriginalID]">

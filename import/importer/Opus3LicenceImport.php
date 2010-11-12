@@ -121,8 +121,11 @@ class Opus3LicenceImport {
 	// Store the licenses and create a mapping file for migration
 	$fp = fopen('../workspace/tmp/license.map', 'w');
 	foreach ($licenses as $key => $licence) {
-            echo '.';
+            
             $id = $licence->store();
+
+            echo "Licence imported: " . $key . "\n";
+
             fputs($fp, $key . ' ' . $id . "\n");
 	}
 	fclose($fp);

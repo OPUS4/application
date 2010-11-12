@@ -98,6 +98,10 @@ class ZIBCollectionsImport {
         // Build a mapping file to associate old IDs with the new ones
         $fp = fopen('../workspace/tmp/series.map', 'w');
             foreach ($classification as $class) {
+
+                if (array_key_exists('name', $class) === false) { continue; }
+                if (array_key_exists('sr_id', $class) === false) { continue; }
+
                 //echo ".";
                 $root = $role->getRootCollection();
                 $coll = $root->addLastChild();

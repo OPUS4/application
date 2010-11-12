@@ -46,9 +46,7 @@ class Opus3FileImport {
      * @var string  Defaults to null.
      */
     protected $_tmpPath = null;
-    
     protected $_magicPath;
-    protected $_accessRole;
     
 
     /**
@@ -57,12 +55,10 @@ class Opus3FileImport {
      * @param string $fulltextPath Path to the Opus3-fulltexts
      * @return void
      */
-    public function __construct($fulltextPath, $magicPath, $accessRole)
-    {
+    public function __construct($fulltextPath, $magicPath)  {
         // Initialize member variables.
         $this->_path = $fulltextPath;
         $this->_magicPath = $magicPath;
-        $this->_accessRole = $accessRole;
     }
     
     /**
@@ -71,8 +67,7 @@ class Opus3FileImport {
      * @param Opus_Document $object Opus-Document for that the files should be registered
      * @return void
      */
-    public function loadFiles($id)
-    {
+    public function loadFiles($id) {
         
         $doc = new Opus_Document($id);
         $opus3Id = $doc->getIdentifierOpus3(0)->getValue();
@@ -148,9 +143,6 @@ class Opus3FileImport {
                     $file->setTempFile($filename);
                     //$file->setDocumentId($object->getId());
 		    $file->setLanguage($lang);
-		    if ($this->_accessRole !== null) {
-                                 //$file->addAccessPermission($this->_accessRole);
-		    }
                     $number++;
                 }
             }
@@ -160,6 +152,8 @@ class Opus3FileImport {
         if ($number > 0) {
             $doc->store();
         }
+
+        unset ($doc);
 
         //echo "After Num Collections:".count($doc->getCollection())."\n";
         

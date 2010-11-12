@@ -71,8 +71,7 @@ class ZIBFileImport {
      * @param Opus_Document $object Opus-Document for that the files should be registered
      * @return void
      */
-    public function loadFiles($id)
-    {
+    public function loadFiles($id) {
         
         $doc = new Opus_Document($id);
         $opus3Id = $doc->getIdentifierOpus3(0)->getValue();

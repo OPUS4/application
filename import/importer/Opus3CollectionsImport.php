@@ -42,12 +42,6 @@ class Opus3CollectionsImport {
      */
     public function __construct($data) {
 
-
-        /*
-         * Serien sind flache Datenstrukturen. Unterhalb der Wurzel sind alle Serien auf zweiter Ebene angeordnet.
-         * Collections sind hierarchische Datenstrukturen. Mehrere Ebenen sind möglich.
-         * Daher werden zwei unterschiedliche Methoden für den Import verwendet
-         */
         $collRole = Opus_CollectionRole::fetchByName('collections');
         $seriesRole = Opus_CollectionRole::fetchByName('series');
        
@@ -55,7 +49,6 @@ class Opus3CollectionsImport {
 	foreach ($doclist as $document)	{
             if ($document->getAttribute('name') === 'collections') {
                 $this->importCollectionsDirectly($document, $collRole);
-                //$this->importCollections($document, $collRole);
             }
             if ($document->getAttribute('name') === 'schriftenreihen') {
                 $this->importSeries($document, $seriesRole);
@@ -131,50 +124,78 @@ class Opus3CollectionsImport {
 
         // 1 is used as a predefined key and should not be used again!
         // so lets increment all old IDs by 1
-        $previousRight = null;
-        $previousNode = array();
-        $new_collection = null;
+        $previousRightStack = array();
+        $previousNodeStack  = array();
+        $new_collection     = null;
 
         // Build a mapping file to associate old IDs with the new ones
         $fp = fopen('../workspace/tmp/collections.map', 'w');
 
         foreach ($sorted_collections as $row) {
 
-            echo ".";
-            // parent_id is needed
-            if ($previousRight === null) {
-
+            //echo ".";
+            // case root_node
+            if (count($previousRightStack) == 0) {
+                //echo "case 1: id -" . $row['coll_id'] . "-left -" . $row['lft'] . "- right -" .$row['rgt']. "\n";
                 $root = $collRole->getRootCollection();
                 $new_collection = $root->addLastChild();
-//                $collRole->store();
+//              $collRole->store();
 
-                array_push($previousNode, $new_collection);
-            }
-            else if ( (int) $row['lft'] === (int) $previousRight+1) {
-            	// its a brother of previous node
-            	$left_brother = array_pop($previousNode);
-                $new_collection = $left_brother->addNextSibling();
-                $left_brother->store();
-                
-                array_push($previousNode, $new_collection);
-            }
-            else if ($row['rgt'] < $previousRight) {
-            	// its a child of previous node
-            	$father = array_pop($previousNode);
-                $new_collection = $father->addLastChild();
-                $father->store();
-
-            	array_push($previousNode, $father);
-            	array_push($previousNode, $new_collection);
+                array_push($previousNodeStack, $new_collection);
+                array_push($previousRightStack, $row['rgt']);
             }
             else {
-                throw new Exception("Should never happen, ({$row['rgt']} < $previousRight) failed");
+
+                // Throw elements from stack as long we don't have a
+                // father *or* a brother.
+                do {
+                    $previousNode = array_pop($previousNodeStack);
+                    $previousRight = array_pop($previousRightStack);
+
+                    $is_child = ($row['rgt'] < $previousRight);
+                    $is_brother = ((int) $row['lft'] === (int) $previousRight + 1);
+                } while ( !$is_child && !$is_brother );
+
+
+                // same level
+                if ($is_brother) {
+                    //echo "case 2: id -" . $row['coll_id'] . "-left -" . $row['lft'] . "- right -" . $row['rgt'] . "- prevright - " . $previousRight . "-\n";
+                    // its a brother of previous node
+                    $left_brother = $previousNode;
+                    $new_collection = $left_brother->addNextSibling();
+                    $left_brother->store();
+
+                    array_push($previousNodeStack, $new_collection);
+                    array_push($previousRightStack, $row['rgt']);
+                }
+                // go down one level
+                else if ($is_child) {
+                    //echo "case 3: id -" . $row['coll_id'] . "-left -" . $row['lft'] . "- right -" . $row['rgt'] . "- prevright - " . $previousRight . "-\n";
+                    // its a child of previous node
+                    $father = $previousNode;
+                    $new_collection = $father->addLastChild();
+                    $father->store();
+
+                    array_push($previousNodeStack, $father);
+                    array_push($previousRightStack, $previousRight);
+
+                    array_push($previousNodeStack, $new_collection);
+                    array_push($previousRightStack, $row['rgt']);
+
+                } else {
+                    //echo "case 4: id -" . $row['coll_id'] . "-left -" . $row['lft'] . "- right -" . $row['rgt'] . "- prevright - " . $previousRight . "-\n";
+                    throw new Exception("Collectionstructure of id ".$row['coll_id']." not valid");
+                    continue;
+                }
             }
 
             $new_collection->setVisible(1);
             $new_collection->setName($row['coll_name']);
             $new_collection->store();
             $previousRight = $row['rgt'];
+
+            echo "Collection imported: " . $row['coll_name'] ."\n";
+
             fputs($fp, $row['coll_id'] . ' ' . $new_collection->getId() . "\n");
         }
         echo "\n";
@@ -196,12 +217,15 @@ class Opus3CollectionsImport {
             foreach ($classification as $class) {
                 if (array_key_exists('name', $class) === false) { continue; }
                 if (array_key_exists('sr_id', $class) === false) { continue; }
-                echo ".";
+                //echo ".";
                 $root = $role->getRootCollection();
                 $coll = $root->addLastChild();
                 $coll->setVisible(1);
                 $coll->setName($class['name']);
                 $root->store();
+
+                echo "Series imported: " . $class['name'] ."\n";
+
                 fputs($fp, $class['sr_id'] . ' ' . $coll->getId() . "\n");
             }
         echo "\n";

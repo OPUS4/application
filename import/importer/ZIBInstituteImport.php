@@ -104,6 +104,10 @@ class ZIBInstituteImport {
         // Build a mapping file to associate old IDs with the new ones
         $fp = fopen('../workspace/tmp/universities.map', 'w');
         foreach ($classification as $class) {
+
+            if (array_key_exists('universitaet_anzeige', $class) === false) { continue; }
+            if (array_key_exists('universitaet', $class) === false) { continue; }
+
             //echo ".";
             $uni = new Opus_DnbInstitute();
             $uni->setName($class['universitaet_anzeige']);
@@ -119,7 +123,6 @@ class ZIBInstituteImport {
 
             fputs($fp, str_replace(" ", "_", $class['universitaet']) . ' ' .  $uni->getId() . "\n");
         }
-        //echo "\n";
         fclose($fp);
     }
 
@@ -136,7 +139,10 @@ class ZIBInstituteImport {
         // Build a mapping file to associate old IDs with the new ones
         $fp = fopen('../workspace/tmp/faculties.map', 'w');
         foreach ($classification as $class) {
-            //echo ".";
+
+            if (array_key_exists('fakultaet', $class) === false) { continue; }
+            if (array_key_exists('nr', $class) === false) { continue; }
+
             $fac = new Opus_DnbInstitute();
             $fac->setName($this->uniname.",".$class['fakultaet']);
             $fac->setCity($this->unicity);
@@ -147,7 +153,6 @@ class ZIBInstituteImport {
 
             fputs($fp, str_replace(" ", "_", $class['nr']) . ' ' .  $fac->getId() . "\n");
         }
-        //echo "\n";
         fclose($fp);
     }
 
@@ -164,10 +169,15 @@ class ZIBInstituteImport {
         // Build a mapping file to associate old IDs with the new ones
         $fp = fopen('../workspace/tmp/institute.map', 'w');
         foreach ($classification as $class) {
-            //echo ".";
-            // ZIB-Hack:
+
+            if (array_key_exists('fakultaet', $class) === false) { continue; }
+            if (array_key_exists('name', $class) === false) { continue; }
+            if (array_key_exists('nr', $class) === false) { continue; }
+
+            /* Rename some Institutes */
             if ($class['name'] === 'High Performance Computing') { $class['name'] = 'Parallele und Verteilte Algorithmen'; }
             if ($class['name'] === 'KOBV') { fputs($fp, $class['nr'] . ' 15994' . "\n"); continue; }
+
             $root = $role->getRootCollection();
 	    $coll = $root->addLastChild();
             $coll->setName($class['name']);
@@ -178,7 +188,6 @@ class ZIBInstituteImport {
 
             fputs($fp, $class['nr'] . ' ' . $coll->getId() . "\n");
         }
-        //echo "\n";
         fclose($fp);
     }
 }
