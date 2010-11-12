@@ -126,6 +126,7 @@ class ZIBMigration_Base {
         
         $fileImporter = new ZIBFileImport($this->path, $this->magicPath, $accessRole);
         $doclist = Opus_Document::getAllIds();
+
         foreach ($doclist as $id) {
             $doc = new Opus_Document($id);
             //$opus3Id = $doc->getIdentifierOpus3()->getValue();
@@ -141,6 +142,7 @@ class ZIBMigration_Base {
             unset($doc);
             unset($numberOfFiles);
         }
+
         unset($fileImporter);
         echo "finished!\n";
     }

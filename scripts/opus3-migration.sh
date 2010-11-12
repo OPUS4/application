@@ -1,13 +1,14 @@
 #!/bin/sh
 
 # clean files, everything will be imported newly
-
-rm -rf ../workspace/files/*
+cd ../workspace/files/
+rm -rf *
 
 # create clean database
-
-sh ../db/createdb.sh
+cd ../../db
+sh ./createdb.sh
 
 # start Opus3-Migration
-
+cd ../scripts
 php Opus3Migration.php
+

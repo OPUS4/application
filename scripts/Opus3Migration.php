@@ -36,6 +36,8 @@
 
 // Configure include path.
 set_include_path('.' . PATH_SEPARATOR
+        . PATH_SEPARATOR . dirname(dirname(__FILE__)) . '/import/importer'
+        . PATH_SEPARATOR . dirname(dirname(__FILE__)) . '/import/stylesheets'
         . PATH_SEPARATOR . dirname(dirname(__FILE__)) . '/library'
         . PATH_SEPARATOR . dirname(dirname(__FILE__)) . '/modules/import'
         . PATH_SEPARATOR . dirname(dirname(__FILE__)) . '/modules'

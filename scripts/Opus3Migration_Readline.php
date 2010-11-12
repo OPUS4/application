@@ -11,17 +11,24 @@
  * @author gunar
  */
 
-require_once 'OpusMigrationBase.php';
-require_once 'import/models/Opus3CollectionsImport.php';
-require_once 'import/models/Opus3InstituteImport.php';
-require_once 'import/models/Opus3LicenceImport.php';
-require_once 'import/models/Opus3XMLImport.php';
+//require_once 'Opus3Migration_Base.php';
+require_once 'Opus3CollectionsImport.php';
+require_once 'Opus3FileImport.php';
+require_once 'Opus3InstituteImport.php';
+require_once 'Opus3LicenceImport.php';
+require_once 'Opus3XMLImport.php';
 
-class Opus3Migration_Readline extends OpusMigrationBase {
+//class Opus3Migration_Readline extends Opus3Migration_Base {
+class Opus3Migration_Readline  {
 
+    private $importfile;
     private $importData;
     private $fileinput;
-    private $doclist = array();
+    //private $doclist = array();
+    private $path;
+    private $magicPath = '/usr/share/file/magic'; # on Ubuntu-Systems this should be the magic path
+    private $stylesheet;
+    private $xslt;
 
     // Set XMl-Dump-Impor
     public function init($file = null) {
@@ -34,11 +41,41 @@ class Opus3Migration_Readline extends OpusMigrationBase {
         $this->importData = $this->loadImportFile();
     }
 
+    // Create Collections
+    public function create_collection_roles() {
+
+
+        $roles = array(
+            "Institute" => array("name" => "institutes", "position" => 1),
+            "Collections" => array("name" => "collections", "position" => 9),
+            "Sammlungen" => array("name" => "series", "position" => 10)
+        );
+
+        foreach ($roles as $r) {
+            $role = new Opus_CollectionRole();
+            $role->setName($r["name"]);
+            $role->setOaiName($r["name"]);
+            $role->setPosition($r["position"]);
+            $role->setVisible(1);
+            $role->setVisibleBrowsingStart(1);
+            $role->setDisplayBrowsing('Name');
+            $role->setVisibleFrontdoor(1);
+            $role->setDisplayFrontdoor('Name');
+            $role->setVisibleOai(1);
+            $role->setDisplayOai('Name');
+            $role->store();
+
+            $root = $role->addRootCollection()->setVisible(1);
+            $root->store();
+        }
+
+    }
+
     // Import collections and series
     public function load_collections() {
         $input = readline('Do you want to import collections and series from OPUS3? (y/n) ');
         if ($input === 'y' || $input === 'yes') {
-            $import = new Import_Model_Opus3CollectionsImport($this->importData);
+            $import = new Opus3CollectionsImport($this->importData);
         }
 
     }
@@ -47,7 +84,7 @@ class Opus3Migration_Readline extends OpusMigrationBase {
     public function load_institutes() {
         $input = readline('Do you want to import faculties and institutes from OPUS3? (y/n) ');
         if ($input === 'y' || $input === 'yes') {
-            $import = new Import_Model_Opus3InstituteImport($this->importData);
+            $import = new Opus3InstituteImport($this->importData);
         }
     }
 
@@ -55,7 +92,7 @@ class Opus3Migration_Readline extends OpusMigrationBase {
     public function load_licences() {
         $input = readline('Do you want to import licences from OPUS3? (y/n) ');
         if ($input === 'y' || $input === 'yes') {
-            $import= new Import_Model_Opus3LicenceImport($this->importData);
+            $import= new Opus3LicenceImport($this->importData);
         }
     }
 
@@ -63,7 +100,7 @@ class Opus3Migration_Readline extends OpusMigrationBase {
     public function load_documents($start = null, $end = null) {
         $input = readline('Do you want to import metadata of documents from OPUS3? (y/n) ');
         if ($input === 'y' || $input === 'yes') {
-            $import = new Import_Model_Opus3XMLImport($this->xslt, $this->stylesheet);
+            $import = new Opus3XMLImport($this->xslt, $this->stylesheet);
             $toImport = $import->initImportFile($this->importData);
             $logfile = '../workspace/tmp/importerrors.xml';
 
@@ -73,6 +110,9 @@ class Opus3Migration_Readline extends OpusMigrationBase {
             $successCount = 0;
             $failureCount = 0;
 
+            $mem_now = round(memory_get_usage() / 1024 / 1024);
+            $mem_peak = round(memory_get_peak_usage() / 1024 / 1024);
+
             foreach ($toImport as $document) {
                 //echo "Memory amount: " . round(memory_get_usage() / 1024 / 1024, 2) . " (MB), peak memory " . round(memory_get_peak_usage() / 1024 / 1024, 2) . " (MB)\n";
                 $totalCount++;
@@ -81,9 +121,10 @@ class Opus3Migration_Readline extends OpusMigrationBase {
 
                 $result = $import->import($document);
                 if ($result['result'] === 'success') {
-                    echo "Successfully imported old ID " . $result['oldid'] . " with new ID " . $result['newid'] . "\n";
+                    //echo "Successfully imported old ID " . $result['oldid'] . " with new ID " . $result['newid'] . "\n";
+                    echo "Successfully imported old ID " . $result['oldid'] . " with new ID " . $result['newid'] . " -- memory $mem_now MB, peak memory $mem_peak (MB)\n";
                     $import->log("Successfully imported old ID " . $result['oldid'] . " with new ID " . $result['newid'] . "\n");
-                    array_push($this->doclist, $result['newid']);
+                    //array_push($this->doclist, $result['newid']);
                     $successCount++;
                 } else if ($result['result'] === 'failure') {
                     echo "ERROR: " . $result['message'] . " for old ID " . $result['oldid'] . "\n";
@@ -109,39 +150,51 @@ class Opus3Migration_Readline extends OpusMigrationBase {
                while (false === file_exists($path)) {
                     $path = readline('Please type the path to your OPUS3 fulltext files (e.g. /usr/local/opus/htdocs/volltexte): ');
                 }
-                echo "Please specify the access rights for this fulltext path (Opus3 ranges)!\n";
-                $ipStart = readline('The IP-range starts at (e.g. 192.168.1.1): ');
-                $ipEnd = readline('The IP-range ends at (e.g. 192.168.1.10): ');
                 $this->path = $path;
-                $this->importFiles($ipStart, $ipEnd, $this->doclist);
+                //$this->importFiles($this->doclist);
+                $this->importFiles();
                 $input = readline('Do you want to enter another fulltext path for files from another Opus3-area? (y/n) ');
                 $path = null;
             } while ($input === 'y');
         }
     }
 
-    // Import signatures
-    public function load_signatures() {
-        $input = readline('If you used signatures (GPG-Extension) in OPUS 3.x, do you want the signatures to be imported? (y/n) ');
-        if ($input === 'y' || $input === 'yes') {
-            $signaturePath = '';
-            while (false === file_exists($signaturePath)) {
-                $signaturePath = readline('Please type the path to your OPUS3 signature files (e.g. /usr/local/opus/htdocs/signatures): ');
+
+    private function setStylesheet() {
+        $this->stylesheet = '../import/stylesheets';
+        $this->xslt = 'opus3.xslt';
+    }
+
+    private function loadImportFile() {
+        $importData = new DOMDocument;
+        $importData->load($this->importfile);
+        return $importData;
+    }
+
+    private function importFiles() {
+        $fileImporter = new Opus3FileImport($this->path, $this->magicPath);
+        $docList = Opus_Document::getAllIds();
+
+        foreach ($docList as $id) {
+            $doc = new Opus_Document($id);
+            $numberOfFiles = $fileImporter->loadFiles($id);
+
+            $mem_now = round(memory_get_usage() / 1024 / 1024);
+            $mem_peak = round(memory_get_peak_usage() / 1024 / 1024);
+
+            if ($numberOfFiles > 0) {
+                echo $numberOfFiles . " file(s) have been imported successfully for document ID " . $doc->getId() . " -- memory $mem_now MB, peak memory $mem_peak (MB)\n";
             }
-            $this->signaturePath = $signaturePath;
-            $this->importSignatures();
+            unset ($doc);
+            unset ($numberOfFiles);
         }
     }
 
-    // Signing publications is only possible if files have been imported
-    public function sign_publications() {
-        if ($this->fileinput  === 'y' || $this->fileinput  === 'yes') {
-            $input = readline('Do you want files to get signed automatically? (You need to have an internal key already) (y/n) ');
-            if ($input === 'y' || $input === 'yes') {
-                $newsigpass = readline('Please type the password for your signature key: ');
-                echo "Signing publications ";
-                $this->autosign($newsigpass);
-                echo "finished!\n";
+    private function cleanup() {
+        $filereader = opendir('../workspace/tmp/');
+        while (false !== ($file = readdir($filereader))) {
+            if (substr($file, -4) === '.map') {
+                unlink('../workspace/tmp/' . $file);
             }
         }
     }
@@ -158,7 +211,13 @@ class Opus3Migration_Readline extends OpusMigrationBase {
 
         // Load Opus3-mySQL-XML-dump
         //$this->init();
-        $this->init('/home/gunar/opus4/dumps/opuszib_20100920.xml');
+        //$this->init('/home/gunar/opus4-btu/dumps/opus3_btu_20101110_utf8.xml');
+        //$this->init('/home/gunar/opus4-ubp/dumps/opus3_ubp_20101110_latin1.xml');
+        $this->init('/home/gunar/opus4-btu/dumps/opus3_btu_20101111.xml');
+        //$this->init('/home/gunar/opus4-ubp/dumps/opus3_ubp_20101111.xml');
+
+        // Create Collection Roles
+        $this->create_collection_roles();
 
         // Load Collections
         $this->load_collections();
@@ -170,20 +229,17 @@ class Opus3Migration_Readline extends OpusMigrationBase {
         $this->load_licences();
 
         // Load Institutes
-        $this->load_documents('100', '105');
+        //$this->load_documents();
+        $this->load_documents('1', '50');
 
         // Import files
         //$this->load_fulltext();
-        $this->load_fulltext('/home/gunar/opus4/volltexte');
+        $this->load_fulltext('/home/gunar/opus4-btu/volltexte');
+        //$this->load_fulltext('/home/gunar/opus4-ubp/volltexte');
 
-        // Import Signatures
-        $this->load_signatures();
-
-        // Sign Files
-        $this->sign_publications();
 
         // Be Careful: cleanup will delete all Mapping Files for Institutes, Faculties etc.
-        //$this->cleanup();
+        $this->cleanup();
     }
 }
 
