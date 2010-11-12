@@ -7,12 +7,12 @@
   
   <body>
 
-	<tu tuid="groupPersonSubmitter">
+    <tu tuid="rights">
       <tuv xml:lang="en">
-        <seg>Submitter</seg>
+        <seg>Ich habe diese rechtlichen Hinweise gelesen und bin damit einverstanden.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Kontaktdaten des Einstellers</seg>
+        <seg>Ich habe diese rechtlichen Hinweise gelesen und bin damit einverstanden.</seg>
       </tuv>
     </tu>
 	
@@ -34,7 +34,7 @@
       </tuv>
     </tu>
 
-	<tu tuid="PersonSubmitterEmail">
+    <tu tuid="PersonSubmitterEmail">
       <tuv xml:lang="en">
         <seg>email address</seg>
       </tuv>
@@ -43,7 +43,7 @@
       </tuv>
     </tu>
 	
-	<tu tuid="PersonSubmitterAcademicTitle">
+    <tu tuid="PersonSubmitterAcademicTitle">
       <tuv xml:lang="en">
         <seg>Academic Title</seg>
       </tuv>
@@ -52,7 +52,7 @@
       </tuv>
     </tu>
 	
-	<tu tuid="PersonSubmitterDateOfBirth">
+    <tu tuid="PersonSubmitterDateOfBirth">
       <tuv xml:lang="en">
         <seg>Date of Birth</seg>
       </tuv>
@@ -61,7 +61,7 @@
       </tuv>
     </tu>
 	
-	<tu tuid="PersonSubmitterPlaceOfBirth">
+    <tu tuid="PersonSubmitterPlaceOfBirth">
       <tuv xml:lang="en">
         <seg>Place of Birth</seg>
       </tuv>
@@ -70,15 +70,6 @@
       </tuv>
     </tu>
 	
-    <tu tuid="groupPersonAuthor">
-      <tuv xml:lang="en">
-        <seg>Author(s)</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Autor(en)</seg>
-      </tuv>
-    </tu>
-
     <tu tuid="PersonAuthorFirstName">
       <tuv xml:lang="en">
         <seg>First name</seg>

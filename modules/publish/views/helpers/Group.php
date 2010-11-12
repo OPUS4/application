@@ -83,7 +83,6 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
             $fieldset .= "<fieldset class='left-labels' id='" . $group['Name'] . "' />\n";
             $fieldset .= "<legend>" . $this->view->translate($group['Name']) . "</legend>\n\t";
             $fieldset .= "<div class='description hint'><p>" . $this->_getGroupHint($group['Name']) . "</div></p>";
-            // $fieldset .= "\n<div class='form-multiple odd'>";
 
             $i = 0;
             //show fields
@@ -171,17 +170,36 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                         $fieldset .= "\n</div>";
                         break;
 
+                    case 'Zend_Form_Element_File' :
+                        $fieldset .= "<input type='file' name='" . $field['id'] . "' id='" . $field['id'] . "' enctype='multipart/form-data' ";
+                        $fieldset .= "title='" . $this->view->translate($field['hint']) . "' ";
+                        if ($options !== null)
+                            $fieldset .= $options . " ";
+                        else
+                            $fieldset .= "size='30'";
+                        $fieldset .= " />\n";
+
+                        if (isset($this->session->publishFiles) && count($this->session->publishFiles) >= 1) {
+                            $fieldset .= "<div class='form-files'><ul>" . $this->view->translate('already_uploaded_files');
+                            foreach ($this->session->publishFiles as $file) {
+                                $fieldset .= "\n<li>" . $file . "</li>";
+                            }
+                            $fieldset .= "</ul></div>";
+                        }
+                        break;
+
 
                     default:
                         throw new Application_Exception("Field Type {$field['type']} not found in View Helper.");
                 }
 
-                if (isset($field["error"])) {
+                if (isset($field["error"]) && count($field["error"]) >= 1) {
                     $fieldset .= "<div class='form-errors'><ul>";
                     foreach ($field["error"] AS $err)
                         $fieldset .= "<li>" . $err . "</li>";
                     $fieldset .= "</ul></div>";
                 }
+
 
                 $i++;
             }

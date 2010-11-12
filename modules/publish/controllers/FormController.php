@@ -98,10 +98,6 @@ class Publish_FormController extends Controller_Action {
                     $this->session->first = false;
                     $this->view->title = $this->view->translate('publish_controller_index');
                     $this->view->subtitle = $this->view->translate('publish_controller_index_anotherFile');
-//                    $form2 = new Publish_Form_PublishingFirst(true);
-//                    $form2->populate($data);
-//                    $this->view->form = $form2;
-//                    $this->_setFirstFormViewVariables($form2);
                     $this->view->form = $indexForm;
                     $this->_setFirstFormViewVariables($indexForm);
 
@@ -207,18 +203,43 @@ class Publish_FormController extends Controller_Action {
     private function _setFirstFormViewVariables($form) {
         $errors = $form->getMessages();
 
-        //group fields and single fields for view placeholders
+        //first form single fields for view placeholders
         foreach ($form->getElements() AS $currentElement => $value) {
-            $this->log->debug("(IndexController): currentElement = " . $currentElement);
-
             //single field name (for calling with helper class)
             $elementAttributes = $form->getElementAttributes($currentElement); //array
             $this->view->$currentElement = $elementAttributes;
-
-            $label = $currentElement . self::LABEL;
-            $this->view->$label = $this->view->translate($form->getElement($currentElement)->getLabel());
         }
 
+        //Upload-Field
+        $displayGroup = $form->getDisplayGroup('documentUpload');
+        $this->session->numdocumentUpload = 2;
+        $groupName = $displayGroup->getName();
+        $groupFields = array(); //Fields
+        $groupHiddens = array(); //Hidden fields for adding and deleting fields
+        $groupButtons = array(); //Buttons
+
+        foreach ($displayGroup->getElements() AS $groupElement) {
+
+            $elementAttributes = $form->getElementAttributes($groupElement->getName()); //array
+            if ($groupElement->getType() === 'Zend_Form_Element_Submit') {
+                //buttons
+                $groupButtons[$elementAttributes["id"]] = $elementAttributes;
+            }
+            else if ($groupElement->getType() === 'Zend_Form_Element_Hidden') {
+                //hidden fields
+                $groupHiddens[$elementAttributes["id"]] = $elementAttributes;
+            }
+            else {
+                //normal fields
+                $groupFields[$elementAttributes["id"]] = $elementAttributes;
+            }
+        }
+        $group[] = array();
+        $group["Fields"] = $groupFields;
+        $group["Hiddens"] = $groupHiddens;
+        $group["Buttons"] = $groupButtons;
+        $group["Name"] = $groupName;
+        $this->view->$groupName = $group;
         $this->view->MAX_FILE_SIZE = $this->session->maxFileSize;
     }
 
@@ -256,7 +277,6 @@ class Publish_FormController extends Controller_Action {
                 $this->view->$name = $elementAttributes;
                 $this->viewElementsCount++;
             }
-
             else {
                 $this->view->$currentElement = $elementAttributes;
                 $this->viewElementsCount++;

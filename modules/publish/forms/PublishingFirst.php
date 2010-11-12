@@ -43,15 +43,31 @@ class Publish_Form_PublishingFirst extends Zend_Form {
     public $session;
     public $disable;
     public $view;
+    public $log;
 
     public function __construct($view, $disable = null, $options = null) {
         if (isset($disable))
             $this->disable = $disable;
 
         $this->view = $view;
-        
-        parent::__construct($options);
+        $this->log = Zend_Registry::get('Zend_Log');
 
+        parent::__construct($options);
+    }
+
+    public function isValid($data) {
+        $valid1 = true;
+        $valid2 = parent::isValid($data);
+
+        $rights = $data['rights'];
+        $this->log->debug('************************'. $rights .'*********************');
+        if ($rights == '0') {
+            $rights = $this->getElement('rights');
+            $rights->addError('publish_error_rights_checkbox_empty');
+            $valid2 = false;
+        }        
+
+        return ($valid1 && $valid2);
     }
 
     /**
@@ -72,17 +88,16 @@ class Publish_Form_PublishingFirst extends Zend_Form {
 
         //create and add file upload
         $fileupload = $this->_createFileuploadField();
-        $this->addElement($fileupload);
+        $this->addDisplayGroup($fileupload, 'documentUpload');
 
         //create and add bibliographie
         $bibliographie = $this->_createBibliographyField();
         if ($bibliographie !== null)
             $this->addElement($bibliographie);
 
-        //create and add add-button
-        $addAnotherFile = $this->createElement('submit', 'addAnotherFile');
-        $addAnotherFile->setLabel('addAnotherFile');
-        $this->addElement($addAnotherFile);
+        //create and add rights checkbox
+        $rights = $this->_createRightsCheckBox();
+        $this->addElement($rights);
 
         //create and add send-button
         $submit = $this->createElement('submit', 'send');
@@ -101,13 +116,13 @@ class Publish_Form_PublishingFirst extends Zend_Form {
      */
     private function _createDocumentTypeField() {
         $documentTypes = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
-        //todo: order ba name for german translation
+
         //Select with different document types given by the used function
         $listOptions = $documentTypes->getDocumentTypes();
-        
+
         $translatedOptions = array();
 
-        foreach($listOptions as $option) {
+        foreach ($listOptions as $option) {
             $translatedOptions[$option] = $this->view->translate($option);
         }
 
@@ -149,11 +164,6 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         }
         $this->session->maxFileSize = $maxFileSize;
 
-        //get the initial number of file fields, toto: aus der config holen
-//        $number_of_files = (int) $this->config->form->first->numberoffiles;
-//        if (true === empty($number_of_files))
-//            $number_of_files = 1;
-
         // Upload-fields required to enter second stage
         $requireUpload = $this->config->form->first->requireupload;
         if (true === empty($requireUpload))
@@ -171,23 +181,23 @@ class Publish_Form_PublishingFirst extends Zend_Form {
                 ->setMaxFileSize($maxFileSize)
                 ->addValidator('Extension', false, $filetypes)  // allowed filetypes by extension                
                 ->setValueDisabled(true)
-                ->setAttrib('enctype', 'multipart/form-data');        
-        
-//        if ($number_of_files > 1) {
-//            $fileupload->setMultiFile($number_of_files)
-//                    ->setDescription('publish_controller_index_fileupload');
-//            if (1 === $requireUpload)
-//                $fileupload->addValidator('Count', false, array('min' => 1, 'max' => $number_of_files));
-//            else
-//                $fileupload->addValidator('Count', false, array('min' => 0, 'max' => $number_of_files));
-//        }
+                ->setAttrib('enctype', 'multipart/form-data');
 
         if (1 === $requireUpload)
             $fileupload->setRequired(true);
         else
             $fileupload->setRequired(false);
 
-        return $fileupload;
+        $this->addElement($fileupload);
+
+        //create add-button
+        $addAnotherFile = $this->createElement('submit', 'addAnotherFile');
+        $addAnotherFile->setLabel('addAnotherFile');
+        $this->addElement($addAnotherFile);
+
+        $group = array($fileupload->getName(), $addAnotherFile->getName());
+
+        return $group;
     }
 
     /**
@@ -216,12 +226,20 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         return $bibliographie;
     }
 
+    private function _createRightsCheckBox() {
+        $rights = $this->createElement('checkbox', 'rights')
+                        ->setLabel('rights')
+                        ->setRequired(true);
+        return $rights;
+    }
+
     /**
      *
      * @param <type> $elementName
      * @return string
      */
     public function getElementAttributes($elementName) {
+        //todo: duplicate in publishing second...
         $elementAttributes = array();
         $element = $this->getElement($elementName);
         $elementAttributes['value'] = $element->getValue();
@@ -231,6 +249,7 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         $elementAttributes['type'] = $element->getType();
         $elementAttributes['desc'] = $element->getDescription();
         $elementAttributes['hint'] = 'hint_' . $elementName;
+        $elementAttributes['header'] = 'header_' . $elementName;
         $elementAttributes['disabled'] = $element->getAttrib('disabled');
 
         if ($element->getType() === 'Zend_Form_Element_Checkbox') {

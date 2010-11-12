@@ -8,6 +8,15 @@
   <body>
 <!-- This language file contains all texts and cases concerning errors. -->
 
+    <tu tuid="publish_error_rights_checkbox_empty">
+        <tuv xml:lang="en">
+            <seg>Error: Please confirm our legal notices.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Fehler: Bestätigen Sie bitte unsere rechtlichen Hinweise.</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="publish_error_justOneLanguagePerTitleType">
         <tuv xml:lang="en">
             <seg>Error: You may not enter a title with the same language several times. Please choose a different language or delete the title.</seg>

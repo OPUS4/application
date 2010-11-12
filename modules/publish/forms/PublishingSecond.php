@@ -142,6 +142,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         $elementAttributes['type'] = $element->getType();
         $elementAttributes['desc'] = $element->getDescription();
         $elementAttributes['hint'] = 'hint_' . $elementName;
+        $elementAttributes['header'] = 'header_' . $elementName;
         $elementAttributes['disabled'] = $element->getAttrib('disabled');
 
         if ($element->getType() === 'Zend_Form_Element_Checkbox') {

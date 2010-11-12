@@ -1,0 +1,84 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+ 
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+  
+  <body>
+<!-- This language file contains all texts concerning field hints. -->
+
+     <tu tuid="header_documentType">
+      <tuv xml:lang="en">
+        <seg>Documenttype</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokumenttyp</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="documentUpload">
+      <tuv xml:lang="en">
+        <seg>Upload document(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokument(e) hochladen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_bibliographie">
+      <tuv xml:lang="en">
+        <seg>Bibliography</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bibliographie</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_rights">
+      <tuv xml:lang="en">
+        <seg>Einräumnung eines einfachen Nutzungsrechts</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einräumnung eines einfachen Nutzungsrechts</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="groupPersonSubmitter">
+      <tuv xml:lang="en">
+        <seg>Submitter</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Kontaktdaten des Einstellers</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="groupPersonAuthor">
+      <tuv xml:lang="en">
+        <seg>Author(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Autor(en)</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_Language">
+      <tuv xml:lang="en">
+        <seg>Language</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sprache</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_EnrichmentNeuesFeld">
+      <tuv xml:lang="en">
+        <seg>New field</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Neues Feld</seg>
+      </tuv>
+    </tu>
+
+    </body>
+</tmx>

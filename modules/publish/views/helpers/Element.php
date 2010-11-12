@@ -71,7 +71,8 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
      */
     protected function _renderElement($element, $options=null, $name=null) {
         $elementfield = "<fieldset class='left-labels'>";
-        $elementfield .= "<legend>" . $this->view->translate($element["label"]) . "</legend>\n\t\t\n\t\t";
+
+        $elementfield .= "<legend>" . $this->view->translate($element['header']) . "</legend>\n\t\t\n\t\t";
         $elementfield .= "<div class='description hint'><p>" . $this->_getElementHint($element["id"]) . "</div></p>";
         $elementfield .= "<div class='form-item'>";
         $elementfield .= "<label for='" . $element["id"] . "'>" . $element["label"];
@@ -88,13 +89,7 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
                     $elementfield .= "cols='30' rows='10' ";
                 $elementfield .= " title='" . $this->view->translate($element["hint"]) . "'>";
                 $elementfield .= $element["value"] . "</textarea>";
-
-                if ($element["error"] != null) {
-                    $elementfield .= "<div class='form-errors'><ul>";
-                    foreach ($element["error"] AS $err)
-                        $elementfield .= "\n\t\t\t<li>" . $err . "</li>";
-                    $elementfield .= "\n\t\t</ul></div>";
-                }
+               
                 break;
 
             case "Zend_Form_Element_Text" :
@@ -111,13 +106,7 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
                 $elementfield .= "value='" . $element["value"] . "' />\n\t\t";
                 if (isset($element["desc"]))
                     $elementfield .= "<p class='description'>" . $this->view->translate($element["desc"]) . "</p>";
-
-                if ($element["error"] != null) {
-                    $elementfield .= "<div class='form-errors'><ul>";
-                    foreach ($element["error"] AS $err)
-                        $elementfield .= "\n\t\t\t<li>" . $err . "</li>";
-                    $elementfield .= "\n\t\t</ul></div>";
-                }
+                
                 break;
 
             case "Zend_Form_Element_Select":
@@ -130,7 +119,7 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
                 $elementfield .= ">\n\t\t\t\t";
                 if (!is_null($element['options'])) {
                     $options = $element['options'];
-                    
+
                     foreach ($options AS $key => $option) {
                         $elementfield .= "<option value='" . $key . "' label='" . $option . "'";
                         $elementfield .= " title='" . $this->view->translate($element["hint"]) . "' ";
@@ -143,13 +132,7 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
                     }
                 }
                 $elementfield .= "</select>";
-
-                if ($element["error"] != null) {
-                    $elementfield .= "<div class='form-errors'><ul>";
-                    foreach ($element["error"] AS $err)
-                        $elementfield .= "\n\t\t\t<li>" . $err . "</li>";
-                    $elementfield .= "\n\t\t</ul></div>";
-                }
+                
                 break;
 
             case 'Zend_Form_Element_Checkbox' :
@@ -165,7 +148,7 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
                 }
 
                 $elementfield .= " />";
-                $elementfield .= "</div>";
+                
                 break;
 
             case "Zend_Form_Element_File" :
@@ -178,14 +161,6 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
 
                 $elementfield .= " title='" . $this->view->translate($element["hint"]) . "' />";
 
-
-                if ($element["error"] != null) {
-                    $elementfield .= "<div class='form-errors'><ul>";
-                    foreach ($element["error"] AS $err)
-                        $elementfield .= "\n\t\t\t<li>" . $err . "</li>";
-                    $elementfield .= "\n\t\t</ul></div>";
-                }
-
                 if (isset($this->session->publishFiles) && count($this->session->publishFiles) >= 1) {
                     $elementfield .= "<div class='form-files'><ul>" . $this->view->translate('already_uploaded_files');
                     foreach ($this->session->publishFiles as $file) {
@@ -194,6 +169,13 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
                     $elementfield .= "</ul></div>";
                 }
                 break;
+        }
+
+        if ($element["error"] != null) {
+            $elementfield .= "<div class='form-errors'><ul>";
+            foreach ($element["error"] AS $err)
+                $elementfield .= "\n\t\t\t<li>" . $err . "</li>";
+            $elementfield .= "\n\t\t</ul></div>";
         }
 
         $elementfield .= "</div></fieldset>\n\n";

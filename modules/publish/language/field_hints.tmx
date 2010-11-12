@@ -8,6 +8,15 @@
   <body>
 <!-- This language file contains all texts concerning field hints. -->
 
+    <tu tuid="hint_rights">
+        <tuv xml:lang="en">
+            <seg>Fields that are marked with <span class="required" title="This field has to be filled.">*</span> have to be filled. </seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte bestätigen Sie, dass Sie die rechtlichen Hinweise sowie die <a href="home/index/help#policies">Leitlinien</a> unseres Dokumentenservers gelesen haben und damit einverstanden sind. </seg>
+        </tuv>
+    </tu>
+
     <tu tuid="publish_controller_required_hint">
         <!-- Hint for the required sign -->
         <tuv xml:lang="en">
@@ -1228,7 +1237,7 @@ Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathsci
         </tuv>
     </tu>
 
-    <tu tuid="hint_fileupload">
+    <tu tuid="hint_documentUpload">
         <tuv xml:lang="en">
             <seg>Choose your document. In case you want to upload more files, click the button.</seg>
         </tuv>
