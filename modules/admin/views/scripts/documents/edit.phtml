@@ -55,6 +55,7 @@
             </li>
             <li><a href="#collections"><?= $this->translate('admin_documents_label_collections') ?></a></li>
         </ul>
+        <?PHP /* FIXME permanently remove -> not useful on edit metadata page
         <ul>
             <?php if ($this->docHelper->getDocState() === 'unpublished') : ?>
             <li><a href="<?= $this->docHelper->getUrlDelete() ?>"><?= $this->translate('admin_doc_delete'); ?></a></li>
@@ -66,7 +67,7 @@
             <li><a href="<?= $this->docHelper->getUrlPublish() ?>"><?= $this->translate('admin_doc_undelete'); ?></a></li>
             <li><a href="<?= $this->docHelper->getUrlPermanentDelete() ?>"><?= $this->translate('admin_doc_delete_permanent'); ?></a></li>
             <?php endif; ?>
-        </ul>
+        </ul> */?>
     </div>
 
     <?= $this->form; ?>
