@@ -601,6 +601,7 @@ body > #top-header{
 #searchbar{
 	padding: 0 0 0 245px;
 }
+.latest #searchbar,
 .collection #searchbar{
 	padding: 0;
 }

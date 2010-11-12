@@ -114,7 +114,7 @@ $languageSelectors = $this->languageSelector();
             </div>
         </div>
 
-        <div id="content" class="opus <?= $this->moduleName ?><?php if ($this->moduleName === 'publish') : ?>"><?php else : ?><?= ($this->controllerName === 'index' ? '' : '_'.$this->controllerName)?><?= ($this->searchType === 'collection' ? ' '.$this->searchType : '') ?>">
+        <div id="content" class="opus <?= $this->moduleName ?><?php if ($this->moduleName === 'publish') : ?>"><?php else : ?><?= ($this->controllerName === 'index' ? '' : '_'.$this->controllerName)?><?= ($this->searchType === 'collection' || $this->searchType === 'latest' ? ' '.$this->searchType : '') ?>">
 
 
                         <?  endif; ?>
