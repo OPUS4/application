@@ -33,6 +33,19 @@
  */
 
 class Oai_Bootstrap extends Zend_Application_Module_Bootstrap {
+
+    /**
+     * Setup DNB xml postprocess manipulation plugin.
+     *
+     * @return void
+     */
+    protected function _initDnbXmlPostProcessPlugin() {
+        $this->bootstrap('FrontController');
+        $front = $this->getResource('FrontController');
+        $plugin = new Oai_Plugin_Controller_DnbXmlPostprocess;
+        $front->registerPlugin($plugin);
+    }
+
 }
 
 ?>
