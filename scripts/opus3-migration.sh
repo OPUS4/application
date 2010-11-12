@@ -2,7 +2,7 @@
 
 # clean files, everything will be imported newly
 cd ../workspace/files/
-rm -rf *
+rm -rf [0-9]*
 
 # create clean database
 cd ../../db
