@@ -985,7 +985,7 @@
                 <em class="data-marker">
                     <xsl:value-of select="@Value" />
                 </em>
-            </td>>
+            </td>
         </tr>
     </xsl:template>
 
