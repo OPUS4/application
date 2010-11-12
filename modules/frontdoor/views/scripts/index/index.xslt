@@ -64,128 +64,137 @@
      if you wish new fields, you have to add a new line xsl:apply-templates...
      and a special template for each new field below, too -->
     <xsl:template match="Opus_Document">
-        <div class="authorTitle">
-            <table>
+        <div id="titlemain-wrapper">
+            <xsl:apply-templates select="TitleMain" />
+        </div>
+
+        <div id="result-data">
+            <table class="result-data authorTitle">
                 <xsl:apply-templates select="PersonAuthor" />
             </table>
+
+            <div id="abstract">
+                <xsl:apply-templates select="TitleAbstract" />
+            </div>
         </div>
-        <xsl:apply-templates select="TitleMain" />
-        <xsl:apply-templates select="TitleAbstract" />
         
         <div id="services" class="services-menu">
             <xsl:if test="normalize-space(File/@PathName)">
-                <div id="download-fulltext">
-                    <h2>
+                <div id="download-fulltext" class="services">
+                    <h3>
                         <xsl:call-template name="translateString">
                             <xsl:with-param name="string">frontdoor_download_options</xsl:with-param>
                         </xsl:call-template>
-                    </h2>
+                    </h3>
                     <ul>
+                        <!--
                         <xsl:apply-templates select="File[@VisibleInFrontdoor='1']" />
+                        -->
+                        <xsl:apply-templates select="File"/>
                     </ul>
                 </div>
             </xsl:if>
             <xsl:call-template name="MailToAuthor"/>
             <!--<xsl:call-template name="services"/>-->
-            <div id="export">
-                <h2>
+            <div id="export" class="services">
+                <h3>
                     <xsl:call-template name="translateString">
                         <xsl:with-param name="string">frontdoor_export_options</xsl:with-param>
                     </xsl:call-template>
-                </h2>
-                <xsl:call-template name="ExportFunctions" />
+                </h3>
+                <ul>
+                    <xsl:call-template name="ExportFunctions" />
+                </ul>
             </div>
         </div>
 
-        <div class="frontdoordata">
-            <h2>Metadaten</h2>
-            <table cellspacing="0">
-                <colgroup class="angaben">
-                    <col class="name"/>
-                </colgroup>
-                <xsl:apply-templates select="PersonAuthor" />
-                <xsl:apply-templates select="IdentifierUrn" />
-                <xsl:apply-templates select="IdentifierUrl" />
-                <xsl:apply-templates select="IdentifierHandle" />
-                <xsl:apply-templates select="IdentifierDoi" />
-                <xsl:apply-templates select="IdentifierIsbn" />
-                <xsl:apply-templates select="IdentifierIssn" />
-                <xsl:apply-templates select="ReferenceUrn" />
-                <xsl:apply-templates select="ReferenceUrl" />
-                <xsl:apply-templates select="ReferenceDoi" />
-                <xsl:apply-templates select="ReferenceHandle" />
-                <xsl:apply-templates select="ReferenceIsbn" />
-                <xsl:apply-templates select="ReferenceIssn" />
-                <xsl:apply-templates select="TitleParent" />
-                <xsl:apply-templates select="@PublisherName" />
-                <xsl:apply-templates select="@PublisherPlace" />
-                <xsl:apply-templates select="PersonEditor" />
-                <xsl:apply-templates select="PersonTranslator" />
-                <xsl:apply-templates select="PersonContributor" />
-                <xsl:apply-templates select="PersonOther" />
-                <xsl:apply-templates select="PersonReferee" />
-                <xsl:apply-templates select="PersonAdvisor" />
-                <xsl:apply-templates select="@Type" />
-                <xsl:apply-templates select="@Language" />
+        <table class="result-data frontdoordata">
+            <caption>Metadaten</caption>
+            <colgroup class="angaben">
+                <col class="name"/>
+            </colgroup>
+            <xsl:apply-templates select="PersonAuthor" />
+            <xsl:apply-templates select="IdentifierUrn" />
+            <xsl:apply-templates select="IdentifierUrl" />
+            <xsl:apply-templates select="IdentifierHandle" />
+            <xsl:apply-templates select="IdentifierDoi" />
+            <xsl:apply-templates select="IdentifierIsbn" />
+            <xsl:apply-templates select="IdentifierIssn" />
+            <xsl:apply-templates select="ReferenceUrn" />
+            <xsl:apply-templates select="ReferenceUrl" />
+            <xsl:apply-templates select="ReferenceDoi" />
+            <xsl:apply-templates select="ReferenceHandle" />
+            <xsl:apply-templates select="ReferenceIsbn" />
+            <xsl:apply-templates select="ReferenceIssn" />
+            <xsl:apply-templates select="TitleParent" />
+            <xsl:apply-templates select="@PublisherName" />
+            <xsl:apply-templates select="@PublisherPlace" />
+            <xsl:apply-templates select="PersonEditor" />
+            <xsl:apply-templates select="PersonTranslator" />
+            <xsl:apply-templates select="PersonContributor" />
+            <xsl:apply-templates select="PersonOther" />
+            <xsl:apply-templates select="PersonReferee" />
+            <xsl:apply-templates select="PersonAdvisor" />
+            <xsl:apply-templates select="@Type" />
+            <xsl:apply-templates select="@Language" />
 
-                <xsl:choose>
-                    <xsl:when test="normalize-space(@CompletedYear) != '0000'">
-                        <xsl:apply-templates select="@CompletedYear" />
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:apply-templates select="@ComletedDate" />
-                    </xsl:otherwise>
-                </xsl:choose>
+            <xsl:choose>
+                <xsl:when test="normalize-space(@CompletedYear) != '0000'">
+                    <xsl:apply-templates select="@CompletedYear" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="@ComletedDate" />
+                </xsl:otherwise>
+            </xsl:choose>
 
-                <xsl:choose>
-                    <xsl:when test="normalize-space(PublishedDate/@Year)">
-                        <xsl:apply-templates select="PublishedDate" />
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:apply-templates select="@PublishedYear" />
-                    </xsl:otherwise>
-                </xsl:choose>
+            <xsl:choose>
+                <xsl:when test="normalize-space(PublishedDate/@Year)">
+                    <xsl:apply-templates select="PublishedDate" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="@PublishedYear" />
+                </xsl:otherwise>
+            </xsl:choose>
 
-                <xsl:apply-templates select="DateAccepted" />
+            <xsl:apply-templates select="DateAccepted" />
 
-                <xsl:if test="@CreatingCorporation != ''">
-                    <xsl:apply-templates select="@CreatingCorporation" />
-                </xsl:if>
-                <xsl:if test="@ContributingCorporation != ''">
-                    <xsl:apply-templates select="@ContributingCorporation" />
-                </xsl:if>
+            <xsl:if test="@CreatingCorporation != ''">
+                <xsl:apply-templates select="@CreatingCorporation" />
+            </xsl:if>
+            <xsl:if test="@ContributingCorporation != ''">
+                <xsl:apply-templates select="@ContributingCorporation" />
+            </xsl:if>
 
-                <xsl:apply-templates select="SubjectSwd" />
-                <xsl:apply-templates select="SubjectUncontrolled" />
-                <xsl:apply-templates select="SubjectPsyndex" />
-                <xsl:apply-templates select="SubjectMSC" >
-                    <xsl:sort select="@Value"/>
-                </xsl:apply-templates>
-                <xsl:apply-templates select="@Source" />
-                <xsl:apply-templates select="@Volume" />
-                <xsl:apply-templates select="@Issue" />
-                <xsl:apply-templates select="@Edition" />
-                <xsl:apply-templates select="@PageNumber" />
-                <xsl:apply-templates select="@PageFirst" />
-                <xsl:apply-templates select="@PageLast" />
-                <xsl:apply-templates select="@Reviewed" />
-                <xsl:apply-templates select="Note" />
-                <xsl:apply-templates select="@PublicationVersion" />
+            <xsl:apply-templates select="SubjectSwd" />
+            <xsl:apply-templates select="SubjectUncontrolled" />
+            <xsl:apply-templates select="SubjectPsyndex" />
+            <xsl:apply-templates select="SubjectMSC" >
+                <xsl:sort select="@Value"/>
+            </xsl:apply-templates>
+            <xsl:apply-templates select="@Source" />
+            <xsl:apply-templates select="@Volume" />
+            <xsl:apply-templates select="@Issue" />
+            <xsl:apply-templates select="@Edition" />
+            <xsl:apply-templates select="@PageNumber" />
+            <xsl:apply-templates select="@PageFirst" />
+            <xsl:apply-templates select="@PageLast" />
+            <xsl:apply-templates select="@Reviewed" />
+            <xsl:apply-templates select="Note" />
+            <xsl:apply-templates select="@PublicationVersion" />
 
-                <xsl:apply-templates select="Collection[@RoleName='institutes']" />
-                <xsl:apply-templates select="Collection[@RoleName='projects']" />
+            <xsl:apply-templates select="Collection[@RoleName='institutes']" />
+            <xsl:apply-templates select="Collection[@RoleName='projects']" />
 
-                <xsl:apply-templates select="Collection[@RoleName='ccs']" />
-                <xsl:apply-templates select="Collection[@RoleName='ddc']" />
-                <xsl:apply-templates select="Collection[@RoleName='msc']" >
-                    <xsl:sort select="@Number"/>
-                </xsl:apply-templates>
-                <xsl:apply-templates select="Collection[@RoleName='pacs']" />
-                <xsl:apply-templates select="Collection[@RoleName='series']" />
+            <xsl:apply-templates select="Collection[@RoleName='ccs']" />
+            <xsl:apply-templates select="Collection[@RoleName='ddc']" />
+            <xsl:apply-templates select="Collection[@RoleName='msc']" >
+                <xsl:sort select="@Number"/>
+            </xsl:apply-templates>
+            <xsl:apply-templates select="Collection[@RoleName='pacs']" />
+            <xsl:apply-templates select="Collection[@RoleName='series']" />
 
-                <xsl:apply-templates select="Licence" />
-            </table>
-        </div>
+            <xsl:apply-templates select="Licence" />
+        </table>
     </xsl:template>
 
     <!-- here begins the special templates for the fields -->
@@ -947,7 +956,9 @@
                 <xsl:call-template name="translateFieldname"/>:
             </th>
             <td>
-                <xsl:value-of select="@Value" />
+                <em class="data-marker">
+                    <xsl:value-of select="@Value" />
+                </em>
             </td>
         </tr>
     </xsl:template>
@@ -958,7 +969,9 @@
                 <xsl:call-template name="translateFieldname"/>:
             </th>
             <td>
-                <xsl:value-of select="@Value" />
+                <em class="data-marker">
+                    <xsl:value-of select="@Value" />
+                </em>
             </td>
         </tr>
     </xsl:template>
@@ -969,8 +982,10 @@
                 <xsl:call-template name="translateFieldname"/>:
             </th>
             <td>
-                <xsl:value-of select="@Value" />
-            </td>
+                <em class="data-marker">
+                    <xsl:value-of select="@Value" />
+                </em>
+            </td>>
         </tr>
     </xsl:template>
 
@@ -980,19 +995,21 @@
                 <xsl:call-template name="translateFieldname"/>:
             </th>
             <td>
-                <xsl:value-of select="@Value" />
+                <em class="data-marker">
+                    <xsl:value-of select="@Value" />
+                </em>
             </td>
         </tr>
     </xsl:template>
 
     <xsl:template match="TitleMain">
-        <h1 class="titlemain">
+        <h2 class="titlemain">
             <xsl:value-of select="@Value" />
-        </h1>
+        </h2>
     </xsl:template>
 
     <xsl:template match="TitleAbstract">
-        <p class="abstract">
+        <p>
             <xsl:value-of select="@Value" />
         </p>
     </xsl:template>
@@ -1231,91 +1248,95 @@
 
     <xsl:template name="ExportFunctions">
         <!-- Bib-Export -->
-        <xsl:element name="a">
-           <!-- TODO: Use Zend Url-Helper to build href attribute -->
-            <xsl:attribute name="href">
-                <xsl:value-of select="$baseUrl"/>
-                <xsl:text>/citationExport/index/download/output/bibtex/docId/</xsl:text>
-                <xsl:value-of select="@Id" />
-            </xsl:attribute>
-            <xsl:element name="img">
-                <xsl:attribute name="src">
-                    <xsl:value-of select="$layoutPath"/>
-                    <xsl:text>/img/bibtex_w.png</xsl:text>
+        <li>
+            <xsl:element name="a">
+               <!-- TODO: Use Zend Url-Helper to build href attribute -->
+                <xsl:attribute name="href">
+                    <xsl:value-of select="$baseUrl"/>
+                    <xsl:text>/citationExport/index/download/output/bibtex/docId/</xsl:text>
+                    <xsl:value-of select="@Id" />
                 </xsl:attribute>
-                <xsl:attribute name="name">
-                    <xsl:text>bibtex</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="onmouseover">
-                    <xsl:text>document.bibtex.src='</xsl:text>
-                    <xsl:value-of select="$layoutPath"/>
-                    <xsl:text>/img/bibtex_o.png';</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="onmouseout">
-                    <xsl:text>document.bibtex.src='</xsl:text>
-                    <xsl:value-of select="$layoutPath"/>
-                    <xsl:text>/img/bibtex_w.png';</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="border">
-                    <xsl:text>0</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="title">
-                    <xsl:call-template name="translateString">
-                        <xsl:with-param name="string">frontdoor_exportbibtex</xsl:with-param>
-                    </xsl:call-template>
-                </xsl:attribute>
-                <xsl:attribute name="title">
-                    <xsl:text>Bibtex Export</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="alt">
-                    <xsl:text>Bibtex Export</xsl:text>
-                </xsl:attribute>
+                <xsl:element name="img">
+                    <xsl:attribute name="src">
+                        <xsl:value-of select="$layoutPath"/>
+                        <xsl:text>/img/bibtex_w.png</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="name">
+                        <xsl:text>bibtex</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="onmouseover">
+                        <xsl:text>document.bibtex.src='</xsl:text>
+                        <xsl:value-of select="$layoutPath"/>
+                        <xsl:text>/img/bibtex_o.png';</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="onmouseout">
+                        <xsl:text>document.bibtex.src='</xsl:text>
+                        <xsl:value-of select="$layoutPath"/>
+                        <xsl:text>/img/bibtex_w.png';</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="border">
+                        <xsl:text>0</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="title">
+                        <xsl:call-template name="translateString">
+                            <xsl:with-param name="string">frontdoor_exportbibtex</xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:attribute>
+                    <xsl:attribute name="title">
+                        <xsl:text>Bibtex Export</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="alt">
+                        <xsl:text>Bibtex Export</xsl:text>
+                    </xsl:attribute>
+                </xsl:element>
             </xsl:element>
-        </xsl:element>
+        </li>
         <xsl:text> </xsl:text>
 
         <!-- Ris-Export -->
-        <xsl:element name="a">
-           <!-- TODO: Use Zend Url-Helper to build href attribute -->
-            <xsl:attribute name="href">
-                <xsl:value-of select="$baseUrl"/>
-                <xsl:text>/citationExport/index/download/output/ris/docId/</xsl:text>
-                <xsl:value-of select="@Id" />
-            </xsl:attribute>
-            <xsl:element name="img">
-                <xsl:attribute name="src">
-                    <xsl:value-of select="$layoutPath"/>
-                    <xsl:text>/img/ris_w.png</xsl:text>
+        <li>
+            <xsl:element name="a">
+               <!-- TODO: Use Zend Url-Helper to build href attribute -->
+                <xsl:attribute name="href">
+                    <xsl:value-of select="$baseUrl"/>
+                    <xsl:text>/citationExport/index/download/output/ris/docId/</xsl:text>
+                    <xsl:value-of select="@Id" />
                 </xsl:attribute>
-                <xsl:attribute name="name">
-                    <xsl:text>ris</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="onmouseover">
-                    <xsl:text>document.ris.src='</xsl:text>
-                    <xsl:value-of select="$layoutPath"/>
-                    <xsl:text>/img/ris_o.png';</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="onmouseout">
-                    <xsl:text>document.ris.src='</xsl:text>
-                    <xsl:value-of select="$layoutPath"/>
-                    <xsl:text>/img/ris_w.png';</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="border">
-                    <xsl:text>0</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="title">
-                    <xsl:call-template name="translateString">
-                        <xsl:with-param name="string">frontdoor_exportris</xsl:with-param>
-                    </xsl:call-template>
-                </xsl:attribute>
-                <xsl:attribute name="title">
-                    <xsl:text>Ris Export</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="alt">
-                    <xsl:text>Ris Export</xsl:text>
-                </xsl:attribute>
+                <xsl:element name="img">
+                    <xsl:attribute name="src">
+                        <xsl:value-of select="$layoutPath"/>
+                        <xsl:text>/img/ris_w.png</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="name">
+                        <xsl:text>ris</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="onmouseover">
+                        <xsl:text>document.ris.src='</xsl:text>
+                        <xsl:value-of select="$layoutPath"/>
+                        <xsl:text>/img/ris_o.png';</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="onmouseout">
+                        <xsl:text>document.ris.src='</xsl:text>
+                        <xsl:value-of select="$layoutPath"/>
+                        <xsl:text>/img/ris_w.png';</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="border">
+                        <xsl:text>0</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="title">
+                        <xsl:call-template name="translateString">
+                            <xsl:with-param name="string">frontdoor_exportris</xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:attribute>
+                    <xsl:attribute name="title">
+                        <xsl:text>Ris Export</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="alt">
+                        <xsl:text>Ris Export</xsl:text>
+                    </xsl:attribute>
+                </xsl:element>
             </xsl:element>
-        </xsl:element>
+        </li>
     </xsl:template>
 
     <!-- Named template to translate a field's name. Needs no parameter. -->
