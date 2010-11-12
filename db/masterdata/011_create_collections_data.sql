@@ -13,7 +13,6 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- --------------------------------------------------------
 
 INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`, `left_id`, `right_id`, `parent_id`, `visible`) VALUES
-(1, 1, NULL, NULL, NULL, 1, 2, NULL, 1),
 (2, 2, NULL, NULL, NULL, 1, 2054, NULL, 1),
 (3, 2, '0', 'Informatik, Informationswissenschaft, allgemeine Werke', NULL, 2, 189, 2, 1),
 (4, 2, '1', 'Philosophie und Psychologie', NULL, 190, 389, 2, 1),
@@ -16021,23 +16020,15 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`, `lef
 (15978, 7, '89.92', 'Ost-West-Verhältnis', NULL, 4261, 4262, 15912, 1),
 (15979, 7, '89.93', 'Nord-Süd-Verhältnis', NULL, 4263, 4264, 15912, 1),
 (15980, 7, '89.94', 'Internationale Beziehungen: Sonstiges', NULL, 4265, 4266, 15912, 1),
-(15981, 7, '89.99', 'Politologie: Sonstiges', NULL, 4267, 4268, 15912, 1),
-(15982, 9, NULL, NULL, NULL, 1, 2, NULL, 1),
-(15983, 10, NULL, NULL, NULL, 1, 2, NULL, 1),
-(15984, 11, NULL, NULL, NULL, 1, 2, NULL, 1);
+(15981, 7, '89.99', 'Politologie: Sonstiges', NULL, 4267, 4268, 15912, 1);
 
 -- --------------------------------------------------------
 
 INSERT INTO `collections_roles` (`id`, `name`, `oai_name`, `position`, `visible`, `visible_browsing_start`, `display_browsing`, `visible_frontdoor`, `display_frontdoor`, `visible_oai`, `display_oai`) VALUES
-(1, 'institutes', 'institutes', 1, 1, 1, 'Name', 1, 'Name', 1, 'Name'),
 (2, 'ddc', 'ddc', 2, 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
 (3, 'ccs', 'ccs', 3, 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
 (4, 'pacs', 'pacs', 4, 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
 (5, 'jel', 'jel', 5, 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
 (6, 'msc', 'msc', 6, 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
-(7, 'bk', 'bk', 7, 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
-(9, 'collections', 'collections', 9, 1, 1, 'Name', 1, 'Name', 1, 'Name'),
-(10, 'series', 'series', 10, 1, 1, 'Name', 1, 'Name', 1, 'Name'),
-(11, 'reports', 'reports', 11, 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
-(15, 'projects', 'projects', 12, 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number');
+(7, 'bk', 'bk', 7, 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number');
 
