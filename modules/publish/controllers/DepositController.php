@@ -121,7 +121,8 @@ class Publish_DepositController extends Controller_Action {
                             'success_redirect_with_link', $docUrl, $docId);
                 }
                 return $this->_redirectToAndExit('index', $message, 'index',
-                        'publish');            }
+                        'publish');
+            }
         }
         else {
             return $this->_redirectTo('index', '', 'index');
@@ -159,7 +160,6 @@ class Publish_DepositController extends Controller_Action {
             $mail = new Opus_Job_Worker_MailPublishNotification($log);
             $mail->work($job);
         }
-
     }
 
     /**
