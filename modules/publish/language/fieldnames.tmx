@@ -2267,19 +2267,19 @@
 
     <tu tuid="choose_collection_role">
       <tuv xml:lang="en">
-        <seg>Main collection</seg>
+        <seg>Collection</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Haupt-Sammlung</seg>
+        <seg>Sammlung</seg>
       </tuv>
     </tu>
 
     <tu tuid="choose_collection_subcollection">
       <tuv xml:lang="en">
-        <seg>Sub Collection</seg>
+        <seg>Collection Entry</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Sub-Sammlung</seg>
+        <seg>Sammlungseintrag</seg>
       </tuv>
     </tu>
 
