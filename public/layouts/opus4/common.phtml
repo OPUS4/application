@@ -133,6 +133,7 @@ $languageSelectors = $this->languageSelector();
 
         <div id="page-footer">
             <div class="wrapper">
+                <p id="logo-wrapper"><img src="<?= $this->layoutPath() ?>/img/theme/logo_small.gif" alt="OPUS" title="" width="69" height="29" /></p>
                 <ul id="secondary-nav" class="nav">
                     <li class="first"><a href="<?= $this->url(array('module' => 'home', 'controller' => 'index', 'action' => 'contact'), null, true) ?>"><?= $this->translate('home_index_contact_actionname'); ?></a></li>
                     <li class="last"><a href="<?= $this->url(array('module' => 'home', 'controller' => 'index', 'action' => 'imprint'), null, true) ?>"><?= $this->translate('home_index_imprint_actionname') ?></a></li>
