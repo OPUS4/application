@@ -38,17 +38,26 @@ class SolrSearch_Model_CollectionRoles {
 
     public function __construct() {
         foreach (Opus_CollectionRole::fetchAll() as $collectionRole) {
-            if ($collectionRole->getVisible() === '1' and $collectionRole->getVisibleBrowsingStart() === '1') {
-                $rootCollection = $collectionRole->getRootCollection();
-                if (is_null($rootCollection) || $rootCollection->getVisible()) {
-                    array_push($this->collectionRoles, $collectionRole);
-                }
+            if (!$this->isEmpty($collectionRole) && $this->isVisible($collectionRole)) {
+                array_push($this->collectionRoles, $collectionRole);
             }
         }
     }
 
     public function getAllVisible() {
         return $this->collectionRoles;
+    }
+
+    private function isEmpty($collectionRole) {
+        $rootCollection = $collectionRole->getRootCollection();
+        if (is_null($rootCollection) || count($rootCollection->getChildren()) === 0) {
+            return true;
+        }
+        return false;
+    }
+
+    private function isVisible($collectionRole) {
+        return $collectionRole->getVisible() === '1' and $collectionRole->getVisibleBrowsingStart() === '1';
     }
 }
 ?>
