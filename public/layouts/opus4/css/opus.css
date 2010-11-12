@@ -1,4 +1,4 @@
-﻿/* Page specific settings
+/* Page specific settings
 ------------------------------------------------------------ */
 #content.home{
 	background: #eaedf2 url(../img/theme/bg_content.jpg) repeat-x;
@@ -112,7 +112,7 @@ table.result-data {
 	line-height: 1.4em;
 }
 .result-data td{
-	
+
 }
 table.authorTitle th,
 table.authorTitle td,
@@ -238,16 +238,16 @@ div > .abort-button{
 .opus fieldset .form-errors{
 	clear: both;
 }
-.opus fieldset .form-files{   
+.opus fieldset .form-files{
     width: 100%;
     margin-left:610px;
     margin-top:-70px;
     color: #26517D;
-   
+
 }
 .left-labels label,
 .right-labels label{
-	width: 24%;	
+	width: 24%;
 	padding: 0 1em 0 0;
 	float: left;
 }
@@ -647,7 +647,7 @@ body > #top-header{
 #searchbar .breadcrumb_results .paginationControl{
 	padding: 0 0 0 30px;
 	float: left;
-	background: url(../img/theme/breadcrumb_results.png) no-repeat left center;	
+	background: url(../img/theme/breadcrumb_results.png) no-repeat left center;
 }
 .breadcrumb_results .paginationControl li{
 	padding: 7px 10px 7px 0;
