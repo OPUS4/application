@@ -1,4 +1,4 @@
-/* Page specific settings
+* Page specific settings
 ------------------------------------------------------------ */
 #content.home{
 	background: #eaedf2 url(../img/theme/bg_content.jpg) repeat-x;
@@ -197,7 +197,7 @@ div > .delete-button,
 div > .up-button,
 div > .down-button
 {
-    padding-left: 22px;
+	padding-left: 22px;
 }
 div > .add-button{
 	background: url(../img/theme/bg_button-add.gif) no-repeat 0 50%;
@@ -531,6 +531,7 @@ body > #top-header{
 .content{
 	float: left;
 	width: 100%;
+	margin-bottom: 1em;
 }
 #page-footer{
 	clear: both;
@@ -600,6 +601,36 @@ body > #top-header{
 #searchbar{
 	padding: 0 0 0 245px;
 }
+.collection #searchbar{
+	padding: 0;
+}
+#breadcrumb ul{
+	margin: 0 0 0 0;
+	padding: 0 0 10px 0;
+	list-style: none;
+	/*float: left;
+	width: 100%;*/
+	/*background-color: #f3f6f8;*/
+}
+#breadcrumb li{
+	white-space: nowrap;
+	padding: 0 0 0 0px;
+	margin: 0 0 0 10px;
+	display: inline-block;
+	border-bottom: 4px solid #e2e6e9;
+	/*background: url("../img/theme/breadcrumb_results.png") no-repeat left center;*/
+}
+#breadcrumb li:first-child{
+	padding: 0;
+	/*margin: 0 0 0 0px;*/
+}
+#breadcrumb a{
+	text-decoration: none;
+	border-bottom: 4px solid #e2e6e9;
+}
+#breadcrumb a:hover{
+	border-bottom: 4px solid #feb07c;
+}
 .breadcrumb_results{
 	float: left;
 	width: 100%;
@@ -668,17 +699,29 @@ body > #top-header{
 	line-height: normal;
 	margin-left: 0.5em;
 }
-.sorting_options .sort_desc,
-.sorting_options .sort_asc{
-	padding: 0 13px;
-	background-repeat: no-repeat;
-	background-position: 100% 4px;
+.sorting_options a{
+	text-decoration: none;
 }
-.sorting_options .sort_desc{
+.sorting_options a:hover{
+	text-decoration: underline;
+}
+.sorting_options .sort_desc a,
+.sorting_options .sort_asc a{
+	padding: 0 17px 0 13px;
+	background-repeat: no-repeat;
+	background-position: 100% 5px;
+}
+.sorting_options .sort_desc a{
 	background-image: url(../img/theme/icon-desc.gif);
 }
-.sorting_options .sort_asc{
+.sorting_options .sort_asc a{
 	background-image: url(../img/theme/icon-asc.gif);
+}
+.sorting_options .sort_desc a:hover{
+	background-image: url(../img/theme/icon-desc-o.gif);
+}
+.sorting_options .sort_asc a:hover{
+	background-image: url(../img/theme/icon-asc-o.gif);
 }
 #search_options{
 	float: left;
@@ -809,7 +852,6 @@ body > #top-header{
 }
 #fieldset-search{
 	background: url(../img/theme/bg_search.png) no-repeat;
-	/*height: 38px;*/
 	width: 535px;
 	margin: auto;
 	padding: 0 0 0;
