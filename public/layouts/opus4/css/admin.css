@@ -251,6 +251,7 @@
 }
 
 .adminContainer fieldset {
+    margin: 1em 1em;
     background: #f3f6f8;
 }
 
