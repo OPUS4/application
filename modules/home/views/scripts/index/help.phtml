@@ -92,8 +92,8 @@
                     <?php elseif (($translation !== 'help_content_' . $entry)) : ?>
                         <p><?= $translation ?></p>
                     <?php endif ?>
+                        <p class="backlink"><a href="#section-help"><?= $this->translate('help_index_up') ?></a></p>
                     </dd>
-                    <p class="backlink"><a href="#section-help"><?= $this->translate('help_index_up') ?></a></p>
                 <?php endforeach; ?>
             <?php endforeach; ?>
             </dl>
