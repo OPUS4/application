@@ -57,10 +57,11 @@
     <xsl:include href="prefixes/XMetaDissPlus.xslt"/>
     <xsl:include href="prefixes/copy_xml.xslt"/>
 
-    <xsl:output method="xml" indent="yes" />
+    <xsl:output method="xml" indent="yes" encoding="utf-8" />
 
     <xsl:param name="dateTime" />
     <xsl:param name="emailAddress" />
+    <xsl:param name="setPubType" />
     <xsl:param name="repName" />
     <xsl:param name="repIdentifier" />
     <xsl:param name="sampleIdentifier" />
@@ -74,7 +75,6 @@
     <xsl:param name="oai_until" />
     <xsl:param name="oai_metadataPrefix" />
     <xsl:param name="oai_resumptionToken" />
-    <xsl:param name="oai_set" />
     <xsl:param name="oai_identifier" />
     <xsl:param name="oai_error_code" />
     <xsl:param name="oai_error_message" />
@@ -107,9 +107,6 @@
                 </xsl:if>
                 <xsl:if test="$oai_metadataPrefix != ''">
                     <xsl:attribute name="metadataPrefix"><xsl:value-of select="$oai_metadataPrefix" /></xsl:attribute>
-                </xsl:if>
-                <xsl:if test="$oai_set != ''">
-                    <xsl:attribute name="set"><xsl:value-of select="$oai_set" /></xsl:attribute>
                 </xsl:if>
                 <xsl:if test="$oai_identifier != ''">
                     <xsl:attribute name="identifier"><xsl:value-of select="$oai_identifier" /></xsl:attribute>
@@ -167,24 +164,19 @@
            <xsl:element name="earliestDatestamp">
              <xsl:value-of select="$earliestDate"/>
            </xsl:element>
-           <xsl:element name="deletedRecord"><xsl:text>persistent</xsl:text></xsl:element>
-           <xsl:element name="granularity"><xsl:text>YYYY-MM-DDThh:mm:ssZ</xsl:text></xsl:element>
+           <!-- <xsl:element name="deletedRecord"><xsl:text>persistent</xsl:text></xsl:element> -->
+           <xsl:element name="deletedRecord">no</xsl:element>
+           <!--TODO: check granularity throughout the OAI component-->
+           <!--xsl:element name="granularity">YYYY-MM-DDThh:mm:ssZ</xsl:element>-->
+           <xsl:element name="granularity">YYYY-MM-DD</xsl:element>
            <xsl:element name="description">
                <xsl:element name="oai-identifier">
-                  <xsl:attribute name="xmlns"> 
-                    <xsl:text>http://www.openarchives.org/OAI/2.0/oai-identifier</xsl:text>
-                  </xsl:attribute>
-                  <xsl:attribute name="xsi:schemaLocation">
-                    <xsl:text>http://www.openarchives.org/OAI/2.0/oai-identifier http://www.openarchives.org/OAI/2.0/oai-identifier.xsd</xsl:text>
-                  </xsl:attribute>
-                  <xsl:element name="scheme"><xsl:text>oai</xsl:text></xsl:element>
-                  <xsl:element name="repositoryIdentifier">
-                     <xsl:value-of select="$repIdentifier"/>
-                  </xsl:element>
+                  <xsl:attribute name="xmlns">http://www.openarchives.org/OAI/2.0/oai-identifier</xsl:attribute>
+                  <xsl:attribute name="xsi:schemaLocation">http://www.openarchives.org/OAI/2.0/oai-identifier http://www.openarchives.org/OAI/2.0/oai-identifier.xsd</xsl:attribute>
+                  <xsl:element name="scheme">oai</xsl:element>
+                  <xsl:element name="repositoryIdentifier"><xsl:value-of select="$repIdentifier"/></xsl:element>
                   <xsl:element name="delimiter"><xsl:text>:</xsl:text></xsl:element>
-                  <xsl:element name="sampleIdentifier">
-                     <xsl:value-of select="$sampleIdentifier"/>
-                  </xsl:element>
+                  <xsl:element name="sampleIdentifier"><xsl:value-of select="$sampleIdentifier"/></xsl:element>
                </xsl:element>
            </xsl:element>
         </xsl:element>
@@ -218,17 +210,17 @@
     </xsl:template>
 
     <xsl:template match="Documents" mode="ListIdentifiers">
-        <xsl:element name="ListIdentifiers">
+        <xsl:if test="$totalIds > 0">
+            <xsl:element name="ListIdentifiers">
             <xsl:apply-templates select="Opus_Document" /> 
-            <xsl:if test="$totalIds > 0">
                 <xsl:element name = "resumptionToken">
                   <xsl:attribute name="expirationDate"><xsl:value-of select="$dateDelete"/></xsl:attribute>
                   <xsl:attribute name="completeListSize"><xsl:value-of select="$totalIds"/>
                   </xsl:attribute><xsl:attribute name="cursor"><xsl:value-of select="$cursor"/>
                   </xsl:attribute><xsl:value-of select="$res"/>
                 </xsl:element>
-            </xsl:if>
-        </xsl:element>
+            </xsl:element>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="Documents" mode="ListSets">
@@ -238,17 +230,17 @@
     </xsl:template>
 
     <xsl:template match="Documents" mode="ListRecords">
-        <xsl:element name="ListRecords">
+        <xsl:if test="$totalIds > 0">
+            <xsl:element name="ListRecords">
             <xsl:apply-templates select="Opus_Document" />
-            <xsl:if test="$totalIds > 0">
                 <xsl:element name = "resumptionToken">
                   <xsl:attribute name="expirationDate"><xsl:value-of select="$dateDelete"/></xsl:attribute>
                   <xsl:attribute name="completeListSize"><xsl:value-of select="$totalIds"/>
                   </xsl:attribute><xsl:attribute name="cursor"><xsl:value-of select="$cursor"/>
                   </xsl:attribute><xsl:value-of select="$res"/>
                 </xsl:element>
-            </xsl:if>
-        </xsl:element>
+            </xsl:element>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="Documents" mode="GetRecord">
@@ -259,8 +251,8 @@
 
     <xsl:template match="Opus_Sets">
         <xsl:element name="set">
-           <xsl:element name="setSpec"><xsl:value-of select="@Spec"/></xsl:element>
-           <xsl:element name="setName"><xsl:value-of select="@Name"/></xsl:element>
+           <xsl:element name="setSpec"><xsl:value-of select="@Type"/></xsl:element>
+           <xsl:element name="setName"><xsl:value-of select="@TypeName"/></xsl:element>
         </xsl:element>
     </xsl:template>    
 
@@ -305,14 +297,14 @@
                 <xsl:element name="datestamp">
                   <xsl:choose>
                     <xsl:when test="@ServerDateModified">
-                        <xsl:value-of select="@ServerDateModified" />
+                        <xsl:value-of select="ServerDateModified/@Year"/>-<xsl:value-of select="format-number(ServerDateModified/@Month,'00')"/>-<xsl:value-of select="format-number(ServerDateModified/@Day,'00')"/>    
                     </xsl:when>  
                     <xsl:otherwise>
-                        <xsl:value-of select="@ServerDatePublished" />
+                        <xsl:value-of select="ServerDatePublished/@Year"/>-<xsl:value-of select="format-number(ServerDatePublished/@Month,'00')"/>-<xsl:value-of select="format-number(ServerDatePublished/@Day,'00')"/> 
                     </xsl:otherwise>   
                   </xsl:choose>
                 </xsl:element>
-            <xsl:apply-templates select="Spec" />
+            <xsl:apply-templates select="SetSpec" />
             </xsl:element>
             <!-- choose the corresponding template depending on metadataPrefix -->
             <!-- not, when verb=ListIdentifiers -->
@@ -345,7 +337,7 @@
             </xsl:choose>            
     </xsl:template>
     
-    <xsl:template match="Spec">
+    <xsl:template match="SetSpec">
        <xsl:element name="setSpec"><xsl:value-of select="@Value"/></xsl:element>
     </xsl:template>         
     
