@@ -137,7 +137,9 @@ class View_Helper_LoginBar {
             if ($addAccountLink) {
                 $accountUrl = $this->_view->url(array('module' => 'account'), null, true);
                 $url = $this->_view->url(array_merge($this->_logout_url, $returnParams->getReturnParameters()));
-                return '<a style="padding-right: 1em" href="' . $accountUrl . '">Account</a> <a href="' . $url . '">Logout</a>';
+                return '<a style="padding-right: 1em" href="' . $accountUrl . 
+                    '">Account</a> <a href="' . $url .
+                    '">Logout (' . $identity . ')</a>';
             }
             else {
                 $url = $this->_view->url(array_merge($this->_logout_url, $returnParams->getReturnParameters()));
