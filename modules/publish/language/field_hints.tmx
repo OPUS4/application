@@ -1264,6 +1264,150 @@ Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathsci
         </tuv>
     </tu>
 
+  <tu tuid="hint_Opus_Model_Filter_Licence">
+      <tuv xml:lang="en">
+        <seg>Please select a license for your document.
+        By choosing a license you decide which legal
+        conditions will apply to the document you are
+        publishing.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie die Lizenz, unter der
+        das Dokument veröffentlicht werden soll.
+        Mit der Wahl der Lizenz entscheiden Sie,
+        unter welchen Bedingungen das von Ihnen
+        veröffentlichte Dokument zukünftig genutzt
+        werden darf.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="hint_add_SubjectUncontrolled">
+      <tuv xml:lang="en">
+        <seg>You can index your document with free
+        English keywords here.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sie können hier freie Schlagwörter eingeben.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="hint_Opus_Model_Filter_TitleParent">
+      <tuv xml:lang="en">
+        <seg>Please insert the title of the journal, to which the article belongs to.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Geben Sie bitte die Zeitschrift ein, zu der der Artikel gehört</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="hint_TitleAbstract">
+      <tuv xml:lang="en">
+        <seg>Insert an abstract, please!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Geben Sie bitte eine Zusammenfassung ein!</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="hint_Opus_Model_Filter_Language">
+      <tuv xml:lang="en">
+        <seg>Select the language</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte die Hauptsprache des Werkes angeben</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="hint_Opus_Model_Filter_TitleMain">
+      <tuv xml:lang="en">
+        <seg>If the original title is not in english, please order another inputfield</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sofern der Originaltitel nicht englisch ist, fordern Sie bitte ein weiteres Eingabefeld an.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="hint_Opus_Model_Filter_TitleAbstract_add">
+      <tuv xml:lang="en">
+        <seg>If given an abstract, order an input field</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sofern es eine Zusammenfassung (Abstract) gibt, fordern Sie bitte ein Eingabefeld an</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="hint_Opus_Model_Filter_TitleAdditional">
+      <tuv xml:lang="en">
+        <seg>Please insert an additional title in german, if the original title is in english. And vice versa.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sofern der Originaltitel der Arbeit englisch ist, geben Sie bitte einen zusätzlichen Titel auf deutsch ein. Und umgekehrt.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="hint_FirstName">
+      <tuv xml:lang="en">
+        <seg>If possible, please write out the first name, too.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte schreiben Sie wenn möglich auch den Vornamen vollständig aus.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="hint_collection2">
+      <tuv xml:lang="en">
+        <seg>Choose another sub collection from the select box.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Wählen Sie eine weitere Untersammlung aus.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="hint_collection3">
+      <tuv xml:lang="en">
+        <seg>Choose another sub collection from the select box.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Wählen Sie eine weitere Untersammlung aus.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="hint_collection4">
+      <tuv xml:lang="en">
+        <seg>Choose another sub collection from the select box.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Wählen Sie eine weitere Untersammlung aus.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="hint_collection5">
+      <tuv xml:lang="en">
+        <seg>Choose another sub collection from the select box.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Wählen Sie eine weitere Untersammlung aus.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="hint_collection6">
+      <tuv xml:lang="en">
+        <seg>Choose another sub collection from the select box.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Wählen Sie eine weitere Untersammlung aus.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="hint_collection7">
+      <tuv xml:lang="en">
+        <seg>Choose another sub collection from the select box.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Wählen Sie eine weitere Untersammlung aus.</seg>
+      </tuv>
+    </tu>
+
 	
     </body>
 </tmx>

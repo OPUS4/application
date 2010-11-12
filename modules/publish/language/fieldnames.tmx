@@ -178,14 +178,6 @@
       </tuv>
     </tu>
 
-    <tu tuid="groupPersonTranslator">
-      <tuv xml:lang="en">
-        <seg>Translator(s)</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Übersetzer</seg>
-      </tuv>
-    </tu>
 
 	<tu tuid="PersonAdvisorFirstName">
       <tuv xml:lang="en">
@@ -205,14 +197,6 @@
       </tuv>
     </tu>
 
-    <tu tuid="groupPersonAdvisor">
-      <tuv xml:lang="en">
-        <seg>Advisor</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Betreuer</seg>
-      </tuv>
-    </tu>
 	
 	<tu tuid="PersonContributorFirstName">
       <tuv xml:lang="en">
@@ -232,32 +216,8 @@
       </tuv>
     </tu>
 
-    <tu tuid="groupPersonContributor">
-      <tuv xml:lang="en">
-        <seg>Contributor</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Beteiligte Person</seg>
-      </tuv>
-    </tu>
-	
-	<tu tuid="groupCreatingCorporation">
-      <tuv xml:lang="en">
-        <seg>Creating Corporation</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Urhebende Körperschaft</seg>
-      </tuv>
-    </tu>
-	
-	<tu tuid="groupContributingCorporation">
-      <tuv xml:lang="en">
-        <seg>Contributing Corporation</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Beteiligte Körperschaft</seg>
-      </tuv>
-    </tu>
+
+
 	
      <tu tuid="Language">
       <tuv xml:lang="en">
@@ -367,22 +327,7 @@
       </tuv>
     </tu>
     
-    <tu tuid="hint_Opus_Model_Filter_Licence">
-      <tuv xml:lang="en">
-        <seg>Please select a license for your document. 
-        By choosing a license you decide which legal 
-        conditions will apply to the document you are 
-        publishing.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Bitte wählen Sie die Lizenz, unter der 
-        das Dokument veröffentlicht werden soll. 
-        Mit der Wahl der Lizenz entscheiden Sie, 
-        unter welchen Bedingungen das von Ihnen 
-        veröffentlichte Dokument zukünftig genutzt 
-        werden darf.</seg>
-      </tuv>
-    </tu>
+  
     
     <tu tuid="File">
       <tuv xml:lang="en">
@@ -627,14 +572,7 @@
       </tuv>
     </tu>
 
-	<tu tuid="groupCreatingCorporation">
-      <tuv xml:lang="en">
-        <seg>Creating Corporation</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Urhebende Körperschaft</seg>
-      </tuv>
-    </tu>
+
 	
     <tu tuid="CreatingCorporation">
       <tuv xml:lang="en">
@@ -645,23 +583,6 @@
       </tuv>
     </tu>
 
-    <tu tuid="add_CreatingCorporation">
-      <tuv xml:lang="en">
-        <seg>add Creating Corporation</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Urhebende Körperschaft hinzufügen</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="remove_CreatingCorporation">
-      <tuv xml:lang="en">
-        <seg>remove Creating Corporation</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Urhebende Körperschaft entfernen</seg>
-      </tuv>
-    </tu>
     
     <tu tuid="DateAccepted">
       <tuv xml:lang="en">
@@ -680,16 +601,7 @@
         <seg>Dokumentart</seg>
       </tuv>
      </tu>
-     
-    <tu tuid="groupSubjectSwd">
-      <tuv xml:lang="en">
-        <seg>SWD-Keyword</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>SWD-Schlagwort</seg>
-      </tuv>
-    </tu>
-    
+         
     <tu tuid="add_SubjectSwd">
       <tuv xml:lang="en">
         <seg>add SWD-Keyword</seg>
@@ -717,14 +629,7 @@
       </tuv>
     </tu>
 
-	<tu tuid="groupSubjectDdc">
-      <tuv xml:lang="en">
-        <seg>DDC Term</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>DDC Sachgruppe</seg>
-      </tuv>
-    </tu>
+
 	
     <tu tuid="add_SubjectDdc">
       <tuv xml:lang="en">
@@ -751,26 +656,7 @@
       <tuv xml:lang="de">
         <seg>Freies Schlagwort / Tag</seg>
       </tuv>
-    </tu>
-
-    <tu tuid="groupSubjectUncontrolled">
-      <tuv xml:lang="en">
-        <seg>Tag(s)</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Schlagwort(e)</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="hint_add_SubjectUncontrolled">
-      <tuv xml:lang="en">
-        <seg>You can index your document with free 
-        English keywords here.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Sie können hier freie Schlagwörter eingeben.</seg>
-      </tuv>
-    </tu>  
+    </tu>     
 
     <tu tuid="add_SubjectUncontrolled">
       <tuv xml:lang="en">
@@ -853,14 +739,6 @@
       </tuv>
     </tu>
 
-    <tu tuid="groupInstitute">
-      <tuv xml:lang="en">
-        <seg>Institute(s)</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Institut(e)</seg>
-      </tuv>
-    </tu>
 
     <tu tuid="add_NonInstituteAffiliation">
       <tuv xml:lang="en">
@@ -1096,14 +974,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="groupTitleMain">
-      <tuv xml:lang="en">
-        <seg>Main Title(s)</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Haupttitel</seg>
-      </tuv>
-    </tu>
+
     
     <tu tuid="TitleMainValue">
       <tuv xml:lang="en">
@@ -1123,14 +994,7 @@
       </tuv>
     </tu>
     
-    <tu tuid="hint_Opus_Model_Filter_TitleMain">
-      <tuv xml:lang="en">
-        <seg>If the original title is not in english, please order another inputfield</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Sofern der Originaltitel nicht englisch ist, fordern Sie bitte ein weiteres Eingabefeld an.</seg>
-      </tuv>
-    </tu> 
+
     
     <tu tuid="add_TitleMain">
       <tuv xml:lang="en">
@@ -1150,14 +1014,7 @@
       </tuv>
     </tu>
         
-	<tu tuid="groupTitleSub">
-      <tuv xml:lang="en">
-        <seg>Subtitle(s)</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Untertitel</seg>
-      </tuv>
-    </tu>
+
 	
 	<tu tuid="TitleSub">
       <tuv xml:lang="en">
@@ -1177,14 +1034,7 @@
       </tuv>
     </tu>
 	
-	<tu tuid="groupTitleParent">
-      <tuv xml:lang="en">
-        <seg>Parent Title</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Titel des übergeordneten Werkes</seg>
-      </tuv>
-    </tu>
+
 
 	<tu tuid="TitleParentLanguage">
       <tuv xml:lang="en">
@@ -1222,39 +1072,12 @@
       </tuv>
     </tu>
     
-    <tu tuid="hint_Opus_Model_Filter_TitleParent">
-      <tuv xml:lang="en">
-        <seg>Please insert the title of the journal, to which the article belongs to.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Geben Sie bitte die Zeitschrift ein, zu der der Artikel gehört</seg>
-      </tuv>
-    </tu>
-    
     <tu tuid="TitleAbstract">
       <tuv xml:lang="en">
         <seg>Abstract</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Abstract / Kurzfassung</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="groupTitleAbstract">
-      <tuv xml:lang="en">
-        <seg>Abstract(s)</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Abstract(s)</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="hint_TitleAbstract">
-      <tuv xml:lang="en">
-        <seg>Insert an abstract, please!</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Geben Sie bitte eine Zusammenfassung ein!</seg>
       </tuv>
     </tu>
 
@@ -1294,14 +1117,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="hint_Opus_Model_Filter_TitleAbstract_add">
-      <tuv xml:lang="en">
-        <seg>If given an abstract, order an input field</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Sofern es eine Zusammenfassung (Abstract) gibt, fordern Sie bitte ein Eingabefeld an</seg>
-      </tuv>
-    </tu>
+
 
     <tu tuid="TitleAdditional">
       <tuv xml:lang="en">
@@ -1319,25 +1135,7 @@
       <tuv xml:lang="de">
         <seg>Sprache</seg>
       </tuv>
-    </tu>
-
-	<tu tuid="groupTitleAdditional">
-      <tuv xml:lang="en">
-        <seg>Title Additional</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Übersetzter Titel</seg>
-      </tuv>
-    </tu>
-	
-    <tu tuid="hint_Opus_Model_Filter_TitleAdditional">
-      <tuv xml:lang="en">
-        <seg>Please insert an additional title in german, if the original title is in english. And vice versa.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Sofern der Originaltitel der Arbeit englisch ist, geben Sie bitte einen zusätzlichen Titel auf deutsch ein. Und umgekehrt.</seg>
-      </tuv>
-    </tu>   
+    </tu> 
     
     <tu tuid="add_TitleAdditional">
       <tuv xml:lang="en">
@@ -1483,14 +1281,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="groupSubjectMSC">
-      <tuv xml:lang="en">
-        <seg>MSC Classification(s)</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>MSC Klassifikation(en)</seg>
-      </tuv>
-    </tu>
+
 
     <tu tuid="SubjectMSC">
       <tuv xml:lang="en">
@@ -1683,14 +1474,7 @@
       </tuv>
     </tu>
         
-	<tu tuid="groupPersonEditor">
-      <tuv xml:lang="en">
-        <seg>Editor(s)</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Herausgeber</seg>
-      </tuv>
-    </tu>
+
 	
     <tu tuid="PersonEditor">
       <tuv xml:lang="en">
@@ -1822,25 +1606,7 @@
       <tuv xml:lang="de">
         <seg>beteiligte Person entfernen</seg>
       </tuv>
-    </tu>
-
-    <tu tuid="groupPersonReferee">
-      <tuv xml:lang="en">
-        <seg>Referee(s)</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Gutachter</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="groupProject">
-      <tuv xml:lang="en">
-        <seg>Project(s)</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Projekt(e)</seg>
-      </tuv>
-    </tu>
+    </tu>  
 
     <tu tuid="Project">
       <tuv xml:lang="en">
@@ -1848,24 +1614,6 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Projekt</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="groupApplicationArea">
-      <tuv xml:lang="en">
-        <seg>Application area(s)</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Anwendungsgebiet(e)</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="ApplicationArea">
-      <tuv xml:lang="en">
-        <seg>Application area</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Anwendungsgebiet</seg>
       </tuv>
     </tu>
 
@@ -1985,15 +1733,7 @@
         <seg>Vorname</seg>
       </tuv>
     </tu>
-    
-    <tu tuid="hint_FirstName">
-      <tuv xml:lang="en">
-        <seg>If possible, please write out the first name, too.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Bitte schreiben Sie wenn möglich auch den Vornamen vollständig aus.</seg>
-      </tuv>
-    </tu>    
+  
     
     <tu tuid="LastName">
       <tuv xml:lang="en">
@@ -2064,15 +1804,6 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Verlag</seg>
-      </tuv>
-    </tu>
-
-	<tu tuid="groupLicence">
-      <tuv xml:lang="en">
-        <seg>Licence(s)</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Lizenz(en)</seg>
       </tuv>
     </tu>
 
@@ -2238,14 +1969,7 @@
       </tuv>
     </tu>
     
-    <tu tuid="hint_Opus_Model_Filter_Language">
-      <tuv xml:lang="en">
-        <seg>Select the language</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Bitte die Hauptsprache des Werkes angeben</seg>
-      </tuv>
-    </tu>
+
 
     <tu tuid="transmit">
       <tuv xml:lang="en">
