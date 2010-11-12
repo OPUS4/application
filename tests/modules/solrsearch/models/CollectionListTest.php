@@ -45,16 +45,16 @@ class SolrSearch_Model_CollectionListTest extends ControllerTestCase {
     }
 
     public function testInvisbleCollection() {
-        $rootCollection = $this->getRootCollection(1);
+        $collection = $this->getFirstNonRootCollection(1);
 
-        $rootCollection->setVisible(false);
-        $rootCollection->store();
+        $collection->setVisible(false);
+        $collection->store();
         try {
-            new SolrSearch_Model_CollectionList($rootCollection->getId());
+            new SolrSearch_Model_CollectionList($collection->getId());
         }
         catch (SolrSearch_Model_Exception $e) {
-            $rootCollection->setVisible(true);
-            $rootCollection->store();
+            $collection->setVisible(true);
+            $collection->store();
             return;
         }
         $this->fail('Expected exception SolrSearch_Model_Exception was not raised.');
@@ -220,6 +220,15 @@ class SolrSearch_Model_CollectionListTest extends ControllerTestCase {
         $this->assertNotNull($rootCollection);
         $this->assertEquals('1', $rootCollection->getVisible());
         return $rootCollection;
+    }
+
+    private function getFirstNonRootCollection($collectionRoleId) {
+        $rootCollection = $this->getRootCollection($collectionRoleId);
+        $children = $rootCollection->getChildren();
+        if (count($children) == 0) {
+            return null;
+        }
+        return $children[0];
     }
 }
 ?>
