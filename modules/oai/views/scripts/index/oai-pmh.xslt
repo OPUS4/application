@@ -210,15 +210,17 @@
     </xsl:template>
 
     <xsl:template match="Documents" mode="ListIdentifiers">
-        <xsl:if test="$totalIds > 0">
+        <xsl:if test="count(Opus_Document) > 0">
             <xsl:element name="ListIdentifiers">
-            <xsl:apply-templates select="Opus_Document" /> 
-                <xsl:element name = "resumptionToken">
-                  <xsl:attribute name="expirationDate"><xsl:value-of select="$dateDelete"/></xsl:attribute>
-                  <xsl:attribute name="completeListSize"><xsl:value-of select="$totalIds"/>
-                  </xsl:attribute><xsl:attribute name="cursor"><xsl:value-of select="$cursor"/>
-                  </xsl:attribute><xsl:value-of select="$res"/>
-                </xsl:element>
+                <xsl:apply-templates select="Opus_Document" /> 
+                <xsl:if test="$totalIds > 0">
+                    <xsl:element name = "resumptionToken">
+                        <xsl:attribute name="expirationDate"><xsl:value-of select="$dateDelete"/></xsl:attribute>
+                        <xsl:attribute name="completeListSize"><xsl:value-of select="$totalIds"/>
+                        </xsl:attribute><xsl:attribute name="cursor"><xsl:value-of select="$cursor"/>
+                        </xsl:attribute><xsl:value-of select="$res"/>
+                    </xsl:element>
+                </xsl:if>
             </xsl:element>
         </xsl:if>
     </xsl:template>
@@ -230,15 +232,17 @@
     </xsl:template>
 
     <xsl:template match="Documents" mode="ListRecords">
-        <xsl:if test="$totalIds > 0">
+        <xsl:if test="count(Opus_Document) > 0">
             <xsl:element name="ListRecords">
             <xsl:apply-templates select="Opus_Document" />
-                <xsl:element name = "resumptionToken">
-                  <xsl:attribute name="expirationDate"><xsl:value-of select="$dateDelete"/></xsl:attribute>
-                  <xsl:attribute name="completeListSize"><xsl:value-of select="$totalIds"/>
-                  </xsl:attribute><xsl:attribute name="cursor"><xsl:value-of select="$cursor"/>
-                  </xsl:attribute><xsl:value-of select="$res"/>
-                </xsl:element>
+                <xsl:if test="$totalIds > 0">
+                    <xsl:element name = "resumptionToken">
+                        <xsl:attribute name="expirationDate"><xsl:value-of select="$dateDelete"/></xsl:attribute>
+                        <xsl:attribute name="completeListSize"><xsl:value-of select="$totalIds"/>
+                        </xsl:attribute><xsl:attribute name="cursor"><xsl:value-of select="$cursor"/>
+                        </xsl:attribute><xsl:value-of select="$res"/>
+                    </xsl:element>
+                </xsl:if>
             </xsl:element>
         </xsl:if>
     </xsl:template>
