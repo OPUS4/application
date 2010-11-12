@@ -103,13 +103,6 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $realmSetupPlugin = new Controller_Plugin_SecurityRealm();
         $frontController->registerPlugin($realmSetupPlugin);
 
-        /*
-         * Add a front controller plugin for oai-requests because of
-         * DNB-validation
-         */
-        $oaiPlugin = new Controller_Plugin_DnbXmlPostprocess();
-        $frontController->registerPlugin($oaiPlugin);
-
         // Get Name of Module, Controller and Action for Use in View
         $viewSetup = new Controller_Plugin_ViewSetup();
         $frontController->registerPlugin($viewSetup);
