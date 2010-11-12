@@ -117,8 +117,8 @@ class Publish_Model_FormElement {
     }
 
     private function isGroup() {
-        $groupCount = 'num' . $this->elementName;
-        $this->session->$groupCount = 0;
+//        $groupCount = 'num' . $this->elementName;
+//        $this->session->$groupCount = 0;
         if ($this->isTitleElement())
             return true;
         else if ($this->isPersonElement())

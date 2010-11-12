@@ -74,7 +74,7 @@ class Publish_Model_DisplayGroup {
         $number = count($displayGroup);        
         $groupCount = "num" . $this->label;
 
-        //if (!isset($this->session->$groupCount) || $number < $this->session->$groupCount)
+        if (!isset($this->session->$groupCount) || $number < $this->session->$groupCount)
             $this->session->$groupCount = $number;
         
         $this->log->debug("initial number for group elements = " . $number . " for group " . $this->label);
