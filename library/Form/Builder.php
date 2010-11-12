@@ -40,6 +40,12 @@ class Form_Builder {
 
     private $DEBUG = false;
 
+    private $log;
+
+    public function __construct() {
+        $this->log = Zend_Registry::get('Zend_Log');
+    }
+
     /**
      * Returns a form for a model by integrating all necessary subforms.
      *
@@ -84,7 +90,19 @@ class Form_Builder {
      * @return void
      */
     private function __populateModel(Opus_Model_Abstract $model, array $data) {
+        if ($model instanceof Opus_Date) {
+            $this->log->debug('populateModel: Opus_Date');
+            
+            $dateStr = $data['date'][1];
+            $date = new Zend_Date($dateStr);
+            $model->setZendDate($date);
+            return;
+        }
+        else {
+            $this->log->debug('populateModel: ' . $model);
+        }
         foreach ($data as $fieldName => $values) {
+            $this->log->debug('fieldName = ' . $fieldName);
             $field = $model->getField($fieldName);
             // FIXME: Under what condition does this happen?
             if (null === $field) continue;
@@ -113,7 +131,8 @@ class Form_Builder {
                     }
                 }
                 $model->$accessor($values);
-            } else {
+            }
+            else {
                 // Set object property.
                 $accessor = 'set' . $fieldName;
                 $fieldValues = array();
@@ -123,16 +142,19 @@ class Form_Builder {
                         $clazz = $field->getValueModelClass();
                         if ('add' === $key) {
                             $fieldValues[] = new $clazz();
-                        } else if ('' !== $value) {
+                        }
+                        else if ('' !== $value) {
                             $fieldValues[] = new $clazz($value);
                         }
-                    } else if ('add' !== $key && 'nothing' !== $key) {
+                    }
+                    else if ('add' !== $key && 'nothing' !== $key) {
                         // The 'add' key is reserved for adding a new (blank) subform.
                         // The 'nothing' key should always be ignored
                         $clazz = $field->getValueModelClass();
                         if (false === array_key_exists('Id', $value) or '' === $value['Id']) {
                             $id = null;
-                        } else {
+                        }
+                        else {
                             $id = $value['Id'];
                             if (!(false === strpos($id, ','))) {
                                 $id = explode(',', $id);
@@ -149,7 +171,8 @@ class Form_Builder {
                         }
                         $this->__populateModel($fieldValue, $value);
                         $fieldValues[] = $fieldValue;
-                    } else if ('nothing' !== $key) {
+                    }
+                    else if ('nothing' !== $key) {
                         // Create a new model for the value
                         $clazz = $field->getValueModelClass();
                         $fieldValue = new $clazz;
@@ -192,16 +215,73 @@ class Form_Builder {
             $subForm->addElement($idElement);
         }
 
-        // Iterate over fields and build a subform for each field.
-        foreach ($model->describe() as $i => $fieldName) {
-            $field = $model->getField($fieldName);
-            $fieldForm = $this->__buildFieldForm($field, get_class($model));
-            $subForm->addSubForm($fieldForm, $fieldName);
+        if ($model instanceof Opus_Date) {
+            $fieldForm = $this->buildDateForm($model);
+            $subForm->addSubForm($fieldForm, 'date');
         }
+        else {
+            // Iterate over fields and build a subform for each field.
+            foreach ($model->describe() as $i => $fieldName) {
+                $field = $model->getField($fieldName);
+                $fieldForm = $this->__buildFieldForm($field, get_class($model));
+                $subForm->addSubForm($fieldForm, $fieldName);
+            }
+        }
+
         $this->__addDescription(get_class($model) . '_form', $subForm);
         $subForm->removeDecorator('Fieldset');
         return $subForm;
 
+    }
+
+    private function buildDateForm($model) {
+        $fieldName = 'date';
+
+        $fieldForm = new Zend_Form_SubForm;
+        $fieldForm->removeDecorator('HtmlTag');
+        $fieldForm->removeDecorator('DtDdWrapper');
+        $fieldForm->setLegend($fieldName);
+
+        $widget = new Zend_Form_Element_Text(strVal(1));
+        $widget->getDecorator('Label')->setOption('tag','div');
+        $widget->removeDecorator('HtmlTag');
+
+        $fieldValue = $model->getZendDate();
+
+
+        $session = new Zend_Session_Namespace();
+
+        $format_de = "dd.MM.YYYY";
+        $format_en = "YYYY/MM/dd";
+
+        switch($session->language) {
+            case 'de' :
+                $format = $format_de;
+                break;
+            default:
+                $format = $format_en;
+                break;
+        }
+
+        $timestamp = $model->getUnixTimestamp();
+        if (empty($timestamp)) {
+            $widget->setValue(null);
+        }
+        else {
+            $widget->setValue($fieldValue->get($format));
+        }
+        
+        $widget->setLabel($fieldName);
+
+        $widget->setRequired(false);
+
+//        $this->__addDescription($modelName . '_' . $fieldName, $widget);
+        $widget->addValidators($this->__getDateValidator());
+        $widget->setAttrib('class', $fieldName);
+        $fieldForm->addElement($widget);
+        $fieldForm->removeDecorator('Fieldset');
+
+        return $fieldForm;
     }
 
     /**
@@ -211,35 +291,11 @@ class Form_Builder {
      * @return Zend_Form_SubForm The subform for the field.
      */
     private function __buildFieldForm(Opus_Model_Field $field, $modelName = '') {
-
         // Get field properties.
         $fieldName = $field->getName();
-        $mandatory = $field->isMandatory();
-        $validator = $field->getValidator();
         $valueModelClass = $field->getValueModelClass();
-        $linkModelClass = $field->getLinkModelClass();
-        $fieldValues = $field->getValue();
 
-        // If getter returns no value, initialize new values if field is
-        // mandatory, since null-values will be ignored.
-        if (true === empty($fieldValues) and (true === $field->isMandatory())) {
-            if (false === is_null($linkModelClass)) {
-                $fieldValues = new $linkModelClass;
-                $target = new $valueModelClass;
-                $fieldValues->setModel($target);
-            } else if (false === is_null($valueModelClass)) {
-                $fieldValues = new $valueModelClass;
-            } else {
-                $fieldValues = '';
-            }
-        } else if (true === empty($fieldValues) and (true === is_null($field->getValueModelClass()))) {
-            $fieldValues = '';
-        }
-
-        // Construct value array if neccessary
-        if (false === is_array($fieldValues) and false === is_null($fieldValues)) {
-            $fieldValues = array($fieldValues);
-        }
+        $fieldValues = $this->_getFieldValues($field);
 
         // Iterate over values, placing them on the appropriate subform.
         $fieldForm = new Zend_Form_SubForm;
@@ -258,68 +314,28 @@ class Form_Builder {
         if (false === empty($fieldValues)) {
             foreach ($fieldValues as $i => $fieldValue) {
                 if ($fieldValue instanceof Opus_File) {
-                    // Hardcoded class name for file inputs!
-                    $fileInput = new Zend_Form_Element_File($fieldName);
-                    $fileInput->setLabel($fieldName);
-                    $this->__addDescription($modelName . '_' . $fieldName, $fileInput);
+                    $fileInput = $this->_createFileField($fieldName, $modelName);
                     $fieldForm->addElement($fileInput);
-                } else if ($fieldValue instanceof Opus_Model_Abstract) {                    
+                }
+                else if ($fieldValue instanceof Opus_Model_Abstract) {
                     if ($field->isSelection()) {
-                        // If value is a selection of models, build selection widget
-                        $options = $field->getDefault();
-                        $widget = new Zend_Form_Element_Select(strVal($i + 1));
-                        $widget->setRequired($mandatory);
-                        $message = Zend_Registry::get('Zend_Translate')->_('choose_option') . ' ' . Zend_Registry::get('Zend_Translate')->_($fieldName);
-                        $widget->addMultiOption('', $message);
-                        foreach ($options as $option) {
-                            $widget->addMultiOption($option->getId(), $option->getDisplayName());
-                        }
-                        $widget->setValue($fieldValue->getId());
-                        $widget->getDecorator('Label')->setTag(null);
-                        $widget->removeDecorator('HtmlTag');
-                        $widget->setAttrib('class', $fieldName);
-                        $this->__addDescription($modelName . '_' . $fieldName, $widget);
-                        $fieldForm->addElement($widget);                        
-                    } else {
+                        $this->_handleSelectionField($fieldForm, $i, $field, $fieldValue, $modelName);
+                    }
+                    else {
                         // If value is not a selection of models, embed subform
                         // FIXME: hardcoded check to deal with infinite
                         // recursion in collection fields
-                        if ($fieldValue instanceof Opus_Collection) continue;
+                        if ($fieldValue instanceof Opus_Collection) {
+                            continue;
+                        }
                         $fieldForm->addSubForm($this->__buildModelForm($fieldValue), $i + 1);
                         $this->__addDescription($modelName . '_' . $fieldName, $fieldForm);
                     }
-                } else if (true === is_null($valueModelClass)) {
-                    // If value is simple, build corresponding widget
-                    if ($field->isTextarea()) {
-                        $widget = new Zend_Form_Element_Textarea(strVal($i + 1));
-                    } else if ($field->isCheckbox()) {
-                        $widget = new Zend_Form_Element_Checkbox(strVal($i + 1));
-                    } else if ($field->isSelection()) {
-                        $options = $field->getDefault();
-                        $widget = new Zend_Form_Element_Select(strVal($i + 1));
-                        $message = Zend_Registry::get('Zend_Translate')->_('choose_option') . ' ' . Zend_Registry::get('Zend_Translate')->_($fieldName);
-                        $widget->addMultiOption('', $message);
-                        foreach ($field->getDefault() as $key => $option) {
-                            $widget->addMultiOption($key, $option);
-                        }
-                    } else {
-                        $widget = new Zend_Form_Element_Text(strVal($i + 1));
-                    }
-                    $widget->getDecorator('Label')->setOption('tag','div');
-
-                    $widget->removeDecorator('HtmlTag');
-                    $widget->setValue($fieldValue);
-                    $widget->setLabel($fieldName);
-                    $widget->setRequired($mandatory);
-
-                    $this->__addDescription($modelName . '_' . $fieldName, $widget);
-                    if (false === is_null($validator)) {
-                        $widget->addValidator($validator);
-                    }
-                    $widget->setAttrib('class', $fieldName);
-                    $fieldForm->addElement($widget);
-                    $fieldForm->removeDecorator('Fieldset');
                 }
+                else if (true === is_null($valueModelClass)) {
+                    $this->_handleSimpleField($fieldForm, $i, $field, $fieldValue, $modelName);
+                }
+
                 // Create button to remove value when appropriate.
                 if (1 < count($fieldValues) or (false === $field->isMandatory() and false === is_null($valueModelClass))) {
                     $element = new Zend_Form_Element_Submit('remove_' . strVal($i + 1));
@@ -333,6 +349,108 @@ class Form_Builder {
             }
         }
 
+        $this->_handleMultiplicity($fieldForm, $field, $fieldValues, $modelName);
+
+        $fieldForm->setAttrib('class', $valueModelClass);
+        return $fieldForm;
+    }
+
+    protected function _handleSimpleField($fieldForm, $i, $field, $fieldValue, $modelName) {
+        $fieldName = $field->getName();
+        $validator = $field->getValidator();
+        // If value is simple, build corresponding widget
+        if ($field->isTextarea()) {
+            $widget = new Zend_Form_Element_Textarea(strVal($i + 1));
+        }
+        else if ($field->isCheckbox()) {
+            $widget = new Zend_Form_Element_Checkbox(strVal($i + 1));
+        }
+        else if ($field->isSelection()) {
+            $options = $field->getDefault();
+            $widget = new Zend_Form_Element_Select(strVal($i + 1));
+            $message = Zend_Registry::get('Zend_Translate')->_('choose_option') . ' ' . Zend_Registry::get('Zend_Translate')->_($fieldName);
+            $widget->addMultiOption('', $message);
+            foreach ($field->getDefault() as $key => $option) {
+                $widget->addMultiOption($key, $option);
+            }
+        }
+        else {
+            $widget = new Zend_Form_Element_Text(strVal($i + 1));
+        }
+        $widget->getDecorator('Label')->setOption('tag','div');
+
+        $widget->removeDecorator('HtmlTag');
+        $widget->setValue($fieldValue);
+        $widget->setLabel($fieldName);
+        $widget->setRequired($field->isMandatory());
+
+        $this->__addDescription($modelName . '_' . $fieldName, $widget);
+        if (false === is_null($validator)) {
+            $widget->addValidator($validator);
+        }
+        $widget->setAttrib('class', $fieldName);
+        $fieldForm->addElement($widget);
+        $fieldForm->removeDecorator('Fieldset');
+    }
+
+    protected function _handleSelectionField($fieldForm, $i, $field, $fieldValue, $modelName) {
+        // If value is a selection of models, build selection widget
+        $fieldName = $field->getName();
+
+        $widget = new Zend_Form_Element_Select(strVal($i + 1));
+        $widget->setRequired($field->isMandatory());
+
+        $message = Zend_Registry::get('Zend_Translate')->_('choose_option') . ' ' . Zend_Registry::get('Zend_Translate')->_($fieldName);
+        $widget->addMultiOption('', $message);
+
+        $options = $field->getDefault();
+        foreach ($options as $option) {
+            $widget->addMultiOption($option->getId(), $option->getDisplayName());
+        }
+
+        $widget->setValue($fieldValue->getId());
+        $widget->getDecorator('Label')->setTag(null);
+        $widget->removeDecorator('HtmlTag');
+        $widget->setAttrib('class', $fieldName);
+        $this->__addDescription($modelName . '_' . $fieldName, $widget);
+        $fieldForm->addElement($widget);
+    }
+    
+    protected function _getFieldValues($field) {
+        $fieldValues = $field->getValue();
+
+        $valueModelClass = $field->getValueModelClass();
+        $linkModelClass = $field->getLinkModelClass();
+        
+        // If getter returns no value, initialize new values if field is
+        // mandatory, since null-values will be ignored.
+        if (true === empty($fieldValues) and (true === $field->isMandatory())) {
+            if (false === is_null($linkModelClass)) {
+                $fieldValues = new $linkModelClass;
+                $target = new $valueModelClass;
+                $fieldValues->setModel($target);
+            } 
+            else if (false === is_null($valueModelClass)) {
+                $fieldValues = new $valueModelClass;
+            } 
+            else {
+                $fieldValues = '';
+            }
+        } 
+        else if (true === empty($fieldValues) and (true === is_null($field->getValueModelClass()))) {
+            $fieldValues = '';
+        }
+
+        // Construct value array if neccessary
+        if (false === is_array($fieldValues) and false === is_null($fieldValues)) {
+            $fieldValues = array($fieldValues);
+        }
+        
+        return $fieldValues;
+    }
+
+    protected function _handleMultiplicity($fieldForm, $field, $fieldValues, $modelName) {
+        $fieldName = $field->getName();
         // Create button to add value when appropriate.
         if (count($fieldValues) < $field->getMultiplicity() or '*' === $field->getMultiplicity()) {
             // add an empty element to allow help- and hint texts for whole subfields
@@ -340,7 +458,7 @@ class Form_Builder {
             $helpElement->setAttrib('class', 'hiddenelement');
             $this->__addDescription($modelName . '_' . $fieldName . '_field', $helpElement);
             $fieldForm->addElement($helpElement);
-            
+
             $element = new Zend_Form_Element_Submit('add');
             $element->removeDecorator('DtDdWrapper');
             $element->setBelongsTo('Actions');
@@ -351,45 +469,52 @@ class Form_Builder {
             $element->setAttrib('class', 'button add');
             $fieldForm->addElement($element);
         }
-
-        $fieldForm->setAttrib('class', $valueModelClass);
-        return $fieldForm;
     }
 
+    protected function _createFileField($fieldName, $modelName) {
+        // Hardcoded class name for file inputs!
+        $fileInput = new Zend_Form_Element_File($fieldName);
+        $fileInput->setLabel($fieldName);
+        $this->__addDescription($modelName . '_' . $fieldName, $fileInput);
+        return $fileInput;
+    }
+
+    /**
+     * FIXME remove
+     * @param <type> $key
+     * @param <type> $element
+     */
     private function __addDescription($key, $element) {
-        $translationKey = 'hint_' . $key;
-        $translate = Zend_Registry::get('Zend_Translate');
-        $translationContent = null;
-        $helpAvailable = false;
-        if ($this->__addHelp($key) !== false) {
-        	$helpAvailable = true;
-        	$pseudoView = new Zend_View;
-        	$helpUrl = $pseudoView->url(array('module' => 'home', 'controller' => 'index', 'action' => 'help', 'content' => 'help_' .  $key), null, true);
-        	$translationContent .= '<a href="'.$helpUrl.'" target="_blank">' . $translate->translate('help_formbuilder_field_link') . '</a>';
-        	// set the decorator and set escaping to false in order to show the link correctly
-        	$element->addDecorator('Description');
-        	$element->getDecorator('Description')->setEscape(false);
-        }
-        if ($this->DEBUG === true) $translationContent .= $translationKey;
-        if ($translate->isTranslated($translationKey)) {
-        	if ($this->DEBUG === true) $translationContent .= ': ' . $translate->translate($translationKey);
-        	else $translationContent .= $translate->translate($translationKey);
-        	// set the decorator if that has not been done yet
-        	if ($helpAvailable === false) {
-        	    $element->addDecorator('Description');
-        	}
-        }
-        if ($translationContent !== null) {
-        	$element->setDescription($translationContent);
-        }
+        $helper = new Form_Builder_Helper_Abstract();
+        $helper->_addDescription($key, $element);
     }
 
-    private function __addHelp($key) {
-        $translationKey = 'help_' . $key;
-        $translate = Zend_Registry::get('Zend_Translate');
-        if ($translate->isTranslated($translationKey)) {
-        	return true;
+    private function __getDateValidator() {
+        $format_de = "dd.MM.YYYY";
+        $format_en = "YYYY/MM/dd";
+
+        $session = new Zend_Session_Namespace();
+
+        $lang = $session->language;
+        $validators = array();
+
+        switch ($lang) {
+            case 'en' : $validator = new Zend_Validate_Date(array('format' => $format_en, 'locale' => $lang));
+                break;
+            case 'de' : $validator = new Zend_Validate_Date(array('format' => $format_de, 'locale' => $lang));
+                break;
+            default : $validator = new Zend_Validate_Date(array('format' => $format_en, 'locale' => $lang));
+                break;
         }
-        return false;
+        $messages = array(
+            Zend_Validate_Date::INVALID => 'validation_error_date_invalid',
+            Zend_Validate_Date::INVALID_DATE => 'validation_error_date_invaliddate',
+            Zend_Validate_Date::FALSEFORMAT => 'validation_error_date_falseformat');
+        $validator->setMessages($messages);
+
+        $validators[] = $validator;
+
+        return $validators;
     }
+
 }

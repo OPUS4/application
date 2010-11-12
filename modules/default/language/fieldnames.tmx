@@ -2586,6 +2586,16 @@
         <seg>Änderungen zurücksetzen</seg>
       </tuv>
     </tu>
+
+    <tu tuid="date">
+      <tuv xml:lang="en">
+        <seg>Date (YYYY/MM/DD)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datum (TT.MM.JJJJ)</seg>
+      </tuv>
+    </tu>
+
   </body>
   
 </tmx>

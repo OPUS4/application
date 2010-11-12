@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+
+  <body>
+
+    <tu tuid="validation_error_date_invalid">
+        <tuv xml:lang="en">
+            <seg>Invalid datatype: please enter just a string, an integer, array or Zend_Date.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Unerlaubter Datentyp: bitte tragen Sie ausschließlich eine Zeichenkette, eine Zahl, ein Array oder Zend_Date ein.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="validation_error_date_invaliddate">
+        <tuv xml:lang="en">
+            <seg>Error: %value% does not appear to be a valid date.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Fehler: %value% scheint kein gültiges Datum zu sein.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="validation_error_date_falseformat">
+        <tuv xml:lang="en">
+            <seg>Please change %value% to fit the date format %format%.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte ändern Sie %value% in das Datumsformat %format%.</seg>
+        </tuv>
+    </tu>
+
+  </body>
+
+</tmx>
