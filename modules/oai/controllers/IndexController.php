@@ -57,7 +57,7 @@ class Oai_IndexController extends Controller_Xml {
      *
      * @var array
      */
-    private $_xMetaDissRestriction = array('doctoral_thesis', 'habilitation_thesis');
+    private $_xMetaDissRestriction = array('doctoral_thesis', 'habilitation');
 
     /**
      * Hold oai module configuration model.
