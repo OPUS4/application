@@ -44,12 +44,6 @@
  */
 class Oai_IndexController extends Controller_Xml {
 
-    const BADVERB = 0;
-    const BADARGUMENT = 1;
-    const CANNOTDISSEMINATEFORMAT = 2;
-    const BADRESUMPTIONTOKEN = 3;
-    const NORECORDSMATCH = 4;
-
     /**
      * Holds information about which document state aka server_state
      * are delivered out
