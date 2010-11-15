@@ -191,7 +191,7 @@ class Opus3Migration_Documents {
     public function run() {
 
         // Load Opus3-mySQL-XML-dump
-        $this->init($this->importFile, $this->fulltextPath, $this-start, $this->end);
+        $this->init($this->importFile, $this->fulltextPath, $this->start, $this->end);
 
          // Load Metadata
         $this->load_documents();
