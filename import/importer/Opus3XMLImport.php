@@ -391,7 +391,7 @@ class Opus3XMLImport {
                 /* TODO: DDC-Hack */
                 if (($role_name == 'ddc') and (count($c->getChildren()) > 0)) { continue; }
                 $document->addCollection($c);
-                echo "Document added to $role_name Collection $number \n";
+                //echo "Document added to $role_name Collection $number \n";
             }
         }
         else {
