@@ -147,7 +147,7 @@ class Publish_Form_PublishingFirst extends Zend_Form {
      */
     private function _createFileuploadField() {
         // get path to store files
-        $tempPath = $this->config->path->workspace->temp;
+        $tempPath = $this->config->form->first->temp;
         if (true === empty($tempPath))
             $tempPath = '../workspace/tmp/';
 
