@@ -65,16 +65,26 @@
      and a special template for each new field below, too -->
     <xsl:template match="Opus_Document">
         <div id="titlemain-wrapper">
+            <xsl:call-template name="Title" />
+            <!--
             <xsl:apply-templates select="TitleMain" />
+            -->
         </div>
 
-        <div id="result-data">
-            <table class="result-data authorTitle">
-                <xsl:apply-templates select="PersonAuthor" />
-            </table>
 
+        <div id="result-data">
+            <div id ="author">
+                <xsl:call-template name="Author" />
+                <!--
+                <xsl:apply-templates select="PersonAuthor" />
+                -->
+            </div>
+            
             <div id="abstract">
+                <xsl:call-template name="Abstract" />
+                <!--
                 <xsl:apply-templates select="TitleAbstract" />
+                -->
             </div>
         </div>
         
@@ -1031,7 +1041,59 @@
     <xsl:template match="ReferenceStdDoi"/>
     <xsl:template match="ReferenceCrisLink"/>
     <xsl:template match="ReferenceSplashUrl"/>
-    
+
+    <xsl:template name="Author">
+        <p>
+            <xsl:for-each select="PersonAuthor">
+                <xsl:element name="a">
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="$baseUrl"/>
+                        <xsl:text>/solrsearch/index/search/searchtype/authorsearch/author/</xsl:text>
+                        <xsl:value-of select="concat('&quot;', @FirstName, ' ', @LastName, '&quot;')" />
+                    </xsl:attribute>
+                    <xsl:attribute name="title">
+                        <xsl:call-template name="translateString">
+                            <xsl:with-param name="string">frontdoor_author_search</xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:attribute>
+                    <xsl:value-of select="concat(@FirstName, ' ', @LastName)" />
+                </xsl:element>
+                <xsl:if test="not(position()=last())">
+                    <xsl:text>, </xsl:text>
+                </xsl:if>
+            </xsl:for-each>
+        </p>
+    </xsl:template>
+
+    <xsl:template name="Title">
+        <xsl:for-each select="TitleMain">
+            <xsl:if test="position() = 1">
+                <h2 class="titlemain">
+                    <xsl:value-of select="@Value" />
+                </h2>
+            </xsl:if>
+            <xsl:if test="position() > 1">
+                <h3 class="titlemain">
+                    <xsl:value-of select="@Value" />
+                </h3>
+            </xsl:if>
+        </xsl:for-each>
+    </xsl:template>
+
+    <xsl:template name="Abstract">
+        <xsl:for-each select="TitleAbstract">
+            <xsl:if test="position() = 1">
+                <div class="abstract">
+                    <p><xsl:value-of select="@Value" /></p>
+                </div>
+            </xsl:if>
+            <xsl:if test="position() > 1">
+                <div class="abstract">
+                    <p><xsl:value-of select="@Value" /></p>
+                </div>
+            </xsl:if>
+        </xsl:for-each>
+    </xsl:template>
 
     <!-- Named template to proof, what to show for collections, depending on display_frontdoor -->
     <xsl:template name="checkdisplay">
