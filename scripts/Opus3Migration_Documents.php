@@ -58,6 +58,7 @@ class Opus3Migration_Documents {
     private $importFile;
     private $importData;
     private $stylesheet;
+    private $fulltextPath;
     private $xslt;
     private $start = null;
     private $end = null;
@@ -72,12 +73,12 @@ class Opus3Migration_Documents {
     function __construct($options) {
         if (array_key_exists('f', $options) !== false) { $this->importFile = $options["f"]; }
         if (array_key_exists('p', $options) !== false) { $this->fulltextPath = $options["p"]; }
-        if (array_key_exists('s', $options) !== false) { $this->starth = $options["s"]; }
+        if (array_key_exists('s', $options) !== false) { $this->start = $options["s"]; }
         if (array_key_exists('e', $options) !== false) { $this->end  = $options["e"]; }
     }
 
     // Set XMl-Dump-Import-File
-    public function init($file = null, $path = null, $start= null, $end = null) {
+    public function init($file = null, $path = null, $start = null, $end = null) {
         $this->setStylesheet();
         while (false === file_exists($file)) {
             $file= readline('Please type the path to your OPUS3 database export file (a dumpfile of the database in XML format e.g. /usr/local/opus/complete_database.xml): ');
@@ -89,7 +90,16 @@ class Opus3Migration_Documents {
             $path = readline('Please type the path to your OPUS3 fulltext files (e.g. /usr/local/opus/htdocs/volltexte): ');
         }
         $this->fulltextPath = $path;
-        $this->loadImportFile();
+
+        while (false === is_numeric($start)) {
+            $start = readline('Please type the number of the first document to import (e.g. 1) :');
+        }
+        $this->start = $start;
+
+        while (false === is_numeric($end)) {
+            $end = readline('Please type the number of the first document to import (e.g. 50) :');
+        }
+        $this->end = $end;
     }
 
    // Import Documents
@@ -105,12 +115,16 @@ class Opus3Migration_Documents {
         $successCount = 0;
         $failureCount = 0;
 
+
+
+
         foreach ($toImport as $document) {
             //echo "Memory amount: " . round(memory_get_usage() / 1024 / 1024, 2) . " (MB), peak memory " . round(memory_get_peak_usage() / 1024 / 1024, 2) . " (MB)\n";
             $mem_now = round(memory_get_usage() / 1024 );
             $mem_peak = round(memory_get_peak_usage() / 1024);
 
             $totalCount++;
+
             if (!(is_null($this->start)) && ($totalCount < $this->start)) { continue; }
             if (!(is_null($this->end)) && ($totalCount > $this->end)) { break; }
 
@@ -177,7 +191,7 @@ class Opus3Migration_Documents {
     public function run() {
 
         // Load Opus3-mySQL-XML-dump
-        $this->init($this->importFile, $this->fulltextPath);
+        $this->init($this->importFile, $this->fulltextPath, $this-start, $this->end);
 
          // Load Metadata
         $this->load_documents();

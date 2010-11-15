@@ -8,7 +8,7 @@
 ## -e Number of last document to import
 ##
 
-while getopts f:p:s:e o
+while getopts f:p:s:e: o
 do	case "$o" in
 	f)	xmlfile="$OPTARG";;
 	p)	fulltextpath="$OPTARG";;
@@ -18,6 +18,8 @@ do	case "$o" in
 		exit 1;;
 	esac
 done
+
+
 
 echo "Start Opus3-Migration"
 
@@ -49,6 +51,7 @@ read input
 case $input in
 "y")
 cd ../scripts
+echo "php Opus3Migration_ICL.php -f $xmlfile"
 php Opus3Migration_ICL.php -f $xmlfile
 esac
 
@@ -59,6 +62,7 @@ read input
 case $input in
 "y")
 cd ../scripts
+echo "php Opus3Migration_Documents.php -f $xmlfile -p $fulltextpath -s $start -e $end"
 php Opus3Migration_Documents.php -f $xmlfile -p $fulltextpath -s $start -e $end
 esac
 
