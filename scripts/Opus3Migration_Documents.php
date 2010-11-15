@@ -92,12 +92,12 @@ class Opus3Migration_Documents {
         $this->fulltextPath = $path;
 
         while (false === is_numeric($start)) {
-            $start = readline('Please type the number of the first document to import (e.g. 1) :');
+            $start = readline('Please type the number of the first document to import (e.g. 1) : ');
         }
         $this->start = $start;
 
         while (false === is_numeric($end)) {
-            $end = readline('Please type the number of the first document to import (e.g. 50) :');
+            $end = readline('Please type the number of the last document to import (e.g. 50) : ');
         }
         $this->end = $end;
     }
