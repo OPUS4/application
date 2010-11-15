@@ -4,6 +4,15 @@
  <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
  </header>
   <body>
+    <tu tuid="solrsearch_browse_index">
+        <tuv xml:lang="en">
+            <seg>Browse</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Browsen</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="search_index_browsing">
       <tuv xml:lang="en">
         <seg>Browse</seg>
