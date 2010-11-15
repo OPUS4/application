@@ -12,6 +12,7 @@
 .opus.solrsearch_advanced h2{
 	margin-bottom: 15px;
 }
+.solrsearch #form-wrapper,
 .solrsearch #form-search,
 .solrsearch_advanced .form-wrapper,
 .solrsearch_invalidsearchterm .form-wrapper,
@@ -27,16 +28,23 @@
 	padding: 15px 235px;
 }
 /* frontdoor */
-#titlemain-wrapper h2{
-	background: #F3F6F8 url(../img/theme/icon-title-frontdoor.gif) no-repeat 4px 6px;
+#titlemain-wrapper h2 {
+    background: #F3F6F8 url(../img/theme/icon-title-frontdoor.gif) no-repeat 4px 6px;
+    font-size: 16px;
+}
+#titlemain-wrapper h3 {
+    font-size: 14px;
+}
+#titlemain-wrapper h2,
+#titlemain-wrapper h3 {
 	padding: 7px 10px 7px 26px;
 	margin: 0;
 	font-weight: normal;
 	color: #333;
 	text-transform: none;
-	font-size: 16px;
 	line-height: normal;
 }
+
 #result-data{
 	float: left;
 	width: 60%;
@@ -114,28 +122,29 @@ table.result-data {
 .result-data td{
 
 }
-table.authorTitle th,
-table.authorTitle td,
-.frontdoor #abstract,
+
+.frontdoor #author,
+.frontdoor .abstract,
 .frontdoordata caption{
 	padding-left: 26px;
 }
-table.authorTitle th,
-table.authorTitle td{
-	display: block;
+
+.frontdoor #author {
+        margin-top: 10px;
+	background: url(../img/theme/icon-author-frontdoor.gif) no-repeat 4px 0;
+	line-height: 1.4em;
+        display: block;
 }
+
 .frontdoordata th{
 	padding-left: 26px;
 	width: 28%;
-}
-table.authorTitle th{
-	background: url(../img/theme/icon-author-frontdoor.gif) no-repeat 4px 0;
 }
 .result-data .data-marker{
 	white-space: nowrap;
 	font-style: normal;
 }
-.frontdoor #abstract{
+.frontdoor .abstract {
 	background: url(../img/theme/icon-abstract-frontdoor.gif) no-repeat 3px 0;
 	line-height: 1.4em;
 }
