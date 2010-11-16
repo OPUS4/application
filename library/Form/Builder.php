@@ -98,9 +98,6 @@ class Form_Builder {
             $model->setZendDate($date);
             return;
         }
-        else {
-            $this->log->debug('populateModel: ' . $model);
-        }
         foreach ($data as $fieldName => $values) {
             $this->log->debug('fieldName = ' . $fieldName);
             $field = $model->getField($fieldName);
