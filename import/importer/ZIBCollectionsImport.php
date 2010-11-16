@@ -42,16 +42,6 @@ class ZIBCollectionsImport {
      */
     public function __construct($data) {
 
-
-        /*
-         * Serien und Collections sollen für das ZIB in OPUS4 zusammengeführt werden. Folgende Struktur ist vereimnbart:
-         * - ZIB-Report
-         * - Preprint
-         * - Technical Report
-         * - Jahresbericht
-         * - Studienabschlussarbeiten
-         * - Dissertationen
-         */
         $collRole = Opus_CollectionRole::fetchByName('collections');
         $seriesRole = Opus_CollectionRole::fetchByName('series');
        
@@ -102,7 +92,6 @@ class ZIBCollectionsImport {
                 if (array_key_exists('name', $class) === false) { continue; }
                 if (array_key_exists('sr_id', $class) === false) { continue; }
 
-                //echo ".";
                 $root = $role->getRootCollection();
                 $coll = $root->addLastChild();
                 $coll->setVisible(1);
@@ -110,10 +99,8 @@ class ZIBCollectionsImport {
                 $root->store();
 
                 echo "Series imported: " . $class['name'] ."\n";
-
                 fputs($fp, $class['sr_id'] . ' ' . $coll->getId() . "\n");
             }
-        //echo "\n";
 	fclose($fp);
     }
 
@@ -129,7 +116,10 @@ class ZIBCollectionsImport {
         // Build a mapping file to associate old IDs with the new ones
         $fp = fopen('../workspace/tmp/collections.map', 'w');
             foreach ($classification as $class) {
-                //echo ".";
+
+                if (array_key_exists('coll_name', $class) === false) { continue; }
+                if (array_key_exists('coll_id', $class) === false) { continue; }
+
                 // ZIB-Hack:
                 if ($class['coll_name'] === 'ZIB') { continue; }
                 //if ($class['coll_name'] === 'Dissertationen') { $class['coll_name'] = 'Dissertation'; }
