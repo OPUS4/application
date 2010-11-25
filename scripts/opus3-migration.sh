@@ -8,11 +8,6 @@
 ## -i Build Index after each loop
 ##
 
-#if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
-#    . /etc/bash_completion
-#fi
-
-
 stepsize=50
 
 while getopts f:p:z:i o
