@@ -215,10 +215,6 @@ $application->bootstrap(array('Configuration', 'Logging', 'Database'));
 
 $options = getopt("f:p:s:e:");
 
-// Turn logging_level to INFO
-$config = Zend_Registry::get('Zend_Config');
-$config->log->level = "INFO";
-
 // Start Opus3Migration
 $migration = new Opus3Migration_Documents($options);
 $status = $migration->run();
