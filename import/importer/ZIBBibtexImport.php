@@ -166,12 +166,39 @@ class ZIBBibtexImport {
     public function import($document) {
         // Use the document as attribute
         $this->document = $document;
+
+        $institutes = null;
+        $institutes = $this->document->getElementsByTagName('OldInstitute');
+        $instituteValues = array();
+
+        if (count($institutes) > 0) {
+            while ($institutes->length > 0) {
+                $i = $institutes->Item(0);
+                array_push($instituteValues, $i->getAttribute('Value'));
+                $this->document->removeChild($i);
+            }
+        }
+
+        $projects = null;
+        $projects = $this->document->getElementsByTagName('OldProject');
+        $projectValues = array();
+
+        if (count($projects) > 0) {
+            while ($projects->length > 0) {
+                $p = $projects->Item(0);
+                array_push($projectValues, $p->getAttribute('Value'));
+                $this->document->removeChild($p);
+            }
+        }
+
+        //$authors = null;
+        //$authors = $this->document->getElementsByTagName('PersonAuthor');
 	
 	try {
-            // Dummyobject, does not need any content, because only one node is transformed
             $doc = Opus_Document::fromXml('<Opus>' . $this->completeXML->saveXML($this->document) . '</Opus>');
             // Set the publication status to published since only published documents shall be imported
             $doc->setServerState('published');
+
 
             $oldid = null;
             if ($doc->getIdentifierOld()) {
@@ -210,26 +237,47 @@ class ZIBBibtexImport {
                 }
             }
   
-	     // The Institutes-Name is part of the import-file
 	    $role = Opus_CollectionRole::fetchByName('institutes');
             $colls = Opus_Collection::fetchCollectionsByRoleId($role->getId());
+
+            foreach ($instituteValues as $i) {
+                foreach ($colls as $c) {
+                    if ($c->getName() === $i) {
+                        $doc->addCollection($c);
+                    }
+                }
+            }
+
+	    $role = Opus_CollectionRole::fetchByName('projects');
+            $colls = Opus_Collection::fetchCollectionsByRoleId($role->getId());
+
+            foreach ($projectValues as $p) {
+                //echo "Check $p \n";
+                foreach ($colls as $c) {
+                    if (strpos($c->getName(), $p) === 0) {
+                        $doc->addCollection($c);
+                        //echo "Project $p added to Colelction " . $c->getName() . "\n";
+                    }
+                }
+            }
+
+	    $role = Opus_CollectionRole::fetchByName('persons');
+            $colls = Opus_Collection::fetchCollectionsByRoleId($role->getId());
+
             foreach ($colls as $c) {
-		
-		$filename = $this->_importFile;
-		$filename = preg_replace('/.*\//', '', $filename);
-		$filename = preg_replace('/\..*/', '', $filename);
-		
-		//echo "Filename:".$filename."#".$c->getName()."#".stripos($c->getName(), $filename)."\n";
-		
-                if (strrpos($c->getName(), $filename) !== false) {
-                    $doc->addCollection($c);
-                    $doc->store();
-                    //echo "Add Document  to Abteilungs-Collection ".$c->getName()."\n";
+                $names = explode(", ", $c->getName());
+                foreach ($doc->getPersonAuthor() as $author) {
+                    if (strcmp($names[0], $author->getLastName()) != 0) { continue; }
+                    $firstname = trim(str_replace(".","",$author->getFirstName()));
+
+                    if (stripos($names[1], $firstname) === 0) {
+                        $doc->addCollection($c);
+                    }
                 }
             }
 
             // store the document
-            
+            $doc->store();
 
 	    $imported['result'] = 'success';
             #$imported['entry'] = $this->completeXML->saveXML($this->document);

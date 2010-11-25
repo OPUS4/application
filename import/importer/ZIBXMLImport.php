@@ -124,171 +124,142 @@ class ZIBXMLImport {
      * @return array information about the document that has been imported
      */
     public function import($document) {
-        // Use the document as attribute
         $this->document = $document;
-
-        //echo "BEFORE:".$this->completeXML->saveXML($this->document)."\n";
 
         $doc = null;
 
         $oldid = null;
         $oldid = $document->getElementsByTagName('IdentifierOpus3')->Item(0)->getAttribute('Value');
 
-        $ddcNotation = null;
-        $ddcNotation = $document->getElementsByTagName('OldDdc')->Item(0);
-        $ddcValue = null;
-
         $oldclasses = array();
         $oldclasses = $document->getElementsByTagName('OldClasses');
         $newclasses = array();
+        while ($oldclasses->length >0) {
+            $oc=$oldclasses->Item(0);
+            if (($oc->getAttribute('Key') != "") && ($oc->getAttribute('Value')) != "") {
+                $nc = array('Key'=>strtolower($oc->getAttribute('Key')), 'Value'=>$oc->getAttribute('Value'));
+                array_push($newclasses, $nc);
+            }
+            $this->document->removeChild($oc);
+        }
 
-        $institutes = null;
-        $institutes = $document->getElementsByTagName('OldInstitute');
-        $instituteValues = array();
+        $oldcollections = array();
+        $oldcollections = $document->getElementsByTagName('OldCollections');
+        $newcollections = array();
+        while ($oldcollections->length > 0) {
+           $c = $oldcollections->Item(0);
+           $mappingFile = '../workspace/tmp/collections.map';
+           if (!is_null( $this->getMapping($mappingFile, $c->getAttribute('Value')))) {
+                array_push($newcollections, $this->getMapping($mappingFile, $c->getAttribute('Value')));
+           }
+           $this->document->removeChild($c);
+        }
 
-        $series = null;
-        $series = $document->getElementsByTagName('OldSeries');
+        $oldddc = null;
+        $oldddc = $document->getElementsByTagName('OldDdc')->Item(0);
+        $newddc = null;
+        if ($oldddc !== null) {
+            $newddc = $oldddc->getAttribute('Value');
+            $this->document->removeChild($oldddc);
+        }
+
+        $oldgrantor = null;
+        $oldgrantor = $document->getElementsByTagName('OldGrantor');
+        $newgrantor = null;
+        while ($oldgrantor->length > 0) {
+           $g = $oldgrantor->Item(0);
+           $mappingFile = '../workspace/tmp/grantor.map';
+           if (!is_null( $this->getMapping($mappingFile, $g->getAttribute('Value')))) {
+                $newgrantor =  $this->getMapping($mappingFile, $g->getAttribute('Value'));
+           }
+           $this->document->removeChild($g);
+        }
+
+        $oldinstitutes = null;
+        $oldinstitutes = $document->getElementsByTagName('OldInstitute');
+        $newinstitutes = array();
+        while ($oldinstitutes->length >0) {
+            $i=$oldinstitutes->Item(0);
+            $mappingFile = '../workspace/tmp/institute.map';
+            if (!is_null($this->getMapping($mappingFile, $i->getAttribute('Value')))) {
+                array_push($newinstitutes, $this->getMapping($mappingFile, $i->getAttribute('Value')));
+            }
+            $this->document->removeChild($i);
+        }
+
+        $oldlicence = null;
+        $oldlicence = $document->getElementsByTagName('OldLicence');
+        $newlicence = null;
+        while ($oldlicence->length >0) {
+            $l=$oldlicence->Item(0);
+            $mappingFile = '../workspace/tmp/license.map';
+            if (!is_null($this->getMapping($mappingFile, $l->getAttribute('Value')))) {
+                $newlicence = $this->getMapping($mappingFile, $l->getAttribute('Value'));
+            }
+            $this->document->removeChild($l);
+        }
+
+        $oldpublisher = null;
+        $oldpublisher = $document->getElementsByTagName('OldPublisherUniversity');
+        $newpublisher = null;
+        while ($oldpublisher->length > 0) {
+           $p = $oldpublisher->Item(0);
+           $mappingFile = '../workspace/tmp/universities.map';
+           if (!is_null( $this->getMapping($mappingFile, $p->getAttribute('Value')))) {
+                $newpublisher =  $this->getMapping($mappingFile, $p->getAttribute('Value'));
+           }
+           $this->document->removeChild($p);
+        }
+
+        $oldseries = null;
+        $oldseries = $document->getElementsByTagName('OldSeries');
         $newseries = array();
-
-        $collections = array();
-        $collections = $document->getElementsByTagName('OldCollections');
-        $collectionValues = array();
-
-        $licence = null;
-        $licence = $document->getElementsByTagName('OldLicence');
-        $licenceValue = null;
-
-        /*  ThesisPublisher */
-        $publisher = null;
-        $publisher = $document->getElementsByTagName('OldPublisherUniversity');
-        $publisherValue = null;
+        while ($oldseries->length >0) {
+            $s = $oldseries->Item(0);
+            $mappingFile = '../workspace/tmp/series.map';
+            if (!is_null($this->getMapping($mappingFile, $s->getAttribute('Value')))) {
+                $ns = array('Key'=>$this->getMapping($mappingFile, $s->getAttribute('Value')), 'Value'=>$s->getAttribute('Issue'));
+                array_push($newseries, $ns);
+            }
+            $this->document->removeChild($s);
+        }
         
-	/* ThesisGrantor */
-        $faculty = null;
-        $faculty = $document->getElementsByTagName('OldGrantor');
-        $grantorValue = null;
-
         $imported = array();
-	
-        if ($ddcNotation !== null) {
-            $ddcValue = $ddcNotation->getAttribute('Value');
-            $this->document->removeChild($ddcNotation);
-        }
-
-        if (count($oldclasses) > 0) { // Array: (Key=>...,Value=>...)
-
-            while ($oldclasses->length >0) {
-                $oc=$oldclasses->Item(0);
-                if (($oc->getAttribute('Key') != "") && ($oc->getAttribute('Value')) != "") {
-                    $nc = array('Key'=>strtolower($oc->getAttribute('Key')), 'Value'=>$oc->getAttribute('Value'));
-                    array_push($newclasses, $nc);
-                }
-                $this->document->removeChild($oc);
-            }
-        }
-
-        if (count($series) > 0) {
-           foreach ($series as $s) {
-               $mappingFile = '../workspace/tmp/series.map';
-               //echo "Found a series\n";
-               if (!is_null($this->getMapping($mappingFile, $s->getAttribute('Value')))) {
-                    $ns = array('Key'=>$this->getMapping($mappingFile, $s->getAttribute('Value')), 'Value'=>$s->getAttribute('Issue'));
-                    array_push($newseries, $ns);
-               }
-               $this->document->removeChild($s);
-           }
-        }
-
-        if (count($collections) > 0) {
-           while ($collections->length > 0) {
-               $c=$collections->Item(0);
-               //echo "Collection Found: ". $c->getAttribute('Value')."\n";
-               $mappingFile = '../workspace/tmp/collections.map';
-               if (!is_null( $this->getMapping($mappingFile, $c->getAttribute('Value')))) {
-                    //echo "Collection resolved\n";
-                    array_push($collectionValues, $this->getMapping($mappingFile, $c->getAttribute('Value')));
-               }
-               //echo "Collection remove\n";
-               $this->document->removeChild($c);
-           }
-        }
-
-        if (count($institutes) > 0) {
-            foreach ($institutes as $i) {
-                $mappingFile = '../workspace/tmp/institute.map';
-                if (!is_null($this->getMapping($mappingFile, $i->getAttribute('Value')))) {
-                    array_push($instituteValues, $this->getMapping($mappingFile, $i->getAttribute('Value')));
-                }
-                $this->document->removeChild($i);
-            }
-        }
-
-	
-        if (count($licence) > 0) {
-            foreach ($licence as $l) {
-                $mappingFile = '../workspace/tmp/license.map';
-                if (!is_null($this->getMapping($mappingFile, $l->getAttribute('Value')))) {
-                    $licenceValue = $this->getMapping($mappingFile, $l->getAttribute('Value'));
-                }
-                $this->document->removeChild($l);
-            }
-        } else {
-            /* TODO: Throw Exception if Licence '1' not valid */
-            $licenceValue = '1';
-        }
-
-        if (count($faculty) > 0) {
-            foreach ($faculty as $f) {
-                $mappingFile = '../workspace/tmp/faculties.map';
-                if (!is_null($this->getMapping($mappingFile, $f->getAttribute('Value')))) {
-                    $grantorValue =  $this->getMapping($mappingFile, $f->getAttribute('Value'));
-                    //echo "ThesisGrantor: ".$f->getAttribute('Value')."\n";
-                }
-                $this->document->removeChild($f);
-            }
-        }
-
-        /* Special-ZIB: Der OldPublisher soll nicht als ThesisPublisher sondern als "echter" Publisher gelistet werden */
-        if (count($publisher) > 0) {
-            foreach ($publisher as $p) {
-               $publisherValue =  $p->getAttribute('Value');
-               //echo "ThesisPublisher: ".$p->getAttribute('Value')."\n";
-               $this->document->removeChild($p);
-            }
-        }
-
 
         try {
             //echo "AFTER:".$this->completeXML->saveXML($this->document)."\n";
-            // Dummyobject, does not need any content, because only one node is transformed
             $doc = Opus_Document::fromXml('<Opus>' . $this->completeXML->saveXML($this->document) . '</Opus>');
 
 
-            if ($licenceValue !== null) {
-                /* TODO: Throw Exception if Licence not valid */
-                $doc->addLicence(new Opus_Licence($licenceValue));
+            if (count($newclasses) > 0) {
+                foreach ($newclasses as $c) {
+                  $this->addDocumentToCollection($doc, $c['Key'], $c['Value']);
+                }
             }
 
-            /* Special-ZIB: Wir lassen ThesisGrantor und ThesisPublisher estmal weg */
-            /*
-            if ($publisherValue !== null) {
-                $doc->setPublisherName($publisherValue);
+            if (count($newcollections) > 0) {
+                foreach ($newcollections as $c) {
+                    $coll = new Opus_Collection($c);
+                    $doc->addCollection($coll);
+                }
             }
 
-            if ($grantorValue !== null) {
-                $doc->setThesisGrantor($grantorValue);
+            if ($newddc !== null) {
+                  $this->addDocumentToCollection($doc, 'ddc', $newddc);
             }
-             * 
-             */
-            // Set the publication status to published since only published documents shall be imported
-            $doc->setServerState('published');
 
-            // Add Document to Institute-Collections
-            if (count($instituteValues) > 0) {
-                foreach ($instituteValues as $i) {
+            if (count($newinstitutes) > 0) {
+                foreach ($newinstitutes as $i) {
                     $coll = new Opus_Collection($i);
                     $doc->addCollection($coll);
-                  }
+                }
+            }
+
+            if ($newlicence !== null) {
+                /* TODO: Throw Exception if Licence not valid */
+                $doc->addLicence(new Opus_Licence($newlicence));
+            } else {
+                $doc->addLicence(new Opus_Licence('1'));
             }
 
             if (count($newseries) > 0) {
@@ -299,22 +270,43 @@ class ZIBXMLImport {
                 }
             }
 
-            if (count($collectionValues) > 0) {
-                foreach ($collectionValues as $c) {
-                    $coll = new Opus_Collection($c);
-                    $doc->addCollection($coll);
+
+            /* Special-ZIB: Wir lassen ThesisGrantor und ThesisPublisher entfallen */
+            /*
+            if ($newgrantor !== null) {
+                $dnbInstitute = new Opus_DnbInstitute($newgrantor);
+                $doc->setThesisGrantor($dnbInstitute);
+                $dnbInstitute = new Opus_DnbInstitute(1);
+                $doc->setThesisPublisher($dnbInstitute);
+            }
+
+            if ($newpublisher !== null) {
+                $dnbInstitute = new Opus_DnbInstitute($newpublisher);
+                $doc->setThesisPublisher($dnbInstitute);
+                $dnbInstitute = new Opus_DnbInstitute(1);
+                $doc->setThesisPublisher($dnbInstitute);
+            }
+             * 
+             */
+            // Set the publication status to published since only published documents shall be imported
+            $doc->setServerState('published');
+
+            /* Add Document to Person-Collection */
+	    $role = Opus_CollectionRole::fetchByName('persons');
+            $colls = Opus_Collection::fetchCollectionsByRoleId($role->getId());
+
+            foreach ($colls as $c) {
+                $names = explode(", ", $c->getName());
+                foreach ($doc->getPersonAuthor() as $author) {
+                    if (strcmp($names[0], $author->getLastName()) != 0) { continue; }
+                    $firstname = trim(str_replace(".","",$author->getFirstName()));
+
+                    if (stripos($names[1], $firstname) === 0) {
+                        $doc->addCollection($c);
+                    }
                 }
             }
 
-            if ($ddcValue !== null) {
-                $this->addDocumentToCollectionNumber($doc, 'ddc', $ddcValue);
-            }
-
-            if (count($newclasses) > 0) {
-                foreach ($newclasses as $c) {
-                    $this->addDocumentToCollectionNumber($doc, $c['Key'], $c['Value']);
-                }
-            }
             // store the document
      
             $doc->store();
