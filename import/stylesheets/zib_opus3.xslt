@@ -510,14 +510,14 @@
             </xsl:for-each>
 
             <!-- OldInstitutes -->
-            <xsl:for-each select="/mysqldump/database/table_data[@name='opus_inst']/row[field[@name='source_opus']=$OriginalID]">
+             <xsl:for-each select="/mysqldump/database/table_data[@name='opus_inst']/row[field[@name='source_opus']=$OriginalID]">
                 <xsl:element name="OldInstitute">
                     <xsl:attribute name="Value">
                         <xsl:value-of select="field[@name='inst_nr']" />
                     </xsl:attribute>
                 </xsl:element>
             </xsl:for-each>
-
+ 
             <!-- OldClasses -->
             <xsl:for-each select="/mysqldump/database/table_data[@name='opus_klassifikationen']/row[field[@name='source_opus']=$OriginalID]">
                 <xsl:element name="OldClasses">
