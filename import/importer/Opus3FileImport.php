@@ -47,6 +47,22 @@ class Opus3FileImport {
      */
     protected $_tmpPath = null;
     protected $_magicPath;
+
+
+    /**
+     * Holds the logfile for Importer
+     *
+     * @var string  Path to logfile
+     */
+    protected $logfile = '../workspace/log/import.log';
+
+    /**
+     * Holds the filehandle of the logfile
+     *
+     * @var file  Fileandle logfile
+     */
+    protected $_logfile;
+
     
 
     /**
@@ -59,6 +75,15 @@ class Opus3FileImport {
         // Initialize member variables.
         $this->_path = $fulltextPath;
         $this->_magicPath = $magicPath;
+        $this->_logfile = fopen($this->logfile, 'a');
+    }
+
+    public function log($string) {
+        fputs($this->_logfile, $string);
+    }
+
+    public function finalize() {
+        fclose($this->_logfile);
     }
     
     /**
@@ -74,6 +99,7 @@ class Opus3FileImport {
      	// Initialize path
     	$this->_tmpPath = '';
 
+        // get collections before import files
         $doc->getCollection();
         //echo "Before Num Collections:".count($doc->getCollection())."\n";
 

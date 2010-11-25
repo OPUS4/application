@@ -65,6 +65,13 @@ class Opus3Migration_Documents {
     private $doclist = array();
     private $magicPath = '/usr/share/file/magic'; # on Ubuntu-Systems this should be the magic path
 
+    private $status;
+    
+    //CONST _ERROR = "-1";
+    CONST _INIT = "-1";
+    CONST _FINISH = "0";
+    CONST _BREAK = "1";
+
     /**
      * Constructur.
      *
@@ -79,6 +86,9 @@ class Opus3Migration_Documents {
 
     // Set XMl-Dump-Import-File
     public function init($file = null, $path = null, $start = null, $end = null) {
+
+        $this->status = self::_INIT;
+
         $this->setStylesheet();
         while (false === file_exists($file)) {
             $file= readline('Please type the path to your OPUS3 database export file (a dumpfile of the database in XML format e.g. /usr/local/opus/complete_database.xml): ');
@@ -104,57 +114,41 @@ class Opus3Migration_Documents {
 
    // Import Documents
     public function load_documents() {
-
         $xmlImporter = new Opus3XMLImport($this->xslt, $this->stylesheet);
         $toImport = $xmlImporter->initImportFile($this->importData);
-        $logfile = '../workspace/tmp/importerrors.xml';
-
-        // TODO: Add error handling to fopen()
-        $f = fopen($logfile, 'w');
         $totalCount = 0;
-        $successCount = 0;
-        $failureCount = 0;
 
-
-
+        $this->status = self::_FINISH;
 
         foreach ($toImport as $document) {
-            //echo "Memory amount: " . round(memory_get_usage() / 1024 / 1024, 2) . " (MB), peak memory " . round(memory_get_peak_usage() / 1024 / 1024, 2) . " (MB)\n";
             $mem_now = round(memory_get_usage() / 1024 );
             $mem_peak = round(memory_get_peak_usage() / 1024);
 
             $totalCount++;
 
             if (!(is_null($this->start)) && ($totalCount < $this->start)) { continue; }
-            if (!(is_null($this->end)) && ($totalCount > $this->end)) { break; }
+            if (!(is_null($this->end)) && ($totalCount > $this->end)) {
+                $this->status = self::_BREAK;
+                break;
+            }
 
             $result = $xmlImporter->import($document);
             if ($result['result'] === 'success') {
-                //echo "Successfully imported old ID " . $result['oldid'] . " with new ID " . $result['newid'] . "\n";
-                echo "Successfully imported old ID " . $result['oldid'] . " with new ID " . $result['newid'] . " -- memory $mem_now (KB), peak memory $mem_peak (KB)\n";
-                //$xmlImporter->log("Successfully imported old ID " . $result['oldid'] . " with new ID " . $result['newid'] . "\n");
+                echo date('Y-m-d H:i:s') . " Successfully imported old ID " . $result['oldid'] . " with new ID " . $result['newid'] . " -- memory $mem_now (KB), peak memory $mem_peak (KB)\n";
+                $xmlImporter->log(date('Y-m-d H:i:s') . " Successfully imported old ID " . $result['oldid'] . " with new ID " . $result['newid'] . " -- memory $mem_now (KB), peak memory $mem_peak (KB)\n");
                 array_push($this->doclist, $result['newid']);
-                $successCount++;
             } else if ($result['result'] === 'failure') {
-                echo "ERROR: " . $result['message'] . " for old ID " . $result['oldid'] . "\n";
-                //$xmlImporter->log("ERROR: " . $result['message'] . " for old ID " . $result['oldid'] . "\n");
-                fputs($f, $result['entry'] . "\n");
-                $failureCount++;
+                echo date('Y-m-d H:i:s') . " ERROR: " . $result['message'] . " for old ID " . $result['oldid'] . "\n";
+                $xmlImporter->log(date('Y-m-d H:i:s') . " ERROR: " . $result['message'] . " for old ID " . $result['oldid'] . "\n" . $result['entry'] . "\n");
             }
-            flush();
         }
-        fclose($f);
+
         $xmlImporter->finalize();
-
-        echo "Imported " . $successCount . " documents successfully.\n";
-        echo $failureCount . " documents have not been imported due to failures listed above. See $logfile for details about failed entries.\n";
-
-    }
+   }
 
     public function load_fulltext() {
 
         $fileImporter = new Opus3FileImport($this->fulltextPath, $this->magicPath);
-
  
         foreach ($this->doclist as $id) {
 
@@ -168,9 +162,12 @@ class Opus3Migration_Documents {
             $mem_peak = round(memory_get_peak_usage() / 1024 );
 
             if ($numberOfFiles > 0) {
-                echo $numberOfFiles . " file(s) have been imported successfully for document ID " . $doc->getId() . " -- memory $mem_now (KB), peak memory $mem_peak (KB)\n";
+                echo date('Y-m-d H:i:s') . " " . $numberOfFiles . " file(s) have been imported successfully for document ID " . $doc->getId() . " -- memory $mem_now (KB), peak memory $mem_peak (KB)\n";
+                $fileImporter->log(date('Y-m-d H:i:s') . " " . $numberOfFiles . " file(s) have been imported successfully for document ID " . $doc->getId() . " -- memory $mem_now (KB), peak memory $mem_peak (KB)\n");
             }
         }
+
+        $fileImporter->finalize();
     }
 
     private function setStylesheet() {
@@ -194,10 +191,13 @@ class Opus3Migration_Documents {
         $this->init($this->importFile, $this->fulltextPath, $this->start, $this->end);
 
          // Load Metadata
-        $this->load_documents();
+        $status = $this->load_documents();
 
         // Load Fulltext
         $this->load_fulltext();
+
+        return $this->status;
+
     }
 }
 
@@ -215,8 +215,13 @@ $application->bootstrap(array('Configuration', 'Logging', 'Database'));
 
 $options = getopt("f:p:s:e:");
 
+// Turn logging_level to INFO
+$config = Zend_Registry::get('Zend_Config');
+$config->log->level = "INFO";
+
 // Start Opus3Migration
 $migration = new Opus3Migration_Documents($options);
-$migration->run();
+$status = $migration->run();
 
+if ($status === Opus3Migration_Documents::_BREAK) { exit(1); }
 

@@ -1,78 +1,82 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 ##
 ## Call This Skript with paramaters:
 ## -f OPUS3-XML-database export file (e.g. /usr/local/opus/complete_database.xml)
 ## -p Path your OPUS3 fulltext files (e.g. /usr/local/opus/htdocs/volltexte)
-## -s Number of first document to import
-## -e Number of last document to import
+## -z Stepsize for looping
+## -i Build Index after each loop
 ##
 
-while getopts f:p:s:e: o
+#if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+#    . /etc/bash_completion
+#fi
+
+
+stepsize=50
+
+while getopts f:p:z:i o
 do	case "$o" in
 	f)	xmlfile="$OPTARG";;
 	p)	fulltextpath="$OPTARG";;
-        s)	start="$OPTARG";;
-        e)	end="$OPTARG";;
-	[?])	print "Usage: $0 [-f xmlfile] [-p fulltextpath] [-s start-id] [-e end-id] "
+        z)	stepsize="$OPTARG";;
+        i)      buildindex=1;;
+	[?])	print "Usage: $0 [-f xmlfile] [-p fulltextpath] [-z stepsize for looping] [-i ] "
 		exit 1;;
 	esac
 done
 
+while [ ! -f "$xmlfile" ]
+do
+    echo "Please type the name of a dumpfile of the database in XML format (e.g. /usr/local/opus/complete_database.xml):"
+    read xmlfile
+done
 
+while [ ! -d "$fulltextpath" ]
+do
+    echo "Please type the path to your OPUS3 fulltext files (e.g. /usr/local/opus/htdocs/volltexte):"
+    read fulltextpath
+done
 
-echo "Start Opus3-Migration"
+echo $stepsize | grep "[^0-9]" > /dev/null 2>&1
+while [ "$?" -eq "0" ]
+do
+    echo "Please enter a valid number of documents to be imported per each loop (e.g. 50)"
+    read stepsize
+    echo $stepsize | grep "[^0-9]" > /dev/null 2>&1
+done
 
-# clean files, everything will be imported newly
-echo "Do you want to delete all files in workspace-directory (y/n) ?"
-read input
-
-case $input in
-"y")
+echo "Clean workspace/files/* and workspace/log/import.log and workspace/tmp/* directory"
 cd ../workspace/files/
 rm -rf [0-9]*
-esac
+cd ../log/
+rm -rf import.log
+cd ../tmp/
+rm -rf *
 
-
-# create clean database
-echo "Do you want to clean database (y/n) ?"
-read input
-
-case $input in
-"y")
+echo "Clean database"
 cd ../../db
 sh ./createdb.sh
-esac
 
-# import institutes, collections and licenses
-echo "Do you want to import institutes, collections and licenses (y/n) ?"
-read input
-
-case $input in
-"y")
+echo "Import institutes, collections and licenses"
 cd ../scripts
-echo "php Opus3Migration_ICL.php -f $xmlfile"
 php Opus3Migration_ICL.php -f $xmlfile
-esac
 
-# import metadata and fulltext from documents
-echo "Do you want to import metadata and fulltext of documents (y/n) ?"
-read input
-
-case $input in
-"y")
+echo "Import metadata and fulltext"
 cd ../scripts
-echo "php Opus3Migration_Documents.php -f $xmlfile -p $fulltextpath -s $start -e $end"
+start=1
+end=`expr $start + $stepsize - 1`
+
 php Opus3Migration_Documents.php -f $xmlfile -p $fulltextpath -s $start -e $end
-esac
-
-# import metadata and fulltext from documents
-echo "Do you want to build SolrIndex (y/n) ?"
-read input
-
-case $input in
-"y")
-cd ../scripts
+while [ $? -eq 1 ]
+do
+    start=`expr $start + $stepsize`
+    end=`expr $end + $stepsize`
+    if [ "$buildindex" = "1" ]
+    then
+        php SolrIndexBuilder.php
+    fi
+    php Opus3Migration_Documents.php -f $xmlfile -p $fulltextpath -s $start -e $end
+done
 php SolrIndexBuilder.php
-esac
 
