@@ -112,8 +112,8 @@ mail.opus.name = ; Name of administrator
 ;form.first.requireupload = 0
 
 ;REFEREES
-; Who should be informed, if a new document gets published?
-; referees['John Doe'] = john.doe@example.org
+; reviewer.collections.ddc.66[] = 'admin'
+; reviewer.collections.ddc.66[] = 'administrine'
 
 ;OAI SETTINGS
 oai.baseurl =
