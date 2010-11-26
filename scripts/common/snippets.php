@@ -41,15 +41,20 @@ if (false === is_null(ini_get('register_argc_argv'))
     // removes script name
     array_shift($snippet_files);
     foreach ($snippet_files as $snippet_file) {
-        if (true === file_exists($snippet_file)) {
-            try {
-                include_once($snippet_file);
-            }
-            catch (Exception $e) {
-                echo 'Caught exception ' . get_class($e) . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString() . "\n";
-                // exit here, so nobody thinks that the script was loaded.
-                exit(1);
-            }
+        if (false === file_exists($snippet_file)) {
+            echo "# snippet $snippet_file does not exist\n";
+            continue;
+        }
+
+        try {
+            include_once($snippet_file);
+            echo "# included snippet $snippet_file\n";
+        }
+        catch (Exception $e) {
+            echo "# failed including snippet $snippet_file: \n";
+            echo 'Caught exception ' . get_class($e) . ': ' . $e->getMessage() . "\n" . $e->getTraceAsString() . "\n";
+            // exit here, so nobody thinks that the script was loaded.
+            exit(1);
         }
     }
 }
