@@ -39,12 +39,37 @@
  */
 class Review_IndexController extends Controller_Action {
 
+    private $_reviewer = null;
+
     /**
      * Setup title.
      */
     public function init() {
         parent::init();
         $this->view->title = $this->view->translate('review_index_title');
+
+        // Initialize config and authentication...
+        $config = Zend_Registry::get('Zend_Config');
+        $login = Zend_Auth::getInstance()->getIdentity();
+
+        // If configured, initialize reviewer-class and filter selected documents.
+        if (isset($config->reviewer)) {
+            Opus_Reviewer::init($config->reviewer->toArray());
+            $this->_reviewer = new Opus_Reviewer($login);
+        }
+
+        // Get list of selected documents...
+        $selected = $this->getRequest()->getParam('selected');
+        if (!isset($selected) || !is_array($selected)) {
+            $selected = array();
+        }
+
+        // Filter documents which are not reviewable by the current user.
+        if (isset($this->_reviewer)) {
+            $selected = $this->_reviewer->filterDocumentIds($selected);
+        }
+
+        $this->view->selected = $selected;
     }
 
     /**
@@ -53,8 +78,6 @@ class Review_IndexController extends Controller_Action {
      * Processes clicked buttons on that page.
      */
     public function indexAction() {
-        $this->_processSelection();
-
         if ($this->_isButtonPressed('buttonSubmit', true, false)) {
             if (count($this->view->selected) > 0) {
                 $this->_forward('clear');
@@ -95,6 +118,13 @@ class Review_IndexController extends Controller_Action {
         // Get list of document identifiers
         $result = $this->_helper->documents($sort_order, $sort_reverse,
                 'unpublished');
+
+        // Only show documents which are reviewable by the current user.
+        if (isset($this->_reviewer)) {
+            $result = $this->_reviewer->filterDocumentIds($result);
+        }
+
+        // $this->_logger->err('err '. print_r($result, 1));
 
         // TODO remove or disable if log level is not DEBUG
         foreach ($result as $testid) {
@@ -139,8 +169,6 @@ class Review_IndexController extends Controller_Action {
 
         $this->view->actionUrl = $this->view->url(array('action'=>'clear'));
 
-        $this->_processSelection();
-
         if (isset($config->clearing->addCurrentUserAsReferee)) {
             $useCurrentUser = $config->clearing->addCurrentUserAsReferee;
         }
@@ -149,14 +177,12 @@ class Review_IndexController extends Controller_Action {
         }
 
         if ($useCurrentUser) {
-            $userId = Zend_Auth::getInstance()->getIdentity();
-            $user = new Opus_Account(null, null, $userId);
+            $user = new Opus_Account(null, null, $login);
             $firstName = $user->getFirstName();
             $lastName = $user->getLastName();
             $email = $user->getEmail();
             $helper = new Review_Model_ClearDocumentsHelper();
-            $helper->clear($this->view->selected, $lastName, $firstName,
-                    $email);
+            $helper->clear($this->view->selected, $lastName, $firstName, $email);
             $this->_redirectTo('index');
         }
         else {
@@ -198,8 +224,6 @@ class Review_IndexController extends Controller_Action {
             return;
         }
 
-        $this->_processSelection();
-
         $this->view->documentCount = count($this->view->selected);
 
         if ($this->_isButtonPressed('sureno', true, false)) {
@@ -216,19 +240,6 @@ class Review_IndexController extends Controller_Action {
 //        $this->view->title = $this->view->translate('admin_doc_delete');
         $this->view->text = $this->view->translate('review_reject_sure');
         $this->view->actionUrl = $this->view->url(array('action' => 'reject'));
-    }
-
-    /**
-     * Processes form input, especially selected documents.
-     */
-    protected function _processSelection() {
-        $selected = $this->getRequest()->getParam('selected');
-
-        if (!isset($selected) || !is_array($selected)) {
-            $selected = array();
-        }
-
-        $this->view->selected = $selected;
     }
 
     /**
