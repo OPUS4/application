@@ -137,12 +137,30 @@
       </tuv>
     </tu>
 
-	<tu tuid="groupSubjectDdc">
+    <tu tuid="groupSubjectDDC">
       <tuv xml:lang="en">
-        <seg>DDC Term</seg>
+        <seg>DDC Classifications</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>DDC Sachgruppe</seg>
+        <seg>DDC Sachgruppen / Klassifikationen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="groupSubjectCCS">
+      <tuv xml:lang="en">
+        <seg>CCS Classifications</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>CCS Sachgruppen / Klassifikationen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="groupSubjectPACS">
+      <tuv xml:lang="en">
+        <seg>PACS Classifications</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>PACS Sachgruppen / Klassifikationen</seg>
       </tuv>
     </tu>
 

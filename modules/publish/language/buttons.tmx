@@ -180,7 +180,25 @@
         </tuv>
     </tu>
 
-<tu tuid="button_label_add_one_moreSubjectDdc">
+    <tu tuid="button_label_add_one_moreSubjectCCS">
+        <tuv xml:lang="en">
+            <seg>Add one more CCS Class</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Eine weitere CCS Klasse hinzufügen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_deleteSubjectCCS">
+        <tuv xml:lang="en">
+            <seg>Delete the last CCS class</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Die letzte CCS Klasse löschen</seg>
+        </tuv>
+    </tu>
+
+<tu tuid="button_label_add_one_moreSubjectDDC">
         <tuv xml:lang="en">
             <seg>Add one more DDC-Subject group</seg>
         </tuv>
@@ -189,12 +207,30 @@
         </tuv>
     </tu>
 
-    <tu tuid="button_label_deleteSubjectDdc">
+    <tu tuid="button_label_deleteSubjectDDC">
         <tuv xml:lang="en">
             <seg>Delete the last DDC-Subject group</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Die letzte DDC-Sachgruppe löschen</seg>
+        </tuv>
+    </tu>
+
+ <tu tuid="button_label_add_one_moreSubjectPACS">
+        <tuv xml:lang="en">
+            <seg>Add one more PACS Class</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Eine weitere PACS Klasse hinzufügen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_deleteSubjectPACS">
+        <tuv xml:lang="en">
+            <seg>Delete the last PACS class</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Die letzte PACS Klasse löschen</seg>
         </tuv>
     </tu>
 

@@ -325,6 +325,10 @@ class Publish_Model_Deposit {
             return 'DDC';
         else if (strstr($dataKey, 'Swd'))
             return 'Swd';
+        else if (strstr($dataKey, 'CCS'))
+            return 'CCS';
+        else if (strstr($dataKey, 'PACS'))
+            return 'PACS';
         else
             return 'Uncontrolled';
     }
@@ -360,6 +364,16 @@ class Publish_Model_Deposit {
                     $subject = new Opus_Subject();
                     break;
 
+                case 'CCS' :
+                    $this->log->debug("subject is a CCS subject and has to be stored as a Collection.");
+                    $this->_storeCollectionObject('ccs', $dataValue);
+                    break;
+
+                case 'PACS' :
+                    $this->log->debug("subject is a PACS subject and has to be stored as a Collection.");
+                    $this->_storeCollectionObject('pacs', $dataValue);
+                    break;
+
                 case 'Swd' :
                     $this->log->debug("subject is a swd subject.");
                     $subject = new Opus_SubjectSwd();
@@ -371,17 +385,20 @@ class Publish_Model_Deposit {
                     break;
             }
 
-            $counter = (int) $this->getCounter($dataKey);
-            $this->log->debug("counter: " . $counter);
+            if ($type != 'CCS' && $type != 'PACS') {
+                $counter = (int) $this->getCounter($dataKey);
+                $this->log->debug("counter: " . $counter);
 
-            if ($counter >= 1) {
-                $subjectType = 'Subject' . $type;
-                $this->log->debug("subjectType: " . $subjectType);
-                $subject->setValue($dataValue);
 
-                $addFunction = "add" . $subjectType;
-                $this->log->debug("addfunction: " . $addFunction);
-                $this->document->$addFunction($subject);
+                if ($counter >= 1) {
+                    $subjectType = 'Subject' . $type;
+                    $this->log->debug("subjectType: " . $subjectType);
+                    $subject->setValue($dataValue);
+
+                    $addFunction = "add" . $subjectType;
+                    $this->log->debug("addfunction: " . $addFunction);
+                    $this->document->$addFunction($subject);
+                }
             }
         }
     }
@@ -634,7 +651,7 @@ class Publish_Model_Deposit {
             }
             else if (strstr($dataKey, 'SplashUrl')) {
                 $addFunction .= 'SplashUrl';
-            }            
+            }
 
             $this->log->debug("addfunction: " . $addFunction);
             $this->document->$addFunction($reference);
@@ -655,11 +672,12 @@ class Publish_Model_Deposit {
             $keyName = str_replace('Enrichment', '', $dataKey);
             $enrichment->setKeyName($keyName);
             $addFunction = 'addEnrichment';
-           
+
             $this->log->debug("addfunction: " . $addFunction);
             $this->document->$addFunction($enrichment);
         }
     }
+
 }
 
 ?>

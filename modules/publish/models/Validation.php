@@ -64,6 +64,9 @@ class Publish_Model_Validation {
     private function _datatypeValidation() {
         switch ($this->datatype) {
 
+            case 'ccs' : $this->validator = $this->_validateCCS();
+                break;
+
             case 'Date' : $this->validator = $this->_validateDate();
                 break;
 
@@ -89,6 +92,9 @@ class Publish_Model_Validation {
                 break;
 
             case 'msc' : $this->validator = $this->_validateMSC();
+                break;
+
+            case 'pacs' : $this->validator = $this->_validatePACS();
                 break;
 
             case 'Project' : $this->validator = $this->_validateCollection('projects');
@@ -141,6 +147,17 @@ class Publish_Model_Validation {
             Zend_Validate_Date::INVALID => 'publish_validation_error_date_invalid',
             Zend_Validate_Date::INVALID_DATE => 'publish_validation_error_date_invaliddate',
             Zend_Validate_Date::FALSEFORMAT => 'publish_validation_error_date_falseformat');
+        $validator->setMessages($messages);
+
+        $validators[] = $validator;
+        return $validators;
+    }
+
+     private function _validateCCS() {
+        $validators = array();
+        $validator = new Opus_Validate_SubjectCCS();
+        $messages = array(
+            Opus_Validate_SubjectCCS::MSG_SUBJECTCCS => 'publish_validation_error_subjectccs_msgsubjectccs');
         $validator->setMessages($messages);
 
         $validators[] = $validator;
@@ -226,6 +243,17 @@ class Publish_Model_Validation {
         $validator = new Opus_Validate_SubjectMSC();
         $messages = array(
             Opus_Validate_SubjectMSC::MSG_SUBJECTMSC => 'publish_validation_error_subjectmsc_msgsubjectmsc');
+        $validator->setMessages($messages);
+
+        $validators[] = $validator;
+        return $validators;
+    }
+
+     private function _validatePACS() {
+        $validators = array();
+        $validator = new Opus_Validate_SubjectPACS();
+        $messages = array(
+            Opus_Validate_SubjectPACS::MSG_SUBJECTPACS => 'publish_validation_error_subjectpacs_msgsubjectpacs');
         $validator->setMessages($messages);
 
         $validators[] = $validator;

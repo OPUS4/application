@@ -874,14 +874,17 @@
         </tuv>
     </tu>
 
+<!-- MSC ************************************************ -->
     <tu tuid="hint_groupSubjectMSC">
         <tuv xml:lang="en">
             <seg>Please enter the MSC classes of the document. You may add more MSC classes by clicking on the button (or delete them).<br />
-See the manual at <a href="http://www.ams.org/mathscinet/msc/msc2010.html" target="tab" >http://www.ams.org/mathscinet/msc/msc2010.html</a>.</seg>
+See the manual at <a href="http://www.ams.org/mathscinet/msc/msc2010.html" target="tab" >http://www.ams.org/mathscinet/msc/msc2010.html</a>.<br />
+Example input: "00A09" (for Popularization of mathematics)</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie hier bitte die MSC Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen).<br />
-Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathscinet/msc/msc2010.html" target="tab" >http://www.ams.org/mathscinet/msc/msc2010.html</a></seg>
+Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathscinet/msc/msc2010.html" target="tab" >http://www.ams.org/mathscinet/msc/msc2010.html</a><br />
+Beispieleingabe: "00A09" (für Popularization of mathematics)</seg>
         </tuv>
     </tu>
 
@@ -903,7 +906,21 @@ Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathsci
         </tuv>
     </tu>
 
-<tu tuid="hint_groupSubjectDdc">
+<!-- DDC **************************************************** -->
+<tu tuid="hint_groupSubjectDDC">
+        <tuv xml:lang="en">
+            <seg>Please enter the DDC classes of the document. You may add more DDC classes by clicking on the button )or delete them).<br />
+See the overview at <a href="http://www.oclc.org/dewey/resources/summaries/default.htm" target="tab">http://www.oclc.org/dewey/resources/summaries/default.htm</a><br />
+Example input: "100" (for Philosophy and psychology) </seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie hier bitte die DDC Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen).<br />
+Eine Übersicht über verfügbare Klassen bekommen Sie unter: <a href="http://www.oclc.org/dewey/resources/summaries/default.htm" target="tab" >http://www.oclc.org/dewey/resources/summaries/default.htm</a><br />
+Beispieleingabe: "100" (für Philosophy and psychology)</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_SubjectDDC">
         <tuv xml:lang="en">
             <seg>Please enter a DDC class.</seg>
         </tuv>
@@ -912,7 +929,7 @@ Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathsci
         </tuv>
     </tu>
 
-    <tu tuid="hint_SubjectDdc1">
+    <tu tuid="hint_SubjectDDC1">
         <tuv xml:lang="en">
             <seg>Please enter a DDC class.</seg>
         </tuv>
@@ -921,15 +938,71 @@ Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathsci
         </tuv>
     </tu>
 
-    <tu tuid="hint_SubjectDdc">
+<!-- CCS ****************************************************** -->
+<tu tuid="hint_groupSubjectCCS">
         <tuv xml:lang="en">
-            <seg>Please enter a DDC class.</seg>
+            <seg>Please enter the CCS classes of the document. You may add more CCS classes by clicking on the button (or delete them).<br />
+See the overview at <a href="http://portal.acm.org/ccs.cfm" target="tab" >http://portal.acm.org/ccs.cfm</a>.<br />
+Example input: "C.1" (for Processor Architectures)</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte eine DDC Klasse ein.</seg>
+            <seg>Tragen Sie hier bitte die CCS Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen).<br />
+Eine Übersicht über verfügbare Klassen bekommen Sie unter: <a href="http://portal.acm.org/ccs.cfm" target="tab" >http://portal.acm.org/ccs.cfm</a><br />
+Beispieleingabe: "C.1" (für Processor Architectures)</seg>
         </tuv>
     </tu>
 
+    <tu tuid="hint_SubjectCCS1">
+        <tuv xml:lang="en">
+            <seg>Please enter a CCS class.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte eine CCS Klasse ein.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_SubjectCCS">
+        <tuv xml:lang="en">
+            <seg>Please enter a CCS class.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte eine CCS Klasse ein.</seg>
+        </tuv>
+    </tu>
+
+<!-- PACS ****************************************************** -->
+<tu tuid="hint_groupSubjectPACS">
+        <tuv xml:lang="en">
+            <seg>Please enter the PACS classes of the document. You may add more PACS classes by clicking on the button (or delete them).<br />
+See the overview at <a href="http://www.aip.org/pacs/pacs2010/individuals/pacs2010_regular_edition/index.html" target="tab" >http://www.aip.org/pacs/pacs2010/individuals/pacs2010_regular_edition/index.html</a>.<br />
+Example input: "11.15.Bt" (for General properties of perturbation theory )</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie hier bitte die PACS Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen).<br />
+Eine Übersicht über verfügbare Klassen bekommen Sie unter: <a href="http://www.aip.org/pacs/pacs2010/individuals/pacs2010_regular_edition/index.html" target="tab" >http://www.aip.org/pacs/pacs2010/individuals/pacs2010_regular_edition/index.html</a><br />
+Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_SubjectPACS1">
+        <tuv xml:lang="en">
+            <seg>Please enter a PACS class.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte eine PACS Klasse ein.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_SubjectPACS">
+        <tuv xml:lang="en">
+            <seg>Please enter a PACS class.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte eine PACS Klasse ein.</seg>
+        </tuv>
+    </tu>
+
+<!-- SubjectUncontrolled ************************************************** -->
     <tu tuid="hint_groupSubjectUncontrolled">
         <tuv xml:lang="en">
             <seg>Please enter keywords of the document. You may add more keywords by clicking on the button (or delete them).</seg>
