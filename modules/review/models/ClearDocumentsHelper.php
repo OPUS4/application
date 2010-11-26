@@ -67,7 +67,8 @@ class Review_Model_ClearDocumentsHelper {
                     $person->setEmail($email);
                     $document->addPersonReferee($person);
 
-                    $date = new Opus_Date(new Zend_Date());
+                    $date = new Opus_Date();
+                    $date->setNow();
 
                     $document->setServerDatePublished($date);
 
