@@ -294,7 +294,7 @@
               </xsl:when>  
               <xsl:otherwise>  
                 <xsl:element name="identifier">
-                    oai:<xsl:value-of select="$repIdentifier" />:<xsl:value-of select="@Id" />
+                    <xsl:text>oai:</xsl:text><xsl:value-of select="$repIdentifier" /><xsl:text>:</xsl:text><xsl:value-of select="@Id" />
                 </xsl:element>
                </xsl:otherwise> 
             </xsl:choose>
