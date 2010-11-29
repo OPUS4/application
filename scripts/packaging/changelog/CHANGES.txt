@@ -1,0 +1,19 @@
+OPUS 4 Change Log
+
+======================= Release 4.0.1 2010-11-26 =======================
+
+1. Layout/CSS Änderungen
+
+2. Opus3-Import
+
+3. Migration OPUS 3.x
+
+4. Fehlende Übersetzungseinträge wurden hinzugefügt
+
+5. Korrekte Validierung von Passwörtern in Eingabeformularen im Account 
+und im Admin Modul
+
+6. FormBuilder geändert um bei uninitialisierten Modelinstancen 
+Exceptions zu verhindern
+
+
