@@ -214,6 +214,15 @@
         </tuv>
    </tu>
 
+   <tu tuid="talkzib">
+        <tuv xml:lang="en">
+            <seg>Talk for ZIB</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Vortrag für ZIB</seg>
+        </tuv>
+   </tu>
+
    </body>
   
 </tmx>

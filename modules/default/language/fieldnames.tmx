@@ -2596,6 +2596,33 @@
       </tuv>
     </tu>
 
+<tu tuid="EnrichmentEvent">
+      <tuv xml:lang="en">
+        <seg>Name of Event</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Name der Veranstaltung</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="EnrichmentCity">
+      <tuv xml:lang="en">
+        <seg>City of event</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Stadt der Veranstaltung</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="EnrichmentCountry">
+      <tuv xml:lang="en">
+        <seg>Country of event</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Land der Veranstaltung</seg>
+      </tuv>
+    </tu>
+
   </body>
   
 </tmx>

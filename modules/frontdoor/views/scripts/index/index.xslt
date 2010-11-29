@@ -191,6 +191,12 @@
             <xsl:apply-templates select="@Reviewed" />
             <xsl:apply-templates select="Note" />
             <xsl:apply-templates select="@PublicationVersion" />
+            
+            <!-- Enrichment Section: add the enrichment keys that have to be displayed in frontdoor -->
+            <xsl:apply-templates select="Enrichment[@KeyName='Event']" />
+            <xsl:apply-templates select="Enrichment[@KeyName='City']" />
+            <xsl:apply-templates select="Enrichment[@KeyName='Country']" />
+            <!-- End Enrichtments -->
 
             <xsl:apply-templates select="Collection[@RoleName='institutes']" />
             <xsl:apply-templates select="Collection[@RoleName='projects']" />
@@ -446,6 +452,48 @@
             </td>
         </tr>
     </xsl:template>
+
+<!-- Templates for "enrichments". -->
+    <xsl:template match="Enrichment[@KeyName='Event']">
+        <tr>            
+            <th class="name">
+                <xsl:call-template name="translateString">
+                            <xsl:with-param name="string">EnrichmentEvent</xsl:with-param>
+                        </xsl:call-template>
+                        <xsl:text>:</xsl:text>
+                </th>
+            <td>
+                <xsl:value-of select="@Value" />
+        </td>
+        </tr>
+    </xsl:template>
+    <xsl:template match="Enrichment[@KeyName='City']">
+        <tr>
+            <th class="name">
+                <xsl:call-template name="translateString">
+                            <xsl:with-param name="string">EnrichmentCity</xsl:with-param>
+                        </xsl:call-template>
+                        <xsl:text>:</xsl:text>
+                </th>
+            <td>
+                <xsl:value-of select="@Value" />
+        </td>
+        </tr>
+    </xsl:template>
+    <xsl:template match="Enrichment[@KeyName='Country']">
+        <tr>
+            <th class="name">
+                <xsl:call-template name="translateString">
+                            <xsl:with-param name="string">EnrichmentCountry</xsl:with-param>
+                        </xsl:call-template>
+                        <xsl:text>:</xsl:text>
+                </th>
+            <td>
+                <xsl:value-of select="@Value" />
+        </td>
+        </tr>
+    </xsl:template>
+
 
 
     <!-- Templates for "external fields". -->
@@ -748,7 +796,17 @@
                 <xsl:call-template name="translateFieldname"/>:
             </th>
             <td>
-                <xsl:value-of select="@Value" />
+                <xsl:element name="a">
+                <!-- TODO: Use Zend Url-Helper to build href attribute -->
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="@Value" />
+                    </xsl:attribute>
+                    <xsl:attribute name="target">
+                        <xsl:text>tab/</xsl:text>
+                    </xsl:attribute>
+
+                    <xsl:value-of select="@Value" />
+                </xsl:element>
             </td>
         </tr>
     </xsl:template>
