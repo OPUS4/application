@@ -407,6 +407,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="header_IdentifierUrl">
+      <tuv xml:lang="en">
+        <seg>URL of document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>URL des Dokuments</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="header_IdentifierIsbn">
       <tuv xml:lang="en">
         <seg>ISBN of document</seg>
@@ -566,6 +575,33 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Unter-Sammlung auswählen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_EnrichmentEvent">
+      <tuv xml:lang="en">
+        <seg>Event</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Veranstaltung</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_EnrichmentCity">
+      <tuv xml:lang="en">
+        <seg>City</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Stadt</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_EnrichmentCountry">
+      <tuv xml:lang="en">
+        <seg>Country</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Land</seg>
       </tuv>
     </tu>
 

@@ -1149,7 +1149,7 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
 	
 	<tu tuid="hint_PublishedDate">
         <tuv xml:lang="en">
-            <seg>Please enter the date of the document's first publishing in the format MM/DD/YYYY.</seg>
+            <seg>Please enter the date of the document's first publishing in the format YYYY/MM/YY.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte das Erstveröffentlichungsdatum des Dokuments im Format TT.MM.JJJJ ein.</seg>
@@ -1281,8 +1281,35 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
         <seg>Sie können hier definieren, was Sie möchten.</seg>
       </tuv>
     </tu>
+
+    <tu tuid="hint_EnrichmentEvent">
+      <tuv xml:lang="en">
+        <seg>Please enter the event at which the talk was given.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte tragen Sie die Veranstaltung ein, bei der der Vortrag gehalten wurde.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="hint_EnrichmentCity">
+      <tuv xml:lang="en">
+        <seg>The city where the event was located.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Die Stadt, in der die Veranstaltung abgehalten wurde.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="hint_EnrichmentCountry">
+      <tuv xml:lang="en">
+        <seg>The country in which the event took place.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das Land, in dem die Veranstaktung statt fand.</seg>
+      </tuv>
+    </tu>
 	
-	<tu tuid="hint_IdentifierOpus3">
+    <tu tuid="hint_IdentifierOpus3">
         <tuv xml:lang="en">
             <seg>Please enter the document's OPUS3-ID-Number.</seg>
         </tuv>
@@ -1291,14 +1318,13 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
         </tuv>
     </tu>
 	
-	<tu tuid="hint_IdentifierOpac">
+    <tu tuid="hint_IdentifierOpac">
         <tuv xml:lang="en">
             <seg>Please enter the document's OPAC-Number.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte die OPAC-Nummer des Dokuments ein.</seg>
         </tuv>
-
     </tu>
 
     <tu tuid="hint_documentType">
@@ -1481,6 +1507,14 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
       </tuv>
     </tu>
 
+    <tu tuid="hint_IdentifierUrl">
+      <tuv xml:lang="en">
+        <seg>Please enter the url at which the document is available.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte geben Sie die URL an, bei der das Dokument verfügbar ist.</seg>
+      </tuv>
+    </tu>
 	
     </body>
 </tmx>
