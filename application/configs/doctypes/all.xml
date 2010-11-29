@@ -100,5 +100,9 @@
     <field name="Note" required="no" formelement="Textarea" datatype="Text" multiplicity="1"/>
     <field name="Licence" required="no" formelement="Select" datatype="Licence" multiplicity="1"/>
     <field name="ServerDateUnlocking" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
+    <field name="SubjectDDC" required="no" formelement="Text" datatype="ddc" multiplicity="*"/>
+    <field name="SubjectMSC" required="no" formelement="Text" datatype="msc" multiplicity="*"/>
+    <field name="SubjectPACS" required="no" formelement="Text" datatype="pacs" multiplicity="*"/>
+    <field name="SubjectCCS" required="no" formelement="Text" datatype="ccs" multiplicity="*"/>
 
 </documenttype>
