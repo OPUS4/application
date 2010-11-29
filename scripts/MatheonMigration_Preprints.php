@@ -344,7 +344,9 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
 //        // $app_node->setRoleId( $role_id );
 //        $app_node->store();
 
-        $role = Opus_CollectionRole::fetchByName('projects');
+        $role = new Opus_CollectionRole();
+        $role->setName('projects');
+        $role->setOaiName('projects');
         $role->setVisible(1);
         $role->setDisplayBrowsing('Number, Name');
         $role->setVisibleBrowsingStart(1);
@@ -422,7 +424,9 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
      * @return void
      */
     public function load_institutes() {
-        $role = Opus_CollectionRole::fetchByName('institutes');
+        $role = new Opus_CollectionRole();
+        $role->setName('institutes');
+        $role->setOaiName('institutes');
         $role->setVisible(1);
         $role->setDisplayBrowsing('Name');
         $role->setVisibleBrowsingStart(1);
@@ -430,7 +434,8 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
         $role->setVisibleFrontdoor(1);
         $role->store();
 
-        $root = $role->getRootCollection()->setVisible(1);
+        $root = $role->addRootCollection()->setVisible(1);
+        $root->store();
 
         // TODO: Write unit test.
         // $root->store();
