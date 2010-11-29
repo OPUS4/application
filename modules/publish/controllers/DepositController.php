@@ -138,7 +138,7 @@ class Publish_DepositController extends Controller_Action {
 
         $subject_additional_text = '';
         if ((!is_null($projects)) and (count($projects) > 0)) {
-            $subject_additional_text = "(projects: " . implode(array_values($projects)) . ")";
+            $subject_additional_text = " -- assigned project(s): " . implode(array_values($projects)) . "";
             $this->log->err("Additional text: " . $subject_additional_text);
         }
 
