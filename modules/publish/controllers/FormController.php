@@ -256,8 +256,12 @@ class Publish_FormController extends Controller_Action {
             //element names have to loose special strings for finding groups
             $name = $this->_getRawElementName($currentElement);
 
+            if (strstr($name, 'Enrichment')) {                    
+                    $name = str_replace('Enrichment', '', $name);
+            }
+
             //build group name
-            $groupName = self::GROUP . $name;
+            $groupName = self::GROUP . $name;            
             $this->view->$name = $this->view->translate($name);
 
             //get the display group for the current element and build the complete group

@@ -50,7 +50,14 @@ class Publish_Model_DisplayGroup {
 
     public function __construct($elementName, Publish_Form_PublishingSecond $form, $multiplicity) {
         $this->elementName = $elementName;
-        $this->label = 'group' . $elementName;
+
+        if (strstr($elementName, 'Enrichment')) {
+            $name = str_replace('Enrichment', '', $elementName);
+            $this->label = 'group' . $name;
+        }
+        else
+            $this->label = 'group' . $elementName;
+
         $this->form = $form;
         $this->multiplicity = $multiplicity;
         $this->log = Zend_Registry::get('Zend_Log');
@@ -67,16 +74,16 @@ class Publish_Model_DisplayGroup {
                 $elem = clone $element;
                 $elem->setName($element->getName() . $i);
                 $this->form->addElement($elem);
-                $displayGroup[] = $elem->getName();                
+                $displayGroup[] = $elem->getName();
             }
         }
 
-        $number = count($displayGroup);        
+        $number = count($displayGroup);
         $groupCount = "num" . $this->label;
 
         if (!isset($this->session->$groupCount) || $number < $this->session->$groupCount)
             $this->session->$groupCount = $number;
-        
+
         $this->log->debug("initial number for group elements = " . $number . " for group " . $this->label);
 
         $this->session->additionalFields[$this->elementName] = $this->maxNumber();

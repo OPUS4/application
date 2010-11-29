@@ -80,6 +80,14 @@
       </tuv>
     </tu>
 
+    <tu tuid="groupNeuesFeld">
+      <tuv xml:lang="en">
+        <seg>New field</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Neues Feld</seg>
+      </tuv>
+    </tu>
 
     <tu tuid="groupPersonTranslator">
       <tuv xml:lang="en">
