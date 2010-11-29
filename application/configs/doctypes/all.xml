@@ -73,7 +73,7 @@
     <field name="ContributingCorporation" required="no" formelement="text" datatype="Text" multiplicity="1"/>
     <field name="PublisherName" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="PublisherPlace" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-    <field name="NeuesFeld" required="no" formelement="Text" datatype="Enrichment" multiplicity="1"/>
+    <field name="NeuesFeld" required="no" formelement="Text" datatype="Enrichment" multiplicity="*"/>
     <field name="PageNumber" required="no" formelement="Text" datatype="Integer" multiplicity="1"/>
     <field name="PageFirst" required="no" formelement="Text" datatype="Integer" multiplicity="1"/>
     <field name="PageLast" required="no" formelement="Text" datatype="Integer" multiplicity="1"/>
