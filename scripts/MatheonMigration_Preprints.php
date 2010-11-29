@@ -153,13 +153,18 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
      */
     public static function parse_keywords($keywords = '') {
 
+        $keywords = preg_replace("/\.$/", "",  $keywords);
         $keywords = str_replace("\n", " ", $keywords);
         $keywords = str_replace("\r", " ", $keywords);
         $keywords = str_replace("\t", " ", $keywords);
 
         $keyword_list = array();
-        foreach (explode(",", $keywords) AS $keyword) {
+        foreach (preg_split("/[,;]+/", trim($keywords)) AS $keyword) {
             $new_keyword = trim($keyword);
+
+            if (preg_match('/[^A-Za-z -]/', $new_keyword)) {
+               echo "-- Ungueltiges Keyword? '$new_keyword'\n";
+            }
 
             if (!empty($new_keyword)) {
                 $keyword_list[] = $new_keyword;
@@ -181,10 +186,10 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
 
         foreach ($this->load_xml_mysqldump($file) AS $person) {
             $opm = new Opus_Person();
-            $opm->setAcademicTitle($person['title']);
-            $opm->setFirstName($person['first_name']);
-            $opm->setLastName($person['last_name']);
-            $opm->setEmail($person['email_address']);
+            $opm->setAcademicTitle(trim($person['title']));
+            $opm->setFirstName(trim($person['first_name']));
+            $opm->setLastName(trim($person['last_name']));
+            $opm->setEmail(trim($person['email_address']));
             // $opm->store();
 
             $idlocal = $opm->addIdentifierLocal();
@@ -235,8 +240,8 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             }
             else {
                 $opm = new Opus_Person();
-                $opm->setFirstName($author['givenname']);
-                $opm->setLastName($author['familyname']);
+                $opm->setFirstName(trim($author['givenname']));
+                $opm->setLastName(trim($author['familyname']));
 
                 $idlocal = $opm->addIdentifierLocal();
                 $idlocal->setValue("preprint_document_authors.author=" . $author['author']);
@@ -366,13 +371,13 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
 
         $file = $this->dumps_dir . '/projects.xml';
         foreach ($this->load_xml_mysqldump($file) AS $project) {
-            $app_area = $project['app_area'];
-            $app_area_name = $project['app_area_name'];
+            $app_area = trim($project['app_area']);
+            $app_area_name = trim($project['app_area_name']);
             $app_area_visible = $project['app_area_visible'];
 
-            $project_id = $project['project_id'];
-            $project_title = $project['project_title'];
-            $project_no = $project['project_no'];
+            $project_id = trim($project['project_id']);
+            $project_title = trim($project['project_title']);
+            $project_no = trim($project['project_no']);
 
             if (false === array_key_exists($app_area, $app_area_collection)) {
                 $app_collection = $root->addLastChild()->setVisible($app_area_visible);
@@ -436,11 +441,6 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
 
         $root = $role->addRootCollection()->setVisible(1);
         $root->store();
-
-        // TODO: Write unit test.
-        // $root->store();
-
-        $role->store();
 
         $collections = array();
 
@@ -523,7 +523,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             if ($user['referee'] || trim($user['last_name']) == 'Kunz') {
                 $account->addRole( $reviewer_role );
             }
-            
+
             $account->addRole( $guest_role );
             $account->store();
         }
@@ -576,9 +576,6 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
         // Load mySQL dump for preprints.
         $preprints = $this->load_xml_mysqldump($this->dumps_dir . '/preprints.xml');
         echo "found " . count($preprints) . " preprints\n";
-
-
-
 
 
         $counter = 0;
@@ -662,7 +659,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             $doc->setPublishedDate($preprint['approve_date']);
 
             //    <field name="comment" xsi:nil="true" />
-            $field = $preprint['comment'];
+            $field = trim($preprint['comment']);
             if ($field != '') {
                 $model = $doc->addNote();
                 $model->setMessage($field);
@@ -681,7 +678,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             }
 
             //    <field name="abstract" xsi:nil="true" />
-            $field = $preprint['abstract'];
+            $field = trim($preprint['abstract']);
             if ($field != '') {
                 $model = $doc->addTitleAbstract();
                 $model->setLanguage('eng');
@@ -714,7 +711,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             }
 
             //    <field name="msc" xsi:nil="true" />
-            $field = $preprint['msc'];
+            $field = trim($preprint['msc']);
             if ($field != '') {
                 $msc_hash = self::parse_msc($field);
 
@@ -758,11 +755,11 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             }
 
             //    <field name="keywords" xsi:nil="true" />
-            $field = $preprint['keywords'];
+            $field = trim($preprint['keywords']);
             if ($field != '') {
                 foreach (self::parse_keywords($field) AS $k) {
                     $model = $doc->addSubjectUncontrolled();
-                    $model->setValue($k);
+                    $model->setValue(trim($k));
                 }
             }
 
