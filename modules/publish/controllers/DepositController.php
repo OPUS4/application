@@ -136,10 +136,16 @@ class Publish_DepositController extends Controller_Action {
     private function __scheduleNotification($subject, $message, $docId, $projects = null) {
         $docId = $this->session->documentId;
 
+        $subject_additional_text = '';
+        if ((!is_null($projects)) and (count($projects) > 0)) {
+            $subject_additional_text = "(projects: " . implode(array_values($projects)) . ")";
+            $this->log->err("Additional text: " . $subject_additional_text);
+        }
+
         $job = new Opus_Job();
         $job->setLabel(Opus_Job_Worker_MailPublishNotification::LABEL);
         $job->setData(array(
-            'subject' => $subject,
+            'subject' => $subject . $subject_additional_text,
             'message' => $message,
             'projects' => $projects,
             'docId' => $docId
