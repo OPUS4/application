@@ -165,5 +165,51 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-    
+
+    <!-- This Templat add Subjects to Opus4 -->
+    <xsl:template name="AddSubjects">
+        <xsl:param name="type" required="yes" />
+        <xsl:param name="list" required="yes" />
+        <xsl:param name="delimiter" required="yes" />
+        <xsl:param name="language" required="yes" />
+        <xsl:variable name="newlist">
+            <xsl:choose>
+                <xsl:when test="contains($list, $delimiter)"><xsl:value-of select="normalize-space($list)" /></xsl:when>
+                <xsl:otherwise><xsl:value-of select="concat(normalize-space($list), $delimiter)"/></xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="first" select="substring-before($newlist, $delimiter)" />
+        <xsl:variable name="remaining" select="substring-after($newlist, $delimiter)" />
+        <xsl:call-template name="AddSubject">
+             <xsl:with-param name="type" select="$type" />
+             <xsl:with-param name="subject" select="$first" />
+             <xsl:with-param name="language" select="$language" />
+        </xsl:call-template>
+        <xsl:if test="$remaining">
+            <xsl:call-template name="AddSubjects">
+                <xsl:with-param name="type"><xsl:value-of select="$type" /> </xsl:with-param>
+                <xsl:with-param name="list"><xsl:value-of select="$remaining" /> </xsl:with-param>
+                <xsl:with-param name="delimiter"><xsl:value-of select="$delimiter" /> </xsl:with-param>
+                <xsl:with-param name="language"><xsl:value-of select="$language" /> </xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+    </xsl:template>
+
+    <xsl:template name="AddSubject">
+        <xsl:param name="type" required="yes" />
+        <xsl:param name="subject" required="yes" />
+        <xsl:param name="language" required="yes" />
+        <xsl:element name="{$type}">
+            <xsl:attribute name="Language">
+                <xsl:call-template name="mapLanguage">
+                    <xsl:with-param name="lang">
+                        <xsl:value-of select="$language" />
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:attribute>
+            <xsl:attribute name="Value">
+                <xsl:value-of select="$subject" />
+            </xsl:attribute>
+        </xsl:element>
+    </xsl:template>
 </xsl:stylesheet>

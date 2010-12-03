@@ -68,15 +68,15 @@
     <xsl:template match="bibtex:entry">
         <xsl:variable name="id"><xsl:value-of select="@id" /></xsl:variable>
 
-        <xsl:variable name="abstract"><xsl:value-of select="*/bibtex:abstract" /></xsl:variable>
+        <xsl:variable name="abstract"><xsl:value-of select="*/bibtex:abstract" /></xsl:variable>                    <!-- enthaelt sauberen Abstracttext -->
         <xsl:variable name="address"><xsl:value-of select="*/bibtex:address" /></xsl:variable>                      <!-- address: muss nicht zwingend publisher_pplace sein -->
-        <!-- <xsl:variable name="annote"><xsl:value-of select="*/bibtex:annote" /></xsl:variable> -->
+        <xsl:variable name="annote"><xsl:value-of select="*/bibtex:annote" /></xsl:variable>
         <xsl:variable name="author"><xsl:value-of select="*/bibtex:author" /></xsl:variable>	
-        <!-- <xsl:variable name="bibsource"><xsl:value-of select="*/bibtex:bibsource" /></xsl:variable> -->
+        <!--# <xsl:variable name="bibsource"><xsl:value-of select="*/bibtex:bibsource" /></xsl:variable> -->        <!-- ignoriert: 'DBLP, http://dblp.uni-trier.de' -->
         <xsl:variable name="booktitle"><xsl:value-of select="*/bibtex:booktitle" /></xsl:variable>	
-        <!-- <xsl:variable name="chapter"><xsl:value-of select="*/bibtex:chapter" /></xsl:variable> -->
-        <!-- <xsl:variable name="classmath"><xsl:value-of select="*/bibtex:clasmath" /></xsl:variable> -->
-        <!-- <xsl:variable name="crossref"><xsl:value-of select="*/bibtex:crossref" /></xsl:variable> -->	
+        <!--# <xsl:variable name="chapter"><xsl:value-of select="*/bibtex:chapter" /></xsl:variable> -->            <!-- ignoriert: Abbildung in Opus unklar -->
+        <!-- <xsl:variable name="classmath"><xsl:value-of select="*/bibtex:clasmath" /></xsl:variable> -->          <!-- TODO: Mapping auf die Collection -->
+        <!--# <xsl:variable name="crossref"><xsl:value-of select="*/bibtex:crossref" /></xsl:variable> -->          <!-- ignoriert: Referenz auf DBLP eintrag -->
         <xsl:variable name="doi"><xsl:value-of select="*/bibtex:doi" /></xsl:variable>
         <xsl:variable name="edition"><xsl:value-of select="*/bibtex:edition" /></xsl:variable>
         <xsl:variable name="editor"><xsl:value-of select="*/bibtex:editor" /></xsl:variable>
@@ -86,28 +86,28 @@
         <xsl:variable name="issn"><xsl:value-of select="*/bibtex:issn" /></xsl:variable>
         <xsl:variable name="issue"><xsl:value-of select="*/bibtex:issue" /></xsl:variable>	
         <xsl:variable name="journal"><xsl:value-of select="*/bibtex:journal" /></xsl:variable>
-	<!-- <xsl:variable name="key"><xsl:value-of select="*/bibtex:key" /></xsl:variable> -->
-	<!-- <xsl:variable name="keywords"><xsl:value-of select="*/bibtex:keywords" /></xsl:variable> -->
+	<!--# <xsl:variable name="key"><xsl:value-of select="*/bibtex:key" /></xsl:variable> -->                    <!-- ignoriert: ohne content -->
+	<xsl:variable name="keywords"><xsl:value-of select="*/bibtex:keywords" /></xsl:variable>
         <xsl:variable name="language"><xsl:value-of select="*/bibtex:language" /></xsl:variable>
         <xsl:variable name="month"><xsl:value-of select="*/bibtex:month" /></xsl:variable>                          <!-- Inproceedings: das Datum der Konferenz, Doctoralthesis das Datum der Abgabe/Verteidigung? -->
         <xsl:variable name="note"><xsl:value-of select="*/bibtex:note" /></xsl:variable>
         <xsl:variable name="number"><xsl:value-of select="*/bibtex:number" /></xsl:variable>                        <!-- Article: der Issue eines Hefts -->
-	<!-- <xsl:variable name="organization"><xsl:value-of select="*/bibtex:organization" /></xsl:variable> -->
-	<!-- <xsl:variable name="owner"><xsl:value-of select="*/bibtex:owner" /></xsl:variable> -->	
+	<xsl:variable name="organization"><xsl:value-of select="*/bibtex:organization" /></xsl:variable>            <!-- CreatingCorporation -->
+	<!--# <xsl:variable name="owner"><xsl:value-of select="*/bibtex:owner" /></xsl:variable> -->                <!-- ignoriert: Semantik unklar -->
         <xsl:variable name="pages"><xsl:value-of select="*/bibtex:pages" /></xsl:variable>
-	<!-- <xsl:variable name="preprinturl"><xsl:value-of select="*/bibtex:preprinturl" /></xsl:variable> -->	
+	<xsl:variable name="preprinturl"><xsl:value-of select="*/bibtex:preprinturl" /></xsl:variable>              <!-- ReferenceUrl/@Label='preprint' -->
         <xsl:variable name="publisher"><xsl:value-of select="*/bibtex:publisher" /></xsl:variable>
-	<!-- <xsl:variable name="reviewer"><xsl:value-of select="*/bibtex:reviewer" /></xsl:variable> -->	
+	<xsl:variable name="reviewer"><xsl:value-of select="*/bibtex:reviewer" /></xsl:variable>
         <xsl:variable name="school"><xsl:value-of select="*/bibtex:school" /></xsl:variable>
-	 <!-- <xsl:variable name="seealso"><xsl:value-of select="*/bibtex:seealso" /></xsl:variable> -->	
+	<!-- <xsl:variable name="seealso"><xsl:value-of select="*/bibtex:seealso" /></xsl:variable> -->             <!-- TODO: ReferenceDocid, 11 entries -->
         <xsl:variable name="series"><xsl:value-of select="*/bibtex:series" /></xsl:variable>                        <!-- ConferenceObject: TitleSub -->
-        <!-- <xsl:variable name="texturl"><xsl:value-of select="*/bibtex:texturl" /></xsl:variable>-->
-        <!-- <xsl:variable name="timestamp"><xsl:value-of select="*/bibtex:timestamp" /></xsl:variable>-->
+        <xsl:variable name="texturl"><xsl:value-of select="*/bibtex:texturl" /></xsl:variable>
+        <!--# <xsl:variable name="timestamp"><xsl:value-of select="*/bibtex:timestamp" /></xsl:variable>-->         <!-- ignoriert: Opus setzt Timestamp selbst -->
         <xsl:variable name="title"><xsl:value-of select="*/bibtex:title" /></xsl:variable>
         <xsl:variable name="type"><xsl:value-of select="*/bibtex:type" /></xsl:variable>                            <!-- Doctoralthesis: Phdthesis -->
         <xsl:variable name="url"><xsl:value-of select="*/bibtex:url" /></xsl:variable>                              <!-- Das Feld Url beinhaltet z.t. ungepruefte Urls -->
-	<!-- <xsl:variable name="urn"><xsl:value-of select="*/bibtex:urn" /></xsl:variable>  -->
-        <!-- <xsl:variable name="viewerurl"><xsl:value-of select="*/bibtex:viewerurl" /></xsl:variable> -->
+	<xsl:variable name="urn"><xsl:value-of select="*/bibtex:urn" /></xsl:variable>
+        <xsl:variable name="viewerurl"><xsl:value-of select="*/bibtex:viewerurl" /></xsl:variable>
         <xsl:variable name="volume"><xsl:value-of select="*/bibtex:volume" /></xsl:variable>
         <xsl:variable name="year"><xsl:value-of select="*/bibtex:year" /></xsl:variable>	
 
@@ -156,6 +156,11 @@
             </xsl:if>
 
             <!-- CreatingCorporation -->
+            <xsl:if test="string-length($organization) > 0">
+                <xsl:attribute name="CreatingCorporation">
+                    <xsl:value-of select="$organization" />
+                </xsl:attribute>
+            </xsl:if>
 
             <!-- ThesisDateAccepted -->
 
@@ -356,20 +361,21 @@
                 </xsl:element>
             </xsl:if>
 
-            <!-- IdentifierUrl / IdentifierDoi-->
+            <!-- IdentifierUrl -->
             <xsl:if test="string-length($url) > 0">
-                <xsl:choose>
-                    <xsl:when test="contains($url, 'dx.doi.org')">
-                        <xsl:element name="IdentifierDoi">
-                            <xsl:attribute name="Value"><xsl:value-of select="substring-after($url,'dx.doi.org/')" /></xsl:attribute>
-                        </xsl:element>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:element name="IdentifierUrl">
-                            <xsl:attribute name="Value"><xsl:value-of select="$url" /></xsl:attribute>
-                        </xsl:element>
-                    </xsl:otherwise>
-               </xsl:choose>
+                <xsl:element name="IdentifierUrl">
+                    <xsl:attribute name="Value"><xsl:value-of select="$url" /></xsl:attribute>
+                </xsl:element>
+            </xsl:if>
+            <xsl:if test="string-length($texturl) > 0">
+                <xsl:element name="IdentifierUrl">
+                    <xsl:attribute name="Value"><xsl:value-of select="$texturl" /></xsl:attribute>
+                </xsl:element>
+            </xsl:if>
+            <xsl:if test="string-length($viewerurl) > 0">
+                <xsl:element name="IdentifierUrl">
+                    <xsl:attribute name="Value"><xsl:value-of select="$viewerurl" /></xsl:attribute>
+                </xsl:element>
             </xsl:if>
 
             <!-- IdentifierOld -->
@@ -379,9 +385,21 @@
                 </xsl:element>
             </xsl:if>
 
-            <!-- ReferenceUrl-->
+            <xsl:if test="string-length($urn) > 0">
+                <xsl:element name="IdentifierUrn">
+                    <xsl:attribute name="Value"><xsl:value-of select="$urn" /></xsl:attribute>
+                </xsl:element>
+            </xsl:if>
 
-             <!-- noter can be a Note or a IdentifierUrl -->
+            <!-- ReferenceUrl-->
+            <xsl:if test="string-length($preprinturl) > 0">
+                <xsl:element name="ReferenceUrl">
+                    <xsl:attribute name="Label">preprint</xsl:attribute>
+                    <xsl:attribute name="Value"><xsl:value-of select="$preprinturl" /></xsl:attribute>
+                </xsl:element>
+            </xsl:if>
+
+            <!-- note can be a Note or a IdentifierUrl -->
             <xsl:if test="string-length($note) > 0">
                 <xsl:choose>
                     <xsl:when test="contains($note, 'http://')">
@@ -444,10 +462,43 @@
                  </xsl:element>
             </xsl:if>
 
+            <xsl:if test="string-length($reviewer) > 0">
+                 <xsl:element name="Enrichment">
+                     <xsl:attribute name="KeyName">reviewer</xsl:attribute>
+                     <xsl:attribute name="Value"><xsl:value-of select="$reviewer" /></xsl:attribute>
+                 </xsl:element>
+            </xsl:if>
+
             <!-- Institutes and WorkingGroups -->
             <xsl:element name="OldInstitute">
                 <xsl:attribute name="Value">Optimierung</xsl:attribute>
             </xsl:element>
+
+            <!-- SubjectUncontrolled -->
+            <xsl:if test="string-length(substring-after($annote,'Keywords:')) > 0">
+                <xsl:call-template name="AddSubjects">
+                    <xsl:with-param name="type">SubjectUncontrolled</xsl:with-param>
+                    <xsl:with-param name="list">
+                        <xsl:value-of select="$keywords" />
+                        <xsl:value-of select="substring-after($annote,'Keywords:')" />
+                    </xsl:with-param>
+                    <xsl:with-param name="delimiter">,</xsl:with-param>
+                    <xsl:with-param name="language">eng</xsl:with-param>
+                </xsl:call-template>
+            </xsl:if>
+
+            <!-- SubjectUncontrolled -->
+            <xsl:if test="string-length($keywords) > 0">
+                <xsl:call-template name="AddSubjects">
+                    <xsl:with-param name="type">SubjectUncontrolled</xsl:with-param>
+                    <xsl:with-param name="list">
+                        <xsl:value-of select="$keywords" />
+                    </xsl:with-param>
+                    <xsl:with-param name="delimiter">,</xsl:with-param>
+                    <xsl:with-param name="language">eng</xsl:with-param>
+                </xsl:call-template>
+            </xsl:if>
+
 
         </xsl:element>
    </xsl:template>

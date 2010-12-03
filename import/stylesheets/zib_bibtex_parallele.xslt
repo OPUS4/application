@@ -68,15 +68,15 @@
     <xsl:template match="bibtex:entry">
         <xsl:variable name="id"><xsl:value-of select="@id" /></xsl:variable>
 
-        <xsl:variable name="address"><xsl:value-of select="*/bibtex:address" /></xsl:variable>                      <!-- address: muss nicht zwingend publisher_pplace sein -->
-        <!--<xsl:variable name="addressnotused"><xsl:value-of select="*/bibtex:addressnotused" /></xsl:variable> -->
-        <!--<xsl:variable name="annote"><xsl:value-of select="*/bibtex:annote" /></xsl:variable> -->
+        <xsl:variable name="address"><xsl:value-of select="*/bibtex:address" /></xsl:variable>                      <!-- PublisherPlace oder Enrichment/@KeyName='address' -->
+        <!--# <xsl:variable name="addressnotused"><xsl:value-of select="*/bibtex:addressnotused" /></xsl:variable> -->    <!-- ignoriert: Semantik unklar -->
+        <!--# <xsl:variable name="annote"><xsl:value-of select="*/bibtex:annote" /></xsl:variable> -->              <!-- ignoriert: 'OWNER: xxx' -->
         <xsl:variable name="author"><xsl:value-of select="*/bibtex:author" /></xsl:variable> 
-        <!--<xsl:variable name="bibsource"><xsl:value-of select="*/bibtex:bibsource" /></xsl:variable> -->
+        <!--# <xsl:variable name="bibsource"><xsl:value-of select="*/bibtex:bibsource" /></xsl:variable> -->        <!-- ignoriert: 'DBLP, http://dblp.uni-trier.de' -->
         <xsl:variable name="booktitle"><xsl:value-of select="*/bibtex:booktitle" /></xsl:variable>
-        <!--<xsl:variable name="comment"><xsl:value-of select="*/bibtex:comment" /></xsl:variable> -->	
-        <!--<xsl:variable name="crossref"><xsl:value-of select="*/bibtex:crossref" /></xsl:variable> -->
-        <!--<xsl:variable name="date"><xsl:value-of select="*/bibtex:date" /></xsl:variable> -->
+        <xsl:variable name="comment"><xsl:value-of select="*/bibtex:comment" /></xsl:variable>                      <!-- Note -->
+        <!--# <xsl:variable name="crossref"><xsl:value-of select="*/bibtex:crossref" /></xsl:variable> -->          <!-- ignoriert: Referenz auf DBLP eintrag -->
+        <!--# <xsl:variable name="date"><xsl:value-of select="*/bibtex:date" /></xsl:variable> -->                  <!-- ignoriert: Datumsangabe: Tag -->
         <xsl:variable name="doi"><xsl:value-of select="*/bibtex:doi" /></xsl:variable>
         <xsl:variable name="editor"><xsl:value-of select="*/bibtex:editor" /></xsl:variable>
         <xsl:variable name="howpublished"><xsl:value-of select="*/bibtex:howpublished" /></xsl:variable>
@@ -84,8 +84,8 @@
         <xsl:variable name="isbn"><xsl:value-of select="*/bibtex:isbn" /></xsl:variable>
         <xsl:variable name="issue"><xsl:value-of select="*/bibtex:issue" /></xsl:variable>	
         <xsl:variable name="journal"><xsl:value-of select="*/bibtex:journal" /></xsl:variable>
-        <!-- <xsl:variable name="keywords"><xsl:value-of select="*/bibtex:keywords" /></xsl:variable> -->
-        <!-- <xsl:variable name="location"><xsl:value-of select="*/bibtex:location" /></xsl:variable> -->
+        <xsl:variable name="keywords"><xsl:value-of select="*/bibtex:keywords" /></xsl:variable>                    <!-- SubjectUncontrolled -->
+        <xsl:variable name="location"><xsl:value-of select="*/bibtex:location" /></xsl:variable>                    <!-- IdentifierUrl oder Enrichment/@KeyName='address' -->
         <xsl:variable name="month"><xsl:value-of select="*/bibtex:month" /></xsl:variable>                          <!-- Inproceedings: das Datum der Konferenz, Doctoralthesis das Datum der Abgabe/Verteidigung? -->
         <xsl:variable name="note"><xsl:value-of select="*/bibtex:note" /></xsl:variable>
         <xsl:variable name="number"><xsl:value-of select="*/bibtex:number" /></xsl:variable>                        <!-- Article: der Issue eines Hefts -->
@@ -94,7 +94,7 @@
         <xsl:variable name="series"><xsl:value-of select="*/bibtex:series" /></xsl:variable>                        <!-- ConferenceObject: TitleSub -->
         <xsl:variable name="title"><xsl:value-of select="*/bibtex:title" /></xsl:variable>
         <xsl:variable name="type"><xsl:value-of select="*/bibtex:type" /></xsl:variable>                            <!-- Doctoralthesis: Phdthesis -->
-        <xsl:variable name="url"><xsl:value-of select="*/bibtex:url" /></xsl:variable>                              <!-- Das Feld Url beinhaltet z.t. ungepruefte Urls -->
+        <xsl:variable name="url"><xsl:value-of select="*/bibtex:url" /></xsl:variable>                              <!-- IdentifierUrl oder IdentifierDoi -->
         <xsl:variable name="volume"><xsl:value-of select="*/bibtex:volume" /></xsl:variable>
         <xsl:variable name="year"><xsl:value-of select="*/bibtex:year" /></xsl:variable>
 
@@ -221,7 +221,7 @@
             <xsl:attribute name="BelongsToBibliography"><xsl:text>1</xsl:text></xsl:attribute>
 
 
-            <!-- EXTERNAL FILEDS -->
+            <!-- EXTERNAL FIELDS: Title -->
             <!-- TitleMain -->
             <xsl:if test="string-length($title) > 0">
                 <xsl:element name="TitleMain">
@@ -249,6 +249,7 @@
                 </xsl:element>
             </xsl:if>
 
+            <!-- EXTERNAL FIELDS: Identifier -->
             <!-- IdentifierIsbn -->
             <xsl:if test="string-length($isbn) > 0">
                 <xsl:element name="IdentifierIsbn">
@@ -260,9 +261,23 @@
 
             <!-- IdentifierDoi -->
             <xsl:if test="string-length($doi) > 0">
-                <xsl:element name="IdentifierDoi">
-                    <xsl:attribute name="Value"><xsl:value-of select="$doi" /></xsl:attribute>
-                </xsl:element>
+                <xsl:choose>
+                    <xsl:when test="contains($doi, 'dx.doi.org')">
+                        <xsl:element name="IdentifierDoi">
+                            <xsl:attribute name="Value"><xsl:value-of select="substring-after($doi,'dx.doi.org/')" /></xsl:attribute>
+                        </xsl:element>
+                    </xsl:when>
+                    <xsl:when test="contains($doi, 'doi.ieeecomputersociety.org')">
+                        <xsl:element name="IdentifierDoi">
+                            <xsl:attribute name="Value"><xsl:value-of select="substring-after($doi,'doi.ieeecomputersociety.org/')" /></xsl:attribute>
+                        </xsl:element>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:element name="IdentifierUrl">
+                            <xsl:attribute name="Value"><xsl:value-of select="$url" /></xsl:attribute>
+                        </xsl:element>
+                    </xsl:otherwise>
+               </xsl:choose>
             </xsl:if>
 
             <!-- IdentifierUrl / IdentifierDoi-->
@@ -290,18 +305,33 @@
 
             <!-- ReferenceUrl-->
 
-             <!-- noter can be a Note or a IdentifierUrl -->
+            <!-- EXTERNAL FIELDS: Note -->
+            <!-- Note  -->
             <xsl:if test="string-length($note) > 0">
+               <xsl:element name="Note">
+                    <xsl:attribute name="Message"><xsl:value-of select="$note" /></xsl:attribute>
+               </xsl:element>
+            </xsl:if>
+
+            <xsl:if test="string-length($comment) > 0">
+               <xsl:element name="Note">
+                    <xsl:attribute name="Message"><xsl:value-of select="$comment" /></xsl:attribute>
+               </xsl:element>
+            </xsl:if>
+
+            <!-- location can be a Address or a IdentifierUrl -->
+            <xsl:if test="string-length($location) > 0">
                 <xsl:choose>
-                    <xsl:when test="contains($note, 'http://')">
+                    <xsl:when test="contains($location, 'http://')">
                         <xsl:element name="IdentifierUrl">
-                            <xsl:attribute name="Value"><xsl:value-of select="$note" /></xsl:attribute>
+                            <xsl:attribute name="Value"><xsl:value-of select="$location" /></xsl:attribute>
                         </xsl:element>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:element name="Note">
-                            <xsl:attribute name="Message"><xsl:value-of select="$note" /></xsl:attribute>
-                        </xsl:element>
+                         <xsl:element name="Enrichment">
+                             <xsl:attribute name="KeyName">address</xsl:attribute>
+                             <xsl:attribute name="Value"><xsl:value-of select="$location" /></xsl:attribute>
+                         </xsl:element>
                     </xsl:otherwise>
                </xsl:choose>
             </xsl:if>
@@ -357,6 +387,18 @@
             <xsl:element name="OldInstitute">
                 <xsl:attribute name="Value">Parallele und Verteilte Algorithmen</xsl:attribute>
             </xsl:element>
+
+            <!-- SubjectUncontrolled -->
+            <xsl:if test="string-length($keywords) > 0">
+                <xsl:call-template name="AddSubjects">
+                    <xsl:with-param name="type">SubjectUncontrolled</xsl:with-param>
+                    <xsl:with-param name="list">
+                        <xsl:value-of select="$keywords" />
+                    </xsl:with-param>
+                    <xsl:with-param name="delimiter">;</xsl:with-param>
+                    <xsl:with-param name="language">eng</xsl:with-param>
+                </xsl:call-template>
+            </xsl:if>
 
         </xsl:element>
    </xsl:template>
