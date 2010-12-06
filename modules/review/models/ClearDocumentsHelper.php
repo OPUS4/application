@@ -82,6 +82,8 @@ class Review_Model_ClearDocumentsHelper {
                         }
                     }
 
+                    $document->getCollection(); // FIXME make sure collections are loaded (OPUSVIER-863)
+
                     $document->store();
                 }
                 else {
