@@ -15,16 +15,54 @@
         <tu tuid="mail_publish_notification">
             <tuv xml:lang="en">
                 <seg>
-A new document was published.
+Dear Reviewer,
 
-%1$s
+
+you are listed as reviewer for the Opus4 document server will
+receive a message for new submitted documents.  We kindly ask
+you to carefully review the submitted documents and only accept
+Documents, which fulfill your standards.
+
+A new document has been submitted and waits for publishing:
+* %1$s
+
+All unpublished documents can be reviewed in the review-area:
+* %2$s
+
+Changing the submitted document metadata is possible in the
+admin area:
+* %3$s
+
+
+Kind regards,
+  your Opus4 Team
                 </seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>
-Ein neues Dokument ist veroeffentlicht worden.
+Lieber Reviewer,
 
-%1$s
+
+Sie sind als Reviewer fuer den Opus4-Dokument-Server eingetragen
+und erhalten Benachrichtigungen fuer neu eingestellte Dokumente.
+Bitte pruefen Sie die Dokumente sorgfaeltig und schalten Sie nur
+Dokumente frei, die Ihren Standards genuegen.
+
+Das folgende Dokument wurde neu veroeffentlicht und wartet auf
+Freischaltung:
+* %1$s
+
+Im Review-Bereich koennen Sie alle noch nicht freigeschalteten 
+Dokumente einsehen und ggf. freischalten:
+* %2$s
+
+Aenderungen an den eingegebenen Dokument-Metadaten sind ueber den
+Admin-Bereich moeglich:
+* %3$s
+
+
+Mit freundlichen Gruessen,
+  Dein Opus4-Team
                 </seg>
             </tuv>
         </tu>

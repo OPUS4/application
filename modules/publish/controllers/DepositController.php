@@ -100,25 +100,47 @@ class Publish_DepositController extends Controller_Action {
 
                 $this->session->document = $document;
                 $this->session->documentId = $document->store();
+                $docId = $this->session->documentId;
 
-                $this->log->info("Document was sucessfully stored!");
+                $this->log->info("Document $docId was sucessfully stored!");
 
-                $subject = $this->view->translate('mail_publish_notification_subject', $this->session->documentId);
-                $docUrl = $this->__getDocumentUrl($this->session->documentId);
-                $message = $this->view->translate('mail_publish_notification', $docUrl);
+                // Build URLs for the publish-notification-mail.
+                $fullDocUrl = $this->__getDocumentUrl($docId);
+                $reviewUrl = $this->view->serverUrl() . $this->view->url(array(
+                            'module' => 'review',
+                            'controller' => 'index',
+                            'action' => 'index'));
+                $adminEditUrl = $this->view->serverUrl() . $this->view->url(array(
+                            'module' => 'admin',
+                            'controller' => 'documents',
+                            'action' => 'edit',
+                            'id' => $docId));
+
+
+                $this->log->debug("fullDocUrl:   $fullDocUrl");
+                $this->log->debug("reviewUrl:    $reviewUrl");
+                $this->log->debug("adminEditUrl: $adminEditUrl");
+
+                $subject = $this->view->translate('mail_publish_notification_subject', $docId);
+                $message = $this->view->translate('mail_publish_notification', $fullDocUrl, $reviewUrl, $adminEditUrl);
+
+                $this->log->debug("sending email (subject): $subject");
+                $this->log->debug("sending email (body):    \n:$message\n-- end email.");
                 $this->__scheduleNotification($subject, $message, $projects);
+
                 // Redirect to publish start page and print message
                 $docUrl = $this->view->url(array(
                             'module' => 'frontdoor',
                             'controller' => 'index',
                             'action' => 'index',
-                            'docId' => $this->session->documentId));
+                            'docId' => $docId));
                 if (true !== Opus_Security_Realm::getInstance()->check('clearance')) {
-                    $message = $this->view->translate('success_redirect', $this->session->documentId);
+                    $message = $this->view->translate('success_redirect',
+                            $docId);
                 }
                 else {
                     $message = $this->view->translate(
-                                    'success_redirect_with_link', $docUrl, $this->session->documentId);
+                            'success_redirect_with_link', $docUrl, $docId);
                 }
                 return $this->_redirectToAndExit('index', $message, 'index',
                         'publish');
@@ -137,7 +159,7 @@ class Publish_DepositController extends Controller_Action {
 
         $subject_additional_text = '';
         if ((!is_null($projects)) and (count($projects) > 0)) {
-            $subject_additional_text = " -- assigned project(s): " . implode(array_values($projects)) . "";
+            $subject_additional_text = " -- assigned project(s): " . implode(", ", array_values($projects)) . "";
             $this->log->err("Additional text: " . $subject_additional_text);
         }
 
@@ -151,7 +173,7 @@ class Publish_DepositController extends Controller_Action {
         //fetch all reviewers for email sending
         $document = $this->session->document;
         $usernames = Opus_Reviewer::fetchAllByDocument($document);
-        $this->log->debug("Referees for Mails: " . implode(";", $username));
+        $this->log->debug("Referees for Mails: " . implode(";", $usernames));
 
         $job = new Opus_Job();
         $job->setLabel(Opus_Job_Worker_MailPublishNotification::LABEL);
