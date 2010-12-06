@@ -60,9 +60,9 @@
         <default value="today" edit="yes" public="yes" />
     </field>
     <field name="SubjectMSC" required="yes" formelement="text"  datatype="msc" multiplicity="5" />
+    <field name="Project" required="yes" formelement="select" datatype="Project" multiplicity="*" />    
 
 <!-- unrequired fields -->
-    <field name="Project" required="no" formelement="select" datatype="Project" multiplicity="*" />    
     <field name="SubjectUncontrolled" required="no" formelement="text"  datatype="Text" multiplicity="5" />
     <field name="Note" required="no" formelement="textarea"  datatype="Text" multiplicity="1" />
 		
