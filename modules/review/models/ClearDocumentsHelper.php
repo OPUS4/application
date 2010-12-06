@@ -108,6 +108,8 @@ class Review_Model_ClearDocumentsHelper {
                 $state = $document->getServerState();
 
                 if ($state === 'unpublished') {
+                    $document->getCollection(); // FIXME make sure collections are loaded (OPUSVIER-863)
+                    
                     $document->delete();
                 }
                 else {
