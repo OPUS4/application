@@ -54,9 +54,10 @@ mv opus4/scripts/packaging/changelog/CHANGES.txt .
 
 rm -rv opus4/{docs,nbproject,tests,workspace}
 rm -rvf opus4/public/layouts/{opus33,opus34,darker,matheon,plain,opus4-matheon}
-rm -r opus4/import/importer/ZIB*.php
-rm -r opus4/import/stylesheets/zib*.xslt
+rm -r  opus4/import/importer/ZIB*.php
+rm -r  opus4/import/stylesheets/zib*.xslt
 rm -v  opus4/modules/publish/views/scripts/form/preprintmatheon.phtml
+rm -v  opus4/application/configs/doctypes/preprintmatheon.xml
 rm -rv opus4/modules/{pkm,publicationList,remotecontrol}
 rm -rv opus4/scripts/{packaging,cron,indexing,install}
 rm -r  opus4/scripts/*{Matheon,ZIB}*.php
