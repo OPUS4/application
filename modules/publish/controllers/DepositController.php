@@ -98,27 +98,27 @@ class Publish_DepositController extends Controller_Action {
 
                 $document->setServerState('unpublished');
 
-                $docId = $document->store();
+                $this->session->document = $document;
+                $this->session->documentId = $document->store();
 
                 $this->log->info("Document was sucessfully stored!");
 
-                $subject = $this->view->translate('mail_publish_notification_subject', $docId);
-                $docUrl = $this->__getDocumentUrl($docId);
+                $subject = $this->view->translate('mail_publish_notification_subject', $this->session->documentId);
+                $docUrl = $this->__getDocumentUrl($this->session->documentId);
                 $message = $this->view->translate('mail_publish_notification', $docUrl);
-                $this->__scheduleNotification($subject, $message, $docId, $projects);
+                $this->__scheduleNotification($subject, $message, $projects);
                 // Redirect to publish start page and print message
                 $docUrl = $this->view->url(array(
                             'module' => 'frontdoor',
                             'controller' => 'index',
                             'action' => 'index',
-                            'docId' => $docId));
+                            'docId' => $this->session->documentId));
                 if (true !== Opus_Security_Realm::getInstance()->check('clearance')) {
-                    $message = $this->view->translate('success_redirect',
-                            $docId);
+                    $message = $this->view->translate('success_redirect', $this->session->documentId);
                 }
                 else {
                     $message = $this->view->translate(
-                            'success_redirect_with_link', $docUrl, $docId);
+                                    'success_redirect_with_link', $docUrl, $this->session->documentId);
                 }
                 return $this->_redirectToAndExit('index', $message, 'index',
                         'publish');
@@ -133,8 +133,7 @@ class Publish_DepositController extends Controller_Action {
      * Schedules notifications for referees.
      * @param <type> $projects
      */
-    private function __scheduleNotification($subject, $message, $docId, $projects = null) {
-        $docId = $this->session->documentId;
+    private function __scheduleNotification($subject, $message, $projects = null) {
 
         $subject_additional_text = '';
         if ((!is_null($projects)) and (count($projects) > 0)) {
@@ -142,19 +141,28 @@ class Publish_DepositController extends Controller_Action {
             $this->log->err("Additional text: " . $subject_additional_text);
         }
 
+        $config = Zend_Registry::get('Zend_Config');
+
+        // Initialized Opus_Review class from config (if exists!):
+        if (isset($config->reviewer)) {
+            Opus_Reviewer::init($config->reviewer->toArray());
+        }
+
+        //fetch all reviewers for email sending
+        $document = $this->session->document;
+        $usernames = Opus_Reviewer::fetchAllByDocument($document);
+        $this->log->debug("Referees for Mails: " . implode(";", $username));
+
         $job = new Opus_Job();
         $job->setLabel(Opus_Job_Worker_MailPublishNotification::LABEL);
         $job->setData(array(
             'subject' => $subject . $subject_additional_text,
             'message' => $message,
-            'projects' => $projects,
-            'docId' => $docId
-        ));
+            'users' => $usernames,
+            'docId' => $this->session->documentId
+        ));   
 
-        $config = Zend_Registry::get('Zend_Config');
-
-        if (isset($config->runjobs->asynchronous) &&
-                $config->runjobs->asynchronous) {
+        if (isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
             // Queue job (execute asynchronously)
             // skip creating job if equal job already exists
             if (true === $job->isUniqueInQueue()) {
@@ -163,7 +171,7 @@ class Publish_DepositController extends Controller_Action {
         }
         else {
             // Execute job immediately (synchronously)
-            $mail = new Opus_Job_Worker_MailPublishNotification($log);
+            $mail = new Opus_Job_Worker_MailPublishNotification($this->log);
             $mail->work($job);
         }
     }
