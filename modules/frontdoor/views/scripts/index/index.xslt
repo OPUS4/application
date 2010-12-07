@@ -744,7 +744,7 @@
                             <xsl:with-param name="string">frontdoor_download_file</xsl:with-param>
                         </xsl:call-template>
                         <xsl:text> </xsl:text>
-                        <xsl:value-of select="@PathName" />
+                        <xsl:value-of select="@Label" />
                         <xsl:text> (</xsl:text>
                         <xsl:value-of select="@MimeType" />
                         <xsl:text>)</xsl:text>
@@ -761,7 +761,7 @@
                     <xsl:text>/</xsl:text>
                     <xsl:value-of select="@PathName" />
                 </xsl:attribute>
-                <xsl:value-of select="@PathName" />
+                <xsl:value-of select="@Label" />
             </xsl:element>
             <xsl:text> </xsl:text>
         </li>
