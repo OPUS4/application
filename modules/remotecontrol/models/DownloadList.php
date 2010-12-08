@@ -112,6 +112,7 @@ class Remotecontrol_Model_DownloadList {
     }
 
     /**
+     * Convert list of items to TAB-separated list.  One entry per line.
      *
      * @param array $items
      * @return string A csv representation of the given items.
@@ -119,7 +120,7 @@ class Remotecontrol_Model_DownloadList {
     private function prepareCsv($items) {
         $csv = '';
         foreach ($items as $item) {
-            $csv .= $item->getId() . " , '" . $item->getTitle() . "' , '" . $item->getYear() . "'\n";
+            $csv .= $item->getId() . "\t" . str_replace("\t", " ", $item->getTitle()) . "\t" . $item->getYear() . "\n";
         }
         return $csv;
     }
