@@ -35,9 +35,9 @@
 
 class Remotecontrol_Model_Exception extends Exception {
 
-    const NAME_IS_NOT_UNIQUE = 1;
+    const COLLECTION_IS_NOT_UNIQUE = 1;
 
-    public function nameIsNotUnique() {
-        return $this->getCode() === self::NAME_IS_NOT_UNIQUE;
+    public function collectionIsNotUnique() {
+        return $this->getCode() === self::COLLECTION_IS_NOT_UNIQUE;
     }
 }

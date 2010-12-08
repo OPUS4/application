@@ -85,6 +85,9 @@ class Remotecontrol_CollectionControllerTest extends ControllerTestCase {
                 ->setMethod('POST')
                 ->setPost($this->requestData);
         $this->dispatch('/remotecontrol/collection/add');
+
+        echo "code: " . $this->getResponse()->getHttpResponseCode() . "\n";
+
         $this->assertResponseCode(400);
 
     }
@@ -124,12 +127,6 @@ class Remotecontrol_CollectionControllerTest extends ControllerTestCase {
         $this->assertResponseCode(400);
     }
 
-    public function testCsvActionWithInvalidCollectionName() {
-        $this->request->setMethod('GET');
-        $this->dispatch('/remotecontrol/collection/list?role=ddc&number=-1');
-        $this->assertResponseCode(400);
-    }
-
     public function testCsvActionWithNonUniqueCollectionName() {
         $this->markTestIncomplete('FIXME: Testdata does not contain non-unique collections.');
     
@@ -143,18 +140,5 @@ class Remotecontrol_CollectionControllerTest extends ControllerTestCase {
         $this->dispatch('/remotecontrol/collection/list?role=ddc&number=521');
         $this->assertResponseCode(200);
         $this->assertHeaderContains('Content-Disposition', 'filename=ddc_521.csv');
-    }
-
-    public function testCsvActionForName() {
-        $this->request->setMethod('GET');
-        $this->dispatch('/remotecontrol/collection/list?role=institutes&name=Bauwesen');
-        $this->assertResponseCode(200);
-        $this->assertHeaderContains('Content-Disposition', 'filename=institutes_Bauwesen.csv');
-    }
-
-    public function testCsvActionForNameAndNumber() {
-        $this->request->setMethod('GET');
-        $this->dispatch('/remotecontrol/collection/list?role=institutes&name=Bauwesen&number=1');
-        $this->assertResponseCode(400);
     }
 }

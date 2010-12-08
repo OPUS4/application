@@ -34,6 +34,20 @@
 
 class Remotecontrol_Model_CollectionRoleTest extends ControllerTestCase {
 
+    public function testNewModelOnCollectionRoleWithRoot() {
+        // In our test data, this role exists and has a root collection.
+
+        $model = new Remotecontrol_Model_CollectionRole('msc');
+        $this->assertNotNull( $model );
+    }
+
+    public function testNewModelOnCollectionRoleWithGivenNode() {
+        // In our test data, this role exists and has a collection-number 500.
+
+        $model = new Remotecontrol_Model_CollectionRole('ddc', '500');
+        $this->assertNotNull( $model );
+    }
+
     public function testNewModelOnCollectionRoleWithoutRoot() {
         // In our test data, this role does not have any associated collections.
 

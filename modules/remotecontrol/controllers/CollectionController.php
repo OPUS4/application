@@ -62,12 +62,13 @@ class Remotecontrol_CollectionController extends Controller_Action {
         $request = $this->getRequest();
 
         $role_name = $request->getParam('role');
+        $parent_number = $request->getParam('parent');
         $collection_number = $request->getParam('key');
         $collection_name = $request->getParam('title');
 
         try {
-            $manage = new Remotecontrol_Model_CollectionRole($role_name);
-            $manage->addCollection($collection_number, $collection_name);
+            $model = new Remotecontrol_Model_CollectionRole($role_name, $parent_number);
+            $model->appendChild($collection_number, $collection_name);
         }
         catch (Remotecontrol_Model_Exception $e) {
             $this->getResponse()->setHttpResponseCode(400);
@@ -85,8 +86,8 @@ class Remotecontrol_CollectionController extends Controller_Action {
         $collection_name = $request->getParam('title');
 
         try {
-            $manage = new Remotecontrol_Model_CollectionRole($role_name);
-            $manage->renameCollectionByNumber($collection_number, $collection_name);
+            $model = new Remotecontrol_Model_CollectionRole($role_name, $collection_number);
+            $model->rename($collection_name);
         }
         catch (Remotecontrol_Model_Exception $e) {
             $this->getResponse()->setHttpResponseCode(400);
@@ -99,7 +100,6 @@ class Remotecontrol_CollectionController extends Controller_Action {
         $request = $this->getRequest();
         $role = $request->getParam('role');
         $number = $request->getParam('number');
-        $name = $request->getParam('name');
 
         $downloadList = new Remotecontrol_Model_DownloadList();
         
@@ -107,10 +107,10 @@ class Remotecontrol_CollectionController extends Controller_Action {
         $this->_helper->layout()->disableLayout();
 
         try {
-            $this->getResponse()->setBody($downloadList->getCvsFile($role, $number, $name));
+            $this->getResponse()->setBody($downloadList->getCvsFile($role, $number));
         }
         catch (Remotecontrol_Model_Exception $e) {
-            if ($e->nameIsNotUnique()) {
+            if ($e->collectionIsNotUnique()) {
                 $this->getResponse()->setHttpResponseCode(501);
             }
             else {
@@ -119,13 +119,7 @@ class Remotecontrol_CollectionController extends Controller_Action {
             return;
         }
         $this->getResponse()->setHeader('Content-Type', 'text/plain; charset=UTF-8', true);
-        $filename = $role . '_';
-        if (is_null($name)) {
-            $filename .= $number;
-        }
-        else {
-            $filename .= $name;
-        }
+        $filename = $role . '_' . $number;
         $this->getResponse()->setHeader('Content-Disposition', 'attachment; filename=' . $filename . '.csv', true);
     }
 

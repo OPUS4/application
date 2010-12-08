@@ -27,6 +27,7 @@
  * @category    Application
  * @package     Module_Collection
  * @author      Sascha Szott <szott@zib.de>
+ * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -35,57 +36,26 @@
 class Remotecontrol_Model_DownloadList {
 
     /**
-     * Return a csv representation of all documents that are associated to
-     * the collection identfied by the given role and number (or name).
+     * Return a csv representation of all documents that are associated to the
+     * collection identfied by the given role and number.
      *
      * @return string CSV output.
      * @throws Remotecontrol_Model_Exception Thrown if the database does not contain
      * a collection with the given properties or in case an error occurred while
      * getting all associated documents from the Solr index.
      */
-    public function getCvsFile($role, $number, $name) {
+    public function getCvsFile($role, $number) {
         $log = Zend_Registry::get('Zend_Log');
-        if (is_null($role) || (is_null($number) && is_null($name))) {
-            $msg = 'role, number or name parameter is empty - could not process request.';
-            $log->debug($msg);
-            throw new Remotecontrol_Model_Exception($msg);
-        }
-        if (!is_null($number) && !is_null($name)) {
-            $msg = 'both number and name are given - could not process request.';
+        if (is_null($role) || is_null($number)) {
+            $msg = 'role or number is empty - could not process request.';
             $log->debug($msg);
             throw new Remotecontrol_Model_Exception($msg);
         }
 
-        $errorMsgPrefix = null;
-        $collections = array();
-        try {
-            $model = new Remotecontrol_Model_CollectionRole($role);
-            if (is_null($name)) {
-                $collections = $model->findCollectionByNumber($number);
-                $errorMsgPrefix = "Number '" . $number;
-            }
-            else {
-                $collections = $model->findCollectionByName($name);
-                $errorMsgPrefix = "Name '" . $name;
-            }
-        }
-        catch (Remotecontrol_Model_Exception $e) {
-            $log->debug($e->getMessage());
-            throw $e;
-        }
-        if (count($collections) === 0) {
-            $message =  $errorMsgPrefix . "' does not exist for collection role " . $role;
-            $log->debug($message);
-            throw new Remotecontrol_Model_Exception($message);
-        }
-        if (count($collections) > 1) {
-            $message = $errorMsgPrefix . "' is not unique for collection role " . $role;
-            $log->debug($message);
-            throw new Remotecontrol_Model_Exception($message, Remotecontrol_Model_Exception::NAME_IS_NOT_UNIQUE);
-        }
+        $collection = new Remotecontrol_Model_CollectionRole($role, $number);
         $resultList = array();
         try {
-            $resultList = $this->getListItems($collections[0]->getId());
+            $resultList = $this->getListItems($collection->getId());
             $log->debug(count($resultList) . ' documents found.');
         }
         catch (Opus_SolrSearch_Exception $e) {
@@ -125,4 +95,3 @@ class Remotecontrol_Model_DownloadList {
         return $csv;
     }
 }
-?>
