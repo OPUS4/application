@@ -32,7 +32,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Remotecontrol_Model_CollectionRole {
+class Remotecontrol_Model_Collection {
 
     private $role       = null;
     private $collection = null;
@@ -41,11 +41,11 @@ class Remotecontrol_Model_CollectionRole {
 
         $this->role = Opus_CollectionRole::fetchByName($role_name);
         if (is_null($this->role)) {
-            throw new Remotecontrol_Model_Exception("CollectionRole: Role with name '$role_name' not found");
+            throw new Remotecontrol_Model_Exception("Model_Collection: Role with name '$role_name' not found");
         }
 
         if (is_null($this->role->getRootCollection())) {
-            throw new Remotecontrol_Model_Exception("CollectionRole: Root Collection for role does not exist.");
+            throw new Remotecontrol_Model_Exception("Model_Collection: Root Collection for role '$role_name' does not exist.");
         }
 
         if (!isset($collection_number)) {
@@ -65,10 +65,10 @@ class Remotecontrol_Model_CollectionRole {
         $collections = Opus_Collection::fetchCollectionsByRoleNumber($this->role->getId(), $number);
 
         if (count($collections) > 1) {
-            throw new Remotecontrol_Model_Exception("CollectionRole: Found more than one collection with number '$number'.", Remotecontrol_Model_Exception::COLLECTION_IS_NOT_UNIQUE);
+            throw new Remotecontrol_Model_Exception("Model_Collection: Found more than one collection with number '$number'.", Remotecontrol_Model_Exception::COLLECTION_IS_NOT_UNIQUE);
         }
         elseif (count($collections) != 1) {
-            throw new Remotecontrol_Model_Exception("CollectionRole: Collection with number '$number' does not exist.");
+            throw new Remotecontrol_Model_Exception("Model_Collection: Collection with number '$number' does not exist.");
         }
 
         return $collections[0];
@@ -77,7 +77,7 @@ class Remotecontrol_Model_CollectionRole {
     public function appendChild($number, $title) {
         $collections = Opus_Collection::fetchCollectionsByRoleNumber($this->role->getId(), $number);
         if (count($collections) > 0) {
-            throw new Remotecontrol_Model_Exception("CollectionRole: Collection with number '$number' already exists.");
+            throw new Remotecontrol_Model_Exception("Model_Collection: Collection with number '$number' already exists.");
         }
 
         $child = $this->collection->addLastChild();

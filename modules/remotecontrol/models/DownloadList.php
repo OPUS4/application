@@ -52,7 +52,7 @@ class Remotecontrol_Model_DownloadList {
             throw new Remotecontrol_Model_Exception($msg);
         }
 
-        $collection = new Remotecontrol_Model_CollectionRole($role, $number);
+        $collection = new Remotecontrol_Model_Collection($role, $number);
         $resultList = array();
         try {
             $resultList = $this->getListItems($collection->getId());

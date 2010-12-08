@@ -67,7 +67,7 @@ class Remotecontrol_CollectionController extends Controller_Action {
         $collection_name = $request->getParam('title');
 
         try {
-            $model = new Remotecontrol_Model_CollectionRole($role_name, $parent_number);
+            $model = new Remotecontrol_Model_Collection($role_name, $parent_number);
             $model->appendChild($collection_number, $collection_name);
         }
         catch (Remotecontrol_Model_Exception $e) {
@@ -86,7 +86,7 @@ class Remotecontrol_CollectionController extends Controller_Action {
         $collection_name = $request->getParam('title');
 
         try {
-            $model = new Remotecontrol_Model_CollectionRole($role_name, $collection_number);
+            $model = new Remotecontrol_Model_Collection($role_name, $collection_number);
             $model->rename($collection_name);
         }
         catch (Remotecontrol_Model_Exception $e) {

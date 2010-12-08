@@ -32,19 +32,19 @@
  * @version     $Id$
  */
 
-class Remotecontrol_Model_CollectionRoleTest extends ControllerTestCase {
+class Remotecontrol_Model_CollectionTest extends ControllerTestCase {
 
     public function testNewModelOnCollectionRoleWithRoot() {
         // In our test data, this role exists and has a root collection.
 
-        $model = new Remotecontrol_Model_CollectionRole('msc');
+        $model = new Remotecontrol_Model_Collection('msc');
         $this->assertNotNull( $model );
     }
 
     public function testNewModelOnCollectionRoleWithGivenNode() {
         // In our test data, this role exists and has a collection-number 500.
 
-        $model = new Remotecontrol_Model_CollectionRole('ddc', '500');
+        $model = new Remotecontrol_Model_Collection('ddc', '500');
         $this->assertNotNull( $model );
     }
 
@@ -52,13 +52,13 @@ class Remotecontrol_Model_CollectionRoleTest extends ControllerTestCase {
         // In our test data, this role does not have any associated collections.
 
         $this->setExpectedException('Remotecontrol_Model_Exception');
-        new Remotecontrol_Model_CollectionRole('no-root-test');
+        new Remotecontrol_Model_Collection('no-root-test');
     }
 
     public function testNewModelOnNonexistentCollectionRole() {
         // In our test data, this role does not have any associated collections.
 
         $this->setExpectedException('Remotecontrol_Model_Exception');
-        new Remotecontrol_Model_CollectionRole('foo-'.rand());
+        new Remotecontrol_Model_Collection('foo-'.rand());
     }
 }
