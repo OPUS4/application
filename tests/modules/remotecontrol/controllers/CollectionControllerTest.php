@@ -85,9 +85,6 @@ class Remotecontrol_CollectionControllerTest extends ControllerTestCase {
                 ->setMethod('POST')
                 ->setPost($this->requestData);
         $this->dispatch('/remotecontrol/collection/add');
-
-        echo "code: " . $this->getResponse()->getHttpResponseCode() . "\n";
-
         $this->assertResponseCode(400);
 
     }
