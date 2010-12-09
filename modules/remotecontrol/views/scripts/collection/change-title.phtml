@@ -31,10 +31,10 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
 
-<?php if (isset($this->error)) : ?>
-        <?= htmlspecialchars($this->error) ?>
-<?php else: ?>
-        SUCCESS
-<?php endif ?>
+if (isset($this->error)) {
+   echo htmlspecialchars($this->error);
+}
+else {
+   echo "SUCCESS";
+}
