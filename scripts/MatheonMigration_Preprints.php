@@ -510,6 +510,11 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
         $users = $this->load_xml_mysqldump($file);
 
         $guest_role = Opus_Role::fetchByName('guest');
+        $guest_role->setPrivilege(array());
+        $publish_privilege = $guest_role->addPrivilege();
+        $publish_privilege->setPrivilege('remotecontrol');
+        $guest_role->store();
+
         $reviewer_role = Opus_Role::fetchByName('reviewer');
 
         foreach ($users AS $user) {
@@ -596,7 +601,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             $sid = $preprint['serial'];
 
             $doc = new Opus_Document();
-            $doc->setType('preprint');
+            $doc->setType('matheonpreprint');
             $doc->setLanguage('eng');
 
             //    <field name="id">1</field>
