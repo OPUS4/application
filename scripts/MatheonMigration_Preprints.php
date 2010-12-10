@@ -520,7 +520,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
         foreach ($users AS $user) {
             $account = new Opus_Account();
             $account->setLogin(trim($user['email_address']));
-            $account->setPassword(trim($user['password']));
+            $account->setPasswordDirectly(trim($user['passcode']));
             $account->setEmail(trim($user['email_address']));
             $account->setFirstName(trim($user['last_name']));
             $account->setLastName(trim($user['first_name']));
