@@ -90,7 +90,9 @@ if($this->jQueryEnabled()) {
                     ?>
                     <dt class="results_title">
                         <?php if($this->jQueryEnabled()) : ?>
-                            <img src="<?= $this->layoutPath() ?>/img/theme/icon-on-off.png" alt="<?= $this->translate('results_hideabstract_alt') ?>" title="<?= $this->translate('results_hideabstract_title') ?>" onclick="$(function(){$('#<?= $result->getId() ?>').toggle();});" />
+                            <?php if(!is_null($result->getAbstract())) : ?>
+                                <img src="<?= $this->layoutPath() ?>/img/theme/icon-on-off.png" alt="<?= $this->translate('results_hideabstract_alt') ?>" title="<?= $this->translate('results_hideabstract_title') ?>" onclick="$(function(){$('#<?= $result->getId() ?>').toggle();});" />
+                            <?php endif ?>
                         <?php endif ?>
                         <a href="<?= $this->url($frontdoorUrl, null, true) ?>"><?= htmlspecialchars($result->getTitle()); ?></a> (<?= htmlspecialchars($result->getYear()); ?>)
                     </dt>
