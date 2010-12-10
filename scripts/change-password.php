@@ -27,10 +27,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @author      Pascal-Nicolas Becker <becker@zib.de>
- * @author      Ralf Claussnitzer <ralf.claussnitzer@slub-dresden.de>
  * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @copyright   Copyright (c) 2009-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -40,8 +37,7 @@
 require_once dirname(__FILE__) . '/common/bootstrap.php';
 
 $programm = array_shift($argv);
-
-if ($argc < 3) {
+if (count($argv) < 2) {
    echo "usage: $programm [name of existing user] [new password]\n";
    exit();
 }
@@ -51,6 +47,4 @@ $password = array_shift($argv);
 
 // Set passwort of $user to $password.
 $a = new Opus_Account(null,null,$username);
-$a->setPassword($password);
-$a->store();
-
+$a->setPassword($password)->store();
