@@ -53,7 +53,19 @@
     <field name="TitleSub" required="no" formelement="text" datatype="Title" multiplicity="1"/>
     <field name="TitleAdditional" required="no" formelement="Text" datatype="Title" multiplicity="1"/>
     <field name="TitleParent" required="no" formelement="text" datatype="Title" multiplicity="1"/>
-    
+
+    <field name="PublicationState" required="no" formelement="Select" datatype="List" multiplicity="1" >
+        <option value="draft" />
+        <option value="accepted" />
+    </field>
+
+    <field name="NeuesSelect" required="no" formelement="Select" datatype="Enrichment" multiplicity="*" >
+        <option value="hallo" />
+        <option value="ballo" />
+        <option value="knallo" />
+        <option value="fallo" />
+    </field>
+
     <field name="PersonAuthor" required="no" formelement="text" datatype="Person" multiplicity="*">
         <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" >
             <default value="Dr." edit="yes" public="yes"  />
