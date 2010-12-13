@@ -10,7 +10,7 @@
 
     <tu tuid="hint_rights">
         <tuv xml:lang="en">
-            <seg>Fields that are marked with <span class="required" title="This field has to be filled.">*</span> have to be filled. </seg>
+            <seg>Please confirm that you read and commit to the legal notices and <a href="home/index/help#policies">policies</a> of our document server.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Bitte bestätigen Sie, dass Sie die rechtlichen Hinweise sowie die <a href="home/index/help#policies">Leitlinien</a> unseres Dokumentenservers gelesen haben und damit einverstanden sind. </seg>
