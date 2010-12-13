@@ -40,24 +40,14 @@ class Publish_Model_Deposit {
 
     public function __construct($documentId = null, $documentType = null, $documentData = null) {
 
-        if (isset($documentId) && !empty($documentId))
-            $this->document = new Opus_Document($documentId);
-
-        else
-            $this->document = new Opus_Document();
-
-
-        if (isset($documentType)) {
-            $docType = $this->document->getField('Type');
-            $docType->setValue($documentType);
-            $this->document->store();
-        }
-
-        if (isset($documentData)) {
-            $this->documentData = $documentData;
-        }
-
         $this->log = Zend_Registry::get('Zend_Log');
+        $this->document = new Opus_Document($documentId);
+        $this->documentData = $documentData;
+
+        if ($this->document->getServerState() !== 'temporary') {
+            $this->log->error('Could not find document: Tried to return document, which is not in state "temporary"');
+            throw new Publish_Model_OpusServerException('Could not find document.');
+        }
 
         $this->_storeDocumentData();
     }
@@ -679,5 +669,3 @@ class Publish_Model_Deposit {
     }
 
 }
-
-?>
