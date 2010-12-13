@@ -126,7 +126,17 @@ class Form_Builder {
                     if ('add' === $key) {
                         $values[$key] = '';
                     }
+                    switch ($fieldName) {
+                        case 'PageFirst':
+                        case 'PageLast':
+                        case 'PageNumber':
+                            if (empty($value)) {
+                                $values[$key] = null;
+                            }
+                            break;
+                    }
                 }
+                $this->log->debug('set value of ' . $fieldName . ' to ' . $values);
                 $model->$accessor($values);
             }
             else {
