@@ -40,10 +40,6 @@ class Remotecontrol_AccountControllerTest extends ControllerTestCase {
 
     private $requestData = array();
 
-    public function setUp() {
-        parent::setUp();
-    }
-
     private function addTestAccountWithRoles() {
 
         // Make sure, the role exists.

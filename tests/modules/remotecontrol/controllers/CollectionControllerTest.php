@@ -37,10 +37,6 @@ class Remotecontrol_CollectionControllerTest extends ControllerTestCase {
 
     private $requestData = array();
 
-    public function setUp() {
-        parent::setUp();
-    }
-
     private function addTestCollection() {
         $this->requestData = array(
                     'role' => 'Collections',

@@ -47,5 +47,3 @@ class Publish_IndexControllerTest extends ControllerTestCase {
     }   
 
 }
-
-?>
