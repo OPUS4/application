@@ -49,7 +49,7 @@ class Review_Model_ClearDocumentsHelper {
         $config = Zend_Registry::get('Zend_Config');
         $moduleConfig = $config->clearing;
 
-        $logger->debug('Clearing documents.');
+        $logger->debug('Clearing documents: ' . implode(", ", $docIds));
 
         foreach ($docIds AS $docId) {
             $document = new Opus_Document( (int) $docId);
