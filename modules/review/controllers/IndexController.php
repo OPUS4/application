@@ -169,49 +169,52 @@ class Review_IndexController extends Controller_Action {
 
         $this->view->actionUrl = $this->view->url(array('action'=>'clear'));
 
+        $useCurrentUser = false;
         if (isset($config->clearing->addCurrentUserAsReferee)) {
             $useCurrentUser = $config->clearing->addCurrentUserAsReferee;
         }
-        else {
-            $useCurrentUser = false;
-        }
 
         if ($useCurrentUser) {
-            $user = new Opus_Account(null, null, $login);
-            $firstName = $user->getFirstName();
-            $lastName = $user->getLastName();
-            $email = $user->getEmail();
+            $this->_logger->debug("useCurrentUser...");
+
+            $loggedUserModel = new Publish_Model_LoggedUser();
+            $person = $loggedUserModel->createPerson();
+
             $helper = new Review_Model_ClearDocumentsHelper();
-            $helper->clear($this->view->selected, $lastName, $firstName, $email);
+            $helper->clear($this->view->selected, $person);
             $this->_redirectTo('index');
+
+            return;
         }
-        else {
-            $this->view->documentCount = count($this->view->selected);
 
-            $firstName = $this->getRequest()->getParam('firstname');
-            $this->view->firstName = $firstName;
+        $this->_logger->debug("not-useCurrentUser...");
 
-            $lastName = $this->getRequest()->getParam('lastname');
-            $this->view->lastName = $lastName;
+        $this->view->documentCount = count($this->view->selected);
+        $this->view->firstName = $this->getRequest()->getParam('firstname');
+        $this->view->lastName = $this->getRequest()->getParam('lastname');
 
-            if ($this->_isButtonPressed('buttonAccept', true, false)) {
-                if (!Zend_Validate::is($firstName, 'NotEmpty')) {
-                    $this->view->error = $this->view->translate(
-                            'review_error_input_missing');
-                }
+        if ($this->_isButtonPressed('buttonAccept', true, false)) {
+            if (!Zend_Validate::is($this->view->firstName, 'NotEmpty')) {
+                $this->view->error = $this->view->translate(
+                                'review_error_input_missing');
+            }
 
-                if (!Zend_Validate::is($lastName, 'NotEmpty')) {
-                    $this->view->error = $this->view->translate(
-                            'review_error_input_missing');
-                }
+            if (!Zend_Validate::is($this->view->lastName, 'NotEmpty')) {
+                $this->view->error = $this->view->translate(
+                                'review_error_input_missing');
+            }
 
-                if (empty($this->view->error)) {
-                    $helper = new Review_Model_ClearDocumentsHelper();
-                    $helper->clear($this->view->selected, $lastName, $firstName);
-                    $this->_redirectTo('index');
-                }
+            if (empty($this->view->error)) {
+                $person = new Opus_Person();
+                $person->setFirstName(trim($this->view->firstName))
+                        ->setLastName(trim($this->view->lastName));
+
+                $helper = new Review_Model_ClearDocumentsHelper();
+                $helper->clear($this->view->selected, $person);
+                $this->_redirectTo('index');
             }
         }
+
     }
 
     /**

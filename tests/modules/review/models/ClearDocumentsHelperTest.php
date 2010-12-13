@@ -33,12 +33,37 @@
 
 class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase {
 
-    public function testClearDocument() {
-        $helper = new Review_Model_ClearDocumentsHelper();
-        
-        $helper->clear(array('105'), 'Doe', 'John');
+    public function setUp() {
+        parent::setUp();
+
+        $document = new Opus_Document(105);
+        $document->setServerState('unpublished');
+        $document->store();
     }
 
-}
+    public function testClearDocument() {
+        $helper = new Review_Model_ClearDocumentsHelper();
 
-?>
+        $person = new Opus_Person();
+        $person->setFirstName('John');
+        $person->setLastName('Doe');
+
+        $helper->clear(array('105'), $person);
+
+        $document = new Opus_Document(105);
+        $this->assertEquals('published', $document->getServerState());
+    }
+
+    public function testRejectDocument() {
+        $helper = new Review_Model_ClearDocumentsHelper();
+
+        $person = new Opus_Person();
+        $person->setFirstName('John');
+        $person->setLastName('Doe');
+
+        $helper->reject(array('105'), $person);
+
+        $document = new Opus_Document(105);
+        $this->assertNotEquals('published', $document->getServerState());
+    }
+}

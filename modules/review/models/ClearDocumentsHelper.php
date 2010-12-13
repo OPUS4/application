@@ -37,62 +37,52 @@
 class Review_Model_ClearDocumentsHelper {
 
     /**
-     * Publishes documents and adds referee.
+     * Publishes documents and adds the given Person as referee.
      *
      * @param array $docIds
-     * @param string $lastName
-     * @param string $firstName
+     * @param Opus_Person $person
      *
-     * FIXME add referee
      * FIXME capture success or failure for display afterwards
      */
-    public function clear($docIds, $lastName = null, $firstName = null, $email = null) {
+    public function clear(array $docIds = null, Opus_Person $person = null) {
         $logger = Zend_Registry::get('Zend_Log');
+        $config = Zend_Registry::get('Zend_Config');
+        $moduleConfig = $config->clearing;
 
         $logger->debug('Clearing documents.');
 
-        foreach ($docIds as $index => $docId) {
+        foreach ($docIds AS $docId) {
             $document = new Opus_Document( (int) $docId);
+            $state = $document->getServerState();
 
-            try {
-                $state = $document->getServerState();
- 
-                if ($state === 'unpublished') {
-                    $logger->debug('Change state to \'published\' for document:' . $docId);
-                    $document->setServerState('published');
+            if ($state !== 'unpublished') {
+                // already published or deleted?
+                $logger->warn('Document ' . $docId . ' already published (at least not in state "unpublished")? Skipping.');
+                continue;
+            }
 
-                    $person = new Opus_Person();
-                    $person->setFirstName($firstName);
-                    $person->setLastName($lastName);
-                    $person->setEmail($email);
-                    $document->addPersonReferee($person);
+            $logger->debug('Change state to \'published\' for document:' . $docId);
+            $document->setServerState('published');
 
-                    $date = new Opus_Date();
-                    $date->setNow();
+            $date = new Opus_Date();
+            $document->setServerDatePublished($date->setNow());
 
-                    $document->setServerDatePublished($date);
-
-                    $config = Zend_Registry::get('Zend_Config');
-
-                    $moduleConfig = $config->clearing;
-
-                    if (isset($moduleConfig)) {
-                        if ($moduleConfig->setPublishedDate) {
-                            $document->setPublishedDate($date);
-                        }
-                    }
-
-                    $document->getCollection(); // FIXME make sure collections are loaded (OPUSVIER-863)
-
-                    $document->store();
-                }
-                else {
-                    // already published or deleted
-                    $logger->warn('Document ' . $docId . ' already published.');
+            if (isset($moduleConfig)) {
+                if ($moduleConfig->setPublishedDate) {
+                    $document->setPublishedDate($date);
                 }
             }
+
+            if (isset($person)) {
+                $document->addPersonReferee($person);
+            }
+
+            try {
+                $document->getCollection(); // FIXME make sure collections are loaded (OPUSVIER-863)
+                $document->store();
+            }
             catch (Exception $e) {
-                $logger->err($e);
+                $logger->err("Saving state of accepted document failed: " . $e);
                 // TODO throw something, show something
             }
 
@@ -100,31 +90,38 @@ class Review_Model_ClearDocumentsHelper {
 
     }
 
-    public function reject($docIds) {
-        foreach ($docIds as $index => $docId) {
+    /**
+     * Rejects documents and adds the given Person as referee.
+     *
+     * @param array $docIds
+     * @param Opus_Person $person
+     *
+     * FIXME capture success or failure for display afterwards
+     */
+    public function reject(array $docIds = null, Opus_Person $person = null) {
+        $logger = Zend_Registry::get('Zend_Log');
+
+        foreach ($docIds AS $docId) {
             $document = new Opus_Document( (int) $docId);
+            $state = $document->getServerState();
+
+            if ($state === 'unpublished') {
+                $logger->warn('Document ' . $docId . ' already published (at least not in state "unpublished")?  Skipping.');
+                continue;
+            }
+
+            if (isset($person)) {
+                $document->addPersonReferee($person);
+            }
 
             try {
-                $state = $document->getServerState();
-
-                if ($state === 'unpublished') {
-                    $document->getCollection(); // FIXME make sure collections are loaded (OPUSVIER-863)
-                    
-                    $document->delete();
-                }
-                else {
-                    // already published or deleted
-                    $logger->warn('Document ' . $docId . ' not in unpublished
-                        state.');
-                }
+                $document->getCollection(); // FIXME make sure collections are loaded (OPUSVIER-863)
+                $document->delete();
             }
             catch (Exception $e) {
-                $logger->err($e);
+                $logger->err("Saving state of rejected document failed: " . $e);
                 // TODO throw something, show something
             }
         }
     }
-
 }
-
-?>
