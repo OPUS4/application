@@ -38,11 +38,15 @@
 //echo $this->form;
 
 $session = new Zend_Session_Namespace('Publish');
+$step = $session->step;
+$countCollections = $session->countCollections;
+$name = 'Collection' . $countCollections;
+                        
 ?>
 
 <h2><?= $this->title ?></h2>
 <div class="content">
-    <h3 class="document-type"><?= $this->subtitle ?></h3>
+    <h3 class="document-type"><?= $this->subtitle ?></h3>   
 
     <?php if (isset($this->errorCaseMessage)) : ?>
         <div class="form-hint form-errors"><p><?= $this->errorCaseMessage; ?></p></div>

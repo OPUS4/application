@@ -41,11 +41,17 @@ class Publish_Form_PublishingThird extends Zend_Form {
 
     public $log;
     public $session;
+    public $specialCollections;
     CONST SIZE = 100;
 
     public function __construct($options=null) {
         $this->log = Zend_Registry::get('Zend_Log');
         $this->session = new Zend_Session_Namespace('Publish');
+
+        //only show special collection for choosing?
+        if (isset($this->session->chooseSpecialCollection) && $this->session->chooseSpecialCollection!="") {
+            $this->specialCollections = explode(", ", $this->session->chooseSpecialCollection);
+        }
 
         parent::__construct($options);
     }
@@ -57,7 +63,13 @@ class Publish_Form_PublishingThird extends Zend_Form {
             // get the root collections
             $top = new Zend_Form_Element_Select('collection1');
             $top->setLabel('choose_collection_role');
-            $options = $this->getCollection();
+
+            if (isset($this->specialCollections)) {
+                $options = $this->getSpecialCollections();
+            }
+            else
+                $options = $this->getCollection();
+
             $top->setMultiOptions($options);
             $this->addElement($top);
         }
@@ -155,6 +167,31 @@ class Publish_Form_PublishingThird extends Zend_Form {
             else
                 return null;
         }
+        return $collections;
+    }
+
+    /**
+     * Method to fetch collections for select options.
+     * @param <type> $oaiName
+     * @param <type> $collectionId
+     * @return array of options
+     */
+    protected function getSpecialCollections() {
+        $collections = array();
+        $roles = array();
+
+        //get top classes of collectin_role
+        foreach ($this->specialCollections as $col) {
+            $this->log->debug("PublishingThird: special collection => " . $col);
+            $roles[] = Opus_CollectionRole::fetchByName($col);
+        }
+
+        foreach ($roles as $role) {
+            if (!is_null($role->getRootCollection())) {
+                $collections[$role->getRootCollection()->getId()] = $role->getDisplayName();
+            }
+        }
+
         return $collections;
     }
 

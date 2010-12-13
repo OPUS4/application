@@ -39,9 +39,9 @@
 <h3 class="document-type" ><?= $this->subtitle?></h3>
 
 <?php
-    $defaultNS = new Zend_Session_Namespace('Publish');
-    $elements = $defaultNS->elements;
-    $form = $defaultNS->depositForm;            
+    $session = new Zend_Session_Namespace('Publish');
+    $elements = $session->elements;
+    $form = $session->depositForm;
    
 ?>
 <div id="form-table-check">
@@ -103,8 +103,10 @@
 </div>
 
 <form enctype="application/x-www-form-urlencoded" action="<?= $this->action_url; ?>" method="post">
+    <?php //$session->chooseSpecialCollection = "institutes, projects"; ?>
     <div class="button-wrapper">
         <?= $this->element('button_label_back', "class='form-button abort-button'", "Submit", "back"); ?>
+        <!--<?= $this->element('button_label_special_collection', "class='form-button add-button'", "Submit", "collection"); ?>-->
         <?= $this->element('button_label_collection', "class='form-button add-button'", "Submit", "collection"); ?>
         <?= $this->element('button_label_send2', "class='form-button submit-button'", "Submit", "send"); ?>
     </div>

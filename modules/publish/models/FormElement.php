@@ -56,6 +56,7 @@ class Publish_Model_FormElement {
     private $validation = array();
     private $group;         //Publish_Model_Group
     private $subFormElements = array();         //array of Zend_Form_Element
+    public $listOptions = array();
 
     //Constants
     const FIRST = "FirstName";
@@ -82,7 +83,7 @@ class Publish_Model_FormElement {
     }
 
     private function initValidation() {
-        $this->validationObject = new Publish_Model_Validation($this->datatype);
+        $this->validationObject = new Publish_Model_Validation($this->datatype, $this->listOptions);
         $this->validationObject->validate();
         $this->validation = $this->validationObject->validator;
     }
@@ -206,7 +207,11 @@ class Publish_Model_FormElement {
                 $element = $this->form->createElement($this->formElement, $this->elementName);
             }
             else {
-                $options = $this->validationObject->selectOptions($this->datatype);
+                if (is_null($this->listOptions))
+                    $options = $this->validationObject->selectOptions($this->datatype);
+                else
+                    $options = $this->listOptions;
+
                 if (is_null($options)) {
                     //no options found in database / session / cache
                     $this->log->debug("No options found for element " . $this->elementName);
@@ -216,7 +221,7 @@ class Publish_Model_FormElement {
                     $this->required = false;
                 }
                 else {
-                    $this->log->debug("Options found for element " . $this->elementName);
+                    $this->log->debug("Options found for element " . $this->elementName . " => " . implode(',', $options));
 
                     $element = $this->showSelectField($options);
                 }
@@ -280,6 +285,9 @@ class Publish_Model_FormElement {
             case 'ThesisPublisher':
                 $element->setMultiOptions(array_merge(array('' => 'choose_valid_thesispublisher'), $options));
                 break;
+            default:
+                $element->setMultiOptions(array_merge(array('' => 'choose_valid_option'), $options));
+                break;
         }
 
         return $element;
@@ -340,6 +348,11 @@ class Publish_Model_FormElement {
         $this->label = $label;
     }
 
+    public function setListOptions($options) {
+        $this->listOptions = $options;
+        $this->initValidation();
+    }
+
     public function getMultiplicity() {
         return $this->multiplicity;
     }
@@ -362,7 +375,8 @@ class Publish_Model_FormElement {
 
     public function setDatatype($datatype) {
         $this->datatype = $datatype;
-        $this->initValidation();
+        if ($this->datatype !== 'List')
+            $this->initValidation();
     }
 
     public function getRequired() {

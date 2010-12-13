@@ -48,9 +48,15 @@ class Publish_Model_Validation {
     public $log;
     public $sessionP;
     public $session;
+    public $listOptions = array();
 
-    public function __construct($datatype) {
-        $this->datatype = $datatype;
+    public function __construct($datatype, $options=null) {
+        if (isset($options) && !empty($options)) {
+            $this->listOptions = $options;
+            $this->datatype = 'List';
+        }
+        else
+            $this->datatype = $datatype;
         $this->log = Zend_Registry::get('Zend_Log');
         $this->sessionP = new Zend_Session_Namespace('Publish');
         $this->session = new Zend_Session_Namespace();
@@ -58,7 +64,7 @@ class Publish_Model_Validation {
 
     public function validate() {
 
-        $this->_datatypeValidation();       
+        $this->_datatypeValidation();
     }
 
     private function _datatypeValidation() {
@@ -91,6 +97,9 @@ class Publish_Model_Validation {
             case 'Licence' : $this->validator = $this->_validateLicence();
                 break;
 
+            case 'List' : $this->validator = $this->_validateList();
+                break;
+
             case 'msc' : $this->validator = $this->_validateMSC();
                 break;
 
@@ -102,7 +111,6 @@ class Publish_Model_Validation {
 
             case 'Text': //$this->validator = $this->_validateText();
                 $this->validator = null;
-
                 break;
 
             case 'ThesisGrantor' : $this->validator = $this->_validateThesis(true);
@@ -124,15 +132,11 @@ class Publish_Model_Validation {
         }
     }
 
-    private function _extendedValidation() {
-        //TODO Extended Validation
-    }
-
     private function _validateDate() {
         $format_de = "DD.MM.YYYY";
         $format_en = "YYYY/MM/DD";
 
-        $lang = $this->session->language;        
+        $lang = $this->session->language;
         $validators = array();
 
         switch ($lang) {
@@ -153,7 +157,7 @@ class Publish_Model_Validation {
         return $validators;
     }
 
-     private function _validateCCS() {
+    private function _validateCCS() {
         $validators = array();
         $validator = new Opus_Validate_SubjectCCS();
         $messages = array(
@@ -238,6 +242,20 @@ class Publish_Model_Validation {
         }
     }
 
+    private function _validateList() {
+        $validators = array();
+        foreach ($this->listOptions as $option)
+            $this->listOptions[$option] = $option;
+
+        $validator = new Zend_Validate_InArray($this->listOptions);
+        $messages = array(
+            Zend_Validate_InArray::NOT_IN_ARRAY => 'publish_validation_error_inarray_notinarray');
+        $validator->setMessages($messages);
+
+        $validators[] = $validator;
+        return $validators;
+    }
+
     private function _validateMSC() {
         $validators = array();
         $validator = new Opus_Validate_SubjectMSC();
@@ -249,7 +267,7 @@ class Publish_Model_Validation {
         return $validators;
     }
 
-     private function _validatePACS() {
+    private function _validatePACS() {
         $validators = array();
         $validator = new Opus_Validate_SubjectPACS();
         $messages = array(
@@ -332,6 +350,9 @@ class Publish_Model_Validation {
                 break;
 
             case 'Licence': return $this->_licenceSelect();
+                break;
+
+            case 'List': return $this->listOptions;
                 break;
 
             case 'Institute' : return $this->_instituteSelect();

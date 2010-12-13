@@ -191,6 +191,15 @@ class Publish_Model_DocumenttypeParser {
                 }
                 $this->currentElement->addSubFormElement($currentSubField->transform());
             }
+
+            $options = array();
+            foreach ($field->getElementsByTagname('option') as $option) {
+                if ($option->hasAttributes()) {
+                    $value = $option->getAttribute('value');
+                    $options[$value] = $value;
+                }
+            }
+            $this->currentElement->setListOptions($options);
         }
         //No Subfields found!
         else

@@ -66,11 +66,12 @@ class Publish_DepositController extends Controller_Action {
             }
             else
             if (array_key_exists('collection', $post)) {
-                //choose collections
+                //choose any collections
                 $this->_forward('top', 'collection');
-            }
-            else {
-
+            }            
+            
+            else {                
+                
                 //deposit data
                 $this->view->title = $this->view->translate('publish_controller_index');
                 $this->view->subtitle = $this->view->translate('publish_controller_deposit_successful');

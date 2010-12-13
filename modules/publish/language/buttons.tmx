@@ -405,6 +405,15 @@
         </tuv>
     </tu>
 
+    <tu tuid="button_label_special_collection">
+        <tuv xml:lang="en">
+            <seg>Select institutes and projects</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Institute und Projekte auswählen</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="button_label_choose_subcollection">
         <tuv xml:lang="en">
             <seg>Select a collection entry</seg>
