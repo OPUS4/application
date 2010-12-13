@@ -112,19 +112,23 @@ class Remotecontrol_CollectionControllerTest extends ControllerTestCase {
         $this->assertContains('SUCCESS', $body);
     }
 
-    public function testCsvActionWithoutArgs() {
+    public function testListCsvActionWithoutArgs() {
+        $this->requireSolrConfig();
+
         $this->request->setMethod('GET');
         $this->dispatch('/remotecontrol/collection/list');
         $this->assertResponseCode(400);
     }
 
-    public function testCsvActionWithMissingArg() {
+    public function testListCsvActionWithMissingArg() {
+        $this->requireSolrConfig();
+
         $this->request->setMethod('GET');
         $this->dispatch('/remotecontrol/collection/list?role=ddc');
         $this->assertResponseCode(400);
     }
 
-    public function testCsvActionWithNonUniqueCollectionName() {
+    public function testListCsvActionWithNonUniqueCollectionName() {
         $this->markTestIncomplete('FIXME: Testdata does not contain non-unique collections.');
     
         $this->request->setMethod('GET');
@@ -132,7 +136,9 @@ class Remotecontrol_CollectionControllerTest extends ControllerTestCase {
         $this->assertResponseCode(501);
     }
 
-    public function testCsvActionForNumber() {
+    public function testListCsvActionForNumber() {
+        $this->requireSolrConfig();
+
         $this->request->setMethod('GET');
         $this->dispatch('/remotecontrol/collection/list?role=ddc&number=521');
         $this->assertResponseCode(200);
