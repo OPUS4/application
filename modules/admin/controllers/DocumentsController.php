@@ -405,32 +405,27 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $sureyes = $this->getRequest()->getPost('sureyes');
         $sureno = $this->getRequest()->getPost('sureno');
 
-        if (isset($sureyes) === true || isset($sureno) === true) {
+        if (isset($sureyes) === true) {
             // publish document
-            if (isset($sureyes) === true) {
-                $doc = new Opus_Document($id);
-                if (false === is_null($doc->getField('ServerDateUnlocking')) and $doc->getServerDateUnlocking() > date('Y-m-d')) {
-                    $this->_redirectTo('index', 'publish_unlocking_date_not_reached');
-                }
-                $doc->setServerState('published');
-        //        $doc->setServerDatePublished(date('Y-m-d'));
-        //        $doc->setServerDatePublished(date('c'));
-                $date = new Zend_Date();
-                $doc->setServerDatePublished($date->get('yyyy-MM-ddThh:mm:ss') . 'Z');
-                $doc->store();
-
-                // add document to index
-                $indexer = new Opus_Search_Index_Solr_Indexer();
-                $indexer->addDocumentToEntryIndex($doc);
-
-                $this->_redirectTo('show', $this->view->translate(
-                        'document_published', $id), 'documents', 'admin',
-                        array('id' => $id));
+            $doc = new Opus_Document($id);
+            if (false === is_null($doc->getField('ServerDateUnlocking')) and $doc->getServerDateUnlocking() > date('Y-m-d')) {
+                $this->_redirectTo('index', 'publish_unlocking_date_not_reached');
             }
-            else {
-                $this->_redirectTo('show', null, 'documents', 'admin',
-                        array('id' => $id));
-            }
+            $doc->setServerState('published');
+            //        $doc->setServerDatePublished(date('Y-m-d'));
+            //        $doc->setServerDatePublished(date('c'));
+            $date = new Zend_Date();
+            $doc->setServerDatePublished($date->get('yyyy-MM-ddThh:mm:ss') . 'Z');
+            $doc->store();
+
+            $message = $this->view->translate('document_published', $id);
+            $this->_redirectTo('show', $message, 'documents', 'admin',
+                    array('id' => $id));
+        }
+        else if (isset($sureno) === true) {
+            $message = null;
+            $this->_redirectTo('show', $message, 'documents', 'admin',
+                    array('id' => $id));
         }
         else {
             // show safety question
@@ -459,24 +454,19 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $sureyes = $this->getRequest()->getPost('sureyes');
         $sureno = $this->getRequest()->getPost('sureno');
 
-        if (isset($sureyes) === true || isset($sureno) === true) {
-            if (isset($sureyes)) {
-                $doc = new Opus_Document($id);
-                $doc->setServerState('unpublished');
-                $doc->store();
+        if (isset($sureyes) === true) {
+            $doc = new Opus_Document($id);
+            $doc->setServerState('unpublished');
+            $doc->store();
 
-                // remove document from to index
-                $indexer = new Opus_Search_Index_Solr_Indexer();
-                $indexer->removeDocumentFromEntryIndex($doc);
-
-                $this->_redirectTo('show', $this->view->translate(
-                        'document_unpublished', $id), 'documents', 'admin',
-                        array('id' => $id));
-            }
-            else {
-                $this->_redirectTo('show', null, 'documents', 'admin',
-                        array('id' => $id));
-            }
+            $message = $this->view->translate('document_unpublished', $id);
+            $this->_redirectTo('show', $message, 'documents', 'admin',
+                    array('id' => $id));
+        }
+        else if (isset($sureno) === true) {
+            $message = null;
+            $this->_redirectTo('show', $message, 'documents', 'admin',
+                    array('id' => $id));
         }
         else {
             // show safety question
@@ -485,6 +475,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             $yesnoForm = $this->_getConfirmationForm($id, 'unpublish');
             $this->view->form = $yesnoForm;
         }
+
     }
 
     /**
