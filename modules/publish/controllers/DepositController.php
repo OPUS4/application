@@ -92,7 +92,7 @@ class Publish_DepositController extends Controller_Action {
                 if (isset($this->postData['send']))
                     unset($this->postData['send']);
 
-                $depositData = new Publish_Model_Deposit($this->session->documentId, $this->session->documentType, $this->postData);
+                $depositData = new Publish_Model_Deposit($this->session->documentId, $this->postData);
                 $document = $depositData->getDocument();
 
                 $projects = $depositData->getDocProjects();

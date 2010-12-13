@@ -38,7 +38,7 @@ class Publish_Model_Deposit {
     public $projects = array();
     public $log;
 
-    public function __construct($documentId = null, $documentType = null, $documentData = null) {
+    public function __construct($documentId = null, $documentData = null) {
 
         $this->log = Zend_Registry::get('Zend_Log');
         $this->document = new Opus_Document($documentId);
