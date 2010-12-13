@@ -233,13 +233,21 @@ class Oai_IndexController extends Controller_Xml {
         $repIdentifier = $this->_configuration->getRepositoryIdentifier();
         $sampleIdentifier = $this->_configuration->getSampleIdentifier();
 
-        $earliestDate = Zend_Date::now()->set(Opus_Document::getEarliestPublicationDate(), Zend_Date::ISO_8601)->get('yyyy-MM-dd');
+        // Set backup date if database query does not return a date.
+        $earliestDate = new Zend_Date('1970-01-01', Zend_Date::ISO_8601);
+
+        $earliestDateFromDb = Opus_Document::getEarliestPublicationDate();
+        if (!is_null($earliestDateFromDb) and trim($earliestDateFromDb) != '') {
+            $earliestDate = new Zend_Date($earliestDateFromDb, Zend_Date::ISO_8601);
+        }
+        $earliestDateIso = $earliestDate->get('yyyy-MM-dd');
+
         // set parameters for oai-pmh.xslt
         $this->_proc->setParameter('', 'emailAddress', $email);
         $this->_proc->setParameter('', 'repName', $repName);
         $this->_proc->setParameter('', 'repIdentifier', $repIdentifier);
         $this->_proc->setParameter('', 'sampleIdentifier', $sampleIdentifier);
-        $this->_proc->setParameter('', 'earliestDate', $earliestDate);
+        $this->_proc->setParameter('', 'earliestDate', $earliestDateIso);
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
     }
 
