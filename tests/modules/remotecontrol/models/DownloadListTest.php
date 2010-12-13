@@ -36,6 +36,7 @@ class Remotecontrol_Model_DownloadListTest extends ControllerTestCase {
 
     public function setUp() {
         parent::setUp();
+        $this->requireSolrConfig();
     }
 
     public function testGetCsvFileForCollectionNumber() {

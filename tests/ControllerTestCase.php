@@ -112,6 +112,14 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         Zend_Auth::getInstance()->clearIdentity();
     }
 
-}
+    /**
+     * Check if Solr-Config is given, otherwise skip the tests.
+     */
+    protected function requireSolrConfig() {
+        $config = Zend_Registry::get('Zend_Config');
+        if (!isset($config->engine)) {
+            $this->markTestSkipped('No solr-config given.  Skipping test.');
+        }
+    }
 
-?>
+}

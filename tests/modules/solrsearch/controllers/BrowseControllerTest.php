@@ -34,6 +34,11 @@
 
 class Solrsearch_BrowseControllerTest extends ControllerTestCase {
 
+    public function setUp() {
+        parent::setUp();
+        $this->requireSolrConfig();
+    }
+
     public function testIndexAction() {
         $this->dispatch('/solrsearch/browse');
         $this->assertResponseCode(200);
@@ -44,4 +49,3 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200);
     }
 }
-?>

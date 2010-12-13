@@ -41,7 +41,7 @@ class Publish_Model_LoggedUserTest extends ControllerTestCase {
     /**
      * This method is called before a test is executed.
      */
-    protected function setUp() {
+    public function setUp() {
         parent::setUp();
         $this->object = new Publish_Model_LoggedUser;
     }
