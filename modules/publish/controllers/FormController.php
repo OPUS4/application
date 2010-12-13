@@ -59,67 +59,71 @@ class Publish_FormController extends Controller_Action {
     public function uploadAction() {
         $this->view->languageSelectorDisabled = true;
 
-        if ($this->getRequest()->isPost() === true) {
-            $indexForm = new Publish_Form_PublishingFirst($this->view);
-
-            $data = $this->getRequest()->getPost();
-
-            if (isset($data['MAX_FILE_SIZE']) && $data['MAX_FILE_SIZE'] != $this->session->maxFileSize) {
-                //manipulated hidden field for file size???
-                $this->log->debug("wrong Max_file_size and redirect to index");
-
-                return $this->_redirectTo('index', '', 'index');
-            }
-
-            if (!$indexForm->isValid($data)) {
-                //error case, and redirect to index, show errors
-                $this->view->form = $indexForm;
-                $this->view->title = $this->view->translate('publish_controller_index');
-                $this->view->subtitle = $this->view->translate('publish_controller_index_sub');
-                $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
-                $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
-                $this->_setFirstFormViewVariables($indexForm);
-
-                return $this->renderScript('index/index.phtml');
-            }
-            else {
-                //form entries are valid
-                $this->_setDocumentParameters($data);
-
-                $this->view->title = $this->view->translate('publish_controller_index');
-                $this->view->subtitle = $this->view->translate($this->session->documentType);
-                $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
-                $this->view->doctype = $this->session->documentType;
-
-                $this->_storeFilesAndBibliographie($data, $indexForm);
-
-                //upload another file?
-                if (array_key_exists('addAnotherFile', $data)) {
-                    $this->session->first = false;
-                    $this->view->title = $this->view->translate('publish_controller_index');
-                    $this->view->subtitle = $this->view->translate('publish_controller_index_anotherFile');
-                    $this->view->form = $indexForm;
-                    $this->_setFirstFormViewVariables($indexForm);
-
-                    return $this->renderScript('index/index.phtml');
-                }
-
-                unset($this->session->first);
-                $templateName = $this->_helper->documentTypes->getTemplateName($this->session->documentType);
-                $this->_helper->viewRenderer($templateName);
-
-                $publishForm = new Publish_Form_PublishingSecond($this->session->documentType, $this->session->documentId, $this->session->fulltext, $this->session->additionalFields, null);
-                $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check')) . '#current';
-                $publishForm->setAction($action_url);
-                $publishForm->setMethod('post');
-                $this->_setSecondFormViewVariables($publishForm);
-                $this->view->action_url = $action_url;
-                $this->view->form = $publishForm;
-            }
-        }
-        else {
+        if ($this->getRequest()->isPost() === false) {
             return $this->_redirectTo('index', '', 'index');
         }
+
+        $indexForm = new Publish_Form_PublishingFirst($this->view);
+
+        $data = $this->getRequest()->getPost();
+
+        if (isset($data['MAX_FILE_SIZE']) && $data['MAX_FILE_SIZE'] != $this->session->maxFileSize) {
+            //manipulated hidden field for file size???
+            $this->log->debug("wrong Max_file_size and redirect to index");
+
+            return $this->_redirectTo('index', '', 'index');
+        }
+
+        if (!$indexForm->isValid($data)) {
+            //error case, and redirect to index, show errors
+            $this->view->form = $indexForm;
+            $this->view->title = $this->view->translate('publish_controller_index');
+            $this->view->subtitle = $this->view->translate('publish_controller_index_sub');
+            $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
+            $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
+            $this->_setFirstFormViewVariables($indexForm);
+
+            return $this->renderScript('index/index.phtml');
+        }
+
+        //form entries are valid
+        $this->_setDocumentParameters($data);
+
+        $this->view->title = $this->view->translate('publish_controller_index');
+        $this->view->subtitle = $this->view->translate($this->session->documentType);
+        $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
+        $this->view->doctype = $this->session->documentType;
+
+        $this->_initializeDocument();
+        $this->_storeFilesAndBibliographie($data, $indexForm);
+        $this->_storePersonSubmitter();
+
+        $this->session->documentId = $this->session->document->store();
+        $this->log->info("The corresponding doucment ID is: " . $this->session->documentId);
+
+        //upload another file?
+        if (array_key_exists('addAnotherFile', $data)) {
+            $this->session->first = false;
+            $this->view->title = $this->view->translate('publish_controller_index');
+            $this->view->subtitle = $this->view->translate('publish_controller_index_anotherFile');
+            $this->view->form = $indexForm;
+            $this->_setFirstFormViewVariables($indexForm);
+
+            return $this->renderScript('index/index.phtml');
+        }
+
+        unset($this->session->first);
+        $templateName = $this->_helper->documentTypes->getTemplateName($this->session->documentType);
+        $this->_helper->viewRenderer($templateName);
+
+        $publishForm = new Publish_Form_PublishingSecond($this->session->documentType, $this->session->documentId, $this->session->fulltext, $this->session->additionalFields, null);
+        $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check')) . '#current';
+        $publishForm->setAction($action_url);
+        $publishForm->setMethod('post');
+        $this->_setSecondFormViewVariables($publishForm);
+        $this->view->action_url = $action_url;
+        $this->view->form = $publishForm;
+
     }
 
     /**
@@ -406,17 +410,32 @@ class Publish_FormController extends Controller_Action {
     /**
      * Method stores th uploaded files
      */
-    private function _storeFilesAndBibliographie($data, $form) {
+    private function _initializeDocument() {
         if ($this->session->documentId !== "") {
             $this->log->debug("documentID not empty: " . $this->session->documentId);
             $this->session->document = new Opus_Document($this->session->documentId);
         }
-        else
+        else {
             $this->session->document = new Opus_Document();
+        }
 
         $this->session->document->setType($this->session->documentType);
         $this->session->document->setServerState('temporary');
+    }
 
+    /**
+     * Method stores th uploaded files
+     */
+    private function _storePersonSubmitter() {
+        $loggedUserModel = new Publish_Model_LoggedUser();
+        $person = $loggedUserModel->createPerson();
+        $this->session->document->addPersonSubmitter($person);
+    }
+
+    /**
+     * Method stores th uploaded files
+     */
+    private function _storeFilesAndBibliographie($data, $form) {
         $upload = new Zend_File_Transfer_Adapter_Http();
         $files = $upload->getFileInfo();
         $upload_count = 0;
@@ -454,13 +473,6 @@ class Publish_FormController extends Controller_Action {
             //store the document internal field BelongsToBibliography
             $this->session->document->setBelongsToBibliography(1);
         }
-
-        if ($this->session->documentId === "") {
-            $this->session->documentId = $this->session->document->store();
-        }
-        $this->session->document->store();
-
-        $this->log->info("The corresponding doucment ID is: " . $this->session->documentId);
     }
 
     /**
