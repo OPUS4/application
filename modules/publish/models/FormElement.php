@@ -207,7 +207,7 @@ class Publish_Model_FormElement {
                 $element = $this->form->createElement($this->formElement, $this->elementName);
             }
             else {
-                if (is_null($this->listOptions))
+                if (is_null($this->listOptions) || empty($this->listOptions))
                     $options = $this->validationObject->selectOptions($this->datatype);
                 else
                     $options = $this->listOptions;
