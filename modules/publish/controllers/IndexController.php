@@ -78,6 +78,8 @@ class Publish_IndexController extends Controller_Action {
         $this->session->documentId = "";
         $this->session->fullText = 0;
         $this->session->chooseSpecialCollection = "";
+        $this->session->countCollections = 1;
+        $this->session->collectionHistory = array();
     }
 
     /**

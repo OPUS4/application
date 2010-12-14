@@ -38,15 +38,25 @@
 //echo $this->form;
 
 $session = new Zend_Session_Namespace('Publish');
-$step = $session->step;
-$countCollections = $session->countCollections;
-$name = 'Collection' . $countCollections;
-                        
+$colls = $session->collectionHistory;
 ?>
 
 <h2><?= $this->title ?></h2>
 <div class="content">
-    <h3 class="document-type"><?= $this->subtitle ?></h3>   
+    <h3 class="document-type"><?= $this->subtitle ?></h3>
+
+    <?php if (count($colls)>= 1) : ?>
+    <?php echo $this->translate('collections_choosen'); ?>
+        <div class="form-hint">
+            <p>
+                <ul>
+            <?php for ($k=1; $k<count($colls); $k++) { ?>
+                <li><?php echo $this->translate($colls[$k]['root']); ?> => <?php echo $colls[$k]['leaf']; ?></li>
+            <?php } ?>
+                </ul>
+            </p>
+        </div>
+    <?php endif; ?>
 
     <?php if (isset($this->errorCaseMessage)) : ?>
         <div class="form-hint form-errors"><p><?= $this->errorCaseMessage; ?></p></div>
@@ -55,9 +65,9 @@ $name = 'Collection' . $countCollections;
         <form enctype="multipart/form-data" action="<?= $this->action_url; ?>" method="post">
 
             <div class="form-items-wrapper">
-            <?= $this->element($this->collection1); ?>
-            
-            <div class="button-wrapper">
+                <?= $this->element($this->collection1); ?>
+
+             <div class="button-wrapper">
                 <?= $this->element('button_label_choose_subcollection', "class='form-button down-button'", "Submit", "goToSubCollection"); ?>
                 <?= $this->element('button_label_send', "class='form-button submit-button'", "Submit", "send"); ?>
             </div>

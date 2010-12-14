@@ -101,6 +101,12 @@ class Publish_Form_PublishingThird extends Zend_Form {
                         $this->session->elements[$name]['name'] = $name;
                         $this->session->elements[$name]['value'] = $this->session->collection['collection' . $j];
                         $this->session->elements[$name]['label'] = 'collection';
+
+                        //show history in collection choosing process
+                        $number = $this->session->countCollections;
+                        $this->session->collectionHistory[$number]['root'] = $this->getCollectionName($collectionId, true);
+                        $this->session->collectionHistory[$number]['leaf'] = $this->getCollectionName($collectionId);
+
                         $this->log->debug('Collection stored in session!');
                     }
                 }
@@ -198,14 +204,19 @@ class Publish_Form_PublishingThird extends Zend_Form {
     /**
      * Method to find oput the name for a collection id.
      * @param <Int> $collectionId
+     * @param <Boolean> $root if true, the root collection (role name) is returned
      * @return <String> name for collection id
      */
-    protected function getCollectionName($collectionId = null) {
+    protected function getCollectionName($collectionId = null, $root=false) {
         if (isset($collectionId)) {
-            $collection = new Opus_Collection($collectionId);
-            $name = $collection->getDisplayName();
-            if (empty($name)) {
-
+            if (!$root) {
+                $collection = new Opus_Collection($collectionId);
+                $name = $collection->getDisplayName();
+                if (empty($name))
+                    $name = $collection->getRoleName();
+            }
+            else {
+                $collection = new Opus_Collection($collectionId);
                 $name = $collection->getRoleName();
             }
             return $name;

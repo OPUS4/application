@@ -468,5 +468,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="collections_choosen">
+      <tuv xml:lang="en">
+        <seg>You have already choosen the following collections:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sie haben bisher folgende Sammlungen ausgewählt:</seg>
+      </tuv>
+    </tu>
+
+
   </body>  
 </tmx>
