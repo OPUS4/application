@@ -512,7 +512,8 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
         $guest_role = Opus_Role::fetchByName('guest');
         $guest_role->setPrivilege(array());
         $publish_privilege = $guest_role->addPrivilege();
-        $publish_privilege->setPrivilege('remotecontrol');
+        $publish_privilege->setPrivilege('readMetadata');
+        $publish_privilege->setDocumentServerState('published');
         $guest_role->store();
 
         $reviewer_role = Opus_Role::fetchByName('reviewer');
