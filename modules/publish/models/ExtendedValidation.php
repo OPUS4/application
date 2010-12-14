@@ -68,7 +68,9 @@ class Publish_Model_ExtendedValidation {
 
         $validTitles = $this->_validateTitles();
 
-        if ($validPersons && $validTitles)
+        $validCheckboxes = $this->_validateCheckboxes();
+
+        if ($validPersons && $validTitles && $validCheckboxes)
             return true;
         else
             return false;
@@ -142,7 +144,7 @@ class Publish_Model_ExtendedValidation {
 
                 if ($this->data[$lastName] != "" || $this->data[$lastName] != "") {
                     //just check the email if first or last name is given
-                    
+
                     if ($this->data[$emailKey] == "" || $this->data[$emailKey] == null) {
                         //error case: Email Check exists but Email not
                         $element = $this->form->getElement($emailKey);
@@ -155,8 +157,8 @@ class Publish_Model_ExtendedValidation {
                     }
                 }
                 else {
-                   $this->data[$key] = "";
-                   $this->data[$titleName] = "";
+                    $this->data[$key] = "";
+                    $this->data[$titleName] = "";
                 }
             }
         }
@@ -366,6 +368,34 @@ class Publish_Model_ExtendedValidation {
         }
 
         return $titles;
+    }
+
+    private function _validateCheckboxes() {
+        $validCheckboxes = true;
+        $checkBoxes = $this->_getRequiredCheckboxes();
+
+        foreach ($checkBoxes AS $box) {
+            if ($this->data[$box] === '0') {
+                $this->log->debug("(Validation): error for element " . $box);
+                $element = $this->form->getElement($box);
+                $element->clearErrorMessages();
+                $element->addError('publish_error_rights_checkbox_empty');
+                $validCheckboxes = false;
+            }
+        }
+
+        return $validCheckboxes;
+    }
+
+    private function _getRequiredCheckboxes() {
+        $boxes = array();
+
+        foreach ($this->form->getElements() as $element) {
+            if ($element->getType() === 'Zend_Form_Element_Checkbox' && $element->isRequired())
+                $boxes[] = $element->getName();
+        }
+
+        return $boxes;
     }
 
 }

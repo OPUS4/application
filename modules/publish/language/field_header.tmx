@@ -37,7 +37,16 @@
 
     <tu tuid="header_rights">
       <tuv xml:lang="en">
+        <seg>Granting a simple right of use</seg>
+      </tuv>
+      <tuv xml:lang="de">
         <seg>Einräumnung eines einfachen Nutzungsrechts</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_EnrichmentLegalNotices">
+      <tuv xml:lang="en">
+        <seg>Granting a simple right of use</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Einräumnung eines einfachen Nutzungsrechts</seg>

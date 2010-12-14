@@ -9,7 +9,16 @@
 
     <tu tuid="rights">
       <tuv xml:lang="en">
+        <seg>I have read these legal notices and agree to them.</seg>
+      </tuv>
+      <tuv xml:lang="de">
         <seg>Ich habe diese rechtlichen Hinweise gelesen und bin damit einverstanden.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="EnrichmentLegalNotices">
+      <tuv xml:lang="en">
+        <seg>I have read these legal notices and agree to them.</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Ich habe diese rechtlichen Hinweise gelesen und bin damit einverstanden.</seg>

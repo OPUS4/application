@@ -249,6 +249,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="choose_valid_option">
+      <tuv xml:lang="en">
+        <seg>Please choose something</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie etwas aus</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="choose_valid_doctype">
       <tuv xml:lang="en">
         <seg>Please choose a document type.</seg>
