@@ -66,6 +66,8 @@
         <option value="fallo" />
     </field>
 
+    <field name="LegalNotices" required="yes" formelement="checkbox" multiplicity="1" datatype="Enrichment" />
+
     <field name="PersonAuthor" required="no" formelement="text" datatype="Person" multiplicity="*">
         <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" >
             <default value="Dr." edit="yes" public="yes"  />
