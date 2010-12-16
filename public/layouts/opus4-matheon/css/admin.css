@@ -90,9 +90,10 @@
     font-weight: normal;
     font-size: 1.7em;
     margin-bottom: 0.5em;
+    clear: both;
 }
 
-.adminContainer span.label {
+.adminContainer div span.label {
     display: table-cell;
     width: 15em;
     padding: 2px;
@@ -101,7 +102,7 @@
     background-color: lightgray;
 }
 
-.adminContainer span.value {
+.adminContainer div span.value {
     display: table-cell;
     text-align: left;
     padding: 2px;
@@ -109,6 +110,26 @@
     border-bottom: 2px solid white;
     background-color: #eeeeee;
     width: 50em;
+}
+
+.adminContainer div span.value div span.label {
+    width: 10em;
+    border-bottom: 1px solid white;
+}
+
+.adminContainer div span.value div span.value {
+    width: 38em;
+    border-bottom: 1px solid white;
+}
+
+.adminContainer div span.value div:last-child span.label {
+    width: 10em;
+    border-bottom: none;
+}
+
+.adminContainer div span.value div:last-child span.value {
+    width: 38em;
+    border-bottom: none;
 }
 
 .adminContainer ul.sortingNavigation {
@@ -179,7 +200,7 @@
 }
 
 .adminContainer .docstateMenu span.active {
-    font-weight: bold;
+    /* font-weight: bold; */
 }
 
 .adminContainer .docstateMenu a {
@@ -227,6 +248,11 @@
 .adminContainer #upload-form {
     background-color: #f3f6f8;
     padding: 0.5em 2em;
+}
+
+.adminContainer fieldset {
+    margin: 1em 1em;
+    background: #f3f6f8;
 }
 
 .adminContainer fieldset.file {
@@ -293,4 +319,9 @@
 
 .adminContainer table.collections {
     margin: 2em 0;
+}
+
+.adminContainer #showdocmenu a {
+    padding: 0.2em 0.5em;
+    margin-right: 0.5em;
 }
