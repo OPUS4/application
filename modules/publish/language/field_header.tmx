@@ -345,10 +345,10 @@
 
     <tu tuid="header_Institute">
       <tuv xml:lang="en">
-        <seg>Instiute</seg>
+        <seg>Institute</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Instiut</seg>
+        <seg>Institut</seg>
       </tuv>
     </tu>
 
