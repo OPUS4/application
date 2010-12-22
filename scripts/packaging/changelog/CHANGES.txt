@@ -1,10 +1,10 @@
 h1. OPUS 4 Change Log
 
-h2. ======================== Release 4.0.2 2010-12-23 ========================
+h2. ======================== Release 4.0.2 2010-12-22 ========================
 
 h3. Änderungen
 
-* Erfassung von Änderungen in CHANGES.txt in TARball
+* Erfassung von Änderungen in CHANGES.txt in Tarball
 
 h3. Behobene Fehler
 
