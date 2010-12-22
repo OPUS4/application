@@ -1,19 +1,39 @@
-OPUS 4 Change Log
+h1. OPUS 4 Change Log
 
-======================= Release 4.0.1 2010-11-26 =======================
+h2. ======================== Release 4.0.2 2010-12-23 ========================
 
-1. Layout/CSS Änderungen
+h3. Änderungen
 
-2. Opus3-Import
+* Erfassung von Änderungen in CHANGES.txt in TARball
 
-3. Migration OPUS 3.x
+h3. Behobene Fehler
 
-4. Fehlende Übersetzungseinträge wurden hinzugefügt
+* Fehler behoben, der dafür sorgte, daß beim Freischalten bzw. Ablehnen
+eines Dokumentes die Zuordnung dieses Dokumentes zu Collections verloren ging.
+Issue #OPUSVIER-863 - Beim hochladen von Dateien gehen die zugeordneten
+Collections verloren
 
-5. Korrekte Validierung von Passwörtern in Eingabeformularen im Account 
+* Für 'PageFirst', 'PageLast' und 'PageNumber' eine spezielle Behandlung in den
+FormBuilder eingebaut, die bei leeren Eingabefeldern, diese Werte auf 'null'
+setzt, um zu verhindern, das einmal gesetzte Felder auch nach dem entfernen der
+Werte in der Frontdoor mit dem Wert '0' auftauchen.
+Issue #OPUSVIER-924 - Nach dem Löschen von Seiten Einträgen im
+Metadaten-Formular erscheint '0' als Wert
+
+h2. ======================== Release 4.0.1 2010-11-26 ========================
+
+* Layout/CSS Änderungen
+
+* Opus3-Import
+
+* Migration OPUS 3.x
+
+* Fehlende Übersetzungseinträge wurden hinzugefügt
+
+* Korrekte Validierung von Passwörtern in Eingabeformularen im Account
 und im Admin Modul
 
-6. FormBuilder geändert um bei uninitialisierten Modelinstancen 
+* FormBuilder geändert um bei uninitialisierten Modelinstancen
 Exceptions zu verhindern
 
 
