@@ -95,7 +95,8 @@ class Publish_FormController extends Controller_Action {
         $this->view->doctype = $this->session->documentType;
 
         $this->_initializeDocument();
-        $this->_storeFilesAndBibliographie($data);
+        $this->_storeUploadedFiles();
+        $this->_storeBibliography($data);
         $this->_storePersonSubmitter();
 
         $this->session->documentId = $this->session->document->store();
@@ -433,9 +434,9 @@ class Publish_FormController extends Controller_Action {
     }
 
     /**
-     * Method stores th uploaded files
+     * Method stores the uploaded files
      */
-    private function _storeFilesAndBibliographie($data) {
+    private function _storeUploadedFiles() {
         $upload = new Zend_File_Transfer_Adapter_Http();
         $files = $upload->getFileInfo();
         $upload_count = 0;
@@ -448,26 +449,31 @@ class Publish_FormController extends Controller_Action {
 
         $this->log->info("Fileupload of: " . count($files) . " potential files (vs. $upload_count really uploaded)");
 
-        if ($upload_count >= 1) {
-            $this->log->debug("File uploaded!!!");
-            $this->session->fulltext = '1';
-
-            foreach ($files AS $file => $fileValues) {
-                if (!empty($fileValues['name'])) {
-                    $this->session->publishFiles[] = $fileValues['name'];
-                    $this->log->info("uploaded: " . $fileValues['name']);
-                    $docfile = $this->session->document->addFile();
-                    //file always requires a language, this value is later overwritten by the exact language
-                    $docfile->setLanguage("eng");
-                    $docfile->setFromPost($fileValues);
-                }
-            }
-        }
-        else {
+        if ($upload_count < 1) {
             $this->log->debug("NO File uploaded!!!");
             $this->session->fulltext = '0';
+            return;
         }
 
+        $this->log->debug("File uploaded!!!");
+        $this->session->fulltext = '1';
+
+        foreach ($files AS $file => $fileValues) {
+            if (!empty($fileValues['name'])) {
+                $this->session->publishFiles[] = $fileValues['name'];
+                $this->log->info("uploaded: " . $fileValues['name']);
+                $docfile = $this->session->document->addFile();
+                //file always requires a language, this value is later overwritten by the exact language
+                $docfile->setLanguage("eng");
+                $docfile->setFromPost($fileValues);
+            }
+        }
+    }
+
+    /**
+     * Method stores the uploaded files
+     */
+    private function _storeBibliography($data) {
         if (isset($data['bibliographie']) && $data['bibliographie'] === '1') {
             $this->log->debug("Bibliographie is set -> store it!");
             //store the document internal field BelongsToBibliography
