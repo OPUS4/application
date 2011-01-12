@@ -45,7 +45,7 @@ class Publish_Model_Deposit {
         $this->documentData = $documentData;
 
         if ($this->document->getServerState() !== 'temporary') {
-            $this->log->error('Could not find document: Tried to return document, which is not in state "temporary"');
+            $this->log->err('Could not find document: Tried to return document, which is not in state "temporary"');
             throw new Publish_Model_OpusServerException('Could not find document.');
         }
 
