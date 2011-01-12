@@ -150,7 +150,9 @@ class Publish_FormController extends Controller_Action {
             }
 
             //initialize the form object
+            $this->log->debug("(first) new form for documenttype: " .  $this->session->documentType . "... ");
             $form = new Publish_Form_PublishingSecond($this->session->documentType, $this->session->documentId, $this->session->fulltext, $this->session->additionalFields, $postData);
+            $this->log->debug("(first) new form for documenttype: " .  $this->session->documentType . "... done.");
 
             if (!$form->send->isChecked() || array_key_exists('back', $postData)) {
                 // A button (not SEND) was pressed => add / remove fields
@@ -189,7 +191,10 @@ class Publish_FormController extends Controller_Action {
                     $this->view->subtitle = $this->view->translate('publish_controller_check2');
                     $this->view->header = $this->view->translate('publish_controller_changes');
 
+                    $this->log->debug("(second) new form for documenttype: " .  $this->session->documentType . "... ");
                     $depositForm = new Publish_Form_PublishingSecond($this->session->documentType, $this->session->documentId, $this->session->fulltext, $this->session->additionalFields, $form->getValues());
+                    $this->log->debug("(second) new form for documenttype: " .  $this->session->documentType . "... done.");
+
                     $action_url = $this->view->url(array('controller' => 'deposit', 'action' => 'deposit'));
                     $depositForm->setAction($action_url);
                     $depositForm->setMethod('post');
