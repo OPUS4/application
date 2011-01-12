@@ -97,7 +97,6 @@ class Publish_FormController extends Controller_Action {
         $this->_initializeDocument();
         $this->_storeUploadedFiles();
         $this->_storeBibliography($data);
-        $this->_storePersonSubmitter();
 
         $this->session->documentId = $this->session->document->store();
         $this->log->info("The corresponding doucment ID is: " . $this->session->documentId);
@@ -422,15 +421,6 @@ class Publish_FormController extends Controller_Action {
 
         $this->session->document->setType($this->session->documentType);
         $this->session->document->setServerState('temporary');
-    }
-
-    /**
-     * Method stores th uploaded files
-     */
-    private function _storePersonSubmitter() {
-        $loggedUserModel = new Publish_Model_LoggedUser();
-        $person = $loggedUserModel->createPerson();
-        $this->session->document->addPersonSubmitter($person);
     }
 
     /**
