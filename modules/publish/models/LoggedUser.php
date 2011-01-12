@@ -41,6 +41,10 @@ class Publish_Model_LoggedUser {
         $this->_account = new Opus_Account(null, null, $this->_login);
     }
 
+    public function getUserId() {
+        return $this->_account->getId();
+    }
+
     public function createPerson() {
         $person = new Opus_Person();
 

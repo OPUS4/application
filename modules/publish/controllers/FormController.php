@@ -97,6 +97,7 @@ class Publish_FormController extends Controller_Action {
         $this->_initializeDocument();
         $this->_storeUploadedFiles();
         $this->_storeBibliography($data);
+        $this->_storeSubmitterEnrichment();
 
         $this->session->documentId = $this->session->document->store();
         $this->log->info("The corresponding doucment ID is: " . $this->session->documentId);
@@ -421,6 +422,17 @@ class Publish_FormController extends Controller_Action {
 
         $this->session->document->setType($this->session->documentType);
         $this->session->document->setServerState('temporary');
+    }
+
+    /**
+     * Method stores th uploaded files
+     */
+    private function _storeSubmitterEnrichment() {
+        $loggedUserModel = new Publish_Model_LoggedUser();
+
+        $enrichment = $this->session->document->addEnrichment();
+        $enrichment->setKeyName('submitter.user_id');
+        $enrichment->setValue($loggedUserModel->getUserId());
     }
 
     /**
