@@ -438,7 +438,7 @@ class Publish_FormController extends Controller_Action {
 
         $enrichment = $this->session->document->addEnrichment();
         $enrichment->setKeyName('submitter.user_id');
-        $enrichment->setValue();
+        $enrichment->setValue($userId);
     }
 
     /**
