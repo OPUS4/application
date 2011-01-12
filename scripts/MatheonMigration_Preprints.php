@@ -523,8 +523,8 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             $account->setLogin(trim($user['email_address']));
             $account->setPasswordDirectly(trim($user['passcode']));
             $account->setEmail(trim($user['email_address']));
-            $account->setFirstName(trim($user['last_name']));
-            $account->setLastName(trim($user['first_name']));
+            $account->setFirstName(trim($user['first_name']));
+            $account->setLastName(trim($user['last_name']));
 
             if ($user['referee'] || trim($user['last_name']) == 'Kunz') {
                 $account->addRole( $reviewer_role );
