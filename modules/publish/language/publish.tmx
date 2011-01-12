@@ -331,21 +331,21 @@
       </tuv>
     </tu>
 
-    <tu tuid="success_redirect">
+    <tu tuid="publish_success">
       <tuv xml:lang="en">
-        <seg>Your document was successfully stored. The Document ID is %1$s.</seg>
+        <seg>Document %1$s was successfully published.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Das Dokument wurde erfolgreich gespeichert. Die Dokument ID lautet %1$s.</seg>
+        <seg>Dokument %1$s wurde erfolgreich gespeichert.</seg>
       </tuv>
     </tu>
 
-    <tu tuid="success_redirect_with_link">
+    <tu tuid="publish_success_frontdoor">
       <tuv xml:lang="en">
-        <seg>Your document was successfully stored. The Document ID is <a href="%1$s" style="text-decoration: none">%2$s</a>.</seg>
+        <seg>View document.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Das Dokument wurde erfolgreich gespeichert. Die Dokument ID lautet <a href="%1$s" style="text-decoration: none">%2$s</a>.</seg>
+        <seg>Dokument betrachten.</seg>
       </tuv>
     </tu>
 

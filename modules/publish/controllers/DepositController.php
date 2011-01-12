@@ -129,22 +129,12 @@ class Publish_DepositController extends Controller_Action {
                 $this->log->debug("sending email (body):    \n:$message\n-- end email.");
                 $this->__scheduleNotification($subject, $message, $projects);
 
-                // Redirect to publish start page and print message
-                $docUrl = $this->view->url(array(
-                            'module' => 'frontdoor',
-                            'controller' => 'index',
-                            'action' => 'index',
-                            'docId' => $docId));
                 if (true !== Opus_Security_Realm::getInstance()->check('clearance')) {
-                    $message = $this->view->translate('success_redirect',
-                            $docId);
+                    $this->view->showFrontdoor = true;
                 }
-                else {
-                    $message = $this->view->translate(
-                            'success_redirect_with_link', $docUrl, $docId);
-                }
-                return $this->_redirectToAndExit('index', $message, 'index',
-                        'publish');
+
+                $this->view->docId = $docId;
+                return $this->render('confirm');
             }
         }
         else {
