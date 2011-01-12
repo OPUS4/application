@@ -429,10 +429,16 @@ class Publish_FormController extends Controller_Action {
      */
     private function _storeSubmitterEnrichment() {
         $loggedUserModel = new Publish_Model_LoggedUser();
+        $userId = trim($loggedUserModel->getUserId());
+
+        if (empty($userId)) {
+            $this->log->debug("submitter->userId is empty; skipping enrichment.");
+            return;
+        }
 
         $enrichment = $this->session->document->addEnrichment();
         $enrichment->setKeyName('submitter.user_id');
-        $enrichment->setValue($loggedUserModel->getUserId());
+        $enrichment->setValue();
     }
 
     /**
