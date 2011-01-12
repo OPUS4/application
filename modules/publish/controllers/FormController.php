@@ -95,7 +95,7 @@ class Publish_FormController extends Controller_Action {
         $this->view->doctype = $this->session->documentType;
 
         $this->_initializeDocument();
-        $this->_storeFilesAndBibliographie($data, $indexForm);
+        $this->_storeFilesAndBibliographie($data);
         $this->_storePersonSubmitter();
 
         $this->session->documentId = $this->session->document->store();
@@ -435,7 +435,7 @@ class Publish_FormController extends Controller_Action {
     /**
      * Method stores th uploaded files
      */
-    private function _storeFilesAndBibliographie($data, $form) {
+    private function _storeFilesAndBibliographie($data) {
         $upload = new Zend_File_Transfer_Adapter_Http();
         $files = $upload->getFileInfo();
         $upload_count = 0;
