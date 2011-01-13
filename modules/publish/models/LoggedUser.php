@@ -59,6 +59,12 @@ class Publish_Model_LoggedUser {
         return isset($this->_account) ? $this->_account->getId() : null;
     }
 
+    /**
+     * Create Opus_Person object for currently logged user.  If no account
+     * has been found, return NULL.
+     *
+     * @return Opus_Person
+     */
     public function createPerson() {
         if (is_null($this->_account)) {
             return;
