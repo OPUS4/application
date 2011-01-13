@@ -432,13 +432,13 @@ class Publish_FormController extends Controller_Action {
         $userId = trim($loggedUserModel->getUserId());
 
         if (empty($userId)) {
-            $this->log->debug("submitter->userId is empty; skipping enrichment.");
+            $this->log->debug("No user logged in.  Skipping enrichment.");
             return;
         }
 
-        $enrichment = $this->session->document->addEnrichment();
-        $enrichment->setKeyName('submitter.user_id');
-        $enrichment->setValue($userId);
+        $this->session->document->addEnrichment()
+            ->setKeyName('submitter.user_id')
+            ->setValue($userId);
     }
 
     /**
