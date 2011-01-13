@@ -33,38 +33,46 @@
  */
 class Publish_Model_LoggedUser {
     
+    private $_log     = null;
     private $_login   = null;
     private $_account = null;
 
     public function __construct() {
-        $this->_login   = Zend_Auth::getInstance()->getIdentity();
-        $this->_account = new Opus_Account(null, null, $this->_login);
+        $this->_log = Zend_Registry::get("Zend_Log");
 
-        $log = Zend_Registry::get("Zend_Log");
-        if ($this->_account->isNewRecord()) {
-            $message = "Error checking logged user.";
-            $log->err("$message (Returned account object for user '" . $this->_login . "' isNewRecord(), but must not!)");
-            throw new Application_Exception($message);
+        $login = Zend_Auth::getInstance()->getIdentity();
+        if (is_null($login) or trim($login) == '') {
+            return;
         }
+
+        $account = Opus_Account::fetchAccountByLogin($login);
+        if (is_null($account) or $account->isNewRecord()) {
+            $this->_log->err("Error checking logged user: Invalid account returned for user '$login'!");
+            return;
+        }
+
+        $this->_login   = $login;
+        $this->_account = $account;
     }
 
     public function getUserId() {
-        return $this->_account->getId();
+        return isset($this->_account) ? $this->_account->getId() : null;
     }
 
     public function createPerson() {
-        $person = new Opus_Person();
+        if (is_null($this->_account)) {
+            return;
+        }
 
+        $person = new Opus_Person();
         $person->setFirstName(trim($this->_account->getFirstName()));
         $person->setLastName(trim($this->_account->getLastName()));
         $person->setEmail(trim($this->_account->getEmail()));
 
         if (!$person->isValid()) {
-            $log = Zend_Registry::get("Zend_Log");
-            $log->err("Could not create valid person object for user '" . $this->_login . "'. ");
+            $this->_log->err("Created Opus_Person object for user '" . $this->_login . "' is NOT VALID. ");
         }
 
         return $person;
     }
-
 }
