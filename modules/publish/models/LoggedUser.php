@@ -55,24 +55,13 @@ class Publish_Model_LoggedUser {
     public function createPerson() {
         $person = new Opus_Person();
 
-        // Setting first name.
-        $firstName = trim($this->_account->getFirstName());
-        if (!isset($firstName) or empty($firstName)) {
-            $firstName = '-empty-';
-        }
-        $person->setFirstName($firstName);
+        $person->setFirstName(trim($this->_account->getFirstName()));
+        $person->setLastName(trim($this->_account->getLastName()));
+        $person->setEmail(trim($this->_account->getEmail()));
 
-        // Setting last name.
-        $lastName = trim($this->_account->getLastName());
-        if (!isset($lastName) or empty($lastName)) {
-            $lastName = "(Opus4 user: " . $this->_login . ")";
-        }
-        $person->setLastName($lastName);
-
-        // Setting email (if given)
-        $email = trim($this->_account->getEmail());
-        if (isset($email) and !empty($email)) {
-            $person->setEmail($email);
+        if (!$person->isValid()) {
+            $log = Zend_Registry::get("Zend_Log");
+            $log->err("Could not create valid person object for user '" . $this->_login . "'. ");
         }
 
         return $person;
