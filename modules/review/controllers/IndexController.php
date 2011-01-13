@@ -180,6 +180,12 @@ class Review_IndexController extends Controller_Action {
             $loggedUserModel = new Publish_Model_LoggedUser();
             $person = $loggedUserModel->createPerson();
 
+            if (is_null($person) or !$person->isValid()) {
+                $message = "Problem clearing documents.  Person object for logged user is null or not valid.";
+                $this->_logger->err($message);
+                throw new Application_Exception($message);
+            }
+
             $helper = new Review_Model_ClearDocumentsHelper();
             $helper->clear($this->view->selected, $person);
             $this->_redirectTo('index');
