@@ -123,7 +123,7 @@ class Publish_DepositController extends Controller_Action {
         $message = $this->view->translate('mail_publish_notification', $fullDocUrl, $reviewUrl, $adminEditUrl);
 
         $this->log->debug("sending email (subject): $subject");
-        $this->log->debug("sending email (body):    \n:$message\n-- end email.");
+        $this->log->debug("sending email (body):    \n$message\n-- end email.");
         $this->__scheduleNotification($subject, $message);
 
         // Prepare redirect to confirmation action.
@@ -163,16 +163,12 @@ class Publish_DepositController extends Controller_Action {
      */
     private function __scheduleNotification($subject, $message) {
 
-        // Initialized Opus_Review class from config (if exists!):
-        $config = Zend_Registry::get('Zend_Config');
-        $mailAddress = isset($config->mail->opus->address) ? $config->mail->opus->address : '';
-
         $job = new Opus_Job();
         $job->setLabel(Opus_Job_Worker_MailPublishNotification::LABEL);
         $job->setData(array(
             'subject' => $subject,
             'message' => $message,
-            'users' => $mailAddress,
+            'users' => 'admin',
             'docId' => $this->session->documentId
         ));   
 
