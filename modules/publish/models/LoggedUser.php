@@ -55,6 +55,11 @@ class Publish_Model_LoggedUser {
         $this->_account = $account;
     }
 
+    /**
+     * Get ID of Opus_Account object.  Return null if no account has been found.
+     *
+     * @return Opus_Person
+     */
     public function getUserId() {
         return isset($this->_account) ? $this->_account->getId() : null;
     }
