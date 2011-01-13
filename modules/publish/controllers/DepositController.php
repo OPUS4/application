@@ -94,9 +94,6 @@ class Publish_DepositController extends Controller_Action {
 
         $depositData = new Publish_Model_Deposit($this->session->documentId, $this->postData);
         $document = $depositData->getDocument();
-
-        $projects = $depositData->getDocProjects();
-
         $document->setServerState('unpublished');
 
         $this->session->document = $document;
@@ -127,7 +124,7 @@ class Publish_DepositController extends Controller_Action {
 
         $this->log->debug("sending email (subject): $subject");
         $this->log->debug("sending email (body):    \n:$message\n-- end email.");
-        $this->__scheduleNotification($subject, $message, $projects);
+        $this->__scheduleNotification($subject, $message);
 
         // Prepare redirect to confirmation action.
         $this->session->depositConfirmDocumentId = $docId;
@@ -164,32 +161,18 @@ class Publish_DepositController extends Controller_Action {
      * Schedules notifications for referees.
      * @param <type> $projects
      */
-    private function __scheduleNotification($subject, $message, $projects = null) {
-
-        $subject_additional_text = '';
-        if ((!is_null($projects)) and (count($projects) > 0)) {
-            $subject_additional_text = " -- assigned project(s): " . implode(", ", array_values($projects)) . "";
-            $this->log->err("Additional text: " . $subject_additional_text);
-        }
-
-        $config = Zend_Registry::get('Zend_Config');
+    private function __scheduleNotification($subject, $message) {
 
         // Initialized Opus_Review class from config (if exists!):
-        if (isset($config->reviewer)) {
-            Opus_Reviewer::init($config->reviewer->toArray());
-        }
-
-        //fetch all reviewers for email sending
-        $document = $this->session->document;
-        $usernames = Opus_Reviewer::fetchAllByDocument($document);
-        $this->log->debug("Referees for Mails: " . implode(";", $usernames));
+        $config = Zend_Registry::get('Zend_Config');
+        $mailAddress = isset($config->mail->opus->address) ? $config->mail->opus->address : '';
 
         $job = new Opus_Job();
         $job->setLabel(Opus_Job_Worker_MailPublishNotification::LABEL);
         $job->setData(array(
-            'subject' => $subject . $subject_additional_text,
+            'subject' => $subject,
             'message' => $message,
-            'users' => $usernames,
+            'users' => $mailAddress,
             'docId' => $this->session->documentId
         ));   
 

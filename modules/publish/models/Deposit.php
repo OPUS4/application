@@ -35,7 +35,6 @@ class Publish_Model_Deposit {
 
     public $document;
     public $documentData;
-    public $projects = array();
     public $log;
 
     public function __construct($documentId = null, $documentData = null) {
@@ -54,10 +53,6 @@ class Publish_Model_Deposit {
 
     public function getDocument() {
         return $this->document;
-    }
-
-    public function getDocProjects() {
-        return $this->projects;
     }
 
     private function _storeDocumentData() {
@@ -466,13 +461,7 @@ class Publish_Model_Deposit {
 
                 //if (!is_null($collArray) && count($collArray) <= 1) {
                 if (!is_null($collArray)) {
-
                     $this->document->addCollection($collArray[0]);
-
-                    if (strstr($collectionRole, 'project')) {
-                        $this->projects[] = $dataValue;
-                        $this->log->debug("Project array for referee, extended by " . $dataValue);
-                    }
                 }
                 if (count($collArray) >= 2) {
                     $this->log->info("While trying to store " . $collectionRole . " as Collection, an error occurred. " .
