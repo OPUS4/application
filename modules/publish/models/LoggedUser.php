@@ -39,6 +39,13 @@ class Publish_Model_LoggedUser {
     public function __construct() {
         $this->_login   = Zend_Auth::getInstance()->getIdentity();
         $this->_account = new Opus_Account(null, null, $this->_login);
+
+        $log = Zend_Registry::get("Zend_Log");
+        if ($this->_account->isNewRecord()) {
+            $message = "Error checking logged user.";
+            $log->err("$message (Returned account object for user '" . $this->_login . "' isNewRecord(), but must not!)");
+            throw new Application_Exception($message);
+        }
     }
 
     public function getUserId() {
