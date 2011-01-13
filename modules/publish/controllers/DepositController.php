@@ -129,13 +129,35 @@ class Publish_DepositController extends Controller_Action {
         $this->log->debug("sending email (body):    \n:$message\n-- end email.");
         $this->__scheduleNotification($subject, $message, $projects);
 
-        if (true !== Opus_Security_Realm::getInstance()->check('clearance')) {
+        // Prepare redirect to confirmation action.
+        $this->session->depositConfirmDocumentId = $docId;
+
+        $targetAction = 'confirm';
+        $targetController = 'deposit';
+        $targetModule = 'publish';
+
+        $config = Zend_Registry::get('Zend_Config');
+        if (isset($config) and isset($config->publish->depositComplete)) {
+            $targetAction = $config->publish->depositComplete->action;
+            $targetController = $config->publish->depositComplete->controller;
+            $targetModule = $config->publish->depositComplete->module;
+        }
+
+        return $this->_redirectToAndExit($targetAction, null, $targetController, $targetModule);
+    }
+
+    /**
+     * Shows a confirmation for the user, when the publication process is
+     * finished.
+     */
+    public function confirmAction() {
+        $this->view->docId = $this->session->depositConfirmDocumentId;
+
+        if (true === Opus_Security_Realm::getInstance()->check('clearance')) {
             $this->view->showFrontdoor = true;
         }
 
-        $this->view->docId = $docId;
-        return $this->render('confirm');
-
+        return;
     }
 
     /**
