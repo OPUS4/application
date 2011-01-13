@@ -65,9 +65,9 @@ class View_Helper_ShowModel_Licence extends View_Helper_ShowModel_Abstract {
         $display_name = @$value['NameLong'];
         $licence_link = @$value['LinkLicence'];
         if (false === empty($licence_link)) {
-            $iterim_value = '<a href="' . $licence_link . '">' . $display_name . '</a>';
+            $iterim_value = '<a href="' . htmlspecialchars($licence_link) . '">' . htmlspecialchars($display_name) . '</a>';
         } else {
-            $iterim_value = $display_name;
+            $iterim_value = htmlspecialchars($display_name);
         }
         if (($this->_saef === false) or (empty($iterim_value) === false)) {
             $data = $this->__skeleton($field, $iterim_value, $prefix);

@@ -57,7 +57,7 @@ class View_Helper_ShowModel_Date extends View_Helper_ShowModel_Abstract {
         $result = '';
 
         if (($this->_saef === false) or (empty($values) === false)) {
-            $data[] = $this->__skeleton($field, $values);
+            $data[] = $this->__skeleton($field, htmlspecialchars($values));
         }
 
         if (($this->_saef === false) or (empty($data) === false)) {

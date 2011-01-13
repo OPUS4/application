@@ -63,7 +63,7 @@ class View_Helper_ShowModel_Language extends View_Helper_ShowModel_Abstract {
         $language_list = Zend_Registry::get('Available_Languages');
         $iterim_value = @$language_list[$value];
         if (($this->_saef === false) or (empty($iterim_value) === false)) {
-            $data = $this->__skeleton($field, $iterim_value, $prefix);
+            $data = $this->__skeleton($field, htmlspecialchars($iterim_value), $prefix);
             $result = $this->_view->partial($this->_partial, $data);
         }
         return $result;

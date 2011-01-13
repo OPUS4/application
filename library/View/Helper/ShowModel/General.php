@@ -44,7 +44,7 @@ class View_Helper_ShowModel_General extends View_Helper_ShowModel_Abstract {
         $result = '';
         if (false === is_array($value)) {
             if (($this->_saef === false) or (empty($value) === false)) {
-                $data = $this->__skeleton($field, $value);
+                $data = $this->__skeleton($field, htmlspecialchars($value));
                 $result = $this->_view->partial($this->_partial, $data);
             }
         }

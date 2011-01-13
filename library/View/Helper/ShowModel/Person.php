@@ -77,7 +77,7 @@ class View_Helper_ShowModel_Person extends View_Helper_ShowModel_Abstract {
         }
         $fieldname = 'PersonName';
         if (($this->_saef === false) or (empty($merged) === false)) {
-            $data[] = $this->__skeleton($fieldname, $merged);
+            $data[] = $this->__skeleton($fieldname, htmlspecialchars($merged));
         }
         if ($this->_spi === false) {
             // other fields
@@ -91,7 +91,7 @@ class View_Helper_ShowModel_Person extends View_Helper_ShowModel_Abstract {
                             $fieldValue->setLocale($locale);
                             $fieldValue = $fieldValue->toString(Zend_Locale_Format::getDateFormat($locale));
                         }
-                        $data[] = $this->__skeleton($fieldname, $fieldValue);
+                        $data[] = $this->__skeleton($fieldname, htmlspecialchars($fieldValue));
                     }
                 }
             }

@@ -51,7 +51,7 @@ class View_Helper_ShowModel_Collection extends View_Helper_ShowModel_Abstract {
         else {
             foreach ($value as $index => $collection) {
                 if (($this->_saef === false) or (empty($collection) === false)) {
-                    $data = $this->__skeleton($field, $collection['DisplayFrontdoor']);
+                    $data = $this->__skeleton($field, htmlspecialchars($collection['DisplayFrontdoor']));
                     $result .= $this->_view->partial($this->_partial, $data);
                 }
             }
