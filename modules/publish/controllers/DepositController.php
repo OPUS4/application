@@ -57,89 +57,85 @@ class Publish_DepositController extends Controller_Action {
      */
     public function depositAction() {
 
-        if ($this->getRequest()->isPost() === true) {
-
-            $post = $this->getRequest()->getPost();
-            if (array_key_exists('back', $post)) {
-                //go back
-                $this->_forward('check', 'form');
-            }
-            else
-            if (array_key_exists('collection', $post)) {
-                //choose any collections
-                $this->_forward('top', 'collection');
-            }            
-            
-            else {                
-                
-                //deposit data
-                $this->view->title = $this->view->translate('publish_controller_index');
-                $this->view->subtitle = $this->view->translate('publish_controller_deposit_successful');
-
-                if (isset($this->session->elements)) {
-                    foreach ($this->session->elements AS $element) {
-                        $this->postData[$element['name']] = $element['value'];
-                        $this->log->debug('SAVING DATA: ' . $element['name'] . ' + ' . $element['value']);
-                    }
-                }
-
-                $depositForm = new Publish_Form_PublishingSecond($this->session->documentType, $this->session->documentId, $this->session->fulltext, $this->session->additionalFields, $this->postData);
-                $depositForm->populate($this->postData);
-
-                //avoid vulnerability by populate postdata to form => hacked fields won't be saved
-                $depositForm->prepareCheck();
-
-                if (isset($this->postData['send']))
-                    unset($this->postData['send']);
-
-                $depositData = new Publish_Model_Deposit($this->session->documentId, $this->postData);
-                $document = $depositData->getDocument();
-
-                $projects = $depositData->getDocProjects();
-
-                $document->setServerState('unpublished');
-
-                $this->session->document = $document;
-                $this->session->documentId = $document->store();
-                $docId = $this->session->documentId;
-
-                $this->log->info("Document $docId was sucessfully stored!");
-
-                // Build URLs for the publish-notification-mail.
-                $fullDocUrl = $this->__getDocumentUrl($docId);
-                $reviewUrl = $this->view->serverUrl() . $this->view->url(array(
-                            'module' => 'review',
-                            'controller' => 'index',
-                            'action' => 'index'));
-                $adminEditUrl = $this->view->serverUrl() . $this->view->url(array(
-                            'module' => 'admin',
-                            'controller' => 'documents',
-                            'action' => 'edit',
-                            'id' => $docId));
-
-
-                $this->log->debug("fullDocUrl:   $fullDocUrl");
-                $this->log->debug("reviewUrl:    $reviewUrl");
-                $this->log->debug("adminEditUrl: $adminEditUrl");
-
-                $subject = $this->view->translate('mail_publish_notification_subject', $docId);
-                $message = $this->view->translate('mail_publish_notification', $fullDocUrl, $reviewUrl, $adminEditUrl);
-
-                $this->log->debug("sending email (subject): $subject");
-                $this->log->debug("sending email (body):    \n:$message\n-- end email.");
-                $this->__scheduleNotification($subject, $message, $projects);
-
-                if (true !== Opus_Security_Realm::getInstance()->check('clearance')) {
-                    $this->view->showFrontdoor = true;
-                }
-
-                $this->view->docId = $docId;
-                return $this->render('confirm');
-            }
-        }
-        else {
+        if ($this->getRequest()->isPost() !== true) {
             return $this->_redirectTo('index', '', 'index');
         }
+
+        $post = $this->getRequest()->getPost();
+        if (array_key_exists('back', $post)) {
+            //go back
+            return $this->_forward('check', 'form');
+        }
+        else
+        if (array_key_exists('collection', $post)) {
+            //choose any collections
+            return $this->_forward('top', 'collection');
+        }
+
+        //deposit data
+        $this->view->title = $this->view->translate('publish_controller_index');
+        $this->view->subtitle = $this->view->translate('publish_controller_deposit_successful');
+
+        if (isset($this->session->elements)) {
+            foreach ($this->session->elements AS $element) {
+                $this->postData[$element['name']] = $element['value'];
+                $this->log->debug('SAVING DATA: ' . $element['name'] . ' + ' . $element['value']);
+            }
+        }
+
+        $depositForm = new Publish_Form_PublishingSecond($this->session->documentType, $this->session->documentId, $this->session->fulltext, $this->session->additionalFields, $this->postData);
+        $depositForm->populate($this->postData);
+
+        //avoid vulnerability by populate postdata to form => hacked fields won't be saved
+        $depositForm->prepareCheck();
+
+        if (isset($this->postData['send']))
+            unset($this->postData['send']);
+
+        $depositData = new Publish_Model_Deposit($this->session->documentId, $this->postData);
+        $document = $depositData->getDocument();
+
+        $projects = $depositData->getDocProjects();
+
+        $document->setServerState('unpublished');
+
+        $this->session->document = $document;
+        $this->session->documentId = $document->store();
+        $docId = $this->session->documentId;
+
+        $this->log->info("Document $docId was sucessfully stored!");
+
+        // Build URLs for the publish-notification-mail.
+        $fullDocUrl = $this->__getDocumentUrl($docId);
+        $reviewUrl = $this->view->serverUrl() . $this->view->url(array(
+                    'module' => 'review',
+                    'controller' => 'index',
+                    'action' => 'index'));
+        $adminEditUrl = $this->view->serverUrl() . $this->view->url(array(
+                    'module' => 'admin',
+                    'controller' => 'documents',
+                    'action' => 'edit',
+                    'id' => $docId));
+
+
+        $this->log->debug("fullDocUrl:   $fullDocUrl");
+        $this->log->debug("reviewUrl:    $reviewUrl");
+        $this->log->debug("adminEditUrl: $adminEditUrl");
+
+        $subject = $this->view->translate('mail_publish_notification_subject', $docId);
+        $message = $this->view->translate('mail_publish_notification', $fullDocUrl, $reviewUrl, $adminEditUrl);
+
+        $this->log->debug("sending email (subject): $subject");
+        $this->log->debug("sending email (body):    \n:$message\n-- end email.");
+        $this->__scheduleNotification($subject, $message, $projects);
+
+        if (true !== Opus_Security_Realm::getInstance()->check('clearance')) {
+            $this->view->showFrontdoor = true;
+        }
+
+        $this->view->docId = $docId;
+        return $this->render('confirm');
+
     }
 
     /**
