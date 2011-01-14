@@ -39,8 +39,6 @@
  */
 class Review_IndexController extends Controller_Action {
 
-    private $_reviewer = null;
-
     /**
      * Setup title.
      */
@@ -48,25 +46,10 @@ class Review_IndexController extends Controller_Action {
         parent::init();
         $this->view->title = $this->view->translate('review_index_title');
 
-        // Initialize config and authentication...
-        $config = Zend_Registry::get('Zend_Config');
-        $login = Zend_Auth::getInstance()->getIdentity();
-
-        // If configured, initialize reviewer-class and filter selected documents.
-        if (isset($config->reviewer)) {
-            Opus_Reviewer::init($config->reviewer->toArray());
-            $this->_reviewer = new Opus_Reviewer($login);
-        }
-
         // Get list of selected documents...
         $selected = $this->getRequest()->getParam('selected');
         if (!isset($selected) || !is_array($selected)) {
             $selected = array();
-        }
-
-        // Filter documents which are not reviewable by the current user.
-        if (isset($this->_reviewer)) {
-            $selected = $this->_reviewer->filterDocumentIds($selected);
         }
 
         $this->view->selected = $selected;
@@ -119,13 +102,6 @@ class Review_IndexController extends Controller_Action {
         // Get list of document identifiers
         $result = $this->_helper->documents($sort_order, $sort_reverse,
                 'unpublished');
-
-        // Only show documents which are reviewable by the current user.
-        if (isset($this->_reviewer)) {
-            $result = $this->_reviewer->filterDocumentIds($result);
-        }
-
-        // $this->_logger->err('err '. print_r($result, 1));
 
         // TODO remove or disable if log level is not DEBUG
         foreach ($result as $testid) {
