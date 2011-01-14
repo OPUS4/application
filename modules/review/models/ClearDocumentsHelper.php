@@ -105,7 +105,7 @@ class Review_Model_ClearDocumentsHelper {
             $document = new Opus_Document( (int) $docId);
             $state = $document->getServerState();
 
-            if ($state === 'unpublished') {
+            if ($state !== 'unpublished') {
                 $logger->warn('Document ' . $docId . ' already published (at least not in state "unpublished")?  Skipping.');
                 continue;
             }
