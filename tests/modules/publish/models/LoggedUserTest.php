@@ -34,6 +34,14 @@
 class Publish_Model_LoggedUserTest extends ControllerTestCase {
 
     /**
+     * Reset logged user after testcase.
+     */
+    public function tearDown() {
+        $this->setZendAuthIdentity(null);
+        parent::tearDown();
+    }
+
+    /**
      * Simple test.  Return NULL if no user logged in.
      */
     public function testCreatePersonNullUser() {
@@ -92,5 +100,4 @@ class Publish_Model_LoggedUserTest extends ControllerTestCase {
         $session   = new Zend_Session_Namespace($namespace);
         $session->{$member} = $identity;
     }
-
 }
