@@ -57,8 +57,8 @@ class Review_IndexController extends Controller_Action {
         // Add constraint for current user
         if (count($selected) > 0) {
             $this->_logger->debug("ids before: " . implode(", ", $selected));
-            $searcher = $this->_prepareSearcher()->setIdSubset($selected);
-            $selected = $searcher->ids();
+            $finder = $this->_prepareSearcher()->setIdSubset($selected);
+            $selected = $finder->ids();
             $this->_logger->debug("ids after: " . implode(", ", $selected));
         }
 
@@ -110,22 +110,22 @@ class Review_IndexController extends Controller_Action {
         $this->_prepareSortOptions();
 
         // Get list of document identifiers
-        $searcher = $this->_prepareSearcher();
+        $finder = $this->_prepareSearcher();
 
         switch ($sort_order) {
             case 'author':
-                $searcher->orderByAuthorLastname($sort_reverse != 1);
+                $finder->orderByAuthorLastname($sort_reverse != 1);
             case 'publicationDate':
-                $searcher->orderByServerDatePublished($sort_reverse != 1);
+                $finder->orderByServerDatePublished($sort_reverse != 1);
             case 'docType':
-                $searcher->orderByType($sort_reverse != 1);
+                $finder->orderByType($sort_reverse != 1);
             case 'title':
-                $searcher->orderByTitleMain($sort_reverse != 1);
+                $finder->orderByTitleMain($sort_reverse != 1);
             default:
-                $searcher->orderById($sort_reverse != 1);
+                $finder->orderById($sort_reverse != 1);
         }
 
-        $result = $searcher->ids();
+        $result = $finder->ids();
 
         // TODO remove or disable if log level is not DEBUG
         foreach ($result as $testid) {
@@ -133,19 +133,18 @@ class Review_IndexController extends Controller_Action {
         }
 
         if (empty($result)) {
-            $this->_helper->viewRenderer('nodocs');
+            return $this->_helper->viewRenderer('nodocs');
         }
-        else {
-            $this->view->documentCount = count($result);
 
-            $currentPage = $this->_getParam('page', 1);
-            $this->view->currentPage = $currentPage;
+        $this->view->documentCount = count($result);
 
-            $paginator = Zend_Paginator::factory($result);
-            $paginator->setCurrentPageNumber($currentPage);
-            $paginator->setItemCountPerPage(10);
-            $this->view->paginator = $paginator;
-        }
+        $currentPage = $this->_getParam('page', 1);
+        $this->view->currentPage = $currentPage;
+
+        $paginator = Zend_Paginator::factory($result);
+        $paginator->setCurrentPageNumber($currentPage);
+        $paginator->setItemCountPerPage(10);
+        $this->view->paginator = $paginator;
     }
 
 
@@ -266,18 +265,18 @@ class Review_IndexController extends Controller_Action {
     }
 
     /**
-     * Prepare searcher
+     * Prepare document finder.
      *
-     * @return Opus_DocumentSearcher
+     * @return Opus_DocumentFinder
      */
     protected function _prepareSearcher() {
         $loggedUser = new Publish_Model_LoggedUser();
 
-        $searcher = new Opus_DocumentSearcher();
-        $searcher->setServerState(self::$reviewServerState);
-        $searcher->setEnrichmentKeyValue('reviewer.user_id', $loggedUser->getUserId());
+        $finder = new Opus_DocumentSearcher();
+        $finder->setServerState(self::$reviewServerState);
+        $finder->setEnrichmentKeyValue('reviewer.user_id', $loggedUser->getUserId());
 
-        return $searcher;
+        return $finder;
     }
 
     /**
