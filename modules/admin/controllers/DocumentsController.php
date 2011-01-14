@@ -97,29 +97,21 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         }
 
         // Default Ordering...
+        $sort_reverse = '0';
         if (true === array_key_exists('sort_reverse', $data)) {
            $sort_reverse = $data['sort_reverse'];
-        }
-        else {
-           $sort_reverse = '0';
         }
         $this->view->sort_reverse = $sort_reverse;
         $this->view->sortDirection = ($sort_reverse) ? 'descending' : 'ascending';
 
         $config = Zend_Registry::get('Zend_Config');
 
-        $state = null;
-
+                $state = 'unpublished';
         if (true === array_key_exists('state', $data)) {
             $state = $data['state'];
         }
-        else {
-            if (isset($config->admin->documents->defaultview)) {
-                $state = $config->admin->documents->defaultview;
-            }
-            else {
-                $state = 'unpublished';
-            }
+        else if (isset($config->admin->documents->defaultview)) {
+            $state = $config->admin->documents->defaultview;
         }
         
         if (!empty($state) && !in_array($state, $this->docOptions)) {
@@ -128,11 +120,9 @@ class Admin_DocumentsController extends Controller_CRUDAction {
 
         $this->view->state = $state;
 
+        $sort_order = 'id';
         if (true === array_key_exists('sort_order', $data)) {
             $sort_order = $data['sort_order'];
-        }
-        else {
-            $sort_order = 'id';
         }
         
         $this->view->sort_order = $sort_order;
@@ -149,11 +139,10 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             }
             $paginator->setItemCountPerPage($hitsPerPage);
         }
+        $page = 1;
         if (array_key_exists('page', $data)) {
             // paginator
             $page = $data['page'];
-        } else {
-            $page = 1;
         }
         $paginator->setCurrentPageNumber($page);
         $this->view->paginator = $paginator;
@@ -213,35 +202,34 @@ class Admin_DocumentsController extends Controller_CRUDAction {
     public function editAction() {
         // get parameters
         $id = $this->getRequest()->getParam('id');
-
-        if (!empty($id) && is_numeric($id)) {
-            $this->view->title = $this->view->translate('admin_documents_edit', $id);
-
-            $form_builder = new Form_Builder();
-            $document = new $this->_modelclass($id);
-
-            $documentInSession = new Zend_Session_Namespace('document');
-            $documentInSession->document = $document;
-
-            $this->view->showFilemanager = $document->hasField('File');
-            $documentWithFilter = $this->__createFilter($document);
-
-            $modelForm = $form_builder->build($documentWithFilter);
-
-            $action_url = $this->view->url(array("action" => "create"));
-            $modelForm->setAction($action_url);
-            $this->view->form = $modelForm;
-            $this->view->docId = $id;
-            $assignedCollections = array();
-            foreach ($document->getCollection() as $assignedCollection) {
-                $assignedCollections[] = array('collectionName' => $assignedCollection->getDisplayName(), 'collectionId' => $assignedCollection->getId(), 'roleName' => $assignedCollection->getRole()->getName(), 'roleId' => $assignedCollection->getRole()->getId());
-            }
-            $this->view->assignedCollections = $assignedCollections;
-            $this->view->docHelper = new Review_Model_DocumentAdapter($this->view, $document);
-        }
-        else {
+        if (empty($id) or !is_numeric($id)) {
             $this->_helper->redirector('index');
         }
+
+        $this->view->title = $this->view->translate('admin_documents_edit', $id);
+
+        $form_builder = new Form_Builder();
+        $document = new $this->_modelclass($id);
+
+        $documentInSession = new Zend_Session_Namespace('document');
+        $documentInSession->document = $document;
+
+        $this->view->showFilemanager = $document->hasField('File');
+        $documentWithFilter = $this->__createFilter($document);
+
+        $modelForm = $form_builder->build($documentWithFilter);
+
+        $action_url = $this->view->url(array("action" => "create"));
+        $modelForm->setAction($action_url);
+        $this->view->form = $modelForm;
+        $this->view->docId = $id;
+        $assignedCollections = array();
+        foreach ($document->getCollection() as $assignedCollection) {
+            $assignedCollections[] = array('collectionName' => $assignedCollection->getDisplayName(), 'collectionId' => $assignedCollection->getId(), 'roleName' => $assignedCollection->getRole()->getName(), 'roleId' => $assignedCollection->getRole()->getId());
+        }
+        $this->view->assignedCollections = $assignedCollections;
+        $this->view->docHelper = new Review_Model_DocumentAdapter($this->view, $document);
+
     }
 
     /**
@@ -250,34 +238,33 @@ class Admin_DocumentsController extends Controller_CRUDAction {
      * @return void
      */
     public function deleteAction() {
-        if ($this->_request->isPost() === true || $this->getRequest()->getParam('docId') !== null) {
-            $id = null;
-            $id = $this->getRequest()->getParam('docId');
-            if ($id === null) {
-                $id = $this->getRequest()->getPost('id');
-            }
-            $sureyes = $this->getRequest()->getPost('sureyes');
-            $sureno = $this->getRequest()->getPost('sureno');
-            if (isset($sureyes) === true or isset($sureno) === true) {
-            	// Safety question answered, deleting
-            	if (isset($sureyes) === true) {
-                    $model = new $this->_modelclass($id);
-                    $model->delete();
-                    $this->_redirectTo('index', 'Model successfully deleted.');
-            	}
-            	else {
-                    $this->_redirectTo('index');
-            	}
+        if ($this->_request->isPost() !== true && is_null($this->getRequest()->getParam('docId'))) {
+            $this->_redirectTo('index');
+        }
+
+        $id = $this->getRequest()->getParam('docId');
+        if ($id === null) {
+            $id = $this->getRequest()->getPost('id');
+        }
+        $sureyes = $this->getRequest()->getPost('sureyes');
+        $sureno = $this->getRequest()->getPost('sureno');
+        if (isset($sureyes) === true or isset($sureno) === true) {
+            // Safety question answered, deleting
+            if (isset($sureyes) === true) {
+                $model = new $this->_modelclass($id);
+                $model->delete();
+                $this->_redirectTo('index', 'Model successfully deleted.');
             }
             else {
-                // show safety question
-                $this->view->title = $this->view->translate('admin_doc_delete');
-                $this->view->text = $this->view->translate('admin_doc_delete_sure', $id);
-                $yesnoForm = $this->_getConfirmationForm($id, 'delete');
-                $this->view->form = $yesnoForm;
+                $this->_redirectTo('index');
             }
-        } else {
-            $this->_redirectTo('index');
+        }
+        else {
+            // show safety question
+            $this->view->title = $this->view->translate('admin_doc_delete');
+            $this->view->text = $this->view->translate('admin_doc_delete_sure', $id);
+            $yesnoForm = $this->_getConfirmationForm($id, 'delete');
+            $this->view->form = $yesnoForm;
         }
     }
 
