@@ -39,6 +39,8 @@
  */
 class Review_IndexController extends Controller_Action {
 
+    public static $reviewServerState = 'unpublished';
+
     /**
      * Setup title.
      */
@@ -50,6 +52,14 @@ class Review_IndexController extends Controller_Action {
         $selected = $this->getRequest()->getParam('selected');
         if (!isset($selected) || !is_array($selected)) {
             $selected = array();
+        }
+
+        // Add constraint for current user
+        if (count($selected) > 0) {
+            $this->_logger->debug("ids before: " . implode(", ", $selected));
+            $searcher = $this->_prepareSearcher()->setIdSubset($selected);
+            $selected = $searcher->ids();
+            $this->_logger->debug("ids after: " . implode(", ", $selected));
         }
 
         $this->view->selected = $selected;
@@ -100,8 +110,22 @@ class Review_IndexController extends Controller_Action {
         $this->_prepareSortOptions();
 
         // Get list of document identifiers
-        $result = $this->_helper->documents($sort_order, $sort_reverse,
-                'unpublished');
+        $searcher = $this->_prepareSearcher();
+
+        switch ($sort_order) {
+            case 'author':
+                $searcher->orderByAuthorLastname($sort_reverse != 1);
+            case 'publicationDate':
+                $searcher->orderByServerDatePublished($sort_reverse != 1);
+            case 'docType':
+                $searcher->orderByType($sort_reverse != 1);
+            case 'title':
+                $searcher->orderByTitleMain($sort_reverse != 1);
+            default:
+                $searcher->orderById($sort_reverse != 1);
+        }
+
+        $result = $searcher->ids();
 
         // TODO remove or disable if log level is not DEBUG
         foreach ($result as $testid) {
@@ -239,6 +263,21 @@ class Review_IndexController extends Controller_Action {
         $sortOptions['publicationDate'] = $this->view->translate('review_option_date');
         $sortOptions['docType'] = $this->view->translate('review_option_doctype');
         $this->view->sortOptions = $sortOptions;
+    }
+
+    /**
+     * Prepare searcher
+     *
+     * @return Opus_DocumentSearcher
+     */
+    protected function _prepareSearcher() {
+        $loggedUser = new Publish_Model_LoggedUser();
+
+        $searcher = new Opus_DocumentSearcher();
+        $searcher->setServerState(self::$reviewServerState);
+        $searcher->setEnrichmentKeyValue('reviewer.user_id', $loggedUser->getUserId());
+
+        return $searcher;
     }
 
     /**
