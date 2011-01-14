@@ -639,12 +639,6 @@ class Oai_IndexController extends Controller_Xml {
             }
         }
 
-        if ('xmetadissfis' === $oaiRequest['metadataPrefix']) {
-            $restriction['fis_only'] = true;
-        } else {
-            $restriction['fis_only'] = false;
-        }
-
         $fromDate = null;
         if (true === array_key_exists('from', $oaiRequest)) {
             $fromDate = $oaiRequest['from'];
@@ -661,23 +655,7 @@ class Oai_IndexController extends Controller_Xml {
             'dateFormat' => 'yyyy-MM-dd'
             );
 
-        // security restriction
-        $restriction['security'] = null;
-        $currentResourceId = $this->_getCurrentResourceId();
-        if (false === empty($currentResourceId)) {
-            $restriction['security'] = $currentResourceId;
-        }
-
         $result = Opus_Document::getIdsOfOaiRequest($restriction);
         return $result;
     }
-
-    /**
-     * Retrieve resource id if resource id is available and parent id is not empty
-     *
-     * @return string|null Returns resource id or null if not available.
-     */
-    private function _getCurrentResourceId() {
-    }
-
 }
