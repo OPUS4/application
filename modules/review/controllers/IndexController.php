@@ -104,9 +104,10 @@ class Review_IndexController extends Controller_Action {
         $sort_order = $request->getParam('sort_order');
         $this->view->sort_order = $sort_order;
 
-        $sort_reverse = $request->getParam('sort_reverse', '0');
-        $sort_reverse = $this->_isButtonPressed('buttonUp', '0');
-        $sort_reverse = $this->_isButtonPressed('buttonDown', '1');
+        $sort_reverse = $request->getParam('sort_reverse') ? 1 : 0;
+        $sort_reverse = $this->_isButtonPressed('buttonUp', '0', $sort_reverse);
+        $sort_reverse = $this->_isButtonPressed('buttonDown', '1', $sort_reverse);
+        $this->view->sort_reverse = $sort_reverse;
 
         $this->view->selectAll = $this->_isButtonPressed('buttonSelectAll',
                 true, false);

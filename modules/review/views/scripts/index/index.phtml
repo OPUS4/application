@@ -61,6 +61,7 @@
             <?PHP endforeach; ?>
         </select>
 
+        <input type="hidden" name="sort_reverse" value="<?= htmlspecialchars($this->sort_reverse) ?>" />
         <input type="submit" name="buttonUp" value="<?= $this->translate('review_sort_up') ?>" />
         <input type="submit" name="buttonDown" value="<?= $this->translate('review_sort_down') ?>" />
     </div>
