@@ -272,7 +272,7 @@ class Review_IndexController extends Controller_Action {
     protected function _prepareSearcher() {
         $loggedUser = new Publish_Model_LoggedUser();
 
-        $finder = new Opus_DocumentSearcher();
+        $finder = new Opus_DocumentFinder();
         $finder->setServerState(self::$reviewServerState);
         $finder->setEnrichmentKeyValue('reviewer.user_id', $loggedUser->getUserId());
 
