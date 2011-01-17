@@ -73,6 +73,14 @@ class Review_Model_ClearDocumentsHelper {
                 }
             }
 
+            $guest_role = Opus_Role::fetchByName('guest');
+            foreach ($document->getFile() AS $file)  {
+                $privilege = $guest_role->addPrivilege();
+                $privilege->setPrivilege('readFile');
+                $privilege->setFile($file);
+                $guest_role->store();
+            }
+
             if (isset($person)) {
                 $document->addPersonReferee($person);
             }
