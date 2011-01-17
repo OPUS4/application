@@ -39,9 +39,10 @@
     <?PHP if ($this->showException) : ?>
     <div class="stacktrace">
         <h2>Stacktrace</h2>
-        <pre>
-        <?= htmlspecialchars($this->exception) ?>
-        </pre>
+<?PHP /* note: do not use indentation here */ ?>
+<pre>
+<?= htmlspecialchars($this->exception) ?>
+</pre>
     </div>
     <?PHP else : ?>
     <div class="exceptionMessage">
