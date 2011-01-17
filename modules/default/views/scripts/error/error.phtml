@@ -40,21 +40,22 @@
     <div class="stacktrace">
         <h2>Stacktrace</h2>
         <pre>
-        <?= $this->exception ?>
+        <?= htmlspecialchars($this->exception) ?>
         </pre>
     </div>
     <?PHP else : ?>
     <div class="exceptionMessage">
-        <?= $this->exception->getMessage() ?>
+        <?= htmlspecialchars($this->exception->getMessage()) ?>
     </div>
     <?PHP endif; ?>
 
     <?PHP if (isset($this->errorRequest)) : ?>
     <div class="request">
         <h2>Request</h2>
-        <pre>
-        <?= var_dump($this->errorRequest) ?>
-        </pre>
+<?PHP /* note: do not use indentation here */ ?>
+<pre>
+<?= htmlspecialchars(var_export($this->errorRequest, TRUE)) ?>
+</pre>
     </div>
 </div>
 
