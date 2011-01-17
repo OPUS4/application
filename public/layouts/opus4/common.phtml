@@ -120,7 +120,7 @@ $languageSelectors = $this->languageSelector();
             <?php if (!is_null($this->flashMessenger)) : ?>
             <div class="messages">
                 <?php foreach ($this->flashMessenger->getMessages() as $message) : ?>
-                    <div class="<?= $message['level'] ?>"><?= $message['message'] ?></div>
+                    <div class="<?= $message['level'] ?>"><?= htmlspecialchars($message['message']) ?></div>
                 <?php endforeach ?>
             </div>
             <?php endif ?>
