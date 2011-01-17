@@ -46,14 +46,14 @@
             &raquo;
             <?php if ($i === 0) : ?>
                 <?php if (count($this->breadcrumb) > 1) : ?>
-                    <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'show', 'id' => $parent->getId()), null, true) ?>"><?= $this->role_name ?></a>
+                    <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'show', 'id' => $parent->getId()), null, true) ?>"><?= htmlspecialchars($this->role_name) ?></a>
                 <?php else : ?>
-                    <?= $this->role_name ?>
+                    <?= htmlspecialchars($this->role_name) ?>
                 <?php endif ?>
             <?php elseif ($i === count($this->breadcrumb) - 1) : ?>
-                <?= $parent->getDisplayName() ?>
+                <?= htmlspecialchars($parent->getDisplayName()) ?>
             <?php else : ?>
-                <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'show', 'id' => $parent->getId()), null, true) ?>"><?= $parent->getDisplayName() ?></a>
+                <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'show', 'id' => $parent->getId()), null, true) ?>"><?= htmlspecialchars($parent->getDisplayName()) ?></a>
             <?php endif ?>
         <?php endforeach; ?>
     </div>
@@ -77,7 +77,7 @@
         <tr class="<?= ($i % 2 == 0) ? 'even' : 'odd'?>">
             <td class="<?= ($collection->getVisible() === '1') ? 'visible' : 'unvisible' ?>">
                 <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'show', 'id' => $collection->getId()), null, true) ?>">
-                <?= $collection->getDisplayName() ?>
+                <?= htmlspecialchars($collection->getDisplayName()) ?>
                 </a>
             </td>
 
