@@ -65,7 +65,8 @@ class Review_Model_ClearDocumentsHelper {
             $document->setServerState('published');
 
             $date = new Opus_Date();
-            $document->setServerDatePublished($date->setNow());
+            $date->setNow();
+            $document->setServerDatePublished($date);
 
             if (isset($moduleConfig)) {
                 if ($moduleConfig->setPublishedDate) {
