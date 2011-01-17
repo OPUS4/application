@@ -497,6 +497,14 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             $iprange->addRole( $remoteupdate_role );
             $iprange->store();
         }
+
+        $user_role = new Opus_Role();
+        $user_role->setName('user');
+        $user_privilege = $user_role->addPrivilege();
+        $user_privilege->setPrivilege('publish');
+        $user_privilege = $user_role->addPrivilege();
+        $user_privilege->setPrivilege('guest');
+        $user_role->store();
     }
 
     /**
@@ -516,6 +524,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
         $publish_privilege->setDocumentServerState('published');
         $guest_role->store();
 
+        $user_role = Opus_Role::fetchByName('user');
         $reviewer_role = Opus_Role::fetchByName('reviewer');
         $admin_role = Opus_Role::fetchByName('administrator');
 
@@ -535,6 +544,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
                 $account->addRole( $admin_role );
             }
 
+            $account->addRole( $user_role );
             $account->addRole( $guest_role );
             $account->store();
         }
