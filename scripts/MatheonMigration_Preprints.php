@@ -517,6 +517,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
         $guest_role->store();
 
         $reviewer_role = Opus_Role::fetchByName('reviewer');
+        $admin_role = Opus_Role::fetchByName('administrator');
 
         foreach ($users AS $user) {
             $account = new Opus_Account();
@@ -526,8 +527,12 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             $account->setFirstName(trim($user['first_name']));
             $account->setLastName(trim($user['last_name']));
 
-            if ($user['referee'] || trim($user['last_name']) == 'Kunz') {
+            if ($user['referee']) {
                 $account->addRole( $reviewer_role );
+            }
+
+            if ($user['last_name'] == 'Kunz') {
+                $account->addRole( $admin_role );
             }
 
             $account->addRole( $guest_role );
@@ -661,7 +666,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             }
 
             //    <field name="approve_date">2003-12-10 00:00:00</field>
-            // $doc->setCompletedDate($preprint['approve_date']);
+            $doc->setCompletedDate($preprint['approve_date']);
             $doc->setPublishedDate($preprint['approve_date']);
 
             //    <field name="comment" xsi:nil="true" />
