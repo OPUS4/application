@@ -31,10 +31,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-//for printing a generized Zend Form with standard layout:
-//echo $this->form;
-//element($value, $options = null, $type = null, $name = null)
-//group($value, $options = null, $name = null)
 ?>
 
 <h2><?= $this->title ?></h2>
@@ -46,30 +42,30 @@
 <? endif; ?>
 
 <form enctype="application/x-www-form-urlencoded" action="<?= $this->action_url; ?>" method="post">
-    <div class="form-items-wrapper">
-        <div class="form-hint"><p><?= $this->requiredHint; ?></p></div>
+<div class="form-items-wrapper">
+
+    <div class="form-hint"><p><?= $this->requiredHint; ?></p></div>
 
     <?= $this->group($this->groupPersonAuthor); ?>
-    <?= $this->group($this->groupInstitute); ?>
     <?= $this->element($this->Language); ?>
     <?= $this->group($this->groupTitleMain, "size='60'"); ?>
     <?= $this->group($this->groupTitleAbstract, "cols='60' rows='9'"); ?>
+
+    <?= $this->group($this->groupInstitute); ?>
     <?= $this->group($this->groupProject); ?>
-    <?= $this->element($this->CompletedDate); ?>
     <?= $this->group($this->groupSubjectMSC); ?>
     <?= $this->group($this->groupSubjectUncontrolled); ?>
-    <?= $this->element($this->Note, "cols='60' rows='9'"); ?>
 
     <div class="button-wrapper">
         <?= $this->element('button_label_abort', "class='form-button abort-button'", "Submit", "abort"); ?>
         <?= $this->element('button_label_send', "class='form-button submit-button'", "Submit", "send"); ?>
     </div>
 
-    </div>
+</div>
 </form>
 
 <?php if ($this->endTemplate($this->form) !== "") : ?>
     <div class="form-hint form-errors"><?= $this->endTemplate($this->form); ?></div>
 <? endif; ?>
-    
+
 </div>
