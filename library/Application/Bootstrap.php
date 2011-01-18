@@ -278,7 +278,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         Zend_Session::setOptions(array(
             'cookie_path' => Zend_Controller_Front::getInstance()->getBaseUrl(),
         ));
-        Zend_Session::regenerateId();
+        // Zend_Session::regenerateId();
         return new Zend_Session_Namespace();
     }
 
