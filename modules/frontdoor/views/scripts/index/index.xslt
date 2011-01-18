@@ -149,11 +149,11 @@
             <xsl:apply-templates select="@Language" />
 
             <xsl:choose>
-                <xsl:when test="normalize-space(@CompletedYear) != '0000'">
-                    <xsl:apply-templates select="@CompletedYear" />
+                <xsl:when test="normalize-space(CompletedDate/@Year)">
+                    <xsl:apply-templates select="CompletedDate" />
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:apply-templates select="@ComletedDate" />
+                    <xsl:apply-templates select="@CompletedYear" />
                 </xsl:otherwise>
             </xsl:choose>
 
