@@ -211,13 +211,10 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      *
      */
     protected function _initTranslation()  {
-        $this->bootstrap(array('Logging','TranslationCache'));
+        $this->bootstrap(array('Session', 'Logging', 'TranslationCache'));
 
         $logger = $this->getResource('Logging');
-
-        Zend_Session::setOptions(array(
-            'cookie_path' => Zend_Controller_Front::getInstance()->getBaseUrl()
-        ));        
+        $sessiondata = $this->getResource('Session');
 
         $options = array(
             'clear' => false,
@@ -273,18 +270,28 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
     }
 
     /**
+     * Setup session.
+     *
+     * @return Zend_Session_Namespace 
+     */
+    protected function _initSession() {
+        Zend_Session::setOptions(array(
+            'cookie_path' => Zend_Controller_Front::getInstance()->getBaseUrl(),
+        ));
+        Zend_Session::regenerateId();
+        return new Zend_Session_Namespace();
+    }
+
+    /**
      * Setup language list.
      *
      * @return void
      */
     protected function _initLanguageList() {
-        $this->bootstrap('Translation');
+        $this->bootstrap(array('Session', 'Logging', 'Translation'));
 
+        $sessiondata = $this->getResource('Session');
         $logger = $this->getResource('Logging');
-        Zend_Session::setOptions(array(
-            'cookie_path' => Zend_Controller_Front::getInstance()->getBaseUrl()
-        ));
-        $sessiondata = new Zend_Session_Namespace();
 
         $languages = array();
         try {
