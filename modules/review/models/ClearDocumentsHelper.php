@@ -51,7 +51,8 @@ class Review_Model_ClearDocumentsHelper {
         $logger->debug('Clearing documents: ' . implode(", ", $docIds));
 
         foreach ($docIds AS $docId) {
-            $document = new Opus_Document( (int) $docId);
+            $docId = (int) $docId;
+            $document = new Opus_Document($docId);
             $state = $document->getServerState();
 
             if ($state !== 'unpublished') {
@@ -105,7 +106,8 @@ class Review_Model_ClearDocumentsHelper {
         $logger = Zend_Registry::get('Zend_Log');
 
         foreach ($docIds AS $docId) {
-            $document = new Opus_Document( (int) $docId);
+            $docId = (int) $docId;
+            $document = new Opus_Document($docId);
             $state = $document->getServerState();
 
             if ($state !== 'unpublished') {
