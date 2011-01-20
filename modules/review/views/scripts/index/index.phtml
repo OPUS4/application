@@ -74,7 +74,7 @@
     <?PHP $document = new Review_Model_DocumentAdapter($this, $docId); ?>
     <tr class="<?= ($index++ % 2) ? 'even' : 'odd' ?>">
         <td><input type="checkbox" name="selected[]" value="<?= $document->getDocId()?>"
-                <?= ((in_array($document->getDocId(), $this->selected) || $this->selectAll) && !$this->selectNone)  ? 'checked' : '' ?> /></td>
+                <?= (!$this->selectNone && ($this->selectAll || in_array($document->getDocId(), $this->selected)))  ? 'checked' : '' ?> /></td>
         <td class="id"><?= $document->getDocId() ?></td>
         <td>
             <div class="title">
