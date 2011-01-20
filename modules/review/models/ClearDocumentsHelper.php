@@ -47,7 +47,6 @@ class Review_Model_ClearDocumentsHelper {
     public function clear(array $docIds = null, Opus_Person $person = null) {
         $logger = Zend_Registry::get('Zend_Log');
         $config = Zend_Registry::get('Zend_Config');
-        $moduleConfig = $config->clearing;
 
         $logger->debug('Clearing documents: ' . implode(", ", $docIds));
 
@@ -67,12 +66,7 @@ class Review_Model_ClearDocumentsHelper {
             $date = new Opus_Date();
             $date->setNow();
             $document->setServerDatePublished($date);
-
-            if (isset($moduleConfig)) {
-                if ($moduleConfig->setPublishedDate) {
-                    $document->setPublishedDate($date);
-                }
-            }
+            $document->setPublishedDate($date);
 
             $guest_role = Opus_Role::fetchByName('guest');
             foreach ($document->getFile() AS $file)  {
