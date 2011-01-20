@@ -154,12 +154,12 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
     public static function parse_keywords($keywords = '') {
 
         $keywords = preg_replace("/\.$/", "",  $keywords);
-        $keywords = str_replace("\n", " ", $keywords);
-        $keywords = str_replace("\r", " ", $keywords);
-        $keywords = str_replace("\t", " ", $keywords);
+//        $keywords = str_replace("\n", " ", $keywords);
+//        $keywords = str_replace("\r", " ", $keywords);
+//        $keywords = str_replace("\t", " ", $keywords);
 
         $keyword_list = array();
-        foreach (preg_split("/[,;]+/", trim($keywords)) AS $keyword) {
+        foreach (preg_split("/[,;\r\n\t]+/", trim($keywords)) AS $keyword) {
             $new_keyword = trim($keyword);
 
             if (preg_match('/[^A-Za-z -]/', $new_keyword)) {
@@ -617,7 +617,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             $sid = $preprint['serial'];
 
             $doc = new Opus_Document();
-            $doc->setType('matheonpreprint');
+            $doc->setType('preprintmatheon');
             $doc->setLanguage('eng');
 
             //    <field name="id">1</field>
