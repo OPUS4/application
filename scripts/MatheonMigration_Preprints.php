@@ -524,6 +524,9 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
         $publish_privilege->setDocumentServerState('published');
         $guest_role->store();
 
+        $referee_user = Opus_Account::fetchAccountByLogin('referee');
+        $referee_user->delete();
+
         $user_role = Opus_Role::fetchByName('user');
         $reviewer_role = Opus_Role::fetchByName('reviewer');
         $admin_role = Opus_Role::fetchByName('administrator');
