@@ -26,7 +26,8 @@
  *
  * @package     Application - Module Review
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @author      Thoralf Klein <thoralf.klein@zib.de>
+ * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -75,39 +76,33 @@ class Review_IndexController extends Controller_Action {
             if (count($this->view->selected) > 0) {
                 $this->_forward('clear');
             }
-            else {
-                $this->view->error = $this->view->translate(
-                        'review_error_noselection');
-            }
+            $this->view->error = $this->view->translate('review_error_noselection');
         }
 
         if ($this->_isButtonPressed('buttonReject', true, false)) {
             if (count($this->view->selected) > 0) {
                 $this->_forward('reject');
             }
-            else {
-                $this->view->error = $this->view->translate('review_error_noselection');
-            }
+            $this->view->error = $this->view->translate('review_error_noselection');
         }
 
-        $this->view->actionUrl = $this->view->url(array('action'=>'index'));
-
-        $request = $this->getRequest();
-
-        $sort_order = $request->getParam('sort_order');
-        $this->view->sort_order = $sort_order;
-
-        $sort_reverse = $request->getParam('sort_reverse') ? 1 : 0;
+        $sort_order = $this->_getParam('sort_order');
+        $sort_reverse = $this->_getParam('sort_reverse') ? 1 : 0;
         $sort_reverse = $this->_isButtonPressed('buttonUp', '0', $sort_reverse);
         $sort_reverse = $this->_isButtonPressed('buttonDown', '1', $sort_reverse);
+
+        $this->view->actionUrl = $this->view->url(array('action'=>'index'));
+        $this->view->sort_order = $sort_order;
         $this->view->sort_reverse = $sort_reverse;
-
-        $this->view->selectAll = $this->_isButtonPressed('buttonSelectAll',
-                true, false);
-        $this->view->selectNone = $this->_isButtonPressed('buttonSelectNone',
-                true, false);
-
-        $this->_prepareSortOptions();
+        $this->view->selectAll = $this->_getParam('buttonSelectAll')  ? 1 : 0;
+        $this->view->selectNone = $this->_getParam('buttonSelectNone')  ? 1 : 0;
+        $this->view->sortOptions = array(
+            'author' => $this->view->translate('review_option_author'),
+            'publicationDate' => $this->view->translate('review_option_date'),
+            'docType' => $this->view->translate('review_option_doctype'),
+            'title' => $this->view->translate('review_option_title'),
+            'id' => $this->view->translate('review_option_docid'),
+        );
 
         // Get list of document identifiers
         $finder = $this->_prepareSearcher();
@@ -115,35 +110,32 @@ class Review_IndexController extends Controller_Action {
         switch ($sort_order) {
             case 'author':
                 $finder->orderByAuthorLastname($sort_reverse != 1);
+                break;
             case 'publicationDate':
                 $finder->orderByServerDatePublished($sort_reverse != 1);
+                break;
             case 'docType':
                 $finder->orderByType($sort_reverse != 1);
+                break;
             case 'title':
                 $finder->orderByTitleMain($sort_reverse != 1);
+                break;
             default:
                 $finder->orderById($sort_reverse != 1);
         }
 
         $result = $finder->ids();
-
-        // TODO remove or disable if log level is not DEBUG
-        foreach ($result as $testid) {
-            $this->_logger->debug('Document '. $testid);
-        }
-
         if (empty($result)) {
             return $this->_helper->viewRenderer('nodocs');
         }
 
-        $this->view->documentCount = count($result);
-
         $currentPage = $this->_getParam('page', 1);
-        $this->view->currentPage = $currentPage;
-
         $paginator = Zend_Paginator::factory($result);
         $paginator->setCurrentPageNumber($currentPage);
         $paginator->setItemCountPerPage(10);
+
+        $this->view->currentPage = $currentPage;
+        $this->view->documentCount = count($result);
         $this->view->paginator = $paginator;
     }
 
@@ -249,19 +241,6 @@ class Review_IndexController extends Controller_Action {
 //        $this->view->title = $this->view->translate('admin_doc_delete');
         $this->view->text = $this->view->translate('review_reject_sure');
         $this->view->actionUrl = $this->view->url(array('action' => 'reject'));
-    }
-
-    /**
-     * Prepares array of sorting options for the form.
-     */
-    protected function _prepareSortOptions() {
-        $sortOptions = array();
-        $sortOptions['id'] = $this->view->translate('review_option_docid');
-        $sortOptions['title'] = $this->view->translate('review_option_title');
-        $sortOptions['author'] = $this->view->translate('review_option_author');
-        $sortOptions['publicationDate'] = $this->view->translate('review_option_date');
-        $sortOptions['docType'] = $this->view->translate('review_option_doctype');
-        $this->view->sortOptions = $sortOptions;
     }
 
     /**
