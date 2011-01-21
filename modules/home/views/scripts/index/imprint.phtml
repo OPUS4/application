@@ -38,5 +38,10 @@
 <h1><?= $this->translate('home_index_imprint_title') ?></h1>
 
 <p>
-<?= $this->translate('help_content_imprint') ?>
+<?php $translation = $this->translate('help_content_imprint'); ?>
+<?php if (file_exists($this->getScriptPath('') . $translation)) : ?>
+    <?= file_get_contents($this->getScriptPath('') . $translation) ?>
+<?php else: ?>
+    <?= $translation ?>
+<?php endif ?>
 </p>
