@@ -63,6 +63,13 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
     private $persons = array();
 
     /**
+     * Associative array maps user_ids to Opus_Account ids.
+     *
+     * @var array
+     */
+    private $accounts = array();
+
+    /**
      * Associative array maps preprint_ids to arrays of Opus_Person.
      *
      * @var array
@@ -550,6 +557,9 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             $account->addRole( $user_role );
             $account->addRole( $guest_role );
             $account->store();
+
+            $user_id = trim($user['user_id']);
+            $this->accounts[$user_id] = $account->getId();
         }
 
         return count($users);
@@ -678,6 +688,16 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
                 throw new Exception("No referee for document $pid");
             }
 
+            if (!empty($field)) {
+                $enrichhment = $doc->addEnrichment();
+                $enrichhment->setKeyName('matheon_old.referee_id');
+                $enrichhment->setValue($field);
+
+                $enrichhment = $doc->addEnrichment();
+                $enrichhment->setKeyName('matheon_new.referee_id');
+                $enrichhment->setValue( $this->accounts[$field] );
+            }
+
             //    <field name="approve_date">2003-12-10 00:00:00</field>
             $doc->setPublishedDate($preprint['approve_date']);
 
@@ -698,6 +718,21 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             }
             else {
                 // throw new Exception("No owner for document $pid");
+            }
+
+            if (!empty($field)) {
+                $enrichhment = $doc->addEnrichment();
+                $enrichhment->setKeyName('matheon_old.owner_id');
+                $enrichhment->setValue($field);
+
+                if (array_key_exists($field, $this->accounts)) {
+                    $enrichhment = $doc->addEnrichment();
+                    $enrichhment->setKeyName('matheon_new.owner_id');
+                    $enrichhment->setValue( $this->accounts[$field] );
+                }
+                else {
+                    echo "---- Fehlende ACCOUNT_ID fuer USER_ID $field!\n";
+                }
             }
 
             //    <field name="abstract" xsi:nil="true" />
@@ -835,9 +870,9 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
                 $docid = $doc->store();
                 echo "created $counter/$total documents -- opus_id: $docid, serial: {$preprint['serial']}, pid: $pid\n";
             }
-            catch (Opus_Model_Exception $e) {
+            catch (Opus_Model_Exception $enrichhment) {
                 echo "failed creating document $counter/$total --serial: {$preprint['serial']}, pid: $pid\n";
-                throw $e;
+                throw $enrichhment;
             }
 
             // Finally: Write collected experiment data.
