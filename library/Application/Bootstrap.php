@@ -275,14 +275,9 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * @return Zend_Session_Namespace 
      */
     protected function _initSession() {
-        $base_url = Zend_Controller_Front::getInstance()->getBaseUrl();
-        $logger = $this->getResource('Logging');
-        $logger->debug("Bootstrap/Session: Found base-url '$base_url'");
-
-        Zend_Session::setOptions(array(
-            'cookie_path' => $base_url,
-        ));
-        // Zend_Session::regenerateId();
+        // Zend_Session::setOptions(array('cookie_path' => '...'));
+        // $config = new Zend_Config_Ini('cookie.ini', 'development');
+        // Zend_Session::setOptions($config->toArray());
         return new Zend_Session_Namespace();
     }
 
