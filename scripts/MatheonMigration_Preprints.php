@@ -720,6 +720,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
                 // throw new Exception("No owner for document $pid");
             }
 
+            $idmissing = "";
             if (!empty($field)) {
                 $enrichhment = $doc->addEnrichment();
                 $enrichhment->setKeyName('matheon_old.owner_id');
@@ -731,7 +732,8 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
                     $enrichhment->setValue( $this->accounts[$field] );
                 }
                 else {
-                    echo "---- Fehlende ACCOUNT_ID fuer USER_ID $field!\n";
+                    $idmissing = "---- Fehlende ACCOUNT_ID fuer USER_ID $field - id $pid / serial $sid";
+                    echo "$idmissing\n";
                 }
             }
 
@@ -869,6 +871,9 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
                 $doc->setBelongsToBibliography(0);
                 $docid = $doc->store();
                 echo "created $counter/$total documents -- opus_id: $docid, serial: {$preprint['serial']}, pid: $pid\n";
+                if (!empty($idmissing)) {
+                    echo "-- $idmissing / opus-id $docid\n";
+                }
             }
             catch (Opus_Model_Exception $enrichhment) {
                 echo "failed creating document $counter/$total --serial: {$preprint['serial']}, pid: $pid\n";
