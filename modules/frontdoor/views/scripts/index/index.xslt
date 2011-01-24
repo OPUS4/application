@@ -583,32 +583,6 @@
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="Collection[@RoleName='institutes']">
-        <xsl:choose>
-            <xsl:when test="position()=1">
-                <tr>
-                    <th class="name">
-                        <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">collection_role_frontdoor_<xsl:value-of select="@RoleName" /></xsl:with-param>
-                        </xsl:call-template>
-                        <xsl:text>:</xsl:text>
-                    </th>
-                    <td>
-                        <xsl:call-template name="checkdisplay"/>
-                    </td>
-                </tr>
-            </xsl:when>
-            <xsl:otherwise>
-                <tr>
-                    <td></td>
-                    <td>
-                        <xsl:call-template name="checkdisplay"/>
-                    </td>
-                </tr>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-
     <xsl:template match="Collection[@RoleName='pacs']">
         <xsl:choose>
             <xsl:when test="position()=1">
@@ -668,7 +642,7 @@
                     </th>
                 </xsl:when>
                 <xsl:otherwise>
-                    <td></td>
+                    <th class="name"></th>
                 </xsl:otherwise>
             </xsl:choose>
             <td>
@@ -1031,8 +1005,9 @@
             <th class="name">
                 <xsl:if test="position() = 1">
                     <xsl:call-template name="translateString">
-                        <xsl:with-param name="string">subject_<xsl:value-of select="@Type" /></xsl:with-param>
+                        <xsl:with-param name="string">subject_frontdoor_<xsl:value-of select="@Type" /></xsl:with-param>
                     </xsl:call-template>
+                    <xsl:text>:</xsl:text>
                 </xsl:if>
             </th>
             <td>
