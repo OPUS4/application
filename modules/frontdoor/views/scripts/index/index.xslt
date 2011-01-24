@@ -149,7 +149,7 @@
             <xsl:apply-templates select="@Language" />
 
             <xsl:choose>
-                <xsl:when test="normalize-space(CompletedDate/@Year)">
+                <xsl:when test="normalize-space(CompletedDate/@Year) != '0000'">
                     <xsl:apply-templates select="CompletedDate" />
                 </xsl:when>
                 <xsl:otherwise>
@@ -158,7 +158,7 @@
             </xsl:choose>
 
             <xsl:choose>
-                <xsl:when test="normalize-space(PublishedDate/@Year)">
+                <xsl:when test="normalize-space(PublishedDate/@Year) != '0000'">
                     <xsl:apply-templates select="PublishedDate" />
                 </xsl:when>
                 <xsl:otherwise>
@@ -752,7 +752,9 @@
     <xsl:template match="PersonAuthor">
         <tr>
             <th class="name">
-                <xsl:call-template name="translateFieldname"/>:
+                <xsl:if test="position() = 1">
+                   <xsl:call-template name="translateFieldname"/>:
+                </xsl:if>
             </th>
             <td>
                 <xsl:element name="a">
