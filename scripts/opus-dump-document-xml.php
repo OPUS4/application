@@ -40,10 +40,10 @@ require_once dirname(__FILE__) . '/common/bootstrap.php';
 array_shift($argv);
 
 // Dump given documents
-echo "dumping document(s): " . implode(", ", $argv), "\n";
+error_log("dumping document(s): " . implode(", ", $argv));
 
 foreach ($argv AS $docId) {
-   echo "<!-- dumping document-id $docId: -->\n";
+   error_log("<!-- dumping document-id $docId: -->");
 
    $d = new Opus_Document($docId);
    $d_xml = $d->toXml();
