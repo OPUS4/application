@@ -54,7 +54,7 @@
         </tu>
         <tu tuid="review_menu_label_description">
             <tuv xml:lang="en">
-                <seg>Publish unpublished documents.</seg>
+                <seg>Release unpublished documents.</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>Unveröffentlichte Dokumente freischalten.</seg>
