@@ -439,7 +439,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
         $role = new Opus_CollectionRole();
         $role->setName('institutes');
         $role->setOaiName('institutes');
-        $role->setVisible(1);
+        $role->setVisible(0);
         $role->setDisplayBrowsing('Name');
         $role->setVisibleBrowsingStart(1);
         $role->setDisplayFrontdoor('Name');
@@ -710,6 +710,13 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             }
 
             //    <field name="prevpub" xsi:nil="true" />
+            $field = trim($preprint['prevpub']);
+            if (!empty($field)) {
+                $enrichhment = $doc->addEnrichment();
+                $enrichhment->setKeyName('matheon_old.prevpub');
+                $enrichhment->setValue( $field );
+            }
+
             //    <field name="owner_id">606</field>
             $field = $preprint['owner_id'];
             if (array_key_exists($field, $this->persons)) {
