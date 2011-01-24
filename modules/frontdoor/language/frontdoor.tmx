@@ -417,15 +417,6 @@
       </tuv>
     </tu>
 
-    <tu tuid="col">
-      <tuv xml:lang="en">
-        <seg>Collection</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Sammlung</seg>
-      </tuv>
-    </tu>
-
     <tu tuid="collection_role_frontdoor_ccs">
       <tuv xml:lang="en">
         <seg>CCS-Classification</seg>
