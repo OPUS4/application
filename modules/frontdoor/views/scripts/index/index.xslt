@@ -175,12 +175,20 @@
                 <xsl:apply-templates select="@ContributingCorporation" />
             </xsl:if>
 
-            <xsl:apply-templates select="SubjectSwd" />
-            <xsl:apply-templates select="SubjectUncontrolled" />
-            <xsl:apply-templates select="SubjectPsyndex" />
-            <xsl:apply-templates select="SubjectMSC" >
-                <xsl:sort select="@Value"/>
-            </xsl:apply-templates>
+
+
+            <!-- -->
+            <!-- Subjects section.  New subjects must be introduced right here. -->
+            <!-- -->
+
+            <xsl:apply-templates select="Subject[@Type='uncontrolled']"><xsl:sort select="@Value"/></xsl:apply-templates>
+            <xsl:apply-templates select="Subject[@Type='swd']"><xsl:sort select="@Value"/></xsl:apply-templates>
+            <xsl:apply-templates select="Subject[@Type='ddc']"><xsl:sort select="@Value"/></xsl:apply-templates>
+            <xsl:apply-templates select="Subject[@Type='msc']"><xsl:sort select="@Value"/></xsl:apply-templates>
+            <xsl:apply-templates select="Subject[@Type='psyndex']"><xsl:sort select="@Value"/></xsl:apply-templates>
+
+
+
             <xsl:apply-templates select="@Source" />
             <xsl:apply-templates select="@Volume" />
             <xsl:apply-templates select="@Issue" />
@@ -1018,49 +1026,14 @@
         </tr>
     </xsl:template>
 
-    <xsl:template match="SubjectPsyndex">
+    <xsl:template match="Subject">
         <tr>
             <th class="name">
-                <xsl:call-template name="translateFieldname"/>:
-            </th>
-            <td>
-                <em class="data-marker">
-                    <xsl:value-of select="@Value" />
-                </em>
-            </td>
-        </tr>
-    </xsl:template>
-
-    <xsl:template match="SubjectSwd">
-        <tr>
-            <th class="name">
-                <xsl:call-template name="translateFieldname"/>:
-            </th>
-            <td>
-                <em class="data-marker">
-                    <xsl:value-of select="@Value" />
-                </em>
-            </td>
-        </tr>
-    </xsl:template>
-
-    <xsl:template match="SubjectUncontrolled">
-        <tr>
-            <th class="name">
-                <xsl:call-template name="translateFieldname"/>:
-            </th>
-            <td>
-                <em class="data-marker">
-                    <xsl:value-of select="@Value" />
-                </em>
-            </td>
-        </tr>
-    </xsl:template>
-
-    <xsl:template match="SubjectMSC">
-        <tr>
-            <th class="name">
-                <xsl:call-template name="translateFieldname"/>:
+                <xsl:if test="position() = 1">
+                    <xsl:call-template name="translateString">
+                        <xsl:with-param name="string">subject_<xsl:value-of select="@Type" /></xsl:with-param>
+                    </xsl:call-template>
+                </xsl:if>
             </th>
             <td>
                 <em class="data-marker">
