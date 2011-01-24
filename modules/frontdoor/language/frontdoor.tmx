@@ -417,6 +417,51 @@
       </tuv>
     </tu>
 
+     <tu tuid="subject_frontdoor_swd">
+      <tuv xml:lang="en">
+        <seg>SWD-Keyword</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>SWD-Schlagwort</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="subject_frontdoor_msc">
+      <tuv xml:lang="en">
+        <seg>MSC-Classfication</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>MSC-Klassifikation</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="subject_frontdoor_ddc">
+      <tuv xml:lang="en">
+        <seg>DDC Term</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>DDC Sachgruppe</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="subject_frontdoor_uncontrolled">
+      <tuv xml:lang="en">
+        <seg>Tag</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Freies Schlagwort / Tag</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="subject_frontdoor_psyndex">
+      <tuv xml:lang="en">
+        <seg>Psyndex Keyword</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Psyndex-Schlagwort</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="collection_role_frontdoor_ccs">
       <tuv xml:lang="en">
         <seg>CCS-Classification</seg>
