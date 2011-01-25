@@ -36,6 +36,16 @@
         </tuv>
     </tu>
 
+    <tu tuid="hint_fileupload">
+        <!-- Text for alreaded uploaded files -->
+        <tuv xml:lang="en">
+            <seg>Please choose a file for uploading</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte wählen Sie eine Datei, die Sie hochladen möchten </seg>
+        </tuv>
+    </tu>
+
     <tu tuid="already_uploaded_files">
         <!-- Text for alreaded uploaded files -->
         <tuv xml:lang="en">

@@ -138,7 +138,7 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
             case 'Zend_Form_Element_Checkbox' :
                 $elementfield .= "<input type='hidden' name='" . $element['id'] . "' value='0' />";
                 $elementfield .= "\n\t\t\t\t<input type='checkbox' name='" . $element['id'] . "' id='" . $element['id'] . "' ";
-                $elementfield .= "title='" . $this->view->translate($element['hint']) . "' value='" . $element['value'] . "' ";
+                $elementfield .= "value='" . $element['value'] . "' ";
                 if ($element['check'] == 'checked')
                     $elementfield .= " checked='checked' ";
 

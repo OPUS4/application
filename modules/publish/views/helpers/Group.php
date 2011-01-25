@@ -162,7 +162,7 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                     case 'Zend_Form_Element_Checkbox' :
                         $fieldset .= "<input type='hidden' name='" . $field['id'] . "' value='0' />";
                         $fieldset .= "\n\t\t\t\t<input type='checkbox' class='form-checkbox' name='" . $field['id'] . "' id='" . $field['id'] . "' ";
-                        $fieldset .= "title='" . $this->view->translate($field['hint']) . "' value='" . $field['value'] . "' ";
+                        $fieldset .= "value='" . $field['value'] . "' ";
                         if ($field['value'] === '1')
                             $fieldset .= " checked='checked' />";
                         else
