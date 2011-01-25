@@ -108,24 +108,14 @@ class Frontdoor_IndexController extends Controller_Action {
     /**
      * maps an old ID from OPUS3 to the new one in OPUS4
      * 
+     * @deprecated since OPUS 4.0.3: this function will be removed in future releases
+     * use Rewrite_IndexController instead
+     * 
      * @return void
      */
     public function mapopus3Action() {
-    	$docId = $this->getRequest()->getParam('oldId');
-    	$newId = Opus_Document::getDocumentByIdentifier($docId, 'opus3-id');
-    	if ($newId[0] === 0) {
-    	    // if the document with the given ID in OPUS3 does not exist, redirect to start page
-    	    $config = Zend_Registry::get('Zend_Config');
-
-		    $module = $config->startmodule;
-		    if (empty($module) === true) {
-			    $module = 'home';
-		    }
-		
-		    $this->_helper->getHelper('Redirector')->gotoSimple('index', 'index', $module);
-    	}
-    	$params = array('docId' => $newId[0]);
-    	$this->_helper->_redirector('index', 'index', 'frontdoor', $params);
+        $docId = $this->getRequest()->getParam('oldId');
+        $this->_redirectToAndExit('id', '', 'index', 'rewrite', array('type' => 'opus3-id', 'value' => $docId));
     }
 
     /**
