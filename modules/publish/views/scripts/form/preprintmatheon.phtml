@@ -56,6 +56,8 @@
     <?= $this->group($this->groupSubjectMSC); ?>
     <?= $this->group($this->groupSubjectUncontrolled); ?>
 
+    <?= $this->fileOverview(); ?>
+
     <div class="button-wrapper">
         <?= $this->element('button_label_abort', "class='form-button abort-button'", "Submit", "abort"); ?>
         <?= $this->element('button_label_send', "class='form-button submit-button'", "Submit", "send"); ?>
