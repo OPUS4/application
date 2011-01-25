@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -46,8 +47,7 @@ class AuthController extends Controller_Action {
      *
      * @var array
      */
-    protected $_login_url = array('action' => 'index', 'controller' => 'index', 'module' => 'default', 'params' => array());
-    
+    protected $_login_url = array('action' => 'login', 'controller' => 'index', 'module' => 'default', 'params' => array());
     /**
      * Default URL to goto after successful logout. Maybe overwritten by findRemoteParameters().
      *
@@ -61,24 +61,13 @@ class AuthController extends Controller_Action {
      * @return void
      */
     public function indexAction() {
-        // check for return module, controller, action and parameteres
-        $rparams = $this->findReturnParameters();
-
-        // Retrieve the current configured identity.
         $identity = Zend_Auth::getInstance()->getIdentity();
         if (empty($identity) === true) {
-            // Nobody is logged in, so present the login form.
-            // Do not forget return parameters.
-            $url = $this->view->url(array_merge(array('action' => 'login', 'controller' => 'auth', 'module' => 'default'), $rparams));
-            $this->view->form = $this->getLoginForm();
-            $this->view->form->setAction($url);
-        } else {
-            // Somebody is logged in, so present the logout link.
-            // Do not forget return parameters.
-            $url = $this->view->url(array_merge(array('action' => 'logout', 'controller' => 'auth', 'module' => 'default'), $rparams));
-            $text = 'Logout ' . $identity . '.';
-            $this->view->form = '<a href="' . $url . '">' . $text . '</a>';
+            return $this->loginAction();
         }
+
+        $this->view->logout_url = $this->view->url(array('action' => 'logout'));
+        $this->view->identity = htmlspecialchars($identity);
     }
 
     /**
@@ -88,65 +77,73 @@ class AuthController extends Controller_Action {
      * @return void
      */
     public function loginAction() {
+
+        // Initialize form.
+        $form = $this->getLoginForm();
+
         // check for return module, controller, action and parameteres, overwrite $_login_url.
         $rparams = $this->findReturnParameters();
 
-        if ($this->getRequest()->isPost() === true) {
-            // Credentials coming in via POST operation.
-            
-            // Get a login form instance for validation.
-            $form = $this->getLoginForm();
-            
-            // Get request data.
-            $data = $this->_request->getPost();
-            
-            if ($form->isValid($data) === true) {
-                // Form data is valid (including the hash field)
-        		$config = Zend_Registry::get('Zend_Config');
-    
-	        	$authenticationModule = $config->authenticationModule;
-        		if ($authenticationModule === 'Ldap') {
-		        	$auth = new Opus_Security_AuthAdapter_Ldap();
-		        }
-		        else {
-		        	$auth = new Opus_Security_AuthAdapter();
-		        }
- 
-                // Perfom authentication attempt
-                $auth->setCredentials($data['login'], $data['password']);
-                $auth_result = $auth->authenticate();
+        if ($this->getRequest()->isPost() !== true) {
+            // Do not forget return parameters.
+            $url = $this->view->url(array_merge(array('action' => 'login', 'controller' => 'auth', 'module' => 'default'), $rparams));
+            $form->setAction($url);
 
-                if ($auth_result->isValid() === true) {
-                    // Persistent the successful authenticated identity.
-                    Zend_Auth::getInstance()->getStorage()->write($data['login']);
-                    
-                    // Redirect to post login url.
-                    $action = $this->_login_url['action'];
-                    $controller = $this->_login_url['controller'];
-                    $module = $this->_login_url['module'];
-                    $params = $this->_login_url['params'];
-                    $this->_helper->_redirector($action, $controller, $module, $params);
-                } else {
-                    // Put authentication failure message to the view.
-                    $this->view->auth_failed_msg = $auth_result->getMessages();
-                    $this->view->auth_failed_msg = $this->view->auth_failed_msg[0];
-                    // Populate the form again to trigger validator decorators.
-                    $form->populate($data);
-                    $this->view->form = $form;
-                }
-            } else {
-                // Put authentication failure message to the view.
-                $this->view->auth_failed_msg = 'Invalid credentials';
-                // Populate the form again to trigger validator decorators.
-                $form->populate($data);
-                $this->view->form = $form;
-            }
-            // Render index script to show the login form again.
-            $this->render('index');
-        } else {
-            // Redirect to index on GET operation.
-            $this->_helper->_redirector('index', 'auth', 'default', $rparams);
+            $this->view->form = $form;
+            return;
         }
+
+        // Credentials coming in via POST operation.
+        // Get a login form instance for validation.
+        // Get request data.
+        $data = $this->_request->getPost();
+
+        if ($form->isValid($data) !== true) {
+            // Put authentication failure message to the view.
+            $this->view->auth_failed_msg = 'Invalid credentials';
+
+            // Populate the form again to trigger validator decorators.
+            $form->populate($data);
+
+            $this->view->form = $form;
+            return;
+        }
+
+        // Form data is valid (including the hash field)
+        $auth = new Opus_Security_AuthAdapter();
+
+        // Overwrite auth adapter if config-key is set.
+        $config = Zend_Registry::get('Zend_Config');
+        if (isset($config, $config->authenticationModule) and ($config->authenticationModule === 'Ldap')) {
+            $auth = new Opus_Security_AuthAdapter_Ldap();
+        }
+
+        // Perfom authentication attempt
+        $auth->setCredentials($data['login'], $data['password']);
+        $auth_result = $auth->authenticate();
+
+        if ($auth_result->isValid() !== true) {
+            // Put authentication failure message to the view.
+            $message = $auth_result->getMessages();
+            $this->view->auth_failed_msg = $message[0];
+
+            // Populate the form again to trigger validator decorators.
+            $form->populate($data);
+
+            $this->view->form = $form;
+            return;
+        }
+
+        // Persistent the successful authenticated identity.
+        Zend_Auth::getInstance()->getStorage()->write($data['login']);
+
+        // Redirect to post login url.
+        $action = $this->_login_url['action'];
+        $controller = $this->_login_url['controller'];
+        $module = $this->_login_url['module'];
+        $params = $this->_login_url['params'];
+        $this->_helper->_redirector($action, $controller, $module, $params);
+
     }
 
     /**
@@ -165,7 +162,6 @@ class AuthController extends Controller_Action {
         $this->_helper->_redirector($action, $controller, $module, $params);
     }
 
-
     /**
      * Assembles and returns a login form.
      *
@@ -180,14 +176,14 @@ class AuthController extends Controller_Action {
         // Login name element.
         $login = new Zend_Form_Element_Text('login');
         $login->addValidator(new Zend_Validate_Regex('/^[A-Za-z0-9@._-]+$/'))
-            ->setRequired()
-            ->setLabel('auth_field_login');
+                ->setRequired()
+                ->setLabel('auth_field_login');
 
         // Password element.
         $password = new Zend_Form_Element_Password('password');
         $password->addValidator(new Zend_Validate_Alnum())
-            ->setRequired()
-            ->setLabel('auth_field_password');
+                ->setRequired()
+                ->setLabel('auth_field_password');
 
         // Submit button.
         $submit = new Zend_Form_Element_Submit('SubmitCredentials');
@@ -211,36 +207,36 @@ class AuthController extends Controller_Action {
         $rparams = array();
         foreach($params as $key=>$value) {
             switch ($key) {
-            // ignore default parameters
-            case 'module' :
-                break;
-            case 'controller' :
-                break;
-            case 'action' :
-                break;
-            // do not forward login credentials
-            case 'hash' :
-                break;
-            case 'login' :
-                break;
-            case 'password' :
-                break;
-            case 'SubmitCredentials' :
-                break;
-            // find return module, controller, action and parameters
-            case 'rmodule' :
-                $rmodule = $value;
-                break;
-            case 'rcontroller' :
-                $rcontroller = $value;
-                break;
-            case 'raction' :
-                $raction = $value;
-                break;
-            default :
-                // parameter of old url
-                $rparams[$key] = $value;
-                break;
+                // ignore default parameters
+                case 'module' :
+                    break;
+                case 'controller' :
+                    break;
+                case 'action' :
+                    break;
+                // do not forward login credentials
+                case 'hash' :
+                    break;
+                case 'login' :
+                    break;
+                case 'password' :
+                    break;
+                case 'SubmitCredentials' :
+                    break;
+                // find return module, controller, action and parameters
+                case 'rmodule' :
+                    $rmodule = $value;
+                    break;
+                case 'rcontroller' :
+                    $rcontroller = $value;
+                    break;
+                case 'raction' :
+                    $raction = $value;
+                    break;
+                default :
+                    // parameter of old url
+                    $rparams[$key] = $value;
+                    break;
             }
         }
 
@@ -263,7 +259,7 @@ class AuthController extends Controller_Action {
                 'module' => $rmodule,
                 'params' => $rparams,
             );
-        return array_merge(array('rmodule' => $rmodule, 'rcontroller' => $rcontroller, 'raction' => $raction), $rparams);
+            return array_merge(array('rmodule' => $rmodule, 'rcontroller' => $rcontroller, 'raction' => $raction), $rparams);
         }
         return array();
 
