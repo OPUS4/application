@@ -1356,10 +1356,16 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
 
     <tu tuid="hint_documentUpload">
         <tuv xml:lang="en">
-            <seg>Choose your document. In case you want to upload more files, click the button.</seg>
+            <seg>
+            Upload your fulltext documents here.  You get more upload-fields by
+            pressing the PLUS-sign.
+            </seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Wählen Sie Ihr Dokument. Wenn Sie mehrere Dateien hochladen möchten, klicken Sie auf den Button.</seg>
+            <seg>
+            Wählen Sie Ihr die hochzuladenden Dokumente.  Weitere Upload-Felder
+            erhalten Sie per Klick auf das PLUS-Zeichen.
+            </seg>
         </tuv>
     </tu>
 
