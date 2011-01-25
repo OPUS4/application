@@ -58,37 +58,56 @@ class Publish_FormController extends Controller_Action {
 
     public function uploadAction() {
         $this->view->languageSelectorDisabled = true;
+        $this->view->title = $this->view->translate('publish_controller_index');
 
+        //get-Request?
         if ($this->getRequest()->isPost() === false) {
             return $this->_redirectTo('index', '', 'index');
         }
 
         $indexForm = new Publish_Form_PublishingFirst($this->view);
-
         $data = $this->getRequest()->getPost();
+        $indexForm->populate($data);
 
+        //manipulated hidden field for file size?
         if (isset($data['MAX_FILE_SIZE']) && $data['MAX_FILE_SIZE'] != $this->session->maxFileSize) {
-            //manipulated hidden field for file size???
             $this->log->debug("wrong Max_file_size and redirect to index");
-
             return $this->_redirectTo('index', '', 'index');
         }
 
-        if (!$indexForm->isValid($data)) {
-            //error case, and redirect to index, show errors
+        //upload another file?
+        if (array_key_exists('addAnotherFile', $data)) {
+            //validate fileupload
+            if (!$indexForm->getElement('fileupload')->isValid($data)) {                
+                $this->view->form = $indexForm;
+                $this->view->subtitle = $this->view->translate('publish_controller_index_sub');
+                $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
+                $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
+                $this->_setFirstFormViewVariables($indexForm);                
+                return $this->renderScript('index/index.phtml');
+            }
+
+            //file valid
+            $this->session->first = false;
+            $this->view->subtitle = $this->view->translate('publish_controller_index_anotherFile');
             $this->view->form = $indexForm;
-            $this->view->title = $this->view->translate('publish_controller_index');
+            $this->_setFirstFormViewVariables($indexForm);
+            $this->_storeUploadedFiles();
+            return $this->renderScript('index/index.phtml');
+        }
+
+        //validate whole form
+        if (!$indexForm->isValid($data)) {            
+            $this->view->form = $indexForm;
             $this->view->subtitle = $this->view->translate('publish_controller_index_sub');
             $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
             $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
             $this->_setFirstFormViewVariables($indexForm);
-
             return $this->renderScript('index/index.phtml');
         }
 
         //form entries are valid
         $this->_setDocumentParameters($data);
-
         $this->view->title = $this->view->translate('publish_controller_index');
         $this->view->subtitle = $this->view->translate($this->session->documentType);
         $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
@@ -102,17 +121,6 @@ class Publish_FormController extends Controller_Action {
         $this->session->documentId = $this->session->document->store();
         $this->log->info("The corresponding doucment ID is: " . $this->session->documentId);
 
-        //upload another file?
-        if (array_key_exists('addAnotherFile', $data)) {
-            $this->session->first = false;
-            $this->view->title = $this->view->translate('publish_controller_index');
-            $this->view->subtitle = $this->view->translate('publish_controller_index_anotherFile');
-            $this->view->form = $indexForm;
-            $this->_setFirstFormViewVariables($indexForm);
-
-            return $this->renderScript('index/index.phtml');
-        }
-
         unset($this->session->first);
         $templateName = $this->_helper->documentTypes->getTemplateName($this->session->documentType);
         $this->_helper->viewRenderer($templateName);
@@ -124,7 +132,6 @@ class Publish_FormController extends Controller_Action {
         $this->_setSecondFormViewVariables($publishForm);
         $this->view->action_url = $action_url;
         $this->view->form = $publishForm;
-
     }
 
     /**
@@ -146,7 +153,7 @@ class Publish_FormController extends Controller_Action {
                 $reload = false;
                 if (isset($this->session->elements))
                     foreach ($this->session->elements AS $element)
-                        $postData[$element['name']] = htmlspecialchars ($element['value']);
+                        $postData[$element['name']] = htmlspecialchars($element['value']);
             }
 
             //initialize the form object
@@ -261,12 +268,12 @@ class Publish_FormController extends Controller_Action {
             //element names have to loose special strings for finding groups
             $name = $this->_getRawElementName($currentElement);
 
-            if (strstr($name, 'Enrichment')) {                    
-                    $name = str_replace('Enrichment', '', $name);
+            if (strstr($name, 'Enrichment')) {
+                $name = str_replace('Enrichment', '', $name);
             }
 
             //build group name
-            $groupName = self::GROUP . $name;            
+            $groupName = self::GROUP . $name;
             $this->view->$name = $this->view->translate($name);
 
             //get the display group for the current element and build the complete group
@@ -437,8 +444,8 @@ class Publish_FormController extends Controller_Action {
         }
 
         $this->session->document->addEnrichment()
-            ->setKeyName('submitter.user_id')
-            ->setValue($userId);
+                ->setKeyName('submitter.user_id')
+                ->setValue($userId);
     }
 
     /**
