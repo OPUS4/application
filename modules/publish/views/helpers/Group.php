@@ -119,7 +119,7 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
 
                         if (strstr($field["id"], "1"))
                             $fieldset .= " title='" . $this->view->translate($field["hint"]) . "' ";
-                        $fieldset .= " value='" . $field["value"] . "' />\n</div>";
+                        $fieldset .= " value='" . htmlspecialchars($field["value"]) . "' />\n</div>";
 
                         break;
 
@@ -133,7 +133,7 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                         if (strstr($field["id"], "1"))
                             $fieldset .= " title='" . $this->view->translate($field["hint"]) . "' ";
 
-                        $fieldset .= " id='" . $field["id"] . "'>" . $field["value"] . "</textarea></div>";
+                        $fieldset .= " id='" . $field["id"] . "'>" . htmlspecialchars($field["value"]) . "</textarea></div>";
 
                         break;
 
@@ -182,7 +182,7 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                         if (isset($this->session->publishFiles) && count($this->session->publishFiles) >= 1) {
                             $fieldset .= "<div class='form-files'><ul>" . $this->view->translate('already_uploaded_files');
                             foreach ($this->session->publishFiles as $file) {
-                                $fieldset .= "\n<li>" . $file . "</li>";
+                                $fieldset .= "\n<li>" . htmlspecialchars($file) . "</li>";
                             }
                             $fieldset .= "</ul></div>";
                         }

@@ -146,7 +146,7 @@ class Publish_FormController extends Controller_Action {
                 $reload = false;
                 if (isset($this->session->elements))
                     foreach ($this->session->elements AS $element)
-                        $postData[$element['name']] = $element['value'];
+                        $postData[$element['name']] = htmlspecialchars ($element['value']);
             }
 
             //initialize the form object

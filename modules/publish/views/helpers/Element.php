@@ -88,7 +88,7 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
                 else
                     $elementfield .= "cols='30' rows='10' ";
                 $elementfield .= " title='" . $this->view->translate($element["hint"]) . "'>";
-                $elementfield .= $element["value"] . "</textarea>";
+                $elementfield .= htmlspecialchars($element["value"]) . "</textarea>";
                
                 break;
 
@@ -103,7 +103,7 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
                     $elementfield .= " disabled='1' ";
                     $disable = true;
                 }
-                $elementfield .= "value='" . $element["value"] . "' />\n\t\t";
+                $elementfield .= "value='" . htmlspecialchars($element["value"]) . "' />\n\t\t";
                 if (isset($element["desc"]))
                     $elementfield .= "<p class='description'>" . $this->view->translate($element["desc"]) . "</p>";
                 
@@ -164,7 +164,7 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
                 if (isset($this->session->publishFiles) && count($this->session->publishFiles) >= 1) {
                     $elementfield .= "<div class='form-files'><ul>" . $this->view->translate('already_uploaded_files');
                     foreach ($this->session->publishFiles as $file) {
-                        $elementfield .= "\n<li>" . $file . "</li>";
+                        $elementfield .= "\n<li>" . htmlspecialchars($file) . "</li>";
                     }
                     $elementfield .= "</ul></div>";
                 }

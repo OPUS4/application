@@ -47,7 +47,7 @@
 <div id="form-table-check">
 <table cellspacing='5' cellpadding='10' width="60%" border="0">
 
-    <!-- listing all fieldset/group with their form elements -->
+    <!-- listing all fieldsets/groups with their form elements -->
     <?php foreach ($form->getDisplayGroups() as $group) : ?>
         <?php if (count($group->getElements())>=1 ) { ?>
             <tr><td class='group' colspan="2"><b><?= $this->translate($group->getName()) ?></b></td></tr>

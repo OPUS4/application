@@ -63,8 +63,7 @@
             <?= $this->group($this->groupSubjectDDC); ?>
             <?= $this->group($this->groupSubjectCCS); ?>
             <?= $this->group($this->groupSubjectPACS); ?>
-            <?= $this->group($this->groupNeuesFeld); ?>
-            <?= $this->element($this->LegalNotices); ?>
+            <?= $this->group($this->groupNeuesFeld); ?>            
             <?= $this->element($this->PageNumber); ?>
             <?= $this->element($this->PageFirst); ?>
             <?= $this->element($this->PageLast); ?>
@@ -97,7 +96,8 @@
             <?= $this->group($this->groupSubjectUncontrolled); ?>
             <?= $this->element($this->Note); ?>
             <?= $this->element($this->Licence); ?>
-            <?= $this->element($this->ServerDateUnlocking); ?>           
+            <?= $this->element($this->ServerDateUnlocking); ?>
+            <?= $this->element($this->LegalNotices); ?>
 
             <div class="button-wrapper">
         <?= $this->element('button_label_abort', "class='form-button abort-button'", "Submit", "abort"); ?>

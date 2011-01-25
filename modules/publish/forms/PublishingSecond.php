@@ -181,9 +181,15 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      * Methods removes unused label, hidden fields, submit fields and empty fields from form to support a proper check page.
      */
     public function prepareCheck() {
-        $defaultNS = new Zend_Session_Namespace('Publish');
-        $defaultNS->elements = array();
-        $defaultNS->depositForm = $this;
+        $session = new Zend_Session_Namespace('Publish');
+        $session->elements = array();
+        
+        foreach ($this->getElements() AS $element) {
+            $value = htmlspecialchars($element->getValue());
+            $element->setValue($value);
+        }
+
+        $session->depositForm = $this;
 
         foreach ($this->getElements() as $element) {
             $name = $element->getName();
@@ -192,9 +198,9 @@ class Publish_Form_PublishingSecond extends Zend_Form {
                 $this->removeElement($name);
             }
             else {
-                $defaultNS->elements[$name]['name'] = $name;
-                $defaultNS->elements[$name]['value'] = $element->getValue();
-                $defaultNS->elements[$name]['label'] = $element->getLabel();
+                $session->elements[$name]['name'] = $name;
+                $session->elements[$name]['value'] = htmlspecialchars($element->getValue());
+                $session->elements[$name]['label'] = $element->getLabel();
                 $element->removeDecorator('Label');                
             }
         }
