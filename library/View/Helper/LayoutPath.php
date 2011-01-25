@@ -45,4 +45,3 @@ class View_Helper_LayoutPath extends Zend_View_Helper_Abstract {
         return $request->getBaseUrl() . '/layouts/' . $theme;
     }
 }
-?>

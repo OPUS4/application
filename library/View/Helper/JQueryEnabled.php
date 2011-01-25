@@ -42,4 +42,3 @@ class View_Helper_JQueryEnabled extends Zend_View_Helper_Abstract {
         return is_file(APPLICATION_PATH . '/public/' . $config->javascript->jquery->path);
     }
 }
-?>
