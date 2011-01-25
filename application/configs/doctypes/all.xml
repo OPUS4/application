@@ -96,7 +96,7 @@
     <field name="Volume" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="Issue" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="Edition" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-    <field name="Institute" required="no" formelement="Select" datatype="Institute" multiplicity="1"/>
+    <field name="Institute" required="no" formelement="Select" datatype="Institute" multiplicity="*"/>
     <field name="PublishedYear" required="no" formelement="Text" datatype="Year" multiplicity="1"/>
     <field name="PublishedDate" required="no" formelement="Text" datatype="Date" multiplicity="1"/>
     <field name="CompletedYear" required="no" formelement="Text" datatype="Year" multiplicity="1"/>
