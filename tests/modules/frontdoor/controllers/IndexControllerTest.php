@@ -75,10 +75,11 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->checkForBadStringsInHtml($response->getBody());
     }
 
-    public function testMapopus3Action() {
-        
-        $this->markTestSkipped('function under test is deprecated and will be removed in future releases');
-
+    /**
+     * @deprecated since OPUS 3.0.2, the function under test is marked as deprecated
+     * and will be removed in future releases
+     */
+    public function testMapopus3Action() {        
         $opus3_id = 'foobar-'.rand();
         $this->_document->addIdentifierOpus3()->setValue($opus3_id);
         $doc_id = $this->_document->store();
@@ -86,6 +87,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->dispatch('/frontdoor/index/mapopus3/oldId/'.$opus3_id);
 
         $this->assertResponseCode(302);
+        $this->assertModule('frontdoor');
         $this->assertController('index');
         $this->assertAction('mapopus3');
 
@@ -93,7 +95,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $headers = $response->getHeaders();
 
         $this->assertEquals('Location', $headers[0]['name']);
-        $this->assertStringEndsWith('docId/' . $doc_id, $headers[0]['value']);
+        $this->assertStringEndsWith('/rewrite/index/id/type/opus3-id/value/' . $opus3_id, $headers[0]['value']);
 
         $this->checkForBadStringsInHtml($response->getBody());
     }
