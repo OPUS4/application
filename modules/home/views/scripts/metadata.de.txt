@@ -1,10 +1,10 @@
 Metadaten können definiert werden als
 <ul>
-<li>Daten, die eine oder mehrere Resourcen beschreiben</li> oder als
+<li>Daten, die eine oder mehrere Ressourcen beschreiben</li> oder als
 <li>Daten, die mit einem Objekt verbunden sind und dieses Objekt beschreiben</li>
 </ul>
 Prinzipiell stellen Metadaten daher eine Beschreibung von Dokumenten, Objekten oder Diensten dar und 
-enthalten Informationen zu deren Inhalt, Struktur oder Form. Etwas abstarkter formuliert sind Metadaten 
+enthalten Informationen zu deren Inhalt, Struktur oder Form. Etwas abstrakter formuliert sind Metadaten 
 Beschreibungen von Daten bzw. "Daten über Daten". Bibliographische Datensätze und Katalogeinträge in 
 Bibliotheken können als eine Form von Metadaten gesehen werden.
 <p>
