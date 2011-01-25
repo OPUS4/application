@@ -164,7 +164,7 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         $this->session->maxFileSize = $maxFileSize;
 
         // Upload-fields required to enter second stage
-        $requireUpload = $this->config->form->first->requireupload;
+        $requireUpload = $this->config->form->first->requireupload;        
         if (true === empty($requireUpload))
             $requireUpload = 0;
 
@@ -182,7 +182,7 @@ class Publish_Form_PublishingFirst extends Zend_Form {
                 ->setValueDisabled(true)
                 ->setAttrib('enctype', 'multipart/form-data');
 
-        if (1 === $requireUpload)
+        if (1 == $requireUpload)
             $fileupload->setRequired(true);
         else
             $fileupload->setRequired(false);
