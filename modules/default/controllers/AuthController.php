@@ -181,13 +181,13 @@ class AuthController extends Controller_Action {
         $login = new Zend_Form_Element_Text('login');
         $login->addValidator(new Zend_Validate_Regex('/^[A-Za-z0-9@._-]+$/'))
             ->setRequired()
-            ->setLabel('Login');
+            ->setLabel('auth_field_login');
 
         // Password element.
         $password = new Zend_Form_Element_Password('password');
         $password->addValidator(new Zend_Validate_Alnum())
             ->setRequired()
-            ->setLabel('Password');
+            ->setLabel('auth_field_password');
 
         // Submit button.
         $submit = new Zend_Form_Element_Submit('SubmitCredentials');
