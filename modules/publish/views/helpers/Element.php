@@ -161,13 +161,13 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
 
                 $elementfield .= " title='" . $this->view->translate($element["hint"]) . "' />";
 
-                if (isset($this->session->publishFiles) && count($this->session->publishFiles) >= 1) {
-                    $elementfield .= "<div class='form-files'><ul>" . $this->view->translate('already_uploaded_files');
-                    foreach ($this->session->publishFiles as $file) {
-                        $elementfield .= "\n<li>" . htmlspecialchars($file) . "</li>";
-                    }
-                    $elementfield .= "</ul></div>";
-                }
+//                if (isset($this->session->publishFiles) && count($this->session->publishFiles) >= 1) {
+//                    $elementfield .= "<div class='form-files'><ul>" . $this->view->translate('already_uploaded_files');
+//                    foreach ($this->session->publishFiles as $file) {
+//                        $elementfield .= "\n<li>" . htmlspecialchars($file) . "</li>";
+//                    }
+//                    $elementfield .= "</ul></div>";
+//                }
                 break;
         }
 

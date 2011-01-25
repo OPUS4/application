@@ -179,13 +179,13 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                             $fieldset .= "size='30'";
                         $fieldset .= " />\n";
 
-                        if (isset($this->session->publishFiles) && count($this->session->publishFiles) >= 1) {
-                            $fieldset .= "<div class='form-files'><ul>" . $this->view->translate('already_uploaded_files');
-                            foreach ($this->session->publishFiles as $file) {
-                                $fieldset .= "\n<li>" . htmlspecialchars($file) . "</li>";
-                            }
-                            $fieldset .= "</ul></div>";
-                        }
+//                        if (isset($this->session->publishFiles) && count($this->session->publishFiles) >= 1) {
+//                            $fieldset .= "<div class='form-files'><ul>" . $this->view->translate('already_uploaded_files');
+//                            foreach ($this->session->publishFiles as $file) {
+//                                $fieldset .= "\n<li>" . htmlspecialchars($file) . "</li>";
+//                            }
+//                            $fieldset .= "</ul></div>";
+//                        }
                         break;
 
 

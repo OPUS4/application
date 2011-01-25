@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -25,50 +26,55 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
+ * @package     View_Helper
  * @author      Susanne Gottwald <gottwald@zib.de>
- * @author      Doreen Thiede <thiede@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ * @version     $Id: Element.php 7353 2011-01-25 10:25:05Z sgottwald $
  */
-//for printing a generized Zend Form with standard layout:
-//echo $this->form;
-//element($value, $options = null, $type = null, $name = null)
-//group($value, $options = null, $name = null)
-//echo $this->form;
+class View_Helper_FileOverview extends Zend_View_Helper_Abstract {
 
-$session = new Zend_Session_Namespace('Publish');
+    public $view;
+    public $session;
+    public $document;
+
+    /**
+     * method to render specific elements of an form
+     * @param <type> $type element type that has to rendered
+     * @param <type> $value value of element or Zend_Form_Element
+     * @param <type> $name name of possible hidden element
+     * @return element to render in view
+     */
+    public function fileOverview() {
+        $this->session = new Zend_Session_Namespace('Publish');
+        $log = Zend_Registry::get('Zend_Log');
+
+        $fieldset_start = "<fieldset><legend>" . $this->view->translate('already_uploaded_files') . "</legend>\n\t\t\n\t\t";
+        $fieldset_end = "</fieldset>";
+
+        if (is_null($this->session->document)) {
+            return "";
+            // return $fieldset_start . $this->view->translate('no_uploaded_files') . $fieldset_end;
+        }
+
+        $this->document = $this->session->document;
+        $files = $this->document->getFile();
+
+        if (empty($files)) {
+            return $fieldset_start . $this->view->translate('no_uploaded_files') . $fieldset_end;
+        }
+
+        $overview = "";
+        foreach ($files as $file) {
+//            $f = new Opus_File($file->getId());
+            $overview .= "<p>Name: <b>" . htmlspecialchars($file->getPathName()) .
+                        "</b><br/>Type: " . htmlspecialchars($file->getMimeType()) .
+                        "<br/>Size: " . htmlspecialchars($file->getFileSize()) . " Bytes</p>";
+        }
+
+        return $fieldset_start . $overview . $fieldset_end;
+    }
+
+}
+
 ?>
-
-<h2><?= $this->title ?></h2>
-<div class="content">
-    <h3 class="document-type"><?= $this->subtitle ?></h3>
-
-    <?php if (isset($this->errorCaseMessage)) : ?>
-        <div class="form-hint form-errors"><p><?= $this->errorCaseMessage; ?></p></div>
-    <? endif; ?>
-
-        <form enctype="multipart/form-data" action="<?= $this->action_url; ?>" method="post">
-
-            <div class="form-items-wrapper">
-            <?= $this->element($this->documentType); ?>
-            <?= $this->element($this->MAX_FILE_SIZE, null, 'hidden', 'MAX_FILE_SIZE'); ?>
-            <?= $this->group($this->documentUpload); ?>
-            <?= $this->fileOverview(); ?>
-
-            <?php if ($session->bibliographie == 1) : ?>
-            <?= $this->element($this->bibliographie); ?>
-            <? endif; ?>
-
-            <?= $this->element($this->rights); ?>
-
-            <div class="button-wrapper">
-                <?= $this->element('button_label_send', "class='form-button submit-button'", "Submit", "send"); ?>
-            </div>
-
-        </div>
-
-    </form>
-</div>
-
-

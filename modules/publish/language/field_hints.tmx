@@ -46,6 +46,16 @@
         </tuv>
     </tu>
 
+    <tu tuid="no_uploaded_files">
+        <!-- Text for alreaded uploaded files -->
+        <tuv xml:lang="en">
+            <seg>No files uploaded.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Es wurden keine Dateien hochgeladen. </seg>
+        </tuv>
+    </tu>
+
     <tu tuid="required_star_title">
         <tuv xml:lang="en">
             <seg>This field has to be filled.</seg>

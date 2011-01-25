@@ -49,6 +49,7 @@
     <div class="form-items-wrapper">
         <div class="form-hint"><p><?= $this->requiredHint; ?></p></div>
 
+            <?= $this->fileOverview(); ?>
             <?= $this->group($this->groupPersonSubmitter); ?>
             <?= $this->group($this->groupPersonAuthor); ?>
             <?= $this->element($this->Language); ?>
