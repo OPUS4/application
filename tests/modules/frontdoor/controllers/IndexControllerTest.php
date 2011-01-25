@@ -76,6 +76,9 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     }
 
     public function testMapopus3Action() {
+        
+        $this->markTestSkipped('function under test is deprecated and will be removed in future releases');
+
         $opus3_id = 'foobar-'.rand();
         $this->_document->addIdentifierOpus3()->setValue($opus3_id);
         $doc_id = $this->_document->store();
