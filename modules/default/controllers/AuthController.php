@@ -90,7 +90,7 @@ class AuthController extends Controller_Action {
             $form->setAction($url);
 
             $this->view->form = $form;
-            return;
+            return $this->render('login');
         }
 
         // Credentials coming in via POST operation.
@@ -106,7 +106,7 @@ class AuthController extends Controller_Action {
             $form->populate($data);
 
             $this->view->form = $form;
-            return;
+            return $this->render('login');
         }
 
         // Form data is valid (including the hash field)
@@ -131,7 +131,7 @@ class AuthController extends Controller_Action {
             $form->populate($data);
 
             $this->view->form = $form;
-            return;
+            return $this->render('login');
         }
 
         // Persistent the successful authenticated identity.
