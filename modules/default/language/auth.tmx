@@ -15,6 +15,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="auth_pagetitle_index">
+      <tuv xml:lang="en">
+        <seg>User Login</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Benutzer-Anmeldung</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="auth_description">
       <tuv xml:lang="en">
         <seg>You need an existing account to log in.</seg>
