@@ -1308,16 +1308,7 @@
         <seg>Uuid entfernen</seg>
       </tuv>
     </tu>
-            
-    <tu tuid="IdentifierValue">
-      <tuv xml:lang="en">
-        <seg>ISBN</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>ISBN Nummer</seg>
-      </tuv>
-    </tu>
-    
+
     <tu tuid="IdentifierUrn">
       <tuv xml:lang="en">
         <seg>URN</seg>

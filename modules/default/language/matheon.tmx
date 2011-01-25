@@ -3,24 +3,6 @@
 <tmx version="1.4">
     <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool"></header>
     <body>
-        <tu tuid="home_modulename">
-          <tuv xml:lang="en">
-            <seg>Home</seg>
-          </tuv>
-          <tuv xml:lang="de">
-            <seg>Einstieg</seg>
-          </tuv>
-        </tu>
-
-        <tu tuid="home_index_index_actionname">
-          <tuv xml:lang="en">
-            <seg>Home</seg>
-          </tuv>
-          <tuv xml:lang="de">
-            <seg>Einstieg</seg>
-          </tuv>
-        </tu>
-
         <tu tuid="home_index_index_title">
           <tuv xml:lang="en">
             <seg>DFG Research Center MATHEON::Preprints</seg>
@@ -36,15 +18,6 @@
           </tuv>
           <tuv xml:lang="de">
             <seg>Einstieg</seg>
-          </tuv>
-        </tu>
-
-        <tu tuid="home_index_language_label">
-          <tuv xml:lang="en">
-            <seg>Language</seg>
-          </tuv>
-          <tuv xml:lang="de">
-            <seg>Sprache</seg>
           </tuv>
         </tu>
 
