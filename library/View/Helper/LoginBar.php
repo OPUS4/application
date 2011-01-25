@@ -125,26 +125,26 @@ class View_Helper_LoginBar {
         if (empty($identity) === true) {
             $url = $this->_view->url(array_merge($this->_login_url, $returnParams->getReturnParameters()));
             return '<a href="' . $url . '">Login</a>';
-        } else {
-             // Default setting for edit own account: allow and add link.
-            $addAccountLink = true;
-
-            $config = Zend_Registry::get('Zend_Config');
-            if (isset($config) and isset($config->account->editOwnAccount)) {
-                $addAccountLink = $config->account->editOwnAccount;
-            }
-
-            $url = $this->_view->url(array_merge($this->_logout_url, $returnParams->getReturnParameters()));
-            $logoutLink = '<a href="' . $url . '">Logout (' . htmlspecialchars($identity) . ')</a>';
-
-            if ($addAccountLink) {
-                $accountUrl = $this->_view->url(array('module' => 'account'), null, true);
-                return '<a style="padding-right: 1em" href="' . $accountUrl . 
-                    '">Account</a> ' . $logoutLink;
-            }
-
-            return $logoutLink;
         }
+
+        // Default setting for edit own account: allow and add link.
+        $addAccountLink = true;
+
+        $config = Zend_Registry::get('Zend_Config');
+        if (isset($config) and isset($config->account->editOwnAccount)) {
+            $addAccountLink = $config->account->editOwnAccount;
+        }
+
+        $url = $this->_view->url(array_merge($this->_logout_url, $returnParams->getReturnParameters()));
+        $logoutLink = '<a href="' . $url . '">Logout (' . htmlspecialchars($identity) . ')</a>';
+
+        if ($addAccountLink) {
+            $accountUrl = $this->_view->url(array('module' => 'account'), null, true);
+            return '<a style="padding-right: 1em" href="' . $accountUrl .
+            '">Account</a> ' . $logoutLink;
+        }
+
+        return $logoutLink;
     }
 
 }
