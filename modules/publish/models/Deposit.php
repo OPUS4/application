@@ -126,15 +126,26 @@ class Publish_Model_Deposit {
     }
 
     /**
-     * Method to retrieve the last character of an data key. If that is a number, it is a counter.
+     * Method to retrieve a possible counter from key name. The counter can be the last character of an data key.
+     * Counter > 0 is returned if last character is a integer. Else 0 is returned.
      * @param <String> $dataKey
-     * @return <String> last character
+     * @return <Int> counter or 0
      */
     private function getCounter($dataKey) {
-        //always on last position
-        return (substr($dataKey, -1, 1));
+        //counters may appear on the last position
+        $lastChar = (substr($dataKey, -1, 1));
+        if (is_numeric($lastChar))
+            return (int) $lastChar;
+        else
+            return 0;
     }
 
+    /**
+     * Method finds out which type of person or title is given by removing unneccesary chars.
+     * @param <type> $dataKey
+     * @param <type> $removeString
+     * @return <type>
+     */
     private function getObjectType($dataKey, $removeString) {
         $pos = strpos($dataKey, $removeString);
         if ($pos !== false)
@@ -147,45 +158,29 @@ class Publish_Model_Deposit {
      * @param <type> $dataValue
      */
     private function _preparePersonObject($dataKey = null, $dataValue = null) {
-        //String can be changed here
-        $first = "FirstName";
+        //String can be changed here        
         $last = "LastName";
-        $email = "Email";
-        $birthplace = "PlaceOfBirth";
-        $birthdate = "DateOfBirth";
-        $academic = "AcademicTitle";
-        $allowEmail = "AllowEmailContact";
 
-        if (strstr($dataKey, $first))
-            $type = $this->getObjectType($dataKey, $first);
-        else
-        if (strstr($dataKey, $last))
+        if (strstr($dataKey, $last)) {
             $type = $this->getObjectType($dataKey, $last);
-
-        if (isset($type)) {
             $this->log->debug("Person type:" . $type);
 
-            $counter = (int) $this->getCounter($dataKey);
+            $counter = $this->getCounter($dataKey);
             $this->log->debug("counter: " . $counter);
 
-            if ($this->documentData[$type . $last . $counter] !== "") {
+            $addFunction = 'add' . $type;
+            $person = $this->document->$addFunction(new Opus_Person());
 
-                $addFunction = 'add' . $type;
-                $person = $this->document->$addFunction(new Opus_Person());
+            // person model
+            $this->storePersonAttribute($person, $type, 'FirstName', 'first', $counter);
+            $this->storePersonAttribute($person, $type, $last, 'last', $counter);
+            $this->storePersonAttribute($person, $type, 'Email', 'email', $counter);
+            $this->storePersonAttribute($person, $type, 'PlaceOfBirth', 'pob', $counter);
+            $this->storePersonAttribute($person, $type, 'AcademicTitle', 'title', $counter);
+            $this->storePersonAttribute($person, $type, 'DateOfBirth', 'dob', $counter);
 
-                // person model                
-                $this->storePersonAttribute($person, $type, $first, 'first', $counter);
-                $this->storePersonAttribute($person, $type, $last, 'last', $counter);
-                $this->storePersonAttribute($person, $type, $email, 'email', $counter);
-                $this->storePersonAttribute($person, $type, $birthplace, 'pob', $counter);
-                $this->storePersonAttribute($person, $type, $academic, 'title', $counter);
-                $this->storePersonAttribute($person, $type, $birthdate, 'dob', $counter);
-
-                // link-person-model                
-                $this->storePersonAttribute($person, $type, $allowEmail, 'check', $counter);
-
-                $this->log->debug("person stored");
-            }
+            // link-person-model
+            $this->storePersonAttribute($person, $type, 'AllowEmailContact', 'check', $counter);
         }
     }
 
@@ -198,108 +193,102 @@ class Publish_Model_Deposit {
      * @param <Int> $counter - number in case of more than one person per type
      */
     private function storePersonAttribute($person, $personType, $attribute, $attributeType, $counter) {
-        $entry = "";
-        if (isset($this->documentData[$personType . $attribute . $counter])) {
-            $entry = $this->documentData[$personType . $attribute . $counter];
+        if ($counter >= 1) {
+            $index = $personType . $attribute . $counter;
         }
         else {
-            if (isset($this->documentData[$personType . $attribute])) {
-                $entry = $this->documentData[$personType . $attribute];
-            }
+            $index = $personType . $attribute;
         }
-
+        $entry = $this->documentData[$index];
         if ($entry !== "") {
-            $this->log->debug("Value: " . $entry);
             switch ($attributeType) {
-                case 'first' : $person->setFirstName($entry);
+                case 'first' :
+                    $this->log->debug("First name: " . $entry);
+                    $person->setFirstName($entry);
                     break;
-                case 'last' : $person->setLastName($entry);
+                case 'last' :
+                    $this->log->debug("Last name: " . $entry);
+                    $person->setLastName($entry);
                     break;
-                case 'email' : $person->setEmail($entry);
+                case 'email' :
+                    $this->log->debug("Email: " . $entry);
+                    $person->setEmail($entry);
                     break;
-                case 'pob' : $person->setPlaceOfBirth($entry);
+                case 'pob' :
+                    $this->log->debug("Place of Birth: " . $entry);
+                    $person->setPlaceOfBirth($entry);
                     break;
-                case 'title' : $person->setAcademicTitle($entry);
+                case 'title' :
+                    $this->log->debug("Academic Title: " . $entry);
+                    $person->setAcademicTitle($entry);
                     break;
-                case 'dob' : $person->setDateOfBirth($entry);
+                case 'dob' :
+                    $this->log->debug("Date of Birth: " . $entry);
+                    $person->setDateOfBirth($entry);
                     break;
-                case 'check' : $person->setAllowEmailContact($entry);
+                case 'check' :
+                    $this->log->debug("Allow Email Contact?: " . $entry);
+                    if (is_null($entry))
+                        $entry = 0;
+                    $person->setAllowEmailContact($entry);
                     break;
             }
 
-            if ($counter >= '1')
-                $this->documentData[$personType . $attribute . $counter] = "";
-
-            else
-                $this->documentData[$personType . $attribute] = "";
+            $this->documentData[$index] = "";
         }
     }
 
     private function _prepareTitleObject($dataKey, $dataValue) {
-        if (!isset($dataValue)) {
+        if ($dataValue == "") {
+            $this->log->info("title already stored!");
             return;
         }
-        else {
-            //String can be changed here
-            $lang = "Language";
-            $this->log->info("try to store title: " . $dataKey);
+        //String can be changed here
+        $lang = "Language";
+
+        if (!strstr($dataKey, $lang)) {
+            $type = substr($dataKey, 0, strlen($dataKey) - 1);
+            $addFunction = 'add' . $type;
             $title = new Opus_Title();
 
-            if (strstr($dataKey, $lang))
-                $type = $this->getObjectType($dataKey, $lang);
-            else
-                $type = substr($dataKey, 0, strlen($dataKey) - 1);
-
-            if (isset($type)) {
-                $this->log->debug("Title type:" . $type);
-                $counter = (int) $this->getCounter($dataKey);
-                $this->log->debug("counter: " . $counter);
-                if ($this->documentData[$type . $counter] !== "") {
-                    $this->storeTitleValue($title, $type, $counter);
-                    $this->log->debug("title value stored");
-
-                    $this->storeTitleLanguage($title, $type, $lang, $counter);
-                    $this->log->debug("title language stored");
-
-                    $addFunction = 'add' . $type;
-                    $this->document->$addFunction($title);
-                    $this->log->debug("title stored");
-                }
-            }
+            $this->log->debug("Title type:" . $type);
+            $counter = $this->getCounter($dataKey);
+            $this->log->debug("counter: " . $counter);
+            $this->storeTitleValue($title, $type, $counter);
+            $this->storeTitleLanguage($title, $type, $lang, $counter);
+            $this->document->$addFunction($title);
         }
     }
 
     private function storeTitleValue($title, $type, $counter) {
         if ($counter >= 1) {
-            $entry = $this->documentData[$type . $counter];
-            if ($entry !== "") {
-                $this->log->debug("Value: " . $entry);
-                $title->setValue($entry);
-                $this->documentData[$type . $counter] = "";
-            }
+            $index = $type . $counter;
         }
         else {
-            $entry = $this->documentData[$type];
-            $this->log->debug("Value: " . $entry);
+            $index = $type;
+        }
+        $entry = $this->documentData[$index];
+        if ($entry !== "") {
+            $this->log->debug("Value of title: " . $entry);
             $title->setValue($entry);
-            $this->documentData[$type] = "";
+            //"delete" value to avoid possible redundant record
+            $this->documentData[$index] = "";            
         }
     }
 
     private function storeTitleLanguage($title, $type, $short, $counter) {
         if ($counter >= 1) {
-            $entry = $this->documentData[$type . $short . $counter];
-            if ($entry !== "") {
-                $this->log->debug("Value: " . $entry);
-                $title->setLanguage($entry);
-                $this->documentData[$type . $short . $counter] = "";
-            }
+            $index = $type . $short . $counter;
         }
         else {
-            $entry = $this->documentData[$type . $short];
-            $this->log->debug("Value: " . $entry);
+            $index = $type . $short;
+        }
+        $entry = $this->documentData[$index];
+        if ($entry !== "") {
+            $this->log->debug("Value of title language: " . $entry);
             $title->setLanguage($entry);
-            $this->documentData[$type . $short] = "";
+            //"delete" value to avoid possible redundant record
+            $this->documentData[$index] = "";            
         }
     }
 
@@ -327,65 +316,51 @@ class Publish_Model_Deposit {
      * @return <Array> $formValues
      */
     private function _prepareSubjectObject($dataKey, $dataValue) {
-
         if ($dataValue == "") {
             $this->log->debug("Subject already stored.");
+            return;
         }
-        else {
-            $this->log->debug("try to store subject: " . $dataKey);
-            $type = $this->getSubjectType($dataKey);
-            switch ($type) {
-                case 'MSC' :
-                    $this->log->debug("subject is a MSC subject and has to be stored as a Collection.");
-                    $this->_storeCollectionObject('msc', $dataValue);
-                    $this->log->debug("subject has also be stored as subject.");
-                    $subject = new Opus_Subject();
-                    break;
+        $this->log->debug("try to store subject: " . $dataKey);
+        $type = $this->getSubjectType($dataKey);
+        switch ($type) {
+            case 'MSC' :
+            case 'DDC' :
+                $this->log->debug("subject is a " . $type . " subject and has to be stored as a Collection.");
+                $this->_storeCollectionObject(strtolower($type), $dataValue);
+                $this->log->debug("subject has also be stored as subject.");
+                $subject = new Opus_Subject();
+                break;
 
-                case 'DDC' :
-                    $this->log->debug("subject is a DDC subject and has to be stored as a Collection.");
-                    $this->_storeCollectionObject('ddc', $dataValue);
-                    $this->log->debug("subject has also be stored as subject.");
-                    $subject = new Opus_Subject();
-                    break;
+            case 'CCS' :
+            case 'PACS' :
+                $this->log->debug("subject is a " . $type . " subject and has only to be stored as a Collection.");
+                $this->_storeCollectionObject(strtolower($type), $dataValue);
+                return;
 
-                case 'CCS' :
-                    $this->log->debug("subject is a CCS subject and has to be stored as a Collection.");
-                    $this->_storeCollectionObject('ccs', $dataValue);
-                    break;
+            case 'Swd' :
+                $this->log->debug("subject is a swd subject.");
+                $subject = new Opus_SubjectSwd();
+                break;
 
-                case 'PACS' :
-                    $this->log->debug("subject is a PACS subject and has to be stored as a Collection.");
-                    $this->_storeCollectionObject('pacs', $dataValue);
-                    break;
-
-                case 'Swd' :
-                    $this->log->debug("subject is a swd subject.");
-                    $subject = new Opus_SubjectSwd();
-                    break;
-
-                case 'Uncontrolled':
-                    $this->log->debug("subject is a uncontrolled or other subject.");
-                    $subject = new Opus_Subject();
-                    break;
-            }
-
-            if ($type != 'CCS' && $type != 'PACS') {
-                $counter = (int) $this->getCounter($dataKey);
-                $this->log->debug("counter: " . $counter);
-
-
-                if ($counter >= 1) {
-                    $subjectType = 'Subject' . $type;
-                    $this->log->debug("subjectType: " . $subjectType);
-                    $subject->setValue($dataValue);
-
-                    $addFunction = "add" . $subjectType;
-                    $this->log->debug("addfunction: " . $addFunction);
-                    $this->document->$addFunction($subject);
-                }
-            }
+            case 'Uncontrolled':
+                $this->log->debug("subject is a uncontrolled or other subject.");
+                $subject = new Opus_Subject();
+                break;
         }
+
+        // if ($type != 'CCS' && $type != 'PACS') {
+        $counter = (int) $this->getCounter($dataKey);
+        $this->log->debug("counter: " . $counter);
+
+        if ($counter >= 1) {
+            $subjectType = 'Subject' . $type;
+            $this->log->debug("subjectType: " . $subjectType);
+            $subject->setValue($dataValue);
+            $addFunction = "add" . $subjectType;
+            $this->log->debug("addfunction: " . $addFunction);
+            $this->document->$addFunction($subject);
+        }
+        //}
     }
 
     /**
@@ -397,22 +372,15 @@ class Publish_Model_Deposit {
      * @return <Array> $formValues
      */
     private function _prepareNoteObject($dataKey, $dataValue) {
-
         if ($dataValue == "") {
             $this->log->debug("Note already stored.");
+            return;
         }
-        else {
-            $this->log->debug("try to store note: " . $dataKey);
-            $note = new Opus_Note();
-
-            $this->log->debug("set value: " . $dataValue);
-            $note->setMessage($dataValue);
-
-            $note->setVisibility("private");
-            $addFunction = "addNote";
-            $this->log->debug("addfunction: " . $addFunction);
-            $this->document->$addFunction($note);
-        }
+        $this->log->debug("try to store note: " . $dataKey);
+        $note = new Opus_Note();
+        $note->setMessage($dataValue);
+        $note->setVisibility("private");
+        $this->document->addNote($note);
     }
 
     /**
@@ -425,52 +393,47 @@ class Publish_Model_Deposit {
      * @throws Publish_Model_OpusServerException
      */
     private function _prepareCollectionObject($dataKey, $dataValue) {
-
         if ($dataValue == "") {
             $this->log->debug("Collection already stored.");
+            return;
         }
-        else {
-            $this->log->debug("try to store Collection:");
+        $this->log->debug("try to store Collection: " . $dataValue);
 
-            if (strstr($dataKey, "Project"))
-                $this->_storeCollectionObject('projects', $dataValue);
+        if (strstr($dataKey, "Project"))
+            $this->_storeCollectionObject('projects', $dataValue);
 
-            else if (strstr($dataKey, "Institute"))
-                $this->_storeCollectionObject('institutes', $dataValue);
+        else if (strstr($dataKey, "Institute"))
+            $this->_storeCollectionObject('institutes', $dataValue);
 
-            else if (strstr($dataKey, "Collection"))
-                $this->_storeCollectionObject('', $dataValue);
-        }
+        else if (strstr($dataKey, "Collection"))
+            $this->_storeCollectionObject('', $dataValue);
     }
 
     private function _storeCollectionObject($collectionRole, $dataValue) {
         if ($collectionRole == "") {
+            //store a simple collection
             $this->document->addCollection(new Opus_Collection($dataValue));
+            return;
         }
-        else {
-            $role = Opus_CollectionRole::fetchByName($collectionRole);
-            if (isset($role)) {
-                $this->log->debug("Role: " . $role);
+        $role = Opus_CollectionRole::fetchByName($collectionRole);
+        if (isset($role)) {
+            $roleId = $role->getId();
+            $this->log->debug("Role: " . $role . " with ID " . $roleId . " and value " . $dataValue);
 
-                if ($collectionRole === 'institutes')
-                    $collArray = Opus_Collection::fetchCollectionsByRoleName($role->getId(), $dataValue);
-                else
-                    $collArray = Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $dataValue);
+            if ($collectionRole === 'institutes') {
+                //fetch role name for institutes (they don't have a number)
+                $collArray = Opus_Collection::fetchCollectionsByRoleName($roleId, $dataValue);
+            }
+            else {
+                //all other roles are catched by number
+                $collArray = Opus_Collection::fetchCollectionsByRoleNumber($roleId, $dataValue);
+            }
 
-                $this->log->debug("Role ID: " . $role->getId() . ", value: " . $dataValue);
-
-                //if (!is_null($collArray) && count($collArray) <= 1) {
-                if (!is_null($collArray)) {
-                    $this->document->addCollection($collArray[0]);
-                }
-                if (count($collArray) >= 2) {
-                    $this->log->info("While trying to store " . $collectionRole . " as Collection, an error occurred. " .
-                            "The method fetchCollectionsByRoleNumber returned an array with > 1 values. The " . $collectionRole .
-                            " cannot be definitely assigned but was stored to the first entry.");
-                }
-//                else
-//                    throw new Publish_Model_OpusServerException("While trying to store " . $collectionRole . " as Collection, an error occurred.
-//                        The method fetchCollectionsByRoleNumber returned an array with > 1 values. The " . $collectionRole . " cannot be definitely assigned.");
+            if (!is_null($collArray)) {
+                $this->document->addCollection($collArray[0]);
+            }
+            if (count($collArray) >= 2) {
+                $this->log->err("While trying to store " . $collectionRole . " as Collection, an error occurred. The method fetchCollectionsByRoleNumber returned an array with > 1 values. The " . $collectionRole . " cannot be definitely assigned but was stored to the first entry.");
             }
         }
     }
@@ -484,18 +447,12 @@ class Publish_Model_Deposit {
 
         if ($dataValue == "") {
             $this->log->debug("Licence already stored.");
+            return;
         }
-        else {
-            $dataValue = substr($dataValue, 3);
-
-            $this->log->debug("try to store Licence with id: " . $dataValue);
-
-            $licence = new Opus_Licence($dataValue);
-
-            $addFunction = "addLicence";
-            $this->log->debug("addfunction: " . $addFunction);
-            $this->document->$addFunction($licence);
-        }
+        $dataValue = substr($dataValue, 3);
+        $this->log->debug("try to store Licence with id: " . $dataValue);
+        $licence = new Opus_Licence($dataValue);
+        $this->document->addLicence($licence);
     }
 
     /**
@@ -507,84 +464,71 @@ class Publish_Model_Deposit {
 
         if ($dataValue == "") {
             $this->log->debug("ThesisGrantor or ThesisPublisher already stored.");
+            return;
         }
-        else {
-            $dataValue = substr($dataValue, 3);
+        $dataValue = substr($dataValue, 3);
+        $this->log->debug("try to store " . $dataKey . " with id: " . $dataValue);
+        $thesis = new Opus_DnbInstitute($dataValue);
 
-            $this->log->debug("try to store " . $dataKey . " with id: " . $dataValue);
-
-            $thesis = new Opus_DnbInstitute($dataValue);
-
-            if (strstr($dataKey, 'Grantor')) {
-                $addFunction = "addThesisGrantor";
-                $this->log->debug("addfunction: " . $addFunction);
-                $this->document->$addFunction($thesis);
-            }
-            else if (strstr($dataKey, 'Publisher')) {
-                $addFunction = "addThesisPublisher";
-                $this->log->debug("addfunction: " . $addFunction);
-                $this->document->$addFunction($thesis);
-            }
+        if (strstr($dataKey, 'Grantor')) {
+            $this->document->addThesisGrantor($thesis);
+        }
+        else if (strstr($dataKey, 'Publisher')) {
+            $this->document->addThesisPublisher($thesis);
         }
     }
 
     private function _prepareIdentifierObject($dataKey, $dataValue) {
         if ($dataValue == "") {
             $this->log->debug("Identifier already stored.");
+            return;
         }
-        else {
+        $this->log->debug("try to store " . $dataKey . " with id: " . $dataValue);
 
-            $this->log->debug("try to store " . $dataKey . " with id: " . $dataValue);
+        $identifier = new Opus_Identifier();
+        $identifier->setValue($dataValue);
 
-            $identifier = new Opus_Identifier();
-            $identifier->setValue($dataValue);
-            $addFunction = 'addIdentifier';
-
-            if (strstr($dataKey, 'Old')) {
-                $addFunction .= 'Old';
-            }
-            else if (strstr($dataKey, 'Serial')) {
-                $addFunction .= 'Serial';
-            }
-            else if (strstr($dataKey, 'Uuid')) {
-                $addFunction .= 'Uuid';
-            }
-            else if (strstr($dataKey, 'Isbn')) {
-                $addFunction .= 'Isbn';
-            }
-            else if (strstr($dataKey, 'Urn')) {
-                $addFunction .= 'Urn';
-            }
-            else if (strstr($dataKey, 'Doi')) {
-                $addFunction .= 'Doi';
-            }
-            else if (strstr($dataKey, 'Handle')) {
-                $addFunction .= 'Handle';
-            }
-            else if (strstr($dataKey, 'Url')) {
-                $addFunction .= 'Url';
-            }
-            else if (strstr($dataKey, 'Issn')) {
-                $addFunction .= 'Issn';
-            }
-            else if (strstr($dataKey, 'StdDoi')) {
-                $addFunction .= 'StdDoi';
-            }
-            else if (strstr($dataKey, 'CrisLink')) {
-                $addFunction .= 'CrisLink';
-            }
-            else if (strstr($dataKey, 'SplashUrl')) {
-                $addFunction .= 'SplashUrl';
-            }
-            else if (strstr($dataKey, 'Opus3')) {
-                $addFunction .= 'Opus3';
-            }
-            else if (strstr($dataKey, 'Opac')) {
-                $addFunction .= 'Opac';
-            }
-
-            $this->log->debug("addfunction: " . $addFunction);
-            $this->document->$addFunction($identifier);
+        if (strstr($dataKey, 'Old')) {
+            $this->document->addIdentifierOld($identifier);
+        }
+        else if (strstr($dataKey, 'Serial')) {
+            $this->document->addIdentifierSerial($identifier);
+        }
+        else if (strstr($dataKey, 'Uuid')) {
+            $this->document->addIdentifierUuid($identifier);
+        }
+        else if (strstr($dataKey, 'Isbn')) {
+            $this->document->addIdentifierIsbn($identifier);
+        }
+        else if (strstr($dataKey, 'Urn')) {
+            $this->document->addIdentifierUrn($identifier);
+        }
+        else if (strstr($dataKey, 'Doi')) {
+            $this->document->addIdentifierDoi($identifier);
+        }
+        else if (strstr($dataKey, 'Handle')) {
+            $this->document->addIdentifierHandle($identifier);
+        }
+        else if (strstr($dataKey, 'Url')) {
+            $this->document->addIdentifierUrl($identifier);
+        }
+        else if (strstr($dataKey, 'Issn')) {
+            $this->document->addIdentifierIssn($identifier);
+        }
+        else if (strstr($dataKey, 'StdDoi')) {
+            $this->document->addIdentifierStdDoi($identifier);
+        }
+        else if (strstr($dataKey, 'CrisLink')) {
+            $this->document->addIdentifierCrisLink($identifier);
+        }
+        else if (strstr($dataKey, 'SplashUrl')) {
+            $this->document->addIdentifierSplashUrl($identifier);
+        }
+        else if (strstr($dataKey, 'Opus3')) {
+            $this->document->addIdentifierOpus3($identifier);
+        }
+        else if (strstr($dataKey, 'Opac')) {
+            $this->document->addIdentifierOpac($identifier);
         }
     }
 
@@ -594,67 +538,58 @@ class Publish_Model_Deposit {
 
         if ($dataValue == "") {
             $this->log->debug("Reference already stored.");
+            return;
         }
-        else {
 
-            $this->log->debug("try to store " . $dataKey . " with id: " . $dataValue);
+        $this->log->debug("try to store " . $dataKey . " with id: " . $dataValue);
 
-            $reference = new Opus_Reference();
-            $reference->setValue($dataValue);
-            $reference->setLabel("no Label given");
-            $addFunction = 'addReference';
+        $reference = new Opus_Reference();
+        $reference->setValue($dataValue);
+        $reference->setLabel("no Label given");
 
-            if (strstr($dataKey, 'Isbn')) {
-                $addFunction .= 'Isbn';
-            }
-            else if (strstr($dataKey, 'Urn')) {
-                $addFunction .= 'Urn';
-            }
-            else if (strstr($dataKey, 'Doi')) {
-                $addFunction .= 'Doi';
-            }
-            else if (strstr($dataKey, 'Handle')) {
-                $addFunction .= 'Handle';
-            }
-            else if (strstr($dataKey, 'Url')) {
-                $addFunction .= 'Url';
-            }
-            else if (strstr($dataKey, 'Issn')) {
-                $addFunction .= 'Issn';
-            }
-            else if (strstr($dataKey, 'StdDoi')) {
-                $addFunction .= 'StdDoi';
-            }
-            else if (strstr($dataKey, 'CrisLink')) {
-                $addFunction .= 'CrisLink';
-            }
-            else if (strstr($dataKey, 'SplashUrl')) {
-                $addFunction .= 'SplashUrl';
-            }
-
-            $this->log->debug("addfunction: " . $addFunction);
-            $this->document->$addFunction($reference);
+        if (strstr($dataKey, 'Isbn')) {
+            $this->document->addReferenceIsbn($reference);
+        }
+        else if (strstr($dataKey, 'Urn')) {
+            $this->document->addReferenceUrn($reference);
+        }
+        else if (strstr($dataKey, 'Doi')) {
+            $this->document->addReferenceDoi($reference);
+        }
+        else if (strstr($dataKey, 'Handle')) {
+            $this->document->addReferenceHandle($reference);
+        }
+        else if (strstr($dataKey, 'Url')) {
+            $this->document->addReferenceUri($reference);
+        }
+        else if (strstr($dataKey, 'Issn')) {
+            $this->document->addReferenceIssn($reference);
+        }
+        else if (strstr($dataKey, 'StdDoi')) {
+            $this->document->addReferenceStdDoi($reference);
+        }
+        else if (strstr($dataKey, 'CrisLink')) {
+            $this->document->addReferenceCrisLink($reference);
+        }
+        else if (strstr($dataKey, 'SplashUrl')) {
+            $this->document->addReferenceSplashUrl($reference);
         }
     }
 
     private function _prepareEnrichmentObject($dataKey, $dataValue) {
         if ($dataValue == "") {
             $this->log->debug("Enrichment already stored.");
+            return;
         }
-        else {
 
-            $this->log->debug("try to store " . $dataKey . " with id: " . $dataValue);
+        $this->log->debug("try to store " . $dataKey . " with id: " . $dataValue);
+        $keyName = str_replace('Enrichment', '', $dataKey);
 
-            $enrichment = new Opus_Enrichment();
-            $enrichment->setValue($dataValue);
+        $enrichment = new Opus_Enrichment();
+        $enrichment->setValue($dataValue);
+        $enrichment->setKeyName($keyName);
 
-            $keyName = str_replace('Enrichment', '', $dataKey);
-            $enrichment->setKeyName($keyName);
-            $addFunction = 'addEnrichment';
-
-            $this->log->debug("addfunction: " . $addFunction);
-            $this->document->$addFunction($enrichment);
-        }
+        $this->document->addEnrichment($enrichment);
     }
 
 }
