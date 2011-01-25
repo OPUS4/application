@@ -49,8 +49,7 @@ class View_Helper_Hostname {
 	public function hostname() {
 
             $fc = new Zend_Controller_Request_Http();
-            return $fc->getHttpHost();
-
+            return htmlspecialchars($fc->getHttpHost());
 	}
 
 }
