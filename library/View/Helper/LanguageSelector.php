@@ -80,7 +80,7 @@ class View_Helper_LanguageSelector extends Zend_View_Helper_Abstract {
                     'controller' => 'index',
                     'module' => 'home',
                     'language' => $translation), $returnParams->getReturnParameters()), null, true);
-                array_push($result, array('name' => $languageName, 'url' => $languageUrl));
+                array_push($result, array('name' => htmlspecialchars($languageName), 'url' => $languageUrl));
             }
         }
         return $result;
