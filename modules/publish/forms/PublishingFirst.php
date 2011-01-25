@@ -182,8 +182,10 @@ class Publish_Form_PublishingFirst extends Zend_Form {
                 ->setValueDisabled(true)
                 ->setAttrib('enctype', 'multipart/form-data');
 
-        if (1 == $requireUpload)
-            $fileupload->setRequired(true);
+        if (1 == $requireUpload) {
+            if (empty($this->session->publishFiles))
+                    $fileupload->setRequired(true);
+        }
         else
             $fileupload->setRequired(false);
 
