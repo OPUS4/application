@@ -130,12 +130,12 @@ class View_Helper_LoginBar {
             $addAccountLink = true;
 
             $config = Zend_Registry::get('Zend_Config');
-            if (isset($config->account->editOwnAccount)) {
+            if (isset($config) and isset($config->account->editOwnAccount)) {
                 $addAccountLink = $config->account->editOwnAccount;
             }
 
             $url = $this->_view->url(array_merge($this->_logout_url, $returnParams->getReturnParameters()));
-            $logoutLink = '<a href="' . $url . '">Logout (' . $identity . ')</a>';
+            $logoutLink = '<a href="' . $url . '">Logout (' . htmlspecialchars($identity) . ')</a>';
 
             if ($addAccountLink) {
                 $accountUrl = $this->_view->url(array('module' => 'account'), null, true);
