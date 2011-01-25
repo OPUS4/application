@@ -43,20 +43,17 @@ class Rewrite_IndexController extends Controller_Action {
         $type = $this->getRequest()->getParam('type');
         $value = $this->getRequest()->getParam('value');
         if (empty($type) || empty($value)) {
-            $this->_redirectToAndExit('index', array('failure' => 'missing argument'), 'index', 'home');
-            return;
+            return $this->_redirectToAndExit('index', array('failure' => 'missing argument'), 'index', 'home');
         }
         $f = new Opus_DocumentFinder();
         $ids = $f->setIdentifierTypeValue($type, $value)->ids();
         if (count($ids) < 1) {
-            $this->_redirectToAndExit('index', array('failure' => 'given id is unknown'), 'index', 'home');
-            return;
+            return $this->_redirectToAndExit('index', array('failure' => 'given id is unknown'), 'index', 'home');
         }
         if (count($ids) > 1) {
-            $this->_redirectToAndExit('index', array('failure' => 'given id is not unique'), 'index', 'home');
-            return;
+            return $this->_redirectToAndExit('index', array('failure' => 'given id is not unique'), 'index', 'home');
         }
-        $this->_redirectToAndExit('index', '', 'index', 'frontdoor', array('docId' => $ids[0]));
+        return $this->_redirectToAndExit('index', '', 'index', 'frontdoor', array('docId' => $ids[0]));
     }
 
     /**
@@ -67,22 +64,19 @@ class Rewrite_IndexController extends Controller_Action {
         $docid = $this->getRequest()->getParam('opus3id');
         $filename = $this->getRequest()->getParam('filename');
         if (empty($docid) || empty($filename)) {
-            $this->_redirectToAndExit('index', array('failure' => 'missing argument'), 'index', 'default');
-            return;
+            return $this->_redirectToAndExit('index', array('failure' => 'missing argument'), 'index', 'home');
         }
         $f = new Opus_DocumentFinder();
         $ids = $f->setIdentifierTypeValue('opus3-id', $docid)->ids();
         if (count($ids) < 1) {
-            $this->_redirectToAndExit('index', array('failure' => 'given opus3id is unknown'), 'index', 'default');
-            return;
+            return $this->_redirectToAndExit('index', array('failure' => 'given opus3id is unknown'), 'index', 'home');
         }
         if (count($ids) > 1) {
-            $this->_redirectToAndExit('index', array('failure' => 'given opus3id is not unique'), 'index', 'default');
-            return;
+            return $this->_redirectToAndExit('index', array('failure' => 'given opus3id is not unique'), 'index', 'home');
         }
         $config = Zend_Registry::getInstance()->get('Zend_Config');
-        $deliver_url_prefix = isset($config->deliver->url->prefix) ? $config->deliver->url->prefix : '/documents';
-        $this->_redirect($deliver_url_prefix . '/' . $ids[0] . '/' . $filename, array('exit' => true, 'prependBase' => false, 'code' => 301));
+        $deliver_url_prefix = isset($config->deliver->url->prefix) ? $config->deliver->url->prefix : '/documents';        
+        return $this->_redirect($deliver_url_prefix . '/' . $ids[0] . '/' . $filename, array('prependBase' => false, 'code' => 301));
     }
 }
 ?>
