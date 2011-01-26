@@ -28,7 +28,7 @@
  *
  * @category    Application
  * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -40,17 +40,13 @@ require_once dirname(__FILE__) . '/common/bootstrap.php';
 array_shift($argv);
 
 // Dump given documents
-echo "dumping document(s): " . implode(", ", $argv), "\n";
+error_log( "dumping document(s): " . implode(", ", $argv) );
 
 foreach ($argv AS $filename) {
-   echo "loading filename $docId...\n";
+   error_log( "loading filename $filename..." );
    $content = file_get_contents($filename);
 
    $doc = Opus_Document::fromXml($content);
-   $doc->store();
-
-#   $d = new Opus_Document($docId);
-#   $d_xml = $d->toXml();
-#   $d_xml->formatOutput = true;
-#   echo $d_xml->saveXml();
+   $docId = $doc->store();
+   error_log( "loading filename $filename... done.  Document $docId." );
 }
