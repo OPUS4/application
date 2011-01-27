@@ -59,11 +59,12 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         $valid1 = true;
         $valid2 = parent::isValid($data);
 
-        $rights = $data['rights'];
-        if ($rights == '0') {
-            $rights = $this->getElement('rights');
-            $rights->addError('publish_error_rights_checkbox_empty');
-            $valid2 = false;
+        if (array_key_exists('rights', $data)) {            
+            if ($data['rights'] == '0') {
+                $rights = $this->getElement('rights');
+                $rights->addError('publish_error_rights_checkbox_empty');
+                $valid2 = false;
+            }
         }
 
         return ($valid1 && $valid2);
@@ -164,7 +165,7 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         $this->session->maxFileSize = $maxFileSize;
 
         // Upload-fields required to enter second stage
-        $requireUpload = $this->config->form->first->requireupload;        
+        $requireUpload = $this->config->form->first->requireupload;
         if (true === empty($requireUpload))
             $requireUpload = 0;
 
@@ -184,7 +185,7 @@ class Publish_Form_PublishingFirst extends Zend_Form {
 
         if (1 == $requireUpload) {
             if (empty($this->session->publishFiles))
-                    $fileupload->setRequired(true);
+                $fileupload->setRequired(true);
         }
         else
             $fileupload->setRequired(false);
