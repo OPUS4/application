@@ -349,6 +349,33 @@
       </tuv>
     </tu>
 
+    <tu tuid="publish_success_another_document">
+      <tuv xml:lang="en">
+        <seg>Do you want to publish another document?</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Möchten Sie ein weiteres Dokument veröffentlichen?</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="publish_success_another_document_yes">
+      <tuv xml:lang="en">
+        <seg>Go to publish form</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zum Veröffentlichungsformular</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="publish_success_another_document_no">
+      <tuv xml:lang="en">
+        <seg>No thanks, go to home page.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nein danke, weiter zur Startseite.</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="yes">
       <tuv xml:lang="en">
         <seg>Yes</seg>

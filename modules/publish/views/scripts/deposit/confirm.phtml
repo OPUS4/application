@@ -43,4 +43,20 @@
           <?= htmlspecialchars( $this->translate('publish_success_frontdoor') ) ?>
        </a>
     <?php endif ?>
+    <br /><br />
+    <p>
+    <b><?= $this->translate('publish_success_another_document') ?></b>
+    </p>
+
+    <p>&rarr;<a href="<?= $this->url(array('module' => 'publish', 'controller' => 'index', 'action' => 'index')) ?>">
+       <?= $this->translate('publish_success_another_document_yes'); ?>
+       </a>
+    </p>
+
+    <p>
+       &rarr;<a href="<?= $this->url(array('module' => 'home', 'controller' => 'index', 'action' => 'index')) ?>">
+       <?= $this->translate('publish_success_another_document_no'); ?>
+       </a>
+    </p>
+
 </div>
