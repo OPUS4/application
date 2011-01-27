@@ -163,11 +163,15 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                         $fieldset .= "<input type='hidden' name='" . $field['id'] . "' value='0' />";
                         $fieldset .= "\n\t\t\t\t<input type='checkbox' class='form-checkbox' name='" . $field['id'] . "' id='" . $field['id'] . "' ";
                         $fieldset .= "value='" . $field['value'] . "' ";
-                        if ($field['value'] === '1')
-                            $fieldset .= " checked='checked' />";
-                        else
-                            $fieldset .= " />";
-                        $fieldset .= "\n</div>";
+                        if ($field['check'] == 'checked')
+                            $fieldset .= " checked='checked' ";
+
+                        if ($field["disabled"] === true) {
+                            $fieldset .= " disabled='disabled' ";
+                            $disable = true;
+                        }
+                        
+                        $fieldset .= " />\n</div>";
                         break;
 
                     case 'Zend_Form_Element_File' :
