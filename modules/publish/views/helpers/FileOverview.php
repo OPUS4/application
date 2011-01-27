@@ -61,7 +61,7 @@ class View_Helper_FileOverview extends Zend_View_Helper_Abstract {
         $files = $this->document->getFile();
 
         if (empty($files)) {
-            return $fieldset_start . $this->view->translate('no_uploaded_files') . $fieldset_end;
+            return $fieldset_start . "<div class='form-errors'><ul><li>" . $this->view->translate('no_uploaded_files') . "</li></ul></div>" . $fieldset_end;
         }
 
         $overview = "";
