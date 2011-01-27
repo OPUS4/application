@@ -49,7 +49,7 @@ class Publish_Form_PublishingThird extends Zend_Form {
         $this->session = new Zend_Session_Namespace('Publish');
 
         //only show special collection for choosing?
-        if (isset($this->session->chooseSpecialCollection) && $this->session->chooseSpecialCollection!="") {
+        if (isset($this->session->chooseSpecialCollection) && $this->session->chooseSpecialCollection != "") {
             $this->specialCollections = explode(", ", $this->session->chooseSpecialCollection);
         }
 
@@ -157,8 +157,10 @@ class Publish_Form_PublishingThird extends Zend_Form {
             $roles = Opus_CollectionRole::fetchAll();
 
             foreach ($roles as $role) {
-                if (!is_null($role->getRootCollection())) {
-                    $collections[$role->getRootCollection()->getId()] = $role->getDisplayName();
+                if ($role->getVisible() == 1) {
+                    if (!is_null($role->getRootCollection())) {
+                        $collections[$role->getRootCollection()->getId()] = $role->getDisplayName();
+                    }
                 }
             }
         }
