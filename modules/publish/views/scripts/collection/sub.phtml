@@ -80,9 +80,10 @@ $step = $session->step;
                 <?php endif; ?>
 
                 <?php if (true === $session->endOfCollection) : ?>
-                <?= $this->element('button_label_choose_another_collection', "class='form-button add-button'", "Submit", "chooseAnotherCollection"); ?>
+                <?= $this->element('button_label_choose_another_collection', "class='form-button add-button'", "Submit", "chooseAnotherCollection"); ?>                
+                <?php endif; ?>
+
                 <?= $this->element('button_label_send_collection', "class='form-button submit-button'", "Submit", "send"); ?>
-                <?php endif; ?>                
             </div>
 
         </div>
