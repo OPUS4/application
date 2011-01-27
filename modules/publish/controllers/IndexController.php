@@ -56,13 +56,9 @@ class Publish_IndexController extends Controller_Action {
         $this->log = Zend_Registry::get('Zend_Log');
 
         $this->session = new Zend_Session_Namespace('Publish');
-        $this->session->foo = "bar";
+
+        //unset all possible session content
         $this->session->unsetAll();
-
-        if (isset($this->session->foo)) {
-            throw new Exception();
-        }
-
 
         $this->view->title = $this->view->translate('publish_controller_index');
         $this->view->subtitle = $this->view->translate('publish_controller_index_sub');
