@@ -274,8 +274,6 @@ class Admin_FilemanagerController extends Controller_Action
         // TODO: Validate document id, error message on fail
         $document = new Opus_Document($docId);
 
-        $document->getCollection(); // FIXME make sure collections are loaded (OPUSVIER-863)
-
         // save each file
         foreach ($files as $file) {
             /* TODO: Uncaught exception 'Zend_File_Transfer_Exception' with message '"fileupload" not found by file transfer adapter
@@ -290,7 +288,6 @@ class Admin_FilemanagerController extends Controller_Action
             $docfile->setPathName($file['name']);
             $docfile->setMimeType($file['type']);
             $docfile->setTempFile($file['tmp_name']);
-            $docfile->setFromPost($file);
         }
 
         $e = null;

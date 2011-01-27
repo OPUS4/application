@@ -82,7 +82,6 @@ class Review_Model_ClearDocumentsHelper {
             }
 
             try {
-                $document->getCollection(); // FIXME make sure collections are loaded (OPUSVIER-863)
                 $document->store();
             }
             catch (Exception $e) {
@@ -120,7 +119,6 @@ class Review_Model_ClearDocumentsHelper {
             }
 
             try {
-                $document->getCollection(); // FIXME make sure collections are loaded (OPUSVIER-863)
                 $document->delete();
             }
             catch (Exception $e) {
