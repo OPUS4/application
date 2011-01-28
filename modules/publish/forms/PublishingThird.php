@@ -86,54 +86,33 @@ class Publish_Form_PublishingThird extends Zend_Form {
                     //increase and get next collection
                     $i = (int) $i + 1;
                     $options = $this->getCollection($collectionId);
+
                     if ($options !== null) {
                         $subSelect = new Zend_Form_Element_Select('collection' . $i);
                         $subSelect->setLabel('choose_collection_subcollection');
                         $subSelect->setMultiOptions($options);
                         $this->addElement($subSelect);
                     }
-                    else {
-                        //end of collection tree
-                        $this->session->endOfCollection = true;
-                        //decrease
-                        $j = $i - 1;
-                        $name = 'Collection' . $this->session->countCollections;
-                        $this->session->elements[$name]['name'] = $name;
-                        $this->session->elements[$name]['value'] = $this->session->collection['collection' . $j];
-                        $this->session->elements[$name]['label'] = 'collection';
-
-                        //show history in collection choosing process
-                        $number = $this->session->countCollections;
-                        $this->session->collectionHistory[$number]['root'] = $this->getCollectionName($collectionId, true);
-                        $this->session->collectionHistory[$number]['leaf'] = $this->getCollectionName($collectionId);
-
-                        $this->log->debug('Collection stored in session!');
-                    }
                 }
             }
         }
 
-
         if (false === $this->session->endOfCollection) {
             //the end in a tree has not been reached yet? -> go down
-            //go down to child collection
             $submit = $this->createElement('submit', 'goToSubCollection');
             $submit->setLabel('button_label_choose_subcollection');
             $this->addElement($submit);
         }
 
-        if (true === $this->session->endOfCollection) {
-            //the end has been reached? -> save or choose another collection
-            //choose another collection
-            $submit = $this->createElement('submit', 'chooseAnotherCollection');
-            $submit->setLabel('button_label_choose_another_collection');
-            $this->addElement($submit);
+        //the end has been reached? -> save or choose another collection
+        $submit = $this->createElement('submit', 'chooseAnotherCollection');
+        $submit->setLabel('button_label_choose_another_collection');
+        $this->addElement($submit);
 
-            //save
-            $submit = $this->createElement('submit', 'send');
-            $submit->setLabel('button_label_send');
-            $this->addElement($submit);
-        }
+        //save the choosen collections
+        $submit = $this->createElement('submit', 'send');
+        $submit->setLabel('button_label_send');
+        $this->addElement($submit);
 
         if ((int) $this->session->step >= 2) {
             //go up to parent collection
@@ -152,29 +131,32 @@ class Publish_Form_PublishingThird extends Zend_Form {
     protected function getCollection($collectionId=null) {
         $collections = array();
 
-        if (false === isset($collectionId)) {
-            //get top classes of collectin_role
+        //get top classes of collectin_role
+        if (false === isset($collectionId)) {            
             $roles = Opus_CollectionRole::fetchAll();
-
             foreach ($roles as $role) {
-                if ($role->getVisible() == 1) {
+                if ($role->getVisible() == '1') {
                     if (!is_null($role->getRootCollection())) {
                         $collections[$role->getRootCollection()->getId()] = $role->getDisplayName();
                     }
                 }
             }
+            return $collections;
         }
-        else {
-            $collection = new Opus_Collection($collectionId);
-            $colls = $collection->getChildren();
-            if (isset($colls) && count($colls) > 1) {
-                foreach ($colls as $coll) {
-                    $collections[$coll->getId()] = $coll->getDisplayName();
-                }
-            }
-            else
-                return null;
+
+        //get sub collections
+        $collection = new Opus_Collection($collectionId);
+        $colls = $collection->getChildren();
+
+        //reached the end of a collection tree
+        if (!(isset($colls) && count($colls) > 1)) {
+            return null;
         }
+
+        foreach ($colls as $coll) {
+            $collections[$coll->getId()] = $coll->getDisplayName();
+        }
+
         return $collections;
     }
 
@@ -209,7 +191,7 @@ class Publish_Form_PublishingThird extends Zend_Form {
      * @param <Boolean> $root if true, the root collection (role name) is returned
      * @return <String> name for collection id
      */
-    protected function getCollectionName($collectionId = null, $root=false) {
+    public function getCollectionName($collectionId = null, $root=false) {
         if (isset($collectionId)) {
             if (!$root) {
                 $collection = new Opus_Collection($collectionId);

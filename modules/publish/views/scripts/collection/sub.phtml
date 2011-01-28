@@ -39,6 +39,7 @@
 
 $session = new Zend_Session_Namespace('Publish');
 $step = $session->step;
+
 ?>
 
 <h2><?= $this->title ?></h2>
@@ -52,22 +53,15 @@ $step = $session->step;
         <form enctype="multipart/form-data" action="<?= $this->action_url; ?>" method="post">
             <div class="form-items-wrapper">
 
-<!-- already chosen selections -->
-                <ul class="nav browsing">
-                    <?php for ($i = 1; $i <= $step-1; $i++)  : ?>
-                        <li><?= $this->translate($session->collection['collection'.$i.'Name']); ?></li>
-                    <?php endfor; ?>
-                </ul>
+        <?= $this->collectionOverview(); ?>
 
-<!-- new Selection Field -->
-            
+<!-- new Selection Field -->            
                 <?php $step = (int) $step; $sub = 'collection' . $step; ?>
                 <?php if(isset($this->$sub)) : ?>
                      <?= $this->element($this->$sub); ?>
                 <?php else : ?>
                     <h4><?= $this->translate('endOfCollectionTree'); ?></h4>
-                <?php endif; ?>
-          
+                <?php endif; ?>          
 
 <!-- Buttons -->
             <div class="button-wrapper">
@@ -79,11 +73,10 @@ $step = $session->step;
                 <?= $this->element('button_label_choose_subcollection', "class='form-button down-button'", "Submit", "goToSubCollection"); ?>
                 <?php endif; ?>
 
-                <?php if (true === $session->endOfCollection) : ?>
+              <br/><br/>
                 <?= $this->element('button_label_choose_another_collection', "class='form-button add-button'", "Submit", "chooseAnotherCollection"); ?>                
-                <?php endif; ?>
-
                 <?= $this->element('button_label_send_collection', "class='form-button submit-button'", "Submit", "send"); ?>
+               
             </div>
 
         </div>

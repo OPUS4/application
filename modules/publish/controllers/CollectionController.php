@@ -52,7 +52,7 @@ class Publish_CollectionController extends Controller_Action {
     public function topAction() {
 
         $this->view->languageSelectorDisabled = true;
-        
+
         $this->session->step = 1;
         $this->view->title = $this->view->translate('publish_controller_index');
         $this->view->subtitle = $this->view->translate('publish_controller_collection_sub');
@@ -84,8 +84,22 @@ class Publish_CollectionController extends Controller_Action {
                 else if (array_key_exists('goToSubCollection', $post)) {
                     $this->session->step = $this->session->step + 1;
                 }
-
                 else if (array_key_exists('chooseAnotherCollection', $post)) {
+
+                    //store inner node
+                    if (array_key_exists('collection' . $this->session->step, $post)) {
+                        $collIdToSave = (int) $post['collection' . $this->session->step];                        
+                    }
+
+                    //store leaf node
+                    else {
+                        $index = (int) ($this->session->step) - 1;
+                        $collIdToSave = (int) $this->session->collection['collection' . $index ];                        
+                    }
+
+                    $this->session->document->addCollection(new Opus_Collection($collIdToSave));
+                    $this->session->document->store();
+
                     $this->session->countCollections = (int) $this->session->countCollections + 1;
                     $this->_forward('top');
                 }
@@ -94,8 +108,6 @@ class Publish_CollectionController extends Controller_Action {
                     $this->log->debug("Post: " . $p . " => " . $v);
                     $this->session->collection[$p] = $v;
                 }
-
-                $this->log->debug("SUB Session step: " . $this->session->step);
 
                 $this->view->title = $this->view->translate('publish_controller_index');
                 $this->view->subtitle = $this->view->translate('publish_controller_collection_sub');
@@ -130,7 +142,6 @@ class Publish_CollectionController extends Controller_Action {
             $this->log->debug("Third: set view var " . $currentElement);
         }
     }
-
 
 }
 
