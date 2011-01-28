@@ -396,7 +396,7 @@ class Solrsearch_IndexController extends Controller_Action {
         $query->setRows($this->getRequest()->getParam('rows', Opus_SolrSearch_Query::DEFAULT_ROWS));
         $query->setSortField($this->getRequest()->getParam('sortfield', Opus_SolrSearch_Query::DEFAULT_SORTFIELD));
         $query->setSortOrder($this->getRequest()->getParam('sortorder', Opus_SolrSearch_Query::DEFAULT_SORTORDER));
-        $query->addFilterQuery('collection_ids:' . $collectionId);
+        $query->addFilterQuery('collection_ids', $collectionId);
 
         $this->log->debug("Query $query complete");
         return $query;
@@ -432,11 +432,11 @@ class Solrsearch_IndexController extends Controller_Action {
 
         foreach($facetsArray as $facet) {
             $facet = trim($facet);
-            $facetKey = $facet."fq";
+            $facetKey = $facet . "fq";
             $facetValue = $this->getRequest()->getParam($facetKey, '');
             if($facetValue !== '') {
                 $this->log->debug("request has facet key: ".$facetKey." value is: ".$facetValue." corresponding facet is: ".$facet);
-                $query->addFilterQuery($facet.":".$facetValue);
+                $query->addFilterQuery($facet, $facetValue);
             }
         }
     }

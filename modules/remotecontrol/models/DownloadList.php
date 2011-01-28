@@ -75,7 +75,7 @@ class Remotecontrol_Model_DownloadList {
     private function getListItems($collectionId) {
         $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::SIMPLE);
         $query->setCatchAll('*:*');
-        $query->addFilterQuery('collection_ids:' . $collectionId);
+        $query->addFilterQuery('collection_ids', $collectionId);
         $query->setRows(Opus_SolrSearch_Query::MAX_ROWS);
         $solrsearch = new Opus_SolrSearch_Searcher();
         return $solrsearch->search($query)->getResults();
