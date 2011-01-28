@@ -167,7 +167,9 @@ table.result-data {
     color: #fe7c25;
 }
 fieldset .add-delete-wrapper{
-	padding: 0;
+	padding-bottom: 3px;
+        padding-top: 3px;
+        padding-right:0;
 	text-align: right;
 }
 .publish fieldset .form-item{
@@ -237,7 +239,7 @@ div > .abort-button{
 	background: #f3f6f8;
 	margin: 1em 0 1em;
 }
-.publish fieldset .hint{
+.opus fieldset .hint{
 	/*background: #e1e6ec;*/
 	background: url(../img/theme/icon-hint-small.gif) no-repeat 0 0.2em;
 	padding: 4px 6px 4px 20px;
