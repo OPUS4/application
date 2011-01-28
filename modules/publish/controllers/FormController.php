@@ -69,10 +69,12 @@ class Publish_FormController extends Controller_Action {
         $data = $this->getRequest()->getPost();
         $indexForm->populate($data);
 
+        $this->_setDocumentParameters($data);
+        
         if (isset($this->session->first) && $this->session->first==true ) {
             $this->_initializeDocument();            
         }
-        $this->_setDocumentParameters($data);
+        
 
         //manipulated hidden field for file size?
         if (isset($data['MAX_FILE_SIZE']) && $data['MAX_FILE_SIZE'] != $this->session->maxFileSize) {
