@@ -2013,7 +2013,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="EnrichmentNeuesFeld">
+    <tu tuid="EnrichmentNeuesSelect">
       <tuv xml:lang="en">
         <seg>A new self defined field</seg>
       </tuv>

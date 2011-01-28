@@ -83,20 +83,23 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
             $fieldset .= "<fieldset class='left-labels' id='" . $group['Name'] . "' />\n";
             $fieldset .= "<legend>" . $this->view->translate($group['Name']) . "</legend>\n\t";
             $fieldset .= "<div class='description hint'><p>" . $this->_getGroupHint($group['Name']) . "</div></p>";
+            
+            //inital div class
+            $fieldset .= "<div class='form-multiple odd'>";
+            $i = 1;
 
-            $i = 0;
             //show fields
             foreach ($group["Fields"] AS $field) {
 
-                //show other div in case intial field number is extended
-                $groupCount = 'num' . $group['Name'];
-
-                $j = $i / $this->session->$groupCount;
-                if (fmod($j, 2) == 1)
-                    $fieldset .= "<div class='form-multiple even'>";
-                else
-                if (fmod($j, 2) == 0)
-                    $fieldset .= "<div class='form-multiple odd'>";
+                $groupCount = 'num' . $group['Name'];                
+                $j = (($i - 1) / $this->session->$groupCount);
+                if (is_int($j)) {
+                    //show other div in case intial field number is extended
+                    if (fmod($j, 2) == 1)
+                        $fieldset .= "</div><div class='form-multiple even'>";
+                    else
+                        $fieldset .= "</div><div class='form-multiple odd'>";
+                }
 
                 $fieldset .= "\n<div class='form-item'>\n";
                 $fieldset .= "<label for='" . $field["id"] . "'>" . $field["label"];
@@ -119,7 +122,7 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
 
                         if (strstr($field["id"], "1"))
                             $fieldset .= " title='" . $this->view->translate($field["hint"]) . "' ";
-                        $fieldset .= " value='" . htmlspecialchars($field["value"]) . "' />\n</div>";
+                        $fieldset .= " value='" . htmlspecialchars($field["value"]) . "' />\n";
 
                         break;
 
@@ -133,7 +136,7 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                         if (strstr($field["id"], "1"))
                             $fieldset .= " title='" . $this->view->translate($field["hint"]) . "' ";
 
-                        $fieldset .= " id='" . $field["id"] . "'>" . htmlspecialchars($field["value"]) . "</textarea></div>";
+                        $fieldset .= " id='" . $field["id"] . "'>" . htmlspecialchars($field["value"]) . "</textarea>";
 
                         break;
 
@@ -152,7 +155,7 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                             $fieldset .= ">";
                             $fieldset .= $option . "</option>\n\t\t\t\t\t";
                         }
-                        $fieldset .= "</select>\n</div>";
+                        $fieldset .= "</select>\n";
 
                         if (isset($field["desc"]))
                             $fieldset .= "<div class='description hint'>" . $this->view->translate($field["desc"]) . "</div>";
@@ -170,8 +173,8 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                             $fieldset .= " disabled='disabled' ";
                             $disable = true;
                         }
-                        
-                        $fieldset .= " />\n</div>";
+
+                        $fieldset .= " />\n";
                         break;
 
                     case 'Zend_Form_Element_File' :
@@ -204,9 +207,11 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                     $fieldset .= "</ul></div>";
                 }
 
-
+                $fieldset .= "</div>";
                 $i++;
             }
+
+            //close inital div class
             $fieldset .= "</div>";
 
             //show buttons
@@ -221,10 +226,11 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                             $fieldset .= "class='form-button delete-button' ";
                     }
 
-                    $fieldset .= "name='" . $button["id"] . "' id='" . $button["id"] . "' value='" . $button["label"] . "' />";
+                    $fieldset .= "name='" . $button["id"] . "' id='" . $button["id"] . "' value='" . $button["label"] . "' />&nbsp;";
                 }
             }
             $fieldset .= "</div>";
+
             //show hidden fields
             foreach ($group["Hiddens"] AS $hidden) {
                 $fieldset .= "\n<input type='hidden' name='" . $hidden["id"] . "' id='" . $hidden["id"] . "' value='" . $hidden["value"] . "' />";

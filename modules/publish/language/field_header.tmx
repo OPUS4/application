@@ -91,10 +91,19 @@
 
     <tu tuid="groupNeuesFeld">
       <tuv xml:lang="en">
-        <seg>New field</seg>
+        <seg>New select field</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Neues Feld</seg>
+        <seg>Neues Select-Feld</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="groupNeuesSelect">
+      <tuv xml:lang="en">
+        <seg>New select field</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Neues Select-Feld</seg>
       </tuv>
     </tu>
 

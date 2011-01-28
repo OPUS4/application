@@ -519,9 +519,20 @@ class Publish_FormController extends Controller_Action {
                 $workflow = "delete";
             }
 
+            $saveName = "";
+            //Enrichment-Fruppen haben Enrichment im Namen, die aber mit den currentAnchor kollidieren
             $currentNumber = $this->session->additionalFields[$fieldName];
+            if (strstr($fieldName, 'Enrichment'))  {
+                    $saveName = $fieldName;
+                    $fieldName = str_replace('Enrichment', '', $fieldName);
+            }
+
             $this->session->currentAnchor = 'group' . $fieldName;
-            $this->log->debug("old current number: " . $currentNumber);
+            //erst Enrichment entfernen und dann unverändert weiter geben
+            //todo: schönere Lösung als diese blöden String-Sachen!!!
+            if ($saveName != "")
+                $fieldName = $saveName;
+
             if ($workflow == "add") {
                 //show one more fields
                 $currentNumber = (int) $currentNumber + 1;

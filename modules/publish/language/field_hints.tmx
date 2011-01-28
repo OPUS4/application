@@ -1320,6 +1320,25 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
       </tuv>
     </tu>
 
+
+    <tu tuid="hint_EnrichmentNeuesSelect">
+      <tuv xml:lang="en">
+        <seg>You can define whatever you want</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sie können hier definieren, was Sie möchten.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="hint_groupNeuesSelect">
+      <tuv xml:lang="en">
+        <seg>You can define whatever you want</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sie können hier definieren, was Sie möchten.</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="hint_EnrichmentEvent">
       <tuv xml:lang="en">
         <seg>Please enter the event at which the talk was given.</seg>

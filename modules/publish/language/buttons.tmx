@@ -450,6 +450,24 @@
         </tuv>
     </tu>
 
+    <tu tuid="button_label_add_one_moreEnrichmentNeuesSelect">
+        <tuv xml:lang="en">
+            <seg>Add one more new field</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Eine weiteres neues Feld hinzugügen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_deleteEnrichmentNeuesSelect">
+        <tuv xml:lang="en">
+            <seg>Delete the last new field</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Das letzte neue Feld löschen</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="button_label_add_one_moreEnrichmentNeuesFeld">
         <tuv xml:lang="en">
             <seg>Add one more new field</seg>
