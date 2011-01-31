@@ -35,7 +35,7 @@
     
     <tu tuid="admin_filemanager_uploadsuccess">
       <tuv xml:lang="en">
-        <seg>Upload succussful!</seg>
+        <seg>Upload successful!</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Datei erfolgreich hochgeladen!</seg>
@@ -44,7 +44,7 @@
     
     <tu tuid="admin_filemanager_uploadfailure">
       <tuv xml:lang="en">
-        <seg>Upload NOT succussful - please check write permissions for file directory!</seg>
+        <seg>Upload NOT successful - please check write permissions for file directory!</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Datei konnte nicht erfolgreich hochgeladen werden - bitte prüfen Sie die Schreibberchtigung im Dokumentverzeichnis.</seg>
