@@ -50,8 +50,6 @@ class Admin_Model_FileHelper {
 
     private $file = null;
 
-    private $hashes;
-
     public function __construct($view, $document, $file) {
         $this->view = $view;
         $this->document = $document;
@@ -132,6 +130,10 @@ class Admin_Model_FileHelper {
     }
 
     public function getHashes() {
+        if ($this->file->exists()) {
+            return;
+        }
+
         $hashHelpers = array();
 
         $hashes = $this->file->getHashValue();
@@ -191,6 +193,10 @@ class Admin_Model_FileHelper {
         else {
             return false;
         }
+    }
+
+    public function exists() {
+        return $this->file->exists();
     }
 
 }

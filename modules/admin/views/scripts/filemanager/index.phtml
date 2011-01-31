@@ -84,6 +84,7 @@
         </tr>
     </table>
 
+    <?PHP if ($file->exists()) : ?>
     <div class="file-actions">
         <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'filemanager', 'action' => 'delete', 'fileId' => $file->getId()), null, false) ?>"
            ><?= $this->translate('admin_filemanager_delete') ?></a>
@@ -154,6 +155,11 @@
     <?PHP foreach ($file->getForms() as $fileForm) : ?>
         <?= $fileForm ?>
     <?PHP endforeach; ?>
+
+    <?PHP else : ?>
+           <b><?= $this->translate('admin_filemanager_file_does_not_exist') ?></b>
+    <?PHP endif; ?>
+
     </fieldset>
 <?PHP endforeach; ?>
 </div>
