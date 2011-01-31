@@ -205,7 +205,8 @@ class Publish_FormController extends Controller_Action {
             $this->view->form = $depositForm;
         }
 
-        return $this->_redirectTo('upload');
+        else
+            return $this->_redirectTo('upload');
     }
 
     private function _setFirstFormViewVariables($form) {
