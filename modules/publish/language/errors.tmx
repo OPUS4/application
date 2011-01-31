@@ -82,7 +82,7 @@
 
     <tu tuid="publish_controller_form_template2">
         <tuv xml:lang="en">
-            <seg>Error: there are too many document type fields in thetemplate. Please compare template with document type and delete.</seg>
+            <seg>Error: there are too many document type fields in the template. Please compare template with document type and delete.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Fehler: es gibt <b>zu viele</b> Dokumenttyp-Felder innerhalb des Templates. Bitte vergleichen und löschen Sie.</seg>
@@ -116,8 +116,28 @@
         </tuv>
     </tu>
 
+    <tu tuid="fileUploadErrorNoFile">
+        <tuv xml:lang="en">
+            <seg>File upload is required.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Sie haben keine Datei ausgewählt.</seg>
+        </tuv>
+    </tu>
 
-<!-- **************Errors for Person and their names****************** -->
+
+    <tu tuid="fileExtensionFalse">
+        <tuv xml:lang="en">
+            <seg>File '%value%' has a forbidden extension. Plaese choose another file.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Die Datei '%value%' hat eine unerlaubte Dateiendung. Bitte wählen Sie eine andere Datei.</seg>
+        </tuv>
+    </tu>
+
+
+
+<!-- **************Errors for Person names and file names****************** -->
     <tu tuid="publish_validation_error_person_invalid">
         <tuv xml:lang="en">
             <seg>Invalid datatype: please enter just a string.</seg>
