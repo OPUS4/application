@@ -70,11 +70,10 @@ class Publish_FormController extends Controller_Action {
         $indexForm->populate($data);
 
         $this->_setDocumentParameters($data);
-        
-        if (isset($this->session->first) && $this->session->first==true ) {
-            $this->_initializeDocument();            
+
+        if (isset($this->session->first) && $this->session->first == true) {
+            $this->_initializeDocument();
         }
-        
 
         //manipulated hidden field for file size?
         if (isset($data['MAX_FILE_SIZE']) && $data['MAX_FILE_SIZE'] != $this->session->maxFileSize) {
@@ -82,18 +81,15 @@ class Publish_FormController extends Controller_Action {
             return $this->_redirectTo('index', '', 'index');
         }
 
-        //upload another file?
-        if (array_key_exists('addAnotherFile', $data)) {
-            //validate fileupload
-            if (!$indexForm->getElement('fileupload')->isValid($data)) {
-                $this->view->form = $indexForm;
-                $this->view->subtitle = $this->view->translate('publish_controller_index_sub');
-                $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
-                $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
-                $this->_setFirstFormViewVariables($indexForm);
-                return $this->renderScript('index/index.phtml');
-            }
-
+        //validate fileupload
+        if (!$indexForm->getElement('fileupload')->isValid($data)) {
+            $this->view->form = $indexForm;
+            $this->view->subtitle = $this->view->translate('publish_controller_index_sub');
+            $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
+            $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
+            $this->_setFirstFormViewVariables($indexForm);            
+        }
+        else {
             //file valid
             $this->session->first = false;
             $this->view->subtitle = $this->view->translate('publish_controller_index_anotherFile');
@@ -101,9 +97,11 @@ class Publish_FormController extends Controller_Action {
             $this->_setFirstFormViewVariables($indexForm);
             $this->_storeUploadedFiles();
             $this->session->documentId = $this->session->document->store();
-            return $this->renderScript('index/index.phtml');
-        }
 
+            if (array_key_exists('addAnotherFile', $data))
+                    return $this->renderScript('index/index.phtml');
+        }
+        
         //validate whole form
         if (!$indexForm->isValid($data)) {
             $this->view->form = $indexForm;
@@ -114,8 +112,7 @@ class Publish_FormController extends Controller_Action {
             return $this->renderScript('index/index.phtml');
         }
 
-        
-        //form entries are valid: store data                
+        //form entries are valid: store data
         $this->_storeUploadedFiles();
         $this->_storeBibliography($data);
         $this->_storeSubmitterEnrichment();
@@ -176,45 +173,39 @@ class Publish_FormController extends Controller_Action {
                 //call method to add or delete buttons
                 return $this->_getExtendedForm($form, $postData, $reload);
             }
-            else {
-                // SEND was pressed => check the form
 
-                $this->view->title = $this->view->translate('publish_controller_index');
-                $this->view->subtitle = $this->view->translate($this->session->documentType);
-                $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
+            // SEND was pressed => check the form
+            $this->view->title = $this->view->translate('publish_controller_index');
+            $this->view->subtitle = $this->view->translate($this->session->documentType);
+            $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
 
-                if (!$form->isValid($this->getRequest()->getPost())) {
-
-                    $this->_setSecondFormViewVariables($form);
-                    //error case, and redirect to form, show errors
-                    $this->view->form = $form;
-                    $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
-
-
-                    return $this->render($this->session->documentType);
-                }
-                else {
-                    // Form variables all VALID
-                    $this->log->debug("Variables are valid!");
-
-                    $this->view->title = $this->view->translate('publish_controller_index');
-                    $this->view->subtitle = $this->view->translate('publish_controller_check2');
-                    $this->view->header = $this->view->translate('publish_controller_changes');
-
-                    $depositForm = new Publish_Form_PublishingSecond($this->session->documentType, $this->session->documentId, $this->session->fulltext, $this->session->additionalFields, $form->getValues());
-                    $action_url = $this->view->url(array('controller' => 'deposit', 'action' => 'deposit'));
-                    $depositForm->setAction($action_url);
-                    $depositForm->setMethod('post');
-                    $depositForm->populate($form->getValues());
-                    $depositForm->prepareCheck();
-                    $this->view->action_url = $action_url;
-                    $this->view->form = $depositForm;
-                }
+            if (!$form->isValid($this->getRequest()->getPost())) {
+                //Variables are invalid
+                $this->_setSecondFormViewVariables($form);
+                $this->view->form = $form;
+                $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
+                //error case, and redirect to form, show errors
+                return $this->render($this->session->documentType);
             }
+
+            // Form variables all VALID
+            $this->log->debug("Variables are valid!");
+
+            $this->view->title = $this->view->translate('publish_controller_index');
+            $this->view->subtitle = $this->view->translate('publish_controller_check2');
+            $this->view->header = $this->view->translate('publish_controller_changes');
+
+            $depositForm = new Publish_Form_PublishingSecond($this->session->documentType, $this->session->documentId, $this->session->fulltext, $this->session->additionalFields, $form->getValues());
+            $action_url = $this->view->url(array('controller' => 'deposit', 'action' => 'deposit'));
+            $depositForm->setAction($action_url);
+            $depositForm->setMethod('post');
+            $depositForm->populate($form->getValues());
+            $depositForm->prepareCheck();
+            $this->view->action_url = $action_url;
+            $this->view->form = $depositForm;
         }
-        else {
-            return $this->_redirectTo('upload');
-        }
+
+        return $this->_redirectTo('upload');
     }
 
     private function _setFirstFormViewVariables($form) {
@@ -524,9 +515,9 @@ class Publish_FormController extends Controller_Action {
             $saveName = "";
             //Enrichment-Fruppen haben Enrichment im Namen, die aber mit den currentAnchor kollidieren
             $currentNumber = $this->session->additionalFields[$fieldName];
-            if (strstr($fieldName, 'Enrichment'))  {
-                    $saveName = $fieldName;
-                    $fieldName = str_replace('Enrichment', '', $fieldName);
+            if (strstr($fieldName, 'Enrichment')) {
+                $saveName = $fieldName;
+                $fieldName = str_replace('Enrichment', '', $fieldName);
             }
 
             $this->session->currentAnchor = 'group' . $fieldName;
