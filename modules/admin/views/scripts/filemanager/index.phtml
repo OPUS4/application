@@ -139,7 +139,7 @@
                 <div>
                     <span class="label"><?= $this->translate('frontdoor_current')?>:</span>
                     <span class="value" style="white-space: normal">
-                    <?PHP if ($hash->getIst() != 0) : ?>
+                    <?PHP if ($hash->getIst() !== 0) : ?>
                         <?= $hash->getIst() ?>
                     <?PHP else : ?>
                         <?= $this->translate('frontdoor_file_too_big')?>
