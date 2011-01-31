@@ -50,6 +50,7 @@ class Solrsearch_IndexController extends Controller_Action {
     public function  init() {
         parent::init();
         $this->log = Zend_Registry::get('Zend_Log');
+        $this->_helper->mainMenu('search');
     }
 
     public function indexAction() {

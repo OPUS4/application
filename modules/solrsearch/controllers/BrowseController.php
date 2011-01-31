@@ -34,8 +34,8 @@
 
 class Solrsearch_BrowseController extends Controller_Action {
 
-    public function  preDispatch() {
-        parent::preDispatch();
+    public function  init() {
+        parent::init();
         $this->_helper->mainMenu('browsing');
     }
 
