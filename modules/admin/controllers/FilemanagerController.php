@@ -65,8 +65,10 @@ class Admin_FilemanagerController extends Controller_Action
 
         $this->view->docId = $docId;
 
-    	if (!empty($docId))
-    	{
+    	if (empty($docId)) {
+            return $this->renderScript('filemanager/nodoc.phtml');
+        }
+
             $this->view->editUrl = $this->view->url(array('module' => 'admin', 
                 'controller' => 'documents', 'action' => 'edit', 'id' => $docId),
                     null, true);
@@ -104,10 +106,7 @@ class Admin_FilemanagerController extends Controller_Action
             $this->view->verifyResult = array();
 
             $fileHelpers = array();
-            if (empty($files)) {
-                $this->view->actionresult = $this->view->translate('admin_filemanager_nofiles');
-            }
-            else {
+            if (!empty($files)) {
                 foreach ($files as $file) {
                     try {
                         $fileHelpers[] = new Admin_Model_FileHelper($this->view, $document, $file);
@@ -121,36 +120,26 @@ class Admin_FilemanagerController extends Controller_Action
             }
 
             $this->view->fileHelpers = $fileHelpers;
-    	}
-    	else {
-            return $this->renderScript('filemanager/nodoc.phtml');
-    	}
     }
 
     public function deleteAction() {
         $docId = $this->getRequest()->getParam('docId');
         $fileId = $this->getRequest()->getParam('fileId');
 
-        $fileName = null;
-
-        if (!empty($fileId)) {
-            try {
-                $file = new Opus_File($fileId);
-                $fileName = $file->getPathName();
-                // Really delete this file
-                $file->doDelete($file->delete());
-            }
-            catch (Exception $e) {
-//                $this->view->actionresult = $e->getMessage();
-            }
-//            if ($e === null) {
-//                $this->view->actionresult = $this->view->translate('admin_filemanager_deletesuccess');
-//            }
-
-            $this->_redirectTo('index', $this->view->translate('admin_filemanager_delete_success', $fileName), 'filemanager', 'admin', array('docId' => $docId));
+        if (empty($fileId)) {
+            $this->_redirectTo('index', '', 'filemanager', 'admin', array('docId' => $docId));
         }
 
-        $this->_redirectTo('index', '', 'filemanager', 'admin', array('docId' => $docId));
+        try {
+            $file = new Opus_File($fileId);
+            $file->doDelete($file->delete());
+            $this->view->actionresult = $this->view->translate('admin_filemanager_deletesuccess');
+        }
+        catch (Opus_Storage_Exception $e) {
+            $this->view->actionresult = $e->getMessage();
+        }
+
+        $this->_redirectTo('index', $this->view->translate('admin_filemanager_delete_success', $fileName), 'filemanager', 'admin', array('docId' => $docId));
     }
 
     protected function _getUploadForm() {
@@ -265,13 +254,10 @@ class Admin_FilemanagerController extends Controller_Action
     }
 
     protected function _storeUpload($docId, $uploadForm) {
-        // This works only from Zend 1.7 on
-        // $upload = $uploadForm->getTransferAdapter();
+        $log = Zend_Registry::get('Zend_Log');
         $upload = new Zend_File_Transfer_Adapter_Http();
-
         $files = $upload->getFileInfo();
 
-        // TODO: Validate document id, error message on fail
         $document = new Opus_Document($docId);
 
         // save each file
@@ -290,16 +276,13 @@ class Admin_FilemanagerController extends Controller_Action
             $docfile->setTempFile($file['tmp_name']);
         }
 
-        $e = null;
-
         try {
             $document->store();
-        }
-        catch (Exception $e) {
-            $this->view->actionresult = $this->view->translate('admin_filemanager_uploadfailure');
-        }
-        if ($e === null) {
             $this->view->actionresult = $this->view->translate('admin_filemanager_uploadsuccess');
+        }
+        catch (Opus_Model_Exception $e) {
+            $log->warn("File upload failed: " . $e);
+            $this->view->actionresult = $e->getMessage();
         }
 
         // reset input values fo re-displaying
