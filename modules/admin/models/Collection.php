@@ -66,7 +66,7 @@ class Admin_Model_Collection {
             return;
         }
         $parents = $this->collection->getParents();
-        $this->collection->delete();
+        $this->collection->doDelete( $this->collection->delete() );
         return $parents[1]->getId();        
     }
 
