@@ -130,8 +130,8 @@ class Admin_Model_FileHelper {
     }
 
     public function getHashes() {
-        if ($this->file->exists()) {
-            return;
+        if (!$this->file->exists()) {
+            return array();
         }
 
         $hashHelpers = array();
