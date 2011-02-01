@@ -40,18 +40,6 @@
 $logger = Zend_Registry::get('Zend_Log');
 // $logger->info("starting autorisitation check for module frontdoor!");
 
-// try to get docId
-$docId = $this->getRequest()->getParam('docId');
-
-// forward old IDs
-$oldId = $this->getRequest()->getParam('oldId');
-if (isset($oldId) === true) {
-    $newId = Opus_Document::getDocumentByIdentifier($oldId, 'opus3-id');
-    if (count($newId) > 0) {
-        $docId = $newId[0];
-    }
-}
-
 if (isset($docId) === true) {
     $translate = Zend_Registry::get('Zend_Translate');
     try {
