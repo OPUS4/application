@@ -27,7 +27,7 @@
  *
  * @category    Application
  * @package     Module_Frontdoor
- * @author      Pascal-Nicolase Becker <becker@zib.de>
+ * @author      Pascal-Nicolas Becker <becker@zib.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -40,6 +40,7 @@
 $logger = Zend_Registry::get('Zend_Log');
 // $logger->info("starting autorisitation check for module frontdoor!");
 
+$docId = $this->getRequest()->getParam('docId');
 if (isset($docId) === true) {
     $translate = Zend_Registry::get('Zend_Translate');
     try {
