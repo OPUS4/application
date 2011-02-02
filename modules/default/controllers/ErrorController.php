@@ -131,20 +131,19 @@ class ErrorController extends Zend_Controller_Action
         $body = '';
 
         $body .= "Source:\n";
-        $body .= "   file:       " . $exception->getFile() . ":" . $exception->getLine() . "\n";
         $body .= "   module:     " . $request->getModuleName() . "\n";
         $body .= "   controller: " . $request->getControllerName() . "\n";
         $body .= "   action:     " . $request->getActionName() . "\n";
+        $body .= "   file:       " . $exception->getFile() . ":" . $exception->getLine() . "\n";
+        $body .= "\n";
 
         $body .= "View:\n";
-
         if (isset($view->title)) {
             $body .= "   title: " . $view->title . "\n";
         }
         if (isset($view->message)) {
             $body .= "   message: " . $view->message . "\n";
         }
-
         $body .= "\n";
 
         $body .= "Request:\n";
@@ -180,6 +179,13 @@ class ErrorController extends Zend_Controller_Action
             $body .= "-- start request header --\n";
             $body .= var_export($_SERVER, TRUE) . "\n";
             $body .= "-- end request header --\n\n";
+        }
+
+        if (isset($_SESSION)) {
+            $body .= "SESSION:\n";
+            $body .= "-- start session dump --\n";
+            $body .= var_export($_SESSION, TRUE) . "\n";
+            $body .= "-- end session dump --\n\n";
         }
 
         $adminName = $config->errorController->mailTo->name;
