@@ -26,11 +26,14 @@
  *
  * @category    Application
  * @author      Julian Heise <heise@zib.de>
+ * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2010-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+
+$config = Zend_Registry::get('Zend_Config');
 
 $this->headMeta()
     ->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8')
@@ -38,6 +41,10 @@ $this->headMeta()
 
 $this->headTitle('OPUS 4')
     ->setSeparator(' | ');
+
+if (isset($config->instance_name)) {
+    $this->headTitle($config->instance_name);
+}
 
 if (isset($this->title)) {
     $this->headTitle($this->translate($this->title));
@@ -51,7 +58,6 @@ $this->headLink()
 $this->container = Zend_Registry::get('Opus_Navigation');
 
 if ($this->jQueryEnabled()) {
-    $config = Zend_Registry::get('Zend_Config');
     $this->headScript()
          ->prependFile($this->baseUrl() . '/' . $config->javascript->jquery->path)
          ->appendFile($this->layoutPath() . '/js/searchutil.js');
@@ -92,7 +98,7 @@ $languageSelectors = $this->languageSelector();
         <div id="header">
             <div class="wrapper">
                 <h1 id="logo">
-                    <a href="<?= $this->url(array('module' => 'home', 'controller' => 'index', 'action' => 'index'), null, true) ?>"><img src="<?= $this->layoutPath() ?>/img/theme/matheon-logo-de.jpg" alt="OPUS" title="Home" width="331" height="89" /></a>
+                    <a href="http://www.matheon.de/"><img src="<?= $this->layoutPath() ?>/img/theme/matheon-logo-de.jpg" alt="OPUS" title="Home" width="331" height="89" /></a>
                 </h1>
                 <ul id="primary-nav" class="nav">
                 <?php foreach ($this->container as $page) : ?>
@@ -120,7 +126,7 @@ $languageSelectors = $this->languageSelector();
             <?php if (!is_null($this->flashMessenger)) : ?>
             <div class="messages">
                 <?php foreach ($this->flashMessenger->getMessages() as $message) : ?>
-                    <div class="<?= $message['level'] ?>"><?= $message['message'] ?></div>
+                    <div class="<?= $message['level'] ?>"><?= htmlspecialchars($message['message']) ?></div>
                 <?php endforeach ?>
             </div>
             <?php endif ?>
@@ -137,20 +143,21 @@ $languageSelectors = $this->languageSelector();
                     <li class="first"><a href="<?= $this->url(array('module' => 'home', 'controller' => 'index', 'action' => 'contact'), null, true) ?>"><?= $this->translate('home_index_contact_actionname'); ?></a></li>
                     <li class="last"><a href="<?= $this->url(array('module' => 'home', 'controller' => 'index', 'action' => 'imprint'), null, true) ?>"><?= $this->translate('home_index_imprint_actionname') ?></a></li>
                 </ul>
-                <p id="copyright">&copy; <abbr xml:lang="de" title="Kooperativer Bibliotheksverbund Berlin-Brandenburg" lang="de">KOBV</abbr> 2010</p>
+                <p id="copyright">&copy; <abbr xml:lang="de" title="Kooperativer Bibliotheksverbund Berlin-Brandenburg" lang="de">KOBV</abbr> 2010-2011</p>
             </div>
         </div>
 
+<!--
         <div class="debug revision">
             <hr/>
             <div class="wrapper">
                 <b>$Rev$</b>
             </div>
         </div>
+-->
 
         <?php
             $dbprofiler = Zend_Registry::get('db_adapter')->getProfiler();
-            $config = Zend_Registry::get('Zend_Config');
             $profiler_show_queries = (bool) $config->db->params->showqueries;
             $profiler_max_queries = (int) $config->db->params->maxqueries;
             if ($dbprofiler->getEnabled() === true) :
