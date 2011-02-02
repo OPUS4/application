@@ -345,11 +345,6 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                         // store document
                         $document->store();
 
-                        // reindex
-                        $indexer = new Opus_Search_Index_Solr_Indexer();
-                        $indexer->removeDocumentFromEntryIndex($document);
-                        $indexer->addDocumentToEntryIndex($document);
-
                         // The first 3 params are module, controller and action.
                         // Additional parameters are passed through.
                         $params = $this->getRequest()->getUserParams();
