@@ -158,7 +158,7 @@ class AuthController extends Controller_Action {
         $action = $this->_logout_url['action'];
         $controller = $this->_logout_url['controller'];
         $module = $this->_logout_url['module'];
-        $params = $this->_login_url['params'];
+        $params = $this->_logout_url['params'];
         $this->_helper->_redirector($action, $controller, $module, $params);
     }
 
