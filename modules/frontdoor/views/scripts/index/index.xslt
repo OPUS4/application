@@ -30,7 +30,8 @@
  * @package     Module_Frontdoor
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de> 
  * @author      Simone Finkbeiner <simone.finkbeiner@ub.uni-stuttgart.de> 
- * @copyright   Copyright (c) 2009, OPUS 4 development team
+ * @author      Thoralf Klein <thoralf.klein@zib.de>
+ * @copyright   Copyright (c) 2009-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
