@@ -570,5 +570,14 @@
                 <seg>Klicken Sie auf das Icon, um den Abstract anzuzeigen bzw. zu verbergen.</seg>
             </tuv>
         </tu>
+
+        <tu tuid="results_missingtitle">
+            <tuv xml:lang="en">
+                <seg>untitled document</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>unbenanntes Dokument</seg>
+            </tuv>
+        </tu>
     </body>
 </tmx>

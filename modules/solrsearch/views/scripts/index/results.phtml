@@ -94,7 +94,14 @@ if($this->jQueryEnabled()) {
                                 <img src="<?= $this->layoutPath() ?>/img/theme/icon-on-off.png" alt="<?= $this->translate('results_hideabstract_alt') ?>" title="<?= $this->translate('results_hideabstract_title') ?>" onclick="$(function(){$('#<?= $result->getId() ?>').toggle();});" />
                             <?php endif ?>
                         <?php endif ?>
-                        <a href="<?= $this->url($frontdoorUrl, null, true) ?>"><?= htmlspecialchars($result->getTitle()); ?></a> (<?= htmlspecialchars($result->getYear()); ?>)
+                        <?php if(!is_null($result->getTitle())) : ?>
+                            <a href="<?= $this->url($frontdoorUrl, null, true) ?>"><?= htmlspecialchars($result->getTitle()); ?></a>
+                        <?php else: ?>
+                            <a href="<?= $this->url($frontdoorUrl, null, true) ?>"><?= $this->translate('results_missingtitle') ?></a>
+                        <?php endif ?>
+                        <?php if($result->getYear()) : ?>
+                            (<?= htmlspecialchars($result->getYear()); ?>)
+                        <?php endif ?>
                     </dt>
                     <?php if(!is_null($result->getAuthors())) : ?>
                         <dt class="results_author">
