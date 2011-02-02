@@ -182,5 +182,17 @@ $languageSelectors = $this->languageSelector();
         </div>
         <?php endif ?>
 
+        <?php
+            $identity = Zend_Auth::getInstance()->getIdentity();
+            if (isset($config->debugSession) and ((bool)$config->debugSession === true) and !empty($identity)) :
+        ?>
+        <div class="debug session">
+            <div class="wrapper">
+                <h2>Session</h2>
+                <? Zend_Debug::dump($_SESSION, 'Session Data'); ?>
+            </div>
+        </div>
+        <?php endif ?>
+
     </body>
 </html>
