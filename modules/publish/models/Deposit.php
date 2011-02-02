@@ -61,14 +61,14 @@ class Publish_Model_Deposit {
             $datasetType = $this->_getDatasetType($dataKey, $dataValue);
 
             if (isset($datasetType) && !empty($datasetType)) {
-                $this->log->info("Wanna store a " . $datasetType . "!");
-                $this->log->info("dataKey: " . $dataKey . " AND dataValue " . $dataValue);
+                $this->log->debug("Wanna store a " . $datasetType . "!");
+                $this->log->debug("dataKey: " . $dataKey . " AND dataValue " . $dataValue);
                 $storeMethod = "_prepare" . $datasetType . "Object";
 
                 $this->$storeMethod($dataKey, $dataValue);
             }
             else {
-                $this->log->info("wanna store something else...");
+                $this->log->debug("wanna store something else...");
                 if ($this->document->hasMultipleValueField($dataKey)) {
 
                     if ($dataKey === 'Language') {
