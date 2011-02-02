@@ -69,6 +69,10 @@ searchengine.extract.app =
 mail.opus.address = ; email address of administrator
 mail.opus.name = ; Name of administrator
 
+;ERROR CONTROLLER SETTINGS - who should receive error mails?
+; errorController.mailTo.name = root
+; errorController.mailTo.address = root@localhost
+
 ;DOCUMENT-DOWNLOAD-DIRECTORIES
 ; Please read the documentation about the delivery proccess of OPUS.
 ; Here you can configure the internal address of the fulltext directory.

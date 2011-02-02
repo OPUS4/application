@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -27,9 +28,10 @@
  * @category    Application
  * @package     Module_Default
  * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @author      Thoralf Klein <thoralf.klein@zib.de>
+ * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ * @version     $Id: ErrorController.php 7241 2010-12-16 16:17:42Z tklein $
  */
 
 
@@ -77,15 +79,126 @@ class ErrorController extends Zend_Controller_Action
         $this->view->exception = $errors->exception;
 
         $errorConfig = $config->errorController;
-
-        if (isset($errorConfig)) {
-            $this->view->showException = $errorConfig->showException;
-            if ($errorConfig->showRequest) {
-                $this->view->errorRequest = $errors->request;
-            }
-        }
-        else {
+        if (!isset($errorConfig)) {
             $logger->warn('ErrorController not configured.');
+            return;
+        }
+
+        $this->view->showException = $errorConfig->showException;
+        if ($errorConfig->showRequest) {
+            $this->view->errorRequest = $errors->request;
+        }
+
+        if (!isset($errorConfig->mailTo)) {
+            $logger->info('ErrorController mail feature not configured.');
+            return;
+        }
+        
+        try {
+            $this->_sendErrorMail(
+                    $config,
+                    $this->getResponse()->getHttpResponseCode(),
+                    $this->view,
+                    $errors->request,
+                    $errors->exception
+            );
+        }
+        catch (Exception $e) {
+            $logger->err('ErrorController: Failed sending error email: ' . $e);
         }
     }
+
+    public function _sendErrorMail($config, $response_code, $view, $request, $exception) {
+        if (!isset($config->errorController->mailTo)) {
+            return false;
+        }
+
+        if (!is_object($exception) or !($exception instanceof Exception)) {
+            throw new Application_Exception('Invalid Exception object given.');
+        }
+
+        if (!is_object($request) or !($request instanceof Zend_Controller_Request_Abstract)) {
+            throw new Application_Exception('Invalid Zend_Controller_Request_Abstract object given.');
+        }
+
+        // Setting up mail subject.
+        $instance_name = isset($config->instance_name) ? $config->instance_name : 'Opus4';
+
+        $subject = $instance_name . " ($response_code): " . get_class($exception);
+        $subject .= $request->getModuleName() . "/" . $request->getControllerName() . "/" . $request->getActionName();
+
+        // Setting up mail body.
+        $body = '';
+
+        $body .= "Source:\n";
+        $body .= "   file:       " . $exception->getFile() . ":" . $exception->getLine() . "\n";
+        $body .= "   module:     " . $request->getModuleName() . "\n";
+        $body .= "   controller: " . $request->getControllerName() . "\n";
+        $body .= "   action:     " . $request->getActionName() . "\n";
+
+        $body .= "View:\n";
+
+        if (isset($view->title)) {
+            $body .= "   title: " . $view->title . "\n";
+        }
+        if (isset($view->message)) {
+            $body .= "   message: " . $view->message . "\n";
+        }
+
+        $body .= "\n";
+
+        $body .= "Request:\n";
+        $server_keys = array('HTTP_USER_AGENT', 'SCRIPT_URI', 'HTTP_REFERER', 'REMOTE_ADDR');
+        foreach ($server_keys AS $key) {
+            if (array_key_exists($key, $_SERVER)) {
+                $body .= "   $key: " . $_SERVER[$key] . "\n";
+            }
+        }
+        $body .= "\n";
+
+        $body .= "file: " . $exception->getFile() . ":" . $exception->getLine() . "\n";
+        $body .= "-- start exception message --\n";
+        $body .= $exception->getMessage() . "\n";
+        $body .= "-- end exception message --\n\n";
+
+        $body .= "-- start exception trace --\n";
+        $body .= $exception->getTraceAsString() . "\n";
+        $body .= "-- end exception trace --\n\n";
+
+        $body .= "Request parameters:\n";
+        $body .= "-- start request params --\n";
+        $body .= var_export($request->getParams(), TRUE) . "\n";
+        $body .= "-- end request params --\n\n";
+
+        $body .= "Request:\n";
+        $body .= "-- start request --\n";
+        $body .= var_export($request, TRUE) . "\n";
+        $body .= "-- end request --\n\n";
+
+        if (isset($_SERVER)) {
+            $body .= "Request header:\n";
+            $body .= "-- start request header --\n";
+            $body .= var_export($_SERVER, TRUE) . "\n";
+            $body .= "-- end request header --\n\n";
+        }
+
+        $adminName = $config->errorController->mailTo->name;
+        $adminAddress = $config->errorController->mailTo->address;
+
+        $logger = Zend_Registry::get('Zend_Log');
+
+        $logger->info("ErrorController: Sending error mail via server {$config->mail->opus->smtp}:{$config->mail->opus->port} to '$adminName <$adminAddress>'");
+        $tr = new Zend_Mail_Transport_Smtp($config->mail->opus->smtp, array('port' => $config->mail->opus->port));
+
+        $mail = new Zend_Mail();
+        $mail->setFrom($config->mail->opus->address, $config->mail->opus->name);
+        $mail->addTo($adminAddress, $adminName);
+        $mail->setSubject($subject);
+        $mail->setBodyText($body);
+        $mail->send($tr);
+
+        return true;
+
+    }
+
 }
