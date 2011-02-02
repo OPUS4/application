@@ -124,8 +124,8 @@ class ErrorController extends Zend_Controller_Action
         // Setting up mail subject.
         $instance_name = isset($config->instance_name) ? $config->instance_name : 'Opus4';
 
-        $subject = $instance_name . " ($response_code): " . get_class($exception);
-        $subject .= $request->getModuleName() . "/" . $request->getControllerName() . "/" . $request->getActionName();
+        $subject = $instance_name . " ($response_code): " . get_class($exception) . " ";
+        $subject .= "/" . $request->getModuleName() . "/" . $request->getControllerName() . "/" . $request->getActionName();
 
         // Setting up mail body.
         $body = '';
