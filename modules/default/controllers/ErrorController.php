@@ -181,13 +181,6 @@ class ErrorController extends Zend_Controller_Action
             $body .= "-- end request header --\n\n";
         }
 
-        if (isset($_SESSION)) {
-            $body .= "SESSION:\n";
-            $body .= "-- start session dump --\n";
-            $body .= var_export($_SESSION, TRUE) . "\n";
-            $body .= "-- end session dump --\n\n";
-        }
-
         $adminName = $config->errorController->mailTo->name;
         $adminAddress = $config->errorController->mailTo->address;
 
