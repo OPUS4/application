@@ -124,7 +124,7 @@ class View_Helper_LoginBar {
         $identity = Zend_Auth::getInstance()->getIdentity();
         if (empty($identity) === true) {
             $url = $this->_view->url(array_merge($this->_login_url, $returnParams->getReturnParameters()));
-            return '<a href="' . $url . '">Login</a>';
+            return '<a rel="nofollow" href="' . $url . '">Login</a>';
         }
 
         // Default setting for edit own account: allow and add link.
@@ -136,11 +136,11 @@ class View_Helper_LoginBar {
         }
 
         $url = $this->_view->url(array_merge($this->_logout_url, $returnParams->getReturnParameters()));
-        $logoutLink = '<a href="' . $url . '">Logout (' . htmlspecialchars($identity) . ')</a>';
+        $logoutLink = '<a rel="nofollow" href="' . $url . '">Logout (' . htmlspecialchars($identity) . ')</a>';
 
         if ($addAccountLink) {
             $accountUrl = $this->_view->url(array('module' => 'account'), null, true);
-            return '<a style="padding-right: 1em" href="' . $accountUrl .
+            return '<a rel="nofollow" style="padding-right: 1em" href="' . $accountUrl .
             '">Account</a> ' . $logoutLink;
         }
 
