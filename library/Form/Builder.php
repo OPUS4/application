@@ -127,6 +127,14 @@ class Form_Builder {
                         $values[$key] = '';
                     }
                     switch ($fieldName) {
+                        // FIXME hier muessten alle Felder aufgeführt werden, die
+                        // in der Datenbank als NULLable markiert sind
+                        // ansonsten wird im Falle von leeren Eingabefeldern in der
+                        // Datenbank der leere String gespeichert und damit z. T.
+                        // der vorgegebene Wert NULL überschrieben
+                        // insbesondere bei Feldern vom Typ year problematisch, da
+                        // hier das Speichern von '' zum Wert 0000 führt (siehe MySQL Doku)
+                        case 'PublishedYear' :
                         case 'PageFirst':
                         case 'PageLast':
                         case 'PageNumber':
