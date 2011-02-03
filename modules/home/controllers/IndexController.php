@@ -88,6 +88,15 @@ class Home_IndexController extends Controller_Action {
                 case 'raction':
                     $action = $value;
                     break;
+                case 'rrmodule':
+                    $params['rmodule'] = $value;
+                    break;
+                case 'rrcontroller':
+                    $params['rcontroller'] = $value;
+                    break;
+                case 'rraction':
+                    $params['raction'] = $value;
+                    break;
                 case 'language':
                     $language = $value;
                     break;

@@ -61,6 +61,15 @@ class Controller_Helper_ReturnParams extends Zend_Controller_Action_Helper_Abstr
             case 'action' :
                 $params['raction'] = $value;
                 break;
+            case 'rmodule' :
+                $params['rrmodule'] = $value;
+                break;
+            case 'rcontroller' :
+                $params['rrcontroller'] = $value;
+                break;
+            case 'raction' :
+                $params['rraction'] = $value;
+                break;
             case 'error_handler':
                 // don't use for URL generation
                 break;
