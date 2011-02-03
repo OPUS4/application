@@ -37,8 +37,6 @@
 /**
  * Provides actions for basic authenticating login and logout.
  *
- * @category    Application
- * @package     Module_Default
  */
 class AuthController extends Controller_Action {
 
@@ -47,7 +45,7 @@ class AuthController extends Controller_Action {
      *
      * @var array
      */
-    protected $_login_url = array('action' => 'login', 'controller' => 'index', 'module' => 'default', 'params' => array());
+    protected $_login_url = array('action' => 'index', 'controller' => 'index', 'module' => 'admin', 'params' => array());
     /**
      * Default URL to goto after successful logout. Maybe overwritten by findRemoteParameters().
      *
@@ -56,7 +54,7 @@ class AuthController extends Controller_Action {
     protected $_logout_url = array('action' => 'index', 'controller' => 'index', 'module' => 'default', 'params' => array());
 
     /**
-     * Index action shows login form or logout link respectivly.
+     * Index action shows login form or logout link respectively.
      *
      * @return void
      */
@@ -153,8 +151,8 @@ class AuthController extends Controller_Action {
      */
     public function logoutAction() {
         Zend_Auth::getInstance()->clearIdentity();
-        // check for return module, controller, action and parameteres. Overwrite $_logout_url.
-        $rparams = $this->findReturnParameters();
+        // check for return module, controller, action and parameters. Overwrite $_logout_url.
+        $this->findReturnParameters();
         $action = $this->_logout_url['action'];
         $controller = $this->_logout_url['controller'];
         $module = $this->_logout_url['module'];
@@ -205,6 +203,9 @@ class AuthController extends Controller_Action {
     protected function findReturnParameters() {
         $params = $this->getRequest()->getUserParams();
         $rparams = array();
+        $rmodule = null;
+        $rcontroller = null;
+        $raction = null;
         foreach($params as $key=>$value) {
             switch ($key) {
                 // ignore default parameters
@@ -240,29 +241,23 @@ class AuthController extends Controller_Action {
             }
         }
 
-        // store return address and parameters
-        if (true === isset($rmodule) && false === empty($rmodule)
-                && true === isset($rcontroller) && false === empty($rcontroller)
-                && true === isset($raction) && false === empty($raction)) {
-            if (false === isset($rparams) || false === is_array($rparams)) {
-                $rparams = array();
-            }
-            $this->_login_url = array(
-                'action' => $raction,
-                'controller' => $rcontroller,
-                'module' => $rmodule,
-                'params' => $rparams,
-            );
-            $this->_logout_url = array(
-                'action' => $raction,
-                'controller' => $rcontroller,
-                'module' => $rmodule,
-                'params' => $rparams,
-            );
-            return array_merge(array('rmodule' => $rmodule, 'rcontroller' => $rcontroller, 'raction' => $raction), $rparams);
+        if (is_null($rmodule) || is_null($rcontroller) || is_null($raction)) {
+            return array();
         }
-        return array();
 
+        // store return address and parameters
+        $this->_login_url = array(
+            'action' => $raction,
+            'controller' => $rcontroller,
+            'module' => $rmodule,
+            'params' => $rparams,
+        );
+        $this->_logout_url = array(
+            'action' => $raction,
+            'controller' => $rcontroller,
+            'module' => $rmodule,
+            'params' => $rparams,
+        );
+        return array_merge(array('rmodule' => $rmodule, 'rcontroller' => $rcontroller, 'raction' => $raction), $rparams);
     }
-
 }
