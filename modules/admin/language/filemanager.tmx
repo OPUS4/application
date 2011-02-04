@@ -131,6 +131,15 @@
         <seg>Dateigröße:</seg>
       </tuv>
     </tu>
+
+    <tu tuid="admin_filemanager_file_does_not_exist">
+      <tuv xml:lang="en">
+        <seg>File does not exist!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datei existiert nicht!</seg>
+      </tuv>
+    </tu>
   </body>
   
 </tmx>
