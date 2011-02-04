@@ -322,6 +322,24 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_documents_delete_success">
+      <tuv xml:lang="en">
+        <seg>Document was successfully deleted.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das Dokument wurde erfolgreich gelöscht.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_documents_permanent_delete_success">
+      <tuv xml:lang="en">
+        <seg>Document was successfully removed from the repository.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das Dokument wurde erfolgreich aus dem Repository entfernt.</seg>
+      </tuv>
+    </tu>
+
   </body>
   
 </tmx>

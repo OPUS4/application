@@ -253,7 +253,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             if (isset($sureyes) === true) {
                 $model = new $this->_modelclass($id);
                 $model->delete();
-                $this->_redirectTo('index', 'Model successfully deleted.');
+                $this->_redirectTo('index', $this->view->translate('admin_documents_delete_success'));
             }
             else {
                 $this->_redirectTo('index');
@@ -292,7 +292,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                     catch (Exception $e) {
                     	$this->_redirectTo('index', $e->getMessage());
                     }
-                    $this->_redirectTo('index', 'Model successfully deleted.');
+                    $this->_redirectTo('index', $this->view->translate('admin_documents_permanent_delete_success'));
             	}
             	else {
                     $this->_redirectTo('index');
@@ -363,6 +363,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             }
             $this->view->title = $this->view->translate('admin_documents_edit', $id);
             $this->view->docHelper = new Review_Model_DocumentAdapter($this->view, $document);
+            // $this->renderScript('documents/edit.phtml');
         }
         else {
             $this->_redirectTo('edit');
