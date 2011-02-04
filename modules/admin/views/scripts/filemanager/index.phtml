@@ -54,11 +54,11 @@
 <div style="padding: 1em; margin-left: 2em">
     <div>
         <span class="label"><?= $this->translate('DocumentId') ?></span>
-        <span class="value"><?= $this->document->getDocId() ?></span>
+        <span class="value"><?= htmlspecialchars($this->document->getDocId()) ?></span>
     </div>
     <div>
         <span class="label"><?= $this->translate('TitleMain') ?></span>
-        <span class="value"><?= $this->document->getDocTitle() ?></span>
+        <span class="value"><?= htmlspecialchars($this->document->getDocTitle()) ?></span>
     </div>
 </div>
 
@@ -71,7 +71,7 @@
 <div id="file-list">
 <?PHP foreach ($this->fileHelpers as $file) : ?>
     <?PHP
-        $fileName = $file->getFileName();
+        $fileName = htmlspecialchars($file->getFileName());
         $show_gpg = true;
     ?>
     <fieldset class="file">
