@@ -141,9 +141,9 @@ class Publish_FormController extends Controller_Action {
             $postData = $this->getRequest()->getPost();
 
             if (array_key_exists('abort', $postData))
-                return $this->_redirectTo('index', '', 'index');
+                return $this->_redirectTo('index', '', 'index');            
 
-            if (array_key_exists('back', $postData)) {
+            if (array_key_exists('back', $postData) || array_key_exists('abortCollection', $postData) ) {
                 $reload = false;
                 if (isset($this->session->elements))
                     foreach ($this->session->elements AS $element)
@@ -152,6 +152,11 @@ class Publish_FormController extends Controller_Action {
 
             //initialize the form object
             $form = new Publish_Form_PublishingSecond($this->session->documentType, $this->session->documentId, $this->session->fulltext, $this->session->additionalFields, $postData);
+
+            if (array_key_exists('abortCollection', $postData)) {
+                $form = $form->populate($postData);
+                return $this->showCheckPage($form);
+            }
 
             if (!$form->send->isChecked() || array_key_exists('back', $postData)) {
                 // A button (not SEND) was pressed => add / remove fields
@@ -180,25 +185,30 @@ class Publish_FormController extends Controller_Action {
                 return $this->render($this->session->documentType);
             }
 
-            // Form variables all VALID
-            $this->log->debug("Variables are valid!");
-
-            $this->view->title = $this->view->translate('publish_controller_index');
-            $this->view->subtitle = $this->view->translate('publish_controller_check2');
-            $this->view->header = $this->view->translate('publish_controller_changes');
-
-            $depositForm = new Publish_Form_PublishingSecond($this->session->documentType, $this->session->documentId, $this->session->fulltext, $this->session->additionalFields, $form->getValues());
-            $action_url = $this->view->url(array('controller' => 'deposit', 'action' => 'deposit'));
-            $depositForm->setAction($action_url);
-            $depositForm->setMethod('post');
-            $depositForm->populate($form->getValues());
-            $depositForm->prepareCheck();
-            $this->view->action_url = $action_url;
-            $this->view->form = $depositForm;
+            $this->showCheckPage($form);
         }
 
         else
             return $this->_redirectTo('upload');
+    }
+
+    private function showCheckPage($form) {
+
+        // Form variables all VALID
+        $this->log->debug("Variables are valid!");
+
+        $this->view->title = $this->view->translate('publish_controller_index');
+        $this->view->subtitle = $this->view->translate('publish_controller_check2');
+        $this->view->header = $this->view->translate('publish_controller_changes');
+
+        $depositForm = new Publish_Form_PublishingSecond($this->session->documentType, $this->session->documentId, $this->session->fulltext, $this->session->additionalFields, $form->getValues());
+        $action_url = $this->view->url(array('controller' => 'deposit', 'action' => 'deposit'));
+        $depositForm->setAction($action_url);
+        $depositForm->setMethod('post');
+        $depositForm->populate($form->getValues());
+        $depositForm->prepareCheck();
+        $this->view->action_url = $action_url;
+        $this->view->form = $depositForm;
     }
 
     private function _setFirstFormViewVariables($form) {

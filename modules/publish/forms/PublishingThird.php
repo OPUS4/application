@@ -122,25 +122,27 @@ class Publish_Form_PublishingThird extends Zend_Form {
             $this->addElement($submit);
         }
 
-        if (true === $this->session->endOfCollection) {
-            //the end has been reached? -> save or choose another collection
-            //choose another collection
-            $submit = $this->createElement('submit', 'chooseAnotherCollection');
-            $submit->setLabel('button_label_choose_another_collection');
-            $this->addElement($submit);
-
-            //save
-            $submit = $this->createElement('submit', 'send');
-            $submit->setLabel('button_label_send');
-            $this->addElement($submit);
-        }
-
         if ((int) $this->session->step >= 2) {
             //go up to parent collection
             $submit = $this->createElement('submit', 'goToParentCollection');
             $submit->setLabel('button_label_choose_parentcollection');
             $this->addElement($submit);
         }
+
+        //choose another collection
+        $submit = $this->createElement('submit', 'chooseAnotherCollection');
+        $submit->setLabel('button_label_choose_another_collection');
+        $this->addElement($submit);
+
+        //save
+        $submit = $this->createElement('submit', 'send');
+        $submit->setLabel('button_label_send');
+        $this->addElement($submit);
+
+        //abort
+        $abort = $this->createElement('submit', 'abortCollection');
+        $abort->setLabel('button_label_abort_collection');
+        $this->addElement($abort);
     }
 
     /**
@@ -175,7 +177,7 @@ class Publish_Form_PublishingThird extends Zend_Form {
 
         foreach ($colls as $coll) {
             if ($coll->getVisible() == 1)
-                    $collections[$coll->getId()] = $coll->getDisplayName();
+                $collections[$coll->getId()] = $coll->getDisplayName();
         }
 
         return $collections;

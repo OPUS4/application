@@ -57,8 +57,8 @@ $session = new Zend_Session_Namespace('Publish');
                 <?= $this->element($this->collection1); ?>
 
              <div class="button-wrapper">
-                <?= $this->element('button_label_choose_subcollection', "class='form-button down-button'", "Submit", "goToSubCollection"); ?>
-                <?= $this->element('button_label_send_collection', "class='form-button submit-button'", "Submit", "send"); ?>
+                <?= $this->element('button_label_abort_collection', "class='form-button abort-button'", "Submit", "abortCollection"); ?>
+                <?= $this->element('button_label_choose_subcollection', "class='form-button down-button'", "Submit", "goToSubCollection"); ?>               
             </div>
 
         </div>

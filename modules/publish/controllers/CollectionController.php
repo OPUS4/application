@@ -69,61 +69,61 @@ class Publish_CollectionController extends Controller_Action {
     }
 
     public function subAction() {
-        if ($this->getRequest()->isPost() === true) {
 
-            $post = $this->getRequest()->getPost();
-
-            if (array_key_exists('send', $post)) {
-                $this->_forward('deposit', 'deposit');
-            }
-            else {
-                if (array_key_exists('goToParentCollection', $post)) {
-                    if ((int) $this->session->step >= 2)
-                        $this->session->step = $this->session->step - 1;
-                }
-                else if (array_key_exists('goToSubCollection', $post)) {
-                    $this->session->step = $this->session->step + 1;
-                }
-                else if (array_key_exists('chooseAnotherCollection', $post)) {
-
-                    //store inner node
-                    if (array_key_exists('collection' . $this->session->step, $post)) {
-                        $collIdToSave = (int) $post['collection' . $this->session->step];                        
-                    }
-
-                    //store leaf node
-                    else {
-                        $index = (int) ($this->session->step) - 1;
-                        $collIdToSave = (int) $this->session->collection['collection' . $index ];                        
-                    }
-
-                    $this->session->document->addCollection(new Opus_Collection($collIdToSave));
-                    $this->session->document->store();
-
-                    $this->session->countCollections = (int) $this->session->countCollections + 1;
-                    $this->_forward('top');
-                }
-
-                foreach ($post AS $p => $v) {
-                    $this->log->debug("Post: " . $p . " => " . $v);
-                    $this->session->collection[$p] = $v;
-                }
-
-                $this->view->title = $this->view->translate('publish_controller_index');
-                $this->view->subtitle = $this->view->translate('publish_controller_collection_sub');
-
-                $form = new Publish_Form_PublishingThird();
-                $action_url = $this->view->url(array('controller' => 'collection', 'action' => 'sub'));
-                $form->setMethod('post');
-                $form->setAction($action_url);
-                $this->_setThirdFormViewVariables($form);
-                $this->view->action_url = $action_url;
-                $this->view->form = $form;
-            }
-        }
-        else {
+        if (!$this->getRequest()->isPost()) {
             return $this->_redirectTo('index', '', 'index');
         }
+
+        $post = $this->getRequest()->getPost();
+
+        if (array_key_exists('send', $post))
+            $this->_forward('deposit', 'deposit');
+
+        if (array_key_exists('abortCollection', $post))
+            $this->_forward('check', 'form');
+
+        if (array_key_exists('goToParentCollection', $post)) {
+            if ((int) $this->session->step >= 2)
+                $this->session->step = $this->session->step - 1;
+        }
+        else if (array_key_exists('goToSubCollection', $post)) {
+            $this->session->step = $this->session->step + 1;
+        }
+        else if (array_key_exists('chooseAnotherCollection', $post)) {
+
+            //store inner node
+            if (array_key_exists('collection' . $this->session->step, $post)) {
+                $collIdToSave = (int) $post['collection' . $this->session->step];
+            }
+
+            //store leaf node
+            else {
+                $index = (int) ($this->session->step) - 1;
+                $collIdToSave = (int) $this->session->collection['collection' . $index];
+            }
+
+            $this->session->document->addCollection(new Opus_Collection($collIdToSave));
+            $this->session->document->store();
+
+            $this->session->countCollections = (int) $this->session->countCollections + 1;
+            $this->_forward('top');
+        }
+
+        foreach ($post AS $p => $v) {
+            $this->log->debug("Post: " . $p . " => " . $v);
+            $this->session->collection[$p] = $v;
+        }
+
+        $this->view->title = $this->view->translate('publish_controller_index');
+        $this->view->subtitle = $this->view->translate('publish_controller_collection_sub');
+
+        $form = new Publish_Form_PublishingThird();
+        $action_url = $this->view->url(array('controller' => 'collection', 'action' => 'sub'));
+        $form->setMethod('post');
+        $form->setAction($action_url);
+        $this->_setThirdFormViewVariables($form);
+        $this->view->action_url = $action_url;
+        $this->view->form = $form;
     }
 
     /**
@@ -135,7 +135,6 @@ class Publish_CollectionController extends Controller_Action {
 
         //group fields and single fields for view placeholders
         foreach ($form->getElements() AS $currentElement => $value) {
-
             //single field name (for calling with helper class)
             $elementAttributes = $form->getElementAttributes($currentElement); //array
             $this->view->$currentElement = $elementAttributes;

@@ -82,6 +82,7 @@ $number = $session->countCollections;
                 <?php endif; ?>
 
               <br/><br/>
+                <?= $this->element('button_label_abort_collection', "class='form-button abort-button'", "Submit", "abortCollection"); ?>
                 <?= $this->element('button_label_choose_another_collection', "class='form-button add-button'", "Submit", "chooseAnotherCollection"); ?>                
                 <?= $this->element('button_label_send_collection', "class='form-button submit-button'", "Submit", "send"); ?>
                

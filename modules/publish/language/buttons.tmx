@@ -17,6 +17,16 @@
         </tuv>
     </tu>
 
+    <tu tuid="button_label_abort_collection">
+        <tuv xml:lang="en">
+            <seg>Abort</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Abbrechen</seg>
+        </tuv>
+    </tu>
+
+
     <tu tuid="button_label_send">
         <tuv xml:lang="en">
             <seg>Next step</seg>
