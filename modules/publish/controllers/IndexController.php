@@ -78,8 +78,7 @@ class Publish_IndexController extends Controller_Action {
 
         //initialize session variables
         $this->session->documentType = "";
-        $this->session->documentId = "";
-        $this->session->fullText = 0;
+        $this->session->documentId = "";        
         $this->session->chooseSpecialCollection = "";
         $this->session->countCollections = 1;
         $this->session->collectionHistory = array();        
