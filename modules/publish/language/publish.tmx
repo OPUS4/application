@@ -531,6 +531,15 @@
       </tuv>
     </tu>
 
+   <tu tuid="collections_choosen_current">
+      <tuv xml:lang="en">
+        <seg>Your current choice</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Ihre aktuelle Auswahl</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="no_collections_choosen">
       <tuv xml:lang="en">
         <seg>No Collections choosen.</seg>

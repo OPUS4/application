@@ -163,19 +163,21 @@ class Publish_Form_PublishingThird extends Zend_Form {
                     }
                 }
             }
+            return $collections;
         }
-        else {
-            $collection = new Opus_Collection($collectionId);
-            $colls = $collection->getChildren();
 
-            if (!isset($colls) || count($colls) < 1) {
-                return null;
-            }
+        $collection = new Opus_Collection($collectionId);
+        $colls = $collection->getChildren();
 
-            foreach ($colls as $coll) {
-                $collections[$coll->getId()] = $coll->getDisplayName();
-            }
+        if (!isset($colls) || count($colls) < 1) {
+            return null;
         }
+
+        foreach ($colls as $coll) {
+            if ($coll->getVisible() == 1)
+                    $collections[$coll->getId()] = $coll->getDisplayName();
+        }
+
         return $collections;
     }
 

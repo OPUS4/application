@@ -68,7 +68,7 @@ $number = $session->countCollections;
                             $root = $session->collectionHistory[$number]['root'];
                             $leaf = $session->collectionHistory[$number]['leaf'];
                      }?>
-                    <p>Ihre aktuelle Auswahl:<br /><?= $this->translate($root); ?> -- <?php echo $leaf; ?></p>
+                    <p><?= $this->translate('collections_choosen_current') ?>:<br /><?= $this->translate($root); ?> -- <?php echo $leaf; ?></p>
                 <?php endif; ?>          
 
 <!-- Buttons -->
