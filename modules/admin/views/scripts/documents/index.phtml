@@ -105,6 +105,7 @@
                 <span class="doctype"><?= $document->getDocType() ?></span>
             </td>
             <td class="actions">
+                <a href="<?= $document->getUrlShow() ?>"><?= $this->translate('docs_show') ?></a>
                 <a href="<?= $document->getUrlEdit() ?>"><?= $this->translate('docs_edit') ?></a>
                 <a href="<?= $document->getUrlDelete() ?>"><?= $this->translate(($document->isDeleted()) ? 'docs_permadelete' : 'docs_delete') ?></a>
             </td>

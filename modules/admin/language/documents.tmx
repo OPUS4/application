@@ -349,6 +349,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="docs_show">
+      <tuv xml:lang="en">
+        <seg>Overview</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Übersicht</seg>
+      </tuv>
+    </tu>
+
   </body>
   
 </tmx>
