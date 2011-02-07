@@ -229,15 +229,16 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
             $options
             );
 
-        if (file_exists(APPLICATION_PATH . '/modules/default/language/') === true) {
-            $handle = opendir(APPLICATION_PATH . '/modules/default/language/');
+        $languageDir = APPLICATION_PATH . '/modules/default/language/';
+        if (is_dir($languageDir) && is_readable($languageDir)) {
+            $handle = opendir($languageDir);
             if ($handle) {
                 while (false !== ($file = readdir($handle))) {
                     // ignore directories
                     if (is_dir($file) === true) continue;
                     // ignore files with leading dot and files without extension tmx
                     if (preg_match('/^[^.].*\.tmx$/', $file) === 0) continue;
-                    $translate->addTranslation(APPLICATION_PATH . '/modules/default/language/' . $file, 'auto', $options);
+                    $translate->addTranslation($languageDir . $file, 'auto', $options);
                 }
             }
         }

@@ -376,7 +376,7 @@ class Solrsearch_IndexController extends Controller_Action {
         $usetheme = $this->getRequest()->getParam("usetheme");
         if (!is_null($usetheme) && 1 === (int) $usetheme) {
             $layoutPath = APPLICATION_PATH . '/public/layouts/' . $collectionList->getTheme();
-            if (file_exists($layoutPath . '/common.phtml')) {
+            if (is_readable($layoutPath . '/common.phtml')) {
                 $this->_helper->layout->setLayoutPath($layoutPath);
             }
             else {

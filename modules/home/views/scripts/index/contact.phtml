@@ -39,9 +39,12 @@
 <h1><?= $this->translate('home_index_contact_title') ?></h1>
 
 <p>
-<?php $translation = $this->translate('help_content_contact'); ?>
-<?php if (file_exists($this->getScriptPath('') . $translation)) : ?>
-    <?= file_get_contents($this->getScriptPath('') . $translation) ?>
+<?php
+    $translation = $this->translate('help_content_contact');
+    $contentFile = $this->getScriptPath('') . $translation;
+?>
+<?php if (is_file($contentFile) && is_readable($contentFile)) : ?>
+    <?= file_get_contents($contentFile) ?>
 <?php else: ?>
     <?= $translation ?>
 <?php endif ?>

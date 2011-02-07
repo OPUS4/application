@@ -154,9 +154,10 @@ class Home_IndexController extends Controller_Action {
                 }
 
                 $translation = $this->view->translate('help_content_' . $content);
-                if (file_exists($this->view->getScriptPath('') . $translation)) {
+                $contentFile = $this->view->getScriptPath('') . $translation;
+                if (is_file($contentFile) && is_readable($contentFile)) {
                     $this->view->contenttitle = 'help_title_' . $content;
-                    $this->view->content = file_get_contents($this->view->getScriptPath('') . $translation);
+                    $this->view->content = file_get_contents($contentFile);
                 }
                 elseif ($translation !== 'help_content_' . $content) {
                     $this->view->contenttitle = 'help_title_' . $content;
