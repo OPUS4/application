@@ -61,7 +61,7 @@ class View_Helper_CollectionOverview extends Zend_View_Helper_Abstract {
         $collections = Opus_Collection::fetchCollectionIdsByDocumentId($this->document->getId());
         
         if (empty($collections)) {
-            return $fieldset_start . "<div class='form-errors'><ul><li>" . $this->view->translate('no_collections_choosen') . "</li></ul></div>" . $fieldset_end;
+            return $fieldset_start . "<b>" . $this->view->translate('no_collections_choosen') . "</b>" . $fieldset_end;
         }
 
         $overview = "";

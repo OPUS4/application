@@ -168,7 +168,7 @@ class Publish_Form_PublishingThird extends Zend_Form {
             $collection = new Opus_Collection($collectionId);
             $colls = $collection->getChildren();
 
-            if (!isset($colls) || count($colls) <= 1) {
+            if (!isset($colls) || count($colls) < 1) {
                 return null;
             }
 
