@@ -340,6 +340,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_documents_tooltip_show">
+      <tuv xml:lang="en">
+        <seg>Show document metadata.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zeige Metadaten-Übersicht zu Dokument.</seg>
+      </tuv>
+    </tu>
+
   </body>
   
 </tmx>

@@ -87,10 +87,18 @@
             <td class="info">
                 <?PHP $authorsCount = count($document->getAuthors()) - 1; ?>
                 <?PHP foreach($document->getAuthors() as $count => $author) : ?>
-                <span class="author"><a href="<?= $author['url'] ?>"><?= $author['name'] ?></a></span>
+                <span class="author">
+                    <?PHP if ($this->linkToAuthorSearch) : ?>
+                        <a href="<?= $author['url'] ?>"><?= $author['name'] ?></a>
+                    <?PHP else : ?>
+                        <?= $author['name'] ?>
+                    <?PHP endif; ?>
+                </span>
                     <?= ($count < $authorsCount) ? '; ' : ': '?>
                 <?PHP endforeach; ?>
-                <span class="title"><a href="<?=$document->getUrlShow() ?>"><?= $document->getDocTitle() ?></a></span>
+                <span class="title"><a href="<?=$document->getUrlShow() ?>"
+                    title="<?= $this->translate('admin_documents_tooltip_show') ?>"
+                                       ><?= $document->getDocTitle() ?></a></span>
                 (<span class="pubDate"><?= $document->getYear() ?></span>)
             </td>
             <td class="doctype">

@@ -66,6 +66,19 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         return $filter;
     }
 
+    public function init() {
+        parent::init();
+
+        $config = Zend_Registry::get("Zend_Config");
+
+        if (isset($config->admin->documents->linkToAuthorSearch)) {
+            $this->view->linkToAuthorSearch = $config->admin->documents->linkToAuthorSearch;
+        }
+        else {
+            $this->view->linkToAuthorSearch = 0;
+        }
+    }
+
     /**
      * Display documents (all or filtered by state)
      *
