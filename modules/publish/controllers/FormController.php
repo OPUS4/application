@@ -60,22 +60,18 @@ class Publish_FormController extends Controller_Action {
         $this->view->languageSelectorDisabled = true;
         $this->view->title = $this->view->translate('publish_controller_index');
 
-        //get-Request?
+        //reject get-Request
         if ($this->getRequest()->isPost() === false) {
             return $this->_redirectTo('index', '', 'index');
         }
 
+        //initializing
         $indexForm = new Publish_Form_PublishingFirst($this->view);
         $data = $this->getRequest()->getPost();
         $indexForm->populate($data);
+        $this->_initializeDocument($data);
 
-        $this->_setDocumentParameters($data);
-
-        if (isset($this->session->first) && $this->session->first == true) {
-            $this->_initializeDocument();
-        }
-
-        //manipulated hidden field for file size?
+        //reject manipulated hidden field for file size
         if (isset($data['MAX_FILE_SIZE']) && $data['MAX_FILE_SIZE'] != $this->session->maxFileSize) {
             $this->log->debug("wrong Max_file_size and redirect to index");
             return $this->_redirectTo('index', '', 'index');
@@ -87,11 +83,10 @@ class Publish_FormController extends Controller_Action {
             $this->view->subtitle = $this->view->translate('publish_controller_index_sub');
             $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
             $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
-            $this->_setFirstFormViewVariables($indexForm);            
+            $this->_setFirstFormViewVariables($indexForm);
         }
         else {
-            //file valid
-            $this->session->first = false;
+            //file valid-> store file            
             $this->view->subtitle = $this->view->translate('publish_controller_index_anotherFile');
             $this->view->form = $indexForm;
             $this->_setFirstFormViewVariables($indexForm);
@@ -99,9 +94,9 @@ class Publish_FormController extends Controller_Action {
             $this->session->documentId = $this->session->document->store();
 
             if (array_key_exists('addAnotherFile', $data))
-                    return $this->renderScript('index/index.phtml');
+                return $this->renderScript('index/index.phtml');
         }
-        
+
         //validate whole form
         if (!$indexForm->isValid($data)) {
             $this->view->form = $indexForm;
@@ -112,15 +107,12 @@ class Publish_FormController extends Controller_Action {
             return $this->renderScript('index/index.phtml');
         }
 
-        //form entries are valid: store data
-        $this->_storeUploadedFiles();
+        //form entries are valid: store data        
         $this->_storeBibliography($data);
         $this->_storeSubmitterEnrichment();
+        $this->session->document->store();
 
-        $this->session->documentId = $this->session->document->store();
-        $this->log->info("The corresponding doucment ID is: " . $this->session->documentId);
-
-        unset($this->session->first);
+        //call the appropriate template
         $templateName = $this->_helper->documentTypes->getTemplateName($this->session->documentType);
         $this->_helper->viewRenderer($templateName);
         $this->view->subtitle = $this->view->translate($this->session->documentType);
@@ -415,17 +407,32 @@ class Publish_FormController extends Controller_Action {
     /**
      * Method stores th uploaded files
      */
-    private function _initializeDocument() {
-        if ($this->session->documentId !== "") {
-            $this->log->debug("documentID not empty: " . $this->session->documentId);
-            $this->session->document = new Opus_Document($this->session->documentId);
-        }
-        else {
-            $this->session->document = new Opus_Document();
+    private function _initializeDocument($postData = null) {
+//        if ($this->session->documentId !== "") {
+//            $this->log->debug("documentID not empty: " . $this->session->documentId);
+//            $this->session->document = new Opus_Document($this->session->documentId);
+//        }
+//        else {
+//            $this->session->document = new Opus_Document();
+//        }
+
+        if (isset($postData['documentType'])) {
+            $this->session->documentType = $postData['documentType'];
+            unset($postData['documentType']);
         }
 
+        $this->log->info("(FormController) documentType = " . $this->session->documentType);
+
+
+        if (!isset($this->session->documentId) || $this->session->documentId == "") {
+            $this->session->document = new Opus_Document();
+            $this->session->documentId = $this->session->document->store();
+            $this->log->info("The corresponding doucment ID is: " . $this->session->documentId);
+        }
         $this->session->document->setType($this->session->documentType);
         $this->session->document->setServerState('temporary');
+
+        $this->session->additionalFields = array();
     }
 
     /**
