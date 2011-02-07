@@ -513,6 +513,24 @@
       </tuv>
     </tu>
 
+    <tu tuid="collections_choosen_root">
+      <tuv xml:lang="en">
+        <seg>Collection root</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Wurzel der Sammlung</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="collections_choosen_entry">
+      <tuv xml:lang="en">
+        <seg>Entry</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Eintrag</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="no_collections_choosen">
       <tuv xml:lang="en">
         <seg>No Collections choosen.</seg>

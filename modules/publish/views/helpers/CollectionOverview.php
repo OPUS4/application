@@ -68,7 +68,7 @@ class View_Helper_CollectionOverview extends Zend_View_Helper_Abstract {
         foreach ($collections as $collId) {
             $coll = new Opus_Collection($collId);
             $role = new Opus_CollectionRole($coll->getRoleId());
-            $overview .= "<p>Collection-Wurzel: <b>" . $this->view->translate($role->getDisplayName()) . "</b><br/>Eintrag: " . $coll->getDisplayName() . " (ID: " . $collId . ")";
+            $overview .= "<p>". $this->view->translate('collections_chosen_root') .": <b>" . $this->view->translate($role->getDisplayName()) . "</b><br/>". $this->view->translate('collections_chosen_entry') .": " . $coll->getDisplayName() . " (ID: " . $collId . ")";
         }
 
         return $fieldset_start . $overview . $fieldset_end;
