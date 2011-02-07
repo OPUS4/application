@@ -40,8 +40,7 @@
 $session = new Zend_Session_Namespace('Publish');
 $step = $session->step;
 $number = $session->countCollections;
-$root = $session->collectionHistory[$number]['root'];
-$leaf = $session->collectionHistory[$number]['leaf'];
+
 
 ?>
 
@@ -64,6 +63,11 @@ $leaf = $session->collectionHistory[$number]['leaf'];
                      <?= $this->element($this->$sub); ?>
                 <?php else : ?>
                     <h4><?= $this->translate('endOfCollectionTree'); ?></h4>
+                    <?php
+                    if (isset($session->collectionHistory[$number]['root'])) {
+                            $root = $session->collectionHistory[$number]['root'];
+                            $leaf = $session->collectionHistory[$number]['leaf'];
+                     }?>
                     <p>Ihre aktuelle Auswahl:<br /><?= $this->translate($root); ?> -- <?php echo $leaf; ?></p>
                 <?php endif; ?>          
 
