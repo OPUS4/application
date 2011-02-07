@@ -149,7 +149,7 @@ class Publish_Form_PublishingThird extends Zend_Form {
         $colls = $collection->getChildren();
 
         //reached the end of a collection tree
-        if (!(isset($colls) && count($colls) > 1)) {
+        if (!(isset($colls) )) {
             return null;
         }
 
