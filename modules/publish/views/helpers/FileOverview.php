@@ -54,7 +54,6 @@ class View_Helper_FileOverview extends Zend_View_Helper_Abstract {
 
         if (is_null($this->session->document)) {
             return "";
-            // return $fieldset_start . $this->view->translate('no_uploaded_files') . $fieldset_end;
         }
 
         $this->document = $this->session->document;
@@ -63,10 +62,9 @@ class View_Helper_FileOverview extends Zend_View_Helper_Abstract {
         if (empty($files)) {
             return $fieldset_start . "<div class='form-errors'><ul><li>" . $this->view->translate('no_uploaded_files') . "</li></ul></div>" . $fieldset_end;
         }
-
+        
         $overview = "";
         foreach ($files as $file) {
-//            $f = new Opus_File($file->getId());
             $overview .= "<p>Name: <b>" . htmlspecialchars($file->getPathName()) .
                         "</b><br/>Type: " . htmlspecialchars($file->getMimeType()) .
                         "<br/>Size: " . htmlspecialchars($file->getFileSize()) . " Bytes</p>";

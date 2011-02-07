@@ -175,7 +175,7 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                         }
 
                         $fieldset .= " />\n";
-                        break;
+                        break;                        
 
                     case 'Zend_Form_Element_File' :
                         $fieldset .= "<input type='file' name='" . $field['id'] . "' id='" . $field['id'] . "' enctype='multipart/form-data' ";
