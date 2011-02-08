@@ -46,11 +46,13 @@ class Publish_Model_FormElement {
     private $datatype;
     private $multiplicity;
     private $value;
-    private $default = array(
-        'value' => '',
-        'edit' => 'yes',
-        'public' => 'yes'
-    );
+    //private $default = array(
+//        'value' => '',
+//        'edit' => 'yes',
+//        'public' => 'yes',
+//        'for' => ''
+//    );
+    private $default = array();
     public $isSubField = false;
     private $validationObject; //Publish_Model_Validation
     private $validation = array();
@@ -136,10 +138,14 @@ class Publish_Model_FormElement {
             case 'Person':
                 $first = new Publish_Model_FormElement($this->form, $this->elementName . self::FIRST, $this->required, 'text', 'Text');
                 $first->isSubField = true;
+                $first->setDefaultValue($this->default, self::FIRST);
                 $elementFirst = $first->transform();
+
                 $last = new Publish_Model_FormElement($this->form, $this->elementName . self::LAST, $this->required, 'text', 'Text');
                 $last->isSubField = true;
+                $last->setDefaultValue($this->default, self::LAST);
                 $elementLast = $last->transform();
+
                 return array($elementFirst, $elementLast);
                 break;
 
@@ -149,10 +155,14 @@ class Publish_Model_FormElement {
                 else
                     $value = new Publish_Model_FormElement($this->form, $this->elementName, $this->required, 'text', 'Text');
                 $value->isSubField = true;
+                $value->setDefaultValue($this->default, self::VALUE);
                 $elementValue = $value->transform();
+
                 $lang = new Publish_Model_FormElement($this->form, $this->elementName . self::LANG, $this->required, 'select', 'Language');
                 $lang->isSubField = true;
+                $lang->setDefaultValue($this->default, self::LANG);
                 $elementLang = $lang->transform();
+
                 return array($elementValue, $elementLang);
                 break;
         }
@@ -229,9 +239,9 @@ class Publish_Model_FormElement {
 
             $element->setRequired($this->required);
 
-            if (isset($this->default['value']) && !empty($this->default['value'])) {
-                $element->setValue($this->default['value']);
-                $this->log->debug("Value set to default for " . $this->elementName . " => " . $this->default['value']);
+            if (isset($this->default[0]['value']) && !empty($this->default[0]['value'])) {
+                $element->setValue($this->default[0]['value']);
+                $this->log->debug("Value set to default for " . $this->elementName . " => " . $this->default[0]['value']);
             }
 
             if (isset($this->default['edit']) && $this->default['edit'] === 'no') {
@@ -318,25 +328,29 @@ class Publish_Model_FormElement {
         return $this->default;
     }
 
-    public function setDefaultValue($defaultValue) {
+    public function setDefaultValue($defaultValue, $forValue = null) {
+
+        if (isset($forValue)) {
+            foreach ($defaultValue AS $default) {
+                if ($default['for'] == $forValue) {
+                    $this->default[] = $default;
+                }
+            }
+            return;
+        }
+
         if (!isset($this->value) || is_null($this->value)) {
             if (isset($defaultValue['value'])) {
+
                 //Date Field has be set to current date
                 if ($defaultValue['value'] === 'today') {
                     if ($this->session->language === 'de')
-                        $this->default['value'] = date('d.m.Y');
+                        $defaultValue['value'] = date('d.m.Y');
                     else
-                        $this->default['value'] = date('Y/m/d');
+                        $defaultValue['value'] = date('Y/m/d');
                 }
-                else
-                    $this->default['value'] = $defaultValue['value'];
+                $this->default[] = $defaultValue;
             }
-
-            if (isset($defaultValue['edit']))
-                $this->default['edit'] = $defaultValue['edit'];
-
-            if (isset($defaultValue['public']))
-                $this->default['public'] = $defaultValue['public'];
         }
     }
 

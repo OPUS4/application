@@ -219,8 +219,14 @@ class Publish_Model_DocumenttypeParser {
 
                 if ($default->hasAttributes()) {
                     $defaultArray = array();
+
+                    $forValue = $default->getAttribute('for');
+                    if (isset($forValue))
+                        $defaultArray['for'] = $forValue;
+
                     $value = $default->getAttribute('value');
-                    $defaultArray['value'] = $value;
+                    if (isset($value))
+                        $defaultArray['value'] = $value;
 
                     $edit = $default->getAttribute('edit');
                     if (isset($edit))
