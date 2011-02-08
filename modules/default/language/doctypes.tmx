@@ -225,10 +225,10 @@
 
    <tu tuid="demo">
         <tuv xml:lang="en">
-            <seg>Demo</seg>
+            <seg>Demo (contains only two fields)</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Demo</seg>
+            <seg>Demo (enthält nur zwei Felder)</seg>
         </tuv>
    </tu>
    </body>
