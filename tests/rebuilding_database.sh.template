@@ -20,8 +20,16 @@ test_dir=../tests/sql/
 
 # path to directory that contains test fulltexts
 fulltext_dir=../tests/fulltexts
+# path to workspace directory
+workspace_dir=../workspace
 # path to workspace directory that hosts fulltexts
-workspace_files_dir=../workspace/files
+workspace_files_dir=$workspace_dir/files
+# path to workspace directory thats hosts log files
+workspace_log_dir=$workspace_dir/log
+# path to workspace directory that hosts temporary files
+workspace_tmp_dir=$workspace_dir/tmp
+# path to workspace directory that hosts cached files
+workspace_cache_dir=$workspace_dir/cache
 
 #
 # end editable part
@@ -61,7 +69,17 @@ if [ -d ${test_dir} ] ; then
     done
 fi
 
+#Backup old fulltexts and log files
+TEMP_DIR=$(mktemp -d $workspace_tmp_dir/old-XXXXXXX)
+mkdir -v $TEMP_DIR/files
+mv -v $workspace_files_dir $TEMP_DIR
+mkdir -v $TEMP_DIR/log
+mv -v $workspace_log_dir $TEMP_DIR
+rm -rf $workspace_cache_dir/*
+echo -e "\n*** Created backup of fulltexts and log files in $TEMP_DIR ***\n"
+
 #Copy test fulltexts to workspace
-mkdir -pv $workspace_files_dir
+mkdir -pv {$workspace_files_dir,$workspace_log_dir}
+chmod -R 777 $workspace_dir
 rsync -rv --exclude=.svn $fulltext_dir/* $workspace_files_dir
 
