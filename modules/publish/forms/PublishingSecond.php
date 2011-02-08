@@ -92,7 +92,9 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      */
     public function init() {
         $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument($this->doctype);
-
+        if (!isset($dom)) {
+            throw new Publish_Model_OpusServerException('Session Timeout. Please start publishing process again.');
+        }
         $parser = new Publish_Model_DocumenttypeParser($dom, $this);
         $this->log->debug("Parser created");
         $parser->setAdditionalFields($this->additionalFields);
