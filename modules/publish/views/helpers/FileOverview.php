@@ -64,6 +64,10 @@ class View_Helper_FileOverview extends Zend_View_Helper_Abstract {
         }
         
         $overview = "";
+
+        if ($this->session->uploadSuccess === false)
+                $overview .= "<div class='form-errors'><ul><li>" . $this->view->translate('error_uploaded_files') . "</li></ul></div>";
+
         foreach ($files as $file) {
             $overview .= "<p>Name: <b>" . htmlspecialchars($file->getPathName()) .
                         "</b><br/>Type: " . htmlspecialchars($file->getMimeType()) .
