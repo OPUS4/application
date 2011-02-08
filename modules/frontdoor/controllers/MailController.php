@@ -209,7 +209,9 @@ class Frontdoor_MailController extends Zend_Controller_Action {
 
                 $mailSendMail = new Opus_Mail_SendMail();
                 try {
-                    $mailSendMail->sendMail($from,$fromName,$subject,$bodyText,$recipient, true);
+                    foreach ($recipient as $address) {
+                        $mailSendMail->sendMail($from,$fromName,$subject,$bodyText,$address);
+                    }
                     $this->view->ok = true;
 
                     $this->view->success = 'frontdoor_mail_ok';
