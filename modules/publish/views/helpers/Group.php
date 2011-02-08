@@ -147,13 +147,13 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                         $fieldset .= ">\n\t\t\t\t\t";
 
                         foreach ($field["options"] AS $key => $option) {
-                            $fieldset .= "<option value='" . $key . "' label='" . $option . "'";
+                            $fieldset .= "<option value='" . htmlspecialchars($key) . "' label='" . htmlspecialchars($option) . "'";
 
                             if ($option === $field["value"] || $key === $field["value"])
                                 $fieldset .= " selected='selected'";
 
                             $fieldset .= ">";
-                            $fieldset .= $option . "</option>\n\t\t\t\t\t";
+                            $fieldset .= htmlspecialchars($option) . "</option>\n\t\t\t\t\t";
                         }
                         $fieldset .= "</select>\n";
 
@@ -186,13 +186,6 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                             $fieldset .= "size='30'";
                         $fieldset .= " />\n";
 
-//                        if (isset($this->session->publishFiles) && count($this->session->publishFiles) >= 1) {
-//                            $fieldset .= "<div class='form-files'><ul>" . $this->view->translate('already_uploaded_files');
-//                            foreach ($this->session->publishFiles as $file) {
-//                                $fieldset .= "\n<li>" . htmlspecialchars($file) . "</li>";
-//                            }
-//                            $fieldset .= "</ul></div>";
-//                        }
                         break;
 
 
@@ -203,7 +196,7 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                 if (isset($field["error"]) && count($field["error"]) >= 1) {
                     $fieldset .= "<div class='form-errors'><ul>";
                     foreach ($field["error"] AS $err)
-                        $fieldset .= "<li>" . $err . "</li>";
+                        $fieldset .= "<li>" . htmlspecialchars($err) . "</li>";
                     $fieldset .= "</ul></div>";
                 }
 

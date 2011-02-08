@@ -121,14 +121,14 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
                     $options = $element['options'];
 
                     foreach ($options AS $key => $option) {
-                        $elementfield .= "<option value='" . $key . "' label='" . $option . "'";
+                        $elementfield .= "<option value='" . htmlspecialchars($key) . "' label='" . htmlspecialchars($option) . "'";
                         $elementfield .= " title='" . $this->view->translate($element["hint"]) . "' ";
 
                         if ($option === $element["value"] || $key === $element["value"])
                             $elementfield .= " selected='selected'>";
                         else
                             $elementfield .= ">";
-                        $elementfield .= $option . "</option>\n\t\t\t\t";
+                        $elementfield .= htmlspecialchars($option) . "</option>\n\t\t\t\t";
                     }
                 }
                 $elementfield .= "</select>";
@@ -166,7 +166,7 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
         if ($element["error"] != null) {
             $elementfield .= "<div class='form-errors'><ul>";
             foreach ($element["error"] AS $err)
-                $elementfield .= "\n\t\t\t<li>" . $err . "</li>";
+                $elementfield .= "\n\t\t\t<li>" . htmlspecialchars($err) . "</li>";
             $elementfield .= "\n\t\t</ul></div>";
         }
 
