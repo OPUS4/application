@@ -181,20 +181,19 @@ class ErrorController extends Zend_Controller_Action
             $body .= "-- end request header --\n\n";
         }
 
-        $adminName = $config->errorController->mailTo->name;
-        $adminAddress = $config->errorController->mailTo->address;
+        $adminAddress = array(
+            'address' => $config->errorController->mailTo->address,
+            'name' => $config->errorController->mailTo->name,
+        );
 
-        $logger = Zend_Registry::get('Zend_Log');
-
-        $logger->info("ErrorController: Sending error mail via server {$config->mail->opus->smtp}:{$config->mail->opus->port} to '$adminName <$adminAddress>'");
-        $tr = new Zend_Mail_Transport_Smtp($config->mail->opus->smtp, array('port' => $config->mail->opus->port));
-
-        $mail = new Zend_Mail();
-        $mail->setFrom($config->mail->opus->address, $config->mail->opus->name);
-        $mail->addTo($adminAddress, $adminName);
-        $mail->setSubject($subject);
-        $mail->setBodyText($body);
-        $mail->send($tr);
+        $mail = new Opus_Mail_SendMail();
+        $mail->sendMail(
+                $config->mail->opus->address,
+                $config->mail->opus->name,
+                $subject,
+                $body,
+                array($adminAddress)
+        );
 
         return true;
 
