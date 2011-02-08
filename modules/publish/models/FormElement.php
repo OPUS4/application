@@ -38,6 +38,9 @@ class Publish_Model_FormElement {
     public $log;
     public $additionalFields = array();
     public $postValues = array();
+    public $isSubField = false;
+    public $listOptions = array();
+
     //private member variables
     private $elementName;
     private $label;
@@ -45,20 +48,12 @@ class Publish_Model_FormElement {
     private $formElement;
     private $datatype;
     private $multiplicity;
-    private $value;
-    //private $default = array(
-//        'value' => '',
-//        'edit' => 'yes',
-//        'public' => 'yes',
-//        'for' => ''
-//    );
-    private $default = array();
-    public $isSubField = false;
+    private $value;    
+    private $default = array();    
     private $validationObject; //Publish_Model_Validation
     private $validation = array();
     private $group;         //Publish_Model_Group
-    private $subFormElements = array();         //array of Zend_Form_Element
-    public $listOptions = array();
+    private $subFormElements = array();         //array of Zend_Form_Element    
 
     //Constants
     const FIRST = "FirstName";
@@ -120,15 +115,12 @@ class Publish_Model_FormElement {
     }
 
     private function isGroup() {
-//        $groupCount = 'num' . $this->elementName;
-//        $this->session->$groupCount = 0;
         if ($this->isTitleElement())
             return true;
         else if ($this->isPersonElement())
             return true;
         else if ($this->multiplicity !== '1')
             return true;
-
         else
             return false;
     }
@@ -136,6 +128,7 @@ class Publish_Model_FormElement {
     private function implicitFields($workflow) {
         switch ($workflow) {
             case 'Person':
+                //creates two subfields for first and last name
                 $first = new Publish_Model_FormElement($this->form, $this->elementName . self::FIRST, $this->required, 'text', 'Text');
                 $first->isSubField = true;
                 $first->setDefaultValue($this->default, self::FIRST);
@@ -150,6 +143,7 @@ class Publish_Model_FormElement {
                 break;
 
             case 'Title':
+                //creates two subfields for title value and language (select)
                 if ($this->isTextareaElement())
                     $value = new Publish_Model_FormElement($this->form, $this->elementName, $this->required, 'textarea', 'Text');
                 else
@@ -244,7 +238,7 @@ class Publish_Model_FormElement {
                 $this->log->debug("Value set to default for " . $this->elementName . " => " . $this->default[0]['value']);
             }
 
-            if (isset($this->default['edit']) && $this->default['edit'] === 'no') {
+            if (isset($this->default[0]['edit']) && $this->default[0]['edit'] === 'no') {
                 $element->setAttrib('disabled', true);
                 $element->setRequired(false);
             }
