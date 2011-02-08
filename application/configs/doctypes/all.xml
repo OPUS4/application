@@ -39,13 +39,16 @@
 	xsi:schemaLocation="http://schemas.opus.org/documenttype https://svn.zib.de/opus4dev/framework/trunk/library/Opus/Document/documenttype.xsd">
 	
     <field name="PersonSubmitter" required="yes" multiplicity="1" formelement="text" datatype="Person">
+        <default for="FirstName" value="Hans" edit="yes" public="yes"  />
+        <default for="LastName" value="Hansmann" edit="yes" public="yes"  />
         <subfield name="Email" required="yes" formelement="text" datatype="Email" />
     </field>
     <field name="Language" required="no" formelement="select" datatype="Language" multiplicity="1">
         <default value="deu" edit="yes" public="yes"/>
     </field>
     <field name="TitleMain" required="no" formelement="text" datatype="Title" multiplicity="4">
-        <default value="deu" edit="yes" public="yes"/>
+        <default for="Value" value="Hier den Haupttiel eintragen" edit="yes" public="yes"/>
+        <default for="Language" value="deu" edit="yes" public="yes"/>
     </field>
     <field name="TitleAbstract" required="no" formelement="textarea" datatype="Title" multiplicity="4">
         <required-if-fulltext/>
