@@ -38,7 +38,8 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://schemas.opus.org/documenttype https://svn.zib.de/opus4dev/framework/trunk/library/Opus/Document/documenttype.xsd">
 
-<!-- required fields -->
     <field name="PersonSubmitter" required="yes" formelement="text" datatype="Person" multiplicity="1">
+        <default for="FirstName" value="John" edit="yes" public="yes"/>
+        <default for="LastName" value="Doe" edit="yes" public="yes"/>
     </field>
 </documenttype>
