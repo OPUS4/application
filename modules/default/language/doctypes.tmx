@@ -223,6 +223,14 @@
         </tuv>
    </tu>
 
+   <tu tuid="demo">
+        <tuv xml:lang="en">
+            <seg>Demo</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Demo</seg>
+        </tuv>
+   </tu>
    </body>
   
 </tmx>

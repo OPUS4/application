@@ -58,6 +58,8 @@ rm -r  opus4/import/importer/ZIB*.php
 rm -r  opus4/import/stylesheets/zib*.xslt
 rm -v  opus4/modules/publish/views/scripts/form/preprintmatheon.phtml
 rm -v  opus4/application/configs/doctypes/preprintmatheon.xml
+rm -v  opus4/modules/publish/views/scripts/form/demo.phtml
+rm -v  opus4/application/configs/doctypes/demo.xml
 rm -rv opus4/modules/{pkm,publicationList,remotecontrol}
 rm -rv opus4/scripts/{packaging,cron,indexing,install}
 rm -r  opus4/scripts/*{Matheon,ZIB}*.php
