@@ -93,3 +93,10 @@ touch workspace/log/opus.log
 chmod 666 workspace/log/opus.log
 chmod 777 workspace/{files,cache,tmp}
 chmod 777 workspace/tmp/resumption
+
+#
+# Make install/uninstall script executable
+#
+
+chmod +x install/install.sh
+chmod +x install/uninstall.sh
