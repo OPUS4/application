@@ -6,6 +6,16 @@
 
   <body>
 
+    <tu tuid="default_auth_login">
+      <tuv xml:lang="en">
+        <seg>User Login</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Benutzer-Anmeldung</seg>
+      </tuv>
+    </tu>
+
+
     <tu tuid="auth_pagetitle">
       <tuv xml:lang="en">
         <seg>User Login</seg>
@@ -48,6 +58,42 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Passwort</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="auth_error_no_username">
+      <tuv xml:lang="en">
+        <seg>Username is required.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Username fehlt.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="auth_error_no_password">
+      <tuv xml:lang="en">
+        <seg>Password is required.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Passwort fehlt.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="auth_error_invalid_credentials">
+      <tuv xml:lang="en">
+        <seg>Login failed. Invalid credentials.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Die Eingabe ist ungültig.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="auth_login_success">
+      <tuv xml:lang="en">
+        <seg>Authenticated successfully.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Erfolgreich authentifiziert.</seg>
       </tuv>
     </tu>
 

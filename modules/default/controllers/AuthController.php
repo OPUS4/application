@@ -98,7 +98,7 @@ class AuthController extends Controller_Action {
 
         if ($form->isValid($data) !== true) {
             // Put authentication failure message to the view.
-            $this->view->auth_failed_msg = 'Invalid credentials';
+            $this->view->auth_failed_msg = $this->view->translate('auth_error_invalid_credentials');
 
             // Populate the form again to trigger validator decorators.
             $form->populate($data);
@@ -123,7 +123,7 @@ class AuthController extends Controller_Action {
         if ($auth_result->isValid() !== true) {
             // Put authentication failure message to the view.
             $message = $auth_result->getMessages();
-            $this->view->auth_failed_msg = $message[0];
+            $this->view->auth_failed_msg = $this->view->translate($message[0]);
 
             // Populate the form again to trigger validator decorators.
             $form->populate($data);
@@ -176,12 +176,18 @@ class AuthController extends Controller_Action {
         $login->addValidator(new Zend_Validate_Regex('/^[A-Za-z0-9@._-]+$/'))
                 ->setRequired()
                 ->setLabel('auth_field_login');
+        $login->addErrorMessages(array(
+            Zend_Validate_NotEmpty::IS_EMPTY => 'auth_error_no_username'
+        ));
 
         // Password element.
         $password = new Zend_Form_Element_Password('password');
         $password->addValidator(new Zend_Validate_Alnum())
                 ->setRequired()
                 ->setLabel('auth_field_password');
+        $password->addErrorMessages(array(
+            Zend_Validate_NotEmpty::IS_EMPTY => 'auth_error_no_password'
+        ));
 
         // Submit button.
         $submit = new Zend_Form_Element_Submit('SubmitCredentials');
