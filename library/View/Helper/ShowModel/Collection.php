@@ -44,14 +44,14 @@ class View_Helper_ShowModel_Collection extends View_Helper_ShowModel_Abstract {
         $result = '';
         if (false === is_array($value)) {
             if (($this->_saef === false) or (empty($value) === false)) {
-                $data = $this->__skeleton($field, $value);
+                $data = $this->__skeleton($field, htmlspecialchars($value));
                 $result = $this->_view->partial($this->_partial, $data);
             }
         }
         else {
             foreach ($value as $index => $collection) {
                 if (($this->_saef === false) or (empty($collection) === false)) {
-                    $data = $this->__skeleton($field, htmlspecialchars($collection['DisplayFrontdoor']));
+                    $data = $this->__skeleton($field, htmlspecialchars($collection['DisplayFrontdoor'])); // TODO war DisplayFrontdoor
                     $result .= $this->_view->partial($this->_partial, $data);
                 }
             }

@@ -91,7 +91,20 @@ class View_Helper_ShowModel_Person extends View_Helper_ShowModel_Abstract {
                             $fieldValue->setLocale($locale);
                             $fieldValue = $fieldValue->toString(Zend_Locale_Format::getDateFormat($locale));
                         }
-                        $data[] = $this->__skeleton($fieldname, htmlspecialchars($fieldValue));
+                        else {
+                            if ($fieldname !== 'DateOfBirth') {
+                                $fieldValue = htmlspecialchars($fieldValue);
+                            }
+                            else {
+                                // HACK for showing the date properly
+                                // The ShowModel Code converts everything into
+                                // an array at the beginning.
+                                $date = new Zend_Date();
+                                $date->setTimestamp($fieldValue['UnixTimestamp']);
+                                $fieldValue = $date;
+                            }
+                        }
+                        $data[] = $this->__skeleton($fieldname, $fieldValue);
                     }
                 }
             }
