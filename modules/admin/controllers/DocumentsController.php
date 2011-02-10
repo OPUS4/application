@@ -60,7 +60,10 @@ class Admin_DocumentsController extends Controller_CRUDAction {
     private function __createFilter(Opus_Document $document, $page = null) {
         $filter = new Opus_Model_Filter();
         $filter->setModel($document);
-        $blacklist = array('Collection', 'IdentifierOpus3', 'Source', 'File', 'ServerState', 'ServerDatePublished', 'ServerDateModified', 'ServerDateUnlocking', 'Type');
+        $blacklist = array('Collection', 'IdentifierOpus3', 'Source', 'File',
+            'ServerState', 'ServerDatePublished', 'ServerDateModified',
+            'ServerDateUnlocking', 'Type',
+            'PublicationState');
         $filter->setBlacklist($blacklist);
         // $filter->setSortOrder($type->getAdminFormSortOrder());
         return $filter;
