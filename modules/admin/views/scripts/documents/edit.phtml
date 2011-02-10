@@ -89,7 +89,7 @@
     <ul>
         <?PHP foreach ($this->assignedCollections as $collection) : ?>
         <li>
-            <?= $collection['roleName']?>: <?= $collection['collectionName'] ?>
+            <?= $collection['roleName']?>: <?= htmlspecialchars($collection['collectionName']) ?>
             <form method="post" action="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'unlinkcollection', 'role' => $collection['roleId'], 'collection' => $collection['collectionId'])) ?>">
                 <input type="submit" value="<?= $this->translate('admin_documents_unlinkcollection') ?>" />
             </form>
