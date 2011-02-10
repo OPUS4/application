@@ -53,17 +53,27 @@ set_include_path(implode(PATH_SEPARATOR, array(
 
 ///** Zend_Application */
 require_once 'Zend/Application.php';
-//
+require_once 'Zend/Config/Ini.php';
+
+$config = new Zend_Config_Ini(
+        APPLICATION_PATH . '/application/configs/application.ini',
+        APPLICATION_ENV,
+        array('allowModifications'=>true));
+
+$localConfig = new Zend_Config_Ini(
+        APPLICATION_PATH . '/application/configs/config.ini',
+        APPLICATION_ENV,
+        array('allowModifications'=>true));
+
+$webConfig = new Zend_Config(array(
+       'log' => array(
+           'filename'=>'opus.log')), true);
+
+$config->merge($localConfig);
+$config->merge($webConfig);
+
 //// Create application, bootstrap, and run
-$application = new Zend_Application(
-    APPLICATION_ENV,
-    array(
-        "config"=>array(
-            APPLICATION_PATH . '/application/configs/application.ini',
-            APPLICATION_PATH . '/application/configs/config.ini'
-        )
-    )
-);
+$application = new Zend_Application(APPLICATION_ENV, $config);
 
 try {
     $application->bootstrap()->run();
