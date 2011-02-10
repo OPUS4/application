@@ -65,7 +65,7 @@
         </tr>
         <?php foreach ($this->typeStat as $type => $count) : ?>
         <tr>
-            <td><?= $this->translate($type) ?></td>
+            <td><?= htmlspecialchars($this->translate($type)) ?></td>
             <td><?= $count ?></td>
         </tr>
         <?php endforeach;?>
