@@ -89,8 +89,8 @@ mkdir -vp workspace/{cache,log,files,tmp}
 mkdir -v workspace/tmp/resumption
 ln -sv "../workspace" "opus4/workspace"
 
-touch workspace/log/opus.log
-chmod 666 workspace/log/opus.log
+touch workspace/log/{opus.log,opus-console.log}
+chmod 666 workspace/log/{opus.log,opus-console.log}
 chmod 777 workspace/{files,cache,tmp}
 chmod 777 workspace/tmp/resumption
 
