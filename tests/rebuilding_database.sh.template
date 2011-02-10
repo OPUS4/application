@@ -78,8 +78,11 @@ mv -v $workspace_log_dir $TEMP_DIR
 rm -rf $workspace_cache_dir/*
 echo -e "\n*** Created backup of fulltexts and log files in $TEMP_DIR ***\n"
 
-#Copy test fulltexts to workspace
 mkdir -pv {$workspace_files_dir,$workspace_log_dir}
 chmod -R 777 {$workspace_files_dir,$workspace_log_dir}
+touch $workspace_log_dir/opus.log
+chmod 666 $workspace_log_dir/opus.log
+
+#Copy test fulltexts to workspace
 rsync -rv --exclude=.svn $fulltext_dir/* $workspace_files_dir
 
