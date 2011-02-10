@@ -64,7 +64,7 @@ class View_Helper_ShowModel_IdentifierUrn extends View_Helper_ShowModel_Abstract
         $urn_value = @$value['Value'];
         if (($this->_saef === false) or (empty($urn_value) === false)) {
             // TODO resolving URI should configurable
-            $output_string = 'http://nbn-resolving.de/urn/resolver.pl?' . $urn_value;
+            $output_string = 'http://nbn-resolving.de/urn/resolver.pl?' . htmlspecialchars($urn_value);
             $iterim_value = '<a href="' . $output_string . '">' . $output_string . '</a>';
             $data = $this->__skeleton($field, $iterim_value);
             $result = $this->_view->partial($this->_partial, $data);

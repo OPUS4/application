@@ -69,7 +69,7 @@ class View_Helper_ShowModel_Complex extends View_Helper_ShowModel_Abstract {
         $data = array();
         foreach ($value as $fieldname => $internal_value) {
             if (($this->_saef === false) or (empty($internal_value) === false)) {
-                $data[] = $this->__skeleton($fieldname, $internal_value);
+                $data[] = $this->__skeleton($fieldname, htmlspecialchars($internal_value));
             }
         }
         if (($this->_saef === false) or (empty($data) === false)) {
