@@ -204,9 +204,27 @@ class Admin_DocumentsController extends Controller_CRUDAction {
     }
 
     public function showAction() {
-        $model = parent::showAction();
-        if (!empty($model)) {
-            $this->view->docHelper = new Review_Model_DocumentAdapter($this->view, $model);
+        $id = $this->getRequest()->getParam('id');
+        if (!empty($id) && is_numeric($id)) {
+            $model = new $this->_modelclass($id);
+
+            $filter = new Opus_Model_Filter();
+            $filter->setModel($model);
+            $blacklist = array('PublicationState');
+            $filter->setBlacklist($blacklist);
+            
+            $this->view->entry = $filter->toArray();
+            $this->view->objectId = $id;
+
+            if (!empty($model)) {
+                $this->view->docHelper = new Review_Model_DocumentAdapter(
+                        $this->view, $model);
+            }
+
+            return $model;
+        }
+        else {
+            $this->_helper->redirector('index');
         }
     }
 
