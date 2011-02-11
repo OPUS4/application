@@ -106,7 +106,6 @@ class Publish_FormController extends Controller_Action {
             //form entries are valid: store data
             $this->_storeBibliography($data);
             $this->_storeSubmitterEnrichment();
-            $this->session->document->store();
 
             //call the appropriate template
             return $this->_showTemplate();
@@ -402,21 +401,23 @@ class Publish_FormController extends Controller_Action {
     /**
      * Method stores th uploaded files
      */
-    private function _initializeDocument($postData = null) {
+    private function _initializeDocument($postData = null) {       
+        if (!isset($this->session->documentId) || $this->session->documentId == '') {
+            $this->session->document = new Opus_Document();
+            $this->session->document->setServerState('temporary');
+            $this->session->documentId = $this->session->document->store();
+            $this->log->info(__METHOD__ . ' The corresponding document ID is: ' . $this->session->documentId);
+        }
+
         if (isset($postData['documentType'])) {
-            $this->session->documentType = $postData['documentType'];
+            if ($postData['documentType'] !== '') {
+                $this->session->documentType = $postData['documentType'];
+                $this->log->info(__METHOD__ .  ' documentType = ' . $this->session->documentType);                
+                $this->session->document->setType($this->session->documentType);
+                $this->session->document->store();
+            }
             unset($postData['documentType']);
         }
-
-        $this->log->info("(FormController) documentType = " . $this->session->documentType);
-
-        if (!isset($this->session->documentId) || $this->session->documentId == "") {
-            $this->session->document = new Opus_Document();
-            $this->session->documentId = $this->session->document->store();
-            $this->log->info("The corresponding doucment ID is: " . $this->session->documentId);
-        }
-        $this->session->document->setType($this->session->documentType);
-        $this->session->document->setServerState('temporary');
 
         $this->session->additionalFields = array();
     }
@@ -436,6 +437,7 @@ class Publish_FormController extends Controller_Action {
         $this->session->document->addEnrichment()
                 ->setKeyName('submitter.user_id')
                 ->setValue($userId);
+        $this->session->document->store();
     }
 
     /**
@@ -496,6 +498,7 @@ class Publish_FormController extends Controller_Action {
             $this->log->debug("Bibliographie is set -> store it!");
             //store the document internal field BelongsToBibliography
             $this->session->document->setBelongsToBibliography(1);
+            $this->session->document->store();
         }
     }
 
