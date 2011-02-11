@@ -29,7 +29,7 @@
  * @package     Module_Import
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
  * @author      Gunar Maiwald <maiwald@zib.de>
- * @copyright   Copyright (c) 2009, 2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2009-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id: Opus3Migration_Readline.php 7086 2010-11-12 16:40:52Z gmaiwald $
  */
@@ -63,7 +63,6 @@ class Opus3Migration_Documents {
     private $start = null;
     private $end = null;
     private $doclist = array();
-    private $magicPath = '/usr/share/file/magic'; # on Ubuntu-Systems this should be the magic path
 
     private $status;
     
@@ -99,7 +98,7 @@ class Opus3Migration_Documents {
         while (false === file_exists($path)) {
             $path = readline('Please type the path to your OPUS3 fulltext files (e.g. /usr/local/opus/htdocs/volltexte): ');
         }
-        $this->fulltextPath = $path;
+        $this->fulltextPath = rtrim($path,"/");
 
         while (false === is_numeric($start)) {
             $start = readline('Please type the number of the first document to import (e.g. 1) : ');
@@ -134,11 +133,9 @@ class Opus3Migration_Documents {
 
             $result = $xmlImporter->import($document);
             if ($result['result'] === 'success') {
-                echo date('Y-m-d H:i:s') . " Successfully imported old ID " . $result['oldid'] . " with new ID " . $result['newid'] . " -- memory $mem_now (KB), peak memory $mem_peak (KB)\n";
                 $xmlImporter->log(date('Y-m-d H:i:s') . " Successfully imported old ID " . $result['oldid'] . " with new ID " . $result['newid'] . " -- memory $mem_now (KB), peak memory $mem_peak (KB)\n");
                 array_push($this->doclist, $result['newid']);
             } else if ($result['result'] === 'failure') {
-                echo date('Y-m-d H:i:s') . " ERROR: " . $result['message'] . " for old ID " . $result['oldid'] . "\n";
                 $xmlImporter->log(date('Y-m-d H:i:s') . " ERROR: " . $result['message'] . " for old ID " . $result['oldid'] . "\n" . $result['entry'] . "\n");
             }
         }
@@ -148,22 +145,20 @@ class Opus3Migration_Documents {
 
     public function load_fulltext() {
 
-        $fileImporter = new Opus3FileImport($this->fulltextPath, $this->magicPath);
+        $fileImporter = new Opus3FileImport($this->fulltextPath);
  
         foreach ($this->doclist as $id) {
 
             $mem_now = round(memory_get_usage() / 1024 );
             $mem_peak = round(memory_get_peak_usage() / 1024);
 
-            $doc = new Opus_Document($id);
             $numberOfFiles = $fileImporter->loadFiles($id);
 
             $mem_now = round(memory_get_usage() / 1024 );
             $mem_peak = round(memory_get_peak_usage() / 1024 );
 
             if ($numberOfFiles > 0) {
-                echo date('Y-m-d H:i:s') . " " . $numberOfFiles . " file(s) have been imported successfully for document ID " . $doc->getId() . " -- memory $mem_now (KB), peak memory $mem_peak (KB)\n";
-                $fileImporter->log(date('Y-m-d H:i:s') . " " . $numberOfFiles . " file(s) have been imported successfully for document ID " . $doc->getId() . " -- memory $mem_now (KB), peak memory $mem_peak (KB)\n");
+                $fileImporter->log(date('Y-m-d H:i:s') . " " . $numberOfFiles . " file(s) have been imported successfully for document ID " . $id . " -- memory $mem_now (KB), peak memory $mem_peak (KB)\n");
             }
         }
 
@@ -207,7 +202,8 @@ $application = new Zend_Application(
     array(
         "config"=>array(
             APPLICATION_PATH . '/application/configs/application.ini',
-            APPLICATION_PATH . '/application/configs/config.ini'
+            APPLICATION_PATH . '/application/configs/config.ini',
+            APPLICATION_PATH . '/application/configs/import.ini'
         )
     )
 );

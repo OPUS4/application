@@ -33,6 +33,13 @@
  */
 class Opus3InstituteImport {
 
+   /**
+    * Holds Zend-Configurationfile
+    *
+    * @var file
+    */
+    protected $config = null;
+
 
     /**
      * Imports Collection data to Opus4
@@ -41,6 +48,8 @@ class Opus3InstituteImport {
      * @return array List of documents that have been imported
      */
     public function __construct($data)	{
+
+        $this->config = Zend_Registry::get('Zend_Config');
         $role = Opus_CollectionRole::fetchByName('institutes');
         $xml = new DomDocument;
         $xslt = new DomDocument;
@@ -95,11 +104,22 @@ class Opus3InstituteImport {
      * @return array List of documents that have been imported
      */
     protected function importUniversities($data, $role) {
+        $mf = $this->config->import->mapping->universities;
+        $fp = null;
+        try {
+            $fp = @fopen($mf, 'w');
+            if (!$fp) {
+                throw new Exception("ERROR Opus3InstituteImport: Could not create '".$mf."' for Universities.\n");
+            }
+        } catch (Exception $e){
+            echo $e->getMessage();
+            return;
+        }
+
+
         $classification = $this->transferOpusClassification($data);
         $subcoll = array();
 
-        // Build a mapping file to associate old IDs with the new ones
-        $fp = fopen('../workspace/tmp/universities.map', 'w');
         foreach ($classification as $class) {
 
             if (array_key_exists('universitaet_anzeige', $class) === false) { continue; }
@@ -140,12 +160,33 @@ class Opus3InstituteImport {
      * @return array List of documents that have been imported
      */
     protected function importFaculties($data, $pColl) {
+        $mf1 = $this->config->import->mapping->faculties;
+        $fp1 = null;
+        try {
+            $fp1 = @fopen($mf1, 'w');
+            if (!$fp1) {
+                throw new Exception("ERROR Opus3InstituteImport: Could not create '".$mf1."' for Faculties.\n");
+            }
+        } catch (Exception $e){
+            echo $e->getMessage();
+            return;
+        }
+
+        $mf2 = $this->config->import->mapping->grantors;
+        $fp2 = null;
+        try {
+            $fp2 = @fopen($mf2, 'w');
+            if (!$fp2) {
+                throw new Exception("ERROR Opus3InstituteImport: Could not create '".$mf2."' for Grantors.\n");
+            }
+        } catch (Exception $e){
+            echo $e->getMessage();
+            return;
+        }
+
         $classification = $this->transferOpusClassification($data);
         $subcoll = array();
 
-        // Build a mapping file to associate old IDs with the new ones
-        $fp = fopen('../workspace/tmp/faculties.map', 'w');
-        $fp2 = fopen('../workspace/tmp/grantor.map', 'w');
         foreach ($classification as $class) {
             if (array_key_exists('fakultaet', $class) === false) { continue; }
             if (array_key_exists('nr', $class) === false) { continue; }
@@ -166,11 +207,11 @@ class Opus3InstituteImport {
             $fac->store();
 
             echo "Faculty imported: " . $class['fakultaet'] ."\n";
-            fputs($fp, $class['nr'] . ' ' . $subcoll[$class["nr"]] . "\n");
+            fputs($fp1, $class['nr'] . ' ' . $subcoll[$class["nr"]] . "\n");
             fputs($fp2, $class['nr'] . ' ' . $fac->getId() . "\n");
 
 	}
-        fclose($fp);
+        fclose($fp1);
         fclose($fp2);
 	return $subcoll;
     }
@@ -182,10 +223,20 @@ class Opus3InstituteImport {
      * @return array List of documents that have been imported
      */
     protected function importInstitutes($data, $pColls)     {
+        $mf = $this->config->import->mapping->institutes;
+        $fp = null;
+        try {
+            $fp = @fopen($mf, 'w');
+            if (!$fp) {
+                throw new Exception("ERROR Opus3InstituteImport: Could not create '".$mf."' for Institutes.\n");
+            }
+        } catch (Exception $e){
+            echo $e->getMessage();
+            return;
+        }
+
         $classification = $this->transferOpusClassification($data);
 
-        // Build a mapping file to associate old IDs with the new ones
-        $fp = fopen('../workspace/tmp/institute.map', 'w');
         foreach ($classification as $class) {
             if (array_key_exists('fakultaet', $class) === false) { continue; }
             if (array_key_exists('name', $class) === false) { continue; }

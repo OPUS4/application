@@ -51,7 +51,12 @@
 
     <xsl:template match="/">
         <xsl:element name="Documents">
-            <xsl:apply-templates select="/mysqldump/database/table_data[@name='opus']/row" />
+            <xsl:apply-templates select="/mysqldump/database/table_data[@name='opus']/row">
+                <xsl:with-param name="modus">opus</xsl:with-param>
+            </xsl:apply-templates>
+              <xsl:apply-templates select="/mysqldump/database/table_data[@name='temp']/row">
+                <xsl:with-param name="modus">temp</xsl:with-param>
+            </xsl:apply-templates>
         </xsl:element>
     </xsl:template>
 
@@ -61,14 +66,28 @@
     <xsl:template match="table_data/row/field[@xsi:nil='true']" priority="1" />
 
     <!-- All Fields of table 'opus' -->
-    <xsl:template match="table_data[@name='opus']/row">
+    <xsl:template match="table_data[@name='opus']/row | table_data[@name='temp']/row">
+        <xsl:param name="modus" required="yes" />
         <xsl:element name="Opus_Document">
+
+            <!-- Type-->
+            <!-- OldType will be mapped in Opus3XMLImport.php -->
+            <xsl:attribute name="OldType">
+                 <xsl:value-of select="field[@name='type']" />
+            </xsl:attribute>
+
+            <!-- Language -->
+            <!-- OldLanguage will be mapped in Opus3XMLImport.php -->
+            <xsl:attribute name="OldLanguage">
+                 <xsl:value-of select="field[@name='language']" />
+            </xsl:attribute>
+
             <!-- Variables for internal use -->
             <xsl:variable name="OriginalID">
                 <xsl:value-of select="field[@name='source_opus']" />
             </xsl:variable>
             <xsl:variable name="date_accepted">
-                <xsl:value-of select="/mysqldump/database/table_data[@name='opus_diss']/row[field[@name='source_opus']=$OriginalID]/field[@name='date_accepted']" />
+                 <xsl:value-of select="/mysqldump/database/table_data[@name='opus_diss' or @name='temp_diss']/row[field[@name='source_opus']=$OriginalID]/field[@name='date_accepted']" />
             </xsl:variable>
             <xsl:variable name="date_creation">
                 <xsl:value-of select="field[@name='date_creation']" />
@@ -111,95 +130,9 @@
                 </xsl:attribute>
             </xsl:if>
 
-            <!-- Type-->
-            <xsl:attribute name="Type">
-                <xsl:choose>
-                   <xsl:when test="field[@name='type']='1'">
-                        <xsl:text>report</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='2'">
-                        <xsl:text>article</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='4'">
-                        <xsl:text>book</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='5'">
-                        <xsl:text>bookpart</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='7'">
-                        <xsl:text>masterthesis</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='8'">
-                        <xsl:text>doctoralthesis</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='9'">
-                        <xsl:text>book</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='11'">
-                        <xsl:text>misc</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='15'">
-                        <xsl:text>conferenceobject</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='16'">
-                        <xsl:text>article</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='17'">
-                        <xsl:text>workingpaper</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='19'">
-                        <xsl:text>studythesis</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='20'">
-                        <xsl:text>report</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='22'">
-                        <xsl:text>preprint</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='23'">
-                        <xsl:text>misc</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='24'">
-                        <xsl:text>habilitation</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='25'">
-                        <xsl:text>bachelorthesis</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='26'">
-                        <xsl:text>lecture</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='71'">
-                        <xsl:text>article</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='76'">
-                        <xsl:text>misc</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='78'">
-                        <xsl:text>lecture</xsl:text>
-                    </xsl:when>
-                    <xsl:when test="field[@name='type']='79'">
-                        <xsl:text>book</xsl:text>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:text>other</xsl:text>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </xsl:attribute>
-
             <!-- Edition -->
 
             <!-- Issue -->
-
-            <!-- Language -->
-            <!-- Language might be a multivalue field in Opus4; in Opus3 there can be only one language -->
-            <!-- if the document type defines it as multivalue, there will be problems importing -->
-            <xsl:attribute name="Language">
-                <xsl:call-template name="mapLanguage">
-                    <xsl:with-param name="lang">
-                        <xsl:value-of select="field[@name='language']" />
-                    </xsl:with-param>
-                </xsl:call-template>
-            </xsl:attribute>
 
             <!-- PageFirst -->
 
@@ -240,14 +173,23 @@
 
             <!-- ServerState -->
             <!-- All publications in the OPUS table are published, so we can set this statically -->
-            <xsl:attribute name="ServerState">
-                <xsl:text>published</xsl:text>
-            </xsl:attribute>
+            <!-- TODO: temporarely Documents in TEMP-table-->
+            <xsl:if test="$modus = 'opus'">
+                <xsl:attribute name="ServerState">
+                    <xsl:text>published</xsl:text>
+                </xsl:attribute>
+            </xsl:if>
+            <xsl:if test="$modus = 'temp'">
+                <xsl:attribute name="ServerState">
+                    <xsl:text>temporary</xsl:text>
+                </xsl:attribute>
+            </xsl:if>
 
             <!-- Volume -->
 
             <!-- BelongstoBibliography -->
 
+           
             <!-- All Related Identifiers -->
             <!-- IdentifierOpus3 -->
             <xsl:if test="string-length(field[@name='source_opus']) > 0">
@@ -290,12 +232,8 @@
             <!-- TitleMain -->
             <xsl:if test="string-length(field[@name='title']) > 0">
                 <xsl:element name="TitleMain">
-                    <xsl:attribute name="Language">
-                        <xsl:call-template name="mapLanguage">
-                            <xsl:with-param name="lang">
-                                <xsl:value-of select="field[@name='language']" />
-                            </xsl:with-param>
-                        </xsl:call-template>
+                    <xsl:attribute name="OldLanguage">
+                        <xsl:value-of select="field[@name='language']" />
                     </xsl:attribute>
                     <xsl:attribute name="Value">
                         <xsl:value-of select="field[@name='title']" />
@@ -305,10 +243,8 @@
             <!-- TitleMain (english) -->
             <xsl:if test="string-length(field[@name='title_en']) > 0">
                 <xsl:element name="TitleMain">
-                    <xsl:attribute name="Language">
-                        <xsl:call-template name="mapLanguage">
-                            <xsl:with-param name="lang">eng</xsl:with-param>
-                        </xsl:call-template>
+                    <xsl:attribute name="OldLanguage">
+                        <xsl:text>eng</xsl:text>
                     </xsl:attribute>
                     <xsl:attribute name="Value">
                         <xsl:value-of select="field[@name='title_en']" />
@@ -319,21 +255,13 @@
             <!-- TitleAbstract -->
             <xsl:if test="string-length(normalize-space(field[@name='description'])) > 0">
                 <xsl:element name="TitleAbstract">
-                    <xsl:attribute name="Language">
+                    <xsl:attribute name="OldLanguage">
                         <xsl:choose>
                             <xsl:when test="string-length(field[@name='description_lang']) > 0">
-                                <xsl:call-template name="mapLanguage">
-                                    <xsl:with-param name="lang">
-                                        <xsl:value-of select="field[@name='description_lang']" />
-                                    </xsl:with-param>
-                                </xsl:call-template>
+                                <xsl:value-of select="field[@name='description_lang']" />
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:call-template name="mapLanguage">
-                                    <xsl:with-param name="lang">
-                                        <xsl:value-of select="field[@name='language']" />
-                                    </xsl:with-param>
-                                </xsl:call-template>
+                                <xsl:value-of select="field[@name='language']" />
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:attribute>
@@ -345,12 +273,8 @@
             <!-- TitleAbstract (2nd) -->
             <xsl:if test="string-length(normalize-space(field[@name='description2'])) > 0">
                 <xsl:element name="TitleAbstract">
-                    <xsl:attribute name="Language">
-                        <xsl:call-template name="mapLanguage">
-                            <xsl:with-param name="lang">
-                                <xsl:value-of select="field[@name='description2_lang']" />
-                            </xsl:with-param>
-                        </xsl:call-template>
+                    <xsl:attribute name="OldLanguage">
+                        <xsl:value-of select="field[@name='description2_lang']" />
                     </xsl:attribute>
                     <xsl:attribute name="Value">
                         <xsl:value-of select="normalize-space(field[@name='description2'])" />
@@ -358,13 +282,11 @@
                 </xsl:element>
             </xsl:if>
             <!-- Dissertation:TitleMain, Language="deu" (2nd) -->
-            <xsl:for-each select="/mysqldump/database/table_data[@name='opus_diss']/row[field[@name='source_opus']=$OriginalID]">
+            <xsl:for-each select="/mysqldump/database/table_data[@name='opus_diss' or @name='temp_diss']/row[field[@name='source_opus']=$OriginalID]">
                 <xsl:if test="string-length(field[@name='title_de'])>0">
                     <xsl:element name="TitleAbstract">
-                        <xsl:attribute name="Language">
-                            <xsl:call-template name="mapLanguage">
-                                <xsl:with-param name="lang">ger</xsl:with-param>
-                            </xsl:call-template>
+                        <xsl:attribute name="OldLanguage">
+                            <xsl:text>ger</xsl:text>
                         </xsl:attribute>
                         <xsl:attribute name="Value">
                             <xsl:value-of select="field[@name='title_de']" />
@@ -411,7 +333,7 @@
                 </xsl:element>
             </xsl:if>	
             
-            <!-- Old: OldPublisherUniversity -->
+            <!-- OldPublisherUniversity -->
             <!--
             <xsl:if test="string-length(field[@name='publisher_university']) > 0">
                 <xsl:element name="OldPublisherUniversity">
@@ -423,6 +345,7 @@
             -->
 
            <!-- New: Enrichment Institution -->
+           <!-- Special Case for ZIB -->
             <xsl:if test="string-length(field[@name='publisher_university']) > 0">
                 <xsl:element name="Enrichment">
                     <xsl:attribute name="KeyName">
@@ -433,6 +356,7 @@
                     </xsl:attribute>
                 </xsl:element>
             </xsl:if>
+
 
             <!-- All Related Persons (Author/Editor/Submitter/Contributor/...)-->
             <!-- PersonSubmitter -->
@@ -447,7 +371,7 @@
             </xsl:if>
 	    
             <!-- PersonAuthor -->
-            <xsl:for-each select="/mysqldump/database/table_data[@name='opus_autor']/row[field[@name='source_opus']=$OriginalID]">
+            <xsl:for-each select="/mysqldump/database/table_data[@name='opus_autor' or @name='temp_autor']/row[field[@name='source_opus']=$OriginalID]">
                 <xsl:call-template name="AddPerson" >
                     <xsl:with-param name="role">PersonAuthor</xsl:with-param>
                     <xsl:with-param name="name">
@@ -456,8 +380,9 @@
                 </xsl:call-template>
             </xsl:for-each>
 
+
             <!-- PersonAdvisor -->
-            <xsl:for-each select="/mysqldump/database/table_data[@name='opus_diss']/row[field[@name='source_opus']=$OriginalID]">
+            <xsl:for-each select="/mysqldump/database/table_data[@name='opus_diss' or @name='temp_diss']/row[field[@name='source_opus']=$OriginalID]">
                 <xsl:call-template name="AddPerson" >
                     <xsl:with-param name="role">PersonAdvisor</xsl:with-param>
                     <xsl:with-param name="name">
@@ -537,7 +462,7 @@
             </xsl:if>  
             
             <!-- OldGrantor -->
-            <xsl:for-each select="/mysqldump/database/table_data[@name='opus_diss']/row[field[@name='source_opus']=$OriginalID]">
+             <xsl:for-each select="/mysqldump/database/table_data[@name='opus_diss' or @name='temp_diss']/row[field[@name='source_opus']=$OriginalID]">
                 <xsl:element name="OldGrantor">
                     <xsl:attribute name="Value">
                         <xsl:value-of select="field[@name='publisher_faculty']" />
@@ -546,7 +471,7 @@
             </xsl:for-each>
 
             <!-- OldSeries -->
-            <xsl:for-each select="/mysqldump/database/table_data[@name='opus_schriftenreihe']/row[field[@name='source_opus']=$OriginalID]">
+            <xsl:for-each select="/mysqldump/database/table_data[@name='opus_schriftenreihe' or @name='temp_schriftenreihe']/row[field[@name='source_opus']=$OriginalID]">
                 <xsl:element name="OldSeries">
                     <xsl:attribute name="Value">
                         <xsl:value-of select="field[@name='sr_id']" />
@@ -558,16 +483,17 @@
             </xsl:for-each>
 
             <!-- OldCollections -->
-            <xsl:for-each select="/mysqldump/database/table_data[@name='opus_coll']/row[field[@name='source_opus']=$OriginalID]">
-                <xsl:element name="OldCollections">
+            <xsl:for-each select="/mysqldump/database/table_data[@name='opus_coll' or @name='temp_coll']/row[field[@name='source_opus']=$OriginalID]">
+                <xsl:element name="OldCollection">
                     <xsl:attribute name="Value">
                         <xsl:value-of select="field[@name='coll_id']" />
                     </xsl:attribute>
                 </xsl:element>
             </xsl:for-each>
+ 
 
             <!-- OldInstitutes -->
-            <xsl:for-each select="/mysqldump/database/table_data[@name='opus_inst']/row[field[@name='source_opus']=$OriginalID]">
+            <xsl:for-each select="/mysqldump/database/table_data[@name='opus_inst' or @name='temp_inst']/row[field[@name='source_opus']=$OriginalID]">
                 <xsl:element name="OldInstitute">
                     <xsl:attribute name="Value">
                         <xsl:value-of select="field[@name='inst_nr']" />
@@ -575,12 +501,36 @@
                 </xsl:element>
             </xsl:for-each>
 
+
             <!-- OldClasses -->
-            <xsl:for-each select="/mysqldump/database/table_data[@name='opus_klassifikationen']/row[field[@name='source_opus']=$OriginalID]">
-                <xsl:element name="OldClasses">
-                    <xsl:attribute name="Key">
-                        <xsl:value-of select="field[@name='name_kurz']" />
-                    </xsl:attribute>
+            <!-- This is ZIB-Style -->
+             <xsl:for-each select="/mysqldump/database/table_data[@name='opus_klassifikationen' or @name='temp_klassifikationen']/row[field[@name='source_opus']=$OriginalID]">
+                <xsl:if test="field[@name='name_kurz'] = 'MSC'">
+                    <xsl:element name="OldMsc">
+                        <xsl:attribute name="Value">
+                            <xsl:value-of select="field[@name='class']" />
+                        </xsl:attribute>
+                    </xsl:element>
+                </xsl:if>
+                <xsl:if test="field[@name='name_kurz'] = 'CCS'">
+                    <xsl:element name="OldCcs">
+                        <xsl:attribute name="Value">
+                            <xsl:value-of select="field[@name='class']" />
+                        </xsl:attribute>
+                    </xsl:element>
+                </xsl:if>
+                <xsl:if test="field[@name='name_kurz'] = 'PACS'">
+                    <xsl:element name="OldPacs">
+                        <xsl:attribute name="Value">
+                            <xsl:value-of select="field[@name='class']" />
+                        </xsl:attribute>
+                    </xsl:element>
+                </xsl:if>
+            </xsl:for-each>
+ 
+            <!-- OldCcs -->
+            <xsl:for-each select="/mysqldump/database/table_data[@name='opus_ccs' or @name='temp_ccs']/row[field[@name='source_opus']=$OriginalID]">
+                <xsl:element name="OldCcs">
                     <xsl:attribute name="Value">
                         <xsl:value-of select="field[@name='class']" />
                     </xsl:attribute>
@@ -595,31 +545,37 @@
                     </xsl:attribute>
                 </xsl:element>
             </xsl:if>
+
+            <!-- OldJel -->
+            <xsl:for-each select="/mysqldump/database/table_data[@name='opus_jel' or @name='temp_jel']/row[field[@name='source_opus']=$OriginalID]">
+                <xsl:element name="OldJel">
+                    <xsl:attribute name="Value">
+                        <xsl:value-of select="field[@name='class']" />
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:for-each>
+
+            <!-- OldMsc -->
+            <xsl:for-each select="/mysqldump/database/table_data[@name='opus_msc' or @name='temp_msc']/row[field[@name='source_opus']=$OriginalID]">
+                <xsl:element name="OldMsc">
+                    <xsl:attribute name="Value">
+                        <xsl:value-of select="field[@name='class']" />
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:for-each>
+
+
+            <!-- OldPacs -->
+             <xsl:for-each select="/mysqldump/database/table_data[@name='opus_pacs' or @name='temp_pacs']/row[field[@name='source_opus']=$OriginalID]">
+                <xsl:element name="OldPacs">
+                    <xsl:attribute name="Value">
+                        <xsl:value-of select="field[@name='class']" />
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:for-each>
+
         </xsl:element>
     </xsl:template>
-
-    <!-- This template maps Language -->
-    <xsl:template name="mapLanguage">
-        <xsl:param name="lang" required="yes" />
-        <xsl:if test="$lang='ger'">
-            <xsl:text>deu</xsl:text>
-        </xsl:if>
-        <xsl:if test="$lang='eng'">
-            <xsl:text>eng</xsl:text>
-        </xsl:if>
-        <xsl:if test="$lang='fre'">
-            <xsl:text>fra</xsl:text>
-        </xsl:if>
-        <xsl:if test="$lang='rus'">
-            <xsl:text>rus</xsl:text>
-        </xsl:if>
-        <xsl:if test="$lang='mul'">
-            <xsl:text>deu</xsl:text>
-        </xsl:if>
-        <xsl:if test="$lang='mis'">
-            <xsl:text>eng</xsl:text>
-        </xsl:if>
-    </xsl:template> 
 
     <!-- This template adds multiple Persons from a <delimiter>-separated list to Opus4-DB (recursively) -->
     <xsl:template name="AddPersons">
@@ -774,12 +730,8 @@
         <xsl:param name="subject" required="yes" />
         <xsl:param name="language" required="yes" />
         <xsl:element name="{$type}">
-            <xsl:attribute name="Language">
-                <xsl:call-template name="mapLanguage">
-                    <xsl:with-param name="lang">
-                        <xsl:value-of select="$language" />
-                    </xsl:with-param>
-                </xsl:call-template>
+            <xsl:attribute name="OldLanguage">
+                <xsl:value-of select="$language" />
             </xsl:attribute>
             <xsl:attribute name="Value">
                 <xsl:value-of select="$subject" />

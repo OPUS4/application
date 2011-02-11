@@ -33,7 +33,14 @@
  * @version     $Id: Opus3LicenceImport.php -1   $
  */
 class Opus3LicenceImport {
-	
+
+   /**
+    * Holds Zend-Configurationfile
+    *
+    * @var file
+    */
+    protected $config = null;
+
     /**
      * Imports licenses data to Opus4
      *
@@ -41,6 +48,8 @@ class Opus3LicenceImport {
      * @return array List of documents that have been imported
      */
     public function __construct($data) {
+        $this->config = Zend_Registry::get('Zend_Config');
+        $this->mapping['language'] =  array('old' => 'OldLanguage', 'new' => 'Language', 'config' => $this->config->import->language);
 	$doclist = $data->getElementsByTagName('table_data');
 	foreach ($doclist as $document) {
             if ($document->getAttribute('name') === 'license_de') {
@@ -90,6 +99,8 @@ class Opus3LicenceImport {
      * @return Opus4-Language-String
      */
     private function mapLanguage($lang) {
+        return $this->config->import->language->$lang;
+        /*
     	switch ($lang) {
             case 'ger':
                 return 'deu';
@@ -107,7 +118,10 @@ class Opus3LicenceImport {
                 return 'eng';
                 break;
     	}
+         * 
+         */
     }
+
 
     /**
      * reates a mapping file from old licence identifiers to the ones in Opus4
@@ -116,10 +130,19 @@ class Opus3LicenceImport {
      * @return array List of documents that have been imported
      */
     protected function readLicenses($data) {
-        $licenses = $this->transferOpus3Licence($data);
 
-	// Store the licenses and create a mapping file for migration
-	$fp = fopen('../workspace/tmp/license.map', 'w');
+        $mf = $this->config->import->mapping->licences;
+        $fp = null;
+        try {
+            $fp = @fopen($mf, 'w');
+            if (!$fp) {
+                throw new Exception("ERROR Opus3LicenceImport: Could not create '".$mf."' for Licences.\n");
+            }
+        } catch (Exception $e){
+            echo $e->getMessage();
+            return;
+        }
+        $licenses = $this->transferOpus3Licence($data);
 	foreach ($licenses as $key => $licence) {
             
             $id = $licence->store();

@@ -34,6 +34,13 @@
  */
 class Opus3CollectionsImport {
 
+   /**
+    * Holds Zend-Configurationfile
+    *
+    * @var file
+    */
+    protected $config = null;
+
     /**
      * Imports Collection data to Opus4
      *
@@ -41,6 +48,8 @@ class Opus3CollectionsImport {
      * @return array List of documents that have been imported
      */
     public function __construct($data) {
+
+        $this->config = Zend_Registry::get('Zend_Config');
 
         $collRole = Opus_CollectionRole::fetchByName('collections');
         $seriesRole = Opus_CollectionRole::fetchByName('series');
@@ -55,6 +64,164 @@ class Opus3CollectionsImport {
             }
 	}
 
+    }
+
+   /**
+     * Imports Collections from Opus3 to Opus4 directly (from DB-table to DB-tables)
+     *
+     * @param DOMDocument $data XML-Document to be imported
+     * @return array List of documents that have been imported
+     */
+    protected function importCollectionsDirectly($data, $collRole)  {
+        $mf = $this->config->import->mapping->collections;
+        $fp = null;
+        try {
+            $fp = @fopen($mf, 'w');
+            if (!$fp) {
+                throw new Exception("ERROR Opus3CollectionsImport: Could not create '".$mf."' for Collections.\n");
+            }
+        } catch (Exception $e){
+            echo $e->getMessage();
+            return;
+        }
+
+        try {
+            $collections = $this->transferOpusClassification($data);
+            if (count($collections) == 0) {
+                throw new Exception("DEBUG: Opus3CollectionsImport: No Collections in XML-Dump.\n");
+            }
+
+            // sort by lft-values
+            $sorted_collections = $this->msort($collections, 'lft');
+
+            if (count($sorted_collections) == 0) {
+                // TODO: Improve error handling in case of empty collections.
+                throw new Exception("ERROR: Sorted collections empty.");
+            }
+
+            if ($sorted_collections[0]['lft'] != 1) {
+                // var_dump($sorted_collections[0]);
+                // TODO: Improve error handling in case of wrong left-ids.
+                throw new Exception("ERROR: First left_id is not 1.");
+            }
+
+            // 1 is used as a predefined key and should not be used again!
+            // so lets increment all old IDs by 1
+            $previousRightStack = array();
+            $previousNodeStack  = array();
+            $new_collection     = null;
+
+            foreach ($sorted_collections as $row) {
+
+                //echo ".";
+                // case root_node
+                if (count($previousRightStack) == 0) {
+                    //echo "case 1: id -" . $row['coll_id'] . "-left -" . $row['lft'] . "- right -" .$row['rgt']. "\n";
+                    $root = $collRole->getRootCollection();
+                    $new_collection = $root->addLastChild();
+    //              $collRole->store();
+
+                    array_push($previousNodeStack, $new_collection);
+                    array_push($previousRightStack, $row['rgt']);
+                }
+                else {
+
+                    // Throw elements from stack as long we don't have a
+                    // father *or* a brother.
+                    do {
+                        $previousNode = array_pop($previousNodeStack);
+                        $previousRight = array_pop($previousRightStack);
+
+                        $is_child = ($row['rgt'] < $previousRight);
+                        $is_brother = ((int) $row['lft'] === (int) $previousRight + 1);
+                    } while ( !$is_child && !$is_brother );
+
+
+                    // same level
+                    if ($is_brother) {
+                        //echo "case 2: id -" . $row['coll_id'] . "-left -" . $row['lft'] . "- right -" . $row['rgt'] . "- prevright - " . $previousRight . "-\n";
+                        // its a brother of previous node
+                        $left_brother = $previousNode;
+                        $new_collection = $left_brother->addNextSibling();
+                        $left_brother->store();
+
+                        array_push($previousNodeStack, $new_collection);
+                        array_push($previousRightStack, $row['rgt']);
+                    }
+                    // go down one level
+                    else if ($is_child) {
+                        //echo "case 3: id -" . $row['coll_id'] . "-left -" . $row['lft'] . "- right -" . $row['rgt'] . "- prevright - " . $previousRight . "-\n";
+                        // its a child of previous node
+                        $father = $previousNode;
+                        $new_collection = $father->addLastChild();
+                        $father->store();
+
+                        array_push($previousNodeStack, $father);
+                        array_push($previousRightStack, $previousRight);
+
+                        array_push($previousNodeStack, $new_collection);
+                        array_push($previousRightStack, $row['rgt']);
+
+                    } else {
+                        //echo "case 4: id -" . $row['coll_id'] . "-left -" . $row['lft'] . "- right -" . $row['rgt'] . "- prevright - " . $previousRight . "-\n";
+                        throw new Exception("Collectionstructure of id ".$row['coll_id']." not valid");
+                    }
+                }
+
+                $new_collection->setVisible(1);
+                $new_collection->setName($row['coll_name']);
+                $new_collection->store();
+                $previousRight = $row['rgt'];
+
+                echo "Collection imported: " . $row['coll_name'] ."\n";
+
+                fputs($fp, $row['coll_id'] . ' ' . $new_collection->getId() . "\n");
+            }
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+        echo "\n";
+	fclose($fp);
+
+    }
+
+
+    /**
+     * Imports Series from Opus3 to Opus4
+     *
+     * @param DOMDocument $data XML-Document to be imported
+     * @return array List of documents that have been imported
+     */
+    protected function importSeries($data, $role) {
+        $mf = $this->config->import->mapping->series;
+        $fp = null;
+        try {
+            $fp = @fopen($mf, 'w');
+            if (!$fp) {
+                throw new Exception("ERROR Opus3CollectionsImport: Could not create '".$mf."' for Series.\n");
+            }
+        } catch (Exception $e){
+            echo $e->getMessage();
+            return;
+        }
+             
+        $classification = $this->transferOpusClassification($data);
+        foreach ($classification as $class) {
+            if (array_key_exists('name', $class) === false) { continue; }
+            if (array_key_exists('sr_id', $class) === false) { continue; }
+            //echo ".";
+            $root = $role->getRootCollection();
+            $coll = $root->addLastChild();
+            $coll->setVisible(1);
+            $coll->setName($class['name']);
+            $root->store();
+
+            echo "Series imported: " . $class['name'] ."\n";
+
+            fputs($fp, $class['sr_id'] . ' ' . $coll->getId() . "\n");
+        }
+        echo "\n";
+	fclose($fp);
     }
 
     /**
@@ -99,136 +266,4 @@ class Opus3CollectionsImport {
         return $temp_array;
     }
 
-    /**
-     * Imports Collections from Opus3 to Opus4 directly (from DB-table to DB-tables)
-     *
-     * @param DOMDocument $data XML-Document to be imported
-     * @return array List of documents that have been imported
-     */
-    protected function importCollectionsDirectly($data, $collRole)  {
-        $collections = $this->transferOpusClassification($data);
-        
-        // sort by lft-values
-        $sorted_collections = $this->msort($collections, 'lft');
-
-        if (count($sorted_collections) == 0) {
-            // TODO: Improve error handling in case of empty collections.
-            throw new Exception("ERROR: Sorted collections empty.");
-        }
-
-        if ($sorted_collections[0]['lft'] != 1) {
-            var_dump($sorted_collections[0]);
-            // TODO: Improve error handling in case of wrong left-ids.
-            throw new Exception("ERROR: First left_id is not 1.");
-        }
-
-        // 1 is used as a predefined key and should not be used again!
-        // so lets increment all old IDs by 1
-        $previousRightStack = array();
-        $previousNodeStack  = array();
-        $new_collection     = null;
-
-        // Build a mapping file to associate old IDs with the new ones
-        $fp = fopen('../workspace/tmp/collections.map', 'w');
-
-        foreach ($sorted_collections as $row) {
-
-            //echo ".";
-            // case root_node
-            if (count($previousRightStack) == 0) {
-                //echo "case 1: id -" . $row['coll_id'] . "-left -" . $row['lft'] . "- right -" .$row['rgt']. "\n";
-                $root = $collRole->getRootCollection();
-                $new_collection = $root->addLastChild();
-//              $collRole->store();
-
-                array_push($previousNodeStack, $new_collection);
-                array_push($previousRightStack, $row['rgt']);
-            }
-            else {
-
-                // Throw elements from stack as long we don't have a
-                // father *or* a brother.
-                do {
-                    $previousNode = array_pop($previousNodeStack);
-                    $previousRight = array_pop($previousRightStack);
-
-                    $is_child = ($row['rgt'] < $previousRight);
-                    $is_brother = ((int) $row['lft'] === (int) $previousRight + 1);
-                } while ( !$is_child && !$is_brother );
-
-
-                // same level
-                if ($is_brother) {
-                    //echo "case 2: id -" . $row['coll_id'] . "-left -" . $row['lft'] . "- right -" . $row['rgt'] . "- prevright - " . $previousRight . "-\n";
-                    // its a brother of previous node
-                    $left_brother = $previousNode;
-                    $new_collection = $left_brother->addNextSibling();
-                    $left_brother->store();
-
-                    array_push($previousNodeStack, $new_collection);
-                    array_push($previousRightStack, $row['rgt']);
-                }
-                // go down one level
-                else if ($is_child) {
-                    //echo "case 3: id -" . $row['coll_id'] . "-left -" . $row['lft'] . "- right -" . $row['rgt'] . "- prevright - " . $previousRight . "-\n";
-                    // its a child of previous node
-                    $father = $previousNode;
-                    $new_collection = $father->addLastChild();
-                    $father->store();
-
-                    array_push($previousNodeStack, $father);
-                    array_push($previousRightStack, $previousRight);
-
-                    array_push($previousNodeStack, $new_collection);
-                    array_push($previousRightStack, $row['rgt']);
-
-                } else {
-                    //echo "case 4: id -" . $row['coll_id'] . "-left -" . $row['lft'] . "- right -" . $row['rgt'] . "- prevright - " . $previousRight . "-\n";
-                    throw new Exception("Collectionstructure of id ".$row['coll_id']." not valid");
-                    continue;
-                }
-            }
-
-            $new_collection->setVisible(1);
-            $new_collection->setName($row['coll_name']);
-            $new_collection->store();
-            $previousRight = $row['rgt'];
-
-            echo "Collection imported: " . $row['coll_name'] ."\n";
-
-            fputs($fp, $row['coll_id'] . ' ' . $new_collection->getId() . "\n");
-        }
-        echo "\n";
-	fclose($fp);
-
-    }
-
-
-    /**
-     * Imports Series from Opus3 to Opus4
-     *      
-     * @param DOMDocument $data XML-Document to be imported
-     * @return array List of documents that have been imported
-     */
-    protected function importSeries($data, $role) {
-        $classification = $this->transferOpusClassification($data);
-        // Build a mapping file to associate old IDs with the new ones
-        $fp = fopen('../workspace/tmp/series.map', 'w');
-            foreach ($classification as $class) {
-                if (array_key_exists('name', $class) === false) { continue; }
-                if (array_key_exists('sr_id', $class) === false) { continue; }
-                //echo ".";
-                $root = $role->getRootCollection();
-                $coll = $root->addLastChild();
-                $coll->setVisible(1);
-                $coll->setName($class['name']);
-                $root->store();
-
-                echo "Series imported: " . $class['name'] ."\n";
-
-                fputs($fp, $class['sr_id'] . ' ' . $coll->getId() . "\n");
-            }
-        echo "\n";
-	fclose($fp);
-    }
 }

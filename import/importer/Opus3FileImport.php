@@ -27,18 +27,33 @@
  * @category    Application
  * @package     Module_Import
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
- * @copyright   Copyright (c) 2009, OPUS 4 development team
+ * @author      Gunar Maiwald <maiwald@zib.de>
+ * @copyright   Copyright (c) 2009-2011 OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id: Opus3FileImport.php 5890 2010-09-26 17:13:48Z tklein $
  */
 
 class Opus3FileImport {
+   /**
+    * Holds Zend-Configurationfile
+    *
+    * @var file
+    */
+    protected $config = null;
+
     /**
      * Holds the path to the fulltexts in Opus3
      *
      * @var string  Defaults to null.
      */
     protected $_path = null;
+
+    /**
+     * Holds the specified document
+     *
+     * @var string  Defaults to null.
+     */
+    protected $_tmpDoc = null;
     
     /**
      * Holds the path to the fulltexts in Opus3 for this certain ID
@@ -46,7 +61,13 @@ class Opus3FileImport {
      * @var string  Defaults to null.
      */
     protected $_tmpPath = null;
-    protected $_magicPath;
+
+    /**
+     * Holds the files to the fulltexts in Opus3
+     *
+     * @var string  Defaults to null.
+     */
+    protected $_tmpFiles = array();
 
 
     /**
@@ -54,7 +75,7 @@ class Opus3FileImport {
      *
      * @var string  Path to logfile
      */
-    protected $logfile = '../workspace/log/import.log';
+    protected $logfile = null;
 
     /**
      * Holds the filehandle of the logfile
@@ -71,14 +92,22 @@ class Opus3FileImport {
      * @param string $fulltextPath Path to the Opus3-fulltexts
      * @return void
      */
-    public function __construct($fulltextPath, $magicPath)  {
-        // Initialize member variables.
+    public function __construct($fulltextPath)  {
+        $this->config = Zend_Registry::get('Zend_Config');
+        $this->logfile = $this->config->import->logfile;
         $this->_path = $fulltextPath;
-        $this->_magicPath = $magicPath;
-        $this->_logfile = fopen($this->logfile, 'a');
+        try {
+            $this->_logfile= @fopen($this->logfile, 'a');
+            if (!$this->_logfile) {
+                throw new Exception("ERROR Opus3FileImport: Could not create '".$this->logfile."'\n");
+            }
+        } catch (Exception $e){
+            echo $e->getMessage();
+        }
     }
 
     public function log($string) {
+        echo $string;
         fputs($this->_logfile, $string);
     }
 
@@ -93,154 +122,176 @@ class Opus3FileImport {
      * @return void
      */
     public function loadFiles($id) {
-        
-        $doc = new Opus_Document($id);
-        $opus3Id = $doc->getIdentifierOpus3(0)->getValue();
-     	// Initialize path
-    	$this->_tmpPath = '';
+        $this->_tmpDoc = new Opus_Document($id);
+        $opus3Id = $this->_tmpDoc->getIdentifierOpus3(0)->getValue();
+   	
+    	$this->searchDir($this->_path, $opus3Id);
 
-        // get collections before import files
-        $doc->getCollection();
-        //echo "Before Num Collections:".count($doc->getCollection())."\n";
+        $this->_tmpFiles = array();
+        $this->getFiles($this->_tmpPath);
 
-        // Search the ID-directory in fulltext tree
-        $this->searchDir($this->_path, $opus3Id);
-        //echo "Found Files for $id in $this->_tmpPath \n";
-        $files = $this->getFiles($this->_tmpPath);
-
-        //echo "Count:".count($files)."\n";
-        $alreadyImportedFiles = $doc->getFile();
-        
-        if (count($files) === 0) {
-        	return 0;
-        }
-
-        $lang = "";
-        
-        if (true === is_array($doc->getLanguage()))
-        {
-    	    $lang = $doc->getLanguage(0);
-        }
-        else
-        {
-    	    $lang = $doc->getLanguage();
-        }
-        
-        $number = 0;
-        
-        if (true === isset($files[0])) {
-            foreach ($files as $filename) {
-                //echo $filename."\n";
-                //$finfo = new finfo(FILEINFO_MIME, $this->_magicPath);
-                //$mimeType = $finfo->file($filename);
-            
-                $filenameArray = preg_split('/\./', $filename);
-                $suffix = $filenameArray[(count($filenameArray)-1)];
-                                
-                // if you got it, build a Opus_File-Object
-                $alreadyImported = false;
-                
-                // if its a .bem-file, import it as a note
-                if (substr(basename($filename), 0, 5) === '.bem_') {
-                	$alreadyImported = true;
-                	$fileArray = file($filename);
-                	$filecontent = substr(basename($filename), 5) . ": ";
-                	$filecontent .= utf8_encode(implode(' ', $fileArray));
-                	$note = new Opus_Note();
-                        $note->setVisibility('public');
-                        //$note->setCreator('imported');
-                        $note->setMessage($filecontent);
-                        $doc->addNote($note);
-                        $doc->store();
-                }
-                
-                foreach ($alreadyImportedFiles as $f) {
-                	if (basename($filename) === $f->getPathName()) {
-                	    $alreadyImported = true;
-                	    continue;
-                	}
-                }
-                if ($alreadyImported === false) {
-                    $file = $doc->addFile();
-                    $file->setLabel(basename($filename));
-                    //$file->setFileType($suffix);
-                    $file->setPathName(basename($filename));
-                    //$file->setMimeType($mimeType);
-                    $file->setTempFile($filename);
-                    //$file->setDocumentId($object->getId());
-		    $file->setLanguage($lang);
-                    $number++;
-                }
-            }
-        }
-        
-        // store the object
-        if ($number > 0) {
-            $doc->store();
-        }
-
-        unset ($doc);
-
-        //echo "After Num Collections:".count($doc->getCollection())."\n";
-        
-        // return number of imported files
+        $number = $this->saveFiles();
         return $number;
     }
-    
-    private function getFiles($from) 
-    {
-        if(! is_dir($from))
-            return false;
-     
-        $files = array();
 
-        //echo "Get Files from $from\n";
-     
-        if( $dh = opendir($from))
-        {
-            while( false !== ($file = readdir($dh)))
-            {
-                // Skip '.' and '..' and '.svn' (that should not exist, but if it does...) and .asc files (they shouldnt be here also)
-                if( $file == '.' || $file == '..' || $file === '.svn' || preg_match('/\.asc$/', $file) != false || preg_match('/\.sig$/', $file) != false)
-                    continue;
-                $path = $from . '/' . $file;
-                if( is_dir($path) )
-                    $files += $this->getFiles($path);
-                else {
-                	// Ignore files in the main directory, OPUS3 stores in subdirectories only
-                	if ($from !== $this->_tmpPath) {
-                        $files[] = $path;
-                	}
-                }
-            }
-            closedir($dh);
+    /*
+     * Initialize tmpPath for Opus3Id
+     *
+     * @param Directory and OpusId
+     * @return void
+     */
+
+    private function searchDir($from, $search) {
+
+        //echo "Search in ".$from." for id ".$search. "\n";
+
+        if(!is_dir($from)) {
+            return;
         }
-        return $files;
+
+        $handle = opendir($from);
+        while ($file = readdir($handle)) {
+            // Skip '.' , '..' and '.svn'
+            if( $file == '.' || $file == '..' || $file === '.svn') {
+                continue;
+            }
+
+            $path = $from . '/' . $file;
+
+            // Workaround for Opus3-Id === year
+            if ( is_dir($path) && $from ===  $this->_path) {
+                $this->searchDir($path, $search);
+            }
+
+            // If correct directory found: take it
+            else if ( is_dir($path) && $file === $search) {
+                $this->_tmpPath = $path;
+                $this->log("DEBUG OPus3FileImport: Directory for Opus3Id '".$search."' : ".$path."\n");
+            }
+            
+            // call function recursively
+            else if( is_dir($path) ) {  
+                $this->searchDir($path, $search);
+            }
+        }
+        closedir($handle);
+  
+        return;
     }
-    
-    private function searchDir($from, $search)
-    {
-        if(! is_dir($from))
-            return false;
 
-        if( $dh = opendir($from))
-        {
-            while( false !== ($file = readdir($dh)))
-            {
-                // Skip '.' and '..'
-                if( $file == '.' || $file == '..')
-                    continue;
-                $path = $from . '/' . $file;
-                if ($file === $search) {
-                 	$this->_tmpPath = $path;
-                	return true;
-                }
-                else if( is_dir($path) ) {
-                    $this->searchDir($path, $search);
-                }
-            }
-            closedir($dh);
+    /*
+     * Get Files in specified path
+     *
+     * @param Directory
+     * @return void
+     */
+
+    private function getFiles($from)  {
+        if(! is_dir($from)) { 
+            return;
         }
-        return false;
+
+        $handle = opendir($from);
+        while ($file = readdir($handle)) {
+            // Skip '.' , '..' and '.svn'
+            if( $file == '.' || $file == '..' || $file === '.svn') {
+                continue;
+            }
+            
+            $path = $from . '/' . $file;
+
+            // If directory: call function recursively
+            if (is_dir($path))  {
+                $this->getFiles($path);
+            }
+
+            // If file: take it
+            else  {   
+                array_push($this->_tmpFiles, $path);
+            }
+            
+        }
+        closedir($handle);
+
+        return;
+   }
+   
+   /*
+    * Save Files to Opus-Document and return number of saved files
+    * 
+    * @param void 
+    * @return int 
+    */
+
+    private function saveFiles()  {
+
+        if (count($this->_tmpFiles) === 0) {
+           return 0;
+        }
+
+        $lang = $this->_tmpDoc->getLanguage();
+        $total = 0;
+
+        $numSuffix = array();
+        $filesImported = array();
+
+        foreach ($this->_tmpFiles as $f) {
+                        
+            // Exclude 'index.html' and files starting with '.'
+            if (basename($f) == 'index.html' || strpos(basename($f), '.') === 0) {
+                $this->log("DEBUG Opus3FileImport: Skipped File '".basename($f)."'\n");
+                continue;
+            }
+
+            // ERROR: File wirh same Basnemae already imported
+            if (array_search(basename($f), $filesImported) !== false) {
+                $this->log("ERROR Opus3FileImport: File ".basename($f)." already imported.\n");
+                continue;
+
+            }
+
+            // ERROR: Filename has no Extension
+            if (strrchr ($f, ".") === false) {
+                $this->log("ERROR Opus3FileImport: File ".basename($f)." has no extension and will be ignored.\n");
+                continue;
+            }
+
+            $suffix = substr (strrchr ($f, "."), 1);
+            if (array_key_exists($suffix, $numSuffix) === false) { $numSuffix[$suffix] = 0; }
+            $numSuffix[$suffix]++;
+            $label = "Dokument_" . $numSuffix[$suffix] . "." . $suffix;
+
+            array_push($filesImported, basename($f));
+            $this->log("DEBUG Opus3FileImport: File ".basename($f)." imported.\n");
+
+            $file = $this->_tmpDoc->addFile();
+            $file->setPathName(basename($f));
+            $file->setLabel($label);
+            $file->setTempFile($f);
+            $file->setLanguage($lang);
+
+            // TOOD ion 4.1: Check if a '.bem_' file exists and make a filecomment
+            $comment_file = dirname($f) . "/.bem_" . basename($f);
+            /*
+            if (file_exists($comment_file)) {
+                $fileArray = file($comment_file);
+                $comment = utf8_encode(implode(' ', $fileArray));
+                $file->setComment($comment);
+            }
+             * 
+             */
+
+            $total++;
+        }
+
+        // store the object
+        if ($total > 0) {
+            // TODO: Get collections before import files (must be fixed in framework)
+            //$this->_tmpDoc->getCollection();
+            $this->_tmpDoc->store();
+        }
+
+        return $total;
     }
 }
+

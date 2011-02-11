@@ -34,6 +34,14 @@
  * @version     $Id: Opus3XMLImport.php -1   $
  */
 class Opus3XMLImport {
+    
+   /**
+    * Holds Zend-Configurationfile
+    *
+    * @var file.
+    */
+
+    protected $config = null;
 
     /**
      * Holds xml representation of document information to be processed.
@@ -59,24 +67,40 @@ class Opus3XMLImport {
      * @var DomNode  XML-Representation of the document to import
      */
     protected $document = null;
+     /**
+     * Holds the Mappings forColelctions
+     *
+     * @var Array
+     */
+    protected $mappings = array();
+
+    /**
+     * Holds the Collections the document should be added
+     *
+     * @var Array
+     */
+    protected $collections = array();
+
+    /**
+     * Holds Values for Grantor, Licence and PublisherUniversity
+     *
+     * @var Array
+     */
+    protected $values = array();
+
     /**
      * Holds the complete XML-Representation of the Importfile
      *
      * @var DomDocument  XML-Representation of the importfile
      */
     protected $completeXML = null;
-    /**
-     * Holds the collections predifined in OPUS
-     *
-     * @var array  Defaults to the OPUS collections (Name => ID).
-     */
-    protected $collections = array();
+
     /**
      * Holds the logfile for Importer
      *
      * @var string  Path to logfile
      */
-    protected $logfile = '../workspace/log/import.log';
+    protected $logfile = null;
     /**
      * Holds the filehandle of the logfile
      *
@@ -93,16 +117,38 @@ class Opus3XMLImport {
      */
     public function __construct($xslt, $stylesheetPath) {
         // Initialize member variables.
+        $this->config = Zend_Registry::get('Zend_Config');
         $this->_xml = new DomDocument;
         $this->_xslt = new DomDocument;
         $this->_xslt->load($stylesheetPath . '/' . $xslt);
         $this->_proc = new XSLTProcessor;
         $this->_proc->registerPhpFunctions();
         $this->_proc->importStyleSheet($this->_xslt);
-        $this->_logfile = fopen($this->logfile, 'a');
+        $this->logfile = $this->config->import->logfile;
+
+        try {
+            $this->_logfile= @fopen($this->logfile, 'a');
+            if (!$this->_logfile) {
+                throw new Exception("ERROR Opus3XMLImport: Could not create '".$this->logfile."'\n");
+            }
+        } catch (Exception $e){
+            echo $e->getMessage();
+        }
+
+        $this->mapping['language'] =  array('old' => 'OldLanguage', 'new' => 'Language', 'config' => $this->config->import->language);
+        $this->mapping['type'] =  array('old' => 'OldType', 'new' => 'Type', 'config' => $this->config->import->doctype);
+
+        $this->mapping['collection'] = array('name' => 'OldCollection', 'mapping' => $this->config->import->mapping->collections);
+        $this->mapping['institute'] = array('name' => 'OldInstitute',  'mapping' => $this->config->import->mapping->institutes);
+        $this->mapping['series'] = array('name' => 'OldSeries',  'mapping' => $this->config->import->mapping->series);
+        $this->mapping['grantor'] = array('name' => 'OldGrantor', 'mapping' => $this->config->import->mapping->grantor);
+        $this->mapping['licence'] = array('name' => 'OldLicence',  'mapping' => $this->config->import->mapping->licence);
+        $this->mapping['publisherUniversity'] = array('name' => 'OldPublisherUniversity', 'mapping' => $this->config->import->mapping->universities);
+
     }
 
     public function log($string) {
+        echo $string;
         fputs($this->_logfile, $string);
     }
 
@@ -126,175 +172,52 @@ class Opus3XMLImport {
     public function import($document) {
 
         $this->document = $document;
-
-        $doc = null;
-
+     
         $oldid = null;
-        $oldid = $document->getElementsByTagName('IdentifierOpus3')->Item(0)->getAttribute('Value');
+        $oldid = $this->document->getElementsByTagName('IdentifierOpus3')->Item(0)->getAttribute('Value');
 
-        $oldclasses = array();
-        $oldclasses = $document->getElementsByTagName('OldClasses');
-        $newclasses = array();
-        while ($oldclasses->length >0) {
-            $oc=$oldclasses->Item(0);
-            if (($oc->getAttribute('Key') != "") && ($oc->getAttribute('Value')) != "") {
-                $nc = array('Key'=>strtolower($oc->getAttribute('Key')), 'Value'=>$oc->getAttribute('Value'));
-                array_push($newclasses, $nc);
-            }
-            $this->document->removeChild($oc);
-        }
-
-        $oldcollections = array();
-        $oldcollections = $document->getElementsByTagName('OldCollections');
-        $newcollections = array();
-        while ($oldcollections->length > 0) {
-           $c = $oldcollections->Item(0);
-           $mappingFile = '../workspace/tmp/collections.map';
-           if (!is_null( $this->getMapping($mappingFile, $c->getAttribute('Value')))) {
-                array_push($newcollections, $this->getMapping($mappingFile, $c->getAttribute('Value')));
-           }
-           $this->document->removeChild($c);
-        }
-
-        $oldddc = null;
-        $oldddc = $document->getElementsByTagName('OldDdc')->Item(0);
-        $newddc = null;
-        if ($oldddc !== null) {
-            $newddc = $oldddc->getAttribute('Value');
-            $this->document->removeChild($oldddc);
-        }
-
-        $oldgrantor = null;
-        $oldgrantor = $document->getElementsByTagName('OldGrantor');
-        $newgrantor = null;
-        while ($oldgrantor->length > 0) {
-           $g = $oldgrantor->Item(0);
-           $mappingFile = '../workspace/tmp/grantor.map';
-           if (!is_null( $this->getMapping($mappingFile, $g->getAttribute('Value')))) {
-                $newgrantor =  $this->getMapping($mappingFile, $g->getAttribute('Value'));
-           }
-           $this->document->removeChild($g);
-        }
-
-        $oldinstitutes = null;
-        $oldinstitutes = $document->getElementsByTagName('OldInstitute');
-        $newinstitutes = array();
-        while ($oldinstitutes->length >0) {
-            $i=$oldinstitutes->Item(0);
-            $mappingFile = '../workspace/tmp/institute.map';
-            if (!is_null($this->getMapping($mappingFile, $i->getAttribute('Value')))) {
-                array_push($newinstitutes, $this->getMapping($mappingFile, $i->getAttribute('Value')));
-            }
-            $this->document->removeChild($i);
-        }
-
-        $oldlicence = null;
-        $oldlicence = $document->getElementsByTagName('OldLicence');
-        $newlicence = null;
-        while ($oldlicence->length >0) {
-            $l=$oldlicence->Item(0);
-            $mappingFile = '../workspace/tmp/license.map';
-            if (!is_null($this->getMapping($mappingFile, $l->getAttribute('Value')))) {
-                $newlicence = $this->getMapping($mappingFile, $l->getAttribute('Value'));
-            }
-            $this->document->removeChild($l);
-        }
-
-        $oldpublisher = null;
-        $oldpublisher = $document->getElementsByTagName('OldPublisherUniversity');
-        $newpublisher = null;
-        while ($oldpublisher->length > 0) {
-           $p = $oldpublisher->Item(0);
-           $mappingFile = '../workspace/tmp/universities.map';
-           if (!is_null( $this->getMapping($mappingFile, $p->getAttribute('Value')))) {
-                $newpublisher =  $this->getMapping($mappingFile, $p->getAttribute('Value'));
-           }
-           $this->document->removeChild($p);
-        }
-
-        $oldseries = null;
-        $oldseries = $document->getElementsByTagName('OldSeries');
-        $newseries = array();
-        while ($oldseries->length >0) {
-            $s = $oldseries->Item(0);
-            $mappingFile = '../workspace/tmp/series.map';
-            if (!is_null($this->getMapping($mappingFile, $s->getAttribute('Value')))) {
-                $ns = array('Key'=>$this->getMapping($mappingFile, $s->getAttribute('Value')), 'Value'=>$s->getAttribute('Issue'));
-                array_push($newseries, $ns);
-            }
-            $this->document->removeChild($s);
-        }
+        //echo "(1):".$this->completeXML->saveXML($this->document)."\n";
+        $this->skipPersonsWithoutFirstname();
+        $this->mapDocumentTypeAndLanguage();
+        $this->mapElementLanguage();
+        $this->mapClassifications();
+        $this->mapCollections();
+        $this->mapValues();
+        //echo "(2):".$this->completeXML->saveXML($this->document)."\n";
+        //return;
 
         $imported = array();
 
         try {
-            
-            // Dummyobject, does not need any content, because only one node is transformed
+            $doc = null;
             $doc = Opus_Document::fromXml('<Opus>' . $this->completeXML->saveXML($this->document) . '</Opus>');
 
-            //echo "BEFORE:".$this->completeXML->saveXML($this->document)."\n";
-
-            if (count($newclasses) > 0) {
-                foreach ($newclasses as $c) {
-                  $this->addDocumentToCollection($doc, $c['Key'], $c['Value']);
-                }
+            if (array_key_exists('grantor', $this->values)) {
+                $dnbGrantor = new Opus_DnbInstitute($this->values['grantor']);
+                $doc->setThesisGrantor($dnbGrantor);
+            }
+            if (array_key_exists('publisherUniversity', $this->values)) {
+                $dnbPublisher = new Opus_DnbInstitute($this->values['publisherUniversity']);
+                $doc->setThesisPublisher($dnbPublisher);
+            }
+            if (array_key_exists('licence', $this->values)) {
+                $doc->addLicence(new Opus_Licence($this->values['licence']));
             }
 
-            if (count($newcollections) > 0) {
-                foreach ($newcollections as $c) {
-                    $coll = new Opus_Collection($c);
-                    $doc->addCollection($coll);
-                }
+            foreach ($this->collections as $c) {
+                $coll = new Opus_Collection($c);
+                /*
+                $enrichment = new Opus_CollectionEnrichment();
+                $enrichment->setKeyName("foo");
+                $enrichment->setValue("bar");
+                $coll->addEnrichment($enrichment);
+                $coll->store();
+                 * 
+                 */
+                $doc->addCollection($coll);
             }
 
-            if ($newddc !== null) {
-                  $this->addDocumentToCollection($doc, 'ddc', $newddc);
-            }
-
-            if ($newgrantor !== null) {
-                $dnbInstitute = new Opus_DnbInstitute($newgrantor);
-                $doc->setThesisGrantor($dnbInstitute);
-                $dnbInstitute = new Opus_DnbInstitute(1);
-                $doc->setThesisPublisher($dnbInstitute);
-            }
-
-            if (count($newinstitutes) > 0) {
-                foreach ($newinstitutes as $i) {
-                    $coll = new Opus_Collection($i);
-                    $doc->addCollection($coll);
-                }
-            }
-
-            if ($newlicence !== null) {
-                /* TODO: Throw Exception if Licence not valid */
-                $doc->addLicence(new Opus_Licence($newlicence));
-            } else {
-                $doc->addLicence(new Opus_Licence('1'));
-            }
-
-            /*
-            if ($newpublisher !== null) {
-                $dnbInstitute = new Opus_DnbInstitute($newpublisher);
-                $doc->setThesisPublisher($dnbInstitute);
-                $dnbInstitute = new Opus_DnbInstitute(1);
-                $doc->setThesisPublisher($dnbInstitute);
-            }
-             *
-             */
-
-            if (count($newseries) > 0) {
-                foreach ($newseries as $s) {
-                    $coll = new Opus_Collection($s['Key']);
-                    $doc->addCollection($coll);
-                    $doc->setIssue($s['Value']);
-                }
-            }
-
-            // Set the publication status to published since only published documents shall be imported
-            $doc->setServerState('published');
-
-             // store the document
-            //echo "AFTER:".$this->completeXML->saveXML($this->document)."\n";
+            //echo "(3):".$this->completeXML->saveXML($this->document)."\n";
             $doc->store();
 
             $imported['result'] = 'success';
@@ -307,6 +230,7 @@ class Opus3XMLImport {
             $imported['oldid'] = $oldid;
         }
 
+        /*
         unset($doc);
 	unset($this->document);
         unset($oldid);
@@ -326,9 +250,146 @@ class Opus3XMLImport {
 	unset($newpublisher);
 	unset($oldseries);
 	unset($newseries);
+         * 
+         */
 
         return $imported;
     }
+
+    private function skipPersonsWithoutFirstname() {
+       // BUGFIX:OPUSVIER-938: Fehler beim Import von Dokumenten mit Autoren ohne Vornamen
+        $roles = array();
+        array_push($roles, 'PersonAdvisor');
+        array_push($roles, 'PersonAuthor');
+        array_push($roles, 'PersonContributor');
+        array_push($roles, 'PersonEditor');
+        array_push($roles, 'PersonReferee');
+        array_push($roles, 'PersonOther');
+        array_push($roles, 'PersonTranslator');
+        array_push($roles, 'PersonSubmitter');
+
+        foreach ($roles as $r) {
+            $persons = $this->document->getElementsByTagName($r);
+            foreach ($persons as $p) {
+                //echo $p->getAttribute('LastName')."\n";
+                if ($p->getAttribute('FirstName') == "") {
+                    $this->log("ERROR: Person without a FirstName: '". $p->getAttribute('LastName') ."' will not be imported.\n");
+                    $this->document->removeChild($p);
+                }
+            }
+        }
+    }
+
+    private function mapDocumentTypeAndLanguage() {
+        $mapping = array('language', 'type');
+        foreach ($mapping as $m) {
+            $oa = $this->mapping[$m];
+            $old_value = $this->document->getAttribute($oa['old']);
+            $new_value = $oa['config']->$old_value;
+            //echo "Found Mapping: #".$oldvalue."# --> #".$newvalue."#\n";
+            $this->document->removeAttribute($oa['old']);
+            $this->document->setAttribute($oa['new'], $new_value);
+        }
+    }
+
+    private function mapElementLanguage() {
+        $tagnames = array('TitleMain', 'TitleAbstract', 'SubjectSwd', 'SubjectUncontrolled');
+        $oa = $this->mapping['language'];
+        foreach ($tagnames as $tag) {
+            $elements = $this->document->getElementsByTagName($tag);
+            foreach ($elements as $e) {
+                $old_value = $e->getAttribute($oa['old']);
+                $new_value = $oa['config']->$old_value;
+                //echo "Found Mapping: #".$oldvalue."# --> #".$newvalue."#\n";
+                $e->removeAttribute($oa['old']);
+                $e->setAttribute($oa['new'], $new_value);
+            }
+        }
+    }
+
+    private function mapClassifications() {
+        $old_ccs = array('name' => 'OldCcs', 'role' => 'ccs');
+        $old_ddc = array('name' => 'OldDdc', 'role' => 'ddc');
+        $old_jel = array('name' => 'OldJel', 'role' => 'jel');
+        $old_msc = array('name' => 'OldMsc', 'role' => 'msc');
+        $old_pacs = array('name' => 'OldPacs', 'role' => 'pacs');
+        $old_array = array($old_ccs, $old_ddc, $old_jel, $old_msc, $old_pacs);
+
+        foreach ($old_array as $oa) {
+            $elements = $this->document->getElementsByTagName($oa['name']);
+
+            while ($elements->length > 0) {
+                $e = $elements->Item(0);
+                $value = $e->getAttribute('Value');
+                //echo "FOUND ".$elements->length." for ".$oa['name']."\n";
+                $role = Opus_CollectionRole::fetchByName($oa['role']);
+                $colls = Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $value);
+
+                if (count($colls) > 0) {
+                    foreach ($colls as $c) {
+                        /* TODO: DDC-Hack */
+                        if (($oa['role'] === 'ddc') and (count($c->getChildren()) > 0)) { continue; }
+                        //echo "Found Mapping for ".$oa['role'].": '".$value."' --> '".$c->getNumber()."'\n";
+                        array_push($this->collections, $c->getId());
+                    }
+                }
+                else {
+                    $this->log("ERROR Opus3XMLImport: Document not added to '".$oa['role']."' '" .$value. "'\n");
+                }
+                $this->document->removeChild($e);
+            }
+        }
+    }
+
+    private function mapCollections() {
+        /* TODO: New Series mit Issue */
+        $mapping = array('collection', 'institute', 'series');
+
+        foreach ($mapping as $m) {
+            $oa = $this->mapping[$m];
+            $elements = $this->document->getElementsByTagName($oa['name']);
+            while ($elements->length > 0) {
+                $e = $elements->Item(0);
+                $old_value = $e->getAttribute('Value');
+
+                if (!is_null ($this->getMapping($oa['mapping'], $old_value))) {
+                    $new_value = $this->getMapping($oa['mapping'], $old_value);
+                    array_push($this->collections,  $new_value);
+                    //echo "Found Mapping in ".$oa['mapping'].": '".$old_value."' --> '".$new_value."'\n";
+                }
+                else {
+                    $this->log("ERROR Opus3XMLImport: No valid Mapping in '".$oa['mapping']."' for '".$old_value."'\n");
+                }
+
+                $this->document->removeChild($e);
+            }
+        }
+    }
+
+    private function mapValues() {
+        $mapping = array('grantor', 'licence', 'publisherUniversity');
+        foreach ($mapping as $m) {
+            $oa = $this->mapping[$m];
+            $elements = $this->document->getElementsByTagName($oa['name']);
+            while ($elements->length > 0) {
+                $e = $elements->Item(0);
+                $old_value = $e->getAttribute('Value');
+                //echo "FOUND ".$elements->length." for ".$oa['name']."\n";
+
+                if (!is_null ($this->getMapping($oa['mapping'], $old_value))) {
+                    $new_value = $this->getMapping($oa['mapping'], $old_value);
+                    $this->values[$m] = $new_value;
+                    //echo "Found Mapping in ".$oa['mapping'].": '".$old_value."' --> '".$new_value."'\n";
+                }
+                else {
+                    $this->log("ERROR Opus3XMLImport: No valid Mapping in '".$oa['mapping']."' for '".$old_value."'\n");
+                }
+
+                $this->document->removeChild($e);
+            }
+        }
+    }
+
 
     /**
      * Get mapped Values for a document and add it
@@ -338,11 +399,16 @@ class Opus3XMLImport {
      * @return new id
      */
      private function getMapping($mappingFile, $id) {
+        /* TODO: CHECK if File exists , echo ERROR and return null if not*/
+        if (!is_readable($mappingFile)) {
+            $this->log("ERROR Opus3XMLImport: MappingFile '".$mappingFile."' is not readable.\n");
+            return null;
+        }
         $fp = file($mappingFile);
         $mapping = array();
         foreach ($fp as $line) {
             $values = explode(" ", $line);
-            $mapping[$values[0]] = $values[1];
+            $mapping[$values[0]] = trim($values[1]);
         }
         if (array_key_exists($id, $mapping) === false) {
             return null;
@@ -351,32 +417,4 @@ class Opus3XMLImport {
         return $mapping[$id];
     }
 
-    /**
-     * Add Document to a Collection identified by role_name and number
-     *
-     * @document: Opus-Document
-     * @role_name: Role_Name of Colelction
-     * @number: Number of Collection
-     * @return Opus_Licence Licence to be added to the document
-     */
-     private function addDocumentToCollection($document, $role_name, $number) {
-
-        $role = Opus_CollectionRole::fetchByName($role_name);
-        $colls = Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $number);
-
-        //echo "role_id ". $role->getId(). " number " . $number ."\n";
-
-        if (count($colls) > 0) {
-            foreach ($colls as $c) {
-                /* TODO: DDC-Hack */
-                if (($role_name == 'ddc') and (count($c->getChildren()) > 0)) { continue; }
-                $document->addCollection($c);
-                //echo "Document added to $role_name Collection $number \n";
-            }
-        }
-        else {
-            echo "ERROR: Document not added to $role_name Collection $number \n";
-            $this->log("ERROR: Document not added to $role_name Collection $number \n");
-        }
-    }
 }
