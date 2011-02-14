@@ -79,7 +79,10 @@ class Account_IndexController extends Controller_Action {
                 $isPasswordChanged = false;
             }
 
-            if (!isset($postData['username'])) {
+            // check if username was provided and if it may be changed
+            if (!isset($postData['username'])
+                    || (isset($config->account->editPasswordOnly) && $config->account->editPasswordOnly)
+                    || (isset($config->account->changeLogin) && !$config->account->changeLogin)) {
                 $postData['username'] = $login;
             }
 
