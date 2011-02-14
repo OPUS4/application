@@ -8,6 +8,15 @@
   <body>
 <!-- This language file contains all texts and cases concerning errors. -->
 
+    <tu tuid="error_empty_post_array">
+        <tuv xml:lang="en">
+            <seg>Error: No files uploaded or data submitted. This error can possibly be caused by files that enlarge the allowed upload size in php.ini. The administrator will be informed.<br />Please retry publishing a document using a smaller file. </seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Fehler: es wurden keine Dateien hochgeladen oder Daten übermittelt. Eine mögliche Ursache sind zu große Dateien, die die erlaubte Upload Größe in php.ini übersteigen. Der Administrator wird darüber informiert.<br /> Bitte versuchen Sie erneut ein Dokument mit einer kleineren Datei zu veröffentlichen.</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="publish_error_rights_checkbox_empty">
         <tuv xml:lang="en">
             <seg>Error: Please confirm our legal notices.</seg>
