@@ -141,24 +141,24 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                         break;
 
                     case "Zend_Form_Element_Select" :
-                        $fieldset .= "\n\t\t\t\t<select name='" . $field["id"] . "' class='form-selectfield'  id='" . $field["id"] . "'";
-                        if (strstr($field["id"], "1"))
-                            $fieldset .= " title='" . $this->view->translate($field["hint"]) . "'";
-                        $fieldset .= ">\n\t\t\t\t\t";
+                        $fieldset .= "\n\t\t\t\t" . '<select name="' . $field['id'] . '" class="form-selectfield"  id="' . $field['id'] . '"';
+                        if (strstr($field['id'], '1'))
+                            $fieldset .= ' title="' . $this->view->translate($field['hint']) . '"';
+                        $fieldset .= '>' . "\n\t\t\t\t\t";
 
-                        foreach ($field["options"] AS $key => $option) {
-                            $fieldset .= "<option value='" . htmlspecialchars($key) . "' label='" . htmlspecialchars($option) . "'";
+                        foreach ($field['options'] AS $key => $option) {
+                            $fieldset .= '<option value="' . htmlspecialchars($key) . '" label="' . htmlspecialchars($option) . '"';
 
-                            if ($option === $field["value"] || $key === $field["value"])
-                                $fieldset .= " selected='selected'";
+                            if ($option === $field['value'] || $key === $field['value'])
+                                $fieldset .= ' selected="selected"';
 
-                            $fieldset .= ">";
-                            $fieldset .= htmlspecialchars($option) . "</option>\n\t\t\t\t\t";
+                            $fieldset .= '>';
+                            $fieldset .= htmlspecialchars($option) . '</option>' . "\n\t\t\t\t\t";
                         }
-                        $fieldset .= "</select>\n";
+                        $fieldset .= '</select>' . "\n";
 
-                        if (isset($field["desc"]))
-                            $fieldset .= "<div class='description hint'>" . $this->view->translate($field["desc"]) . "</div>";
+                        if (isset($field['desc']))
+                            $fieldset .= '<div class="description hint">' . $this->view->translate($field['desc']) . '</div>';
 
                         break;
 

@@ -110,10 +110,10 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
                 break;
 
             case "Zend_Form_Element_Select":
-                $elementfield .= "\n\t\t\t<select class='form-selectfield' name='" . $element["id"] . "' id='" . $element["id"] . "'";
+                $elementfield .= "\n\t\t\t" .'<select class="form-selectfield" name="' . $element["id"] . '" id="' . $element["id"] . '"';
 
-                if ($element["disabled"] === true) {
-                    $elementfield .= " disabled='disabled' ";
+                if ($element['disabled'] === true) {
+                    $elementfield .= ' disabled="disabled" ';
                     $disable = true;
                 }
                 $elementfield .= ">\n\t\t\t\t";
@@ -121,17 +121,20 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
                     $options = $element['options'];
 
                     foreach ($options AS $key => $option) {
-                        $elementfield .= "<option value='" . htmlspecialchars($key) . "' label='" . htmlspecialchars($option) . "'";
-                        $elementfield .= " title='" . $this->view->translate($element["hint"]) . "' ";
+                        $elementfield .= '<option value="' . htmlspecialchars($key) . '" label="' . htmlspecialchars($option) . '"';
+                        $elementfield .= ' title="' . $this->view->translate($element['hint']) . ' "';
 
-                        if ($option === $element["value"] || $key === $element["value"])
-                            $elementfield .= " selected='selected'>";
+                        if ($option === $element['value'] || $key === $element['value'])
+                            $elementfield .= ' selected="selected">';
                         else
-                            $elementfield .= ">";
-                        $elementfield .= htmlspecialchars($option) . "</option>\n\t\t\t\t";
+                            $elementfield .= '>';
+                        $elementfield .= htmlspecialchars($option) . '</option>' . "\n\t\t\t\t";
                     }
                 }
-                $elementfield .= "</select>";
+                $elementfield .= '</select>' . "\n";
+
+                if (isset($element['desc']))
+                            $elementfield .= '<div class="description hint">' . $this->view->translate($element['desc']) . '</div>';
                 
                 break;
 
