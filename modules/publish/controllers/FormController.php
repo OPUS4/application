@@ -65,6 +65,12 @@ class Publish_FormController extends Controller_Action {
             //initializing
             $indexForm = new Publish_Form_PublishingFirst($this->view);
             $data = $this->getRequest()->getPost();
+
+            if (is_array($data) && count($data) === 0) {
+                $this->log->error('FormController: EXCEPTION during uploading. Possibly the upload_max_filesize in php.ini is lower than the expected value in OPUS4 config.ini. Further information can be read in our documentation.');
+                 return $this->_redirectTo('index', $this->view->translate('error_empty_post_array'), 'index');
+            }
+
             $indexForm->populate($data);
             $this->_initializeDocument($data);
 
@@ -459,7 +465,7 @@ class Publish_FormController extends Controller_Action {
 
                 //file have already been uploaded
                 if (array_key_exists($file['name'], $uploaded_files_names)) {
-                        return false;
+                    return false;
                 }
                 $upload_count++;
             }
@@ -481,11 +487,12 @@ class Publish_FormController extends Controller_Action {
                 $this->session->publishFiles[] = $fileValues['name'];
                 $this->log->info("uploaded: " . $fileValues['name']);
                 $docfile = $this->session->document->addFile();
+                $docfile->setFromPost($fileValues);
                 //file always requires a language, this value is later overwritten by the exact language
                 $docfile->setLanguage("eng");
-                $docfile->setFromPost($fileValues);
             }
         }
+
         $this->session->document->store();
         return true;
     }
