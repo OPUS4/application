@@ -25,6 +25,16 @@
         </tuv>
     </tu>
 
+    <tu tuid="error_uploaded_files">
+        <!-- Text for alreaded uploaded files -->
+        <tuv xml:lang="en">
+            <seg>Error: File already exists or could not be stored.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Fehler: Datei exisitert bereits oder kann nicht gespeichert werden.</seg>
+        </tuv>
+    </tu>
+
   </body>
   
 </tmx>
