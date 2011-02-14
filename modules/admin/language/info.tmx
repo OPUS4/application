@@ -1,0 +1,49 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+
+  <body>
+
+    <tu tuid="admin_info_index">
+      <tuv xml:lang="en">
+        <seg>System Information</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>System Informationen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_info_section_upload">
+      <tuv xml:lang="en">
+        <seg>File Upload Settings</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einstellungen zum Dateien hochladen</seg>
+      </tuv>
+    </tu>
+
+
+    <tu tuid="admin_info_postmaxsize_description">
+      <tuv xml:lang="en">
+        <seg>Maximum size of POST request (edit in php.ini).</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Maximalgröße eines POST (editierbar in php.ini).</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_info_uploadmaxfilesize_description">
+      <tuv xml:lang="en">
+        <seg>Maximum size of file upload (edit in php.ini).</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Maximalgröße von Dateien (editierbar in php.ini).</seg>
+      </tuv>
+    </tu>
+
+  </body>
+
+</tmx>

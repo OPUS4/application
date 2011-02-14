@@ -404,6 +404,16 @@
                         </edit>
                     </pages>
                 </dnbInstitute>
+
+               	<info>
+                    <type>mvc</type>
+                    <label>admin_title_info</label>
+                    <description>admin_title_info_description</description>
+                    <module>admin</module>
+                    <controller>info</controller>
+                    <action>index</action>
+                </info>
+
             </pages>
         </administration>
     </nav>

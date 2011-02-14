@@ -259,6 +259,24 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_title_info">
+      <tuv xml:lang="en">
+        <seg>System Information</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>System Informationen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_title_info_description">
+      <tuv xml:lang="en">
+        <seg>Shows system and environment settings.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zeigt wichtige System und Umgebungseinstellungen.</seg>
+      </tuv>
+    </tu>
+
   </body>
   
 </tmx>
