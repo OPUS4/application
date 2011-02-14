@@ -325,3 +325,22 @@
     padding: 0.2em 0.5em;
     margin-right: 0.5em;
 }
+
+.adminContainer table.systeminfo {
+}
+
+.adminContainer table.systeminfo td {
+    padding: 2px 4px;
+}
+
+.adminContainer table.systeminfo td.label {
+}
+
+.adminContainer table.systeminfo td.value {
+}
+
+.adminContainer table.systeminfo td.location {
+}
+
+.adminContainer table.systeminfo td.description {
+}

@@ -25,22 +25,57 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_info_column_setting">
+      <tuv xml:lang="en">
+        <seg>Setting</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einstellung</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_info_column_value">
+      <tuv xml:lang="en">
+        <seg>Value</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Wert</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_info_column_location">
+      <tuv xml:lang="en">
+        <seg>Location</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datei</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_info_column_description">
+      <tuv xml:lang="en">
+        <seg>Description</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Beschreibung</seg>
+      </tuv>
+    </tu>
 
     <tu tuid="admin_info_postmaxsize_description">
       <tuv xml:lang="en">
-        <seg>Maximum size of POST request (edit in php.ini).</seg>
+        <seg>Maximum size of POST request.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Maximalgröße eines POST (editierbar in php.ini).</seg>
+        <seg>Maximalgröße eines POST.</seg>
       </tuv>
     </tu>
 
     <tu tuid="admin_info_uploadmaxfilesize_description">
       <tuv xml:lang="en">
-        <seg>Maximum size of file upload (edit in php.ini).</seg>
+        <seg>Maximum size of file upload.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Maximalgröße von Dateien (editierbar in php.ini).</seg>
+        <seg>Maximalgröße von Dateien.</seg>
       </tuv>
     </tu>
 
