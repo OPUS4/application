@@ -37,6 +37,15 @@
 class Admin_InfoController extends Controller_Action {
 
     public function indexAction() {
+        $config = Zend_Registry::get('Zend_Config');
+
+        if (isset($config->publish->maxfilesize)) {
+            $this->view->maxfilesize = $config->publish->maxfilesize;
+        }
+        else {
+            $this->view->maxfilesize = $this->view->translate('admin_info_error_not_set');
+        }
+
         $this->view->postMaxSize = ini_get('post_max_size');
         $this->view->uploadMaxFilesize = ini_get('upload_max_filesize');
     }

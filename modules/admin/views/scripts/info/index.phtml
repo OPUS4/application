@@ -50,6 +50,12 @@
                     <th class="description"><?= $this->translate('admin_info_column_description') ?></th>
                 </tr>
                 <tr>
+                    <td class="label">publish.maxfilesize</td>
+                    <td class="value"><?= htmlspecialchars($this->maxfilesize) ?></td>
+                    <td class="location">config.ini</td>
+                    <td class="description"><?= $this->translate('admin_info_maxfilesize_description') ?></td>
+                </tr>
+                <tr>
                     <td class="label">upload_max_filesize</td>
                     <td class="value"><?= htmlspecialchars($this->uploadMaxFilesize) ?></td>
                     <td class="location">php.ini</td>

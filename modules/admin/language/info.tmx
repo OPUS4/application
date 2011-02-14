@@ -61,6 +61,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_info_maxfilesize_description">
+      <tuv xml:lang="en">
+        <seg>Maximum upload size for OPUS.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Maximalgröße von Dateien für OPUS.</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_info_postmaxsize_description">
       <tuv xml:lang="en">
         <seg>Maximum size of POST request.</seg>
@@ -76,6 +85,15 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Maximalgröße von Dateien.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_info_error_no_set">
+      <tuv xml:lang="en">
+        <seg>[not set]</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>[nicht konfiguriert]</seg>
       </tuv>
     </tu>
 
