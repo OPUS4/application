@@ -67,7 +67,7 @@ class Publish_FormController extends Controller_Action {
             $data = $this->getRequest()->getPost();
 
             if (is_array($data) && count($data) === 0) {
-                $this->log->error('FormController: EXCEPTION during uploading. Possibly the upload_max_filesize in php.ini is lower than the expected value in OPUS4 config.ini. Further information can be read in our documentation.');
+                $this->log->err('FormController: EXCEPTION during uploading. Possibly the upload_max_filesize in php.ini is lower than the expected value in OPUS4 config.ini. Further information can be read in our documentation.');
                  return $this->_redirectTo('index', $this->view->translate('error_empty_post_array'), 'index');
             }
 
