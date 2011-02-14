@@ -71,20 +71,20 @@ class View_Helper_ShowModel_Title extends View_Helper_ShowModel_Abstract {
     private function __titleHelper($field, array &$value, $prefix = null) {
         $data = array();
         // title language
-        $language_field = 'Language';
-        if (true === array_key_exists($language_field, $value)) {
+        if (true === array_key_exists('Language', $value)) {
+            $language = $value['Language'];
             $language_list = Zend_Registry::get('Available_Languages');
-            $language = $language_list[$value[$language_field]];
-            $data[] = $this->__skeleton($language_field, htmlspecialchars($language));
+            if (true === array_key_exists($language, $language_list)) {
+               $language = $language_list[$language];
+            }
+            $data[] = $this->__skeleton('Language', htmlspecialchars($language));
         }
         // title value
-        $title_field = 'Value';
-        $iterim_value = $value[$title_field];
-        $data[] = $this->__skeleton($field . $title_field, htmlspecialchars($iterim_value));
+        $iterim_value = array_key_exists('Value', $value) ? $value['Value'] : '';
+        $data[] = $this->__skeleton($field . 'Value', htmlspecialchars($iterim_value));
         $iterim_data = $this->_view->partialLoop($this->_partial, $data);
         $outer = $this->__skeleton($field, $iterim_data, $prefix);
         return $this->_view->partial($this->_partial, $outer);
     }
 
 }
-?>
