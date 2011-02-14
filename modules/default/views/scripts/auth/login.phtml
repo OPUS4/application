@@ -35,9 +35,11 @@
 
 <h1><?= $this->translate('auth_pagetitle') ?></h1>
 
+<?PHP if (!empty($this->auth_failed_msg)) : ?>
 <div class="form-hint form-errors">
     <p><?= $this->auth_failed_msg ?></p>
 </div>
+<?PHP endif; ?>
 
 <?= $this->form ?>
 <?= $this->translate('auth_description') ?>
