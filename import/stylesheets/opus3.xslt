@@ -124,7 +124,7 @@
             </xsl:if>
 
             <!-- ThesisDateAccepted -->
-            <xsl:if test="$date_accepted >0">
+            <xsl:if test="$date_accepted > 0">
                 <xsl:attribute name="ThesisDateAccepted">
                     <xsl:value-of select="php:function('date', 'd.m.Y', $date_accepted)" />
                 </xsl:attribute>
@@ -334,7 +334,6 @@
             </xsl:if>	
             
             <!-- OldPublisherUniversity -->
-            <!--
             <xsl:if test="string-length(field[@name='publisher_university']) > 0">
                 <xsl:element name="OldPublisherUniversity">
                     <xsl:attribute name="Value">
@@ -342,21 +341,6 @@
                     </xsl:attribute>
                 </xsl:element>
             </xsl:if>
-            -->
-
-           <!-- New: Enrichment Institution -->
-           <!-- Special Case for ZIB -->
-            <xsl:if test="string-length(field[@name='publisher_university']) > 0">
-                <xsl:element name="Enrichment">
-                    <xsl:attribute name="KeyName">
-                        <xsl:text>institution</xsl:text>
-                    </xsl:attribute>
-                    <xsl:attribute name="Value">
-                        <xsl:value-of select="normalize-space(field[@name='publisher_university'])" />
-                    </xsl:attribute>
-                </xsl:element>
-            </xsl:if>
-
 
             <!-- All Related Persons (Author/Editor/Submitter/Contributor/...)-->
             <!-- PersonSubmitter -->

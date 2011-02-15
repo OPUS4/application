@@ -145,7 +145,7 @@ class Opus3InstituteImport {
             $uni->store();
 
             echo "University imported: " . $class['universitaet_anzeige'] ."\n";
-            fputs($fp, str_replace(" ", "_", $class['universitaet']) . ' ' .  $coll->getId() . "\n");
+            fputs($fp, str_replace(" ", "_", $class['universitaet']) . ' ' .  $uni->getId() . "\n");
         }
         fclose($fp);
         return $subcoll;

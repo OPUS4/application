@@ -89,6 +89,13 @@ class Opus3XMLImport {
     protected $values = array();
 
     /**
+     * Holds Doctypes for Thesis
+     *
+     * @var Array
+     */
+    protected $thesistypes = array();
+
+    /**
      * Holds the complete XML-Representation of the Importfile
      *
      * @var DomDocument  XML-Representation of the importfile
@@ -141,10 +148,15 @@ class Opus3XMLImport {
         $this->mapping['collection'] = array('name' => 'OldCollection', 'mapping' => $this->config->import->mapping->collections);
         $this->mapping['institute'] = array('name' => 'OldInstitute',  'mapping' => $this->config->import->mapping->institutes);
         $this->mapping['series'] = array('name' => 'OldSeries',  'mapping' => $this->config->import->mapping->series);
-        $this->mapping['grantor'] = array('name' => 'OldGrantor', 'mapping' => $this->config->import->mapping->grantor);
+        $this->mapping['grantor'] = array('name' => 'OldGrantor', 'mapping' => $this->config->import->mapping->grantors);
         $this->mapping['licence'] = array('name' => 'OldLicence',  'mapping' => $this->config->import->mapping->licence);
         $this->mapping['publisherUniversity'] = array('name' => 'OldPublisherUniversity', 'mapping' => $this->config->import->mapping->universities);
 
+        array_push($this->thesistypes, 'bachelorthesis');
+        array_push($this->thesistypes, 'doctoralthesis');
+        array_push($this->thesistypes, 'habilitation');
+        array_push($this->thesistypes, 'masterthesis');
+        array_push($this->thesistypes, 'studythesis');
     }
 
     public function log($string) {
@@ -170,13 +182,15 @@ class Opus3XMLImport {
      * @return array information about the document that has been imported
      */
     public function import($document) {
+        $this->collections = array();
+        $this->values = null;
 
         $this->document = $document;
      
         $oldid = null;
         $oldid = $this->document->getElementsByTagName('IdentifierOpus3')->Item(0)->getAttribute('Value');
 
-        //echo "(1):".$this->completeXML->saveXML($this->document)."\n";
+        //$this->log("(1):".$this->completeXML->saveXML($this->document)."\n");
         $this->skipPersonsWithoutFirstname();
         $this->mapDocumentTypeAndLanguage();
         $this->mapElementLanguage();
@@ -192,28 +206,26 @@ class Opus3XMLImport {
             $doc = null;
             $doc = Opus_Document::fromXml('<Opus>' . $this->completeXML->saveXML($this->document) . '</Opus>');
 
-            if (array_key_exists('grantor', $this->values)) {
-                $dnbGrantor = new Opus_DnbInstitute($this->values['grantor']);
-                $doc->setThesisGrantor($dnbGrantor);
+            // ThesisGrantor and ThesisPublisher only for Thesis-Documents
+            if(in_array($doc->getType(), $this->thesistypes)) {
+                if (array_key_exists('grantor', $this->values)) {
+                    $dnbGrantor = new Opus_DnbInstitute($this->values['grantor']);
+                    $doc->setThesisGrantor($dnbGrantor);
+                }
+                if (array_key_exists('publisherUniversity', $this->values)) {
+                    $dnbPublisher = new Opus_DnbInstitute($this->values['publisherUniversity']);
+                    $doc->setThesisPublisher($dnbPublisher);
+                }
             }
-            if (array_key_exists('publisherUniversity', $this->values)) {
-                $dnbPublisher = new Opus_DnbInstitute($this->values['publisherUniversity']);
-                $doc->setThesisPublisher($dnbPublisher);
-            }
+
             if (array_key_exists('licence', $this->values)) {
                 $doc->addLicence(new Opus_Licence($this->values['licence']));
             }
 
             foreach ($this->collections as $c) {
                 $coll = new Opus_Collection($c);
-                /*
-                $enrichment = new Opus_CollectionEnrichment();
-                $enrichment->setKeyName("foo");
-                $enrichment->setValue("bar");
-                $coll->addEnrichment($enrichment);
+                $coll->setVisible(1);
                 $coll->store();
-                 * 
-                 */
                 $doc->addCollection($coll);
             }
 
@@ -329,7 +341,7 @@ class Opus3XMLImport {
                     foreach ($colls as $c) {
                         /* TODO: DDC-Hack */
                         if (($oa['role'] === 'ddc') and (count($c->getChildren()) > 0)) { continue; }
-                        //echo "Found Mapping for ".$oa['role'].": '".$value."' --> '".$c->getNumber()."'\n";
+                        //$this->log("Found Mapping for ".$oa['role'].": '".$value."' --> '".$c->getNumber()."'\n");
                         array_push($this->collections, $c->getId());
                     }
                 }
@@ -358,7 +370,7 @@ class Opus3XMLImport {
                     //echo "Found Mapping in ".$oa['mapping'].": '".$old_value."' --> '".$new_value."'\n";
                 }
                 else {
-                    $this->log("ERROR Opus3XMLImport: No valid Mapping in '".$oa['mapping']."' for '".$old_value."'\n");
+                    $this->log("ERROR Opus3XMLImport ('$m'): No valid Mapping in '".$oa['mapping']."' for '".$old_value."'\n");
                 }
 
                 $this->document->removeChild($e);
@@ -374,7 +386,10 @@ class Opus3XMLImport {
             while ($elements->length > 0) {
                 $e = $elements->Item(0);
                 $old_value = $e->getAttribute('Value');
-                //echo "FOUND ".$elements->length." for ".$oa['name']."\n";
+                
+                if ($m === 'publisherUniversity') {
+                    $old_value = str_replace(" ", "_", $old_value);
+                }
 
                 if (!is_null ($this->getMapping($oa['mapping'], $old_value))) {
                     $new_value = $this->getMapping($oa['mapping'], $old_value);
@@ -382,7 +397,7 @@ class Opus3XMLImport {
                     //echo "Found Mapping in ".$oa['mapping'].": '".$old_value."' --> '".$new_value."'\n";
                 }
                 else {
-                    $this->log("ERROR Opus3XMLImport: No valid Mapping in '".$oa['mapping']."' for '".$old_value."'\n");
+                    $this->log("ERROR Opus3XMLImport ('$m'): No valid Mapping in '".$oa['mapping']."' for '".$old_value."'\n");
                 }
 
                 $this->document->removeChild($e);
