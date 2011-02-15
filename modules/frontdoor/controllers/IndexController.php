@@ -66,7 +66,7 @@ class Frontdoor_IndexController extends Controller_Action {
             $template = $this->setUpXSLTStylesheet($type);
             $xslt->load($this->view->getScriptPath('index') . '/' . $template);
             $proc = new XSLTProcessor;
-            $proc->registerPHPFunctions('Frontdoor_IndexController::translate', 'Frontdoor_IndexController::isMailPossible');
+            $proc->registerPHPFunctions('Frontdoor_IndexController::translate');
             $proc->importStyleSheet($xslt);
 
             $this->view->baseUrl = $baseUrl;
