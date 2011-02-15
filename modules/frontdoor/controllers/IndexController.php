@@ -74,6 +74,7 @@ class Frontdoor_IndexController extends Controller_Action {
 
             $this->view->headMeta()
                 ->appendHttpEquiv('Last-Modified', $document->getServerDateModified()->getZendDate()->get(Zend_Date::RFC_1123));
+            // $this->addScholarMetaTagsForDocument($document);
 
             $config = Zend_Registry::getInstance()->get('Zend_Config');
             $deliver_url_prefix = isset($config->deliver->url->prefix) ? $config->deliver->url->prefix : '/documents';
@@ -92,6 +93,106 @@ class Frontdoor_IndexController extends Controller_Action {
                     $this->view->frontdoor = sprintf($this->view->translate('frontdoor_doc_id_not_found'), $docId);
             }
         }
+    }
+
+    private function addMetaTagsForDocument($document) {
+        $this->createMetaTagsForDocument($document);
+
+        $this->_logger->debug(var_export($scholarTags, true) );
+        foreach ($scholarTags AS $pair) {
+            $this->view->headMeta($pair[1], $pair[0]);
+        }
+    }
+
+    private function createMetaTagsForDocument($document) {
+        $config = Zend_Registry::getInstance()->get('Zend_Config');
+        $serverUrl = $this->view->serverUrl();
+        $baseUrlServer = $serverUrl . $this->getRequest()->getBaseUrl();
+        $baseUrlFiles = $serverUrl . (isset($config, $config->deliver->url->prefix) ? $config->deliver->url->prefix : '/documents');
+
+        $metas = array();
+
+        foreach ($document->getPersonAuthor() AS $author) {
+            $lastname = trim($author->getLastName());
+            if (empty($lastname)) {
+                continue;
+            }
+            $name = $lastname;
+
+            $firstname = trim($author->getFirstName());
+            if (!empty($firstname)) {
+                $name .= ", " . $firstname;
+            }
+
+            $metas[] = array('DC.Creator', $name);
+            $metas[] = array('author', $name);
+            $metas[] = array('citation_author', $name);
+        }
+
+        foreach ($document->getTitleMain() AS $title) {
+            $titleValue = trim( $title->getValue() );
+            if (empty($titleValue)) {
+                continue;
+            }
+            $metas[] = array('DC.title', $titleValue);
+            $metas[] = array('title', $titleValue);
+            $metas[] = array('citation_title', $titleValue);
+        }
+
+        foreach ($document->getTitleAbstract() AS $abstract) {
+            $abstractValue = trim( $abstract->getValue() );
+            if (empty($abstractValue)) {
+                continue;
+            }
+            $metas[] = array('DC.Description', $abstractValue);
+            $metas[] = array('description', $abstractValue);
+        }
+
+        $subjectsArray = array();
+        foreach ($document->getSubject() AS $subject) {
+            $subjectValue = trim($subject->getValue());
+            if (empty($subjectValue)) {
+                continue;
+            }
+            $metas[] = array('DC.subject', $subjectValue);
+            $subjectsArray[] = $subjectValue;
+        }
+        if (count($subjectsArray) > 0) {
+            $subjectsArray = array_unique($subjectsArray);
+            $metas[] = array('keywords', implode(", ", $subjectsArray));
+        }
+
+        foreach ($document->getIdentifierUrn() AS $identifier) {
+            $identifierValue = trim($identifier->getValue());
+            if (empty($identifierValue)) {
+                continue;
+            }
+            $metas[] = array('DC.Identifier', $identifierValue);
+        }
+        $metas[] = array('DC.Identifier', $baseUrlServer . '/frontdoor/index/index/docId/'. $document->getId());
+
+        foreach ($document->getFile() AS $file) {
+            if (!$file->exists() or ($file->getVisibleInFrontdoor() !== '1') ) {
+                continue;
+            }
+            $metas[] = array('DC.Identifier', "$baseUrlFiles/" . $document->getId() . "/" . $file->getPathName());
+
+            if ($file->getMimeType() != 'application/pdf') {
+                continue;
+            }
+            $metas[] = array('citation_pdf_url', "$baseUrlFiles/" . $document->getId() . "/" . $file->getPathName());
+        }
+
+        $datePublished = $document->getPublishedDate();
+        if (!is_null($datePublished)) {
+            // $date = new Opus_Date();
+            $dateString = $datePublished->getZendDate()->get('yyyy-MM-dd');
+
+            $metas[] = array("citation_date", $dateString);
+            $metas[] = array("DC.Date", $dateString);
+        }
+
+        return $metas;
     }
 
     private function setUpXSLTStylesheet($type) {
