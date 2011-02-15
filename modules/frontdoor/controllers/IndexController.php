@@ -72,8 +72,11 @@ class Frontdoor_IndexController extends Controller_Action {
             $this->view->baseUrl = $baseUrl;
             $this->view->doctype('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"  "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">');
 
-            $this->view->headMeta()
-                ->appendHttpEquiv('Last-Modified', $document->getServerDateModified()->getZendDate()->get(Zend_Date::RFC_1123));
+            $dateModified = $document->getServerDateModified();
+            if (!is_null($dateModified)) {
+                $this->view->headMeta()
+                    ->appendHttpEquiv('Last-Modified', $dateModified->getZendDate()->get(Zend_Date::RFC_1123));
+            }
             // $this->addScholarMetaTagsForDocument($document);
 
             $config = Zend_Registry::getInstance()->get('Zend_Config');
