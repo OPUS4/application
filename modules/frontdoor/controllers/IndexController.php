@@ -77,7 +77,7 @@ class Frontdoor_IndexController extends Controller_Action {
                 $this->view->headMeta()
                     ->appendHttpEquiv('Last-Modified', $dateModified->getZendDate()->get(Zend_Date::RFC_1123));
             }
-            // $this->addScholarMetaTagsForDocument($document);
+            // $this->addMetaTagsForDocument($document);
 
             $config = Zend_Registry::getInstance()->get('Zend_Config');
             $deliver_url_prefix = isset($config->deliver->url->prefix) ? $config->deliver->url->prefix : '/documents';
@@ -99,10 +99,7 @@ class Frontdoor_IndexController extends Controller_Action {
     }
 
     private function addMetaTagsForDocument($document) {
-        $this->createMetaTagsForDocument($document);
-
-        $this->_logger->debug(var_export($scholarTags, true) );
-        foreach ($scholarTags AS $pair) {
+        foreach ($this->createMetaTagsForDocument($document) AS $pair) {
             $this->view->headMeta($pair[1], $pair[0]);
         }
     }
