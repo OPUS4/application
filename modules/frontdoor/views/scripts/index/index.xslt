@@ -205,6 +205,7 @@
             <xsl:apply-templates select="Enrichment[@KeyName='Event']" />
             <xsl:apply-templates select="Enrichment[@KeyName='City']" />
             <xsl:apply-templates select="Enrichment[@KeyName='Country']" />
+            <xsl:apply-templates select="Enrichment[@KeyName='NeuesSelect']" />
             <!-- End Enrichtments -->
 
             <xsl:apply-templates select="Collection[@RoleName='institutes']" />
@@ -463,24 +464,11 @@
     </xsl:template>
 
 <!-- Templates for "enrichments". -->
-    <xsl:template match="Enrichment[@KeyName='Event']">
-        <tr>            
-            <th class="name">
-                <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">EnrichmentEvent</xsl:with-param>
-                        </xsl:call-template>
-                        <xsl:text>:</xsl:text>
-                </th>
-            <td>
-                <xsl:value-of select="@Value" />
-        </td>
-        </tr>
-    </xsl:template>
-    <xsl:template match="Enrichment[@KeyName='City']">
+    <xsl:template match="Enrichment">
         <tr>
             <th class="name">
                 <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">EnrichmentCity</xsl:with-param>
+                            <xsl:with-param name="string">Enrichment<xsl:value-of select="@KeyName" /></xsl:with-param>
                         </xsl:call-template>
                         <xsl:text>:</xsl:text>
                 </th>
@@ -489,20 +477,6 @@
         </td>
         </tr>
     </xsl:template>
-    <xsl:template match="Enrichment[@KeyName='Country']">
-        <tr>
-            <th class="name">
-                <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">EnrichmentCountry</xsl:with-param>
-                        </xsl:call-template>
-                        <xsl:text>:</xsl:text>
-                </th>
-            <td>
-                <xsl:value-of select="@Value" />
-        </td>
-        </tr>
-    </xsl:template>
-
 
 
     <!-- Templates for "external fields". -->
