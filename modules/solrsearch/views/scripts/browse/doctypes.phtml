@@ -34,16 +34,16 @@
  */
 ?>
 
-<h2><?= $this->translate('browse_doctypes_title') ?></h2>
+<h2><?= htmlspecialchars($this->translate('browse_doctypes_title')) ?></h2>
 
 <p>
-    <?= $this->translate('browse_doctypes_message') ?>
+    <?= htmlspecialchars($this->translate('browse_doctypes_message')) ?>
 </p>
 <div class="content">
 <ul class="nav browsing">
 <?php foreach($this->facetitems as $facetitem) : ?>
     <li>
-        <a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'simple', 'query' => '*:*', 'browsing' => 'true', 'doctypefq' => $facetitem->getText()), null, true) ?>"><?= $this->translate($facetitem->getText()) ?></a>
+        <a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'simple', 'query' => '*:*', 'browsing' => 'true', 'doctypefq' => $facetitem->getText()), null, true) ?>"><?= htmlspecialchars($this->translate($facetitem->getText())) ?></a>
         &nbsp;(<?= $facetitem->getCount() ?>)
     </li>
 <?php endforeach ?>
