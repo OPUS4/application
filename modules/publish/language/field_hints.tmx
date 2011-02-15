@@ -1178,7 +1178,7 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
 	
 	<tu tuid="hint_PublishedDate">
         <tuv xml:lang="en">
-            <seg>Please enter the date of the document's first publishing in the format YYYY/MM/YY.</seg>
+            <seg>Please enter the date of the document's first publishing in the format YYYY/MM/DD.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte das Erstveröffentlichungsdatum des Dokuments im Format TT.MM.JJJJ ein.</seg>
