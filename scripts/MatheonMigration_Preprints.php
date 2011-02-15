@@ -538,6 +538,13 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
         $reviewer_role = Opus_Role::fetchByName('reviewer');
         $admin_role = Opus_Role::fetchByName('administrator');
 
+        $admin_user = Opus_Account::fetchAccountByLogin('admin');
+        $admin_user->addRole( $reviewer_role );
+        $admin_user->setFirstName("-admin-");
+        $admin_user->setLastName("-admin-");
+        // $admin_user->setEmail("root@localhost");
+        $admin_user->store();
+
         foreach ($users AS $user) {
             $account = new Opus_Account();
             $account->setLogin(trim($user['email_address']));
@@ -628,6 +635,10 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
         foreach ($preprints AS $pid => $preprint) {
             $pid = $preprint['id'];
             $sid = $preprint['serial'];
+
+//          if ($sid > 50) {
+//             break;
+//          }
 
             $doc = new Opus_Document();
             $doc->setType('preprintmatheon');
