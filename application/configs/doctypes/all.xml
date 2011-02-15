@@ -41,7 +41,9 @@
     <field name="PersonSubmitter" required="yes" multiplicity="1" formelement="text" datatype="Person">
         <default for="FirstName" value="Hans" edit="yes" public="yes"  />
         <default for="LastName" value="Hansmann" edit="yes" public="yes"  />
-        <subfield name="Email" required="yes" formelement="text" datatype="Email" />
+        <subfield name="Email" required="yes" formelement="text" datatype="Email">
+          <default value="doe@example.org" edit="yes" public="yes" />
+        </subfield>
     </field>
     <field name="Language" required="no" formelement="select" datatype="Language" multiplicity="1">
         <default value="deu" edit="yes" public="yes"/>
