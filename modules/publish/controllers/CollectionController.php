@@ -41,10 +41,12 @@ class Publish_CollectionController extends Controller_Action {
 
     public $session;
     public $log;
+    public $document;
 
     public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array()) {
         $this->log = Zend_Registry::get('Zend_Log');
         $this->session = new Zend_Session_Namespace('Publish');
+        $this->document = new Opus_Document($this->session->documentId);
 
         parent::__construct($request, $response, $invokeArgs);
     }
@@ -79,8 +81,10 @@ class Publish_CollectionController extends Controller_Action {
         if (array_key_exists('send', $post))
             $this->_forward('deposit', 'deposit');
 
-        if (array_key_exists('abortCollection', $post))
+        if (array_key_exists('abortCollection', $post)) {
+            $this->session->step = 0;
             $this->_forward('check', 'form');
+        }
 
         if (array_key_exists('goToParentCollection', $post)) {
             if ((int) $this->session->step >= 2)
@@ -102,8 +106,8 @@ class Publish_CollectionController extends Controller_Action {
                 $collIdToSave = (int) $this->session->collection['collection' . $index];
             }
 
-            $this->session->document->addCollection(new Opus_Collection($collIdToSave));
-            $this->session->document->store();
+            $this->document->addCollection(new Opus_Collection($collIdToSave));
+            $this->document->store();
 
             $this->session->countCollections = (int) $this->session->countCollections + 1;
             $this->_forward('top');

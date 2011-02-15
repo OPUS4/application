@@ -57,9 +57,10 @@ class View_Helper_CollectionOverview extends Zend_View_Helper_Abstract {
         $fieldset_start2 = "<fieldset><legend>" . $this->view->translate('collections_current_choice') . "</legend>\n\t\t\n\t\t";
         $fieldset_end2 = "</fieldset>";
 
-        if (is_null($this->session->document)) {
+        if (is_null($this->session->documentId)) {
             return "";
         }
+        //$this->document = new Opus_Document($this->session->documentId);
 
         $step = $this->session->step;
         $overview2 = "";
@@ -70,11 +71,9 @@ class View_Helper_CollectionOverview extends Zend_View_Helper_Abstract {
                 $overview2 .= '<li>' . htmlspecialchars($this->view->translate($this->session->collection['collection' . $i . 'Name'])) . '</li>';
             }
             $overview2 .= '</ul>';
-        }
+        }        
 
-        $this->document = $this->session->document;
-
-        $collections = Opus_Collection::fetchCollectionIdsByDocumentId($this->document->getId());
+        $collections = Opus_Collection::fetchCollectionIdsByDocumentId($this->session->documentId);
 
         if (empty($collections)) {
             $empty = $fieldset_start1 . "<b>" . $this->view->translate('no_collections_choosen') . "</b>" . $fieldset_end1;

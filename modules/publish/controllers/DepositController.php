@@ -43,6 +43,7 @@ class Publish_DepositController extends Controller_Action {
     public $postData = array();
     public $log;
     public $session;
+    public $document;
 
     public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array()) {
         $this->log = Zend_Registry::get('Zend_Log');
@@ -92,12 +93,10 @@ class Publish_DepositController extends Controller_Action {
         if (isset($this->postData['send']))
             unset($this->postData['send']);
 
-        $depositData = new Publish_Model_Deposit($this->session->documentId, $this->postData);
-        $document = $depositData->getDocument();
-        $document->setServerState('unpublished');
-
-        $this->session->document = $document;
-        $this->session->documentId = $document->store();
+        $depositData = new Publish_Model_Deposit($this->postData);
+        $this->document = $depositData->getDocument();
+        $this->document->setServerState('unpublished');
+        $this->session->documentId = $this->document->store();
         $docId = $this->session->documentId;
 
         $this->log->info("Document $docId was sucessfully stored!");

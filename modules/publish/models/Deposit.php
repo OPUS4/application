@@ -36,11 +36,13 @@ class Publish_Model_Deposit {
     public $document;
     public $documentData;
     public $log;
+    public $session;
 
-    public function __construct($documentId = null, $documentData = null) {
+    public function __construct($documentData = null) {
 
         $this->log = Zend_Registry::get('Zend_Log');
-        $this->document = new Opus_Document($documentId);
+        $this->session = new Zend_Session_Namespace('Publish');
+        $this->document = new Opus_Document($this->session->documentId);
         $this->documentData = $documentData;
 
         if ($this->document->getServerState() !== 'temporary') {

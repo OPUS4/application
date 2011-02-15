@@ -48,6 +48,7 @@ class Publish_FormController extends Controller_Action {
 
     public $log;
     public $session;
+    public $document;
 
     public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array()) {
         $this->log = Zend_Registry::get('Zend_Log');
@@ -409,18 +410,20 @@ class Publish_FormController extends Controller_Action {
      */
     private function _initializeDocument($postData = null) {       
         if (!isset($this->session->documentId) || $this->session->documentId == '') {
-            $this->session->document = new Opus_Document();
-            $this->session->document->setServerState('temporary');
-            $this->session->documentId = $this->session->document->store();
+            $this->document = new Opus_Document();
+            $this->document->setServerState('temporary');
+            $this->session->documentId = $this->document->store();
             $this->log->info(__METHOD__ . ' The corresponding document ID is: ' . $this->session->documentId);
         }
+        else
+            $this->document = new Opus_Document($this->session->documentId);
 
         if (isset($postData['documentType'])) {
             if ($postData['documentType'] !== '') {
                 $this->session->documentType = $postData['documentType'];
                 $this->log->info(__METHOD__ .  ' documentType = ' . $this->session->documentType);                
-                $this->session->document->setType($this->session->documentType);
-                $this->session->document->store();
+                $this->document->setType($this->session->documentType);
+                $this->document->store();
             }
             unset($postData['documentType']);
         }
@@ -440,10 +443,10 @@ class Publish_FormController extends Controller_Action {
             return;
         }
 
-        $this->session->document->addEnrichment()
+        $this->document->addEnrichment()
                 ->setKeyName('submitter.user_id')
                 ->setValue($userId);
-        $this->session->document->store();
+        $this->document->store();
     }
 
     /**
@@ -454,7 +457,7 @@ class Publish_FormController extends Controller_Action {
         $files = $upload->getFileInfo();
         $upload_count = 0;
 
-        $uploaded_files = $this->session->document->getFile();
+        $uploaded_files = $this->document->getFile();
         $uploaded_files_names = array();
         foreach ($uploaded_files as $upfile) {
             $uploaded_files_names[$upfile->getPathName()] = $upfile->getPathName();
@@ -486,14 +489,14 @@ class Publish_FormController extends Controller_Action {
             if (!empty($fileValues['name'])) {
                 $this->session->publishFiles[] = $fileValues['name'];
                 $this->log->info("uploaded: " . $fileValues['name']);
-                $docfile = $this->session->document->addFile();
+                $docfile = $this->document->addFile();
                 $docfile->setFromPost($fileValues);
                 //file always requires a language, this value is later overwritten by the exact language
                 $docfile->setLanguage("eng");
             }
         }
 
-        $this->session->document->store();
+        $this->document->store();
         return true;
     }
 
@@ -504,8 +507,8 @@ class Publish_FormController extends Controller_Action {
         if (isset($data['bibliographie']) && $data['bibliographie'] === '1') {
             $this->log->debug("Bibliographie is set -> store it!");
             //store the document internal field BelongsToBibliography
-            $this->session->document->setBelongsToBibliography(1);
-            $this->session->document->store();
+            $this->document->setBelongsToBibliography(1);
+            $this->document->store();
         }
     }
 

@@ -52,11 +52,11 @@ class View_Helper_FileOverview extends Zend_View_Helper_Abstract {
         $fieldset_start = "<fieldset><legend>" . $this->view->translate('already_uploaded_files') . "</legend>\n\t\t\n\t\t";
         $fieldset_end = "</fieldset>";
 
-        if (is_null($this->session->document)) {
+        if ($this->session->documentId == "") {
             return "";
         }
 
-        $this->document = $this->session->document;
+        $this->document = new Opus_Document($this->session->documentId);
         $files = $this->document->getFile();
 
         if (empty($files)) {
