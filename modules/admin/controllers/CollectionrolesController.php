@@ -47,30 +47,30 @@ class Admin_CollectionrolesController extends Controller_Action {
     }
 
     public function newAction() {
+        Opus_CollectionRole::fixPositions();
         $collectionRoleModel = new Admin_Model_CollectionRole();
         $this->view->form = $this->getRoleForm($collectionRoleModel->getObject());
     }
 
     public function editAction() {
-        $collectionRoleModel = null;
+        Opus_CollectionRole::fixPositions();
         try {
             $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('roleid', ''));
+            $this->view->form = $this->getRoleForm($collectionRoleModel->getObject());
         }
         catch (Application_Exception $e) {
-            $this->_redirectToAndExit('index', array('failure' => $e->getMessage()));
-            return;
-        }
-        $this->view->form = $this->getRoleForm($collectionRoleModel->getObject());
+            return $this->_redirectToAndExit('index', array('failure' => $e->getMessage()));
+        }       
     }
 
     public function moveAction() {
         try {
             $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('roleid', ''));
             $collectionRoleModel->move($this->getRequest()->getParam('pos'));
-            $this->_redirectTo('index', 'Operation completed successfully.');
+            return $this->_redirectTo('index', 'Operation completed successfully.');
         }
         catch (Application_Exception $e) {
-            $this->_redirectToAndExit('index', array('failure' => $e->getMessage()));
+            return $this->_redirectToAndExit('index', array('failure' => $e->getMessage()));
         }
     }
 
@@ -78,10 +78,10 @@ class Admin_CollectionrolesController extends Controller_Action {
         try {
             $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('roleid', ''));
             $collectionRoleModel->setVisibility($visibility);
-            $this->_redirectTo('index', 'Operation completed successfully.');
+            return $this->_redirectTo('index', 'Operation completed successfully.');
         }
         catch (Application_Exception $e) {
-            $this->_redirectToAndExit('index', array('failure' => $e->getMessage()));
+            return $this->_redirectToAndExit('index', array('failure' => $e->getMessage()));
         }        
     }
 
@@ -106,8 +106,7 @@ class Admin_CollectionrolesController extends Controller_Action {
 
     public function createAction() {
         if (!$this->getRequest()->isPost()) {
-            $this->_redirectToAndExit('index');
-            return;
+            return $this->_redirectToAndExit('index');
         }
 
         $data = $this->_request->getPost();
@@ -144,11 +143,11 @@ class Admin_CollectionrolesController extends Controller_Action {
                     $collectionRole->getRootCollection()->setVisible('1');
                 }
                 $collectionRole->store();
-                $this->_redirectTo('index', 'Collection role \'' . $collectionRole->getName() . '\' successfully created.');
+                return $this->_redirectTo('index', 'Collection role \'' . $collectionRole->getName() . '\' successfully created.');
             }
             else {
                 $collectionRole->store();
-                $this->_redirectTo('index', 'Collection role \'' . $collectionRole->getName() . '\' successfully edited.');
+                return $this->_redirectTo('index', 'Collection role \'' . $collectionRole->getName() . '\' successfully edited.');
             }
         }
     }
@@ -177,13 +176,11 @@ class Admin_CollectionrolesController extends Controller_Action {
         try {
             $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('roleid', ''));
             $collectionRoleModel->delete();
-            $this->_redirectTo('index', 'Operation completed successfully.');
+            return $this->_redirectTo('index', 'Operation completed successfully.');
         }
         catch (Application_Exception $e) {
-            $this->_redirectToAndExit('index', array('failure' => $e->getMessage()));
-        }
-        
+            return $this->_redirectToAndExit('index', array('failure' => $e->getMessage()));
+        }        
     }
-
 }
 ?>
