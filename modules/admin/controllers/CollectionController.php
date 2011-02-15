@@ -78,7 +78,7 @@ class Admin_CollectionController extends Controller_Action {
     }
 
     /**
-     * Edits a collection instance
+     * Edit a collection instance
      *
      * @return void
      */
@@ -182,8 +182,7 @@ class Admin_CollectionController extends Controller_Action {
 
     public function createAction() {
         if (!$this->getRequest()->isPost()) {
-            $this->_redirectToAndExit('index', '', 'collectionroles');
-            return;
+            return $this->_redirectToAndExit('index', '', 'collectionroles');
         }
         
         $data = $this->_request->getPost();
@@ -202,47 +201,38 @@ class Admin_CollectionController extends Controller_Action {
                 $form->setAction($this->view->url(array('action' => 'create', 'oid' => $collection->getId(), 'id' => $this->getRequest()->getParam('id'), 'type' => $this->getRequest()->getParam('type'))));
             }
             $this->view->form = $form;
-        }
-        else {            
-            if (true === $collection->isNewRecord()) {
-                $id = $this->getRequest()->getParam('id');
-                $type = $this->getRequest()->getParam('type');
-                if (is_null($id)) {
-                    $this->_redirectToAndExit('index', array('failure' => 'id parameter is missing'), 'collectionroles');
-                    return;
-                }
-                if (is_null($type)) {
-                    $this->_redirectToAndExit('index', array('failure' => 'type parameter is missing'), 'collectionroles');
-                    return;
-                }
-                if ($type === 'child') {
-                    $refCollection = new Opus_Collection($id);
-                    $refCollection->addFirstChild($collection);
-                    $refCollection->store();
-                }
-                else if ($type === 'sibling') {
-                    $refCollection = new Opus_Collection($id);
-                    $refCollection->addNextSibling($collection);
-                    $refCollection->store();
-                }
-                else {
-                    $this->_redirectToAndExit('index', array('failure' => 'type paramter invalid'), 'collectionroles');
-                    return;
-                }
-                $this->_redirectTo('show', 'Insert successful', 'collection', 'admin', array('id' => $collection->getId()));
+            return;
+        }       
+        if (true === $collection->isNewRecord()) {
+            $id = $this->getRequest()->getParam('id');
+            $type = $this->getRequest()->getParam('type');
+            if (is_null($id)) {
+                return $this->_redirectToAndExit('index', array('failure' => 'id parameter is missing'), 'collectionroles');
             }
-            else {
-                // nur Änderungen
-                $collection->store();
-                $parents = $collection->getParents();
-                if (count($parents) === 1) {
-                    $this->_redirectTo('show', 'Edit successful', 'collection', 'admin', array('id' => $collection->getRoleId()));
-                }
-                else {
-                    $this->_redirectTo('show', 'Edit successful', 'collection', 'admin', array('id' => $parents[1]->getId()));
-                }
+            if (is_null($type)) {
+                return $this->_redirectToAndExit('index', array('failure' => 'type parameter is missing'), 'collectionroles');
             }
+            if ($type === 'child') {
+                $refCollection = new Opus_Collection($id);
+                $refCollection->addFirstChild($collection);
+                $refCollection->store();
+                return $this->_redirectTo('show', 'Insert successful', 'collection', 'admin', array('id' => $collection->getId()));
+            }
+            if ($type === 'sibling') {
+                $refCollection = new Opus_Collection($id);
+                $refCollection->addNextSibling($collection);
+                $refCollection->store();
+                return $this->_redirectTo('show', 'Insert successful', 'collection', 'admin', array('id' => $collection->getId()));
+            }
+            return $this->_redirectToAndExit('index', array('failure' => 'type paramter invalid'), 'collectionroles');
         }
+        // nur Änderungen
+        $collection->store();
+        $parents = $collection->getParents();
+        if (count($parents) === 1) {
+            return $this->_redirectTo('show', 'Edit successful', 'collection', 'admin', array('id' => $collection->getRoleId()));
+        }
+        return $this->_redirectTo('show', 'Edit successful', 'collection', 'admin', array('id' => $parents[1]->getId()));
     }
 
     /**
