@@ -76,7 +76,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         $this->postData = $extended->data;
 
         if ($valid1 && $valid2 && $valid3) {
-            $this->session->invalidForm = '1';
+            $this->session->invalidForm = '0';
             return true;
         }
         else {

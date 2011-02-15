@@ -150,7 +150,7 @@ class Publish_FormController extends Controller_Action {
                 return $this->_showCheckPage($form);
             }
 
-            if (!$form->send->isChecked() || array_key_exists('back', $postData)) {
+            if (!$form->send->isChecked() || array_key_exists('back', $postData)) {                
                 // A button (not SEND) was pressed => add / remove fields
 
                 $this->view->title = $this->view->translate('publish_controller_index');
