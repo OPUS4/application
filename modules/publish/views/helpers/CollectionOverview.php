@@ -49,34 +49,57 @@ class View_Helper_CollectionOverview extends Zend_View_Helper_Abstract {
         $this->session = new Zend_Session_Namespace('Publish');
         $log = Zend_Registry::get('Zend_Log');
 
-        $fieldset_start = "<fieldset><legend>" . $this->view->translate('collections_choosen') . "</legend>\n\t\t\n\t\t";
-        $fieldset_end = "</fieldset>";
+        //already choosen collection
+        $fieldset_start1 = "<fieldset><legend>" . $this->view->translate('collections_choosen') . "</legend>\n\t\t\n\t\t";
+        $fieldset_end1 = "</fieldset>";
+
+        //current collection hierachie
+        $fieldset_start2 = "<fieldset><legend>" . $this->view->translate('collections_current_choice') . "</legend>\n\t\t\n\t\t";
+        $fieldset_end2 = "</fieldset>";
 
         if (is_null($this->session->document)) {
             return "";
         }
 
+        $step = $this->session->step;
+        $overview2 = "";
+
+        if ($step > 1) {
+            $overview2 .= '<ul class="nav browsing">';
+            for ($i = 1; $i <= $step - 1; $i++) {
+                $overview2 .= '<li>' . htmlspecialchars($this->view->translate($this->session->collection['collection' . $i . 'Name'])) . '</li>';
+            }
+            $overview2 .= '</ul>';
+        }
+
         $this->document = $this->session->document;
 
         $collections = Opus_Collection::fetchCollectionIdsByDocumentId($this->document->getId());
-        
+
         if (empty($collections)) {
-            return $fieldset_start . "<b>" . $this->view->translate('no_collections_choosen') . "</b>" . $fieldset_end;
+            $empty = $fieldset_start1 . "<b>" . $this->view->translate('no_collections_choosen') . "</b>" . $fieldset_end1;
+            if ($overview2 !== "")
+                return $empty . $fieldset_start2 . $overview2 . $fieldset_end2;
+
+            return $empty;
         }
 
         $overview = "";
         foreach ($collections as $collId) {
             $coll = new Opus_Collection($collId);
             $role = new Opus_CollectionRole($coll->getRoleId());
-            $overview .= "<p>". $this->view->translate('collections_choosen_root') .": <b>" .
+            $overview .= "<p>" . $this->view->translate('collections_choosen_root') . ": <b>" .
                     $this->view->translate(htmlspecialchars($role->getDisplayName())) .
-                            "</b><br/>". $this->view->translate('collections_choosen_entry') .": " .
-                                htmlspecialchars($coll->getDisplayName()) . " (ID: " . $collId . ")";
+                    "</b><br/>" . $this->view->translate('collections_choosen_entry') . ": " . htmlspecialchars($coll->getDisplayName());
         }
 
-        return $fieldset_start . $overview . $fieldset_end;
+
+
+        if ($overview2 !== "")
+            return $fieldset_start1 . $overview . $fieldset_end1 . $fieldset_start2 . $overview2 . $fieldset_end2;
+
+        return $fieldset_start1 . $overview . $fieldset_end1;
     }
 
 }
-
 ?>

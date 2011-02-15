@@ -549,6 +549,14 @@
       </tuv>
     </tu>
 
+    <tu tuid="collections_current_choice">
+      <tuv xml:lang="en">
+        <seg>Your current choice</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Ihre aktuelle Auswahl</seg>
+      </tuv>
+    </tu>
 
   </body>  
 </tmx>
