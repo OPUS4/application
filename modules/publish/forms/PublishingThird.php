@@ -180,6 +180,9 @@ class Publish_Form_PublishingThird extends Zend_Form {
                 $collections[$coll->getId()] = $coll->getDisplayName();
         }
 
+        if(count($collections) === 0)
+            return null;
+
         return $collections;
     }
 
