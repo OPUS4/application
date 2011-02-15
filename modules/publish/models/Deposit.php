@@ -583,6 +583,11 @@ class Publish_Model_Deposit {
             $this->log->debug("Enrichment already stored.");
             return;
         }
+        $counter = $this->getCounter($dataKey);
+        if ($counter != 0) {            
+            //remove possible counter char
+            $dataKey = str_replace($counter, '', $dataKey);
+        }
 
         $this->log->debug("try to store " . $dataKey . " with id: " . $dataValue);
         $keyName = str_replace('Enrichment', '', $dataKey);
