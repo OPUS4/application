@@ -168,7 +168,7 @@ class ZIBBibtexImport {
         $this->document = $document;
 
         $institutes = null;
-        $institutes = $this->document->getElementsByTagName('OldInstitute');
+        $institutes = $this->document->getElementsByTagName('PublicationGroup');
         $instituteValues = array();
 
         if (count($institutes) > 0) {
@@ -180,7 +180,7 @@ class ZIBBibtexImport {
         }
 
         $projects = null;
-        $projects = $this->document->getElementsByTagName('OldProject');
+        $projects = $this->document->getElementsByTagName('PublicationProject');
         $projectValues = array();
 
         if (count($projects) > 0) {
@@ -188,6 +188,54 @@ class ZIBBibtexImport {
                 $p = $projects->Item(0);
                 array_push($projectValues, $p->getAttribute('Value'));
                 $this->document->removeChild($p);
+            }
+        }
+
+        $projectnames = null;
+        $projectnames = $this->document->getElementsByTagName('PublicationProjectName');
+        $projectnameValues = array();
+
+        if (count($projectnames) > 0) {
+            while ($projectnames->length > 0) {
+                $p = $projectnames->Item(0);
+                array_push($projectnameValues, $p->getAttribute('Value'));
+                $this->document->removeChild($p);
+            }
+        }
+
+        $persons = null;
+        $persons = $this->document->getElementsByTagName('PublicationPerson');
+        $personValues = array();
+
+        if (count($persons) > 0) {
+            while ($persons->length > 0) {
+                $p = $persons->Item(0);
+                array_push($personValues, $p->getAttribute('Value'));
+                $this->document->removeChild($p);
+            }
+        }
+
+        $enrichment = $this->document->getElementsByTagName('Enrichment');
+        if (count($enrichment) > 0) {
+            for ($i = 0; $i < $enrichment->length; $i++) {
+                if ($enrichment->Item($i)->getAttribute('KeyName') === 'report') {
+                    echo "Found Report-Id: ". $enrichment->Item($i)->getAttribute('Value')  . "\n";
+                }
+            }
+        }
+
+        $opus3id = null;
+        $opus3id = $this->document->getElementsByTagName('Opus3Identifier');
+        $reportid = null;
+
+        if (count($opus3id) > 0) {
+            while ($opus3id->length > 0) {
+                $id1 = $opus3id->Item(0)->getAttribute('Value');
+                $docid = Opus_Document::getDocumentByIdentifier($id1, 'opus3-id');
+                $doc = new Opus_Document($docid);
+                $reportid = $doc->getIssue();
+                echo "Found Opus3Identifier " . $id1 ." with Report-Id: ". $reportid . "\n";;
+                $this->document->removeChild($opus3id->Item(0));
             }
         }
 
@@ -199,51 +247,23 @@ class ZIBBibtexImport {
             // Set the publication status to published since only published documents shall be imported
             $doc->setServerState('published');
 
-
             $oldid = null;
             if ($doc->getIdentifierOld()) {
                 $oldid = $doc->getIdentifierOld(0)->getValue();
             }
 
-            // ZIB_reports or ZIB_Preprints will be ignored
-            if ($doc->getNote()) {
-                if(preg_match('/^ZIB/', $doc->getNote(0)->getMessage())) {
-                    throw new Exception("ZIB Preprint/Report/Technical report will be ignored");
-                }
-                if(preg_match('/^Preprint SC/', $doc->getNote(0)->getMessage())) {
-                    throw new Exception("ZIB Preprint/Report/Technical report will be ignored");
-                }
-                if(preg_match('/^ZR\s/', $doc->getNote(0)->getMessage())) {
-                    throw new Exception("ZIB Preprint/Report/Technical report will be ignored");
-                }
-             }
+            if ($doc->getBelongsToBibliography() === '0') {
+                throw new Exception("ZIB Preprint/Report/Technical-Report will be ignored");
+            }
 
-            foreach ($doc->getIdentifierUrl() as $url) {
-               if(preg_match('/opus\.kobv\.de/', $url->getValue())) {
-                    throw new Exception("ZIB-Opus-Documents report will be ignored");
-               }
-            }
-            
-            foreach ($doc->getEnrichment() as $enrichment) {
-                if ($enrichment->getKeyName() === 'type') {
-                    if(preg_match('/ZIB/', $enrichment->getValue())) {
-                        throw new Exception("ZIB Preprint/Report/Technical report will be ignored");
-                    }
-                }
-                if ($enrichment->getKeyName() === 'howpublished') {
-                    if(preg_match('/ZIB/', $enrichment->getValue())) {
-                        throw new Exception("ZIB Preprint/Report/Technical report will be ignored");
-                    }
-                }
-            }
-  
 	    $role = Opus_CollectionRole::fetchByName('institutes');
             $colls = Opus_Collection::fetchCollectionsByRoleId($role->getId());
 
             foreach ($instituteValues as $i) {
                 foreach ($colls as $c) {
-                    if ($c->getName() === $i) {
+                    if ($c->getNumber() === $i) {
                         $doc->addCollection($c);
+                        echo "Via Tag: Document added to Institute  " . $i . "\n";
                     }
                 }
             }
@@ -252,26 +272,42 @@ class ZIBBibtexImport {
             $colls = Opus_Collection::fetchCollectionsByRoleId($role->getId());
 
             foreach ($projectValues as $p) {
-                //echo "Check $p \n";
                 foreach ($colls as $c) {
-                    if (strpos($c->getName(), $p) === 0) {
+                    if ($c->getName() === $p) {
                         $doc->addCollection($c);
-                        //echo "Project $p added to Colelction " . $c->getName() . "\n";
+                        echo "Via Tag: Document added to Project  " . $i . "\n";
                     }
                 }
             }
 
+
 	    $role = Opus_CollectionRole::fetchByName('persons');
             $colls = Opus_Collection::fetchCollectionsByRoleId($role->getId());
 
-            foreach ($colls as $c) {
-                $names = explode(", ", $c->getName());
-                foreach ($doc->getPersonAuthor() as $author) {
-                    if (strcmp($names[0], $author->getLastName()) != 0) { continue; }
-                    $firstname = trim(str_replace(".","",$author->getFirstName()));
+            if (count($personValues) > 0) {
+                /* Numerik, Optimierung */
+                foreach ($personValues as $p) {
+                    foreach ($colls as $c) {
+                        if ($c->getNumber() === $p) {
+                            $doc->addCollection($c);
+                            echo "Via Tag:  Document added to Person " . $p . "\n";
+                        } 
+                    }
+                }
+            }
 
-                    if (stripos($names[1], $firstname) === 0) {
-                        $doc->addCollection($c);
+            else {
+                /* Visualisierung, Parallele */
+                foreach ($colls as $c) {
+                    $names = explode(", ", $c->getName());
+                    foreach ($doc->getPersonAuthor() as $author) {
+                        if (strcmp($names[0], $author->getLastName()) != 0) { continue; }
+                        $firstname = trim(str_replace(".","",$author->getFirstName()));
+
+                        if (stripos($names[1], $firstname) === 0) {
+                            $doc->addCollection($c);
+                            echo "Via Name: Document added to Person " . $p . "\n";
+                        }
                     }
                 }
             }
@@ -279,12 +315,21 @@ class ZIBBibtexImport {
             // store the document
             $doc->store();
 
+            if (!is_null($reportid)) {
+                $e = new Opus_Enrichment();
+                $e->setKeyName('report_ref');
+                $e->setValue($reportid);
+                $e->setParentId($doc->getId());
+                $e->store();
+            }
+
 	    $imported['result'] = 'success';
             #$imported['entry'] = $this->completeXML->saveXML($this->document);
             #$imported['document'] = $doc;
             $imported['newid'] = $doc->getId();
             $imported['oldid'] = $oldid;
         } catch (Exception $e) {
+            //echo $this->completeXML->saveXML($this->document)."\n";
             $imported['result'] = 'failure';
             $imported['message'] = $e->getMessage();
             $imported['entry'] = $this->completeXML->saveXML($this->document);
