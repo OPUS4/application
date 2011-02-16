@@ -75,7 +75,7 @@
         <xsl:variable name="bdsk-url-1"><xsl:value-of select="*/bibtex:bdsk-url-1" /></xsl:variable>                <!-- IdentifierUrl -->
         <xsl:variable name="book"><xsl:value-of select="*/bibtex:book" /></xsl:variable>                            <!-- IdentifierUrl -->
         <xsl:variable name="booktitle"><xsl:value-of select="*/bibtex:booktitle" /></xsl:variable>
-        <!--# <xsl:variable name="chapter"><xsl:value-of select="*/bibtex:chapter" /></xsl:variable> -->            <!-- ignoriert: Abbildung in Opus unklar -->
+        <xsl:variable name="chapter"><xsl:value-of select="*/bibtex:chapter" /></xsl:variable>                      <!-- Enrichment/@KeyName='chapter' -->
         <xsl:variable name="comment"><xsl:value-of select="*/bibtex:comment" /></xsl:variable>                      <!-- Note -->
         <!--# <xsl:variable name="crossref"><xsl:value-of select="*/bibtex:crossref" /></xsl:variable> -->          <!-- ignoriert: ohne content -->
         <!--# <xsl:variable name="date-added"><xsl:value-of select="*/bibtex:date-added" /></xsl:variable> -->      <!-- ignoriert: Opus setzt Timestamp selbst -->
@@ -138,6 +138,98 @@
             </xsl:choose>
         </xsl:variable>
 
+        <!-- Is ZIB-Publication? -->
+        <xsl:variable name="belongsToBibliography">
+            <xsl:choose>
+                <xsl:when test="$doctype='report' and contains($type, 'ZIB Report')"><xsl:text>0</xsl:text></xsl:when>
+                <xsl:when test="$doctype='report' and contains($type, 'ZIB-Report')"><xsl:text>0</xsl:text></xsl:when>
+                <xsl:when test="$doctype='report' and contains($institution, 'ZIB')"><xsl:text>0</xsl:text></xsl:when>
+                <xsl:when test="$doctype='report' and contains($institution, 'Konrad-Zuse-Zentrum für Informationstechnik Berlin')"><xsl:text>0</xsl:text></xsl:when>
+                <xsl:when test="$doctype='report' and contains($institution, 'Konrad-Zuse-Zentrum Berlin')"><xsl:text>0</xsl:text></xsl:when>
+                <xsl:when test="$doctype='report' and contains($institution, 'Konrad-Zuse-Zentrum')"><xsl:text>0</xsl:text></xsl:when>
+                <xsl:when test="$doctype='report' and contains($institution, 'Zuse Institute, Berlin')"><xsl:text>0</xsl:text></xsl:when>
+                <xsl:otherwise><xsl:text>1</xsl:text></xsl:otherwise>
+           </xsl:choose>
+        </xsl:variable>
+
+        <!-- References ZIB-Publication? -->
+        <xsl:variable name="reportid">
+            <xsl:choose>
+                <!--
+                    <bibtex:abstr>http://www2.zib.de/PaperWeb/abstracts/SC-97-55</bibtex:abstr>
+                    <bibtex:bdsk-url-1>http://www2.zib.de/PaperWeb/abstracts/SC-98-45</bibtex:bdsk-url-1>
+                    <bibtex:url>http://www2.zib.de/PaperWeb/abstracts/SC-98-45</bibtex:url>
+                -->
+                <xsl:when test="contains($abstr, 'http://www2.zib.de/PaperWeb/abstracts/')">
+                    <xsl:value-of select="substring-after(php:function('preg_replace', '/\/$/','', $abstr), '/abstracts/')" />
+                </xsl:when>
+                <xsl:when test="contains($bdsk-url-1, 'http://www2.zib.de/PaperWeb/abstracts/')">
+                    <xsl:value-of select="substring-after(php:function('preg_replace', '/\/$/','', $bdsk-url-1), '/abstracts/')" />
+                </xsl:when>
+                <xsl:when test="contains($url, 'http://www2.zib.de/PaperWeb/abstracts/')">
+                    <xsl:value-of select="substring-after(php:function('preg_replace', '/\/$/','', $url), '/abstracts/')" />
+                </xsl:when>
+                <!--
+                    <bibtex:abstr>http://www2.zib.de/Publications/abstracts/SC-00-01</bibtex:abstr>
+                -->
+                <xsl:when test="contains($abstr, 'http://www2.zib.de/Publications/abstracts/')">
+                    <xsl:value-of select="substring-after(php:function('preg_replace', '/\/$/','', $abstr), '/abstracts/')" />
+                </xsl:when>
+                <!--
+                    <bibtex:pdf>http://www2.zib.de/Publications/Reports/SC-00-01.pdf</bibtex:pdf>
+                    <bibtex:report>http://www2.zib.de/Publications/Reports/ZR-02-40.pdf</bibtex:report>
+                    <bibtex:postscript>http://www2.zib.de/Publications/Reports/SC-96-02.ps.Z</bibtex:postscript>
+                    <bibtex:preprint>http://www2.zib.de/Publications/Reports/SC-97-55.ps.Z</bibtex:preprint>
+                    <bibtex:ps>http://www2.zib.de/Publications/Reports/SC-00-01.ps.Z</bibtex:ps>
+                -->
+                <xsl:when test="contains($pdf, 'http://www2.zib.de/Publications/Reports/')">
+                    <xsl:value-of select="substring-before(substring-after($pdf, '/Reports/'), '.pdf')" />
+                </xsl:when>
+                <xsl:when test="contains($postscript, 'http://www2.zib.de/Publications/Reports/')">
+                    <xsl:value-of select="substring-before(substring-after($postscript, '/Reports/'), '.ps.Z')" />
+                </xsl:when>
+                <xsl:when test="contains($preprint, 'http://www2.zib.de/Publications/Reports/')">
+                    <xsl:value-of select="substring-before(substring-after($preprint, '/Reports/'), '.ps.Z')" />
+                </xsl:when>
+                <xsl:when test="contains($ps, 'http://www2.zib.de/Publications/Reports/')">
+                    <xsl:value-of select="substring-before(substring-after($preprint, '/Reports/'), '.ps.Z')" />
+                </xsl:when>
+                <xsl:when test="contains($report, 'http://www2.zib.de/Publications/Reports/')">
+                    <xsl:value-of select="substring-before(substring-after($report, '/Reports/'), '.ps.Z')" />
+                </xsl:when>
+                <!--
+                    <bibtex:preprint>http://opus.kobv.de/zib/volltexte/2006/910/pdf/ZR-06-16.pdf</bibtex:preprint>
+                    <bibtex:report>http://opus.kobv.de/zib/volltexte/2005/876/pdf/ZR-05-43.pdf</bibtex:report>
+                -->
+                <xsl:when test="contains($preprint, 'http://opus.kobv.de/zib/volltexte/')">
+                    <xsl:value-of select="substring-before(substring-after($preprint, '/pdf/'), '.pdf')" />
+                </xsl:when>
+                <xsl:when test="contains($report, 'http://opus.kobv.de/zib/volltexte/')">
+                    <xsl:value-of select="substring-before(substring-after($report, '/pdf/'), '.pdf')" />
+                </xsl:when>
+                <xsl:otherwise></xsl:otherwise>
+           </xsl:choose>
+        </xsl:variable>
+
+
+        <!-- References Opus3-Document? -->
+        <xsl:variable name="opus3id">
+            <xsl:choose>
+                <!--
+                    <bibtex:abstract>http://opus.kobv.de/zib/volltexte/2010/1229</bibtex:abstract>
+                    <bibtex:abstr>http://opus.kobv.de/zib/volltexte/2005/876/</bibtex:abstr>
+                    <bibtex:abstr>http://opus.kobv.de/zib/volltexte/2008/1138/index.html</bibtex:abstr>
+                -->
+                <xsl:when test="contains($abstract, 'http://opus.kobv.de/zib/volltexte/')">
+                    <xsl:value-of select="php:function('preg_replace', '/^[\d]{4}\/([\d]+)\/?$/', '$1', substring-after($abstract, '/volltexte/'))" />
+                </xsl:when>
+                <xsl:when test="contains($abstr, 'http://opus.kobv.de/zib/volltexte/')">
+                    <xsl:value-of select="php:function('preg_replace', '/^[\d]{4}\/([\d]+)\/(index\.html)?$/', '$1', substring-after($abstr, '/volltexte/'))" />
+                  </xsl:when>
+                <xsl:otherwise></xsl:otherwise>
+           </xsl:choose>
+        </xsl:variable>
+
         <!-- Das eigentliche Opus-Dokument -->
         <xsl:element name="Opus_Document">
             <!-- CompletedDate -->
@@ -194,7 +286,7 @@
             <!-- Language -->
             <xsl:if test="string-length($language) > 0">
                 <xsl:attribute name="Language">
-                    <xsl:call-template name="getLanguage">
+                    <xsl:call-template name="mapLanguage">
                         <xsl:with-param name="lang">
                             <xsl:value-of select="$language" />
                         </xsl:with-param>
@@ -255,9 +347,10 @@
                 <xsl:attribute name="Volume"><xsl:value-of select="$volume" /></xsl:attribute>
             </xsl:if>
 
-            <!-- BelongsToBibliography -->
-            <xsl:attribute name="BelongsToBibliography"><xsl:text>1</xsl:text></xsl:attribute>
-
+            <!-- Belongs to Bibliography -->
+            <xsl:attribute name="BelongsToBibliography">
+                <xsl:value-of select="$belongsToBibliography" />
+            </xsl:attribute>
 
             <!-- EXTERNAL FILEDS -->
             <!-- TitleMain -->
@@ -266,7 +359,7 @@
                     <xsl:attribute name="Value"><xsl:value-of select="$title" /></xsl:attribute>
                     <xsl:if test="string-length($language) > 0">
                         <xsl:attribute name="Language">
-                            <xsl:call-template name="getLanguage">
+                            <xsl:call-template name="mapLanguage">
                                 <xsl:with-param name="lang">
                                     <xsl:value-of select="$language" />
                                 </xsl:with-param>
@@ -282,7 +375,7 @@
                     <xsl:attribute name="Value"><xsl:value-of select="$abstract" /></xsl:attribute>
                     <xsl:if test="string-length($language) > 0">
                         <xsl:attribute name="Language">
-                            <xsl:call-template name="getLanguage">
+                            <xsl:call-template name="mapLanguage">
                                 <xsl:with-param name="lang">
                                     <xsl:value-of select="$language" />
                                 </xsl:with-param>
@@ -298,7 +391,7 @@
                     <xsl:attribute name="Value"><xsl:value-of select="$journal" /></xsl:attribute>
                     <xsl:if test="string-length($language) > 0">
                         <xsl:attribute name="Language">
-                            <xsl:call-template name="getLanguage">
+                            <xsl:call-template name="mapLanguage">
                                 <xsl:with-param name="lang">
                                     <xsl:value-of select="$language" />
                                 </xsl:with-param>
@@ -313,7 +406,7 @@
                 <xsl:attribute name="Value"><xsl:value-of select="$booktitle" /></xsl:attribute>
                     <xsl:if test="string-length($language) > 0">
                         <xsl:attribute name="Language">
-                            <xsl:call-template name="getLanguage">
+                            <xsl:call-template name="mapLanguage">
                                 <xsl:with-param name="lang">
                                     <xsl:value-of select="$language" />
                                 </xsl:with-param>
@@ -331,7 +424,7 @@
                     </xsl:attribute>
                     <xsl:if test="string-length($language) > 0">
                         <xsl:attribute name="Language">
-                            <xsl:call-template name="getLanguage">
+                            <xsl:call-template name="mapLanguage">
                                 <xsl:with-param name="lang">
                                     <xsl:value-of select="$language" />
                                 </xsl:with-param>
@@ -351,80 +444,63 @@
                     <xsl:attribute name="Value"><xsl:value-of select="$doi" /></xsl:attribute>
                 </xsl:element>
             </xsl:if>
-            <xsl:if test="string-length($key) > 0">
-                <xsl:element name="IdentifierDoi">
-                    <xsl:attribute name="Value"><xsl:value-of select="$key" /></xsl:attribute>
-                </xsl:element>
-            </xsl:if>
 
-            <!-- IdentifierUrl / IdentifierDoi-->
-            <xsl:if test="string-length($url) > 0">
-                <xsl:choose>
-                    <xsl:when test="contains($url, 'dx.doi.org')">
-                        <xsl:element name="IdentifierDoi">
-                            <xsl:attribute name="Value"><xsl:value-of select="substring-after($url,'dx.doi.org/')" /></xsl:attribute>
-                        </xsl:element>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:element name="IdentifierUrl">
-                            <xsl:attribute name="Value"><xsl:value-of select="$url" /></xsl:attribute>
-                        </xsl:element>
-                    </xsl:otherwise>
-               </xsl:choose>
-            </xsl:if>
-            <xsl:if test="string-length($urlpdf) > 0">
-                <xsl:choose>
-                    <xsl:when test="contains($urlpdf, 'dx.doi.org')">
-                        <xsl:element name="IdentifierDoi">
-                            <xsl:attribute name="Value"><xsl:value-of select="substring-after($urlpdf,'dx.doi.org/')" /></xsl:attribute>
-                        </xsl:element>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:element name="IdentifierUrl">
-                            <xsl:attribute name="Value"><xsl:value-of select="$urlpdf" /></xsl:attribute>
-                        </xsl:element>
-                    </xsl:otherwise>
-               </xsl:choose>
-            </xsl:if>
+
+            <!-- IdentifierUrl -->
             <xsl:if test="string-length($bdsk-url-1) > 0">
-                <xsl:element name="IdentifierUrl">
-                    <xsl:attribute name="Value"><xsl:value-of select="$bdsk-url-1" /></xsl:attribute>
-                </xsl:element>
+                <xsl:call-template name="AddIdentifier">
+                    <xsl:with-param name="url"><xsl:value-of select="$bdsk-url-1" /></xsl:with-param>
+                </xsl:call-template>
             </xsl:if>
             <xsl:if test="string-length($book) > 0">
-                <xsl:element name="IdentifierUrl">
-                    <xsl:attribute name="Value"><xsl:value-of select="$book" /></xsl:attribute>
-                </xsl:element>
+                 <xsl:call-template name="AddIdentifier">
+                    <xsl:with-param name="url"><xsl:value-of select="$book" /></xsl:with-param>
+                 </xsl:call-template>
+            </xsl:if>
+            <xsl:if test="string-length($key) > 0">
+                <xsl:call-template name="AddIdentifier">
+                    <xsl:with-param name="url"><xsl:value-of select="$key" /></xsl:with-param>
+                </xsl:call-template>
             </xsl:if>
             <xsl:if test="string-length($pdf) > 0">
-                <xsl:element name="IdentifierUrl">
-                    <xsl:attribute name="Value"><xsl:value-of select="$pdf" /></xsl:attribute>
-                </xsl:element>
+                 <xsl:call-template name="AddIdentifier">
+                    <xsl:with-param name="url"><xsl:value-of select="$pdf" /></xsl:with-param>
+                 </xsl:call-template>
             </xsl:if>
             <xsl:if test="string-length($postscript) > 0">
-                <xsl:element name="IdentifierUrl">
-                    <xsl:attribute name="Value"><xsl:value-of select="$postscript" /></xsl:attribute>
-                </xsl:element>
+                 <xsl:call-template name="AddIdentifier">
+                    <xsl:with-param name="url"><xsl:value-of select="$postscript" /></xsl:with-param>
+                 </xsl:call-template>
             </xsl:if>
             <xsl:if test="string-length($ps) > 0">
-                <xsl:element name="IdentifierUrl">
-                    <xsl:attribute name="Value"><xsl:value-of select="$ps" /></xsl:attribute>
-                </xsl:element>
+                 <xsl:call-template name="AddIdentifier">
+                    <xsl:with-param name="url"><xsl:value-of select="$ps" /></xsl:with-param>
+                 </xsl:call-template>
             </xsl:if>
             <xsl:if test="string-length($report) > 0">
-                <xsl:element name="IdentifierUrl">
-                    <xsl:attribute name="Value"><xsl:value-of select="$report" /></xsl:attribute>
-                </xsl:element>
+                 <xsl:call-template name="AddIdentifier">
+                    <xsl:with-param name="url"><xsl:value-of select="$report" /></xsl:with-param>
+                 </xsl:call-template>
             </xsl:if>
             <xsl:if test="string-length($revised) > 0">
-                <xsl:element name="IdentifierUrl">
-                    <xsl:attribute name="Value"><xsl:value-of select="$revised" /></xsl:attribute>
-                </xsl:element>
+                 <xsl:call-template name="AddIdentifier">
+                    <xsl:with-param name="url"><xsl:value-of select="$revised" /></xsl:with-param>
+                 </xsl:call-template>
+            </xsl:if>
+            <xsl:if test="string-length($url) > 0">
+                <xsl:call-template name="AddIdentifier">
+                    <xsl:with-param name="url"><xsl:value-of select="$url" /></xsl:with-param>
+                </xsl:call-template>
             </xsl:if>
             <xsl:if test="string-length($urlhtml) > 0">
-                <xsl:element name="IdentifierUrl">
-                    <xsl:attribute name="Value"><xsl:value-of select="$urlhtml" /></xsl:attribute>
-                </xsl:element>
+                 <xsl:call-template name="AddIdentifier">
+                    <xsl:with-param name="url"><xsl:value-of select="$urlhtml" /></xsl:with-param>
+                 </xsl:call-template>
+            </xsl:if>
+            <xsl:if test="string-length($urlpdf) > 0">
+                <xsl:call-template name="AddIdentifier">
+                    <xsl:with-param name="url"><xsl:value-of select="$urlpdf" /></xsl:with-param>
+                </xsl:call-template>
             </xsl:if>
 
 
@@ -435,39 +511,44 @@
                 </xsl:element>
             </xsl:if>
 
+
             <!-- ReferenceUrl-->
             <xsl:if test="string-length($abstr) > 0">
-                <xsl:element name="ReferenceUrl">
-                    <xsl:attribute name="Label">abstract</xsl:attribute>
-                    <xsl:attribute name="Value"><xsl:value-of select="$abstr" /></xsl:attribute>
-                </xsl:element>
+                <xsl:call-template name="AddReference">
+                    <xsl:with-param name="label">abstract</xsl:with-param>
+                    <xsl:with-param name="url"><xsl:value-of select="$abstr" /></xsl:with-param>
+                </xsl:call-template>
             </xsl:if>
             <xsl:if test="string-length($urlabstract) > 0">
-                <xsl:element name="ReferenceUrl">
-                    <xsl:attribute name="Label">abstract</xsl:attribute>
-                    <xsl:attribute name="Value"><xsl:value-of select="$urlabstract" /></xsl:attribute>
-                </xsl:element>
+                <xsl:call-template name="AddReference">
+                    <xsl:with-param name="label">abstract</xsl:with-param>
+                    <xsl:with-param name="url"><xsl:value-of select="$urlabstract" /></xsl:with-param>
+                </xsl:call-template>
             </xsl:if>
             <xsl:if test="string-length($preprint) > 0">
-                <xsl:element name="ReferenceUrl">
-                    <xsl:attribute name="Label">preprint</xsl:attribute>
-                    <xsl:attribute name="Value"><xsl:value-of select="$preprint" /></xsl:attribute>
-                </xsl:element>
+                <xsl:call-template name="AddReference">
+                    <xsl:with-param name="label">preprint</xsl:with-param>
+                    <xsl:with-param name="url"><xsl:value-of select="$preprint" /></xsl:with-param>
+                </xsl:call-template>
             </xsl:if>
+
 
             <!-- Note -->
             <xsl:if test="string-length($note) > 0">
                 <xsl:element name="Note">
+                    <xsl:attribute name="Visibility">public</xsl:attribute>
                     <xsl:attribute name="Message"><xsl:value-of select="$note" /></xsl:attribute>
                 </xsl:element>
             </xsl:if>
             <xsl:if test="string-length($comment) > 0">
                <xsl:element name="Note">
+                    <xsl:attribute name="Visibility">public</xsl:attribute>
                     <xsl:attribute name="Message"><xsl:value-of select="$comment" /></xsl:attribute>
                </xsl:element>
             </xsl:if>
             <xsl:if test="string-length($annote) > 0">
                <xsl:element name="Note">
+                    <xsl:attribute name="Visibility">public</xsl:attribute>
                     <xsl:attribute name="Message"><xsl:value-of select="$annote" /></xsl:attribute>
                </xsl:element>
             </xsl:if>
@@ -500,7 +581,6 @@
                  </xsl:element>
                 </xsl:if>
             </xsl:if>
-
             <xsl:if test="string-length($month) > 0">
                  <xsl:element name="Enrichment">
                      <xsl:attribute name="KeyName">month</xsl:attribute>
@@ -519,23 +599,37 @@
                      <xsl:attribute name="Value"><xsl:value-of select="$howpublished" /></xsl:attribute>
                  </xsl:element>
             </xsl:if>
-
-            <!-- Institutes and WorkingGroups -->
-            <!--
-            <xsl:element name="OldInstitute">
-                <xsl:attribute name="Value">Numerische Analysis und Modellierung</xsl:attribute>
-            </xsl:element>
-            -->
-
-            <xsl:if test="string-length($selectiontags) > 0">
-               <xsl:call-template name="AddWorkingGroups">
-                    <xsl:with-param name="list"><xsl:value-of select="$selectiontags" /></xsl:with-param>
-                    <xsl:with-param name="delimiter">,</xsl:with-param>
-                </xsl:call-template>
+            <xsl:if test="string-length($chapter) > 0">
+                 <xsl:element name="Enrichment">
+                     <xsl:attribute name="KeyName">chapter</xsl:attribute>
+                     <xsl:attribute name="Value"><xsl:value-of select="$chapter" /></xsl:attribute>
+                 </xsl:element>
             </xsl:if>
 
+            <!-- Reference from Article to Preprint -->
+            <xsl:if test="string-length($reportid) > 0">
+                <xsl:element name="Enrichment">
+                    <xsl:attribute name="KeyName">report</xsl:attribute>
+                    <xsl:attribute name="Value">
+                        <xsl:call-template name="getReportId">
+                            <xsl:with-param name="id">
+                                <xsl:value-of select="$reportid" />
+                            </xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:if>
+
+            <!-- Referenced Opus3-Identifier -->
+             <xsl:if test="string-length($opus3id) > 0">
+                <xsl:element name="Opus3Identifier">
+                    <xsl:attribute name="Value"><xsl:value-of select="$opus3id" /></xsl:attribute>
+                </xsl:element>
+            </xsl:if>
+
+            <!-- Institutes / WorkingGroups / Persons -->
             <xsl:if test="string-length($selectiontags) > 0">
-               <xsl:call-template name="AddProjects">
+               <xsl:call-template name="AddPublicationLists">
                     <xsl:with-param name="list"><xsl:value-of select="$selectiontags" /></xsl:with-param>
                     <xsl:with-param name="delimiter">,</xsl:with-param>
                 </xsl:call-template>
@@ -555,78 +649,5 @@
 
         </xsl:element>
    </xsl:template>
-
-    <!-- Extrahiert die Arbeitsgruppen -->
-    <xsl:template name="AddWorkingGroups">
-        <xsl:param name="list" required="yes" />
-        <xsl:param name="delimiter" required="yes" />
-        <xsl:variable name="newlist">
-            <xsl:choose>
-                <xsl:when test="contains($list, $delimiter)"><xsl:value-of select="normalize-space($list)" /></xsl:when>
-                <xsl:otherwise><xsl:value-of select="concat(normalize-space($list), $delimiter)"/></xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        <xsl:variable name="first" select="substring-before($newlist, $delimiter)" />
-        <xsl:variable name="remaining" select="substring-after($newlist, $delimiter)" />
-        <xsl:call-template name="MapWorkingGroup">
-             <xsl:with-param name="group" select="normalize-space($first)" />
-        </xsl:call-template>
-        <xsl:if test="$remaining">
-            <xsl:call-template name="AddWorkingGroups">
-                <xsl:with-param name="list"><xsl:value-of select="$remaining" /> </xsl:with-param>
-                <xsl:with-param name="delimiter"><xsl:value-of select="$delimiter" /> </xsl:with-param>
-            </xsl:call-template>
-        </xsl:if>
-    </xsl:template>
-
-   <!-- Das Mapping der Arbeitsgruppen -->
-   <xsl:template name="MapWorkingGroup">
-        <xsl:param name="group" required="yes" />
-        <xsl:element name="OldInstitute">
-            <xsl:attribute name="Value">
-                <xsl:choose>
-                    <xsl:when test="$group='Numerik'"><xsl:text>Numerische Analysis und Modellierung</xsl:text></xsl:when>
-                    <xsl:when test="$group='CompMedicine'"><xsl:text>Virtuelle Medizin</xsl:text></xsl:when>
-                    <xsl:when test="$group='DrugDesign'"><xsl:text>Mathematischer Molekülentwurf</xsl:text></xsl:when>
-                    <xsl:when test="$group='NanoOptik'"><xsl:text>Mathematische Nano-Optik</xsl:text></xsl:when>
-                    <!--
-                    <xsl:when test="$group='medical'"><xsl:text>Mathematische Systembiologie</xsl:text></xsl:when>
-                    -->
-                </xsl:choose>
-            </xsl:attribute>
-        </xsl:element>
-    </xsl:template>
-
-    <!-- Extrahiert die Arbeitsgruppen -->
-    <xsl:template name="AddProjects">
-        <xsl:param name="list" required="yes" />
-        <xsl:param name="delimiter" required="yes" />
-        <xsl:variable name="newlist">
-            <xsl:choose>
-                <xsl:when test="contains($list, $delimiter)"><xsl:value-of select="normalize-space($list)" /></xsl:when>
-                <xsl:otherwise><xsl:value-of select="concat(normalize-space($list), $delimiter)"/></xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>
-        <xsl:variable name="first" select="substring-before($newlist, $delimiter)" />
-        <xsl:variable name="remaining" select="substring-after($newlist, $delimiter)" />
-        <xsl:call-template name="MapProject">
-             <xsl:with-param name="project" select="normalize-space($first)" />
-        </xsl:call-template>
-        <xsl:if test="$remaining">
-            <xsl:call-template name="AddProjects">
-                <xsl:with-param name="list"><xsl:value-of select="$remaining" /> </xsl:with-param>
-                <xsl:with-param name="delimiter"><xsl:value-of select="$delimiter" /></xsl:with-param>
-            </xsl:call-template>
-        </xsl:if>
-    </xsl:template>
-
-   <!-- Das Mapping der Projecte -->
-   <xsl:template name="MapProject">
-        <xsl:param name="project" required="yes" />
-        <xsl:element name="OldProject">
-            <xsl:attribute name="Value"><xsl:value-of select="$project" /></xsl:attribute>
-        </xsl:element>
-    </xsl:template>
-
 
 </xsl:stylesheet>

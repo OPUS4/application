@@ -119,6 +119,14 @@
             </xsl:choose>
         </xsl:variable>
 
+        <!-- Is ZIB-Publication? -->
+        <xsl:variable name="belongsToBibliography">
+            <xsl:choose>
+                <xsl:when test="$doctype='report' and contains($institution, 'Zuse-Institut Berlin')"><xsl:text>0</xsl:text></xsl:when>
+                <xsl:otherwise><xsl:text>1</xsl:text></xsl:otherwise>
+           </xsl:choose>
+        </xsl:variable>
+
         <!-- Das eigentliche Opus-Dokument -->
         <xsl:element name="Opus_Document">
             <!-- CompletedDate -->
@@ -217,8 +225,11 @@
                 <xsl:attribute name="Volume"><xsl:value-of select="$volume" /></xsl:attribute>
             </xsl:if>
 
-            <!-- BelongsToBibliography -->
-            <xsl:attribute name="BelongsToBibliography"><xsl:text>1</xsl:text></xsl:attribute>
+            <!-- Belongs to Bibliography -->
+            <xsl:attribute name="BelongsToBibliography">
+                <xsl:value-of select="$belongsToBibliography" />
+            </xsl:attribute>
+
 
 
             <!-- EXTERNAL FIELDS: Title -->
@@ -261,39 +272,21 @@
 
             <!-- IdentifierDoi -->
             <xsl:if test="string-length($doi) > 0">
-                <xsl:choose>
-                    <xsl:when test="contains($doi, 'dx.doi.org')">
-                        <xsl:element name="IdentifierDoi">
-                            <xsl:attribute name="Value"><xsl:value-of select="substring-after($doi,'dx.doi.org/')" /></xsl:attribute>
-                        </xsl:element>
-                    </xsl:when>
-                    <xsl:when test="contains($doi, 'doi.ieeecomputersociety.org')">
-                        <xsl:element name="IdentifierDoi">
-                            <xsl:attribute name="Value"><xsl:value-of select="substring-after($doi,'doi.ieeecomputersociety.org/')" /></xsl:attribute>
-                        </xsl:element>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:element name="IdentifierUrl">
-                            <xsl:attribute name="Value"><xsl:value-of select="$url" /></xsl:attribute>
-                        </xsl:element>
-                    </xsl:otherwise>
-               </xsl:choose>
+                <xsl:element name="IdentifierDoi">
+                    <xsl:attribute name="Value"><xsl:value-of select="$doi" /></xsl:attribute>
+                </xsl:element>
             </xsl:if>
 
-            <!-- IdentifierUrl / IdentifierDoi-->
+            <!-- IdentifierUrl -->
+            <xsl:if test="string-length($location) > 0 and contains($location, 'http://')">
+                <xsl:call-template name="AddIdentifier">
+                    <xsl:with-param name="url"><xsl:value-of select="$location" /></xsl:with-param>
+                </xsl:call-template>
+            </xsl:if>
             <xsl:if test="string-length($url) > 0">
-                <xsl:choose>
-                    <xsl:when test="contains($url, 'dx.doi.org')">
-                        <xsl:element name="IdentifierDoi">
-                            <xsl:attribute name="Value"><xsl:value-of select="substring-after($url,'dx.doi.org/')" /></xsl:attribute>
-                        </xsl:element>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:element name="IdentifierUrl">
-                            <xsl:attribute name="Value"><xsl:value-of select="$url" /></xsl:attribute>
-                        </xsl:element>
-                    </xsl:otherwise>
-               </xsl:choose>
+                <xsl:call-template name="AddIdentifier">
+                    <xsl:with-param name="url"><xsl:value-of select="$url" /></xsl:with-param>
+                </xsl:call-template>
             </xsl:if>
 
             <!-- IdentifierOld -->
@@ -309,31 +302,24 @@
             <!-- Note  -->
             <xsl:if test="string-length($note) > 0">
                <xsl:element name="Note">
+                    <xsl:attribute name="Visibility">public</xsl:attribute>
                     <xsl:attribute name="Message"><xsl:value-of select="$note" /></xsl:attribute>
                </xsl:element>
             </xsl:if>
 
             <xsl:if test="string-length($comment) > 0">
                <xsl:element name="Note">
+                    <xsl:attribute name="Visibility">public</xsl:attribute>
                     <xsl:attribute name="Message"><xsl:value-of select="$comment" /></xsl:attribute>
                </xsl:element>
             </xsl:if>
 
             <!-- location can be a Address or a IdentifierUrl -->
-            <xsl:if test="string-length($location) > 0">
-                <xsl:choose>
-                    <xsl:when test="contains($location, 'http://')">
-                        <xsl:element name="IdentifierUrl">
-                            <xsl:attribute name="Value"><xsl:value-of select="$location" /></xsl:attribute>
-                        </xsl:element>
-                    </xsl:when>
-                    <xsl:otherwise>
-                         <xsl:element name="Enrichment">
-                             <xsl:attribute name="KeyName">address</xsl:attribute>
-                             <xsl:attribute name="Value"><xsl:value-of select="$location" /></xsl:attribute>
-                         </xsl:element>
-                    </xsl:otherwise>
-               </xsl:choose>
+            <xsl:if test="string-length($location) > 0 and not(contains($location, 'http://'))">
+                 <xsl:element name="Enrichment">
+                     <xsl:attribute name="KeyName">address</xsl:attribute>
+                     <xsl:attribute name="Value"><xsl:value-of select="$location" /></xsl:attribute>
+                 </xsl:element>
             </xsl:if>
 
             <!-- PersonAuthor -->
@@ -383,10 +369,10 @@
                  </xsl:element>
             </xsl:if>
 
-            <!-- Institutes and WorkingGroups -->
-            <xsl:element name="OldInstitute">
-                <xsl:attribute name="Value">Parallele und Verteilte Algorithmen</xsl:attribute>
-            </xsl:element>
+             <!-- Institutes and WorkingGroups -->
+            <xsl:call-template name="AddPublicationGroup">
+                 <xsl:with-param name="group">parallel</xsl:with-param>
+            </xsl:call-template>
 
             <!-- SubjectUncontrolled -->
             <xsl:if test="string-length($keywords) > 0">
@@ -402,4 +388,5 @@
 
         </xsl:element>
    </xsl:template>
+
 </xsl:stylesheet>
