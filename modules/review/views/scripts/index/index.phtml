@@ -78,9 +78,7 @@
         <td class="id"><?= $document->getDocId() ?></td>
         <td>
             <div class="title">
-                <a href="<?= $document->getUrlFrontdoor() ?>" target="_blank">
-                    <?= $document->getDocTitle() ?>
-                </a>
+                <a href="<?= $document->getUrlFrontdoor() ?>" target="_blank"><?= $document->getDocTitle() ?></a>
                 (<span class="pubDate"><?= $document->getYear() ?></span>)
             </div>
             <div class="authors">

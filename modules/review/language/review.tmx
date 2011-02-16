@@ -72,10 +72,10 @@
 
     <tu tuid="review_no_docs_found">
       <tuv xml:lang="en">
-        <seg>No unpublished documents found.</seg>
+        <seg>No new documents found.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Es wurden keine unpublizierten Dokumente gefunden.</seg>
+        <seg>Es existieren keine neuen Dokumente.</seg>
       </tuv>
     </tu>
 

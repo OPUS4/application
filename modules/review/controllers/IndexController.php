@@ -45,7 +45,12 @@ class Review_IndexController extends Controller_Action {
      *
      * @var string
      */
-    public static $reviewServerState = 'unpublished';
+    private static $reviewServerState = 'unpublished';
+
+    /**
+     * @var Publish_Model_LoggedUser
+     */
+    private $loggedUser = null;
 
     /**
      * Setup module.  Check privileges.
@@ -53,8 +58,11 @@ class Review_IndexController extends Controller_Action {
     public function init() {
         parent::init();
 
+        // Check privileges and get logged user.
         $this->requirePrivilege('clearance');
+        $this->loggedUser = new Publish_Model_LoggedUser();
 
+        // Highlight menu entries.
         if (true === Opus_Security_Realm::getInstance()->check('administrate')) {
             $this->getHelper('MainMenu')->setActive('admin');
         }
@@ -74,11 +82,11 @@ class Review_IndexController extends Controller_Action {
         $ids = $this->_filterReviewableIds( $this->_getParam('selected') );
 
         if ($this->_isButtonPressed('buttonSubmit', true, false)) {
-            $this->_forward('clear', null, null, array('selected' => $ids));
+            return $this->_forward('clear', null, null, array('selected' => $ids));
         }
 
         if ($this->_isButtonPressed('buttonReject', true, false)) {
-            $this->_forward('reject', null, null, array('selected' => $ids));
+            return $this->_forward('reject', null, null, array('selected' => $ids));
         }
 
         $sort_order = $this->_getParam('sort_order');
@@ -160,8 +168,7 @@ class Review_IndexController extends Controller_Action {
         }
 
         if ($useCurrentUser) {
-            $loggedUserModel = new Publish_Model_LoggedUser();
-            $person = $loggedUserModel->createPerson();
+            $person = $this->loggedUser->createPerson();
 
             if (is_null($person) or !$person->isValid()) {
                 $message = "Problem clearing documents.  Information for current user is incomplete or invalid.";
@@ -171,12 +178,18 @@ class Review_IndexController extends Controller_Action {
         }
 
         if ($this->_isButtonPressed('sureno', true, false)) {
-            $this->_forward('index', null, null, array('selected' => $ids));
+            return $this->_forward('index', null, null, array('selected' => $ids));
         }
 
         if ($this->_isButtonPressed('sureyes', true, false)) {
             $helper = new Review_Model_ClearDocumentsHelper();
-            $helper->clear($ids, $person);
+
+            $userId = $this->loggedUser->getUserId();
+            if (is_null($userId) or empty($userId)) {
+                $userId = 'unknown';
+            }
+
+            $helper->clear($ids, $userId, $person);
 
             $this->view->message = 'review_accept_success';
             return $this->render('message');
@@ -203,12 +216,18 @@ class Review_IndexController extends Controller_Action {
         $this->view->actionUrl = $this->view->url(array('action' => 'reject'));
 
         if ($this->_isButtonPressed('sureno', true, false)) {
-            $this->_forward('index', null, null, array('selected' => $ids));
+            return $this->_forward('index', null, null, array('selected' => $ids));
         }
 
         if ($this->_isButtonPressed('sureyes', true, false)) {
             $helper = new Review_Model_ClearDocumentsHelper();
-            $helper->reject($ids);
+
+            $userId = $this->loggedUser->getUserId();
+            if (is_null($userId) or empty($userId)) {
+                $userId = 'unknown';
+            }
+
+            $helper->reject($ids, $userId);
 
             $this->view->message = 'review_reject_success';
             return $this->render('message');
@@ -230,8 +249,7 @@ class Review_IndexController extends Controller_Action {
 
         // Add constraint for reviewer, if current user is *not* admin.
         if (false === Opus_Security_Realm::getInstance()->check('administrate')) {
-            $loggedUser = new Publish_Model_LoggedUser();
-            $userId = $loggedUser->getUserId();
+            $userId = $this->loggedUser->getUserId();
             $finder->setEnrichmentKeyValue('reviewer.user_id', $userId);
         }
 
@@ -245,7 +263,11 @@ class Review_IndexController extends Controller_Action {
      * @return array
      */
     protected function _filterReviewableIds( $ids ) {
-        if (!isset($ids) || !is_array($ids) || count($ids) < 1) {
+        if (isset($ids) and !is_array($ids)) {
+            $ids = array($ids);
+        }
+
+        if (!isset($ids) or !is_array($ids) or (count($ids) < 1)) {
             return array();
         }
 
@@ -267,7 +289,7 @@ class Review_IndexController extends Controller_Action {
      */
     protected function _isButtonPressed($name, $value, $default = null) {
         $button = $this->_getParam($name);
-        return isset($button) ? $value : $default;
+        return (isset($button) && !empty($button)) ? $value : $default;
     }
 
 }

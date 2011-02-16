@@ -49,7 +49,7 @@
     <!-- Numbered page links -->
     <?php foreach ($this->pagesInRange as $page): ?>
         <?php if ($page != $this->current): ?>
-            <a href="<?php echo $this->url(array('page' => $page)); ?>">
+            <a href="<?php echo $this->url(array('page' => $page)); ?>" ..>
                 <?php echo $page; ?></a> |
           <?php else: ?>
             <span class="currentPage"><?php echo $page; ?></span> |

@@ -24,9 +24,10 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
+ * @category    Application - Module Review
+ * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -40,16 +41,15 @@ class Review_Model_ClearDocumentsHelper {
      * Publishes documents and adds the given Person as referee.
      *
      * @param array $docIds
+     * @param mixed $userId
      * @param Opus_Person $person
      *
      * FIXME capture success or failure for display afterwards
      */
-    public function clear(array $docIds = null, $person = null) {
+    public function clear(array $docIds = null, $userId = null, $person = null) {
         $logger = Zend_Registry::get('Zend_Log');
-        $config = Zend_Registry::get('Zend_Config');
 
-        $logger->debug('Clearing documents: ' . implode(", ", $docIds));
-
+        $success_count = 0;
         foreach ($docIds AS $docId) {
             $docId = (int) $docId;
             $document = new Opus_Document($docId);
@@ -81,29 +81,36 @@ class Review_Model_ClearDocumentsHelper {
                 $document->addPersonReferee($person);
             }
 
+            $enrichment = $document->addEnrichment();
+            $enrichment->setKeyName('review.accepted_by')
+                    ->setValue($userId);
+
             try {
                 $document->store();
             }
             catch (Exception $e) {
                 $logger->err("Saving state of accepted document failed: " . $e);
-                // TODO throw something, show something
             }
 
+            $success_count++;
         }
 
+        return $success_count;
     }
 
     /**
      * Rejects documents and adds the given Person as referee.
      *
      * @param array $docIds
+     * @param mixed $userId
      * @param Opus_Person $person
      *
      * FIXME capture success or failure for display afterwards
      */
-    public function reject(array $docIds = null, $person = null) {
+    public function reject(array $docIds = null, $userId = null, $person = null) {
         $logger = Zend_Registry::get('Zend_Log');
 
+        $success_count = 0;
         foreach ($docIds AS $docId) {
             $docId = (int) $docId;
             $document = new Opus_Document($docId);
@@ -118,13 +125,20 @@ class Review_Model_ClearDocumentsHelper {
                 $document->addPersonReferee($person);
             }
 
+            $enrichment = $document->addEnrichment();
+            $enrichment->setKeyName('review.rejected_by')
+                    ->setValue($userId);
+
             try {
                 $document->delete();
             }
             catch (Exception $e) {
                 $logger->err("Saving state of rejected document failed: " . $e);
-                // TODO throw something, show something
             }
+
+            $success_count++;
         }
+
+        return $success_count;
     }
 }

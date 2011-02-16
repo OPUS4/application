@@ -33,37 +33,92 @@
 
 class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase {
 
+    private $documentId = null;
+    private $person = null;
+
     public function setUp() {
         parent::setUp();
 
-        $document = new Opus_Document(105);
+        $document = new Opus_Document();
         $document->setServerState('unpublished');
-        $document->store();
+        $document->setPersonReferee(array());
+        $document->setEnrichment(array());
+        $this->documentId = $document->store();
+
+        $document = new Opus_Document($this->documentId);
+        $this->assertEquals(0, count($document->getPersonReferee()));
+        $this->assertEquals(0, count($document->getEnrichment()));
+
+        $person = new Opus_Person();
+        $person->setFirstName('John');
+        $person->setLastName('Doe');
+        $this->person = $person;
+    }
+
+    protected function tearDown() {
+        parent::tearDown();
+
+        $document = new Opus_Document($this->documentId);
+        $document->deletePermanent();
     }
 
     public function testClearDocument() {
         $helper = new Review_Model_ClearDocumentsHelper();
 
-        $person = new Opus_Person();
-        $person->setFirstName('John');
-        $person->setLastName('Doe');
+        $count = $helper->clear(array($this->documentId), 23, $this->person);
+        $this->assertEquals($count, 1);
 
-        $helper->clear(array('105'), $person);
-
-        $document = new Opus_Document(105);
+        $document = new Opus_Document($this->documentId);
         $this->assertEquals('published', $document->getServerState());
+        $this->assertEquals(1, count($document->getPersonReferee()));
+
+        $enrichments = $document->getEnrichment();
+        $this->assertEquals(1, count($enrichments));
+        $this->assertEquals(23, $enrichments[0]->getValue());
     }
 
     public function testRejectDocument() {
         $helper = new Review_Model_ClearDocumentsHelper();
 
-        $person = new Opus_Person();
-        $person->setFirstName('John');
-        $person->setLastName('Doe');
+        $count = $helper->reject(array($this->documentId), 23, $this->person);
+        $this->assertEquals($count, 1);
 
-        $helper->reject(array('105'), $person);
-
-        $document = new Opus_Document(105);
+        $document = new Opus_Document($this->documentId);
         $this->assertNotEquals('published', $document->getServerState());
+        $this->assertEquals(1, count($document->getPersonReferee()));
+
+        $enrichments = $document->getEnrichment();
+        $this->assertEquals(1, count($enrichments));
+        $this->assertEquals(23, $enrichments[0]->getValue());
+    }
+
+    public function testClearDocumentWoPerson() {
+        $helper = new Review_Model_ClearDocumentsHelper();
+
+        $count = $helper->clear(array($this->documentId), 23);
+        $this->assertEquals($count, 1);
+
+        $document = new Opus_Document($this->documentId);
+        $this->assertEquals('published', $document->getServerState());
+        $this->assertEquals(0, count($document->getPersonReferee()));
+
+        $enrichments = $document->getEnrichment();
+        $this->assertEquals(1, count($enrichments));
+        $this->assertEquals(23, $enrichments[0]->getValue());
+    }
+
+    public function testRejectDocumentWoPerson() {
+        $helper = new Review_Model_ClearDocumentsHelper();
+
+        $count = $helper->reject(array($this->documentId), 23);
+        $this->assertEquals($count, 1);
+
+        $document = new Opus_Document($this->documentId);
+        $this->assertNotEquals('published', $document->getServerState());
+        $this->assertEquals(0, count($document->getPersonReferee()));
+
+        $enrichments = $document->getEnrichment();
+        $this->assertEquals(1, count($enrichments));
+        $this->assertEquals(23, $enrichments[0]->getValue());
     }
 }
