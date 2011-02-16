@@ -135,16 +135,6 @@
         </xsl:variable>
 
         <!-- Is ZIB-Publication? -->
-        <!--
-        <xsl:variable name="belongsToBibliography">
-            <xsl:choose>
-                <xsl:when test="contains($howpublished, 'ZIB Preprint')"><xsl:text>0</xsl:text></xsl:when>
-                <xsl:when test="contains($howpublished, 'ZIB Report')"><xsl:text>0</xsl:text></xsl:when>
-                <xsl:when test="contains($howpublished, 'ZIB Technical Report')"><xsl:text>0</xsl:text></xsl:when>
-                <xsl:otherwise><xsl:text>1</xsl:text></xsl:otherwise>
-           </xsl:choose>
-        </xsl:variable>
-        -->
         <xsl:variable name="belongsToBibliography">
             <xsl:choose>
                 <xsl:when test="$doctype='misc' and contains($howpublished, 'ZIB Report')"><xsl:text>0</xsl:text></xsl:when>

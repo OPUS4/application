@@ -136,17 +136,6 @@
         </xsl:variable>
 
         <!-- Is ZIB-Publication? -->
-        <!--
-        <xsl:variable name="belongsToBibliography">
-            <xsl:choose>
-                <xsl:when test="contains($type, 'SC')"><xsl:text>0</xsl:text></xsl:when>
-                <xsl:when test="contains($type, 'ZIB Report')"><xsl:text>0</xsl:text></xsl:when>
-                <xsl:when test="contains($type, 'ZIB-Report')"><xsl:text>0</xsl:text></xsl:when>
-                <xsl:when test="contains($number, 'ZIB Report')"><xsl:text>0</xsl:text></xsl:when>
-                <xsl:otherwise><xsl:text>1</xsl:text></xsl:otherwise>
-           </xsl:choose>
-        </xsl:variable>
-        -->
         <xsl:variable name="belongsToBibliography">
             <xsl:choose>
                 <xsl:when test="$doctype='report' and contains($type, 'ZIB-Report')"><xsl:text>0</xsl:text></xsl:when>
