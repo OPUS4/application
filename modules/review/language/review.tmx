@@ -15,7 +15,7 @@
         <seg>Freigabe</seg>
       </tuv>
     </tu>
-  
+
     <tu tuid="review_index_title">
       <tuv xml:lang="en">
         <seg>Review Documents</seg>
@@ -60,7 +60,7 @@
         <seg>Datum</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="review_option_doctype">
       <tuv xml:lang="en">
         <seg>Document Type</seg>
@@ -223,52 +223,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="review_button_back">
-      <tuv xml:lang="en">
-        <seg>Back</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Zurück</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="review_button_accept">
-      <tuv xml:lang="en">
-        <seg>Accept Documents</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Dokumente freigeben</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="review_referee_instruction">
-      <tuv xml:lang="en">
-        <seg>Please enter the first and last name of the referee:</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Bitte den Vor- und Nachnahmen des Gutachters eingeben:</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="review_person_firstname">
-      <tuv xml:lang="en">
-        <seg>First Name</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Vorname</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="review_person_lastname">
-      <tuv xml:lang="en">
-        <seg>Last Name</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Nachname</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="review_accept_document_count">
+    <tu tuid="review_selected_document_count">
       <tuv xml:lang="en">
         <seg>selected</seg>
       </tuv>
@@ -286,24 +241,41 @@
       </tuv>
     </tu>
 
-    <tu tuid="review_error_input_missing">
+    <tu tuid="review_accept_instruction">
       <tuv xml:lang="en">
-        <seg>Some input is missing.</seg>
+        <seg>Are you sure you want to accept the selected documents?</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Eingaben fehlen.</seg>
+        <seg>Wollen Sie die ausgewählten Dokumente wirklich annehmen?</seg>
       </tuv>
     </tu>
 
-    <tu tuid="review_reject_sure">
+    <tu tuid="review_accept_success">
       <tuv xml:lang="en">
-        <seg>Are you sure you want to reject the selected documents.</seg>
+        <seg>The selected documents have been published successfully.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Wollen Sie die ausgewählten Dokumente wirklich ablehnen.</seg>
+        <seg>Die ausgewählten Dokumente wurden erfolgreich freigeschaltet.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="review_reject_instruction">
+      <tuv xml:lang="en">
+        <seg>Are you sure you want to reject the selected documents?</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Wollen Sie die ausgewählten Dokumente wirklich ablehnen?</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="review_reject_success">
+      <tuv xml:lang="en">
+        <seg>The selected documents have been rejected successfully.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Die ausgewählten Dokumente wurden erfolgreich abgelehnt.</seg>
       </tuv>
     </tu>
 
   </body>
-  
 </tmx>

@@ -122,7 +122,8 @@ class Review_IndexController extends Controller_Action {
 
         $result = $finder->ids();
         if (empty($result)) {
-            return $this->render('nodocs');
+            $this->view->message = 'review_no_docs_found';
+            return $this->render('message');
         }
 
         $currentPage = $this->_getParam('page', 1);
@@ -142,7 +143,8 @@ class Review_IndexController extends Controller_Action {
         $ids = $this->_filterReviewableIds( $this->_getParam('selected') );
 
         if (count($ids) < 1) {
-            return $this->render('nodocs');
+            $this->view->message = 'review_error_noselection';
+            return $this->render('message');
         }
 
         $this->view->selected = $ids;
@@ -175,10 +177,14 @@ class Review_IndexController extends Controller_Action {
         if ($this->_isButtonPressed('sureyes', true, false)) {
             $helper = new Review_Model_ClearDocumentsHelper();
             $helper->clear($ids, $person);
-            $this->_redirectTo('index');
+
+            $this->view->message = 'review_accept_success';
+            return $this->render('message');
         }
 
-        $this->view->text = $this->view->translate('review_accept_sure');
+        $this->view->title       = 'review_accept_title';
+        $this->view->instruction = 'review_accept_instruction';
+        $this->render('confirm');
     }
 
     /**
@@ -188,7 +194,8 @@ class Review_IndexController extends Controller_Action {
         $ids = $this->_filterReviewableIds( $this->_getParam('selected') );
 
         if (count($ids) < 1) {
-            return $this->render('nodocs');
+            $this->view->message = 'review_error_noselection';
+            return $this->render('message');
         }
 
         $this->view->selected = $ids;
@@ -202,10 +209,14 @@ class Review_IndexController extends Controller_Action {
         if ($this->_isButtonPressed('sureyes', true, false)) {
             $helper = new Review_Model_ClearDocumentsHelper();
             $helper->reject($ids);
-            $this->_redirectTo('index');
+
+            $this->view->message = 'review_reject_success';
+            return $this->render('message');
         }
 
-        $this->view->text = $this->view->translate('review_reject_sure');
+        $this->view->title       = 'review_reject_title';
+        $this->view->instruction = 'review_reject_instruction';
+        $this->render('confirm');
     }
 
     /**

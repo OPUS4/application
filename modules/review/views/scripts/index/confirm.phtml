@@ -24,9 +24,10 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
+ * @category    Application  - Module Review
+ * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -34,8 +35,8 @@
 
 <div class="adminContainer">
 
-    <h2><?= $this->translate('review_reject_title')?>
-        <span class="info">(<?= $this->documentCount ?> <?= $this->translate('review_accept_document_count') ?>)</span>
+    <h2><?= $this->translate($this->title) ?>
+        <span class="info">(<?= $this->documentCount ?> <?= $this->translate('review_selected_document_count') ?>)</span>
     </h2>
 
     <form action="<?= $this->actionUrl ?>" method="post" style="margin: 1em 2em">
@@ -47,7 +48,7 @@
         </div>
 
         <div class="instruction">
-            <?= $this->text ?>
+            <?= $this->translate( $this->instruction ) ?>
         </div>
 
         <table style="margin-left: 2em;">
