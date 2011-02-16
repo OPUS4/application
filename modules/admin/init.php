@@ -45,14 +45,16 @@ if (true !== Opus_Security_Realm::getInstance()->check('administrate')) {
     // we are not allowed to administrate.
     // $logger->info("Unallowed access to module admin!");
 
+    $translate = Zend_Registry::get('Zend_Translate');
+
     $identity = Zend_Auth::getInstance()->getIdentity();
     $message = null;
     if (empty($identity) === true) {
         // $message = $this->translate('admin_no_identity_error');
-        $message = "You must be logged in to use module admin.";
+        $message = 'admin_error_login_required';
     } else {
         // $message = $this->translate('admin_wrong_identity_error');
-        $message = "You need another identity to use module admin.";
+        $message = 'admin_error_other_login_required';
     }
 	
     // get all parameters to return after login.

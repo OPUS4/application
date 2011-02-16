@@ -35,6 +35,26 @@
         </tuv>
     </tu>
 
+    <tu tuid="admin_error_login_required">
+        <!-- Text for alreaded uploaded files -->
+        <tuv xml:lang="en">
+            <seg>You must be logged in to use module admin.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Sie müssen eingeloggt sein um auf die Administration zuzugreifen.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="admin_error_other_login_required">
+        <!-- Text for alreaded uploaded files -->
+        <tuv xml:lang="en">
+            <seg>You need another identity to use module admin.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Sie dürfen nicht auf die Administration zugreifen.</seg>
+        </tuv>
+    </tu>
+
   </body>
   
 </tmx>
