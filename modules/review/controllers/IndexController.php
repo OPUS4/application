@@ -40,30 +40,29 @@
  */
 class Review_IndexController extends Controller_Action {
 
+    /**
+     * Restrict reviewable documents to the given status.
+     *
+     * @var string
+     */
     public static $reviewServerState = 'unpublished';
 
     /**
-     * Setup title.
+     * Setup module.  Check privileges.
      */
     public function init() {
         parent::init();
+
+        $this->requirePrivilege('clearance');
+
+        if (true === Opus_Security_Realm::getInstance()->check('administrate')) {
+            $this->getHelper('MainMenu')->setActive('admin');
+        }
+        else {
+            $this->getHelper('MainMenu')->setActive('review');
+        }
+
         $this->view->title = $this->view->translate('review_index_title');
-
-        // Get list of selected documents...
-        $selected = $this->getRequest()->getParam('selected');
-        if (!isset($selected) || !is_array($selected)) {
-            $selected = array();
-        }
-
-        // Add constraint for current user
-        if (count($selected) > 0) {
-            $this->_logger->debug("ids before: " . implode(", ", $selected));
-            $finder = $this->_prepareSearcher()->setIdSubset($selected);
-            $selected = $finder->ids();
-            $this->_logger->debug("ids after: " . implode(", ", $selected));
-        }
-
-        $this->view->selected = $selected;
     }
 
     /**
@@ -72,18 +71,14 @@ class Review_IndexController extends Controller_Action {
      * Processes clicked buttons on that page.
      */
     public function indexAction() {
+        $ids = $this->_filterReviewableIds( $this->_getParam('selected') );
+
         if ($this->_isButtonPressed('buttonSubmit', true, false)) {
-            if (count($this->view->selected) > 0) {
-                $this->_forward('clear');
-            }
-            $this->view->error = $this->view->translate('review_error_noselection');
+            $this->_forward('clear', null, null, array('selected' => $ids));
         }
 
         if ($this->_isButtonPressed('buttonReject', true, false)) {
-            if (count($this->view->selected) > 0) {
-                $this->_forward('reject');
-            }
-            $this->view->error = $this->view->translate('review_error_noselection');
+            $this->_forward('reject', null, null, array('selected' => $ids));
         }
 
         $sort_order = $this->_getParam('sort_order');
@@ -91,6 +86,7 @@ class Review_IndexController extends Controller_Action {
         $sort_reverse = $this->_isButtonPressed('buttonUp', '0', $sort_reverse);
         $sort_reverse = $this->_isButtonPressed('buttonDown', '1', $sort_reverse);
 
+        $this->view->selected = $ids;
         $this->view->actionUrl = $this->view->url(array('action'=>'index'));
         $this->view->sort_order = $sort_order;
         $this->view->sort_reverse = $sort_reverse;
@@ -105,7 +101,7 @@ class Review_IndexController extends Controller_Action {
         );
 
         // Get list of document identifiers
-        $finder = $this->_prepareSearcher();
+        $finder = $this->_prepareDocumentFinder();
 
         switch ($sort_order) {
             case 'author':
@@ -126,7 +122,7 @@ class Review_IndexController extends Controller_Action {
 
         $result = $finder->ids();
         if (empty($result)) {
-            return $this->_helper->viewRenderer('nodocs');
+            return $this->render('nodocs');
         }
 
         $currentPage = $this->_getParam('page', 1);
@@ -139,108 +135,77 @@ class Review_IndexController extends Controller_Action {
         $this->view->paginator = $paginator;
     }
 
-
-
     /**
      * Action for showing the clear form and processing POST from it.
      */
     public function clearAction() {
-        // redirect get requests to module entry page
-        if (!$this->getRequest()->isPost()) {
-            $this->_redirectTo('index');
-            return;
+        $ids = $this->_filterReviewableIds( $this->_getParam('selected') );
+
+        if (count($ids) < 1) {
+            return $this->render('nodocs');
         }
 
-        $config = Zend_Registry::get('Zend_Config');
-
-        // if back button was pressed return to document selection
-        if ($this->_isButtonPressed('buttonBack', true, false)) {
-            $this->_forward('index');
-            return;
-        }
-
+        $this->view->selected = $ids;
+        $this->view->documentCount = count($ids);
         $this->view->actionUrl = $this->view->url(array('action'=>'clear'));
 
         $useCurrentUser = false;
-        if (isset($config->clearing->addCurrentUserAsReferee)) {
+        $person = null;
+
+        $config = Zend_Registry::get('Zend_Config');
+        if (isset($config, $config->clearing->addCurrentUserAsReferee)) {
             $useCurrentUser = $config->clearing->addCurrentUserAsReferee;
         }
 
         if ($useCurrentUser) {
-            $this->_logger->debug("useCurrentUser...");
-
             $loggedUserModel = new Publish_Model_LoggedUser();
             $person = $loggedUserModel->createPerson();
 
             if (is_null($person) or !$person->isValid()) {
-                $message = "Problem clearing documents.  Person object for logged user is null or not valid.";
+                $message = "Problem clearing documents.  Information for current user is incomplete or invalid.";
                 $this->_logger->err($message);
                 throw new Application_Exception($message);
             }
+        }
 
+        if ($this->_isButtonPressed('sureno', true, false)) {
+            $this->_forward('index', null, null, array('selected' => $ids));
+        }
+
+        if ($this->_isButtonPressed('sureyes', true, false)) {
             $helper = new Review_Model_ClearDocumentsHelper();
-            $helper->clear($this->view->selected, $person);
+            $helper->clear($ids, $person);
             $this->_redirectTo('index');
-
-            return;
         }
 
-        $this->_logger->debug("not-useCurrentUser...");
-
-        $this->view->documentCount = count($this->view->selected);
-        $this->view->firstName = $this->getRequest()->getParam('firstname');
-        $this->view->lastName = $this->getRequest()->getParam('lastname');
-
-        if ($this->_isButtonPressed('buttonAccept', true, false)) {
-            if (!Zend_Validate::is($this->view->firstName, 'NotEmpty')) {
-                $this->view->error = $this->view->translate(
-                                'review_error_input_missing');
-            }
-
-            if (!Zend_Validate::is($this->view->lastName, 'NotEmpty')) {
-                $this->view->error = $this->view->translate(
-                                'review_error_input_missing');
-            }
-
-            if (empty($this->view->error)) {
-                $person = new Opus_Person();
-                $person->setFirstName(trim($this->view->firstName))
-                        ->setLastName(trim($this->view->lastName));
-
-                $helper = new Review_Model_ClearDocumentsHelper();
-                $helper->clear($this->view->selected, $person);
-                $this->_redirectTo('index');
-            }
-        }
-
+        $this->view->text = $this->view->translate('review_accept_sure');
     }
 
     /**
      * Confirm rejection of selected documents and reject.
      */
     public function rejectAction() {
-        // redirect get requests to module entry page
-        if (!$this->getRequest()->isPost()) {
-            $this->_redirectTo('index');
-            return;
+        $ids = $this->_filterReviewableIds( $this->_getParam('selected') );
+
+        if (count($ids) < 1) {
+            return $this->render('nodocs');
         }
 
-        $this->view->documentCount = count($this->view->selected);
+        $this->view->selected = $ids;
+        $this->view->documentCount = count($ids);
+        $this->view->actionUrl = $this->view->url(array('action' => 'reject'));
 
         if ($this->_isButtonPressed('sureno', true, false)) {
-            $this->_forward('index');
-            return;
+            $this->_forward('index', null, null, array('selected' => $ids));
         }
- 
+
         if ($this->_isButtonPressed('sureyes', true, false)) {
             $helper = new Review_Model_ClearDocumentsHelper();
-            $helper->reject($this->view->selected);
+            $helper->reject($ids);
             $this->_redirectTo('index');
         }
 
-//        $this->view->title = $this->view->translate('admin_doc_delete');
         $this->view->text = $this->view->translate('review_reject_sure');
-        $this->view->actionUrl = $this->view->url(array('action' => 'reject'));
     }
 
     /**
@@ -248,14 +213,38 @@ class Review_IndexController extends Controller_Action {
      *
      * @return Opus_DocumentFinder
      */
-    protected function _prepareSearcher() {
-        $loggedUser = new Publish_Model_LoggedUser();
-
+    protected function _prepareDocumentFinder() {
         $finder = new Opus_DocumentFinder();
         $finder->setServerState(self::$reviewServerState);
-        $finder->setEnrichmentKeyValue('reviewer.user_id', $loggedUser->getUserId());
+
+        // Add constraint for reviewer, if current user is *not* admin.
+        if (false === Opus_Security_Realm::getInstance()->check('administrate')) {
+            $loggedUser = new Publish_Model_LoggedUser();
+            $userId = $loggedUser->getUserId();
+            $finder->setEnrichmentKeyValue('reviewer.user_id', $userId);
+        }
 
         return $finder;
+    }
+
+    /**
+     * Filter a given document list for reviewable ids.
+     *
+     * @param array $ids
+     * @return array
+     */
+    protected function _filterReviewableIds( $ids ) {
+        if (!isset($ids) || !is_array($ids) || count($ids) < 1) {
+            return array();
+        }
+
+        $this->_logger->debug("ids before filtering: " . implode(", ", $ids));
+
+        $finder = $this->_prepareDocumentFinder();
+        $ids = $finder->setIdSubset($ids)->ids();
+
+        $this->_logger->debug("ids after filtering: " . implode(", ", $ids));
+        return $ids;
     }
 
     /**
@@ -266,14 +255,8 @@ class Review_IndexController extends Controller_Action {
      * @return mixed
      */
     protected function _isButtonPressed($name, $value, $default = null) {
-        $button = $this->getRequest()->getParam($name);
-
-        if (isset($button)) {
-            return $value;
-        }
-        else {
-            return $default;
-        }
+        $button = $this->_getParam($name);
+        return isset($button) ? $value : $default;
     }
 
 }

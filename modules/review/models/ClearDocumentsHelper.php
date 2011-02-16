@@ -44,7 +44,7 @@ class Review_Model_ClearDocumentsHelper {
      *
      * FIXME capture success or failure for display afterwards
      */
-    public function clear(array $docIds = null, Opus_Person $person = null) {
+    public function clear(array $docIds = null, $person = null) {
         $logger = Zend_Registry::get('Zend_Log');
         $config = Zend_Registry::get('Zend_Config');
 
@@ -101,7 +101,7 @@ class Review_Model_ClearDocumentsHelper {
      *
      * FIXME capture success or failure for display afterwards
      */
-    public function reject(array $docIds = null, Opus_Person $person = null) {
+    public function reject(array $docIds = null, $person = null) {
         $logger = Zend_Registry::get('Zend_Log');
 
         foreach ($docIds AS $docId) {
