@@ -85,13 +85,7 @@ class Review_Model_ClearDocumentsHelper {
             $enrichment->setKeyName('review.accepted_by')
                     ->setValue($userId);
 
-            try {
-                $document->store();
-            }
-            catch (Exception $e) {
-                $logger->err("Saving state of accepted document failed: " . $e);
-            }
-
+            $document->store();
             $success_count++;
         }
 
@@ -129,13 +123,7 @@ class Review_Model_ClearDocumentsHelper {
             $enrichment->setKeyName('review.rejected_by')
                     ->setValue($userId);
 
-            try {
-                $document->delete();
-            }
-            catch (Exception $e) {
-                $logger->err("Saving state of rejected document failed: " . $e);
-            }
-
+            $document->delete();
             $success_count++;
         }
 
