@@ -50,17 +50,8 @@ class Review_Model_ClearDocumentsHelper {
         $logger = Zend_Registry::get('Zend_Log');
 
         foreach ($docIds AS $docId) {
-            $docId = (int) $docId;
+            $logger->debug('Change state to "published" for document: ' . $docId);
             $document = new Opus_Document($docId);
-            $state = $document->getServerState();
-
-            if ($state !== 'unpublished') {
-                // already published or deleted?
-                $logger->warn('Document ' . $docId . ' already published (at least not in state "unpublished")? Skipping.');
-                continue;
-            }
-
-            $logger->debug('Change state to \'published\' for document:' . $docId);
             $document->setServerState('published');
 
             $date = new Opus_Date();
@@ -103,14 +94,8 @@ class Review_Model_ClearDocumentsHelper {
         $logger = Zend_Registry::get('Zend_Log');
 
         foreach ($docIds AS $docId) {
-            $docId = (int) $docId;
+            $logger->debug('Deleting document with id: ' . $docId);
             $document = new Opus_Document($docId);
-            $state = $document->getServerState();
-
-            if ($state !== 'unpublished') {
-                $logger->warn('Document ' . $docId . ' already published (at least not in state "unpublished")?  Skipping.');
-                continue;
-            }
 
             if (isset($person)) {
                 $document->addPersonReferee($person);
