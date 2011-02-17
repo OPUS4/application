@@ -189,7 +189,9 @@ $languageSelectors = $this->languageSelector();
         <div class="debug session">
             <div class="wrapper">
                 <h2>Session</h2>
-                <? htmlspecialchars(Zend_Debug::dump($_SESSION, 'Session Data')); ?>
+                <pre>
+                <?= htmlspecialchars(Zend_Debug::dump($_SESSION, 'Session Data', false)); ?>
+                </pre>
             </div>
         </div>
         <?php endif ?>
