@@ -75,6 +75,32 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase {
         $this->assertEquals(23, $enrichments[0]->getValue());
     }
 
+    public function testClearDocumentWithFile() {
+        $path = '/tmp/opus4-test/' . uniqid() . "/src";
+        mkdir($path, 0777, true);
+
+        $filepath = $path . DIRECTORY_SEPARATOR . "foobar.pdf";
+        touch($filepath);
+
+        $document = new Opus_Document($this->documentId);
+        $document->addFile()
+            ->setTempFile($filepath)
+            ->setPathName('foobar.pdf')
+            ->setLabel('Volltextdokument (PDF)');
+        $document->store();
+
+        $helper = new Review_Model_ClearDocumentsHelper();
+        $helper->clear(array($this->documentId), 23, $this->person);
+
+        $document = new Opus_Document($this->documentId);
+        $this->assertEquals('published', $document->getServerState());
+        $this->assertEquals(1, count($document->getPersonReferee()));
+
+        $enrichments = $document->getEnrichment();
+        $this->assertEquals(1, count($enrichments));
+        $this->assertEquals(23, $enrichments[0]->getValue());
+    }
+
     public function testRejectDocument() {
         $helper = new Review_Model_ClearDocumentsHelper();
         $helper->reject(array($this->documentId), 23, $this->person);
