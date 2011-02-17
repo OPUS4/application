@@ -88,6 +88,20 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase {
         $this->assertEquals(23, $enrichments[0]->getValue());
     }
 
+    public function testClearInvalidDocument() {
+        $helper = new Review_Model_ClearDocumentsHelper();
+
+        $this->setExpectedException('Opus_Model_NotFoundException');
+        $helper->clear(array($this->documentId + 100000), 23);
+    }
+
+    public function testRejectInvalidDocument() {
+        $helper = new Review_Model_ClearDocumentsHelper();
+
+        $this->setExpectedException('Opus_Model_NotFoundException');
+        $helper->reject(array($this->documentId + 100000), 23);
+    }
+
     public function testClearDocumentWoPerson() {
         $helper = new Review_Model_ClearDocumentsHelper();
         $helper->clear(array($this->documentId), 23);
