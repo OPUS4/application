@@ -56,10 +56,10 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase {
     }
 
     protected function tearDown() {
-        parent::tearDown();
-
         $document = new Opus_Document($this->documentId);
         $document->deletePermanent();
+
+        parent::tearDown();
     }
 
     public function testClearDocument() {
