@@ -1064,7 +1064,8 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
             <seg>Please enter SWD keywords of the document. You may add more keywords by clicking on the button (or delete them).</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie hier bitte SWD Schlagwörter zu Ihrem Dokument ein. Sie können durch Klicken auf den Button weitere Keywords hinzufügen (oder wieder löschen).</seg>
+            <seg>Tragen Sie hier bitte SWD Schlagwörter zu Ihrem Dokument ein. Sie können durch Klicken auf den Button weitere Schlagwörter hinzufügen (oder wieder löschen).
+			Hilfe zur Auswahl bekommen Sie in der OSWD des BSZ: <a href="http://swb.bsz-bw.de/DB=2.104/" target="tab" >http://swb.bsz-bw.de/DB=2.104/</a></seg>
         </tuv>
     </tu>
 
