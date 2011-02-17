@@ -966,7 +966,22 @@
 
     <xsl:template match="PublisherUniversity"/>
 
-    <xsl:template match="ReferenceHandle|ReferenceUrl">
+    <xsl:template match="ReferenceUrl">
+        <tr>
+            <th class="name">
+                <xsl:call-template name="translateFieldname"/>:
+            </th>
+            <td>
+                <xsl:element name="a">
+                <xsl:attribute name="href"><xsl:value-of select="@Value" /></xsl:attribute>
+                <xsl:attribute name="rel"><xsl:text>nofollow, noindex</xsl:text></xsl:attribute>
+                <xsl:value-of select="@Label" />
+                </xsl:element>
+            </td>
+        </tr>
+    </xsl:template>
+
+    <xsl:template match="ReferenceHandle">
         <tr>
             <th class="name">
                 <xsl:call-template name="translateFieldname"/>:
