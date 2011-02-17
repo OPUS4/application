@@ -49,7 +49,6 @@ class Review_Model_ClearDocumentsHelper {
     public function clear(array $docIds = null, $userId = null, $person = null) {
         $logger = Zend_Registry::get('Zend_Log');
 
-        $success_count = 0;
         foreach ($docIds AS $docId) {
             $docId = (int) $docId;
             $document = new Opus_Document($docId);
@@ -86,10 +85,9 @@ class Review_Model_ClearDocumentsHelper {
                     ->setValue($userId);
 
             $document->store();
-            $success_count++;
         }
 
-        return $success_count;
+        return;
     }
 
     /**
@@ -104,7 +102,6 @@ class Review_Model_ClearDocumentsHelper {
     public function reject(array $docIds = null, $userId = null, $person = null) {
         $logger = Zend_Registry::get('Zend_Log');
 
-        $success_count = 0;
         foreach ($docIds AS $docId) {
             $docId = (int) $docId;
             $document = new Opus_Document($docId);
@@ -124,9 +121,8 @@ class Review_Model_ClearDocumentsHelper {
                     ->setValue($userId);
 
             $document->delete();
-            $success_count++;
         }
 
-        return $success_count;
+        return;
     }
 }

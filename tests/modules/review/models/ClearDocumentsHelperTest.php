@@ -64,9 +64,7 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase {
 
     public function testClearDocument() {
         $helper = new Review_Model_ClearDocumentsHelper();
-
-        $count = $helper->clear(array($this->documentId), 23, $this->person);
-        $this->assertEquals($count, 1);
+        $helper->clear(array($this->documentId), 23, $this->person);
 
         $document = new Opus_Document($this->documentId);
         $this->assertEquals('published', $document->getServerState());
@@ -79,9 +77,7 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase {
 
     public function testRejectDocument() {
         $helper = new Review_Model_ClearDocumentsHelper();
-
-        $count = $helper->reject(array($this->documentId), 23, $this->person);
-        $this->assertEquals($count, 1);
+        $helper->reject(array($this->documentId), 23, $this->person);
 
         $document = new Opus_Document($this->documentId);
         $this->assertNotEquals('published', $document->getServerState());
@@ -94,9 +90,7 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase {
 
     public function testClearDocumentWoPerson() {
         $helper = new Review_Model_ClearDocumentsHelper();
-
-        $count = $helper->clear(array($this->documentId), 23);
-        $this->assertEquals($count, 1);
+        $helper->clear(array($this->documentId), 23);
 
         $document = new Opus_Document($this->documentId);
         $this->assertEquals('published', $document->getServerState());
@@ -109,9 +103,7 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase {
 
     public function testRejectDocumentWoPerson() {
         $helper = new Review_Model_ClearDocumentsHelper();
-
-        $count = $helper->reject(array($this->documentId), 23);
-        $this->assertEquals($count, 1);
+        $helper->reject(array($this->documentId), 23);
 
         $document = new Opus_Document($this->documentId);
         $this->assertNotEquals('published', $document->getServerState());
