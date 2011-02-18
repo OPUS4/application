@@ -268,16 +268,6 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * TODO: Outsource to somewhere else.
      */
     protected function _loadLanguageDirectory($directory) {
-        $translate = Zend_Registry::get('Zend_Translate');
-        $options = array(
-            'adapter' => Zend_Translate::AN_TMX,
-            'locale' => 'auto',
-            'clear' => false,
-            'scan' => Zend_Translate::LOCALE_FILENAME,
-            'ignore' => '.',
-            'disableNotices' => true
-        );
-
         $directory = realpath($directory);
         if (($directory === false) or (!is_dir($directory)) or (!is_readable($directory))) {
             return false;
@@ -287,6 +277,16 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         if (!$handle) {
             return false;
         }
+
+        $translate = Zend_Registry::get('Zend_Translate');
+        $options = array(
+            'adapter' => Zend_Translate::AN_TMX,
+            'locale' => 'auto',
+            'clear' => false,
+            'scan' => Zend_Translate::LOCALE_FILENAME,
+            'ignore' => '.',
+            'disableNotices' => true
+        );
 
         while (false !== ($file = readdir($handle))) {
             // Ignore directories.

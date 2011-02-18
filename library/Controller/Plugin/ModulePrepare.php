@@ -183,16 +183,6 @@ class Controller_Plugin_ModulePrepare extends Zend_Controller_Plugin_Abstract {
      * @return boolean
      */
     protected function _loadLanguageDirectory($directory) {
-        $translate = Zend_Registry::get('Zend_Translate');
-        $options = array(
-            'adapter' => Zend_Translate::AN_TMX,
-            'locale' => 'auto',
-            'clear' => false,
-            'scan' => Zend_Translate::LOCALE_FILENAME,
-            'ignore' => '.',
-            'disableNotices' => true
-        );
-
         $directory = realpath($directory);
         if (($directory === false) or (!is_dir($directory)) or (!is_readable($directory))) {
             return false;
@@ -202,6 +192,16 @@ class Controller_Plugin_ModulePrepare extends Zend_Controller_Plugin_Abstract {
         if (!$handle) {
             return false;
         }
+
+        $translate = Zend_Registry::get('Zend_Translate');
+        $options = array(
+            'adapter' => Zend_Translate::AN_TMX,
+            'locale' => 'auto',
+            'clear' => false,
+            'scan' => Zend_Translate::LOCALE_FILENAME,
+            'ignore' => '.',
+            'disableNotices' => true
+        );
 
         while (false !== ($file = readdir($handle))) {
             // Ignore directories.
