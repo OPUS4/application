@@ -159,9 +159,9 @@ class Controller_Plugin_ModulePrepare extends Zend_Controller_Plugin_Abstract {
 //            }
             // Add translation
             if ($current_module !== 'default') {
-                $lang_path = "$this->_path_to_modules/$current_module/language";
-                if (file_exists($lang_path) === true) {
-                    if ($handle = opendir($lang_path)) {
+                $languageDir = "$this->_path_to_modules/$current_module/language/";
+                if (file_exists($languageDir) === true) {
+                    if ($handle = opendir($languageDir)) {
                         while (false !== ($file = readdir($handle))) {
                             // ignore directories
                             if (is_dir($file) === true)
@@ -171,12 +171,16 @@ class Controller_Plugin_ModulePrepare extends Zend_Controller_Plugin_Abstract {
                                 continue;
                             $translate = Zend_Registry::get('Zend_Translate');
                             $options = array(
+                                'adapter' => Zend_Translate::AN_TMX,
+                                'locale' => 'auto',
                                 'clear' => false,
                                 'scan' => Zend_Translate::LOCALE_FILENAME,
                                 'ignore' => '.',
                                 'disableNotices' => true
                             );
-                            $translate->addTranslation($lang_path . '/' . $file, 'auto', $options);
+                            $translate->addTranslation(array_merge(array(
+                                'content' => $languageDir . $file,
+                            ), $options));
                         }
                     }
                 }

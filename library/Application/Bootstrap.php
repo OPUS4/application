@@ -217,17 +217,17 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $sessiondata = $this->getResource('Session');
 
         $options = array(
+            'adapter' => Zend_Translate::AN_TMX,
+            'locale'  => 'auto',
+
             'clear' => false,
             'scan' => Zend_Translate::LOCALE_FILENAME,
             'ignore' => '.',
             'disableNotices' => true
             );
-        $translate = new Zend_Translate(
-            Zend_Translate::AN_TMX,
-            APPLICATION_PATH . '/modules/default/language/default.tmx',
-            'auto',
-            $options
-            );
+        $translate = new Zend_Translate(array_merge(array(
+            'content' => APPLICATION_PATH . '/modules/default/language/default.tmx',
+            ), $options));
 
         $languageDir = APPLICATION_PATH . '/modules/default/language/';
         if (is_dir($languageDir) && is_readable($languageDir)) {
@@ -238,7 +238,9 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
                     if (is_dir($file) === true) continue;
                     // ignore files with leading dot and files without extension tmx
                     if (preg_match('/^[^.].*\.tmx$/', $file) === 0) continue;
-                    $translate->addTranslation($languageDir . $file, 'auto', $options);
+                    $translate->addTranslation(array_merge(array(
+                        'content' => $languageDir . $file,
+                    ), $options));
                 }
             }
         }
