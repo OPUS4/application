@@ -147,6 +147,35 @@ class Controller_Plugin_ModulePrepare extends Zend_Controller_Plugin_Abstract {
             $module_paths[] = $current_module_paths;
         }
 
+        // Add translation
+        if ($current_module !== 'default') {
+            $languageDir = "$this->_path_to_modules/$current_module/language/";
+            if (file_exists($languageDir) === true) {
+                if ($handle = opendir($languageDir)) {
+                    while (false !== ($file = readdir($handle))) {
+                        // ignore directories
+                        if (is_dir($file) === true)
+                            continue;
+                        // ignore files with leading dot and files without extension tmx
+                        if (preg_match('/^[^.].*\.tmx$/', $file) === 0)
+                            continue;
+                        $translate = Zend_Registry::get('Zend_Translate');
+                        $options = array(
+                            'adapter' => Zend_Translate::AN_TMX,
+                            'locale' => 'auto',
+                            'clear' => false,
+                            'scan' => Zend_Translate::LOCALE_FILENAME,
+                            'ignore' => '.',
+                            'disableNotices' => true
+                        );
+                        $translate->addTranslation(array_merge(array(
+                                    'content' => $languageDir . $file,
+                        ), $options));
+                    }
+                }
+            }
+        }
+
         foreach ($module_paths as $path) {
             // Add classes to include_path.
 //            if (array_key_exists('class', $path) === true) {
@@ -157,34 +186,7 @@ class Controller_Plugin_ModulePrepare extends Zend_Controller_Plugin_Abstract {
 //                }
 //                set_include_path(implode(PATH_SEPARATOR, $include_paths));
 //            }
-            // Add translation
-            if ($current_module !== 'default') {
-                $languageDir = "$this->_path_to_modules/$current_module/language/";
-                if (file_exists($languageDir) === true) {
-                    if ($handle = opendir($languageDir)) {
-                        while (false !== ($file = readdir($handle))) {
-                            // ignore directories
-                            if (is_dir($file) === true)
-                                continue;
-                            // ignore files with leading dot and files without extension tmx
-                            if (preg_match('/^[^.].*\.tmx$/', $file) === 0)
-                                continue;
-                            $translate = Zend_Registry::get('Zend_Translate');
-                            $options = array(
-                                'adapter' => Zend_Translate::AN_TMX,
-                                'locale' => 'auto',
-                                'clear' => false,
-                                'scan' => Zend_Translate::LOCALE_FILENAME,
-                                'ignore' => '.',
-                                'disableNotices' => true
-                            );
-                            $translate->addTranslation(array_merge(array(
-                                'content' => $languageDir . $file,
-                            ), $options));
-                        }
-                    }
-                }
-            }
+
             // Add view helper paths.
             if (array_key_exists('viewhelper', $path) === true) {
                 $view = Zend_Layout::getMvcInstance()->getView();
