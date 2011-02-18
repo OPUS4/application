@@ -539,10 +539,19 @@
 
         <tu tuid="solrsearch_title_alldocs">
             <tuv xml:lang="en">
-                <seg>All docs</seg>
+                <seg>All documents</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>Alle Dokumente</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="solrsearch_title_latest">
+            <tuv xml:lang="en">
+                <seg>Latest documents</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Neueste Dokumente</seg>
             </tuv>
         </tu>
 
