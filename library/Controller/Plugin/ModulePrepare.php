@@ -147,6 +147,16 @@ class Controller_Plugin_ModulePrepare extends Zend_Controller_Plugin_Abstract {
             $module_paths[] = $current_module_paths;
         }
 
+        $translate = Zend_Registry::get('Zend_Translate');
+        $options = array(
+            'adapter' => Zend_Translate::AN_TMX,
+            'locale' => 'auto',
+            'clear' => false,
+            'scan' => Zend_Translate::LOCALE_FILENAME,
+            'ignore' => '.',
+            'disableNotices' => true
+        );
+
         // Add translation
         if ($current_module !== 'default') {
             $languageDir = "$this->_path_to_modules/$current_module/language/";
@@ -159,15 +169,6 @@ class Controller_Plugin_ModulePrepare extends Zend_Controller_Plugin_Abstract {
                         // ignore files with leading dot and files without extension tmx
                         if (preg_match('/^[^.].*\.tmx$/', $file) === 0)
                             continue;
-                        $translate = Zend_Registry::get('Zend_Translate');
-                        $options = array(
-                            'adapter' => Zend_Translate::AN_TMX,
-                            'locale' => 'auto',
-                            'clear' => false,
-                            'scan' => Zend_Translate::LOCALE_FILENAME,
-                            'ignore' => '.',
-                            'disableNotices' => true
-                        );
                         $translate->addTranslation(array_merge(array(
                                     'content' => $languageDir . $file,
                         ), $options));
