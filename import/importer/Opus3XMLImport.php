@@ -183,14 +183,15 @@ class Opus3XMLImport {
      */
     public function import($document) {
         $this->collections = array();
-        $this->values = null;
+        $this->values = array();
         $this->document = $document;
      
         $oldid = null;
         $oldid = $this->document->getElementsByTagName('IdentifierOpus3')->Item(0)->getAttribute('Value');
 
         //$this->log("(1):".$this->completeXML->saveXML($this->document)."\n");
-        $this->skipPersonsWithoutFirstname();
+        $this->skipEmptyFields();
+
         $this->mapDocumentTypeAndLanguage();
         $this->mapElementLanguage();
         $this->mapClassifications();
@@ -256,30 +257,43 @@ class Opus3XMLImport {
         return $imported;
     }
 
-    private function skipPersonsWithoutFirstname() {
+    private function skipEmptyFields() {
        // BUGFIX:OPUSVIER-938: Fehler beim Import von Dokumenten mit Autoren ohne Vornamen
         $roles = array();
-        array_push($roles, 'PersonAdvisor');
-        array_push($roles, 'PersonAuthor');
-        array_push($roles, 'PersonContributor');
-        array_push($roles, 'PersonEditor');
-        array_push($roles, 'PersonReferee');
-        array_push($roles, 'PersonOther');
-        array_push($roles, 'PersonTranslator');
-        array_push($roles, 'PersonSubmitter');
+        array_push($roles, array('PersonAdvisor', 'FirstName'));
+        array_push($roles, array('PersonAuthor', 'FirstName'));
+        array_push($roles, array('PersonContributor', 'FirstName'));
+        array_push($roles, array('PersonEditor', 'FirstName'));
+        array_push($roles, array('PersonReferee', 'FirstName'));
+        array_push($roles, array('PersonOther', 'FirstName'));
+        array_push($roles, array('PersonTranslator', 'FirstName'));
+        array_push($roles, array('PersonSubmitter', 'FirstName'));
 
+        array_push($roles, array('TitleMain', 'Value'));
+        array_push($roles, array('TitleAbstract', 'Value'));
+        array_push($roles, array('TitleParent', 'Value'));
+        array_push($roles, array('TitleSub', 'Value'));
+        array_push($roles, array('TitleAdditional', 'Value'));
+
+        array_push($roles, array('SubjectUncontrolled', 'Value'));
+
+        array_push($roles, array('IdentifierIsbn', 'Value'));
+
+        array_push($roles, array('Note', 'Message'));
+ 
         foreach ($roles as $r) {
-            $persons = $this->document->getElementsByTagName($r);
-            foreach ($persons as $p) {
+            $elements = $this->document->getElementsByTagName($r[0]);
+            foreach ($elements as $e) {
                 //echo $p->getAttribute('LastName')."\n";
-                if ($p->getAttribute('FirstName') == "") {
-                    $this->log("ERROR: Person without a FirstName: '". $p->getAttribute('LastName') ."' will not be imported.\n");
-                    $this->document->removeChild($p);
+                if (trim($e->getAttribute($r[1])) == "") {
+                    $this->log("ERROR: '".$r[0]."' with empty '".$r[1]."' will not be imported.\n");
+                    $this->document->removeChild($e);
                 }
             }
         }
     }
 
+ 
     private function mapDocumentTypeAndLanguage() {
         $mapping = array('language', 'type');
         foreach ($mapping as $m) {
@@ -342,7 +356,6 @@ class Opus3XMLImport {
     }
 
     private function mapCollections() {
-        /* TODO: New Series mit Issue */
         $mapping = array('collection', 'institute', 'series');
 
         foreach ($mapping as $m) {
@@ -366,7 +379,7 @@ class Opus3XMLImport {
         }
     }
 
-    private function mapValues() {
+     private function mapValues() {
         $mapping = array('grantor', 'licence', 'publisherUniversity');
         foreach ($mapping as $m) {
             $oa = $this->mapping[$m];

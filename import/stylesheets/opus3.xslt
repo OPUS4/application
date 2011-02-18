@@ -172,8 +172,6 @@
             <!-- ServerDateUnlocking -->
 
             <!-- ServerState -->
-            <!-- All publications in the OPUS table are published, so we can set this statically -->
-            <!-- TODO: temporarely Documents in TEMP-table-->
             <xsl:if test="$modus = 'opus'">
                 <xsl:attribute name="ServerState">
                     <xsl:text>published</xsl:text>
@@ -310,6 +308,7 @@
             -->
 	    
 	   <!-- New: Enrichment-Contributor -->
+	   <!-- TODO: Opus4.1: Handle Contributor as PersonContributor -->
             <xsl:if test="string-length(field[@name='contributors_name']) > 0">
                 <xsl:element name="Enrichment">
                     <xsl:attribute name="KeyName">
@@ -322,6 +321,7 @@
             </xsl:if>
 	    
 	   <!-- Enrichment-Source --> 
+	   <!-- TODO: Opus 4.1 Handle source as new Document -->
             <xsl:if test="string-length(field[@name='source_title']) > 0">
                 <xsl:element name="Enrichment">
                     <xsl:attribute name="KeyName">
@@ -345,13 +345,26 @@
             <!-- All Related Persons (Author/Editor/Submitter/Contributor/...)-->
             <!-- PersonSubmitter -->
             <xsl:if test="string-length(field[@name='verification'])>0">
-                <xsl:call-template name="AddPersons">
-                    <xsl:with-param name="role">PersonSubmitter</xsl:with-param>
-                    <xsl:with-param name="list">
-                        <xsl:value-of select="field[@name='verification']" />
-                    </xsl:with-param>
-                    <xsl:with-param name="delimiter">;</xsl:with-param>
-                </xsl:call-template>
+                <xsl:choose>
+                    <xsl:when test="contains(field[@name='verification'], ',')">
+                        <xsl:call-template name="AddPersons">
+                            <xsl:with-param name="role">PersonSubmitter</xsl:with-param>
+                            <xsl:with-param name="list">
+                                <xsl:value-of select="field[@name='verification']" />
+                            </xsl:with-param>
+                            <xsl:with-param name="delimiter">,</xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:call-template name="AddPersons">
+                            <xsl:with-param name="role">PersonSubmitter</xsl:with-param>
+                            <xsl:with-param name="list">
+                                <xsl:value-of select="field[@name='verification']" />
+                            </xsl:with-param>
+                            <xsl:with-param name="delimiter">;</xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:if>
 	    
             <!-- PersonAuthor -->
@@ -360,6 +373,9 @@
                     <xsl:with-param name="role">PersonAuthor</xsl:with-param>
                     <xsl:with-param name="name">
                         <xsl:value-of select="field[@name='creator_name']" />
+                    </xsl:with-param>
+                    <xsl:with-param name="sortorder">
+                        <xsl:value-of select="field[@name='reihenfolge']" />
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:for-each>
@@ -486,32 +502,7 @@
             </xsl:for-each>
 
 
-            <!-- OldClasses -->
-            <!-- This is ZIB-Style -->
-             <xsl:for-each select="/mysqldump/database/table_data[@name='opus_klassifikationen' or @name='temp_klassifikationen']/row[field[@name='source_opus']=$OriginalID]">
-                <xsl:if test="field[@name='name_kurz'] = 'MSC'">
-                    <xsl:element name="OldMsc">
-                        <xsl:attribute name="Value">
-                            <xsl:value-of select="field[@name='class']" />
-                        </xsl:attribute>
-                    </xsl:element>
-                </xsl:if>
-                <xsl:if test="field[@name='name_kurz'] = 'CCS'">
-                    <xsl:element name="OldCcs">
-                        <xsl:attribute name="Value">
-                            <xsl:value-of select="field[@name='class']" />
-                        </xsl:attribute>
-                    </xsl:element>
-                </xsl:if>
-                <xsl:if test="field[@name='name_kurz'] = 'PACS'">
-                    <xsl:element name="OldPacs">
-                        <xsl:attribute name="Value">
-                            <xsl:value-of select="field[@name='class']" />
-                        </xsl:attribute>
-                    </xsl:element>
-                </xsl:if>
-            </xsl:for-each>
- 
+            <!-- OldClassificationss -->
             <!-- OldCcs -->
             <xsl:for-each select="/mysqldump/database/table_data[@name='opus_ccs' or @name='temp_ccs']/row[field[@name='source_opus']=$OriginalID]">
                 <xsl:element name="OldCcs">
@@ -591,6 +582,7 @@
     <xsl:template name="AddPerson">
         <xsl:param name="role" required="yes" />
         <xsl:param name="name" required="yes" />
+        <xsl:param name="sortorder" />
         <xsl:element name="{$role}">
             <xsl:attribute name="AcademicTitle">
                 <xsl:call-template name="getAcademicTitle">
@@ -620,6 +612,12 @@
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:attribute>
+            <!-- TODO: Opus 4.1 SortOrder of Authors -->
+            <!--
+            <xsl:attribute name="SortOrder">
+                <xsl:value-of select="$sortorder" />
+            </xsl:attribute>
+            -->
         </xsl:element>
     </xsl:template>
     
