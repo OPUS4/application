@@ -147,43 +147,11 @@ class Controller_Plugin_ModulePrepare extends Zend_Controller_Plugin_Abstract {
             $module_paths[] = $current_module_paths;
         }
 
-        $translate = Zend_Registry::get('Zend_Translate');
-        $options = array(
-            'adapter' => Zend_Translate::AN_TMX,
-            'locale' => 'auto',
-            'clear' => false,
-            'scan' => Zend_Translate::LOCALE_FILENAME,
-            'ignore' => '.',
-            'disableNotices' => true
-        );
-
         // Add translation
         if ($current_module !== 'default') {
-            $overrideFile = "custom.tmx";
-            $languageDir = "$this->_path_to_modules/$current_module/language/";
-            if (is_dir($languageDir) && is_readable($languageDir)) {
-                $handle = opendir($languageDir);
-                if ($handle) {
-                    while (false !== ($file = readdir($handle))) {
-                        // ignore directories, ignore overrideFile.
-                        if ((is_dir($languageDir . $file) === true) or ($file == $overrideFile))
-                            continue;
-                        // ignore files with leading dot and files without extension tmx
-                        if (preg_match('/^[^.].*\.tmx$/', $file) === 0)
-                            continue;
-                        $translate->addTranslation(array_merge(array(
-                                    'content' => $languageDir . $file,
-                        ), $options));
-                    }
-                }
-            }
-
-            // Load overrideFile
-            if (file_exists($languageDir . $overrideFile)) {
-                $translate->addTranslation(array_merge(array(
-                            'content' => $languageDir  . $overrideFile,
-                ), $options));
-            }
+            $moduleDir = $this->_path_to_modules . "/$current_module/";
+            $this->_loadLanguageDirectory("$moduleDir/language/");
+            $this->_loadLanguageDirectory("$moduleDir/language_custom/");
         }
 
         foreach ($module_paths as $path) {
@@ -206,6 +174,52 @@ class Controller_Plugin_ModulePrepare extends Zend_Controller_Plugin_Abstract {
                 }
             }
         }
+    }
+
+    /**
+     * Load the given language directory.
+     *
+     * @param string $directory
+     * @return boolean
+     */
+    protected function _loadLanguageDirectory($directory) {
+        $translate = Zend_Registry::get('Zend_Translate');
+        $options = array(
+            'adapter' => Zend_Translate::AN_TMX,
+            'locale' => 'auto',
+            'clear' => false,
+            'scan' => Zend_Translate::LOCALE_FILENAME,
+            'ignore' => '.',
+            'disableNotices' => true
+        );
+
+        $directory = realpath($directory);
+        if (($directory === false) or (!is_dir($directory)) or (!is_readable($directory))) {
+            return false;
+        }
+
+        $handle = opendir($directory);
+        if (!$handle) {
+            return false;
+        }
+
+        while (false !== ($file = readdir($handle))) {
+            // Ignore directories.
+            if (!is_file($directory . DIRECTORY_SEPARATOR . $file)) {
+                continue;
+            }
+
+            // Ignore files with leading dot and files without extension tmx.
+            if (preg_match('/^[^.].*\.tmx$/', $file) === 0) {
+                continue;
+            }
+            
+            $translate->addTranslation(array_merge(array(
+                        'content' => $directory . DIRECTORY_SEPARATOR . $file,
+            ), $options));
+        }
+
+        return true;
     }
 
     // TODO move code here

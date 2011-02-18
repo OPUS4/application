@@ -218,42 +218,20 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
 
         $options = array(
             'adapter' => Zend_Translate::AN_TMX,
-            'locale'  => 'auto',
-
+            'locale' => 'auto',
             'clear' => false,
             'scan' => Zend_Translate::LOCALE_FILENAME,
             'ignore' => '.',
             'disableNotices' => true
-            );
+        );
         $translate = new Zend_Translate(array_merge(array(
             'content' => APPLICATION_PATH . '/modules/default/language/default.tmx',
         ), $options));
+        Zend_Registry::set('Zend_Translate', $translate);
 
-        $overrideFile = "custom.tmx";
-        $languageDir = APPLICATION_PATH . '/modules/default/language/';
-        if (is_dir($languageDir) && is_readable($languageDir)) {
-            $handle = opendir($languageDir);
-            if ($handle) {
-                while (false !== ($file = readdir($handle))) {
-                    // ignore directories, ignore overrideFile.
-                    if ((is_dir($languageDir . $file) === true) or ($file == $overrideFile))
-                        continue;
-                    // ignore files with leading dot and files without extension tmx
-                    if (preg_match('/^[^.].*\.tmx$/', $file) === 0)
-                        continue;
-                    $translate->addTranslation(array_merge(array(
-                                'content' => $languageDir . $file,
-                    ), $options));
-                }
-            }
-        }
-
-        // Load overrideFile
-        if (file_exists($languageDir . $overrideFile)) {
-            $translate->addTranslation(array_merge(array(
-                        'content' => $languageDir  . $overrideFile,
-            ), $options));
-        }
+        $moduleDir = APPLICATION_PATH . '/modules/default/';
+        $this->_loadLanguageDirectory("$moduleDir/language/");
+        $this->_loadLanguageDirectory("$moduleDir/language_custom/");
 
         $sessiondata = new Zend_Session_Namespace();
         if (empty($sessiondata->language)) {
@@ -278,8 +256,55 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         }
         $logger->info('Set language to "' . $sessiondata->language . '".');
         $translate->setLocale($sessiondata->language);
-        Zend_Registry::set('Zend_Translate', $translate);
         $this->translate = $translate;
+    }
+
+    /**
+     * Load the given language directory.
+     *
+     * @param string $directory
+     * @return boolean
+     *
+     * TODO: Outsource to somewhere else.
+     */
+    protected function _loadLanguageDirectory($directory) {
+        $translate = Zend_Registry::get('Zend_Translate');
+        $options = array(
+            'adapter' => Zend_Translate::AN_TMX,
+            'locale' => 'auto',
+            'clear' => false,
+            'scan' => Zend_Translate::LOCALE_FILENAME,
+            'ignore' => '.',
+            'disableNotices' => true
+        );
+
+        $directory = realpath($directory);
+        if (($directory === false) or (!is_dir($directory)) or (!is_readable($directory))) {
+            return false;
+        }
+
+        $handle = opendir($directory);
+        if (!$handle) {
+            return false;
+        }
+
+        while (false !== ($file = readdir($handle))) {
+            // Ignore directories.
+            if (!is_file($directory . DIRECTORY_SEPARATOR . $file)) {
+                continue;
+            }
+
+            // Ignore files with leading dot and files without extension tmx.
+            if (preg_match('/^[^.].*\.tmx$/', $file) === 0) {
+                continue;
+            }
+
+            $translate->addTranslation(array_merge(array(
+                        'content' => $directory . DIRECTORY_SEPARATOR . $file,
+            ), $options));
+        }
+
+        return true;
     }
 
     /**
