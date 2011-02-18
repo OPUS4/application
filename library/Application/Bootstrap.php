@@ -227,22 +227,32 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
             );
         $translate = new Zend_Translate(array_merge(array(
             'content' => APPLICATION_PATH . '/modules/default/language/default.tmx',
-            ), $options));
+        ), $options));
 
+        $overrideFile = "custom.tmx";
         $languageDir = APPLICATION_PATH . '/modules/default/language/';
         if (is_dir($languageDir) && is_readable($languageDir)) {
             $handle = opendir($languageDir);
             if ($handle) {
                 while (false !== ($file = readdir($handle))) {
-                    // ignore directories
-                    if (is_dir($file) === true) continue;
+                    // ignore directories, ignore overrideFile.
+                    if ((is_dir($languageDir . $file) === true) or ($file == $overrideFile))
+                        continue;
                     // ignore files with leading dot and files without extension tmx
-                    if (preg_match('/^[^.].*\.tmx$/', $file) === 0) continue;
+                    if (preg_match('/^[^.].*\.tmx$/', $file) === 0)
+                        continue;
                     $translate->addTranslation(array_merge(array(
-                        'content' => $languageDir . $file,
+                                'content' => $languageDir . $file,
                     ), $options));
                 }
             }
+        }
+
+        // Load overrideFile
+        if (file_exists($languageDir . $overrideFile)) {
+            $translate->addTranslation(array_merge(array(
+                        'content' => $languageDir  . $overrideFile,
+            ), $options));
         }
 
         $sessiondata = new Zend_Session_Namespace();

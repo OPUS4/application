@@ -159,12 +159,14 @@ class Controller_Plugin_ModulePrepare extends Zend_Controller_Plugin_Abstract {
 
         // Add translation
         if ($current_module !== 'default') {
+            $overrideFile = "custom.tmx";
             $languageDir = "$this->_path_to_modules/$current_module/language/";
-            if (file_exists($languageDir) === true) {
-                if ($handle = opendir($languageDir)) {
+            if (is_dir($languageDir) && is_readable($languageDir)) {
+                $handle = opendir($languageDir);
+                if ($handle) {
                     while (false !== ($file = readdir($handle))) {
-                        // ignore directories
-                        if (is_dir($file) === true)
+                        // ignore directories, ignore overrideFile.
+                        if ((is_dir($languageDir . $file) === true) or ($file == $overrideFile))
                             continue;
                         // ignore files with leading dot and files without extension tmx
                         if (preg_match('/^[^.].*\.tmx$/', $file) === 0)
@@ -174,6 +176,13 @@ class Controller_Plugin_ModulePrepare extends Zend_Controller_Plugin_Abstract {
                         ), $options));
                     }
                 }
+            }
+
+            // Load overrideFile
+            if (file_exists($languageDir . $overrideFile)) {
+                $translate->addTranslation(array_merge(array(
+                            'content' => $languageDir  . $overrideFile,
+                ), $options));
             }
         }
 
