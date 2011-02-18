@@ -68,7 +68,7 @@ class Opus3XMLImport {
      */
     protected $document = null;
      /**
-     * Holds the Mappings forColelctions
+     * Holds the Mappings forCollections
      *
      * @var Array
      */
@@ -184,7 +184,6 @@ class Opus3XMLImport {
     public function import($document) {
         $this->collections = array();
         $this->values = null;
-
         $this->document = $document;
      
         $oldid = null;
@@ -197,13 +196,13 @@ class Opus3XMLImport {
         $this->mapClassifications();
         $this->mapCollections();
         $this->mapValues();
-        //echo "(2):".$this->completeXML->saveXML($this->document)."\n";
+        //$this->log("(2):".$this->completeXML->saveXML($this->document)."\n");
         //return;
 
         $imported = array();
+        $doc = null;
 
         try {
-            $doc = null;
             $doc = Opus_Document::fromXml('<Opus>' . $this->completeXML->saveXML($this->document) . '</Opus>');
 
             // ThesisGrantor and ThesisPublisher only for Thesis-Documents
@@ -221,6 +220,14 @@ class Opus3XMLImport {
             if (array_key_exists('licence', $this->values)) {
                 $doc->addLicence(new Opus_Licence($this->values['licence']));
             }
+
+            /* TODO Opus4.1 SortOrder of PersonAuthor
+             * foreach ($doc->getPersonAuthor() as $a) {
+		//echo "SortOrder:".$a->getSortOrder()."\n";
+                //$a->setSortOrder('1');
+            }
+             * 
+             */
 
             foreach ($this->collections as $c) {
                 $coll = new Opus_Collection($c);
@@ -242,28 +249,9 @@ class Opus3XMLImport {
             $imported['oldid'] = $oldid;
         }
 
-        /*
-        unset($doc);
-	unset($this->document);
-        unset($oldid);
-        unset($oldclasses);
-        unset($newclasses);
-        unset($oldcollections);
-        unset($newcollections);
-        unset($oldddc);
-        unset($newddc);
-        unset($oldgrantor);
-        unset($newgrantor);
-        unset($oldinstitutes);
-        unset($newinstitutes);
-	unset($oldlicence);
-	unset($newlicence);
-	unset($oldpublisher);
-	unset($newpublisher);
-	unset($oldseries);
-	unset($newseries);
-         * 
-         */
+        unset($this->collections);
+        unset($this->values);
+        unset($this->document);
 
         return $imported;
     }
