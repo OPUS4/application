@@ -9,5 +9,5 @@ cp $BASEDIR/opus4/scripts/opus-apache-rewritemap-caller-secure.sh.template $BASE
 chmod +x $BASEDIR/opus4/scripts/opus-apache-rewritemap-caller-secure.sh
 sudo /etc/init.d/apache2 reload
 
-sudo chmod +x $BASEDIR/install/install.sh
-sudo $BASEDIR/install/install.sh
+sudo chmod +x $BASEDIR/install/install_ubuntu.sh
+sudo $BASEDIR/install/install_ubuntu.sh
