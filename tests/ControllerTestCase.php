@@ -40,6 +40,8 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
      * Method to initialize Zend_Application for each test.
      */
     public function setUp() {
+        Opus_Db_TableGateway::clearInstances();
+
         $this->application = new Zend_Application(
             APPLICATION_ENV,
             array(
@@ -65,8 +67,6 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
      * Clean up database instances.
      */
     protected function tearDown() {
-        Opus_Db_TableGateway::clearInstances();
-
         Zend_Registry::set('Opus_Navigation', null); // FIXME Does it help with the mystery bug?
 
         $this->logoutUser();
