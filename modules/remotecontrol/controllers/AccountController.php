@@ -34,6 +34,11 @@
  */
 class Remotecontrol_AccountController extends Controller_Action {
 
+    public function init() {
+        parent::init();
+        $this->requirePrivilege('remotecontrol');
+    }
+
     public function addAction() {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);

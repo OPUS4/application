@@ -35,27 +35,10 @@
  */
 class Remotecontrol_CollectionController extends Controller_Action {
 
-//    public function init() {
-//        parent::init();
-//
-//        if (true !== Opus_Security_Realm::getInstance()->check('administrate')) {
-//
-//            // $message = $this->translate('admin_wrong_identity_error');
-//            $message = "You need another identity to use module admin.";
-//
-//            $identity = Zend_Auth::getInstance()->getIdentity();
-//            if (empty($identity) === true) {
-//                // $message = $this->translate('admin_no_identity_error');
-//                $message = "You must be logged in to use module admin.";
-//            }
-//
-//            throw new Exception($message);
-//
-//            // Forward to module auth
-//            Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger')->addMessage(array('level' => 'failure', 'message' => $message));
-//            Zend_Controller_Action_HelperBroker::getStaticHelper('redirector')->gotoSimple('index', 'auth', 'default');
-//        }
-//    }
+    public function init() {
+        parent::init();
+        $this->requirePrivilege('remotecontrol');
+    }
 
     public function addAction() {
         $this->_helper->layout()->disableLayout();
