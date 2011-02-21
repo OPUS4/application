@@ -179,7 +179,7 @@
             </xsl:if>
             <xsl:if test="$modus = 'temp'">
                 <xsl:attribute name="ServerState">
-                    <xsl:text>temporary</xsl:text>
+                    <xsl:text>unpublished</xsl:text>
                 </xsl:attribute>
             </xsl:if>
 

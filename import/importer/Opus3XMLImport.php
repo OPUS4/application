@@ -149,7 +149,7 @@ class Opus3XMLImport {
         $this->mapping['institute'] = array('name' => 'OldInstitute',  'mapping' => $this->config->import->mapping->institutes);
         $this->mapping['series'] = array('name' => 'OldSeries',  'mapping' => $this->config->import->mapping->series);
         $this->mapping['grantor'] = array('name' => 'OldGrantor', 'mapping' => $this->config->import->mapping->grantors);
-        $this->mapping['licence'] = array('name' => 'OldLicence',  'mapping' => $this->config->import->mapping->licence);
+        $this->mapping['licence'] = array('name' => 'OldLicence',  'mapping' => $this->config->import->mapping->licences);
         $this->mapping['publisherUniversity'] = array('name' => 'OldPublisherUniversity', 'mapping' => $this->config->import->mapping->universities);
 
         array_push($this->thesistypes, 'bachelorthesis');
@@ -191,6 +191,7 @@ class Opus3XMLImport {
 
         //$this->log("(1):".$this->completeXML->saveXML($this->document)."\n");
         $this->skipEmptyFields();
+	$this->validateEmails();
 
         $this->mapDocumentTypeAndLanguage();
         $this->mapElementLanguage();
@@ -276,8 +277,8 @@ class Opus3XMLImport {
         array_push($roles, array('TitleAdditional', 'Value'));
 
         array_push($roles, array('SubjectUncontrolled', 'Value'));
-
         array_push($roles, array('IdentifierIsbn', 'Value'));
+	array_push($roles, array('Enrichment', 'Value'));
 
         array_push($roles, array('Note', 'Message'));
  
@@ -286,12 +287,39 @@ class Opus3XMLImport {
             foreach ($elements as $e) {
                 //echo $p->getAttribute('LastName')."\n";
                 if (trim($e->getAttribute($r[1])) == "") {
-                    $this->log("ERROR: '".$r[0]."' with empty '".$r[1]."' will not be imported.\n");
+                    $this->log("ERROR Opus3XMLImport: '".$r[0]."' with empty '".$r[1]."' will not be imported.\n");
                     $this->document->removeChild($e);
                 }
             }
         }
     }
+    
+    private function validateEmails() {
+    
+        $roles = array();
+        array_push($roles, 'PersonAdvisor');
+        array_push($roles, 'PersonAuthor');
+        array_push($roles, 'PersonContributor');
+        array_push($roles, 'PersonEditor');
+        array_push($roles, 'PersonReferee');
+        array_push($roles, 'PersonOther');
+        array_push($roles, 'PersonTranslator');
+        array_push($roles, 'PersonSubmitter');    
+    
+	$validator = new Zend_Validate_EmailAddress();
+	
+        foreach ($roles as $r) {
+            $elements = $this->document->getElementsByTagName($r);
+            foreach ($elements as $e) {	
+                if (trim($e->getAttribute('Email')) != "") {
+			if (!($validator->isValid($e->getAttribute('Email')))) {
+				$this->log("ERROR Opus3XMLImport: invalid Email-Address '".$e->getAttribute('Email')."' will not be imported.\n");
+				$e->removeAttribute('Email');
+			}
+                }
+            }
+        }
+    }	    
 
  
     private function mapDocumentTypeAndLanguage() {
