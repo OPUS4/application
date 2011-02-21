@@ -177,10 +177,12 @@ class Frontdoor_IndexController extends Controller_Action {
             }
             $metas[] = array('DC.Identifier', "$baseUrlFiles/" . $document->getId() . "/" . $file->getPathName());
 
-            if ($file->getMimeType() != 'application/pdf') {
-                continue;
+            if ($file->getMimeType() == 'application/pdf') {
+                $metas[] = array('citation_pdf_url', "$baseUrlFiles/" . $document->getId() . "/" . $file->getPathName());
             }
-            $metas[] = array('citation_pdf_url', "$baseUrlFiles/" . $document->getId() . "/" . $file->getPathName());
+            else if ($file->getMimeType() == 'application/postscript') {
+                $metas[] = array('citation_ps_url', "$baseUrlFiles/" . $document->getId() . "/" . $file->getPathName());
+            }
         }
 
         $datePublished = $document->getPublishedDate();
