@@ -1,9 +1,0 @@
-<ol>
-<li>Person`s names should be entered this way: Last name, First name</li>
-<li>It is possible to substitute single unknown characters of a term by _ (underline). For example: Ma_er in search field person provides different ways of spelling (e.g. Maier, Mayer etc.).</li>
-<li>Some search fields refer to authority files. Please consult them when in doubt before searching the fields <a href="/fak_liste.php" target="_blank">Faculty</a>, <a href="/inst_liste.php" target="_blank">Institute</a> or <a href="/dokart_liste.php" target="_blank">Document type</a>.</li>
-<li>The field <b>Free text</b> searches <i>title</i>, <i>keyword</i> and <i>abstract</i> at the same time.</li>
-<li></li>
-<li>Use the search field <b>Source</b> to search for parallel publications (e.g. in a journal, a conference issue etc.) of documents.</li>
-</ol>
-If you need more general tipps or hints for research you should have a look into the tutorial <a href="http://discus.tu-harburg.de" target="_blank">DISCUS</a>!

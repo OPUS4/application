@@ -1,1 +1,0 @@
-Dieser Dokumentenserver wird auf Basis der Software OPUS 4.0 betrieben. OPUS ist dokumentiert unter http://opus4.kobv.de/ bzw. http://opusdev.bsz-bw.de.

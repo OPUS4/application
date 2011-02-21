@@ -1,5 +1,0 @@
-Bitte stellen Sie vor der Veröffentlichung eines Dokumentes sicher, dass Sie berechtigt dazu sind. 
-Generell sind Sie berechtigt, wenn Sie selbst der Autor des Dokumentes sind und keine exklusiven Rechte 
-an Dritte abgegeben haben. Sollten Sie Ihre Publikation parallel in einem Verlag veröffentlicht haben 
-oder dies planen, so stellen Sie sicher, dass der Verlag eine parallele Veröffentlichung auf einem 
-Dokumentenserver erlaubt.

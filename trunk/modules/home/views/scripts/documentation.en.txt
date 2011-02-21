@@ -1,1 +1,0 @@
-This document server is based on the repository software OPUS 4.0. OPUS is documented here: http://opus4.kobv.de/ and http://opusdev.bsz-bw.de.
