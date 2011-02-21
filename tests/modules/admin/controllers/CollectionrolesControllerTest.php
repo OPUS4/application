@@ -62,10 +62,14 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
         $rootCollection->store();
     }
 
-    public function tearDown() {
+    public function tearDown() {        
+        if (!is_null($this->nonEmptyCollectionRole) && !is_null($this->nonEmptyCollectionRole->getId())) {
+            $this->nonEmptyCollectionRole->delete();
+        }
+        if (!is_null($this->emptyCollectionRole) && !is_null($this->emptyCollectionRole->getId())) {
+            $this->emptyCollectionRole->delete();
+        }
         parent::tearDown();
-        if (!is_null($this->nonEmptyCollectionRole->getId())) $this->nonEmptyCollectionRole->delete();
-        if (!is_null($this->emptyCollectionRole->getId())) $this->emptyCollectionRole->delete();
     }
     
     public function testIndexAction() {
