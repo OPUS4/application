@@ -40,7 +40,10 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
      * Method to initialize Zend_Application for each test.
      */
     public function setUp() {
+        // Resetting singletons or other kinds of persistent objects.
         Opus_Db_TableGateway::clearInstances();
+        Zend_Registry::set('Opus_Navigation', null);
+        $this->logoutUser();
 
         $this->application = new Zend_Application(
             APPLICATION_ENV,
@@ -61,17 +64,6 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
 
         // Initializing start_mtime to make tests pass if debugging is enabled.
         $GLOBALS['start_mtime'] = 0;
-    }
-
-    /**
-     * Clean up database instances.
-     */
-    protected function tearDown() {
-        Zend_Registry::set('Opus_Navigation', null); // FIXME Does it help with the mystery bug?
-
-        $this->logoutUser();
-
-        parent::tearDown();
     }
 
     /**
