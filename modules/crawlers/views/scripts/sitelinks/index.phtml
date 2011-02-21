@@ -37,6 +37,6 @@
 
 <ol>
 <?php foreach ($this->ids as $id) : ?>
-    <li><a href="<?= $this->url(array('module' => 'frontdoor', 'docId' => $id)) ?>">document <?= $id ?></a></li>
+    <li><a href="<?= $this->url(array('module' => 'frontdoor', 'controller' => 'index', 'action' => 'index', 'docId' => $id)) ?>">document <?= $id ?></a></li>
 <?php endforeach; ?>
 </ol>
