@@ -161,6 +161,8 @@ class Solrsearch_IndexController extends Controller_Action {
         $this->setViewValues();
         $this->setViewFacets();
 
+        $this->setLinkRelCanonical();
+
         if($this->numOfHits === 0 || $this->query->getStart() >= $this->numOfHits) {
             $this->render('nohits');
         }
@@ -169,8 +171,20 @@ class Solrsearch_IndexController extends Controller_Action {
         }
     }
 
+    private function setLinkRelCanonical() {
+        $query = $this->getRequest()->getParams();
+        $query['rows'] = 10;
+        unset($query['sortfield']);
+        unset($query['sortorder']);
+
+        $serverUrl = $this->view->serverUrl();
+        $fullCanonicalUrl = $serverUrl . $this->view->url( $query, null, true );
+
+        $this->view->headLink(array('rel' => 'canonical', 'href' => $fullCanonicalUrl));
+    }
+
     private function performSearch() {
-        $this->log->debug('performing search');        
+        $this->log->debug('performing search');
         try {
             $searcher = new Opus_SolrSearch_Searcher();
             $this->resultList = $searcher->search($this->query);
