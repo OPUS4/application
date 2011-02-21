@@ -1,0 +1,83 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+ 
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+ 
+  <body>
+
+    <tu tuid="admin_role_index">
+      <tuv xml:lang="en">
+        <seg>Manage User Roles and Privileges</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nutzerrollen und Privilegien verwalten</seg>
+      </tuv>
+    </tu>
+       
+    <tu tuid="admin_role_show">
+      <tuv xml:lang="en">
+        <seg>Role</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nutzerrolle</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_role_new">
+      <tuv xml:lang="en">
+        <seg>New Role</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Neue Nutzerrolle</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_role_edit">
+      <tuv xml:lang="en">
+        <seg>Edit Role</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nutzerrolle editieren</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_role_label_name">
+      <tuv xml:lang="en">
+        <seg>Name:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Name:</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_role_group_basic">
+      <tuv xml:lang="en">
+        <seg>Basic Privileges</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einfache Rechte</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_role_group_metadata">
+      <tuv xml:lang="en">
+        <seg>Read Metadata Privileges</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Metadaten Lesen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_role_error_role_used">
+      <tuv xml:lang="en">
+        <seg>Role name already exists.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Der Rollenname existiert bereits.</seg>
+      </tuv>
+    </tu>
+  </body>
+  
+</tmx>

@@ -1,0 +1,249 @@
+/**
+ * This file is part of OPUS. The software OPUS has been originally developed
+ * at the University of Stuttgart with funding from the German Research Net,
+ * the Federal Department of Higher Education and Research and the Ministry
+ * of Science, Research and the Arts of the State of Baden-Wuerttemberg.
+ *
+ * OPUS 4 is a complete rewrite of the original OPUS software and was developed
+ * by the Stuttgart University Library, the Library Service Center
+ * Baden-Wuerttemberg, the Cooperative Library Network Berlin-Brandenburg,
+ * the Saarland University and State Library, the Saxon State Library -
+ * Dresden State and University Library, the Bielefeld University Library and
+ * the University Library of Hamburg University of Technology with funding from
+ * the German Research Foundation and the European Regional Development Fund.
+ *
+ * LICENCE
+ * OPUS is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the Licence, or any later version.
+ * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @category    Application
+ * @author      Felix Ostrowski (ostrowski@hbz-nrw.de)
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ * @version     $Id$
+*/
+
+/**
+ * All styles concerned with colors, borders and images.
+*/
+
+#header {
+    /*border-bottom: 1px solid #d8e1ea;*/
+}
+
+#footer {
+    border-top: 1px solid black;
+    background: url(../img/opus-logo.gif) no-repeat;
+}
+
+#summary div {
+    padding: 10px;
+}
+
+.paginationContainer ul, li {
+    margin-left: .2em;
+    padding-left: .2em;
+}
+
+div.box {
+    border: 1px solid black;
+}
+
+div.box h1 {
+    background-color: #EFEFEF;
+}
+
+.search_results .result_box {
+    padding:.5em;
+    color:black;
+}
+
+.search_results .even {
+    background-color:#c3d6e6;
+}
+
+.search_results .odd {
+    background-color:#f3f6f6;
+}
+
+.search_results .results_title {
+    font-weight:bold;
+}
+
+.results_pagination {
+    clear:both;
+    color:black;
+    margin:0px;
+    display:inline;
+    margin-bottom:5em;
+}
+
+.paginationContainer {
+    margin-bottom:2em;
+    margin-top:2em;
+    clear:both;
+}
+
+.results_pagination ul li {
+    display:inline;
+}
+
+.results_facets {
+    float:left;
+    width: 20%;
+    color:black;
+}
+
+.results_facets .facet_heading {
+    margin-bottom:2em;
+    color:#ff9f0d;
+    font-weight: bold;
+}
+
+.search_results {
+    float: right;
+    width: 75%;
+}
+
+.results_facets .facet {
+    margin:0;
+    padding:0;
+    padding-bottom:1em;
+
+}
+
+.results_facets .facet li {
+    padding:0;
+    margin:0;
+    list-style-type:none;
+    font-size:10px;
+
+}
+
+.results_facets .facet li a {
+    font-size:10px;
+    text-decoration:none;
+}
+
+.results_facets .facet li a:hover {
+    text-decoration:underline;
+}
+
+.results_facets .facet ul {
+    margin:0;
+    padding:0;
+    font-size:10px;
+    line-height:115%;
+}
+
+.search_options {
+    margin:2em;
+}
+
+.results_facets .activeFacet {
+
+}
+
+.results_facets .activeFacet a {
+    color:#FE0607;
+    font-weight:bold;
+}
+
+.results_facets .removeFacetLink a {
+    color:#555555;
+    font-weight: normal;
+    font-style: italic;
+}
+
+.results_facets .facet_heading {
+    padding-bottom:2em;
+}
+
+.results_pagination .info_small {
+    display:inline;
+}
+
+.results_pagination .paginationControl {
+    display:inline;
+}
+
+.results_pagination .paginationControl a {
+    border:1px solid #999999;
+    background-color: #eeeeee;
+    color: black;
+    padding: .3em;
+    text-decoration:none;
+    display:inline;
+    margin:0px;
+}
+
+.results_pagination .paginationControl a:hover {
+    background-color:#ffffff;
+}
+
+.info_small {
+    padding:1em;
+    font-size:14px;
+}
+
+.opus_form {
+    margin-top:1em;
+    margin-bottom:1em;
+}
+
+.sorting_options {
+    list-style: none outside none;
+    margin: 0;
+    padding: 0;
+}
+
+.sorting_option {
+    display: inline;
+    margin: 0;
+    padding: 0;
+    padding-right: .5em;
+}
+
+.printfriendly h1 {
+    font-size: 18px;
+}
+
+.printfriendly a {
+    font-size:14px;
+}
+
+.searchform {
+    margin-top:1em;
+}
+
+.searchform h2 {
+    color:red;
+}
+
+.messages{
+	font: 0.8em "Courier New", Courier, monospace;
+}
+
+.failure, .notice{
+	padding: 5px 10px;
+	margin: 1em 0 1em;
+	float: left;
+	width: 100%;
+}
+
+.messages .failure{
+	color: #a40000;
+	background-color: #ffd4d4;
+}
+
+.messages .notice{
+	color: #008644;
+	background-color: #d4ffea;
+}

@@ -1,0 +1,66 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+ 
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+ 
+  <body>
+  
+    <tu tuid="Person_Controller">
+      <tuv xml:lang="en">
+        <seg>Admin: Administration of persons</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Admin: Personenverwaltung</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="Person_Id">
+      <tuv xml:lang="en">
+        <seg>Person Id:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Personen-Id:</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="data_error">
+      <tuv xml:lang="en">
+        <seg>person data are not correct.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Personendaten sind nicht korrekt.</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="stored">
+      <tuv xml:lang="en">
+        <seg>person data are updated.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Personendaten sind geändert.</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="notstored">
+      <tuv xml:lang="en">
+        <seg>Person data not updated!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Personendaten konnten nicht geändert werden.</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="transmit_index">
+      <tuv xml:lang="en">
+        <seg>show person data</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Personendaten anzeigen</seg>
+      </tuv>
+    </tu>
+    
+  </body>
+  
+</tmx>

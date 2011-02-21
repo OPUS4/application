@@ -1,0 +1,199 @@
+<?php
+     /**
+     * This file is part of OPUS. The software OPUS has been originally developed
+     * at the University of Stuttgart with funding from the German Research Net,
+     * the Federal Department of Higher Education and Research and the Ministry
+     * of Science, Research and the Arts of the State of Baden-Wuerttemberg.
+     *
+     * OPUS 4 is a complete rewrite of the original OPUS software and was developed
+     * by the Stuttgart University Library, the Library Service Center
+     * Baden-Wuerttemberg, the Cooperative Library Network Berlin-Brandenburg,
+     * the Saarland University and State Library, the Saxon State Library -
+     * Dresden State and University Library, the Bielefeld University Library and
+     * the University Library of Hamburg University of Technology with funding from
+     * the German Research Foundation and the European Regional Development Fund.
+     *
+     * LICENCE
+     * OPUS is free software; you can redistribute it and/or modify it under the
+     * terms of the GNU General Public License as published by the Free Software
+     * Foundation; either version 2 of the Licence, or any later version.
+     * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
+     * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+     * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+     * details. You should have received a copy of the GNU General Public License
+     * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
+     * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+     *
+     * @category    Application
+     * @author      Thoralf Klein <thoralf.klein@zib.de>
+     * @copyright   Copyright (c) 2010, OPUS 4 development team
+     * @license     http://www.gnu.org/licenses/gpl.html General Public License
+     * @version     $Id$
+     */
+     
+     /*
+     * Configure headMeta helper with content type, language and encoding.
+     */
+     
+     $this->headMeta()
+         ->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8')
+         ->appendHttpEquiv('Content-Language', 'de-DE');
+
+     $this->headTitle('OPUS 4')
+         ->headTitle($this->title)
+         ->setSeparator(' | ');
+
+     $fc = Zend_Controller_Front::getInstance();
+     $basePath = $fc->getRequest()->getBasePath();
+     $this->headLink()
+         ->appendStylesheet($basePath . '/layouts/matheon/css/opus.css')
+         ->appendStylesheet($basePath . '/layouts/matheon/css/frontdoor.css');
+
+     $languageSelectors = $this->languageSelector();
+?>
+
+<?= $this->doctype() ?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <?= $this->headMeta() ?>
+        <?= $this->headTitle() ?>
+        <?= $this->headLink() ?>
+    </head>
+    <body>
+        <div align="center">
+
+            <table class="printfriendly" width="1024" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    
+                    <td>
+                        <a href="http://www.matheon.de/index.asp">
+                            <img src="<?= $basePath;?>/layouts/matheon/img/matheon-fries_e.jpg" height="117" width="1024" border="0" alt="" />
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+
+            <table width="1024" border="0" cellspacing="0" cellpadding="0">
+                <tr class="printfriendly">
+                    <td class="tab_u tab_l" width="40" height="27">&nbsp;</td>
+                    <td class="tab_u" width="655" height="27">
+                        <table width="655" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td>
+                                    <h1>Matheon Preprint Server</h1>
+                                    
+                                </td>
+                                <td>
+                                    <a href="http://www.matheon.de">back to www.matheon.de</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div id="Tmenu">
+                                        <?= $this->navigation()
+                                                 ->menu($this->navigationMainMenu)
+                                                 ->setMaxDepth(0)
+                                                 ->setOnlyActiveBranch(0) ?>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div id="lang">
+                                        <?php if(!is_null($languageSelectors)) : ?>
+                                            <ul id="lang-switch" class="nav" title="Choose your language">
+                                                <?php foreach ($languageSelectors as $i => $languageSelector) : ?>
+                                                    <li class="<?= ($i === 0) ? 'first' : '' ?>"><a href="<?= $languageSelector['url'] ?>" title="<?= $languageSelector['name'] ?>"><?= $languageSelector['name'] ?></a></li>
+                                                <?php endforeach ?>
+                                            </ul>
+                                        <?php endif ?>
+                                    </div>
+                                </td>
+                            </tr>
+                            
+                        </table> 
+                    </td> 
+                    <td class="tab_u" width="31">
+                        &nbsp;
+                    </td>
+
+                    <td class="tab_u" width="298" height="27">
+                    </td>
+                    <td class="tab_u tab_r" width="40" height="27">&nbsp;</td>
+                </tr>
+
+                <tr class="printfriendly">
+                    <td class="tab_l" width="40">&nbsp;</td>
+                    <td class="content" valign="top" width="655">
+
+                        <table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td class="content" valign="top">
+                                    <div id="content" class="<?= $this->moduleName ?><?= ($this->controllerName === 'index' ? '' : '_'.$this->controllerName)?><?= ($this->actionName === 'index' ? '' : '_'.$this->actionName)?>">
+                                        <?php if (!is_null($this->flashMessenger)) : ?>
+                                        <div class="messages">
+                                            <?php foreach ($this->flashMessenger->getMessages() as $message) : ?>
+                                                <div class="<?= $message['level'] ?>"><?= $message['message'] ?></div>
+                                            <?php endforeach ?>
+                                        </div>
+                                        <?php endif ?>
+
+                                        <div class="wrapper">
+                                            <?= $this->layout()->content ?>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </td>
+                    <td width="31">&nbsp;</td>
+                    <td class="navi_links printfriendly" valign="top" width="309" />
+                    <td class="tab_r" width="40">&nbsp;</td>
+                </tr>
+            </table>
+
+            <table class="printfriendly" width="1024" border="0" cellspacing="0" cellpadding="0" height="27">
+                <tr>
+                    <td class="bg_unten" style="border: 1px solid #d8e1ea;">
+                        <span class="content">
+                            &copy; <span style="font-variant:small-caps">Matheon</span>
+                            &bull; <a href="http://www.matheon.de/impressum.asp">Imprint (German only)</a>
+                            &bull; <a href="http://www.matheon.de/disclaimer.asp">Disclaimer</a>
+                            &bull; <a href="http://www.matheon.de/copyright.asp">Copyright</a>
+                            &bull; <a href="http://www.matheon.de/members/members.asp">Login</a>
+                        </span>
+                    </td>
+                </tr>
+            </table>
+
+<?php
+     $dbprofiler = Zend_Registry::get('db_adapter')->getProfiler();
+     $config = Zend_Registry::get('Zend_Config');
+     $profiler_show_queries = (bool) $config->db->params->showqueries;
+     $profiler_max_queries = (int) $config->db->params->maxqueries;
+     if ($dbprofiler->getEnabled() === true) :
+?>
+
+    <div class="debug dbprofiler" style="clear:both">
+    <hr/>
+    <h2>Profiling information (execution time <?= round(microtime(true) - $GLOBALS['start_mtime'],3) ?>)</h2>
+    <b>Total number of queries: </b><?= $dbprofiler->getTotalNumQueries() ?><br />
+    <b>Total query time (s): </b><?= $dbprofiler->getTotalElapsedSecs() ?><br />
+    <b>Current memory consumption: </b><?= memory_get_usage(true) ?><br />
+    <b>Peak memory consumption: </b><?= memory_get_peak_usage(true) ?><br />
+    <?php if ($profiler_show_queries === true and $profiler_query_profiles = $dbprofiler->getQueryProfiles()) : ?>
+        <b>Queries:</b><br />
+        <ul>
+            <?php for ($i=1; ($i < $profiler_max_queries) and ($i < count($profiler_query_profiles)); $i++) : ?>
+                <li><pre><?= $profiler_query_profiles[$i]->getQuery() ?></pre></li>
+            <?php endfor ?>
+            <?php if ($i < count($profiler_query_profiles)) { echo "<li>...</li>"; } ?>
+        </ul>
+    <?php endif ?>
+    </div>
+<?php endif ?>
+            
+        </div>
+        
+    </body>
+</html>

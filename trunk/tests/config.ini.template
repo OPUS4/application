@@ -1,0 +1,83 @@
+; This file is part of OPUS. The software OPUS has been originally developed
+; at the University of Stuttgart with funding from the German Research Net,
+; the Federal Department of Higher Education and Research and the Ministry
+; of Science, Research and the Arts of the State of Baden-Wuerttemberg.
+; 
+; OPUS 4 is a complete rewrite of the original OPUS software and was developed
+; by the Stuttgart University Library, the Library Service Center
+; Baden-Wuerttemberg, the Cooperative Library Network Berlin-Brandenburg,
+; the Saarland University and State Library, the Saxon State Library -
+; Dresden State and University Library, the Bielefeld University Library and
+; the University Library of Hamburg University of Technology with funding from
+; the German Research Foundation and the European Regional Development Fund.
+; 
+; LICENCE
+; OPUS is free software; you can redistribute it and/or modify it under the
+; terms of the GNU General Public License as published by the Free Software
+; Foundation; either version 2 of the Licence, or any later version.
+; OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
+; WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+; FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+; details. You should have received a copy of the GNU General Public License
+; along with OPUS; if not, write to the Free Software Foundation, Inc., 51
+; Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+; 
+; @category    Application
+; @author      Ralf Claussnitzer <ralf.claussnitzer@slub-dresden.de>
+; @author      Thoralf Klein <thoralf.klein@zib.de>
+; @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+; @license     http://www.gnu.org/licenses/gpl.html General Public License
+; @version     $Id$
+
+; Database adapter configuration using standard Zend_db option names.
+; Have a look on Zend_Db::factory() method for information about adapter creation.
+
+[production]
+db.params.host     =  
+db.params.username = 
+db.params.password = 
+db.params.dbname   = 
+
+;PHP SETTINGS
+phpSettings.display_startup_errors = 1
+phpSettings.display_errors = 1
+; TODO verify the two settings below
+phpSettings.error_reporting = E_ALL | E_STRICT
+phpSettings.date.timezone = Europe/Berlin
+
+;ZEND_APPLICATION SETTINGS
+includePaths.library = APPLICATION_PATH "/library"
+bootstrap.path = APPLICATION_PATH "/tests/TestHelper.php"
+bootstrap.class = "TestHelper"
+appnamespace = "Application"
+autoloaderNamespaces.apache = 'Apache_'
+autoloaderNamespaces.opus = 'Opus_'
+autoloaderNamespaces.form = 'Form_'
+autoloaderNamespaces.controller = 'Controller_'
+
+workspacePath = APPLICATION_PATH "/tests/workspace"
+path.workspace.temp = APPLICATION_PATH "/tests/workspace/tmp"
+
+; LOCALE SETTINGS (TODO verify)
+resources.locale.default = de
+
+;SEARCH ENGINE SETTINGS
+; searchengine to be used: Lucene or Solr
+searchengine.engine = Solr
+searchengine.index.host =
+searchengine.index.port =
+searchengine.index.app =
+searchengine.extract.host =
+searchengine.extract.port =
+searchengine.extract.app =
+
+;OAI SETTINGS
+oai.repository.name =
+oai.repository.identifier =
+oai.sample.identifier =
+oai.contactid =
+oai.max.listrecords = 10
+oai.max.listidentifiers = 10
+
+[testing : production]
+sql.schema.path =

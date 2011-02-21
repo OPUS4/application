@@ -1,0 +1,227 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+ 
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+ 
+  <body>
+  
+    <tu tuid="Statistic_Controller">
+      <tuv xml:lang="en">
+        <seg>Admin: Number of publications</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Admin: Veröffentlichungstatistik</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_statistic_show">
+      <tuv xml:lang="en">
+        <seg>Number of Publications</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Veröffentlichungstatistik</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="Total_Number_Documents">
+      <tuv xml:lang="en">
+        <seg>Total number of documents</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Gesamtzahl Dokumente</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="Month_Overview_Title">
+      <tuv xml:lang="en">
+        <seg>Month overview</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Monatsübersicht</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="Type_Overview_Title">
+      <tuv xml:lang="en">
+        <seg>Overview by document type</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokumenttyp-Übersicht</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="Institute_Overview_Title">
+      <tuv xml:lang="en">
+        <seg>Overview by institute</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Institut-Übersicht</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="Month_Title">
+      <tuv xml:lang="en">
+        <seg>Month</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Monat</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="Institute_Title">
+      <tuv xml:lang="en">
+        <seg>Institute</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Institut</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="Count_Title">
+      <tuv xml:lang="en">
+        <seg>Count</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Anzahl</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="Doc_Type">
+      <tuv xml:lang="en">
+        <seg>Document type</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokumenttyp</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="Select_Year_Label">
+      <tuv xml:lang="en">
+        <seg>Please select year:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte Jahr auswählen:</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="Submit_Button_Label">
+      <tuv xml:lang="en">
+        <seg>Show statistic</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Statistik anzeigen</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="Month_1">
+      <tuv xml:lang="en">
+        <seg>Jan</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Jan</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="Month_2">
+      <tuv xml:lang="en">
+        <seg>Feb</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Feb</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="Month_3">
+      <tuv xml:lang="en">
+        <seg>Mar</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Mrz</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="Month_4">
+      <tuv xml:lang="en">
+        <seg>Avr</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Apr</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="Month_5">
+      <tuv xml:lang="en">
+        <seg>May</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Mai</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="Month_6">
+      <tuv xml:lang="en">
+        <seg>Jun</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Jun</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="Month_7">
+      <tuv xml:lang="en">
+        <seg>Jul</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Jul</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="Month_8">
+      <tuv xml:lang="en">
+        <seg>Aug</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Aug</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="Month_9">
+      <tuv xml:lang="en">
+        <seg>Sep</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sep</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="Month_10">
+      <tuv xml:lang="en">
+        <seg>Oct</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Okt</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="Month_11">
+      <tuv xml:lang="en">
+        <seg>Nov</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nov</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="Month_12">
+      <tuv xml:lang="en">
+        <seg>Dec</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dez</seg>
+      </tuv>
+    </tu>
+    
+  </body>
+</tmx>

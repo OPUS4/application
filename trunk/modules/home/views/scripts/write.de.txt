@@ -1,0 +1,15 @@
+Hilfe zum Verfassen wissenschaftlicher Texte finden Sie in zahlreichen Quellen. Allgemeine Hinweise, 
+welche Formate überhaupt geeignet sind, um online zu publizieren, bietet 
+<a href="http://www.dissonline.de/service/autoren/datenformate.htm" taregt="_blank">DissOnline</a>.
+<br/><br/>
+Ein <a href="http://www.freidok.uni-freiburg.de/freidok/tutorial/index.html" target="_blank">Tutorial zum 
+Publizieren im PDF-Format</a> mit vielen nützlichen Tipps bietet zum Beispiel die Universitätsbibliothek 
+Freiburg.<br/><br/>
+Wenn Sie Ihre Arbeit mit TeX oder LaTeX schreiben wollen (bei ingenieurswissenschaftlichen Themen mit vielen 
+mathematischen Formeln kann das sehr sinnvoll sein!), so finden Sie in der TUB einige interessante 
+<a href="https://katalog.b.tu-harburg.de/DB=1/LNG=DU/CMD?ACT=SRCHA&IKT=1016&SRT=YOP&TRM=latex" target="_blank">Literatur</a> zu diesem Thema.<br/><br/>
+Weiterführende Hinweise sowie hilfreiche Formatvorlagen für 
+<a href="http://edoc.hu-berlin.de/e_autoren/diss.php" target="_blank">Dissertationen</a>, 
+<a href="http://edoc.hu-berlin.de/e_autoren/habil.php" target="_blank">Habilitationen</a> sowie 
+<a href="http://edoc.hu-berlin.de/e_autoren/diplom.php" target="_blank">Bachelor-, Master-, Magister- und Diplomarbeiten</a> 
+bietet die Humboldt-Universität Berlin auf ihrem Dokumentenserver edoc an.

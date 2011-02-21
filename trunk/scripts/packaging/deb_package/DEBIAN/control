@@ -1,0 +1,11 @@
+Package: opus
+Version: 4.0.3
+Section: World Wide Web
+Priority: Optional
+Architecture: all
+Depends: curl, wget, subversion, java5-runtime-headless | java6-runtime-headless, libapache2-mod-php5 (>= 5.3.0) | php5-cgi (>= 5.3.0) | php5 (>= 5.3.0), php5-curl, php5-gd, php5-mcrypt, php5-mysql, php5-uuid, php5-xdebug, php5-xsl, php-crypt-gpg, mysql-server-5.1
+Recommends: apache2, mysql-client, php5-cli
+Maintainer: Opus 4 Development Team <opus4@kobv.de>
+Homepage: http://opus4.kobv.de/
+Description: An open-source publication repository software.
+ To get more information visit http://opus4.kobv.de/

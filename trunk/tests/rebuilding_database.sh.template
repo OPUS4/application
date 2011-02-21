@@ -1,0 +1,88 @@
+#! /bin/bash
+
+#
+# begin editable part
+#
+
+# user should has rights to drop and create a database (grant rights)
+user=
+password=
+host=localhost
+dbname=opus400
+
+# path to mysql binary
+mysql_bin=/usr/bin/mysql
+# path to schema file
+schema_file=../db/schema/opus400.sql
+# path to different sql locations
+master_dir=../db/masterdata/
+test_dir=../tests/sql/
+
+# path to directory that contains test fulltexts
+fulltext_dir=../tests/fulltexts
+# path to workspace directory
+workspace_dir=../workspace
+# path to workspace directory that hosts fulltexts
+workspace_files_dir=$workspace_dir/files
+# path to workspace directory thats hosts log files
+workspace_log_dir=$workspace_dir/log
+# path to workspace directory that hosts temporary files
+workspace_tmp_dir=$workspace_dir/tmp
+# path to workspace directory that hosts cached files
+workspace_cache_dir=$workspace_dir/cache
+
+#
+# end editable part
+# 
+
+mysql="${mysql_bin} --default-character-set=utf8 --user=${user} --host=${host}"
+
+if [ -n "${password}" ]; then
+    mysql="${mysql} --password=${password}"
+fi
+
+#Delete database
+echo "Dropping database: ${dbname}"
+echo "DROP DATABASE IF EXISTS ${dbname};" | ${mysql}
+
+#Creating database
+echo "Creating database: ${dbname}"
+echo "CREATE SCHEMA IF NOT EXISTS ${dbname} DEFAULT CHARACTER SET = utf8 DEFAULT COLLATE = utf8_general_ci;" | ${mysql}
+
+#Import database schema
+echo "Importing database schema file '${schema_file}'"
+${mysql} ${dbname} < ${schema_file}
+
+#Import master data
+if [ -d ${master_dir} ] ; then
+    for i in `find ${master_dir} -name *.sql \( -type f -o -type l \) | sort`; do
+        echo "Inserting file '${i}'"
+        ${mysql} ${dbname} < "${i}"
+    done
+fi
+
+#Import test data
+if [ -d ${test_dir} ] ; then
+    for i in `find ${test_dir} -name *.sql \( -type f -o -type l \) | sort`; do
+        echo "Inserting file '${i}'"
+        ${mysql} ${dbname} < "${i}"
+    done
+fi
+
+#Backup old fulltexts and log files
+TEMP_DIR=$(mktemp -d $workspace_tmp_dir/old-XXXXXXX)
+mkdir -v $TEMP_DIR/files
+mv -v $workspace_files_dir $TEMP_DIR
+mkdir -v $TEMP_DIR/log
+mv -v $workspace_log_dir $TEMP_DIR
+rm -rf $workspace_cache_dir/*
+echo -e "\n*** Created backup of fulltexts and log files in $TEMP_DIR ***\n"
+
+mkdir -pv {$workspace_files_dir,$workspace_log_dir}
+chmod 777 {$workspace_files_dir,$workspace_log_dir}
+touch $workspace_log_dir/{opus.log,opus-console.log}
+chmod 666 $workspace_log_dir/{opus.log,opus-console.log}
+
+#Copy test fulltexts to workspace
+rsync -rv --exclude=.svn $fulltext_dir/* $workspace_files_dir
+

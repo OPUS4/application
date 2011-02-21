@@ -1,0 +1,635 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+ 
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+  
+  <body>
+<!-- This language file contains all texts concerning field hints. -->
+
+     <tu tuid="header_documentType">
+      <tuv xml:lang="en">
+        <seg>Documenttype</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokumenttyp</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="documentUpload">
+      <tuv xml:lang="en">
+        <seg>Upload document(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokument(e) hochladen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_bibliographie">
+      <tuv xml:lang="en">
+        <seg>Bibliography</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bibliographie</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_rights">
+      <tuv xml:lang="en">
+        <seg>Granting a simple right of use</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einräumnung eines einfachen Nutzungsrechts</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_EnrichmentLegalNotices">
+      <tuv xml:lang="en">
+        <seg>Granting a simple right of use</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einräumnung eines einfachen Nutzungsrechts</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="groupPersonSubmitter">
+      <tuv xml:lang="en">
+        <seg>Submitter</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Kontaktdaten des Einstellers</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="groupPersonAuthor">
+      <tuv xml:lang="en">
+        <seg>Author(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Autor(en)</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_Language">
+      <tuv xml:lang="en">
+        <seg>Language</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sprache</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_EnrichmentNeuesFeld">
+      <tuv xml:lang="en">
+        <seg>New field</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Neues Feld</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="groupNeuesFeld">
+      <tuv xml:lang="en">
+        <seg>New select field</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Neues Select-Feld</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="groupNeuesSelect">
+      <tuv xml:lang="en">
+        <seg>New select field</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Neues Select-Feld</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="groupPersonTranslator">
+      <tuv xml:lang="en">
+        <seg>Translator(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Übersetzer</seg>
+      </tuv>
+    </tu>
+
+
+    <tu tuid="groupPersonAdvisor">
+      <tuv xml:lang="en">
+        <seg>Advisor</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Betreuer</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="groupPersonContributor">
+      <tuv xml:lang="en">
+        <seg>Contributor</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Beteiligte Person</seg>
+      </tuv>
+    </tu>
+
+
+	<tu tuid="groupCreatingCorporation">
+      <tuv xml:lang="en">
+        <seg>Creating Corporation</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Urhebende Körperschaft</seg>
+      </tuv>
+    </tu>
+
+	<tu tuid="groupContributingCorporation">
+      <tuv xml:lang="en">
+        <seg>Contributing Corporation</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Beteiligte Körperschaft</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="groupSubjectSwd">
+      <tuv xml:lang="en">
+        <seg>SWD-Keyword</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>SWD-Schlagwort</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="groupSubjectDDC">
+      <tuv xml:lang="en">
+        <seg>DDC Classifications</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>DDC Sachgruppen / Klassifikationen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="groupSubjectCCS">
+      <tuv xml:lang="en">
+        <seg>CCS Classifications</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>CCS Sachgruppen / Klassifikationen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="groupSubjectPACS">
+      <tuv xml:lang="en">
+        <seg>PACS Classifications</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>PACS Sachgruppen / Klassifikationen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="groupSubjectUncontrolled">
+      <tuv xml:lang="en">
+        <seg>Tag(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Schlagwort(e)</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="groupInstitute">
+      <tuv xml:lang="en">
+        <seg>Institute(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Institut(e)</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="groupTitleMain">
+      <tuv xml:lang="en">
+        <seg>Main Title(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Haupttitel</seg>
+      </tuv>
+    </tu>
+
+	<tu tuid="groupTitleSub">
+      <tuv xml:lang="en">
+        <seg>Subtitle(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Untertitel</seg>
+      </tuv>
+    </tu>
+
+	<tu tuid="groupTitleParent">
+      <tuv xml:lang="en">
+        <seg>Parent Title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Titel des übergeordneten Werkes</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="groupTitleAbstract">
+      <tuv xml:lang="en">
+        <seg>Abstract(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Abstract(s)</seg>
+      </tuv>
+    </tu>
+
+	<tu tuid="groupTitleAdditional">
+      <tuv xml:lang="en">
+        <seg>Title Additional</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Übersetzter Titel</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="groupSubjectMSC">
+      <tuv xml:lang="en">
+        <seg>MSC Classification(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>MSC Klassifikation(en)</seg>
+      </tuv>
+    </tu>
+
+	<tu tuid="groupPersonEditor">
+      <tuv xml:lang="en">
+        <seg>Editor(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Herausgeber</seg>
+      </tuv>
+    </tu>
+
+<tu tuid="groupPersonReferee">
+      <tuv xml:lang="en">
+        <seg>Referee(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Gutachter</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="groupProject">
+      <tuv xml:lang="en">
+        <seg>Project(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Projekt(e)</seg>
+      </tuv>
+    </tu>
+
+	<tu tuid="groupLicence">
+      <tuv xml:lang="en">
+        <seg>Licence(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Lizenz(en)</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_PageNumber">
+      <tuv xml:lang="en">
+        <seg>Page number</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Seitenzahl</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_PageFirst">
+      <tuv xml:lang="en">
+        <seg>First Page</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Erste Seite</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_PageLast">
+      <tuv xml:lang="en">
+        <seg>Last Page</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Letzte Seite</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_Volume">
+      <tuv xml:lang="en">
+        <seg>Volume</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Band</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_Issue">
+      <tuv xml:lang="en">
+        <seg>Issue</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Ausgabe</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_Edition">
+      <tuv xml:lang="en">
+        <seg>Edition</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Auflage</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_Institute">
+      <tuv xml:lang="en">
+        <seg>Institute</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Institut</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_PublishedYear">
+      <tuv xml:lang="en">
+        <seg>Publication: year</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Veröffentlichung: Jahr</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_PublishedDate">
+      <tuv xml:lang="en">
+        <seg>Publication: Date</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Veröffentlichung: Datum</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_PublisherName">
+      <tuv xml:lang="en">
+        <seg>Publisher</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Verlag</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_PublisherPlace">
+      <tuv xml:lang="en">
+        <seg>Place of Publisher</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Verlagsort</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_CompletedYear">
+      <tuv xml:lang="en">
+        <seg>Completion: Year</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Fertigstellung: Jahr</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_CompletedDate">
+      <tuv xml:lang="en">
+        <seg>Publication online</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Online-Veröffentlichung</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_IdentifierOpus3">
+      <tuv xml:lang="en">
+        <seg>OPUS 3 ID of document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>OPUS 3 ID des Dokuments</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_IdentifierUrn">
+      <tuv xml:lang="en">
+        <seg>URN of document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>URN des Dokuments</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_IdentifierUrl">
+      <tuv xml:lang="en">
+        <seg>URL of document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>URL des Dokuments</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_IdentifierIsbn">
+      <tuv xml:lang="en">
+        <seg>ISBN of document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>ISBN des Dokuments</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_IdentifierIssn">
+      <tuv xml:lang="en">
+        <seg>ISSN of document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>ISSN des Dokuments</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_IdentifierOpac">
+      <tuv xml:lang="en">
+        <seg>OPAC of document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>OPAC des Dokuments</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_ThesisDateAccepted">
+      <tuv xml:lang="en">
+        <seg>Thesis: Date</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Abschlussarbeit: Datum</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_ThesisGrantor">
+      <tuv xml:lang="en">
+        <seg>Granting Institution</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Titel verleihende Institution</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_ThesisPublisher">
+      <tuv xml:lang="en">
+        <seg>Publishing Institution</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Veröffentlichende Institution</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_CreatingCorporation">
+      <tuv xml:lang="en">
+        <seg>Creating Corporation</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Urhebende Körperschaft</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_ContributingCorporation">
+      <tuv xml:lang="en">
+        <seg>Contributing Corporation</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Beteiligte Körperschaft</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_Note">
+      <tuv xml:lang="en">
+        <seg>Room for notices</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Platz für Notizen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_Licence">
+      <tuv xml:lang="en">
+        <seg>Licence of document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Lizenz des Dokuments</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_ServerDateUnlocking">
+      <tuv xml:lang="en">
+        <seg>Release date</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Freigabedatum</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_collection1">
+      <tuv xml:lang="en">
+        <seg>Choose main collection</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Hauptsammlung auswählen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_collection2">
+      <tuv xml:lang="en">
+        <seg>Choose sub collection</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Unter-Sammlung auswählen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_collection3">
+      <tuv xml:lang="en">
+        <seg>Choose main collection</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Unter-Sammlung auswählen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_collection4">
+      <tuv xml:lang="en">
+        <seg>Choose main collection</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Unter-Sammlung auswählen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_collection5">
+      <tuv xml:lang="en">
+        <seg>Choose main collection</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Unter-Sammlung auswählen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_collection6">
+      <tuv xml:lang="en">
+        <seg>Choose main collection</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Unter-Sammlung auswählen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_collection7">
+      <tuv xml:lang="en">
+        <seg>Choose main collection</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Unter-Sammlung auswählen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_EnrichmentEvent">
+      <tuv xml:lang="en">
+        <seg>Event</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Veranstaltung</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_EnrichmentCity">
+      <tuv xml:lang="en">
+        <seg>City</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Stadt</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="header_EnrichmentCountry">
+      <tuv xml:lang="en">
+        <seg>Country</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Land</seg>
+      </tuv>
+    </tu>
+
+    </body>
+</tmx>

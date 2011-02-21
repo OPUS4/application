@@ -1,0 +1,102 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+
+  <body>
+
+    <tu tuid="admin_info_index">
+      <tuv xml:lang="en">
+        <seg>System Information</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>System Informationen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_info_section_upload">
+      <tuv xml:lang="en">
+        <seg>File Upload Settings</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einstellungen zum Dateien hochladen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_info_column_setting">
+      <tuv xml:lang="en">
+        <seg>Setting</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einstellung</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_info_column_value">
+      <tuv xml:lang="en">
+        <seg>Value</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Wert</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_info_column_location">
+      <tuv xml:lang="en">
+        <seg>Location</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datei</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_info_column_description">
+      <tuv xml:lang="en">
+        <seg>Description</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Beschreibung</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_info_maxfilesize_description">
+      <tuv xml:lang="en">
+        <seg>Maximum upload size for OPUS.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Maximalgröße von Dateien für OPUS.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_info_postmaxsize_description">
+      <tuv xml:lang="en">
+        <seg>Maximum size of POST request.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Maximalgröße eines POST.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_info_uploadmaxfilesize_description">
+      <tuv xml:lang="en">
+        <seg>Maximum size of file upload.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Maximalgröße von Dateien.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_info_error_no_set">
+      <tuv xml:lang="en">
+        <seg>[not set]</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>[nicht konfiguriert]</seg>
+      </tuv>
+    </tu>
+
+  </body>
+
+</tmx>

@@ -1,0 +1,102 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+
+ <header/>
+
+  <body>
+
+    <tu tuid="default_auth_login">
+      <tuv xml:lang="en">
+        <seg>User Login</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Benutzer-Anmeldung</seg>
+      </tuv>
+    </tu>
+
+
+    <tu tuid="auth_pagetitle">
+      <tuv xml:lang="en">
+        <seg>User Login</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Benutzer-Anmeldung</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="auth_pagetitle_index">
+      <tuv xml:lang="en">
+        <seg>User Login</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Benutzer-Anmeldung</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="auth_description">
+      <tuv xml:lang="en">
+        <seg>You need an existing account to log in.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sie benötigen einen existierenden Account um sich anzumelden.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="auth_field_login">
+      <tuv xml:lang="en">
+        <seg>User name</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Benutzer-Name</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="auth_field_password">
+      <tuv xml:lang="en">
+        <seg>Password</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Passwort</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="auth_error_no_username">
+      <tuv xml:lang="en">
+        <seg>Username is required.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Username fehlt.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="auth_error_no_password">
+      <tuv xml:lang="en">
+        <seg>Password is required.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Passwort fehlt.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="auth_error_invalid_credentials">
+      <tuv xml:lang="en">
+        <seg>Login failed. Invalid credentials.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Die Eingabe ist ungültig.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="auth_login_success">
+      <tuv xml:lang="en">
+        <seg>Authenticated successfully.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Erfolgreich authentifiziert.</seg>
+      </tuv>
+    </tu>
+
+  </body>
+
+</tmx>

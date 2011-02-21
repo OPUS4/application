@@ -1,0 +1,5 @@
+Your document must be a scientific document, readable with a prevalent document reader program. Currently we are accepting the following formats:
+<ul>
+<li>PDF</li>
+<li>HTML</li>
+</ul>

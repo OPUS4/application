@@ -1,0 +1,1 @@
+Mit Präsentationsformat ist die Datei gemeint, die sich der Nutzer anschauen kann. Im Unterschied dazu gibt es auch das Originalformat, das als Datengrundlage für das Präsentationsformat dient. Als Präsentationsformat im Internet haben sich HTML bzw. XML etabliert, für elektronische Dokumente (wie die auf Dokumentenservern) vor allem PDF.

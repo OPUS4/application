@@ -1,0 +1,322 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+ 
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+  
+  <body>
+<!-- This language file contains all texts and cases concerning errors. -->
+
+    <tu tuid="error_empty_post_array">
+        <tuv xml:lang="en">
+            <seg>Error: No files uploaded or data submitted. This error can possibly be caused by files that enlarge the allowed upload size in php.ini. The administrator will be informed.<br />Please retry publishing a document using a smaller file. </seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Fehler: es wurden keine Dateien hochgeladen oder Daten übermittelt. Eine mögliche Ursache sind zu große Dateien, die die erlaubte Upload Größe in php.ini übersteigen. Der Administrator wird darüber informiert.<br /> Bitte versuchen Sie erneut ein Dokument mit einer kleineren Datei zu veröffentlichen.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="publish_error_rights_checkbox_empty">
+        <tuv xml:lang="en">
+            <seg>Error: Please confirm our legal notices.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Fehler: Bestätigen Sie bitte unsere rechtlichen Hinweise.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="publish_error_justOneLanguagePerTitleType">
+        <tuv xml:lang="en">
+            <seg>Error: You may not enter a title with the same language several times. Please choose a different language or delete the title.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Fehler: Sie können einen Titel nicht mehrmals in derselben Sprache angeben. Bitte wählen Sie eine andere Sprache oder löschen Sie den Titel.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="publish_error_noEmailButNotification">
+        <tuv xml:lang="en">
+            <seg>Please fill in a email or delete the checkbox.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte geben Sie auch eine Emailadresse an oder löschen Sie das Häkchen.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="publish_error_noLastButFirstName">
+        <tuv xml:lang="en">
+            <seg>Please fill in a last name or delete the first name.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte geben Sie auch den Nachnamen an oder löschen Sie den Vornamen.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="publish_error_noTitleButLanguage">
+        <tuv xml:lang="en">
+            <seg>Please fill in a title or delete the language field.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte geben Sie auch den Titel an oder löschen Sie die Sprachauswahl.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="publish_error_noLanguageButTitle">
+        <tuv xml:lang="en">
+            <seg>Please choose a language or delete the title field.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte geben Sie die Sprache an oder löschen Sie den Titel.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="publish_controller_form_errorcase">
+        <tuv xml:lang="en">
+            <seg>Errors occurred. Please check the error messages beside the form fields.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Es sind Fehler aufgetreten. Bitte beachten Sie die Fehlermeldungen an den Formularfeldern.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="publish_controller_form_template1">
+        <tuv xml:lang="en">
+            <seg>Error: document type fields <b>are missing</b> in the template. Please compare template with document type and complete it.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Fehler: es <b>fehlen</b> Dokumenttyp-Felder innerhalb des Templates. Bitte vergleichen und ergänzen Sie. </seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="publish_controller_form_template2">
+        <tuv xml:lang="en">
+            <seg>Error: there are too many document type fields in the template. Please compare template with document type and delete.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Fehler: es gibt <b>zu viele</b> Dokumenttyp-Felder innerhalb des Templates. Bitte vergleichen und löschen Sie.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="isEmpty">
+        <tuv xml:lang="en">
+            <seg>Value is required and can't be empty.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Der Wert wird benötigt und darf nicht leer bleiben.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="fileCountTooFew">
+        <tuv xml:lang="en">
+            <seg>Please upload at least one file.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte laden Sie mindestens eine Datei hoch.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="fileUploadErrorFormSize">
+        <tuv xml:lang="en">
+            <seg>Your file in field %value% exceeds the defined form size.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Ihre Datei im Feld %value% übersteigt die definierte Formulargröße.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="fileUploadErrorNoFile">
+        <tuv xml:lang="en">
+            <seg>File upload is required.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Sie haben keine Datei ausgewählt.</seg>
+        </tuv>
+    </tu>
+
+
+    <tu tuid="fileExtensionFalse">
+        <tuv xml:lang="en">
+            <seg>File '%value%' has a forbidden extension. Plaese choose another file.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Die Datei '%value%' hat eine unerlaubte Dateiendung. Bitte wählen Sie eine andere Datei.</seg>
+        </tuv>
+    </tu>
+
+
+
+<!-- **************Errors for Person names and file names****************** -->
+    <tu tuid="publish_validation_error_person_invalid">
+        <tuv xml:lang="en">
+            <seg>Invalid datatype: please enter just a string.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Unerlaubter Datentyp: bitte tragen Sie ausschließlich eine Zeichenkette ein.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="publish_validation_error_person_notalpha">
+        <tuv xml:lang="en">
+            <seg>Error: %value% may only contain alphabetic characters.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Fehler: %value% darf nur alphabetische Zeichen enthalten.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="publish_validation_error_person_stringempty">
+        <tuv xml:lang="en">
+            <seg>This field is required.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Dieses Feld muss ausgefüllt werden.</seg>
+        </tuv>
+    </tu>
+
+<!-- **************END Person************** -->
+
+<!-- **************Errors for Years ****************** -->
+
+    <tu tuid="publish_validation_error_year_greaterthan">
+        <tuv xml:lang="en">
+            <seg>Please enter a year that is greater that %min%.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte tragen Sie ein Jahr ein, dass größer als %min% ist.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="publish_validation_error_year_notint">
+        <tuv xml:lang="en">
+            <seg>Error: %value% does not appear to be an year.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Fehler: %value% ist keine Jahresangabe.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="publish_validation_error_year_intinvalid">
+        <tuv xml:lang="en">
+            <seg>Invalid year given. Value should be a integer of format YYYY.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Ungültiges Jahr. Bitte ändern in das Format YYYY.</seg>
+        </tuv>
+    </tu>
+
+<!-- **************END Person************** -->
+
+<!-- **************Errors for Date****************** -->
+    <tu tuid="publish_validation_error_date_invalid">
+        <tuv xml:lang="en">
+            <seg>Invalid datatype: please enter just a string, an integer, array or Zend_Date.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Unerlaubter Datentyp: bitte tragen Sie ausschließlich eine Zeichenkette, eine Zahl, ein Array oder Zend_Date ein.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="publish_validation_error_date_invaliddate">
+        <tuv xml:lang="en">
+            <seg>Error: %value% does not appear to be a valid date.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Fehler: %value% scheint kein gültiges Datum zu sein.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="publish_validation_error_date_falseformat">
+        <tuv xml:lang="en">
+            <seg>Please change %value% to fit the date format %format%.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte ändern Sie %value% in das Datumsformat %format%.</seg>
+        </tuv>
+    </tu>
+<!-- **************END Date************** -->
+
+    <tu tuid="publish_validation_error_notempty_isempty">
+        <tuv xml:lang="en">
+            <seg>This field is required.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Dieses Feld muss ausgefüllt werden.</seg>
+        </tuv>
+    </tu>
+<!-- **************END NotEmpty************** -->
+  
+    <tu tuid="publish_validation_error_inarray_notinarray">
+        <tuv xml:lang="en">
+            <seg>The value %value% was not found in the selection.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Der Wert %value% wurde nicht in der Auswahl gefunden.</seg>
+        </tuv>
+    </tu>
+<!-- **************END InArray************** -->
+
+    <tu tuid="publish_validation_error_subjectmsc_msgsubjectmsc">
+        <tuv xml:lang="en">
+            <seg>The value %value% is not a valid MSC class.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Der Wert %value% ist keine gültige MSC Klasse.</seg>
+        </tuv>
+    </tu>
+<!-- **************END SubjectMSC************** -->
+
+
+    <tu tuid="publish_validation_error_subjectccs_msgsubjectccs">
+        <tuv xml:lang="en">
+            <seg>The value %value% is not a valid CCS class.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Der Wert %value% ist keine gültige CCS Klasse.</seg>
+        </tuv>
+    </tu>
+<!-- **************END SubjectCCS************** -->
+
+<tu tuid="publish_validation_error_subjectddc_msgsubjectddc">
+        <tuv xml:lang="en">
+            <seg>The value %value% is not a valid DDC class.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Der Wert %value% ist keine gültige DDC Klasse.</seg>
+        </tuv>
+    </tu>
+<!-- **************END SubjectDDC************** -->
+
+<tu tuid="publish_validation_error_subjectpacs_msgsubjectpacs">
+        <tuv xml:lang="en">
+            <seg>The value %value% is not a valid PACS class.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Der Wert %value% ist keine gültige PACS Klasse.</seg>
+        </tuv>
+    </tu>
+<!-- **************END SubjectPACS************** -->
+
+    <tu tuid="publish_validation_error_int_notint">
+        <tuv xml:lang="en">
+            <seg>The value %value% is not a number.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Der Wert %value% ist keine Zahl.</seg>
+        </tuv>
+    </tu>
+<!-- **************END Int************** -->
+
+
+    <tu tuid="error_uploaded_files">
+        <!-- Text for alreaded uploaded files -->
+        <tuv xml:lang="en">
+            <seg>Error: File already exists or could not be stored.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Fehler: Datei exisitert bereits oder kann nicht gespeichert werden.</seg>
+        </tuv>
+    </tu>
+
+    </body>
+</tmx>

@@ -1,0 +1,23 @@
+Publish
+~~~~~~~
+
+Interne Dokument-Felder  dürfen nur mit einer Multiplicity "1" definiert werden.
+Z.B. <field name="ContributingCorporation" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
+
+Dazu gehören:
+* CompletedDate
+* CompletedYear
+* ContributingCorporation
+* CreatingCorporation
+* ThesisDateAccepted
+* Edition
+* Issue
+* Language (der Veröffentlichung)
+* PageFirst
+* PageLast
+* PageNumber
+* PublishedDate
+* PublishedYear
+* PublisherName
+* PublisherPlace
+* Volume

@@ -1,0 +1,282 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+ 
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+ 
+  <body>
+
+    <tu tuid="admin_index_title">
+      <tuv xml:lang="en">
+        <seg>Administration</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Administration</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_title_configuration">
+      <tuv xml:lang="en">
+        <seg>Configure</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Konfiguration</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_title_indexbuild">
+      <tuv xml:lang="en">
+        <seg>Build Lucene index</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Luceneindex aufbauen</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_title_collections">
+      <tuv xml:lang="en">
+        <seg>Edit Collections</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sammlungen verwalten</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_title_collections_description">
+      <tuv xml:lang="en">
+        <seg>Create, edit, and delete collections.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sammlungen erstellen, editieren und löschen.</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_title_person">
+      <tuv xml:lang="en">
+        <seg>Person data</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Personendaten verwalten</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_title_licence">
+      <tuv xml:lang="en">
+        <seg>Licence types</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Lizenzen verwalten</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_title_licence_description">
+      <tuv xml:lang="en">
+        <seg>Add, edit or remove licences.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Lizenzen hinzfügen, editieren, oder löschen.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_title_organizational_units_show">
+      <tuv xml:lang="en">
+        <seg>Organizational units</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Organisatorische Einheiten (Institute, Fakultäten, ...) verwalten</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_title_organizational_units_edit">
+      <tuv xml:lang="en">
+        <seg>Organization tree</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Organisationsbaum verwalten</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_title_documents">
+      <tuv xml:lang="en">
+        <seg>Manage Documents</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokumente verwalten</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_title_documents_description">
+      <tuv xml:lang="en">
+        <seg>Edit document metadata. Delete documents and manage files.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Metadaten der Dokumente editieren. Dokumente löschen und Dateien verwalten.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_title_languages">
+      <tuv xml:lang="en">
+        <seg>Languages</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sprachen verwalten</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_title_languages_description">
+      <tuv xml:lang="en">
+        <seg>Add, edit or remove languages. Aktivate or deaktivate languages.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sprachen hinzufügen, editieren, entfernen und ein- oder ausschalten.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_title_statistic">
+      <tuv xml:lang="en">
+        <seg>Publication statistics</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Veröffentlichungsstatistik</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_title_statistic_description">
+      <tuv xml:lang="en">
+        <seg>Shows publication statistics for individual years.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zeigt Veröffentlichungsstatistiken für einzelne Jahre.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_title_oailink">
+      <tuv xml:lang="en">
+        <seg>OAI Link Information</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>OAI Link anzeigen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_title_oailink_description">
+      <tuv xml:lang="en">
+        <seg>Base URL for OAI requests and examples.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>URL für OAI Anfragen und Beispiele.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_title_dnbinstitute">
+      <tuv xml:lang="en">
+        <seg>Institutes (dispersive body)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Institute (Verbreitende Stelle)</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_title_dnbinstitute_description">
+      <tuv xml:lang="en">
+        <seg>Add, edit, or remove Institutes, that serve as dispersive body for theses.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Institute hinzufügen, editieren, oder löschen, die als verbreitende Stelle für Hochschulschriften fungieren.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_title_security">
+      <tuv xml:lang="en">
+        <seg>Access Control</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zugriffskontrolle</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_title_security_description">
+      <tuv xml:lang="en">
+        <seg>Manage user account, IP ranges, and roles and their privileges.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Verwalten von Nutzerkonten, IP Bereichen, und Rollen sowie deren Privilegien.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_form_action_edit">
+      <tuv xml:lang="en">
+        <seg>Edit</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Editieren</seg>
+      </tuv>
+    </tu>
+   
+    <tu tuid="admin_form_action_delete">
+      <tuv xml:lang="en">
+        <seg>Delete</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Löschen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_form_group_roles">
+      <tuv xml:lang="en">
+        <seg>User Roles</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nutzerrollen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_form_create">
+      <tuv xml:lang="en">
+        <seg>Create</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Speichern</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_form_cancel">
+      <tuv xml:lang="en">
+        <seg>Cancel</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zurueck</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_form_update">
+      <tuv xml:lang="en">
+        <seg>Update</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Speichern</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_title_info">
+      <tuv xml:lang="en">
+        <seg>System Information</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>System Informationen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_title_info_description">
+      <tuv xml:lang="en">
+        <seg>Shows system and environment settings.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zeigt wichtige System und Umgebungseinstellungen.</seg>
+      </tuv>
+    </tu>
+
+  </body>
+  
+</tmx>

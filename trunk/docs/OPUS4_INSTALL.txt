@@ -1,0 +1,246 @@
+Installation von Opus Version 4.0
+==================================
+System:  Ubuntu 8.04 Server LTS
+
+A.	Installation der Basiskomponenten
+=====================================
+
+
+1.	Webserver
+------------------------------------------
+
+Aktueller Apache 2:
+root@opus4# apt-get install apache2
+Mit a2enmod folgende Module aktivieren:
+-	rewrite
+-	proxy
+-	php5
+Apache-Konfiguration s. bei Installation von Opus
+
+
+2.	Mysql-Server
+------------------------------------------
+
+Installiert wird die aktuelle Version.
+root@opus4# apt-get install mysql-server mysql-client
+
+
+3.	PHP5
+------------------------------------------
+
+root@opus4# apt-get install  php5
+
+Pear (zum Installieren von Pear-Modulen):
+
+root@opus4# apt-get install php-pear
+
+Pear-Modul Crypt_GPG:
+
+root@opus4# pear install Crypt_GPG
+
+Benötigt werden außerdem die PHP5-Pakete "php5-gd" und "php5-xsl" und die Mysql-Treiber "php5-mysql":
+
+root@opus4# apt-get install php5-xsl
+root@opus4# apt-get install php5-gd 
+root@opus4# apt-get install php5-mysql
+
+Und das Pecl-Modul fileinfo (sofern PHP < 5.3 verwendet wird):
+root@opus4# apt-get install  libmagic-dev
+root@opus4# pecl install fileinfo
+
+Das Modul fileinfo muss noch in der php.ini freigeschaltet werden:
+
+
+4.	Subversion-Client
+------------------------------------------
+
+Muss auf dem Rechner installiert werden, auf welchem die Software aus dem Subversion-Respository geholt wird. 
+Dies muss nicht unbedingt der aktuelle Opus-Server sein. Die Software kann auch einfach in die entsprechenden Verzeichnisse kopiert werden.
+
+root@opus4# apt-get install subversion
+
+
+5.	Zend Framework
+------------------------------------------
+
+Aktuell wird die Version 1.9.x verwendet.
+Download-Url:
+http://framework.zend.com/releases/ZendFramework-1.9.7/ZendFramework-1.9.7.tar.gz
+
+Paket Zendframework-1.9.7.tar.gz im Verzeichnis /opt/Zend auspacken, symbolischen Link setzen.
+Software als User 'opus' holen (s. unter B.1.).
+
+root@opus4# cd /opt
+root@opus4# mkdir Zend
+root@opus4# chown opus:opus Zend
+root@opus4# su - opus
+opus@opus4: cd Zend
+opus@opus4: wget http://framework.zend.com/releases/ZendFramework-1.9.7/ZendFramework-1.9.7.tar.gz
+opus@opus4: tar zxvf ZendFramework-1.9.7.tar.gz
+opus@opus4: ln -s ./ZendFramework-1.9.7 ./ZendFramework
+
+In etc/php5/apache/php.ini und /etc/php5/cli/php.ini include_path setzen:
+
+include_path = ".:/usr/share/php:/opt/Zend/ZendFramework/library" 
+
+
+6.	Sonstige benötigte Software
+------------------------------------------
+
+->	pstotext
+->	xpdf-utils
+
+Für Mailfunktionen:
+->	exim4
+->	mailx
+
+
+
+B.	Installation von Opus
+=====================================
+
+
+1.	Anwendungsuser erstellen
+------------------------------------------
+
+opus:opus  mit Home-Verzeichnis $OPUS_HOME
+
+
+2.	Opus-Software aus SVN-Repository holen
+------------------------------------------
+
+opus@opus4: cd $OPUS_HOME
+opus@opus4: svn export https://opusdev.bsz-bw.de/svn/application/trunk ./application
+opus@opus4: svn export https://opusdev.bsz-bw.de/svn/framework/trunk ./framework
+
+Will man die Software aus dem SVN-Repository laufend aktualisieren, sollte ein 'svn checkout' ausgeführt werden.
+Die Aktualisierung erfolgt dann mit dem Befehl
+opus@opus4: svn up
+
+
+3.	Berechtigungen von Verzeichnissen anpassen
+------------------------------------------
+
+da hier vom Webserver-User geschrieben wird:
+
+root@opus4# cd $OPUS_HOME/workspace
+root@opus4# chown -R www-data:www-data tmp cache log files lucene_index tmp
+
+
+4.	Mysql-DB erstellen
+------------------------------------------
+
+Um die Datenbank zu erzeugen wird die vorhandene Template-Datei kopiert:
+
+opus@opus4: cd $OPUS_HOME
+opus@opus4: cp createdb.sh.template createdb.sh
+
+Angepasst werden sollten 
+
+user = rootuser 
+password= rootpw
+dbname=opus400
+
+wobei 'rootuser' ein User sein soll, der Datenbanken anlegen und löschen kann (i.d.Regel root).
+
+
+Mit 
+opus@opus4: ./createdb.sh
+wird die Datenbank neu erzeugt und gefüllt.
+
+Einen Mysql-User 'opus4' mit dem Passwort 'xxxx' für die Opus-Anwendung erstellt man folgendermaßen:
+opus@opus4: mysql -u root -p
+mysql> grant all on opus400.* to opus4@localhost identified by 'xxxx';
+
+
+5.	Opus-Konfiguration anpassen
+------------------------------------------
+
+opus@opus4: cp $OPUS_HOME/application/config
+opus@opus4: cp config.ini.template config.ini
+
+In config.ini muss mindestens angepasst werden
+
+;DB SETTINGS - das sind die Verbindungsdaten zur Datenbank
+db.params.host = localhost
+db.params.username = opus4
+db.params.password = xxxx
+db.params.dbname = opus400
+
+;WOKSPACE-PATH SETTINGS - der Pfad des workspace
+path.workspace.temp =$OPUS_HOME/application/workspace/tmp
+
+;GENERAL SETTINGS - optional, das Layout hier auf opus34
+;theme = default
+theme = opus34
+
+
+6.	Apache-Konfiguration
+------------------------------------------
+
+Die Apache-Konfiguration (am besten in einem Virtual Host unter /etc/apache2/sites-enabled) sollte folgendes enthalten:
+
+.......
+DocumentRoot $OPUS_HOME/application/public
+<Directory "$OPUS_HOME/application/public/">
+                RewriteEngine on
+                RewriteBase /
+                RewriteCond %{REQUEST_FILENAME} -s [OR]
+                RewriteCond %{REQUEST_FILENAME} -l [OR]
+                RewriteCond %{REQUEST_FILNANME} -d
+                RewriteRule ^.*$ - [NC,L]
+                RewriteRule ^.*$ index.php [NC,L]
+                AllowOverride None
+                Options MultiViews FollowSymLinks
+                #PHP settings
+                php_flag magic_quotes_gpc off
+                php_flag register_globals off
+                php_flag short_open_tag on
+                Order allow,deny
+                allow from all
+</Directory>
+
+<IfModule mod_rewrite.c>
+    	RewriteEngine on
+    	RewriteLog /var/log/apache2/rewrite.log
+    	RewriteLogLevel 1
+    	RewriteMap opusdeliver 'prg:$OPUS_HOME/application/scripts/opus-apache-rewritemap-caller.sh'
+    	<IfModule mod_proxy.c>
+        		<Proxy http://127.0.0.1/*>
+            		Order deny,allow
+            		Allow from all
+         		</Proxy>
+    	</IfModule>
+    	RewriteRule ^/documents/(.*)$ http://127.0.0.1/${opusdeliver:$1\	%{REMOTE_ADDR}\ %{HTTP_COOKIE}} [P]
+    	</IfModule>
+
+Alias /files '$OPUS_HOME/application/workspace/files'
+<Directory "$OPUS_HOME/application/workspace/files/">
+    	Options -Indexes
+   	 AllowOverride None
+    	Order deny,allow
+    	Deny from all
+    	Allow from 127.0.0.1
+</Directory>
+.......
+
+Achtung: In der RewriteRule muss ein Tabulatur-Zeichen zwischen $1\   und %{REMOTE_ADDR} stehen, ansonsten wirft der Apache eine Fehlermeldung aus!
+
+
+7.	 Lucene-Index erzeugen
+------------------------------------------
+
+Um den Lucene-Index komplett erzeugen zu können müssen in der php.ini 
+( /etc/php5/apache2/php.ini und /etc/php5/cli/php.ini ) 
+folgende Werte angepasst werden: 
+
+max_execution_time = 600     ; Maximum execution time of each script, in seconds
+max_input_time = 300 ; Maximum amount of time each script may spend parsing request data
+memory_limit = 128M      ; Maximum amount of memory a script may consume (32MB)
+
+Der Index kann dann wie folgt erzeugt werden: 
+root@opus4: su - www-data
+www-data@opus4: cd $OPUS_HOME/application/scripts
+www-data@opus4: php SearchEngineIndexBuilder.php
+
+

@@ -1,0 +1,50 @@
+#! /bin/bash
+
+#
+# begin editable part
+#
+
+# user should has rights to drop and create a database (grant rights)
+user=
+password=
+host=
+port=
+dbname=
+
+# path to mysql binary
+mysql_bin=/usr/bin/mysql
+# path to schema file
+schema_file=schema/opus400.sql
+# path to different sql locations
+master_dir=masterdata/
+
+#
+# end editable part
+# 
+
+mysql="${mysql_bin} --default-character-set=utf8 --user=${user} --host=${host} --port=${port}"
+
+if [ -n "${password}" ]; then
+    mysql="${mysql} --password=${password}"
+fi
+
+#Delete database
+echo "Dropping database: ${dbname}"
+echo "DROP DATABASE IF EXISTS ${dbname};" | ${mysql}
+
+#Creating database
+echo "Creating database: ${dbname}"
+echo "CREATE SCHEMA IF NOT EXISTS ${dbname} DEFAULT CHARACTER SET = utf8 DEFAULT COLLATE = utf8_general_ci;" | ${mysql}
+
+#Import database schema
+echo "Importing database schema file '${schema_file}'"
+${mysql} ${dbname} < ${schema_file}
+
+#Import master data
+if [ -d ${master_dir} ] ; then
+    for i in `find ${master_dir} -name *.sql \( -type f -o -type l \) | sort`; do
+        echo "Inserting file '${i}'"
+        ${mysql} ${dbname} < "${i}"
+    done
+fi
+

@@ -1,0 +1,136 @@
+h1. OPUS 4 Change Log
+
+h2. ======================== Release 4.0.3 2011-02-21 ========================
+
+h3. Bug Fixes
+
+* [OPUSVIER-598] - Ausgewählter Reiter wird nicht immer korrekt angezeigt
+* [OPUSVIER-663] - RSS-Export der neuesten Dokumente liefert HTML-Seite aus
+* [OPUSVIER-724] - Validierung "required-if-fulltext" funktioniert nicht
+* [OPUSVIER-847] - leere Klammern in der Ergebnisanzeige
+* [OPUSVIER-906] - Probleme beim Upload weiterer Datei
+* [OPUSVIER-920] - Übersetzungsschlüssel anpassen
+* [OPUSVIER-929] - Multiplicity bei Instituten läßt sich nicht ändern
+* [OPUSVIER-936] - Installations-Skript funktioniert nicht mit openSUSE 11.3
+* [OPUSVIER-937] - Installationsprobleme im Zusammenhang mit namebased vhost
+* [OPUSVIER-938] - Import
+* [OPUSVIER-939] - Migration: Problem mit Sonderzeichen und Klassifikationen
+* [OPUSVIER-940] - Problem mit der OPUS-ID
+* [OPUSVIER-941] - Problem beim Import von DDC-Sachgruppen
+* [OPUSVIER-942] - Import nicht publizierter Dokumente
+* [OPUSVIER-944] - XSS im Publish-Formular
+* [OPUSVIER-945] - XSS-Vulnerability in Dokumentverwaltung
+* [OPUSVIER-946] - Dokumentverwaltung zeigt mehrere Submitter, obwohl nur einer eingetragen wurde
+* [OPUSVIER-951] - Login-Mechanismus funktioniert nicht, wenn mehrere Parameter übergeben werden
+* [OPUSVIER-952] - Dokumente werden nicht angenommen, wenn rechtliche Hinweise nicht ausgewählt
+* [OPUSVIER-953] - Publish-Formular: Allow-Email-Contact per Default immer an
+* [OPUSVIER-954] - Publish-Formular: Formular springt bei Änderungen wieder nach oben
+* [OPUSVIER-955] - SolrIndexBuilder wirft Zend_Db_Statement_Exception, wenn startID (und endID) angegeben werden
+* [OPUSVIER-959] - Formatierungsfehler in Dokumentation: zu lange Zeilen
+* [OPUSVIER-960] - Klarstellung zur Migration: Direktupdate von OPUS 3.0 möglich
+* [OPUSVIER-963] - "Invalid credentials" - "No token was provided to match against"
+* [OPUSVIER-966] - XSS ersten Schritt des Publish-Formulars (Dateiname)
+* [OPUSVIER-967] - XSS im Filemanager
+* [OPUSVIER-969] - Publish-Formular: Manchmal werden Dateien doppelt hochgeladen
+* [OPUSVIER-983] - Fehler bei Migration von OPUS 3.x-Instanzen ohne Collections
+* [OPUSVIER-985] - Opus_File: Datei mit selbem Namen überschreibt alte!
+* [OPUSVIER-986] - Dateimanager-Crash bei nicht-existierenden Dateien
+* [OPUSVIER-989] - Manage documents: Too few columns for the primary key
+* [OPUSVIER-990] - Abstract muss required sein wenn Datei hochgeladen wird
+* [OPUSVIER-991] - FileManager: "File too large" falls Null-Byte-Datei
+* [OPUSVIER-994] - FileManager: Kein Fehler, falls Datei-Ordner nicht schreibbar
+* [OPUSVIER-1001] - Opus_Model: ParentId wird nicht korrekt gesetzt
+* [OPUSVIER-1002] - Fehlender Übersetzungsschlüssel "admin_filemanager_file_does_not_exist" im Admin-Bereich
+* [OPUSVIER-1003] - Apt-Get befehle korrekt einrücken
+* [OPUSVIER-1004] - Deb-Package installiert openjdk, obwohl sun-jdk installiert ist
+* [OPUSVIER-1005] - hochgeladene Datei wird zweimal abgespeichert
+* [OPUSVIER-1008] - Sprungmechanismus im zweiten Formularschritt beim Hinzufügen von neuen Fehlern funktioniert nicht nach dem Zurückkehren aus dem dritten Schritt
+* [OPUSVIER-1009] - aussagekräftigere Meldung beim nicht-wiederherstellbaren Löschen eines Dokuments
+* [OPUSVIER-1010] - Nicht benutzte Dokument-Feld publication_state in Metadatenverwaltung ausblenden
+* [OPUSVIER-1012] - Exception nach Aufruf des Login-Formulars ohne r*-URL-Parameter
+* [OPUSVIER-1013] - Aussagekräftige Fehlermeldung im Produktivsystem abstellen
+* [OPUSVIER-1014] - OPUS-Installation benötigt Subversion-Client
+* [OPUSVIER-1016] - Given resumption path /workspace/tmp/resumption is not a directory.
+* [OPUSVIER-1028] - XSS im Publish-Formular (Collections-Auswahl)
+* [OPUSVIER-1029] - Fehlende Übersetzungen in Collection-Auswahl
+* [OPUSVIER-1030] - XSS im Publish-Formular (Fehlermeldungen)
+* [OPUSVIER-1031] - Kein gültiges Datumsformat: "YYYY/MM/YY"
+* [OPUSVIER-1032] - Benutzer kann erfolgreich seinen Loginnamen überschreiben
+* [OPUSVIER-1033] - Keine Informationen über nicht-existierende Accounts preisgeben
+* [OPUSVIER-1034] - Logout-Link unter auth/index funktioniert nicht
+* [OPUSVIER-1036] - Publish-Formular nicht resistent gegen abgelaufene / ungültige User-Session
+* [OPUSVIER-1051] - Fehler im Bootstrap (Applikation startet nicht) , wenn opus.log für Webserver-Prozess nicht schreibbar
+* [OPUSVIER-1054] - Apache Installation/Konfiguration unter openSuSE
+* [OPUSVIER-1057] - Error beim Publish von grossen Dokumenten ausserhalb der zulaessigen Dateigroesse
+* [OPUSVIER-1058] - Dateiupload von Dateien, die größer 20 MB sind, aktuell nicht möglich
+* [OPUSVIER-1069] - Verbesserte Fehlermeldung beim Versuch eine bereits hochgeladene Datei erneut hochzuladen
+* [OPUSVIER-1070] - Falsches Sprungziel nach abspeichern einer Collection
+* [OPUSVIER-1079] - XSS-Vulnerability in Browsing nach Dokumenttypen
+
+h3. Improvements
+
+* [OPUSVIER-912] - Feld "Allow Email Contact?" wird immer wieder aktiviert
+* [OPUSVIER-968] - Dateien auf Check-Seite des Publish-Formulars werden nicht angezeigt
+* [OPUSVIER-1046] - Sichtbarkeit in Google-Scholar
+* [OPUSVIER-2] - Instanzspezifische Übersetzungsressourcen
+* [OPUSVIER-202] - IgnoreMultiplicity-Hack von aus Opus_Model_Field entfernen
+* [OPUSVIER-660] - Eingabemöglichkeit für DDC
+* [OPUSVIER-835] - Kollektionsauswahl im dritten Formularschritt berücksichtigt nicht die Sichtbarkeitseinstellung von CollectionRole bzw. Collection
+* [OPUSVIER-892] - Innere Knoten von Collections sollen auch zugeordnet werden können
+* [OPUSVIER-931] - Abbrechen-Button bei der Sammlungs-Auswahl
+* [OPUSVIER-932] - nach erfolgreichem publish-Vorgang kein redirect auf Schritt 1
+* [OPUSVIER-943] - Aufnahme der Lizenzen in die Standardauslieferung
+* [OPUSVIER-958] - Fehler beim Auswählen einer neu angelegten Collection beim Publish
+* [OPUSVIER-961] - Heraustrennung der distributionsspezifischen Teile aus Install-/Uninstall-Skript
+* [OPUSVIER-962] - Anpassung in .htaccess durch Install-Skript unter Debian/Ubuntu
+* [OPUSVIER-965] - RewriteRule für die Weiterleitung von alten auf neue OPUS-IDs
+* [OPUSVIER-981] - Referenzierung der Subjects in solr.xslt ändern
+* [OPUSVIER-1019] - Opus_Document aus Session entfernen?
+* [OPUSVIER-1023] - Default-Wert für "mehrwertige" Felder
+* [OPUSVIER-1044] - Dokumentation des value-Parameters
+* [OPUSVIER-1045] - Defaultwerte für "implizite" Unterfelder
+* [OPUSVIER-1047] - Anzeige der zuvor ausgewählten Collection im 3. Formularschritt
+* [OPUSVIER-1055] - Migration von noch nicht veröffentlichten Dokumenten
+* [OPUSVIER-1063] - OAI-Parameter ergänzen
+* [OPUSVIER-1068] - Filemanager dokumentieren
+* [OPUSVIER-1075] - Definition von eigenen Select-Feldern
+* [OPUSVIER-1077] - Hinweis zur Apache-Konfiguration
+* [OPUSVIER-1078] - Weiterer Hinweis zur PHP-Konfiguration in php.ini
+
+h2. ======================== Release 4.0.2 2010-12-22 ========================
+
+h3. Änderungen
+
+* Erfassung von Änderungen in CHANGES.txt in Tarball
+
+h3. Behobene Fehler
+
+* Fehler behoben, der dafür sorgte, daß beim Freischalten bzw. Ablehnen
+eines Dokumentes die Zuordnung dieses Dokumentes zu Collections verloren ging.
+Issue #OPUSVIER-863 - Beim hochladen von Dateien gehen die zugeordneten
+Collections verloren
+
+* Für 'PageFirst', 'PageLast' und 'PageNumber' eine spezielle Behandlung in den
+FormBuilder eingebaut, die bei leeren Eingabefeldern, diese Werte auf 'null'
+setzt, um zu verhindern, das einmal gesetzte Felder auch nach dem entfernen der
+Werte in der Frontdoor mit dem Wert '0' auftauchen.
+Issue #OPUSVIER-924 - Nach dem Löschen von Seiten Einträgen im
+Metadaten-Formular erscheint '0' als Wert
+
+h2. ======================== Release 4.0.1 2010-11-26 ========================
+
+* Layout/CSS Änderungen
+
+* Opus3-Import
+
+* Migration OPUS 3.x
+
+* Fehlende Übersetzungseinträge wurden hinzugefügt
+
+* Korrekte Validierung von Passwörtern in Eingabeformularen im Account
+und im Admin Modul
+
+* FormBuilder geändert um bei uninitialisierten Modelinstancen
+Exceptions zu verhindern
+
+

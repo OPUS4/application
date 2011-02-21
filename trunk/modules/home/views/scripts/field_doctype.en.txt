@@ -1,0 +1,1 @@
+This element is mandatory for every publication! It contains the type of publication, for example thesis, preprint, study paper etc. You can select a type from a list.

@@ -1,0 +1,14 @@
+You can find help to create scientific texts in a lot of sources. General hints, which formats are usable 
+to publish online, are offered by 
+<a href="http://www.dissonline.de/service/autoren/datenformate.htm" target="_blank">DissOnline</a>.
+<br/><br/>
+The university library in Freiburg offers a 
+<a href="http://www.freidok.uni-freiburg.de/freidok/tutorial/index.html" target="_blank">tutorial on 
+publishing in PDF format</a> (in german language only).<br/><br/>
+If you want to write your work with TeX or LaTeX (this may be very useful on engineering topics with 
+many mathematical formulas!), so you can find some interesting 
+<a href="https://katalog.b.tu-harburg.de/DB=1/LNG=DU/CMD?ACT=SRCHA&IKT=1016&SRT=YOP&TRM=latex" target="_blank">books</a> about that in the TU library.<br/><br/>
+Further information and helpful format exhibitions for <a href="http://edoc.hu-berlin.de/e_autoren/diss.php" target="_blank">doctoral thesises</a>, 
+<a href="http://edoc.hu-berlin.de/e_autoren/habil.php" target="_blank">State doctorates</a> and 
+<a href="http://edoc.hu-berlin.de/e_autoren/diplom.php" target="_blank">Bachelor-, Master-, Magister- and Diploma-thesises</a> 
+are offered by the Humboldt University of Berlin on their electronic document repository edoc.

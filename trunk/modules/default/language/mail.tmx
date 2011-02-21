@@ -1,0 +1,80 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+    <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool"></header>
+    <body>
+        <tu tuid="mail_publish_notification_subject">
+          <tuv xml:lang="en">
+            <seg>New document (%1$s) published</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Neues Dokument (%1$s) publiziert</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="mail_publish_notification">
+            <tuv xml:lang="en">
+                <seg>
+Dear Reviewer,
+
+
+you are listed as reviewer for the Opus4 document server will
+receive a message for new submitted documents.  We kindly ask
+you to carefully review the submitted documents and only accept
+Documents, which fulfill your standards.
+
+A new document has been submitted and waits for publishing:
+* %1$s
+
+All unpublished documents can be reviewed in the review-area:
+* %2$s
+
+Changing the submitted document metadata is possible in the
+admin area:
+* %3$s
+
+
+Kind regards,
+  your Opus4 Team
+                </seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>
+Lieber Reviewer,
+
+
+Sie sind als Reviewer fuer den Opus4-Dokument-Server eingetragen
+und erhalten Benachrichtigungen fuer neu eingestellte Dokumente.
+Bitte pruefen Sie die Dokumente sorgfaeltig und schalten Sie nur
+Dokumente frei, die Ihren Standards genuegen.
+
+Das folgende Dokument wurde neu veroeffentlicht und wartet auf
+Freischaltung:
+* %1$s
+
+Im Review-Bereich koennen Sie alle noch nicht freigeschalteten 
+Dokumente einsehen und ggf. freischalten:
+* %2$s
+
+Aenderungen an den eingegebenen Dokument-Metadaten sind ueber den
+Admin-Bereich moeglich:
+* %3$s
+
+
+Mit freundlichen Gruessen,
+  Dein Opus4-Team
+                </seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="mail_toauthor_subject">
+          <tuv xml:lang="en">
+            <seg>Request about your OPUS document</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Anfrage für Ihr OPUS-Dokument</seg>
+          </tuv>
+        </tu>
+
+    </body>
+</tmx>

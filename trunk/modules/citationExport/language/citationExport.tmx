@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+ 
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+ 
+  <body>
+    <tu tuid="citationExport_modulename">
+      <tuv xml:lang="en">
+        <seg>Citation Export</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Export bibliographischer Daten</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="invalid_format">
+      <tuv xml:lang="en">
+        <seg>Bibliographic data cannot be shown: Unknown output format</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bibliographische Daten können nicht angezeigt werden: Unbekanntes Ausgabeformat</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="download_bibliographic_data">
+      <tuv xml:lang="en">
+        <seg>Download bibliographic data</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bibliographische Daten speichern</seg>
+      </tuv>
+    </tu>
+
+  </body>
+  
+</tmx>

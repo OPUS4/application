@@ -1,0 +1,111 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+ 
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+  
+  <body>
+  
+      <tu tuid="statistic_index_title">
+      <tuv xml:lang="en">
+        <seg>Statistics</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Statistik</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="rss_modulename">
+      <tuv xml:lang="en">
+        <seg>Statistics</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Statistik</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="graph_year_title">
+      <tuv xml:lang="en">
+        <seg>Year chart</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Jahresdiagramm</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="graph_month_title">
+      <tuv xml:lang="en">
+        <seg>Month chart</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Monatsdiagramm</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="graph_year_xaxis">
+      <tuv xml:lang="en">
+        <seg>year</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Jahr</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="graph_month_xaxis">
+      <tuv xml:lang="en">
+        <seg>month</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Monat</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="graph_yaxis">
+      <tuv xml:lang="en">
+        <seg>viewed</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>angesehen</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="back_to_frontdoor">
+      <tuv xml:lang="en">
+        <seg>back to abstract page</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zurück zur Frontdoor</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="graph_legend_frontdoor">
+      <tuv xml:lang="en">
+        <seg>abstract page</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Frontdoor</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="graph_legend_files">
+      <tuv xml:lang="en">
+        <seg>full text</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Volltext</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="total_views">
+      <tuv xml:lang="en">
+        <seg>Total views</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Gesamtanzahl</seg>
+      </tuv>
+    </tu>
+    
+  </body>
+  
+</tmx>

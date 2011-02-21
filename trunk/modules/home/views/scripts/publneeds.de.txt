@@ -1,0 +1,7 @@
+Bitte halten Sie folgende Unterlagen bereit, wenn Sie eine Publikation auf unserem Dokumentenserver einstellen m&ouml;chten:
+<ul>
+<li>Ihre Dokumente, die Sie publizieren wollen</li>
+<li>einen PGP- oder GPG-Schlüssel (optional)</li>
+<li>das Veröffentlichungs-, Vervielfältigungs- sowie Verbreitungsrecht für die Publikation</li>
+</ul>
+Außerdem brauchen Sie natürlich ein bisschen Zeit, um die Anmeldung auszufüllen.

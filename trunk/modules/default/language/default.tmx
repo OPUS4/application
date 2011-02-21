@@ -1,0 +1,622 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+    <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool"></header>
+    <body>
+        <tu tuid="license_pagetitle">
+          <tuv xml:lang="en">
+            <seg>License</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Lizenz</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="home_menu_label">
+            <tuv xml:lang="en">
+                <seg>Home</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Startseite</seg>
+            </tuv>
+        </tu>
+        <tu tuid="search_menu_label">
+            <tuv xml:lang="en">
+                <seg>Search</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Suchen</seg>
+            </tuv>
+        </tu>
+        <tu tuid="browsing_menu_label">
+            <tuv xml:lang="en">
+                <seg>Browse</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Browsen</seg>
+            </tuv>
+        </tu>
+        <tu tuid="publish_menu_label">
+            <tuv xml:lang="en">
+                <seg>Publish</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Veröffentlichen</seg>
+            </tuv>
+        </tu>
+        <tu tuid="review_menu_label">
+            <tuv xml:lang="en">
+                <seg>Review</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Freischalten</seg>
+            </tuv>
+        </tu>
+        <tu tuid="review_menu_label_description">
+            <tuv xml:lang="en">
+                <seg>Release unpublished documents.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Unveröffentlichte Dokumente freischalten.</seg>
+            </tuv>
+        </tu>
+        <tu tuid="admin_menu_label">
+            <tuv xml:lang="en">
+                <seg>Administration</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Administration</seg>
+            </tuv>
+        </tu>
+        <tu tuid="help_menu_label">
+            <tuv xml:lang="en">
+                <seg>FAQ</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>FAQ</seg>
+            </tuv>
+        </tu>
+
+  
+    
+        <tu tuid="home_modulename">
+          <tuv xml:lang="en">
+            <seg>Home</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Einstieg</seg>
+          </tuv>
+        </tu>
+        <tu tuid="search_modulename">
+          <tuv xml:lang="en">
+            <seg>Search and browse</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Suchen und Browsen</seg>
+          </tuv>
+        </tu>
+        <tu tuid="publish_modulename">
+          <tuv xml:lang="en">
+            <seg>Publish</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Veröffentlichen</seg>
+          </tuv>
+        </tu>
+        <tu tuid="admin_modulename">
+          <tuv xml:lang="en">
+            <seg>Administration</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Administration</seg>
+          </tuv>
+        </tu>
+
+
+    
+        <tu tuid="home_index_index_actionname">
+          <tuv xml:lang="en">
+            <seg>Home</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Einstieg</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="home_index_help_actionname">
+          <tuv xml:lang="en">
+            <seg>Help</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Hilfe</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="home_index_contact_actionname">
+          <tuv xml:lang="en">
+            <seg>Contact</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Kontakt</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="home_index_imprint_actionname">
+            <tuv xml:lang="en">
+                <seg>Imprint</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Impressum</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="default_modulename">
+          <tuv xml:lang="en">
+            <seg>Default</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Standard</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="docs_all">
+          <tuv xml:lang="en">
+            <seg>All documents</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Alle Dokumente</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="docs_nodocs">
+          <tuv xml:lang="en">
+            <seg>No documents found!</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Keine Dokumente vorhanden!</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="docs_sortorder">
+          <tuv xml:lang="en">
+            <seg>Sort document list by:</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Sortiere Dokumentliste nach:</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="choose_option">
+          <tuv xml:lang="en">
+            <seg>Please choose: </seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Bitte wählen: </seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="search_index_search">
+          <tuv xml:lang="en">
+            <seg>Search</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Suche</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="search_searchaction">
+          <tuv xml:lang="en">
+            <seg>Search</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Suchen</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="admin_documents_sort_ascending">
+          <tuv xml:lang="en">
+            <seg>Ascending</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Aufsteigend</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="admin_documents_sort_descending">
+          <tuv xml:lang="en">
+            <seg>Descending</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Absteigend</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="admin_documents_sortby_id">
+          <tuv xml:lang="en">
+            <seg>ID</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>ID</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="pagination_previous">
+          <tuv xml:lang="en">
+            <seg>Previous</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Zurück</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="pagination_next">
+          <tuv xml:lang="en">
+            <seg>Next</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Weiter</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="pagination_first">
+          <tuv xml:lang="en">
+            <seg>First</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Anfang</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="pagination_last">
+          <tuv xml:lang="en">
+            <seg>Last</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Ende</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="admin_documents_sortby_title">
+          <tuv xml:lang="en">
+            <seg>Title</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Titel</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="admin_documents_sortby_publicationDate">
+          <tuv xml:lang="en">
+            <seg>Date</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Datum</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="admin_documents_sortby_author">
+          <tuv xml:lang="en">
+            <seg>Author</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Autor</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="admin_documents_sortby_docType">
+          <tuv xml:lang="en">
+            <seg>Document type</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Dokumenttyp</seg>
+          </tuv>
+        </tu>
+
+         <tu tuid="search_titles_resultlist">
+          <tuv xml:lang="en">
+            <seg>Query returned <b>%1$s</b> hits.</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Die Suche ergab <b>%1$s</b> Treffer.</seg>
+          </tuv>
+        </tu>
+
+         <tu tuid="search_results_from_to">
+          <tuv xml:lang="en">
+            <seg>Showing results <b>%1$s</b> to <b>%2$s</b></seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Ergebnisse <b>%1$s</b> bis <b>%2$s</b></seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="frontdoor_fixpoint">
+          <tuv xml:lang="en">
+            <seg>Fixpoint</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Sollwert</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="frontdoor_current">
+          <tuv xml:lang="en">
+            <seg>Current value</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Istwert</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="frontdoor_file_too_big">
+          <tuv xml:lang="en">
+            <seg>Checksum cannot be verified - file too large</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Prüfsumme konnte nicht geprüft werden - Datei ist zu groß</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="FileToUpload">
+          <tuv xml:lang="en">
+            <seg>File to upload</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Einzubringende Datei</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="Comment">
+          <tuv xml:lang="en">
+            <seg>Comment</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Kommentar</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="Process">
+          <tuv xml:lang="en">
+            <seg>Process</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Einbringen</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="pkm_list_keys">
+          <tuv xml:lang="en">
+            <seg>Key Management</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Schlüsselverwaltung</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="pkm_sigcheck_valid">
+          <tuv xml:lang="en">
+            <seg>Valid signature from %1$s</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Gültige Signatur von %1$s</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="pkm_sigcheck_invalid">
+          <tuv xml:lang="en">
+            <seg>Invalid signature from %1$s</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Ungültige Signatur von %1$s</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="pkm_show_key">
+          <tuv xml:lang="en">
+            <seg>Show key</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Schlüssel anzeigen</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="pkm_show_signature">
+          <tuv xml:lang="en">
+            <seg>Show signature</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Signatur anzeigen</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="pkm_show_signature_key">
+          <tuv xml:lang="en">
+            <seg>Show key used for signature</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Signierschlüssel anzeigen</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="keyPassword">
+          <tuv xml:lang="en">
+            <seg>Passphrase for your internal key</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Passwort Ihres internen Schlüssels</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="pkm_signFile">
+          <tuv xml:lang="en">
+            <seg>Sign this file</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Diese Datei signieren</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="publish_no_identity_error">
+          <tuv xml:lang="en">
+            <seg>Please login to publish new documents.</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Bitte loggen Sie sich zum Publizieren neuer Dokumente ein.</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="publish_wrong_identity_error">
+          <tuv xml:lang="en">
+            <seg>Your account is not allowed to publish documents. You may relogin with an other identity.</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Sie sind nicht berechtigt neue Dokumente zu publizieren. Bitte loggen Sie sich aus und mit einem anderen Account wieder ein.</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="admin_documents_collectionassign">
+          <tuv xml:lang="en">
+            <seg>Assign document to collection</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Dokument einer Sammlung zuweisen</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="admin_documents_organisationalunitassign">
+          <tuv xml:lang="en">
+            <seg>Assign document to organisational unit</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Dokument einer organisatorischen Einheit zuweisen</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="no_file_according_to_dtd">
+          <tuv xml:lang="en">
+            <seg>This document type does not allow files</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Diesem Dokumenttyp können keine Dateien zugewiesen werden</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="keyFileToUpload">
+          <tuv xml:lang="en">
+            <seg>Keyfile</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Schlüsseldatei</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="pkm_process">
+          <tuv xml:lang="en">
+            <seg>Send file</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Abschicken</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="solrsearch_title_simple">
+            <tuv xml:lang="en">
+                <seg>Search</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Suche</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="solrsearch_title_advanced">
+            <tuv xml:lang="en">
+                <seg>Advanced Search</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Erweiterte Suche</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="solrsearch_title_alldocs">
+            <tuv xml:lang="en">
+                <seg>All documents</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Alle Dokumente</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="solrsearch_title_latest">
+            <tuv xml:lang="en">
+                <seg>Latest documents</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Neueste Dokumente</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="solrsearch_searchaction">
+            <tuv xml:lang="en">
+                <seg>Search</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Suchen</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="solrsearch_query_label">
+            <tuv xml:lang="en">
+                <seg>Search Term</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Suchbegriff</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="license_id_not_found">
+            <tuv xml:lang="en">
+                <seg>License with ID %1$s not found.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Lizenz mit ID %1$s nicht gefunden.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="default_auth_index">
+            <tuv xml:lang="en">
+                <seg>Login</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Einloggen</seg>
+            </tuv>
+        </tu>
+
+    <tu tuid="answer_yes">
+      <tuv xml:lang="en">
+        <seg>Yes</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Ja</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="answer_no">
+      <tuv xml:lang="en">
+        <seg>No</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nein</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="label_captcha">
+      <tuv xml:lang="en">
+        <seg>Please enter the following characters to verify your are not a robot.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte geben Sie die folgende Zeichenfolge ein.</seg>
+      </tuv>
+    </tu>
+
+    </body>
+</tmx>

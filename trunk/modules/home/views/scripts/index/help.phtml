@@ -1,0 +1,105 @@
+<?php
+/**
+ * This file is part of OPUS. The software OPUS has been originally developed
+ * at the University of Stuttgart with funding from the German Research Net,
+ * the Federal Department of Higher Education and Research and the Ministry
+ * of Science, Research and the Arts of the State of Baden-Wuerttemberg.
+ *
+ * OPUS 4 is a complete rewrite of the original OPUS software and was developed
+ * by the Stuttgart University Library, the Library Service Center
+ * Baden-Wuerttemberg, the North Rhine-Westphalian Library Service Center,
+ * the Cooperative Library Network Berlin-Brandenburg, the Saarland University
+ * and State Library, the Saxon State Library - Dresden State and University
+ * Library, the Bielefeld University Library and the University Library of
+ * Hamburg University of Technology with funding from the German Research
+ * Foundation and the European Regional Development Fund.
+ *
+ * LICENCE
+ * OPUS is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the Licence, or any later version.
+ * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details. You should have received a copy of the GNU General Public License 
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51 
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @category   Application
+ * @package    Module_Home
+ * @author     Oliver Marahrens (o.marahrens@tu-harburg.de)
+ * @author     Sascha Szott <szott@zib.de>
+ * @copyright  Copyright (c) 2008-2010, OPUS 4 development team
+ * @license    http://www.gnu.org/licenses/gpl.html General Public License
+ * @version    $Id$
+ */
+?>
+
+<? $this->title = $this->translate('help_index_pagetitle') ?>
+<h2><?= $this->translate('help_index_title') ?></h2>
+
+<?php if (isset($this->content)) : ?>
+    <h2><?= $this->translate($this->contenttitle) ?></h2>
+    <div class="content">
+        <div id="section-help" class="section help">
+        <?= $this->content ?>
+        </div>
+    </div>
+<?php else : ?>
+    <div class="content">
+        <div id="section-help" class="section help">
+
+        <?php $help_entries = array (
+            'help_index_general' => array('about', 'costs', 'searchtipps'),
+            'help_index_authorhelp' => array('diss', 'contact', 'free', 'publneeds', 'right', 'format', 'requirements', 'write', 'publicationprocess', 'preprint', 'workflowlibrary'),
+            'help_index_formfields' => array('metadata', 'form_general', 'field_doctype'),
+            'help_index_legal_title' => array('legal_parallel', 'legal_oa', 'legal_license'),
+            'help_index_misc' => array('policies', 'documentation', 'imprint', 'disclaimer', 'termsofuse'),
+            'help_index_test' => array('test'),
+        )
+        ?>
+        <?php foreach ($help_entries as $section => $entries) : ?>
+            <h3><?= $this->translate($section) ?></h3>
+            <ul class="nav help">
+                <?php foreach ($entries as $entry) : ?>
+                    <li>
+                        <?php if (!$this->separate) : ?>
+                            <a href="#<?= $entry; ?>">
+                                <?= $this->translate('help_title_' . $entry) ?>
+                            </a>
+                        <?php else : ?>
+                            <a href="<?= $this->url(array('module' => 'home', 'controller' => 'index', 'action' => 'help', 'content' => $entry), null, true) ?>">
+                                <?= $this->translate('help_title_' . $entry) ?>
+                            </a>
+                        <?php endif ?>                        
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php endforeach; ?>
+        </div>
+
+        <?php if (!$this->separate) : ?>
+         <div class="section answers">
+            <h2><?= $this->translate('help_index_answerstitle') ?></h2>
+            <dl>
+            <?php foreach ($help_entries as $section => $entries) : ?>
+                <?php foreach ($entries as $entry) : ?>
+                    <dt id="<?= $entry ?>"> <?= $this->translate('help_title_'.$entry) ?></dt>
+                    <?php $translation = $this->translate('help_content_' . $entry); ?>
+                    <dd>
+                    <?php 
+                        $contentFile = $this->getScriptPath('') . $translation;
+                        if (is_file($contentFile) && is_readable($contentFile)) : ?>
+                        <p><?= file_get_contents($contentFile) ?></p>
+                    <?php elseif (($translation !== 'help_content_' . $entry)) : ?>
+                        <p><?= $translation ?></p>
+                    <?php endif ?>
+                        <p class="backlink"><a href="#section-help"><?= $this->translate('help_index_up') ?></a></p>
+                    </dd>
+                <?php endforeach; ?>
+            <?php endforeach; ?>
+            </dl>
+        </div>
+        <?php endif ?>
+    </div>
+<?php endif ?>

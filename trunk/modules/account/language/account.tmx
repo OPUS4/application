@@ -1,0 +1,92 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+ 
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+ 
+  <body>
+
+    <tu tuid="account_index_index">
+      <tuv xml:lang="en">
+        <seg>Account</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Konto</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="account_form_save">
+      <tuv xml:lang="en">
+        <seg>Save</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Speichern</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_account_label_login">
+      <tuv xml:lang="en">
+        <seg>Login:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Login:</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_account_label_firstname">
+      <tuv xml:lang="en">
+        <seg>Firstname:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Vorname:</seg>
+      </tuv>
+    </tu>
+    <tu tuid="admin_account_label_lastname">
+      <tuv xml:lang="en">
+        <seg>Lastname:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nachnahme:</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_account_label_email">
+      <tuv xml:lang="en">
+        <seg>Email:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Email:</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_account_label_password">
+      <tuv xml:lang="en">
+        <seg>Password:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Passwort:</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_account_label_confirmpassword">
+      <tuv xml:lang="en">
+        <seg>Confirm password:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Passwort bestätigen:</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_account_error_login_used">
+      <tuv xml:lang="en">
+        <seg>Login is already used.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das Login wird bereits verwendet.</seg>
+      </tuv>
+    </tu>
+
+  </body>
+  
+</tmx>
