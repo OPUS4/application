@@ -42,8 +42,9 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
     public function setUp() {
         // Resetting singletons or other kinds of persistent objects.
         Opus_Db_TableGateway::clearInstances();
+
+        // FIXME Does it help with the mystery bug?
         Zend_Registry::set('Opus_Navigation', null);
-        $this->logoutUser();
 
         $this->application = new Zend_Application(
             APPLICATION_ENV,
@@ -64,6 +65,15 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
 
         // Initializing start_mtime to make tests pass if debugging is enabled.
         $GLOBALS['start_mtime'] = 0;
+    }
+
+    /**
+     * Clean up database instances.
+     */
+    protected function tearDown() {
+        $this->logoutUser();
+
+        parent::tearDown();
     }
 
     /**
