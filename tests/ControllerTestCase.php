@@ -101,7 +101,10 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
     }
 
     public function logoutUser() {
-        Zend_Auth::getInstance()->clearIdentity();
+        $instance = Zend_Auth::getInstance();
+        if (!is_null($instance)) {
+            $instance->clearIdentity();
+        }
     }
 
     /**
