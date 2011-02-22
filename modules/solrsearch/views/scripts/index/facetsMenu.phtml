@@ -53,7 +53,7 @@
                             </li>
                         <?php endif ?>
                     <?php else: ?>
-                        <li><a href="<?= $this->url($fqUrl) ?>"><?= $this->translate(htmlspecialchars($facetItem->getText())) ?> <?= count($this->selectedFacets) > 0 ? 'rel="noindex, nofollow"' : '' ?></a> (<?= $facetItem->getCount() ?>)</li>
+                        <li><a href="<?= $this->url($fqUrl) ?>" <?= count($this->selectedFacets) > 0 ? 'rel="noindex, nofollow"' : '' ?>><?= $this->translate(htmlspecialchars($facetItem->getText())) ?></a> (<?= $facetItem->getCount() ?>)</li>
                     <? endif ?>
                 <?php endforeach ?>
             </ul>
