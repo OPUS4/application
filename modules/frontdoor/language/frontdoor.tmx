@@ -8,7 +8,16 @@
             <seg>Search for other publications by this author</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Nach weiteren Publikationen von diesem Autor suchen</seg>
+            <seg>Nach weiteren Publikationen dieses Autors suchen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="frontdoor_referee_search">
+        <tuv xml:lang="en">
+            <seg>Search for other publications by this referee</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Nach weiteren Publikationen dieses Gutachters suchen</seg>
         </tuv>
     </tu>
 

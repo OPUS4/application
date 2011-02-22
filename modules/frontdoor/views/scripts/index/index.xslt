@@ -912,10 +912,24 @@
     <xsl:template match="PersonReferee">
         <tr>
             <th class="name">
-                <xsl:call-template name="translateFieldname"/>:
+                <xsl:if test="position() = 1">
+                   <xsl:call-template name="translateFieldname"/>:
+                </xsl:if>
             </th>
             <td>
-                <xsl:value-of select="concat(@LastName, ', ', @FirstName)" />
+                <xsl:element name="a">
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="$baseUrl"/>
+                        <xsl:text>/solrsearch/index/search/searchtype/authorsearch/referee/</xsl:text>
+                        <xsl:value-of select="concat('&quot;', @FirstName, ' ', @LastName, '&quot;')" />
+                    </xsl:attribute>
+                    <xsl:attribute name="title">
+                        <xsl:call-template name="translateString">
+                            <xsl:with-param name="string">frontdoor_referee_search</xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:attribute>
+                    <xsl:value-of select="concat(@LastName, ', ', @FirstName)" />
+                </xsl:element>
             </td>
         </tr>
     </xsl:template>
