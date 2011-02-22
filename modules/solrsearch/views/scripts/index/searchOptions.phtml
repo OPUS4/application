@@ -48,7 +48,9 @@
             <?php if ($this->sortfield === 'score' && $this->sortorder === 'desc') : ?>
                 <?= $this->translate('sorting_relevancy') ?>
             <?php else : ?>
-                <a href="<?= $this->url($urlparams) ?>"><?= $this->translate('sorting_relevancy') ?></a>
+                <a href="<?= $this->url($urlparams) ?>" rel="noindex, nofollow">
+                    <?= $this->translate('sorting_relevancy') ?>
+                </a>
             <?php endif ?>
         </li>
     <?php endif ?>
@@ -62,7 +64,7 @@
             <?php if ($this->sortfield === $sortfield && $this->sortorder === $sortorder) : ?>
                 <?= $this->translate('sorting_' . $sortfield ) ?>
             <?php else : ?>
-                <a href="<?= $this->url($urlparams) ?>">
+                <a href="<?= $this->url($urlparams) ?>" rel="noindex, nofollow">
                     <?= $this->translate('sorting_' . $sortfield ) ?>
                 </a>
             <?php endif ?>
