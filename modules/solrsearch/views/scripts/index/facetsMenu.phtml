@@ -42,6 +42,7 @@
                 <?php foreach($facet as $facetItem) :
                     $fqUrl = $this->firstPage;
                     $fqUrl[$key.'fq'] = $facetItem->getText();
+                    $fqLinkRel = count($this->selectedFacets) > 0 ? 'rel="noindex, nofollow"' : '';
                 ?>
                     <?php if (array_key_exists($key, $this->selectedFacets)) : ?>
                         <?php if ($this->selectedFacets[$key] == $facetItem->getText()) :
@@ -49,11 +50,11 @@
                             $remove_fqUrl[$key.'fq'] = '';
                         ?>
                             <li class="activeFacet"><?= $this->translate(htmlspecialchars($facetItem->getText())) ?> (<?= $facetItem->getCount() ?>)
-                            <span class="removeFacetLink"><a href="<?= $this->url($remove_fqUrl) ?>">(<?= $this->translate('facets_remove') ?>)</a></span>
+                            <span class="removeFacetLink"><a href="<?= $this->url($remove_fqUrl) ?>" <?= $fqLinkRel ?>>(<?= $this->translate('facets_remove') ?>)</a></span>
                             </li>
                         <?php endif ?>
                     <?php else: ?>
-                        <li><a href="<?= $this->url($fqUrl) ?>" <?= count($this->selectedFacets) > 0 ? 'rel="noindex, nofollow"' : '' ?>><?= $this->translate(htmlspecialchars($facetItem->getText())) ?></a> (<?= $facetItem->getCount() ?>)</li>
+                        <li><a href="<?= $this->url($fqUrl) ?>" <?= $fqLinkRel ?>><?= $this->translate(htmlspecialchars($facetItem->getText())) ?></a> (<?= $facetItem->getCount() ?>)</li>
                     <? endif ?>
                 <?php endforeach ?>
             </ul>
