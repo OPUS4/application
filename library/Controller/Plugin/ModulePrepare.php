@@ -28,7 +28,8 @@
  * @category    Application
  * @package     Controller
  * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @author      Thoralf Klein <thoralf.klein@zib.de>
+ * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -46,24 +47,12 @@
 class Controller_Plugin_ModulePrepare extends Zend_Controller_Plugin_Abstract {
 
     /**
-     * Holds reference to front controller instance.
-     *
-     * @var unknown_type
-     */
-    protected $_front = null;
-    /**
      * Holds the name of the directory that contains application modules.
      *
      * @var string
      */
     protected $_path_to_modules = null;
-    /**
-     * Holds a generated name for path variables that do not belong
-     * to an specific module.
-     *
-     * @var string
-     */
-    protected $_nomodule_key = null;
+
     /**
      * Contains all paths the plugin has been given on initialization.
      *
@@ -77,8 +66,6 @@ class Controller_Plugin_ModulePrepare extends Zend_Controller_Plugin_Abstract {
      * @param string $module_path_name Name of the directory that contains application modules.
      */
     public function __construct($module_path_name) {
-        $this->_nomodule_key = md5('nomodule');
-        $this->_front = Zend_Controller_Front::getInstance();
         $this->_path_to_modules = $module_path_name;
     }
 
@@ -86,46 +73,10 @@ class Controller_Plugin_ModulePrepare extends Zend_Controller_Plugin_Abstract {
      * Append a class path. Forewards to _appendPath();
      *
      * @param string $cp     Path relative to model path that contains required classes.
-     * @param string $module (Optional) Name of a module if the class path is specific to that module.
      * @return Opus_Controller_Plugin_ModulePrepare Returns the plugin itself for providing a fluent interface.
      */
-    public function appendClassPath($cp, $module = null) {
-        return $this->_appendPath('class', $cp, $module);
-    }
-
-    /**
-     * Append a view helper path. Forwards to _appendPath();
-     *
-     * @param string $vhp    Relative path to module specific view helpers.
-     * @param string $module (Optional) Name of a module if the pattern is specific to that module.
-     * @return unknown	Returns the plugin itself for providing a fluent interface.
-     */
-    public function appendViewHelperPath($vhp, $module = null) {
-        return $this->_appendPath('viewhelper', $vhp, $module);
-    }
-
-    /**
-     * Append a given path to an appropriate path list depending on the path's
-     * type.
-     *
-     * @param string $type   Type of the path e.g. 'viewhelper'.
-     * @param string $path   The path pattern itself e.g. 'views/helpers'
-     * @param string $module (Optional) Name of a module if the pattern is specific to that module.
-     * @return Opus_Controller_Plugin_ModulePrepare Returns the plugin itself for providing a fluent interface.
-     */
-    protected function _appendPath($type, $path, $module = null) {
-        if (empty($module) === true) {
-            $module = $this->_nomodule_key;
-        }
-        if (array_key_exists($module, $this->_paths) === false) {
-            $this->_paths[$module] = array();
-        }
-        $module_struct = &$this->_paths[$module];
-        if (array_key_exists($type, $module_struct) === false) {
-            $module_struct[$type] = array();
-        }
-        $viewhelperpath_struct = &$module_struct[$type];
-        $viewhelperpath_struct[] = $path;
+    public function appendClassPath($cp) {
+        $this->_paths[] = $cp;
         return $this;
     }
 
@@ -138,41 +89,12 @@ class Controller_Plugin_ModulePrepare extends Zend_Controller_Plugin_Abstract {
      */
     public function preDispatch(Zend_Controller_Request_Abstract $request) {
         $current_module = $request->getModuleName();
-        if (array_key_exists($current_module, $this->_paths) === true) {
-            $current_module_paths = $this->_paths[$current_module];
-        }
-        $module_paths = array();
-        $module_paths[] = $this->_paths[$this->_nomodule_key];
-        if (isset($current_module_paths) === true) {
-            $module_paths[] = $current_module_paths;
-        }
 
         // Add translation
         if ($current_module !== 'default') {
             $moduleDir = $this->_path_to_modules . "/$current_module/";
             $this->_loadLanguageDirectory("$moduleDir/language/");
             $this->_loadLanguageDirectory("$moduleDir/language_custom/");
-        }
-
-        foreach ($module_paths as $path) {
-            // Add classes to include_path.
-//            if (array_key_exists('class', $path) === true) {
-//                $class_paths = $path['class'];
-//                $include_paths = explode(PATH_SEPARATOR, get_include_path());
-//                foreach ($class_paths as $cp) {
-//                    $include_paths[] = "$this->_path_to_modules/$current_module/$cp";
-//                }
-//                set_include_path(implode(PATH_SEPARATOR, $include_paths));
-//            }
-
-            // Add view helper paths.
-            if (array_key_exists('viewhelper', $path) === true) {
-                $view = Zend_Layout::getMvcInstance()->getView();
-                $viewhelper_paths = $path['viewhelper'];
-                foreach ($viewhelper_paths as $vhp) {
-                    $view->addHelperPath("$this->_path_to_modules/$current_module/$vhp");
-                }
-            }
         }
     }
 
@@ -213,17 +135,13 @@ class Controller_Plugin_ModulePrepare extends Zend_Controller_Plugin_Abstract {
             if (preg_match('/^[^.].*\.tmx$/', $file) === 0) {
                 continue;
             }
-            
+
             $translate->addTranslation(array_merge(array(
                         'content' => $directory . DIRECTORY_SEPARATOR . $file,
             ), $options));
         }
 
         return true;
-    }
-
-    // TODO move code here
-    protected function _addViewHelperPaths() {
     }
 
 }
