@@ -78,6 +78,7 @@ class Frontdoor_IndexController extends Controller_Action {
                     ->appendHttpEquiv('Last-Modified', $dateModified->getZendDate()->get(Zend_Date::RFC_1123));
             }
             // $this->addMetaTagsForDocument($document);
+            $this->setFrontdoorTitleToDocumentTitle($document);
 
             $config = Zend_Registry::getInstance()->get('Zend_Config');
             $deliver_url_prefix = isset($config->deliver->url->prefix) ? $config->deliver->url->prefix : '/documents';
@@ -94,6 +95,25 @@ class Frontdoor_IndexController extends Controller_Action {
         catch (Zend_Db_Table_Rowset_Exception $e) {
             if ($e->getMessage() === 'No row could be found at position 0') {
                     $this->view->frontdoor = sprintf($this->view->translate('frontdoor_doc_id_not_found'), $docId);
+            }
+        }
+    }
+
+    private function setFrontdoorTitleToDocumentTitle($document) {
+        $docLanguage = $document->getLanguage();
+        $docLanguage = is_array($docLanguage) ? $docLanguage : array($docLanguage);
+
+        foreach ($document->getTitleMain() AS $title) {
+            $titleValue = trim($title->getValue());
+            if (empty($titleValue)) {
+                continue;
+            }
+
+            if (in_array($title->getValue(), $docLanguage)) {
+                $this->view->title = $titleValue;
+            }
+            else {
+                $this->view->title = $titleValue;
             }
         }
     }
