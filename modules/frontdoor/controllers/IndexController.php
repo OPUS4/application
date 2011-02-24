@@ -103,6 +103,9 @@ class Frontdoor_IndexController extends Controller_Action {
         $docLanguage = $document->getLanguage();
         $docLanguage = is_array($docLanguage) ? $docLanguage : array($docLanguage);
 
+        $titleStringMain = "";
+        $titleStringAlt = "";
+
         foreach ($document->getTitleMain() AS $title) {
             $titleValue = trim($title->getValue());
             if (empty($titleValue)) {
@@ -110,11 +113,18 @@ class Frontdoor_IndexController extends Controller_Action {
             }
 
             if (in_array($title->getValue(), $docLanguage)) {
-                $this->view->title = $titleValue;
+                $titleStringMain = $titleValue;
             }
             else {
-                $this->view->title = $titleValue;
+                $titleStringAlt = $titleValue;
             }
+        }
+
+        if (!empty($titleStringMain)) {
+            $this->view->title = $titleStringMain;
+        }
+        elseif (!empty($titleStringAlt)) {
+            $this->view->title = $titleStringAlt;
         }
     }
 
