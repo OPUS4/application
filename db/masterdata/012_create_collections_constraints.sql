@@ -23,7 +23,8 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- Constraints der Tabelle `collections`
 --
 ALTER TABLE `collections`
-  ADD CONSTRAINT `collections_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `collections_roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `collections_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `collections_roles` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  ADD CONSTRAINT `collections_ibfk_2` FOREIGN KEY (`parent_id`) REFERENCES `collections` (`id`);
 
 --
 -- Constraints der Tabelle `collections_enrichments`
