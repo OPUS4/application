@@ -122,7 +122,7 @@ class OpusApacheRewritemap { // extends Opus_Bootstrap_Base {
         // split input
         list($path, $remoteAddress, $cookie) = preg_split('/\t/', $line, 3);
         // remove leading 'COOKIE=', set to prevent eating of second tab by the shell
-        preg_replace('/^COOKIES=/', '', $cookie, 1);
+        $cookie = preg_replace('/^COOKIES=/', '', $cookie, 1);
 
         // issue rewriting
         $rwmap = new Rewritemap_Apache($targetPrefix, $log);
@@ -145,7 +145,7 @@ $application = new Zend_Application(
     )
 );
 
-$application->bootstrap();
+$application->bootstrap(array('Configuration', 'Logging', 'Database'));
 
 // Bootstrap Zend
 $rwmap = new OpusApacheRewritemap($argv);

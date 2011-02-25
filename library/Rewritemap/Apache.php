@@ -105,7 +105,7 @@ class Rewritemap_Apache {
      * return string
      */
     public function rewriteRequest($request, $ip = null, $cookies = null) {
-        $this->_logger->info("got request '$request'");
+        $this->_logger->info("got request '$request', $ip, $cookies");
         // parse and normalize request, remove leading slash
         $request = preg_replace('/^\/(.*)$/', '$1', $request);
         if (preg_match('/^[\d]+[\/]?$/', $request) === 1) {
