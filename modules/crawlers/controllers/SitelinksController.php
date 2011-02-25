@@ -41,7 +41,23 @@ class Crawlers_SitelinksController extends Controller_Action {
     public function indexAction() {
         $f = new Opus_DocumentFinder();
         $f->setServerState('published');
-        $this->view->ids = $f->ids();
+
+        $this->view->years = $f->groupedServerYearPublished();
+        sort($this->view->years);
+        $this->view->ids = array();
+    }
+
+    public function listAction() {
+        $this->indexAction();
+
+        $year = trim($this->_getParam('year'));
+        if (preg_match('/^\d{4}$/', $year) > 0) {
+           $f = new Opus_DocumentFinder();
+           $f->setServerState('published');
+           $f->setServerDatePublishedRange($year, $year+1);
+           $this->view->ids = $f->ids();
+        }
+        
+        return $this->render('index');
     }
 }
-

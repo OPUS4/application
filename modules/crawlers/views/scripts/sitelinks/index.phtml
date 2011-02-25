@@ -35,6 +35,12 @@
 
 <h1>Sitelinks for Web Crawlers</h1>
 
+<span>
+<?php foreach ($this->years as $year) : ?>
+    <a title="documents published in year <?= $year ?>" href="<?= $this->url(array('module' => 'crawlers', 'controller' => 'sitelinks', 'action' => 'list', 'year' => $year)) ?>"><?= $year ?></a> 
+<?php endforeach; ?>
+</span>
+
 <ol>
 <?php foreach ($this->ids as $id) : ?>
     <li><a href="<?= $this->url(array('module' => 'frontdoor', 'controller' => 'index', 'action' => 'index', 'docId' => $id)) ?>">document <?= $id ?></a></li>
