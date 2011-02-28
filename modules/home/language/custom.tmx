@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+    <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool"></header>
+    <body>
+
+        <tu tuid="home_index_contact_pagetitle">
+          <tuv xml:lang="en">
+            <seg>foo</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>bar</seg>
+          </tuv>
+        </tu>
+
+        <!-- to edit help_content_contact open help.tmx -->
+    </body>
+</tmx>

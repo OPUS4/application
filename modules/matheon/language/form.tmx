@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+    <body>
+        <tu tuid="reviewerid_label">
+          <tuv xml:lang="en">
+            <seg>Please choose your reviewer:</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Bitte Ihren Reviewer wählen:</seg>
+          </tuv>
+        </tu>
+    </body>
+</tmx>

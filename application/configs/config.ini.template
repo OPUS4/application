@@ -77,8 +77,6 @@ mail.opus.name = ; Name of administrator
 ; Please read the documentation about the delivery proccess of OPUS.
 ; Here you can configure the internal address of the fulltext directory.
 ; deliver.target.prefix = /files
-; Here you can configure the external address of the fulltext directory.
-; deliver.url.prefix = /documents
 
 ; URN SETTINGS
 ; If you do not want to set URNs automatically, set these values blank or

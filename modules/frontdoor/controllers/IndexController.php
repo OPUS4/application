@@ -81,11 +81,9 @@ class Frontdoor_IndexController extends Controller_Action {
             $this->setFrontdoorTitleToDocumentTitle($document);
 
             $config = Zend_Registry::getInstance()->get('Zend_Config');
-            $deliver_url_prefix = isset($config->deliver->url->prefix) ? $config->deliver->url->prefix : '/documents';
-            $layoutPath = 'layouts/'.(isset($config->theme) ? $config->theme : '');
+            $layoutPath = 'layouts/'.(isset($config, $config->theme) ? $config->theme : '');
 
             $proc->setParameter('', 'baseUrl', $baseUrl);
-            $proc->setParameter('', 'deliverUrlPrefix', "$deliver_url_prefix");
             $proc->setParameter('', 'layoutPath', $baseUrl.'/'.$layoutPath);
             $proc->setParameter('', 'isMailPossible', ($this->isMailPossible($document) ? true : false));
             $this->view->frontdoor = $proc->transformToXML($xml);
