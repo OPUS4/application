@@ -82,7 +82,7 @@ class Matheon_CheckDataController extends Controller_Action {
                 $docStats['missingProject'] = true;
             }
 
-            if ($this->_countCollectionRole($document, 'msc') === 0) {
+            if (($this->_countSubjectMsc($document) === 0) and ($this->_countCollectionRole($document, 'msc') === 0)) {
                 $docStats['errors']++;
                 $docStats['missingMsc'] = true;
             }
@@ -127,6 +127,16 @@ class Matheon_CheckDataController extends Controller_Action {
         $count = 0;
         foreach ($document->getCollection() AS $collection) {
             if ($collection->getRoleName() == $name) {
+                $count++;
+            }
+        }
+        return $count;
+    }
+
+    private function _countSubjectMsc($document) {
+        $count = 0;
+        foreach ($document->getSubject() AS $subject) {
+            if (trim($subject->getType()) == 'msc') {
                 $count++;
             }
         }
