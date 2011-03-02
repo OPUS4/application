@@ -87,10 +87,10 @@ class Matheon_CheckDataController extends Controller_Action {
                 $docStats['missingMsc'] = true;
             }
 
-            if (count($document->getPersonReferee()) === 0) {
-                $docStats['errors']++;
-                $docStats['missingReferee'] = true;
-            }
+//            if (count($document->getPersonReferee()) === 0) {
+//                $docStats['errors']++;
+//                $docStats['missingReferee'] = true;
+//            }
 
             if ($docStats['errors'] > 0) {
                 foreach ($docStats['authorEmails'] AS $author) {
