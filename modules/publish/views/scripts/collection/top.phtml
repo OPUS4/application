@@ -49,7 +49,7 @@ $session = new Zend_Session_Namespace('Publish');
 
     <?php if (isset($this->errorCaseMessage)) : ?>
         <div class="form-hint form-errors"><p><?= $this->errorCaseMessage; ?></p></div>
-    <? endif; ?>
+    <?php endif; ?>
 
         <form enctype="multipart/form-data" action="<?= $this->action_url; ?>" method="post">
 

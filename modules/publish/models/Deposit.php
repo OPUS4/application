@@ -348,9 +348,7 @@ class Publish_Model_Deposit {
                 $this->log->debug("subject is a uncontrolled or other subject.");
                 $subject = new Opus_Subject();
                 break;
-        }
-
-        // if ($type != 'CCS' && $type != 'PACS') {
+        }        
         $counter = (int) $this->getCounter($dataKey);
         $this->log->debug("counter: " . $counter);
 
@@ -361,8 +359,7 @@ class Publish_Model_Deposit {
             $addFunction = "add" . $subjectType;
             $this->log->debug("addfunction: " . $addFunction);
             $this->document->$addFunction($subject);
-        }
-        //}
+        }       
     }
 
     /**
@@ -486,10 +483,8 @@ class Publish_Model_Deposit {
             return;
         }
         $this->log->debug("try to store " . $dataKey . " with id: " . $dataValue);
-
         $identifier = new Opus_Identifier();
         $identifier->setValue($dataValue);
-
         if (strstr($dataKey, 'Old')) {
             $this->document->addIdentifierOld($identifier);
         }
@@ -562,7 +557,7 @@ class Publish_Model_Deposit {
             $this->document->addReferenceHandle($reference);
         }
         else if (strstr($dataKey, 'Url')) {
-            $this->document->addReferenceUri($reference);
+            $this->document->addReferenceUrl($reference);
         }
         else if (strstr($dataKey, 'Issn')) {
             $this->document->addReferenceIssn($reference);

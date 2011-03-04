@@ -58,6 +58,8 @@ class Publish_FormController extends Controller_Action {
     }
 
     public function uploadAction() {
+        $this->log->err('FormController: ' .var_export($this->getRequest()->getParams(), true));
+ 
         $this->view->languageSelectorDisabled = true;
         $this->view->title = $this->view->translate('publish_controller_index');
 
@@ -141,9 +143,9 @@ class Publish_FormController extends Controller_Action {
                     foreach ($this->session->elements AS $element)
                         $postData[$element['name']] = htmlspecialchars($element['value']);
             }
-
+            
             //initialize the form object
-            $form = new Publish_Form_PublishingSecond($this->session->documentType, $this->session->documentId, $this->session->fulltext, $this->session->additionalFields, $postData);
+            $form = new Publish_Form_PublishingSecond($postData);
 
             if (array_key_exists('abortCollection', $postData)) {
                 $form = $form->populate($postData);
@@ -190,7 +192,7 @@ class Publish_FormController extends Controller_Action {
         $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
         $this->view->doctype = $this->session->documentType;
 
-        $publishForm = new Publish_Form_PublishingSecond($this->session->documentType, $this->session->documentId, $this->session->fulltext, $this->session->additionalFields, null);
+        $publishForm = new Publish_Form_PublishingSecond(null);
         $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check')) . '#current';
         $publishForm->setAction($action_url);
         $publishForm->setMethod('post');
@@ -208,7 +210,7 @@ class Publish_FormController extends Controller_Action {
         $this->view->subtitle = $this->view->translate('publish_controller_check2');
         $this->view->header = $this->view->translate('publish_controller_changes');
 
-        $depositForm = new Publish_Form_PublishingSecond($this->session->documentType, $this->session->documentId, $this->session->fulltext, $this->session->additionalFields, $form->getValues());
+        $depositForm = new Publish_Form_PublishingSecond($form->getValues());
         $action_url = $this->view->url(array('controller' => 'deposit', 'action' => 'deposit'));
         $depositForm->setAction($action_url);
         $depositForm->setMethod('post');
@@ -560,7 +562,7 @@ class Publish_FormController extends Controller_Action {
             $this->session->additionalFields[$fieldName] = $currentNumber;
         }
 
-        $form = new Publish_Form_PublishingSecond($this->session->documentType, $this->session->documentId, $this->session->fulltext, $this->session->additionalFields, $postData);
+        $form = new Publish_Form_PublishingSecond($postData);
         $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check')) . '#current';
         $form->setAction($action_url);
         $this->view->action_url = $action_url;

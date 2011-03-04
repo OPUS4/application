@@ -53,6 +53,9 @@ class Publish_CollectionController extends Controller_Action {
 
     public function topAction() {
 
+        if (!$this->getRequest()->isPost()) {
+            return $this->_redirectTo('index', '', 'index');
+        }
         $this->view->languageSelectorDisabled = true;
 
         $this->session->step = 1;

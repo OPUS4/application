@@ -84,7 +84,7 @@ class Publish_DepositController extends Controller_Action {
             }
         }
 
-        $depositForm = new Publish_Form_PublishingSecond($this->session->documentType, $this->session->documentId, $this->session->fulltext, $this->session->additionalFields, $this->postData);
+        $depositForm = new Publish_Form_PublishingSecond($this->postData);
         $depositForm->populate($this->postData);
 
         //avoid vulnerability by populate postdata to form => hacked fields won't be saved

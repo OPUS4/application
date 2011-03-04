@@ -47,14 +47,15 @@ class Publish_Form_PublishingSecond extends Zend_Form {
     public $languages = array();
     public $session;
 
-    public function __construct($type, $id, $fulltext, $additionalFields, $postData, $options=null) {
-        $this->doctype = $type;
-        $this->docid = $id;
-        $this->fulltext = $fulltext;
-        $this->additionalFields = $additionalFields;
-        $this->postData = $postData;
+    public function __construct($postData, $options=null) {
         $this->session = new Zend_Session_Namespace('Publish');
         $log = Zend_Registry::get('Zend_Log');
+        $this->doctype = $this->session->documentType;
+        $this->docid = $this->session->documentId;
+        $this->fulltext = $this->session->fulltext;
+        $this->additionalFields = $this->session->additionalFields;
+        $this->postData = $postData;
+        
         $this->log = $log;
 
         parent::__construct($options);
@@ -91,7 +92,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      * @return void
      */
     public function init() {
-        $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument($this->doctype);
+        $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument($this->doctype);        
         if (!isset($dom)) {
             throw new Publish_Model_OpusServerException('Session Timeout. Please start publishing process again.');
         }
