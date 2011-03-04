@@ -235,14 +235,17 @@ class Publish_FormControllerTest extends ControllerTestCase {
             2 => array('name' => 'PersonSubmitterLastName1', 'value' => 'Hansmann'),
             3 => array('name' => 'PersonSubmitterEmail1', 'value' => 'test@mail.com'),
             4 => array('name' => 'CompletedDate', 'value' => '2011/03/03'),
-            5 => array('name' => 'CompletedDate', 'value' => '2011/03/03'),
             5 => array('name' => 'EnrichmentLegalNotices', 'value' => '1'),
             6 => array('name' => 'TitleMain1', 'value' => 'Irgendwas'),
             7 => array('name' => 'TitleMainLanguage1', 'value' => 'deu')
         );
         $session->elements = $elemente;
-        $session->documentType = 'all';
-        $session->documentId = '790';
+        $doc = new Opus_Document();
+        $doc->setType('preprint');
+        $doc->setServerState('temporary');
+        $docId = $doc->store();
+        $session->documentType = 'preprint';
+        $session->documentId = $docId;
         $session->fulltext = '0';
         $session->additionalFields = array();
 

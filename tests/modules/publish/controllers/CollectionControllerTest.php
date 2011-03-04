@@ -78,7 +78,11 @@ class Publish_CollectionControllerTest extends ControllerTestCase {
             7 => array('name' => 'TitleMainLanguage1', 'value' => 'deu')
         );
         $session->elements = $elemente;
-        $session->documentId = '712';
+        $doc = new Opus_Document();
+        $doc->setType('preprint');
+        $doc->setServerState('temporary');
+        $docId = $doc->store();
+        $session->documentId = $docId;
         $session->documentType = 'preprint';
 
         $this->dispatch('/publish/collection/sub');
