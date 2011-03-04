@@ -49,27 +49,63 @@ class Publish_DepositControllerTest extends ControllerTestCase {
      * which leads to a Error Message and code 200
      */
     public function testDepositActionWithValidPostAndBackButton() {
-        $defaultNS = new Zend_Session_Namespace('Publish');
-        $defaultNS->elements = array(
-            'PersonAuthor1FirstName' => 'Susanne',
-            'PersonAuthor1LastName' => 'Gottwald',
-            'Language' => 'eng',
-            'Institute1' => 'Zuse Institute Berlin (ZIB)',
-            'TitleMain1' => 'Entenhausen',
-            'TitleMain1Language' => 'eng',
-            'SubjectMSC1' => '00A09'
+        $session = new Zend_Session_Namespace('Publish');
+        $elemente = array(
+            1 => array('name' => 'PersonSubmitterFirstName1', 'value' => 'Hans'),
+            2 => array('name' => 'PersonSubmitterLastName1', 'value' => 'Hansmann'),
+            3 => array('name' => 'PersonSubmitterEmail1', 'value' => 'test@mail.com'),
+            4 => array('name' => 'CompletedDate', 'value' => '2011/03/03'),
+            5 => array('name' => 'CompletedDate', 'value' => '2011/03/03'),
+            5 => array('name' => 'EnrichmentLegalNotices', 'value' => '1'),
+            6 => array('name' => 'TitleMain1', 'value' => 'Irgendwas'),
+            7 => array('name' => 'TitleMainLanguage1', 'value' => 'deu')
         );
+        $session->elements = $elemente;
+        $session->documentId = '712';
+        $session->documentType = 'preprint';
 
         $this->request
                 ->setMethod('POST')
                 ->setPost(array(
-                    'back' => 'button_label_back'
+                    'back' => ''
                 ));
 
         $this->dispatch('/publish/deposit/deposit');
-//        $this->assertResponseCode(200);
-//        $this->assertController('deposit');
-//        $this->assertAction('deposit');
+        $this->assertResponseCode(200);
+        $this->assertController('form');
+        $this->assertAction('check');
+    }
+
+    /**
+     * Method tests the deposit action with a valid POST request
+     * which leads to a OK Message, code 200 and Saving of all document data
+     */
+    public function testDepositActionWithValidPostAndCollectionButton() {
+        $session = new Zend_Session_Namespace('Publish');
+        $elemente = array(
+            1 => array('name' => 'PersonSubmitterFirstName1', 'value' => 'Hans'),
+            2 => array('name' => 'PersonSubmitterLastName1', 'value' => 'Hansmann'),
+            3 => array('name' => 'PersonSubmitterEmail1', 'value' => 'test@mail.com'),
+            4 => array('name' => 'CompletedDate', 'value' => '2011/03/03'),
+            5 => array('name' => 'CompletedDate', 'value' => '2011/03/03'),
+            5 => array('name' => 'EnrichmentLegalNotices', 'value' => '1'),
+            6 => array('name' => 'TitleMain1', 'value' => 'Irgendwas'),
+            7 => array('name' => 'TitleMainLanguage1', 'value' => 'deu')
+        );
+        $session->elements = $elemente;
+        $session->documentId = '712';
+        $session->documentType = 'preprint';
+
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'collection' => ''
+                ));
+
+        $this->dispatch('/publish/deposit/deposit');
+        $this->assertResponseCode(200);
+        $this->assertController('collection');
+        $this->assertAction('top');
     }
 
     /**
@@ -77,31 +113,83 @@ class Publish_DepositControllerTest extends ControllerTestCase {
      * which leads to a OK Message, code 200 and Saving of all document data
      */
     public function testDepositActionWithValidPostAndSendButton() {
-        $defaultNS = new Zend_Session_Namespace('Publish');
-        $defaultNS->elements = array(
-            'PersonAuthor1FirstName' => 'Susanne',
-            'PersonAuthor1LastName' => 'Gottwald',
-            'Language' => 'eng',
-            'Institute1' => 'Zuse Institute Berlin (ZIB)',
-            'TitleMain1' => 'Entenhausen',
-            'TitleMain1Language' => 'eng',
-            'SubjectMSC1' => '00A09'
+        $session = new Zend_Session_Namespace('Publish');
+        $elemente = array(
+            1 => array('name' => 'PersonSubmitterFirstName1', 'value' => 'Hans'),
+            2 => array('name' => 'PersonSubmitterLastName1', 'value' => 'Hansmann'),
+            3 => array('name' => 'PersonSubmitterEmail1', 'value' => 'test@mail.com'),
+            4 => array('name' => 'PersonSubmitterPlaceOfBirth1', 'value' => 'Stadt'),
+            5 => array('name' => 'PersonSubmitterDateOfBirth1', 'value' => '1970/01/01'),
+            6 => array('name' => 'PersonSubmitterAcademicTitle1', 'value' => 'Dr.'),
+            7 => array('name' => 'PersonSubmitterAllowEmailContact1', 'value' => '0'),
+            8 => array('name' => 'CompletedDate', 'value' => '2011/03/03'),
+            9 => array('name' => 'CompletedDate', 'value' => '2011/03/03'),
+            10 => array('name' => 'EnrichmentLegalNotices', 'value' => '1'),
+            11 => array('name' => 'TitleMain1', 'value' => 'Irgendwas'),
+            12 => array('name' => 'TitleMainLanguage1', 'value' => 'deu'),
+            13 => array('name' => 'TitleMain2', 'value' => 'Irgendwas sonst'),
+            14 => array('name' => 'TitleMainLanguage2', 'value' => 'eng'),
+            15 => array('name' => 'Language', 'value' => 'deu'),
+            16 => array('name' => 'SubjectUncontrolled1', 'value' => 'Keyword'),
+            17 => array('name' => 'Note', 'value' => 'Dies ist ein Kommentar'),
+            18 => array('name' => 'Licence', 'value' => 'ID_1'),
+            19 => array('name' => 'IdentifierUrn', 'value' => 'blablup987'),
+            20 => array('name' => 'Institute', 'value' => 'Freie Universität Berlin'),           
+            21 => array('name' => 'ThesisGrantor', 'value' => 'ID:1'),
+            22 => array('name' => 'SubjectMSC1', 'value' => '00A09'),
+            23 => array('name' => 'SubjectSwd1', 'value' => 'hallo098'),
+            24 => array('name' => 'ThesisPublisher', 'value' => 'ID:1'),
+            25 => array('name' => 'SubjectPACS1', 'value' => '11.15.Bt'),
+            26 => array('name' => 'IdentifierOld', 'value' => 'blablup987'),
+            27 => array('name' => 'IdentifierSerial', 'value' => 'blablup987'),
+            28 => array('name' => 'IdentifierUuid', 'value' => 'blablup987'),
+            29 => array('name' => 'IdentifierIsbn', 'value' => 'blablup987'),
+            30 => array('name' => 'IdentifierDoi', 'value' => 'blablup987'),
+            31 => array('name' => 'IdentifierHandle', 'value' => 'blablup987'),
+            32 => array('name' => 'IdentifierUrl', 'value' => 'blablup987'),
+            33 => array('name' => 'IdentifierIssn', 'value' => 'blablup987'),
+            34 => array('name' => 'IdentifierStdDoi', 'value' => 'blablup987'),
+            35 => array('name' => 'IdentifierCrisLink', 'value' => 'blablup987'),
+            36 => array('name' => 'IdentifierSplashUrl', 'value' => 'blablup987'),
+            37 => array('name' => 'IdentifierOpus3', 'value' => 'blablup987'),
+            38 => array('name' => 'IdentifierOpac', 'value' => 'blablup987'),
+            39 => array('name' => 'ReferenceIsbn', 'value' => 'blablup987'),
+            40 => array('name' => 'ReferenceUrn', 'value' => 'blablup987'),
+            41 => array('name' => 'ReferenceHandle', 'value' => 'blablup987'),
+            42 => array('name' => 'ReferenceDoi', 'value' => 'blablup987'),
+            43 => array('name' => 'ReferenceIssn', 'value' => 'blablup987'),
+            44 => array('name' => 'ReferenceUrl', 'value' => 'blablup987'),
+            45 => array('name' => 'ReferenceCrisLink', 'value' => 'blablup987'),
+            46 => array('name' => 'ReferenceStdDoi', 'value' => 'blablup987'),
+            47 => array('name' => 'ReferenceSplashUrl', 'value' => 'blablup987')
         );
-        $defaultNS->documentId = '712';
-        $defaultNS->documentType = 'preprint';
+        $session->elements = $elemente;
+        $session->documentType = 'preprint';
+        $doc = new Opus_Document();
+        $doc->setServerState('temporary');
+        $doc->setType('preprint');
+        $session->documentId = $doc->store();
 
         $this->request
                 ->setMethod('POST')
                 ->setPost(array(
-                    'send' => 'button_label_send'
+                    'send' => 'Abspeichern'
                 ));
 
         $this->dispatch('/publish/deposit/deposit');
-//        $this->assertResponseCode(200);
-//        $this->assertController('deposit');
-//        $this->assertAction('deposit');
+        echo $this->getResponse()->getBody();
+        $this->assertResponseCode(302);
+        $this->assertController('deposit');
+        $this->assertAction('deposit');
     }
 
+    public function testConfirmAction() {
+        $session = new Zend_Session_Namespace('Publish');
+        $session->depositConfirmDocumentId = '712';
+        $this->dispatch('/publish/deposit/confirm');
+        $this->assertController('deposit');
+        $this->assertAction('confirm');
+    }
 }
 
 ?>

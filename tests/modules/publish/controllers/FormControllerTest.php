@@ -27,26 +27,119 @@
  *
  * @category    Application
  * @package     Tests
- * @author      Thoralf Klein <thoralf.klein@zib.de>
+ * @author      Susanne Gottwald <gottwald@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 class Publish_FormControllerTest extends ControllerTestCase {
 
+     /**
+     * Send Button was pressed but the post is invalid (missing first name)
+     */
+    public function testCheckActionWithValidPostAndSendButton() {
+        $session = new Zend_Session_Namespace('Publish');
+        $session->unsetAll();
+        $session->documentType = 'preprint';
+        $session->documentId = '750';
+        $session->fulltext = '0';
+        $session->additionalFields = array();
+
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'PersonSubmitterFirstName1' => 'John',
+                    'PersonSubmitterLastName1' => 'Doe',
+                    'PersonSubmitterEmail1' => 'doe@example.org',
+                    'TitleMain1' => 'Entenhausen',
+                    'TitleMainLanguage1' => 'eng',
+                    'TitleAbstract1' => 'Testabsatz',
+                    'TitleAbstractLanguage1' => 'deu',
+                    'PersonAuthorFirstName1' => '',
+                    'PersonAuthorLastName1' => '',
+                    'PersonAuthorAcademicTitle1' => 'Dr.',
+                    'PersonAuthorEmail1' => '',
+                    'PersonAuthorAllowEmailContact1' => '0',
+                    'PersonAuthorDateOfBirth1' => '',
+                    'PersonAuthorPlaceOfBirth1' => '',
+                    'CompletedDate' => '2011/02/22',
+                    'PageNumber' => '',
+                    'SubjectUncontrolled1' => '',
+                    'Institute' => '',
+                    'IdentifierUrn' => '',
+                    'Note' => '',
+                    'Language' => 'deu',
+                    'Licence' => 'ID_1',
+                    'send' => 'Next step'
+                ));
+
+        $this->dispatch('/publish/form/check');
+        $this->assertResponseCode(200);
+        $this->assertController('form');
+        $this->assertAction('check');
+    }
+    
+    
+
     /**
-     * Simple test action to check form action in FormController
+     * Test GET on upload action
      */
     public function testUploadActionWithOutPost() {
         $this->dispatch('/publish/form/upload');
         $this->assertResponseCode(302);
         $this->assertController('form');
         $this->assertAction('upload');
+    }    
 
+    /**
+     * Test upload action with empty POST array
+     */
+    public function testUploadActionWithEmptyPost() {
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array());
+
+        $this->dispatch('/publish/form/upload');
+        $this->assertResponseCode(302);
+        $this->assertController('form');
+        $this->assertAction('upload');
+    }
+
+    
+    
+    public function testUploadActionWithValidPost() {
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'documentType' => 'all',
+                    'rights' => '1',
+                    'send' => 'Next step'
+                ));
+
+        $this->dispatch('/publish/form/upload');
+        $this->assertResponseCode(200);
+        $this->assertController('form');
+        $this->assertAction('upload');
     }
 
     /**
-     * Simple test action to check form action with invalid POST
+     * Test upload action with user-changed MAXFILESIZE in POST array
+     */
+    public function testUploadActionWithAttackedPost() {
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'MAX_FILE_SIZE' => 123
+                ));
+
+        $this->dispatch('/publish/form/upload');
+        $this->assertResponseCode(302);
+        $this->assertController('form');
+        $this->assertAction('upload');
+    }
+
+    /**
+     * Test upload action with invalid POST array
      */
     public function testUploadActionWithInvalidDummyPost() {
         $this->request
@@ -56,50 +149,58 @@ class Publish_FormControllerTest extends ControllerTestCase {
                 ));
 
         $this->dispatch('/publish/form/upload');
-//        $this->assertResponseCode(200);
-//        $this->assertController('form');
-//        $this->assertAction('upload');
-
+        $this->assertResponseCode(200);
+        $this->assertController('form');
+        $this->assertAction('upload');
     }
 
     /**
-     * Simple test action to check check action in FormController
+     * Test check action with GET
      */
     public function testCheckActionWithoutPost() {
         $this->dispatch('/publish/form/check');
         $this->assertResponseCode(302);
         $this->assertController('form');
         $this->assertAction('check');
+    }   
 
-    }    
+    /**
+     * Add Button was pressed and the post is valid
+     */
+    public function testCheckActionWithValidPostAndAddButton() {
+        $session = new Zend_Session_Namespace('Publish');
+        $session->unsetAll();
+        $session->documentType = 'preprint';
+        $session->documentId = '900';
+        $session->fulltext = '0';
+        $session->additionalFields = array();
 
-    public function testCheckActionWithValidPostAndSendButton() {
-         $this->request
+        $this->request
                 ->setMethod('POST')
                 ->setPost(array(
-                    'PersonAuthor1FirstName' => 'Testi',
-                    'PersonAuthor1LastName' => 'Tester',
-                    'countMorePersonAuthor' => '1',
-                    'Institute1' => 'Zuse Institute Berlin (ZIB)',
-                    'countMoreInstitute' => '1',
-                    'Language' => 'eng',
-                    'TitleMain1' => 'Title',
-                    'TitleMain1Language' => 'eng',
-                    'countMoreTitleMain' => '1',
-                    'TitleAbstract1' => '',
-                    'TitleAbstract1Language' => '',
-                    'countMoreTitleAbstract' => '1',
-                    'Project1' => '',
-                    'countMoreProject' => '1',
-                    'SubjectMSC1' => '00A09',
-                    'countMoreSubjectMSC' => '1',
+                    'PersonSubmitterFirstName1' => 'John',
+                    'PersonSubmitterLastName1' => 'Doe',
+                    'PersonSubmitterEmail1' => 'doe@example.org',
+                    'TitleMain1' => 'Entenhausen',
+                    'TitleMainLanguage1' => 'eng',
+                    'TitleAbstract1' => 'Testabsatz',
+                    'TitleAbstractLanguage1' => 'deu',
+                    'PersonAuthorFirstName1' => '',
+                    'PersonAuthorLastName1' => '',
+                    'PersonAuthorAcademicTitle1' => 'Dr.',
+                    'PersonAuthorEmail1' => '',
+                    'PersonAuthorAllowEmailContact1' => '0',
+                    'PersonAuthorDateOfBirth1' => '',
+                    'PersonAuthorPlaceOfBirth1' => '',
+                    'CompletedDate' => '2011/02/22',
+                    'PageNumber' => '',
                     'SubjectUncontrolled1' => '',
-                    'countMoreSubjectUncontrolled' => '1',
+                    'Institute' => '',
+                    'IdentifierUrn' => '',
                     'Note' => '',
-                    'fullText' => '0',
-                    'documentType' => 'preprint',
-                    'documentId' => '',
-                    'send' => 'button_label_send'
+                    'Language' => 'deu',
+                    'Licence' => 'ID_1',
+                    'addMoreTitleMain' => 'Add one more main title'
                 ));
 
         $this->dispatch('/publish/form/check');
@@ -107,77 +208,54 @@ class Publish_FormControllerTest extends ControllerTestCase {
 //        $this->assertController('form');
 //        $this->assertAction('check');
     }
-
-    public function testCheckActionWithValidPostAndAddMoreButton() {
-         $this->request
+    
+    /**
+     * Abort from check page
+     */
+    public function testCheckActionWithAbortInPost() {
+        $this->request
                 ->setMethod('POST')
                 ->setPost(array(
-                    'PersonAuthor1FirstName' => 'Testi',
-                    'PersonAuthor1LastName' => 'Tester',
-                    'countMorePersonAuthor' => '1',                    
-                    'addMorePersonAuthor' => 'button_label_add_one_morePersonAuthor',
-                    'Institute1' => 'Zuse Institute Berlin (ZIB)',
-                    'countMoreInstitute' => '1',
-                    'Language' => 'eng',
-                    'TitleMain1' => 'Title',
-                    'TitleMain1Language' => 'eng',
-                    'countMoreTitleMain' => '1',
-                    'TitleAbstract1' => '',
-                    'TitleAbstract1Language' => '',
-                    'countMoreTitleAbstract' => '1',
-                    'Project1' => '',
-                    'countMoreProject' => '1',
-                    'SubjectMSC1' => '00A09',
-                    'countMoreSubjectMSC' => '1',
-                    'SubjectUncontrolled1' => '',
-                    'countMoreSubjectUncontrolled' => '1',
-                    'Note' => '',
-                    'fullText' => '0',
-                    'documentType' => 'preprint',
-                    'documentId' => ''                    
+                    'abort' => '',
                 ));
 
         $this->dispatch('/publish/form/check');
-//        $this->assertResponseCode(200);
-//        $this->assertController('form');
-//        $this->assertAction('check');
-
+        $this->assertResponseCode(302);
+        $this->assertController('form');
+        $this->assertAction('check');
     }
 
-    public function testCheckActionWithInvalidPostAndAddSendButton() {
-         $this->request
+    /**
+     * Abort from Collection view
+     */
+    public function testCheckActionWithAbortCollectionInPost() {
+        $session = new Zend_Session_Namespace('Publish');
+        $elemente = array(
+            1 => array('name' => 'PersonSubmitterFirstName1', 'value' => 'Hans'),
+            2 => array('name' => 'PersonSubmitterLastName1', 'value' => 'Hansmann'),
+            3 => array('name' => 'PersonSubmitterEmail1', 'value' => 'test@mail.com'),
+            4 => array('name' => 'CompletedDate', 'value' => '2011/03/03'),
+            5 => array('name' => 'CompletedDate', 'value' => '2011/03/03'),
+            5 => array('name' => 'EnrichmentLegalNotices', 'value' => '1'),
+            6 => array('name' => 'TitleMain1', 'value' => 'Irgendwas'),
+            7 => array('name' => 'TitleMainLanguage1', 'value' => 'deu')
+        );
+        $session->elements = $elemente;
+        $session->documentType = 'all';
+        $session->documentId = '790';
+        $session->fulltext = '0';
+        $session->additionalFields = array();
+
+        $this->request
                 ->setMethod('POST')
                 ->setPost(array(
-                    'PersonAuthor1FirstName' => '',
-                    'PersonAuthor1LastName' => '',
-                    'countMorePersonAuthor' => '1',
-                    'Institute1' => 'Zuse Institute Berlin (ZIB)',
-                    'countMoreInstitute' => '1',
-                    'Language' => 'eng',
-                    'TitleMain1' => 'Title',
-                    'TitleMain1Language' => 'eng',
-                    'countMoreTitleMain' => '1',
-                    'TitleAbstract1' => '',
-                    'TitleAbstract1Language' => '',
-                    'countMoreTitleAbstract' => '1',
-                    'Project1' => '',
-                    'countMoreProject' => '1',
-                    'SubjectMSC1' => '00A09',
-                    'countMoreSubjectMSC' => '1',
-                    'SubjectUncontrolled1' => '',
-                    'countMoreSubjectUncontrolled' => '1',
-                    'Note' => '',
-                    'fullText' => '0',
-                    'documentType' => 'preprint',
-                    'documentId' => '',
-                    'send' => 'button_label_send'
+                    'abortCollection' => '',
                 ));
 
         $this->dispatch('/publish/form/check');
-//        $this->assertResponseCode(200);
-//        $this->assertController('form');
-//        $this->assertAction('check');
-
+        $this->assertResponseCode(200);
+        $this->assertController('form');
+        $this->assertAction('check');
     }
 
 }

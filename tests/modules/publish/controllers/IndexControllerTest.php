@@ -27,23 +27,24 @@
  *
  * @category    Application
  * @package     Tests
- * @author      Thoralf Klein <thoralf.klein@zib.de>
+ * @author      Susanne Gottwald <gottwald@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-class Publish_IndexControllerTest extends ControllerTestCase {
+class Publish_IndexControllerTest extends ControllerTestCase{
 
     
     /**
-     * Simple test action to check "index" action in publish module.
+     * Just call the publish first site.
      */
     public function testIndexAction() {
-        $this->dispatch('/publish');
+        $this->dispatch('/publish');        
         $this->assertResponseCode(200);
         $this->assertController('index');
         $this->assertAction('index');
-    }   
+    }
+    
 
 }
