@@ -43,7 +43,7 @@
 
     <?php if (isset($this->errorCaseMessage)) : ?>
         <div class="form-hint form-errors"><p><?= $this->errorCaseMessage; ?></p></div>
-    <? endif; ?>
+    <?php endif; ?>
 
         <form enctype="application/x-www-form-urlencoded" action="<?= $this->action_url; ?>" method="post">
             <div class="form-items-wrapper">
@@ -76,6 +76,6 @@
 
     <?php if ($this->endTemplate($this->form) !== "") : ?>
                     <div class="form-hint form-errors"><?= $this->endTemplate($this->form); ?></div>
-    <? endif; ?>
+    <?php endif; ?>
 
 </div>
