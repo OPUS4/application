@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <configdata>
     <nav>
         <home>
@@ -10,7 +9,7 @@
             <controller>index</controller>
             <action>index</action>
             <class>first</class>
-            <id>primary-nav-home</id>            
+            <id>primary-nav-home</id>
         </home>
 
         <search>
