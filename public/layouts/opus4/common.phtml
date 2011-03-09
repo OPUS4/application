@@ -104,11 +104,11 @@ $languageSelectors = $this->languageSelector();
                 <?php foreach ($this->container as $page) : ?>
                     <?php $pageIsActive = $page->isActive(false); ?>
                     <li id="<?= $page->getId() ?>" class="<?= ($pageIsActive ? 'active ' : '').$page->getClass()?>">
-                        <a href="<?= $page->getHref() ?>" title="<?= $page->getTitle() ?>">
+                        <a href="<?= $page->getHref() ?>" title="<?= $this->translate($page->getTitle()) ?>">
                             <?php if($pageIsActive) : ?>
                             <em>
                             <?php endif ?>
-                            <span><?= $this->translate($page->getLabel()) ?></span>
+                                <span><?= $this->translate($page->getLabel()) ?></span>
                             <?php if($pageIsActive) : ?>
                             </em>
                             <?php endif ?>

@@ -5,15 +5,18 @@
         <home>
             <type>mvc</type>
             <label>home_menu_label</label>
+            <title>home_menu_label</title>
             <module>home</module>
             <controller>index</controller>
             <action>index</action>
             <class>first</class>
+            <id>primary-nav-home</id>            
         </home>
 
         <search>
             <type>mvc</type>
             <label>search_menu_label</label>
+            <title>search_menu_label</title>
             <module>solrsearch</module>
             <controller>index</controller>
             <action>index</action>
@@ -24,6 +27,7 @@
         <browsing>
             <type>mvc</type>
             <label>browsing_menu_label</label>
+            <title>browsing_menu_label</title>
             <module>solrsearch</module>
             <controller>browse</controller>
             <action>index</action>
@@ -34,6 +38,7 @@
         <publish>
             <type>mvc</type>
             <label>publish_menu_label</label>
+            <title>publish_menu_label</title>
             <module>publish</module>
             <controller>index</controller>
             <action>index</action>
@@ -44,27 +49,32 @@
         <review>
             <type>mvc</type>
             <label>review_menu_label</label>
+            <title>review_menu_label</title>
             <module>review</module>
             <controller>index</controller>
             <action>index</action>
+            <id>primary-nav-review</id>
         </review>
 
         <administration>
             <type>mvc</type>
             <label>admin_menu_label</label>
+            <title>admin_menu_label</title>
             <module>admin</module>
             <controller>index</controller>
             <action>index</action>
+            <id>primary-nav-administration</id>
         </administration>
 
         <help>
             <type>mvc</type>
             <label>help_menu_label</label>
+            <title>help_menu_label</title>
             <module>home</module>
             <controller>index</controller>
             <action>help</action>
             <class>last</class>
-        </help>
-        
+            <id>primary-nav-help</id>
+        </help>       
     </nav>
 </configdata>
