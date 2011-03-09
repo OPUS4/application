@@ -51,6 +51,7 @@ cd ..
 find -P . -name .gitignore -print0 | xargs -r0 rm -v 
 
 mv opus4/scripts/packaging/changelog/CHANGES.txt .
+mv opus4/scripts/packaging/gpl-3.0.txt .
 
 rm -rv opus4/{docs,nbproject,tests,workspace}
 rm -rvf opus4/public/layouts/{opus33,opus34,darker,matheon,plain,opus4-matheon}
