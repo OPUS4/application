@@ -74,9 +74,7 @@ class Rewrite_IndexController extends Controller_Action {
         if (count($ids) > 1) {
             return $this->_redirectToAndExit('index', array('failure' => 'given opus3id is not unique'), 'index', 'home');
         }
-        $config = Zend_Registry::getInstance()->get('Zend_Config');
-        $deliver_url_prefix = isset($config->deliver->url->prefix) ? $config->deliver->url->prefix : '/documents';        
-        return $this->_redirect($deliver_url_prefix . '/' . $ids[0] . '/' . $filename, array('prependBase' => false, 'code' => 301));
+        return $this->_redirect($this->getRequest()->getBaseUrl() . '/files/' . $ids[0] . '/' . $filename, array('prependBase' => false, 'code' => 301));
     }
 }
 ?>
