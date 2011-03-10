@@ -16025,10 +16025,12 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`, `lef
 -- --------------------------------------------------------
 
 INSERT INTO `collections_roles` (`id`, `name`, `oai_name`, `position`, `visible`, `visible_browsing_start`, `display_browsing`, `visible_frontdoor`, `display_frontdoor`, `visible_oai`, `display_oai`) VALUES
+(1, 'institutes', 'institutes', 1, 1, 1, 'Name', 1, 'Name', 1, 'Name'),
 (2, 'ddc', 'ddc', 2, 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
 (3, 'ccs', 'ccs', 3, 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
 (4, 'pacs', 'pacs', 4, 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
 (5, 'jel', 'jel', 5, 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
 (6, 'msc', 'msc', 6, 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
-(7, 'bk', 'bk', 7, 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number');
+(7, 'bk', 'bk', 7, 1, 1, 'Number, Name', 1, 'Number, Name', 1, 'Number'),
+(10, 'series', 'series', 10, 1, 1, 'Name', 1, 'Name', 1, 'Name');
 
