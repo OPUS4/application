@@ -85,7 +85,6 @@ class Frontdoor_IndexController extends Controller_Action {
 
             $proc->setParameter('', 'baseUrl', $baseUrl);
             $proc->setParameter('', 'layoutPath', $baseUrl.'/'.$layoutPath);
-            $proc->setParameter('', 'isMailPossible', ($this->isMailPossible($document) ? true : false));
             $this->view->frontdoor = $proc->transformToXML($xml);
 
             $this->incrementStatisticsCounter($docId);
@@ -262,17 +261,6 @@ class Frontdoor_IndexController extends Controller_Action {
         $registry = Zend_Registry::getInstance();
         $translate = $registry->get('Zend_Translate');
         return $translate->_($key);
-    }
-
-    private function isMailPossible($document) {
-        foreach ($document->getPersonAuthor() as $author) {
-            $mail = $author->getEmail();
-            if ($author->getAllowEmailContact() && !empty($mail)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
 }
