@@ -53,26 +53,23 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      *
      * @return void
      */
-    protected function _initTranslationCache() {
-        $this->bootstrap('Backend');
-
+    protected function _initZendCache() {
+        $this->bootstrap('Configuration');
         $config = $this->getResource('Configuration');
 
-        $cache = null;
         $frontendOptions = array(
             'lifetime' => 600, // in seconds
             'automatic_serialization' => true,
         );
 
         $backendOptions = array(
-            // Directory where to put the cache files. Must be writeable for application server
+            // Directory where to put the cache files. Must be writeable for
+            // application server
             'cache_dir' => $config->workspacePath . '/cache/'
-            );
+        );
 
-        $cache = Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
-        Zend_Translate::setCache($cache);
+        return Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
     }
-
 
     /**
      * Setup a front controller instance with error options and module
@@ -211,10 +208,13 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      *
      */
     protected function _initTranslation()  {
-        $this->bootstrap(array('Session', 'Logging', 'TranslationCache'));
+        $this->bootstrap(array('Session', 'Logging', 'ZendCache'));
 
         $logger = $this->getResource('Logging');
         $sessiondata = $this->getResource('Session');
+
+        $cache = $this->getResource('ZendCache');
+        Zend_Translate::setCache($cache);
 
         $options = array(
             'adapter' => Zend_Translate::AN_TMX,
@@ -325,7 +325,10 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * @return void
      */
     protected function _initLanguageList() {
-        $this->bootstrap(array('Session', 'Logging', 'Translation'));
+        $this->bootstrap(array('Session', 'Logging', 'Translation', 'Backend'));
+
+        $cache = $this->getResource('ZendCache');
+        Zend_Locale::setCache($cache);
 
         $sessiondata = $this->getResource('Session');
         $logger = $this->getResource('Logging');
@@ -351,9 +354,10 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
             Zend_Registry::set('Available_Languages', $languages);
         }
         catch (Exception $ex) {
-            $logger->err('Error getting languages from database.');
+            $message = 'Unknown error while initializing languages.';
+            $logger->err($message);
             $logger->err($ex);
-            throw new Exception('Opus: Error accessing database.');
+            throw new Exception('Opus: ' . $message);
         }
     }
 
