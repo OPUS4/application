@@ -313,9 +313,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * @return Zend_Session_Namespace 
      */
     protected function _initSession() {
-        // Zend_Session::setOptions(array('cookie_path' => '...'));
-        // $config = new Zend_Config_Ini('cookie.ini', 'development');
-        // Zend_Session::setOptions($config->toArray());
+        $this->bootstrap(array('Database'));
         return new Zend_Session_Namespace();
     }
 
@@ -325,7 +323,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * @return void
      */
     protected function _initLanguageList() {
-        $this->bootstrap(array('Session', 'Logging', 'Translation', 'Backend'));
+        $this->bootstrap(array('Session', 'Logging', 'Translation', 'ZendCache', 'Backend'));
 
         $cache = $this->getResource('ZendCache');
         Zend_Locale::setCache($cache);
@@ -370,23 +368,14 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $this->bootstrap('Logging', 'View');
 
         $log = $this->getResource('Logging');
-
         $log->debug('Initializing Zend_Navigation');
 
-        $config = $this->getResource('configuration');
-        if (is_null($config)) {
-            $log->debug("config is null");
-        }
-        else {
-            $log->debug("config is not null");
-        }
-
         $navigationConfigFile = APPLICATION_PATH . '/application/configs/navigationModules.xml';
-
         $navConfig = new Zend_Config_Xml($navigationConfigFile, 'nav');
 
         $log->debug('Navigation config file is: ' . $navigationConfigFile);
 
+        $container = null;
         try {
             $container = new Zend_Navigation($navConfig);
         }
@@ -397,11 +386,9 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
              * has not appeared (as far as we know).
              */
             $log->err($e);
-            $container = null;
         }
 
         $view = $this->getResource('View');
-
         $view->navigation($container);
 
         $log->debug('Zend_Navigation initialization completed');
