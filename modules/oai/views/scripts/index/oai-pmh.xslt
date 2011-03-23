@@ -164,8 +164,7 @@
            <xsl:element name="earliestDatestamp">
              <xsl:value-of select="$earliestDate"/>
            </xsl:element>
-           <!-- <xsl:element name="deletedRecord"><xsl:text>persistent</xsl:text></xsl:element> -->
-           <xsl:element name="deletedRecord">no</xsl:element>
+           <xsl:element name="deletedRecord"><xsl:text>persistent</xsl:text></xsl:element>
            <!--TODO: check granularity throughout the OAI component-->
            <!--xsl:element name="granularity">YYYY-MM-DDThh:mm:ssZ</xsl:element>-->
            <xsl:element name="granularity">YYYY-MM-DD</xsl:element>

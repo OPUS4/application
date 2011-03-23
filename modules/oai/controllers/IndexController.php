@@ -50,7 +50,7 @@ class Oai_IndexController extends Controller_Xml {
      *
      * @var array
      */
-    private $_deliveringDocumentStates = array('published');  // maybe deleted documents too
+    private $_deliveringDocumentStates = array('published', 'deleted');  // maybe deleted documents too
 
     /**
      * Holds restriction types for xMetaDiss
