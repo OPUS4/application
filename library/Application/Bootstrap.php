@@ -49,29 +49,6 @@
 class Application_Bootstrap extends Opus_Bootstrap_Base {
 
     /**
-     * Setup translation cache.
-     *
-     * @return void
-     */
-    protected function _initZendCache() {
-        $this->bootstrap('Configuration');
-        $config = $this->getResource('Configuration');
-
-        $frontendOptions = array(
-            'lifetime' => 600, // in seconds
-            'automatic_serialization' => true,
-        );
-
-        $backendOptions = array(
-            // Directory where to put the cache files. Must be writeable for
-            // application server
-            'cache_dir' => $config->workspacePath . '/cache/'
-        );
-
-        return Zend_Cache::factory('Core', 'File', $frontendOptions, $backendOptions);
-    }
-
-    /**
      * Setup a front controller instance with error options and module
      * directory.
      *
