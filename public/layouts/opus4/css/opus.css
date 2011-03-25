@@ -612,10 +612,10 @@ body > #top-header{
 #searchbar{
 	padding: 0 0 0 245px;
 }
-.latest #searchbar,
-.collection #searchbar{
+.latest #searchbar {
 	padding: 0;
 }
+
 #breadcrumb ul{
 	margin: 0 0 0 0;
 	padding: 0 0 10px 0;

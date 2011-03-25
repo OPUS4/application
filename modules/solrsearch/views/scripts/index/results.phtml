@@ -46,37 +46,25 @@ if($this->jQueryEnabled()) {
 <div class="content">
     <?php
      if ($this->searchType === 'simple' && !$this->browsing)
-         include('simpleSearchForm.phtml');
-        else if(($this->searchType === 'advanced' || $this->searchType === 'authorsearch') && !$this->browsing)
-         include('advancedSearchForm.phtml');
-        else if($this->searchType === 'latest')
-            include('latestDocsForm.phtml');
-        else if ($this->searchType === 'collection')
-            include('browsecollection.phtml');
+        include('simpleSearchForm.phtml');
+    else if(($this->searchType === 'advanced' || $this->searchType === 'authorsearch') && !$this->browsing)
+        include('advancedSearchForm.phtml');
+    else if($this->searchType === 'latest')
+        include('latestDocsForm.phtml');
+    else if ($this->searchType === 'collection')
+        include('browsecollection.phtml');
     ?>
 </div>
 <div class="content">
-    <?php
-         if ($this->isSimpleList === false && $this->searchType !== 'collection') {
-             include('facetsMenu.phtml');
-        }
-    ?>
+    <?php if (!$this->isSimpleList) include('facetsMenu.phtml'); ?>
     <div id="searchbar">
         <div class="breadcrumb_results">
             <?php if (!isset($this->specialTitle)) : ?>
                 <h3><?= $this->numOfHits . ' ' . ($this->numOfHits === 1 ? $this->translate('results_title_single') : $this->translate('results_title')); ?></h3>
             <?php endif ?>
-            <?php
-                if ($this->isSimpleList === false) {
-                    include('pagination.phtml');
-                }
-            ?>
+            <?php if (!$this->isSimpleList) include('pagination.phtml'); ?>
         </div>
-        <?php
-            if ($this->isSimpleList === false) {
-                include('searchOptions.phtml');
-            }
-        ?>
+        <?php if (!$this->isSimpleList) include('searchOptions.phtml'); ?>
         <div id="search_results" class="search_results">
             <?php $rowCount = 0; ?>
             <?php foreach($this->results as $result) :?>

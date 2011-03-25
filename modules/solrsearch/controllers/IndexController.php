@@ -24,10 +24,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Module_Solrsearch
+ * @category    Application
+ * @package     Module_Solrsearch
  * @author      Julian Heise <heise@zib.de>
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -125,13 +126,13 @@ class Solrsearch_IndexController extends Controller_Action {
 
     private function createSimpleSearchUrlParams() {
         $params = array(
-                'searchtype'=> $this->getRequest()->getParam('searchtype', Solrsearch_IndexController::SIMPLE_SEARCH),
-                'start'=> $this->getRequest()->getParam('start','0'),
-                'rows'=> $this->getRequest()->getParam('rows','10'),
-                'query'=> $this->getRequest()->getParam('query','*:*'),
-                'sortfield'=> $this->getRequest()->getParam('sortfield', 'score'),
-                'sortorder'=> $this->getRequest()->getParam('sortorder','desc')
-            );
+            'searchtype'=> $this->getRequest()->getParam('searchtype', Solrsearch_IndexController::SIMPLE_SEARCH),
+            'start'=> $this->getRequest()->getParam('start','0'),
+            'rows'=> $this->getRequest()->getParam('rows','10'),
+            'query'=> $this->getRequest()->getParam('query','*:*'),
+            'sortfield'=> $this->getRequest()->getParam('sortfield', 'score'),
+            'sortorder'=> $this->getRequest()->getParam('sortorder','desc')
+        );
         return $params;
     }
 
@@ -196,9 +197,9 @@ class Solrsearch_IndexController extends Controller_Action {
     }
 
     private function setViewValues() {
-        $this->setGeneralViewValues();
+        $this->setGeneralViewValues();        
 
-        if($this->searchtype === self::SIMPLE_SEARCH || $this->searchtype === self::COLLECTION_SEARCH || $this->searchtype === self::ALL_SEARCH) {
+        if ($this->searchtype === self::SIMPLE_SEARCH || $this->searchtype === self::ALL_SEARCH) {
             $queryString = $this->query->getCatchAll();
             if (trim($queryString) !== '*:*') {
                 $this->view->q = $queryString;
@@ -211,12 +212,12 @@ class Solrsearch_IndexController extends Controller_Action {
             $this->view->lastPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>(int)($this->numOfHits / $this->query->getRows()) * $this->query->getRows(),'rows'=>$this->query->getRows()));
             $this->view->firstPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>'0','rows'=>$this->query->getRows()));
             $browsing = $this->getRequest()->getParam('browsing', 'false');
-            if($browsing === 'true') {
+            if ($browsing === 'true') {
                 $this->view->specialTitle = $this->getRequest()->getParam('doctypefq', '');
             }
             return;
         }
-        if($this->searchtype === self::ADVANCED_SEARCH || $this->searchtype === self::AUTHOR_SEARCH) {
+        if ($this->searchtype === self::ADVANCED_SEARCH || $this->searchtype === self::AUTHOR_SEARCH) {
             $this->view->nextPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'start'=>(int)($this->query->getStart()) + (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
             $this->view->prevPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'start'=>(int)($this->query->getStart()) - (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
             $this->view->lastPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'start'=>(int)($this->numOfHits / $this->query->getRows()) * $this->query->getRows(),'rows'=>$this->query->getRows()));
@@ -232,6 +233,13 @@ class Solrsearch_IndexController extends Controller_Action {
             $this->view->yearQueryModifier = $this->query->getModifier('year');
             $this->view->refereeQuery = $this->query->getField('referee');
             $this->view->refereeQueryModifier = $this->query->getModifier('referee');
+            return;
+        }
+        if ($this->searchtype === self::COLLECTION_SEARCH) {
+            $this->view->nextPage = self::createSearchUrlArray(array('searchtype' => self::COLLECTION_SEARCH, 'start'=>(int)($this->query->getStart()) + (int)($this->query->getRows()), 'rows'=>$this->query->getRows()));
+            $this->view->prevPage = self::createSearchUrlArray(array('searchtype' => self::COLLECTION_SEARCH, 'start'=>(int)($this->query->getStart()) - (int)($this->query->getRows()), 'rows'=>$this->query->getRows()));
+            $this->view->lastPage = self::createSearchUrlArray(array('searchtype' => self::COLLECTION_SEARCH, 'start'=>(int)($this->numOfHits / $this->query->getRows()) * $this->query->getRows(), 'rows'=>$this->query->getRows()));
+            $this->view->firstPage = self::createSearchUrlArray(array('searchtype' => self::COLLECTION_SEARCH, 'start'=>'0', 'rows'=>$this->query->getRows()));
             return;
         }
         if ($this->searchtype === self::LATEST_SEARCH) {            
@@ -412,6 +420,7 @@ class Solrsearch_IndexController extends Controller_Action {
         $query->setSortField($this->getRequest()->getParam('sortfield', Opus_SolrSearch_Query::DEFAULT_SORTFIELD));
         $query->setSortOrder($this->getRequest()->getParam('sortorder', Opus_SolrSearch_Query::DEFAULT_SORTORDER));
         $query->addFilterQuery('collection_ids', $collectionId);
+        $this->addFiltersToQuery($query);
 
         $this->log->debug("Query $query complete");
         return $query;
@@ -443,11 +452,11 @@ class Solrsearch_IndexController extends Controller_Action {
 
         $facets = $config->searchengine->solr->facets;
         $this->log->debug("searchengine.solr.facets is set to " . $facets);
-        $facetsArray = explode(",", $facets);
+        $facetsArray = explode(',', $facets);
 
         foreach($facetsArray as $facet) {
             $facet = trim($facet);
-            $facetKey = $facet . "fq";
+            $facetKey = $facet . 'fq';
             $facetValue = $this->getRequest()->getParam($facetKey, '');
             if($facetValue !== '') {
                 $this->log->debug("request has facet key: ".$facetKey." value is: ".$facetValue." corresponding facet is: ".$facet);
