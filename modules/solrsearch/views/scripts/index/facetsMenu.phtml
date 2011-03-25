@@ -35,7 +35,7 @@
 
 <div id="facets" class="results_facets">
     <h3><?= $this->translate('facets_menu_title') ?></h3>
-    <?php foreach($this->facets as $key=>$facet) : ?>
+    <?php foreach($this->facets as $key => $facet) : ?>
         <div id="<?= $key ?>_facet" class="facet">
             <h4><?= $this->translate($key."_facet_heading") ?></h4>
             <ul>
@@ -43,18 +43,23 @@
                     $fqUrl = $this->firstPage;
                     $fqUrl[$key.'fq'] = $facetItem->getText();
                     $fqLinkRel = count($this->selectedFacets) > 0 ? 'rel="noindex, nofollow"' : '';
+
+                    $facetvalue_name = $facetItem->getText();
+                    if ($key === 'has_fulltext' || $key === 'belongs_to_bibliography') {
+                        $facetvalue_name = $this->translate('facetvalue_' . $key . '_' . $facetvalue_name);
+                    }
                 ?>
                     <?php if (array_key_exists($key, $this->selectedFacets)) : ?>
                         <?php if ($this->selectedFacets[$key] == $facetItem->getText()) :
                             // remove fq param from URL
                             $remove_fqUrl = preg_replace('/\/' . $key . 'fq\/[^\/]*/', '', $this->url($this->firstPage));
                         ?>
-                            <li class="activeFacet"><?= $this->translate(htmlspecialchars($facetItem->getText())) ?> (<?= $facetItem->getCount() ?>)
+                            <li class="activeFacet"><?= $this->translate(htmlspecialchars($facetvalue_name)) ?> (<?= $facetItem->getCount() ?>)
                             <span class="removeFacetLink"><a href="<?= $remove_fqUrl ?>" <?= $fqLinkRel ?>>(<?= $this->translate('facets_remove') ?>)</a></span>
                             </li>
                         <?php endif ?>
                     <?php else: ?>
-                        <li><a href="<?= $this->url($fqUrl) ?>" <?= $fqLinkRel ?>><?= $this->translate(htmlspecialchars($facetItem->getText())) ?></a> (<?= $facetItem->getCount() ?>)</li>
+                        <li><a href="<?= $this->url($fqUrl) ?>" <?= $fqLinkRel ?>><?= $this->translate(htmlspecialchars($facetvalue_name)) ?></a> (<?= $facetItem->getCount() ?>)</li>
                     <? endif ?>
                 <?php endforeach ?>
             </ul>

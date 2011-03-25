@@ -579,5 +579,41 @@
                 <seg>unbenanntes Dokument</seg>
             </tuv>
         </tu>
+
+        <tu tuid="facetvalue_has_fulltext_true">
+            <tuv xml:lang="en">
+                <seg>yes</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>ja</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="facetvalue_has_fulltext_false">
+            <tuv xml:lang="en">
+                <seg>no</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>nein</seg>
+            </tuv>
+        </tu>
+
+       <tu tuid="facetvalue_belongs_to_bibliography_true">
+            <tuv xml:lang="en">
+                <seg>yes</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>ja</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="facetvalue_belongs_to_bibliography_false">
+            <tuv xml:lang="en">
+                <seg>no</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>nein</seg>
+            </tuv>
+        </tu>
     </body>
 </tmx>
