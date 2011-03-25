@@ -46,11 +46,11 @@
                 ?>
                     <?php if (array_key_exists($key, $this->selectedFacets)) : ?>
                         <?php if ($this->selectedFacets[$key] == $facetItem->getText()) :
-                            $remove_fqUrl = $this->firstPage;
-                            $remove_fqUrl[$key.'fq'] = '';
+                            // remove fq param from URL
+                            $remove_fqUrl = preg_replace('/\/' . $key . 'fq\/[^\/]*/', '', $this->url($this->firstPage));
                         ?>
                             <li class="activeFacet"><?= $this->translate(htmlspecialchars($facetItem->getText())) ?> (<?= $facetItem->getCount() ?>)
-                            <span class="removeFacetLink"><a href="<?= $this->url($remove_fqUrl) ?>" <?= $fqLinkRel ?>>(<?= $this->translate('facets_remove') ?>)</a></span>
+                            <span class="removeFacetLink"><a href="<?= $remove_fqUrl ?>" <?= $fqLinkRel ?>>(<?= $this->translate('facets_remove') ?>)</a></span>
                             </li>
                         <?php endif ?>
                     <?php else: ?>

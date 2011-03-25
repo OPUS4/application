@@ -282,8 +282,8 @@ class Solrsearch_IndexController extends Controller_Action {
             }
         }
         
-        $this->view->__set('facets', $facetArray);
-        $this->view->__set('selectedFacets', $selectedFacets);
+        $this->view->facets = $facetArray;
+        $this->view->selectedFacets = $selectedFacets;
     }
 
     private function buildQuery() {
