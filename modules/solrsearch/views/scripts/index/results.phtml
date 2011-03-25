@@ -26,7 +26,6 @@
  *
  * @category    Application
  * @package     Module_Solrsearch
- * @package     Opus_SolrSearch
  * @author      Julian Heise <heise@zib.de>
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
@@ -47,9 +46,9 @@ if($this->jQueryEnabled()) {
     <?php
      if ($this->searchType === 'simple' && !$this->browsing)
         include('simpleSearchForm.phtml');
-    else if(($this->searchType === 'advanced' || $this->searchType === 'authorsearch') && !$this->browsing)
+    else if (($this->searchType === 'advanced' || $this->searchType === 'authorsearch') && !$this->browsing)
         include('advancedSearchForm.phtml');
-    else if($this->searchType === 'latest')
+    else if ($this->searchType === 'latest')
         include('latestDocsForm.phtml');
     else if ($this->searchType === 'collection')
         include('browsecollection.phtml');
@@ -65,46 +64,48 @@ if($this->jQueryEnabled()) {
             <?php if (!$this->isSimpleList) include('pagination.phtml'); ?>
         </div>
         <?php if (!$this->isSimpleList) include('searchOptions.phtml'); ?>
-        <div id="search_results" class="search_results">
-            <?php $rowCount = 0; ?>
-            <?php foreach($this->results as $result) :?>
-                <dl class="result_box <?= $rowCount++ % 2 === 0 ? 'even' : 'odd'; ?>">
-                    <?php
-                        $frontdoorUrl = array(
-                            'module' => 'frontdoor',
-                            'controller' => 'index',
-                            'action' => 'index',
-                            'docId' => $result->getId());
-                    ?>
-                    <dt class="results_title">
-                        <?php if($this->jQueryEnabled()) : ?>
-                            <?php if(!is_null($result->getAbstract())) : ?>
-                                <img src="<?= $this->layoutPath() ?>/img/theme/icon-on-off.png" alt="<?= $this->translate('results_hideabstract_alt') ?>" title="<?= $this->translate('results_hideabstract_title') ?>" onclick="$(function(){$('#<?= $result->getId() ?>').toggle();});" />
+        <?php if (!is_null($this->results)) : ?>
+            <div id="search_results" class="search_results">
+                <?php $rowCount = 0; ?>
+                <?php foreach($this->results as $result) :?>
+                    <dl class="result_box <?= $rowCount++ % 2 === 0 ? 'even' : 'odd'; ?>">
+                        <?php
+                            $frontdoorUrl = array(
+                                'module' => 'frontdoor',
+                                'controller' => 'index',
+                                'action' => 'index',
+                                'docId' => $result->getId());
+                        ?>
+                        <dt class="results_title">
+                            <?php if ($this->jQueryEnabled()) : ?>
+                                <?php if (!is_null($result->getAbstract())) : ?>
+                                    <img src="<?= $this->layoutPath() ?>/img/theme/icon-on-off.png" alt="<?= $this->translate('results_hideabstract_alt') ?>" title="<?= $this->translate('results_hideabstract_title') ?>" onclick="$(function(){$('#<?= $result->getId() ?>').toggle();});" />
+                                <?php endif ?>
                             <?php endif ?>
-                        <?php endif ?>
-                        <?php if(!is_null($result->getTitle())) : ?>
-                            <a href="<?= $this->url($frontdoorUrl, null, true) ?>"><?= htmlspecialchars($result->getTitle()); ?></a>
-                        <?php else: ?>
-                            <a href="<?= $this->url($frontdoorUrl, null, true) ?>"><?= $this->translate('results_missingtitle') ?></a>
-                        <?php endif ?>
-                        <?php if($result->getYear()) : ?>
-                            (<?= htmlspecialchars($result->getYear()); ?>)
-                        <?php endif ?>
-                    </dt>
-                    <?php if(!is_null($result->getAuthors())) : ?>
-                        <dt class="results_author">
-                            <?php foreach($result->getAuthors() as $author) :
-                               $authorSearch = $this->authorSearch;
-                               $authorSearch['author'] = '"'.$author.'"';
-                            ?>
-                                <a href="<?= $this->url($authorSearch, null, true); ?>"><?= htmlspecialchars($author) ?></a>
-                            <?php endforeach ?>
+                            <?php if (!is_null($result->getTitle())) : ?>
+                                <a href="<?= $this->url($frontdoorUrl, null, true) ?>"><?= htmlspecialchars($result->getTitle()); ?></a>
+                            <?php else: ?>
+                                <a href="<?= $this->url($frontdoorUrl, null, true) ?>"><?= $this->translate('results_missingtitle') ?></a>
+                            <?php endif ?>
+                            <?php if ($result->getYear()) : ?>
+                                (<?= htmlspecialchars($result->getYear()); ?>)
+                            <?php endif ?>
                         </dt>
-                    <?php endif ?>
-                    <dd class="abstractText" id="<?= $result->getId() ?>"><?= htmlspecialchars($result->getAbstract()) ?></dd>
-                </dl>
-            <?php endforeach ?>
-        </div>
+                        <?php if (!is_null($result->getAuthors())) : ?>
+                            <dt class="results_author">
+                                <?php foreach($result->getAuthors() as $author) :
+                                   $authorSearch = $this->authorSearch;
+                                   $authorSearch['author'] = '"'.$author.'"';
+                                ?>
+                                    <a href="<?= $this->url($authorSearch, null, true); ?>"><?= htmlspecialchars($author) ?></a>
+                                <?php endforeach ?>
+                            </dt>
+                        <?php endif ?>
+                        <dd class="abstractText" id="<?= $result->getId() ?>"><?= htmlspecialchars($result->getAbstract()) ?></dd>
+                    </dl>
+                <?php endforeach ?>
+            </div>
+        <?php endif ?>
         <div class="breadcrumb_results">
             <?php if (!$this->isSimpleList) include('pagination.phtml') ?>
         </div>
