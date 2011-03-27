@@ -27,7 +27,7 @@
  * @category    Application
  * @package     Module_Solrsearch
  * @author      Julian Heise <heise@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -52,7 +52,9 @@
                     <?php if (array_key_exists($key, $this->selectedFacets)) : ?>
                         <?php if ($this->selectedFacets[$key] == $facetItem->getText()) :
                             // remove fq param from URL
-                            $remove_fqUrl = preg_replace('/\/' . $key . 'fq\/[^\/]*/', '', $this->url($this->firstPage));
+                            $remove_fq_params = $this->removeFilterQueryBase;
+                            unset($remove_fq_params[$key . 'fq']);
+                            $remove_fqUrl = $this->url($remove_fq_params, null, true);
                         ?>
                             <li class="activeFacet"><?= $this->translate(htmlspecialchars($facetvalue_name)) ?> (<?= $facetItem->getCount() ?>)
                             <span class="removeFacetLink"><a href="<?= $remove_fqUrl ?>" <?= $fqLinkRel ?>>(<?= $this->translate('facets_remove') ?>)</a></span>

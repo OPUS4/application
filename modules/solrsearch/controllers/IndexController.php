@@ -211,6 +211,7 @@ class Solrsearch_IndexController extends Controller_Action {
             $this->view->prevPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>(int)($this->query->getStart()) - (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
             $this->view->lastPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>(int)($this->numOfHits / $this->query->getRows()) * $this->query->getRows(),'rows'=>$this->query->getRows()));
             $this->view->firstPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>'0','rows'=>$this->query->getRows()));
+            $this->setFilterQueryBaseURL();
             $browsing = $this->getRequest()->getParam('browsing', 'false');
             if ($browsing === 'true') {
                 $this->view->specialTitle = $this->getRequest()->getParam('doctypefq', '');
@@ -222,6 +223,7 @@ class Solrsearch_IndexController extends Controller_Action {
             $this->view->prevPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'start'=>(int)($this->query->getStart()) - (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
             $this->view->lastPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'start'=>(int)($this->numOfHits / $this->query->getRows()) * $this->query->getRows(),'rows'=>$this->query->getRows()));
             $this->view->firstPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'start'=>'0','rows'=>$this->query->getRows()));
+            $this->setFilterQueryBaseURL();
             $this->view->authorQuery = $this->query->getField('author');
             $this->view->titleQuery = $this->query->getField('title');
             $this->view->abstractQuery = $this->query->getField('abstract');
@@ -240,6 +242,7 @@ class Solrsearch_IndexController extends Controller_Action {
             $this->view->prevPage = self::createSearchUrlArray(array('searchtype' => self::COLLECTION_SEARCH, 'start'=>(int)($this->query->getStart()) - (int)($this->query->getRows()), 'rows'=>$this->query->getRows()));
             $this->view->lastPage = self::createSearchUrlArray(array('searchtype' => self::COLLECTION_SEARCH, 'start'=>(int)($this->numOfHits / $this->query->getRows()) * $this->query->getRows(), 'rows'=>$this->query->getRows()));
             $this->view->firstPage = self::createSearchUrlArray(array('searchtype' => self::COLLECTION_SEARCH, 'start'=>'0', 'rows'=>$this->query->getRows()));
+            $this->setFilterQueryBaseURL();
             return;
         }
         if ($this->searchtype === self::LATEST_SEARCH) {            
@@ -524,5 +527,13 @@ class Solrsearch_IndexController extends Controller_Action {
         }
         return $rows;
     }
-        }
+
+    /**
+     * Sets the base URL that is used to build all remove filter query URLs.
+     */
+    private function setFilterQueryBaseURL() {
+        $this->view->removeFilterQueryBase = $this->getRequest()->getParams();
+        unset($this->view->removeFilterQueryBase['start']);
+    }
+}
 ?>
