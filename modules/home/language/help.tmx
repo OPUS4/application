@@ -187,10 +187,10 @@
         </tu>
         <tu tuid="help_content_contact">
           <tuv xml:lang="en">
-            <seg>Add your contact data.</seg>
+            <seg>contact.en.txt</seg>
           </tuv>
           <tuv xml:lang="de">
-            <seg>Tragen Sie Ihre Kontaktinformationen ein.</seg>
+            <seg>contact.de.txt</seg>
           </tuv>
         </tu>
 
