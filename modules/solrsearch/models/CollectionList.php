@@ -108,9 +108,6 @@ class SolrSearch_Model_CollectionList {
     }
 
     public function getTitle() {
-        if ($this->isRootCollection()) {
-            return $this->getCollectionRoleTitle();
-        }
         return $this->collection->getDisplayName('browsing');
     }
 
@@ -123,7 +120,11 @@ class SolrSearch_Model_CollectionList {
     }
 
     public function getCollectionRoleTitle() {
-        return 'search_index_custom_browsing_' . $this->collectionRole->getDisplayName('browsing');
+        return 'search_index_custom_browsing_' . $this->getCollectionRoleTitlePlain();
+    }
+
+    public function getCollectionRoleTitlePlain() {
+        return $this->collectionRole->getDisplayName('browsing');
     }
 }
 ?>

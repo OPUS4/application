@@ -386,10 +386,14 @@ class Solrsearch_IndexController extends Controller_Action {
         
         $this->view->children = $collectionList->getChildren();
         $this->view->parents = $collectionList->getParents();
-        $this->view->collectionRoleTitle = $this->view->translate($collectionList->getCollectionRoleTitle());
-
+        $translation = $this->view->translate($collectionList->getCollectionRoleTitle());
+        if ($translation === $collectionList->getCollectionRoleTitle()) {
+            $translation = $collectionList->getCollectionRoleTitlePlain();
+        }
+        $this->view->collectionRoleTitle = $translation;
+        
         if ($collectionList->isRootCollection()) {
-            $this->view->title = $this->view->translate($collectionList->getTitle());
+            $this->view->title = $translation;
         }
         else {
             $this->view->title = $collectionList->getTitle();
