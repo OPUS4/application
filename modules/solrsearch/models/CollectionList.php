@@ -61,7 +61,7 @@ class SolrSearch_Model_CollectionList {
             throw new SolrSearch_Model_Exception("Collection role with id '" . $collection->getRoleId() . "' does not exist.");
         }
         
-        if (!($collectionRole->getVisible() === '1' and $collectionRole->getVisibleBrowsingStart() === '1')) {
+        if (!($collectionRole->getVisible() === '1' && $collectionRole->getVisibleBrowsingStart() === '1')) {
             throw new SolrSearch_Model_Exception("Collection role with id '" . $collectionRole->getId() . "' is not visible.");
         }
 

@@ -38,7 +38,7 @@ class SolrSearch_Model_CollectionRoles {
 
     public function __construct() {
         foreach (Opus_CollectionRole::fetchAll() as $collectionRole) {
-            if (!$this->isEmpty($collectionRole) && $this->isVisible($collectionRole)) {
+            if ($this->isVisible($collectionRole) && ($this->HasVisibleChildren($collectionRole) || $this->hasPublishedDocs($collectionRole))) {
                 array_push($this->collectionRoles, $collectionRole);
             }
         }
@@ -46,6 +46,40 @@ class SolrSearch_Model_CollectionRoles {
 
     public function getAllVisible() {
         return $this->collectionRoles;
+    }
+
+    /**
+     * Return true if the given collection role has at least one
+     * first-level collection that is visible.
+     * 
+     * @param Opus_CollectionRole $collectionRole
+     * @return bool
+     */
+    public function hasVisibleChildren($collectionRole) {
+        if ($this->isEmpty($collectionRole)) {
+            return false;
+        }
+        foreach ($collectionRole->getRootCollection()->getChildren() as $child) {
+            if ($child->getVisible() == '1') {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Returns true if the given collection role has at least one associated document
+     * in server_state published.
+     *
+     * @param Opus_CollectionRole $collectionRole
+     * @return bool
+     */
+    private function hasPublishedDocs($collectionRole) {
+        $rootCollection = $collectionRole->getRootCollection();
+        if (is_null($rootCollection)) {
+            return false;
+        }
+        return count($rootCollection->getPublishedDocumentIds()) > 0;
     }
 
     private function isEmpty($collectionRole) {
