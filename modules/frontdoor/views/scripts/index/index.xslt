@@ -719,6 +719,11 @@
                     <xsl:value-of select="@PathName" />
                 </xsl:attribute>
                 <xsl:value-of select="@Label" />
+                <xsl:if test="@FileSize">
+                    <xsl:text> (</xsl:text>
+                    <xsl:value-of select="round(@FileSize div 1024)" />
+                    <xsl:text> KB)</xsl:text>
+                </xsl:if>
             </xsl:element>
             <xsl:text> </xsl:text>
         </li>
