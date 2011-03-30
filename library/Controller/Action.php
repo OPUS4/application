@@ -73,22 +73,42 @@ class Controller_Action extends Zend_Controller_Action {
     /**
      * Redirects to an action / controller / module, sets a message for the redirect target view.
      *
-     * @param  array  $action     The redirect target action
-     * @param  mixed  $message    The message to be displayed
-     * @param  mixed  $controller The redirect target controller
-     * @param  mixed  $module     The redirect target model
-     * @param  mixed  $params     Parameters for the redirect target action
+     * @param  string $action     The redirect target action
+     * @param  string $message    The message to be displayed
+     * @param  string $controller The redirect target controller
+     * @param  string $module     The redirect target model
+     * @param  array  $params     Parameters for the redirect target action
      * @return void
      */
-    protected function _redirectTo($action, $message = '', $controller = null, $module = null, $params = array()) {
+    protected function _redirectTo($action, $message = null, $controller = null, $module = null, $params = array()) {
         $this->performRedirect($action, $message, $controller, $module, $params);
     }
 
-    protected function _redirectToAndExit($action, $message = '', $controller = null, $module = null, $params = array()) {
+    /**
+     *
+     * Performs a permanent (301) redirect.
+     *
+     * @param string $action        The target action.
+     * @param string $message       The message to be displayed.
+     * @param string $controller    The target controller.
+     * @param string $module        The target module.
+     * @param array $params         Optional request parameters.
+     */
+    protected function _redirectToPermanent($action, $message = null, $controller = null, $module = null, $params = array()) {
+        $this->__redirector->setCode(301);
+        $this->performRedirect($action, $message, $controller, $module, $params);
+    }
+    
+    protected function _redirectToAndExit($action, $message = null, $controller = null, $module = null, $params = array()) {
         $this->performRedirect($action, $message, $controller, $module, $params, true);
     }
 
-    private function performRedirect($action, $message = '', $controller = null, $module = null, $params = array(), $exit = false) {
+    protected function _redirectToPermanentAndExit($action, $message = null, $controller = null, $module = null, $params = array()) {
+        $this->__redirector->setCode(301);
+        $this->performRedirect($action, $message, $controller, $module, $params, true);
+    }
+
+    private function performRedirect($action, $message = null, $controller = null, $module = null, $params = array(), $exit = false) {
         if (!is_null($message)) {
             if (is_array($message) && count($message) !==  0) {
                 $keys = array_keys($message);
