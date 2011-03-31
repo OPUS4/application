@@ -65,17 +65,21 @@ class SolrSearch_Model_CollectionList {
             throw new SolrSearch_Model_Exception("Collection role with id '" . $collectionRole->getId() . "' is not visible.");
         }
 
-        // check if at least one visible child exists
-        $visibleChild = false;
-        foreach ($collection->getChildren() as $child) {
-            if ($child->getVisible() == '1') {
-                $visibleChild = true;
-                break;
+        // additional root collection check
+        $rootCollection = $collectionRole->getRootCollection();
+        if (!is_null($rootCollection)) {
+            // check if at least one visible child exists
+            $visibleChild = false;
+            foreach ($rootCollection->getChildren() as $child) {
+                if ($child->getVisible() == '1') {
+                    $visibleChild = true;
+                    break;
+                }
             }
-        }        
 
-        if (!$visibleChild && count($collection->getPublishedDocumentIds()) == 0) {
-            throw new SolrSearch_Model_Exception("Collection role with id '" . $collectionRole->getId() . "' is not clickable and therefore not displayed.");
+            if (!$visibleChild && count($rootCollection->getPublishedDocumentIds()) == 0) {
+                throw new SolrSearch_Model_Exception("Collection role with id '" . $collectionRole->getId() . "' is not clickable and therefore not displayed.");
+            }
         }
 
         $this->collectionRole = $collectionRole;
