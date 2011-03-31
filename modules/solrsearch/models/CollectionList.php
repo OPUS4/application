@@ -49,10 +49,14 @@ class SolrSearch_Model_CollectionList {
         catch (Opus_Model_NotFoundException $e) {
             throw new SolrSearch_Model_Exception("Collection with id '" . $collectionId . "' does not exist.");
         }
-        if (!$collection->isRoot() && $collection->getVisible() !== '1') {
-            throw new SolrSearch_Model_Exception("Collection with id '" . $collectionId . "' is not visible.");
-        }
 
+        // check if an unvisible collection exists along the path to the root collection
+        foreach ($collection->getParents() as $parent) {
+            if (!$parent->isRoot() && $parent->getVisible() !== '1') {
+                throw new SolrSearch_Model_Exception("Collection with id '" . $collectionId . "' is not visible.");
+            }
+        }
+        
         $collectionRole = null;
         try {
             $collectionRole = new Opus_CollectionRole($collection->getRoleId());
