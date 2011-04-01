@@ -14,10 +14,10 @@
 
         <tu tuid="home_index_imprint_title">
           <tuv xml:lang="en">
-            <seg>Legal notice according to §6 Teledienstegesetz (Germany)</seg>
+            <seg>Legal notice according to §5 Telemediengesetz (Germany)</seg>
           </tuv>
           <tuv xml:lang="de">
-            <seg>Impressum nach §6 Teledienstegesetz</seg>
+            <seg>Impressum nach §5 Telemediengesetz</seg>
           </tuv>
         </tu>
 
