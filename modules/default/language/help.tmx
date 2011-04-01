@@ -57,14 +57,6 @@
             </tuv>
         </tu>
 
-        <tu tuid="home_index_language_label">
-          <tuv xml:lang="en">
-            <seg>Language</seg>
-          </tuv>
-          <tuv xml:lang="de">
-            <seg>Sprache</seg>
-          </tuv>
-        </tu>
     </body>
 </tmx>
 

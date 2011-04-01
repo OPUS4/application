@@ -1,12 +1,9 @@
 <?xml version="1.0" ?>
 <!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
 <tmx version="1.4">
- 
- <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
- </header>
- 
+  <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+  </header>
   <body>
-  
     <tu tuid="home_index_index_instructions">
       <tuv xml:lang="en">
         <seg>If you want to search for documents of the university, please
@@ -61,97 +58,5 @@
         Suchmaschinen des WWW erschlossen und zugänglich.</seg>
       </tuv>
     </tu>
-    
-    <tu tuid="home_index_about_pagetitle">
-      <tuv xml:lang="en">
-        <seg>About</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Über</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="home_index_about_title">
-      <tuv xml:lang="en">
-        <seg>Lorem ipsum dolor</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Lorem ipsum dolor</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="home_index_about_text">
-      <tuv xml:lang="en">
-        <seg> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-        nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-        sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
-        rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
-        ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing
-        elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
-        aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
-        dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus
-        est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
-        sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-        dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et
-        justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-        takimata sanctus est Lorem ipsum dolor sit amet. Duis autem vel eum
-        iriure dolor in hendrerit in vulputate velit esse molestie consequat,
-        vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et
-        iusto odio dignissim qui blandit praesent luptatum zzril delenit augue
-        duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet,
-        consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut
-        laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim
-        veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut
-        aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in
-        hendrerit in vulputate velit esse molestie consequat, vel illum dolore
-        eu feugiat nulla facilisis at vero eros et accumsan et iusto odio
-        dignissim qui blandit praesent luptatum zzril delenit augue duis dolore
-        te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend
-        option congue nihil imperdiet doming id quod mazim placerat facer.
-        </seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg> Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-        nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-        sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
-        rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
-        ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing
-        elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
-        aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
-        dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus
-        est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
-        sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-        dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et
-        justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-        takimata sanctus est Lorem ipsum dolor sit amet. Duis autem vel eum
-        iriure dolor in hendrerit in vulputate velit esse molestie consequat,
-        vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et
-        iusto odio dignissim qui blandit praesent luptatum zzril delenit augue
-        duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet,
-        consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut
-        laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim
-        veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut
-        aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in
-        hendrerit in vulputate velit esse molestie consequat, vel illum dolore
-        eu feugiat nulla facilisis at vero eros et accumsan et iusto odio
-        dignissim qui blandit praesent luptatum zzril delenit augue duis dolore
-        te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend
-        option congue nihil imperdiet doming id quod mazim placerat facer.
-        </seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="home_index_language_label">
-      <tuv xml:lang="en">
-        <seg>Language</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Sprache</seg>
-      </tuv>
-    </tu>
-
-
-    
   </body>
-  
 </tmx>
