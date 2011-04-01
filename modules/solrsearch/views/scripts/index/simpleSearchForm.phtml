@@ -42,7 +42,7 @@ if ($this->jQueryEnabled()) {
 ?>
 
 <div class="form-wrapper">
-    <form id="form-search" action="<?= $this->url(array('module'=>'solrsearch','controller'=>'index','action'=>'searchdispatch'),null,true); ?>" method="post">
+    <form id="form-search" action="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'dispatch', 'action' => 'index'), null, true); ?>" method="post">
         <div id="fieldset-search" class="fieldset-wrapper">
             <fieldset>
                 <div id="edit-search-wrapper" class="form-item">

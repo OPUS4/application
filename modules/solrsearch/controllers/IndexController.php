@@ -34,13 +34,6 @@
  */
 
 class Solrsearch_IndexController extends Controller_Action {
-
-    const SIMPLE_SEARCH = 'simple';
-    const ADVANCED_SEARCH = 'advanced';
-    const AUTHOR_SEARCH = 'authorsearch';
-    const COLLECTION_SEARCH = 'collection';
-    const LATEST_SEARCH = 'latest';
-    const ALL_SEARCH = 'all';
     
     private $log;
     private $query;
@@ -73,87 +66,19 @@ class Solrsearch_IndexController extends Controller_Action {
     public function invalidsearchtermAction() {
         $this->view->title = $this->view->translate('solrsearch_title_invalidsearchterm');
         $searchtype = $this->getRequest()->getParam('searchtype');
-        if ($searchtype === self::ADVANCED_SEARCH) {
-            $this->view->searchType = self::ADVANCED_SEARCH;
+        if ($searchtype === Util_Searchtypes::ADVANCED_SEARCH) {
+            $this->view->searchType = Util_Searchtypes::ADVANCED_SEARCH;
         }
         else {
-            $this->view->searchType = self::SIMPLE_SEARCH;
+            $this->view->searchType = Util_Searchtypes::SIMPLE_SEARCH;
         }
     }
 
+    /**
+     * legacy OPUS 4.0 action: externalized in SolrSearch_DispatchController.indexAction
+     */
     public function searchdispatchAction() {
-        $this->log->debug('Received new search request. Redirecting to search action.');
-        $params = array();
-        $action = 'search';
-
-        $searchtype = $this->getRequest()->getParam('searchtype', 'invalid searchtype');
-        if($searchtype === self::SIMPLE_SEARCH) {
-            if(!$this->isSimpleSearchRequestValid()) {
-                $action = 'invalidsearchterm';
-                $params = array('searchtype' => self::SIMPLE_SEARCH);
-            }
-            else {
-                $params= $this->createSimpleSearchUrlParams();
-            }
-        } 
-        else if($searchtype === self::ADVANCED_SEARCH || $searchtype === self::AUTHOR_SEARCH) {
-            if(!$this->isAdvancedSearchRequestValid()) {
-                $action = 'invalidsearchterm';
-                $params = array('searchtype' =>  $searchtype);
-            }
-            else {
-                $params = $this->createAdvancedSearchUrlParams();
-            }
-        }
-
-        $this->_redirectTo($action, '', null, null, $params);
-    }
-
-    private function isSimpleSearchRequestValid() {
-        $query = $this->getRequest()->getParam('query');
-        return !is_null($query) && trim($query) != '';
-    }
-
-    private function isAdvancedSearchRequestValid() {
-        foreach (array('author', 'title', 'referee', 'abstract', 'fulltext',  'year') as $fieldname) {
-            $fieldvalue = $this->getRequest()->getParam($fieldname);
-            if (!is_null($fieldvalue) && trim($fieldvalue) != '') {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private function createSimpleSearchUrlParams() {
-        $params = array(
-            'searchtype'=> $this->getRequest()->getParam('searchtype', Solrsearch_IndexController::SIMPLE_SEARCH),
-            'start'=> $this->getRequest()->getParam('start','0'),
-            'rows'=> $this->getRequest()->getParam('rows','10'),
-            'query'=> $this->getRequest()->getParam('query','*:*'),
-            'sortfield'=> $this->getRequest()->getParam('sortfield', 'score'),
-            'sortorder'=> $this->getRequest()->getParam('sortorder','desc')
-        );
-        return $params;
-    }
-
-    private function createAdvancedSearchUrlParams() {
-        $params = array (
-            'searchtype'=> $this->getRequest()->getParam('searchtype',Solrsearch_IndexController::ADVANCED_SEARCH),
-            'start'=> $this->getRequest()->getParam('start', '0'),
-            'rows'=> $this->getRequest()->getParam('rows','10'),
-            'sortfield'=> $this->getRequest()->getParam('sortfield','score'),
-            'sortorder'=> $this->getRequest()->getParam('sortorder','desc')
-        );
-
-        foreach (array('author', 'title', 'abstract', 'fulltext', 'year', 'referee') as $fieldname) {
-            $fieldvalue = $this->getRequest()->getParam($fieldname, '');
-            if($fieldvalue !== '') {
-                $params[$fieldname] = $fieldvalue;
-                $params[$fieldname . 'modifier'] = $this->getRequest()->getParam($fieldname . 'modifier',Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL);
-            }
-        }
-
-        return $params;
+        $this->_forward('index', 'dispatch');
     }
 
     public function searchAction() {
@@ -199,7 +124,7 @@ class Solrsearch_IndexController extends Controller_Action {
     private function setViewValues() {
         $this->setGeneralViewValues();        
 
-        if ($this->searchtype === self::SIMPLE_SEARCH || $this->searchtype === self::ALL_SEARCH) {
+        if ($this->searchtype === Util_Searchtypes::SIMPLE_SEARCH || $this->searchtype === Util_Searchtypes::ALL_SEARCH) {
             $queryString = $this->query->getCatchAll();
             if (trim($queryString) !== '*:*') {
                 $this->view->q = $queryString;
@@ -218,7 +143,7 @@ class Solrsearch_IndexController extends Controller_Action {
             }
             return;
         }
-        if ($this->searchtype === self::ADVANCED_SEARCH || $this->searchtype === self::AUTHOR_SEARCH) {
+        if ($this->searchtype === Util_Searchtypes::ADVANCED_SEARCH || $this->searchtype === Util_Searchtypes::AUTHOR_SEARCH) {
             $this->view->nextPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'start'=>(int)($this->query->getStart()) + (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
             $this->view->prevPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'start'=>(int)($this->query->getStart()) - (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
             $this->view->lastPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'start'=>(int)($this->numOfHits / $this->query->getRows()) * $this->query->getRows(),'rows'=>$this->query->getRows()));
@@ -237,15 +162,15 @@ class Solrsearch_IndexController extends Controller_Action {
             $this->view->refereeQueryModifier = $this->query->getModifier('referee');
             return;
         }
-        if ($this->searchtype === self::COLLECTION_SEARCH) {
-            $this->view->nextPage = self::createSearchUrlArray(array('searchtype' => self::COLLECTION_SEARCH, 'start'=>(int)($this->query->getStart()) + (int)($this->query->getRows()), 'rows'=>$this->query->getRows()));
-            $this->view->prevPage = self::createSearchUrlArray(array('searchtype' => self::COLLECTION_SEARCH, 'start'=>(int)($this->query->getStart()) - (int)($this->query->getRows()), 'rows'=>$this->query->getRows()));
-            $this->view->lastPage = self::createSearchUrlArray(array('searchtype' => self::COLLECTION_SEARCH, 'start'=>(int)($this->numOfHits / $this->query->getRows()) * $this->query->getRows(), 'rows'=>$this->query->getRows()));
-            $this->view->firstPage = self::createSearchUrlArray(array('searchtype' => self::COLLECTION_SEARCH, 'start'=>'0', 'rows'=>$this->query->getRows()));
+        if ($this->searchtype === Util_Searchtypes::COLLECTION_SEARCH) {
+            $this->view->nextPage = self::createSearchUrlArray(array('searchtype' => Util_Searchtypes::COLLECTION_SEARCH, 'start'=>(int)($this->query->getStart()) + (int)($this->query->getRows()), 'rows'=>$this->query->getRows()));
+            $this->view->prevPage = self::createSearchUrlArray(array('searchtype' => Util_Searchtypes::COLLECTION_SEARCH, 'start'=>(int)($this->query->getStart()) - (int)($this->query->getRows()), 'rows'=>$this->query->getRows()));
+            $this->view->lastPage = self::createSearchUrlArray(array('searchtype' => Util_Searchtypes::COLLECTION_SEARCH, 'start'=>(int)($this->numOfHits / $this->query->getRows()) * $this->query->getRows(), 'rows'=>$this->query->getRows()));
+            $this->view->firstPage = self::createSearchUrlArray(array('searchtype' => Util_Searchtypes::COLLECTION_SEARCH, 'start'=>'0', 'rows'=>$this->query->getRows()));
             $this->setFilterQueryBaseURL();
             return;
         }
-        if ($this->searchtype === self::LATEST_SEARCH) {            
+        if ($this->searchtype === Util_Searchtypes::LATEST_SEARCH) {
             $this->view->isSimpleList = true;
             $this->view->specialTitle = $this->view->translate('title_latest_docs_article').' '.$this->query->getRows(). ' '.$this->view->translate('title_latest_docs');
             return;
@@ -260,7 +185,7 @@ class Solrsearch_IndexController extends Controller_Action {
         $this->view->start = $this->query->getStart();
         $this->view->numOfPages = (int) ($this->numOfHits / $this->query->getRows()) + 1;
         $this->view->rows = $this->query->getRows();
-        $this->view->authorSearch = self::createSearchUrlArray(array('searchtype' => self::AUTHOR_SEARCH));
+        $this->view->authorSearch = self::createSearchUrlArray(array('searchtype' => Util_Searchtypes::AUTHOR_SEARCH));
         $this->view->isSimpleList = false;
         $this->view->browsing = (boolean) $this->getRequest()->getParam('browsing', false);
         $this->view->sortfield = $this->getRequest()->getParam('sortfield', 'score');
@@ -290,88 +215,24 @@ class Solrsearch_IndexController extends Controller_Action {
     }
 
     private function buildQuery() {
-        if (is_null($this->getRequest()->getParams())) {
-            $this->log->info('Unable to read request data. Search cannot be performed.');
-            $this->_redirectToAndExit ('index');
+        $queryBuilder = new Util_QueryBuilder();
+        $queryBuilderInput = array();
+        try {
+            $queryBuilderInput = $queryBuilder->createQueryBuilderInputFromRequest($this->getRequest());
+        }
+        catch (Util_QueryBuilderException $e) {
+            $this->log->info(__CLASS__ . '.' . __METHOD__ . ' : ' . $e->getMessage());
+            return $this->_redirectToAndExit('index');
         }
 
-        if (is_null($this->getRequest()->getParam('searchtype'))) {
-            $this->log->info('Unable to create query for unspecified searchtype');
-            $this->_redirectToAndExit ('index');
-        }
-
-        $query = null;
         $this->searchtype = $this->getRequest()->getParam('searchtype');
-        if ($this->searchtype === self::SIMPLE_SEARCH) {
-            $query = $this->createSimpleSearchQuery();
+        if ($this->searchtype === Util_Searchtypes::LATEST_SEARCH) {
+            return $queryBuilder->createSearchQuery($this->validateInput($queryBuilderInput, 10, 100));
         }
-        else if ($this->searchtype === self::ADVANCED_SEARCH || $this->searchtype === self::AUTHOR_SEARCH) {
-            $query = $this->createAdvancedSearchQuery();
+        if ($this->searchtype === Util_Searchtypes::COLLECTION_SEARCH) {
+            $queryBuilderInput['collectionId'] = $this->prepareChildren();
         }
-        else if ($this->searchtype === self::LATEST_SEARCH) {
-            $query = $this->createLatestSearchQuery();
-        }
-        else if ($this->searchtype === self::COLLECTION_SEARCH) {
-            $query = $this->createCollectionSearchQuery();
-        }
-        else if ($this->searchtype === self::ALL_SEARCH) {
-            $query = $this->createAllSearchQuery();
-        }
-        else {
-            $this->log->info('Unable to create query for searchtype ' . $this->searchtype);
-            $this->_redirectToAndExit ('index');
-        }
-        
-        $this->validateQuery($query);
-        return $query;
-    }
-
-    private function validateQuery($query) {
-        // TODO check if the two subsequent rows checks are obsolete
-        if($query->getRows() > 100) {
-            $this->log->warn("Values greater than 100 are currently not allowed for the rows paramter.");
-            $query->setRows('100');
-        }
-        if($query->getRows() < 1) {
-            $this->log->warn("row parameter is smaller than 1: adjusting to 1.");
-            $query->setRows('1');
-        }
-        if ($query->getStart() < 0) {
-            $this->log->warn("A negative start parameter is ignored.");
-            $query->setStart('0');
-        }
-        if($this->searchtype === self::ADVANCED_SEARCH || $this->searchtype === self::AUTHOR_SEARCH) {
-            //im Falle einer Autorensuche werden Kommas und Semikolons aus dem Suchstring entfernt
-            if (!is_null($query->getField('author'))) {
-                $author = $query->getField('author');
-                $authormodifier = $query->getModifier('author');
-                $query->setField('author', str_replace(array(',', ';'), '', $author), $authormodifier);
-            }
-        }
-    }
-
-    private function createSimpleSearchQuery() {
-        $this->log->debug("Constructing query for simple search.");
-
-        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::SIMPLE);
-        $query->setStart($this->getRequest()->getParam('start', Opus_SolrSearch_Query::DEFAULT_START));
-        $query->setCatchAll($this->getRequest()->getParam('query', '*:*'));
-        $query->setRows($this->getRequest()->getParam('rows', Opus_SolrSearch_Query::DEFAULT_ROWS));
-        $query->setSortField($this->getRequest()->getParam('sortfield', Opus_SolrSearch_Query::DEFAULT_SORTFIELD));
-        $query->setSortOrder($this->getRequest()->getParam('sortorder', Opus_SolrSearch_Query::DEFAULT_SORTORDER));
-
-        $this->addFiltersToQuery($query);
-        $this->log->debug("Query $query complete");
-        return $query;
-    }
-
-    private function createLatestSearchQuery() {
-        $this->log->debug("Constructing query for latest search.");
-        
-        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::LATEST_DOCS);
-        $query->setRows($this->getRows($this->getRequest()->getParam('rows', Opus_SolrSearch_Query::DEFAULT_ROWS), 10, 100));
-        $this->log->debug("Query $query complete");
-        return $query;
+        return $queryBuilder->createSearchQuery($this->validateInput($queryBuilderInput));
     }
 
     private function prepareChildren() {
@@ -381,9 +242,9 @@ class Solrsearch_IndexController extends Controller_Action {
         }
         catch (SolrSearch_Model_Exception $e) {
             $this->log->debug($e->getMessage());
-            $this->_redirectToAndExit('index', '', 'browse', null, array(), true);
-        }        
-        
+            return $this->_redirectToAndExit('index', '', 'browse', null, array(), true);
+        }
+
         $this->view->children = $collectionList->getChildren();
         $this->view->parents = $collectionList->getParents();
         $translation = $this->view->translate($collectionList->getCollectionRoleTitle());
@@ -391,14 +252,14 @@ class Solrsearch_IndexController extends Controller_Action {
             $translation = $collectionList->getCollectionRoleTitlePlain();
         }
         $this->view->collectionRoleTitle = $translation;
-        
+
         if ($collectionList->isRootCollection()) {
             $this->view->title = $translation;
         }
         else {
             $this->view->title = $collectionList->getTitle();
         }
-        
+
         // Get the theme assigned to this collection iff usertheme is
         // set in the request.  To enable the collection theme, add
         // /usetheme/1/ to the URL.
@@ -413,85 +274,6 @@ class Solrsearch_IndexController extends Controller_Action {
             }
         }
         return $collectionList->getCollectionId();
-    }
-
-    private function createCollectionSearchQuery() {
-        $this->log->debug("Constructing query for collection search.");
-
-        $collectionId = $this->prepareChildren();
-
-        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::SIMPLE);
-        $query->setStart($this->getRequest()->getParam('start', Opus_SolrSearch_Query::DEFAULT_START));
-        $query->setCatchAll('*:*');
-        $query->setRows($this->getRequest()->getParam('rows', Opus_SolrSearch_Query::DEFAULT_ROWS));
-        $query->setSortField($this->getRequest()->getParam('sortfield', Opus_SolrSearch_Query::DEFAULT_SORTFIELD));
-        $query->setSortOrder($this->getRequest()->getParam('sortorder', Opus_SolrSearch_Query::DEFAULT_SORTORDER));
-        $query->addFilterQuery('collection_ids', $collectionId);
-        $this->addFiltersToQuery($query);
-
-        $this->log->debug("Query $query complete");
-        return $query;
-    }
-
-    private function createAllSearchQuery() {
-        $this->log->debug("Constructing query for all search.");
-
-        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::ALL_DOCS);
-        $query->setStart($this->getRequest()->getParam('start', Opus_SolrSearch_Query::DEFAULT_START));
-        $query->setRows($this->getRequest()->getParam('rows', Opus_SolrSearch_Query::DEFAULT_ROWS));
-        if (!is_null($this->getRequest()->getParam('sortfield'))) {
-            $query->setSortField($this->getRequest()->getParam('sortfield'));
-        }
-        $query->setSortOrder($this->getRequest()->getParam('sortorder', Opus_SolrSearch_Query::DEFAULT_SORTORDER));
-
-        $this->addFiltersToQuery($query);
-        $this->log->debug("Query $query complete");
-        return $query;
-    }
-
-    private function addFiltersToQuery($query) {
-        $config = Zend_Registry::get("Zend_Config");
-
-        if(!isset($config->searchengine->solr->facets)){
-            $this->log->debug("key searchengine.solr.facets is not present in config. skipping filter queries");
-            return;
-        }
-
-        $facets = $config->searchengine->solr->facets;
-        $this->log->debug("searchengine.solr.facets is set to " . $facets);
-        $facetsArray = explode(',', $facets);
-
-        foreach($facetsArray as $facet) {
-            $facet = trim($facet);
-            $facetKey = $facet . 'fq';
-            $facetValue = $this->getRequest()->getParam($facetKey, '');
-            if($facetValue !== '') {
-                $this->log->debug("request has facet key: ".$facetKey." value is: ".$facetValue." corresponding facet is: ".$facet);
-                $query->addFilterQuery($facet, $facetValue);
-            }
-        }
-    }
-
-    private function createAdvancedSearchQuery() {
-        $this->log->debug("Constructing query for advanced search.");
-
-        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::ADVANCED);
-        $query->setStart($this->getRequest()->getParam('start', Opus_SolrSearch_Query::DEFAULT_START));
-        $query->setRows($this->getRequest()->getParam('rows', Opus_SolrSearch_Query::DEFAULT_ROWS));
-        $query->setSortField($this->getRequest()->getParam('sortfield', Opus_SolrSearch_Query::DEFAULT_SORTFIELD));
-        $query->setSortOrder($this->getRequest()->getParam('sortorder', Opus_SolrSearch_Query::DEFAULT_SORTORDER));
-
-        foreach (array('author', 'title', 'referee', 'abstract', 'fulltext', 'year' ) as $fieldname) {
-            $fieldvalue = $this->getRequest()->getParam($fieldname, '');
-            if (!empty($fieldvalue)) {
-                $fieldmodifier = $this->getRequest()->getParam($fieldname . 'modifier', Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL);
-                $query->setField($fieldname, $fieldvalue, $fieldmodifier);
-            }
-        }
-
-        $this->addFiltersToQuery($query);
-        $this->log->debug("Query $query complete");
-        return $query;
     }
 
     /**
@@ -510,10 +292,19 @@ class Solrsearch_IndexController extends Controller_Action {
     }
 
     /**
-     * Returns the actual rows parameter value if it is between $lowerBoundInclusive
-     * and $upperBoundInclusive. Otherwise, in case the actual value is smaller (greater)
-     * than $lowerBoundInclusive ($upperBoundInclusive) it is adjusted to
-     * $lowerBoundInclusive ($upperBoundInclusive).
+     * Sets the base URL that is used to build all remove filter query URLs.
+     */
+    private function setFilterQueryBaseURL() {
+        $this->view->removeFilterQueryBase = $this->getRequest()->getParams();
+        unset($this->view->removeFilterQueryBase['start']);
+    }
+
+    /**
+     * Adjust the actual rows parameter value if it is not between $min
+     * and $max (inclusive). In case the actual value is smaller (greater)
+     * than $min ($max) it is adjusted to $min ($max).
+     *
+     * Sets the actual start parameter value to 0 if it is negative.
      *
      * @param array $data An array that contains the request parameters.
      * @param int $lowerBoundInclusive The lower bound.
@@ -521,23 +312,20 @@ class Solrsearch_IndexController extends Controller_Action {
      * @return int Returns the actual rows parameter value or an adjusted value if
      * it is not in the interval [$lowerBoundInclusive, $upperBoundInclusive].
      */
-    private function getRows($data, $lowerBoundInclusive, $upperBoundInclusive) {
-        $rows = (int) $this->getRequest()->getParam('rows', $lowerBoundInclusive);
-        if($rows < $lowerBoundInclusive) {
-            return $lowerBoundInclusive;
+    private function validateInput($input, $min = 1, $max = 100) {
+        if ($input['rows'] > $max) {
+            $this->log->warn("Values greater than 100 are currently not allowed for the rows paramter.");
+            $input['rows'] = $max;
         }
-        if($rows > $upperBoundInclusive) {
-            return $upperBoundInclusive;
+        if ($input['rows'] < $min) {
+            $this->log->warn("rows parameter is smaller than 1: adjusting to 1.");
+            $input['rows'] = $min;
         }
-        return $rows;
-    }
-
-    /**
-     * Sets the base URL that is used to build all remove filter query URLs.
-     */
-    private function setFilterQueryBaseURL() {
-        $this->view->removeFilterQueryBase = $this->getRequest()->getParams();
-        unset($this->view->removeFilterQueryBase['start']);
+        if ($input['start'] < 0) {
+            $this->log->warn("A negative start parameter is ignored.");
+            $input['start'] = 0;
+        }
+        return $input;
     }
 }
 ?>
