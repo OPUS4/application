@@ -1,1 +1,19 @@
-Tragen Sie das Impressum Ihrer Institution ein.
+﻿<p>+++++++++++++++      Muster      +++++++++++++++</p>
+
+<p>Musterinstitut 
+<br>Musterstraße 1
+<br>00000 Musterstadt</p>
+
+<p>Telefon: </p>
+<p>Fax: </p>
+<p>E-Mail:</p>
+
+<p>USt-Id-Nr.: </p>
+
+<p>Musterinstitut ist eine Körperschaft des öffentlichen Rechts.</p>
+<p>Sie wird durch Mustermann gesetzlich vertreten.</p>
+<p>Zuständige Aufsichtsbehörde:</p>
+
+<p>Für die Redaktion und die Pflege der Datenbank sowie die inhaltliche Fassung der Autorenseiten zeichnet sich i.S.d. § 55 Abs. 2 RStV Mustermensch von Musterinstitut verantwortlich. (Siehe ..> Kontakt)</p>
+
+<p>Die Betreuung der Hard- und Software dieses Servers obliegt Musterinstitut.</p>
