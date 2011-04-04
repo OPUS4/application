@@ -274,21 +274,21 @@
 
     <xsl:template match="SubjectDdc" mode="xmetadissplus">
         <xsl:element name="dc:subject">
-            <xsl:attribute name="xsi:type"><xsl:text>DDC-SG</xsl:text></xsl:attribute>
+            <xsl:attribute name="xsi:type"><xsl:text>xMetaDiss:DDC-SG</xsl:text></xsl:attribute>
             <xsl:value-of select="@Value" />
         </xsl:element>
     </xsl:template>
 
     <xsl:template match="SubjectSwd" mode="xmetadissplus">
         <xsl:element name="dc:subject">
-            <xsl:attribute name="xsi:type"><xsl:text>SWD</xsl:text></xsl:attribute>
+            <xsl:attribute name="xsi:type"><xsl:text>xMetaDiss:SWD</xsl:text></xsl:attribute>
             <xsl:value-of select="@Value" />
         </xsl:element>
     </xsl:template>
 
     <xsl:template match="SubjectUncontrolled" mode="xmetadissplus">
         <xsl:element name="dc:subject">
-            <xsl:attribute name="xsi:type"><xsl:text>noScheme</xsl:text></xsl:attribute>
+            <xsl:attribute name="xsi:type"><xsl:text>xMetaDiss:noScheme</xsl:text></xsl:attribute>
             <xsl:value-of select="@Value" />
         </xsl:element>
     </xsl:template>
