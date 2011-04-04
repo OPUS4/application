@@ -86,8 +86,7 @@
             <xsl:apply-templates select="PersonAdvisor" mode="xmetadissplus" />
             <xsl:apply-templates select="PersonReferee" mode="xmetadissplus" />
 
-<!--    hier statt DateAccepted Datum der Erstveroeffentlichung -->
-            <xsl:apply-templates select="@DateAccepted" mode="xmetadissplus" />
+            <xsl:apply-templates select="ThesisDateAccepted" mode="xmetadissplus" />
 
             <xsl:element name="dc:type">
                <xsl:attribute name="xsi:type"><xsl:text>dini:PublType</xsl:text></xsl:attribute>
@@ -363,6 +362,7 @@
     <xsl:template match="ThesisPublisher" mode="xmetadissplus">
         <xsl:element name="dc:publisher">
            <xsl:attribute name="xsi:type"><xsl:text>cc:Publisher</xsl:text></xsl:attribute>
+           <xsl:attribute name="type"><xsl:text>dcterms:ISO3166</xsl:text></xsl:attribute>
                <xsl:element name="cc:universityOrInstitution">
                  <xsl:element name="cc:name">
                      <xsl:value-of select="@Name" />
@@ -378,10 +378,10 @@
         </xsl:element>
     </xsl:template>          
 
-    <xsl:template match="@DateAccepted" mode="xmetadissplus">
+    <xsl:template match="ThesisDateAccepted" mode="xmetadissplus">
         <xsl:element name="dcterms:dateAccepted">
           <xsl:attribute name="xsi:type"><xsl:text>dcterms:W3CDTF</xsl:text></xsl:attribute>
-            <xsl:value-of select="." />
+            <xsl:value-of select="@Year"/>-<xsl:value-of select="format-number(@Month,'00')"/>-<xsl:value-of select="format-number(@Day,'00')"/>
         </xsl:element>
     </xsl:template>
 
