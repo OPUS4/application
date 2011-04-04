@@ -57,7 +57,7 @@ class Oai_IndexController extends Controller_Xml {
      *
      * @var array
      */
-    private $_xMetaDissRestriction = array('doctoral_thesis', 'habilitation');
+    private $_xMetaDissRestriction = array('doctoralthesis', 'habilitation');
 
     /**
      * Hold oai module configuration model.
@@ -212,7 +212,7 @@ class Oai_IndexController extends Controller_Xml {
             $type = $document->getType();
             $isHabOrDoc = in_array($type, $this->_xMetaDissRestriction);
             if (false === $isHabOrDoc) {
-               throw new Exception("The combination of the given values results in an empty list (xMetaDiss only for habilitation_thesis and doctoral_thesis).", Oai_Model_Error::NORECORDSMATCH);
+               throw new Exception("The combination of the given values results in an empty list (xMetaDiss only for habilitation and doctoralthesis).", Oai_Model_Error::NORECORDSMATCH);
             }
         }
         $this->_xml->appendChild($this->_xml->createElement('Documents'));

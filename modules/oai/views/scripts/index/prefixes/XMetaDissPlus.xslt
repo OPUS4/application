@@ -75,9 +75,9 @@
                 <xsl:apply-templates select="PersonAuthor" mode="xmetadissplus" />
             </xsl:element>
             <!-- dc:subject -->
-            <xsl:apply-templates select="SubjectDdc" mode="xmetadissplus" />
-            <xsl:apply-templates select="SubjectSwd" mode="xmetadissplus" />
-            <xsl:apply-templates select="SubjectUncontrolled" mode="xmetadissplus" />
+            <xsl:apply-templates select="Subject[@Type='ddc']" mode="xmetadissplus" />
+            <xsl:apply-templates select="Subject[@Type='swd']" mode="xmetadissplus" />
+            <xsl:apply-templates select="Subject[@Type='uncontrolled']" mode="xmetadissplus" />
             <!-- dc:abstract -->
             <xsl:apply-templates select="TitleAbstract" mode="xmetadissplus" />
             <!-- dc:publisher -->
@@ -292,21 +292,21 @@
         </xsl:element>
     </xsl:template>
 
-    <xsl:template match="SubjectDdc" mode="xmetadissplus">
+    <xsl:template match="Subject[@Type='ddc']" mode="xmetadissplus">
         <xsl:element name="dc:subject">
             <xsl:attribute name="xsi:type"><xsl:text>xMetaDiss:DDC-SG</xsl:text></xsl:attribute>
             <xsl:value-of select="@Value" />
         </xsl:element>
     </xsl:template>
 
-    <xsl:template match="SubjectSwd" mode="xmetadissplus">
+    <xsl:template match="Subject[@Type='swd']" mode="xmetadissplus">
         <xsl:element name="dc:subject">
             <xsl:attribute name="xsi:type"><xsl:text>xMetaDiss:SWD</xsl:text></xsl:attribute>
             <xsl:value-of select="@Value" />
         </xsl:element>
     </xsl:template>
 
-    <xsl:template match="SubjectUncontrolled" mode="xmetadissplus">
+    <xsl:template match="Subject[@Type='uncontrolled']" mode="xmetadissplus">
         <xsl:element name="dc:subject">
             <xsl:attribute name="xsi:type"><xsl:text>xMetaDiss:noScheme</xsl:text></xsl:attribute>
             <xsl:value-of select="@Value" />
@@ -335,6 +335,7 @@
     <xsl:template match="PersonAdvisor" mode="xmetadissplus">
        <xsl:element name="dc:contributor">
          <xsl:attribute name="xsi:type"><xsl:text>pc:Contributor</xsl:text></xsl:attribute>
+         <xsl:attribute name="type"><xsl:text>dcterms:ISO3166</xsl:text></xsl:attribute>
          <xsl:attribute name="thesis:role"><xsl:text>advisor</xsl:text></xsl:attribute>
          <xsl:attribute name="countryCode"><xsl:text>DE</xsl:text></xsl:attribute>
            <xsl:element name="pc:person">
@@ -359,6 +360,7 @@
     <xsl:template match="PersonReferee" mode="xmetadiss">
        <xsl:element name="dc:contributor">
          <xsl:attribute name="xsi:type"><xsl:text>pc:Contributor</xsl:text></xsl:attribute>
+         <xsl:attribute name="type"><xsl:text>dcterms:ISO3166</xsl:text></xsl:attribute>
          <xsl:attribute name="thesis:role"><xsl:text>referee</xsl:text></xsl:attribute>
          <xsl:attribute name="countryCode"><xsl:text>DE</xsl:text></xsl:attribute>
            <xsl:element name="pc:person">
@@ -432,8 +434,7 @@
              <xsl:attribute name="ddb:fileSize">
                <xsl:value-of select="@FileSize"/>
             </xsl:attribute>   
-            <xsl:attribute name="ddb:fileDirectory">/</xsl:attribute>
-            <xsl:text>aus:Praesentationsformat</xsl:text>
+
         </xsl:element>
     </xsl:template>
 
@@ -447,19 +448,3 @@
 
 
 </xsl:stylesheet>
-
-
-<!-- folgende Felder sind unklar bzw. fehlen noch im Datenmodell bzw.
-     in der xml-Darstellung
-dcterms:issued Datum der Erstveroeffentlichung (z.Zt DateAccepted,
-               muss noch geaendert werden
-SubjectSwd : freie Schlagwoerter tauchen in der XML-Darstellung
-             doppelt auf, einmal als
-             SubjectSwd Type=uncontrolled  und zweitens als
-             SubjectUncontrolled
-             Welches soll ich nehmen? Wird eines wegfallen?
-             z.Zt. werden sie auch hier doppelt ausgegeben
-fileSize    ist bei den Attributen zum Feld file nicht dabei
-            hier z.Zt. FileSize benannt 
-
--->
