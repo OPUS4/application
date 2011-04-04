@@ -92,17 +92,17 @@
                    <xsl:when test="@Type='article'">
                        <xsl:text>article</xsl:text>
                    </xsl:when>
+                   <xsl:when test="@Type='bachelorthesis'">
+                       <xsl:text>bachelorThesis</xsl:text>
+                   </xsl:when>
                    <xsl:when test="@Type='book'">
                        <xsl:text>book</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='bookpart'">
                        <xsl:text>bookPart</xsl:text>
                    </xsl:when>
-                   <xsl:when test="@Type='bachelorthesis'">
-                       <xsl:text>bachelorThesis</xsl:text>
-                   </xsl:when>
-                   <xsl:when test="@Type='masterthesis'">
-                       <xsl:text>masterThesis</xsl:text>
+                   <xsl:when test="@Type='conferenceobject'">
+                       <xsl:text>conferenceObject</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='doctoralthesis'">
                        <xsl:text>doctoralThesis</xsl:text>
@@ -110,26 +110,26 @@
                    <xsl:when test="@Type='habilitation'">
                        <xsl:text>doctoralThesis</xsl:text>
                    </xsl:when>
-                   <xsl:when test="@Type='conferenceobject'">
-                       <xsl:text>conferenceObject</xsl:text>
+                   <xsl:when test="@Type='lecture'">
+                       <xsl:text>lecture</xsl:text>
+                   </xsl:when>
+                   <xsl:when test="@Type='masterthesis'">
+                       <xsl:text>masterThesis</xsl:text>
+                   </xsl:when>
+                   <xsl:when test="@Type='other'">
+                       <xsl:text>Other</xsl:text>
+                   </xsl:when>
+                   <xsl:when test="@Type='preprint'">
+                       <xsl:text>preprint</xsl:text>
+                   </xsl:when>
+                   <xsl:when test="@Type='report'">
+                       <xsl:text>report</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='studythesis'">
                        <xsl:text>StudyThesis</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='workingpaper'">
                        <xsl:text>workingPaper</xsl:text>
-                   </xsl:when>
-                   <xsl:when test="@Type='report'">
-                       <xsl:text>report</xsl:text>
-                   </xsl:when>
-                   <xsl:when test="@Type='preprint'">
-                       <xsl:text>preprint</xsl:text>
-                   </xsl:when>
-                   <xsl:when test="@Type='other'">
-                       <xsl:text>Other</xsl:text>
-                   </xsl:when>
-                   <xsl:when test="@Type='lecture'">
-                       <xsl:text>lecture</xsl:text>
                    </xsl:when>
                    <xsl:otherwise>
                      <xsl:value-of select="@Type" />
