@@ -46,18 +46,21 @@
 -->
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns="http://www.bsz-bw.de/xmetadissplus/1.3"
-    xmlns:xMetaDiss="http://www.d-nb.de/standards/xMetaDiss/"
+    xmlns:xMetaDiss="http://www.d-nb.de/standards/xmetadissplus/"
     xmlns:cc="http://www.d-nb.de/standards/cc/"
     xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:dcmitype="http://purl.org/dc/dcmitype/"
     xmlns:dcterms="http://purl.org/dc/terms/"
-    xmlns:bszterms="http://www.bsz-bw.de/xmetadissplus/1.3/terms/"
     xmlns:pc="http://www.d-nb.de/standards/pc/"
     xmlns:urn="http://www.d-nb.de/standards/urn/"
+    xmlns:hdl="http://www.d-nb.de/standards/hdl/"
+    xmlns:doi="http://www.d-nb.de/standards/doi/"
     xmlns:thesis="http://www.ndltd.org/standards/metadata/etdms/1.0/"
     xmlns:ddb="http://www.d-nb.de/standards/ddb/"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    xmlns:dini="http://www.d-nb.de/standards/xmetadissplus/type/"
+    xmlns="http://www.d-nb.de/standards/subject/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.d-nb.de/standards/xmetadissplus/ http://www.d-nb.de/standards/xmetadissplus/xmetadissplus.xsd">
 
     <xsl:output method="xml" indent="yes" />
 
