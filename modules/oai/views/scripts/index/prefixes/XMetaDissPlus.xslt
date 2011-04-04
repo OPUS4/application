@@ -104,17 +104,29 @@
                    <xsl:when test="@Type='conferenceobject'">
                        <xsl:text>conferenceObject</xsl:text>
                    </xsl:when>
+                   <xsl:when test="@Type='contributiontoperiodical'">
+                       <xsl:text>contributionToPeriodical</xsl:text>
+                   </xsl:when>
+                   <xsl:when test="@Type='coursematerial'">
+                       <xsl:text>CourseMaterial</xsl:text>
+                   </xsl:when>
                    <xsl:when test="@Type='doctoralthesis'">
                        <xsl:text>doctoralThesis</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='habilitation'">
                        <xsl:text>doctoralThesis</xsl:text>
                    </xsl:when>
+                   <xsl:when test="@Type='image'">
+                       <xsl:text>Image</xsl:text>
+                   </xsl:when>
                    <xsl:when test="@Type='lecture'">
                        <xsl:text>lecture</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='masterthesis'">
                        <xsl:text>masterThesis</xsl:text>
+                   </xsl:when>
+                   <xsl:when test="@Type='movingimage'">
+                       <xsl:text>MovingImage</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='other'">
                        <xsl:text>Other</xsl:text>
@@ -124,6 +136,12 @@
                    </xsl:when>
                    <xsl:when test="@Type='report'">
                        <xsl:text>report</xsl:text>
+                   </xsl:when>
+                   <xsl:when test="@Type='review'">
+                       <xsl:text>review</xsl:text>
+                   </xsl:when>
+                   <xsl:when test="@Type='sound'">
+                       <xsl:text>sound</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='studythesis'">
                        <xsl:text>StudyThesis</xsl:text>
