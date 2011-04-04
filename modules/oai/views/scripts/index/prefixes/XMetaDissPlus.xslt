@@ -87,68 +87,57 @@
             <xsl:apply-templates select="@DateAccepted" mode="xmetadissplus" />
 
             <xsl:element name="dc:type">
-               <xsl:attribute name="xsi:type"><xsl:text>bszterms:PublType</xsl:text></xsl:attribute>
+               <xsl:attribute name="xsi:type"><xsl:text>dini:PublType</xsl:text></xsl:attribute>
                  <xsl:choose>
-                   <xsl:when test="@Type='manual'">
-                       <xsl:text>Manual</xsl:text>
-                   </xsl:when>
                    <xsl:when test="@Type='article'">
-                       <xsl:text>Article</xsl:text>
+                       <xsl:text>article</xsl:text>
                    </xsl:when>
-                   <xsl:when test="@Type='monograph'">
-                       <xsl:text>Book</xsl:text>
+                   <xsl:when test="@Type='book'">
+                       <xsl:text>book</xsl:text>
                    </xsl:when>
-                   <xsl:when test="@Type='monograph_section'">
-                       <xsl:text>InBook</xsl:text>
+                   <xsl:when test="@Type='bookpart'">
+                       <xsl:text>bookPart</xsl:text>
                    </xsl:when>
-                   <xsl:when test="@Type='bachelor_thesis'">
-                       <xsl:text>Thesis.Bachelor</xsl:text>
+                   <xsl:when test="@Type='bachelorthesis'">
+                       <xsl:text>bachelorThesis</xsl:text>
                    </xsl:when>
-                   <xsl:when test="@Type='master_thesis'">
-                       <xsl:text>Thesis.Master</xsl:text>
+                   <xsl:when test="@Type='masterthesis'">
+                       <xsl:text>masterThesis</xsl:text>
                    </xsl:when>
-                   <xsl:when test="@Type='doctoral_thesis'">
-                       <xsl:text>Thesis.Doctoral</xsl:text>
+                   <xsl:when test="@Type='doctoralthesis'">
+                       <xsl:text>doctoralThesis</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='habilitation'">
-                       <xsl:text>Thesis.Habilitation</xsl:text>
+                       <xsl:text>doctoralThesis</xsl:text>
                    </xsl:when>
-                   <xsl:when test="@Type='festschrift'">
-                       <xsl:text>Festschrift</xsl:text>
+                   <xsl:when test="@Type='conferenceobject'">
+                       <xsl:text>conferenceObject</xsl:text>
                    </xsl:when>
-                   <xsl:when test="@Type='journal'">
-                       <xsl:text>Journal</xsl:text>
+                   <xsl:when test="@Type='studythesis'">
+                       <xsl:text>StudyThesis</xsl:text>
                    </xsl:when>
-                   <xsl:when test="@Type='conference'">
-                       <xsl:text>Proceedings</xsl:text>
-                   </xsl:when>
-                   <xsl:when test="@Type='conference_item'">
-                       <xsl:text>InProceedings</xsl:text>
-                   </xsl:when>
-                   <xsl:when test="@Type='studienarbeit'">
-                       <xsl:text>Paper</xsl:text>
-                   </xsl:when>
-                   <xsl:when test="@Type='paper'">
-                       <xsl:text>ResearchPaper</xsl:text>
+                   <xsl:when test="@Type='workingpaper'">
+                       <xsl:text>workingPaper</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='report'">
-                       <xsl:text>TechReport</xsl:text>
+                       <xsl:text>report</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='preprint'">
-                       <xsl:text>Preprint</xsl:text>
+                       <xsl:text>preprint</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='other'">
-                       <xsl:text>Misc</xsl:text>
+                       <xsl:text>Other</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='lecture'">
-                       <xsl:text>Lecture</xsl:text>
+                       <xsl:text>lecture</xsl:text>
                    </xsl:when>
                    <xsl:otherwise>
                      <xsl:value-of select="@Type" />
-                       <xsl:text>unbekannter Typ</xsl:text> 
+                       <xsl:text>Other</xsl:text>
                    </xsl:otherwise>    
                  </xsl:choose>  
             </xsl:element>
+
             <xsl:apply-templates select="IdentifierUrn" mode="xmetadissplus" />
             <xsl:element name="dcterms:medium">
                <xsl:attribute name="xsi:type"><xsl:text>dcterms:IMT</xsl:text></xsl:attribute>
@@ -168,7 +157,7 @@
             <xsl:apply-templates select="Licence" mode="xmetadissplus" />
 
            <!--  thesis.degree only, if type doctoral or habilitation -->
-            <xsl:if test="@Type='doctoral_thesis' or @Type='habilitation'">
+            <xsl:if test="@Type='doctoralthesis' or @Type='habilitation'">
                 <xsl:element name="thesis:degree">
                    <xsl:element name="thesis:level">
                      <xsl:choose>
