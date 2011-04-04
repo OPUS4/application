@@ -175,15 +175,21 @@
             <xsl:apply-templates select="Licence" mode="xmetadissplus" />
 
            <!--  thesis.degree only, if type doctoral or habilitation -->
-            <xsl:if test="@Type='doctoralthesis' or @Type='habilitation'">
+            <xsl:if test="@Type='bachelorthesis' or @Type='doctoralthesis' or @Type='habilitation' or @Type='masterthesis'">
                 <xsl:element name="thesis:degree">
                    <xsl:element name="thesis:level">
                      <xsl:choose>
-                       <xsl:when test="@Type='doctoral_thesis'">
-                           <xsl:text>thesis:doctoral</xsl:text>
+                       <xsl:when test="@Type='bachelorthesis'">
+                           <xsl:text>bachelor</xsl:text>
+                       </xsl:when>
+                       <xsl:when test="@Type='doctoralthesis'">
+                           <xsl:text>thesis.doctoral</xsl:text>
                        </xsl:when>
                        <xsl:when test="@Type='habilitation'">
-                           <xsl:text>thesis:habilitation</xsl:text>
+                           <xsl:text>thesis.habilitation</xsl:text>
+                       </xsl:when>
+                       <xsl:when test="@Type='masterthesis'">
+                           <xsl:text>master</xsl:text>
                        </xsl:when>
                        <xsl:otherwise>
                            <xsl:text>other</xsl:text> 
