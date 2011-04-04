@@ -196,6 +196,7 @@ class Oai_IndexController extends Controller_Xml {
         // Currently implemented as 'oai:foo.bar.de:{docId}'
         $docId = substr(strrchr($oaiRequest['identifier'], ':'), 1);
 
+        $document = null;
         try {
             $document = new Opus_Document($docId);
         } catch (Exception $ex) {
@@ -203,7 +204,7 @@ class Oai_IndexController extends Controller_Xml {
         }
 
         // do not deliver documents which are restricted by document state
-        if (false === in_array($document->getServerState(), $this->_deliveringDocumentStates)) {
+        if (is_null($document) or false === in_array($document->getServerState(), $this->_deliveringDocumentStates)) {
             throw new Exception('Document is not available for OAI export!', Oai_Model_Error::NORECORDSMATCH);
         }
 
