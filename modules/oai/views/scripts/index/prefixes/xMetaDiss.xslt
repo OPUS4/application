@@ -106,7 +106,7 @@
             <xsl:element name="thesis:degree">
                <xsl:element name="thesis:level">
                  <xsl:choose>
-                   <xsl:when test="@Type='doctoral_thesis'">
+                   <xsl:when test="@Type='doctoralthesis'">
                        <xsl:text>thesis.doctoral</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='habilitation'">
