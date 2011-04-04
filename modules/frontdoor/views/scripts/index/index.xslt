@@ -993,7 +993,7 @@
             <td>
                 <xsl:element name="a">
                 <xsl:attribute name="href"><xsl:value-of select="@Value" /></xsl:attribute>
-                <xsl:attribute name="rel"><xsl:text>nofollow, noindex</xsl:text></xsl:attribute>
+                <xsl:attribute name="rel"><xsl:text>nofollow</xsl:text></xsl:attribute>
                 <xsl:value-of select="@Label" />
                 </xsl:element>
             </td>

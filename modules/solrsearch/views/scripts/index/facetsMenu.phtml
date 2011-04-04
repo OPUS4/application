@@ -42,7 +42,7 @@
                 <?php foreach($facet as $facetItem) :
                     $fqUrl = $this->firstPage;
                     $fqUrl[$key.'fq'] = $facetItem->getText();
-                    $fqLinkRel = count($this->selectedFacets) > 0 ? 'rel="noindex, nofollow"' : '';
+                    $fqLinkRel = count($this->selectedFacets) > 0 ? 'rel="nofollow"' : '';
 
                     $facetvalue_name = $facetItem->getText();
                     if ($key === 'has_fulltext' || $key === 'belongs_to_bibliography') {
