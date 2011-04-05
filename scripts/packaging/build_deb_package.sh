@@ -12,7 +12,7 @@
 # GNU General Public License for more details.
 #
 # @author      Sascha Szott <szott@zib.de>
-# @copyright   Copyright (c) 2010, OPUS 4 development team
+# @copyright   Copyright (c) 2010-2011, OPUS 4 development team
 # @license     http://www.gnu.org/licenses/gpl.html General Public License
 # @version     $Id$
 
@@ -25,6 +25,7 @@ set -e
 
 TEMPDIR=$1
 BASEDIR='/var/local/opus4'
+TAG=$2
 
 if [ -z $TEMPDIR ]; then
   echo "argument missing"
@@ -37,14 +38,18 @@ if [ -d $TEMPDIR ]; then
 fi
 
 echo "create directory $TEMPDIR"
-mkdir -vp $TEMPDIR/$BASEDIR
+mkdir -vp ${TEMPDIR}${BASEDIR}
 
 svn --force export https://svn.zib.de/opus4dev/server/trunk/scripts/packaging/deb_package/DEBIAN/ $TEMPDIR/DEBIAN
 
-echo "get OPUS 4 source code"
-./prepare_directories.sh trunk $TEMPDIR/$BASEDIR
+if [ -z $TAG ]; then
+  TAG=trunk
+fi
+echo "get OPUS 4 source code (tag: $TAG)"
+./prepare_directories.sh $TAG ${TEMPDIR}${BASEDIR}
 
 echo "create deb package"
+md5sum `find ${TEMPDIR}${BASEDIR} -type f` | sed -e "s/$TEMPDIR//" > $TEMPDIR/DEBIAN/md5sums
 chmod +x $TEMPDIR/DEBIAN/{postinst,prerm}
 dpkg-deb --build $TEMPDIR .
 
