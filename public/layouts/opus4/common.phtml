@@ -55,6 +55,11 @@ $this->headLink()
     ->appendStylesheet($this->layoutPath() . '/css/admin.css')
     ->headLink(array('rel' => 'shortcut icon', 'href' => $this->layoutPath() . '/img/logo/favicon.ico'));
 
+/* 
+uncomment the following line if you want to enable your own layout changes
+$this->appendStylesheet($this->layoutPath() . '/css/custom.css');
+*/
+
 $this->container = Zend_Registry::get('Opus_Navigation');
 
 if ($this->jQueryEnabled()) {
