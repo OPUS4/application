@@ -133,21 +133,21 @@
         </tuv>
    </tu>
 
-   <tu tuid="misc">
-        <tuv xml:lang="en">
-            <seg>Misc</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Sonstiges</seg>
-        </tuv>
-   </tu>
-
-    <tu tuid="movingimage">
+   <tu tuid="movingimage">
         <tuv xml:lang="en">
             <seg>Moving Images</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Bewegte Bilder</seg>
+        </tuv>
+   </tu>
+   
+   <tu tuid="other">
+        <tuv xml:lang="en">
+            <seg>Other</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Sonstiges</seg>
         </tuv>
    </tu>
    
