@@ -66,7 +66,8 @@
 
     <xsl:template match="Opus_Document" mode="xmetadissplus">
         <xMetaDiss
-            xsi:schemaLocation="http://www.bsz-bw.de/xmetadissplus/1.3 http://www.bsz-bw.de/xmetadissplus/1.3/xmetadissplus.xsd">
+            xsi:schemaLocation="http://www.d-nb.de/standards/xmetadissplus/ http://www.d-nb.de/standards/xmetadissplus/xmetadissplus.xsd">
+
             <!-- dc:title -->
             <xsl:apply-templates select="TitleMain" mode="xmetadissplus" />
             <!-- dc:creator -->
