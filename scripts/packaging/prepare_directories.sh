@@ -13,7 +13,7 @@
 #
 # @author      Thoralf Klein <thoralf.klein@zib.de>
 # @author      Sascha Szott <szott@zib.de>
-# @copyright   Copyright (c) 2010, OPUS 4 development team
+# @copyright   Copyright (c) 2010-2011, OPUS 4 development team
 # @license     http://www.gnu.org/licenses/gpl.html General Public License
 # @version     $Id$
 
@@ -34,9 +34,9 @@ rm -rfv {opus4,solrconfig,libs,workspace,apacheconf,install,testdata}
 svn --force export https://svn.zib.de/opus4dev/server/$TAG opus4
 svn --force export https://svn.zib.de/opus4dev/framework/$TAG/db/schema opus4/db/schema
 svn --force export https://svn.zib.de/opus4dev/framework/$TAG/library/Opus opus4/library/Opus
-svn --force export https://svn.zib.de/opus4dev/solrconfig solrconfig
-svn --force export https://svn.zib.de/opus4dev/apacheconf apacheconf
-svn --force export https://svn.zib.de/opus4dev/install install
+svn --force export https://svn.zib.de/opus4dev/solrconfig/$TAG solrconfig
+svn --force export https://svn.zib.de/opus4dev/apacheconf/$TAG apacheconf
+svn --force export https://svn.zib.de/opus4dev/install/$TAG install
 
 mkdir -pv testdata
 cd testdata
