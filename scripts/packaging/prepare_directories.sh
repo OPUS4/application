@@ -61,6 +61,11 @@ if [ -f opus4/scripts/packaging/gpl-3.0.txt ]; then
 else
   touch gpl-3.0.txt
 fi
+if [ -d opus4/scripts/packaging/releases ]; then
+  mv opus4/scripts/packaging/releases .
+else
+  mkdir releases
+fi;
 
 rm -rv opus4/{docs,nbproject,tests,workspace}
 rm -rvf opus4/public/layouts/{opus33,opus34,darker,matheon,plain,opus4-matheon}
