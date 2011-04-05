@@ -50,8 +50,17 @@ cd ..
 
 find -P . -name .gitignore -print0 | xargs -r0 rm -v 
 
-mv opus4/scripts/packaging/changelog/CHANGES.txt .
-mv opus4/scripts/packaging/gpl-3.0.txt .
+# added checks to ensure compatibility with older releases
+if [ -f opus4/scripts/packaging/changelog/CHANGES.txt ]; then
+  mv opus4/scripts/packaging/changelog/CHANGES.txt .
+else
+  touch CHANGES.txt
+fi
+if [ -f opus4/scripts/packaging/gpl-3.0.txt ]; then
+  mv opus4/scripts/packaging/gpl-3.0.txt .
+else
+  touch gpl-3.0.txt
+fi
 
 rm -rv opus4/{docs,nbproject,tests,workspace}
 rm -rvf opus4/public/layouts/{opus33,opus34,darker,matheon,plain,opus4-matheon}
@@ -101,3 +110,17 @@ chmod 777 workspace/tmp/resumption
 
 chmod +x install/install.sh
 chmod +x install/uninstall.sh
+
+#
+# create VERSION.txt
+#
+if [ "$TAG" == "trunk" ]; then
+  echo trunk > VERSION.txt
+else
+  echo ${TAG:16} > VERSION.txt
+fi
+
+#
+# create MD5SUMS
+#
+touch MD5SUMS

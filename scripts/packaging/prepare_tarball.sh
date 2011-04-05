@@ -35,4 +35,4 @@ $(dirname $0)/prepare_directories.sh $1 $2
 #
 
 cd $2
-tar czvf ../$(basename $2).tgz opus4 workspace libs solrconfig apacheconf install testdata CHANGES.txt
+tar czvf ../$(basename $2).tgz opus4 workspace libs solrconfig apacheconf install testdata CHANGES.txt MD5SUMS VERSION.txt gpl-3.0.txt
