@@ -57,6 +57,16 @@
             <xsl:attribute name="xsi:schemaLocation">
               <xsl:text>urn:nbn:de:1111-2004033116 http://www.persistent-identifier.de/xepicur/version1.0/xepicur.xsd</xsl:text>
             </xsl:attribute>
+            <xsl:attribute name="xmlns:xsi">
+              <xsl:text>http://www.w3.org/2001/XMLSchema-instance</xsl:text>
+            </xsl:attribute>
+            <xsl:attribute name="xmlns:epicur">
+              <xsl:text>urn:nbn:de:1111-2004033116</xsl:text>
+            </xsl:attribute>
+            <xsl:attribute name="xmlns">
+              <xsl:text>urn:nbn:de:1111-2004033116</xsl:text>
+            </xsl:attribute>
+
             <xsl:element name="administrative_data">
                 <xsl:element name="delivery">
                     <update_status type="urn_new"/>
