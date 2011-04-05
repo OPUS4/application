@@ -33,7 +33,7 @@
  * @version     $Id$
  */
  -->
-<documenttype name="misc"
+<documenttype name="other"
     xmlns="http://schemas.opus.org/documenttype"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://schemas.opus.org/documenttype https://svn.zib.de/opus4dev/framework/trunk/library/Opus/Document/documenttype.xsd">
