@@ -66,21 +66,31 @@
             <xsl:element name="record">
                <!-- IdentifierUrn -->
                <xsl:apply-templates select="IdentifierUrn" mode="epicur" />
+
                <xsl:element name="resource">
-                    <!-- IdentifierUrl -->
-                    <xsl:apply-templates select="IdentifierUrl" mode="epicur" />
+                    <xsl:element name="identifier">
+                        <xsl:attribute name="scheme">url</xsl:attribute>
+                        <xsl:attribute name="type">frontpage</xsl:attribute>
+                        <xsl:attribute name="role">primary</xsl:attribute>
+                        <xsl:attribute name="origin">original</xsl:attribute>
+                        <xsl:value-of select="@frontdoorurl"/>
+                    </xsl:element>
+
                     <xsl:element name="format">
-                        <xsl:attribute name="scheme"><xsl:text>imt</xsl:text>
+                        <xsl:attribute name="scheme">
+                            <xsl:text>imt</xsl:text>
                         </xsl:attribute>
                         <xsl:text>text/html</xsl:text>
                     </xsl:element>
                </xsl:element>
+
+               <xsl:apply-templates select="File" mode="epicur"/>
+
             </xsl:element>
         </epicur>
     </xsl:template>
 
 
-    <!--xsl:template match="IdentifierIsbn|IdentifierUrn" mode="epicur"-->
     <xsl:template match="IdentifierUrn" mode="epicur">
         <xsl:element name="identifier">
             <xsl:attribute name="scheme"><xsl:text>urn:nbn:de</xsl:text></xsl:attribute>
@@ -88,16 +98,24 @@
         </xsl:element>
     </xsl:template>
 
+    <!-- skip container file -->
+    <xsl:template match="File[@DnbContainer='1']" mode="epicur" />
 
-    <xsl:template match="IdentifierUrl" mode="epicur">
-        <xsl:element name="identifier">
-            <xsl:attribute name="scheme"><xsl:text>url</xsl:text></xsl:attribute>
-            <xsl:attribute name="type"><xsl:text>frontpage</xsl:text></xsl:attribute>
-            <xsl:attribute name="role"><xsl:text>primary</xsl:text></xsl:attribute>
-            <xsl:value-of select="@Value" />
+    <xsl:template match="File" mode="epicur">
+        <xsl:element name="resource">
+            <xsl:element name="identifier">
+                <xsl:attribute name="scheme">url</xsl:attribute>
+                <xsl:attribute name="target">transfer</xsl:attribute>
+                <xsl:attribute name="origin">original</xsl:attribute>
+                <xsl:value-of select="@url"/>
+            </xsl:element>
+            <xsl:element name="format">
+                <xsl:attribute name="scheme">
+                    <xsl:text>imt</xsl:text>
+                </xsl:attribute>
+                <xsl:value-of select="@MimeType"/>
+            </xsl:element>
         </xsl:element>
     </xsl:template>
-
-
 
 </xsl:stylesheet>
