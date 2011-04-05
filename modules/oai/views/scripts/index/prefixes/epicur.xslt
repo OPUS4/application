@@ -46,26 +46,17 @@
 -->
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:epicur="urn:nbn:de:1111-2004033116"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <xsl:output method="xml" indent="yes" />
 
 
     <xsl:template match="Opus_Document" mode="epicur">
-        <xsl:element name="epicur">
-            <xsl:attribute name="xsi:schemaLocation">
-              <xsl:text>urn:nbn:de:1111-2004033116 http://www.persistent-identifier.de/xepicur/version1.0/xepicur.xsd</xsl:text>
-            </xsl:attribute>
-            <xsl:attribute name="xmlns:xsi">
-              <xsl:text>http://www.w3.org/2001/XMLSchema-instance</xsl:text>
-            </xsl:attribute>
-            <xsl:attribute name="xmlns:epicur">
-              <xsl:text>urn:nbn:de:1111-2004033116</xsl:text>
-            </xsl:attribute>
-            <xsl:attribute name="xmlns">
-              <xsl:text>urn:nbn:de:1111-2004033116</xsl:text>
-            </xsl:attribute>
+        <epicur
+            xsi:schemaLocation="urn:nbn:de:1111-2004033116 http://www.persistent-identifier.de/xepicur/version1.0/xepicur.xsd"
+            xmlns:epicur="urn:nbn:de:1111-2004033116"
+            xmlns="urn:nbn:de:1111-2004033116"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
             <xsl:element name="administrative_data">
                 <xsl:element name="delivery">
@@ -85,7 +76,7 @@
                     </xsl:element>
                </xsl:element>
             </xsl:element>
-        </xsl:element>
+        </epicur>
     </xsl:template>
 
 
