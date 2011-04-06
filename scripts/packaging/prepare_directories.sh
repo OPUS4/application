@@ -128,5 +128,5 @@ fi
 #
 # create MD5SUMS
 #
-find . -type f -print0 | xargs -0 md5sum >> MD5SUMS
+find . -type f -not -name MD5SUMS -print0 | xargs -0 md5sum >> MD5SUMS
 
