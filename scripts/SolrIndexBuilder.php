@@ -103,8 +103,8 @@ class SolrIndexBuilder { // extends Application_Bootstrap {
         }
         $this->evaluateArguments($argc, $argv);
         $docIds = Opus_Document::getAllPublishedIds($this->start, $this->end);
-        $indexer = new Opus_Search_Index_Solr_Indexer($this->deleteAllDocs);
-        //$indexer = new Opus_Search_Index_Solr_Indexer();
+        $indexer = new Opus_SolrSearch_Index_Indexer($this->deleteAllDocs);
+        //$indexer = new Opus_SolrSearch_Index_Indexer();
         echo date('Y-m-d H:i:s') . " Start indexing of " . count($docIds) . " documents.\n";
         $numOfDocs = 0;
         $runtime = microtime(true);
@@ -154,7 +154,7 @@ try {
     $runtime = (int) $index->run();
     echo "\nOperation completed successfully in $runtime seconds.\n";
 }
-catch (Opus_Search_Index_Solr_Exception $e) {
+catch (Opus_SolrSearch_Index_Exception $e) {
     echo "\nAn error occurred while indexing.";
     echo "\nError Message: " . $e->getMessage();
     if (!is_null($e->getPrevious())) {

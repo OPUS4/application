@@ -52,7 +52,7 @@ $jobrunner->setDelay(0);
 $jobrunner->setLimit(100);
 
 $indexWorker = new Opus_Job_Worker_IndexOpusDocument;
-$indexWorker->setIndex(new Opus_Search_Index_Solr_Indexer(false));
+$indexWorker->setIndex(new Opus_SolrSearch_Index_Indexer(false));
 $jobrunner->registerWorker($indexWorker);
 
 // run processing
