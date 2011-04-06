@@ -1,7 +1,9 @@
 Klicken Sie auf der Startseite auf Veröffentlichen.<br/>
 Sie werden zunächst aufgefordert, einen Dokumenttyp auszuwählen. Direkt darunter können Sie Ihr(e) Dokument(e) hochladen. Klicken Sie anschließend auf "Abschicken". Es folgt das eigentliche Formular. Hier werden verschiedene Daten zu Ihrer Publikation 
 (sog. Metadaten) abgefragt, die der Beschreibung in Katalogen und anderen bibliographischen Verzeichnissen 
-dienen. Abhängig vom Dokumenttyp sind einige der Felder Pflichtfelder und müssen also von Ihnen ausgefüllt werden. 
+dienen. Beschreiben Sie hier anhand der vorgegebenen Kategorien das Dokument, das Sie einbringen wollen.
+Abhängig vom Dokumenttyp sind einige der Felder <span class="required">Pflichtfelder</span> und müssen also von Ihnen ausgefüllt werden. 
+Machen Sie ansonsten so genaue Angaben wie möglich.
 Zum Beispiel werden erfasst:<br/>
 <ul>
 <li>Dokumentart (aus einer Liste auszuwählen)</li>

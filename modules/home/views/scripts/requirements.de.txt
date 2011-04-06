@@ -1,5 +1,0 @@
-Ihr Dokument muss ein wissenschaftliches Dokument sein, das mit einem gängigen Readerprogramm gelesen werden kann. Derzeit werden auf diesem Dokumentenserver die folgenden Formate akzeptiert:
-<ul>
-<li>PDF</li>
-<li>HTML</li>
-</ul>

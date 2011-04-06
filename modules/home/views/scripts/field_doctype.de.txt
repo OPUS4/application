@@ -1,1 +1,0 @@
-Dieses Element muss immer ausgefüllt werden! Es enthält die Art der Publikation wie z.B. Dissertation, Diplomarbeit, Preprint, Studienarbeit usw. Sie können die Dokumentart bei der Veröffentlichung aus einer Liste auswählen.
