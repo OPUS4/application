@@ -62,8 +62,6 @@ path.workspace.temp = APPLICATION_PATH "/tests/workspace/tmp"
 resources.locale.default = de
 
 ;SEARCH ENGINE SETTINGS
-; searchengine to be used: Lucene or Solr
-searchengine.engine = Solr
 searchengine.index.host =
 searchengine.index.port =
 searchengine.index.app =
