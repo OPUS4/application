@@ -1,5 +1,4 @@
-﻿<h4><b>Einfache und Erweiterte Suche</b></h4>
-<h5>Boolesche Operatoren <b>AND</b>, <b>OR</b>, <b>NOT</b></h5>
+﻿<h4>Boolesche Operatoren <b>AND</b>, <b>OR</b>, <b>NOT</b></h4>
 <p>Bei der <b>Einfachen Suche</b> werden mehrere Suchbegriffe automatisch mit <b>und</b> verknüpft. Für eine gezieltere Suche empfiehlt es sich mit 
 Hilfe der Booleschen Operatoren mehrere Suchbegriffe miteinander zu verknüpfen.</p>
 <blockquote><b>AND:</b> Alle eingegebenen Suchwörter müssen im Dokument vorkommen.</blockquote>
@@ -10,7 +9,7 @@ vorkommen. Diese Einschränkung bietet sich an, wenn man nach Begriffen sucht, d
 <b>Kiefer (medizinisch)</b> oder <b>Kiefer (botanisch)</b></blockquote>
 <p>Die Booleschehn Operatoren funktionieren auch für die <b>Erweiterte Suche</b>. Dort können sie benutzt werden, um verschiedene Suchbegriffe innerhalb
 eines Suchfelds miteinander zu kombinieren, zum Beispiel, um gezielt nach Dokumenten eines Autors für bestimmte Jahre zu suchen. 
-<h5><b>Platzhalter/ Wildcards</b></h5>
+<h4><b>Platzhalter/ Wildcards</b></h4>
 <p>Wenn Sie sich nicht sicher sind, wie ein Suchbegriff, beispielsweise ein Name, geschrieben wird, oder wenn Sie ihre Suche erweitern möchten, 
 können Sie <b>*</b> und <b>?</b> als Wildcard verwenden. Es ist nicht möglich, diese am Beginn eines Suchbegriffes zu verwenden.</p>
 <blockquote>Beispiel 1: "Biblio<b>*</b>" findet "Bibliothekar", "Bibliothek" oder auch "bibliothekarisch".</blockquote>

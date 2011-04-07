@@ -1,5 +1,4 @@
-<h4>Simple Search and Advanced Search</h4>
-<h5>Boolean Operators <b>AND</b>, <b>OR</b>, <b>NOT</b></h5>
+<h4>Boolean Operators <b>AND</b>, <b>OR</b>, <b>NOT</b></h4>
 <p>When you use the <b>Simple Search</b>, all terms are combined by <b>AND</b> automatically. For a more tightly focused search you may use the 
 Boolean Operators to combine different search terms.</p>
 <blockquote><b>AND:</b> The document has to contain all search terms.</blockquote>
@@ -9,7 +8,7 @@ different terms for the same meaning (Synonyms), for example <b>article</b> or <
 for terms that have different meanings in different contexts. For example <b>arms (biological)</b> or <b>arms (military)</b>.</blockquote>
 The Boolean Operators work for the <b>Advanced Search</b> as well. You may use them to combine different search terms within one search field, i.e. to
 search documents of an author only within specific years.
-<h5>Wildcards</h5>
+<h4>Wildcards</h4>
 <p>In the field 'Search:', you may use the symbols '*' and '?' as wildcards. Use them in place of a character or characters that are unknown or that 
 may differ. You cannot use them in front of a word or search string.</p>
 <blockquote>Example 1: <b>chemi*</b> finds <i>chemical</i> but also <i>chemistry</i> or <i>chemist</i>.</blockquote>
