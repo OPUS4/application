@@ -98,7 +98,7 @@ class Matheon_SelectReviewerControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200);
 
         $response = $this->getResponse();
-        echo $response->getBody();
+        //echo $response->getBody();
 
         $this->assertQueryContentContains('div#content', 'has been notified');
     }
