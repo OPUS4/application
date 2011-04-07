@@ -14,5 +14,5 @@ eines Suchfelds miteinander zu kombinieren, zum Beispiel, um gezielt nach Dokume
 können Sie <b>*</b> und <b>?</b> als Wildcard verwenden. Es ist nicht möglich, diese am Beginn eines Suchbegriffes zu verwenden.</p>
 <blockquote>Beispiel 1: "Biblio<b>*</b>" findet "Bibliothekar", "Bibliothek" oder auch "bibliothekarisch".</blockquote>
 <blockquote>Beispiel 2: "Ma<b>?</b>er" findet "Mayer", "Maier" oder auch "Mager" und "Maler".</blockquote>
-<p>Sie können einfache Anführungszeichen '' benutzen, um eine Phrasensuche durchzuführen.
+<p>Sie können einfache Anführungszeichen (') benutzen, um eine Phrasensuche durchzuführen.
 <p>Nach längerer Inaktivität werden Ihre Ergebnisse gelöscht.</p>
