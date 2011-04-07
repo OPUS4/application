@@ -1,11 +1,19 @@
-<ol>
-<li>Personennamen sind wie folgt aufgebaut: Nachname, Vorname</li>
-<li>Bei exakter Suche müssen die Suchbegriffe einschließlich Artikel etc. genau in der Reihenfolge eingegeben werden, in der sie auch in der Datenbank vorkommen.</li>
-<li>Bei Teilwortsuche können beliebige Begriffe oder Teile von Begriffen gesucht werden. Es kann jedoch nur ein Begriff pro Suchfeld eingegeben werden.</li>
-<li>Einzelne unbekannte Buchstaben innerhalb eines Begriffes können durch den Platzhalter _ (Unterstrich) ersetzt werden. Z.B. liefert die Anfrage Ma_er im Suchfeld Person u.a. die verschiedenen Schreibweisen Maier, Mayer usw.</li>
-<li>Zu einzelnen Suchfeldern existieren vorgegebene Begriffslisten. Sie sollten im Zweifelsfall vor einer Suche in den Feldern <a href="/fak_liste.php" target="_blank">Forschungsschwerpunkt</a>, <a href="/inst_liste.php" target="_blank">Institut</a> oder <a href="/dokart_liste.php" target="_blank">Dokumentart</a> konsultiert werden.</li>
-
-<li>Im Suchfeld Freitext durchsuchen Sie gleichzeitig Titel, Schlagwort und Abstract.</li>
-<li>Im Suchfeld Quelle können Sie nach Parallelveröffentlichungen (z.B. in einer Zeitschrift, einem Konferenzband etc.) von Datenbankabfrage-Dokumenten suchen.</li>
-</ol>
-Wenn Sie allgemeinere Suchtipps oder Recherchehinweise brauchen, dann schauen Sie doch mal in das Tutorial <a href="http://discus.tu-harburg.de" target="_blank">DISCUS</a>!
+﻿<h2><b>Einfache und Erweiterte Suche</b></h2>
+<h3>Boolesche Operatoren <b>AND</b>, <b>OR</b>, <b>NOT</b></h3>
+<p>Bei der <b>Einfachen Suche</b> werden mehrere Suchbegriffe automatisch mit <b>und</b> verknüpft. Für eine gezieltere Suche empfiehlt es sich mit 
+Hilfe der Booleschen Operatoren mehrere Suchbegriffe miteinander zu verknüpfen.</p>
+<blockquote><b>AND:</b> Alle eingegebenen Suchwörter müssen im Dokument vorkommen.</blockquote>
+<blockquote><b>OR:</b> Einer der eingegebenen Suchbegriffe muss im Dokument vorkommen. Diese Funktion erweitert den Suchbereich und bietet sich an, 
+wenn unterschiedliche Bezeichnungen zu einem Thema existieren (Synonyme), zum Beispiel <b>Orange</b> und <b>Apfelsine</b>.</blockquote>
+<blockquote><b>NOT:</b> Diese Funktion hat eine ausschließende Wirkung: In Dokumenten, in denen der eine Suchbegriff vorkommt, darf der andere nicht 
+vorkommen. Diese Einschränkung bietet sich an, wenn man nach Begriffen sucht, die unterschiedlich Bedeutungen haben können (Homonyme), zum Beispiel 
+<b>Kiefer (medizinisch)</b> oder <b>Kiefer (botanisch)</b></blockquote>
+<p>Die Booleschehn Operatoren funktionieren auch für die <b>Erweiterte Suche</b>. Dort können sie benutzt werden, um verschiedene Suchbegriffe innerhalb
+eines Suchfelds miteinander zu kombinieren, zum Beispiel, um gezielt nach Dokumenten eines Autors für bestimmte Jahre zu suchen. 
+<h3><b>Platzhalter/ Wildcards</b></h3>
+<p>Wenn Sie sich nicht sicher sind, wie ein Suchbegriff, beispielsweise ein Name, geschrieben wird, oder wenn Sie ihre Suche erweitern möchten, 
+können Sie <b>*</b> und <b>?</b> als Wildcard verwenden. Es ist nicht möglich, diese am Beginn eines Suchbegriffes zu verwenden.</p>
+<blockquote>Beispiel 1: "Biblio<b>*</b>" findet "Bibliothekar", "Bibliothek" oder auch "bibliothekarisch".</blockquote>
+<blockquote>Beispiel 2: "Ma<b>?</b>er" findet "Mayer", "Maier" oder auch "Mager" und "Maler".</blockquote>
+<p>Sie können einfache Anführungszeichen '' benutzen, um eine Phrasensuche durchzuführen.
+<p>Nach längerer Inaktivität werden Ihre Ergebnisse gelöscht.</p>

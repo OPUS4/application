@@ -1,9 +1,18 @@
-<ol>
-<li>Person`s names should be entered this way: Last name, First name</li>
-<li>It is possible to substitute single unknown characters of a term by _ (underline). For example: Ma_er in search field person provides different ways of spelling (e.g. Maier, Mayer etc.).</li>
-<li>Some search fields refer to authority files. Please consult them when in doubt before searching the fields <a href="/fak_liste.php" target="_blank">Faculty</a>, <a href="/inst_liste.php" target="_blank">Institute</a> or <a href="/dokart_liste.php" target="_blank">Document type</a>.</li>
-<li>The field <b>Free text</b> searches <i>title</i>, <i>keyword</i> and <i>abstract</i> at the same time.</li>
-<li></li>
-<li>Use the search field <b>Source</b> to search for parallel publications (e.g. in a journal, a conference issue etc.) of documents.</li>
-</ol>
-If you need more general tipps or hints for research you should have a look into the tutorial <a href="http://discus.tu-harburg.de" target="_blank">DISCUS</a>!
+<h2>Simple Search and Advanced Search</h2>
+<h3>Boolean Operators <b>AND</b>, <b>OR</b>, <b>NOT</b></h3>
+<p>When you use the <b>Simple Search</b>, all terms are combined by <b>AND</b> automatically. For a more tightly focused search you may use the 
+Boolean Operators to combine different search terms.</p>
+<blockquote><b>AND:</b> The document has to contain all search terms.</blockquote>
+<blockquote><b>OR:</b> The document has to contain one of the search terms. This function broadens your search and is recommended, when there are 
+different terms for the same meaning (Synonyms), for example <b>article</b> or <b>paper</b>.</blockquote>
+<blockquote><b>NOT:</b> This function works excluding: Documents, which contain the one term, may not contain the other. This might be useful to search 
+for terms that have different meanings in different contexts. For example <b>arms (biological)</b> or <b>arms (military)</b>.</blockquote>
+The Boolean Operators work for the <b>Advanced Search</b> as well. You may use them to combine different search terms within one search field, i.e. to
+search documents of an author only within specific years.
+<h3>Wildcards</h3>
+<p>In the field 'Search:', you may use the symbols '*' and '?' as wildcards. Use them in place of a character or characters that are unknown or that 
+may differ. You cannot use them in front of a word or search string.</p>
+<blockquote>Example 1: <b>chemi*</b> finds <i>chemical</i> but also <i>chemistry</i> or <i>chemist</i>.</blockquote>
+<blockquote>Example 2: <b>licen?e</b> finds <i>licence</i> and <i>license</i>.</blockquote>
+<p>You may use single quotation marks '' to search for phrases.</p>
+<p>After being inactive for a longer period your results will be erased.</p>
