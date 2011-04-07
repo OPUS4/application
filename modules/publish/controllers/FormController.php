@@ -58,7 +58,7 @@ class Publish_FormController extends Controller_Action {
     }
 
     public function uploadAction() {
-        $this->log->err('FormController: ' .var_export($this->getRequest()->getParams(), true));
+        //$this->log->err('FormController: ' .var_export($this->getRequest()->getParams(), true));
  
         $this->view->languageSelectorDisabled = true;
         $this->view->title = $this->view->translate('publish_controller_index');
