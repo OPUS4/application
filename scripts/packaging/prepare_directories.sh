@@ -110,11 +110,12 @@ chmod 777 workspace/{files,cache,tmp}
 chmod 777 workspace/tmp/resumption
 
 #
-# Make install/uninstall script executable
+# Make install/uninstall/update script executable
 #
 
 chmod +x install/install.sh
 chmod +x install/uninstall.sh
+chmod +x install/update.sh
 
 #
 # create VERSION.txt
