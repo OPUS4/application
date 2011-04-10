@@ -36,6 +36,7 @@ class Util_QueryBuilder {
     
     private $log;
     private $filterFields;
+    private $searchFields;
 
     public function __construct() {
         $this->log = Zend_Registry::get('Zend_Log');
@@ -51,6 +52,8 @@ class Util_QueryBuilder {
         foreach (explode(',', $filters) as $filterfield) {
             array_push($this->filterFields, trim($filterfield));
         }
+
+        $this->searchFields = array('author', 'title', 'referee', 'abstract', 'fulltext', 'year');
     }
 
     public function createQueryBuilderInputFromRequest($request) {
@@ -66,6 +69,8 @@ class Util_QueryBuilder {
             throw new Util_QueryBuilderException('Unsupported search type ' . $request->getParam('searchtype') . ' : unable to create query.');
         }
 
+        $this->validateParamsType($request);
+
         $input = array(
             'searchtype' => $request->getParam('searchtype'),
             'start' => $request->getParam('start', Opus_SolrSearch_Query::DEFAULT_START),
@@ -75,9 +80,9 @@ class Util_QueryBuilder {
             'query' => $request->getParam('query', '*:*')
         );
 
-        foreach (array('author', 'title', 'referee', 'abstract', 'fulltext', 'year') as $field) {
-            $input[$field] = $request->getParam($field, '');
-            $input[$field . 'modifier'] = $request->getParam($field . 'modifier', Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL);
+        foreach ($this->searchFields as $searchField) {
+            $input[$searchField] = $request->getParam($searchField, '');
+            $input[$searchField . 'modifier'] = $request->getParam($searchField . 'modifier', Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL);
         }
 
         foreach ($this->filterFields as $filterField) {
@@ -86,6 +91,35 @@ class Util_QueryBuilder {
         }
        
         return $input;
+    }
+
+    /**
+     * Checks if all given parameters are of type string. Otherwise, throws Util_QueryBuilderException.
+     *
+     * @throws Util_QueryBuilderException
+     */
+    private function validateParamsType($request) {
+        $paramNames = array(
+            'searchtype',
+            'start',
+            'rows',
+            'sortField',
+            'sortOrder',
+            'query',
+        );
+        foreach ($this->searchFields as $searchField) {
+            array_push($paramNames, $searchField, $searchField . 'modifier');
+        }
+        foreach ($this->filterFields as $filterField) {
+            array_push($paramNames, $filterField . 'fq');
+        }
+
+        foreach ($paramNames as $paramName) {
+            $paramValue = $request->getParam($paramName, null);
+            if (!is_null($paramValue) && !is_string($paramValue)) {
+                throw new Util_QueryBuilderException('Parameter ' . $paramName . ' is not of type string');
+            }
+        }
     }
 
     public function createSearchQuery($input) {

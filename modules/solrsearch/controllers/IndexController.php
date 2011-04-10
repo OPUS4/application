@@ -200,7 +200,7 @@ class Solrsearch_IndexController extends Controller_Action {
         foreach($facets as $key=>$facet) {
             $this->log->debug("found $key facet in search results");
 
-            $facetValue = $this->getRequest()->getParam($key.'fq','');
+            $facetValue = $this->getRequest()->getParam($key . 'fq','');
             if($facetValue !== '') {
                 $selectedFacets[$key] = $facetValue;
             }
@@ -221,7 +221,7 @@ class Solrsearch_IndexController extends Controller_Action {
             $queryBuilderInput = $queryBuilder->createQueryBuilderInputFromRequest($this->getRequest());
         }
         catch (Util_QueryBuilderException $e) {
-            $this->log->info(__CLASS__ . '.' . __METHOD__ . ' : ' . $e->getMessage());
+            $this->log->err(__METHOD__ . ' : ' . $e->getMessage());
             return $this->_redirectToAndExit('index');
         }
 
