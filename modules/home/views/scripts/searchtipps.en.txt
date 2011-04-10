@@ -13,5 +13,5 @@ search documents of an author only within specific years.
 may differ. You cannot use them in front of a word or search string.</p>
 <blockquote>Example 1: <b>chemi*</b> finds <i>chemical</i> but also <i>chemistry</i> or <i>chemist</i>.</blockquote>
 <blockquote>Example 2: <b>licen?e</b> finds <i>licence</i> and <i>license</i>.</blockquote>
-<p>You may use single quotation marks (') to search for phrases.</p>
+<p>You may use double quotes (") to search for phrases.</p>
 <p>After being inactive for a longer period your results will be erased.</p>
