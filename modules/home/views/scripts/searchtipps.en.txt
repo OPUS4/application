@@ -1,17 +1,19 @@
 <h4>Boolean Operators <b>AND</b>, <b>OR</b>, <b>NOT</b></h4>
 <p>When you use the <b>Simple Search</b>, all terms are combined by <b>AND</b> automatically. For a more tightly focused search you may use the 
 Boolean Operators to combine different search terms.</p>
-<blockquote><b>AND:</b> The document has to contain all search terms.</blockquote>
-<blockquote><b>OR:</b> The document has to contain one of the search terms. This function broadens your search and is recommended, when there are 
-different terms for the same meaning (Synonyms), for example <b>article</b> or <b>paper</b>.</blockquote>
-<blockquote><b>NOT:</b> This function works excluding: Documents, which contain the one term, may not contain the other. This might be useful to search 
-for terms that have different meanings in different contexts. For example <b>arms (biological)</b> or <b>arms (military)</b>.</blockquote>
-The Boolean Operators work for the <b>Advanced Search</b> as well. You may use them to combine different search terms within one search field, i.e. to
-search documents of an author only within specific years.
+<p><b>AND:</b> The document has to contain all search terms.</p>
+<p><b>OR:</b> The document has to contain one of the search terms. This function broadens your search and is recommended, when there are 
+different terms for the same meaning.</p>
+<blockquote>article <b>OR</b> paper</blockquote>
+<p><b>NOT:</b> This function works excluding and might be useful to reduce a large result list: Documents, which contain the one term, may not contain 
+the other.</p>
+<blockquote>article <b>NOT</b> paper</blockquote>
+The Boolean Operators work for the <b>Advanced Search</b> as well. You may use them to combine different search terms within one search field. For example,
+to search for documents of the author "Doe" in the years 2002 or 2003, use the query:
+<blockquote>Author: Doe <br> Year: 2002 <b>OR</b> 2003</blockquote>
 <h4>Wildcards</h4>
 <p>In the field 'Search:', you may use the symbols '*' and '?' as wildcards. Use them in place of a character or characters that are unknown or that 
 may differ. You cannot use them in front of a word or search string.</p>
 <blockquote>Example 1: <b>chemi*</b> finds <i>chemical</i> but also <i>chemistry</i> or <i>chemist</i>.</blockquote>
 <blockquote>Example 2: <b>licen?e</b> finds <i>licence</i> and <i>license</i>.</blockquote>
 <p>You may use double quotes (") to search for phrases.</p>
-<p>After being inactive for a longer period your results will be erased.</p>
