@@ -1,18 +1,20 @@
 ﻿<h4>Boolesche Operatoren <b>AND</b>, <b>OR</b>, <b>NOT</b></h4>
 <p>Bei der <b>Einfachen Suche</b> werden mehrere Suchbegriffe automatisch mit <b>und</b> verknüpft. Für eine gezieltere Suche empfiehlt es sich mit 
 Hilfe der Booleschen Operatoren mehrere Suchbegriffe miteinander zu verknüpfen.</p>
-<blockquote><b>AND:</b> Alle eingegebenen Suchwörter müssen im Dokument vorkommen.</blockquote>
-<blockquote><b>OR:</b> Einer der eingegebenen Suchbegriffe muss im Dokument vorkommen. Diese Funktion erweitert den Suchbereich und bietet sich an, 
-wenn unterschiedliche Bezeichnungen zu einem Thema existieren (Synonyme), zum Beispiel <b>Orange</b> und <b>Apfelsine</b>.</blockquote>
-<blockquote><b>NOT:</b> Diese Funktion hat eine ausschließende Wirkung: In Dokumenten, in denen der eine Suchbegriff vorkommt, darf der andere nicht 
-vorkommen. Diese Einschränkung bietet sich an, wenn man nach Begriffen sucht, die unterschiedlich Bedeutungen haben können (Homonyme), zum Beispiel 
-<b>Kiefer (medizinisch)</b> oder <b>Kiefer (botanisch)</b></blockquote>
-<p>Die Booleschehn Operatoren funktionieren auch für die <b>Erweiterte Suche</b>. Dort können sie benutzt werden, um verschiedene Suchbegriffe innerhalb
-eines Suchfelds miteinander zu kombinieren, zum Beispiel, um gezielt nach Dokumenten eines Autors für bestimmte Jahre zu suchen. 
+<p><b>AND:</b> Alle eingegebenen Suchwörter müssen im Dokument vorkommen.</p>
+<p><b>OR:</b> Nur einer der eingegebenen Suchbegriffe muss im Dokument vorkommen. Diese Funktion erweitert den Suchbereich und bietet sich an, 
+wenn unterschiedliche Bezeichnungen zu einem Thema existieren.</p>
+<blockquote>Orange <b>OR</b> Apfelsine</blockquote>
+<p><b>NOT:</b> Diese Funktion hat eine ausschließende Wirkung und kann benutzt werden, um die Treffermenge einzuschränken: In Dokumenten, in 
+denen der eine Suchbegriff vorkommt, darf der andere nicht vorkommen.</p>
+<blockquote>Orange <b>NOT</b> Apfelsine</blockquote>
+<p>Die Booleschen Operatoren funktionieren auch für die <b>Erweiterte Suche</b>. Dort können sie benutzt werden, um verschiedene Suchbegriffe innerhalb
+eines Suchfelds miteinander zu kombinieren. Zum Beispiel liefert die folgende Suchanfrage alle Dokumente des Autors "Mustermann" für die Jahre 2002 oder 2003: 
+<blockquote> Autor: Mustermann <br> Jahr: 2002 <b>OR</b> 2003
+</blockquote>
 <h4><b>Platzhalter/ Wildcards</b></h4>
 <p>Wenn Sie sich nicht sicher sind, wie ein Suchbegriff, beispielsweise ein Name, geschrieben wird, oder wenn Sie ihre Suche erweitern möchten, 
 können Sie <b>*</b> und <b>?</b> als Wildcard verwenden. Es ist nicht möglich, diese am Beginn eines Suchbegriffes zu verwenden.</p>
 <blockquote>Beispiel 1: "Biblio<b>*</b>" findet "Bibliothekar", "Bibliothek" oder auch "bibliothekarisch".</blockquote>
 <blockquote>Beispiel 2: "Ma<b>?</b>er" findet "Mayer", "Maier" oder auch "Mager" und "Maler".</blockquote>
 <p>Sie können doppelte Anführungszeichen (") benutzen, um eine Phrasensuche durchzuführen.</p>
-<p>Nach längerer Inaktivität werden Ihre Ergebnisse gelöscht.</p>
