@@ -49,17 +49,17 @@ class Publish_FormController extends Controller_Action {
     public $log;
     public $session;
     public $document;
+    public $helper;
 
     public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array()) {
         $this->log = Zend_Registry::get('Zend_Log');
         $this->session = new Zend_Session_Namespace('Publish');
+        $this->helper = new Publish_Model_FormHelper();
 
         parent::__construct($request, $response, $invokeArgs);
     }
 
-    public function uploadAction() {
-        //$this->log->err('FormController: ' .var_export($this->getRequest()->getParams(), true));
- 
+    public function uploadAction() {        
         $this->view->languageSelectorDisabled = true;
         $this->view->title = $this->view->translate('publish_controller_index');
 
@@ -67,6 +67,7 @@ class Publish_FormController extends Controller_Action {
 
             //initializing
             $indexForm = new Publish_Form_PublishingFirst($this->view);
+            $this->helper->setCurrentView($this->view);
             $data = $this->getRequest()->getPost();
 
             if (is_array($data) && count($data) === 0) {
@@ -89,13 +90,15 @@ class Publish_FormController extends Controller_Action {
                 $this->view->subtitle = $this->view->translate('publish_controller_index_sub');
                 $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
                 $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
-                $this->_setFirstFormViewVariables($indexForm);
+                $this->helper->setCurrentForm($indexForm);            
+                $this->helper->setFirstFormViewVariables();
             }
             else {
                 //file valid-> store file
                 $this->view->subtitle = $this->view->translate('publish_controller_index_anotherFile');
                 $this->view->form = $indexForm;
-                $this->_setFirstFormViewVariables($indexForm);
+                $this->helper->setCurrentForm($indexForm);
+                $this->helper->setFirstFormViewVariables();
                 $this->session->uploadSuccess = $this->_storeUploadedFiles();
 
                 if (array_key_exists('addAnotherFile', $data))
@@ -108,7 +111,8 @@ class Publish_FormController extends Controller_Action {
                 $this->view->subtitle = $this->view->translate('publish_controller_index_sub');
                 $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
                 $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
-                $this->_setFirstFormViewVariables($indexForm);
+                $this->helper->setCurrentForm($indexForm);
+                $this->helper->setFirstFormViewVariables();
                 return $this->renderScript('index/index.phtml');
             }
 
@@ -117,7 +121,7 @@ class Publish_FormController extends Controller_Action {
             $this->_storeSubmitterEnrichment();
 
             //call the appropriate template
-            return $this->_showTemplate();
+            return $this->helper->showTemplate($this->_helper);
         }
         return $this->_redirectTo('index', '', 'index');
     }
@@ -129,6 +133,7 @@ class Publish_FormController extends Controller_Action {
      */
     public function checkAction() {
         $this->view->languageSelectorDisabled = true;
+        $this->helper->setCurrentView($this->view);
         $reload = true;
 
         if ($this->getRequest()->isPost() === true) {
@@ -149,7 +154,8 @@ class Publish_FormController extends Controller_Action {
 
             if (array_key_exists('abortCollection', $postData)) {
                 $form = $form->populate($postData);
-                return $this->_showCheckPage($form);
+                $this->helper->setCurrentForm($form);
+                return $this->helper->showCheckPage();
             }
 
             if (!$form->send->isChecked() || array_key_exists('back', $postData)) {                
@@ -162,7 +168,8 @@ class Publish_FormController extends Controller_Action {
                 $this->_helper->viewRenderer($this->session->documentType);
 
                 //call method to add or delete buttons
-                return $this->_getExtendedForm($form, $postData, $reload);
+                $this->helper->setCurrentForm($form);
+                return $this->helper->getExtendedForm($postData, $reload);
             }
 
             // SEND was pressed => check the form
@@ -172,239 +179,18 @@ class Publish_FormController extends Controller_Action {
 
             if (!$form->isValid($this->getRequest()->getPost())) {
                 //Variables are invalid
-                $this->_setSecondFormViewVariables($form);
+                $this->helper->setCurrentForm($form);
+                $this->helper->setSecondFormViewVariables();
                 $this->view->form = $form;
                 $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
                 //error case, and redirect to form, show errors
                 return $this->render($this->session->documentType);
             }
-
-            return $this->_showCheckPage($form);
+            $this->helper->setCurrentForm($form);
+            return $this->helper->showCheckPage();
         }
 
         return $this->_redirectTo('upload');
-    }
-
-    private function _showTemplate() {
-        $templateName = $this->_helper->documentTypes->getTemplateName($this->session->documentType);
-        $this->_helper->viewRenderer($templateName);
-        $this->view->subtitle = $this->view->translate($this->session->documentType);
-        $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
-        $this->view->doctype = $this->session->documentType;
-
-        $publishForm = new Publish_Form_PublishingSecond(null);
-        $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check')) . '#current';
-        $publishForm->setAction($action_url);
-        $publishForm->setMethod('post');
-        $this->_setSecondFormViewVariables($publishForm);
-        $this->view->action_url = $action_url;
-        $this->view->form = $publishForm;
-    }
-
-    private function _showCheckPage($form) {
-
-        // Form variables all VALID
-        $this->log->debug("Variables are valid!");
-
-        $this->view->title = $this->view->translate('publish_controller_index');
-        $this->view->subtitle = $this->view->translate('publish_controller_check2');
-        $this->view->header = $this->view->translate('publish_controller_changes');
-
-        $depositForm = new Publish_Form_PublishingSecond($form->getValues());
-        $action_url = $this->view->url(array('controller' => 'deposit', 'action' => 'deposit'));
-        $depositForm->setAction($action_url);
-        $depositForm->setMethod('post');
-        $depositForm->populate($form->getValues());
-        $depositForm->prepareCheck();
-        $this->view->action_url = $action_url;
-        $this->view->form = $depositForm;
-    }
-
-    private function _setFirstFormViewVariables($form) {
-        $errors = $form->getMessages();
-
-        //first form single fields for view placeholders
-        foreach ($form->getElements() AS $currentElement => $value) {
-            //single field name (for calling with helper class)
-            $elementAttributes = $form->getElementAttributes($currentElement); //array
-            $this->view->$currentElement = $elementAttributes;
-        }
-
-        //Upload-Field
-        $displayGroup = $form->getDisplayGroup('documentUpload');
-        $this->session->numdocumentUpload = 2;
-        $groupName = $displayGroup->getName();
-        $groupFields = array(); //Fields
-        $groupHiddens = array(); //Hidden fields for adding and deleting fields
-        $groupButtons = array(); //Buttons
-
-        foreach ($displayGroup->getElements() AS $groupElement) {
-
-            $elementAttributes = $form->getElementAttributes($groupElement->getName()); //array
-            if ($groupElement->getType() === 'Zend_Form_Element_Submit') {
-                //buttons
-                $groupButtons[$elementAttributes["id"]] = $elementAttributes;
-            }
-            else if ($groupElement->getType() === 'Zend_Form_Element_Hidden') {
-                //hidden fields
-                $groupHiddens[$elementAttributes["id"]] = $elementAttributes;
-            }
-            else {
-                //normal fields
-                $groupFields[$elementAttributes["id"]] = $elementAttributes;
-            }
-        }
-        $group = array();
-        $group["Fields"] = $groupFields;
-        $group["Hiddens"] = $groupHiddens;
-        $group["Buttons"] = $groupButtons;
-        $group["Name"] = $groupName;
-        $this->view->$groupName = $group;
-        $this->view->MAX_FILE_SIZE = $this->session->maxFileSize;
-    }
-
-    /**
-     * method to set the different variables and arrays for the view and the templates
-     * @param <Zend_Form> $form
-     */
-    private function _setSecondFormViewVariables($form) {
-        $this->session->elementCount = 0;
-        $errors = $form->getMessages();
-
-        //group fields and single fields for view placeholders
-        foreach ($form->getElements() AS $currentElement => $value) {
-            //element names have to loose special strings for finding groups
-            $name = $this->_getRawElementName($currentElement);
-
-            if (strstr($name, 'Enrichment')) {
-                $name = str_replace('Enrichment', '', $name);
-            }
-
-            //build group name
-            $groupName = self::GROUP . $name;
-            $this->view->$name = $this->view->translate($name);
-
-            //get the display group for the current element and build the complete group
-            $displayGroup = $form->getDisplayGroup($groupName);
-            if (!is_null($displayGroup)) {
-                $group = $this->_buildViewDisplayGroup($displayGroup, $form);
-                $group["Name"] = $groupName;
-                $this->view->$groupName = $group;
-                $this->viewElementsCount++;
-            }
-
-            //single field name (for calling with helper class)
-            $elementAttributes = $form->getElementAttributes($currentElement); //array
-
-            if (strstr($currentElement, 'Enrichment')) {
-                $name = str_replace('Enrichment', '', $currentElement);
-                $this->view->$name = $elementAttributes;
-                $this->viewElementsCount++;
-            }
-            else {
-                $this->view->$currentElement = $elementAttributes;
-                $this->viewElementsCount++;
-            }
-
-            $label = $currentElement . self::LABEL;
-            $this->view->$label = $this->view->translate($form->getElement($currentElement)->getLabel());
-
-            //EXPERT VIEW:
-            //also support more difficult templates for "expert admins"
-            $expertField = $currentElement . self::EXPERT;
-            $this->view->$expertField = $form->getElement($currentElement)->getValue();
-            //error values for expert fields view
-            if (isset($errors[$currentElement])) {
-                foreach ($errors[$currentElement] as $error => $errorMessage) {
-                    $errorElement = $expertField . self::ERROR;
-                    $this->view->$errorElement = $errorMessage;
-                }
-            }
-        }
-    }
-
-    /**
-     * Method to find out the element name stemming.
-     * @param <String> $element element name
-     * @return <String> $name
-     */
-    private function _getRawElementName($element) {
-        $name = "";
-        //element is a person element
-        $pos = stripos($element, self::FIRST);
-        if ($pos !== false) {
-            $name = substr($element, 0, $pos);
-        }
-        else {
-            //element belongs to a group
-            $pos = stripos($element, self::COUNTER);
-            if ($pos != false) {
-                $name = substr($element, 0, $pos);
-            }
-            else {
-                //"normal" element name without changes
-                $name = $element;
-            }
-        }
-        return $name;
-    }
-
-    /**
-     * Method to build a disply group by a number of arrays for fields, hidden fields and buttons.
-     * @param <Zend_Form_DisplayGroup> $displayGroup
-     * @param <Publishing_Second> $form
-     * @return <Array> $group
-     */
-    private function _buildViewDisplayGroup($displayGroup, $form) {
-        $groupFields = array(); //Fields
-        $groupHiddens = array(); //Hidden fields for adding and deleting fields
-        $groupButtons = array(); //Buttons
-
-        foreach ($displayGroup->getElements() AS $groupElement) {
-
-            $elementAttributes = $form->getElementAttributes($groupElement->getName()); //array
-            if ($groupElement->getType() === 'Zend_Form_Element_Submit') {
-                //buttons
-                $groupButtons[$elementAttributes["id"]] = $elementAttributes;
-            }
-            else if ($groupElement->getType() === 'Zend_Form_Element_Hidden') {
-                //hidden fields
-                $groupHiddens[$elementAttributes["id"]] = $elementAttributes;
-            }
-            else {
-                //normal fields
-                $groupFields[$elementAttributes["id"]] = $elementAttributes;
-            }
-        }
-        $group[] = array();
-        $group["Fields"] = $groupFields;
-        $group["Hiddens"] = $groupHiddens;
-        $group["Buttons"] = $groupButtons;
-
-        return $group;
-    }
-
-    /**
-     * Method to check which button in the form was pressed.
-     * @param <Zend_Form> $form
-     * @return <String> name of button
-     */
-    private function _getPressedButton($form) {
-        $this->log->debug("Method getPressedButton begins...");
-        $pressedButton = "";
-        foreach ($form->getElements() AS $element) {
-            if ($element->getType() === 'Zend_Form_Element_Submit' && $element->isChecked()) {
-                $this->log->debug('Following Button Is Checked: ' . $element->getName());
-                $pressedButton = $element;
-                $pressedButtonName = $pressedButton->getName();
-                break;
-            }
-        }
-
-        if ($pressedButton == "")
-            throw new Publish_Model_OpusServerException("No pressed button found! Possibly the values of the buttons are not equal in the view and Publish class.");
-        else
-            return $pressedButtonName;
     }
 
     /**
@@ -513,63 +299,5 @@ class Publish_FormController extends Controller_Action {
             $this->document->store();
         }
     }
-
-    /**
-     * Methodgets the current form and finds out which fields has to be edded or deleted
-     * @param Publish_Form_PublishingSecond $form
-     * @return <View>
-     */
-    private function _getExtendedForm($form, $postData=null, $reload=true) {
-        $this->session->currentAnchor = "";
-        if ($reload === true) {
-            //find out which button was pressed
-            $pressedButtonName = $this->_getPressedButton($form);
-
-            if (substr($pressedButtonName, 0, 7) == "addMore") {
-                $fieldName = substr($pressedButtonName, 7);
-                $workflow = "add";
-            }
-            else if (substr($pressedButtonName, 0, 10) == "deleteMore") {
-                $fieldName = substr($pressedButtonName, 10);
-                $workflow = "delete";
-            }
-
-            $saveName = "";
-            //Enrichment-Fruppen haben Enrichment im Namen, die aber mit den currentAnchor kollidieren
-            $currentNumber = $this->session->additionalFields[$fieldName];
-            if (strstr($fieldName, 'Enrichment')) {
-                $saveName = $fieldName;
-                $fieldName = str_replace('Enrichment', '', $fieldName);
-            }
-
-            $this->session->currentAnchor = 'group' . $fieldName;
-            //erst Enrichment entfernen und dann unverändert weiter geben
-            //todo: schönere Lösung als diese blöden String-Sachen!!!
-            if ($saveName != "")
-                $fieldName = $saveName;
-
-            if ($workflow == "add") {
-                //show one more fields
-                $currentNumber = (int) $currentNumber + 1;
-            }
-            else {
-                if ($currentNumber > 1) {
-                    //remove one more field, only down to 0
-                    $currentNumber = (int) $currentNumber - 1;
-                }
-            }
-            //set the increased value for the pressed button and create a new form
-            $this->session->additionalFields[$fieldName] = $currentNumber;
-        }
-
-        $form = new Publish_Form_PublishingSecond($postData);
-        $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check')) . '#current';
-        $form->setAction($action_url);
-        $this->view->action_url = $action_url;
-        $this->_setSecondFormViewVariables($form);
-        $this->view->form = $form;
-
-        return $this->render($this->session->documentType);
-    }
-
+  
 }
