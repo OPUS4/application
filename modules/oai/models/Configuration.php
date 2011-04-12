@@ -53,7 +53,7 @@ class Oai_Model_Configuration {
      * Hold URL prefix for document frontdoor. OAI module will replace 
      * $docid with the document id.
      *
-     * E.g. "http://www.example.com/frontdoor?document=$docid"
+     * E.g. "http://www.example.com/frontdoor/index/index/docId/$docid"
      *
      * @var string
      */
@@ -63,7 +63,7 @@ class Oai_Model_Configuration {
      * Hold URL prefix for file download. OAI module will replace
      * $docid with the document id and $filename with a real filename.
      *
-     * E.g. "http://www.example.com/fileadmin/$docid/$filename"
+     * E.g. "http://www.example.com/files/$docid/$filename"
      *
      * @var string
      */
