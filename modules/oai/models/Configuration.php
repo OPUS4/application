@@ -37,8 +37,6 @@
  * Configuration model holding OAI module config options
  * gathered from Zend_Registry and application configuration.
  *
- * @category    Application
- * @package     Module_Oai
  */
 class Oai_Model_Configuration {
 
@@ -47,36 +45,14 @@ class Oai_Model_Configuration {
      *
      * @var string
      */
-    private $_ddb_contact_id = '';
-
-    /**
-     * Hold URL prefix for document frontdoor. OAI module will replace 
-     * $docid with the document id.
-     *
-     * E.g. "http://www.example.com/frontdoor/index/index/docId/$docid"
-     *
-     * @var string
-     */
-    private $_frontdoor_url = '';
-    
-    /**
-     * Hold URL prefix for file download. OAI module will replace
-     * $docid with the document id and $filename with a real filename.
-     *
-     * E.g. "http://www.example.com/files/$docid/$filename"
-     *
-     * @var string
-     */
-    private $_file_url = '';
-    
+    private $_ddb_contact_id = '';   
     
     /**
      * Hold path where to store temporary resumption token files.
      *
      * @var string
      */
-    private $_path_tokens = '';
-    
+    private $_path_tokens = '';    
     
     /**
      * Holds email address of repository contact person.
@@ -140,12 +116,6 @@ class Oai_Model_Configuration {
         if (true === isset($config->oai->ddb->contactid)) {
             $this->_ddb_contact_id = $config->oai->ddb->contactid;
         }
-        if (true === isset($config->oai->repository->frontdoorurl)) {
-            $this->_frontdoor_url = $config->oai->repository->frontdoorurl;
-        }
-        if (true === isset($config->oai->repository->fileurl)) {
-            $this->_file_url = $config->oai->repository->fileurl;
-        }
         if (true === isset($config->oai->repository->name)) {
             $this->_repo_name = $config->oai->repository->name;
         }
@@ -183,26 +153,7 @@ class Oai_Model_Configuration {
      */
     public function getDdbContactId() {
         return $this->_ddb_contact_id;
-    }
- 
-    /**
-     * Return configured frontdoor URL pattern.
-     *
-     * @return string Frontdoor URL pattern.
-     */
-    public function getFrontdoorUrl() {
-        return $this->_frontdoor_url;
-    }
-    
-    
-    /**
-     * Return configured file URL pattern.
-     *
-     * @return string File URL pattern.
-     */
-    public function getFileUrl() {
-        return $this->_file_url;
-    }
+    }    
     
     /**
      * Return temporary path for resumption tokens.
@@ -277,4 +228,3 @@ class Oai_Model_Configuration {
     }
 
 }
-

@@ -33,15 +33,9 @@
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @copyright   Copyright (c) 2009 - 2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: IndexController.php 5722 2010-06-04 13:12:35Z gerhardt $
+ * @version     $Id$
  */
 
-/**
- * Main entry point for this module.
- *
- * @category    Application
- * @package     Module_Oai
- */
 class Oai_IndexController extends Controller_Xml {
 
     /**
@@ -413,10 +407,8 @@ class Oai_IndexController extends Controller_Xml {
      * @return void
      */
     private function _addFrontdoorUrlAttribute(DOMNode $document, $docid) {
-        $url = $this->_configuration->getFrontdoorUrl();
-
-        $url = str_replace('$docid', $docid, $url);
-
+        $url = $this->view->serverUrl() . $this->getRequest()->getBaseUrl() . '/frontdoor/index/index/docId/' . $docid;
+        
         $owner = $document->ownerDocument;
         $attr = $owner->createAttribute('frontdoorurl');
         $attr->appendChild($owner->createTextNode($url));
@@ -432,9 +424,7 @@ class Oai_IndexController extends Controller_Xml {
      * @return void
      */  
     private function _addFileUrlAttribute(DOMNode $file, $docid, $filename) {
-        $url = $this->_configuration->getFileUrl();
-        $url = str_replace('$docid', $docid, $url);
-        $url = str_replace('$filename', $filename, $url);
+        $url = $this->view->serverUrl() . $this->getRequest()->getBaseUrl() . '/files/' . $docid . '/' . $filename;
 
         $owner = $file->ownerDocument;
         $attr = $owner->createAttribute('url');
