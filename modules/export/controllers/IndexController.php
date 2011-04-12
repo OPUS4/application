@@ -43,7 +43,12 @@ class Export_IndexController extends Controller_Xml {
     }    
 
     public function indexAction() {
-        if ($this->getRequest()->getParam('export') !== 'xml') {
+        $exportParam = $this->getRequest()->getParam('export');
+        if (is_null($exportParam)) {
+            throw new Application_Exception('export format is not specified');
+        }
+
+        if ($exportParam !== 'xml') {
             throw new Application_Exception('export format is not supported');
         }
 
