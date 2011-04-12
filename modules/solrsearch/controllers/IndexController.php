@@ -75,13 +75,21 @@ class Solrsearch_IndexController extends Controller_Action {
     }
 
     /**
-     * legacy OPUS 4.0 action: externalized in SolrSearch_DispatchController.indexAction
+     * legacy OPUS 4.0.x action: externalized in SolrSearch_DispatchController.indexAction
      */
     public function searchdispatchAction() {
         $this->_forward('index', 'dispatch');
     }
 
     public function searchAction() {
+        if (!is_null($this->getRequest()->getParam('export'))) {
+            $params = $this->getRequest()->getParams();
+            // export module ignores pagination parameters
+            unset($params['rows']);
+            unset($params['start']);
+            return $this->_redirectToAndExit('index', null, 'index', 'export', $params);
+        }
+
         $this->query = $this->buildQuery();
         $this->performSearch();
         $this->setViewValues();
@@ -96,7 +104,7 @@ class Solrsearch_IndexController extends Controller_Action {
             $this->render('results');
         }
     }
-
+    
     private function setLinkRelCanonical() {
         $query = $this->getRequest()->getParams();
         $query['rows'] = 10;
