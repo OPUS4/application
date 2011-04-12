@@ -37,8 +37,13 @@ class Util_QueryBuilder {
     private $log;
     private $filterFields;
     private $searchFields;
+    private $export = false;
 
-    public function __construct() {
+    /**
+     *
+     * @param boolean $export
+     */
+    public function __construct($export = false) {
         $this->log = Zend_Registry::get('Zend_Log');
 
         $this->filterFields = array();
@@ -54,8 +59,14 @@ class Util_QueryBuilder {
         }
 
         $this->searchFields = array('author', 'title', 'referee', 'abstract', 'fulltext', 'year');
+        $this->export = $export;
     }
 
+    /**
+     *
+     * @param $request
+     * @return array
+     */
     public function createQueryBuilderInputFromRequest($request) {
         if (is_null($request->getParams())) {
             throw new Util_QueryBuilderException('Unable to read request data. Search cannot be performed.');
@@ -79,6 +90,13 @@ class Util_QueryBuilder {
             'sortOrder' => $request->getParam('sortorder', Opus_SolrSearch_Query::DEFAULT_SORTORDER),
             'query' => $request->getParam('query', '*:*')
         );
+
+        if ($this->export) {
+            // java.lang.Integer.MAX_VALUE
+            $MAX_ROWS = 2147483647;
+            $input['rows'] = $MAX_ROWS;
+            $input['start'] = 0;
+        }
 
         foreach ($this->searchFields as $searchField) {
             $input[$searchField] = $request->getParam($searchField, '');
@@ -122,6 +140,11 @@ class Util_QueryBuilder {
         }
     }
 
+    /**
+     *
+     * @param array $input
+     * @return Opus_SolrSearch_Query
+     */
     public function createSearchQuery($input) {
         if ($input['searchtype'] === Util_Searchtypes::SIMPLE_SEARCH) {
             return $this->createSimpleSearchQuery($input);
@@ -151,6 +174,10 @@ class Util_QueryBuilder {
 
         $query->setCatchAll($input['query']);
         $this->addFiltersToQuery($query, $input);
+
+        if ($this->export) {
+            $query->setReturnIdsOnly(true);
+        }
         
         $this->log->debug("Query $query complete");
         return $query;
@@ -180,6 +207,10 @@ class Util_QueryBuilder {
             $query->setField('author', str_replace(array(',', ';'), '', $author), $authormodifier);
         }
 
+        if ($this->export) {
+            $query->setReturnIdsOnly(true);
+        }
+
         $this->log->debug("Query $query complete");
         return $query;
     }
@@ -189,6 +220,10 @@ class Util_QueryBuilder {
         
         $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::LATEST_DOCS);
         $query->setRows($input['rows']);
+
+        if ($this->export) {
+            $query->setReturnIdsOnly(true);
+        }
 
         $this->log->debug("Query $query complete");
         return $query;
@@ -207,6 +242,10 @@ class Util_QueryBuilder {
         $query->addFilterQuery('collection_ids', $input['collectionId']);
         $this->addFiltersToQuery($query, $input);
 
+        if ($this->export) {
+            $query->setReturnIdsOnly(true);
+        }
+
         $this->log->debug("Query $query complete");
         return $query;
     }
@@ -221,6 +260,10 @@ class Util_QueryBuilder {
         $query->setSortOrder($input['sortOrder']);
         
         $this->addFiltersToQuery($query, $input);
+
+        if ($this->export) {
+            $query->setReturnIdsOnly(true);
+        }
 
         $this->log->debug("Query $query complete");
         return $query;
