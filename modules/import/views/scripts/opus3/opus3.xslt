@@ -225,7 +225,6 @@
             
             <xsl:call-template name="AddSubmitter">
                 <xsl:with-param name="verification"><xsl:value-of select="field[@name='verification']" /></xsl:with-param>
-                <xsl:with-param name="author_id"><xsl:value-of select="/mysqldump/database/table_data[@name='opus_autorid']/row[field[@name='source_opus']=$OriginalID]/field[@name='autor_ID']" /></xsl:with-param>
             </xsl:call-template>
                       
             <xsl:apply-templates select="field" />
@@ -256,7 +255,6 @@
 
     <xsl:template name="AddSubmitter">
         <xsl:param name="verification" required="no" />
-        <xsl:param name="author_id" required="no" />
         <xsl:for-each select="str:split($verification,';')">
             <xsl:variable name="verification_tmp"><xsl:value-of select="normalize-space(.)" /></xsl:variable>
             <xsl:for-each select="str:split($verification_tmp,',')">
@@ -265,11 +263,6 @@
                     <xsl:attribute name="LastName">Importer</xsl:attribute>
                     <xsl:if test="string-length(normalize-space(.))>0">
                         <xsl:attribute name="Email"><xsl:value-of select="normalize-space(.)" /></xsl:attribute>
-                    </xsl:if>
-                    <xsl:if test="string-length($author_id)>0">
-                        <xsl:element name="IdentifierLocal">
-                            <xsl:attribute name="Value"><xsl:value-of select="$author_id" /></xsl:attribute>
-                        </xsl:element>
                     </xsl:if>
                 </xsl:element>
             </xsl:for-each>
