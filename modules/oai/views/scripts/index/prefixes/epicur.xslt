@@ -39,9 +39,6 @@
 /**
  * Transforms the xml representation of an Opus_Model_Document to epicur
  * xml as required by the OAI-PMH protocol.
- *
- * @category    Application
- * @package     Module_Oai
  */
 -->
 <xsl:stylesheet version="1.0"
