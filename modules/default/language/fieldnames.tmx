@@ -2290,60 +2290,6 @@
       </tuv>
     </tu>
     
-	<tu tuid="IdentifierPnd">
-      <tuv xml:lang="en">
-        <seg>PND</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>PND</seg>
-      </tuv>
-    </tu>
-	
-	<tu tuid="add_IdentifierPnd">
-      <tuv xml:lang="en">
-        <seg>Add PND</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>PND hinzufügen</seg>
-      </tuv>
-    </tu>
-	
-	<tu tuid="remove_IdentifierPnd">
-      <tuv xml:lang="en">
-        <seg>Remove PND</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>PND entfernen</seg>
-      </tuv>
-    </tu>
-	
-	<tu tuid="IdentifierLocal">
-      <tuv xml:lang="en">
-        <seg>Local Identifier</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>PND</seg>
-      </tuv>
-    </tu>
-	
-	<tu tuid="add_IdentifierLocal">
-      <tuv xml:lang="en">
-        <seg>Add local Identifier</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Lokalen Identifier hinzufügen</seg>
-      </tuv>
-    </tu>
-	
-	<tu tuid="remove_IdentifierLocal">
-      <tuv xml:lang="en">
-        <seg>Remove local Identifier</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Lokalen Identifier entfernen</seg>
-      </tuv>
-    </tu>
-	
     <tu tuid="Value">
       <tuv xml:lang="en">
         <seg>Value</seg>
