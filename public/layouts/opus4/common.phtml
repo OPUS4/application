@@ -32,14 +32,15 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+
 $config = Zend_Registry::get('Zend_Config');
 
 $this->headMeta()
-        ->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8')
-        ->appendHttpEquiv('Content-Language', 'de-DE');
+    ->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8')
+    ->appendHttpEquiv('Content-Language', 'de-DE');
 
 $this->headTitle('OPUS 4')
-        ->setSeparator(' | ');
+    ->setSeparator(' | ');
 
 if (isset($config->instance_name)) {
     $this->headTitle($config->instance_name);
@@ -50,21 +51,21 @@ if (isset($this->title)) {
 }
 
 $this->headLink()
-        ->appendStylesheet($this->layoutPath() . '/css/opus.css')
-        ->appendStylesheet($this->layoutPath() . '/css/admin.css')
-        ->headLink(array('rel' => 'shortcut icon', 'href' => $this->layoutPath() . '/img/logo/favicon.ico'));
+    ->appendStylesheet($this->layoutPath() . '/css/opus.css')
+    ->appendStylesheet($this->layoutPath() . '/css/admin.css')
+    ->headLink(array('rel' => 'shortcut icon', 'href' => $this->layoutPath() . '/img/logo/favicon.ico'));
 
-/*
-  uncomment the following line if you want to enable your own layout changes
-  $this->appendStylesheet($this->layoutPath() . '/css/custom.css');
- */
+/* 
+uncomment the following line if you want to enable your own layout changes
+$this->appendStylesheet($this->layoutPath() . '/css/custom.css');
+*/
 
 $this->container = Zend_Registry::get('Opus_Navigation');
 
 if ($this->jQueryEnabled()) {
     $this->headScript()
-            ->prependFile($this->baseUrl() . '/' . $config->javascript->jquery->path)
-            ->appendFile($this->layoutPath() . '/js/searchutil.js');
+         ->prependFile($this->baseUrl() . '/' . $config->javascript->jquery->path)
+         ->appendFile($this->layoutPath() . '/js/searchutil.js');
 }
 
 $languageSelectors = $this->languageSelector();
@@ -95,119 +96,116 @@ $languageSelectors = $this->languageSelector();
                 <div class="wrapper">
                     <?php if (!is_null($languageSelectors)) : ?>
                         <ul id="lang-switch" class="nav" title="Choose your language">
-                        <?php foreach ($languageSelectors as $i => $languageSelector) : ?>
-                            <li class="<?= ($i === 0) ? 'first' : '' ?>"><a href="<?= $languageSelector['url'] ?>" title="<?= $languageSelector['name'] ?>"><?= $languageSelector['name'] ?></a></li>
-                        <?php endforeach ?>
+                            <?php foreach ($languageSelectors as $i => $languageSelector) : ?>
+                                <li class="<?= ($i === 0) ? 'first' : '' ?>"><a href="<?= $languageSelector['url'] ?>" title="<?= $languageSelector['name'] ?>"><?= $languageSelector['name'] ?></a></li>
+                            <?php endforeach ?>
                         </ul>
                     <?php endif ?>
-                            <ul id="login-bar" class="nav"><?= $this->loginBar() ?></ul>
-                        </div>
-                    </div>
+                    <ul id="login-bar" class="nav"><?= $this->loginBar() ?></ul>
+                </div>
+            </div>
 
-                    <div id="header">
-                        <div class="wrapper">
-                            <h1 id="logo">
-                                <a href="<?= $this->url(array('module' => 'home', 'controller' => 'index', 'action' => 'index'), null, true) ?>"><img src="<?= $this->layoutPath() ?>/img/logo/logo.gif" alt="OPUS" title="Home" width="185" height="89" /></a>
-                            </h1>
-                            <ul id="primary-nav" class="nav">
-                        <?php foreach ($this->container as $page) : ?>
+            <div id="header">
+                <div class="wrapper">
+                    <h1 id="logo">
+                        <a href="<?= $this->url(array('module' => 'home', 'controller' => 'index', 'action' => 'index'), null, true) ?>"><img src="<?= $this->layoutPath() ?>/img/logo/logo.gif" alt="OPUS" title="Home" width="185" height="89" /></a>
+                    </h1>
+                    <ul id="primary-nav" class="nav">
+                    <?php foreach ($this->container as $page) : ?>
                         <?php $pageIsActive = $page->isActive(false); ?>
-                                <li id="<?= $page->getId() ?>" class="<?= ($pageIsActive ? 'active ' : '') . $page->getClass() ?>">
-                                    <a href="<?= $page->getHref() ?>" title="<?= $this->translate($page->getTitle()) ?>">
-                                <?php if ($pageIsActive) : ?>
-                                    <em>
-                                    <?php endif ?>
-                                    <span><?= $this->translate($page->getLabel()) ?></span>
-                                    <?php if ($pageIsActive) : ?>
-                                    </em>
+                        <li id="<?= $page->getId() ?>" class="<?= ($pageIsActive ? 'active ' : '').$page->getClass()?>">
+                            <a href="<?= $page->getHref() ?>" title="<?= $this->translate($page->getTitle()) ?>">
+                                <?php if($pageIsActive) : ?>
+                                <em>
                                 <?php endif ?>
-                                    </a>
-                                </li>
-                        <?php endforeach ?>
-                                    </ul>
-                                </div>
-                            </div>
-
-                            <div id="content" class="opus <?= $this->moduleName ?><?php if ($this->moduleName === 'publish') : ?>"><?php else : ?><?= ($this->controllerName === 'index' ? '' : '_' . $this->controllerName) ?><?= ($this->actionName === 'index' ? '' : '_' . $this->actionName) ?><?= ($this->searchType === 'collection' || $this->searchType === 'latest' ? ' ' . $this->searchType : '') ?>">
-
-
-                <?php endif; ?>
-                <?php if (!is_null($this->flashMessenger)) : ?>
-                                                    <div class="messages">
-                    <?php foreach ($this->flashMessenger->getMessages() as $message) : ?>
-                                                        <div class="<?= $message['level'] ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
+                                    <span><?= $this->translate($page->getLabel()) ?></span>
+                                <?php if($pageIsActive) : ?>
+                                </em>
+                                <?php endif ?>
+                            </a>
+                        </li>
                     <?php endforeach ?>
-                                                    </div>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="content" class="opus <?= $this->moduleName ?><?php if ($this->moduleName === 'publish') : ?>"><?php else : ?><?= ($this->controllerName === 'index' ? '' : '_'.$this->controllerName)?><?= ($this->actionName === 'index' ? '' : '_'.$this->actionName)?><?= ($this->searchType === 'collection' || $this->searchType === 'latest' ? ' '.$this->searchType : '') ?>"><?php  endif; ?>
+                <?php if (!is_null($this->flashMessenger)) : ?>
+                <div class="messages">
+                    <?php foreach ($this->flashMessenger->getMessages() as $message) : ?>
+                        <div class="<?= $message['level'] ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
+                    <?php endforeach ?>
+                </div>
                 <?php endif ?>
 
-                                                        <div class="wrapper">
+                <div class="wrapper">
                     <?= $this->layout()->content ?>
-                                                    </div>
-                                                </div>
+                </div>
+            </div>
 
-                                                <div id="page-footer">
-                                                    <div class="wrapper">
-                                                        <p id="logo-wrapper"><a href="http://www.kobv.de/opus4/" title="Opus4 Website"><img src="<?= $this->layoutPath() ?>/img/logo/logo_small.gif" alt="OPUS4 Logo" title="" width="69" height="29" /></a></p>
-                                                        <ul id="secondary-nav" class="nav">
-                                                            <li class="first"><a href="<?= $this->url(array('module' => 'home', 'controller' => 'index', 'action' => 'contact'), null, true) ?>"><?= $this->translate('home_index_contact_actionname'); ?></a></li>
-                                                            <li class="first"><a href="<?= $this->url(array('module' => 'home', 'controller' => 'index', 'action' => 'imprint'), null, true) ?>"><?= $this->translate('home_index_imprint_actionname') ?></a></li>
-                                                            <li class="last"><a href="<?= $this->url(array('module' => 'crawlers', 'controller' => 'sitelinks'), null, true) ?>">Sitelinks</a></li>
-                                                        </ul>
-                                                        <p id="copyright">&copy; <abbr xml:lang="de" title="Kooperativer Bibliotheksverbund Berlin-Brandenburg" lang="de">KOBV</abbr> 2010-2011</p>
-                                                    </div>
-                                                </div>
-                                            </div>
+            <div id="page-footer">
+                <div class="wrapper">
+                    <p id="logo-wrapper"><a href="http://www.kobv.de/opus4/" title="Opus4 Website"><img src="<?= $this->layoutPath() ?>/img/logo/logo_small.gif" alt="OPUS4 Logo" title="" width="69" height="29" /></a></p>
+                    <ul id="secondary-nav" class="nav">
+                        <li class="first"><a href="<?= $this->url(array('module' => 'home', 'controller' => 'index', 'action' => 'contact'), null, true) ?>"><?= $this->translate('home_index_contact_actionname'); ?></a></li>
+                        <li class="first"><a href="<?= $this->url(array('module' => 'home', 'controller' => 'index', 'action' => 'imprint'), null, true) ?>"><?= $this->translate('home_index_imprint_actionname') ?></a></li>
+                        <li class="last"><a href="<?= $this->url(array('module' => 'crawlers', 'controller' => 'sitelinks'), null, true) ?>">Sitelinks</a></li>
+                    </ul>
+                    <p id="copyright">&copy; <abbr xml:lang="de" title="Kooperativer Bibliotheksverbund Berlin-Brandenburg" lang="de">KOBV</abbr> 2010-2011</p>
+                </div>
+            </div>
+        </div>
 
-                                            <div class="debug revision">
-                                                <hr/>
-                                                <div class="wrapper">
-                                                    <b>$Rev$</b>
-                                                </div>
-                                            </div>
+        <div class="debug revision">
+            <hr/>
+            <div class="wrapper">
+                <?php /* do not edit: revision number gets updated automatically */ ?>
+                <b>$Rev$</b>
+            </div>
+        </div>
 
         <?php
-                                                        $dbprofiler = Zend_Registry::get('db_adapter')->getProfiler();
-                                                        $profiler_show_queries = (bool) $config->db->params->showqueries;
-                                                        $profiler_max_queries = (int) $config->db->params->maxqueries;
-                                                        if ($dbprofiler->getEnabled() === true) :
+            $dbprofiler = Zend_Registry::get('db_adapter')->getProfiler();
+            $profiler_show_queries = (bool) $config->db->params->showqueries;
+            $profiler_max_queries = (int) $config->db->params->maxqueries;
+            if ($dbprofiler->getEnabled() === true) :
         ?>
-                                                            <div class="debug dbprofiler">
-                                                                <div class="wrapper">
-                                                                    <h2>Profiling information (execution time <?= microtime(true) - $GLOBALS['start_mtime'] ?>)</h2>
-                                                                    <b>Total number of queries: </b><?= $dbprofiler->getTotalNumQueries() ?><br />
-                                                                    <b>Total query time (s): </b><?= $dbprofiler->getTotalElapsedSecs() ?><br />
-                                                                    <b>Current memory consumption: </b><?= memory_get_usage(true) ?><br />
-                                                                    <b>Peak memory consumption: </b><?= memory_get_peak_usage(true) ?><br />
+        <div class="debug dbprofiler">
+            <div class="wrapper">
+                <h2>Profiling information (execution time <?= microtime(true) - $GLOBALS['start_mtime'] ?>)</h2>
+                <b>Total number of queries: </b><?= $dbprofiler->getTotalNumQueries() ?><br />
+                <b>Total query time (s): </b><?= $dbprofiler->getTotalElapsedSecs() ?><br />
+                <b>Current memory consumption: </b><?= memory_get_usage(true) ?><br />
+                <b>Peak memory consumption: </b><?= memory_get_peak_usage(true) ?><br />
                 <?php if ($profiler_show_queries === true and $profiler_query_profiles = $dbprofiler->getQueryProfiles()) : ?>
-                                                                <b>Queries:</b><br />
-                                                                <ul>
-                    <?php for ($i = 1; ($i < $profiler_max_queries) and ($i < count($profiler_query_profiles)); $i++) : ?>
-                                                                    <li><pre><?= $profiler_query_profiles[$i]->getQuery() ?></pre></li>
+                    <b>Queries:</b><br />
+                    <ul>
+                    <?php for ($i=1; ($i < $profiler_max_queries) and ($i < count($profiler_query_profiles)); $i++) : ?>
+                        <li><pre><?= $profiler_query_profiles[$i]->getQuery() ?></pre></li>
                     <?php endfor ?>
-                    <?php
-                                                                    if ($i < count($profiler_query_profiles)) {
-                                                                        echo "<li>...</li>";
-                                                                    }
-                    ?>
-                                                                    </ul>
-<?php endif ?>
-                                                                </div>
-                                                            </div>
+                    <?php if ($i < count($profiler_query_profiles)) { echo "<li>...</li>"; } ?>
+                    </ul>
+                <?php endif ?>
+            </div>
+        </div>
         <?php endif ?>
 
         <?php
-                                                                    $identity = Zend_Auth::getInstance()->getIdentity();
-                                                                    if (isset($config->debugSession) and ((bool) $config->debugSession === true) and !empty($identity)) :
+            $identity = Zend_Auth::getInstance()->getIdentity();
+            if (isset($config->debugSession) and ((bool)$config->debugSession === true) and !empty($identity)) :
         ?>
-                                                                        <div class="debug session">
-                                                                            <div class="wrapper">
-                                                                                <h2>Session</h2>
-                                                                                <pre>
+        <div class="debug session">
+            <div class="wrapper">
+                <h2>Session</h2>
+
+<?php /* do not apply indentation here! */ ?>
+<pre>
 <?= htmlspecialchars(Zend_Debug::dump($_SESSION, 'Session Data', false)); ?>
-                                                                    </pre>
-                                                                </div>
-                                                            </div>
-<?php endif ?>
+</pre>
+
+            </div>
+        </div>
+        <?php endif ?>
 
     </body>
 </html>
