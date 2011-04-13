@@ -20,5 +20,5 @@ INSERT INTO access_modules (role_id, module_name, controller_name) VALUES
 (2, 'default', 'auth'),
 (2, 'solrsearch', '*'),
 (2, 'publish', '*'),
+(2, 'export', 'rss'),
 (4, 'review', '*');
-
