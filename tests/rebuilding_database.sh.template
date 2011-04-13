@@ -100,7 +100,7 @@ fi
 TEMP_DIR=$(mktemp -d $workspace_tmp_dir/old-XXXXXXX)
 mkdir -v $TEMP_DIR/{files,log}
 rsync -rv --exclude=.svn --exclude=error/ $workspace_files_dir/* $TEMP_DIR/files
-rsync -rv --exclude=.svn $workspace_log_dir/* $TEMP_DIR/logs
+rsync -rv --exclude=.svn $workspace_log_dir/* $TEMP_DIR/log
 rm -rf {$workspace_files_dir,$workspace_log_dir}
 cd $workspace_dir
 svn up
