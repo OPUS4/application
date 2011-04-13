@@ -33,6 +33,14 @@
  */
 ?>
 
+<?php
+    $this->headLink(array(
+        'rel' => 'alternate',
+        'type' => 'application/rss+xml',
+        'href' => $this->serverUrl() . $this->baseUrl() . '/export/rss/index'
+    ));
+?>
+
 <form action="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search'), null, true) ?>" method="get">
     <fieldset>
         <legend><?= $this->translate('latest_options') ?></legend>
