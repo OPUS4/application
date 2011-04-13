@@ -43,7 +43,7 @@
  * TODO could the array be generated once for each language?
  * TODO could this be made more readable (dynamic list, methods, XML)
  */
-class Admin_SecurityController extends Zend_Controller_Action {
+class Admin_SecurityController extends Controller_Action {
 
     /**
      * Creates array with items for administration menu.

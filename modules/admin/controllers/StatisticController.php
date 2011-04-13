@@ -40,7 +40,7 @@
  * @package     Module_Admin
  */
 
-class Admin_StatisticController extends Zend_Controller_Action {
+class Admin_StatisticController extends Controller_Action {
 
     /**
      * TODO

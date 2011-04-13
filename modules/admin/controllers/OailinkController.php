@@ -38,7 +38,7 @@
  * @category    Application
  * @package     Module_Admin
  */
-class Admin_OailinkController extends Zend_Controller_Action {
+class Admin_OailinkController extends Controller_Action {
 
     /**
      * Shows link to oai module.
