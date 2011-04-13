@@ -14,7 +14,7 @@ dbname=
 # path to mysql binary
 mysql_bin=/usr/bin/mysql
 # path to schema file
-schema_file=schema/opus400.sql
+schema_file=schema/opus410.sql
 # path to different sql locations
 master_dir=masterdata/
 
@@ -42,7 +42,7 @@ ${mysql} ${dbname} < ${schema_file}
 
 #Import master data
 if [ -d ${master_dir} ] ; then
-    for i in `find ${master_dir} -name *.sql \( -type f -o -type l \) | sort`; do
+    for i in `find ${master_dir} -name '*.sql' \( -type f -o -type l \) | sort`; do
         echo "Inserting file '${i}'"
         ${mysql} ${dbname} < "${i}"
     done

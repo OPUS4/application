@@ -26,7 +26,8 @@
  *
  * @category    Tests
  * @author      Ralf Claussnitzer <ralf.claussnitzer@slub-dresden.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @author      Thoralf Klein <thoralf.klein@zib.de>
+ * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -46,11 +47,6 @@ class TestHelper extends Application_Bootstrap {
      * @return void
      * @see library/Opus/Bootstrap/Opus_Bootstrap_Base#_setupBackend()
      */
-//    protected function _initBackend() {
-//        $this->bootstrap('Logging');
-//        $this->_setupTemp();
-//        $this->_setupDatabase();
-//    }
 
     /**
      * Set up database connection. If stored schema version information
@@ -65,7 +61,7 @@ class TestHelper extends Application_Bootstrap {
         $log = Zend_Registry::get('Zend_Log');
         
         // Determine current schema revision from opus400.sql
-        $sqlFile = dirname(dirname(__FILE__)) . '/db/schema/opus400.sql';
+        $sqlFile = dirname(dirname(__FILE__)) . '/db/schema/opus410.sql';
         if (false === is_file($sqlFile)) {
             $log->warn('Schema file ' . $sqlFile . ' not found.');
             return;
@@ -140,4 +136,3 @@ class TestHelper extends Application_Bootstrap {
     }
 
 }
-?>

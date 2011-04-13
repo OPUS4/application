@@ -40,7 +40,7 @@ dbname=opus400
 # path to mysql binary
 mysql_bin=/usr/bin/mysql
 # path to schema file
-schema_file=$script_dir/../db/schema/opus400.sql
+schema_file=$script_dir/../db/schema/opus410.sql
 # path to different sql locations
 master_dir=$script_dir/../db/masterdata/
 test_dir=$script_dir/sql/
@@ -82,7 +82,7 @@ ${mysql} ${dbname} < ${schema_file}
 
 #Import master data
 if [ -d ${master_dir} ] ; then
-    for i in `find ${master_dir} -name *.sql \( -type f -o -type l \) | sort`; do
+    for i in `find ${master_dir} -name '*.sql' \( -type f -o -type l \) | sort`; do
         echo "Inserting file '${i}'"
         ${mysql} ${dbname} < "${i}"
     done
@@ -90,7 +90,7 @@ fi
 
 #Import test data
 if [ -d ${test_dir} ] ; then
-    for i in `find ${test_dir} -name *.sql \( -type f -o -type l \) | sort`; do
+    for i in `find ${test_dir} -name '*.sql' \( -type f -o -type l \) | sort`; do
         echo "Inserting file '${i}'"
         ${mysql} ${dbname} < "${i}"
     done
