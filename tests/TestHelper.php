@@ -42,13 +42,6 @@
 class TestHelper extends Application_Bootstrap {
 
     /**
-     * Add setting up database and logging facilities.
-     *
-     * @return void
-     * @see library/Opus/Bootstrap/Opus_Bootstrap_Base#_setupBackend()
-     */
-
-    /**
      * Set up database connection. If stored schema version information
      * denotes an deprecated schema, end with exception.
      *
@@ -112,18 +105,6 @@ class TestHelper extends Application_Bootstrap {
         $adapter = Zend_Db_Table::getDefaultAdapter();
         $tablename = $adapter->quoteIdentifier($tablename);
         $adapter->query("DELETE FROM $tablename");
-    }
-
-    /**
-     * Use standard database adapater to drop a table.
-     *
-     * @param string $tablename Name of the table to be dropped.
-     * @return void
-     */
-    public static function dropTable($tablename) {
-        $adapter = Zend_Db_Table::getDefaultAdapter();
-        $tablename = $adapter->quoteIdentifier($tablename);
-        $adapter->query("DROP TABLE IF EXISTS $tablename ");
     }
 
     /**
