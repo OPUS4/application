@@ -58,18 +58,15 @@ class Review_IndexController extends Controller_Action {
     public function init() {
         parent::init();
 
-        // Check privileges and get logged user.
-        $this->requirePrivilege('clearance');
-        $this->loggedUser = new Publish_Model_LoggedUser();
-
         // Highlight menu entries.
-        if (true === Opus_Security_Realm::getInstance()->check('administrate')) {
+        if (true === Opus_Security_Realm::getInstance()->checkModuleController('admin', 'index')) {
             $this->getHelper('MainMenu')->setActive('admin');
         }
         else {
             $this->getHelper('MainMenu')->setActive('review');
         }
 
+        $this->loggedUser = new Publish_Model_LoggedUser();
         $this->view->title = $this->view->translate('review_index_title');
     }
 
