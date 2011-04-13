@@ -53,7 +53,10 @@ if (isset($this->title)) {
 $this->headLink()
     ->appendStylesheet($this->layoutPath() . '/css/opus.css')
     ->appendStylesheet($this->layoutPath() . '/css/admin.css')
-    ->headLink(array('rel' => 'shortcut icon', 'href' => $this->layoutPath() . '/img/logo/favicon.ico'));
+    ->headLink(array(
+        'rel' => 'shortcut icon',
+        'type' => 'image/x-icon',
+        'href' => $this->layoutPath() . '/img/logo/favicon.ico'));
 
 /* 
 uncomment the following line if you want to enable your own layout changes
