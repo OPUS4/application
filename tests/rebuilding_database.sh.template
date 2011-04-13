@@ -98,15 +98,16 @@ fi
 
 #Backup old fulltexts and log files
 TEMP_DIR=$(mktemp -d $workspace_tmp_dir/old-XXXXXXX)
-mkdir -v $TEMP_DIR/files
-mv -v $workspace_files_dir $TEMP_DIR
-mkdir -v $TEMP_DIR/log
-mv -v $workspace_log_dir $TEMP_DIR
-rm -rf $workspace_cache_dir/*
+mkdir -v $TEMP_DIR/{files,log}
+rsync -rv --exclude=.svn --exclude=error/ $workspace_files_dir/* $TEMP_DIR/files
+rsync -rv --exclude=.svn $workspace_log_dir/* $TEMP_DIR/logs
+rm -rf {$workspace_files_dir,$workspace_log_dir}
+cd $workspace_dir
+svn up
+cd -
 echo -e "\n*** Created backup of fulltexts and log files in $TEMP_DIR ***\n"
 
-mkdir -pv {$workspace_files_dir,$workspace_log_dir}
-chmod 777 {$workspace_files_dir,$workspace_log_dir}
+chmod -R 777 {$workspace_files_dir,$workspace_log_dir}
 touch $workspace_log_dir/{opus.log,opus-console.log}
 chmod 666 $workspace_log_dir/{opus.log,opus-console.log}
 
