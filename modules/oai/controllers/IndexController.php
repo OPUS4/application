@@ -337,40 +337,34 @@ class Oai_IndexController extends Controller_Xml {
      * @return void
      */
     private function createXmlRecord(Opus_Document $document) {
-
         $docId = $document->getId();
-        $xmlModel = new Opus_Model_Xml;
-        $xmlModel->setModel($document);
-        $xmlModel->excludeEmptyFields(); // needed for preventing handling errors
-        $xmlModel->setStrategy(new Opus_Model_Xml_Version1);
-        $xmlModel->setXmlCache(new Opus_Model_Xml_Cache);
-
-        $xmldoc = $xmlModel->getDomDocument()->getElementsByTagName('Opus_Document')->item(0);
+        $documentXml = new Util_DocumentXmlCache($docId);
+        $domNode = $documentXml->getNode();
 
         // add frontdoor url
-        $this->_addFrontdoorUrlAttribute($xmldoc, $docId);
+        $this->_addFrontdoorUrlAttribute($domNode, $docId);
 
-        $this->_addDdbContactId($xmldoc, $docId);
+        $this->_addDdbContactId($domNode, $docId);
 
         // add container file element
-        $this->_addContainerFileElement($xmldoc, $docId);
+        $this->_addContainerFileElement($domNode, $docId);
 
         // remove file elements which should not be exported through OAI
-        $filenodes = $xmldoc->getElementsByTagName('File');
+        $filenodes = $domNode->getElementsByTagName('File');
         foreach ($filenodes as $filenode) {
             if ((false === $filenode->hasAttribute('VisibleInOai'))
                 or ('1' !== $filenode->getAttribute('VisibleInOai'))) {
-                $xmldoc->removeChild($filenode);
+                $domNode->removeChild($filenode);
             }
         }
 
         // add file download urls
-        $filenodes = $xmldoc->getElementsByTagName('File');
+        $filenodes = $domNode->getElementsByTagName('File');
         foreach ($filenodes as $filenode) {
             $this->_addFileUrlAttribute($filenode, $docId, $filenode->getAttribute('PathName'));
         }
 
-        $node = $this->_xml->importNode($xmldoc, true);
+        $node = $this->_xml->importNode($domNode, true);
 
         $type = $document->getType();
         $this->_addSpecInformation($node, 'pub-type:' . $type);

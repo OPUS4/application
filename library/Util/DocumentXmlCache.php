@@ -25,14 +25,14 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Export
+ * @package     Util
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-class Export_Model_DocumentXml {
+class Util_DocumentXmlCache {
 
     /**
      *
@@ -42,14 +42,17 @@ class Export_Model_DocumentXml {
 
     /**
      *
-     * @param int $documentId Document ID
+     * @param int $documentId
+     * @param boolean $useCache 
      */
-    public function  __construct($documentId) {
+    public function  __construct($documentId, $useCache = true) {
         $this->xmlModel = new Opus_Model_Xml();
         $this->xmlModel->setModel(new Opus_Document($documentId));
         $this->xmlModel->excludeEmptyFields(); // needed for preventing handling errors
         $this->xmlModel->setStrategy(new Opus_Model_Xml_Version1);
-        $this->xmlModel->setXmlCache(new Opus_Model_Xml_Cache);
+        if ($useCache) {
+            $this->xmlModel->setXmlCache(new Opus_Model_Xml_Cache);
+        }
     }
 
     /**
@@ -59,6 +62,6 @@ class Export_Model_DocumentXml {
     public function getNode() {
         return $this->xmlModel->getDomDocument()->getElementsByTagName('Opus_Document')->item(0);
     }
-}
 
+}
 ?>

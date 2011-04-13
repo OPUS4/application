@@ -50,20 +50,10 @@ class Frontdoor_IndexController extends Controller_Action {
 
         try {
             $document = new Opus_Document($docId);
-
-            $type = $document->getType();
-
-            $xmlModel = new Opus_Model_Xml;
-            $xmlModel->setModel($document);
-            $xmlModel->excludeEmptyFields(); // needed for preventing handling errors
-            $xmlModel->setStrategy(new Opus_Model_Xml_Version1);
-            // FIXME: Xml_Cache contains empty fields
-            //$xmlModel->setXmlCache(new Opus_Model_Xml_Cache);
-
-            $xml = $xmlModel->getDomDocument()->getElementsByTagName('Opus_Document')->item(0);
+            $documentXml = new Util_DocumentXmlCache($docId, false);
 
             $xslt = new DomDocument;
-            $template = $this->setUpXSLTStylesheet($type);
+            $template = $this->setUpXSLTStylesheet($document->getType());
             $xslt->load($this->view->getScriptPath('index') . DIRECTORY_SEPARATOR . $template);
             $proc = new XSLTProcessor;
             $proc->registerPHPFunctions('Frontdoor_IndexController::translate');
@@ -85,7 +75,7 @@ class Frontdoor_IndexController extends Controller_Action {
 
             $proc->setParameter('', 'baseUrl', $baseUrl);
             $proc->setParameter('', 'layoutPath', $baseUrl.'/'.$layoutPath);
-            $this->view->frontdoor = $proc->transformToXML($xml);
+            $this->view->frontdoor = $proc->transformToXML($documentXml->getNode());
 
             $this->incrementStatisticsCounter($docId);
         }
