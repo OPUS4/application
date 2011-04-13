@@ -48,10 +48,14 @@ class Export_IndexController extends Controller_Xml {
             throw new Application_Exception('export format is not specified');
         }
 
+        // currently only xml is supported here
         if ($exportParam !== 'xml') {
             throw new Application_Exception('export format is not supported');
-        }
+        }        
+        $this->prepareXml();
+    }
 
+    private function prepareXml() {
         $this->setStylesheet($this->getRequest()->getParam('stylesheet'));
 
         try {
@@ -63,13 +67,7 @@ class Export_IndexController extends Controller_Xml {
             $this->log->err(__METHOD__ . ' : ' . $e->getMessage());
             throw new Application_Exception('Sorry, an internal server error occurred.');
         }
-    }
-
-    public function rssAction() {
-        // TODO
-        // diese Action kann von jedermann aufgerufen werden
-        // hier: muss die Trefferanzahl begrenzt werden (50) und nach Aktualität absteigend sortiert werden
-        $this->setStylesheet('rss2_0');
+        
     }
 
     /**
@@ -78,12 +76,11 @@ class Export_IndexController extends Controller_Xml {
      * @return void
      */
     private function setStylesheet($stylesheet = null) {
-        if (!is_null($stylesheet) && is_readable($this->view->getScriptPath('index') . DIRECTORY_SEPARATOR .
-                'stylesheets' . DIRECTORY_SEPARATOR . $stylesheet . '.xslt')) {
-            $this->_proc->setParameter('', 'stylesheet', $stylesheet);
+        if (!is_null($stylesheet) && is_readable($this->view->getScriptPath('') . 'stylesheets-custom' . DIRECTORY_SEPARATOR . $stylesheet . '.xslt')) {            
+            $this->loadStyleSheet($this->view->getScriptPath('') . 'stylesheets-custom' . DIRECTORY_SEPARATOR .  $stylesheet . '.xslt');
         }
         else {
-            $this->_proc->setParameter('', 'stylesheet', '');
+            $this->loadStyleSheet($this->view->getScriptPath('') . 'stylesheets' . DIRECTORY_SEPARATOR . 'raw.xslt');
         }
     }
 
@@ -92,28 +89,14 @@ class Export_IndexController extends Controller_Xml {
      * @param array $results An array of Opus_SolrSearch_Result objects.
      */
     private function handleResults($results) {
-        $this->loadStyleSheet($this->view->getScriptPath('index') . DIRECTORY_SEPARATOR . 'export.xslt');
         $this->_proc->setParameter('', 'timestamp', str_replace('+00:00', 'Z', Zend_Date::now()->setTimeZone('UTC')->getIso()));
         $this->_proc->setParameter('', 'docCount', count($results));
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
         foreach ($results as $result) {
-            $this->createXmlRecord($result->getId());
+            $documentXml = new Export_Model_DocumentXml($result->getId());
+            $domNode = $this->_xml->importNode($documentXml->getNode(), true);
+            $this->_xml->documentElement->appendChild($domNode);
         }
-    }
-
-    /**
-     *
-     * @param int $documentId ID of an Opus_Document
-     */
-    private function createXmlRecord($documentId) {
-        $xmlModel = new Opus_Model_Xml();
-        $xmlModel->setModel(new Opus_Document($documentId));
-        $xmlModel->excludeEmptyFields(); // needed for preventing handling errors
-        $xmlModel->setStrategy(new Opus_Model_Xml_Version1);
-        $xmlModel->setXmlCache(new Opus_Model_Xml_Cache);
-        $xmldoc = $xmlModel->getDomDocument()->getElementsByTagName('Opus_Document')->item(0);
-        $node = $this->_xml->importNode($xmldoc, true);
-        $this->_xml->documentElement->appendChild($node);
     }
 
     private function buildQuery() {
@@ -134,7 +117,7 @@ class Export_IndexController extends Controller_Xml {
             }
             catch (SolrSearch_Model_Exception $e) {
                 $this->log->debug($e->getMessage());
-                throw new Application_Exception('', '', $e);
+                throw new Application_Exception($e->getMessage(), $e->getCode(), $e);
             }
             $queryBuilderInput['collectionId'] = $collectionList->getCollectionId();
         }
