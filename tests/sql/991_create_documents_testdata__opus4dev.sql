@@ -17,27 +17,27 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- Daten für Tabelle `documents`
 --
 
-INSERT INTO `documents` (`id`, `completed_date`, `completed_year`, `contributing_corporation`, `creating_corporation`, `thesis_date_accepted`, `type`, `edition`, `issue`, `language`, `page_first`, `page_last`, `page_number`, `publication_state`, `published_date`, `published_year`, `publisher_name`, `publisher_place`, `server_date_modified`, `server_date_published`, `server_date_unlocking`, `server_state`, `volume`, `belongs_to_bibliography`) VALUES
-(91, NULL, 2010, NULL, NULL, '2010-02-26', 'report', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2010, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'published', NULL, 1),
-(92, NULL, 2009, NULL, NULL, '2010-03-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2009, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'published', NULL, 1),
-(93, NULL, 2009, NULL, NULL, '2010-04-26', 'doctoralthesis', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2009, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'published', NULL, 1),
-(94, NULL, 2008, NULL, NULL, '2010-05-26', 'report', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'published', NULL, 1),
-(95, NULL, 2008, NULL, NULL, '2010-06-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'published', NULL, 1),
-(96, NULL, 2008, NULL, NULL, '2010-07-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL, 0),
-(97, NULL, 2008, NULL, NULL, '2010-08-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL, 0),
-(98, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL, 0),
-(99, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL, 0),
-(100, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL, 0),
-(101, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL, 0),
-(102, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL, 0),
-(103, NULL, 2008, NULL, NULL, '2010-06-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'published', NULL, 0),
-(104, NULL, 2008, NULL, NULL, '2010-07-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL, 0),
-(105, NULL, 2008, NULL, NULL, '2010-08-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL, 0),
-(106, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL, 0),
-(107, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL, 0),
-(108, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL, 0),
-(109, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL, 0),
-(110, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', NULL, 'unpublished', NULL, 0);
+INSERT INTO `documents` (`id`, `completed_date`, `completed_year`, `contributing_corporation`, `creating_corporation`, `thesis_date_accepted`, `type`, `edition`, `issue`, `language`, `page_first`, `page_last`, `page_number`, `publication_state`, `published_date`, `published_year`, `publisher_name`, `publisher_place`, `server_date_modified`, `server_date_published`, `server_state`, `volume`, `belongs_to_bibliography`) VALUES
+(91, NULL, 2010, NULL, NULL, '2010-02-26', 'report', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2010, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'published', NULL, 1),
+(92, NULL, 2009, NULL, NULL, '2010-03-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2009, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'published', NULL, 1),
+(93, NULL, 2009, NULL, NULL, '2010-04-26', 'doctoralthesis', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2009, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'published', NULL, 1),
+(94, NULL, 2008, NULL, NULL, '2010-05-26', 'report', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'published', NULL, 1),
+(95, NULL, 2008, NULL, NULL, '2010-06-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'published', NULL, 1),
+(96, NULL, 2008, NULL, NULL, '2010-07-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'unpublished', NULL, 0),
+(97, NULL, 2008, NULL, NULL, '2010-08-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'unpublished', NULL, 0),
+(98, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'unpublished', NULL, 0),
+(99, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'unpublished', NULL, 0),
+(100, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'unpublished', NULL, 0),
+(101, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'unpublished', NULL, 0),
+(102, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'unpublished', NULL, 0),
+(103, NULL, 2008, NULL, NULL, '2010-06-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'published', NULL, 0),
+(104, NULL, 2008, NULL, NULL, '2010-07-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'unpublished', NULL, 0),
+(105, NULL, 2008, NULL, NULL, '2010-08-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'unpublished', NULL, 0),
+(106, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'unpublished', NULL, 0),
+(107, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'unpublished', NULL, 0),
+(108, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'unpublished', NULL, 0),
+(109, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'unpublished', NULL, 0),
+(110, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'unpublished', NULL, 0);
 
 --
 -- Daten für Tabelle `document_files`
