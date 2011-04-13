@@ -65,12 +65,7 @@ $localConfig = new Zend_Config_Ini(
         APPLICATION_ENV,
         array('allowModifications'=>true));
 
-$webConfig = new Zend_Config(array(
-       'log' => array(
-           'filename'=>'opus.log')), true);
-
 $config->merge($localConfig);
-$config->merge($webConfig);
 
 //// Create application, bootstrap, and run
 $application = new Zend_Application(APPLICATION_ENV, $config);
