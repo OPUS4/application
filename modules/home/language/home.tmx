@@ -4,33 +4,14 @@
   <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
   </header>
   <body>
-    <tu tuid="home_index_index_instructions">
-      <tuv xml:lang="en">
-        <seg>If you want to search for documents of the university, please
-        choose the menu "Search" where you will find several search options. If
-        you want to publish a document, please select the menu "Publish"; here
-        you can submit your document to the publication server in just a few
-        steps.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Wenn Sie nach Texten der Hochschule suchen wollen, wählen Sie bitte
-        das Menü "Suchen"; dort stehen Ihnen verschiedene Recherchemöglichkeiten
-        zur Verfügung. Wollen Sie ein Dokument publizieren, wählen Sie bitte das
-        Menü "Veröffentlichen"; mit wenigen Schritten können Sie dort Ihr
-        Dokument an den Hochschulschriftenserver übertragen.</seg>
-      </tuv>
-    </tu>
     
-    <tu tuid="home_index_index_title">
-      <tuv xml:lang="en">
-        <seg>Publication Server of XYZ University</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Hochschulschriftenserver der Universität XYZ</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="home_index_index_pagetitle">
+	<!--
+
+            Tab Title
+
+    -->
+	
+	<tu tuid="home_index_index_pagetitle">
       <tuv xml:lang="en">
         <seg>Home</seg>
       </tuv>
@@ -38,8 +19,29 @@
         <seg>Einstieg</seg>
       </tuv>
     </tu>
-    
-    <tu tuid="home_index_index_welcome">
+	
+	<!--
+
+            Headline
+
+    -->
+	
+	<tu tuid="home_index_index_title">
+      <tuv xml:lang="en">
+        <seg>Publication Server of XYZ University</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Hochschulschriftenserver der Universität XYZ</seg>
+      </tuv>
+    </tu>
+	
+	<!--
+
+            Text Sections
+
+    -->
+	
+	<tu tuid="home_index_index_welcome">
       <tuv xml:lang="en">
         <seg>The library offers to publish electronically generated and
         qualified documents on its online publication system. This service is
@@ -58,5 +60,24 @@
         Suchmaschinen des WWW erschlossen und zugänglich.</seg>
       </tuv>
     </tu>
+	
+	<tu tuid="home_index_index_instructions">
+      <tuv xml:lang="en">
+        <seg>If you want to search for documents of the university, please
+        choose the menu "Search" where you will find several search options. If
+        you want to publish a document, please select the menu "Publish"; here
+        you can submit your document to the publication server in just a few
+        steps.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Wenn Sie nach Texten der Hochschule suchen wollen, wählen Sie bitte
+        das Menü "Suchen"; dort stehen Ihnen verschiedene Recherchemöglichkeiten
+        zur Verfügung. Wollen Sie ein Dokument publizieren, wählen Sie bitte das
+        Menü "Veröffentlichen"; mit wenigen Schritten können Sie dort Ihr
+        Dokument an den Hochschulschriftenserver übertragen.</seg>
+      </tuv>
+    </tu>
+    
+    
   </body>
 </tmx>
