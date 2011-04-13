@@ -111,7 +111,7 @@ class Admin_RoleControllerTest extends ControllerTestCase {
         $this->assertController('role');
         $this->assertAction('create');
         $this->assertRedirect();
-        $this->assertNotNull(Opus_Role::fetchByName('testrole'));
+        $this->assertNotNull(Opus_UserRole::fetchByName('testrole'));
     }
 
     public function testCreateActionCancel() {
@@ -151,7 +151,7 @@ class Admin_RoleControllerTest extends ControllerTestCase {
      * @depends testCreateAction
      */
     public function testUpdateAction() {
-        $role = Opus_Role::fetchByName('testrole');
+        $role = Opus_UserRole::fetchByName('testrole');
 
          $this->request
                 ->setMethod('POST')
@@ -168,7 +168,7 @@ class Admin_RoleControllerTest extends ControllerTestCase {
         $this->assertController('role');
         $this->assertAction('update');
         $this->assertRedirect();
-        $role = Opus_Role::fetchByName('testrole2');
+        $role = Opus_UserRole::fetchByName('testrole2');
         $this->assertNotNull($role);
         $this->assertNotNull($role->getId());
         $this->assertEquals('testrole2', $role->getDisplayName());
@@ -178,7 +178,7 @@ class Admin_RoleControllerTest extends ControllerTestCase {
      * @depends testUpdateAction
      */
     public function testUpdateActionInvalidInput() {
-        $role = Opus_Role::fetchByName('testrole2');
+        $role = Opus_UserRole::fetchByName('testrole2');
 
          $this->request
                 ->setMethod('POST')
@@ -201,7 +201,7 @@ class Admin_RoleControllerTest extends ControllerTestCase {
      * @depends testUpdateActionInvalidInput
      */
     public function testDeleteAction() {
-        $role = Opus_Role::fetchByName('testrole2');
+        $role = Opus_UserRole::fetchByName('testrole2');
         $this->assertNotNull($role);
         $this->dispatch('/admin/role/delete/id/' . $role->getId());
         $this->assertModule('admin');

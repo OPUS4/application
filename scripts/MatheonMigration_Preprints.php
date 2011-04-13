@@ -489,7 +489,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
      * @return void
      */
     public function create_access_control() {
-        $remoteupdate_role = new Opus_Role();
+        $remoteupdate_role = new Opus_UserRole();
         $remoteupdate_role->setName('remoteupdate');
         $remotecontrol_privilege = $remoteupdate_role->addPrivilege();
         $remotecontrol_privilege->setPrivilege('remotecontrol');
@@ -505,7 +505,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
             $iprange->store();
         }
 
-        $user_role = new Opus_Role();
+        $user_role = new Opus_UserRole();
         $user_role->setName('user');
         $user_privilege = $user_role->addPrivilege();
         $user_privilege->setPrivilege('publish');
@@ -524,7 +524,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
         $file = $this->dumps_dir . '/accounts.xml';
         $users = $this->load_xml_mysqldump($file);
 
-        $guest_role = Opus_Role::fetchByName('guest');
+        $guest_role = Opus_UserRole::fetchByName('guest');
         $guest_role->setPrivilege(array());
         $publish_privilege = $guest_role->addPrivilege();
         $publish_privilege->setPrivilege('readMetadata');
@@ -534,9 +534,9 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
         $referee_user = Opus_Account::fetchAccountByLogin('referee');
         $referee_user->delete();
 
-        $user_role = Opus_Role::fetchByName('user');
-        $reviewer_role = Opus_Role::fetchByName('reviewer');
-        $admin_role = Opus_Role::fetchByName('administrator');
+        $user_role = Opus_UserRole::fetchByName('user');
+        $reviewer_role = Opus_UserRole::fetchByName('reviewer');
+        $admin_role = Opus_UserRole::fetchByName('administrator');
 
         $admin_user = Opus_Account::fetchAccountByLogin('admin');
         $admin_user->addRole( $reviewer_role );
@@ -621,7 +621,7 @@ class MatheonMigration_Preprints extends MatheonMigration_Base {
 
         $counter = 0;
         $total = count($preprints);
-        $guest_role = Opus_Role::fetchByName('guest');
+        $guest_role = Opus_UserRole::fetchByName('guest');
 
         // Write imported documents to seperate text file
         $experiments = true;

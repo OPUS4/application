@@ -170,7 +170,7 @@ class Matheon_Model_Document {
      * @return Matheon_Model_Document Fluent interface.
      */
     public function addReadFilePrivilege($role_name = 'guest') {
-        $role = Opus_Role::fetchByName($role_name);
+        $role = Opus_UserRole::fetchByName($role_name);
 
         if (is_null($role)) {
             $this->log->err("Cannot add readFile privilege for non-existent role '{$role->getName()}' to document " . $this->getId() . ".");

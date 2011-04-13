@@ -62,9 +62,9 @@ class Remotecontrol_AccountController extends Controller_Action {
 
         foreach (explode(",", $user_roles) AS $role_name) {
             $role_name = trim($role_name);
-            $role = Opus_Role::fetchByName($role_name);
+            $role = Opus_UserRole::fetchByName($role_name);
 
-            if ($role instanceof Opus_Role) {
+            if ($role instanceof Opus_UserRole) {
                 $account->addRole($role);
             }
         }

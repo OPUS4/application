@@ -42,7 +42,7 @@ abstract class Admin_Form_RolesAbstract extends Zend_Form {
      * Adds display group for roles.
      */
     protected function _addRolesGroup() {
-        $roles = Opus_Role::getAll();
+        $roles = Opus_UserRole::getAll();
 
         $rolesGroup = array();
 
@@ -58,20 +58,20 @@ abstract class Admin_Form_RolesAbstract extends Zend_Form {
     }
 
     /**
-     * Parses post data and returns array with Opus_Role instances.
+     * Parses post data and returns array with Opus_UserRole instances.
      * @param array $postData
-     * @return array of Opus_Role instances
+     * @return array of Opus_UserRole instances
      */
     public static function parseSelectedRoles($postData) {
         $selectedRoles = array();
         foreach (self::parseSelectedRoleNames($postData) as $roleName) {
-            $selectedRoles[] = Opus_Role::fetchByName($roleName);
+            $selectedRoles[] = Opus_UserRole::fetchByName($roleName);
         }
         return $selectedRoles;
     }
 
     public static function parseSelectedRoleNames($postData) {
-        $roles = Opus_Role::getAll();
+        $roles = Opus_UserRole::getAll();
 
         $selectedRoles = array();
 

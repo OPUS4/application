@@ -138,7 +138,7 @@ class Matheon_SelectReviewerController extends Controller_Action {
      * @return array
      */
     private function __fetchReviewers() {
-        $role = Opus_Role::fetchByName('reviewer');
+        $role = Opus_UserRole::fetchByName('reviewer');
         $reviewerSelect = array('' => '-- please choose --');
 
         foreach ($role->getAllAccountIds() AS $id) {

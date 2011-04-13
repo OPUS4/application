@@ -225,7 +225,7 @@ class Admin_FilemanagerController extends Controller_Action {
             // remove roles that are not selected
             foreach ($currentRoleNames as $roleName) {
                 if (!in_array($roleName, $selectedRoleNames)) {
-                    $role = Opus_Role::fetchByName($roleName);
+                    $role = Opus_UserRole::fetchByName($roleName);
                     $privileges = $role->getPrivilege();
                     foreach ($privileges as $index => $privilege) {
                         if ($privilege->getPrivilege() === 'readFile') {
@@ -242,7 +242,7 @@ class Admin_FilemanagerController extends Controller_Action {
 
             // add selected roles
             foreach ($selectedRoleNames as $roleName) {
-                $role = Opus_Role::fetchByName($roleName);
+                $role = Opus_UserRole::fetchByName($roleName);
                 if (in_array($roleName, $currentRoleNames)) {
                     $log->debug('readFile for role ' . $roleName . ' already set');
                 }

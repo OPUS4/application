@@ -49,7 +49,7 @@ class Admin_RoleController extends Controller_Action {
     public function indexAction() {
         $this->view->title = $this->view->translate('admin_role_index');
 
-        $roles = Opus_Role::getAll();
+        $roles = Opus_UserRole::getAll();
 
         if (empty($roles)) {
             $this->view->render('none');
@@ -73,7 +73,7 @@ class Admin_RoleController extends Controller_Action {
         if (!empty($roleId)) {
             $this->view->title = $this->view->translate('admin_role_show');
 
-            $role = new Opus_Role($roleId);
+            $role = new Opus_UserRole($roleId);
             $this->view->role = $role;
         }
         else {
@@ -155,7 +155,7 @@ class Admin_RoleController extends Controller_Action {
         if (!empty($roleId)) {
             $postData = $this->getRequest()->getPost();
 
-            $role = new Opus_Role($roleId);
+            $role = new Opus_UserRole($roleId);
 
             if (!isset($postData['name'])) {
                 $postData['name'] = $role->getName();
@@ -190,7 +190,7 @@ class Admin_RoleController extends Controller_Action {
         $roleId = $this->getRequest()->getParam('id');
 
         if (!empty($roleId)) {
-            $role = new Opus_Role($roleId);
+            $role = new Opus_UserRole($roleId);
             
             $roleName = $role->getName();
             
@@ -207,11 +207,11 @@ class Admin_RoleController extends Controller_Action {
 
     protected function _updateRole($roleId, $name, $selectedPrivileges) {
         if (!empty($roleId)) {
-            $role = new Opus_Role($roleId);
+            $role = new Opus_UserRole($roleId);
             $currentPrivileges = $role->getPrivilege();
         }
         else {
-            $role = new Opus_Role();
+            $role = new Opus_UserRole();
             $currentPrivileges = array();
         }
 
@@ -255,6 +255,8 @@ class Admin_RoleController extends Controller_Action {
             if ($name) {
                 if ($name === 'readMetadata') {
                     $state = substr(strstr($newPrivilege, '.', false), 1);
+        // TODO: Remove, since not supported any more.
+        throw new Exception("TODO: Remove, since not supported any more.");
                     $privilege = new Opus_Privilege();
                     $privilege->setPrivilege('readMetadata');
                     $privilege->setDocumentServerState($state);
@@ -262,6 +264,8 @@ class Admin_RoleController extends Controller_Action {
                 }
             }
             else {
+        // TODO: Remove, since not supported any more.
+        throw new Exception("TODO: Remove, since not supported any more.");
                 $privilege = new Opus_Privilege();
                 $privilege->setPrivilege($newPrivilege);
                 $currentPrivileges[] = $privilege;
@@ -274,7 +278,7 @@ class Admin_RoleController extends Controller_Action {
     }
 
     protected function _isRoleNameExists($name) {
-        $role = Opus_Role::fetchByName($name);
+        $role = Opus_UserRole::fetchByName($name);
 
         if (empty($role)) {
             return false;

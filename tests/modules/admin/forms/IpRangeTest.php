@@ -67,7 +67,7 @@ class Admin_Form_IpRangeTest extends ControllerTestCase {
 
         $roles = array();
 
-        $roles[] = Opus_Role::fetchByName('administrator');
+        $roles[] = Opus_UserRole::fetchByName('administrator');
 
         $form->setSelectedRoles($roles);
 

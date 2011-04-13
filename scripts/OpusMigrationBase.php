@@ -115,7 +115,7 @@ class OpusMigrationBase {
         }
 
         if (empty($iprange) === false) {
-            $accessRole = new Opus_Role();
+            $accessRole = new Opus_UserRole();
             $accessRole->setName('IP-' . $rolename);
             $accessRole->store();
             $iprange->addRole($accessRole);
@@ -124,14 +124,14 @@ class OpusMigrationBase {
             $guestId = 0;
             // open document to the great bad internet
             // by assigning it to guest role
-            $roles = Opus_Role::getAll();
+            $roles = Opus_UserRole::getAll();
             foreach ($roles as $role) {
                 if ($role->getDisplayName() === 'guest') {
                     $guestId = $role->getId();
                 }
             }
             if ($guestId > 0) {
-                $accessRole = new Opus_Role($guestId);
+                $accessRole = new Opus_UserRole($guestId);
             }
             if ($accessRole === null) {
                 echo "Warning: no guest user has been found in database! Documents without IP-range will be imported without access permissions, so only the admin can view them!";

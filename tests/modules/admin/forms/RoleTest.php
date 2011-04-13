@@ -39,7 +39,7 @@ class Admin_Form_RoleTest extends ControllerTestCase {
     }
 
     public function testPopulateFromRole() {
-        $role = Opus_Role::fetchByName('guest');
+        $role = Opus_UserRole::fetchByName('guest');
         $form = new Admin_Form_Role($role->getId());
         $this->assertEquals('guest', $form->getElement('name')->getValue());
     }

@@ -43,7 +43,7 @@ class Remotecontrol_AccountControllerTest extends ControllerTestCase {
     private function addTestAccountWithRoles() {
 
         // Make sure, the role exists.
-        $role = Opus_Role::fetchByName("administrator");
+        $role = Opus_UserRole::fetchByName("administrator");
         $this->assertNotNull( $role );
 
         // Prepare first request.

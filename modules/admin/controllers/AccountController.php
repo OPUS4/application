@@ -234,7 +234,7 @@ class Admin_AccountController extends Controller_Action {
                 $isCurrentUser = ($currentUser === $oldLogin) ? true : false;
 
                 if (!$hasAdministratorRole && $isCurrentUser) {
-                    $newRoles[] = Opus_Role::fetchByName('administrator');
+                    $newRoles[] = Opus_UserRole::fetchByName('administrator');
                 }
 
                 $account->setRole($newRoles);

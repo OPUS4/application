@@ -91,7 +91,7 @@ class Form_Validate_RoleAvailable extends Zend_Validate_Abstract {
      */
     protected function _isRoleUsed($role) {
         try {
-            $role = Opus_Role::fetchByName($role);
+            $role = Opus_UserRole::fetchByName($role);
 
             if (empty($role)) {
                 return false;

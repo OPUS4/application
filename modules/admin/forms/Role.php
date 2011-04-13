@@ -72,7 +72,7 @@ class Admin_Form_Role extends Zend_Form {
         parent::__construct($config->form->role);
 
         if (!empty($id)) {
-            $role = new Opus_Role($id);
+            $role = new Opus_UserRole($id);
             $this->populateFromRole($role);
         }
     }

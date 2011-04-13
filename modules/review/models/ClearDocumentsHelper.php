@@ -59,7 +59,7 @@ class Review_Model_ClearDocumentsHelper {
             $document->setServerDatePublished($date);
             $document->setPublishedDate($date);
 
-            $guest_role = Opus_Role::fetchByName('guest');
+            $guest_role = Opus_UserRole::fetchByName('guest');
             foreach ($document->getFile() AS $file)  {
                 $privilege = $guest_role->addPrivilege();
                 $privilege->setPrivilege('readFile');
