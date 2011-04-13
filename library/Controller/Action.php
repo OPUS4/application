@@ -68,6 +68,8 @@ class Controller_Action extends Zend_Controller_Action {
         $this->__redirector = $this->_helper->getHelper('Redirector');
         $this->__flashMessenger = $this->_helper->getHelper('FlashMessenger');
         $this->view->flashMessenger = $this->__flashMessenger;
+
+        $this->checkAccessPermissions();
     }
 
     /**
@@ -140,10 +142,38 @@ class Controller_Action extends Zend_Controller_Action {
         $this->_forward($action);
     }
 
+    protected function checkAccessPermissions() {
+        $module     = $this->_request->getModuleName();
+        $controller = $this->_request->getControllerName();
+        
+        $this->_logger->debug("starting authorization check for module '$module'/controller '$controller'");
+
+        // Check, if have the right privilege...
+        if (true !== Opus_Security_Realm::getInstance()->checkModuleController($module, $controller)) {
+            // we are not allowed to publish
+            $identity = Zend_Auth::getInstance()->getIdentity();
+
+            $errorcode = 'no_identity_error';
+            if (!empty($identity)) {
+                $errorcode = 'wrong_identity_error';
+            }
+            $message = $this->view->translate($errorcode);
+
+            // Forward to module auth
+            $this->__flashMessenger->addMessage(array('level' => 'failure', 'message' => $message));
+            $this->__redirector->gotoSimple('index', 'auth', 'default');
+        }
+
+        $this->_logger->debug("authorization check for module '$module'/controller '$controller' successful");
+    }
+
+
     /**
      * Check if the currently logged user has a given privilege.
      *
      * @param mixed $privilege
+     *
+     * @deprecated
      */
     protected function requirePrivilege($privilege) {
         $module = $this->_request->getModuleName();
