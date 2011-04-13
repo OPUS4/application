@@ -29,14 +29,14 @@
 }
 /* frontdoor */
 #titlemain-wrapper{
-    background: #F3F6F8 url(../img/theme/icon-title-frontdoor.gif) no-repeat 4px 6px;
+	background: #F3F6F8 url(../img/theme/icon-title-frontdoor.gif) no-repeat 4px 6px;
 }
 #titlemain-wrapper h2{
-    font-size: 16px;
+	font-size: 16px;
 	padding: 7px 10px 7px 26px;
 }
 #titlemain-wrapper h3{
-    font-size: 14px;
+	font-size: 14px;
 	padding: 0 10px 7px 26px;
 }
 #titlemain-wrapper h2,
@@ -48,7 +48,6 @@
 	text-transform: none;
 	line-height: normal;
 }
-
 #result-data{
 	float: left;
 	width: 60%;
@@ -127,21 +126,17 @@ table.result-data {
 	line-height: 1.4em;
 }
 .result-data td{
-
 }
-
 .frontdoor #author,
 .frontdoor .abstract,
 .frontdoordata caption{
 	padding-left: 26px;
 }
-
 .frontdoor #author {
-    margin: 1em 0;
+	margin: 1em 0;
 	background: url(../img/theme/icon-author-frontdoor.gif) no-repeat 4px 0;
 	line-height: 1.4em;
 }
-
 .frontdoordata th{
 	padding-left: 26px;
 	width: 28%;
@@ -166,14 +161,14 @@ table.result-data {
 }
 .button-wrapper{
 	padding: 10px;
-        text-align:right;
+	text-align: right;
 	clear: both;
 }
 .button-wrapper input{
 	margin-left: 0.5em;
 }
 .required{
-    color: #fe7c25;
+	color: #fe7c25;
 }
 fieldset .add-delete-wrapper{
 	padding: 0;
@@ -200,7 +195,6 @@ fieldset .add-delete-wrapper{
 	width: 100%;
 	background: #e2e6e9;
 }
-
 div > .form-button{
 	background: #2b5580 url(../img/theme/bg_button.gif) repeat-x center;
 	-moz-border-radius: 5px;
@@ -213,15 +207,14 @@ div > .form-button{
 div > .add-button,
 div > .delete-button,
 div > .up-button,
-div > .down-button
-{
+div > .down-button {
 	padding-left: 22px;
 }
 div > .add-button{
 	background: url(../img/theme/bg_button-add.gif) no-repeat 0 50%;
 }
 div > .down-button{
-    background: url(../img/theme/bg_button-down.gif) no-repeat 0 50%;
+	background: url(../img/theme/bg_button-down.gif) no-repeat 0 50%;
 }
 div > .delete-button{
 	background: url(../img/theme/bg_button-delete.gif) no-repeat 0 50%;
@@ -229,10 +222,10 @@ div > .delete-button{
 	color: black;
 }
 div > .up-button{
-    background: url(../img/theme/bg_button-up.gif) no-repeat 0 50%;
-    border-color: #a5b5b5;
-    color: black;
-    margin-left: 5px;
+	background: url(../img/theme/bg_button-up.gif) no-repeat 0 50%;
+	border-color: #a5b5b5;
+	color: black;
+	margin-left: 5px;
 }
 div > .abort-button{
 	background: url(../img/theme/bg_button-abort.gif) repeat-x center;
@@ -257,11 +250,10 @@ div > .abort-button{
 	clear: both;
 }
 .opus fieldset .form-files{
-    width: 100%;
-    margin-left:610px;
-    margin-top:-70px;
-    color: #26517D;
-
+	width: 100%;
+	margin-left: 610px;
+	margin-top: -70px;
+	color: #26517D;
 }
 .left-labels label,
 .right-labels label{
@@ -289,14 +281,13 @@ div > .abort-button{
 	color: #cc3300;
 }
 .opus fieldset .form-files ul {
-    margin: 0 0 0 0;
-    padding-left: 1em;
-    list-style: none;
+	margin: 0 0 0 0;
+	padding-left: 1em;
+	list-style: none;
 }
-.opus fieldset .form-files li
-{
-    background: url(../img/theme/icon-dash-small.gif) no-repeat 0 50%;
-    padding: 0 0 0 9px;
+.opus fieldset .form-files li {
+	background: url(../img/theme/icon-dash-small.gif) no-repeat 0 50%;
+	padding: 0 0 0 9px;
 }
 .opus .form-hint{
 	padding: 0 10px;
@@ -316,15 +307,14 @@ div > .abort-button{
 	background-repeat: no-repeat;
 }
 #form-table-check td.label{
-    border-right: 1px solid #26517C;
-    text-align: right;
+	border-right: 1px solid #26517C;
+	text-align: right;
 }
-
 #form-table-check td.group{
-    border-bottom: 1px solid #26517C;
-    background-color: #E2E6E9;
-    color: #6a7a7b;
-    text-align: left;
+	border-bottom: 1px solid #26517C;
+	background-color: #E2E6E9;
+	color: #6a7a7b;
+	text-align: left;
 }
 /* HTML elements
 ------------------------------------------------------------ */
@@ -359,7 +349,6 @@ a{
 	background-color: transparent;
 }
 a:hover{
-
 	color: #FE7C25;
 	background-color: transparent;
 }
@@ -388,12 +377,10 @@ a img{
 }
 /* IDs and Classes
 --------------------------------------------------------------------- */
-
 #container {
-    background-color: white;
-    float: left;
+	background-color: white;
+	float: left;
 }
-
 .intro{
 	color: #26517D;
 	background-color: transparent;
@@ -438,11 +425,10 @@ body > #top-header{
 .messages,
 #page-footer .wrapper{
 	max-width: 960px;
-        min-width: 800px;
-        padding: 0 20px;
+	min-width: 800px;
+	padding: 0 20px;
 	margin: auto;
 }
-
 #lang-switch{
 	float: left;
 	/*margin: 0 0 0 10px;*/
@@ -569,10 +555,10 @@ body > #top-header{
 #logo-wrapper{
 	height: 40px;
 	text-align: right;
+	margin: 0 0 1em
 }
 #page-footer .wrapper{
 	font-size: 12px;
-	padding: 0;
 	color: white;
 	background-color: transparent;
 }
@@ -587,6 +573,9 @@ body > #top-header{
 	float: left;
 	padding: 3px 11px 5px;
 	background: url(../img/theme/footer-separator.jpg) no-repeat right center;
+}
+#secondary-nav li.first{
+	padding-left: 0;
 }
 #secondary-nav .last{
 	background-image: none;
@@ -632,7 +621,6 @@ body > #top-header{
 .latest #searchbar {
 	padding: 0;
 }
-
 #breadcrumb ul{
 	margin: 0;
 	padding: 0 0 15px 0;
@@ -683,7 +671,6 @@ body > #top-header{
 	font-size: 12px;
 	line-height: normal;
 }
-
 .opus .breadcrumb_results h3,
 .opus .breadcrumb_results .info_small,
 .opus .breadcrumb_results .paginationControl li{
@@ -784,7 +771,6 @@ body > #top-header{
 	line-height: 1.5em;
 }
 /* Browsing */
-
 .nav.help li,
 .nav.browsing li{
 	background: url(../img/theme/list-arrow.gif) no-repeat;
@@ -814,7 +800,6 @@ body > #top-header{
 .nav.browsing li:hover a{
 	color: #fe7c25;
 }
-
 .nav.browsing li.empty-collection:hover{
 	color: #888;
 }
@@ -866,6 +851,14 @@ body > #top-header{
 	font-size: 16px;
 	font-family: Arial, Helvetica, sans-serif;
 	padding: 0 15px;
+}
+.solrsearch_advanced .form-submit-wrapper{
+	background: none;
+}
+.solrsearch_advanced .form-submit{
+	background: url(../img/theme/bg_button_l.gif) no-repeat left center;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
 }
 #edit-submit-advanced-search-wrapper{
 	float: left;
@@ -923,9 +916,8 @@ body > #top-header{
 #fieldset-search .form-submit:hover{
 	color: #feb07c;
 }
-
 .debug {
-    float:left;
-    width: 100%;
-    /* background-color: white; */
+	float: left;
+	width: 100%;
+	/* background-color: white; */
 }

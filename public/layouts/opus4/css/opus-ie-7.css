@@ -1,0 +1,11 @@
+.opus.solrsearch_advanced .form-submit-wrapper{
+	background: url(../img/theme/bg_button_l.gif) no-repeat left center;
+}
+.opus.solrsearch_advanced .form-submit{
+	background: transparent url(../img/theme/bg_button_r.gif) no-repeat right center;
+	border: none;
+	color: white;
+	font-size: 16px;
+	font-family: Arial, Helvetica, sans-serif;
+	padding: 0 15px;
+}
