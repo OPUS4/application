@@ -225,12 +225,10 @@ class Frontdoor_IndexController extends Controller_Action {
     }
 
     private function setUpXSLTStylesheet($type) {
-        $template = null;
-        if (file_exists($this->view->getScriptPath('index') . '/' . $type . '.xslt'))
-            $template = $type . '.xslt';
-        else
-            $template = 'index.xslt';
-        return $template;
+        if (is_readable($this->view->getScriptPath('index') . DIRECTORY_SEPARATOR . $type . '.xslt')) {
+            return $type . '.xslt';
+        }
+        return 'index.xslt';
     }
 
     private function incrementStatisticsCounter($docId) {
