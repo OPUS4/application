@@ -29,7 +29,7 @@
  * @package     Module_Admin
  * @author      Sascha Szott <szott@zib.de>
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -93,21 +93,21 @@
                 <?php endif ?>
             </td>
 
-            <!--td-->
-                <?php if ($i > 0) : /* ?>
-                    <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'moveup', 'id' => $collection->getId(), 'ref' => $this->collections[$i - 1]->getId()), null, true) ?>">
+            <td>
+                <?php if ($i > 0) : ?>
+                    <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'move', 'id' => $collection->getId(), 'pos' => $i), null, true) ?>">
                     <?= $this->translate('admin_collections_role_move_up') ?>
                     </a>
-                <?php */ endif ?>
-            <!--/td-->
+                <?php endif ?>
+            </td>
 
-            <!--td-->
-                <?php if ($i < count($this->collections) - 1) : /* ?>
-                    <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'movedown', 'id' => $collection->getId(), 'ref' => $this->collections[$i + 1]->getId()), null, true)?>">
+            <td>
+                <?php if ($i < count($this->collections) - 1) : ?>
+                    <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'move', 'id' => $collection->getId(), 'pos' => $i + 2), null, true)?>">
                     <?= $this->translate('admin_collections_role_move_down') ?>
                     </a>
-                <?php */ endif ?>
-            <!--/td-->
+                <?php endif ?>
+            </td>
 
             <td>
                 <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'index', 'collectionid' => $collection->getId()), null, true) ?>">
@@ -116,14 +116,7 @@
             </td>
             
             <td>
-                <?php
-                    if (count($collection->getChildren()) > 0) {
-                        $confirmKey = 'confirm_deletion';
-                    }
-                    else {
-                        $confirmKey = 'confirm_deletion_empty';
-                    }
-                ?>
+                <?php $confirmKey = count($collection->getChildren()) > 0 ? 'confirm_deletion' : 'confirm_deletion_empty'; ?>
                 <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'delete', 'id' => $collection->getId()), null, true) ?>" onclick="return confirm('<?= $this->translate($confirmKey) ?>');"><?=$this->translate('admin_collections_collection_delete')?></a>
             </td>
         </tr>

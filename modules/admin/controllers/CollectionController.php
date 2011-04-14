@@ -31,7 +31,7 @@
  * @author     	Thoralf Klein <thoralf.klein@zib.de>
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @author      Tobias Tappe <tobias.tappe@uni-bielefeld.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -87,31 +87,20 @@ class Admin_CollectionController extends Controller_Action {
         $this->view->form = $this->getForm($collectionModel->getObject());
     }
 
-    private function moveCollection($increment) {
-        throw new Application_Exception('Method is not implemented!');
-        $collectionModel = new Admin_Model_Collection($this->getRequest()->getParam('id', ''));
-
-        // evaluate parameter ref
-    }
-
-    public function moveupAction() {
-        $collectionParentId = $this->moveCollection(-1);
-        if (is_null($collectionParentId)) {
-            $this->_redirectTo('index', 'Operation completed successfully.', 'collectionroles');
+    /**
+     * Moves a collection within the same hierarchy level.
+     *
+     * @return void
+     */
+    public function moveAction() {
+        try {
+            $collectionModel = new Admin_Model_Collection($this->getRequest()->getParam('id', ''));
+            $parentId = $collectionModel->move($this->getRequest()->getParam('pos'));
+            $this->_redirectTo('show', 'Operation completed successfully.', 'collection', 'admin', array('id' => $parentId));
         }
-        else {
-            $this->_redirectTo('show', 'Operation completed successfully.', 'controller', 'admin', array('id' => $collectionParentId));
-        }
-    }
-
-    public function movedownAction() {
-        $collectionParentId = $this->moveCollection(+1);
-        if (is_null($collectionParentId)) {
-            $this->_redirectTo('index', 'Operation completed successfully.', 'collectionroles');
-        }
-        else {
-            $this->_redirectTo('show', 'Operation completed successfully.', 'controller', 'admin', array('id' => $collectionParentId));
-        }
+        catch (Admin_Model_Exception $e) {
+            $this->_redirectToAndExit('index', array('failure' => $e->getMessage()), 'collectionroles');
+        }       
     }
 
     private function changeCollectionVisibility($visibility) {

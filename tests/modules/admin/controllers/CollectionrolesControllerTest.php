@@ -91,33 +91,25 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
     public function testDeleteAction() {
         $this->dispatch('/admin/collectionroles/delete/roleid/' . $this->nonEmptyCollectionRole->getId());
         $this->assertRedirect();
-        $this->assertModule('admin');
-        $this->assertController('collectionroles');
-        $this->assertAction('delete');
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/collectionroles');
     }
 
     public function testDeleteActionWithMissingParam() {
         $this->dispatch('/admin/collectionroles/delete');
         $this->assertRedirect();
-        $this->assertModule('admin');
-        $this->assertController('collectionroles');
-        $this->assertAction('delete');
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/collectionroles');
     }
 
     public function testMoveAction() {
         $this->dispatch('/admin/collectionroles/move/pos/1/roleid/' . $this->emptyCollectionRole->getId());
         $this->assertRedirect();
-        $this->assertModule('admin');
-        $this->assertController('collectionroles');
-        $this->assertAction('move');
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/collectionroles');
     }
 
     public function testMoveActionWithMissingParam() {
         $this->dispatch('/admin/collectionroles/move');
         $this->assertRedirect();
-        $this->assertModule('admin');
-        $this->assertController('collectionroles');
-        $this->assertAction('move');
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/collectionroles');
     }
 
     public function testNewAction() {
@@ -131,33 +123,25 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
     public function testHideAction() {
         $this->dispatch('/admin/collectionroles/hide/roleid/' . $this->nonEmptyCollectionRole->getId());
         $this->assertRedirect();
-        $this->assertModule('admin');
-        $this->assertController('collectionroles');
-        $this->assertAction('hide');
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/collectionroles');
     }
 
     public function testHideActionWithMissingParam() {
         $this->dispatch('/admin/collectionroles/hide');
         $this->assertRedirect();
-        $this->assertModule('admin');
-        $this->assertController('collectionroles');
-        $this->assertAction('hide');
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/collectionroles');
     }
 
     public function testUnhideAction() {
         $this->dispatch('/admin/collectionroles/unhide/roleid/' . $this->nonEmptyCollectionRole->getId());
         $this->assertRedirect();
-        $this->assertModule('admin');
-        $this->assertController('collectionroles');
-        $this->assertAction('unhide');
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/collectionroles');
     }
 
     public function testUnhideActionWithMissingParam() {
         $this->dispatch('/admin/collectionroles/unhide');
         $this->assertRedirect();
-        $this->assertModule('admin');
-        $this->assertController('collectionroles');
-        $this->assertAction('unhide');
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/collectionroles');
     }    
 }
 ?>

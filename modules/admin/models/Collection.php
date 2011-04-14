@@ -57,6 +57,10 @@ class Admin_Model_Collection {
         $this->collection->setVisible('1');
     }
 
+    /**
+     *
+     * @return Opus_Collection
+     */
     public function getObject() {
         return $this->collection;
     }
@@ -102,5 +106,56 @@ class Admin_Model_Collection {
         return $this->collection->getDisplayName();
     }
 
+    /**
+     * Moves the collection within the same hierarchy level. Return the parent's
+     * collection id.
+     *
+     * @param int $newPosition
+     * @return int
+     */
+    public function move($newPosition) {
+        if (is_null($newPosition)) {
+            throw new Admin_Model_Exception('missing parameter pos');
+        }
+        
+        $newPosition = (int) $newPosition;
+        if ($newPosition < 1) {
+            throw new Admin_Model_Exception('cannot move collection to position ' . $newPosition);
+        }
+
+        $parents = $this->collection->getParents();
+        if (count($parents) < 2) {
+            throw new Admin_Model_Exception('cannot move root collection');
+        }
+
+        $siblings = $parents[1]->getChildren();
+        if ($newPosition > count($siblings)) {
+            throw new Admin_Model_Exception('cannot move collection to position ' . $newPosition);
+        }
+
+        // assing sortOrder value to all collections at the same hierarchy level
+        $oldPosition = 0;
+        foreach ($siblings as $position => $sibling) {
+            $sibling->setSortOrder($position);
+            $sibling->store();
+            if ($sibling->getId() === $this->collection->getId()) {
+                $oldPosition = $position;                
+            }
+        }
+
+        // counting for newPosition is not zero-based
+        $newPosition--;
+
+        // perform move operation
+        if ($oldPosition !== $newPosition) {
+            $siblings[$oldPosition]->setSortOrder($newPosition);
+            $siblings[$newPosition]->setSortOrder($oldPosition);
+            
+            $siblings[$oldPosition]->store();
+            $siblings[$newPosition]->store();
+        }
+
+        return $parents[1]->getId();
+    }
 }
 ?>
