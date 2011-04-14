@@ -177,8 +177,6 @@
                 <xsl:apply-templates select="@ContributingCorporation" />
             </xsl:if>
 
-
-
             <!-- -->
             <!-- Subjects section.  New subjects must be introduced right here. -->
             <!-- -->
@@ -188,8 +186,6 @@
             <xsl:apply-templates select="Subject[@Type='ddc']"><xsl:sort select="@Value"/></xsl:apply-templates>
             <xsl:apply-templates select="Subject[@Type='msc']"><xsl:sort select="@Value"/></xsl:apply-templates>
             <xsl:apply-templates select="Subject[@Type='psyndex']"><xsl:sort select="@Value"/></xsl:apply-templates>
-
-
 
             <xsl:apply-templates select="@Source" />
             <xsl:apply-templates select="@Volume" />
@@ -1012,21 +1008,21 @@
     </xsl:template>
 
     <xsl:template match="Subject">
-        <tr>
-            <th class="name">
-                <xsl:if test="position() = 1">
-                    <xsl:call-template name="translateString">
-                        <xsl:with-param name="string">subject_frontdoor_<xsl:value-of select="@Type" /></xsl:with-param>
-                    </xsl:call-template>
-                    <xsl:text>:</xsl:text>
-                </xsl:if>
-            </th>
-            <td>
-                <em class="data-marker">
-                    <xsl:value-of select="@Value" />
-                </em>
-            </td>
-        </tr>
+        <xsl:if test="position() = 1">
+            <xsl:text disable-output-escaping="yes">&lt;tr&gt;</xsl:text>
+            <xsl:text disable-output-escaping="yes">&lt;th class="name"&gt;</xsl:text>
+            <xsl:call-template name="translateString">
+                <xsl:with-param name="string">subject_frontdoor_<xsl:value-of select="@Type" /></xsl:with-param>
+            </xsl:call-template>
+            <xsl:text>:</xsl:text>
+            <xsl:text disable-output-escaping="yes">&lt;/th&gt;</xsl:text>
+            <xsl:text disable-output-escaping="yes">&lt;td&gt;&lt;em class="data-marker"&gt;</xsl:text>
+        </xsl:if>
+        <xsl:value-of select="@Value" /><xsl:if test="position() != last()">; </xsl:if>
+        <xsl:if test="position() = last()">
+            <xsl:text disable-output-escaping="yes">&lt;/em&gt;&lt;/td&gt;</xsl:text>
+            <xsl:text disable-output-escaping="yes">&lt;/tr&gt;</xsl:text>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="TitleMain">
