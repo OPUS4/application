@@ -44,22 +44,6 @@ class Admin_Form_RoleTest extends ControllerTestCase {
         $this->assertEquals('guest', $form->getElement('name')->getValue());
     }
 
-    public function testParseSelectedPrivileges() {
-        $postData = array(
-            'privilegeadministrate' => 0,
-            'privilegeclearance' => 1,
-            'metadatapublished' => 1,
-            'metadataunpublished' => 0
-        );
-
-        $privileges = Admin_Form_Role::parseSelectedPrivileges($postData);
-
-        $this->assertNotContains('administrate', $privileges);
-        $this->assertContains('clearance', $privileges);
-        $this->assertContains('readMetadata.published', $privileges);
-        $this->assertNotContains('readMetadata.unpublished', $privileges);
-    }
-
 }
 
 ?>
