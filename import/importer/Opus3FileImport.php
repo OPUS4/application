@@ -270,16 +270,13 @@ class Opus3FileImport {
             $file->setTempFile($f);
             $file->setLanguage($lang);
 
-            // TOOD ion 4.1: Check if a '.bem_' file exists and make a filecomment
+            // Check if a '.bem_' file exists and make a filecomment
             $comment_file = dirname($f) . "/.bem_" . basename($f);
-            /*
             if (file_exists($comment_file)) {
                 $fileArray = file($comment_file);
                 $comment = utf8_encode(implode(' ', $fileArray));
                 $file->setComment($comment);
             }
-             * 
-             */
 
             $total++;
         }
