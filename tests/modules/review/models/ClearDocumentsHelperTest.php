@@ -76,6 +76,8 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase {
     }
 
     public function testClearDocumentWithFile() {
+        $this->markTestIncomplete('TODO: Re-enable, as soon as OPUSVIER-1220 is fixed.');
+
         $path = '/tmp/opus4-test/' . uniqid() . "/src";
         mkdir($path, 0777, true);
 
