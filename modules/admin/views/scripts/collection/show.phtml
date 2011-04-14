@@ -109,16 +109,12 @@
                 <?php */ endif ?>
             <!--/td-->
 
-            <?php /*
             <td>
-                TODO: alle Collections im Unterbaum ausblenden (OPUSVIER-769)
+                <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'index', 'collectionid' => $collection->getId()), null, true) ?>">
+                <?= $this->translate('admin_collections_show_associated') ?>
+                </a>
             </td>
-
-            <td>
-                TODO: alle Collections im Unterbaum einblenden (OPUSVIER-769)
-            </td>
-            */ ?>
-
+            
             <td>
                 <?php
                     if (count($collection->getChildren()) > 0) {

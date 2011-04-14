@@ -96,6 +96,13 @@
             <?php endif ?>
         </td>
         <td>
+            <?php if (!is_null($collectionRole->getRootCollection())) : ?>
+                <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'index', 'collectionid' => $collectionRole->getRootCollection()->getId()), null, true) ?>">
+                <?= $this->translate('admin_collections_role_show_associated') ?>
+                </a>
+            <?php endif ?>
+        </td>
+        <td>
             <?php
             if (is_null($collectionRole->getRootCollection()) || count($collectionRole->getRootCollection()->getChildren()) === 0) {
                 $confirmKey = 'confirm_deletion_empty';

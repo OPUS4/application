@@ -66,6 +66,15 @@
 			</tuv>
         </tu>
 
+        <tu tuid="admin_collections_role_show_associated">
+                        <tuv xml:lang="en">
+                                <seg>Show Associated Documents</seg>
+                        </tuv>
+                        <tuv xml:lang="de">
+                                <seg>Zeige verknüpfte Dokumente</seg>
+                        </tuv>
+        </tu>
+
         <tu tuid="admin_collections_collection_new">
 			<tuv xml:lang="en">
 				<seg>Create a new Collection</seg>
@@ -190,6 +199,15 @@
 			<tuv xml:lang="de">
 				<seg>nach unten verschieben</seg>
 			</tuv>
+        </tu>
+
+        <tu tuid="admin_collections_show_associated">
+                        <tuv xml:lang="en">
+                                <seg>Show Associated Documents</seg>
+                        </tuv>
+                        <tuv xml:lang="de">
+                                <seg>Zeige verknüpfte Dokumente</seg>
+                        </tuv>
         </tu>
 
         <tu tuid="Name">
