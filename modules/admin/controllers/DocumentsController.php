@@ -62,8 +62,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $filter->setModel($document);
         $blacklist = array('Collection', 'IdentifierOpus3', 'Source', 'File',
             'ServerState', 'ServerDatePublished', 'ServerDateModified',
-            'ServerDateUnlocking', 'Type',
-            'PublicationState');
+            'ServerDateUnlocking', 'Type', 'PublicationState');
         $filter->setBlacklist($blacklist);
         // $filter->setSortOrder($type->getAdminFormSortOrder());
         return $filter;
@@ -112,6 +111,11 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             $page = $data['page'];
         }
 
+        $collectionId = null;
+        if (array_key_exists('collectionid', $data)) {
+            $collectionId = $data['collectionid'];
+        }
+
         // Default Ordering...
         $sort_reverse = '0';
         if (true === array_key_exists('sort_reverse', $data)) {
@@ -122,7 +126,8 @@ class Admin_DocumentsController extends Controller_CRUDAction {
 
         $config = Zend_Registry::get('Zend_Config');
 
-                $state = 'unpublished';
+        $state = 'unpublished';
+
         if (true === array_key_exists('state', $data)) {
             $state = $data['state'];
         }
@@ -143,7 +148,14 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         
         $this->view->sort_order = $sort_order;
 
-        $result = $this->_helper->documents($sort_order, $sort_reverse, $state);
+        if (!empty($collectionId)) {
+            $collection = new Opus_Collection($collectionId);
+            $result = $collection->getDocumentIds();
+            $this->view->collection = $collection;
+        }
+        else {
+            $result = $this->_helper->documents($sort_order, $sort_reverse, $state);
+        }
 
         $paginator = Zend_Paginator::factory($result);
         if (array_key_exists('hitsPerPage', $data)) {
@@ -212,7 +224,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             $filter->setModel($model);
             $blacklist = array('PublicationState');
             $filter->setBlacklist($blacklist);
-            
+
             $this->view->entry = $filter->toArray();
             $this->view->objectId = $id;
 
