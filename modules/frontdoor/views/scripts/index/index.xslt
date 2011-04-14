@@ -722,6 +722,11 @@
                 </xsl:if>
             </xsl:element>
             <xsl:text> </xsl:text>
+            <xsl:if test="@Comment">
+                    <xsl:element name="p">
+                        <xsl:value-of select="@Comment" />
+                    </xsl:element>
+            </xsl:if>
         </li>
     </xsl:template>
 
