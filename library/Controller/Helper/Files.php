@@ -37,7 +37,7 @@
  *
  * Can be used to list files in a directory matching a pattern.
  *
- * TODO Implement/improve functionality
+ * TODO Implement/improve functionality (talk to Jens before doing anything)
  */
 class Controller_Helper_Files extends Zend_Controller_Action_Helper_Abstract {
     
