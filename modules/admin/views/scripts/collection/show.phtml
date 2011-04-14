@@ -110,9 +110,13 @@
             </td>
 
             <td>
-                <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'index', 'collectionid' => $collection->getId()), null, true) ?>">
-                <?= $this->translate('admin_collections_show_associated') ?>
-                </a>
+                <?php if (count($collection->getDocumentIds()) == 0) : ?>
+                    <span class="unavailable"><?= $this->translate('admin_collections_no_associated') ?></span>
+                <?php else : ?>
+                    <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'index', 'collectionid' => $collection->getId()), null, true) ?>">
+                    <?= $this->translate('admin_collections_show_associated') ?>
+                    </a>
+                <?php endif ?>
             </td>
             
             <td>

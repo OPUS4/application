@@ -210,6 +210,15 @@
                         </tuv>
         </tu>
 
+        <tu tuid="admin_collections_no_associated">
+                        <tuv xml:lang="en">
+                                <seg>No associated documents available</seg>
+                        </tuv>
+                        <tuv xml:lang="de">
+                                <seg>Keine verknüpften Dokumente vorhanden</seg>
+                        </tuv>
+        </tu>
+
         <tu tuid="Name">
 			<tuv xml:lang="en">
 				<seg>Name</seg>

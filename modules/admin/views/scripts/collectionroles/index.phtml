@@ -96,20 +96,19 @@
             <?php endif ?>
         </td>
         <td>
-            <?php if (!is_null($collectionRole->getRootCollection())) : ?>
+            <?php if (!is_null($collectionRole->getRootCollection()) && count($collectionRole->getRootCollection()->getDocumentIds()) > 0)  : ?>
                 <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'index', 'collectionid' => $collectionRole->getRootCollection()->getId()), null, true) ?>">
                 <?= $this->translate('admin_collections_role_show_associated') ?>
                 </a>
+            <?php else: ?>
+                <span class="unavailable"><?= $this->translate('admin_collections_no_associated') ?></span>
             <?php endif ?>
         </td>
         <td>
             <?php
-            if (is_null($collectionRole->getRootCollection()) || count($collectionRole->getRootCollection()->getChildren()) === 0) {
-                $confirmKey = 'confirm_deletion_empty';
-            }
-            else {
-                $confirmKey = 'confirm_deletion';
-            }
+            $confirmKey = 
+                (is_null($collectionRole->getRootCollection()) || count($collectionRole->getRootCollection()->getChildren()) === 0) ?
+                    'confirm_deletion_empty' : 'confirm_deletion'
             ?>
             <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collectionroles', 'action' => 'delete', 'roleid' => $collectionRole->getId()), null, true) ?>" onclick="return confirm('<?= $this->translate($confirmKey) ?>');">
             <?= $this->translate('admin_collections_role_delete') ?>

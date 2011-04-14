@@ -344,3 +344,7 @@
 
 .adminContainer table.systeminfo td.description {
 }
+
+.adminContainer .unavailable {
+    color: gray;
+}
