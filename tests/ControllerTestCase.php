@@ -127,4 +127,19 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         }
     }
 
+    /**
+     *
+     * @param Zend_Controller_Response_Abstract $response
+     * @param string $location
+     */
+    protected function assertResponseLocationHeader($response, $location) {
+        $locationActual = null;
+        foreach ($response->getHeaders() as $header) {
+            if ($header['name'] === 'Location') {
+                $locationActual = $header['value'];
+            }
+        }
+        $this->assertNotNull($locationActual);
+        $this->assertEquals($location, $locationActual);
+    }
 }
