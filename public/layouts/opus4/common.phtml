@@ -56,7 +56,12 @@ $this->headLink()
     ->headLink(array(
         'rel' => 'shortcut icon',
         'type' => 'image/x-icon',
-        'href' => $this->layoutPath() . '/img/logo/favicon.ico'));
+        'href' => $this->layoutPath() . '/img/logo/favicon.ico'))
+    ->headLink(array(
+        'rel' => 'search',
+        'title' => 'OPUS 4 Search',
+        'type' => 'application/opensearchdescription+xml',
+        'href' => $this->serverUrl() . $this->baseUrl() . '/solrsearch/opensearch'));
 
 /* 
 uncomment the following line if you want to enable your own layout changes
