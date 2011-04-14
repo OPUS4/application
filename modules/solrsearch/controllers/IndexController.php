@@ -75,7 +75,7 @@ class Solrsearch_IndexController extends Controller_Action {
     }
 
     /**
-     * legacy OPUS 4.0.x action: externalized in SolrSearch_DispatchController.indexAction
+     * legacy OPUS 4.0.x action: externalized in Solrsearch_DispatchController.indexAction
      */
     public function searchdispatchAction() {
         $this->_forward('index', 'dispatch');
@@ -246,9 +246,9 @@ class Solrsearch_IndexController extends Controller_Action {
     private function prepareChildren() {
         $collectionList = null;
         try {
-            $collectionList = new SolrSearch_Model_CollectionList($this->getRequest()->getParam('id'));
+            $collectionList = new Solrsearch_Model_CollectionList($this->getRequest()->getParam('id'));
         }
-        catch (SolrSearch_Model_Exception $e) {
+        catch (Solrsearch_Model_Exception $e) {
             $this->log->debug($e->getMessage());
             return $this->_redirectToAndExit('index', '', 'browse', null, array(), true);
         }

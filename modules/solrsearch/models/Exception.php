@@ -31,6 +31,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class SolrSearch_Model_Exception extends Exception {    
+class Solrsearch_Model_Exception extends Exception {
 }
 ?>

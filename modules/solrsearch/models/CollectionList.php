@@ -32,14 +32,14 @@
  * @version     $Id$
  */
 
-class SolrSearch_Model_CollectionList {
+class Solrsearch_Model_CollectionList {
 
     private $collection;
     private $collectionRole;
 
     public function __construct($collectionId) {
         if (is_null($collectionId)) {
-            throw new SolrSearch_Model_Exception('Could not browse collection due to missing id parameter.');
+            throw new Solrsearch_Model_Exception('Could not browse collection due to missing id parameter.');
         }
 
         $collection = null;
@@ -47,13 +47,13 @@ class SolrSearch_Model_CollectionList {
             $collection = new Opus_Collection((int) $collectionId);
         }
         catch (Opus_Model_NotFoundException $e) {
-            throw new SolrSearch_Model_Exception("Collection with id '" . $collectionId . "' does not exist.");
+            throw new Solrsearch_Model_Exception("Collection with id '" . $collectionId . "' does not exist.");
         }
 
         // check if an unvisible collection exists along the path to the root collection
         foreach ($collection->getParents() as $parent) {
             if (!$parent->isRoot() && $parent->getVisible() !== '1') {
-                throw new SolrSearch_Model_Exception("Collection with id '" . $collectionId . "' is not visible.");
+                throw new Solrsearch_Model_Exception("Collection with id '" . $collectionId . "' is not visible.");
             }
         }
         
@@ -62,11 +62,11 @@ class SolrSearch_Model_CollectionList {
             $collectionRole = new Opus_CollectionRole($collection->getRoleId());
         }
         catch (Opus_Model_NotFoundException $e) {
-            throw new SolrSearch_Model_Exception("Collection role with id '" . $collection->getRoleId() . "' does not exist.");
+            throw new Solrsearch_Model_Exception("Collection role with id '" . $collection->getRoleId() . "' does not exist.");
         }
         
         if (!($collectionRole->getVisible() === '1' && $collectionRole->getVisibleBrowsingStart() === '1')) {
-            throw new SolrSearch_Model_Exception("Collection role with id '" . $collectionRole->getId() . "' is not visible.");
+            throw new Solrsearch_Model_Exception("Collection role with id '" . $collectionRole->getId() . "' is not visible.");
         }
 
         // additional root collection check
@@ -82,7 +82,7 @@ class SolrSearch_Model_CollectionList {
             }
 
             if (!$visibleChild && count($rootCollection->getPublishedDocumentIds()) == 0) {
-                throw new SolrSearch_Model_Exception("Collection role with id '" . $collectionRole->getId() . "' is not clickable and therefore not displayed.");
+                throw new Solrsearch_Model_Exception("Collection role with id '" . $collectionRole->getId() . "' is not clickable and therefore not displayed.");
             }
         }
 

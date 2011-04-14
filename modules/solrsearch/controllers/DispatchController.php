@@ -25,7 +25,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_SolrSearch
+ * @package     Module_Solrsearch
  * @author      Julian Heise <heise@zib.de>
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
@@ -33,7 +33,7 @@
  * @version     $Id$
  */
 
-class SolrSearch_DispatchController extends Controller_Action {
+class Solrsearch_DispatchController extends Controller_Action {
 
     private $log;
 

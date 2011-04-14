@@ -41,7 +41,7 @@ class Solrsearch_BrowseController extends Controller_Action {
 
     public function indexAction() {
         $this->view->baseUrl = $this->getRequest()->getBaseUrl();
-        $collectionRoles = new SolrSearch_Model_CollectionRoles();
+        $collectionRoles = new Solrsearch_Model_CollectionRoles();
         $this->view->collectionRoles = $collectionRoles->getAllVisible();
     }
 

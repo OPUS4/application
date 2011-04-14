@@ -113,9 +113,9 @@ class Export_IndexController extends Controller_Xml {
         if ($this->searchtype === Util_Searchtypes::COLLECTION_SEARCH) {
             $collectionList = null;
             try {
-                $collectionList = new SolrSearch_Model_CollectionList($this->getRequest()->getParam('id'));
+                $collectionList = new Solrsearch_Model_CollectionList($this->getRequest()->getParam('id'));
             }
-            catch (SolrSearch_Model_Exception $e) {
+            catch (Solrsearch_Model_Exception $e) {
                 $this->log->debug($e->getMessage());
                 throw new Application_Exception($e->getMessage(), $e->getCode(), $e);
             }

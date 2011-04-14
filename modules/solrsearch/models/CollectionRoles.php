@@ -32,7 +32,7 @@
  * @version     $Id$
  */
 
-class SolrSearch_Model_CollectionRoles {
+class Solrsearch_Model_CollectionRoles {
 
     private $collectionRoles = array();
 

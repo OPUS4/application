@@ -32,10 +32,10 @@
  * @version     $Id$
  */
 
-class SolrSearch_Model_CollectionRolesTest extends ControllerTestCase {
+class Solrsearch_Model_CollectionRolesTest extends ControllerTestCase {
 
     public function testGetAllVisible() {
-        $collectionRoles = new SolrSearch_Model_CollectionRoles();
+        $collectionRoles = new Solrsearch_Model_CollectionRoles();
         $collectionRoles->getAllVisible();
     }
 }
