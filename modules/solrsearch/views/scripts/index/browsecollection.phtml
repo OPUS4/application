@@ -37,13 +37,26 @@
 <div id="breadcrumb">
     <ul>        
         <?php foreach ($this->parents as $id => $parent) : ?>
+            <?php
+                $displayNameShortened = '';
+                if ($id === 0) {
+                    $displayNameShortened = $this->collectionRoleTitle;
+                }
+                else {
+                    $displayNameShortened = $parent->getDisplayName();
+                }
+                if (strlen($displayNameShortened) > 50) {
+                    $displayNameShortened = substr($displayNameShortened, 0, 50) . '...';
+                }
+                $displayNameShortened = htmlspecialchars($displayNameShortened);
+            ?>
             <?php if ($id === 0) : ?>
-                <li><a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'collection', 'id' => $parent->getId()), null, true) ?>"><?= htmlspecialchars($this->collectionRoleTitle) ?></a></li>
+                <li><a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'collection', 'id' => $parent->getId()), null, true) ?>"><?= $displayNameShortened ?></a></li>
             <?php else : ?>
                 <?php if ($parent->getVisible() === '1') : ?>
-                    <li><a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'collection', 'id' => $parent->getId()), null, true) ?>"><?= htmlspecialchars($parent->getDisplayName()) ?></a></li>
+                    <li><a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'collection', 'id' => $parent->getId()), null, true) ?>"><?= $displayNameShortened ?></a></li>
                 <?php else : ?>
-                    <li class="empty-collection"><?= htmlspecialchars($parent->getDisplayName()) ?></li>
+                    <li class="empty-collection"><?= $displayNameShortened ?></li>
                 <?php endif ?>                
             <?php endif ?>
         <?php endforeach ?>
