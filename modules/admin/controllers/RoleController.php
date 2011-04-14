@@ -102,7 +102,7 @@ class Admin_RoleController extends Controller_Action {
             $postData = $this->getRequest()->getPost();
 
             if ($this->getRequest()->getPost('cancel')) {
-                $this->_helper->redirector('index');
+                $this->_redirectTo('index');
             }
 
             $form = new Admin_Form_Role();
@@ -113,9 +113,7 @@ class Admin_RoleController extends Controller_Action {
 
                 $roleExists = $this->_isRoleNameExists($name);
 
-                $selectedPrivileges = Admin_Form_Role::parseSelectedPrivileges($postData);
-
-                $this->_updateRole(null, $name, $selectedPrivileges);
+                $this->_updateRole(null, $name);
             }
             else {
                 $actionUrl = $this->view->url(array('action' => 'create'));
@@ -126,7 +124,7 @@ class Admin_RoleController extends Controller_Action {
             }
         }
 
-        $this->_helper->redirector('index');
+        $this->_redirectTo('index');
     }
     
     /**
@@ -167,9 +165,7 @@ class Admin_RoleController extends Controller_Action {
 
             if ($roleForm->isValid($postData)) {
                 $name = $postData['name'];
-                $selectedPrivileges = Admin_Form_Role::parseSelectedPrivileges($postData);
-
-                $this->_updateRole($roleId, $name, $selectedPrivileges);
+                $this->_updateRole($roleId, $name);
             }
             else {
                 $actionUrl = $this->view->url(array('action' => 'update', 'id' => $roleId));
@@ -208,11 +204,9 @@ class Admin_RoleController extends Controller_Action {
     protected function _updateRole($roleId, $name, $selectedPrivileges) {
         if (!empty($roleId)) {
             $role = new Opus_UserRole($roleId);
-            $currentPrivileges = $role->getPrivilege();
         }
         else {
             $role = new Opus_UserRole();
-            $currentPrivileges = array();
         }
 
         $oldName = $role->getName();
@@ -220,59 +214,6 @@ class Admin_RoleController extends Controller_Action {
         if (!empty($name) && (!in_array($name, self::$protectedRoles))) {
             $role->setName($name);
         }
-
-        // check which privileges are already granted and
-        // remove the ones that are not selected anymore
-        foreach ($currentPrivileges as $index => $currentPrivilege) {
-            $name = $currentPrivilege->getPrivilege();
-            switch ($name) {
-            case 'readMetadata':
-                $state = $currentPrivilege->getDocumentServerState();
-                if (isset($selectedPrivileges['readMetadata.' . $state])) {
-                    unset($selectedPrivileges['readMetadata.' . $state]);
-                }
-                else {
-                    $currentPrivileges[$index] = null;
-                }
-                break;
-            case 'readFile':
-                // don't modify in this controller
-                break;
-            default:
-                if (isset($selectedPrivileges[$name])) {
-                    unset($selectedPrivileges[$name]);
-                }
-                else {
-                    $currentPrivileges[$index] = null;
-                }
-                break;
-            }
-        }
-
-        // add remaining selected privileges
-        foreach($selectedPrivileges as $newPrivilege) {
-            $name = strstr($newPrivilege, '.', true);
-            if ($name) {
-                if ($name === 'readMetadata') {
-                    $state = substr(strstr($newPrivilege, '.', false), 1);
-        // TODO: Remove, since not supported any more.
-        throw new Exception("TODO: Remove, since not supported any more.");
-                    $privilege = new Opus_Privilege();
-                    $privilege->setPrivilege('readMetadata');
-                    $privilege->setDocumentServerState($state);
-                    $currentPrivileges[] = $privilege;
-                }
-            }
-            else {
-        // TODO: Remove, since not supported any more.
-        throw new Exception("TODO: Remove, since not supported any more.");
-                $privilege = new Opus_Privilege();
-                $privilege->setPrivilege($newPrivilege);
-                $currentPrivileges[] = $privilege;
-            }
-        }
-
-        $role->setPrivilege($currentPrivileges);
 
         $role->store();
     }
