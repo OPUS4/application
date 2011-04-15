@@ -121,7 +121,7 @@ class Controller_Xml extends Zend_Controller_Action {
             return;
         }
 
-        $this->_logger->debug("FAILED authorization check for module '$module'/controller '$controller'");
+        $logger->debug("FAILED authorization check for module '$module'/controller '$controller'");
 
         // Print empty XML document
         $response = $this->getResponse();
