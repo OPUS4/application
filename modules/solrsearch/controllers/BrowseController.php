@@ -53,6 +53,7 @@ class Solrsearch_BrowseController extends Controller_Action {
         $facets = $searcher->search($query)->getFacets();
         $facetitems = $facets[$facetname];
         $this->view->facetitems = $facetitems;
+        $this->view->title = $this->view->translate('solrsearch_browse_doctypes');
     }
 }
 ?>
