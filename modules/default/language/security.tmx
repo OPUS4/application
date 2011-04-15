@@ -25,6 +25,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="no_identity_error">
+      <tuv xml:lang="en">
+        <seg>You must be logged in to access this page.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sie müssen eingeloggt sein um diese Seite aufzurufen.</seg>
+      </tuv>
+    </tu>
+
   </body>
 
 </tmx>
