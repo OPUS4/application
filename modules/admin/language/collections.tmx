@@ -58,6 +58,15 @@
             </tuv>
         </tu>
 
+        <tu tuid="admin_collection_assign">
+            <tuv xml:lang="en">
+                <seg>Assign Collection</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sammlungszuweisung</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="admin_collections_edit">
             <tuv xml:lang="en">
                 <seg>Edit</seg>
