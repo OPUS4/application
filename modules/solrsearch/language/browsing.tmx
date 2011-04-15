@@ -13,6 +13,15 @@
         </tuv>
     </tu>
 
+    <tu tuid="solrsearch_browse_doctypes">
+        <tuv xml:lang="en">
+            <seg>Browse documents by type</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Dokumenttypen</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="search_index_browsing">
       <tuv xml:lang="en">
         <seg>Browse</seg>
