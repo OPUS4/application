@@ -62,22 +62,6 @@ class Admin_Form_Role extends Zend_Form {
         $this->getElement('name')->addValidator(new Form_Validate_RoleAvailable());
     }
 
-    /**
-     * Add display group with basic privileges like 'administrate'.
-     */
-    protected function _addBasicPrivilegesGroup() {
-        $group = array();
-
-        foreach (self::$basicPrivileges as $privilege) {
-            $element = $this->createElement('checkbox', 'privilege' . $privilege)->setLabel($privilege);
-            $this->addElement($element);
-            $group[] = $element->getName();
-        }
-
-        $this->addDisplayGroup($group, 'basic', array('legend' => 'admin_role_group_basic'));
-    }
-
-
     public function populateFromRole($role) {
         $nameElement = $this->getElement('name');
         $roleName = $role->getName();

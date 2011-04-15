@@ -97,7 +97,7 @@ class Admin_RoleControllerTest extends ControllerTestCase {
     }
 
     public function testCreateAction() {
-         $this->request
+        $this->request
                 ->setMethod('POST')
                 ->setPost(array(
                     'name' => 'testrole',
@@ -110,7 +110,7 @@ class Admin_RoleControllerTest extends ControllerTestCase {
         $this->assertModule('admin');
         $this->assertController('role');
         $this->assertAction('create');
-        $this->assertRedirect();
+        $this->assertRedirect('/admin/role/index');
         $this->assertNotNull(Opus_UserRole::fetchByName('testrole'));
     }
 

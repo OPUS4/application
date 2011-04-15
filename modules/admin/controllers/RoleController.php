@@ -201,7 +201,7 @@ class Admin_RoleController extends Controller_Action {
         $this->_helper->redirector('index');
     }
 
-    protected function _updateRole($roleId, $name, $selectedPrivileges) {
+    protected function _updateRole($roleId, $name) {
         if (!empty($roleId)) {
             $role = new Opus_UserRole($roleId);
         }
