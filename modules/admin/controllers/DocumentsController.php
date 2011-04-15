@@ -152,6 +152,12 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             $collection = new Opus_Collection($collectionId);
             $result = $collection->getDocumentIds();
             $this->view->collection = $collection;
+            if ($collection->isRoot()) {
+                $this->view->collectionName = $collection->getRole()->getDisplayName();
+            }
+            else {
+                $this->view->collectionName = $collection->getDisplayName();
+            }
         }
         else {
             $result = $this->_helper->documents($sort_order, $sort_reverse, $state);

@@ -295,6 +295,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_documents_label_collection">
+      <tuv xml:lang="en">
+        <seg>Collection</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Collection</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="search_titles_resultlist_one_entry">
       <tuv xml:lang="en">
         <seg>One document was found.</seg>

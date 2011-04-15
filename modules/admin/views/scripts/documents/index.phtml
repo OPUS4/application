@@ -50,6 +50,9 @@
     </div>
 
     <div class="documentOptions">
+        <?PHP if (!empty($this->collection)) : ?>
+            <?=$this->translate('admin_documents_label_collection')?>: <b><?=htmlspecialchars($this->collectionName)?></b>
+        <?PHP else : ?>
         <div class="docstateMenu">
             <span><?= $this->translate('admin_documents_show_docs') ?></span>
             <?php foreach ($this->registers as $state => $link) : ?>
@@ -73,6 +76,7 @@
             </span>
             <?PHP endforeach; ?>
         </div>
+        <?PHP endif; ?>
     </div>
 
     <?= $this->paginationControl($this->paginator, NULL, 'itemCount_pagination.phtml') ?>
