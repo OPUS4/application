@@ -90,10 +90,21 @@ class Admin_AccessController extends Controller_Action {
         $role->store();
     }
 
-    private function string_begins_with($string, $search) {
-        return (strncmp($string, $search, strlen($search)) == 0);
+    /**
+     * Checks whether a given string has the supplied prefix
+     * @param $string
+     * @param $prefix
+     * @return boolean
+     */
+    private function string_begins_with($string, $prefix) {
+        return (strncmp($string, $prefix, strlen($prefix)) == 0);
     }
 
+    /**
+     * Iterates over Zend controller directories and extracts controller and
+     * module names
+     * @return array
+     */
     private function getAllModules() {
         $deadPaths = Array( ".", "..", ".svn");
         $module_dir = substr(str_replace("\\","/",$this->getFrontController()->getModuleDirectory()),0,strrpos(str_replace("\\","/",$this->getFrontController()->getModuleDirectory()),'/'));
@@ -118,6 +129,5 @@ class Admin_AccessController extends Controller_Action {
         }
         return $structured;
     }
-
 }
 ?>
