@@ -344,8 +344,6 @@ class Oai_IndexController extends Controller_Xml {
         // add frontdoor url
         $this->_addFrontdoorUrlAttribute($domNode, $docId);
 
-        $this->_addDdbContactId($domNode, $docId);
-
         // add container file element
         $this->_addContainerFileElement($domNode, $docId);
 
@@ -433,16 +431,6 @@ class Oai_IndexController extends Controller_Xml {
      * @param string  $docId
      * @return void
      */
-    private function _addDdbContactId(DOMNode $document, $docId) {
-
-        $ddbContactIdValue = $this->_configuration->getDdbContactid();
-
-        $owner = $document->ownerDocument;
-        $ddbContactId = $owner->createAttribute('ddbContactId');
-        $ddbContactId->appendChild($owner->createTextNode($ddbContactIdValue));
-        $document->appendChild($ddbContactId);
-    }
-
     /**
      * Add <File> element for container file if present.
      *

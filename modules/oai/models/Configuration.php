@@ -41,13 +41,6 @@
 class Oai_Model_Configuration {
 
     /**
-     * Holds ddb contact id
-     *
-     * @var string
-     */
-    private $_ddb_contact_id = '';   
-    
-    /**
      * Hold path where to store temporary resumption token files.
      *
      * @var string
@@ -112,10 +105,7 @@ class Oai_Model_Configuration {
         if (false === isset($config->oai)) {
             throw new Exception('No configuration for module oai.');
         }
-    
-        if (true === isset($config->oai->ddb->contactid)) {
-            $this->_ddb_contact_id = $config->oai->ddb->contactid;
-        }
+
         if (true === isset($config->oai->repository->name)) {
             $this->_repo_name = $config->oai->repository->name;
         }
@@ -146,15 +136,6 @@ class Oai_Model_Configuration {
         }
     }
 
-    /**
-     * Return configured ddb contact id.
-     *
-     * @return string Ddb ontact id.
-     */
-    public function getDdbContactId() {
-        return $this->_ddb_contact_id;
-    }    
-    
     /**
      * Return temporary path for resumption tokens.
      *
