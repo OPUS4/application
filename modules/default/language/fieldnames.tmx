@@ -859,7 +859,34 @@
       </tuv>
     </tu>
     
-    <tu tuid="ServerDateModified">
+    <tu tuid="ServerDateCreated">
+      <tuv xml:lang="en">
+        <seg>Date of Creation</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datum der Erstellung</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="add_ServerDateCreated">
+      <tuv xml:lang="en">
+        <seg>Add Date of Creation</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datum der Erstellung hinzufügen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="remove_ServerDateCreated">
+      <tuv xml:lang="en">
+        <seg>Remove Date of Creation</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datum der Erstellung entfernen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="ServerDateModified">
       <tuv xml:lang="en">
         <seg>Date of Last Modification (Server)</seg>
       </tuv>
@@ -877,15 +904,33 @@
       </tuv>
     </tu>
     
-    <tu tuid="ServerDateUnlocking">
+	<tu tuid="ServerDateDeleted">
       <tuv xml:lang="en">
-        <seg>Release at</seg>
+        <seg>Date of Deletion</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Freigabe am</seg>
+        <seg>Löschdatum</seg>
       </tuv>
     </tu>
-    
+	
+	<tu tuid="add_ServerDateDeleted">
+      <tuv xml:lang="en">
+        <seg>Add Date of Deletion</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Löschdatum hinzufügen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="remove_ServerDateDeleted">
+      <tuv xml:lang="en">
+        <seg>Remove Date of Deletion</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Löschdatum entfernen</seg>
+      </tuv>
+    </tu>
+	
     <tu tuid="ServerDateValid">
       <tuv xml:lang="en">
         <seg>Valid until</seg>
@@ -931,6 +976,60 @@
       </tuv>
     </tu>
     
+	<tu tuid="IdentifierArxiv">
+      <tuv xml:lang="en">
+        <seg>ArXiv Id</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>ArXiv-Id</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="add_IdentifierArxiv">
+      <tuv xml:lang="en">
+        <seg>Add ArXiv Id</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>ArXiv-Id hinzufügen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="remove_IdentifierArxiv">
+      <tuv xml:lang="en">
+        <seg>remove ArXiv Id</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>ArXiv-Id entfernen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="IdentifierPubmed">
+      <tuv xml:lang="en">
+        <seg>Pubmed Id</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Pubmed-Id</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="add_IdentifierPubmed">
+      <tuv xml:lang="en">
+        <seg>Add Pubmed Id</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Pubmed-Id hinzufügen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="remove_IdentifierPubmed">
+      <tuv xml:lang="en">
+        <seg>remove Pubmed Id</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Pubmed-Id entfernen</seg>
+      </tuv>
+    </tu>
+	
     <tu tuid="VgWortPixelUrl">
       <tuv xml:lang="en">
         <seg>URL for Pixel in VG Wort</seg>
@@ -978,10 +1077,10 @@
     
     <tu tuid="hint_Opus_Model_Filter_TitleMain">
       <tuv xml:lang="en">
-        <seg>If the original title is not in english, please order another inputfield</seg>
+        <seg>Please insert Title here.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Sofern der Originaltitel nicht englisch ist, fordern Sie bitte ein weiteres Eingabefeld an.</seg>
+        <seg>Geben Sie hier bitte den Titel ein.</seg>
       </tuv>
     </tu> 
     
@@ -1032,19 +1131,19 @@
         
     <tu tuid="TitleParentValue">
       <tuv xml:lang="en">
-        <seg>Main Title</seg>
+        <seg>Parent Title</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Haupttitel</seg>
+        <seg>Titel des übergeordneten Werks.</seg>
       </tuv>
     </tu>
     
     <tu tuid="hint_Opus_Model_Filter_TitleParent">
       <tuv xml:lang="en">
-        <seg>Please insert the parent title, which the article belongs to.</seg>
+        <seg>Please insert the Parent Title.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Geben Sie bitte das übergeordnete Werk ein, zu dem der Artikel gehört</seg>
+        <seg>Geben Sie bitte den Titel des übergeordneten Werks ein</seg>
       </tuv>
     </tu>
     
@@ -1116,16 +1215,16 @@
         <seg>Title Additional</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>zusätzlicher Titel</seg>
+        <seg>übersetzter Titel</seg>
       </tuv>
     </tu>
     
     <tu tuid="hint_Opus_Model_Filter_TitleAdditional">
       <tuv xml:lang="en">
-        <seg>Please insert an additional title in german, if the original title is in english. And vice versa.</seg>
+        <seg>Please insert a translated Title.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Sofern der Originaltitel der Arbeit englisch ist, geben Sie bitte einen zusätzlichen Titel auf deutsch ein. Und umgekehrt.</seg>
+        <seg>Geben Sie bitte einen übersetzten Titel</seg>
       </tuv>
     </tu>   
     
@@ -1134,7 +1233,7 @@
         <seg>add Title Additional</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>zusätzlichen Titel hinzufügen</seg>
+        <seg>übersetzten Titel hinzufügen</seg>
       </tuv>
     </tu>
         
@@ -1143,7 +1242,7 @@
         <seg>remove Titel Additional</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>zusätzlichen Titel entfernen</seg>
+        <seg>übersetzten Titel entfernen</seg>
       </tuv>
     </tu>
     
@@ -2146,33 +2245,6 @@
       </tuv>
     </tu>
     
-	<tu tuid="PersonOwner">
-      <tuv xml:lang="en">
-        <seg>Other Person(s)</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Besitzende Person</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="add_PersonOwner">
-      <tuv xml:lang="en">
-        <seg>add owning Person</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Besitzende Person hinzufügen</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="remove_PersonOwner">
-      <tuv xml:lang="en">
-        <seg>remove owning Person</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>besitzende Person entfernen</seg>
-      </tuv>
-    </tu>
-	
 	<tu tuid="PersonSubmitter">
       <tuv xml:lang="en">
         <seg>Submitter</seg>
@@ -2305,15 +2377,6 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Publikationsversion</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="PublisherUniversity">
-      <tuv xml:lang="en">
-        <seg>Publisher University</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Universität (Veröffentlicher)</seg>
       </tuv>
     </tu>
     
