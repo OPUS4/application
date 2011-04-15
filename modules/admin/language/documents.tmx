@@ -264,7 +264,7 @@
         <seg>The document is assigned to the following collections:</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Das Dokument ist folgenden Collections zugewiesen:</seg>
+        <seg>Das Dokument ist folgenden Sammlungen zugewiesen:</seg>
       </tuv>
     </tu>
     
@@ -273,7 +273,7 @@
         <seg>The document is not assigned to a collection.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Das Dokument ist keiner Collection zugewiesen.</seg>
+        <seg>Das Dokument ist keiner Sammlung zugewiesen.</seg>
       </tuv>
     </tu>
     
@@ -282,7 +282,7 @@
         <seg>Remove document from this collection</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Dokument aus der Collection entfernen</seg>
+        <seg>Dokument aus der Sammlung entfernen</seg>
       </tuv>
     </tu>
 
