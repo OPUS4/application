@@ -146,6 +146,13 @@ class Admin_Model_Collection {
         // counting for newPosition is not zero-based
         $newPosition--;
 
+        // TODO: moving distance needs to be increased
+        if (abs($oldPosition - $newPosition) > 1) {
+            // restore value for displaying error message
+            $newPosition++;
+            throw new Admin_Model_Exception('cannot move collection to position ' . $newPosition);
+        }
+
         // perform move operation
         if ($oldPosition !== $newPosition) {
             $siblings[$oldPosition]->setSortOrder($newPosition);
