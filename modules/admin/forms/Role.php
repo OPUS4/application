@@ -39,27 +39,6 @@ class Admin_Form_Role extends Zend_Form {
     private static $protectedRoles = array('administrator', 'guest');
 
     /**
-     * Names of basic privileges.
-     */
-    private static $basicPrivileges = array('administrate', 'clearance', 
-        'publish', 'publishUnvalidated');
-
-    /**
-     * Name of read metadata privilege.
-     */
-    const READ_METADATA_PRIVILEGE = "readMetadata";
-
-    /**
-     * Names of server states for read metadata privilege.
-     */
-    private static $serverStates = array('published', 'unpublished', 'deleted');
-
-    /**
-     * Name of read file privilege.
-     */
-    const READ_FILE_PRIVILEGE = "readFile";
-
-    /**
      * Constructs form.
      * @param int $id
      */
@@ -81,8 +60,6 @@ class Admin_Form_Role extends Zend_Form {
         parent::init();
 
         $this->getElement('name')->addValidator(new Form_Validate_RoleAvailable());
-        $this->_addBasicPrivilegesGroup();
-        $this->_addMetadataPrivilegesGroup();
     }
 
     /**
@@ -100,20 +77,6 @@ class Admin_Form_Role extends Zend_Form {
         $this->addDisplayGroup($group, 'basic', array('legend' => 'admin_role_group_basic'));
     }
 
-    /**
-     * Add showMetadata privileges group.
-     */
-    protected function _addMetadataPrivilegesGroup() {
-        $group = array();
-
-        foreach (self::$serverStates as $state) {
-            $element = $this->createElement('checkbox', 'metadata' . $state)->setLabel($state);
-            $this->addElement($element);
-            $group[] = $element->getName();
-        }
-
-        $this->addDisplayGroup($group, 'metadata', array('legend' => 'admin_role_group_metadata'));
-    }
 
     public function populateFromRole($role) {
         $nameElement = $this->getElement('name');
@@ -122,55 +85,7 @@ class Admin_Form_Role extends Zend_Form {
         if (in_array($roleName, self::$protectedRoles)) {
             $nameElement->setAttrib('disabled', 'true');
         }
-
-        $privileges = $role->getPrivilege();
-
-        foreach ($privileges as $privilege) {
-            $this->_populatePrivilege($privilege);
-        }
     }
-
-    protected function _populatePrivilege($privilege) {
-        switch ($privilege->getPrivilege()) {
-        case 'readFile':
-            // readFile permissions are managed in file manager
-            break;
-        case 'readMetadata':
-            $serverState = $privilege->getDocumentServerState();
-            $this->getElement('metadata' . $serverState)->setValue(true);
-            break;
-        default:
-            $basicPrivilege = $privilege->getPrivilege();
-            $this->getElement('privilege' . $basicPrivilege)->setValue(true);
-            break;
-        }
-    }
-
-    public static function parseSelectedPrivileges($postData) {
-        $privileges = array();
-
-        foreach (self::$basicPrivileges as $name) {
-            if (isset($postData['privilege' . $name])) {
-                $value = $postData['privilege' . $name];
-                if ($value) {
-                    $privileges[] = $name;
-                }
-            }
-        }
-
-        foreach (self::$serverStates as $state) {
-            if (isset($postData['metadata' . $state])) {
-                $value = $postData['metadata' . $state];
-                if ($value) {
-                    $privileges[] = 'readMetadata.' . $state;
-                }
-            }
-        }
-
-        return $privileges;
-    }
-
-
 
 }
 
