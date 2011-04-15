@@ -36,7 +36,7 @@
     
     <tu tuid="admin_title_collections">
       <tuv xml:lang="en">
-        <seg>Edit Collections</seg>
+        <seg>Manage Collections</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Sammlungen verwalten</seg>
