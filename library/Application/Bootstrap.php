@@ -69,10 +69,6 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         ->appendClassPath('forms');
         $frontController->registerPlugin($moduleprepare);
 
-        // Checks the current requeste module's directory for an initFile and runs it before controller is loaded.
-        $moduleInit = new Controller_Plugin_ModuleInit();
-        $frontController->registerPlugin($moduleInit);
-
         // Add security realm initialization
         $realmSetupPlugin = new Controller_Plugin_SecurityRealm();
         $frontController->registerPlugin($realmSetupPlugin);
