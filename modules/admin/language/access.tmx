@@ -1,0 +1,90 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+
+<header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+</header>
+
+<body>
+    <tu tuid="access_select_module">
+      <tuv xml:lang="en">
+        <seg>Please select modules and controllers you would like to grant access to</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie Module und Controller, für die Sie Zugriff gewähren möchten</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="access_current_roleid">
+      <tuv xml:lang="en">
+        <seg>Currently selected role ID:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Momentan ausgewählte Rollen-ID:</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="access_button_save">
+      <tuv xml:lang="en">
+        <seg>Save</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Speichern</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="access_button_cancel">
+      <tuv xml:lang="en">
+        <seg>Cancel</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Abbrechen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="access_redirect_message">
+      <tuv xml:lang="en">
+        <seg>Done</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Fertig</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="access_submit_save">
+      <tuv xml:lang="en">
+        <seg>Operation complete</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Vorgang abgeschlossen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="access_submit_cancel">
+      <tuv xml:lang="en">
+        <seg>Operation canceled</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Vorgang abgebrochen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="access_save_message">
+      <tuv xml:lang="en">
+        <seg>Your changes have been successfully saved</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Ihre Änderungen wurden gespeichert</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="access_cancel_message">
+      <tuv xml:lang="en">
+        <seg>Your changes have been discarded</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Ihre Änderungen wurden verworfen</seg>
+      </tuv>
+    </tu>
+
+</body>

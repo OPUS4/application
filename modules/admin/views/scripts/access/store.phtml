@@ -1,0 +1,18 @@
+<?php
+/* 
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+?>
+
+<h2><?= $this->translate($this->submit) ?></h2>
+<p><?= $this->translate($this->message)?></p>
+
+<form action="<?= $this->url($this->redirect, null, true) ?>" method="GET">
+    <div class="form-item">
+        <span class="form-submit-wrapper">
+            <input type="submit" class="form-submit" value="<?= $this->translate('access_redirect_message') ?>"/>
+        </span>
+    </div>
+</form>
