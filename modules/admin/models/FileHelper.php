@@ -85,6 +85,8 @@ class Admin_Model_FileHelper {
 
     public static function getRolesForFile($file) {
         $roles = array();
+        return $roles;
+
         // TODO: Remove, since not supported any more.
         throw new Exception("TODO: Remove, since not supported any more.");
         $privilegeIds = Opus_Privilege::fetchPrivilegeIdsByFile($file);
