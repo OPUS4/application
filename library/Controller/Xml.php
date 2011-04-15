@@ -75,6 +75,8 @@ class Controller_Xml extends Zend_Controller_Action {
         // Initialize member variables.
         $this->_xml = new DomDocument;
         $this->_proc = new XSLTProcessor;
+
+        $this->checkAccessModulePermissions();
     }
 
     /**
@@ -103,4 +105,35 @@ class Controller_Xml extends Zend_Controller_Action {
         $this->_xslt->load($stylesheet);
         $this->_proc->importStyleSheet($this->_xslt);
     }
+
+
+    protected function checkAccessModulePermissions() {
+        $logger = Zend_Registry::get('Zend_Log');
+
+        $module     = $this->_request->getModuleName();
+        $controller = $this->_request->getControllerName();
+
+        $logger->debug("starting authorization check for module '$module'/controller '$controller'");
+
+        // Check, if have the right privilege...
+        if (true === Opus_Security_Realm::getInstance()->checkModuleController($module, $controller)) {
+            $logger->debug("authorization check for module '$module'/controller '$controller' successful");
+            return;
+        }
+
+        $this->_logger->debug("FAILED authorization check for module '$module'/controller '$controller'");
+
+        // Print empty XML document
+        $response = $this->getResponse();
+        $response->setHttpResponseCode(401);
+        $response->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);
+        $response->setBody(
+                '<?xml version="1.0" encoding="utf-8" ?>' . "\n" .
+                '<error>Unauthorized: Access to module not allowed.</error>'
+                );
+
+        $response->sendResponse();
+        exit();
+    }
+
 }
