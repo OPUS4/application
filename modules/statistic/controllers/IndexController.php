@@ -32,7 +32,7 @@
  * @version     $Id$
  */
 
-class Statistic_IndexController extends Zend_Controller_Action {
+class Statistic_IndexController extends Controller_Action {
 
     /**
      * Just for manual testing, not for final opus version

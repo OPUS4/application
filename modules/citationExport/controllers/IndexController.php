@@ -38,7 +38,7 @@
  * @category    Application
  * @package     Module_CitationExport
  */
-class CitationExport_IndexController extends Zend_Controller_Action {
+class CitationExport_IndexController extends Controller_Action {
 
     /**
      * Output data to index view

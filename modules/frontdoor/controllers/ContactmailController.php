@@ -36,7 +36,7 @@
  * Controller for contacting authors (if allowed)
  *
  */
-class Frontdoor_ContactMailController extends Zend_Controller_Action
+class Frontdoor_ContactMailController extends Controller_Action
 {
     /**
      * Create the mail form for contacting author (Name and e-mail adress were read out)

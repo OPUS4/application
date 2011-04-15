@@ -37,7 +37,7 @@
  * Controller for document recommendation starting from Frontdoor
  *
  */
-class Frontdoor_MailController extends Zend_Controller_Action {
+class Frontdoor_MailController extends Controller_Action {
 
     /**
      *

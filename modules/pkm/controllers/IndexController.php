@@ -34,7 +34,7 @@
  * @version     $Id$
  */
 
-class Pkm_IndexController extends Zend_Controller_Action
+class Pkm_IndexController extends Controller_Action
 {
     /**
      * Do some initialization on startup of every action

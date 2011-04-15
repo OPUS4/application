@@ -37,7 +37,7 @@
  *
  *
  */
-class Frontdoor_HashController extends Zend_Controller_Action {
+class Frontdoor_HashController extends Controller_Action {
 
     /**
      *

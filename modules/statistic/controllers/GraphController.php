@@ -32,7 +32,7 @@
  * @version     $Id$
  */
 
-class Statistic_GraphController extends Zend_Controller_Action {
+class Statistic_GraphController extends Controller_Action {
 
 
     protected function buildGraph($title, $dataPdf, $dataFrontdoor) {

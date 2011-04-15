@@ -31,7 +31,7 @@
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: ErrorController.php 7241 2010-12-16 16:17:42Z tklein $
+ * @version     $Id$
  */
 
 
@@ -40,7 +40,7 @@
  *
  * @package     Module_Default
  */
-class ErrorController extends Zend_Controller_Action
+class ErrorController extends Controller_Action
 {
     /**
      * Print error information appropriate to environment.

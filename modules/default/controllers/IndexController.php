@@ -41,7 +41,7 @@
  * @category    Application
  * @package     Module_Default
  */
-class IndexController extends Zend_Controller_Action {
+class IndexController extends Controller_Action {
 
 	/**
 	 * Redirect to default module.

@@ -34,7 +34,7 @@
  * @version     $Id$
  */
 
-class Import_IndexController extends Zend_Controller_Action
+class Import_IndexController extends Controller_Action
 {
 	/**
 	 * Set forms to select an import action to the view
