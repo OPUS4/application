@@ -232,20 +232,19 @@ class Admin_CollectionController extends Controller_Action {
     public function assignAction() {
         $documentId = $this->getRequest()->getParam('document');
         if (is_null($documentId)) {
-            $this->_redirectToAndExit('index', array('failure' => 'document parameter missing'), 'collectionroles');
-            return;
+            return $this->_redirectToAndExit('index', array('failure' => 'document parameter missing'), 'collectionroles');
         }
         
         if ($this->getRequest()->isPost() === true) {
             // Zuordnung des Dokuments zur Collection ist erfolgt
             $collectionModel = new Admin_Model_Collection($this->getRequest()->getParam('id', ''));
             $collectionModel->addDocument($documentId);
-            $this->_redirectToAndExit(
+            return $this->_redirectToAndExit(
                     'edit',
                     'Document successfully assigned to collection "' . $collectionModel->getDisplayName() . '".',
                     'documents', 'admin', array('id' => $documentId));
-            return;
         }
+        
         $collectionId = $this->getRequest()->getParam('id');
         if (is_null($collectionId)) {
             // Einsprungseite anzeigen
@@ -262,13 +261,17 @@ class Admin_CollectionController extends Controller_Action {
         $this->view->collections = array();
         foreach ($collectionRoles as $collectionRole) {
             $rootCollection = $collectionRole->getRootCollection();
-            if (!is_null($rootCollection)) {
-                array_push($this->view->collections,
-                        array(
-                            'id' => $rootCollection->getId(),
-                            'name' => $collectionRole->getDisplayName(),
-                            'hasChildren' => (count($rootCollection->getChildren()) > 0)));
+            if (is_null($rootCollection)) {
+                // create empty root collection
+                $rootCollection = $collectionRole->addRootCollection();
+                $rootCollection->store();                
             }
+            
+            array_push($this->view->collections,
+                    array(
+                        'id' => $rootCollection->getId(),
+                        'name' => $collectionRole->getDisplayName(),
+                        'hasChildren' => (count($rootCollection->getChildren()) > 0)));
         }
         $this->view->documentId = $documentId;
         $this->view->breadcrumb = array();
