@@ -35,6 +35,23 @@
 
 class Admin_AccessController extends Controller_Action {
 
+    public function listroleAction() {
+        $id = $this->getRequest()->getParam('docid');
+        $roles = Opus_UserRole::getAll();
+        $this->view->docId = $id;
+        $this->view->roles = $roles;
+        $this->view->checkedRoles = $this->getCheckedRoles($id, $roles);
+    }
+
+    private function getCheckedRoles($id, $roles) {
+        $items = array();
+        foreach($roles as $role) {
+            $docs = $role->listAccessDocuments();
+            if(in_array($id, $docs))
+                array_push($items, $role->getId());
+        }
+    }
+
     public function listmoduleAction() {
 
         $id = $this->getRequest()->getParam('roleid');

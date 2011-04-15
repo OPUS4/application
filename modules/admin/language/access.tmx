@@ -87,4 +87,30 @@
       </tuv>
     </tu>
 
+    <tu tuid="access_select_role">
+      <tuv xml:lang="en">
+        <seg>Please select roles you would like to grant access to this document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie die Rollen, die Zugriff auf dieses Dokument erhalten sollen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="access_current_docid">
+      <tuv xml:lang="en">
+        <seg>Currently selected document ID:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Momentan ausgewählte Dokumenten-ID:</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="access_available_roles">
+      <tuv xml:lang="en">
+        <seg>Available roles</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Verfügbare Rollen</seg>
+      </tuv>
+    </tu>
 </body>
