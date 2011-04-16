@@ -1,0 +1,138 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+
+  <body>
+
+    <tu tuid="admin_document_index">
+      <tuv xml:lang="en">
+        <seg>Document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokument</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_document_edit_section">
+      <tuv xml:lang="en">
+        <seg>Edit</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Editieren</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_section_general">
+      <tuv xml:lang="en">
+        <seg>General</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Allgemein</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_section_titles">
+      <tuv xml:lang="en">
+        <seg>Title Information</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Titelinformationen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_section_abstracts">
+      <tuv xml:lang="en">
+        <seg>Abstract(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Abstact(s)</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_section_persons">
+      <tuv xml:lang="en">
+        <seg>Person(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Personen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_section_dates">
+      <tuv xml:lang="en">
+        <seg>Date(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datumsangaben</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_section_subjects">
+      <tuv xml:lang="en">
+        <seg>Subjects, Classifications, Collections</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Schlagwörter, Klassifikationen, Collections</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_section_identifiers">
+      <tuv xml:lang="en">
+        <seg>Identifiers</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Identifiers</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_section_references">
+      <tuv xml:lang="en">
+        <seg>References</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Referenzen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_section_licences">
+      <tuv xml:lang="en">
+        <seg>Licence(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Lizenzen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_section_thesis">
+      <tuv xml:lang="en">
+        <seg>Thesis</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Hochschulschriften</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_section_collections">
+      <tuv xml:lang="en">
+        <seg>Collections</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Collections</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_section_other">
+      <tuv xml:lang="en">
+        <seg>Miscellaneous Information</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Weitere Informationen</seg>
+      </tuv>
+    </tu>
+
+  </body>
+
+</tmx>
