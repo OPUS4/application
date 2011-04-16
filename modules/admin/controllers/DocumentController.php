@@ -53,7 +53,7 @@ class Admin_DocumentController extends Controller_Action {
             $this->view->entry = $filter->toArray();
             $this->view->objectId = $id;
 
-            $this->view->overviewHelper = new Admin_Model_DocumentOverviewHelper($model);
+            $this->view->overviewHelper = new Admin_Model_DocumentHelper($model);
 
             if (!empty($model)) {
                 $this->view->docHelper = new Review_Model_DocumentAdapter(
