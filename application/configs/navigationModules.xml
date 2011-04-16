@@ -49,6 +49,14 @@
                             <action>show</action>
                         </show>
 
+                        <show2>
+                            <type>mvc</type>
+                            <label>admin_document_index</label>
+                            <module>admin</module>
+                            <controller>document</controller>
+                            <action>index</action>
+                        </show2>
+
                         <filemanager>
                             <type>mvc</type>
                             <label>admin_filemanager_index</label>
