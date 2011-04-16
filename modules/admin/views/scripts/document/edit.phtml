@@ -1,0 +1,795 @@
+<?php
+/**
+ * This file is part of OPUS. The software OPUS has been originally developed
+ * at the University of Stuttgart with funding from the German Research Net,
+ * the Federal Department of Higher Education and Research and the Ministry
+ * of Science, Research and the Arts of the State of Baden-Wuerttemberg.
+ *
+ * OPUS 4 is a complete rewrite of the original OPUS software and was developed
+ * by the Stuttgart University Library, the Library Service Center
+ * Baden-Wuerttemberg, the North Rhine-Westphalian Library Service Center,
+ * the Cooperative Library Network Berlin-Brandenburg, the Saarland University
+ * and State Library, the Saxon State Library - Dresden State and University
+ * Library, the Bielefeld University Library and the University Library of
+ * Hamburg University of Technology with funding from the German Research
+ * Foundation and the European Regional Development Fund.
+ *
+ * LICENCE
+ * OPUS is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the Licence, or any later version.
+ * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @category    Application
+ * @package     Module_Admin
+ * @author      Jens Schwidder <schwidder(at)zib.de>
+ * @copyright   Copyright (c) 2009, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ * @version     $Id: edit.phtml 7528 2011-02-10 15:49:13Z schwidder $
+ */
+?>
+
+<div class="adminContainer">
+
+    <div class="breadcrumbsContainer">
+        <?= $this->navigation()->breadcrumbs()
+                 ->setMaxDepth(1)
+                 ->setLinkLast(true) ?>
+        &gt;
+        <?= $this->translate('admin_documents_edit', $this->docHelper->getDocId()) ?>
+    </div>
+
+    <!-- Navigation -->
+
+    <div>
+        <ul>
+            <li><a href="#collections"><?= $this->translate('admin_documents_label_collections') ?></a></li>
+        </ul>
+    </div>
+
+    <!-- -->
+
+    <div class="content">
+
+    <form style="padding: 0px; margin: 0px">
+
+        <div class="form-items-wrapper">
+
+            <fieldset class="left-labels" style="margin: 0px">
+
+                <legend>General</legend>
+
+                <div class="form-item">
+                    <label><?=$this->translate('CompletedDate')?></label>
+                    <input type="text" size="10" />
+                </div>
+
+                <div class="form-item">
+                    <label><?=$this->translate('CompletedYear')?></label>
+                    <input type="text" size="4" />
+                </div>
+
+                <div class="form-item">
+                    <label><?=$this->translate('ContributingCorporation')?></label>
+                    <input type="text" size="20" />
+                </div>
+
+                <div class="form-item">
+                    <label><?=$this->translate('CreatingCorporation')?></label>
+                    <input type="text" size="20" />
+                </div>
+
+                <div class="form-item">
+                    <label><?=$this->translate('ThesisDateAccepted')?></label>
+                    <input type="text" size="20" />
+                </div>
+
+                <div style="padding-top: 1em; padding-bottom: 1em">
+
+                <div class="form-item">
+                    <label><?=$this->translate('Edition')?></label>
+                    <input type="text" size="20" />
+                </div>
+
+                <div class="form-item">
+                    <label><?=$this->translate('Issue')?></label>
+                    <input type="text" size="20" />
+                </div>
+
+                <div class="form-item">
+                    <label><?=$this->translate('Language')?></label>
+                    <select>
+                        <option>Please select</option>
+                        <option>German</option>
+                        <option>English</option>
+                        <option>French</option>
+                        <option>Russian</option>
+                        <option>Spanish</option>
+                    </select>
+                </div>
+
+                <div class="form-item">
+                    <label><?=$this->translate('PageFirst')?></label>
+                    <input type="text" size="6" />
+                </div>
+
+                <div class="form-item">
+                    <label><?=$this->translate('PageLast')?></label>
+                    <input type="text" size="6" />
+                </div>
+
+                <div class="form-item">
+                    <label><?=$this->translate('PageNumber')?></label>
+                    <input type="text" size="6" />
+                </div>
+
+                </div>
+
+                <div class="form-item">
+                    <label><?=$this->translate('PublishedDate')?></label>
+                    <input type="text" size="20" />
+                </div>
+
+                <div class="form-item">
+                    <label><?=$this->translate('PublishedYear')?></label>
+                    <input type="text" size="20" />
+                </div>
+
+                <div class="form-item">
+                    <label><?=$this->translate('PublisherName')?></label>
+                    <input type="text" size="20" />
+                </div>
+
+                <div class="form-item">
+                    <label><?=$this->translate('PublisherPlace')?></label>
+                    <input type="text" size="20" />
+                </div>
+
+                <div class="form-item">
+                    <label><?=$this->translate('Volume')?></label>
+                    <input type="text" size="20" />
+                </div>
+
+                <div class="form-item">
+                    <label><?=$this->translate('BelongsToBibliography')?></label>
+                    <input type="checkbox" size="20" />
+                </div>
+            </fieldset>
+
+            <div class="button-wrapper">
+                <input type="button" value="Save Changes" class="form-button submit-button" />
+            </div>
+
+            <!-- Main Titles -->
+
+            <fieldset class="left-labels">
+
+                <legend><?=$this->translate('TitleMain')?></legend>
+
+                <div class="form-multiple odd">
+
+                    <div class="form-item">
+                        <label><?=$this->translate('TitleMain')?></label>
+                        <input type="text" size="40" />
+                    </div>
+
+                    <div class="form-item">
+                        <label><?=$this->translate('Language')?></label>
+                        <select>
+                            <option>Same as Document (German)</option>
+                            <option>German</option>
+                            <option>English</option>
+                            <option>French</option>
+                            <option>Russian</option>
+                            <option>Spanish</option>
+                        </select>
+                    </div>
+
+                    <div class="button-wrapper add-delete-wrapper">
+                        <input type="button" value="Remove Title" class="form-button delete-button" style="padding-top: 2px; padding-bottom: 2px"/>
+                    </div>
+                    
+                </div>
+
+                <div class="form-multiple even">
+
+                    <div class="form-item">
+                        <label><?=$this->translate('TitleMain')?></label>
+                        <input type="text" size="40" />
+                    </div>
+
+                    <div class="form-item">
+                        <label><?=$this->translate('Language')?></label>
+                        <select>
+                            <option>Same as Document</option>
+                            <option>German</option>
+                            <option>English</option>
+                            <option>French</option>
+                            <option>Russian</option>
+                            <option>Spanish</option>
+                        </select>
+                    </div>
+
+                    <div class="button-wrapper add-delete-wrapper">
+                        <input type="button" value="Remove Title" class="form-button delete-button" style="padding-top: 2px; padding-bottom: 2px"/>
+                    </div>
+                    
+                </div>
+
+                <div class="button-wrapper add-delete-wrapper">
+                    <input type="button" value="Add Title" class="form-button add-button" style="padding-top: 2px; padding-bottom: 2px"/>
+                </div>
+
+            </fieldset>
+
+            <div class="button-wrapper">
+                <input type="button" value="Save Changes" class="form-button submit-button" />
+            </div>
+
+            <!-- Abstracts -->
+
+            <fieldset class="left-labels">
+
+                <legend><?=$this->translate('TitleAbstract')?></legend>
+
+                <div class="form-multiple odd">
+
+                    <div class="form-item">
+                        <label><?=$this->translate('TitleAbstract')?></label>
+                        <textarea cols="80" rows="6"></textarea>
+                    </div>
+
+                    <div class="form-item">
+                        <label><?=$this->translate('Language')?></label>
+                        <select>
+                            <option>Same as Document</option>
+                            <option>German</option>
+                            <option>English</option>
+                            <option>French</option>
+                            <option>Russian</option>
+                            <option>Spanish</option>
+                        </select>
+                    </div>
+
+                    <div class="button-wrapper add-delete-wrapper">
+                        <input type="button" value="Remove Abstract" class="form-button delete-button" />
+                    </div>
+
+                </div>
+
+                <div class="button-wrapper add-delete-wrapper">
+                    <input type="button" value="Add Abstract" class="form-button add-button" />
+                </div>
+
+            </fieldset>
+
+            <div class="button-wrapper">
+                <input type="button" value="Save Changes" class="form-button submit-button" />
+            </div>
+
+            <!-- Other Titles -->
+
+            <fieldset class="left-labels">
+
+                <legend><?=$this->translate('TitleParent')?></legend>
+
+                <div class="form-multiple odd">
+
+                    <div class="form-item">
+                        <label><?=$this->translate('TitleParent')?></label>
+                        <input type="text" size="40" />
+                    </div>
+
+                    <div class="form-item">
+                        <label><?=$this->translate('Language')?></label>
+                        <select>
+                            <option>Same as Document</option>
+                            <option>German</option>
+                            <option>English</option>
+                            <option>French</option>
+                            <option>Russian</option>
+                            <option>Spanish</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="button-wrapper add-delete-wrapper">
+                    <input type="button" value="Add Title" class="form-button add-button" />
+                </div>
+
+            </fieldset>
+
+            <div class="button-wrapper">
+                <input type="button" value="Save Changes" class="form-button submit-button" />
+            </div>
+
+            <fieldset class="left-labels">
+
+                <legend><?=$this->translate('TitleSub')?></legend>
+
+                <div class="form-multiple odd">
+
+                    <div class="form-item">
+                        <label><?=$this->translate('TitleSub')?></label>
+                        <input type="text" size="40" />
+                    </div>
+
+                    <div class="form-item">
+                        <label><?=$this->translate('Language')?></label>
+                        <input type="text" size="20" />
+                    </div>
+
+                </div>
+
+                <div class="button-wrapper add-delete-wrapper">
+                    <input type="button" value="Add Title" class="form-button add-button" />
+                </div>
+
+            </fieldset>
+
+            <div class="button-wrapper">
+                <input type="button" value="Save Changes" class="form-button submit-button" />
+            </div>
+            
+            <fieldset class="left-labels">
+
+                <legend><?=$this->translate('TitleAdditional')?></legend>
+
+                <div class="form-multiple odd">
+
+                    <div class="form-item">
+                        <label><?=$this->translate('TitleAdditional')?></label>
+                        <input type="text" size="40" />
+                    </div>
+
+                    <div class="form-item">
+                        <label><?=$this->translate('Language')?></label>
+                        <input type="text" size="20" />
+                    </div>
+
+                </div>
+
+                <div class="button-wrapper add-delete-wrapper">
+                    <input type="button" value="Add Title" class="form-button add-button" />
+                </div>
+
+            </fieldset>
+
+            <!-- Identifiers -->
+
+            <fieldset class="left-labels">
+
+                <legend>Identifiers</legend>
+
+                <div class="form-multiple odd">
+
+                <table>
+                    <tr>
+                        <th align="left">Value</th>
+                        <th align="left">Type</th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td><input type="text" size="60" /></td>
+                        <td>
+                            <select>
+                                <option value="CRIS-LINK">CRIS-Link</option>
+                                <option value="DOI">DOI</option>
+                                <option value="HANDLE">HANDLE</option>
+                                <option value="ISBN">ISBN</option>
+                                <option value="ISSN">ISSN</option>
+                                <option value="Old ID">Old ID</option>
+                                <option value="OPAC ID">OPAC ID</option>
+                                <option value="SICI">SICI</option>
+                                <option value="SPLASHURL">SplashURL</option>
+                                <option value="STD-DOI">STD-DOI</option>
+                                <option value="URL">URL</option>
+                                <option value="URN">URN</option>
+                                <option value="UUID">UUID</option>
+                            </select>
+                        </td>
+                        <td><div><input type="button" value="Remove" class="form-button delete-button" /></div></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" size="60" /></td>
+                        <td>
+                            <select>
+                                <option value="CRIS-LINK">CRIS-Link</option>
+                                <option value="DOI">DOI</option>
+                                <option value="HANDLE">HANDLE</option>
+                                <option value="ISBN">ISBN</option>
+                                <option value="ISSN">ISSN</option>
+                                <option value="Old ID">Old ID</option>
+                                <option value="OPAC ID">OPAC ID</option>
+                                <option value="SICI">SICI</option>
+                                <option value="SPLASHURL">SplashURL</option>
+                                <option value="STD-DOI">STD-DOI</option>
+                                <option value="URL">URL</option>
+                                <option value="URN">URN</option>
+                                <option value="UUID">UUID</option>
+                            </select>
+                        </td>
+                        <td><div><input type="button" value="Remove" class="form-button delete-button" /></div></td>
+                    </tr>
+                </table>
+
+                </div>
+
+                <div class="button-wrapper add-delete-wrapper">
+                    <input type="button" value="Add Identifier" class="form-button add-button" />
+                </div>
+
+            </fieldset>
+
+            <div class="button-wrapper">
+                <input type="button" value="Save Changes" class="form-button submit-button" />
+            </div>
+
+            <!-- References -->
+
+            <fieldset class="left-labels">
+
+                <legend>References</legend>
+
+                <table>
+                    <tr>
+                        <th align="left">Label</th>
+                        <th align="left">Value</th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td><input type="text" size="30" /></td>
+                        <td><input type="text" size="50" /></td>
+                        <td><input type="button" value="Remove" class="form-button delete-button" /></td>
+                    </tr>
+                </table>
+
+                <div class="button-wrapper add-delete-wrapper">
+                    <input type="button" value="Add Reference" class="form-button add-button" />
+                </div>
+
+            </fieldset>
+
+            <div class="button-wrapper">
+                <input type="button" value="Save Changes" class="form-button submit-button" />
+            </div>
+
+            <!-- Notes -->
+
+            <fieldset class="left-labels">
+
+                <legend>Notes</legend>
+
+                <div class="form-multiple odd">
+
+                    <div class="form-item">
+                        <label><?=$this->translate('Visibility')?></label>
+                        <select>
+                            <option>private</option>
+                            <option>public</option>
+                        </select>
+                    </div>
+
+                    <div class="form-item">
+                        <label><?=$this->translate('Note')?></label>
+                        <textarea cols="80" rows="6"></textarea>
+                    </div>
+
+                    <div class="form-item">
+                        <label>&nbsp;</label>
+                        <input type="button" value="Remove" />
+                    </div>
+
+                </div>
+
+                <div class="button-wrapper add-delete-wrapper">
+                    <input type="button" value="Add Note" class="form-button add-button" />
+                </div>
+                
+            </fieldset>
+
+            <div class="button-wrapper">
+                <input type="button" value="Save Changes" class="form-button submit-button" />
+            </div>
+
+            <!-- Patent Specifications -->
+
+            <fieldset class="left-labels">
+
+                <legend>Patent</legend>
+
+                <div class="form-multiple odd">
+
+                    <div class="form-item">
+                        <label><?=$this->translate('Countries')?></label>
+                        <input type="text" size="20" />
+                    </div>
+
+                    <div class="form-item">
+                        <label><?=$this->translate('DateGranted')?></label>
+                        <input type="text" size="10" />
+                    </div>
+
+                    <div class="form-item">
+                        <label><?=$this->translate('PatentNumber')?></label>
+                        <input type="text" size="20" />
+                    </div>
+
+                    <div class="form-item">
+                        <label><?=$this->translate('YearApplied')?></label>
+                        <input type="text" size="4" />
+                    </div>
+
+                    <div class="form-item">
+                        <label><?=$this->translate('PatentApplication')?></label>
+                        <input type="text" size="20" />
+                    </div>
+
+                    <div class="button-wrapper add-delete-wrapper">
+                        <input type="button" value="Remove" class="form-button delete-button" />
+                    </div>
+
+                </div>
+
+                <div class="button-wrapper add-delete-wrapper">
+                    <input type="button" value="Add Patent" class="form-button add-button" />
+                </div>
+
+            </fieldset>
+
+            <div class="button-wrapper">
+                <input type="button" value="Save Changes" class="form-button submit-button" />
+            </div>
+
+            <!-- Enrichments -->
+
+            <fieldset class="left-labels">
+
+                <legend>Enrichments</legend>
+
+                <table>
+                    <tr>
+                        <th align="left">Key</th>
+                        <th align="left">Value</th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td><input type="text" size="20" /></td>
+                        <td><input type="text" size="60" /></td>
+                        <td><input type="button" value="Remove" /></td>
+                    </tr>
+                </table>
+
+                <div class="button-wrapper add-delete-wrapper">
+                    <input type="button" value="Add Enrichment" class="form-button add-button" style="padding-top: 3px; padding-bottom: 3px"/>
+                </div>
+
+            </fieldset>
+
+            <div class="button-wrapper">
+                <input type="button" value="Save Changes" class="form-button submit-button" />
+            </div>
+
+            <!-- Licence -->
+
+            <fieldset>
+
+                <legend>Licence(s)</legend>
+
+                <div class="form-multiple odd">
+
+                    <select>
+                        <option value="1" label="Veröffentlichungsvertrag für Publikationen mit Print on Demand" selected="selected">Veröffentlichungsvertrag für Publikationen mit Print on Demand</option>
+                        <option value="2" label="Veröffentlichungsvertrag für Publikationen ohne Print on Demand">Veröffentlichungsvertrag für Publikationen ohne Print on Demand</option>
+
+                        <option value="3" label="Creative Commons - Namensnennung, Nicht kommerziell, Keine Bearbeitung">Creative Commons - Namensnennung, Nicht kommerziell, Keine Bearbeitung</option>
+                        <option value="4" label="Creative Commons - Namensnennung" selected="selected">Creative Commons - Namensnennung</option>
+                        <option value="5" label="Creative Commons - Namensnennung-Weitergabe unter gleichen Bedingungen">Creative Commons - Namensnennung-Weitergabe unter gleichen Bedingungen</option>
+                        <option value="6" label="Creative Commons - Namensnennung-Keine Bearbeitung">Creative Commons - Namensnennung-Keine Bearbeitung</option>
+                        <option value="7" label="Creative Commons - Namensnennung-Keine kommerzielle Nutzung-Weitergabe unter gleichen Bedingungen">Creative Commons - Namensnennung-Keine kommerzielle Nutzung-Weitergabe unter gleichen Bedingungen</option>
+                    </select>
+                    
+                    <input type="button" value="Remove" class="form-button delete-button" />
+
+                </div>
+
+                <div class="button-wrapper add-delete-wrapper">
+                    <input type="button" value="Add Licence" class="form-button add-button" />
+                </div>
+
+            </fieldset>
+
+            <div class="button-wrapper">
+                <input type="button" value="Save Changes" class="form-button submit-button" />
+            </div>
+
+            <!-- Person(s) -->
+
+            <fieldset class="left-labels">
+
+                <legend>Person(s)</legend>
+
+                <div class="form-multiple odd">
+                    <div class="form-item">
+                        <label><?=$this->translate('PersonRole')?></label>
+                        <select>
+                            <option>Advisor</option>
+                            <option>Author</option>
+                            <option>Contributor</option>
+                            <option>Editor</option>
+                            <option>Referee</option>
+                            <option>Submitter</option>
+                            <option>Translator</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-item">
+                        <label><?=$this->translate('AcademicTitle')?></label>
+                        <input type="text" size="40" />
+                    </div>
+
+                    <div class="form-item">
+                        <label><?=$this->translate('FirstName')?></label>
+                        <input type="text" size="40" />
+                    </div>
+
+                    <div class="form-item">
+                        <label><?=$this->translate('LastName')?></label>
+                        <input type="text" size="40" />
+                    </div>
+
+                    <div class="form-item">
+                        <label><?=$this->translate('DateOfBirth')?></label>
+                        <input type="text" size="10" />
+                    </div>
+
+                    <div class="form-item">
+                        <label><?=$this->translate('PersonEmail')?></label>
+                        <input type="text" size="40" />
+                    </div>
+
+                    <div class="form-item">
+                        <label><?=$this->translate('ContactAllowed')?></label>
+                        <input type="checkbox" />
+                    </div>
+
+                    <div class="form-item">
+                        <label><?=$this->translate('PND')?></label>
+                        <input type="text" size="40" />
+                    </div>
+
+                    <div class="form-item">
+                        <label><?=$this->translate('Local Identifier')?></label>
+                        <input type="text" size="40" />
+                    </div>
+
+                    <div class="form-item">
+                        <label><?=$this->translate('Sorting Order')?></label>
+                        <input type="text" size="3" />
+                    </div>
+
+                    <div class="button-wrapper add-delete-wrapper">
+                        <input type="button" value="Remove" class="form-button delete-button" />
+                    </div>
+
+                </div>
+
+                <div class="form-multiple even">
+                    <div class="form-item">
+                        <label><?=$this->translate('PersonRole')?></label>
+                        <select>
+                            <option>Advisor</option>
+                            <option>Author</option>
+                            <option>Contributor</option>
+                            <option>Editor</option>
+                            <option>Referee</option>
+                            <option>Submitter</option>
+                            <option>Translator</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-item">
+                        <label><?=$this->translate('AcademicTitle')?></label>
+                        <input type="text" size="40" />
+                    </div>
+
+                    <div class="form-item">
+                        <label><?=$this->translate('FirstName')?></label>
+                        <input type="text" size="40" />
+                    </div>
+
+                    <div class="form-item">
+                        <label><?=$this->translate('LastName')?></label>
+                        <input type="text" size="40" />
+                    </div>
+
+                    <div class="form-item">
+                        <label><?=$this->translate('DateOfBirth')?></label>
+                        <input type="text" size="10" />
+                    </div>
+
+                    <div class="form-item">
+                        <label><?=$this->translate('PersonEmail')?></label>
+                        <input type="text" size="40" />
+                    </div>
+
+                    <div class="form-item">
+                        <label><?=$this->translate('ContactAllowed')?></label>
+                        <input type="checkbox" />
+                    </div>
+
+                    <div class="form-item">
+                        <label><?=$this->translate('PND')?></label>
+                        <input type="text" size="40" />
+                    </div>
+
+                    <div class="form-item">
+                        <label><?=$this->translate('Local Identifier')?></label>
+                        <input type="text" size="40" />
+                    </div>
+
+                    <div class="form-item">
+                        <label><?=$this->translate('Sorting Order')?></label>
+                        <input type="text" size="3" />
+                    </div>
+
+                    <div class="button-wrapper add-delete-wrapper">
+                        <input type="button" value="Remove" class="form-button delete-button" />
+                    </div>
+
+                </div>
+
+                <div class="button-wrapper add-delete-wrapper">
+                    <input type="button" value="Add Person" class="form-button add-button" />
+                </div>
+
+            </fieldset>
+
+            <div class="button-wrapper">
+                <input type="button" value="Save Changes" class="form-button submit-button" />
+            </div>
+    
+        </div>
+
+    </form>
+
+    <!-- Collections -->
+
+    <fieldset>
+
+        <legend><a name="collections"><?= $this->translate('admin_documents_label_collections') ?></a></legend>
+
+    <div>
+        <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'assign', 'document' => $this->docId), null, true); ?>"><?= $this->translate('admin_documents_collectionassign'); ?></a><br/>
+    </div>
+
+    <?PHP if (0 < count($this->assignedCollections)) : ?>
+        <?= $this->translate('admin_documents_collectionsassigned') ?>
+    <?PHP else : ?>
+        <?= $this->translate('admin_documents_nocollectionsassigned') ?>
+    <?PHP endif; ?>
+
+    <ul>
+        <?PHP foreach ($this->assignedCollections as $collection) : ?>
+        <li>
+            <?= htmlspecialchars($collection['roleName'])?>: <?= htmlspecialchars($collection['collectionName']) ?>
+            <form method="post" action="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'unlinkcollection', 'role' => $collection['roleId'], 'collection' => $collection['collectionId'])) ?>">
+                <input type="submit" value="<?= $this->translate('admin_documents_unlinkcollection') ?>" />
+            </form>
+        </li>
+        <?PHP endforeach; ?>
+    </ul>
+
+    </fieldset>
+
+    </div>
+
+</div>

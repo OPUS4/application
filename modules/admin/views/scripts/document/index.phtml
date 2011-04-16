@@ -1,0 +1,290 @@
+<?php
+/*
+ * This file is part of OPUS. The software OPUS has been originally developed
+ * at the University of Stuttgart with funding from the German Research Net,
+ * the Federal Department of Higher Education and Research and the Ministry
+ * of Science, Research and the Arts of the State of Baden-Wuerttemberg.
+ *
+ * OPUS 4 is a complete rewrite of the original OPUS software and was developed
+ * by the Stuttgart University Library, the Library Service Center
+ * Baden-Wuerttemberg, the Cooperative Library Network Berlin-Brandenburg,
+ * the Saarland University and State Library, the Saxon State Library -
+ * Dresden State and University Library, the Bielefeld University Library and
+ * the University Library of Hamburg University of Technology with funding from
+ * the German Research Foundation and the European Regional Development Fund.
+ *
+ * LICENCE
+ * OPUS is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the Licence, or any later version.
+ * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @category    Application
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ * @version     $Id$
+ */
+?>
+<div class="adminContainer">
+
+    <div class="breadcrumbsContainer">
+        <?= $this->navigation()->breadcrumbs() ?> (<?= $this->objectId ?>)
+    </div>
+
+    <?PHP $doc = new Review_Model_DocumentAdapter($this, $this->objectId); ?>
+
+    <div id="showdocmenu" style="padding: 0.5em 1em">
+        <a href="<?= $this->docHelper->getUrlFrontdoor() ?>"><?= $this->translate('admin_documents_open_frontdoor') ?></a>
+        <!--a href="<?= $this->docHelper->getUrlEdit() ?>"><?= $this->translate('docs_edit') ?></a-->
+        <?PHP if ($this->docHelper->hasFiles()) : ?>
+        <a href="<?= $this->docHelper->getUrlFileManager() ?>"><?= $this->translate('admin_filemanager_index') ?></a>
+        <?PHP endif; ?>
+        <?php if ($this->docHelper->getDocState() === 'unpublished') : ?>
+        <a href="<?= $this->docHelper->getUrlDelete() ?>"><?= $this->translate('admin_doc_delete'); ?></a>
+        <a href="<?= $this->docHelper->getUrlPublish() ?>"><?= $this->translate('admin_documents_publish'); ?></a>
+        <?php elseif ($this->docHelper->getDocState() === 'published') : ?>
+        <a href="<?= $this->docHelper->getUrlDelete() ?>"><?= $this->translate('admin_doc_delete'); ?></a>
+        <a href="<?= $this->docHelper->getUrlUnpublish() ?>"><?= $this->translate('admin_documents_unpublish'); ?></a>
+        <?php elseif ($this->docHelper->getDocState() === 'deleted') : ?>
+        <a href="<?= $this->docHelper->getUrlPublish() ?>"><?= $this->translate('admin_doc_undelete'); ?></a>
+        <a href="<?= $this->docHelper->getUrlPermanentDelete() ?>"><?= $this->translate('admin_doc_delete_permanent'); ?></a>
+        <?php endif; ?>
+    </div>
+
+    <div id="showdoc">
+
+    <fieldset class="overview">
+
+        <legend>
+            <?=$this->translate('admin_document_section_general')?>
+            <span class="editLink"><a href="<?=$this->editUrls['general']?>"><?=$this->editLabels['general']?></a></span>
+        </legend>
+
+        <?PHP foreach($this->overviewHelper->getGroupFields('general') as $index => $field) : ?>
+        <?PHP $value = $field->getValue(); ?>
+        <?PHP if (!empty($value)) : ?>
+        <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
+            <span class="label"><?=$this->translate($field->getName())?></span>
+            <span class="value"><?=$field->getValue()?></span>
+        </div>
+        <?PHP endif; ?>
+        <?PHP endforeach; ?>
+
+    </fieldset>
+
+    <fieldset class="overview">
+
+        <legend>
+            <?=$this->translate('admin_document_section_titles')?>
+            <span class="editLink"><a href="<?=$this->editUrls['titles']?>"><?=$this->editLabels['titles']?></a></span>
+        </legend>
+
+        <?PHP foreach($this->document->getTitleMain() as $index => $title) : ?>
+
+        <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
+            <div>
+                <span class="label"><?=$index + 1?>. Title (<b><?=$this->translate($title->getLanguage())?></b>)</span>
+                <span class="value"><?=$title->getValue()?></span>
+            </div>
+        </div>
+
+        <?PHP endforeach; ?>
+
+    </fieldset>
+
+    <fieldset class="overview">
+
+        <legend>
+            <?=$this->translate('admin_document_section_abstracts')?>
+            <span class="editLink"><a href="<?=$this->editUrls['abstracts']?>"><?=$this->editLabels['abstracts']?></a></span>
+        </legend>
+
+        <?PHP foreach($this->document->getTitleAbstract() as $index => $abstract) : ?>
+
+        <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
+            <div>
+                <?=$index+1?>. Abstract (<b><?=$this->translate($abstract->getLanguage())?></b>)
+            </div>
+            <div style="background: white; border: 1px dotted lightgray; padding: 4px;">
+                <?=$abstract->getValue()?>
+            </div>
+        </div>
+
+        <?PHP endforeach; ?>
+
+    </fieldset>
+
+    <fieldset class="overview">
+
+        <legend>
+            <?=$this->translate('admin_document_section_persons')?>
+            <span class="editLink"><a href="<?=$this->editUrls['persons']?>"><?=$this->editLabels['persons']?></a></span>
+        </legend>
+
+       <?PHP foreach($this->document->getPerson() as $index => $person) : ?>
+
+        <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
+            <div class="PersonRole">
+                <span class="PersonRole label">Role</span>
+                <span class="PersonRole value"><?=$this->translate($person->getRole())?></span>
+            </div>
+            <div class="PersonName">
+                <span class="PersonName label">Name</span>
+                <span class="PersonName value"><?=$person->getName()?></span>
+            </div>
+            <!--div class="Email">
+                <span class="Email label">E-Mail</span>
+                <span class="Email value"><?=$person->getEmail()?></span>
+            </div>
+            <div class="DateOfBirth">
+                <span class="DateOfBirth label">Date of Birth</span>
+                <span class="DateOfBirth value"><?=$person->getDateOfBirth()?></span>
+            </div>
+            <div class="PlaceOfBirth">
+                <span class="PlaceOfBirth label">Place of Birth</span>
+                <span class="PlaceOfBirth value"><?=$person->getPlaceOfBirth()?></span>
+            </div-->
+        </div>
+
+        <?PHP endforeach; ?>
+
+    </fieldset>
+
+    <fieldset class="overview">
+
+        <legend>
+            <?=$this->translate('admin_document_section_dates')?>
+            <span class="editLink"><a href="<?=$this->editUrls['dates']?>"><?=$this->editLabels['dates']?></a></span>
+        </legend>
+
+        <?PHP foreach($this->overviewHelper->getGroupFields('dates') as $index => $field) : ?>
+        <?PHP $value = $field->getValue(); ?>
+        <?PHP if (!empty($value)) : ?>
+        <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
+            <span class="label"><?=$this->translate($field->getName())?></span>
+            <span class="value"><?=$field->getValue()?></span>
+        </div>
+        <?PHP endif; ?>
+        <?PHP endforeach; ?>
+
+    </fieldset>
+
+    <fieldset class="overview">
+
+        <legend>
+            <?=$this->translate('admin_document_section_identifiers')?>
+            <span class="editLink"><a href="<?=$this->editUrls['identifiers']?>"><?=$this->editLabels['identifiers']?></a></span>
+        </legend>
+
+        <?PHP foreach($this->document->getIdentifier() as $index => $identifier) : ?>
+
+        <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
+            <span class="Identifier label"><?=$identifier->getType() ?></span>
+            <span class="Identifier value"><?=$identifier->getValue() ?></span>
+        </div>
+
+        <?PHP endforeach; ?>
+
+    </fieldset>
+
+    <fieldset class="overview">
+
+        <legend>
+            <?=$this->translate('admin_document_section_references')?>
+            <span class="editLink"><a href="<?=$this->editUrls['references']?>"><?=$this->editLabels['references']?></a></span>
+        </legend>
+
+        <?PHP foreach($this->document->getReference() as $index => $reference) : ?>
+
+        <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
+            <div class="Reference">
+                <span class="Reference label"><?=$identifier->getLabel() ?></span>
+                <span class="Reference value"><?=$identifier->getValue() ?></span>
+            </div>
+        </div>
+
+        <?PHP endforeach; ?>
+
+    </fieldset>
+
+    <fieldset class="overview">
+
+        <legend>
+            <?=$this->translate('admin_document_section_licences')?>
+            <span class="editLink"><a href="<?=$this->editUrls['licences']?>"><?=$this->editLabels['licences']?></a></span>
+        </legend>
+
+        <?PHP foreach($this->document->getLicence() as $index => $licence) : ?>
+
+        <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
+            <div class=""Licence">
+                <span class="Licence"><?=$index + 1?>.</span>
+                <span class="Licence"><a href="<?=$licence->getLinkLicence()?>"><?=$licence->getNameLong()?></a></span>
+            </div>
+        </div>
+
+        <?PHP endforeach; ?>
+
+    </fieldset>
+
+
+    <fieldset class="overview">
+
+        <legend>
+            <?=$this->translate('admin_document_section_subjects')?>
+            <span class="editLink"><a href="<?=$this->editUrls['subjects']?>"><?=$this->editLabels['subjects']?></a></span>
+        </legend>
+
+        <?PHP $rowIndex = 0; ?>
+        <?PHP foreach($this->overviewHelper->getGroupedSubjects() as $subjectType => $subjects) : ?>
+
+        <div class="<?= ($rowIndex++ % 2) ? 'even' : 'odd' ?>">
+            <span class="label"><?=$subjectType?></span>
+            <span class="value">
+                <?PHP foreach($subjects as $index => $subject) : ?>
+                <div>
+                    <?=$subject->getValue()?><br>
+                </div>
+                <?PHP endforeach; ?>
+            </span>
+        </div>
+
+        <?PHP endforeach; ?>
+        
+    </fieldset>
+
+    <fieldset class="overview">
+
+        <legend>
+            <?=$this->translate('admin_document_section_collections')?>
+            <span class="editLink"><a href="<?=$this->editUrls['collections']?>"><?=$this->editLabels['collections']?></a></span>
+        </legend>
+
+        <?PHP $rowIndex = 0; ?>
+        <?PHP foreach($this->overviewHelper->getGroupedCollections() as $collectionRole => $collections) : ?>
+
+        <div class="<?= ($rowIndex++ % 2) ? 'even' : 'odd' ?>">
+            <span class="label"><?=$collectionRole?></span>
+
+            <span class="value">
+                <?PHP foreach($collections as $index => $collection) : ?>
+                <div>
+                    <?=$collection->getDisplayName()?>
+                </div>
+                <?PHP endforeach; ?>
+            </span>
+        </div>
+
+        <?PHP endforeach; ?>
+
+    </fieldset>
+
+    </div>
+
+</div>
