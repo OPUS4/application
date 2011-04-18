@@ -49,8 +49,10 @@ class Admin_DocumentController extends Controller_Action {
         'licences',
         'subjects',
         'collections',
-        'other',
         'thesis',
+        'other',
+        'patents',
+        'notes',
         'enrichments'
     );
 
@@ -106,9 +108,22 @@ class Admin_DocumentController extends Controller_Action {
     }
 
     public function editAction() {
+        $id = $this->getRequest()->getParam('id');
+
         $section = $this->getRequest()->getParam('section');
 
-        if (!empty($section)) {
+        if (!empty($section) && !empty($id) && is_numeric($id)) {
+                $model = new Opus_Document($id);
+
+            $this->view->docHelper = new Review_Model_DocumentAdapter($this->view, $model);
+
+            // TODO create addForm for section
+            $this->view->addForm = $this->getAddForm($model, $section);
+
+            // TODO create editForm for section
+            $this->view->editForm = $this->getEditForm($model, $section);
+
+            return $this->renderScript('document/edit' . ucfirst($section) . '.phtml');
         }
 
         $this->_redirectTo('index');
@@ -199,6 +214,14 @@ class Admin_DocumentController extends Controller_Action {
 
         $this->view->editUrls = $editUrls;
         $this->view->editLabels = $editLabels;
+    }
+
+    public function getAddForm($model, $section) {
+
+    }
+
+    public function getEditForm($model, $section) {
+
     }
 
 }

@@ -160,6 +160,24 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_document_section_patents">
+      <tuv xml:lang="en">
+        <seg>Patent(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Patente</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_section_notes">
+      <tuv xml:lang="en">
+        <seg>Note(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Notizen</seg>
+      </tuv>
+    </tu>
+
   </body>
 
 </tmx>

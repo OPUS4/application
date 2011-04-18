@@ -40,7 +40,7 @@
 
     <?PHP $doc = new Review_Model_DocumentAdapter($this, $this->objectId); ?>
 
-    <div id="showdocmenu" style="padding: 0.5em 1em">
+    <div id="showdocmenu" style="padding: 0.5em 1em; font-size: larger; text-align: center;">
         <?PHP foreach ($this->actions as $action) : ?>
         <a href="<?=$action['url']?>"><?=$this->translate($action['label']) ?></a>
         <?PHP endforeach; ?>
@@ -250,12 +250,12 @@
         <?PHP foreach($this->overviewHelper->getGroupedCollections() as $collectionRole => $collections) : ?>
 
         <div class="<?= ($rowIndex++ % 2) ? 'even' : 'odd' ?>">
-            <span class="label"><?=$collectionRole?></span>
+            <span class="label"><?=htmlspecialchars(Opus_CollectionRole::fetchByName($collectionRole)->getDisplayName())?></span>
 
             <span class="value">
                 <?PHP foreach($collections as $index => $collection) : ?>
                 <div>
-                    <?=$collection->getDisplayName()?>
+                    <?=htmlspecialchars($collection->getDisplayName())?>
                 </div>
                 <?PHP endforeach; ?>
             </span>
@@ -292,6 +292,46 @@
             <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
                 <span class="label"><?=$this->translate($field->getName())?></span>
                 <span class="value"><?=htmlspecialchars($this->overviewHelper->formatField($field))?></span>
+            </div>
+            <?PHP endforeach; ?>
+
+        </fieldset>
+
+        <fieldset class="overview">
+
+            <legend>
+                <?=$this->translate('admin_document_section_patents')?>
+                <span class="editLink"><a href="<?=$this->editUrls['patents']?>"><?=$this->editLabels['patents']?></a></span>
+            </legend>
+
+            <?PHP $patents = $this->overviewHelper->flattenValues($this->overviewHelper->getFieldsForGroup('patents'));?>
+
+            <?PHP foreach($patents as $index => $patent) : ?>
+            <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
+
+                <?PHP foreach($this->overviewHelper->getValues($patent) as $key => $value) : ?>
+                <div>
+                    <span class="label"><?=$this->translate($key)?></span>
+                    <span class="value"><?=htmlspecialchars($this->overviewHelper->formatValue($value))?></span>
+                </div>
+                <?PHP endforeach; ?>
+
+            </div>
+            <?PHP endforeach; ?>
+
+        </fieldset>
+
+        <fieldset class="overview">
+
+            <legend>
+                <?=$this->translate('admin_document_section_notes')?>
+                <span class="editLink"><a href="<?=$this->editUrls['notes']?>"><?=$this->editLabels['notes']?></a></span>
+            </legend>
+
+            <?PHP foreach($this->document->getNote() as $index => $note) : ?>
+            <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
+                <span class="label"><?=htmlspecialchars($note->getVisibility())?></span>
+                <span class="value"><?=htmlspecialchars($note->getMessage())?></span>
             </div>
             <?PHP endforeach; ?>
 
