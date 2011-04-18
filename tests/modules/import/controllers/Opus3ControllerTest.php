@@ -1,7 +1,5 @@
 <?php
 /**
- * Index controller for Import module
- * 
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -27,26 +25,18 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Import
- * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @package     Tests
+ * @author      Sascha Szott <szott@zib.de>
+ * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-class Import_IndexController extends Controller_Action {
-	/**
-	 * Set forms to select an import action to the view
-	 *
-	 * @return void
-	 */
-     public function indexAction() {
-    	$this->view->title = $this->view->translate('import_modulename');
-        
-        $importForm = new Import_Form_Opus3ImportForm();
-        $importForm->setAction($this->view->url(array("controller"=>"opus3", "action"=>"import")));
-        $importForm->setMethod('post');
+class Import_Opus3ControllerTest extends ControllerTestCase {
 
-        $this->view->form = $importForm;
+    public function testImportAction() {
+        $this->dispatch('/import/opus3/import');
+        $this->assertResponseCode(500);
     }
 }
+?>

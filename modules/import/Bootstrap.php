@@ -1,7 +1,5 @@
 <?php
 /**
- * Index controller for Import module
- * 
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -28,52 +26,13 @@
  *
  * @category    Application
  * @package     Module_Import
- * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @author      Sascha Szott <szott@zib.de>
+ * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-class Import_Opus3Controller extends Controller_Action {
-
-    /**
-     * Imports metadata from an Opus3-Repository from an XML-Dump
-     *
-     * @return void    
-     */
-    public function importAction() {
-        if (!$this->getRequest()->isPost()) {
-            throw new Application_Exception('only POST requests are supported');
-        }        
-        
-        $stylesheet = $this->getRequest()->getPost('xmlformat');
-        // Set the stylesheet to use for XML-input transformation
-        switch ($stylesheet) {
-            case 'mysqldump':
-                $xslt = 'opus3.xslt';
-                break;
-            case 'phpmyadmin':
-                $xslt = 'opus3.phpmyadmin.xslt';
-                break;
-            default:
-                $xslt = 'opus3.xslt';
-                break;
-        }
-
-        $upload = new Zend_File_Transfer_Adapter_Http();
-        $files = $upload->getFileInfo();
-        $importData = new DOMDocument;
-        $importData->load($files['xmldump']['tmp_name']);
-
-        $import = new XMLImport($xslt, $this->view->getScriptPath('opus3'));
-        $result = $import->import($importData);
-
-        // don't import the files from webinterface at the moment
-        $this->view->title = $this->view->translate('import_modulename');
-        $this->view->numberOfEntries = count($result['success']);
-        $this->view->numberOfFailures = count($result['failure']);
-        $this->view->importiere = $result['success'];
-        $this->view->importfehler = $result['failure'];
-    }
+class Import_Bootstrap extends Zend_Application_Module_Bootstrap {
     
 }
+?>
