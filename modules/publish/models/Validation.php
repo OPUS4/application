@@ -566,8 +566,8 @@ class Publish_Model_Validation {
             if (is_null($thesises) || empty($thesises))
                 return null;
         } else if (is_null($grantors)) {
-            //get all = publishers
-            $thesises = Opus_DnbInstitute::getAll();
+            //get all Publishers
+            $thesises = Opus_DnbInstitute::getPublishers();
             if (is_null($thesises) || empty($thesises))
                 return null;
         }
