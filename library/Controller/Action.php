@@ -154,6 +154,8 @@ class Controller_Action extends Zend_Controller_Action {
             return;
         }
 
+        $this->_logger->debug("FAILED authorization check for module '$module'/controller '$controller'");
+
         // we are not allowed to access this module/controller -- but why?
         $identity = Zend_Auth::getInstance()->getIdentity();
 
@@ -167,7 +169,6 @@ class Controller_Action extends Zend_Controller_Action {
         $this->__flashMessenger->addMessage(array('level' => 'failure', 'message' => $message));
         $this->__redirector->gotoSimple('index', 'auth', 'default');
 
-        $this->_logger->debug("FAILED authorization check for module '$module'/controller '$controller'");
     }
 
 
