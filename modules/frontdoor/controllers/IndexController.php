@@ -50,7 +50,7 @@ class Frontdoor_IndexController extends Controller_Action {
 
         try {
             $document = new Opus_Document($docId);
-            $documentXml = new Util_DocumentXmlCache($docId, false);
+            $documentXml = new Util_DocumentXmlCache($document, false);
 
             $xslt = new DomDocument;
             $template = $this->setUpXSLTStylesheet($document->getType());

@@ -93,7 +93,8 @@ class Export_IndexController extends Controller_Xml {
         $this->_proc->setParameter('', 'docCount', count($results));
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
         foreach ($results as $result) {
-            $documentXml = new Util_DocumentXmlCache($result->getId());
+            $document = new Opus_Document($result->getId());
+            $documentXml = new Util_DocumentXmlCache($document);
             $domNode = $this->_xml->importNode($documentXml->getNode(), true);
             $this->_xml->documentElement->appendChild($domNode);
         }

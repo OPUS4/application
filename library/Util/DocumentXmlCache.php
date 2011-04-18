@@ -42,12 +42,12 @@ class Util_DocumentXmlCache {
 
     /**
      *
-     * @param int $documentId
-     * @param boolean $useCache 
+     * @param Opus_Document $document
+     * @param boolean       $useCache
      */
-    public function  __construct($documentId, $useCache = true) {
+    public function  __construct($document, $useCache = true) {
         $this->xmlModel = new Opus_Model_Xml();
-        $this->xmlModel->setModel(new Opus_Document($documentId));
+        $this->xmlModel->setModel($document);
         $this->xmlModel->excludeEmptyFields(); // needed for preventing handling errors
         $this->xmlModel->setStrategy(new Opus_Model_Xml_Version1);
         if ($useCache) {
@@ -64,4 +64,3 @@ class Util_DocumentXmlCache {
     }
 
 }
-?>
