@@ -48,42 +48,47 @@ class Frontdoor_IndexController extends Controller_Action {
         $this->view->docId = $docId;
         $baseUrl = $request->getBaseUrl();
 
+        $document = null;
         try {
             $document = new Opus_Document($docId);
-            $documentXml = new Util_DocumentXmlCache($document, false);
-
-            $xslt = new DomDocument;
-            $template = $this->setUpXSLTStylesheet($document->getType());
-            $xslt->load($this->view->getScriptPath('index') . DIRECTORY_SEPARATOR . $template);
-            $proc = new XSLTProcessor;
-            $proc->registerPHPFunctions('Frontdoor_IndexController::translate');
-            $proc->importStyleSheet($xslt);
-
-            $this->view->baseUrl = $baseUrl;
-            $this->view->doctype('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"  "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">');
-
-            $dateModified = $document->getServerDateModified();
-            if (!is_null($dateModified)) {
-                $this->view->headMeta()
-                    ->appendHttpEquiv('Last-Modified', $dateModified->getZendDate()->get(Zend_Date::RFC_1123));
-            }
-            // $this->addMetaTagsForDocument($document);
-            $this->setFrontdoorTitleToDocumentTitle($document);
-
-            $config = Zend_Registry::getInstance()->get('Zend_Config');
-            $layoutPath = 'layouts/'.(isset($config, $config->theme) ? $config->theme : '');
-
-            $proc->setParameter('', 'baseUrl', $baseUrl);
-            $proc->setParameter('', 'layoutPath', $baseUrl.'/'.$layoutPath);
-            $this->view->frontdoor = $proc->transformToXML($documentXml->getNode());
-
-            $this->incrementStatisticsCounter($docId);
         }
         catch (Zend_Db_Table_Rowset_Exception $e) {
             if ($e->getMessage() === 'No row could be found at position 0') {
                     $this->view->frontdoor = sprintf($this->view->translate('frontdoor_doc_id_not_found'), $docId);
             }
+            $this->getResponse()->setHttpResponseCode('404');
+            return;
         }
+
+        $documentXml = new Util_Document($document);
+        $documentNode = $documentXml->getNode(false);
+
+        $xslt = new DomDocument;
+        $template = $this->setUpXSLTStylesheet($document->getType());
+        $xslt->load($this->view->getScriptPath('index') . DIRECTORY_SEPARATOR . $template);
+        $proc = new XSLTProcessor;
+        $proc->registerPHPFunctions('Frontdoor_IndexController::translate');
+        $proc->importStyleSheet($xslt);
+
+        $this->view->baseUrl = $baseUrl;
+        $this->view->doctype('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"  "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">');
+
+        $dateModified = $document->getServerDateModified();
+        if (!is_null($dateModified)) {
+            $this->view->headMeta()
+                    ->appendHttpEquiv('Last-Modified', $dateModified->getZendDate()->get(Zend_Date::RFC_1123));
+        }
+        // $this->addMetaTagsForDocument($document);
+        $this->setFrontdoorTitleToDocumentTitle($document);
+
+        $config = Zend_Registry::getInstance()->get('Zend_Config');
+        $layoutPath = 'layouts/' . (isset($config, $config->theme) ? $config->theme : '');
+
+        $proc->setParameter('', 'baseUrl', $baseUrl);
+        $proc->setParameter('', 'layoutPath', $baseUrl . '/' . $layoutPath);
+        $this->view->frontdoor = $proc->transformToXML($documentNode);
+
+        $this->incrementStatisticsCounter($docId);
     }
 
     private function setFrontdoorTitleToDocumentTitle($document) {
