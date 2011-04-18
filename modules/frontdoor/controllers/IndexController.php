@@ -89,7 +89,7 @@ class Frontdoor_IndexController extends Controller_Action {
         $documentNode = $documentXml->getNode(false);
 
         $xslt = new DomDocument;
-        $template = $this->setUpXSLTStylesheet($document->getType());
+        $template = 'index.xslt';
         $xslt->load($this->view->getScriptPath('index') . DIRECTORY_SEPARATOR . $template);
         $proc = new XSLTProcessor;
         $proc->registerPHPFunctions('Frontdoor_IndexController::translate');
@@ -242,13 +242,6 @@ class Frontdoor_IndexController extends Controller_Action {
         }
 
         return $metas;
-    }
-
-    private function setUpXSLTStylesheet($type) {
-        if (is_readable($this->view->getScriptPath('index') . DIRECTORY_SEPARATOR . $type . '.xslt')) {
-            return $type . '.xslt';
-        }
-        return 'index.xslt';
     }
 
     private function incrementStatisticsCounter($docId) {
