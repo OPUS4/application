@@ -32,51 +32,41 @@
  * @version     $Id$
  */
 
-class Admin_Form_FileAccess extends Admin_Form_RolesAbstract {
+/**
+ * Description of Admin_Form_Document
+ *
+ * @author jens
+ */
+class Admin_Form_Document {
 
-    protected $roleGroupLegendKey = 'admin_filemanager_legend_fileroles';
+    private $model;
 
-    private $fileId;
-
-    private $file;
-
-    public function __construct($fileId) {
-        $this->fileId = $fileId;
-        $this->file = new Opus_File($this->fileId);
-        parent::__construct();
+    private $includedFields;
+    
+    /**
+     * Constructs form for Opus_Model_Abstract instance.
+     * @param <type> $model
+     * @param <type> $clear
+     */
+    public function __construct($model, $includedFields = null, $clear = false) {
     }
 
-    public function init() {
-        parent::init();
+    protected function _init() {
 
-        $translate = Zend_Registry::get('Zend_Translate');
-
-        $file = $this->createElement('hidden', 'FileObject');
-        $this->addElement($file);
-
-        $frontdoorCheckbox =
-                $this->createElement('checkbox', 'visibleInFrontdoor')
-                     ->setLabel('admin_filemanager_label_visibleinfrontdoor');
-        $frontdoorCheckbox->setValue($this->file->getVisibleInFrontdoor());
-        $this->addElement($frontdoorCheckbox);
-
-
-        $oaiCheckbox = $this->createElement('checkbox', 'visibleInOai')
-                            ->setLabel('admin_filemanager_label_visibleinoai');
-        $oaiCheckbox->setValue($this->file->getVisibleInOai());
-        $this->addElement($oaiCheckbox);
-
-        $submit = $this->createElement('submit', 'accesssubmit');
-        $submit->setLabel('Save');
-        $submit->setOrder(100);
-
-        $this->addElement($submit);
-
-        // add form elements for selecting roles
-        $this->_addRolesGroup();
     }
 
+    /**
+     * Populates form from model values.
+     */
+    public function popluateFromModel() {
+
+    }
+
+    /**
+     * Sets values in model instance.
+     */
+    public function populateModel() {
+    }
 
 }
-
 ?>

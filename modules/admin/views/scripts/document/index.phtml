@@ -25,6 +25,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
+ * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -40,21 +41,9 @@
     <?PHP $doc = new Review_Model_DocumentAdapter($this, $this->objectId); ?>
 
     <div id="showdocmenu" style="padding: 0.5em 1em">
-        <a href="<?= $this->docHelper->getUrlFrontdoor() ?>"><?= $this->translate('admin_documents_open_frontdoor') ?></a>
-        <!--a href="<?= $this->docHelper->getUrlEdit() ?>"><?= $this->translate('docs_edit') ?></a-->
-        <?PHP if ($this->docHelper->hasFiles()) : ?>
-        <a href="<?= $this->docHelper->getUrlFileManager() ?>"><?= $this->translate('admin_filemanager_index') ?></a>
-        <?PHP endif; ?>
-        <?php if ($this->docHelper->getDocState() === 'unpublished') : ?>
-        <a href="<?= $this->docHelper->getUrlDelete() ?>"><?= $this->translate('admin_doc_delete'); ?></a>
-        <a href="<?= $this->docHelper->getUrlPublish() ?>"><?= $this->translate('admin_documents_publish'); ?></a>
-        <?php elseif ($this->docHelper->getDocState() === 'published') : ?>
-        <a href="<?= $this->docHelper->getUrlDelete() ?>"><?= $this->translate('admin_doc_delete'); ?></a>
-        <a href="<?= $this->docHelper->getUrlUnpublish() ?>"><?= $this->translate('admin_documents_unpublish'); ?></a>
-        <?php elseif ($this->docHelper->getDocState() === 'deleted') : ?>
-        <a href="<?= $this->docHelper->getUrlPublish() ?>"><?= $this->translate('admin_doc_undelete'); ?></a>
-        <a href="<?= $this->docHelper->getUrlPermanentDelete() ?>"><?= $this->translate('admin_doc_delete_permanent'); ?></a>
-        <?php endif; ?>
+        <?PHP foreach ($actions as $action) : ?>
+        <a href="<?=$action['url']?>"><?=$this->translate($action['label']) ?></a>
+        <?PHP endforeach; ?>
     </div>
 
     <div id="showdoc">
@@ -66,7 +55,7 @@
             <span class="editLink"><a href="<?=$this->editUrls['general']?>"><?=$this->editLabels['general']?></a></span>
         </legend>
 
-        <?PHP foreach($this->overviewHelper->getGroupFields('general') as $index => $field) : ?>
+        <?PHP foreach($this->overviewHelper->getFieldsForGroup('general') as $index => $field) : ?>
         <?PHP $value = $field->getValue(); ?>
         <?PHP if (!empty($value)) : ?>
         <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
@@ -85,13 +74,21 @@
             <span class="editLink"><a href="<?=$this->editUrls['titles']?>"><?=$this->editLabels['titles']?></a></span>
         </legend>
 
-        <?PHP foreach($this->document->getTitleMain() as $index => $title) : ?>
+        <?PHP foreach($this->overviewHelper->getFieldsForGroup('titles') as $index => $titles) : ?>
 
-        <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
-            <div>
-                <span class="label"><?=$index + 1?>. Title (<b><?=$this->translate($title->getLanguage())?></b>)</span>
-                <span class="value"><?=$title->getValue()?></span>
+        <div>
+            <?PHP foreach($titles as $index2 => $title) : ?>
+            <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
+                <div>
+                    <span class="label">
+                        <?=$index + 1?>.
+                        <?=$this->translate($title->getValueModelClass())?>
+                        (<b><?=htmlspecialchars($this->translate($title->getLanguage()))?></b>)
+                    </span>
+                    <span class="value"><?=htmlspecialchars($title->getValue())?></span>
+                </div>
             </div>
+            <?PHP endforeach; ?>
         </div>
 
         <?PHP endforeach; ?>
@@ -109,10 +106,10 @@
 
         <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
             <div>
-                <?=$index+1?>. Abstract (<b><?=$this->translate($abstract->getLanguage())?></b>)
+                <?=$index+1?>. Abstract (<b><?=htmlspecialchars($this->translate($abstract->getLanguage()))?></b>)
             </div>
             <div style="background: white; border: 1px dotted lightgray; padding: 4px;">
-                <?=$abstract->getValue()?>
+                <?=htmlspecialchars($abstract->getValue())?>
             </div>
         </div>
 
@@ -127,31 +124,19 @@
             <span class="editLink"><a href="<?=$this->editUrls['persons']?>"><?=$this->editLabels['persons']?></a></span>
         </legend>
 
-       <?PHP foreach($this->document->getPerson() as $index => $person) : ?>
+        <?PHP $persons = $this->overviewHelper->flattenValues($this->overviewHelper->getFieldsForGroup('persons'));?>
 
+        <?PHP foreach($persons as $index => $person) : ?>
         <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
-            <div class="PersonRole">
-                <span class="PersonRole label">Role</span>
-                <span class="PersonRole value"><?=$this->translate($person->getRole())?></span>
-            </div>
-            <div class="PersonName">
-                <span class="PersonName label">Name</span>
-                <span class="PersonName value"><?=$person->getName()?></span>
-            </div>
-            <!--div class="Email">
-                <span class="Email label">E-Mail</span>
-                <span class="Email value"><?=$person->getEmail()?></span>
-            </div>
-            <div class="DateOfBirth">
-                <span class="DateOfBirth label">Date of Birth</span>
-                <span class="DateOfBirth value"><?=$person->getDateOfBirth()?></span>
-            </div>
-            <div class="PlaceOfBirth">
-                <span class="PlaceOfBirth label">Place of Birth</span>
-                <span class="PlaceOfBirth value"><?=$person->getPlaceOfBirth()?></span>
-            </div-->
-        </div>
 
+            <?PHP foreach($this->overviewHelper->getValues($person) as $key => $value) : ?>
+            <div>
+                <span class="label"><?=$this->translate($key)?></span>
+                <span class="value"><?=htmlspecialchars($this->overviewHelper->formatValue($value))?></span>
+            </div>
+            <?PHP endforeach; ?>
+
+        </div>
         <?PHP endforeach; ?>
 
     </fieldset>
@@ -163,14 +148,11 @@
             <span class="editLink"><a href="<?=$this->editUrls['dates']?>"><?=$this->editLabels['dates']?></a></span>
         </legend>
 
-        <?PHP foreach($this->overviewHelper->getGroupFields('dates') as $index => $field) : ?>
-        <?PHP $value = $field->getValue(); ?>
-        <?PHP if (!empty($value)) : ?>
+        <?PHP foreach($this->overviewHelper->getFieldsForGroup('dates') as $index => $field) : ?>
         <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
             <span class="label"><?=$this->translate($field->getName())?></span>
-            <span class="value"><?=$field->getValue()?></span>
+            <span class="value"><?=htmlspecialchars($this->overviewHelper->formatDate($field->getValue()))?></span>
         </div>
-        <?PHP endif; ?>
         <?PHP endforeach; ?>
 
     </fieldset>
@@ -185,8 +167,8 @@
         <?PHP foreach($this->document->getIdentifier() as $index => $identifier) : ?>
 
         <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
-            <span class="Identifier label"><?=$identifier->getType() ?></span>
-            <span class="Identifier value"><?=$identifier->getValue() ?></span>
+            <span class="Identifier label"><?=htmlspecialchars($identifier->getType()) ?></span>
+            <span class="Identifier value"><?=htmlspecialchars($identifier->getValue()) ?></span>
         </div>
 
         <?PHP endforeach; ?>
@@ -204,8 +186,8 @@
 
         <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
             <div class="Reference">
-                <span class="Reference label"><?=$identifier->getLabel() ?></span>
-                <span class="Reference value"><?=$identifier->getValue() ?></span>
+                <span class="Reference label"><?=htmlspecialchars($identifier->getLabel()) ?></span>
+                <span class="Reference value"><?=htmlspecialchars($identifier->getValue()) ?></span>
             </div>
         </div>
 
@@ -225,7 +207,7 @@
         <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
             <div class=""Licence">
                 <span class="Licence"><?=$index + 1?>.</span>
-                <span class="Licence"><a href="<?=$licence->getLinkLicence()?>"><?=$licence->getNameLong()?></a></span>
+                <span class="Licence"><a href="<?=htmlspecialchars($licence->getLinkLicence())?>"><?=htmlspecialchars($licence->getNameLong())?></a></span>
             </div>
         </div>
 
@@ -249,7 +231,7 @@
             <span class="value">
                 <?PHP foreach($subjects as $index => $subject) : ?>
                 <div>
-                    <?=$subject->getValue()?><br>
+                    <?=htmlspecialchars($subject->getValue())?><br>
                 </div>
                 <?PHP endforeach; ?>
             </span>
@@ -284,6 +266,54 @@
         <?PHP endforeach; ?>
 
     </fieldset>
+
+        <fieldset class="thesis">
+
+            <legend>
+                <?=$this->translate('admin_document_section_thesis')?>
+                <span class="editLink"><a href="<?=$this->editUrls['thesis']?>"><?=$this->editLabels['thesis']?></a></span>
+            </legend>
+
+            <?PHP foreach($this->overviewHelper->getFieldsForGroup('thesis') as $index => $field) : ?>
+            <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
+                <span class="label"><?=$this->translate($field->getName())?></span>
+                <span class="value"><?=htmlspecialchars($this->overviewHelper->formatField($field))?></span>
+            </div>
+            <?PHP endforeach; ?>
+
+        </fieldset>
+
+        <fieldset class="other">
+
+            <legend>
+                <?=$this->translate('admin_document_section_other')?>
+                <span class="editLink"><a href="<?=$this->editUrls['other']?>"><?=$this->editLabels['other']?></a></span>
+            </legend>
+
+            <?PHP foreach($this->overviewHelper->getFieldsForGroup('other') as $index => $field) : ?>
+            <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
+                <span class="label"><?=$this->translate($field->getName())?></span>
+                <span class="value"><?=htmlspecialchars($this->overviewHelper->formatField($field))?></span>
+            </div>
+            <?PHP endforeach; ?>
+
+        </fieldset>
+
+        <fieldset class="overview">
+
+            <legend>
+                <?=$this->translate('admin_document_section_enrichments')?>
+                <span class="editLink"><a href="<?=$this->editUrls['enrichments']?>"><?=$this->editLabels['enrichments']?></a></span>
+            </legend>
+
+            <?PHP foreach($this->document->getEnrichment() as $index => $enrichment) : ?>
+            <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
+                <span class="label"><?=htmlspecialchars($enrichment->getKeyName())?></span>
+                <span class="value"><?=htmlspecialchars($enrichment->getValue())?></span>
+            </div>
+            <?PHP endforeach; ?>
+
+        </fieldset>
 
     </div>
 
