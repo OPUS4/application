@@ -50,7 +50,8 @@ class Admin_DocumentController extends Controller_Action {
         'subjects',
         'collections',
         'other',
-        'thesis'
+        'thesis',
+        'enrichments'
     );
 
     /**
@@ -121,7 +122,7 @@ class Admin_DocumentController extends Controller_Action {
      *
      *
      */
-    public function prepareActionLinks() {
+    public function prepareActionLinks($docHelper) {
         $actions = array();
         
         $action = array();
@@ -132,7 +133,7 @@ class Admin_DocumentController extends Controller_Action {
         // TODO should always be shown, or?
         if ($docHelper->hasFiles()) {
             $action = array();
-            $action['label'] = 'admin_filemanager_index';
+            $action['label'] = 'admin_document_files';
             $action['url'] = $docHelper->getUrlFileManager();
             $actions['files'] = $action;
         }
@@ -176,6 +177,8 @@ class Admin_DocumentController extends Controller_Action {
             $action['url'] = $docHelper->getUrlPermanentDelete();
             $actions['permanentDelete'] = $action;
         }
+
+        $this->view->actions = $actions;
 
         return $actions;
     }

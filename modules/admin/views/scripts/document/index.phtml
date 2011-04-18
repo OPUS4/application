@@ -41,7 +41,7 @@
     <?PHP $doc = new Review_Model_DocumentAdapter($this, $this->objectId); ?>
 
     <div id="showdocmenu" style="padding: 0.5em 1em">
-        <?PHP foreach ($actions as $action) : ?>
+        <?PHP foreach ($this->actions as $action) : ?>
         <a href="<?=$action['url']?>"><?=$this->translate($action['label']) ?></a>
         <?PHP endforeach; ?>
     </div>

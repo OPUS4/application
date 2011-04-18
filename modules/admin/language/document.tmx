@@ -133,6 +133,33 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_document_section_enrichments">
+      <tuv xml:lang="en">
+        <seg>Enrichments</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Enrichments</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_access">
+      <tuv xml:lang="en">
+        <seg>Access</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zugriffsrechte</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_files">
+      <tuv xml:lang="en">
+        <seg>Files</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dateien</seg>
+      </tuv>
+    </tu>
+
   </body>
 
 </tmx>

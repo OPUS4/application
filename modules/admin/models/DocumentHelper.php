@@ -33,7 +33,7 @@
  */
 
 
-class Admin_Model_DocumentOverviewHelper {
+class Admin_Model_DocumentHelper {
 
     private $__document;
 
@@ -288,7 +288,7 @@ class Admin_Model_DocumentOverviewHelper {
             return null;
         }
         else {
-            return $date->get($format);
+            return $date->getZendDate()->get($format);
         }
     }
 
