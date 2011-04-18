@@ -14,7 +14,16 @@
         <seg>Export bibliographischer Daten</seg>
       </tuv>
     </tu>
-    
+
+    <tu tuid="invalid_docid">
+      <tuv xml:lang="en">
+        <seg>Bibliographic data cannot be shown: Unknown document ID</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bibliographische Daten können nicht angezeigt werden: Unbekannte Dokument-ID</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="invalid_format">
       <tuv xml:lang="en">
         <seg>Bibliographic data cannot be shown: Unknown output format</seg>
