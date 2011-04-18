@@ -74,15 +74,15 @@
             <span class="editLink"><a href="<?=$this->editUrls['titles']?>"><?=$this->editLabels['titles']?></a></span>
         </legend>
 
-        <?PHP foreach($this->overviewHelper->getFieldsForGroup('titles') as $index => $titles) : ?>
+        <?PHP $titles = $this->overviewHelper->flattenValues($this->overviewHelper->getFieldsForGroup('titles'));?>
 
         <div>
-            <?PHP foreach($titles as $index2 => $title) : ?>
+            <?PHP foreach($titles as $index => $title) : ?>
             <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
                 <div>
                     <span class="label">
                         <?=$index + 1?>.
-                        <?=$this->translate($title->getValueModelClass())?>
+                        <?=$this->translate('Title' . ucfirst($title->getType()))?>
                         (<b><?=htmlspecialchars($this->translate($title->getLanguage()))?></b>)
                     </span>
                     <span class="value"><?=htmlspecialchars($title->getValue())?></span>
@@ -90,8 +90,6 @@
             </div>
             <?PHP endforeach; ?>
         </div>
-
-        <?PHP endforeach; ?>
 
     </fieldset>
 
