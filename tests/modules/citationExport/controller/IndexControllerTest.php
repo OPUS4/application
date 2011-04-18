@@ -93,55 +93,55 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
     public function testIndexActionBibtexDoctypeArticle() {
         $this->setDocumentType('article');
         $this->dispatch('/citationExport/index/index/output/bibtex/docId/' . $this->documentId);
-        $this->testBibtexExport('@article');
+        $this->checkBibtexAssertions('@article');
     }
 
     public function testIndexActionBibtexDoctypeBook() {
         $this->setDocumentType('book');
         $this->dispatch('/citationExport/index/index/output/bibtex/docId/' . $this->documentId);
-        $this->testBibtexExport('@book');
+        $this->checkBibtexAssertions('@book');
     }
 
     public function testIndexActionBibtexDoctypeBookpart() {
         $this->setDocumentType('bookpart');
         $this->dispatch('/citationExport/index/index/output/bibtex/docId/' . $this->documentId);
-        $this->testBibtexExport('@incollection');
+        $this->checkBibtexAssertions('@incollection');
     }
 
     public function testIndexActionBibtexDoctypeConferenceobject() {
         $this->setDocumentType('conferenceobject');
         $this->dispatch('/citationExport/index/index/output/bibtex/docId/' . $this->documentId);
-        $this->testBibtexExport('@inproceedings');
+        $this->checkBibtexAssertions('@inproceedings');
     }
 
     public function testIndexActionBibtexDoctypeDoctoralthesis() {
         $this->setDocumentType('doctoralthesis');
         $this->dispatch('/citationExport/index/index/output/bibtex/docId/' . $this->documentId);
-        $this->testBibtexExport('@phdthesis');
+        $this->checkBibtexAssertions('@phdthesis');
     }
 
     public function testIndexActionBibtexDoctypeMasterthesis() {
         $this->setDocumentType('masterthesis');
         $this->dispatch('/citationExport/index/index/output/bibtex/docId/' . $this->documentId);
-        $this->testBibtexExport('@mastersthesis');
+        $this->checkBibtexAssertions('@mastersthesis');
     }
 
     public function testIndexActionBibtexDoctypePreprint() {
         $this->setDocumentType('preprint');
         $this->dispatch('/citationExport/index/index/output/bibtex/docId/' . $this->documentId);
-        $this->testBibtexExport('@unpublished');
+        $this->checkBibtexAssertions('@unpublished');
     }
 
     public function testIndexActionBibtexDoctypeReport() {
         $this->setDocumentType('report');
         $this->dispatch('/citationExport/index/index/output/bibtex/docId/' . $this->documentId);
-        $this->testBibtexExport('@techreport');
+        $this->checkBibtexAssertions('@techreport');
     }
 
     public function testIndexActionBibtexMisc() {
         $this->setDocumentType('foo');
         $this->dispatch('/citationExport/index/index/output/bibtex/docId/' . $this->documentId);
-        $this->testBibtexExport('@misc');
+        $this->checkBibtexAssertions('@misc');
     }
 
     public function testDownloadActionWithMissingDocIdParam() {
@@ -183,55 +183,55 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
     public function testDownloadActionBibtexDoctypeArticle() {
         $this->setDocumentType('article');
         $this->dispatch('/citationExport/index/download/output/bibtex/docId/' . $this->documentId);
-        $this->testBibtexExport('@article', false);
+        $this->checkBibtexAssertions('@article', false);
     }
 
     public function testDownloadActionBibtexDoctypeBook() {
         $this->setDocumentType('book');
         $this->dispatch('/citationExport/index/download/output/bibtex/docId/' . $this->documentId);
-        $this->testBibtexExport('@book', false);
+        $this->checkBibtexAssertions('@book', false);
     }
 
     public function testDownloadActionBibtexDoctypeBookpart() {
         $this->setDocumentType('bookpart');
         $this->dispatch('/citationExport/index/download/output/bibtex/docId/' . $this->documentId);
-        $this->testBibtexExport('@incollection', false);
+        $this->checkBibtexAssertions('@incollection', false);
     }
 
     public function testDownloadActionBibtexDoctypeConferenceobject() {
         $this->setDocumentType('conferenceobject');
         $this->dispatch('/citationExport/index/download/output/bibtex/docId/' . $this->documentId);
-        $this->testBibtexExport('@inproceedings', false);
+        $this->checkBibtexAssertions('@inproceedings', false);
     }
 
     public function testDownloadActionBibtexDoctypeDoctoralthesis() {
         $this->setDocumentType('doctoralthesis');
         $this->dispatch('/citationExport/index/download/output/bibtex/docId/' . $this->documentId);
-        $this->testBibtexExport('@phdthesis', false);
+        $this->checkBibtexAssertions('@phdthesis', false);
     }
 
     public function testDownloadActionBibtexDoctypeMasterthesis() {
         $this->setDocumentType('masterthesis');
         $this->dispatch('/citationExport/index/download/output/bibtex/docId/' . $this->documentId);
-        $this->testBibtexExport('@mastersthesis', false);
+        $this->checkBibtexAssertions('@mastersthesis', false);
     }
 
     public function testDownloadActionBibtexDoctypePreprint() {
         $this->setDocumentType('preprint');
         $this->dispatch('/citationExport/index/download/output/bibtex/docId/' . $this->documentId);
-        $this->testBibtexExport('@unpublished', false);
+        $this->checkBibtexAssertions('@unpublished', false);
     }
 
     public function testDownloadActionBibtexDoctypeReport() {
         $this->setDocumentType('report');
         $this->dispatch('/citationExport/index/download/output/bibtex/docId/' . $this->documentId);
-        $this->testBibtexExport('@techreport', false);
+        $this->checkBibtexAssertions('@techreport', false);
     }
 
     public function testDownloadActionBibtexMisc() {
         $this->setDocumentType('foo');
         $this->dispatch('/citationExport/index/download/output/bibtex/docId/' . $this->documentId);
-        $this->testBibtexExport('@misc', false);
+        $this->checkBibtexAssertions('@misc', false);
         
     }
 
@@ -241,7 +241,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
         $doc->store();
     }
 
-    private function testBibtexExport($bibtexType, $downloadLinkExists = true) {
+    private function checkBibtexAssertions($bibtexType, $downloadLinkExists = true) {
         $this->assertResponseCode(200);
         $response = $this->getResponse();
         $this->assertContains($bibtexType, $response->getBody());
