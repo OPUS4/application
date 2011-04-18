@@ -32,35 +32,49 @@
  * @version     $Id$
  */
 
-class Util_DocumentXmlCache {
+class Util_Document {
 
     /**
      *
-     * @var Opus_Model_Xml
+     * @var Opus_Document
      */
-    private $xmlModel;
+    private $document;
 
     /**
      *
      * @param Opus_Document $document
-     * @param boolean       $useCache
+     * @throws Application_Exception
      */
-    public function  __construct($document, $useCache = true) {
-        $this->xmlModel = new Opus_Model_Xml();
-        $this->xmlModel->setModel($document);
-        $this->xmlModel->excludeEmptyFields(); // needed for preventing handling errors
-        $this->xmlModel->setStrategy(new Opus_Model_Xml_Version1);
-        if ($useCache) {
-            $this->xmlModel->setXmlCache(new Opus_Model_Xml_Cache);
+    public function  __construct($document) {
+        $this->document = $document;
+        if (!$this->checkPermission()) {
+            throw new Application_Exception('document access for id ' . $this->document->getId() . ' not allowed');
         }
     }
 
     /**
-     *
+     * @return boolean
+     */
+    private function checkPermission() {
+        if ($this->document->getServerState() === 'published') {
+            return true;
+        }
+        return Opus_Security_Realm::getInstance()->checkDocument($this->document->getId());
+    }
+
+    /**
+     * @param boolean $useCache
      * @return DOMNode Opus_Document node
      */
-    public function getNode() {
-        return $this->xmlModel->getDomDocument()->getElementsByTagName('Opus_Document')->item(0);
+    public function getNode($useCache = true) {
+        $xmlModel = new Opus_Model_Xml();
+        $xmlModel->setModel($this->document);
+        $xmlModel->excludeEmptyFields(); // needed for preventing handling errors
+        $xmlModel->setStrategy(new Opus_Model_Xml_Version1);
+        if ($useCache) {
+            $xmlModel->setXmlCache(new Opus_Model_Xml_Cache);
+        }
+        return $xmlModel->getDomDocument()->getElementsByTagName('Opus_Document')->item(0);
     }
 
 }
