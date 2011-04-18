@@ -2067,6 +2067,14 @@
       </tuv>
     </tu>
 
-  </body>
-  
+    <tu tuid="uploadComment">
+      <tuv xml:lang="en">
+        <seg>Comment</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Kommentar</seg>
+      </tuv>
+    </tu>
+
+  </body>  
 </tmx>

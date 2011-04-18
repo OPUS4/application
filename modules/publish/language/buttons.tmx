@@ -496,5 +496,77 @@
         </tuv>
     </tu>
 
+    <tu tuid="button_label_browse_downSubjectMSC">
+        <tuv xml:lang="en">
+            <seg>down</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>runter</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_browse_downSubjectDDC">
+        <tuv xml:lang="en">
+            <seg>down</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>runter</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_browse_downSubjectPACS">
+        <tuv xml:lang="en">
+            <seg>down</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>runter</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_browse_downSubjectCCS">
+        <tuv xml:lang="en">
+            <seg>down</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>runter</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_browse_upSubjectMSC">
+        <tuv xml:lang="en">
+            <seg>up</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>hoch</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_browse_upSubjectDDC">
+        <tuv xml:lang="en">
+            <seg>up</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>hoch</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_browse_upSubjectPACS">
+        <tuv xml:lang="en">
+            <seg>up</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>hoch</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_browse_upSubjectCCS">
+        <tuv xml:lang="en">
+            <seg>up</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>hoch</seg>
+        </tuv>
+    </tu>
+
     </body>
 </tmx>

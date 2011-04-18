@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -290,29 +291,44 @@ class Publish_Model_FormHelper {
      * @return <View>
      */
     public function getExtendedForm($postData=null, $reload=true) {
-        $this->session->currentAnchor = "";
+        $this->session->currentAnchor = "";        
         if ($reload === true) {
             //find out which button was pressed
             $pressedButtonName = $this->_getPressedButton();
-
             if (substr($pressedButtonName, 0, 7) == "addMore") {
                 $fieldName = substr($pressedButtonName, 7);
-                $workflow = "add";
+                $workflow = 'add';
             }
             else if (substr($pressedButtonName, 0, 10) == "deleteMore") {
                 $fieldName = substr($pressedButtonName, 10);
-                $workflow = "delete";
+                $workflow = 'delete';
+            }
+            else if (substr($pressedButtonName, 0, 10) == "browseDown") {
+                $fieldName = substr($pressedButtonName, 10);
+                $workflow = 'down';
+            }
+            else if (substr($pressedButtonName, 0, 8) == "browseUp") {
+                $fieldName = substr($pressedButtonName, 8);
+                $workflow = 'up';
             }
 
-            if ($this->_isCollectionField($fieldName)) {
-                $browseCollection = 'browse' . $fieldName;
-                $this->session->browseCollection = $browseCollection;
-                return $this->_browsableExtendedForm($fieldName);
+            $currentNumber = $this->session->additionalFields[$fieldName];
+            if (array_key_exists('step' . $fieldName . $currentNumber, $this->session->additionalFields)) {
+                $currentCollectionLevel = $this->session->additionalFields['step' . $fieldName . $currentNumber];                
+                if ($currentCollectionLevel == '1') {
+                    if (isset($postData[$fieldName . $currentNumber]))
+                        $this->session->additionalFields['collId1' . $fieldName . $currentNumber] = substr($postData[$fieldName . $currentNumber], 3);
+                }
+                else {
+                    if (isset($postData['collId' . $currentCollectionLevel . $fieldName . $currentNumber])) {
+                        $entry = substr($postData['collId' . $currentCollectionLevel . $fieldName . $currentNumber], 3);
+                        $this->session->additionalFields['collId' . $currentCollectionLevel . $fieldName . $currentNumber] = $entry;
+                    }
+                }
             }
 
             $saveName = "";
-            //Enrichment-Fruppen haben Enrichment im Namen, die aber mit den currentAnchor kollidieren
-            $currentNumber = $this->session->additionalFields[$fieldName];
+            //Enrichment-Gruppen haben Enrichment im Namen, die aber mit den currentAnchor kollidieren            
             if (strstr($fieldName, 'Enrichment')) {
                 $saveName = $fieldName;
                 $fieldName = str_replace('Enrichment', '', $fieldName);
@@ -323,19 +339,36 @@ class Publish_Model_FormHelper {
             //todo: schönere Lösung als diese blöden String-Sachen!!!
             if ($saveName != "")
                 $fieldName = $saveName;
+            $fieldsetCount = $currentNumber;
 
-            if ($workflow == "add") {
-                //show one more fields
-                $currentNumber = (int) $currentNumber + 1;
+            switch ($workflow) {
+                case 'add':
+                    //show one more fields
+                    $currentNumber = (int) $currentNumber + 1;
+                    break;
+                case 'delete':
+                    if ($currentNumber > 1) {
+                        //remove one more field, only down to 0
+                        $currentNumber = (int) $currentNumber - 1;
+                    }
+                    break;
+                case 'down':
+                    $currentCollectionLevel = (int) $currentCollectionLevel + 1;
+                    break;
+                case 'up' :
+                    if ($currentCollectionLevel >= 2)
+                        $currentCollectionLevel = (int) $currentCollectionLevel - 1;
+                    break;
+                default:
+                    break;
             }
-            else {
-                if ($currentNumber > 1) {
-                    //remove one more field, only down to 0
-                    $currentNumber = (int) $currentNumber - 1;
-                }
-            }
+
             //set the increased value for the pressed button and create a new form
             $this->session->additionalFields[$fieldName] = $currentNumber;
+            if (isset($currentCollectionLevel)) {
+                $this->session->additionalFields['step' . $fieldName . $fieldsetCount] = $currentCollectionLevel;
+            }
+            //var_dump($this->session->additionalFields);
         }
 
         $form2 = new Publish_Form_PublishingSecond($postData);
@@ -351,7 +384,6 @@ class Publish_Model_FormHelper {
      * @return <String> name of button
      */
     private function _getPressedButton() {
-        $this->log->debug("Method getPressedButton begins...");
         $pressedButton = "";
         foreach ($this->form->getElements() AS $element) {
             if ($element->getType() === 'Zend_Form_Element_Submit' && $element->isChecked()) {
@@ -366,26 +398,6 @@ class Publish_Model_FormHelper {
             throw new Publish_Model_OpusServerException("No pressed button found! Possibly the values of the buttons are not equal in the view and Publish class.");
         else
             return $pressedButtonName;
-    }
-
-    private function _isCollectionField($buttonName) {
-        $collectionFields = array(
-            'Project' => '',
-            'Institute' => '',
-            'Collection' => '',
-            'SubjectMSC' => '',
-            'SubjectDDC' => '',
-            'SubjectPACS' => '',
-            'SubjectCCS' => ''
-        );
-        if (array_key_exists($buttonName, $collectionFields))
-            return true;
-        else
-            return false;
-    }
-
-    private function _browsableExtendedForm($collectionToBrowse) {
-        
     }
 
 }

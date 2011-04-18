@@ -73,10 +73,10 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
         $fieldset = "";
         $disable = false;
         if (isset($group)) {
-            
+
             if (isset($this->session->invalidForm) && $this->session->invalidForm == '1')
                 $fieldset .= "";
-            else {                
+            else {
                 if ($this->session->currentAnchor == $group['Name'])
                     $fieldset .= "<a name='current'></a>";
             }
@@ -84,7 +84,7 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
             $fieldset .= "<fieldset class='left-labels' id='" . $group['Name'] . "' />\n";
             $fieldset .= "<legend>" . $this->view->translate($group['Name']) . "</legend>\n\t";
             $fieldset .= "<div class='description hint'><p>" . $this->_getGroupHint($group['Name']) . "</div></p>";
-            
+
             //inital div class
             $fieldset .= "<div class='form-multiple odd'>";
             $i = 1;
@@ -92,7 +92,7 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
             //show fields
             foreach ($group["Fields"] AS $field) {
 
-                $groupCount = 'num' . $group['Name'];                
+                $groupCount = 'num' . $group['Name'];
                 $j = (($i - 1) / $this->session->$groupCount);
                 if (is_int($j)) {
                     //show other div in case intial field number is extended
@@ -104,27 +104,30 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
 
                 $fieldset .= "\n<div class='form-item'>\n";
                 $fieldset .= "<label for='" . $field["id"] . "'>" . $field["label"];
+
                 if ($field["req"] === 'required')
                     $fieldset .= $this->_getRequiredSign();
                 $fieldset .= "</label>";
 
                 switch ($field['type']) {
+
                     case "Zend_Form_Element_Text":
-                        $fieldset .= "\n\t\t\t\t<input type='text' class='form-textfield' name='" . $field["id"] . "' id='" . $field["id"] . "' ";
-                        if ($options !== null)
-                            $fieldset .= $options . " ";
-                        else
-                            $fieldset .= "size='30' ";
+                        if (!array_key_exists($field['id'], $this->session->endOfCollectionTree)) {
+                            $fieldset .= "\n\t\t\t\t<input type='text' class='form-textfield' name='" . $field['id'] . "' id='" . $field['id'] . "' ";
+                            if ($options !== null)
+                                $fieldset .= $options . " ";
+                            else
+                                $fieldset .= "size='30' ";
 
-                        if ($field["disabled"] === true) {
-                            $fieldset .= " disabled='1' ";
-                            $disable = true;
+                            if ($field["disabled"] === true) {
+                                $fieldset .= " disabled='1' ";
+                                $disable = true;
+                            }
+
+                            if (strstr($field["id"], "1"))
+                                $fieldset .= " title='" . $this->view->translate($field["hint"]) . "' ";
+                            $fieldset .= " value='" . htmlspecialchars($field["value"]) . "' />\n";
                         }
-
-                        if (strstr($field["id"], "1"))
-                            $fieldset .= " title='" . $this->view->translate($field["hint"]) . "' ";
-                        $fieldset .= " value='" . htmlspecialchars($field["value"]) . "' />\n";
-
                         break;
 
                     case "Zend_Form_Element_Textarea":
@@ -132,7 +135,7 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                         if ($options !== null)
                             $fieldset .= $options . " ";
                         else
-                            $fieldset .= "cols='30' rows='10' ";
+                            $fieldset .= "cols='30' rows='5' ";
 
                         if (strstr($field["id"], "1"))
                             $fieldset .= " title='" . $this->view->translate($field["hint"]) . "' ";
@@ -142,9 +145,12 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                         break;
 
                     case "Zend_Form_Element_Select" :
-                        $fieldset .= "\n\t\t\t\t" . '<select name="' . $field['id'] . '" class="form-selectfield"  id="' . $field['id'] . '"';
+                        $fieldset .= "\n\t\t\t\t" . '<select style="width:300px" name="' . $field['id'] . '" class="form-selectfield"  id="' . $field['id'] . '"';
                         if (strstr($field['id'], '1'))
                             $fieldset .= ' title="' . $this->view->translate($field['hint']) . '"';
+                        if ($field["disabled"] === true) {
+                                $fieldset .= ' disabled="1" ';                               
+                            }
                         $fieldset .= '>' . "\n\t\t\t\t\t";
 
                         foreach ($field['options'] AS $key => $option) {
@@ -176,7 +182,7 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                         }
 
                         $fieldset .= " />\n";
-                        break;                        
+                        break;
 
                     case 'Zend_Form_Element_File' :
                         $fieldset .= "<input type='file' name='" . $field['id'] . "' id='" . $field['id'] . "' enctype='multipart/form-data' ";
@@ -213,6 +219,13 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
             foreach ($group["Buttons"] AS $button) {
                 if (!$disable) {
                     $fieldset .= "<input type='submit' ";
+                    if (strstr($button['id'], 'Down') !== false)
+                        $fieldset .= "class='form-button down-button' ";
+                    else {
+                        if (strstr($button['id'], 'Up') !== false)
+                            $fieldset .= "class='form-button up-button' ";
+                    }
+
                     if (strstr($button['id'], 'add') !== false)
                         $fieldset .= "class='form-button add-button' ";
                     else {

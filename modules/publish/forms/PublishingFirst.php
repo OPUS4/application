@@ -197,7 +197,11 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         $addAnotherFile->setLabel('addAnotherFile');
         $this->addElement($addAnotherFile);
 
-        $group = array($fileupload->getName(), $addAnotherFile->getName());
+        $comment = $this->createElement('textarea', 'uploadComment');
+        $comment->setLabel('uploadComment');
+        $this->addElement($comment);
+
+        $group = array($fileupload->getName(), $addAnotherFile->getName(), $comment->getName());
 
         return $group;
     }

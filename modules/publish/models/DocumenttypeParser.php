@@ -87,7 +87,7 @@ class Publish_Model_DocumenttypeParser {
 
             $this->_parseRequiredIfFulltext($field);
 
-            $this->currentElement->setPostValues($this->postValues);
+            $this->currentElement->setPostValues($this->postValues);           
 
             $group = $this->currentElement->initGroup();
 
@@ -135,6 +135,12 @@ class Publish_Model_DocumenttypeParser {
 
             if ($datatype === 'Enrichment')
                 $elementName = 'Enrichment' . $elementName;
+
+            if ($datatype == 'Collection') {
+                $collectionRole = $field->getAttribute('root');
+                $this->currentElement->setCollectionRole($collectionRole);
+                $this->currentElement->setCurrentCollectionId();
+            }
             
             $this->currentElement->setElementName($elementName);
             if ($required === 'yes')

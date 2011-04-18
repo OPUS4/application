@@ -49,11 +49,15 @@ class Publish_Model_Validation {
     public $sessionP;
     public $session;
     public $listOptions = array();
+    public $collectionRole;
 
-    public function __construct($datatype, $options=null) {
+    public function __construct($datatype, $collectionRole=null, $options=null) {
         if (isset($options) && !empty($options)) {
             $this->listOptions = $options;
             $this->datatype = 'List';
+        }
+        if (isset($collectionRole)) {
+            $this->collectionRole = $collectionRole;
         }
         else
             $this->datatype = $datatype;
@@ -69,6 +73,10 @@ class Publish_Model_Validation {
 
     private function _datatypeValidation() {
         switch ($this->datatype) {
+
+            case 'Collection' : //$this->validator = $this->_validateCollection($this->collectionRole);
+                return null;
+                break;
 
             case 'ccs' : $this->validator = $this->_validateCCS();
                 break;
@@ -168,6 +176,23 @@ class Publish_Model_Validation {
         return $validators;
     }
 
+    private function _validateCollection($role) {
+        $validators = array();
+        $validValues = $this->getCollection($role);
+
+        if (is_null($validValues))
+            return null;
+        else {
+            $validator = new Zend_Validate_InArray($validValues);
+            $messages = array(
+                Zend_Validate_InArray::NOT_IN_ARRAY => 'publish_validation_error_inarray_notinarray');
+            $validator->setMessages($messages);
+
+            $validators[] = $validator;
+            return $validators;
+        }
+    }
+
     private function _validateDDC() {
         $validators = array();
         $validator = new Opus_Validate_SubjectDDC();
@@ -197,22 +222,6 @@ class Publish_Model_Validation {
 
         $validators[] = $validator;
         return $validators;
-    }
-
-    private function _validateCollection($role) {
-        $validators = array();
-        $validValues = $this->getCollection($role);
-        if (is_null($validValues))
-            return null;
-        else {
-            $validator = new Zend_Validate_InArray($validValues);
-            $messages = array(
-                Zend_Validate_InArray::NOT_IN_ARRAY => 'publish_validation_error_inarray_notinarray');
-            $validator->setMessages($messages);
-
-            $validators[] = $validator;
-            return $validators;
-        }
     }
 
     private function _validateLanguage() {
@@ -346,6 +355,9 @@ class Publish_Model_Validation {
             $switchVar = $this->datatype;
 
         switch ($switchVar) {
+            case 'Collection': return $this->_collectionSelect();
+                break;
+
             case 'Language': return $this->_languageSelect();
                 break;
 
@@ -370,6 +382,23 @@ class Publish_Model_Validation {
             default : throw new Publish_Model_OpusServerException("Error while parsing the xml document type: Found datatype " . $this->datatype . " is unknown!");
                 break;
         }
+    }
+
+    private function _collectionSelect() {
+        $browsingHelper1 = new SolrSearch_Model_CollectionRoles();
+        $collectionRole = Opus_CollectionRole::fetchByOaiName($this->collectionRole);
+        $children = array();
+        if ($browsingHelper1->hasVisibleChildren($collectionRole)) {
+            $collectionId = $collectionRole->getRootCollection()->getId();
+            $collection = new Opus_Collection($collectionId);
+            $colls = $collection->getChildren();
+
+            foreach ($colls as $coll) {
+                if ($coll->getVisible() == 1)
+                    $children['ID:' . $coll->getId()] = $coll->getDisplayName();
+            }
+        }
+        return $children;
     }
 
     private function _instituteSelect() {
@@ -447,10 +476,10 @@ class Publish_Model_Validation {
      */
     private function getCollection($oaiName) {
         if (empty($this->$oaiName)) {
-            // $this->log->debug($oaiName . " has to be fetched from database!");
             $role = Opus_CollectionRole::fetchByName($oaiName);
-            if (is_null($role))
+            if (is_null($role)) {
                 return null;
+            }
             else {
                 $colls = Opus_Collection::fetchCollectionsByRoleId($role->getId());
                 $collections = array();
@@ -472,7 +501,6 @@ class Publish_Model_Validation {
             return $collections;
         }
         else {
-            //$this->log->debug($oaiName . " can be fetched from cache!");
             return $this->$oaiName;
         }
     }

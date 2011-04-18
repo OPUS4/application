@@ -99,10 +99,16 @@ class Publish_FormController extends Controller_Action {
                 $this->view->form = $indexForm;
                 $this->helper->setCurrentForm($indexForm);
                 $this->helper->setFirstFormViewVariables();
-                $this->session->uploadSuccess = $this->_storeUploadedFiles();
+                if (array_key_exists('uploadComment', $data))
+                        $comment = $data['uploadComment'];
+                else 
+                    $comment = "";
+                $this->session->uploadSuccess = $this->_storeUploadedFiles($comment);
 
-                if (array_key_exists('addAnotherFile', $data))
+                if (array_key_exists('addAnotherFile', $data)) {
+                    $data['uploadComment'] = "";
                     return $this->renderScript('index/index.phtml');
+                }
             }
 
             //validate whole form
@@ -240,7 +246,7 @@ class Publish_FormController extends Controller_Action {
     /**
      * Method stores the uploaded files
      */
-    private function _storeUploadedFiles() {
+    private function _storeUploadedFiles($comment) {
         $upload = new Zend_File_Transfer_Adapter_Http();
         $files = $upload->getFileInfo();
         $upload_count = 0;
@@ -281,6 +287,7 @@ class Publish_FormController extends Controller_Action {
                 $docfile->setFromPost($fileValues);
                 //file always requires a language, this value is later overwritten by the exact language
                 $docfile->setLanguage("eng");
+                $docfile->setComment(htmlspecialchars($comment));
             }
         }
 

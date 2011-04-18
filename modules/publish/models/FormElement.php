@@ -40,16 +40,17 @@ class Publish_Model_FormElement {
     public $postValues = array();
     public $isSubField = false;
     public $listOptions = array();
-
     //private member variables
     private $elementName;
     private $label;
     private $required;
     private $formElement;
     private $datatype;
+    private $collectionRole;
+    private $collectionId;
     private $multiplicity;
-    private $value;    
-    private $default = array();    
+    private $value;
+    private $default = array();
     private $validationObject; //Publish_Model_Validation
     private $validation = array();
     private $group;         //Publish_Model_Group
@@ -79,8 +80,8 @@ class Publish_Model_FormElement {
             $this->initValidation();
     }
 
-    private function initValidation() {
-        $this->validationObject = new Publish_Model_Validation($this->datatype, $this->listOptions);
+    public function initValidation() {
+        $this->validationObject = new Publish_Model_Validation($this->datatype, $this->collectionRole, $this->listOptions);
         $this->validationObject->validate();
         $this->validation = $this->validationObject->validator;
     }
@@ -89,25 +90,29 @@ class Publish_Model_FormElement {
         if ($this->isGroup()) {
             if ($this->isSubField === false) {
                 $this->group = new Publish_Model_DisplayGroup($this->elementName, $this->form, $this->multiplicity);
+                if (isset($this->collectionRole)) {
+                    $this->group->isBrowseField = true;
+                    $this->group->collectionIds[] = $this->collectionId;
+                }
 
                 if ($this->isPersonElement()) {
-                    $this->log->debug("FormElement -> initGroup(): person element");
                     $implicitFields = $this->implicitFields('Person');
                     $this->addSubFormElements($implicitFields);
                 }
                 else if ($this->isTitleElement()) {
-                    $this->log->debug("FormElement -> initGroup(): title element");
                     $implicitFields = $this->implicitFields('Title');
                     $this->addSubFormElements($implicitFields);
                 }
                 else {
-                    $this->log->debug("FormElement -> initGroup(): other element");
                     $this->addSubFormElement($this->transform());
                 }
 
                 $this->group->setAdditionalFields($this->additionalFields);
                 $this->group->setSubFields($this->subFormElements);
-                $this->group->makeDisplayGroup();
+                if (isset($this->collectionRole))
+                    $this->group->makeBrowseGroup();
+                else
+                    $this->group->makeDisplayGroup();
             }
             $displayGroup = $this->form->addDisplayGroup($this->group->elements, $this->group->label);
             return $displayGroup;
@@ -211,8 +216,9 @@ class Publish_Model_FormElement {
                 $element = $this->form->createElement($this->formElement, $this->elementName);
             }
             else {
-                if (is_null($this->listOptions) || empty($this->listOptions))
+                if (is_null($this->listOptions) || empty($this->listOptions)) {
                     $options = $this->validationObject->selectOptions($this->datatype);
+                }
                 else
                     $options = $this->listOptions;
 
@@ -320,6 +326,27 @@ class Publish_Model_FormElement {
 
     public function getDefault() {
         return $this->default;
+    }
+
+    public function setCollectionRole($root) {
+        $this->collectionRole = $root;
+    }
+
+    public function getCollectionRole() {
+        return $this->collectionRole;
+    }
+
+    public function setCurrentCollectionId($setRoot=false) {
+
+        if (!$setRoot) {
+            $collectionRole = Opus_CollectionRole::fetchByOaiName($this->collectionRole);
+            $collectionId = $collectionRole->getRootCollection()->getId();
+            $this->collectionId = $collectionId;
+        }
+    }
+
+    public function getCurrentCollectionId() {
+        return $this->collectionId;
     }
 
     public function setDefaultValue($defaultValue, $forValue = null) {

@@ -60,7 +60,7 @@ class Publish_Model_Deposit {
     private function _storeDocumentData() {
 
         foreach ($this->documentData as $dataKey => $dataValue) {
-            $datasetType = $this->_getDatasetType($dataKey, $dataValue);
+            $datasetType = $this->_getDatasetType($dataKey);
 
             if (isset($datasetType) && !empty($datasetType)) {
                 $this->log->debug("Wanna store a " . $datasetType . "!");
@@ -100,7 +100,7 @@ class Publish_Model_Deposit {
      * @param <String> $dataKey
      * @return <String> Type or ""
      */
-    private function _getDatasetType($dataKey, $dataValue) {
+    private function _getDatasetType($dataKey) {
         if (strstr($dataKey, 'Person'))
             return 'Person';
         else if (strstr($dataKey, 'Title'))
@@ -274,7 +274,7 @@ class Publish_Model_Deposit {
             $this->log->debug("Value of title: " . $entry);
             $title->setValue($entry);
             //"delete" value to avoid possible redundant record
-            $this->documentData[$index] = "";            
+            $this->documentData[$index] = "";
         }
     }
 
@@ -290,7 +290,7 @@ class Publish_Model_Deposit {
             $this->log->debug("Value of title language: " . $entry);
             $title->setLanguage($entry);
             //"delete" value to avoid possible redundant record
-            $this->documentData[$index] = "";            
+            $this->documentData[$index] = "";
         }
     }
 
@@ -324,10 +324,20 @@ class Publish_Model_Deposit {
         }
         $this->log->debug("try to store subject: " . $dataKey);
         $type = $this->getSubjectType($dataKey);
+        $counter = (int) $this->getCounter($dataKey);
+        $this->log->debug("counter: " . $counter);
+
         switch ($type) {
             case 'MSC' :
             case 'DDC' :
                 $this->log->debug("subject is a " . $type . " subject and has to be stored as a Collection.");
+                if (strstr($dataValue, 'collId'))
+                        return;
+                if (isset ($this->session->additionalFields['step'.$dataKey])) {
+                        $step = $this->session->additionalFields['step'.$dataKey];
+                        if (array_key_exists('collId'. $step . $dataKey, $this->documentData))
+                                $dataValue = $this->documentData['collId'. $step . $dataKey];
+                }
                 $this->_storeCollectionObject(strtolower($type), $dataValue);
                 $this->log->debug("subject has also be stored as subject.");
                 $subject = new Opus_Subject();
@@ -336,7 +346,14 @@ class Publish_Model_Deposit {
             case 'CCS' :
             case 'PACS' :
                 $this->log->debug("subject is a " . $type . " subject and has only to be stored as a Collection.");
+                if (isset ($this->session->additionalFields['step'.$dataKey])) {
+                        $step = $this->session->additionalFields['step'.$dataKey];
+                        if (array_key_exists('collId'. $step . $dataKey, $this->documentData))
+                                $dataValue = $this->documentData['collId'. $step . $dataKey];
+                }
                 $this->_storeCollectionObject(strtolower($type), $dataValue);
+                if (isset($step))
+                    $dataValue = $this->documentData['collId'. $step . $dataKey] = "";
                 return;
 
             case 'Swd' :
@@ -348,18 +365,23 @@ class Publish_Model_Deposit {
                 $this->log->debug("subject is a uncontrolled or other subject.");
                 $subject = new Opus_Subject();
                 break;
-        }        
-        $counter = (int) $this->getCounter($dataKey);
-        $this->log->debug("counter: " . $counter);
-
+        }       
         if ($counter >= 1) {
             $subjectType = 'Subject' . $type;
             $this->log->debug("subjectType: " . $subjectType);
+            if (strstr($dataValue, 'ID:')) {
+                $dataValue = substr($dataValue, 3);
+                //store a simple collection
+                $collection = new Opus_Collection($dataValue);
+                $dataValue = $collection->getDisplayName();
+            }
             $subject->setValue($dataValue);
             $addFunction = "add" . $subjectType;
             $this->log->debug("addfunction: " . $addFunction);
             $this->document->$addFunction($subject);
-        }       
+            if (isset($step))
+                    $dataValue = $this->documentData['collId'. $step . $dataKey] = "";
+        }
     }
 
     /**
@@ -409,8 +431,19 @@ class Publish_Model_Deposit {
     }
 
     private function _storeCollectionObject($collectionRole, $dataValue) {
-        if ($collectionRole == "") {
+        if ($dataValue == "") {
+            $this->log->debug("Collection already stored.");            
+            return;
+        }
+        if (strstr($dataValue, 'ID:')) {
+            $dataValue = substr($dataValue, 3);
             //store a simple collection
+            $this->document->addCollection(new Opus_Collection($dataValue));
+            return;
+        }
+
+        if ($collectionRole == "") {
+            //store a simple collection            
             $this->document->addCollection(new Opus_Collection($dataValue));
             return;
         }
@@ -579,7 +612,7 @@ class Publish_Model_Deposit {
             return;
         }
         $counter = $this->getCounter($dataKey);
-        if ($counter != 0) {            
+        if ($counter != 0) {
             //remove possible counter char
             $dataKey = str_replace($counter, '', $dataKey);
         }

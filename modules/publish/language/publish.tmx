@@ -558,5 +558,42 @@
       </tuv>
     </tu>
 
+    <tu tuid="name">
+      <tuv xml:lang="en">
+        <seg>Name</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Name</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="size">
+      <tuv xml:lang="en">
+        <seg>File size</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dateigröße</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="type">
+      <tuv xml:lang="en">
+        <seg>File type</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dateityp</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="bytes">
+      <tuv xml:lang="en">
+        <seg>bytes</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bytes</seg>
+      </tuv>
+    </tu>
+
+
   </body>  
 </tmx>

@@ -104,9 +104,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertController('form');
         $this->assertAction('upload');
     }
-
-    
-    
+ 
     public function testUploadActionWithValidPost() {
         $this->request
                 ->setMethod('POST')
@@ -203,7 +201,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
                     'addMoreTitleMain' => 'Add one more main title'
                 ));
 
-        $this->dispatch('/publish/form/check');
+//        $this->dispatch('/publish/form/check');
 //        $this->assertResponseCode(200);
 //        $this->assertController('form');
 //        $this->assertAction('check');

@@ -41,9 +41,11 @@ class Publish_Model_DisplayGroup {
 
     public $label;
     public $elements = array(); //Array of Zend_Form_Element
+    public $form;
+    public $isBrowseField = false;
+    public $collectionIds = array();
     private $elementName;
     private $additionalFields;
-    public $form;
     private $multiplicity;
     private $log;
     private $session;
@@ -69,8 +71,11 @@ class Publish_Model_DisplayGroup {
         $minNum = $this->minNumber();
         $maxNum = $this->maxNumber();
 
+        //Number of fieldsets for the same field type (ex: 3 x author fieldset)
         for ($i = $minNum; $i <= $maxNum; $i++) {
+
             foreach ($this->elements as $element) {
+
                 $elem = clone $element;
                 $elem->setName($element->getName() . $i);
                 $this->form->addElement($elem);
@@ -78,28 +83,164 @@ class Publish_Model_DisplayGroup {
             }
         }
 
+        //count fields for "visually grouping" in template
         $number = count($displayGroup);
         $groupCount = "num" . $this->label;
-
         if (!isset($this->session->$groupCount) || $number < $this->session->$groupCount)
             $this->session->$groupCount = $number;
-
         $this->log->debug("initial number for group elements = " . $number . " for group " . $this->label);
 
         $this->session->additionalFields[$this->elementName] = $this->maxNumber();
+
+        $buttons = $this->addDeleteButtons();
+        $displayGroup = array_merge($buttons, $displayGroup);
+
+        $this->elements = $displayGroup;
+    }
+
+    public function makeBrowseGroup() {
+        $displayGroup = array();
+        $minNum = $this->minNumber();
+        $maxNum = $this->maxNumber();
+
+        for ($i = $minNum; $i <= $maxNum; $i++) {
+            $this->session->additionalFields['step' . $this->elementName . $i] = $this->collectionStep($i);
+            //update $this->collectionIds and generate fields for the current fieldset
+            $this->browseFields($i);
+
+            $allElements = count($this->elements) - 1;
+            foreach ($this->elements as $count => $element) {
+                $currentStep = (int) $this->collectionStep($i);
+                if ($element->getName() === $this->elementName) {
+                    //clone the "root selection"
+                    $elem = clone $element;
+                    $elem->setName($this->elementName . $i);
+
+                    if (isset($this->session->additionalFields['collId0' . $this->elementName . $i])) {                        
+                        $elem->setValue($this->session->additionalFields['collId0' . $this->elementName . $i]);                       
+                    }
+
+//                    if ($currentStep != 1)
+//                        $elem->setAttrib('disabled', true);
+
+                    $this->form->addElement($elem);
+                    $displayGroup[] = $elem->getName();
+                }
+                else {
+//                    if ($count != $allElements && $currentStep != 1) {
+//                        $element->setAttrib('disabled', true);
+//                    }
+                    $this->form->addElement($element);
+                    $displayGroup[] = $element->getName();
+                }
+            }
+        }
+
+        //count fields for "visually grouping" in template
+        $groupCount = "num" . $this->label;
+        $this->session->$groupCount = count($this->collectionIds);
+
+        $this->session->additionalFields[$this->elementName] = $maxNum;
+
+        $buttons = $this->addDeleteButtons();
+        $displayGroup = array_merge($displayGroup, $buttons);
+
+        $buttons = $this->browseButtons();
+        if (!is_null($buttons)) {
+            $displayGroup = array_merge($buttons, $displayGroup);
+        }
+
+        $this->elements = $displayGroup;
+    }
+
+    private function addDeleteButtons() {
+        $displayGroup = array();
+        //show delete button only in case multiplicity has not been reached yet
         if ($this->maxNumber() < (int) $this->multiplicity || $this->multiplicity === '*') {
             $addButton = $this->addAddButtontoGroup();
             $this->form->addElement($addButton);
             $displayGroup[] = $addButton->getName();
         }
 
-        if ($maxNum > 1) {
+        if ($this->maxNumber() > 1) {
             $deleteButton = $this->addDeleteButtonToGroup();
             $this->form->addElement($deleteButton);
             $displayGroup[] = $deleteButton->getName();
         }
+        return $displayGroup;
+    }
 
-        $this->elements = $displayGroup;
+    /**
+     * Method returns an array with one or two buttons for browsing the collections during publication.
+     * The buttons have been added to the current Zend_Form.
+     * @return <Array> of button names
+     */
+    private function browseButtons() {
+        $displayGroup = array();
+        //show browseDown button only for the last select field
+        $level = (int) count($this->collectionIds);
+        try {
+            $collection = new Opus_Collection($this->collectionIds[$level - 1]);
+        } catch (Exception $e) {
+            return null;
+        }
+        $colls = $collection->getChildren();
+        if (!is_null($colls) && count($colls) > 1) {
+            //collection has children
+            $displayButton = false;
+            //check all children to prevent false buttons
+            foreach ($colls AS $coll) {
+                $childs = $coll->getChildren();
+                if (!is_null($childs) && count($childs) > 1)
+                    $displayButton = true;
+            }
+            if ($displayButton) {
+                //Collection has at least one child with children -> make button to browse down
+                $downButton = $this->addDownButtontoGroup();
+                $this->form->addElement($downButton);
+                $displayGroup[] = $downButton->getName();
+            }
+        }
+
+        $isRoot = $collection->isRoot();
+        if (!$isRoot) {
+            //Collection has parents -> make button to browse up
+            $upButton = $this->addUpButtontoGroup();
+            $this->form->addElement($upButton);
+            $displayGroup[] = $upButton->getName();
+        }
+        return $displayGroup;
+    }
+
+    /**
+     * Method adds different collection selection fields to the elements list of the disyplay group for the current fieldset
+     * @param <Int> $fieldset Counter of the current fieldset
+     */
+    private function browseFields($fieldset) {
+        if ($fieldset > 1)
+            $this->collectionIds[] = $this->collectionIds[0];
+        $this->session->additionalFields['collId0' . $this->elementName . $fieldset] = $this->collectionIds[0];
+
+        $elements = array();
+        //found collection level for the current fieldset
+        $step = $this->collectionStep($fieldset);
+
+        for ($j = 2; $j <= $step; $j++) {
+            $prev = (int) $j - 1;
+            //get the previous selection collection id from session
+            if (isset($this->session->additionalFields['collId' . $prev . $this->elementName . $fieldset])) {
+                $id = $this->session->additionalFields['collId' . $prev . $this->elementName . $fieldset];
+
+                if ($id != '0' || !is_null($id)) {
+                    //insert to array and geneerate field
+                    $this->collectionIds[] = $id;
+                    //echo ('Show Collection with id ' . $id . " in field with name collId" . $j . $this->elementName . $fieldset . '<br>');
+                    $selectfield = $this->collectionEntries((int) $id, $j, $fieldset);
+                    if (!is_null($selectfield))
+                        $this->elements[] = $selectfield;
+                }
+            }
+        }
     }
 
     private function maxNumber() {
@@ -107,10 +248,45 @@ class Publish_Model_DisplayGroup {
         if (isset($this->additionalFields)) {
             if (array_key_exists($this->elementName, $this->additionalFields)) {
                 $maxNumber = (int) $this->additionalFields[$this->elementName];
-                //$this->log->debug("maxNumber(): key " . $this->elementName . " exists, maxnumberr = " . $maxNumber);
             }
         }
         return $maxNumber;
+    }
+
+    private function collectionStep($max=null) {
+        $step = 1;
+        if (isset($this->session->additionalFields)) {
+            if (isset($this->session->additionalFields['step' . $this->elementName . $max])) {
+                $step = (int) $this->session->additionalFields['step' . $this->elementName . $max];
+                $this->log->debug("DisplayGroup: Step found = " . $step . " for fieldset nr. " . $max);
+            }
+        }
+        return $step;
+    }
+
+    private function collectionEntries($id, $step, $fieldset) {
+        try {
+            $collection = new Opus_Collection($id);
+        } catch (Exception $e) {
+            return null;
+        }
+        $colls = $collection->getChildren();
+
+        if (!is_null($colls) && count($colls) > 1) {
+            $selectField = $this->form->createElement('select', 'collId' . $step . $this->elementName . $fieldset);
+            $selectField->setLabel('choose_collection_subcollection');
+            $children = array();
+            foreach ($colls as $coll) {
+                $children['ID:' . $coll->getId()] = $coll->getDisplayName();
+            }
+            $selectField->setMultiOptions($children);
+        }
+        else {
+            $selectField = $this->form->createElement('text', 'collId' . $step . $this->elementName . $fieldset);
+            $selectField->setLabel('endOfCollectionTree');
+            $this->session->endOfCollectionTree['collId' . $step . $this->elementName] = 1;
+        }
+        return $selectField;
     }
 
     private function minNumber() {
@@ -147,6 +323,18 @@ class Publish_Model_DisplayGroup {
         $deleteButton = $this->form->createElement('submit', 'deleteMore' . $this->elementName);
         $deleteButton->setLabel('button_label_delete' . $this->elementName);
         return $deleteButton;
+    }
+
+    private function addDownButtontoGroup() {
+        $downButton = $this->form->createElement('submit', 'browseDown' . $this->elementName);
+        $downButton->setLabel('button_label_browse_down' . $this->elementName);
+        return $downButton;
+    }
+
+    private function addUpButtontoGroup() {
+        $upButton = $this->form->createElement('submit', 'browseUp' . $this->elementName);
+        $upButton->setLabel('button_label_browse_up' . $this->elementName);
+        return $upButton;
     }
 
 }
