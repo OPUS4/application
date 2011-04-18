@@ -124,12 +124,7 @@
             </xsl:call-template>
         </xsl:if>
         <xsl:call-template name="outputFieldValue">
-            <xsl:with-param name="field">pages  </xsl:with-param>
-            <xsl:with-param name="value"><xsl:value-of select ="$pages" /></xsl:with-param>
-            <xsl:with-param name="delimiter">,</xsl:with-param>
-        </xsl:call-template>
-        <xsl:call-template name="outputFieldValue">
-            <xsl:with-param name="field">pages      </xsl:with-param>
+            <xsl:with-param name="field">pages    </xsl:with-param>
             <xsl:with-param name="value"><xsl:value-of select ="$pages" /></xsl:with-param>
             <xsl:with-param name="delimiter">,</xsl:with-param>
         </xsl:call-template>
