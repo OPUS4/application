@@ -289,6 +289,16 @@ class Review_Model_DocumentAdapter {
         return $this->view->url($url, null, true);
     }
 
+    public function getUrlAccessManager() {
+        $url = array(
+            'module'     => 'admin',
+            'controller' => 'access',
+            'action'     => 'listrole',
+            'docid'      => $this->getDocId()
+        );
+        return $this->view->url($url, null, true);
+    }
+
     public function getUrlPublish() {
         $url = array(
             'module'     => 'admin',
