@@ -2076,5 +2076,23 @@
       </tuv>
     </tu>
 
+    <tu tuid="SeriesNumber">
+      <tuv xml:lang="en">
+        <seg>Series number</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bandnummer</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="Series">
+      <tuv xml:lang="en">
+        <seg>Serie</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Schriftenreihe</seg>
+      </tuv>
+    </tu>
+
   </body>  
 </tmx>

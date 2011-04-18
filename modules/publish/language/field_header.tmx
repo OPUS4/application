@@ -631,5 +631,14 @@
       </tuv>
     </tu>
 
+    <tu tuid="groupSeries">
+      <tuv xml:lang="en">
+        <seg>Series</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Schriftenreihen</seg>
+      </tuv>
+    </tu>
+
     </body>
 </tmx>

@@ -385,8 +385,8 @@ class Publish_Model_Validation {
     }
 
     private function _collectionSelect() {
-        $browsingHelper1 = new SolrSearch_Model_CollectionRoles();
-        $collectionRole = Opus_CollectionRole::fetchByOaiName($this->collectionRole);
+        $browsingHelper1 = new Solrsearch_Model_CollectionRoles();
+        $collectionRole = Opus_CollectionRole::fetchByOaiName($this->collectionRole);        
         $children = array();
         if ($browsingHelper1->hasVisibleChildren($collectionRole)) {
             $collectionId = $collectionRole->getRootCollection()->getId();
@@ -397,7 +397,7 @@ class Publish_Model_Validation {
                 if ($coll->getVisible() == 1)
                     $children['ID:' . $coll->getId()] = $coll->getDisplayName();
             }
-        }
+        }        
         return $children;
     }
 

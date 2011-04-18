@@ -120,6 +120,51 @@
         </tuv>
     </tu>
 
+    <tu tuid="hint_no_selection_SubjectMSC">
+        <tuv xml:lang="en">
+            <seg>Sorry: No MSC classes have been found in our database.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Entschuldigung: Es wurden keine MSC Klassen in unserer Datenbank gefunden.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_no_selection_SubjectDDC">
+        <tuv xml:lang="en">
+            <seg>Sorry: No DDC classes have been found in our database.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Entschuldigung: Es wurden keine DDC Klassen in unserer Datenbank gefunden.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_no_selection_SubjectCCS">
+        <tuv xml:lang="en">
+            <seg>Sorry: No CCS classes have been found in our database.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Entschuldigung: Es wurden keine CCS Klassen in unserer Datenbank gefunden.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_no_selection_SubjectPACS">
+        <tuv xml:lang="en">
+            <seg>Sorry: No PACS classes have been found in our database.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Entschuldigung: Es wurden keine PACS Klassen in unserer Datenbank gefunden.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_no_selection_Series">
+        <tuv xml:lang="en">
+            <seg>Sorry: No series have been found in our database.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Entschuldigung: Es wurden keine Schriftenreihen in unserer Datenbank gefunden.</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="hint_no_selection_projects">
         <tuv xml:lang="en">
             <seg>Sorry: No projects have been found in our database.</seg>
@@ -1586,6 +1631,15 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
       </tuv>
       <tuv xml:lang="de">
         <seg>Bitte geben Sie die URL an, bei der das Dokument verfügbar ist.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="hint_groupSeries">
+      <tuv xml:lang="en">
+        <seg>Choose a serie from the select box and enter the corresponding number.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Wählen Sie eine Schriftenreihe aus und geben Sie die dazugehörige Bandnummer an.</seg>
       </tuv>
     </tu>
 	

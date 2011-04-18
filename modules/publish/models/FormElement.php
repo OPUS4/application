@@ -61,6 +61,7 @@ class Publish_Model_FormElement {
     const LAST = "LastName";
     const VALUE = "Value";
     const LANG = "Language";
+    const NR = "Number";
 
     public function __construct($form, $name = null, $required = null, $formElement = null, $datatype = null, $multiplicity = null) {
         $this->session = new Zend_Session_Namespace();
@@ -92,7 +93,7 @@ class Publish_Model_FormElement {
                 $this->group = new Publish_Model_DisplayGroup($this->elementName, $this->form, $this->multiplicity);
                 if (isset($this->collectionRole)) {
                     $this->group->isBrowseField = true;
-                    $this->group->collectionIds[] = $this->collectionId;
+                    $this->group->collectionIds[] = $this->collectionId;                    
                 }
 
                 if ($this->isPersonElement()) {
@@ -103,12 +104,17 @@ class Publish_Model_FormElement {
                     $implicitFields = $this->implicitFields('Title');
                     $this->addSubFormElements($implicitFields);
                 }
+                 else if ($this->isSeriesElement()) {
+                    $implicitFields = $this->implicitFields('Series');
+                    $this->addSubFormElements($implicitFields);
+                    $this->group->implicitGroup = true;
+                }
                 else {
                     $this->addSubFormElement($this->transform());
                 }
 
                 $this->group->setAdditionalFields($this->additionalFields);
-                $this->group->setSubFields($this->subFormElements);
+                $this->group->setSubFields($this->subFormElements);                
                 if (isset($this->collectionRole))
                     $this->group->makeBrowseGroup();
                 else
@@ -147,6 +153,24 @@ class Publish_Model_FormElement {
                 return array($elementFirst, $elementLast);
                 break;
 
+            case 'Series':
+                //creates a additional field for a number
+                $number = new Publish_Model_FormElement($this->form, $this->elementName . self::NR, $this->required, 'text', 'Text');
+                $number->isSubField = true;
+                $number->setDefaultValue($this->default, self::NR);
+                $elementNumber = $number->transform();
+
+                $select = new Publish_Model_FormElement($this->form, $this->elementName, $this->required, 'select', 'Collection');
+                $select->isSubField = true;
+                $select->collectionRole = $this->collectionRole;
+                $select->collectionId = $this->collectionId;
+                $select->validationObject->collectionRole=$this->collectionRole;
+                $select->setDefaultValue($this->default);
+                $element = $select->transform();
+                
+                return array($elementNumber, $element);
+                break;
+
             case 'Title':
                 //creates two subfields for title value and language (select)
                 if ($this->isTextareaElement())
@@ -171,6 +195,13 @@ class Publish_Model_FormElement {
         if (strstr($this->elementName, 'Title')
                 || strstr($this->elementName, 'Abstract'
                         || $this->datatype === 'Title'))
+            return true;
+        else
+            return false;
+    }
+
+    private function isSeriesElement() {
+        if (strstr($this->elementName, 'Series'))
             return true;
         else
             return false;
@@ -212,10 +243,10 @@ class Publish_Model_FormElement {
     public function transform() {
         if (isset($this->form)) {
 
-            if (false === $this->isSelectElement()) {
+            if (false === $this->isSelectElement()) {                
                 $element = $this->form->createElement($this->formElement, $this->elementName);
             }
-            else {
+            else {                
                 if (is_null($this->listOptions) || empty($this->listOptions)) {
                     $options = $this->validationObject->selectOptions($this->datatype);
                 }
@@ -337,11 +368,14 @@ class Publish_Model_FormElement {
     }
 
     public function setCurrentCollectionId($setRoot=false) {
-
         if (!$setRoot) {
             $collectionRole = Opus_CollectionRole::fetchByOaiName($this->collectionRole);
-            $collectionId = $collectionRole->getRootCollection()->getId();
-            $this->collectionId = $collectionId;
+            $rootCollection = $collectionRole->getRootCollection();
+            if (!is_null($rootCollection)) {
+                $collectionId = $rootCollection->getId();
+                $this->log->debug("CollectionRoot: " . $this->collectionRole . " * CollectionId: " . $collectionId);
+                $this->collectionId = $collectionId;
+            }
         }
     }
 

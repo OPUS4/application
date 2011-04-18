@@ -89,7 +89,7 @@ class Publish_Model_DocumenttypeParser {
 
             $this->currentElement->setPostValues($this->postValues);           
 
-            $group = $this->currentElement->initGroup();
+            $group = $this->currentElement->initGroup();            
 
             $this->formElements[] = $group;
             

@@ -44,6 +44,7 @@ class Publish_Model_DisplayGroup {
     public $form;
     public $isBrowseField = false;
     public $collectionIds = array();
+    public $implicitGroup = false;
     private $elementName;
     private $additionalFields;
     private $multiplicity;
@@ -109,36 +110,37 @@ class Publish_Model_DisplayGroup {
             $this->browseFields($i);
 
             $allElements = count($this->elements) - 1;
-            foreach ($this->elements as $count => $element) {
-                $currentStep = (int) $this->collectionStep($i);
-                if ($element->getName() === $this->elementName) {
-                    //clone the "root selection"
+            foreach ($this->elements as $count => $element) {                
+                if ($this->implicitGroup) {
+                    
+                    //clone all elements
                     $elem = clone $element;
-                    $elem->setName($this->elementName . $i);
-
-                    if (isset($this->session->additionalFields['collId0' . $this->elementName . $i])) {                        
-                        $elem->setValue($this->session->additionalFields['collId0' . $this->elementName . $i]);                       
-                    }
-
-//                    if ($currentStep != 1)
-//                        $elem->setAttrib('disabled', true);
-
+                    $elem->setName($element->getName() . $i);
                     $this->form->addElement($elem);
                     $displayGroup[] = $elem->getName();
                 }
                 else {
-//                    if ($count != $allElements && $currentStep != 1) {
-//                        $element->setAttrib('disabled', true);
-//                    }
-                    $this->form->addElement($element);
-                    $displayGroup[] = $element->getName();
+                    //only clone special fields
+                    $currentStep = (int) $this->collectionStep($i);
+                    if ($element->getName() === $this->elementName) {
+                        //clone the "root selection"
+                        $elem = clone $element;
+                        $elem->setName($this->elementName . $i);
+                        $this->form->addElement($elem);
+                        $displayGroup[] = $elem->getName();
+                    }
+                    else {
+                        $this->form->addElement($element);
+                        $displayGroup[] = $element->getName();
+                    }
                 }
             }
         }
 
+
         //count fields for "visually grouping" in template
         $groupCount = "num" . $this->label;
-        $this->session->$groupCount = count($this->collectionIds);
+        $this->session->$groupCount = count($this->elements);
 
         $this->session->additionalFields[$this->elementName] = $maxNum;
 
@@ -217,6 +219,15 @@ class Publish_Model_DisplayGroup {
      * @param <Int> $fieldset Counter of the current fieldset
      */
     private function browseFields($fieldset) {
+        if (is_null($this->collectionIds[0])) {
+            $error = $this->form->createElement('text', $this->elementName);
+            $error->setLabel($this->elementName);
+            $error->setDescription('hint_no_selection_' . $this->elementName);
+            $error->setAttrib('disabled', true);
+            $this->elements[] = $error;
+            return;
+        }
+
         if ($fieldset > 1)
             $this->collectionIds[] = $this->collectionIds[0];
         $this->session->additionalFields['collId0' . $this->elementName . $fieldset] = $this->collectionIds[0];
@@ -258,7 +269,6 @@ class Publish_Model_DisplayGroup {
         if (isset($this->session->additionalFields)) {
             if (isset($this->session->additionalFields['step' . $this->elementName . $max])) {
                 $step = (int) $this->session->additionalFields['step' . $this->elementName . $max];
-                $this->log->debug("DisplayGroup: Step found = " . $step . " for fieldset nr. " . $max);
             }
         }
         return $step;

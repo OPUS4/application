@@ -123,6 +123,8 @@ class Publish_Model_Deposit {
             return 'Patent';
         else if (strstr($dataKey, 'Enrichment'))
             return 'Enrichment';
+        else if (strstr($dataKey, 'Series'))
+            return 'Series';
 
         return "";
     }
@@ -332,11 +334,11 @@ class Publish_Model_Deposit {
             case 'DDC' :
                 $this->log->debug("subject is a " . $type . " subject and has to be stored as a Collection.");
                 if (strstr($dataValue, 'collId'))
-                        return;
-                if (isset ($this->session->additionalFields['step'.$dataKey])) {
-                        $step = $this->session->additionalFields['step'.$dataKey];
-                        if (array_key_exists('collId'. $step . $dataKey, $this->documentData))
-                                $dataValue = $this->documentData['collId'. $step . $dataKey];
+                    return;
+                if (isset($this->session->additionalFields['step' . $dataKey])) {
+                    $step = $this->session->additionalFields['step' . $dataKey];
+                    if (array_key_exists('collId' . $step . $dataKey, $this->documentData))
+                        $dataValue = $this->documentData['collId' . $step . $dataKey];
                 }
                 $this->_storeCollectionObject(strtolower($type), $dataValue);
                 $this->log->debug("subject has also be stored as subject.");
@@ -346,14 +348,14 @@ class Publish_Model_Deposit {
             case 'CCS' :
             case 'PACS' :
                 $this->log->debug("subject is a " . $type . " subject and has only to be stored as a Collection.");
-                if (isset ($this->session->additionalFields['step'.$dataKey])) {
-                        $step = $this->session->additionalFields['step'.$dataKey];
-                        if (array_key_exists('collId'. $step . $dataKey, $this->documentData))
-                                $dataValue = $this->documentData['collId'. $step . $dataKey];
+                if (isset($this->session->additionalFields['step' . $dataKey])) {
+                    $step = $this->session->additionalFields['step' . $dataKey];
+                    if (array_key_exists('collId' . $step . $dataKey, $this->documentData))
+                        $dataValue = $this->documentData['collId' . $step . $dataKey];
                 }
                 $this->_storeCollectionObject(strtolower($type), $dataValue);
                 if (isset($step))
-                    $dataValue = $this->documentData['collId'. $step . $dataKey] = "";
+                    $dataValue = $this->documentData['collId' . $step . $dataKey] = "";
                 return;
 
             case 'Swd' :
@@ -365,7 +367,7 @@ class Publish_Model_Deposit {
                 $this->log->debug("subject is a uncontrolled or other subject.");
                 $subject = new Opus_Subject();
                 break;
-        }       
+        }
         if ($counter >= 1) {
             $subjectType = 'Subject' . $type;
             $this->log->debug("subjectType: " . $subjectType);
@@ -380,7 +382,7 @@ class Publish_Model_Deposit {
             $this->log->debug("addfunction: " . $addFunction);
             $this->document->$addFunction($subject);
             if (isset($step))
-                    $dataValue = $this->documentData['collId'. $step . $dataKey] = "";
+                $dataValue = $this->documentData['collId' . $step . $dataKey] = "";
         }
     }
 
@@ -432,7 +434,7 @@ class Publish_Model_Deposit {
 
     private function _storeCollectionObject($collectionRole, $dataValue) {
         if ($dataValue == "") {
-            $this->log->debug("Collection already stored.");            
+            $this->log->debug("Collection already stored.");
             return;
         }
         if (strstr($dataValue, 'ID:')) {
@@ -467,6 +469,34 @@ class Publish_Model_Deposit {
             if (count($collArray) >= 2) {
                 $this->log->err("While trying to store " . $collectionRole . " as Collection, an error occurred. The method fetchCollectionsByRoleNumber returned an array with > 1 values. The " . $collectionRole . " cannot be definitely assigned but was stored to the first entry.");
             }
+        }
+    }
+
+    /**
+     * method to prepare a Collection object for storing
+     * @param <Opus_Document> $this->document
+     * @param <Array> $formValues
+     * @param <String> $dataKey current Element of formValues
+     * @param <Array> $externalFields
+     * @return <Array> $formValues
+     * @throws Publish_Model_OpusServerException
+     */
+    private function _prepareSeriesObject($dataKey, $dataValue) {
+        if ($dataValue == "") {
+            $this->log->debug("Series collection already stored.");
+            return;
+        }
+        $this->log->debug("try to store serie collection: " . $dataValue);
+
+        if (strstr($dataKey, "Number"))
+            return;
+        else {
+            if (isset($this->session->additionalFields['step' . $dataKey])) {
+                $step = $this->session->additionalFields['step' . $dataKey];
+                if (array_key_exists('collId' . $step . $dataKey, $this->documentData))
+                    $dataValue = $this->documentData['collId' . $step . $dataKey];
+            }
+            $this->_storeCollectionObject('', $dataValue);
         }
     }
 

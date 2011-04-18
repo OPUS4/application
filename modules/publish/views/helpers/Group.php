@@ -127,6 +127,9 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                             if (strstr($field["id"], "1"))
                                 $fieldset .= " title='" . $this->view->translate($field["hint"]) . "' ";
                             $fieldset .= " value='" . htmlspecialchars($field["value"]) . "' />\n";
+
+                            if (isset($field['desc']))
+                                $fieldset .= '<div class="description hint">' . $this->view->translate($field['desc']) . '</div>';
                         }
                         break;
 
