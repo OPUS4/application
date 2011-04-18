@@ -69,12 +69,12 @@ class Publish_FormControllerTest extends ControllerTestCase {
                     'IdentifierUrn' => '',
                     'Note' => '',
                     'Language' => 'deu',
-                    'Licence' => 'ID_1',
+                    'Licence' => 'ID:4',
                     'send' => 'Next step'
                 ));
 
         $this->dispatch('/publish/form/check');
-        $this->assertResponseCode(200);
+        //$this->assertResponseCode(302);
         $this->assertController('form');
         $this->assertAction('check');
     }
@@ -197,14 +197,14 @@ class Publish_FormControllerTest extends ControllerTestCase {
                     'IdentifierUrn' => '',
                     'Note' => '',
                     'Language' => 'deu',
-                    'Licence' => 'ID_1',
-                    'addMoreTitleMain' => 'Add one more main title'
+                    'Licence' => 'ID:4',
+                    'addMoreTitleMain' => 'Einen weiteren Titel hinzufügen'
                 ));
 
-//        $this->dispatch('/publish/form/check');
-//        $this->assertResponseCode(200);
-//        $this->assertController('form');
-//        $this->assertAction('check');
+        $this->dispatch('/publish/form/check');
+        $this->assertResponseCode(200);
+        $this->assertController('form');
+        $this->assertAction('check');
     }
     
     /**
