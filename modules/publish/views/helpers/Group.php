@@ -120,8 +120,7 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                                 $fieldset .= "size='30' ";
 
                             if ($field["disabled"] === true) {
-                                $fieldset .= " disabled='1' ";
-                                $disable = true;
+                                $fieldset .= " disabled='1' ";                                
                             }
 
                             if (strstr($field["id"], "1"))
