@@ -45,6 +45,7 @@
     font-size: small;
     width: 100%;
     margin: 0;
+    padding: 0;
 }
 
 .adminContainer table.documents td {
@@ -251,7 +252,7 @@
 }
 
 .adminContainer fieldset {
-    margin: 1em 1em;
+    margin: 0px;
     background: #f3f6f8;
 }
 
@@ -270,6 +271,20 @@
 .adminContainer fieldset.file .file-actions {
     font-size: 110%;
     padding: 0.5em;
+}
+
+.adminContainer fieldset .form-item {
+    margin-bottom: 4px;
+}
+
+.adminContainer input.delete-button {
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.adminContainer input.add-button {
+    padding-top: 2px;
+    padding-bottom: 2px;
 }
 
 .adminContainer div.collection_new {
@@ -348,3 +363,59 @@
 .adminContainer .unavailable {
     color: gray;
 }
+
+.adminContainer #showdoc span.label {
+    background-color: inherit;
+    border: none;
+}
+
+.adminContainer #showdoc span.value {
+    background-color: inherit;
+    border: none;
+    font-weight: bold;
+}
+
+.adminContainer #showdoc fieldset {
+    margin-bottom: 1em;
+}
+
+.adminContainer #showdoc fieldset legend {
+    font-size: 1.5em;
+}
+
+.adminContainer #showdoc span.value span.label {
+    font-weight: normal;
+}
+
+.adminContainer .odd {
+    background: inherit;
+}
+
+.adminContainer .even {
+    background: #e9e9e9;
+}
+
+.adminContainer span.editLink {
+    font-size: 80%;
+    padding: 2px;
+    /* margin-left: 1em; */
+}
+
+.adminContainer span.editLink:before {
+    content: '<'
+}
+
+.adminContainer span.editLink:after {
+    content: '>'
+}
+
+.adminContainer fieldset.overview {
+    /* background: inherit; */
+}
+
+.adminContainer fieldset.overview legend {
+    text-transform: none;
+    border: none;
+}
+
+
