@@ -44,5 +44,6 @@
     <field name="Institute" required="no" formelement="Select" datatype="Collection" root="institutes" multiplicity="5"/>
     <field name="SubjectPACS" required="no" formelement="Select" datatype="Collection" root="pacs" multiplicity="*"/>
     <field name="SubjectCCS" required="no" formelement="Select" datatype="Collection" root="ccs" multiplicity="*"/>
+    <field name="Series" required="no" formelement="Select" datatype="Collection" root="series" multiplicity="1"/>
 
 </documenttype>

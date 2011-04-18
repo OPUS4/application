@@ -130,6 +130,8 @@ class Publish_Model_FormElement {
             return true;
         else if ($this->isPersonElement())
             return true;
+        else if ($this->isSeriesElement())
+            return true;
         else if ($this->multiplicity !== '1')
             return true;
         else
