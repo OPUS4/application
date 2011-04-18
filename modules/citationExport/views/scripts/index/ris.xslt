@@ -27,7 +27,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Frontdoor
+ * @package     Module_CitationExport
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de> 
  * @copyright   Copyright (c) 2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -35,17 +35,9 @@
  */
 -->
 
-<!--
-/**
- * @category    Application
- * @package     Module_Frontdoor
- */
--->
-
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:php="http://php.net/xsl"
-    xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     exclude-result-prefixes="php">
 

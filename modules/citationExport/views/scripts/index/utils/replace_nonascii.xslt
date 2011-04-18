@@ -27,36 +27,34 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Frontdoor
+ * @package     Module_CitationExport
  * @author      Gunar Maiwald <maiwald@zib.de>
  * @copyright   Copyright (c) 2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: bibtex_output.xslt 6855 2010-11-05 11:49:06Z gmaiwald $
+ * @version     $Id$
  */
 -->
 
-<!--
-/**
- * @category    Application
- * @package     Module_CitationExport
- */
--->
+<xsl:stylesheet version="1.0"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:php="http://php.net/xsl"
+    xmlns:xml="http://www.w3.org/XML/1998/namespace"
+    exclude-result-prefixes="php">
 
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-    <xsl:output method="html"/>
+    <xsl:output method="text" omit-xml-declaration="yes" />
 
     <!-- output field and value -->
     <xsl:template name="outputFieldValue">
         <xsl:param name="field" required="yes" />
         <xsl:param name="value" required="yes" />
         <xsl:param name="delimiter" required="no" />
-        <xsl:if test="string-length($field)>0">
-            <xsl:if test="string-length($value)>0">
+        <xsl:if test="string-length($field) > 0">
+            <xsl:if test="string-length($value) > 0">
 <xsl:text>  </xsl:text><xsl:value-of select="$field" /><xsl:text> = "</xsl:text>
                 <xsl:call-template name="replaceSpecialCharacters">
                     <xsl:with-param name="value"><xsl:value-of select="$value" /></xsl:with-param>
                 </xsl:call-template><xsl:text>"</xsl:text>
-	  <xsl:if test="string-length($delimiter)>0">
+	  <xsl:if test="string-length($delimiter) > 0">
 		<xsl:value-of select="$delimiter" />
 	  </xsl:if>
 <xsl:text>
@@ -64,6 +62,7 @@
             </xsl:if>
         </xsl:if>
     </xsl:template>
+
 
     <!-- Replace Special Characters -->
     <xsl:template name ="replaceSpecialCharacters">

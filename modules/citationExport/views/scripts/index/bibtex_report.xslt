@@ -27,7 +27,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Frontdoor
+ * @package     Module_CitationExport
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
  * @author      Gunar Maiwald <maiwald@zib.de>
  * @copyright   Copyright (c) 2010, OPUS 4 development team
@@ -36,25 +36,19 @@
  */
 -->
 
-<!--
-/**
- * @category    Application
- * @package     Module_Frontdoor
- */
--->
-
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:php="http://php.net/xsl"
-    xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     exclude-result-prefixes="php">
 
     <xsl:output method="text" omit-xml-declaration="yes" />
 
-<!--
-    <xsl:include href="bibtex_output.xslt" />
--->
+    <xsl:include href="utils/replace_nonascii.xslt"/>
+    <xsl:include href="utils/bibtex_authors.xslt"/>
+    <xsl:include href="utils/bibtex_editors.xslt"/>
+    <xsl:include href="utils/bibtex_pages.xslt"/>
+
     <xsl:template match="/">
       <xsl:apply-templates select="Opus/Opus_Model_Filter" />
     </xsl:template>
@@ -99,7 +93,7 @@
             </xsl:call-template>
         </xsl:variable>
 
-        <!-- II) Output: print Opus-Document in bibtex -->
+        <!-- Output: print Opus-Document in bibtex -->
         <xsl:text>@techreport{</xsl:text><xsl:value-of select="$identifier" />,
 <xsl:text></xsl:text>
         <xsl:call-template name="outputFieldValue">
@@ -145,143 +139,5 @@
         </xsl:call-template>
 <xsl:text>}</xsl:text>
      </xsl:template>
-
-    <!-- bibtex-style for authors  -->
-    <xsl:template match="PersonAuthor">
-      <xsl:param name="type" required="yes" />
-      <xsl:choose>
-          <xsl:when test="$type='author'">
-            <xsl:value-of select="concat(@FirstName, ' ', @LastName)" />
-            <xsl:choose>
-                <xsl:when test="position()=last()">
-                    <xsl:text></xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text> and </xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-           </xsl:when>
-          <xsl:when test="$type='identifier'">
-	<xsl:choose>
-	<xsl:when test="position()=1 or position()=2 or position()=3">
-		<xsl:value-of select="@LastName" />
-	</xsl:when>
-	<xsl:when test="position()=4">
-		<xsl:text>etal</xsl:text>
-	</xsl:when>
-	<xsl:otherwise>
-               <xsl:text></xsl:text>
-          </xsl:otherwise>
-	</xsl:choose>
-           </xsl:when>
-      </xsl:choose>
-    </xsl:template>
-
-    <!-- bibtex-style for editors  -->
-    <xsl:template match="PersonEditor">
-      <xsl:value-of select="concat(@FirstName, ' ', @LastName)" />
-      <xsl:choose>
-         <xsl:when test="position()=last()">
-            <xsl:text></xsl:text>
-         </xsl:when>
-         <xsl:otherwise>
-            <xsl:text> and </xsl:text>
-         </xsl:otherwise>
-      </xsl:choose>
-    </xsl:template>
-
-    <!-- bibtex-style for pages  -->
-    <xsl:template name="Pages">
-      <xsl:param name="number" required="yes" />
-      <xsl:choose>
-         <xsl:when test="string-length($number) > 0">
-            <xsl:value-of select="$number" />
-         </xsl:when>
-      </xsl:choose>
-    </xsl:template>
-
-    <!-- output field and value -->
-    <xsl:template name="outputFieldValue">
-        <xsl:param name="field" required="yes" />
-        <xsl:param name="value" required="yes" />
-        <xsl:param name="delimiter" required="no" />
-        <xsl:if test="string-length($field)>0">
-            <xsl:if test="string-length($value)>0">
-<xsl:text>  </xsl:text><xsl:value-of select="$field" /><xsl:text> = "</xsl:text>
-                <xsl:call-template name="replaceSpecialCharacters">
-                    <xsl:with-param name="value"><xsl:value-of select="$value" /></xsl:with-param>
-                </xsl:call-template><xsl:text>"</xsl:text>
-	  <xsl:if test="string-length($delimiter)>0">
-		<xsl:value-of select="$delimiter" />
-	  </xsl:if>
-<xsl:text>
-</xsl:text>
-            </xsl:if>
-        </xsl:if>
-    </xsl:template>
-
-    <!-- Replace Special Characters -->
-    <xsl:template name ="replaceSpecialCharacters">
-        <xsl:param name="value" required="yes" />
-        <xsl:choose>
-            <xsl:when test="contains($value, 'ä')">
-                <xsl:call-template name="replaceSpecialCharacters">
-                    <xsl:with-param name="value">
-                        <xsl:value-of select="substring-before($value, 'ä')" />
-                        <xsl:text>{\"a}</xsl:text>
-                        <xsl:value-of select="substring-after($value, 'ä')" />
-                    </xsl:with-param>
-                </xsl:call-template>
-            </xsl:when>
-            <xsl:when test="contains($value, 'ö')">
-                <xsl:call-template name="replaceSpecialCharacters">
-                    <xsl:with-param name="value">
-                        <xsl:value-of select="substring-before($value, 'ö')" />
-                        <xsl:text>{\"o}</xsl:text>
-                        <xsl:value-of select="substring-after($value, 'ö')" />
-                    </xsl:with-param>
-                </xsl:call-template>
-            </xsl:when>
-            <xsl:when test="contains($value, 'ü')">
-                <xsl:call-template name="replaceSpecialCharacters">
-                    <xsl:with-param name="value">
-                        <xsl:value-of select="substring-before($value, 'ü')" />
-                        <xsl:text>{\"u}</xsl:text>
-                        <xsl:value-of select="substring-after($value, 'ü')" />
-                    </xsl:with-param>
-                </xsl:call-template>
-            </xsl:when>
-            <xsl:when test="contains($value, 'Ä')">
-                <xsl:call-template name="replaceSpecialCharacters">
-                    <xsl:with-param name="value">
-                        <xsl:value-of select="substring-before($value, 'Ä')" />
-                        <xsl:text>{\"A}</xsl:text>
-                        <xsl:value-of select="substring-after($value, 'Ä')" />
-                    </xsl:with-param>
-                </xsl:call-template>
-            </xsl:when>
-            <xsl:when test="contains($value, 'Ö')">
-                <xsl:call-template name="replaceSpecialCharacters">
-                    <xsl:with-param name="value">
-                        <xsl:value-of select="substring-before($value, 'Ö')" />
-                        <xsl:text>{\"O}</xsl:text>
-                        <xsl:value-of select="substring-after($value, 'Ö')" />
-                    </xsl:with-param>
-                </xsl:call-template>
-            </xsl:when>
-            <xsl:when test="contains($value, 'Ü')">
-                <xsl:call-template name="replaceSpecialCharacters">
-                    <xsl:with-param name="value">
-                        <xsl:value-of select="substring-before($value, 'Ü')" />
-                        <xsl:text>{\"U}</xsl:text>
-                        <xsl:value-of select="substring-after($value, 'Ü')" />
-                    </xsl:with-param>
-                </xsl:call-template>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="$value" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
 
 </xsl:stylesheet>
