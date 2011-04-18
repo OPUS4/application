@@ -321,10 +321,10 @@
 
      <tu tuid="template_error_unknown_field">
       <tuv xml:lang="en">
-        <seg>You try to create an unknown element that doesn't exist in the document type in that form. Please check the variable name. Hint: single elements end with underscore _ multiple elements which are forming a group begin with group. And attention: Persons alsways have the type "Group".</seg>
+        <seg>You try to create an unknown form element. 1) Please check the variable name. 2) Single elements (ex: Lanuage, Identifier) are called by element 3) Multiple elements of a group are valled by group (ex: Persons, Titles, Multiplicity=*)</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Sie versuchen, ein unbekanntes Element zu erzeugen, das so nicht im Dokumenttyp vorkommt. Bitte überprüfen Sie den Variablennamen. Hinweis: einfache Element werden mit element aufgerufen, Mehrfachelemente, die eine Gruppe bilden beginnen mit group und werden mit group aufgerufen. Und Achtung: Personen müssen immer als Gruppe aufgerufen werden.</seg>
+        <seg>Sie wollen ein unbekanntes Formularelement erzeugen. 1) Überprüfen Sie den Variablennamen. 2) Einfache Elemente (z.B. Language, Identifier) werden mit element aufgerufen 3) Mehrfachelemente einer Gruppe werden mit group aufgerufen (z.B. Personen, Titel, Multiplicity=*)</seg>
       </tuv>
     </tu>
 
