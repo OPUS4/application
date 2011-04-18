@@ -106,7 +106,7 @@
             </xsl:if>
             <xsl:call-template name="MailToAuthor"/>
             <!--<xsl:call-template name="services"/>-->
-            <!--
+            
             <div id="export" class="services">
                 <h3>
                     <xsl:call-template name="translateString">
@@ -117,7 +117,7 @@
                     <xsl:call-template name="ExportFunctions" />
                 </ul>
             </div>
-            -->
+            
         </div>
 
         <table class="result-data frontdoordata">
