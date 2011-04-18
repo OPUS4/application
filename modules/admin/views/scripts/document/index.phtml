@@ -165,7 +165,7 @@
         <?PHP foreach($this->document->getIdentifier() as $index => $identifier) : ?>
 
         <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
-            <span class="Identifier label"><?=htmlspecialchars($identifier->getType()) ?></span>
+            <span class="Identifier label"><?=htmlspecialchars($this->translate('Identifier' . ucfirst($identifier->getType()))) ?></span>
             <span class="Identifier value"><?=htmlspecialchars($identifier->getValue()) ?></span>
         </div>
 
@@ -225,7 +225,7 @@
         <?PHP foreach($this->overviewHelper->getGroupedSubjects() as $subjectType => $subjects) : ?>
 
         <div class="<?= ($rowIndex++ % 2) ? 'even' : 'odd' ?>">
-            <span class="label"><?=$subjectType?></span>
+            <span class="label"><?=$this->translate('Subject' . ucfirst($subjectType))?></span>
             <span class="value">
                 <?PHP foreach($subjects as $index => $subject) : ?>
                 <div>
