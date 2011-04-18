@@ -73,6 +73,10 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $realmSetupPlugin = new Controller_Plugin_SecurityRealm();
         $frontController->registerPlugin($realmSetupPlugin);
 
+        // Add navigation initialization plugin
+        $navigationPlugin = new Controller_Plugin_Navigation();
+        $frontController->registerPlugin($navigationPlugin);
+
         // Get Name of Module, Controller and Action for Use in View
         $viewSetup = new Controller_Plugin_ViewSetup();
         $frontController->registerPlugin($viewSetup);

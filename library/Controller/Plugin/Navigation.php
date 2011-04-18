@@ -26,55 +26,48 @@
  *
  * @category    Application
  * @package     Controller
- * @author		Pascal-Nicolas Becker <becker@zib.de>
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @author      Thoralf Klein <thoralf.klein@zib.de>
+ * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
 /**
- * Identify the Role of the current User and set up Opus_Security_Realm with
- * the approriate Role.
+ * Initialize the navigation bar.
  *
  * @category    Application
  * @package     Controller
  */
-class Controller_Plugin_SecurityRealm extends Zend_Controller_Plugin_Abstract {
+class Controller_Plugin_Navigation extends Zend_Controller_Plugin_Abstract {
 
     /**
-     * Determine the current User's security role and set up Opus_Security_Realm.
+     * Set up Opus_Navigation.
      *
      * @param Zend_Controller_Request_Abstract $request The current request.
      * @return void
      */
     public function routeStartup(Zend_Controller_Request_Abstract $request) {
 
-        // Create a Realm instance.  Initialize privileges to empty.
+        // Hide menu entries based on privileges
+        $navigation = Zend_Registry::get('Opus_Navigation');
+        
+        if (empty($navigation)) {
+            return;
+        }
+
+        // Create a Realm instance.
         $realm = Opus_Security_Realm::getInstance();
-        $realm->setUser(null);
-        $realm->setIp(null);
 
-        // Overwrite default user if current user is logged on.
-        $auth = Zend_Auth::getInstance();
-        $identity = $auth->getIdentity();
-
-        if (false === empty($identity)) {
-            try {
-                $realm->setUser($identity);
-            }
-            catch (Exception $e) {
-                $auth->clearIdentity();
-                throw new Exception($e);
-            }
+        if ($realm->check('admin', 'index') or !$realm->check('review', 'index')) {
+            $page = $navigation->findBy('label', 'review_menu_label');
+            $navigation->removePage($page);
         }
 
-        // OPUS_Security does not support IPv6.  Skip setting IP address, if
-        // IPv6 address has been detected.  This means, that authentication by
-        // IPv6 address does not work, but username-password still does.
-        if (preg_match('/:/', $_SERVER['REMOTE_ADDR']) === 0) {
-            $realm->setIp($_SERVER['REMOTE_ADDR']);
+        if (!$realm->check('admin', 'index')) {
+            $page = $navigation->findBy('label', 'admin_menu_label');
+            $navigation->removePage($page);
         }
+
     }
     
 }
