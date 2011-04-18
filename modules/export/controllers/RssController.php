@@ -85,7 +85,7 @@ class Export_RssController extends Controller_Xml {
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
         foreach ($resultList->getResults() as $result) {
             $document = new Opus_Document($result->getId());
-            $documentXml = new Util_DocumentXmlCache($document);
+            $documentXml = new Util_Document($document);
             $domNode = $this->_xml->importNode($documentXml->getNode(), true);
 
             // add publication date in RFC_2822 format

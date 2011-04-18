@@ -338,7 +338,7 @@ class Oai_IndexController extends Controller_Xml {
      */
     private function createXmlRecord(Opus_Document $document) {
         $docId = $document->getId();
-        $documentXml = new Util_DocumentXmlCache($document);
+        $documentXml = new Util_Document($document);
         $domNode = $documentXml->getNode();
 
         // add frontdoor url
