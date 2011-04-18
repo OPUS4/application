@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tmx version="2.0" xmlns="http://www.lisa.org/tmx20">
+  <header adminlang="en" creationtool="locale4j" creationtoolversion="1.1" o-tmf="unknown" segtype="block" srclang="*all*"/>
+  <body>
+
+   
+    <tu tuid="frontdoor_doc_id_not_found">
+      <tuv xml:lang="en">
+        <seg>Document with ID %1$s has not been found!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das Dokument mit der ID %1$s existiert nicht in diesem Repository!</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="frontdoor_doc_access_denied">
+      <tuv xml:lang="en">
+        <seg>Document with ID %1$s has not been found!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das Dokument mit der ID %1$s existiert nicht in diesem Repository!</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="frontdoor_doc_deleted">
+      <tuv xml:lang="en">
+        <seg>Document with ID %1$s has been deleted!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das Dokument mit der ID %1$s wurde gelöscht!</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="frontdoor_doc_unpublished">
+      <tuv xml:lang="en">
+        <seg>Document with ID %1$s has not been published yet!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das Dokument mit der ID %1$s wurde noch nicht freigeschaltet!</seg>
+      </tuv>
+    </tu>
+ 
+  </body>
+</tmx>

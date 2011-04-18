@@ -52,15 +52,40 @@ class Frontdoor_IndexController extends Controller_Action {
         try {
             $document = new Opus_Document($docId);
         }
-        catch (Zend_Db_Table_Rowset_Exception $e) {
-            if ($e->getMessage() === 'No row could be found at position 0') {
-                    $this->view->frontdoor = sprintf($this->view->translate('frontdoor_doc_id_not_found'), $docId);
-            }
-            $this->getResponse()->setHttpResponseCode('404');
+        catch (Opus_Model_NotFoundException $e) {
+            $this->view->errorMessage = "frontdoor_doc_id_not_found";
+            $this->getResponse()->setHttpResponseCode(404);
+            $this->render('document-error');
             return;
         }
 
-        $documentXml = new Util_Document($document);
+        $documentXml = null;
+        try {
+            $documentXml = new Util_Document($document);
+        }
+        catch (Application_Exception $e) {
+            $this->getResponse()->setHttpResponseCode(403);
+            $this->view->errorMessage = "frontdoor_doc_access_denied";
+
+            switch ($document->getServerState()) {
+                case 'deleted':
+                    $this->getResponse()->setHttpResponseCode(410);
+                    $this->view->errorMessage = "frontdoor_doc_deleted";
+                    break;
+
+                case 'unpublished':
+                    $this->getResponse()->setHttpResponseCode(403);
+                    $this->view->errorMessage = "frontdoor_doc_unpublished";
+                    break;
+
+                default:
+                    break;
+            }
+
+            $this->render("document-error");
+            return;
+        }
+
         $documentNode = $documentXml->getNode(false);
 
         $xslt = new DomDocument;
