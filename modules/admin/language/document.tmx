@@ -63,7 +63,7 @@
 
     <tu tuid="admin_document_section_dates">
       <tuv xml:lang="en">
-        <seg>Date(s)</seg>
+        <seg>Dates</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Datumsangaben</seg>

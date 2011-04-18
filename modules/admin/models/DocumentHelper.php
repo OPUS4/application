@@ -45,7 +45,7 @@ class Admin_Model_DocumentHelper {
      * TODO reverse configuration: fieldName -> group?
      * TODO how about sorting?
      */
-    private $fieldGroups = array(
+    public static $fieldGroups = array(
         'dates' => array(
             'PublishedDate',
             'PublishedYear',
@@ -113,6 +113,9 @@ class Admin_Model_DocumentHelper {
         ),
         'patents' => array(
             'Patent'
+        ),
+        'identifiers' => array(
+            'Identifier'
         )
     );
 
@@ -184,7 +187,7 @@ class Admin_Model_DocumentHelper {
     public function getFieldsForGroup($groupName, $filterEmpty = true) {
         $groupFields = array();
 
-        $groupFieldNames = $this->fieldGroups[$groupName];
+        $groupFieldNames = Admin_Model_DocumentHelper::$fieldGroups[$groupName];
         
         foreach ($groupFieldNames as $name) {
             $field = $this->__document->getField($name);
@@ -390,6 +393,10 @@ class Admin_Model_DocumentHelper {
                 }
             }
         }
+    }
+
+    public static function getFieldNamesForGroup($section) {
+       return Admin_Model_DocumentHelper::$fieldGroups[$section];
     }
 
 }

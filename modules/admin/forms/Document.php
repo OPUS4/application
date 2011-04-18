@@ -37,7 +37,7 @@
  *
  * @author jens
  */
-class Admin_Form_Document {
+class Admin_Form_Document extends Zend_Form {
 
     private $model;
 
@@ -49,10 +49,16 @@ class Admin_Form_Document {
      * @param <type> $clear
      */
     public function __construct($model, $includedFields = null, $clear = false) {
+        $this->model = $model;
+        $this->includedFields = $includedFields;
+
+        $this->_init($clear);
     }
 
-    protected function _init() {
-
+    protected function _init($clear) {
+        foreach($this->includedFields as $fieldName) {
+            $field = $this->model->getField($fieldName);
+        }
     }
 
     /**

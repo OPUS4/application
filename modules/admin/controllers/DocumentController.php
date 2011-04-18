@@ -118,7 +118,11 @@ class Admin_DocumentController extends Controller_Action {
             $this->view->docHelper = new Review_Model_DocumentAdapter($this->view, $model);
 
             // TODO create addForm for section
-            $this->view->addForm = $this->getAddForm($model, $section);
+            // $addForm = $this->getAddForm($model, $section);
+            $addForm = new Admin_Form_Model('Opus_Person');
+            $addUrl = $this->view->url(array('action' => 'update'));
+            $addForm->setAction($addUrl);
+            $this->view->addForm = $addForm;
 
             // TODO create editForm for section
             $this->view->editForm = $this->getEditForm($model, $section);
@@ -217,7 +221,9 @@ class Admin_DocumentController extends Controller_Action {
     }
 
     public function getAddForm($model, $section) {
-
+        $includedFields = Admin_Model_DocumentHelper::getFieldNamesForGroup($section);
+        $form = new Admin_Form_Document($model, $includedFields, true);
+        return $form;
     }
 
     public function getEditForm($model, $section) {
