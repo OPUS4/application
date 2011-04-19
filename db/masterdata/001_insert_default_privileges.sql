@@ -23,4 +23,5 @@ INSERT INTO access_modules (role_id, module_name, controller_name) VALUES
 (2, 'publish', '*'),
 (2, 'rewrite', '*'),
 (2, 'export', 'rss'),
+(2, 'citationExport', '*'),
 (4, 'review', '*');
