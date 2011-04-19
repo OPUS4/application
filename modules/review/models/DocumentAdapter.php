@@ -217,8 +217,8 @@ class Review_Model_DocumentAdapter {
     public function getUrlShow() {
         $url_show = array(
             'module'     => 'admin',
-            'controller' => 'documents',
-            'action'     => 'show',
+            'controller' => 'document',
+            'action'     => 'index',
             'id'         => $this->getDocId()
         );
         return $this->view->url($url_show, 'default', true);
