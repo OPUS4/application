@@ -47,13 +47,13 @@ class Opus3InstituteImport {
      * @param Strring $data XML-String with classifications to be imported
      * @return array List of documents that have been imported
      */
-    public function __construct($data)	{
+    public function __construct($data, $path, $stylesheet)	{
 
         $this->config = Zend_Registry::get('Zend_Config');
         $role = Opus_CollectionRole::fetchByName('institutes');
         $xml = new DomDocument;
         $xslt = new DomDocument;
-        $xslt->load('../import/stylesheets/institute_structure.xslt');
+        $xslt->load($path.'/'.$stylesheet);
         $proc = new XSLTProcessor;
         $proc->registerPhpFunctions();
         $proc->importStyleSheet($xslt);
