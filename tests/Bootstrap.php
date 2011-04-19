@@ -43,10 +43,6 @@ defined('APPLICATION_PATH')
 define('APPLICATION_ENV', 'testing');
 //        (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'testing'));
 
-// Zend_Loader is'nt available yet. We have to do a require_once
-// in order to find the bootstrap class.
-// require_once 'Opus/Bootstrap/Base.php';
-
 // Configure include path.
 set_include_path('.' . PATH_SEPARATOR
     . PATH_SEPARATOR . dirname(__FILE__)
