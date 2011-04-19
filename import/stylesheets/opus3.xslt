@@ -503,6 +503,15 @@
 
 
             <!-- OldClassificationss -->
+            <!-- OldBkl -->
+            <xsl:for-each select="/mysqldump/database/table_data[@name='opus_bkl' or @name='temp_bkl']/row[field[@name='source_opus']=$OriginalID]">
+                <xsl:element name="OldBkl">
+                    <xsl:attribute name="Value">
+                        <xsl:value-of select="field[@name='class']" />
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:for-each>
+
             <!-- OldCcs -->
             <xsl:for-each select="/mysqldump/database/table_data[@name='opus_ccs' or @name='temp_ccs']/row[field[@name='source_opus']=$OriginalID]">
                 <xsl:element name="OldCcs">
@@ -612,12 +621,9 @@
                     </xsl:with-param>
                 </xsl:call-template>
             </xsl:attribute>
-            <!-- TODO: Opus 4.1 SortOrder of Authors -->
-            <!--
             <xsl:attribute name="SortOrder">
                 <xsl:value-of select="$sortorder" />
             </xsl:attribute>
-            -->
         </xsl:element>
     </xsl:template>
     
