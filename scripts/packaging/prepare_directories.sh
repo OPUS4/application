@@ -98,13 +98,13 @@ ln -sv "../../libs/ZendFramework/library/Zend" "opus4/library/Zend"
 # Prepare workspace directory
 #
 
-mkdir -vp workspace/{cache,log,files,tmp}
+mkdir -vp workspace/{cache,log,files,tmp,incoming}
 mkdir -v workspace/tmp/resumption
 ln -sv "../workspace" "opus4/workspace"
 
 touch workspace/log/{opus.log,opus-console.log}
 chmod 666 workspace/log/{opus.log,opus-console.log}
-chmod 777 workspace/{files,cache,tmp}
+chmod 777 workspace/{files,cache,tmp,incoming}
 chmod 777 workspace/tmp/resumption
 
 #
