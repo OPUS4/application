@@ -164,7 +164,7 @@ class Rewritemap_Apache {
         }
 
         // check for security
-        if ($document->getServerState() !== 'published' and !$this->_realm->checkDocument((int) $docId)) {
+        if ($document->getServerState() !== 'published' and !$this->_realm->checkDocument($docId)) {
             $this->_logger->debug("Document with id '$docId' not allowed, will send "
                     . $this->_targetPrefix . "/error/send403.php'");
             return $this->_targetPrefix . "/error/send403.php"; // Forbidden, independent from authorization.
