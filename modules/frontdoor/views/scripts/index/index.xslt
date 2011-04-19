@@ -215,6 +215,7 @@
             </xsl:apply-templates>
             <xsl:apply-templates select="Collection[@RoleName='pacs']" />
             <xsl:apply-templates select="Collection[@RoleName='series']" />
+            <xsl:apply-templates select="IdentifierSerial" />
 
             <xsl:apply-templates select="Licence" />
         </table>
@@ -812,7 +813,7 @@
         </tr>
     </xsl:template>
 
-    <xsl:template match="IdentifierIsbn|IdentifierIssn|ReferenceIsbn|ReferenceIssn">
+    <xsl:template match="IdentifierIsbn|IdentifierIssn|ReferenceIsbn|ReferenceIssn|IdentifierSerial">
         <tr>
             <th class="name">
                 <xsl:call-template name="translateFieldname"/>:
