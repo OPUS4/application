@@ -49,12 +49,14 @@ class Rewritemap_Apache {
      * @var string  Defaults to '/files'.
      */
     protected $_targetPrefix = '/files';
+
     /**
      * For logging output.
      *
      * @var Zend_Log
      */
     protected $_logger = null;
+
     /**
      * Security realm to check permissions.
      *
@@ -67,7 +69,7 @@ class Rewritemap_Apache {
      *
      * @param Zend_Config         $config       (Optional) Config instance to determing targetPrefix
      * @param Zend_Log            $logger       (Optional) Logger instance to issue log messages to.
-     * @param Opus_Security_Realm $logger       (Optional) Security realm instance to check permissions.
+     * @param Opus_Security_Realm $realm        (Optional) Security realm instance to check permissions.
      * @return void
      */
     public function __construct(Zend_Config $config = null, Zend_Log $logger = null, Opus_Security_Realm $realm = null) {
@@ -86,8 +88,6 @@ class Rewritemap_Apache {
 
         $this->_logger = $logger;
         $this->_realm = $realm;
-
-        $this->_logger->err("Initialized " . __CLASS__);
     }
 
     /**
@@ -112,7 +112,7 @@ class Rewritemap_Apache {
         $remoteAddress = $parsed[2];
         $cookies = $parsed[3];
 
-        $this->_logger->err("got request '$docId', $path', '$remoteAddress', '$cookies'");
+        $this->_logger->info("got request '$docId', $path', '$remoteAddress', '$cookies'");
 
         // set ip/username in realm
         $this->__setupIdentity($remoteAddress, $cookies);
@@ -158,14 +158,14 @@ class Rewritemap_Apache {
             $document = new Opus_Document($docId);
         }
         catch (Opus_Model_NotFoundException $e) {
-            $this->_logger->err("Document with id '$docId' does not exist, will send "
+            $this->_logger->debug("Document with id '$docId' does not exist, will send "
                     . $this->_targetPrefix . "/error/send404.php'");
             return $this->_targetPrefix . "/error/send404.php"; //not found
         }
 
         // check for security
         if ($document->getServerState() !== 'published' and !$this->_realm->checkDocument((int) $docId)) {
-            $this->_logger->err("Document with id '$docId' not allowed, will send "
+            $this->_logger->debug("Document with id '$docId' not allowed, will send "
                     . $this->_targetPrefix . "/error/send403.php'");
             return $this->_targetPrefix . "/error/send403.php"; // Forbidden, independent from authorization.
         }
@@ -209,7 +209,7 @@ class Rewritemap_Apache {
             $this->_realm->setIp($ip);
         }
         catch (Opus_Security_Exception $e) {
-            $this->_logger->err("RewriteMap got an invalid IP address: '$ip'!\n");
+            $this->_logger->warn("RewriteMap got an invalid IP address: '$ip'!\n");
         }
 
         // look for a session to set user/identity in realm.

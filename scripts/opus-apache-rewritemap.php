@@ -44,8 +44,6 @@ $autoloader->setFallbackAutoloader(true);
 $log = Zend_Registry::get('Zend_Log');
 $config = Zend_Registry::get('Zend_Config');
 
-$log->err(var_export($argv, true));
-
 // issue rewriting
 $rwmap = new Rewritemap_Apache($config, $log);
 echo $rwmap->rewriteRequest($argc > 1 ? $argv[1] : '') . "\n";
