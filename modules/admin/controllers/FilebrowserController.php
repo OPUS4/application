@@ -84,7 +84,6 @@ class Admin_FilebrowserController extends Controller_Action {
 
         $fileImportModel = new Admin_Model_FileImport();
         $fileImportModel->addFilesToDocument($docId, $files);
-
         return $this->_redirectToAndExit('index', null, 'filemanager', 'admin', array('docId' => $docId));
     }
 }

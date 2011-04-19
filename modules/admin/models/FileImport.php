@@ -47,6 +47,7 @@ class Admin_Model_FileImport {
      *
      * @param string $docId
      * @param array $files
+     * @throws Application_Exception in case database contains no document with id $docID
      */
     public function addFilesToDocument($docId, $files) {
         $document = null;
