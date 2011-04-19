@@ -37,62 +37,83 @@
  *
  * Can be used to list files in a directory matching a pattern.
  *
- * TODO Implement/improve functionality (talk to Jens before doing anything)
  */
 class Controller_Helper_Files extends Zend_Controller_Action_Helper_Abstract {
-    
+   
     /**
      * Lists files in import folder.
      */
     static public function listFiles($folder) {
-        $files = array();
+        if (!is_dir($folder) || !is_readable($folder)) {
+            throw new Application_Exception('given directory is not readable');
+        }
 
-        $files = scandir($folder);
-
-        $files = array_filter($files, 'Controller_Helper_Files::filterCallback');
-
-        return $files;
+        $result = array();
+        foreach (new DirectoryIterator($folder) as $file) {
+            if (self::checkFile($file)) {
+                array_push($result, array(
+                    'name' => $file->getFilename(),
+                    'size' => number_format($file->getSize() / 1024.0, 2, '.', ''),
+                ));
+            }
+        }
+        return $result;
     }
 
+    static private function getAllowedFileTypes() {
+        $config = Zend_Registry::get('Zend_Config');
 
-   static public function getAllowedFileTypes() {
-       $config = Zend_Registry::get('Zend_Config');
+        if (!isset($config->publish->filetypes->allowed)) {
+            return null;
+        }
+        
+        $allowed = explode(',', $config->publish->filetypes->allowed);
+        Util_Array::trim($allowed);
+        return $allowed;
+    }
 
-       if (isset($config->publish->filetypes->allowed)) {
-           $allowed = explode(',', $config->publish->filetypes->allowed);
-           Util_Array::trim($allowed);
-           return $allowed;
-       }
-       else {
-           return null;
-       }
-   }
+    static private function checkFile($file) {
+        $log = Zend_Registry::get('Zend_Log');
+        $logMessage = 'check for file: ' . $file->getPathname();
 
-   static public function filterCallback($filename) {
-       $allowed = Controller_Helper_Files::getAllowedFileTypes();
+        $allowedFileTypes = Controller_Helper_Files::getAllowedFileTypes();
+        if (is_null($allowedFileTypes) || empty($allowedFileTypes)) {
+            $log->debug('no filetypes are allowed');
+            return false;
+        }
 
-       // filter hidden files
-       if (strpos($filename, '.') === 0) {
-           return false;
-       }
+        // ignore . and ..
+        if ($file->isDot()) {
+            return false;
+        }
 
-       // TODO filter links
+        // filter links and directories
+        if (!$file->isFile()) {
+            $log->debug($logMessage . ' : is not a regular file');
+            return false;
+        }
 
-       // TODO filter directories
+        // filter unreadable files
+        if (!$file->isReadable()) {
+            $log->debug($logMessage . ' : is not readable');
+            return false;
+        }
 
-       if (!empty($allowed)) {
-           foreach ($allowed as $fileType) {
-               if (fnmatch('*.' . $fileType, $filename)) {
-                   return true;
-               }
-           }
+        // filter hidden files
+        if (strpos($file->getFilename(), '.') === 0) {
+            $log->debug($logMessage . ' : is a hidden file');
+            return false;
+        }
 
-           return false;
-       }
-
-       return true;
-   }
+        foreach ($allowedFileTypes as $fileType) {
+            if (fnmatch('*.' . $fileType, $file->getFilename())) {
+                $log->debug($logMessage . ' : OK');
+                return true;
+            }
+        }
+        $log->debug($logMessage . ' : filetype is not allowed');
+        return false;
+    }
 
 }
-
 ?>

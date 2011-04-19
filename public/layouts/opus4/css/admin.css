@@ -418,4 +418,31 @@
     border: none;
 }
 
+.adminContainer #filebrowser {
+    padding: 2em;
+}
 
+.adminContainer #filebrowser #headline {
+    margin-bottom: 1em;
+    font-size: medium;
+}
+
+.adminContainer #filebrowser #filelisting table th {
+    color: gray;
+}
+
+.adminContainer #filebrowser #filelisting table {
+    margin-bottom: 1em;    
+    min-width: 50%;
+    padding: .5em;
+    border: 1px solid #f4f4f4;
+}
+
+.adminContainer #filebrowser #filelisting table td {
+    padding: 5px;
+}
+
+.adminContainer #filebrowser #headline span {
+    color: blue;
+    font-weight: bold;
+}

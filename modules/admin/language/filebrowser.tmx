@@ -1,21 +1,63 @@
 <?xml version="1.0" ?>
 <!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
 <tmx version="1.4">
+    <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+    </header>
+    <body>
 
- <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
- </header>
+        <tu tuid="admin_filebrowser_index">
+          <tuv xml:lang="en">
+            <seg>Filebrowser</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Dateibrowser</seg>
+          </tuv>
+        </tu>
 
-  <body>
+        <tu tuid="admin_filebrowser_headline">
+          <tuv xml:lang="en">
+            <seg>Add files to document with id</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Füge Dateien hinzu zum Dokument mit ID</seg>
+          </tuv>
+        </tu>
 
-    <tu tuid="admin_filebrowser_index">
-      <tuv xml:lang="en">
-        <seg>Filebrowser</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Dateibrowser</seg>
-      </tuv>
-    </tu>
-    
-  </body>
+        <tu tuid="admin_filebrowser_noFilesToSelect">
+          <tuv xml:lang="en">
+            <seg>No files to select.</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Keine Dateien vorhanden.</seg>
+          </tuv>
+        </tu>
 
+        <tu tuid="admin_filebrowser_filename">
+          <tuv xml:lang="en">
+            <seg>Filename</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Dateiname</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="admin_filebrowser_filesize">
+          <tuv xml:lang="en">
+            <seg>Filesize</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Dateigröße</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="admin_filebrowser_submit">
+          <tuv xml:lang="en">
+            <seg>Import Selected Files</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Ausgewählte Dateien importieren</seg>
+          </tuv>
+        </tu>
+
+    </body>
 </tmx>
