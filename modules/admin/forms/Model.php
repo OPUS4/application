@@ -108,6 +108,13 @@ class Admin_Form_Model extends Zend_Form_SubForm {
             $field = $model->getField($fieldName);
             $element = $this->_getElementForField($field);
             // $element->setName($model->getName());
+            if ($field->isMandatory()) {
+                $element->setRequired(true);
+            }
+            $validator = $field->getValidator();
+            if (!empty($validator)) {
+                $element->addValidator($validator);
+            }
             $this->addElement($element);
         }
     }
@@ -127,6 +134,18 @@ class Admin_Form_Model extends Zend_Form_SubForm {
             if (!empty($element)) {
                 if ($element instanceof Zend_Form_Element_Select) {
                     $element->setValue($field->getValue());
+                }
+                elseif ($field->getValueModelClass() === 'Opus_Date') {
+                    $value = $field->getValue();
+
+                    if (!empty($value)) {
+                        // TODO use common function for formatting
+                        $date = $value->getZendDate();
+                        $element->setValue($date->get('YYYY/MM/dd'));
+                    }
+                    else {
+                        $element->setValue(null);
+                    }
                 }
                 else {
                     $element->setValue($field->getValue());
@@ -173,6 +192,13 @@ class Admin_Form_Model extends Zend_Form_SubForm {
         return $checkbox;
     }
 
+    /**
+     *
+     * @param <type> $field
+     * @return Zend_Form_Element_Text
+     *
+     * TODO handle validation for Date fields
+     */
     protected function _createTextfield($field) {
         $name = $field->getName();
         $textfield = new Zend_Form_Element_Text($name);
@@ -182,6 +208,8 @@ class Admin_Form_Model extends Zend_Form_SubForm {
     protected function _createTextarea($field) {
         $name = $field->getName();
         $textarea = new Zend_Form_Element_Textarea($name);
+        $textarea->setAttrib('cols', 100);
+        $textarea->setAttrib('rows', 6);
         return $textarea;
     }
 

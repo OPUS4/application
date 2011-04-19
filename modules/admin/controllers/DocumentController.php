@@ -128,7 +128,7 @@ class Admin_DocumentController extends Controller_Action {
         $section = $this->getRequest()->getParam('section');
 
         if (!empty($section) && !empty($id) && is_numeric($id)) {
-                $model = new Opus_Document($id);
+            $model = new Opus_Document($id);
 
             $this->view->docHelper = new Review_Model_DocumentAdapter($this->view, $model);
             $this->view->addForm = $this->getAddForm($model, $section);
@@ -150,8 +150,19 @@ class Admin_DocumentController extends Controller_Action {
         if ($this->getRequest()->isPost()) {
             $postData = $this->getRequest()->getPost();
 
-            if (isset($this->sectionModel[$section])) {
-                $sectionModel = $this->sectionModel[$section];
+            $document = new Opus_Document($id);
+
+            foreach ($postData as $modelClass => $fields) {
+                $model = new $modelClass;
+                foreach ($fields as $name => $value) {
+                    // TODO filter buttons
+                    $field = $model->getField($name);
+                    if (!empty($field)) {
+                        $field->setValue($value);
+                    }
+                }
+
+                // TODO add model to document (see old Form_Builder)
             }
         }
         else {
@@ -166,7 +177,8 @@ class Admin_DocumentController extends Controller_Action {
         if ($this->getRequest()->isPost()) {
             $postData = $this->getRequest()->getPost();
 
-
+            // TODO get models from document and update
+            // TODO see form builder on finding models (just by index?)
         }
         else {
             
@@ -258,9 +270,9 @@ class Admin_DocumentController extends Controller_Action {
     }
 
     public function getAddForm($model, $section) {
-        $id = $model->getId();
+        $form = null;
 
-        $form = new Zend_Form('add');
+        $id = $model->getId();
 
         $includedFields = Admin_Model_DocumentHelper::getFieldNamesForGroup($section);
 
@@ -284,13 +296,6 @@ class Admin_DocumentController extends Controller_Action {
         }
 
         if (!empty($addForm)) {
-            $addUrl = $this->view->url(array(
-                'action' => 'create',
-                'id' => $id,
-                'section' => $section
-            ));
-            $form->setAction($addUrl);
-
             $hiddenDocId = new Zend_Form_Element_Hidden('docid');
             $hiddenDocId->setValue($id);
 
@@ -302,16 +307,25 @@ class Admin_DocumentController extends Controller_Action {
             $addForm->addElement($submit);
 
             $addForm->removeDecorator('Fieldset');
-        }
 
-        if (!empty($sectionModel)) {
-            $form->addSubForm($addForm, $sectionModel);
-        }
-        elseif (!empty($field)) {
-            $form->addSubForm($addForm, $field->getValueModelClass());
-        }
-        else {
-            // TODO take care of this case
+            $form = new Zend_Form('AddMetadata');
+
+            $addUrl = $this->view->url(array(
+                'action' => 'create',
+                'id' => $id,
+                'section' => $section
+            ));
+            $form->setAction($addUrl);
+            
+            if (!empty($sectionModel)) {
+                $form->addSubForm($addForm, $sectionModel);
+            }
+            elseif (!empty($field)) {
+                $form->addSubForm($addForm, $field->getValueModelClass());
+            }
+            else {
+                // TODO take care of this case
+            }
         }
 
         return $form;
