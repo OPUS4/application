@@ -51,6 +51,17 @@ INSERT INTO `document_files` (`id`, `document_id`, `path_name`, `label`, `mime_t
 (120, 95, 'test.html', 'test.html', 'text/html', 'eng', 847, 1, 1);
 
 --
+-- Daten für Tabelle `access_files`
+--
+
+INSERT INTO `access_files` (`role_id`, `file_id`) VALUES
+(2, 116),
+(2, 117),
+(2, 118),
+(2, 119),
+(2, 120);
+
+--
 -- Daten für Tabelle `document_identifiers`
 --
 
