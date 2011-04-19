@@ -577,7 +577,43 @@
         </tuv>
     </tu>
 
+    <tu tuid="button_label_browse_upInstitute">
+        <tuv xml:lang="en">
+            <seg>up</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>hoch</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_browse_downInstitute">
+        <tuv xml:lang="en">
+            <seg>down</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>runter</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="button_label_browse_upSeries">
+        <tuv xml:lang="en">
+            <seg>up</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>hoch</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_browse_downSeries">
+        <tuv xml:lang="en">
+            <seg>down</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>runter</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_add_one_moreSeries">
         <tuv xml:lang="en">
             <seg>up</seg>
         </tuv>

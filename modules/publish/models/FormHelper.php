@@ -244,7 +244,7 @@ class Publish_Model_FormHelper {
             else {
                 //"normal" element name without changes
                 $name = $element;
-            }
+            }           
         }
         return $name;
     }
@@ -348,8 +348,13 @@ class Publish_Model_FormHelper {
                     break;
                 case 'delete':
                     if ($currentNumber > 1) {
+                        if (isset($currentCollectionLevel)) {
+                            for ($i=0; $i<=$currentCollectionLevel; $i++)
+                                $this->session->additionalFields['collId'.$i.$fieldName.$currentNumber] = "";
+                        }
                         //remove one more field, only down to 0
                         $currentNumber = (int) $currentNumber - 1;
+
                     }
                     break;
                 case 'down':

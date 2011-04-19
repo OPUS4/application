@@ -107,12 +107,12 @@ class Publish_Model_DisplayGroup {
         for ($i = $minNum; $i <= $maxNum; $i++) {
             $this->session->additionalFields['step' . $this->elementName . $i] = $this->collectionStep($i);
             //update $this->collectionIds and generate fields for the current fieldset
-            $this->browseFields($i);
-
+            $currentStep = (int) $this->collectionStep($i);
+            $this->browseFields($i, $currentStep);
             $allElements = count($this->elements) - 1;
-            foreach ($this->elements as $count => $element) {                
+
+            foreach ($this->elements as $count => $element) {
                 if ($this->implicitGroup) {
-                    
                     //clone all elements
                     $elem = clone $element;
                     $elem->setName($element->getName() . $i);
@@ -121,26 +121,44 @@ class Publish_Model_DisplayGroup {
                 }
                 else {
                     //only clone special fields
-                    $currentStep = (int) $this->collectionStep($i);
                     if ($element->getName() === $this->elementName) {
                         //clone the "root selection"
                         $elem = clone $element;
                         $elem->setName($this->elementName . $i);
+                        if (isset($this->session->additionalFields['collId1' . $this->elementName . $i])) {
+                            $elem->setValue('ID:' . $this->session->additionalFields['collId1' . $this->elementName . $i]);
+                        }
+                        if ($currentStep !== 1) {
+                            //make top steps disabled
+                            $elem->setAttrib('disabled', true);
+                        }
                         $this->form->addElement($elem);
                         $displayGroup[] = $elem->getName();
                     }
                     else {
+                        if ($count !== $allElements || $count == $allElements && $i < $maxNum) {
+                            //make previous middle steps disabled
+                            $element->setAttrib('disabled', true);
+                        }
+
                         $this->form->addElement($element);
                         $displayGroup[] = $element->getName();
                     }
                 }
             }
         }
+        for ($i = $minNum; $i <= $maxNum; $i++) {
+            $maxStep = $this->collectionStep($i);
+            $name = 'collId' . $maxStep . $this->elementName . $i;
+            $formElement = $this->form->getElement($name);
+            if (!is_null($formElement))
+                $formElement->setAttrib('disabled', false);
+        }
 
 
         //count fields for "visually grouping" in template
         $groupCount = "num" . $this->label;
-        $this->session->$groupCount = count($this->elements);
+        $this->session->$groupCount = 100;
 
         $this->session->additionalFields[$this->elementName] = $maxNum;
 
@@ -153,6 +171,16 @@ class Publish_Model_DisplayGroup {
         }
 
         $this->elements = $displayGroup;
+    }
+
+    private function isLastEntry($element, $fieldset) {
+        $name = $element->getName();
+        $maxStep = $this->collectionStep($fieldset);
+        echo "maxstep for " . $fieldset . " = " . $maxStep . "<br>";
+        if ($name == 'collId' . $maxStep . $this->elementName . $fieldset)
+            return true;
+        else
+            return false;
     }
 
     private function addDeleteButtons() {
@@ -187,13 +215,13 @@ class Publish_Model_DisplayGroup {
             return null;
         }
         $colls = $collection->getChildren();
-        if (!is_null($colls) && count($colls) > 1) {
+        if (!is_null($colls) && count($colls) >= 1) {
             //collection has children
             $displayButton = false;
             //check all children to prevent false buttons
             foreach ($colls AS $coll) {
                 $childs = $coll->getChildren();
-                if (!is_null($childs) && count($childs) > 1)
+                if (!is_null($childs) && count($childs) >= 1)
                     $displayButton = true;
             }
             if ($displayButton) {
@@ -218,7 +246,7 @@ class Publish_Model_DisplayGroup {
      * Method adds different collection selection fields to the elements list of the disyplay group for the current fieldset
      * @param <Int> $fieldset Counter of the current fieldset
      */
-    private function browseFields($fieldset) {
+    private function browseFields($fieldset, $step) {
         if (is_null($this->collectionIds[0])) {
             $error = $this->form->createElement('text', $this->elementName);
             $error->setLabel($this->elementName);
@@ -234,7 +262,7 @@ class Publish_Model_DisplayGroup {
 
         $elements = array();
         //found collection level for the current fieldset
-        $step = $this->collectionStep($fieldset);
+        //$step = $this->collectionStep($fieldset);
 
         for ($j = 2; $j <= $step; $j++) {
             $prev = (int) $j - 1;
@@ -282,14 +310,14 @@ class Publish_Model_DisplayGroup {
         }
         $colls = $collection->getChildren();
 
-        if (!is_null($colls) && count($colls) > 1) {
+        if (!is_null($colls) && count($colls) >= 1) {
             $selectField = $this->form->createElement('select', 'collId' . $step . $this->elementName . $fieldset);
             $selectField->setLabel('choose_collection_subcollection');
             $children = array();
             foreach ($colls as $coll) {
                 $children['ID:' . $coll->getId()] = $coll->getDisplayName();
             }
-            $selectField->setMultiOptions($children);
+            $selectField->setMultiOptions($children);            
         }
         else {
             $selectField = $this->form->createElement('text', 'collId' . $step . $this->elementName . $fieldset);

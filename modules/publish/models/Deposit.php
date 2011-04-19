@@ -332,9 +332,7 @@ class Publish_Model_Deposit {
         switch ($type) {
             case 'MSC' :
             case 'DDC' :
-                $this->log->debug("subject is a " . $type . " subject and has to be stored as a Collection.");
-                if (strstr($dataValue, 'collId'))
-                    return;
+                $this->log->debug("subject is a " . $type . " subject and has to be stored as a Collection.");                
                 if (isset($this->session->additionalFields['step' . $dataKey])) {
                     $step = $this->session->additionalFields['step' . $dataKey];
                     if (array_key_exists('collId' . $step . $dataKey, $this->documentData))
@@ -347,7 +345,7 @@ class Publish_Model_Deposit {
 
             case 'CCS' :
             case 'PACS' :
-                $this->log->debug("subject is a " . $type . " subject and has only to be stored as a Collection.");
+                $this->log->debug("subject is a " . $type . " subject and has only to be stored as a Collection.");                
                 if (isset($this->session->additionalFields['step' . $dataKey])) {
                     $step = $this->session->additionalFields['step' . $dataKey];
                     if (array_key_exists('collId' . $step . $dataKey, $this->documentData))
@@ -373,9 +371,6 @@ class Publish_Model_Deposit {
             $this->log->debug("subjectType: " . $subjectType);
             if (strstr($dataValue, 'ID:')) {
                 $dataValue = substr($dataValue, 3);
-                //store a simple collection
-                $collection = new Opus_Collection($dataValue);
-                $dataValue = $collection->getDisplayName();
             }
             $subject->setValue($dataValue);
             $addFunction = "add" . $subjectType;
@@ -489,15 +484,10 @@ class Publish_Model_Deposit {
         $this->log->debug("try to store serie collection: " . $dataValue);
 
         if (strstr($dataKey, "Number"))
-            return;
-        else {
-            if (isset($this->session->additionalFields['step' . $dataKey])) {
-                $step = $this->session->additionalFields['step' . $dataKey];
-                if (array_key_exists('collId' . $step . $dataKey, $this->documentData))
-                    $dataValue = $this->documentData['collId' . $step . $dataKey];
-            }
+            $this->_prepareIdentifierObject('IdentifierSerial', $dataValue);
+
+        else
             $this->_storeCollectionObject('', $dataValue);
-        }
     }
 
     /**
