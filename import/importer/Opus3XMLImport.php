@@ -82,11 +82,25 @@ class Opus3XMLImport {
     protected $collections = array();
 
     /**
+     * Holds the Series the document should be added
+     *
+     * @var Array
+     */
+    protected $series = array();
+
+    /**
      * Holds Values for Grantor, Licence and PublisherUniversity
      *
      * @var Array
      */
     protected $values = array();
+
+    /**
+     * Holds SortOrder of Authors
+     *
+     * @var Array
+     */
+    protected $personSortOrder = array();
 
     /**
      * Holds Doctypes for Thesis
@@ -184,6 +198,8 @@ class Opus3XMLImport {
     public function import($document) {
         $this->collections = array();
         $this->values = array();
+        $this->series = array();
+        $this->personSortOrder = array();
         $this->document = $document;
      
         $oldid = null;
@@ -198,6 +214,9 @@ class Opus3XMLImport {
         $this->mapClassifications();
         $this->mapCollections();
         $this->mapValues();
+
+        $this->getSortOrder();
+
         //$this->log("(2):".$this->completeXML->saveXML($this->document)."\n");
         //return;
 
@@ -223,18 +242,30 @@ class Opus3XMLImport {
                 $doc->addLicence(new Opus_Licence($this->values['licence']));
             }
 
-            /* TODO Opus4.1 SortOrder of PersonAuthor
-             * foreach ($doc->getPersonAuthor() as $a) {
-		//echo "SortOrder:".$a->getSortOrder()."\n";
-                //$a->setSortOrder('1');
+            // TODO Opus4.x : Handle SortOrder via Opus_Document_Model
+             foreach ($doc->getPersonAuthor() as $a) {
+                $lastname = $a->getLastName();
+                $firstname = $a->getFirstName();
+                $sortorder = $this->personSortOrder[$lastname.",".$firstname];
+                $a->setSortOrder($sortorder);
             }
-             * 
-             */
+
+
 
             foreach ($this->collections as $c) {
                 $coll = new Opus_Collection($c);
                 $coll->setVisible(1);
                 $coll->store();
+                $doc->addCollection($coll);
+            }
+
+            foreach ($this->series as $s) {
+                $coll = new Opus_Collection($s[0]);
+                $coll->setVisible(1);
+                $coll->store();
+                $identifierSerial = new Opus_Identifier();
+                $identifierSerial->setValue($s[1]);
+                $doc->addIdentifierSerial($identifierSerial);
                 $doc->addCollection($coll);
             }
 
@@ -252,6 +283,7 @@ class Opus3XMLImport {
         }
 
         unset($this->collections);
+        unset($this->series);
         unset($this->values);
         unset($this->document);
 
@@ -350,12 +382,13 @@ class Opus3XMLImport {
     }
 
     private function mapClassifications() {
+        $old_bkl = array('name' => 'OldBkl', 'role' => 'bkl');
         $old_ccs = array('name' => 'OldCcs', 'role' => 'ccs');
         $old_ddc = array('name' => 'OldDdc', 'role' => 'ddc');
         $old_jel = array('name' => 'OldJel', 'role' => 'jel');
         $old_msc = array('name' => 'OldMsc', 'role' => 'msc');
         $old_pacs = array('name' => 'OldPacs', 'role' => 'pacs');
-        $old_array = array($old_ccs, $old_ddc, $old_jel, $old_msc, $old_pacs);
+        $old_array = array($old_bkl, $old_ccs, $old_ddc, $old_jel, $old_msc, $old_pacs);
 
         foreach ($old_array as $oa) {
             $elements = $this->document->getElementsByTagName($oa['name']);
@@ -395,8 +428,19 @@ class Opus3XMLImport {
 
                 if (!is_null ($this->getMapping($oa['mapping'], $old_value))) {
                     $new_value = $this->getMapping($oa['mapping'], $old_value);
-                    array_push($this->collections,  $new_value);
                     //echo "Found Mapping in ".$oa['mapping'].": '".$old_value."' --> '".$new_value."'\n";
+
+                    if ($m === 'series') {
+
+                        $old_issue = $e->getAttribute('Issue');
+                        $new_series = array($new_value, $old_issue);
+                        //echo "Found Mapping in ".$oa['mapping'].": '".$old_value."' --> '".$new_value."' with Issue '".$old_issue."'\n";
+                        array_push($this->series,  $new_series);
+
+                    } else {
+                        array_push($this->collections,  $new_value);
+                    }
+
                 }
                 else {
                     $this->log("ERROR Opus3XMLImport ('$m'): No valid Mapping in '".$oa['mapping']."' for '".$old_value."'\n");
@@ -430,6 +474,23 @@ class Opus3XMLImport {
                 }
 
                 $this->document->removeChild($e);
+            }
+        }
+    }
+
+    private function getSortorder() {
+
+        $roles = array();
+        array_push($roles, 'PersonAuthor');
+
+        foreach ($roles as $r) {
+            $elements = $this->document->getElementsByTagName($r);
+            foreach ($elements as $e) {
+                $firstname = $e->getAttribute('FirstName');
+                $lastname = $e->getAttribute('LastName');
+                $sortorder = $e->getAttribute('SortOrder');
+                $this->personSortOrder[$lastname.",".$firstname] = $sortorder;
+                $e->removeAttribute('SortOrder');
             }
         }
     }
