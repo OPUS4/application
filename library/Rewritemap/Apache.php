@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -42,22 +43,18 @@
  */
 class Rewritemap_Apache {
 
-
     /**
-    * Sets URL to file directory.
-    *
-    * @var string  Defaults to '/files'.
-    */
-    protected $_targetPrefix;
-
+     * Sets URL to file directory.
+     *
+     * @var string  Defaults to '/files'.
+     */
+    protected $_targetPrefix = '/files';
     /**
      * For logging output.
      *
      * @var Zend_Log
      */
     protected $_logger = null;
-
-
     /**
      * Security realm to check permissions.
      *
@@ -68,15 +65,12 @@ class Rewritemap_Apache {
     /**
      * Initialize the rewritemap instance.
      *
-     * @param string              $targetPrefix (Optional) Path prefix of resources to deliver.
-     *                                          Default is "/files".
+     * @param Zend_Config         $config       (Optional) Config instance to determing targetPrefix
      * @param Zend_Log            $logger       (Optional) Logger instance to issue log messages to.
      * @param Opus_Security_Realm $logger       (Optional) Security realm instance to check permissions.
      * @return void
      */
-    public function __construct($targetPrefix = '/files', Zend_Log $logger = null,
-        Opus_Security_Realm $realm = null)
-    {
+    public function __construct(Zend_Config $config = null, Zend_Log $logger = null, Opus_Security_Realm $realm = null) {
         if (null === $logger) {
             $logger = new Zend_Log(new Zend_Log_Writer_Mock);
         }
@@ -85,14 +79,46 @@ class Rewritemap_Apache {
             $realm = Opus_Security_Realm::getInstance();
         }
 
-        $this->_targetPrefix = $targetPrefix;
+        // set target prefix
+        if (isset($config, $config->deliver->target->prefix) === true) {
+            $this->_targetPrefix = $config->deliver->target->prefix;
+        }
+
         $this->_logger = $logger;
         $this->_realm = $realm;
 
-        $this->_logger->info("Initialized " . __CLASS__);
+        $this->_logger->err("Initialized " . __CLASS__);
     }
 
+    /**
+     *
+     * @param  array  $arguments
+     * @return string target path, if any.
+     */
+    private function parseRequestArgumentString($arguments = null) {
+        // check input
+        if (!is_string($arguments)) {
+            return null;
+        }
 
+        // Parse input parameters (given as tab-separated string)
+        $parsed = preg_split('/\t/', $arguments, 4);
+        while (count($parsed) < 4) {
+            $parsed[] = '';
+        }
+
+        $docId = $parsed[0];
+        $path = $parsed[1];
+        $remoteAddress = $parsed[2];
+        $cookies = $parsed[3];
+
+        $this->_logger->err("got request '$docId', $path', '$remoteAddress', '$cookies'");
+
+        // set ip/username in realm
+        $this->__setupIdentity($remoteAddress, $cookies);
+
+        return array($docId, $path);
+    }
 
     /**
      * Rewrite document requests.
@@ -100,31 +126,22 @@ class Rewritemap_Apache {
      * @param string $request Input from apache, containing requested address and
      *                        some information about the user.
      * @param string $ip      (Optional) IP of the requesting host.
-     * @param string $cookie  (Optional) Cookie content holding authentication information
+     * @param string $cookies  (Optional) Cookie content holding authentication information
      *                        if submitted.
      * return string
      */
-    public function rewriteRequest($request, $ip = null, $cookies = null) {
-        $this->_logger->info("got request '$request', $ip, $cookies");
-        // parse and normalize request, remove leading slash
-        $request = preg_replace('/^\/(.*)$/', '$1', $request);
-        if (preg_match('/^[\d]+[\/]?$/', $request) === 1) {
-            // no file name submitted, trying index.html for compatibility reasons
-            $this->_logger->info("no filename submitted, trying /index.html");
-            if (preg_match('/\/$/', $request) === 0) {
-                $request .= "/";
-            }
-            $request .= 'index.html';
+    public function rewriteRequest($arguments) {
+
+        $request = $this->parseRequestArgumentString($arguments);
+        if (!is_array($request) or count($request) < 2) {
+            $this->_logger->err('Internal error: Received unexpected arguments, will send 403');
+            $this->_logger->err('Apache Input: "' . $arguments . '"');
+            return $this->_targetPrefix . "/error/send403.php";
         }
 
-        // extract docId from path
-        $path_array = preg_split('/\//', $request , 2);
-        if (count($path_array) < 2) {
-            $this->_logger->err("Got request: $request, will send "
-                                 . $this->_targetPrefix . "/error/send403.php'");
-            return $this->_targetPrefix ."/error/send403.php";
-        }
-        list($docId, $path) = $path_array;
+        $docId = $request[0];
+        $path = $request[1];
+        $this->_logger->err("Got path: $path and docId: $docId...");
 
         // check input: docId should only be numbers, path should not contain ../
         if ((mb_strlen($docId) < 1) ||
@@ -132,117 +149,100 @@ class Rewritemap_Apache {
                 (preg_match('/^[\d]+$/', $docId) === 0) ||
                 (preg_match('/\.\.\//', $path) === 1)) {
             $this->_logger->err("Got path: $path and docId: $docId, will send "
-                                 . $this->_targetPrefix . "/error/send403.php'");
-            return $this->_targetPrefix ."/error/send403.php"; // Forbidden, independent from authorization.
+                    . $this->_targetPrefix . "/error/send403.php'");
+            return $this->_targetPrefix . "/error/send403.php"; // Forbidden, independent from authorization.
         }
 
-        // check for security
-        $conf = Zend_Registry::get('Zend_Config');
-        $target = $this->_targetPrefix . "/$docId/$path";
-        $secu = $conf->security;
-        if ($secu === '0') {
-            // security switched off, deliver everything
-            $this->_logger->info("security switched off, return '$target'");
-            return $target;
+        $document = null;
+        try {
+            $document = new Opus_Document($docId);
         }
-        // set ip/username in realm
-		$this->__setupIdentity($ip, $cookies);
-
-        // lookup the target file
-		$target = null;
-		//get all files
-        $files = $this->__getFilesForDocumentId($docId);
-        // look for the right file
-        foreach ($files as $file) {
-            $pathnames = $file->getPathName();
-            if (is_array($pathnames) === false) {
-                if ($pathnames === $path) {
-                    $target = $file;
-                    break;
-                }
-            } else {
-                // in theory we can get an error here, if one file contains
-                // more then on object out of the filesystem.
-		        foreach ($pathnames as $pathname) {
-			        if ($pathname === $path) {
-				        $target = $file;
-					}
-				}
-            }
-        }
-
-        if (is_null($target) === true) {
-            // file not found
+        catch (Opus_Model_NotFoundException $e) {
+            $this->_logger->err("Document with id '$docId' does not exist, will send "
+                    . $this->_targetPrefix . "/error/send404.php'");
             return $this->_targetPrefix . "/error/send404.php"; //not found
         }
 
-		// check if we have access
-		try {
-			if (true === $this->_realm->check('readFile', null, $target->getId())) {
-                return $this->_targetPrefix . "/$docId/$path";
-			}
-        } catch (Exception $e) {
-			// 500 Internal Server Error
-			$this->_logger->err('Caught exception ' . $e->getMessage());
-            return $this->_targetPrefix . "/error/send500.php";
+        // check for security
+        if ($document->getServerState() !== 'published' and !$this->_realm->checkDocument((int) $docId)) {
+            $this->_logger->err("Document with id '$docId' not allowed, will send "
+                    . $this->_targetPrefix . "/error/send403.php'");
+            return $this->_targetPrefix . "/error/send403.php"; // Forbidden, independent from authorization.
         }
 
-        return  $this->_targetPrefix . "/error/send401.php"; // Unauthorized
+        // lookup the target file
+        $targetFile = $this->findFileForDocument($document, $path);
+
+        if (is_null($targetFile) === true) {
+            // file not found
+            return $this->_targetPrefix . "/error/send404.php"; // not found
+        }
+
+        // check if we have access
+        if (true === $this->_realm->checkFile($targetFile->getId())) {
+            return $this->_targetPrefix . "/$docId/$path";
+        }
+
+        return $this->_targetPrefix . "/error/send403.php"; // Unauthorized
+    }
+
+    private function findFileForDocument($document, $path) {
+        foreach ($document->getFile() as $file) {
+            $this->_logger->debug("Found file " . $file->getId() . ": " . $file->getPathName());
+
+            $pathnames = $file->getPathName();
+            if ($pathnames === $path) {
+                return $file;
+            }
+        }
+
+        return null;
     }
 
 
-    /**
-     * Get all Files for the given document identifier.
-     *
-     * @param integer $docId Document identfier
-     * @return array Array of Opus_File objects.
-     */
-    private function __getFilesForDocumentId($docId) {
-        $fileTable = Opus_Db_TableGateway::getInstance('Opus_Db_DocumentFiles');
-        $fileRows = $fileTable->fetchAll($fileTable->select()->where('document_id = ?', $docId));
-        $result = array();
-        foreach ($fileRows as $fileRow) {
-            $fileObj = new Opus_File($fileRow);
-            $result[] = $fileObj;
+    private function __setupIdentity($ip, $cookiestring) {
+        $this->_realm->setIp(null);
+        $this->_realm->setUser(null);
+
+        // set/reset IP
+        try {
+            $this->_realm->setIp($ip);
         }
-        return $result;
+        catch (Opus_Security_Exception $e) {
+            $this->_logger->err("RewriteMap got an invalid IP address: '$ip'!\n");
+        }
+
+        // look for a session to set user/identity in realm.
+        if (!is_string($cookiestring) or $cookiestring == '') {
+            return;
+        }
+
+        $cookies = explode('; ', $cookiestring);
+        $session_id = null;
+        foreach ($cookies as $cookie) {
+            if (preg_match('/' . ini_get('session.name') . '=(.*)[\/]?$/',
+                            $cookie, $matches)) {
+                $session_id = $matches[1];
+            }
+        }
+
+        // found an open session?
+        if (!is_string($session_id) or $session_id == '') {
+            return;
+        }
+
+        Zend_Session::setId($session_id);
+        Zend_Session::start();
+        $identity = Zend_Auth::getInstance()->getIdentity();
+
+        // found an username?
+        if (false === empty($identity)) {
+            // set session and return.
+            $this->_realm->setUser($identity);
+        }
+
+        return;
     }
 
-	private function __setupIdentity($ip, $cookiestring) {
-		// set/reset IP
-		try {
-			$this->_realm->setIp($ip);
-		} catch (Opus_Security_Exception $e) {
-		    $this->_logger->err("RewriteMap got an invalid IP address: '$ip'!\n");
-			$this->_realm->setIp(null);
-		}
-
-		// look for a session to set user/identity in realm.
-		if (false === is_null($cookiestring)) {
-	        $cookies = explode('; ', $cookiestring);
-		    $session_id = null;
-			foreach ($cookies as $cookie) {
-				    if (preg_match('/'.ini_get('session.name').'=(.*)[\/]?$/',
-					        $cookie, $matches)) {
-						$session_id = $matches[1];
-					}
-	        }
-	        // found a open session?
-		    if (is_null($session_id) === false) {
-			    Zend_Session::setId($session_id);
-				Zend_Session::start();
-				$identity = Zend_Auth::getInstance()->getIdentity();
-				// found an username?
-				if (false === empty($identity)) {
-				    // set session and return.
-					$this->_realm->setUser($identity);
-					return;
-				}
-			}
-		}
-		// if we reach this code, we have not found any user.
-		// reset the user.
-	    $this->_realm->setUser(null);
-	}
 }
 

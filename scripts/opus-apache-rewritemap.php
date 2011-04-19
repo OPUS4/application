@@ -33,122 +33,19 @@
  * @version    $Id$
  */
 
-// Configure include path.
-set_include_path('.' . PATH_SEPARATOR
-            . PATH_SEPARATOR . dirname(__FILE__)
-            . PATH_SEPARATOR . dirname(dirname(__FILE__)) . '/library'
-            . PATH_SEPARATOR . get_include_path());
-
-defined('APPLICATION_PATH')
-        || define('APPLICATION_PATH', realpath(dirname(dirname(__FILE__))));
-
-define('APPLICATION_ENV', 'testing');
+// Bootstrapping
+require_once dirname(__FILE__) . '/common/bootstrap.php';
 
 require_once 'Zend/Loader/Autoloader.php';
 $autoloader = Zend_Loader_Autoloader::getInstance();
 $autoloader->suppressNotFoundWarnings(false);
 $autoloader->setFallbackAutoloader(true);
 
-// Zend_Loader is'nt available yet. We have to do a require_once
-// in order to find the bootstrap class.
-//require_once 'Opus/Bootstrap/Base.php';
+$log = Zend_Registry::get('Zend_Log');
+$config = Zend_Registry::get('Zend_Config');
 
-/**
- * Bootstraps and runs the application.
- *
- * @category    Application
- */
-class OpusApacheRewritemap { // extends Opus_Bootstrap_Base {
+$log->err(var_export($argv, true));
 
-    /**
-     * Holds command line arguments passed to the script.
-     *
-     * @var array
-     */
-    private $_arguments = array();
-
-    /**
-     * Initialise with command line arguments.
-     *
-     * @param array $arguments Command line arguments passed to the script.
-     */
-    public function __construct(array $arguments) {
-        $this->_arguments = $arguments;
-    }
-
-
-    /**
-     * Setup configuration, database and translation.
-     *
-     * @return void
-     */
-    protected function _setupBackend() {
-        $this->_setupLogging();
-        $this->_setupDatabase();
-    }
-
-
-    /**
-     * Starts an Opus console.
-     *
-     * @return void
-     */
-    public function run() {
-        $log = Zend_Registry::get('Zend_Log');
-        $config = Zend_Registry::get('Zend_Config');
-
-        // set targetprefix
-        if (empty($config->deliver->target->prefix) === true) {
-            $log->warn('No target prefix defined in configuration. Using "/files"!');
-            $targetPrefix = '/files';
-        } else {
-            $targetPrefix = $config->deliver->target->prefix;
-        }
-
-        // check input
-        if (count($this->_arguments) < 2) {
-            $line = '';
-        } else {
-            $line = $this->_arguments[1];
-        }
-        if (preg_match('/\t.*\t/', $line) === 0) {
-            $log->err('Internal fatal error! Input from Apache was not as predicted, unparsable by RewriteMap!');
-            $log->err('Apache Input: \'' . $line . '\'');
-            return $targetPrefix ."/error/send500.php";
-        }
-
-        // instantiate cookie
-        $cookie = null;
-        // split input
-        list($path, $remoteAddress, $cookie) = preg_split('/\t/', $line, 3);
-        // remove leading 'COOKIE=', set to prevent eating of second tab by the shell
-        $cookie = preg_replace('/^COOKIES=/', '', $cookie, 1);
-
-        // issue rewriting
-        $rwmap = new Rewritemap_Apache($targetPrefix, $log);
-        echo $rwmap->rewriteRequest($path, $remoteAddress, $cookie) . "\n";
-    }
-
-}
-
-require_once 'Zend/Application.php';
-
-// environment initializiation
-
-$application = new Zend_Application(
-    APPLICATION_ENV,
-    array(
-        "config"=>array(
-            APPLICATION_PATH . '/application/configs/application.ini',
-            APPLICATION_PATH . '/application/configs/config.ini'
-        )
-    )
-);
-
-$application->bootstrap(array('Configuration', 'Logging', 'Database'));
-
-// Bootstrap Zend
-$rwmap = new OpusApacheRewritemap($argv);
-//echo dirname(dirname(__FILE__));
-$rwmap->run();
-
+// issue rewriting
+$rwmap = new Rewritemap_Apache($config, $log);
+echo $rwmap->rewriteRequest($argc > 1 ? $argv[1] : '') . "\n";
