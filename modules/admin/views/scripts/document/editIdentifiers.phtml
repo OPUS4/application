@@ -45,9 +45,11 @@
     </div>
 
     <!-- Add new identifier -->
+    <?PHP if (isset($this->addForm)) : ?>
     <div>
         <?= $this->addForm ?>
     </div>
+    <?PHP endif; ?>
 
     <!-- Edit/remove old identifiers -->
     <?PHP /*

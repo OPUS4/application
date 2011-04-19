@@ -35,44 +35,4 @@
 ?>
 
 <div class="adminContainer">
-
-    <div class="breadcrumbsContainer">
-        <?= $this->navigation()->breadcrumbs()
-                 ->setMaxDepth(1)
-                 ->setLinkLast(true) ?>
-        &gt;
-        <?= $this->translate('admin_documents_edit', $this->docHelper->getDocId()) ?>
-    </div>
-
-    <!-- -->
-
-    <div class="content">
-
-        <!-- Add new model -->
-        <?PHP if (isset($this->addForm)) : ?>
-        <fieldset>
-
-            <legend><?=$this->translate('Add New')?></legend>
-
-            <div>
-                <?= $this->addForm ?>
-            </div>
-
-        </fieldset>
-        <?PHP endif; ?>
-
-        <?PHP if (isset($this->editForm)) : ?>
-        <fieldset>
-
-            <legend><?=$this->translate('Edit')?></legend>
-
-            <div>
-                <?=$this->editForm ?>
-            </div>
-
-        </fieldset>
-        <?PHP endif; ?>
-
-    </div>
-
 </div>

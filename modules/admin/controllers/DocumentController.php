@@ -56,6 +56,21 @@ class Admin_DocumentController extends Controller_Action {
         'enrichments'
     );
 
+    private $sectionModel = array(
+        'titles' => 'Opus_Title',
+        'abstracts' => 'Opus_TitleAbstract',
+        'identifiers' => 'Opus_Identifier',
+        'references' => 'Opus_References',
+        'subjects' => 'Opus_Subject',
+        'patents' => 'Opus_Patent',
+        'notes' => 'Opus_Note',
+        'enrichments' => 'Opus_Enrichment'
+    );
+
+    private $sectionField = array(
+        'persons' => 'Person'
+    );
+
     /**
      * Returns a filtered representation of the document.
      *
@@ -116,24 +131,46 @@ class Admin_DocumentController extends Controller_Action {
                 $model = new Opus_Document($id);
 
             $this->view->docHelper = new Review_Model_DocumentAdapter($this->view, $model);
-
-            // TODO create addForm for section
-            // $addForm = $this->getAddForm($model, $section);
-            $addForm = new Admin_Form_Model('Opus_Person');
-            $addUrl = $this->view->url(array('action' => 'update'));
-            $addForm->setAction($addUrl);
-            $this->view->addForm = $addForm;
-
-            // TODO create editForm for section
+            $this->view->addForm = $this->getAddForm($model, $section);
             $this->view->editForm = $this->getEditForm($model, $section);
 
-            return $this->renderScript('document/edit' . ucfirst($section) . '.phtml');
+            return $this->renderScript('document/edit' /* . ucfirst($section) */ . '.phtml');
         }
 
         $this->_redirectTo('index');
     }
 
+    /**
+     * Create new model and add to document.
+     */
+    public function createAction() {
+        $id = $this->getRequest()->getParam('id');
+        $section = $this->getRequest()->getParam('section');
+
+        if ($this->getRequest()->isPost()) {
+            $postData = $this->getRequest()->getPost();
+
+            if (isset($this->sectionModel[$section])) {
+                $sectionModel = $this->sectionModel[$section];
+            }
+        }
+        else {
+
+        }
+    }
+
     public function updateAction() {
+        $id = $this->getRequest()->getParam('id');
+        $section = $this->getRequest()->getParam('section');
+
+        if ($this->getRequest()->isPost()) {
+            $postData = $this->getRequest()->getPost();
+
+
+        }
+        else {
+            
+        }
     }
 
     /**
@@ -221,13 +258,118 @@ class Admin_DocumentController extends Controller_Action {
     }
 
     public function getAddForm($model, $section) {
+        $id = $model->getId();
+
+        $form = new Zend_Form('add');
+
         $includedFields = Admin_Model_DocumentHelper::getFieldNamesForGroup($section);
-        $form = new Admin_Form_Document($model, $includedFields, true);
+
+        if (isset($this->sectionModel[$section])) {
+            $sectionModel = $this->sectionModel[$section];
+        }
+        if (isset($this->sectionField[$section])) {
+            $sectionField = $this->sectionField[$section];
+        }
+
+        if (!empty($sectionModel)) {
+            $addForm = new Admin_Form_Model($sectionModel);
+        }
+        elseif (!empty($sectionField)) {
+            $temp = new Opus_Document();
+            $field = $temp->getField($sectionField);
+            $addForm = new Admin_Form_Model($temp->getField($sectionField));
+        }
+        else {
+            $addForm = null;
+        }
+
+        if (!empty($addForm)) {
+            $addUrl = $this->view->url(array(
+                'action' => 'create',
+                'id' => $id,
+                'section' => $section
+            ));
+            $form->setAction($addUrl);
+
+            $hiddenDocId = new Zend_Form_Element_Hidden('docid');
+            $hiddenDocId->setValue($id);
+
+            $addForm->addElement($hiddenDocId);
+
+            $submit = new Zend_Form_Element_Submit('submit_add');
+            $submit->setLabel('Add'); // TODO
+
+            $addForm->addElement($submit);
+
+            $addForm->removeDecorator('Fieldset');
+        }
+
+        if (!empty($sectionModel)) {
+            $form->addSubForm($addForm, $sectionModel);
+        }
+        elseif (!empty($field)) {
+            $form->addSubForm($addForm, $field->getValueModelClass());
+        }
+        else {
+            // TODO take care of this case
+        }
+
         return $form;
     }
 
     public function getEditForm($model, $section) {
+        $includedFields = Admin_Model_DocumentHelper::getFieldNamesForGroup($section);
 
+        $form = new Zend_Form('edit');
+
+        switch ($section) {
+            case 'general':
+            case 'misc':
+            case 'other':
+            case 'dates':
+                $subform = new Admin_Form_Model($model, $includedFields);
+                $subform->populateFromModel($model);
+                $form->addSubForm($subform, 'general');
+                break;
+
+            default:
+                foreach ($includedFields as $index => $fieldName) {
+                    $field = $model->getField($fieldName);
+
+                    $values = $field->getValue();
+
+                    if (is_array($values)) {
+                        foreach ($values as $index2 => $value) {
+                            $subform = new Admin_Form_Model($field);
+                            $subform->populateFromModel($value);
+                            $form->addSubForm($subform, $index . '-' . $value->getId());
+                        }
+                    }
+                }
+                break;
+        }
+        
+        $updateUrl = $this->view->url(array(
+            'action' => 'update',
+            'id' => $model->getId(),
+            'section'=> $section
+        ));
+
+        $form->setAction($updateUrl);
+
+        $submit = new Zend_Form_Element_Submit('save');
+        $submit->setLabel('Save');
+        $form->addElement($submit);
+
+        $cancel = new Zend_Form_Element_Submit('cancel');
+        $cancel->setLabel('Cancel');
+        $form->addElement($cancel);
+
+        $reset = new Zend_Form_Element_Reset('reset');
+        $reset->setLabel('Reset');
+        $form->addElement($reset);
+        
+        return $form;
     }
 
 }

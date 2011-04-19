@@ -37,7 +37,7 @@
  *
  * @author jens
  */
-class Admin_Form_Model extends Zend_Form {
+class Admin_Form_Model extends Zend_Form_SubForm {
 
     private $modelClazz;
 
@@ -50,29 +50,64 @@ class Admin_Form_Model extends Zend_Form {
      */
     public function __construct($clazz, $includedFields = null) {
         parent::__construct();
-        $this->modelClazz = $clazz;
+
         $this->includedFields = $includedFields;
 
-        $this->_init();
-
-        $this->setAction('update');
-    }
-
-    protected function _init() {
-        $model = new $this->modelClazz;
-
-        // get keys of fields that should be included
-        if (empty($includedFields)) {
-            $modelFields = array_keys($model->toArray());
+        if ($clazz instanceof Opus_Model_Field) {
+            $this->modelClazz = null;
+            $this->_init($clazz);
+        }
+        elseif ($clazz instanceof Opus_Model_Abstract) {
+            $this->modelClazz = null;
+            $this->_init($clazz);
         }
         else {
-            $modelFields = $this->includedFields;
+            $this->modelClazz = $clazz;
+            $this->_init();
+        }
+    }
+
+    protected function _init($field = null) {
+        if (!empty($field) && $field instanceof Opus_Model_Field) {
+            $linkModelClass = $field->getLinkModelClass();
+            $modelClass = $field->getValueModelClass();
+
+            if (!empty($linkModelClass)) {
+                $model = new $linkModelClass;
+                $target = new $modelClass;
+                $model->setModel($target);
+            }
+            else {
+                $model = new $modelClass;
+            }
+        }
+        elseif (!empty($field) && $field instanceof Opus_Model_Abstract) {
+            $model = $field;
+        }
+        else {
+            $model = new $this->modelClazz;
+        }
+
+        $modelFields = $model->describe();
+
+        $filteredFields = array();
+
+        // get keys of fields that should be included
+        if (!empty($this->includedFields)) {
+            foreach ($modelFields as $fieldName) {
+                if (in_array($fieldName, $this->includedFields)) {
+                    $filteredFields[] = $fieldName;
+                }
+            }
+
+            $modelFields = $filteredFields;
         }
 
         // iterate through fields and generate form elements
         foreach ($modelFields as $fieldName) {
             $field = $model->getField($fieldName);
             $element = $this->_getElementForField($field);
+            // $element->setName($model->getName());
             $this->addElement($element);
         }
     }
@@ -80,8 +115,24 @@ class Admin_Form_Model extends Zend_Form {
     /**
      * Populates form from model values.
      */
-    public function popluateFromModel() {
+    public function populateFromModel($model) {
+        // TODO check if model matches form
 
+        $modelFields = $model->describe();
+
+        // iterate through fields and generate form elements
+        foreach ($modelFields as $fieldName) {
+            $field = $model->getField($fieldName);
+            $element = $this->getElement($field->getName());
+            if (!empty($element)) {
+                if ($element instanceof Zend_Form_Element_Select) {
+                    $element->setValue($field->getValue());
+                }
+                else {
+                    $element->setValue($field->getValue());
+                }
+            }
+        }
     }
 
     /**
@@ -102,8 +153,10 @@ class Admin_Form_Model extends Zend_Form {
             $element = $this->_createCheckbox($field);
         }
         elseif ($field->isSelection()) {
+            $element = $this->_createSelect($field);
         }
         elseif ($field->isTextarea()) {
+            $element = $this->_createTextarea($field);
         }
         else {
             $element = $this->_createTextfield($field);
@@ -124,6 +177,35 @@ class Admin_Form_Model extends Zend_Form {
         $name = $field->getName();
         $textfield = new Zend_Form_Element_Text($name);
         return $textfield;
+    }
+
+    protected function _createTextarea($field) {
+        $name = $field->getName();
+        $textarea = new Zend_Form_Element_Textarea($name);
+        return $textarea;
+    }
+
+    protected function _createSelect($field) {
+        $name = $field->getName();
+        $select = new Zend_Form_Element_Select($name);
+
+        // add message (null option)
+        // TODO only if null is allowed
+        // $message = Zend_Registry::get('Zend_Translate')->translate('choose_option');
+        // $select->addMultiOption('', $message);
+
+        // add possible values
+        $options = $field->getDefault();
+
+        foreach ($options as $option) {
+            $select->addMultiOption($option, $option);
+        }
+
+        return $select;
+    }
+
+    protected function _getFieldNames() {
+
     }
 
 }
