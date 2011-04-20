@@ -529,8 +529,7 @@ body > #top-header{
 #content .wrapper{
 	font-size: 0.8em;
 }
-.opus .messages,
-.opus .exceptionMessage {
+.opus .messages{
 	font: 0.8em "Courier New", Courier, monospace;
 }
 .opus .failure,
@@ -544,6 +543,9 @@ body > #top-header{
 .opus .form-hint.form-errors{
 	color: #a40000;
 	background-color: #ffd4d4;
+}
+.exceptionMessage{
+        font: 1em "Courier New", Courier, monospace;
 }
 .opus .messages .notice{
 	color: #008644;
