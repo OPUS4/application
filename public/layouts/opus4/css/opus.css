@@ -542,11 +542,14 @@ body > #top-header{
 }
 .opus .messages .failure,
 .opus .exceptionMessage,
-.stacktrace pre,
-.request pre,
 .opus .form-hint.form-errors{
 	color: #a40000;
 	background-color: #ffd4d4;
+}
+.stacktrace pre,
+.request pre {
+	color: #800000;
+	background-color: #ffffb2;
 }
 .exceptionMessage,
 .stacktrace pre,
