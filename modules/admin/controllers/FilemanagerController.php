@@ -43,6 +43,59 @@ class Admin_FilemanagerController extends Controller_Action {
      *
      */
     public function indexAction() {
+        $docId = $this->_prepareView();
+
+        if (empty($docId)) {
+            return $this->renderScript('filemanager/nodoc.phtml');
+        }
+
+        // TODO not needed anymore
+//        if (!empty($this->view->actionresult)) {
+//            $this->_redirectTo('index', $this->view->actionresult, 'filemanager', 'admin', array('docId' => $docId));
+//        }
+    }
+
+    public function uploadAction() {
+        
+        $data = $this->_request->getPost();
+
+        $uploadForm = $this->_getUploadForm();
+
+        $docId = $this->getRequest()->getParam('docId');
+
+        $this->view->docId = $docId;
+
+        // store uploaded data in application temp dir
+        if (true === array_key_exists('uploadsubmit', $data)) {
+            if ($uploadForm->isValid($data) === true) {
+                $this->_storeUpload($docId, $uploadForm);
+                $this->_redirectTo('index', $this->view->actionresult, 'filemanager', 'admin', array('docId' => $docId));
+            }
+            else {
+                $this->_prepareView();
+
+                // invalid form, populate with transmitted data
+                $uploadForm->populate($data);
+                $this->view->form = $uploadForm;
+
+                $this->view->actionresult = 'Invalid form input.';
+                // TODO forward to index action
+                $this->render('index');
+            }
+        }
+    }
+
+    protected function _getUploadForm() {
+        $uploadForm = new Admin_Form_FileUpload();
+
+        $actionUrl = $this->view->url(array('controller' => 'filemanager', 'action' => 'upload'));
+
+        $uploadForm->setAction($actionUrl);
+
+        return $uploadForm;
+    }
+
+    protected function _prepareView() {
         $this->view->title = 'admin_filemanager_index';
 
         $data = $this->_request->getPost();
@@ -51,20 +104,8 @@ class Admin_FilemanagerController extends Controller_Action {
 
         $this->view->docId = $docId;
 
-        if (empty($docId)) {
-            return $this->renderScript('filemanager/nodoc.phtml');
-        }
 
-        if (true === array_key_exists('signsubmit', $data)) {
-            $this->_processSignSubmit($data);
-        }
-        else if (true === array_key_exists('deletesubmit', $data)) {
-            $this->_processDeleteSubmit($data);
-        }
-        else if (true === array_key_exists('accesssubmit', $data)) {
-            $this->_processAccessSubmit($data);
-        }
-        
+
         $this->view->editUrl = $this->view->url(array('module' => 'admin',
             'controller' => 'documents', 'action' => 'edit', 'id' => $docId),
                 null, true);
@@ -105,45 +146,7 @@ class Admin_FilemanagerController extends Controller_Action {
 
         $this->view->fileHelpers = $fileHelpers;
 
-        if (!empty($this->view->actionresult)) {
-            $this->_redirectTo('index', $this->view->actionresult, 'filemanager', 'admin', array('docId' => $docId));
-        }
-    }
-
-    public function uploadAction() {
-        
-        $data = $this->_request->getPost();
-
-        $uploadForm = $this->_getUploadForm();
-
-        $docId = $this->getRequest()->getParam('docId');
-
-        $this->view->docId = $docId;
-
-        // store uploaded data in application temp dir
-        if (true === array_key_exists('uploadsubmit', $data)) {
-            if ($uploadForm->isValid($data) === true) {
-                $this->_storeUpload($docId, $uploadForm);
-                $this->_redirectTo('index', $this->view->actionresult, 'filemanager', 'admin', array('docId' => $docId));
-            }
-            else {
-                // invalid form, populate with transmitted data
-                $uploadForm->populate($data);
-                $this->view->form = $uploadForm;
-
-                // TODO forward to index action
-            }
-        }
-    }
-
-    protected function _getUploadForm() {
-        $uploadForm = new Admin_Form_FileUpload();
-
-        $actionUrl = $this->view->url(array('controller' => 'filemanager', 'action' => 'upload'));
-
-        $uploadForm->setAction($actionUrl);
-
-        return $uploadForm;
+        return $docId;
     }
 
     public function accessAction() {
@@ -291,7 +294,8 @@ class Admin_FilemanagerController extends Controller_Action {
             * }
             */
             $docfile = $document->addFile();
-            $docfile->setLabel($uploadForm->getValue('comment'));
+            $docfile->setLabel($uploadForm->getValue('label'));
+            $docfile->setComment($uploadForm->getValue('comment'));
             $docfile->setLanguage($uploadForm->getValue('language'));
             $docfile->setPathName($file['name']);
             $docfile->setMimeType($file['type']);
@@ -305,7 +309,7 @@ class Admin_FilemanagerController extends Controller_Action {
         catch (Opus_Model_Exception $e) {
             $log->warn("File upload failed: " . $e);
             $this->view->actionresult = array(
-                'failure' => $this->view->translate('error_uploaded_files')); // TODO was $e->getMessage();
+                'failure' => $this->view->translate('error_uploaded_files'));
         }
 
         // reset input values fo re-displaying

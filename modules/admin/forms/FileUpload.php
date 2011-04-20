@@ -49,15 +49,42 @@ class Admin_Form_FileUpload extends Zend_Form {
 
         //$this->addElement('hash', 'UploadHash', array('salt' => 'unique'));
 
+        $config = Zend_Registry::get('Zend_Config');
+
+        $maxFileSize = 2000000;
+
+        if (isset($config->publish->maxfilesize)) {
+            $maxFileSize = $config->publish->maxfilesize;
+        }
+        else {
+            $log->warn('publish.maxfilesize not configured.');
+        }
+
+        $fileTypes = 'pdf,txt';
+
+        if (isset($config->publish->filetypes->allowed)) {
+            $fileTypes = $config->publish->filetypes->allowed;
+        }
+        else {
+            $log->warn('publish.filetypes.allowed not configured.');
+        }
+
         // FIXME: Make hard coded path configurable.
         $fileupload = new Zend_Form_Element_File('fileupload');
         $fileupload->setLabel('FileToUpload')
             ->addValidator('Count', false, 1)     // ensure only 1 file
-            ->addValidator('Size', false, 102400000) // limit to 100M
-            ->addValidator('Extension', false, 'pdf,txt'); // only PDF
+            ->addValidator('Size', false, $maxFileSize) // limit to 100M
+            ->addValidator('Extension', false, $fileTypes); // only PDF
+        
+        $comment = new Zend_Form_Element_Textarea('comment');
+        $comment->setAttrib('cols', 100);
+        $comment->setAttrib('rows', 4);
+        $comment->setLabel('admin_filemanager_label_comment');
 
-        $comment = new Zend_Form_Element_Text('comment');
-        $comment->setLabel('Comment');
+
+        $label = new Zend_Form_Element_Text('label');
+        $label->setAttrib('size', 40);
+        $label->setLabel('admin_filemanager_label_label');
 
         $languageList = new Zend_Form_Element_Select('language');
         $languageList->setLabel('Language')
@@ -71,7 +98,7 @@ class Admin_Form_FileUpload extends Zend_Form {
         $documentId->addValidator('NotEmpty')
             ->addValidator('Int');
 
-        $this->addElements(array($fileupload, $comment, $languageList, $documentId, $submit));
+        $this->addElements(array($fileupload, $label, $comment, $languageList, $documentId, $submit));
         $this->setAttrib('enctype', Zend_Form::ENCTYPE_MULTIPART);
     }
 
