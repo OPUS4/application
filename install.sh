@@ -210,6 +210,15 @@ sed -e "s!^user=!user='$ADMIN_ESC'!" \
 chmod +x createdb.sh
 ./createdb.sh
 
+# create opus-apache-rewritemap-caller-secure.sh
+cd $BASEDIR/opus4/scripts
+cp opus-apache-rewritemap-caller-secure.sh.template opus-apache-rewritemap-caller-secure.sh
+if [ $OS = "suse" ]; then
+  sed -e "s!^USER='www-data'!USER='wwwrun'" opus-apache-rewritemap-caller-secure.sh > opus-apache-rewritemap-caller-secure.sh.tmp
+  mv opus-apache-rewritemap-caller-secure.sh.tmp opus-apache-rewritemap-caller-secure.sh
+fi
+chmod +x opus-apache-rewritemap-caller-secure.sh
+
 # install and configure Solr search server
 cd $BASEDIR
 read -p "Install and configure Solr server? [Y]: " INSTALL_SOLR
