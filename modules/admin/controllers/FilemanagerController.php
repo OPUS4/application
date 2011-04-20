@@ -206,6 +206,12 @@ class Admin_FilemanagerController extends Controller_Action {
         }
     }
 
+    /**
+     *
+     * @param <type> $postData
+     *
+     * TODO use Zend validation
+     */
     protected function _processAccessSubmit($postData) {
         $log = Zend_Registry::get('Zend_Log');
 
@@ -223,6 +229,8 @@ class Admin_FilemanagerController extends Controller_Action {
 
             $label = $postData['label'];
             $file->setLabel($label);
+
+            $file->setLanguage($postData['language']);
 
             $visibleInFrontdoor = $postData['visibleInFrontdoor'];
             $file->setVisibleInFrontdoor($visibleInFrontdoor);

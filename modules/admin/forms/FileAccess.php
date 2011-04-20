@@ -70,6 +70,13 @@ class Admin_Form_FileAccess extends Admin_Form_RolesAbstract {
         $comment->setValue($this->file->getComment());
         $this->addElement($comment);
 
+        $languageList = new Zend_Form_Element_Select('language');
+        $languageList->setLabel('Language')
+            ->setMultiOptions(Zend_Registry::get('Available_Languages'))
+            ->addValidator('NotEmpty');
+        $languageList->setValue($this->file->getLanguage());
+        $this->addElement($languageList);
+
         $frontdoorCheckbox =
                 $this->createElement('checkbox', 'visibleInFrontdoor')
                      ->setLabel('admin_filemanager_label_visibleinfrontdoor');
