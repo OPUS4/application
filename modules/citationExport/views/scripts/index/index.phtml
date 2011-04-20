@@ -35,7 +35,7 @@
 ?>
 <h1><?= $this->title ?></h1>
 <pre>
-<?= $this->output ?>
+<?= htmlspecialchars($this->output) ?>
 </pre>
 <?php if (isset($this->downloadUrl)) : ?>
     <a href="<?= $this->downloadUrl ?>"><?= $this->translate('download_bibliographic_data') ?></a>
