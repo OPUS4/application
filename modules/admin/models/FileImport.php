@@ -70,6 +70,7 @@ class Admin_Model_FileImport {
                 $docfile = $document->addFile();
                 $docfile->setTempFile($pathname);
                 $docfile->setPathName($validFilenames[$file]);
+                $docfile->setLabel($validFilenames[$file]);
                 try {
                     $document->store();
                     $log->info('import of file ' . $pathname . ' successful');
