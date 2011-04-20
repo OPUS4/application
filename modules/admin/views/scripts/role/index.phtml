@@ -51,14 +51,14 @@
         <td><a href="<?= $this->url(array('action' => 'show', 'id' => $id)) ?>"><?= htmlspecialchars($role) ?></a></td>
         <td class="actions">
             <a href="<?= $this->url(array('action' => 'edit', 'id' => $id)) ?>"><?= $this->translate('admin_form_action_edit') ?></a>
-            <?PHP if (!in_array($role, $this->protectedRoles)) : ?>
-                <a href="<?= $this->url(array('action' => 'delete', 'id' => $id)) ?>"><?= $this->translate('admin_form_action_delete') ?></a>
-            <?PHP endif; ?>
             <a href="<?= $this->url(array(
                 'module' => 'admin',
                 'controller' => 'access',
                 'action' => 'listmodule',
                 'roleid' => $id))?>"><?= $this->translate('admin_role_edit_access') ?></a>
+            <?PHP if (!in_array($role, $this->protectedRoles)) : ?>
+                <a href="<?= $this->url(array('action' => 'delete', 'id' => $id)) ?>"><?= $this->translate('admin_form_action_delete') ?></a>
+            <?PHP endif; ?>
         </td>
     </tr>
     <? endforeach; ?>

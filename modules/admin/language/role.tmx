@@ -78,6 +78,16 @@
         <seg>Der Rollenname existiert bereits.</seg>
       </tuv>
     </tu>
+
+    <tu tuid="admin_role_edit_access">
+      <tuv xml:lang="en">
+        <seg>Access</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Access</seg>
+      </tuv>
+    </tu>
+
   </body>
   
 </tmx>
