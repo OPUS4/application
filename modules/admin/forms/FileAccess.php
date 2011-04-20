@@ -32,6 +32,9 @@
  * @version     $Id$
  */
 
+/**
+ * TODO rename into Admin_Form_File (since funcionality goes beyond access
+ */
 class Admin_Form_FileAccess extends Admin_Form_RolesAbstract {
 
     protected $roleGroupLegendKey = 'admin_filemanager_legend_fileroles';
@@ -53,6 +56,19 @@ class Admin_Form_FileAccess extends Admin_Form_RolesAbstract {
 
         $file = $this->createElement('hidden', 'FileObject');
         $this->addElement($file);
+
+        $label = new Zend_Form_Element_Text('label');
+        $label->setAttrib('size', 40);
+        $label->setLabel('admin_filemanager_label_label');
+        $label->setValue($this->file->getLabel());
+        $this->addElement($label);
+
+        $comment = new Zend_Form_Element_Textarea('comment');
+        $comment->setAttrib('cols', 100);
+        $comment->setAttrib('rows', 4);
+        $comment->setLabel('admin_filemanager_label_comment');
+        $comment->setValue($this->file->getComment());
+        $this->addElement($comment);
 
         $frontdoorCheckbox =
                 $this->createElement('checkbox', 'visibleInFrontdoor')

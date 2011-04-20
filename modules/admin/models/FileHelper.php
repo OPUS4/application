@@ -92,8 +92,10 @@ class Admin_Model_FileHelper {
     }
 
     protected function _getActionUrl() {
-        $actionUrl = $this->view->url(array('module' => 'admin',
-            'controller' => 'filemanager', 'action' => 'index',
+        $actionUrl = $this->view->url(array(
+            'module' => 'admin',
+            'controller' => 'filemanager',
+            'action' => 'access',
             'docId' => $this->document->getId()), null, true);
         return $actionUrl;
     }

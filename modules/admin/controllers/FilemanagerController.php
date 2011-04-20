@@ -104,8 +104,6 @@ class Admin_FilemanagerController extends Controller_Action {
 
         $this->view->docId = $docId;
 
-
-
         $this->view->editUrl = $this->view->url(array('module' => 'admin',
             'controller' => 'documents', 'action' => 'edit', 'id' => $docId),
                 null, true);
@@ -150,7 +148,14 @@ class Admin_FilemanagerController extends Controller_Action {
     }
 
     public function accessAction() {
+        $docId = $this->getRequest()->getParam('docId');
 
+        if ($this->getRequest()->isPost()) {
+            $postData = $this->getRequest()->getPost();
+            $this->_processAccessSubmit($postData);
+        }
+
+        $this->_redirectTo('index', null, 'filemanager', 'admin', array('docId' => $docId));
     }
 
     public function signAction() {
@@ -213,6 +218,12 @@ class Admin_FilemanagerController extends Controller_Action {
                 throw new Exception('file ' . $fileId . ' does not exist.');
             }
 
+            $comment = $postData['comment'];
+            $file->setComment($comment);
+
+            $label = $postData['label'];
+            $file->setLabel($label);
+
             $visibleInFrontdoor = $postData['visibleInFrontdoor'];
             $file->setVisibleInFrontdoor($visibleInFrontdoor);
 
@@ -226,19 +237,10 @@ class Admin_FilemanagerController extends Controller_Action {
             $selectedRoleNames = Admin_Form_FileAccess::parseSelectedRoleNames($postData);
 
             // remove roles that are not selected
+            // TODO implement
             foreach ($currentRoleNames as $roleName) {
                 if (!in_array($roleName, $selectedRoleNames)) {
                     $role = Opus_UserRole::fetchByName($roleName);
-                    $privileges = $role->getPrivilege();
-                    foreach ($privileges as $index => $privilege) {
-                        if ($privilege->getPrivilege() === 'readFile') {
-                            if ($privilege->getFileId() === $fileId) {
-                                $log->debug('remove readFile: ' . $fileId . ' from role ' . $roleName);
-                                $privileges[$index] = null;
-                            }
-                        }
-                    }
-                    $role->setPrivilege($privileges);
                     $role->store();
                 }
             }

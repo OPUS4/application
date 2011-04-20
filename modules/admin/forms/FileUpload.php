@@ -81,7 +81,6 @@ class Admin_Form_FileUpload extends Zend_Form {
         $comment->setAttrib('rows', 4);
         $comment->setLabel('admin_filemanager_label_comment');
 
-
         $label = new Zend_Form_Element_Text('label');
         $label->setAttrib('size', 40);
         $label->setLabel('admin_filemanager_label_label');
