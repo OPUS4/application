@@ -38,6 +38,8 @@ abstract class Admin_Form_RolesAbstract extends Zend_Form {
 
     protected $roleGroupLegendKey = 'admin_form_group_roles';
 
+    protected $alwaysCheckAndDisableGuest = true;
+
     /**
      * Adds display group for roles.
      */
@@ -52,7 +54,7 @@ abstract class Admin_Form_RolesAbstract extends Zend_Form {
                     'role' . $roleName)->setLabel($roleName);
             
             // TODO special code to handle role 'guest': Is that good?
-            if ($roleName === 'guest' ) {
+            if ($roleName === 'guest' && $this->alwaysCheckAndDisableGuest) {
                 $roleCheckbox->setValue(1);
                 $roleCheckbox->setAttrib('disabled', true);
             }

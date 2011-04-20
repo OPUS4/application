@@ -39,6 +39,8 @@ class Admin_Form_FileAccess extends Admin_Form_RolesAbstract {
 
     protected $roleGroupLegendKey = 'admin_filemanager_legend_fileroles';
 
+    protected $alwaysCheckAndDisableGuest = false;
+
     private $fileId;
 
     private $file;
