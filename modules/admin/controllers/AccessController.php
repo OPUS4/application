@@ -53,6 +53,7 @@ class Admin_AccessController extends Controller_Action {
         $items = array();
         foreach($roles as $role) {
             $docs = $role->listAccessDocuments();
+
             if(in_array($id, $docs)) {
                 array_push($items, $role->getId());
             }
@@ -84,7 +85,7 @@ class Admin_AccessController extends Controller_Action {
 
             $this->view->redirect = array('module'=>'admin','controller'=>'role','action'=>'show','id'=>$id);
         }
-        elseif (!empty($docid)) {
+        elseif (!empty($docId)) {
             $this->storeRoles($this->getRequest());
 
             $this->view->redirect = array('module'=>'admin','controller'=>'document','action'=>'index','id'=>$docId);
@@ -133,12 +134,14 @@ class Admin_AccessController extends Controller_Action {
             $roleName = $role->getName();
             $checked = $request->getParam($roleName);
             if ($checked) {
-
+                $role->appendAccessDocument($docId);
             }
             else {
-                
+                $role->removeAccessDocument($docId);
             }
         }
+
+        $role->store();
     }
 
     /**
