@@ -135,13 +135,13 @@ class Admin_AccessController extends Controller_Action {
             $checked = $request->getParam($roleName);
             if ($checked) {
                 $role->appendAccessDocument($docId);
+                $role->store();
             }
             else {
                 $role->removeAccessDocument($docId);
+                $role->store();
             }
         }
-
-        $role->store();
     }
 
     /**
