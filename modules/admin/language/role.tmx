@@ -9,10 +9,10 @@
 
     <tu tuid="admin_role_index">
       <tuv xml:lang="en">
-        <seg>Manage User Roles and Privileges</seg>
+        <seg>Manage User Roles</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Nutzerrollen und Privilegien verwalten</seg>
+        <seg>Nutzerrollen verwalten</seg>
       </tuv>
     </tu>
        
@@ -84,7 +84,7 @@
         <seg>Access</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Access</seg>
+        <seg>Zugriffsrechte</seg>
       </tuv>
     </tu>
 
