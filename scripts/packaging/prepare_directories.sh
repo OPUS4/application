@@ -76,8 +76,7 @@ rm -v  opus4/application/configs/doctypes/preprintmatheon.xml
 rm -vf opus4/modules/publish/views/scripts/form/demo.phtml
 rm -vf  opus4/application/configs/doctypes/demo.xml
 rm -rv opus4/modules/{pkm,publicationList,remotecontrol,import,matheon}
-rm -rv opus4/scripts/{packaging,cron,indexing,install}
-rm -rv  opus4/scripts/zib
+rm -rv opus4/scripts/{packaging,cron,indexing,install,zib}
 rm -rvf opus4/library/Opus/Search/{Adapter,Index}/Lucene/
 rm -rvf testdata/sql/992_create_documents_testdata__security.sql
 rm -rvf testdata/sql/990_create_documents_testdata__hhhar.sql
