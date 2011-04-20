@@ -367,6 +367,24 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_documents_state_inprogress">
+      <tuv xml:lang="en">
+        <seg>In-Progress</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>In-Arbeit</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_documents_state_restricted">
+      <tuv xml:lang="en">
+        <seg>Restricted</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Geschützt</seg>
+      </tuv>
+    </tu>
+
   </body>
   
 </tmx>
