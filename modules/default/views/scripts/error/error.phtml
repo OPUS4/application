@@ -38,7 +38,7 @@
 
     <?PHP if ($this->showException) : ?>
     <div class="stacktrace">
-        <h2>Stacktrace</h2>
+        <h3>Stacktrace</h3>
 <?PHP /* note: do not use indentation here */ ?>
 <pre>
 <?= htmlspecialchars($this->exception) ?>
@@ -52,7 +52,7 @@
 
     <?PHP if (isset($this->errorRequest)) : ?>
     <div class="request">
-        <h2>Request</h2>
+        <h3>Request</h3>
 <?PHP /* note: do not use indentation here */ ?>
 <pre>
 <?= htmlspecialchars(var_export($this->errorRequest, TRUE)) ?>
