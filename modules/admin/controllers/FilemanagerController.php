@@ -48,6 +48,15 @@ class Admin_FilemanagerController extends Controller_Action {
         if (empty($docId)) {
             return $this->renderScript('filemanager/nodoc.phtml');
         }
+        
+        $importUrl = $this->view->url(array(
+            'module' => 'admin',
+            'controller' => 'filebrowser',
+            'action' => 'index',
+            'docId' => $docId
+        ));
+
+        $this->view->importUrl = $importUrl;
 
         // TODO not needed anymore
 //        if (!empty($this->view->actionresult)) {

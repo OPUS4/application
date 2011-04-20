@@ -150,6 +150,14 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_filemanager_import_link">
+      <tuv xml:lang="en">
+        <seg>Import File</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datei importieren</seg>
+      </tuv>
+    </tu>
 
   </body>
   
