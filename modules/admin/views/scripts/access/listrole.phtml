@@ -40,7 +40,7 @@
 
 <h2><?= $this->translate('access_available_roles') ?></h2>
 
-<form method="POST" action="">
+<form method="POST" action="<?= $this->url(array('module'=>'admin', 'controller'=>'access', 'action'=>'store'), null ,true) ?>">
     <ul>
     <?php foreach($this->roles as $role) : ?>
         <li><input type="checkbox" name="<?= $role->getName()?>"
@@ -50,6 +50,8 @@
         /><?= $role->getName(); ?><br/></li>
     <?php endforeach ?>
     </ul>
+
+    <input type="hidden" name="docid" value="<?=$this->docId?>" />
 
     <div class="form-item">
         <span class="form-submit-wrapper">

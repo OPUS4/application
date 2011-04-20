@@ -270,9 +270,6 @@ class Admin_FilemanagerController extends Controller_Action {
                 }
                 else {
                     $log->debug('add readFile to role ' . $roleName);
-                    $privilege = $role->addPrivilege();
-                    $privilege->setPrivilege('readFile');
-                    $privilege->setFile($file);
                     $role->store();
                 }
             }

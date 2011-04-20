@@ -53,9 +53,11 @@ class Admin_AccessController extends Controller_Action {
         $items = array();
         foreach($roles as $role) {
             $docs = $role->listAccessDocuments();
-            if(in_array($id, $docs))
+            if(in_array($id, $docs)) {
                 array_push($items, $role->getId());
+            }
         }
+        return $items;
     }
 
     public function listmoduleAction() {
@@ -74,11 +76,20 @@ class Admin_AccessController extends Controller_Action {
     public function storeAction() {
         $save = $this->getRequest()->getParam('save_button');
         $id = $this->getRequest()->getParam('roleid');
-        $accessMode = $this->getRequest()->getParam('access_mode');
+        $docId = $this->getRequest()->getParam('docid');
+        if (!empty($id)) {
+            $accessMode = $this->getRequest()->getParam('access_mode');
 
-        $this->storeModules($this->getRequest());
-        
-        $this->view->redirect = array('module'=>'admin','controller'=>'role','action'=>'show','id'=>$id);
+            $this->storeModules($this->getRequest());
+
+            $this->view->redirect = array('module'=>'admin','controller'=>'role','action'=>'show','id'=>$id);
+        }
+        elseif (!empty($docid)) {
+            $this->storeRoles($this->getRequest());
+
+            $this->view->redirect = array('module'=>'admin','controller'=>'document','action'=>'index','id'=>$docId);
+        }
+
         if($save != null) {
             $this->view->submit = 'access_submit_save';
             $this->view->message = 'access_save_message';
@@ -111,6 +122,23 @@ class Admin_AccessController extends Controller_Action {
             }
         }
         $role->store();
+    }
+
+    private function storeRoles($request) {
+        $docId = $request->getParam('docid');
+
+        $roles = Opus_UserRole::getAll();
+
+        foreach ($roles as $role) {
+            $roleName = $role->getName();
+            $checked = $request->getParam($roleName);
+            if ($checked) {
+
+            }
+            else {
+                
+            }
+        }
     }
 
     /**

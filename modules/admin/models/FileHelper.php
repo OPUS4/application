@@ -80,15 +80,23 @@ class Admin_Model_FileHelper {
     }
 
     protected function _getRolesForFile() {
-        return Admin_Model_FileHelper::getRolesForFile($this->file);
+        return Admin_Model_FileHelper::getRolesForFile($this->file->getId());
     }
 
-    public static function getRolesForFile($file) {
-        $roles = array();
-
-        // TODO implement
+    public static function getRolesForFile($fileId) {
+        $checkedRoles = array();
         
-        return $roles;
+        $roles = Opus_UserRole::getAll();
+
+        $items = array();
+        foreach($roles as $role) {
+            $files = $role->listAccessFiles();
+            if (in_array($fileId, $files)) {
+                array_push($checkedRoles, $role->getName());
+            }
+        }
+
+        return $checkedRoles;
     }
 
     protected function _getActionUrl() {
