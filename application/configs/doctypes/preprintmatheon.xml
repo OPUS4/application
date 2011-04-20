@@ -53,11 +53,11 @@
         <required-if-fulltext/>
     </field>
 
-    <field name="Institute" formelement="select" required="yes"  datatype="Institute" multiplicity="*" />
-    <field name="Project" required="yes" formelement="select" datatype="Project" multiplicity="*" />    
-    <field name="SubjectMSC" required="yes" formelement="text" datatype="msc" multiplicity="10" />
+    <field name="Institute" required="no" formelement="Select" datatype="Collection" root="institutes" multiplicity="5"/>
+    <field name="Project" required="yes" formelement="Select" datatype="Collection" root="projects" multiplicity="*" />
+    <field name="SubjectMSC" required="no" formelement="Select" datatype="Collection" root="msc" multiplicity="9"/>
     
 <!-- unrequired fields -->
     <field name="SubjectUncontrolled" required="no" formelement="text" datatype="Text" multiplicity="*" />
-    
+    <field name="Series" required="no" formelement="Select" datatype="Collection" root="series" multiplicity="1"/>
 </documenttype>

@@ -76,10 +76,10 @@
     <field name="PageLast" required="no" formelement="Text" datatype="Integer" multiplicity="1" />    
     <field name="SubjectSwd" required="no" formelement="Text" datatype="Text" multiplicity="5" />
     <field name="SubjectUncontrolled" required="no" formelement="Text" datatype="Text" multiplicity="5" />
-    <field name="Institute" required="no" formelement="Select" datatype="Institute" multiplicity="1" />
+    <field name="Institute" required="no" formelement="Select" datatype="Collection" root="institutes" multiplicity="1"/>
     <field name="PublishedYear" required="no" formelement="Text" datatype="Year" multiplicity="1" />
     <field name="IdentifierUrn" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="Note" required="no" formelement="Textarea" datatype="Text" multiplicity="1" />
-    
+    <field name="Series" required="no" formelement="Select" datatype="Collection" root="series" multiplicity="1"/>
         
 </documenttype>

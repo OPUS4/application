@@ -53,14 +53,13 @@
         </subfield>
         <subfield name="Email" required="no" formelement="text" datatype="Email" />        
     </field>
-    <field name="Institute" required="no" formelement="Select" datatype="Institute" multiplicity="1"/>
-
+    <field name="Institute" required="no" formelement="Select" datatype="Collection" root="institutes" multiplicity="1"/>
 
     <field name="Event" required="yes" formelement="Text" datatype="Enrichment" multiplicity="1"/>
     <field name="City" required="yes" formelement="Text" datatype="Enrichment" multiplicity="1"/>
     <field name="Country" required="yes" formelement="Text" datatype="Enrichment" multiplicity="1"/>
     <field name="IdentifierUrl" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-
     <field name="PublishedDate" required="yes" formelement="Text" datatype="Date" multiplicity="1"/>
+    <field name="Series" required="no" formelement="Select" datatype="Collection" root="series" multiplicity="1"/>
 
 </documenttype>

@@ -101,7 +101,7 @@
     <field name="Volume" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="Issue" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="Edition" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-    <field name="Institute" required="no" formelement="Select" datatype="Institute" multiplicity="*"/>
+    <field name="Institute" required="no" formelement="Select" datatype="Collection" root="institutes" multiplicity="5"/>
     <field name="PublishedYear" required="no" formelement="Text" datatype="Year" multiplicity="1"/>
     <field name="PublishedDate" required="no" formelement="Text" datatype="Date" multiplicity="1"/>
     <field name="CompletedYear" required="no" formelement="Text" datatype="Year" multiplicity="1"/>
@@ -119,9 +119,10 @@
     <field name="Note" required="no" formelement="Textarea" datatype="Text" multiplicity="1"/>
     <field name="Licence" required="no" formelement="Select" datatype="Licence" multiplicity="1"/>
     <field name="ServerDateUnlocking" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-    <field name="SubjectDDC" required="no" formelement="Text" datatype="ddc" multiplicity="*"/>
-    <field name="SubjectMSC" required="no" formelement="Text" datatype="msc" multiplicity="*"/>
-    <field name="SubjectPACS" required="no" formelement="Text" datatype="pacs" multiplicity="*"/>
-    <field name="SubjectCCS" required="no" formelement="Text" datatype="ccs" multiplicity="*"/>
+    <field name="SubjectDDC" required="no" formelement="Select" datatype="Collection" root="ddc" multiplicity="*"/>
+    <field name="SubjectMSC" required="no" formelement="Select" datatype="Collection" root="msc" multiplicity="*"/>
+    <field name="SubjectPACS" required="no" formelement="Select" datatype="Collection" root="pacs" multiplicity="*"/>
+    <field name="SubjectCCS" required="no" formelement="Select" datatype="Collection" root="ccs" multiplicity="*"/>
+    <field name="Series" required="no" formelement="Select" datatype="Collection" root="series" multiplicity="1"/>
 
 </documenttype>
