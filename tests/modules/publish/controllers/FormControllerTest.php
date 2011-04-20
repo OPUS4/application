@@ -39,7 +39,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
      */
     public function testCheckActionWithValidPostAndSendButton() {
         $session = new Zend_Session_Namespace('Publish');
-        $session->unsetAll();
+        //$session->unsetAll();
         $session->documentType = 'preprint';
         $session->documentId = '750';
         $session->fulltext = '0';
@@ -69,7 +69,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
                     'IdentifierUrn' => '',
                     'Note' => '',
                     'Language' => 'deu',
-                    'Licence' => 'ID:4',
+                    'Licence' => 'ID:1',
                     'send' => 'Next step'
                 ));
 
@@ -77,9 +77,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200);
         $this->assertController('form');
         $this->assertAction('check');
-    }
-    
-    
+    }      
 
     /**
      * Test GET on upload action
@@ -189,17 +187,17 @@ class Publish_FormControllerTest extends ControllerTestCase {
                     'PersonAuthorAllowEmailContact1' => '0',
                     'PersonAuthorDateOfBirth1' => '',
                     'PersonAuthorPlaceOfBirth1' => '',
-                    'CompletedDate' => '20.04.2011',
+                    'CompletedDate' => '2011/04/20',
                     'PageNumber' => '',
                     'SubjectUncontrolled1' => '',
                     'Institute' => '',
                     'IdentifierUrn' => '',
                     'Note' => '',
                     'Language' => 'deu',
-                    'Licence' => 'ID:4',
+                    'Licence' => 'ID:1',
                     'Series1' => '',
                     'SeriesNumber1' => '',
-                    'addMoreTitleMain' => 'Add one more main title'
+                    'addMoreTitleMain' => 'Add one more title main'
                 ));
                        
         $this->dispatch('/publish/form/check');
