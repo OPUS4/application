@@ -41,6 +41,7 @@
         <?= $this->navigation()->breadcrumbs() ?>
     </div>
 
+    <?PHP if (empty($this->collection)) : ?>
     <div style="text-align: center; margin: 0.1em 0em">
         <form action="<?= $this->url_call_id ?>" method="post" class="crud">
              <?= $this->translate('docs_call_id_label') ?>
@@ -48,6 +49,7 @@
              <input type="submit" value="<?= $this->translate('docs_call_id') ?>" />
         </form>
     </div>
+    <?PHP endif; ?>
 
     <div class="documentOptions">
         <?PHP if (!empty($this->collection)) : ?>
