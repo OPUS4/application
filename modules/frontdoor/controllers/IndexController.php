@@ -93,6 +93,7 @@ class Frontdoor_IndexController extends Controller_Action {
         $xslt->load($this->view->getScriptPath('index') . DIRECTORY_SEPARATOR . $template);
         $proc = new XSLTProcessor;
         $proc->registerPHPFunctions('Frontdoor_IndexController::translate');
+        $proc->registerPHPFunctions('Frontdoor_IndexController::checkIfUserHasFileAccess');
         $proc->importStyleSheet($xslt);
 
         $this->view->baseUrl = $baseUrl;
@@ -114,6 +115,21 @@ class Frontdoor_IndexController extends Controller_Action {
         $this->view->frontdoor = $proc->transformToXML($documentNode);
 
         $this->incrementStatisticsCounter($docId);
+    }
+
+    /**
+     * Static function to be called from XSLT script to check file permission.
+     *
+     * @param string|int $file_id
+     * @return boolean
+     */
+    public static function checkIfUserHasFileAccess($file_id = null) {
+        if (is_null($file_id)) {
+            return false;
+        }
+
+        $realm = Opus_Security_Realm::getInstance();
+        return $realm->checkFile($file_id);
     }
 
     private function setFrontdoorTitleToDocumentTitle($document) {

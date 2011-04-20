@@ -661,16 +661,9 @@
         </tr>
     </xsl:template>
 
-    <xsl:template match="File">
+    <xsl:template match="File[@VisibleInFrontdoor='1']">
         <li>
-            <xsl:element name="a">
-                <xsl:attribute name="href">
-                    <xsl:value-of select="$baseUrl"/>
-                    <xsl:text>/files/</xsl:text>
-                    <xsl:value-of select="../@Id" />
-                    <xsl:text>/</xsl:text>
-                    <xsl:value-of select="@PathName" />
-                </xsl:attribute>
+            <xsl:variable name="fileIcon">
                 <xsl:element name="img">
                     <xsl:attribute name="src">
                         <xsl:value-of select="$layoutPath"/>
@@ -702,16 +695,17 @@
                         <xsl:text>)</xsl:text>
                     </xsl:attribute>
                 </xsl:element>
-            </xsl:element>
+            </xsl:variable>
 
-            <xsl:element name="a">
-                <xsl:attribute name="href">
-                    <xsl:value-of select="$baseUrl"/>
-                    <xsl:text>/files/</xsl:text>
-                    <xsl:value-of select="../@Id" />
-                    <xsl:text>/</xsl:text>
-                    <xsl:value-of select="@PathName" />
-                </xsl:attribute>
+            <xsl:variable name="fileLink">
+                <xsl:value-of select="$baseUrl"/>
+                <xsl:text>/files/</xsl:text>
+                <xsl:value-of select="../@Id" />
+                <xsl:text>/</xsl:text>
+                <xsl:value-of select="@PathName" />
+            </xsl:variable>
+
+            <xsl:variable name="fileLinkText">
                 <xsl:choose>
                     <xsl:when test="normalize-space(@Label)">
                         <xsl:value-of select="@Label" />
@@ -725,9 +719,34 @@
                     <xsl:value-of select="round(@FileSize div 1024)" />
                     <xsl:text> KB)</xsl:text>
                 </xsl:if>
-            </xsl:element>
-            <xsl:text> </xsl:text>
+            </xsl:variable>
+
+            <xsl:choose>
+                <xsl:when test="php:functionString('Frontdoor_IndexController::checkIfUserHasFileAccess', @Id)">
+                    <xsl:element name="a">
+                        <xsl:attribute name="href">
+                            <xsl:copy-of select="$fileLink" />
+                        </xsl:attribute>
+                        <xsl:copy-of select="$fileIcon" />
+                    </xsl:element>
+                    <xsl:text> </xsl:text>
+
+                    <xsl:element name="a">
+                        <xsl:attribute name="href">
+                            <xsl:copy-of select="$fileLink" />
+                        </xsl:attribute>
+                        <xsl:copy-of select="$fileLinkText" />
+                    </xsl:element>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:copy-of select="$fileIcon" />
+                    <xsl:text> </xsl:text>
+                    <xsl:copy-of select="$fileLinkText" />
+                </xsl:otherwise>
+            </xsl:choose>
+
             <xsl:if test="@Comment">
+                    <xsl:text> </xsl:text>
                     <xsl:element name="p">
                         <xsl:value-of select="@Comment" />
                     </xsl:element>
