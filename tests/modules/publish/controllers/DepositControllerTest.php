@@ -69,10 +69,10 @@ class Publish_DepositControllerTest extends ControllerTestCase {
                     'back' => ''
                 ));
 
-//        $this->dispatch('/publish/deposit/deposit');
-//        $this->assertResponseCode(200);
-//        $this->assertController('form');
-//        $this->assertAction('check');
+        $this->dispatch('/publish/deposit/deposit');
+        $this->assertResponseCode(200);
+        $this->assertController('form');
+        $this->assertAction('check');
     }
 
     /**
@@ -85,8 +85,7 @@ class Publish_DepositControllerTest extends ControllerTestCase {
             1 => array('name' => 'PersonSubmitterFirstName1', 'value' => 'Hans'),
             2 => array('name' => 'PersonSubmitterLastName1', 'value' => 'Hansmann'),
             3 => array('name' => 'PersonSubmitterEmail1', 'value' => 'test@mail.com'),
-            4 => array('name' => 'CompletedDate', 'value' => '2011/03/03'),
-            5 => array('name' => 'CompletedDate', 'value' => '2011/03/03'),
+            4 => array('name' => 'CompletedDate', 'value' => '2011/03/03'),            
             5 => array('name' => 'EnrichmentLegalNotices', 'value' => '1'),
             6 => array('name' => 'TitleMain1', 'value' => 'Irgendwas'),
             7 => array('name' => 'TitleMainLanguage1', 'value' => 'deu')
@@ -139,10 +138,10 @@ class Publish_DepositControllerTest extends ControllerTestCase {
             18 => array('name' => 'IdentifierUrn', 'value' => 'blablup987'),
             19 => array('name' => 'Institute', 'value' => ''),
             20 => array('name' => 'ThesisGrantor', 'value' => 'ID:1'),
-            21 => array('name' => 'SubjectMSC1', 'value' => '00A09'),
+            21 => array('name' => 'SubjectMSC1', 'value' => 'ID:8030'),
             22 => array('name' => 'SubjectSwd1', 'value' => 'hallo098'),
             23 => array('name' => 'ThesisPublisher', 'value' => 'ID:1'),
-            24 => array('name' => 'SubjectPACS1', 'value' => '11.15.Bt'),
+            24 => array('name' => 'SubjectPACS1', 'value' => 'ID:2878'),
             25 => array('name' => 'IdentifierOld', 'value' => 'blablup987'),
             26 => array('name' => 'IdentifierSerial', 'value' => 'blablup987'),
             27 => array('name' => 'IdentifierUuid', 'value' => 'blablup987'),
@@ -176,13 +175,13 @@ class Publish_DepositControllerTest extends ControllerTestCase {
         $this->request
                 ->setMethod('POST')
                 ->setPost(array(
-                    'send' => 'Abspeichern'
+                    'send' => 'Save document'
                 ));
 
-//        $this->dispatch('/publish/deposit/deposit');
-//        $this->assertResponseCode(302);
-//        $this->assertController('deposit');
-//        $this->assertAction('deposit');
+        $this->dispatch('/publish/deposit/deposit');
+        $this->assertResponseCode(302);
+        $this->assertController('deposit');
+        $this->assertAction('deposit');
     }
 
     public function testConfirmAction() {

@@ -73,10 +73,10 @@ class Publish_FormControllerTest extends ControllerTestCase {
                     'send' => 'Next step'
                 ));
 
-//        $this->dispatch('/publish/form/check');
-//        $this->assertResponseCode(302);
-//        $this->assertController('form');
-//        $this->assertAction('check');
+        $this->dispatch('/publish/form/check');
+        $this->assertResponseCode(200);
+        $this->assertController('form');
+        $this->assertAction('check');
     }
     
     
@@ -166,13 +166,12 @@ class Publish_FormControllerTest extends ControllerTestCase {
      * Add Button was pressed and the post is valid
      */
     public function testCheckActionWithValidPostAndAddButton() {
-        $session = new Zend_Session_Namespace('Publish');
-        $session->unsetAll();
+        $session = new Zend_Session_Namespace('Publish');        
         $session->documentType = 'preprint';
-        $session->documentId = '900';
+        $session->documentId = '950';
         $session->fulltext = '0';
         $session->additionalFields = array();
-
+        
         $this->request
                 ->setMethod('POST')
                 ->setPost(array(
@@ -190,7 +189,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
                     'PersonAuthorAllowEmailContact1' => '0',
                     'PersonAuthorDateOfBirth1' => '',
                     'PersonAuthorPlaceOfBirth1' => '',
-                    'CompletedDate' => '2011/02/22',
+                    'CompletedDate' => '20.04.2011',
                     'PageNumber' => '',
                     'SubjectUncontrolled1' => '',
                     'Institute' => '',
@@ -198,13 +197,15 @@ class Publish_FormControllerTest extends ControllerTestCase {
                     'Note' => '',
                     'Language' => 'deu',
                     'Licence' => 'ID:4',
-                    'addMoreTitleMain' => 'Einen weiteren Titel hinzufügen'
+                    'Series1' => '',
+                    'SeriesNumber1' => '',
+                    'addMoreTitleMain' => 'Add one more main title'
                 ));
-
-//        $this->dispatch('/publish/form/check');
-//        $this->assertResponseCode(200);
-//        $this->assertController('form');
-//        $this->assertAction('check');
+                       
+        $this->dispatch('/publish/form/check');
+        $this->assertResponseCode(200);
+        $this->assertController('form');
+        $this->assertAction('check');       
     }
     
     /**
