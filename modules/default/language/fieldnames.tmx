@@ -633,34 +633,7 @@
         <seg>Ausgabe / Heft</seg>
       </tuv>
     </tu>
-    
-    <tu tuid="NonInstituteAffiliation">
-      <tuv xml:lang="en">
-        <seg>Non-Institute Affiliation</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Nicht-instititutionelle Beziehung</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="add_NonInstituteAffiliation">
-      <tuv xml:lang="en">
-        <seg>add Non-Institute Affiliation</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Nicht-instititutionelle Beziehung hinzufügen</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="remove_NonInstituteAffiliation">
-      <tuv xml:lang="en">
-        <seg>remove Non-Institute Affiliation</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Nicht-instititutionelle Beziehung entfernen</seg>
-      </tuv>
-    </tu>
-    
+       
     <tu tuid="PageFirst">
       <tuv xml:lang="en">
         <seg>First Page</seg>
@@ -685,15 +658,6 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Seitenzahl</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="Pages_from_to">
-      <tuv xml:lang="en">
-        <seg>Pages (from-to)</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Seiten (von-bis)</seg>
       </tuv>
     </tu>
     
@@ -1329,28 +1293,28 @@
      
 	<tu tuid="IdentifierSerial">
       <tuv xml:lang="en">
-        <seg>SICI</seg>
+        <seg>Serial Number</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>SICI</seg>
+        <seg>Bandnummer</seg>
       </tuv>
     </tu>
 
     <tu tuid="add_IdentifierSerial">
       <tuv xml:lang="en">
-        <seg>add SICI</seg>
+        <seg>add Serial Number</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>SICI hinzufügen</seg>
+        <seg>Bandnummer hinzufügen</seg>
       </tuv>
     </tu>
         
     <tu tuid="remove_IdentifierSerial">
       <tuv xml:lang="en">
-        <seg>remove SICI</seg>
+        <seg>remove Serial Number</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>SICI entfernen</seg>
+        <seg>Bandnummer entfernen</seg>
       </tuv>
     </tu>
 	
