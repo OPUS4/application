@@ -99,9 +99,12 @@ fi
 #Backup old fulltexts and log files
 TEMP_DIR=$(mktemp -d $workspace_tmp_dir/old-XXXXXXX)
 mkdir -v $TEMP_DIR/{files,log}
-test -d $workspace_files_dir && rsync -rv --exclude=.svn --exclude=error/ $workspace_files_dir/ $TEMP_DIR/files
-test -d $workspace_log_dir && rsync -rv --exclude=.svn $workspace_log_dir/ $TEMP_DIR/log
-rm -rf {$workspace_files_dir,$workspace_log_dir}
+mv $workspace_files_dir/ $TEMP_DIR/files
+rm -rf $TEMP_DIR/files/{.svn,error}
+
+mv $workspace_log_dir/ $TEMP_DIR/log
+rm -rf $TEMP_DIR/log/.svn
+ 
 cd $workspace_dir
 svn up
 cd -
