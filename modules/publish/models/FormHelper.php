@@ -388,14 +388,8 @@ class Publish_Model_FormHelper {
      * @return <String> name of button
      */
     private function _getPressedButton() {
-        $pressedButton = "";
+        $pressedButtonName = "";
         foreach ($this->form->getElements() AS $element) {
-//            if ($element->getType() === 'Zend_Form_Element_Submit' && $element->isChecked()) {
-//                $this->log->debug('Following Button Is Checked: ' . $element->getName());
-//                $pressedButton = $element;
-//                $pressedButtonName = $pressedButton->getName();
-//                break;
-//            }
             $name = $element->getName();
             if (strstr($name, 'addMore') || strstr($name, 'deleteMore') || strstr($name, 'browseDown') || strstr($name, 'browseUp')) {                
                 $value = $element->getValue();               

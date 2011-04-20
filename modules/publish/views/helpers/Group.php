@@ -112,23 +112,25 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                 switch ($field['type']) {
 
                     case "Zend_Form_Element_Text":
-                        if (!array_key_exists($field['id'], $this->session->endOfCollectionTree)) {
-                            $fieldset .= "\n\t\t\t\t<input type='text' class='form-textfield' name='" . $field['id'] . "' id='" . $field['id'] . "' ";
-                            if ($options !== null)
-                                $fieldset .= $options . " ";
-                            else
-                                $fieldset .= "size='30' ";
+                        if (!is_null($this->session->endOfCollectionTree)) {
+                            if (!array_key_exists($field['id'], $this->session->endOfCollectionTree)) {
+                                $fieldset .= "\n\t\t\t\t<input type='text' class='form-textfield' name='" . $field['id'] . "' id='" . $field['id'] . "' ";
+                                if ($options !== null)
+                                    $fieldset .= $options . " ";
+                                else
+                                    $fieldset .= "size='30' ";
 
-                            if ($field["disabled"] === true) {
-                                $fieldset .= " disabled='1' ";                                
+                                if ($field["disabled"] === true) {
+                                    $fieldset .= " disabled='1' ";
+                                }
+
+                                if (strstr($field["id"], "1"))
+                                    $fieldset .= " title='" . $this->view->translate($field["hint"]) . "' ";
+                                $fieldset .= " value='" . htmlspecialchars($field["value"]) . "' />\n";
+
+                                if (isset($field['desc']))
+                                    $fieldset .= '<div class="description hint">' . $this->view->translate($field['desc']) . '</div>';
                             }
-
-                            if (strstr($field["id"], "1"))
-                                $fieldset .= " title='" . $this->view->translate($field["hint"]) . "' ";
-                            $fieldset .= " value='" . htmlspecialchars($field["value"]) . "' />\n";
-
-                            if (isset($field['desc']))
-                                $fieldset .= '<div class="description hint">' . $this->view->translate($field['desc']) . '</div>';
                         }
                         break;
 
@@ -151,8 +153,8 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                         if (strstr($field['id'], '1'))
                             $fieldset .= ' title="' . $this->view->translate($field['hint']) . '"';
                         if ($field["disabled"] === true) {
-                                $fieldset .= ' disabled="1" ';                               
-                            }
+                            $fieldset .= ' disabled="1" ';
+                        }
                         $fieldset .= '>' . "\n\t\t\t\t\t";
 
                         foreach ($field['options'] AS $key => $option) {
