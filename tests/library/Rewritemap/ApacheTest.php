@@ -175,7 +175,6 @@ class Rewritemap_ApacheTest extends PHPUnit_Framework_TestCase {
      * @return void
      */
     public function testRewriteCallWithKnownFileReturns403ErrorWithSecurity() {
-        $this->markTestSkipped('TODO');
         $this->bootstrapFramework();
         $rwm = new Rewritemap_Apache;
 
@@ -266,7 +265,6 @@ class Rewritemap_ApacheTest extends PHPUnit_Framework_TestCase {
      * @return void
      */   
     public function testGotRequestLogMessage() {
-        $this->markTestSkipped('TODO');
         $logWriter = new Zend_Log_Writer_Mock();
         $log = new Zend_Log($logWriter);
         $rwm = new Rewritemap_Apache($this->mockConfig('/foobar'), $log);
