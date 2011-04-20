@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -28,11 +28,17 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Julian Heise <heise@zib.de>
+ * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id: $
  */
 
+/**
+ * Controller for managing role access to documents and modules.
+ *
+ * TODO implement assigning documents to roles
+ */
 class Admin_AccessController extends Controller_Action {
 
     public function listroleAction() {
@@ -72,7 +78,7 @@ class Admin_AccessController extends Controller_Action {
 
         $this->storeModules($this->getRequest());
         
-        $this->view->redirect = array('module'=>'admin','controller'=>'role','action'=>'show','roleid'=>$id);
+        $this->view->redirect = array('module'=>'admin','controller'=>'role','action'=>'show','id'=>$id);
         if($save != null) {
             $this->view->submit = 'access_submit_save';
             $this->view->message = 'access_save_message';

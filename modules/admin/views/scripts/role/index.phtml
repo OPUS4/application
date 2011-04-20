@@ -31,6 +31,8 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+
+// TODO move url creation into controller
 ?>
 
 <div class="adminContainer">
@@ -52,6 +54,11 @@
             <?PHP if (!in_array($role, $this->protectedRoles)) : ?>
                 <a href="<?= $this->url(array('action' => 'delete', 'id' => $id)) ?>"><?= $this->translate('admin_form_action_delete') ?></a>
             <?PHP endif; ?>
+            <a href="<?= $this->url(array(
+                'module' => 'admin',
+                'controller' => 'access',
+                'action' => 'listmodule',
+                'roleid' => $id))?>"><?= $this->translate('admin_role_edit_access') ?></a>
         </td>
     </tr>
     <? endforeach; ?>

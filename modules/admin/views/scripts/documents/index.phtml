@@ -108,10 +108,13 @@
             <td class="doctype">
                 <span class="doctype"><?= $document->getDocType() ?></span>
             </td>
+            <?PHP if (!empty($this->collection)) : ?>
+            <td class="">
+                <span class=""><?= $document->getDocState() ?></span>
+            </td>
+            <?PHP endif; ?>
             <td class="actions">
                 <a href="<?= $document->getUrlShow() ?>"><?= $this->translate('docs_show') ?></a>
-                <a href="<?= $document->getUrlEdit() ?>"><?= $this->translate('docs_edit') ?></a>
-                <a href="<?= $document->getUrlDelete() ?>"><?= $this->translate(($document->isDeleted()) ? 'docs_permadelete' : 'docs_delete') ?></a>
             </td>
         </tr>
         <?PHP endforeach; ?>
