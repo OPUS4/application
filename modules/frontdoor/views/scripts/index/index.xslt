@@ -89,7 +89,7 @@
         </div>
         
         <div id="services" class="services-menu">
-            <xsl:if test="normalize-space(File/@PathName)">
+            <xsl:if test="normalize-space(File/@PathName) and File[@VisibleInFrontdoor='1']">
                 <div id="download-fulltext" class="services">
                     <h3>
                         <xsl:call-template name="translateString">
@@ -97,10 +97,7 @@
                         </xsl:call-template>
                     </h3>
                     <ul>
-                        <!--
                         <xsl:apply-templates select="File[@VisibleInFrontdoor='1']" />
-                        -->
-                        <xsl:apply-templates select="File"/>
                     </ul>
                 </div>
             </xsl:if>
@@ -715,7 +712,14 @@
                     <xsl:text>/</xsl:text>
                     <xsl:value-of select="@PathName" />
                 </xsl:attribute>
-                <xsl:value-of select="@Label" />
+                <xsl:choose>
+                    <xsl:when test="normalize-space(@Label)">
+                        <xsl:value-of select="@Label" />
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="@PathName" />
+                    </xsl:otherwise>
+                </xsl:choose>
                 <xsl:if test="@FileSize">
                     <xsl:text> (</xsl:text>
                     <xsl:value-of select="round(@FileSize div 1024)" />
