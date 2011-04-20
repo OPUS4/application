@@ -49,7 +49,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
     protected $sortingOptions = array('id', 'title', 'author',
         'publicationDate', 'docType');
 
-    protected $docOptions = array(/* 'all', */ 'published', 'unpublished', 'deleted', 'inprogress', 'restricted');
+    protected $docOptions = array(/* 'all', */ 'unpublished', 'inprogress', 'published', 'restricted', 'deleted');
 
     /**
      * Returns a filtered representation of the document.
