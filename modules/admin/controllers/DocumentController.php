@@ -118,7 +118,7 @@ class Admin_DocumentController extends Controller_Action {
         }
         else {
             // missing or bad parameter => go back to main page
-            $this->_helper->redirector('index', null, 'documents', 'admin');
+            $this->_redirectTo('index', null, 'documents', 'admin');
         }
     }
 
@@ -162,11 +162,22 @@ class Admin_DocumentController extends Controller_Action {
                     }
                 }
 
-                // TODO add model to document (see old Form_Builder)
+                // TODO implement for other models
+                $document->addIdentifier($model);
+
+                $document->store();
             }
+
+            $this->_redirectTo('edit', null, 'document', 'admin', array(
+                'id' => $id,
+                'section' => $section
+            ));
         }
         else {
-
+            // TODO What if there is no $id?
+            $this->_redirectTo('index', null, 'document', 'admin', array(
+                'id' => $id
+            ));
         }
     }
 
