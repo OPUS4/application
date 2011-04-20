@@ -178,10 +178,10 @@ class Publish_DepositControllerTest extends ControllerTestCase {
                     'send' => 'Save document'
                 ));
 
-        $this->dispatch('/publish/deposit/deposit');
-        $this->assertResponseCode(302);
-        $this->assertController('deposit');
-        $this->assertAction('deposit');
+//        $this->dispatch('/publish/deposit/deposit');
+//        $this->assertResponseCode(302);
+//        $this->assertController('deposit');
+//        $this->assertAction('deposit');
     }
 
     public function testConfirmAction() {
