@@ -50,6 +50,12 @@ abstract class Admin_Form_RolesAbstract extends Zend_Form {
             $roleName = $role->getDisplayName();
             $roleCheckbox = $this->createElement('checkbox',
                     'role' . $roleName)->setLabel($roleName);
+            
+            // TODO special code to handle role 'guest': Is that good?
+            if ($roleName === 'guest' ) {
+                $roleCheckbox->setValue(1);
+                $roleCheckbox->setAttrib('disabled', true);
+            }
             $this->addElement($roleCheckbox);
             $rolesGroup[] = $roleCheckbox->getName();
         }
@@ -95,6 +101,8 @@ abstract class Admin_Form_RolesAbstract extends Zend_Form {
     /**
      * Sets checkboxes for roles according to provided array.
      * @param array $roles
+     *
+     * TODO uncheck all others (expected behaviour?)
      */
     public function setSelectedRoles($roles) {
         foreach ($roles as $roleName) {
