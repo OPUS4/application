@@ -72,7 +72,8 @@ class Admin_Form_IpRangeTest extends ControllerTestCase {
         $form->setSelectedRoles($roles);
 
         $this->assertEquals(1, $form->getElement('roleadministrator')->getValue());
-        $this->assertEquals(0, $form->getElement('roleguest')->getValue());
+        // TODO 'guest' is always selected because of policy
+        $this->assertEquals(1, $form->getElement('roleguest')->getValue());
     }
 
 }
