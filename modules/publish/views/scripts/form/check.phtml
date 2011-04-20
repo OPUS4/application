@@ -102,15 +102,13 @@
 </table>
 
 <?= $this->fileOverview(); ?>
-<?= $this->collectionOverview(); ?>
+
 </div>
 
 <form enctype="application/x-www-form-urlencoded" action="<?= $this->action_url; ?>" method="post">
     <?php //$session->chooseSpecialCollection = "institutes, projects"; ?>
     <div class="button-wrapper">
-        <?= $this->element('button_label_back', "class='form-button abort-button'", "Submit", "back"); ?>
-        <!--<?= $this->element('button_label_special_collection', "class='form-button add-button'", "Submit", "collection"); ?>-->
-        <?= $this->element('button_label_collection', "class='form-button add-button'", "Submit", "collection"); ?>
+        <?= $this->element('button_label_back', "class='form-button abort-button'", "Submit", "back"); ?>        
         <?= $this->element('button_label_send2', "class='form-button submit-button'", "Submit", "send"); ?>
     </div>
 </form>
