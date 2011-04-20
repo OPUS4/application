@@ -96,6 +96,8 @@ class Rewritemap_Apache {
      * @return string target path, if any.
      */
     private function parseRequestArgumentString($arguments = null) {
+        $this->_logger->info("got request '$arguments'");
+
         // check input
         if (!is_string($arguments)) {
             return null;
@@ -141,14 +143,13 @@ class Rewritemap_Apache {
 
         $docId = $request[0];
         $path = $request[1];
-        $this->_logger->err("Got path: $path and docId: $docId...");
 
         // check input: docId should only be numbers, path should not contain ../
         if ((mb_strlen($docId) < 1) ||
                 (mb_strlen($path) < 1) ||
                 (preg_match('/^[\d]+$/', $docId) === 0) ||
                 (preg_match('/\.\.\//', $path) === 1)) {
-            $this->_logger->err("Got path: $path and docId: $docId, will send "
+            $this->_logger->err("Error: Got path: $path and docId: $docId, will send "
                     . $this->_targetPrefix . "/error/send403.php'");
             return $this->_targetPrefix . "/error/send403.php"; // Forbidden, independent from authorization.
         }

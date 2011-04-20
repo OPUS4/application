@@ -181,7 +181,7 @@ class Rewritemap_ApacheTest extends PHPUnit_Framework_TestCase {
         $config = Zend_Registry::get('Zend_Config');
         $config->security = '1';
 
-        $this->assertEquals('/files/error/send403.php', $rwm->rewriteRequest("41\tDissertation_Pick.pdf\t"),
+        $this->assertEquals('/files/error/send403.php', $rwm->rewriteRequest("93\ttest.txt\t"),
                 'Wrong error status file URL for protected file in request.');
     }
 

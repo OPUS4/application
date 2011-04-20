@@ -57,7 +57,7 @@ INSERT INTO `document_files` (`id`, `document_id`, `path_name`, `label`, `mime_t
 INSERT INTO `access_files` (`role_id`, `file_id`) VALUES
 (2, 116),
 (2, 117),
-(2, 118),
+(4, 118),
 (2, 119),
 (2, 120);
 
