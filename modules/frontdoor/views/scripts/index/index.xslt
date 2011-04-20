@@ -151,21 +151,21 @@
             <xsl:apply-templates select="@Language" />
 
             <xsl:choose>
-                <xsl:when test="normalize-space(CompletedDate/@Year) != '0000'">
+                <xsl:when test="string-length(normalize-space(CompletedDate/@Year)) > 0">
                     <xsl:apply-templates select="CompletedDate" />
                 </xsl:when>
-                <xsl:otherwise>
+                <xsl:when test="normalize-space(@CompletedYear) != '0000'">
                     <xsl:apply-templates select="@CompletedYear" />
-                </xsl:otherwise>
+                </xsl:when>
             </xsl:choose>
 
             <xsl:choose>
-                <xsl:when test="normalize-space(PublishedDate/@Year) != '0000'">
+                <xsl:when test="string-length(normalize-space(PublishedDate/@Year)) > 0">
                     <xsl:apply-templates select="PublishedDate" />
                 </xsl:when>
-                <xsl:otherwise>
+                <xsl:when test="normalize-space(@PublishedYear) != '0000'">
                     <xsl:apply-templates select="@PublishedYear" />
-                </xsl:otherwise>
+                </xsl:when>
             </xsl:choose>
 
             <xsl:apply-templates select="DateAccepted" />
