@@ -149,10 +149,10 @@
         
     <tu tuid="frontdoor_recommendationtext">
       <tuv xml:lang="en">
-        <seg>Please fill out this form to mail the URL of this document and a short message. Please note: Your name and your e-mail address are helpful to jugde the reliability of this e-mail. All marked fields are mandatory.</seg>
+        <seg>Please fill out this form to mail the URL of this document and a short message. Please note: Your name and your email address are helpful to jugde the reliability of this email. All marked fields are mandatory.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Um die Adresse (URL) dieses Dokuments und eine kurze Mitteilung zu versenden, füllen Sie bitte die untenstehenden Felder aus. Bitte beachten Sie: Die Angabe Ihres Namens und Ihrer E-mail-Adresse helfen dem Empfänger die Seriösität dieser E-mail einzuschätzen. Bitte beachten Sie: Die markierten Felder müssen ausgefüllt werden.</seg>
+        <seg>Um die Adresse (URL) dieses Dokuments und eine kurze Mitteilung zu versenden, füllen Sie bitte die untenstehenden Felder aus. Bitte beachten Sie: Die Angabe Ihres Namens und Ihrer E-Mail-Adresse helfen dem Empfänger die Seriösität dieser E-Mail einzuschätzen. Bitte beachten Sie: Die markierten Felder müssen ausgefüllt werden.</seg>
       </tuv>
     </tu>
     
@@ -179,16 +179,16 @@
         <seg>Email was send.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>E-mail wurde verschickt.</seg>
+        <seg>E-Mail wurde verschickt.</seg>
       </tuv>
     </tu>
     
     <tu tuid="frontdoor_mail_notok">
       <tuv xml:lang="en">
-        <seg>E-mail could not be send.</seg>
+        <seg>Email could not be send.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>E-mail konnte nicht versendet werden.</seg>
+        <seg>E-Mail konnte nicht versendet werden.</seg>
       </tuv>
     </tu>
     
@@ -284,10 +284,10 @@
     
     <tu tuid="frontdoor_sendersmail">
       <tuv xml:lang="en">
-        <seg>Senders E-mail address</seg>
+        <seg>Senders email address</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>E-mail-Adresse des Absenders</seg>
+        <seg>E-Mail-Adresse des Absenders</seg>
       </tuv>
     </tu>
     
@@ -536,7 +536,7 @@
  
     <tu tuid="frontdoor_mailform_notallowed">
       <tuv xml:lang="en">
-        <seg>E-Mail contact not allowed</seg>
+        <seg>Email contact not allowed</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Mailkontakt nicht erlaubt</seg>
