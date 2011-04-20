@@ -176,10 +176,10 @@
        
     <tu tuid="frontdoor_mail_ok">
       <tuv xml:lang="en">
-        <seg>E-mail was send.</seg>
+        <seg>Email was send.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>E-mail wurde versand.</seg>
+        <seg>E-mail wurde verschickt.</seg>
       </tuv>
     </tu>
     
