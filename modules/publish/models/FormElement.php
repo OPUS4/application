@@ -93,7 +93,7 @@ class Publish_Model_FormElement {
                 $this->group = new Publish_Model_DisplayGroup($this->elementName, $this->form, $this->multiplicity);
                 if (isset($this->collectionRole)) {
                     $this->group->isBrowseField = true;
-                    $this->group->collectionIds[] = $this->collectionId;                    
+                    $this->group->collectionIds[] = $this->collectionId;
                 }
 
                 if ($this->isPersonElement()) {
@@ -104,7 +104,7 @@ class Publish_Model_FormElement {
                     $implicitFields = $this->implicitFields('Title');
                     $this->addSubFormElements($implicitFields);
                 }
-                 else if ($this->isSeriesElement()) {
+                else if ($this->isSeriesElement()) {
                     $implicitFields = $this->implicitFields('Series');
                     $this->addSubFormElements($implicitFields);
                     $this->group->implicitGroup = true;
@@ -114,7 +114,7 @@ class Publish_Model_FormElement {
                 }
 
                 $this->group->setAdditionalFields($this->additionalFields);
-                $this->group->setSubFields($this->subFormElements);                
+                $this->group->setSubFields($this->subFormElements);
                 if (isset($this->collectionRole))
                     $this->group->makeBrowseGroup();
                 else
@@ -166,10 +166,10 @@ class Publish_Model_FormElement {
                 $select->isSubField = true;
                 $select->collectionRole = $this->collectionRole;
                 $select->collectionId = $this->collectionId;
-                $select->validationObject->collectionRole=$this->collectionRole;
+                $select->validationObject->collectionRole = $this->collectionRole;
                 $select->setDefaultValue($this->default);
                 $element = $select->transform();
-                
+
                 return array($elementNumber, $element);
                 break;
 
@@ -245,10 +245,10 @@ class Publish_Model_FormElement {
     public function transform() {
         if (isset($this->form)) {
 
-            if (false === $this->isSelectElement()) {                
+            if (false === $this->isSelectElement()) {
                 $element = $this->form->createElement($this->formElement, $this->elementName);
             }
-            else {                
+            else {
                 if (is_null($this->listOptions) || empty($this->listOptions)) {
                     $options = $this->validationObject->selectOptions($this->datatype);
                 }
@@ -372,11 +372,13 @@ class Publish_Model_FormElement {
     public function setCurrentCollectionId($setRoot=false) {
         if (!$setRoot) {
             $collectionRole = Opus_CollectionRole::fetchByOaiName($this->collectionRole);
-            $rootCollection = $collectionRole->getRootCollection();
-            if (!is_null($rootCollection)) {
-                $collectionId = $rootCollection->getId();
-                $this->log->debug("CollectionRoot: " . $this->collectionRole . " * CollectionId: " . $collectionId);
-                $this->collectionId = $collectionId;
+            if (!is_null($collectionRole)) {
+                $rootCollection = $collectionRole->getRootCollection();
+                if (!is_null($rootCollection)) {
+                    $collectionId = $rootCollection->getId();
+                    $this->log->debug("CollectionRoot: " . $this->collectionRole . " * CollectionId: " . $collectionId);
+                    $this->collectionId = $collectionId;
+                }
             }
         }
     }

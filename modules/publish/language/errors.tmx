@@ -118,10 +118,10 @@
 
     <tu tuid="fileUploadErrorFormSize">
         <tuv xml:lang="en">
-            <seg>Your file in field %value% exceeds the defined form size.</seg>
+            <seg>Your file exceeds the defined size.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Ihre Datei im Feld %value% übersteigt die definierte Formulargröße.</seg>
+            <seg>Ihre Datei übersteigt die erlaubte Größe.</seg>
         </tuv>
     </tu>
 

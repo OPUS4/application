@@ -244,7 +244,7 @@ class Publish_Model_FormHelper {
             else {
                 //"normal" element name without changes
                 $name = $element;
-            }           
+            }
         }
         return $name;
     }
@@ -291,7 +291,7 @@ class Publish_Model_FormHelper {
      * @return <View>
      */
     public function getExtendedForm($postData=null, $reload=true) {
-        $this->session->currentAnchor = "";        
+        $this->session->currentAnchor = "";
         if ($reload === true) {
             //find out which button was pressed
             $pressedButtonName = $this->_getPressedButton();
@@ -314,7 +314,7 @@ class Publish_Model_FormHelper {
 
             $currentNumber = $this->session->additionalFields[$fieldName];
             if (array_key_exists('step' . $fieldName . $currentNumber, $this->session->additionalFields)) {
-                $currentCollectionLevel = $this->session->additionalFields['step' . $fieldName . $currentNumber];                
+                $currentCollectionLevel = $this->session->additionalFields['step' . $fieldName . $currentNumber];
                 if ($currentCollectionLevel == '1') {
                     if (isset($postData[$fieldName . $currentNumber]))
                         $this->session->additionalFields['collId1' . $fieldName . $currentNumber] = substr($postData[$fieldName . $currentNumber], 3);
@@ -349,12 +349,11 @@ class Publish_Model_FormHelper {
                 case 'delete':
                     if ($currentNumber > 1) {
                         if (isset($currentCollectionLevel)) {
-                            for ($i=0; $i<=$currentCollectionLevel; $i++)
-                                $this->session->additionalFields['collId'.$i.$fieldName.$currentNumber] = "";
+                            for ($i = 0; $i <= $currentCollectionLevel; $i++)
+                                $this->session->additionalFields['collId' . $i . $fieldName . $currentNumber] = "";
                         }
                         //remove one more field, only down to 0
                         $currentNumber = (int) $currentNumber - 1;
-
                     }
                     break;
                 case 'down':
@@ -391,15 +390,21 @@ class Publish_Model_FormHelper {
     private function _getPressedButton() {
         $pressedButton = "";
         foreach ($this->form->getElements() AS $element) {
-            if ($element->getType() === 'Zend_Form_Element_Submit' && $element->isChecked()) {
-                $this->log->debug('Following Button Is Checked: ' . $element->getName());
-                $pressedButton = $element;
-                $pressedButtonName = $pressedButton->getName();
-                break;
+//            if ($element->getType() === 'Zend_Form_Element_Submit' && $element->isChecked()) {
+//                $this->log->debug('Following Button Is Checked: ' . $element->getName());
+//                $pressedButton = $element;
+//                $pressedButtonName = $pressedButton->getName();
+//                break;
+//            }
+            $name = $element->getName();
+            if (strstr($name, 'addMore') || strstr($name, 'deleteMore') || strstr($name, 'browseDown') || strstr($name, 'browseUp')) {                
+                $value = $element->getValue();               
+                if (!is_null($value))
+                    $pressedButtonName = $name;
             }
         }
 
-        if ($pressedButton == "")
+        if ($pressedButtonName == "")
             throw new Publish_Model_OpusServerException("No pressed button found! Possibly the values of the buttons are not equal in the view and Publish class.");
         else
             return $pressedButtonName;

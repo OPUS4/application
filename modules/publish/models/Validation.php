@@ -386,18 +386,20 @@ class Publish_Model_Validation {
 
     private function _collectionSelect() {
         $browsingHelper1 = new Solrsearch_Model_CollectionRoles();
-        $collectionRole = Opus_CollectionRole::fetchByOaiName($this->collectionRole);        
+        $collectionRole = Opus_CollectionRole::fetchByOaiName($this->collectionRole);
         $children = array();
-        if ($browsingHelper1->hasVisibleChildren($collectionRole)) {
-            $collectionId = $collectionRole->getRootCollection()->getId();
-            $collection = new Opus_Collection($collectionId);
-            $colls = $collection->getChildren();
+        if (!is_null($collectionRole)) {
+            if ($browsingHelper1->hasVisibleChildren($collectionRole)) {
+                $collectionId = $collectionRole->getRootCollection()->getId();
+                $collection = new Opus_Collection($collectionId);
+                $colls = $collection->getChildren();
 
-            foreach ($colls as $coll) {
-                if ($coll->getVisible() == 1)
-                    $children['ID:' . $coll->getId()] = $coll->getDisplayName();
+                foreach ($colls as $coll) {
+                    if ($coll->getVisible() == 1)
+                        $children['ID:' . $coll->getId()] = $coll->getDisplayName();
+                }
             }
-        }        
+        }
         return $children;
     }
 

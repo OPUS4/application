@@ -8,15 +8,6 @@
   <body>
 <!-- This language file contains all texts concerning field hints. -->
 
-    <tu tuid="hint_rights">
-        <tuv xml:lang="en">
-            <seg>Please confirm that you read and commit to the legal notices and <a href="home/index/help#policies">policies</a> of our document server.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Bitte bestätigen Sie, dass Sie die rechtlichen Hinweise sowie die <a href="home/index/help#policies">Leitlinien</a> unseres Dokumentenservers gelesen haben und damit einverstanden sind. </seg>
-        </tuv>
-    </tu>
-
     <tu tuid="hint_EnrichmentLegalNotices">
         <tuv xml:lang="en">
             <seg>Please confirm that you read and commit to the legal notices and <a href="home/index/help#policies">policies</a> of our document server.</seg>
@@ -108,6 +99,15 @@
         </tuv>
         <tuv xml:lang="de">
             <seg>Entschuldigung: Es wurden keine Sprachen in unserer Datenbank gefunden.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_no_selection_Project">
+        <tuv xml:lang="en">
+            <seg>Sorry: No projects have been found in our database.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Entschuldigung: Es wurden keine Projekte in unserer Datenbank gefunden.</seg>
         </tuv>
     </tu>
 
@@ -1242,7 +1242,7 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
 	
 	<tu tuid="hint_CompletedDate">
         <tuv xml:lang="en">
-            <seg>Please enter the date of the document's publishing in the format MM/DD/YYYY.</seg>
+            <seg>Please enter the date of the document's publishing in the format YYYY/MM/DD.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte das Veröffentlichungsdatum (online) des Dokuments im Format TT.MM.JJJJ ein.</seg>

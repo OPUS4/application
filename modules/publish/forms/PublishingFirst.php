@@ -56,10 +56,10 @@ class Publish_Form_PublishingFirst extends Zend_Form {
     }
 
     public function isValid($data) {
-        $valid1 = true;
+        $valid1 = true;        
         $valid2 = parent::isValid($data);
-
-        if (array_key_exists('rights', $data)) {            
+        
+        if (array_key_exists('rights', $data)) {
             if ($data['rights'] == '0') {
                 $rights = $this->getElement('rights');
                 $rights->addError('publish_error_rights_checkbox_empty');
@@ -171,10 +171,6 @@ class Publish_Form_PublishingFirst extends Zend_Form {
 
         //file upload field(s)
         $fileupload = new Zend_Form_Element_File('fileupload');
-        $validate = new Zend_Validate_File_Upload();
-        $messages = array(Zend_Validate_File_Upload::FORM_SIZE => 'publish_validation_error_person_invalid');
-        $validate->setMessages($messages);
-
         $fileupload->setLabel('fileupload')
                 ->setDestination($tempPath)
                 ->addValidator('Size', false, $maxFileSize)     // limit to value given in application.ini

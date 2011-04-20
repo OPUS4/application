@@ -232,13 +232,14 @@ class Publish_Model_DisplayGroup {
             }
         }
 
-        $isRoot = $collection->isRoot();
-        if (!$isRoot) {
+        $isRoot = $collection->isRoot();       
+        if (!$isRoot && !is_null($this->collectionIds[0])) {
             //Collection has parents -> make button to browse up
             $upButton = $this->addUpButtontoGroup();
             $this->form->addElement($upButton);
             $displayGroup[] = $upButton->getName();
         }
+
         return $displayGroup;
     }
 
@@ -255,15 +256,11 @@ class Publish_Model_DisplayGroup {
             $this->elements[] = $error;
             return;
         }
-
         if ($fieldset > 1)
             $this->collectionIds[] = $this->collectionIds[0];
         $this->session->additionalFields['collId0' . $this->elementName . $fieldset] = $this->collectionIds[0];
-
         $elements = array();
-        //found collection level for the current fieldset
-        //$step = $this->collectionStep($fieldset);
-
+        //found collection level for the current fieldset        
         for ($j = 2; $j <= $step; $j++) {
             $prev = (int) $j - 1;
             //get the previous selection collection id from session
@@ -273,7 +270,6 @@ class Publish_Model_DisplayGroup {
                 if ($id != '0' || !is_null($id)) {
                     //insert to array and geneerate field
                     $this->collectionIds[] = $id;
-                    //echo ('Show Collection with id ' . $id . " in field with name collId" . $j . $this->elementName . $fieldset . '<br>');
                     $selectfield = $this->collectionEntries((int) $id, $j, $fieldset);
                     if (!is_null($selectfield))
                         $this->elements[] = $selectfield;
@@ -317,7 +313,7 @@ class Publish_Model_DisplayGroup {
             foreach ($colls as $coll) {
                 $children['ID:' . $coll->getId()] = $coll->getDisplayName();
             }
-            $selectField->setMultiOptions($children);            
+            $selectField->setMultiOptions($children);
         }
         else {
             $selectField = $this->form->createElement('text', 'collId' . $step . $this->elementName . $fieldset);
