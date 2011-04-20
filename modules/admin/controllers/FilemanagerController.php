@@ -249,15 +249,15 @@ class Admin_FilemanagerController extends Controller_Action {
 
             $file->store();
 
-            $currentRoleNames = Admin_Model_FileHelper::getRolesForFile($file);
+            $currentRoleNames = Admin_Model_FileHelper::getRolesForFile($file->getId());
 
             $selectedRoleNames = Admin_Form_FileAccess::parseSelectedRoleNames($postData);
 
             // remove roles that are not selected
-            // TODO implement
-            foreach ($currentRoleNames as $roleName) {
+            foreach ($currentRoleNames as $index => $roleName) {
                 if (!in_array($roleName, $selectedRoleNames)) {
                     $role = Opus_UserRole::fetchByName($roleName);
+                    $role->removeAccessFile($file->getId());
                     $role->store();
                 }
             }
@@ -270,6 +270,7 @@ class Admin_FilemanagerController extends Controller_Action {
                 }
                 else {
                     $log->debug('add readFile to role ' . $roleName);
+                    $role->appendAccessFile($file->getId());
                     $role->store();
                 }
             }
