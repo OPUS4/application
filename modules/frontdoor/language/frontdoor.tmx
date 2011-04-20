@@ -173,25 +173,7 @@
         <seg>Empfehlung absenden</seg>
       </tuv>
     </tu>
-   
-    <tu tuid="frontdoor_contacttitle">
-      <tuv xml:lang="en">
-        <seg>Contact</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Kontakt</seg>
-      </tuv>
-    </tu>
-    
-     <tu tuid="frontdoor_contacttext">
-      <tuv xml:lang="en">
-        <seg>Please fill out this form to contact the author of this document and leave a short message. His agreement is on hand. All fat-marked fields are mandatory.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Hier können Sie den Autor per E-mail kontaktieren. Das Einverständnis des Autors liegt vor. Bitte tragen Sie Ihren Namen, E-mail Adresse und eine Mitteilung ein. Alle fett markierten Felder sind Pflichtfelder.</seg>
-      </tuv>
-    </tu>
-    
+       
     <tu tuid="frontdoor_mail_ok">
       <tuv xml:lang="en">
         <seg>E-mail was send.</seg>
