@@ -75,6 +75,10 @@
 	padding: 0;
 	list-style: none;
 }
+#download-fulltext{
+        word-wrap: break-word;
+}
+
 #download-fulltext li a img{
 	margin-right: 0.5em;
 }
@@ -525,15 +529,18 @@ body > #top-header{
 #content .wrapper{
 	font-size: 0.8em;
 }
-.opus .messages{
+.opus .messages,
+.opus .exceptionMessage {
 	font: 0.8em "Courier New", Courier, monospace;
 }
 .opus .failure,
+.opus .exceptionMessage,
 .opus .notice{
 	padding: 5px 10px;
 	margin: 0 0 1em;
 }
 .opus .messages .failure,
+.opus .exceptionMessage,
 .opus .form-hint.form-errors{
 	color: #a40000;
 	background-color: #ffd4d4;
