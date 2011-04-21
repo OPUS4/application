@@ -150,6 +150,33 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_account_module_access_summary">
+      <tuv xml:lang="en">
+        <seg>Summary of Module Access Rights</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Übersicht Modul-Zugriffsrechte</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_account_label_module">
+      <tuv xml:lang="en">
+        <seg>Module</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Modul</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_account_label_has_access">
+      <tuv xml:lang="en">
+        <seg>Has access?</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Hat Zugriff?</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_account_none_found">
       <tuv xml:lang="en">
         <seg>No arrounts are configured.</seg>

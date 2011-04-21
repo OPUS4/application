@@ -67,4 +67,25 @@
     </tr>
 </table>
 
+<h2><?= $this->translate('admin_account_module_access_summary') ?></h2>
+<table>
+    <tr>
+        <th><?= $this->translate('admin_account_label_module') ?></th>
+        <th><?= $this->translate('admin_account_label_has_access') ?></th>
+        <th><?= $this->translate('admin_account_label_roles') ?></th>
+    </tr>
+
+    <?php foreach ($this->allModules AS $module) : ?>
+      <tr><td><?= htmlspecialchars($module) ?></td>
+      <?php if (count($this->modulesRoles[$module]) > 0) : ?>
+        <td><b><?= $this->translate('answer_yes') ?></b></td>
+        <td><b><?= htmlspecialchars(implode(", ", $this->modulesRoles[$module])) ?></b></td>
+      <?php else : ?>
+        <td><?= $this->translate('answer_no') ?></td>
+        <td>-</td>
+      <?php endif ?>
+    <?php endforeach ?>
+</table>
+
 </div>
+

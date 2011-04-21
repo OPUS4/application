@@ -76,11 +76,14 @@ class Admin_AccessController extends Controller_Action {
             $this->view->guestModules = $guestModules;
         }
 
+        $moduleDirectory = dirname($this->getFrontController()->getModuleDirectory());
+        $modulesModel = new Admin_Model_Modules($moduleDirectory);
+
         $this->view->loginNames = $role->getAllAccountNames();
         $this->view->roleId = $role->getId();
         $this->view->roleName = $role->getName();
         $this->view->modules = $roleModules;
-        $this->view->allModules = $this->getAllModules();
+        $this->view->allModules = $modulesModel->getAll();
     }
 
     public function storeAction() {
@@ -166,20 +169,4 @@ class Admin_AccessController extends Controller_Action {
         return (strncmp($string, $prefix, strlen($prefix)) == 0);
     }
 
-    /**
-     * Iterates over module directories and return all module names
-     * @return array
-     */
-    private function getAllModules() {
-        $deadPaths = Array( ".", "..", ".svn");
-        $module_dir = substr(str_replace("\\","/",$this->getFrontController()->getModuleDirectory()),0,strrpos(str_replace("\\","/",$this->getFrontController()->getModuleDirectory()),'/'));
-        $temp = array_diff( scandir( $module_dir), $deadPaths);
-        $modules = array();
-        foreach ($temp as $module) {
-            if (is_dir($module_dir . "/" . $module)) {
-                $modules[] = $module;
-            }
-        }
-        return $modules;
-    }
 }

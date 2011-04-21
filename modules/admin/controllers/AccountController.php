@@ -73,11 +73,35 @@ class Admin_AccountController extends Controller_Action {
             $this->_logger->debug('Missing parameter account id.');
             $this->_helper->redirector('index');
         }
-        else {
-            $account = new Opus_Account($id);
-            $this->view->account = $account;
-            return $account;
+
+        $moduleDirectory = dirname($this->getFrontController()->getModuleDirectory());
+        $modulesModel = new Admin_Model_Modules($moduleDirectory);
+        $this->view->allModules = $modulesModel->getAll();
+
+        $account = new Opus_Account($id);
+        $this->view->account = $account;
+
+        $modulesRoles = array();
+        foreach ($this->view->allModules as $module) {
+            $modulesRoles[$module] = array();
         }
+
+        foreach ($account->getRole() AS $roleLinkModel) {
+            $role = $roleLinkModel->getModel();
+            $roleName = $role->getName();
+            $roleModules = $role->listAccessModules();
+
+            foreach ($roleModules as $module) {
+                if (!array_key_exists($module, $modulesRoles)) {
+                    $modulesRoles[$module] = array();
+                }
+
+                $modulesRoles[$module][] = $roleName;
+            }
+        }
+        $this->view->modulesRoles = $modulesRoles;
+
+        return $account;
     }
 
     /**
