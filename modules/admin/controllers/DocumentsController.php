@@ -93,8 +93,8 @@ class Admin_DocumentsController extends Controller_CRUDAction {
 
         $url_call_id = array(
             'module' => 'admin',
-            'controller' => 'documents',
-            'action' => 'show'
+            'controller' => 'document',
+            'action' => 'index'
         );
         $this->view->url_call_id = $this->view->url($url_call_id, 'default', true);
 
