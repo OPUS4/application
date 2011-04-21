@@ -6,6 +6,24 @@
 </header>
 
 <body>
+    <tu tuid="admin_access_listmodule">
+      <tuv xml:lang="en">
+        <seg>Access to Modules/Controllers</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zugriff auf Module/Controller</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_access_listrole">
+      <tuv xml:lang="en">
+        <seg>Access to Document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zugriff auf Dokument</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="access_select_module">
       <tuv xml:lang="en">
         <seg>Please select modules and controllers you would like to grant access to</seg>
