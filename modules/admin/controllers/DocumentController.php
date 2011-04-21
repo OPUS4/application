@@ -208,12 +208,15 @@ class Admin_DocumentController extends Controller_Action {
                         $document->addTitleAbstract($model);
                         break;
                     case 'Opus_Subject':
+                        $document->addSubject($model);
                         break;
                     case 'Opus_SubjectSwd':
+                        $document->addSubjectSwd($model);
                         break;
                     case 'Opus_Licence':
                         break;
                     case 'Opus_Patent':
+                        $document->addPatent($model);
                         break;
                     case 'Opus_Enrichment':
                         $document->addEnrichment($model);

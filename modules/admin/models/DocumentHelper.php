@@ -84,8 +84,7 @@ class Admin_Model_DocumentHelper {
             'PersonOther'
         ),
         'subjects' => array(
-            'Subject',
-            'SubjectSwd'
+            'Subject'
         ),
         'other' => array(
             'ContributingCorporation',

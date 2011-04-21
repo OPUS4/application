@@ -81,10 +81,10 @@
 
     <tu tuid="admin_document_section_subjects">
       <tuv xml:lang="en">
-        <seg>Subjects, Classifications, Collections</seg>
+        <seg>Subjects, Classifications</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Schlagwörter, Klassifikationen, Collections</seg>
+        <seg>Schlagwörter, Klassifikationen</seg>
       </tuv>
     </tu>
 
