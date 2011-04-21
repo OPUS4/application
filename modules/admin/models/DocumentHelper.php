@@ -57,7 +57,6 @@ class Admin_Model_DocumentHelper {
         ),
         'general' => array(
             'Language',
-            'ServerState',
             'Type'
         ),
         'thesis' => array(

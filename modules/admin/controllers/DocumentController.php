@@ -237,65 +237,77 @@ class Admin_DocumentController extends Controller_Action {
 
         if ($this->getRequest()->isPost()) {
             $postData = $this->getRequest()->getPost();
-            switch ($section) {
-                case 'general':
-                case 'misc':
-                case 'dates':
-                case 'other':
-                case 'thesis':
-                    $model = new Opus_Document($id);
-                    $fields = $postData['Opus_Document'];
-                    foreach ($fields as $fieldName => $value) {
-                        $field = $model->getField($fieldName);
-                        if (!empty($field)) {
-                            // TODO handle NULL
-                            switch ($field->getValueModelClass()) {
-                                case 'Opus_Date':
-                                    $dateFormat = Admin_Model_DocumentHelper::getDateFormat();
-                                    if (!empty($value)) {
-                                        $date = new Zend_Date($value);
-                                        $dateModel = new Opus_Date();
-                                        $dateModel->setZendDate($date);
-                                    }
-                                    else {
-                                        $dateModel = null;
-                                    }
-                                    $field->setValue($dateModel);
-                                    break;
-                                default:
-                                    $field->setValue($value);
-                                    break;
+            if (!array_key_exists('cancel', $postData)) {
+                switch ($section) {
+                    case 'general':
+                    case 'misc':
+                    case 'dates':
+                    case 'other':
+                    case 'thesis':
+                        $model = new Opus_Document($id);
+                        $fields = $postData['Opus_Document'];
+                        foreach ($fields as $fieldName => $value) {
+                            $field = $model->getField($fieldName);
+                            if (!empty($field)) {
+                                // TODO handle NULL
+                                switch ($field->getValueModelClass()) {
+                                    case 'Opus_Date':
+                                        $dateFormat = Admin_Model_DocumentHelper::getDateFormat();
+                                        if (!empty($value)) {
+                                            $date = new Zend_Date($value);
+                                            $dateModel = new Opus_Date();
+                                            $dateModel->setZendDate($date);
+                                        }
+                                        else {
+                                            $dateModel = null;
+                                        }
+                                        $field->setValue($dateModel);
+                                        break;
+                                    default:
+                                        $field->setValue($value);
+                                        break;
+                                }
                             }
                         }
-                    }
-                    $model->store();
-                    break;
-                default:
-                    $model = new Opus_Document($id);
-                    foreach ($postData as $fieldName => $modelData) {
-                        $field = $model->getField($fieldName);
-                        foreach ($modelData as $index => $modelValues) {
-                            $fieldValues = $field->getValue();
-                            if (array_key_exists('remove', $modelValues)) {
-                                unset($fieldValues[$index]);
-                                $field->setValue($fieldValues);
-                                break;
-                            }
-                            else {
-                                $this->populateModel($fieldValues[$index], $modelValues);
+                        $model->store();
+                        break;
+                    default:
+                        $model = new Opus_Document($id);
+                        foreach ($postData as $fieldName => $modelData) {
+                            $field = $model->getField($fieldName);
+                            foreach ($modelData as $index => $modelValues) {
+                                $fieldValues = $field->getValue();
+                                if (array_key_exists('remove', $modelValues)) {
+                                    unset($fieldValues[$index]);
+                                    $field->setValue($fieldValues);
+                                    break;
+                                }
+                                else {
+                                    $this->populateModel($fieldValues[$index], $modelValues);
+                                }
                             }
                         }
-                    }
-                    $model->store();
-                    break;
-            }
+                        $model->store();
+                        break;
+                }
 
-            $this->_redirectTo('edit', null, 'document', 'admin', array(
-                'id' => $id,
-                'section' => $section
-            ));
+                $this->_redirectTo('edit', null, 'document', 'admin', array(
+                    'id' => $id,
+                    'section' => $section
+                ));
+            }
+            else {
+                // TODO what if no $id
+                $this->_redirectTo('index', null, 'document', 'admin', array(
+                    'id' => $id
+                ));
+            }
         }
         else {
+            // TODO what if no $id
+            $this->_redirectTo('index', null, 'document', 'admin', array(
+                'id' => $id
+            ));
         }
     }
 

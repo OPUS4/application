@@ -202,6 +202,7 @@ class Admin_Form_Model extends Zend_Form_SubForm {
     protected function _createTextfield($field) {
         $name = $field->getName();
         $textfield = new Zend_Form_Element_Text($name);
+        $textfield->setAttrib('size', 60);
         return $textfield;
     }
 
