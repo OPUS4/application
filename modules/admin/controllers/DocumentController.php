@@ -460,7 +460,7 @@ class Admin_DocumentController extends Controller_Action {
         $action['url'] = $docHelper->getUrlAccessManager();
         $actions['access'] = $action;
         
-        if ($docHelper->getDocState() === 'unpublished') {
+        if ($docHelper->getDocState() === 'unpublished' || $docHelper->getDocState() === 'restricted' || $docHelper->getDocState() === 'inprogress') {
             $action = array();
             $action['label'] = 'admin_doc_delete';
             $action['url'] = $docHelper->getUrlDelete();
@@ -482,7 +482,7 @@ class Admin_DocumentController extends Controller_Action {
             $action['url'] = $docHelper->getUrlUnpublish();
             $actions['unpublish'] = $action;
         }
-        elseif ($this->docHelper->getDocState() === 'deleted') {
+        elseif ($docHelper->getDocState() === 'deleted') {
             $action = array();
             $action['label'] = 'admin_doc_undelete';
             $action['url'] = $docHelper->getUrlPublish();
