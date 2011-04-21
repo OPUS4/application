@@ -26,19 +26,25 @@
 
     <tu tuid="access_select_module">
       <tuv xml:lang="en">
-        <seg>Please select modules and controllers you would like to grant access to</seg>
+        <seg>Module access for role '%1$s'</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Bitte wählen Sie Module und Controller, für die Sie Zugriff gewähren möchten</seg>
+        <seg>Modul-Zugriff für Rolle '%1$s'</seg>
       </tuv>
     </tu>
 
-    <tu tuid="access_current_roleid">
+    <tu tuid="access_current_role_name">
       <tuv xml:lang="en">
-        <seg>Currently selected role ID:</seg>
+        <seg>
+        You are editing module access for role '%1$s'.  Please select
+        modules you would like to grant access to.
+        </seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Momentan ausgewählte Rollen-ID:</seg>
+        <seg>
+        Sie bearbeiten gerade den Modul-Zugriff für Rolle '%1$s'.
+        Bitte wählen Sie Module, für die Sie Zugriff gewähren möchten.
+        </seg>
       </tuv>
     </tu>
 
@@ -134,10 +140,10 @@
 
     <tu tuid="admin_access_checked_in_guest">
       <tuv xml:lang="en">
-        <seg>(pre-selected in 'guest' role)</seg>
+        <seg>(Access already granted by 'guest' role)</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>(Ausgewählt in 'guest' Rolle)</seg>
+        <seg>(Bereits erlaubt durch 'guest'-Rolle)</seg>
       </tuv>
     </tu>
 

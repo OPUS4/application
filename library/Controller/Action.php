@@ -142,21 +142,25 @@ class Controller_Action extends Zend_Controller_Action {
         $this->_forward($action);
     }
 
+    /**
+     * Checks if the user is allowed to access the given module.
+     *
+     * @return void
+     */
     protected function checkAccessModulePermissions() {
-        $module     = $this->_request->getModuleName();
-        $controller = $this->_request->getControllerName();
+        $module = $this->_request->getModuleName();
         
-        $this->_logger->debug("starting authorization check for module '$module'/controller '$controller'");
+        $this->_logger->debug("starting authorization check for module '$module'");
 
         // Check, if have the right privilege...
-        if (true === Opus_Security_Realm::getInstance()->checkModuleController($module, $controller)) {
-            $this->_logger->debug("authorization check for module '$module'/controller '$controller' successful");
+        if (true === Opus_Security_Realm::getInstance()->checkModule($module)) {
+            $this->_logger->debug("authorization check for module '$module' successful");
             return;
         }
 
-        $this->_logger->debug("FAILED authorization check for module '$module'/controller '$controller'");
+        $this->_logger->debug("FAILED authorization check for module '$module'");
 
-        // we are not allowed to access this module/controller -- but why?
+        // we are not allowed to access this module -- but why?
         $identity = Zend_Auth::getInstance()->getIdentity();
 
         $errorcode = 'no_identity_error';
@@ -169,6 +173,7 @@ class Controller_Action extends Zend_Controller_Action {
         $this->__flashMessenger->addMessage(array('level' => 'failure', 'message' => $message));
         $this->__redirector->gotoSimple('index', 'auth', 'default');
 
+        return;
     }
 
 

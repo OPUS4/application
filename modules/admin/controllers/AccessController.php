@@ -29,7 +29,7 @@
  * @package     Module_Admin
  * @author      Julian Heise <heise@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id: $
  */
@@ -67,7 +67,6 @@ class Admin_AccessController extends Controller_Action {
         if($id == null)
             throw new Exception('Role ID missing');
 
-        $this->view->roleId = $id;
         $role = new Opus_UserRole($id);
         $roleModules = $role->listAccessModules();
 
@@ -77,6 +76,8 @@ class Admin_AccessController extends Controller_Action {
             $this->view->guestModules = $guestModules;
         }
 
+        $this->view->roleId = $role->getId();
+        $this->view->roleName = $role->getName();
         $this->view->modules = $roleModules;
         $this->view->allModules = $this->getAllModules();
     }
@@ -112,21 +113,18 @@ class Admin_AccessController extends Controller_Action {
         $role = new Opus_UserRole($id);
         $roleModules = $role->listAccessModules();
 
-        foreach($roleModules as $module=>$controllers) {
-            foreach($controllers as $controller) {
-                if($request->getParam('set_'.$module.':'.$controller, 'NULL') === 'NULL') {
-                    $role->removeAccessModule($module, $controller);
-                }
+        foreach($roleModules as $module) {
+            if($request->getParam('set_'.$module, 'NULL') === 'NULL') {
+                $role->removeAccessModule($module);
             }
         }
 
         $params = $request->getParams();
         foreach($params as $name=>$value) {
             if($this->string_begins_with($name, 'set_')) {
-                $parts = explode(":", $name);
-                $module = explode("_", $parts[0]);
+                $module = explode("_", $name);
                 $module = $module[1];
-                $role->appendAccessModule($module, $parts[1]);
+                $role->appendAccessModule($module);
             }
         }
         $role->store();
@@ -168,8 +166,7 @@ class Admin_AccessController extends Controller_Action {
     }
 
     /**
-     * Iterates over Zend controller directories and extracts controller and
-     * module names
+     * Iterates over module directories and return all module names
      * @return array
      */
     private function getAllModules() {
@@ -177,24 +174,11 @@ class Admin_AccessController extends Controller_Action {
         $module_dir = substr(str_replace("\\","/",$this->getFrontController()->getModuleDirectory()),0,strrpos(str_replace("\\","/",$this->getFrontController()->getModuleDirectory()),'/'));
         $temp = array_diff( scandir( $module_dir), $deadPaths);
         $modules = array();
-        $controller_directorys = array();
-        $controllers = array();
-        $structured = array();
         foreach ($temp as $module) {
             if (is_dir($module_dir . "/" . $module)) {
-                $structured[$module] = array();
-                $directory = str_replace("\\","/",$this->getFrontController()->getControllerDirectory($module));
-                foreach (scandir($directory) as $dirstructure) {
-                    if (is_file($directory  . "/" . $dirstructure)) {
-                        if (strstr($dirstructure,"Controller.php") != false) {
-                            $replaced = str_replace("Controller.php", "", $dirstructure);
-                            array_push($structured[$module], strtolower($replaced));
-                        }
-                    }
-                }
+                $modules[] = $module;
             }
         }
-        return $structured;
+        return $modules;
     }
 }
-?>

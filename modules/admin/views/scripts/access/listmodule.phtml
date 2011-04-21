@@ -28,7 +28,7 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Julian Heise <heise@zib.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id: $
  */
@@ -36,8 +36,8 @@
 // TODO move some of the processing into model or controller
 ?>
 
-<h1><?= $this->translate('access_select_module') ?></h1>
-<p><?= $this->translate('access_current_roleid') . ' ' . $this->roleId ?></p>
+<h1><?= $this->translate('access_select_module', $this->roleName) ?></h1>
+<p><?= $this->translate('access_current_role_name', $this->roleName) ?></p>
 
 <div class="form-wrapper">
     <form action="<?= $this->url(array('module'=>'admin', 'controller'=>'access', 'action'=>'store'), null ,true) ?>" method="post">
@@ -53,39 +53,20 @@
 
         <br/>
         
-        <?php foreach($this->allModules as $module=>$controllers) : ?>
-        <h2><?= $module ?></h2>
-        <ul class="controller-list">
-            <?php foreach($controllers as $controller) : ?>
+        <ul>
+        <?php foreach($this->allModules as $module) : ?>
             <li>
-                <input name="<?= 'set_'.$module.':'.$controller ?>" type="checkbox" value="set"
-                <?PHP if (isset($this->guestModules) && array_key_exists($module, $this->guestModules) != null) {
-                    $inGuest = in_array($controller, $this->guestModules[$module]) || in_array('*', $this->guestModules[$module]);
-                } // TODO move to controller
-                else {
-                    $inGuest = false;
-                } ?>
-                <?PHP if (array_key_exists($module, $this->modules) != null) {
-                    $inRole = in_array($controller, $this->modules[$module]) || in_array('*', $this->modules[$module]);
-                }
-                else {
-                    $inRole = false;
-                } ?>
-                <?php if ($inRole || $inGuest) : ?>
-                    checked="checked"
-                <?php endif ?>
-                <?PHP if ($inGuest) : ?>
-                    disabled="true"
-                <?PHP endif; ?>
-                 /><?= $controller ?>
-                <?PHP if ($inGuest) : ?>
+            <input type="hidden" name="<?= 'list_'.$module ?>" value="list" />
+            <input name="<?= 'set_'.$module ?>" type="checkbox" value="set"
+                <?= in_array($module, $this->modules) ? ' checked="checked" ' : '' ?>
+            /> <?= $module ?>
+
+            <?PHP if (isset($this->guestModules) && in_array($module, $this->guestModules)) : ?>
                 <span style="font-style: italic; color: gray; padding-left: 0.5em"><?= $this->translate('admin_access_checked_in_guest'); ?></span>
-                <?PHP endif; ?>
-                <input type="hidden" name="<?= 'list_'.$module.':'.$controller ?>" value="list" />
-            </li>
-            <?php endforeach ?>
-        </ul>
+            <?PHP endif; ?>
+          </li>
         <?php endforeach ?>
+        </ul>
 
         <div class="form-item">
             <span class="form-submit-wrapper">

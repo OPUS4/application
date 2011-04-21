@@ -106,22 +106,24 @@ class Controller_Xml extends Zend_Controller_Action {
         $this->_proc->importStyleSheet($this->_xslt);
     }
 
-
+    /**
+     * Checks if the user is allowed to access the given module.
+     *
+     * @return void
+     */
     protected function checkAccessModulePermissions() {
         $logger = Zend_Registry::get('Zend_Log');
+        $module = $this->_request->getModuleName();
 
-        $module     = $this->_request->getModuleName();
-        $controller = $this->_request->getControllerName();
-
-        $logger->debug("starting authorization check for module '$module'/controller '$controller'");
+        $logger->debug("starting authorization check for module '$module'");
 
         // Check, if have the right privilege...
-        if (true === Opus_Security_Realm::getInstance()->checkModuleController($module, $controller)) {
-            $logger->debug("authorization check for module '$module'/controller '$controller' successful");
+        if (true === Opus_Security_Realm::getInstance()->checkModule($module)) {
+            $logger->debug("authorization check for module '$module' successful");
             return;
         }
 
-        $logger->debug("FAILED authorization check for module '$module'/controller '$controller'");
+        $logger->debug("FAILED authorization check for module '$module'");
 
         // Print empty XML document
         $response = $this->getResponse();

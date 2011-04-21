@@ -59,7 +59,7 @@ class Review_IndexController extends Controller_Action {
         parent::init();
 
         // Highlight menu entries.
-        if (true === Opus_Security_Realm::getInstance()->checkModuleController('admin', 'index')) {
+        if (true === Opus_Security_Realm::getInstance()->checkModule('admin')) {
             $this->getHelper('MainMenu')->setActive('admin');
         }
         else {
