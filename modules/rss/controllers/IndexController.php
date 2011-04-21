@@ -68,7 +68,7 @@ class Rss_IndexController extends Controller_Xml {
     }
 
     private function setLink() {
-        $this->_proc->setParameter('', 'link', $this->view->serverUrl() . $this->getRequest()->getBaseUrl() . '/rss/index/');
+        $this->_proc->setParameter('', 'link', $this->view->serverUrl() . $this->getRequest()->getBaseUrl() . '/index/index/');
     }
 
     private function setDates($resultList) {

@@ -25,33 +25,21 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Solrsearch
- * @author      Julian Heise <heise@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @package     Tests
+ * @author      Sascha Szott <szott@zib.de>
+ * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
 
-<?php
-    $this->headLink(array(
-        'rel' => 'alternate',
-        'type' => 'application/rss+xml',
-        'href' => $this->serverUrl() . $this->baseUrl() . '/rss/index/index'
-    ));
-?>
+class Rss_IndexControllerTest extends ControllerTestCase {
 
-<form action="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search'), null, true) ?>" method="get">
-    <fieldset>
-        <legend><?= $this->translate('latest_options') ?></legend>
-        <label for="rows"><?= $this->translate('latest_set_rows') ?></label>
-        <select name="rows" id="rows">
-            <option <?= !isset($this->rows) || $this->rows === 10 ? 'selected="true"' : '' ?>>10</option>
-            <option <?= $this->rows === 20 ? 'selected="true"' : '' ?>>20</option>
-            <option <?= $this->rows === 50 ? 'selected="true"' : '' ?>>50</option>
-            <option <?= $this->rows === 100 ? 'selected="true"' : '' ?>>100</option>
-        </select>
-        <input type="hidden" name="searchtype" value="latest" />
-        <input type="submit" value="<?= $this->translate('latest_submit') ?>" />
-    </fieldset>
-</form>
+    public function testIndexAction() {
+        $this->dispatch('/rss/index/index');
+        $this->assertResponseCode(200);
+        $response = $this->getResponse();
+        $this->assertContains('<?xml version="1.0" encoding="utf-8"?>', $response->getBody());
+        $this->assertContains('<rss version="2.0">', $response->getBody());
+    }
+}
+?>
