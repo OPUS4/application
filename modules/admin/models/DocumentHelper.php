@@ -274,19 +274,7 @@ class Admin_Model_DocumentHelper {
             return $date;
         }
 
-        $session = new Zend_Session_Namespace();
-
-        $format_de = "dd.MM.YYYY";
-        $format_en = "YYYY/MM/dd";
-
-        switch($session->language) {
-           case 'de':
-               $format = $format_de;
-               break;
-           default:
-               $format = $format_en;
-               break;
-        }
+        $format = Admin_Model_DocumentHelper::getDateFormat();
 
         $timestamp = $date->getUnixTimestamp();
 
@@ -400,6 +388,24 @@ class Admin_Model_DocumentHelper {
 
     public static function getFieldNamesForGroup($section) {
        return Admin_Model_DocumentHelper::$fieldGroups[$section];
+    }
+
+    public static function getDateFormat() {
+        $session = new Zend_Session_Namespace();
+
+        $format_de = "dd.MM.YYYY";
+        $format_en = "YYYY/MM/dd";
+
+        switch($session->language) {
+           case 'de':
+               $format = $format_de;
+               break;
+           default:
+               $format = $format_en;
+               break;
+        }
+
+        return $format;
     }
 
 }

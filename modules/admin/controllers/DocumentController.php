@@ -228,19 +228,66 @@ class Admin_DocumentController extends Controller_Action {
         }
     }
 
+    /**
+     * Updates values of fields and models.
+     */
     public function updateAction() {
         $id = $this->getRequest()->getParam('id');
         $section = $this->getRequest()->getParam('section');
 
         if ($this->getRequest()->isPost()) {
             $postData = $this->getRequest()->getPost();
+            switch ($section) {
+                case 'general':
+                case 'misc':
+                case 'dates':
+                case 'other':
+                case 'thesis':
+                    $model = new Opus_Document($id);
+                    $fields = $postData['Opus_Document'];
+                    foreach ($fields as $fieldName => $value) {
+                        $field = $model->getField($fieldName);
+                        if (!empty($field)) {
+                            // TODO handle NULL
+                            switch ($field->getValueModelClass()) {
+                                case 'Opus_Date':
+                                    $dateFormat = Admin_Model_DocumentHelper::getDateFormat();
+                                    if (!empty($value)) {
+                                        $date = new Zend_Date($value);
+                                        $dateModel = new Opus_Date();
+                                        $dateModel->setZendDate($date);
+                                    }
+                                    else {
+                                        $dateModel = null;
+                                    }
+                                    $field->setValue($dateModel);
+                                    break;
+                                default:
+                                    $field->setValue($value);
+                                    break;
+                            }
+                        }
+                    }
+                    $model->store();
+                    break;
+                default:
+                    break;
+            }
 
-            // TODO get models from document and update
-            // TODO see form builder on finding models (just by index?)
+            $this->_redirectTo('edit', null, 'document', 'admin', array(
+                'id' => $id,
+                'section' => $section
+            ));
         }
         else {
-            
         }
+    }
+
+    /**
+     * Removes a value (model) from document.
+     */
+    public function removeAction() {
+
     }
 
     /**
@@ -399,9 +446,10 @@ class Admin_DocumentController extends Controller_Action {
             case 'misc':
             case 'other':
             case 'dates':
+            case 'thesis':
                 $subform = new Admin_Form_Model($model, $includedFields);
                 $subform->populateFromModel($model);
-                $form->addSubForm($subform, 'general');
+                $form->addSubForm($subform, 'Opus_Document');
                 break;
 
             default:
@@ -414,7 +462,11 @@ class Admin_DocumentController extends Controller_Action {
                         foreach ($values as $index2 => $value) {
                             $subform = new Admin_Form_Model($field);
                             $subform->populateFromModel($value);
-                            $form->addSubForm($subform, $index . '-' . $value->getId());
+                            $remove = new Zend_Form_Element_Submit('remove');
+                            $remove->setValue($field->getValueModelClass() . $index2);
+                            $remove->setLabel('Remove'); // TODO translate model specific
+                            $subform->addElement($remove);
+                            $form->addSubForm($subform, $field->getValueModelClass() . '-' . $index . '-' . $index2);
                         }
                     }
                 }
