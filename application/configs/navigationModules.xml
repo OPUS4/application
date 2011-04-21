@@ -57,6 +57,14 @@
                             <action>index</action>
                         </show2>
 
+                        <edit2>
+                            <type>mvc</type>
+                            <label>admin_document_edit</label>
+                            <module>admin</module>
+                            <controller>document</controller>
+                            <action>edit</action>
+                        </edit2>
+
                         <filemanager>
                             <type>mvc</type>
                             <label>admin_filemanager_index</label>

@@ -187,6 +187,24 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_document_breadcrumb_edit">
+      <tuv xml:lang="en">
+        <seg>Edit Metadata</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Metadaten editieren</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_breadcrumb_document">
+      <tuv xml:lang="en">
+        <seg>Document (%1$s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokument (%1$s)</seg>
+      </tuv>
+    </tu>
+
   </body>
 
 </tmx>

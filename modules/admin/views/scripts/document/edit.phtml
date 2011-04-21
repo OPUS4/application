@@ -41,7 +41,14 @@
                  ->setMaxDepth(1)
                  ->setLinkLast(true) ?>
         &gt;
-        <?= $this->translate('admin_documents_edit', $this->docHelper->getDocId()) ?>
+        <a href="<?=$this->url(array(
+            'module' => 'admin',
+            'controller' => 'document',
+            'action' => 'index',
+            'id' => $this->docHelper->getDocId()
+        ));?>"><?= $this->translate('admin_document_breadcrumb_document', $this->docHelper->getDocId()) ?></a>
+        &gt;
+        <?= $this->translate('admin_document_breadcrumb_edit') ?>
     </div>
 
     <!-- -->
