@@ -57,6 +57,7 @@ class Admin_Model_DocumentHelper {
         ),
         'general' => array(
             'Language',
+            'ServerState',
             'Type'
         ),
         'thesis' => array(
@@ -117,6 +118,9 @@ class Admin_Model_DocumentHelper {
         ),
         'references' => array(
             'Reference'
+        ),
+        'licences' => array(
+            'Licence'
         )
     );
 

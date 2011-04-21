@@ -116,6 +116,12 @@ class Admin_Form_Model extends Zend_Form_SubForm {
                 $element->addValidator($validator);
             }
             $this->addElement($element);
+//            switch ($fieldName) {
+//                case 'Licence':
+//                    break;
+//                default:
+//                    break;
+//            }
         }
     }
 
@@ -127,28 +133,34 @@ class Admin_Form_Model extends Zend_Form_SubForm {
 
         $modelFields = $model->describe();
 
-        // iterate through fields and generate form elements
-        foreach ($modelFields as $fieldName) {
-            $field = $model->getField($fieldName);
-            $element = $this->getElement($field->getName());
-            if (!empty($element)) {
-                if ($element instanceof Zend_Form_Element_Select) {
-                    $element->setValue($field->getValue());
-                }
-                elseif ($field->getValueModelClass() === 'Opus_Date') {
-                    $value = $field->getValue();
+        if ($model instanceof Opus_Model_Dependent_Link_DocumentLicence) {
+            $element = $this->getElement('Licence');
+            $element->setValue($model->getLinkedModelId() - 1);
+        }
+        else {
+            // iterate through fields and generate form elements
+            foreach ($modelFields as $fieldName) {
+                $field = $model->getField($fieldName);
+                $element = $this->getElement($field->getName());
+                if (!empty($element)) {
+                    if ($element instanceof Zend_Form_Element_Select) {
+                        $element->setValue($field->getValue());
+                    }
+                    elseif ($field->getValueModelClass() === 'Opus_Date') {
+                        $value = $field->getValue();
 
-                    if (!empty($value)) {
-                        // TODO use common function for formatting
-                        $date = $value->getZendDate();
-                        $element->setValue($date->get('YYYY/MM/dd'));
+                        if (!empty($value)) {
+                            // TODO use common function for formatting
+                            $date = $value->getZendDate();
+                            $element->setValue($date->get('YYYY/MM/dd'));
+                        }
+                        else {
+                            $element->setValue(null);
+                        }
                     }
                     else {
-                        $element->setValue(null);
+                        $element->setValue($field->getValue());
                     }
-                }
-                else {
-                    $element->setValue($field->getValue());
                 }
             }
         }
@@ -227,7 +239,14 @@ class Admin_Form_Model extends Zend_Form_SubForm {
         $options = $field->getDefault();
 
         foreach ($options as $option) {
-            $select->addMultiOption($option, $option);
+            switch ($name) {
+                case 'Licence':
+                    $select->addMultiOption($option->getId(), $option);
+                    break;
+                default:
+                    $select->addMultiOption($option, $option);
+                    break;
+            }
         }
 
         return $select;

@@ -68,7 +68,9 @@ class Admin_DocumentController extends Controller_Action {
     );
 
     private $sectionField = array(
-        'persons' => 'Person'
+        'persons' => 'Person',
+        'licences' => 'Licence'
+
     );
 
     /**
@@ -163,38 +165,52 @@ class Admin_DocumentController extends Controller_Action {
         if ($this->getRequest()->isPost()) {
             $postData = $this->getRequest()->getPost();
 
+//            var_dump($postData); return;
+
             $document = new Opus_Document($id);
 
             foreach ($postData as $modelClass => $fields) {
+                $processFields = true;
+
                 switch ($modelClass) {
                     case 'Opus_Person':
                         $person = new Opus_Person();
                         $model = $document->addPerson($person);
                         break;
+                    case 'Opus_Licence':
+                        // TODO no duplicate entries
+                        $licenceIndex = $fields['Licence'];
+                        $licences = Opus_Licence::getAll();
+                        $document->addLicence($licences[$licenceIndex]);
+                        $processFields = false;
+                        break;
                     default:
                         $model = new $modelClass;
                         break;
                 }
-                foreach ($fields as $name => $value) {
-                    // TODO filter buttons
-                    $field = $model->getField($name);
-                    if (!empty($field)) {
-                        switch ($field->getValueModelClass()) {
-                            case 'Opus_Date':
-                                $dateFormat = Admin_Model_DocumentHelper::getDateFormat();
-                                if (!empty($value)) {
-                                    $date = new Zend_Date($value);
-                                    $dateModel = new Opus_Date();
-                                    $dateModel->setZendDate($date);
-                                }
-                                else {
-                                    $dateModel = null;
-                                }
-                                $field->setValue($dateModel);
-                                break;
-                            default:
-                                $field->setValue($value);
-                                break;
+
+                if ($processFields) {
+                    foreach ($fields as $name => $value) {
+                        // TODO filter buttons
+                        $field = $model->getField($name);
+                        if (!empty($field)) {
+                            switch ($field->getValueModelClass()) {
+                                case 'Opus_Date':
+                                    $dateFormat = Admin_Model_DocumentHelper::getDateFormat();
+                                    if (!empty($value)) {
+                                        $date = new Zend_Date($value);
+                                        $dateModel = new Opus_Date();
+                                        $dateModel->setZendDate($date);
+                                    }
+                                    else {
+                                        $dateModel = null;
+                                    }
+                                    $field->setValue($dateModel);
+                                    break;
+                                default:
+                                    $field->setValue($value);
+                                    break;
+                            }
                         }
                     }
                 }
@@ -237,8 +253,6 @@ class Admin_DocumentController extends Controller_Action {
                         break;
                     case 'Opus_SubjectSwd':
                         $document->addSubjectSwd($model);
-                        break;
-                    case 'Opus_Licence':
                         break;
                     case 'Opus_Patent':
                         $document->addPatent($model);
@@ -488,7 +502,14 @@ class Admin_DocumentController extends Controller_Action {
         elseif (!empty($sectionField)) {
             $temp = new Opus_Document();
             $field = $temp->getField($sectionField);
-            $addForm = new Admin_Form_Model($temp->getField($sectionField));
+            switch ($sectionField) {
+                case 'Licence':
+                    $addForm = new Admin_Form_Model('Opus_Document', array('Licence'));
+                    break;
+                default:
+                    $addForm = new Admin_Form_Model($temp->getField($sectionField));
+                    break;
+            }
         }
         else {
             $addForm = null;
@@ -559,7 +580,14 @@ class Admin_DocumentController extends Controller_Action {
 
                     if (is_array($values)) {
                         foreach ($values as $index2 => $value) {
-                            $subform = new Admin_Form_Model($field);
+                            switch ($fieldName) {
+                                case 'Licence':
+                                    $subform = new Admin_Form_Model('Opus_Document', array('Licence'));
+                                    break;
+                                default:
+                                    $subform = new Admin_Form_Model($field);
+                                    break;
+                            }
                             $subform->removeDecorator('DtDdWrapper');
                             $subform->populateFromModel($value);
                             $subform->setLegend($field->getValueModelClass()); // TODO remove/replace
