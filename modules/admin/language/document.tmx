@@ -205,6 +205,24 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_document_publisher_none">
+      <tuv xml:lang="en">
+        <seg>Please select publisher</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte Institution auswählen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_grantor_none">
+      <tuv xml:lang="en">
+        <seg>Please select grantor</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte Institution auswählen</seg>
+      </tuv>
+    </tu>
+
   </body>
 
 </tmx>

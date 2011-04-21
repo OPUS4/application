@@ -328,6 +328,23 @@ class Admin_DocumentController extends Controller_Action {
                                         }
                                         $field->setValue($dateModel);
                                         break;
+                                    case 'Opus_DnbInstitute':
+                                        if ($value === 'nothing') {
+                                            $field->setValue(null);
+                                        }
+                                        else {
+                                            $institute = new Opus_DnbInstitute($value);
+                                            // TODO simplify
+                                            switch ($field->getName()) {
+                                                case 'ThesisGrantor':
+                                                    $model->setThesisGrantor($institute);
+                                                    break;
+                                                case 'ThesisPublisher':
+                                                    $model->setThesisPublisher($institute);
+                                                    break;
+                                            }
+                                        }
+                                        break;
                                     default:
                                         $field->setValue($value);
                                         break;

@@ -149,7 +149,24 @@ class Admin_Form_Model extends Zend_Form_SubForm {
                 $element = $this->getElement($field->getName());
                 if (!empty($element)) {
                     if ($element instanceof Zend_Form_Element_Select) {
-                        $element->setValue($field->getValue());
+                        if ($field->getValueModelClass() == 'Opus_DnbInstitute') {
+                            $value = $field->getValue();
+                            switch ($field->getName()) {
+                                case 'ThesisGrantor':
+                                    $value = $model->getThesisGrantor();
+                                    break;
+                                case 'ThesisPublisher':
+                                    $value = $model->getThesisPublisher();
+                                    break;
+                            }
+                            if (isset($value[0])) {
+                                //throw new Exception($value[0]);
+                                $element->setValue($value[0]->getId());
+                            }
+                        }
+                        else {
+                            $element->setValue($field->getValue());
+                        }
                     }
                     elseif ($field->getValueModelClass() === 'Opus_Date') {
                         $value = $field->getValue();
@@ -246,13 +263,32 @@ class Admin_Form_Model extends Zend_Form_SubForm {
             $options = $docTypeHelper->getDocumentTypes();
         }
         else {
-            $options = $field->getDefault();
+            switch ($name) {
+                case 'ThesisPublisher':
+                    $options['nothing'] = 'admin_document_publisher_none';
+                    $options = array_merge($options, $field->getDefault());
+                    break;
+                case 'ThesisGrantor':
+                    $options['nothing'] = 'admin_document_grantor_none';
+                    $options = array_merge($options, $field->getDefault());
+                    break;
+                default:
+                    $options = $field->getDefault();
+                break;
+            }
         }
 
-        foreach ($options as $option) {
+        foreach ($options as $index => $option) {
             switch ($name) {
                 case 'Licence':
-                    $select->addMultiOption($option->getId(), $option);
+                case 'ThesisPublisher':
+                case 'ThesisGrantor':
+                    if ($option instanceof Opus_Model_Abstract) {
+                        $select->addMultiOption($option->getId(), $option);
+                    }
+                    else {
+                        $select->addMultiOption($index, $option);
+                    }
                     break;
                 default:
                     $select->addMultiOption($option, $option);

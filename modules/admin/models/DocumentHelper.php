@@ -306,6 +306,14 @@ class Admin_Model_DocumentHelper {
                     return 'TODO handle Opus_Note';
                 case 'Opus_Patent':
                     return 'TODO handle Opus_Patent';
+                case 'Opus_DnbInstitute':
+                    $value = $field->getValue();
+                    if (isset($value[0])) {
+                        return $value[0]->getName();
+                    }
+                    else {
+                        return 'none';
+                    }
                 default:
                     // TODO handle other models
                     break;
