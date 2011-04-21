@@ -43,6 +43,7 @@ class Pkm_IndexController extends Controller_Action
      */
     public function init()
     {
+        parent::init();
         $this->_redirector = $this->_helper->getHelper('Redirector');
     }
 

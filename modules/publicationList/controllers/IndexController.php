@@ -39,6 +39,7 @@ class PublicationList_IndexController extends Controller_Action {
     private $renderer;
    
     public function init() {
+        parent::init();
         $this->log = Zend_Registry::get('Zend_Log');
     }
 
