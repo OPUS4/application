@@ -7,5 +7,11 @@ sudo ln -si $BASEDIR/apacheconf/opus4 /etc/apache2/sites-available
 sudo a2ensite opus4
 sudo /etc/init.d/apache2 reload
 
-sudo chmod +x $BASEDIR/install/install_ubuntu.sh
-sudo $BASEDIR/install/install_ubuntu.sh
+if [ "$1" == "upgrade" ]
+then
+    sudo chmod +x $BASEDIR/install/update.sh
+    sudo $BASEDIR/install/update.sh
+else
+    sudo chmod +x $BASEDIR/install/install_ubuntu.sh
+    sudo $BASEDIR/install/install_ubuntu.sh
+fi
