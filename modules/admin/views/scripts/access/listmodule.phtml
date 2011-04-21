@@ -59,23 +59,27 @@
             <?php foreach($controllers as $controller) : ?>
             <li>
                 <input name="<?= 'set_'.$module.':'.$controller ?>" type="checkbox" value="set"
-                <?PHP if (array_key_exists($module, $this->guestModules) != null) {
+                <?PHP if (isset($this->guestModules) && array_key_exists($module, $this->guestModules) != null) {
                     $inGuest = in_array($controller, $this->guestModules[$module]) || in_array('*', $this->guestModules[$module]);
                 } // TODO move to controller
                 else {
                     $inGuest = false;
                 } ?>
-                <?php if (array_key_exists($module, $this->modules) != null) : ?>
-                    <?php if (in_array($controller, $this->modules[$module]) || in_array('*', $this->modules[$module]) || $inGuest ) : ?>
-                        checked="checked"
-                    <?php endif ?>
-                    <?PHP if ($inGuest) : ?>
-                        disabled="true"
-                    <?PHP endif; ?>
+                <?PHP if (array_key_exists($module, $this->modules) != null) {
+                    $inRole = in_array($controller, $this->modules[$module]) || in_array('*', $this->modules[$module]);
+                }
+                else {
+                    $inRole = false;
+                } ?>
+                <?php if ($inRole || $inGuest) : ?>
+                    checked="checked"
                 <?php endif ?>
+                <?PHP if ($inGuest) : ?>
+                    disabled="true"
+                <?PHP endif; ?>
                  /><?= $controller ?>
                 <?PHP if ($inGuest) : ?>
-                <?= $this->translate('admin_access_checked_in_guest'); ?>
+                <span style="font-style: italic; color: gray; padding-left: 0.5em"><?= $this->translate('admin_access_checked_in_guest'); ?></span>
                 <?PHP endif; ?>
                 <input type="hidden" name="<?= 'list_'.$module.':'.$controller ?>" value="list" />
             </li>

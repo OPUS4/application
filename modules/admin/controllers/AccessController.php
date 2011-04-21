@@ -71,11 +71,13 @@ class Admin_AccessController extends Controller_Action {
         $role = new Opus_UserRole($id);
         $roleModules = $role->listAccessModules();
 
-        $guest = Opus_UserRole::fetchByName('guest');
-        $guestModules = $guest->listAccessModules();
+        if ($role->getName() !== 'guest') {
+            $guest = Opus_UserRole::fetchByName('guest');
+            $guestModules = $guest->listAccessModules();
+            $this->view->guestModules = $guestModules;
+        }
 
         $this->view->modules = $roleModules;
-        $this->view->guestModules = $guestModules;
         $this->view->allModules = $this->getAllModules();
     }
 
@@ -130,6 +132,12 @@ class Admin_AccessController extends Controller_Action {
         $role->store();
     }
 
+    /**
+     *
+     * @param <type> $request
+     *
+     * TODO Is it a problem if document is append twice?
+     */
     private function storeRoles($request) {
         $docId = $request->getParam('docid');
 
