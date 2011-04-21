@@ -242,7 +242,7 @@ class Admin_CollectionController extends Controller_Action {
             return $this->_redirectToAndExit(
                     'edit',
                     'Document successfully assigned to collection "' . $collectionModel->getDisplayName() . '".',
-                    'documents', 'admin', array('id' => $documentId));
+                    'document', 'admin', array('id' => $documentId, 'section' => 'collections'));
         }
         
         $collectionId = $this->getRequest()->getParam('id');

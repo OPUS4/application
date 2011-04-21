@@ -41,12 +41,41 @@
                  ->setMaxDepth(1)
                  ->setLinkLast(true) ?>
         &gt;
-        <?= $this->translate('admin_documents_edit', $this->docHelper->getDocId()) ?>
+        <a href="<?=$this->url(array(
+            'module' => 'admin',
+            'controller' => 'document',
+            'action' => 'index',
+            'id' => $this->docHelper->getDocId()
+        ));?>"><?= $this->translate('admin_document_breadcrumb_document', $this->docHelper->getDocId()) ?></a>
+        &gt;
+        <?= $this->translate('admin_document_breadcrumb_edit') ?>
     </div>
 
-    <!-- Add new identifier -->
+        <fieldset>
 
+        <legend><a name="collections"><?= $this->translate('admin_documents_label_collections') ?></a></legend>
 
-    <!-- Edit/remove old identifiers -->
+    <div>
+        <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'assign', 'document' => $this->docHelper->getDocId()), null, true); ?>"><?= $this->translate('admin_documents_collectionassign'); ?></a><br/>
+    </div>
+
+    <?PHP if (0 < count($this->assignedCollections)) : ?>
+        <?= $this->translate('admin_documents_collectionsassigned') ?>
+    <?PHP else : ?>
+        <?= $this->translate('admin_documents_nocollectionsassigned') ?>
+    <?PHP endif; ?>
+
+    <ul>
+        <?PHP foreach ($this->assignedCollections as $collection) : ?>
+        <li>
+            <?= htmlspecialchars($collection['roleName'])?>: <?= htmlspecialchars($collection['collectionName']) ?>
+            <form method="post" action="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'unlinkcollection', 'role' => $collection['roleId'], 'collection' => $collection['collectionId'])) ?>">
+                <input type="submit" value="<?= $this->translate('admin_documents_unlinkcollection') ?>" />
+            </form>
+        </li>
+        <?PHP endforeach; ?>
+    </ul>
+
+    </fieldset>
 
 </div>

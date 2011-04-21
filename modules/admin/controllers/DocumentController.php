@@ -128,13 +128,26 @@ class Admin_DocumentController extends Controller_Action {
         $section = $this->getRequest()->getParam('section');
 
         if (!empty($section) && !empty($id) && is_numeric($id)) {
-            $model = new Opus_Document($id);
+            switch ($section) {
+                case 'collections':
+                    $document = new Opus_Document($id);
+                    $assignedCollections = array();
+                    foreach ($document->getCollection() as $assignedCollection) {
+                        $assignedCollections[] = array('collectionName' => $assignedCollection->getDisplayName(), 'collectionId' => $assignedCollection->getId(), 'roleName' => $assignedCollection->getRole()->getName(), 'roleId' => $assignedCollection->getRole()->getId());
+                    }
+                    $this->view->assignedCollections = $assignedCollections;
+                    $this->view->docHelper = new Review_Model_DocumentAdapter($this->view, $document);
+                    return $this->renderScript('document/editCollections.phtml');
+                    break;
+                default:
+                    $model = new Opus_Document($id);
 
-            $this->view->docHelper = new Review_Model_DocumentAdapter($this->view, $model);
-            $this->view->addForm = $this->getAddForm($model, $section);
-            $this->view->editForm = $this->getEditForm($model, $section);
+                    $this->view->docHelper = new Review_Model_DocumentAdapter($this->view, $model);
+                    $this->view->addForm = $this->getAddForm($model, $section);
+                    $this->view->editForm = $this->getEditForm($model, $section);
 
-            return $this->renderScript('document/edit' /* . ucfirst($section) */ . '.phtml');
+                    return $this->renderScript('document/edit' /* . ucfirst($section) */ . '.phtml');
+            }
         }
 
         $this->_redirectTo('index');
