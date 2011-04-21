@@ -271,6 +271,22 @@ class Admin_DocumentController extends Controller_Action {
                     $model->store();
                     break;
                 default:
+                    $model = new Opus_Document($id);
+                    foreach ($postData as $fieldName => $modelData) {
+                        $field = $model->getField($fieldName);
+                        foreach ($modelData as $index => $modelValues) {
+                            $fieldValues = $field->getValue();
+                            if (array_key_exists('remove', $modelValues)) {
+                                unset($fieldValues[$index]);
+                                $field->setValue($fieldValues);
+                                break;
+                            }
+                            else {
+                                $this->populateModel($fieldValues[$index], $modelValues);
+                            }
+                        }
+                    }
+                    $model->store();
                     break;
             }
 
@@ -280,6 +296,31 @@ class Admin_DocumentController extends Controller_Action {
             ));
         }
         else {
+        }
+    }
+
+    protected function populateModel($model, $fieldValues) {
+        foreach($fieldValues as $fieldName => $value) {
+            $field = $model->getField($fieldName);
+            if (!empty($field)) {
+                switch ($field->getValueModelClass()) {
+                    case 'Opus_Date':
+                        $dateFormat = Admin_Model_DocumentHelper::getDateFormat();
+                        if (!empty($value)) {
+                            $date = new Zend_Date($value);
+                            $dateModel = new Opus_Date();
+                            $dateModel->setZendDate($date);
+                        }
+                        else {
+                            $dateModel = null;
+                        }
+                        $field->setValue($dateModel);
+                        break;
+                    default:
+                        $field->setValue($value);
+                        break;
+                }
+            }
         }
     }
 
@@ -412,6 +453,7 @@ class Admin_DocumentController extends Controller_Action {
             $addForm->addElement($submit);
 
             $addForm->removeDecorator('Fieldset');
+            $addForm->removeDecorator('DtDdWrapper');
 
             $form = new Zend_Form('AddMetadata');
 
@@ -456,17 +498,24 @@ class Admin_DocumentController extends Controller_Action {
                 foreach ($includedFields as $index => $fieldName) {
                     $field = $model->getField($fieldName);
 
+                    $fieldNameSub = new Zend_Form_SubForm($fieldName);
+                    $fieldNameSub->removeDecorator('fieldset');
+                    $fieldNameSub->removeDecorator('DtDdWrapper');
+
                     $values = $field->getValue();
 
                     if (is_array($values)) {
                         foreach ($values as $index2 => $value) {
                             $subform = new Admin_Form_Model($field);
+                            $subform->removeDecorator('DtDdWrapper');
                             $subform->populateFromModel($value);
+                            $subform->setLegend($field->getValueModelClass()); // TODO remove/replace
                             $remove = new Zend_Form_Element_Submit('remove');
                             $remove->setValue($field->getValueModelClass() . $index2);
                             $remove->setLabel('Remove'); // TODO translate model specific
                             $subform->addElement($remove);
-                            $form->addSubForm($subform, $field->getValueModelClass() . '-' . $index . '-' . $index2);
+                            $fieldNameSub->addSubForm($subform, $index2);
+                            $form->addSubForm($fieldNameSub, $fieldName);
                         }
                     }
                 }
