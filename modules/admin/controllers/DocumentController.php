@@ -166,12 +166,36 @@ class Admin_DocumentController extends Controller_Action {
             $document = new Opus_Document($id);
 
             foreach ($postData as $modelClass => $fields) {
-                $model = new $modelClass;
+                switch ($modelClass) {
+                    case 'Opus_Person':
+                        $person = new Opus_Person();
+                        $model = $document->addPerson($person);
+                        break;
+                    default:
+                        $model = new $modelClass;
+                        break;
+                }
                 foreach ($fields as $name => $value) {
                     // TODO filter buttons
                     $field = $model->getField($name);
                     if (!empty($field)) {
-                        $field->setValue($value);
+                        switch ($field->getValueModelClass()) {
+                            case 'Opus_Date':
+                                $dateFormat = Admin_Model_DocumentHelper::getDateFormat();
+                                if (!empty($value)) {
+                                    $date = new Zend_Date($value);
+                                    $dateModel = new Opus_Date();
+                                    $dateModel->setZendDate($date);
+                                }
+                                else {
+                                    $dateModel = null;
+                                }
+                                $field->setValue($dateModel);
+                                break;
+                            default:
+                                $field->setValue($value);
+                                break;
+                        }
                     }
                 }
 
@@ -181,6 +205,7 @@ class Admin_DocumentController extends Controller_Action {
                         $document->addIdentifier($model);
                         break;
                     case 'Opus_Person':
+                        $document->addPerson($model);
                         break;
                     case 'Opus_Reference':
                         $document->addReference($model);
