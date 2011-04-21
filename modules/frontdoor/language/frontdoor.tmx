@@ -48,6 +48,15 @@
         </tuv>
     </tu>
 
+    <tu tuid="frontdoor_protected_file">
+        <tuv xml:lang="en">
+            <seg>Protected file</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Geschützte Datei</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="frontdoor_edit_document">
         <tuv xml:lang="en">
             <seg>Edit this document</seg>

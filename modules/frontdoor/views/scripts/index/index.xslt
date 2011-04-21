@@ -684,16 +684,6 @@
                     <xsl:attribute name="border">
                         <xsl:text>0</xsl:text>
                     </xsl:attribute>
-                    <xsl:attribute name="title">
-                        <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">frontdoor_download_file</xsl:with-param>
-                        </xsl:call-template>
-                        <xsl:text> </xsl:text>
-                        <xsl:value-of select="@Label" />
-                        <xsl:text> (</xsl:text>
-                        <xsl:value-of select="@MimeType" />
-                        <xsl:text>)</xsl:text>
-                    </xsl:attribute>
                 </xsl:element>
             </xsl:variable>
 
@@ -723,25 +713,44 @@
 
             <xsl:choose>
                 <xsl:when test="php:functionString('Frontdoor_IndexController::checkIfUserHasFileAccess', @Id)">
-                    <xsl:element name="a">
-                        <xsl:attribute name="href">
-                            <xsl:copy-of select="$fileLink" />
+                    <div class="accessible-file">
+                        <xsl:attribute name="title">
+                            <xsl:call-template name="translateString">
+                                <xsl:with-param name="string">frontdoor_download_file</xsl:with-param>
+                            </xsl:call-template>
+                            <xsl:text> </xsl:text>
+                            <xsl:value-of select="@Label" />
+                            <xsl:text> (</xsl:text>
+                            <xsl:value-of select="@MimeType" />
+                            <xsl:text>)</xsl:text>
                         </xsl:attribute>
-                        <xsl:copy-of select="$fileIcon" />
-                    </xsl:element>
-                    <xsl:text> </xsl:text>
+                        <xsl:element name="a">
+                            <xsl:attribute name="href">
+                                <xsl:copy-of select="$fileLink" />
+                            </xsl:attribute>
+                            <xsl:copy-of select="$fileIcon" />
+                        </xsl:element>
+                        <xsl:text> </xsl:text>
 
-                    <xsl:element name="a">
-                        <xsl:attribute name="href">
-                            <xsl:copy-of select="$fileLink" />
-                        </xsl:attribute>
-                        <xsl:copy-of select="$fileLinkText" />
-                    </xsl:element>
+                        <xsl:element name="a">
+                            <xsl:attribute name="href">
+                                <xsl:copy-of select="$fileLink" />
+                            </xsl:attribute>
+                            <xsl:copy-of select="$fileLinkText" />
+                        </xsl:element>
+                    </div>
                 </xsl:when>
                 <xsl:otherwise>
-                    <xsl:copy-of select="$fileIcon" />
-                    <xsl:text> </xsl:text>
-                    <xsl:copy-of select="$fileLinkText" />
+                    <div class="protected-file">
+                        <xsl:attribute name="title">
+                            <xsl:call-template name="translateString">
+                                <xsl:with-param name="string">frontdoor_protected_file</xsl:with-param>
+                            </xsl:call-template>
+                        </xsl:attribute>
+                        <xsl:copy-of select="$fileIcon" />
+                        <xsl:text> </xsl:text>
+                        <xsl:copy-of select="$fileLinkText" />
+                    </div>
                 </xsl:otherwise>
             </xsl:choose>
 
