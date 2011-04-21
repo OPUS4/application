@@ -171,19 +171,19 @@
 
     <tu tuid="admin_title_dnbinstitute">
       <tuv xml:lang="en">
-        <seg>Institutes (dispersive body)</seg>
+        <seg>Institution (dispersive body)</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Institute (Verbreitende Stelle)</seg>
+        <seg>Institution (Verbreitende Stelle)</seg>
       </tuv>
     </tu>
 
     <tu tuid="admin_title_dnbinstitute_description">
       <tuv xml:lang="en">
-        <seg>Add, edit, or remove Institutes, that serve as dispersive body for theses.</seg>
+        <seg>Add, edit, or remove Institutions, that serve as dispersive body for theses.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Institute hinzufügen, editieren, oder löschen, die als verbreitende Stelle für Hochschulschriften fungieren.</seg>
+        <seg>Institutionen hinzufügen, editieren, oder löschen, die als verbreitende Stelle für Hochschulschriften fungieren.</seg>
       </tuv>
     </tu>
 
