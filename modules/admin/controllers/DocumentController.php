@@ -181,7 +181,17 @@ class Admin_DocumentController extends Controller_Action {
                         // TODO no duplicate entries
                         $licenceIndex = $fields['Licence'];
                         $licences = Opus_Licence::getAll();
-                        $document->addLicence($licences[$licenceIndex]);
+                        $currentLicences = $document->getLicence();
+                        $licenceAlreadyAssigned = false;
+                        foreach ($currentLicences as $index => $currentLicence) {
+                            if ($currentLicence->getModel()->getId() == ($licenceIndex + 1)) {
+                                $licenceAlreadyAssigned = true;
+                                // TODO print out message
+                            }
+                        }
+                        if (!$licenceAlreadyAssigned) {
+                            $document->addLicence($licences[$licenceIndex]);
+                        }
                         $processFields = false;
                         break;
                     default:
@@ -327,6 +337,7 @@ class Admin_DocumentController extends Controller_Action {
                         $model->store();
                         break;
                     case 'licences':
+                        // TODO merge with default case
                         $model = new Opus_Document($id);
                         foreach ($postData as $fieldName => $modelData) {
                             $field = $model->getField($fieldName);
