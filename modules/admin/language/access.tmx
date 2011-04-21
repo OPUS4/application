@@ -147,4 +147,22 @@
       </tuv>
     </tu>
 
+    <tu tuid="access_module_changes">
+      <tuv xml:lang="en">
+        <seg>Changing Module Access</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Änderungen am Modul-Zugriff</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="access_module_changes_affect_accounts">
+      <tuv xml:lang="en">
+        <seg>Changes will affect the following accounts</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Änderungen betreffen die folgenden Nutzerkonten</seg>
+      </tuv>
+    </tu>
+
 </body>

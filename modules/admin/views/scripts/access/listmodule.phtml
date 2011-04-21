@@ -39,7 +39,16 @@
 <h1><?= $this->translate('access_select_module', $this->roleName) ?></h1>
 <p><?= $this->translate('access_current_role_name', $this->roleName) ?></p>
 
+<h2><?= $this->translate('access_module_changes_affect_accounts') ?></h2>
+<div>
+    <?php foreach ($this->loginNames AS $login) : ?>
+        <?= htmlspecialchars($login) ?>
+    <?php endforeach; ?>
+</div>
+<br/>
+
 <div class="form-wrapper">
+    <h2><?= $this->translate('access_module_changes') ?></h2>
     <form action="<?= $this->url(array('module'=>'admin', 'controller'=>'access', 'action'=>'store'), null ,true) ?>" method="post">
 
         <div class="form-item">

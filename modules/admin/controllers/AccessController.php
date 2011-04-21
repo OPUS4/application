@@ -76,6 +76,7 @@ class Admin_AccessController extends Controller_Action {
             $this->view->guestModules = $guestModules;
         }
 
+        $this->view->loginNames = $role->getAllAccountNames();
         $this->view->roleId = $role->getId();
         $this->view->roleName = $role->getName();
         $this->view->modules = $roleModules;
