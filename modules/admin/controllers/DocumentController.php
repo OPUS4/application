@@ -326,6 +326,30 @@ class Admin_DocumentController extends Controller_Action {
                         }
                         $model->store();
                         break;
+                    case 'licences':
+                        $model = new Opus_Document($id);
+                        foreach ($postData as $fieldName => $modelData) {
+                            $field = $model->getField($fieldName);
+                            if (!empty($field)) {
+                                foreach ($modelData as $index => $modelValues) {
+                                    $fieldValues = $field->getValue();
+                                    $licenceIndex = $modelValues['Licence'];
+                                    if (array_key_exists('remove', $modelValues)) {
+                                        unset($fieldValues[$index]);
+                                        $field->setValue($fieldValues);
+                                        break;
+                                    }
+                                    else {
+                                        $licences = Opus_Licence::getAll();
+
+                                        $fieldValues[$index]->setModel($licences[$licenceIndex]);
+                                    }
+                                }
+                                $field->setValue($fieldValues);
+                            }
+                        }
+                        $model->store();
+                        break;
                     default:
                         $model = new Opus_Document($id);
                         foreach ($postData as $fieldName => $modelData) {
