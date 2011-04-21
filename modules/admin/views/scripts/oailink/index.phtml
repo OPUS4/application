@@ -46,6 +46,9 @@
 
     <p><?php echo $this->translate('admin_oailink_examples'); ?></p>
     <ul>
+        <li><a href="<?php echo $this->baseLink . '?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai:' . $this->repIdentifier . ':78'?>"><?php echo $this->translate('admin_oailink_example_getrecord').' (oai_dc)';?></a></li>
+        <li><a href="<?php echo $this->baseLink . '?verb=GetRecord&metadataPrefix=oai_pp&identifier=oai:' . $this->repIdentifier . ':78'?>"><?php echo $this->translate('admin_oailink_example_getrecord').' (oai_pp)';?></a></li>
+        <li><a href="<?php echo $this->baseLink . '?verb=GetRecord&metadataPrefix=epicur&identifier=oai:' . $this->repIdentifier . ':78'?>"><?php echo $this->translate('admin_oailink_example_getrecord').' (EPICUR)';?></a></li>
         <li><a href="<?php echo $this->baseLink . '?verb=GetRecord&metadataPrefix=xMetaDiss&identifier=oai:' . $this->repIdentifier . ':35'?>"><?php echo $this->translate('admin_oailink_example_getrecord').' (xMetaDiss)';?></a></li>
         <li><a href="<?php echo $this->baseLink . '?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai:' . $this->repIdentifier . ':41'?>"><?php echo $this->translate('admin_oailink_example_getrecord').' (XMetaDissPlus)';?></a></li>
         <li><a href="<?php echo $this->baseLink . '?verb=Identify'?>"><?php echo $this->translate('admin_oailink_example_identify');?></a></li>
