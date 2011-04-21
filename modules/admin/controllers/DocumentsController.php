@@ -308,7 +308,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                 $this->_redirectTo('index', $this->view->translate('admin_documents_delete_success'));
             }
             else {
-                $this->_redirectTo('index');
+                $this->_redirectTo('index', null, 'document', 'admin', array('id' => $id));
             }
         }
         else {
