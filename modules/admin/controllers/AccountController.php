@@ -81,13 +81,24 @@ class Admin_AccountController extends Controller_Action {
         $account = new Opus_Account($id);
         $this->view->account = $account;
 
+        // Get all Opus_UserRoles for current Account *plus* 'guest'
+        $roles = array();
+        foreach ($account->getRole() AS $roleLinkModel) {
+            $roles[] = $roleLinkModel->getModel();
+        }
+ 
+        $guestRole = Opus_UserRole::fetchByName('guest');
+        if (!is_null($guestRole)) {
+            $roles[] = $guestRole;
+        }
+
+        // Build module-roles table.
         $modulesRoles = array();
         foreach ($this->view->allModules as $module) {
             $modulesRoles[$module] = array();
         }
 
-        foreach ($account->getRole() AS $roleLinkModel) {
-            $role = $roleLinkModel->getModel();
+        foreach ($roles AS $role) {
             $roleName = $role->getName();
             $roleModules = $role->listAccessModules();
 
@@ -99,6 +110,12 @@ class Admin_AccountController extends Controller_Action {
                 $modulesRoles[$module][] = $roleName;
             }
         }
+
+        foreach (array_keys($modulesRoles) as $module) {
+            $modulesRoles[$module] = array_unique($modulesRoles[$module]);
+            sort($modulesRoles[$module]);
+        }
+
         $this->view->modulesRoles = $modulesRoles;
 
         return $account;
