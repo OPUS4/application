@@ -9,37 +9,37 @@
   
     <tu tuid="admin_dnbinstitute_index">
       <tuv xml:lang="en">
-        <seg>DNB Institutes</seg>
+        <seg>DNB Institution</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>DNB Institute</seg>
+        <seg>DNB Institution</seg>
       </tuv>
     </tu>
     
     <tu tuid="admin_dnbinstitute_new">
       <tuv xml:lang="en">
-        <seg>Create DNB Institute</seg>
+        <seg>Create DNB Institution</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Neues DNB Institut anlegen</seg>
+        <seg>Neue DNB Institution anlegen</seg>
       </tuv>
     </tu>
 
     <tu tuid="admin_dnbinstitute_show">
       <tuv xml:lang="en">
-        <seg>DNB Institute</seg>
+        <seg>DNB Institution</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>DNB Institut</seg>
+        <seg>DNB Institution</seg>
       </tuv>
     </tu>
 
     <tu tuid="admin_dnbinstitute_edit">
       <tuv xml:lang="en">
-        <seg>Edit DNB Institute</seg>
+        <seg>Edit DNB Institution</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>DNB Institut editieren</seg>
+        <seg>DNB Institution editieren</seg>
       </tuv>
     </tu>
 
