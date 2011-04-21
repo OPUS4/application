@@ -16,6 +16,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="admin_document_edit">
+      <tuv xml:lang="en">
+        <seg>Edit/Add Metadata</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Metadaten editieren/hinzufügen</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_document_edit_section">
       <tuv xml:lang="en">
         <seg>Edit</seg>

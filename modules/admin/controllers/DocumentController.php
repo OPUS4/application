@@ -60,7 +60,7 @@ class Admin_DocumentController extends Controller_Action {
         'titles' => 'Opus_Title',
         'abstracts' => 'Opus_TitleAbstract',
         'identifiers' => 'Opus_Identifier',
-        'references' => 'Opus_References',
+        'references' => 'Opus_Reference',
         'subjects' => 'Opus_Subject',
         'patents' => 'Opus_Patent',
         'notes' => 'Opus_Note',
@@ -162,8 +162,55 @@ class Admin_DocumentController extends Controller_Action {
                     }
                 }
 
-                // TODO implement for other models
-                $document->addIdentifier($model);
+                // TODO move in class that can be shared with publishing
+                switch ($modelClass) {
+                    case 'Opus_Identifier':
+                        $document->addIdentifier($model);
+                        break;
+                    case 'Opus_Person':
+                        break;
+                    case 'Opus_Reference':
+                        $document->addReference($model);
+                        break;
+                    case 'Opus_Title':
+                        switch ($model->getType()) {
+                            case 'main':
+                                $document->addTitleMain($model);
+                                break;
+                            case 'sub':
+                                $document->addTitleSub($model);
+                                break;
+                            case 'parent':
+                                $document->addTitleParent($model);
+                                break;
+                            case 'additional':
+                                $document->addTitleAdditional($model);
+                                break;
+                            default:
+                                break;
+                        }
+                        break;
+                    case 'Opus_TitleAbstract':
+                        $model->setType('abstract');
+                        $document->addTitleAbstract($model);
+                        break;
+                    case 'Opus_Subject':
+                        break;
+                    case 'Opus_SubjectSwd':
+                        break;
+                    case 'Opus_Licence':
+                        break;
+                    case 'Opus_Patent':
+                        break;
+                    case 'Opus_Enrichment':
+                        $document->addEnrichment($model);
+                        break;
+                    case 'Opus_Note':
+                        $document->addNote($model);
+                        break;
+                    default:
+                        break;
+                }
 
                 $document->store();
             }

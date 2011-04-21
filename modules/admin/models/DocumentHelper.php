@@ -116,6 +116,9 @@ class Admin_Model_DocumentHelper {
         ),
         'identifiers' => array(
             'Identifier'
+        ),
+        'references' => array(
+            'Reference'
         )
     );
 
