@@ -26,14 +26,14 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Export
+ * @package     Module_Rss
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-class Export_RssController extends Controller_Xml {
+class Rss_IndexController extends Controller_Xml {
 
     private $log;
     const NUM_OF_ITEMS_PER_FEED = '25';
@@ -68,7 +68,7 @@ class Export_RssController extends Controller_Xml {
     }
 
     private function setLink() {
-        $this->_proc->setParameter('', 'link', $this->view->serverUrl() . $this->getRequest()->getBaseUrl() . '/export/rss/');
+        $this->_proc->setParameter('', 'link', $this->view->serverUrl() . $this->getRequest()->getBaseUrl() . '/rss/index/');
     }
 
     private function setDates($resultList) {
