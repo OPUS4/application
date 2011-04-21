@@ -344,7 +344,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                     catch (Exception $e) {
                     	$this->_redirectTo('index', $e->getMessage());
                     }
-                    $this->_redirectTo('index', $this->view->translate('admin_documents_permanent_delete_success'));
+                    $this->_redirectTo('index', $this->view->translate('admin_documents_permanent_delete_success'), 'documents', 'admin');
             	}
             	else {
                     $this->_redirectTo('index');
@@ -459,7 +459,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         }
         else if (isset($sureno) === true) {
             $message = null;
-            $this->_redirectTo('show', $message, 'documents', 'admin',
+            $this->_redirectTo('index', $message, 'document', 'admin',
                     array('id' => $id));
         }
         else {
