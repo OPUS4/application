@@ -106,7 +106,12 @@ class Admin_Form_Model extends Zend_Form_SubForm {
         // iterate through fields and generate form elements
         foreach ($modelFields as $fieldName) {
             $field = $model->getField($fieldName);
-            $element = $this->_getElementForField($field);
+            if ($model instanceof Opus_Document && $field->getName() === 'Type') {
+                $element = $this->_getElementForField($field, 'DocType');
+            }
+            else {
+                $element = $this->_getElementForField($field);
+            }
             // $element->setName($model->getName());
             if ($field->isMandatory()) {
                 $element->setRequired(true);
@@ -177,14 +182,14 @@ class Admin_Form_Model extends Zend_Form_SubForm {
      *
      * TODO add method to Opus_Field to *getField(Render)Type()*
      */
-    protected function _getElementForField($field) {
+    protected function _getElementForField($field, $flag = null) {
         $element = null;
 
         if ($field->isCheckbox()) {
             $element = $this->_createCheckbox($field);
         }
         elseif ($field->isSelection()) {
-            $element = $this->_createSelect($field);
+            $element = $this->_createSelect($field, $flag);
         }
         elseif ($field->isTextarea()) {
             $element = $this->_createTextarea($field);
@@ -226,7 +231,7 @@ class Admin_Form_Model extends Zend_Form_SubForm {
         return $textarea;
     }
 
-    protected function _createSelect($field) {
+    protected function _createSelect($field, $flag) {
         $name = $field->getName();
         $select = new Zend_Form_Element_Select($name);
 
@@ -236,7 +241,13 @@ class Admin_Form_Model extends Zend_Form_SubForm {
         // $select->addMultiOption('', $message);
 
         // add possible values
-        $options = $field->getDefault();
+        if ($flag === 'DocType') {
+            $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
+            $options = $docTypeHelper->getDocumentTypes();
+        }
+        else {
+            $options = $field->getDefault();
+        }
 
         foreach ($options as $option) {
             switch ($name) {
