@@ -214,7 +214,7 @@ chmod +x createdb.sh
 cd $BASEDIR/opus4/scripts
 cp opus-apache-rewritemap-caller-secure.sh.template opus-apache-rewritemap-caller-secure.sh
 if [ $OS = "suse" ]; then
-  sed -e "s!^USER='www-data'!USER='wwwrun'" opus-apache-rewritemap-caller-secure.sh > opus-apache-rewritemap-caller-secure.sh.tmp
+  sed -e "s!^USER='www-data'!USER='wwwrun'!" opus-apache-rewritemap-caller-secure.sh > opus-apache-rewritemap-caller-secure.sh.tmp
   mv opus-apache-rewritemap-caller-secure.sh.tmp opus-apache-rewritemap-caller-secure.sh
 fi
 chmod +x opus-apache-rewritemap-caller-secure.sh
