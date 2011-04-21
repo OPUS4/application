@@ -40,7 +40,7 @@
 ?>
 
 <?php if (Opus_Security_Realm::getInstance()->check('administrate')) : ?>
-    <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'edit', 'id' => $this->docId), null, true) ?>" id="admin-edit-document">
+    <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'document', 'action' => 'index', 'id' => $this->docId), null, true) ?>" id="admin-edit-document">
         <?= $this->translate('frontdoor_edit_document') ?>
 </a>
 <?php endif ?>
