@@ -113,4 +113,14 @@
         <seg>Verfügbare Rollen</seg>
       </tuv>
     </tu>
+
+    <tu tuid="admin_access_checked_in_guest">
+      <tuv xml:lang="en">
+        <seg>(pre-selected in 'guest' role)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>(Ausgewählt in 'guest' Rolle)</seg>
+      </tuv>
+    </tu>
+
 </body>

@@ -70,7 +70,12 @@ class Admin_AccessController extends Controller_Action {
         $this->view->roleId = $id;
         $role = new Opus_UserRole($id);
         $roleModules = $role->listAccessModules();
+
+        $guest = Opus_UserRole::fetchByName('guest');
+        $guestModules = $guest->listAccessModules();
+
         $this->view->modules = $roleModules;
+        $this->view->guestModules = $guestModules;
         $this->view->allModules = $this->getAllModules();
     }
 
