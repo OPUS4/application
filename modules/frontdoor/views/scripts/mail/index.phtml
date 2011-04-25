@@ -36,19 +36,22 @@
  *  This view displays a mailform for recommendation of a document starting from frontdoor-view
  */
 ?>
-<h1><?= $this->translate ('frontdoor_recommendationtitle')?></h1><br/>
-<?
-foreach ($this->author as $authors) {
-    ?>
-   <b><u><?= $authors?></u></b>:&nbsp;<?
-}?>
-<b><?= $this->title?></b> (<?= $this->translate($this->type)?>)<br/><br/>
+<h1><?= $this->translate ('frontdoor_recommendationtitle')?></h1>
 
-<p><?= $this->translate ('frontdoor_recommendationtext')?></p><br /><br>
-<?=$this->mailForm?><br />
-<br /><p><a href="<?= $this->value =
-   $this->url(array(
-   'module' => 'frontdoor',
-   'controller' => 'index',
-   'docId' => $this->docId,
-   ), null, true);?>"><?= $this->translate('frontdoor_back')?></a></p><br />
+<?php foreach ($this->author as $author) : ?>
+<b><u><?= htmlspecialchars($author) ?></u></b>:&nbsp;
+<?php endforeach; ?>
+
+<b><?= htmlspecialchars($this->title) ?></b> (<?= htmlspecialchars($this->translate($this->type)) ?>)
+<br/>
+<br/>
+
+<p><?= $this->translate ('frontdoor_recommendationtext')?></p>
+<br/>
+<br>
+<?= $this->mailForm ?>
+<br/>
+<br/>
+<p>
+    <a href="<?= $this->url(array('module' => 'frontdoor', 'controller' => 'index', 'docId' => $this->docId), null, true); ?>"><?= $this->translate('frontdoor_back')?></a>
+</p>

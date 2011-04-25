@@ -50,14 +50,13 @@ class Frontdoor_Form_ToauthorForm extends Zend_Form
      * @return void
      */
     public function init() {
-        $first = true;
         $numberOfAuthors = 0;
         $atLeastOne = new Frontdoor_Form_AtLeastOneValidator();
         $displayGroupElements = array();
         $authorSub = new Zend_Form_SubForm('a');
 
         if (!is_null($this->_authors)) {
-            foreach($this->_authors as $author) {
+            foreach($this->_authors as $index => $author) {
                 $mail = $author['mail'];
                 $allow = $author['allowMail'];
                 if ($allow && !empty($mail)) {
@@ -71,9 +70,8 @@ class Frontdoor_Form_ToauthorForm extends Zend_Form
                     $options = array('disabled' => true);
                 }
                 $authCheck = new Zend_Form_Element_Checkbox($author['id'], $options);
-                if ($first) {
+                if ($index == 0) {
                     $firstAuthorCheckbox = $authCheck;
-                    $first = false;
                 }
                 $label = $author['name'];
                 if (!$allow) {
@@ -91,7 +89,6 @@ class Frontdoor_Form_ToauthorForm extends Zend_Form
                 $firstAuthorCheckbox->setUncheckedValue(1);
             }
             $authCheck->addValidator($atLeastOne);
-            //print_r($displayGroupElements);
             //$this->addDisplayGroup($displayGroupElements, 'author_group');
             $this->addSubForm($authorSub, 'authors');
         }
@@ -130,6 +127,5 @@ class Frontdoor_Form_ToauthorForm extends Zend_Form
 
     public function isValid($data) {
         return parent::isValid($data);
-        print_r($data);
     }
 }

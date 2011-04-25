@@ -36,9 +36,10 @@
  *  This view indicates if a mail is posted successfully or not
  */
 ?>
-<h1><?= $this->translate ('frontdoor_sendmailtitle')?></h1><br />
-<? echo $this->form;
-if ($this->text != "") {
-   echo $this->text;
-}?>
+<h1><?= $this->translate ('frontdoor_sendmailtitle')?></h1>
 
+<?= $this->form ?>
+
+<?php if ($this->text != "") : ?>
+    <?= $this->text ?>
+<?php endif; ?>

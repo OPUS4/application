@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -27,29 +26,13 @@
  *
  * @category    Application
  * @package     Module_Frontdoor
- * @author      Tobias Leidinger <tobias.leidinger@googlemail.com>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @author      Sascha Szott <szott@zib.de>
+ * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id:
- *
- *  This view displays a mailform to send mails to author of the document
+ * @version     $Id$
  */
+
+class Frontdoor_Model_Exception extends Exception {
+
+}
 ?>
-
-<h1><?= $this->translate ('frontdoor_toauthortitle')?></h1>
-<?/*
-foreach ($this->author as $au) {
-    ?>
-   <b><u><?= $au['name']?></u></b>:&nbsp;<?
-}*/?>
-<b><?= $this->title?></b> (<?= $this->translate($this->type)?>)<br/><br/>
-
-<p><?= $this->translate ('frontdoor_toauthortext')?></p>
-<br/>
-<br>
-<?= $this->form ?>
-<br/>
-<br/>
-<p>
-    <a href="<?= $this->url(array('module' => 'frontdoor', 'controller' => 'index','docId' => $this->docId), null, true); ?>"><?= $this->translate('frontdoor_back')?></a>
-</p>
