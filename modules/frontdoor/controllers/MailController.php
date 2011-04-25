@@ -166,11 +166,6 @@ class Frontdoor_MailController extends Controller_Action {
         if (empty($authors)) {
             throw new Application_Exception('no authors contactable via email');
         }
- 
-        $this->view->docId = $docId;
-        $this->view->author = $authors;
-        $this->view->type = $authorsModel->getDocument()->getType();
-        $this->view->title = $authorsModel->getDocument()->getTitleMain(0)->getValue();
         
         $form = new Frontdoor_Form_ToauthorForm(array('authors' => $authors));
         $form->setAction($this->view->url(array(
@@ -178,13 +173,14 @@ class Frontdoor_MailController extends Controller_Action {
                     'controller' => 'mail',
                     'action' => 'toauthor')));
         $form->setMethod('post');
-        $this->view->form = $form;
 
-        if (!$this->getRequest()->isPost()) {
-            return;
-        }
+        $this->view->docId = $docId;
 
-        if (!$form->isValid($this->getRequest()->getPost())) {
+        if (!$this->getRequest()->isPost() || !$form->isValid($this->getRequest()->getPost())) {
+            $this->view->form = $form;
+            $this->view->author = $authors;
+            $this->view->type = $authorsModel->getDocument()->getType();
+            $this->view->title = $authorsModel->getDocument()->getTitleMain(0)->getValue();
             return;
         }
 
@@ -196,12 +192,11 @@ class Frontdoor_MailController extends Controller_Action {
                     $this->view->translate('mail_toauthor_subject'),
                     $form->getValue('message'),
                     $form->getValue('authors'));
-            $this->view->ok = true;
             $this->view->success = 'frontdoor_mail_ok';
         }
         catch (Exception $e) {
-            $this->view->ok = false;
-            $this->view->form = $e->getMessage();
+            $log = Zend_Registry::get('Zend_Log');
+            $log->err($e->getMessage());
             $this->view->success = 'frontdoor_mail_notok';
         }
         $this->render('feedback');

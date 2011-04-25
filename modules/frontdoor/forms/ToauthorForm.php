@@ -50,48 +50,30 @@ class Frontdoor_Form_ToauthorForm extends Zend_Form
      * @return void
      */
     public function init() {
-        $numberOfAuthors = 0;
         $atLeastOne = new Frontdoor_Form_AtLeastOneValidator();
-        $displayGroupElements = array();
         $authorSub = new Zend_Form_SubForm('a');
 
         if (!is_null($this->_authors)) {
-            foreach($this->_authors as $index => $author) {
-                $mail = $author['mail'];
-                $allow = $author['allowMail'];
-                if ($allow && !empty($mail)) {
-                    $numberOfAuthors++;
-                    $options = array('checked' => true);
-                    if (sizeof($this->_authors) == 1) {
-                        $options['disabled'] = true;
-                    }
-
-                } else {
-                    $options = array('disabled' => true);
+            $authCheck = null;
+            foreach($this->_authors as $author) {
+                $options = array('checked' => true);
+                if (count($this->_authors) == 1) {
+                    $options['disabled'] = true;
                 }
                 $authCheck = new Zend_Form_Element_Checkbox($author['id'], $options);
-                if ($index == 0) {
-                    $firstAuthorCheckbox = $authCheck;
-                }
-                $label = $author['name'];
-                if (!$allow) {
-                    $translate = Zend_Registry::get('Zend_Translate');
-                    $label .= ' (' . $translate->_('frontdoor_mailform_notallowed') .')';
-                } else {
-                    $atLeastOne->addField($authCheck);
-                }
-                $authCheck->setLabel($label);
-                //$displayGroupElements[] = $author['id'];
+                $atLeastOne->addField($authCheck);
+                $authCheck->setLabel($author['name']);
                 $authorSub->addElement($authCheck);
+
+                if (count($this->_authors) == 1) {
+                    $authCheck->setUncheckedValue(1);
+                }
             }
-            if ($numberOfAuthors == 1) {
-                $firstAuthorCheckbox->setOptions(array('disabled' => true));
-                $firstAuthorCheckbox->setUncheckedValue(1);
-            }
+            
             $authCheck->addValidator($atLeastOne);
-            //$this->addDisplayGroup($displayGroupElements, 'author_group');
             $this->addSubForm($authorSub, 'authors');
         }
+
         $sender = new Zend_Form_Element_Text('sender');
         $sender->setRequired(true);
         $sender->setLabel('frontdoor_sendername');
@@ -116,7 +98,6 @@ class Frontdoor_Form_ToauthorForm extends Zend_Form
         $submit = new Zend_Form_Element_Submit('frontdoor_send_mailtoauthor');
         $submit->setLabel('frontdoor_send_mailtoauthor');
 
-        // Add elements to form:
         $this->addElements(array($sender, $sender_mail, $message, $captcha, $submit));
     }
 
