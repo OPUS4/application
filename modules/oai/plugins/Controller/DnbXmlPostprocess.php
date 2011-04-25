@@ -12,6 +12,7 @@
  * GNU General Public License for more details.
  *
  * @category    Application
+ * @package     Module_Oai
  * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
  * @copyright   Copyright (c) 2009-2010
  *              Saechsische Landesbibliothek - Staats- und Universitaetsbibliothek Dresden (SLUB)
