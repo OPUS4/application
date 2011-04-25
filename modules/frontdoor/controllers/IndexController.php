@@ -41,7 +41,6 @@ class Frontdoor_IndexController extends Controller_Action {
      * @return void
      */
     public function indexAction() {
-
         $this->view->title = $this->view->translate('frontdoor_title');
         $request = $this->getRequest();
         $docId = $request->getParam('docId');
@@ -112,9 +111,15 @@ class Frontdoor_IndexController extends Controller_Action {
 
         $proc->setParameter('', 'baseUrl', $baseUrl);
         $proc->setParameter('', 'layoutPath', $baseUrl . '/' . $layoutPath);
+        $proc->setParameter('', 'isMailPossible', $this->isMailPossible($docId));
         $this->view->frontdoor = $proc->transformToXML($documentNode);
 
         $this->incrementStatisticsCounter($docId);
+    }
+
+    private function isMailPossible($docId) {
+        $authors = new Frontdoor_Model_Authors($docId);
+        return count($authors->getContactableAuthors()) > 0;
     }
 
     /**

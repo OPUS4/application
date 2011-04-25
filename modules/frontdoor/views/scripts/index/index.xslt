@@ -1161,7 +1161,7 @@
         <xsl:if test ="$isMailPossible">
             <xsl:element name="br"/>
             <xsl:element name="a">
-	           	<!-- TODO: Use Zend Url-Helper to build href attribute -->
+                <!-- TODO: Use Zend Url-Helper to build href attribute -->
                 <xsl:attribute name="href">
                     <xsl:value-of select="$baseUrl"/>
                     <xsl:text>/frontdoor/mail/toauthor/docId/</xsl:text>
@@ -1172,7 +1172,6 @@
                 </xsl:call-template>
             </xsl:element>
         </xsl:if>
-       
     </xsl:template>
 
 
