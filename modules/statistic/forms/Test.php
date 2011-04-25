@@ -26,7 +26,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Statistic
+ * @package     Module_Statistic
  * @author      Tobias Leidinger <tobias.leidinger@gmail.com>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License

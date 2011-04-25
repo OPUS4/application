@@ -29,7 +29,7 @@ include ("jpgraph/jpgraph_bar.php");
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_statistic
+ * @package     Module_Statistic
  * @author      Birgit Dressler (b.dressler@sulb.uni-saarland.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
