@@ -69,8 +69,8 @@ fi;
 
 rm -rv opus4/{docs,nbproject,tests,workspace}
 rm -rvf opus4/public/layouts/{opus33,opus34,darker,matheon,plain,opus4-matheon}
-rm -rv  opus4/import/importer/zib
-rm -rv  opus4/import/stylesheets/zib
+#rm -rv  opus4/import/importer/zib
+#rm -rv  opus4/import/stylesheets/zib
 rm -v  opus4/modules/publish/views/scripts/form/preprintmatheon.phtml
 rm -v  opus4/application/configs/doctypes/preprintmatheon.xml
 rm -vf opus4/modules/publish/views/scripts/form/demo.phtml
