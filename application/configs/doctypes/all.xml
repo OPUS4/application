@@ -49,7 +49,7 @@
         <default value="deu" edit="yes" public="yes"/>
     </field>
     <field name="TitleMain" required="no" formelement="text" datatype="Title" multiplicity="4">
-        <default for="Value" value="Hier den Haupttiel eintragen" edit="yes" public="yes"/>
+        <default for="Value" value="Hier den Haupttitel eintragen" edit="yes" public="yes"/>
         <default for="Language" value="deu" edit="yes" public="yes"/>
     </field>
     <field name="TitleAbstract" required="no" formelement="textarea" datatype="Title" multiplicity="4">
