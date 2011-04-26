@@ -114,7 +114,7 @@ class Admin_DocumentController extends Controller_Action {
 
             $this->prepareActionLinks($this->view->docHelper);
 
-            $this->prepareEditLinks();
+            $this->prepareEditLinks($id);
 
             return $model;
         }
@@ -516,7 +516,7 @@ class Admin_DocumentController extends Controller_Action {
         return $actions;
     }
 
-    public function prepareEditLinks() {
+    public function prepareEditLinks($docId) {
         $editUrls = array();
         $editLabels = array();
 
@@ -525,6 +525,7 @@ class Admin_DocumentController extends Controller_Action {
                 'module' => 'admin',
                 'controller' => 'document',
                 'action' => 'edit',
+                'id' => $docId,
                 'section' => $section
             ), 'default', false);
             $editLabels[$section] = $this->view->translate('admin_document_edit_section');
