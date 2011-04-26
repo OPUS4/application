@@ -14,3 +14,4 @@ then
 else
     sudo chmod +x $BASEDIR/install/install.sh
     sudo sh $BASEDIR/install/install.sh ubuntu
+fi
