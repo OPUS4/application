@@ -12,6 +12,16 @@ then
     sudo chmod +x $BASEDIR/install/update.sh
     sudo $BASEDIR/install/update.sh
 else
-    sudo chmod +x $BASEDIR/install/install_ubuntu.sh
-    sudo $BASEDIR/install/install_ubuntu.sh
+    if [ "$1" == "configure" ]
+    then
+        read -p "Upgrade Opus [u] or new installation [i] ? " ANSWER
+        if [ $ANSWER == 'u']
+        then
+            sudo chmod +x $BASEDIR/install/update.sh
+            sudo $BASEDIR/install/update.sh
+        else 
+            sudo chmod +x $BASEDIR/install/install_ubuntu.sh
+            sudo $BASEDIR/install/install_ubuntu.sh
+        fi
+    fi
 fi
