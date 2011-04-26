@@ -16,4 +16,4 @@
 # @license     http://www.gnu.org/licenses/gpl.html General Public License
 # @version     $Id$
 
-sh install.sh ubuntu
+$(dirname $0)/install.sh ubuntu
