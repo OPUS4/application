@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 # This file is part of OPUS. The software OPUS has been originally developed
 # at the University of Stuttgart with funding from the German Research Net,
@@ -25,7 +25,7 @@
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 set -e
-script_dir=$(pwd)/$(dirname "$BASH_SOURCE")
+script_dir=$(cd `dirname $0` && pwd)
 
 #
 # begin editable part
