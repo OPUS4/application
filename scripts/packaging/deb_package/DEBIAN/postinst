@@ -8,20 +8,9 @@ sudo a2ensite opus4
 sudo /etc/init.d/apache2 reload
 
 if [ "$1" == "upgrade" ]
-then
+then 
     sudo chmod +x $BASEDIR/install/update.sh
-    sudo $BASEDIR/install/update.sh
+    sudo sh $BASEDIR/install/update.sh
 else
-    if [ "$1" == "configure" ]
-    then
-        read -p "Upgrade Opus [u] or new installation [i] ? " ANSWER
-        if [ $ANSWER == 'u']
-        then
-            sudo chmod +x $BASEDIR/install/update.sh
-            sudo $BASEDIR/install/update.sh
-        else 
-            sudo chmod +x $BASEDIR/install/install_ubuntu.sh
-            sudo $BASEDIR/install/install_ubuntu.sh
-        fi
-    fi
-fi
+    sudo chmod +x $BASEDIR/install/install_ubuntu.sh
+    sudo sh $BASEDIR/install/install_ubuntu.sh
