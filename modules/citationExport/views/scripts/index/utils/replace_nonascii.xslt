@@ -52,7 +52,7 @@
             <xsl:if test="string-length($value) > 0">
 <xsl:text>  </xsl:text><xsl:value-of select="$field" /><xsl:text> = {</xsl:text>
                 <xsl:call-template name="replace_strings">
-                    <xsl:with-param name="input_text"><xsl:value-of select="$value" /></xsl:with-param>
+                    <xsl:with-param name="input_text"><xsl:value-of select="normalize-space($value)" /></xsl:with-param>
                 </xsl:call-template><xsl:text>}</xsl:text>
 	  <xsl:if test="string-length($delimiter) > 0">
 		<xsl:value-of select="$delimiter" />

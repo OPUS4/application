@@ -58,20 +58,74 @@
                 </xsl:otherwise>
             </xsl:choose>
            </xsl:when>
-          <xsl:when test="$type='identifier'">
-	<xsl:choose>
-	<xsl:when test="position() = 1 or position() = 2 or position() = 3">
-		<xsl:value-of select="@LastName" />
-	</xsl:when>
-	<xsl:when test="position() = 4">
-		<xsl:text>etal</xsl:text>
-	</xsl:when>
-	<xsl:otherwise>
-               <xsl:text></xsl:text>
-          </xsl:otherwise>
-	</xsl:choose>
+           <xsl:when test="$type='identifier'">
+               <xsl:choose>
+                   <xsl:when test="position() = 1 or position() = 2 or position() = 3">
+                       <xsl:call-template name="replace_id_strings">
+                           <xsl:with-param name="input_text"><xsl:value-of select="@LastName" /></xsl:with-param>
+                       </xsl:call-template>
+                   </xsl:when>
+                   <xsl:when test="position() = 4">
+                           <xsl:text>etal.</xsl:text>
+                   </xsl:when>
+                   <xsl:otherwise>
+                          <xsl:text></xsl:text>
+                   </xsl:otherwise>
+               </xsl:choose>
            </xsl:when>
       </xsl:choose>
+    </xsl:template>
+
+
+    <!-- Replace Special Characters -->
+    <xsl:template name="replace_id_strings">
+      <xsl:param name="input_text" />
+      <xsl:param name="search" select="document('identifier_characters.xml')/string_replacement/search" />
+      <xsl:variable name="replaced_text">
+        <xsl:call-template name="replace_id_substring">
+          <xsl:with-param name="text" select="$input_text" />
+          <xsl:with-param name="from" select="$search[1]/find" />
+          <xsl:with-param name="to" select="$search[1]/replace" />
+        </xsl:call-template>
+      </xsl:variable>
+
+      <xsl:choose>
+        <xsl:when test="$search[2]">
+          <xsl:call-template name="replace_id_strings">
+            <xsl:with-param name="input_text" select="$replaced_text" />
+            <xsl:with-param name="search" select="$search[position() > 1]" />
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="$replaced_text" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:template>
+
+    <xsl:template name="replace_id_substring">
+        <xsl:param name="text" />
+        <xsl:param name="from" />
+        <xsl:param name="to" />
+        <xsl:choose>
+            <xsl:when test="contains($text, $from)">
+                <xsl:call-template name="replace_id_substring">
+                    <xsl:with-param name="text">
+                        <xsl:value-of select="substring-before($text, $from)" />
+                        <xsl:value-of select="$to" />
+                        <xsl:value-of select="substring-after($text, $from)" />
+                    </xsl:with-param>
+                    <xsl:with-param name="from">
+                        <xsl:value-of select="$from" />
+                    </xsl:with-param>
+                    <xsl:with-param name="to">
+                        <xsl:value-of select="$to" />
+                    </xsl:with-param>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$text" />
+            </xsl:otherwise>
+       </xsl:choose>
     </xsl:template>
 
 </xsl:stylesheet>

@@ -58,18 +58,24 @@
 
     <xsl:template match="Opus_Model_Filter">
 
-        <!--  Preprocessing: some variables must be definesd -->
-         <xsl:variable name="doctype">
+        <!--  Preprocessing: some variables must be defined -->
+        <xsl:variable name="doctype">
             <xsl:value-of select="@Type" />
         </xsl:variable>
 
         <xsl:variable name="year">
             <xsl:choose>
-                <xsl:when test="string-length(@PublishedYear)>0">
-                    <xsl:value-of select="@PublishedYear" />
+                <xsl:when test="string-length(normalize-space(CompletedDate/@Year)) > 0">
+                    <xsl:value-of select="CompletedDate/@Year" />
                 </xsl:when>
-                <xsl:when test="string-length(@CompletedYear)>0">
+                <xsl:when test="normalize-space(@CompletedYear) != '0000'">
                     <xsl:value-of select="@CompletedYear" />
+                </xsl:when>
+                <xsl:when test="string-length(normalize-space(PublishedDate/@Year)) > 0">
+                    <xsl:value-of select="PublishedDate/@Year" />
+                </xsl:when>
+                <xsl:when test="normalize-space(@PublishedYear) != '0000'">
+                    <xsl:value-of select="@PublishedYear" />
                 </xsl:when>
            </xsl:choose>
        </xsl:variable>
@@ -81,10 +87,18 @@
         </xsl:variable>
 
         <xsl:variable name="identifier">
-            <xsl:apply-templates select="PersonAuthor">
-                 <xsl:with-param name="type">identifier</xsl:with-param>
-            </xsl:apply-templates>
-            <xsl:value-of select="$year" />
+            <xsl:choose>
+                <xsl:when test="string-length(normalize-space($author)) > 0">
+                    <xsl:apply-templates select="PersonAuthor">
+                         <xsl:with-param name="type">identifier</xsl:with-param>
+                    </xsl:apply-templates>
+                    <xsl:value-of select="$year" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>OPUS4-</xsl:text>
+                    <xsl:value-of select="@Id" />
+                </xsl:otherwise>
+            </xsl:choose>
          </xsl:variable>
 
         <xsl:variable name="editor">
