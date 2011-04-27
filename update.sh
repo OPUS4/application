@@ -20,9 +20,10 @@
 set -e
 
 SCRIPTNAME=`basename $0`
-SCRIPT_PATH=`pwd`
+SCRIPT_PATH=$(cd `dirname $0` && pwd)
 BASEDIR=/var/local/opus4
 MYSQL_CLIENT=/usr/bin/mysql
+cd $SCRIPT_PATH
 VERSION_NEW=$(sed -n '1p' ../VERSION.txt)
 MD5_NEW=../MD5SUMS
 
