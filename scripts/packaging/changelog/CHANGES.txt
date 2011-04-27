@@ -1,5 +1,215 @@
 h1. OPUS 4 Change Log
 
+h2. ======================== Release 4.1.0 2011-04-27 ========================
+
+h3. Stories
+
+* OPUSVIER-1233 -   nachträgliches Hinzufügen von Dateien zu Dokumenten
+* OPUSVIER-1157 -   OAI-Schnittstelle unterstützt Feature "deletedRecord" nicht
+* OPUSVIER-1110 -   OpenSearch Support
+* OPUSVIER-1096 -   Module "crawlers/sitelinks" soll Dokumente jahresweise anzeigen
+* OPUSVIER-1092 -   Collections-Methode mit Rückgabe der Parent-Id
+* OPUSVIER-1091 -   Frontdoor-Titel: Anzeigen des Dokument-Titels
+* OPUSVIER-1089 -   Referee field in frontdoor is not clickable
+* OPUSVIER-1088 -   Link-Attribute nofollow,noindex für Such-Crawler
+* OPUSVIER-1080 -   Zugriffsrechte
+* OPUSVIER-1059 -   Editieren des Bemerkungsfeldes zu einer Datei im Nachhinein nicht möglich
+* OPUSVIER-1040 -   Veröffentlichungsformular - Auswahl der DDC-Sachgruppen als Pull-Down-Liste
+* OPUSVIER-1039 -   Veröffentlichungsformular - Link zur SWD Schlagwortdatei
+* OPUSVIER-1038 -   Erstellen von Schriftenreihen
+* OPUSVIER-919 	-   Vorlagen für Impressum und Deposit-License erstellen
+* OPUSVIER-909 	-   Release-Updateskript erstellen
+* OPUSVIER-797 	-   Kein HTML bei Kontaktinformationen
+* OPUSVIER-613 	-   OAI-Schnittstelle
+* OPUSVIER-184 	-   Prüfen und ergänzen der Metadatenformate, die die OAI-Schnitstelle unterstützt
+
+h2. Specification
+
+* OPUSVIER-895  -   Collections für die Standardauslieferung
+* OPUSVIER-438 	-   Umgang mit den Zend_Lucene-Relikten
+
+h2. Documentation
+
+* OPUSVIER-1303 -   Anlegen der Datei opus-apache-rewritemap-caller.sh aus der Doku entfernen
+* OPUSVIER-1289 -   Featurebeschreibung für nachträgliche Hinzufügen von Dateien zu Dokumenten
+* OPUSVIER-1288 -   neues Verzeichnis workspace/incoming in Dokumentation aufnehmen
+* OPUSVIER-1286 -   Komplkationen mit php5-librdf und OAI sowie BibTeX
+* OPUSVIER-1234 -   Nutzer-Doku: Individuelle Templates
+* OPUSVIER-1221 -   Neues Rechte-System dokumentieren
+* OPUSVIER-1218 -   Beschreibung des Moduls Export
+* OPUSVIER-1212	-   fehlende OAI-Konfigparameter (aktuell in application.ini)
+* OPUSVIER-1196 -   Vorgehen zum Anlegen eines eigenen Layouts
+* OPUSVIER-1192 -   Unklarheiten in der Konfiguration des FAQ-Mechanismus
+* OPUSVIER-1170 -   Hinweis in Doku, dass einem Dokument maximal eine Bandnummer zugewiesen werden kann
+* OPUSVIER-1167 -   Übersetzungsschlüssel für Werte der Bibliographie- und Volltext-Vorhanden-Facette
+* OPUSVIER-896  -   Script "change-password.php" in Dokumentation aufnehmen
+
+h2. Bugs
+* OPUSVIER-1314 -   Edit-Links in Dokumentverwaltung funktionieren nicht, wenn Dokument direkt per ID aufgerufen wird
+* OPUSVIER-1312 -   MailToAuthor: unerlaubter Mailversand an Autoren möglich durch clientsetige Manipulation des Formulars
+* OPUSVIER-1305 -   neu hochgeladene Dateien können zunächst von niemandem gesehen werden (außer Admin)
+* OPUSVIER-1296 -   Funktion "mail to Author" funktioniert nicht
+* OPUSVIER-1282 -   Beim Speichern einer Sammlung werden alle Zwischenschritte als einzelne Sammlungszuweisungen mitgespeichert
+* OPUSVIER-1281 -   Fehler beim Abspeichern einer Sammlung
+* OPUSVIER-1278 -   XSS-Vulnerability im CitationExport (sowohl BibTeX als auch RIS)
+* OPUSVIER-1277 -   BibTeX-Export: Escaping von Non-ASCII-Zeichen (außer äÄöÖüÜ)
+* OPUSVIER-1274 -   CitationExport liefert auch Dokumente aus, die nicht im server_state published sind
+* OPUSVIER-1261 -   Suche nach ID nicht bei Sammlungen verwalten anzeigen
+* OPUSVIER-1255 -   Frontdoor: Statt Dateiname wird Label-Feld angezeigt
+* OPUSVIER-1254 -   Filemanager: Label-Feld kann nicht bearbeitet werden
+* OPUSVIER-1252 -   Collectionzuordnung für Dokumente zeigt nicht alle vorhandenen CollectionRoles an
+* OPUSVIER-1251 -   fehlende Übersetzungsschlüssel für Seitentitel in Collection/CollectionRole-Administration
+* OPUSVIER-1246 -   DNB-Institute werden nicht richtig im Publish-Formular angezeigt
+* OPUSVIER-1244 -   Unterschiedlicher Abstand in Footer-Links
+* OPUSVIER-1227 -   Script "rebuilding_database.sh" entfernt SVN-Verzeichnisse und bricht "opus4server" auf dem CI-System
+* OPUSVIER-1215 -   Export liefert zu wenige Dokumente
+* OPUSVIER-1208 -   Application_Exception in /solrsearch/index/search (was caught in Matheon instance)
+* OPUSVIER-1205 -   Parameter form.first.requireupload
+* OPUSVIER-1188 -   obsolete Schlüssel in home.tmx entfernen
+* OPUSVIER-1186 -   rebuilding_database.sh ist abhängig vom momentanen arbeitsverzeichnis
+* OPUSVIER-1177 -   Fehler in Bestätigungsnachricht nach Entfernen der Collectionzuordnung zu einem Dokument
+* OPUSVIER-1176 -   Nicht angezeigte Collection_Role kann durch Raten der RootCollection-ID dennoch angezeigt werden
+* OPUSVIER-1175 -   leere CollectionRole mit zugeordneten published Dokumenten erscheint nicht im Browsing
+* OPUSVIER-1174 -   CollectionRole anklickbar, obwohl alle Untercollections auf der ersten Ebene unsichtbar sind und der CollectionRole selbst keine published Dokumente zugeordnet sind
+* OPUSVIER-1173 -   Unsichtbarkeit von Collections wird nicht auf die Knoten im Unterbaum propagiert
+* OPUSVIER-1168 -   rows-Parameter wird nicht validiert
+* OPUSVIER-1165 -   Fehler in Doku 8.5 und 8.6: Kontaktseite bzw. Impressumseite
+* OPUSVIER-1159 -   Facettenschlüssel verbleiben nach Entfernen einer ausgewählten Facette in der URL
+* OPUSVIER-1155 -   Cache-Dateien liegen in "/tmp"
+* OPUSVIER-1146 -   automatische URN Vergabe funktioniert nicht
+* OPUSVIER-1143 -   Fehlende Übersetzungsschlüssel
+* OPUSVIER-1142 -   Filemanager: Fehler beim Erzeugen der Md5, SHA512 Prüfsummen
+* OPUSVIER-1137 -   Installation unter OpenSuse: Anpassung der Variable USER in opus-apache-rewritemap-caller-secure.sh
+* OPUSVIER-1127 -   Fehler in RewriteRule in Kapitel 10.4
+* OPUSVIER-1115 -   falsches Geburtsdatum bei Personen
+* OPUSVIER-1100 -   solrsearch/views/scripts/index/results.phtml(82): Invalid argument supplied for foreach()
+* OPUSVIER-1093 -   Model löscht Collections, wenn man die Zuordnung zu einem Dokument entfernt
+* OPUSVIER-1087 -   Fehlerhafter Leitlinien-Link in Upload-Formular
+* OPUSVIER-1062 -   erweitertes <epicur>-Wurzelelement
+* OPUSVIER-1061 -   OAI - Es werden keine URLs bei der Abfrage (epicur) ausgegeben
+* OPUSVIER-982  -   Eingeschraenkte Zugriffsberechtigung über IP-Bereiche
+* OPUSVIER-971 	-   BibTeX-Export liefert 20-Byte-Datei aus
+* OPUSVIER-970 	-   Frontdoor: Volltext-Dateien mit zu langen Dateinamen machen das Layout kaputt
+* OPUSVIER-948 	-   Keine Datei-Downloads für unpublished-Dokument möglich (Cookie-Problem!)
+* OPUSVIER-935 	-   Auth-Controller verliert Parameter bei Weiterleitung
+* OPUSVIER-930 	-   Parameter requireupload funktioniert nicht
+* OPUSVIER-928 	-   Seitentitel "OPUS 4 | default_auth_login" bei fehlgeschlagenem Login
+* OPUSVIER-903 	-   Zu DDC zugeordnetes Dokument wird nicht im Browsing angezeigt
+* OPUSVIER-900 	-   Leitlinien-Link im Formular führt auf Fehlerseite nachdem Formular mit Eingabefehlern zurückgegeben wurde
+* OPUSVIER-865 	-   angezeigtes Datum soll CompletedDate sein
+* OPUSVIER-712 	-   OAI-Schnittstelle missachtet Flag "VisibleInOai"
+* OPUSVIER-652 	-   Uneinheitliche Darstellung bei Freie Schlagworte/Tags
+* OPUSVIER-482 	-   Matheon-Instanz: BibTeX nicht okay
+* OPUSVIER-354 	-   Aufräumen der Reste von abgebrochenen Dokumentuploads
+* OPUSVIER-139 	-   OPUS_Security blockt IPv6
+
+h2. Tasks
+
+* OPUSVIER-1319 -   Rechte-Umbau: Anzeige von Edit-Button auf Frontdoor kaputt für User != Admin
+* OPUSVIER-1318 -   Rechte-Umbau: Anzeige von Admin-Button kaputt für User != Admin
+* OPUSVIER-1315 -   Link zur Autorkontaktierung nur anzeigen, wenn mindestens ein Autor existiert, der kontaktierbar ist
+* OPUSVIER-1300 -   Änderung von Kommentar, Sprache und Label von Dateien im Dateimanager
+* OPUSVIER-1299 -   Link auf Filebrowser in Administration einfügen
+* OPUSVIER-1298 -   Rechte-Umbau: Hinzufügen von Dokument-Rechten über die Administration
+* OPUSVIER-1297 -   Rechte-Umbau: Hinzufügen von Datei-Rechten über die Administration
+* OPUSVIER-1294 -   Änderungen der Rewrite-Regeln in der Dokumentation erwähnen
+* OPUSVIER-1293 -   Controller und View für das nachträgliche Hinzufügen von Dateien zu Dokumenten im Admin-Bereich
+* OPUSVIER-1291 -   Leitlinien Link
+* OPUSVIER-1290 -   Änderung des Verzeichnis des Migrationsskripts
+* OPUSVIER-1287 -   incoming Verzeichnis in Tarball aufnehmen
+* OPUSVIER-1283 -   Migrations-Scripte in server/scripts in eigenes Verzeichnis migration auslagern
+* OPUSVIER-1280 -   Code Duplication in BibTeX-Export entfernen
+* OPUSVIER-1272 -   Zuweisung einer Bandnummer im Publish-Formular
+* OPUSVIER-1259 -   Rechte-Umbau: Admin->FileHelper enthält noch alten Privilege-Code
+* OPUSVIER-1257 -   OAI-Parameter oai.ddb.contactid aus der config.ini-template entfernen
+* OPUSVIER-1256 -   Rechte-Umbau: Nicht-benötigte Klasse "Controller_Plugin_ModuleInit" entfernen
+* OPUSVIER-1250 -   Rechte-Umbau, Modul Publish: "Opus_Security_Realm::getInstance()->check('publish')" in Controller
+* OPUSVIER-1249 -   Rechte-Umbau, Modul Frontdoor: "check('readMetadata', $doc->getServerState()))" in Controller verlagern.
+* OPUSVIER-1248 -   Rechte-Umbau, Modul CitationExport: "check('readMetadata', $doc->getServerState()))" in Controller verlagern.
+* OPUSVIER-1245 -   Link nur anzeigen, wenn die Collection verknüpfte Dokumente enthält
+* OPUSVIER-1239 -   URN-Parameter "urn.autoCreate = true" entfernen
+* OPUSVIER-1238 -   Model Opus_Dnbinstitute: neues Feld 'IsPublisher' und neue Methode 'getPublishers'
+* OPUSVIER-1237 -   Model Opus_Reference: Relation
+* OPUSVIER-1235 -   Model Opus_Document: IdentifierArxiv, IdentifierPubmed, ReferenceOpus4
+* OPUSVIER-1228 -   Umbau Rechte: "init.php" aus allen Server-Modulen entfernen
+* OPUSVIER-1226 -   LatestDocuments-XHTML mit link-Element auf RSS-Feed anreichern
+* OPUSVIER-1225 -   Einbindung RSS-Icon in Latest Documents Browsing
+* OPUSVIER-1224 -   Umbenennung der Schlüssel für die Startseite
+* OPUSVIER-1223 -   Rechte-Umbau: Model-Klasse für Tabelle "access_modules" erstellen
+* OPUSVIER-1222 -   neues Feld server_date_created in Tabelle documents
+* OPUSVIER-1220 -   Rechte-Umbau: Check der Datei-Rechte implementieren
+* OPUSVIER-1219 -   Rechte-Umbau: Check der Dokument-Rechte implementieren
+* OPUSVIER-1217 -   Rechte-Umbau: Check der Modul-Rechte implementieren
+* OPUSVIER-1216 -   URL des offiziellen OPUS-Subversion veröffentlichen
+* OPUSVIER-1211 -   Dokumentexport durch Anhängen von Parametern in den solrsearch/index/search URLs
+* OPUSVIER-1210 -   Zugriff auf Modul export einschränken
+* OPUSVIER-1206 -   Update-Skript in Deb-Package einbauen
+* OPUSVIER-1204 -   Update-Script dokumentieren
+* OPUSVIER-1203 -   Löschen der Übersetzungsschlüssel der gelöschten FAQ-Texte
+* OPUSVIER-1202 -   Festlegen der Standard-FAQ-Texte
+* OPUSVIER-1201 -   Übersicht, welche Felder in den Templates als group bzw. element ausgewiesen werden müssen
+* OPUSVIER-1200 -   MD5SUMS Datei im Wurzelverzeichnis des Tarballs aufnehmen
+* OPUSVIER-1199 -   Verzeichnis releases im Wurzelverzeichnis des Tarballs erstellen
+* OPUSVIER-1198 -   Datei VERSION.txt im Wurzelverzeichnis des Tarballs erstellen
+* OPUSVIER-1197 -   Release-Tagging für apacheconf, solrconfig und install
+* OPUSVIER-1195 -   Datei md5sums in Deb-Package aufnehmen
+* OPUSVIER-1194 -   Anlegen eines alter-db-skript
+* OPUSVIER-1189 -   Schemaänderung propagieren
+* OPUSVIER-1187 -   Checkliste vor Liveschaltung einer OPUS 4-Instanz
+* OPUSVIER-1182 -   Kapitelüberschriften den Kapiteldtitelblättern hinzufügen
+* OPUSVIER-1180 -   Erweiterung der Anzeige in der Dokumentverwaltung
+* OPUSVIER-1179 -   Link in der Sammlungsadministration, der alle zugeordneten Dokumente anzeigt
+* OPUSVIER-1172 -   Menüpunkte im Breadcrumb abkürzen
+* OPUSVIER-1169 -   Anzeige von Bandnummer und zugehöriger Schriftenreihe in Frontdoor
+* OPUSVIER-1161 -   Implizite Abhängigkeit zwischen Apache-Config und config.ini
+* OPUSVIER-1154 -   Migration der Bandnummern für Schriftenreihen
+* OPUSVIER-1150 -   Migration der BKL
+* OPUSVIER-1147 -   Erweiterung der Felder für DNB-Institut
+* OPUSVIER-1147 -   Erweiterung der Felder für DNB-Institut
+* OPUSVIER-1126 -   Anpassung in den RewriteRules für das Umschreiben der alten OPUS 3.x Volltext-URLs (S. 63 ff.)
+* OPUSVIER-1125 -   Anpassung Apache Config in der Dokumentation (Seite 32)
+* OPUSVIER-1124 -   Anzeige von Bandnummer und zugehöriger Schriftenreihe im Browsing
+* OPUSVIER-1122 -   Ausgabe von Suchtreffern als RSS-Feed
+* OPUSVIER-1121 -   Anpassung der XML-Ausgabe per XSL-Stylesheets
+* OPUSVIER-1120 -   Ausgabe von Suchtreffern im Format OPUS-XML
+* OPUSVIER-1119 -   Facettierte Suche innerhalb des Browsings
+* OPUSVIER-1117 -   GPL Text zur Distribution hinzufügen
+* OPUSVIER-1113 -   Fehler in Anzeige der Suchergebnisseite beim Verkleinern des Browserfensters
+* OPUSVIER-1111 -   Bereitstellung eines OpenSearch Deskriptors
+* OPUSVIER-1105 -   Installations-Script: Download-Pfad jetzt als Unterverzeichnis "/opus4/files/"
+* OPUSVIER-1103 -   Dokumentation anpassen: Config-Schlüssel "deliver.url.prefix" entfernt
+* OPUSVIER-1099 -   Neue Schema-Datei anlegen!
+* OPUSVIER-1098 -   Model Opus_File: Neues Feld "comment" in Taballe "documents_files"
+* OPUSVIER-1097 -   Update-Script: Neues Feld "comment" in Tabelle "documents_files"
+* OPUSVIER-1095 -   Update-Script: Neue Datenbank-Constraints für die collections-Tabelle
+* OPUSVIER-1065 -   Kommentare auf Dateiebene
+* OPUSVIER-1042 -   Änderung der Reihenfolge von Collections auf einer Ebene
+* OPUSVIER-1041 -   Veröffentlichungsformular - Auswahl der Schriftenreihen
+* OPUSVIER-1037 -   Veröffentlichungsformular - Auswahl der Institute
+* OPUSVIER-1018 -   Zuordnung von Collections im zweiten Schritt als Browsing innerhalb des Formulars
+* OPUSVIER-988 	-   Anzeigefehler im Opera: blauer Balken im Seitenfooter
+* OPUSVIER-976 	-   Layout: message-Element in opus.css ist 1000px breit
+* OPUSVIER-975 	-   Menüleiste verschwindet bei Auflösung von 800x600 und kleiner
+* OPUSVIER-957 	-   Bugfix in schema.xml erfordert Neuaufbau des Index
+* OPUSVIER-947 	-   Anzeigefehler in Chrom(e|ium)
+* OPUSVIER-934 	-   Anzeige der Bibliographie- und Volltext-Facette
+* OPUSVIER-933 	-   Credits
+* OPUSVIER-904 	-   Fehler im Design bei den Breadcrumbs im Browsing
+* OPUSVIER-890 	-   Dok.typen für XMetaDiss Auslieferung umbenennen
+* OPUSVIER-830 	-   leere Collections nicht anklickbar machen
+* OPUSVIER-829 	-   Übersetzungsschlüssel von Collections
+* OPUSVIER-821 	-   Suchergebnis "halten"
+* OPUSVIER-769 	-   Funktion zum Verändern des Sichtbarkeitsstatus eines Unterbaums
+* OPUSVIER-767 	-   Download aller Dokumente mit Flag 'Bibliographie' als Liste
+* OPUSVIER-640 	-   Suche Zurücksetzen Button löscht Suchergebnisse
+* OPUSVIER-553 	-   Hinzufügen von Dependent-Models für Document<->Collection, CollectionRole<->Collection
+* OPUSVIER-423 	-   Export von Suchergebnissen / Publikationslisten
+* OPUSVIER-238 	-   Behandlung von Fehlern in Templates
+* OPUSVIER-217 	-   Konsolidierung der unterschiedlichen Ablageorte von Klassen mit Solr-Bezug
+* OPUSVIER-185 	-   Prüfen der Metadatenformate, die die OAI-Schnittstelle derzeit Unterstützt
+* OPUSVIER-153 	-   Asynchrone Indexaktualisierung mittels Cron
+* OPUSVIER-113 	-   Bearbeitung der OAI-Resumption-Token in extra Klasse auslagern
+
 h2. ======================== Release 4.0.3 2011-02-21 ========================
 
 h3. Bug Fixes
