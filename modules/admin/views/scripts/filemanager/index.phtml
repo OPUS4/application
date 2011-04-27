@@ -144,10 +144,15 @@
                 <div>
                     <span class="label"><?= $this->translate('frontdoor_current')?>:</span>
                     <span class="value" style="white-space: normal">
-                    <?PHP if ($hash->getIst() !== 0) : ?>
-                        <?= $hash->getIst() ?>
-                    <?PHP else : ?>
+                    <?PHP if (!$hash->checkFileExists()) : ?>
+                        <?= $this->translate('admin_filemanager_file_does_not_exist') ?>
+                    <?PHP elseif (!$hash->checkFilePermission()) : ?>
+                        <?= $this->translate('admin_filemanager_file_permission_denied')?>
+                    <?PHP elseif (!$hash->canVerify()) : ?>
                         <?= $this->translate('frontdoor_file_too_big')?>
+                    <?PHP else : ?>
+                        <? $real_hash_value = $hash->getIst() ?>
+                        <? $real_hash_value != NULL ? $real_hash_value : 'null' ?>
                     <?PHP endif; ?>
                     </span>
                 </div>

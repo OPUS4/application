@@ -132,6 +132,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_filemanager_file_permission_denied">
+      <tuv xml:lang="en">
+        <seg>File is not readable!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datei ist nicht lesbar!</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_filemanager_label_comment">
       <tuv xml:lang="en">
         <seg>Comment</seg>

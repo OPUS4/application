@@ -35,6 +35,9 @@ class Admin_Model_Hash {
 
     private $hash = null;
 
+    /**
+     * @var Opus_File
+     */
     private $file = null;
 
     public function __construct($file, $hash) {
@@ -54,14 +57,34 @@ class Admin_Model_Hash {
         return $this->hash->getValue();
     }
 
+    /**
+     * @return boolean
+     */
+    public function canVerify() {
+        return $this->file->canVerify();
+    }
+
+    /**
+     * @return boolean
+     */
+    public function checkFilePermission() {
+        return $this->file->isReadable();
+    }
+
+    /**
+     * @return boolean
+     */
+    public function checkFileExists() {
+        return $this->file->exists();
+    }
+
     public function getIst() {
         if (!($this->getSignatureType() === 'gpg') && !($this->_isGpgEnabled())) {
-            if (true === $this->file->canVerify()) {
-                return $this->file->getRealHash($this->getHashType());
+            if (!$this->file->canVerify()) {
+                return;
             }
-            else {
-                return 0;
-            }
+
+            return $this->file->getRealHash($this->getHashType());
         }
     }
 
