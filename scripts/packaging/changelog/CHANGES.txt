@@ -5,9 +5,11 @@ h2. ======================== Release 4.1.0 2011-04-27 ========================
 h3. Stories
 
 * OPUSVIER-1233 -   nachträgliches Hinzufügen von Dateien zu Dokumenten
+* OPUSVIER-1209 -   Umbau OPUS-Rechtemanagement
 * OPUSVIER-1157 -   OAI-Schnittstelle unterstützt Feature "deletedRecord" nicht
 * OPUSVIER-1110 -   OpenSearch Support
 * OPUSVIER-1096 -   Module "crawlers/sitelinks" soll Dokumente jahresweise anzeigen
+* OPUSVIER-1094 -   Datenbank-Änderungen für die 4.1
 * OPUSVIER-1092 -   Collections-Methode mit Rückgabe der Parent-Id
 * OPUSVIER-1091 -   Frontdoor-Titel: Anzeigen des Dokument-Titels
 * OPUSVIER-1089 -   Referee field in frontdoor is not clickable
@@ -17,16 +19,16 @@ h3. Stories
 * OPUSVIER-1040 -   Veröffentlichungsformular - Auswahl der DDC-Sachgruppen als Pull-Down-Liste
 * OPUSVIER-1039 -   Veröffentlichungsformular - Link zur SWD Schlagwortdatei
 * OPUSVIER-1038 -   Erstellen von Schriftenreihen
-* OPUSVIER-919 	-   Vorlagen für Impressum und Deposit-License erstellen
-* OPUSVIER-909 	-   Release-Updateskript erstellen
-* OPUSVIER-797 	-   Kein HTML bei Kontaktinformationen
-* OPUSVIER-613 	-   OAI-Schnittstelle
-* OPUSVIER-184 	-   Prüfen und ergänzen der Metadatenformate, die die OAI-Schnitstelle unterstützt
+* OPUSVIER-919  -   Vorlagen für Impressum und Deposit-License erstellen
+* OPUSVIER-909  -   Release-Updateskript erstellen
+* OPUSVIER-797  -   Kein HTML bei Kontaktinformationen
+* OPUSVIER-613  -   OAI-Schnittstelle
+* OPUSVIER-184  -   Prüfen und ergänzen der Metadatenformate, die die OAI-Schnitstelle unterstützt
 
 h3. Specification
 
 * OPUSVIER-895  -   Collections für die Standardauslieferung
-* OPUSVIER-438 	-   Umgang mit den Zend_Lucene-Relikten
+* OPUSVIER-438  -   Umgang mit den Zend_Lucene-Relikten
 
 h3. Documentation
 
