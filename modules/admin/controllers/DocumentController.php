@@ -472,10 +472,11 @@ class Admin_DocumentController extends Controller_Action {
         }
 
         // TODO implement docHelper method
-        $action = array();
-        $action['label'] = 'admin_document_access';
-        $action['url'] = $docHelper->getUrlAccessManager();
-        $actions['access'] = $action;
+        // TODO: Disabled, since feature is not usable for the user!
+//        $action = array();
+//        $action['label'] = 'admin_document_access';
+//        $action['url'] = $docHelper->getUrlAccessManager();
+//        $actions['access'] = $action;
         
         if ($docHelper->getDocState() === 'unpublished' || $docHelper->getDocState() === 'restricted' || $docHelper->getDocState() === 'inprogress') {
             $action = array();
