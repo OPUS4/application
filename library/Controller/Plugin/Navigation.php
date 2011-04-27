@@ -58,12 +58,12 @@ class Controller_Plugin_Navigation extends Zend_Controller_Plugin_Abstract {
         // Create a Realm instance.
         $realm = Opus_Security_Realm::getInstance();
 
-        if ($realm->check('admin', 'index') or !$realm->check('review', 'index')) {
+        if ($realm->checkModule('admin') or !$realm->checkModule('review')) {
             $page = $navigation->findBy('label', 'review_menu_label');
             $navigation->removePage($page);
         }
 
-        if (!$realm->check('admin', 'index')) {
+        if (!$realm->checkModule('admin')) {
             $page = $navigation->findBy('label', 'admin_menu_label');
             $navigation->removePage($page);
         }
