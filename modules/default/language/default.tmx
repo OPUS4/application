@@ -350,10 +350,10 @@
 
         <tu tuid="frontdoor_file_too_big">
           <tuv xml:lang="en">
-            <seg>Checksum cannot be verified - file too large</seg>
+            <seg>Checksum cannot be verified - file too large.  Size has been limited by server config.</seg>
           </tuv>
           <tuv xml:lang="de">
-            <seg>Prüfsumme konnte nicht geprüft werden - Datei ist zu groß</seg>
+            <seg>Prüfsumme konnte nicht geprüft werden - Datei ist zu groß.  Die Größe wird wurde durch den Server-Admin beschränkt.</seg>
           </tuv>
         </tu>
 
