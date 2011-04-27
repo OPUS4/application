@@ -45,18 +45,6 @@
  */
 class Rewritemap_ApacheTest extends PHPUnit_Framework_TestCase {
 
-    protected function setUp() {
-        parent::setUp();
-
-        // FIXME!  DIRTY HACK, because "mb_strlen" breaks the CI build.
-        // TODO: Remove as soon as possible.possible
-        if (!function_exists('mb_strlen')) {
-            function mb_strlen($str, $encoding = null) {
-                return strlen($str);
-            }
-        }
-    }
-
     public function bootstrapFramework() {
         // Resetting singletons or other kinds of persistent objects.
         Opus_Db_TableGateway::clearInstances();
