@@ -1508,15 +1508,7 @@
         <seg>Betreuer</seg>
       </tuv>
     </tu>
-    <tu tuid="PersonAdvisorFirstName">
-      <tuv xml:lang="en">
-        <seg>First name</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Vorname</seg>
-      </tuv>
-    </tu>
-   
+ 
     <tu tuid="add_PersonAdvisor">
       <tuv xml:lang="en">
         <seg>add Advisor</seg>
@@ -2019,6 +2011,15 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Schriftenreihe</seg>
+      </tuv>
+    </tu>
+
+ <tu tuid="PublicationState">
+      <tuv xml:lang="en">
+        <seg>Status</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Status</seg>
       </tuv>
     </tu>
 

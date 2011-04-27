@@ -577,5 +577,14 @@
       </tuv>
     </tu>
 
+    <tu tuid="header_PublicationState">
+      <tuv xml:lang="en">
+        <seg>Publication: State</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Veröffentlichung: Zustand</seg>
+      </tuv>
+    </tu>
+
     </body>
 </tmx>
