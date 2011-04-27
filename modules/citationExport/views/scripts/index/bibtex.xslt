@@ -189,7 +189,7 @@
         </xsl:call-template>
         <xsl:if test="Collection/@RoleName='series' = 'true'">
             <xsl:call-template name="outputFieldValue">
-                <xsl:with-param name="field">institution   </xsl:with-param>
+                <xsl:with-param name="field">institution</xsl:with-param>
                 <xsl:with-param name="value"><xsl:value-of select ="Collection[@RoleName='institutes']/@Name" /></xsl:with-param>
                 <xsl:with-param name="delimiter">,</xsl:with-param>
             </xsl:call-template>
