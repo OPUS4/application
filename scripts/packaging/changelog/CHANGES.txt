@@ -23,12 +23,12 @@ h3. Stories
 * OPUSVIER-613 	-   OAI-Schnittstelle
 * OPUSVIER-184 	-   Prüfen und ergänzen der Metadatenformate, die die OAI-Schnitstelle unterstützt
 
-h2. Specification
+h3. Specification
 
 * OPUSVIER-895  -   Collections für die Standardauslieferung
 * OPUSVIER-438 	-   Umgang mit den Zend_Lucene-Relikten
 
-h2. Documentation
+h3. Documentation
 
 * OPUSVIER-1303 -   Anlegen der Datei opus-apache-rewritemap-caller.sh aus der Doku entfernen
 * OPUSVIER-1289 -   Featurebeschreibung für nachträgliche Hinzufügen von Dateien zu Dokumenten
@@ -44,7 +44,8 @@ h2. Documentation
 * OPUSVIER-1167 -   Übersetzungsschlüssel für Werte der Bibliographie- und Volltext-Vorhanden-Facette
 * OPUSVIER-896  -   Script "change-password.php" in Dokumentation aufnehmen
 
-h2. Bugs
+h3. Bug Fixes
+
 * OPUSVIER-1314 -   Edit-Links in Dokumentverwaltung funktionieren nicht, wenn Dokument direkt per ID aufgerufen wird
 * OPUSVIER-1312 -   MailToAuthor: unerlaubter Mailversand an Autoren möglich durch clientsetige Manipulation des Formulars
 * OPUSVIER-1305 -   neu hochgeladene Dateien können zunächst von niemandem gesehen werden (außer Admin)
@@ -103,7 +104,7 @@ h2. Bugs
 * OPUSVIER-354 	-   Aufräumen der Reste von abgebrochenen Dokumentuploads
 * OPUSVIER-139 	-   OPUS_Security blockt IPv6
 
-h2. Tasks
+h3. Tasks
 
 * OPUSVIER-1319 -   Rechte-Umbau: Anzeige von Edit-Button auf Frontdoor kaputt für User != Admin
 * OPUSVIER-1318 -   Rechte-Umbau: Anzeige von Admin-Button kaputt für User != Admin
