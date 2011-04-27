@@ -142,15 +142,7 @@
       </tuv>
     </tu>
 
-  <tu tuid="PersonTranslatorFirstName">
-      <tuv xml:lang="en">
-        <seg>Editor</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Herausgeber</seg>
-      </tuv>
-    </tu>
-	
+  	
 	<tu tuid="PersonEditorFirstName">
       <tuv xml:lang="en">
         <seg>First name</seg>
@@ -160,15 +152,6 @@
       </tuv>
     </tu>
 
-    <tu tuid="PersonEditorLastName">
-      <tuv xml:lang="en">
-        <seg>Last name</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Nachname</seg>
-      </tuv>
-    </tu>
-  
 	<tu tuid="PersonTranslatorFirstName">
       <tuv xml:lang="en">
         <seg>First name</seg>
@@ -215,18 +198,6 @@
         <seg>Vorname</seg>
       </tuv>
     </tu>
-
-    <tu tuid="PersonContributorLastName">
-      <tuv xml:lang="en">
-        <seg>Last name</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Nachname</seg>
-      </tuv>
-    </tu>
-
-
-
 	
      <tu tuid="Language">
       <tuv xml:lang="en">
@@ -626,15 +597,6 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>SWD-Schlagwort entfernen</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="SubjectDDC1">
-      <tuv xml:lang="en">
-        <seg>DDC Term</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>DDC Sachgruppe</seg>
       </tuv>
     </tu>
 
@@ -1252,15 +1214,6 @@
         <seg>Uuid entfernen</seg>
       </tuv>
     </tu>
-            
-    <tu tuid="IdentifierValue">
-      <tuv xml:lang="en">
-        <seg>ISBN</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>ISBN Nummer</seg>
-      </tuv>
-    </tu>
     
     <tu tuid="IdentifierUrn">
       <tuv xml:lang="en">
@@ -1520,15 +1473,6 @@
       </tuv>
     </tu>
 	
-    <tu tuid="PersonEditorFirstName">
-      <tuv xml:lang="en">
-        <seg>First name</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Vorname</seg>
-      </tuv>
-    </tu>
-	
     <tu tuid="PersonEditorLastName">
       <tuv xml:lang="en">
         <seg>Last name</seg>
@@ -1572,15 +1516,7 @@
         <seg>Vorname</seg>
       </tuv>
     </tu>
-    <tu tuid="PersonAdvisorLastName">
-      <tuv xml:lang="en">
-        <seg>Last name</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Nachname</seg>
-      </tuv>
-    </tu>
-
+   
     <tu tuid="add_PersonAdvisor">
       <tuv xml:lang="en">
         <seg>add Advisor</seg>
@@ -1608,14 +1544,6 @@
       </tuv>
     </tu>
 
-    <tu tuid="PersonContributorFirstName">
-      <tuv xml:lang="en">
-        <seg>First name</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Vorname</seg>
-      </tuv>
-    </tu>
     <tu tuid="PersonContributorLastName">
       <tuv xml:lang="en">
         <seg>Last name</seg>

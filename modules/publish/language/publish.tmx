@@ -186,14 +186,6 @@
       </tuv>
     </tu>
     
-    <tu tuid="transmit">
-      <tuv xml:lang="en">
-        <seg>transmit</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>übermitteln</seg>
-      </tuv>
-    </tu>
     <tu tuid="LanguageDescr">
       <tuv xml:lang="en">
         <seg>Please select the language</seg>
@@ -218,15 +210,6 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Datum, an dem das Dokument angenommen wurde</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="PublishedDate">
-      <tuv xml:lang="en">
-        <seg>Date of Publication</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Datum der Veröffentlichung</seg>
       </tuv>
     </tu>
     

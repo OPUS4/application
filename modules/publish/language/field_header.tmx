@@ -541,69 +541,6 @@
       </tuv>
     </tu>
 
-    <tu tuid="header_collection1">
-      <tuv xml:lang="en">
-        <seg>Choose main collection</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Hauptsammlung auswählen</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="header_collection2">
-      <tuv xml:lang="en">
-        <seg>Choose sub collection</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Unter-Sammlung auswählen</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="header_collection3">
-      <tuv xml:lang="en">
-        <seg>Choose main collection</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Unter-Sammlung auswählen</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="header_collection4">
-      <tuv xml:lang="en">
-        <seg>Choose main collection</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Unter-Sammlung auswählen</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="header_collection5">
-      <tuv xml:lang="en">
-        <seg>Choose main collection</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Unter-Sammlung auswählen</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="header_collection6">
-      <tuv xml:lang="en">
-        <seg>Choose main collection</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Unter-Sammlung auswählen</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="header_collection7">
-      <tuv xml:lang="en">
-        <seg>Choose main collection</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Unter-Sammlung auswählen</seg>
-      </tuv>
-    </tu>
-
     <tu tuid="header_EnrichmentEvent">
       <tuv xml:lang="en">
         <seg>Event</seg>
