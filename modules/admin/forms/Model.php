@@ -283,6 +283,7 @@ class Admin_Form_Model extends Zend_Form_SubForm {
                 case 'Licence':
                 case 'ThesisPublisher':
                 case 'ThesisGrantor':
+                case 'Language':
                     if ($option instanceof Opus_Model_Abstract) {
                         $select->addMultiOption($option->getId(), $option);
                     }
@@ -291,6 +292,7 @@ class Admin_Form_Model extends Zend_Form_SubForm {
                     }
                     break;
                 default:
+                    // TODO needed for any field?
                     $select->addMultiOption($option, $option);
                     break;
             }
