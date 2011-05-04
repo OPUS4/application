@@ -666,15 +666,15 @@ class Admin_DocumentController extends Controller_Action {
         $form->setAction($updateUrl);
 
         $submit = new Zend_Form_Element_Submit('save');
-        $submit->setLabel('Save');
+        $submit->setLabel('admin_document_button_save');
         $form->addElement($submit);
 
         $cancel = new Zend_Form_Element_Submit('cancel');
-        $cancel->setLabel('Cancel');
+        $cancel->setLabel('admin_document_button_back');
         $form->addElement($cancel);
 
         $reset = new Zend_Form_Element_Reset('reset');
-        $reset->setLabel('Reset');
+        $reset->setLabel('admin_document_button_reset');
         $form->addElement($reset);
         
         return $form;

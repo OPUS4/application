@@ -223,6 +223,33 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_document_button_save">
+      <tuv xml:lang="en">
+        <seg>Save</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Speichern</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_button_back">
+      <tuv xml:lang="en">
+        <seg>Back</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zurück</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_button_reset">
+      <tuv xml:lang="en">
+        <seg>Reset</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zurücksetzen</seg>
+      </tuv>
+    </tu>
+
   </body>
 
 </tmx>
