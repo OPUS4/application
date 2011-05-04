@@ -398,7 +398,9 @@ class Admin_DocumentController extends Controller_Action {
                         break;
                 }
 
-                $this->_redirectTo('edit', null, 'document', 'admin', array(
+                $message = $this->view->translate('admin_document_update_success');
+
+                $this->_redirectTo('edit', $message, 'document', 'admin', array(
                     'id' => $id,
                     'section' => $section
                 ));
@@ -411,7 +413,7 @@ class Admin_DocumentController extends Controller_Action {
             }
         }
         else {
-            // TODO what if no $id
+            // TODO what if no $id, no POST
             $this->_redirectTo('index', null, 'document', 'admin', array(
                 'id' => $id
             ));

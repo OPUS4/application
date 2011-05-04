@@ -250,6 +250,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_document_update_success">
+      <tuv xml:lang="en">
+        <seg>Changes successfully saved.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Änderungen erfolgreich abgespeichert.</seg>
+      </tuv>
+    </tu>
+
   </body>
 
 </tmx>
