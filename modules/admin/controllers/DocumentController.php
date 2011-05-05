@@ -346,7 +346,12 @@ class Admin_DocumentController extends Controller_Action {
                                         }
                                         break;
                                     default:
-                                        $field->setValue($value);
+                                        if (empty($value)) {
+                                           $field->setValue(null);
+                                        }
+                                        else {
+                                            $field->setValue($value);
+                                        }
                                         break;
                                 }
                             }
@@ -438,7 +443,12 @@ class Admin_DocumentController extends Controller_Action {
                         $field->setValue($dateModel);
                         break;
                     default:
-                        $field->setValue($value);
+                        if (empty($value)) {
+                            $field->setValue(null);
+                        }
+                        else {
+                            $field->setValue($value);
+                        }
                         break;
                 }
             }
