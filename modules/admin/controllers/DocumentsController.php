@@ -545,6 +545,9 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $module = array_shift($params);
         $controller = array_shift($params);
         $action = array_shift($params);
-        $this->_redirectTo('edit', "collection '$deletedCollectionName' was removed successfully", $controller, $module, $params);
+
+        $message = $this->view->translate('admin_document_remove_collection_success', $deletedCollectionName);
+
+        $this->_redirectTo('edit', $message, 'document', 'admin', $params);
     }    
 }

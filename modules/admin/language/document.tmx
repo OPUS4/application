@@ -259,6 +259,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_document_remove_collection_success">
+      <tuv xml:lang="en">
+        <seg>Collection '%1$s' was successfully removed.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Collection '%1$s' wurde erfolgreich entfernt.</seg>
+      </tuv>
+    </tu>
+
   </body>
 
 </tmx>
