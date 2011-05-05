@@ -71,6 +71,7 @@ class Admin_Form_FileUpload extends Zend_Form {
 
         // FIXME: Make hard coded path configurable.
         $fileupload = new Zend_Form_Element_File('fileupload');
+        $fileupload->setRequired(true);
         $fileupload->setLabel('FileToUpload')
             ->addValidator('Count', false, 1)     // ensure only 1 file
             ->addValidator('Size', false, $maxFileSize) // limit to 100M

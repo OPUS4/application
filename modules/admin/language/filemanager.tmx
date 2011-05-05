@@ -168,6 +168,23 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_filemanager_invalid_upload">
+      <tuv xml:lang="en">
+        <seg>The upload was invalid.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Die Eingaben zum Hochladen waren nicht korrekt.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_filemanager_error_upload">
+      <tuv xml:lang="en">
+        <seg>An error occurred during upload.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Beim Hochladen ist ein Fehler aufgetreten.</seg>
+      </tuv>
+    </tu>
   </body>
   
 </tmx>

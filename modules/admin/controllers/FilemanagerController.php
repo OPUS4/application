@@ -86,10 +86,18 @@ class Admin_FilemanagerController extends Controller_Action {
                 // invalid form, populate with transmitted data
                 $uploadForm->populate($data);
                 $this->view->form = $uploadForm;
-
                 $this->view->actionresult = 'Invalid form input.';
-                // TODO forward to index action
-                $this->render('index');
+                $message = $this->view->translate('admin_filemanager_invalid_upload');
+                $this->_redirectTo('index', $message, 'filemanager', 'admin', array('docId' => $docId));
+            }
+        }
+        else {
+            if (!empty($docId)) {
+                $message = $this->view->translate('admin_filemanager_error_upload');
+                $this->_redirectTo('index', array('failure' => $message), 'filemanager', 'admin', array('docId' => $docId));
+            }
+            else {
+                $this->_redirectTo('index', null, 'documents', 'admin');
             }
         }
     }
