@@ -107,10 +107,10 @@ class Admin_Form_Model extends Zend_Form_SubForm {
         foreach ($modelFields as $fieldName) {
             $field = $model->getField($fieldName);
             if ($model instanceof Opus_Document && $field->getName() === 'Type') {
-                $element = $this->_getElementForField($field, 'DocType');
+                $element = $this->_getElementForField($model, $field, 'DocType');
             }
             else {
-                $element = $this->_getElementForField($field);
+                $element = $this->_getElementForField($model, $field);
             }
             // $element->setName($model->getName());
             if ($field->isMandatory()) {
@@ -199,7 +199,7 @@ class Admin_Form_Model extends Zend_Form_SubForm {
      *
      * TODO add method to Opus_Field to *getField(Render)Type()*
      */
-    protected function _getElementForField($field, $flag = null) {
+    protected function getElementForField($model, $field, $flag = null) {
         $element = null;
 
         if ($field->isCheckbox()) {
@@ -215,7 +215,17 @@ class Admin_Form_Model extends Zend_Form_SubForm {
             $element = $this->_createTextfield($field);
         }
 
-        $element->setLabel($field->getName());
+        $fieldName = $field->getName();
+
+        // TODO consider always prepending the class
+        switch ($fieldName) {
+            case "Type":
+                $element->setLabel(get_class($model) . "_" . $fieldName);
+                break;
+            default:
+                $element->setLabel($field->getName());
+                break;
+        }
 
         return $element;
     }

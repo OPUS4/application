@@ -456,6 +456,33 @@
       </tuv>
      </tu>
      
+    <tu tuid="Opus_Document_Type">
+      <tuv xml:lang="en">
+        <seg>Document Type</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokumentart</seg>
+      </tuv>
+     </tu>
+
+    <tu tuid="Opus_Identifier_Type">
+      <tuv xml:lang="en">
+        <seg>Identifier Type</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Identifier Typ</seg>
+      </tuv>
+     </tu>
+
+    <tu tuid="Opus_Subject_Type">
+      <tuv xml:lang="en">
+        <seg>Subject/Classification Type</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Schlagwort/Klassifikationstyp</seg>
+      </tuv>
+     </tu>
+
      <tu tuid="SubjectSwd">
       <tuv xml:lang="en">
         <seg>SWD-Keyword</seg>
