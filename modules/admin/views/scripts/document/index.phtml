@@ -60,7 +60,11 @@
         <?PHP if (!empty($value)) : ?>
         <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
             <span class="label"><?=$this->translate($field->getName())?></span>
+            <?PHP if ($field->isSelection()) : ?>
+            <span class="value"><?=$this->translate($field->getValue())?></span>
+            <?PHP else : ?>
             <span class="value"><?=$field->getValue()?></span>
+            <?PHP endif; ?>
         </div>
         <?PHP endif; ?>
         <?PHP endforeach; ?>

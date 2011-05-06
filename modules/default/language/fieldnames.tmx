@@ -849,7 +849,16 @@
         <seg>Status des Publikationsprozesses</seg>
       </tuv>
     </tu>
-    
+
+    <tu tuid="PublicationState">
+      <tuv xml:lang="en">
+        <seg>Status</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Status</seg>
+      </tuv>
+    </tu>
+ 
     <tu tuid="ServerDateCreated">
       <tuv xml:lang="en">
         <seg>Date of Creation</seg>
