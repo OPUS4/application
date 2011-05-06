@@ -65,7 +65,7 @@ $this->headLink()
 
 /* 
 uncomment the following line if you want to enable your own layout changes
-$this->appendStylesheet($this->layoutPath() . '/css/custom.css');
+$this->headLink()->prependStylesheet($this->layoutPath() . '/css/custom.css');
 */
 
 $this->container = Zend_Registry::get('Opus_Navigation');
