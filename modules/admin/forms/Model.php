@@ -199,7 +199,7 @@ class Admin_Form_Model extends Zend_Form_SubForm {
      *
      * TODO add method to Opus_Field to *getField(Render)Type()*
      */
-    protected function getElementForField($model, $field, $flag = null) {
+    protected function _getElementForField($model, $field, $flag = null) {
         $element = null;
 
         if ($field->isCheckbox()) {
