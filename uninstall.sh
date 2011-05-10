@@ -16,24 +16,22 @@
 # @license     http://www.gnu.org/licenses/gpl.html General Public License
 # @version     $Id$
 
-#set -ex
 set -e
 
 BASEDIR=/var/local/opus4
-
 MYSQL_CLIENT=/usr/bin/mysql
 
-cd $BASEDIR
+cd "$BASEDIR"
 
-OPUS4_DB_NAME=`grep '^dbname=' $BASEDIR/opus4/db/createdb.sh | cut -d= -f2 | sed -e "s/'//g"`
-OPUS4_DB_ADMIN=`grep '^user=' $BASEDIR/opus4/db/createdb.sh | cut -d= -f2 | sed -e "s/'//g"`
-OPUS4_DB_USER=`grep 'db.params.username' $BASEDIR/opus4/application/configs/config.ini | cut -d' ' -f3 | sed -e "s/'//g"`
+OPUS4_DB_NAME=`grep '^dbname=' "$BASEDIR/opus4/db/createdb.sh" | cut -d= -f2 | sed -e "s/'//g"`
+OPUS4_DB_ADMIN=`grep '^user=' "$BASEDIR/opus4/db/createdb.sh" | cut -d= -f2 | sed -e "s/'//g"`
+OPUS4_DB_USER=`grep 'db.params.username' "$BASEDIR/opus4/application/configs/config.ini" | cut -d' ' -f3 | sed -e "s/'//g"`
 MYSQL_COMMANDS=''
 
 read -p "MySQL Root User [root]: " MYSQLROOT
 read -p "MySQL DBMS Host [leave blank for using Unix domain sockets]: " MYSQLHOST
 read -p "MySQL DBMS Port [leave blank for using Unix domain sockets]: " MYSQLPORT
-echo ""
+echo
 if [ -z "$MYSQLROOT" ]; then
   MYSQLROOT=root
 fi
@@ -71,9 +69,9 @@ then
     MYSQL="$MYSQL -P $MYSQLPORT"
   fi
 
-  echo ""
+  echo
   echo "Next you'll be now prompted to enter the root password of your MySQL server"
-  $MYSQL -e "$MYSQL_COMMANDS"
+  "$MYSQL" -e "$MYSQL_COMMANDS"
 fi
 
 /etc/init.d/opus4-solr-jetty stop
@@ -81,13 +79,13 @@ update-rc.d -f opus4-solr-jetty remove
 rm -rf /etc/init.d/opus4-solr-jetty
 rm -rf /etc/default/jetty 
 
-OPUS4_USER_ACCOUNT=`grep '^JETTY_USER=' $BASEDIR/install/opus4-solr-jetty.conf | cut -d= -f2`
+OPUS4_USER_ACCOUNT=`grep '^JETTY_USER=' "$BASEDIR/install/opus4-solr-jetty.conf" | cut -d= -f2`
 
 read -p "Remove OPUS4 instance directory? [N]: " REMOVE_INSTANCE_DIR
 if [ "$REMOVE_INSTANCE_DIR" = "Y" ] || [ "$REMOVE_INSTANCE_DIR" = "y" ]
 then
-  cd $BASEDIR/..
-  rm -rf $BASEDIR
+  cd "$BASEDIR/.."
+  rm -rf "$BASEDIR"
 fi
 
 if [ -n "$OPUS4_USER_ACCOUNT" ]
@@ -95,8 +93,9 @@ then
   read -p "Remove OPUS4 system account $OPUS4_USER_ACCOUNT [Y]: " $DELETE_OPUS4_USER_ACCOUNT
   if [ -z "$DELETE_OPUS4_USER_ACCOUNT" ] || [ "$DELETE_OPUS4_USER_ACCOUNT" = "Y" ] || [ "$DELETE_OPUS4_USER_ACCOUNT" = "y" ]
   then
-    userdel -f $OPUS4_USER_ACCOUNT
+    userdel -f "$OPUS4_USER_ACCOUNT"
   fi
 fi
 
-echo "Deinstallation of OPUS4 completed."
+echo 'Deinstallation of OPUS4 completed.'
+echo
