@@ -27,7 +27,7 @@ then
   exit 1
 fi
 
-if [ "$1" = "ubuntu" -o "$1" = "suse" ]
+if [ "$1" = ubuntu ] || [ "$1" = suse ]
 then
   OS=$1
 else
@@ -79,7 +79,7 @@ fi
 
 # create .htaccess
 sed -e 's!<template>!/opus4!' opus4/public/htaccess-template > opus4/public/.htaccess
-if [ "$OS" = "ubuntu" ]
+if [ "$OS" = ubuntu ]
 then
   cp opus4/public/.htaccess opus4/public/.htaccess.tmp
   sed -e 's!#Enable for UBUNTU/DEBIAN:# !!' opus4/public/.htaccess.tmp > opus4/public/.htaccess
@@ -120,7 +120,7 @@ if [ -z "$OPUS_USER_NAME" ]; then
 fi
 OPUS_USER_NAME_ESC=`echo "$OPUS_USER_NAME" | sed 's/\!/\\\!/g'`
 
-if [ "$OS" = "ubuntu" ]
+if [ "$OS" = ubuntu ]
 then
   useradd -c 'OPUS 4 Solr manager' --system "$OPUS_USER_NAME"
 else
@@ -213,7 +213,7 @@ chmod +x createdb.sh
 # create opus-apache-rewritemap-caller-secure.sh
 cd "$BASEDIR/opus4/scripts"
 cp opus-apache-rewritemap-caller-secure.sh.template opus-apache-rewritemap-caller-secure.sh
-if [ "$OS" = "suse" ]; then
+if [ "$OS" = suse ]; then
   sed -e "s!^USER='www-data'!USER='wwwrun'!" opus-apache-rewritemap-caller-secure.sh > opus-apache-rewritemap-caller-secure.sh.tmp
   mv opus-apache-rewritemap-caller-secure.sh.tmp opus-apache-rewritemap-caller-secure.sh
 fi
@@ -222,7 +222,7 @@ chmod +x opus-apache-rewritemap-caller-secure.sh
 # install and configure Solr search server
 cd "$BASEDIR"
 read -p "Install and configure Solr server? [Y]: " INSTALL_SOLR
-if [ -z "$INSTALL_SOLR" ] || [ "$INSTALL_SOLR" = "Y" ] || [ "$INSTALL_SOLR" = "y" ]
+if [ -z "$INSTALL_SOLR" ] || [ "$INSTALL_SOLR" = Y ] || [ "$INSTALL_SOLR" = y ]
 then
   tar xfvz downloads/solr.tgz
   ln -sf apache-solr-1.4.1 solr
@@ -253,7 +253,7 @@ then
   rm config.ini.tmp
 
   cd "$BASEDIR/install"
-  if [ "$OS" = "suse" ]
+  if [ "$OS" = suse ]
   then
     cp opus4-solr-jetty opus4-solr-jetty.tmp
     sed -e "s!^START_STOP_DAEMON=1!START_STOP_DAEMON=0!" opus4-solr-jetty.tmp > opus4-solr-jetty
@@ -264,13 +264,13 @@ then
   chmod +x opus4-solr-jetty
 
   read -p "Install init.d script to start and stop Solr server automatically? [Y]: " INSTALL_INIT_SCRIPT
-  if [ -z "$INSTALL_INIT_SCRIPT" ] || [ "$INSTALL_INIT_SCRIPT" = "Y" ] || [ "$INSTALL_INIT_SCRIPT" = "y" ]
+  if [ -z "$INSTALL_INIT_SCRIPT" ] || [ "$INSTALL_INIT_SCRIPT" = Y ] || [ "$INSTALL_INIT_SCRIPT" = y ]
   then
     ln -sf "$BASEDIR/install/opus4-solr-jetty" /etc/init.d/opus4-solr-jetty
     ln -sf "$BASEDIR/install/opus4-solr-jetty.conf" /etc/default/jetty
     ln -sf "$BASEDIR/install/jetty-logging.xml" "$BASEDIR/solr/opus4/etc/jetty-logging.xml"
     chmod +x /etc/init.d/opus4-solr-jetty
-    if [ "$OS" = "ubuntu" ]
+    if [ "$OS" = ubuntu ]
     then
       update-rc.d -f opus4-solr-jetty remove
       update-rc.d opus4-solr-jetty defaults
@@ -281,7 +281,7 @@ then
   fi
 
   # change file owner of solr installation
-  if [ "$OS" = "ubuntu" ]
+  if [ "$OS" = ubuntu ]
   then
     OWNER="$OPUS_USER_NAME:$OPUS_USER_NAME"
   else
@@ -296,7 +296,7 @@ fi
 
 # import some test documents
 read -p "Import test data? [Y]: " IMPORT_TESTDATA
-if [ -z "$IMPORT_TESTDATA" ] || [ "$IMPORT_TESTDATA" = "Y" ] || [ "$IMPORT_TESTDATA" = "y" ]
+if [ -z "$IMPORT_TESTDATA" ] || [ "$IMPORT_TESTDATA" = Y ] || [ "$IMPORT_TESTDATA" = y ]
 then
   # import test data
   cd "$BASEDIR"
@@ -325,7 +325,7 @@ then
 fi
 
 # change file owner to $OPUS_USER_NAME
-if [ "$OS" = "ubuntu" ]
+if [ "$OS" = ubuntu ]
 then
   chown -R "$OPUS_USER_NAME:$OPUS_USER_NAME $BASEDIR"
 else
@@ -337,7 +337,7 @@ chmod -R 777 *
 # delete tar archives
 cd "$BASEDIR"
 read -p "Delete downloads? [N]: " DELETE_DOWNLOADS
-if [ "$DELETE_DOWNLOADS" = "Y" ] || [ "$DELETE_DOWNLOADS" = "y" ]; then
+if [ "$DELETE_DOWNLOADS" = Y ] || [ "$DELETE_DOWNLOADS" = y ]; then
   rm -rf downloads
 fi
 
