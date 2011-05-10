@@ -190,9 +190,6 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $logger = $this->getResource('Logging');
         $sessiondata = $this->getResource('Session');
 
-        $cache = $this->getResource('ZendCache');
-        Zend_Translate::setCache($cache);
-
         $options = array(
             'adapter' => Zend_Translate::AN_TMX,
             'locale' => 'auto',
@@ -301,9 +298,6 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      */
     protected function _initLanguageList() {
         $this->bootstrap(array('Session', 'Logging', 'Translation', 'ZendCache', 'Backend'));
-
-        $cache = $this->getResource('ZendCache');
-        Zend_Locale::setCache($cache);
 
         $sessiondata = $this->getResource('Session');
         $logger = $this->getResource('Logging');
