@@ -340,6 +340,9 @@ read -p "Delete downloads? [N]: " DELETE_DOWNLOADS
 if [ "$DELETE_DOWNLOADS" = "Y" ] || [ "$DELETE_DOWNLOADS" = "y" ]; then
   rm -rf downloads
 fi
+
+echo 'restart apache webserver ...'
+/etc/init.d/apache2 restart
   
 echo
-echo "OPUS 4 is running now! Point your browser to http://localhost/opus4/"
+echo 'OPUS 4 is running now! Point your browser to http://localhost/opus4/'
