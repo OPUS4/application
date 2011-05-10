@@ -64,8 +64,7 @@ $application = new Zend_Application(
 );
 
 // Bootstrapping application
-$bootstrap_ressources = array('Configuration', 'Logging', 'Database');
-$application->bootstrap($bootstrap_ressources);
+$application->bootstrap('Backend');
 
 // Bootstrapping modules
 $application->getBootstrap()->getPluginResource('modules')->init();

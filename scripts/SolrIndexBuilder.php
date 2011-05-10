@@ -146,7 +146,7 @@ $application = new Zend_Application(
     )
 );
 
-$application->bootstrap(array('Configuration', 'Logging', 'Database'));
+$application->bootstrap(array('Backend'));
 
 $index = new SolrIndexBuilder;
 try {
