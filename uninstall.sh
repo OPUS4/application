@@ -42,19 +42,19 @@ else
 fi
 
 read -p "Delete OPUS4 Database $OPUS4_DB_NAME [Y]: " DELETE_DATABASE
-if [ -z "$DELETE_DATABASE" ] || [ "$DELETE_DATABASE" = "Y" ] || [ "$DELETE_OPUS4_DB_USER" = "y" ]
+if [ -z "$DELETE_DATABASE" ] || [ "$DELETE_DATABASE" = Y ] || [ "$DELETE_OPUS4_DB_USER" = y ]
 then
   MYSQL_COMMANDS="$MYSQL_COMMANDS DROP DATABASE IF EXISTS $OPUS4_DB_NAME ;"   
 fi
 
 read -p "Delete OPUS4 Database User $OPUS4_DB_USER [Y]: " DELETE_OPUS4_DB_USER
-if [ -z "$DELETE_OPUS4_DB_USER" ] || [ "$DELETE_OPUS4_DB_USER" = "Y" ] || [ "$DELETE_OPUS4_DB_USER" = "y" ]
+if [ -z "$DELETE_OPUS4_DB_USER" ] || [ "$DELETE_OPUS4_DB_USER" = Y ] || [ "$DELETE_OPUS4_DB_USER" = y ]
 then
   MYSQL_COMMANDS="$MYSQL_COMMANDS DROP USER '$OPUS4_DB_USER'@'$HOST' ;"
 fi
 
 read -p "Delete OPUS4 Database Admin User $OPUS4_DB_ADMIN [Y]: " DELETE_OPUS4_DB_ADMIN
-if [ -z "$DELETE_OPUS4_DB_ADMIN" ] || [ "$DELETE_OPUS4_DB_ADMIN" = "Y" ] || [ "$DELETE_OPUS4_DB_ADMIN" = "y" ]
+if [ -z "$DELETE_OPUS4_DB_ADMIN" ] || [ "$DELETE_OPUS4_DB_ADMIN" = Y ] || [ "$DELETE_OPUS4_DB_ADMIN" = y ]
 then
   MYSQL_COMMANDS="$MYSQL_COMMANDS DROP USER '$OPUS4_DB_ADMIN'@'$HOST' ;"
 fi
@@ -82,7 +82,7 @@ rm -rf /etc/default/jetty
 OPUS4_USER_ACCOUNT=`grep '^JETTY_USER=' "$BASEDIR/install/opus4-solr-jetty.conf" | cut -d= -f2`
 
 read -p "Remove OPUS4 instance directory? [N]: " REMOVE_INSTANCE_DIR
-if [ "$REMOVE_INSTANCE_DIR" = "Y" ] || [ "$REMOVE_INSTANCE_DIR" = "y" ]
+if [ "$REMOVE_INSTANCE_DIR" = Y ] || [ "$REMOVE_INSTANCE_DIR" = y ]
 then
   cd "$BASEDIR/.."
   rm -rf "$BASEDIR"
@@ -91,7 +91,7 @@ fi
 if [ -n "$OPUS4_USER_ACCOUNT" ]
 then
   read -p "Remove OPUS4 system account $OPUS4_USER_ACCOUNT [Y]: " $DELETE_OPUS4_USER_ACCOUNT
-  if [ -z "$DELETE_OPUS4_USER_ACCOUNT" ] || [ "$DELETE_OPUS4_USER_ACCOUNT" = "Y" ] || [ "$DELETE_OPUS4_USER_ACCOUNT" = "y" ]
+  if [ -z "$DELETE_OPUS4_USER_ACCOUNT" ] || [ "$DELETE_OPUS4_USER_ACCOUNT" = Y ] || [ "$DELETE_OPUS4_USER_ACCOUNT" = y ]
   then
     userdel -f "$OPUS4_USER_ACCOUNT"
   fi
