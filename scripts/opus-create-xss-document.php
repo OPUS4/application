@@ -73,7 +73,6 @@ $doc->setVolume(randString($counter++));
 $doc->setIssue(randString($counter++));
 $doc->setCreatingCorporation(randString($counter++));
 $doc->setContributingCorporation(randString($counter++));
-$doc->setServerDateUnlocking("23.05.1949");
 
 
 
