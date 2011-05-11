@@ -31,7 +31,97 @@
  * @version     $Id$
  */
 
-class Form_Builder_Helper_Date extends Form_Helper_Abstract {
+class Form_Builder_Helper_Date extends Form_Builder_Helper_Default {
+
+    protected function processFields($model, $subForm) {
+        $fieldForm = $this->buildForm($model);
+        $subForm->addSubForm($fieldForm, 'date');
+    }
+
+    public function buildForm($model) {
+        $fieldName = 'date';
+
+        $fieldForm = new Zend_Form_SubForm;
+        $fieldForm->removeDecorator('HtmlTag');
+        $fieldForm->removeDecorator('DtDdWrapper');
+        $fieldForm->setLegend($fieldName);
+
+        $widget = new Zend_Form_Element_Text(strVal(1));
+        $widget->getDecorator('Label')->setOption('tag','div');
+        $widget->removeDecorator('HtmlTag');
+
+        $fieldValue = $model->getZendDate();
+
+        $session = new Zend_Session_Namespace();
+
+        $format_de = "dd.MM.YYYY";
+        $format_en = "YYYY/MM/dd";
+
+        switch($session->language) {
+            case 'de' :
+                $format = $format_de;
+                break;
+            default:
+                $format = $format_en;
+                break;
+        }
+
+        $timestamp = $model->getUnixTimestamp();
+        if (empty($timestamp)) {
+            $widget->setValue(null);
+        }
+        else {
+            $widget->setValue($fieldValue->get($format));
+        }
+
+        $widget->setLabel($fieldName);
+
+        $widget->setRequired(false);
+
+//        $this->__addDescription($modelName . '_' . $fieldName, $widget);
+        $widget->addValidators($this->__getDateValidator());
+        $widget->setAttrib('class', $fieldName);
+        $fieldForm->addElement($widget);
+        $fieldForm->removeDecorator('Fieldset');
+
+        return $fieldForm;
+    }
+
+    private function __getDateValidator() {
+        $format_de = "dd.MM.YYYY";
+        $format_en = "YYYY/MM/dd";
+
+        $session = new Zend_Session_Namespace();
+
+        $lang = $session->language;
+        $validators = array();
+
+        switch ($lang) {
+            case 'en' : $validator = new Zend_Validate_Date(array('format' => $format_en, 'locale' => $lang));
+                break;
+            case 'de' : $validator = new Zend_Validate_Date(array('format' => $format_de, 'locale' => $lang));
+                break;
+            default : $validator = new Zend_Validate_Date(array('format' => $format_en, 'locale' => $lang));
+                break;
+        }
+        $messages = array(
+            Zend_Validate_Date::INVALID => 'validation_error_date_invalid',
+            Zend_Validate_Date::INVALID_DATE => 'validation_error_date_invaliddate',
+            Zend_Validate_Date::FALSEFORMAT => 'validation_error_date_falseformat');
+        $validator->setMessages($messages);
+
+        $validators[] = $validator;
+
+        return $validators;
+    }
+
+    public function populateModel(Opus_Model_Abstract $model, array $data) {
+        $this->log->debug('populateModel: Opus_Date');
+        $dateStr = $data['date'][1];
+        $date = new Zend_Date($dateStr);
+        $model->setZendDate($date);
+        return;
+    }
 
 }
 

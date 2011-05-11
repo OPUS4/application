@@ -35,10 +35,16 @@ class Form_Builder_Helper_Abstract {
 
     private $debug = false;
 
-    public function buildForm() {
+    protected $log;
+
+    public function __construct() {
+        $this->log = Zend_Registry::get('Zend_Log');
     }
 
-    public function populateModel() {
+    public function buildForm($model) {
+    }
+
+    public function populateModel(Opus_Model_Abstract $model, array $data) {
     }
 
     /**

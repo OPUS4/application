@@ -31,7 +31,7 @@
  * @version     $Id$
  */
 
-class Form_Builder_Helper_File extends Form_Helper_Abstract {
+class Form_Builder_Helper_File extends Form_Builder_Helper_Abstract {
 
 }
 
