@@ -18,40 +18,41 @@
 
 
 # usage:
-# create opus_4.0.0_all.deb using temporary directory debtmp
-# ./build_deb_package.sh debtmp 
+# create opus_4.x.y_all.deb using temporary directory debtmp
+# ./build_deb_package.sh debtmp [svn-tag] 
 
 set -e
 
-TEMPDIR=$1
+TEMPDIR="$1"
 BASEDIR='/var/local/opus4'
-TAG=$2
+TAG="$2"
 
-if [ -z $TEMPDIR ]; then
+if [ -z "$TEMPDIR" ]; then
   echo "argument missing"
   exit
 fi
 
-if [ -d $TEMPDIR ]; then
+if [ -d "$TEMPDIR" ]; then
   echo "directory $TEMPDIR exists -- choose another one or delete it first"
   exit
 fi
 
 echo "create directory $TEMPDIR"
-mkdir -vp ${TEMPDIR}${BASEDIR}
+mkdir -vp "${TEMPDIR}${BASEDIR}"
 
-svn --force export https://svn.zib.de/opus4dev/server/trunk/scripts/packaging/deb_package/DEBIAN/ $TEMPDIR/DEBIAN
+svn --force export https://svn.zib.de/opus4dev/server/trunk/scripts/packaging/deb_package/DEBIAN/ "$TEMPDIR/DEBIAN"
 
-if [ -z $TAG ]; then
-  TAG=trunk
+if [ -z "$TAG" ]; then
+  TAG='trunk'
 fi
 echo "get OPUS 4 source code (tag: $TAG)"
-./prepare_directories.sh $TAG ${TEMPDIR}${BASEDIR}
+./prepare_directories.sh "$TAG" "${TEMPDIR}${BASEDIR}"
 
 echo "create deb package"
-md5sum `find ${TEMPDIR}${BASEDIR} -type f` | sed -e "s/$TEMPDIR//" > $TEMPDIR/DEBIAN/md5sums
-chmod +x $TEMPDIR/DEBIAN/{postinst,prerm}
-dpkg-deb --build $TEMPDIR .
+md5sum `find "${TEMPDIR}${BASEDIR}" -type f` | sed -e "s/$TEMPDIR//" > "$TEMPDIR/DEBIAN/md5sums"
+chmod +x "$TEMPDIR"/DEBIAN/{postinst,prerm}
+dpkg-deb --build "$TEMPDIR" .
 
 echo "remove directory $TEMPDIR"
-rm -rf $TEMPDIR
+rm -rf "$TEMPDIR"
+
