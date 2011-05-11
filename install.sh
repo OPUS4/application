@@ -18,7 +18,7 @@
 
 set -e
 
-SCRIPT_NAME=`basename $0`
+SCRIPT_NAME=`basename "$0"`
 
 if [ $# -lt 1 ]
 then
@@ -29,21 +29,21 @@ fi
 
 if [ "$1" = ubuntu ] || [ "$1" = suse ]
 then
-  OS=$1
+  OS="$1"
 else
   echo "Invalid Argument $1 : use $SCRIPT_NAME {ubuntu,suse}"
   echo "Installation aborted."
-  exit 1 
+  exit 1
 fi
 
-BASEDIR=/var/local/opus4
-MYSQL_CLIENT=/usr/bin/mysql
+BASEDIR='/var/local/opus4'
+MYSQL_CLIENT='/usr/bin/mysql'
 
 ZEND_LIB_URL='http://framework.zend.com/releases/ZendFramework-1.10.6/ZendFramework-1.10.6-minimal.tar.gz'
 JPGRAPH_LIB_URL='http://jpgraph.net/download/download.php?p=1'
 SOLR_SERVER_URL='http://www.apache.org/dist//lucene/solr/1.4.1/apache-solr-1.4.1.tgz'
 SOLR_PHP_CLIENT_LIB_URL='http://solr-php-client.googlecode.com/svn/trunk/'
-SOLR_PHP_CLIENT_LIB_REVISION=36
+SOLR_PHP_CLIENT_LIB_REVISION='36'
 JQUERY_LIB_URL='http://code.jquery.com/jquery-1.4.3.min.js'
 
 cd "$BASEDIR"
@@ -113,10 +113,10 @@ cd "$BASEDIR"
 
 # promt for username
 echo "OPUS requires a dedicated system account under which Solr will be running."
-echo "In order to create this account, you will be prompted for some information." 
+echo "In order to create this account, you will be prompted for some information."
 read -p "System Account Name [opus4]: " OPUS_USER_NAME
 if [ -z "$OPUS_USER_NAME" ]; then
-  OPUS_USER_NAME=opus4
+  OPUS_USER_NAME='opus4'
 fi
 OPUS_USER_NAME_ESC=`echo "$OPUS_USER_NAME" | sed 's/\!/\\\!/g'`
 
@@ -144,19 +144,19 @@ echo
 
 # set defaults if value is not given
 if [ -z "$DBNAME" ]; then
-   DBNAME=opus400
+   DBNAME='opus400'
 fi
 if [ -z "$ADMIN" ]; then
-   ADMIN=opus4admin
+   ADMIN='opus4admin'
 fi
 if [ -z "$WEBAPP_USER" ]; then
-   WEBAPP_USER=opus4
+   WEBAPP_USER='opus4'
 fi
 if [ -z "$MYSQLROOT" ]; then
-   MYSQLROOT=root
+   MYSQLROOT='root'
 fi
 if [ -z "$MYSQLHOST" ]; then
-  HOST=localhost
+  HOST='localhost'
 else
   HOST="$MYSQLHOST"
 fi
@@ -238,7 +238,7 @@ then
 
   read -p "Solr server port number [8983]: " SOLR_SERVER_PORT
   if [ -z "$SOLR_SERVER_PORT" ]; then
-    SOLR_SERVER_PORT=8983;
+    SOLR_SERVER_PORT='8983';
   fi
   SOLR_SERVER_PORT_ESC=`echo "$SOLR_SERVER_PORT" |sed 's/\!/\\\!/g'`
 
@@ -327,9 +327,9 @@ fi
 # change file owner to $OPUS_USER_NAME
 if [ "$OS" = ubuntu ]
 then
-  chown -R "$OPUS_USER_NAME:$OPUS_USER_NAME $BASEDIR"
+  chown -R "$OPUS_USER_NAME:$OPUS_USER_NAME" "$BASEDIR"
 else
-  chown -R "$OPUS_USER_NAME $BASEDIR"
+  chown -R "$OPUS_USER_NAME" "$BASEDIR"
 fi
 cd "$BASEDIR/workspace"
 chmod -R 777 *

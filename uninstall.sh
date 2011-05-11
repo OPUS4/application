@@ -18,8 +18,8 @@
 
 set -e
 
-BASEDIR=/var/local/opus4
-MYSQL_CLIENT=/usr/bin/mysql
+BASEDIR='/var/local/opus4'
+MYSQL_CLIENT'=/usr/bin/mysql'
 
 cd "$BASEDIR"
 
@@ -33,10 +33,10 @@ read -p "MySQL DBMS Host [leave blank for using Unix domain sockets]: " MYSQLHOS
 read -p "MySQL DBMS Port [leave blank for using Unix domain sockets]: " MYSQLPORT
 echo
 if [ -z "$MYSQLROOT" ]; then
-  MYSQLROOT=root
+  MYSQLROOT='root'
 fi
 if [ -z "$MYSQLHOST" ]; then
-  HOST=localhost
+  HOST='localhost'
 else
   HOST="$MYSQLHOST"
 fi
