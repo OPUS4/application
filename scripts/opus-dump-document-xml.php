@@ -46,7 +46,14 @@ foreach ($argv AS $docId) {
    error_log("<!-- dumping document-id $docId: -->");
 
    $d = new Opus_Document($docId);
-   $d_xml = $d->toXml();
+
+   $xmlModel = new Opus_Model_Xml();
+   $xmlModel->setModel($d);
+   $xmlModel->excludeEmptyFields();
+   $xmlModel->setStrategy(new Opus_Model_Xml_Version1);
+   $xmlModel->setXmlCache(new Opus_Model_Xml_Cache);
+
+   $d_xml = $xmlModel->getDomDocument();
    $d_xml->formatOutput = true;
    echo $d_xml->saveXml();
 }
