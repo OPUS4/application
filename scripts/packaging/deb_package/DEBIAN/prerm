@@ -11,7 +11,7 @@ if [ -f /etc/apache2/sites-enabled/opus4 ]; then
   sudo /etc/init.d/apache2 reload
 fi
 
-if [ -f $BASEDIR/install/uninstall.sh ]; then
-  sudo chmod +x $BASEDIR/install/uninstall.sh
-  sudo $BASEDIR/install/uninstall.sh
+if [ -f "$BASEDIR/install/uninstall.sh" ]; then
+  sudo chmod +x "$BASEDIR/install/uninstall.sh"
+  sudo "$BASEDIR/install/uninstall.sh"
 fi
