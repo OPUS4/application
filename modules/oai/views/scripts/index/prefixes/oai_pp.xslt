@@ -74,7 +74,10 @@
             <xsl:apply-templates select="@DateAccepted" mode="oai_pp" />
             <xsl:apply-templates select="@Language" mode="oai_pp" />
             <xsl:apply-templates select="IdentifierUrl" mode="oai_pp" />
-            <xsl:element name="PP:PP.Origindoc">0</xsl:element>
+
+            <!-- adding download urls -->
+            <xsl:apply-templates select="File" mode="oai_pp" />
+
             <!-- dc:creator -->
             <xsl:apply-templates select="PersonAuthor" mode="oai_pp" />
             <!-- dc:publisher -->
@@ -185,5 +188,10 @@
         </xsl:element>
     </xsl:template>
 
+    <xsl:template match="File" mode="oai_pp">
+        <PP:PP.Origindoc>
+            <xsl:value-of select="@url" />
+        </PP:PP.Origindoc>
+    </xsl:template>
 
 </xsl:stylesheet>
