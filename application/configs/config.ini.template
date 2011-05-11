@@ -35,10 +35,6 @@
 ; The 'theme' setting can be used to select a different theme.
 ; theme = opus4
 
-; The 'startmodule' sets the module, which will be loaded when
-; no module is given in the url.  Defaults to 'home'.
-; startmodule = home
-
 ;DB SETTINGS
 ; Please insert the credential to connect to your mysql db.
 db.params.host =
