@@ -165,6 +165,9 @@
             <!-- PageNumber -->
 
             <!-- PublicationState -->
+            <xsl:attribute name="PublicationState">
+                <xsl:text>published</xsl:text>
+            </xsl:attribute>
 
             <!-- PublisherName -->
 
