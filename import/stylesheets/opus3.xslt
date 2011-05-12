@@ -281,7 +281,7 @@
             <!-- Dissertation:TitleMain, Language="deu" (2nd) -->
             <xsl:for-each select="/mysqldump/database/table_data[@name='opus_diss' or @name='temp_diss']/row[field[@name='source_opus']=$OriginalID]">
                 <xsl:if test="string-length(field[@name='title_de'])>0">
-                    <xsl:element name="TitleAbstract">
+                    <xsl:element name="TitleMain">
                         <xsl:attribute name="OldLanguage">
                             <xsl:text>ger</xsl:text>
                         </xsl:attribute>
