@@ -43,11 +43,20 @@ done
 
 echo "Clean workspace/files/* and workspace/log/import.log and workspace/tmp/* directory"
 cd ../../workspace/files/
-rm -rf [0-9]*
+if [ "$?" -eq "0" ]
+then
+    rm -rf [0-9]*
+fi
 cd ../log/
-rm -rf import.log
+if [ "$?" -eq "0" ]
+then
+    rm -rf import.log
+fi
 cd ../tmp/
-rm -rf *
+if [ "$?" -eq "0" ]
+then
+    rm -rf *
+fi
 
 echo "Clean database"
 cd ../../db
@@ -58,12 +67,11 @@ cd ../scripts/migration
 php Opus3Migration_ICL.php -f $xmlfile
 
 echo "Import metadata and fulltext"
-#cd ../scripts
 start=1
 end=`expr $start + $stepsize - 1`
 
 php Opus3Migration_Documents.php -f $xmlfile -p $fulltextpath -s $start -e $end
-while [ $? -eq 1 ]
+while [ "$?" -eq "1" ]
 do
     start=`expr $start + $stepsize`
     end=`expr $end + $stepsize`
