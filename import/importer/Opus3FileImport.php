@@ -243,7 +243,7 @@ class Opus3FileImport {
                 continue;
             }
 
-            // ERROR: File wirh same Basnemae already imported
+            // ERROR: File with same Basnemae already imported
             if (array_search(basename($f), $filesImported) !== false) {
                 $this->log("ERROR Opus3FileImport: File ".basename($f)." already imported.\n");
                 continue;

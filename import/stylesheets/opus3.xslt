@@ -95,19 +95,49 @@
             <xsl:variable name="date_modified">
                 <xsl:value-of select="field[@name='date_modified']" />
             </xsl:variable>
-            <!-- Ist nicht relevant
+            <!-- date_valid (Opus3) is not relevant -->
+            <!--
             <xsl:variable name="date_valid">
                 <xsl:value-of select="field[@name='date_valid']" />
             </xsl:variable>
             -->
 
-            <!-- CompletedDate -->
-            <!--CompletedDate is left out, because Opus3 only stores the year -->
-
             <!-- CompletedYear -->
+            <!-- date_year is mandatory in Opus3 -->
             <xsl:attribute name="CompletedYear">
                 <xsl:value-of select="field[@name='date_year']" />
             </xsl:attribute>
+
+            <!-- CompletedDate -->
+            <!-- CompletedDate is more precise then CompletedYear -->
+            <xsl:if test="$date_creation > 0">
+                <xsl:attribute name="CompletedDate">
+                    <xsl:value-of select="php:function('date', 'Y-m-d', $date_creation)" />
+                </xsl:attribute>
+            </xsl:if>
+
+            <!-- ServerDatePublished -->
+            <xsl:if test="$date_creation > 0">
+                <xsl:attribute name="ServerDatePublished">
+                    <xsl:value-of select="php:function('date', 'c', $date_creation)" />
+                </xsl:attribute>
+            </xsl:if>
+
+            <!-- ThesisDateAccepted -->
+            <xsl:if test="$date_accepted > 0">
+                <xsl:attribute name="ThesisDateAccepted">
+                    <xsl:value-of select="php:function('date', 'Y-m-d', $date_accepted)" />
+                </xsl:attribute>
+            </xsl:if>
+
+            <!-- These values relate to a secondary publication of same document -->
+            <!-- PublishedYear -->
+            <!-- PublishedDate -->
+
+            <!-- These values will be added by the framework -->
+            <!-- ServerDateCreated -->
+            <!-- ServerDateDeleted -->
+            <!-- ServerDateModified -->
 
             <!-- ContributingCorporation -->
             <xsl:if test="string-length(field[@name='contributors_corporate']) > 0">
@@ -123,12 +153,6 @@
                 </xsl:attribute>
             </xsl:if>
 
-            <!-- ThesisDateAccepted -->
-            <xsl:if test="$date_accepted > 0">
-                <xsl:attribute name="ThesisDateAccepted">
-                    <xsl:value-of select="php:function('date', 'd.m.Y', $date_accepted)" />
-                </xsl:attribute>
-            </xsl:if>
 
             <!-- Edition -->
 
@@ -142,34 +166,9 @@
 
             <!-- PublicationState -->
 
-            <!-- PublishedDate -->
-            <!-- PublishedDate is left out, because Opus3 only stores the year -->
-
-            <!-- PublishedYear -->
-            <!-- PublishedYear is not stored by Opus 3, but necessary for some doctypes in OPUS4, so import date_year into both fields -->
-            <xsl:attribute name="PublishedYear">
-                <xsl:value-of select="field[@name='date_year']" />
-            </xsl:attribute>
-
             <!-- PublisherName -->
 
             <!-- PublisherPlace -->
-
-            <!-- ServerDateModified -->
-            <xsl:if test="$date_modified > 0">
-                <xsl:attribute name="ServerDateModified">
-                    <xsl:value-of select="php:function('date', 'c', $date_modified)" />
-                </xsl:attribute>
-            </xsl:if>
-
-            <!-- ServerDatePublished -->
-            <xsl:if test="$date_creation > 0">
-                <xsl:attribute name="ServerDatePublished">
-                    <xsl:value-of select="php:function('date', 'c', $date_creation)" />
-                </xsl:attribute>
-            </xsl:if>
-
-            <!-- ServerDateUnlocking -->
 
             <!-- ServerState -->
             <xsl:if test="$modus = 'opus'">
@@ -308,7 +307,7 @@
             -->
 	    
 	   <!-- New: Enrichment-Contributor -->
-	   <!-- TODO: Opus4.1: Handle Contributor as PersonContributor -->
+	   <!-- TODO: Opus4.2: Handle Contributor as PersonContributor -->
             <xsl:if test="string-length(field[@name='contributors_name']) > 0">
                 <xsl:element name="Enrichment">
                     <xsl:attribute name="KeyName">
@@ -321,7 +320,7 @@
             </xsl:if>
 	    
 	   <!-- Enrichment-Source --> 
-	   <!-- TODO: Opus 4.1 Handle source as new Document -->
+	   <!-- TODO: Opus 4.2: Handle source as new Document -->
             <xsl:if test="string-length(field[@name='source_title']) > 0">
                 <xsl:element name="Enrichment">
                     <xsl:attribute name="KeyName">
