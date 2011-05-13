@@ -103,7 +103,6 @@
             -->
 
             <!-- CompletedYear -->
-            <!-- date_year is mandatory in Opus3 -->
             <xsl:attribute name="CompletedYear">
                 <xsl:value-of select="field[@name='date_year']" />
             </xsl:attribute>
@@ -130,7 +129,7 @@
                 </xsl:attribute>
             </xsl:if>
 
-            <!-- These values relate to a secondary publication of same document -->
+            <!-- These values relate to a secondary publication date of same document -->
             <!-- PublishedYear -->
             <!-- PublishedDate -->
 
