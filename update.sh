@@ -184,6 +184,9 @@ backup
 # Update SOLR index
 # TODO $SCRIPTPATH/update-solr.sh $BASEDIR
 
+# Update Apache configuration
+# TODO $SCRIPTPATH/update-apache.sh $BASEDIR
+
 # =============================================================================
 # Finish update
 # =============================================================================
