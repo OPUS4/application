@@ -19,16 +19,27 @@
 
 # Update SOLR server
 
-if [ $VERSION_OLD==4.0.0 ] || [ $VERSION_OLD==4.0.1 ] || [ $VERSION_OLD==4.0.2 ]
-then
-	echo "The Solr server schema has to be updated."
-	echo "*******************************************"
-	DIR_O=$BASEDIR/solrconfig
-	DIR_N=../solrconfig
-	FILE=schema.xml
-	filesDiff
-	echo "The Solr index is rebuilding now..."
-	php5 $OLD_SCRIPTS/SolrIndexBuilder.php
+# TODO currently uses undefined MD5Path
+
+set -o errexit
+
+BASEDIR=$1
+VERSION_OLD=$2
+
+OLD_SCRIPTS=$BASEDIR/opus4/scripts
+MD5Path=opus4/application/configs
+
+source update-common.sh
+
+# TODO Why check specifically for versions before 4.0.3? At least add comment.
+if [ $VERSION_OLD==4.0.0 ] || [ $VERSION_OLD==4.0.1 ] || [ $VERSION_OLD==4.0.2 ]; then
+    echo -e "Updating SOLR server schema ... \c "
+    # TODO use MD5Path? Not used in old script. 
+    updateFile ../solrconfig $BASEDIR/solrconfig $MD5Path schema.xml
+    echo "done"
+
+    echo -e "Rebuilding Solr index ... \c "
+    php5 $OLD_SCRIPTS/SolrIndexBuilder.php
+    echo "done"
 fi
-echo ""
 
