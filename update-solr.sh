@@ -38,6 +38,7 @@ if [ $VERSION_OLD==4.0.0 ] || [ $VERSION_OLD==4.0.1 ] || [ $VERSION_OLD==4.0.2 ]
     updateFile ../solrconfig $BASEDIR/solrconfig $MD5Path schema.xml
     echo "done"
 
+    # TODO move into separate script for execution after all update scripts?
     echo -e "Rebuilding Solr index ... \c "
     php5 $OLD_SCRIPTS/SolrIndexBuilder.php
     echo "done"
