@@ -29,7 +29,7 @@ source update-common.sh
 DEBUG "BASEDIR = $BASEDIR"
 
 OLD_CONFIG=$BASEDIR/opus4/application/configs
-NEW_CONFIG1=opus4/application/configs
+NEW_CONFIG1=opus4/application/configs # TODO rename variable MD5PATH ?
 NEW_CONFIG=../$NEW_CONFIG1
 
 echo "Updating configuration files ..."
@@ -44,7 +44,7 @@ cp $NEW_CONFIG/doctypes/all.xml $OLD_CONFIG/doctypes/all.xml
 # DIR_N=$NEW_CONFIG # TODO remove
 # MD5Path=$NEW_CONFIG1 # TODO remove
 
-filesDiff $NEW_CONFIG $OLD_CONFIG $NEW_CONFIG1 navigation.xml
-filesDiff $NEW_CONFIG $OLD_CONFIG $NEW_CONFIG1 navigationModules.xml
+updateFile $NEW_CONFIG $OLD_CONFIG $NEW_CONFIG1 navigation.xml
+updateFile $NEW_CONFIG $OLD_CONFIG $NEW_CONFIG1 navigationModules.xml
 
 
