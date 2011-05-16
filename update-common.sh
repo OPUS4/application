@@ -18,11 +18,18 @@
 # @version     $Id$
 
 # Common functions used by OPUS4 update scripts
+# TODO consistent naming for functions (no idea whats common for shell scripts)
 
 set -o errexit
 
+# Enables (1) or disables (0) additional output for debugging.
 # TODO Maybe set based on argument or environment?
 _DEBUG=1
+
+# Enables (1) or disables (0) dry run mode to create UPDATE.log without making
+# any actual modifications to the OPUS4 installation.
+# TODO Maybe set based on argument or environment?
+_DRYRUN=0
 
 # Executes parameter if DEBUG is enabled
 # @param Text for output
@@ -32,8 +39,28 @@ function DEBUG() {
     return 0 # required with *set -o errexit* TODO why?
 }
 
+# Writes operations into UPDATE.log 
+# @param pathtofile
+# @param operation
+# TODO what if file already exists wenn update starts?
+function UPDATELOG() {
+    if [ -z $_UPDATELOG ]; then
+        DEBUG "Setup UPDATE log"
+        _UPDATELOG=$BASEDIR/UPDATE.log # TODO change name?
+        if [ ! -f $_UPDATELOG ]; then  
+            DEBUG "Write UPDATE log header"
+            echo "Following operations were executed during the update:" > $_UPDATELOG
+            echo "" >> $_UPDATELOG
+        fi
+    fi
+    # Format output so that $2 is always at the same position
+    printf "%-10s %s\n" $1 $2 >> $_UPDATELOG
+}
+
 # Adds entry to CONFLICTS.txt
 # @param path to file that creates conflict
+# TODO what if file already exists when update starts?
+# TODO log conflicts to UPDATE.log
 function addConflict() {
     if [ -z $CONFLICT ]; then
         DEBUG "Setup CONFLICT"
@@ -53,44 +80,124 @@ function addConflict() {
 # @param destination folder
 # @param Path to MD5
 # @param file
+# Uses global variable MD5_OLD
+# TODO use local SRC_FILE and DEST_FILE instead of construction over and over
 function updateFile {	
-    DEST_PATH=$1
-    SRC_PATH=$2
-    MD5Path=$3
-    FILE=$4
-    if [ ! -f $DEST_PATH/$FILE ]; then
-        echo -e "Copying $FILE ... \c "
-        #the file does not exist in the old installation and can be copied
-        cp $SRC_PATH/$FILE $DEST_PATH/$FILE
-        echo "done"
+    local SRC=$1
+    local DEST=$2
+    local MD5PATH=$3
+    local FILE=$4
+    if [ ! -f $DEST/$FILE ]; then
+        # File does not exist at target destination and can be copied
+        addFile $SRC/$FILE $DEST/$FILE
     else 
-        echo "Checking file $MD5Path/$FILE...."
-        MD5ORIGIN=$(grep $MD5Path/$FILE $MD5_OLD | cut -b 1-32)
-        MD5FILE=$(md5sum $DIR_O/$FILE | cut -b 1-32)
-        if [ "$MD5ORIGIN" != "$MD5FILE" ]; then
-            #the hashes are different
-            DIFF='diff -b -B -q $DIR_O/$FILE $DIR_N/$FILE'
-            if [ ${#DIFF} != 0 ]; then 
-                #files are different and the user is asked if he wants to update the file
-                read -p "Conflict for $FILE ! Solve the conflict manually after update? [1] Copy the new file now? [2] : " ANSWER		
-                if [ $ANSWER = '2' ]
-                then 
-                    cp $DIR_N/$FILE $DIR_O/$FILE
+        # File already exists at target destination
+        echo "Checking file $MD5PATH/$FILE for changes."
+
+        # Get reference MD5 for file
+        local MD5_REFERENCE=$(grep $MD5PATH/$FILE $MD5_OLD | cut -b 1-32)
+
+        # Calculate MD5 for existing file
+        local MD5_ACTUAL=$(md5sum $DEST/$FILE | cut -b 1-32)
+
+        # Compare MD5 values
+        if [ "$MD5_REFERENCE" != "$MD5_ACTUAL" ]; then
+            # Hashes are different;
+
+            # Check if changes are trivial (modified whitespace)
+            local DIFF='diff -b -B -q $DEST/$FILE $SRC/$FILE'
+
+            if [ ${#DIFF} != 0 ]; then # TODO IMPORTANT Why does the line look like comment (escape #?)
+                # File was changed. User decides which file to keep.
+                # TODO Add variable for automatic decision, for entire script, after first decision?
+                echo "Conflict for $FILE"
+                
+                # TODO Add variable for printing out explanation only once.
+                echo -e "You can keep the existing modified file and resolve the"
+                echo -e " conflict after the update manually or the file can be"
+                echo " replaced by the new file from OPUS4 $VERSION_NEW."
+                
+                # TODO Add option for more information
+                echo -e "[K]eep modified file or [r]eplace with new file [K/r]? : \c " 
+                read ANSWER # TODO How to make ANSWER local variable?
+
+                # Check and format input
+                if [ -z $ANSWER ]; then 
+                    ANSWER='k'
                 else 
-                    #file in which conflicts are stored for later 
-                    echo $DIR_O/$FILE >> $CONFLICT
+                    ANSWER=${ANSWER,,}
+                    ANSWER=${ANSWER:0:1}
+                fi
+
+                # TODO Check for invalid input? 
+                if [ $ANSWER = 'r' ] 
+                    # Replace existing file
+                    copyFile $SRC/$FILE $DEST/$FILE
+                else
+                    # Do not replace file; Log it as conflict
+                    addConflict $DEST/$FILE
                 fi
             else
-                cp $DIR_N/$FILE $DIR_O/$FILE
+                copyFile $SRC/$FILE $DEST/$FILE
             fi
         else
-            cp $DIR_N/$FILE $DIR_O/$FILE
+            # Installed file was not modified, replace it.
+            copyFile $SRC/$FILE $DEST/$FILE
         fi
     fi
 }
 
-# Updates a folder 
-# TODO implement
-function updateFolder() {
-    echo "TODO implement updateFolder"
+# Copies a file using different functions depending on existence of target file
+function copyFile() {
+    local SRC=$1
+    local DEST=$2
+    if [ ! -f $DEST ]; then 
+        # target file does not exist
+        addFile $SRC $DEST
+    else 
+        # target file already exists
+        replaceFile $SRC $DEST
+    fi
 }
+
+# Updates a folder 
+# TODO handle links
+# TODO handle errors
+# TODO write to log
+function updateFolder() {
+    local SRC=$1
+    local DEST=$2
+    local SRC_FILES=$(ls $SRC)
+    for FILE in $SRC_FILES; do
+        copyFile $SRC/$FILE $DEST/$FILE
+    done
+}
+
+# TODO add console output to the following functions performing operations?
+
+# Adds a new file to the OPUS4 installation
+function addFile() {
+    cp $1 $2
+    UPDATELOG "ADDED" $2
+    DEBUG "Added file $2"
+}
+
+# Updates an unmodified file of the OPUS4 installation
+function replaceFile() {
+    cp $1 $2
+    UPDATELOG "REPLACED" $2
+}
+
+# Deletes a file from the OPUS4 installation
+function deleteFile() {
+    echo "TODO implement DELETE file"
+}
+
+# Replaces a modified file in the OPUS4 installation
+function replaceModifiedFile() {
+    echo "TODO implement REPLACE MODIFIED file"
+}
+
+BASEDIR=./test
+
+updateFolder $1 $2

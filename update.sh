@@ -89,6 +89,7 @@ function getNewVersion() {
 # Find MD5SUMS for installed OPUS4
 # Use file MD5SUMS if it exists, otherwise 
 # TODO Ways to make it more robust?
+# TODO rename MD5_OLD to MD5SUMS_INSTALLED or something else
 function getMd5Sums() {
     if [ ! -f $BASEDIR/MD5SUMS ]; then
         # TODO use SCRIPTPATH?

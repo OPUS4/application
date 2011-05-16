@@ -28,23 +28,24 @@ source update-common.sh
 
 DEBUG "BASEDIR = $BASEDIR"
 
-OLD_CONFIG=$BASEDIR/opus4/application/configs
-NEW_CONFIG1=opus4/application/configs # TODO rename variable MD5PATH ?
-NEW_CONFIG=../$NEW_CONFIG1
+DEST=$BASEDIR/opus4/application/configs
+MD5PATH=opus4/application/configs # TODO rename variable MD5PATH ?
+SRC=../$FILEPATH
 
 echo "Updating configuration files ..."
 
-cp $NEW_CONFIG/application.ini $OLD_CONFIG/application.ini
-cp $NEW_CONFIG/config.ini.template $OLD_CONFIG/config.ini.template
-cp $NEW_CONFIG/doctypes/all.xml $OLD_CONFIG/doctypes/all.xml
-
+# The following files are simply copied without checking the existing files.
+copyFile $SRC/application.ini $DEST/application.ini
+copyFile $SRC/config.ini.template $DEST/config.ini.template
+copyFile $SRC/doctypes/all.xml $DEST/doctypes/all.xml
 # TODO maybe config.ini should be merged with new template?
 
 # DIR_O=$OLD_CONFIG # TODO remove
 # DIR_N=$NEW_CONFIG # TODO remove
 # MD5Path=$NEW_CONFIG1 # TODO remove
 
-updateFile $NEW_CONFIG $OLD_CONFIG $NEW_CONFIG1 navigation.xml
-updateFile $NEW_CONFIG $OLD_CONFIG $NEW_CONFIG1 navigationModules.xml
+# Ask user before replacing the following files.
+updateFile $SRC $DEST $MD5PATH navigation.xml
+updateFile $SRC $DEST $MD5PATH navigationModules.xml
 
 
