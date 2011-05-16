@@ -36,7 +36,7 @@ BASEDIR_DEFAULT=/var/local/opus4
 
 # Determines installation directory for existing OPUS4
 function getBasedir() {
-    ABORT='n'
+    local ABORT='n'
     while [ -z $BASEDIR ] || [ ! -d $BASEDIR ] && [ $ABORT != 'y' ]; do 
         echo -e "Please specify OPUS4 installation directory ($BASEDIR_DEFAULT): \c "
         read BASEDIR_NEW
@@ -69,11 +69,35 @@ function getBasedir() {
 }
 
 # Determines current version of installed OPUS4
+# TODO What if VERSION.txt is missing, but it is a post 4.1 version?
 function getOldVersion() {
     if [ ! -f $BASEDIR/VERSION.txt ]; then 
-        echo -e "What version of OPUS4 is installed? \c "
-        read VERSION_OLD
-        # TODO verify version (OPUSVIER-1375), but how?
+        local ABORT='n'
+        while [ ! -f MD5_OLD ] && [ $ABORT != 'y' ]; do
+            echo -e "What version of OPUS4 is installed? \c "
+            read VERSION_OLD
+
+            getMd5Sums
+
+            # Check if MD5SUMS file exists for the entered version
+            # TODO Better way to verify entered version?
+            if ! -f MD5_OLD ]; then
+                echo -c "You entered an unknown OPUS4 version number. Abort the update [y/N]? \c "
+                read ABORT
+                if [ -z $ABORT ]; then 
+                    ABORT='n'
+                else 
+                    # TODO better way of doing the two steps below
+                    # TODO removing whitespace (trim) does not seem necessary
+                    ABORT=${ABORT,,} # convert to lowercase
+                    ABORT=${ABORT:0:1} # get first letter
+                fi
+            fi
+        done
+        if [ $ABORT == 'y' ]; then 
+            echo "OPUS4 update aborted"
+            exit 1
+        fi
     else 
         # Read content of VERSION into VERSION_OLD
 	VERSION_OLD=$(sed -n '1p' $BASEDIR/VERSION.txt)		
