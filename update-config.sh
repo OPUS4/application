@@ -29,7 +29,7 @@ source update-common.sh
 DEBUG "BASEDIR = $BASEDIR"
 
 DEST=$BASEDIR/opus4/application/configs
-MD5PATH=opus4/application/configs # TODO rename variable MD5PATH ?
+MD5PATH=opus4/application/configs
 SRC=../$FILEPATH
 
 echo "Updating configuration files ..."
@@ -40,11 +40,7 @@ copyFile $SRC/config.ini.template $DEST/config.ini.template
 copyFile $SRC/doctypes/all.xml $DEST/doctypes/all.xml
 # TODO maybe config.ini should be merged with new template?
 
-# DIR_O=$OLD_CONFIG # TODO remove
-# DIR_N=$NEW_CONFIG # TODO remove
-# MD5Path=$NEW_CONFIG1 # TODO remove
-
-# Ask user before replacing the following files.
+# Ask user before replacing the following files if they have been modified.
 updateFile $SRC $DEST $MD5PATH navigation.xml
 updateFile $SRC $DEST $MD5PATH navigationModules.xml
 
