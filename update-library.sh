@@ -20,6 +20,7 @@
 # Updates the OPUS4 *library* directory
 
 # TODO Better way of updating library folder except Application folder.
+# TODO Folders in *library* (top-level) that are not used anymore are not deleted.
 
 set -o errexit
 
