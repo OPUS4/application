@@ -17,11 +17,32 @@
 # @license     http://www.gnu.org/licenses/gpl.html General Public License
 # @version     $Id$
 
+# Main script for updating an OPUS4 instance
+# @param $1 path to new distribution
+# @param $2 path to OPUS4 installation
+# @param $3 version of OPUS4 installation
+
 # TODO add generic function for YES/NO questions?
 # TODO add function for abort?
 # TODO add batch mode (no questions asked)?
 
 set -o errexit
+
+# =============================================================================
+# Parse parameters
+# =============================================================================
+
+# Use first parameter as location of OPUS4 distribution
+if [ ! -z $1 ]; then
+    BASE_SOURCE=$1
+fi
+
+# Use second parameter as location of OPUS4 installation
+if [ ! -z $2 ]; then
+    BASEDIR=$2
+fi
+
+# TODO implement version parameter 
 
 # =============================================================================
 # Define constants
@@ -35,6 +56,7 @@ BASEDIR_DEFAULT=/var/local/opus4
 # =============================================================================
 
 # Determines installation directory for existing OPUS4
+# TODO handle BASEDIR passed as parameter consistently
 function getBasedir() {
     local ABORT='n'
     while [ -z $BASEDIR ] || [ ! -d $BASEDIR ] && [ $ABORT != 'y' ]; do 
@@ -150,6 +172,12 @@ DEBUG "Debug output enabled"
 SCRIPTNAME=`basename $0`
 SCRIPTPATH=$(cd `dirname $0` && pwd)
 
+# If BASE_SOURCE was not provided set to parent folder of SCRIPTPATH
+if [ -z $BASE_SOURCE ]; then
+    BASE_SOURCE=$SCRIPTPATH/..
+fi 
+
+DEBUG "BASE_SOURCE=$SCRIPTPATH"
 DEBUG "SCRIPTNAME = $SCRIPTNAME"
 DEBUG "SCRIPTPATH = $SCRIPTPATH"
 
@@ -186,31 +214,31 @@ backup
 # =============================================================================
 
 # Update configuration
-# TODO $SCRIPTPATH/update-config.sh $BASEDIR
+$SCRIPTPATH/update-config.sh $BASEDIR $BASE_SOURCE
 
 # Update database
-# TODO $SCRIPTPATH/update-db.sh $BASEDIR
+$SCRIPTPATH/update-db.sh $BASEDIR 
 
 # Update *import* folder
-# TODO $SCRIPTPATH/update-import.sh $BASEDIR
+$SCRIPTPATH/update-import.sh $BASEDIR
 
 # Update *library* folder
-# TODO $SCRIPTPATH/update-library.sh $BASEDIR
+$SCRIPTPATH/update-library.sh $BASEDIR $BASE_SOURCE
 
 # Update modules
-# TODO $SCRIPTPATH/update-modules.sh $BASEDIR
+$SCRIPTPATH/update-modules.sh $BASEDIR
 
 # Update *public* folder
-# TODO $SCRIPTPATH/update-public.sh $BASEDIR
+$SCRIPTPATH/update-public.sh $BASEDIR
 
 # Update *scripts* folders
-# TODO $SCRIPTPATH/update-scripts.sh $BASEDIR
+$SCRIPTPATH/update-scripts.sh $BASEDIR
 
 # Update SOLR index
-# TODO $SCRIPTPATH/update-solr.sh $BASEDIR
+$SCRIPTPATH/update-solr.sh $BASEDIR
 
 # Update Apache configuration
-# TODO $SCRIPTPATH/update-apache.sh $BASEDIR
+$SCRIPTPATH/update-apache.sh $BASEDIR
 
 # =============================================================================
 # Finish update
