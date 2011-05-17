@@ -25,34 +25,33 @@ BASEDIR=$1
 
 source update-common.sh
 
+MODULES_PATH=opus4/modules
 OLD_MODULES=$BASEDIR/opus4/modules
-NEW_MODULES1=opus4/modules
-NEW_MODULES=../$NEW_MODULES1
+NEW_MODULES=../$MODULES_PATH
 
-################################################################
-#Part 3: update modules (with and without diff)
-################################################################
-echo "The directory $OLD_MODULES is updating now."
-echo "********************************************************************"
+echo "Updating directory $OLD_MODULES ..."
 
+# Get list of folder in modules directory => list of modules
 MODULES=$(ls $NEW_MODULES )
 
-#copy all module directories and files, except views and language_custom
-for i in $MODULES;
-do
-	LIST=$(ls $NEW_MODULES/$i)
-	for j in LIST
-	do
-		if [ -d "$j" ] && [ $j != 'views' ] && [ $j != 'language_custom' ]
-		then
-			cp $NEW_MODULES/$i/$j/* -R $OLD_MODULES/$i/$j;
-		else
-			if [ -f "$j" ]
-			then
-				cp $NEW_MODULES/$i/$j $OLD_MODULES/$i/$j
-			fi
-		fi
-	done	
+# Copy all module directories and files, except views and language_custom
+# TODO files in modules folder are not removed
+# TODO IMPORTANT files in module folder are not removed
+for MODULE in $MODULES; do
+    LIST=$(ls $NEW_MODULES/$MODULE)
+    for FILE in LIST; do
+        # Check if folder and if special folder
+        if [ -d "$FILE" ] && [ $FILE != 'views' ] && [ $FILE != 'language_custom' ]; then
+            # Regular folder
+            updateFolder $NEW_MODULES/$MODULE/$FILE $OLD_MODULES/$MODULE/$FILE;
+        else
+            # Check if file
+            if [ -f "$FILE" ]; then 
+                # Is file; copy it
+                copyFile $NEW_MODULES/$MODULE/$FILE $OLD_MODULES/$MODULE/$FILE
+            fi
+        fi
+    done	
 done
 
 #special treatment for copying the view directories
@@ -60,36 +59,40 @@ HELPERS=helpers
 SCRIPTS=scripts
 VIEW=views
 
+
+
 #1)copy all helpers directories
-for i in $MODULES;
-do 
-	if [ -d "$NEW_MODULES/$i/$VIEW/$HELPERS" ]
-	then
-		cp $NEW_MODULES/$i/$VIEW/$HELPERS/* -R $OLD_MODULES/$i/$VIEW/$HELPERS;
-	fi
+# TODO Why are helpers handled separately here? They are not ignored above?
+for MODULE in $MODULES; do 
+    if [ -d "$NEW_MODULES/$MODULE/$VIEW/$HELPERS" ]; then
+        updateFolder $NEW_MODULES/$MODULE/$VIEW/$HELPERS $OLD_MODULES/$MODULE/$VIEW/$HELPERS;
+    fi
 done
 
 #2)call filesDiff method for all files in all script directories
-for i in $MODULES;
-do 
-	if [ -d "$NEW_MODULES/$i/$VIEW/$SCRIPTS" ]
-	then
-		cd $NEW_MODULES/$i/$VIEW/$SCRIPTS
-		SCRIPT_FILES=$(find . -type f -exec ls {} \; | cut -b 3-)		
-		cd $SCRIPT_PATH
-		for j in $SCRIPT_FILES;
-		do
-			DIR_O=$OLD_MODULES/$i/$VIEW/$SCRIPTS
-			DIR_N=$NEW_MODULES/$i/$VIEW/$SCRIPTS
-			MD5Path=$NEW_MODULES1/$i/$VIEW/$SCRIPTS
-			FILE=$j
-			filesDiff
-		done		
-	fi			
+# TODO Does this work correctly? Can we ignore everything that is not executable?
+# TODO Does not remove scripts.
+for MODULE in $MODULES; do 
+    if [ -d "$NEW_MODULES/$MODULE/$VIEW/$SCRIPTS" ]; then
+        # TODO no better way to do this without cd?
+        cd $NEW_MODULES/$MODULE/$VIEW/$SCRIPTS
+        SCRIPT_FILES=$(find . -type f -exec ls {} \; | cut -b 3-)		
+        cd $SCRIPT_PATH
+
+        for FILE in $SCRIPT_FILES; do
+            DEST=$OLD_MODULES/$MODULE/$VIEW/$SCRIPTS
+            SRC=$NEW_MODULES/$MODULE/$VIEW/$SCRIPTS
+            MD5PATH=$MODULES_PATH/$MODULE/$VIEW/$SCRIPTS
+            updateFile $SRC $DEST $MD5PATH $FILE
+        done		
+    fi			
 done
 
 cd $SCRIPT_PATH
-cp $NEW_MODULES/publish/$VIEW/$SCRIPTS/form/all.phtml $OLD_MODULES/publish/$VIEW/$SCRIPTS/form/all.phtml
+
+# TODO explain special handling of this one file
+copyFile $NEW_MODULES/publish/$VIEW/$SCRIPTS/form/all.phtml $OLD_MODULES/publish/$VIEW/$SCRIPTS/form/all.phtml
+
 echo ""
 
 
