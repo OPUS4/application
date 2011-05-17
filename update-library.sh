@@ -19,7 +19,7 @@
 
 # Updates the OPUS4 *library* directory
 
-# TODO maybe script should take src and dest parameter?
+# TODO Better way of updating library folder except Application folder.
 
 set -o errexit
 
@@ -32,15 +32,38 @@ BASE_SOURCE=$2
 # Replace old framework folder with new one without checking for changes.
 # TODO check folders
 
-NEW_FRAMEWORK=$BASE_SOURCE/opus4/library/Opus
-OLD_FRAMEWORK=$BASEDIR/opus4/library/Opus # TODO path correct?
+NEW_LIBRARY=$BASE_SOURCE/opus4/library
+OLD_LIBRARY=$BASEDIR/opus4/library
 
-DEBUG "NEW_FRAMEWORK = $NEW_FRAMEWORK"
-DEBUG "OLD_FRAMEWORK = $OLD_FRAMEWORK"
+DEBUG "NEW_LIBRARY = $NEW_LIBRARY"
+DEBUG "OLD_LIBRARY = $OLD_LIBRARY"
 
 echo -e "Updating *library* folder ... \c "
-updateFolder $NEW_FRAMEWORK $OLD_FRAMEWORK
+
+# Updating *Opus* folder
+updateFolder $NEW_LIBRARY/Opus $OLD_LIBRARY/Opus
 # TODO Are we possibly deleting too much in the next line? It will delete everything that does not exist in source location.
-deleteFiles $NEW_FRAMEWORK $OLD_FRAMEWORK
+deleteFiles $NEW_LIBRARY/Opus $OLD_LIBRARY/Opus
 # TODO verify with diff between $NEW_FRAMEWORK and $OLD_FRAMEWORK?
+
+# Updating *Form* folder
+updateFolder $NEW_LIBRARY/Form $OLD_LIBRARY/Form
+deleteFiles $NEW_LIBRARY/Form $OLD_LIBRARY/Form
+
+# Updating *Controller* folder
+updateFolder $NEW_LIBRARY/Controller $OLD_LIBRARY/Controller
+deleteFiles $NEW_LIBRARY/Controller $OLD_LIBRARY/Controller
+
+# Updating *Rewritemap* folder
+updateFolder $NEW_LIBRARY/Rewritemap $OLD_LIBRARY/Rewritemap
+deleteFiles $NEW_LIBRARY/Rewritemap $OLD_LIBRARY/Rewritemap
+
+# Updating *Util* folder
+updateFolder $NEW_LIBRARY/Util $OLD_LIBRARY/Util
+deleteFiles $NEW_LIBRARY/Util $OLD_LIBRARY/Util
+
+# Updating *View* folder
+updateFolder $NEW_LIBRARY/View $OLD_LIBRARY/View
+deleteFiles $NEW_LIBRARY/View $OLD_LIBRARY/View
+
 echo "done"

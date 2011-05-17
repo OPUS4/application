@@ -170,6 +170,7 @@ function copyFile() {
 # TODO handle symbolic link
 # TODO check if source/target exist
 # TODO handle errors
+# TODO handle missing target folder
 function updateFolder() {
     local SRC=$1
     local DEST=$2
