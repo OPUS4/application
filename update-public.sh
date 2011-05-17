@@ -88,4 +88,4 @@ else
     updateFolder $NEW_PUBLIC/$LAYOUT_OPUS4 $OLD_PUBLIC/$LAYOUT_OPUS4
 fi		
 
-updateFile $NEW_PUBLIC/htaccess-template $OLD_PUBLIC/htaccess-template
+copyFile $NEW_PUBLIC/htaccess-template $OLD_PUBLIC/htaccess-template
