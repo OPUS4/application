@@ -221,8 +221,6 @@ if [ -f $BASEDIR/UPDATE.log ]; then
     rm $BASEDIR/UPDATE.log 
 fi
 
-RUN_SCRIPTS=0
-
 # Update configuration
 $SCRIPTPATH/update-config.sh $BASEDIR $BASE_SOURCE $MD5_OLD
 
@@ -235,24 +233,20 @@ $SCRIPTPATH/update-import.sh $BASEDIR $BASE_SOURCE
 # Update *library* folder
 $SCRIPTPATH/update-library.sh $BASEDIR $BASE_SOURCE
 
-if [ $RUN_SCRIPTS -eq 1 ]; then
-
 # Update modules
-$SCRIPTPATH/update-modules.sh $BASEDIR
+# $SCRIPTPATH/update-modules.sh $BASEDIR
 
 # Update *public* folder
-$SCRIPTPATH/update-public.sh $BASEDIR
+# $SCRIPTPATH/update-public.sh $BASEDIR
 
 # Update *scripts* folders
-$SCRIPTPATH/update-scripts.sh $BASEDIR
+# $SCRIPTPATH/update-scripts.sh $BASEDIR
 
 # Update SOLR index
-$SCRIPTPATH/update-solr.sh $BASEDIR
+# $SCRIPTPATH/update-solr.sh $BASEDIR
 
 # Update Apache configuration
-$SCRIPTPATH/update-apache.sh $BASEDIR
-
-fi
+# $SCRIPTPATH/update-apache.sh $BASEDIR
 
 # =============================================================================
 # Finish update
