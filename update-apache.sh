@@ -24,4 +24,6 @@ BASEDIR=$1
 
 source update-common.sh
 
-echo "Updating Apache configuration ... "
+echo -e "Updating Apache configuration ... \c "
+echo "NOT IMPLEMENTED YET" # OPUSVIER-1382
+echo "done"
