@@ -215,18 +215,24 @@ backup
 # Run update scripts
 # =============================================================================
 
+# TODO IMPORTANT remove line; temporary for testing
+# TODO move into testing script
+if [ -f $BASEDIR/UPDATE.log ]; then
+    rm $BASEDIR/UPDATE.log 
+fi
+
 RUN_SCRIPTS=0
 
 # Update configuration
 $SCRIPTPATH/update-config.sh $BASEDIR $BASE_SOURCE $MD5_OLD
 
-if [ $RUN_SCRIPTS -eq 1 ]; then
-
 # Update database
-$SCRIPTPATH/update-db.sh $BASEDIR 
+# TODO $SCRIPTPATH/update-db.sh $BASEDIR 
 
 # Update *import* folder
-$SCRIPTPATH/update-import.sh $BASEDIR
+$SCRIPTPATH/update-import.sh $BASEDIR $BASE_SOURCE
+
+if [ $RUN_SCRIPTS -eq 1 ]; then
 
 # Update *library* folder
 $SCRIPTPATH/update-library.sh $BASEDIR $BASE_SOURCE

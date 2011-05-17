@@ -19,4 +19,25 @@
 
 # Updates the OPUS4 *import* directory
 
+# TODO Is that sufficient for updating import folder?
+
 set -o errexit
+
+BASEDIR=$1
+BASE_SOURCE=$2
+
+source update-common.sh
+
+echo -e "Updating *import* folder ... \c "
+
+SRC=$BASE_SOURCE/opus4/import
+DEST=$BASEDIR/opus4/import
+
+# Create import folder if it does not exit yet
+if [ ! -d $DEST ]; then
+    createFolder $DEST
+fi
+
+updateFolder $SRC $DEST
+
+echo "done"
