@@ -32,8 +32,8 @@ NEW_SCRIPTS=../$NEW_SCRIPTS1
 ################################################################
 #Part 4: update scripts directory (without diff)
 ################################################################
-echo "The directory $OLD_SCRIPTS is updating now."
-echo "************************************************************"
-cp $NEW_SCRIPTS/* -R $OLD_SCRIPTS
-echo ""
+echo -e "Updating $OLD_SCRIPTS ... \c "
+updateFolder $NEW_SCRIPTS $OLD_SCRIPTS
+deleteFiles $NEW_SCRIPTS $OLD_SCRIPTS
+echo "done"
 
