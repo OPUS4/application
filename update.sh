@@ -225,7 +225,7 @@ fi
 $SCRIPTPATH/update-config.sh $BASEDIR $BASE_SOURCE $MD5_OLD
 
 # Update database
-# TODO $SCRIPTPATH/update-db.sh $BASEDIR 
+$SCRIPTPATH/update-db.sh $BASEDIR $BASE_SOURCE $VERSION_OLD $VERSION_NEW
 
 # Update *import* folder
 $SCRIPTPATH/update-import.sh $BASEDIR $BASE_SOURCE
