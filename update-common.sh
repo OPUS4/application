@@ -160,6 +160,8 @@ function copyFile() {
     fi
 }
 
+# TODO use? rsync -avz --delete $NEW_FRAMEWORK/ $OLD_FRAMEWORK to sync folders
+
 # Copies files from a source to a destination folder recursively
 # TODO handle links
 # TODO handle errors
@@ -202,8 +204,14 @@ function deleteFiles() {
             # Check if folder exists in source folder
             if [ ! -d $SRC/$FILE ]; then
                 # Folder does not exist
-                # TODO Delete folder file by file recursively (for log) 
-                deleteFolder -rf $DEST/$FILE
+                # TODO Delete folder file by file recursively (for log)?
+                # TODO Check against MD5 before deleting?
+                # Check if folder is link; Delete if not
+                if [ ! -L $DEST/$FILE ]; then 
+                    deleteFolder $DEST/$FILE
+                else
+                    DEBUG "Not deleted symbolic link $DEST/$FILE"
+                fi
             else
                 # Folder exists, call deleteFiles recursively
                 deleteFiles $SRC/$FILE $DEST/$FILE
@@ -212,6 +220,8 @@ function deleteFiles() {
             # Check if file exists in source folder
             if [ ! -f $SRC/$FILE ]; then
                 # File does not exist; Delete file in destination folder
+                # TODO Check against MD5 before deleting?
+                # TODO check for linked files?
                 deleteFile $DEST/$FILE
             fi 
         fi
