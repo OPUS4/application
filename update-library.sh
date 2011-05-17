@@ -39,7 +39,8 @@ DEBUG "NEW_FRAMEWORK = $NEW_FRAMEWORK"
 DEBUG "OLD_FRAMEWORK = $OLD_FRAMEWORK"
 
 echo -e "Updating *library* folder ... \c "
-cp -R $NEW_FRAMEWORK/* $OLD_FRAMEWORK
-# TODO use? rsync -avz --delete $NEW_FRAMEWORK/ $OLD_FRAMEWORK
+updateFolder $NEW_FRAMEWORK/ $OLD_FRAMEWORK
+# TODO Are we possibly deleting too much in the next line? It will delete everything that does not exist in source location.
+deleteFiles $NEW_FRAMEWORK/ $OLD_FRAMEWORK
 # TODO verify with diff between $NEW_FRAMEWORK and $OLD_FRAMEWORK?
 echo "done"
