@@ -38,6 +38,9 @@ if [ ! -d $DEST ]; then
     createFolder $DEST
 fi
 
+# Copy files from source to destination folder
 updateFolder $SRC $DEST
+# Remove files from destination that do not exist in source folder
+deleteFiles $SRC $DEST
 
 echo "done"
