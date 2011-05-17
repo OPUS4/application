@@ -25,58 +25,54 @@ source update-common.sh
 
 # TODO move into common script? Be careful with main script!
 BASEDIR=$1
+BASE_SOURCE=$2
+VERSION_OLD=$3
+VERSION_NEW=$4
+mysql_bin=/usr/bin/mysql
+SCRIPT=$BASEDIR/opus/db/createdb.sh
 
 echo "Updating database ..."
 
-################################################################
-#Part 7: update mysql database schema
-################################################################
-echo "Checking database update information...."
-echo "***************************************************"
+SCHEMA_PATH=BASE_SOURCE/opus4/db/schema
 
-# aus Zeitmangel nur für Update auf 4.1 zu verwenden
-# ermöglicht keinen rekursiven Aufruf anderer Skripte!!!
-# muss bei nächster Datenbankänderung angepasst werden! 
-
-SCHEMA_PATH=../opus4/db/schema
-cd $SCHEMA_PATH
-SCHEMA_PATH=`pwd`
-VERSION_1=$(echo $VERSION_OLD | cut -b 1-4)
+VERSION_PREFIX=$(echo $VERSION_OLD | cut -b 1-4)
 X=x
-VERSION_X=$VERSION_1$X
-#SQL="update-"$VERSION_X"-to-"$VERSION_NEW".sql"
-SQL="update-"$VERSION_X"-to-4.1.0.sql"
+VERSION_X=$VERSION_PREFIX$X
+SQL1="update-"$VERSION_OLD"-to-"$VERSION_NEW".sql"
+SQL2="update-"$VERSION_X"-to-"$VERSION_NEW".sql"
+UPDATE_FILE=$SQL1
 
-if [ ! -f "$SCHEMA_PATH/$SQL" ]
-then 
-	echo "No database update information available."	
-	echo "Thanks for updating OPUS! Have fun with it!"
-	exit 1
-fi
-
-echo "The database is updating now."
-echo "*******************************************"
-OPUS_DB=$(grep db.params.dbname $OLD_CONFIG/config.ini | cut -b 20-)
-HOST=$(grep db.params.host $OLD_CONFIG/config.ini | cut -b 18-)
-
-read -p "MySQL Root User [root]: " MYSQLROOT
-if [ -z "$MYSQLROOT" ]
+if [ ! -f "$SCHEMA_PATH/$SQL1" ]
 then
-	MYSQLROOT=root
+    if [ ! -f "$SCHEMA_PATH/$SQL2" ]
+    then
+	echo "No database update information available."
+        exit 1
+    else
+        $UPDATE_FILE=$SQL2
+    fi
 fi
-if [ $HOST=="''" ]
-then 
-	MYSQL="$MYSQL_CLIENT --default-character-set=utf8 -u $MYSQLROOT -v -p"
-else 
-	MYSQL="$MYSQL_CLIENT --default-character-set=utf8 -u $MYSQLROOT -h $HOST -v -p"
+
+DEBUG "MYSQL UPDATE SCRIPT = $UPDATE_FILE"
+
+#read database credentials from createdb.sh
+USER=$ grep -v '^[[:space:]]*;' $SCRIPT | grep '^[[:space:]]*user[[:space:]]*=' | cut -d= -f2 | sed "s/\;.*$//; s/[ \'\"]*$//; s/^[ \'\"]*//"
+PASSWORD=$ grep -v '^[[:space:]]*;' $SCRIPT | grep '^[[:space:]]*password[[:space:]]*=' | cut -d= -f2 | sed "s/\;.*$//; s/[ \'\"]*$//; s/^[ \'\"]*//"
+HOST=$ grep -v '^[[:space:]]*;' $SCRIPT | grep '^[[:space:]]*host[[:space:]]*=' | cut -d= -f2 | sed "s/\;.*$//; s/[ \'\"]*$//; s/^[ \'\"]*//"
+PORT=$ grep -v '^[[:space:]]*;' $SCRIPT | grep '^[[:space:]]*port[[:space:]]*=' | cut -d= -f2 | sed "s/\;.*$//; s/[ \'\"]*$//; s/^[ \'\"]*//"
+DBNAME=$ grep -v '^[[:space:]]*;' $SCRIPT | grep '^[[:space:]]*dbname[[:space:]]*=' | cut -d= -f2 | sed "s/\;.*$//; s/[ \'\"]*$//; s/^[ \'\"]*//"
+
+mysql="${mysql_bin} --default-character-set=utf8 --user=${USER} --host=${HOST} --port=${PORT}"
+
+if [ -n "${PASSWORD}" ]; then
+    mysql="${mysql} --password=${PASSWORD}"
 fi
 	
 $MYSQL <<EOFMYSQL
-USE $OPUS_DB;
-SOURCE $SCHEMA_PATH/$SQL;
+USE $DBNAME;
+SOURCE $SCHEMA_PATH/$UPDATE_FILE;
 
 EOFMYSQL
 	
 echo "Database is up-to-date!"
-echo "Thanks for updating OPUS! Have fun with it!"
 
