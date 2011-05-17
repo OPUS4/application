@@ -29,10 +29,8 @@ OLD_SCRIPTS=$BASEDIR/opus4/scripts
 NEW_SCRIPTS1=opus4/scripts
 NEW_SCRIPTS=../$NEW_SCRIPTS1
 
-################################################################
-#Part 4: update scripts directory (without diff)
-################################################################
 echo -e "Updating $OLD_SCRIPTS ... \c "
+# Files in the scripts folder are updated without checks.
 updateFolder $NEW_SCRIPTS $OLD_SCRIPTS
 deleteFiles $NEW_SCRIPTS $OLD_SCRIPTS
 echo "done"
