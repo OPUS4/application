@@ -269,8 +269,3 @@ function createFolder() {
 function replaceModifiedFile() {
     echo "TODO implement REPLACE MODIFIED file"
 }
-
-BASEDIR=./test
-
-updateFolder $1 $2
-deleteFiles $1 $2
