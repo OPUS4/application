@@ -29,7 +29,7 @@ _DEBUG=1
 # Enables (1) or disables (0) dry run mode to create UPDATE.log without making
 # any actual modifications to the OPUS4 installation.
 # TODO Maybe set based on argument or environment?
-_DRYRUN=0
+_DRYRUN=1
 
 # Executes parameter if DEBUG is enabled
 # @param Text for output
@@ -232,35 +232,35 @@ function deleteFiles() {
 
 # Adds a new file to the OPUS4 installation
 function addFile() {
-    cp $1 $2
+    [ "$_DRYRUN" -eq 1 ] && cp $1 $2
     UPDATELOG "ADDED" $2
     DEBUG "Added file $2"
 }
 
 # Updates an unmodified file of the OPUS4 installation
 function replaceFile() {
-    cp $1 $2
+    [ "$_DRYRUN" -eq 1 ] && cp $1 $2
     UPDATELOG "REPLACED" $2
     DEBUG "Replaced file $2"
 }
 
 # Deletes a file from the OPUS4 installation
 function deleteFile() {
-    rm $1
+    [ "$_DRYRUN" -eq 1 ] && rm $1
     UPDATELOG "DELETED" $1
     DEBUG "Deleted file $1"
 }
 
 # Deletes a folder from the OPUS4 installation
 function deleteFolder() {
-    rm -rf $1
+    [ "$_DRYRUN" -eq 1 ] && rm -rf $1
     UPDATELOG "DELETED" $1
     DEBUG "Deleted folder $1"
 }
 
 # Creates a folder
 function createFolder() {
-    mkdir $1
+    [ "$_DRYRUN" -eq 1 ] && mkdir $1
     UPDATELOG "CREATED" $1
     DEBUG "Created folder $1"
 }
