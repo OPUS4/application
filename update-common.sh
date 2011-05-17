@@ -130,7 +130,7 @@ function updateFile {
                 fi
 
                 # TODO Check for invalid input? 
-                if [ $ANSWER = 'r' ] 
+                if [ $ANSWER = 'r' ]; then
                     # Replace existing file
                     copyFile $SRC/$FILE $DEST/$FILE
                 else
@@ -160,16 +160,61 @@ function copyFile() {
     fi
 }
 
-# Updates a folder 
+# Copies files from a source to a destination folder recursively
 # TODO handle links
 # TODO handle errors
-# TODO write to log
+# TODO handle symbolic link
+# TODO check if source/target exist
+# TODO handle errors
 function updateFolder() {
     local SRC=$1
     local DEST=$2
+    # Get files and folders in source directory
     local SRC_FILES=$(ls $SRC)
+    # Iterate through files and folders
     for FILE in $SRC_FILES; do
-        copyFile $SRC/$FILE $DEST/$FILE
+        # Check if folder
+        if [ -d $SRC/$FILE ]; then
+            # Check if target folder exists
+            if [ ! -d $DEST/$FILE ]; then
+                # Create target folder if it does not exist already
+                createFolder $DEST/$FILE
+            fi
+            # Call updateFolder recursively
+            updateFolder $SRC/$FILE $DEST/$FILE
+        else
+            copyFile $SRC/$FILE $DEST/$FILE
+        fi
+    done
+}
+
+# Deletes files that exist at destination but not in source folder recursively
+# TODO IMPORTANT handle/ignore symbolic links
+# TODO filter deletes based on MD5 list (does that actually work as expected)?
+function deleteFiles() {
+    local SRC=$1
+    local DEST=$2
+    local DEST_FILES=$(ls $DEST)
+    # Iterate through destination files
+    for FILE in $DEST_FILES; do
+        # Check if folder
+        if [ -d $DEST/$FILE ]; then
+            # Check if folder exists in source folder
+            if [ ! -d $SRC/$FILE ]; then
+                # Folder does not exist
+                # TODO Delete folder file by file recursively (for log) 
+                deleteFolder -rf $DEST/$FILE
+            else
+                # Folder exists, call deleteFiles recursively
+                deleteFiles $SRC/$FILE $DEST/$FILE
+            fi
+        else
+            # Check if file exists in source folder
+            if [ ! -f $SRC/$FILE ]; then
+                # File does not exist; Delete file in destination folder
+                deleteFile $DEST/$FILE
+            fi 
+        fi
     done
 }
 
@@ -186,11 +231,28 @@ function addFile() {
 function replaceFile() {
     cp $1 $2
     UPDATELOG "REPLACED" $2
+    DEBUG "Replaced file $2"
 }
 
 # Deletes a file from the OPUS4 installation
 function deleteFile() {
-    echo "TODO implement DELETE file"
+    rm $1
+    UPDATELOG "DELETED" $1
+    DEBUG "Deleted file $1"
+}
+
+# Deletes a folder from the OPUS4 installation
+function deleteFolder() {
+    rm -rf $1
+    UPDATELOG "DELETED" $1
+    DEBUG "Deleted folder $1"
+}
+
+# Creates a folder
+function createFolder() {
+    mkdir $1
+    UPDATELOG "CREATED" $1
+    DEBUG "Created folder $1"
 }
 
 # Replaces a modified file in the OPUS4 installation
@@ -201,3 +263,4 @@ function replaceModifiedFile() {
 BASEDIR=./test
 
 updateFolder $1 $2
+deleteFiles $1 $2
