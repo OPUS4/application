@@ -215,8 +215,12 @@ backup
 # Run update scripts
 # =============================================================================
 
+RUN_SCRIPTS=0
+
 # Update configuration
-# $SCRIPTPATH/update-config.sh $BASEDIR $BASE_SOURCE
+$SCRIPTPATH/update-config.sh $BASEDIR $BASE_SOURCE $MD5_OLD
+
+if [ $RUN_SCRIPTS -eq 1 ]; then
 
 # Update database
 $SCRIPTPATH/update-db.sh $BASEDIR 
@@ -241,6 +245,8 @@ $SCRIPTPATH/update-solr.sh $BASEDIR
 
 # Update Apache configuration
 $SCRIPTPATH/update-apache.sh $BASEDIR
+
+fi
 
 # =============================================================================
 # Finish update

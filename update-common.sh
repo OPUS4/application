@@ -92,13 +92,15 @@ function updateFile {
         addFile $SRC/$FILE $DEST/$FILE
     else 
         # File already exists at target destination
-        echo "Checking file $MD5PATH/$FILE for changes."
+        echo "Checking file $DEST/$MD5PATH/$FILE for changes."
 
         # Get reference MD5 for file
         local MD5_REFERENCE=$(grep $MD5PATH/$FILE $MD5_OLD | cut -b 1-32)
+        DEBUG "MD5 ref = $MD5_REFERENCE"
 
         # Calculate MD5 for existing file
         local MD5_ACTUAL=$(md5sum $DEST/$FILE | cut -b 1-32)
+        DEBUG "MD4 cur = $MD5_ACTUAL"
 
         # Compare MD5 values
         if [ "$MD5_REFERENCE" != "$MD5_ACTUAL" ]; then

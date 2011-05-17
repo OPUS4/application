@@ -23,16 +23,22 @@ set -o errexit
 
 # TODO move into common script? Be careful with main script.
 BASEDIR=$1
+BASE_SOURCE=$2
+MD5_OLD=$3
 
 source update-common.sh
 
 DEBUG "BASEDIR = $BASEDIR"
+DEBUG "BASE_SOURCE = $BASE_SOURCE"
+DEBUG "MD5_OLD = $MD5_OLD"
 
 DEST=$BASEDIR/opus4/application/configs
 MD5PATH=opus4/application/configs
-SRC=../$FILEPATH
+SRC=$BASE_SOURCE/$MD5PATH
 
 echo "Updating configuration files ..."
+
+DEBUG "Copying $SRC to $DEST"
 
 # The following files are simply copied without checking the existing files.
 copyFile $SRC/application.ini $DEST/application.ini
