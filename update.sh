@@ -232,10 +232,10 @@ $SCRIPTPATH/update-config.sh $BASEDIR $BASE_SOURCE $MD5_OLD
 # Update *import* folder
 $SCRIPTPATH/update-import.sh $BASEDIR $BASE_SOURCE
 
-if [ $RUN_SCRIPTS -eq 1 ]; then
-
 # Update *library* folder
 $SCRIPTPATH/update-library.sh $BASEDIR $BASE_SOURCE
+
+if [ $RUN_SCRIPTS -eq 1 ]; then
 
 # Update modules
 $SCRIPTPATH/update-modules.sh $BASEDIR

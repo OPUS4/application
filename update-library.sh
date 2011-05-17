@@ -33,7 +33,7 @@ BASE_SOURCE=$2
 # TODO check folders
 
 NEW_FRAMEWORK=$BASE_SOURCE/opus4/library/Opus
-OLD_FRAMEWORK=$BASEDIR/library/Opus # TODO path correct?
+OLD_FRAMEWORK=$BASEDIR/opus4/library/Opus # TODO path correct?
 
 DEBUG "NEW_FRAMEWORK = $NEW_FRAMEWORK"
 DEBUG "OLD_FRAMEWORK = $OLD_FRAMEWORK"
