@@ -18,8 +18,8 @@
 # @version     $Id$
 
 # Main script for updating an OPUS4 instance
-# @param $1 path to new distribution
-# @param $2 path to OPUS4 installation
+# @param $1 path to OPUS4 installation
+# @param $2 path to new distribution
 # @param $3 version of OPUS4 installation
 
 # TODO add generic function for YES/NO questions?
@@ -34,12 +34,12 @@ set -o errexit
 
 # Use first parameter as location of OPUS4 distribution
 if [ ! -z $1 ]; then
-    BASE_SOURCE=$1
+    BASE_SOURCE=$2
 fi
 
 # Use second parameter as location of OPUS4 installation
 if [ ! -z $2 ]; then
-    BASEDIR=$2
+    BASEDIR=$1
 fi
 
 # TODO implement version parameter 
@@ -95,7 +95,7 @@ function getBasedir() {
 function getOldVersion() {
     if [ ! -f $BASEDIR/VERSION.txt ]; then 
         local ABORT='n'
-        while [ ! -f MD5_OLD ] && [ $ABORT != 'y' ]; do
+        while [ -z $MD5_OLD ] || [ ! -f $MD5_OLD ] && [ $ABORT != 'y' ]; do
             echo -e "What version of OPUS4 is installed? \c "
             read VERSION_OLD
 
@@ -103,8 +103,8 @@ function getOldVersion() {
 
             # Check if MD5SUMS file exists for the entered version
             # TODO Better way to verify entered version?
-            if ! -f MD5_OLD ]; then
-                echo -c "You entered an unknown OPUS4 version number. Abort the update [y/N]? \c "
+            if [ ! -f $MD5_OLD ]; then
+                echo -e "You entered an unknown OPUS4 version number. Abort the update [y/N]? \c "
                 read ABORT
                 if [ -z $ABORT ]; then 
                     ABORT='n'
@@ -114,6 +114,7 @@ function getOldVersion() {
                     ABORT=${ABORT,,} # convert to lowercase
                     ABORT=${ABORT:0:1} # get first letter
                 fi
+
             fi
         done
         if [ $ABORT == 'y' ]; then 
@@ -129,7 +130,7 @@ function getOldVersion() {
 # Determines version of new OPUS4
 # TODO Ways to improve, make more robust?
 function getNewVersion() {
-    VERSION_NEW=$(sed -n '1p' ../VERSION.txt)
+    VERSION_NEW=$(sed -n '1p' $BASE_SOURCE/VERSION.txt)
 }
 
 # Find MD5SUMS for installed OPUS4
@@ -139,10 +140,11 @@ function getNewVersion() {
 function getMd5Sums() {
     if [ ! -f $BASEDIR/MD5SUMS ]; then
         # TODO use SCRIPTPATH?
-        MD5_OLD=../releases/$VERSION_OLD.MD5SUMS
+        MD5_OLD=$BASE_SOURCE/releases/$VERSION_OLD.MD5SUMS
     else
         MD5_OLD=$BASEDIR/MD5SUMS
     fi
+    DEBUG "MD5_OLD = $MD5_OLD"
 }
 
 source update-common.sh
@@ -177,13 +179,13 @@ if [ -z $BASE_SOURCE ]; then
     BASE_SOURCE=$SCRIPTPATH/..
 fi 
 
-DEBUG "BASE_SOURCE=$SCRIPTPATH"
+DEBUG "BASE_SOURCE = $BASE_SOURCE"
 DEBUG "SCRIPTNAME = $SCRIPTNAME"
 DEBUG "SCRIPTPATH = $SCRIPTPATH"
 
 # TODO Is there a way to find the MySQL client?
 MYSQL_CLIENT=/usr/bin/mysql
-MD5_NEW=../MD5SUMS
+MD5_NEW=$BASE_SOURCE/MD5SUMS
 
 # Switch to folder containing update script
 # TODO Is that a problem? Can we do without?
@@ -214,7 +216,7 @@ backup
 # =============================================================================
 
 # Update configuration
-$SCRIPTPATH/update-config.sh $BASEDIR $BASE_SOURCE
+# $SCRIPTPATH/update-config.sh $BASEDIR $BASE_SOURCE
 
 # Update database
 $SCRIPTPATH/update-db.sh $BASEDIR 
