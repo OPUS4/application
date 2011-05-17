@@ -234,35 +234,35 @@ function deleteFiles() {
 
 # Adds a new file to the OPUS4 installation
 function addFile() {
-    [ "$_DRYRUN" -eq 1 ] && cp $1 $2
+    [ "$_DRYRUN" -eq 0 ] && cp $1 $2
     UPDATELOG "ADDED" $2
     DEBUG "Added file $2"
 }
 
 # Updates an unmodified file of the OPUS4 installation
 function replaceFile() {
-    [ "$_DRYRUN" -eq 1 ] && cp $1 $2
+    [ "$_DRYRUN" -eq 0 ] && cp $1 $2
     UPDATELOG "REPLACED" $2
     DEBUG "Replaced file $2"
 }
 
 # Deletes a file from the OPUS4 installation
 function deleteFile() {
-    [ "$_DRYRUN" -eq 1 ] && rm $1
+    [ "$_DRYRUN" -eq 0 ] && rm $1
     UPDATELOG "DELETED" $1
     DEBUG "Deleted file $1"
 }
 
 # Deletes a folder from the OPUS4 installation
 function deleteFolder() {
-    [ "$_DRYRUN" -eq 1 ] && rm -rf $1
+    [ "$_DRYRUN" -eq 0 ] && rm -rf $1
     UPDATELOG "DELETED" $1
     DEBUG "Deleted folder $1"
 }
 
 # Creates a folder
 function createFolder() {
-    [ "$_DRYRUN" -eq 1 ] && mkdir $1
+    [ "$_DRYRUN" -eq 0 ] && mkdir $1
     UPDATELOG "CREATED" $1
     DEBUG "Created folder $1"
 }
