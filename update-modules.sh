@@ -118,8 +118,11 @@ for MODULE in $MODULES; do
             FOLDER=$(dirname $DEST/$FILE)
             # Check if folder exists
             if [ ! -d $FOLDER ]; then
-                # Folder does not exist; create it
-                createFolder $FOLDER
+                # Folder does not exist; create it unless last folder created was the same
+                if [ -z $PREV_FOLDER ] || [ $FOLDER != $PREV_FOLDER ]; then 
+                    createFolder $FOLDER
+                fi
+                PREV_FOLDER=$FOLDER
             fi
             # Update file
             updateFile $SRC $DEST $MD5PATH $FILE
