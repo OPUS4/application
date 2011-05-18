@@ -33,34 +33,11 @@ BASE_SOURCE=$2
 VERSION_OLD=$3
 VERSION_NEW=$4
 
-# TODO more flexible way to find mysql binary?
-mysql_bin=/usr/bin/mysql
-SCRIPT=$BASEDIR/opus/db/createdb.sh
-
-echo "Updating database ..."
-
 SCHEMA_PATH=$BASE_SOURCE/opus4/db/schema
 
-VERSION_PREFIX=$(echo $VERSION_OLD | cut -b 1-4)
-X=x
-VERSION_X=$VERSION_PREFIX$X
-SQL1="update-"$VERSION_OLD"-to-"$VERSION_NEW".sql"
-SQL2="update-"$VERSION_X"-to-"$VERSION_NEW".sql"
-UPDATE_FILE=$SQL1
-
-if [ ! -f "$SCHEMA_PATH/$SQL1" ]
-then
-    if [ ! -f "$SCHEMA_PATH/$SQL2" ]
-    then
-        # TODO Is this always a reason to exit. What about cleanup?
-	echo "No database update information available."
-        exit 1
-    else
-        $UPDATE_FILE=$SQL2
-    fi
-fi
-
-DEBUG "MYSQL UPDATE SCRIPT = $UPDATE_FILE"
+# TODO more flexible way to find mysql binary?
+mysql_bin=/usr/bin/mysql
+SCRIPT=$BASEDIR/opus4/db/createdb.sh
 
 #read database credentials from createdb.sh
 # TODO Handle missing values
@@ -75,17 +52,104 @@ PORT=$PROP_VALUE
 getProperty $SCRIPT dbname
 DBNAME=$PROP_VALUE
 
-mysql="${mysql_bin} --default-character-set=utf8 --user=${USER} --host=${HOST} --port=${PORT}"
 
-if [ -n "${PASSWORD}" ]; then
-    mysql="${mysql} --password=${PASSWORD}"
-fi
-	
-$MYSQL <<EOFMYSQL
-USE $DBNAME;
-SOURCE $SCHEMA_PATH/$UPDATE_FILE;
+#recursive method selects database update script by the version numbers
+#@param $1 old version
+#@param $2 new version
+function dbScript() {
+    V_OLD=$1
+    V_NEW=$2
+    #check if there are update scripts for origin version
+    findFiles $V_OLD
 
+    if [ "$FILES_COUNT" -eq 0 ]; then
+        versionGroup $V_OLD
+        #check if there are update scripts for group of origin version
+        findFiles $VERSION_GROUP
+
+        if [ "$FILES_COUNT" -eq 0 ]; then
+            #no update scripts, neither for origin version nor version group
+            echo "No database update information available!"
+        else
+
+            #a update file for the group of origin version was found
+            if [ "$FILES_COUNT" -eq 1 ]; then
+                #lists with more than one file are disregarded
+                runDbUpdate $FILES_LIST
+                findVersion $FILES_LIST
+
+                if [ "$V_TO" != "$V_NEW" ]; then
+                    #recursive call
+                    dbScript $V_TO $V_NEW
+                fi
+            fi
+        fi
+
+     else
+
+        #a update file for the origin version was found
+        if [ "$FILES_COUNT" -eq 1 ]; then
+            #lists with more than one file are disregarded
+            runDbUpdate $FILES_LIST
+            findVersion $FILES_LIST
+
+            if [ "$V_TO" != "$V_NEW" ]; then
+                #recursive call
+                dbScript $V_TO $V_NEW
+            fi
+        fi
+     fi
+}
+
+#method lists the files that concern the db update for the given version
+#@param $1 version number
+function findFiles() {
+    VERSION=$1
+    FILES_LIST="$(find "$SCHEMA_PATH" -maxdepth 1 -type f -name "update-$VERSION*")"
+    FILES_COUNT="$(echo "$FILES_LIST" | wc -l)"
+    DEBUG "Version = $VERSION + List = $FILES_LIST + Count = $FILES_COUNT"
+}
+
+#method extracts the new version from a db update script name
+#@param $1 name of file
+function findVersion() {
+    FILE=$1
+    #TODO: Find better way to extract the new version
+    V_TO="$(echo "$FILE" | cut -b 19-23)"
+    DEBUG "File = $FILE + To-Version = $V_TO"
+}
+
+#method finds the "group" of versions for a specific version number
+#e.g. 4.0.2 belongs to version group 4.0.x
+#@param $1 version to find group for
+function versionGroup() {
+    VERSION=$1
+    VERSION_PREFIX=$(echo $VERSION | cut -b 1-4)
+    X=x
+    VERSION_GROUP=$VERSION_PREFIX$X
+}
+
+#method executes a db update script (with global mysql credentials)
+#@param $1 update script file
+function runDbUpdate() {
+    UPDATE_FILE=$1
+
+    if [ "$_DRYRUN" -eq 0 ]; then
+        MYSQL="${mysql_bin} --default-character-set=utf8 --user=${USER} --host=${HOST} --port=${PORT}"
+
+        if [ -n "${PASSWORD}" ]; then
+            MYSQL="${mysql} --password=${PASSWORD}"
+        fi
+    fi
+
+    $MYSQL <<-EOFMYSQL
+    USE $DBNAME;
+    SOURCE $SCHEMA_PATH/$UPDATE_FILE;
 EOFMYSQL
-	
-echo "Database is up-to-date!"
 
+    DEBUG "MYSQL UPDATE SCRIPT = $UPDATE_FILE"
+}
+
+echo "Database is updating now..."
+dbScript "$VERSION_OLD" "$VERSION_NEW"
+echo "Database is up-to-date!"
