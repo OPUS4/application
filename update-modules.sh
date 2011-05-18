@@ -24,11 +24,12 @@ set -o errexit
 BASEDIR=$1
 BASE_SOURCE=$2
 MD5_OLD=$3
+SCRIPTPATH=$4
 
 source update-common.sh
 
 MODULES_PATH=opus4/modules
-OLD_MODULES=$BASEDIR/opus4/modules
+OLD_MODULES=$BASEDIR/$MODULES_PATH
 NEW_MODULES=$BASE_SOURCE/$MODULES_PATH
 
 echo "Updating $OLD_MODULES ..."
@@ -37,62 +38,93 @@ echo "Updating $OLD_MODULES ..."
 MODULES=$(ls $NEW_MODULES)
 
 # Copy all module directories and files, except views and language_custom
-# TODO files in modules folder are not removed
-# TODO IMPORTANT files in module folder are not removed
 for MODULE in $MODULES; do
+    DEBUG "Updating module $MODULE"
+    # Check if folder exists in OPUS4 installation
+    if [ ! -d $OLD_MODULES/$MODULE ]; then
+        # New folder; create in old distribution
+        createFolder $OLD_MODULES/$MODULE
+    fi
+    # Update folders of module
     LIST=$(ls $NEW_MODULES/$MODULE)
-    for FILE in LIST; do
+    for FILE in $LIST; do
         # Check if folder and if special folder
-        if [ -d "$FILE" ] && [ $FILE != 'views' ] && [ $FILE != 'language_custom' ]; then
-            # Regular folder
-            updateFolder $NEW_MODULES/$MODULE/$FILE $OLD_MODULES/$MODULE/$FILE;
+        if [ -d "$NEW_MODULES/$MODULE/$FILE" ]; then 
+            # Check for special folder and update later
+            if [ $FILE != 'views' ] && [ $FILE != 'language_custom' ]; then
+                # Regular folder; update files
+                updateFolder $NEW_MODULES/$MODULE/$FILE $OLD_MODULES/$MODULE/$FILE
+                # Delete files not needed anymore
+                deleteFiles $NEW_MODULES/$MODULE/$FILE $OLD_MODULES/$MODULE/$FILE
+            fi
         else
             # Check if file
-            if [ -f "$FILE" ]; then 
+            if [ -f "$NEW_MODULES/$MODULE/$FILE" ]; then 
                 # Is file; copy it
                 copyFile $NEW_MODULES/$MODULE/$FILE $OLD_MODULES/$MODULE/$FILE
             fi
         fi
-    done	
+    done
+    # Check if module exists in installed OPUS4
+    # Should always exist because of code above, except in DRYRUN mode.
+    if [ -d $OLD_MODULES/$MODULE ]; then 
+        # Delete files in module root folder, not needed anymore
+        DEBUG "Deleting files in $OLD_MODULES/$MODULE"
+        deleteFiles $NEW_MODULES/$MODULE $OLD_MODULES/$MODULE flat
+    fi
 done
 
-# Special treatment for copying the view directories
+# Delete files and folders in modules directory
+DEBUG "Deleting files and folders in $OLD_MODULES"
+deleteFiles $NEW_MODULES $OLD_MODULES flat
+
+# =============================================================================
+# Special treatment for copying the view directories because the files there
+# are more likely to be modified locally.
+# =============================================================================
+
 HELPERS=helpers
 SCRIPTS=scripts
 VIEW=views
 
-#1)copy all helpers directories
-# TODO Why are helpers handled separately here? They are not ignored above?
+# Copy all helpers directories
+# The helpers folder is handled separately because it is a subfolder of views,
+# but does not need to be updated using diff.
 for MODULE in $MODULES; do 
     if [ -d "$NEW_MODULES/$MODULE/$VIEW/$HELPERS" ]; then
         updateFolder $NEW_MODULES/$MODULE/$VIEW/$HELPERS $OLD_MODULES/$MODULE/$VIEW/$HELPERS;
     fi
 done
 
-#2)call filesDiff method for all files in all script directories
-# TODO Does this work correctly? Can we ignore everything that is not executable?
-# TODO Does not remove scripts.
-for MODULE in $MODULES; do 
-    if [ -d "$NEW_MODULES/$MODULE/$VIEW/$SCRIPTS" ]; then
-        # TODO no better way to do this without cd?
-        cd $NEW_MODULES/$MODULE/$VIEW/$SCRIPTS
-        SCRIPT_FILES=$(find . -type f -exec ls {} \; | cut -b 3-)		
-        cd $SCRIPT_PATH
+# Call updateFile function for all files in all script directories
 
+# Iterate through modules
+for MODULE in $MODULES; do 
+    # Check if view/scripts folder exists for module
+    if [ -d "$NEW_MODULES/$MODULE/$VIEW/$SCRIPTS" ]; then
+        # List all files in scripts or on of its subfolders
+        # TODO Better way without cd?
+        cd $NEW_MODULES/$MODULE
+        SCRIPT_FILES=$(find "$VIEW/$SCRIPTS" -type f -exec ls {} \;)		
+        cd $SCRIPTPATH
+
+        DEST=$OLD_MODULES/$MODULE
+        SRC=$NEW_MODULES/$MODULE
+        MD5PATH=$MODULES_PATH/$MODULE
+
+        # Call updateFile for every file found
         for FILE in $SCRIPT_FILES; do
-            DEST=$OLD_MODULES/$MODULE/$VIEW/$SCRIPTS
-            SRC=$NEW_MODULES/$MODULE/$VIEW/$SCRIPTS
-            MD5PATH=$MODULES_PATH/$MODULE/$VIEW/$SCRIPTS
             updateFile $SRC $DEST $MD5PATH $FILE
         done		
     fi			
+
+    # Deletes files not needed anymore from scripts
+    # TODO is this sufficient? Do we need to ask users?
+    deleteFiles $NEW_MODULES/$MODULE/$VIEW/$SCRIPTS $OLD_MODULES/$MODULE/$VIEW/$SCRIPTS
 done
 
-cd $SCRIPT_PATH
+cd $SCRIPTPATH
 
 # TODO explain special handling of this one file
 copyFile $NEW_MODULES/publish/$VIEW/$SCRIPTS/form/all.phtml $OLD_MODULES/publish/$VIEW/$SCRIPTS/form/all.phtml
-
-echo ""
-
 
