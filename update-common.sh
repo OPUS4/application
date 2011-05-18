@@ -132,6 +132,7 @@ function updateFile {
                 
                 # TODO Add option for more information
                 echo -e "[K]eep modified file or [r]eplace with new file [K/r]? : \c " 
+                local ANSWER
                 read ANSWER # TODO How to make ANSWER local variable?
 
                 # Check and format input
@@ -185,23 +186,31 @@ function copyFile() {
 function updateFolder() {
     local SRC=$1
     local DEST=$2
+    local FLAT=0
+    # Third parameter disables (1) recursion
+    if [ ! -z $3 ] && [ $3 = 'flat' ]; then
+        local FLAT=1
+    fi
+    DEBUG "Update folder $DEST from $SRC"
     # Get files and folders in source directory
     local SRC_FILES=$(ls $SRC)
+    # Check if target folder exists
+    if [ ! -d $DEST ]; then
+        # Create target folder if it does not exist already
+        createFolder $DEST
+    fi
     # Iterate through files and folders
+    local FILE
     for FILE in $SRC_FILES; do
         # Check if folder
         if [ -d $SRC/$FILE ]; then
-            # Check if target folder exists
-            if [ ! -d $DEST/$FILE ]; then
-                # Create target folder if it does not exist already
-                createFolder $DEST/$FILE
-            fi
             # Call updateFolder recursively
-            updateFolder $SRC/$FILE $DEST/$FILE
+            [ "$FLAT" -eq 0 ] && updateFolder $SRC/$FILE $DEST/$FILE
         else
             copyFile $SRC/$FILE $DEST/$FILE
         fi
     done
+    return 0 # TODO see comments for deleteFiles
 }
 
 # Deletes files that exist at destination but not in source folder recursively
@@ -210,8 +219,14 @@ function updateFolder() {
 function deleteFiles() {
     local SRC=$1
     local DEST=$2
+    local FLAT=0
+    # Third parameter disables (1) recursion
+    if [ ! -z $3 ] && [ $3 = 'flat' ]; then
+        local FLAT=1
+    fi
     local DEST_FILES=$(ls $DEST)
     # Iterate through destination files
+    local FILE
     for FILE in $DEST_FILES; do
         # Check if folder
         if [ -d $DEST/$FILE ]; then
@@ -228,7 +243,7 @@ function deleteFiles() {
                 fi
             else
                 # Folder exists, call deleteFiles recursively
-                deleteFiles $SRC/$FILE $DEST/$FILE
+                [ "$FLAT" -eq 0 ] && deleteFiles $SRC/$FILE $DEST/$FILE # TODO problem see comment at return
             fi
         else
             # Check if file exists in source folder
@@ -240,6 +255,7 @@ function deleteFiles() {
             fi 
         fi
     done
+    return 0 # TODO better way of preventing things to stop when $FLAT = 1? (related to set -o errexit)
 }
 
 # TODO add console output to the following functions performing operations?
