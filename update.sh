@@ -22,10 +22,11 @@
 # @param $2 path to new distribution
 # @param $3 version of OPUS4 installation
 
+# TODO document globally used, important variables
 # TODO add generic function for YES/NO questions?
 # TODO add function for abort?
 # TODO add batch mode (no questions asked)?
-
+# TODO Make it possible to revert update if something fails? (Keep old files until done?)
 set -o errexit
 
 # =============================================================================
@@ -240,7 +241,7 @@ $SCRIPTPATH/update-library.sh $BASEDIR $BASE_SOURCE
 # $SCRIPTPATH/update-public.sh $BASEDIR
 
 # Update *scripts* folders
-# $SCRIPTPATH/update-scripts.sh $BASEDIR
+$SCRIPTPATH/update-scripts.sh $BASEDIR $BASE_SOURCE
 
 # Update SOLR index
 # $SCRIPTPATH/update-solr.sh $BASEDIR

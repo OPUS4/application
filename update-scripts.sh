@@ -22,16 +22,18 @@
 set -o errexit
 
 BASEDIR=$1
+BASE_SOURCE=$2
 
 source update-common.sh
 
-OLD_SCRIPTS=$BASEDIR/opus4/scripts
-NEW_SCRIPTS1=opus4/scripts
-NEW_SCRIPTS=../$NEW_SCRIPTS1
+SCRIPTS_PATH=opus4/scripts
+OLD_SCRIPTS=$BASEDIR/$SCRIPTS_PATH
+NEW_SCRIPTS=$BASE_SOURCE/$SCRIPTS_PATH
 
 echo -e "Updating $OLD_SCRIPTS ... \c "
-# Files in the scripts folder are updated without checks.
+# Files in the scripts folder are updated without checks
 updateFolder $NEW_SCRIPTS $OLD_SCRIPTS
+# Files that are not part of new distribution are deleted
 deleteFiles $NEW_SCRIPTS $OLD_SCRIPTS
 echo "done"
 
