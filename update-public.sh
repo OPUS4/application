@@ -25,30 +25,31 @@
 set -o errexit
 
 BASEDIR=$1
+BASE_SOURCE=$2
 
 source update-common.sh
 
-OLD_PUBLIC=$BASEDIR/opus4/public
-NEW_PUBLIC1=opus4/public
-NEW_PUBLIC=../$NEW_PUBLIC1
+PUBLIC_PATH=opus4/public
+OLD_PUBLIC=$BASEDIR/$PUBLIC_PATH
+NEW_PUBLIC=$BASE_SOURCE/$PUBLIC_PATH
 
-################################################################
-#Part 5: update public directory (depends)
-################################################################
+OLD_CONFIG=$BASEDIR/opus4/application/configs
+
 echo "Updating directory $OLD_PUBLIC ..."
 
 LAYOUT_OPUS4=layouts/opus4
 LAYOUT_CUSTOM=layouts/my_layout
 
-# TODO IMPORTANT grep using regular expression to handle whitespace
-# TODO IMPORTANT handle commented out lines (ignore them)
-THEME1=$(grep 'theme = ' $OLD_CONFIG/config.ini)
-THEME_OPUS="; theme = opus4"
+getProperty $OLD_CONFIG/config.ini 'theme'
+THEME=$PROP_VALUE
+THEME_OPUS='opus4' # "; theme = opus4"
 
-echo $THEME1
-echo $THEME_OPUS
+echo "Selected theme: $THEME"
+echo " Default theme: $THEME_OPUS"
 
-if [ -z "$THEME1" ] || [ "$THEME1" == "$THEME_OPUS" ]; then
+# Check if no theme or default theme has been configured
+if [ -z "$THEME" ] || [ "$THEME" == "$THEME_OPUS" ]; then
+    # Default theme is configured
     echo -e "You are currently using the standard OPUS4 layout. This creates "
     echo "conflicts during update process."
     echo -e "Would you like to copy the current layout to $LAYOUT_CUSTOM and "
@@ -73,7 +74,7 @@ if [ -z "$THEME1" ] || [ "$THEME1" == "$THEME_OPUS" ]; then
         echo "Please update layout bugfixes manually in /opus4/public/$LAYOUT_CUSTOM" >> $CONFLICT
         createFolder $OLD_PUBLIC/$LAYOUT_CUSTOM
         # TODO use functions that log operations for this?
-        cp $OLD_PUBLIC/$LAYOUT_OPUS4/* -R $OLD_PUBLIC/$LAYOUT_CUSTOM
+        copyFolder $OLD_PUBLIC/$LAYOUT_OPUS4 $OLD_PUBLIC/$LAYOUT_CUSTOM
         
         updateFolder $NEW_PUBLIC/$LAYOUT_OPUS4 $OLD_PUBLIC/$LAYOUT_OPUS4
 
@@ -85,7 +86,15 @@ if [ -z "$THEME1" ] || [ "$THEME1" == "$THEME_OPUS" ]; then
         echo "Your config.ini has changed => theme = $LAYOUT_NAME"
     fi
 else
+    # Custom theme has been configured
+    # Add and replace files
     updateFolder $NEW_PUBLIC/$LAYOUT_OPUS4 $OLD_PUBLIC/$LAYOUT_OPUS4
+    # Delete files no longer needed
+    deleteFiles $NEW_PUBLIC/$LAYOUT_OPUS4 $OLD_PUBLIC/$LAYOUT_OPUS4
 fi		
 
+# Copy htaccess-template
+# TODO What about local .htaccess file?
 copyFile $NEW_PUBLIC/htaccess-template $OLD_PUBLIC/htaccess-template
+
+# TODO handle index.php

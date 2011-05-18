@@ -29,6 +29,7 @@
 # TODO Make it possible to revert update if something fails? (Keep old files until done?)
 # TODO IMPORTANT The new scripts can delete files. Make sure they won't delete local configuration files (e.g. config.ini, createdb.sh)
 # TODO IMPORTANT Should all files instead of being deleted be renamed. If it is in MD5 delete, if not rename?
+# TODO refactor for consistent naming of variables
 set -o errexit
 
 # =============================================================================
@@ -224,6 +225,8 @@ if [ -f $BASEDIR/UPDATE.log ]; then
     rm $BASEDIR/UPDATE.log 
 fi
 
+# TODO maybe use source so that variables do not have to be passed explicitely
+
 # Update configuration
 $SCRIPTPATH/update-config.sh $BASEDIR $BASE_SOURCE $MD5_OLD
 
@@ -240,7 +243,7 @@ $SCRIPTPATH/update-library.sh $BASEDIR $BASE_SOURCE
 $SCRIPTPATH/update-modules.sh $BASEDIR $BASE_SOURCE $MD5_OLD $SCRIPTPATH
 
 # Update *public* folder
-# $SCRIPTPATH/update-public.sh $BASEDIR
+$SCRIPTPATH/update-public.sh $BASEDIR $BASE_SOURCE
 
 # Update *scripts* folders
 $SCRIPTPATH/update-scripts.sh $BASEDIR $BASE_SOURCE
