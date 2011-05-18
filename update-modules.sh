@@ -114,6 +114,14 @@ for MODULE in $MODULES; do
 
         # Call updateFile for every file found
         for FILE in $SCRIPT_FILES; do
+            # Get path to file
+            FOLDER=$(dirname $DEST/$FILE)
+            # Check if folder exists
+            if [ ! -d $FOLDER ]; then
+                # Folder does not exist; create it
+                createFolder $FOLDER
+            fi
+            # Update file
             updateFile $SRC $DEST $MD5PATH $FILE
         done		
     fi			
