@@ -39,7 +39,7 @@ SCRIPT=$BASEDIR/opus/db/createdb.sh
 
 echo "Updating database ..."
 
-SCHEMA_PATH=BASE_SOURCE/opus4/db/schema
+SCHEMA_PATH=$BASE_SOURCE/opus4/db/schema
 
 VERSION_PREFIX=$(echo $VERSION_OLD | cut -b 1-4)
 X=x
