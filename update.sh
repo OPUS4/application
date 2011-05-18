@@ -27,6 +27,8 @@
 # TODO add function for abort?
 # TODO add batch mode (no questions asked)?
 # TODO Make it possible to revert update if something fails? (Keep old files until done?)
+# TODO IMPORTANT The new scripts can delete files. Make sure they won't delete local configuration files (e.g. config.ini, createdb.sh)
+# TODO IMPORTANT Should all files instead of being deleted be renamed. If it is in MD5 delete, if not rename?
 set -o errexit
 
 # =============================================================================
@@ -235,7 +237,7 @@ $SCRIPTPATH/update-import.sh $BASEDIR $BASE_SOURCE
 $SCRIPTPATH/update-library.sh $BASEDIR $BASE_SOURCE
 
 # Update modules
-# $SCRIPTPATH/update-modules.sh $BASEDIR
+$SCRIPTPATH/update-modules.sh $BASEDIR $BASE_SOURCE $MD5_OLD
 
 # Update *public* folder
 # $SCRIPTPATH/update-public.sh $BASEDIR

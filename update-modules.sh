@@ -22,17 +22,19 @@
 set -o errexit
 
 BASEDIR=$1
+BASE_SOURCE=$2
+MD5_OLD=$3
 
 source update-common.sh
 
 MODULES_PATH=opus4/modules
 OLD_MODULES=$BASEDIR/opus4/modules
-NEW_MODULES=../$MODULES_PATH
+NEW_MODULES=$BASE_SOURCE/$MODULES_PATH
 
-echo "Updating directory $OLD_MODULES ..."
+echo "Updating $OLD_MODULES ..."
 
 # Get list of folder in modules directory => list of modules
-MODULES=$(ls $NEW_MODULES )
+MODULES=$(ls $NEW_MODULES)
 
 # Copy all module directories and files, except views and language_custom
 # TODO files in modules folder are not removed
@@ -54,12 +56,10 @@ for MODULE in $MODULES; do
     done	
 done
 
-#special treatment for copying the view directories
+# Special treatment for copying the view directories
 HELPERS=helpers
 SCRIPTS=scripts
 VIEW=views
-
-
 
 #1)copy all helpers directories
 # TODO Why are helpers handled separately here? They are not ignored above?
