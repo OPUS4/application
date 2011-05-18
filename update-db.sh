@@ -19,6 +19,10 @@
 
 # Updates the OPUS4 database
 
+# TODO explain what script does in few words
+# TODO update database scripts only if necessary (see tickets)
+# TODO use _DRYRUN to prevent execution of changes
+
 set -o errexit
 
 source update-common.sh
@@ -28,6 +32,8 @@ BASEDIR=$1
 BASE_SOURCE=$2
 VERSION_OLD=$3
 VERSION_NEW=$4
+
+# TODO more flexible way to find mysql binary?
 mysql_bin=/usr/bin/mysql
 SCRIPT=$BASEDIR/opus/db/createdb.sh
 
@@ -46,6 +52,7 @@ if [ ! -f "$SCHEMA_PATH/$SQL1" ]
 then
     if [ ! -f "$SCHEMA_PATH/$SQL2" ]
     then
+        # TODO Is this always a reason to exit. What about cleanup?
 	echo "No database update information available."
         exit 1
     else
@@ -56,6 +63,7 @@ fi
 DEBUG "MYSQL UPDATE SCRIPT = $UPDATE_FILE"
 
 #read database credentials from createdb.sh
+# TODO Add function for this operation
 USER=$ grep -v '^[[:space:]]*;' $SCRIPT | grep '^[[:space:]]*user[[:space:]]*=' | cut -d= -f2 | sed "s/\;.*$//; s/[ \'\"]*$//; s/^[ \'\"]*//"
 PASSWORD=$ grep -v '^[[:space:]]*;' $SCRIPT | grep '^[[:space:]]*password[[:space:]]*=' | cut -d= -f2 | sed "s/\;.*$//; s/[ \'\"]*$//; s/^[ \'\"]*//"
 HOST=$ grep -v '^[[:space:]]*;' $SCRIPT | grep '^[[:space:]]*host[[:space:]]*=' | cut -d= -f2 | sed "s/\;.*$//; s/[ \'\"]*$//; s/^[ \'\"]*//"
