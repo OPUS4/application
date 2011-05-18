@@ -57,6 +57,17 @@ function UPDATELOG() {
     printf "%-10s %s\n" $1 $2 >> $_UPDATELOG
 }
 
+# Gets value of property from file
+# @param $1 Path to file containing property
+# @param $2 Name of property
+# @returns Value of property in PROP_VALUE
+# TODO Analyse and maybe break apart for easier reading. Explain.
+function getProperty() {
+    FILE=$1
+    PROP_NAME=$2
+    PROP_VALUE=$(grep -v '^[[:space:]]*;' $FILE | grep "^[[:space:]]*$PROP_NAME[[:space:]]*=" | cut -d= -f2 | sed "s/\;.*$//; s/[ \'\"]*$//; s/^[ \'\"]*//")
+}
+
 # Adds entry to CONFLICTS.txt
 # @param path to file that creates conflict
 # TODO what if file already exists when update starts?

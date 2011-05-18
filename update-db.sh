@@ -63,12 +63,17 @@ fi
 DEBUG "MYSQL UPDATE SCRIPT = $UPDATE_FILE"
 
 #read database credentials from createdb.sh
-# TODO Add function for this operation
-USER=$ grep -v '^[[:space:]]*;' $SCRIPT | grep '^[[:space:]]*user[[:space:]]*=' | cut -d= -f2 | sed "s/\;.*$//; s/[ \'\"]*$//; s/^[ \'\"]*//"
-PASSWORD=$ grep -v '^[[:space:]]*;' $SCRIPT | grep '^[[:space:]]*password[[:space:]]*=' | cut -d= -f2 | sed "s/\;.*$//; s/[ \'\"]*$//; s/^[ \'\"]*//"
-HOST=$ grep -v '^[[:space:]]*;' $SCRIPT | grep '^[[:space:]]*host[[:space:]]*=' | cut -d= -f2 | sed "s/\;.*$//; s/[ \'\"]*$//; s/^[ \'\"]*//"
-PORT=$ grep -v '^[[:space:]]*;' $SCRIPT | grep '^[[:space:]]*port[[:space:]]*=' | cut -d= -f2 | sed "s/\;.*$//; s/[ \'\"]*$//; s/^[ \'\"]*//"
-DBNAME=$ grep -v '^[[:space:]]*;' $SCRIPT | grep '^[[:space:]]*dbname[[:space:]]*=' | cut -d= -f2 | sed "s/\;.*$//; s/[ \'\"]*$//; s/^[ \'\"]*//"
+# TODO Handle missing values
+getProperty $SCRIPT user
+USER=$PROP_VALUE
+getProperty $SCRIPT password
+PASSWORD=$PROP_VALUE
+getProperty $SCRIPT host
+HOST=$PROP_VALUE
+getProperty $SCRIPT port
+PORT=$PROP_VALUE
+getProperty $SCRIPT dbname
+DBNAME=$PROP_VALUE
 
 mysql="${mysql_bin} --default-character-set=utf8 --user=${USER} --host=${HOST} --port=${PORT}"
 
