@@ -174,6 +174,17 @@ function copyFile() {
     fi
 }
 
+# Copies a folder
+# TODO check if target already exists
+# TODO synchronize folders instead of simple copy?
+function copyFolder() {
+    local SRC=$1
+    local DEST=$2
+    [ "$_DRYRUN" -eq 0 ] && cp -R "$SRC" "$DEST"
+    UPDATELOG "CREATED" $2
+    DEBUG "Copied folder $1 to $2"
+}
+
 # TODO use? rsync -avz --delete $NEW_FRAMEWORK/ $OLD_FRAMEWORK to sync folders
 
 # Copies files from a source to a destination folder recursively
@@ -289,8 +300,9 @@ function deleteFolder() {
 }
 
 # Creates a folder
+# TODO Can -p always be used or should it be selectable by parameter?
 function createFolder() {
-    [ "$_DRYRUN" -eq 0 ] && mkdir $1
+    [ "$_DRYRUN" -eq 0 ] && mkdir -p $1
     UPDATELOG "CREATED" $1
     DEBUG "Created folder $1"
 }
