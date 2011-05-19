@@ -44,6 +44,7 @@ function DEBUG() {
 # @param pathtofile
 # @param operation
 # TODO what if file already exists wenn update starts?
+# TODO IMPORTANT add timestamp to filename
 function UPDATELOG() {
     if [ -z $_UPDATELOG ]; then
         DEBUG "Setup UPDATE log"
@@ -160,6 +161,37 @@ function updateFile {
             copyFile $SRC/$FILE $DEST/$FILE
         fi
     fi
+}
+
+# Check folder for modification
+# TODO function does not recognize empty folders that have been added
+# TODO IMPORANT small change that wrong MD5 reference is found
+function checkForModifications() {
+    TARGET_MODIFIED='0'
+    local FOLDER=$1
+    DEBUG "Check $FOLDER for modifications"
+    find "$FOLDER" -type f | while read FILE; do
+        # Get relative path for file
+        local FILE_PATH=$(echo "$FILE" | sed -e "s|$FOLDER/||") 
+        DEBUG "Checking $FILE_PATH" 
+
+        # Check if file has been modified
+        # TODO use path relative to root of distribution
+        local FILE_MD5_REFERENCE=$(grep $FILE_PATH $MD5_OLD | cut -b 1-32)
+        DEBUG "MD5 ref = $FILE_MD5_REFERENCE"
+
+        # Calculate MD5 for existing file
+        local FILE_MD5_ACTUAL=$(md5sum $FILE | cut -b 1-32)
+        DEBUG "MD5 cur = $FILE_MD5_ACTUAL"
+
+        # Check if file is unknown or has been modified
+        if [ -z "$FILE_MD5_REFERENCE" ] || [ "$FILE_MD5_REFERENCE" != "$FILE_MD5_ACTUAL" ]; then
+            # Unknown or modified file; target has been modified
+            DEBUG "Modified file $FILE_PATH has been found."
+            TARGET_MODIFIED='1' # TODO does not work
+            return 0 # TODO better way to exit loop? sufficient?
+        fi
+    done
 }
 
 # Copies a file using different functions depending on existence of target file
