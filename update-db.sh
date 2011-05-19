@@ -54,6 +54,8 @@ getProperty $SCRIPT dbname
 DBNAME=$PROP_VALUE
 
 #recursive method selects database update script by the version numbers
+#TODO: Replace recursive call by iteration over sorted files list
+#TODO: new version really neccessary? Or just update to the newest version?
 #@param $1 old version
 #@param $2 new version
 function dbScript() {
