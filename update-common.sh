@@ -55,7 +55,7 @@ function UPDATELOG() {
         fi
     fi
     # Format output so that $2 is always at the same position
-    printf "%-10s %s\n" $1 $2 >> $_UPDATELOG
+    printf "%-10s %s\n" "$1" "$2" >> $_UPDATELOG
 }
 
 # Gets value of property from file
@@ -312,11 +312,12 @@ function createFolder() {
 # Used to move modified files out of the way.
 function renameFile() {
     [ "$_DRYRUN" -eq 0 ] && mv $1 $2
-    UPDATELOG "RENAMED" "$1 to $2"
+    UPDATELOG "RENAMED" "$1 => `basename $2`"
     DEBUG "Renamed file $1"
 }
 
 # Replaces a modified file in the OPUS4 installation
+# TODO remove?
 function replaceModifiedFile() {
     echo "TODO implement REPLACE MODIFIED file"
 }
