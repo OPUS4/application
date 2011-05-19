@@ -37,17 +37,17 @@
 
 set -o errexit
 
-BASEDIR=$1
-BASE_SOURCE=$2
-MD5_OLD=$3
-MD5_NEW=$4
-SCRIPTPATH=$5
+BASEDIR="$1"
+BASE_SOURCE="$2"
+MD5_OLD="$3"
+MD5_NEW="$4"
+SCRIPTPATH="$5"
 
 source update-common.sh
 
-MODULES_PATH=opus4/modules
-OLD_MODULES=$BASEDIR/$MODULES_PATH
-NEW_MODULES=$BASE_SOURCE/$MODULES_PATH
+MODULES_PATH="opus4/modules"
+OLD_MODULES="$BASEDIR/$MODULES_PATH"
+NEW_MODULES="$BASE_SOURCE/$MODULES_PATH"
 
 echo "Updating $OLD_MODULES ..."
 
@@ -56,11 +56,8 @@ echo "Updating $OLD_MODULES ..."
 # =============================================================================
 
 # Iterate through module files
-cd $OLD_MODULES
-SCRIPT_FILES=$(find . -type f -exec ls {} \; | cut -b 3-)		
-cd $SCRIPTPATH
-
-for FILE in $SCRIPT_FILES; do
+find "$OLD_MODULES" -type f | while read FILE_PATH; do
+    FILE=$(echo "$FILE_PATH" | sed -e "s|$OLD_MODULES/||") 
     DEBUG "Update $FILE"
     
     # Get reference MD5 for file
@@ -76,23 +73,23 @@ for FILE in $SCRIPT_FILES; do
     DEBUG "MD5 new = $FILE_MD5_NEW"
 
     # Check if file is part of old distribution (MD5 reference exists)
-    if [ ! -z $FILE_MD5_REFERENCE ]; then
+    if [ ! -z "$FILE_MD5_REFERENCE" ]; then
         # MD5 reference found; File part of old distribution
         # Check if File was modified
         if [ "$FILE_MD5_REFERENCE" == "$FILE_MD5_ACTUAL" ]; then
             # File was not modified
             # Check if new version exists
-            if [ ! -z $FILE_MD5_NEW ]; then
+            if [ ! -z "$FILE_MD5_NEW" ]; then
                 # New version of file exists; Replace it
-                copyFile $NEW_MODULES/$FILE $OLD_MODULES/$FILE
+                copyFile "$NEW_MODULES/$FILE" "$OLD_MODULES/$FILE"
             else 
                 # File no longer part of new distribution; Delete it
-                deleteFile $OLD_MODULES/$FILE
+                deleteFile "$OLD_MODULES/$FILE"
             fi
         else 
             # File was modified
             # Check if new version exists
-            if [ ! -z $FILE_MD5_NEW ]; then
+            if [ ! -z "$FILE_MD5_NEW" ]; then
                 # New version of file exists; Rename file, copy new file
                 renameFile "$OLD_MODULES/$FILE" "$OLD_MODULES/$FILE.backup"
                 # Copy new file
@@ -105,7 +102,7 @@ for FILE in $SCRIPT_FILES; do
     else
         # MD5 reference not found; File not part of old distribution
         # Check if new distribution contains file 
-        if [ ! -z $FILE_MD5_NEW ]; then
+        if [ ! -z "$FILE_MD5_NEW" ]; then
             # New distribution contains file; Rename file, copy new file
             renameFile "$OLD_MODULES/$FILE" "$OLD_MODULES/$FILE.backup"
             # Copy new file
@@ -122,34 +119,26 @@ done
 # Delete empty folders
 # =============================================================================
 
-# Find emtpy folders
-cd $OLD_MODULES
-EMPTY_FOLDERS=$(find . -type d -empty | cut -b 3-)		
-cd $SCRIPTPATH
-
 # Iterate through found empty folders
-for FILE in $EMPTY_FOLDERS; do
+find "$OLD_MODULES" -type d -empty | while read FILE_PATH; do
+    FILE=$(echo "$FILE_PATH" | sed -e "s|$OLD_MODULES/||") 
     DEBUG "Empty folder $FILE found"
     # Delete empty folders
     # TODO Find way to add message like "(EMPTY)" to UPDATE.log
-    deleteFolder $OLD_MODULES/$FILE
+    deleteFolder "$OLD_MODULES/$FILE"
 done
 
 # =============================================================================
 # Add new files from the new distribution
 # =============================================================================
 
-# Get list of all new modules files
-cd $NEW_MODULES
-SCRIPT_FILES=$(find . -type f -exec ls {} \; | cut -b 3-)		
-cd $SCRIPTPATH
-
 # Iterate through all new modules files
-for FILE in $SCRIPT_FILES; do
+find "$NEW_MODULES" -type f | while read FILE_PATH; do
+    FILE=$(echo "$FILE_PATH" | sed -e "s|$NEW_MODULES/||") 
     # Check if file does not exist in old modules folder
     # If file exists it has been already processed above.
     if [ ! -f "$OLD_MODULES/$FILE" ]; then
         # File does not exist in old folder; Add it
-        copyFile $NEW_MODULES/$FILE $OLD_MODULES/$FILE
+        copyFile "$NEW_MODULES/$FILE" "$OLD_MODULES/$FILE"
     fi
 done
