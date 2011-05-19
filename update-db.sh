@@ -69,7 +69,7 @@ function dbScript() {
 
         if [ "$FILES_COUNT" -eq 0 ]; then
             #no update scripts, neither for origin version nor version group
-            echo "No database update information available!"
+            echo "No information available for update from version $V_OLD to $V_NEW"
         else
 
             #a update file for the group of origin version was found
