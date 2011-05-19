@@ -19,6 +19,7 @@
 
 # Common functions used by OPUS4 update scripts
 # TODO consistent naming for functions (no idea whats common for shell scripts)
+# TODO add message parameter to functions like deleteFolder for additional log info?
 
 set -o errexit
 
@@ -305,6 +306,14 @@ function createFolder() {
     [ "$_DRYRUN" -eq 0 ] && mkdir -p $1
     UPDATELOG "CREATED" $1
     DEBUG "Created folder $1"
+}
+
+# Rename a file
+# Used to move modified files out of the way.
+function renameFile() {
+    [ "$_DRYRUN" -eq 0 ] && mv $1 $2
+    UPDATELOG "RENAMED" "$1 to $2"
+    DEBUG "Renamed file $1"
 }
 
 # Replaces a modified file in the OPUS4 installation

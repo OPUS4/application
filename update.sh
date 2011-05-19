@@ -22,6 +22,7 @@
 # @param $2 path to new distribution
 # @param $3 version of OPUS4 installation
 
+# TODO IMPORTANT prevent downgrade
 # TODO document globally used, important variables
 # TODO add generic function for YES/NO questions?
 # TODO add function for abort?
@@ -240,7 +241,7 @@ $SCRIPTPATH/update-import.sh $BASEDIR $BASE_SOURCE
 $SCRIPTPATH/update-library.sh $BASEDIR $BASE_SOURCE
 
 # Update modules
-$SCRIPTPATH/update-modules.sh $BASEDIR $BASE_SOURCE $MD5_OLD $SCRIPTPATH
+$SCRIPTPATH/update-modules.sh $BASEDIR $BASE_SOURCE $MD5_OLD $MD5_NEW $SCRIPTPATH
 
 # Update *public* folder
 $SCRIPTPATH/update-public.sh $BASEDIR $BASE_SOURCE

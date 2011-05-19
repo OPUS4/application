@@ -19,12 +19,29 @@
 
 # Updates the OPUS4 *modules* directory
 
+# Update process for modules:
+# For each module every file found is checked against the MD5 file. If the file
+# was part of the old distribution and was not changed it is deleted. Empty 
+# folders are deleted. Afterwards the new files are transferred to the module 
+# folder. If a file already exists, the existing file is renamed to 
+# FILENAME.backup and replaced by the new file.
+# The resulting folder contains all new files, backups of old modified files,
+# and any extra files created by the user.
+# 
+# Short version:
+# Unmodified files => Replace with new files
+# Modified files   => Rename to FILENAME.backup and replace with new files
+# Unknown files    => Keep
+# 
+# TODO Explain how files are handled that were removed from the distribution?
+
 set -o errexit
 
 BASEDIR=$1
 BASE_SOURCE=$2
 MD5_OLD=$3
-SCRIPTPATH=$4
+MD5_NEW=$4
+SCRIPTPATH=$5
 
 source update-common.sh
 
@@ -34,108 +51,105 @@ NEW_MODULES=$BASE_SOURCE/$MODULES_PATH
 
 echo "Updating $OLD_MODULES ..."
 
-# Get list of folder in modules directory => list of modules
-MODULES=$(ls $NEW_MODULES)
-
-# Copy all module directories and files, except views and language_custom
-for MODULE in $MODULES; do
-    DEBUG "Updating module $MODULE"
-    # Check if folder exists in OPUS4 installation
-    if [ ! -d $OLD_MODULES/$MODULE ]; then
-        # New folder; create in old distribution
-        createFolder $OLD_MODULES/$MODULE
-    fi
-    # Update folders of module
-    LIST=$(ls $NEW_MODULES/$MODULE)
-    for FILE in $LIST; do
-        # Check if folder and if special folder
-        if [ -d "$NEW_MODULES/$MODULE/$FILE" ]; then 
-            # Check for special folder and update later
-            if [ $FILE != 'views' ] && [ $FILE != 'language_custom' ]; then
-                # Regular folder; update files
-                updateFolder $NEW_MODULES/$MODULE/$FILE $OLD_MODULES/$MODULE/$FILE
-                # Delete files not needed anymore
-                deleteFiles $NEW_MODULES/$MODULE/$FILE $OLD_MODULES/$MODULE/$FILE
-            fi
-        else
-            # Check if file
-            if [ -f "$NEW_MODULES/$MODULE/$FILE" ]; then 
-                # Is file; copy it
-                copyFile $NEW_MODULES/$MODULE/$FILE $OLD_MODULES/$MODULE/$FILE
-            fi
-        fi
-    done
-    # Check if module exists in installed OPUS4
-    # Should always exist because of code above, except in DRYRUN mode.
-    if [ -d $OLD_MODULES/$MODULE ]; then 
-        # Delete files in module root folder, not needed anymore
-        DEBUG "Deleting files in $OLD_MODULES/$MODULE"
-        deleteFiles $NEW_MODULES/$MODULE $OLD_MODULES/$MODULE flat
-    fi
-done
-
-# Delete files and folders in modules directory
-DEBUG "Deleting files and folders in $OLD_MODULES"
-deleteFiles $NEW_MODULES $OLD_MODULES flat
-
 # =============================================================================
-# Special treatment for copying the view directories because the files there
-# are more likely to be modified locally.
+# Update or delete existing files
 # =============================================================================
 
-HELPERS=helpers
-SCRIPTS=scripts
-VIEW=views
-
-# Copy all helpers directories
-# The helpers folder is handled separately because it is a subfolder of views,
-# but does not need to be updated using diff.
-for MODULE in $MODULES; do 
-    if [ -d "$NEW_MODULES/$MODULE/$VIEW/$HELPERS" ]; then
-        updateFolder $NEW_MODULES/$MODULE/$VIEW/$HELPERS $OLD_MODULES/$MODULE/$VIEW/$HELPERS;
-    fi
-done
-
-# Call updateFile function for all files in all script directories
-
-# Iterate through modules
-for MODULE in $MODULES; do 
-    # Check if view/scripts folder exists for module
-    if [ -d "$NEW_MODULES/$MODULE/$VIEW/$SCRIPTS" ]; then
-        # List all files in scripts or on of its subfolders
-        # TODO Better way without cd?
-        cd $NEW_MODULES/$MODULE
-        SCRIPT_FILES=$(find "$VIEW/$SCRIPTS" -type f -exec ls {} \;)		
-        cd $SCRIPTPATH
-
-        DEST=$OLD_MODULES/$MODULE
-        SRC=$NEW_MODULES/$MODULE
-        MD5PATH=$MODULES_PATH/$MODULE
-
-        # Call updateFile for every file found
-        for FILE in $SCRIPT_FILES; do
-            # Get path to file
-            FOLDER=$(dirname $DEST/$FILE)
-            # Check if folder exists
-            if [ ! -d $FOLDER ]; then
-                # Folder does not exist; create it unless last folder created was the same
-                if [ -z $PREV_FOLDER ] || [ $FOLDER != $PREV_FOLDER ]; then 
-                    createFolder $FOLDER
-                fi
-                PREV_FOLDER=$FOLDER
-            fi
-            # Update file
-            updateFile $SRC $DEST $MD5PATH $FILE
-        done		
-    fi			
-
-    # Deletes files not needed anymore from scripts
-    # TODO is this sufficient? Do we need to ask users?
-    deleteFiles $NEW_MODULES/$MODULE/$VIEW/$SCRIPTS $OLD_MODULES/$MODULE/$VIEW/$SCRIPTS
-done
-
+# Iterate through module files
+cd $OLD_MODULES
+SCRIPT_FILES=$(find . -type f -exec ls {} \; | cut -b 3-)		
 cd $SCRIPTPATH
 
-# TODO explain special handling of this one file
-copyFile $NEW_MODULES/publish/$VIEW/$SCRIPTS/form/all.phtml $OLD_MODULES/publish/$VIEW/$SCRIPTS/form/all.phtml
+for FILE in $SCRIPT_FILES; do
+    DEBUG "Update $FILE"
+    
+    # Get reference MD5 for file
+    FILE_MD5_REFERENCE=$(grep "$MODULES_PATH/$FILE" "$MD5_OLD" | cut -b 1-32)
+    DEBUG "MD5 ref = $FILE_MD5_REFERENCE"
 
+    # Calculate MD5 for existing file
+    FILE_MD5_ACTUAL=$(md5sum "$OLD_MODULES/$FILE" | cut -b 1-32)
+    DEBUG "MD5 cur = $FILE_MD5_ACTUAL" # TODO Why get spaces lost?
+
+    # Get reference MD5 for new file
+    FILE_MD5_NEW=$(grep "$MODULES_PATH/$FILE" "$MD5_NEW" | cut -b 1-32)
+    DEBUG "MD5 new = $FILE_MD5_NEW"
+
+    # Check if file is part of old distribution (MD5 reference exists)
+    if [ ! -z $FILE_MD5_REFERENCE ]; then
+        # MD5 reference found; File part of old distribution
+        # Check if File was modified
+        if [ "$FILE_MD5_REFERENCE" == "$FILE_MD5_ACTUAL" ]; then
+            # File was not modified
+            # Check if new version exists
+            if [ ! -z $FILE_MD5_NEW ]; then
+                # New version of file exists; Replace it
+                copyFile $NEW_MODULES/$FILE $OLD_MODULES/$FILE
+            else 
+                # File no longer part of new distribution; Delete it
+                deleteFile $OLD_MODULES/$FILE
+            fi
+        else 
+            # File was modified
+            # Check if new version exists
+            if [ ! -z $FILE_MD5_NEW ]; then
+                # New version of file exists; Rename file, copy new file
+                renameFile "$OLD_MODULES/$FILE" "$OLD_MODULES/$FILE.backup"
+                # Copy new file
+                copyFile "$NEW_MODULES/$FILE" "$OLD_MODULES/$FILE"
+            else
+                # File no longer part of new distribution; Rename file
+                renameFile "$OLD_MODULES/$FILE" "$OLD_MODULES/$FILE.backup"
+            fi
+        fi
+    else
+        # MD5 reference not found; File not part of old distribution
+        # Check if new distribution contains file 
+        if [ ! -z $FILE_MD5_NEW ]; then
+            # New distribution contains file; Rename file, copy new file
+            renameFile "$OLD_MODULES/$FILE" "$OLD_MODULES/$FILE.backup"
+            # Copy new file
+            copyFile "$NEW_MODULES/$FILE" "$OLD_MODULES/$FILE"
+        else 
+            # File not part of new distribtution either
+            DEBUG "Unknown file $FILE (do nothing)"
+        fi
+    fi
+    
+done
+
+# =============================================================================
+# Delete empty folders
+# =============================================================================
+
+# Find emtpy folders
+cd $OLD_MODULES
+EMPTY_FOLDERS=$(find . -type d -empty | cut -b 3-)		
+cd $SCRIPTPATH
+
+# Iterate through found empty folders
+for FILE in $EMPTY_FOLDERS; do
+    DEBUG "Empty folder $FILE found"
+    # Delete empty folders
+    # TODO Find way to add message like "(EMPTY)" to UPDATE.log
+    deleteFolder $OLD_MODULES/$FILE
+done
+
+# =============================================================================
+# Add new files from the new distribution
+# =============================================================================
+
+# Get list of all new modules files
+cd $NEW_MODULES
+SCRIPT_FILES=$(find . -type f -exec ls {} \; | cut -b 3-)		
+cd $SCRIPTPATH
+
+# Iterate through all new modules files
+for FILE in $SCRIPT_FILES; do
+    # Check if file does not exist in old modules folder
+    # If file exists it has been already processed above.
+    if [ ! -f "$OLD_MODULES/$FILE" ]; then
+        # File does not exist in old folder; Add it
+        copyFile $NEW_MODULES/$FILE $OLD_MODULES/$FILE
+    fi
+done
