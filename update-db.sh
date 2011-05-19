@@ -24,6 +24,7 @@
 # TODO use _DRYRUN to prevent execution of changes
 
 set -o errexit
+set -e
 
 source update-common.sh
 
@@ -37,12 +38,12 @@ SCHEMA_PATH=$BASE_SOURCE/opus4/db/schema
 
 # TODO more flexible way to find mysql binary?
 mysql_bin=/usr/bin/mysql
-SCRIPT=$BASEDIR/opus4/db/createdb.sh
+SCRIPT="$BASEDIR/opus4/db/createdb.sh"
 
 #read database credentials from createdb.sh
 # TODO Handle missing values
 getProperty $SCRIPT user
-USER=$PROP_VALUE
+USER="$PROP_VALUE"
 getProperty $SCRIPT password
 PASSWORD=$PROP_VALUE
 getProperty $SCRIPT host
@@ -52,20 +53,19 @@ PORT=$PROP_VALUE
 getProperty $SCRIPT dbname
 DBNAME=$PROP_VALUE
 
-
 #recursive method selects database update script by the version numbers
 #@param $1 old version
 #@param $2 new version
 function dbScript() {
-    V_OLD=$1
-    V_NEW=$2
+    V_OLD="$1"
+    V_NEW="$2"
     #check if there are update scripts for origin version
-    findFiles $V_OLD
+    findFiles "$V_OLD"
 
     if [ "$FILES_COUNT" -eq 0 ]; then
-        versionGroup $V_OLD
+        versionGroup "$V_OLD"
         #check if there are update scripts for group of origin version
-        findFiles $VERSION_GROUP
+        findFiles "$VERSION_GROUP"
 
         if [ "$FILES_COUNT" -eq 0 ]; then
             #no update scripts, neither for origin version nor version group
@@ -75,12 +75,13 @@ function dbScript() {
             #a update file for the group of origin version was found
             if [ "$FILES_COUNT" -eq 1 ]; then
                 #lists with more than one file are disregarded
-                runDbUpdate $FILES_LIST
-                findVersion $FILES_LIST
+                runDbUpdate "$FILES_LIST"
+                FILENAME=$(basename "$FILES_LIST")
+                findVersion "$FILENAME"
 
                 if [ "$V_TO" != "$V_NEW" ]; then
                     #recursive call
-                    dbScript $V_TO $V_NEW
+                    dbScript "$V_TO" "$V_NEW"
                 fi
             fi
         fi
@@ -90,12 +91,13 @@ function dbScript() {
         #a update file for the origin version was found
         if [ "$FILES_COUNT" -eq 1 ]; then
             #lists with more than one file are disregarded
-            runDbUpdate $FILES_LIST
-            findVersion $FILES_LIST
+            runDbUpdate "$FILES_LIST"
+            FILENAME=$(basename "$FILES_LIST")
+            findVersion "$FILENAME"
 
             if [ "$V_TO" != "$V_NEW" ]; then
                 #recursive call
-                dbScript $V_TO $V_NEW
+                dbScript "$V_TO" "$V_NEW"
             fi
         fi
      fi
@@ -104,10 +106,10 @@ function dbScript() {
 #method lists the files that concern the db update for the given version
 #@param $1 version number
 function findFiles() {
-    VERSION=$1
-    FILES_LIST="$(find "$SCHEMA_PATH" -maxdepth 1 -type f -name "update-$VERSION*")"
-    FILES_COUNT="$(echo "$FILES_LIST" | wc -l)"
-    DEBUG "Version = $VERSION + List = $FILES_LIST + Count = $FILES_COUNT"
+    VERSION="$1"
+    FILES_LIST="$(find "$SCHEMA_PATH" -maxdepth 1 -type f -name "update-$VERSION*.sql")"
+    FILES_COUNT="$(find "$SCHEMA_PATH" -maxdepth 1 -type f -name "update-$VERSION*.sql" | wc -l)"
+    #DEBUG "Version = $VERSION + List = $FILES_LIST + Count = $FILES_COUNT"
 }
 
 #method extracts the new version from a db update script name
@@ -115,8 +117,8 @@ function findFiles() {
 function findVersion() {
     FILE=$1
     #TODO: Find better way to extract the new version
-    V_TO="$(echo "$FILE" | cut -b 19-23)"
-    DEBUG "File = $FILE + To-Version = $V_TO"
+    V_TO="$(echo "$FILE" | sed -e 's/^.*update-\(.*\)-to-\(.*\).sql$/\2/')"
+    #DEBUG "File = $FILE + To-Version = $V_TO"
 }
 
 #method finds the "group" of versions for a specific version number
@@ -135,18 +137,18 @@ function runDbUpdate() {
     UPDATE_FILE=$1
 
     if [ "$_DRYRUN" -eq 0 ]; then
-        MYSQL="${mysql_bin} --default-character-set=utf8 --user=${USER} --host=${HOST} --port=${PORT}"
+        MYSQL="${mysql_bin} --default-character-set=utf8 --user=${USER} --password=${PASSWORD} --host=${HOST} --port=${PORT}"
 
         if [ -n "${PASSWORD}" ]; then
-            MYSQL="${mysql} --password=${PASSWORD}"
-        fi
-    fi
+            MYSQL="${MYSQL} --password=${PASSWORD}"
+        fi    
 
     $MYSQL <<-EOFMYSQL
     USE $DBNAME;
-    SOURCE $SCHEMA_PATH/$UPDATE_FILE;
+    SOURCE $UPDATE_FILE;
 EOFMYSQL
 
+    fi
     DEBUG "MYSQL UPDATE SCRIPT = $UPDATE_FILE"
 }
 
