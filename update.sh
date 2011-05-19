@@ -250,7 +250,7 @@ $SCRIPTPATH/update-public.sh $BASEDIR $BASE_SOURCE
 $SCRIPTPATH/update-scripts.sh $BASEDIR $BASE_SOURCE
 
 # Update SOLR index
-# $SCRIPTPATH/update-solr.sh $BASEDIR
+$SCRIPTPATH/update-solr.sh $BASEDIR $BASE_SOURCE $VERSION_OLD
 
 # Update Apache configuration
 # $SCRIPTPATH/update-apache.sh $BASEDIR

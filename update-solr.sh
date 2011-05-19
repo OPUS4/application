@@ -19,12 +19,11 @@
 
 # Update SOLR server
 
-# TODO currently uses undefined MD5Path
-
 set -o errexit
 
 BASEDIR=$1
-VERSION_OLD=$2
+BASE_SOURCE=$2
+VERSION_OLD=$3
 
 OLD_SCRIPTS=$BASEDIR/opus4/scripts
 MD5Path=opus4/application/configs
@@ -35,10 +34,10 @@ source update-common.sh
 if [ $VERSION_OLD==4.0.0 ] || [ $VERSION_OLD==4.0.1 ] || [ $VERSION_OLD==4.0.2 ]; then
     echo -e "Updating SOLR server schema ... \c "
     # TODO use MD5Path? Not used in old script. 
-    updateFile ../solrconfig $BASEDIR/solrconfig $MD5Path schema.xml
+    updateFile $BASE_SOURCE/solrconfig $BASEDIR/solrconfig $MD5Path schema.xml
     echo "done"
 
-    # TODO move into separate script for execution after all update scripts?
+    # TODO move into separate script for execution after all other update scripts?
     echo -e "Rebuilding Solr index ... \c "
     php5 $OLD_SCRIPTS/SolrIndexBuilder.php
     echo "done"
