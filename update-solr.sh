@@ -39,7 +39,7 @@ if [ $VERSION_OLD==4.0.0 ] || [ $VERSION_OLD==4.0.1 ] || [ $VERSION_OLD==4.0.2 ]
 
     # TODO move into separate script for execution after all other update scripts?
     echo -e "Rebuilding Solr index ... \c "
-    php5 $OLD_SCRIPTS/SolrIndexBuilder.php
+    [ "$_DRYRUN" -eq 0 ] && php5 $OLD_SCRIPTS/SolrIndexBuilder.php
     echo "done"
 fi
 
