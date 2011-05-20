@@ -35,9 +35,8 @@ _DRYRUN=1
 # Executes parameter if DEBUG is enabled
 # @param Text for output
 function DEBUG() {
-    # [ "$_DEBUG" -eq 1 ] && $@ # original version
-    [ "$_DEBUG" -eq 1 ] && echo $@
-    return 0 # required with *set -o errexit* TODO why?
+    [ "${_DEBUG}" -eq 1 ] && echo $@
+    return 0
 }
 
 # Writes operations into UPDATE.log 
@@ -188,10 +187,10 @@ function checkForModifications() {
         if [ -z "$FILE_MD5_REFERENCE" ] || [ "$FILE_MD5_REFERENCE" != "$FILE_MD5_ACTUAL" ]; then
             # Unknown or modified file; target has been modified
             DEBUG "Modified file $FILE_PATH has been found."
-            TARGET_MODIFIED='1' # TODO does not work
-            return 0 # TODO better way to exit loop? sufficient?
+            return 1;
         fi
     done
+    return 0;
 }
 
 # Copies a file using different functions depending on existence of target file
