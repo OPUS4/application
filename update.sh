@@ -244,7 +244,7 @@ $SCRIPTPATH/update-library.sh $BASEDIR $BASE_SOURCE
 $SCRIPTPATH/update-modules.sh $BASEDIR $BASE_SOURCE $MD5_OLD $MD5_NEW $SCRIPTPATH
 
 # Update *public* folder
-$SCRIPTPATH/update-public.sh $BASEDIR $BASE_SOURCE
+$SCRIPTPATH/update-public.sh $BASEDIR $BASE_SOURCE $MD5_OLD
 
 # Update *scripts* folders
 $SCRIPTPATH/update-scripts.sh $BASEDIR $BASE_SOURCE

@@ -18,14 +18,20 @@
 # @version     $Id$
 
 # Updates the OPUS4 *public* folder
-
-# TODO the process for updating public seems confusing, especially for users that are happy with standard layout.
-# TODO What if my_layout already exists?
+# If the user is using a different theme than 'opus4'. The 'opus4' layout is 
+# updated without further questions. If the user is using 'opus4' he is given
+# the option of copying the current 'opus4' layout as a new theme, before the
+# 'opus4' layout is updated.
+#
+# In short, the 'opus4' layout is always updated. User can save the old layout.
 
 set -o errexit
 
 BASEDIR=$1
 BASE_SOURCE=$2
+MD5_OLD=$3
+
+# TODO verify parameters
 
 source update-common.sh
 
@@ -37,8 +43,7 @@ OLD_CONFIG=$BASEDIR/opus4/application/configs
 
 echo "Updating directory $OLD_PUBLIC ..."
 
-LAYOUT_OPUS4=layouts/opus4
-LAYOUT_CUSTOM=layouts/my_layout
+LAYOUTS="$OLD_PUBLIC/layouts"
 
 getProperty $OLD_CONFIG/config.ini 'theme'
 THEME=$PROP_VALUE
@@ -47,54 +52,62 @@ THEME_OPUS='opus4' # "; theme = opus4"
 echo "Selected theme: $THEME"
 echo " Default theme: $THEME_OPUS"
 
+# echo "Checking default layout (opus4) for modifications ..."
+# TODO IMPORTANT use checkForModifications if opus4 layout has been modified
+
 # Check if no theme or default theme has been configured
 if [ -z "$THEME" ] || [ "$THEME" == "$THEME_OPUS" ]; then
     # Default theme is configured
-    echo -e "You are currently using the standard OPUS4 layout. This creates "
-    echo "conflicts during update process."
-    echo -e "Would you like to copy the current layout to $LAYOUT_CUSTOM and "
-    echo -e "update the standard opus4 layout [U] or skip important layout "
-    echo -e "changes [s] [U|s]? : \c " 
-    read LAYOUT_ANSWER
-    if [ -z $LAYOUT_ANSWER ]; then 
-        LAYOUT_ANSWER='u' # default is update layout
+    echo -e "You are currently using the standard OPUS4 layout. Any"
+    echo -e " modifications you made to the layout will be lost during the"
+    echo -e " update. Would you like to create a copy of the current layout"
+    echo -e " under a different name (Y/n)? \c "
+    read ANSWER
+    if [ -z "$ANSWER" ]; then 
+        ANSWER='y' # default is update layout
     else
-        LAYOUT_ANSWER=${LAYOUT_ANSWER,,} # convert to lowercase
-        LAYOUT_ANSWER=${LAYOUT_ANSWER:0:1} # get first letter
+        ANSWER=${ANSWER,,} # convert to lowercase
+        ANSWER=${ANSWER:0:1} # get first letter
     fi
-    if [ $LAYOUT_ANSWER = 's' ]; then
-        echo "Please check layout changes/bugfixes in /opus4/public/layouts/opus4/" >> $CONFLICT 
-    else 
-        # TODO So every update leads to creation of new folder?
-        if [ -d "$OLD_PUBLIC/$LAYOUT_CUSTOM" ]; then			
-            read -p "The layout 'my_layout' already exists. Please enter a different layout name: " LAYOUT_NAME
-            LAYOUT_CUSTOM=layouts/$LAYOUT_NAME			
-        fi
+    if [ "$ANSWER" == 'y' ]; then
+        # User wants to create backup of old layout folder
 
-        echo "Please update layout bugfixes manually in /opus4/public/$LAYOUT_CUSTOM" >> $CONFLICT
-        createFolder $OLD_PUBLIC/$LAYOUT_CUSTOM
-        # TODO use functions that log operations for this?
-        copyFolder $OLD_PUBLIC/$LAYOUT_OPUS4 $OLD_PUBLIC/$LAYOUT_CUSTOM
+        # Ask for name of new theme
+        while [ -z "$THEME_NEW" ] || [ -d "$LAYOUTS/$THEME_NEW" ]; do
+            echo -e "Please enter name of new theme: \c "
+            read THEME_NEW
+            if [ ! -z "$THEME_NEW" ]; then
+                # Check if layout folder already exists
+                if [ -d "$LAYOUTS/$THEME_NEW" ]; then
+                    # Folder already exists
+                    echo "A theme with name '$THEME_NEW' already exists."
+                fi
+            fi
+        done
+
+        echo "Creating new theme '$THEME_NEW' ..."
+        # Create new folder and copy files from 'opus4'
+        createFolder "$LAYOUTS/$THEME_NEW"
+        copyFolder "$LAYOUTS/$THEME_OPUS" "$LAYOUTS/$THEME_NEW"
         
-        updateFolder $NEW_PUBLIC/$LAYOUT_OPUS4 $OLD_PUBLIC/$LAYOUT_OPUS4
-
-        if [ ! -z $LAYOUT_NAME ]; then
-            sed -i "s/; theme = opus4/theme = $LAYOUT_NAME/" $OLD_CONFIG/config.ini
-        else 
-            sed -i "s/; theme = opus4/theme = my_layout/" $OLD_CONFIG/config.ini
-        fi
-        echo "Your config.ini has changed => theme = $LAYOUT_NAME"
+        # Update configuration to use new theme
+        # TODO IMPORTANT make more flexible; create function for it
+        sed -i "s/; theme = opus4/theme = $LAYOUT_NAME/" $OLD_CONFIG/config.ini
+        # TODO log to UPDATE.log
+        echo "Your config.ini has been updated (theme = $THEME_NEW)."
     fi
-else
-    # Custom theme has been configured
-    # Add and replace files
-    updateFolder $NEW_PUBLIC/$LAYOUT_OPUS4 $OLD_PUBLIC/$LAYOUT_OPUS4
-    # Delete files no longer needed
-    deleteFiles $NEW_PUBLIC/$LAYOUT_OPUS4 $OLD_PUBLIC/$LAYOUT_OPUS4
-fi		
+fi 
 
-# Copy htaccess-template
-# TODO What about local .htaccess file?
-copyFile $NEW_PUBLIC/htaccess-template $OLD_PUBLIC/htaccess-template
+# =============================================================================
+# Update 'opus4' layout
+# =============================================================================
 
-# TODO handle index.php
+# Add and replace files
+updateFolder "$NEW_PUBLIC/layouts/$THEME_OPUS" "$LAYOUTS/$THEME_OPUS"
+# Delete files no longer needed
+deleteFiles "$NEW_PUBLIC/layouts/$THEME_OPUS" "$LAYOUTS/$THEME_OPUS"		
+
+# Update other files
+# TODO Should this be replace by "updateFolder SRC DEST flat" to handle all files in the folder
+copyFile "$NEW_PUBLIC/htaccess-template" "$OLD_PUBLIC/htaccess-template"
+copyFile "$NEW_PUBLIC/index.php" "$OLD_PUBLIC/index.php"
