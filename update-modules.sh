@@ -56,7 +56,7 @@ echo "Updating $OLD_MODULES ..."
 # =============================================================================
 
 # Iterate through module files
-find "$OLD_MODULES" -type f | while read FILE_PATH; do
+find "$OLD_MODULES" -type f -print0 | while read -r -d $'\0' FILE_PATH; do
     FILE=$(echo "$FILE_PATH" | sed -e "s|$OLD_MODULES/||") 
     DEBUG "Update $FILE"
     
@@ -120,7 +120,7 @@ done
 # =============================================================================
 
 # Iterate through found empty folders
-find "$OLD_MODULES" -type d -empty | while read FILE_PATH; do
+find "$OLD_MODULES" -type d -empty -print0 | while read -r -d $'\0' FILE_PATH; do
     FILE=$(echo "$FILE_PATH" | sed -e "s|$OLD_MODULES/||") 
     DEBUG "Empty folder $FILE found"
     # Delete empty folders
@@ -133,7 +133,7 @@ done
 # =============================================================================
 
 # Iterate through all new modules files
-find "$NEW_MODULES" -type f | while read FILE_PATH; do
+find "$NEW_MODULES" -type f -print0 | while read -r -d $'\0' FILE_PATH; do
     FILE=$(echo "$FILE_PATH" | sed -e "s|$NEW_MODULES/||") 
     # Check if file does not exist in old modules folder
     # If file exists it has been already processed above.
