@@ -166,10 +166,10 @@ function updateFile {
 # TODO function does not recognize empty folders that have been added
 # TODO IMPORANT small change that wrong MD5 reference is found
 function checkForModifications() {
-    TARGET_MODIFIED='0'
+    local RESULT=0
     local FOLDER=$1
     DEBUG "Check $FOLDER for modifications"
-    find "$FOLDER" -type f | while read FILE; do
+    find "$FOLDER" -type f -print0 | while read -r -d $'\0' FILE; do
         # Get relative path for file
         local FILE_PATH=$(echo "$FILE" | sed -e "s|$FOLDER/||") 
         DEBUG "Checking $FILE_PATH" 
@@ -187,10 +187,11 @@ function checkForModifications() {
         if [ -z "$FILE_MD5_REFERENCE" ] || [ "$FILE_MD5_REFERENCE" != "$FILE_MD5_ACTUAL" ]; then
             # Unknown or modified file; target has been modified
             DEBUG "Modified file $FILE_PATH has been found."
-            return 1;
+            RESULT=1
         fi
     done
-    return 0;
+    echo "RESULT = $RESULT"
+    return $RESULT;
 }
 
 # Copies a file using different functions depending on existence of target file
