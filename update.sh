@@ -31,6 +31,7 @@
 # TODO IMPORTANT The new scripts can delete files. Make sure they won't delete local configuration files (e.g. config.ini, createdb.sh)
 # TODO IMPORTANT Should all files instead of being deleted be renamed. If it is in MD5 delete, if not rename?
 # TODO refactor for consistent naming of variables
+# TODO use flags like RESTART_APACHE, RESTART_SOLR that can be set during the update process to trigger restarts at the end of the process
 set -o errexit
 
 # =============================================================================
@@ -253,7 +254,7 @@ $SCRIPTPATH/update-scripts.sh $BASEDIR $BASE_SOURCE
 $SCRIPTPATH/update-solr.sh $BASEDIR $BASE_SOURCE $VERSION_OLD
 
 # Update Apache configuration
-# $SCRIPTPATH/update-apache.sh $BASEDIR
+$SCRIPTPATH/update-apache.sh $BASEDIR $BASE_SOURCE $MD5_OLD
 
 # =============================================================================
 # Finish update

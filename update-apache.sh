@@ -17,13 +17,23 @@
 # @version     $Id$
 
 # Update Apache configuration
+# The Apache configuration for OPUS4 is located in $BASEDIR/apacheconf/opus4
+# and linked into /etc/apache2/sites-available.
+# The file might have been modified locally. The user should decide what should
+# happen in that case.
 
 set -o errexit
 
 BASEDIR=$1
+BASE_SOURCE=$2
+MD5_OLD=$3
 
 source update-common.sh
 
+MD5PATH=apacheconf
+
 echo -e "Updating Apache configuration ... \c "
-echo "NOT IMPLEMENTED YET" # OPUSVIER-1382
+# TODO updateFile either replaces or does not replace file, should create backup
+# TODO check if file has been modified, if yes set restart flag for APACHE
+updateFile $BASE_SOURCE/$MD5PATH $BASEDIR/$MD5PATH $MD5_OLD opus4
 echo "done"
