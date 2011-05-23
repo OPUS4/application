@@ -61,15 +61,15 @@ find "$OLD_MODULES" -type f -print0 | while read -r -d $'\0' FILE_PATH; do
     DEBUG "Update $FILE"
     
     # Get reference MD5 for file
-    FILE_MD5_REFERENCE=$(grep "$MODULES_PATH/$FILE" "$MD5_OLD" | cut -b 1-32)
+    FILE_MD5_REFERENCE="$(getMD5 $MODULES_PATH/$FILE $MD5_OLD)"
     DEBUG "MD5 ref = $FILE_MD5_REFERENCE"
 
     # Calculate MD5 for existing file
-    FILE_MD5_ACTUAL=$(md5sum "$OLD_MODULES/$FILE" | cut -b 1-32)
+    FILE_MD5_ACTUAL="$(getActualMD5 $OLD_MODULES/$FILE)"
     DEBUG "MD5 cur = $FILE_MD5_ACTUAL" # TODO Why get spaces lost?
 
     # Get reference MD5 for new file
-    FILE_MD5_NEW=$(grep "$MODULES_PATH/$FILE" "$MD5_NEW" | cut -b 1-32)
+    FILE_MD5_NEW="$(getMD5 $MODULES_PATH/$FILE $MD5_NEW)"
     DEBUG "MD5 new = $FILE_MD5_NEW"
 
     # Check if file is part of old distribution (MD5 reference exists)
