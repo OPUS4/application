@@ -35,7 +35,7 @@ _DRYRUN=1
 # Executes parameter if DEBUG is enabled
 # @param Text for output
 function DEBUG() {
-    [ "${_DEBUG}" -eq 1 ] && echo $@
+    [ "${_DEBUG}" -eq 1 ] && echo "$@"
     return 0
 }
 
@@ -95,10 +95,10 @@ function addConflict() {
 # Uses global variable MD5_OLD
 # TODO use local SRC_FILE and DEST_FILE instead of construction over and over
 function updateFile {	
-    local SRC=$1
-    local DEST=$2
-    local MD5PATH=$3
-    local FILE=$4
+    local SRC=$1 # source folder
+    local DEST=$2 # destination folder
+    local MD5PATH=$3 # relative path in distribution
+    local FILE=$4 # filename
     if [ ! -f $DEST/$FILE ]; then
         # File does not exist at target destination and can be copied
         addFile $SRC/$FILE $DEST/$FILE
