@@ -69,6 +69,20 @@ function getProperty() {
     PROP_VALUE=$(grep -v '^[[:space:]]*;' $FILE | grep "^[[:space:]]*$PROP_NAME[[:space:]]*=" | cut -d= -f2 | sed "s/\;.*$//; s/[ \'\"]*$//; s/^[ \'\"]*//")
 }
 
+# Returns the actual MD5 hash for a file.
+function getActualMD5() {
+    local FILEPATH=$1
+    echo "$(md5sum $FILEPATH | cut -b 1-32)"
+}   
+
+# Returns the reference MD5 hash for a file.
+function getMD5() {
+    local FILEPATH=$1
+    local MD5FILE=$2
+    echo "$(grep $FILEPATH$ $MD5FILE | cut -b 1-32)"
+    return
+}
+
 # Adds entry to CONFLICTS.txt
 # @param path to file that creates conflict
 # TODO what if file already exists when update starts?
