@@ -175,6 +175,7 @@ function backup() {
 }
 
 DEBUG "Debug output enabled"
+[ "$_DRYRUN" -eq 1 ] && echo "Dry-Run mode enabled"
 
 # Get name and path for update script
 SCRIPTNAME=`basename $0`
