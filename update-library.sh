@@ -19,6 +19,7 @@
 
 # Updates the OPUS4 *library* directory
 
+# TODO Simply update everything, but ignore symbolic links
 # TODO Better way of updating library folder except Application folder.
 # TODO Folders in *library* (top-level) that are not used anymore are not deleted.
 
