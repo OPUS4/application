@@ -23,8 +23,8 @@ set -o errexit
 
 BASEDIR="$1"
 BASE_SOURCE="$2"
-VERSION_OLD="$3"
-MD5_OLD="$4"
+MD5_OLD="$3"
+VERSION_OLD="$4"
 
 OLD_SCRIPTS="$BASEDIR/opus4/scripts"
 MD5PATH=solrconfig
