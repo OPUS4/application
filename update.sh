@@ -111,6 +111,7 @@ function getBasedir() {
 
 # Determines current version of installed OPUS4
 # TODO What if VERSION.txt is missing, but it is a post 4.1 version?
+# TODO What if content of VERSION.txt is wrong (no MD5SUMS file for version)
 function getOldVersion() {
     if [[ ! -f $BASEDIR/VERSION.txt ]]; then 
         local ABORT='n'
@@ -192,7 +193,7 @@ function backup() {
 }
 
 DEBUG "Debug output enabled"
-DRYRUN || echo "Dry-Run mode enabled"
+! DRYRUN || echo "Dry-Run mode enabled" # Using ! since the command should not be executed if Dry-Run is enabled
 
 # Get name and path for update script
 SCRIPTNAME=`basename $0`
