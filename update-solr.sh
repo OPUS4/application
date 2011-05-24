@@ -24,6 +24,7 @@ set -o errexit
 BASEDIR=$1
 BASE_SOURCE=$2
 VERSION_OLD=$3
+MD5_OLD=$4
 
 OLD_SCRIPTS=$BASEDIR/opus4/scripts
 MD5Path=opus4/application/configs
@@ -32,14 +33,14 @@ source update-common.sh
 
 # TODO Why check specifically for versions before 4.0.3? At least add comment.
 if [ $VERSION_OLD==4.0.0 ] || [ $VERSION_OLD==4.0.1 ] || [ $VERSION_OLD==4.0.2 ]; then
-    echo -e "Updating SOLR server schema ... \c "
+    echo "Updating SOLR server schema ..."
     # TODO use MD5Path? Not used in old script. 
     updateFile $BASE_SOURCE/solrconfig $BASEDIR/solrconfig $MD5Path schema.xml
     echo "done"
 
     # TODO move into separate script for execution after all other update scripts?
     echo -e "Rebuilding Solr index ... \c "
-    [ "$_DRYRUN" -eq 0 ] && php5 $OLD_SCRIPTS/SolrIndexBuilder.php
+    DRYRUN || php5 $OLD_SCRIPTS/SolrIndexBuilder.php
     echo "done"
 fi
 
