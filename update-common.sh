@@ -43,10 +43,10 @@ function DEBUG() {
 # @param pathtofile
 # @param operation
 function UPDATELOG() {
-    if [ -z $_UPDATELOG ]; then
+    if [[ -z $_UPDATELOG ]]; then
         DEBUG "Setup UPDATE log"
         _UPDATELOG=$BASEDIR/UPDATE-$(date -Iseconds).log # TODO change name?
-        if [ ! -f $_UPDATELOG ]; then  
+        if [[ ! -f $_UPDATELOG ]]; then  
             DEBUG "Write UPDATE log header"
             echo "Following operations were executed during the update:" > $_UPDATELOG
             echo "" >> $_UPDATELOG
@@ -60,7 +60,7 @@ function UPDATELOG() {
 # Can be used to enable/disable execution of commands like this:
 # DRYRUN || <command that should not be executed if Dry-Run is enabled>
 function DRYRUN() {
-    [[ $_DRYRUN -eq 0 ]] && return 0;
+    [ "$_DRYRUN" -eq 1 ] && return 0;
     return 1;
 }
 
@@ -68,23 +68,24 @@ function DRYRUN() {
 # @param $1 Path to file containing property
 # @param $2 Name of property
 # @returns Value of property in PROP_VALUE
+# TODO use echo to return value
 # TODO Analyse and maybe break apart for easier reading. Explain.
 function getProperty() {
-    FILE=$1
-    PROP_NAME=$2
+    local FILE="$1"
+    local PROP_NAME="$2"
     PROP_VALUE=$(grep -v '^[[:space:]]*;' $FILE | grep "^[[:space:]]*$PROP_NAME[[:space:]]*=" | cut -d= -f2 | sed "s/\;.*$//; s/[ \'\"]*$//; s/^[ \'\"]*//")
 }
 
 # Returns the actual MD5 hash for a file.
 function getActualMD5() {
-    local FILEPATH=$1
+    local FILEPATH="$1"
     echo "$(md5sum $FILEPATH | cut -b 1-32)"
 }   
 
 # Returns the reference MD5 hash for a file.
 function getMD5() {
-    local FILEPATH=$1
-    local MD5FILE=$2
+    local FILEPATH="$1"
+    local MD5FILE="$2"
     echo "$(grep $FILEPATH$ $MD5FILE | cut -b 1-32)"
     return
 }
@@ -94,10 +95,10 @@ function getMD5() {
 # TODO what if file already exists when update starts?
 # TODO log conflicts to UPDATE.log
 function addConflict() {
-    if [ -z $CONFLICT ]; then
+    if [[ -z $CONFLICT ]]; then
         DEBUG "Setup CONFLICT"
-        CONFLICT=$BASEDIR/conflicts.txt # TODO change name to CONFLICTS.txt?
-        if [ ! -f $CONFLICT ]; then  
+        CONFLICT="$BASEDIR/conflicts.txt" # TODO change name to CONFLICTS.txt?
+        if [[ ! -f $CONFLICT ]]; then  
             DEBUG "Write CONFLICT header"
             echo "Following files created conflicts and need to be changed manually:" > $CONFLICT
             echo "" >> $CONFLICT
@@ -114,28 +115,29 @@ function addConflict() {
 # @param file
 # Uses global variable MD5_OLD
 # TODO use local SRC_FILE and DEST_FILE instead of construction over and over
+# TODO create backup before replacing file
 function updateFile {	
-    local SRC=$1 # source folder
-    local DEST=$2 # destination folder
-    local MD5PATH=$3 # relative path in distribution
-    local FILE=$4 # filename
-    if [ ! -f $DEST/$FILE ]; then
+    local SRC="$1" # source folder
+    local DEST="$2" # destination folder
+    local MD5PATH="$3" # relative path in distribution
+    local FILE="$4" # filename
+    if [[ ! -f $DEST/$FILE ]]; then
         # File does not exist at target destination and can be copied
-        addFile $SRC/$FILE $DEST/$FILE
+        addFile "$SRC/$FILE" "$DEST/$FILE"
     else 
         # File already exists at target destination
         echo "Checking file $DEST/$MD5PATH/$FILE for changes."
 
         # Get reference MD5 for file
-        local MD5_REFERENCE=$(grep $MD5PATH/$FILE $MD5_OLD | cut -b 1-32)
+        local MD5_REFERENCE="$(getMD5 $MD5PATH/$FILE $MD5_OLD)"
         DEBUG "MD5 ref = $MD5_REFERENCE"
 
         # Calculate MD5 for existing file
-        local MD5_ACTUAL=$(md5sum $DEST/$FILE | cut -b 1-32)
+        local MD5_ACTUAL="$(getActualMD5 $DEST/$FILE)"
         DEBUG "MD4 cur = $MD5_ACTUAL"
 
         # Compare MD5 values
-        if [ "$MD5_REFERENCE" != "$MD5_ACTUAL" ]; then
+        if [[ "$MD5_REFERENCE" != "$MD5_ACTUAL" ]]; then
             # Hashes are different;
 
             # Check if changes are trivial (modified whitespace)
@@ -157,7 +159,7 @@ function updateFile {
                 read ANSWER # TODO How to make ANSWER local variable?
 
                 # Check and format input
-                if [ -z $ANSWER ]; then 
+                if [[ -z $ANSWER ]]; then 
                     ANSWER='k'
                 else 
                     ANSWER=${ANSWER,,}
@@ -165,19 +167,19 @@ function updateFile {
                 fi
 
                 # TODO Check for invalid input? 
-                if [ $ANSWER = 'r' ]; then
+                if [[ $ANSWER = 'r' ]]; then
                     # Replace existing file
-                    copyFile $SRC/$FILE $DEST/$FILE
+                    copyFile "$SRC/$FILE" "$DEST/$FILE"
                 else
                     # Do not replace file; Log it as conflict
-                    addConflict $DEST/$FILE
+                    addConflict "$DEST/$FILE"
                 fi
             else
-                copyFile $SRC/$FILE $DEST/$FILE
+                copyFile "$SRC/$FILE" "$DEST/$FILE"
             fi
         else
             # Installed file was not modified, replace it.
-            copyFile $SRC/$FILE $DEST/$FILE
+            copyFile "$SRC/$FILE" "$DEST/$FILE"
         fi
     fi
 }
@@ -187,7 +189,7 @@ function updateFile {
 # TODO IMPORANT small change that wrong MD5 reference is found
 function checkForModifications() {
     local RESULT=0
-    local FOLDER=$1
+    local FOLDER="$1"
     DEBUG "Check $FOLDER for modifications"
     find "$FOLDER" -type f -print0 | while read -r -d $'\0' FILE; do
         # Get relative path for file
@@ -196,15 +198,15 @@ function checkForModifications() {
 
         # Check if file has been modified
         # TODO use path relative to root of distribution
-        local FILE_MD5_REFERENCE=$(grep $FILE_PATH $MD5_OLD | cut -b 1-32)
+        local FILE_MD5_REFERENCE="$(getMD5 $FILE_PATH $MD5_OLD)"
         DEBUG "MD5 ref = $FILE_MD5_REFERENCE"
 
         # Calculate MD5 for existing file
-        local FILE_MD5_ACTUAL=$(md5sum $FILE | cut -b 1-32)
+        local FILE_MD5_ACTUAL="$(getActualMD5 $FILE)"
         DEBUG "MD5 cur = $FILE_MD5_ACTUAL"
 
         # Check if file is unknown or has been modified
-        if [ -z "$FILE_MD5_REFERENCE" ] || [ "$FILE_MD5_REFERENCE" != "$FILE_MD5_ACTUAL" ]; then
+        if [[ -z "$FILE_MD5_REFERENCE" ]] || [[ "$FILE_MD5_REFERENCE" != "$FILE_MD5_ACTUAL" ]]; then
             # Unknown or modified file; target has been modified
             DEBUG "Modified file $FILE_PATH has been found."
             RESULT=1
@@ -216,14 +218,14 @@ function checkForModifications() {
 
 # Copies a file using different functions depending on existence of target file
 function copyFile() {
-    local SRC=$1
-    local DEST=$2
-    if [ ! -f $DEST ]; then 
+    local SRC="$1"
+    local DEST="$2"
+    if [[ ! -f $DEST ]]; then 
         # target file does not exist
-        addFile $SRC $DEST
+        addFile "$SRC" "$DEST"
     else 
         # target file already exists
-        replaceFile $SRC $DEST
+        replaceFile "$SRC" "$DEST"
     fi
 }
 
@@ -231,11 +233,11 @@ function copyFile() {
 # TODO check if target already exists
 # TODO synchronize folders instead of simple copy?
 function copyFolder() {
-    local SRC=$1
-    local DEST=$2
-    [ "$_DRYRUN" -eq 0 ] && cp -R "$SRC" "$DEST"
-    UPDATELOG "CREATED" $2
-    DEBUG "Copied folder $1 to $2"
+    local SRC="$1"
+    local DEST="$2"
+    DRYRUN || cp -R "$SRC" "$DEST"
+    UPDATELOG "CREATED" "$DEST"
+    DEBUG "Copied folder $SRC to $DEST"
 }
 
 # TODO use? rsync -avz --delete $NEW_FRAMEWORK/ $OLD_FRAMEWORK to sync folders
@@ -248,30 +250,30 @@ function copyFolder() {
 # TODO handle errors
 # TODO handle missing target folder
 function updateFolder() {
-    local SRC=$1
-    local DEST=$2
+    local SRC="$1"
+    local DEST="$2"
     local FLAT=0
     # Third parameter disables (1) recursion
-    if [ ! -z $3 ] && [ $3 = 'flat' ]; then
+    if [[ ! -z $3 ]] && [[ $3 = 'flat' ]]; then
         local FLAT=1
     fi
     DEBUG "Update folder $DEST from $SRC"
     # Get files and folders in source directory
     local SRC_FILES=$(ls $SRC)
     # Check if target folder exists
-    if [ ! -d $DEST ]; then
+    if [[ ! -d $DEST ]]; then
         # Create target folder if it does not exist already
-        createFolder $DEST
+        createFolder "$DEST"
     fi
     # Iterate through files and folders
     local FILE
     for FILE in $SRC_FILES; do
         # Check if folder
-        if [ -d $SRC/$FILE ]; then
+        if [[ -d $SRC/$FILE ]]; then
             # Call updateFolder recursively
-            [ "$FLAT" -eq 0 ] && updateFolder $SRC/$FILE $DEST/$FILE
+            [[ "$FLAT" -eq 0 ]] && updateFolder "$SRC/$FILE" "$DEST/$FILE"
         else
-            copyFile $SRC/$FILE $DEST/$FILE
+            copyFile "$SRC/$FILE" "$DEST/$FILE"
         fi
     done
     return 0 # TODO see comments for deleteFiles
@@ -280,12 +282,13 @@ function updateFolder() {
 # Deletes files that exist at destination but not in source folder recursively
 # TODO IMPORTANT handle/ignore symbolic links
 # TODO filter deletes based on MD5 list (does that actually work as expected)?
+# TODO Make iteration over files more robust (newline, etc.)
 function deleteFiles() {
-    local SRC=$1
-    local DEST=$2
+    local SRC="$1"
+    local DEST="$2"
     local FLAT=0
     # Third parameter disables (1) recursion
-    if [ ! -z $3 ] && [ $3 = 'flat' ]; then
+    if [[ ! -z $3 ]] && [[ $3 = 'flat' ]]; then
         local FLAT=1
     fi
     local DEST_FILES=$(ls $DEST)
@@ -293,29 +296,29 @@ function deleteFiles() {
     local FILE
     for FILE in $DEST_FILES; do
         # Check if folder
-        if [ -d $DEST/$FILE ]; then
+        if [[ -d $DEST/$FILE ]]; then
             # Check if folder exists in source folder
-            if [ ! -d $SRC/$FILE ]; then
+            if [[ ! -d $SRC/$FILE ]]; then
                 # Folder does not exist
                 # TODO Delete folder file by file recursively (for log)?
                 # TODO Check against MD5 before deleting?
                 # Check if folder is link; Delete if not
-                if [ ! -L $DEST/$FILE ]; then 
-                    deleteFolder $DEST/$FILE
+                if [[ ! -L $DEST/$FILE ]]; then 
+                    deleteFolder "$DEST/$FILE"
                 else
                     DEBUG "Not deleted symbolic link $DEST/$FILE"
                 fi
             else
                 # Folder exists, call deleteFiles recursively
-                [ "$FLAT" -eq 0 ] && deleteFiles $SRC/$FILE $DEST/$FILE # TODO problem see comment at return
+                [[ "$FLAT" -eq 0 ]] && deleteFiles $SRC/$FILE $DEST/$FILE # TODO problem see comment at return
             fi
         else
             # Check if file exists in source folder
-            if [ ! -f $SRC/$FILE ]; then
+            if [[ ! -f $SRC/$FILE ]]; then
                 # File does not exist; Delete file in destination folder
                 # TODO Check against MD5 before deleting?
                 # TODO check for linked files?
-                deleteFile $DEST/$FILE
+                deleteFile "$DEST/$FILE"
             fi 
         fi
     done
@@ -326,28 +329,28 @@ function deleteFiles() {
 
 # Adds a new file to the OPUS4 installation
 function addFile() {
-    [ "$_DRYRUN" -eq 0 ] && cp $1 $2
+    DRYRUN || cp $1 $2
     UPDATELOG "ADDED" $2
     DEBUG "Added file $2"
 }
 
 # Updates an unmodified file of the OPUS4 installation
 function replaceFile() {
-    [ "$_DRYRUN" -eq 0 ] && cp $1 $2
+    DRYRUN || cp $1 $2
     UPDATELOG "REPLACED" $2
     DEBUG "Replaced file $2"
 }
 
 # Deletes a file from the OPUS4 installation
 function deleteFile() {
-    [ "$_DRYRUN" -eq 0 ] && rm $1
+    DRYRUN || rm $1
     UPDATELOG "DELETED" $1
     DEBUG "Deleted file $1"
 }
 
 # Deletes a folder from the OPUS4 installation
 function deleteFolder() {
-    [ "$_DRYRUN" -eq 0 ] && rm -rf $1
+    DRYRUN || rm -rf $1
     UPDATELOG "DELETED" $1
     DEBUG "Deleted folder $1"
 }
@@ -363,13 +366,7 @@ function createFolder() {
 # Rename a file
 # Used to move modified files out of the way.
 function renameFile() {
-    [ "$_DRYRUN" -eq 0 ] && mv $1 $2
+    DRYRUN || mv $1 $2
     UPDATELOG "RENAMED" "$1 => `basename $2`"
     DEBUG "Renamed file $1"
-}
-
-# Replaces a modified file in the OPUS4 installation
-# TODO remove?
-function replaceModifiedFile() {
-    echo "TODO implement REPLACE MODIFIED file"
 }
