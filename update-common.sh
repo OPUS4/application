@@ -35,19 +35,17 @@ _DRYRUN=1
 # Executes parameter if DEBUG is enabled
 # @param Text for output
 function DEBUG() {
-    [ "${_DEBUG}" -eq 1 ] && echo "$@"
+    [[ "${_DEBUG}" -eq 1 ]] && echo "$@"
     return 0
 }
 
 # Writes operations into UPDATE.log 
 # @param pathtofile
 # @param operation
-# TODO what if file already exists wenn update starts?
-# TODO IMPORTANT add timestamp to filename
 function UPDATELOG() {
     if [ -z $_UPDATELOG ]; then
         DEBUG "Setup UPDATE log"
-        _UPDATELOG=$BASEDIR/UPDATE.log # TODO change name?
+        _UPDATELOG=$BASEDIR/UPDATE-$(date -Iseconds).log # TODO change name?
         if [ ! -f $_UPDATELOG ]; then  
             DEBUG "Write UPDATE log header"
             echo "Following operations were executed during the update:" > $_UPDATELOG
@@ -56,6 +54,14 @@ function UPDATELOG() {
     fi
     # Format output so that $2 is always at the same position
     printf "%-10s %s\n" "$1" "$2" >> $_UPDATELOG
+}
+
+# Return true if Dry-Run mode is disabled
+# Can be used to enable/disable execution of commands like this:
+# DRYRUN || <command that should not be executed if Dry-Run is enabled>
+function DRYRUN() {
+    [[ $_DRYRUN -eq 0 ]] && return 0;
+    return 1;
 }
 
 # Gets value of property from file
