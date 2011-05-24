@@ -23,24 +23,24 @@
 
 set -o errexit
 
-BASEDIR=$1
-BASE_SOURCE=$2
+BASEDIR="$1"
+BASE_SOURCE="$2"
 
 source update-common.sh
 
 echo -e "Updating *import* folder ... \c "
 
-SRC=$BASE_SOURCE/opus4/import
-DEST=$BASEDIR/opus4/import
+SRC="$BASE_SOURCE/opus4/import"
+DEST="$BASEDIR/opus4/import"
 
 # Create import folder if it does not exit yet
-if [ ! -d $DEST ]; then
-    createFolder $DEST
+if [[ ! -d $DEST ]]; then
+    createFolder "$DEST"
 fi
 
 # Copy files from source to destination folder
-updateFolder $SRC $DEST
+updateFolder "$SRC" "$DEST"
 # Remove files from destination that do not exist in source folder
-deleteFiles $SRC $DEST
+deleteFiles "$SRC" "$DEST"
 
 echo "done"
