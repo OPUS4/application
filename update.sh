@@ -249,10 +249,10 @@ backup
 "$SCRIPTPATH"/update-db.sh "$BASEDIR" "$BASE_SOURCE" "$VERSION_OLD" "$VERSION_NEW"
 
 # Update *import* folder
-"$SCRIPTPATH"/update-import.sh "$BASEDIR" "$BASE_SOURCE"
+"$SCRIPTPATH"/update-import.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD"
 
 # Update *library* folder
-"$SCRIPTPATH"/update-library.sh "$BASEDIR" "$BASE_SOURCE"
+"$SCRIPTPATH"/update-library.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD"
 
 # Update modules
 "$SCRIPTPATH"/update-modules.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$MD5_NEW" "$SCRIPTPATH"
@@ -264,7 +264,7 @@ backup
 "$SCRIPTPATH"/update-scripts.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD"
 
 # Update SOLR index
-"$SCRIPTPATH"/update-solr.sh "$BASEDIR" "$BASE_SOURCE" "$VERSION_OLD" "$MD5_OLD"
+"$SCRIPTPATH"/update-solr.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$VERSION_OLD" 
 
 # Update Apache configuration
 "$SCRIPTPATH"/update-apache.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD"
