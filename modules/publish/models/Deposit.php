@@ -138,10 +138,13 @@ class Publish_Model_Deposit {
     private function getCounter($dataKey) {
         //counters may appear on the last position
         $lastChar = (substr($dataKey, -1, 1));
+        $seclastChar = (substr($dataKey, -2, 1));
         if (is_numeric($lastChar))
-            return (int) $lastChar;
-        else
-            return 0;
+            if (is_numeric($seclastChar))
+                return (int) $seclastChar . $lastChar;
+            else
+                return (int) $lastChar;
+        return 0;
     }
 
     /**
