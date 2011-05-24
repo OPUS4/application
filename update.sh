@@ -21,11 +21,20 @@
 # @param $1 path to OPUS4 installation
 # @param $2 path to new distribution
 # @param $3 version of OPUS4 installation
+#
+# Important global variables
+# SCRIPTPATH - Path to this script
+# BASEDIR - Path to OPUS4 installation
+# BASE_SOURCE - Path to new OPUS4 distribution
+# VERSION_OLD - Version of OPUS4 installation
+# VERSION_NEW - Version of new OPUS4 distribution
+# MD5_OLD - Path to MD5 reference file for OPUS4 installation
+# MD5_NEW - Path to MD5 reference file for new OPUS4 distribution
 
 # TODO IMPORTANT prevent downgrade
-# TODO document globally used, important variables
+# TODO add backup script
 # TODO add generic function for YES/NO questions?
-# TODO add function for abort?
+# TODO add function for abort? Including cleanup script?
 # TODO add batch mode (no questions asked)?
 # TODO Make it possible to revert update if something fails? (Keep old files until done?)
 # TODO IMPORTANT The new scripts can delete files. Make sure they won't delete local configuration files (e.g. config.ini, createdb.sh)
@@ -34,21 +43,25 @@
 # TODO use flags like RESTART_APACHE, RESTART_SOLR that can be set during the update process to trigger restarts at the end of the process
 set -o errexit
 
+
 # =============================================================================
 # Parse parameters
 # =============================================================================
 
-# Use first parameter as location of OPUS4 distribution
-if [ ! -z $1 ]; then
-    BASE_SOURCE=$2
-fi
-
-# Use second parameter as location of OPUS4 installation
-if [ ! -z $2 ]; then
+# Use first parameter as location of OPUS4 installation
+if [[ ! -z $2 ]]; then
     BASEDIR=$1
 fi
 
-# TODO implement version parameter 
+# Use second parameter as location of OPUS4 distribution
+if [[ ! -z $1 ]]; then
+    BASE_SOURCE=$2
+fi
+
+# Use third parameter as version of old OPUS4
+if [[ ! -z $3 ]]; then
+    VERSION_OLD=$3
+fi
 
 # =============================================================================
 # Define constants
@@ -65,18 +78,18 @@ BASEDIR_DEFAULT=/var/local/opus4
 # TODO handle BASEDIR passed as parameter consistently
 function getBasedir() {
     local ABORT='n'
-    while [ -z $BASEDIR ] || [ ! -d $BASEDIR ] && [ $ABORT != 'y' ]; do 
+    while [[ -z $BASEDIR ]] || [[ ! -d $BASEDIR ]] && [[ $ABORT != 'y' ]]; do 
         echo -e "Please specify OPUS4 installation directory ($BASEDIR_DEFAULT): \c "
         read BASEDIR_NEW
-        if [ -z "$BASEDIR_NEW" ]; then
+        if [[ -z "$BASEDIR_NEW" ]]; then
             BASEDIR_NEW=$BASEDIR_DEFAULT
         fi
         # Verify BASEDIR_NEW
-        if [ ! -d $BASEDIR_NEW ]; then 
+        if [[ ! -d $BASEDIR_NEW ]]; then 
             echo "OPUS4 could not be found at $BASEDIR_NEW"
             echo -e "Would you like to abort the update (y/N)? \c ";
             read ABORT
-            if [ -z $ABORT ]; then 
+            if [[ -z $ABORT ]]; then 
                 ABORT='n'
             else 
                 # TODO better way of doing the two steps below
@@ -85,11 +98,11 @@ function getBasedir() {
                 ABORT=${ABORT:0:1} # get first letter
             fi
         else
-            BASEDIR=$BASEDIR_NEW
+            BASEDIR="$BASEDIR_NEW"
         fi
         unset BASEDIR_NEW
     done
-    if [ $ABORT == 'y' ]; then 
+    if [[ $ABORT == 'y' ]]; then 
         echo "OPUS4 update aborted"
         exit 1
     fi
@@ -99,20 +112,23 @@ function getBasedir() {
 # Determines current version of installed OPUS4
 # TODO What if VERSION.txt is missing, but it is a post 4.1 version?
 function getOldVersion() {
-    if [ ! -f $BASEDIR/VERSION.txt ]; then 
+    if [[ ! -f $BASEDIR/VERSION.txt ]]; then 
         local ABORT='n'
-        while [ -z $MD5_OLD ] || [ ! -f $MD5_OLD ] && [ $ABORT != 'y' ]; do
-            echo -e "What version of OPUS4 is installed? \c "
-            read VERSION_OLD
+        while [[ -z $MD5_OLD ]] || [[ ! -f $MD5_OLD ]] && [[ $ABORT != 'y' ]]; do
+            # Check if version has been specified as parameter
+            if [[ -z $VERSION_OLD ]]; then
+                echo -e "What version of OPUS4 is installed? \c "
+                read VERSION_OLD
+            fi
 
             getMd5Sums
 
             # Check if MD5SUMS file exists for the entered version
             # TODO Better way to verify entered version?
-            if [ ! -f $MD5_OLD ]; then
+            if [[ ! -f $MD5_OLD ]]; then
                 echo -e "You entered an unknown OPUS4 version number. Abort the update [y/N]? \c "
                 read ABORT
-                if [ -z $ABORT ]; then 
+                if [[ -z $ABORT ]]; then 
                     ABORT='n'
                 else 
                     # TODO better way of doing the two steps below
@@ -120,23 +136,24 @@ function getOldVersion() {
                     ABORT=${ABORT,,} # convert to lowercase
                     ABORT=${ABORT:0:1} # get first letter
                 fi
-
+                # Unset version to force version question above
+                unset VERSION_OLD
             fi
         done
-        if [ $ABORT == 'y' ]; then 
+        if [[ $ABORT == 'y' ]]; then 
             echo "OPUS4 update aborted"
             exit 1
         fi
     else 
         # Read content of VERSION into VERSION_OLD
-	VERSION_OLD=$(sed -n '1p' $BASEDIR/VERSION.txt)		
+	VERSION_OLD=$(sed -n '1p' "$BASEDIR/VERSION.txt")		
     fi
 }
 
 # Determines version of new OPUS4
 # TODO Ways to improve, make more robust?
 function getNewVersion() {
-    VERSION_NEW=$(sed -n '1p' $BASE_SOURCE/VERSION.txt)
+    VERSION_NEW=$(sed -n '1p' "$BASE_SOURCE/VERSION.txt")
 }
 
 # Find MD5SUMS for installed OPUS4
@@ -144,11 +161,11 @@ function getNewVersion() {
 # TODO Ways to make it more robust?
 # TODO rename MD5_OLD to MD5SUMS_INSTALLED or something else
 function getMd5Sums() {
-    if [ ! -f $BASEDIR/MD5SUMS ]; then
+    if [[ ! -f $BASEDIR/MD5SUMS ]]; then
         # TODO use SCRIPTPATH?
-        MD5_OLD=$BASE_SOURCE/releases/$VERSION_OLD.MD5SUMS
+        MD5_OLD="$BASE_SOURCE/releases/$VERSION_OLD.MD5SUMS"
     else
-        MD5_OLD=$BASEDIR/MD5SUMS
+        MD5_OLD="$BASEDIR/MD5SUMS"
     fi
     DEBUG "MD5_OLD = $MD5_OLD"
 }
@@ -162,20 +179,20 @@ function backup() {
     echo " before running the update. Files will be overwritten!"
     echo -e "Start the update to OPUS $VERSION_NEW now [y/N]? \c "
     read UPDATE_NOW
-    if [ -z $UPDATE_NOW ]; then 
+    if [[ -z $UPDATE_NOW ]]; then 
         UPDATE_NOW='n'
     else
         UPDATE_NOW=${UPDATE_NOW,,}
         UPDATE_NOW=${UPDATE_NOW:0:1}
     fi
-    if [ $UPDATE_NOW != 'y' ]; then 
+    if [[ $UPDATE_NOW != 'y' ]]; then 
         echo "OPUS4 update aborted"
         exit 1
     fi
 }
 
 DEBUG "Debug output enabled"
-[ "$_DRYRUN" -eq 1 ] && echo "Dry-Run mode enabled"
+DRYRUN || echo "Dry-Run mode enabled"
 
 # Get name and path for update script
 SCRIPTNAME=`basename $0`
@@ -190,9 +207,8 @@ DEBUG "BASE_SOURCE = $BASE_SOURCE"
 DEBUG "SCRIPTNAME = $SCRIPTNAME"
 DEBUG "SCRIPTPATH = $SCRIPTPATH"
 
-# TODO Is there a way to find the MySQL client?
-MYSQL_CLIENT=/usr/bin/mysql
-MD5_NEW=$BASE_SOURCE/MD5SUMS
+
+MD5_NEW="$BASE_SOURCE/MD5SUMS"
 
 # Switch to folder containing update script
 # TODO Is that a problem? Can we do without?
@@ -212,9 +228,10 @@ getNewVersion
 DEBUG "VERSION_OLD = $VERSION_OLD"
 DEBUG "VERSION_NEW = $VERSION_NEW"
 
-# TODO Verify that update from that version is supported?
-
-# getMd5Sums
+# Make sure MD5_OLD is set (in case it was not set by getOldVersion)
+if [[ -z MD5_OLD ]] ; then
+    getMd5Sums 
+fi
 
 backup
 
@@ -222,40 +239,34 @@ backup
 # Run update scripts
 # =============================================================================
 
-# TODO IMPORTANT remove line; temporary for testing
-# TODO move into testing script
-if [ -f $BASEDIR/UPDATE.log ]; then
-    rm $BASEDIR/UPDATE.log 
-fi
-
 # TODO maybe use source so that variables do not have to be passed explicitely
 
 # Update configuration
-$SCRIPTPATH/update-config.sh $BASEDIR $BASE_SOURCE $MD5_OLD
+"$SCRIPTPATH"/update-config.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD"
 
 # Update database
-$SCRIPTPATH/update-db.sh $BASEDIR $BASE_SOURCE $VERSION_OLD $VERSION_NEW
+"$SCRIPTPATH"/update-db.sh "$BASEDIR" "$BASE_SOURCE" "$VERSION_OLD" "$VERSION_NEW"
 
 # Update *import* folder
-$SCRIPTPATH/update-import.sh $BASEDIR $BASE_SOURCE
+"$SCRIPTPATH"/update-import.sh "$BASEDIR" "$BASE_SOURCE"
 
 # Update *library* folder
-$SCRIPTPATH/update-library.sh $BASEDIR $BASE_SOURCE
+"$SCRIPTPATH"/update-library.sh "$BASEDIR" "$BASE_SOURCE"
 
 # Update modules
-$SCRIPTPATH/update-modules.sh $BASEDIR $BASE_SOURCE $MD5_OLD $MD5_NEW $SCRIPTPATH
+"$SCRIPTPATH"/update-modules.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$MD5_NEW" "$SCRIPTPATH"
 
 # Update *public* folder
-$SCRIPTPATH/update-public.sh $BASEDIR $BASE_SOURCE $MD5_OLD
+"$SCRIPTPATH"/update-public.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD"
 
 # Update *scripts* folders
-$SCRIPTPATH/update-scripts.sh $BASEDIR $BASE_SOURCE
+"$SCRIPTPATH"/update-scripts.sh "$BASEDIR" "$BASE_SOURCE"
 
 # Update SOLR index
-$SCRIPTPATH/update-solr.sh $BASEDIR $BASE_SOURCE $VERSION_OLD
+"$SCRIPTPATH"/update-solr.sh "$BASEDIR" "$BASE_SOURCE" "$VERSION_OLD" "$MD5_OLD"
 
 # Update Apache configuration
-$SCRIPTPATH/update-apache.sh $BASEDIR $BASE_SOURCE $MD5_OLD
+"$SCRIPTPATH"/update-apache.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD"
 
 # =============================================================================
 # Finish update
