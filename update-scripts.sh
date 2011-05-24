@@ -23,6 +23,7 @@ set -o errexit
 
 BASEDIR=$1
 BASE_SOURCE=$2
+MD5_OLD=$3
 
 source update-common.sh
 
