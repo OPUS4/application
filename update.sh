@@ -261,7 +261,7 @@ backup
 "$SCRIPTPATH"/update-public.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD"
 
 # Update *scripts* folders
-"$SCRIPTPATH"/update-scripts.sh "$BASEDIR" "$BASE_SOURCE"
+"$SCRIPTPATH"/update-scripts.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD"
 
 # Update SOLR index
 "$SCRIPTPATH"/update-solr.sh "$BASEDIR" "$BASE_SOURCE" "$VERSION_OLD" "$MD5_OLD"
