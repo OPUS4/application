@@ -343,7 +343,7 @@ function deleteFiles() {
                 fi
             else
                 # Folder exists, call deleteFiles recursively
-                [[ "$FLAT" -eq 0 ]] && deleteFiles $SRC/$FILE $DEST/$FILE # TODO problem see comment at return
+                [[ "$FLAT" -eq 0 ]] && deleteFiles "$SRC/$FILE" "$DEST/$FILE" # TODO problem see comment at return
             fi
         else
             # Check if file exists in source folder
@@ -351,7 +351,16 @@ function deleteFiles() {
                 # File does not exist; Delete file in destination folder
                 # TODO Check against MD5 before deleting?
                 # TODO check for linked files?
-                deleteFile "$DEST/$FILE"
+                local MD5PATH=$(echo "$FILE" | sed -e "s|$BASEDIR||") 
+                local FILE_MD5_REF="$(getMD5 $MD5PATH $MD5_OLD)"
+
+                # Check if file was part of old distribution; it has MD5
+                if [[ ! -z $FILE_MD5_REF ]]; then
+                    # File was part of old distribution; delete it
+                    deleteFile "$DEST/$FILE"
+                else
+                    DEBUG "Did not delete unknown file $DEST/$FILE"
+                fi
             fi 
         fi
     done
