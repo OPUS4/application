@@ -38,6 +38,7 @@ SCHEMA_PATH="$BASE_SOURCE/opus4/db/schema"
 # TODO more flexible way to find mysql binary?
 mysql_bin=/usr/bin/mysql
 SCRIPT="$BASEDIR/opus4/db/createdb.sh"
+UPDATED=0
 
 #read database credentials from createdb.sh
 # TODO Handle missing values
@@ -151,7 +152,8 @@ function runDbUpdate() {
 EOFMYSQL
 
     fi
-    DEBUG "MYSQL UPDATE SCRIPT = $UPDATE_FILE"
+    DEBUG "MYSQL UPDATE SCRIPT = $UPDATE_FILE"    
+    echo "$UPDATE_FILE" >> "$BASE_SOURCE"/dbupdated.txt
 }
 
 echo "Database is updating now..."

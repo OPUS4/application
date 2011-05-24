@@ -32,15 +32,20 @@ MD5PATH=solrconfig
 source update-common.sh
 
 # TODO Why check specifically for versions before 4.0.3? At least add comment.
-if [[ $VERSION_OLD == 4.0.0 ]] || [[ $VERSION_OLD == 4.0.1 ]] || [[ $VERSION_OLD == 4.0.2 ]]; then
+if [[ -f "$BASE_SOURCE"/dbupdated.txt ]]; then
     echo "Updating SOLR server schema ..."
     # TODO use MD5Path? Not used in old script. 
-    updateFile "$BASE_SOURCE/$MD5PATH" "$BASEDIR/$MD5PATH" "$MD5PATH" "schema.xml"
+    # What happens if schema.xml is remotely available?
+    updateFile $BASE_SOURCE/solrconfig $BASEDIR/solrconfig $MD5Path schema.xml
     echo "done"
 
-    # TODO move into separate script for execution after all other update scripts?
-    echo -e "Rebuilding Solr index ... \c "
-    DRYRUN || php5 "$OLD_SCRIPTS/SolrIndexBuilder.php"
-    echo "done"
+    # TODO move into separate script for execution after all other update scripts?    
+    if [[ "$_DRYRUN" -eq 0 ]]; then
+        echo -e "Rebuilding Solr index ... \c "
+        php5 $OLD_SCRIPTS/SolrIndexBuilder.php
+        echo "done"
+    fi
+    
+    rm "$BASE_SOURCE"/dbupdated.txt
 fi
 
