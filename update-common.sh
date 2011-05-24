@@ -30,7 +30,7 @@ _DEBUG=1
 # Enables (1) or disables (0) dry run mode to create UPDATE.log without making
 # any actual modifications to the OPUS4 installation.
 # TODO Maybe set based on argument or environment?
-_DRYRUN=1
+_DRYRUN=0
 
 # Executes parameter if DEBUG is enabled
 # @param Text for output
