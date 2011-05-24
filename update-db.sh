@@ -24,17 +24,16 @@
 # TODO use _DRYRUN to prevent execution of changes
 
 set -o errexit
-set -e
 
 source update-common.sh
 
 # TODO move into common script? Be careful with main script!
-BASEDIR=$1
-BASE_SOURCE=$2
-VERSION_OLD=$3
-VERSION_NEW=$4
+BASEDIR="$1"
+BASE_SOURCE="$2"
+VERSION_OLD="$3"
+VERSION_NEW="$4"
 
-SCHEMA_PATH=$BASE_SOURCE/opus4/db/schema
+SCHEMA_PATH="$BASE_SOURCE/opus4/db/schema"
 
 # TODO more flexible way to find mysql binary?
 mysql_bin=/usr/bin/mysql
@@ -56,32 +55,33 @@ DBNAME=$PROP_VALUE
 #recursive method selects database update script by the version numbers
 #TODO: Replace recursive call by iteration over sorted files list
 #TODO: new version really neccessary? Or just update to the newest version?
+#TODO more debug output to see the steps
 #@param $1 old version
 #@param $2 new version
 function dbScript() {
-    V_OLD="$1"
-    V_NEW="$2"
+    local V_OLD="$1"
+    local V_NEW="$2"
     #check if there are update scripts for origin version
     findFiles "$V_OLD"
 
-    if [ "$FILES_COUNT" -eq 0 ]; then
+    if [[ "$FILES_COUNT" -eq 0 ]]; then
         versionGroup "$V_OLD"
         #check if there are update scripts for group of origin version
         findFiles "$VERSION_GROUP"
 
-        if [ "$FILES_COUNT" -eq 0 ]; then
+        if [[ "$FILES_COUNT" -eq 0 ]]; then
             #no update scripts, neither for origin version nor version group
             echo "No information available for update from version $V_OLD to $V_NEW"
         else
 
             #a update file for the group of origin version was found
-            if [ "$FILES_COUNT" -eq 1 ]; then
+            if [[ "$FILES_COUNT" -eq 1 ]]; then
                 #lists with more than one file are disregarded
                 runDbUpdate "$FILES_LIST"
                 FILENAME=$(basename "$FILES_LIST")
                 findVersion "$FILENAME"
 
-                if [ "$V_TO" != "$V_NEW" ]; then
+                if [[ "$V_TO" != "$V_NEW" ]]; then
                     #recursive call
                     dbScript "$V_TO" "$V_NEW"
                 fi
@@ -91,13 +91,13 @@ function dbScript() {
      else
 
         #a update file for the origin version was found
-        if [ "$FILES_COUNT" -eq 1 ]; then
+        if [[ "$FILES_COUNT" -eq 1 ]]; then
             #lists with more than one file are disregarded
             runDbUpdate "$FILES_LIST"
             FILENAME=$(basename "$FILES_LIST")
             findVersion "$FILENAME"
 
-            if [ "$V_TO" != "$V_NEW" ]; then
+            if [[ "$V_TO" != "$V_NEW" ]]; then
                 #recursive call
                 dbScript "$V_TO" "$V_NEW"
             fi
@@ -138,10 +138,10 @@ function versionGroup() {
 function runDbUpdate() {
     UPDATE_FILE=$1
 
-    if [ "$_DRYRUN" -eq 0 ]; then
+    if [[ "$_DRYRUN" -eq 0 ]]; then
         MYSQL="${mysql_bin} --default-character-set=utf8 --user=${USER} --password=${PASSWORD} --host=${HOST} --port=${PORT}"
 
-        if [ -n "${PASSWORD}" ]; then
+        if [[ -n "${PASSWORD}" ]]; then
             MYSQL="${MYSQL} --password=${PASSWORD}"
         fi    
 
