@@ -24,9 +24,9 @@
 
 set -o errexit
 
-BASEDIR=$1
-BASE_SOURCE=$2
-MD5_OLD=$3
+BASEDIR="$1"
+BASE_SOURCE="$2"
+MD5_OLD="$3"
 
 source update-common.sh
 
@@ -35,5 +35,5 @@ MD5PATH=apacheconf
 echo -e "Updating Apache configuration ... \c "
 # TODO updateFile either replaces or does not replace file, should create backup
 # TODO check if file has been modified, if yes set restart flag for APACHE
-updateFile $BASE_SOURCE/$MD5PATH $BASEDIR/$MD5PATH $MD5_OLD opus4
+updateFile "$BASE_SOURCE/$MD5PATH" "$BASEDIR/$MD5PATH" "$MD5PATH" "opus4"
 echo "done"
