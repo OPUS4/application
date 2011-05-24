@@ -109,7 +109,7 @@ chmod 777 workspace/tmp/resumption
 
 chmod +x install/install.sh
 chmod +x install/uninstall.sh
-chmod +x install/update.sh
+chmod +x install/update*.sh
 
 #
 # create VERSION.txt
