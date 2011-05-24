@@ -42,6 +42,10 @@ DEBUG "OLD_LIBRARY = $OLD_LIBRARY"
 
 echo -e "Updating *library* folder ... \c "
 
+# Updating *Application* folder
+updateFolder $NEW_LIBRARY/Application $OLD_LIBRARY/Application
+deleteFiles $NEW_LIBRARY/Application $OLD_LIBRARY/Application
+
 # Updating *Opus* folder
 updateFolder $NEW_LIBRARY/Opus $OLD_LIBRARY/Opus
 # TODO Are we possibly deleting too much in the next line? It will delete everything that does not exist in source location.
