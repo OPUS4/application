@@ -16,4 +16,4 @@
 # @license     http://www.gnu.org/licenses/gpl.html General Public License
 # @version     $Id$
 
-$(dirname $0)/install.sh suse
+"$(dirname "$0")"/install.sh suse
