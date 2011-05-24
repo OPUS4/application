@@ -274,3 +274,11 @@ backup
 # =============================================================================
 
 # TODO Verify successful update somehow?
+
+# Restart apache
+if [[ askYesNo "Would you like to restart Apache2 now [Y/n]?" ]]; then
+    echo "Restarting Apache server ..."
+    DRYRUN || /etc/init.d/apache2 restart
+fi
+
+# Restart Solr

@@ -90,6 +90,33 @@ function getMD5() {
     return
 }
 
+# Asks yes/no question
+# @return 0 = yes = default, 1 = no
+function askYesNo() {
+    local QUESTION="$1"
+    local ANSWER
+
+    DEBUG $QUESTION
+
+    while [[ -z $ANSWER ]] && [[ $ANSWER != 'y' ]] && [[ $ANSWER != 'n' ]]; do
+        echo -e "$QUESTION \c"
+        read ANSWER
+
+        if [[ -z $ANSWER ]]; then 
+            return 0 # default
+        else 
+            ANSWER=${ANSWER,,} # convert to lowercase
+            ANSWER=${ANSWER:0:1} # get first letter
+        fi
+    done
+
+    if [[ $ANSWER == 'y' ]]; then 
+        return 0
+    else
+        return 1
+    fi
+}
+
 # Adds entry to CONFLICTS.txt
 # @param path to file that creates conflict
 # TODO what if file already exists when update starts?
@@ -220,6 +247,12 @@ function checkForModifications() {
 function copyFile() {
     local SRC="$1"
     local DEST="$2"
+    local DEST_DIR=$(dirname "$DEST")
+    # Check if target folder for file exists
+    if [[ ! -d "$DEST_DIR" ]]; then
+        # Create folder if it does not exist
+        createFolder "$DEST_DIR"
+    fi
     if [[ ! -f $DEST ]]; then 
         # target file does not exist
         addFile "$SRC" "$DEST"
