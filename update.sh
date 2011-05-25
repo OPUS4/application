@@ -274,6 +274,10 @@ backup
 # Update Apache configuration
 "$SCRIPTPATH"/update-apache.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG"
 
+# Update root directory files
+updateFolder $BASE_SOURCE $BASEDIR flat
+deleteFiles $BASE_SOURCE $BASEDIR flat
+
 # =============================================================================
 # Finish update
 # =============================================================================
