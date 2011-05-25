@@ -18,6 +18,10 @@
 # @version     $Id$
 
 # Updates the OPUS4 configuration files
+# 
+# Document types are updated after asking the user.
+
+# TODO simply mechanism so that not every file has to be handled separately
 
 set -o errexit
 
@@ -44,11 +48,23 @@ DEBUG "Copying $SRC to $DEST"
 # The following files are simply copied without checking the existing files.
 copyFile "$SRC/application.ini" "$DEST/application.ini"
 copyFile "$SRC/config.ini.template" "$DEST/config.ini.template"
-copyFile "$SRC/doctypes/all.xml" "$DEST/doctypes/all.xml"
 # TODO maybe config.ini should be merged with new template? Message to user?
+
+# Copy import.sh.template file
+copyFile "$SRC/import.sh.template" "$DEST/import.sh.template"
 
 # Ask user before replacing the following files if they have been modified.
 updateFile "$SRC" "$DEST" "$MD5PATH" "navigation.xml"
 updateFile "$SRC" "$DEST" "$MD5PATH" "navigationModules.xml"
 
+# Update document types
+# copyFile "$SRC/doctypes/all.xml" "$DEST/doctypes/all.xml" # TODO remove
+
+echo "Updating document types ... "
+
+FILES=$(getFiles "$SRC/doctypes")
+
+for FILE in $FILES; do
+    updateFile "$SRC/doctypes" "$DEST/doctypes" "$MD5PATH/doctypes" "$FILE" backup
+done
 
