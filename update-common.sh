@@ -424,9 +424,18 @@ function deleteFile() {
 }
 
 # Deletes a folder from the OPUS4 installation
+# TODO When parent folders are deleted, no entries appear in UPDATE log.
 function deleteFolder() {
-    DRYRUN || rm -rf $1
-    UPDATELOG "DELETED" $1
+    local DELETE_EMPTY=1
+    if [[ ! -z "$2" ]] && [[ "$2" = 'empty' ]]; then
+        DELETE_EMPTY=0
+    fi
+    if [[ $DELETE_EMPTY == 0 ]]; then
+        DRYRUN || rmdir --ignore-fail-on-non-empty --parents "$1"
+    else
+        DRYRUN || rm -rf "$1"
+    fi
+    UPDATELOG "DELETED" "$1"
     DEBUG "Deleted folder $1"
 }
 
@@ -434,7 +443,7 @@ function deleteFolder() {
 # TODO Can -p always be used or should it be selectable by parameter?
 function createFolder() {
     [ "$_DRYRUN" -eq 0 ] && mkdir -p $1
-    UPDATELOG "CREATED" $1
+    UPDATELOG "CREATED" "$1"
     DEBUG "Created folder $1"
 }
 
