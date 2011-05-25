@@ -130,10 +130,10 @@ function findVersion() {
 #e.g. 4.0.2 belongs to version group 4.0.x
 #@param $1 version to find group for
 function versionGroup() {
-    VERSION=$1
-    VERSION_PREFIX=$(echo $VERSION | cut -b 1-4)
+    VERSION="$1"
+    VERSION_PREFIX="$(echo "$VERSION" | cut -b 1-4)"
     X=x
-    VERSION_GROUP=$VERSION_PREFIX$X
+    VERSION_GROUP="$VERSION_PREFIX""$X"
 }
 
 #method executes a db update script (with global mysql credentials)
@@ -141,7 +141,7 @@ function versionGroup() {
 function runDbUpdate() {
     UPDATE_FILE=$1
 
-    if [[ "$_DRYRUN" -eq 0 ]]; then
+    if [[ "$_DRYRUN" -eq 1 ]]; then
         MYSQL="${mysql_bin} --default-character-set=utf8 --user=${USER} --password=${PASSWORD} --host=${HOST} --port=${PORT}"
 
         if [[ -n "${PASSWORD}" ]]; then
@@ -161,3 +161,7 @@ EOFMYSQL
 echo "Database is updating now..."
 dbScript "$VERSION_OLD" "$VERSION_NEW"
 echo "Database is up-to-date!"
+
+# Copy sql files from source to destination folder
+updateFolder "$SCHEMA_PATH" "$BASEDIR"/opus4/db/schema
+updateFolder "$BASE_SOURCE"/opus4/db/masterdata "$BASEDIR"/opus4/db/masterdata
