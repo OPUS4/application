@@ -126,7 +126,7 @@ find "$OLD_MODULES" -type d -empty -print0 | while read -r -d $'\0' FILE_PATH; d
     DEBUG "Empty folder $FILE found"
     # Delete empty folders
     # TODO Find way to add message like "(EMPTY)" to UPDATE.log
-    deleteFolder "$OLD_MODULES/$FILE"
+    deleteFolder "$OLD_MODULES/$FILE" empty
 done
 
 # =============================================================================
