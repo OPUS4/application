@@ -65,7 +65,7 @@
                                 <td><?= $this->translate('no'); ?></td>
                             <?php endif ?>
                         <?php else : ?>
-                            <td><?= $elem->getValue() ?></td>
+                            <td><?= htmlspecialchars($element->getValue()) ?></td>
                         <?php endif ?> <!--checkbox-->
                     <?php endif ?> <!--select-->
                     </tr>
@@ -81,7 +81,7 @@
         <?php if ($elem->getValue() != "") : ?>
             <tr><td class='label'><?= $elem->getLabel() ?></td>
                 <?php if ($elem->getType() === 'Zend_Form_Element_Select') : ?>
-                    <td><?= $elem->getMultiOption($elem->getValue()) ?></td>
+                    <td><?= htmlspecialchars($elem->getMultiOption($elem->getValue())) ?></td>
                 <?php  else : ?>
                     <?php if ($elem->getType() === 'Zend_Form_Element_Checkbox') : ?>
                         <?php if ($elem->getValue() == '1') : ?>
@@ -90,7 +90,7 @@
                             <td><?= $this->translate('no'); ?></td>
                         <?php endif ?>
                     <?php else : ?>
-                        <td><?= $elem->getValue() ?></td>
+                        <td><?= htmlspecialchars($elem->getValue()) ?></td>
                     <?php endif ?>
                 <?php endif ?>
             </tr>
