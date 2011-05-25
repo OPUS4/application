@@ -40,8 +40,9 @@ set -o errexit
 BASEDIR="$1"
 BASE_SOURCE="$2"
 MD5_OLD="$3"
-MD5_NEW="$4"
-SCRIPTPATH="$5"
+_UPDATELOG="$4"
+MD5_NEW="$5"
+SCRIPTPATH="$6"
 
 source update-common.sh
 

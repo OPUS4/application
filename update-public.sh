@@ -27,26 +27,27 @@
 
 set -o errexit
 
-BASEDIR=$1
-BASE_SOURCE=$2
-MD5_OLD=$3
+BASEDIR="$1"
+BASE_SOURCE="$2"
+MD5_OLD="$3"
+_UPDATELOG="$4"
 
 # TODO verify parameters
 
 source update-common.sh
 
 PUBLIC_PATH=opus4/public
-OLD_PUBLIC=$BASEDIR/$PUBLIC_PATH
-NEW_PUBLIC=$BASE_SOURCE/$PUBLIC_PATH
+OLD_PUBLIC="$BASEDIR/$PUBLIC_PATH"
+NEW_PUBLIC="$BASE_SOURCE/$PUBLIC_PATH"
 
-OLD_CONFIG=$BASEDIR/opus4/application/configs
+OLD_CONFIG="$BASEDIR/opus4/application/configs"
 
 echo "Updating directory $OLD_PUBLIC ..."
 
 LAYOUTS="$OLD_PUBLIC/layouts"
 
-getProperty $OLD_CONFIG/config.ini 'theme'
-THEME=$PROP_VALUE
+getProperty "$OLD_CONFIG/config.ini" 'theme'
+THEME="$PROP_VALUE"
 THEME_OPUS='opus4' # "; theme = opus4"
 
 echo "Selected theme: $THEME"
@@ -56,29 +57,29 @@ echo " Default theme: $THEME_OPUS"
 # TODO IMPORTANT use checkForModifications if opus4 layout has been modified
 
 # Check if no theme or default theme has been configured
-if [ -z "$THEME" ] || [ "$THEME" == "$THEME_OPUS" ]; then
+if [[ -z "$THEME" ]] || [[ "$THEME" == "$THEME_OPUS" ]]; then
     # Default theme is configured
     echo -e "You are currently using the standard OPUS4 layout. Any"
     echo -e " modifications you made to the layout will be lost during the"
     echo -e " update. Would you like to create a copy of the current layout"
     echo -e " under a different name (Y/n)? \c "
     read ANSWER
-    if [ -z "$ANSWER" ]; then 
+    if [[ -z "$ANSWER" ]]; then 
         ANSWER='y' # default is update layout
     else
         ANSWER=${ANSWER,,} # convert to lowercase
         ANSWER=${ANSWER:0:1} # get first letter
     fi
-    if [ "$ANSWER" == 'y' ]; then
+    if [[ "$ANSWER" == 'y' ]]; then
         # User wants to create backup of old layout folder
 
         # Ask for name of new theme
-        while [ -z "$THEME_NEW" ] || [ -d "$LAYOUTS/$THEME_NEW" ]; do
+        while [[ -z "$THEME_NEW" ]] || [[ -d "$LAYOUTS/$THEME_NEW" ]]; do
             echo -e "Please enter name of new theme: \c "
             read THEME_NEW
-            if [ ! -z "$THEME_NEW" ]; then
+            if [[ ! -z "$THEME_NEW" ]]; then
                 # Check if layout folder already exists
-                if [ -d "$LAYOUTS/$THEME_NEW" ]; then
+                if [[ -d "$LAYOUTS/$THEME_NEW" ]]; then
                     # Folder already exists
                     echo "A theme with name '$THEME_NEW' already exists."
                 fi

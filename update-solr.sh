@@ -24,7 +24,8 @@ set -o errexit
 BASEDIR="$1"
 BASE_SOURCE="$2"
 MD5_OLD="$3"
-VERSION_OLD="$4"
+_UPDATELOG="$4"
+VERSION_OLD="$5"
 
 OLD_SCRIPTS="$BASEDIR/opus4/scripts"
 MD5PATH=solrconfig
@@ -42,7 +43,7 @@ if [[ -f "$BASE_SOURCE"/dbupdated.txt ]]; then
     # TODO move into separate script for execution after all other update scripts?    
     if [[ "$_DRYRUN" -eq 0 ]]; then
         echo -e "Rebuilding Solr index ... \c "
-        php5 $OLD_SCRIPTS/SolrIndexBuilder.php
+        php5 "$OLD_SCRIPTS/SolrIndexBuilder.php"
         echo "done"
     fi
     

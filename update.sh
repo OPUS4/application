@@ -30,6 +30,7 @@
 # VERSION_NEW - Version of new OPUS4 distribution
 # MD5_OLD - Path to MD5 reference file for OPUS4 installation
 # MD5_NEW - Path to MD5 reference file for new OPUS4 distribution
+# _UPDATELOG - Path to file for update log
 
 # TODO IMPORTANT prevent downgrade
 # TODO add backup script
@@ -171,7 +172,11 @@ function getMd5Sums() {
     DEBUG "MD5_OLD = $MD5_OLD"
 }
 
+# TODO move up or down?
 source update-common.sh
+
+# Create file for update log (sets _UPDATELOG)
+INIT_UPDATELOG
 
 # Advice user to backup old installation before update
 # TODO perform backup to user specified or default location? Ask first.
@@ -243,31 +248,31 @@ backup
 # TODO maybe use source so that variables do not have to be passed explicitely
 
 # Update configuration
-"$SCRIPTPATH"/update-config.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD"
+"$SCRIPTPATH"/update-config.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG"
 
 # Update database
-"$SCRIPTPATH"/update-db.sh "$BASEDIR" "$BASE_SOURCE" "$VERSION_OLD" "$VERSION_NEW"
+"$SCRIPTPATH"/update-db.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG" "$VERSION_OLD" "$VERSION_NEW"
 
 # Update *import* folder
-"$SCRIPTPATH"/update-import.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD"
+"$SCRIPTPATH"/update-import.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG"
 
 # Update *library* folder
-"$SCRIPTPATH"/update-library.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD"
+"$SCRIPTPATH"/update-library.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG"
 
 # Update modules
-"$SCRIPTPATH"/update-modules.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$MD5_NEW" "$SCRIPTPATH"
+"$SCRIPTPATH"/update-modules.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG" "$MD5_NEW" "$SCRIPTPATH"
 
 # Update *public* folder
-"$SCRIPTPATH"/update-public.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD"
+"$SCRIPTPATH"/update-public.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG"
 
 # Update *scripts* folders
-"$SCRIPTPATH"/update-scripts.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD"
+"$SCRIPTPATH"/update-scripts.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG"
 
 # Update SOLR index
-"$SCRIPTPATH"/update-solr.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$VERSION_OLD" 
+"$SCRIPTPATH"/update-solr.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG" "$VERSION_OLD" 
 
 # Update Apache configuration
-"$SCRIPTPATH"/update-apache.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD"
+"$SCRIPTPATH"/update-apache.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG"
 
 # =============================================================================
 # Finish update

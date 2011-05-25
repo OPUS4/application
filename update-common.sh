@@ -39,9 +39,23 @@ function DEBUG() {
     return 0
 }
 
+# Creates file for update log
+function INIT_UPDATELOG() {
+    if [[ -z $_UPDATELOG ]]; then
+        DEBUG "Setup UPDATE log"
+        _UPDATELOG=$BASEDIR/UPDATE-$(date -Iseconds).log # TODO change name?
+        if [[ ! -f $_UPDATELOG ]]; then  
+            DEBUG "Write UPDATE log header"
+            echo "Following operations were executed during the update:" > $_UPDATELOG
+            echo "" >> $_UPDATELOG
+        fi
+    fi
+}
+
 # Writes operations into UPDATE.log 
 # @param pathtofile
 # @param operation
+# TODO remove code for initializing update log?
 function UPDATELOG() {
     if [[ -z $_UPDATELOG ]]; then
         DEBUG "Setup UPDATE log"

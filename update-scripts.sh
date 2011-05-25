@@ -21,20 +21,21 @@
 
 set -o errexit
 
-BASEDIR=$1
-BASE_SOURCE=$2
-MD5_OLD=$3
+BASEDIR="$1"
+BASE_SOURCE="$2"
+MD5_OLD="$3"
+_UPDATELOG="$4"
 
 source update-common.sh
 
 SCRIPTS_PATH=opus4/scripts
-OLD_SCRIPTS=$BASEDIR/$SCRIPTS_PATH
-NEW_SCRIPTS=$BASE_SOURCE/$SCRIPTS_PATH
+OLD_SCRIPTS="$BASEDIR/$SCRIPTS_PATH"
+NEW_SCRIPTS="$BASE_SOURCE/$SCRIPTS_PATH"
 
 echo -e "Updating $OLD_SCRIPTS ... \c "
 # Files in the scripts folder are updated without checks
-updateFolder $NEW_SCRIPTS $OLD_SCRIPTS
+updateFolder "$NEW_SCRIPTS" "$OLD_SCRIPTS"
 # Files that are not part of new distribution are deleted
-deleteFiles $NEW_SCRIPTS $OLD_SCRIPTS
+deleteFiles "$NEW_SCRIPTS" "$OLD_SCRIPTS"
 echo "done"
 

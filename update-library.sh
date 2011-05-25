@@ -31,6 +31,7 @@ source update-common.sh
 BASEDIR="$1"
 BASE_SOURCE="$2"
 MD5_OLD="$3"
+_UPDATELOG="$4"
 
 # Replace old framework folder with new one without checking for changes.
 # TODO check folders

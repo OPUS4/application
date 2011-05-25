@@ -26,6 +26,7 @@ set -o errexit
 BASEDIR="$1"
 BASE_SOURCE="$2"
 MD5_OLD="$3"
+_UPDATELOG="$4"
 
 source update-common.sh
 
