@@ -172,6 +172,12 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase {
                     $this->author3Id => '1',
                     $this->author4Id => '1'));
         $addresses = $mailProvider->getAddress();
+        $this->assertTrue(is_array($addresses));
+        foreach ($addresses as $address) {
+            $this->assertTrue(is_array($address));
+            $this->assertTrue(array_key_exists('name', $address));
+            $this->assertTrue(array_key_exists('address', $address));
+        }
         $this->assertEquals(2, count($addresses));
         $this->assertEquals('doe@example.org', $addresses[0]['address']);
         $this->assertEquals('Doe, John', $addresses[0]['name']);

@@ -34,18 +34,26 @@
 
 class SendMailMock {
 
-    private $from = array();
-    private $fromName = array();
-    private $subject = array();
-    private $bodyText = array();
-    private $address = array();
+    private $from;
+    private $fromName;
+    private $subject;
+    private $bodyText;
+    private $address;
 
+    /**
+     *
+     * @param string $from
+     * @param string $fromName
+     * @param string $subject
+     * @param string $bodyText
+     * @param array  $address Recipients (array [#] => array ('name' => '...', 'address' => '...'))
+     */
     public function sendMail($from, $fromName, $subject, $bodyText, $address) {
-        array_push($this->from, $from);
-        array_push($this->fromName, $fromName);
-        array_push($this->subject, $subject);
-        array_push($this->bodyText, $bodyText);
-        array_push($this->address, $address);
+        $this->from = $from;
+        $this->fromName = $fromName;
+        $this->subject = $subject;
+        $this->bodyText = $bodyText;
+        $this->address = $address;
     }
     
     public function getFrom() {

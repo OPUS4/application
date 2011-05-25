@@ -126,9 +126,7 @@ class Frontdoor_Model_Authors {
      */
     public function sendMail($mailProvider, $from, $fromName, $subject, $bodyText, $authorSelection) {
         try {
-            foreach ($this->validateAuthorCheckboxInput($authorSelection) as $address) {
-                $mailProvider->sendMail($from, $fromName, $subject, $bodyText, $address);
-            }
+            $mailProvider->sendMail($from, $fromName, $subject, $bodyText, $this->validateAuthorCheckboxInput($authorSelection));
         }
         catch (Exception $e) {
             throw new Frontdoor_Model_Exception('failure while sending mail', null, $e);
