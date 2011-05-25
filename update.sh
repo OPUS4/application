@@ -274,9 +274,18 @@ backup
 # Update Apache configuration
 "$SCRIPTPATH"/update-apache.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG"
 
+# =============================================================================
+# Extra update steps
+# =============================================================================
+
 # Update root directory files
 updateFolder $BASE_SOURCE $BASEDIR flat
 deleteFiles $BASE_SOURCE $BASEDIR flat
+
+# Create incoming folder if necessary
+if [[ ! -d "$BASEDIR/workspace/incoming" ]]; then
+    createFolder "BASEDIR/workspace/incoming"
+fi
 
 # =============================================================================
 # Finish update
