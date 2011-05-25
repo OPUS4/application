@@ -94,12 +94,10 @@ function getMD5() {
 # @return 0 = yes = default, 1 = no
 function askYesNo() {
     local QUESTION="$1"
-    local ANSWER
+    local ANSWER=''
 
-    DEBUG $QUESTION
-
-    while [[ -z $ANSWER ]] && [[ $ANSWER != 'y' ]] && [[ $ANSWER != 'n' ]]; do
-        echo -e "$QUESTION \c"
+    while [[ -z $ANSWER ]] || [[ $ANSWER != 'y' ]] && [[ $ANSWER != 'n' ]]; do
+        echo -e "$QUESTION \c "
         read ANSWER
 
         if [[ -z $ANSWER ]]; then 
@@ -107,6 +105,10 @@ function askYesNo() {
         else 
             ANSWER=${ANSWER,,} # convert to lowercase
             ANSWER=${ANSWER:0:1} # get first letter
+        fi
+        
+        if [[ $ANSWER != 'y' ]] && [[ $ANSWER != 'n' ]]; then
+            echo "Invalid input."
         fi
     done
 
