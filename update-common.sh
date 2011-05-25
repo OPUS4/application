@@ -78,6 +78,14 @@ function DRYRUN() {
     return 1;
 }
 
+# Returns list of files names from folder
+function getFiles() {
+    local FOLDER=$1
+    find "$FOLDER" -type f -print0 | while read -r -d $'\0' FILE_PATH; do
+        echo $(basename "$FILE_PATH") 
+    done
+}
+
 # Gets value of property from file
 # @param $1 Path to file containing property
 # @param $2 Name of property
@@ -164,6 +172,10 @@ function updateFile {
     local DEST="$2" # destination folder
     local MD5PATH="$3" # relative path in distribution
     local FILE="$4" # filename
+    local BACKUP=0 # flag for backup of old file
+    if [[ ! -z $5 ]] && [[ $5 = 'backup' ]]; then
+        BACKUP=1
+    fi
     if [[ ! -f $DEST/$FILE ]]; then
         # File does not exist at target destination and can be copied
         addFile "$SRC/$FILE" "$DEST/$FILE"
@@ -211,11 +223,16 @@ function updateFile {
 
                 # TODO Check for invalid input? 
                 if [[ $ANSWER = 'r' ]]; then
+                    if [[ $BACKUP = 1 ]]; then
+                        copyFile "$DEST/$FILE" "$DEST/$FILE.backup"
+                    fi
                     # Replace existing file
                     copyFile "$SRC/$FILE" "$DEST/$FILE"
+
                 else
                     # Do not replace file; Log it as conflict
                     addConflict "$DEST/$FILE"
+                    copyFile "$SRC/$FILE" "$DEST/$FILE.new" # TODO IMPORTANT should use $VERSION_NEW, but needs to be pulled through all scripts
                 fi
             else
                 copyFile "$SRC/$FILE" "$DEST/$FILE"
