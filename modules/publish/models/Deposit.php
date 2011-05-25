@@ -374,7 +374,9 @@ class Publish_Model_Deposit {
             $this->log->debug("subjectType: " . $subjectType);
             if (strstr($dataValue, 'ID:')) {
                 $dataValue = substr($dataValue, 3);
-            }
+                $coll = new Opus_Collection($dataValue);
+                $dataValue = $coll->getNumber();
+            }            
             $subject->setValue($dataValue);
             $addFunction = "add" . $subjectType;
             $this->log->debug("addfunction: " . $addFunction);
