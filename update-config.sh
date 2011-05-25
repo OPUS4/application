@@ -51,7 +51,7 @@ copyFile "$SRC/config.ini.template" "$DEST/config.ini.template"
 # TODO maybe config.ini should be merged with new template? Message to user?
 
 # Copy import.sh.template file
-copyFile "$SRC/import.sh.template" "$DEST/import.sh.template"
+copyFile "$SRC/import.ini.template" "$DEST/import.ini.template"
 
 # Ask user before replacing the following files if they have been modified.
 updateFile "$SRC" "$DEST" "$MD5PATH" "navigation.xml"
