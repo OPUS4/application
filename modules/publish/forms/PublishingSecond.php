@@ -24,14 +24,19 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @category    Application
+ * @package     Module_Publish
+ * @author      Susanne Gottwald <gottwald@zib.de>
+ * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ * @version     $Id$
  */
 
 /**
  * Shows a publishing form for new documents
  *
- * @category    Application
- * @package     Module_Publish
- * */
+ */
 class Publish_Form_PublishingSecond extends Zend_Form {
 
     public $doctype = "";
@@ -186,11 +191,6 @@ class Publish_Form_PublishingSecond extends Zend_Form {
     public function prepareCheck() {
         $session = new Zend_Session_Namespace('Publish');
         $session->elements = array();
-        
-        foreach ($this->getElements() AS $element) {
-            $value = htmlspecialchars($element->getValue());
-            $element->setValue($value);
-        }
 
         $session->depositForm = $this;
 
@@ -202,7 +202,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
             }
             else {
                 $session->elements[$name]['name'] = $name;
-                $session->elements[$name]['value'] = htmlspecialchars($element->getValue());
+                $session->elements[$name]['value'] = $element->getValue();
                 $session->elements[$name]['label'] = $element->getLabel();
                 $element->removeDecorator('Label');                
             }

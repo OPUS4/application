@@ -25,11 +25,12 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @package     Application - Module Publish
+ * @category    Application
+ * @package     Module_Publish
  * @author      Susanne Gottwald <gottwald@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Publish_2_IndexController$
+ * @version     $Id$
  */
 
 /**
@@ -152,7 +153,7 @@ class Publish_FormController extends Controller_Action {
                 $reload = false;
                 if (isset($this->session->elements))
                     foreach ($this->session->elements AS $element)
-                        $postData[$element['name']] = htmlspecialchars($element['value']);
+                        $postData[$element['name']] = $element['value'];
             }
             
             //initialize the form object
@@ -287,7 +288,7 @@ class Publish_FormController extends Controller_Action {
                 $docfile->setFromPost($fileValues);
                 //file always requires a language, this value is later overwritten by the exact language
                 $docfile->setLanguage("eng");
-                $docfile->setComment(htmlspecialchars($comment));
+                $docfile->setComment($comment);
             }
         }
 
