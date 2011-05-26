@@ -129,6 +129,8 @@ class Controller_Action extends Zend_Controller_Action {
         $this->_logger->debug("redirect to module: $module controller: $controller action: $action");
         $this->__redirector->gotoSimple($action, $controller, $module, $params);
         $this->__redirector->setExit($exit);
+
+        return;
     }
 
     /**
@@ -150,21 +152,39 @@ class Controller_Action extends Zend_Controller_Action {
     protected function checkAccessModulePermissions() {
         $logger = $this->_logger;
         $module = $this->_request->getModuleName();
-        
+
         $logger->debug("starting authorization check for module '$module'");
 
-        // Check, if have the right privilege...
-        if (false === $this->customAccessCheck()) {
+        // Check, controller-specific constraints...
+        if (true !== $this->customAccessCheck()) {
             $logger->debug("FAILED custom authorization check for module '$module'");
-        }
-        elseif (false === Opus_Security_Realm::getInstance()->checkModule($module)) {
-            $logger->debug("FAILED authorization check for module '$module'");
-        }
-        else {
-            $logger->debug("authorization check for module '$module' successful");
-            return;
+            $this->rejectRequest();
         }
 
+        // Check, if the user has the right privileges...
+        if (true !== Opus_Security_Realm::getInstance()->checkModule($module)) {
+            $logger->debug("FAILED authorization check for module '$module'");
+            $this->rejectRequest();
+        }
+
+        $logger->debug("authorization check for module '$module' successful");
+        return;
+    }
+
+    /**
+     * Method stub to be overridden by controllers.  Enables checks for custom
+     * properties.
+     *
+     * @return boolean
+     */
+    protected function customAccessCheck() {
+        return true;
+    }
+
+    /**
+     * Method called when access to module has been denied.
+     */
+    protected function rejectRequest() {
         // we are not allowed to access this module -- but why?
         $identity = Zend_Auth::getInstance()->getIdentity();
 
@@ -177,18 +197,6 @@ class Controller_Action extends Zend_Controller_Action {
         // Forward to module auth
         $this->__flashMessenger->addMessage(array('level' => 'failure', 'message' => $message));
         $this->__redirector->gotoSimple('index', 'auth', 'default');
-
-        return;
-    }
-
-    /**
-     * Method stub to be overridden by controllers.  Enables checks for custom
-     * properties.
-     *
-     * @return boolean
-     */
-    protected function customAccessCheck() {
-        return true;
     }
 
     /**

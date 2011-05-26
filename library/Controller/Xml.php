@@ -117,29 +117,20 @@ class Controller_Xml extends Zend_Controller_Action {
 
         $logger->debug("starting authorization check for module '$module'");
 
-        // Check, if have the right privilege...
-        if (false === $this->customAccessCheck()) {
+        // Check, controller-specific constraints...
+        if (true !== $this->customAccessCheck()) {
             $logger->debug("FAILED custom authorization check for module '$module'");
+            $this->rejectRequest();
         }
-        elseif (false === Opus_Security_Realm::getInstance()->checkModule($module)) {
+
+        // Check, if the user has the right privileges...
+        if (true !== Opus_Security_Realm::getInstance()->checkModule($module)) {
             $logger->debug("FAILED authorization check for module '$module'");
-        }
-        else {
-            $logger->debug("authorization check for module '$module' successful");
-            return;
+            $this->rejectRequest();
         }
 
-        // Print empty XML document
-        $response = $this->getResponse();
-        $response->setHttpResponseCode(401);
-        $response->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);
-        $response->setBody(
-                '<?xml version="1.0" encoding="utf-8" ?>' . "\n" .
-                '<error>Unauthorized: Access to module not allowed.</error>'
-                );
-
-        $response->sendResponse();
-        exit();
+        $logger->debug("authorization check for module '$module' successful");
+        return;
     }
 
     /**
@@ -152,5 +143,21 @@ class Controller_Xml extends Zend_Controller_Action {
         return true;
     }
 
+    /**
+     * Method called when access to module has been denied.
+     */
+    protected function rejectRequest() {
+        // Print empty XML document
+        $response = $this->getResponse();
+        $response->setHttpResponseCode(401);
+        $response->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);
+        $response->setBody(
+                '<?xml version="1.0" encoding="utf-8" ?>' . "\n" .
+                '<error>Unauthorized: Access to module not allowed.</error>'
+                );
+
+        $response->sendResponse();
+        exit();
+    }
 
 }
