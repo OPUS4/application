@@ -244,10 +244,21 @@ class Review_IndexController extends Controller_Action {
         $finder = new Opus_DocumentFinder();
         $finder->setServerState(self::$reviewServerState);
 
+        $logger = Zend_Registry::get('Zend_Log');
+        $userId = $this->loggedUser->getUserId();
+
         // Add constraint for reviewer, if current user is *not* admin.
-        if (false === Opus_Security_Realm::getInstance()->check('administrate')) {
-            $userId = $this->loggedUser->getUserId();
+        if (Opus_Security_Realm::getInstance()->checkModule('admin')) {
+            $message = "Review: Showing all unpublished documents to admin";
+            $logger->debug( $message . " (user_id: $userId)");
+        }
+        elseif (Opus_Security_Realm::getInstance()->checkModule('review')) {
             $finder->setEnrichmentKeyValue('reviewer.user_id', $userId);
+        }
+        else {
+            $message = 'Review: Access to unpublished documents denied.';
+            $logger->err($message . " (user_id: $userId)");
+            throw new Application_Exception($message);
         }
 
         return $finder;
