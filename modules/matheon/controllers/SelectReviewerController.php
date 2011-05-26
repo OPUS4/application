@@ -36,8 +36,6 @@ class Matheon_SelectReviewerController extends Controller_Action {
 
     public function init() {
         parent::init();
-
-        $this->requirePrivilege('publish');
         $this->getHelper('MainMenu')->setActive('publish');
     }
 

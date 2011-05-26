@@ -35,11 +35,6 @@
  */
 class Remotecontrol_CollectionController extends Controller_Action {
 
-    public function init() {
-        parent::init();
-        $this->requirePrivilege('remotecontrol');
-    }
-
     public function addAction() {
         $this->_helper->layout()->disableLayout();
         $request = $this->getRequest();

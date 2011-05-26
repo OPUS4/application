@@ -34,12 +34,6 @@
  */
 class Matheon_CheckDataController extends Controller_Action {
 
-    public function init() {
-        parent::init();
-
-        $this->requirePrivilege('administrate');
-    }
-
     public function indexAction() {
         $f = new Opus_DocumentFinder();
         $f->setServerState('published');

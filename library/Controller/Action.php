@@ -199,48 +199,4 @@ class Controller_Action extends Zend_Controller_Action {
         $this->__redirector->gotoSimple('index', 'auth', 'default');
     }
 
-    /**
-     * Check if the currently logged user has a given privilege.
-     *
-     * @param mixed $privilege
-     *
-     * @deprecated
-     */
-    protected function requirePrivilege($privilege) {
-        $module = $this->_request->getModuleName();
-        if (empty($privilege)) {
-            $this->_logger->warn("Skipping authorization check: No privilege given in module '$module'.");
-
-            // Forward to module auth
-            $message = $this->view->translate('internal_error_privilege_check');
-            $this->__flashMessenger->addMessage(array('level' => 'failure', 'message' => $message));
-            $this->__redirector->gotoSimple('index', 'auth', 'default');
-
-            return;
-        }
-
-        $this->_logger->debug("starting authorization check for module '$module'/'$privilege'");
-
-        // Check, if have the right privilege...
-        if (true !== Opus_Security_Realm::getInstance()->check($privilege)) {
-            // we are not allowed to publish
-            $identity = Zend_Auth::getInstance()->getIdentity();
-
-            $errorcode = 'no_identity_error';
-            if (!empty($identity)) {
-                $errorcode = 'wrong_identity_error';
-            }
-            $message = $this->view->translate($errorcode);
-
-            // get all parameters to return after login.
-            $params = $this->getHelper('ReturnParams')->getReturnParameters();
-
-            // Forward to module auth
-            $this->__flashMessenger->addMessage(array('level' => 'failure', 'message' => $message));
-            $this->__redirector->gotoSimple('index', 'auth', 'default', $params);
-        }
-
-        $this->_logger->debug("authorization check for module '$module'/'$privilege' successful");
-    }
-
 }
