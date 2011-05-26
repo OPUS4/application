@@ -81,7 +81,11 @@ class Publish_Form_PublishingThird extends Zend_Form {
                 if (isset($this->session->collection['collection' . $i])) {
                     //get previous collection
                     $collectionId = (int) $this->session->collection['collection' . $i];
-                    $this->session->collection['collection' . $i . 'Name'] = $this->getCollectionName($collectionId);
+                    $collection = null;
+                    if (!is_null($collectionId)) {
+                        $collection = new Opus_Collection($collectionId);
+                    }
+                    $this->session->collection['collection' . $i . 'Name'] = $this->getCollectionName($collection);
 
                     //increase and get next collection
                     $i = (int) $i + 1;
@@ -104,8 +108,8 @@ class Publish_Form_PublishingThird extends Zend_Form {
 
                         //show history in collection choosing process
                         $number = $this->session->countCollections;
-                        $this->session->collectionHistory[$number]['root'] = $this->getCollectionName($collectionId, true);
-                        $this->session->collectionHistory[$number]['leaf'] = $this->getCollectionName($collectionId);
+                        $this->session->collectionHistory[$number]['root'] = $this->getCollectionName($collection, true);
+                        $this->session->collectionHistory[$number]['leaf'] = $this->getCollectionName($collection);
 
                         $this->log->debug('Collection stored in session!');
                     }
@@ -148,14 +152,14 @@ class Publish_Form_PublishingThird extends Zend_Form {
     /**
      * Method to fetch collections for select options.
      * @param <type> $oaiName
-     * @param <type> $collectionId
+     * @param <type> $collection
      * @return array of options
      */
-    protected function getCollection($collectionId=null) {
+    protected function getCollection($collection = null) {
         $collections = array();
 
-        if (false === isset($collectionId)) {
-            //get top classes of collectin_role
+        if (is_null($collection)) {
+            //get top classes of collection_role
             $roles = Opus_CollectionRole::fetchAll();
 
             foreach ($roles as $role) {
@@ -168,7 +172,6 @@ class Publish_Form_PublishingThird extends Zend_Form {
             return $collections;
         }
 
-        $collection = new Opus_Collection($collectionId);
         $colls = $collection->getChildren();
 
         if (!isset($colls) || count($colls) < 1) {
@@ -180,8 +183,9 @@ class Publish_Form_PublishingThird extends Zend_Form {
                 $collections[$coll->getId()] = $coll->getDisplayName();
         }
 
-        if(count($collections) === 0)
+        if (count($collections) === 0) {
             return null;
+        }
 
         return $collections;
     }
@@ -212,25 +216,21 @@ class Publish_Form_PublishingThird extends Zend_Form {
     }
 
     /**
-     * Method to find oput the name for a collection id.
-     * @param <Int> $collectionId
-     * @param <Boolean> $root if true, the root collection (role name) is returned
-     * @return <String> name for collection id
+     * Method to return the name of a given collection. Returns the name of the associated
+     * collection role if the given collection has an empty name.
+     * @param Opus_Collection $collection
+     * @param boolean $root if true, the root collection (role name) is returned
+     * @return string name for collection id
      */
-    protected function getCollectionName($collectionId = null, $root=false) {
-        if (isset($collectionId)) {
-            if (!$root) {
-                $collection = new Opus_Collection($collectionId);
-                $name = $collection->getDisplayName();
-                if (empty($name))
-                    $name = $collection->getRoleName();
-            }
-            else {
-                $collection = new Opus_Collection($collectionId);
-                $name = $collection->getRoleName();
-            }
-            return $name;
+    protected function getCollectionName($collection, $root = false) {
+        if (is_null($collection)) {
+            // TODO is this an exceptional state?
+            return '';
         }
+        if (!$root && $collection->getDisplayName() !== '') {
+            return $collection->getDisplayName();
+        }
+        return $collection->getRoleName();
     }
 
     /**
