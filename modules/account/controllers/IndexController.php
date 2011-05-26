@@ -63,6 +63,7 @@ class Account_IndexController extends Controller_Action {
      */
     public function saveAction() {
         $login = Zend_Auth::getInstance()->getIdentity();
+        $config = Zend_Registry::get('Zend_Config');
 
         if (!empty($login) && $this->getRequest()->isPost()) {
             $accountForm = new Account_Form_Account($login);
@@ -96,8 +97,6 @@ class Account_IndexController extends Controller_Action {
                 $firstname = $postData['firstname'];
                 $lastname = $postData['lastname'];
                 $email = $postData['email'];
-
-                $config = Zend_Registry::get('Zend_Config');
 
                 $isLoginChanged = false;
 
