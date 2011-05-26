@@ -40,6 +40,8 @@ class Account_IndexControllerTest extends ControllerTestCase {
 
     public function setUp() {
         parent::setUp();
+
+        $this->deleteUser('john');
         $this->user = new Opus_Account();
         $this->user->setLogin('john');
         $this->user->setPassword('testpwd');
@@ -51,10 +53,20 @@ class Account_IndexControllerTest extends ControllerTestCase {
         $this->user->delete();
     }
 
+    private function deleteUser($username) {
+        $account = Opus_Account::fetchAccountByLogin($username);
+        if ($account instanceof Opus_Account) {
+            $account->delete();
+        }
+    }
+
     /**
-     * Test showing account information.
+     * Test showing account information (if editOwnAccount allowed!)
      */
-    public function testIndexAction() {
+    public function testIndexSuccessAction() {
+        $config = Zend_Registry::get('Zend_Config');
+        $config->account->editOwnAccount = 1;
+
         $this->loginUser('admin', 'adminadmin');
         $this->dispatch('/account');
         $this->assertResponseCode(200);
@@ -63,15 +75,32 @@ class Account_IndexControllerTest extends ControllerTestCase {
         $this->assertAction('index');
     }
 
-    public function testIndexActionWithoutLogin() {
+    /**
+     * Test showing account information (if editOwnAccount disabled!)
+     */
+    public function testIndexDeniedIfEditAccountDisabledAction() {
+        $config = Zend_Registry::get('Zend_Config');
+        $config->account->editOwnAccount = 0;
+
+        $this->loginUser('admin', 'adminadmin');
         $this->dispatch('/account');
-        $this->assertModule('account');
-        $this->assertController('index');
-        $this->assertAction('index');
+        $this->assertNotResponseCode(200);
         $this->assertRedirect('/default/auth/index');
     }
 
-    public function testSaveActionMissingInput() {
+    /**
+     * Test showing account information (not allowed for user!)
+     */
+    public function testIndexWithoutLoginAction() {
+        $this->dispatch('/account');
+        $this->assertNotResponseCode(200);
+        $this->assertRedirect('/default/auth/index');
+    }
+
+    public function testChangePasswordFailsOnMissingInputAction() {
+        $config = Zend_Registry::get('Zend_Config');
+        $config->account->editOwnAccount = 1;
+
         $this->loginUser('john', 'testpwd');
         $this->request
                 ->setMethod('POST')
@@ -83,12 +112,20 @@ class Account_IndexControllerTest extends ControllerTestCase {
         $this->assertModule('account');
         $this->assertController('index');
         $this->assertAction('save');
+
+        // Check if change failed...
+        $account = new Opus_Account(null, null, 'john');
+        $this->assertTrue( $account->isPasswordCorrect('testpwd') );
+        $this->assertFalse( $account->isPasswordCorrect('newpassword') );
     }
 
     /**
      * Test modifying account information.
      */
-    public function testChangePassword() {
+    public function testChangePasswordSuccess() {
+        $config = Zend_Registry::get('Zend_Config');
+        $config->account->editOwnAccount = 1;
+
         $this->loginUser('john', 'testpwd');
         $this->request
                 ->setMethod('POST')
@@ -103,13 +140,17 @@ class Account_IndexControllerTest extends ControllerTestCase {
         $this->dispatch('/account/index/save');
         $this->assertRedirect();
 
-        $this->loginUser('john', 'newpassword');
+        // Check if change succeeded...
+        $account = new Opus_Account(null, null, 'john');
+        $this->assertTrue( $account->isPasswordCorrect('newpassword') );
     }
 
     /**
      * Test changing login.
      */
-    public function testChangeLogin() {
+    public function testChangeLoginSuccess() {
+        $this->deleteUser('john2');
+
         $this->loginUser('john', 'testpwd');
         $this->request
                 ->setMethod('POST')
@@ -122,11 +163,16 @@ class Account_IndexControllerTest extends ControllerTestCase {
         $this->dispatch('/account/index/save');
         $this->assertRedirect();
 
-        $this->loginUser('john2', 'testpwd');
+        // Check if new user exists (with proper password) and old does not...
+        $account = Opus_Account::fetchAccountByLogin('john2');
+        $this->assertNotNull( $account );
+        $this->assertTrue( $account->isPasswordCorrect('testpwd') );
 
-        $user = new Opus_Account(null, null, 'john2');
+        $account = Opus_Account::fetchAccountByLogin('john');
+        $this->assertNull( $account );
+
+        // Delete user 'john2' if we're done...
+        $this->deleteUser('john2');
     }
 
 }
-
-?>
