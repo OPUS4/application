@@ -118,12 +118,16 @@ class Controller_Xml extends Zend_Controller_Action {
         $logger->debug("starting authorization check for module '$module'");
 
         // Check, if have the right privilege...
-        if (true === Opus_Security_Realm::getInstance()->checkModule($module)) {
+        if (false === $this->customAccessCheck()) {
+            $logger->debug("FAILED custom authorization check for module '$module'");
+        }
+        elseif (false === Opus_Security_Realm::getInstance()->checkModule($module)) {
+            $logger->debug("FAILED authorization check for module '$module'");
+        }
+        else {
             $logger->debug("authorization check for module '$module' successful");
             return;
         }
-
-        $logger->debug("FAILED authorization check for module '$module'");
 
         // Print empty XML document
         $response = $this->getResponse();
@@ -137,5 +141,16 @@ class Controller_Xml extends Zend_Controller_Action {
         $response->sendResponse();
         exit();
     }
+
+    /**
+     * Method stub to be overridden by controllers.  Enables checks for custom
+     * properties.
+     *
+     * @return boolean
+     */
+    protected function customAccessCheck() {
+        return true;
+    }
+
 
 }

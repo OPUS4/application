@@ -148,17 +148,22 @@ class Controller_Action extends Zend_Controller_Action {
      * @return void
      */
     protected function checkAccessModulePermissions() {
+        $logger = $this->_logger;
         $module = $this->_request->getModuleName();
         
-        $this->_logger->debug("starting authorization check for module '$module'");
+        $logger->debug("starting authorization check for module '$module'");
 
         // Check, if have the right privilege...
-        if (true === Opus_Security_Realm::getInstance()->checkModule($module)) {
-            $this->_logger->debug("authorization check for module '$module' successful");
+        if (false === $this->customAccessCheck()) {
+            $logger->debug("FAILED custom authorization check for module '$module'");
+        }
+        elseif (false === Opus_Security_Realm::getInstance()->checkModule($module)) {
+            $logger->debug("FAILED authorization check for module '$module'");
+        }
+        else {
+            $logger->debug("authorization check for module '$module' successful");
             return;
         }
-
-        $this->_logger->debug("FAILED authorization check for module '$module'");
 
         // we are not allowed to access this module -- but why?
         $identity = Zend_Auth::getInstance()->getIdentity();
@@ -176,6 +181,15 @@ class Controller_Action extends Zend_Controller_Action {
         return;
     }
 
+    /**
+     * Method stub to be overridden by controllers.  Enables checks for custom
+     * properties.
+     *
+     * @return boolean
+     */
+    protected function customAccessCheck() {
+        return true;
+    }
 
     /**
      * Check if the currently logged user has a given privilege.
