@@ -37,6 +37,23 @@
 class Account_IndexController extends Controller_Action {
 
     /**
+     * Custom access check to be called by parent class.  Returns the value of
+     * config key "account.editOwnAccount" if set; false otherwise.
+     *
+     * @return boolean
+     */
+    protected function customAccessCheck() {
+        $parent_value =  parent::customAccessCheck();
+
+        $config = Zend_Registry::get('Zend_Config');
+        if (!isset($config) or !isset($config->account->editOwnAccount)) {
+            return false;
+        }
+
+        return $parent_value and $config->account->editOwnAccount;
+    }
+
+    /**
      * Show account form for logged in user.
      */
     public function indexAction() {
