@@ -29,7 +29,7 @@
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ * @version     $Id: TestHelper.php 8423 2011-05-27 16:58:20Z sszott $
  */
 
 /**
@@ -68,7 +68,7 @@ class TestHelper extends Application_Bootstrap {
         }
         while(false === feof($handle)) {
             $line = fgets($handle);
-            if (1 === preg_match('/\$Rev$line, $matches)) {
+            if (1 === preg_match('/\$Rev: \d*\s\$/', $line, $matches)) {
                 $sqlRev = $matches[0];
                 break;
             }
