@@ -71,7 +71,7 @@ start=1
 end=`expr $start + $stepsize - 1`
 
 php Opus3Migration_Documents.php -f $xmlfile -p $fulltextpath -s $start -e $end
-while [ "$?" -eq "1" ]
+while [ "$?" -eq "0" ]
 do
     start=`expr $start + $stepsize`
     end=`expr $end + $stepsize`

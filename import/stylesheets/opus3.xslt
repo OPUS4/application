@@ -95,6 +95,9 @@
             <xsl:variable name="date_modified">
                 <xsl:value-of select="field[@name='date_modified']" />
             </xsl:variable>
+            <xsl:variable name="date_year">
+                <xsl:value-of select="field[@name='date_year']" />
+            </xsl:variable>
             <!-- date_valid (Opus3) is not relevant -->
             <!--
             <xsl:variable name="date_valid">
@@ -102,25 +105,27 @@
             </xsl:variable>
             -->
 
-            <!-- CompletedYear -->
-            <xsl:attribute name="CompletedYear">
-                <xsl:value-of select="field[@name='date_year']" />
-            </xsl:attribute>
+            <!-- CompletedYear is mandatory in Opus4 -->
+            <!--
+            <xsl:if test="$date_year > 0">
+                <xsl:attribute name="CompletedYear">
+                    <xsl:value-of select="field[@name='date_year']" />
+                </xsl:attribute>
+            </xsl:if>
+            -->
 
-            <!-- CompletedDate -->
-            <!-- CompletedDate is more precise then CompletedYear -->
             <xsl:if test="$date_creation > 0">
+                <!-- CompletedDate -->
+                <!-- CompletedDate is more precise then CompletedYear -->
                 <xsl:attribute name="CompletedDate">
                     <xsl:value-of select="php:function('date', 'Y-m-d', $date_creation)" />
                 </xsl:attribute>
-            </xsl:if>
-
-            <!-- ServerDatePublished -->
-            <xsl:if test="$date_creation > 0">
+                <!-- ServerDatePublished -->
                 <xsl:attribute name="ServerDatePublished">
                     <xsl:value-of select="php:function('date', 'c', $date_creation)" />
                 </xsl:attribute>
             </xsl:if>
+
 
             <!-- ThesisDateAccepted -->
             <xsl:if test="$date_accepted > 0">
