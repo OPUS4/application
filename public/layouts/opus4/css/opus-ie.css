@@ -11,12 +11,11 @@ this.runtimeStyle.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(s
 this.runtimeStyle.backgroundImage = "none")),this.pngSet=true)
 );
 }
-
-
 .breadcrumb_results h3,
 #searchbar .breadcrumb_results .paginationControl{
 	background-image: none;
 }
+
 
 dl.result_box{
 	float: left;
@@ -26,27 +25,21 @@ dl.result_box{
 .opus fieldset .form-errors{
 	background-image: none;
 }
-
 #content {
     height: 600px;
 }
 #primary-nav .icon.active span{
     background-position: 50% -89px;
 }
-
 #fieldset-search{
    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../img/theme/bg_search.png', sizingMethod='crop');
-/*	background: none no-repeat; */
+	background: none no-repeat;
 }
-
-
 #fieldset-search .form-submit,
 #fieldset-search .form-text{
 	position: relative;
 	z-index: 100;
 }
-
-
 .opus legend{
 	width: 130px;
 }
