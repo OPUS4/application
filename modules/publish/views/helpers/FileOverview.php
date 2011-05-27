@@ -30,7 +30,7 @@
  * @author      Susanne Gottwald <gottwald@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: Element.php 7353 2011-01-25 10:25:05Z sgottwald $
+ * @version     $Id$
  */
 class View_Helper_FileOverview extends Zend_View_Helper_Abstract {
 

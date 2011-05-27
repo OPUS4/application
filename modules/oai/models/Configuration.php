@@ -30,7 +30,7 @@
  * @author      Ralf Claußnitzer <ralf.claussnitzer@slub-dresden.de>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: Configuration.php 4695 2009-11-06 10:12:59Z claussni $
+ * @version     $Id$
  */
 
 /**
