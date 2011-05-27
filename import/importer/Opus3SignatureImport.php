@@ -29,7 +29,7 @@
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: SignatureImport.php 2163 2009-03-12 15:35:16Z marahrens $
+ * @version     $Id$
  */
 
 class Opus3SignatureImport {

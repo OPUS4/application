@@ -31,7 +31,7 @@
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @copyright   Copyright (c) 2009-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: opus-console.php 6353 2010-10-06 17:53:39Z pbecker $
+ * @version     $Id$
  */
 
 if (false === is_null(ini_get('register_argc_argv'))

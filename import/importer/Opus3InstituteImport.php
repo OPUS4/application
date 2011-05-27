@@ -29,7 +29,7 @@
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: Opus3InstituteImport.php -1   $
+ * @version     $Id$
  */
 class Opus3InstituteImport {
 

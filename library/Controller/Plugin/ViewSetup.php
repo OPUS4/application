@@ -29,7 +29,7 @@
  * @author      Gunar Maiwald (maiwald@zib.de)
  * @copyright   Copyright (c) 2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: ViewSetup.php 6243 2010-10-05 14:32:58Z maiwaldr $
+ * @version     $Id$
  */
 
 /**

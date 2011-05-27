@@ -30,7 +30,7 @@
  * @author      Gunar Maiwald <maiwald@zib.de>
  * @copyright   Copyright (c) 2009-2011 OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: Opus3FileImport.php 5890 2010-09-26 17:13:48Z tklein $
+ * @version     $Id$
  */
 
 class Opus3FileImport {

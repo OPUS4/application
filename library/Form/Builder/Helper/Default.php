@@ -28,7 +28,7 @@
  * @author      Jens Schwidder <schwidder(at)zib.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: Abstract.php 7438 2011-02-01 18:48:37Z tklein $
+ * @version     $Id$
  */
 
 class Form_Builder_Helper_Default extends Form_Builder_Helper_Abstract {

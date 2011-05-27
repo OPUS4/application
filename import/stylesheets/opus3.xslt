@@ -33,7 +33,7 @@
  * @author      Gunar Maiwald <maiwald@zib.de>
  * @copyright   Copyright (c) 2009-2010 OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: opus3.xslt 6088 2010-09-30 13:39:46Z gmaiwald $
+ * @version     $Id$
  */
 -->
 

@@ -31,7 +31,7 @@
  * @author      Gunar Maiwald <maiwald@zib.de>
  * @copyright   Copyright (c) 2009-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: Opus3Migration_Readline.php 7086 2010-11-12 16:40:52Z gmaiwald $
+ * @version     $Id$
  */
 
 // Configure include path.
