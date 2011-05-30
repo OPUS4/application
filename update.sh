@@ -287,7 +287,7 @@ export OPUS_UPDATE_SCRIPTPATH=$SCRIPTPATH     # TODO necessary? Different way?
 
 # Update root directory files
 updateFolder $BASE_SOURCE $BASEDIR flat
-deleteFiles $BASE_SOURCE $BASEDIR flat
+# deleteFiles $BASE_SOURCE $BASEDIR flat # TODO at the moment deletes too much (required folders)
 
 # Create incoming folder if necessary
 if [[ ! -d "$BASEDIR/workspace/incoming" ]]; then
