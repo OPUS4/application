@@ -98,6 +98,18 @@ function getProperty() {
     PROP_VALUE=$(grep -v '^[[:space:]]*;' $FILE | grep "^[[:space:]]*$PROP_NAME[[:space:]]*=" | cut -d= -f2 | sed "s/\;.*$//; s/[ \'\"]*$//; s/^[ \'\"]*//")
 }
 
+# Replace property value in INI file
+# TODO property might be commented out
+# TODO property might not be commented out
+# TODO handle whitespace flexibly
+function setProperty() {
+    local FILE="$1"
+    local PROP_NAME="$2"
+    local PROP_VALUE="$3"
+    sed -i "s|^\([[:space:]]*$PROP_NAME[[:space:]]*=\)|;\1|" $FILE
+    sed -i "s|^\([[:space:]]*\[production\][[:space:]]*\)|\1\n$PROP_NAME = $PROP_VALUE\n|" $FILE
+}
+
 # Returns the actual MD5 hash for a file.
 function getActualMD5() {
     local FILEPATH="$1"
@@ -467,3 +479,5 @@ function setVars() {
     VERSION_NEW=$OPUS_UPDATE_VERSION_NEW
     SCRIPTPATH=$OPUS_UPDATE_SCRIPTPATH
 }
+
+setProperty $1 $2 $3

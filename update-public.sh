@@ -87,8 +87,8 @@ if [[ -z "$THEME" ]] || [[ "$THEME" == "$THEME_OPUS" ]]; then
         copyFolder "$LAYOUTS/$THEME_OPUS" "$LAYOUTS/$THEME_NEW"
         
         # Update configuration to use new theme
-        # TODO IMPORTANT make more flexible; create function for it
-        sed -i "s/; theme = opus4/theme = $LAYOUT_NAME/" $OLD_CONFIG/config.ini
+        setProperty "$OLD_CONFIG/config.ini" "theme" "$LAYOUT_NAME"
+
         # TODO log to UPDATE.log
         echo "Your config.ini has been updated (theme = $THEME_NEW)."
     fi
