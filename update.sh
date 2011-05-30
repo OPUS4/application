@@ -315,9 +315,22 @@ if askYesNo "Would you like to restart Solr server (Jetty) now [Y/n]?"; then
     DRYRUN || /etc/init.d/opus4-solr-jetty restart
 fi
 
+# sleep some seconds to ensure the server is running
+echo -e "Wait until Solr server is running... \c "
+while :; do
+    echo -n "."
+    wget -q -O /dev/null "http://localhost:$SOLR_SERVER_PORT/solr/admin/ping" && break
+    sleep 2
+done
+echo "done"
+
+
 # TODO move into separate script for execution after all other update scripts?    
-if [[ "$_DRYRUN" -eq 0 ]]; then
-    echo -e "Rebuilding Solr index ... \c "
-    php5 "$BASEDIR/opus4/scripts/SolrIndexBuilder.php"
-    echo "done"
+if askYesNo "Would you like to rebuild Solr index now [Y/n]?"; then
+    echo "Rebuilding Solr index ..."
+    if [[ "$_DRYRUN" -eq 0 ]]; then
+        echo -e "Rebuilding Solr index ... \c "
+        php5 "$BASEDIR/opus4/scripts/SolrIndexBuilder.php"
+        echo "done"
+    fi
 fi
