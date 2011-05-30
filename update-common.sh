@@ -479,5 +479,3 @@ function setVars() {
     VERSION_NEW=$OPUS_UPDATE_VERSION_NEW
     SCRIPTPATH=$OPUS_UPDATE_SCRIPTPATH
 }
-
-setProperty $1 $2 $3
