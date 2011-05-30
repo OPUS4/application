@@ -318,6 +318,6 @@ fi
 # TODO move into separate script for execution after all other update scripts?    
 if [[ "$_DRYRUN" -eq 0 ]]; then
     echo -e "Rebuilding Solr index ... \c "
-    php5 "$OLD_SCRIPTS/SolrIndexBuilder.php"
+    php5 "$BASEDIR/opus4/scripts/SolrIndexBuilder.php"
     echo "done"
 fi
