@@ -35,13 +35,6 @@ if [[ -f "$BASE_SOURCE"/dbupdated.txt ]]; then
     # What happens if schema.xml is remotely available?
     updateFile "$BASE_SOURCE/solrconfig" "$BASEDIR/solrconfig" "$MD5PATH" "schema.xml"
     echo "done"
-
-    # TODO move into separate script for execution after all other update scripts?    
-    if [[ "$_DRYRUN" -eq 0 ]]; then
-        echo -e "Rebuilding Solr index ... \c "
-        php5 "$OLD_SCRIPTS/SolrIndexBuilder.php"
-        echo "done"
-    fi
     
     rm "$BASE_SOURCE"/dbupdated.txt
 fi

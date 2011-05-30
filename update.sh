@@ -314,3 +314,10 @@ if askYesNo "Would you like to restart Solr server (Jetty) now [Y/n]?"; then
     echo "Restarting Jetty server ..."
     DRYRUN || /etc/init.d/jetty restart
 fi
+
+# TODO move into separate script for execution after all other update scripts?    
+if [[ "$_DRYRUN" -eq 0 ]]; then
+    echo -e "Rebuilding Solr index ... \c "
+    php5 "$OLD_SCRIPTS/SolrIndexBuilder.php"
+    echo "done"
+fi
