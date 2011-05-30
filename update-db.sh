@@ -33,6 +33,7 @@ SCHEMA_PATH="$BASE_SOURCE/opus4/db/schema"
 
 # TODO more flexible way to find mysql binary?
 mysql_bin=/usr/bin/mysql
+mysql_dump=/usr/bin/mysqldump
 SCRIPT="$BASEDIR/opus4/db/createdb.sh"
 UPDATED=0
 
@@ -151,6 +152,27 @@ EOFMYSQL
     DEBUG "MYSQL UPDATE SCRIPT = $UPDATE_FILE"    
     echo "$UPDATE_FILE" >> "$BASE_SOURCE"/dbupdated.txt
 }
+
+## backup old database (even in dry-run mode!)
+#@param $1 old database version
+function runDbBackup() {
+    VERSION_OLD=$1
+
+    MYSQLDUMP="${mysql_dump} --default-character-set=utf8 --user=${USER} --password=${PASSWORD} --host=${HOST} --port=${PORT}  $DBNAME"
+    if [ -n "${PASSWORD}" ]; then
+        MYSQLDUMP="${MYSQLDUMP} --password=${PASSWORD}"
+    fi
+
+    BACKUP_FILENAME="$BASEDIR/opus4/db/mysqldump-$DBNAME--$VERSION_OLD--$(date -Iseconds).sql"
+    DEBUG "MYSQL BACKUP = $BACKUP_FILENAME"
+
+    $MYSQLDUMP >"$BACKUP_FILENAME"
+}
+
+
+echo "Backing up database..."
+runDbBackup "$VERSION_OLD"
+echo "Backing up database... done."
 
 echo "Database is updating now..."
 dbScript "$VERSION_OLD" "$VERSION_NEW"
