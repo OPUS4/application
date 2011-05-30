@@ -43,7 +43,6 @@ RewriteCond %{REQUEST_FILENAME} -l [OR]
 RewriteCond %{REQUEST_FILENAME} -d 
 RewriteRule ^.*$ - [NC,L] 
 RewriteRule ^.*$ index.php [NC,L]
-RewriteRule ^/documents/(\d+)/(.*)$ /opus4/files/$1/$2$
 
 # Security: Don't allow browsing of directories
 Options -Indexes
