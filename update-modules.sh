@@ -24,27 +24,22 @@
 # was part of the old distribution and was not changed it is deleted. Empty 
 # folders are deleted. Afterwards the new files are transferred to the module 
 # folder. If a file already exists, the existing file is renamed to 
-# FILENAME.backup and replaced by the new file.
+# FILENAME.backup.VERSION_OLD and replaced by the new file.
 # The resulting folder contains all new files, backups of old modified files,
 # and any extra files created by the user.
 # 
 # Short version:
 # Unmodified files => Replace with new files
-# Modified files   => Rename to FILENAME.backup and replace with new files
+# Modified files   => Rename to FILENAME.backup.VERSION_OLD and replace with new files
 # Unknown files    => Keep
 # 
 # TODO Explain how files are handled that were removed from the distribution?
 
 set -o errexit
 
-BASEDIR="$1"
-BASE_SOURCE="$2"
-MD5_OLD="$3"
-_UPDATELOG="$4"
-MD5_NEW="$5"
-SCRIPTPATH="$6"
-
 source update-common.sh
+
+setVars
 
 MODULES_PATH="opus4/modules"
 OLD_MODULES="$BASEDIR/$MODULES_PATH"
@@ -92,12 +87,12 @@ find "$OLD_MODULES" -type f -print0 | while read -r -d $'\0' FILE_PATH; do
             # Check if new version exists
             if [ ! -z "$FILE_MD5_NEW" ]; then
                 # New version of file exists; Rename file, copy new file
-                renameFile "$OLD_MODULES/$FILE" "$OLD_MODULES/$FILE.backup"
+                renameFile "$OLD_MODULES/$FILE" "$OLD_MODULES/$FILE.backup.$VERSION_OLD"
                 # Copy new file
                 copyFile "$NEW_MODULES/$FILE" "$OLD_MODULES/$FILE"
             else
                 # File no longer part of new distribution; Rename file
-                renameFile "$OLD_MODULES/$FILE" "$OLD_MODULES/$FILE.backup"
+                renameFile "$OLD_MODULES/$FILE" "$OLD_MODULES/$FILE.backup.$VERSION_OLD"
             fi
         fi
     else
@@ -105,7 +100,7 @@ find "$OLD_MODULES" -type f -print0 | while read -r -d $'\0' FILE_PATH; do
         # Check if new distribution contains file 
         if [ ! -z "$FILE_MD5_NEW" ]; then
             # New distribution contains file; Rename file, copy new file
-            renameFile "$OLD_MODULES/$FILE" "$OLD_MODULES/$FILE.backup"
+            renameFile "$OLD_MODULES/$FILE" "$OLD_MODULES/$FILE.backup.$VERSION_OLD"
             # Copy new file
             copyFile "$NEW_MODULES/$FILE" "$OLD_MODULES/$FILE"
         else 

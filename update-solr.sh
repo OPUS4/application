@@ -21,16 +21,12 @@
 
 set -o errexit
 
-BASEDIR="$1"
-BASE_SOURCE="$2"
-MD5_OLD="$3"
-_UPDATELOG="$4"
-VERSION_OLD="$5"
+source update-common.sh
+
+setVars
 
 OLD_SCRIPTS="$BASEDIR/opus4/scripts"
 MD5PATH=solrconfig
-
-source update-common.sh
 
 # TODO Why check specifically for versions before 4.0.3? At least add comment.
 if [[ -f "$BASE_SOURCE"/dbupdated.txt ]]; then

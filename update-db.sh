@@ -27,13 +27,7 @@ set -o errexit
 
 source update-common.sh
 
-# TODO move into common script? Be careful with main script!
-BASEDIR="$1"
-BASE_SOURCE="$2"
-MD5_OLD="$3" # not used, but here for consistence
-_UPDATELOG="$4" # not used?
-VERSION_OLD="$5"
-VERSION_NEW="$6"
+setVars
 
 SCHEMA_PATH="$BASE_SOURCE/opus4/db/schema"
 

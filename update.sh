@@ -42,8 +42,8 @@
 # TODO IMPORTANT Should all files instead of being deleted be renamed. If it is in MD5 delete, if not rename?
 # TODO refactor for consistent naming of variables
 # TODO use flags like RESTART_APACHE, RESTART_SOLR that can be set during the update process to trigger restarts at the end of the process
-set -o errexit
 
+set -o errexit
 
 # =============================================================================
 # Parse parameters
@@ -245,34 +245,41 @@ backup
 # Run update scripts
 # =============================================================================
 
-# TODO maybe use source so that variables do not have to be passed explicitely
+export OPUS_UPDATE_BASEDIR=$BASEDIR
+export OPUS_UPDATE_BASE_SOURCE=$BASE_SOURCE
+export OPUS_UPDATE_MD5_OLD=$MD5_OLD
+export OPUS_UPDATE_MD5_NEW=$MD5_NEW
+export OPUS_UPDATE_LOG=$_UPDATELOG
+export OPUS_UPDATE_VERSION_OLD=$VERSION_OLD
+export OPUS_UPDATE_VERSION_NEW=$VERSION_NEW
+export OPUS_UPDATE_SCRIPTPATH=$SCRIPTPATH     # TODO necessary? Different way?
 
 # Update configuration
-"$SCRIPTPATH"/update-config.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG"
+"$SCRIPTPATH"/update-config.sh # "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG"
 
 # Update database
-"$SCRIPTPATH"/update-db.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG" "$VERSION_OLD" "$VERSION_NEW"
+"$SCRIPTPATH"/update-db.sh # "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG" "$VERSION_OLD" "$VERSION_NEW"
 
 # Update *import* folder
-"$SCRIPTPATH"/update-import.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG"
+"$SCRIPTPATH"/update-import.sh # "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG"
 
 # Update *library* folder
-"$SCRIPTPATH"/update-library.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG"
+"$SCRIPTPATH"/update-library.sh # "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG"
 
 # Update modules
-"$SCRIPTPATH"/update-modules.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG" "$MD5_NEW" "$SCRIPTPATH"
+"$SCRIPTPATH"/update-modules.sh # "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG" "$MD5_NEW" "$SCRIPTPATH"
 
 # Update *public* folder
-"$SCRIPTPATH"/update-public.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG"
+"$SCRIPTPATH"/update-public.sh # "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG"
 
 # Update *scripts* folders
-"$SCRIPTPATH"/update-scripts.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG"
+"$SCRIPTPATH"/update-scripts.sh # "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG"
 
 # Update SOLR index
-"$SCRIPTPATH"/update-solr.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG" "$VERSION_OLD" 
+"$SCRIPTPATH"/update-solr.sh # "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG" "$VERSION_OLD" 
 
 # Update Apache configuration
-"$SCRIPTPATH"/update-apache.sh "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG"
+"$SCRIPTPATH"/update-apache.sh # "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG"
 
 # =============================================================================
 # Extra update steps
@@ -287,6 +294,9 @@ if [[ ! -d "$BASEDIR/workspace/incoming" ]]; then
     createFolder "BASEDIR/workspace/incoming"
 fi
 
+# Update createdb.sh.template
+copyFile "$BASE_SOURCE/opus4/db/createdb.sh.template" "$BASEDIR/opus4/db/createdb.sh.template"
+
 # =============================================================================
 # Finish update
 # =============================================================================
@@ -300,3 +310,7 @@ if askYesNo "Would you like to restart Apache2 now [Y/n]?"; then
 fi
 
 # Restart Solr
+if askYesNo "Would you like to restart Solr server (Jetty) now [Y/n]?"; then
+    echo "Restarting Jetty server ..."
+    DRYRUN || /etc/init.d/jetty restart
+fi

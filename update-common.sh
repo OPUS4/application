@@ -224,7 +224,7 @@ function updateFile {
                 # TODO Check for invalid input? 
                 if [[ $ANSWER = 'r' ]]; then
                     if [[ $BACKUP = 1 ]]; then
-                        copyFile "$DEST/$FILE" "$DEST/$FILE.backup"
+                        copyFile "$DEST/$FILE" "$DEST/$FILE.backup.$VERSION_OLD"
                     fi
                     # Replace existing file
                     copyFile "$SRC/$FILE" "$DEST/$FILE"
@@ -232,7 +232,7 @@ function updateFile {
                 else
                     # Do not replace file; Log it as conflict
                     addConflict "$DEST/$FILE"
-                    copyFile "$SRC/$FILE" "$DEST/$FILE.new" # TODO IMPORTANT should use $VERSION_NEW, but needs to be pulled through all scripts
+                    copyFile "$SRC/$FILE" "$DEST/$FILE.new.$VERSION_NEW"
                 fi
             else
                 copyFile "$SRC/$FILE" "$DEST/$FILE"
@@ -453,4 +453,17 @@ function renameFile() {
     DRYRUN || mv $1 $2
     UPDATELOG "RENAMED" "$1 => `basename $2`"
     DEBUG "Renamed file $1"
+}
+
+# Sets the global variables used across scripts
+# TODO Obviously some redundancy here. Fix later.
+function setVars() {
+    BASEDIR=$OPUS_UPDATE_BASEDIR
+    BASE_SOURCE=$OPUS_UPDATE_BASE_SOURCE
+    MD5_OLD=$OPUS_UPDATE_MD5_OLD
+    MD5_NEW=$OPUS_UPDATE_MD5_NEW
+    _UPDATELOG=$OPUS_UPDATE_LOG
+    VERSION_OLD=$OPUS_UPDATE_VERSION_OLD
+    VERSION_NEW=$OPUS_UPDATE_VERSION_NEW
+    SCRIPTPATH=$OPUS_UPDATE_SCRIPTPATH
 }

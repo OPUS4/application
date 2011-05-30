@@ -27,14 +27,9 @@
 
 set -o errexit
 
-BASEDIR="$1"
-BASE_SOURCE="$2"
-MD5_OLD="$3"
-_UPDATELOG="$4"
-
-# TODO verify parameters
-
 source update-common.sh
+
+setVars
 
 PUBLIC_PATH=opus4/public
 OLD_PUBLIC="$BASEDIR/$PUBLIC_PATH"

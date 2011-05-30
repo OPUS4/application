@@ -26,12 +26,10 @@
 set -o errexit
 
 # TODO move into common script? Be careful with main script.
-BASEDIR="$1"
-BASE_SOURCE="$2"
-MD5_OLD="$3"
-_UPDATELOG="$4"
 
 source update-common.sh
+
+setVars
 
 DEBUG "BASEDIR = $BASEDIR"
 DEBUG "BASE_SOURCE = $BASE_SOURCE"
