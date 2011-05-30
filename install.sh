@@ -169,10 +169,11 @@ WEBAPP_USER_PASSWORD_ESC=`echo "$WEBAPP_USER_PASSWORD" | sed 's/\!/\\\!/g'`
 DBNAME_ESC=`echo "$DBNAME" | sed 's/\!/\\\!/g'`
 ADMIN_ESC=`echo "$ADMIN" | sed 's/\!/\\\!/g'`
 ADMIN_PASSWORD_ESC=`echo "$ADMIN_PASSWORD" | sed 's/\!/\\\!/g'`
+ADMIN_PASSWORD_QUOTED=`echo "$(printf %q "$ADMIN_PASSWORD")"`
 
 # process creating mysql user and database
 MYSQL="$MYSQL_CLIENT --default-character-set=utf8 -u $MYSQLROOT -p -v"
-MYSQL_OPUS4ADMIN="$MYSQL_CLIENT --default-character-set=utf8 -u $ADMIN -p$ADMIN_PASSWORD -v"
+MYSQL_OPUS4ADMIN="$MYSQL_CLIENT --default-character-set=utf8 -u $ADMIN -p$ADMIN_PASSWORD_QUOTED -v"
 if [ -n "$MYSQLHOST" ]
 then
   MYSQL="$MYSQL -h $MYSQLHOST"
