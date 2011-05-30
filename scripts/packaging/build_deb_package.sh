@@ -19,6 +19,7 @@
 
 # usage:
 # create opus_4.x.y_all.deb using temporary directory debtmp
+# use trunk if svn-tag parameter is missing
 # ./build_deb_package.sh debtmp [svn-tag] 
 
 set -e
