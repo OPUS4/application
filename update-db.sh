@@ -29,6 +29,13 @@ source update-common.sh
 
 setVars
 
+DEBUG "BASEDIR = $BASEDIR"
+DEBUG "BASE_SOURCE = $BASE_SOURCE"
+DEBUG "MD5_OLD = $MD5_OLD"
+DEBUG "VERSION_NEW = $VERSION_NEW"
+DEBUG "VERSION_OLD = $VERSION_OLD"
+DEBUG "_UPDATELOG = $_UPDATELOG"
+
 SCHEMA_PATH="$BASE_SOURCE/opus4/db/schema"
 
 # TODO more flexible way to find mysql binary?
