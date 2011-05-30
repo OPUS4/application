@@ -232,7 +232,7 @@ DEBUG "VERSION_OLD = $VERSION_OLD"
 DEBUG "VERSION_NEW = $VERSION_NEW"
 
 # Make sure MD5_OLD is set (in case it was not set by getOldVersion)
-if [[ -z MD5_OLD ]] ; then
+if [[ -z $MD5_OLD ]] ; then
     getMd5Sums 
 fi
 
