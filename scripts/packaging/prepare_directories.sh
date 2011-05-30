@@ -67,7 +67,7 @@ else
   mkdir releases
 fi;
 
-rm -rv opus4/{docs,nbproject,tests,workspace}
+rm -rv opus4/{nbproject,tests,workspace}
 rm -rvf opus4/public/layouts/{opus33,opus34,darker,matheon,plain,opus4-matheon}
 rm -v  opus4/modules/publish/views/scripts/form/preprintmatheon.phtml
 rm -v  opus4/application/configs/doctypes/preprintmatheon.xml
