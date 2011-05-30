@@ -175,9 +175,6 @@ function getMd5Sums() {
 # TODO move up or down?
 source update-common.sh
 
-# Create file for update log (sets _UPDATELOG)
-INIT_UPDATELOG
-
 # Advice user to backup old installation before update
 # TODO perform backup to user specified or default location? Ask first.
 function backup() {
@@ -238,6 +235,9 @@ DEBUG "VERSION_NEW = $VERSION_NEW"
 if [[ -z MD5_OLD ]] ; then
     getMd5Sums 
 fi
+
+# Create file for update log (sets _UPDATELOG)
+INIT_UPDATELOG
 
 backup
 
