@@ -312,7 +312,7 @@ fi
 # Restart Solr
 if askYesNo "Would you like to restart Solr server (Jetty) now [Y/n]?"; then
     echo "Restarting Jetty server ..."
-    DRYRUN || /etc/init.d/jetty restart
+    DRYRUN || /etc/init.d/opus4-solr-jetty restart
 fi
 
 # TODO move into separate script for execution after all other update scripts?    
