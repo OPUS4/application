@@ -16,5 +16,3 @@ else
     sudo "$BASEDIR/install/install.sh" ubuntu
 fi
 
-sudo /etc/init.d/apache2 reload
-
