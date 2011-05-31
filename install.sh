@@ -303,7 +303,7 @@ then
   cd "$BASEDIR"
   for i in `find testdata/sql -name *.sql \( -type f -o -type l \) | sort`; do
     echo "Inserting file '${i}'"
-    $MYSQL_OPUS4ADMIN "$DBNAME" < "${i}"
+    eval "$MYSQL_OPUS4ADMIN" "$DBNAME" < "${i}"
   done
 
   # copy test fulltexts to workspace directory
