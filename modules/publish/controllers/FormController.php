@@ -146,8 +146,12 @@ class Publish_FormController extends Controller_Action {
         if ($this->getRequest()->isPost() === true) {
             $postData = $this->getRequest()->getPost();
 
-            if (array_key_exists('abort', $postData))
+            if (array_key_exists('abort', $postData)) {
+
+                $this->document = new Opus_Document($this->session->documentId);
+                $this->document->deletePermanent();
                 return $this->_redirectTo('index', '', 'index');
+            }
 
             if (array_key_exists('back', $postData) || array_key_exists('abortCollection', $postData)) {
                 $reload = false;
