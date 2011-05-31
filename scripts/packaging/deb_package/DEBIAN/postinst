@@ -1,11 +1,11 @@
 #!/bin/bash
+set -e
 
 BASEDIR='/var/local/opus4'
 
 sudo a2enmod rewrite proxy proxy_http php5
 sudo ln -si "$BASEDIR/apacheconf/opus4" /etc/apache2/sites-available
 sudo a2ensite opus4
-sudo /etc/init.d/apache2 reload
 
 if [ "$1" = upgrade ]
 then 
@@ -15,3 +15,6 @@ else
     sudo chmod +x "$BASEDIR/install/install.sh"
     sudo "$BASEDIR/install/install.sh" ubuntu
 fi
+
+sudo /etc/init.d/apache2 reload
+
