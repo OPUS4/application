@@ -70,7 +70,9 @@ class Publish_Model_ExtendedValidation {
 
         $validCheckboxes = $this->_validateCheckboxes();
 
-        if ($validPersons && $validTitles && $validCheckboxes)
+        $validSubjectLanguages = $this->_validateSubjectLanguages();
+
+        if ($validPersons && $validTitles && $validCheckboxes && $validSubjectLanguages)
             return true;
         else
             return false;
@@ -364,6 +366,66 @@ class Publish_Model_ExtendedValidation {
 
         foreach ($this->data as $key => $value) {
             if (strstr($key, 'Title') && !strstr($key, 'Language') && !strstr($key, 'Academic'))
+                $titles[$key] = $value;
+        }
+
+        return $titles;
+    }
+
+    /**
+     * Checks if filled subjects (swd, uncontrolled) also have an language.
+     * @return boolean
+     */
+    private function _validateSubjectLanguages() {
+        $validSubjects = true;
+        $subjects = $this->_getSubjectFields();
+
+        foreach ($subjects as $key => $subject) {
+            $this->log->debug("(Validation): Subject: " . $key . " with value " . $subject);
+            if ($subject !== "") {
+                //if $name is set and not null, find the corresponding lastname
+                $lastChar = substr($key, -1, 1);
+
+                if ((int) $lastChar >= 1)
+                    $languageKey = substr($key, 0, strlen($key) - 1) . 'Language' . $lastChar;
+                else
+                    $languageKey = $key . 'Language';
+
+                if ($this->data[$languageKey] == "" || $this->data[$languageKey] == null) {
+                    //error case: Title exists but Language not
+                    $element = $this->form->getElement($languageKey);
+                    //set language value to the document language
+                    if ($this->documentLanguage != null) {
+                        $this->log->debug("(Validation): Set value of " . $languageKey . " to " . $this->documentLanguage);
+                        $element->setValue($this->documentLanguage);
+                        //store the new value in $data array
+                        $this->data[$languageKey] = $this->documentLanguage;
+                    }
+                    else {
+                        //error: no document language set -> throw error message
+                        if (!$element->isRequired()) {
+                            if (!$element->hasErrors()) {
+                                $element->addError('publish_error_noLanguageButTitle');
+                                $validSubjects = false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $validSubjects;
+    }
+
+    /**
+     * Retrieves all language fields from form data
+     * @return <Array> of languages
+     */
+    private function _getSubjectFields() {
+        $titles = array();
+
+        foreach ($this->data as $key => $value) {
+            if (strstr($key, 'SubjectSwd') || strstr($key, 'SubjectUncontrolled') && !strstr($key, 'Language'))
                 $titles[$key] = $value;
         }
 

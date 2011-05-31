@@ -173,16 +173,6 @@ class Publish_Model_DisplayGroup {
         $this->elements = $displayGroup;
     }
 
-    private function isLastEntry($element, $fieldset) {
-        $name = $element->getName();
-        $maxStep = $this->collectionStep($fieldset);
-        echo "maxstep for " . $fieldset . " = " . $maxStep . "<br>";
-        if ($name == 'collId' . $maxStep . $this->elementName . $fieldset)
-            return true;
-        else
-            return false;
-    }
-
     private function addDeleteButtons() {
         $displayGroup = array();
         //show delete button only in case multiplicity has not been reached yet

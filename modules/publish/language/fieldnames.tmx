@@ -581,7 +581,25 @@
         <seg>Dokumentart</seg>
       </tuv>
      </tu>
-         
+
+    <tu tuid="SubjectSwd">
+      <tuv xml:lang="en">
+        <seg>SWD Keywords</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>SWD Schlagwörter</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="SubjectSwdLanguage">
+      <tuv xml:lang="en">
+        <seg>SWD Language</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>SWD Sprache</seg>
+      </tuv>
+    </tu>
+ 
     <tu tuid="add_SubjectSwd">
       <tuv xml:lang="en">
         <seg>add SWD-Keyword</seg>
@@ -635,7 +653,16 @@
       <tuv xml:lang="de">
         <seg>Freies Schlagwort / Tag</seg>
       </tuv>
-    </tu>     
+    </tu>
+
+    <tu tuid="SubjectUncontrolledLanguage">
+      <tuv xml:lang="en">
+        <seg>Tag language</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Schlagwort Sprache</seg>
+      </tuv>
+    </tu>
 
     <tu tuid="add_SubjectUncontrolled">
       <tuv xml:lang="en">
@@ -952,8 +979,6 @@
         <seg>Titel</seg>
       </tuv>
     </tu>
-
-
     
     <tu tuid="TitleMainValue">
       <tuv xml:lang="en">
@@ -1280,34 +1305,7 @@
       </tuv>
     </tu>
     
-    <tu tuid="SubjectSwdValue">
-      <tuv xml:lang="en">
-        <seg>SWD Keywords</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>SWD Schlagwörter</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="SubjectUncontrolledValue">
-      <tuv xml:lang="en">
-        <seg>Uncontrolled Keywords</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Freie Schlagwörter</seg>
-      </tuv>
-    </tu>
-    
      
-    
-    <tu tuid="SubjectPsyndexValue">
-      <tuv xml:lang="en">
-        <seg>Psyndex Keywords</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Psyndex-Schlagwörter</seg>
-      </tuv>
-    </tu>
     
     <tu tuid="Note">
       <tuv xml:lang="en">

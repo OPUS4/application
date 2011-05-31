@@ -323,7 +323,7 @@ class Publish_Model_Deposit {
      * @return <Array> $formValues
      */
     private function _prepareSubjectObject($dataKey, $dataValue) {
-        if ($dataValue == "") {
+        if ($dataValue == "" || strstr($dataKey, 'Language')) {
             $this->log->debug("Subject already stored.");
             return;
         }
@@ -360,17 +360,20 @@ class Publish_Model_Deposit {
                 return;
 
             case 'Swd' :
-                $this->log->debug("subject is a swd subject.");
-                $subject = new Opus_SubjectSwd();
+                $this->log->debug("subject is a " . $type . " subject.");
+                $subject = new Opus_Subject();
+                //$subject = new Opus_SubjectSwd();
                 break;
 
             case 'Uncontrolled':
-                $this->log->debug("subject is a uncontrolled or other subject.");
+                $this->log->debug("subject is a " . $type . " or other subject.");
                 $subject = new Opus_Subject();
                 break;
+
         }
         if ($counter >= 1) {
             $subjectType = 'Subject' . $type;
+            //collectionID
             $this->log->debug("subjectType: " . $subjectType);
             if (strstr($dataValue, 'ID:')) {
                 $dataValue = substr($dataValue, 3);
@@ -378,6 +381,12 @@ class Publish_Model_Deposit {
                 $dataValue = $coll->getNumber();
             }            
             $subject->setValue($dataValue);
+            $subject->setType(strtolower($type));
+            if (array_key_exists($subjectType . 'Language' . $counter, $this->documentData)) {
+                $subject->setLanguage($this->documentData[$subjectType . 'Language' . $counter]);
+                $this->documentData[$subjectType . 'Language' . $counter] = "";
+            }
+
             $addFunction = "add" . $subjectType;
             $this->log->debug("addfunction: " . $addFunction);
             $this->document->$addFunction($subject);
@@ -523,10 +532,13 @@ class Publish_Model_Deposit {
             $this->log->debug("ThesisGrantor or ThesisPublisher already stored.");
             return;
         }
-        $dataValue = substr($dataValue, 3);
+        if (strstr($dataValue, 'ID:')) {
+            $dataValue = substr($dataValue, 3);
+            $thesis = new Opus_DnbInstitute($dataValue);
+        }
+        
         $this->log->debug("try to store " . $dataKey . " with id: " . $dataValue);
-        $thesis = new Opus_DnbInstitute($dataValue);
-
+        
         if (strstr($dataKey, 'Grantor')) {
             $this->document->addThesisGrantor($thesis);
         }

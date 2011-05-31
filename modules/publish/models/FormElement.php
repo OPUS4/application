@@ -109,6 +109,10 @@ class Publish_Model_FormElement {
                     $this->addSubFormElements($implicitFields);
                     $this->group->implicitGroup = true;
                 }
+                else if ($this->isSubjectElement()) {
+                    $implicitFields = $this->implicitFields('Subject');
+                    $this->addSubFormElements($implicitFields);
+                }
                 else {
                     $this->addSubFormElement($this->transform());
                 }
@@ -131,6 +135,8 @@ class Publish_Model_FormElement {
         else if ($this->isPersonElement())
             return true;
         else if ($this->isSeriesElement())
+            return true;
+        else if ($this->datatype == 'Collection')
             return true;
         else if ($this->multiplicity !== '1')
             return true;
@@ -173,6 +179,21 @@ class Publish_Model_FormElement {
                 return array($elementNumber, $element);
                 break;
 
+            case 'Subject':
+                //creates two subfields for subject and language
+                $subject = new Publish_Model_FormElement($this->form, $this->elementName, $this->required, 'text', 'Text');
+                $subject->isSubField = true;
+                $subject->setDefaultValue($this->default, self::VALUE);
+                $elementSubject = $subject->transform();
+
+                $lang = new Publish_Model_FormElement($this->form, $this->elementName . self::LANG, $this->required, 'select', 'Language');
+                $lang->isSubField = true;
+                $lang->setDefaultValue($this->default, self::LANG);
+                $elementLang = $lang->transform();
+
+                return array($elementSubject, $elementLang);
+                break;
+
             case 'Title':
                 //creates two subfields for title value and language (select)
                 if ($this->isTextareaElement())
@@ -204,6 +225,14 @@ class Publish_Model_FormElement {
 
     private function isSeriesElement() {
         if (strstr($this->elementName, 'Series'))
+            return true;
+        else
+            return false;
+    }
+
+    private function isSubjectElement() {
+        if (strstr($this->elementName, 'Swd')
+                || strstr($this->elementName, 'Uncontrolled'))
             return true;
         else
             return false;
