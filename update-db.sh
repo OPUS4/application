@@ -21,7 +21,6 @@
 
 # TODO explain what script does in few words
 # TODO update database scripts only if necessary (see tickets)
-# TODO use _DRYRUN to prevent execution of changes
 
 set -o errexit
 
@@ -143,7 +142,7 @@ function versionGroup() {
 function runDbUpdate() {
     UPDATE_FILE=$1
 
-    if [[ "$_DRYRUN" -eq 0 ]]; then
+    if [[ ! DRYRUN ]]; then
         MYSQL="${mysql_bin} --default-character-set=utf8 --user=${USER} --password=${PASSWORD} --host=${HOST} --port=${PORT}"
 
         if [[ -n "${PASSWORD}" ]]; then
