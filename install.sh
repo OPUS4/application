@@ -326,12 +326,8 @@ then
 fi
 
 # change file owner to $OPUS_USER_NAME
-if [ "$OS" = ubuntu ]
-then
-  chown -R "${OPUS_USER_NAME}:${OPUS_USER_NAME}" "$BASEDIR"
-else
-  chown -R "$OPUS_USER_NAME" "$BASEDIR"
-fi
+chown -R "$OWNER" "$BASEDIR"
+
 find "$BASEDIR/workspace/" -type f -print0 |xargs -r0 chmod -v 777
 find "$BASEDIR/workspace/" -type d -print0 |xargs -r0 chmod -v 666
 
