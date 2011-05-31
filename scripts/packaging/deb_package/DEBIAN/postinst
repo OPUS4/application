@@ -3,7 +3,7 @@
 BASEDIR='/var/local/opus4'
 
 sudo a2enmod rewrite proxy proxy_http php5
-sudo ln -si "$BASEDIR/apacheconf/opus4 /etc/apache2/sites-available"
+sudo ln -si "$BASEDIR/apacheconf/opus4" /etc/apache2/sites-available
 sudo a2ensite opus4
 sudo /etc/init.d/apache2 reload
 
