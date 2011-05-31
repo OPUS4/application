@@ -1,5 +1,7 @@
 #! /bin/bash
 
+set -e
+
 #
 # begin editable part
 #
@@ -20,31 +22,31 @@ master_dir=masterdata/
 
 #
 # end editable part
-# 
+#
 
-mysql="${mysql_bin} --default-character-set=utf8 --user=${user} --host=${host} --port=${port}"
+mysql="${mysql_bin} --default-character-set=utf8 --user=`printf %q "${user}"` --host=`printf %q "${host}"` --port=`printf %q "${port}"`"
 
 if [ -n "${password}" ]; then
-    mysql="${mysql} --password=${password}"
+     mysql="${mysql} --password=`printf %q "${password}"`"
 fi
 
 #Delete database
-echo "Dropping database: ${dbname}"
-echo "DROP DATABASE IF EXISTS ${dbname};" | ${mysql}
+echo "Dropping database: '${dbname}'"
+echo "DROP DATABASE IF EXISTS \`${dbname}\`;" | eval "${mysql}"
 
 #Creating database
-echo "Creating database: ${dbname}"
-echo "CREATE SCHEMA IF NOT EXISTS ${dbname} DEFAULT CHARACTER SET = utf8 DEFAULT COLLATE = utf8_general_ci;" | ${mysql}
+echo "Creating database: '${dbname}'"
+echo "CREATE SCHEMA IF NOT EXISTS \`${dbname}\` DEFAULT CHARACTER SET = utf8 DEFAULT COLLATE = utf8_general_ci;" | eval "${mysql}"
 
 #Import database schema
 echo "Importing database schema file '${schema_file}'"
-${mysql} ${dbname} < ${schema_file}
+eval "${mysql}" "${dbname}" < "${schema_file}"
 
 #Import master data
-if [ -d ${master_dir} ] ; then
-    for i in `find ${master_dir} -name '*.sql' \( -type f -o -type l \) | sort`; do
+if [ -d "${master_dir}" ] ; then
+    for i in `find "${master_dir}" -name '*.sql' \( -type f -o -type l \) | sort`; do
         echo "Inserting file '${i}'"
-        ${mysql} ${dbname} < "${i}"
+        eval "${mysql}" "${dbname}" < "${i}"
     done
 fi
 
