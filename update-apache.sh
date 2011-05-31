@@ -34,4 +34,7 @@ echo -e "Updating Apache configuration ... \c "
 # TODO updateFile either replaces or does not replace file, should create backup
 # TODO check if file has been modified, if yes set restart flag for APACHE
 updateFile "$BASE_SOURCE/$MD5PATH" "$BASEDIR/$MD5PATH" "$MD5PATH" "opus4"
+
+# Template file is replaced without checks
+copyFile "$BASE_SOURCE/$MD5PATH/apache.conf.template" "$BASEDIR/$MD5PATH/apache.conf.template"
 echo "done"
