@@ -325,14 +325,15 @@ then
   php5 "$BASEDIR/opus4/scripts/SolrIndexBuilder.php"
 fi
 
-# change file owner to $OPUS_USER_NAME
+# change file owner of all files in $BASEDIR to $OPUS_USER_NAME
 chown -R "$OWNER" "$BASEDIR"
 
-find "$BASEDIR/opus4/workspace/" -type f -print0 |xargs -r0 chmod 777
-find "$BASEDIR/opus4/workspace/" -type d -print0 |xargs -r0 chmod 666
+# set permission in workspace directory appropriately
+cd "$BASEDIR"
+find workspace/ -type f -print0 |xargs -r0 chmod 777
+find workspace/ -type d -print0 |xargs -r0 chmod 666
 
 # delete tar archives
-cd "$BASEDIR"
 read -p "Delete downloads? [N]: " DELETE_DOWNLOADS
 if [ "$DELETE_DOWNLOADS" = Y ] || [ "$DELETE_DOWNLOADS" = y ]; then
   rm -rf downloads
@@ -341,6 +342,7 @@ fi
 echo 'restart apache webserver ...'
 /etc/init.d/apache2 restart
   
+echo
 echo
 echo 'OPUS 4 is running now! Point your browser to http://localhost/opus4/'
 echo
