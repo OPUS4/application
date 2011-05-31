@@ -68,10 +68,14 @@ class Publish_DepositController extends Controller_Action {
             //go back
             return $this->_forward('check', 'form');
         }
-        else
-        if (array_key_exists('collection', $post)) {
+        else if (array_key_exists('collection', $post)) {
             //choose any collections
             return $this->_forward('top', 'collection');
+        }
+        else if (array_key_exists('abort', $post)) {
+            $this->document = new Opus_Document($this->session->documentId);
+            $this->document->deletePermanent();
+            return $this->_redirectTo('index', '', 'index');
         }
 
         //deposit data
