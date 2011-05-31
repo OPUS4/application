@@ -330,8 +330,7 @@ chown -R "$OWNER" "$BASEDIR"
 
 # set permission in workspace directory appropriately
 cd "$BASEDIR"
-find workspace/ -type f -print0 |xargs -r0 chmod 777
-find workspace/ -type d -print0 |xargs -r0 chmod 666
+chmod -R 777 workspace
 
 # delete tar archives
 read -p "Delete downloads? [N]: " DELETE_DOWNLOADS
