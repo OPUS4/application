@@ -106,6 +106,7 @@ function setProperty() {
     local FILE="$1"
     local PROP_NAME="$2"
     local PROP_VALUE="$3"
+    DEBUG "Setting property $PROP_NAME in file $FILE to $PROP_VALUE."
     sed -i "s|^\([[:space:]]*$PROP_NAME[[:space:]]*=\)|;\1|" $FILE
     sed -i "s|^\([[:space:]]*\[production\][[:space:]]*\)|\1\n$PROP_NAME = $PROP_VALUE\n|" $FILE
 }
