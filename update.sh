@@ -291,7 +291,7 @@ updateFolder $BASE_SOURCE $BASEDIR flat
 
 # Create incoming folder if necessary
 if [[ ! -d "$BASEDIR/workspace/incoming" ]]; then
-    createFolder "BASEDIR/workspace/incoming"
+    createFolder "$BASEDIR/workspace/incoming"
 fi
 
 # Update createdb.sh.template
