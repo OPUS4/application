@@ -315,6 +315,11 @@ if askYesNo "Would you like to restart Solr server (Jetty) now [Y/n]?"; then
     DRYRUN || /etc/init.d/opus4-solr-jetty restart
 fi
 
+getProperty "$BASEDIR/opus4/application/configs/config.ini" "searchengine.index.port"
+SOLR_SERVER_PORT=$PROP_VALUE
+
+DEBUG "SOLR_SERVER_PORT = $SOLR_SERVER_PORT"
+
 # sleep some seconds to ensure the server is running
 echo -e "Wait until Solr server is running... \c "
 while :; do
