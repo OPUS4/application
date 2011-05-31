@@ -328,7 +328,7 @@ fi
 # change file owner to $OPUS_USER_NAME
 if [ "$OS" = ubuntu ]
 then
-  chown -R "$OPUS_USER_NAME:$OPUS_USER_NAME" "$BASEDIR"
+  chown -R "${OPUS_USER_NAME}:${OPUS_USER_NAME}" "$BASEDIR"
 else
   chown -R "$OPUS_USER_NAME" "$BASEDIR"
 fi
