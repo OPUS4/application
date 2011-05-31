@@ -7,7 +7,7 @@ echo('
 <title>403 Forbidden</title>
 </head><body>
 <h1>Forbidden</h1>
-<p>You don\'t have permission to access these files on this sever.</p>
+<p>You don\'t have permission to access these files on this server.</p>
 <hr>
 </body></html>
 ');
