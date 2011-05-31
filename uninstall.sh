@@ -19,7 +19,7 @@
 set -e
 
 BASEDIR='/var/local/opus4'
-MYSQL_CLIENT'=/usr/bin/mysql'
+MYSQL_CLIENT='/usr/bin/mysql'
 
 cd "$BASEDIR"
 
@@ -71,7 +71,7 @@ then
 
   echo
   echo "Next you'll be now prompted to enter the root password of your MySQL server"
-  "$MYSQL" -e "$MYSQL_COMMANDS"
+  $MYSQL -e "$MYSQL_COMMANDS"
 fi
 
 /etc/init.d/opus4-solr-jetty stop
