@@ -66,12 +66,12 @@
             <?= $this->element($this->ContributingCorporation); ?>          
             <?= $this->group($this->groupSubjectSwd); ?>
             <?= $this->group($this->groupSubjectUncontrolled); ?>
-            <?= $this->element($this->Institute); ?>
+            <?= $this->group($this->groupInstitute); ?>
             <?= $this->element($this->IdentifierUrn); ?>
             <?= $this->element($this->Note); ?>
             <?= $this->element($this->Language); ?>
             <?= $this->element($this->Licence); ?>
-                <?= $this->group($this->groupSeries); ?>
+            <?= $this->group($this->groupSeries); ?>
 
             <div class="button-wrapper">
                 <?= $this->element('button_label_abort', "class='form-button abort-button'", "Submit", "abort"); ?>

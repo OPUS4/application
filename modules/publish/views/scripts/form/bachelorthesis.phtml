@@ -57,7 +57,7 @@
             <?= $this->group($this->groupPersonAdvisor); ?>
             <?= $this->element($this->ThesisGrantor); ?>
             <?= $this->element($this->ThesisPublisher); ?>
-            <?= $this->element($this->Institute); ?>
+            <?= $this->group($this->groupInstitute); ?>
             <?= $this->element($this->PublisherName); ?>
             <?= $this->element($this->PublisherPlace); ?>
             <?= $this->element($this->PageNumber); ?>
@@ -69,7 +69,7 @@
             <?= $this->element($this->Note); ?>
             <?= $this->element($this->Language); ?>
             <?= $this->element($this->Licence); ?>
-        <?= $this->group($this->groupSeries); ?>
+            <?= $this->group($this->groupSeries); ?>
 
         <div class="button-wrapper">
         <?= $this->element('button_label_abort', "class='form-button abort-button'", "Submit", "abort"); ?>

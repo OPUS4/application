@@ -50,7 +50,7 @@
         <div class="form-hint"><p><?= $this->requiredHint; ?></p></div>
 
             <?= $this->group($this->groupPersonAuthor); ?>
-            <?= $this->element($this->Institute); ?>
+            <?= $this->group($this->groupInstitute); ?>
             <?= $this->element($this->Language); ?>
             <?= $this->group($this->groupTitleMain); ?>
             <?= $this->group($this->groupTitleAbstract); ?>
@@ -59,7 +59,7 @@
             <?= $this->element($this->City); ?>
             <?= $this->element($this->Country); ?>
             <?= $this->element($this->PublishedDate); ?>
-           <?= $this->group($this->groupSeries); ?>
+            <?= $this->group($this->groupSeries); ?>
 
             <div class="button-wrapper">
         <?= $this->element('button_label_abort', "class='form-button abort-button'", "Submit", "abort"); ?>
