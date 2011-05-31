@@ -10,8 +10,8 @@ sudo /etc/init.d/apache2 reload
 if [ "$1" = upgrade ]
 then 
     sudo chmod +x "$BASEDIR/install/update.sh"
-    sudo sh "$BASEDIR/install/update.sh"
+    sudo "$BASEDIR/install/update.sh"
 else
     sudo chmod +x "$BASEDIR/install/install.sh"
-    sudo sh "$BASEDIR/install/install.sh" ubuntu
+    sudo "$BASEDIR/install/install.sh" ubuntu
 fi
