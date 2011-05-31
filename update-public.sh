@@ -82,8 +82,7 @@ if [[ -z "$THEME" ]] || [[ "$THEME" == "$THEME_OPUS" ]]; then
         done
 
         echo "Creating new theme '$THEME_NEW' ..."
-        # Create new folder and copy files from 'opus4'
-        createFolder "$LAYOUTS/$THEME_NEW"
+        # Copy files from 'opus4' to new folder
         copyFolder "$LAYOUTS/$THEME_OPUS" "$LAYOUTS/$THEME_NEW"
         
         # Update configuration to use new theme
