@@ -34,5 +34,20 @@ echo -e "Updating $OLD_SCRIPTS ... \c "
 updateFolder "$NEW_SCRIPTS" "$OLD_SCRIPTS"
 # Files that are not part of new distribution are deleted
 deleteFiles "$NEW_SCRIPTS" "$OLD_SCRIPTS"
+
+# Update opus-apache-rewritemap-caller-secure.sh
+FILE="opus-apache-rewritemap-caller-secure.sh"
+# Make backup of old file
+getProperty "$DEST/$FILE" "USER"
+USER_VALUE=$PROP_VALUE
+copyFile "$DEST/$FILE" "$DEST/$FILE.backup.$VERSION_OLD"
+
+DEBUG "Replacing $FILE."
+DEBUG "USER = $USER_VALUE"
+
+# Copy template
+copyFile "$DEST/$FILE.template" "$DEST/$FILE"
+setProperty "$DEST/$FILE" "USER" "$USER_VALUE"
+
 echo "done"
 
