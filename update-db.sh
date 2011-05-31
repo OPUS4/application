@@ -142,7 +142,7 @@ function versionGroup() {
 function runDbUpdate() {
     UPDATE_FILE=$1
 
-    if [[ ! DRYRUN ]]; then
+    if [[ DRYRUN ]]; then
         MYSQL="${mysql_bin} --default-character-set=utf8 --user=${USER} --password=${PASSWORD} --host=${HOST} --port=${PORT}"
 
         if [[ -n "${PASSWORD}" ]]; then
