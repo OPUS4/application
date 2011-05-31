@@ -332,8 +332,8 @@ then
 else
   chown -R "$OPUS_USER_NAME" "$BASEDIR"
 fi
-find "$BASEDIR/workspace/" -type f -print0 |xargs -r0 chmod 777
-find "$BASEDIR/workspace/" -type d -print0 |xargs -r0 chmod 666
+find "$BASEDIR/workspace/" -type f -print0 |xargs -r0 chmod -v 777
+find "$BASEDIR/workspace/" -type d -print0 |xargs -r0 chmod -v 666
 
 # delete tar archives
 cd "$BASEDIR"
