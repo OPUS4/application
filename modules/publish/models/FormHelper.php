@@ -316,8 +316,10 @@ class Publish_Model_FormHelper {
             if (array_key_exists('step' . $fieldName . $currentNumber, $this->session->additionalFields)) {
                 $currentCollectionLevel = $this->session->additionalFields['step' . $fieldName . $currentNumber];
                 if ($currentCollectionLevel == '1') {
-                    if (isset($postData[$fieldName . $currentNumber]))
-                        $this->session->additionalFields['collId1' . $fieldName . $currentNumber] = substr($postData[$fieldName . $currentNumber], 3);
+                    if (isset($postData[$fieldName . $currentNumber])) {
+                        if (substr($postData[$fieldName . $currentNumber], 3) !== 'EMPTY') 
+                                $this->session->additionalFields['collId1' . $fieldName . $currentNumber] = substr($postData[$fieldName . $currentNumber], 3);
+                    }
                 }
                 else {
                     if (isset($postData['collId' . $currentCollectionLevel . $fieldName . $currentNumber])) {
@@ -357,7 +359,8 @@ class Publish_Model_FormHelper {
                     }
                     break;
                 case 'down':
-                    $currentCollectionLevel = (int) $currentCollectionLevel + 1;
+                    if (substr($postData[$fieldName . $currentNumber], 3) !== 'EMPTY')
+                            $currentCollectionLevel = (int) $currentCollectionLevel + 1;
                     break;
                 case 'up' :
                     if ($currentCollectionLevel >= 2)

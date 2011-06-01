@@ -108,6 +108,13 @@ class Publish_Model_DisplayGroup {
             $this->session->additionalFields['step' . $this->elementName . $i] = $this->collectionStep($i);
             //update $this->collectionIds and generate fields for the current fieldset
             $currentStep = (int) $this->collectionStep($i);
+//            if (isset($this->session->additionalFields['collId' . $currentStep . $this->elementName . $i])) {
+//                if ($this->session->additionalFields['collId' . $currentStep . $this->elementName . $i] == 'EMPTY') {
+//                    unset($this->session->additionalFields['collId' . $currentStep . $this->elementName . $i]);
+//                    $currentStep = $currentStep - 1;
+//                }
+//            }
+            
             $this->browseFields($i, $currentStep);
             $allElements = count($this->elements) - 1;
 

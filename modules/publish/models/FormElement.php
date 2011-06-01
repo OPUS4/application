@@ -336,6 +336,9 @@ class Publish_Model_FormElement {
             $switchVar = $this->datatype;
 
         switch ($switchVar) {
+            case 'Collection':
+                $element->setMultiOptions(array_merge(array('___EMPTY' => 'choose_valid_collection'), $options));
+                break;
             case 'Licence' :
                 $element->setMultiOptions(array_merge(array('' => 'choose_valid_licence'), $options));
                 break;
@@ -345,10 +348,10 @@ class Publish_Model_FormElement {
                 else
                     $element->setMultiOptions(array_merge(array('' => 'inherit_document_language'), $options));
                 break;
-            case 'Project' :
+            case 'Project' : //deprecated
                 $element->setMultiOptions(array_merge(array('' => 'choose_valid_project'), $options));
                 break;
-            case 'Institute' :
+            case 'Institute' : //deprecated
                 $element->setMultiOptions(array_merge(array('' => 'choose_valid_institute'), $options));
                 break;
             case 'ThesisGrantor' :
