@@ -266,8 +266,13 @@ class Frontdoor_IndexController extends Controller_Action {
     }
 
     private function incrementStatisticsCounter($docId) {
-        $statistics = Opus_Statistic_LocalCounter::getInstance();
-        $statistics->countFrontdoor($docId);
+        try {
+            $statistics = Opus_Statistic_LocalCounter::getInstance();
+            $statistics->countFrontdoor($docId);
+        }
+        catch (Exception $e) {
+            $this->_logger->err("Counting frontdoor statistics failed: " . $e);
+        }
     }
     
     /**
