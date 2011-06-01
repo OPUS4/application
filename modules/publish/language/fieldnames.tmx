@@ -890,15 +890,6 @@
       </tuv>
     </tu>
     
-    <tu tuid="ServerDateUnlocking">
-      <tuv xml:lang="en">
-        <seg>Release at</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Freigabe am</seg>
-      </tuv>
-    </tu>
-    
     <tu tuid="ServerDateValid">
       <tuv xml:lang="en">
         <seg>Valid until</seg>

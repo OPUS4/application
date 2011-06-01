@@ -1202,15 +1202,6 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
             <seg>Tragen Sie bitte die verbreitende Institution ein.</seg>
         </tuv>
     </tu>
-	
-	<tu tuid="hint_ServerDateUnlocking">
-        <tuv xml:lang="en">
-            <seg>Please enter the date to unlock your document.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte das Datum ein, an dem Ihr Dokument freigeschaltet werden soll.</seg>
-        </tuv>
-    </tu>
     
     <tu tuid="hint_EnrichmentNeuesFeld">
       <tuv xml:lang="en">

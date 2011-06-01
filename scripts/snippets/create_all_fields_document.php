@@ -216,8 +216,6 @@ if (count($licences) >= 1) {
 }
 $doc->setLicence($lic);
 
-$doc->setServerDateUnlocking("23.05.1949");
-
 $ddc = $doc->addSubjectDDC();
 $ddc->setValue('Allgemeines, Wissenschaft')->setLanguage('deu')->setExternalKey('000');
 

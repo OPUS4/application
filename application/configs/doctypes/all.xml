@@ -117,8 +117,7 @@
     <field name="ThesisPublisher" required="no" formelement="Select" datatype="ThesisPublisher" multiplicity="1"/>
     <field name="ThesisGrantor" required="no" formelement="Select" datatype="ThesisGrantor" multiplicity="1"/>
     <field name="Note" required="no" formelement="Textarea" datatype="Text" multiplicity="1"/>
-    <field name="Licence" required="no" formelement="Select" datatype="Licence" multiplicity="1"/>
-    <field name="ServerDateUnlocking" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
+    <field name="Licence" required="no" formelement="Select" datatype="Licence" multiplicity="1"/>    
     <field name="SubjectDDC" required="no" formelement="Select" datatype="Collection" root="ddc" multiplicity="*"/>
     <field name="SubjectMSC" required="no" formelement="Select" datatype="Collection" root="msc" multiplicity="*"/>
     <field name="SubjectPACS" required="no" formelement="Select" datatype="Collection" root="pacs" multiplicity="*"/>

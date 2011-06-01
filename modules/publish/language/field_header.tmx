@@ -532,15 +532,6 @@
       </tuv>
     </tu>
 
-    <tu tuid="header_ServerDateUnlocking">
-      <tuv xml:lang="en">
-        <seg>Release date</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Freigabedatum</seg>
-      </tuv>
-    </tu>
-
     <tu tuid="header_EnrichmentEvent">
       <tuv xml:lang="en">
         <seg>Event</seg>

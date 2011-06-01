@@ -84,7 +84,7 @@ class Admin_DocumentController extends Controller_Action {
         $filter->setModel($document);
         $blacklist = array('Collection', 'IdentifierOpus3', 'Source', 'File',
             'ServerState', 'ServerDatePublished', 'ServerDateModified',
-            'ServerDateUnlocking', 'Type', 'PublicationState');
+            'Type', 'PublicationState');
         $filter->setBlacklist($blacklist);
         // $filter->setSortOrder($type->getAdminFormSortOrder());
         return $filter;
