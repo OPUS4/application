@@ -42,8 +42,8 @@ RewriteRule ^index.php/ /<template> [L]
 RewriteCond %{REQUEST_FILENAME} -s [OR] 
 RewriteCond %{REQUEST_FILENAME} -l [OR] 
 RewriteCond %{REQUEST_FILENAME} -d 
-RewriteRule ^.*$ - [NC,L] 
-RewriteRule ^.*$ index.php [NC,L]
+RewriteRule ^.*$ - [L] 
+RewriteRule ^.*$ index.php [L]
 
 # Security: Don't allow browsing of directories
 Options -Indexes
