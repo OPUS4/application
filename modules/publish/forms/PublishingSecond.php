@@ -196,7 +196,10 @@ class Publish_Form_PublishingSecond extends Zend_Form {
 
         foreach ($this->getElements() as $element) {
             $name = $element->getName();
-            if ($element->getValue() == "" || $element->getType() == "Zend_Form_Element_Submit" || $element->getType() == "Zend_Form_Element_Hidden") {
+            if ($element->getValue() == ""
+                    || $element->getType() == "Zend_Form_Element_Submit"
+                    || $element->getType() == "Zend_Form_Element_Hidden"
+                    || $element->getValue() == '___EMPTY') {
                 $element->removeDecorator('Label');
                 $this->removeElement($name);
             }
