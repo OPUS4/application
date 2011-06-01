@@ -38,16 +38,16 @@ deleteFiles "$NEW_SCRIPTS" "$OLD_SCRIPTS"
 # Update opus-apache-rewritemap-caller-secure.sh
 FILE="opus-apache-rewritemap-caller-secure.sh"
 # Make backup of old file
-getProperty "$DEST/$FILE" "USER"
+getProperty "$OLD_SCRIPTS/$FILE" "USER"
 USER_VALUE=$PROP_VALUE
-copyFile "$DEST/$FILE" "$DEST/$FILE.backup.$VERSION_OLD"
+copyFile "$OLD_SCRIPTS/$FILE" "$OLD_SCRIPTS/$FILE.backup.$VERSION_OLD"
 
 DEBUG "Replacing $FILE."
 DEBUG "USER = $USER_VALUE"
 
 # Copy template
-copyFile "$DEST/$FILE.template" "$DEST/$FILE"
-setProperty "$DEST/$FILE" "USER" "$USER_VALUE"
+copyFile "$OLD_SCRIPTS/$FILE.template" "$OLD_SCRIPTS/$FILE"
+setProperty2 "$OLD_SCRIPTS/$FILE" "USER" "$USER_VALUE"
 
 echo "done"
 
