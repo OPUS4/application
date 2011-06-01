@@ -232,7 +232,7 @@ class Oai_IndexController extends Controller_Xml {
         $earliestDate = new Zend_Date('1970-01-01', Zend_Date::ISO_8601);
 
         $earliestDateFromDb = Opus_Document::getEarliestPublicationDate();
-        if (!is_null($earliestDateFromDb) and trim($earliestDateFromDb) != '') {
+        if (!is_null($earliestDateFromDb)) {
             $earliestDate = new Zend_Date($earliestDateFromDb, Zend_Date::ISO_8601);
         }
         $earliestDateIso = $earliestDate->get('yyyy-MM-dd');
