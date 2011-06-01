@@ -187,3 +187,49 @@ echo "Database is up-to-date!"
 # Copy sql files from source to destination folder
 updateFolder "$SCHEMA_PATH" "$BASEDIR"/opus4/db/schema
 updateFolder "$BASE_SOURCE"/opus4/db/masterdata "$BASEDIR"/opus4/db/masterdata
+
+# Update createdb.sh.template
+copyFile "$BASE_SOURCE/opus4/db/createdb.sh.template" "$BASEDIR/opus4/db/createdb.sh.template"
+
+# Update createdb.sh
+FILE_PATH=opus4/db/createdb.sh
+FILE="$BASEDIR/$FILE_PATH"
+
+# get properties from old file
+# TODO make nicer
+getProperty "$FILE" "user"
+CREATEDB_USER=$PROP_VALUE
+
+getProperty "$FILE" "password"
+CREATEDB_PASSWORD=$PROP_VALUE
+
+getProperty "$FILE" "host"
+CREATEDB_HOST=$PROP_VALUE
+
+getProperty "$FILE" "port"
+CREATEDB_PORT=$PROP_VALUE
+
+getProperty "$FILE" "dbname"
+CREATEDB_DBNAME=$PROP_VALUE
+
+getProperty "$FILE" "mysql_bin"
+CREATEDB_MYSQL_BIN=$PROP_VALUE
+
+getProperty "$FILE" "master_dir"
+CREATEDB_MASTER_DIR=$PROP_VALUE
+
+# Create backup of current createdb.sh
+copyFile "$FILE" "$FILE.backup.$VERSION_OLD"
+
+# Copy template
+copyFile "$FILE.template" "$FILE"
+
+# Set properties
+# TODO only modify files if DRYRUN is disabled
+setProperty2 "$FILE" "user" "$CREATEDB_USER"
+setProperty2 "$FILE" "password" "$CREATEDB_PASSWORD"
+setProperty2 "$FILE" "host" "$CREATEDB_HOST"
+setProperty2 "$FILE" "port" "$CREATEDB_PORT"
+setProperty2 "$FILE" "dbname" "$CREATEDB_DBNAME"
+setProperty2 "$FILE" "mysql_bin" "$CREATEDB_MYSQL_BIN"
+setProperty2 "$FILE" "master_dir" "$CREATEDB_MASTER_DIR"
