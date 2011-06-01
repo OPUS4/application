@@ -120,7 +120,7 @@
             </td>
             
             <td>
-                <?php $confirmKey = count($collection->getChildren()) > 0 ? 'confirm_deletion' : 'confirm_deletion_empty'; ?>
+                <?php $confirmKey = ($collection->hasChildren() ? 'confirm_deletion' : 'confirm_deletion_empty'); ?>
                 <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'delete', 'id' => $collection->getId()), null, true) ?>" onclick="return confirm('<?= $this->translate($confirmKey) ?>');"><?=$this->translate('admin_collections_collection_delete')?></a>
             </td>
         </tr>
