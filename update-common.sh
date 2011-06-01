@@ -25,7 +25,7 @@ set -o errexit
 
 # Enables (1) or disables (0) additional output for debugging.
 # TODO Maybe set based on argument or environment?
-_DEBUG=1
+_DEBUG=0
 
 # Enables (1) or disables (0) dry run mode to create UPDATE.log without making
 # any actual modifications to the OPUS4 installation.
@@ -109,6 +109,15 @@ function setProperty() {
     DEBUG "Setting property $PROP_NAME in file $FILE to $PROP_VALUE."
     sed -i "s|^\([[:space:]]*$PROP_NAME[[:space:]]*=\)|;\1|" $FILE
     sed -i "s|^\([[:space:]]*\[production\][[:space:]]*\)|\1\n$PROP_NAME = $PROP_VALUE\n|" $FILE
+}
+
+# Set property value in script file (does not look for "[production]"
+function setProperty2() {
+    local FILE="$1"
+    local PROP_NAME="$2"
+    local PROP_VALUE="$3"
+    DEBUG "Setting property $PROP_NAME in file $FILE to $PROP_VALUE."
+    sed -i "s|^\([[:space:]]*$PROP_NAME[[:space:]]*=.*$\)|;\1\n$PROP_NAME=$PROP_VALUE\n|" $FILE
 }
 
 # Returns the actual MD5 hash for a file.
@@ -417,6 +426,7 @@ function deleteFiles() {
 
 # Adds a new file to the OPUS4 installation
 function addFile() {
+    [ -f "$2" ] && ( echo "File '$2' already exists."; exit )
     DRYRUN || cp $1 $2
     UPDATELOG "ADDED" $2
     DEBUG "Added file $2"
