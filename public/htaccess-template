@@ -38,6 +38,7 @@
 RewriteEngine on
 RewriteBase <template>
 
+RewriteRule ^index.php/ /<template> [L]
 RewriteCond %{REQUEST_FILENAME} -s [OR] 
 RewriteCond %{REQUEST_FILENAME} -l [OR] 
 RewriteCond %{REQUEST_FILENAME} -d 
