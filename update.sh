@@ -294,9 +294,6 @@ if [[ ! -d "$BASEDIR/workspace/incoming" ]]; then
     createFolder "$BASEDIR/workspace/incoming"
 fi
 
-# Update createdb.sh.template
-copyFile "$BASE_SOURCE/opus4/db/createdb.sh.template" "$BASEDIR/opus4/db/createdb.sh.template"
-
 # Update testdata
 updateFolder "$BASE_SOURCE/testdata" "$BASEDIR/testdata"
 deleteFiles "$BASE_SOURCE/testdata" "$BASEDIR/testdata"
