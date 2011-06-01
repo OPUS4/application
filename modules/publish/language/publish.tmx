@@ -241,6 +241,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="choose_valid_collection">
+      <tuv xml:lang="en">
+        <seg>Please choose a collection entry</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie einen Sammlungseintrag</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="choose_valid_doctype">
       <tuv xml:lang="en">
         <seg>Please choose a document type.</seg>
