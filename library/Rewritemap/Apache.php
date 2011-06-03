@@ -187,6 +187,10 @@ class Rewritemap_Apache {
         return $this->_targetPrefix . "/error/send403.php"; // Unauthorized
     }
 
+    public function sendServerError() {
+        return $this->_targetPrefix . "/error/send500.php"; // Internal Server Error.
+    }
+
     private function findFileForDocument($document, $path) {
         foreach ($document->getFile() as $file) {
             $this->_logger->debug("Found file " . $file->getId() . ": " . $file->getPathName());

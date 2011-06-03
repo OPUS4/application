@@ -46,4 +46,10 @@ $config = Zend_Registry::get('Zend_Config');
 
 // issue rewriting
 $rwmap = new Rewritemap_Apache($config, $log);
-echo $rwmap->rewriteRequest($argc > 1 ? $argv[1] : '') . "\n";
+try {
+    echo $rwmap->rewriteRequest($argc > 1 ? $argv[1] : '') . "\n";
+}
+catch (Exception $e) {
+    echo $rwmap->sendServerError() . "\n";
+    throw $e;
+}
