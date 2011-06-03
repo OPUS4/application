@@ -2,6 +2,111 @@ h1. OPUS 4 Change Log
 
 h2. ======================== Release 4.1.1 2011-06-03 ========================
 
+h3. Bugfixes
+
+* [OPUSVIER-752] - Wiederherstellen (Publishing) eines gelöschten Dokumentes von der Metadata Seite erzeugt SOLR Exception
+* [OPUSVIER-810] - Alternatives Startmodul wird nicht verlinkt
+* [OPUSVIER-852] - Einbringen einer neuen Datei im Dateimanager trotz Fehlermeldung
+* [OPUSVIER-864] - OutOfMemory-Fehler beim Zuordnen der Collection "bk" zu einem Dokument
+* [OPUSVIER-885] - Einige Opus Modelle produzieren Fehler wenn man *__toString* für neue noch "leere" Instanzen aufruft
+* [OPUSVIER-926] - OAI-Schnittstelle wirft Exception, wenn ungültige Strings in server_date_published stehen
+* [OPUSVIER-998] - Datei-Download: Zugriff nicht nach Benutzername steuerbar
+* [OPUSVIER-1006] - Form_Builder überschreibt NULL-Werte wenn leere Eingabefelder übermittelt werden
+* [OPUSVIER-1048] - Exception in Collection-Auswahl beim Reload von publish/collection/sub
+* [OPUSVIER-1155] - Cache-Dateien liegen in "/tmp"
+* [OPUSVIER-1311] - User-Feedback: "php-mbstring" standardmäßig nicht installiert unter SuSE
+* [OPUSVIER-1316] - Collection-Auswahl im Publikationsformular Schritt 2: Nicht ausgewählte Collection kann nicht mehr rückgängig gemacht werden
+* [OPUSVIER-1325] - XSS in Collectionauswahl möglich
+* [OPUSVIER-1332] - Titel fehlt, wenn ein Dokument von restricted zu published gesetzt wird
+* [OPUSVIER-1337] - Dokumentsprache wird in section/general nicht übernommen
+* [OPUSVIER-1345] - Tarball Versionsnummer maskieren
+* [OPUSVIER-1346] - Publish-Formular: HTML-Sonderzeichen werden falsch abgespeichert.
+* [OPUSVIER-1348] - falsche Verlinkung zum alten Admin-Formular
+* [OPUSVIER-1351] - Script opus-dump-document-xml.php benutzt XML-Cache nicht
+* [OPUSVIER-1363] - Reihenfolge der Autoren eines Dokuments nicht definiert
+* [OPUSVIER-1365] - Problem mit server_date_created
+* [OPUSVIER-1369] - Syntaxfehler im Datenbank-Updateskript
+* [OPUSVIER-1372] - nichtexistierende Grafik zu Lizenzen auf der Frontdoor
+* [OPUSVIER-1385] - Fehler beim Anlegen eines eigenen Layouts
+* [OPUSVIER-1388] - postinst Skript im Deb-Package enthält Windows-Steuerzeichen 0D0A
+* [OPUSVIER-1399] - kein Frontdoor-Zugriff für guest nach Update von 4.0.2 auf 4.1.0
+* [OPUSVIER-1405] - neue Sprachen erfordern Anpassungen in den fieldnames.tmx
+* [OPUSVIER-1429] - Deb-Package: install_ubuntu.sh: line 19: ./install.sh: No such file or directory
+* [OPUSVIER-1433] - 403-fehlermeldung: "server" statt "sever"
+* [OPUSVIER-1435] - E-Mailversand an Autoren funktioniert nicht
+* [OPUSVIER-1438] - Dateidownload funktioniert nicht, wenn im Dateinamen zwei oder mehr zusammenhängende Leerzeichen enthalten sind
+* [OPUSVIER-1439] - Deb-Package: Unnötige Dependencies "subversion", "curl", "php-crypt-gpg", "xdebug"
+* [OPUSVIER-1444] - Werte im Publish-Formular werden doppelt-escaped in Datenbank gespeichert
+* [OPUSVIER-1446] - Schlagwortsprache wird nicht im Publish-Formular abgefragt
+* [OPUSVIER-1452] - $Id$-Keyword im OPUS-Prolog wird bei einigen Dateien aufgrund nicht gesetzter svn:keywords Eigenschaft nicht gesetzt
+* [OPUSVIER-1458] - Abbrechen-Aktion im zweiten Formularschritt führt kein Cleanup durch
+* [OPUSVIER-1462] - createdb.sh.template stirbt, wenn Passwort Leerzeichen enthält
+* [OPUSVIER-1468] - Publish-Formulare: Feld "ServerDateUnlocking" muss entfernt werden
+* [OPUSVIER-1470] - Installation des Deb-Package stürzt unter Ubuntu 11.04 ab
+* [OPUSVIER-1472] - Probleme mit der Frontdoor bzw. Statistik (weiße Seite)
+* [OPUSVIER-1475] - deletePermanent() sollte Ordner des Dokuments löschen
+* [OPUSVIER-1484] - beim Aufruf der Applikation über index.php zerbricht das Layout und index.php verbleibt in URL
+* [OPUSVIER-1489] - create-tarball-script: Verzeichnis "workspace/files/error" existiert nicht
+* [OPUSVIER-1493] - keine Auslieferung und Ausführung von common.phtml in /public erlauben
+
+h3. Stories
+
+* [OPUSVIER-995] - FileManager: Upload-Size und erlaubte Dokumenttypen fest vorgegeben
+* [OPUSVIER-1094] - Datenbank-Änderungen für die 4.1
+* [OPUSVIER-1102] - Anpassungen für geänderten Datei-Download-Pfad
+
+h3. Tasks
+
+* [OPUSVIER-974] - Zugriffsbeschränkung sollte auf Frontdoor angezeigt werden
+* [OPUSVIER-987] - Subject-Unterfeld "Type" wird mit "Document Type" beschriftet
+* [OPUSVIER-1151] - Titleimport bei Dissertationen
+* [OPUSVIER-1158] - Gesammelte Datenbank-Änderungen für die 4.1
+* [OPUSVIER-1236] - Model Opus_File: EmbargoDate
+* [OPUSVIER-1243] - Umbau Rechte: Modul "review" fixen und Unit-tests wieder aktivieren
+* [OPUSVIER-1247] - Rechte-Umbau, Modul Account: Check der Config-Parameter 'account.editOwnAccount' in Controller verlagern
+* [OPUSVIER-1260] - Durch Datenbank-Umbau überflüssige Übersetzunggschlüssel entfernen
+* [OPUSVIER-1313] - OAI-Schnittstelle: MetadataPrefix "oai_pp" / Proprint Format
+* [OPUSVIER-1350] - Fix für ungültige XML-Zeichen in Opus-Modellen: Wodurch soll ersetzt werden?
+* [OPUSVIER-1352] - Unit-Tests: Behandlung von ungültigen Zeichen in der Datenbank
+* [OPUSVIER-1356] - Update-Skript: SolrIndexBuilder.php erst nach dem Aktualisieren der Datenbank aufrufen
+* [OPUSVIER-1374] - Update-Skript darf keine impliziten Annahmen über Installationsverzeichnis machen
+* [OPUSVIER-1375] - eingegebene OPUS-Versionsnummer wird nicht validiert
+* [OPUSVIER-1377] - Solr-Server muss nach Schemaupdate neu gestartet werden, damit Änderung übernommen wird
+* [OPUSVIER-1378] - Update-Skript sollte die durchgeführten Änderungen in Logdatei protokollieren
+* [OPUSVIER-1379] - Update-Skript darf nicht MySQL root-Credentials abfragen
+* [OPUSVIER-1380] - Auslesen von Werten aus Konfigdateien nicht mit fest-codierter Positionsangabe 
+* [OPUSVIER-1382] - Update-Skript aktualisiert nicht die Apache-Konfiguration
+* [OPUSVIER-1389] - Update-Skript momentan auf Zielversion 4.1.0 zugeschnitten
+* [OPUSVIER-1392] - Updateskript stirbt beim Update von OPUS 4.0.x auf OPUS 4.1.0 bei neu hinzugefügten Verzeichnissen
+* [OPUSVIER-1393] - Updateskript nicht resistent gegen Fehleingaben
+* [OPUSVIER-1396] - Update-Skript kopiert keine neu hinzugefügten Controller
+* [OPUSVIER-1397] - Update-Skript fügt nur neu hinzukommende Dateien hinzu, löscht aber keine Dateien, die nicht mehr ausgeliefert werden
+* [OPUSVIER-1401] - Update-Skript berücksichtigt nicht alle Modul-Verzeichnisse
+* [OPUSVIER-1403] - Neustart des Apachen am Ende des Install-Skripts aufnehmen
+* [OPUSVIER-1404] - Update-Skript sollte Datenbank-Verbindungsdaten aus db/createdb.sh
+* [OPUSVIER-1412] - Unit-Test: Vertauschen von Tag/Monat in Opus_Date reproduzieren
+* [OPUSVIER-1421] - Update Skript sollte in mehrere Skripte zerlegt werden, die Teilaspekte implementieren
+* [OPUSVIER-1425] - Update des OPUS Layouts überdenken
+* [OPUSVIER-1440] - Rechte-Umbau: Methode "requirePrivilege" aus matheon-Modul entfernen
+* [OPUSVIER-1441] - Rechte-Umbau: Methode "requirePrivilege" aus remotecontrol-Modul entfernen
+* [OPUSVIER-1442] - Rechte-Umbau: Methode "requirePrivilege" aus Klasse "Controller_Action" entfernen
+* [OPUSVIER-1460] - Create backup script for database
+* [OPUSVIER-1464] - Opus_Person: Automatisches Setzen von SortOrder beim Hinzufügen neuer Autoren
+* [OPUSVIER-1465] - Opus_Person: SortOrder korrekt initialisieren bei "->setPersonAuthor($authors)"
+
+h3. Documentation
+
+* [OPUSVIER-1327] - Fehler in Kapitel 8.3.1 XML-Dokumenttypdefinitionen
+* [OPUSVIER-1328] - Browsing-Felder dokumentieren
+* [OPUSVIER-1329] - Fehlender Zeilenumbruch in Kapitel 8.4.3 Anzeige in der Frontdoor und in Kapitel 11.3 Weitere Interaktion
+* [OPUSVIER-1331] - Fehler in Kapitel 8.4.1
+* [OPUSVIER-1344] - ServerName in Apache-Config eintragen: Kap. 5.2.4
+* [OPUSVIER-1366] - Unklarheit in der Beschreibung des manuellen Updates (Kap. 11.2)
+* [OPUSVIER-1367] - Fehler in Kap. 2.6 (Export)
+* [OPUSVIER-1381] - Fehler in Kap. 5.2.4 (Installation unter Ubuntu ohne Paketverwaltung)
+* [OPUSVIER-1384] - Fehler im Kapitel 8.3.2 Templates
+* [OPUSVIER-1387] - Fehler in Kap. 8.6 (benutzerspezifische Layouts)
+* [OPUSVIER-1402] - Fehler in Doku in Kap. 5.2.1 und 5.3.1 (Installation von php5 unter ubuntu bzw. opensuse)
 
 
 h2. ======================== Release 4.1.0 2011-04-27 ========================
