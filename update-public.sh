@@ -106,3 +106,32 @@ deleteFiles "$NEW_PUBLIC/layouts/$THEME_OPUS" "$LAYOUTS/$THEME_OPUS"
 # TODO Should this be replace by "updateFolder SRC DEST flat" to handle all files in the folder
 copyFile "$NEW_PUBLIC/htaccess-template" "$OLD_PUBLIC/htaccess-template"
 copyFile "$NEW_PUBLIC/index.php" "$OLD_PUBLIC/index.php"
+
+# Update .htaccess
+FILE=".htaccess"
+
+if askYesNo "Would you like to update file $OLD_PUBLIC/$FILE [Y/n]?"; then
+    echo "Updating $OLD_PUBLIC/$FILE"
+
+    # Make backup of old .htaccess file
+    copyFile "$OLD_PUBLIC/$FILE" "$OLD_PUBLIC/$FILE.backup.$VERSION_OLD"
+
+    # Get value for RewriteBase
+    REWRITE_BASE=$(grep -v '^[[:space:]]*#' $OLD_PUBLIC/$FILE | grep "^[[:space:]]*RewriteBase[[:space:]]*" | sed "s|[[:space:]]*RewriteBase[[:space:]]*||")
+
+    ENABLE_UBUNTU=$(grep -v '^[[:space:]]*#' $OLD_PUBLIC/$FILE | grep "session.gc_probability" || true)
+
+    # Replace .htaccess with new template 
+    copyFile "$NEW_PUBLIC/htaccess-template" "$OLD_PUBLIC/.htaccess"
+
+    # Set RewriteBase
+    # TODO do not replace <template> in comment
+    DRYRUN || sed -i "s|<template>|$REWRITE_BASE|" "$OLD_PUBLIC/$FILE"
+
+    if [[ ! -z $ENABLE_UBUNTU ]]; then
+        echo "Enabling for UBUNTU/DEBIAN"
+        sed -i 's|#Enable for UBUNTU/DEBIAN:# ||' "$OLD_PUBLIC/$FILE"
+    fi
+fi
+
+
