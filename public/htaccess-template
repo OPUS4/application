@@ -42,12 +42,19 @@ RewriteBase <template>
 # IMPORTANT: Do not remove the tabulators: $1 <tab> $2 <tab> %{REMOTE_ADDR} <tab> %{HTTP_COOKIE}
 RewriteRule ^files/(\d+)/(.*)$ "http://127.0.0.1/${opus4deliver:$1	$2	%{REMOTE_ADDR}	%{HTTP_COOKIE}}" [P]
 
-# Rewrite rules to hide "index.php"
-RewriteRule ^index.php/ /<template> [L]
-RewriteCond %{REQUEST_FILENAME} -s [OR] 
-RewriteCond %{REQUEST_FILENAME} -l [OR] 
-RewriteCond %{REQUEST_FILENAME} -d 
-RewriteRule ^.*$ - [L] 
+# Rewrite rule to remove index.php in request URL
+RewriteRule ^index.php/ <template> [L]
+
+# Rewrite rule to prevent access to common.phtml
+RewriteRule ^layouts/[^/]+/common.phtml$ <template> [L]
+
+# Rewrite rule for the delivery of static resources
+RewriteCond %{REQUEST_FILENAME} -s [OR]
+RewriteCond %{REQUEST_FILENAME} -l [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^.*$ - [L]
+
+# all other requests are handled by the webapp itself
 RewriteRule ^.*$ index.php [L]
 
 # Security: Don't allow browsing of directories
