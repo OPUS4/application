@@ -39,6 +39,13 @@ fi
 BASEDIR='/var/local/opus4'
 MYSQL_CLIENT='/usr/bin/mysql'
 
+if [[ "$(pwd)" != "$BASEDIR/install" ]]; then
+    echo "Install script must be called from within '$BASEDIR/install'."
+    echo "Please extract the sources in '$BASEDIR', change to '$BASEDIR/install' and retry."
+    echo "Installation aborted."
+    exit 1
+fi
+
 ZEND_LIB_URL='http://framework.zend.com/releases/ZendFramework-1.10.6/ZendFramework-1.10.6-minimal.tar.gz'
 JPGRAPH_LIB_URL='http://jpgraph.net/download/download.php?p=1'
 SOLR_SERVER_URL='http://www.apache.org/dist//lucene/solr/1.4.1/apache-solr-1.4.1.tgz'
