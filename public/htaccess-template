@@ -45,6 +45,11 @@ RewriteRule ^files/(\d+)/(.*)$ "http://127.0.0.1/${opus4deliver:$1	$2	%{REMOTE_A
 # Rewrite rule to remove index.php in request URL
 RewriteRule ^index.php/ <template> [L]
 
+# Rewrite rule for unknown file icons in the frontdoor
+RewriteCond %{REQUEST_URI} layouts/[^/]*/img/filetype/
+RewriteCond %{REQUEST_FILENAME} !-s
+RewriteRule ^layouts/([^/]+)/img/filetype/.*$ layouts/$1/img/filetype/application_octet-stream.png [L,R=301]
+
 # Rewrite rule to prevent access to common.phtml
 RewriteRule ^layouts/[^/]+/common.phtml$ <template> [L]
 
