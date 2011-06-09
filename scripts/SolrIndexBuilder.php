@@ -31,28 +31,16 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-// Configure include path.
-set_include_path('.' . PATH_SEPARATOR
-        . PATH_SEPARATOR . dirname(__FILE__)
-        . PATH_SEPARATOR . dirname(dirname(__FILE__)) . '/library'
-        . PATH_SEPARATOR . get_include_path());
 
-// Define path to application directory
-defined('APPLICATION_PATH')
-        || define('APPLICATION_PATH', realpath(dirname(dirname(__FILE__))));
-
-define('APPLICATION_ENV', 'testing');
-
-// Zend_Loader is'nt available yet. We have to do a require_once
-// in order to find the bootstrap class.
-//require_once 'Application/Bootstrap.php';
+// Bootstrapping
+require_once dirname(__FILE__) . '/common/bootstrap.php';
 
 /**
  * Bootstraps and runs an import from Opus3
  *
  * @category Search
  */
-class SolrIndexBuilder { // extends Application_Bootstrap {
+class SolrIndexBuilder {
     private $start = null;
     private $end = null;
     private $deleteAllDocs = false;
@@ -131,22 +119,6 @@ class SolrIndexBuilder { // extends Application_Bootstrap {
         return $runtime;
     }
 }
-
-require_once 'Zend/Application.php';
-
-// environment initializiation
-
-$application = new Zend_Application(
-    APPLICATION_ENV,
-    array(
-        "config"=>array(
-            APPLICATION_PATH . '/application/configs/application.ini',
-            APPLICATION_PATH . '/application/configs/config.ini'
-        )
-    )
-);
-
-$application->bootstrap(array('Backend'));
 
 $index = new SolrIndexBuilder;
 try {
