@@ -53,6 +53,10 @@ RewriteRule ^layouts/([^/]+)/img/filetype/.*$ layouts/$1/img/filetype/applicatio
 # Rewrite rule to prevent access to common.phtml
 RewriteRule ^layouts/[^/]+/common.phtml$ <template> [L]
 
+# Access to layouts and javascript folders should redirected
+RewriteRule ^layouts/ - [L]
+RewriteRule ^js/ - [L]
+
 # Rewrite rule for the delivery of static resources
 RewriteCond %{REQUEST_FILENAME} -s [OR]
 RewriteCond %{REQUEST_FILENAME} -l [OR]
