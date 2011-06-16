@@ -178,12 +178,11 @@ class Matheon_Model_Document {
         }
 
         $this->log->warn("Warning: Setting all files readable for role '{$role->getName()}' (document " . $this->getId() . ")");
+        $role->appendAccessDocument($this->getId());
         foreach ($this->document->getFile() AS $file) {
-            $privilege = $role->addPrivilege();
-            $privilege->setPrivilege('readFile');
-            $privilege->setFile($file);
-            $role->store();
+              $role->appendAccessFile($file->getId());
         }
+        $role->store();
 
         return $this;
     }
@@ -296,10 +295,10 @@ In addition you can also directly download and read the preprint.
     {$filesString}
 
 and accepting:
-    {$baseUrlServer}/review/index/reject?accept[]={$docId}
+    {$baseUrlServer}/review/index/clear?selected={$docId}
 
 or reject it:
-    {$baseUrlServer}/review/index/reject?selected[]={$docId}
+    {$baseUrlServer}/review/index/reject?selected={$docId}
 
 
 Thank you for your efforts!
