@@ -142,7 +142,7 @@ class Solrsearch_IndexController extends Controller_Action {
             }
             $this->view->nextPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>(int)($this->query->getStart()) + (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
             $this->view->prevPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>(int)($this->query->getStart()) - (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
-            $this->view->lastPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>(int)($this->numOfHits / $this->query->getRows()) * $this->query->getRows(),'rows'=>$this->query->getRows()));
+            $this->view->lastPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>(int)(($this->numOfHits - 1) / $this->query->getRows()) * $this->query->getRows(),'rows'=>$this->query->getRows()));
             $this->view->firstPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>'0','rows'=>$this->query->getRows()));
             $this->setFilterQueryBaseURL();
             $browsing = $this->getRequest()->getParam('browsing', 'false');
@@ -154,7 +154,7 @@ class Solrsearch_IndexController extends Controller_Action {
         if ($this->searchtype === Util_Searchtypes::ADVANCED_SEARCH || $this->searchtype === Util_Searchtypes::AUTHOR_SEARCH) {
             $this->view->nextPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'start'=>(int)($this->query->getStart()) + (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
             $this->view->prevPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'start'=>(int)($this->query->getStart()) - (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
-            $this->view->lastPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'start'=>(int)($this->numOfHits / $this->query->getRows()) * $this->query->getRows(),'rows'=>$this->query->getRows()));
+            $this->view->lastPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'start'=>(int)(($this->numOfHits - 1) / $this->query->getRows()) * $this->query->getRows(),'rows'=>$this->query->getRows()));
             $this->view->firstPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'start'=>'0','rows'=>$this->query->getRows()));
             $this->setFilterQueryBaseURL();
             $this->view->authorQuery = $this->query->getField('author');
@@ -173,7 +173,7 @@ class Solrsearch_IndexController extends Controller_Action {
         if ($this->searchtype === Util_Searchtypes::COLLECTION_SEARCH) {
             $this->view->nextPage = self::createSearchUrlArray(array('searchtype' => Util_Searchtypes::COLLECTION_SEARCH, 'start'=>(int)($this->query->getStart()) + (int)($this->query->getRows()), 'rows'=>$this->query->getRows()));
             $this->view->prevPage = self::createSearchUrlArray(array('searchtype' => Util_Searchtypes::COLLECTION_SEARCH, 'start'=>(int)($this->query->getStart()) - (int)($this->query->getRows()), 'rows'=>$this->query->getRows()));
-            $this->view->lastPage = self::createSearchUrlArray(array('searchtype' => Util_Searchtypes::COLLECTION_SEARCH, 'start'=>(int)($this->numOfHits / $this->query->getRows()) * $this->query->getRows(), 'rows'=>$this->query->getRows()));
+            $this->view->lastPage = self::createSearchUrlArray(array('searchtype' => Util_Searchtypes::COLLECTION_SEARCH, 'start'=>(int)(($this->numOfHits - 1) / $this->query->getRows()) * $this->query->getRows(), 'rows'=>$this->query->getRows()));
             $this->view->firstPage = self::createSearchUrlArray(array('searchtype' => Util_Searchtypes::COLLECTION_SEARCH, 'start'=>'0', 'rows'=>$this->query->getRows()));
             $this->setFilterQueryBaseURL();
             return;
