@@ -664,7 +664,7 @@
     <xsl:template match="File[@VisibleInFrontdoor='1']">
         <li>
             <xsl:variable name="fileIcon">
-                <xsl:element name="img">
+                <img border="0" width="16" height="16">
                     <xsl:attribute name="src">
                         <xsl:value-of select="$layoutPath"/>
                         <xsl:text>/img/filetype/</xsl:text>
@@ -675,16 +675,7 @@
                         </xsl:call-template>
                         <xsl:text>.png</xsl:text>
                     </xsl:attribute>
-                    <xsl:attribute name="width">
-                        <xsl:text>16</xsl:text>
-                    </xsl:attribute>
-                    <xsl:attribute name="height">
-                        <xsl:text>16</xsl:text>
-                    </xsl:attribute>
-                    <xsl:attribute name="border">
-                        <xsl:text>0</xsl:text>
-                    </xsl:attribute>
-                </xsl:element>
+                </img>
             </xsl:variable>
 
             <xsl:variable name="fileLink">
@@ -724,12 +715,12 @@
                             <xsl:value-of select="@MimeType" />
                             <xsl:text>)</xsl:text>
                         </xsl:attribute>
-                        <xsl:element name="a">
+                        <a>
                             <xsl:attribute name="href">
                                 <xsl:copy-of select="$fileLink" />
                             </xsl:attribute>
                             <xsl:copy-of select="$fileIcon" />
-                        </xsl:element>
+                        </a>
                         <xsl:text> </xsl:text>
 
                         <xsl:element name="a">
@@ -756,9 +747,9 @@
 
             <xsl:if test="@Comment">
                     <xsl:text> </xsl:text>
-                    <xsl:element name="p">
+                    <p>
                         <xsl:value-of select="@Comment" />
-                    </xsl:element>
+                    </p>
             </xsl:if>
         </li>
     </xsl:template>
