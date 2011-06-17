@@ -446,3 +446,9 @@
     color: blue;
     font-weight: bold;
 }
+
+.abstractTextContainer {
+    background: white;
+    border: 1px dotted lightgray;
+    padding: 4px;
+}
