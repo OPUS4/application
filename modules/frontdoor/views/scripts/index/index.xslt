@@ -1151,6 +1151,37 @@
 
     <!--  Named template for services-buttons -->
     <xsl:template name="services">
+        <!-- Twitter -->
+        <xsl:variable name="frontdoor_share_twitter">
+            <xsl:call-template name="translateString">
+                <xsl:with-param name="string">frontdoor_share_twitter</xsl:with-param>
+            </xsl:call-template>
+        </xsl:variable>
+
+        <a>
+            <xsl:attribute name="href">
+                <xsl:text disable-output-escaping="yes">http://twitter.com/share?url=</xsl:text>
+                <xsl:value-of select="$baseUrl"/>
+                <xsl:text>/frontdoor/index/index/docId/</xsl:text>
+                <xsl:value-of select="@Id" />
+            </xsl:attribute>
+            <img border="0">
+                <xsl:attribute name="src">
+                    <xsl:value-of select="$layoutPath"/>
+                    <xsl:text>/img/twitter.png</xsl:text>
+                </xsl:attribute>
+                <xsl:attribute name="name">
+                    <xsl:value-of select="$frontdoor_share_twitter"/>
+                </xsl:attribute>
+                <xsl:attribute name="title">
+                    <xsl:value-of select="$frontdoor_share_twitter"/>
+                </xsl:attribute>
+                <xsl:attribute name="alt">
+                    <xsl:value-of select="$frontdoor_share_twitter"/>
+                </xsl:attribute>
+            </img>
+        </a>
+        <xsl:text> </xsl:text>
 
         <!-- google-scholar -->
         <xsl:if test="normalize-space(TitleMain/@Value)">
