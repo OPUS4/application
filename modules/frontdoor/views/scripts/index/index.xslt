@@ -101,8 +101,9 @@
                     </ul>
                 </div>
             </xsl:if>
+
             <xsl:call-template name="MailToAuthor"/>
-            <!--<xsl:call-template name="services"/>-->
+            <xsl:call-template name="services"/>
             
             <div id="export" class="services">
                 <h3>
