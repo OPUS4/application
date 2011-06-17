@@ -135,7 +135,12 @@ class Admin_DocumentController extends Controller_Action {
                     $document = new Opus_Document($id);
                     $assignedCollections = array();
                     foreach ($document->getCollection() as $assignedCollection) {
-                        $assignedCollections[] = array('collectionName' => $assignedCollection->getDisplayName(), 'collectionId' => $assignedCollection->getId(), 'roleName' => $assignedCollection->getRole()->getName(), 'roleId' => $assignedCollection->getRole()->getId());
+                        $assignedCollections[] = array(
+                            'collectionName' => $assignedCollection->getDisplayName(),
+                            'collectionId' => $assignedCollection->getId(),
+                            'roleName' => $assignedCollection->getRole()->getName(),
+                            'roleId' => $assignedCollection->getRole()->getId()
+                        );
                     }
                     $this->view->assignedCollections = $assignedCollections;
                     $this->view->docHelper = new Review_Model_DocumentAdapter($this->view, $document);
@@ -143,16 +148,22 @@ class Admin_DocumentController extends Controller_Action {
                     break;
                 default:
                     $model = new Opus_Document($id);
-
                     $this->view->docHelper = new Review_Model_DocumentAdapter($this->view, $model);
-                    $this->view->addForm = $this->getAddForm($model, $section);
                     $this->view->editForm = $this->getEditForm($model, $section);
-
                     return $this->renderScript('document/edit' /* . ucfirst($section) */ . '.phtml');
             }
         }
 
         $this->_redirectTo('index');
+    }
+
+    public function addAction() {
+        $id = $this->getRequest()->getParam('id');
+        $section = $this->getRequest()->getParam('section');
+        $model = new Opus_Document($id);
+        $this->view->docHelper = new Review_Model_DocumentAdapter($this->view, $model);
+        $this->view->addForm = $this->getAddForm($model, $section);
+        return $this->renderScript('document/add' /* . ucfirst($section) */ . '.phtml');
     }
 
     /**
@@ -532,6 +543,7 @@ class Admin_DocumentController extends Controller_Action {
     public function prepareEditLinks($docId) {
         $editUrls = array();
         $editLabels = array();
+        $addUrls = array();
 
         foreach ($this->sections as $section) {
             $editUrls[$section] = $this->view->url(array(
@@ -541,11 +553,21 @@ class Admin_DocumentController extends Controller_Action {
                 'id' => $docId,
                 'section' => $section
             ), 'default', false);
+            $addUrls[$section] = $this->view->url(array(
+                'module' => 'admin',
+                'controller' => 'document',
+                'action' => 'add',
+                'id' => $docId,
+                'section' => $section
+            ), 'default', false);
             $editLabels[$section] = $this->view->translate('admin_document_edit_section');
+            $addLabels[$section] = $this->view->translate('admin_document_add_section');
         }
 
         $this->view->editUrls = $editUrls;
         $this->view->editLabels = $editLabels;
+        $this->view->addUrls = $addUrls;
+        $this->view->addLabels = $addLabels;
     }
 
     public function getAddForm($model, $section) {

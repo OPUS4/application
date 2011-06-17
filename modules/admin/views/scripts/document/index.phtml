@@ -75,7 +75,10 @@
 
         <legend>
             <?=$this->translate('admin_document_section_titles')?>
-            <span class="editLink"><a href="<?=$this->editUrls['titles']?>"><?=$this->editLabels['titles']?></a></span>
+            <span class="editLink">
+                <a href="<?=$this->addUrls['titles']?>"><?=$this->addLabels['titles']?></a> / 
+                <a href="<?=$this->editUrls['titles']?>"><?=$this->editLabels['titles']?></a>
+            </span>
         </legend>
 
         <?PHP $titles = $this->overviewHelper->flattenValues($this->overviewHelper->getFieldsForGroup('titles'));?>
@@ -101,7 +104,11 @@
 
         <legend>
             <?=$this->translate('admin_document_section_abstracts')?>
-            <span class="editLink"><a href="<?=$this->editUrls['abstracts']?>"><?=$this->editLabels['abstracts']?></a></span>
+            <span class="editLink">
+                <!--<a href="<?=$this->editUrls['abstracts']?>"><?=$this->editLabels['abstracts']?></a>-->
+                <a href="<?=$this->addUrls['abstracts']?>"><?=$this->addLabels['abstracts']?></a> / 
+                <a href="<?=$this->editUrls['abstracts']?>"><?=$this->editLabels['abstracts']?></a>
+            </span>
         </legend>
 
         <?PHP foreach($this->document->getTitleAbstract() as $index => $abstract) : ?>
@@ -110,7 +117,7 @@
             <div>
                 <?=$index+1?>. Abstract (<b><?=htmlspecialchars($this->translate($abstract->getLanguage()))?></b>)
             </div>
-            <div style="background: white; border: 1px dotted lightgray; padding: 4px;">
+            <div class="abstractTextContainer">
                 <?=htmlspecialchars($abstract->getValue())?>
             </div>
         </div>
@@ -123,7 +130,10 @@
 
         <legend>
             <?=$this->translate('admin_document_section_persons')?>
-            <span class="editLink"><a href="<?=$this->editUrls['persons']?>"><?=$this->editLabels['persons']?></a></span>
+            <span class="editLink">
+                <a href="<?=$this->addUrls['persons']?>"><?=$this->addLabels['persons']?></a> / 
+                <a href="<?=$this->editUrls['persons']?>"><?=$this->editLabels['persons']?></a>
+            </span>
         </legend>
 
         <?PHP $persons = $this->overviewHelper->flattenValues($this->overviewHelper->getFieldsForGroup('persons'));?>
@@ -147,7 +157,9 @@
 
         <legend>
             <?=$this->translate('admin_document_section_dates')?>
-            <span class="editLink"><a href="<?=$this->editUrls['dates']?>"><?=$this->editLabels['dates']?></a></span>
+            <span class="editLink">
+                <a href="<?=$this->editUrls['dates']?>"><?=$this->editLabels['dates']?></a>
+            </span>
         </legend>
 
         <?PHP foreach($this->overviewHelper->getFieldsForGroup('dates') as $index => $field) : ?>
@@ -163,7 +175,10 @@
 
         <legend>
             <?=$this->translate('admin_document_section_identifiers')?>
-            <span class="editLink"><a href="<?=$this->editUrls['identifiers']?>"><?=$this->editLabels['identifiers']?></a></span>
+            <span class="editLink">
+                <a href="<?=$this->addUrls['identifiers']?>"><?=$this->addLabels['identifiers']?></a> / 
+                <a href="<?=$this->editUrls['identifiers']?>"><?=$this->editLabels['identifiers']?></a>
+            </span>
         </legend>
 
         <?PHP foreach($this->document->getIdentifier() as $index => $identifier) : ?>
@@ -203,7 +218,10 @@
 
         <legend>
             <?=$this->translate('admin_document_section_licences')?>
-            <span class="editLink"><a href="<?=$this->editUrls['licences']?>"><?=$this->editLabels['licences']?></a></span>
+            <span class="editLink">
+                <a href="<?=$this->addUrls['licences']?>"><?=$this->addLabels['licences']?></a> / 
+                <a href="<?=$this->editUrls['licences']?>"><?=$this->editLabels['licences']?></a>
+            </span>
         </legend>
 
         <?PHP foreach($this->document->getLicence() as $index => $licence) : ?>
@@ -224,7 +242,10 @@
 
         <legend>
             <?=$this->translate('admin_document_section_subjects')?>
-            <span class="editLink"><a href="<?=$this->editUrls['subjects']?>"><?=$this->editLabels['subjects']?></a></span>
+            <span class="editLink">
+                <a href="<?=$this->addUrls['subjects']?>"><?=$this->addLabels['subjects']?></a> /
+                <a href="<?=$this->editUrls['subjects']?>"><?=$this->editLabels['subjects']?></a>
+            </span>
         </legend>
 
         <?PHP $rowIndex = 0; ?>
@@ -249,7 +270,9 @@
 
         <legend>
             <?=$this->translate('admin_document_section_collections')?>
-            <span class="editLink"><a href="<?=$this->editUrls['collections']?>"><?=$this->editLabels['collections']?></a></span>
+            <span class="editLink">
+                <a href="<?=$this->editUrls['collections']?>"><?=$this->editLabels['collections']?></a>
+            </span>
         </legend>
 
         <?PHP $rowIndex = 0; ?>
@@ -275,7 +298,9 @@
 
             <legend>
                 <?=$this->translate('admin_document_section_thesis')?>
-                <span class="editLink"><a href="<?=$this->editUrls['thesis']?>"><?=$this->editLabels['thesis']?></a></span>
+                <span class="editLink">
+                    <a href="<?=$this->editUrls['thesis']?>"><?=$this->editLabels['thesis']?></a>
+                </span>
             </legend>
 
             <?PHP foreach($this->overviewHelper->getFieldsForGroup('thesis') as $index => $field) : ?>
@@ -291,7 +316,9 @@
 
             <legend>
                 <?=$this->translate('admin_document_section_other')?>
-                <span class="editLink"><a href="<?=$this->editUrls['other']?>"><?=$this->editLabels['other']?></a></span>
+                <span class="editLink">
+                    <a href="<?=$this->editUrls['other']?>"><?=$this->editLabels['other']?></a>
+                </span>
             </legend>
 
             <?PHP foreach($this->overviewHelper->getFieldsForGroup('other') as $index => $field) : ?>
@@ -307,7 +334,10 @@
 
             <legend>
                 <?=$this->translate('admin_document_section_patents')?>
-                <span class="editLink"><a href="<?=$this->editUrls['patents']?>"><?=$this->editLabels['patents']?></a></span>
+                <span class="editLink">
+                    <a href="<?=$this->addUrls['patents']?>"><?=$this->addLabels['patents']?></a> / 
+                    <a href="<?=$this->editUrls['patents']?>"><?=$this->editLabels['patents']?></a>
+                </span>
             </legend>
 
             <?PHP $patents = $this->overviewHelper->flattenValues($this->overviewHelper->getFieldsForGroup('patents'));?>
@@ -331,7 +361,10 @@
 
             <legend>
                 <?=$this->translate('admin_document_section_notes')?>
-                <span class="editLink"><a href="<?=$this->editUrls['notes']?>"><?=$this->editLabels['notes']?></a></span>
+                <span class="editLink">
+                    <a href="<?=$this->addUrls['notes']?>"><?=$this->addLabels['notes']?></a> / 
+                    <a href="<?=$this->editUrls['notes']?>"><?=$this->editLabels['notes']?></a>
+                </span>
             </legend>
 
             <?PHP foreach($this->document->getNote() as $index => $note) : ?>
@@ -347,7 +380,10 @@
 
             <legend>
                 <?=$this->translate('admin_document_section_enrichments')?>
-                <span class="editLink"><a href="<?=$this->editUrls['enrichments']?>"><?=$this->editLabels['enrichments']?></a></span>
+                <span class="editLink">
+                    <a href="<?=$this->addUrls['enrichments']?>"><?=$this->addLabels['enrichments']?></a> /
+                    <a href="<?=$this->editUrls['enrichments']?>"><?=$this->editLabels['enrichments']?></a>
+                </span>
             </legend>
 
             <?PHP foreach($this->document->getEnrichment() as $index => $enrichment) : ?>

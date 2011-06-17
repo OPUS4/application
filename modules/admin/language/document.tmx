@@ -30,7 +30,16 @@
         <seg>Edit</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Editieren</seg>
+        <seg>Bearbeiten</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_add_section">
+      <tuv xml:lang="en">
+        <seg>Add New</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Neu hinzufügen</seg>
       </tuv>
     </tu>
 
