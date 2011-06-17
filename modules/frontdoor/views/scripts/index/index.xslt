@@ -1248,11 +1248,10 @@
                             <xsl:with-param name="string">frontdoor_exportbibtex</xsl:with-param>
                         </xsl:call-template>
                     </xsl:attribute>
-                    <xsl:attribute name="title">
-                        <xsl:text>Bibtex Export</xsl:text>
-                    </xsl:attribute>
                     <xsl:attribute name="alt">
-                        <xsl:text>Bibtex Export</xsl:text>
+                        <xsl:call-template name="translateString">
+                            <xsl:with-param name="string">frontdoor_exportbibtex</xsl:with-param>
+                        </xsl:call-template>
                     </xsl:attribute>
                 </xsl:element>
             </xsl:element>
@@ -1294,11 +1293,10 @@
                             <xsl:with-param name="string">frontdoor_exportris</xsl:with-param>
                         </xsl:call-template>
                     </xsl:attribute>
-                    <xsl:attribute name="title">
-                        <xsl:text>Ris Export</xsl:text>
-                    </xsl:attribute>
                     <xsl:attribute name="alt">
-                        <xsl:text>Ris Export</xsl:text>
+                        <xsl:call-template name="translateString">
+                            <xsl:with-param name="string">frontdoor_exportris</xsl:with-param>
+                        </xsl:call-template>
                     </xsl:attribute>
                 </xsl:element>
             </xsl:element>
