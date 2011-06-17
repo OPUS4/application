@@ -108,25 +108,8 @@ class Admin_Model_FileHelper {
         return $actionUrl;
     }
 
-    // fileForms
     public function getForms() {
-        $fileForms = array();
-
-        $masterkey = $this->_getMasterKey();
-
-        // FIXME get verified
-        
-        // only include form if ???
-        if ($masterkey !== false && in_array($masterkey, $verified) === false) {
-            $fileForms = $this->getSignatureForm();
-        }
-        else {
-            $fileForms = '';
-        }
-
-        // $fileForms[] = $this->getDeleteForm();
         $fileForms[] = $this->getAccessForm();
-
         return $fileForms;
     }
 
@@ -152,53 +135,6 @@ class Admin_Model_FileHelper {
         }
 
         return $hashHelpers;
-    }
-
-    /**
-     *
-     * @return <type>
-     *
-     * FIXME move into controller helper
-     */
-    protected function _getMasterKey() {
-        // Initialize masterkey
-        $masterkey = false;
-
-        if ($this->_isGpgEnabled()) {
-            $gpg = new Opus_GPG();
-            if ($gpg->getMasterkey() !== false) {
-                try {
-                    $masterkey = $gpg->getMasterkey()->getPrimaryKey()->getFingerprint();
-                }
-                catch (Exception $e) {
-                    // do nothing, masterkey is already set to false
-                }
-            }
-        }
-
-        return $masterkey;
-    }
-
-    /**
-     *
-     * @return <type>
-     *
-     * Check if GPG is used
-     * GPG is not used
-     * by default
-     * if admin has disabled it in config
-     * if no masterkey has been found
-     * TODO if GPG is not configured correctly
-     *
-     * FIXME move into controller helper
-     */
-    protected function _isGpgEnabled() {
-        if (isset($config->gpg->enable->admin)) {
-            return ($config->gpg->enable->admin === 1) ? true : false;
-        }
-        else {
-            return false;
-        }
     }
 
     public function exists() {

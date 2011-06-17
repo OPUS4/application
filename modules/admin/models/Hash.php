@@ -79,7 +79,7 @@ class Admin_Model_Hash {
     }
 
     public function getIst() {
-        if (!($this->getSignatureType() === 'gpg') && !($this->_isGpgEnabled())) {
+        if ($this->getSignatureType() !== 'gpg') {
             if (!$this->file->canVerify()) {
                 return;
             }
@@ -87,58 +87,5 @@ class Admin_Model_Hash {
             return $this->file->getRealHash($this->getHashType());
         }
     }
-
-    /**
-     * try {
-     * } catch (Exception $e) {
-     *     $this->view->verifyResult[$fileNames[$fi]] = array('result' => array($e->getMessage()), 'signature' => $hashSoll[$fi][$hi]);
-     * }
-     */
-    public function getVerified() {
-        $verified = array();
-
-        $gpg = new Opus_GPG();
-
-        $verifyResult = $gpg->verifyPublicationFile($this->file);
-        foreach($verifyResult as $verifiedArray) {
-            foreach($verifiedArray as $index => $verificationResult) {
-                if ($index === 'result') {
-                    foreach ($verificationResult as $result) {
-                        // Show key used for signature
-                        if (true === is_object($result) && get_class($result) === 'Crypt_GPG_Signature') {
-                            $verified[] = $result->getKeyFingerprint();
-                        }
-                    }
-                }
-            }
-        }
-
-        return $verified;
-    }
-
-
-    /**
-     *
-     * @return <type>
-     *
-     * Check if GPG is used
-     * GPG is not used
-     * by default
-     * if admin has disabled it in config
-     * if no masterkey has been found
-     * TODO if GPG is not configured correctly
-     *
-     * FIXME move into controller helper
-     */
-    protected function _isGpgEnabled() {
-        if (isset($config->gpg->enable->admin)) {
-            return ($config->gpg->enable->admin === 1) ? true : false;
-        }
-        else {
-            return false;
-        }
-    }
-
 }
-
 ?>

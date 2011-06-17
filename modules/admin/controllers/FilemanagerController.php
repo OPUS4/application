@@ -113,38 +113,14 @@ class Admin_FilemanagerController extends Controller_Action {
     }
 
     protected function _prepareView() {
-        $this->view->title = 'admin_filemanager_index';
-
+        
         $data = $this->_request->getPost();
-
         $docId = $this->getRequest()->getParam('docId');
-
-        $this->view->docId = $docId;
-
-        $this->view->editUrl = $this->view->url(array('module' => 'admin',
-            'controller' => 'documents', 'action' => 'edit', 'id' => $docId),
-                null, true);
-
         $uploadForm = $this->_getUploadForm();
-
-        $this->view->uploadform = $uploadForm;
-
-        $this->view->document = new Review_Model_DocumentAdapter($this->view, $docId);
-
+        $this->configureView($docId, $uploadForm);
         $document = $this->view->document->getDocument();
-
-        //searching for files, getting filenumbers and hashes
-        $files = $document->getFile();
-        if (true === is_array($files)) {
-            $this->view->fileNumber = count($files);
-        }
-
-        // Iteration over all files, hashtypes and -values
-        // Check if GPG for admin is enabled
-        $config = Zend_Registry::get('Zend_Config');
-
-        $this->view->verifyResult = array();
-
+        $files = $this->getNumberedFiles($document);
+        
         $fileHelpers = array();
         if (!empty($files)) {
             foreach ($files as $file) {
@@ -158,10 +134,27 @@ class Admin_FilemanagerController extends Controller_Action {
                 }
             }
         }
-
         $this->view->fileHelpers = $fileHelpers;
-
         return $docId;
+    }
+
+    private function configureView($docId, $uploadForm) {
+        $this->view->title = 'admin_filemanager_index';
+        $this->view->docId = $docId;
+        $this->view->editUrl = $this->view->url(array('module' => 'admin',
+            'controller' => 'documents', 'action' => 'edit', 'id' => $docId),
+                null, true);
+        $this->view->uploadform = $uploadForm;
+        $this->view->document = new Review_Model_DocumentAdapter($this->view, $docId);
+        $this->view->verifyResult = array();
+    }
+
+    private function getNumberedFiles($document) {
+        $files = $document->getFile();
+        if (true === is_array($files)) {
+            $this->view->fileNumber = count($files);
+        }
+        return $files;
     }
 
     public function accessAction() {
@@ -197,30 +190,6 @@ class Admin_FilemanagerController extends Controller_Action {
         }
 
         $this->_redirectTo('index', $this->view->translate('admin_filemanager_delete_success'), 'filemanager', 'admin', array('docId' => $docId));
-    }
-    
-    protected function _processSignSubmit($postData) {
-        $gpg = new Opus_GPG();
-
-        $e = null;
-        try {
-            $gpg->signPublicationFile(new Opus_File($postData['FileObject']), $postData['password']);
-        }
-        catch (Exception $e) {
-            $this->view->actionresult = $e->getMessage();
-        }
-        if ($e === null) {
-            $this->view->actionresult = $this->view->translate('admin_filemanager_signsuccess');
-        }
-    }
-
-    protected function _isGpgEnabled() {
-        if (isset($config->gpg->enable->admin)) {
-            return ($config->gpg->enable->admin === 1) ? true : false;
-        }
-        else {
-            return false;
-        }
     }
 
     /**

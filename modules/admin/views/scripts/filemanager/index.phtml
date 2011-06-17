@@ -34,8 +34,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
-// FIXME This page should not be displayed if no document has been selected
 ?>
 
 <div class="adminContainer">
@@ -76,7 +74,6 @@
 <?PHP foreach ($this->fileHelpers as $file) : ?>
     <?PHP
         $fileName = htmlspecialchars($file->getFileName());
-        $show_gpg = true;
     ?>
     <fieldset class="file">
     <legend class="filename"><?= $fileName ?></legend>
@@ -98,44 +95,7 @@
         <?PHP $hashType = $hash->getHashType(); ?>
         <?PHP if (!empty($hashType)) : ?>
             <?PHP $signtype = $hash->getSignatureType(); ?>
-            <?PHP if ($signtype == 'gpg') : ?>
-                <?PHP if ($show_gpg === true) : ?>
-                    <?PHP $show_gpg = false; // Show GPG-Signatures only once ?>
-                    <p><b><?= $this->translate('SignatureValue'); ?> (<?= $fileName ?>)</b></p>
-                    <p><?= $signtype ?>:
-                    <?PHP
-                        // Controller stores signature verification results in $this->verifyResult[$fileName]
-                        $verification = $this->verifyResult[$fileName];
-                    ?>
-                    <?PHP if (count($verification) === 0) : ?>
-                        <?= $this->translate('pkm_no_signature') ?>
-                    <?php endif; ?>
-                    <?PHP $sigindex = 0; ?>
-                    <?PHP foreach($verification as $verifiedArray) : ?>
-                        <?PHP foreach($verifiedArray as $index => $verificationResult) : ?>
-                            <?PHP if ($index === 'result') : ?>
-                                <?PHP foreach ($verificationResult as $verified) : ?>
-                                    <?PHP if (false === is_object($verified)) : ?>
-                                        <?= $verified ?><br/>
-                                    <?PHP elseif ($verified->isValid() === true) : ?>
-                                        <?= $this->translate('pkm_sigcheck_valid', $verified->getUserId()->getName()); ?>
-                                    <?PHP else : ?>
-                                        <?= $this->translate('pkm_sigcheck_invalid', $verified->getUserId()->getName()); ?>
-                                    <?PHP endif; ?>
-                                    <?PHP if (true === is_object($verified)) : // Show key used for signature ?>
-                                        <a href="<?= $this->url(array('module' => 'pkm', 'controller' => 'index', 'action' => 'showkey', 'fingerprint' => $verified->getKeyFingerprint()), null, true) ?>"><?= $this->translate('pkm_show_signature_key') ?></a><br/>
-                                    <?PHP endif; ?>
-                                <?PHP endforeach; ?>
-                            <?PHP else : ?>
-                                <? $signaturelist->signatures[$sigindex] = $verificationResult; ?>
-                                <a href="<?= $this->url(array('module' => 'pkm', 'controller' => 'index', 'action' => 'showsignature', 'signature' => $sigindex), null, true) ?>"><?= $this->translate('pkm_show_signature') ?></a><br/>
-                                <? $sigindex++; ?>
-                            <?PHP endif; ?>
-                        <?PHP endforeach; ?>
-                    <?PHP endforeach; ?>
-                    </p>
-                <?PHP endif; ?>
-            <?PHP else : ?>
+            <?PHP if($signtype != 'gpg') : ?>
                 <div><?= $this->translate('HashValue')?> - <?= $hash->getHashType() ?></div>
                 <div>
                     <span class="label"><?= $this->translate('frontdoor_fixpoint')?>:</span>
