@@ -399,6 +399,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="frontdoor_share_twitter">
+      <tuv xml:lang="en">
+        <seg>Share in Twitter</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Teilen auf Twitter</seg>
+      </tuv>
+    </tu>
+    
     <tu tuid="frontdoor_exportbibtex">
       <tuv xml:lang="en">
         <seg>Export Bibtex</seg>
