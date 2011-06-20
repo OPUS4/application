@@ -665,7 +665,7 @@
     <xsl:template match="File[@VisibleInFrontdoor='1']">
         <li>
             <xsl:variable name="fileIcon">
-                <img border="0" width="16" height="16">
+                <img width="16" height="16">
                     <xsl:attribute name="src">
                         <xsl:value-of select="$layoutPath"/>
                         <xsl:text>/img/filetype/</xsl:text>
@@ -857,7 +857,7 @@
                 <xsl:call-template name="translateFieldname"/>:
             </th>
             <td>
-                <img border="0" alt="License Logo">
+                <img alt="License Logo">
                     <xsl:attribute name="src">
                         <xsl:value-of select="@LinkLogo"/>
                     </xsl:attribute>
@@ -1157,7 +1157,7 @@
                 <xsl:text>/frontdoor/index/index/docId/</xsl:text>
                 <xsl:value-of select="@Id" />
             </xsl:attribute>
-            <img border="0">
+            <img>
                 <xsl:attribute name="src">
                     <xsl:value-of select="$layoutPath"/>
                     <xsl:text>/img/twitter.png</xsl:text>
@@ -1188,9 +1188,6 @@
                     <xsl:attribute name="src">
                         <xsl:value-of select="$layoutPath"/>
                         <xsl:text>/img/google_scholar.jpg</xsl:text>
-                    </xsl:attribute>
-                    <xsl:attribute name="border">
-                        <xsl:text>0</xsl:text>
                     </xsl:attribute>
                     <xsl:attribute name="title">
                         <xsl:call-template name="translateString">
@@ -1237,9 +1234,6 @@
                         <xsl:value-of select="$layoutPath"/>
                         <xsl:text>/img/bibtex_w.png';</xsl:text>
                     </xsl:attribute>
-                    <xsl:attribute name="border">
-                        <xsl:text>0</xsl:text>
-                    </xsl:attribute>
                     <xsl:attribute name="title">
                         <xsl:call-template name="translateString">
                             <xsl:with-param name="string">frontdoor_exportbibtex</xsl:with-param>
@@ -1281,9 +1275,6 @@
                         <xsl:text>document.ris.src='</xsl:text>
                         <xsl:value-of select="$layoutPath"/>
                         <xsl:text>/img/ris_w.png';</xsl:text>
-                    </xsl:attribute>
-                    <xsl:attribute name="border">
-                        <xsl:text>0</xsl:text>
                     </xsl:attribute>
                     <xsl:attribute name="title">
                         <xsl:call-template name="translateString">
