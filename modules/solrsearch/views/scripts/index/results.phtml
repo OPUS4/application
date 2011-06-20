@@ -79,7 +79,7 @@ if($this->jQueryEnabled()) {
                         <dt class="results_title">
                             <?php if ($this->jQueryEnabled()) : ?>
                                 <?php if (!is_null($result->getAbstract())) : ?>
-                                    <img src="<?= $this->layoutPath() ?>/img/theme/icon-on-off.png" alt="<?= $this->translate('results_hideabstract_alt') ?>" title="<?= $this->translate('results_hideabstract_title') ?>" onclick="$(function(){$('#<?= $result->getId() ?>').toggle();});" />
+                                    <img src="<?= $this->layoutPath() ?>/img/theme/icon-on-off.png" alt="<?= $this->translate('results_hideabstract_alt') ?>" title="<?= $this->translate('results_hideabstract_title') ?>" onclick="$(function(){$('#abstractText_<?= $result->getId() ?>').toggle();});" />
                                 <?php endif ?>
                             <?php endif ?>
                             <?php if (!is_null($result->getTitle())) : ?>
@@ -101,7 +101,7 @@ if($this->jQueryEnabled()) {
                                 <?php endforeach ?>
                             </dt>
                         <?php endif ?>
-                        <dd class="abstractText" id="<?= $result->getId() ?>"><?= htmlspecialchars($result->getAbstract()) ?></dd>
+                        <dd class="abstractText" id="abstractText_<?= $result->getId() ?>"><?= htmlspecialchars($result->getAbstract()) ?></dd>
                     </dl>
                 <?php endforeach ?>
             </div>
