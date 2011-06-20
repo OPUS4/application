@@ -676,6 +676,9 @@
                         </xsl:call-template>
                         <xsl:text>.png</xsl:text>
                     </xsl:attribute>
+                    <xsl:attribute name="alt">
+                        <xsl:value-of select="@MimeType"/>
+                    </xsl:attribute>
                 </img>
             </xsl:variable>
 
