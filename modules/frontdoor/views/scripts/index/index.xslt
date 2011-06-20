@@ -44,7 +44,7 @@
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     exclude-result-prefixes="php">
 
-    <xsl:output method="html" omit-xml-declaration="yes" />
+    <xsl:output method="xml" omit-xml-declaration="yes" />
  
     <xsl:param name="baseUrl" />
     <xsl:param name="layoutPath" />
