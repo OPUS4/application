@@ -857,17 +857,14 @@
                 <xsl:call-template name="translateFieldname"/>:
             </th>
             <td>
-                <xsl:element name="img">
+                <img border="0" alt="License Logo">
                     <xsl:attribute name="src">
                         <xsl:value-of select="@LinkLogo"/>
                     </xsl:attribute>
                     <xsl:attribute name="title">
                         <xsl:value-of select="@LinkLicence"/>
                     </xsl:attribute>
-                    <xsl:attribute name="border">
-                        <xsl:text>0</xsl:text>
-                    </xsl:attribute>
-                </xsl:element>
+                </img>
 
                 <xsl:element name="a">
                     <xsl:attribute name="href">
@@ -1196,6 +1193,11 @@
                         <xsl:text>0</xsl:text>
                     </xsl:attribute>
                     <xsl:attribute name="title">
+                        <xsl:call-template name="translateString">
+                            <xsl:with-param name="string">frontdoor_searchgoogle</xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:attribute>
+                    <xsl:attribute name="alt">
                         <xsl:call-template name="translateString">
                             <xsl:with-param name="string">frontdoor_searchgoogle</xsl:with-param>
                         </xsl:call-template>
