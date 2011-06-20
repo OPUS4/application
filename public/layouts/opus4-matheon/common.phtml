@@ -174,7 +174,7 @@ $languageSelectors = $this->languageSelector();
                     <b>Queries:</b><br />
                     <ul>
                     <?php for ($i=1; ($i < $profiler_max_queries) and ($i < count($profiler_query_profiles)); $i++) : ?>
-                        <li><pre><?= $profiler_query_profiles[$i]->getQuery() ?></pre></li>
+                        <li><pre><?= htmlspecialchars($profiler_query_profiles[$i]->getQuery()) ?></pre></li>
                     <?php endfor ?>
                     <?php if ($i < count($profiler_query_profiles)) { echo "<li>...</li>"; } ?>
                     </ul>
