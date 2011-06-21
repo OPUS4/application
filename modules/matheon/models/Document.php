@@ -236,7 +236,7 @@ class Matheon_Model_Document {
             $submitterString = trim($person->getFirstName() . " " . $person->getLastName());
         }
         if (empty($submitterString)) {
-            $submitterString = '-- No title given! --';
+            $submitterString = '-- No submitter name given! --';
         }
 
         $titleModels = $this->document->getTitleMain();
