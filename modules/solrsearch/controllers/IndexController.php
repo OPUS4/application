@@ -124,6 +124,7 @@ class Solrsearch_IndexController extends Controller_Action {
             $this->resultList = $searcher->search($this->query);
         }
         catch (Opus_SolrSearch_Exception $e) {
+            $this->log->err("Sorry, an internal server error occurred: " . $e);
             throw new Application_Exception('Sorry, an internal server error occurred.');
         }
         $this->numOfHits = $this->resultList->getNumberOfHits();
