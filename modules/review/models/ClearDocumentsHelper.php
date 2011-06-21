@@ -61,10 +61,7 @@ class Review_Model_ClearDocumentsHelper {
 
             $guest_role = Opus_UserRole::fetchByName('guest');
             foreach ($document->getFile() AS $file)  {
-                $privilege = $guest_role->addPrivilege();
-                $privilege->setPrivilege('readFile');
-                $privilege->setFile($file);
-                $guest_role->store();
+                $guest_role->appendAccessFile($file->getId());
             }
 
             if (isset($person)) {
@@ -75,7 +72,9 @@ class Review_Model_ClearDocumentsHelper {
             $enrichment->setKeyName('review.accepted_by')
                     ->setValue($userId);
 
+            // TODO: Put into same transaction...
             $document->store();
+            $guest_role->store();
         }
 
         return;
