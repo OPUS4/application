@@ -109,6 +109,7 @@ class Frontdoor_IndexController extends Controller_Action {
         $config = Zend_Registry::getInstance()->get('Zend_Config');
         $layoutPath = 'layouts/' . (isset($config, $config->theme) ? $config->theme : '');
 
+        $proc->setParameter('', 'baseUrlServer', $this->getFullServerUrl());
         $proc->setParameter('', 'baseUrl', $baseUrl);
         $proc->setParameter('', 'layoutPath', $baseUrl . '/' . $layoutPath);
         $proc->setParameter('', 'isMailPossible', $this->isMailPossible($docId));
@@ -120,6 +121,10 @@ class Frontdoor_IndexController extends Controller_Action {
     private function isMailPossible($docId) {
         $authors = new Frontdoor_Model_Authors($docId);
         return count($authors->getContactableAuthors()) > 0;
+    }
+
+    private function getFullServerUrl() {
+        return $this->view->serverUrl() . $this->getRequest()->getBaseUrl();
     }
 
     /**
@@ -175,7 +180,7 @@ class Frontdoor_IndexController extends Controller_Action {
     private function createMetaTagsForDocument($document) {
         $config = Zend_Registry::getInstance()->get('Zend_Config');
         $serverUrl = $this->view->serverUrl();
-        $baseUrlServer = $serverUrl . $this->getRequest()->getBaseUrl();
+        $baseUrlServer = $this->getFullServerUrl();
         $baseUrlFiles = $serverUrl . (isset($config, $config->deliver->url->prefix) ? $config->deliver->url->prefix : '/documents');
 
         $metas = array();

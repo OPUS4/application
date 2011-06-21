@@ -46,6 +46,7 @@
 
     <xsl:output method="xml" omit-xml-declaration="yes" />
  
+    <xsl:param name="baseUrlServer" />
     <xsl:param name="baseUrl" />
     <xsl:param name="layoutPath" />
     <xsl:param name="isMailPossible" />
@@ -1153,7 +1154,7 @@
         <a>
             <xsl:attribute name="href">
                 <xsl:text disable-output-escaping="yes">http://twitter.com/share?url=</xsl:text>
-                <xsl:value-of select="$baseUrl"/>
+                <xsl:value-of select="$baseUrlServer"/>
                 <xsl:text>/frontdoor/index/index/docId/</xsl:text>
                 <xsl:value-of select="@Id" />
             </xsl:attribute>
