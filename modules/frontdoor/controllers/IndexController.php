@@ -103,7 +103,7 @@ class Frontdoor_IndexController extends Controller_Action {
             $this->view->headMeta()
                     ->appendHttpEquiv('Last-Modified', $dateModified->getZendDate()->get(Zend_Date::RFC_1123));
         }
-        // $this->addMetaTagsForDocument($document);
+        $this->addMetaTagsForDocument($document);
         $this->setFrontdoorTitleToDocumentTitle($document);
 
         $config = Zend_Registry::getInstance()->get('Zend_Config');
